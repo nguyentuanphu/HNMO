@@ -1,0 +1,57 @@
+name: Web game tests
+
+# Plays the web game in a browser against a real HNMO server (demo mode: its data in memory):
+# log in, enter the world, inventory, moving and equipping items, the vault.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['client/web/**', 'server/**', '.github/workflows/web-e2e.yml']
+  pull_request:
+    paths: ['client/web/**', 'server/**', '.github/workflows/web-e2e.yml']
+
+concurrency:
+  group: web-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install the web client and the test browser
+        run: |
+          npm ci --prefix client/web
+          cd client/web && npx playwright install --with-deps chromium
+      - name: Build the server and the web client
+        run: |
+          dotnet build server/src/Startup/HNMO.Startup.csproj -c Release -v quiet
+          npm run build --prefix client/web
+          dotnet build client/web/bridge/HNMO.Web.csproj -c Release -v quiet
+      - name: Start the server (demo) and the web client
+        run: |
+          (cd server/src/Startup && nohup dotnet run -c Release --no-build -- -demo -autostart -resolveIP:loopback > "$RUNNER_TEMP/server.log" 2>&1 &)
+          (cd client/web/bridge && nohup dotnet run -c Release --no-build > "$RUNNER_TEMP/web.log" 2>&1 &)
+          for i in $(seq 1 120); do (echo > /dev/tcp/127.0.0.1/44406) 2>/dev/null && break; sleep 5; done
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8081/ > /dev/null && break; sleep 2; done
+          (echo > /dev/tcp/127.0.0.1/44406) && curl -sf -o /dev/null http://127.0.0.1:8081/
+      - name: Play the tests
+        run: cd client/web && CI=1 npx playwright test
+      - name: Logs and report
+        if: failure()
+        run: tail -n 100 "$RUNNER_TEMP/server.log" "$RUNNER_TEMP/web.log"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: web-e2e-report
+          path: |
+            client/web/playwright-report
+            client/web/test-results
+          retention-days: 14

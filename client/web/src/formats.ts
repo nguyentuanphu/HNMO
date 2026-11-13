@@ -14,7 +14,38 @@ const MAP_KEY_START = 0x5e;
 const MAP_KEY_STEP = 0x3d;
 const BUX_CODE = [0xfc, 0xcf, 0xab];
 
-export function mapFileDecrypt(source) {
+export type Vec3 = [number, number, number];
+
+/** EncTerrainN.map: the two texture layers and their blend alpha, one byte per cell. */
+export interface TerrainMapping {
+  mapNumber: number;
+  layer1: Uint8Array;
+  layer2: Uint8Array;
+  alpha: Uint8Array;
+}
+
+/** A static object of EncTerrainN.obj. */
+export interface WorldObject {
+  type: number;
+  position: Vec3;
+  /** Euler angles in degrees. */
+  angle: Vec3;
+  scale: number;
+}
+
+export interface WorldObjects {
+  mapNumber: number;
+  objects: WorldObject[];
+}
+
+/** A decoded image, top-down RGBA rows. */
+export interface DecodedImage {
+  width: number;
+  height: number;
+  pixels: Uint8Array;
+}
+
+export function mapFileDecrypt(source: Uint8Array): Uint8Array {
   const out = new Uint8Array(source.length);
   let key = MAP_KEY_START;
   for (let i = 0; i < source.length; i++) {
@@ -24,7 +55,7 @@ export function mapFileDecrypt(source) {
   return out;
 }
 
-export function buxConvert(buffer) {
+export function buxConvert(buffer: Uint8Array): Uint8Array {
   for (let i = 0; i < buffer.length; i++) buffer[i] ^= BUX_CODE[i % 3];
   return buffer;
 }
@@ -32,7 +63,7 @@ export function buxConvert(buffer) {
 const CELLS = TERRAIN_SIZE * TERRAIN_SIZE;
 
 // EncTerrainN.map: version, map number, two texture layers and the blend alpha per cell.
-export function parseTerrainMapping(encrypted) {
+export function parseTerrainMapping(encrypted: Uint8Array): TerrainMapping {
   const data = mapFileDecrypt(encrypted);
   let p = 2;
   const layer1 = data.slice(p, p + CELLS); p += CELLS;
@@ -42,7 +73,7 @@ export function parseTerrainMapping(encrypted) {
 }
 
 // EncTerrainN.att: walkability flags per cell (one byte, or a WORD in the extended format).
-export function parseTerrainAttributes(encrypted) {
+export function parseTerrainAttributes(encrypted: Uint8Array): Uint16Array {
   const data = buxConvert(mapFileDecrypt(encrypted));
   const flags = new Uint16Array(CELLS);
   const wide = data.length === CELLS * 2 + 4;
@@ -63,7 +94,7 @@ const EXTENDED_MIN_HEIGHT = -500;             // g_fMinHeight
 // TerrainHeight.OZB: an 8-bit grayscale BMP after a 4-byte prefix, 1.5 units per
 // level (OpenTerrainHeight); a few maps use a 24-bit BMP with the height in its three
 // bytes (OpenTerrainHeightNew).
-export function parseTerrainHeight(bytes) {
+export function parseTerrainHeight(bytes: Uint8Array): Float32Array {
   const heights = new Float32Array(CELLS);
   if (bytes.length >= OZB_PREFIX_BYTES + EXTENDED_HEIGHT_HEADER_BYTES + CELLS * 3) {
     const start = OZB_PREFIX_BYTES + EXTENDED_HEIGHT_HEADER_BYTES;
@@ -81,11 +112,11 @@ export function parseTerrainHeight(bytes) {
 const OBJECT_RECORD_BYTES = 2 + 12 + 12 + 4;
 
 // EncTerrainN.obj: the static world objects, each a model type with position, angles (degrees) and scale.
-export function parseWorldObjects(encrypted) {
+export function parseWorldObjects(encrypted: Uint8Array): WorldObjects {
   const data = mapFileDecrypt(encrypted);
   const view = new DataView(data.buffer);
   const count = view.getInt16(2, true);
-  const objects = [];
+  const objects: WorldObject[] = [];
   let p = 4;
   for (let i = 0; i < count && p + OBJECT_RECORD_BYTES <= data.length; i++, p += OBJECT_RECORD_BYTES) {
     objects.push({
@@ -108,13 +139,58 @@ const NORMAL_BYTES = 20;     // short Node, (pad), vec3 Normal, short BindVertex
 const TEXCOORD_BYTES = 8;    // float U, float V
 const TRIANGLE_BYTES = 64;   // sizeof(Triangle_t2), the record size on disk
 
-function readName(bytes, offset) {
+export interface BMDVertex { node: number; position: Vec3 }
+export interface BMDNormal { node: number; normal: Vec3 }
+
+/** A triangle (corners 3) or quad (corners 4): indexes into the mesh's vertices, normals and texture coordinates. */
+export interface BMDTriangle {
+  corners: number;
+  vertex: number[];
+  normal: number[];
+  texCoord: number[];
+}
+
+export interface BMDMesh {
+  texture: number;
+  textureName: string;
+  vertices: BMDVertex[];
+  normals: BMDNormal[];
+  texCoords: [number, number][];
+  triangles: BMDTriangle[];
+}
+
+export interface BMDAction { numKeys: number }
+
+/** One action's keys of a bone: x, y, z per key. */
+export interface BMDBoneFrames {
+  positions: Float32Array;
+  rotations: Float32Array;
+}
+
+export interface BMDBone {
+  dummy: boolean;
+  name?: string;
+  /** Index of the parent bone, -1 for none. */
+  parent: number;
+  /** Indexed by action. */
+  frames: BMDBoneFrames[];
+}
+
+/** A parsed BMD model. */
+export interface BMDModel {
+  name: string;
+  meshes: BMDMesh[];
+  actions: BMDAction[];
+  bones: BMDBone[];
+}
+
+function readName(bytes: Uint8Array, offset: number): string {
   let end = offset;
   while (end < offset + NAME_BYTES && bytes[end] !== 0) end++;
   return new TextDecoder('latin1').decode(bytes.subarray(offset, end));
 }
 
-function bmdBody(fileBytes) {
+function bmdBody(fileBytes: Uint8Array): Uint8Array {
   if (fileBytes[0] !== 0x42 || fileBytes[1] !== 0x4d || fileBytes[2] !== 0x44) throw new Error('Not a BMD file');
   const version = fileBytes[3];
   if (version === BMD_VERSION_PLAIN) return fileBytes.subarray(4);
@@ -125,7 +201,7 @@ function bmdBody(fileBytes) {
   throw new Error(`BMD version ${version} is not supported yet`);
 }
 
-export function parseBMD(fileBytes) {
+export function parseBMD(fileBytes: Uint8Array): BMDModel {
   const bytes = bmdBody(fileBytes);
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   let p = 0;
@@ -134,7 +210,7 @@ export function parseBMD(fileBytes) {
   const numBones = view.getInt16(p, true); p += 2;
   const numActions = view.getInt16(p, true); p += 2;
 
-  const meshes = [];
+  const meshes: BMDMesh[] = [];
   for (let m = 0; m < numMeshes; m++) {
     const numVertices = view.getInt16(p, true);
     const numNormals = view.getInt16(p + 2, true);
@@ -142,20 +218,20 @@ export function parseBMD(fileBytes) {
     const numTriangles = view.getInt16(p + 6, true);
     const texture = view.getInt16(p + 8, true);
     p += 10;
-    const vertices = [];
+    const vertices: BMDVertex[] = [];
     for (let i = 0; i < numVertices; i++, p += VERTEX_BYTES) {
       vertices.push({ node: view.getInt16(p, true), position: [view.getFloat32(p + 4, true), view.getFloat32(p + 8, true), view.getFloat32(p + 12, true)] });
     }
-    const normals = [];
+    const normals: BMDNormal[] = [];
     for (let i = 0; i < numNormals; i++, p += NORMAL_BYTES) {
       normals.push({ node: view.getInt16(p, true), normal: [view.getFloat32(p + 4, true), view.getFloat32(p + 8, true), view.getFloat32(p + 12, true)] });
     }
-    const texCoords = [];
+    const texCoords: [number, number][] = [];
     for (let i = 0; i < numTexCoords; i++, p += TEXCOORD_BYTES) texCoords.push([view.getFloat32(p, true), view.getFloat32(p + 4, true)]);
-    const triangles = [];
+    const triangles: BMDTriangle[] = [];
     for (let i = 0; i < numTriangles; i++, p += TRIANGLE_BYTES) {
       const corners = view.getInt8(p);
-      const tri = { corners, vertex: [], normal: [], texCoord: [] };
+      const tri: BMDTriangle = { corners, vertex: [], normal: [], texCoord: [] };
       for (let k = 0; k < 4; k++) {
         tri.vertex.push(view.getInt16(p + 2 + k * 2, true));
         tri.normal.push(view.getInt16(p + 10 + k * 2, true));
@@ -167,7 +243,7 @@ export function parseBMD(fileBytes) {
     meshes.push({ texture, textureName, vertices, normals, texCoords, triangles });
   }
 
-  const actions = [];
+  const actions: BMDAction[] = [];
   for (let a = 0; a < numActions; a++) {
     const numKeys = view.getInt16(p, true);
     const lockPositions = bytes[p + 2] !== 0;
@@ -176,13 +252,13 @@ export function parseBMD(fileBytes) {
     actions.push({ numKeys });
   }
 
-  const bones = [];
+  const bones: BMDBone[] = [];
   for (let b = 0; b < numBones; b++) {
     const dummy = bytes[p] !== 0; p += 1;
     if (dummy) { bones.push({ dummy: true, parent: -1, frames: [] }); continue; }
     const boneName = readName(bytes, p); p += NAME_BYTES;
     const parent = view.getInt16(p, true); p += 2;
-    const frames = [];
+    const frames: BMDBoneFrames[] = [];
     for (let a = 0; a < numActions; a++) {
       const keys = actions[a].numKeys;
       const positions = new Float32Array(keys * 3);
@@ -206,7 +282,7 @@ const TGA_RLE_TRUECOLOR = 10;
 const TGA_ORIGIN_TOP = 0x20;
 
 // Decodes a truecolor TGA into top-down RGBA rows.
-export function decodeTGA(bytes) {
+export function decodeTGA(bytes: Uint8Array): DecodedImage {
   const idLength = bytes[0];
   const imageType = bytes[2];
   const width = bytes[12] | (bytes[13] << 8);
@@ -218,7 +294,7 @@ export function decodeTGA(bytes) {
   const pixels = new Uint8Array(width * height * 4);
   let src = 18 + idLength;
   let dst = 0;
-  const putPixel = (at) => {
+  const putPixel = (at: number) => {
     pixels[dst] = bytes[at + 2];
     pixels[dst + 1] = bytes[at + 1];
     pixels[dst + 2] = bytes[at];
@@ -240,7 +316,7 @@ export function decodeTGA(bytes) {
   return { width, height, pixels };
 }
 
-function flipRows(pixels, width, height) {
+function flipRows(pixels: Uint8Array, width: number, height: number): void {
   const row = width * 4;
   const temp = new Uint8Array(row);
   for (let y = 0; y < height >> 1; y++) {

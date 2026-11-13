@@ -28,9 +28,12 @@ dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release -r "$
   -p:PublishSingleFile=false -o "$OUT/server" -v quiet
 dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet -p:HnmoServerSource="$SERVER_SOURCE"
 
-# The web client and its library
+# The web client (TypeScript, built and type-checked here; a type error stops the build) and its library
+echo "Building the web client"
+(cd "$WEB" && rm -rf public/js && npx tsc -p .)
 mkdir -p "$OUT/web/wwwroot" "$OUT/web/vendor/three"
 cp -r "$WEB/public/." "$OUT/web/wwwroot/"
+find "$OUT/web/wwwroot" -name '*.js.map' -delete
 cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 # The save game database: bundled, or one installed on the computer
 POSTGRES_BIN_IN_FOLDER="../postgres/bin"

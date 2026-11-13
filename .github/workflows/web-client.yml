@@ -1,0 +1,29 @@
+name: Web client
+
+# Type-checks and builds the web game (TypeScript, strict).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['client/web/**', '.github/workflows/web-client.yml']
+  pull_request:
+    paths: ['client/web/**', '.github/workflows/web-client.yml']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install
+        run: npm ci --prefix client/web
+      - name: Check that the packet definitions are up to date
+        run: |
+          node client/web/tools/generate-packets.mjs server/src/Network/Packets
+          git diff --exit-code client/web/src/net/packets.generated.ts
+      - name: Type-check (game and tests)
+        run: npm run typecheck --prefix client/web
+      - name: Build
+        run: npm run build --prefix client/web

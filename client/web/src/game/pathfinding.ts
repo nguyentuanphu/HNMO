@@ -4,29 +4,40 @@
 
 import { TERRAIN_SIZE, TerrainFlag } from '../formats.js';
 
+/** A cell of the 256x256 grid. */
+export interface Cell {
+  x: number;
+  y: number;
+}
+
+interface SearchNode extends Cell {
+  cost: number;
+  score: number;
+}
+
 // [dx, dy] for packet direction 0..7: West, SouthWest, South, SouthEast, East, NorthEast, North, NorthWest.
-export const DIRECTION_OFFSETS = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
+export const DIRECTION_OFFSETS: [dx: number, dy: number][] = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
 const BLOCKING = TerrainFlag.NOMOVE | TerrainFlag.NOGROUND;
 const MAX_SEARCHED_CELLS = 4000;
 const DIAGONAL_COST = 1.4142;
 
-export function directionBetween(from, to) {
+export function directionBetween(from: Cell, to: Cell): number {
   const dx = Math.sign(to.x - from.x), dy = Math.sign(to.y - from.y);
   return DIRECTION_OFFSETS.findIndex(([x, y]) => x === dx && y === dy);
 }
 
-export function isWalkableCell(flags, x, y) {
+export function isWalkableCell(flags: ArrayLike<number>, x: number, y: number): boolean {
   if (x < 0 || y < 0 || x >= TERRAIN_SIZE || y >= TERRAIN_SIZE) return false;
   return (flags[y * TERRAIN_SIZE + x] & BLOCKING) === 0;
 }
 
 // A* from start to goal; returns the cells after start, or [] when there's no way.
-export function findPath(flags, start, goal) {
+export function findPath(flags: ArrayLike<number>, start: Cell, goal: Cell): Cell[] {
   if (!isWalkableCell(flags, goal.x, goal.y)) return [];
-  const key = (x, y) => y * TERRAIN_SIZE + x;
-  const heuristic = (x, y) => Math.max(Math.abs(goal.x - x), Math.abs(goal.y - y));
-  const open = [{ x: start.x, y: start.y, cost: 0, score: heuristic(start.x, start.y) }];
-  const cameFrom = new Map();
+  const key = (x: number, y: number) => y * TERRAIN_SIZE + x;
+  const heuristic = (x: number, y: number) => Math.max(Math.abs(goal.x - x), Math.abs(goal.y - y));
+  const open: SearchNode[] = [{ x: start.x, y: start.y, cost: 0, score: heuristic(start.x, start.y) }];
+  const cameFrom = new Map<number, SearchNode>();
   const bestCost = new Map([[key(start.x, start.y), 0]]);
   let searched = 0;
   while (open.length && searched++ < MAX_SEARCHED_CELLS) {
@@ -48,12 +59,12 @@ export function findPath(flags, start, goal) {
   return [];
 }
 
-function rebuildPath(cameFrom, key, end) {
-  const path = [];
+function rebuildPath(cameFrom: Map<number, SearchNode>, key: (x: number, y: number) => number, end: SearchNode): Cell[] {
+  const path: Cell[] = [];
   let node = end;
   while (cameFrom.has(key(node.x, node.y))) {
     path.unshift({ x: node.x, y: node.y });
-    node = cameFrom.get(key(node.x, node.y));
+    node = cameFrom.get(key(node.x, node.y))!;
   }
   return path;
 }

@@ -4,8 +4,22 @@
 
 const MAX_LINES = 60;
 
+/** The page elements of the chat. */
+export interface ChatElements {
+  log: HTMLElement;
+  form: HTMLFormElement;
+  input: HTMLInputElement;
+}
+
+export type ChatSender = (text: string) => void;
+
 export class Chat {
-  constructor({ log, form, input }) {
+  log: HTMLElement;
+  form: HTMLFormElement;
+  input: HTMLInputElement;
+  send: ChatSender | null;
+
+  constructor({ log, form, input }: ChatElements) {
     this.log = log;
     this.form = form;
     this.input = input;
@@ -28,22 +42,22 @@ export class Chat {
     });
   }
 
-  enable(send) {
+  enable(send: ChatSender): void {
     this.send = send;
     this.log.hidden = false;
     this.form.hidden = false;
   }
 
-  close() {
+  close(): void {
     this.input.blur();
   }
 
-  add(text, kind = 'chat') {
+  add(text: string, kind = 'chat'): void {
     const line = document.createElement('div');
     line.className = `line ${kind}`;
     line.textContent = text;
     this.log.append(line);
-    while (this.log.childElementCount > MAX_LINES) this.log.firstElementChild.remove();
+    while (this.log.childElementCount > MAX_LINES) this.log.firstElementChild!.remove();
     this.log.scrollTop = this.log.scrollHeight;
   }
 }

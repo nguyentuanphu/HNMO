@@ -6,8 +6,30 @@ import * as THREE from 'three';
 import { parseTerrainMapping, parseTerrainAttributes, parseTerrainHeight, parseWorldObjects } from './formats.js';
 import { fetchBytes, loadModel, computeBoneMatrices, buildGeometries, createMaterial } from './bmd.js';
 import { createTerrain, loadLightMap, sampleLight } from './terrain.js';
+import type { TerrainMapping, WorldObject } from './formats.js';
+import type { TerrainFog, TerrainMesh } from './terrain.js';
 
-const LORENCIA_MODELS = [
+/** Everything loaded for a map before it is built into the scene. */
+export interface WorldData {
+  mapNumber: number;
+  /** The data folder number (WorldN, ObjectN). */
+  worldNumber: number;
+  dir: string;
+  mapping: TerrainMapping;
+  /** Walkability flags per cell (TerrainFlag). */
+  flags: Uint16Array;
+  heights: Float32Array;
+  objects: WorldObject[];
+  /** The light map: r, g, b per cell. */
+  light: Float32Array;
+}
+
+export interface World {
+  group: THREE.Group;
+  terrain: TerrainMesh;
+}
+
+const LORENCIA_MODELS: [name: string, firstType: number, count: number][] = [
   ['Tree', 0, 13], ['Grass', 20, 8], ['Stone', 30, 5], ['StoneStatue', 40, 3], ['SteelStatue', 43, 1],
   ['Tomb', 44, 3], ['FireLight', 50, 2], ['Bonfire', 52, 1], ['DoungeonGate', 55, 1], ['MerchantAnimal', 56, 2],
   ['TreasureDrum', 58, 1], ['TreasureChest', 59, 1], ['Ship', 60, 1], ['SteelWall', 65, 3], ['SteelDoor', 68, 1],
@@ -21,12 +43,12 @@ const LORENCIA_MODELS = [
 const MAX_WORLD_OBJECTS = 160;
 const DEGREES = Math.PI / 180;
 
-function modelFileName(name, number) {
+function modelFileName(name: string, number: number): string {
   return `${name}${String(number).padStart(2, '0')}.bmd`;
 }
 
-export function worldModelFiles(worldNumber) {
-  const files = new Map();
+export function worldModelFiles(worldNumber: number): Map<number, string> {
+  const files = new Map<number, string>();
   if (worldNumber === 1) {
     for (const [name, firstType, count] of LORENCIA_MODELS) {
       for (let i = 0; i < count; i++) files.set(firstType + i, modelFileName(name, i + 1));
@@ -46,11 +68,11 @@ const SHARED_FOLDERS = [
   { maps: [45, 46, 47, 48, 49, 50], folder: 47 },         // Illusion Temple
 ];
 
-export function filesFolder(mapNumber) {
+export function filesFolder(mapNumber: number): number {
   return SHARED_FOLDERS.find((entry) => entry.maps.includes(mapNumber))?.folder ?? mapNumber + 1;
 }
 
-const MAP_NAMES = {
+const MAP_NAMES: Record<number, string> = {
   0: 'Lorencia', 1: 'Dungeon', 2: 'Devias', 3: 'Noria', 4: 'Lost Tower', 6: 'Arena', 7: 'Atlans', 8: 'Tarkan',
   9: 'Devil Square', 10: 'Icarus', 11: 'Blood Castle', 18: 'Chaos Castle', 24: 'Kalima', 30: 'Valley of Loren',
   31: 'Land of Trials', 33: 'Aida', 34: 'Crywolf Fortress', 37: 'Kanturu', 38: 'Kanturu Relics', 39: 'Kanturu Refinery Tower',
@@ -61,11 +83,11 @@ const MAP_NAMES = {
 
 export const KNOWN_MAPS = Object.keys(MAP_NAMES).map(Number);
 
-export function mapName(mapNumber) {
+export function mapName(mapNumber: number): string {
   return MAP_NAMES[mapNumber] ?? `Map ${mapNumber}`;
 }
 
-export async function loadWorldData(mapNumber) {
+export async function loadWorldData(mapNumber: number): Promise<WorldData> {
   const worldNumber = filesFolder(mapNumber);
   const dir = `World${worldNumber}`;
   const [mapBytes, attBytes, objBytes, heightBytes, light] = await Promise.all([
@@ -87,7 +109,7 @@ export async function loadWorldData(mapNumber) {
   };
 }
 
-function objectMatrix(object) {
+function objectMatrix(object: WorldObject): THREE.Matrix4 {
   const [x, y, z] = object.position;
   const rotation = new THREE.Euler(object.angle[0] * DEGREES, object.angle[1] * DEGREES, object.angle[2] * DEGREES, 'ZYX');
   return new THREE.Matrix4().compose(
@@ -98,12 +120,12 @@ function objectMatrix(object) {
 }
 
 // One instanced mesh per model mesh, so the 2,000+ objects of a map draw in a few hundred calls.
-async function buildObjectType(objectDir, fileName, placements, light) {
+async function buildObjectType(objectDir: string, fileName: string, placements: WorldObject[], light: Float32Array): Promise<THREE.InstancedMesh[]> {
   let model;
   try {
     model = await loadModel(objectDir, fileName);
   } catch (error) {
-    console.warn('Model missing:', `${objectDir}/${fileName}`, error.message);
+    console.warn('Model missing:', `${objectDir}/${fileName}`, (error as Error).message);
     return [];
   }
   const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
@@ -121,22 +143,22 @@ async function buildObjectType(objectDir, fileName, placements, light) {
   }));
 }
 
-export async function createWorld(data, fog, onProgress) {
+export async function createWorld(data: WorldData, fog: TerrainFog, onProgress?: (progress: number) => void): Promise<World> {
   const group = new THREE.Group();
   const terrain = await createTerrain({ worldDir: data.dir, heights: data.heights, mapping: data.mapping, light: data.light, fog });
   group.add(terrain);
 
   const files = worldModelFiles(data.worldNumber);
-  const byType = new Map();
+  const byType = new Map<number, WorldObject[]>();
   for (const object of data.objects) {
     if (!files.has(object.type)) continue;
     if (!byType.has(object.type)) byType.set(object.type, []);
-    byType.get(object.type).push(object);
+    byType.get(object.type)!.push(object);
   }
   const objectDir = `Object${data.worldNumber}`;
   let done = 0;
   await Promise.all([...byType].map(async ([type, placements]) => {
-    const meshes = await buildObjectType(objectDir, files.get(type), placements, data.light);
+    const meshes = await buildObjectType(objectDir, files.get(type)!, placements, data.light);
     meshes.forEach((mesh) => group.add(mesh));
     onProgress?.(++done / byType.size);
   }));

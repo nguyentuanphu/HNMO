@@ -1,3 +1,7 @@
 node_modules/
 bridge/bin/
 bridge/obj/
+# Built from src/ by "npm run build" (tsc)
+public/js/
+playwright-report/
+test-results/

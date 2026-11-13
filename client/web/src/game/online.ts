@@ -8,6 +8,10 @@ import { classOfAppearance } from '../net/session.js';
 import { parseAppearance } from './items.js';
 import { createMonsterCharacter, createPlayerCharacter } from './characters.js';
 import { findPath, directionBetween, isWalkableCell } from './pathfinding.js';
+import type * as THREE from 'three';
+import type { Connection } from '../net/connection.js';
+import type { PacketValues } from '../net/packets.js';
+import type { Cell, Character, CharacterWorld } from './characters.js';
 
 const ID_MASK = 0x7fff;          // the high bit marks "just created" (WSclient.cpp: Key &= 0x7FFF)
 const MAX_STEPS_PER_WALK = 15;   // the step count is a 4-bit field
@@ -17,8 +21,66 @@ const PING_INTERVAL_MS = 20000;
 const Code = { CHAT: 0x00, SERVER_MESSAGE: 0x0d, ADD_PLAYERS: 0x12, ADD_NPCS: 0x13, OUT_OF_SCOPE: 0x14, MOVED: 0x15, MAP_CHANGED: 0x1c, WALKED: 0xd4, PING_REQUEST: 0x71 };
 const MAP_CHANGED_SUB_CODE = 0x0f;
 
+// The fields this file reads of the server's packets (server/src/Network/Packets).
+interface MapChangedPacket { IsMapChange: boolean; MapNumber: number; PositionX: number; PositionY: number; Rotation: number }
+interface ChatMessagePacket { Sender: string; Message: string }
+interface SlideNoticePacket { Message: string }
+interface NpcData {
+  Id: number; TypeNumber: number; CurrentPositionX: number; CurrentPositionY: number;
+  TargetPositionX: number; TargetPositionY: number; Rotation: number;
+}
+interface AddNpcsPacket { NPCs: NpcData[] }
+interface AddCharacterPacket {
+  Id: number; Name: string; CurrentPositionX: number; CurrentPositionY: number;
+  TargetPositionX: number; TargetPositionY: number; Rotation: number; AppearanceAndEffects: Uint8Array;
+}
+interface OutOfScopePacket { Objects: { Id: number }[] }
+interface ObjectWalkedPacket { ObjectId: number; TargetX: number; TargetY: number }
+interface ObjectMovedPacket { ObjectId: number; PositionX: number; PositionY: number }
+
+/** Where a character shows up and where it's walking to. */
+interface Placement { x: number; y: number; targetX: number; targetY: number; rotation: number }
+
+/** The player's own character; it may know how to turn to a cell. */
+export type Hero = Character & { faceTo?(cell: Cell): void };
+
+/** How a message shows in the chat: said by someone, or from the server. */
+export type MessageKind = 'chat' | 'system';
+
+export interface OnlineWorldOptions {
+  connection: Connection;
+  /** The scene node characters are added to. */
+  root: THREE.Object3D;
+  world: CharacterWorld;
+  hero: Hero;
+  playerId: number;
+  onChange?: () => void;
+  /** Loads another map and puts the hero at x, y. */
+  onMapChanged?: (mapNumber: number, x: number, y: number) => Promise<void> | void;
+  onMessage?: (text: string, kind: MessageKind) => void;
+}
+
 export class OnlineWorld {
-  constructor({ connection, root, world, hero, playerId, onChange, onMapChanged, onMessage }) {
+  onMapChanged: OnlineWorldOptions['onMapChanged'];
+  onMessage: OnlineWorldOptions['onMessage'];
+  connection: Connection;
+  root: THREE.Object3D;
+  world: CharacterWorld;
+  hero: Hero;
+  playerId: number;
+  /** The other characters in view, by object id. */
+  characters: Map<number, Character>;
+  /** Ids whose characters are still loading. */
+  pending: Set<number>;
+  onChange: OnlineWorldOptions['onChange'];
+  unsubscribe: () => void;
+  pingTimer: ReturnType<typeof setInterval>;
+  /** Where the hero is walking to, over several walk packets. */
+  goal?: Cell | null;
+  /** The NPC to talk to once the hero gets there. */
+  talkTarget?: Character | null;
+
+  constructor({ connection, root, world, hero, playerId, onChange, onMapChanged, onMessage }: OnlineWorldOptions) {
     this.onMapChanged = onMapChanged;
     this.onMessage = onMessage;
     this.connection = connection;
@@ -33,25 +95,25 @@ export class OnlineWorld {
     this.pingTimer = setInterval(() => this.ping(), PING_INTERVAL_MS);
   }
 
-  handle(bytes) {
+  handle(bytes: Uint8Array) {
     const { code, subCode } = packetCode(bytes);
     try {
-      if (code === Code.MAP_CHANGED && bytes[0] === 0xc3 && subCode === MAP_CHANGED_SUB_CODE) return this.mapChanged(read('ServerToClient', 'MapChanged', bytes));
-      if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read('ServerToClient', 'ChatMessage', bytes); return this.onMessage?.(`${m.Sender}: ${m.Message}`, 'chat'); }
+      if (code === Code.MAP_CHANGED && bytes[0] === 0xc3 && subCode === MAP_CHANGED_SUB_CODE) return this.mapChanged(read<MapChangedPacket>('ServerToClient', 'MapChanged', bytes));
+      if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read<ChatMessagePacket>('ServerToClient', 'ChatMessage', bytes); return this.onMessage?.(`${m.Sender}: ${m.Message}`, 'chat'); }
       // The client reads every notice with the layout of PRECEIVE_NOTICE: type, count, delay, color, speed, text (ReceiveNotice).
-      if (code === Code.SERVER_MESSAGE && bytes[0] === 0xc1 && bytes.length > 13) return this.onMessage?.(read('ServerToClient', 'SlideNotice', bytes).Message, 'system');
-      if (code === Code.ADD_NPCS && bytes[0] === 0xc2) this.addNpcs(read('ServerToClient', 'AddNpcsToScope', bytes));
-      else if (code === Code.ADD_PLAYERS && bytes[0] === 0xc2) this.addPlayer(read('ServerToClient', 'AddCharacterToScopeExtended', bytes));
-      else if (code === Code.OUT_OF_SCOPE && bytes[0] === 0xc1) this.remove(read('ServerToClient', 'MapObjectOutOfScope', bytes));
-      else if (code === Code.WALKED && bytes[0] === 0xc1) this.walked(read('ServerToClient', 'ObjectWalkedExtended', bytes));
-      else if (code === Code.MOVED && bytes[0] === 0xc1) this.moved(read('ServerToClient', 'ObjectMoved', bytes));
+      if (code === Code.SERVER_MESSAGE && bytes[0] === 0xc1 && bytes.length > 13) return this.onMessage?.(read<SlideNoticePacket>('ServerToClient', 'SlideNotice', bytes).Message, 'system');
+      if (code === Code.ADD_NPCS && bytes[0] === 0xc2) this.addNpcs(read<AddNpcsPacket>('ServerToClient', 'AddNpcsToScope', bytes));
+      else if (code === Code.ADD_PLAYERS && bytes[0] === 0xc2) this.addPlayer(read<AddCharacterPacket>('ServerToClient', 'AddCharacterToScopeExtended', bytes));
+      else if (code === Code.OUT_OF_SCOPE && bytes[0] === 0xc1) this.remove(read<OutOfScopePacket>('ServerToClient', 'MapObjectOutOfScope', bytes));
+      else if (code === Code.WALKED && bytes[0] === 0xc1) this.walked(read<ObjectWalkedPacket>('ServerToClient', 'ObjectWalkedExtended', bytes));
+      else if (code === Code.MOVED && bytes[0] === 0xc1) this.moved(read<ObjectMovedPacket>('ServerToClient', 'ObjectMoved', bytes));
       else if (code === Code.PING_REQUEST && bytes[0] === 0xc1) this.connection.send('ClientToServer', 'PingResponse');
     } catch (error) {
       console.warn('Packet not handled:', error);
     }
   }
 
-  async spawn(id, create, placement) {
+  async spawn(id: number, create: () => Promise<Character>, placement: Placement): Promise<void> {
     if (id === this.playerId || this.characters.has(id) || this.pending.has(id)) return;
     this.pending.add(id);
     try {
@@ -63,13 +125,13 @@ export class OnlineWorld {
       this.root.add(character.group);
       this.onChange?.();
     } catch (error) {
-      console.warn(`Couldn't show object ${id}:`, error.message);
+      console.warn(`Couldn't show object ${id}:`, (error as Error).message);
     } finally {
       this.pending.delete(id);
     }
   }
 
-  addNpcs(packet) {
+  addNpcs(packet: AddNpcsPacket): void {
     for (const npc of packet.NPCs) {
       const id = npc.Id & ID_MASK;
       this.spawn(id, () => createMonsterCharacter({ id, type: npc.TypeNumber }), {
@@ -78,7 +140,7 @@ export class OnlineWorld {
     }
   }
 
-  addPlayer(player) {
+  addPlayer(player: AddCharacterPacket): void {
     const id = player.Id & ID_MASK;
     const bodySet = classOfAppearance(player.AppearanceAndEffects) + 1;
     const { equipment } = parseAppearance(player.AppearanceAndEffects);
@@ -87,7 +149,7 @@ export class OnlineWorld {
     });
   }
 
-  remove(packet) {
+  remove(packet: OutOfScopePacket): void {
     for (const { Id } of packet.Objects) {
       const id = Id & ID_MASK;
       this.pending.delete(id);
@@ -99,12 +161,12 @@ export class OnlineWorld {
     this.onChange?.();
   }
 
-  walked(packet) {
+  walked(packet: ObjectWalkedPacket): void {
     const character = this.characters.get(packet.ObjectId & ID_MASK);
     character?.walkStraightTo(packet.TargetX, packet.TargetY);
   }
 
-  moved(packet) {
+  moved(packet: ObjectMovedPacket): void {
     const id = packet.ObjectId & ID_MASK;
     if (id === this.playerId) this.goal = null;
     const character = id === this.playerId ? this.hero : this.characters.get(id);
@@ -113,7 +175,7 @@ export class OnlineWorld {
 
   // A warp: to another map (the client loads it), or a teleport on the same map.
   // Mirrors ReceiveTeleport (WSclient.cpp), which ends with ClientReadyAfterMapChange.
-  async mapChanged(packet) {
+  async mapChanged(packet: MapChangedPacket): Promise<void> {
     this.goal = null;
     this.clearCharacters();
     if (packet.IsMapChange) await this.onMapChanged?.(packet.MapNumber, packet.PositionX, packet.PositionY);
@@ -121,20 +183,20 @@ export class OnlineWorld {
     this.connection.send('ClientToServer', 'ClientReadyAfterMapChange');
   }
 
-  clearCharacters() {
+  clearCharacters(): void {
     for (const character of this.characters.values()) this.root.remove(character.group);
     this.characters.clear();
     this.pending.clear();
     this.onChange?.();
   }
 
-  say(text) {
+  say(text: string): void {
     this.connection.send('ClientToServer', 'PublicChatMessage', { Character: this.hero.name, Message: text });
   }
 
   // Talks to an NPC (vault keeper, merchants, …): walks next to it first when it's farther than
   // the server allows, then sends TalkToNpcRequest, as the client does when an NPC is clicked.
-  talkTo(npc) {
+  talkTo(npc: Character): void {
     this.talkTarget = npc;
     if (!this.closeEnoughToTalk(npc)) {
       const near = this.cellNextTo(npc.cell);
@@ -142,12 +204,12 @@ export class OnlineWorld {
     }
   }
 
-  closeEnoughToTalk(npc) {
+  closeEnoughToTalk(npc: Character): boolean {
     return Math.max(Math.abs(npc.cell.x - this.hero.cell.x), Math.abs(npc.cell.y - this.hero.cell.y)) <= TALK_DISTANCE;
   }
 
-  cellNextTo(cell) {
-    let best = null;
+  cellNextTo(cell: Cell): Cell | null {
+    let best: (Cell & { distance: number }) | null = null;
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
         const candidate = { x: cell.x + dx, y: cell.y + dy };
@@ -162,13 +224,13 @@ export class OnlineWorld {
 
   // Walks the player to a cell and tells the server, as the client's SendRequestMove does.
   // A walk packet holds at most 15 steps; longer walks continue when a part ends.
-  walkTo(cell, { keepTalk = false } = {}) {
+  walkTo(cell: Cell, { keepTalk = false }: { keepTalk?: boolean } = {}): boolean {
     if (!keepTalk) this.talkTarget = null;
     this.goal = { x: cell.x, y: cell.y };
     return this.walkNextPart();
   }
 
-  walkNextPart() {
+  walkNextPart(): boolean {
     const cell = this.goal;
     if (!cell || (cell.x === this.hero.cell.x && cell.y === this.hero.cell.y)) { this.goal = null; return false; }
     const path = findPath(this.world.flags, this.hero.cell, cell).slice(0, MAX_STEPS_PER_WALK);
@@ -188,11 +250,11 @@ export class OnlineWorld {
     return true;
   }
 
-  ping() {
+  ping(): void {
     this.connection.send('ClientToServer', 'Ping', { TickCount: Math.floor(performance.now()) >>> 0, AttackSpeed: 0, MagicSpeed: 0 });
   }
 
-  update(dt) {
+  update(dt: number): void {
     if (this.goal && !this.hero.isWalking) this.walkNextPart();
     if (this.talkTarget && !this.hero.isWalking && !this.goal) {
       if (this.closeEnoughToTalk(this.talkTarget)) {
@@ -204,7 +266,7 @@ export class OnlineWorld {
     for (const character of this.characters.values()) character.update(dt, this.world);
   }
 
-  dispose() {
+  dispose(): void {
     clearInterval(this.pingTimer);
     this.unsubscribe();
     for (const character of this.characters.values()) this.root.remove(character.group);

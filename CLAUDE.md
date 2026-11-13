@@ -10,6 +10,10 @@ when you learn something new about how they work (see the `hnmo` skill).
   game, its publisher or the projects this one started from. Keep third-party
   copyright notices and license files as they are (they're legally required).
 - **Time:** read and report all times in Sydney time (Australia/Sydney).
+- **Same as the desktop:** the web game must do everything the desktop client does, the same
+  way. Check each feature against the desktop client's code and data before calling it done.
+- **TypeScript:** all web client code is strict TypeScript (`client/web/src`); no `any`
+  without a reason, no `@ts-ignore`.
 - **Small steps:** build features one at a time, test each in the real game
   (headless Chromium + the packaged HNMO folder), then commit.
 - **Report:** say what was verified and what wasn't; give download links for builds.
@@ -18,7 +22,8 @@ when you learn something new about how they work (see the `hnmo` skill).
 
 - `server/` — game server + admin panel (.NET 10). Solution `server/src/HNMO.sln`,
   start project `server/src/Startup/HNMO.Startup.csproj`. Database name `hnmo`.
-- `client/web/` — the web game. `public/` (browser client, ES modules, three.js),
+- `client/web/` — the web game. `src/` (browser client in strict TypeScript, built by
+  `npm run build` into `public/js`; never write JavaScript there by hand), `public/` (page, three.js),
   `bridge/` (HNMO.Web: launcher, `/relay` WebSocket→TCP, `/data`, `/portal`),
   `tools/package-hnmo.sh` (builds the HNMO folder), `PARITY.md` (feature checklist).
 - `client/src/bin/Data` — game data the web client reads.
@@ -29,7 +34,7 @@ when you learn something new about how they work (see the `hnmo` skill).
 
 ```bash
 dotnet build server/src/HNMO.sln -c Release && dotnet test server/src/HNMO.sln -c Release --no-build
-npm ci --prefix client/web
+npm ci --prefix client/web && npm run build --prefix client/web   # type-check + build the web client
 node client/web/tools/generate-packets.mjs server/src/Network/Packets   # after packet XML changes
 client/web/tools/package-hnmo.sh "$PWD/server" linux-x64 /tmp/HNMO     # whole folder
 ```

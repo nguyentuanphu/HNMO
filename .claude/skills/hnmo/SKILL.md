@@ -37,12 +37,12 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 
 - The desktop client's windows are RML documents with RCSS themes in
   `client/src/bin/Data/Interface/RmlUi` (default theme `legacy`). The web client shows them
-  as they are with `client/web/public/js/ui/rml.js` (sprite sheets, tokens, data bindings), so a
+  as they are with `client/web/src/ui/rml.ts` (sprite sheets, tokens, data bindings), so a
   new window is: open its document, fill its data model like the desktop's `*RmlModel`, and do
   the hit tests in JS (the themes leave pointer events off; the desktop does them in C++).
 - Items come in the server's extended format (`ItemSerializerExtended`, 5-15 bytes); the web
-  client decodes them in `game/inventory.js`. Items are drawn with their 3D model and the
-  `inventory` rotation of `Data/Items/Models` (`ui/itemIcons.js`).
+  client decodes them in `src/game/inventory.ts`. Items are drawn with their 3D model and the
+  `inventory` rotation of `Data/Items/Models` (`src/ui/itemIcons.ts`).
 - For quick browser tests run the web client from source: build `client/web/bridge` and run
   `dotnet bin/Release/net10.0/HNMO.dll --contentRoot <bridge dir>` (port 8081) next to a
   running server; the login may show a server list (click `#servers .choice`), and an account

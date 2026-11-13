@@ -3,45 +3,100 @@
 
 import { PACKETS } from './packets.generated.js';
 
-const HEADER_BYTES = { C1: 3, C3: 3, C2: 4, C4: 4 };
-const HEADER_TYPE = { C1: 0xc1, C2: 0xc2, C3: 0xc3, C4: 0xc4 };
+export type HeaderType = 'C1' | 'C2' | 'C3' | 'C4';
+
+/** A field of a packet or structure, as in the server's XML. */
+export interface FieldDef {
+  name: string;
+  /** Byte offset from the start of the packet (or structure). */
+  index: number;
+  type: string;
+  /** Bytes for strings and binary, bits for small Byte/Enum/Boolean fields. */
+  length?: number;
+  shift?: number;
+  /** The structure's name for Structure and Structure[] fields. */
+  typeName?: string;
+  /** The field holding the element count of a Structure[] field. */
+  countField?: string;
+  defaultValue?: string;
+}
+
+export interface StructureDef {
+  length?: number;
+  fields: FieldDef[];
+}
+
+export interface PacketDef {
+  name: string;
+  header: HeaderType;
+  hasSubCode: boolean;
+  code: number;
+  subCode?: number;
+  length?: number;
+  fields: FieldDef[];
+  structures: Record<string, StructureDef>;
+}
+
+/** A value read from (or written to) a packet field. */
+export type PacketValue = number | boolean | string | Uint8Array | PacketValues | PacketValues[] | undefined;
+
+/** A packet's (or structure's) field values by field name. */
+export interface PacketValues {
+  [field: string]: PacketValue;
+}
+
+export interface PacketHeader {
+  code: number;
+  subCode: number;
+}
+
+interface ReadContext {
+  bytes: Uint8Array;
+  view: DataView;
+  group: string;
+  packet: PacketDef;
+}
+
+const HEADER_BYTES: Record<HeaderType, number> = { C1: 3, C3: 3, C2: 4, C4: 4 };
+const HEADER_TYPE: Record<HeaderType, number> = { C1: 0xc1, C2: 0xc2, C3: 0xc3, C4: 0xc4 };
 const textDecoder = new TextDecoder('utf-8');
 const textEncoder = new TextEncoder();
 
-export function packetLength(bytes) {
+export function packetLength(bytes: Uint8Array): number {
   return bytes[0] === 0xc2 || bytes[0] === 0xc4 ? (bytes[1] << 8) | bytes[2] : bytes[1];
 }
 
-export function packetCode(bytes) {
+export function packetCode(bytes: Uint8Array): PacketHeader {
   const offset = bytes[0] === 0xc2 || bytes[0] === 0xc4 ? 3 : 2;
   return { code: bytes[offset], subCode: bytes[offset + 1] };
 }
 
-function findStructure(group, packet, name) {
+function findStructure(group: string, packet: PacketDef | undefined, name: string | undefined): StructureDef {
+  if (name === undefined) throw new Error(`A structure field of ${packet?.name} has no type name`);
   return packet?.structures?.[name] ?? PACKETS[group].structures[name];
 }
 
 // Size of one element of a structure; -1 when it isn't fixed.
-function structureSize(structure) {
+function structureSize(structure: StructureDef): number {
   if (structure.length) return structure.length;
   return -1;
 }
 
-function readBits(byte, field) {
+function readBits(byte: number, field: FieldDef): number {
   const bits = field.length ?? 8;
   return (byte >> (field.shift ?? 0)) & ((1 << bits) - 1);
 }
 
-function readString(bytes, start, length) {
+function readString(bytes: Uint8Array, start: number, length: number): string {
   let end = start;
   const limit = Math.min(bytes.length, start + length);
   while (end < limit && bytes[end] !== 0) end++;
   return textDecoder.decode(bytes.subarray(start, end));
 }
 
-const FIXED_SIZES = { ShortLittleEndian: 2, ShortBigEndian: 2, IntegerLittleEndian: 4, IntegerBigEndian: 4, LongLittleEndian: 8, LongBigEndian: 8, Float: 4, Double: 8 };
+const FIXED_SIZES: Record<string, number> = { ShortLittleEndian: 2, ShortBigEndian: 2, IntegerLittleEndian: 4, IntegerBigEndian: 4, LongLittleEndian: 8, LongBigEndian: 8, Float: 4, Double: 8 };
 
-function readField(context, field, base, end) {
+function readField(context: ReadContext, field: FieldDef, base: number, end: number): PacketValue {
   const { bytes, view } = context;
   const at = base + field.index;
   // A shorter variant of a packet (e.g. a failure answer) has no value for fields past its end.
@@ -71,8 +126,8 @@ function readField(context, field, base, end) {
   }
 }
 
-function readFields(context, fields, base, end) {
-  const result = {};
+function readFields(context: ReadContext, fields: FieldDef[], base: number, end: number): PacketValues {
+  const result: PacketValues = {};
   for (const field of fields) {
     if (field.type !== 'Structure[]') result[field.name] = readField(context, field, base, end);
   }
@@ -80,8 +135,8 @@ function readFields(context, fields, base, end) {
     if (field.type !== 'Structure[]') continue;
     const structure = findStructure(context.group, context.packet, field.typeName);
     const size = structureSize(structure);
-    const count = field.countField ? result[field.countField] : Math.floor((end - base - field.index) / Math.max(size, 1));
-    const items = [];
+    const count = field.countField ? Number(result[field.countField]) : Math.floor((end - base - field.index) / Math.max(size, 1));
+    const items: PacketValues[] = [];
     let offset = base + field.index;
     for (let i = 0; i < count && size > 0 && offset + size <= end; i++, offset += size) {
       items.push(readFields(context, structure.fields, offset, offset + size));
@@ -92,32 +147,33 @@ function readFields(context, fields, base, end) {
 }
 
 // Decodes a received packet with the named definition, e.g. read('ServerToClient', 'AddNpcsToScope', bytes).
-export function read(group, name, bytes) {
+// The caller names the shape it expects (T); the values come from the definition, unchecked.
+export function read<T extends object = PacketValues>(group: string, name: string, bytes: Uint8Array): T {
   const packet = PACKETS[group].packets[name];
   if (!packet) throw new Error(`Unknown packet ${group}.${name}`);
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  return readFields({ bytes, view, group, packet }, packet.fields, 0, bytes.length);
+  return readFields({ bytes, view, group, packet }, packet.fields, 0, bytes.length) as T;
 }
 
 // ---------- writing ----------
 
-function writeBits(bytes, at, field, value) {
+function writeBits(bytes: Uint8Array, at: number, field: Pick<FieldDef, 'length' | 'shift'>, value: PacketValue): void {
   const bits = field.length ?? 8;
   const shift = field.shift ?? 0;
   const mask = ((1 << bits) - 1) << shift;
   bytes[at] = (bytes[at] & ~mask) | ((Number(value) << shift) & mask);
 }
 
-function fieldEnd(field, values) {
+function fieldEnd(field: FieldDef, values: PacketValues): number {
   if (field.length !== undefined && field.type !== 'Byte' && field.type !== 'Enum' && field.type !== 'Boolean') return field.index + field.length;
   const value = values[field.name];
-  if (field.type === 'Binary') return field.index + (value?.length ?? 0);
-  if (field.type === 'String') return field.index + textEncoder.encode(value ?? '').length;
-  const sizes = { ShortLittleEndian: 2, ShortBigEndian: 2, IntegerLittleEndian: 4, IntegerBigEndian: 4, LongLittleEndian: 8, LongBigEndian: 8, Float: 4, Double: 8 };
+  if (field.type === 'Binary') return field.index + ((value as Uint8Array | undefined)?.length ?? 0);
+  if (field.type === 'String') return field.index + textEncoder.encode((value as string | undefined) ?? '').length;
+  const sizes: Record<string, number> = { ShortLittleEndian: 2, ShortBigEndian: 2, IntegerLittleEndian: 4, IntegerBigEndian: 4, LongLittleEndian: 8, LongBigEndian: 8, Float: 4, Double: 8 };
   return field.index + (sizes[field.type] ?? 1);
 }
 
-function writeField(view, bytes, field, value) {
+function writeField(view: DataView, bytes: Uint8Array, field: FieldDef, value: PacketValue): void {
   const at = field.index;
   switch (field.type) {
     case 'Byte':
@@ -126,26 +182,30 @@ function writeField(view, bytes, field, value) {
       else bytes[at] = Number(value) & 0xff;
       break;
     case 'Boolean': writeBits(bytes, at, { length: 1, shift: field.shift }, value ? 1 : 0); break;
-    case 'ShortLittleEndian': view.setUint16(at, value, true); break;
-    case 'ShortBigEndian': view.setUint16(at, value, false); break;
-    case 'IntegerLittleEndian': view.setUint32(at, value, true); break;
-    case 'IntegerBigEndian': view.setUint32(at, value, false); break;
-    case 'LongLittleEndian': view.setBigUint64(at, BigInt(value), true); break;
-    case 'LongBigEndian': view.setBigUint64(at, BigInt(value), false); break;
-    case 'Float': view.setFloat32(at, value, true); break;
-    case 'Double': view.setFloat64(at, value, true); break;
+    case 'ShortLittleEndian': view.setUint16(at, value as number, true); break;
+    case 'ShortBigEndian': view.setUint16(at, value as number, false); break;
+    case 'IntegerLittleEndian': view.setUint32(at, value as number, true); break;
+    case 'IntegerBigEndian': view.setUint32(at, value as number, false); break;
+    case 'LongLittleEndian': view.setBigUint64(at, BigInt(value as number), true); break;
+    case 'LongBigEndian': view.setBigUint64(at, BigInt(value as number), false); break;
+    case 'Float': view.setFloat32(at, value as number, true); break;
+    case 'Double': view.setFloat64(at, value as number, true); break;
     case 'String': {
-      const encoded = textEncoder.encode(value);
+      const encoded = textEncoder.encode(value as string);
       bytes.set(field.length !== undefined ? encoded.subarray(0, field.length) : encoded, at);
       break;
     }
-    case 'Binary': bytes.set(field.length !== undefined ? value.subarray(0, field.length) : value, at); break;
+    case 'Binary': {
+      const binary = value as Uint8Array;
+      bytes.set(field.length !== undefined ? binary.subarray(0, field.length) : binary, at);
+      break;
+    }
     default: throw new Error(`Writing ${field.type} fields is not supported`);
   }
 }
 
 // Builds a packet to send, e.g. write('ClientToServer', 'WalkRequest', { SourceX: 1, ... }).
-export function write(group, name, values = {}) {
+export function write(group: string, name: string, values: PacketValues = {}): Uint8Array {
   const packet = PACKETS[group].packets[name];
   if (!packet) throw new Error(`Unknown packet ${group}.${name}`);
   const headerBytes = HEADER_BYTES[packet.header];
@@ -156,7 +216,7 @@ export function write(group, name, values = {}) {
   if (headerBytes === 3) bytes[1] = length;
   else view.setUint16(1, length, false);
   bytes[headerBytes - 1] = packet.code;
-  if (packet.hasSubCode) bytes[headerBytes] = packet.subCode;
+  if (packet.hasSubCode) bytes[headerBytes] = packet.subCode ?? 0;
   for (const field of packet.fields) {
     const value = values[field.name] ?? (field.defaultValue !== undefined ? Number(field.defaultValue) : undefined);
     if (value !== undefined) writeField(view, bytes, field, value);
@@ -165,12 +225,12 @@ export function write(group, name, values = {}) {
 }
 
 // Packets of a group indexed by code and sub code, for dispatching received packets.
-export function indexPackets(group) {
-  const byCode = new Map();
+export function indexPackets(group: string): Map<string, string[]> {
+  const byCode = new Map<string, string[]>();
   for (const packet of Object.values(PACKETS[group].packets)) {
     const key = packet.hasSubCode ? `${packet.code}:${packet.subCode}` : `${packet.code}`;
     if (!byCode.has(key)) byCode.set(key, []);
-    byCode.get(key).push(packet.name);
+    byCode.get(key)!.push(packet.name);
   }
   return byCode;
 }

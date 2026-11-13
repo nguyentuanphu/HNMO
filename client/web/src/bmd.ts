@@ -5,23 +5,24 @@
 
 import * as THREE from 'three';
 import { parseBMD, decodeTGA } from './formats.js';
+import type { BMDModel, BMDMesh, BMDBoneFrames } from './formats.js';
 
 const ALPHA_TEST = 0.25;
 
-const fileCache = new Map();
-const textureCache = new Map();
+const fileCache = new Map<string, Promise<Uint8Array>>();
+const textureCache = new Map<string, Promise<THREE.Texture | null>>();
 
-export async function fetchBytes(url) {
+export async function fetchBytes(url: string): Promise<Uint8Array> {
   if (!fileCache.has(url)) {
     fileCache.set(url, fetch(url).then(async (response) => {
       if (!response.ok) throw new Error(`${response.status} ${url}`);
       return new Uint8Array(await response.arrayBuffer());
     }));
   }
-  return fileCache.get(url);
+  return fileCache.get(url)!;
 }
 
-export async function loadModel(dir, fileName) {
+export async function loadModel(dir: string, fileName: string): Promise<BMDModel> {
   const bytes = await fetchBytes(`/data/${dir}/${fileName}`);
   return parseBMD(bytes);
 }
@@ -29,7 +30,13 @@ export async function loadModel(dir, fileName) {
 // Texture scripts in the file name (TextureScript.cpp): the letters after the first
 // "_" can be R (bright), H (hidden mesh), S (stream mesh) and N (no blending).
 // Hair is drawn as hair, not bright, like the client's IsHair textures.
-function textureKind(name) {
+interface TextureKind {
+  isTga: boolean;
+  additive: boolean;
+  hidden: boolean;
+}
+
+function textureKind(name: string): TextureKind {
   const lower = name.toLowerCase();
   const underscore = name.indexOf('_');
   const script = underscore < 0 ? '' : name.slice(underscore + 1, underscore + 5).split('.')[0];
@@ -41,7 +48,7 @@ function textureKind(name) {
   };
 }
 
-async function decodeTexture(url, isTga) {
+async function decodeTexture(url: string, isTga: boolean): Promise<THREE.Texture> {
   const bytes = await fetchBytes(url);
   if (isTga) {
     const { width, height, pixels } = decodeTGA(bytes);
@@ -56,7 +63,7 @@ async function decodeTexture(url, isTga) {
   return texture;
 }
 
-function loadTextureFrom(dir, name) {
+function loadTextureFrom(dir: string, name: string): Promise<THREE.Texture | null> {
   const url = `/data/${dir}/${name}`;
   if (!textureCache.has(url)) {
     const { isTga } = textureKind(name);
@@ -68,11 +75,11 @@ function loadTextureFrom(dir, name) {
       return texture;
     }).catch(() => null));
   }
-  return textureCache.get(url);
+  return textureCache.get(url)!;
 }
 
 // A texture comes from the first of the folders that has it (LoadTextureFromFolders).
-export async function loadTexture(dirs, name) {
+export async function loadTexture(dirs: string | string[], name: string): Promise<THREE.Texture | null> {
   const folders = Array.isArray(dirs) ? dirs : [dirs];
   for (const dir of folders) {
     const texture = await loadTextureFrom(dir, name);
@@ -85,7 +92,12 @@ export async function loadTexture(dirs, name) {
 // Meshes whose texture name starts with "hid" are never drawn (Data::Items::IsHiddenTexture).
 const HIDDEN_TEXTURE_PREFIX = 'hid';
 
-export async function createMaterial(dir, textureName, { glow = false } = {}) {
+export interface MaterialOptions {
+  /** Draw additively, like a texture whose name asks for it. */
+  glow?: boolean;
+}
+
+export async function createMaterial(dir: string | string[], textureName: string, { glow = false }: MaterialOptions = {}): Promise<THREE.MeshBasicMaterial> {
   const { isTga, additive: additiveByName, hidden } = textureKind(textureName);
   const additive = glow || additiveByName;
   if (hidden || textureName.startsWith(HIDDEN_TEXTURE_PREFIX)) return new THREE.MeshBasicMaterial({ visible: false });
@@ -109,7 +121,7 @@ const tmpPos = new THREE.Vector3();
 const tmpPosB = new THREE.Vector3();
 const unitScale = new THREE.Vector3(1, 1, 1);
 
-function boneKey(frames, key, outPosition, outQuaternion) {
+function boneKey(frames: BMDBoneFrames, key: number, outPosition: THREE.Vector3, outQuaternion: THREE.Quaternion): void {
   const i = key * 3;
   outPosition.set(frames.positions[i], frames.positions[i + 1], frames.positions[i + 2]);
   tmpEuler.set(frames.rotations[i], frames.rotations[i + 1], frames.rotations[i + 2], 'ZYX');
@@ -117,7 +129,7 @@ function boneKey(frames, key, outPosition, outQuaternion) {
 }
 
 // World matrices of every bone for an action at a (fractional, looping) key.
-export function computeBoneMatrices(model, actionIndex, time, out) {
+export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: number, out?: THREE.Matrix4[]): THREE.Matrix4[] {
   const action = model.actions[actionIndex] ? actionIndex : 0;
   const numKeys = Math.max(1, model.actions[action]?.numKeys || 1);
   const k0 = Math.floor(time) % numKeys;
@@ -145,14 +157,46 @@ export function computeBoneMatrices(model, actionIndex, time, out) {
 
 const TRIANGLE_FAN = [[0, 1, 2], [0, 2, 3]];
 
+/** A mesh expanded to one entry per drawn corner, with each corner's bone and bind pose. */
+export interface MeshSkin {
+  nodes: Int16Array;
+  local: Float32Array;
+  normalNodes: Int16Array;
+  localNormals: Float32Array;
+  uvs: Float32Array;
+}
+
+/** One mesh of a model as three.js geometry (see buildGeometries). */
+export interface GeometryPart {
+  geometry: THREE.BufferGeometry;
+  skin: MeshSkin;
+  textureName: string;
+  meshIndex: number;
+}
+
+/** The light multiplier of an item level at a time in seconds. */
+export type LightFactor = (seconds: number) => THREE.Color;
+
+/** A drawn part of an AnimatedModel. */
+export interface ModelPart extends GeometryPart {
+  mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
+  lightFactor?: LightFactor | null;
+}
+
+/** Extra meshes drawn over a model's parts (game/itemGlow.js), updated every frame. */
+export interface ModelGlow {
+  meshes: THREE.Mesh[];
+  update(seconds: number): void;
+}
+
 // Expands a mesh's triangles and quads into flat vertex arrays. Keeps each vertex's
 // bone and bind position (and normal), so an animated model can be re-posed every frame.
-function expandMesh(mesh) {
-  const nodes = [];
-  const local = [];
-  const normalNodes = [];
-  const localNormals = [];
-  const uvs = [];
+function expandMesh(mesh: BMDMesh): MeshSkin {
+  const nodes: number[] = [];
+  const local: number[] = [];
+  const normalNodes: number[] = [];
+  const localNormals: number[] = [];
+  const uvs: number[] = [];
   for (const tri of mesh.triangles) {
     const fans = tri.corners === 4 ? TRIANGLE_FAN : TRIANGLE_FAN.slice(0, 1);
     for (const fan of fans) {
@@ -179,7 +223,7 @@ function expandMesh(mesh) {
 const tmpVec = new THREE.Vector3();
 const tmpNormalMatrix = new THREE.Matrix3();
 
-export function poseVertices(skin, boneMatrices, positions) {
+export function poseVertices(skin: MeshSkin, boneMatrices: THREE.Matrix4[], positions: THREE.TypedArray): void {
   for (let i = 0; i < skin.nodes.length; i++) {
     tmpVec.set(skin.local[i * 3], skin.local[i * 3 + 1], skin.local[i * 3 + 2]);
     const bone = boneMatrices[skin.nodes[i]];
@@ -191,7 +235,7 @@ export function poseVertices(skin, boneMatrices, positions) {
 }
 
 // Normals turn with their bone (rotation only), for the chrome glow passes.
-export function poseNormals(skin, boneMatrices, normals) {
+export function poseNormals(skin: MeshSkin, boneMatrices: THREE.Matrix4[], normals: THREE.TypedArray): void {
   for (let i = 0; i < skin.normalNodes.length; i++) {
     tmpVec.set(skin.localNormals[i * 3], skin.localNormals[i * 3 + 1], skin.localNormals[i * 3 + 2]);
     const bone = boneMatrices[skin.normalNodes[i]];
@@ -203,7 +247,7 @@ export function poseNormals(skin, boneMatrices, normals) {
 }
 
 // One geometry per mesh of the model, posed with the given bone matrices.
-export function buildGeometries(model, boneMatrices) {
+export function buildGeometries(model: BMDModel, boneMatrices: THREE.Matrix4[]): GeometryPart[] {
   return model.meshes.map((mesh, meshIndex) => {
     const skin = expandMesh(mesh);
     const positions = new Float32Array(skin.local.length);
@@ -222,7 +266,14 @@ export function buildGeometries(model, boneMatrices) {
 // An animated model whose meshes follow a skeleton (its own, or a shared one such as Player.bmd).
 // Glow passes are extra meshes on the same geometry (see game/itemGlow.js).
 export class AnimatedModel {
-  constructor(skeleton, parts, materials) {
+  skeleton: BMDModel;
+  group: THREE.Group;
+  matrices: THREE.Matrix4[];
+  parts: ModelPart[];
+  glows: ModelGlow[];
+  lightFactor: LightFactor | null;
+
+  constructor(skeleton: BMDModel, parts: GeometryPart[], materials: THREE.MeshBasicMaterial[]) {
     this.skeleton = skeleton;
     this.group = new THREE.Group();
     this.matrices = computeBoneMatrices(skeleton, 0, 0);
@@ -237,7 +288,7 @@ export class AnimatedModel {
     });
   }
 
-  pose(actionIndex, time) {
+  pose(actionIndex: number, time: number): void {
     computeBoneMatrices(this.skeleton, actionIndex, time, this.matrices);
     const withNormals = this.glows.length > 0;
     for (const part of this.parts) {
@@ -252,12 +303,12 @@ export class AnimatedModel {
     }
   }
 
-  addGlow(glow) {
+  addGlow(glow: ModelGlow): void {
     this.glows.push(glow);
     for (const mesh of glow.meshes) this.group.add(mesh);
   }
 
-  setLight(color, seconds = 0) {
+  setLight(color: THREE.Color, seconds = 0): void {
     for (const part of this.parts) {
       if (part.mesh.material.blending === THREE.AdditiveBlending) continue;
       part.mesh.material.color.copy(color);

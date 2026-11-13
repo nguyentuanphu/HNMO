@@ -31,14 +31,19 @@ The GitHub workflow "HNMO package" builds the Windows folder as a download.
 
 ### From source (developers)
 
-You need the .NET 10 SDK, Node.js (for `npm install` only) and a running server,
+You need the .NET 10 SDK, Node.js 22 and a running server,
 e.g. the server program started with `-demo -autostart -resolveIP:loopback`.
 
 ```bash
-cd web
+cd client/web
 npm install
-npm start        # HNMO.Web: the client, the game data and the relay on port 8081
+npm start        # builds the TypeScript, then HNMO.Web: the client, the game data and the relay on port 8081
+npm run watch    # in a second terminal: rebuilds on every change
 ```
+
+The client is TypeScript (`src/`, strict), compiled by `tsc` into `public/js` (not in git).
+`npm run typecheck` checks it without writing files; the HNMO folder build and the
+"Web client" workflow stop on any type error.
 
 Open <http://127.0.0.1:8081/> and log in, e.g. with the test account `test300` /
 `test300`.
@@ -51,7 +56,7 @@ ours to publish.
 
 ## Packets
 
-`public/js/net/packets.generated.js` is generated from the server's packet
+`src/net/packets.generated.ts` is generated from the server's packet
 definitions, so every packet the server knows can be read and written by name:
 
 ```bash
@@ -60,7 +65,7 @@ node tools/generate-packets.mjs <the HNMO server>/src/Network/Packets
 
 ## How the files are read
 
-The parsers in `public/js/formats.js` are ports of the client's loaders, and each
+The parsers in `src/formats.ts` are ports of the client's loaders, and each
 names the C++ function it follows:
 
 | File | Format |

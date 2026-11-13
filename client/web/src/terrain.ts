@@ -5,6 +5,25 @@
 import * as THREE from 'three';
 import { TERRAIN_SIZE, TERRAIN_SCALE, NO_LAYER } from './formats.js';
 import { fetchBytes } from './bmd.js';
+import type { TerrainMapping } from './formats.js';
+
+/** Fog of the scene, which the terrain shader applies itself. */
+export interface TerrainFog {
+  color: THREE.Color;
+  near: number;
+  far: number;
+}
+
+export interface TerrainOptions {
+  worldDir: string;
+  heights: Float32Array;
+  mapping: TerrainMapping;
+  /** The light map: r, g, b per cell (see loadLightMap). */
+  light: Float32Array;
+  fog: TerrainFog;
+}
+
+export type TerrainMesh = THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
 
 const ATLAS_COLUMNS = 8;
 const ATLAS_ROWS = 4;
@@ -13,14 +32,14 @@ const TILE_TEXELS_PER_CELL = 64;
 const MAX_TILES = ATLAS_COLUMNS * ATLAS_ROWS;
 
 // The order of BITMAP_MAPTILE + n in MapManager.cpp.
-export function tileFileNames(worldDir) {
+export function tileFileNames(worldDir: string): string[] {
   const names = ['TileGrass01', 'TileGrass02', 'TileGround01', 'TileGround02', 'TileGround03', 'TileWater01',
     'TileWood01', 'TileRock01', 'TileRock02', 'TileRock03', 'TileRock04', 'TileRock05', 'TileRock06', 'TileRock07'];
   for (let i = 1; i <= 16; i++) names.push(`ExtTile${String(i).padStart(2, '0')}`);
   return names.map((name) => `${worldDir}/${name}.jpg`);
 }
 
-async function loadBitmap(url) {
+async function loadBitmap(url: string): Promise<ImageBitmap | null> {
   try {
     const bytes = await fetchBytes(`/data/${url}`);
     return await createImageBitmap(new Blob([bytes], { type: 'image/jpeg' }));
@@ -29,11 +48,11 @@ async function loadBitmap(url) {
   }
 }
 
-async function buildAtlas(urls, usedTiles) {
+async function buildAtlas(urls: string[], usedTiles: Set<number>): Promise<{ texture: THREE.CanvasTexture; scales: Float32Array }> {
   const canvas = document.createElement('canvas');
   canvas.width = ATLAS_COLUMNS * ATLAS_SLOT;
   canvas.height = ATLAS_ROWS * ATLAS_SLOT;
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext('2d')!;
   context.fillStyle = '#555';
   context.fillRect(0, 0, canvas.width, canvas.height);
   const scales = new Float32Array(MAX_TILES).fill(TILE_TEXELS_PER_CELL / ATLAS_SLOT);
@@ -52,13 +71,13 @@ async function buildAtlas(urls, usedTiles) {
   return { texture, scales };
 }
 
-export async function loadLightMap(url) {
+export async function loadLightMap(url: string): Promise<Float32Array> {
   const bitmap = await loadBitmap(url);
   const light = new Float32Array(TERRAIN_SIZE * TERRAIN_SIZE * 3).fill(1);
   if (!bitmap) return light;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = TERRAIN_SIZE;
-  const context = canvas.getContext('2d', { willReadFrequently: true });
+  const context = canvas.getContext('2d', { willReadFrequently: true })!;
   context.drawImage(bitmap, 0, 0, TERRAIN_SIZE, TERRAIN_SIZE);
   const { data } = context.getImageData(0, 0, TERRAIN_SIZE, TERRAIN_SIZE);
   for (let i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; i++) {
@@ -69,14 +88,14 @@ export async function loadLightMap(url) {
   return light;
 }
 
-function byteTexture(bytes, linear) {
+function byteTexture(bytes: Uint8Array, linear: boolean): THREE.DataTexture {
   const texture = new THREE.DataTexture(bytes, TERRAIN_SIZE, TERRAIN_SIZE, THREE.RedFormat, THREE.UnsignedByteType);
   texture.magFilter = texture.minFilter = linear ? THREE.LinearFilter : THREE.NearestFilter;
   texture.needsUpdate = true;
   return texture;
 }
 
-function lightTexture(light) {
+function lightTexture(light: Float32Array): THREE.DataTexture {
   const bytes = new Uint8Array(TERRAIN_SIZE * TERRAIN_SIZE * 4);
   for (let i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; i++) {
     bytes[i * 4] = light[i * 3] * 255;
@@ -90,7 +109,7 @@ function lightTexture(light) {
   return texture;
 }
 
-function buildGeometry(heights) {
+function buildGeometry(heights: Float32Array): THREE.BufferGeometry {
   const count = TERRAIN_SIZE * TERRAIN_SIZE;
   const positions = new Float32Array(count * 3);
   const cells = new Float32Array(count * 2);
@@ -169,13 +188,13 @@ const fragmentShader = /* glsl */ `
   }
 `;
 
-function usedTileIndices(mapping) {
-  const used = new Set(mapping.layer1);
+function usedTileIndices(mapping: TerrainMapping): Set<number> {
+  const used = new Set<number>(mapping.layer1);
   for (const index of mapping.layer2) if (index !== NO_LAYER) used.add(index);
   return used;
 }
 
-export async function createTerrain({ worldDir, heights, mapping, light, fog }) {
+export async function createTerrain({ worldDir, heights, mapping, light, fog }: TerrainOptions): Promise<TerrainMesh> {
   const { texture, scales } = await buildAtlas(tileFileNames(worldDir), usedTileIndices(mapping));
   const material = new THREE.ShaderMaterial({
     vertexShader,
@@ -199,18 +218,18 @@ export async function createTerrain({ worldDir, heights, mapping, light, fog }) 
 }
 
 // Height at a world position (MU units), interpolated between the four corners of its cell.
-export function sampleHeight(heights, x, y) {
+export function sampleHeight(heights: Float32Array, x: number, y: number): number {
   const fx = Math.min(Math.max(x / TERRAIN_SCALE, 0), TERRAIN_SIZE - 1.001);
   const fy = Math.min(Math.max(y / TERRAIN_SCALE, 0), TERRAIN_SIZE - 1.001);
   const xi = Math.floor(fx), yi = Math.floor(fy);
   const tx = fx - xi, ty = fy - yi;
-  const h = (cx, cy) => heights[cy * TERRAIN_SIZE + cx];
+  const h = (cx: number, cy: number) => heights[cy * TERRAIN_SIZE + cx];
   const top = h(xi, yi) * (1 - tx) + h(xi + 1, yi) * tx;
   const bottom = h(xi, yi + 1) * (1 - tx) + h(xi + 1, yi + 1) * tx;
   return top * (1 - ty) + bottom * ty;
 }
 
-export function sampleLight(light, x, y, out) {
+export function sampleLight(light: Float32Array, x: number, y: number, out: THREE.Color): THREE.Color {
   const xi = Math.min(Math.max(Math.round(x / TERRAIN_SCALE), 0), TERRAIN_SIZE - 1);
   const yi = Math.min(Math.max(Math.round(y / TERRAIN_SCALE), 0), TERRAIN_SIZE - 1);
   const i = (yi * TERRAIN_SIZE + xi) * 3;

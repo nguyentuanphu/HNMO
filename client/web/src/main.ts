@@ -15,6 +15,37 @@ import { loadGlowColors } from './game/itemGlow.js';
 import { Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
 import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
+import type { WorldData } from './world.js';
+import type { TerrainMesh } from './terrain.js';
+import type { Character } from './game/characters.js';
+import type { AppearanceItem, EquipmentAppearance, EquipmentSlotName, ItemChoice } from './game/items.js';
+import type { CharacterListEntry } from './net/session.js';
+import type { Connection } from './net/connection.js';
+
+// The map the hero is on: its data and the terrain mesh the pointer is cast against.
+export type GameWorld = WorldData & { terrain: TerrainMesh };
+
+// The app's state, also exposed as window.__game for automated tests and debugging.
+export interface GameState {
+  world: GameWorld | null;
+  worldGroup?: THREE.Group;
+  hero: Character | null;
+  online: OnlineWorld | null;
+  mapNumber: number | null;
+  camera: THREE.PerspectiveCamera;
+  inventory?: Inventory;
+  itemWindows?: ItemWindows;
+}
+
+declare global {
+  interface Window {
+    __game: GameState;
+    __viewerReady?: boolean;
+  }
+}
+
+// What the login form holds (its inputs' names).
+interface LoginSettings { relay: string; host: string; port: string; username: string; password: string }
 
 THREE.ColorManagement.enabled = false;
 
@@ -25,16 +56,19 @@ const LABEL_RANGE_CELLS = 18;
 const MAX_FRAME_SECONDS = 0.5; // a hidden tab still catches up on walks, but not on minutes
 const SETTINGS_KEY = 'hnmo-login';
 
-const $ = (id) => document.getElementById(id);
+// The page's elements: all of them are always in index.html.
+const $ = <E extends HTMLElement = HTMLElement>(id: string): E => document.getElementById(id) as E;
 const ui = {
-  canvas: $('view'), status: $('status'), bar: $('bar'), position: $('position'), fps: $('fps'),
-  login: $('login'), loginForm: $('loginForm'), loginError: $('loginError'), servers: $('servers'), characters: $('characters'),
-  offline: $('offline'), hud: $('hud'), heroName: $('heroName'), labels: $('labels'), wardrobe: $('wardrobe'), bodySet: $('bodySet'),
-  armorSet: $('armorSet'), rightHand: $('rightHand'), leftHand: $('leftHand'), wings: $('wings'), previousSet: $('previousSet'), nextSet: $('nextSet'),
-  holdWeapons: $('holdWeapons'), itemLevel: $('itemLevel'), excellent: $('excellent'), ancient: $('ancient'), mapPicker: $('mapPicker'), mapSelect: $('mapSelect'),
+  canvas: $<HTMLCanvasElement>('view'), status: $('status'), bar: $('bar'), position: $('position'), fps: $('fps'),
+  login: $('login'), loginForm: $<HTMLFormElement>('loginForm'), loginError: $('loginError'), servers: $('servers'), characters: $('characters'),
+  offline: $<HTMLButtonElement>('offline'), hud: $('hud'), heroName: $('heroName'), labels: $('labels'), wardrobe: $('wardrobe'), bodySet: $<HTMLSelectElement>('bodySet'),
+  armorSet: $<HTMLSelectElement>('armorSet'), rightHand: $<HTMLSelectElement>('rightHand'), leftHand: $<HTMLSelectElement>('leftHand'), wings: $<HTMLSelectElement>('wings'),
+  previousSet: $<HTMLButtonElement>('previousSet'), nextSet: $<HTMLButtonElement>('nextSet'),
+  holdWeapons: $<HTMLInputElement>('holdWeapons'), itemLevel: $<HTMLSelectElement>('itemLevel'), excellent: $<HTMLInputElement>('excellent'), ancient: $<HTMLInputElement>('ancient'),
+  mapPicker: $('mapPicker'), mapSelect: $<HTMLSelectElement>('mapSelect'),
 };
 
-const chat = new Chat({ log: $('chatLog'), form: $('chatForm'), input: $('chatInput') });
+const chat = new Chat({ log: $('chatLog'), form: $<HTMLFormElement>('chatForm'), input: $<HTMLInputElement>('chatInput') });
 
 const renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: true });
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
@@ -46,28 +80,27 @@ const root = new THREE.Group(); // game coordinates: x east, y north, z up
 root.rotation.x = -Math.PI / 2;
 scene.add(root);
 
-const state = { world: null, hero: null, online: null, mapNumber: null };
+const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 window.__game = state; // for automated tests and debugging from the console
-state.camera = camera;
 
-function setStatus(text, progress) {
+function setStatus(text: string, progress?: number): void {
   ui.status.textContent = text;
   if (progress !== undefined) ui.bar.style.width = `${Math.round(progress * 100)}%`;
 }
 
 function resize() {
-  const { clientWidth: width, clientHeight: height } = ui.canvas.parentElement;
+  const { clientWidth: width, clientHeight: height } = ui.canvas.parentElement!;
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 }
 window.addEventListener('resize', resize);
 
-const toScene = (x, y, z) => new THREE.Vector3(x, z, -y);
+const toScene = (x: number, y: number, z: number): THREE.Vector3 => new THREE.Vector3(x, z, -y);
 
 // ---------- world ----------
 
-async function loadMap(mapNumber) {
+async function loadMap(mapNumber: number): Promise<void> {
   if (state.mapNumber === mapNumber) return;
   if (state.worldGroup) root.remove(state.worldGroup);
   setStatus(`Loading ${mapName(mapNumber)}…`, 0.05);
@@ -79,25 +112,27 @@ async function loadMap(mapNumber) {
   root.add(world.group);
 }
 
-async function placeHero({ id, name, bodySet, equipment, x, y }) {
+async function placeHero({ id, name, bodySet, equipment, x, y }: {
+  id: number; name: string; bodySet: number; equipment: EquipmentAppearance; x: number; y: number;
+}): Promise<void> {
   setStatus('Loading character…', 0.95);
   const hero = await createPlayerCharacter({ id, name, bodySet, equipment });
   if (state.hero) root.remove(state.hero.group);
   state.hero = hero;
   hero.holdWeapons = !state.online && ui.holdWeapons.checked;
-  state.hero.placeAt(x, y);
-  root.add(state.hero.group);
+  hero.placeAt(x, y);
+  root.add(hero.group);
   ui.heroName.textContent = name;
 }
 
 // The hero wears what the inventory's equipment slots hold (the desktop client draws its own
 // character from CharacterMachine->Equipment): put on again when that changes.
-const EQUIPMENT_OF_SLOT = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings'];
-let wornSignature = null;
-async function wearInventory(character) {
-  const equipment = {};
+const EQUIPMENT_OF_SLOT: EquipmentSlotName[] = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings'];
+let wornSignature: string | null = null;
+async function wearInventory(character: CharacterListEntry): Promise<void> {
+  const equipment: EquipmentAppearance = {};
   EQUIPMENT_OF_SLOT.forEach((name, slot) => {
-    const item = state.inventory.items.get(slot);
+    const item = state.inventory!.items.get(slot);
     equipment[name] = item ? { group: item.group, number: item.number, glowLevel: item.level, excellent: item.excellent > 0, ancient: item.ancientSet > 0 } : null;
   });
   const signature = JSON.stringify(equipment);
@@ -123,9 +158,10 @@ async function wearInventory(character) {
 
 const view = { yaw: CAMERA.yaw, distance: CAMERA.distance, dragging: false, lastX: 0 };
 
-function updateCamera() {
-  const { x, y } = state.hero.position;
-  const z = sampleHeight(state.world.heights, x, y);
+function updateCamera(): void {
+  // Called by the frame loop once the hero (and so the world) is there.
+  const { x, y } = state.hero!.position;
+  const z = sampleHeight(state.world!.heights, x, y);
   const horizontal = Math.cos(CAMERA.pitch) * view.distance;
   camera.position.copy(toScene(x + Math.sin(view.yaw) * horizontal, y - Math.cos(view.yaw) * horizontal, z + Math.sin(CAMERA.pitch) * view.distance));
   camera.lookAt(toScene(x, y, z + 100));
@@ -134,11 +170,11 @@ function updateCamera() {
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-function pickCell(event) {
+function pickCell(event: MouseEvent): { x: number; y: number } | null {
   const rect = ui.canvas.getBoundingClientRect();
   pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointer, camera);
-  const hit = raycaster.intersectObject(state.world.terrain, false)[0];
+  const hit = raycaster.intersectObject(state.world!.terrain, false)[0];
   if (!hit) return null;
   const local = root.worldToLocal(hit.point.clone());
   return { x: Math.floor(local.x / TERRAIN_SCALE), y: Math.floor(local.y / TERRAIN_SCALE) };
@@ -147,16 +183,16 @@ function pickCell(event) {
 ui.canvas.addEventListener('contextmenu', (event) => event.preventDefault());
 // The NPC under the pointer: the nearest one whose drawn body the pointer is on.
 const npcBox = new THREE.Box3();
-function pickNpc(event) {
+function pickNpc(event: MouseEvent): Character | null {
   if (!state.online) return null;
   const rect = ui.canvas.getBoundingClientRect();
-  let best = null;
+  let best: { character: Character; distance: number } | null = null;
   for (const character of state.online.characters.values()) {
     if (character.kind !== 'npc') continue;
     npcBox.setFromObject(character.group);
     if (npcBox.isEmpty()) continue;
     const top = npcBox.max.clone().project(camera), bottom = npcBox.min.clone().project(camera);
-    const toScreen = (v) => ({ x: rect.left + (v.x + 1) / 2 * rect.width, y: rect.top + (1 - v.y) / 2 * rect.height });
+    const toScreen = (v: THREE.Vector3) => ({ x: rect.left + (v.x + 1) / 2 * rect.width, y: rect.top + (1 - v.y) / 2 * rect.height });
     const a = toScreen(top), b = toScreen(bottom);
     const left = Math.min(a.x, b.x), right = Math.max(a.x, b.x), upper = Math.min(a.y, b.y), lower = Math.max(a.y, b.y);
     const pad = 8;
@@ -168,14 +204,15 @@ function pickNpc(event) {
 }
 
 ui.canvas.addEventListener('pointerdown', (event) => {
-  if (!state.hero) return;
+  const hero = state.hero;
+  if (!hero) return;
   if (event.button === 2) { view.dragging = true; view.lastX = event.clientX; return; }
   const npc = pickNpc(event);
-  if (npc) { state.online.talkTo(npc); return; }
+  if (npc) { state.online!.talkTo(npc); return; } // an NPC is only found online
   const cell = pickCell(event);
   if (!cell) return;
   if (state.online) state.online.walkTo(cell);
-  else state.hero.walk(findPath(state.world.flags, state.hero.cell, cell));
+  else hero.walk(findPath(state.world!.flags, hero.cell, cell));
 });
 window.addEventListener('pointerup', () => { view.dragging = false; });
 window.addEventListener('pointermove', (event) => {
@@ -190,17 +227,18 @@ ui.canvas.addEventListener('wheel', (event) => {
 
 // ---------- name labels ----------
 
-const labelElements = new Map();
+const labelElements = new Map<Character, HTMLSpanElement>();
 
-function updateLabels() {
-  const visible = new Set();
-  if (state.online) {
+function updateLabels(): void {
+  const visible = new Set<Character>();
+  const hero = state.hero, world = state.world;
+  if (state.online && hero && world) {
     const rect = ui.canvas.getBoundingClientRect();
     for (const character of state.online.characters.values()) {
       if (character.kind === 'monster') continue;
-      const dx = character.cell.x - state.hero.cell.x, dy = character.cell.y - state.hero.cell.y;
+      const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
       if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) continue;
-      const point = toScene(character.position.x, character.position.y, sampleHeight(state.world.heights, character.position.x, character.position.y) + 220).project(camera);
+      const point = toScene(character.position.x, character.position.y, sampleHeight(world.heights, character.position.x, character.position.y) + 220).project(camera);
       if (point.z > 1) continue;
       let element = labelElements.get(character);
       if (!element) {
@@ -226,13 +264,13 @@ function updateLabels() {
 let last = performance.now();
 let frames = 0, fpsTime = 0;
 
-function frame(now) {
+function frame(now: number): void {
   const dt = Math.min((now - last) / 1000, MAX_FRAME_SECONDS);
   last = now;
   frames++; fpsTime += dt;
   if (fpsTime >= 1) { ui.fps.textContent = `${frames} fps`; frames = 0; fpsTime = 0; }
   if (state.hero) {
-    state.hero.update(dt, state.world);
+    state.hero.update(dt, state.world!);
     state.online?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
@@ -244,23 +282,23 @@ function frame(now) {
 
 // ---------- login screens ----------
 
-function loadSettings() {
-  try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) ?? {}; } catch { return {}; }
+function loadSettings(): Record<string, unknown> {
+  try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? 'null') ?? {}; } catch { return {}; }
 }
 
-function saveSettings(settings) {
+function saveSettings(settings: Record<string, string>): void {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* private window */ }
 }
 
-function showError(error) {
-  ui.loginError.textContent = error.message ?? String(error);
+function showError(error: unknown): void {
+  ui.loginError.textContent = error instanceof Error ? error.message : String(error);
   ui.loginError.hidden = false;
 }
 
-function chooseFrom(container, items, describe) {
+function chooseFrom<T>(container: HTMLElement, items: T[], describe: (item: T) => string): Promise<T> {
   container.replaceChildren();
   container.hidden = false;
-  return new Promise((resolve) => {
+  return new Promise<T>((resolve) => {
     for (const item of items) {
       const button = document.createElement('button');
       button.type = 'button';
@@ -272,19 +310,19 @@ function chooseFrom(container, items, describe) {
   });
 }
 
-const escapeHtml = (text) => String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-const NEW_CHARACTER = { create: true };
+const escapeHtml = (text: unknown): string => String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+const NEW_CHARACTER = { create: true } as const;
 const MAX_CHARACTERS = 5;
 
 // The character list, with a form to create one (the client's CharacterScene).
 // The server sends the list once; a created character is added from the server's answer,
 // as the client's CharacterScene does.
-async function chooseCharacter(connection) {
+async function chooseCharacter(connection: Connection): Promise<CharacterListEntry> {
   const characters = await fetchCharacters(connection);
   for (;;) {
-    const choices = characters.length < MAX_CHARACTERS ? [...characters, NEW_CHARACTER] : characters;
-    const choice = await chooseFrom(ui.characters, choices, (c) => (c.create ? '+ Create a character<small>Dark Wizard, Dark Knight, Fairy Elf, …</small>' : `${escapeHtml(c.name)}<small>Level ${c.level} ${CLASSES[c.classIndex]}</small>`));
-    if (!choice.create) return choice;
+    const choices: (CharacterListEntry | typeof NEW_CHARACTER)[] = characters.length < MAX_CHARACTERS ? [...characters, NEW_CHARACTER] : characters;
+    const choice = await chooseFrom(ui.characters, choices, (c) => ('create' in c ? '+ Create a character<small>Dark Wizard, Dark Knight, Fairy Elf, …</small>' : `${escapeHtml(c.name)}<small>Level ${c.level} ${CLASSES[c.classIndex]}</small>`));
+    if (!('create' in choice)) return choice;
     const created = await askNewCharacter();
     if (!created) continue;
     try {
@@ -296,7 +334,7 @@ async function chooseCharacter(connection) {
   }
 }
 
-function askNewCharacter() {
+function askNewCharacter(): Promise<{ name: string; classIndex: number } | null> {
   ui.characters.replaceChildren();
   const form = document.createElement('div');
   form.className = 'choices';
@@ -305,19 +343,22 @@ function askNewCharacter() {
     <label class="row"><span>Class</span><select id="newClass">${CLASSES.map((name, index) => `<option value="${index}">${name}</option>`).join('')}</select></label>
     <div class="buttons"><button type="button" class="primary" id="createIt">Create</button><button type="button" id="cancelIt">Back</button></div>`;
   ui.characters.append(form);
-  form.querySelector('#newName').focus();
+  // The form's fields were just written above.
+  const nameInput = form.querySelector<HTMLInputElement>('#newName')!;
+  const classSelect = form.querySelector<HTMLSelectElement>('#newClass')!;
+  nameInput.focus();
   return new Promise((resolve) => {
-    form.querySelector('#cancelIt').addEventListener('click', () => resolve(null), { once: true });
-    form.querySelector('#createIt').addEventListener('click', () => {
-      const name = form.querySelector('#newName').value.trim();
+    form.querySelector('#cancelIt')!.addEventListener('click', () => resolve(null), { once: true });
+    form.querySelector('#createIt')!.addEventListener('click', () => {
+      const name = nameInput.value.trim();
       if (name.length < 4 || name.length > 10) { showError(new Error('A character name has 4 to 10 letters or digits.')); return; }
       ui.loginError.hidden = true;
-      resolve({ name, classIndex: Number(form.querySelector('#newClass').value) });
+      resolve({ name, classIndex: Number(classSelect.value) });
     });
   });
 }
 
-async function playOnline(settings) {
+async function playOnline(settings: LoginSettings): Promise<void> {
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
   const servers = await fetchServerList(settings.relay, connectServer);
@@ -332,33 +373,44 @@ async function playOnline(settings) {
   await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors()]);
   // The server sends who is in view right after the character information, while
   // the map is still loading: keep those packets and replay them once it's ready.
-  const earlyPackets = [];
+  const earlyPackets: Uint8Array[] = [];
   const stopBuffering = connection.onPacket((bytes) => earlyPackets.push(bytes));
   // The inventory follows the server from the start: it sends the items right after the character.
-  state.inventory = new Inventory(connection);
+  const inventory = new Inventory(connection);
+  state.inventory = inventory;
   const info = await enterWorld(connection, character.name);
-  state.inventory.money = info.Money ?? 0;
-  state.itemWindows = new ItemWindows({ inventory: state.inventory });
-  state.inventory.onChange((what) => { if (what === 'inventory') wearInventory(character); });
+  inventory.money = typeof info.Money === 'number' ? info.Money : 0;
+  // The character's stats for the item tooltips' requirement lines (CharacterInformationExtended).
+  const stat = (name: string): number | undefined => (typeof info[name] === 'number' ? info[name] as number : undefined);
+  const tooltipCharacter = {
+    classIndex: character.classIndex, level: character.level,
+    strength: stat('Strength'), agility: stat('Agility'), vitality: stat('Vitality'), energy: stat('Energy'), leadership: stat('Leadership'),
+    maxLife: stat('MaximumHealth'), maxMana: stat('MaximumMana'),
+  };
+  state.itemWindows = new ItemWindows({ inventory, character: () => tooltipCharacter });
+  inventory.onChange((what) => { if (what === 'inventory') wearInventory(character); });
   wearInventory(character); // what the hero wears now, from the inventory the server sent with the character
   ui.login.hidden = true;
+  const playerId = connection.playerId!; // known since login()
   await loadMap(info.MapId);
-  await placeHero({ id: connection.playerId, name: character.name, bodySet: character.classIndex + 1, equipment: character.equipment, x: info.X, y: info.Y });
+  await placeHero({ id: playerId, name: character.name, bodySet: character.classIndex + 1, equipment: character.equipment, x: info.X, y: info.Y });
   stopBuffering();
+  // The world and the hero are there now; the map changes only come once state.online is set.
   state.online = new OnlineWorld({
-    connection, root, world: state.world, hero: state.hero, playerId: connection.playerId,
+    connection, root, world: state.world!, hero: state.hero!, playerId,
     onMessage: (text, kind) => chat.add(text, kind),
     onMapChanged: async (map, x, y) => {
       await loadMap(map);
-      state.online.world = state.world;
-      state.hero.placeAt(x, y);
+      state.online!.world = state.world!;
+      state.hero!.placeAt(x, y);
       chat.add(`Welcome to ${mapName(map)}.`, 'system');
       setStatus(`${mapName(map)}. Enter opens the chat; /move <map> warps.`, 1);
     },
   });
-  chat.enable((text) => state.online.say(text));
+  const online = state.online;
+  chat.enable((text) => online.say(text));
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
-  earlyPackets.forEach((bytes) => state.online.handle(bytes));
+  earlyPackets.forEach((bytes) => online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }
@@ -367,23 +419,23 @@ async function playOnline(settings) {
 
 const NOTHING = '';
 
-function fillSelect(select, items, { none = true } = {}) {
+function fillSelect(select: HTMLSelectElement, items: ItemChoice[], { none = true } = {}): void {
   select.replaceChildren();
   if (none) select.append(new Option('Nothing', NOTHING));
   for (const item of items) select.append(new Option(`${item.name}`, `${item.group}:${item.number}`));
 }
 
-function selectedItem(select) {
+function selectedItem(select: HTMLSelectElement): { group: number; number: number } | null {
   if (select.value === NOTHING) return null;
   const [group, number] = select.value.split(':').map(Number);
   return { group, number };
 }
 
 // An armour set is the same item number in the helm, armour, pants, gloves and boots groups.
-function armorSetEquipment(number) {
+function armorSetEquipment(number: number | null): EquipmentAppearance {
   if (number === null) return {};
-  const slots = ['helm', 'armor', 'pants', 'gloves', 'boots'];
-  const equipment = {};
+  const slots: EquipmentSlotName[] = ['helm', 'armor', 'pants', 'gloves', 'boots'];
+  const equipment: EquipmentAppearance = {};
   ARMOR_GROUPS.forEach((group, index) => {
     if (itemsWithModels(group).some((item) => item.number === number)) equipment[slots[index]] = { group, number };
   });
@@ -391,11 +443,11 @@ function armorSetEquipment(number) {
 }
 
 // The level and options every worn item gets, as the appearance bytes would carry them.
-function wardrobeEquipment() {
+function wardrobeEquipment(): EquipmentAppearance {
   const armor = selectedItem(ui.armorSet);
   const options = { glowLevel: Number(ui.itemLevel.value), excellent: ui.excellent.checked, ancient: ui.ancient.checked };
-  const withOptions = (item) => (item ? { ...item, ...options } : null);
-  const equipment = {
+  const withOptions = (item: AppearanceItem | null | undefined): AppearanceItem | null => (item ? { ...item, ...options } : null);
+  const equipment: EquipmentAppearance = {
     ...armorSetEquipment(armor ? armor.number : null),
     rightHand: selectedItem(ui.rightHand),
     leftHand: selectedItem(ui.leftHand),
@@ -423,7 +475,7 @@ function initWardrobe() {
   for (let level = 0; level <= 15; level++) ui.itemLevel.append(new Option(`+${level}`, String(level)));
   for (const select of [ui.bodySet, ui.armorSet, ui.rightHand, ui.leftHand, ui.wings, ui.itemLevel, ui.excellent, ui.ancient]) select.addEventListener('change', redress);
   ui.holdWeapons.addEventListener('change', () => { if (state.hero) state.hero.holdWeapons = ui.holdWeapons.checked; });
-  const step = (delta) => {
+  const step = (delta: number) => {
     const count = ui.armorSet.options.length;
     ui.armorSet.selectedIndex = (ui.armorSet.selectedIndex + delta + count) % count;
     redress();
@@ -434,9 +486,9 @@ function initWardrobe() {
 
 // Where to stand on a map without a server: the walkable cell nearest the middle,
 // preferring a safe zone (towns are safe zones).
-function offlineStartCell(world) {
+function offlineStartCell(world: WorldData): { x: number; y: number } {
   const center = TERRAIN_SIZE / 2;
-  let best = null;
+  let best: { x: number; y: number; score: number } | null = null;
   for (let y = 0; y < TERRAIN_SIZE; y++) {
     for (let x = 0; x < TERRAIN_SIZE; x++) {
       const flags = world.flags[y * TERRAIN_SIZE + x];
@@ -456,11 +508,11 @@ function initMapPicker() {
     const map = Number(ui.mapSelect.value);
     try {
       await loadMap(map);
-      const cell = map === OFFLINE_START.map ? OFFLINE_START : offlineStartCell(state.world);
-      state.hero.placeAt(cell.x, cell.y);
+      const cell = map === OFFLINE_START.map ? OFFLINE_START : offlineStartCell(state.world!);
+      state.hero!.placeAt(cell.x, cell.y);
       setStatus(`Offline: ${mapName(map)}. Left-click to walk, right-drag to turn, wheel to zoom.`, 1);
     } catch (error) {
-      setStatus(`${mapName(map)} couldn't be loaded: ${error.message}`);
+      setStatus(`${mapName(map)} couldn't be loaded: ${error instanceof Error ? error.message : String(error)}`);
     }
   });
 }
@@ -476,9 +528,9 @@ async function playOffline() {
   setStatus('Offline: Lorencia without a server. Left-click to walk, right-drag to turn, wheel to zoom.', 1);
 }
 
-function startGame(play) {
+function startGame(play: () => Promise<void>): void {
   ui.loginError.hidden = true;
-  ui.loginForm.querySelector('fieldset').disabled = true;
+  ui.loginForm.querySelector('fieldset')!.disabled = true;
   play().then(() => {
     document.body.classList.add('ready');
     ui.hud.hidden = false;
@@ -487,7 +539,7 @@ function startGame(play) {
     console.error(error);
     ui.login.hidden = false;
     ui.servers.hidden = ui.characters.hidden = true;
-    ui.loginForm.querySelector('fieldset').disabled = false;
+    ui.loginForm.querySelector('fieldset')!.disabled = false;
     showError(error);
   });
 }
@@ -497,12 +549,15 @@ function initLogin() {
   // HNMO.Web serves the page and the relay from the same address.
   const defaults = { relay: `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/relay`, host: '127.0.0.1', port: 44406, username: '' };
   for (const [key, value] of Object.entries({ ...defaults, ...saved })) {
-    const input = ui.loginForm.elements.namedItem(key);
-    if (input) input.value = value;
+    const input = ui.loginForm.elements.namedItem(key) as HTMLInputElement | null;
+    if (input) input.value = String(value);
   }
   ui.loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    const form = Object.fromEntries(new FormData(ui.loginForm));
+    // The form's text inputs, by name.
+    const data = new FormData(ui.loginForm);
+    const field = (name: keyof LoginSettings) => String(data.get(name) ?? '');
+    const form: LoginSettings = { username: field('username'), password: field('password'), host: field('host'), port: field('port'), relay: field('relay') };
     const { password, ...remembered } = form;
     saveSettings(remembered);
     startGame(() => playOnline(form));

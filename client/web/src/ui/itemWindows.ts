@@ -3,15 +3,82 @@
 // grid, the money, and moving items by clicking an item to pick it up and clicking where it goes.
 
 import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
+import type { RmlDocument, RmlModel } from './rml.js';
 import { drawItem } from './itemIcons.js';
 import { BAG, VAULT, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
+import type { Item, ItemGrid } from '../game/inventory.js';
 import { itemName } from '../game/items.js';
+import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
+import type { TooltipCharacter } from '../game/itemTooltip.js';
 
 const CELL = 20; // the grid's cell pitch in reference pixels (item_grid.rcss --item-cell)
 const PANEL = { width: 190, height: 429 };
 
+// A point or a box in panel reference px.
+interface Point { x: number; y: number }
+interface Box extends Point { w: number; h: number }
+// Where a picked item came from.
+interface PickedSource { storage: number; slot: number; item: Item }
+
+// A cell of the grid as the RML draws it: the tint under an item, the drop preview, the stack count.
+export interface GridCell { tint: string; drop: string; count: string }
+
+// The data model every item window's RML binds to.
+export interface ItemWindowModel extends RmlModel {
+  text_px: number;
+  title: string;
+  grid_cells: GridCell[];
+  window_close: () => void;
+}
+
+// my_inventory.rml's data model.
+export interface InventoryModel extends ItemWindowModel {
+  gold_text: string;
+  gold_tier: string;
+  slot_states: string[];
+  repair_visible: boolean;
+  myshop_visible: boolean;
+  myshop_mode_open: boolean;
+  myshop_locked: boolean;
+  exit_tooltip: string;
+  repair_tooltip: string;
+  myshop_tooltip: string;
+  expand_tooltip: string;
+  set_option_label: string;
+  socket_option_label: string;
+  set_option_active: boolean;
+  socket_option_active: boolean;
+  my_inventory_exit_click: () => void;
+  my_inventory_repair_click: () => void;
+  my_inventory_myshop_click: () => void;
+  my_inventory_expand_click: () => void;
+  my_inventory_set_option_hover: () => void;
+  my_inventory_set_option_unhover: () => void;
+  my_inventory_socket_option_hover: () => void;
+  my_inventory_socket_option_unhover: () => void;
+}
+
+// storage.rml's data model.
+export interface VaultModel extends ItemWindowModel {
+  title_locked: boolean;
+  zen_text: string;
+  zen_tier: string;
+  fee_label: string;
+  fee_value: string;
+  storage_locked: boolean;
+  expand_visible: boolean;
+  insert_tooltip: string;
+  take_tooltip: string;
+  lock_tooltip: string;
+  expand_tooltip: string;
+  storage_insert_click: () => void;
+  storage_take_click: () => void;
+  storage_lock_click: () => void;
+  storage_expand_click: () => void;
+}
+
 // The equipment slots' elements in my_inventory.rml, by inventory slot.
-const SLOT_ELEMENTS = {
+const SLOT_ELEMENTS: Record<number, string> = {
   [Equipment.RIGHT_HAND]: 'slot_weapon_right', [Equipment.LEFT_HAND]: 'slot_weapon_left', [Equipment.HELM]: 'slot_helm',
   [Equipment.ARMOR]: 'slot_armor', [Equipment.PANTS]: 'slot_pants', [Equipment.GLOVES]: 'slot_gloves', [Equipment.BOOTS]: 'slot_boots',
   [Equipment.WINGS]: 'slot_wing', [Equipment.PET]: 'slot_helper', [Equipment.PENDANT]: 'slot_amulet',
@@ -19,35 +86,39 @@ const SLOT_ELEMENTS = {
 };
 
 // Which item groups each equipment slot takes (IsEquipable, by the item's slot in Data/Items).
-const SLOT_OF_DEFINITION = {
+const SLOT_OF_DEFINITION: Record<string, number[]> = {
   mainHand: [Equipment.RIGHT_HAND, Equipment.LEFT_HAND], offHand: [Equipment.LEFT_HAND], twoHand: [Equipment.RIGHT_HAND],
   bothHands: [Equipment.RIGHT_HAND, Equipment.LEFT_HAND], helm: [Equipment.HELM], armor: [Equipment.ARMOR], pants: [Equipment.PANTS],
   gloves: [Equipment.GLOVES], boots: [Equipment.BOOTS], wings: [Equipment.WINGS], pet: [Equipment.PET], helper: [Equipment.PET],
   pendant: [Equipment.PENDANT], amulet: [Equipment.PENDANT], ring: [Equipment.RING_LEFT, Equipment.RING_RIGHT],
 };
 
-export function formatGold(amount) {
+export function formatGold(amount: number): string {
   return Math.floor(amount).toLocaleString('en-US');
 }
 
-export function goldTier(amount) {
+export function goldTier(amount: number): string {
   if (amount >= 10_000_000) return 'ten-million';
   if (amount >= 1_000_000) return 'million';
   if (amount >= 100_000) return 'hundred-thousand';
   return 'base';
 }
 
-function uiScale() {
+function uiScale(): number {
   return window.innerHeight / REFERENCE_HEIGHT;
 }
 
-function emptyCells(count) {
+function emptyCells(count: number): GridCell[] {
   return Array.from({ length: count }, () => ({ tint: '', drop: '', count: '' }));
 }
 
 // The item following the mouse after it was picked up (CInventoryCtrl's picked item).
 class PickedItem {
-  constructor(layer) {
+  canvas: HTMLCanvasElement;
+  source: PickedSource | null;
+  lastEvent?: MouseEvent;
+
+  constructor(layer: HTMLElement) {
     this.canvas = document.createElement('canvas');
     Object.assign(this.canvas.style, { position: 'fixed', pointerEvents: 'none', zIndex: 60, display: 'none' });
     layer.append(this.canvas);
@@ -55,7 +126,7 @@ class PickedItem {
     window.addEventListener('pointermove', (event) => this.follow(event));
   }
 
-  async pick(source, item) {
+  async pick(source: { storage: number; slot: number }, item: Item): Promise<void> {
     this.source = { ...source, item };
     const scale = uiScale();
     const w = item.width * CELL * scale, h = item.height * CELL * scale;
@@ -67,7 +138,7 @@ class PickedItem {
     this.canvas.style.display = 'block';
   }
 
-  follow(event) {
+  follow(event: MouseEvent): void {
     if (!this.source) return;
     this.canvas.style.left = `${event.clientX - this.canvas.width / 2}px`;
     this.canvas.style.top = `${event.clientY - this.canvas.height / 2}px`;
@@ -81,8 +152,26 @@ class PickedItem {
 }
 
 // One RML window with an item grid (and, for the inventory, equipment slots).
-class ItemWindow {
-  constructor({ inventory, picked, documentName, grid, storage, model }) {
+class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
+  inventory: Inventory;
+  picked: PickedItem;
+  documentName: string;
+  grid: ItemGrid;
+  storageKind: number;
+  model: M;
+  doc: RmlDocument | null;
+  canvases: Map<string, { canvas: HTMLCanvasElement; signature?: string }>;
+  hoverSlot: number | null;
+  // Set while the window is open (by open() and layout()).
+  panel!: HTMLElement;
+  layer!: HTMLDivElement;
+  gridOrigin!: Point;
+  onPickedChanged?: () => void;
+  onHover?: (item: Item | null, event: PointerEvent | null) => void;
+
+  constructor({ inventory, picked, documentName, grid, storage, model }: {
+    inventory: Inventory; picked: PickedItem; documentName: string; grid: ItemGrid; storage: number; model: M;
+  }) {
     this.inventory = inventory;
     this.picked = picked;
     this.documentName = documentName;
@@ -94,14 +183,25 @@ class ItemWindow {
     this.hoverSlot = null;
   }
 
-  get items() {
+  // The item at a slot as a box on the screen, for its tooltip.
+  screenBoxOf(slot: number): ScreenBox | null {
+    const item = this.items.get(slot);
+    if (!item || !this.doc) return null;
+    const box = this.boxOf(slot, item);
+    if (!box) return null;
+    const rect = this.panel.getBoundingClientRect();
+    const scale = rect.width / PANEL.width;
+    return { left: rect.left + box.x * scale, top: rect.top + box.y * scale, width: box.w * scale, height: box.h * scale };
+  }
+
+  get items(): Map<number, Item> {
     return this.inventory.storage(this.storageKind);
   }
 
-  async open(parent) {
+  async open(parent: HTMLElement): Promise<void> {
     if (this.doc) return;
     this.doc = await openDocument(this.documentName, this.model, { parent, scale: uiScale() });
-    this.panel = this.doc.$('#panel');
+    this.panel = this.doc.$('#panel')!;
     // The theme leaves pointer events to the game's own hit tests (as the desktop client does them in C++).
     this.panel.style.pointerEvents = 'auto';
     this.layer = document.createElement('div');
@@ -121,10 +221,10 @@ class ItemWindow {
     this.canvases.clear();
   }
 
-  get isOpen() { return Boolean(this.doc); }
+  get isOpen(): boolean { return Boolean(this.doc); }
 
   // Panel placement: docked from the right edge, like the original's dock-right column.
-  place(right) {
+  place(right: number): void {
     if (!this.doc) return;
     const scale = uiScale();
     Object.assign(this.panel.style, { left: `${window.innerWidth - (right + PANEL.width) * scale}px`, top: '0px', transform: `scale(${scale})` });
@@ -133,19 +233,19 @@ class ItemWindow {
     this.doc.update();
   }
 
-  layout() {
-    const gridElement = this.doc.$('#item_grid');
+  layout(): void {
+    const gridElement = this.doc!.$('#item_grid')!;
     this.gridOrigin = { x: gridElement.offsetLeft, y: gridElement.offsetTop };
   }
 
   // The panel point (reference px) of a mouse event.
-  pointOf(event) {
+  pointOf(event: MouseEvent): Point {
     const rect = this.panel.getBoundingClientRect();
     const scale = rect.width / PANEL.width;
     return { x: (event.clientX - rect.left) / scale, y: (event.clientY - rect.top) / scale };
   }
 
-  gridSlotAt(point) {
+  gridSlotAt(point: Point): number | null {
     const col = Math.floor((point.x - this.gridOrigin.x) / CELL);
     const row = Math.floor((point.y - this.gridOrigin.y) / CELL);
     if (col < 0 || row < 0 || col >= this.grid.columns || row >= this.grid.rows) return null;
@@ -153,7 +253,8 @@ class ItemWindow {
   }
 
   // The item under a grid slot: the item whose cells cover it.
-  itemAtGridSlot(slot) {
+  itemAtGridSlot(slot: number | null): number | null {
+    if (slot === null) return null;
     for (const [s, item] of this.items) {
       if (s < this.grid.firstSlot) continue;
       if (Inventory.cellsOf(this.grid, s, item)?.includes(slot)) return s;
@@ -161,10 +262,10 @@ class ItemWindow {
     return null;
   }
 
-  equipmentSlotAt() { return null; }
+  equipmentSlotAt(_point: Point): number | null { return null; }
 
   // Where a picked item would go for this pointer: the slot of its top-left cell.
-  dropSlotFor(point, item) {
+  dropSlotFor(point: Point, item: Item): { slot: number; equipment: boolean } | null {
     const equipment = this.equipmentSlotAt(point);
     if (equipment !== null) return { slot: equipment, equipment: true };
     const col = Math.round((point.x - this.gridOrigin.x) / CELL - item.width / 2);
@@ -173,8 +274,8 @@ class ItemWindow {
     return { slot: this.grid.firstSlot + row * this.grid.columns + col, equipment: false };
   }
 
-  click(event) {
-    if (event.target.closest?.('#btn_exit, #frame_corner_close, .inv-btn, .stor-btn')) return;
+  click(event: MouseEvent): void {
+    if (event.target instanceof Element && event.target.closest('#btn_exit, #frame_corner_close, .inv-btn, .stor-btn')) return;
     const point = this.pointOf(event);
     if (this.picked.source) {
       const item = this.picked.source.item;
@@ -193,14 +294,14 @@ class ItemWindow {
     const equipment = this.equipmentSlotAt(point);
     const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
     if (slot === null || !this.items.has(slot) || this.inventory.pendingMove) return;
-    this.picked.pick({ storage: this.storageKind, slot }, this.items.get(slot));
+    this.picked.pick({ storage: this.storageKind, slot }, this.items.get(slot)!);
     this.picked.follow(event);
     this.onPickedChanged?.();
   }
 
-  hover(event) {
+  hover(event: PointerEvent | null): void {
     const point = event ? this.pointOf(event) : null;
-    let slot = null;
+    let slot: number | null = null;
     if (point) {
       const equipment = this.equipmentSlotAt(point);
       slot = equipment !== null ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
@@ -213,7 +314,7 @@ class ItemWindow {
   }
 
   // The cells under the picked item: blue where it fits, red where it doesn't (drop-free / drop-blocked).
-  updateDropPreview(point) {
+  updateDropPreview(point: Point | null): void {
     const cells = this.model.grid_cells;
     for (const cell of cells) cell.drop = '';
     const picked = this.picked.source;
@@ -228,7 +329,7 @@ class ItemWindow {
   }
 
   // The item's box in panel reference px.
-  boxOf(slot, item) {
+  boxOf(slot: number, item: Item): Box | null {
     const index = slot - this.grid.firstSlot;
     return {
       x: this.gridOrigin.x + (index % this.grid.columns) * CELL,
@@ -238,7 +339,7 @@ class ItemWindow {
     };
   }
 
-  refresh() {
+  refresh(): void {
     if (!this.doc) return;
     // Cells: tinted under every item, as CInventoryCtrl::Render() does.
     const cells = emptyCells(this.grid.columns * this.grid.rows);
@@ -254,9 +355,9 @@ class ItemWindow {
     this.drawItems();
   }
 
-  updateModel() {}
+  updateModel(): void {}
 
-  drawItems() {
+  drawItems(): void {
     const scale = uiScale();
     const seen = new Set();
     for (const [slot, item] of this.items) {
@@ -290,9 +391,11 @@ class ItemWindow {
   }
 }
 
-export class InventoryWindow extends ItemWindow {
-  constructor({ inventory, picked, onClose }) {
-    const model = {
+export class InventoryWindow extends ItemWindow<InventoryModel> {
+  slotBoxes!: Map<number, Box>; // set by layout()
+
+  constructor({ inventory, picked, onClose }: { inventory: Inventory; picked: PickedItem; onClose: () => void }) {
+    const model: InventoryModel = {
       text_px: 12, title: 'Inventory', gold_text: '0', gold_tier: 'base',
       slot_states: Array(12).fill(''), grid_cells: emptyCells(64),
       repair_visible: false, myshop_visible: false, myshop_mode_open: true, myshop_locked: false,
@@ -306,38 +409,40 @@ export class InventoryWindow extends ItemWindow {
     super({ inventory, picked, documentName: 'my_inventory', grid: BAG, storage: Storage.INVENTORY, model });
   }
 
-  layout() {
+  override layout(): void {
     super.layout();
     this.slotBoxes = new Map();
     for (const [slot, id] of Object.entries(SLOT_ELEMENTS)) {
-      const element = this.doc.$(`#${id}`);
+      const element = this.doc!.$(`#${id}`);
       if (element) this.slotBoxes.set(Number(slot), { x: element.offsetLeft, y: element.offsetTop, w: element.offsetWidth, h: element.offsetHeight });
     }
   }
 
-  equipmentSlotAt(point) {
+  override equipmentSlotAt(point: Point): number | null {
     for (const [slot, box] of this.slotBoxes) {
       if (point.x >= box.x && point.x < box.x + box.w && point.y >= box.y && point.y < box.y + box.h) return slot;
     }
     return null;
   }
 
-  boxOf(slot, item) {
+  override boxOf(slot: number, item: Item): Box | null {
     if (slot < BAG.firstSlot) return this.slotBoxes.get(slot) ?? null;
     if (slot >= BAG.firstSlot + BAG.columns * BAG.rows) return null; // the extensions aren't shown yet
     return super.boxOf(slot, item);
   }
 
-  updateModel() {
+  override updateModel(): void {
     this.model.gold_text = formatGold(this.inventory.money);
     this.model.gold_tier = goldTier(this.inventory.money);
     this.model.slot_states = Array.from({ length: 12 }, (_, slot) => (this.items.has(slot) ? '' : ''));
   }
 }
 
-export class VaultWindow extends ItemWindow {
-  constructor({ inventory, picked, onClose, onMoney }) {
-    const model = {
+export class VaultWindow extends ItemWindow<VaultModel> {
+  constructor({ inventory, picked, onClose, onMoney }: {
+    inventory: Inventory; picked: PickedItem; onClose: () => void; onMoney: (toVault: boolean) => void;
+  }) {
+    const model: VaultModel = {
       text_px: 12, title: 'Vault', title_locked: false, zen_text: '0', zen_tier: 'base',
       fee_label: 'Fee', fee_value: '0', grid_cells: emptyCells(120),
       storage_locked: false, expand_visible: false,
@@ -349,7 +454,7 @@ export class VaultWindow extends ItemWindow {
     super({ inventory, picked, documentName: 'storage', grid: VAULT, storage: Storage.VAULT, model });
   }
 
-  updateModel() {
+  override updateModel(): void {
     this.model.zen_text = formatGold(this.inventory.vaultMoney);
     this.model.zen_tier = goldTier(this.inventory.vaultMoney);
   }
@@ -357,21 +462,39 @@ export class VaultWindow extends ItemWindow {
 
 // The inventory and vault windows with the item on the cursor, and the keys that open them.
 export class ItemWindows {
-  constructor({ inventory, parent = document.body }) {
+  inventory: Inventory;
+  parent: HTMLElement;
+  picked: PickedItem;
+  bag: InventoryWindow;
+  vault: VaultWindow;
+  tooltip: ItemTooltipView;
+
+  constructor({ inventory, parent = document.body as HTMLElement, character = () => null }: {
+    inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
+  }) {
     this.inventory = inventory;
     this.parent = parent;
     this.picked = new PickedItem(parent);
+    this.tooltip = new ItemTooltipView(parent, character);
     // Get the windows ready in the background, so they open at once.
     prepareDocument('my_inventory').then(() => prepareDocument('storage')).catch((error) => console.warn('Interface', error));
     this.bag = new InventoryWindow({ inventory, picked: this.picked, onClose: () => this.closeAll() });
     this.vault = new VaultWindow({ inventory, picked: this.picked, onClose: () => this.closeAll(), onMoney: (toVault) => this.askMoney(toVault) });
-    for (const window of [this.bag, this.vault]) window.onPickedChanged = () => this.refresh();
+    for (const itemWindow of [this.bag, this.vault]) {
+      itemWindow.onPickedChanged = () => { this.tooltip.hide(); this.refresh(); };
+      // The hovered item's tooltip, unless an item is on the cursor (CInventoryCtrl only shows it then).
+      itemWindow.onHover = (item) => {
+        const box = item && !this.picked.source && itemWindow.hoverSlot !== null ? itemWindow.screenBoxOf(itemWindow.hoverSlot) : null;
+        if (item && box) void this.tooltip.show(item, box);
+        else this.tooltip.hide();
+      };
+    }
     inventory.onChange((what) => {
       if (what === 'window') this.syncVault();
       this.refresh();
     });
     window.addEventListener('keydown', (event) => {
-      if (event.target.closest?.('input, textarea')) return;
+      if (event.target instanceof Element && event.target.closest('input, textarea')) return;
       const key = event.key.toLowerCase();
       if (key === 'i' || key === 'v') { event.preventDefault(); this.toggle(); }
       if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen)) this.closeAll();
@@ -383,12 +506,12 @@ export class ItemWindows {
     });
   }
 
-  async toggle() {
+  async toggle(): Promise<void> {
     if (this.bag.isOpen) this.closeAll();
     else { await this.bag.open(this.parent); this.placeAll(); }
   }
 
-  async syncVault() {
+  async syncVault(): Promise<void> {
     if (this.inventory.openWindow === NpcWindow.VAULT) {
       await this.bag.open(this.parent);
       await this.vault.open(this.parent);
@@ -399,25 +522,26 @@ export class ItemWindows {
     }
   }
 
-  closeAll() {
+  closeAll(): void {
+    this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
     if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
     this.bag.close();
   }
 
-  placeAll() {
+  placeAll(): void {
     this.bag.place(0);
     this.vault.place(PANEL.width);
     this.bag.refresh();
     this.vault.refresh();
   }
 
-  refresh() {
+  refresh(): void {
     this.bag.refresh();
     this.vault.refresh();
   }
 
-  askMoney(toVault) {
+  askMoney(toVault: boolean): void {
     const text = window.prompt(toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?', '0');
     const amount = Math.floor(Number(text));
     if (amount > 0) this.inventory.moveMoney(toVault, amount);

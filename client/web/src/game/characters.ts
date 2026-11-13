@@ -8,45 +8,81 @@ import { sampleHeight, sampleLight } from '../terrain.js';
 import { describeMonster, MonsterAction } from './monsterData.js';
 import { itemModel, ItemGroup } from './items.js';
 import { addItemGlow } from './itemGlow.js';
+import type { Vec3 } from '../formats.js';
+import type { GeometryPart } from '../bmd.js';
+import type { ModelMonster } from './monsterData.js';
+import type { AppearanceItem, EquipmentAppearance, ItemGlowData } from './items.js';
 
-export const PlayerAction = { STOP: 1, WALK: 15 }; // PLAYER_STOP_MALE, PLAYER_WALK_MALE
-const PLAYER_KEYS_PER_SECOND = { [PlayerAction.STOP]: 6, [PlayerAction.WALK]: 9 };
-const BODY_PARTS = ['Helm', 'Armor', 'Pant', 'Glove', 'Boot'];
+/** A terrain cell. */
+export interface Cell {
+  x: number;
+  y: number;
+}
+
+/** What characters need of the map they walk on (see world.js). */
+export interface CharacterWorld {
+  /** Terrain heights, TERRAIN_SIZE x TERRAIN_SIZE. */
+  heights: Float32Array;
+  /** Terrain light, r g b per cell. */
+  light: Float32Array;
+  /** Terrain flags per cell (TerrainFlag). */
+  flags: ArrayLike<number>;
+}
+
+/** The animation actions a character plays when standing and walking. */
+export interface CharacterActions {
+  stop: number;
+  walk: number;
+}
+
+export const PlayerAction = { STOP: 1, WALK: 15 } as const; // PLAYER_STOP_MALE, PLAYER_WALK_MALE
+const PLAYER_KEYS_PER_SECOND: Record<number, number> = { [PlayerAction.STOP]: 6, [PlayerAction.WALK]: 9 };
+const BODY_PARTS = ['Helm', 'Armor', 'Pant', 'Glove', 'Boot'] as const;
 export const WALK_CELLS_PER_SECOND = 3.3;
 const DEGREES = Math.PI / 180;
 const ROTATION_STEP_DEGREES = 45;
 
-export function cellCenter(cell) {
+export function cellCenter(cell: number): number {
   return (cell + 0.5) * TERRAIN_SCALE;
 }
 
 // The angle the client gives an object received with a packet rotation (WSclient.cpp).
-export function angleFromRotation(rotation) {
+export function angleFromRotation(rotation: number): number {
   return (rotation - 1) * ROTATION_STEP_DEGREES * DEGREES;
 }
 
 // Each body part shows the worn item's model, or the class's own body without one.
-const BODY_PART_SLOTS = { Helm: 'helm', Armor: 'armor', Pant: 'pants', Glove: 'gloves', Boot: 'boots' };
+const BODY_PART_SLOTS = { Helm: 'helm', Armor: 'armor', Pant: 'pants', Glove: 'gloves', Boot: 'boots' } as const;
+type BodyPart = keyof typeof BODY_PART_SLOTS;
 
-function bodyPartSource(part, bodySet, equipment) {
+/** Where a body part's model comes from, and the worn item when it's an item's. */
+interface BodyPartSource {
+  dir: string;
+  fileName: string;
+  textureDir: string | string[];
+  item?: AppearanceItem;
+  glow?: ItemGlowData;
+}
+
+function bodyPartSource(part: BodyPart, bodySet: number, equipment: EquipmentAppearance | null | undefined): BodyPartSource {
   const item = equipment?.[BODY_PART_SLOTS[part]];
   const model = item ? itemModel(item.group, item.number) : null;
-  if (model) return { dir: model.dir, fileName: model.fileName, textureDir: model.textureDir, item, glow: model.glow };
+  if (item && model) return { dir: model.dir, fileName: model.fileName, textureDir: model.textureDir, item, glow: model.glow };
   return { dir: 'Player', fileName: `${part}Class${String(bodySet).padStart(2, '0')}.bmd`, textureDir: 'Player' };
 }
 
-export async function createPlayerModel(bodySet, equipment) {
+export async function createPlayerModel(bodySet: number, equipment?: EquipmentAppearance | null): Promise<AnimatedModel> {
   const skeleton = await loadModel('Player', 'player.bmd');
   const pose = computeBoneMatrices(skeleton, PlayerAction.STOP, 0);
   const sources = BODY_PARTS.map((part) => bodyPartSource(part, bodySet, equipment));
-  const loaded = await Promise.all(sources.map(async (source) => {
+  const loaded = await Promise.all(sources.map(async (source): Promise<{ geometries: GeometryPart[]; materials: THREE.MeshBasicMaterial[] }> => {
     try {
       const model = await loadModel(source.dir, source.fileName);
       const geometries = buildGeometries(model, pose);
       const materials = await Promise.all(geometries.map((geometry) => createMaterial(source.textureDir, geometry.textureName)));
       return { geometries, materials };
     } catch (error) {
-      console.warn(`Body part ${source.dir}/${source.fileName} missing`, error.message);
+      console.warn(`Body part ${source.dir}/${source.fileName} missing`, (error as Error).message);
       return { geometries: [], materials: [] };
     }
   }));
@@ -65,18 +101,18 @@ export async function createPlayerModel(bodySet, equipment) {
 // ---------- weapons and wings ----------
 
 // The player skeleton's bones parts hang from (ZzzCharacter.cpp: Weapon[].LinkBone, RenderCharacterBackItem).
-const Bone = { RIGHT_HAND: 33, LEFT_HAND: 42, BACK: 47 };
+const Bone = { RIGHT_HAND: 33, LEFT_HAND: 42, BACK: 47 } as const;
 const WING_KEYS_PER_SECOND = 0.25 * 25;
 
 // AngleMatrix (Core/Math) with a translation: degrees around x, y and z, applied z, y, x.
-function angleMatrix([x, y, z], [tx, ty, tz] = [0, 0, 0]) {
+function angleMatrix([x, y, z]: Vec3, [tx, ty, tz]: Vec3 = [0, 0, 0]): THREE.Matrix4 {
   const matrix = new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(x * DEGREES, y * DEGREES, z * DEGREES, 'ZYX'));
   return matrix.setPosition(tx, ty, tz);
 }
 
 // How a weapon sits on the back in a safe zone (PlaceLinkedPart with Link = true).
-function backPlacement(item, rightHand) {
-  let translation = [-20, 5, 40];
+function backPlacement(item: AppearanceItem, rightHand: boolean): THREE.Matrix4 {
+  let translation: Vec3 = [-20, 5, 40];
   if (item.group === ItemGroup.SHIELD) translation = [-10, 0, 0];
   else if (item.group === ItemGroup.BOW) translation = [-10, 5, 10];
   const matrix = angleMatrix([70, 0, 90], translation);
@@ -84,7 +120,7 @@ function backPlacement(item, rightHand) {
   return matrix;
 }
 
-export async function createItemModel(item) {
+export async function createItemModel(item: AppearanceItem): Promise<AnimatedModel | null> {
   const source = itemModel(item.group, item.number);
   if (!source) return null;
   const model = await loadModel(source.dir, source.fileName);
@@ -95,8 +131,17 @@ export async function createItemModel(item) {
   return animated;
 }
 
-class Attachment {
-  constructor({ model, item, slot }) {
+/** The equipment slots drawn as models of their own, hanging from a bone. */
+export type AttachmentSlot = 'rightHand' | 'leftHand' | 'wings';
+
+export class Attachment {
+  model: AnimatedModel;
+  item: AppearanceItem;
+  slot: AttachmentSlot;
+  /** Where a weapon sits on the back; null for wings. */
+  backMatrix: THREE.Matrix4 | null;
+
+  constructor({ model, item, slot }: { model: AnimatedModel; item: AppearanceItem; slot: AttachmentSlot }) {
     this.model = model;
     this.item = item;
     this.slot = slot;
@@ -104,39 +149,73 @@ class Attachment {
     this.backMatrix = slot === 'wings' ? null : backPlacement(item, slot === 'rightHand');
   }
 
-  place(boneMatrices, onBack, time) {
+  place(boneMatrices: THREE.Matrix4[], onBack: boolean, time: number): void {
     const matrix = this.model.group.matrix;
     if (this.slot === 'wings') matrix.copy(boneMatrices[Bone.BACK]);
-    else if (onBack) matrix.multiplyMatrices(boneMatrices[Bone.BACK], this.backMatrix);
+    else if (onBack) matrix.multiplyMatrices(boneMatrices[Bone.BACK], this.backMatrix!); // set for all but wings
     else matrix.copy(boneMatrices[this.slot === 'rightHand' ? Bone.RIGHT_HAND : Bone.LEFT_HAND]);
     this.model.group.matrixWorldNeedsUpdate = true;
     this.model.pose(0, this.slot === 'wings' ? time * WING_KEYS_PER_SECOND : 0);
   }
 }
 
-export async function createAttachments(equipment) {
-  const slots = ['rightHand', 'leftHand', 'wings'].filter((slot) => equipment?.[slot]);
+export async function createAttachments(equipment?: EquipmentAppearance | null): Promise<Attachment[]> {
+  const slots = (['rightHand', 'leftHand', 'wings'] as const).filter((slot) => equipment?.[slot]);
   const attachments = await Promise.all(slots.map(async (slot) => {
+    const item = equipment![slot]!; // the filter keeps the worn slots
     try {
-      const model = await createItemModel(equipment[slot]);
-      return model ? new Attachment({ model, item: equipment[slot], slot }) : null;
+      const model = await createItemModel(item);
+      return model ? new Attachment({ model, item, slot }) : null;
     } catch (error) {
-      console.warn(`Item ${equipment[slot].group},${equipment[slot].number} not drawn`, error.message);
+      console.warn(`Item ${item.group},${item.number} not drawn`, (error as Error).message);
       return null;
     }
   }));
-  return attachments.filter(Boolean);
+  return attachments.filter((attachment): attachment is Attachment => Boolean(attachment));
 }
 
-async function createMonsterModel(description) {
+async function createMonsterModel(description: ModelMonster): Promise<AnimatedModel> {
   const model = await loadModel(description.dir, description.fileName);
   const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
   const materials = await Promise.all(parts.map((part) => createMaterial(description.textureDir, part.textureName)));
   return new AnimatedModel(model, parts, materials);
 }
 
+export interface CharacterOptions {
+  id: number;
+  name: string;
+  model: AnimatedModel;
+  /** 'player', 'monster', 'npc', … */
+  kind: string;
+  scale?: number;
+  actions: CharacterActions;
+  keysPerSecond: (action: number) => number;
+}
+
 export class Character {
-  constructor({ id, name, model, kind, scale = 1, actions, keysPerSecond }) {
+  id: number;
+  name: string;
+  kind: string;
+  model: AnimatedModel;
+  actions: CharacterActions;
+  keysPerSecond: (action: number) => number;
+  /** Where it stands, in world units. */
+  position: THREE.Vector2;
+  cell: Cell;
+  /** The cells still to walk. */
+  path: Cell[];
+  angle: number;
+  action: number;
+  time: number;
+  light: THREE.Color;
+  attachments: Attachment[];
+  weaponsOnBack: boolean;
+  holdWeapons: boolean;
+  clock: number;
+  /** What a player wears (players only). */
+  equipment?: EquipmentAppearance;
+
+  constructor({ id, name, model, kind, scale = 1, actions, keysPerSecond }: CharacterOptions) {
     this.id = id;
     this.name = name;
     this.kind = kind;
@@ -157,33 +236,33 @@ export class Character {
     this.clock = 0;
   }
 
-  setAttachments(attachments) {
+  setAttachments(attachments: Attachment[]): void {
     for (const attachment of this.attachments) this.model.group.remove(attachment.model.group);
     this.attachments = attachments;
     for (const attachment of attachments) this.model.group.add(attachment.model.group);
   }
 
-  get group() { return this.model.group; }
+  get group(): THREE.Group { return this.model.group; }
 
-  placeAt(x, y, rotation) {
+  placeAt(x: number, y: number, rotation?: number): void {
     this.cell = { x, y };
     this.position.set(cellCenter(x), cellCenter(y));
     this.path = [];
     if (rotation !== undefined) this.angle = angleFromRotation(rotation);
   }
 
-  walk(cells) {
+  walk(cells: Cell[]): void {
     this.path = cells.slice();
   }
 
   // Walks straight to a cell, used for others whose exact steps we don't simulate.
-  walkStraightTo(x, y) {
+  walkStraightTo(x: number, y: number): void {
     this.path = [{ x, y }];
   }
 
-  get isWalking() { return this.path.length > 0; }
+  get isWalking(): boolean { return this.path.length > 0; }
 
-  update(dt, world) {
+  update(dt: number, world: CharacterWorld): void {
     this.advance(dt);
     const action = this.isWalking ? this.actions.walk : this.actions.stop;
     if (action !== this.action) { this.action = action; this.time = 0; }
@@ -203,7 +282,7 @@ export class Character {
     }
   }
 
-  advance(dt) {
+  advance(dt: number): void {
     let budget = WALK_CELLS_PER_SECOND * TERRAIN_SCALE * dt;
     while (budget > 0 && this.path.length) {
       const next = this.path[0];
@@ -224,12 +303,21 @@ export class Character {
   }
 }
 
-export async function createPlayerCharacter({ id, name, bodySet, equipment, kind = 'player' }) {
+export interface PlayerCharacterOptions {
+  id: number;
+  name: string;
+  /** The class's body set (class index + 1). */
+  bodySet: number;
+  equipment?: EquipmentAppearance | null;
+  kind?: string;
+}
+
+export async function createPlayerCharacter({ id, name, bodySet, equipment, kind = 'player' }: PlayerCharacterOptions): Promise<Character> {
   const [model, attachments] = await Promise.all([createPlayerModel(bodySet, equipment), createAttachments(equipment)]);
   const character = new Character({
     id, name, kind, model,
     actions: { stop: PlayerAction.STOP, walk: PlayerAction.WALK },
-    keysPerSecond: (action) => PLAYER_KEYS_PER_SECOND[action],
+    keysPerSecond: (action: number) => PLAYER_KEYS_PER_SECOND[action],
   });
   character.setAttachments(attachments);
   character.equipment = equipment ?? {};
@@ -238,7 +326,7 @@ export async function createPlayerCharacter({ id, name, bodySet, equipment, kind
 
 const DEFAULT_NPC_BODY_SET = 2;
 
-export async function createMonsterCharacter({ id, type }) {
+export async function createMonsterCharacter({ id, type }: { id: number; type: number }): Promise<Character> {
   const description = describeMonster(type);
   if (description.usesPlayerModel) {
     const character = await createPlayerCharacter({ id, name: description.name, bodySet: DEFAULT_NPC_BODY_SET, kind: description.kind });
@@ -252,6 +340,6 @@ export async function createMonsterCharacter({ id, type }) {
     model: await createMonsterModel(description),
     scale: description.scale,
     actions: { stop: MonsterAction.STOP, walk: MonsterAction.WALK },
-    keysPerSecond: (action) => description.keysPerSecond[action],
+    keysPerSecond: (action: number) => description.keysPerSecond[action],
   });
 }
