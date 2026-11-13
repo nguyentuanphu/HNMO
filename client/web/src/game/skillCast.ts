@@ -410,6 +410,18 @@ export function skillKeepsAutoAttack(skill: number, classIndex: number): boolean
   return true;
 }
 
+// IsPartyMemberSkill (PartyMemberSkill.cpp): the elf's, wizard's and summoner's skills that go to a
+// selected party member (its id in TargetedSkill) instead of the hero. The master variants count too.
+const PARTY_MEMBER_SKILLS: readonly number[] = [
+  S.HEALING, 413, S.DEFENSE, 417, 423, S.ATTACK, 420, 422, S.TELEPORT_ALLY,
+  S.SOUL_BARRIER, 403, 404, S.ALICE_THORNS, S.RECOVER,
+];
+
+export function isPartyMemberSkill(classIndex: number, skill: number): boolean {
+  if (classIndex !== C.ELF && classIndex !== C.DARK_WIZARD && classIndex !== C.SUMMONER) return false;
+  return PARTY_MEMBER_SKILLS.includes(skill);
+}
+
 // ---------------------------------------------------------------------------
 // Which executor the desktop runs for a class (ExecuteSkill's dispatch).
 // ---------------------------------------------------------------------------

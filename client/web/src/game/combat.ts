@@ -18,7 +18,7 @@ import {
   monsterAttackAction, newMonsterAttackState, playerAnimationReaction, playerAttackAction, playerShockAction, ServerAnimation,
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
-import { areaSkillRotation, skillCastPlan, skillAnimationAction, skillRange, type SkillCastContext, type SkillCastPlan } from './skillCast.js';
+import { areaSkillRotation, isPartyMemberSkill, skillCastPlan, skillAnimationAction, skillRange, type SkillCastContext, type SkillCastPlan } from './skillCast.js';
 import { itemDefinition } from './items.js';
 import { skillCooldowns, skillInfo } from './skills.js';
 
@@ -152,6 +152,17 @@ export class Combat {
     return true;
   }
 
+  /** Whether the hero has a way to cast a skill now (a cast plan for its class and equipment). */
+  castable(skill: number): boolean {
+    const plan = skillCastPlan(skill, this.classIndex, this.castContext());
+    return plan !== null && plan.packet !== 'none';
+  }
+
+  /** Whether a skill is about to be cast (walking into its range or waiting for the last swing). */
+  get casting(): boolean {
+    return this.pendingSkill !== null;
+  }
+
   /** Whether the hero is fighting: a skill about to be cast, or a living target being attacked. */
   get busy(): boolean {
     return this.pendingSkill !== null || (this.target !== null && !this.target.dead && this.online.characters.has(this.target.id));
@@ -229,7 +240,9 @@ export class Combat {
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
     if (plan.packet === 'targeted') {
-      const id = plan.targetSelf || !target || target === this.hero ? this.online.playerId : target.id;
+      // A heal or buff at another player goes to that player (AttackElf / AttackWizard with a selected party member).
+      const atMember = target && target !== this.hero && target.kind === 'player' && plan.friendly && isPartyMemberSkill(this.classIndex, skill);
+      const id = atMember ? target.id : plan.targetSelf || !target || target === this.hero ? this.online.playerId : target.id;
       this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: skill, TargetId: id });
     } else if (plan.packet === 'area') {
       // AreaSkill: at the hero's own tile or the target's, with the selected character when the skill names one.

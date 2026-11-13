@@ -14,6 +14,7 @@ import type { PacketValues } from '../net/packets.js';
 import type { Cell, Character, CharacterWorld } from './characters.js';
 
 const ID_MASK = 0x7fff;          // the high bit marks "just created" (WSclient.cpp: Key &= 0x7FFF)
+const APPEARANCE_LENGTH = 27;   // the server's extended appearance (AppearanceSerializerExtended.NeededSpace)
 const MAX_STEPS_PER_WALK = 15;   // the step count is a 4-bit field
 const TALK_DISTANCE = 3;         // cells; the server refuses farther talks
 const PING_INTERVAL_MS = 20000;
@@ -73,6 +74,8 @@ export class OnlineWorld {
   /** Ids whose characters are still loading. */
   pending: Set<number>;
   onChange: OnlineWorldOptions['onChange'];
+  /** A player came into view with these effects (buffs), or a character left it (effects null). */
+  onEffects?: (id: number, effects: number[] | null) => void;
   unsubscribe: () => void;
   pingTimer: ReturnType<typeof setInterval>;
   /** Where the hero is walking to, over several walk packets. */
@@ -146,6 +149,10 @@ export class OnlineWorld {
     const id = player.Id & ID_MASK;
     const bodySet = classOfAppearance(player.AppearanceAndEffects) + 1;
     const { equipment } = parseAppearance(player.AppearanceAndEffects);
+    // The effects follow the appearance (27 bytes): a count, then one byte per effect.
+    const effects = player.AppearanceAndEffects;
+    const count = effects[APPEARANCE_LENGTH] ?? 0;
+    this.onEffects?.(id, [...effects.subarray(APPEARANCE_LENGTH + 1, APPEARANCE_LENGTH + 1 + count)]);
     this.spawn(id, () => createPlayerCharacter({ id, name: player.Name, bodySet, equipment }), {
       x: player.CurrentPositionX, y: player.CurrentPositionY, targetX: player.TargetPositionX, targetY: player.TargetPositionY, rotation: player.Rotation,
     });
@@ -155,6 +162,7 @@ export class OnlineWorld {
     for (const { Id } of packet.Objects) {
       const id = Id & ID_MASK;
       this.pending.delete(id);
+      this.onEffects?.(id, null);
       const character = this.characters.get(id);
       if (!character) continue;
       this.root.remove(character.group);
@@ -186,7 +194,7 @@ export class OnlineWorld {
   }
 
   clearCharacters(): void {
-    for (const character of this.characters.values()) this.root.remove(character.group);
+    for (const [id, character] of this.characters) { this.root.remove(character.group); this.onEffects?.(id, null); }
     this.characters.clear();
     this.pending.clear();
     this.onChange?.();

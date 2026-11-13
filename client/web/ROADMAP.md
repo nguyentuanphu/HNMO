@@ -61,7 +61,7 @@ harmony restore price), Jewel of Harmony, lucky items, united market.
 messenger and letters, whisper/party/guild chat, duels, Gens.
 
 ## 8. Auto play
-1. 🟡 The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop, settings windows done; buffs/heal/party/raven in the loop next: hunting range, main and 2 activation skills with
+1. ✅ The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop, settings windows, buffs, heal, Drain Life, party support and the Dark Raven done (the master skill variants and the Rage Fighter's buffs wait for their casting): hunting range, main and 2 activation skills with
    conditions, combo, counter-attacks, potions and heal, buffs and party support, Dark Spirit,
    pick-up rules and item list, repair, auto-accept, the helper bar and its zen cost.
 2. Offline leveling (the server already does it).
