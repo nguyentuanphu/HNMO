@@ -190,7 +190,7 @@ export class Inventory {
     } else if (c3 && code === 0x22 && bytes[data] === 0xfe) {
       this.money = u32be(bytes, data + 1);
       this.changed('money');
-    } else if (c3 && code === 0x22) {
+    } else if (c3 && code === 0x22 && bytes.length > 5) {
       // ItemAddedToInventory (picked up, bought, …)
       this.items.set(bytes[data], decodeItem(bytes, data + 1));
       this.changed('inventory');
@@ -206,6 +206,9 @@ export class Inventory {
       this.pendingMove = null;
       this.changed(bytes[data] === Storage.VAULT ? 'vault' : 'inventory');
       if (this.lastMoveTouchedVault) this.changed('vault');
+    } else if (c1 && code === 0x23) {
+      // ItemDropResponse: the item we put on the ground left the inventory
+      if (bytes[data] !== 0) { this.items.delete(bytes[data + 1]); this.changed('inventory'); }
     } else if (c1 && code === 0x28) {
       this.items.delete(bytes[data]);
       this.changed('inventory');
@@ -234,6 +237,11 @@ export class Inventory {
     this.lastMoveTouchedVault = fromStorage === Storage.VAULT || toStorage === Storage.VAULT;
     this.connection.send('ClientToServer', 'ItemMoveRequestExtended', { FromStorage: fromStorage, FromSlot: fromSlot, ToStorage: toStorage, ToSlot: toSlot });
     setTimeout(() => { if (this.pendingMove?.fromSlot === fromSlot) { this.pendingMove = null; this.changed('inventory'); } }, 3000);
+  }
+
+  // Puts an inventory item on the ground at a cell (DropItemRequest); the server answers with ItemDropResponse.
+  dropToGround(slot: number, cell: { x: number; y: number }): void {
+    this.connection.send('ClientToServer', 'DropItemRequest', { TargetX: cell.x, TargetY: cell.y, ItemSlot: slot });
   }
 
   moveMoney(toVault: boolean, amount: number): void {

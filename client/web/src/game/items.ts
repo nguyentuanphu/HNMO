@@ -61,6 +61,7 @@ export interface ModelFileData {
   textureFolders?: string[];
   noneBlendMeshes?: number[];
   inventory?: InventoryDisplay;
+  ground?: GroundDisplay;
 }
 
 /** A model of SharedModels.json, used by name from several items. */
@@ -124,6 +125,8 @@ export interface ItemModelSource {
   isGlowMesh: (index: number) => boolean;
   glow: ItemGlowData;
   inventory: InventoryDisplay | null;
+  /** How it lies on the ground. */
+  ground: GroundDisplay | null;
 }
 
 export interface ItemCatalog {
@@ -182,6 +185,7 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
         isGlowMesh: glowMeshRule(entry, model),
         glow: entry.glow ?? {},
         inventory: entry.inventory ?? model.inventory ?? null,
+        ground: entry.ground ?? model.ground ?? null,
       });
     }
   });

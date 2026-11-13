@@ -18,6 +18,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
+import { GroundItems } from './game/groundItems.js';
 import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -43,6 +44,7 @@ export interface GameState {
   hud?: Hud;
   combat?: Combat;
   overlay?: CombatOverlay;
+  ground?: GroundItems;
 }
 
 declare global {
@@ -223,6 +225,7 @@ function pickCharacter(event: MouseEvent, kinds: string[]): Character | null {
 // The monster under the mouse shows its name and health bar at the top (CNameWindow); otherwise the target's.
 ui.canvas.addEventListener('pointermove', (event) => {
   if (!state.overlay) return;
+  state.ground?.hover(event);
   const hovered = pickCharacter(event, ['monster']);
   state.overlay.showTarget(hovered ?? state.combat?.target ?? null);
 });
@@ -235,9 +238,12 @@ ui.canvas.addEventListener('pointerdown', (event) => {
   if (monster && state.combat) { state.combat.attack(monster); return; }
   const npc = pickCharacter(event, ['npc']);
   if (npc) { state.combat?.cancel(); state.online!.talkTo(npc); return; } // an NPC is only found online
+  const drop = state.ground?.pick(event);
+  if (drop) { state.combat?.cancel(); state.ground!.pickUp(drop); return; }
   const cell = pickCell(event);
   if (!cell) return;
   state.combat?.cancel();
+  state.ground?.cancel();
   if (state.online) state.online.walkTo(cell);
   else hero.walk(findPath(state.world!.flags, hero.cell, cell));
 });
@@ -300,6 +306,7 @@ function frame(now: number): void {
     state.hero.update(dt, state.world!);
     state.online?.update(dt);
     state.combat?.update();
+    if (state.ground && state.world) state.ground.update(state.world);
     state.overlay?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
@@ -414,6 +421,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.stats = stats;
   state.itemWindows = new ItemWindows({
     inventory,
+    groundCell: (event) => (event.target === ui.canvas ? pickCell(event) : null),
     character: () => ({
       classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility,
       vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana,
@@ -431,6 +439,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     connection, root, world: state.world!, hero: state.hero!, playerId,
     onMessage: (text, kind) => chat.add(text, kind),
     onMapChanged: async (map, x, y) => {
+      state.ground?.clear(); // the server sends the new map's drops
       await loadMap(map);
       state.online!.world = state.world!;
       state.hero!.placeAt(x, y);
@@ -444,6 +453,11 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   setPlayerAnimationSpeeds(num('AttackSpeed'), num('MagicSpeed'));
   const overlay = new CombatOverlay(camera, ui.canvas, root);
   state.overlay = overlay;
+  state.ground = new GroundItems(connection, root, camera, ui.canvas, {
+    hero: () => online.hero,
+    walkTo: (cell) => { online.walkTo(cell); },
+    send: (id) => connection.send('ClientToServer', 'PickupItemRequest', { ItemId: id }),
+  });
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => overlay.addNumbers(() => Combat.anchorOf(target, 0), texts),
     onMessage: (text) => chat.add(text, 'system'),

@@ -469,8 +469,10 @@ export class ItemWindows {
   vault: VaultWindow;
   tooltip: ItemTooltipView;
 
-  constructor({ inventory, parent = document.body as HTMLElement, character = () => null }: {
+  constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null }: {
     inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
+    /** The ground cell under the mouse, where a picked inventory item is dropped (null: not on the ground). */
+    groundCell?: (event: MouseEvent) => { x: number; y: number } | null;
   }) {
     this.inventory = inventory;
     this.parent = parent;
@@ -500,10 +502,21 @@ export class ItemWindows {
       if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen)) this.closeAll();
     });
     window.addEventListener('resize', () => this.placeAll());
-    // A click outside the windows with an item on the cursor puts it back (the original drops it on the ground).
-    window.addEventListener('pointerdown', () => {
-      if (this.picked.source) { this.picked.drop(); this.refresh(); }
-    });
+    // A click outside the windows with an inventory item on the cursor drops it on the ground there, as
+    // on the desktop; a vault item goes back.
+    window.addEventListener('pointerdown', (event) => {
+      const source = this.picked.source;
+      if (!source) return;
+      // Clicks on a window are the window's (placing the item there).
+      if (event.composedPath().some((node) => node instanceof HTMLElement && node.classList.contains('rml-document'))) return;
+      const cell = source.storage === Storage.INVENTORY ? groundCell(event) : null;
+      if (cell) {
+        event.stopImmediatePropagation();
+        inventory.dropToGround(source.slot, cell);
+      }
+      this.picked.drop();
+      this.refresh();
+    }, true);
   }
 
   async toggle(): Promise<void> {

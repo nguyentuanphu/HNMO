@@ -1409,3 +1409,31 @@ export function tooltipLines(item: Item, character: TooltipCharacter | null = nu
   socketLines(item, character, writer.lines);
   return writer.lines;
 }
+
+// ---------------------------------------------------------------------------
+// For other item texts (the ground labels): the item's name line and its conditions.
+// ---------------------------------------------------------------------------
+
+function contextOf(item: Item): { definition: TooltipDefinition | null; context: TooltipContext } {
+  loaded();
+  const definition = itemDefinition(item.group, item.number) as TooltipDefinition | null;
+  return { definition, context: computeContext(item, definition, null, optionSlots(item, definition, null)) };
+}
+
+/** The item's name as windows and messages write it (GetItemNameText): with "Excellent", the set and the level. */
+export function itemNameText(item: Item): string {
+  const { definition, context } = contextOf(item);
+  return itemName(item, definition, context).name;
+}
+
+/** Whether all of a rule's conditions ("excellent", "level>=7", "tag:…", …) hold for the item. */
+export function itemConditionsHold(item: Item, when: readonly string[] | undefined): boolean {
+  const { context } = contextOf(item);
+  return (when ?? []).every((condition) => conditionHolds(condition, context));
+}
+
+/** The name of the item's ancient set, to put in front of its name (GetSetItemName), or null. */
+export function itemSetName(item: Item): string | null {
+  loaded();
+  return setItemName(item);
+}
