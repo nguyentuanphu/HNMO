@@ -77,9 +77,9 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Attack monsters, damage numbers, health bars | ⬜ | Next up |
 | Skills and buffs (`GameLogic/Skills`, `Buffs`) | ⬜ | |
 | Experience, level up, stats and points | ⬜ | |
-| Items: drops, pick up, inventory, equip, use | ⬜ | |
-| NPC dialogs, shops, buy and sell, repair | ⬜ | |
-| Vault, trade, personal shop, chaos machine | ⬜ | |
+| Items: drops, pick up, inventory, equip, use | 🟡 | Inventory from the server (`CharacterInventory`, extended item format), moving and equipping by clicking (`ItemMoveRequestExtended`), the hero re-dressed from the equipment slots; drops, pick up and use not yet |
+| NPC dialogs, shops, buy and sell, repair | 🟡 | Clicking an NPC walks next to it and talks to it; shops, buying, selling and repair not yet |
+| Vault, trade, personal shop, chaos machine | 🟡 | Vault: talking to the vault keeper opens it (`TalkToNpcRequest`, `NpcWindowResponse`, `StoreItemList`), items move both ways, zen deposit and withdraw; trade, personal shop and chaos machine not yet |
 | Party, guild, friends, messenger | ⬜ | |
 | Quests | ⬜ | |
 | Events (Blood Castle, Devil Square, Chaos Castle, …) | ⬜ | |
@@ -92,7 +92,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 |---|---|---|
 | HUD: health, mana, experience bar, skill bar | ⬜ | |
 | Chat window, whisper, party and guild chat, chat commands | 🟡 | Public chat and commands (Enter), chat and server messages shown; whisper, party, guild not yet |
-| Inventory, character, skill tree and option windows | ⬜ | |
+| Inventory, character, skill tree and option windows | 🟡 | The windows are the game's own RML documents and RCSS themes (`ui/rml.js` shows them in the browser): inventory and vault done, with the 3D items at their inventory angles (`ui/itemIcons.js`); the others not yet |
 | Tooltips | ⬜ | |
 | Themes and UI scaling | ⬜ | |
 | Translations (`src/Localization`) | ⬜ | |

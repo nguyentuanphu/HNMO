@@ -84,7 +84,7 @@ function backPlacement(item, rightHand) {
   return matrix;
 }
 
-async function createItemModel(item) {
+export async function createItemModel(item) {
   const source = itemModel(item.group, item.number);
   if (!source) return null;
   const model = await loadModel(source.dir, source.fileName);

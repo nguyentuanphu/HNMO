@@ -12,6 +12,8 @@ import { loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUP
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { loadGlowColors } from './game/itemGlow.js';
+import { Inventory } from './game/inventory.js';
+import { ItemWindows } from './ui/itemWindows.js';
 import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 
 THREE.ColorManagement.enabled = false;
@@ -87,6 +89,35 @@ async function placeHero({ id, name, bodySet, equipment, x, y }) {
   ui.heroName.textContent = name;
 }
 
+// The hero wears what the inventory's equipment slots hold (the desktop client draws its own
+// character from CharacterMachine->Equipment): put on again when that changes.
+const EQUIPMENT_OF_SLOT = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings'];
+let wornSignature = null;
+async function wearInventory(character) {
+  const equipment = {};
+  EQUIPMENT_OF_SLOT.forEach((name, slot) => {
+    const item = state.inventory.items.get(slot);
+    equipment[name] = item ? { group: item.group, number: item.number, glowLevel: item.level, excellent: item.excellent > 0, ancient: item.ancientSet > 0 } : null;
+  });
+  const signature = JSON.stringify(equipment);
+  if (signature === wornSignature) return;
+  const first = wornSignature === null;
+  wornSignature = signature;
+  if (first || !state.hero) return; // the hero already wears what the character list showed
+  const old = state.hero;
+  const hero = await createPlayerCharacter({ id: old.id, name: old.name, bodySet: character.classIndex + 1, equipment });
+  if (state.hero !== old) return;
+  hero.position.copy(old.position);
+  hero.cell = { ...old.cell };
+  hero.angle = old.angle;
+  hero.path = old.path;
+  hero.action = old.action;
+  root.remove(old.group);
+  root.add(hero.group);
+  state.hero = hero;
+  if (state.online) state.online.hero = hero;
+}
+
 // ---------- camera and input ----------
 
 const view = { yaw: CAMERA.yaw, distance: CAMERA.distance, dragging: false, lastX: 0 };
@@ -113,9 +144,33 @@ function pickCell(event) {
 }
 
 ui.canvas.addEventListener('contextmenu', (event) => event.preventDefault());
+// The NPC under the pointer: the nearest one whose drawn body the pointer is on.
+const npcBox = new THREE.Box3();
+function pickNpc(event) {
+  if (!state.online) return null;
+  const rect = ui.canvas.getBoundingClientRect();
+  let best = null;
+  for (const character of state.online.characters.values()) {
+    if (character.kind !== 'npc') continue;
+    npcBox.setFromObject(character.group);
+    if (npcBox.isEmpty()) continue;
+    const top = npcBox.max.clone().project(camera), bottom = npcBox.min.clone().project(camera);
+    const toScreen = (v) => ({ x: rect.left + (v.x + 1) / 2 * rect.width, y: rect.top + (1 - v.y) / 2 * rect.height });
+    const a = toScreen(top), b = toScreen(bottom);
+    const left = Math.min(a.x, b.x), right = Math.max(a.x, b.x), upper = Math.min(a.y, b.y), lower = Math.max(a.y, b.y);
+    const pad = 8;
+    if (event.clientX < left - pad || event.clientX > right + pad || event.clientY < upper - pad || event.clientY > lower + pad) continue;
+    const distance = Math.hypot(event.clientX - (left + right) / 2, event.clientY - (upper + lower) / 2);
+    if (!best || distance < best.distance) best = { character, distance };
+  }
+  return best?.character ?? null;
+}
+
 ui.canvas.addEventListener('pointerdown', (event) => {
   if (!state.hero) return;
   if (event.button === 2) { view.dragging = true; view.lastX = event.clientX; return; }
+  const npc = pickNpc(event);
+  if (npc) { state.online.talkTo(npc); return; }
   const cell = pickCell(event);
   if (!cell) return;
   if (state.online) state.online.walkTo(cell);
@@ -278,7 +333,13 @@ async function playOnline(settings) {
   // the map is still loading: keep those packets and replay them once it's ready.
   const earlyPackets = [];
   const stopBuffering = connection.onPacket((bytes) => earlyPackets.push(bytes));
+  // The inventory follows the server from the start: it sends the items right after the character.
+  state.inventory = new Inventory(connection);
   const info = await enterWorld(connection, character.name);
+  state.inventory.money = info.Money ?? 0;
+  state.itemWindows = new ItemWindows({ inventory: state.inventory });
+  state.inventory.onChange((what) => { if (what === 'inventory') wearInventory(character); });
+  wearInventory(character); // what the hero wears now, from the inventory the server sent with the character
   ui.login.hidden = true;
   await loadMap(info.MapId);
   await placeHero({ id: connection.playerId, name: character.name, bodySet: character.classIndex + 1, equipment: character.equipment, x: info.X, y: info.Y });
@@ -298,7 +359,7 @@ async function playOnline(settings) {
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => state.online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
-  setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom.`, 1);
+  setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }
 
 // ---------- wardrobe (offline) ----------

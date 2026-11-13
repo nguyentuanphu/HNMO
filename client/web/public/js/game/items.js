@@ -46,6 +46,7 @@ export async function loadItemCatalog() {
   const sharedByName = new Map(shared.models.map((model) => [model.name, model]));
   const models = new Map();
   const names = new Map();
+  const definitions = new Map();
   groups.forEach((group, groupIndex) => {
     for (const entry of group.models) {
       const model = entry.model ? sharedByName.get(entry.model) : entry;
@@ -55,18 +56,27 @@ export async function loadItemCatalog() {
         textureDir: model.textureFolders?.length ? model.textureFolders : ['Item'],
         isGlowMesh: glowMeshRule(entry, model),
         glow: entry.glow ?? {},
+        inventory: entry.inventory ?? model.inventory ?? null,
       });
     }
   });
   items.forEach((group, groupIndex) => {
-    for (const item of group.items) if (item.name?.en) names.set(`${groupIndex}:${item.number}`, item.name.en);
+    for (const item of group.items) {
+      if (item.name?.en) names.set(`${groupIndex}:${item.number}`, item.name.en);
+      definitions.set(`${groupIndex}:${item.number}`, item);
+    }
   });
-  catalog = { models, names };
+  catalog = { models, names, definitions };
   return catalog;
 }
 
 export function itemModel(group, number) {
   return catalog?.models.get(`${group}:${number}`) ?? null;
+}
+
+// The item's definition (Data/Items/GroupNN_*.json): size in cells, slot, requirements, …
+export function itemDefinition(group, number) {
+  return catalog?.definitions.get(`${group}:${number}`) ?? null;
 }
 
 export function itemName(group, number) {

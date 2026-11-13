@@ -7,10 +7,11 @@ import { read, packetCode } from '../net/packets.js';
 import { classOfAppearance } from '../net/session.js';
 import { parseAppearance } from './items.js';
 import { createMonsterCharacter, createPlayerCharacter } from './characters.js';
-import { findPath, directionBetween } from './pathfinding.js';
+import { findPath, directionBetween, isWalkableCell } from './pathfinding.js';
 
 const ID_MASK = 0x7fff;          // the high bit marks "just created" (WSclient.cpp: Key &= 0x7FFF)
 const MAX_STEPS_PER_WALK = 15;   // the step count is a 4-bit field
+const TALK_DISTANCE = 3;         // cells; the server refuses farther talks
 const PING_INTERVAL_MS = 20000;
 
 const Code = { CHAT: 0x00, SERVER_MESSAGE: 0x0d, ADD_PLAYERS: 0x12, ADD_NPCS: 0x13, OUT_OF_SCOPE: 0x14, MOVED: 0x15, MAP_CHANGED: 0x1c, WALKED: 0xd4, PING_REQUEST: 0x71 };
@@ -131,9 +132,38 @@ export class OnlineWorld {
     this.connection.send('ClientToServer', 'PublicChatMessage', { Character: this.hero.name, Message: text });
   }
 
+  // Talks to an NPC (vault keeper, merchants, …): walks next to it first when it's farther than
+  // the server allows, then sends TalkToNpcRequest, as the client does when an NPC is clicked.
+  talkTo(npc) {
+    this.talkTarget = npc;
+    if (!this.closeEnoughToTalk(npc)) {
+      const near = this.cellNextTo(npc.cell);
+      if (near) this.walkTo(near, { keepTalk: true });
+    }
+  }
+
+  closeEnoughToTalk(npc) {
+    return Math.max(Math.abs(npc.cell.x - this.hero.cell.x), Math.abs(npc.cell.y - this.hero.cell.y)) <= TALK_DISTANCE;
+  }
+
+  cellNextTo(cell) {
+    let best = null;
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const candidate = { x: cell.x + dx, y: cell.y + dy };
+        if ((dx || dy) && isWalkableCell(this.world.flags, candidate.x, candidate.y)) {
+          const distance = Math.hypot(candidate.x - this.hero.cell.x, candidate.y - this.hero.cell.y);
+          if (!best || distance < best.distance) best = { ...candidate, distance };
+        }
+      }
+    }
+    return best && { x: best.x, y: best.y };
+  }
+
   // Walks the player to a cell and tells the server, as the client's SendRequestMove does.
   // A walk packet holds at most 15 steps; longer walks continue when a part ends.
-  walkTo(cell) {
+  walkTo(cell, { keepTalk = false } = {}) {
+    if (!keepTalk) this.talkTarget = null;
     this.goal = { x: cell.x, y: cell.y };
     return this.walkNextPart();
   }
@@ -164,6 +194,13 @@ export class OnlineWorld {
 
   update(dt) {
     if (this.goal && !this.hero.isWalking) this.walkNextPart();
+    if (this.talkTarget && !this.hero.isWalking && !this.goal) {
+      if (this.closeEnoughToTalk(this.talkTarget)) {
+        this.connection.send('ClientToServer', 'TalkToNpcRequest', { NpcId: this.talkTarget.id });
+        this.hero.faceTo?.(this.talkTarget.cell);
+      }
+      this.talkTarget = null;
+    }
     for (const character of this.characters.values()) character.update(dt, this.world);
   }
 
