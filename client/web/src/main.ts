@@ -21,6 +21,7 @@ import { findItemReverse, HOTKEY_LETTERS, ItemHotkeys, ItemUser, itemTypesInUseO
 import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
+import { CharacterWindow } from './ui/characterWindow.js';
 import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -464,11 +465,6 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     }),
   });
   inventory.onChange((what) => { if (what === 'inventory') wearInventory(character); });
-  // TEMP-CHARWIN-BEGIN
-  { const { CharacterWindow } = await import('./ui/characterWindow.js');
-    const characterWindow = new CharacterWindow({ connection, stats, inventory, classIndex: character.classIndex, name: character.name, currentSkill: () => skills.skillAt(skills.current) });
-    window.addEventListener('keydown', (event) => { if (event.target instanceof Element && event.target.closest('input, textarea')) return; if (event.key.toLowerCase() === 'c') void characterWindow.toggle(); }); }
-  // TEMP-CHARWIN-END
   wearInventory(character); // what the hero wears now, from the inventory the server sent with the character
   ui.login.hidden = true;
   const playerId = connection.playerId!; // known since login()
@@ -577,7 +573,17 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     }
     if (!event.repeat) useHotkey(slot);
   });
-  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); } }, {
+  // The character window (C): the rightmost docked window; the inventory moves left of it while it's open.
+  const characterWindow = new CharacterWindow({
+    connection, stats, inventory, classIndex: character.classIndex, name: character.name,
+    currentSkill: () => skills.skillAt(skills.current),
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'c' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void characterWindow.toggle(); }
+  });
+  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); }, character: () => { void characterWindow.toggle(); } }, {
     item: (slot) => { const bagSlot = hotkeys.slotOf(slot, inventory.items); return bagSlot === null ? null : inventory.items.get(bagSlot) ?? null; },
     count: (slot) => hotkeys.count(slot, inventory.items),
     use: useHotkey,

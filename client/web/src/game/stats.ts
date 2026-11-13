@@ -30,6 +30,11 @@ export class CharacterStats implements StatValues {
   strength = 0; agility = 0; vitality = 0; energy = 0; leadership = 0;
   life = 0; maxLife = 1; mana = 0; maxMana = 1; shield = 0; maxShield = 1; ability = 0; maxAbility = 1;
   money = 0;
+  /** The attack and wizardry speeds and the speed cap, as the server computes them (CharacterAttribute->AttackSpeed…). */
+  attackSpeed = 0; magicSpeed = 0; maxAttackSpeed = 0;
+  resets = 0;
+  /** The stat fruits: points added and removed, and their maxima (AddPoint, MaxAddPoint, wMinusPoint, wMaxMinusPoint). */
+  usedFruitPoints = 0; maxFruitPoints = 0; usedNegativeFruitPoints = 0; maxNegativeFruitPoints = 0;
   private readonly listeners = new Set<(change: StatsChange, detail?: PacketValues) => void>();
   private readonly stop: () => void;
 
@@ -45,6 +50,11 @@ export class CharacterStats implements StatValues {
     this.shield = num(info, 'CurrentShield'); this.maxShield = num(info, 'MaximumShield') || 1;
     this.ability = num(info, 'CurrentAbility'); this.maxAbility = num(info, 'MaximumAbility') || 1;
     this.money = num(info, 'Money');
+    this.attackSpeed = num(info, 'AttackSpeed'); this.magicSpeed = num(info, 'MagicSpeed');
+    this.maxAttackSpeed = num(info, 'MaximumAttackSpeed'); this.resets = num(info, 'Resets');
+    this.usedFruitPoints = num(info, 'UsedFruitPoints'); this.maxFruitPoints = num(info, 'MaxFruitPoints');
+    this.usedNegativeFruitPoints = num(info, 'UsedNegativeFruitPoints');
+    this.maxNegativeFruitPoints = num(info, 'MaxNegativeFruitPoints');
     this.stop = connection.onPacket((bytes) => this.handle(bytes));
   }
 
@@ -61,6 +71,7 @@ export class CharacterStats implements StatValues {
     if (bytes[0] === 0xc1 && bytes[2] === 0x26 && bytes[3] === 0xff) {
       const p = read('ServerToClient', 'CurrentStatsExtended', bytes);
       this.life = num(p, 'Health'); this.shield = num(p, 'Shield'); this.mana = num(p, 'Mana'); this.ability = num(p, 'Ability');
+      this.attackSpeed = num(p, 'AttackSpeed'); this.magicSpeed = num(p, 'MagicSpeed');
       this.changed('stats');
     } else if (bytes[0] === 0xc1 && bytes[2] === 0x26 && bytes[3] === 0xfe) {
       const p = read('ServerToClient', 'MaximumStatsExtended', bytes);
@@ -87,6 +98,22 @@ export class CharacterStats implements StatValues {
       this.life = num(p, 'CurrentHealth'); this.mana = num(p, 'CurrentMana'); this.shield = num(p, 'CurrentShield');
       this.ability = num(p, 'CurrentAbility'); this.experience = num(p, 'Experience'); this.money = num(p, 'Money');
       this.changed('respawn', p);
+    } else if (bytes[0] === 0xc1 && bytes[2] === 0xf3 && bytes[3] === 0x06 && bytes[1] >= 24) {
+      // The answer to a stat point (ReceiveAddPointExtended): nothing added when it was refused.
+      const p = read('ServerToClient', 'CharacterStatIncreaseResponseExtended', bytes);
+      const added = num(p, 'AddedAmount');
+      if (added === 0) return;
+      this.levelUpPoints -= added;
+      switch (num(p, 'Attribute')) {
+        case 0: this.strength += added; break;
+        case 1: this.agility += added; break;
+        case 2: this.vitality += added; break;
+        case 3: this.energy += added; break;
+        case 4: this.leadership += added; break;
+      }
+      this.maxLife = num(p, 'UpdatedMaximumHealth') || 1; this.maxMana = num(p, 'UpdatedMaximumMana') || 1;
+      this.maxShield = num(p, 'UpdatedMaximumShield') || 1; this.maxAbility = num(p, 'UpdatedMaximumAbility') || 1;
+      this.changed('stats', p);
     } else if (bytes[0] === 0xc1 && bytes[2] === 0xf3 && bytes[3] === 0x32) {
       const p = read('ServerToClient', 'BaseStatsExtended', bytes);
       this.strength = num(p, 'Strength'); this.agility = num(p, 'Agility'); this.vitality = num(p, 'Vitality');

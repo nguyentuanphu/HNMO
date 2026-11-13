@@ -1437,3 +1437,158 @@ export function itemSetName(item: Item): string | null {
   loaded();
   return setItemName(item);
 }
+
+// ---------------------------------------------------------------------------
+// For the character window's sums (CHARACTER_MACHINE::CalculateAll): what a worn item gives.
+// ---------------------------------------------------------------------------
+
+/**
+ * An option slot's effect as the stat code reads it (the AT_ numbers of ItemOptionEffects.cpp and of the code
+ * options): `improveDamage` AT_IMPROVE_DAMAGE, `improveDamageLevel` AT_IMPROVE_DAMAGE_LEVEL, `improveDamagePercent`
+ * AT_IMPROVE_DAMAGE_PERCENT, the same for `improveMagic…`, `improveCurse`, `improveBlocking`, `improveBlockingPercent`,
+ * `improveDefense`, `luck` (AT_LUCK, the critical damage rate), `improveCharisma` AT_SET_OPTION_IMPROVE_CHARISMA.
+ */
+export interface ItemOptionEffect { effect: string; value: number }
+
+/** The Jewel of Harmony's part (JewelHarmonyInfo::GetStrengthenCapability), zero where it gives nothing. */
+export interface ItemHarmonyValues {
+  /** Index 0: the requirements it lowers. */
+  strength: number; dexterity: number;
+  /** Index 1 (weapons and staffs). */
+  minAttack: number; maxAttack: number; magicalPower: number; attackRate: number; criticalDamage: number;
+  /** Index 2 (shields and armour). */
+  defense: number; defenseRate: number;
+}
+
+/** What an item gives the character's stats (SetItemAttributes' values, its option slots and its harmony option). */
+export interface ItemCombatValues {
+  /** group * 512 + number (ITEM::Type). */
+  type: number;
+  weaponKind: string | null;
+  tags: string[];
+  wingTier: string | null;
+  /** ITEM_ATTRIBUTE's Durability and MagicDur, for CalcDurabilityPercent. */
+  baseDurability: number;
+  baseMagicDurability: number;
+  damageMin: number;
+  damageMax: number;
+  magicPower: number;
+  blockRate: number;
+  defense: number;
+  require: Record<'level' | RequirementStat, number>;
+  /** RequireClass by base class: the class step it needs, 0 when the class can't wear it. */
+  classes: number[];
+  options: ItemOptionEffect[];
+  /** Its option is a magic sword's (baseDamageBonus): the damage option counts for wizardry too. */
+  raisesWizardry: boolean;
+  harmony: ItemHarmonyValues;
+  /** The guardian (380) option's attack and defense rates (ItemAddOption.bmd options 1 and 3), when it has one. */
+  guardianAttackRate: number;
+  guardianDefenseRate: number;
+}
+
+// The data options the stat code reads, by type and attribute (ItemOptionEffects.cpp, the ones that write a value).
+const DATA_OPTION_EFFECTS: Record<string, string> = {
+  'luck:criticalDamageChance': 'luck',
+  'option:physicalBaseDmg': 'improveDamage', 'option:baseDamageBonus': 'improveDamage',
+  'option:wizardryBaseDmg': 'improveMagic', 'option:curseBaseDmg': 'improveCurse',
+  'option:defenseRatePvm': 'improveBlocking', 'option:defenseBase': 'improveDefense',
+  'excellent:defenseRatePvm': 'improveBlockingPercent',
+  'excellent:physicalBaseDmg': 'improveDamageLevel', 'excellent:wizardryBaseDmg': 'improveMagicLevel',
+  'excellent:physicalBaseDmgIncrease': 'improveDamagePercent', 'excellent:wizardryBaseDmgIncrease': 'improveMagicPercent',
+  'excellent:attackSpeedAny': 'improveAttackSpeed',
+};
+
+function harmonyValues(item: Item): ItemHarmonyValues {
+  const values: ItemHarmonyValues = { strength: 0, dexterity: 0, minAttack: 0, maxAttack: 0, magicalPower: 0,
+    attackRate: 0, criticalDamage: 0, defense: 0, defenseRate: 0 };
+  const option = item.harmony >> 4;
+  const level = item.harmony & 0x0f;
+  const kind = harmonyKind(item.group);
+  if (option === 0 || item.level < level || kind === null || !isHarmonyOption(kind, option)) return values;
+  const value = harmonyOption(kind, option)?.levels[level] ?? 0;
+  if (kind === 0) {
+    if (option === 3) values.strength = value;
+    if (option === 4) values.dexterity = value;
+    if (option === 1 || option === 5) values.minAttack = value;
+    if (option === 2 || option === 5) values.maxAttack = value;
+    if (option === 8) values.attackRate = value;
+    if (option === 6) values.criticalDamage = value;
+  } else if (kind === 1) {
+    if (option === 2) values.strength = value;
+    if (option === 3) values.dexterity = value;
+    if (option === 1) values.magicalPower = value;
+    if (option === 7) values.attackRate = value;
+    if (option === 5) values.criticalDamage = value;
+  } else {
+    if (option === 1) values.defense = value;
+    if (option === 6) values.defenseRate = value;
+  }
+  return values;
+}
+
+function guardianRates(item: Item, type: number): { guardianAttackRate: number; guardianDefenseRate: number } {
+  const add = item.guardian ? loaded().addOptions?.(type) : undefined;
+  const rate = (option: number) => (add ? (add.option1 === option ? add.value1 : 0) + (add.option2 === option ? add.value2 : 0) : 0);
+  return { guardianAttackRate: rate(1), guardianDefenseRate: rate(3) };
+}
+
+/** What the item gives the character's stats (after loadTooltipData has finished); `level` is the hero's level. */
+export function itemCombatValues(item: Item, level: number): ItemCombatValues {
+  loaded();
+  const definition = itemDefinition(item.group, item.number) as TooltipDefinition | null;
+  const attribute = attributeOf(definition);
+  const links = optionLinks(definition);
+  const excellent = hasExcellentOptions(links, item.excellent);
+  const stats = computeStats(item, definition, attribute, excellent);
+  const character: TooltipCharacter = { level };
+  const options: ItemOptionEffect[] = [];
+  let raisesWizardry = false;
+  // In SetItemAttributes' order: the wings' options, luck, the additional option, excellent, the rings'.
+  const code = (option: CodeOption, value: number) => options.push({ effect: option, value });
+  addWingOptions(item, definition, code);
+  for (const kind of TAKE_ORDER) {
+    const turnedOn = kind === 'luck' ? item.luck : kind === 'option' ? item.optionLevel > 0 : item.excellent !== 0;
+    if (turnedOn) {
+      for (const link of links) {
+        if (link.type !== kind) continue;
+        for (const option of link.options) {
+          if (kind === 'option' && optionNumber(option) !== item.optionType) continue;
+          if (kind === 'excellent' && !isExcellentBitSet(item.excellent, option)) continue;
+          const effect = DATA_OPTION_EFFECTS[`${kind}:${option.attribute}`];
+          if (!effect) continue;
+          if (option.attribute === 'baseDamageBonus') raisesWizardry = true;
+          options.push({ effect, value: optionValue(option, kind === 'option' ? item.optionLevel : 1, character) });
+        }
+      }
+    }
+    if (kind === 'option' && item.optionLevel && !links.some((link) => link.type === 'option')) {
+      addCodeAdditionalOption(item, item.group * ITEMS_PER_GROUP + item.number, code);
+    }
+  }
+  const type = item.group * ITEMS_PER_GROUP + item.number;
+  if (type === 13 * ITEMS_PER_GROUP + 20 && (item.level === 0 || item.level === 3)) {
+    code('improveMagicPercent', 10); code('improveDamagePercent', 10); code('improveAttackSpeed', 10);
+  } else if (type === 13 * ITEMS_PER_GROUP + 107) {
+    code('improveMagicPercent', 15); code('improveDamagePercent', 15); code('improveAttackSpeed', 10);
+  }
+  return {
+    type,
+    weaponKind: definition?.weaponKind ?? null,
+    tags: definition?.tags ?? [],
+    wingTier: definition?.wingTier ?? null,
+    baseDurability: attribute.durability,
+    baseMagicDurability: attribute.magicDurability,
+    damageMin: stats.damageMin,
+    damageMax: stats.damageMax,
+    magicPower: stats.magicPower,
+    blockRate: stats.blockRate,
+    defense: stats.defense,
+    require: stats.require,
+    classes: attribute.classes,
+    options,
+    raisesWizardry,
+    harmony: harmonyValues(item),
+    ...guardianRates(item, type),
+  };
+}

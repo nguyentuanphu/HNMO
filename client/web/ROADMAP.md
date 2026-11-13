@@ -40,7 +40,7 @@ tests and CI for all of it; strict TypeScript build.
 3. Repair (inventory button and NPCs), durability tints and the durability window.
 
 ## 4. Character
-1. Character window C (`character_info.rml`): stats, adding level-up points.
+1. ✅ Character window C (`character_info.rml`): stats, adding level-up points (buffs, set/socket options and master level count once those exist).
 2. Running after walking a while (`canRun`, run delays), swimming maps.
 3. Pets and mounts drawn (Guardian Angel, Imp, Dark Horse, Fenrir …), capes as cloth.
 
@@ -89,7 +89,7 @@ each release.
 | 23:30–00:30 | ✅ 10.1 the (i) guide; ✅ 3.1 potions on Q W E R and right-click use |
 | 00:30–01:30 | ✅ 2.1 skill list, skill bar, hotkeys and tooltip (cooldown wipes come with casting) |
 | 01:30–02:30 | 🟡 1.1 effect system basics; 2.2 casting with skill animations and first effects |
-| 02:30–03:30 | 4.1 character window and stat points; 5.1 NPC shops (buy, sell, repair) |
+| 02:30–03:30 | ✅ 4.1 character window and stat points; ✅ 5.1 NPC shops (buy, sell, repair) |
 | 03:30–04:30 | 8.1 auto play core (hunt, potions, pick up) with its bar; report, package link |
 
 Order after tonight: the rest of 2, 3, 8, then 5-7, 4, 9, 10, 11.

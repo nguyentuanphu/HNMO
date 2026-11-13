@@ -653,10 +653,14 @@ export class ItemWindows {
     this.bag.close();
   }
 
+  /** Panels docked at the right edge before these windows (the character window): the bag moves left of them. */
+  dockedRight = 0;
+
   placeAll(): void {
-    this.bag.place(0);
-    this.vault.place(PANEL.width);
-    this.shop.place(PANEL.width);
+    const right = this.dockedRight * PANEL.width;
+    this.bag.place(right);
+    this.vault.place(right + PANEL.width);
+    this.shop.place(right + PANEL.width);
     this.bag.refresh();
     this.vault.refresh();
     this.shop.refresh();
