@@ -43,4 +43,4 @@ Web client during development: see [`client/web/README.md`](client/web/README.md
 
 ## Licenses
 
-The server is released under the MIT license ([`server/LICENSE`](server/LICENSE)).
+The server is released under the MIT license ([`server/licenses/LICENSE.txt`](server/licenses/LICENSE.txt)).

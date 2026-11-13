@@ -73,7 +73,7 @@ else
 fi
 
 mkdir -p "$OUT/licenses"
-cp "$SERVER_SOURCE/LICENSE" "$OUT/licenses/server-LICENSE.txt"
+cp "$SERVER_SOURCE/licenses/LICENSE.txt" "$OUT/licenses/server-LICENSE.txt"
 cp "$WEB/node_modules/three/LICENSE" "$OUT/licenses/three.js-LICENSE.txt"
 if [ -n "${POSTGRES_DIR:-}" ]; then
   echo "PostgreSQL is released under the PostgreSQL License: https://www.postgresql.org/about/licence/" > "$OUT/licenses/postgresql-LICENSE.txt"
