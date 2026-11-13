@@ -404,4 +404,38 @@ internal enum SkillNumber
     RecoversSdFully = 616,
     IncreaseTripleDamageChance = 617,
     #endregion
+
+    #region HNMO skills
+
+    // Four skills per class: 700 + 4 * class + letter (A 0, B 1, C 2, D 3), classes in the order
+    // Dark Knight, Dark Wizard, Fairy Elf, Magic Gladiator, Dark Lord, Summoner, Rage Fighter.
+    EarthSplitter = 700,
+    BloodSlash = 701,
+    IronGuard = 702,
+    KnightCharge = 703,
+    IceDragon = 704,
+    MeteorRain = 705,
+    ThunderCage = 706,
+    ManaShield = 707,
+    PhoenixArrow = 708,
+    FrostArrowRain = 709,
+    ForestBlessing = 710,
+    SpiritWolf = 711,
+    ChainLightningBlade = 712,
+    FlameWhirl = 713,
+    TwinPower = 714,
+    HeavenSword = 715,
+    ShadowRavens = 716,
+    WarCommand = 717,
+    EarthStomp = 718,
+    RoyalBeam = 719,
+    PoisonSoul = 720,
+    LittleDemon = 721,
+    WeakeningCurse = 722,
+    SoulDrain = 723,
+    DragonFist = 724,
+    WhirlKicks = 725,
+    IronBody = 726,
+    QuakeFist = 727,
+    #endregion
 }

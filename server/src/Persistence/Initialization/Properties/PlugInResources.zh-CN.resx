@@ -481,4 +481,10 @@
   <data name="AddProtectionTalismansUpdatePlugIn_Description" xml:space="preserve">
     <value>此更新添加守护护身符（防止死亡惩罚）和物品保护护身符（保持已装备物品的耐久度）。</value>
   </data>
+  <data name="AddHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>添加 HNMO 技能</value>
+  </data>
+  <data name="AddHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>添加 28 个 HNMO 技能（编号 700 至 727，每个职业四个）及其效果，以及勇者大陆精灵士兵的试炼任务，完成后学会各职业的第四个技能。</value>
+  </data>
 </root>

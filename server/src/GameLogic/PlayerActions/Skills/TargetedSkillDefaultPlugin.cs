@@ -28,6 +28,8 @@ public class TargetedSkillDefaultPlugin : TargetedSkillPluginBase
         { 34, 10 }, // Dark Knight
         { 35, 150 }, // Bali
         { 36, 151 }, // Soldier
+        { 711, 351 }, // Spirit Wolf (HNMO skill): Splinter Wolf
+        { 721, 37 }, // Little Demon (HNMO skill): Devil
     };
 
     /// <inheritdoc/>

@@ -819,4 +819,88 @@
   <data name="SummonSoldier" xml:space="preserve">
     <value>召唤士兵</value>
   </data>
+  <data name="EarthSplitter" xml:space="preserve">
+    <value>裂地斩</value>
+  </data>
+  <data name="BloodSlash" xml:space="preserve">
+    <value>血之斩</value>
+  </data>
+  <data name="IronGuard" xml:space="preserve">
+    <value>钢铁守护</value>
+  </data>
+  <data name="KnightCharge" xml:space="preserve">
+    <value>冲锋</value>
+  </data>
+  <data name="IceDragon" xml:space="preserve">
+    <value>冰龙</value>
+  </data>
+  <data name="MeteorRain" xml:space="preserve">
+    <value>流星雨</value>
+  </data>
+  <data name="ThunderCage" xml:space="preserve">
+    <value>雷霆牢笼</value>
+  </data>
+  <data name="ManaShield" xml:space="preserve">
+    <value>魔法护盾</value>
+  </data>
+  <data name="PhoenixArrow" xml:space="preserve">
+    <value>凤凰之箭</value>
+  </data>
+  <data name="FrostArrowRain" xml:space="preserve">
+    <value>冰霜箭雨</value>
+  </data>
+  <data name="ForestBlessing" xml:space="preserve">
+    <value>森林祝福</value>
+  </data>
+  <data name="SpiritWolf" xml:space="preserve">
+    <value>灵狼</value>
+  </data>
+  <data name="ChainLightningBlade" xml:space="preserve">
+    <value>连锁闪电刃</value>
+  </data>
+  <data name="FlameWhirl" xml:space="preserve">
+    <value>烈焰旋风</value>
+  </data>
+  <data name="TwinPower" xml:space="preserve">
+    <value>双重之力</value>
+  </data>
+  <data name="HeavenSword" xml:space="preserve">
+    <value>天堂之剑</value>
+  </data>
+  <data name="ShadowRavens" xml:space="preserve">
+    <value>暗影乌鸦</value>
+  </data>
+  <data name="WarCommand" xml:space="preserve">
+    <value>战争号令</value>
+  </data>
+  <data name="EarthStomp" xml:space="preserve">
+    <value>大地践踏</value>
+  </data>
+  <data name="RoyalBeam" xml:space="preserve">
+    <value>王者光束</value>
+  </data>
+  <data name="PoisonSoul" xml:space="preserve">
+    <value>毒魂</value>
+  </data>
+  <data name="LittleDemon" xml:space="preserve">
+    <value>小恶魔</value>
+  </data>
+  <data name="WeakeningCurse" xml:space="preserve">
+    <value>衰弱诅咒</value>
+  </data>
+  <data name="SoulDrain" xml:space="preserve">
+    <value>灵魂汲取</value>
+  </data>
+  <data name="DragonFist" xml:space="preserve">
+    <value>龙拳</value>
+  </data>
+  <data name="WhirlKicks" xml:space="preserve">
+    <value>旋风踢</value>
+  </data>
+  <data name="IronBody" xml:space="preserve">
+    <value>钢铁之躯</value>
+  </data>
+  <data name="QuakeFist" xml:space="preserve">
+    <value>震地拳</value>
+  </data>
 </root>

@@ -1171,4 +1171,7 @@ Extensões de inventário: {18}</value>
   <data name="MiniGameTicketRequired" xml:space="preserve">
     <value>Você precisa de um ingresso para entrar neste evento.</value>
   </data>
+  <data name="SkillLearned" xml:space="preserve">
+    <value>Você aprendeu {0}.</value>
+  </data>
 </root>

@@ -1119,4 +1119,25 @@
   <data name="FindTheScrollOfEmperorDarkKnight" xml:space="preserve">
     <value>Find the 'Scroll of Emperor' (Dark Knight)</value>
   </data>
+  <data name="TrialOfTheDarkKnight" xml:space="preserve">
+    <value>Trial of the Dark Knight</value>
+  </data>
+  <data name="TrialOfTheDarkWizard" xml:space="preserve">
+    <value>Trial of the Dark Wizard</value>
+  </data>
+  <data name="TrialOfTheFairyElf" xml:space="preserve">
+    <value>Trial of the Fairy Elf</value>
+  </data>
+  <data name="TrialOfTheMagicGladiator" xml:space="preserve">
+    <value>Trial of the Magic Gladiator</value>
+  </data>
+  <data name="TrialOfTheDarkLord" xml:space="preserve">
+    <value>Trial of the Dark Lord</value>
+  </data>
+  <data name="TrialOfTheSummoner" xml:space="preserve">
+    <value>Trial of the Summoner</value>
+  </data>
+  <data name="TrialOfTheRageFighter" xml:space="preserve">
+    <value>Trial of the Rage Fighter</value>
+  </data>
 </root>
