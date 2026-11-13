@@ -1420,6 +1420,14 @@ function contextOf(item: Item): { definition: TooltipDefinition | null; context:
   return { definition, context: computeContext(item, definition, null, optionSlots(item, definition, null)) };
 }
 
+/** The character level the item asks for (the desktop's ITEM::RequireLevel, ComputeItemStats). */
+export function itemRequiredLevel(item: Item): number {
+  loaded();
+  const definition = itemDefinition(item.group, item.number) as TooltipDefinition | null;
+  const attribute = attributeOf(definition);
+  return computeStats(item, definition, attribute, hasExcellentOptions(optionLinks(definition), item.excellent)).require.level;
+}
+
 /** The item's name as windows and messages write it (GetItemNameText): with "Excellent", the set and the level. */
 export function itemNameText(item: Item): string {
   const { definition, context } = contextOf(item);

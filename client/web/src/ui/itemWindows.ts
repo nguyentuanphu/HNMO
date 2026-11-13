@@ -109,12 +109,12 @@ function uiScale(): number {
   return window.innerHeight / REFERENCE_HEIGHT;
 }
 
-function emptyCells(count: number): GridCell[] {
+export function emptyCells(count: number): GridCell[] {
   return Array.from({ length: count }, () => ({ tint: '', drop: '', count: '' }));
 }
 
 // The item following the mouse after it was picked up (CInventoryCtrl's picked item).
-class PickedItem {
+export class PickedItem {
   canvas: HTMLCanvasElement;
   source: PickedSource | null;
   lastEvent?: MouseEvent;
@@ -153,7 +153,7 @@ class PickedItem {
 }
 
 // One RML window with an item grid (and, for the inventory, equipment slots).
-class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
+export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   inventory: Inventory;
   picked: PickedItem;
   documentName: string;
@@ -827,15 +827,7 @@ export class ItemWindows {
       this.inventory.repair(slot, false);
       return true;
     };
-    for (const itemWindow of [this.bag, this.vault, this.shop, this.trade]) {
-      itemWindow.onPickedChanged = () => { this.tooltip.hide(); this.refresh(); };
-      // The hovered item's tooltip, unless an item is on the cursor (CInventoryCtrl only shows it then).
-      itemWindow.onHover = (item) => {
-        const box = item && !this.picked.source && itemWindow.hoverSlot !== null ? itemWindow.screenBoxOf(itemWindow.hoverSlot) : null;
-        if (item && box) void this.tooltip.show(item, box);
-        else this.tooltip.hide();
-      };
-    }
+    for (const itemWindow of [this.bag, this.vault, this.shop, this.trade]) this.hook(itemWindow);
     inventory.onChange((what) => {
       if (what === 'window') this.syncVault();
       this.refresh();
@@ -844,7 +836,7 @@ export class ItemWindows {
       if (event.target instanceof Element && event.target.closest('input, textarea')) return;
       const key = event.key.toLowerCase();
       if (key === 'i' || key === 'v') { event.preventDefault(); this.toggle(); }
-      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen)) this.closeAll();
+      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen || this.docked.some((d) => d.window.isOpen))) this.closeAll();
       // L: the repair mode of a repair shop; Shift + L repairs everything (CNPCShop::UpdateKeyEvent).
       if (key === 'l' && this.shop.isOpen && this.shop.repairShop) {
         if (event.shiftKey) this.inventory.repair(0xff, false);
@@ -868,6 +860,21 @@ export class ItemWindows {
       this.refresh();
     }, true);
   }
+
+  private hook(itemWindow: ItemWindow<ItemWindowModel>): void {
+    itemWindow.onPickedChanged = () => { this.tooltip.hide(); this.refresh(); };
+    // The hovered item's tooltip, unless an item is on the cursor (CInventoryCtrl only shows it then).
+    itemWindow.onHover = (item) => {
+      const box = item && !this.picked.source && itemWindow.hoverSlot !== null ? itemWindow.screenBoxOf(itemWindow.hoverSlot) : null;
+      if (item && box) void this.tooltip.show(item, box);
+      else this.tooltip.hide();
+    };
+  }
+
+  /** Windows opened next to the inventory by other parts (the mix window): placed, refreshed and closed with these;
+   * `close` returns false to keep everything open (the desktop's ClosingProcess). */
+  docked: { window: ItemWindow<ItemWindowModel>; close: () => boolean }[] = [];
+  dock(window: ItemWindow<ItemWindowModel>, close: () => boolean): void { this.hook(window); this.docked.push({ window, close }); }
 
   async toggle(): Promise<void> {
     if (this.bag.isOpen) this.closeAll();
@@ -894,6 +901,7 @@ export class ItemWindows {
   }
 
   closeAll(): void {
+    if (this.docked.some((d) => d.window.isOpen && !d.close())) return;
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
     if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
@@ -936,6 +944,7 @@ export class ItemWindows {
     this.vault.place(right + PANEL.width);
     this.shop.place(right + PANEL.width);
     this.trade.place(right + PANEL.width);
+    for (const d of this.docked) { d.window.place(right + PANEL.width); d.window.refresh(); }
     this.bag.refresh();
     this.vault.refresh();
     this.shop.refresh();
@@ -947,6 +956,7 @@ export class ItemWindows {
     this.vault.refresh();
     this.shop.refresh();
     this.trade.refresh();
+    for (const d of this.docked) d.window.refresh();
   }
 
   // Selling a bag item to the open merchant (HandleSellToNPC / InventoryProcess): not what can't be

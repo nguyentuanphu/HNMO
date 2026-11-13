@@ -50,8 +50,10 @@ tests and CI for all of it; strict TypeScript build.
 3. 🟡 Move window M (done) / gates by walking (done) / warps (`move_command.rml`, `gateman.rml`), mini map (done, Tab), map name banner (done).
 
 ## 6. Trading and crafting
-🟡 Trade (`trade.rml`, done), personal store (`my_shop`, `PurchaseShopInventory`), chaos machine and every
-mix (`mix_inventory.rml`), Jewel of Harmony, sockets, lucky items, united market.
+🟡 Trade (`trade.rml`, done), personal store (`my_shop`, `PurchaseShopInventory`), chaos machine (`mix_inventory.rml`,
+done for the Chaos Goblin, the refinery, restore, chaos card and cherry blossom NPCs; left: the mix sparkle, the method
+menu as RML, the pet trainer, Elpis, seed master / researcher menus and the socket list, the 380 option lines, the
+harmony restore price), Jewel of Harmony, lucky items, united market.
 
 ## 7. Social
 🟡 Party (`party_list.rml`, done; `party_info.rml` next), guild (`guild_info.rml`, `guild_make.rml`), friends,

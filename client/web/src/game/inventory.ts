@@ -28,6 +28,9 @@ export const SHOP: ItemGrid = { firstSlot: 0, columns: 8, rows: 15 };
 /** The own side of an open trade (CTrade's 8 x 4 grids; the server's trade storage). */
 export const TRADE: ItemGrid = { firstSlot: 0, columns: 8, rows: 4 };
 export type Storage = (typeof Storage)[keyof typeof Storage];
+/** The mix windows' grids (8 x 4): the chaos machine and the other mix NPCs' storages (5-14, the desktop's *_MIX). */
+export const MIX: ItemGrid = { firstSlot: 0, columns: 8, rows: 4 };
+export const isMixStorage = (kind: number): boolean => kind === Storage.CHAOS_MACHINE || (kind >= 5 && kind <= 14);
 export const NpcWindow = { MERCHANT: 0, MERCHANT1: 1, VAULT: 2, CHAOS_MACHINE: 3 } as const;
 export type NpcWindow = (typeof NpcWindow)[keyof typeof NpcWindow];
 
@@ -64,7 +67,7 @@ export interface StoredItem {
 }
 
 /** What changed, for Inventory.onChange listeners. */
-export type InventoryChange = 'inventory' | 'vault' | 'shop' | 'trade' | 'window' | 'money' | 'buyFailed';
+export type InventoryChange = 'inventory' | 'vault' | 'shop' | 'trade' | 'window' | 'money' | 'buyFailed' | 'mix';
 
 /** A move the server hasn't answered yet. */
 export interface PendingMove {
@@ -144,6 +147,8 @@ export class Inventory {
   shop = new Map<number, Item>();
   /** The items this player put into the open trade, by trade slot (ItemMoved to the trade storage). */
   trade = new Map<number, Item>();
+  /** The items in the open mix window (the chaos machine), by its slot. */
+  mix = new Map<number, Item>();
   /** The bag slot of the item being sold (SellItemToNpcRequest), until the server answers. */
   sellingSlot: number | null = null;
   lastMoveTouchedVault?: boolean;
@@ -171,7 +176,8 @@ export class Inventory {
   }
 
   storage(kind: number): Map<number, Item> {
-    return kind === Storage.VAULT ? this.vault : kind === SHOP_STORAGE ? this.shop : kind === Storage.TRADE ? this.trade : this.items;
+    return kind === Storage.VAULT ? this.vault : kind === SHOP_STORAGE ? this.shop : kind === Storage.TRADE ? this.trade
+      : isMixStorage(kind) ? this.mix : this.items;
   }
 
   handle(bytes: Uint8Array): void {
@@ -186,9 +192,13 @@ export class Inventory {
       // StoreItemList: the vault's (or a merchant's) items
       const kind = bytes[data];
       const list = decodeStoredItems(bytes, data + 2, bytes[data + 1]);
-      // Both lists are of the "normal" kind; the window the server opened tells them apart.
-      void kind;
-      if (this.openWindow === NpcWindow.MERCHANT || this.openWindow === NpcWindow.MERCHANT1) {
+      // 3 and 5: what a mix left in the mix window (ReceiveTradeInventoryExtended). The vault's and a merchant's
+      // lists are both of the "normal" kind; the window the server opened tells them apart.
+      if (kind === 3 || kind === 5) {
+        this.mix.clear();
+        for (const { slot, item } of list) this.mix.set(slot, item);
+        this.changed('mix');
+      } else if (this.openWindow === NpcWindow.MERCHANT || this.openWindow === NpcWindow.MERCHANT1) {
         this.shop.clear();
         for (const { slot, item } of list) this.shop.set(slot, item);
         this.changed('shop');
@@ -197,6 +207,11 @@ export class Inventory {
         for (const { slot, item } of list) this.vault.set(slot, item);
         this.changed('vault');
       }
+    } else if (c1 && code === 0x86 && bytes.length > data + 5 && bytes[data] === 1 && bytes.subarray(data + 1).some((b) => b !== 0)) {
+      // ItemCraftingResult, success: the new item alone in the mix window (ReceiveMixExtended)
+      this.mix.clear();
+      this.mix.set(0, decodeItem(bytes, data + 1));
+      this.changed('mix');
     } else if (c3 && code === 0x30) {
       this.openWindow = bytes[data];
       this.changed('window');
