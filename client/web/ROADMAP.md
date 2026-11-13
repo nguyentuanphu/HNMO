@@ -26,12 +26,17 @@ tests and CI for all of it; strict TypeScript build.
 1. 🟡 Skill list from the server (`SkillListUpdate`, `SkillAdded/Removed`), the HUD skill bar,
    hotkeys 1-9/0, the skill list popup, the skill tooltip (range, mana, AG, cooldown,
    requirements, notes) (done). Cooldowns (done: CheckSkillDelay, the wipes on the bar and the list). Left: the tooltip's damage lines (with the character's damage,
-   4.1), the buff/party/map checks of grey icons, master icons.
+   4.1), the buff/party/map checks of grey icons. Master skill icons (done: the master atlas on the bar and the list).
 2. 🟡 Casting: targeted (`TargetedSkill`), area (`AreaSkill`), the skill animations (done for the
    classes' skills except the Rage Fighter's and master skills) and effects per skill (first skills
    done), skill arrows and multi-shot fans. (The desktop never sends `AreaSkillHit`; the server hits.)
 3. 🟡 Buffs and debuffs (`MagicEffectStatus`), the buff strip (`buff_strip.rml`) (done), their visual effects.
-4. Master level and skill tree (`master_level.rml`).
+4. 🟡 Master level and skill tree (`master_level.rml`, `ui/masterLevelWindow.ts`, `game/masterLevel.ts`): done: the master
+   level, experience and points (F3 50/51, master experience), the HUD's experience bar past level 400, A and the
+   character window's button, the class's tree from `MasterSkillTreeData.bmd` with its columns, ranks, icons, arrows,
+   levels and hints from `MasterSkillTooltip_eng.bmd`, the desktop's checks and question before `AddMasterSkillPoint`,
+   the answer (F3 52) updating the tree, the skill list and the HUD (test `master.spec.ts`). Left: master level-up
+   flare effect, the master skills' effects on the character window's numbers, casting the strengthened skills.
 
 ## 3. Using items
 1. ✅ Potions on Q W E R (`ConsumeItemRequest`), right-click to use. Left: the dialogs of fruits,
