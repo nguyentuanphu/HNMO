@@ -38,6 +38,7 @@ import { GameSounds } from './game/gameSounds.js';
 import { Party, facingPlayer } from './game/party.js';
 import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
+import { setupSocial, decorateLabel, type Social } from './game/social.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { MiniMap } from './ui/miniMap.js';
 import { installTouchControls } from './ui/touchControls.js';
@@ -94,6 +95,7 @@ export interface GameState {
   view?: { yaw: number; distance: number };
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
+  social?: Social;
 }
 
 declare global {
@@ -372,6 +374,7 @@ function updateLabels(): void {
         ui.labels.append(element);
         labelElements.set(character, element);
       }
+      decorateLabel(character, element);
       element.style.transform = `translate(${(point.x + 1) / 2 * rect.width}px, ${(1 - point.y) / 2 * rect.height}px) translate(-50%, -100%)`;
       visible.add(character);
     }
@@ -935,6 +938,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     }
     online.say(text);
   });
+  // Guild, friends, letters and whispers (game/social.ts): G, F, /guild, the guild master NPC.
+  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); } });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
