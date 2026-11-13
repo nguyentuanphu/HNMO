@@ -26,7 +26,7 @@ tests and CI for all of it; strict TypeScript build.
 1. 🟡 Skill list from the server (`SkillListUpdate`, `SkillAdded/Removed`), the HUD skill bar,
    hotkeys 1-9/0, the skill list popup, the skill tooltip (range, mana, AG, cooldown,
    requirements, notes) (done). Left: the tooltip's damage lines (with the character's damage,
-   4.1), cooldown wipes (with casting, 2.2), the weapon/mount/buff checks of grey icons, master icons.
+   4.1), cooldown wipes (with casting, 2.2), the buff/party/map checks of grey icons, master icons.
 2. Casting: targeted (`TargetedSkill`), area (`AreaSkill`, `AreaSkillHit`), the skill animations
    and effects per skill, skill arrows and multi-shot fans.
 3. Buffs and debuffs (`MagicEffectStatus`), the buff strip (`buff_strip.rml`), their visual effects.

@@ -275,3 +275,39 @@ export class SkillList {
     return result;
   }
 }
+
+/** What the grey-icon checks look at: the hands, the pet slot and the stats with their bonuses. */
+export interface SkillEquipment {
+  right: { group: number; number: number } | null;
+  left: { group: number; number: number } | null;
+  helper: { group: number; number: number; durability: number } | null;
+  strength: number;
+  agility: number;
+}
+
+const TWISTING_SLASH = 41, RAGEFUL_BLOW = 42, DEATH_STAB = 43, IMPALE = 47, ICE_ARROW = 51, FIRE_SLASH = 55,
+  POWER_SLASH = 56, EARTHSHAKE = 62, BLOCKING = 18, SLASH = 23;
+
+// IsHudSkillUsable's equipment checks (the desktop greys the icon when they fail): melee skills
+// need a weapon that isn't a staff or book, Multi-Shot a bow with arrows or a crossbow with bolts,
+// Earthshake a living dark horse, Impale a horn mount and a spear, and riding a horn mount rules
+// out the knight's basic skills. The buff, party, map and pet checks come with those features.
+export function skillUsableWithEquipment(skill: number, equipment: SkillEquipment, kindOf: (item: { group: number; number: number }) => string | undefined): boolean {
+  const { right, left, helper } = equipment;
+  const kind = (item: { group: number; number: number } | null) => (item ? kindOf(item) : undefined);
+  const staffOrBook = (item: { group: number; number: number } | null) => kind(item) === 'staff' || kind(item) === 'book';
+  const melee = right !== null && !staffOrBook(right) && !staffOrBook(left);
+  const hornMount = helper !== null && helper.group === 13 && [2, 3, 37].includes(helper.number);
+  if (skill === IMPALE && (!hornMount || (kind(left) !== 'spear' && kind(right) !== 'spear'))) return false;
+  if (hornMount && ((skill >= BLOCKING && skill <= SLASH) || skill === POWER_SLASH)) return false;
+  if (skill === EARTHSHAKE && !(helper && helper.group === 13 && helper.number === 4 && helper.durability > 0)) return false;
+  if (skill === FIRE_SLASH && (equipment.strength < 596 || !melee)) return false;
+  if (skill === ICE_ARROW && equipment.agility < 646) return false;
+  if ((skill === TWISTING_SLASH || skill === RAGEFUL_BLOW || skill === DEATH_STAB || skill === SkillNumber.FLAME_STRIKE) && !melee) return false;
+  if (skill === SkillNumber.MULTI_SHOT) {
+    const bow = kind(left) === 'bow' && right?.group === 4 && right.number === 15;
+    const crossbow = kind(right) === 'crossbow' && left?.group === 4 && left.number === 7;
+    if (!bow && !crossbow) return false;
+  }
+  return true;
+}

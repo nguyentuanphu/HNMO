@@ -8,7 +8,7 @@ import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
 import { createPlayerCharacter, setPlayerAnimationSpeeds } from './game/characters.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
-import { loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
+import { itemDefinition, loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { loadGlowColors } from './game/itemGlow.js';
@@ -18,7 +18,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { HOTKEY_LETTERS, ItemHotkeys, ItemUser, rightClickBagItem } from './game/itemUse.js';
-import { loadSkillData, SkillList, skillRequirementsMet } from './game/skills.js';
+import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -540,7 +540,10 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const hud = state.hud;
   hud.setSkills({
     list: skills,
-    usable: (skill) => skillRequirementsMet(skill, stats, character.classIndex),
+    usable: (skill) => skillRequirementsMet(skill, stats, character.classIndex) && skillUsableWithEquipment(skill, {
+      right: inventory.items.get(0) ?? null, left: inventory.items.get(1) ?? null, helper: inventory.items.get(8) ?? null,
+      strength: stats.strength, agility: stats.agility,
+    }, (item) => itemDefinition(item.group, item.number)?.weaponKind),
     hasPet: () => false, // the Dark Lord's raven comes with the pets
     tooltip: (index, box) => {
       const view = itemWindows.tooltip;
@@ -560,7 +563,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.ctrlKey) { if (hud.hoveredSkill >= 0) skills.setHotkey(hotkey, hud.hoveredSkill); return; }
     skills.useHotkey(hotkey);
   });
-  inventory.onChange(() => hud.refreshItemSlots());
+  inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
   void hud.open();
   chat.enable((text) => online.say(text));
