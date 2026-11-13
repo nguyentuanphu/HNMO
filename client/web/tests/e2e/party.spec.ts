@@ -13,8 +13,8 @@ const members = (page: Page) => page.evaluate(() => (window as unknown as Win)._
 
 test('a party of two: invite, accept, the cards, leave', async ({ browser }) => {
   test.setTimeout(6 * 60_000);
-  const a = await (await browser.newContext()).newPage();
-  const b = await (await browser.newContext()).newPage();
+  const contextA = await browser.newContext(), contextB = await browser.newContext();
+  const a = await contextA.newPage(), b = await contextB.newPage();
   const errors: string[] = [];
   for (const page of [a, b]) page.on('pageerror', (error) => errors.push(error.message));
   await enterWorld(a, 'test7');
@@ -52,4 +52,6 @@ test('a party of two: invite, accept, the cards, leave', async ({ browser }) => 
   await b.evaluate(() => { const g = (window as unknown as Win).__game; g.party.leave(g.party.members.findIndex((m) => m.name === document.querySelector('#heroName')?.textContent)); });
   await expect.poll(() => members(b), { timeout: 60_000 }).toHaveLength(0);
   await expectNoPageErrors(errors);
+  await contextA.close();
+  await contextB.close();
 });

@@ -65,7 +65,8 @@ test('potions on Q W E R and right-click use in the bag', async ({ page }) => {
   await expect.poll(() => potions(page, HEALING)).toBe(healing - 1);
   await expect.poll(() => slotCount(page, 0)).toBe(String(healing - 1));
 
-  // Right-clicking a mana potion in the bag drinks it too.
+  // Right-clicking a mana potion in the bag drinks it too (after the server's potion cooldown).
+  await page.waitForTimeout(2_000);
   const manaSlotNow = await bagSlotOf(page, MANA);
   const point = await gridSlotPoint(page, 'my_inventory', BAG, BAG_GRID_ORIGIN.left, BAG_GRID_ORIGIN.top, manaSlotNow!);
   await page.mouse.move(point.x, point.y, { steps: 4 });

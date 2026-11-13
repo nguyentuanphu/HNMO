@@ -22,5 +22,8 @@ test('M opens the warp list and a click warps to Noria', async ({ page }) => {
   await expect(page.locator('.rml-map_name #name_text')).toHaveText('Noria', { timeout: 30_000 });
   await page.waitForTimeout(2500);
   await page.screenshot({ path: 'test-results/map-name.png' });
+  // Back to town, so the account starts there next time.
+  await page.evaluate(() => (window as unknown as Win & { __game: { online: { say(text: string): void } } }).__game.online.say('/move lorencia'));
+  await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.mapNumber), { timeout: 60_000 }).toBe(0);
   await expectNoPageErrors(errors);
 });

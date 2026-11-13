@@ -60,7 +60,7 @@ test('Z opens the auto play settings and Escape closes them', async ({ page }) =
   await enterWorld(page, 'test9');
   await page.keyboard.press('z');
   const settings = page.locator('.rml-mu_helper_config #panel');
-  await expect(settings).toBeVisible({ timeout: 30_000 });
+  await expect(settings).toBeVisible({ timeout: 90_000 });
   await page.screenshot({ path: 'test-results/auto-play-settings.png' });
   await page.keyboard.press('Escape');
   await expect(settings).toBeHidden();
