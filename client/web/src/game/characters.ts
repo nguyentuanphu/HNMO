@@ -214,6 +214,12 @@ export class Character {
   clock: number;
   /** What a player wears (players only). */
   equipment?: EquipmentAppearance;
+  /** An animation played once over the standing or walking one (an attack, getting hit, dying). */
+  oneShot: { action: number; keysPerSecond: number; hold: boolean } | null = null;
+  /** Life left as a share (0-1) from the last hit the server reported; -1 while unknown. */
+  healthStatus = -1;
+  /** Set once the server reported its death: the death animation holds its last key. */
+  dead = false;
 
   constructor({ id, name, model, kind, scale = 1, actions, keysPerSecond }: CharacterOptions) {
     this.id = id;
@@ -262,11 +268,35 @@ export class Character {
 
   get isWalking(): boolean { return this.path.length > 0; }
 
+  // Plays an animation once, then goes back to standing or walking; hold keeps its last key (death).
+  playOnce(action: number, keysPerSecond?: number, hold = false): void {
+    this.oneShot = { action, keysPerSecond: keysPerSecond ?? this.keysPerSecond(action) ?? 6, hold };
+    this.action = action;
+    this.time = 0;
+  }
+
+  get isPlayingOnce(): boolean { return this.oneShot !== null; }
+
+  // Turns to face a cell (the desktop's CreateAngle2D before an attack or a talk).
+  faceTo(cell: Cell): void {
+    const dx = cellCenter(cell.x) - this.position.x, dy = cellCenter(cell.y) - this.position.y;
+    if (dx || dy) this.angle = Math.atan2(dx, -dy);
+  }
+
   update(dt: number, world: CharacterWorld): void {
-    this.advance(dt);
-    const action = this.isWalking ? this.actions.walk : this.actions.stop;
-    if (action !== this.action) { this.action = action; this.time = 0; }
-    this.time += dt * this.keysPerSecond(action);
+    if (!this.dead) this.advance(dt);
+    const keys = (action: number) => Math.max(1, this.model.skeleton.actions[action]?.numKeys ?? 1);
+    if (this.oneShot) {
+      const shot = this.oneShot;
+      this.action = shot.action;
+      this.time = Math.min(this.time + dt * shot.keysPerSecond, keys(shot.action) - 1);
+      if (this.time >= keys(shot.action) - 1 && !shot.hold) { this.oneShot = null; this.time = 0; }
+    }
+    if (!this.oneShot) {
+      const action = this.isWalking ? this.actions.walk : this.actions.stop;
+      if (action !== this.action) { this.action = action; this.time = 0; }
+      this.time += dt * (this.keysPerSecond(action) ?? 6);
+    }
     const { x, y } = this.position;
     this.group.position.set(x, y, sampleHeight(world.heights, x, y));
     this.group.rotation.set(0, 0, this.angle);
