@@ -33,7 +33,7 @@ interface HitPacket {
 interface KilledPacket { KilledId: number; SkillId: number; KillerId: number }
 interface AnimationPacket { ObjectId: number; Direction: number; Animation: number; TargetId: number }
 interface MonsterSkillPacket { SkillNumber: number; AttackerId: number; TargetId: number }
-interface ExperiencePacket { AddedExperience: number; DamageOfLastHit: number; KilledObjectId: number }
+interface ExperiencePacket { Type: number; AddedExperience: number; DamageOfLastHit: number; KilledObjectId: number }
 interface RespawnPacket { PositionX: number; PositionY: number; MapNumber: number; Direction: number }
 interface SkillAnimationPacket { SkillId: number; PlayerId: number; TargetId: number }
 interface AreaSkillAnimationPacket { SkillId: number; PlayerId: number; PointX: number; PointY: number; Rotation: number }
@@ -379,7 +379,8 @@ export class Combat {
   }
 
   private experience(packet: ExperiencePacket): void {
-    if (packet.AddedExperience > 0) this.events.onMessage?.(`${packet.AddedExperience} experience`);
+    // MasterEXPAchievementD for master experience (Type 2).
+    if (packet.AddedExperience > 0) this.events.onMessage?.(packet.Type === 2 ? `Master EXP achievement ${packet.AddedExperience}` : `${packet.AddedExperience} experience`);
     const killed = this.characterById(packet.KilledObjectId & ID_MASK);
     const text = killDamageText(packet.DamageOfLastHit);
     if (killed && text) this.events.onDamage?.(killed, [text]);

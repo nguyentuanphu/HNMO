@@ -158,7 +158,7 @@ export async function loadNewSkills(): Promise<Map<number, SkillData>> {
     if (index !== undefined) classes[index] = 1;
     result.set(e.number, {
       name: e.name, level: e.level ?? 0, damage: e.damage, mana: e.manaCost, ability: e.agCost, distance: e.range, delay: e.cooldownMs,
-      energy: 0, leadership: 0, masteryType: 0, useType: 0, brand: 0, killCount: 0, classes, icon: 0, strength: 0, dexterity: 0,
+      energy: 0, leadership: 0, masteryType: 0, useType: 0, brand: 0, killCount: 0, classes, icon: 0, strength: 0, dexterity: 0, rank: 0,
     });
   }
   return result;

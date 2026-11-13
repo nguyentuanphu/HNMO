@@ -32,6 +32,8 @@ export interface CharacterListEntry {
   classIndex: number;
   /** A third class (the desktop's IsMasterLevel): the server's class number is odd for those. */
   master?: boolean;
+  /** The server's class number (the appearance's first byte: second and third classes too). */
+  classNumber?: number;
   equipment: ReturnType<typeof parseAppearance>['equipment'];
 }
 
@@ -143,6 +145,7 @@ export async function fetchCharacters(connection: Connection): Promise<Character
     level: character.Level,
     classIndex: classOfAppearance(character.Appearance),
     master: ((character.Appearance?.[0] ?? 0) & 1) === 1,
+    classNumber: character.Appearance?.[0] ?? 0,
     equipment: parseAppearance(character.Appearance).equipment,
   }));
 }

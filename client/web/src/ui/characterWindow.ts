@@ -144,6 +144,7 @@ export class CharacterWindow {
   private sheet: CharacterSheet | null = null;
   private hovered = NO_HINT;
   private hoverTarget: Element | null = null;
+  private masterLevelEnabled: () => boolean = () => false;
 
   constructor(options: CharacterWindowOptions) {
     this.options = options;
@@ -178,6 +179,13 @@ export class CharacterWindow {
       if (event.key === 'Escape' && this.isOpen) this.close();
     });
     window.addEventListener('resize', () => this.place());
+  }
+
+  /** The Master Skill Tree button: lit for a master class (IsMasterLevel), opens the tree (RmlClickMasterLevel). */
+  setMasterLevel(enabled: () => boolean, open: () => void): void {
+    this.masterLevelEnabled = enabled;
+    this.options.onMasterLevel = open;
+    if (this.doc) this.refresh();
   }
 
   get isOpen(): boolean {
@@ -288,6 +296,7 @@ export class CharacterWindow {
     this.sheet = sheet;
 
     model.can_level_up = stats.levelUpPoints > 0;
+    model.master_level_enabled = this.masterLevelEnabled();
     model.pk_level = this.options.pkLevel?.() ?? PVP_NEUTRAL;
     const names = CLASS_NAMES[classIndex] ?? CLASS_NAMES[0];
     model.classname_text = `(${names[Math.min(Math.max(this.options.classLevel ?? 1, 1), 3) - 1]})`;

@@ -83,7 +83,8 @@ export class CharacterStats implements StatValues {
       this.changed('stats');
     } else if (bytes[0] === 0xc3 && bytes[2] === 0x16) {
       const p = read('ServerToClient', 'ExperienceGainedExtended', bytes);
-      this.experience += num(p, 'AddedExperience');
+      // Master experience (Type 2) goes to the master level (game/masterLevel.ts), not the character's.
+      if (num(p, 'Type') !== 2) this.experience += num(p, 'AddedExperience');
       this.changed('experience', p);
     } else if (bytes[0] === 0xc1 && bytes[2] === 0xf3 && bytes[3] === 0x05) {
       const p = read('ServerToClient', 'CharacterLevelUpdateExtended', bytes);
