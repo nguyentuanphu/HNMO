@@ -27,6 +27,7 @@ const BUTTONS: { label: string; title: string; key: string }[] = [
   { label: 'Map', title: 'Mini map', key: 'Tab' },
   { label: 'Z', title: 'Auto play settings', key: 'z' },
   { label: '▶', title: 'Auto play on / off', key: 'Home' },
+  { label: '⚙', title: 'Settings', key: 'o' },
   { label: '💬', title: 'Chat', key: 'Enter' },
 ];
 

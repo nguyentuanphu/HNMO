@@ -400,7 +400,9 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
       if (property === 'decorator') { updaters.push((scope) => applyDecorator(element, evaluate(value, scope))); continue; }
       updaters.push((scope) => {
         const v = evaluate(value, scope);
-        element.style.setProperty(property, v === undefined || v === null ? '' : String(v));
+        const text = v === undefined || v === null ? '' : String(v);
+        // Bound text sizes follow the HNMO text size setting (--hnmo-text-scale, ui/settingsWindow.ts).
+        element.style.setProperty(property, property === 'font-size' && text ? `calc(${text} * var(--hnmo-text-scale, 1))` : text);
       });
     } else if (name.startsWith('data-event-')) {
       const eventName = name.slice('data-event-'.length);
@@ -424,7 +426,7 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
 
 const BASE_CSS = `
 :host { all: initial; position: absolute; left: 0; top: 0; width: 0; height: 0; }
-.rml-body { position: absolute; left: 0; top: 0; color: #fff; font-family: Tahoma, Arial, sans-serif; font-size: 12px; line-height: 1.2; }
+.rml-body { position: absolute; left: 0; top: 0; color: #fff; font-family: Tahoma, Arial, sans-serif; font-size: calc(12px * var(--hnmo-text-scale, 1)); line-height: 1.2; }
 :where(.rml-body) :where(div, p, h1, h2, h3) { display: block; margin: 0; padding: 0; box-sizing: content-box; }
 :where(.rml-body) :where(img) { display: block; }
 :where(.rml-body) :where(img:not([src])) { visibility: hidden; }
@@ -437,12 +439,36 @@ const BASE_CSS = `
 // model: the window's data (names the RML binds to) and its event handlers.
 const compiled = new Map<string, Promise<PreparedDocument>>();
 
+// <body template="name">: the template's body (e.g. window_shell.rml's frame) takes the document's
+// place and the document's own content goes into the template's content element, as RmlUi does.
+async function applyTemplate(xml: Document, name: string): Promise<void> {
+  const found = await findDocument(name);
+  const shell = new DOMParser().parseFromString(found.text.replace(/&nbsp;/g, '&#160;').replace(/<\/?template\b[^>]*>/g, ''), 'text/html');
+  const contentId = /<template\b[^>]*\bcontent="([^"]+)"/.exec(found.text)?.[1] ?? 'content';
+  const slot = shell.getElementById(contentId);
+  if (!slot) return;
+  for (const child of [...xml.body.childNodes]) slot.append(shell.importNode(child, true));
+  // The template's stylesheets come first, so the document's own rules win.
+  for (const link of [...shell.head.querySelectorAll('link')].reverse()) {
+    link.setAttribute('href', new URL(link.getAttribute('href') ?? '', `http://x${found.url}`).pathname);
+    xml.head.prepend(xml.importNode(link, true));
+  }
+  xml.body.removeAttribute('template');
+  for (const attribute of [...shell.body.attributes]) {
+    if (attribute.name === 'class') xml.body.className = `${attribute.value} ${xml.body.className}`.trim();
+    else if (!xml.body.hasAttribute(attribute.name)) xml.body.setAttribute(attribute.name, attribute.value);
+  }
+  xml.body.replaceChildren(...[...shell.body.childNodes].map((child) => xml.importNode(child, true)));
+}
+
 // Loads a document and turns its stylesheets into CSS once; later opens reuse it.
 export function prepareDocument(name: string): Promise<PreparedDocument> {
   if (!compiled.has(name)) {
     compiled.set(name, (async () => {
       const { url, text } = await findDocument(name);
       const xml = new DOMParser().parseFromString(text.replace(/&nbsp;/g, '&#160;'), 'text/html');
+      const templateName = xml.body.getAttribute('template');
+      if (templateName) await applyTemplate(xml, templateName);
       const links = [...xml.querySelectorAll('link[type="text/rcss"], link[href$=".rcss"]')].map((link) => link.getAttribute('href') ?? '');
       const sprites: Sprites = new Map();
       const sheets = await Promise.all(links.map((href) => findStylesheet(href, url)));
@@ -468,6 +494,7 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
   const root = document.createElement('div');
   root.className = `rml-body ${xml.body.className}`;
   root.style.setProperty('--root-scale', String(scale));
+  if (xml.body.id) root.id = xml.body.id;
   for (const child of [...xml.body.childNodes]) root.append(document.importNode(child, true));
   // <body>'s own bindings (e.g. a tooltip's position) go on the root that stands for it.
   for (const attribute of [...xml.body.attributes]) {
