@@ -287,6 +287,8 @@ export function equipSlotFor(item: Item, equipped: ReadonlyMap<number, Item>, cl
 
 /** Sends use requests one at a time, like the desktop's EnableUse. */
 export class ItemUser {
+  /** Told when an item is used on its own (the potion and apple sounds). */
+  onUsed?: (item: Item) => void;
   private busy = false;
   private busyTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -315,6 +317,8 @@ export class ItemUser {
     // The desktop waits for the answer only; a lost answer would block items for good, so give up after a while.
     this.busyTimer = setTimeout(() => { this.busy = false; }, 1500);
     this.connection.send('ClientToServer', 'ConsumeItemRequest', { ItemSlot: slot, TargetSlot: target, FruitConsumption: 1 });
+    const item = this.inventory.items.get(slot);
+    if (item && target === 0) this.onUsed?.(item);
     return true;
   }
 }

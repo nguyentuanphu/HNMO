@@ -18,7 +18,7 @@ tests and CI for all of it; strict TypeScript build.
 ## 1. Effects and sound
 1. 🟡 Particle, sprite and effect system (core done; more effect types with each skill; weapon trails, terrain light) (the desktop's `ZzzEffect*`, `CreateEffect`, `CreateSprite`,
    `CreateParticle`, joints/trails, lights) — needed by skills, items and maps.
-2. Sounds and music: the files are in `client/src/bin/Data/Sound` (808; 103 were damaged in the
+2. 🟡 Sounds and music (wired: music, ambience, footsteps, combat, monsters, potions, skills; map object and event sounds, volume sliders left): the files are in `client/src/bin/Data/Sound` (808; 103 were damaged in the
    archive, listed in `Sound/MISSING.txt`) and `Data/Music` (47); port the desktop client's sound
    playback (`Audio/`, `Data/Monsters/Sounds.json`, map music) with the Web Audio API.
 

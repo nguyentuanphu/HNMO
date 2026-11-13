@@ -106,7 +106,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 |---|---|---|
 | Skill effects, particles, sprites | 🟡 | The effect system's core (`render/effects/`: effects, particles, sprites, joints at the desktop's 25 ticks a second, with Data/Effects/EffectTypes.json) and the effects of the first skills: Energy Ball, Fire Ball, Lightning, Power Wave, the knight's Falling Slash to Slash sparks, Triple Shot's arrows, Heal / Greater Defense / Greater Damage, Power Slash. Weapon trails, terrain light and the other skills not yet |
 | Item glow by level, excellent and ancient effects | ⬜ | |
-| Sound effects and music | ⬜ | The sound files are not in the repository |
+| Sound effects and music | 🟡 | `audio/` (Web Audio) and `game/gameSounds.ts`: the desktop's sound files and channels, the login theme, map music and ambience by its rules, footsteps by ground, weapon swings, screams when hit and on death, monster attack/hit/death sounds from their sound sets, potions, level up, the skills' sounds; the sound button mutes (kept in the browser). 103 sound files are missing from the data (pick-up, drop, plain-ground steps…), those stay silent. Not yet: map object sounds, event sounds, the option window's volume sliders |
 
 ## 7. Models and formats
 

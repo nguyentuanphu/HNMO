@@ -44,6 +44,8 @@
     .chat-log .chat { color: #f2f3f7; }
     .chat-form { position: fixed; left: 12px; bottom: calc(10.625vh + 8px); width: min(460px, calc(100vw - 24px)); }
     .chat-form input { width: 100%; box-sizing: border-box; background: rgba(10,12,20,.75); }
+    #soundButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 15px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
+    #soundButton[aria-pressed="true"] { color: var(--muted); border-color: var(--line); text-decoration: line-through; }
     #guideButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: italic 700 16px/1 Georgia, serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #guide { position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, .6); display: grid; place-items: center; padding: 16px; }
     #guide .frame { position: relative; width: min(900px, 100%); height: min(88vh, 100%); background: #0b0e16; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
@@ -72,6 +74,7 @@
     <span class="chip" id="heroName">-</span>
     <span class="chip">Cell <span id="position">-</span></span>
     <span class="chip" id="fps">- fps</span>
+    <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
     <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the HNMO guide">i</button>
   </div>
   <div class="chip wardrobe" id="wardrobe" hidden>

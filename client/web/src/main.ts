@@ -32,6 +32,8 @@ import { MoveWindow } from './ui/moveWindow.js';
 import { loadWarps } from './game/warps.js';
 import { prepareDocument } from './ui/rml.js';
 import { MapNameBanner } from './ui/mapNameBanner.js';
+import { GameSounds } from './game/gameSounds.js';
+import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
@@ -149,6 +151,8 @@ const toScene = (x: number, y: number, z: number): THREE.Vector3 => new THREE.Ve
 
 // ---------- world ----------
 
+// Sounds and music (the desktop's PlayBuffer / PlayMp3 rules).
+const sounds = new GameSounds();
 // The map name banner (CUIMapName): shown on entering each map.
 const mapBanner = new MapNameBanner();
 
@@ -360,6 +364,12 @@ function frame(now: number): void {
     state.effects?.update(dt);
     state.autoPlay?.update();
     mapBanner.update(dt);
+    if (state.online && state.hero && state.world) {
+      const hero = state.hero, world = state.world;
+      const index = hero.cell.y * TERRAIN_SIZE + hero.cell.x;
+      const numKeys = hero.model.skeleton.actions[hero.action]?.numKeys ?? 0;
+      sounds.frame(state.mapNumber, hero, world.mapping.layer1[index] ?? 0, (world.flags[index] & TerrainFlag.SAFEZONE) !== 0, numKeys);
+    }
     state.autoPlayExtras?.update();
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
@@ -540,11 +550,19 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const effects = new EffectSystem(root, { camera, heightAt });
   state.effects = effects;
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
-    onDamage: (target, texts) => overlay.addNumbers(() => Combat.anchorOf(target, 0), texts),
+    onDamage: (target, texts) => {
+      overlay.addNumbers(() => Combat.anchorOf(target, 0), texts);
+      if (target.dead) return;
+      if (target.kind === 'player' || target === online.hero) sounds.playerHurt(target === online.hero ? character.classIndex : target.classIndex ?? 0, false);
+      else if (target.kind === 'monster') sounds.monster(target, { moment: 'hit', animation: 'shock' }, online.hero);
+    },
     onMessage: (text) => chat.add(text, 'system'),
     onTargetChanged: (target) => overlay.showTarget(target),
     // Arrows leave the bow a moment into the swing (CreateArrow); archers among the monsters shoot theirs.
     onSwing: (actor, target, look) => {
+      if (actor.kind === 'monster') sounds.monster(actor, { moment: 'attack', animation: 'attack1' }, online.hero);
+      else if (look) sounds.swing(look.rightHand, look.leftHand);
+      else sounds.swing(actor.equipment?.rightHand ?? null, actor.equipment?.leftHand ?? null);
       const hand = (item: { group: number; number: number } | null | undefined) => (item ? { group: item.group, number: item.number } : null);
       const kinds = look ? arrowKindsForWeapons(look.rightHand, look.leftHand)
         : actor.kind === 'player' ? arrowKindsForWeapons(hand(actor.equipment?.rightHand), hand(actor.equipment?.leftHand))
@@ -552,9 +570,14 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       if (!kinds.length || !target) return;
       setTimeout(() => { for (const kind of kinds) void projectiles.shoot(actor, target, kind, { fenrir: look?.mount === 'fenrir' }); }, ARROW_RELEASE_DELAY_SECONDS * 1000);
     },
-    onKilled: (character) => deaths.died(character, character.kind === 'player' ? null : character.monsterNumber),
+    onKilled: (dead) => {
+      deaths.died(dead, dead.kind === 'player' ? null : dead.monsterNumber);
+      if (dead.kind === 'monster') sounds.monster(dead, { moment: 'death', animation: 'die' }, online.hero);
+      else sounds.playerHurt(dead === online.hero ? character.classIndex : dead.classIndex ?? 0, true);
+    },
     onHeroAttacked: (attacker) => state.autoPlay?.attackedBy(attacker),
     onSkill: (caster, skill, target) => {
+      sounds.skill(skill);
       // Triple Shot's fan of arrows goes through the arrows' own layer (CreateArrows).
       const hands = caster === online.hero
         ? { right: inventory.items.get(0), left: inventory.items.get(1) }
@@ -573,6 +596,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   });
   // Using items: Q W E R and the HUD's potion slots, a right click in the bag.
   const itemUser = new ItemUser(connection, inventory, (text) => chat.add(text, 'system'));
+  itemUser.onUsed = (item) => sounds.used(item);
+  stats.onChange((change) => { if (change === 'levelUp') sounds.levelUp(); });
+  sounds.audio.stopMusic(loginMusic(false)); // the login theme stops on entering the world
   const useHotkey = (slot: number) => {
     if (online.hero.dead) return;
     const bagSlot = hotkeys.slotOf(slot, inventory.items);
@@ -964,4 +990,13 @@ function initLogin() {
 resize();
 initLogin();
 setUpGuide();
+// The login theme (it starts with the first click or key: browsers hold sound back until then).
+sounds.audio.playMusic(loginMusic(false));
+// The sound button: everything on or off, kept in the browser.
+const soundButton = document.getElementById('soundButton');
+if (soundButton) {
+  const show = () => soundButton.setAttribute('aria-pressed', String(sounds.audio.getSettings().muted));
+  soundButton.addEventListener('click', () => { sounds.audio.setMuted(!sounds.audio.getSettings().muted); show(); });
+  show();
+}
 requestAnimationFrame(frame);
