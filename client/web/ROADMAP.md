@@ -17,8 +17,9 @@ dropping items; browser tests and CI for all of it; strict TypeScript build.
 ## 1. Effects and sound
 1. Particle, sprite and effect system (the desktop's `ZzzEffect*`, `CreateEffect`, `CreateSprite`,
    `CreateParticle`, joints/trails, lights) — needed by skills, items and maps.
-2. Sounds and music (`Data/Sound`, `Data/Music`; the sound files are not in the repository yet —
-   needs the owner's copy).
+2. Sounds and music: the files are in `client/src/bin/Data/Sound` (808; 103 were damaged in the
+   archive, listed in `Sound/MISSING.txt`) and `Data/Music` (47); port the desktop client's sound
+   playback (`Audio/`, `Data/Monsters/Sounds.json`, map music) with the Web Audio API.
 
 ## 2. Skills and buffs
 1. Skill list from the server (`SkillListUpdate`, `SkillAdded/Removed`), the HUD skill bar,
