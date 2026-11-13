@@ -169,6 +169,8 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   gridOrigin!: Point;
   onPickedChanged?: () => void;
   onHover?: (item: Item | null, event: PointerEvent | null) => void;
+  /** An item on the cursor dropped on another item of this window: true when handled (jewels). */
+  onDropOnItem?: (from: { storage: number; slot: number; item: Item }, slot: number, target: Item) => boolean;
   /** A left click on an item, before it's picked up: true when handled (the shop's repair mode). */
   onItemClick?: (slot: number, item: Item) => boolean;
   /** A right click on an item of the window (CInventoryActionController::HandleRightClick). */
@@ -293,6 +295,16 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const point = this.pointOf(event);
     if (this.picked.source) {
       const item = this.picked.source.item;
+      // Dropped on another item: a jewel is used on it (ApplyJewels) before any move.
+      const equipmentUnder = this.equipmentSlotAt(point);
+      const under = equipmentUnder !== null && this.items.has(equipmentUnder) ? equipmentUnder : this.itemAtGridSlot(this.gridSlotAt(point));
+      const source = this.picked.source;
+      if (under !== null && !(source.storage === this.storageKind && source.slot === under) && this.items.has(under)
+        && this.onDropOnItem?.(source, under, this.items.get(under)!)) {
+        this.picked.drop();
+        this.onPickedChanged?.();
+        return;
+      }
       const target = this.dropSlotFor(point, item);
       if (!target) return;
       const from = this.picked.source;

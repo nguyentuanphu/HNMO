@@ -365,3 +365,35 @@ export function isSellingBan(item: Item): boolean {
     || (type === ItemKind.REMEDY_OF_LOVE && item.level >= 1 && item.level <= 5)) return true;
   return itemDefinition(item.group, item.number)?.sellable === false;
 }
+
+const JEWEL_OF_BLESS = POTION + 13, JEWEL_OF_SOUL = POTION + 14, JEWEL_OF_LIFE = POTION + 16, JEWEL_OF_HARMONY = POTION + 42;
+const HORN_OF_FENRIR = HELPER + 37, WINGS_OF_DARKNESS = WING + 6;
+
+/** Whether an item is a jewel that's applied by dropping it on another item. */
+export function isApplicableJewel(item: Item): boolean {
+  const type = typeOf(item);
+  return type === JEWEL_OF_BLESS || type === JEWEL_OF_SOUL || type === JEWEL_OF_LIFE || type === JEWEL_OF_HARMONY
+    || hasTag(type, 'refineStone') || type === POTION + 160 || type === POTION + 161;
+}
+
+// CInventoryActionController::ApplyJewels: whether dropping the jewel on the item uses it on it.
+// 'confirm' for a Jewel of Bless on a worn Horn of Fenrir (it repairs the horn after asking).
+export function jewelApplies(jewel: Item, target: Item): boolean | 'confirm' {
+  if (!isApplicableJewel(jewel)) return false;
+  const jewelType = typeOf(jewel), type = typeOf(target);
+  const definition = itemDefinition(target.group, target.number);
+  let ok = true;
+  if (type > WINGS_OF_DARKNESS && !definition?.wingTier) ok = false;
+  if (hasTag(type, 'ammunition')) ok = false;
+  if ((jewelType === JEWEL_OF_BLESS && target.level >= 6) || (jewelType === JEWEL_OF_SOUL && target.level >= 9)) ok = false;
+  if (jewelType === JEWEL_OF_BLESS && type === HORN_OF_FENRIR && target.durability !== 255) return 'confirm';
+  // Harmony needs an item without sockets or a harmony option yet (the kinds it strengthens come with harmony itself).
+  if (jewelType === JEWEL_OF_HARMONY && (target.sockets.length > 0 || target.harmony !== 0)) ok = false;
+  if (hasTag(jewelType, 'refineStone') && (target.sockets.length > 0 || target.harmony === 0)) ok = false;
+  if (hasTag(type, 'luckyItem')) {
+    ok = false;
+    if (jewelType === POTION + 161 && target.harmony === 0) ok = true;
+    else if (jewelType === POTION + 160 && target.durability > 0) ok = true;
+  }
+  return ok;
+}

@@ -17,7 +17,7 @@ import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
-import { findItemReverse, HOTKEY_LETTERS, isHighValue, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
+import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
@@ -573,6 +573,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     sell: (slot, item) => itemWindows.sell(slot, item),
   });
   itemWindows.message = (text) => chat.add(text, 'system');
+  // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
+  itemWindows.bag.onDropOnItem = (from, slot, target) => {
+    if (from.storage !== 0 || from.slot < 12) return false;
+    const applies = jewelApplies(from.item, target);
+    if (!applies) return false;
+    if (applies === 'confirm' && !window.confirm('Would you like to repair Fenrir\'s horn?')) return true;
+    itemUser.use(from.slot, slot);
+    return true;
+  };
   // What repairing everything costs at a repair shop (RepairAllGold, the NPC's price).
   void loadItemValueData().then(() => { itemWindows.shop.repairAllCost = () => repairAllCost(inventory.items, false); itemWindows.refresh(); })
     .catch((error: unknown) => console.warn('Item prices', error));
