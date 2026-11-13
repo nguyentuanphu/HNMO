@@ -66,6 +66,7 @@ const SHARED_FOLDERS = [
   { maps: [18, 19, 20, 21, 22, 23, 53], folder: 19 },     // Chaos Castle
   { maps: [24, 25, 26, 27, 28, 29, 36], folder: 25 },     // Kalima
   { maps: [45, 46, 47, 48, 49, 50], folder: 47 },         // Illusion Temple
+  { maps: [9, 32], folder: 10 },                          // Devil Square (32 is the second one, GetLoadedWorld)
 ];
 
 export function filesFolder(mapNumber: number): number {
@@ -83,8 +84,13 @@ const MAP_NAMES: Record<number, string> = {
 
 export const KNOWN_MAPS = Object.keys(MAP_NAMES).map(Number);
 
+// FindMapName's event maps: every map of an event has the event's name (EventMapName).
+const EVENT_MAP_NAMES = [
+  { maps: [12, 13, 14, 15, 16, 17, 52], name: 'Blood Castle' }, { maps: [19, 20, 21, 22, 23, 53], name: 'Chaos Castle' }, { maps: [32], name: 'Devil Square' },
+];
+
 export function mapName(mapNumber: number): string {
-  return MAP_NAMES[mapNumber] ?? `Map ${mapNumber}`;
+  return MAP_NAMES[mapNumber] ?? EVENT_MAP_NAMES.find((entry) => entry.maps.includes(mapNumber))?.name ?? `Map ${mapNumber}`;
 }
 
 export async function loadWorldData(mapNumber: number): Promise<WorldData> {
