@@ -1,16 +1,17 @@
 // Auto play: the desktop client's helper (MUHelper::CMuHelper) run in the browser. Started and
 // stopped through the server (MuHelperStatusChangeRequest → MuHelperStatusUpdate, which may charge
-// zen), it works once per frame like CMuHelper::Work: health potions, regrouping at the start spot,
-// picking up drops by the pick-up rules, attacking the nearest monster in the hunting range with the
-// skill rotation (basic skill, two activation skills on a timer or a monster count, combo) or a plain
-// attack, and self repair. Entering a safe zone stops it. Buffs, healing skills, party support and
-// the Dark Raven come with the buff system.
+// zen), it works once per frame like CMuHelper::Work: the Dark Raven's command once, health potions,
+// the three buffs (on the hero, or on each party member in turn; refreshed on a timer), the healing
+// skill (the hero, or each party member by its health step) and Drain Life, regrouping at the start
+// spot, picking up drops by the pick-up rules, attacking the nearest monster in the hunting range with
+// the skill rotation (basic skill, two activation skills on a timer or a monster count, combo) or a
+// plain attack, and self repair. Entering a safe zone stops it.
 
 import { read } from '../net/packets.js';
 import type { Connection } from '../net/connection.js';
 import type { Character } from './characters.js';
 import type { Item } from './inventory.js';
-import { SkillActivation, type AutoPlayConfig } from './autoPlayConfig.js';
+import { PetAttackMode, SkillActivation, type AutoPlayConfig } from './autoPlayConfig.js';
 
 const PICKUP_RETRY_SECONDS = 1;
 const PICKUP_REQUEST_RETRY_SECONDS = 3;
@@ -18,6 +19,59 @@ const TARGET_RETRY_SECONDS = 2;
 const MAX_PICKUP_REQUESTS = 3;
 const DEFAULT_DURABILITY_THRESHOLD = 50;
 const MAX_NOT_READY_ATTEMPTS = 4;
+const MAX_ACTIONABLE_DISTANCE = 10;
+const NO_TARGET = 0xffff;
+
+// The desktop's skill numbers (ActionSkillType, _enum.h) the helper looks for.
+export const HelperSkill = {
+  ATTACK: 28, ATTACK_STR: 420,
+  DEFENSE: 27, DEFENSE_STR: 417, DEFENSE_MASTERY: 423,
+  INFINITY_ARROW: 77, INFINITY_ARROW_STR: 441,
+  SOUL_BARRIER: 16, SOUL_BARRIER_STR: 403, SOUL_BARRIER_PROFICIENCY: 404,
+  SWELL_LIFE: 48, SWELL_LIFE_STR: 356, SWELL_LIFE_PROFICIENCY: 360,
+  EXPANSION_OF_WIZARDRY: 233, EXPANSION_OF_WIZARDRY_STR: 380, EXPANSION_OF_WIZARDRY_MASTERY: 383,
+  ADD_CRITICAL: 64, ADD_CRITICAL_STR1: 511, ADD_CRITICAL_STR2: 515, ADD_CRITICAL_STR3: 517,
+  ALICE_BERSERKER: 218, ALICE_BERSERKER_STR: 469, ALICE_THORNS: 217,
+  ATT_UP_OURFORCES: 266, HP_UP_OURFORCES: 267, HP_UP_OURFORCES_STR: 573,
+  DEF_UP_OURFORCES: 268, DEF_UP_OURFORCES_STR: 569, DEF_UP_OURFORCES_MASTERY: 572,
+  HEALING: 26, HEALING_STR: 413, ALICE_DRAINLIFE: 214, ALICE_DRAINLIFE_STR: 458,
+} as const;
+const Skill = HelperSkill;
+
+// The buffs (eBuffState, the server's effect numbers) the helper checks for.
+export const HelperBuff = {
+  ATTACK: 1, DEFENSE: 2, WIZ_DEFENSE: 4, ADD_CRITICAL_DAMAGE: 5, INFINITY_ARROW: 6, LIFE: 8,
+  THORNS: 71, BERSERKER: 81, SWELL_OF_MAGIC_POWER: 82, ATT_UP_OURFORCES: 129, HP_UP_OURFORCES: 130, DEF_UP_OURFORCES: 131,
+} as const;
+const Buff = HelperBuff;
+
+/** How BuffTarget casts a buff skill: the buff it gives, whether the timed refresh recasts it, whether it's aimed at the character. */
+interface BuffRule { buff: number; timed: boolean; needsTarget: boolean }
+
+// BuffTarget's table.
+const BUFF_RULES = new Map<number, BuffRule>();
+const rule = (skills: number[], buff: number, timed: boolean, needsTarget: boolean) => { for (const skill of skills) BUFF_RULES.set(skill, { buff, timed, needsTarget }); };
+rule([Skill.ATTACK, Skill.ATTACK_STR], Buff.ATTACK, true, true);
+rule([Skill.DEFENSE, Skill.DEFENSE_STR, Skill.DEFENSE_MASTERY], Buff.DEFENSE, true, true);
+rule([Skill.INFINITY_ARROW, Skill.INFINITY_ARROW_STR], Buff.INFINITY_ARROW, false, false);
+rule([Skill.SOUL_BARRIER, Skill.SOUL_BARRIER_STR, Skill.SOUL_BARRIER_PROFICIENCY], Buff.WIZ_DEFENSE, true, true);
+rule([Skill.SWELL_LIFE, Skill.SWELL_LIFE_STR, Skill.SWELL_LIFE_PROFICIENCY], Buff.LIFE, true, false);
+rule([Skill.EXPANSION_OF_WIZARDRY, Skill.EXPANSION_OF_WIZARDRY_STR, Skill.EXPANSION_OF_WIZARDRY_MASTERY], Buff.SWELL_OF_MAGIC_POWER, false, false);
+rule([Skill.ADD_CRITICAL, Skill.ADD_CRITICAL_STR1, Skill.ADD_CRITICAL_STR2, Skill.ADD_CRITICAL_STR3], Buff.ADD_CRITICAL_DAMAGE, false, false);
+rule([Skill.ALICE_BERSERKER, Skill.ALICE_BERSERKER_STR], Buff.BERSERKER, false, false);
+rule([Skill.ALICE_THORNS], Buff.THORNS, false, false);
+rule([Skill.ATT_UP_OURFORCES], Buff.ATT_UP_OURFORCES, true, false);
+rule([Skill.HP_UP_OURFORCES, Skill.HP_UP_OURFORCES_STR], Buff.HP_UP_OURFORCES, true, false);
+rule([Skill.DEF_UP_OURFORCES, Skill.DEF_UP_OURFORCES_STR, Skill.DEF_UP_OURFORCES_MASTERY], Buff.DEF_UP_OURFORCES, true, false);
+const SWELL_LIFE_SKILLS: readonly number[] = [Skill.SWELL_LIFE, Skill.SWELL_LIFE_STR, Skill.SWELL_LIFE_PROFICIENCY];
+
+/** The buff a helper buff skill gives (BuffTarget's table), null for other skills. */
+export function helperBuffOf(skill: number): number | null {
+  return BUFF_RULES.get(skill)?.buff ?? null;
+}
+
+/** A party member as the helper sees it: its character when in view, and its health in tenths. */
+export interface AutoPlayPartyMember { character: Character | null; healthStep: number }
 
 /** A drop the helper may pick up. */
 export interface AutoPlayDrop { id: number; cell: { x: number; y: number }; item: Item | null; zen: number }
@@ -35,6 +89,16 @@ export interface AutoPlayWorld {
   busy: () => boolean;
   /** Whether a skill can be used now (learned, requirements, equipment). */
   skillUsable: (skill: number) => boolean;
+  /** Whether the hero knows a skill (the skill list's GetSkillIndex). */
+  knowsSkill: (skill: number) => boolean;
+  /** Casts a buff or heal at the hero or a party member, or Drain Life at a monster; false when it can't be. */
+  castSupport: (skill: number, target: Character) => boolean;
+  /** Whether a walk, swing or cast is under way (the automation's Busy: IsSwingInProgress, IsWalkInProgress). */
+  actionBusy: () => boolean;
+  /** Whether a character has a buff (g_isCharacterBuff). */
+  hasBuff: (character: Character, buff: number) => boolean;
+  /** The party in its list's order; empty without a party. */
+  party: () => AutoPlayPartyMember[];
   life: () => number;
   maxLife: () => number;
   money: () => number;
@@ -81,6 +145,13 @@ export class AutoPlay {
   private notReadyAttempts = 0;
   private readonly timerDueAt = [0, 0, 0];
   private readonly conditionHeldUntil = [0, 0, 0];
+  // Buffs, heals and the pet
+  private currentBuffIndex = 0;
+  private currentBuffPartyIndex = 0;
+  private currentHealPartyIndex = 0;
+  private nextBuffCastAt = 0;
+  private timerActivatedBuffOngoing = false;
+  private petActivated = false;
   private readonly listeners = new Set<() => void>();
 
   constructor(private readonly connection: Connection, private readonly world: AutoPlayWorld) {
@@ -144,6 +215,12 @@ export class AutoPlay {
     this.notReadyAttempts = 0;
     this.timerDueAt.fill(0);
     this.conditionHeldUntil.fill(0);
+    this.currentBuffIndex = 0;
+    this.currentBuffPartyIndex = 0;
+    this.currentHealPartyIndex = 0;
+    this.nextBuffCastAt = 0;
+    this.timerActivatedBuffOngoing = false;
+    this.petActivated = false;
     this.origin = { ...this.world.hero().cell };
     this.secondsElapsed = 0;
     this.secondsAway = 0;
@@ -181,9 +258,13 @@ export class AutoPlay {
     this.work(now);
   }
 
-  // Work: potions first, then the drop being fetched, regrouping, more loot, attacking, repairing.
+  // Work: the pet, potions, buffs, heals, then the drop being fetched, regrouping, more loot,
+  // attacking, repairing. A buff or heal under way holds up what comes after it.
   private work(now: number): void {
+    this.activatePet();
     this.consumePotion();
+    if (!this.buff()) return;
+    if (!this.recoverHealth(now)) return;
     if (this.currentItem !== null && !this.obtainItem(now)) return;
     if (!this.regroup()) return;
     if (!this.obtainItem(now)) return;
@@ -197,6 +278,137 @@ export class AutoPlay {
     const life = this.world.life(), max = this.world.maxLife();
     if (!config.useHealPotion || max <= 0 || life <= 0) return;
     if (Math.ceil((life * 100) / max) <= config.potionThreshold) this.world.drinkHealingPotion();
+  }
+
+  // ActivatePet: the Dark Raven's attack mode, sent once when auto play starts.
+  private activatePet(): void {
+    const config = this.config!;
+    if (!config.useDarkRaven || this.petActivated) return;
+    // PetCommandMode: Normal (0), AttackRandom (1), AttackWithOwner (2).
+    const mode = config.darkRavenMode === PetAttackMode.CEASE ? 0
+      : config.darkRavenMode === PetAttackMode.AUTO ? 1
+      : config.darkRavenMode === PetAttackMode.TOGETHER ? 2 : null;
+    if (mode !== null) this.connection.send('ClientToServer', 'PetCommandRequest', { PetType: 0 /* DarkRaven */, CommandMode: mode, TargetId: NO_TARGET });
+    this.petActivated = true;
+  }
+
+  // Buff: the three buff skills in turn, on the hero, or with party support on each member in view
+  // (within ten cells) in turn; a timed refresh recasts them every so many seconds.
+  private buff(): boolean {
+    const config = this.config!;
+    if (!config.buffs.some((skill) => skill !== 0)) return true;
+    const party = this.world.party();
+    if (config.supportParty && party.length > 0) {
+      this.currentBuffPartyIndex %= party.length;
+      const member = party[this.currentBuffPartyIndex].character;
+      if (member && this.distanceTo(member) <= MAX_ACTIONABLE_DISTANCE) {
+        this.startTimedBuffRefresh(config.buffDurationParty);
+        // A cast still under way keeps this member and buff for the next tick.
+        if (!this.buffTarget(member, config.buffs[this.currentBuffIndex])) return false;
+      }
+      this.currentBuffPartyIndex = (this.currentBuffPartyIndex + 1) % party.length;
+    } else {
+      this.currentBuffPartyIndex = 0;
+      this.startTimedBuffRefresh(config.buffDuration);
+      if (!this.buffTarget(this.world.hero(), config.buffs[this.currentBuffIndex])) return false;
+    }
+    if (this.currentBuffPartyIndex === 0) {
+      this.currentBuffIndex = (this.currentBuffIndex + 1) % config.buffs.length;
+      // Everyone has had every buff: a scheduled refresh is complete, the next one counts from now.
+      if (this.currentBuffIndex === 0 && this.timerActivatedBuffOngoing) {
+        this.timerActivatedBuffOngoing = false;
+        this.nextBuffCastAt = this.secondsElapsed + config.buffCastInterval;
+      }
+    }
+    return true;
+  }
+
+  // StartTimedBuffRefresh: unless only expired buffs are recast, the interval starts a refresh round.
+  private startTimedBuffRefresh(refreshOnExpiryOnly: boolean): void {
+    const config = this.config!;
+    if (!refreshOnExpiryOnly && config.buffCastInterval !== 0 && !this.timerActivatedBuffOngoing && this.secondsElapsed >= this.nextBuffCastAt) {
+      this.timerActivatedBuffOngoing = true;
+    }
+  }
+
+  // BuffTarget: cast when the character lacks the skill's buff, or (the timed ones) during a refresh round.
+  private buffTarget(character: Character, skill: number): boolean {
+    const rule = BUFF_RULES.get(skill);
+    if (!rule) return true;
+    if (SWELL_LIFE_SKILLS.includes(skill) && this.comboState === 2) return true;
+    if (!this.world.hasBuff(character, rule.buff) || (rule.timed && this.timerActivatedBuffOngoing)) {
+      return this.supportSkill(skill, rule.needsTarget ? character : this.world.hero());
+    }
+    return true;
+  }
+
+  // RecoverHealth: the healing skill, then Drain Life.
+  private recoverHealth(now: number): boolean {
+    return this.heal() && this.drainLife(now);
+  }
+
+  // GetHealingSkill / GetDrainLifeSkill: the first of the skills the hero knows (0 for none).
+  private knownSkill(skills: number[]): number {
+    return skills.find((skill) => this.world.knowsSkill(skill)) ?? 0;
+  }
+
+  // The hero's life in whole percent, rounded up (null without a maximum).
+  private lifePercent(): number | null {
+    const life = this.world.life(), max = this.world.maxLife();
+    return max <= 0 ? null : Math.ceil((life * 100) / max);
+  }
+
+  // Heal: the hero below the threshold, or with party healing each member in turn whose health
+  // step is at or below the party threshold, within ten cells.
+  private heal(): boolean {
+    const config = this.config!;
+    if (!config.autoHeal) return true;
+    const skill = this.knownSkill([Skill.HEALING, Skill.HEALING_STR]);
+    if (!skill) return true;
+    const party = this.world.party();
+    if (config.autoHealParty && party.length > 0) {
+      this.currentHealPartyIndex %= party.length;
+      const member = party[this.currentHealPartyIndex];
+      const character = member.character;
+      let result = true;
+      if (character) {
+        if (character === this.world.hero()) result = this.healSelf(skill);
+        else if (member.healthStep * 10 <= config.healPartyThreshold && this.distanceTo(character) <= MAX_ACTIONABLE_DISTANCE) result = this.supportSkill(skill, character);
+      }
+      this.currentHealPartyIndex = (this.currentHealPartyIndex + 1) % party.length;
+      return result;
+    }
+    this.currentHealPartyIndex = 0;
+    return this.healSelf(skill);
+  }
+
+  // HealSelf: the hero's life (whole percent, rounded up) at or below the threshold.
+  private healSelf(skill: number): boolean {
+    const percent = this.lifePercent();
+    if (percent === null || percent > this.config!.healThreshold) return true;
+    return this.supportSkill(skill, this.world.hero());
+  }
+
+  // DrainLife: at or below the heal threshold, Drain Life at the nearest monster in the hunting range.
+  private drainLife(now: number): boolean {
+    const config = this.config!;
+    if (!config.useDrainLife) return true;
+    const skill = this.knownSkill([Skill.ALICE_DRAINLIFE, Skill.ALICE_DRAINLIFE_STR]);
+    if (!skill) return true;
+    const percent = this.lifePercent();
+    if (percent === null || percent > config.healThreshold) return true;
+    this.currentTarget = this.nearestTarget(now);
+    if (this.currentTarget) return this.supportSkill(skill, this.currentTarget);
+    return true;
+  }
+
+  // SimulateSupportSkill: only a cast under way (busy, or walking into range) holds up the work
+  // after it; one that can't happen must not.
+  private supportSkill(skill: number, target: Character): boolean {
+    if (this.world.actionBusy()) return false;
+    if (!this.world.skillUsable(skill)) return true;
+    this.world.castSupport(skill, target);
+    return true;
   }
 
   // Regroup: back to the start spot after being away longer than allowed.
@@ -298,16 +510,19 @@ export class AutoPlay {
       }
       this.currentTarget = far;
     }
-    if (!this.currentTarget) {
-      let near: Character | null = null, nearDistance = this.huntingDistance;
-      for (const m of monsters) {
-        if (this.coolingDown(m.id, now)) continue;
-        const d = this.distanceTo(m);
-        if (d <= nearDistance) { nearDistance = d; near = m; }
-      }
-      this.currentTarget = near;
-    }
+    if (!this.currentTarget) this.currentTarget = this.nearestTarget(now, monsters);
     return this.currentTarget;
+  }
+
+  // GetNearestTarget: the nearest living monster in the hunting range that isn't cooling down.
+  private nearestTarget(now: number, monsters = [...this.world.monsters()].filter((m) => !m.dead && m.kind === 'monster')): Character | null {
+    let near: Character | null = null, nearDistance = this.huntingDistance;
+    for (const m of monsters) {
+      if (this.coolingDown(m.id, now)) continue;
+      const d = this.distanceTo(m);
+      if (d <= nearDistance) { nearDistance = d; near = m; }
+    }
+    return near;
   }
 
   // Attack: the rotation's skill, else (fallback) a plain attack.

@@ -575,6 +575,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     },
   });
   const online = state.online;
+  // Players coming into view bring their buffs; leaving it forgets them.
+  online.onEffects = (id, effects) => { if (effects) buffs.replace(id, effects); else buffs.forget(id); };
   const itemWindows = state.itemWindows;
   const num = (name: string) => (typeof info[name] === 'number' ? info[name] as number : 0);
   setPlayerAnimationSpeeds(num('AttackSpeed'), num('MagicSpeed'));
@@ -737,6 +739,14 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     attack: (target) => state.combat?.attack(target),
     busy: () => (state.combat?.busy ?? false) || online.hero.isPlayingOnce,
     skillUsable: (skill) => [...skills.skills.values()].includes(skill) && skillRequirementsMet(skill, stats, character.classIndex),
+    knowsSkill: (skill) => [...skills.skills.values()].includes(skill),
+    castSupport: (skill, target) => { state.combat?.cancel(); return state.combat?.cast(target, { ...target.cell }, skill) ?? false; },
+    actionBusy: () => online.hero.isWalking || online.hero.isPlayingOnce || (state.combat?.casting ?? false),
+    hasBuff: (who, buff) => buffs.has(who === online.hero ? playerId : who.id, buff),
+    party: () => (state.party?.members ?? []).map((member) => ({
+      healthStep: member.healthStep,
+      character: member.name === character.name ? online.hero : [...online.characters.values()].find((c) => c.kind === 'player' && c.name === member.name) ?? null,
+    })),
     life: () => stats.life, maxLife: () => stats.maxLife, money: () => inventory.money,
     drinkHealingPotion: () => {
       for (const type of itemTypesInUseOrder('healingPotion')) {
