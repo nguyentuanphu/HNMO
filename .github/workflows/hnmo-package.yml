@@ -8,6 +8,11 @@ on:
     branches: [main]
     paths: ['server/**', 'client/web/**', 'client/src/bin/**', '.github/workflows/hnmo-package.yml']
 
+# Only the newest push builds; an older build still running is cancelled.
+concurrency:
+  group: hnmo-package-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   package:
     runs-on: ubuntu-latest
