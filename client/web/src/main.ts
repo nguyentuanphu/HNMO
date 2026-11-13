@@ -17,6 +17,8 @@ import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
+import { setUpSettings } from './ui/settingsWindow.js';
+import { frameDue } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
@@ -360,6 +362,7 @@ let last = performance.now();
 let frames = 0, fpsTime = 0;
 
 function frame(now: number): void {
+  if (!frameDue(now)) { requestAnimationFrame(frame); return; } // the settings' FPS limit
   const dt = Math.min((now - last) / 1000, MAX_FRAME_SECONDS);
   last = now;
   frames++; fpsTime += dt;
@@ -1055,6 +1058,7 @@ function initLogin() {
 resize();
 initLogin();
 setUpGuide();
+setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root });
 // The login theme (it starts with the first click or key: browsers hold sound back until then).
 sounds.audio.playMusic(loginMusic(false));
 // The sound button: everything on or off, kept in the browser.

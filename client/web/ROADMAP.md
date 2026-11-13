@@ -74,9 +74,13 @@ timers, scores, rewards.
 1. ✅ **(extra)** The (i) button: an in-game guide of what to play and what each feature does
    (`public/guide.html`; keep its feature table up to date with each step).
 2. Cash shop with the free coins (`in_game_shop.rml` and the gift/package windows).
-3. Login, server and character select as the game's own RML scenes; option window (auto attack,
-   sounds, theme), system menu, help, command window, translations, themes and UI scale.
+3. Login, server and character select as the game's own RML scenes; the option window's other rows
+   (auto attack, whisper sound, theme, the Enhanced look, shadows), system menu, help, command
+   window, translations, themes and UI scale.
 4. Shadows, weather, animated map objects, water, BMD v14 and GLB models.
+5. ✅ Option window (`O` or ⚙, `ui/settingsWindow.ts`): FPS limit, sound and music volume,
+   windowed mode, effects off, FPS counter; **(extra)** render scale, text size, mute, view
+   distance and a low-spec mode for slow PCs (`render/quality.ts`).
 
 ## 11. Release
 Windows build tried on a real PC, performance on a normal laptop, the friends guide updated with
