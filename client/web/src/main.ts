@@ -40,6 +40,7 @@ import { confirmInGame } from './ui/confirmDialog.js';
 import { MiniMap } from './ui/miniMap.js';
 import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
+import { ChaosMachine } from './ui/mixWindow.js';
 import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
@@ -86,6 +87,7 @@ export interface GameState {
   buffs?: BuffTracker;
   party?: Party;
   trade?: Trade;
+  chaosMachine?: ChaosMachine;
   miniMap?: MiniMap;
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
@@ -645,6 +647,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     level: () => stats.level, heroName: () => character.name,
     playerName: (id) => online.characters.get(id)?.name,
   });
+  // The chaos machine and the other mix NPCs (CMixInventory).
+  state.chaosMachine = new ChaosMachine({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'),
+    confirm: (text) => confirmInGame(text), level: () => stats.level, play: (id) => sounds.audio.play(id) });
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   itemWindows.bag.onDropOnItem = (from, slot, target) => {
     if (from.storage !== 0 || from.slot < 12) return false;
