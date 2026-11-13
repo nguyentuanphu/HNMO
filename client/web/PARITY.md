@@ -66,7 +66,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Wardrobe (offline): try on any class, armour set, weapon and wings | ✅ | A developer tool, like the client's item previews |
 | NPCs drawn with the player model (guards, …) with their equipment | 🟡 | Drawn with a default body set |
 | Others' exact walking steps (`StepData`) | ⬜ | |
-| Actions: attack, skills, die, emotes, sit (`18`, `19`, `1E`, `17`) | ⬜ | |
+| Actions: attack, skills, die, emotes, sit (`18`, `19`, `1E`, `17`) | 🟡 | Attacks, flinching, death and emotes from `ObjectAnimation`/`ObjectGotKilled`, with the desktop's animation speeds; skills not yet |
 | Monster special setups (`hooks`, `glowMesh`, `stateVariants`, …) | ⬜ | |
 | Shadows | ⬜ | |
 
@@ -74,7 +74,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 
 | Feature | Status | Notes |
 |---|---|---|
-| Attack monsters, damage numbers, health bars | ⬜ | Next up |
+| Attack monsters, damage numbers, health bars | 🟡 | Click a monster: walk into range (1.8 / spear 2.2 / bow 6 cells), swing with the weapon's animation (`SetPlayerAttack`, `src/game/combatLook.ts`), `HitRequest`; auto attack until it dies; hits show the desktop's damage numbers (colours, sizes, motion), flinches and the top-centre name and health bar; kills play the death animation; others' attacks animate; own death and respawn. Not yet: the per-monster attack data, shooting arrows, death effects |
 | Skills and buffs (`GameLogic/Skills`, `Buffs`) | ⬜ | |
 | Experience, level up, stats and points | ⬜ | |
 | Items: drops, pick up, inventory, equip, use | 🟡 | Inventory from the server (`CharacterInventory`, extended item format), moving and equipping by clicking (`ItemMoveRequestExtended`), the hero re-dressed from the equipment slots; drops, pick up and use not yet |

@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight } from './terrain.js';
 import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
-import { createPlayerCharacter } from './game/characters.js';
+import { createPlayerCharacter, setPlayerAnimationSpeeds } from './game/characters.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
 import { loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
@@ -16,6 +16,8 @@ import { Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
+import { Combat } from './game/combat.js';
+import { CombatOverlay } from './ui/combatOverlay.js';
 import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -39,6 +41,8 @@ export interface GameState {
   itemWindows?: ItemWindows;
   stats?: CharacterStats;
   hud?: Hud;
+  combat?: Combat;
+  overlay?: CombatOverlay;
 }
 
 declare global {
@@ -196,12 +200,12 @@ function pickCell(event: MouseEvent): { x: number; y: number } | null {
 ui.canvas.addEventListener('contextmenu', (event) => event.preventDefault());
 // The NPC under the pointer: the nearest one whose drawn body the pointer is on.
 const npcBox = new THREE.Box3();
-function pickNpc(event: MouseEvent): Character | null {
+function pickCharacter(event: MouseEvent, kinds: string[]): Character | null {
   if (!state.online) return null;
   const rect = ui.canvas.getBoundingClientRect();
   let best: { character: Character; distance: number } | null = null;
   for (const character of state.online.characters.values()) {
-    if (character.kind !== 'npc') continue;
+    if (!kinds.includes(character.kind) || character.dead) continue;
     npcBox.setFromObject(character.group);
     if (npcBox.isEmpty()) continue;
     const top = npcBox.max.clone().project(camera), bottom = npcBox.min.clone().project(camera);
@@ -216,14 +220,24 @@ function pickNpc(event: MouseEvent): Character | null {
   return best?.character ?? null;
 }
 
+// The monster under the mouse shows its name and health bar at the top (CNameWindow); otherwise the target's.
+ui.canvas.addEventListener('pointermove', (event) => {
+  if (!state.overlay) return;
+  const hovered = pickCharacter(event, ['monster']);
+  state.overlay.showTarget(hovered ?? state.combat?.target ?? null);
+});
+
 ui.canvas.addEventListener('pointerdown', (event) => {
   const hero = state.hero;
   if (!hero) return;
   if (event.button === 2) { view.dragging = true; view.lastX = event.clientX; return; }
-  const npc = pickNpc(event);
-  if (npc) { state.online!.talkTo(npc); return; } // an NPC is only found online
+  const monster = pickCharacter(event, ['monster']);
+  if (monster && state.combat) { state.combat.attack(monster); return; }
+  const npc = pickCharacter(event, ['npc']);
+  if (npc) { state.combat?.cancel(); state.online!.talkTo(npc); return; } // an NPC is only found online
   const cell = pickCell(event);
   if (!cell) return;
+  state.combat?.cancel();
   if (state.online) state.online.walkTo(cell);
   else hero.walk(findPath(state.world!.flags, hero.cell, cell));
 });
@@ -285,6 +299,8 @@ function frame(now: number): void {
   if (state.hero) {
     state.hero.update(dt, state.world!);
     state.online?.update(dt);
+    state.combat?.update();
+    state.overlay?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
     updateLabels();
@@ -424,6 +440,20 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   });
   const online = state.online;
   const itemWindows = state.itemWindows;
+  const num = (name: string) => (typeof info[name] === 'number' ? info[name] as number : 0);
+  setPlayerAnimationSpeeds(num('AttackSpeed'), num('MagicSpeed'));
+  const overlay = new CombatOverlay(camera, ui.canvas, root);
+  state.overlay = overlay;
+  state.combat = new Combat(connection, online, inventory, character.classIndex, {
+    onDamage: (target, texts) => overlay.addNumbers(() => Combat.anchorOf(target, 0), texts),
+    onMessage: (text) => chat.add(text, 'system'),
+    onTargetChanged: (target) => overlay.showTarget(target),
+    onHeroDied: () => chat.add('You died.', 'system'),
+    onRespawn: async (map, x, y) => {
+      if (map !== state.mapNumber) { await loadMap(map); online.world = state.world!; }
+      state.hero!.placeAt(x, y);
+    },
+  });
   state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); } });
   void state.hud.open();
   chat.enable((text) => online.say(text));

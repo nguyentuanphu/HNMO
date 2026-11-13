@@ -224,7 +224,7 @@ export class OnlineWorld {
 
   // Walks the player to a cell and tells the server, as the client's SendRequestMove does.
   // A walk packet holds at most 15 steps; longer walks continue when a part ends.
-  walkTo(cell: Cell, { keepTalk = false }: { keepTalk?: boolean } = {}): boolean {
+  walkTo(cell: Cell, { keepTalk = false }: { keepTalk?: boolean; keepAttack?: boolean } = {}): boolean {
     if (!keepTalk) this.talkTarget = null;
     this.goal = { x: cell.x, y: cell.y };
     return this.walkNextPart();

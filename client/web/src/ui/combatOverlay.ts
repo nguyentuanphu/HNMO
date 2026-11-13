@@ -6,22 +6,23 @@
 
 import * as THREE from 'three';
 import { REFERENCE_HEIGHT } from './rml.js';
+import { damageTextMotion, DAMAGE_TEXT_LIFETIME_SECONDS, type DamageText } from '../game/combatLook.js';
 
-export interface FloatingText { text: string; color: [number, number, number]; scale: number }
 
 const BAR = { steps: 20, span: 80, border: 2, gap: 1, height: 5, nameTop: 2, barTop: 15 };
-const FLOAT_SECONDS = 1.2;
-const FLOAT_RISE = 60;        // reference pixels a number rises over its life
 const TEXT_UNITS = 12;
+// A damage number's scale (CreatePoint's size) as a text height in reference pixels.
+const DAMAGE_TEXT_UNITS_PER_SCALE = 0.75;
 
 export class CombatOverlay {
   private readonly root: HTMLDivElement;
   private readonly name: HTMLDivElement;
   private readonly bar: HTMLDivElement;
   private readonly segments: HTMLDivElement[] = [];
-  private readonly numbers: { element: HTMLDivElement; anchor: THREE.Vector3; age: number; offset: number }[] = [];
+  private readonly numbers: { element: HTMLDivElement; anchor: () => THREE.Vector3; text: DamageText; age: number }[] = [];
 
-  constructor(private readonly camera: THREE.Camera, private readonly canvas: HTMLCanvasElement, parent: HTMLElement = document.body) {
+  // root: the scene node the anchors are given in (the world's root, in the game's units, z up).
+  constructor(private readonly camera: THREE.Camera, private readonly canvas: HTMLCanvasElement, private readonly root3d: THREE.Object3D, parent: HTMLElement = document.body) {
     this.root = document.createElement('div');
     Object.assign(this.root.style, { position: 'fixed', inset: '0', pointerEvents: 'none', zIndex: '15', overflow: 'hidden' });
     this.name = document.createElement('div');
@@ -60,20 +61,20 @@ export class CombatOverlay {
     });
   }
 
-  // Numbers that rise from a point of the world (in the scene's world coordinates).
-  addNumbers(anchor: THREE.Vector3, texts: FloatingText[]): void {
-    texts.forEach((text, index) => {
+  // Numbers that rise from a point (anchor: where they start, in the root's coordinates, followed
+  // as the character moves), with the desktop's motion: rising, slowing, shrinking, fading.
+  addNumbers(anchor: () => THREE.Vector3, texts: DamageText[]): void {
+    for (const text of texts) {
       const element = document.createElement('div');
-      const [r, g, b] = text.color;
+      const [r, g, b] = text.color.map((c) => Math.round(Math.min(1, Math.max(0, c)) * 255));
       Object.assign(element.style, {
         position: 'absolute', color: `rgb(${r},${g},${b})`, fontFamily: 'Tahoma, Arial, sans-serif', fontWeight: 'bold',
-        fontSize: `${TEXT_UNITS * 1.4 * text.scale * this.scale}px`, textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000',
-        whiteSpace: 'nowrap', transform: 'translate(-50%, -100%)',
+        textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000', whiteSpace: 'nowrap', transform: 'translate(-50%, -50%)',
       });
       element.textContent = text.text;
       this.root.append(element);
-      this.numbers.push({ element, anchor: anchor.clone(), age: 0, offset: index * TEXT_UNITS * 1.3 });
-    });
+      this.numbers.push({ element, anchor, text, age: 0 });
+    }
   }
 
   update(dt: number): void {
@@ -82,13 +83,18 @@ export class CombatOverlay {
     for (let i = this.numbers.length - 1; i >= 0; i--) {
       const number = this.numbers[i];
       number.age += dt;
-      if (number.age >= FLOAT_SECONDS) { number.element.remove(); this.numbers.splice(i, 1); continue; }
-      point.copy(number.anchor).project(this.camera);
-      const x = rect.left + (point.x + 1) / 2 * rect.width;
-      const y = rect.top + (1 - point.y) / 2 * rect.height - (number.offset + (number.age / FLOAT_SECONDS) * FLOAT_RISE) * this.scale;
-      number.element.style.left = `${x}px`;
-      number.element.style.top = `${y}px`;
-      number.element.style.opacity = String(Math.min(1, 2 * (1 - number.age / FLOAT_SECONDS)));
+      const motion = damageTextMotion(number.age, number.text.scale);
+      if (!motion.alive || number.age > DAMAGE_TEXT_LIFETIME_SECONDS) { number.element.remove(); this.numbers.splice(i, 1); continue; }
+      point.copy(number.anchor());
+      point.z += number.text.heightOffset + motion.rise;
+      this.root3d.localToWorld(point);
+      point.project(this.camera);
+      if (point.z > 1) { number.element.style.display = 'none'; continue; }
+      number.element.style.display = 'block';
+      number.element.style.left = `${rect.left + (point.x + 1) / 2 * rect.width}px`;
+      number.element.style.top = `${rect.top + (1 - point.y) / 2 * rect.height}px`;
+      number.element.style.fontSize = `${motion.scale * DAMAGE_TEXT_UNITS_PER_SCALE * this.scale}px`;
+      number.element.style.opacity = String(motion.alpha);
     }
   }
 }

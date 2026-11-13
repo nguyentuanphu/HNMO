@@ -8,6 +8,7 @@ import { sampleHeight, sampleLight } from '../terrain.js';
 import { describeMonster, MonsterAction } from './monsterData.js';
 import { itemModel, ItemGroup } from './items.js';
 import { addItemGlow } from './itemGlow.js';
+import { playerActionSpeed } from './combatLook.js';
 import type { Vec3 } from '../formats.js';
 import type { GeometryPart } from '../bmd.js';
 import type { ModelMonster } from './monsterData.js';
@@ -36,7 +37,13 @@ export interface CharacterActions {
 }
 
 export const PlayerAction = { STOP: 1, WALK: 15 } as const; // PLAYER_STOP_MALE, PLAYER_WALK_MALE
-const PLAYER_KEYS_PER_SECOND: Record<number, number> = { [PlayerAction.STOP]: 6, [PlayerAction.WALK]: 9 };
+// The speeds of the player model's animations depend on the attack and magic speed; the desktop
+// client uses the own character's for every player (SetAttackSpeed), so they're set once here.
+const playerSpeeds = { attackSpeed: 0, magicSpeed: 0 };
+export function setPlayerAnimationSpeeds(attackSpeed: number, magicSpeed: number): void {
+  playerSpeeds.attackSpeed = attackSpeed;
+  playerSpeeds.magicSpeed = magicSpeed;
+}
 const BODY_PARTS = ['Helm', 'Armor', 'Pant', 'Glove', 'Boot'] as const;
 export const WALK_CELLS_PER_SECOND = 3.3;
 const DEGREES = Math.PI / 180;
@@ -347,7 +354,7 @@ export async function createPlayerCharacter({ id, name, bodySet, equipment, kind
   const character = new Character({
     id, name, kind, model,
     actions: { stop: PlayerAction.STOP, walk: PlayerAction.WALK },
-    keysPerSecond: (action: number) => PLAYER_KEYS_PER_SECOND[action],
+    keysPerSecond: (action: number) => playerActionSpeed(action, { ...playerSpeeds, classIndex: Math.max(0, bodySet - 1) }),
   });
   character.setAttachments(attachments);
   character.equipment = equipment ?? {};
