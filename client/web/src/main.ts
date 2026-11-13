@@ -38,6 +38,7 @@ import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { MiniMap } from './ui/miniMap.js';
+import { installTouchControls } from './ui/touchControls.js';
 import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { loginMusic } from './audio/index.js';
@@ -87,6 +88,8 @@ export interface GameState {
   party?: Party;
   trade?: Trade;
   miniMap?: MiniMap;
+  /** The camera's turn and distance (the mouse and the touch controls change them). */
+  view?: { yaw: number; distance: number };
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
 }
@@ -234,6 +237,7 @@ async function wearInventory(character: CharacterListEntry): Promise<void> {
 // ---------- camera and input ----------
 
 const view = { yaw: CAMERA.yaw, distance: CAMERA.distance, dragging: false, lastX: 0, rightDownX: 0, rightDownY: 0 };
+state.view = view;
 
 function updateCamera(): void {
   // Called by the frame loop once the hero (and so the world) is there.
@@ -291,6 +295,7 @@ ui.canvas.addEventListener('pointermove', (event) => {
 ui.canvas.addEventListener('pointerdown', (event) => {
   const hero = state.hero;
   if (!hero) return;
+  if (event.pointerType === 'touch' && !event.isPrimary) return; // a second finger pinches or turns
   if (event.button === 2) { view.dragging = true; view.lastX = event.clientX; view.rightDownX = event.clientX; view.rightDownY = event.clientY; return; }
   const monster = pickCharacter(event, ['monster']);
   if (monster && state.combat) { state.combat.attack(monster); return; }
@@ -329,6 +334,18 @@ ui.canvas.addEventListener('wheel', (event) => {
   event.preventDefault();
   view.distance = THREE.MathUtils.clamp(view.distance * (event.deltaY > 0 ? 1.1 : 0.9), CAMERA.minDistance, CAMERA.maxDistance);
 }, { passive: false });
+// Phones and tablets (HNMO extra): long press casts, two fingers zoom and turn, buttons for the keys.
+installTouchControls({
+  canvas: ui.canvas,
+  zoom: (factor) => { view.distance = THREE.MathUtils.clamp(view.distance * factor, CAMERA.minDistance, CAMERA.maxDistance); },
+  rotate: (dx) => { view.yaw -= dx * 0.006; },
+  cast: (x, y) => {
+    if (!state.combat || !state.online) return;
+    const at = new MouseEvent('pointermove', { clientX: x, clientY: y });
+    const monster = pickCharacter(at, ['monster']);
+    state.combat.cast(monster, monster ? { ...monster.cell } : pickCell(at));
+  },
+});
 
 // ---------- name labels ----------
 

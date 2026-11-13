@@ -97,6 +97,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Inventory, character, skill tree and option windows | 🟡 | The windows are the game's own RML documents and RCSS themes (`ui/rml.js` shows them in the browser): inventory and vault done, with the 3D items at their inventory angles (`ui/itemIcons.js`); the others not yet |
 | Tooltips | 🟡 | Item tooltips from the game's own layouts (`Tooltip.json`, `ItemStats.json`, option files; `src/game/itemTooltip.ts`) in `tooltip.rml`: name, damage/defense with levels, durability, requirements (red when lacking), classes, luck/option/excellent/ancient/harmony/socket/guardian lines, descriptions. Not yet: the skill line (skill list not decoded), an ancient set's option list while wearing the set, shop prices, expiry and a few special items |
 | Themes and UI scaling | ⬜ | |
+| **(extra)** Touch screens (phones, tablets) | ✅ | `ui/touchControls.ts`: a tap does a left click's work (walk, attack, talk, pick up), a long press casts the current skill at what's under the finger, two fingers pinch to zoom and slide to turn, a button bar for what only keys open (I, C, P, M, the mini map, Z, auto play on/off, the chat); test `touch.spec.ts` |
 | **(extra)** The (i) guide: what to play, the controls, each feature and whether it works yet | ✅ | `public/guide.html`, opened by the (i) next to the character name and from the login screen |
 | Translations (`src/Localization`) | ⬜ | |
 
