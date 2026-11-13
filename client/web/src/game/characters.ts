@@ -8,7 +8,7 @@ import { sampleHeight, sampleLight } from '../terrain.js';
 import { describeMonster, MonsterAction } from './monsterData.js';
 import { itemModel, ItemGroup } from './items.js';
 import { addItemGlow } from './itemGlow.js';
-import { playerActionSpeed } from './combatLook.js';
+import { playerActionSpeed, type MonsterAttacksData } from './combatLook.js';
 import type { Vec3 } from '../formats.js';
 import type { GeometryPart } from '../bmd.js';
 import type { ModelMonster } from './monsterData.js';
@@ -227,6 +227,9 @@ export class Character {
   healthStatus = -1;
   /** Set once the server reported its death: the death animation holds its last key. */
   dead = false;
+  /** A monster's or NPC's type number, and how it attacks (Monsters.json). */
+  monsterNumber: number | null = null;
+  attacks: MonsterAttacksData | null = null;
 
   constructor({ id, name, model, kind, scale = 1, actions, keysPerSecond }: CharacterOptions) {
     this.id = id;
@@ -368,9 +371,11 @@ export async function createMonsterCharacter({ id, type }: { id: number; type: n
   if (description.usesPlayerModel) {
     const character = await createPlayerCharacter({ id, name: description.name, bodySet: DEFAULT_NPC_BODY_SET, kind: description.kind });
     character.group.scale.setScalar(description.scale);
+    character.monsterNumber = type;
+    character.attacks = description.attacks;
     return character;
   }
-  return new Character({
+  const monster = new Character({
     id,
     name: description.name,
     kind: description.kind,
@@ -379,4 +384,7 @@ export async function createMonsterCharacter({ id, type }: { id: number; type: n
     actions: { stop: MonsterAction.STOP, walk: MonsterAction.WALK },
     keysPerSecond: (action: number) => description.keysPerSecond[action],
   });
+  monster.monsterNumber = type;
+  monster.attacks = description.attacks;
+  return monster;
 }

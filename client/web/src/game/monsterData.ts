@@ -2,6 +2,8 @@
 // Models.json, see docs/monster-data.md): which model a type number uses, its scale
 // and its animation speeds.
 
+import type { MonsterAttacksData } from './combatLook.js';
+
 const FRAMES_PER_SECOND = 25; // animation speeds in the data are keys per 25 FPS frame (ADR 0001)
 const DEFAULT_PLAY_SPEED = 0.25;
 const MONSTER_ACTIONS = ['stop1', 'stop2', 'walk', 'attack1', 'attack2', 'shock', 'die'];
@@ -15,6 +17,8 @@ interface MonsterEntry {
   model?: string;
   scale?: number;
   numbers: { number: number; maps?: number[] }[];
+  /** How it attacks (which animation for which skill), read by combatLook's monsterAttackAction. */
+  attacks?: MonsterAttacksData;
 }
 
 interface MonstersFile {
@@ -47,6 +51,7 @@ export interface PlayerModelMonster {
   usesPlayerModel: true;
   scale: number;
   kind: string | undefined;
+  attacks: MonsterAttacksData | null;
 }
 
 /** A type drawn with its own model. */
@@ -60,6 +65,7 @@ export interface ModelMonster {
   scale: number;
   /** Animation speed per action (MONSTER_ACTIONS order), in keys per second. */
   keysPerSecond: number[];
+  attacks: MonsterAttacksData | null;
 }
 
 export type MonsterDescription = PlayerModelMonster | ModelMonster;
@@ -91,7 +97,7 @@ export function describeMonster(number: number): MonsterDescription {
   const monster = catalog.byNumber.get(number);
   const slot = monster?.model ?? catalog.unknown.model;
   const name = monster?.name?.en ?? `Monster ${number}`;
-  if (slot === 'player') return { name, usesPlayerModel: true, scale: monster?.scale ?? 1, kind: monster?.kind };
+  if (slot === 'player') return { name, usesPlayerModel: true, scale: monster?.scale ?? 1, kind: monster?.kind, attacks: monster?.attacks ?? null };
   // The unknown monsters' model is always in Models.json.
   const model = catalog.modelsBySlot.get(slot) ?? catalog.modelsBySlot.get(catalog.unknown.model)!;
   const file = model.file.replace(/^Data\//, '');
@@ -106,5 +112,6 @@ export function describeMonster(number: number): MonsterDescription {
     textureDir: model.textureFolders?.length ? model.textureFolders : [dir],
     scale: monster?.scale ?? model.scale ?? 1,
     keysPerSecond: speeds,
+    attacks: monster?.attacks ?? null,
   };
 }

@@ -15,7 +15,7 @@ import type { OnlineWorld } from './online.js';
 import type { Inventory, Item } from './inventory.js';
 import {
   attackRange, damageTexts, deathAction, hitPlaysShock, killDamageText, monsterAnimationReaction, monsterShockAction,
-  newMonsterAttackState, playerAnimationReaction, playerAttackAction, playerShockAction, ServerAnimation,
+  monsterAttackAction, newMonsterAttackState, playerAnimationReaction, playerAttackAction, playerShockAction, ServerAnimation,
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
 
@@ -29,6 +29,7 @@ interface HitPacket {
 }
 interface KilledPacket { KilledId: number; SkillId: number; KillerId: number }
 interface AnimationPacket { ObjectId: number; Direction: number; Animation: number; TargetId: number }
+interface MonsterSkillPacket { SkillNumber: number; AttackerId: number; TargetId: number }
 interface ExperiencePacket { AddedExperience: number; DamageOfLastHit: number; KilledObjectId: number }
 interface RespawnPacket { PositionX: number; PositionY: number; MapNumber: number; Direction: number }
 
@@ -141,6 +142,7 @@ export class Combat {
       if (bytes[0] === 0xc1 && code === 0x11) this.hit(read<HitPacket>('ServerToClient', 'ObjectHitExtended', bytes));
       else if (bytes[0] === 0xc1 && code === 0x17) this.killed(read<KilledPacket>('ServerToClient', 'ObjectGotKilled', bytes));
       else if (bytes[0] === 0xc1 && code === 0x18) this.animation(read<AnimationPacket>('ServerToClient', 'ObjectAnimation', bytes));
+      else if (bytes[0] === 0xc1 && code === 0x69) this.monsterSkill(read<MonsterSkillPacket>('ServerToClient', 'MonsterSkillAnimation', bytes));
       else if (bytes[0] === 0xc3 && code === 0x16) this.experience(read<ExperiencePacket>('ServerToClient', 'ExperienceGainedExtended', bytes));
       else if (bytes[0] === 0xc1 && code === 0xf3 && bytes[3] === 0x04) this.respawn(read<RespawnPacket>('ServerToClient', 'RespawnAfterDeathExtended', bytes));
     } catch (error) {
@@ -196,11 +198,24 @@ export class Combat {
     } else {
       let state = this.monsterStates.get(actor.id);
       if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
-      reaction = monsterAnimationReaction(packet.Animation, null, state);
+      reaction = monsterAnimationReaction(packet.Animation, actor.attacks, state);
     }
-    if (reaction.kind === 'attack' && reaction.action !== null) actor.playOnce(reaction.action);
+    if (reaction.kind === 'attack' && reaction.action !== null && reaction.action >= 0) actor.playOnce(reaction.action);
     else if (reaction.kind === 'play') actor.playOnce(reaction.action);
     else if (reaction.kind === 'stop') actor.oneShot = null;
+  }
+
+  // A monster's own skill (MonsterSkillAnimation): the attack its data names for that skill.
+  private monsterSkill(packet: MonsterSkillPacket): void {
+    const actor = this.characterById(packet.AttackerId & ID_MASK);
+    if (!actor || actor === this.hero || actor.dead) return;
+    const victim = this.characterById(packet.TargetId & ID_MASK);
+    if (victim) actor.faceTo(victim.cell);
+    let state = this.monsterStates.get(actor.id);
+    if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
+    state.monsterSkill = packet.SkillNumber;
+    const action = monsterAttackAction(actor.attacks, state);
+    if (action !== null && action >= 0) actor.playOnce(action);
   }
 
   private experience(packet: ExperiencePacket): void {
