@@ -43,6 +43,10 @@ export interface CombatEvents {
   onRespawn?: (map: number, x: number, y: number) => void;
   /** The target or its health changed. */
   onTargetChanged?: (target: Character | null) => void;
+  /** Someone started an attack (for arrows and other projectiles); look is the hero's when it's the hero. */
+  onSwing?: (actor: Character, target: Character | null, look: AttackLookInput | null) => void;
+  /** Someone died (for the death effects). */
+  onKilled?: (character: Character) => void;
 }
 
 // The pets that change how the hero attacks (inventory slot 8): Horn of Fenrir, Dark Horse, Uniria, Dinorant.
@@ -125,6 +129,7 @@ export class Combat {
     if (this.hero.isWalking || this.hero.isPlayingOnce) return; // the last swing first
     this.hero.faceTo(target.cell);
     this.hero.playOnce(playerAttackAction(look, this.swing++));
+    this.events.onSwing?.(this.hero, target, look);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
     const direction = Math.floor((degrees + 22.5) / 360 * 8 + 1) % 8;
     this.connection.send('ClientToServer', 'HitRequest', { TargetId: target.id, AttackAnimation: AT_ATTACK1, LookingDirection: direction });
@@ -179,6 +184,7 @@ export class Combat {
     target.path = [];
     target.healthStatus = 0;
     target.playOnce(deathAction(target.kind === 'player' || target === this.hero), undefined, true);
+    this.events.onKilled?.(target);
     if (target === this.hero) {
       this.cancel();
       this.events.onHeroDied?.();
@@ -200,7 +206,10 @@ export class Combat {
       if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
       reaction = monsterAnimationReaction(packet.Animation, actor.attacks, state);
     }
-    if (reaction.kind === 'attack' && reaction.action !== null && reaction.action >= 0) actor.playOnce(reaction.action);
+    if (reaction.kind === 'attack' && reaction.action !== null && reaction.action >= 0) {
+      actor.playOnce(reaction.action);
+      this.events.onSwing?.(actor, victim, null);
+    }
     else if (reaction.kind === 'play') actor.playOnce(reaction.action);
     else if (reaction.kind === 'stop') actor.oneShot = null;
   }

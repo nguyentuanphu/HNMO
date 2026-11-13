@@ -19,6 +19,7 @@ import { Hud } from './ui/hud.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
+import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
 import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -45,6 +46,8 @@ export interface GameState {
   combat?: Combat;
   overlay?: CombatOverlay;
   ground?: GroundItems;
+  projectiles?: ProjectileLayer;
+  deaths?: DeathEffects;
 }
 
 declare global {
@@ -307,6 +310,8 @@ function frame(now: number): void {
     state.online?.update(dt);
     state.combat?.update();
     if (state.ground && state.world) state.ground.update(state.world);
+    state.deaths?.update(dt);
+    state.projectiles?.update(dt);
     state.overlay?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
@@ -458,10 +463,26 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     walkTo: (cell) => { online.walkTo(cell); },
     send: (id) => connection.send('ClientToServer', 'PickupItemRequest', { ItemId: id }),
   });
+  const heightAt = (x: number, y: number) => (state.world ? sampleHeight(state.world.heights, x, y) : 0);
+  void loadCombatEffectsData();
+  const projectiles = new ProjectileLayer(root, { heightAt, characters: () => online.characters.values(), hero: () => online.hero });
+  const deaths = new DeathEffects(root, { heightAt, map: () => state.mapNumber ?? 0 });
+  state.projectiles = projectiles;
+  state.deaths = deaths;
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => overlay.addNumbers(() => Combat.anchorOf(target, 0), texts),
     onMessage: (text) => chat.add(text, 'system'),
     onTargetChanged: (target) => overlay.showTarget(target),
+    // Arrows leave the bow a moment into the swing (CreateArrow); archers among the monsters shoot theirs.
+    onSwing: (actor, target, look) => {
+      const hand = (item: { group: number; number: number } | null | undefined) => (item ? { group: item.group, number: item.number } : null);
+      const kinds = look ? arrowKindsForWeapons(look.rightHand, look.leftHand)
+        : actor.kind === 'player' ? arrowKindsForWeapons(hand(actor.equipment?.rightHand), hand(actor.equipment?.leftHand))
+        : actor.monsterNumber !== null ? arrowKindsForMonster(actor.monsterNumber, target !== null) : [];
+      if (!kinds.length || !target) return;
+      setTimeout(() => { for (const kind of kinds) void projectiles.shoot(actor, target, kind, { fenrir: look?.mount === 'fenrir' }); }, ARROW_RELEASE_DELAY_SECONDS * 1000);
+    },
+    onKilled: (character) => deaths.died(character, character.kind === 'player' ? null : character.monsterNumber),
     onHeroDied: () => chat.add('You died.', 'system'),
     onRespawn: async (map, x, y) => {
       if (map !== state.mapNumber) { await loadMap(map); online.world = state.world!; }
