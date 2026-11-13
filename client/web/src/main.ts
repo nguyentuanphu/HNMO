@@ -38,6 +38,7 @@ import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { MiniMap } from './ui/miniMap.js';
+import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
@@ -86,6 +87,7 @@ export interface GameState {
   party?: Party;
   trade?: Trade;
   miniMap?: MiniMap;
+  gates?: GateWatcher;
   partyWindow?: PartyWindow;
 }
 
@@ -168,6 +170,14 @@ const mapBanner = new MapNameBanner();
 
 async function loadMap(mapNumber: number): Promise<void> {
   if (state.mapNumber === mapNumber) return;
+  mapsLoading++;
+  try { await loadMapNow(mapNumber); } finally { mapsLoading--; }
+}
+
+/** Maps being loaded (LoadingWorld): gates wait for them. */
+let mapsLoading = 0;
+
+async function loadMapNow(mapNumber: number): Promise<void> {
   if (state.online || ui.login.hidden) void mapBanner.show(mapNumber, mapName(mapNumber));
   if (state.worldGroup) root.remove(state.worldGroup);
   setStatus(`Loading ${mapName(mapNumber)}…`, 0.05);
@@ -384,6 +394,7 @@ function frame(now: number): void {
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
     state.miniMap?.update();
+    state.gates?.update();
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
     updateLabels();
@@ -770,6 +781,16 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
   });
   inventory.onChange(() => moveWindow.refresh());
+  // Gates you walk into (CheckGate): the server takes the hero through (EnterGateRequest).
+  state.gates = new GateWatcher({
+    hero: () => state.hero && state.mapNumber !== null ? {
+      map: state.mapNumber, x: state.hero.cell.x, y: state.hero.cell.y, level: stats.level, classIndex: character.classIndex,
+      helper: inventory.items.get(8), wings: inventory.items.get(7),
+    } : null,
+    busy: () => mapsLoading > 0,
+    enter: (gate) => connection.send('ClientToServer', 'EnterGateRequest', { GateNumber: gate, TeleportTargetX: 0, TeleportTargetY: 0 }),
+    message: (text) => chat.add(text, 'system'),
+  });
   // The mini map (Tab): the whole map with its NPCs and gates, the hero's arrow in the middle.
   const miniMap = new MiniMap({
     hero: () => state.hero ?? null,

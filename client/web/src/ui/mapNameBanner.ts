@@ -43,8 +43,11 @@ export class MapNameBanner {
     const icon = data?.maps.get(mapNumber);
     const place = icon ? data?.places[icon] : undefined;
     this.model.map_name = name;
-    this.model.icon = Boolean(icon && place);
-    this.model.icon_source = icon ? `${ORNAMENTS}/${icon}.tga` : '';
+    // The icon as a picture the browser can show (a .tga drawn by the interface image loader): the
+    // binding sets the source on every update of the fade, so it must already be the drawn one.
+    const picture = icon && place ? await loadImage(`${ORNAMENTS}/${icon}.tga`.replace(/^\/Data\//, '/data/')).catch(() => null) : null;
+    this.model.icon = Boolean(picture);
+    this.model.icon_source = picture ? picture.toDataURL() : '';
     this.model.icon_style = place ? `left: ${place.x}px; top: ${place.y}px; width: ${place.width}px; height: ${place.height}px;` : '';
     this.model.alpha = 0.2;
     this.state = name ? 'in' : 'hide';
@@ -58,8 +61,10 @@ export class MapNameBanner {
     for (const img of this.doc?.root.querySelectorAll<HTMLImageElement>('img') ?? []) {
       const src = img.getAttribute('src') ?? '';
       if (!src || src.startsWith('data:') || src.startsWith('blob:')) continue;
+      // Hidden until drawn: the browser can't show a .tga, and would draw a broken image meanwhile.
+      img.style.visibility = 'hidden';
       const canvas = await loadImage(src.replace(/^\/Data\//, '/data/'));
-      if (canvas) img.src = canvas.toDataURL();
+      if (canvas) { img.src = canvas.toDataURL(); img.style.visibility = ''; }
     }
   }
 
