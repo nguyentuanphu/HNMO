@@ -17,9 +17,10 @@ import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
-import { HOTKEY_LETTERS, ItemHotkeys, ItemUser, rightClickBagItem } from './game/itemUse.js';
+import { findItemReverse, HOTKEY_LETTERS, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
+import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -54,6 +55,7 @@ export interface GameState {
   ground?: GroundItems;
   projectiles?: ProjectileLayer;
   deaths?: DeathEffects;
+  effects?: EffectSystem;
 }
 
 declare global {
@@ -184,7 +186,7 @@ async function wearInventory(character: CharacterListEntry): Promise<void> {
 
 // ---------- camera and input ----------
 
-const view = { yaw: CAMERA.yaw, distance: CAMERA.distance, dragging: false, lastX: 0 };
+const view = { yaw: CAMERA.yaw, distance: CAMERA.distance, dragging: false, lastX: 0, rightDownX: 0, rightDownY: 0 };
 
 function updateCamera(): void {
   // Called by the frame loop once the hero (and so the world) is there.
@@ -242,7 +244,7 @@ ui.canvas.addEventListener('pointermove', (event) => {
 ui.canvas.addEventListener('pointerdown', (event) => {
   const hero = state.hero;
   if (!hero) return;
-  if (event.button === 2) { view.dragging = true; view.lastX = event.clientX; return; }
+  if (event.button === 2) { view.dragging = true; view.lastX = event.clientX; view.rightDownX = event.clientX; view.rightDownY = event.clientY; return; }
   const monster = pickCharacter(event, ['monster']);
   if (monster && state.combat) { state.combat.attack(monster); return; }
   const npc = pickCharacter(event, ['npc']);
@@ -256,7 +258,17 @@ ui.canvas.addEventListener('pointerdown', (event) => {
   if (state.online) state.online.walkTo(cell);
   else hero.walk(findPath(state.world!.flags, hero.cell, cell));
 });
-window.addEventListener('pointerup', () => { view.dragging = false; });
+window.addEventListener('pointerup', (event) => {
+  // A right click that didn't turn the camera casts the current skill (the desktop's right mouse
+  // button): at the monster under the mouse, else at the ground there (area skills, buffs on the hero).
+  if (event.button === 2 && view.dragging && state.combat && state.online && event.target === ui.canvas
+    && Math.hypot(event.clientX - view.rightDownX, event.clientY - view.rightDownY) < 6) {
+    const monster = pickCharacter(event, ['monster']);
+    const cell = monster ? { ...monster.cell } : pickCell(event);
+    state.combat.cast(monster, cell);
+  }
+  view.dragging = false;
+});
 window.addEventListener('pointermove', (event) => {
   if (!view.dragging) return;
   view.yaw -= (event.clientX - view.lastX) * 0.006;
@@ -318,6 +330,7 @@ function frame(now: number): void {
     if (state.ground && state.world) state.ground.update(state.world);
     state.deaths?.update(dt);
     state.projectiles?.update(dt);
+    state.effects?.update(dt);
     state.overlay?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
@@ -482,6 +495,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const deaths = new DeathEffects(root, { heightAt, map: () => state.mapNumber ?? 0 });
   state.projectiles = projectiles;
   state.deaths = deaths;
+  // Skill effects (the desktop's effect system): played when anyone casts.
+  const effects = new EffectSystem(root, { camera, heightAt });
+  state.effects = effects;
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => overlay.addNumbers(() => Combat.anchorOf(target, 0), texts),
     onMessage: (text) => chat.add(text, 'system'),
@@ -496,6 +512,17 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       setTimeout(() => { for (const kind of kinds) void projectiles.shoot(actor, target, kind, { fenrir: look?.mount === 'fenrir' }); }, ARROW_RELEASE_DELAY_SECONDS * 1000);
     },
     onKilled: (character) => deaths.died(character, character.kind === 'player' ? null : character.monsterNumber),
+    onSkill: (caster, skill, target) => {
+      // Triple Shot's fan of arrows goes through the arrows' own layer (CreateArrows).
+      const hands = caster === online.hero
+        ? { right: inventory.items.get(0), left: inventory.items.get(1) }
+        : { right: caster.equipment?.rightHand ?? undefined, left: caster.equipment?.leftHand ?? undefined };
+      const kinds = arrowKindsForWeapons(hands.right ? { group: hands.right.group, number: hands.right.number } : null, hands.left ? { group: hands.left.group, number: hands.left.number } : null);
+      playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
+        shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
+        bowNumbers: { rightHand: hands.right?.number, leftHand: hands.left?.number },
+      });
+    },
     onHeroDied: () => chat.add('You died.', 'system'),
     onRespawn: async (map, x, y) => {
       if (map !== state.mapNumber) { await loadMap(map); online.world = state.world!; }
@@ -553,6 +580,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     },
   });
   stats.onChange(() => hud.refreshSkills());
+  // Casting: the right mouse button uses the current skill (its number from the skill list).
+  if (state.combat) state.combat.skills = {
+    current: () => { const skill = skills.skillAt(skills.current); return skill > 0 ? skill : null; },
+    mana: () => stats.mana, ability: () => stats.ability,
+    outOfMana: () => {
+      // FindManaItemIndex: drink the best mana potion there is.
+      for (const type of itemTypesInUseOrder('manaPotion')) {
+        const slot = findItemReverse(inventory.items, type, -1);
+        if (slot !== null) { itemUser.use(slot); return; }
+      }
+    },
+  };
   // The number keys pick the current skill (CSkillList::UpdateKeyEvent); Ctrl + a number over a skill
   // of the popup puts it on that key.
   window.addEventListener('keydown', (event) => {

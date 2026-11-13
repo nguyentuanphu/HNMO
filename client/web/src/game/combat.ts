@@ -18,6 +18,9 @@ import {
   monsterAttackAction, newMonsterAttackState, playerAnimationReaction, playerAttackAction, playerShockAction, ServerAnimation,
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
+import { areaSkillRotation, skillCastPlan, skillAnimationAction, skillRange, type SkillCastContext, type SkillCastPlan } from './skillCast.js';
+import { itemDefinition } from './items.js';
+import { skillInfo } from './skills.js';
 
 const ID_MASK = 0x7fff;
 const HIT_SHOCK_FLAG = 0x8000;
@@ -32,6 +35,21 @@ interface AnimationPacket { ObjectId: number; Direction: number; Animation: numb
 interface MonsterSkillPacket { SkillNumber: number; AttackerId: number; TargetId: number }
 interface ExperiencePacket { AddedExperience: number; DamageOfLastHit: number; KilledObjectId: number }
 interface RespawnPacket { PositionX: number; PositionY: number; MapNumber: number; Direction: number }
+interface SkillAnimationPacket { SkillId: number; PlayerId: number; TargetId: number }
+interface AreaSkillAnimationPacket { SkillId: number; PlayerId: number; PointX: number; PointY: number; Rotation: number }
+
+/** What casting needs from the rest of the game: the current skill and the hero's mana and AG. */
+export interface SkillSource {
+  /** The skill number the right mouse button casts (the current skill), null for none. */
+  current: () => number | null;
+  mana: () => number;
+  ability: () => number;
+  /** Mana ran short: the desktop drinks a mana potion then (FindManaItemIndex). */
+  outOfMana?: () => void;
+}
+
+/** A skill the hero is about to cast: at a character, or at a cell (area skills). */
+interface PendingSkill { skill: number; plan: SkillCastPlan; target: Character | null; cell: { x: number; y: number } | null }
 
 export interface CombatEvents {
   /** A hit to show: the character hit and the texts the desktop draws for it. */
@@ -47,6 +65,8 @@ export interface CombatEvents {
   onSwing?: (actor: Character, target: Character | null, look: AttackLookInput | null) => void;
   /** Someone died (for the death effects). */
   onKilled?: (character: Character) => void;
+  /** Someone cast a skill (SkillAnimation / AreaSkillAnimation, and the hero's own cast): for its effects. */
+  onSkill?: (caster: Character, skill: number, target: Character | null, cell: { x: number; y: number } | null) => void;
 }
 
 // The pets that change how the hero attacks (inventory slot 8): Horn of Fenrir, Dark Horse, Uniria, Dinorant.
@@ -66,6 +86,10 @@ export class Combat {
   private swing = 0;
   private readonly monsterStates = new Map<number, MonsterAttackState>();
   private readonly stop: () => void;
+  private pendingSkill: PendingSkill | null = null;
+  /** The skill auto attack repeats (the desktop's Attacking = 2 after a cast). */
+  private repeatSkill: PendingSkill | null = null;
+  skills: SkillSource | null = null;
 
   constructor(
     private readonly connection: Connection,
@@ -100,8 +124,36 @@ export class Combat {
     this.events.onTargetChanged?.(target);
   }
 
+  // What the cast rules look at: the hands' weapon kinds, the mount, wings, safe zone.
+  private castContext(): SkillCastContext {
+    const items = this.inventory.items;
+    const kind = (item: Item | undefined) => (item ? itemDefinition(item.group, item.number)?.weaponKind : undefined);
+    const look = this.lookInput();
+    return {
+      rightHandKind: kind(items.get(0)), leftHandKind: kind(items.get(1)), rightHand: look.rightHand, leftHand: look.leftHand,
+      mount: look.mount, mounted: look.mount !== 'none', wings: look.wings, safeZone: look.safeZone,
+    };
+  }
+
+  // A right click: cast the current skill at a character (or the hero itself for buffs), or at a cell
+  // for area skills (the desktop's ExecuteSkill with the selected character and the mouse's tile).
+  cast(target: Character | null, cell: { x: number; y: number } | null): boolean {
+    const skill = this.skills?.current() ?? null;
+    if (skill === null || this.hero.dead) return false;
+    const plan = skillCastPlan(skill, this.classIndex, this.castContext());
+    if (!plan || plan.packet === 'none') return false;
+    if (target && target.dead) target = null;
+    if (plan.needsTarget && !target) return false;
+    this.pendingSkill = { skill, plan, target, cell: cell ?? (target ? { ...target.cell } : null) };
+    this.repeatSkill = null;
+    if (target && !plan.friendly) { this.target = target; this.events.onTargetChanged?.(target); }
+    return true;
+  }
+
   // The player did something else (walked somewhere): the attack stops.
   cancel(): void {
+    this.pendingSkill = null;
+    this.repeatSkill = null;
     if (!this.target) return;
     this.target = null;
     this.events.onTargetChanged?.(null);
@@ -112,8 +164,13 @@ export class Combat {
   }
 
   update(): void {
+    if (this.pendingSkill) { this.updateSkill(this.pendingSkill); return; }
     const target = this.target;
     if (!target) return;
+    if (this.repeatSkill && !target.dead && this.online.characters.has(target.id)) {
+      this.pendingSkill = { ...this.repeatSkill, target, cell: { ...target.cell } };
+      return;
+    }
     if (target.dead || !this.online.characters.has(target.id) || this.hero.dead) { this.cancel(); return; }
     if (this.inSafeZone()) return; // no attacks in a safe zone, as on the desktop
     const look = this.lookInput();
@@ -135,6 +192,50 @@ export class Combat {
     this.connection.send('ClientToServer', 'HitRequest', { TargetId: target.id, AttackAnimation: AT_ATTACK1, LookingDirection: direction });
   }
 
+  // Walk into the skill's range, then turn, play the cast and send the skill (AttackWizard /
+  // AttackKnight / AttackElf: SendRequestMagic or SendRequestMagicContinue).
+  private updateSkill(pending: PendingSkill): void {
+    const { skill, plan } = pending;
+    const target = pending.target;
+    if (this.hero.dead || (target && (target.dead || (target !== this.hero && !this.online.characters.has(target.id))))) { this.pendingSkill = null; return; }
+    if (this.inSafeZone()) { this.pendingSkill = null; return; } // CanExecuteSkill: no skills in a safe zone
+    const data = skillInfo(skill);
+    const range = skillRange(skill, data?.distance ?? 0);
+    const aim = target && target !== this.hero ? target.cell : pending.cell;
+    if (aim && range > 0 && target !== this.hero) {
+      const distance = Math.hypot(aim.x - this.hero.cell.x, aim.y - this.hero.cell.y);
+      if (distance > range) {
+        if (!this.hero.isWalking) {
+          const near = target ? this.online.cellNextTo(target.cell) : aim;
+          if (near) this.online.walkTo(near, { keepTalk: false, keepAttack: true });
+        }
+        return;
+      }
+    }
+    if (this.hero.isWalking || this.hero.isPlayingOnce) return;
+    // CheckMana: mana and AG first (out of mana the desktop drinks a mana potion instead).
+    if (this.skills && data && data.mana > this.skills.mana()) { this.skills.outOfMana?.(); this.pendingSkill = null; return; }
+    if (this.skills && data && data.ability > this.skills.ability()) { this.pendingSkill = null; return; }
+    if (aim) this.hero.faceTo(aim);
+    if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
+    const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
+    if (plan.packet === 'targeted') {
+      const id = plan.targetSelf || !target || target === this.hero ? this.online.playerId : target.id;
+      this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: skill, TargetId: id });
+    } else if (plan.packet === 'area') {
+      // AreaSkill: at the hero's own tile or the target's, with the selected character when the skill names one.
+      const at = plan.areaAt === 'self' ? this.hero.cell : aim;
+      if (at) {
+        const extra = plan.areaExtraTarget && target && target !== this.hero ? target.id : 0xffff;
+        this.connection.send('ClientToServer', 'AreaSkill', { SkillId: skill, TargetX: at.x, TargetY: at.y, Rotation: areaSkillRotation(degrees, plan.rotationScale), ExtraTargetId: extra, AnimationCounter: 0 });
+      }
+    }
+    this.events.onSkill?.(this.hero, skill, target, aim);
+    this.pendingSkill = null;
+    // Auto attack keeps casting at a monster for attack skills (Attacking = 2).
+    this.repeatSkill = plan.keepAutoAttack && target && target !== this.hero && !plan.friendly ? pending : null;
+  }
+
   private characterById(id: number): Character | null {
     if (id === this.online.playerId) return this.hero;
     return this.online.characters.get(id) ?? null;
@@ -150,6 +251,8 @@ export class Combat {
       else if (bytes[0] === 0xc1 && code === 0x69) this.monsterSkill(read<MonsterSkillPacket>('ServerToClient', 'MonsterSkillAnimation', bytes));
       else if (bytes[0] === 0xc3 && code === 0x16) this.experience(read<ExperiencePacket>('ServerToClient', 'ExperienceGainedExtended', bytes));
       else if (bytes[0] === 0xc1 && code === 0xf3 && bytes[3] === 0x04) this.respawn(read<RespawnPacket>('ServerToClient', 'RespawnAfterDeathExtended', bytes));
+      else if (bytes[0] === 0xc3 && code === 0x19 && bytes.length >= 9) this.skillAnimation(read<SkillAnimationPacket>('ServerToClient', 'SkillAnimation', bytes));
+      else if (bytes[0] === 0xc3 && code === 0x1e && bytes.length >= 10) this.areaSkillAnimation(read<AreaSkillAnimationPacket>('ServerToClient', 'AreaSkillAnimation', bytes));
     } catch (error) {
       console.warn('Combat packet not handled:', error);
     }
@@ -225,6 +328,30 @@ export class Combat {
     state.monsterSkill = packet.SkillNumber;
     const action = monsterAttackAction(actor.attacks, state);
     if (action !== null && action >= 0) actor.playOnce(action);
+  }
+
+  // SkillAnimation: someone cast a skill at a target. Others play the skill's action; the hero
+  // already did when casting.
+  private skillAnimation(packet: SkillAnimationPacket): void {
+    const caster = this.characterById(packet.PlayerId & ID_MASK);
+    if (!caster || caster.dead) return;
+    const target = this.characterById(packet.TargetId & ID_MASK);
+    if (caster !== this.hero) {
+      if (target && target !== caster) caster.faceTo(target.cell);
+      const action = caster.kind === 'player' ? skillAnimationAction(packet.SkillId, caster.classIndex ?? 0, { own: false, via: 'targeted' }) : null;
+      if (action !== null) caster.playOnce(action);
+      this.events.onSkill?.(caster, packet.SkillId, target, target ? { ...target.cell } : null);
+    }
+  }
+
+  private areaSkillAnimation(packet: AreaSkillAnimationPacket): void {
+    const caster = this.characterById(packet.PlayerId & ID_MASK);
+    if (!caster || caster.dead || caster === this.hero) return;
+    const cell = { x: packet.PointX, y: packet.PointY };
+    caster.faceTo(cell);
+    const action = caster.kind === 'player' ? skillAnimationAction(packet.SkillId, caster.classIndex ?? 0, { own: false, via: 'area' }) : null;
+    if (action !== null) caster.playOnce(action);
+    this.events.onSkill?.(caster, packet.SkillId, null, cell);
   }
 
   private experience(packet: ExperiencePacket): void {
