@@ -48,6 +48,7 @@ scene.add(root);
 
 const state = { world: null, hero: null, online: null, mapNumber: null };
 window.__game = state; // for automated tests and debugging from the console
+state.camera = camera;
 
 function setStatus(text, progress) {
   ui.status.textContent = text;
