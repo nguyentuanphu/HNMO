@@ -2,6 +2,7 @@
 // which (MagicEffectStatus, C1 07: an effect switched on or off on a character).
 
 import type { Connection } from '../net/connection.js';
+import { NEW_SKILL_BUFFS } from './newSkills.js';
 
 export interface BuffDefinition {
   number: number;
@@ -14,6 +15,8 @@ export interface BuffDefinition {
   tier?: number;
   hidden?: boolean;
   cancelSkill?: number;
+  /** The buff whose icon it shows (HNMO's own buffs wear a game buff's icon). */
+  iconFrom?: number;
 }
 
 let definitions: Map<number, BuffDefinition> | null = null;
@@ -26,6 +29,10 @@ export async function loadBuffData(): Promise<void> {
   if (!response.ok) throw new Error(`${response.status} Buffs.json`);
   const file = (await response.json()) as { buffs: BuffDefinition[] };
   definitions = new Map(file.buffs.map((buff) => [buff.number, buff]));
+  // HNMO's own skills' buffs (not in the game's list).
+  for (const b of NEW_SKILL_BUFFS) {
+    definitions.set(b.number, { number: b.number, name: b.name, kind: b.kind, displayName: { en: b.name }, description: { en: b.text }, iconFrom: b.iconFrom });
+  }
   const lowest = new Map<string, number>();
   for (const buff of file.buffs) if (buff.family) lowest.set(buff.family, Math.min(lowest.get(buff.family) ?? Infinity, buff.number));
   for (const buff of file.buffs) if (buff.family) familyOf.set(buff.number, lowest.get(buff.family)!);

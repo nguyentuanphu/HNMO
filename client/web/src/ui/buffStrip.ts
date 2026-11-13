@@ -13,7 +13,8 @@ interface StripModel extends RmlModel {
 }
 
 // BuildIconDecorator: 20x28 tiles of two atlases, ten per row.
-function iconDecorator(buff: number): string {
+function iconDecorator(shown: number): string {
+  const buff = buffDefinition(shown)?.iconFrom ?? shown;
   const first = buff < 81;
   const tile = Math.min(Math.max(first ? buff - 1 : buff - 81, 0), 89);
   return `image(${first ? 'atlas1-' : 'atlas2-'}${tile})`;

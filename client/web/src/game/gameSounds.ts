@@ -10,6 +10,7 @@ import {
 import type { Character } from './characters.js';
 import type { Item } from './inventory.js';
 import { isFemaleClass } from './combatLook.js';
+import { NEW_SKILL_LOOKS } from './newSkills.js';
 
 /** A skill's own sound (ReceiveMagic / AttackEffect), by skill number. */
 const SKILL_SOUNDS: Record<number, string> = {
@@ -95,7 +96,7 @@ export class GameSounds {
   }
 
   skill(skill: number): void {
-    const sound = SKILL_SOUNDS[skill];
+    const sound = SKILL_SOUNDS[skill] ?? NEW_SKILL_LOOKS[skill]?.sound;
     if (sound) this.audio.play(sound, { anchored: true });
   }
 

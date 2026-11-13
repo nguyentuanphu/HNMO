@@ -42,6 +42,7 @@ import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
 import { MiniMap } from './ui/miniMap.js';
+import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
 import { installTouchControls } from './ui/touchControls.js';
 import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
@@ -635,6 +636,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         ? { right: inventory.items.get(0), left: inventory.items.get(1) }
         : { right: caster.equipment?.rightHand ?? undefined, left: caster.equipment?.leftHand ?? undefined };
       const kinds = arrowKindsForWeapons(hands.right ? { group: hands.right.group, number: hands.right.number } : null, hands.left ? { group: hands.left.group, number: hands.left.number } : null);
+      if (isNewSkill(skill)) { playNewSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null); return; }
       playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
         shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
         bowNumbers: { rightHand: hands.right?.number, leftHand: hands.left?.number },

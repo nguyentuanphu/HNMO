@@ -20,6 +20,7 @@ import {
   type Mount,
   type RandomSource,
 } from './combatLook.js';
+import { isNewSkill, NEW_SKILL_LOOKS } from './newSkills.js';
 
 // ---------------------------------------------------------------------------
 // Skill numbers (the desktop's AT_SKILL_* values, Core/Globals/_enum.h).
@@ -117,6 +118,7 @@ export const SkillId = {
 
 const S = SkillId;
 const A = PlayerActions;
+
 const C = CharacterClass;
 
 // ---------------------------------------------------------------------------
@@ -479,6 +481,19 @@ export function skillCastPlan(
   const ctx = context;
   const g = gearOf(ctx);
   const plan = (p: PlanParts): SkillCastPlan => make(skill, classIndex, p);
+
+  // HNMO's own skills: how each is cast is in its look (game/newSkills.ts).
+  if (isNewSkill(skill)) {
+    const look = NEW_SKILL_LOOKS[skill];
+    if (!look) return null;
+    const heroAction = look.action === 'magic' ? magicAction(classIndex, ctx)
+      : look.action === 'attack' ? (bowAction(classIndex, ctx) ?? attackAction(classIndex, ctx)) : look.action;
+    return plan({
+      packet: look.packet, heroAction, needsTarget: look.needsTarget, friendly: look.friendly, targetSelf: look.friendly,
+      ...(look.packet === 'area' ? { areaAt: look.areaAt ?? 'target', areaExtraTarget: true } : {}),
+      source: 'HNMO skill (game/newSkills.ts)',
+    });
+  }
 
   // AttackCommon (ClassAttack.cpp): the castle skills, for every class.
   if (skill >= S.STUN && skill <= S.REMOVAL_BUFF) {

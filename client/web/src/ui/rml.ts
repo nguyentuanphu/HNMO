@@ -246,11 +246,36 @@ function outlineShadow(width: string, color: string): string {
 const knownSprites: Sprites = new Map();
 const decoratorCss = new Map<string, Promise<string>>();
 
+// Sprites drawn at run time (HNMO's skills wear a game icon in another colour): a name and how to
+// draw it from a known sprite.
+const shiftedSprites = new Map<string, { base: string; hue: number }>();
+
+/** Makes `name` a sprite: the sprite `base` with its colours turned by `hue` degrees. */
+export function registerHueShiftedSprite(name: string, base: string, hue: number): void {
+  shiftedSprites.set(name, { base, hue });
+}
+
+async function hueShiftedCss(shift: { base: string; hue: number }): Promise<string> {
+  const sprite = knownSprites.get(shift.base);
+  const url = sprite ? await spriteUrl(sprite.src, sprite.rect) : null;
+  const image = url ? await fetch(url).then((r) => r.blob()).then((blob) => createImageBitmap(blob)).catch(() => null) : null;
+  if (!image) return 'background: none;';
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const context = canvas.getContext('2d')!;
+  context.filter = `hue-rotate(${shift.hue}deg) saturate(1.3)`;
+  context.drawImage(image, 0, 0);
+  return `background: url("${canvas.toDataURL()}") 0 0 / 100% 100% no-repeat;`;
+}
+
 /** The CSS background for an RCSS decorator value ("image(sprite)", "none"). */
 export function decoratorBackground(value: string): Promise<string> {
   if (!decoratorCss.has(value)) {
     const match = /^\s*(image|additive-image)\((.*)\)\s*$/.exec(value);
-    decoratorCss.set(value, match ? imageCss.call({ sprites: knownSprites, sheetUrl: '/' }, match[2]) : Promise.resolve('background: none;'));
+    const shift = match ? shiftedSprites.get(match[2].trim()) : undefined;
+    decoratorCss.set(value, shift ? hueShiftedCss(shift)
+      : match ? imageCss.call({ sprites: knownSprites, sheetUrl: '/' }, match[2]) : Promise.resolve('background: none;'));
   }
   return decoratorCss.get(value)!;
 }

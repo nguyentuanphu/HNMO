@@ -5,6 +5,8 @@
 // (UI::Skills::Icon::ResolveSkillIcon, the sprites of skill_icons.rcss).
 
 import { fetchBytes } from '../bmd.js';
+import { isNewSkill, loadNewSkills, NEW_SKILL_LOOKS } from './newSkills.js';
+import { registerHueShiftedSprite } from '../ui/rml.js';
 import type { Connection } from '../net/connection.js';
 
 const RECORD = 108; // SKILL_ATTRIBUTE_FILE: 50 byte name, fields with MSVC alignment
@@ -39,6 +41,8 @@ export async function loadSkillData(): Promise<SkillData[]> {
       strength: v.getInt32(96, true), dexterity: v.getInt32(100, true),
     });
   }
+  // HNMO's own skills (700-727) from their list.
+  for (const [number, data] of await loadNewSkills().catch(() => new Map<number, SkillData>())) list[number] = data;
   skillData = list;
   return list;
 }
@@ -67,6 +71,15 @@ export function skillIconSprite(skill: number, usable: boolean): string {
   const S = SkillNumber;
   const data = skillInfo(skill);
   const cell = (atlas: string, column: number, row: number) => `skill-icon-${atlas}-${usable ? 'lit' : 'grey'}-${column}-${row}`;
+  if (isNewSkill(skill)) {
+    // A game icon in another colour (registered as its own sprite for the decorators).
+    const look = NEW_SKILL_LOOKS[skill];
+    const base = look ? skillIconSprite(look.icon.from, usable) : '';
+    if (!base || !look) return '';
+    const name = `skill-icon-hnmo-${skill}-${usable ? 'lit' : 'grey'}`;
+    registerHueShiftedSprite(name, base, look.icon.hue);
+    return name;
+  }
   if (skill >= S.MASTER_BEGIN) return '';
   if (skill >= S.PET_COMMAND_DEFAULT && skill <= S.PET_COMMAND_END) {
     const command = skill - S.PET_COMMAND_DEFAULT;
