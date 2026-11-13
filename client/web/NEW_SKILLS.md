@@ -1,6 +1,6 @@
 # New skills (server + web only)
 
-All 28 are built (owner, 2026-11-14). How they're learnt, for every class:
+All 28 will be built (the owner chose all of them on 2026-11-14). How they're learnt, for every class:
 
 | Skill | How it's learnt |
 |---|---|
@@ -13,9 +13,7 @@ Sounds: generated with ElevenLabs sound effects (one per skill) while the free c
 game's own sound files. Effects come from the game's own textures and models. Icons come from the
 game's own skill icons, recoloured or combined.
 
-The options per class: Effects are made from the game's own effect textures and
-models, sounds from the game's own sound files (pitched or mixed); the class's existing skill
-animations. Numbers are a first guess and get balanced in testing.
+The options per class (numbers are a first guess and get balanced in testing):
 
 ## Dark Knight
 - **A. Earth Splitter**: area around the hero. The sword hits the ground, cracks and rocks spread out, monsters are slowed. Sound: ground slam with a deep boom.
