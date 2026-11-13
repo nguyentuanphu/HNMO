@@ -79,3 +79,7 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   `hnmo` user) before blaming the game. GitHub's "Web game tests" start from a fresh save.
 - Packet handlers must not block (no `window.confirm` / `prompt` inside one): use
   `ui/confirmDialog.ts` (`confirmInGame`).
+- Parity rule (owner, 2026-11-14): the owner decides what the web takes from the desktop and how.
+  New content beyond the desktop (e.g. new skills for every class) goes in the server and the web
+  only; don't change the desktop client for it unless asked. New skills reuse the game's own
+  effect textures/models and sound files, defined in data (one entry per skill).
