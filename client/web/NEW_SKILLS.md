@@ -4,10 +4,16 @@ All 28 will be built (the owner chose all of them on 2026-11-14). How they're le
 
 | Skill | How it's learnt |
 |---|---|
-| A | level 80: learnt from the class's skill book, sold by the town's magic or weapon merchant |
-| B | level 150: skill book, the same merchant |
-| C | level 220: skill book, the same merchant |
-| D | the class's trial quest (from level 250): an NPC in Lorencia asks for 100 monsters of a set kind and one jewel; the skill is learnt when it's done |
+| A | reaching level 80: learnt by itself, with a message |
+| B | reaching level 150: learnt by itself |
+| C | reaching level 220: learnt by itself |
+| D | the class's trial quest (from level 250): an NPC in Lorencia asks for 100 monsters of a set kind and one jewel; the skill is learnt when it's done (quest reward type Skill) |
+
+A character already past a level when the update arrives learns those skills when it next enters
+the game. Skill numbers (the server's and the web's): 700 + 4 × class + letter (A 0, B 1, C 2, D 3),
+classes in this order: Dark Knight 0, Dark Wizard 1, Fairy Elf 2, Magic Gladiator 3, Dark Lord 4,
+Summoner 5, Rage Fighter 6. So Dark Knight A is 700, Rage Fighter D is 727. They go into existing
+saves with a server update plug-in, and into fresh saves with the initializer.
 
 Sounds: generated with ElevenLabs sound effects (one per skill) while the free credits last, then the
 game's own sound files. Effects come from the game's own textures and models. Icons come from the
