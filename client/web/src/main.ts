@@ -19,6 +19,7 @@ import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { HOTKEY_LETTERS, ItemHotkeys, ItemUser, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, SkillList, skillRequirementsMet } from './game/skills.js';
+import { skillTooltipLines } from './game/skillTooltip.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -541,6 +542,12 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     list: skills,
     usable: (skill) => skillRequirementsMet(skill, stats, character.classIndex),
     hasPet: () => false, // the Dark Lord's raven comes with the pets
+    tooltip: (index, box) => {
+      const view = itemWindows.tooltip;
+      if (index === null || !box) { view.hide(); return; }
+      const skill = index >= 120 && index < 124 ? index : skills.skillAt(index);
+      void view.showLines(skillTooltipLines(skill, stats, character.classIndex), { left: box.left, top: box.top, width: box.width, height: box.height }, { index }, { above: true });
+    },
   });
   stats.onChange(() => hud.refreshSkills());
   // The number keys pick the current skill (CSkillList::UpdateKeyEvent); Ctrl + a number over a skill

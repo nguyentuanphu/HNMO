@@ -15,6 +15,8 @@ export interface HudSkills {
   list: SkillList;
   usable: (skill: number) => boolean;
   hasPet: () => boolean;
+  /** Shows the tooltip of a list index's skill over the box (null hides it). */
+  tooltip?: (index: number | null, box: DOMRect | null) => void;
 }
 
 interface SkillCell { skill_index: number; is_current: boolean; icon: string; hotkey: string; cooldown_fraction: number }
@@ -58,6 +60,8 @@ export class Hud {
   private skills: HudSkills | null = null;
   /** The popup cell under the mouse: Ctrl + a number key puts its skill on that key. */
   hoveredSkill = -1;
+  /** The slot or popup cell the mouse is over (found before the document's own handlers run). */
+  private hoveredElement: Element | null = null;
 
   constructor(private readonly stats: CharacterStats, actions: HudActions, private readonly itemSlots: HudItemSlots | null = null) {
     const noop = () => undefined;
@@ -87,14 +91,14 @@ export class Hud {
       item_hotkey_rightclick: noop, // the right button is told apart in open()
       // The skill bar (CSkillList's OnHotkeySlotClick, OnCurrentSkillClick, OnGridCellClick, …).
       skill_hotkey_click: (slot: number) => this.skillSlotClick(slot),
-      skill_hotkey_hover: noop,
-      skill_unhover: () => { this.hoveredSkill = -1; },
+      skill_hotkey_hover: (slot: number) => this.skillTooltip(this.slotIndex(slot)),
+      skill_unhover: () => { this.hoveredSkill = -1; this.skills?.tooltip?.(null, null); },
       skill_current_click: () => { this.model.skill_grid_open = !this.model.skill_grid_open; this.refreshSkills(); },
-      skill_current_hover: noop,
+      skill_current_hover: () => { if (this.skills && this.skills.list.count > 0) this.skillTooltip(this.skills.list.current); },
       skill_grid_click: (index: number) => this.pickSkill(index),
-      skill_grid_hover: (index: number) => { this.hoveredSkill = index; },
+      skill_grid_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index); },
       skill_pet_click: (index: number) => this.pickSkill(index),
-      skill_pet_hover: (index: number) => { this.hoveredSkill = index; },
+      skill_pet_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index); },
     };
     stats.onChange(() => this.refresh());
     window.addEventListener('resize', () => this.place());
@@ -103,6 +107,9 @@ export class Hud {
   async open(parent: HTMLElement = document.body): Promise<void> {
     this.doc = await openDocument('main_frame', this.model, { parent });
     this.doc.host.style.zIndex = '20';
+    this.doc.root.addEventListener('mouseover', (event) => {
+      this.hoveredElement = event.target instanceof Element ? event.target.closest('.slot-frame, .skill-cell') : null;
+    }, true);
     for (let slot = 0; slot < 4; slot++) {
       const frame = this.doc.$(`#item_slot_${slot}`);
       const icon = this.doc.$(`#item_icon_${slot}`);
@@ -206,6 +213,19 @@ export class Hud {
     m.skill_grid_cells = m.skill_grid_open ? list.gridIndexes().map(cell) : [];
     m.pet_skill_cells = m.skill_grid_open && pet ? [120, 121, 122, 123].map(cell) : [];
     this.doc.update();
+  }
+
+  /** The list index of a hotkey row slot's skill, -1 for none. */
+  private slotIndex(slot: number): number {
+    if (!this.skills) return -1;
+    const hotkey = this.skills.list.slotHotkey(slot, this.skills.hasPet());
+    return hotkey < 0 ? -1 : this.skills.list.hotkeys[hotkey];
+  }
+
+  // QueueTooltip: the hovered skill's tooltip above its slot.
+  private skillTooltip(index: number): void {
+    if (!this.skills?.tooltip || index < 0) return;
+    this.skills.tooltip(index, this.hoveredElement?.getBoundingClientRect() ?? null);
   }
 
   // OnHotkeySlotClick: the slot's skill becomes the current one.

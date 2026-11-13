@@ -20,6 +20,14 @@ test('skill list, skill popup, hotkeys', async ({ page }) => {
   // The current skill's icon, a sprite of skill_icons.rcss.
   await expect(hud.locator('#current_skill_slot .skill-icon')).toHaveAttribute('data-decorator', /^image\(skill-icon-/);
 
+  // Hovering the current skill shows its tooltip: the name, its mana cost (skill_eng.bmd).
+  await hud.locator('#current_skill_slot').hover();
+  const tooltip = page.locator('.rml-tooltip');
+  await expect(tooltip).toContainText('Mana:');
+  await page.screenshot({ path: 'test-results/skill-tooltip.png' });
+  await page.mouse.move(640, 200);
+  await expect(tooltip).not.toContainText('Mana:');
+
   // The current-skill slot opens the popup with every learned skill.
   await hud.locator('#current_skill_slot').click();
   const cells = hud.locator('#skill_grid .skill-cell');

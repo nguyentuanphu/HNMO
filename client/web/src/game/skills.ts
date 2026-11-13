@@ -15,8 +15,8 @@ const BUX = [0xfc, 0xcf, 0xab];
 export interface SkillData {
   name: string;
   level: number; damage: number; mana: number; ability: number; distance: number; delay: number;
-  energy: number; leadership: number; useType: number; classes: number[]; icon: number;
-  strength: number; dexterity: number;
+  energy: number; leadership: number; masteryType: number; useType: number; brand: number; killCount: number;
+  classes: number[]; icon: number; strength: number; dexterity: number;
 }
 
 let skillData: SkillData[] | null = null;
@@ -35,7 +35,7 @@ export async function loadSkillData(): Promise<SkillData[]> {
       name: decoder.decode(r.subarray(0, end >= 0 && end < 50 ? end : 50)),
       level: v.getUint16(50, true), damage: v.getUint16(52, true), mana: v.getUint16(54, true), ability: v.getUint16(56, true),
       distance: v.getUint32(60, true), delay: v.getInt32(64, true), energy: v.getInt32(68, true), leadership: v.getUint16(72, true),
-      useType: r[75], classes: [...r.subarray(84, 91)], icon: v.getUint16(92, true),
+      masteryType: r[74], useType: r[75], brand: v.getUint32(76, true), killCount: r[80], classes: [...r.subarray(84, 91)], icon: v.getUint16(92, true),
       strength: v.getInt32(96, true), dexterity: v.getInt32(100, true),
     });
   }

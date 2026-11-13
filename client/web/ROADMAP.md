@@ -24,8 +24,9 @@ tests and CI for all of it; strict TypeScript build.
 
 ## 2. Skills and buffs
 1. 🟡 Skill list from the server (`SkillListUpdate`, `SkillAdded/Removed`), the HUD skill bar,
-   hotkeys 1-9/0, the skill list popup (done). Left: the skill tooltip (mana/AG cost, range),
-   cooldown wipes (with casting, 2.2), the weapon/mount/buff checks of grey icons, master icons.
+   hotkeys 1-9/0, the skill list popup, the skill tooltip (range, mana, AG, cooldown,
+   requirements, notes) (done). Left: the tooltip's damage lines (with the character's damage,
+   4.1), cooldown wipes (with casting, 2.2), the weapon/mount/buff checks of grey icons, master icons.
 2. Casting: targeted (`TargetedSkill`), area (`AreaSkill`, `AreaSkillHit`), the skill animations
    and effects per skill, skill arrows and multi-shot fans.
 3. Buffs and debuffs (`MagicEffectStatus`), the buff strip (`buff_strip.rml`), their visual effects.
@@ -85,7 +86,7 @@ each release.
 | Time | Work |
 |---|---|
 | 23:30–00:30 | ✅ 10.1 the (i) guide; ✅ 3.1 potions on Q W E R and right-click use |
-| 00:30–01:30 | 🟡 2.1 skill list, skill bar and hotkeys (tooltip and cooldowns left) |
+| 00:30–01:30 | ✅ 2.1 skill list, skill bar, hotkeys and tooltip (cooldown wipes come with casting) |
 | 01:30–02:30 | 1.1 effect system basics; 2.2 casting with skill animations and effects |
 | 02:30–03:30 | 4.1 character window and stat points; 5.1 NPC shops (buy, sell, repair) |
 | 03:30–04:30 | 8.1 auto play core (hunt, potions, pick up) with its bar; report, package link |

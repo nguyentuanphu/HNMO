@@ -44,7 +44,7 @@ export class ItemTooltipView {
   private doc: RmlDocument | null = null;
   private opening: Promise<RmlDocument> | null = null;
   private readonly model: TooltipModel = { pos_x: -10000, pos_y: -10000, center_text: true, lines: [] };
-  private shownFor: Item | null = null;
+  private shownFor: object | null = null;
 
   constructor(private readonly parent: HTMLElement, private readonly character: () => TooltipCharacter | null) {
     loadTooltipData().catch((error: unknown) => console.warn('Tooltip data', error));
@@ -62,8 +62,17 @@ export class ItemTooltipView {
 
   async show(item: Item, box: ScreenBox): Promise<void> {
     this.shownFor = item;
-    const [doc] = await Promise.all([this.document(), loadTooltipData()]);
+    await Promise.all([this.document(), loadTooltipData()]);
     if (this.shownFor !== item) return;
+    await this.showLines(tooltipLines(item, this.character()), box, item);
+  }
+
+  /** Shows any tooltip lines (the skill tooltip too), centred on the box: below it, or above without room
+   * or when asked (the skill bar's tooltips sit above their slot). */
+  async showLines(lines: TooltipLine[], box: ScreenBox, owner: object = lines, { above = false } = {}): Promise<void> {
+    this.shownFor = owner;
+    const doc = await this.document();
+    if (this.shownFor !== owner) return;
     const scale = window.innerHeight / REFERENCE_HEIGHT;
     const panel = doc.$('#tooltip_panel');
     if (!panel) return;
@@ -75,14 +84,14 @@ export class ItemTooltipView {
     });
     panel.style.setProperty('--line-px', `${LINE_UNITS * scale}px`);
     panel.style.setProperty('--bold-line-px', `${LINE_UNITS * scale}px`);
-    this.model.lines = tooltipLines(item, this.character()).map(row);
+    this.model.lines = lines.map(row);
     this.model.pos_x = -10000;
     doc.update();
     // Place it once its size is known: centred on the item, below it or, without room, above.
     const size = panel.getBoundingClientRect();
     const centre = box.left + box.width / 2;
     const below = box.top + box.height;
-    const top = below + size.height <= window.innerHeight ? below : Math.max(0, box.top - size.height);
+    const top = !above && below + size.height <= window.innerHeight ? below : Math.max(0, box.top - size.height);
     this.model.pos_x = Math.round(Math.max(0, Math.min(centre - size.width / 2, window.innerWidth - size.width)));
     this.model.pos_y = Math.round(top);
     doc.update();
