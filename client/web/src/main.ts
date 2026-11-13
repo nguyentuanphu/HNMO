@@ -45,6 +45,7 @@ import { installTouchControls } from './ui/touchControls.js';
 import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { ChaosMachine } from './ui/mixWindow.js';
+import { PersonalShop } from './ui/personalShop.js';
 import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
@@ -92,6 +93,7 @@ export interface GameState {
   party?: Party;
   trade?: Trade;
   chaosMachine?: ChaosMachine;
+  personalShop?: PersonalShop;
   miniMap?: MiniMap;
   cooldowns?: typeof skillCooldowns;
   /** The camera's turn and distance (the mouse and the touch controls change them). */
@@ -674,6 +676,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // The chaos machine and the other mix NPCs (CMixInventory).
   state.chaosMachine = new ChaosMachine({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'),
     confirm: (text) => confirmInGame(text), level: () => stats.level, play: (id) => sounds.audio.play(id) });
+  // The personal store: the own store (S, /personalshop), others' stores (/purchase), the titles over the heads.
+  state.personalShop = new PersonalShop({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'), confirm: confirmInGame, level: () => stats.level, heroName: character.name, heroId: () => online.playerId, characters: () => online.characters, hero: () => online.hero, mapNumber: () => state.mapNumber ?? 0, camera, canvas: ui.canvas, root, tooltipCharacter: () => ({ classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility, vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana }) });
+  earlyPackets.forEach((bytes) => state.personalShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   itemWindows.bag.onDropOnItem = (from, slot, target) => {
     if (from.storage !== 0 || from.slot < 12) return false;
@@ -942,6 +947,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   chat.enable((text) => {
     const command = text.trim().toLowerCase();
     if (command === '/party' || command === '/pt') { party.command(online.hero, online.characters.values(), character.name); return; }
+    if (state.personalShop?.command(text, () => facingPlayer(online.hero, online.characters.values()))) return;
     if (command === '/trade') {
       const partner = facingPlayer(online.hero, online.characters.values());
       if (partner) state.trade?.requestTrade(partner.id);
