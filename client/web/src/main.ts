@@ -14,6 +14,8 @@ import { Chat } from './game/chat.js';
 import { loadGlowColors } from './game/itemGlow.js';
 import { Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
+import { CharacterStats } from './game/stats.js';
+import { Hud } from './ui/hud.js';
 import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -35,6 +37,8 @@ export interface GameState {
   camera: THREE.PerspectiveCamera;
   inventory?: Inventory;
   itemWindows?: ItemWindows;
+  stats?: CharacterStats;
+  hud?: Hud;
 }
 
 declare global {
@@ -83,9 +87,18 @@ scene.add(root);
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 window.__game = state; // for automated tests and debugging from the console
 
+// The loading line; once something has finished loading (progress 1) it goes away after a few
+// seconds, so nothing but the game's own interface stays on screen.
+let statusTimer: ReturnType<typeof setTimeout> | undefined;
 function setStatus(text: string, progress?: number): void {
   ui.status.textContent = text;
   if (progress !== undefined) ui.bar.style.width = `${Math.round(progress * 100)}%`;
+  const box = ui.status.parentElement;
+  if (!box) return;
+  clearTimeout(statusTimer);
+  box.style.transition = 'opacity .6s';
+  box.style.opacity = '1';
+  if (progress === 1) statusTimer = setTimeout(() => { box.style.opacity = '0'; }, 6000);
 }
 
 function resize() {
@@ -380,14 +393,16 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.inventory = inventory;
   const info = await enterWorld(connection, character.name);
   inventory.money = typeof info.Money === 'number' ? info.Money : 0;
-  // The character's stats for the item tooltips' requirement lines (CharacterInformationExtended).
-  const stat = (name: string): number | undefined => (typeof info[name] === 'number' ? info[name] as number : undefined);
-  const tooltipCharacter = {
-    classIndex: character.classIndex, level: character.level,
-    strength: stat('Strength'), agility: stat('Agility'), vitality: stat('Vitality'), energy: stat('Energy'), leadership: stat('Leadership'),
-    maxLife: stat('MaximumHealth'), maxMana: stat('MaximumMana'),
-  };
-  state.itemWindows = new ItemWindows({ inventory, character: () => tooltipCharacter });
+  // Level, experience, life, mana and stats from here on (the HUD and the tooltips read them).
+  const stats = new CharacterStats(connection, character.level, info);
+  state.stats = stats;
+  state.itemWindows = new ItemWindows({
+    inventory,
+    character: () => ({
+      classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility,
+      vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana,
+    }),
+  });
   inventory.onChange((what) => { if (what === 'inventory') wearInventory(character); });
   wearInventory(character); // what the hero wears now, from the inventory the server sent with the character
   ui.login.hidden = true;
@@ -408,6 +423,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     },
   });
   const online = state.online;
+  const itemWindows = state.itemWindows;
+  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); } });
+  void state.hud.open();
   chat.enable((text) => online.say(text));
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));

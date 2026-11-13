@@ -19,6 +19,11 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - The owner sometimes writes in Vietnamese: answer in Vietnamese then.
 - The web client must have **everything** the desktop client has, 1:1 (the owner said so
   explicitly); never call a feature done while the desktop one does more.
+- Auto-play: the desktop helper's full feature set first, plus extras the owner approved
+  (2026-11-13): go back to town when the bag is full or potions run out (buy potions, return to
+  the hunting spot), sell junk to NPCs, a stop timer, alerts on death / full bag. The owner
+  also said: add other useful extras when they fit — mark them as HNMO extras in PARITY.md.
+- An (i) button in the game opens a guide page: what to play and what each feature does.
 - Times in Sydney time. Short, plain reports: what works, what's verified, what's next,
   and what the owner has to do (with links).
 

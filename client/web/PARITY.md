@@ -90,7 +90,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 
 | Feature | Status | Notes |
 |---|---|---|
-| HUD: health, mana, experience bar, skill bar | ⬜ | |
+| HUD: health, mana, experience bar, skill bar | 🟡 | The game's `main_frame.rml`: life, mana, SD and AG gauges with numbers, the experience bar (digit and tenth progress, CMainFrameWindow's formula), the inventory button; skill and potion slots come with the skills |
 | Chat window, whisper, party and guild chat, chat commands | 🟡 | Public chat and commands (Enter), chat and server messages shown; whisper, party, guild not yet |
 | Inventory, character, skill tree and option windows | 🟡 | The windows are the game's own RML documents and RCSS themes (`ui/rml.js` shows them in the browser): inventory and vault done, with the 3D items at their inventory angles (`ui/itemIcons.js`); the others not yet |
 | Tooltips | 🟡 | Item tooltips from the game's own layouts (`Tooltip.json`, `ItemStats.json`, option files; `src/game/itemTooltip.ts`) in `tooltip.rml`: name, damage/defense with levels, durability, requirements (red when lacking), classes, luck/option/excellent/ancient/harmony/socket/guardian lines, descriptions. Not yet: the skill line (skill list not decoded), an ancient set's option list while wearing the set, shop prices, expiry and a few special items |

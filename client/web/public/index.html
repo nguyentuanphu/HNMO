@@ -39,10 +39,10 @@
     #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
     .label { position: absolute; left: 0; top: 0; font-size: 12px; white-space: nowrap; color: #f2f3f7; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
     .label.npc { color: #9fe0a8; }
-    .chat-log { position: fixed; left: 12px; bottom: 84px; width: min(460px, calc(100vw - 24px)); max-height: 30vh; overflow-y: auto; font-size: 13px; text-shadow: 0 1px 2px #000; pointer-events: none; display: grid; gap: 2px; }
+    .chat-log { position: fixed; left: 12px; bottom: calc(10.625vh + 44px); width: min(460px, calc(100vw - 24px)); max-height: 30vh; overflow-y: auto; font-size: 13px; text-shadow: 0 1px 2px #000; pointer-events: none; display: grid; gap: 2px; }
     .chat-log .system { color: #f0d27a; }
     .chat-log .chat { color: #f2f3f7; }
-    .chat-form { position: fixed; left: 12px; bottom: 48px; width: min(460px, calc(100vw - 24px)); }
+    .chat-form { position: fixed; left: 12px; bottom: calc(10.625vh + 8px); width: min(460px, calc(100vw - 24px)); }
     .chat-form input { width: 100%; box-sizing: border-box; background: rgba(10,12,20,.75); }
     .map-picker { position: fixed; right: 12px; top: 12px; display: flex; gap: 8px; align-items: center; }
     .map-picker label { color: var(--muted); font-size: 12px; }
