@@ -1,6 +1,19 @@
 # New skills (server + web only)
 
-Options for each class; the owner picks. Effects are made from the game's own effect textures and
+All 28 are built (owner, 2026-11-14). How they're learnt, for every class:
+
+| Skill | How it's learnt |
+|---|---|
+| A | level 80: learnt from the class's skill book, sold by the town's magic or weapon merchant |
+| B | level 150: skill book, the same merchant |
+| C | level 220: skill book, the same merchant |
+| D | the class's trial quest (from level 250): an NPC in Lorencia asks for 100 monsters of a set kind and one jewel; the skill is learnt when it's done |
+
+Sounds: generated with ElevenLabs sound effects (one per skill) while the free credits last, then the
+game's own sound files. Effects come from the game's own textures and models. Icons come from the
+game's own skill icons, recoloured or combined.
+
+The options per class: Effects are made from the game's own effect textures and
 models, sounds from the game's own sound files (pitched or mixed); the class's existing skill
 animations. Numbers are a first guess and get balanced in testing.
 
