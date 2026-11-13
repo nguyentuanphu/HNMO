@@ -8,7 +8,7 @@ import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from 
 import { experienceForLevel, type CharacterStats } from '../game/stats.js';
 import type { Item } from '../game/inventory.js';
 import { drawItem } from './itemIcons.js';
-import { skillIconSprite, type SkillList } from '../game/skills.js';
+import { skillCooldowns, skillIconSprite, type SkillList } from '../game/skills.js';
 
 /** What the skill bar shows: the skill list and whether a skill can be used now (lit or grey icon). */
 export interface HudSkills {
@@ -199,20 +199,28 @@ export class Hud {
       m[`skill_slot_${slot}_icon`] = hotkey >= 0 ? this.iconOf(list.hotkeys[hotkey]) : 'none';
       m[`skill_slot_${slot}_hotkey`] = hotkey >= 0 ? String(hotkey) : '';
       m[`skill_slot_${slot}_selected`] = hotkey >= 0 && list.hotkeys[hotkey] === list.current;
-      m[`skill_slot_${slot}_cooldown`] = 0;
+      m[`skill_slot_${slot}_cooldown`] = hotkey >= 0 ? skillCooldowns.fraction(list.skillAt(list.hotkeys[hotkey])) : 0;
     }
     const any = list.count > 0;
     m.current_skill_icon = any ? this.iconOf(list.current) : 'none';
     const currentHotkey = list.hotkeyOf(list.current);
     m.current_skill_hotkey = any && currentHotkey >= 0 ? String(currentHotkey) : '';
-    m.current_skill_cooldown = 0;
+    m.current_skill_cooldown = any ? skillCooldowns.fraction(list.skillAt(list.current)) : 0;
     const cell = (index: number): SkillCell => {
       const hotkey = list.hotkeyOf(index);
-      return { skill_index: index, is_current: index === list.current, icon: this.iconOf(index), hotkey: hotkey >= 0 ? String(hotkey) : '', cooldown_fraction: 0 };
+      return { skill_index: index, is_current: index === list.current, icon: this.iconOf(index), hotkey: hotkey >= 0 ? String(hotkey) : '', cooldown_fraction: index < 120 ? skillCooldowns.fraction(list.skillAt(index)) : 0 };
     };
     m.skill_grid_cells = m.skill_grid_open ? list.gridIndexes().map(cell) : [];
     m.pet_skill_cells = m.skill_grid_open && pet ? [120, 121, 122, 123].map(cell) : [];
     this.doc.update();
+  }
+
+  /** Every frame while a skill cools down: the wipes shrink (and vanish once it's ready). */
+  private cooling = false;
+  updateCooldowns(): void {
+    if (!skillCooldowns.active && !this.cooling) return;
+    this.cooling = skillCooldowns.active;
+    this.refreshSkills();
   }
 
   /** The list index of a hotkey row slot's skill, -1 for none. */

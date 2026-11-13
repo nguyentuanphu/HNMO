@@ -20,7 +20,7 @@ import {
 } from './combatLook.js';
 import { areaSkillRotation, skillCastPlan, skillAnimationAction, skillRange, type SkillCastContext, type SkillCastPlan } from './skillCast.js';
 import { itemDefinition } from './items.js';
-import { skillInfo } from './skills.js';
+import { skillCooldowns, skillInfo } from './skills.js';
 
 const ID_MASK = 0x7fff;
 const HIT_SHOCK_FLAG = 0x8000;
@@ -223,6 +223,8 @@ export class Combat {
     // CheckMana: mana and AG first (out of mana the desktop drinks a mana potion instead).
     if (this.skills && data && data.mana > this.skills.mana()) { this.skills.outOfMana?.(); this.pendingSkill = null; return; }
     if (this.skills && data && data.ability > this.skills.ability()) { this.pendingSkill = null; return; }
+    // CheckSkillDelay: not while the skill cools down; casting starts its delay.
+    if (data && !skillCooldowns.tryStart(skill, data.delay)) { this.pendingSkill = null; return; }
     if (aim) this.hero.faceTo(aim);
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;

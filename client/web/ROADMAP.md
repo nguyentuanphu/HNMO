@@ -25,8 +25,8 @@ tests and CI for all of it; strict TypeScript build.
 ## 2. Skills and buffs
 1. 🟡 Skill list from the server (`SkillListUpdate`, `SkillAdded/Removed`), the HUD skill bar,
    hotkeys 1-9/0, the skill list popup, the skill tooltip (range, mana, AG, cooldown,
-   requirements, notes) (done). Left: the tooltip's damage lines (with the character's damage,
-   4.1), cooldown wipes (with casting, 2.2), the buff/party/map checks of grey icons, master icons.
+   requirements, notes) (done). Cooldowns (done: CheckSkillDelay, the wipes on the bar and the list). Left: the tooltip's damage lines (with the character's damage,
+   4.1), the buff/party/map checks of grey icons, master icons.
 2. 🟡 Casting: targeted (`TargetedSkill`), area (`AreaSkill`), the skill animations (done for the
    classes' skills except the Rage Fighter's and master skills) and effects per skill (first skills
    done), skill arrows and multi-shot fans. (The desktop never sends `AreaSkillHit`; the server hits.)

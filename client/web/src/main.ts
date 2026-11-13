@@ -20,7 +20,7 @@ import { setUpGuide } from './ui/guide.js';
 import { setUpSettings } from './ui/settingsWindow.js';
 import { frameDue } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
-import { loadSkillData, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
+import { loadSkillData, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
@@ -90,6 +90,7 @@ export interface GameState {
   party?: Party;
   trade?: Trade;
   miniMap?: MiniMap;
+  cooldowns?: typeof skillCooldowns;
   /** The camera's turn and distance (the mouse and the touch controls change them). */
   view?: { yaw: number; distance: number };
   gates?: GateWatcher;
@@ -140,6 +141,7 @@ root.rotation.x = -Math.PI / 2;
 scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
+state.cooldowns = skillCooldowns;
 window.__game = state; // for automated tests and debugging from the console
 
 // The loading line; once something has finished loading (progress 1) it goes away after a few
@@ -415,6 +417,7 @@ function frame(now: number): void {
     state.overlay?.update(dt);
     state.miniMap?.update();
     state.gates?.update();
+    state.hud?.updateCooldowns();
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
     updateLabels();

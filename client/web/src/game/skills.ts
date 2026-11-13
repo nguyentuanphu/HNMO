@@ -311,3 +311,38 @@ export function skillUsableWithEquipment(skill: number, equipment: SkillEquipmen
   }
   return true;
 }
+
+/**
+ * The skills' cooldowns (CharacterAttribute->SkillDelay, CheckSkillDelay / CalcSkillDelay): a skill
+ * whose data has a delay starts it when it's cast and can't be cast again until it ran out; the
+ * skill bar's wipe shows the part that's left (ComputeSkillCooldownFraction).
+ */
+export class SkillCooldowns {
+  private readonly until = new Map<number, { end: number; length: number }>();
+
+  /** CheckSkillDelay: false while the skill is cooling down; otherwise starts its delay (if any). */
+  tryStart(skill: number, delayMs: number, now = performance.now()): boolean {
+    if (delayMs <= 0) return true;
+    if (this.remaining(skill, now) > 0) return false;
+    this.until.set(skill, { end: now + delayMs, length: delayMs });
+    return true;
+  }
+
+  remaining(skill: number, now = performance.now()): number {
+    const entry = this.until.get(skill);
+    if (!entry) return 0;
+    const left = entry.end - now;
+    if (left <= 0) { this.until.delete(skill); return 0; }
+    return left;
+  }
+
+  /** The part of the delay still to run, 0..1 (the wipe's height). */
+  fraction(skill: number, now = performance.now()): number {
+    const entry = this.until.get(skill);
+    return entry ? Math.min(1, this.remaining(skill, now) / entry.length) : 0;
+  }
+
+  get active(): boolean { return this.until.size > 0; }
+}
+
+export const skillCooldowns = new SkillCooldowns();
