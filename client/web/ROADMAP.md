@@ -12,7 +12,8 @@ players, monsters and NPCs; chat and `/move`; equipment, wings and item glow; in
 windows (the game's RML), moving and equipping items; item tooltips; HUD (life, mana, SD, AG,
 experience); fighting (attack animations per weapon, ranges, auto attack, damage numbers, health
 bar, monster attack data, arrows, death effects, stances); drops, ground labels, picking up and
-dropping items; browser tests and CI for all of it; strict TypeScript build.
+dropping items; potions on Q W E R and right-click use of items (3.1); the (i) guide (10.1); browser
+tests and CI for all of it; strict TypeScript build.
 
 ## 1. Effects and sound
 1. Particle, sprite and effect system (the desktop's `ZzzEffect*`, `CreateEffect`, `CreateSprite`,
@@ -30,7 +31,8 @@ dropping items; browser tests and CI for all of it; strict TypeScript build.
 4. Master level and skill tree (`master_level.rml`).
 
 ## 3. Using items
-1. Potions on Q W E R (`ConsumeItemRequest`), right-click to use, HP/MP refill.
+1. ✅ Potions on Q W E R (`ConsumeItemRequest`), right-click to use. Left: the dialogs of fruits,
+   reset fruits, event tickets and talismans; the elixir check against the buffs (with 2.3).
 2. Jewels on items (Bless, Soul, Life, Chaos …), fruits, scrolls/skill books, town portal, pets.
 3. Repair (inventory button and NPCs), durability tints and the durability window.
 
@@ -66,7 +68,8 @@ Doppelganger, Imperial Guardian, Kanturu, Raklion, lucky coins, golden bowman �
 timers, scores, rewards.
 
 ## 10. Shell and interface
-1. **(extra)** The (i) button: an in-game guide of what to play and what each feature does.
+1. ✅ **(extra)** The (i) button: an in-game guide of what to play and what each feature does
+   (`public/guide.html`; keep its feature table up to date with each step).
 2. Cash shop with the free coins (`in_game_shop.rml` and the gift/package windows).
 3. Login, server and character select as the game's own RML scenes; option window (auto attack,
    sounds, theme), system menu, help, command window, translations, themes and UI scale.
@@ -80,7 +83,7 @@ each release.
 
 | Time | Work |
 |---|---|
-| 23:30–00:30 | 10.1 the (i) guide; 3.1 potions on Q W E R and right-click use |
+| 23:30–00:30 | ✅ 10.1 the (i) guide; ✅ 3.1 potions on Q W E R and right-click use |
 | 00:30–01:30 | 2.1 skill list, skill bar and hotkeys |
 | 01:30–02:30 | 1.1 effect system basics; 2.2 casting with skill animations and effects |
 | 02:30–03:30 | 4.1 character window and stat points; 5.1 NPC shops (buy, sell, repair) |

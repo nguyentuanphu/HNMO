@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HNMO Guide</title>
+  <style>
+    :root { --bg: #0b0e16; --panel: #121725; --line: rgba(255, 255, 255, .12); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --ok: #7fd18b; --soon: #8a90a4; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    main { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { margin: 0 0 4px; color: var(--gold); font-size: 26px; letter-spacing: .04em; }
+    h2 { margin: 32px 0 10px; font-size: 18px; color: var(--gold); border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+    h3 { margin: 18px 0 6px; font-size: 15px; }
+    p { margin: 6px 0; }
+    .lead { color: var(--muted); margin-bottom: 18px; }
+    nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+    nav a { color: var(--text); text-decoration: none; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px; }
+    nav a:hover { border-color: var(--gold); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    kbd { font: 12px/1 ui-monospace, monospace; background: #1d2333; border: 1px solid #333c52; border-bottom-width: 2px; border-radius: 4px; padding: 3px 6px; white-space: nowrap; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+    .card h3 { margin-top: 0; }
+    .tag { display: inline-block; font-size: 11px; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
+    .tag.ok { color: #0b0e16; background: var(--ok); }
+    .tag.soon { color: var(--text); background: #2a3042; }
+    ul { margin: 6px 0; padding-left: 20px; }
+    li { margin: 3px 0; }
+    .muted { color: var(--muted); }
+    @media (max-width: 560px) { th:nth-child(3), td:nth-child(3) { display: none; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>HNMO Guide</h1>
+  <p class="lead">What to play, how to play it, and what each part of the game does. Features marked <span class="tag ok">works</span> are in the game now; <span class="tag soon">coming</span> ones are being built.</p>
+  <nav>
+    <a href="#start">Getting started</a><a href="#controls">Controls</a><a href="#classes">Classes</a>
+    <a href="#where">Where to level</a><a href="#items">Items and potions</a><a href="#features">All features</a><a href="#friends">Playing with friends</a>
+  </nav>
+
+  <h2 id="start">Getting started</h2>
+  <ol>
+    <li>Log in with your account, pick the server and a character (or create one with <b>+ Create a character</b>).</li>
+    <li>You start in town, a <b>safe zone</b>: nobody can attack there and you can't attack either. Weapons go on your back.</li>
+    <li>Walk out of town and click a monster to fight it. Kill monsters for experience, money (zen) and items.</li>
+    <li>Pick up what drops (click it), drink potions with <kbd>Q</kbd> <kbd>W</kbd> when life or mana runs low, and go back to town to store items in the vault.</li>
+  </ol>
+
+  <h2 id="controls">Controls</h2>
+  <table>
+    <tr><th>Key / mouse</th><th>What it does</th><th>Note</th></tr>
+    <tr><td>Left click on the ground</td><td>Walk there</td><td>Finds the way around walls</td></tr>
+    <tr><td>Left click on a monster</td><td>Walk into range and attack; keeps attacking (auto attack)</td><td>Bows reach 6 cells, spears 2.2, others 1.8</td></tr>
+    <tr><td>Left click on an NPC</td><td>Walk to it and talk (the vault keeper opens your vault)</td><td></td></tr>
+    <tr><td>Left click on an item on the ground</td><td>Walk to it and pick it up</td><td>Hold <kbd>Alt</kbd> to see the names of all items on the ground</td></tr>
+    <tr><td>Right drag / mouse wheel</td><td>Turn the camera / zoom</td><td></td></tr>
+    <tr><td><kbd>I</kbd> or <kbd>V</kbd></td><td>Inventory</td><td><kbd>Esc</kbd> closes it</td></tr>
+    <tr><td><kbd>Q</kbd> <kbd>W</kbd> <kbd>E</kbd> <kbd>R</kbd></td><td>Use the potion of that slot (bottom of the screen)</td><td>Right-click a slot does the same</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>Q</kbd>/<kbd>W</kbd>/<kbd>E</kbd>/<kbd>R</kbd> over a potion in the bag</td><td>Put that potion on the key</td><td>Saved with your character</td></tr>
+    <tr><td>Right click an item in the bag</td><td>Use it (potion, scroll, skill book …), else wear it, else drop it at your feet</td><td>With the vault open it goes into the vault</td></tr>
+    <tr><td><kbd>Enter</kbd></td><td>Chat; <code>/move devias</code>, <code>/move noria</code>, <code>/move lorencia</code> warp you</td><td></td></tr>
+    <tr><td>(i) button</td><td>This guide</td><td></td></tr>
+  </table>
+
+  <h2 id="classes">Classes: what to play</h2>
+  <div class="cards">
+    <div class="card"><h3>Dark Knight</h3><p>Close combat with swords, axes and maces; lots of life. The easiest class to start with: walk up and hit. Put points in strength and agility.</p></div>
+    <div class="card"><h3>Dark Wizard</h3><p>Spells from a distance with staffs; little life, much mana. Strong against groups once the skills are in. Put points in energy.</p></div>
+    <div class="card"><h3>Fairy Elf</h3><p>Bows and crossbows from 6 cells away, and support magic (heal, defence, attack buffs) for the party. Put points in agility.</p></div>
+    <div class="card"><h3>Magic Gladiator</h3><p>Fights with a sword and casts spells at the same time; strength and energy both count.</p></div>
+    <div class="card"><h3>Dark Lord</h3><p>Sceptres, a horse and a raven; leads parties with command (leadership).</p></div>
+    <div class="card"><h3>Summoner</h3><p>Books and sticks, summons and curses; weakens monsters for the party.</p></div>
+    <div class="card"><h3>Rage Fighter</h3><p>Gloves and fists, fast close combat.</p></div>
+  </div>
+  <p class="muted">Some classes become available on an account only after another character reaches a certain level, as on the original servers.</p>
+
+  <h2 id="where">Where to level</h2>
+  <ul>
+    <li><b>Lorencia</b> — the first town. The spiders and budge dragons right outside are for the first levels.</li>
+    <li><b>Noria</b> — the elves' town, with easy monsters around it.</li>
+    <li><b>Devias</b> — the snow town, for characters that have outgrown the first fields.</li>
+    <li>When a monster takes many hits and hurts you a lot, it's too strong: go back to weaker ones. When everything dies in one or two hits, move on.</li>
+  </ul>
+
+  <h2 id="items">Items and potions</h2>
+  <ul>
+    <li><b>Potions:</b> healing potions go on <kbd>Q</kbd> and mana potions on <kbd>W</kbd> by default. A slot always drinks the best potion of its kind in your bag and shows how many are left.</li>
+    <li><b>Wearing items:</b> drag an item onto its slot in the inventory, or right-click it. Item names show their level (+7 …) and extras (+Skill, +Luck, +Option); hover an item for its full tooltip.</li>
+    <li><b>Excellent</b> items (green names) and <b>ancient</b> items glow; they can't be dropped by accident.</li>
+    <li><b>Vault:</b> talk to the vault keeper in town to store items and zen. Your items are safe there.</li>
+  </ul>
+
+  <h2 id="features">All features</h2>
+  <table>
+    <tr><th>Feature</th><th>What it does</th><th>Status</th></tr>
+    <tr><td>Fighting</td><td>Attacks with each weapon's own swing, damage numbers, the target's health bar, monsters' attacks and arrows, deaths</td><td><span class="tag ok">works</span></td></tr>
+    <tr><td>Life, mana, SD, AG and experience</td><td>The bar at the bottom of the screen</td><td><span class="tag ok">works</span></td></tr>
+    <tr><td>Inventory and equipment</td><td>Move, wear, drop and pick up items; tooltips</td><td><span class="tag ok">works</span></td></tr>
+    <tr><td>Potions on Q W E R, using items</td><td>Drink potions, read scrolls and skill books, use items by right-clicking</td><td><span class="tag ok">works</span></td></tr>
+    <tr><td>Vault</td><td>Store items and zen</td><td><span class="tag ok">works</span></td></tr>
+    <tr><td>Chat and warps</td><td>Talk to everyone; <code>/move</code> to other towns</td><td><span class="tag ok">works</span></td></tr>
+    <tr><td>Skills and the skill bar (1-5)</td><td>Each class's skills, buffs and their effects</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>Character window (C)</td><td>Your stats; spend the points you get on each level</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>NPC shops</td><td>Buy potions and items, sell, repair</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>Auto play</td><td>Hunts, drinks potions, picks up items for you; HNMO extras: goes back to town when the bag is full or potions run out, sells junk, stop timer, alerts when you die or the bag is full</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>Party, guild, friends, trade</td><td>Play together, share experience, trade items</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>Events</td><td>Blood Castle, Devil Square, Chaos Castle and more</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>Cash shop</td><td>Free HNMO coins for items (no real money)</td><td><span class="tag soon">coming</span></td></tr>
+    <tr><td>Sound and music</td><td>The game's sounds and each map's music</td><td><span class="tag soon">coming</span></td></tr>
+  </table>
+
+  <h2 id="friends">Playing with friends</h2>
+  <p>One person starts the HNMO folder (<i>Start HNMO</i>); everyone opens the game's address in a browser. Over the internet, friends join the host through Tailscale and use the host's Tailscale address. Your progress is saved in the host's folder.</p>
+</main>
+</body>
+</html>

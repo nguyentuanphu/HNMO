@@ -16,6 +16,8 @@ import { Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
+import { setUpGuide } from './ui/guide.js';
+import { HOTKEY_LETTERS, ItemHotkeys, ItemUser, rightClickBagItem } from './game/itemUse.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -43,6 +45,7 @@ export interface GameState {
   itemWindows?: ItemWindows;
   stats?: CharacterStats;
   hud?: Hud;
+  hotkeys?: ItemHotkeys;
   combat?: Combat;
   overlay?: CombatOverlay;
   ground?: GroundItems;
@@ -419,6 +422,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // The inventory follows the server from the start: it sends the items right after the character.
   const inventory = new Inventory(connection);
   state.inventory = inventory;
+  // The potion hotkeys come with the key configuration, when the character enters the world.
+  const hotkeys = new ItemHotkeys(connection);
+  state.hotkeys = hotkeys;
   const info = await enterWorld(connection, character.name);
   inventory.money = typeof info.Money === 'number' ? info.Money : 0;
   // Level, experience, life, mana and stats from here on (the HUD and the tooltips read them).
@@ -489,8 +495,45 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       state.hero!.placeAt(x, y);
     },
   });
-  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); } });
-  void state.hud.open();
+  // Using items: Q W E R and the HUD's potion slots, a right click in the bag.
+  const itemUser = new ItemUser(connection, inventory, (text) => chat.add(text, 'system'));
+  const useHotkey = (slot: number) => {
+    if (online.hero.dead) return;
+    const bagSlot = hotkeys.slotOf(slot, inventory.items);
+    if (bagSlot !== null) itemUser.use(bagSlot);
+  };
+  const inSafeZone = () => {
+    const { x, y } = online.hero.cell;
+    return state.world ? (state.world.flags[y * TERRAIN_SIZE + x] & TerrainFlag.SAFEZONE) !== 0 : false;
+  };
+  itemWindows.bag.onRightClick = (slot, item) => rightClickBagItem(slot, item, {
+    inventory, user: itemUser, classIndex: character.classIndex, level: stats.level, strength: stats.strength, energy: stats.energy,
+    safeZone: inSafeZone(), message: (text) => chat.add(text, 'system'),
+    heroCell: () => (online.hero.dead ? null : { ...online.hero.cell }),
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    const slot = HOTKEY_LETTERS.indexOf(event.key.toUpperCase() as typeof HOTKEY_LETTERS[number]);
+    if (slot < 0 || event.altKey || event.metaKey) return;
+    event.preventDefault();
+    if (event.ctrlKey) {
+      // Ctrl + Q/W/E/R over a bag item binds the key to it (CMyInventory::UpdateKeyEvent).
+      const hovered = itemWindows.bag.isOpen ? itemWindows.bag.hoverSlot : null;
+      const item = hovered !== null && hovered >= 12 ? inventory.items.get(hovered) : undefined;
+      if (item) hotkeys.bind(slot, item);
+      return;
+    }
+    if (!event.repeat) useHotkey(slot);
+  });
+  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); } }, {
+    item: (slot) => { const bagSlot = hotkeys.slotOf(slot, inventory.items); return bagSlot === null ? null : inventory.items.get(bagSlot) ?? null; },
+    count: (slot) => hotkeys.count(slot, inventory.items),
+    use: useHotkey,
+  });
+  const hud = state.hud;
+  inventory.onChange(() => hud.refreshItemSlots());
+  hotkeys.onChange(() => hud.refreshItemSlots());
+  void hud.open();
   chat.enable((text) => online.say(text));
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
@@ -652,4 +695,5 @@ function initLogin() {
 
 resize();
 initLogin();
+setUpGuide();
 requestAnimationFrame(frame);

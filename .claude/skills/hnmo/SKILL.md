@@ -62,3 +62,8 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   `Func<HttpContext, Task<IResult>>`.
 - Inside this sandbox, run local HTTP tests without the proxy
   (`env -u HTTPS_PROXY -u HTTP_PROXY -u https_proxy -u http_proxy`).
+- `test1`'s first character (test1Dk) carries healing, mana and shield potions (good for item-use
+  tests); the `/item` chat command needs a game master account.
+- The in-game guide is `client/web/public/guide.html` (the (i) button): update its feature table
+  whenever a feature starts working.
+- `dotnet` lives in `~/.dotnet` in the cloud sandbox (`export PATH=$HOME/.dotnet:$PATH`).

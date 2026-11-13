@@ -1,10 +1,22 @@
 // The HUD at the bottom of the screen (main_frame.rml), as the desktop client's
 // CMainFrameWindow fills it: life, mana, shield (SD) and ability (AG) gauges with their numbers,
-// the experience bar (its digit and the progress within the current tenth), and the menu
-// buttons. Skill and potion slots come with the skills.
+// the experience bar (its digit and the progress within the current tenth), the menu buttons and
+// the potion slots Q W E R (CItemHotKey: the item each uses next, drawn as its 3D model, and how
+// many are left). Skill slots come with the skills.
 
 import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import { experienceForLevel, type CharacterStats } from '../game/stats.js';
+import type { Item } from '../game/inventory.js';
+import { drawItem } from './itemIcons.js';
+
+/** What the potion slots show and do. */
+export interface HudItemSlots {
+  /** The item a slot uses next (0-3: Q W E R), or null. */
+  item: (slot: number) => Item | null;
+  count: (slot: number) => number;
+  /** Right-click on a slot: use its item. */
+  use: (slot: number) => void;
+}
 
 
 interface HudModel extends RmlModel {
@@ -29,8 +41,12 @@ const clamp = (value: number, max: number) => Math.min(Math.max(0, value), Math.
 export class Hud {
   private doc: RmlDocument | null = null;
   private readonly model: HudModel;
+  private readonly slotCanvases: HTMLCanvasElement[] = [];
+  private readonly slotSignatures: string[] = ['', '', '', ''];
+  private hoveredSlot = -1;
+  private spinStart = 0;
 
-  constructor(private readonly stats: CharacterStats, actions: HudActions) {
+  constructor(private readonly stats: CharacterStats, actions: HudActions, private readonly itemSlots: HudItemSlots | null = null) {
     const noop = () => undefined;
     this.model = {
       hp_fraction: 0, mp_fraction: 0, sd_fraction: 0, ag_fraction: 0, exp_fraction: 0,
@@ -52,7 +68,10 @@ export class Hud {
       mainframe_window_click: actions.menu ?? noop,
       mainframe_friend_click: actions.friends ?? noop,
       mainframe_cshop_click: actions.cashShop ?? noop,
-      item_hotkey_hover: noop, item_hotkey_unhover: noop, item_hotkey_rightclick: noop,
+      // The hovered slot's item turns (RenderItem3DWithHover); a right click uses it (OnHotkeySlotRightClick).
+      item_hotkey_hover: (slot: number) => this.hoverSlot(slot),
+      item_hotkey_unhover: () => this.hoverSlot(-1),
+      item_hotkey_rightclick: noop, // the right button is told apart in open()
       skill_hotkey_click: noop, skill_hotkey_hover: noop, skill_unhover: noop, skill_current_click: noop, skill_current_hover: noop,
       skill_grid_click: noop, skill_grid_hover: noop, skill_pet_click: noop, skill_pet_hover: noop,
     };
@@ -63,6 +82,19 @@ export class Hud {
   async open(parent: HTMLElement = document.body): Promise<void> {
     this.doc = await openDocument('main_frame', this.model, { parent });
     this.doc.host.style.zIndex = '20';
+    for (let slot = 0; slot < 4; slot++) {
+      const frame = this.doc.$(`#item_slot_${slot}`);
+      const icon = this.doc.$(`#item_icon_${slot}`);
+      if (!frame || !icon) continue;
+      const canvas = document.createElement('canvas');
+      canvas.className = 'item-icon';
+      canvas.dataset.slot = String(slot);
+      canvas.style.display = 'none';
+      icon.replaceWith(canvas);
+      this.slotCanvases[slot] = canvas;
+      frame.addEventListener('contextmenu', (event) => event.preventDefault());
+      frame.addEventListener('mouseup', (event) => { if (event.button === 2) this.itemSlots?.use(slot); });
+    }
     this.place();
     this.refresh();
   }
@@ -110,6 +142,51 @@ export class Hud {
     m.exp_fraction = progress;
     m.exp_digit = String(digit);
     m.exp_tooltip = `EXP: ${s.experience}/${s.nextExperience}`;
+    this.refreshItemSlots();
     this.doc.update();
+  }
+
+  /** The potion slots: their items, counts and icons (call when the bag or the bindings change). */
+  refreshItemSlots(): void {
+    if (!this.doc || !this.itemSlots) return;
+    for (let slot = 0; slot < 4; slot++) {
+      const count = this.itemSlots.count(slot);
+      this.model[`item_slot_${slot}_count`] = count > 0 ? String(count) : '';
+      this.model[`item_slot_${slot}_hovered`] = this.hoveredSlot === slot;
+      const item = this.itemSlots.item(slot);
+      const canvas = this.slotCanvases[slot];
+      if (!canvas) continue;
+      const signature = item ? `${item.group}:${item.number}:${item.level}` : '';
+      canvas.style.display = item ? 'block' : 'none';
+      if (signature !== this.slotSignatures[slot]) {
+        this.slotSignatures[slot] = signature;
+        if (item) this.drawSlot(slot, item, null);
+      }
+    }
+    this.doc.update();
+  }
+
+  private drawSlot(slot: number, item: Item, spin: number | null): void {
+    const canvas = this.slotCanvases[slot];
+    const size = Math.max(20, Math.round(canvas.getBoundingClientRect().width * window.devicePixelRatio) || 40);
+    if (canvas.width !== size) { canvas.width = size; canvas.height = size; }
+    void drawItem(canvas, item, { spin, time: performance.now() / 1000 });
+  }
+
+  private hoverSlot(slot: number): void {
+    const previous = this.hoveredSlot;
+    this.hoveredSlot = slot;
+    this.spinStart = performance.now();
+    const item = previous >= 0 ? this.itemSlots?.item(previous) : null;
+    if (item) this.drawSlot(previous, item, null);
+    this.refreshItemSlots();
+    if (slot >= 0) requestAnimationFrame(() => this.spin(slot));
+  }
+
+  private spin(slot: number): void {
+    if (this.hoveredSlot !== slot) return;
+    const item = this.itemSlots?.item(slot);
+    if (item) this.drawSlot(slot, item, (performance.now() - this.spinStart) / 1000);
+    requestAnimationFrame(() => this.spin(slot));
   }
 }

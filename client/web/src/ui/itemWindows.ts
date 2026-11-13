@@ -168,6 +168,8 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   gridOrigin!: Point;
   onPickedChanged?: () => void;
   onHover?: (item: Item | null, event: PointerEvent | null) => void;
+  /** A right click on an item of the window (CInventoryActionController::HandleRightClick). */
+  onRightClick?: (slot: number, item: Item) => void;
 
   constructor({ inventory, picked, documentName, grid, storage, model }: {
     inventory: Inventory; picked: PickedItem; documentName: string; grid: ItemGrid; storage: number; model: M;
@@ -209,6 +211,7 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     this.panel.append(this.layer);
     this.panel.addEventListener('pointerdown', (event) => event.stopPropagation());
     this.panel.addEventListener('click', (event) => this.click(event));
+    this.panel.addEventListener('contextmenu', (event) => { event.preventDefault(); this.rightClick(event); });
     this.panel.addEventListener('pointermove', (event) => this.hover(event));
     this.panel.addEventListener('pointerleave', () => this.hover(null));
     this.layout();
@@ -297,6 +300,15 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     this.picked.pick({ storage: this.storageKind, slot }, this.items.get(slot)!);
     this.picked.follow(event);
     this.onPickedChanged?.();
+  }
+
+  rightClick(event: MouseEvent): void {
+    if (this.picked.source || this.inventory.pendingMove) return;
+    const point = this.pointOf(event);
+    const equipment = this.equipmentSlotAt(point);
+    const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
+    const item = slot === null ? undefined : this.items.get(slot);
+    if (slot !== null && item) this.onRightClick?.(slot, item);
   }
 
   hover(event: PointerEvent | null): void {

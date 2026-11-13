@@ -208,6 +208,12 @@ export function itemDefinition(group: number, number: number): ItemDefinition | 
   return catalog?.definitions.get(`${group}:${number}`) ?? null;
 }
 
+/** Every item definition with its group (empty until the catalog is loaded). */
+export function* allItemDefinitions(): Generator<{ group: number; definition: ItemDefinition }> {
+  if (!catalog) return;
+  for (const [key, definition] of catalog.definitions) yield { group: Number(key.split(':')[0]), definition };
+}
+
 export function itemName(group: number, number: number): string {
   return catalog?.names.get(`${group}:${number}`) ?? `Item ${group},${number}`;
 }

@@ -265,6 +265,14 @@ export class Inventory {
     return cells;
   }
 
+  // CInventoryCtrl::FindEmptySlot: the first slot, row by row, where the item fits; null for none.
+  firstEmptySlot(storage: Map<number, Item>, grid: ItemGrid, item: Item): number | null {
+    for (let index = 0; index < grid.columns * grid.rows; index++) {
+      if (this.fits(storage, grid, grid.firstSlot + index, item, null)) return grid.firstSlot + index;
+    }
+    return null;
+  }
+
   // Whether an item fits at a grid slot, leaving out the item being moved.
   fits(storage: Map<number, Item>, grid: ItemGrid, slot: number, item: Pick<Item, 'width' | 'height'>, ignoreSlot?: number | null): boolean {
     const cells = Inventory.cellsOf(grid, slot, item);
