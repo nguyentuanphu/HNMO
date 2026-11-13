@@ -40,6 +40,7 @@ import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
+import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
 import { MiniMap } from './ui/miniMap.js';
 import { installTouchControls } from './ui/touchControls.js';
 import { GateWatcher } from './game/gates.js';
@@ -98,6 +99,7 @@ export interface GameState {
   view?: { yaw: number; distance: number };
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
+  events?: EventSystem;
 }
 
 declare global {
@@ -951,6 +953,10 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     hero: { name: character.name, baseClass: character.classIndex, level: () => stats.level, money: () => inventory.money, bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12).map(([, item]) => item) },
     closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
   earlyPackets.forEach((bytes) => quests.handle(bytes));
+  // Blood Castle, Devil Square, Chaos Castle: entry windows, tickets, time, countdowns, results (ui/eventWindows.ts).
+  state.events = setUpEvents({ connection, heroName: character.name, hero: () => ({ level: stats.level, classIndex: character.classIndex, master: character.master ?? false }),
+    mapNumber: () => state.mapNumber, flags: () => state.world?.flags ?? null, safeZone: inSafeZone, message: (text) => chat.add(text, 'system'), audio: sounds.audio,
+    closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, inventory });
   void new PartyList(party, {
     heroName: character.name,
     inSight: (name) => name === character.name || [...online.characters.values()].some((c) => c.kind === 'player' && c.name === name),

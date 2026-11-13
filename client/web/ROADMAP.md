@@ -69,9 +69,11 @@ messenger and letters, whisper/party/guild chat, duels, Gens.
 4. ✅ **(extra)** sell junk to NPCs; **(extra)** stop timer; **(extra)** alerts on death / full bag.
 
 ## 9. Events
-Blood Castle, Devil Square, Chaos Castle, Illusion Temple, Kalima, Crywolf, Castle Siege,
-Doppelganger, Imperial Guardian, Kanturu, Raklion, lucky coins, golden bowman — enter windows,
-timers, scores, rewards.
+1. 🟡 Blood Castle, Devil Square, Chaos Castle (`game/events.ts`, `ui/eventWindows.ts`): entry windows,
+   tickets, refusals, the time window, countdowns, terrain changes, results, NPC lines done; the gate and
+   bridge animations, the weapon on its carrier, the rush pose, free tickets and on-screen golden notices next.
+2. Illusion Temple, Kalima, Crywolf, Castle Siege, Doppelganger, Imperial Guardian, Kanturu, Raklion,
+   lucky coins, golden bowman — enter windows, timers, scores, rewards.
 
 ## 10. Shell and interface
 1. ✅ **(extra)** The (i) button: an in-game guide of what to play and what each feature does
