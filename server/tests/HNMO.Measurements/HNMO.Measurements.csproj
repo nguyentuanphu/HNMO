@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable;CS4014;VSTHRD110;VSTHRD100</WarningsAsErrors>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>HNMO.Measurements</AssemblyName>
+    <RootNamespace>HNMO.Measurements</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
+    <Compile Include="..\..\src\SharedGlobalUsings.cs" Link="SharedGlobalUsings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\src\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ChatServer\HNMO.ChatServer.csproj" />
+    <ProjectReference Include="..\..\src\ConnectServer\HNMO.ConnectServer.csproj" />
+    <ProjectReference Include="..\..\src\Persistence\EntityFramework\HNMO.Persistence.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\src\Persistence\Initialization\HNMO.Persistence.Initialization.csproj" />
+    <ProjectReference Include="..\..\src\PlugIns\HNMO.PlugIns.csproj" />
+  </ItemGroup>
+</Project>

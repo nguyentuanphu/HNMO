@@ -1,0 +1,158 @@
+#include "stdafx.h"
+
+#ifdef _EDITOR
+
+#include "MuEditorConfig.h"
+#include <charconv>
+#include <fstream>
+#include <sstream>
+#include <filesystem>
+#include <algorithm>
+
+CMuEditorConfig& CMuEditorConfig::GetInstance()
+{
+    static CMuEditorConfig instance;
+    return instance;
+}
+
+CMuEditorConfig::CMuEditorConfig()
+    : m_language("en")
+{
+}
+
+std::string CMuEditorConfig::Trim(const std::string& str)
+{
+    size_t start = str.find_first_not_of(" \t\r\n");
+    if (start == std::string::npos)
+        return "";
+
+    size_t end = str.find_last_not_of(" \t\r\n");
+    return str.substr(start, end - start + 1);
+}
+
+void CMuEditorConfig::Load()
+{
+    std::ifstream file(m_configPath);
+    if (!file.is_open())
+        return; // File doesn't exist yet, use defaults
+
+    std::string currentSection;
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        line = Trim(line);
+
+        // Skip empty lines and comments
+        if (line.empty() || line[0] == ';' || line[0] == '#')
+            continue;
+
+        // Check for section header
+        if (line[0] == '[' && line[line.length() - 1] == ']')
+        {
+            currentSection = line.substr(1, line.length() - 2);
+            continue;
+        }
+
+        // Parse key=value
+        size_t pos = line.find('=');
+        if (pos != std::string::npos)
+        {
+            std::string key = Trim(line.substr(0, pos));
+            std::string value = Trim(line.substr(pos + 1));
+
+            if (currentSection == "General")
+            {
+                if (key == "Language")
+                {
+                    m_language = value;
+                }
+            }
+            else if (currentSection == "SkillEditorColumnVisibility")
+            {
+                m_skillEditorColumnVisibility[key] = (value == "1" || value == "true");
+            }
+            else if (currentSection == "HNMO")
+            {
+                if (key == "AdminPanelUrl")
+                {
+                    m_hnmoAdminPanelUrl = value;
+                }
+            }
+            else if (currentSection == "ServerList")
+            {
+                if (key == "ShowOfflineServers")
+                {
+                    m_showOfflineServers = value == "1" || value == "true";
+                }
+                else if (key == "OfflineServerLoad")
+                {
+                    int load = m_offlineServerLoad;
+                    std::from_chars(value.data(), value.data() + value.size(), load);
+                    m_offlineServerLoad = load;
+                }
+            }
+        }
+    }
+
+    file.close();
+}
+
+void CMuEditorConfig::Save()
+{
+    // Create MuEditor directory if it doesn't exist
+    std::filesystem::create_directory("MuEditor");
+
+    std::ofstream file(m_configPath);
+    if (!file.is_open())
+        return;
+
+    // Write header
+    file << "; MU Editor Configuration File\n";
+    file << "; Generated automatically - Edit with care\n\n";
+
+    // Write [General] section
+    file << "[General]\n";
+    file << "Language=" << m_language << "\n\n";
+
+    // Write [SkillEditorColumnVisibility] section
+    file << "[SkillEditorColumnVisibility]\n";
+    for (const auto& col : m_skillEditorColumnVisibility)
+    {
+        file << col.first << "=" << (col.second ? "1" : "0") << "\n";
+    }
+
+    // [HNMO]: the server of the Item Sync window's Update from server. Its API key is not
+    // kept here (MU_HNMO_API_KEY).
+    file << "\n[HNMO]\n";
+    file << "AdminPanelUrl=" << m_hnmoAdminPanelUrl << "\n";
+
+    // [ServerList]: the Server List window's preview of the servers the connect server didn't send.
+    file << "\n[ServerList]\n";
+    file << "ShowOfflineServers=" << (m_showOfflineServers ? "1" : "0") << "\n";
+    file << "OfflineServerLoad=" << m_offlineServerLoad << "\n";
+
+    file.close();
+}
+
+std::string CMuEditorConfig::GetLanguage() const
+{
+    return m_language;
+}
+
+void CMuEditorConfig::SetLanguage(const std::string& language)
+{
+    m_language = language;
+}
+
+const std::string& CMuEditorConfig::GetHNMOAdminPanelUrl() const
+{
+    return m_hnmoAdminPanelUrl;
+}
+
+void CMuEditorConfig::SetHNMOAdminPanelUrl(const std::string& url)
+{
+    m_hnmoAdminPanelUrl = url;
+}
+
+#endif // _EDITOR

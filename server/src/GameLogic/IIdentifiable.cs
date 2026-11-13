@@ -1,0 +1,16 @@
+﻿// <copyright file="IIdentifiable.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic;
+
+/// <summary>
+/// Interface for a identifiable object.
+/// </summary>
+public interface IIdentifiable
+{
+    /// <summary>
+    /// Gets the identifier.
+    /// </summary>
+    ushort Id { get; }
+}

@@ -1,0 +1,245 @@
+// stdafx.h : include file for standard system include files,
+#pragma once
+
+//warning
+#pragma warning( disable : 4067 )
+#pragma warning( disable : 4786 )
+#pragma warning( disable : 4800 )
+#pragma warning( disable : 4996 )
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4237 )
+#pragma warning( disable : 4305 )
+#pragma warning( disable : 4503 )
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4091 )
+#pragma warning( disable : 4819 )
+#pragma warning( disable : 4505 )
+#pragma warning( disable : 4100 )
+#pragma warning( disable : 4127 )
+#pragma warning( disable : 4702 )
+#pragma warning( disable : 4838 )
+#pragma warning( disable : 5208 )
+//#pragma warning( disable : 4482 )
+//#pragma warning( disable : 4700 )
+//#pragma warning( disable : 4748 )
+//#pragma warning( disable : 4786 )
+#pragma warning( disable : 28159 )
+#pragma warning( disable : 26812 )
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN
+
+// Use 32-bit time_t only for 32-bit MSVC builds. This avoids conflicts
+// with 64-bit toolchains such as x86_64-w64-mingw32, which require
+// 64-bit time_t.
+#if defined(_MSC_VER) && !defined(_WIN64)
+#ifndef _USE_32BIT_TIME_T
+#define _USE_32BIT_TIME_T
+#endif //_USE_32BIT_TIME_T
+#endif
+
+#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_NONSTDC_NO_DEPRECATE
+
+// Cross-platform debug breakpoint helper.
+#ifdef _MSC_VER
+#define MU_DEBUG_BREAK() __debugbreak()
+#else
+#define MU_DEBUG_BREAK() __builtin_trap()
+#endif
+
+#pragma warning( push, 3 )
+
+// Win32-only system headers. Guarded behind _WIN32 so the PCH can be parsed by
+// non-Windows toolchains. On Windows _WIN32 is always defined (for both 32-bit
+// and 64-bit targets), so every include below is taken and the build stays
+// unchanged. Win32 types/macros still referenced by portable code past the PCH
+// (e.g. the project headers further down) are a separate, case-by-case follow-up.
+#ifdef _WIN32
+#include <windows.h>
+
+// MinGW workaround: Allow swprintf usage
+#if defined(__MINGW32__) || defined(__MINGW64__)
+#undef swprintf
+#endif
+
+#include <winsock2.h>
+#include <mmsystem.h>
+#include <shellapi.h>
+#include <tchar.h>
+#include <mbstring.h>
+#include <conio.h>
+#else // !_WIN32
+// Provide the Win32 scalar/handle types and the MSVC secure-CRT (_s) functions
+// the engine uses, so the ~350 PCH consumers parse on non-Windows toolchains
+// (issue #462, Phase 1).
+#include "Core/Platform/WinCompat.h"
+#include "Core/Platform/SecureCrt.h"
+#include "Core/Platform/WinApiShims.h"
+#include "Core/Platform/WinUser.h"
+#include "Core/Platform/WinNls.h"
+#include "Core/Platform/WinGdi.h"
+#include "Core/Platform/WinFile.h"
+#include "Core/Platform/WinFileFind.h"
+#include "Core/Platform/Imm.h"
+#endif // _WIN32
+
+//c runtime
+#include <stdio.h>
+#include <stdlib.h>
+#if !defined(__APPLE__)
+#include <malloc.h>
+#endif
+#include <memory.h>
+#include <assert.h>
+#include <time.h>
+#include <math.h>
+#include <stdarg.h>
+
+#include <string>
+#include <list>
+#include <map>
+#include <deque>
+#include <algorithm>
+#include <type_traits>
+#include <vector>
+#include <queue>
+
+#pragma warning( pop )
+
+// Cross-platform swprintf replacement
+// MinGW blocks swprintf, so we provide mu_swprintf as a safe cross-platform alternative
+
+// Undefine MinGW's blocking macro first
+#undef swprintf
+#undef swprintf_instead_use_StringCbPrintfW_or_StringCchPrintfW
+
+// Use inline template functions instead of macros to avoid issues with #ifdef in arguments
+#ifdef _MSC_VER
+  // MSVC: swprintf doesn't need buffer size
+  template<typename... Args>
+  inline int mu_swprintf(wchar_t* buffer, const wchar_t* format, Args... args) {
+      return swprintf(buffer, format, args...);
+  }
+  // mu_swprintf_s with explicit size
+  template<typename... Args>
+  inline int mu_swprintf_s(wchar_t* buffer, size_t size, const wchar_t* format, Args... args) {
+      return swprintf_s(buffer, size, format, args...);
+  }
+  // mu_swprintf_s with array - auto-deduce size (like MSVC's swprintf_s)
+  template<size_t N, typename... Args>
+  inline int mu_swprintf_s(wchar_t (&buffer)[N], const wchar_t* format, Args... args) {
+      return swprintf_s(buffer, N, format, args...);
+  }
+#else
+  // GCC/MinGW/Clang: use std::swprintf with an explicit buffer size. For an array
+  // the bound is its real size. For a plain pointer, ask the compiler for the size
+  // it can see: the same size glibc's _FORTIFY_SOURCE checks swprintf against, so the
+  // two can't disagree -- once inlining reveals that the pointer aims into a smaller
+  // buffer, the call truncates instead of aborting. Only when the size is unknown
+  // (heap, hidden object) does the historical 1024 assumption remain.
+#ifndef MU_SWPRINTF_DEFINED
+#define MU_SWPRINTF_DEFINED
+  // Historical assumption for buffers whose size the compiler cannot see.
+  inline constexpr size_t kMuSwprintfUnknownBufferChars = 1024;
+  template<typename Buf, typename... Args>
+  inline int mu_swprintf(Buf&& buffer, const wchar_t* format, Args... args) {
+      using Array = std::remove_reference_t<Buf>;
+      if constexpr (std::is_array_v<Array>)
+          return std::swprintf(buffer, std::extent_v<Array>, format, args...);
+      else
+      {
+          // Object size type 1 asks for the maximum size: exactly what glibc's
+          // _FORTIFY_SOURCE checks swprintf against, so the two can't disagree.
+#if defined(__has_builtin)
+#if __has_builtin(__builtin_dynamic_object_size)
+          const size_t bytes = __builtin_dynamic_object_size(buffer, 1);
+#else
+          const size_t bytes = __builtin_object_size(buffer, 1);
+#endif
+#else
+          const size_t bytes = __builtin_object_size(buffer, 1);
+#endif
+          // Unknown (or empty) size keeps the historical assumption; a truly smaller
+          // buffer truncates instead of aborting.
+          const size_t count = (bytes == static_cast<size_t>(-1) || bytes == 0)
+              ? kMuSwprintfUnknownBufferChars
+              : bytes / sizeof(wchar_t);
+          return std::swprintf(buffer, count, format, args...);
+      }
+  }
+  // mu_swprintf_s with explicit size
+  template<typename... Args>
+  inline int mu_swprintf_s(wchar_t* buffer, size_t size, const wchar_t* format, Args... args) {
+      return std::swprintf(buffer, size, format, args...);
+  }
+  // mu_swprintf_s with array - auto-deduce size (compatible with MSVC swprintf_s)
+  template<size_t N, typename... Args>
+  inline int mu_swprintf_s(wchar_t (&buffer)[N], const wchar_t* format, Args... args) {
+      return std::swprintf(buffer, N, format, args...);
+  }
+#endif
+#endif
+
+//opengl
+#include <gl/glew.h>
+#include <gl/GL.h>
+#include "Render/Renderer/GLCompatShim.h"
+
+//patch
+//winmain
+#include "App/Platform/Windows/Winmain.h"
+#include "Core/Globals/Defined_Global.h"
+
+//client
+#include "Core/Globals/_define.h"
+#include "Core/Globals/_enum.h"
+#include "Core/Globals/_types.h"
+#include "Core/Globals/_struct.h"
+#include "Dotnet/PacketFunctions_CommonEnums.h"
+#include "Dotnet/PacketFunctions_ClientToServer_Enums.h"
+#include "Core/Utilities/_GlobalFunctions.h"
+#include "Core/Globals/_TextureIndex.h"
+#include "UI/Core/WindowCommon.h"
+#include "Core/Math/ZzzMathLib.h"
+
+// Reference resolution -- all UI coordinates and screen-space math use this as the base.
+// Must be declared BEFORE ZzzOpenglUtil.h because BeginOpengl() uses them as default args.
+// g_fScreenRate_x/y (declared further below) scale from reference to actual window size.
+inline constexpr int REFERENCE_WIDTH = 640;
+inline constexpr int REFERENCE_HEIGHT = 480;
+
+#include "Render/Textures/ZzzOpenglUtil.h"
+
+#include "Data/Translation/MultiLanguage.h"
+
+
+#include "Core/Utilities/Log/muConsoleDebug.h"
+#include "Core/Utilities/Log/ErrorReport.h"
+#include "Core/Utilities/Log/WindowsConsole.h"
+
+// Redirect console output to ImGui when editor is enabled
+#ifdef _EDITOR
+#include "../MuEditor/UI/Console/MuEditorConsoleRedirectUI.h"
+#endif
+
+#include "World/MapInfra/w_MapHeaders.h"
+
+#include "Core/Globals/_crypt.h"
+
+// The language folder below Data/Local (e.g. "Eng"), defined in MultiLanguage.cpp. Not an inline variable: in a Debug
+// build its constructor would make MSVC force it into every program built with the precompiled header.
+extern std::wstring g_strSelectedML;
+// Active logical-to-window transform. Screen overlays use full-window scale;
+// panel UI uses centered, capped scale plus offsets.
+inline float g_fScreenRate_x = 0;
+inline float g_fScreenRate_y = 0;
+inline float g_fScreenOffset_x = 0;
+inline float g_fScreenOffset_y = 0;
+inline float g_fTypographyScale = 1.0f;
+inline float g_fWindowMouseX = 0;
+inline float g_fWindowMouseY = 0;

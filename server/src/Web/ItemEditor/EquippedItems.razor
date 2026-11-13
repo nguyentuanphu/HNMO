@@ -1,0 +1,25 @@
+﻿@inherits Microsoft.AspNetCore.Components.Forms.InputBase<HNMO.DataModel.Entities.ItemStorage>
+
+<div class=@($"equipped-container {(this.DraggedItem is null ? string.Empty : "drag-active")}")>
+    @for (byte slot = InventoryConstants.LeftHandSlot; slot < InventoryConstants.EquippableSlotsCount; slot++)
+    {
+        var targetSlot = slot;
+        <div
+            class=@($"{ClassNames[targetSlot]} {this.GetDropPreviewClass(targetSlot)}")
+            @ondragover="() => this.OnDragOver(targetSlot)"
+            @ondragover:preventDefault
+            @ondrop="() => this.DropAsync(targetSlot)"
+            @ondrop:preventDefault>
+            @if (this.GetViewItemOfSlot(targetSlot) is { } viewItem)
+            {
+                <MuItem
+                    Model="viewItem"
+                    OnClick="async () => await this.SetSelectedItemAsync(viewItem)"
+                    OnItemMoved="this.OnItemMovedAsync"
+                    OnDragStarted="this.OnDragStarted"
+                    OnDragEnded="this.OnDragEnded"
+                    IsSelected="this.SelectedItem == viewItem.Item"/>
+            }
+        </div>
+    }
+</div>

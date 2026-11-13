@@ -1,0 +1,36 @@
+# The server for the in-game tests (docs/in-game-tests.md): HNMO in demo mode.
+#
+# -demo keeps the data in memory and creates HNMO's test data on every start,
+# so each test run starts from the same accounts, characters and items.
+# Recreating the container resets it; the InGameTests build target does that
+# before every run.
+#
+# Only the game server of channel 1 is published, on host port 56901: the test
+# clients log in to it directly, without the connect server. Nothing else
+# collides with a local HNMO on its default ports, so both can run at once.
+#   podman compose -f tools/InGameTests/docker-compose.yml up -d --force-recreate
+#   podman compose -f tools/InGameTests/docker-compose.yml down
+# (docker compose works the same way.)
+name: mumain-in-game-tests
+
+services:
+  hnmo:
+    # Built from the HNMO server source next to this repository; set
+    # HNMO_SERVER_SOURCE to use another checkout. The scenarios depend on the
+    # server's demo test data (accounts, their characters and items).
+    image: hnmo-server:in-game-tests
+    build:
+      context: ${HNMO_SERVER_SOURCE:-../../../server}/src
+      dockerfile: Startup/Dockerfile
+    # The image starts with -autostart; -demo is added to it.
+    command: ["-demo"]
+    # Where the wandering NPCs are: HNMO logs every move of Marlon (and the
+    # wandering merchants) at Debug level, with the game server it happened on
+    # in the scope. The tester reads the log to walk straight to Marlon instead
+    # of looking for him on all four of his maps.
+    environment:
+      Serilog__MinimumLevel__Override__WanderingMerchantsPlugIn: "Debug"
+      Serilog__WriteTo__0__Args__outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message} {Properties}{NewLine}{Exception}"
+    ports:
+      # Loopback only: the test data's accounts have public passwords.
+      - "127.0.0.1:56901:55901"

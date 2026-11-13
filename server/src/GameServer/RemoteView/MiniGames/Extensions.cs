@@ -1,0 +1,176 @@
+﻿// <copyright file="Extensions.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameServer.RemoteView.MiniGames;
+
+using HNMO.GameLogic.PlayerActions.MiniGames;
+using HNMO.Network.Packets.ServerToClient;
+
+/// <summary>
+/// Extension methods for various classes regarding views of mini games.
+/// </summary>
+public static class Extensions
+{
+    /// <summary>
+    /// Converts the <see cref="EnterResult"/> to the corresponding <see cref="DevilSquareEnterResult.EnterResult"/>.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The converted result.</returns>
+    public static DevilSquareEnterResult.EnterResult ToDevilSquareEnterResult(this EnterResult enterResult)
+    {
+        return enterResult switch
+        {
+            EnterResult.Success => DevilSquareEnterResult.EnterResult.Success,
+            EnterResult.Failed => DevilSquareEnterResult.EnterResult.Failed,
+            EnterResult.NotOpen => DevilSquareEnterResult.EnterResult.NotOpen,
+            EnterResult.Full => DevilSquareEnterResult.EnterResult.Full,
+            EnterResult.CharacterLevelTooLow => DevilSquareEnterResult.EnterResult.CharacterLevelTooLow,
+            EnterResult.CharacterLevelTooHigh => DevilSquareEnterResult.EnterResult.CharacterLevelTooHigh,
+            _ => DevilSquareEnterResult.EnterResult.Failed,
+        };
+    }
+
+    /// <summary>
+    /// Converts the <see cref="EnterResult"/> to the corresponding <see cref="BloodCastleEnterResult.EnterResult"/>.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The converted result.</returns>
+    public static BloodCastleEnterResult.EnterResult ToBloodCastleEnterResult(this EnterResult enterResult)
+    {
+        return enterResult switch
+        {
+            EnterResult.Success => BloodCastleEnterResult.EnterResult.Success,
+            EnterResult.Failed => BloodCastleEnterResult.EnterResult.Failed,
+            EnterResult.NotOpen => BloodCastleEnterResult.EnterResult.NotOpen,
+            EnterResult.Full => BloodCastleEnterResult.EnterResult.Full,
+            EnterResult.CharacterLevelTooLow => BloodCastleEnterResult.EnterResult.CharacterLevelTooLow,
+            EnterResult.CharacterLevelTooHigh => BloodCastleEnterResult.EnterResult.CharacterLevelTooHigh,
+            _ => BloodCastleEnterResult.EnterResult.Failed,
+        };
+    }
+
+    /// <summary>
+    /// Converts the <see cref="EnterResult"/> to the corresponding <see cref="BloodCastleEnterResult.EnterResult"/>.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The converted result.</returns>
+    public static ChaosCastleEnterResult.EnterResult ToChaosCastleEnterResult(this EnterResult enterResult)
+    {
+        return enterResult switch
+        {
+            EnterResult.Success => ChaosCastleEnterResult.EnterResult.Success,
+            EnterResult.Failed => ChaosCastleEnterResult.EnterResult.Failed,
+            EnterResult.NotOpen => ChaosCastleEnterResult.EnterResult.NotOpen,
+            EnterResult.Full => ChaosCastleEnterResult.EnterResult.Full,
+            EnterResult.CharacterLevelTooLow => ChaosCastleEnterResult.EnterResult.Failed,
+            EnterResult.CharacterLevelTooHigh => ChaosCastleEnterResult.EnterResult.Failed,
+            EnterResult.NotEnoughMoney => ChaosCastleEnterResult.EnterResult.NotEnoughMoney,
+            EnterResult.PlayerKillerCantEnter => ChaosCastleEnterResult.EnterResult.PlayerKillerCantEnter,
+            _ => ChaosCastleEnterResult.EnterResult.Failed,
+        };
+    }
+
+    /// <summary>
+    /// Converts the <see cref="EnterResult"/> to the corresponding <see cref="DoppelgangerEnterResult.EnterResult"/>.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The converted result.</returns>
+    public static DoppelgangerEnterResult.EnterResult ToDoppelgangerEnterResult(this EnterResult enterResult)
+    {
+        return enterResult switch
+        {
+            EnterResult.Success => DoppelgangerEnterResult.EnterResult.Success,
+            EnterResult.NotOpen => DoppelgangerEnterResult.EnterResult.AlreadyStarted,
+            EnterResult.Full => DoppelgangerEnterResult.EnterResult.AlreadyStarted,
+            EnterResult.PlayerKillerCantEnter => DoppelgangerEnterResult.EnterResult.PlayerKiller,
+            _ => DoppelgangerEnterResult.EnterResult.Failed,
+        };
+    }
+
+    /// <summary>
+    /// Converts the <see cref="EnterResult"/> to the result value of the <see cref="IllusionTempleEnterResult"/>.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The converted result.</returns>
+    /// <remarks>
+    /// The client uses distinct result bytes for admission and ticket failures (3), a full event (4),
+    /// and a player-killer rejection (7). Preserve these messages instead of collapsing every failure
+    /// into the not-open result (1).
+    /// </remarks>
+    public static byte ToIllusionTempleEnterResult(this EnterResult enterResult)
+    {
+        return enterResult switch
+        {
+            EnterResult.Success => 0,
+            EnterResult.NotOpen => 1,
+            EnterResult.Full => 4,
+            EnterResult.PlayerKillerCantEnter => 7,
+            _ => 3,
+        };
+    }
+
+    /// <summary>
+    /// Converts the internal character class number into the number the game client expects in the
+    /// illusion temple result packet, so the score board shows the right class next to each player.
+    /// </summary>
+    /// <param name="characterClassNumber">The internal character class number.</param>
+    /// <returns>The class number as the client knows it.</returns>
+    /// <remarks>
+    /// The client reads the class line from the lower nibble (0 Dark Wizard, 1 Dark Knight, 2 Fairy
+    /// Elf, 3 Magic Gladiator, 4 Dark Lord, 5 Summoner, 6 Rage Fighter) and the evolution step from
+    /// the upper one (0 base class, 2 second class, 3 master class), while the internal numbering
+    /// packs both the other way around. This was confirmed on a live client: two players of different
+    /// lines were shown as the same class, because the values sent at the time happened to share their
+    /// lower nibble.
+    /// </remarks>
+    public static byte ToIllusionTempleCharacterClass(this byte characterClassNumber)
+    {
+        // The internal number is line * 4 + evolution step.
+        var line = (byte)(characterClassNumber / 4);
+        var evolution = (byte)(characterClassNumber % 4);
+
+        // Magic Gladiator, Dark Lord and Rage Fighter have no second class, so their master class sits
+        // at internal step 1 (Duel Master 13, Lord Emperor 17, Fist Master 25) while every other line
+        // uses step 3 for it. Without this, those three would be sent with an evolution step the client
+        // doesn't know.
+        if (evolution == 1)
+        {
+            evolution = 3;
+        }
+
+        return (byte)((evolution << 4) | (line & 0x0F));
+    }
+
+    /// <summary>
+    /// Converts the enter result to the one of the imperial guardian event.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The enter result of the imperial guardian event.</returns>
+    /// <remarks>
+    /// The client knows no result for a character level which is too high, so this and all other results
+    /// without a counterpart are shown as <see cref="ImperialGuardianEnterResult.EnterResult.NotOpen"/>.
+    /// </remarks>
+    public static ImperialGuardianEnterResult.EnterResult ToImperialGuardianEnterResult(this EnterResult enterResult)
+    {
+        return enterResult switch
+        {
+            EnterResult.Success => ImperialGuardianEnterResult.EnterResult.Success,
+            EnterResult.Full => ImperialGuardianEnterResult.EnterResult.Full,
+            EnterResult.CharacterLevelTooLow => ImperialGuardianEnterResult.EnterResult.CharacterLevelTooLow,
+            _ => ImperialGuardianEnterResult.EnterResult.NotOpen,
+        };
+    }
+
+    /// <summary>
+    /// Converts the <see cref="EnterResult"/> to the corresponding <see cref="KanturuEnterResult.EnterResult"/>.
+    /// </summary>
+    /// <param name="enterResult">The enter result.</param>
+    /// <returns>The converted result.</returns>
+    public static KanturuEnterResult.EnterResult ToKanturuEnterResult(this EnterResult enterResult)
+    {
+        return enterResult == EnterResult.Success
+            ? KanturuEnterResult.EnterResult.Success
+            : KanturuEnterResult.EnterResult.Failed;
+    }
+}

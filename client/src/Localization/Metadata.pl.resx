@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Name" xml:space="preserve">
+    <value>Nazwa</value>
+  </data>
+  <data name="Two-Hand" xml:space="preserve">
+    <value>Dwuręczny</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Poziom</value>
+  </data>
+  <data name="Slot" xml:space="preserve">
+    <value>Slot</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Umiejętność</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Szerokość</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Wysokość</value>
+  </data>
+  <data name="Min Damage" xml:space="preserve">
+    <value>Min. obrażenia</value>
+  </data>
+  <data name="Max Damage" xml:space="preserve">
+    <value>Maks. obrażenia</value>
+  </data>
+  <data name="Block Rate" xml:space="preserve">
+    <value>Szansa na blok</value>
+  </data>
+  <data name="Defense" xml:space="preserve">
+    <value>Obrona</value>
+  </data>
+  <data name="Magic Defense" xml:space="preserve">
+    <value>Obrona magiczna</value>
+  </data>
+  <data name="Attack Speed" xml:space="preserve">
+    <value>Prędkość ataku</value>
+  </data>
+  <data name="Move Speed" xml:space="preserve">
+    <value>Prędkość ruchu</value>
+  </data>
+  <data name="Durability" xml:space="preserve">
+    <value>Wytrzymałość</value>
+  </data>
+  <data name="Magic Durability" xml:space="preserve">
+    <value>Trwałość magiczna</value>
+  </data>
+  <data name="Magic Power" xml:space="preserve">
+    <value>Moc magiczna</value>
+  </data>
+  <data name="Req Strength" xml:space="preserve">
+    <value>Wymagana siła</value>
+  </data>
+  <data name="Req Dexterity" xml:space="preserve">
+    <value>Wymagana zwinność</value>
+  </data>
+  <data name="Req Energy" xml:space="preserve">
+    <value>Wymagana energia</value>
+  </data>
+  <data name="Req Vitality" xml:space="preserve">
+    <value>Wymagana witalność</value>
+  </data>
+  <data name="Req Leadership" xml:space="preserve">
+    <value>Wymagane dowodzenie</value>
+  </data>
+  <data name="Req Level" xml:space="preserve">
+    <value>Wymagany poziom</value>
+  </data>
+  <data name="Sell Value" xml:space="preserve">
+    <value>Wartość sprzedaży</value>
+  </data>
+  <data name="Buy Price" xml:space="preserve">
+    <value>Cena zakupu</value>
+  </data>
+  <data name="Attack Type" xml:space="preserve">
+    <value>Typ ataku</value>
+  </data>
+  <data name="DW/SM" xml:space="preserve">
+    <value>DW/SM</value>
+  </data>
+  <data name="DK/BK" xml:space="preserve">
+    <value>DK/BK</value>
+  </data>
+  <data name="ELF/ME" xml:space="preserve">
+    <value>ELF/ME</value>
+  </data>
+  <data name="MG/DM" xml:space="preserve">
+    <value>MG/DM</value>
+  </data>
+  <data name="DL/LE" xml:space="preserve">
+    <value>DL/LE</value>
+  </data>
+  <data name="SUM/BS" xml:space="preserve">
+    <value>SUM/BS</value>
+  </data>
+  <data name="RF/FM" xml:space="preserve">
+    <value>RF/FM</value>
+  </data>
+  <data name="Ice Resistance" xml:space="preserve">
+    <value>Odporność na lód</value>
+  </data>
+  <data name="Poison Resistance" xml:space="preserve">
+    <value>Odporność na truciznę</value>
+  </data>
+  <data name="Lightning Resistance" xml:space="preserve">
+    <value>Odporność na błyskawice</value>
+  </data>
+  <data name="Fire Resistance" xml:space="preserve">
+    <value>Odporność na ogień</value>
+  </data>
+  <data name="Earth Resistance" xml:space="preserve">
+    <value>Odporność na ziemię</value>
+  </data>
+  <data name="Wind Resistance" xml:space="preserve">
+    <value>Odporność na wiatr</value>
+  </data>
+  <data name="Water Resistance" xml:space="preserve">
+    <value>Odporność na wodę</value>
+  </data>
+  <data name="Resistance 7" xml:space="preserve">
+    <value>Odporność 7</value>
+  </data>
+  <data name="Damage" xml:space="preserve">
+    <value>Obrażenia</value>
+  </data>
+  <data name="Mana" xml:space="preserve">
+    <value>Mana</value>
+  </data>
+  <data name="AG Cost" xml:space="preserve">
+    <value>Koszt AG</value>
+  </data>
+  <data name="Range" xml:space="preserve">
+    <value>Zasięg</value>
+  </data>
+  <data name="Cooldown" xml:space="preserve">
+    <value>Czas odnowienia</value>
+  </data>
+  <data name="Mastery Type" xml:space="preserve">
+    <value>Typ mistrzostwa</value>
+  </data>
+  <data name="Use Type" xml:space="preserve">
+    <value>Typ użycia</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Marka</value>
+  </data>
+  <data name="Kill Count" xml:space="preserve">
+    <value>Liczba zabójstw</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Ranga</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Ikona</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Item Skill" xml:space="preserve">
+    <value>Umiejętność przedmiotu</value>
+  </data>
+  <data name="Is Damage" xml:space="preserve">
+    <value>Zadaje obrażenia</value>
+  </data>
+  <data name="Effect" xml:space="preserve">
+    <value>Efekt</value>
+  </data>
+  <data name="Duty 0" xml:space="preserve">
+    <value>Funkcja w gildii 0</value>
+  </data>
+  <data name="Duty 1" xml:space="preserve">
+    <value>Funkcja w gildii 1</value>
+  </data>
+  <data name="Duty 2" xml:space="preserve">
+    <value>Funkcja w gildii 2</value>
+  </data>
+</root>

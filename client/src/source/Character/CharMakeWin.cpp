@@ -1,0 +1,642 @@
+//*****************************************************************************
+// File: CharMakeWin.cpp
+//*****************************************************************************
+
+#include "stdafx.h"
+#include "CharMakeWin.h"
+#include "Core/Input/Input.h"
+#include "UI/Core/SceneUICoordinator.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Network/Server/WSclient.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Camera/CameraProjection.h"
+#include "Engine/Object/CharacterAttachments.h"
+#include "Audio/DSPlaySound.h"
+#include "Engine/AI/ZzzAI.h"
+#include "Scenes/SceneCore.h"
+#include "I18N/All.h"
+#include "Core/Globals/_enum.h"
+
+#include "App/Platform/Windows/Local.h"
+#include "CharacterManager.h"
+#include "ClassStep.h"
+
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <cstdint>
+#include <cwchar>
+#include <iterator>
+#include <string>
+
+#include "Render/RmlUi/RmlUiRuntime.h"
+#include "UI/RmlBridge/RmlTheme.h"
+#include "Core/Utilities/StringUtils.h"
+#include <RmlUi/Core/ElementDocument.h>
+#include <RmlUi/Core/Element.h>
+#include <RmlUi/Core/Event.h>
+
+namespace
+{
+    constexpr std::size_t kMinCharacterNameLength = 4;
+
+    // A class's name, indexed by CLASS_*.
+    const wchar_t* const* const kJobNames[] = {
+        &I18N::Game::DarkWizard, &I18N::Game::DarkKnight, &I18N::Game::Elf,        &I18N::Game::MagicGladiator,
+        &I18N::Game::DarkLord,   &I18N::Game::Summoner,   &I18N::Game::RageFighter};
+
+    // A class's description, indexed by CLASS_*.
+    const wchar_t* const* const kJobDescriptions[] = {
+        &I18N::Game::KingdomOfWizardsDescendantOfArka,      &I18N::Game::KingdomOfKnightsDescendantOfLorencia,
+        &I18N::Game::KingdomOfElvesDescendantsOfNoria,      &I18N::Game::ComplexCharacterThatHasACharacteristics,
+        &I18N::Game::CharismaticCharacterThatCanCommandThe, &I18N::Game::StrongMentalityAndExcellentInsightCreates,
+        &I18N::Game::LegitimateBearersOfTheKarutanRoyal};
+    static_assert(std::size(kJobNames) == MAX_CLASS, "one name per creatable class");
+    static_assert(std::size(kJobDescriptions) == MAX_CLASS, "one description per creatable class");
+
+    // A class's name (its job button and, while selected, the description title) in the current
+    // language; `classType` is one of the MAX_CLASS creatable classes.
+    const wchar_t* GetJobName(CLASS_TYPE classType)
+    {
+        return *kJobNames[classType];
+    }
+
+    // A creatable class's description in the current language.
+    const wchar_t* GetJobDescription(CLASS_TYPE classType)
+    {
+        return *kJobDescriptions[classType];
+    }
+
+    constexpr int kStatLineSpacing = 17;
+    constexpr int kStatYOffset = 10;
+    constexpr int kStatValueOffset = 54;
+    constexpr int kStatTextOffsetX = 22;
+    constexpr int kDarkLordStatHeight = 96;
+    constexpr int kDefaultStatHeight = 80;
+    constexpr const wchar_t* kDarkLordLeadershipStatValue = L"25";
+
+    // Indexed by CLASS_*; each theme's char_make.rcss places the button matching [job=<key>].
+    constexpr const char* kJobKeys[MAX_CLASS] = {
+        "wizard", "knight", "elf", "dark", "dark-lord", "summoner", "rage-fighter"
+    };
+    constexpr int kDescSpriteOffsetY = 355;
+    constexpr int kStatSpriteOffsetY = 24;
+    constexpr int kDescriptionTextOffsetX = 10;
+    constexpr int kDescriptionTextOffsetY = 12;
+    constexpr int kDescriptionLineSpacing = 19;
+
+    struct ClassStats
+    {
+        std::array<const wchar_t*, 4> values;
+    };
+
+    constexpr std::array<ClassStats, MAX_CLASS> kClassStatTable{ {
+        ClassStats{ { L"18", L"18", L"15", L"30" } }, // Knight
+        ClassStats{ { L"28", L"20", L"25", L"10" } }, // Wizard
+        ClassStats{ { L"22", L"25", L"20", L"15" } }, // Elf
+        ClassStats{ { L"26", L"26", L"26", L"26" } }, // Magic Gladiator
+        ClassStats{ { L"26", L"20", L"20", L"15" } }, // Dark Lord
+        ClassStats{ { L"21", L"21", L"18", L"23" } }, // Summoner
+        ClassStats{ { L"32", L"27", L"25", L"20" } }, // Rage Fighter
+    } };
+
+    struct ClassRenderParameters
+    {
+        bool overrideAngle;
+        float angleX;
+        float angleY;
+        float angleZ;
+        float scale;
+        float positionOffsetX;
+        float positionOffsetZ;
+    };
+
+    constexpr ClassRenderParameters GetRenderParameters(CLASS_TYPE classType)
+    {
+        switch (classType)
+        {
+        case CLASS_KNIGHT:
+            return { true, 0.0f, 0.0f, -12.0f, 6.05f, 0.0f, 0.0f };
+        case CLASS_WIZARD:
+            return { true, 0.0f, 0.0f, -40.0f, 5.9f, 0.0f, 0.0f };
+        case CLASS_ELF:
+            return { true, 8.0f, 0.0f, 5.0f, 9.1f, 4.8f, 0.0f };
+        case CLASS_DARK:
+            return { true, 8.0f, 0.0f, -13.0f, 6.0f, 0.0f, 1.8f };
+        case CLASS_DARK_LORD:
+            return { true, 8.0f, 0.0f, -18.0f, 6.0f, 0.0f, 0.0f };
+        case CLASS_SUMMONER:
+            return { true, 2.0f, 0.0f, 2.0f, 9.1f, 4.8f, 4.0f };
+        case CLASS_RAGEFIGHTER:
+            return { false, 0.0f, 0.0f, 0.0f, 6.0f, 9.8f, -7.5f };
+        default:
+            return { false, 0.0f, 0.0f, 0.0f, 6.0f, 0.0f, 0.0f };
+        }
+    }
+
+    // Character-name length cap, the same limit the native CUITextInputBox was configured with
+    // (textLimit = 10). Set on the <input> from ApplyNameLimit() rather than written into each
+    // theme's .rml, and reused when copying into the legacy InputText[0] buffer.
+    constexpr int kCharNameMaxLength = 10;
+}
+
+void MoveCharacterCamera(vec3_t Origin, vec3_t Position, vec3_t Angle);
+
+CCharMakeWin g_CharMakeWin;
+
+CCharMakeWin::CCharMakeWin()
+{
+    Engine::Object::Attachments::Track(&CharacterView);
+}
+
+CCharMakeWin::~CCharMakeWin()
+{
+    Engine::Object::Attachments::Untrack(&CharacterView);
+    Release();
+}
+
+void CCharMakeWin::Create()
+{
+    Release();
+
+    m_asprBack[CMW_SPR_STAT].Create(108, 80);
+
+    m_asprBack[CMW_SPR_DESC].Create(454, 51);
+
+    for (int spriteIndex = CMW_SPR_STAT; spriteIndex < CMW_SPR_MAX; ++spriteIndex)
+    {
+        m_asprBack[spriteIndex].SetAlpha(143);
+        m_asprBack[spriteIndex].SetColor(0, 0, 0);
+    }
+
+    std::fill(&m_aszJobDesc[0][0],
+        &m_aszJobDesc[0][0] + (CMW_DESC_LINE_MAX * CMW_DESC_ROW_MAX), L'\0');
+    m_nDescLine = 0;
+    m_LastDescription = nullptr;
+
+    m_nSelJob = CLASS_KNIGHT;
+    m_aJobState[m_nSelJob].checked = true;
+
+    // Builds once; Create() re-runs on resolution change.
+    m_RmlView.Ensure();
+
+    CSceneUICoordinator::Instance().GetNewStyleMng().AddUIObj(mu::ui::window::INTERFACE_CHAR_MAKE, this);
+
+    UpdateDisplay();
+    Show(false);
+}
+
+void CCharMakeWin::BindRmlModel(Rml::DataModelConstructor& c, CharMakeRmlModel& model)
+{
+    model.jobs.resize(MAX_CLASS);
+    for (int i = 0; i < MAX_CLASS; ++i)
+        model.jobs[i].key = kJobKeys[i];
+
+    // RegisterStruct()/RegisterArray() run against this Create() call's own
+    // Rml::DataTypeRegister (RmlModelBinder.h), not one shared across calls -- so this
+    // must re-run in full every time this registration function runs, including on a theme
+    // switch; a guard skipping it on a later call would register nothing on
+    // that call's (fresh, otherwise-empty) register and break the c.Bind() below.
+    auto job = c.RegisterStruct<JobButtonEntry>();
+    job.RegisterMember("key", &JobButtonEntry::key);
+    job.RegisterMember("checked", &JobButtonEntry::checked);
+    job.RegisterMember("disabled", &JobButtonEntry::disabled);
+    job.RegisterMember("label", &JobButtonEntry::label);
+    c.RegisterArray<std::vector<JobButtonEntry>>();
+
+    c.Bind("jobs", &model.jobs);
+    c.Bind("job_previous", &model.jobPrevious);
+    c.Bind("job_next", &model.jobNext);
+    c.Bind("dark_lord_extra", &model.darkLordExtra);
+    c.Bind("stat_label0", &model.statLabel0);
+    c.Bind("stat_label1", &model.statLabel1);
+    c.Bind("stat_label2", &model.statLabel2);
+    c.Bind("stat_label3", &model.statLabel3);
+    c.Bind("stat_label4", &model.statLabel4);
+    c.Bind("stat_value0", &model.statValue0);
+    c.Bind("stat_value1", &model.statValue1);
+    c.Bind("stat_value2", &model.statValue2);
+    c.Bind("stat_value3", &model.statValue3);
+    c.Bind("desc_title", &model.descTitle);
+    c.Bind("desc_line1", &model.descLine1);
+    c.Bind("desc_line2", &model.descLine2);
+    c.Bind("ok_label", &model.okLabel);
+    c.Bind("cancel_label", &model.cancelLabel);
+    c.Bind("char_name", &model.charName);
+    c.Bind("name_label", &model.nameLabel);
+    c.Bind("class_label", &model.classLabel);
+    c.Bind("attributes_label", &model.attributesLabel);
+
+    c.BindEventCallback("charmake_select_job",
+        [this](Rml::DataModelHandle, Rml::Event&, const Rml::VariantList& arguments)
+        {
+            if (arguments.size() == 1)
+                RmlClickJob(arguments[0].Get<int>(-1));
+        });
+    c.BindEventCallback("charmake_ok_click",
+        [this](Rml::DataModelHandle, Rml::Event&, const Rml::VariantList&) { RmlClickOk(); });
+    c.BindEventCallback("charmake_cancel_click",
+        [this](Rml::DataModelHandle, Rml::Event&, const Rml::VariantList&) { RmlClickCancel(); });
+}
+
+void CCharMakeWin::OnRmlReloaded()
+{
+    SetPosition(m_nOriginX, m_nOriginY);
+    UpdateDisplay();
+}
+
+// Caps the <input>'s own edit buffer at the same limit the native CUITextInputBox was configured
+// with. Set from here rather than written into each theme's .rml so it can't drift per theme.
+void CCharMakeWin::ApplyNameLimit()
+{
+    if (!m_RmlView.Document()) return;
+
+    if (Rml::Element* field = m_RmlView.Document()->GetElementById("char_name"))
+        field->SetAttribute("maxlength", kCharNameMaxLength);
+}
+
+void CCharMakeWin::Release()
+{
+    for (int i = 0; i < CMW_SPR_MAX; ++i)
+        m_asprBack[i].Release();
+
+    // See CLoginMainWin::PreRelease()'s identical comment.
+    m_RmlView.Hide();
+
+    // Base-class visibility reset, NOT the full CCharMakeWin::Show(false) override -- that override
+    // touches this window's RmlUi model/document, which aren't guaranteed built the first time this
+    // runs (CreateLoginScene() calls Release() on every window up front, including this one, even though
+    // it only ever Create()s/Shows this window later, in CreateCharacterScene()). Every other
+    // window's Create() ends with an unconditional Show(false) (see CCreditWin::Create()'s own
+    // comment on this), which is what normally keeps CObject's IsVisible() correct before the first
+    // real Show(true) -- but this window's Create() never even runs during the login scene, so
+    // without this its CObject-level m_bRender default (true, from the constructor) stood
+    // uncorrected, and IsVisible() reported true. CSceneUICoordinator::Update()'s ESC-opens-
+    // system-menu check reads exactly this window's IsVisible() while on the login scene, so a
+    // fresh process's first ESC press there fell through as if this dialog were covering the
+    // screen, never opening the system menu.
+    mu::ui::window::CObject::Show(false);
+}
+
+void CCharMakeWin::SetPosition(int nXCoord, int nYCoord)
+{
+    m_nOriginX = nXCoord;
+    m_nOriginY = nYCoord;
+
+    const int baseX = nXCoord + 346;
+    m_asprBack[CMW_SPR_STAT].SetPosition(baseX, nYCoord + kStatSpriteOffsetY);
+
+    m_asprBack[CMW_SPR_DESC].SetPosition(nXCoord, nYCoord + kDescSpriteOffsetY);
+
+    // RmlUi panel: only its own screen origin is still pushed here (genuine placement, same
+    // carve-out as every other migrated window) -- width/height and every static child position
+    // (stat_panel/desc_panel/input_frame/btn_ok/btn_cancel) moved to char_make.rcss (both themes),
+    // since none of those five ever actually varies at runtime. #panel is still fixed px; the
+    // preview no longer depends on that, since its render target takes #preview's own size.
+    if (m_RmlView.Document())
+    {
+        if (Rml::Element* panel = m_RmlView.Document()->GetElementById("panel"))
+        {
+            panel->SetProperty("left", std::to_string(nXCoord) + "px");
+            panel->SetProperty("top", std::to_string(nYCoord) + "px");
+        }
+    }
+}
+
+void CCharMakeWin::Show(bool bShow)
+{
+    mu::ui::window::CObject::Show(bShow);
+
+    m_PreviewTarget.SetEnabled(bShow);
+
+    for (int i = 0; i < CMW_SPR_MAX; ++i)
+        m_asprBack[i].Show(bShow);
+
+    if (bShow)
+    {
+        InputTextWidth = 73;
+        ClearInput();
+        InputEnable = true;
+        InputNumber = 1;
+        InputTextMax[0] = MAX_USERNAME_SIZE;
+
+        // The name field is a stock RmlUi <input> now (char_make.rml). It starts empty on every
+        // open, and focus comes from its own autofocus attribute via m_RmlView.Document()->Show() below --
+        // no explicit Configure()/GiveFocus() pair, and no native widget to position or hide.
+        m_RmlView.GetModel().charName.clear();
+        m_RmlView.MarkDirty("char_name");
+    }
+
+    if (m_RmlView.Document())
+    {
+        if (bShow) { SyncRmlModel(); m_RmlView.Document()->Show(); }
+        else       m_RmlView.Document()->Hide();
+    }
+}
+
+void CCharMakeWin::UpdateDisplay()
+{
+    for (auto& state : m_aJobState)
+        state.enabled = true;
+
+#ifdef PBG_ADD_CHARACTERCARD
+    for (int i = 0; i < CLASS_CHARACTERCARD_TOTALCNT; ++i)
+    {
+        if (!g_CharCardEnable.bCharacterEnable[i])
+            m_aJobState[i + CLASS_DARK].enabled = false;
+    }
+#else //PBG_ADD_CHARACTERCARD
+    m_aJobState[CLASS_SUMMONER].enabled = true;
+#endif //PBG_ADD_CHARACTERCARD
+
+    const bool isDarkLord = (m_nSelJob == CLASS_DARK_LORD);
+    m_asprBack[CMW_SPR_STAT].SetSize(0, isDarkLord ? kDarkLordStatHeight : kDefaultStatHeight, Y);
+
+    SyncDescription();
+
+    SelectCreateCharacter();
+}
+
+void CCharMakeWin::RmlClickJob(int nClassIndex)
+{
+    if (nClassIndex < 0 || nClassIndex >= MAX_CLASS)
+        return;
+    if (!m_aJobState[nClassIndex].enabled)
+        return;
+    SelectJob(nClassIndex);
+}
+
+void CCharMakeWin::SelectJob(int classIndex)
+{
+    for (auto& state : m_aJobState)
+        state.checked = false;
+    m_aJobState[classIndex].checked = true;
+
+    if (m_nSelJob != classIndex)
+    {
+        m_nSelJob = static_cast<CLASS_TYPE>(classIndex);
+        UpdateDisplay();
+    }
+}
+
+void CCharMakeWin::SubmitCreateCharacter()
+{
+    RequestCreateCharacter();
+}
+
+void CCharMakeWin::CloseDialog()
+{
+    Show(false);
+}
+
+bool CCharMakeWin::Update()
+{
+    if (!IsVisible())
+        return true;
+
+    // A CMsgWin validation-error dialog (name too short/invalid/special) can be shown on top of
+    // this one without hiding it first (see GetLayerDepth()'s own comment) -- skip this window's
+    // own click/key consequences while that's up, same reasoning as CCharSelMainWin's modal gate.
+    if (!g_MsgWin.IsVisible())
+    {
+        if (CInput::Instance().IsKeyDown(VK_RETURN))
+        {
+            ::PlayBuffer(SOUND_CLICK01);
+            RequestCreateCharacter();
+        }
+        else if (CInput::Instance().IsKeyDown(VK_ESCAPE))
+        {
+            ::PlayBuffer(SOUND_CLICK01);
+            Show(false);
+        }
+    }
+
+    UpdateCreateCharacter();
+
+    return true;
+}
+
+void CCharMakeWin::RequestCreateCharacter()
+{
+    // Hand the RmlUi-owned value to the legacy buffer the validation/submit path below still reads,
+    // so CheckSpecialText()/SendCreateCharacter() keep their existing contract.
+    const std::wstring typedName = StringUtils::NarrowToWide(m_RmlView.GetModel().charName);
+    wcsncpy(InputText[0], typedName.c_str(), kCharNameMaxLength);
+    InputText[0][kCharNameMaxLength] = L'\0';
+
+    CSceneUICoordinator& rUIMng = CSceneUICoordinator::Instance();
+
+    const std::wstring characterName = InputText[0];
+
+    // todo: check with regex from server
+    if (characterName.length() < kMinCharacterNameLength)
+        rUIMng.PopUpMsgWin(MESSAGE_MIN_LENGTH);
+    else if (::CheckName())
+        rUIMng.PopUpMsgWin(MESSAGE_ID_SPACE_ERROR);
+    else if (CheckSpecialText(InputText[0]))
+        rUIMng.PopUpMsgWin(MESSAGE_SPECIAL_NAME);
+    else
+    {
+        const auto classByte = static_cast<CharacterClassNumber>((CharacterView.Class << 2) + CharacterView.Skin);
+        CurrentProtocolState = REQUEST_CREATE_CHARACTER;
+        SocketClient->ToGameServer()->SendCreateCharacter(MU_C16(InputText[0]), classByte);
+        //SendRequestCreateCharacter(InputText[0], CharacterView.Class, CharacterView.Skin);
+        Show(false);
+        rUIMng.PopUpMsgWin(MESSAGE_WAIT);
+    }
+}
+
+bool CCharMakeWin::Render()
+{
+    SyncPreview();
+
+    // All 2D chrome (job buttons, stat/description panels, input frame, name field, OK/Cancel) now
+    // renders via the RmlUi overlay -- see char_make.rml/.rcss. SyncRmlModel() is the only thing
+    // this override still needs to do; the name field is a stock <input> in that same document, so
+    // there's no native text left to draw after RmlUi (the post-RmlUi RenderTextOnTop() seam this
+    // window used to need is gone -- CLoginWin/CMsgWin still use it for their own native fields).
+    SyncRmlModel();
+    return true;
+}
+
+void CCharMakeWin::SyncRmlModel()
+{
+    if (!m_RmlView.Document()) return;
+
+    SyncJobButtons();
+    SyncDescription();
+
+    auto& model = m_RmlView.GetModel();
+    const bool isDarkLord = (m_nSelJob == CLASS_DARK_LORD);
+    if (model.darkLordExtra != isDarkLord)
+    {
+        model.darkLordExtra = isDarkLord;
+        m_RmlView.MarkDirty("dark_lord_extra");
+    }
+
+    auto syncLabel = [this](Rml::String CharMakeRmlModel::* field, const char* boundName, const wchar_t* text)
+    {
+        const std::string utf8 = StringUtils::WideToNarrow(text);
+        if (m_RmlView.GetModel().*field != utf8)
+        {
+            m_RmlView.GetModel().*field = utf8;
+            m_RmlView.MarkDirty(boundName);
+        }
+    };
+    syncLabel(&CharMakeRmlModel::statLabel0, "stat_label0", I18N::Game::Strength);
+    syncLabel(&CharMakeRmlModel::statLabel1, "stat_label1", I18N::Game::Agility);
+    syncLabel(&CharMakeRmlModel::statLabel2, "stat_label2", I18N::Game::Vitality);
+    syncLabel(&CharMakeRmlModel::statLabel3, "stat_label3", I18N::Game::Energy);
+    syncLabel(&CharMakeRmlModel::statLabel4, "stat_label4", I18N::Game::Command);
+
+    const auto& stats = kClassStatTable[static_cast<std::size_t>(m_nSelJob)];
+    syncLabel(&CharMakeRmlModel::statValue0, "stat_value0", stats.values[0]);
+    syncLabel(&CharMakeRmlModel::statValue1, "stat_value1", stats.values[1]);
+    syncLabel(&CharMakeRmlModel::statValue2, "stat_value2", stats.values[2]);
+    syncLabel(&CharMakeRmlModel::statValue3, "stat_value3", stats.values[3]);
+    // The Dark Lord leadership row's value is a fixed constant in the original (not part of
+    // kClassStatTable) -- reproduced as-is, gated by dark_lord_extra above rather than a live
+    // 5th table column.
+
+    // Same I18N lookup table used to build jobs[i].label (see SyncJobButtons()) -- the selected
+    // class's own name, for the modern theme's description-panel title (legacy hides it).
+    syncLabel(&CharMakeRmlModel::descTitle, "desc_title", GetJobName(m_nSelJob));
+    syncLabel(&CharMakeRmlModel::descLine1, "desc_line1", m_nDescLine > 0 ? m_aszJobDesc[0] : L"");
+    syncLabel(&CharMakeRmlModel::descLine2, "desc_line2", m_nDescLine > 1 ? m_aszJobDesc[1] : L"");
+
+    syncLabel(&CharMakeRmlModel::nameLabel, "name_label", I18N::Game::Name);
+    syncLabel(&CharMakeRmlModel::classLabel, "class_label", I18N::Game::Class);
+    syncLabel(&CharMakeRmlModel::attributesLabel, "attributes_label", I18N::Game::BaseAttributes);
+    syncLabel(&CharMakeRmlModel::okLabel, "ok_label", I18N::Game::OK);
+    syncLabel(&CharMakeRmlModel::cancelLabel, "cancel_label", I18N::Game::Cancel);
+}
+
+void CCharMakeWin::SyncDescription()
+{
+    const wchar_t* description = GetJobDescription(m_nSelJob);
+    if (description == m_LastDescription)
+        return;
+
+    m_LastDescription = description;
+    m_nDescLine = ::SeparateTextIntoLines(description, m_aszJobDesc[0], CMW_DESC_LINE_MAX, CMW_DESC_ROW_MAX);
+}
+
+void CCharMakeWin::SyncJobButtons()
+{
+    auto& model = m_RmlView.GetModel();
+    auto& jobs = model.jobs;
+    bool jobsDirty = false;
+    std::array<bool, MAX_CLASS> enabled{};
+    for (int classIndex = 0; classIndex < MAX_CLASS; ++classIndex)
+    {
+        JobButtonEntry& entry = jobs[classIndex];
+        const bool checked = m_aJobState[classIndex].checked;
+        const bool disabled = !m_aJobState[classIndex].enabled;
+        if (entry.checked != checked)
+        {
+            entry.checked = checked;
+            jobsDirty = true;
+        }
+        if (entry.disabled != disabled)
+        {
+            entry.disabled = disabled;
+            jobsDirty = true;
+        }
+        enabled[classIndex] = !disabled;
+
+        const std::string label = StringUtils::WideToNarrow(GetJobName(static_cast<CLASS_TYPE>(classIndex)));
+        if (entry.label != label)
+        {
+            entry.label = label;
+            jobsDirty = true;
+        }
+    }
+    if (jobsDirty)
+        m_RmlView.MarkDirty("jobs");
+
+    const int jobPrevious = UI::CharacterCreation::StepToEnabledClass(enabled, m_nSelJob, -1);
+    const int jobNext = UI::CharacterCreation::StepToEnabledClass(enabled, m_nSelJob, +1);
+    if (model.jobPrevious != jobPrevious)
+    {
+        model.jobPrevious = jobPrevious;
+        m_RmlView.MarkDirty("job_previous");
+    }
+    if (model.jobNext != jobNext)
+    {
+        model.jobNext = jobNext;
+        m_RmlView.MarkDirty("job_next");
+    }
+}
+
+void CCharMakeWin::SelectCreateCharacter()
+{
+    CharacterView.Class = m_nSelJob;
+    CreateCharacterPointer(&CharacterView, static_cast<int>(MODEL_FACE) + CharacterView.Class, 0, 0);
+    CharacterView.Object.Kind = 0;
+    SetAction(&CharacterView.Object, 1);
+}
+
+void CCharMakeWin::UpdateCreateCharacter()
+{
+    OBJECT* o = &CharacterView.Object;
+    if (!CharacterAnimation(&CharacterView, o))
+        SetAction(o, 0);
+
+    const ClassRenderParameters params = GetRenderParameters(CharacterView.Class);
+    Vector(1.0f, 1.0f, 1.0f, o->Light);
+    if (params.overrideAngle)
+        Vector(params.angleX, params.angleY, params.angleZ, o->Angle);
+    o->Scale = params.scale;
+    UpdatePreviewCharacter(&CharacterView);
+}
+
+void CCharMakeWin::SyncPreview()
+{
+    Rml::ElementDocument* document = m_RmlView.Document();
+    Rml::Element* preview = document ? document->GetElementById("preview") : nullptr;
+    if (!preview)
+        return;
+
+    // The image's own box in RmlUi pixels, which are physical ones: drawn at the size it is shown.
+    const auto size = preview->GetBox().GetSize(Rml::BoxArea::Content);
+    m_PreviewTarget.Resize(static_cast<std::uint32_t>(std::lround(size.x)),
+                           static_cast<std::uint32_t>(std::lround(size.y)));
+
+    // An <img> without a texture still draws its quad, untextured: invisible until the first frame,
+    // but still laid out, since the target takes its size from the box.
+    const Rml::String& source = m_PreviewTarget.Source();
+    preview->SetClass("awaiting-frame", source.empty());
+    if (!source.empty() && preview->GetAttribute<Rml::String>("src", "") != source)
+        preview->SetAttribute("src", source);
+}
+
+void CCharMakeWin::RenderPreviewInto(std::uint32_t width, std::uint32_t height)
+{
+    if (height == 0)
+        return;
+
+    // The scene camera is moved to frame the preview, and given back afterwards.
+    const CameraState sceneCamera = g_Camera;
+
+    const OBJECT* o = &CharacterView.Object;
+    vec3_t Position, Angle;
+
+    // The class's offset in the frame moves the camera the other way, so the character stays where it stands.
+    const ClassRenderParameters params = GetRenderParameters(CharacterView.Class);
+    vec3_t framed;
+    Vector(o->Position[0] - params.positionOffsetX, o->Position[1], o->Position[2] - params.positionOffsetZ, framed);
+    Vector(10, -500.f, 48.f, Position);
+    Vector(-90.f, 0.f, 0.f, Angle);
+    g_Camera.FOV = 10.f;
+    MoveCharacterCamera(framed, Position, Angle);
+    CameraProjection::UpdateView(g_Camera, 0, 0, static_cast<int>(width), static_cast<int>(height));
+
+    BeginOpenglForTarget(static_cast<int>(width), static_cast<int>(height));
+    RenderCharacter(&CharacterView, o);
+
+    EndOpengl();
+    g_Camera = sceneCamera;
+}

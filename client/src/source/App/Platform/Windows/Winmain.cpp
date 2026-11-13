@@ -1,0 +1,2509 @@
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+#include "stdafx.h"
+#include "Core/Utilities/Random.h"
+#include "Core/Input/KeyState.h"
+#include "Core/Utilities/FrameProfiler.h"
+#include "Core/Utilities/TeardownStack.h"
+#include "Core/Input/SyntheticInput.h"
+#include "Core/Platform/GameWindow.h"
+#include "Core/Input/UiInputRouter.h"
+#include "App/Control/ControlServer.h"
+#include "App/Platform/ClientMain.h"
+#include "App/Control/DrawPurityCheck.h"
+#include "Core/Utilities/DrawSpawnCheck.h"
+#include "Core/Text/Utf8.h"
+#include "App/Platform/DiagnosticFrameCaptureSchedule.h"
+#include "App/Platform/DiagnosticFrameCaptureWriter.h"
+
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+
+#ifdef _WIN32
+#include <dpapi.h>
+#endif
+#include <clocale>
+#include <cstring>
+#include <filesystem>
+#include <optional>
+#include <utility>
+#include <vector>
+#include "Core/Platform/WinIni.h" // private-profile (.ini) API
+#include "Data/DataHandler/ItemData/ItemDataHandler.h"
+#include "Data/DataHandler/MonsterData/MonsterDataHandler.h"
+#include "GameLogic/Monsters/MonsterNames.h"
+#include "World/GameMaps/MonsterSpawnWorld.h"
+#include "Data/GameConfig/GameConfig.h"
+#include "UI/Core/UIManager.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "Render/Renderer/MuRenderer.h"
+#include "Render/Look/LookPresetSetting.h"
+#include "Render/Look/LookProfileSetting.h"
+#include "Render/Look/TuningSetting.h"
+#include "Render/RmlUi/RmlUiRuntime.h"
+#include "UI/RmlBridge/RmlRuntimeHooks.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "Scenes/SceneCore.h"
+#include "Scenes/SceneManager.h"
+#include "Scenes/WebzenScene.h"
+#include "Scenes/MainScene.h"
+#include "Network/Reconnect/ReconnectManager.h"
+#include "Network/IncomingPacketQueue.h"
+#include "Network/EndpointForLog.h"
+#include "Core/Time/FrameTimerScheduler.h"
+#include "Core/Utilities/FrameProfiler.h"
+#include "Core/Utilities/Benchmark/BenchRecorder.h"
+#include <SDL3/SDL.h>
+#include "Render/Models/ZzzBMD.h"
+#include "Engine/Object/ZzzInfomation.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/AI/ZzzAI.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Engine/Object/AnimationTaskPool.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Engine/Object/ZzzInventory.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Audio/DSPlaySound.h"
+
+#include "Core/Platform/Imm.h"
+#include "Core/Platform/ProcessLocale.h"
+#include "Core/Platform/ServerPort.h"
+#include "Core/Platform/sdl3/SDLWindowFlags.h"
+#include "Core/Platform/BundledFonts.h"
+#include "Engine/Pathing/ZzzPath.h"
+#include "App/Platform/Windows/Local.h"
+#include "GameLogic/Items/PersonalShopTitleImp.h"
+
+#include "UI/HUD/UIMapName.h" // rozy
+#include "Core/Utilities/CpuUsage.h"
+#include "Core/Utilities/Log/ReadingLanguageLog.h"
+#include "Core/Utilities/PlatformInfo.h"
+
+#include "MUHelper/MuHelper.h"
+#include "Camera/CameraManager.h"
+
+#include "UI/Windows/CBTMessageBox.h"
+
+#include "GameLogic/Events/CSChaosCastle.h"
+#ifdef _WIN32
+#include <io.h>
+#endif
+#include "Core/Input/Input.h"
+#include "Core/Platform/IPlatformAudio.h"
+#include "Core/Platform/Audio/MiniAudioBackend.h"
+#ifndef _WIN32
+#include "Core/Platform/posix/PosixSignalHandlers.h"
+#endif
+#include "Core/Time/Timer.h"
+#include "Core/Utilities/Log/MuLogger.h"
+#include "Core/Utilities/Log/SdlLogBridge.h"
+#include "UI/Core/SceneUICoordinator.h"
+#include "UI/Placement/WindowPlacement.h"
+#include "Character/CharMakeWin.h"
+#include "UI/Windows/CreditWin.h"
+#include "UI/Windows/SysMenuWin.h"
+#include "UI/Windows/LoginWin.h"
+#include "UI/Dialogs/GenericConfirmDialog.h"
+#include "UI/RmlBridge/RmlRenderTarget.h"
+
+#include "World/MapInfra/w_MapHeaders.h"
+
+#include "GameLogic/Pets/w_PetProcess.h"
+
+#include "UI/Core/WindowSystem.h"
+#include "UI/Scaling/UITransform.h"
+#include "Camera/CameraConfig.h"
+#include "I18N/All.h"
+
+#ifdef _EDITOR
+#include "../MuEditor/Core/MuEditorCore.h"
+#include "imgui.h"
+#include "imgui_impl_sdl3.h"
+#include "../MuEditor/Config/MuEditorConfig.h"
+#endif
+
+int g_iChatInputType = 1;
+
+CMultiLanguage* pMultiLanguage = nullptr;
+
+extern DWORD g_dwTopWindow;
+
+CUIManager* g_pUIManager = nullptr;
+CUIMapName* g_pUIMapName = nullptr; // rozy
+
+float Time_Effect = 0;
+bool ashies = false;
+int weather = Random::Rand() % 3;
+
+HWND g_hWnd = nullptr;
+HINSTANCE g_hInst = nullptr;
+HDC g_hDC = nullptr;
+HGLRC g_hRC = nullptr;
+
+// SDL owns the window (issue #442). The native HWND is bridged
+// into g_hWnd so the remaining Win32 code (IME, DirectSound, cursor, the legacy
+// EDIT-control text boxes) keeps working until those are migrated.
+static SDL_Window* g_sdlWindow = nullptr;
+HFONT g_hFont = nullptr;
+HFONT g_hFontBold = nullptr;
+HFONT g_hFontBig = nullptr;
+HFONT g_hFixFont = nullptr;
+
+CTimer* g_pTimer = new CTimer(); // performance counter.
+bool Destroy = false;
+bool ActiveIME = false;
+
+BYTE* RendomMemoryDump;
+ITEM_ATTRIBUTE* ItemAttRibuteMemoryDump;
+CHARACTER* CharacterMemoryDump;
+
+int RandomTable[100];
+
+BOOL g_bMinimizedEnabled = FALSE;
+int g_iScreenSaverOldValue = 60 * 15;
+
+BOOL g_bUseWindowMode = TRUE;
+BOOL g_bUseFullscreenMode = FALSE;
+bool g_bDisableAnimationTaskPool = true;
+
+#include "Audio/AudioPlayer.h"
+#include "Render/Text/CUIRenderText.h"
+#include "Core/Input/ImeInput.h"
+
+extern int LogIn;
+extern wchar_t LogInID[];
+extern bool First;
+extern int FirstTime;
+extern BOOL g_bGameServerConnected;
+extern bool LogOut;
+
+// Closing the window skips the menu exit, which is what sends the key configuration (skill and item hotkeys,
+// options, chat box); send it here while still connected. Once is enough: several close events can arrive, and the
+// menu exit has already saved before it logs out and closes the window.
+void SaveOptionsBeforeClose()
+{
+    if (!Destroy && !LogOut)
+    {
+        SaveOptionsIfInGame();
+    }
+}
+
+void CheckHack()
+{
+    if (!g_bGameServerConnected)
+    {
+        return;
+    }
+
+    g_ConsoleDebug->Write(MCD_SEND, L"SendCheck");
+
+    auto attackSpeed = CharacterAttribute->AttackSpeed;
+    auto magicSpeed = CharacterAttribute->MagicSpeed;
+    if (CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED ||
+        CharacterAttribute->Ability & ABILITY_FAST_ATTACK_SPEED2)
+    {
+        attackSpeed -= 20;
+        magicSpeed -= 20;
+    }
+
+    const int dwTick = GetTickCount();
+    SocketClient->ToGameServer()->SendPing(dwTick, attackSpeed, magicSpeed);
+
+    if (!First)
+    {
+        First = true;
+        FirstTime = dwTick;
+    }
+}
+
+static void ShutdownRendererWindow()
+{
+    // Release the bridged GDI DC obtained from the SDL window.
+    if (g_hDC)
+    {
+        ReleaseDC(g_hWnd, g_hDC);
+        g_hDC = nullptr;
+    }
+
+    // Must run before ShutdownSDLGpuRenderer() -- Rml::Shutdown() (inside Destroy()) releases
+    // every outstanding compiled-geometry/texture handle via RmlUiRenderInterface, which needs
+    // a live SDL_GPUDevice while that happens. No-ops safely if Create() never ran (the
+    // InitSDLGpuRenderer failure path above also calls this function).
+    RmlUiRuntime::Instance().Destroy();
+
+    mu::ShutdownSDLGpuRenderer();
+    g_hRC = nullptr;
+
+    if (g_sdlWindow)
+    {
+        Core::Platform::SetGameWindow(nullptr);
+        SDL_DestroyWindow(g_sdlWindow);
+        g_sdlWindow = nullptr;
+        g_hWnd = nullptr;
+    }
+}
+
+// Debug-only framebuffer capture: when MU_CAPTURE_FRAME=<N> is set, dump the
+// Nth presented frame to MU_CAPTURE_PATH (default mu-frame.ppm) as a PPM.
+// Used to verify rendering on headless/WSLg setups where X screenshot tools
+// cannot read the window (issue #462). No effect unless the env var is set.
+struct DiagnosticFrameCapture
+{
+    std::uint64_t targetFrame = 0;
+    mu::DiagnosticFrameCaptureSchedule schedule{0};
+};
+
+static DiagnosticFrameCapture& GetDiagnosticFrameCapture()
+{
+    static DiagnosticFrameCapture capture = []
+    {
+        const char* target = std::getenv("MU_CAPTURE_FRAME");
+        const std::uint64_t targetFrame = target ? std::strtoull(target, nullptr, 10) : 0;
+        return DiagnosticFrameCapture{targetFrame, mu::DiagnosticFrameCaptureSchedule(targetFrame)};
+    }();
+    return capture;
+}
+
+static void RequestDiagnosticFrameCapture()
+{
+    DiagnosticFrameCapture& capture = GetDiagnosticFrameCapture();
+    if (!capture.schedule.BeforeFrame())
+    {
+        return;
+    }
+
+    if (!mu::GetRenderer().RequestFramePixels())
+    {
+        capture.schedule.Finish();
+    }
+}
+
+static void ConsumeDiagnosticFrameCapture()
+{
+    DiagnosticFrameCapture& capture = GetDiagnosticFrameCapture();
+    if (!capture.schedule.AfterFrame())
+    {
+        return;
+    }
+
+    mu::FramePixels pixels;
+    capture.schedule.Finish();
+    if (!mu::GetRenderer().ConsumeFramePixels(pixels))
+    {
+        // A skipped frame leaves the request pending; drop it.
+        mu::GetRenderer().CancelFramePixels();
+        g_ErrorReport.Write(L"[capture] frame %llu readback failed\r\n",
+                            static_cast<unsigned long long>(capture.targetFrame));
+        return;
+    }
+
+    constexpr const char* DefaultCapturePath = "mu-frame.ppm";
+    const char* path = std::getenv("MU_CAPTURE_PATH");
+    if (path == nullptr)
+    {
+        path = DefaultCapturePath;
+    }
+    if (!mu::WriteDiagnosticFrameCapturePpm(path, pixels))
+    {
+        const char* loggedPath = path[0] == '\0' ? "<empty>" : path;
+        g_ErrorReport.Write(L"[capture] failed to write frame %llu to %hs\r\n",
+                            static_cast<unsigned long long>(capture.targetFrame), loggedPath);
+        return;
+    }
+
+    g_ErrorReport.Write(L"[capture] wrote frame %llu (%ux%u) to %hs\r\n",
+                        static_cast<unsigned long long>(capture.targetFrame), pixels.width, pixels.height, path);
+}
+
+// Monitor refresh rate (Hz) for the display the window is on, via SDL instead
+// of the Win32 GetDeviceCaps(VREFRESH) (issue #442). Falls back to 60.
+int GetFPSLimit()
+{
+    constexpr int DEFAULT_REFRESH_HZ = 60;
+    if (g_sdlWindow)
+    {
+        // Before the window is mapped to a display, SDL_GetDisplayForWindow
+        // returns 0; fall back to the primary display so a high-refresh monitor
+        // isn't capped at the default 60 Hz.
+        SDL_DisplayID displayID = SDL_GetDisplayForWindow(g_sdlWindow);
+        if (displayID == 0)
+            displayID = SDL_GetPrimaryDisplay();
+        if (displayID != 0)
+        {
+            const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
+            if (mode && mode->refresh_rate > 0.0f)
+                return static_cast<int>(mode->refresh_rate + 0.5f);
+        }
+    }
+    return DEFAULT_REFRESH_HZ;
+}
+
+namespace
+{
+bool g_hasPendingVSyncPreference = false;
+bool g_pendingVSyncPreference = true;
+
+// Target FPS to apply whenever VSync ends up off (either genuinely disabled, or unavailable on
+// this system) -- the persisted user preference (Options window's FPS Limit row, formerly only
+// reachable via the console-only `$fps <N>` diagnostic), using the same -1-means-uncapped
+// convention SceneManager::SetTargetFps() already defines. Replaces the previous hardcoded
+// GetFPSLimit() (monitor refresh rate) fallback -- CfgDefaultFpsCap is -1 (uncapped), so a player
+// who has never touched the new setting and has VSync off gets uncapped rendering instead of a
+// monitor-matched cap, matching how most games behave with VSync off and no explicit limit set.
+double EffectiveOffVSyncTargetFps()
+{
+    return GameConfig::GetInstance().GetFpsCap();
+}
+
+void ApplyVSyncPreferenceNow(bool enabled)
+{
+    if (!IsVSyncAvailable())
+    {
+        SetTargetFps(EffectiveOffVSyncTargetFps());
+        return;
+    }
+
+    if (enabled)
+    {
+        EnableVSync();
+    }
+    else
+    {
+        DisableVSync();
+    }
+
+    SetTargetFps(IsVSyncEnabled() ? -1 : EffectiveOffVSyncTargetFps());
+    ResetFrameStats();
+}
+
+void ApplyPendingVSyncPreference()
+{
+    if (!g_hasPendingVSyncPreference)
+    {
+        return;
+    }
+
+    g_hasPendingVSyncPreference = false;
+    ApplyVSyncPreferenceNow(g_pendingVSyncPreference);
+}
+} // namespace
+
+void MuSetVSyncPreference(bool enabled)
+{
+    GameConfig::GetInstance().SetVSyncEnabled(enabled);
+    GameConfig::GetInstance().Save();
+    g_pendingVSyncPreference = enabled;
+    g_hasPendingVSyncPreference = true;
+}
+
+void MuSetTextureFilteringEnabled(bool enabled)
+{
+    Bitmaps.SetTextureFiltering(enabled, GameConfig::GetInstance().GetAnisotropy());
+}
+
+void MuSetAnisotropyPreference(int anisotropy)
+{
+    GameConfig& config = GameConfig::GetInstance();
+    config.SetAnisotropy(anisotropy);
+    config.Save();
+    Bitmaps.SetAnisotropy(config.GetAnisotropy());
+}
+
+// Whether the active look renders with multisampling (Enhanced does, Classic does not).
+static bool g_antialiasingActive = false;
+
+void MuSetAntialiasingActive(bool active)
+{
+    g_antialiasingActive = active;
+    // The renderer rebuilds its pipelines and targets at the next BeginFrame, if the count changed.
+    mu::GetRenderer().SetAntialiasingSamples(active ? GameConfig::GetInstance().GetAntialiasing() : 0);
+}
+
+void MuSetAntialiasingPreference(int samples)
+{
+    GameConfig& config = GameConfig::GetInstance();
+    config.SetAntialiasing(samples);
+    config.Save();
+    if (!g_antialiasingActive)
+    {
+        mu::log::Get("render")->info("Anti-aliasing: {} saved for the Enhanced look; Classic renders without",
+                                     config.GetAntialiasing() > 1 ? std::to_string(config.GetAntialiasing()) + "x"
+                                                                  : std::string("off"));
+        return;
+    }
+    mu::GetRenderer().SetAntialiasingSamples(config.GetAntialiasing());
+}
+
+void MuSetVSyncForSession(bool enabled)
+{
+    g_pendingVSyncPreference = enabled;
+    g_hasPendingVSyncPreference = true;
+}
+
+void MuReapplyVSyncPreference()
+{
+    g_pendingVSyncPreference = GameConfig::GetInstance().GetVSyncEnabled();
+    g_hasPendingVSyncPreference = true;
+}
+
+BOOL GetFileNameOfFilePath(wchar_t* lpszFile, wchar_t* lpszPath)
+{
+    auto iFind = (int)'\\';
+    wchar_t* lpFound = lpszPath;
+    wchar_t* lpOld = lpFound;
+    while (lpFound)
+    {
+        lpOld = lpFound;
+        lpFound = wcschr(lpFound + 1, iFind);
+    }
+
+    if (wcschr(lpszPath, iFind))
+    {
+        wcscpy(lpszFile, lpOld + 1);
+    }
+    else
+    {
+        wcscpy(lpszFile, lpOld);
+    }
+
+    BOOL bCheck = TRUE;
+    for (wchar_t* lpTemp = lpszFile; bCheck; ++lpTemp)
+    {
+        switch (*lpTemp)
+        {
+        case '\"':
+        case '\\':
+        case '/':
+        case ' ':
+            *lpTemp = '\0';
+        case '\0':
+            bCheck = FALSE;
+            break;
+        }
+    }
+
+    return (TRUE);
+}
+
+WORD DecryptCheckSumKey(WORD wSource)
+{
+    WORD wAcc = wSource ^ 0xB479;
+    return ((wAcc >> 10) << 4) | (wAcc & 0xF);
+}
+
+DWORD GenerateCheckSum(BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
+{
+    auto dwKey = (DWORD)wKey;
+    DWORD dwResult = dwKey << 9;
+    for (DWORD dwChecked = 0; dwChecked <= dwSize - 4; dwChecked += 4)
+    {
+        DWORD dwTemp;
+        memcpy(&dwTemp, pbyBuffer + dwChecked, sizeof(DWORD));
+
+        switch ((dwChecked / 4 + wKey) % 3)
+        {
+        case 0:
+            dwResult ^= dwTemp;
+            break;
+        case 1:
+            dwResult += dwTemp;
+            break;
+        case 2:
+            dwResult <<= (dwTemp % 11);
+            dwResult ^= dwTemp;
+            break;
+        }
+
+        if (0 == (dwChecked % 4))
+        {
+            dwResult ^= ((dwKey + dwResult) >> ((dwChecked / 4) % 16 + 3));
+        }
+    }
+
+    return (dwResult);
+}
+
+DWORD GetCheckSum(WORD wKey)
+{
+    wKey = DecryptCheckSumKey(wKey);
+
+    wchar_t lpszFile[MAX_PATH];
+
+    wcscpy(lpszFile, L"data\\local\\Gameguard.csr");
+
+    HANDLE hFile =
+        CreateFile(lpszFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (INVALID_HANDLE_VALUE == hFile)
+    {
+        return (0);
+    }
+
+    DWORD dwSize = GetFileSize(hFile, nullptr);
+    auto* pbyBuffer = new BYTE[dwSize];
+    DWORD dwNumber;
+    ReadFile(hFile, pbyBuffer, dwSize, &dwNumber, nullptr);
+    CloseHandle(hFile);
+
+    DWORD dwCheckSum = GenerateCheckSum(pbyBuffer, dwSize, wKey);
+    delete[] pbyBuffer;
+
+    return (dwCheckSum);
+}
+
+BOOL GetFileVersion(wchar_t* lpszFileName, WORD* pwVersion)
+{
+#ifndef _WIN32
+    // File version-info is a Win32 crash-report detail; report "unknown".
+    (void)lpszFileName;
+    (void)pwVersion;
+    return FALSE;
+#else
+    DWORD dwHandle;
+    DWORD dwLen = GetFileVersionInfoSize(lpszFileName, &dwHandle);
+    if (dwLen <= 0)
+    {
+        return (FALSE);
+    }
+
+    auto* pbyData = new BYTE[dwLen];
+    if (!GetFileVersionInfo(lpszFileName, dwHandle, dwLen, pbyData))
+    {
+        delete[] pbyData;
+        return (FALSE);
+    }
+
+    VS_FIXEDFILEINFO* pffi;
+    UINT uLen;
+    if (!VerQueryValue(pbyData, L"\\", (LPVOID*)&pffi, &uLen))
+    {
+        delete[] pbyData;
+        return (FALSE);
+    }
+
+    pwVersion[0] = HIWORD(pffi->dwFileVersionMS);
+    pwVersion[1] = LOWORD(pffi->dwFileVersionMS);
+    pwVersion[2] = HIWORD(pffi->dwFileVersionLS);
+    pwVersion[3] = LOWORD(pffi->dwFileVersionLS);
+
+    delete[] pbyData;
+    return (TRUE);
+#endif
+}
+
+extern PATH* path;
+
+void DestroyWindow()
+{
+    // A quit during startup: the load's texture batch must end while the renderer is still up.
+    EndWebzenScene();
+
+    // Save game configuration to config.ini
+    GameConfig::GetInstance().SetSoundVolume(g_pOption->GetVolumeLevel());
+    GameConfig::GetInstance().Save();
+
+#ifdef _EDITOR
+    // Save editor configuration
+    g_MuEditorConfig.Save();
+#endif
+
+    // UI objects own timers, SDL_ttf text, and renderer-facing resources. Tear
+    // them down while the timer scheduler and SDL GPU renderer are still alive.
+    g_pNewUISystem->Release();
+    g_pRenderText->Release();
+
+    CSceneUICoordinator::Instance().Release();
+
+    //. release font handle
+    if (g_hFont)
+        DeleteObject((HGDIOBJ)g_hFont);
+
+    if (g_hFontBold)
+        DeleteObject((HGDIOBJ)g_hFontBold);
+
+    if (g_hFontBig)
+        DeleteObject((HGDIOBJ)g_hFontBig);
+
+    if (g_hFixFont)
+        ::DeleteObject((HGDIOBJ)g_hFixFont);
+
+    ReleaseCharacters();
+
+    SAFE_DELETE(GateAttribute);
+
+    SAFE_DELETE(SkillAttribute);
+
+    SAFE_DELETE(CharacterMachine);
+
+    DeleteWaterTerrain();
+
+    {
+        gMapManager.DeleteObjects();
+
+        // Object.
+        if (Models != nullptr)
+        {
+            for (int i = MODEL_LOGO; i < MAX_MODELS; i++)
+            {
+                Models[i].Release();
+            }
+        }
+
+        // Bitmap
+        Bitmaps.UnloadAllImages();
+    }
+
+    SAFE_DELETE_ARRAY(CharacterMemoryDump);
+    SAFE_DELETE_ARRAY(ItemAttRibuteMemoryDump);
+    SAFE_DELETE_ARRAY(RendomMemoryDump);
+    SAFE_DELETE_ARRAY(ModelsDump);
+
+#ifdef DYNAMIC_FRUSTRUM
+    DeleteAllFrustrum();
+#endif // DYNAMIC_FRUSTRUM
+
+
+    SAFE_DELETE(g_pUIMapName); // rozy
+    SAFE_DELETE(g_pTimer);
+    SAFE_DELETE(g_pUIManager);
+
+    SAFE_DELETE(pMultiLanguage);
+    PtrReset(g_BuffSystem);
+    PtrReset(g_MapProcess);
+    PtrReset(g_petProcess);
+
+    g_ErrorReport.Write(L"Destroy");
+
+    HWND shWnd = FindWindow(nullptr, L"MuPlayer");
+    if (shWnd)
+        SendMessage(shWnd, WM_DESTROY, 0, 0);
+}
+void DestroySound()
+{
+    AudioPlayer::Shutdown();
+    if (g_platformAudio != nullptr)
+    {
+        g_platformAudio->Shutdown();
+        delete g_platformAudio;
+        g_platformAudio = nullptr;
+    }
+}
+
+int g_iInactiveTime = 0;
+int g_iNoMouseTime = 0;
+int g_iInactiveWarning = 0;
+bool g_bWndActive = false;
+bool HangulDelete = false;
+int Hangul = 0;
+bool g_bEnterPressed = false;
+
+double g_TargetFpsBeforeInactive = -1.0;
+bool g_HasInactiveFpsOverride = false;
+
+int g_iMousePopPosition_x = 0;
+int g_iMousePopPosition_y = 0;
+
+extern int TimeRemain;
+extern bool EnableFastInput;
+
+// Legacy game-message side effects, reached through the Windows-only SDL hook.
+#ifdef _WIN32
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    // F10 zoom-lock toggle. The native hook runs before SDL event routing, so
+    // editor-open sessions still get the toggle. Bit 30 of lParam = previous
+    // key state — skip auto-repeat ticks so a held key only toggles once.
+    constexpr LPARAM PREVIOUS_KEY_STATE_MASK = 1 << 30;
+    if (msg == WM_SYSKEYDOWN && wParam == VK_F10 && (lParam & PREVIOUS_KEY_STATE_MASK) == 0)
+    {
+        CameraManager::Instance().ToggleZoomLock();
+        return 0;
+    }
+
+    // ImGui (editor) now consumes input from the SDL event loop via
+    // ImGui_ImplSDL3_ProcessEvent, not from Win32 messages (issue #442).
+
+    switch (msg)
+    {
+    case WM_SYSKEYDOWN:
+    {
+        // F10 auto-repeat needs no legacy work. The hook ignores this return
+        // value and lets SDL continue processing the system-key message.
+        return 0;
+    }
+    break;
+    // WM_ACTIVATE is handled via SDL window focus events (issue #442).
+    case WM_NPROTECT_EXIT_TWO:
+        SocketClient->ToGameServer()->SendLogOutByCheatDetection(0);
+        // Inform the user, then close. A frame-ticked timer cannot fire while
+        // this modal dialog blocks the main loop, so close right after the
+        // dialog is dismissed instead of via a timer.
+        MessageBox(nullptr, I18N::Game::Error9AHackingToolHasBeen, L"Error", MB_OK);
+        PostMessage(g_hWnd, WM_CLOSE, 0, 0);
+        break;
+    case WM_ERASEBKGND:
+        return TRUE;
+        break;
+    // WM_SIZE is handled via SDL window resize events (issue #442).
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        HDC hDC = BeginPaint(hwnd, &ps);
+        EndPaint(hwnd, &ps);
+    }
+        return 0;
+        break;
+    case WM_DESTROY:
+    {
+        // Just request shutdown; the main loop exits on Destroy and the teardown
+        // (sound, GL, window) runs after it. SDL owns the window now, so the GL
+        // context and window must not be torn down from inside a message.
+        SaveOptionsBeforeClose();
+        Destroy = true;
+        if (SocketClient != nullptr)
+        {
+            SocketClient->Close();
+            g_bGameServerConnected = false;
+        }
+    }
+    break;
+    case WM_SETCURSOR:
+#ifdef _EDITOR
+        // When hovering UI (including Open Editor button), let Windows show cursor
+        // Otherwise hide Windows cursor for game cursor
+        if (g_MuEditorCore.IsHoveringUI())
+        {
+            // Let Windows cursor show - don't hide it
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+        }
+        else
+#endif
+        {
+            ShowCursor(false);
+        }
+        break;
+        //-----------------------------
+    default:
+        break;
+    }
+
+    // Mouse input (move/buttons/wheel) is handled via SDL events (issue #442).
+    switch (msg)
+    {
+    case WM_IME_NOTIFY:
+    {
+        if (g_iChatInputType == 1)
+        {
+            switch (wParam)
+            {
+            case IMN_SETCONVERSIONMODE:
+                if (GetFocus() == g_hWnd)
+                {
+                    CheckTextInputBoxIME(IME_CONVERSIONMODE);
+                }
+                break;
+            case IMN_SETSENTENCEMODE:
+                if (GetFocus() == g_hWnd)
+                {
+                    CheckTextInputBoxIME(IME_SENTENCEMODE);
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    break;
+    case WM_CHAR:
+    {
+        switch (wParam)
+        {
+        case VK_RETURN:
+        {
+            SetEnterPressed(true);
+        }
+        break;
+        }
+    }
+    break;
+    }
+
+    return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+#endif // _WIN32 (WndProc)
+
+#ifndef _WIN32
+static std::wstring BuildPortableCommandLine(const PSTR commandLine)
+{
+    std::wstring result;
+    if (commandLine == nullptr)
+    {
+        return result;
+    }
+
+    for (const unsigned char* character = reinterpret_cast<const unsigned char*>(commandLine); *character != '\0';
+         ++character)
+    {
+        result.push_back(*character);
+    }
+
+    return result;
+}
+#endif
+
+wchar_t m_Username[11];
+wchar_t m_Password[21];
+wchar_t m_Version[11];
+wchar_t m_ExeVersion[11];
+int m_SoundOnOff;
+int m_MusicOnOff;
+int m_Resolution;
+int m_RememberMe;
+
+wchar_t g_aszMLSelection[MAX_LANGUAGE_NAME_LENGTH] = {'\0'};
+
+BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring& lpszString)
+{
+    if (lpszCommandLine.empty())
+    {
+        return FALSE;
+    }
+
+    // Create both lowercase and uppercase variants of the option character
+    std::wstring cOptionLower = L"/";
+    cOptionLower += static_cast<wchar_t>(towlower(static_cast<wint_t>(cOption)));
+    auto foundIndex = lpszCommandLine.find(cOptionLower);
+    if (foundIndex == std::wstring::npos)
+    {
+        std::wstring cOptionUpper = L"/";
+        cOptionUpper += static_cast<wchar_t>(towupper(static_cast<wint_t>(cOption)));
+        foundIndex = lpszCommandLine.find(cOptionUpper);
+    }
+
+    if (foundIndex == std::wstring::npos)
+    {
+        return FALSE;
+    }
+
+    auto endIndex = lpszCommandLine.find(L' ', foundIndex);
+    if (endIndex == std::wstring::npos)
+    {
+        endIndex = lpszCommandLine.length();
+    }
+
+    lpszString = lpszCommandLine.substr(foundIndex + 2, endIndex - foundIndex - 2);
+    return TRUE;
+}
+
+#ifdef _WIN32
+#include <tlhelp32.h>
+#endif
+
+wchar_t g_lpszCmdURL[50];
+BOOL GetConnectServerInfo(wchar_t* szCmdLine, wchar_t* lpszURL, WORD* pwPort)
+{
+    std::wstring lpszTemp = {
+        0,
+    };
+
+    if (!Util_CheckOption(szCmdLine, L'u', lpszTemp))
+    {
+        return FALSE;
+    }
+
+    wcscpy(lpszURL, lpszTemp.c_str());
+    if (!Util_CheckOption(szCmdLine, L'p', lpszTemp))
+    {
+        return FALSE;
+    }
+
+    if (!Core::Platform::ParseServerPort(lpszTemp, *pwPort))
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+extern int TimeRemain;
+BOOL g_bInactiveTimeChecked = FALSE;
+void MoveObject(OBJECT* o);
+
+bool ExceptionCallback(_EXCEPTION_POINTERS* pExceptionInfo)
+{
+    if (g_bUseWindowMode == FALSE && g_bUseFullscreenMode == TRUE)
+    {
+        ChangeDisplaySettings(nullptr, 0);
+    }
+    return true;
+}
+
+double CPU_AVG = 0.0;
+static void RenderProfiledFrame()
+{
+    {
+        FRAME_PROFILE(RendererBegin);
+        mu::GetRenderer().BeginFrame();
+    }
+    RenderScene(g_hDC);
+    {
+        FRAME_PROFILE(RendererEnd);
+        mu::GetRenderer().EndFrame();
+    }
+    FrameProfiler::CompleteFrame();
+    Core::Benchmark::Recorder::Instance().Tick();
+}
+
+void RecordCpuUsage()
+{
+    constexpr int max_recordings = 60;
+    double CPU_Recordings[max_recordings] = {0.0};
+    double currentAvg = 0.0;
+    double sum = 0.0;
+    int count = 0;
+    int numFilled = 0;
+    auto lastUpdateTime = std::chrono::steady_clock::now();
+
+    while (!Destroy)
+    {
+        double currentUsage = CpuUsage::Instance()->GetUsage() * 100.0;
+
+        currentUsage = std::clamp(currentUsage, 0.0, 100.0);
+
+        // Subtract the old value to maintain the sum
+        sum -= CPU_Recordings[count];
+
+        sum += currentUsage;
+
+        CPU_Recordings[count] = currentUsage;
+
+        // Update the count (wrap around when full - FIFO behavior)
+        count = (count + 1) % max_recordings;
+
+        if (numFilled < max_recordings)
+        {
+            numFilled++;
+        }
+
+        // Calculate the current average
+        currentAvg = sum / numFilled;
+
+        // Update the CPU_AVG every 250 ms
+        auto currentTime = std::chrono::steady_clock::now();
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastUpdateTime).count() >= 250)
+        {
+            CPU_AVG = currentAvg;
+            lastUpdateTime = currentTime;
+        }
+
+        // Sleep to match a 60Hz frame rate as the basis
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    }
+}
+
+
+#ifdef _WIN32
+// Transitional bridge (issue #442): SDL owns message dispatch and default
+// handling. Forward only the remaining queued game-input/shutdown messages;
+// default/non-client messages can otherwise enter Win32 button tracking twice
+// and stall Minimize/Close. Removed once input/IME are SDL-native and the legacy
+// text boxes are replaced (issue #447).
+static bool SDLCALL Win32MessageHook(void* /*userdata*/, MSG* msg)
+{
+    // Let SDL own window close. Forwarding WM_CLOSE to WndProc would reach
+    // DefWindowProc, which destroys the window synchronously and out from under
+    // SDL. The main loop handles SDL's window-close event instead.
+    if (msg->message == WM_CLOSE)
+        return true;
+    // Child controls, editor windows and other windows on this thread keep
+    // their own handling in every build, including normal player builds.
+    if (msg->hwnd != nullptr && msg->hwnd != g_hWnd)
+        return true;
+
+    // Only F10's zoom lock, Enter's legacy input flag and posted WM_DESTROY
+    // shutdown requests need this bridge. SDL dispatches everything else.
+    const bool isZoomLockKey = msg->message == WM_SYSKEYDOWN && msg->wParam == VK_F10;
+    const bool isEnterKey = msg->message == WM_CHAR && msg->wParam == VK_RETURN;
+    if (isZoomLockKey || isEnterKey || msg->message == WM_DESTROY)
+    {
+        WndProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
+    }
+    return true;
+}
+#endif
+
+// SDL event translation (issue #442). Mouse and window events are handled from
+// the SDL event loop instead of WndProc, feeding the same global input state.
+namespace
+{
+bool InputDiagnosticsEnabled()
+{
+    static const bool enabled = std::getenv("MU_INPUT_DIAGNOSTICS") != nullptr;
+    return enabled;
+}
+
+struct WindowScaleMetrics
+{
+    int windowWidth = 0;
+    int windowHeight = 0;
+    int pixelWidth = 0;
+    int pixelHeight = 0;
+    float pixelDensity = 1.0f;
+    float displayScale = 1.0f;
+    float contentScale = 1.0f;
+};
+
+WindowScaleMetrics ReadWindowScaleMetrics()
+{
+    WindowScaleMetrics metrics;
+    if (g_sdlWindow == nullptr)
+        return metrics;
+
+    SDL_GetWindowSize(g_sdlWindow, &metrics.windowWidth, &metrics.windowHeight);
+    SDL_GetWindowSizeInPixels(g_sdlWindow, &metrics.pixelWidth, &metrics.pixelHeight);
+    metrics.pixelDensity = SDL_GetWindowPixelDensity(g_sdlWindow);
+    metrics.displayScale = SDL_GetWindowDisplayScale(g_sdlWindow);
+    metrics.contentScale = UI::Scaling::ContentScaleFromMetrics(metrics.displayScale, metrics.pixelDensity);
+    return metrics;
+}
+
+bool RefreshWindowContentScale()
+{
+    const WindowScaleMetrics metrics = ReadWindowScaleMetrics();
+    const float previousScale = UI::Scaling::GetWindowContentScale();
+    UI::Scaling::SetWindowContentScale(metrics.contentScale);
+    const bool changed = std::abs(previousScale - UI::Scaling::GetWindowContentScale()) > 0.001f;
+    if (InputDiagnosticsEnabled())
+    {
+        mu::log::Get("input")->info(
+            "[InputDiag] window scale window={}x{} pixels={}x{} density={:.3f} display={:.3f} content={:.3f}",
+            metrics.windowWidth, metrics.windowHeight, metrics.pixelWidth, metrics.pixelHeight, metrics.pixelDensity,
+            metrics.displayScale, metrics.contentScale);
+    }
+    return changed;
+}
+
+void HandleMouseMotion(float winX, float winY)
+{
+    g_fWindowMouseX = winX;
+    g_fWindowMouseY = winY;
+    const auto transform = UI::Scaling::ScreenOverlayTransform(WindowWidth, WindowHeight);
+    MouseX = std::clamp(static_cast<int>(UI::Scaling::LogicalX(transform, winX)), 0, REFERENCE_WIDTH);
+    MouseY = std::clamp(static_cast<int>(UI::Scaling::LogicalY(transform, winY)), 0, REFERENCE_HEIGHT);
+
+    static bool firstMotionLogged = false;
+    if (InputDiagnosticsEnabled() && !firstMotionLogged)
+    {
+        const WindowScaleMetrics metrics = ReadWindowScaleMetrics();
+        mu::log::Get("input")->info(
+            "[InputDiag] first mouse motion raw=({:.1f},{:.1f}) logical=({},{}) window={}x{} pixels={}x{} "
+            "density={:.3f} display={:.3f} content={:.3f} active={}",
+            winX, winY, MouseX, MouseY, metrics.windowWidth, metrics.windowHeight, metrics.pixelWidth,
+            metrics.pixelHeight, metrics.pixelDensity, metrics.displayScale, metrics.contentScale, g_bWndActive);
+        firstMotionLogged = true;
+    }
+}
+
+void HandleMouseButton(const SDL_Event& e)
+{
+    HandleMouseMotion(e.button.x, e.button.y);
+    const bool down = (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN);
+    if (InputDiagnosticsEnabled())
+    {
+        const WindowScaleMetrics metrics = ReadWindowScaleMetrics();
+        mu::log::Get("input")->info(
+            "[InputDiag] mouse button={} down={} raw=({:.1f},{:.1f}) logical=({},{}) window={}x{} pixels={}x{} "
+            "density={:.3f} display={:.3f} content={:.3f} active={}",
+            e.button.button, down, e.button.x, e.button.y, MouseX, MouseY, metrics.windowWidth, metrics.windowHeight,
+            metrics.pixelWidth, metrics.pixelHeight, metrics.pixelDensity, metrics.displayScale, metrics.contentScale,
+            g_bWndActive);
+    }
+    g_iNoMouseTime = 0;
+    switch (e.button.button)
+    {
+    case SDL_BUTTON_LEFT:
+        if (down)
+        {
+            MouseLButtonPop = false;
+            if (!MouseLButton)
+                MouseLButtonPush = true;
+            MouseLButton = true;
+            if (e.button.clicks >= 2)
+                MouseLButtonDBClick = true;
+            SetCapture(g_hWnd);
+        }
+        else
+        {
+            if (MouseLButton)
+                MouseLButtonPop = true;
+            MouseLButton = false;
+            g_iMousePopPosition_x = MouseX;
+            g_iMousePopPosition_y = MouseY;
+            ReleaseCapture();
+        }
+        break;
+    case SDL_BUTTON_RIGHT:
+        if (down)
+        {
+            MouseRButtonPop = false;
+            if (!MouseRButton)
+                MouseRButtonPush = true;
+            MouseRButton = true;
+            SetCapture(g_hWnd);
+        }
+        else
+        {
+            if (MouseRButton)
+                MouseRButtonPop = true;
+            MouseRButton = false;
+            ReleaseCapture();
+        }
+        break;
+    case SDL_BUTTON_MIDDLE:
+        if (down)
+        {
+            MouseMButtonPop = false;
+            if (!MouseMButton)
+                MouseMButtonPush = true;
+            MouseMButton = true;
+            SetCapture(g_hWnd);
+        }
+        else
+        {
+            if (MouseMButton)
+                MouseMButtonPop = true;
+            MouseMButton = false;
+            ReleaseCapture();
+        }
+        break;
+    }
+}
+
+// The OS content scale feeds native font sizes, RmlUi's dp ratio and every scale the theme's
+// window placement and the login/character scenes derive from it. The window keeps its size.
+void HandleContentScaleChange()
+{
+    if (!RefreshWindowContentScale())
+        return;
+    ReinitializeFonts();
+    RmlUiRuntime::Instance().RefreshScale();
+    UI::Placement::Invalidate();
+    CSceneUICoordinator::Instance().RepositionSceneUI();
+}
+
+void HandleWindowResize(int width, int height)
+{
+    if (width <= 0 || height <= 0)
+        return;
+    WindowWidth = width;
+    WindowHeight = height;
+    CInput::Instance().SetScreenSize(WindowWidth, WindowHeight);
+    UI::Scaling::SetActiveTransform(UI::Scaling::ScreenOverlayTransform(WindowWidth, WindowHeight));
+    OpenglWindowWidth = WindowWidth;
+    OpenglWindowHeight = WindowHeight;
+    RmlUiRuntime::Instance().OnResize(static_cast<int>(WindowWidth), static_cast<int>(WindowHeight));
+    UpdateResolutionDependentSystems();
+    UpdateCursorClip();
+}
+
+void HandleFocusChange(bool active)
+{
+    if (InputDiagnosticsEnabled())
+    {
+        mu::log::Get("input")->info("[InputDiag] focus active={} previous={}", active, g_bWndActive);
+    }
+    if (!active)
+    {
+#ifdef ACTIVE_FOCUS_OUT
+        if (g_bUseWindowMode == FALSE)
+#endif
+            g_bWndActive = false;
+        // Release the cursor when losing focus so input can route elsewhere.
+        ClipCursor(nullptr);
+
+        if (g_bUseWindowMode == FALSE && !g_HasInactiveFpsOverride)
+        {
+            g_TargetFpsBeforeInactive = GetTargetFps();
+            SetTargetFps(REFERENCE_FPS);
+            g_HasInactiveFpsOverride = true;
+        }
+        if (g_bUseWindowMode == TRUE)
+        {
+            MouseLButton = false;
+            MouseLButtonPop = false;
+            MouseLButtonPush = false;
+            MouseRButton = false;
+            MouseRButtonPop = false;
+            MouseRButtonPush = false;
+            MouseLButtonDBClick = false;
+            MouseMButton = false;
+            MouseMButtonPop = false;
+            MouseMButtonPush = false;
+            MouseWheel = 0;
+        }
+        Core::Input::ClearPressEdges();
+    }
+    else
+    {
+        g_bWndActive = true;
+        if (g_HasInactiveFpsOverride)
+        {
+            SetTargetFps(g_TargetFpsBeforeInactive);
+            g_HasInactiveFpsOverride = false;
+        }
+        UpdateCursorClip();
+    }
+}
+
+// UTF-8 <-> UTF-16 conversions sized to the input, so text of any length
+// (typed, copied or pasted) round-trips without truncation (issue #447).
+std::wstring Utf8ToWide(const char* utf8)
+{
+    if (utf8 == nullptr)
+        return std::wstring();
+    const int needed = MultiByteToWideChar(CP_UTF8, 0, utf8, -1, nullptr, 0);
+    if (needed <= 1)
+        return std::wstring();            // <=1 means empty or error
+    std::wstring wide(needed - 1, L'\0'); // needed includes the null terminator
+    MultiByteToWideChar(CP_UTF8, 0, utf8, -1, wide.data(), needed);
+    return wide;
+}
+
+std::string WideToUtf8(const std::wstring& wide)
+{
+    if (wide.empty())
+        return std::string();
+    const int needed = WideCharToMultiByte(CP_UTF8, 0, wide.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    if (needed <= 1)
+        return std::string(); // <=1 means empty or error
+    std::string utf8(needed - 1, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, wide.c_str(), -1, utf8.data(), needed, nullptr, nullptr);
+    return utf8;
+}
+
+} // namespace
+
+std::vector<std::pair<int, int>> MuGetSupportedDisplayResolutions()
+{
+    std::vector<std::pair<int, int>> resolutions;
+    if (g_sdlWindow == nullptr)
+    {
+        return resolutions;
+    }
+
+    SDL_DisplayID display = SDL_GetDisplayForWindow(g_sdlWindow);
+    if (display == 0)
+    {
+        display = SDL_GetPrimaryDisplay();
+    }
+    if (display == 0)
+    {
+        return resolutions;
+    }
+
+    int modeCount = 0;
+    SDL_DisplayMode** modes = SDL_GetFullscreenDisplayModes(display, &modeCount);
+    if (modes == nullptr)
+    {
+        mu::log::Get("platform")->warn("SDL_GetFullscreenDisplayModes failed: {}", SDL_GetError());
+        return resolutions;
+    }
+
+    resolutions.reserve(static_cast<size_t>(modeCount));
+    for (int i = 0; i < modeCount; ++i)
+    {
+        if (modes[i] != nullptr)
+        {
+            resolutions.emplace_back(modes[i]->w, modes[i]->h);
+        }
+    }
+    SDL_free(modes);
+    return resolutions;
+}
+
+// Wayland compositors own top-level window placement, so SDL rejects position
+// requests there. Not asking also keeps SDL from holding a pending position it
+// never clears on Wayland, which can pin a later borderless fullscreen to the
+// display the window was on at that point.
+static bool VideoDriverPositionsTopLevelWindows()
+{
+    constexpr std::string_view kWaylandVideoDriver = "wayland";
+    const char* driver = SDL_GetCurrentVideoDriver();
+    return driver == nullptr || driver != kWaylandVideoDriver;
+}
+
+static void CenterWindowAfterResize(SDL_Window* window)
+{
+    if (!VideoDriverPositionsTopLevelWindows())
+        return;
+
+    if (!SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED))
+        mu::log::Get("platform")->warn("SDL_SetWindowPosition failed: {}", SDL_GetError());
+}
+
+// Resolution change through SDL (issue #462). SDL owns the window on every
+// platform, so resize it via SDL rather than the OS. The old Windows path in
+// ApplyResolution() drove Win32 SetWindowPos/ChangeDisplaySettings on g_hWnd,
+// which fought SDL: it pins the min/max tracking size of a non-resizable
+// window, so a raw SetWindowPos was clamped back and the resolution never
+// changed unless a windowed/fullscreen toggle reset the style first.
+// SDL_SetWindowSize resizes regardless of the resizable flag and drives the
+// same HandleWindowResize update synchronously, so callers can Save() config
+// right after and see the size the window actually ended up with.
+void MuApplyWindowResolution(unsigned int width, unsigned int height, bool windowed)
+{
+    if (!g_sdlWindow || width == 0 || height == 0)
+        return;
+    const int w = static_cast<int>(width);
+    const int h = static_cast<int>(height);
+
+    // Whether this call actually moves the window anywhere. COptionWindow::ApplyPendingUIScale()
+    // calls here with the size the window already has, purely to drive the resize that makes a new
+    // UI scale take effect -- so centering unconditionally made the whole app window jump to the
+    // middle of the display every time the user touched the scale dial. Centering is right when the
+    // size really changes (the old position may not fit any more) or when leaving fullscreen, and
+    // wrong otherwise.
+    int currentW = 0, currentH = 0;
+    SDL_GetWindowSize(g_sdlWindow, &currentW, &currentH);
+    const bool leavingFullscreen = (SDL_GetWindowFlags(g_sdlWindow) & SDL_WINDOW_FULLSCREEN) != 0;
+    const bool repositions = currentW != w || currentH != h || leavingFullscreen;
+
+    if (windowed)
+    {
+        SDL_SetWindowFullscreen(g_sdlWindow, false);
+        SDL_SetWindowSize(g_sdlWindow, w, h);
+        if (repositions)
+            CenterWindowAfterResize(g_sdlWindow);
+    }
+    else
+    {
+        // Pick the closest real fullscreen mode so the monitor switches
+        // resolution; fall back to borderless desktop if none matches.
+        SDL_DisplayMode mode;
+        const SDL_DisplayID display = SDL_GetDisplayForWindow(g_sdlWindow);
+        if (SDL_GetClosestFullscreenDisplayMode(display, w, h, 0.0f, false, &mode))
+            SDL_SetWindowFullscreenMode(g_sdlWindow, &mode);
+        else
+            SDL_SetWindowFullscreenMode(g_sdlWindow, nullptr);
+        SDL_SetWindowSize(g_sdlWindow, w, h);
+        SDL_SetWindowFullscreen(g_sdlWindow, true);
+    }
+
+    // The request is not a guarantee: the closest fullscreen mode can differ
+    // from what was asked, the borderless fallback is desktop-sized, and mode
+    // switches are asynchronous on some window managers. Settle the request,
+    // then resize the game to the size the window really got - callers persist
+    // WindowWidth/Height, and config must record what happened, not what was
+    // asked for. Logical size, matching what SDL_EVENT_WINDOW_RESIZED carries.
+    SDL_SyncWindow(g_sdlWindow);
+    int actualW = w, actualH = h;
+    SDL_GetWindowSize(g_sdlWindow, &actualW, &actualH);
+    HandleWindowResize(actualW, actualH);
+    MuReapplyVSyncPreference();
+}
+
+// Inspect only the active SDL union member, including for synthetic events.
+SDL_WindowID ActionWindowId(const SDL_Event& event)
+{
+    switch (event.type)
+    {
+    case SDL_EVENT_MOUSE_MOTION:
+        return event.motion.windowID;
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+        return event.button.windowID;
+    case SDL_EVENT_TEXT_INPUT:
+        return event.text.windowID;
+    case SDL_EVENT_KEY_DOWN:
+    case SDL_EVENT_KEY_UP:
+        return event.key.windowID;
+    default:
+        return 0;
+    }
+}
+
+// A right press consumed by the UI still reaches the game when it targets a party card (casting a
+// support skill on that member), and a right release does while the game holds the button, so it can't stick.
+bool PassesRightButtonToGame(const SDL_Event& event)
+{
+    if (event.button.button != SDL_BUTTON_RIGHT)
+        return false;
+    if (event.type == SDL_EVENT_MOUSE_BUTTON_UP)
+        return MouseRButton;
+    return g_pPartyListWindow && g_pPartyListWindow->IsCardHoveredForMemberSkill();
+}
+
+// Physical and scripted input share UI-first routing. Scripted input owns its
+// own legacy held state; it never acquires the OS pointer or replays SDL events.
+bool RouteActionInput(SDL_Event& event, bool synthetic, bool& propagates)
+{
+    if (!g_sdlWindow || (synthetic && ActionWindowId(event) != SDL_GetWindowID(g_sdlWindow)))
+        return false;
+    propagates = true;
+    switch (event.type)
+    {
+    case SDL_EVENT_MOUSE_MOTION:
+        // Motion always reaches physical legacy tracking even when UI hovered.
+        propagates = Core::Input::RouteToUi(event, g_sdlWindow);
+        if (!synthetic)
+            HandleMouseMotion(event.motion.x, event.motion.y);
+        return true;
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+        if (!synthetic && event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+            Core::Input::Synthetic::CancelForPhysicalButton(event.button.button);
+        propagates = Core::Input::RouteToUi(event, g_sdlWindow) || PassesRightButtonToGame(event);
+        if (propagates && !synthetic)
+        {
+            Core::Input::RecordPressEdge(event);
+            HandleMouseButton(event);
+        }
+        return true;
+    case SDL_EVENT_TEXT_INPUT:
+        propagates = Core::Input::RouteToUi(event, g_sdlWindow);
+        return true;
+    case SDL_EVENT_KEY_UP:
+        // RmlUi needs the release even though legacy has no key-up reader.
+        propagates = Core::Input::RouteToUi(event, g_sdlWindow);
+        return true;
+    case SDL_EVENT_KEY_DOWN:
+        propagates = Core::Input::RouteToUi(event, g_sdlWindow);
+        // Scripted keys keep their own held state (Synthetic::IsKeyHeld).
+        if (propagates && !synthetic)
+            Core::Input::RecordPressEdge(event);
+#if !defined(_WIN32)
+        // Physical Windows messages already handle these keys; SDL-only paths
+        // (and Windows synthetic events below) must handle them here instead.
+        if (event.key.scancode == SDL_SCANCODE_RETURN || event.key.scancode == SDL_SCANCODE_KP_ENTER)
+            SetEnterPressed(true);
+        if (event.key.scancode == SDL_SCANCODE_F10 && !event.key.repeat)
+            CameraManager::Instance().ToggleZoomLock();
+#else
+        // Synthetic SDL events do not generate the Win32 messages that handle
+        // these system keys for physical input.
+        if (synthetic && event.key.scancode == SDL_SCANCODE_RETURN)
+            SetEnterPressed(true);
+        if (synthetic && event.key.scancode == SDL_SCANCODE_F10 && !event.key.repeat)
+            CameraManager::Instance().ToggleZoomLock();
+#endif
+        return true;
+    default:
+        return false;
+    }
+}
+
+namespace
+{
+// What startup set up, undone newest first by ShutdownClient, after a normal quit and after a failed startup alike.
+Core::TeardownStack g_teardown;
+std::thread g_cpuUsageRecorder;
+bool g_preciseTimer = false;
+} // namespace
+
+// One SDL event, as SDL_AppEvent hands them over; false once the client should quit.
+bool HandleClientEvent(SDL_Event& event)
+{
+#ifdef _EDITOR
+    // Feed every event to the editor's ImGui SDL3 backend (issue #442).
+    // Guard on an active context: editor init can fail or be shut down.
+    if (ImGui::GetCurrentContext() != nullptr)
+        ImGui_ImplSDL3_ProcessEvent(&event);
+    // What the editor takes (a click or a key on one of its windows) does
+    // not reach RmlUi or the game under it.
+    if (g_MuEditorCore.ClaimsEvent(event))
+        return !Destroy;
+#endif
+    switch (event.type)
+    {
+    case SDL_EVENT_QUIT:
+        SaveOptionsBeforeClose();
+        Destroy = true;
+        break;
+    case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+        // Titlebar X / Alt+F4: request shutdown directly on SDL's close
+        // event, without relying on a subsequent SDL_EVENT_QUIT (#535).
+        SaveOptionsBeforeClose();
+        Destroy = true;
+        break;
+    case SDL_EVENT_MOUSE_MOTION:
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+    {
+        bool propagates = true;
+        RouteActionInput(event, false, propagates);
+        break;
+    }
+    case SDL_EVENT_MOUSE_WHEEL:
+        if (Core::Input::RouteToUi(event, g_sdlWindow))
+        {
+            // SDL does not pre-correct flipped (natural) scrolling; invert.
+            MouseWheel = (event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED) ? -static_cast<int>(event.wheel.y)
+                                                                           : static_cast<int>(event.wheel.y);
+        }
+        break;
+    case SDL_EVENT_WINDOW_RESIZED:
+        HandleWindowResize(event.window.data1, event.window.data2);
+        break;
+    case SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED:
+        HandleContentScaleChange();
+        break;
+    case SDL_EVENT_WINDOW_FOCUS_GAINED:
+        HandleFocusChange(true);
+        break;
+#ifndef _WIN32
+    case SDL_EVENT_WINDOW_MOUSE_ENTER:
+        // Wayland can deliver the first pointer-enter after the startup
+        // cursor-hide, dropping it and leaving the OS cursor over the
+        // game's own; re-apply the hide on every enter (issue #462).
+        MuApplyCursorVisibility();
+        break;
+#endif
+    case SDL_EVENT_WINDOW_FOCUS_LOST:
+        HandleFocusChange(false);
+        break;
+    case SDL_EVENT_TEXT_INPUT:
+    case SDL_EVENT_KEY_UP:
+    case SDL_EVENT_KEY_DOWN:
+    {
+        bool propagates = true;
+        RouteActionInput(event, false, propagates);
+        break;
+    }
+    case SDL_EVENT_TEXT_EDITING:
+        // IsTextInputActive() is driven by RmlUiSystemInterface::ActivateKeyboard/
+        // DeactivateKeyboard, which WidgetTextInput's own Focus/Blur handling calls.
+        if (RmlUiRuntime::Instance().IsTextInputActive())
+            RmlUiRuntime::Instance().ProcessTextEditing(event);
+        break;
+    default:
+        break;
+    }
+
+    return !Destroy;
+}
+
+// One frame, as SDL_AppIterate calls it after handing over the frame's events; false once the client should quit.
+bool IterateClient()
+{
+    // Nothing runs, not even the packets or the timers; the events still arrive, so the window can close.
+    if (FramesPaused())
+    {
+        SDL_Delay(10);
+        return !Destroy;
+    }
+
+    // Process server packets handed over from the network thread. Replaces
+    // the old WM_RECEIVE_BUFFER message round-trip; runs on the main thread.
+    Network::IncomingPacketQueue::Instance().DrainTo(ProcessPacketCallback);
+
+    // Run a pending reconnect teardown between frames (self-guards on its
+    // pending flag). Replaces the old WM_START_RECONNECT round-trip.
+    ReconnectManager::Instance().Begin();
+
+    // Fire any due timers. Replaces the Win32 SetTimer/WM_TIMER dispatch.
+    Core::Time::FrameTimerScheduler::Instance().Tick();
+
+    // Serve the control socket, after this frame's packets have been
+    // processed so a command sees the newest game state, and before
+    // rendering so an act's step is drawn in the same frame. Does nothing
+    // when the socket was never opened.
+    App::Control::ControlServer::Instance().Poll();
+
+    if (CheckRenderNextFrame())
+    {
+        if (g_bUseWindowMode || g_bWndActive || g_HasInactiveFpsOverride)
+        {
+#ifdef _EDITOR
+            // F12 key toggle for editor, from the game window or the editor's
+            // own: the key itself, not the game's keys (IsKeyDown leaves out
+            // what is pressed in the editor's windows).
+            static bool wasF12Pressed = false;
+            const bool f12Down = Core::Input::Synthetic::IsKeyHeld(VK_F12) ||
+                                 SDL_GetKeyboardState(nullptr)[Core::Input::VkToScancode(VK_F12)];
+            if (f12Down)
+            {
+                if (!wasF12Pressed)
+                {
+                    g_MuEditorCore.ToggleEditor();
+                    fwprintf(stderr, L"[Editor] Toggled: %s\n", g_MuEditorCore.IsEnabled() ? L"ON" : L"OFF");
+                    fflush(stderr);
+                    wasF12Pressed = true;
+                }
+            }
+            else
+            {
+                wasF12Pressed = false;
+            }
+
+            // Update editor UI (must be before RenderScene)
+            g_MuEditorCore.Update();
+#endif
+
+            RequestDiagnosticFrameCapture();
+            ApplyPendingVSyncPreference();
+            // Between frames: a texture replaced mid-frame would drop the frame's draws.
+            Bitmaps.UpdateTextureFiltering();
+            // The player's Mood strength, at most one map light rebuild per frame however often
+            // it moved (options open or closed).
+            Render::Look::ApplyPendingTuning();
+            // Load work runs here, between frames: a load inside a frame loses what the frame drew before it.
+            PrepareSceneBeforeFrame();
+            // The first frame has something to draw now.
+            if ((SDL_GetWindowFlags(g_sdlWindow) & SDL_WINDOW_HIDDEN) != 0)
+                SDL_ShowWindow(g_sdlWindow);
+            RenderProfiledFrame();
+#ifdef _EDITOR
+            // The editor's own windows, now that the game's frame went to the GPU.
+            g_MuEditorCore.RenderPlatformWindows();
+#endif
+            ConsumeDiagnosticFrameCapture();
+        }
+    }
+    else
+    {
+        // SDL handed this frame's events over before calling, so just pace the frame.
+        WaitForNextActivity(g_preciseTimer);
+    }
+
+    // Per-frame mouse-state reset (was done per-message in WndProc), before the next frame's events: clear a
+    // stale double-click and a pop whose position the cursor has moved off.
+    MouseLButtonDBClick = false;
+    if (MouseLButtonPop && (g_iMousePopPosition_x != MouseX || g_iMousePopPosition_y != MouseY))
+        MouseLButtonPop = false;
+
+    // Wait for the GPU before SDL reads the next frame's input, not after: with VSync the frame then uses input
+    // as fresh as the CPU work allows, and the wait isn't counted as the renderer's CPU time.
+    mu::GetRenderer().WaitForSwapchain();
+    return !Destroy;
+}
+
+namespace
+{
+struct FontSizes
+{
+    int normal;
+    int big;
+    int fixed;
+};
+
+FontSizes CalculateFontSizes()
+{
+    using UI::Scaling::FontRole;
+    return {
+        UI::Scaling::CachedFontPointSize(FontRole::Normal),
+        UI::Scaling::CachedFontPointSize(FontRole::Big),
+        UI::Scaling::CachedFontPointSize(FontRole::Fixed),
+    };
+}
+
+#ifdef _WIN32
+// Absolute path of a bundled font file (relative to ./fonts) next to the exe.
+// The curated names in kBundledFonts are ASCII, so the byte-wise widen is safe.
+std::wstring BundledFontFullPath(const char* relative)
+{
+    wchar_t exePath[MAX_PATH] = {};
+    GetModuleFileNameW(nullptr, exePath, MAX_PATH);
+    std::wstring path(exePath);
+    path.resize(path.find_last_of(L"\\/") + 1); // keep the directory + separator
+    while (*relative)
+        path.push_back(static_cast<wchar_t>(static_cast<unsigned char>(*relative++)));
+    return path;
+}
+#endif
+
+// Privately register the TTFs bundled in ./fonts so GDI resolves their face
+// names even when they are not installed system-wide — parity with the
+// non-Windows GdiText shim, which reads ./fonts directly. FR_PRIVATE scopes the
+// faces to this process, leaving the system font list untouched. No-op off Windows,
+// where bundled fonts are resolved by GdiText. Shares the kBundledFonts table.
+bool RegisterBundledFonts()
+{
+#ifdef _WIN32
+    std::vector<std::wstring> registeredPaths;
+    const auto rollback = [&registeredPaths]()
+    {
+        for (auto it = registeredPaths.rbegin(); it != registeredPaths.rend(); ++it)
+            RemoveFontResourceExW(it->c_str(), FR_PRIVATE, nullptr);
+    };
+    const auto registerPath = [&registeredPaths, &rollback](const char* relativePath)
+    {
+        const std::wstring path = BundledFontFullPath(relativePath);
+        if (!std::filesystem::is_regular_file(path))
+        {
+            mu::log::Get("render")->error("GDI -- bundled font missing path='{}'", WideToUtf8(path));
+            rollback();
+            return false;
+        }
+        if (AddFontResourceExW(path.c_str(), FR_PRIVATE, nullptr) == 0)
+        {
+            mu::log::Get("render")->error("GDI -- AddFontResourceExW failed path='{}' error={}", WideToUtf8(path),
+                                          GetLastError());
+            rollback();
+            return false;
+        }
+        registeredPaths.push_back(path);
+        return true;
+    };
+
+    for (const auto& font : kBundledFonts)
+    {
+        if (!registerPath(font.regular) || !registerPath(font.bold))
+            return false;
+    }
+    if (!registerPath(kBundledFixedFont.regular))
+        return false;
+#endif
+    return true;
+}
+
+// Mirrors RegisterBundledFonts so the process leaves no private faces behind.
+void UnregisterBundledFonts()
+{
+#ifdef _WIN32
+    for (const auto& font : kBundledFonts)
+    {
+        RemoveFontResourceExW(BundledFontFullPath(font.regular).c_str(), FR_PRIVATE, nullptr);
+        RemoveFontResourceExW(BundledFontFullPath(font.bold).c_str(), FR_PRIVATE, nullptr);
+    }
+    RemoveFontResourceExW(BundledFontFullPath(kBundledFixedFont.regular).c_str(), FR_PRIVATE, nullptr);
+#endif
+}
+
+HFONT CreateFontForFamily(int size, int weight, std::string_view family)
+{
+    const std::string familyName(family);
+    const std::wstring face = Utf8ToWide(familyName.c_str());
+    return CreateFont(size, 0, 0, 0, weight, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                      CLEARTYPE_NATURAL_QUALITY, DEFAULT_PITCH | FF_DONTCARE, face.c_str());
+}
+
+HFONT CreateUIFont(int size, int weight)
+{
+    const std::string configuredFamily = WideToUtf8(GameConfig::GetInstance().GetFontSelection());
+    return CreateFontForFamily(size, weight, ResolveBundledFont(configuredFamily).family);
+}
+
+bool CreateNewFonts(FontSizes sizes)
+{
+    HFONT normal = CreateUIFont(sizes.normal, FW_NORMAL);
+    HFONT bold = CreateUIFont(sizes.normal, FW_SEMIBOLD);
+    HFONT big = CreateUIFont(sizes.big, FW_SEMIBOLD);
+    HFONT fixed = CreateFontForFamily(sizes.fixed, FW_NORMAL, kBundledFixedFont.family);
+    if (!normal || !bold || !big || !fixed)
+    {
+        if (normal)
+            DeleteObject(normal);
+        if (bold)
+            DeleteObject(bold);
+        if (big)
+            DeleteObject(big);
+        if (fixed)
+            DeleteObject(fixed);
+        return false;
+    }
+
+    g_hFont = normal;
+    g_hFontBold = bold;
+    g_hFontBig = big;
+    g_hFixFont = fixed;
+    return true;
+}
+
+void ReinitializeTextRenderer(FontSizes sizes)
+{
+    g_pRenderText->Release();
+    const std::string selectedFamily = WideToUtf8(GameConfig::GetInstance().GetFontSelection());
+    const bool fontsReloaded = mu::GetRenderer().ReloadTtfFonts(selectedFamily, static_cast<float>(sizes.normal),
+                                                                static_cast<float>(sizes.big),
+                                                                static_cast<float>(sizes.fixed));
+    if (!fontsReloaded)
+        mu::log::Get("render")->error("SDL_ttf -- keeping the previous font set after reload failure");
+    const bool textCreated = g_pRenderText->Create(g_hDC);
+    if (textCreated)
+        g_pRenderText->SetFont(g_hFont);
+}
+
+void RefreshInventoryEquipmentSlots()
+{
+    // Inventory slot positions depend on the text buffer size; MUST run after
+    // ReinitializeTextRenderer().
+    if (!g_pNewUISystem)
+        return;
+    auto* pInventory = g_pNewUISystem->GetUI_NewMyInventory();
+    if (pInventory)
+        pInventory->SetEquipmentSlotInfo();
+}
+
+} // namespace
+
+// Reinitialize fonts after an explicit font-family change.
+void ReinitializeFonts()
+{
+    // Save old font handles so we can delete them after the renderer has switched over
+    HFONT hOldFont = g_hFont;
+    HFONT hOldFontBold = g_hFontBold;
+    HFONT hOldFontBig = g_hFontBig;
+    HFONT hOldFixFont = g_hFixFont;
+
+    const FontSizes sizes = CalculateFontSizes();
+    if (!CreateNewFonts(sizes))
+    {
+        mu::log::Get("render")->error("GDI -- failed to create bundled font roles during live reload");
+        return;
+    }
+    ReinitializeTextRenderer(sizes);
+
+    if (hOldFont)
+        DeleteObject(hOldFont);
+    if (hOldFontBold)
+        DeleteObject(hOldFontBold);
+    if (hOldFontBig)
+        DeleteObject(hOldFontBig);
+    if (hOldFixFont)
+        DeleteObject(hOldFixFont);
+
+    CInput::Instance().Create(g_hWnd, WindowWidth, WindowHeight);
+    RefreshInventoryEquipmentSlots();
+    // Text fields render through g_pRenderText and resolve their font by kind
+    // each frame, so they need no per-control rebuild after a resolution change.
+}
+
+DWORD GetDesktopBitsPerPel()
+{
+    DEVMODE dm = {};
+    dm.dmSize = sizeof(dm);
+    if (EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dm))
+        return dm.dmBitsPerPel;
+    return 32;
+}
+
+void UpdateCursorClip()
+{
+    // Confine cursor in fullscreen + active only. In windowed mode the user
+    // must be able to move the cursor to other windows; when deactivated we
+    // must also release so Windows can focus other apps.
+    if (!g_hWnd || g_bUseWindowMode || !g_bWndActive)
+    {
+        ClipCursor(nullptr);
+        return;
+    }
+    RECT client;
+    if (!GetClientRect(g_hWnd, &client))
+        return;
+    POINT tl = {client.left, client.top};
+    POINT br = {client.right, client.bottom};
+    ClientToScreen(g_hWnd, &tl);
+    ClientToScreen(g_hWnd, &br);
+    RECT clip = {tl.x, tl.y, br.x, br.y};
+    ClipCursor(&clip);
+}
+
+// Update camera state when window resolution changes
+void UpdateResolutionDependentSystems()
+{
+    // Reposition old-style CWin-based UI for the current scene. Without this,
+    // login/character-scene info boxes stay anchored to the old screen size
+    // until the player re-enters the scene.
+    CSceneUICoordinator::Instance().RepositionSceneUI();
+}
+
+static void WriteStartupDiagnostics(const wchar_t* executableVersion, const WORD (&fileVersion)[4])
+{
+    g_ErrorReport.Write(L"\r\n");
+    g_ErrorReport.WriteLogBegin();
+    g_ErrorReport.AddSeparator();
+    g_ErrorReport.Write(L"Mu online %ls (%ls) executed. (%d.%d.%d.%d)\r\n", executableVersion, L"Eng", fileVersion[0],
+                        fileVersion[1], fileVersion[2], fileVersion[3]);
+    g_ErrorReport.WriteBuildInfo();
+    g_ConsoleDebug->Write(MCD_NORMAL, L"Mu Online (Version: %d.%d.%d.%d)", fileVersion[0], fileVersion[1],
+                          fileVersion[2], fileVersion[3]);
+
+    g_ErrorReport.WriteCurrentTime();
+    g_ErrorReport.AddSeparator();
+    g_ErrorReport.WriteSystemInfo();
+    g_ErrorReport.AddSeparator();
+}
+
+static void SetWorkingDirectoryToBasePath()
+{
+#if defined(__APPLE__)
+    // The working directory hasn't moved yet, so a relative start path still leads to the client here and is kept
+    // absolute for every later caller (WinApiShims.h).
+    if (const std::filesystem::path executable = Core::Platform::GetExecutablePath(); !executable.empty())
+    {
+        std::error_code error;
+        std::filesystem::current_path(executable.parent_path(), error);
+    }
+#else
+    if (const char* basePath = SDL_GetBasePath(); basePath != nullptr)
+    {
+        std::error_code error;
+        std::filesystem::current_path(basePath, error);
+    }
+#endif
+}
+
+// The language the player reads: SetLocale falls back to en for a locale it doesn't know.
+static Core::Log::ReadingLanguage::State CurrentReadingLanguage()
+{
+    return {I18N::GetCurrentLocale(), GameConfig::GetInstance().GetTranslateItemNames()};
+}
+
+// A UI language switch after start-up (the options window, the editor), so a report shows the language it was in.
+static void LogUiLanguageChange(void* /*context*/) noexcept
+{
+    Core::Log::ReadingLanguage::Write(CurrentReadingLanguage());
+}
+
+// The connect server: the command line's (a launcher passes one) or else config.ini's.
+static void SelectConnectServer(wchar_t* commandLine)
+{
+    WORD port;
+    const bool fromCommandLine = GetConnectServerInfo(commandLine, g_lpszCmdURL, &port) != FALSE;
+    if (fromCommandLine)
+    {
+        szServerIpAddress = g_lpszCmdURL;
+        g_ServerPort = port;
+    }
+    else
+    {
+        static std::wstring serverIPFromConfig = GameConfig::GetInstance().GetServerIP();
+        szServerIpAddress = serverIPFromConfig.c_str();
+        g_ServerPort = GameConfig::GetInstance().GetServerPort();
+    }
+    g_ErrorReport.Write(L"> Server = %hs, from %ls.\r\n",
+                        Network::DescribeEndpointForLog(mu_wchar_to_utf8(szServerIpAddress), g_ServerPort).c_str(),
+                        fromCommandLine ? L"the command line" : L"config.ini");
+}
+
+static void InitializeWorkingDirectoryAndLog()
+{
+    SetWorkingDirectoryToBasePath();
+    mu::log::Init();
+}
+
+// Everything up to the first frame, as SDL_AppInit calls it; false when the client can't start. Each step that
+// succeeds pushes how to undo it, so ShutdownClient undoes a failed startup and a normal quit the same way.
+bool StartClient(char* szCmdLine)
+{
+    InitializeWorkingDirectoryAndLog();
+    g_teardown.Push([] { mu::log::Shutdown(); });
+    // Installed before SDL starts so init failures are captured; SDL_Quit may still log, so it outlives SDL.
+    static std::optional<Core::Log::Sdl::ScopedLogOutput> sdlLogOutput;
+    sdlLogOutput.emplace();
+    g_teardown.Push([] { sdlLogOutput.reset(); });
+
+    wchar_t lpszExeVersion[256] = L"unknown";
+
+#ifdef _WIN32
+    wchar_t* lpszCommandLine = GetCommandLine();
+#else
+    std::wstring portableCommandLine = BuildPortableCommandLine(szCmdLine);
+    wchar_t* lpszCommandLine = portableCommandLine.data();
+#endif
+    wchar_t lpszFile[MAX_PATH];
+    WORD wVersion[4] = {
+        0,
+    };
+    if (GetFileNameOfFilePath(lpszFile, lpszCommandLine))
+    {
+        if (GetFileVersion(lpszFile, wVersion))
+        {
+            mu_swprintf(lpszExeVersion, L"%d.%02d", wVersion[0], wVersion[1]);
+            if (wVersion[2] > 0)
+            {
+                wchar_t lpszMinorVersion[2] = L"a";
+                lpszMinorVersion[0] += (wVersion[2] - 1);
+                wcscat(lpszExeVersion, lpszMinorVersion);
+            }
+        }
+    }
+
+    WriteStartupDiagnostics(lpszExeVersion, wVersion);
+    InitializeDotNetBridge();
+
+    g_ErrorReport.Write(L"> To read config.ini.\r\n");
+
+    // Load game settings from INI file first
+    GameConfig::GetInstance().Load();
+
+    // The animation task pool is off unless config.ini or the command line turns it on.
+    if (GameConfig::GetInstance().GetEnableAnimationTaskPool() || wcsstr(GetCommandLineW(), L"--enable-taskpool"))
+    {
+        g_bDisableAnimationTaskPool = false;
+    }
+
+    SelectConnectServer(lpszCommandLine);
+
+    // #ifdef _DEBUG
+
+    m_Username[0] = '\0';
+    m_Password[0] = '\0';
+    m_SoundOnOff = 1;
+    m_MusicOnOff = 1;
+    m_Resolution = 0;
+    m_RememberMe = 0;
+
+    g_iChatInputType = 1;
+
+    // Apply window settings from INI
+    WindowWidth = GameConfig::GetInstance().GetWindowWidth();
+    WindowHeight = GameConfig::GetInstance().GetWindowHeight();
+    g_bUseWindowMode = GameConfig::GetInstance().GetWindowMode() ? TRUE : FALSE;
+    g_bUseFullscreenMode = !g_bUseWindowMode;
+
+    // Apply audio settings from INI — volume 0 = off, >0 = on
+    m_SoundOnOff = (GameConfig::GetInstance().GetSoundVolume() > 0) ? 1 : 0;
+    m_MusicOnOff = (GameConfig::GetInstance().GetMusicVolume() > 0) ? 1 : 0;
+
+    // Apply login settings from INI
+    m_RememberMe = GameConfig::GetInstance().GetRememberMe() ? 1 : 0;
+    std::wstring langSelection = GameConfig::GetInstance().GetLanguageSelection();
+    wcsncpy_s(g_aszMLSelection, langSelection.c_str(), MAX_LANGUAGE_NAME_LENGTH - 1);
+    g_strSelectedML = g_aszMLSelection;
+    // The legacy "Eng"/"Por"/"Spn" selection that picks the Data/Local files; the UI language comes later.
+    g_ErrorReport.Write(L"> Data language = %ls.\r\n", g_aszMLSelection);
+
+    if (m_RememberMe)
+    {
+        GameConfig::GetInstance().DecryptCredentials(m_Username, m_Password, _countof(m_Username),
+                                                     _countof(m_Password));
+    }
+
+    const auto screenTransform = UI::Scaling::ScreenOverlayTransform(WindowWidth, WindowHeight);
+    UI::Scaling::SetActiveTransform(screenTransform);
+    g_fWindowMouseX = static_cast<float>(WindowWidth) * 0.5f;
+    g_fWindowMouseY = static_cast<float>(WindowHeight) * 0.5f;
+    MouseX = static_cast<int>(UI::Scaling::LogicalX(screenTransform, g_fWindowMouseX));
+    MouseY = static_cast<int>(UI::Scaling::LogicalY(screenTransform, g_fWindowMouseY));
+
+    pMultiLanguage = new CMultiLanguage(g_strSelectedML);
+    g_teardown.Push([] { SAFE_DELETE(pMultiLanguage); });
+
+    if (g_iChatInputType == 1)
+        ShowCursor(FALSE);
+
+    // Fullscreen is requested via an SDL window flag below; SDL handles the
+    // display-mode change and restores it on teardown.
+    g_ErrorReport.Write(L"> Screen size = %d x %d.\r\n", WindowWidth, WindowHeight);
+
+#ifdef _WIN32
+    g_hInst = GetModuleHandleW(nullptr);
+#endif
+
+#if defined(_EDITOR) && defined(__linux__)
+    // The editor's own windows need a video driver that places windows and
+    // knows the mouse outside them: X11, through XWayland on a Wayland desktop.
+    // SDL_VIDEO_DRIVER in the environment still decides; without X11 the
+    // editor stays inside the game window on Wayland.
+    SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "x11,wayland");
+#endif
+
+    // SDL owns the window; SDL_gpu owns the rendering device.
+    bool videoReady = SDL_InitSubSystem(SDL_INIT_VIDEO);
+#if defined(_EDITOR) && defined(__linux__)
+    // Neither X11 nor Wayland (a console, a headless machine): SDL's own choice.
+    if (!videoReady)
+    {
+        SDL_ResetHint(SDL_HINT_VIDEO_DRIVER);
+        videoReady = SDL_InitSubSystem(SDL_INIT_VIDEO);
+    }
+#endif
+    if (!videoReady)
+    {
+        const char* requestedVideoDriver = SDL_GetHint(SDL_HINT_VIDEO_DRIVER);
+        const std::wstring requestedDriver = requestedVideoDriver != nullptr && requestedVideoDriver[0] != '\0'
+                                                 ? Utf8ToWide(requestedVideoDriver)
+                                                 : L"auto";
+        const std::wstring videoInitError = Utf8ToWide(SDL_GetError());
+        g_ErrorReport.Write(L"> SDL video init failed. Requested driver: %ls. SDL error: %ls\r\n",
+                            requestedDriver.c_str(), videoInitError.c_str());
+        MessageBox(nullptr, L"Windows aplication error!", L"Aplication Error", MB_ICONERROR);
+        return false;
+    }
+    g_teardown.Push([] { SDL_Quit(); });
+
+#ifndef _WIN32
+    // Install POSIX crash-diagnostic signal handlers. After SDL_Init (R8
+    // mitigation) and after mu::log::Init() (InitializeWorkingDirectoryAndLog(), above).
+    mu::platform::InstallSignalHandlers();
+#endif
+
+#if defined(__APPLE__)
+    SetWorkingDirectoryToBasePath();
+#endif
+
+    // Hidden until the first frame is about to draw (IterateClient), so the setup below shows no black window.
+    const SDL_WindowFlags windowFlags =
+        Core::Platform::BuildSDLWindowFlags(g_bUseWindowMode != TRUE, false) | SDL_WINDOW_HIDDEN;
+
+    g_sdlWindow =
+        SDL_CreateWindow("MU Online", static_cast<int>(WindowWidth), static_cast<int>(WindowHeight), windowFlags);
+    if (!g_sdlWindow)
+    {
+        g_ErrorReport.Write(L"> SDL_CreateWindow failed.\r\n");
+        MessageBox(nullptr, L"Windows aplication error!", L"Aplication Error", MB_ICONERROR);
+        return false;
+    }
+    Core::Platform::SetGameWindow(g_sdlWindow);
+    // Also shuts down the renderer, which is created into this window below.
+    g_teardown.Push([] { ShutdownRendererWindow(); });
+
+    RefreshWindowContentScale();
+
+#if defined(__linux__)
+    SDL_Surface* applicationIcon = SDL_LoadPNG(Core::Platform::GameWindowIconFile);
+    if (applicationIcon != nullptr)
+    {
+        SDL_SetWindowIcon(g_sdlWindow, applicationIcon);
+        SDL_DestroySurface(applicationIcon);
+    }
+    else
+    {
+        SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "SDL window icon unavailable: %s", SDL_GetError());
+    }
+#endif
+
+    g_ErrorReport.Write(L"> Start window success.\r\n");
+
+    OpenglWindowWidth = WindowWidth;
+    OpenglWindowHeight = WindowHeight;
+
+    const std::string selectedFontFamily = WideToUtf8(GameConfig::GetInstance().GetFontSelection());
+    const std::string renderBackend = WideToUtf8(GameConfig::GetInstance().GetRenderBackend());
+    const FontSizes initialFontSizes = CalculateFontSizes();
+    // Before Init, so the pipelines are built once, with the sample count of the configured look.
+    MuSetAntialiasingActive(Render::Look::PresetFeatures(GameConfig::GetInstance().GetLook()).antialiasing);
+    if (!mu::InitSDLGpuRenderer(g_sdlWindow, selectedFontFamily, renderBackend,
+                                static_cast<float>(initialFontSizes.normal),
+                                static_cast<float>(initialFontSizes.big),
+                                static_cast<float>(initialFontSizes.fixed)))
+    {
+        g_ErrorReport.Write(L"SDL_gpu renderer init failed.\r\n");
+        MessageBox(nullptr, I18N::Game::InstallTheLatestGraphicsCardDriver, L"SDL_gpu Renderer Error.",
+                   MB_OK | MB_ICONEXCLAMATION);
+        return false;
+    }
+
+    // Before the first texture loads, so Enhanced filtering builds mip chains at load.
+    Bitmaps.SetTextureFiltering(Render::Look::PresetFeatures(GameConfig::GetInstance().GetLook()).textureFiltering,
+                                GameConfig::GetInstance().GetAnisotropy());
+    Bitmaps.UpdateTextureFiltering();
+    // Also before the first texture loads: the pack is read once, so a new choice takes effect after a
+    // restart.
+    Bitmaps.SetTexturePack(GameConfig::GetInstance().GetTexturePack());
+
+#ifdef _WIN32
+    // Expose SDL's native handles for remaining Windows integrations, including
+    // DirectSound and the legacy EDIT-control text boxes.
+    g_hWnd = static_cast<HWND>(
+        SDL_GetPointerProperty(SDL_GetWindowProperties(g_sdlWindow), SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr));
+    g_hDC = GetDC(g_hWnd);
+    g_hRC = nullptr;
+
+    // Bridge the remaining queued game messages only (transitional, #442/#447).
+    SDL_SetWindowsMessageHook(Win32MessageHook, nullptr);
+#endif // _WIN32
+
+    SDL_RaiseWindow(g_sdlWindow);
+    SetFocus(g_hWnd);
+
+#ifndef _WIN32
+    // The engine hid the OS cursor (it draws its own) before the SDL video
+    // subsystem existed, so that call could not reach SDL. Apply the pending
+    // state now that the window is up.
+    MuApplyCursorVisibility();
+#endif
+
+    g_ErrorReport.Write(L"> SDL_gpu init success.\r\n");
+    g_ErrorReport.AddSeparator();
+    const auto& renderer = mu::GetRenderer();
+    g_ErrorReport.WriteGpuInfo(renderer.GetGPUDeviceName(), renderer.GetGPUDriverName(),
+                               renderer.GetGPUDriverVersion());
+    g_ErrorReport.AddSeparator();
+
+    // Must run after InitSDLGpuRenderer() -- RmlUiRuntime::Create() needs a live
+    // SDL_GPUDevice/SDL_Window from mu::GetRenderer() (GetDevice()/GetWindow()).
+    UI::RmlBridge::InstallRuntimeHooks();
+    RmlUiRuntime::Instance().Create(WindowWidth, WindowHeight);
+
+    // Content that must always sit visually on top of RmlUi, regardless of theme: the game
+    // cursor, and (login/character scenes specifically) CLoginWin's, CCharMakeWin's, and
+    // CMsgWin's legacy name/password-input text. All would otherwise render earlier in the frame,
+    // as part of the normal legacy 2D pass --
+    // RmlUi always renders last (see SetPreSubmitCallback's own comment), so a theme whose
+    // #panel/.input-frame paints real pixels there (the "legacy" theme's login panel included --
+    // it reproduces the original opaque sprite art) would otherwise visually cover both.
+    // Registered here, not inside RmlUiRuntime.cpp, so that library stays scene-agnostic --
+    // this composition of game-specific overlay content belongs at the app tier, the same
+    // reasoning that already put the SDL input-event wiring here instead of in RmlUiRuntime.
+    //
+    // MAIN_SCENE included: CSysMenuWin is reachable from
+    // gameplay via the in-game ESC menu (SceneCommon.cpp's RenderInfomation() calls
+    // CSceneUICoordinator::Instance().Render() unconditionally every MAIN_SCENE frame), so RmlUi
+    // content was already live during gameplay before this
+    // change -- the cursor just wasn't being pulled back on top of it, because this callback
+    // used to skip MAIN_SCENE entirely while MainScene.cpp's own inline RenderCursor() call ran
+    // too early (before RmlUi's frame-final pass). That inline call is removed in favor of this
+    // one now covering MAIN_SCENE too -- see MainScene.cpp's RenderMainSceneUI() comment.
+    // LoginWin/CharMakeWin/MsgWin's own IsShow() guards make it safe to leave their calls
+    // unconditional across every scene this callback now covers -- those windows are never shown
+    // outside LOG_IN_SCENE/CHARACTER_SCENE regardless.
+    // Native drawing a document shows as an image: recorded last in the frame and rendered into its
+    // own textures before the main pass, so RmlUi samples this frame's drawing.
+    mu::GetRenderer().SetOffscreenRenderCallback([]
+    {
+        FRAME_PROFILE(UI);
+        // A draw pass like the scene's: what the previews draw was updated by their owners.
+        const Diagnostics::DrawSpawnCheck::DrawScope drawing;
+        Diagnostics::DrawPurityCheck::BeforeDraw();
+        UI::RmlBridge::RenderTarget::RenderAll();
+        Diagnostics::DrawPurityCheck::AfterDraw();
+    });
+
+    mu::GetRenderer().SetPostRmlUiCallback(
+        []()
+        {
+            FRAME_PROFILE(UI);
+            extern EGameScene SceneFlag;
+
+            // CSystem's own RmlUi-backed HUD (MU Helper bar, buff strip) needs a real per-scene
+            // visibility gate of its own now, unlike
+            // LoginWin/CharMakeWin/MsgWin below: those are explicitly Show()/Hide()'d by app
+            // logic at their own scene's enter/exit points, but CSystem is a single
+            // app-lifetime singleton whose Update()/Render() only ever run while
+            // SceneFlag == MAIN_SCENE (MainScene.cpp) -- previously a complete visibility gate on
+            // its own (nothing drew otherwise), now insufficient since a persistent RmlUi
+            // document keeps rendering regardless of whether Update() is still being called.
+            // Placed outside the scene-restricted block below (unconditional every frame) so
+            // leaving MAIN_SCENE for ANY scene -- not just the two this callback already
+            // special-cases -- correctly hides them.
+            if (g_pNewUISystem)
+                g_pNewUISystem->SyncMainSceneHudVisibility();
+
+            if (SceneFlag == LOG_IN_SCENE || SceneFlag == CHARACTER_SCENE || SceneFlag == MAIN_SCENE)
+            {
+                BeginBitmap();
+                RenderCursor();
+                EndBitmap();
+            }
+        });
+
+    g_ErrorReport.WriteSoundCardInfo();
+
+    // Initialize translations with the saved UI locale (defaults to "en").
+    // The options window and the editor's language box switch it later.
+    {
+        std::wstring uiLocaleW = GameConfig::GetInstance().GetUILocale();
+        std::string uiLocale(uiLocaleW.begin(), uiLocaleW.end());
+        I18N::SetLocale(uiLocale.c_str());
+    }
+    g_ItemDataHandler.SetTranslateItemNames(GameConfig::GetInstance().GetTranslateItemNames());
+    Core::Log::ReadingLanguage::Write(CurrentReadingLanguage());
+    I18N::RegisterLocaleObserver(&LogUiLanguageChange, nullptr);
+    g_MonsterDataHandler.SetNamesChangedCallback(&GameLogic::Monsters::Names::RefreshShownNames);
+    g_MonsterDataHandler.SetMonstersChangedCallback(&World::Monsters::ApplyLiveSetup);
+
+#ifdef _EDITOR
+    // Initialize MU Editor with the live SDL GPU window.
+    g_MuEditorCore.Initialize(g_sdlWindow);
+    g_teardown.Push([] { g_MuEditorCore.Shutdown(); });
+
+    // Check for --editor command line flag (in szCmdLine on every platform;
+    // GetCommandLineW is an empty stub off Windows)
+    if (szCmdLine && std::strstr(szCmdLine, "--editor"))
+    {
+        g_MuEditorCore.SetEnabled(true);
+        fwprintf(stderr, L"[Editor] Starting in editor mode (--editor flag detected)\n");
+        std::fflush(stderr);
+    }
+#endif
+
+    g_ErrorReport.WriteImeInfo(nullptr);
+    g_ErrorReport.AddSeparator();
+
+    InitVSync();
+    ApplyVSyncPreferenceNow(GameConfig::GetInstance().GetVSyncEnabled());
+    Render::Look::LoadProfile();
+    Render::Look::LoadPersonalTuning();
+    Render::Look::ApplyLookPreset(GameConfig::GetInstance().GetLook());
+
+    // Apply persisted DXP-23 effect-cost toggles (Options window's Graphics tab, formerly only
+    // reachable via the console-only $effects ... diagnostics) at launch, same as VSync above.
+    {
+        GameConfig& cfg = GameConfig::GetInstance();
+        SetDisableEffects(cfg.GetDisableEffects());
+        SetDisableParticles(cfg.GetDisableParticles());
+        SetDisableSkillEffectModels(cfg.GetDisableSkillEffectModels());
+        SetDisableBoids(cfg.GetDisableBoids());
+        SetDisableWingShadow(cfg.GetDisableWingShadow());
+        SetDisableBodyShadows(cfg.GetDisableBodyShadows());
+    }
+
+    // Make the bundled ./fonts faces resolvable by GDI before the first CreateFont,
+    // so a chosen curated font works even without a system-wide install.
+    const bool fontsRegistered = RegisterBundledFonts();
+    g_teardown.Push([] { UnregisterBundledFonts(); });
+    const bool fontsCreated = CreateNewFonts(CalculateFontSizes());
+    if (!fontsRegistered || !fontsCreated)
+    {
+#ifdef NDEBUG
+        mu::log::Get("render")->error("Bundled font roles unavailable; aborting Release startup");
+        return false;
+#else
+        mu::log::Get("render")->warn("NON-PARITY developer font fallback -- bundled GDI roles unavailable");
+#endif
+    }
+
+    // Log which UI font was resolved now that the fonts have been created (the
+    // discovery is lazy on first CreateFont). Helps diagnose "no UI text".
+    g_ErrorReport.AddSeparator();
+    g_ErrorReport.WriteFontInfo();
+    g_ErrorReport.AddSeparator();
+
+    Core::Platform::ApplyProcessLocale();
+
+    CInput::Instance().Create(g_hWnd, WindowWidth, WindowHeight);
+
+    if (g_pNewUISystem != nullptr)
+    {
+        g_pNewUISystem->Create();
+    }
+    else
+    {
+        g_ErrorReport.Write(L"WARNING: g_pNewUISystem is null, skipping Create()\r\n");
+    }
+
+    // One miniaudio backend owns both music and sound effects on every platform.
+    if (g_platformAudio == nullptr)
+    {
+        g_platformAudio = new mu::MiniAudioBackend();
+        if (!g_platformAudio->Initialize())
+        {
+            mu::log::Get("audio")->error("MiniAudioBackend::Initialize failed; game will run without audio");
+        }
+    }
+    AudioPlayer::Initialize();
+    g_teardown.Push([] { DestroySound(); });
+
+    {
+        int value = AudioPlayer::ClampVolume(GameConfig::GetInstance().GetSoundVolume());
+        if (g_pOption != nullptr)
+        {
+            g_pOption->SetVolumeLevel(value);
+        }
+        SetEffectVolumeLevel(value);
+    }
+
+    auto& timers = Core::Time::FrameTimerScheduler::Instance();
+    timers.SetRepeating(HACK_TIMER, 20 * 1000, [] { CheckHack(); });
+    timers.SetRepeating(MUHELPER_TIMER, 250 /* ms */,
+                        [] { MUHelper::CMuHelper::TimerProc(nullptr, 0, MUHELPER_TIMER, 0); });
+
+    Random::SeedRand((unsigned)time(nullptr));
+
+    for (int& i : RandomTable)
+        i = Random::Rand() % 360;
+
+    RendomMemoryDump = new BYTE[Random::Rand() % 100 + 1];
+    GateAttribute = new GATE_ATTRIBUTE[MAX_GATES]{};
+    SkillAttribute = new SKILL_ATTRIBUTE[MAX_SKILLS]{};
+    ItemAttRibuteMemoryDump = new ITEM_ATTRIBUTE[MAX_ITEM + 1024]{};
+    ItemAttribute = ItemAttRibuteMemoryDump + Random::Rand() % 1024;
+    CharacterMemoryDump = new CHARACTER[MAX_CHARACTERS_CLIENT + 1 + 128]{};
+    CharactersClient = CharacterMemoryDump + Random::Rand() % 128;
+    CharacterMachine = new CHARACTER_MACHINE;
+
+    memset(GateAttribute, 0, sizeof(GATE_ATTRIBUTE) * (MAX_GATES));
+    memset(ItemAttribute, 0, sizeof(ITEM_ATTRIBUTE) * (MAX_ITEM));
+    memset(SkillAttribute, 0, sizeof(SKILL_ATTRIBUTE) * (MAX_SKILLS));
+    memset(CharacterMachine, 0, sizeof(CHARACTER_MACHINE));
+
+    CharacterAttribute = &CharacterMachine->Character;
+    CharacterMachine->Init();
+    Hero = &CharactersClient[0];
+
+    g_pUIManager = new CUIManager;
+    g_pUIMapName = new CUIMapName; // rozy
+
+    g_BuffSystem = BuffStateSystem::Make();
+    AnimationTaskPool::Instance().Initialize();
+
+    g_MapProcess = MapProcess::Make();
+
+    g_petProcess = PetProcess::Make();
+
+    CSceneUICoordinator::Instance().Create();
+
+    if (g_iChatInputType == 1)
+    {
+        g_bIMEBlock = FALSE;
+        HIMC hIMC = ImmGetContext(g_hWnd);
+        ImmSetConversionStatus(hIMC, IME_CMODE_ALPHANUMERIC, IME_SMODE_NONE);
+        ImmReleaseContext(g_hWnd, hIMC);
+        SaveIMEStatus();
+        g_bIMEBlock = TRUE;
+    }
+
+#ifdef _WIN32
+    if (g_bUseWindowMode == FALSE)
+    {
+        int nOldVal;
+        SystemParametersInfo(SPI_SCREENSAVERRUNNING, 1, &nOldVal, 0);
+        SystemParametersInfo(SPI_GETSCREENSAVETIMEOUT, 0, &g_iScreenSaverOldValue, 0);
+        SystemParametersInfo(SPI_SETSCREENSAVETIMEOUT, 300 * 60, nullptr, 0);
+    }
+#endif // _WIN32
+
+    // Saves the settings and releases the game's objects, after the wait below.
+    g_teardown.Push([] { DestroyWindow(); });
+    g_teardown.Push(
+        []
+        {
+            // Complete the final submitted frame before UI and bitmap owners release
+            // textures referenced by it. This keeps Metal teardown deterministic. Do
+            // this while the window is still visible: the compositor can stop
+            // servicing a hidden/occluded window's swapchain, leaving this wait
+            // stuck on a present fence that only signals once something (e.g. a
+            // focus change) forces the compositor to redraw (#535).
+            mu::WaitForSDLGpuIdle();
+            // Hide the window before the teardown after this, which pumps no messages and
+            // can take a noticeable moment (asset/UI release, ...). Left visible, the
+            // OS flags it as unresponsive and closing needs a second click to force
+            // the resulting ghost window away (#535).
+            if (g_sdlWindow != nullptr)
+                SDL_HideWindow(g_sdlWindow);
+        });
+
+    // Opened only when the launcher set the path; silent otherwise.
+    App::Control::ControlServer::Instance().Start(Core::Text::ToUtf8(lpszExeVersion));
+    // Closes the control socket and removes its file, so a later client with
+    // the same name does not find a live-looking socket.
+    g_teardown.Push([] { App::Control::ControlServer::Instance().Stop(); });
+
+    constexpr UINT timerResolution = 1;
+    g_preciseTimer = timeBeginPeriod(timerResolution) == TIMERR_NOERROR;
+    if (g_preciseTimer)
+        g_teardown.Push([] { timeEndPeriod(timerResolution); });
+
+    HandleFocusChange(Core::Platform::HasSDLWindowInputFocus(SDL_GetWindowFlags(g_sdlWindow)));
+    Core::Input::Synthetic::SetEventDelivery([](SDL_Event& event, bool& propagates)
+                                             { return RouteActionInput(event, true, propagates); }, g_sdlWindow);
+    g_teardown.Push([] { Core::Input::Synthetic::SetEventDelivery(nullptr, nullptr); });
+
+    g_cpuUsageRecorder = std::thread(RecordCpuUsage);
+    g_teardown.Push(
+        []
+        {
+            // The recorder polls process state until Destroy is set.
+            Destroy = true;
+            g_cpuUsageRecorder.join();
+        });
+    return true;
+}
+
+// After the last frame, or after StartClient failed, as SDL_AppQuit calls it.
+void ShutdownClient()
+{
+    g_teardown.Unwind();
+}

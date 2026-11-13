@@ -1,0 +1,446 @@
+﻿#include "stdafx.h"
+#include "GameLogic/Items/CComGem.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "I18N/All.h"
+
+#include <algorithm>
+#include <array>
+#include <cstdint>
+
+#include "UI/Inventory/InventoryContents.h"
+#include "Engine/Object/ZzzInventory.h"
+#include "UI/Inventory/InventoryCtrl.h"
+#include "UI/Core/WindowSystem.h"
+#include "Data/GameData/ItemData/ItemModelSlots.h"
+
+extern int InventoryStartX;
+extern int InventoryStartY;
+
+namespace COMGEM
+{
+namespace
+{
+constexpr int kInvWidth = 190;
+constexpr int kInvHeight = 433;
+constexpr int kAttachValue = 1000000;
+constexpr int kDetachUnitValue = 50000;
+
+mu::ui::window::CInventoryCtrl* GetInventoryCtrl()
+{
+    return (g_pMyInventory != nullptr) ? g_pMyInventory->GetInventoryCtrl() : nullptr;
+}
+} // namespace
+
+// Locals
+int iInvWidth = kInvWidth;
+int iInvHeight = kInvHeight;
+int iUnMixIndex = -1;
+int iUnMixLevel = -1;
+
+// Globals
+BOOL m_bType = ATTACH;
+char m_cState = STATE_READY;
+char m_cErr = NOERR;
+char m_cGemType = -1;
+char m_cComType = -1;
+BYTE m_cCount = 0;
+int m_iValue = 0;
+BYTE m_cPercent = 0;
+
+namespace
+{
+GameLogic::Items::JewelUnmixSelection unmixSelection;
+
+bool MatchesSelectedUnmixItem(const ITEM* item)
+{
+    const auto& selected = unmixSelection.Selected();
+    return item && selected && selected->slot == iUnMixIndex && selected->level == iUnMixLevel &&
+           item->Key == selected->key && item->Type == selected->type &&
+           item->Level == selected->level && isCompiledGem(item);
+}
+}
+} // namespace COMGEM
+
+void COMGEM::SendReqUnMix()
+{
+    if (!CheckInv())
+        return;
+    SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Unmix, static_cast<ItemType>(m_cGemType / 2), static_cast<StackSize>(iUnMixLevel), iUnMixIndex);
+}
+
+void COMGEM::SendReqMix()
+{
+    SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Mix, static_cast<ItemType>(m_cGemType / 2), static_cast<StackSize>(m_cComType / 10 - 1), 0);
+}
+
+void COMGEM::ProcessCSAction()
+{
+    if (m_cState == STATE_HOLD || m_cErr != NOERR)
+        return;
+    SetState(STATE_HOLD);
+
+    if (isComMode())
+        SendReqMix();
+    else
+        SendReqUnMix();
+}
+
+const GameLogic::Items::JewelUnmixSelection& COMGEM::GetWantedList()
+{
+    return unmixSelection;
+}
+
+void COMGEM::ResetWantedList()
+{
+    unmixSelection.Clear();
+    iUnMixIndex = -1;
+    iUnMixLevel = -1;
+}
+
+bool COMGEM::RefreshWantedList()
+{
+    std::array<GameLogic::Items::JewelUnmixSelection::Entry, MAX_MY_INVENTORY_EX_INDEX> entries;
+    size_t count = 0;
+    if (GetInventoryCtrl())
+    {
+        for (int slot = MAX_EQUIPMENT_INDEX; slot < MAX_MY_INVENTORY_EX_INDEX; ++slot)
+        {
+            const ITEM* item = UI::Inventory::FindPlayerItem(slot);
+            if (item && isCompiledGem(item) && item->Level != NOCOM)
+                entries[count++] = {slot, item->Key, item->Type, item->Level};
+        }
+    }
+    return unmixSelection.Update({entries.data(), count});
+}
+
+bool COMGEM::FindWantedList()
+{
+    ResetWantedList();
+    RefreshWantedList();
+    return !unmixSelection.Entries().empty();
+}
+
+bool COMGEM::SelectWantedItem(const GameLogic::Items::JewelUnmixSelection::Entry& entry)
+{
+    RefreshWantedList();
+    return unmixSelection.Select(entry);
+}
+
+bool COMGEM::PrepareUnmix()
+{
+    RefreshWantedList();
+    const auto& selected = unmixSelection.Selected();
+    if (!selected)
+        return false;
+    iUnMixIndex = selected->slot;
+    iUnMixLevel = selected->level;
+    SetGem(Check_Jewel(selected->type));
+    return CheckInv();
+}
+
+int COMGEM::GetUnMixGemLevel()
+{
+    return iUnMixLevel;
+}
+
+char COMGEM::CheckOneItem(const ITEM* p)
+{
+    return Check_Jewel(p->Type);
+}
+
+bool COMGEM::CheckInv()
+{
+    if (!CheckMyInvValid())
+    {
+        switch (GetError())
+        {
+        case COMERROR_NOTALLOWED:
+            g_pSystemLogBox->AddText(I18N::Game::ItemsForCombinationSystemIsLacking, mu::ui::window::TYPE_ERROR_MESSAGE);
+            break;
+        case DEERROR_NOTALLOWED:
+            g_pSystemLogBox->AddText(I18N::Game::CanTBeDismantled, mu::ui::window::TYPE_ERROR_MESSAGE);
+            break;
+        }
+        GetBack();
+        return false;
+    }
+
+    return true;
+}
+
+bool COMGEM::CheckMyInvValid()
+{
+    m_cPercent = 0;
+    m_cCount = 0;
+
+    if (m_bType == ATTACH)
+    {
+        if (GetInventoryCtrl() == nullptr)
+        {
+            m_cErr = COMERROR_NOTALLOWED;
+            m_cPercent = 0;
+            return false;
+        }
+
+        for (int slot = MAX_EQUIPMENT_INDEX; slot < MAX_MY_INVENTORY_EX_INDEX; ++slot)
+        {
+            const ITEM* pItem = UI::Inventory::FindPlayerItem(slot);
+            if (!pItem)
+            {
+                continue;
+            }
+
+            if (m_cGemType == Check_Jewel_Unit(pItem->Type))
+                ++m_cCount;
+
+            if (m_cCount == m_cComType)
+            {
+                m_cPercent = 100;
+                CalcGen();
+                return true;
+            }
+        }
+        if ((m_cCount < m_cComType) || (m_cComType == NOCOM))
+        {
+            m_cPercent = 0;
+            m_cErr = COMERROR_NOTALLOWED;
+            return false;
+        }
+    }
+    else if (m_bType == DETACH)
+    {
+        if (iUnMixIndex < MAX_EQUIPMENT_INDEX || iUnMixIndex >= MAX_MY_INVENTORY_EX_INDEX)
+        {
+            m_cErr = DEERROR_NOTALLOWED;
+            m_cPercent = 0;
+            return false;
+        }
+
+        const ITEM* pItem = UI::Inventory::FindPlayerItem(iUnMixIndex);
+        if (MatchesSelectedUnmixItem(pItem))
+        {
+            ++m_cCount;
+            m_cPercent = 100;
+            CalcGen();
+            return true;
+        }
+
+        m_cErr = DEERROR_NOTALLOWED;
+        m_cPercent = 0;
+        return false;
+    }
+    m_cErr = ERROR_UNKNOWN;
+    return false;
+}
+
+void COMGEM::CalcGen()
+{
+    m_iValue = 0;
+    if (m_bType)
+    {
+        m_iValue = kAttachValue;
+    }
+    else
+    {
+        m_iValue = m_cComType * kDetachUnitValue;
+    }
+}
+
+int COMGEM::CalcCompiledCount(const ITEM* p)
+{
+    // Only a bundle holds jewels. CheckOneItem can't tell: its NOGEM (-1) is odd like the bundles' kinds.
+    if (!isCompiledGem(p))
+        return 0;
+    return (p->Level + 1) * FIRST;
+}
+
+int COMGEM::CalcItemValue(const ITEM* p)
+{
+    int Level = p->Level;
+    switch (CheckOneItem(p))
+    {
+    case NOGEM:
+        return 0;
+    case eBLESS_C:
+        return 9000000 * (Level + 1) * FIRST;
+    case eSOUL_C:
+        return 6000000 * (Level + 1) * FIRST;
+    case eLIFE_C:
+        return 45000000 * (Level + 1) * FIRST;
+    case eCREATE_C:
+        return 36000000 * (Level + 1) * FIRST;
+    case ePROTECT_C:
+        return 60000000 * (Level + 1) * FIRST;
+    case eCHAOS_C:
+        return 810000 * (Level + 1) * FIRST;
+    case eGEMSTONE_C:
+    case eHARMONY_C:
+    case eLOW_C:
+    case eUPPER_C:
+        return 18600 * (Level + 1) * FIRST;
+    default:
+        return 0;
+    }
+}
+
+int COMGEM::CalcEmptyInv()
+{
+    mu::ui::window::CInventoryCtrl* pNewInventoryCtrl = GetInventoryCtrl();
+    return (pNewInventoryCtrl != nullptr) ? pNewInventoryCtrl->GetEmptySlotCount() : 0;
+}
+
+void COMGEM::Init()
+{
+    ResetWantedList();
+    m_bType = ATTACH;
+    m_cState = STATE_READY;
+    m_cErr = NOERR;
+    m_cGemType = -1;
+    m_cComType = -1;
+    m_cCount = 0;
+    m_iValue = -1;
+    m_cPercent = 0;
+    iUnMixIndex = -1;
+    iUnMixLevel = -1;
+}
+
+void COMGEM::GetBack()
+{
+    if (m_cState == STATE_HOLD)
+    {
+        m_cState = STATE_READY;
+    }
+
+    m_cErr = NOERR;
+    m_cGemType = NOGEM;
+
+    if (m_bType != ATTACH && m_bType != DETACH)
+    {
+        Exit();
+    }
+}
+
+void COMGEM::Exit()
+{
+    Init();
+
+    SocketClient->ToGameServer()->SendCloseNpcRequest();
+}
+
+int COMGEM::GetJewelRequireCount(int i)
+{
+    switch (i)
+    {
+    case 0:
+        return FIRST;
+    case 1:
+        return SECOND;
+    case 2:
+        return THIRD;
+    default:
+        return -1;
+    }
+}
+
+int COMGEM::Check_Jewel(int _nJewel, int _nType, bool _bModel)
+{
+    bool bCom = true;
+    bool bNon = true;
+
+    if (_bModel)
+        _nJewel = Data::Items::ToItemType(_nJewel);
+    if (_nType & 1)
+        bCom = false;
+    if (_nType & 2)
+        bNon = false;
+
+    if (bNon)
+    {
+        if (_nJewel == ITEM_JEWEL_OF_BLESS)
+            return eBLESS;
+        if (_nJewel == ITEM_JEWEL_OF_SOUL)
+            return eSOUL;
+        if (_nJewel == ITEM_JEWEL_OF_LIFE)
+            return eLIFE;
+        if (_nJewel == ITEM_JEWEL_OF_CREATION)
+            return eCREATE;
+        if (_nJewel == ITEM_JEWEL_OF_GUARDIAN)
+            return ePROTECT;
+        if (_nJewel == ITEM_GEMSTONE)
+            return eGEMSTONE;
+        if (_nJewel == ITEM_JEWEL_OF_HARMONY)
+            return eHARMONY;
+        if (_nJewel == ITEM_JEWEL_OF_CHAOS)
+            return eCHAOS;
+        if (_nJewel == ITEM_LOWER_REFINE_STONE)
+            return eLOW;
+        if (_nJewel == ITEM_HIGHER_REFINE_STONE)
+            return eUPPER;
+    }
+
+    if (bCom)
+    {
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_BLESS)
+            return eBLESS_C;
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_SOUL)
+            return eSOUL_C;
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_LIFE)
+            return eLIFE_C;
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_CREATION)
+            return eCREATE_C;
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_GUARDIAN)
+            return ePROTECT_C;
+        if (_nJewel == ITEM_PACKED_GEMSTONE)
+            return eGEMSTONE_C;
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_HARMONY)
+            return eHARMONY_C;
+        if (_nJewel == ITEM_PACKED_JEWEL_OF_CHAOS)
+            return eCHAOS_C;
+        if (_nJewel == ITEM_PACKED_LOWER_REFINE_STONE)
+            return eLOW_C;
+        if (_nJewel == ITEM_PACKED_HIGHER_REFINE_STONE)
+            return eUPPER_C;
+    }
+
+    return NOGEM;
+}
+
+const wchar_t* COMGEM::GetJewelName(int _nJewel)
+{
+    switch (_nJewel)
+    {
+    case eBLESS:
+    case eBLESS_C:
+        return I18N::Game::JewelOfBless;
+    case eSOUL:
+    case eSOUL_C:
+        return I18N::Game::JewelOfSoul;
+    case eLIFE:
+    case eLIFE_C:
+        return I18N::Game::JewelOfLife;
+    case eCREATE:
+    case eCREATE_C:
+        return I18N::Game::JewelOfCreation;
+    case ePROTECT:
+    case ePROTECT_C:
+        return I18N::Game::JewelOfGuardian;
+    case eGEMSTONE:
+    case eGEMSTONE_C:
+        return I18N::Game::JewelStone;
+    case eHARMONY:
+    case eHARMONY_C:
+        return I18N::Game::JewelOfHarmony;
+    case eCHAOS:
+    case eCHAOS_C:
+        return I18N::Game::JewelOfChaos;
+    case eLOW:
+    case eLOW_C:
+        return I18N::Game::LowerRefiningStone;
+    case eUPPER:
+    case eUPPER_C:
+        return I18N::Game::HigherRefiningStone;
+    }
+
+    return L"";
+}

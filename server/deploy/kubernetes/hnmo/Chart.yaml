@@ -1,0 +1,9 @@
+apiVersion: v2
+name: hnmo
+description: The distributed deployment of HNMO, an HNMO server, on Kubernetes with Dapr.
+type: application
+version: 0.1.0
+appVersion: "latest"
+home: https://github.com/nguyentuanphu/HNMO
+sources:
+  - https://github.com/nguyentuanphu/HNMO

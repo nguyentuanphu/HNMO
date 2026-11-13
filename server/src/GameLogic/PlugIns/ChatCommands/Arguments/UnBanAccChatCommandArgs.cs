@@ -1,0 +1,18 @@
+﻿// <copyright file="UnBanAccChatCommandArgs.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ChatCommands.Arguments;
+
+/// <summary>
+/// Arguments used by UnBanAccChatCommandPlugIn.
+/// </summary>
+public class UnBanAccChatCommandArgs : ArgumentsBase
+{
+    /// <summary>
+    /// Gets or sets the account name.
+    /// </summary>
+    [Argument("acc")]
+    [ValueReference(ChatCommandValueReference.AccountName)]
+    public string? AccountName { get; set; }
+}

@@ -1,0 +1,57 @@
+﻿// <copyright file="MiniGameOpeningStateRequestAction.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlayerActions.MiniGames;
+
+using HNMO.GameLogic.MiniGames;
+using HNMO.GameLogic.PlugIns.ChatCommands;
+using HNMO.GameLogic.PlugIns.PeriodicTasks;
+
+/// <summary>
+/// Action which handles the mini game opening state request.
+/// </summary>
+public class MiniGameOpeningStateRequestAction
+{
+    /// <summary>
+    /// Handles the opening state request.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="miniGameType">Type of the mini game.</param>
+    /// <param name="eventLevel">The event level.</param>
+    public async ValueTask HandleRequestAsync(Player player, MiniGameType miniGameType, byte eventLevel)
+    {
+        if (player.GameContext.PlugInManager.GetStrategy<MiniGameType, IPeriodicMiniGameStartPlugIn>(miniGameType) is { } miniGameStartPlugIn
+              && player.GetSuitableMiniGameDefinition(miniGameType, eventLevel) is { } miniGameDefinition)
+        {
+            var timeUntilOpening = await miniGameStartPlugIn.GetDurationUntilNextStartAsync(player.GameContext, miniGameDefinition).ConfigureAwait(false);
+            var playerCount = 0;
+            if (timeUntilOpening == TimeSpan.Zero
+                && await miniGameStartPlugIn.GetMiniGameContextAsync(player.GameContext, miniGameDefinition).ConfigureAwait(false) is { } miniGameContext)
+            {
+                playerCount = miniGameContext.PlayerCount;
+            }
+
+            await player.InvokeViewPlugInAsync<IShowMiniGameOpeningStatePlugIn>(p => p.ShowOpeningStateAsync(miniGameType, timeUntilOpening, playerCount)).ConfigureAwait(false);
+            return;
+        }
+
+        switch (miniGameType)
+        {
+            case MiniGameType.BloodCastle:
+            case MiniGameType.DevilSquare:
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.EventMapCreatedOnEntranceWithoutTimetable)).ConfigureAwait(false);
+                break;
+            case MiniGameType.Doppelganger:
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.EventNotImplementedYet)).ConfigureAwait(false);
+                break;
+            case MiniGameType.IllusionTemple:
+                // We only get here when no start plug-in is registered, or when no temple matches the
+                // player's level - so there is nothing this player could be shown a timetable for.
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.MiniGameNotConfigured)).ConfigureAwait(false);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException($"Unhandled event type {miniGameType}.");
+        }
+    }
+}

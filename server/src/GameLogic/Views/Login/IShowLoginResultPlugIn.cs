@@ -1,0 +1,17 @@
+﻿// <copyright file="IShowLoginResultPlugIn.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.Views.Login;
+
+/// <summary>
+/// Interface of a view whose implementation informs about the result of a login request.
+/// </summary>
+public interface IShowLoginResultPlugIn : IViewPlugIn
+{
+    /// <summary>
+    /// Shows the login result.
+    /// </summary>
+    /// <param name="loginResult">The login result.</param>
+    ValueTask ShowLoginResultAsync(LoginResult loginResult);
+}

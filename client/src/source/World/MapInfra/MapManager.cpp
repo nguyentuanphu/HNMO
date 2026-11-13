@@ -1,0 +1,1529 @@
+﻿
+#include "stdafx.h"
+#include "World/MapInfra/MapManager.h"
+#include "World/MapInfra/MapObjectSounds.h"
+#include "Audio/SoundLoads.h"
+#include "Camera/CameraMove.h"
+#include "GameLogic/Events/Cinematic/CDirection.h"
+#include "Audio/DSPlaySound.h"
+#include "Render/Sprites/GlobalBitmap.h"
+#include "Data/DataHandler/LoadData.h"
+#include "Data/DataHandler/MonsterData/MonsterModelLoader.h"
+#include "UI/Core/WindowSystem.h"
+#include "GameLogic/Items/PersonalShopTitleImp.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Render/Effects/ZzzEffect.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "GameLogic/Events/w_CursedTemple.h"
+#include "Network/Server/WSclient.h"
+#include "I18N/All.h"
+#include "Core/Utilities/Log/MuLogger.h"
+#ifdef _EDITOR
+#include "Core/Utilities/WorldClearing.h"
+#endif
+
+#include <SDL3/SDL_timer.h>
+#include <chrono>
+#include <optional>
+
+CMapManager gMapManager;
+
+CMapManager::CMapManager() // OK
+{
+    this->WorldActive = -1;
+}
+
+CMapManager::~CMapManager() // OK
+{
+}
+
+void CMapManager::Load() // OK
+{
+    // The Sound Editor shows which map loaded a sound.
+    const Audio::SoundLoads::ScopedLoadWhere loadsFor(gMapManager.WorldActive);
+    int i;
+    bool Temp = true;
+
+    LoadBitmap(L"Object8\\drop01.jpg", BITMAP_BUBBLE);
+
+    switch (gMapManager.WorldActive)
+    {
+    case WD_0LORENCIA:
+        gLoadData.AccessModel(MODEL_BIRD01, L"Data\\Object1\\", L"Bird", 1);
+        gLoadData.OpenTexture(MODEL_BIRD01, L"Object1\\");
+        gLoadData.AccessModel(MODEL_FISH01, L"Data\\Object1\\", L"Fish", 1);
+        gLoadData.OpenTexture(MODEL_FISH01, L"Object1\\");
+        break;
+    case WD_1DUNGEON:
+    case WD_4LOSTTOWER:
+        gLoadData.AccessModel(MODEL_DUNGEON_STONE01, L"Data\\Object2\\", L"DungeonStone", 1);
+        gLoadData.OpenTexture(MODEL_DUNGEON_STONE01, L"Object2\\");
+        gLoadData.AccessModel(MODEL_BAT01, L"Data\\Object2\\", L"Bat", 1);
+        gLoadData.OpenTexture(MODEL_BAT01, L"Object2\\");
+        gLoadData.AccessModel(MODEL_RAT01, L"Data\\Object2\\", L"Rat", 1);
+        gLoadData.OpenTexture(MODEL_RAT01, L"Object2\\");
+        break;
+    case WD_2DEVIAS:
+    {
+        vec3_t Pos, Ang;
+        gLoadData.AccessModel(MODEL_NPC_SERBIS_DONKEY, L"Data\\Npc\\", L"obj_donkey");
+        gLoadData.OpenTexture(MODEL_NPC_SERBIS_DONKEY, L"Npc\\");
+        gLoadData.AccessModel(MODEL_NPC_SERBIS_FLAG, L"Data\\Npc\\", L"obj_flag");
+        gLoadData.OpenTexture(MODEL_NPC_SERBIS_FLAG, L"Npc\\");
+
+        Vector(0.f, 0.f, 0.f, Ang);
+        Vector(0.f, 0.f, 270.f, Pos);
+        Pos[0] = 191 * TERRAIN_SCALE; Pos[1] = 16 * TERRAIN_SCALE;
+        CreateObject(MODEL_NPC_SERBIS_DONKEY, Pos, Ang);
+        Pos[0] = 191 * TERRAIN_SCALE; Pos[1] = 17 * TERRAIN_SCALE;
+        CreateObject(MODEL_NPC_SERBIS_FLAG, Pos, Ang);
+
+        gLoadData.AccessModel(MODEL_WARP, L"Data\\Npc\\", L"warp01");
+        gLoadData.AccessModel(MODEL_WARP2, L"Data\\Npc\\", L"warp02");
+        gLoadData.AccessModel(MODEL_WARP3, L"Data\\Npc\\", L"warp03");
+        gLoadData.OpenTexture(MODEL_WARP, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP2, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP3, L"Npc\\");
+        Vector(0.f, 0.f, 10.f, Ang);
+        Vector(0.f, 0.f, 0.f, Pos);
+        Pos[0] = 53 * TERRAIN_SCALE + 50.f;
+        Pos[1] = 92 * TERRAIN_SCALE + 20.f;
+        CreateObject(MODEL_WARP, Pos, Ang);
+    }
+    break;
+    case WD_3NORIA:
+        gLoadData.AccessModel(MODEL_BUTTERFLY01, L"Data\\Object1\\", L"Butterfly", 1);
+        gLoadData.OpenTexture(MODEL_BUTTERFLY01, L"Object1\\");
+        gLoadData.AccessModel(MODEL_WARP, L"Data\\Npc\\", L"warp01");
+        gLoadData.AccessModel(MODEL_WARP2, L"Data\\Npc\\", L"warp02");
+        gLoadData.AccessModel(MODEL_WARP3, L"Data\\Npc\\", L"warp03");
+
+        gLoadData.OpenTexture(MODEL_WARP, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP2, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP3, L"Npc\\");
+
+        vec3_t Pos, Ang;
+        Vector(0.f, 0.f, 10.f, Ang);
+        Vector(0.f, 0.f, 0.f, Pos);
+        Pos[0] = 223 * TERRAIN_SCALE; Pos[1] = 30 * TERRAIN_SCALE;
+        CreateObject(MODEL_WARP, Pos, Ang);
+        break;
+    case WD_5UNKNOWN:
+        for (int i = 0; i < 5; i++)
+            gLoadData.AccessModel(MODEL_BIG_METEO1 + i, L"Data\\Object6\\", L"Meteo", i + 1);
+
+        gLoadData.AccessModel(MODEL_BOSS_HEAD, L"Data\\Object6\\", L"BossHead", 1);
+        gLoadData.AccessModel(MODEL_PRINCESS, L"Data\\Object6\\", L"Princess", 1);
+        for (int i = MODEL_BIG_METEO1; i <= MODEL_PRINCESS; i++)
+            gLoadData.OpenTexture(i, L"Object6\\", GL_NEAREST);
+        break;
+    case WD_6STADIUM:
+        gLoadData.AccessModel(MODEL_BUG01, L"Data\\Object7\\", L"Bug", 1);
+        gLoadData.OpenTexture(MODEL_BUG01, L"Object7\\");
+        break;
+    case WD_7ATLANSE:
+    case WD_67DOPPLEGANGER3:
+        for (int i = 1; i < 9; i++)
+        {
+            gLoadData.AccessModel(MODEL_FISH01 + i, L"Data\\Object8\\", L"Fish", i + 1);
+            gLoadData.OpenTexture(MODEL_FISH01 + i, L"Object8\\");
+        }
+
+        for (int i = 0; i < 32; i++)
+        {
+            wchar_t FileName[100];
+            if (i < 10)
+                mu_swprintf(FileName, L"Object8\\wt0%d.jpg", i);
+            else
+                mu_swprintf(FileName, L"Object8\\wt%d.jpg", i);
+
+            LoadBitmap(FileName, BITMAP_WATER + i, GL_LINEAR, GL_REPEAT, false);
+
+            if (i < 10)
+                mu_swprintf(FileName, L"wt0%d.jpg", i);
+            else
+                mu_swprintf(FileName, L"wt%d.jpg", i);
+            wcscpy(Bitmaps[BITMAP_WATER + i].FileName, FileName);
+        }
+        break;
+    case WD_8TARKAN:
+        LoadBitmap(L"Object9\\sand01.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Object9\\sand02.jpg", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Object9\\Impack03.jpg", BITMAP_IMPACT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        gLoadData.AccessModel(MODEL_BUG01 + 1, L"Data\\Object9\\", L"Bug", 2);
+        gLoadData.OpenTexture(MODEL_BUG01 + 1, L"Object9\\");
+        break;
+    case WD_10HEAVEN:
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        gLoadData.AccessModel(MODEL_CLOUD, L"Data\\Object11\\", L"cloud");
+        gLoadData.OpenTexture(MODEL_CLOUD, L"Object11\\");
+
+        LoadBitmap(L"Effect\\cloudLight.jpg", BITMAP_CLOUD + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        break;
+
+    case WD_11BLOODCASTLE1:
+    case WD_11BLOODCASTLE1 + 1:
+    case WD_11BLOODCASTLE1 + 2:
+    case WD_11BLOODCASTLE1 + 3:
+    case WD_11BLOODCASTLE1 + 4:
+    case WD_11BLOODCASTLE1 + 5:
+    case WD_11BLOODCASTLE1 + 6:
+    case WD_52BLOODCASTLE_MASTER_LEVEL:
+    {
+        gLoadData.AccessModel(MODEL_CROW, L"Data\\Object12\\", L"Crow", 1);
+        gLoadData.OpenTexture(MODEL_CROW, L"Object12\\");
+
+        for (int i = 0; i < 2; ++i)
+            gLoadData.OpenTexture(MODEL_GATE + i, L"Monster\\");
+
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadGameSound(SOUND_BLOODCASTLE);
+    }
+    break;
+    case WD_34CRYWOLF_1ST:
+    {
+        gLoadData.AccessModel(MODEL_SCOLPION, L"Data\\Object35\\", L"scorpion");
+        gLoadData.OpenTexture(MODEL_SCOLPION, L"Object35\\");
+
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\Map_Smoke2.tga", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\mhoujin_R.jpg", BITMAP_MAGIC_CIRCLE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        LoadBitmap(L"Effect\\Impack03.jpg", BITMAP_EXT_LOG_IN + 2);
+        LoadBitmap(L"Logo\\chasellight.jpg", BITMAP_EFFECT);
+
+        LoadGameSound(SOUND_CRY1ST_AMBIENT);
+        LoadGameSound(SOUND_CRY1ST_WWOLF_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_WWOLF_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_WWOLF_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_WWOLF_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_WWOLF_DIE);
+        LoadGameSound(SOUND_CRY1ST_SCOUT1_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_SCOUT1_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_SCOUT1_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_SCOUT1_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_SCOUT1_DIE);
+        LoadGameSound(SOUND_CRY1ST_SCOUT2_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_SCOUT2_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_SCOUT2_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_SCOUT2_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_SCOUT2_DIE);
+        LoadGameSound(SOUND_CRY1ST_SCOUT3_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_SCOUT3_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_SCOUT3_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_SCOUT3_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_SCOUT3_DIE);
+        LoadGameSound(SOUND_CRY1ST_SORAM_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_SORAM_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_SORAM_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_SORAM_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_SORAM_DIE);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_DIE);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_DIE);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_SKILL1);
+        LoadGameSound(SOUND_CRY1ST_BALGAS_SKILL2);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_DIE);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_SKILL1);
+        LoadGameSound(SOUND_CRY1ST_DARKELF_SKILL2);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_DIE);
+        LoadGameSound(SOUND_CRY1ST_TANKER_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_TANKER_DIE);
+        LoadGameSound(SOUND_CRY1ST_SUMMON);
+        LoadGameSound(SOUND_CRY1ST_SUCCESS);
+        LoadGameSound(SOUND_CRY1ST_FAILED);
+    }
+    break;
+    case WD_30BATTLECASTLE:
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\Map_Smoke2.tga", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"World31\\Map1.jpg", BITMAP_INTERFACE_MAP + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"World31\\Map2.jpg", BITMAP_INTERFACE_MAP + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        LoadGameSound(SOUND_BC_AMBIENT);
+        LoadGameSound(SOUND_BC_AMBIENT_BATTLE1);
+        LoadGameSound(SOUND_BC_AMBIENT_BATTLE2);
+        LoadGameSound(SOUND_BC_AMBIENT_BATTLE3);
+        LoadGameSound(SOUND_BC_AMBIENT_BATTLE4);
+        LoadGameSound(SOUND_BC_AMBIENT_BATTLE5);
+        LoadGameSound(SOUND_BC_GUARD_STONE_DIS);
+        LoadGameSound(SOUND_BC_SHIELD_SPACE_DIS);
+        LoadGameSound(SOUND_BC_CATAPULT_ATTACK);
+        LoadGameSound(SOUND_BC_CATAPULT_HIT);
+        LoadGameSound(SOUND_BC_WALL_HIT);
+
+        LoadGameSound(SOUND_BC_GATE_OPEN);
+        LoadGameSound(SOUND_BC_GUARDIAN_ATTACK);
+        LoadGameSound(SOUND_BMS_STUN);
+        LoadGameSound(SOUND_BMS_STUN_REMOVAL);
+        LoadGameSound(SOUND_BMS_MANA);
+        LoadGameSound(SOUND_BMS_INVISIBLE);
+        LoadGameSound(SOUND_BMS_VISIBLE);
+        LoadGameSound(SOUND_BMS_MAGIC_REMOVAL);
+        LoadGameSound(SOUND_BCS_RUSH);
+        LoadGameSound(SOUND_BCS_JAVELIN);
+        LoadGameSound(SOUND_BCS_DEEP_IMPACT);
+        LoadGameSound(SOUND_BCS_DEATH_CANON);
+        LoadGameSound(SOUND_BCS_ONE_FLASH);
+        LoadGameSound(SOUND_BCS_SPACE_SPLIT);
+        LoadGameSound(SOUND_BCS_BRAND_OF_SKILL);
+        break;
+
+    case WD_31HUNTING_GROUND:
+        gLoadData.AccessModel(MODEL_BUTTERFLY01, L"Data\\Object1\\", L"Butterfly", 1);
+        gLoadData.OpenTexture(MODEL_BUTTERFLY01, L"Object1\\");
+
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Monster\\bossmap1_R.jpg", BITMAP_HGBOSS_PATTERN, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Monster\\bosswing.tga", BITMAP_HGBOSS_WING, GL_NEAREST, GL_REPEAT);
+        LoadBitmap(L"Skill\\bossrock1_R.JPG", BITMAP_FISSURE_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        LoadGameSound(SOUND_BC_HUNTINGGROUND_AMBIENT);
+        LoadGameSound(SOUND_BC_AXEWARRIOR_MOVE1);
+        LoadGameSound(SOUND_BC_AXEWARRIOR_MOVE2);
+        LoadGameSound(SOUND_BC_AXEWARRIOR_ATTACK1);
+        LoadGameSound(SOUND_BC_AXEWARRIOR_ATTACK2);
+        LoadGameSound(SOUND_BC_AXEWARRIOR_DIE);
+        LoadGameSound(SOUND_BC_LIZARDWARRIOR_MOVE1);
+        LoadGameSound(SOUND_BC_LIZARDWARRIOR_MOVE2);
+        LoadGameSound(SOUND_BC_LIZARDWARRIOR_ATTACK1);
+        LoadGameSound(SOUND_BC_LIZARDWARRIOR_ATTACK2);
+        LoadGameSound(SOUND_BC_LIZARDWARRIOR_DIE);
+        LoadGameSound(SOUND_BC_POISONGOLEM_MOVE1);
+        LoadGameSound(SOUND_BC_POISONGOLEM_MOVE2);
+        LoadGameSound(SOUND_BC_POISONGOLEM_ATTACK1);
+        LoadGameSound(SOUND_BC_POISONGOLEM_ATTACK2);
+        LoadGameSound(SOUND_BC_POISONGOLEM_ATTACK3);
+        LoadGameSound(SOUND_BC_POISONGOLEM_DIE);
+        LoadGameSound(SOUND_BC_QUEENBEE_MOVE1);
+        LoadGameSound(SOUND_BC_QUEENBEE_MOVE2);
+        LoadGameSound(SOUND_BC_QUEENBEE_ATTACK1);
+        LoadGameSound(SOUND_BC_QUEENBEE_ATTACK2);
+        LoadGameSound(SOUND_BC_QUEENBEE_DIE);
+        LoadGameSound(SOUND_BC_FIREGOLEM_MOVE1);
+        LoadGameSound(SOUND_BC_FIREGOLEM_MOVE2);
+        LoadGameSound(SOUND_BC_FIREGOLEM_ATTACK1);
+        LoadGameSound(SOUND_BC_FIREGOLEM_ATTACK2);
+        LoadGameSound(SOUND_BC_FIREGOLEM_DIE);
+        LoadGameSound(SOUND_BC_EROHIM_ENTER);
+        LoadGameSound(SOUND_BC_EROHIM_ATTACK1);
+        LoadGameSound(SOUND_BC_EROHIM_ATTACK2);
+        LoadGameSound(SOUND_BC_EROHIM_ATTACK3);
+        LoadGameSound(SOUND_BC_EROHIM_DIE);
+        break;
+    case WD_33AIDA:
+        gLoadData.AccessModel(MODEL_BUTTERFLY01, L"Data\\Object1\\", L"Butterfly", 1);
+        gLoadData.OpenTexture(MODEL_BUTTERFLY01, L"Object1\\");
+        gLoadData.AccessModel(MODEL_TREE_ATTACK, L"Data\\Object34\\", L"tree_eff");
+        gLoadData.OpenTexture(MODEL_TREE_ATTACK, L"Object34\\");
+        gLoadData.AccessModel(MODEL_BUG01 + 1, L"Data\\Object9\\", L"Bug", 2);
+        gLoadData.OpenTexture(MODEL_BUG01 + 1, L"Object9\\");
+
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        // The monsters' sounds load with their models (their sound sets in
+        // Data/Monsters/Sounds.json); eElec1 and eElec2 load at start.
+        LoadGameSound(SOUND_AIDA_AMBIENT);
+        break;
+    case WD_68DOPPLEGANGER4:
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"effect\\water.jpg", BITMAP_TWINTAIL_WATER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    case WD_37KANTURU_1ST:
+        gLoadData.AccessModel(MODEL_BUTTERFLY01, L"Data\\Object1\\", L"Butterfly", 1);
+        gLoadData.OpenTexture(MODEL_BUTTERFLY01, L"Object1\\");
+
+        // The object sounds play from Data/Maps/ObjectSounds.json (MP1b).
+        // The monsters' sounds load with their models (their sound sets in
+        // Data/Monsters/Sounds.json, MNK).
+        break;
+    case WD_38KANTURU_2ND:
+    {
+        g_TrapCanon.Open_TrapCanon();
+
+        gLoadData.AccessModel(MODEL_STORM2, L"Data\\SKill\\", L"boswind");
+        gLoadData.OpenTexture(MODEL_STORM2, L"SKill\\");
+        gLoadData.AccessModel(MODEL_STORM3, L"Data\\Skill\\", L"mayatonedo");
+        gLoadData.OpenTexture(MODEL_STORM3, L"Skill\\");
+
+        LoadBitmap(L"Object39\\k_effect_01.JPG", BITMAP_KANTURU_2ND_EFFECT1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Npc\\khs_kan2gate001.jpg", BITMAP_KANTURU_2ND_NPC1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Npc\\khs_kan2gate003.jpg", BITMAP_KANTURU_2ND_NPC2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Npc\\khs_kan2gate004.jpg", BITMAP_KANTURU_2ND_NPC3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        // The object sounds play from Data/Maps/ObjectSounds.json (MP1b).
+        // The monsters' and the gateway machine's sounds load with their models
+        // (their sound sets in Data/Monsters/Sounds.json, MNK).
+    }
+    break;
+    case WD_39KANTURU_3RD:
+    {
+        LoadBitmap(L"Monster\\nightmare_R.jpg", BITMAP_NIGHTMARE_EFFECT1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Monster\\nightmaresward_R.jpg", BITMAP_NIGHTMARE_EFFECT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Monster\\nightmare_cloth.tga", BITMAP_NIGHTMARE_ROBE);
+        LoadBitmap(L"Object40\\maya01_R.jpg", BITMAP_MAYA_BODY, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Object40\\Mtowereffe.JPG", BITMAP_KANTURU3RD_OBJECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\bluering0001_R.jpg", BITMAP_ENERGY_RING, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\bluewave0001_R.jpg", BITMAP_ENERGY_FIELD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        gLoadData.AccessModel(MODEL_STORM2, L"Data\\SKill\\", L"boswind");
+        gLoadData.OpenTexture(MODEL_STORM2, L"SKill\\");
+        gLoadData.AccessModel(MODEL_STORM3, L"Data\\Skill\\", L"mayatonedo");
+        gLoadData.OpenTexture(MODEL_STORM3, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTAR, L"Data\\Skill\\", L"arrowsre05");
+        gLoadData.OpenTexture(MODEL_MAYASTAR, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTONE1, L"Data\\Skill\\", L"mayastone01");
+        gLoadData.OpenTexture(MODEL_MAYASTONE1, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTONE2, L"Data\\Skill\\", L"mayastone02");
+        gLoadData.OpenTexture(MODEL_MAYASTONE2, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTONE3, L"Data\\Skill\\", L"mayastone03");
+        gLoadData.OpenTexture(MODEL_MAYASTONE3, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTONE4, L"Data\\Skill\\", L"mayastone04");
+        gLoadData.OpenTexture(MODEL_MAYASTONE4, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTONE5, L"Data\\Skill\\", L"mayastone05");
+        gLoadData.OpenTexture(MODEL_MAYASTONE5, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYASTONEFIRE, L"Data\\Skill\\", L"mayastonebluefire");
+        gLoadData.OpenTexture(MODEL_MAYASTONEFIRE, L"Skill\\");
+        gLoadData.AccessModel(MODEL_MAYAHANDSKILL, L"Data\\Skill\\", L"hendlight02");
+        gLoadData.OpenTexture(MODEL_MAYAHANDSKILL, L"Skill\\");
+
+        LoadGameSound(SOUND_KANTURU_3RD_MAYA_INTRO);
+        LoadGameSound(SOUND_KANTURU_3RD_MAYA_END);
+        LoadGameSound(SOUND_KANTURU_3RD_MAYA_STORM);
+        LoadGameSound(SOUND_KANTURU_3RD_MAYAHAND_ATTACK1);
+        LoadGameSound(SOUND_KANTURU_3RD_MAYAHAND_ATTACK2);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_INTRO);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_ATT1);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_ATT2);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_ATT3);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_ATT4);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_DIE);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_IDLE1);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_IDLE2);
+        LoadGameSound(SOUND_KANTURU_3RD_NIGHTMARE_TELE);
+        LoadGameSound(SOUND_KANTURU_3RD_MAP_SOUND01);
+        LoadGameSound(SOUND_KANTURU_3RD_MAP_SOUND02);
+        LoadGameSound(SOUND_KANTURU_3RD_MAP_SOUND03);
+        LoadGameSound(SOUND_KANTURU_3RD_MAP_SOUND04);
+        LoadGameSound(SOUND_KANTURU_3RD_MAP_SOUND05);
+        LoadGameSound(SOUND_KANTURU_3RD_AMBIENT);
+    }
+    break;
+    case WD_45CURSEDTEMPLE_LV1:
+    case WD_45CURSEDTEMPLE_LV2:
+    case WD_45CURSEDTEMPLE_LV3:
+    case WD_45CURSEDTEMPLE_LV4:
+    case WD_45CURSEDTEMPLE_LV5:
+    case WD_45CURSEDTEMPLE_LV6:
+    {
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\clud64.jpg", BITMAP_CLUD64, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\ghosteffect01.jpg", BITMAP_GHOST_CLOUD1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\ghosteffect02.jpg", BITMAP_GHOST_CLOUD2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\torchfire.jpg", BITMAP_TORCH_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\clouds2.jpg", BITMAP_EVENT_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        //EFFECT
+        gLoadData.AccessModel(MODEL_FALL_STONE_EFFECT, L"Data\\Object47\\", L"Stoneeffec");
+        gLoadData.OpenTexture(MODEL_FALL_STONE_EFFECT, L"Object47\\");
+        //game system sound
+        LoadGameSound(SOUND_CURSEDTEMPLE_GAMESYSTEM1);
+        LoadGameSound(SOUND_CURSEDTEMPLE_GAMESYSTEM2);
+        LoadGameSound(SOUND_CURSEDTEMPLE_GAMESYSTEM3);
+        LoadGameSound(SOUND_CURSEDTEMPLE_GAMESYSTEM4);
+        LoadGameSound(SOUND_CURSEDTEMPLE_GAMESYSTEM5);
+        //moster 1 - 2 effect sound
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER1_IDLE);
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER_MOVE);
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER1_DAMAGE);
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER1_DEATH);
+        //moster 3 effect sound
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER2_IDLE);
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER2_ATTACK);
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER2_DAMAGE);
+        LoadGameSound(SOUND_CURSEDTEMPLE_MONSTER2_DEATH);
+    }
+    break;
+    case WD_41CHANGEUP3RD_1ST:
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\firered.jpg", BITMAP_FIRE_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);      //  불씨.
+
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_CAGE1);
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_CAGE2);
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_VOLCANO);
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_FIREPILLAR);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_BALRAM_DIE);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_DEATHSPIRIT_DIE);
+        LoadGameSound(SOUND_CRY1ST_SORAM_MOVE1);
+        LoadGameSound(SOUND_CRY1ST_SORAM_MOVE2);
+        LoadGameSound(SOUND_CRY1ST_SORAM_ATTACK1);
+        LoadGameSound(SOUND_CRY1ST_SORAM_ATTACK2);
+        LoadGameSound(SOUND_CRY1ST_SORAM_DIE);
+        break;
+    case WD_42CHANGEUP3RD_2ND:
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\firered.jpg", BITMAP_FIRE_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_CAGE1);
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_CAGE2);
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_VOLCANO);
+        LoadGameSound(SOUND_3RD_CHANGE_UP_BG_FIREPILLAR);
+        break;
+    case WD_51HOME_6TH_CHAR:
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        gLoadData.AccessModel(MODEL_EAGLE, L"Data\\Object52\\", L"sos3bi01");
+        gLoadData.OpenTexture(MODEL_EAGLE, L"Object52\\");
+        if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR)
+        {
+            gLoadData.AccessModel(MODEL_MAP_TORNADO, L"Data\\Object52\\", L"typhoonall");
+            gLoadData.OpenTexture(MODEL_MAP_TORNADO, L"Object52\\");
+
+            LoadGameSound(SOUND_ELBELAND_VILLAGEPROTECTION01);
+            LoadGameSound(SOUND_ELBELAND_WATERFALLSMALL01);
+            LoadGameSound(SOUND_ELBELAND_WATERWAY01);
+            LoadGameSound(SOUND_ELBELAND_ENTERDEVIAS01);
+            LoadGameSound(SOUND_ELBELAND_WATERSMALL01);
+            LoadGameSound(SOUND_ELBELAND_RAVINE01);
+            LoadGameSound(SOUND_ELBELAND_ENTERATLANCE01);
+        }
+        break;
+    case WD_66DOPPLEGANGER2:
+    {
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\WATERFALL2.jpg", BITMAP_CHROME3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\clud64.jpg", BITMAP_CLUD64, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    }
+    break;
+    case WD_63PK_FIELD:
+    {
+    }
+    break;
+    case WD_56MAP_SWAMP_OF_QUIET:
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\Map_Smoke2.tga", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Monster\\red_shadows.jpg", BITMAP_SHADOW_PAWN_RED, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Monster\\blue_shadows.jpg", BITMAP_SHADOW_KINGHT_BLUE, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Monster\\green_shadows.jpg", BITMAP_SHADOW_ROOK_GREEN, GL_LINEAR, GL_REPEAT);
+
+        break;
+    case WD_65DOPPLEGANGER1:
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Object9\\sand02.jpg", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\Chrome08.jpg", BITMAP_CHROME8, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        break;
+    case WD_57ICECITY:
+    case WD_58ICECITY_BOSS:
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Object9\\sand02.jpg", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\Chrome08.jpg", BITMAP_CHROME8, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        gLoadData.AccessModel(MODEL_FALL_STONE_EFFECT, L"Data\\Object47\\", L"Stoneeffec");
+        gLoadData.OpenTexture(MODEL_FALL_STONE_EFFECT, L"Object47\\");
+        gLoadData.AccessModel(MODEL_WARP, L"Data\\Npc\\", L"warp01");
+        gLoadData.AccessModel(MODEL_WARP2, L"Data\\Npc\\", L"warp02");
+        gLoadData.AccessModel(MODEL_WARP3, L"Data\\Npc\\", L"warp03");
+        gLoadData.OpenTexture(MODEL_WARP, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP2, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP3, L"Npc\\");
+        gLoadData.AccessModel(MODEL_WARP4, L"Data\\Npc\\", L"warp01");
+        gLoadData.AccessModel(MODEL_WARP5, L"Data\\Npc\\", L"warp02");
+        gLoadData.AccessModel(MODEL_WARP6, L"Data\\Npc\\", L"warp03");
+        gLoadData.OpenTexture(MODEL_WARP4, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP5, L"Npc\\");
+        gLoadData.OpenTexture(MODEL_WARP6, L"Npc\\");
+        gLoadData.AccessModel(MODEL_SUMMON, L"Data\\SKill\\", L"nightmaresum");
+        gLoadData.OpenTexture(MODEL_SUMMON, L"SKill\\");
+        gLoadData.AccessModel(MODEL_STORM2, L"Data\\SKill\\", L"boswind");
+        gLoadData.OpenTexture(MODEL_STORM2, L"SKill\\");
+
+        LoadGameSound(SOUND_KANTURU_3RD_MAYAHAND_ATTACK2);
+
+        vec3_t vPos, vAngle;
+        if (gMapManager.WorldActive == WD_57ICECITY)
+        {
+            Vector(0.f, 0.f, 35.f, vAngle);
+            Vector(0.f, 0.f, 0.f, vPos);
+            vPos[0] = 162 * TERRAIN_SCALE;
+            vPos[1] = 83 * TERRAIN_SCALE;
+            CreateObject(MODEL_WARP, vPos, vAngle);
+
+            Vector(0.f, 0.f, 80.f, vAngle);
+            Vector(0.f, 0.f, 0.f, vPos);
+            vPos[0] = 171 * TERRAIN_SCALE;
+            vPos[1] = 24 * TERRAIN_SCALE;
+            CreateObject(MODEL_WARP4, vPos, vAngle);
+        }
+        else if (gMapManager.WorldActive == WD_58ICECITY_BOSS)
+        {
+            Vector(0.f, 0.f, 85.f, vAngle);
+            Vector(0.f, 0.f, 0.f, vPos);
+            vPos[0] = 169 * TERRAIN_SCALE;
+            vPos[1] = 24 * TERRAIN_SCALE;
+            CreateObject(MODEL_WARP4, vPos, vAngle);
+
+            Vector(0.f, 0.f, 85.f, vAngle);
+            Vector(0.f, 0.f, 0.f, vPos);
+            vPos[0] = 170 * TERRAIN_SCALE;
+            vPos[1] = 24 * TERRAIN_SCALE;
+            CreateObject(MODEL_WARP4, vPos, vAngle);
+        }
+        break;
+
+    case WD_69EMPIREGUARDIAN1:
+    case WD_70EMPIREGUARDIAN2:
+    case WD_71EMPIREGUARDIAN3:
+    case WD_72EMPIREGUARDIAN4:
+        gLoadData.AccessModel(MODEL_PROJECTILE, L"Data\\Effect\\", L"choarms_06");
+        gLoadData.OpenTexture(MODEL_PROJECTILE, L"Effect\\");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE01, L"Data\\Effect\\", L"piece01_01");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE02, L"Data\\Effect\\", L"piece01_02");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE03, L"Data\\Effect\\", L"piece01_03");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE04, L"Data\\Effect\\", L"piece01_04");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE05, L"Data\\Effect\\", L"piece01_05");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE06, L"Data\\Effect\\", L"piece01_06");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE07, L"Data\\Effect\\", L"piece01_07");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE08, L"Data\\Effect\\", L"piece01_08");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE09, L"Data\\Effect\\", L"newdoor_break_01");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE01, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE02, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE03, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE04, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE05, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE06, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE07, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE08, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE09, L"Effect\\");
+        gLoadData.AccessModel(MODEL_STATUE_CRUSH_EFFECT_PIECE01, L"Data\\Effect\\", L"NpcGagoil_Crack01");
+        gLoadData.AccessModel(MODEL_STATUE_CRUSH_EFFECT_PIECE02, L"Data\\Effect\\", L"NpcGagoil_Crack02");
+        gLoadData.AccessModel(MODEL_STATUE_CRUSH_EFFECT_PIECE03, L"Data\\Effect\\", L"NpcGagoil_Crack03");
+        gLoadData.AccessModel(MODEL_STATUE_CRUSH_EFFECT_PIECE04, L"Data\\Effect\\", L"NpcGagoil_Ruin");
+        gLoadData.OpenTexture(MODEL_STATUE_CRUSH_EFFECT_PIECE01, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_STATUE_CRUSH_EFFECT_PIECE02, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_STATUE_CRUSH_EFFECT_PIECE03, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_STATUE_CRUSH_EFFECT_PIECE04, L"Effect\\");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE10, L"Data\\Effect\\", L"sojghmoon02");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE11, L"Data\\Effect\\", L"sojghmj01");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE12, L"Data\\Effect\\", L"sojghmj02");
+        gLoadData.AccessModel(MODEL_DOOR_CRUSH_EFFECT_PIECE13, L"Data\\Effect\\", L"sojghmj03");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE10, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE11, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE12, L"Effect\\");
+        gLoadData.OpenTexture(MODEL_DOOR_CRUSH_EFFECT_PIECE13, L"Effect\\");
+
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\flare.jpg", BITMAP_FLARE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+        LoadBitmap(L"Effect\\Map_Smoke1.jpg", BITMAP_CHROME + 2, GL_LINEAR, GL_REPEAT);
+
+        LoadGameSound(SOUND_EMPIREGUARDIAN_WEATHER_RAIN);
+        LoadGameSound(SOUND_EMPIREGUARDIAN_WEATHER_FOG);
+        LoadGameSound(SOUND_EMPIREGUARDIAN_WEATHER_STORM);
+        LoadGameSound(SOUND_EMPIREGUARDIAN_INDOOR_SOUND);
+        LoadGameSound(SOUND_EMPIREGUARDIAN_DEFENDER_ATTACK02);
+        break;
+    case WD_73NEW_LOGIN_SCENE:
+    case WD_74NEW_CHARACTER_SCENE:
+    {
+        LoadBitmap(L"Logo\\MU-logo.tga", BITMAP_LOG_IN + 16, GL_LINEAR);
+        LoadBitmap(L"Logo\\MU-logo_g.jpg", BITMAP_LOG_IN + 17, GL_LINEAR);
+    }
+    break;
+    case WD_55LOGINSCENE:
+        gLoadData.AccessModel(MODEL_DRAGON, L"Data\\Object56\\", L"Dragon");
+        gLoadData.OpenTexture(MODEL_DRAGON, L"Object56\\");
+
+        Vector(0.f, 0.f, 0.f, Ang);
+        Vector(0.f, 0.f, 0.f, Pos);
+        Pos[0] = 56 * TERRAIN_SCALE; Pos[1] = 230 * TERRAIN_SCALE;
+        CreateObject(MODEL_DRAGON, Pos, Ang);
+        break;
+
+#ifdef ASG_ADD_KARUTAN_MONSTERS
+    case WD_80KARUTAN1:
+    case WD_81KARUTAN2:
+        LoadBitmap(L"Object9\\sand02.jpg", BITMAP_CHROME + 3, GL_LINEAR, GL_REPEAT);
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        LoadGameSound(SOUND_KARUTAN_DESERT_ENV);
+        LoadGameSound(SOUND_KARUTAN_INSECT_ENV);
+        LoadGameSound(SOUND_KARUTAN_KARDAMAHAL_ENV);
+        break;
+#endif	// ASG_ADD_KARUTAN_MONSTERS
+    }
+
+    if (this->InChaosCastle() == true)
+    {
+        gLoadData.AccessModel(MODEL_ANGEL, L"Data\\Player\\", L"Angel");
+        gLoadData.OpenTexture(MODEL_ANGEL, L"Npc\\");
+
+        LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+        LoadGameSound(SOUND_CHAOSCASTLE);
+    }
+
+    if (this->InHellas())
+    {
+        LoadBitmap(L"Object25\\water1.tga", BITMAP_MAPTILE, GL_LINEAR, GL_REPEAT, false);
+        LoadBitmap(L"Object25\\water2.jpg", BITMAP_MAPTILE + 1, GL_NEAREST, GL_CLAMP_TO_EDGE);
+
+        LoadGameSound(SOUND_KALIMA_AMBIENT);
+        LoadGameSound(SOUND_KALIMA_AMBIENT2);
+        LoadGameSound(SOUND_KALIMA_AMBIENT3);
+        LoadGameSound(SOUND_KALIMA_FALLING_STONE);
+        LoadGameSound(SOUND_DEATH_BUBBLE);
+
+        LoadGameSound(SOUND_KUNDUN_AMBIENT1);
+        LoadGameSound(SOUND_KUNDUN_AMBIENT2);
+        LoadGameSound(SOUND_KUNDUN_ROAR);
+        LoadGameSound(SOUND_KUNDUN_SIGHT);
+        LoadGameSound(SOUND_KUNDUN_SHUDDER);
+        LoadGameSound(SOUND_KUNDUN_DESTROY);
+
+        LoadGameSound(SOUND_SKILL_SKULL);
+        LoadGameSound(SOUND_GREAT_POISON);
+        LoadGameSound(SOUND_GREAT_SHIELD);
+    }
+
+    Data::Monsters::ModelLoader::OpenMapParts(GetServerMap(), GetServerStage());
+
+    if (this->WorldActive != WD_7ATLANSE)
+    {
+        for (int i = 0; i < 32; i++)
+        {
+            wchar_t FileName[100];
+            if (i < 10)
+                mu_swprintf(FileName, L"Object8\\wt0%d.jpg", i);
+            else
+                mu_swprintf(FileName, L"Object8\\wt%d.jpg", i);
+
+            LoadBitmap(FileName, BITMAP_WATER + i, GL_LINEAR, GL_REPEAT, false);
+        }
+    }
+
+    LoadBitmap(L"Object8\\light01.jpg", BITMAP_SHINES, GL_LINEAR, GL_REPEAT);
+
+    if (this->WorldActive == 0)
+    {
+        for (i = 0; i < 13; i++)
+            gLoadData.AccessModel(MODEL_TREE01 + i, L"Data\\Object1\\", L"Tree", i + 1);
+        for (i = 0; i < 8; i++)
+            gLoadData.AccessModel(MODEL_GRASS01 + i, L"Data\\Object1\\", L"Grass", i + 1);
+        for (i = 0; i < 5; i++)
+            gLoadData.AccessModel(MODEL_STONE01 + i, L"Data\\Object1\\", L"Stone", i + 1);
+
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_STONE_STATUE01 + i, L"Data\\Object1\\", L"StoneStatue", i + 1);
+        gLoadData.AccessModel(MODEL_STEEL_STATUE, L"Data\\Object1\\", L"SteelStatue", 1);
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_TOMB01 + i, L"Data\\Object1\\", L"Tomb", i + 1);
+        for (i = 0; i < 2; i++)
+            gLoadData.AccessModel(MODEL_FIRE_LIGHT01 + i, L"Data\\Object1\\", L"FireLight", i + 1);
+        gLoadData.AccessModel(MODEL_BONFIRE, L"Data\\Object1\\", L"Bonfire", 1);
+        gLoadData.AccessModel(MODEL_DUNGEON_GATE, L"Data\\Object1\\", L"DoungeonGate", 1);
+        gLoadData.AccessModel(MODEL_TREASURE_DRUM, L"Data\\Object1\\", L"TreasureDrum", 1);
+        gLoadData.AccessModel(MODEL_TREASURE_CHEST, L"Data\\Object1\\", L"TreasureChest", 1);
+        gLoadData.AccessModel(MODEL_SHIP, L"Data\\Object1\\", L"Ship", 1);
+
+        for (i = 0; i < 6; i++)
+            gLoadData.AccessModel(MODEL_STONE_WALL01 + i, L"Data\\Object1\\", L"StoneWall", i + 1);
+        for (i = 0; i < 4; i++)
+            gLoadData.AccessModel(MODEL_MU_WALL01 + i, L"Data\\Object1\\", L"StoneMuWall", i + 1);
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_STEEL_WALL01 + i, L"Data\\Object1\\", L"SteelWall", i + 1);
+        gLoadData.AccessModel(MODEL_STEEL_DOOR, L"Data\\Object1\\", L"SteelDoor", 1);
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_CANNON01 + i, L"Data\\Object1\\", L"Cannon", i + 1);
+        gLoadData.AccessModel(MODEL_BRIDGE, L"Data\\Object1\\", L"Bridge", 1);
+        for (i = 0; i < 4; i++)
+            gLoadData.AccessModel(MODEL_FENCE01 + i, L"Data\\Object1\\", L"Fence", i + 1);
+        gLoadData.AccessModel(MODEL_BRIDGE_STONE, L"Data\\Object1\\", L"BridgeStone", 1);
+
+        gLoadData.AccessModel(MODEL_STREET_LIGHT, L"Data\\Object1\\", L"StreetLight", 1);
+        gLoadData.AccessModel(MODEL_CURTAIN, L"Data\\Object1\\", L"Curtain", 1);
+        for (i = 0; i < 4; i++)
+            gLoadData.AccessModel(MODEL_CARRIAGE01 + i, L"Data\\Object1\\", L"Carriage", i + 1);
+        for (i = 0; i < 2; i++)
+            gLoadData.AccessModel(MODEL_STRAW01 + i, L"Data\\Object1\\", L"Straw", i + 1);
+        for (i = 0; i < 2; i++)
+            gLoadData.AccessModel(MODEL_SIGN01 + i, L"Data\\Object1\\", L"Sign", i + 1);
+        for (i = 0; i < 2; i++)
+            gLoadData.AccessModel(MODEL_MERCHANT_ANIMAL01 + i, L"Data\\Object1\\", L"MerchantAnimal", i + 1);
+        gLoadData.AccessModel(MODEL_WATERSPOUT, L"Data\\Object1\\", L"Waterspout", 1);
+        for (i = 0; i < 4; i++)
+            gLoadData.AccessModel(MODEL_WELL01 + i, L"Data\\Object1\\", L"Well", i + 1);
+        gLoadData.AccessModel(MODEL_HANGING, L"Data\\Object1\\", L"Hanging", 1);
+
+        for (i = 0; i < 5; i++)
+            gLoadData.AccessModel(MODEL_HOUSE01 + i, L"Data\\Object1\\", L"House", i + 1);
+        gLoadData.AccessModel(MODEL_TENT, L"Data\\Object1\\", L"Tent", 1);
+        gLoadData.AccessModel(MODEL_STAIR, L"Data\\Object1\\", L"Stair", 1);
+
+        for (i = 0; i < 6; i++)
+            gLoadData.AccessModel(MODEL_HOUSE_WALL01 + i, L"Data\\Object1\\", L"HouseWall", i + 1);
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_HOUSE_ETC01 + i, L"Data\\Object1\\", L"HouseEtc", i + 1);
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_LIGHT01 + i, L"Data\\Object1\\", L"Light", i + 1);
+        gLoadData.AccessModel(MODEL_POSE_BOX, L"Data\\Object1\\", L"PoseBox", 1);
+
+        for (i = 0; i < 7; i++)
+            gLoadData.AccessModel(MODEL_FURNITURE01 + i, L"Data\\Object1\\", L"Furniture", i + 1);
+        gLoadData.AccessModel(MODEL_CANDLE, L"Data\\Object1\\", L"Candle", 1);
+        for (i = 0; i < 3; i++)
+            gLoadData.AccessModel(MODEL_BEER01 + i, L"Data\\Object1\\", L"Beer", i + 1);
+
+        for (i = MODEL_WORLD_OBJECT; i < MAX_WORLD_OBJECTS; i++)
+            gLoadData.OpenTexture(i, L"Object1\\");
+    }
+    else
+    {
+        wchar_t DirName[32];
+        const int iMapWorld = GetFilesFolder(this->WorldActive);
+
+        mu_swprintf(DirName, L"Data\\Object%d\\", iMapWorld);
+        for (i = MODEL_WORLD_OBJECT; i < MAX_WORLD_OBJECTS; i++)
+            gLoadData.AccessModel(i, DirName, L"Object", i + 1, true);
+
+        mu_swprintf(DirName, L"Object%d\\", iMapWorld);
+        for (i = MODEL_WORLD_OBJECT; i < MAX_WORLD_OBJECTS; i++)
+        {
+            gLoadData.OpenTexture(i, DirName);
+        }
+
+        if (this->WorldActive == WD_1DUNGEON)
+        {
+            Models[40].Actions[1].PlaySpeed = 0.4f;
+        }
+        else if (this->WorldActive == WD_8TARKAN)
+        {
+            Models[11].StreamMesh = 0;
+            Models[12].StreamMesh = 0;
+            Models[13].StreamMesh = 0;
+            Models[73].StreamMesh = 0;
+            Models[75].StreamMesh = 0;
+            Models[79].StreamMesh = 0;
+        }
+        if (this->WorldActive == WD_51HOME_6TH_CHAR
+            )
+        {
+            Models[MODEL_EAGLE].Actions[0].PlaySpeed = 0.5f;
+            if (this->WorldActive == WD_51HOME_6TH_CHAR)
+            {
+                Models[MODEL_MAP_TORNADO].Actions[0].PlaySpeed = 0.1f;
+            }
+        }
+        else if (this->WorldActive == WD_57ICECITY)
+        {
+            Models[16].Actions[0].PlaySpeed = 0.8f;
+            Models[16].Actions[1].PlaySpeed = 0.8f;
+            Models[17].Actions[0].PlaySpeed = 0.8f;
+            Models[17].Actions[1].PlaySpeed = 0.8f;
+            Models[17].Actions[2].PlaySpeed = 1.f;
+            Models[17].Actions[3].PlaySpeed = 1.f;
+
+            Models[68].Actions[0].PlaySpeed = 0.05f;
+        }
+#ifdef ASG_ADD_MAP_KARUTAN
+        else if (IsKarutanMap())
+        {
+            Models[66].Actions[0].PlaySpeed = 0.15f;
+            Models[66].Actions[1].PlaySpeed = 0.15f;
+
+            Models[107].Actions[0].PlaySpeed = 5.f;
+        }
+#endif	// ASG_ADD_MAP_KARUTAN
+    }
+}
+
+void CMapManager::SetServerMap(int serverMap)
+{
+    m_serverMap = serverMap;
+    WorldActive = GetLoadedWorld(serverMap);
+    m_serverMapWorld = WorldActive;
+}
+
+int CMapManager::GetServerMap() const
+{
+    return m_serverMapWorld == WorldActive ? m_serverMap : WorldActive;
+}
+
+bool CMapManager::IsServerMapLoaded(int serverMap) const
+{
+    return GetServerMap() == serverMap;
+}
+
+void CMapManager::SetServerStage(int stage)
+{
+    m_serverStage = stage;
+}
+
+int CMapManager::GetServerStage() const
+{
+    return m_serverMapWorld == WorldActive ? m_serverStage : 0;
+}
+
+int CMapManager::GetLoadedWorld(int serverMap)
+{
+    return serverMap == SecondDevilSquareMapId ? WD_9DEVILSQUARE : serverMap;
+}
+
+int CMapManager::GetFilesFolder(int serverMap)
+{
+    const int world = GetLoadedWorld(serverMap);
+    if (InBloodCastle(world))
+    {
+        return WD_11BLOODCASTLE1 + 1;
+    }
+    if (InHellas(world))
+    {
+        return WD_24HELLAS + 1;
+    }
+    if (InChaosCastle(world))
+    {
+        return WD_18CHAOS_CASTLE + 1;
+    }
+    if (IsCursedTemple(world))
+    {
+        return WD_45CURSEDTEMPLE_LV1 + 2;
+    }
+    return world + 1;
+}
+
+void CMapManager::LoadWorld(int Map)
+{
+    const auto start = std::chrono::steady_clock::now();
+    std::optional<TextureLoadBatch> textureBatch(std::in_place);
+    SetServerMap(Map);
+    Map = this->WorldActive;
+
+    this->DeleteObjects();
+    DeleteNpcs();
+    DeleteMonsters();
+    if (SceneFlag != CHARACTER_SCENE)
+    {
+        ClearItems();
+        ClearCharacters(HeroKey);
+    }
+    RemoveAllShopTitleExceptHero();
+
+    g_Direction.Init();
+    g_Direction.HeroFallingDownInit();
+    g_Direction.DeleteMonster();
+    M39Kanturu3rd::Kanturu3rdInit();
+    g_Direction.m_CKanturu.m_iKanturuState = 0;
+    g_Direction.m_CKanturu.m_iMayaState = 0;
+    g_Direction.m_CKanturu.m_iNightmareState = 0;
+
+    this->Load();
+    // The sounds of its objects (Data/Maps/ObjectSounds.json, maps design MP1).
+    World::MapObjectSounds::LoadForMap(GetServerMap(), GetServerStage());
+
+    wchar_t FileName[64];
+    wchar_t WorldName[32];
+    int iMapWorld = GetFilesFolder(Map);
+
+    battleCastle::Init();
+
+    mu_swprintf(WorldName, L"World%d", iMapWorld);
+    mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.map", WorldName, iMapWorld);
+
+    int iResult = OpenTerrainMapping(FileName);
+
+    if (iMapWorld != iResult && -1 != iResult)
+    {
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls file corrupted.", FileName);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
+    }
+
+    if (this->WorldActive == WD_73NEW_LOGIN_SCENE)
+    {
+        mu_swprintf(FileName, L"Data\\%ls\\CWScript%d.cws", WorldName, iMapWorld);
+        CCameraMove::GetInstancePtr()->LoadCameraWalkScript(FileName);
+    }
+
+    int CryWolfState = M34CryWolf1st::IsCryWolf1stMVPStart();
+
+    if (gMapManager.InBattleCastle())
+    {
+        if (battleCastle::IsBattleCastleStart())
+        {
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 2);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+        }
+    }
+    else
+
+        if (this->WorldActive == WD_34CRYWOLF_1ST)
+        {
+            switch (CryWolfState)
+            {
+            case CRYWOLF_OCCUPATION_STATE_PEACE:
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+                break;
+            case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 1);
+                break;
+            case CRYWOLF_OCCUPATION_STATE_WAR:
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 2);
+                break;
+            }
+        }
+        else if (this->WorldActive == WD_39KANTURU_3RD)
+        {
+            if (M39Kanturu3rd::IsSuccessBattle())
+            {
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 1);
+            }
+            else
+            {
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+            }
+        }
+        else
+        {
+            mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+        }
+    iResult = OpenTerrainAttribute(FileName);
+    if (iMapWorld != iResult && -1 != iResult)
+    {
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls file corrupted.", FileName);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
+    }
+
+    mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.obj", WorldName, iMapWorld);
+
+    iResult = OpenObjectsEnc(FileName);
+    if (iMapWorld != iResult && -1 != iResult)
+    {
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls file corrupted.", FileName);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return;
+    }
+
+    mu_swprintf(FileName, L"%ls\\TerrainHeight.bmp", WorldName);
+    if (IsTerrainHeightExtMap(this->WorldActive) == true)
+    {
+        CreateTerrain(FileName, true);
+    }
+    else
+    {
+        CreateTerrain(FileName);
+    }
+
+    if (gMapManager.InBattleCastle())
+    {
+        if (battleCastle::IsBattleCastleStart())
+        {
+            mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+        }
+    }
+    else
+        if (this->WorldActive == WD_34CRYWOLF_1ST)
+        {
+            switch (CryWolfState)
+            {
+            case CRYWOLF_OCCUPATION_STATE_PEACE:
+                mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+                break;
+            case CRYWOLF_OCCUPATION_STATE_OCCUPIED:
+                mu_swprintf(FileName, L"%ls\\TerrainLight1.jpg", WorldName);
+                break;
+            case CRYWOLF_OCCUPATION_STATE_WAR:
+                mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+                break;
+            }
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+        }
+
+    OpenTerrainLight(FileName);
+
+    if (CreateWaterTerrain(this->WorldActive) == false)
+    {
+        mu_swprintf(FileName, L"%ls\\TileGrass01.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE, GL_NEAREST, GL_REPEAT, false);
+        mu_swprintf(FileName, L"%ls\\TileGrass02.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 1, GL_NEAREST, GL_REPEAT, false);
+        if (this->WorldActive == WD_51HOME_6TH_CHAR
+            )
+        {
+            mu_swprintf(FileName, L"%ls\\AlphaTileGround01.Tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 2, GL_NEAREST, GL_REPEAT, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TileGround01.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 2, GL_NEAREST, GL_REPEAT, false);
+        }
+
+        if (this->WorldActive == WD_39KANTURU_3RD)
+        {
+            mu_swprintf(FileName, L"%ls\\AlphaTileGround02.Tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 3, GL_NEAREST, GL_REPEAT, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TileGround02.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 3, GL_NEAREST, GL_REPEAT, false);
+        }
+        if (gMapManager.IsCursedTemple())
+        {
+            mu_swprintf(FileName, L"%ls\\AlphaTileGround03.Tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 4, GL_NEAREST, GL_REPEAT, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TileGround03.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 4, GL_NEAREST, GL_REPEAT, false);
+        }
+
+        mu_swprintf(FileName, L"%ls\\TileWater01.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 5, GL_NEAREST, GL_REPEAT, false);
+        mu_swprintf(FileName, L"%ls\\TileWood01.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 6, GL_NEAREST, GL_REPEAT, false);
+        mu_swprintf(FileName, L"%ls\\TileRock01.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 7, GL_NEAREST, GL_REPEAT, false);
+        mu_swprintf(FileName, L"%ls\\TileRock02.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 8, GL_NEAREST, GL_REPEAT, false);
+        mu_swprintf(FileName, L"%ls\\TileRock03.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 9, GL_NEAREST, GL_REPEAT, false);
+
+        if (this->WorldActive == WD_73NEW_LOGIN_SCENE || this->WorldActive == WD_74NEW_CHARACTER_SCENE)
+        {
+            mu_swprintf(FileName, L"%ls\\AlphaTile01.Tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 10, GL_NEAREST, GL_REPEAT, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TileRock04.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 10, GL_NEAREST, GL_REPEAT, false);
+        }
+
+        if (IsPKField() || IsDoppelGanger2())
+        {
+            LoadBitmap(L"Object64\\song_lava1.jpg", BITMAP_MAPTILE + 11, GL_NEAREST, GL_REPEAT, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TileRock05.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 11, GL_NEAREST, GL_REPEAT, false);
+        }
+#ifdef ASG_ADD_MAP_KARUTAN
+        if (IsKarutanMap())
+        {
+            mu_swprintf(FileName, L"%ls\\AlphaTile01.Tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 12, GL_NEAREST, GL_REPEAT, false);
+        }
+        else
+        {
+#endif	// ASG_ADD_MAP_KARUTAN
+            mu_swprintf(FileName, L"%ls\\TileRock06.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 12, GL_NEAREST, GL_REPEAT, false);
+#ifdef ASG_ADD_MAP_KARUTAN
+        }
+#endif	// ASG_ADD_MAP_KARUTAN
+        mu_swprintf(FileName, L"%ls\\TileRock07.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPTILE + 13, GL_NEAREST, GL_REPEAT, false);
+
+        for (int i = 1; i <= 16; i++)
+        {
+            if (i >= 10)
+                mu_swprintf(FileName, L"%ls\\ExtTile%d.jpg", WorldName, i);
+            else
+                mu_swprintf(FileName, L"%ls\\ExtTile0%d.jpg", WorldName, i);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 13 + i, GL_NEAREST, GL_REPEAT, false);
+        }
+        if (IsPKField() || IsDoppelGanger2())
+        {
+            mu_swprintf(FileName, L"%ls\\TileGrass01_R.jpg", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPGRASS, GL_LINEAR, GL_REPEAT, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\TileGrass01.tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPGRASS, GL_NEAREST, GL_REPEAT, false);
+        }
+
+        mu_swprintf(FileName, L"%ls\\TileGrass02.tga", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPGRASS + 1, GL_NEAREST, GL_REPEAT, false);
+        mu_swprintf(FileName, L"%ls\\TileGrass03.tga", WorldName);
+        LoadBitmap(FileName, BITMAP_MAPGRASS + 2, GL_NEAREST, GL_REPEAT, false);
+
+        
+        mu_swprintf(FileName, L"%ls\\leaf01.tga", WorldName);
+        LoadBitmap(FileName, BITMAP_LEAF1, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+        mu_swprintf(FileName,(Map==0||Map==3||Map==63)? L"%ls\\leaf01.tga": L"%ls\\leaf01.jpg",WorldName);
+        LoadBitmap(FileName, BITMAP_LEAF1, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+        mu_swprintf(FileName, L"%ls\\leaf02.jpg", WorldName);
+        LoadBitmap(FileName, BITMAP_LEAF2, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+
+        if (M34CryWolf1st::IsCyrWolf1st() == true)
+        {
+            mu_swprintf(FileName, L"%ls\\rain011.tga", L"World1");
+            LoadBitmap(FileName, BITMAP_RAIN, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+        }
+        else
+        {
+            mu_swprintf(FileName, L"%ls\\rain01.tga", L"World1");
+            LoadBitmap(FileName, BITMAP_RAIN, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+        }
+        mu_swprintf(FileName, L"%ls\\rain02.tga", L"World1");
+        LoadBitmap(FileName, BITMAP_RAIN_CIRCLE, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+        mu_swprintf(FileName, L"%ls\\rain03.tga", L"World10");
+        LoadBitmap(FileName, BITMAP_RAIN_CIRCLE + 1, GL_NEAREST, GL_CLAMP_TO_EDGE, false);
+
+        if (IsEmpireGuardian1() || IsEmpireGuardian2() || IsEmpireGuardian3() || IsEmpireGuardian4())
+        {
+            mu_swprintf(FileName, L"%ls\\AlphaTile01.Tga", WorldName);
+            LoadBitmap(FileName, BITMAP_MAPTILE + 10, GL_NEAREST, GL_REPEAT, false);
+        }
+    }
+
+    if (iMapWorld != 74 && iMapWorld != 75)
+    {
+        g_pNewUIMiniMap->UnloadImages();
+        g_pNewUIMiniMap->LoadImages(WorldName);
+    }
+
+    textureBatch.reset();
+    Bitmaps.LogTextureFilteringSummary("world loaded");
+    mu::log::Get("render")->info(
+        "World {} loaded in {:.0f} ms, {} ms after start", iMapWorld,
+        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count(), SDL_GetTicks());
+}
+
+void CMapManager::DeleteObjects()
+{
+#ifdef _EDITOR
+    // The editor removes what its effect preview created while the pools
+    // still hold it.
+    Core::WorldClearing::Notify();
+#endif
+    if (Models != nullptr)
+    {
+        for (int i = MODEL_WORLD_OBJECT; i < MAX_WORLD_OBJECTS; i++)
+        {
+            Models[i].Release();
+        }
+    }
+
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Tail;
+            while (1)
+            {
+                if (o != NULL)
+                {
+                    OBJECT* Temp = o->Prior;
+                    DeleteObject(o, ob);
+                    if (Temp == NULL) break;
+                    o = Temp;
+                }
+                else break;
+            }
+            ob->Head = NULL;
+            ob->Tail = NULL;
+        }
+    }
+
+    for (int i = BITMAP_MAPTILE; i <= BITMAP_RAIN_CIRCLE; i++)
+    {
+        DeleteBitmap(i);
+    }
+
+    for (int i = 0; i < MAX_SPRITES; i++)
+        Sprites[i].Live = false;
+    for (int i = 0; i < MAX_BOIDS; i++)
+        Boids[i].Live = false;
+    for (int i = 0; i < MAX_FISHS; i++)
+        Fishs[i].Live = false;
+    for (int i = 0; i < MAX_LEAVES; i++)
+        Leaves[i].Live = false;
+    for (int i = 0; i < MAX_PARTICLES; i++)
+        Particles[i].Live = false;
+    for (int i = 0; i < MAX_POINTS; i++)
+        Points[i].Live = false;
+    for (int i = 0; i < MAX_JOINTS; i++)
+        Joints[i].Live = false;
+    for (int i = 0; i < MAX_OPERATES; i++)
+        Operates[i].Live = false;
+    for (int i = 0; i < MAX_EFFECTS; i++)
+        Effects[i].Live = false;
+}
+
+bool CMapManager::InChaosCastle(int iMap)
+{
+    if (iMap == -1)
+    {
+        iMap = this->WorldActive;
+    }
+
+    if ((iMap >= WD_18CHAOS_CASTLE && iMap <= WD_18CHAOS_CASTLE_END) || iMap == WD_53CAOSCASTLE_MASTER_LEVEL)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool CMapManager::InBloodCastle(int iMap)
+{
+    if (iMap == -1)
+    {
+        iMap = this->WorldActive;
+    }
+
+    if ((iMap >= WD_11BLOODCASTLE1 && iMap <= WD_11BLOODCASTLE_END) || iMap == WD_52BLOODCASTLE_MASTER_LEVEL)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool CMapManager::InDevilSquare()
+{
+    return WD_9DEVILSQUARE == this->WorldActive ? true : false;
+}
+
+bool CMapManager::InHellas(int iMap)
+{
+    if (iMap == -1)
+    {
+        iMap = this->WorldActive;
+    }
+
+    return ((iMap >= WD_24HELLAS && iMap <= WD_24HELLAS_END)
+        || (iMap == WD_24HELLAS_7));
+}
+
+bool CMapManager::InHiddenHellas(int iMap)
+{
+    if (iMap == -1)
+    {
+        iMap = this->WorldActive;
+    }
+
+    return iMap == WD_24HELLAS_7;
+}
+
+bool CMapManager::IsPKField()
+{
+    return (this->WorldActive == WD_63PK_FIELD) ? true : false;
+}
+
+bool CMapManager::IsCursedTemple(int iMap)
+{
+    if (iMap == -1)
+    {
+        iMap = this->WorldActive;
+    }
+    return iMap >= WD_45CURSEDTEMPLE_LV1 && iMap <= WD_45CURSEDTEMPLE_LV6;
+}
+
+bool CMapManager::IsEmpireGuardian1()
+{
+    return (this->WorldActive == WD_69EMPIREGUARDIAN1) ? true : false;
+}
+
+bool CMapManager::IsEmpireGuardian2()
+{
+    return (this->WorldActive == WD_70EMPIREGUARDIAN2) ? true : false;
+}
+
+bool CMapManager::IsEmpireGuardian3()
+{
+    return (this->WorldActive == WD_71EMPIREGUARDIAN3) ? true : false;
+}
+
+bool CMapManager::IsEmpireGuardian4()
+{
+    if (this->WorldActive == WD_72EMPIREGUARDIAN4 || this->WorldActive == WD_73NEW_LOGIN_SCENE || this->WorldActive == WD_74NEW_CHARACTER_SCENE)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool CMapManager::IsEmpireGuardian()
+{
+    if (this->IsEmpireGuardian1() == false &&
+        this->IsEmpireGuardian2() == false &&
+        this->IsEmpireGuardian3() == false &&
+        this->IsEmpireGuardian4() == false)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool CMapManager::InBattleCastle(int iMap)
+{
+    if (iMap == -1)
+    {
+        iMap = this->WorldActive;
+    }
+
+    return (iMap == WD_30BATTLECASTLE) ? true : false;
+}
+
+namespace
+{
+const wchar_t* EventMapName(CMapManager& maps, int mapId)
+{
+    if (maps.InBloodCastle(mapId))
+        return I18N::Game::BloodCastle;
+    if (maps.InChaosCastle(mapId))
+        return I18N::Game::ChaosCastle;
+    if (maps.InHellas(mapId))
+        return maps.InHiddenHellas(mapId) ? I18N::Game::LostKalima : I18N::Game::Kalima;
+    if (maps.IsCursedTemple(mapId))
+        return I18N::Game::IllusionTemple;
+    if (mapId >= WD_65DOPPLEGANGER1 && mapId <= WD_68DOPPLEGANGER4)
+        return I18N::Game::Doppelganger;
+    if (mapId >= WD_69EMPIREGUARDIAN1 && mapId <= WD_72EMPIREGUARDIAN4)
+        return I18N::Game::Varka;
+    return nullptr;
+}
+} // namespace
+
+const wchar_t* CMapManager::GetMapName(int iMap)
+{
+    const auto* name = FindMapName(iMap);
+    return name != nullptr ? name : I18N::Game::UnknownMap;
+}
+
+const wchar_t* CMapManager::FindMapName(int iMap)
+{
+    // The event predicates reserve -1 for WorldActive; a name lookup uses only its argument.
+    if (iMap < 0)
+        return nullptr;
+    if (const auto* eventName = EventMapName(*this, iMap))
+        return eventName;
+
+    switch (iMap)
+    {
+    case WD_0LORENCIA:
+        return I18N::Game::Lorencia;
+    case WD_1DUNGEON:
+        return I18N::Game::Dungeon;
+    case WD_2DEVIAS:
+        return I18N::Game::Devias;
+    case WD_3NORIA:
+        return I18N::Game::Noria;
+    case WD_4LOSTTOWER:
+        return I18N::Game::LostTower;
+    case WD_5UNKNOWN:
+        return I18N::Game::APlaceOfExile;
+    case WD_6STADIUM:
+        return I18N::Game::Arena;
+    case WD_7ATLANSE:
+        return I18N::Game::Atlans;
+    case WD_8TARKAN:
+        return I18N::Game::Tarkan;
+    case WD_9DEVILSQUARE:
+    case SecondDevilSquareMapId:
+        return I18N::Game::DevilSquare;
+    case WD_10HEAVEN:
+        return I18N::Game::Icarus;
+    case WD_30BATTLECASTLE:
+        return I18N::Game::ValleyOfLoren;
+    case WD_31HUNTING_GROUND:
+        return I18N::Game::LandOfTrials;
+    case WD_33AIDA:
+        return I18N::Game::Aida;
+    case WD_34CRYWOLF_1ST:
+    case WD_35CRYWOLF_2ND:
+        return I18N::Game::CrywolfFortress;
+    case WD_37KANTURU_1ST:
+        return I18N::Game::Kanturu;
+    case WD_38KANTURU_2ND:
+        return I18N::Game::Kanturu3;
+    case WD_39KANTURU_3RD:
+        return I18N::Game::RefineryTower;
+    case WD_40AREA_FOR_GM:
+        return I18N::Game::GMSummonZone;
+    case WD_41CHANGEUP3RD_1ST:
+        return I18N::Game::BalgassBarrack;
+    case WD_42CHANGEUP3RD_2ND:
+        return I18N::Game::BalgassRestingPlace;
+    case WD_51HOME_6TH_CHAR:
+        return I18N::Game::Elveland;
+    case WD_56MAP_SWAMP_OF_QUIET:
+        return I18N::Game::SwampOfPeace;
+    case WD_57ICECITY:
+        return I18N::Game::LaCleon;
+    case WD_58ICECITY_BOSS:
+        return I18N::Game::Hatchery;
+    case WD_62SANTA_TOWN:
+        return I18N::Game::SantaSVillage;
+    case WD_63PK_FIELD:
+        return I18N::Game::Vulcanus;
+    case WD_64DUELARENA:
+        return I18N::Game::Colosseum;
+    case WD_79UNITEDMARKETPLACE:
+        return I18N::Game::LorenMarket;
+    case WD_80KARUTAN1:
+    case WD_81KARUTAN2:
+        return I18N::Game::Karutan;
+    default:
+        return nullptr;
+    }
+}

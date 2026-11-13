@@ -1,0 +1,35 @@
+//*****************************************************************************
+// File: GM_kanturu_1st.h
+//
+// Desc: 칸투르 1차(외부) 맵, 몬스터.
+//
+// producer: Ahn Sang-Kyu
+//*****************************************************************************
+
+#ifndef _GM_KANTURU_1ST_H_
+#define _GM_KANTURU_1ST_H_
+
+namespace M37Kanturu1st
+{
+    bool IsKanturu1st();						// 칸투르 외부 맵인가?
+
+    // 오브젝트 관련
+    bool CreateKanturu1stObject(OBJECT* pObject);
+    bool MoveKanturu1stObject(OBJECT* pObject);
+    bool UpdateKanturu1stObjectEffects(OBJECT* pObject, BMD* pModel);
+    bool RenderKanturu1stObjectVisual(const OBJECT* pObject, DrawLook& look, BMD* pModel);
+    bool RenderKanturu1stObjectMesh(const OBJECT* o, DrawLook& look, BMD* b,
+                                    bool ExtraMon = 0);                            // 오브젝트 렌더(몬스터 포함)
+    void RenderKanturu1stAfterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b); // 반투명 오브젝트 나중 랜더.
+
+    // 몬스터 관련
+    bool AttackEffectKanturu1stMonster(CHARACTER* c, OBJECT* o, BMD* b);	// 몬스터 공격 이펙트
+    bool MoveKanturu1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);		// 몬스터 효과 업데이트
+    void MoveKanturu1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);		// 몬스터 무기의 잔상 처리
+    bool RenderKanturu1stMonsterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b,
+                                           int ExtraMon); // 몬스터 오브젝트 렌더링
+    bool UpdateKanturu1stMonsterEffects(CHARACTER* c, OBJECT* o, BMD* b);
+    bool RenderKanturu1stMonsterVisual(const CHARACTER* c, const OBJECT* o, BMD* b); // 몬스터 효과 렌더링
+};
+
+#endif	// _GM_KANTURU_1ST_H_

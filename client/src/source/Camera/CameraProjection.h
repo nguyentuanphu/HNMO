@@ -1,0 +1,112 @@
+#pragma once
+
+// Forward declaration
+class CameraState;
+
+/**
+ * @brief Camera projection and viewport utilities
+ *
+ * Handles projection matrix setup, screen-space transformations,
+ * and viewport management. Extracted from ZzzOpenglUtil.cpp.
+ */
+class CameraProjection
+{
+public:
+    /**
+     * @brief Builds the view the frame draws and picks with, from the camera
+     *
+     * The view matrix, and the screen centre and perspective factors of the
+     * viewport (window pixels) the view is drawn into.
+     */
+    static void UpdateView(CameraState& state, int x, int y, int width, int height);
+
+    /**
+     * @brief Sets the renderer's projection and view to the state's view, for a target of width x height
+     */
+    static void ApplyView(const CameraState& state, int width, int height);
+
+    /**
+     * @brief Sets OpenGL viewport with Y-axis flip
+     *
+     * Takes pixel coordinates directly rather than reference coordinates.
+     *
+     * @param x Viewport X offset (pixels)
+     * @param y Viewport Y offset (pixels)
+     * @param width Viewport width (pixels)
+     * @param height Viewport height (pixels)
+     */
+    static void SetViewport(int x, int y, int width, int height);
+
+    /**
+     * @brief Aspect ratio (width / height) of the viewport the 3D world is drawn into
+     *
+     * In MainScene the world viewport leaves room for the HUD; elsewhere it is the window.
+     */
+    static float WorldAspectRatio();
+
+    /**
+     * @brief Converts screen coordinates to world ray direction
+     *
+     * Replaces CreateScreenVector().
+     *
+     * @param state Camera state with cached perspective factors
+     * @param sx Screen X coordinate (in 640×480 reference coordinates)
+     * @param sy Screen Y coordinate (in 640×480 reference coordinates)
+     * @param outTarget Output world direction vector
+     * @param bFixView Use camera view far (true) or item view far (false)
+     */
+    static void ScreenToWorldRay(const CameraState& state, int sx, int sy,
+                                  vec3_t outTarget, bool bFixView = true);
+
+    /**
+     * @brief Projects world position to screen coordinates (reference)
+     *
+     * Replaces Projection(). Returns coordinates in 640×480 reference space.
+     *
+     * @param state Camera state with cached transform and perspective
+     * @param worldPos World position
+     * @param outX Output screen X (in 640×480 reference coordinates)
+     * @param outY Output screen Y (in 640×480 reference coordinates)
+     */
+    static void WorldToScreen(const CameraState& state, const vec3_t worldPos,
+                               int* outX, int* outY);
+
+    /**
+     * @brief Projects a world position to window pixels, as ScreenToWorldRay
+     *        casts the mouse ray back (WorldToScreen without its 640x480
+     *        conversion and integer steps)
+     *
+     * @return false when the position is behind the camera
+     */
+    static bool WorldToWindowPixel(const CameraState& state, const vec3_t worldPos, float* outX, float* outY);
+
+    /**
+     * @brief Transforms position relative to camera (pixel coordinates)
+     *
+     * Replaces TransformPosition(). Returns coordinates in actual pixel space.
+     *
+     * @param state Camera state
+     * @param position World position
+     * @param outWorldPosition Output camera-relative position
+     * @param outX Output screen X (in actual pixels)
+     * @param outY Output screen Y (in actual pixels)
+     */
+    static void TransformPosition(const CameraState& state, const vec3_t position,
+                                   vec3_t outWorldPosition, int* outX, int* outY);
+
+    /**
+     * @brief Tests if a world position is visible in depth buffer
+     *
+     * Replaces TestDepthBuffer().
+     */
+    static bool TestDepthBuffer(const CameraState& state, const vec3_t position);
+
+    /**
+     * @brief Reads OpenGL modelview matrix
+     *
+     * Replaces GetOpenGLMatrix().
+     *
+     * @param outMatrix Output 3×4 matrix
+     */
+    static void GetOpenGLMatrix(float outMatrix[3][4]);
+};

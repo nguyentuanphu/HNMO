@@ -1,0 +1,48 @@
+#ifndef _GM_Kanturu_3rd_H_
+#define _GM_Kanturu_3rd_H_
+
+#pragma once
+
+#include "Render/Models/DrawLook.h"
+
+#include "Render/Models/ZzzBMD.h"
+
+namespace M39Kanturu3rd {
+    bool IsInKanturu3rd();
+
+    bool CreateKanturu3rdObject(OBJECT* o);
+    bool MoveKanturu3rdObject(OBJECT* o);
+    bool UpdateKanturu3rdObjectEffects(OBJECT* o, BMD* b);
+    bool RenderKanturu3rdObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon = 0);
+    void RenderKanturu3rdAfterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon = 0);
+
+    bool MoveKanturu3rdMonsterVisual(OBJECT* o, BMD* b);
+    void MoveKanturu3rdBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+
+    bool RenderKanturu3rdMonsterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon);
+    bool UpdateKanturu3rdMonsterEffects(CHARACTER* c, OBJECT* o, BMD* b);
+
+    bool AttackEffectKanturu3rdMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    bool SetCurrentActionKanturu3rdMonster(CHARACTER* c, OBJECT* o);
+
+    void Kanturu3rdInit();
+    bool IsSuccessBattle();
+    void CheckSuccessBattle(BYTE State, BYTE DetailState);
+    void Kanturu3rdState(BYTE State, BYTE DetailState);
+    void MayaSceneMayaAction(BYTE Skill);
+    void MayaAction(OBJECT* o, BMD* b);
+
+    void Kanturu3rdUserandMonsterCount(int Count1, int Count2);
+
+    void RenderKanturu3rdinterface();
+    void RenderKanturu3rdResultInterface();
+    void Kanturu3rdResult(BYTE Result);
+    void Kanturu3rdSuccess();
+    void Kanturu3rdFailed();
+    void ChangeBackGroundMusic(int World);
+}
+
+extern int UserCount;
+extern int MonsterCount;
+
+#endif //_GM_Kanturu_3rd_H_

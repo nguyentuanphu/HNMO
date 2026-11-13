@@ -1,0 +1,199 @@
+﻿// <copyright file="ItemExtensions.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.DataModel;
+
+using HNMO.DataModel.Configuration.Items;
+using HNMO.DataModel.Entities;
+
+/// <summary>
+/// Extensions for <see cref="Item"/>.
+/// </summary>
+public static class ItemExtensions
+{
+    /// <summary>
+    /// Determines whether this instance is a wing.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item is wing; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsWing(this Item item)
+    {
+        return item.Definition?.IsWing() ?? false;
+    }
+
+    /// <summary>
+    /// Determines whether this instance is a wing.
+    /// </summary>
+    /// <param name="itemDefinition">The item definition.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item is wing; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsWing(this ItemDefinition itemDefinition)
+    {
+        return itemDefinition?.Group is 12 or 13
+               && itemDefinition is { Width: >= 2, Height: >= 2, MaximumItemLevel: >= 11, Durability: >= 200 }
+               && (itemDefinition.ItemSlot?.ItemSlots.Any() ?? false);
+    }
+
+    /// <summary>
+    /// Determines whether this item is a pet (Dark Raven, Dark Horse) which can gain levels itself.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns><see langword="true"/>, if the item is a pet.</returns>
+    public static bool IsTrainablePet(this Item item)
+    {
+        return item.Definition?.IsTrainablePet() ?? false;
+    }
+
+    /// <summary>
+    /// Determines whether this item is a pet (Dark Raven, Dark Horse) which can gain levels itself.
+    /// </summary>
+    /// <param name="itemDefinition">The item definition.</param>
+    /// <returns><see langword="true"/>, if the item is a pet.</returns>
+    public static bool IsTrainablePet(this ItemDefinition itemDefinition)
+    {
+        return itemDefinition.PetExperienceFormula is not null;
+    }
+
+    /// <summary>
+    /// Determines whether the specified item is a dark raven.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item is raven; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsDarkRaven(this Item item)
+    {
+        return item.Definition is { Group: 13, Number: 5 };
+    }
+
+    /// <summary>
+    /// Gets the dark raven leadership requirement, based on pet level.
+    /// TODO: Make somehow configurable?.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <param name="petLevel">The pet level.</param>
+    /// <returns>The required leadership.</returns>
+    public static int GetDarkRavenLeadershipRequirement(this Item item, int petLevel)
+    {
+        return (petLevel * 15) + 185;
+    }
+
+    /// <summary>
+    /// Determines whether this item can have a skill.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item can have a skill; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool CanHaveSkill(this Item item) => item.IsWearable() && item.Definition?.Skill != null && item.Definition.QualifiedCharacters.Any();
+
+    /// <summary>
+    /// Determines whether this item is wearable.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item is wearable; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsWearable(this Item item) => item.Definition?.ItemSlot != null;
+
+    /// <summary>
+    /// Determines whether this item can be repaired the normal way (by an NPC, or with the repair of the
+    /// inventory): it must be wearable, and its definition must allow it (<see cref="ItemDefinition.IsRepairable"/>).
+    /// The durability of an item which can't be worn is its number of pieces, so repairing it would reduce a
+    /// stack to one piece. Other ways to restore the durability, like a Jewel of Bless on a Horn of Fenrir,
+    /// don't use this check.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item can be repaired; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool CanBeRepaired(this Item item) => item.IsWearable() && item.Definition!.IsRepairable;
+
+    /// <summary>
+    /// Determines whether this item is stackable.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the specified item is stackable; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsStackable(this Item item) => !item.IsWearable() && item.Definition?.Durability > 1;
+
+    /// <summary>
+    /// Determines whether this item can be completely stacked on the specified other item.
+    /// After stacking, this item is destroyed.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <param name="otherItem">The other item.</param>
+    /// <returns>
+    ///   <c>true</c> if this item can be completely stacked on the specified other item; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool CanCompletelyStackOn(this Item item, Item otherItem) => item.IsStackable() && item.IsSameItemAs(otherItem) && (item.Durability + otherItem.Durability) <= item.Definition?.Durability;
+
+    /// <summary>
+    /// Determines whether this item can be partially stacked on the specified other item.
+    /// After stacking, this item is left with the rest of its durability.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <param name="otherItem">The other item.</param>
+    /// <returns>
+    ///   <c>true</c> if this item can be partially stacked on the specified other item; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool CanPartiallyStackOn(this Item item, Item otherItem) => item.IsStackable() && item.IsSameItemAs(otherItem) && otherItem.Durability < otherItem.Definition?.Durability;
+
+    /// <summary>
+    /// Determines whether this item is of the same type as the specified other item.
+    /// <see cref="Item.Definition"/> and <see cref="Item.Level"/> need to be equal to get considered as the same item.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <param name="otherItem">The other item.</param>
+    /// <returns>
+    ///   <c>true</c> if this item is of the same type as the specified other item; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsSameItemAs(this Item item, Item otherItem) => item.Definition == otherItem.Definition && item.Level == otherItem.Level;
+
+    /// <summary>
+    /// Determines whether the item level can be upgraded by using jewels of bless or soul.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>
+    ///   <c>true</c> if the item level can be upgraded by using jewels of bless or soul; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool CanLevelBeUpgraded(this Item item)
+    {
+        return item.IsWearable()
+               && item.Definition!.ItemSlot!.ItemSlots.Any(slot => slot <= InventoryConstants.WingsSlot)
+               && item.Level < item.Definition.MaximumItemLevel;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="Item.Durability"/> as byte value, as the client sees it.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>The durability, rounded up.</returns>
+    /// <remarks>
+    /// The durability is stored with a fraction, so wear can accumulate in small steps, but the client only knows
+    /// whole points. Rounded up, an item loses a point only after a full point of wear, and it shows its last point
+    /// until it's worn out completely, at a durability of 0. The original game behaved the same way: it counted the
+    /// wear separately and took off a whole point when it was full.
+    /// Rounding down would cost a whole point on the first fraction of wear instead: a repaired item would look
+    /// damaged again after a single tick of <c>DurabilityDecayPlugIn</c>, and could be repaired and paid for endlessly.
+    /// </remarks>
+    public static byte Durability(this Item item) => (byte)Math.Min(byte.MaxValue, Math.Ceiling(item.Durability));
+
+    /// <summary>
+    /// Decreases the durability of an item, and returns <see langword="true"/>, if the integral number changed.
+    /// </summary>
+    /// <param name="item">The item whose durability should be decreased.</param>
+    /// <param name="decrement">The decrement value.</param>
+    /// <returns><see langword="true"/>, if the integral number changed.</returns>
+    public static bool DecreaseDurability(this Item item, double decrement)
+    {
+        var previousWholeDurability = item.Durability();
+        item.Durability = Math.Max(item.Durability - decrement, 0.0);
+        return item.Durability() != previousWholeDurability;
+    }
+}

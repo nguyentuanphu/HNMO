@@ -1,0 +1,274 @@
+// <copyright file="IGameContext.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic;
+
+using System.Collections.Concurrent;
+using HNMO.GameLogic.MiniGames;
+using HNMO.GameLogic.Views;
+using HNMO.Interfaces;
+using HNMO.Pathfinding;
+using HNMO.Persistence;
+using HNMO.PlugIns;
+
+/// <summary>
+/// The context of the game.
+/// </summary>
+public interface IGameContext
+{
+    /// <summary>
+    /// Occurs when a game map got created.
+    /// </summary>
+    event EventHandler<GameMap>? GameMapCreated;
+
+    /// <summary>
+    /// Occurs when a game map got removed.
+    /// </summary>
+    event EventHandler<GameMap>? GameMapRemoved;
+
+    /// <summary>
+    /// Occurs when the <see cref="LoggedInPlayerCount"/> changed.
+    /// </summary>
+    event EventHandler? LoggedInPlayerCountChanged;
+
+    /// <summary>
+    /// Gets the global experience rate.
+    /// </summary>
+    float ExperienceRate { get; }
+
+    /// <summary>
+    /// Gets the global master experience rate.
+    /// </summary>
+    float MasterExperienceRate { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether PVP is enabled.
+    /// </summary>
+    bool PvpEnabled { get; }
+
+    /// <summary>
+    /// Gets the repository provider. Used to retrieve data, e.g. from a database.
+    /// </summary>
+    IPersistenceContextProvider PersistenceContextProvider { get; }
+
+    /// <summary>
+    /// Gets the item power up factory.
+    /// </summary>
+    IItemPowerUpFactory ItemPowerUpFactory { get; }
+
+    /// <summary>
+    /// Gets the configuration.
+    /// </summary>
+    GameConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Gets or sets the server time zone used to interpret the time-of-day entries of periodic
+    /// event schedules (e.g. invasions, Blood Castle, Devil Square). Defaults to <see cref="TimeZoneInfo.Utc"/>.
+    /// </summary>
+    TimeZoneInfo ServerTimeZone { get; set; }
+
+    /// <summary>
+    /// Gets the experience table. Index is the player level, value the needed experience to reach that level.
+    /// </summary>
+    long[] ExperienceTable { get; }
+
+    /// <summary>
+    /// Gets the master experience table. Index is the player level, value the needed experience to reach that level.
+    /// </summary>
+    long[] MasterExperienceTable { get; }
+
+    /// <summary>
+    /// Gets the configuration change mediator.
+    /// </summary>
+    IConfigurationChangeMediator ConfigurationChangeMediator { get; }
+
+    /// <summary>
+    /// Gets the plug in manager.
+    /// </summary>
+    PlugInManager PlugInManager { get; }
+
+    /// <summary>
+    /// Gets the feature plug ins.
+    /// </summary>
+    FeaturePlugInContainer FeaturePlugIns { get; }
+
+    /// <summary>
+    /// Gets the offline player manager which tracks active offline players.
+    /// </summary>
+    Offline.OfflinePlayerManager OfflinePlayerManager { get; }
+
+    /// <summary>
+    /// Gets the players count of the game.
+    /// </summary>
+    /// <remarks>
+    /// It includes the connections which didn't log in (yet). See <see cref="LoggedInPlayerCount"/> for the players which are online.
+    /// </remarks>
+    int PlayerCount { get; }
+
+    /// <summary>
+    /// Gets the number of players which are logged in: they passed the login screen and didn't disconnect.
+    /// </summary>
+    /// <remarks>
+    /// Unlike <see cref="PlayerCount"/>, it doesn't include the connections which are still at the login screen.
+    /// It's the number which is limited by the maximum players of a game server.
+    /// </remarks>
+    int LoggedInPlayerCount { get; }
+
+    /// <summary>
+    /// Gets the number of players which wait for their login: they are connected, but didn't log in yet.
+    /// </summary>
+    /// <remarks>
+    /// Players which disconnect and are still saving their progress are neither waiting nor logged in.
+    /// </remarks>
+    int WaitingForLoginCount { get; }
+
+    /// <summary>
+    /// Gets the logger factory.
+    /// </summary>
+    ILoggerFactory LoggerFactory { get; }
+
+    /// <summary>
+    /// Gets the drop generator.
+    /// </summary>
+    IDropGenerator DropGenerator { get; }
+
+    /// <summary>
+    /// Gets the object pool for path finders.
+    /// </summary>
+    IObjectPool<PathFinder> PathFinderPool { get; }
+
+    /// <summary>
+    /// Gets the duel room manager.
+    /// </summary>
+    DuelRoomManager DuelRoomManager { get; }
+
+    /// <summary>
+    /// Gets the state of the active self defenses. The datetime holds the timestamp when self-defense ends.
+    /// </summary>
+    ConcurrentDictionary<(Player Attacker, Player Defender), DateTime> SelfDefenseState { get; }
+
+    /// <summary>
+    /// Gets the party manager which handles party creation and persistence.
+    /// </summary>
+    IPartyManager PartyManager { get; }
+
+    /// <summary>
+    /// Gets the manager which hosts and tracks the mini game instances of the game.
+    /// </summary>
+    IMiniGameManager MiniGames { get; }
+
+    /// <summary>
+    /// Gets the initialized maps which are hosted on this context.
+    /// </summary>
+    ValueTask<IEnumerable<GameMap>> GetMapsAsync();
+
+    /// <summary>
+    /// Gets the players.
+    /// </summary>
+    ValueTask<IList<Player>> GetPlayersAsync();
+
+    /// <summary>
+    /// Adds the player to the game.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    ValueTask AddPlayerAsync(Player player);
+
+    /// <summary>
+    /// Removes the player from the game.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    ValueTask RemovePlayerAsync(Player player);
+
+    /// <summary>
+    /// Is called by a player when its state changed, before the plugins for state changes run.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="previousState">The previous state.</param>
+    /// <param name="currentState">The current state.</param>
+    /// <remarks>
+    /// The game context counts its players by their state, see <see cref="LoggedInPlayerCount"/>.
+    /// A player which isn't in this context is ignored. It must not throw, because it runs within
+    /// the state change of the player.
+    /// </remarks>
+    void OnPlayerStateChanged(Player player, State previousState, State currentState);
+
+    /// <summary>
+    /// Reserves a place for a player which logs in, if the game has a free one.
+    /// </summary>
+    /// <param name="maximumPlayers">The maximum number of logged in players.</param>
+    /// <param name="replacedPlayer">The logged in player whose place the player takes over, e.g. its offline player; <c>null</c> otherwise.
+    /// When it's no longer logged in, a free place is required.</param>
+    /// <returns>
+    /// The reservation, or <c>null</c> when there is no free place, and the number of places which were
+    /// taken by logged in players and reservations before, without the place which is taken over.
+    /// </returns>
+    /// <remarks>
+    /// A reservation counts like a logged in player until it's disposed. A login keeps it until its state
+    /// change to <see cref="PlayerState.Authenticated"/> is done, or until it failed, so that two logins
+    /// can't take the last free place at the same time.
+    /// </remarks>
+    (IDisposable? Reservation, int OccupiedPlaces) TryReserveLoginPlace(int maximumPlayers, Player? replacedPlayer);
+
+    /// <summary>
+    /// Gets the maps which is meant to be hosted by the game.
+    /// </summary>
+    /// <param name="mapId">The map identifier.</param>
+    /// <param name="createIfNotExists">If set to <c>true</c>, the map is created if it doesn't exist yet.</param>
+    /// <returns>
+    /// The hosted GameMap instance.
+    /// </returns>
+    ValueTask<GameMap?> GetMapAsync(ushort mapId, bool createIfNotExists = true);
+
+    /// <summary>
+    /// Gets the player object by character name.
+    /// </summary>
+    /// <param name="name">The character name.</param>
+    /// <returns>The player object.</returns>
+    Player? GetPlayerByCharacterName(string name);
+
+    /// <summary>
+    /// Sends a global message to all players of the game with the specified message type.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="messageType">Type of the message.</param>
+    ValueTask SendGlobalMessageAsync(string message, MessageType messageType);
+
+    /// <summary>
+    /// Sends a global message to all players of the game with the specified message type.
+    /// </summary>
+    /// <param name="messageType">Type of the message.</param>
+    /// <param name="messageKey">The message resource key.</param>
+    /// <param name="arguments">The parameters for the message.</param>
+    ValueTask ShowGlobalLocalizedMessageAsync(MessageType messageType, string messageKey, params object?[] arguments);
+
+    /// <summary>
+    /// Sends a global chat message to all players of the game with the specified message type.
+    /// </summary>
+    /// <param name="sender">The sender.</param>
+    /// <param name="message">The message.</param>
+    /// <param name="messageType">Type of the message.</param>
+    ValueTask SendGlobalChatMessageAsync(string sender, string message, ChatMessageType messageType);
+
+    /// <summary>
+    /// Sends a golden global notification to all players of the game.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    ValueTask SendGlobalNotificationAsync(string message);
+
+    /// <summary>
+    /// Sends a golden global notification to all players of the game, in the language of each player.
+    /// </summary>
+    /// <param name="message">The message, which may contain translations and format placeholders.</param>
+    /// <param name="formatArguments">The arguments for the format placeholders of the message.</param>
+    ValueTask SendGlobalNotificationAsync(LocalizedString message, params object?[] formatArguments);
+
+    /// <summary>
+    /// Executes an action for each player.
+    /// </summary>
+    /// <param name="action">The action which is executed.</param>
+    /// <remarks>
+    /// Please avoid doing actions which may lead to the connected-state of the players.
+    /// </remarks>
+    ValueTask ForEachPlayerAsync(Func<Player, Task> action);
+}

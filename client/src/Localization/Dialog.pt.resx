@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Text_1" xml:space="preserve">
+    <value>Olá! Eu sou Pasi o Mago. Hahaha! Hmmm... O movimento das estrelas não parece muito certo. Seu futuro... Hmm... Também não consigo ver seu futuro... Por quê será...?</value>
+  </data>
+  <data name="Text_2" xml:space="preserve">
+    <value>Olá! Meu nome é Baz e cuido dos cofres. Posso ajudá-lo seja onde estiver. Não hesite em deixar seus pertences comigo.</value>
+  </data>
+  <data name="Text_3" xml:space="preserve">
+    <value>Muitos aventureiros me disseram que o som da harpa é confortante e acaba com sua fadiga. Precisa da minha ajuda?</value>
+  </data>
+  <data name="Text_4" xml:space="preserve">
+    <value>Olá! Meu nome é Baz e cuido dos cofres. Posso ajudá-lo seja onde estiver. Não hesite em deixar seus pertences comigo.</value>
+  </data>
+  <data name="Text_5" xml:space="preserve">
+    <value>Você trouxe dinheiro suficiente? Sem ele, não posso combinar os itens porque preciso de dinheiro para continuar minha pesquisa. Entendeu? Quer saber quanto dinheiro precisa?</value>
+  </data>
+  <data name="Text_6" xml:space="preserve">
+    <value>Boas-vindas ao MU! Pressione a tecla F1 se precisar de ajuda ao viajar pelo continente de MU.</value>
+  </data>
+  <data name="Text_7" xml:space="preserve">
+    <value>É a primeira vez que vem a Lorencia? Vá para a saída sudeste na frente da fonte e tente caçar Dragões lentos ou Aranhas. Os Esqueletos a noroeste são muito perigosos.</value>
+  </data>
+  <data name="Text_8" xml:space="preserve">
+    <value>Boas-vindas a Noria. Se for sua primeira visita, passe pelo guarda dos cofres e vá para a saída sul. Tente caçar monstros de nível baixo, como Escorpiões ou Goblins.</value>
+  </data>
+  <data name="Text_9" xml:space="preserve">
+    <value>Se precisar de um guia detalhado do continente de Mu, visite http://muonline.webzen.net</value>
+  </data>
+  <data name="Text_50" xml:space="preserve">
+    <value>Dizem que o 'Pergaminho do Imperador', que fala de Muren, o primeiro imperador de MU, foi visto nos arredores da Torre Perdida, de Atlans e da Masmorra.</value>
+  </data>
+  <data name="Answer_50_Slot_0" xml:space="preserve">
+    <value>Eu não sabia que tal coisa existia...</value>
+  </data>
+  <data name="Text_51" xml:space="preserve">
+    <value>Sua oferenda para o Deus não é suficiente. Eu lhe contarei sobre o oráculo se fizer uma oferenda de 1.000.000 de Zens.</value>
+  </data>
+  <data name="Answer_51_Slot_0" xml:space="preserve">
+    <value>Voltarei com 1.000.000 de Zens.</value>
+  </data>
+  <data name="Text_52" xml:space="preserve">
+    <value>Dizem que o 'Pergaminho do Imperador', que fala de Muren, o primeiro imperador de MU, foi visto nos arredores da Torre Perdida, de Atlans e da Masmorra.</value>
+  </data>
+  <data name="Answer_52_Slot_0" xml:space="preserve">
+    <value>Conte-me mais.</value>
+  </data>
+  <data name="Text_53" xml:space="preserve">
+    <value>O 'Pergaminho do Imperador' está envolto em uma força poderosa. Qualquer pessoa que o leia será abençoado com aquela força poderosa.</value>
+  </data>
+  <data name="Answer_53_Slot_0" xml:space="preserve">
+    <value>Repita a história.</value>
+  </data>
+  <data name="Answer_53_Slot_1" xml:space="preserve">
+    <value>Vou procurá-lo.</value>
+  </data>
+  <data name="Answer_53_Slot_2" xml:space="preserve">
+    <value>Não me importo.</value>
+  </data>
+  <data name="Text_54" xml:space="preserve">
+    <value>Vá procurar o 'Pergaminho do Imperador'. Você receberá um grande poder ao lê-lo.</value>
+  </data>
+  <data name="Answer_54_Slot_0" xml:space="preserve">
+    <value>Vou procurá-lo.</value>
+  </data>
+  <data name="Text_55" xml:space="preserve">
+    <value>Você encontrou o 'Pergaminho do Imperador'! A comemoração da unificação do primeiro imperador do Império de Mu Muren foi registrado com o poder da mágica aqui. Aquele que possuir o 'Pergaminho do Imperador' receberá grande poder.</value>
+  </data>
+  <data name="Answer_55_Slot_0" xml:space="preserve">
+    <value>Conte-me sobre o registro.</value>
+  </data>
+  <data name="Text_56" xml:space="preserve">
+    <value>Um registro histórico do primeiro imperador Muren contém a comemoração da paz por meio do triunfo de Muren sobre todos os senhores da guerra e, com isso, a unificação do continente sob o Império de MU.</value>
+  </data>
+  <data name="Answer_56_Slot_0" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_57" xml:space="preserve">
+    <value>Muren foi um dos três heróis que acabou com o caos trazido ao povo pela invasão de Sekneum.</value>
+  </data>
+  <data name="Answer_57_Slot_0" xml:space="preserve">
+    <value>Conte-me a história anterior.</value>
+  </data>
+  <data name="Answer_57_Slot_1" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_58" xml:space="preserve">
+    <value>Artefatos mágicos podem ser encontrados e são a 'Espada quebrada', 'Lágrima do Elfo' e a 'Alma do Mago'. A 'Espada quebrada' foi oferecida pelos cavaleiros negros como um símbolo de sua bravura, lealdade e seu desejo de prosperidade.</value>
+  </data>
+  <data name="Answer_58_Slot_0" xml:space="preserve">
+    <value>Conte-me a história anterior.</value>
+  </data>
+  <data name="Answer_58_Slot_1" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_59" xml:space="preserve">
+    <value>A 'Alma do Mago' foi oferecida pelos magos negros como um símbolo de seu voto de usar o poder para a paz e a liberdade do império. No Ano 10 do Mu, um excerto do registro de comemoração de paz...</value>
+  </data>
+  <data name="Answer_59_Slot_0" xml:space="preserve">
+    <value>Conte-me a história anterior.</value>
+  </data>
+  <data name="Answer_59_Slot_1" xml:space="preserve">
+    <value>Foi isso o que aconteceu...</value>
+  </data>
+  <data name="Text_60" xml:space="preserve">
+    <value>Se você leu o 'Pergaminho do Imperador', procure pela 'Espada quebrada' que os antigos cavaleiros negros usaram na comemoração da paz. Pelo que ouvi dizer, alguns cavaleiros negros a encontraram em Atlans, na Torre Perdida e Tarkan.</value>
+  </data>
+  <data name="Answer_60_Slot_0" xml:space="preserve">
+    <value>Vou encontrá-la.</value>
+  </data>
+  <data name="Answer_60_Slot_1" xml:space="preserve">
+    <value>Eu desisto.</value>
+  </data>
+  <data name="Text_61" xml:space="preserve">
+    <value>O?perigo espreita em cada canto desses lugares e a 'Espada quebrada' não é vista facilmente. Mas se encontrá-la, novo poder será derramado sobre você! Volte aqui depois que encontrar a 'Espada quebrada'.</value>
+  </data>
+  <data name="Answer_61_Slot_0" xml:space="preserve">
+    <value>Vou encontrá-la e retornar com ela.</value>
+  </data>
+  <data name="Text_62" xml:space="preserve">
+    <value>Bravo cavaleiro negro, você encontrou a 'Espada quebrada'! Depois da unificação do Continente de Mu, Muren, o primeiro imperador, quebrou sua espada 'Apocalipse' como um símbolo de seu desejo de que nenhuma guerra surgisse novamente.</value>
+  </data>
+  <data name="Answer_62_Slot_0" xml:space="preserve">
+    <value>Conte-me mais.</value>
+  </data>
+  <data name="Text_63" xml:space="preserve">
+    <value>Depois da Guerra, os cavaleiros negros que desejassem se tornar cavaleiros da espada começaram a procurar pela antiga 'Espada quebrada' para provar sua bravura.</value>
+  </data>
+  <data name="Answer_63_Slot_0" xml:space="preserve">
+    <value>Foi isso o que aconteceu!</value>
+  </data>
+  <data name="Text_64" xml:space="preserve">
+    <value>Você leu o 'Pergaminho do Imperador', não leu? Então você sabe sobre os 3 tesouros registrados no 'Pergaminho do Imperador'. Encontre o cristal 'Lágrima do Elfo' feito pelos elfos antigos com a força do espírito.</value>
+  </data>
+  <data name="Answer_64_Slot_0" xml:space="preserve">
+    <value>Conte-me mais.</value>
+  </data>
+  <data name="Text_65" xml:space="preserve">
+    <value>Aquele lugar é muito perigoso e a 'Lágrima do Elfo' é extremamente difícil de encontrar. Mas se encontrar a 'Lágrima do Elfo', novo poder será derramado sobre você. Agora, vá encontrar a 'Lágrima do Elfo' e volte aqui.</value>
+  </data>
+  <data name="Answer_65_Slot_0" xml:space="preserve">
+    <value>Vou encontrar a 'Lágrima do Elfo'!</value>
+  </data>
+  <data name="Text_66" xml:space="preserve">
+    <value>Você encontrou a 'Lágrima do Elfo'! Depois da Guerra, Lunedil, a rainha dos elfos, criou a pedra da lágrima lançando magia sobre a pedra do espírito, para que os elfos pudessem invocar o poder da deusa e aumentar seu poder.</value>
+  </data>
+  <data name="Answer_66_Slot_0" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_67" xml:space="preserve">
+    <value>Você leu o 'Pergaminho do Imperador', não leu? Então você sabe sobre os 3 tesouros registrados no 'Pergaminho do Imperador'. Encontre o cristal 'Lágrima do Elfo' feito pelos elfos antigos com a força do espírito.</value>
+  </data>
+  <data name="Answer_67_Slot_0" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_68" xml:space="preserve">
+    <value>Com seu poder, tenho certeza de que encontrará a 'Alma do Mago'. Agora vá encontrar a 'Alma do Mago' e retorne quando encontrá-la.</value>
+  </data>
+  <data name="Answer_68_Slot_0" xml:space="preserve">
+    <value>Vou encontrar a 'Alma do Mago'.</value>
+  </data>
+  <data name="Text_69" xml:space="preserve">
+    <value>Eu sabia que você encontraria a 'Alma do Mago'! Etramu, o maior mago de Arka, criou uma pedra mágica protetora da alma, preocupado que os cavaleiros negros fracos pudessem falhar no ataque de Kundun.</value>
+  </data>
+  <data name="Answer_69_Slot_0" xml:space="preserve">
+    <value>Conte-me mais.</value>
+  </data>
+  <data name="Text_70" xml:space="preserve">
+    <value>Um mago negro com esta pedra mágica torna-se um mestre da alma.</value>
+  </data>
+  <data name="Answer_70_Slot_0" xml:space="preserve">
+    <value>Agora sou um mestre da alma!</value>
+  </data>
+  <data name="Text_71" xml:space="preserve">
+    <value>Sua oferenda para o Deus não é suficiente. Eu lhe contarei sobre o oráculo se fizer uma oferenda de 2.000.000 de Zens.</value>
+  </data>
+  <data name="Answer_71_Slot_0" xml:space="preserve">
+    <value>Voltarei com 2.000.000 de Zens.</value>
+  </data>
+  <data name="Text_72" xml:space="preserve">
+    <value>Novo poder foi conferido a você como resultado de sua força e de sua vontade. Que a graça de Lugard esteja sempre com você.</value>
+  </data>
+  <data name="Answer_72_Slot_0" xml:space="preserve">
+    <value>Que a graça de Deus esteja com você...</value>
+  </data>
+  <data name="Text_73" xml:space="preserve">
+    <value>Você já possui grande poder. Não tenho um oráculo para você.</value>
+  </data>
+  <data name="Answer_73_Slot_0" xml:space="preserve">
+    <value>Voltarei mais tarde.</value>
+  </data>
+  <data name="Text_74" xml:space="preserve">
+    <value>Volte quando estiver mais forte.</value>
+  </data>
+  <data name="Answer_74_Slot_0" xml:space="preserve">
+    <value>Eu retornarei quando estiver mais forte.</value>
+  </data>
+  <data name="Text_75" xml:space="preserve">
+    <value>Se você se tornou um guerreiro forte, conseguirá encontrá-lo.</value>
+  </data>
+  <data name="Answer_75_Slot_0" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_76" xml:space="preserve">
+    <value>A partir de então, nasceu o costume de cavaleiros negros que desejassem se tornar cavaleiros da espada quebrassem suas espadas como um símbolo de seu voto de nunca empunhar suas espadas injustamente.</value>
+  </data>
+  <data name="Answer_76_Slot_0" xml:space="preserve">
+    <value>Conte-me mais.</value>
+  </data>
+  <data name="Text_77" xml:space="preserve">
+    <value>Alguns dos elfos aventureiros disse que eles foram vistos na Torre Perdida, Atlans e Tarkan.</value>
+  </data>
+  <data name="Answer_77_Slot_0" xml:space="preserve">
+    <value>Vou procurá-lo!</value>
+  </data>
+  <data name="Answer_77_Slot_1" xml:space="preserve">
+    <value>Não quero ir para tal lugar.</value>
+  </data>
+  <data name="Text_78" xml:space="preserve">
+    <value>Ela é chamada de 'Lágrima do Elfo' e o elfo que encontrar esta pedra se tornará um elfo inspirado, capaz de conjurar o poder das ?Deusas élficas.</value>
+  </data>
+  <data name="Answer_78_Slot_0" xml:space="preserve">
+    <value>Eu me tornei um elfo inspirado!</value>
+  </data>
+  <data name="Text_79" xml:space="preserve">
+    <value>Como você encontrou o 'Pergaminho do Imperador' e a 'Espada quebrada', a partir de agora será chamado de cavaleiro da espada.</value>
+  </data>
+  <data name="Answer_79_Slot_0" xml:space="preserve">
+    <value>Eu me tornei um Cavaleiro da espada!</value>
+  </data>
+  <data name="Text_80" xml:space="preserve">
+    <value>Depois que o império foi unificado, o povo jurou lealdade ao imperador. Alguns dos tesouros oferecidos como um símbolo de sua lealdade são os seguintes.</value>
+  </data>
+  <data name="Answer_80_Slot_0" xml:space="preserve">
+    <value>Conte-me a história anterior.</value>
+  </data>
+  <data name="Answer_80_Slot_1" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_81" xml:space="preserve">
+    <value>A 'Lágrima do Elfo foi oferecida pelos elfos como um símbolo de seu voto de fortalecer o poder dos elfos e dos humanos.</value>
+  </data>
+  <data name="Answer_81_Slot_0" xml:space="preserve">
+    <value>Conte-me a história anterior.</value>
+  </data>
+  <data name="Answer_81_Slot_1" xml:space="preserve">
+    <value>Continue.</value>
+  </data>
+  <data name="Text_82" xml:space="preserve">
+    <value>Vá encontrar a 'Alma do Mago'. De acordo com os antigos magos negros, ela foi vista pela última vez na Torre Perdida, Atlans e Tarkan.</value>
+  </data>
+  <data name="Answer_82_Slot_0" xml:space="preserve">
+    <value>Vou procurá-la.</value>
+  </data>
+  <data name="Answer_82_Slot_1" xml:space="preserve">
+    <value>Voltarei mais tarde.</value>
+  </data>
+  <data name="Text_90" xml:space="preserve">
+    <value>Você terminou de ler o 'Decreto do Imperador'. Mas você sabe sobre o contrato confidencial entre Muren e Semeden, o líder invocador? Muren recebeu uma promessa, em vez de transferir Elbe para que ficasse sob o império.</value>
+  </data>
+  <data name="Answer_90_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_91" xml:space="preserve">
+    <value>O Continente de MU tinha o portal de uma dimensão do mundo sob a supervisão dos invocadores. E Semeden recebeu o Abismo do Olho como um símbolo da promessa. Vá e traga o Abismo do Olho.</value>
+  </data>
+  <data name="Answer_91_Slot_0" xml:space="preserve">
+    <value>Aceitar o pedido</value>
+  </data>
+  <data name="Answer_91_Slot_1" xml:space="preserve">
+    <value>Negar o pedido</value>
+  </data>
+  <data name="Text_92" xml:space="preserve">
+    <value>Ouvi dizer que o Abismo do Olho foi encontrado nos arredores de Atlance, Torre Perdida e Tarkan. Volte com o Abismo do Olho assim que encontrá-lo.</value>
+  </data>
+  <data name="Answer_92_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+  <data name="Text_93" xml:space="preserve">
+    <value>Você encontrou o Abismo do Olho. Ele tem sido conhecido como um objeto composto pelo elemento inexistente no mundo real. É contagioso no mundo anterior ao presente, ao qual a memória retorna com ele.</value>
+  </data>
+  <data name="Answer_93_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_94" xml:space="preserve">
+    <value>O?Abismo do Olho detém um significado especial para mim, pois supervisiono e me comunico por meio das dimensões deste mundo. Se trouxer o Abismo do Olho, eu lhe darei o título de Invocador sanguinário para Semeden, o supervisor de sua dimensão.</value>
+  </data>
+  <data name="Answer_94_Slot_0" xml:space="preserve">
+    <value>Imposição como Invocador sanguinário</value>
+  </data>
+  <data name="Text_100" xml:space="preserve">
+    <value>O?tesouro lendário chamado 'Anel da Glória' é necessário para adquirir a bênção e a força de Muren. Ele manifestou sua presença mais uma vez dentro de nossas terras. Mas você não está pronto. Espere até que seja mais experiente.</value>
+  </data>
+  <data name="Answer_100_Slot_0" xml:space="preserve">
+    <value>Então o que preciso fazer?</value>
+  </data>
+  <data name="Text_101" xml:space="preserve">
+    <value>É necessário maior experiência para sobreviver essa Aventura. Retorne quando tiver alcançado o nível de acordo com esse desafio.</value>
+  </data>
+  <data name="Answer_101_Slot_0" xml:space="preserve">
+    <value>Retornarei quando for minha hora.</value>
+  </data>
+  <data name="Text_102" xml:space="preserve">
+    <value>O?tesouro lendário chamado 'Anel da Glória' é necessário para adquirir a bênção e a força de Muren. Ele manifestou sua presença mais uma vez dentro de nossas terras.</value>
+  </data>
+  <data name="Answer_102_Slot_0" xml:space="preserve">
+    <value>Gostaria de ouvir mais.</value>
+  </data>
+  <data name="Text_103" xml:space="preserve">
+    <value>Quem possuir o 'Anel da Glória' receberá a bênção de Muren. Diz-se que está nos desertos do outro lado do mar.</value>
+  </data>
+  <data name="Answer_103_Slot_0" xml:space="preserve">
+    <value>Por quê?</value>
+  </data>
+  <data name="Text_104" xml:space="preserve">
+    <value>Os monstros de lá são bastante poderosos. Eles possuem o anel.</value>
+  </data>
+  <data name="Answer_104_Slot_0" xml:space="preserve">
+    <value>Repita a história.</value>
+  </data>
+  <data name="Answer_104_Slot_1" xml:space="preserve">
+    <value>Tentarei.</value>
+  </data>
+  <data name="Answer_104_Slot_2" xml:space="preserve">
+    <value>Ainda não estou pronto.</value>
+  </data>
+  <data name="Text_105" xml:space="preserve">
+    <value>O 'Anel da Glória' pode estar mais perto do que imagina. Quando o adquirir, definitivamente sentirá uma mudança em seu poder. Mas não será uma tarefa fácil.</value>
+  </data>
+  <data name="Answer_105_Slot_0" xml:space="preserve">
+    <value>Retornarei com ele.</value>
+  </data>
+  <data name="Text_108" xml:space="preserve">
+    <value>Este é mesmo o 'Anel da Glória'. Ele brilha com uma aura mística, mais forte do que eu imaginava. Este anel possui uma lenda que você nem pode imaginar. É uma verdadeira bênção em suas mãos.</value>
+  </data>
+  <data name="Answer_108_Slot_0" xml:space="preserve">
+    <value>Entendo.</value>
+  </data>
+  <data name="Text_109" xml:space="preserve">
+    <value>Diz-se que esse anel revive e concede a juventude eterna. Mas só funciona em heróis que possuem o poder de empunhar sua força.</value>
+  </data>
+  <data name="Answer_109_Slot_0" xml:space="preserve">
+    <value>Por quê?</value>
+  </data>
+  <data name="Text_110" xml:space="preserve">
+    <value>Porque Etramu, o Mago de Arka, lançou uma magia para evitar que o mal tirasse vantagem dele. Mas o anel diz que você é adequado para ele.</value>
+  </data>
+  <data name="Answer_110_Slot_0" xml:space="preserve">
+    <value>É mesmo!</value>
+  </data>
+  <data name="Text_111" xml:space="preserve">
+    <value>O 'Anel da Glória' foi criado quando o Secromicon da profecia foi feito com um metal que não perece. Os dois foram considerados sagrados, mas sua localização tornou-se desconhecida quando ele foi levado durante a revolta do comandante Gaion.</value>
+  </data>
+  <data name="Answer_111_Slot_0" xml:space="preserve">
+    <value>É mesmo?!</value>
+  </data>
+  <data name="Text_112" xml:space="preserve">
+    <value>Agora que o 'Anel da Glória' foi encontrado, você conseguirá crescer ainda mais como guerreiro.</value>
+  </data>
+  <data name="Answer_112_Slot_0" xml:space="preserve">
+    <value>Sinto minha habilidade aumentando!</value>
+  </data>
+  <data name="Text_113" xml:space="preserve">
+    <value>Você crescerá e se transformará em um ser muito maior do que antes. Use seu poder pela paz de nosso império.</value>
+  </data>
+  <data name="Answer_113_Slot_0" xml:space="preserve">
+    <value>Eu o farei.</value>
+  </data>
+  <data name="Text_114" xml:space="preserve">
+    <value>Você já possui o poder sagrado.</value>
+  </data>
+  <data name="Answer_114_Slot_0" xml:space="preserve">
+    <value>Voltarei mais tarde.</value>
+  </data>
+  <data name="Text_115" xml:space="preserve">
+    <value>A 'Pedra Negra', que dizem que dá aos guerreiros novo poder, foi encontrada no continente de Mu. No entanto, você não está pronto para usar aquele poder. Espere até que esteja pronto.</value>
+  </data>
+  <data name="Answer_115_Slot_0" xml:space="preserve">
+    <value>Retornarei quando estiver pronto.</value>
+  </data>
+  <data name="Text_116" xml:space="preserve">
+    <value>Para adquirir o poder completo, você precisará se preparar com o 'Pergaminho do Imperador', que registra os fatos históricos do Imperador Muren. Vá para 'Sevina' em Devias.</value>
+  </data>
+  <data name="Answer_116_Slot_0" xml:space="preserve">
+    <value>Retornarei quando estiver pronto.</value>
+  </data>
+  <data name="Text_117" xml:space="preserve">
+    <value>Você falhou em se tornar um Cavaleiro da espada. Volte quando tiver adquirido novo poder por meio do 'Anel da Glória'.</value>
+  </data>
+  <data name="Answer_117_Slot_0" xml:space="preserve">
+    <value>Retornarei quando estiver pronto.</value>
+  </data>
+  <data name="Text_118" xml:space="preserve">
+    <value>Você precisa oferecer 3.000.000 de zens para os Deuses para santificar esta missão. Seu zen não é suficiente</value>
+  </data>
+  <data name="Answer_118_Slot_0" xml:space="preserve">
+    <value>Voltarei com 3.000.000 de Zens.</value>
+  </data>
+  <data name="Text_119" xml:space="preserve">
+    <value>Sua oferenda para o Deus não é suficiente. Eu lhe contarei sobre o oráculo se fizer uma oferenda de 2.000.000 de Zens.</value>
+  </data>
+  <data name="Answer_119_Slot_0" xml:space="preserve">
+    <value>Voltarei com 2.000.000 de Zens.</value>
+  </data>
+  <data name="Text_130" xml:space="preserve">
+    <value>Este é mesmo o 'Anel da Glória'. Ele brilha com uma aura mística, mais forte do que eu imaginava. Este anel possui uma lenda que você nem pode imaginar. É uma verdadeira bênção em suas mãos.</value>
+  </data>
+  <data name="Answer_130_Slot_0" xml:space="preserve">
+    <value>Estou surpreso em saber disso!</value>
+  </data>
+  <data name="Text_131" xml:space="preserve">
+    <value>Diz-se que esse anel revive e concede a juventude eterna. Mas só funciona em heróis que possuem o poder de empunhar sua força.</value>
+  </data>
+  <data name="Answer_131_Slot_0" xml:space="preserve">
+    <value>Por quê?</value>
+  </data>
+  <data name="Text_132" xml:space="preserve">
+    <value>Porque Etramu, o Mago de Arka, lançou uma magia para evitar que o mal tirasse vantagem dele. Mas o anel diz que você é adequado para ele.</value>
+  </data>
+  <data name="Answer_132_Slot_0" xml:space="preserve">
+    <value>É mesmo!</value>
+  </data>
+  <data name="Text_133" xml:space="preserve">
+    <value>O 'Anel da Glória' foi criado quando o Secromicon da profecia foi feito com um metal que não perece. Os dois foram considerados sagrados, mas sua localização tornou-se desconhecida quando ele foi levado durante a revolta do comandante Gaion.</value>
+  </data>
+  <data name="Answer_133_Slot_0" xml:space="preserve">
+    <value>É mesmo!</value>
+  </data>
+  <data name="Text_134" xml:space="preserve">
+    <value>Agora que o 'Anel da Glória' foi encontrado, você conseguirá crescer ainda mais como guerreiro.</value>
+  </data>
+  <data name="Answer_134_Slot_0" xml:space="preserve">
+    <value>Sinto minha habilidade aumentando!</value>
+  </data>
+  <data name="Text_135" xml:space="preserve">
+    <value>Se quiser adquirir novo poder, escute cuidadosamente. A 'Pedra Negra', que dizem que dá aos guerreiros novo poder, foi encontrada no continente de Mu.</value>
+  </data>
+  <data name="Answer_135_Slot_0" xml:space="preserve">
+    <value>Gostaria de saber mais.</value>
+  </data>
+  <data name="Text_136" xml:space="preserve">
+    <value>Com a 'Pedra Negra', você poderá dominar uma nova habilidade. Não será uma tarefa fácil, mas, como você conseguiu adquirir o 'Anel da Glória', é possível que consiga.</value>
+  </data>
+  <data name="Answer_136_Slot_0" xml:space="preserve">
+    <value>O que preciso fazer?</value>
+  </data>
+  <data name="Text_137" xml:space="preserve">
+    <value>Dizem que a pedra pode ser encontrada em Tarkan e Icarus. Tenha cuidado com os monstros. Aqueles monstros que possuem a pedra só reagirão àqueles que tenham uma habilidade especial.</value>
+  </data>
+  <data name="Answer_137_Slot_0" xml:space="preserve">
+    <value>Repita a história novamente.</value>
+  </data>
+  <data name="Answer_137_Slot_1" xml:space="preserve">
+    <value>Então vou tentar!</value>
+  </data>
+  <data name="Answer_137_Slot_2" xml:space="preserve">
+    <value>Ainda não me sinto confiante.</value>
+  </data>
+  <data name="Text_138" xml:space="preserve">
+    <value>A 'Pedra Negra' chama por você agora. Com ela em mãos, você certamente adquirirá poder que nunca sentiu antes, mas muitos dos outros guerreiros também estão buscando a pedra desesperadamente.</value>
+  </data>
+  <data name="Answer_138_Slot_0" xml:space="preserve">
+    <value>Voltarei com a 'Pedra Negra'.</value>
+  </data>
+  <data name="Text_139" xml:space="preserve">
+    <value>Então você encontrou a 'Pedra Negra. Está registrado que esta pedra é o sangue seco do herói 'Benelope', que lutou na Guerra dos Deuses e Satã.</value>
+  </data>
+  <data name="Answer_139_Slot_0" xml:space="preserve">
+    <value>Conte-me mais.</value>
+  </data>
+  <data name="Text_140" xml:space="preserve">
+    <value>Benelope descende de um cavaleiro. Depois de sua derrota na Guerra, ele treinou novas habilidades de luta e de magia. Estas habilidades têm sido silenciosamente passadas para guerreiros com sangue de um cavaleiro para lutar contra a poderosa força de Kundun.</value>
+  </data>
+  <data name="Answer_140_Slot_0" xml:space="preserve">
+    <value>Então...</value>
+  </data>
+  <data name="Text_141" xml:space="preserve">
+    <value>Sim, o sangue de um guerreiro corre em suas veias. Portanto, o poder de Benelope será concedido a você por meio da Pedra Negra.</value>
+  </data>
+  <data name="Answer_141_Slot_0" xml:space="preserve">
+    <value>Eu recebi novo poder!</value>
+  </data>
+  <data name="Text_142" xml:space="preserve">
+    <value>Você adquiriu novo poder por meio do 'Anel da Glória'. Mas há algo que você não sabe.</value>
+  </data>
+  <data name="Answer_142_Slot_0" xml:space="preserve">
+    <value>O que?</value>
+  </data>
+  <data name="Text_143" xml:space="preserve">
+    <value>É possível que seja capaz de adquirir um novo poder. O tesouro lendário chamado 'Pedra Negra', que foi considerado sagrado juntamente com o 'Anel da Glória', chama por você.</value>
+  </data>
+  <data name="Answer_143_Slot_0" xml:space="preserve">
+    <value>É difícil de acreditar!</value>
+  </data>
+  <data name="Text_144" xml:space="preserve">
+    <value>Lugard, o Deus da Luz, solicitou um favor de você. No entanto, você ainda não está qualificado. Sugiro que volte quando estiver mais forte.</value>
+  </data>
+  <data name="Answer_144_Slot_0" xml:space="preserve">
+    <value>Voltarei quando estiver mais forte.</value>
+  </data>
+  <data name="Text_145" xml:space="preserve">
+    <value>Lugard, o Deus da Luz, solicitou um favor de você. No entanto, você ainda não está qualificado. Volte quando tiver terminado a missão anterior.</value>
+  </data>
+  <data name="Answer_145_Slot_0" xml:space="preserve">
+    <value>Voltarei quando a tiver terminado.</value>
+  </data>
+  <data name="Text_146" xml:space="preserve">
+    <value>Você não tem Zens suficientes. Você pode pedir esta missão oferecendo 5.000.000 de Zens para Lugard.</value>
+  </data>
+  <data name="Answer_146_Slot_0" xml:space="preserve">
+    <value>Voltarei quando estiver pronto.</value>
+  </data>
+  <data name="Text_147" xml:space="preserve">
+    <value>Lugard, o Deus da Luz, solicitou um favor de você.</value>
+  </data>
+  <data name="Answer_147_Slot_0" xml:space="preserve">
+    <value>O que é?</value>
+  </data>
+  <data name="Text_148" xml:space="preserve">
+    <value> Lugard pediu que você procurasse por heróis para enfrentar a nova ameaça de Balgass a MU.</value>
+  </data>
+  <data name="Answer_148_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_149" xml:space="preserve">
+    <value>Entendemos que um exército de Balgass está se aproximando do Continente de MU através da Fortaleza do Uivo do Lobo, mas ainda não houve uma interpretação exata da história completa.</value>
+  </data>
+  <data name="Answer_149_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_150" xml:space="preserve">
+    <value>Estamos tentando entender o significado da confiança de Lugar em nós, mas ainda estamos lutando com nossa habilidade inadequada.</value>
+  </data>
+  <data name="Answer_150_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_151" xml:space="preserve">
+    <value>Acredito que você seja a pessoa que pode nos oferecer ajuda. Está interessado em trabalhar conosco?</value>
+  </data>
+  <data name="Answer_151_Slot_0" xml:space="preserve">
+    <value>Ouvir novamente.</value>
+  </data>
+  <data name="Answer_151_Slot_1" xml:space="preserve">
+    <value>Aceitar o pedido</value>
+  </data>
+  <data name="Answer_151_Slot_2" xml:space="preserve">
+    <value>Negar o pedido</value>
+  </data>
+  <data name="Text_152" xml:space="preserve">
+    <value>Para que possa nos ajudar, você precisará se opor ao exército de Balgass. Antes de começar, preciso verificar se é forte o suficiente para a missão.</value>
+  </data>
+  <data name="Answer_152_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_153" xml:space="preserve">
+    <value>Destrua os monstros Raio da Morte, Hellmaine e Fênix negra que dominam Tarkan, Aida e Icarus e traga 3 provas de que o fez.</value>
+  </data>
+  <data name="Answer_153_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+  <data name="Text_154" xml:space="preserve">
+    <value>Parabéns, você completou a tarefa. Eis um pequeno presente por seu trabalho duro.</value>
+  </data>
+  <data name="Answer_154_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_155" xml:space="preserve">
+    <value>Balgass é uma grande ameaça, pois está cooperando com Eresia, a Rainha da Magia, e trouxe muito perigo para este mundo</value>
+  </data>
+  <data name="Answer_155_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_156" xml:space="preserve">
+    <value>Nossa previsão é de que Balgass esteja tentando uma nova ameaça contra o Continente de MU com seu exército de magia do mal.</value>
+  </data>
+  <data name="Answer_156_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+  <data name="Text_157" xml:space="preserve">
+    <value>Você não tem dinheiro suficiente. Ofereça 7.000.000 de Zens a Lugard para pedir esta missão.</value>
+  </data>
+  <data name="Answer_157_Slot_0" xml:space="preserve">
+    <value>Voltarei quando estiver pronto.</value>
+  </data>
+  <data name="Text_158" xml:space="preserve">
+    <value>Bem-vindo, você está verdadeiramente pronto agora para nos ajudar.</value>
+  </data>
+  <data name="Answer_158_Slot_0" xml:space="preserve">
+    <value>Em que posso ajudar?</value>
+  </data>
+  <data name="Text_159" xml:space="preserve">
+    <value>Bem, de acordo com nossas informações, Balgass formou um local chamado Quartel. Os 12 apóstolos de Lugard acreditam que esta é a nova ameaça de Balgass.</value>
+  </data>
+  <data name="Answer_159_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_160" xml:space="preserve">
+    <value>Informações exatas sobre o 'Quartel' orientam a entrar na área do Quartel para diminuir a ameaça de maior desenvolvimento do exército de Balgass.</value>
+  </data>
+  <data name="Answer_160_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_161" xml:space="preserve">
+    <value>Felizmente, a guarda de Lugar pode ajudar a encontrar o caminho para o Quartel de Balgass. Entre na área, destrua os soldados e obtenha informações precisas. Você traria os dados apropriados?</value>
+  </data>
+  <data name="Answer_161_Slot_0" xml:space="preserve">
+    <value>Ouvir novamente.</value>
+  </data>
+  <data name="Answer_161_Slot_1" xml:space="preserve">
+    <value>Aceitar o pedido</value>
+  </data>
+  <data name="Answer_161_Slot_2" xml:space="preserve">
+    <value>Negar o pedido</value>
+  </data>
+  <data name="Text_162" xml:space="preserve">
+    <value>Vá para o cemitério ao norte da área Uivo do Lobo e encontre o refúgio dos soldados do Quartel de Balgass. A bênção de Lugar permitiu que tenham inteligência. Ele chama a si mesmo de Guarda Lobisomem.</value>
+  </data>
+  <data name="Answer_162_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_163" xml:space="preserve">
+    <value>Ele o levará ao Quartel de Balgass. Entre na área e destrua pelo menos 10 monstros no Quartel.</value>
+  </data>
+  <data name="Answer_163_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+  <data name="Text_164" xml:space="preserve">
+    <value>Você completou a tarefa com segurança, aprecio seu trabalho duro e força de vontade.</value>
+  </data>
+  <data name="Answer_164_Slot_0" xml:space="preserve">
+    <value>Continue falando.</value>
+  </data>
+  <data name="Text_165" xml:space="preserve">
+    <value>Você trouxe grande ajuda para a construção da paz do Continente de MU e Uivo do Lobo com as informações e todos os monstros destruídos.</value>
+  </data>
+  <data name="Answer_165_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+  <data name="Text_166" xml:space="preserve">
+    <value>Você ainda não está qualificado. Visite o Guarda de Segurança Mallon e volte quando estiver totalmente qualificado para a missão.</value>
+  </data>
+  <data name="Answer_166_Slot_0" xml:space="preserve">
+    <value>Termine a história.</value>
+  </data>
+  <data name="Text_167" xml:space="preserve">
+    <value>Você não tem dinheiro suficiente. Ofereça 10.000.000 de Zens a Lugard para pedir esta missão.</value>
+  </data>
+  <data name="Answer_167_Slot_0" xml:space="preserve">
+    <value>Voltarei quando estiver pronto.</value>
+  </data>
+  <data name="Text_168" xml:space="preserve">
+    <value>Sua coragem e iniciativa mostraram grande esperança para todos nós.</value>
+  </data>
+  <data name="Answer_168_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_169" xml:space="preserve">
+    <value>Balgass se escondeu em um local separado para restaurar seu corpo cansado.</value>
+  </data>
+  <data name="Answer_169_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_170" xml:space="preserve">
+    <value>Para seguir a missão confiada por Lugar, a localização exata de Balgass deverá ser encontrada e o exército em treinamento deverá ser destruído.</value>
+  </data>
+  <data name="Answer_170_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_171" xml:space="preserve">
+    <value>A missão final a realizar depois da missão de Lugar inclui um teste enorme e difícil. Ainda está interessado?</value>
+  </data>
+  <data name="Answer_171_Slot_0" xml:space="preserve">
+    <value>Ouvir novamente.</value>
+  </data>
+  <data name="Answer_171_Slot_1" xml:space="preserve">
+    <value>Aceitar o pedido</value>
+  </data>
+  <data name="Answer_171_Slot_2" xml:space="preserve">
+    <value>Negar o pedido</value>
+  </data>
+  <data name="Text_172" xml:space="preserve">
+    <value>Entre pela porta na borda ao norte do Quartel de Balgass; Teremos o local pronto com antecedência.</value>
+  </data>
+  <data name="Answer_172_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+  <data name="Text_173" xml:space="preserve">
+    <value>Parabéns, você passou no teste final de Lugar. E agora sua bênção estará com você aonde for.</value>
+  </data>
+  <data name="Answer_173_Slot_0" xml:space="preserve">
+    <value>Continuar ouvindo.</value>
+  </data>
+  <data name="Text_174" xml:space="preserve">
+    <value>Seu trabalho duro ajudou a manter a paz no Continente de MU e Uivo do Lobo contra a nova ameaça de Balgass. Agradeço muito sua ajuda.</value>
+  </data>
+  <data name="Answer_174_Slot_0" xml:space="preserve">
+    <value>Termine de contar a história</value>
+  </data>
+</root>

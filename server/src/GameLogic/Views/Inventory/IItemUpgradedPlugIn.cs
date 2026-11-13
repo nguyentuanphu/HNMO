@@ -1,0 +1,17 @@
+﻿// <copyright file="IItemUpgradedPlugIn.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.Views.Inventory;
+
+/// <summary>
+/// Interface of a view whose implementation informs about an upgraded item in the inventory.
+/// </summary>
+public interface IItemUpgradedPlugIn : IViewPlugIn
+{
+    /// <summary>
+    /// Item has been upgraded.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    ValueTask ItemUpgradedAsync(Item item);
+}

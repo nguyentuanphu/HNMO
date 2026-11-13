@@ -1,0 +1,18 @@
+﻿// <copyright file="SkinChatCommandArgs.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ChatCommands.Arguments;
+
+/// <summary>
+/// Arguments used by the <see cref="SkinChatCommandPlugIn"/>.
+/// </summary>
+public class SkinChatCommandArgs : ArgumentsBase
+{
+    /// <summary>
+    /// Gets or sets the skin number, which is mostly equivalent to the <see cref="MonsterDefinition.Number"/>.
+    /// </summary>
+    [Argument("skin", true)]
+    [ValueReference(ChatCommandValueReference.MonsterNumber)]
+    public short SkinNumber { get; set; }
+}

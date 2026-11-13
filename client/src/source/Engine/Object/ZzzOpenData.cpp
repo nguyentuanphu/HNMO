@@ -1,0 +1,2271 @@
+﻿#include "stdafx.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Core/Utilities/Random.h"
+#include "Engine/Object/ZzzInfomation.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "GameLogic/Skills/SkillHotkeyConfiguration.h"
+#include "Scenes/SceneCore.h"
+#include "Engine/Object/PlayerBodyModels.h"
+#include "Data/GameConfig/GameConfig.h"
+#include "Engine/AI/ZzzAI.h"
+#include "Engine/Object/ZzzInventory.h"
+#include "Audio/DSPlaySound.h"
+
+#include "Render/Models/SMD.h"
+
+#include "Engine/Physics/PhysicsManager.h"
+#include "GameLogic/Quests/CSQuest.h"
+#include "GameLogic/Items/CSItemOption.h"
+#include "Network/MoveCommandData.h"
+#include "Data/DataHandler/LoadData.h"
+#include "World/MapInfra/MapManager.h"
+#include "GameLogic/Events/Event.h"
+#include "GameLogic/Items/MixMgr.h"
+#include "UI/Core/WindowSystem.h"
+#include "UI/Dialogs/HelpWindow.h"
+#include "Camera/CameraMove.h"
+#include "GameLogic/Quests/QuestMng.h"
+#include "Network/Server/ServerListManager.h"
+#include "GameLogic/Social/MonkSystem.h"
+#include "Data/DataHandler/SkillData/SkillDataHandler.h"
+
+#include "Data/DataHandler/EffectData/EffectDataHandler.h"
+#include "Data/DataHandler/ModelData/ModelFileDataHandler.h"
+#include "Data/DataHandler/ItemData/ItemDataHandler.h"
+#include "Data/DataHandler/ItemData/ItemModelLoader.h"
+#include "Data/DataHandler/LookData/LookDataHandler.h"
+#include "Data/DataHandler/MonsterData/MonsterDataHandler.h"
+#include "Data/DataHandler/MonsterData/MonsterModelLoader.h"
+#include "Data/DataHandler/BuffData/BuffStorage.h"
+#include "Data/DataHandler/MapData/MapObjectSoundStorage.h"
+#include "Data/DataHandler/SoundData/SoundEventStorage.h"
+#include "Data/DataHandler/SoundData/SoundFileStorage.h"
+#include "Data/GameData/MonsterData/MonsterModelSlots.h"
+#include "Audio/SoundNumbers.h"
+#include "Data/GameData/EffectData/EffectTypeCatalogue.h"
+#include "Render/Effects/EffectRegistry.h"
+#include "Render/Items/ItemEffects.h"
+#include "Render/Items/LookDrawing.h"
+#include "Render/Items/ItemRenderStyles.h"
+#include "Core/Platform/ErrorDialog.h"
+#include "Core/Text/Utf8.h"
+#include "Network/Server/SocketSystem.h"
+#include "Render/Text/CUIRenderText.h"
+
+///////////////////////////////////////////
+extern BOOL g_bUseChatListBox;
+///////////////////////////////////////////
+
+bool Flip = false;
+
+void OpenModel(int Type, wchar_t* Dir, wchar_t* ModelFileName, ...)
+{
+    wchar_t ModelName[100];
+    wchar_t AnimationName[20][100];
+    wcscpy(ModelName, Dir);
+    wcscat(ModelName, ModelFileName);
+
+    va_list Marker;
+    va_start(Marker, ModelFileName);
+    int AnimationCount = 0;
+    while (1)
+    {
+        wchar_t* Temp = va_arg(Marker, wchar_t*);
+        if (Temp == nullptr || wcscmp(Temp, L"end") == 0)
+        {
+            break;
+        }
+        else
+        {
+            wcscpy(AnimationName[AnimationCount], Dir);
+            wcscat(AnimationName[AnimationCount], Temp);
+            AnimationCount++;
+        }
+    }
+    if (AnimationCount == 0)
+    {
+        OpenSMDModel(Type, ModelName, 1, Flip);
+        OpenSMDAnimation(Type, ModelName);
+    }
+    else
+    {
+        OpenSMDModel(Type, ModelName, AnimationCount, Flip);
+        for (int i = 0; i < AnimationCount; i++)
+        {
+            bool Walk = false;
+            if (i == MONSTER01_WALK || i == MONSTER01_RUN) Walk = true;
+            OpenSMDAnimation(Type, AnimationName[i], Walk);
+        }
+    }
+    va_end(Marker);
+
+    Flip = false;
+}
+
+void OpenModels(int Model, wchar_t* FileName, int i)
+{
+    wchar_t Name[64];
+    if (i < 10)
+        mu_swprintf(Name, L"%ls0%d.smd", FileName, i);
+    else
+        mu_swprintf(Name, L"%ls%d.smd", FileName, i);
+    OpenSMDModel(Model, Name);
+    OpenSMDAnimation(Model, Name);
+}
+
+void OpenPlayers()
+{
+    ModelsDump = new BMD[MAX_MODELS + 1024];
+    Models = ModelsDump + (Random::Rand() % 1024);
+    // Zeroes the constructed models as the original client did, which also sets the constructor's
+    // iBillType (-1) and m_LastBoneScale (1) to 0; the cast says BMD is not a plain struct.
+    ZeroMemory(static_cast<void*>(Models), MAX_MODELS * sizeof(BMD));
+
+    gLoadData.AccessModel(MODEL_PLAYER, L"Data\\Player\\", L"Player");
+
+    if (Models[MODEL_PLAYER].NumMeshs > 0)
+    {
+        g_ErrorReport.Write(L"Player.bmd file error.\r\n");
+        MessageBox(g_hWnd, L"Player.bmd file error!!!", NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+    }
+
+    const bool useS6 = GameConfig::GetInstance().GetUseS6PlayerModels();
+    for (int i = 0; i < MAX_CLASS; ++i)
+    {
+        Engine::Object::OpenPlayerClassBodyParts(i, useS6);
+    }
+
+    gLoadData.AccessModel(MODEL_MASK_HELM + 0, L"Data\\Player\\", L"MaskHelmMale", 1);
+    gLoadData.AccessModel(MODEL_MASK_HELM + 5, L"Data\\Player\\", L"MaskHelmMale", 6);
+    gLoadData.AccessModel(MODEL_MASK_HELM + 6, L"Data\\Player\\", L"MaskHelmMale", 7);
+    gLoadData.AccessModel(MODEL_MASK_HELM + 8, L"Data\\Player\\", L"MaskHelmMale", 9);
+    gLoadData.AccessModel(MODEL_MASK_HELM + 9, L"Data\\Player\\", L"MaskHelmMale", 10);
+
+    for (int i = 0; i < MODEL_ITEM_COMMON_NUM; ++i)
+    {
+        gLoadData.AccessModel(MODEL_HELM2 + i, L"Data\\Player\\", L"HelmElfC", i + 1);
+        gLoadData.AccessModel(MODEL_ARMOR2 + i, L"Data\\Player\\", L"ArmorElfC", i + 1);
+        gLoadData.AccessModel(MODEL_PANTS2 + i, L"Data\\Player\\", L"PantElfC", i + 1);
+        gLoadData.AccessModel(MODEL_GLOVES2 + i, L"Data\\Player\\", L"GloveElfC", i + 1);
+        gLoadData.AccessModel(MODEL_BOOTS2 + i, L"Data\\Player\\", L"BootElfC", i + 1);
+    }
+
+    for (int i = 0; i < MODEL_ITEM_COMMONCNT_RAGEFIGHTER; ++i)
+    {
+        gLoadData.AccessModel(MODEL_HELM_MONK + i, L"Data\\Player\\", L"HelmMonk", i + 1);
+        gLoadData.AccessModel(MODEL_ARMOR_MONK + i, L"Data\\Player\\", L"ArmorMonk", i + 1);
+        gLoadData.AccessModel(MODEL_PANTS_MONK + i, L"Data\\Player\\", L"PantMonk", i + 1);
+        gLoadData.AccessModel(MODEL_BOOTS_MONK + i, L"Data\\Player\\", L"BootMonk", i + 1);
+    }
+
+    for (int i = 0; i < 1; i++)
+        gLoadData.AccessModel(MODEL_SHADOW_BODY + i, L"Data\\Player\\", L"Shadow", i + 1);
+
+    Models[MODEL_PLAYER].BoneHead = 20;
+    Models[MODEL_PLAYER].BoneFoot[0] = 6;
+    Models[MODEL_PLAYER].BoneFoot[1] = 13;
+
+    for (int i = PLAYER_STOP_MALE; i <= PLAYER_STOP_RIDE_WEAPON; i++)
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.28f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_SWORD].PlaySpeed = 0.26f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_TWO_HAND_SWORD].PlaySpeed = 0.24f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_SPEAR].PlaySpeed = 0.24f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_BOW].PlaySpeed = 0.22f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_CROSSBOW].PlaySpeed = 0.22f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_SUMMONER].PlaySpeed = 0.24f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_WAND].PlaySpeed = 0.30f;
+
+    for (int i = PLAYER_WALK_MALE; i <= PLAYER_RUN_RIDE_WEAPON; i++)
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.3f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_WALK_WAND].PlaySpeed = 0.44f;
+    Models[MODEL_PLAYER].Actions[PLAYER_RUN_WAND].PlaySpeed = 0.76f;
+    Models[MODEL_PLAYER].Actions[PLAYER_WALK_SWIM].PlaySpeed = 0.35f;
+    Models[MODEL_PLAYER].Actions[PLAYER_RUN_SWIM].PlaySpeed = 0.35f;
+
+    for (int i = PLAYER_DEFENSE1; i <= PLAYER_SHOCK; i++)
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.32f;
+
+    for (int i = PLAYER_DIE1; i <= PLAYER_DIE2; i++)
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.45f;
+
+    for (int i = PLAYER_SIT1; i < MAX_PLAYER_ACTION; i++)
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.4f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_SHOCK].PlaySpeed = 0.4f;
+    Models[MODEL_PLAYER].Actions[PLAYER_SEE1].PlaySpeed = 0.28f;
+    Models[MODEL_PLAYER].Actions[PLAYER_SEE_FEMALE1].PlaySpeed = 0.28f;
+    Models[MODEL_PLAYER].Actions[PLAYER_HEALING1].PlaySpeed = 0.2f;
+    Models[MODEL_PLAYER].Actions[PLAYER_HEALING_FEMALE1].PlaySpeed = 0.2f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_JACK_1].PlaySpeed = 0.38f;
+    Models[MODEL_PLAYER].Actions[PLAYER_JACK_2].PlaySpeed = 0.38f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_SANTA_1].PlaySpeed = 0.34f;
+    Models[MODEL_PLAYER].Actions[PLAYER_SANTA_2].PlaySpeed = 0.30f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_SKILL_RIDER].PlaySpeed = 0.2f;
+    Models[MODEL_PLAYER].Actions[PLAYER_SKILL_RIDER_FLY].PlaySpeed = 0.2f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_TWO_HAND_SWORD_TWO].PlaySpeed = 0.24f;
+    Models[MODEL_PLAYER].Actions[PLAYER_WALK_TWO_HAND_SWORD_TWO].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_RUN_TWO_HAND_SWORD_TWO].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_TWO_HAND_SWORD_TWO].PlaySpeed = 0.24f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_DEATHSTAB].PlaySpeed = 0.45f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_DIE1].Loop = true;
+    Models[MODEL_PLAYER].Actions[PLAYER_DIE2].Loop = true;
+    Models[MODEL_PLAYER].Actions[PLAYER_COME_UP].Loop = true;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_SKILL_HELL_BEGIN].Loop = true;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_DARKLORD_STAND].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_DARKLORD_WALK].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_RIDE_HORSE].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_RUN_RIDE_HORSE].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_STRIKE].PlaySpeed = 0.2f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_TELEPORT].PlaySpeed = 0.28f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_RIDE_STRIKE].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_RIDE_TELEPORT].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_RIDE_HORSE_SWORD].PlaySpeed = 0.28f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_RIDE_ATTACK_FLASH].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_RIDE_ATTACK_MAGIC].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_ATTACK_DARKHORSE].PlaySpeed = 0.2f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_IDLE1_DARKHORSE].PlaySpeed = 1.0f;
+    Models[MODEL_PLAYER].Actions[PLAYER_IDLE2_DARKHORSE].PlaySpeed = 1.0f;
+
+    for (int i = PLAYER_FENRIR_ATTACK; i <= PLAYER_FENRIR_WALK_ONE_LEFT; i++)
+    {
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.45f;
+    }
+
+    for (int i = PLAYER_FENRIR_RUN; i <= PLAYER_FENRIR_RUN_ONE_LEFT_ELF; i++)
+    {
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.71f;
+    }
+
+    for (int i = PLAYER_FENRIR_STAND; i <= PLAYER_FENRIR_STAND_ONE_LEFT; i++)
+    {
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.4f;
+    }
+
+    Models[MODEL_PLAYER].Actions[PLAYER_FENRIR_ATTACK_MAGIC].PlaySpeed = 0.30f;
+    Models[MODEL_PLAYER].Actions[PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_FENRIR_ATTACK_DARKLORD_TELEPORT].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_FENRIR_ATTACK_DARKLORD_SWORD].PlaySpeed = 0.28f;
+    Models[MODEL_PLAYER].Actions[PLAYER_FENRIR_ATTACK_DARKLORD_FLASH].PlaySpeed = 0.3f;
+
+    Models[MODEL_PLAYER].Actions[PLAYER_HIGH_SHOCK].PlaySpeed = 0.3f;
+
+    for (int i = PLAYER_RAGE_FENRIR; i <= PLAYER_RAGE_FENRIR_ATTACK_RIGHT; i++)
+    {
+        if (i >= PLAYER_RAGE_FENRIR_TWO_SWORD && i <= PLAYER_RAGE_FENRIR_ONE_LEFT)
+            Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.225f;
+        else
+            Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.45f;
+    }
+    for (int i = PLAYER_RAGE_FENRIR_STAND_TWO_SWORD; i <= PLAYER_RAGE_FENRIR_STAND_ONE_LEFT; i++)
+    {
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.2f;
+    }
+    Models[MODEL_PLAYER].Actions[PLAYER_RAGE_FENRIR_STAND].PlaySpeed = 0.21f;
+
+    for (int i = PLAYER_RAGE_FENRIR_RUN; i <= PLAYER_RAGE_FENRIR_RUN_ONE_LEFT; i++)
+    {
+        Models[MODEL_PLAYER].Actions[i].PlaySpeed = 0.355f;
+    }
+    Models[MODEL_PLAYER].Actions[PLAYER_RAGE_UNI_RUN].PlaySpeed = 0.3f;
+    Models[MODEL_PLAYER].Actions[PLAYER_RAGE_UNI_ATTACK_ONE_RIGHT].PlaySpeed = 0.2f;
+    Models[MODEL_PLAYER].Actions[PLAYER_RAGE_UNI_STOP_ONE_RIGHT].PlaySpeed = 0.18f;
+    Models[MODEL_PLAYER].Actions[PLAYER_STOP_RAGEFIGHTER].PlaySpeed = 0.16f;
+    SetAttackSpeed();
+
+    gLoadData.AccessModel(MODEL_GM_CHARACTER, L"Data\\Skill\\", L"youngza");
+}
+
+void OpenPlayerTextures()
+{
+    LoadBitmap(L"Player\\hair_r.jpg", BITMAP_HAIR);
+    LoadBitmap(L"Player\\Robe01.jpg", BITMAP_ROBE);
+    LoadBitmap(L"Player\\Robe02.jpg", BITMAP_ROBE + 1);
+    LoadBitmap(L"Player\\Robe03.tga", BITMAP_ROBE + 2);
+    LoadBitmap(L"Player\\DarklordRobe.tga", BITMAP_ROBE + 7);
+    LoadBitmap(L"Item\\msword03.tga", BITMAP_ROBE + 8);
+    LoadBitmap(L"Item\\dl_redwings02.tga", BITMAP_ROBE + 9);
+    LoadBitmap(L"Item\\dl_redwings03.tga", BITMAP_ROBE + 10);
+
+    for (int j = 0; j < MAX_CLASS_STAGES; ++j)
+    {
+        for (int i = 0; i < MAX_CLASS; ++i)
+        {
+            if (Engine::Object::HasPlayerBodyForm(j, i))
+                Engine::Object::OpenPlayerBodyTextures(j, i);
+        }
+    }
+
+    gLoadData.OpenTexture(MODEL_MASK_HELM + 0, L"Player\\");
+    gLoadData.OpenTexture(MODEL_MASK_HELM + 5, L"Player\\");
+    gLoadData.OpenTexture(MODEL_MASK_HELM + 6, L"Player\\");
+    gLoadData.OpenTexture(MODEL_MASK_HELM + 8, L"Player\\");
+    gLoadData.OpenTexture(MODEL_MASK_HELM + 9, L"Player\\");
+
+    gLoadData.OpenTexture(MODEL_SHADOW_BODY, L"Player\\");
+
+    wchar_t szFileName[64];
+
+    for (int i = 0; i < 6; ++i)
+    {
+        ::mu_swprintf(szFileName, L"Player\\InvenArmorMale%d.tga", 40 + i);
+        ::LoadBitmap(szFileName, BITMAP_INVEN_ARMOR + i);
+        ::mu_swprintf(szFileName, L"Player\\InvenPantsMale%d.tga", 40 + i);
+        ::LoadBitmap(szFileName, BITMAP_INVEN_PANTS + i);
+    }
+
+    ::mu_swprintf(szFileName, L"Player\\Item312_Armoritem.tga");
+    ::LoadBitmap(szFileName, BITMAP_SKIN_ARMOR_DEVINE);
+    ::mu_swprintf(szFileName, L"Player\\Item312_Pantitem.tga");
+    ::LoadBitmap(szFileName, BITMAP_SKIN_PANTS_DEVINE);
+    ::mu_swprintf(szFileName, L"Player\\SkinClass706_upperitem.tga");
+    ::LoadBitmap(szFileName, BITMAP_SKIN_ARMOR_SUCCUBUS);
+    ::mu_swprintf(szFileName, L"Player\\SkinClass706_loweritem.tga");
+    ::LoadBitmap(szFileName, BITMAP_SKIN_PANTS_SUCCUBUS);
+
+    for (int i = 0; i < MODEL_ITEM_COMMON_NUM; ++i)
+    {
+        gLoadData.OpenTexture(MODEL_HELM2 + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_ARMOR2 + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_PANTS2 + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_GLOVES2 + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_BOOTS2 + i, L"Player\\");
+    }
+
+    gLoadData.OpenTexture(MODEL_GM_CHARACTER, L"Skill\\");
+
+    for (int i = 0; i < MODEL_ITEM_COMMONCNT_RAGEFIGHTER; ++i)
+    {
+        gLoadData.OpenTexture(MODEL_HELM_MONK + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_ARMOR_MONK + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_PANTS_MONK + i, L"Player\\");
+        gLoadData.OpenTexture(MODEL_BOOTS_MONK + i, L"Player\\");
+    }
+}
+
+// The game cannot run with broken item, effect or server list data: shows the fatal problems and quits.
+static void StopOnDataError(const char* title, const std::string& errorMessage)
+{
+    const std::wstring message = Core::Text::FromUtf8(errorMessage);
+    g_ErrorReport.Write(L"%ls\r\n", message.c_str());
+    Core::Platform::ErrorDialog::Show(title, errorMessage, false);
+    SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+}
+
+static void StopOnItemDataError(const std::string& errorMessage)
+{
+    StopOnDataError("Item data error", errorMessage);
+}
+
+// Loads the server groups of the login screen (Data/Local/ServerList.json);
+// errors stop the game.
+static void OpenServerList()
+{
+    std::string errorMessage;
+    if (!g_ServerListManager->LoadServerListScript(errorMessage))
+    {
+        StopOnDataError("Server list error", errorMessage);
+    }
+}
+
+// Loads the monster list (Data/Monsters/Monsters.json), with the names in the
+// UI language, the model list (Data/Monsters/Models.json), which names effect
+// types, and the sound sets (Data/Monsters/Sounds.json), which the monsters
+// name; errors stop the game.
+static void OpenMonsterData()
+{
+    std::string errorMessage;
+    if (!g_MonsterDataHandler.Load(errorMessage) || !g_MonsterDataHandler.LoadModels(errorMessage) ||
+        !g_MonsterDataHandler.LoadSounds(errorMessage))
+    {
+        StopOnDataError("Monster data error", errorMessage);
+    }
+}
+
+// Loads the files of the code's sounds (Data/Audio/SoundFiles.json), which
+// LoadGameSound loads by their id, and the sound events (Data/Audio/
+// SoundEvents.json), which say which plays when; errors stop the game.
+static void OpenSoundData()
+{
+    std::string errorMessage;
+    if (!Data::Sounds::LoadSoundFiles(errorMessage) || !Data::Sounds::LoadSoundEvents(errorMessage))
+    {
+        StopOnDataError("Sound data error", errorMessage);
+    }
+}
+
+// Loads the sounds of map objects (Data/Maps/ObjectSounds.json); errors stop
+// the game.
+static void OpenMapData()
+{
+    std::string errorMessage;
+    if (!Data::Maps::LoadMapObjectSounds(errorMessage))
+    {
+        StopOnDataError("Map data error", errorMessage);
+    }
+}
+
+// Loads the buffs (Data/Buffs/Buffs.json): their names, texts and the buff
+// strip's rules; errors stop the game.
+static void OpenBuffData()
+{
+    std::string errorMessage;
+    if (!Data::Buffs::LoadBuffs(errorMessage))
+    {
+        StopOnDataError("Buff data error", errorMessage);
+    }
+}
+
+// Loads the effect types (Data/Effects) and builds the effect registry from
+// their creation values; errors stop the game.
+// Reads the model file table (Data/Models/ModelFiles.json, MU_DATA_OVERLAY
+// first); errors stop the game, as for the effect data. A missing table names
+// no model file.
+static void OpenModelFileData()
+{
+    std::string errorMessage;
+    if (!Data::Models::LoadModelFileTable(errorMessage))
+    {
+        StopOnDataError("Model file data error", errorMessage);
+    }
+}
+
+static void OpenEffectTypeData()
+{
+    std::string errorMessage;
+    if (!Data::Effects::LoadEffectTypes(errorMessage))
+    {
+        StopOnDataError("Effect data error", errorMessage);
+        return;
+    }
+    Render::Effects::BuildRegistry(g_EffectTypeCatalogue.GetCreateParams());
+}
+
+// Loads the item models (Data/Items/Models); without them no item could be
+// drawn, so false stops the game.
+static bool OpenItemModelData()
+{
+    std::string errorMessage;
+    if (!g_ItemDataHandler.LoadModels(errorMessage))
+    {
+        StopOnItemDataError(errorMessage);
+        return false;
+    }
+    return true;
+}
+
+// Opens a part model from its entry in Data/Items/Models/PartModels.json (design L28) into its slot, with its
+// textures; the code decides where it is drawn.
+static void OpenPartModel(int modelType)
+{
+    Data::Items::ModelLoader::OpenPartModel(modelType,
+                                            {Render::Items::Styles::Exists, Render::Items::ItemEffects::Exists});
+}
+
+// Models that are drawn for items, but are no item models themselves:
+// event models, the level 14/15 armor decorations and the parts of the
+// Rage Fighter weapons.
+static void OpenItemEffectModels()
+{
+    gLoadData.AccessModel(MODEL_EVENT + 18, L"Data\\Item\\", L"LifeStoneItem");
+
+    gLoadData.AccessModel(MODEL_EVENT + 4, L"Data\\Item\\", L"MagicBox", 2);
+    gLoadData.AccessModel(MODEL_EVENT + 6, L"Data\\Item\\", L"MagicBox", 5);
+    gLoadData.AccessModel(MODEL_EVENT + 7, L"Data\\Item\\", L"Beer", 2);
+    gLoadData.AccessModel(MODEL_EVENT + 8, L"Data\\Item\\", L"MagicBox", 6);
+    gLoadData.AccessModel(MODEL_EVENT + 9, L"Data\\Item\\", L"MagicBox", 7);
+    gLoadData.AccessModel(MODEL_EVENT + 10, L"Data\\Item\\", L"MagicBox", 8);
+    gLoadData.AccessModel(MODEL_EVENT + 5, L"Data\\Item\\", L"MagicBox", 3);
+
+    gLoadData.AccessModel(MODEL_EVENT, L"Data\\Item\\", L"Event", 2);
+    gLoadData.AccessModel(MODEL_EVENT + 1, L"Data\\Item\\", L"Event", 3);
+
+    gLoadData.AccessModel(MODEL_EVENT + 11, L"Data\\Item\\", L"EventBloodCastle", 3);
+    gLoadData.AccessModel(MODEL_EVENT + 12, L"Data\\Item\\", L"QuestItem3RD", 0);
+    gLoadData.AccessModel(MODEL_EVENT + 13, L"Data\\Item\\", L"QuestItem3RD", 1);
+    gLoadData.AccessModel(MODEL_EVENT + 14, L"Data\\Item\\", L"RingOfLordEvent", 0);
+    gLoadData.AccessModel(MODEL_EVENT + 15, L"Data\\Item\\", L"MagicRing", 0);
+    gLoadData.AccessModel(MODEL_EVENT + 16, L"Data\\Item\\", L"DarkLordSleeve");
+
+    gLoadData.AccessModel(MODEL_EVENT + 21, L"Data\\Item\\", L"p03box");
+    gLoadData.AccessModel(MODEL_EVENT + 22, L"Data\\Item\\", L"obox02");
+    gLoadData.AccessModel(MODEL_EVENT + 23, L"Data\\Item\\", L"blue01");
+
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_ARMLEFT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_ARMRIGHT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_BODYLEFT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_HEAD);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_PANTLEFT);
+    OpenPartModel(MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT);
+
+    g_CMonkSystem.LoadModelItem();
+    OpenPartModel(MODEL_ARMORINVEN_74);
+
+    Models[MODEL_EVENT + 9].Meshs[1].NoneBlendMesh = true;
+}
+
+constexpr int GrandSoulClothMesh = 2;
+constexpr int GrandSoulClothBone = 17;
+constexpr int GrandSoulClothColumns = 5;
+constexpr int GrandSoulClothRows = 8;
+constexpr float GrandSoulClothWidth = 45.0f;
+constexpr float GrandSoulClothHeight = 85.0f;
+
+// The cloth of the Grand Soul pants is drawn on mesh 2 of their model.
+// Creating the cloth once rebuilds the triangles and texture coordinates of
+// that mesh as a cloth grid; the cloth itself is not needed.
+void PrepareGrandSoulPantsClothMesh()
+{
+    if (!CPhysicsClothMesh::CanCreate(MODEL_GRAND_SOUL_PANTS, GrandSoulClothMesh, GrandSoulClothColumns,
+                                      GrandSoulClothRows))
+    {
+        g_ErrorReport.Write(L"The Grand Soul pants model does not fit the cloth grid; its cloth is not prepared.\r\n");
+        return;
+    }
+
+    auto cloth = std::make_unique<CPhysicsClothMesh>();
+    cloth->Create(&Hero->Object, GrandSoulClothMesh, GrandSoulClothBone, 0.0f, 0.0f, 0.0f, GrandSoulClothColumns,
+                  GrandSoulClothRows, GrandSoulClothWidth, GrandSoulClothHeight, BITMAP_PANTS_G_SOUL,
+                  BITMAP_PANTS_G_SOUL, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED, MODEL_GRAND_SOUL_PANTS);
+}
+
+// Loads the looks that are data (Data/Effects/RenderStyles.json and ItemEffects.json), before the item models are
+// opened, which check the names of their looks.
+static void OpenRenderStyleData()
+{
+    std::string errorMessage;
+    if (!Data::Looks::LoadRenderStyles(errorMessage))
+    {
+        StopOnDataError("Render style data error", errorMessage);
+    }
+    if (!Data::Looks::LoadItemEffects(errorMessage))
+    {
+        StopOnDataError("Item effect data error", errorMessage);
+    }
+}
+
+void OpenItems()
+{
+    OpenRenderStyleData();
+    // Without model data the game stops; the item models are not opened.
+    if (OpenItemModelData())
+    {
+        Data::Items::ModelLoader::OpenModels({Render::Items::Styles::Exists, Render::Items::ItemEffects::Exists});
+        PrepareGrandSoulPantsClothMesh();
+    }
+    OpenItemEffectModels();
+
+    LoadBitmap(L"Item\\NCcape.tga", BITMAP_NCCAPE, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\monk_manto01.TGA", BITMAP_MANTO01, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\monke_manto.TGA", BITMAP_MANTOE, GL_LINEAR, GL_REPEAT);
+}
+
+static void OpenItemEffectModelTextures()
+{
+    gLoadData.OpenTexture(MODEL_EVENT + 11, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 12, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 13, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 14, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 15, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 18, L"Monster\\");
+
+    gLoadData.OpenTexture(MODEL_EVENT + 4, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 5, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 6, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 7, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 8, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 9, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 10, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 16, L"Item\\");
+
+    for (int i = 0; i < 2; i++)
+        gLoadData.OpenTexture(MODEL_EVENT + i, L"Item\\");
+
+    gLoadData.OpenTexture(MODEL_EVENT + 21, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 22, L"Item\\");
+    gLoadData.OpenTexture(MODEL_EVENT + 23, L"Item\\");
+
+    g_CMonkSystem.LoadModelItemTexture();
+}
+
+// Textures that the effect code of items draws with.
+void OpenItemEffectTextures()
+{
+    LoadBitmap(L"Item\\msword01_r.jpg", BITMAP_3RDWING_LAYER, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\rollofpaper_R.jpg", BITMAP_ROOLOFPAPER_EFFECT_R, GL_LINEAR);
+
+    LoadBitmap(L"Item\\InGameShop\\membership_item_blue.jpg", BITMAP_PACKAGEBOX_BLUE, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\membership_item_gold.jpg", BITMAP_PACKAGEBOX_GOLD, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\membership_item_green.jpg", BITMAP_PACKAGEBOX_GREEN, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\membership_item_pouple.jpg", BITMAP_PACKAGEBOX_PUPLE, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\membership_item_red.jpg", BITMAP_PACKAGEBOX_RED, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\membership_item_sky.jpg", BITMAP_PACKAGEBOX_SKY, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\mebership_3items_green.jpg", BITMAP_INGAMESHOP_PRIMIUM6, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\mebership_3items_red.jpg", BITMAP_INGAMESHOP_COMMUTERTICKET4, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\InGameShop\\mebership_3items_yellow.jpg", BITMAP_INGAMESHOP_SIZECOMMUTERTICKET3, GL_LINEAR,
+               GL_REPEAT);
+
+    LoadBitmap(L"Item\\rgb_mix.jpg", BITMAP_RGB_MIX, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\PhoenixSoul_render.JPG", BITMAP_PHOENIXSOULWING, GL_LINEAR, GL_REPEAT);
+
+    LoadBitmap(L"Player\\LuckyItem\\65\\InvenArmorMale40_luck.tga", BITMAP_INVEN_ARMOR + 6);
+    LoadBitmap(L"Player\\LuckyItem\\65\\InvenPantsMale40_luck.tga", BITMAP_INVEN_PANTS + 6);
+    LoadBitmap(L"Player\\LuckyItem\\70\\InvenArmorMale41_luck.tga", BITMAP_INVEN_ARMOR + 7);
+    LoadBitmap(L"Player\\LuckyItem\\70\\InvenPantsMale41_luck.tga", BITMAP_INVEN_PANTS + 7);
+}
+
+void OpenItemTextures()
+{
+    // Before the effect textures, like the old code: a model texture that is
+    // also an effect bitmap below stays a texture of its own, with its filter.
+    Data::Items::ModelLoader::OpenTextures();
+    OpenItemEffectModelTextures();
+    gLoadData.OpenTexture(MODEL_ARROW, L"Item\\Bow\\");
+    OpenItemEffectTextures();
+}
+
+void DeleteNpcs()
+{
+    for (int i = MODEL_NPC_BEGIN; i < MODEL_NPC_END; i++)
+    {
+        if(Models[i].Version)
+            Models[i].Release();
+    }
+
+    for (int i = SOUND_NPC; i < SOUND_NPC_END; i++)
+        ReleaseBuffer(i);
+}
+
+// Opens an NPC model from its entry in the model list (Data/Monsters/Models.json).
+void OpenNpc(int Type)
+{
+    BMD* b = &Models[Type];
+    if (b->NumActions > 0) return;
+    Data::Monsters::ModelLoader::Open(Type);
+}
+
+void DeleteMonsters()
+{
+	for (int i = MODEL_MONSTER01; i < MODEL_MONSTER_END; i++)
+		if (Models[i].Version)
+         Models[i].Release();
+
+    for (int i = SOUND_MONSTER; i < SOUND_MONSTER_END; i++)
+        ReleaseBuffer(i);
+
+    for (int i = SOUND_ELBELAND_RABBITSTRANGE_ATTACK01; i <= SOUND_ELBELAND_ENTERATLANCE01; i++)
+        ReleaseBuffer(i);
+
+    // The model sounds without a SOUND_* id; their models load them again.
+    Audio::SoundNumbers::ReleaseAll();
+
+    // A missing model file is tried once a map (Q-MN45c).
+    Data::Monsters::ModelLoader::ForgetMissingFiles();
+}
+
+// Opens a monster model from its entry in the model list
+// (Data/Monsters/Models.json), in the slot MODEL_MONSTER01 + Type.
+void OpenMonsterModel(EMonsterModelType Type)
+{
+    const std::string_view typeName = Data::Monsters::GetMonsterModelTypeName(Type);
+    g_ConsoleDebug->Write(MCD_RECEIVE, L"OpenMonsterModel(%ls = %d)",
+                          std::wstring(typeName.begin(), typeName.end()).c_str(), Type);
+
+    if (Type < 0 || Type >= MONSTER_MODEL_COUNT)   // guard the Models[] indexing below
+        return;
+
+    const int Index = static_cast<int>(MODEL_MONSTER01) + Type;
+    const BMD* b = &Models[Index];
+    if (b->NumActions > 0 || b->NumMeshs > 0) return;
+    Data::Monsters::ModelLoader::Open(Index);
+}
+
+void OpenSkills()
+{
+    gLoadData.AccessModel(MODEL_ICE, L"Data\\Skill\\", L"Ice", 1);
+    gLoadData.AccessModel(MODEL_ICE_SMALL, L"Data\\Skill\\", L"Ice", 2);
+    gLoadData.AccessModel(MODEL_FIRE, L"Data\\Skill\\", L"Fire", 1);
+    gLoadData.AccessModel(MODEL_POISON, L"Data\\Skill\\", L"Poison", 1);
+    for (int i = 0; i < 2; i++)
+        gLoadData.AccessModel(MODEL_STONE1 + i, L"Data\\Skill\\", L"Stone", i + 1);
+    gLoadData.AccessModel(MODEL_CIRCLE, L"Data\\Skill\\", L"Circle", 1);
+    gLoadData.AccessModel(MODEL_CIRCLE_LIGHT, L"Data\\Skill\\", L"Circle", 2);
+    gLoadData.AccessModel(MODEL_MAGIC1, L"Data\\Skill\\", L"Magic", 1);
+    gLoadData.AccessModel(MODEL_MAGIC2, L"Data\\Skill\\", L"Magic", 2);
+    gLoadData.AccessModel(MODEL_STORM, L"Data\\Skill\\", L"Storm", 1);
+    gLoadData.AccessModel(MODEL_LASER, L"Data\\Skill\\", L"Laser", 1);
+
+    for (int i = 0; i < 3; i++)
+        gLoadData.AccessModel(MODEL_SKELETON1 + i, L"Data\\Skill\\", L"Skeleton", i + 1);
+
+    gLoadData.AccessModel(MODEL_SKELETON_PCBANG, L"Data\\Skill\\", L"Skeleton", 3);
+    gLoadData.AccessModel(MODEL_HALLOWEEN, L"Data\\Skill\\", L"Jack");
+
+    gLoadData.AccessModel(MODEL_HALLOWEEN_CANDY_BLUE, L"Data\\Skill\\", L"hcandyblue");
+    gLoadData.AccessModel(MODEL_HALLOWEEN_CANDY_ORANGE, L"Data\\Skill\\", L"hcandyorange");
+    gLoadData.AccessModel(MODEL_HALLOWEEN_CANDY_RED, L"Data\\Skill\\", L"hcandyred");
+    gLoadData.AccessModel(MODEL_HALLOWEEN_CANDY_YELLOW, L"Data\\Skill\\", L"hcandyyellow");
+    gLoadData.AccessModel(MODEL_HALLOWEEN_CANDY_HOBAK, L"Data\\Skill\\", L"hhobak");
+    gLoadData.AccessModel(MODEL_HALLOWEEN_CANDY_STAR, L"Data\\Skill\\", L"hstar");
+    LoadBitmap(L"Skill\\jack04.jpg", BITMAP_JACK_1);
+    LoadBitmap(L"Skill\\jack05.jpg", BITMAP_JACK_2);
+    LoadBitmap(L"Monster\\iui02.tga", BITMAP_ROBE + 3);
+    gLoadData.AccessModel(MODEL_PUMPKIN_OF_LUCK, L"Data\\Item\\", L"hobakhead");
+    gLoadData.OpenTexture(MODEL_PUMPKIN_OF_LUCK, L"Item\\");
+
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_ALLIED_PLAYER, L"Data\\Skill\\", L"unitedsoldier");
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_ILLUSION_PLAYER, L"Data\\Skill\\", L"illusionist");
+
+    gLoadData.AccessModel(MODEL_WOOSISTONE, L"Data\\Skill\\", L"woositone");
+    gLoadData.OpenTexture(MODEL_WOOSISTONE, L"Skill\\");
+
+    g_NewYearsDayEvent->LoadModel();
+
+    gLoadData.AccessModel(MODEL_SAW, L"Data\\Skill\\", L"Saw", 1);
+
+    for (int i = 0; i < 2; i++)
+        gLoadData.AccessModel(MODEL_BONE1 + i, L"Data\\Skill\\", L"Bone", i + 1);
+
+    for (int i = 0; i < 3; i++)
+        gLoadData.AccessModel(MODEL_SNOW1 + i, L"Data\\Skill\\", L"Snow", i + 1);
+
+    gLoadData.AccessModel(MODEL_UNICON, L"Data\\Skill\\", L"Rider", 1);
+    gLoadData.AccessModel(MODEL_PEGASUS, L"Data\\Skill\\", L"Rider", 2);
+    gLoadData.AccessModel(MODEL_DARK_HORSE, L"Data\\Skill\\", L"DarkHorse");
+
+    gLoadData.AccessModel(MODEL_FENRIR_BLACK, L"Data\\Skill\\", L"fenril_black");
+    gLoadData.OpenTexture(MODEL_FENRIR_BLACK, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_FENRIR_RED, L"Data\\Skill\\", L"fenril_red");
+    gLoadData.OpenTexture(MODEL_FENRIR_RED, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_FENRIR_BLUE, L"Data\\Skill\\", L"fenril_blue");
+    gLoadData.OpenTexture(MODEL_FENRIR_BLUE, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_FENRIR_GOLD, L"Data\\Skill\\", L"fenril_gold");
+    gLoadData.OpenTexture(MODEL_FENRIR_BLUE, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_PANDA, L"Data\\Item\\", L"panda");
+    gLoadData.OpenTexture(MODEL_PANDA, L"Item\\");
+
+    gLoadData.AccessModel(MODEL_SKELETON_CHANGED, L"Data\\Item\\", L"trans_skeleton");
+    gLoadData.OpenTexture(MODEL_SKELETON_CHANGED, L"Item\\");
+
+    gLoadData.AccessModel(MODEL_DARK_SPIRIT, L"Data\\Skill\\", L"DarkSpirit");
+    LoadBitmap(L"Skill\\dkthreebody_r.jpg", BITMAP_MONSTER_SKIN + 2, GL_LINEAR, GL_REPEAT);
+
+    gLoadData.AccessModel(MODEL_WARCRAFT, L"Data\\Skill\\", L"HellGate");
+    Models[MODEL_WARCRAFT].Actions[0].LockPositions = false;
+    SAFE_DELETE_ARRAY(Models[MODEL_WARCRAFT].Actions[0].Positions);
+    Models[MODEL_WARCRAFT].Actions[0].PlaySpeed = 0.15f;
+
+    gLoadData.AccessModel(MODEL_ARROW, L"Data\\Skill\\", L"Arrow", 1);
+    gLoadData.AccessModel(MODEL_ARROW_STEEL, L"Data\\Skill\\", L"ArrowSteel", 1);
+    gLoadData.AccessModel(MODEL_ARROW_THUNDER, L"Data\\Skill\\", L"ArrowThunder", 1);
+    gLoadData.AccessModel(MODEL_ARROW_LASER, L"Data\\Skill\\", L"ArrowLaser", 1);
+    gLoadData.AccessModel(MODEL_ARROW_V, L"Data\\Skill\\", L"ArrowV", 1);
+    gLoadData.AccessModel(MODEL_ARROW_SAW, L"Data\\Skill\\", L"ArrowSaw", 1);
+    gLoadData.AccessModel(MODEL_ARROW_NATURE, L"Data\\Skill\\", L"ArrowNature", 1);
+
+    gLoadData.OpenTexture(MODEL_MAGIC_CAPSULE2, L"Skill\\");
+    gLoadData.AccessModel(MODEL_MAGIC_CAPSULE2, L"Data\\Skill\\", L"Protect", 2);
+
+    gLoadData.AccessModel(MODEL_ARROW_SPARK, L"Data\\Skill\\", L"Arrow_Spark");
+    gLoadData.OpenTexture(MODEL_ARROW_SPARK, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_DARK_SCREAM, L"Data\\Skill\\", L"darkfirescrem02");
+    gLoadData.OpenTexture(MODEL_DARK_SCREAM, L"Skill\\");
+    gLoadData.AccessModel(MODEL_DARK_SCREAM_FIRE, L"Data\\Skill\\", L"darkfirescrem01");
+    gLoadData.OpenTexture(MODEL_DARK_SCREAM_FIRE, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMON, L"Data\\SKill\\", L"nightmaresum");
+    gLoadData.OpenTexture(MODEL_SUMMON, L"SKill\\");
+    gLoadData.AccessModel(MODEL_MULTI_SHOT1, L"Data\\Effect\\", L"multishot01");
+    gLoadData.OpenTexture(MODEL_MULTI_SHOT1, L"Effect\\");
+    gLoadData.AccessModel(MODEL_MULTI_SHOT2, L"Data\\Effect\\", L"multishot02");
+    gLoadData.OpenTexture(MODEL_MULTI_SHOT2, L"Effect\\");
+    gLoadData.AccessModel(MODEL_MULTI_SHOT3, L"Data\\Effect\\", L"multishot03");
+    gLoadData.OpenTexture(MODEL_MULTI_SHOT3, L"Effect\\");
+    gLoadData.AccessModel(MODEL_DESAIR, L"Data\\SKill\\", L"desair");
+    gLoadData.OpenTexture(MODEL_DESAIR, L"SKill\\");
+    gLoadData.AccessModel(MODEL_ARROW_RING, L"Data\\Skill\\", L"CW_Bow_Skill");
+    gLoadData.OpenTexture(MODEL_ARROW_RING, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_ARROW_DARKSTINGER, L"Data\\Skill\\", L"sketbows_arrows");
+    gLoadData.OpenTexture(MODEL_ARROW_DARKSTINGER, L"Skill\\");
+    gLoadData.AccessModel(MODEL_FEATHER, L"Data\\Skill\\", L"darkwing_hetachi");
+    gLoadData.OpenTexture(MODEL_FEATHER, L"Skill\\");
+    gLoadData.AccessModel(MODEL_FEATHER_FOREIGN, L"Data\\Skill\\", L"darkwing_hetachi");
+    gLoadData.OpenTexture(MODEL_FEATHER_FOREIGN, L"Skill\\");
+    LoadBitmap(L"Effect\\Bugbear_R.jpg", BITMAP_BUGBEAR_R, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\pk_mon02_fire.jpg", BITMAP_PKMON01, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\pk_mon03_red.jpg", BITMAP_PKMON02, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\pk_mon02_green.jpg", BITMAP_PKMON03, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\pk_mon03_green.jpg", BITMAP_PKMON04, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\lavagiantAa_e.jpg", BITMAP_PKMON05, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\lavagiantBa_e.jpg", BITMAP_PKMON06, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\eff_magma_red.jpg", BITMAP_LAVAGIANT_FOOTPRINT_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\eff_magma_violet.jpg", BITMAP_LAVAGIANT_FOOTPRINT_V, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\raymond_sword_R.jpg", BITMAP_RAYMOND_SWORD, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\mist01.jpg", BITMAP_AG_ADDITION_EFFECT, GL_LINEAR, GL_REPEAT);
+    gLoadData.AccessModel(MODEL_ARROW_GAMBLE, L"Data\\Skill\\", L"gamble_arrows01");
+    gLoadData.OpenTexture(MODEL_ARROW_GAMBLE, L"Skill\\");
+
+    gLoadData.OpenTexture(MODEL_SPEARSKILL, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SPEARSKILL, L"Data\\Skill\\", L"RidingSpear", 1);
+    gLoadData.AccessModel(MODEL_PROTECT, L"Data\\Skill\\", L"Protect", 1);
+
+    for (int i = 0; i < 2; i++)
+        gLoadData.AccessModel(MODEL_BIG_STONE1 + i, L"Data\\Skill\\", L"BigStone", i + 1);
+
+    gLoadData.AccessModel(MODEL_MAGIC_CIRCLE1, L"Data\\Skill\\", L"MagicCircle", 1);
+    gLoadData.AccessModel(MODEL_ARROW_WING, L"Data\\Skill\\", L"ArrowWing", 1);
+    gLoadData.AccessModel(MODEL_ARROW_BOMB, L"Data\\Skill\\", L"ArrowBomb", 1);
+    gLoadData.AccessModel(MODEL_BALL, L"Data\\Skill\\", L"Ball", 1);//공
+    Models[MODEL_BALL].Actions[0].PlaySpeed = 0.5f;
+    gLoadData.AccessModel(MODEL_SKILL_BLAST, L"Data\\Skill\\", L"Blast", 1);
+    gLoadData.AccessModel(MODEL_SKILL_INFERNO, L"Data\\Skill\\", L"Inferno", 1);
+    gLoadData.AccessModel(MODEL_ARROW_DOUBLE, L"Data\\Skill\\", L"ArrowDouble", 1);
+
+    gLoadData.AccessModel(MODEL_ARROW_BEST_CROSSBOW, L"Data\\Skill\\", L"KCross");
+    gLoadData.AccessModel(MODEL_ARROW_DRILL, L"Data\\Skill\\", L"Carow");
+    gLoadData.AccessModel(MODEL_COMBO, L"Data\\Skill\\", L"combo");
+
+    gLoadData.AccessModel(MODEL_GATE + 0, L"Data\\Object12\\", L"Gate", 1);
+    gLoadData.AccessModel(MODEL_GATE + 1, L"Data\\Object12\\", L"Gate", 2);
+    gLoadData.AccessModel(MODEL_STONE_COFFIN + 0, L"Data\\Object12\\", L"StoneCoffin", 1);
+    gLoadData.AccessModel(MODEL_STONE_COFFIN + 1, L"Data\\Object12\\", L"StoneCoffin", 2);
+
+    for (int i = 0; i < 2; ++i)
+    {
+        gLoadData.OpenTexture(MODEL_GATE + 1, L"Monster\\");
+        gLoadData.OpenTexture(MODEL_STONE_COFFIN + i, L"Monster\\");
+    }
+
+    gLoadData.AccessModel(MODEL_AIR_FORCE, L"Data\\Skill\\", L"AirForce");
+    gLoadData.AccessModel(MODEL_WAVES, L"Data\\Skill\\", L"m_Waves");
+    gLoadData.AccessModel(MODEL_PIERCING2, L"Data\\Skill\\", L"m_Piercing");
+    gLoadData.AccessModel(MODEL_PIER_PART, L"Data\\Skill\\", L"PierPart");
+    gLoadData.AccessModel(MODEL_DARKLORD_SKILL, L"Data\\Skill\\", L"DarkLordSkill");
+    gLoadData.AccessModel(MODEL_GROUND_STONE, L"Data\\Skill\\", L"groundStone");
+    Models[MODEL_GROUND_STONE].Actions[0].Loop = false;
+    gLoadData.AccessModel(MODEL_GROUND_STONE2, L"Data\\Skill\\", L"groundStone2");
+    Models[MODEL_GROUND_STONE2].Actions[0].Loop = false;
+    gLoadData.AccessModel(MODEL_WATER_WAVE, L"Data\\Skill\\", L"seamanFX");
+    gLoadData.AccessModel(MODEL_SKULL, L"Data\\Skill\\", L"Skull");
+    gLoadData.AccessModel(MODEL_LACEARROW, L"Data\\Skill\\", L"LaceArrow");
+    gLoadData.OpenTexture(MODEL_LACEARROW, L"Item\\", GL_CLAMP_TO_EDGE);
+
+    gLoadData.AccessModel(MODEL_WEBZEN_MARK, L"Data\\Skill\\", L"MuSign");
+    gLoadData.AccessModel(MODEL_STUN_STONE, L"Data\\Skill\\", L"GroundCrystal");
+    gLoadData.AccessModel(MODEL_SKIN_SHELL, L"Data\\Skill\\", L"skinshell");
+    gLoadData.AccessModel(MODEL_MANA_RUNE, L"Data\\Skill\\", L"ManaRune");
+    gLoadData.AccessModel(MODEL_SKILL_JAVELIN, L"Data\\Skill\\", L"Javelin");
+    gLoadData.AccessModel(MODEL_ARROW_IMPACT, L"Data\\Skill\\", L"ArrowImpact");
+    gLoadData.AccessModel(MODEL_SWORD_FORCE, L"Data\\Skill\\", L"SwordForce");
+
+    gLoadData.AccessModel(MODEL_FLY_BIG_STONE1, L"Data\\Skill\\", L"FlyBigStone1");
+    gLoadData.AccessModel(MODEL_FLY_BIG_STONE2, L"Data\\Skill\\", L"FlyBigStone2");
+    gLoadData.AccessModel(MODEL_BIG_STONE_PART1, L"Data\\Skill\\", L"FlySmallStone1");
+    gLoadData.AccessModel(MODEL_BIG_STONE_PART2, L"Data\\Skill\\", L"FlySmallStone2");
+    gLoadData.AccessModel(MODEL_WALL_PART1, L"Data\\Skill\\", L"WallStone1");
+    gLoadData.AccessModel(MODEL_WALL_PART2, L"Data\\Skill\\", L"WallStone2");
+    gLoadData.AccessModel(MODEL_GATE_PART1, L"Data\\Skill\\", L"GatePart1");
+    gLoadData.AccessModel(MODEL_GATE_PART2, L"Data\\Skill\\", L"GatePart2");
+    gLoadData.AccessModel(MODEL_GATE_PART3, L"Data\\Skill\\", L"GatePart3");
+    gLoadData.AccessModel(MODEL_AURORA, L"Data\\Skill\\", L"Aurora");
+    gLoadData.AccessModel(MODEL_TOWER_GATE_PLANE, L"Data\\Skill\\", L"TowerGatePlane");
+    gLoadData.AccessModel(MODEL_GOLEM_STONE, L"Data\\Skill\\", L"golem_stone");
+    gLoadData.AccessModel(MODEL_FISSURE, L"Data\\Skill\\", L"bossrock");
+    gLoadData.AccessModel(MODEL_FISSURE_LIGHT, L"Data\\Skill\\", L"bossrocklight");
+    gLoadData.AccessModel(MODEL_PROTECTGUILD, L"Data\\Skill\\", L"ProtectGuild");
+    gLoadData.AccessModel(MODEL_DARK_ELF_SKILL, L"Data\\Skill\\", L"elf_skill");
+    gLoadData.AccessModel(MODEL_BALGAS_SKILL, L"Data\\Skill\\", L"WaveForce");
+    gLoadData.AccessModel(MODEL_DEATH_SPI_SKILL, L"Data\\Skill\\", L"deathsp_eff");
+    Models[MODEL_BALGAS_SKILL].Actions[0].Loop = false;
+
+    gLoadData.OpenTexture(MODEL_DARK_ELF_SKILL, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_BALGAS_SKILL, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_DEATH_SPI_SKILL, L"Skill\\");
+
+    gLoadData.OpenTexture(MODEL_DARK_HORSE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_DARK_SPIRIT, L"Skill\\");
+
+    gLoadData.OpenTexture(MODEL_WARCRAFT, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_PEGASUS, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKILL_FURY_STRIKE + 1, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKILL_FURY_STRIKE + 2, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKILL_FURY_STRIKE + 3, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKILL_FURY_STRIKE + 5, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKILL_FURY_STRIKE + 7, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKILL_FURY_STRIKE + 8, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_WAVE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_TAIL, L"Skill\\");
+
+    gLoadData.OpenTexture(MODEL_WAVE_FORCE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_BLIZZARD, L"Skill\\");
+
+    g_XmasEvent->LoadXmasEvent();
+
+    gLoadData.OpenTexture(MODEL_ARROW_BEST_CROSSBOW, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_ARROW_DRILL, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_COMBO, L"Skill\\");
+
+    gLoadData.OpenTexture(MODEL_AIR_FORCE, L"Skill\\", GL_CLAMP_TO_EDGE);
+    gLoadData.OpenTexture(MODEL_WAVES, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_PIERCING2, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_PIER_PART, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_GROUND_STONE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_GROUND_STONE2, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_WATER_WAVE, L"Skill\\", GL_CLAMP_TO_EDGE);
+    gLoadData.OpenTexture(MODEL_SKULL, L"Skill\\", GL_CLAMP_TO_EDGE);
+    gLoadData.OpenTexture(MODEL_WEBZEN_MARK, L"Skill\\");
+
+    gLoadData.OpenTexture(MODEL_FLY_BIG_STONE1, L"Npc\\");
+    gLoadData.OpenTexture(MODEL_FLY_BIG_STONE2, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_BIG_STONE_PART1, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_BIG_STONE_PART2, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_WALL_PART1, L"Object31\\");
+    gLoadData.OpenTexture(MODEL_WALL_PART2, L"Object31\\");
+    gLoadData.OpenTexture(MODEL_GATE_PART1, L"Monster\\");
+    gLoadData.OpenTexture(MODEL_GATE_PART2, L"Monster\\");
+    gLoadData.OpenTexture(MODEL_GATE_PART3, L"Monster\\");
+    gLoadData.OpenTexture(MODEL_AURORA, L"Monster\\");
+    gLoadData.OpenTexture(MODEL_TOWER_GATE_PLANE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_GOLEM_STONE, L"Monster\\");
+    gLoadData.OpenTexture(MODEL_FISSURE, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_FISSURE_LIGHT, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SKIN_SHELL, L"Effect\\");
+    gLoadData.OpenTexture(MODEL_PROTECTGUILD, L"Item\\");
+
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 1, L"Data\\Skill\\", L"EarthQuake", 1);
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 2, L"Data\\Skill\\", L"EarthQuake", 2);
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 3, L"Data\\Skill\\", L"EarthQuake", 3);
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 5, L"Data\\Skill\\", L"EarthQuake", 5);
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 7, L"Data\\Skill\\", L"EarthQuake", 7);
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 8, L"Data\\Skill\\", L"EarthQuake", 8);
+    gLoadData.AccessModel(MODEL_WAVE, L"Data\\Skill\\", L"flashing");
+    gLoadData.AccessModel(MODEL_TAIL, L"Data\\Skill\\", L"tail");
+
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 4, L"Data\\Skill\\", L"EarthQuake", 4);
+    gLoadData.AccessModel(MODEL_SKILL_FURY_STRIKE + 6, L"Data\\Skill\\", L"EarthQuake", 6);
+    gLoadData.AccessModel(MODEL_PIERCING, L"Data\\Skill\\", L"Piercing");
+
+    gLoadData.AccessModel(MODEL_WAVE_FORCE, L"Data\\Skill\\", L"WaveForce");
+    gLoadData.AccessModel(MODEL_BLIZZARD, L"Data\\Skill\\", L"Blizzard");
+
+    gLoadData.AccessModel(MODEL_ARROW_AUTOLOAD, L"Data\\Skill\\", L"arrowsrefill");
+    gLoadData.OpenTexture(MODEL_ARROW_AUTOLOAD, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_INFINITY_ARROW, L"Data\\Skill\\", L"arrowsre", 1);
+    gLoadData.OpenTexture(MODEL_INFINITY_ARROW, L"Skill\\");
+    gLoadData.AccessModel(MODEL_INFINITY_ARROW1, L"Data\\Skill\\", L"arrowsre", 2);
+    gLoadData.OpenTexture(MODEL_INFINITY_ARROW1, L"Skill\\");
+    gLoadData.AccessModel(MODEL_INFINITY_ARROW2, L"Data\\Skill\\", L"arrowsre", 3);
+    gLoadData.OpenTexture(MODEL_INFINITY_ARROW2, L"Skill\\");
+    gLoadData.AccessModel(MODEL_INFINITY_ARROW3, L"Data\\Skill\\", L"arrowsre", 4);
+    gLoadData.OpenTexture(MODEL_INFINITY_ARROW3, L"Effect\\");
+    gLoadData.AccessModel(MODEL_INFINITY_ARROW4, L"Data\\Skill\\", L"arrowsre", 5);
+    gLoadData.OpenTexture(MODEL_INFINITY_ARROW4, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_SHIELD_CRASH, L"Data\\Effect\\", L"atshild");
+    gLoadData.OpenTexture(MODEL_SHIELD_CRASH, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_SHIELD_CRASH2, L"Data\\Effect\\", L"atshild2");
+    gLoadData.OpenTexture(MODEL_SHIELD_CRASH2, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_IRON_RIDER_ARROW, L"Data\\Effect\\", L"ironobj");
+    gLoadData.OpenTexture(MODEL_IRON_RIDER_ARROW, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_KENTAUROS_ARROW, L"Data\\Effect\\", L"cantasarrow");
+    gLoadData.OpenTexture(MODEL_KENTAUROS_ARROW, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_BLADE_SKILL, L"Data\\Effect\\", L"bladetonedo");
+    gLoadData.OpenTexture(MODEL_BLADE_SKILL, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_CHANGE_UP_EFF, L"Data\\Effect\\", L"Change_Up_Eff");
+    gLoadData.OpenTexture(MODEL_CHANGE_UP_EFF, L"Effect\\");
+    Models[MODEL_CHANGE_UP_EFF].Actions[0].PlaySpeed = 0.005f;
+    gLoadData.AccessModel(MODEL_CHANGE_UP_NASA, L"Data\\Effect\\", L"changup_nasa");
+
+    gLoadData.OpenTexture(MODEL_CHANGE_UP_NASA, L"Effect\\");
+    gLoadData.AccessModel(MODEL_CHANGE_UP_CYLINDER, L"Data\\Effect\\", L"clinderlight");
+    gLoadData.OpenTexture(MODEL_CHANGE_UP_CYLINDER, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_HOLYITEM, L"Data\\Skill\\", L"eventsungmul");
+    gLoadData.OpenTexture(MODEL_CURSEDTEMPLE_HOLYITEM, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, L"Data\\Skill\\", L"eventshild");
+    gLoadData.OpenTexture(MODEL_CURSEDTEMPLE_PRODECTION_SKILL, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, L"Data\\Skill\\", L"eventroofe");
+    gLoadData.OpenTexture(MODEL_CURSEDTEMPLE_RESTRAINT_SKILL, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_STATUE_PART1, L"Data\\Npc\\", L"songck1");
+    gLoadData.OpenTexture(MODEL_CURSEDTEMPLE_STATUE_PART1, L"Npc\\");
+
+    gLoadData.AccessModel(MODEL_CURSEDTEMPLE_STATUE_PART2, L"Data\\Npc\\", L"songck2");
+    gLoadData.OpenTexture(MODEL_CURSEDTEMPLE_STATUE_PART2, L"Npc\\");
+
+    gLoadData.AccessModel(MODEL_FENRIR_THUNDER, L"Data\\Effect\\", L"lightning_type01");
+    gLoadData.OpenTexture(MODEL_FENRIR_THUNDER, L"Effect\\");
+
+    for (int i = MODEL_SKILL_BEGIN; i < MODEL_SKILL_END; i++)
+    {
+        if (i == MODEL_PIERCING)
+        {
+            gLoadData.OpenTexture(i, L"Skill\\");
+        }
+        else
+            gLoadData.OpenTexture(i, L"Skill\\");
+    }
+
+    LoadBitmap(L"Skill\\flower1.tga", BITMAP_FLOWER01);
+    LoadBitmap(L"Skill\\flower2.tga", BITMAP_FLOWER01 + 1);
+    LoadBitmap(L"Skill\\flower3.tga", BITMAP_FLOWER01 + 2);
+
+    gLoadData.AccessModel(MODEL_MOONHARVEST_GAM, L"Data\\Effect\\", L"chusukgam");
+    gLoadData.OpenTexture(MODEL_MOONHARVEST_GAM, L"Effect\\");
+    gLoadData.AccessModel(MODEL_MOONHARVEST_SONGPUEN1, L"Data\\Effect\\", L"chusukseung1");
+    gLoadData.OpenTexture(MODEL_MOONHARVEST_SONGPUEN1, L"Effect\\");
+    gLoadData.AccessModel(MODEL_MOONHARVEST_SONGPUEN2, L"Data\\Effect\\", L"chusukseung2");
+    gLoadData.OpenTexture(MODEL_MOONHARVEST_SONGPUEN2, L"Effect\\");
+    gLoadData.AccessModel(MODEL_MOONHARVEST_MOON, L"Data\\Effect\\", L"chysukmoon");
+    gLoadData.OpenTexture(MODEL_MOONHARVEST_MOON, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_ALICE_BUFFSKILL_EFFECT, L"Data\\Effect\\", L"elshildring");
+    gLoadData.OpenTexture(MODEL_ALICE_BUFFSKILL_EFFECT, L"Effect\\");
+    gLoadData.AccessModel(MODEL_ALICE_BUFFSKILL_EFFECT2, L"Data\\Effect\\", L"elshildring2");
+    gLoadData.OpenTexture(MODEL_ALICE_BUFFSKILL_EFFECT2, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_SUMMONER_WRISTRING_EFFECT, L"Data\\Effect\\", L"ringtyperout");
+    gLoadData.OpenTexture(MODEL_SUMMONER_WRISTRING_EFFECT, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_SUMMONER_EQUIP_HEAD_SAHAMUTT, L"Data\\Skill\\", L"sahatail");
+    gLoadData.OpenTexture(MODEL_SUMMONER_EQUIP_HEAD_SAHAMUTT, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_EQUIP_HEAD_NEIL, L"Data\\Skill\\", L"nillsohwanz");
+    gLoadData.OpenTexture(MODEL_SUMMONER_EQUIP_HEAD_NEIL, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_SUMMONER_EQUIP_HEAD_LAGUL, L"Data\\Skill\\", L"lagul_head");
+    gLoadData.OpenTexture(MODEL_SUMMONER_EQUIP_HEAD_LAGUL, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT1, L"Data\\Effect\\", L"Suhwanzin1");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT1, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT11, L"Data\\Effect\\", L"Suhwanzin11");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT11, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT111, L"Data\\Effect\\", L"Suhwanzin111");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT111, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT2, L"Data\\Effect\\", L"Suhwanzin2");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT2, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT22, L"Data\\Effect\\", L"Suhwanzin22");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT22, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT222, L"Data\\Effect\\", L"Suhwanzin222");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT222, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_CASTING_EFFECT4, L"Data\\Effect\\", L"Suhwanzin4");
+    gLoadData.OpenTexture(MODEL_SUMMONER_CASTING_EFFECT4, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_SAHAMUTT, L"Data\\Skill\\", L"summon_sahamutt");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_SAHAMUTT, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL, L"Data\\Skill\\", L"summon_neil");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL, L"Skill\\");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_LAGUL, L"Data\\Skill\\", L"summon_lagul");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_LAGUL, L"Skill\\");
+
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL_NIFE1, L"Data\\Skill\\", L"nelleff_nife01");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL_NIFE1, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL_NIFE2, L"Data\\Skill\\", L"nelleff_nife02");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL_NIFE2, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL_NIFE3, L"Data\\Skill\\", L"nelleff_nife03");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL_NIFE3, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL_GROUND1, L"Data\\Skill\\", L"nell_nifegrund01");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL_GROUND1, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL_GROUND2, L"Data\\Skill\\", L"nell_nifegrund02");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL_GROUND2, L"Skill\\");
+    gLoadData.AccessModel(MODEL_SUMMONER_SUMMON_NEIL_GROUND3, L"Data\\Skill\\", L"nell_nifegrund03");
+    gLoadData.OpenTexture(MODEL_SUMMONER_SUMMON_NEIL_GROUND3, L"Skill\\");
+    gLoadData.AccessModel(MODEL_MOVE_TARGETPOSITION_EFFECT, L"Data\\Effect\\", L"MoveTargetPosEffect");
+    gLoadData.OpenTexture(MODEL_MOVE_TARGETPOSITION_EFFECT, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EFFECT_SAPITRES_ATTACK_1, L"Data\\Effect\\", L"Sapiatttres");
+    gLoadData.OpenTexture(MODEL_EFFECT_SAPITRES_ATTACK_1, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EFFECT_SAPITRES_ATTACK_2, L"Data\\Effect\\", L"Sapiatttres2");
+    gLoadData.OpenTexture(MODEL_EFFECT_SAPITRES_ATTACK_2, L"Effect\\");
+
+    gLoadData.AccessModel(MODEL_RAKLION_BOSS_CRACKEFFECT, L"Data\\Effect\\", L"knight_plancrack_grand");
+    gLoadData.OpenTexture(MODEL_RAKLION_BOSS_CRACKEFFECT, L"Effect\\");
+    gLoadData.AccessModel(MODEL_RAKLION_BOSS_MAGIC, L"Data\\Effect\\", L"serufan_magic");
+    gLoadData.OpenTexture(MODEL_RAKLION_BOSS_MAGIC, L"Effect\\");
+    //Models[MODEL_RAKLION_BOSS_MAGIC].Actions[0].PlaySpeed = 0.005f;
+
+    gLoadData.AccessModel(MODEL_EFFECT_SKURA_ITEM, L"Data\\Effect\\cherryblossom\\", L"Skura_iteam_event");
+
+    gLoadData.AccessModel(MODEL_EFFECT_BROKEN_ICE0, L"Data\\Effect\\", L"ice_stone00");
+    gLoadData.OpenTexture(MODEL_EFFECT_BROKEN_ICE0, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EFFECT_BROKEN_ICE1, L"Data\\Effect\\", L"ice_stone01");
+    gLoadData.OpenTexture(MODEL_EFFECT_BROKEN_ICE1, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EFFECT_BROKEN_ICE2, L"Data\\Effect\\", L"ice_stone02");
+    gLoadData.OpenTexture(MODEL_EFFECT_BROKEN_ICE2, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EFFECT_BROKEN_ICE3, L"Data\\Effect\\", L"ice_stone03");
+    gLoadData.OpenTexture(MODEL_EFFECT_BROKEN_ICE3, L"Effect\\");
+    gLoadData.AccessModel(MODEL_NIGHTWATER_01, L"Data\\Effect\\", L"nightwater01");
+    gLoadData.OpenTexture(MODEL_NIGHTWATER_01, L"Effect\\");
+    gLoadData.AccessModel(MODEL_KNIGHT_PLANCRACK_A, L"Data\\Effect\\", L"knight_plancrack_a");
+    gLoadData.OpenTexture(MODEL_KNIGHT_PLANCRACK_A, L"Effect\\");
+    Models[MODEL_KNIGHT_PLANCRACK_A].Actions[0].PlaySpeed = 0.3f;
+    gLoadData.AccessModel(MODEL_KNIGHT_PLANCRACK_B, L"Data\\Effect\\", L"knight_plancrack_b");
+    gLoadData.OpenTexture(MODEL_KNIGHT_PLANCRACK_B, L"Effect\\");
+    Models[MODEL_KNIGHT_PLANCRACK_B].Actions[0].PlaySpeed = 0.3f;
+    gLoadData.AccessModel(MODEL_EFFECT_FLAME_STRIKE, L"Data\\Effect\\", L"FlameStrike");
+    gLoadData.OpenTexture(MODEL_EFFECT_FLAME_STRIKE, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SWELL_OF_MAGICPOWER, L"Data\\Effect\\", L"magic_powerup");
+    gLoadData.OpenTexture(MODEL_SWELL_OF_MAGICPOWER, L"Effect\\");
+    gLoadData.AccessModel(MODEL_ARROWSRE06, L"Data\\Effect\\", L"arrowsre06");
+    gLoadData.OpenTexture(MODEL_ARROWSRE06, L"Effect\\");
+    gLoadData.AccessModel(MODEL_DOPPELGANGER_SLIME_CHIP, L"Data\\Effect\\", L"slime_chip");
+    gLoadData.OpenTexture(MODEL_DOPPELGANGER_SLIME_CHIP, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EFFECT_UMBRELLA_GOLD, L"Data\\Effect\\", L"japan_gold01");
+    gLoadData.OpenTexture(MODEL_EFFECT_UMBRELLA_GOLD, L"Effect\\");
+    gLoadData.AccessModel(MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE, L"Data\\Effect\\", L"Karanebos_sword_framestrike");
+    gLoadData.OpenTexture(MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE, L"Effect\\");
+    //Models[MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE].Actions[MONSTER01_STOP1].PlaySpeed = 3.0f;
+    gLoadData.AccessModel(MODEL_DEASULER, L"Data\\Monster\\", L"deasther_boomerang");
+    gLoadData.OpenTexture(MODEL_DEASULER, L"Monster\\");
+    gLoadData.AccessModel(MODEL_EFFECT_SD_AURA, L"Data\\Effect\\", L"shield_up");
+    gLoadData.OpenTexture(MODEL_EFFECT_SD_AURA, L"Effect\\");
+    gLoadData.AccessModel(MODEL_WOLF_HEAD_EFFECT, L"Data\\Effect\\", L"wolf_head_effect");
+    gLoadData.OpenTexture(MODEL_WOLF_HEAD_EFFECT, L"Effect\\");
+    LoadBitmap(L"Effect\\sbumb.jpg", BITMAP_SBUMB, GL_LINEAR, GL_REPEAT);
+    gLoadData.AccessModel(MODEL_DOWN_ATTACK_DUMMY_L, L"Data\\Effect\\", L"down_right_punch");
+    gLoadData.OpenTexture(MODEL_DOWN_ATTACK_DUMMY_L, L"Effect\\");
+    gLoadData.AccessModel(MODEL_DOWN_ATTACK_DUMMY_R, L"Data\\Effect\\", L"down_left_punch");
+    gLoadData.OpenTexture(MODEL_DOWN_ATTACK_DUMMY_R, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SHOCKWAVE01, L"Data\\Effect\\", L"shockwave01");
+    gLoadData.OpenTexture(MODEL_SHOCKWAVE01, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SHOCKWAVE02, L"Data\\Effect\\", L"shockwave02");
+    gLoadData.OpenTexture(MODEL_SHOCKWAVE02, L"Effect\\");
+    gLoadData.AccessModel(MODEL_SHOCKWAVE_SPIN01, L"Data\\Effect\\", L"shockwave_spin01");
+    gLoadData.OpenTexture(MODEL_SHOCKWAVE_SPIN01, L"Effect\\");
+    gLoadData.AccessModel(MODEL_WINDFOCE, L"Data\\Effect\\", L"wind_foce");
+    gLoadData.OpenTexture(MODEL_WINDFOCE, L"Effect\\");
+    gLoadData.AccessModel(MODEL_WINDFOCE_MIRROR, L"Data\\Effect\\", L"wind_foce_mirror");
+    gLoadData.OpenTexture(MODEL_WINDFOCE_MIRROR, L"Effect\\");
+    gLoadData.AccessModel(MODEL_WOLF_HEAD_EFFECT2, L"Data\\Effect\\", L"wolf_head_effect2");
+    gLoadData.OpenTexture(MODEL_WOLF_HEAD_EFFECT2, L"skill\\");
+    gLoadData.AccessModel(MODEL_SHOCKWAVE_GROUND01, L"Data\\Effect\\", L"shockwave_ground01");
+    gLoadData.OpenTexture(MODEL_SHOCKWAVE_GROUND01, L"Effect\\");
+    gLoadData.AccessModel(MODEL_DRAGON_KICK_DUMMY, L"Data\\Effect\\", L"dragon_kick_dummy");
+    gLoadData.OpenTexture(MODEL_DRAGON_KICK_DUMMY, L"Effect\\");
+    gLoadData.AccessModel(MODEL_DRAGON_LOWER_DUMMY, L"Data\\Effect\\", L"knight_plancrack_dragon");
+    gLoadData.OpenTexture(MODEL_DRAGON_LOWER_DUMMY, L"Effect\\");
+    gLoadData.AccessModel(MODEL_VOLCANO_OF_MONK, L"Data\\Effect\\", L"volcano_of_monk");
+    gLoadData.OpenTexture(MODEL_VOLCANO_OF_MONK, L"Effect\\");
+    gLoadData.AccessModel(MODEL_VOLCANO_STONE, L"Data\\Effect\\", L"volcano_stone");
+    gLoadData.OpenTexture(MODEL_VOLCANO_STONE, L"Effect\\");
+    LoadBitmap(L"Effect\\force_Pillar.jpg", BITMAP_FORCEPILLAR, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\!SwordEff.jpg", BITMAP_SWORDEFF, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\Damage1.jpg", BITMAP_DAMAGE1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\ground_wind.jpg", BITMAP_GROUND_WIND, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Kwave2.jpg", BITMAP_KWAVE2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Damage2.jpg", BITMAP_DAMAGE2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\volcano_core.jpg", BITMAP_VOLCANO_CORE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\ground_smoke.tga", BITMAP_GROUND_SMOKE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\knightSt_blue.jpg", BITMAP_KNIGHTST_BLUE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    gLoadData.AccessModel(MODEL_PHOENIX_SHOT, L"Data\\Effect\\", L"phoenix_shot_effect");
+    gLoadData.OpenTexture(MODEL_PHOENIX_SHOT, L"Effect\\");
+    gLoadData.AccessModel(MODEL_WINDSPIN02, L"Data\\Effect\\", L"wind_spin02");
+    gLoadData.OpenTexture(MODEL_WINDSPIN02, L"Effect\\");
+    gLoadData.AccessModel(MODEL_WINDSPIN03, L"Data\\Effect\\", L"wind_spin03");
+    gLoadData.OpenTexture(MODEL_WINDSPIN03, L"Effect\\");
+
+    OpenPartModel(MODEL_SWORD_35_WING);
+
+#ifdef ASG_ADD_KARUTAN_MONSTERS
+    // 콘드라 돌조각
+    gLoadData.AccessModel(MODEL_CONDRA_STONE, L"Data\\Monster\\", L"condra_7_stone");
+    gLoadData.OpenTexture(MODEL_CONDRA_STONE, L"Monster\\");
+    gLoadData.AccessModel(MODEL_CONDRA_STONE1, L"Data\\Monster\\", L"condra_7_stone_2");
+    gLoadData.OpenTexture(MODEL_CONDRA_STONE1, L"Monster\\");
+    gLoadData.AccessModel(MODEL_CONDRA_STONE2, L"Data\\Monster\\", L"condra_7_stone_3");
+    gLoadData.OpenTexture(MODEL_CONDRA_STONE2, L"Monster\\");
+    gLoadData.AccessModel(MODEL_CONDRA_STONE3, L"Data\\Monster\\", L"condra_7_stone_4");
+    gLoadData.OpenTexture(MODEL_CONDRA_STONE3, L"Monster\\");
+    gLoadData.AccessModel(MODEL_CONDRA_STONE4, L"Data\\Monster\\", L"condra_7_stone_5");
+    gLoadData.OpenTexture(MODEL_CONDRA_STONE4, L"Monster\\");
+    gLoadData.AccessModel(MODEL_CONDRA_STONE5, L"Data\\Monster\\", L"condra_7_stone_6");
+    gLoadData.OpenTexture(MODEL_CONDRA_STONE5, L"Monster\\");
+
+    gLoadData.AccessModel(MODEL_NARCONDRA_STONE, L"Data\\Monster\\", L"nar_condra_7_stone_1");
+    gLoadData.OpenTexture(MODEL_NARCONDRA_STONE, L"Monster\\");
+    gLoadData.AccessModel(MODEL_NARCONDRA_STONE1, L"Data\\Monster\\", L"nar_condra_7_stone_2");
+    gLoadData.OpenTexture(MODEL_NARCONDRA_STONE1, L"Monster\\");
+    gLoadData.AccessModel(MODEL_NARCONDRA_STONE2, L"Data\\Monster\\", L"nar_condra_7_stone_3");
+    gLoadData.OpenTexture(MODEL_NARCONDRA_STONE2, L"Monster\\");
+    gLoadData.AccessModel(MODEL_NARCONDRA_STONE3, L"Data\\Monster\\", L"nar_condra_7_stone_4");
+    gLoadData.OpenTexture(MODEL_NARCONDRA_STONE3, L"Monster\\");
+#endif	// ASG_ADD_KARUTAN_MONSTERS
+}
+
+#include "Core/Utilities/ReadScript.h"
+
+void SaveWorld(int World)
+{
+    wchar_t WorldName[32];
+    wchar_t FileName[64];
+    mu_swprintf(WorldName, L"World%d", World);
+
+    mu_swprintf(FileName, L"Data2\\%ls\\TerrainLight.jpg", WorldName);
+    SaveTerrainLight(FileName);
+    mu_swprintf(FileName, L"Data2\\%ls\\TerrainHeight.bmp", WorldName);
+    (void)SaveTerrainHeight(FileName);
+    mu_swprintf(FileName, L"Data\\%ls\\Terrain.map", WorldName);
+    SaveTerrainMapping(FileName, World);
+    mu_swprintf(FileName, L"Data\\%ls\\Terrain.att", WorldName);
+    SaveTerrainAttribute(FileName, World);
+    mu_swprintf(FileName, L"Data\\%ls\\Terrain.obj", WorldName);
+    SaveObjects(FileName, World);
+}
+
+void OpenImages()
+{
+    LoadBitmap(L"Interface\\command.jpg", BITMAP_SKILL_INTERFACE + 2);
+    LoadBitmap(L"Interface\\Item_Back01.jpg", BITMAP_INVENTORY);
+    LoadBitmap(L"Interface\\Item_Money.jpg", BITMAP_INVENTORY + 11);
+    LoadBitmap(L"Interface\\Item_box.jpg", BITMAP_INVENTORY + 17);
+    LoadBitmap(L"Interface\\InventoryBox2.jpg", BITMAP_INVENTORY + 18);
+    LoadBitmap(L"Interface\\Trading_line.jpg", BITMAP_INVENTORY + 19);
+    LoadBitmap(L"Interface\\exit_01.jpg", BITMAP_INVENTORY_BUTTON);
+    LoadBitmap(L"Interface\\exit_02.jpg", BITMAP_INVENTORY_BUTTON + 1);
+    LoadBitmap(L"Interface\\accept_box01.jpg", BITMAP_INVENTORY_BUTTON + 10);
+    LoadBitmap(L"Interface\\accept_box02.jpg", BITMAP_INVENTORY_BUTTON + 11);
+    LoadBitmap(L"Interface\\mix_button1.jpg", BITMAP_INVENTORY_BUTTON + 12);
+    LoadBitmap(L"Interface\\mix_button2.jpg", BITMAP_INVENTORY_BUTTON + 13);
+    LoadBitmap(L"Interface\\lock_01.jpg", BITMAP_INVENTORY_BUTTON + 14);
+    LoadBitmap(L"Interface\\lock_02.jpg", BITMAP_INVENTORY_BUTTON + 15);
+    LoadBitmap(L"Interface\\lock_03.jpg", BITMAP_INVENTORY_BUTTON + 16);
+    LoadBitmap(L"Interface\\lock_04.jpg", BITMAP_INVENTORY_BUTTON + 17);
+    LoadCanvasBitmap(L"Interface\\guild.tga", BITMAP_GUILD);
+}
+
+void OpenSounds()
+{
+    bool Enable3DSound = true;
+
+    LoadGameSound(SOUND_WIND01);
+    LoadGameSound(SOUND_RAIN01);
+    LoadGameSound(SOUND_DUNGEON01);
+    LoadGameSound(SOUND_FOREST01);
+    LoadGameSound(SOUND_TOWER01);
+    LoadGameSound(SOUND_WATER01);
+    LoadGameSound(SOUND_DESERT01);
+    //LoadWaveFile(SOUND_BOSS01		    ,"Data\\Sound\\a쿤둔.wav",1);
+    LoadGameSound(SOUND_HUMAN_WALK_GROUND);
+    LoadGameSound(SOUND_HUMAN_WALK_GRASS);
+    LoadGameSound(SOUND_HUMAN_WALK_SNOW);
+    LoadGameSound(SOUND_HUMAN_WALK_SWIM);
+
+    LoadGameSound(SOUND_BIRD01);
+    LoadGameSound(SOUND_BIRD02);
+    LoadGameSound(SOUND_BAT01);
+    LoadGameSound(SOUND_RAT01);
+    LoadGameSound(SOUND_TRAP01);
+    LoadGameSound(SOUND_DOOR01);
+    LoadGameSound(SOUND_DOOR02);
+
+    LoadGameSound(SOUND_HEAVEN01);
+    LoadGameSound(SOUND_THUNDERS01);
+    LoadGameSound(SOUND_THUNDERS02);
+    LoadGameSound(SOUND_THUNDERS03);
+
+    //attack
+    LoadGameSound(SOUND_BRANDISH_SWORD01);
+    LoadGameSound(SOUND_BRANDISH_SWORD02);
+    LoadGameSound(SOUND_BRANDISH_SWORD03);
+    LoadGameSound(SOUND_BOW01);
+    LoadGameSound(SOUND_CROSSBOW01);
+    LoadGameSound(SOUND_MIX01);
+
+    //player
+    LoadGameSound(SOUND_DRINK01);
+    LoadGameSound(SOUND_EAT_APPLE01);
+    LoadGameSound(SOUND_HEART);
+    LoadGameSound(SOUND_GET_ENERGY);
+    LoadGameSound(SOUND_HUMAN_SCREAM01);
+    LoadGameSound(SOUND_HUMAN_SCREAM02);
+    LoadGameSound(SOUND_HUMAN_SCREAM03);
+    LoadGameSound(SOUND_HUMAN_SCREAM04);
+    LoadGameSound(SOUND_FEMALE_SCREAM01);
+    LoadGameSound(SOUND_FEMALE_SCREAM02);
+
+    LoadGameSound(SOUND_DROP_ITEM01);
+    LoadGameSound(SOUND_DROP_GOLD01);
+    LoadGameSound(SOUND_JEWEL01);
+    LoadGameSound(SOUND_GET_ITEM01);
+    //LoadWaveFile(SOUND_SHOUT01    		,"Data\\Sound\\p기합.wav",1);
+
+    //skill
+    LoadGameSound(SOUND_SKILL_DEFENSE);
+    LoadGameSound(SOUND_SKILL_SWORD1);
+    LoadGameSound(SOUND_SKILL_SWORD2);
+    LoadGameSound(SOUND_SKILL_SWORD3);
+    LoadGameSound(SOUND_SKILL_SWORD4);
+    LoadGameSound(SOUND_MONSTER_SHADOWATTACK2);
+
+    LoadGameSound(SOUND_STORM);
+    LoadGameSound(SOUND_EVIL);
+    LoadGameSound(SOUND_MAGIC);
+    LoadGameSound(SOUND_HELLFIRE);
+    LoadGameSound(SOUND_ICE);
+    LoadGameSound(SOUND_FLAME);
+    //LoadWaveFile(SOUND_FLASH            ,"Data\\Sound\\m히드라공격1.wav",2,Enable3DSound);
+    LoadGameSound(SOUND_FLASH);
+
+    LoadGameSound(SOUND_BREAK01);
+    LoadGameSound(SOUND_EXPLOTION01);
+    LoadGameSound(SOUND_METEORITE01);
+    //LoadWaveFile(SOUND_METEORITE02	    ,"Data\\Sound\\e유성.wav",2,Enable3DSound);
+    LoadGameSound(SOUND_THUNDER01);
+
+    LoadGameSound(SOUND_BONE1);
+    LoadGameSound(SOUND_BONE2);
+    LoadGameSound(SOUND_ASSASSIN);
+
+    LoadGameSound(SOUND_ATTACK_MELEE_HIT1);
+    LoadGameSound(SOUND_ATTACK_MELEE_HIT2);
+    LoadGameSound(SOUND_ATTACK_MELEE_HIT3);
+    LoadGameSound(SOUND_ATTACK_MELEE_HIT4);
+    LoadGameSound(SOUND_ATTACK_MELEE_HIT5);
+    LoadGameSound(SOUND_ATTACK_MISSILE_HIT1);
+    LoadGameSound(SOUND_ATTACK_MISSILE_HIT2);
+    LoadGameSound(SOUND_ATTACK_MISSILE_HIT3);
+    LoadGameSound(SOUND_ATTACK_MISSILE_HIT4);
+
+    LoadGameSound(SOUND_FIRECRACKER1);
+    LoadGameSound(SOUND_FIRECRACKER2);
+    LoadGameSound(SOUND_MEDAL);
+    LoadGameSound(SOUND_PHOENIXEXP);
+    //	LoadWaveFile(SOUND_PHOENIXFIRE		,"Data\\Sound\\ePhoenixFire.wav",1,Enable3DSound);
+
+    LoadGameSound(SOUND_RIDINGSPEAR);
+    LoadGameSound(SOUND_RAIDSHOOT);
+    LoadGameSound(SOUND_SWELLLIFE);
+    LoadGameSound(SOUND_PIERCING);
+    LoadGameSound(SOUND_ICEARROW);
+    LoadGameSound(SOUND_TELEKINESIS);
+    LoadGameSound(SOUND_SOULBARRIER);
+    LoadGameSound(SOUND_BLOODATTACK);
+
+    LoadGameSound(SOUND_HIT_GATE);
+    LoadGameSound(SOUND_HIT_GATE2);
+    LoadGameSound(SOUND_HIT_CRISTAL);
+    LoadGameSound(SOUND_DOWN_GATE);
+    LoadGameSound(SOUND_CROW);
+
+    LoadGameSound(SOUND_DEATH_POISON1);
+    LoadGameSound(SOUND_DEATH_POISON2);
+    LoadGameSound(SOUND_SUDDEN_ICE1);
+    LoadGameSound(SOUND_SUDDEN_ICE2);
+    LoadGameSound(SOUND_NUKE1);
+    LoadGameSound(SOUND_NUKE2);
+    LoadGameSound(SOUND_COMBO);
+    LoadGameSound(SOUND_FURY_STRIKE1);
+    LoadGameSound(SOUND_FURY_STRIKE2);
+    LoadGameSound(SOUND_FURY_STRIKE3);
+    LoadGameSound(SOUND_LEVEL_UP);
+    LoadGameSound(SOUND_CHANGE_UP);
+
+    LoadGameSound(SOUND_CHAOS_ENVIR);
+    LoadGameSound(SOUND_CHAOS_END);
+    LoadGameSound(SOUND_CHAOS_FALLING);
+    LoadGameSound(SOUND_CHAOS_FALLING_STONE);
+    LoadGameSound(SOUND_CHAOS_MOB_BOOM01);
+    LoadGameSound(SOUND_CHAOS_MOB_BOOM02);
+    LoadGameSound(SOUND_CHAOS_THUNDER01);
+    LoadGameSound(SOUND_CHAOS_THUNDER02);
+
+    LoadGameSound(SOUND_RUN_DARK_HORSE_1);
+    LoadGameSound(SOUND_RUN_DARK_HORSE_2);
+    LoadGameSound(SOUND_RUN_DARK_HORSE_3);
+    LoadGameSound(SOUND_DARKLORD_PAIN);
+    LoadGameSound(SOUND_DARKLORD_DEAD);
+    LoadGameSound(SOUND_ATTACK_SPEAR);
+    LoadGameSound(SOUND_ATTACK_FIRE_BUST);
+    LoadGameSound(SOUND_ATTACK_FIRE_BUST_EXP);
+    LoadGameSound(SOUND_PART_TELEPORT);
+    LoadGameSound(SOUND_ELEC_STRIKE);
+    LoadGameSound(SOUND_ELEC_STRIKE_READY);
+    LoadGameSound(SOUND_EARTH_QUAKE);
+    LoadGameSound(SOUND_CRITICAL);
+    LoadGameSound(SOUND_DSPIRIT_MISSILE);
+    LoadGameSound(SOUND_DSPIRIT_SHOUT);
+    LoadGameSound(SOUND_DSPIRIT_RUSH);
+
+    LoadGameSound(SOUND_FENRIR_RUN_1);
+    LoadGameSound(SOUND_FENRIR_RUN_2);
+    LoadGameSound(SOUND_FENRIR_RUN_3);
+    LoadGameSound(SOUND_FENRIR_WALK_1);
+    LoadGameSound(SOUND_FENRIR_WALK_2);
+    LoadGameSound(SOUND_FENRIR_DEATH);
+    LoadGameSound(SOUND_FENRIR_IDLE_1);
+    LoadGameSound(SOUND_FENRIR_IDLE_2);
+    LoadGameSound(SOUND_FENRIR_DAMAGE_1);
+    LoadGameSound(SOUND_FENRIR_DAMAGE_2);
+    LoadGameSound(SOUND_FENRIR_SKILL);
+    LoadGameSound(SOUND_JEWEL02);
+
+    LoadGameSound(SOUND_KUNDUN_ITEM_SOUND);
+
+    g_XmasEvent->LoadXmasEventSound();
+    g_NewYearsDayEvent->LoadSound();
+
+    LoadGameSound(SOUND_SHIELDCLASH);
+    LoadGameSound(SOUND_INFINITYARROW);
+    //SOUND_FIRE_SCREAM
+    LoadGameSound(SOUND_FIRE_SCREAM);
+
+    LoadGameSound(SOUND_MOONRABBIT_WALK);
+    LoadGameSound(SOUND_MOONRABBIT_DAMAGE);
+    LoadGameSound(SOUND_MOONRABBIT_DEAD);
+    LoadGameSound(SOUND_MOONRABBIT_EXPLOSION);
+
+    //	LoadWaveFile(SOUND_SUMMON_CASTING,		"Data\\Sound\\eSummon.wav"	,1);
+    LoadGameSound(SOUND_SUMMON_SAHAMUTT);
+    LoadGameSound(SOUND_SUMMON_EXPLOSION);
+    LoadGameSound(SOUND_SUMMON_NEIL);
+    LoadGameSound(SOUND_SUMMON_REQUIEM);
+    LoadGameSound(SOUND_SUMMOM_RARGLE);
+    LoadGameSound(SOUND_SUMMON_SKILL_LIGHTORB);
+    LoadGameSound(SOUND_SUMMON_SKILL_SLEEP);
+    LoadGameSound(SOUND_SUMMON_SKILL_BLIND);
+    LoadGameSound(SOUND_SUMMON_SKILL_THORNS);
+    LoadGameSound(SOUND_SKILL_CHAIN_LIGHTNING);
+    LoadGameSound(SOUND_SKILL_DRAIN_LIFE);
+    LoadGameSound(SOUND_SKILL_WEAKNESS);
+    LoadGameSound(SOUND_SKILL_ENERVATION);
+    LoadGameSound(SOUND_SKILL_BERSERKER);
+    LoadGameSound(SOUND_CHERRYBLOSSOM_EFFECT0);
+    LoadGameSound(SOUND_CHERRYBLOSSOM_EFFECT1);
+    LoadGameSound(SOUND_SKILL_BLOWOFDESTRUCTION);
+    LoadGameSound(SOUND_SKILL_FLAME_STRIKE);
+    LoadGameSound(SOUND_SKILL_GIGANTIC_STORM);
+    LoadGameSound(SOUND_SKILL_LIGHTNING_SHOCK);
+    LoadGameSound(SOUND_SKILL_SWELL_OF_MAGICPOWER);
+    LoadGameSound(SOUND_SKILL_MULTI_SHOT);
+    LoadGameSound(SOUND_SKILL_RECOVER);
+    LoadGameSound(SOUND_SKILL_CAOTIC);
+
+    LoadGameSound(SOUND_XMAS_FIRECRACKER);
+
+    g_09SummerEvent->LoadSound();
+
+    LoadGameSound(SOUND_RAGESKILL_THRUST);
+    LoadGameSound(SOUND_RAGESKILL_THRUST_ATTACK);
+    LoadGameSound(SOUND_RAGESKILL_STAMP);
+    LoadGameSound(SOUND_RAGESKILL_STAMP_ATTACK);
+    LoadGameSound(SOUND_RAGESKILL_GIANTSWING);
+    LoadGameSound(SOUND_RAGESKILL_GIANTSWING_ATTACK);
+    LoadGameSound(SOUND_RAGESKILL_DARKSIDE);
+    LoadGameSound(SOUND_RAGESKILL_DARKSIDE_ATTACK);
+    LoadGameSound(SOUND_RAGESKILL_DRAGONLOWER);
+    LoadGameSound(SOUND_RAGESKILL_DRAGONLOWER_ATTACK);
+    LoadGameSound(SOUND_RAGESKILL_DRAGONKICK);
+    LoadGameSound(SOUND_RAGESKILL_DRAGONKICK_ATTACK);
+    LoadGameSound(SOUND_RAGESKILL_BUFF_1);
+    LoadGameSound(SOUND_RAGESKILL_BUFF_2);
+}
+
+bool OpenFont()
+{
+    InitPath();
+
+    LoadBitmap(L"Interface\\FontInput.tga", BITMAP_FONT, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\FontTest.tga", BITMAP_FONT + 1);
+    LoadBitmap(L"Interface\\Hit.tga", BITMAP_FONT_HIT, GL_NEAREST, GL_CLAMP_TO_EDGE);
+
+    return g_pRenderText->Create(g_hDC);
+}
+
+void SaveMacro(const wchar_t* FileName)
+{
+    FILE* fp = _wfopen(FileName, L"wt");
+    for (int i = 0; i < 10; i++)
+    {
+        fwprintf(fp, L"%ls\n", MacroText[i]);
+    }
+    fclose(fp);
+}
+
+void OpenMacro(const wchar_t* FileName)
+{
+    FILE* fp = _wfopen(FileName, L"rt");
+    if (fp == NULL) return;
+    for (int i = 0; i < 10; i++)
+    {
+        fwscanf(fp, L"%ls", MacroText[i]);
+    }
+    fclose(fp);
+}
+
+extern BOOL g_bGameServerConnected;
+
+void SaveOptions()
+{
+    namespace Hotkeys = GameLogic::Skills::HotkeyConfiguration;
+    // 0 ~ 19 skill hotkey
+    BYTE options[Hotkeys::KeyConfigurationSize]{};
+
+    for (int i = 0; i < Hotkeys::HotkeyCount; ++i)
+    {
+        const int iSkillType = g_pMainFrame->GetSkillHotKey(i);
+        const auto skillNumber =
+            iSkillType != -1 ? static_cast<std::uint16_t>(CharacterAttribute->Skill[iSkillType]) : Hotkeys::FreeHotkey;
+        const auto bytes = Hotkeys::Encode(skillNumber);
+        std::copy(bytes.begin(), bytes.end(), options + i * Hotkeys::BytesPerHotkey);
+    }
+
+    if (g_pOption->IsAutoAttack())
+    {
+        options[20] |= AUTOATTACK_ON;
+    }
+    else
+    {
+        options[20] |= AUTOATTACK_OFF;
+    }
+
+    if (g_pOption->IsWhisperSound())
+    {
+        options[20] |= WHISPER_SOUND_ON;
+    }
+    else
+    {
+        options[20] |= WHISPER_SOUND_OFF;
+    }
+
+    if (g_pOption->IsSlideHelp() == false)
+    {
+        options[20] |= SLIDE_HELP_OFF;
+    }
+
+    options[21] = static_cast<BYTE>((g_pMainFrame->GetItemHotKey(mu::ui::window::HOTKEY_Q) - ITEM_POTION) & 0xFF);
+    options[22] = static_cast<BYTE>((g_pMainFrame->GetItemHotKey(mu::ui::window::HOTKEY_W) - ITEM_POTION) & 0xFF);
+    options[23] = static_cast<BYTE>((g_pMainFrame->GetItemHotKey(mu::ui::window::HOTKEY_E) - ITEM_POTION) & 0xFF);
+
+    BYTE wChatListBoxSize = g_pChatListBox->GetNumberOfLines(g_pChatListBox->GetCurrentMsgType()) / 3;
+    if (g_bUseChatListBox == FALSE)
+        wChatListBoxSize = 0;
+    BYTE wChatListBoxBackAlpha = g_pChatListBox->GetBackAlpha() * 10;
+    options[24] = (((wChatListBoxSize << 4) & 0xF0) | (wChatListBoxBackAlpha & 0x0F)) & 0xFF;
+    options[25] = static_cast<BYTE>((g_pMainFrame->GetItemHotKey(mu::ui::window::HOTKEY_R) - ITEM_POTION) & 0xFF);
+
+    options[26] = g_pMainFrame->GetItemHotKeyLevel(mu::ui::window::HOTKEY_Q);
+    options[27] = g_pMainFrame->GetItemHotKeyLevel(mu::ui::window::HOTKEY_W);
+    options[28] = g_pMainFrame->GetItemHotKeyLevel(mu::ui::window::HOTKEY_E);
+    options[29] = g_pMainFrame->GetItemHotKeyLevel(mu::ui::window::HOTKEY_R);
+
+    SocketClient->ToGameServer()->SendSaveKeyConfiguration(options, sizeof options);
+}
+
+namespace
+{
+bool s_keyConfigurationReceived = false;
+}
+
+void SetKeyConfigurationReceived(bool received)
+{
+    s_keyConfigurationReceived = received;
+}
+
+void SaveOptionsIfInGame()
+{
+    if (SocketClient != nullptr && g_bGameServerConnected && SceneFlag == MAIN_SCENE && s_keyConfigurationReceived)
+    {
+        SaveOptions();
+    }
+}
+
+void OpenLogoSceneData()
+{
+    //image
+    ::LoadBitmap(L"Interface\\cha_bt.tga", BITMAP_LOG_IN);
+    ::LoadBitmap(L"Interface\\server_b2_all.tga", BITMAP_LOG_IN + 1);
+    ::LoadBitmap(L"Interface\\server_b2_loding.jpg", BITMAP_LOG_IN + 2);
+    ::LoadBitmap(L"Interface\\server_deco_all.tga", BITMAP_LOG_IN + 3);
+    ::LoadBitmap(L"Interface\\server_menu_b_all.tga", BITMAP_LOG_IN + 4);
+    ::LoadBitmap(L"Interface\\server_credit_b_all.tga", BITMAP_LOG_IN + 5);
+    ::LoadBitmap(L"Interface\\deco.tga", BITMAP_LOG_IN + 6);
+    ::LoadBitmap(L"Interface\\login_back.tga", BITMAP_LOG_IN + 7);
+    ::LoadBitmap(L"Interface\\login_me.tga", BITMAP_LOG_IN + 8);
+    ::LoadBitmap(L"Interface\\server_ex03.tga", BITMAP_LOG_IN + 11, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\server_ex01.tga", BITMAP_LOG_IN + 12);
+    ::LoadBitmap(L"Interface\\server_ex02.jpg", BITMAP_LOG_IN + 13, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\cr_mu_lo.tga", BITMAP_LOG_IN + 14, GL_LINEAR);
+}
+
+void ReleaseLogoSceneData()
+{
+    for (int i = BITMAP_LOG_IN; i <= BITMAP_LOG_IN_END; ++i)
+        ::DeleteBitmap(i);
+    for (int i = BITMAP_TEMP; i < BITMAP_TEMP + 30; i++)
+        DeleteBitmap(i);
+
+    gMapManager.DeleteObjects();
+    ClearCharacters();
+}
+
+void OpenCharacterSceneData()
+{
+    LoadBitmap(L"Interface\\cha_id.tga", BITMAP_LOG_IN);
+    LoadBitmap(L"Interface\\cha_bt.tga", BITMAP_LOG_IN + 1);
+    LoadBitmap(L"Interface\\deco.tga", BITMAP_LOG_IN + 2);
+    LoadBitmap(L"Interface\\b_create.tga", BITMAP_LOG_IN + 3);
+    LoadBitmap(L"Interface\\server_menu_b_all.tga", BITMAP_LOG_IN + 4);
+    LoadBitmap(L"Interface\\b_connect.tga", BITMAP_LOG_IN + 5);
+    LoadBitmap(L"Interface\\b_delete.tga", BITMAP_LOG_IN + 6);
+    LoadBitmap(L"Interface\\character_ex.tga", BITMAP_LOG_IN + 7);
+    ::LoadBitmap(L"Interface\\server_ex03.tga", BITMAP_LOG_IN + 11, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\server_ex01.tga", BITMAP_LOG_IN + 12);
+    ::LoadBitmap(L"Interface\\server_ex02.jpg", BITMAP_LOG_IN + 13, GL_NEAREST, GL_REPEAT);
+    LoadBitmap(L"Effect\\Impack03.jpg", BITMAP_EXT_LOG_IN + 2);
+    LoadBitmap(L"Logo\\chasellight.jpg", BITMAP_EFFECT);
+
+    int Class = MAX_CLASS;
+
+    for (int i = 4; i < 5; i++)
+        gLoadData.AccessModel(MODEL_LOGO + i, L"Data\\Logo\\", L"Logo", i + 1);
+
+    for (int i = 0; i < Class; i++)
+        gLoadData.AccessModel(MODEL_FACE + i, L"Data\\Logo\\", L"NewFace", i + 1);
+
+    for (int i = 4; i < 5; i++)
+        gLoadData.OpenTexture(MODEL_LOGO + i, L"Logo\\", GL_REPEAT, GL_LINEAR);
+
+    for (int i = 0; i < Class; i++)
+        gLoadData.OpenTexture(MODEL_FACE + i, L"Logo\\");
+
+    for (int i = 0; i < Class; i++)
+    {
+        Models[MODEL_FACE + i].Actions[0].PlaySpeed = 0.3f;
+        Models[MODEL_FACE + i].Actions[1].PlaySpeed = 0.3f;
+    }
+    Models[static_cast<int>(MODEL_FACE) + CLASS_SUMMONER].Actions[0].PlaySpeed = 0.25f;
+}
+
+void ReleaseCharacterSceneData()
+{
+    for (int i = BITMAP_LOG_IN; i <= BITMAP_LOG_IN_END; ++i)
+        ::DeleteBitmap(i);
+
+    for (int i = BITMAP_TEMP; i < BITMAP_EXT_LOG_IN + 7; i++)
+        DeleteBitmap(i);
+
+    gMapManager.DeleteObjects();
+
+    for (int i = 0; i < MAX_CLASS; i++)
+        Models[MODEL_FACE + i].Release();
+
+    ClearCharacters();
+}
+
+// Item data errors stop the start: the game must not run with half-loaded items.
+static bool OpenItemData()
+{
+    std::string errorMessage;
+    if (!g_ItemDataHandler.Load(errorMessage))
+    {
+        StopOnItemDataError(errorMessage);
+        return false;
+    }
+    return true;
+}
+
+// Loads the item data, then shows the problems of the item models, which name
+// the items. After an item data error the game stops; the model problems are
+// only in the log then.
+static void OpenItemDataAndShowModelProblems()
+{
+    if (!OpenItemData())
+    {
+        return;
+    }
+
+    const std::string problems = Data::Items::ModelLoader::TakeProblemMessage();
+    if (!problems.empty())
+    {
+        PopUpErrorCheckMsgBox("Item model error",
+                              problems + "\n\nContinue: keep loading, these items are drawn incompletely.");
+    }
+}
+
+static void OpenBasicDataStep0()
+{
+    // Before the first LoadGameSound: the duel sounds below.
+    OpenSoundData();
+}
+
+static void OpenBasicDataStep1()
+{
+    LoadBitmap(L"Interface\\Cursor.tga", BITMAP_CURSOR, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorPush.tga", BITMAP_CURSOR + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorAttack.tga", BITMAP_CURSOR + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorGet.tga", BITMAP_CURSOR + 3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorTalk.tga", BITMAP_CURSOR + 4, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorRepair.tga", BITMAP_CURSOR + 5, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorLeanAgainst.tga", BITMAP_CURSOR + 6, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorSitDown.tga", BITMAP_CURSOR + 7, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorDontMove.tga", BITMAP_CURSOR + 8, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    //interface
+    LoadBitmap(L"Interface\\ok.jpg", BITMAP_INTERFACE + 11);
+    LoadBitmap(L"Interface\\ok2.jpg", BITMAP_INTERFACE + 12);
+    LoadBitmap(L"Interface\\cancel.jpg", BITMAP_INTERFACE + 13);
+    LoadBitmap(L"Interface\\cancel2.jpg", BITMAP_INTERFACE + 14);
+    LoadBitmap(L"Interface\\win_titlebar.jpg", BITMAP_INTERFACE_EX + 8);
+    LoadBitmap(L"Interface\\win_button.tga", BITMAP_INTERFACE_EX + 9);
+    LoadBitmap(L"Interface\\win_size.jpg", BITMAP_INTERFACE_EX + 10);
+    LoadBitmap(L"Interface\\win_resize.tga", BITMAP_INTERFACE_EX + 11);
+    LoadBitmap(L"Interface\\win_scrollbar.jpg", BITMAP_INTERFACE_EX + 12);
+    LoadBitmap(L"Interface\\win_check.tga", BITMAP_INTERFACE_EX + 13);
+    LoadBitmap(L"Interface\\win_mail.tga", BITMAP_INTERFACE_EX + 14);
+    LoadBitmap(L"Interface\\win_mark.tga", BITMAP_INTERFACE_EX + 15);
+    LoadBitmap(L"Interface\\win_letter.jpg", BITMAP_INTERFACE_EX + 16);
+    LoadBitmap(L"Interface\\win_man.jpg", BITMAP_INTERFACE_EX + 17);
+    LoadBitmap(L"Interface\\win_push.jpg", BITMAP_INTERFACE_EX + 18);
+    LoadBitmap(L"Interface\\win_question.tga", BITMAP_INTERFACE_EX + 20);
+    LoadBitmap(L"Local\\Webzenlogo.jpg", BITMAP_INTERFACE_EX + 22);
+
+#ifdef DUEL_SYSTEM
+    LoadGameSound(SOUND_OPEN_DUELWINDOW);
+    LoadGameSound(SOUND_START_DUEL);
+#endif // DUEL_SYSTEM
+
+    LoadBitmap(L"Interface\\CursorID.tga", BITMAP_INTERFACE_EX + 29);
+    LoadBitmap(L"Interface\\bar.jpg", BITMAP_INTERFACE + 23);
+    LoadBitmap(L"Interface\\back1.jpg", BITMAP_INTERFACE + 24);
+    LoadBitmap(L"Interface\\back2.jpg", BITMAP_INTERFACE + 25);
+    LoadBitmap(L"Interface\\back3.jpg", BITMAP_INTERFACE + 26);
+
+    LoadBitmap(L"Effect\\Fire01.jpg", BITMAP_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);			// GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
+    LoadBitmap(L"Effect\\Fire02.jpg", BITMAP_FIRE + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);			// GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
+    LoadBitmap(L"Effect\\Fire03.jpg", BITMAP_FIRE + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);			// GM3rdChangeUp, GMCrywolf1st,GMHellas,Kanturu 3rd
+    LoadBitmap(L"Effect\\PoundingBall.jpg", BITMAP_POUNDING_BALL, GL_LINEAR, GL_CLAMP_TO_EDGE); // Kanturu 2nd
+    LoadBitmap(L"Effect\\fi01.jpg", BITMAP_ADV_SMOKE, GL_LINEAR, GL_CLAMP_TO_EDGE);		// GM 3rd ChangeUp, CryingWolf2nd
+    LoadBitmap(L"Effect\\fi02.tga", BITMAP_ADV_SMOKE + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);		// GM 3rd ChangeUp, CryingWolf2nd
+    LoadBitmap(L"Effect\\fantaF.jpg", BITMAP_TRUE_FIRE, GL_LINEAR, GL_CLAMP_TO_EDGE);	// GM Aida, GMBattleCastle, ....
+    LoadBitmap(L"Effect\\fantaB.jpg", BITMAP_TRUE_BLUE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\JointSpirit02.jpg", BITMAP_JOINT_SPIRIT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Piercing.jpg", BITMAP_PIERCING, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Monster\\iui06.jpg", BITMAP_ROBE + 6);
+    LoadBitmap(L"Effect\\Magic_b.jpg", BITMAP_MAGIC_EMBLEM);
+    LoadBitmap(L"Player\\dark3chima3.tga", BITMAP_DARKLOAD_SKIRT_3RD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Player\\kaa.tga", BITMAP_DARK_LOAD_SKIRT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\ShockWave.jpg", BITMAP_SHOCK_WAVE, GL_LINEAR);
+    LoadBitmap(L"Effect\\Flame01.jpg", BITMAP_FLAME, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\flare01.jpg", BITMAP_LIGHT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Magic_Ground1.jpg", BITMAP_MAGIC, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Magic_Ground2.jpg", BITMAP_MAGIC + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Magic_Circle1.jpg", BITMAP_MAGIC + 2, GL_LINEAR);
+#ifdef ASG_ADD_INFLUENCE_GROUND_EFFECT
+    LoadBitmap(L"Effect\\guild_ring01.jpg", BITMAP_OUR_INFLUENCE_GROUND, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\enemy_ring02.jpg", BITMAP_ENEMY_INFLUENCE_GROUND, GL_LINEAR, GL_CLAMP_TO_EDGE);
+#endif	// ASG_ADD_INFLUENCE_GROUND_EFFECT
+    LoadBitmap(L"Effect\\Spark02.jpg", BITMAP_SPARK, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Spark03.jpg", BITMAP_SPARK + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\smoke01.jpg", BITMAP_SMOKE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\smoke02.tga", BITMAP_SMOKE + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\smoke05.tga", BITMAP_SMOKE + 4, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\blood01.tga", BITMAP_BLOOD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\blood.tga", BITMAP_BLOOD + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Explotion01.jpg", BITMAP_EXPLOTION, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Skill\\twlighthik01.jpg", BITMAP_TWLIGHT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Skill\\2line_gost.jpg", BITMAP_2LINE_GHOST, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\damage01mono.jpg", BITMAP_DAMAGE_01_MONO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\SwordEff_mono.jpg", BITMAP_SWORD_EFFECT_MONO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\flamestani.jpg", BITMAP_FLAMESTANI, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Effect\\Spark.jpg", BITMAP_SPARK + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firehik02.jpg", BITMAP_FIRE_CURSEDLICH, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\totemgolem_leaf.tga", BITMAP_LEAF_TOTEMGOLEM, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\empact01.jpg", BITMAP_SUMMON_IMPACT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\loungexflow.jpg", BITMAP_SUMMON_SAHAMUTT_EXPLOSION, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\gostmark01.jpg", BITMAP_DRAIN_LIFE_GHOST, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\mzine_typer2.jpg", BITMAP_MAGIC_ZIN, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\shiny05.jpg", BITMAP_SHINY + 6, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\hikorora.jpg", BITMAP_ORORA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\lightmarks.jpg", BITMAP_LIGHT_MARKS, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\cursorpin01.jpg", BITMAP_TARGET_POSITION_EFFECT1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\cursorpin02.jpg", BITMAP_TARGET_POSITION_EFFECT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\smokelines01.jpg", BITMAP_SMOKELINE1, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\smokelines02.jpg", BITMAP_SMOKELINE2, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\smokelines03.jpg", BITMAP_SMOKELINE3, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\lighting_mega01.jpg", BITMAP_LIGHTNING_MEGA1, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\lighting_mega02.jpg", BITMAP_LIGHTNING_MEGA2, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\lighting_mega03.jpg", BITMAP_LIGHTNING_MEGA3, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\firehik01.jpg", BITMAP_FIRE_HIK1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firehik03.jpg", BITMAP_FIRE_HIK3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firehik_mono01.jpg", BITMAP_FIRE_HIK1_MONO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firehik_mono02.jpg", BITMAP_FIRE_HIK2_MONO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firehik_mono03.jpg", BITMAP_FIRE_HIK3_MONO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\clouds3.jpg", BITMAP_RAKLION_CLOUDS, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\icenightlight.jpg", BITMAP_IRONKNIGHT_BODY_BRIGHT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    g_XmasEvent->LoadXmasEventEffect();
+
+    LoadBitmap(L"Skill\\younghtest1.tga", BITMAP_GM_HAIR_1);
+    LoadBitmap(L"Skill\\younghtest3.tga", BITMAP_GM_HAIR_3);
+    LoadBitmap(L"Skill\\gmmzine.jpg", BITMAP_GM_AURORA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\explotion01mono.jpg", BITMAP_EXPLOTION_MONO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\Success_kantru.tga", BITMAP_KANTURU_SUCCESS, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\Failure_kantru.tga", BITMAP_KANTURU_FAILED, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\MonsterCount.tga", BITMAP_KANTURU_COUNTER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Clud64.jpg", BITMAP_CLUD64, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\clouds.jpg", BITMAP_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Skill\\SwordEff.jpg", BITMAP_BLUE_BLUR, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Impack03.jpg", BITMAP_IMPACT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\ScolTail.jpg", BITMAP_SCOLPION_TAIL, GL_LINEAR);
+    LoadBitmap(L"Effect\\FireSnuff.jpg", BITMAP_FIRE_SNUFF, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\coll.jpg", BITMAP_SPOT_WATER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\BowE.jpg", BITMAP_DS_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Shockwave.jpg", BITMAP_DS_SHOCK, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\DinoE.jpg", BITMAP_EXPLOTION + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Shiny01.jpg", BITMAP_SHINY, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Shiny02.jpg", BITMAP_SHINY + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Shiny03.jpg", BITMAP_SHINY + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\eye01.jpg", BITMAP_SHINY + 3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\ring.jpg", BITMAP_SHINY + 4, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\shiny04.jpg", BITMAP_SHINY + 5, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Chrome01.jpg", BITMAP_CHROME, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\blur01.jpg", BITMAP_BLUR, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\bab2.jpg", BITMAP_CHROME + 1, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\motion_blur.jpg", BITMAP_BLUR + 1, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\motion_blur_r.jpg", BITMAP_BLUR + 2, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\motion_mono.jpg", BITMAP_BLUR + 3, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\motion_blur_r3.jpg", BITMAP_BLUR + 6, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\gra.jpg", BITMAP_BLUR + 7, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\spinmark01.jpg", BITMAP_BLUR + 8, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\flamestani.jpg", BITMAP_BLUR + 9, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\sword_blur.jpg", BITMAP_BLUR + 10, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\joint_sword_red.jpg", BITMAP_BLUR + 11, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\motion_blur_r2.jpg", BITMAP_BLUR + 12, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\motion_blur_r3.jpg", BITMAP_BLUR + 13, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\blur02.jpg", BITMAP_BLUR2, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\lightning2.jpg", BITMAP_LIGHTNING + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Thunder01.jpg", BITMAP_ENERGY, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\Spark01.jpg", BITMAP_JOINT_SPARK, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\JointThunder01.jpg", BITMAP_JOINT_THUNDER, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\JointSpirit01.jpg", BITMAP_JOINT_SPIRIT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\JointLaser01.jpg", BITMAP_JOINT_ENERGY, GL_LINEAR);
+    LoadBitmap(L"Effect\\JointEnergy01.jpg", BITMAP_JOINT_HEALING, GL_LINEAR);
+    LoadBitmap(L"Effect\\JointLaser02.jpg", BITMAP_JOINT_LASER + 1, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Monster\\iui03.jpg", BITMAP_JANUSEXT, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Monster\\magic_H.tga", BITMAP_PHO_R_HAIR, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Item\\t_lower_14m.tga", BITMAP_PANTS_G_SOUL, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Skill\\Skull.jpg", BITMAP_SKULL, GL_NEAREST);
+    LoadBitmap(L"Effect\\motion_blur_r2.jpg", BITMAP_JOINT_FORCE, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Effect\\Fire04.jpg", BITMAP_FIRECRACKER, GL_LINEAR);
+    LoadBitmap(L"Effect\\Flare.jpg", BITMAP_FLARE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Effect\\Chrome02.jpg", BITMAP_CHROME2, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Chrome03.jpg", BITMAP_CHROME3, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Chrome06.jpg", BITMAP_CHROME6, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Chrome07.jpg", BITMAP_CHROME7, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\energy01.jpg", BITMAP_CHROME_ENERGY, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\energy02.jpg", BITMAP_CHROME_ENERGY2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Effect\\firecracker0001.jpg", BITMAP_FIRECRACKER0001, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firecracker0002.jpg", BITMAP_FIRECRACKER0002, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firecracker0003.jpg", BITMAP_FIRECRACKER0003, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firecracker0004.jpg", BITMAP_FIRECRACKER0004, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firecracker0005.jpg", BITMAP_FIRECRACKER0005, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firecracker0006.jpg", BITMAP_FIRECRACKER0006, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\firecracker0007.jpg", BITMAP_FIRECRACKER0007, GL_NEAREST, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\shiny05.jpg", BITMAP_SHINY + 5, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Effect\\partCharge1\\bujuckline.jpg", BITMAP_LUCKY_SEAL_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Item\\nfm03.jpg", BITMAP_BLUECHROME, GL_NEAREST, GL_REPEAT);
+    LoadBitmap(L"Effect\\flareBlue.jpg", BITMAP_FLARE_BLUE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\NSkill.jpg", BITMAP_FLARE_FORCE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Flare02.jpg", BITMAP_FLARE + 1, GL_LINEAR, GL_REPEAT);
+    LoadBitmap(L"Monster\\King11.jpg", BITMAP_WHITE_WIZARD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\Kni000.jpg", BITMAP_DEST_ORC_WAR0, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\Kni011.jpg", BITMAP_DEST_ORC_WAR1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\Kni022.jpg", BITMAP_DEST_ORC_WAR2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Skill\\pinkWave.jpg", BITMAP_PINK_WAVE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\flareRed.jpg", BITMAP_FLARE_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Fire05.jpg", BITMAP_FIRE + 3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Hole.jpg", BITMAP_HOLE, GL_LINEAR, GL_REPEAT);
+    //	LoadBitmap( "Monster\\mop011.jpg"        , BITMAP_OTHER_SKIN,    GL_LINEAR, GL_REPEAT );
+    LoadBitmap(L"Effect\\WATERFALL1.jpg", BITMAP_WATERFALL_1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\WATERFALL2.jpg", BITMAP_WATERFALL_2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\WATERFALL3.jpg", BITMAP_WATERFALL_3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\WATERFALL4.jpg", BITMAP_WATERFALL_4, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\WATERFALL5.jpg", BITMAP_WATERFALL_5, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    /*
+    LoadBitmap(L"Interface\\in_bar.tga"		, BITMAP_MVP_INTERFACE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_bar2.jpg"		, BITMAP_MVP_INTERFACE + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_deco.tga"		, BITMAP_MVP_INTERFACE + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main.tga"		, BITMAP_MVP_INTERFACE + 3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_icon_bal1.tga"		, BITMAP_MVP_INTERFACE + 4, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_icon_dl1.tga"		, BITMAP_MVP_INTERFACE + 5, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_icon_dl2.tga"		, BITMAP_MVP_INTERFACE + 6, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_number1.tga"		, BITMAP_MVP_INTERFACE + 7, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_number2.tga"		, BITMAP_MVP_INTERFACE + 8, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main2.tga"		, BITMAP_MVP_INTERFACE + 9, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_failure.tga"		, BITMAP_MVP_INTERFACE + 10, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_success.tga"		, BITMAP_MVP_INTERFACE + 11, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\t_main.tga"		, BITMAP_MVP_INTERFACE + 12, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_no1.tga"		, BITMAP_MVP_INTERFACE + 13, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_no2.tga"		, BITMAP_MVP_INTERFACE + 14, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_no3.tga"		, BITMAP_MVP_INTERFACE + 15, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_ok1.tga"		, BITMAP_MVP_INTERFACE + 16, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_ok2.tga"		, BITMAP_MVP_INTERFACE + 17, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_ok3.tga"		, BITMAP_MVP_INTERFACE + 18, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_yes1.tga"		, BITMAP_MVP_INTERFACE + 19, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_yes2.tga"		, BITMAP_MVP_INTERFACE + 20, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_b_yes3.tga"		, BITMAP_MVP_INTERFACE + 21, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_main.tga"		, BITMAP_MVP_INTERFACE + 22, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_number1_1.tga"		, BITMAP_MVP_INTERFACE + 23, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_number2_1.tga"		, BITMAP_MVP_INTERFACE + 24, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\in_main_number0_2.tga"		, BITMAP_MVP_INTERFACE + 25, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_table.tga"		, BITMAP_MVP_INTERFACE + 26, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_rank.tga"		, BITMAP_MVP_INTERFACE + 27, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_D.tga"		, BITMAP_MVP_INTERFACE + 28, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_C.tga"		, BITMAP_MVP_INTERFACE + 29, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_B.tga"		, BITMAP_MVP_INTERFACE + 30, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_A.tga"		, BITMAP_MVP_INTERFACE + 31, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_S.tga"		, BITMAP_MVP_INTERFACE + 32, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    //icon_Rank_0
+    LoadBitmap(L"Interface\\icon_Rank_0.tga"		, BITMAP_MVP_INTERFACE + 33, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_1.tga"		, BITMAP_MVP_INTERFACE + 34, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_2.tga"		, BITMAP_MVP_INTERFACE + 35, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_3.tga"		, BITMAP_MVP_INTERFACE + 36, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_4.tga"		, BITMAP_MVP_INTERFACE + 37, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_5.tga"		, BITMAP_MVP_INTERFACE + 38, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_6.tga"		, BITMAP_MVP_INTERFACE + 39, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_7.tga"		, BITMAP_MVP_INTERFACE + 40, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_8.tga"		, BITMAP_MVP_INTERFACE + 41, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_9.tga"		, BITMAP_MVP_INTERFACE + 42, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\icon_Rank_exp.tga"		, BITMAP_MVP_INTERFACE + 43, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\m_main_rank.tga"		, BITMAP_MVP_INTERFACE + 44, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    */
+    //m_main_rank
+    //icon_Rank_exp
+    LoadBitmap(L"Interface\\BattleSkill.tga", BITMAP_INTERFACE_EX + 34);
+    LoadBitmap(L"Effect\\Flashing.jpg", BITMAP_FLASH, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\senatusmap.jpg", BITMAP_INTERFACE_EX + 35);
+    LoadBitmap(L"Interface\\gate_button2.jpg", BITMAP_INTERFACE_EX + 36);
+    LoadBitmap(L"Interface\\gate_button1.jpg", BITMAP_INTERFACE_EX + 37);
+    LoadBitmap(L"Interface\\suho_button2.jpg", BITMAP_INTERFACE_EX + 38);
+    LoadBitmap(L"Interface\\suho_button1.jpg", BITMAP_INTERFACE_EX + 39);
+    LoadBitmap(L"Interface\\DoorCL.jpg", BITMAP_INTERFACE_EX + 40);
+    LoadBitmap(L"Interface\\DoorOP.jpg", BITMAP_INTERFACE_EX + 41);
+    //OpenJpeg( "Effect\\FireSnuff.jpg"       , BITMAP_FIRE_SNUFF,    GL_LINEAR, GL_CLAMP_TO_EDGE );
+    LoadCanvasBitmap(L"Object31\\Flag.tga", BITMAP_INTERFACE_MAP + 0, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\CursorAttack2.tga", BITMAP_CURSOR2);
+    LoadBitmap(L"Effect\\Cratered.tga", BITMAP_CRATER);
+    LoadBitmap(L"Effect\\FormationMark.tga", BITMAP_FORMATION_MARK);
+    LoadBitmap(L"Effect\\Plus.tga", BITMAP_PLUS);
+    LoadBitmap(L"Effect\\eff_lighting.jpg", BITMAP_FENRIR_THUNDER);
+    LoadBitmap(L"Effect\\eff_lightinga01.jpg", BITMAP_FENRIR_FOOT_THUNDER1);
+    LoadBitmap(L"Effect\\eff_lightinga02.jpg", BITMAP_FENRIR_FOOT_THUNDER2);
+    LoadBitmap(L"Effect\\eff_lightinga03.jpg", BITMAP_FENRIR_FOOT_THUNDER3);
+    LoadBitmap(L"Effect\\eff_lightinga04.jpg", BITMAP_FENRIR_FOOT_THUNDER4);
+    LoadBitmap(L"Effect\\eff_lightinga05.jpg", BITMAP_FENRIR_FOOT_THUNDER5);
+    LoadBitmap(L"Interface\\Progress_Back.jpg", BITMAP_INTERFACE_EX + 42);
+    LoadBitmap(L"Interface\\Progress.jpg", BITMAP_INTERFACE_EX + 43);
+    LoadBitmap(L"Effect\\Inferno.jpg", BITMAP_INFERNO, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Lava.jpg", BITMAP_LAVA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Interface\\frame.tga", BITMAP_INTERFACE_MAP + 3);
+    LoadBitmap(L"Interface\\i_attack.tga", BITMAP_INTERFACE_MAP + 4);
+    LoadBitmap(L"Interface\\i_defense.tga", BITMAP_INTERFACE_MAP + 5);
+    LoadBitmap(L"Interface\\i_wait.tga", BITMAP_INTERFACE_MAP + 6);
+    LoadBitmap(L"Interface\\b_command01.jpg", BITMAP_INTERFACE_MAP + 8);
+    LoadBitmap(L"Interface\\b_command02.jpg", BITMAP_INTERFACE_MAP + 9);
+    LoadBitmap(L"Interface\\b_group02.jpg", BITMAP_INTERFACE_MAP + 10);
+    LoadBitmap(L"Interface\\b_zoomout01.jpg", BITMAP_INTERFACE_MAP + 11);
+    LoadBitmap(L"Interface\\hourglass.tga", BITMAP_INTERFACE_MAP + 7);
+    LoadBitmap(L"Interface\\dot.tga", BITMAP_INTERFACE_EX + 44);
+    LoadBitmap(L"Object9\\Impack03.jpg", BITMAP_LIGHT + 1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\buserbody_r.jpg", BITMAP_BERSERK_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\busersword_r.jpg", BITMAP_BERSERK_WP_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    //	LoadBitmap(L"Monster\\gigantiscorn_R.jpg", BITMAP_GIGANTIS_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\bladeeff2_r.jpg", BITMAP_BLADEHUNTER_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\illumi_R.jpg", BITMAP_TWINTAIL_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\prsona_R.jpg", BITMAP_PRSONA_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\prsonass_R.jpg", BITMAP_PRSONA_EFFECT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"effect\\water.jpg", BITMAP_TWINTAIL_WATER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\cra_04.jpg", BITMAP_LIGHT + 2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\Impack01.jpg", BITMAP_LIGHT + 3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Interface\\message_ok_b_all.tga", BITMAP_BUTTON);
+    ::LoadBitmap(L"Interface\\loding_cancel_b_all.tga", BITMAP_BUTTON + 1);
+    ::LoadBitmap(L"Interface\\message_close_b_all.tga", BITMAP_BUTTON + 2);
+    ::LoadBitmap(L"Interface\\message_back.tga", BITMAP_MESSAGE_WIN);
+    ::LoadBitmap(L"Interface\\delete_secret_number.tga", BITMAP_MSG_WIN_INPUT);
+    ::LoadBitmap(L"Interface\\op1_stone.jpg", BITMAP_SYS_WIN, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\op1_back1.tga", BITMAP_SYS_WIN + 1);
+    ::LoadBitmap(L"Interface\\op1_back2.tga", BITMAP_SYS_WIN + 2);
+    ::LoadBitmap(L"Interface\\op1_back3.jpg", BITMAP_SYS_WIN + 3, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\op1_back4.jpg", BITMAP_SYS_WIN + 4, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\op1_b_all.tga", BITMAP_TEXT_BTN);
+    ::LoadBitmap(L"Interface\\op2_back1.tga", BITMAP_OPTION_WIN);
+    ::LoadBitmap(L"Interface\\op2_ch.tga", BITMAP_CHECK_BTN);
+    ::LoadBitmap(L"Interface\\op2_volume3.tga", BITMAP_SLIDER);
+    ::LoadBitmap(L"Interface\\op2_volume2.jpg", BITMAP_SLIDER + 1, GL_NEAREST, GL_REPEAT);
+    ::LoadBitmap(L"Interface\\op2_volume1.tga", BITMAP_SLIDER + 2);
+    ::LoadBitmap(L"Effect\\clouds2.jpg", BITMAP_EVENT_CLOUD, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\pin_lights.jpg", BITMAP_PIN_LIGHT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\deasuler_cloth.tga", BITMAP_DEASULER_CLOTH, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Item\\soketmagic_stape02.jpg", BITMAP_SOCKETSTAFF, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\lightmarks.jpg", BITMAP_LIGHTMARKS, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Effect\\lightmarks.jpg", BITMAP_LIGHTMARKS_FOREIGN, GL_LINEAR, GL_CLAMP_TO_EDGE);
+}
+
+static void OpenBasicDataStep2()
+{
+    ::LoadBitmap(L"Item\\partCharge1\\entrance_R.jpg", BITMAP_FREETICKET_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\juju_R.jpg", BITMAP_CHAOSCARD_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Item\\partCharge1\\monmark01a.jpg", BITMAP_LUCKY_SEAL_EFFECT43, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\monmark02a.jpg", BITMAP_LUCKY_SEAL_EFFECT44, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\monmark03a.jpg", BITMAP_LUCKY_SEAL_EFFECT45, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Item\\partCharge1\\bujuck01alpa.jpg", BITMAP_LUCKY_CHARM_EFFECT53, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\expensiveitem01_R.jpg", BITMAP_RAREITEM1_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\expensiveitem02a_R.jpg", BITMAP_RAREITEM2_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\expensiveitem02b_R.jpg", BITMAP_RAREITEM3_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\expensiveitem03a_R.jpg", BITMAP_RAREITEM4_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge1\\expensiveitem03b_R.jpg", BITMAP_RAREITEM5_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Item\\partCharge3\\alicecard_R.tga", BITMAP_CHARACTERCARD_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Item\\Ingameshop\\kacama_R.jpg", BITMAP_CHARACTERCARD_R_MA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\Ingameshop\\kacada_R.jpg", BITMAP_CHARACTERCARD_R_DA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Item\\partCharge3\\jujug_R.jpg", BITMAP_NEWCHAOSCARD_GOLD_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge3\\jujul_R.jpg", BITMAP_NEWCHAOSCARD_RARE_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\partCharge3\\jujum_R.jpg", BITMAP_NEWCHAOSCARD_MINI_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Effect\\cherryblossom\\sakuras01.jpg", BITMAP_CHERRYBLOSSOM_EVENT_PETAL, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Effect\\cherryblossom\\sakuras02.jpg", BITMAP_CHERRYBLOSSOM_EVENT_FLOWER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"Object39\\k_effect_01.JPG", BITMAP_KANTURU_2ND_EFFECT1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\deathbeamstone_R.jpg", BITMAP_ITEM_EFFECT_DBSTONE_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\hellhorn_R.jpg", BITMAP_ITEM_EFFECT_HELLHORN_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\phoenixfeather_R.tga", BITMAP_ITEM_EFFECT_PFEATHER_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\Deye_R.jpg", BITMAP_ITEM_EFFECT_DEYE_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Item\\wing3chaking2.jpg", BITMAP_ITEM_NIGHT_3RDWING_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"NPC\\lumi.jpg", BITMAP_CURSEDTEMPLE_NPC_MESH_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"item\\songko2_R.jpg", BITMAP_CURSEDTEMPLE_HOLYITEM_MESH_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"skill\\unitedsoldier_wing.tga", BITMAP_CURSEDTEMPLE_ALLIED_PHYSICSCLOTH);
+    LoadBitmap(L"skill\\illusionistcloth.tga", BITMAP_CURSEDTEMPLE_ILLUSION_PHYSICSCLOTH);
+    LoadBitmap(L"effect\\masker.jpg", BITMAP_CURSEDTEMPLE_EFFECT_MASKER, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"effect\\wind01.jpg", BITMAP_CURSEDTEMPLE_EFFECT_WIND, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Interface\\menu01_new2_SD.jpg", BITMAP_INTERFACE_EX + 46);
+
+#ifdef ASG_ADD_GENS_SYSTEM
+    std::wstring strFileName = L"Local\\" + g_strSelectedML + L"\\ImgsMapName\\MapNameAddStrife.tga";
+    ::LoadBitmap(strFileName.c_str(), BITMAP_INTERFACE_EX + 47);
+#endif	// ASG_ADD_GENS_SYSTEM
+
+#ifdef ASG_ADD_GENS_MARK
+    ::LoadBitmap(L"Interface\\Gens_mark_D_new.tga", BITMAP_GENS_MARK_DUPRIAN);
+    ::LoadBitmap(L"Interface\\Gens_mark_V_new.tga", BITMAP_GENS_MARK_BARNERT);
+#endif	// ASG_ADD_GENS_MARK
+
+    LoadBitmap(L"Monster\\serufanarm_R.jpg", BITMAP_SERUFAN_ARM_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\serufanwand_R.jpg", BITMAP_SERUFAN_WAND_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"npc\\santa.jpg", BITMAP_GOOD_SANTA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"npc\\santa_baggage.jpg", BITMAP_GOOD_SANTA_BAGGAGE, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+#ifdef PJH_ADD_PANDA_CHANGERING
+    LoadBitmap(L"Item\\pandabody_R.jpg", BITMAP_PANDABODY_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+#endif //PJH_ADD_PANDA_CHANGERING
+
+    LoadBitmap(L"Monster\\DGicewalker_body.jpg", BITMAP_DOPPELGANGER_ICEWALKER0, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\DGicewalker_R.jpg", BITMAP_DOPPELGANGER_ICEWALKER1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Monster\\Snake1.jpg", BITMAP_DOPPELGANGER_SNAKE01, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"NPC\\goldboit.jpg", BITMAP_DOPPELGANGER_GOLDENBOX1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"NPC\\goldline.jpg", BITMAP_DOPPELGANGER_GOLDENBOX2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    //BITMAP_LIGHT_RED
+    LoadBitmap(L"effect\\flare01_red.jpg", BITMAP_LIGHT_RED, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"effect\\gra.jpg", BITMAP_GRA, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"effect\\ring_of_gradation.jpg", BITMAP_RING_OF_GRADATION, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Interface\\InGameShop\\ingame_pack_check.tga", BITMAP_IGS_CHECK_BUTTON, GL_LINEAR);
+    LoadBitmap(L"Monster\\AssassinLeader_body_R.jpg", BITMAP_ASSASSIN_EFFECT1, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Item\\partCharge8\\rareitem_ticket_7_body.jpg", BITMAP_RAREITEM7, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\rareitem_ticket_8_body.jpg", BITMAP_RAREITEM8, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\rareitem_ticket_9_body.jpg", BITMAP_RAREITEM9, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\rareitem_ticket_10_body.jpg", BITMAP_RAREITEM10, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\rareitem_ticket_11_body.jpg", BITMAP_RAREITEM11, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\rareitem_ticket_12_body.jpg", BITMAP_RAREITEM12, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    LoadBitmap(L"Item\\partCharge8\\DoppelCard.jpg", BITMAP_DOPPLEGANGGER_FREETICKET, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\BarcaCard.jpg", BITMAP_BARCA_FREETICKET, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\partCharge8\\Barca7Card.jpg", BITMAP_BARCA7TH_FREETICKET, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+#ifdef LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
+    LoadBitmap(L"Item\\ork_cham_R.jpg", BITMAP_ORK_CHAM_LAYER_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    //LoadBitmap(L"Item\\maple_cham_R.jpg",			BITMAP_MAPLE_CHAM_LAYER_R,			GL_LINEAR, GL_CLAMP_TO_EDGE);
+    LoadBitmap(L"Item\\goldenork_cham_R.jpg", BITMAP_GOLDEN_ORK_CHAM_LAYER_R, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    //LoadBitmap(L"Item\\goldenmaple_cham_R.jpg",	BITMAP_GOLDEN_MAPLE_CHAM_LAYER_R,	GL_LINEAR, GL_CLAMP_TO_EDGE);
+#endif //LJH_ADD_ITEMS_EQUIPPED_FROM_INVENTORY_SYSTEM_PART_2
+
+    ::LoadBitmap(L"Monster\\BoneSE.jpg", BITMAP_BONE_SCORPION_SKIN_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Monster\\KryptaBall2.jpg", BITMAP_KRYPTA_BALL_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Monster\\bora_golem_effect.jpg", BITMAP_CONDRA_SKIN_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Monster\\bora_golem2_effect.jpg", BITMAP_CONDRA_SKIN_EFFECT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Monster\\king_golem01_effect.jpg", BITMAP_NARCONDRA_SKIN_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Monster\\king_golem02_effect.jpg", BITMAP_NARCONDRA_SKIN_EFFECT2, GL_LINEAR, GL_CLAMP_TO_EDGE);
+    ::LoadBitmap(L"Monster\\king_golem03_effect.jpg", BITMAP_NARCONDRA_SKIN_EFFECT3, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+    ::LoadBitmap(L"NPC\\voloE.jpg", BITMAP_VOLO_SKIN_EFFECT, GL_LINEAR, GL_CLAMP_TO_EDGE);
+
+
+    g_ErrorReport.Write(L"> First Load Files OK.\r\n");
+
+    OpenPlayers();
+}
+
+static void OpenBasicDataStep3()
+{
+    OpenPlayerTextures();
+}
+
+static void OpenBasicDataStep4()
+{
+    OpenItems();
+    OpenEffectTypeData();
+    OpenModelFileData();
+}
+
+static void OpenBasicDataStep5()
+{
+    OpenItemTextures();
+    Render::Items::Looks::PrepareTextures();
+}
+
+static void OpenBasicDataStep6()
+{
+    OpenSkills();
+}
+
+static void OpenBasicDataStep7()
+{
+    OpenImages();
+}
+
+static void OpenBasicDataStep8()
+{
+    OpenSounds();
+}
+
+static void OpenBasicDataStep9()
+{
+    wchar_t Text[100];
+
+    OpenServerList();
+
+    // NPC dialog text used to live in Data\Local\<lang>\Dialog_<lang>.bmd
+    // and was loaded into g_DialogScript here. The text and answer labels
+    // now live in I18N::Dialog (generated from src/Localization/Dialog.*.resx),
+    // and the structural branching data lives in
+    // GameLogic::Quests::Dialog::GetEntry, so there is nothing to load at
+    // runtime any more.
+
+    OpenItemDataAndShowModelProblems();
+
+    mu_swprintf(Text, L"Data\\Local\\%ls\\movereq_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
+    SEASON3B::CMoveCommandData::OpenMoveReqScript(Text);
+
+    OpenMonsterData();
+    OpenMapData();
+    OpenBuffData();
+
+    mu_swprintf(Text, L"Data\\Local\\%ls\\Quest_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
+    g_csQuest.OpenQuestScript(Text);
+
+    mu_swprintf(Text, L"Data\\Local\\%ls\\Skill_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
+    g_SkillDataHandler.Load(Text);
+
+    mu_swprintf(Text, L"Data\\Local\\%ls\\SocketItem_%ls.bmd", g_strSelectedML.c_str(), g_strSelectedML.c_str());
+    g_SocketItemMgr.OpenSocketItemScript(Text);
+
+    OpenMacro(L"Data\\Macro.txt");
+
+    g_csItemOption.OpenItemSetScript();
+
+    g_QuestMng.LoadQuestScript();
+
+    OpenGateScript(L"Data\\Gate.bmd");
+
+    g_MixRecipeMgr.LoadData();
+
+    OpenFilterFile(L"Data\\Local\\Filter.bmd");
+
+    OpenNameFilterFile(L"Data\\Local\\FilterName.bmd");
+
+    g_pMasterLevelInterface->OpenMasterSkillTreeData(L"Data\\Local\\MasterSkillTreeData.bmd");
+    g_pMasterLevelInterface->OpenMasterSkillTooltip(L"Data\\Local\\Eng\\MasterSkillTooltip_eng.bmd");
+}
+
+static void OpenBasicDataStep10()
+{
+    LoadGameSound(SOUND_TITLE01);
+    LoadGameSound(SOUND_MENU01);
+    LoadGameSound(SOUND_CLICK01);
+    LoadGameSound(SOUND_ERROR01);
+    LoadGameSound(SOUND_INTERFACE01);
+
+    LoadGameSound(SOUND_REPAIR);
+    LoadGameSound(SOUND_WHISPER);
+
+    LoadGameSound(SOUND_FRIEND_CHAT_ALERT);
+    LoadGameSound(SOUND_FRIEND_MAIL_ALERT);
+    LoadGameSound(SOUND_FRIEND_LOGIN_ALERT);
+
+    LoadGameSound(SOUND_RING_EVENT_READY);
+    LoadGameSound(SOUND_RING_EVENT_START);
+    LoadGameSound(SOUND_RING_EVENT_END);
+}
+
+// The startup data, a step at a time: the title screen draws its progress between steps.
+std::vector<std::function<void()>> OpenBasicDataSteps()
+{
+    return {&OpenBasicDataStep0, &OpenBasicDataStep1, &OpenBasicDataStep2, &OpenBasicDataStep3,
+            &OpenBasicDataStep4, &OpenBasicDataStep5, &OpenBasicDataStep6, &OpenBasicDataStep7,
+            &OpenBasicDataStep8, &OpenBasicDataStep9, &OpenBasicDataStep10};
+}
+
+void ReleaseMainData()
+{
+    gMapManager.DeleteObjects();
+    DeleteNpcs();
+    DeleteMonsters();
+    ClearItems();
+    ClearCharacters();
+}

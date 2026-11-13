@@ -1,0 +1,2004 @@
+﻿//////////////////////////////////////////////////////////////////////////
+//  GMBattleCastle.cpp
+//////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "Core/Utilities/Random.h"
+#include "Network/Server/WSclient.h"
+#include "UI/Core/UIManager.h"
+#include "Audio/DSPlaySound.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Render/Renderer/MuRenderer.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Scenes/SceneCore.h"
+#include "Render/Effects/ZzzEffect.h"
+#include "Engine/AI/ZzzAI.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "Engine/Physics/PhysicsManager.h"
+#include "Character/CSParts.h"
+
+#include "World/MapInfra/MapManager.h"
+#include "Data/GameData/MonsterData/MonsterAnimations.h"
+#include "Data/GameData/MonsterData/MonsterSetup.h"
+#include "GameLogic/Monsters/MonsterSetupApply.h"
+#include "World/GameMaps/MonsterSpawnWorld.h"
+#include "GameLogic/Pets/GIPetManager.h"
+#include "Render/Models/BoneManager.h"
+
+#include "Guild/GuildCache.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Camera/CameraProjection.h"
+#include "UI/Scaling/UITransform.h"
+#include "Render/Effects/EffectDraw.h"
+
+extern  int     WaterTextureNumber;
+extern  char* NUM_MUSIC;
+
+namespace battleCastle
+{
+    typedef struct
+    {
+        vec3_t  m_vPosition;
+        BYTE    m_byBuildTime;
+    } BuildTime;
+
+    static  BYTE    g_byGuardAI = 0;
+    static  bool    g_bBeGate = false;
+    static  BYTE    g_byGateLocation[6][2] = { { 67, 114 }, {  93, 114 }, { 119, 114 }, {  81, 161 }, { 107, 161 }, { 93, 204 } };
+    static  float   g_fGuardStoneLocation[4][2] = { { 8200, 13000 }, { 10700, 13000 }, {  9400, 18200 }, {  9400, 22700 } };
+    static  float   g_fLifeStoneLocation[2] = { 0.f, 0.f };
+    static  bool    g_isCrownState = false;
+    static  DWORD   g_dwCrownBackState = 0x00000000;
+    static  bool    g_bBattleCastleStart = false;
+    static  bool    g_bBattleCastleStartBackup = false;
+    static  float   g_iMp3PlayTime = 0.f;
+
+    static float LastHealingParticle = 0.0f;
+    static constexpr float HealingParticleInterval = 400; // every 400 ms
+
+    static float LastStoneFlyEffect = 0.0f;
+    static constexpr float StoneFlyEffectInterval = 800; // every 800 ms
+
+    static float LastArrowEffectOnBattlefield = 0.0f;
+    static constexpr float ArrowEffectOnBattlefieldInterval = 2400; // every 2400 ms
+
+    static float LastArrowEffectInStampRoom = 0.0f;
+    static constexpr float ArrowEffectInStampRoomInterval = 400; // every 400 ms
+
+    std::queue<BuildTime>   g_qBuildTimeLocation;
+
+    enum
+    {
+        GUARD_STOP = 0,
+        GUARD_READY,
+        GUARD_ATTACK_READY,
+        GUARD_ATTACK
+    };
+
+    bool IsBattleCastleStart(void)
+    {
+        return g_bBattleCastleStart;
+    }
+    void SetBattleCastleStart(bool bResult)
+    {
+        g_bBattleCastleStartBackup = g_bBattleCastleStart;
+        g_bBattleCastleStart = bResult;
+
+        if ( /*g_bBattleCastleStart!=g_bBattleCastleStartBackup && */ gMapManager.WorldActive != -1 && gMapManager.InBattleCastle())
+        {
+            wchar_t FileName[64];
+            wchar_t WorldName[32];
+
+            mu_swprintf(WorldName, L"World%d", gMapManager.WorldActive + 1);
+            if (g_bBattleCastleStart)
+            {
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, (gMapManager.WorldActive + 1) * 10 + 2);
+                OpenTerrainAttribute(FileName);
+
+                mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+                OpenTerrainLight(FileName);
+            }
+            else
+            {
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, gMapManager.WorldActive + 1);
+                OpenTerrainAttribute(FileName);
+
+                mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
+            }
+
+            g_iMp3PlayTime = 0;
+        }
+    }
+
+    bool InArea(float x, float y, vec3_t Position, float Range)
+    {
+        float dx = x - Position[0];
+        float dy = y - Position[1];
+        float Distance = sqrtf(dx * dx + dy * dy);
+        if (Distance <= Range)
+            return true;
+        return false;
+    }
+
+    void CollisionHeroCharacter(vec3_t Position, float Range, int AniType)
+    {
+        OBJECT* o = &Hero->Object;
+
+        if (InArea(Position[0], Position[1], o->Position, Range) && o->CurrentAction != AniType)
+        {
+            //            if ( Range<=350.f && Random::Rand()%(int)(100-(Range-350.f)/10) )
+            if (Hero->Helper.Type == MODEL_HORN_OF_FENRIR && AniType == PLAYER_HIGH_SHOCK)
+            {
+                SetAction_Fenrir_Damage(Hero, o);
+                SendRequestAction(Hero->Object, AniType);
+            }
+            else
+            {
+                SetAction(o, AniType);
+                SendRequestAction(Hero->Object, AniType);
+            }
+        }
+    }
+
+    void    CollisionTempCharacter(vec3_t Position, float Range, int AniType)
+    {
+        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
+        {
+            OBJECT* o = &CharactersClient[i].Object;
+            if (o->Live && (o->Kind == KIND_TMP) && o->Type == MODEL_PLAYER && o->CurrentAction != AniType)
+            {
+                if (InArea(Position[0], Position[1], o->Position, Range))
+                {
+                    //                    if ( Range<=350.f && Random::Rand()%(int)(100-(Range-350.f)/10) )
+                    {
+                        SetAction(o, AniType);
+                    }
+                }
+            }
+        }
+    }
+
+    bool CollisionEffectToObject(OBJECT* eff, float Range, float RangeZ, bool bCollisionGround, bool bRealCollision)
+    {
+        int i = (int)(eff->Position[0] / (16 * TERRAIN_SCALE));
+        int j = (int)(eff->Position[1] / (16 * TERRAIN_SCALE));
+        if (i < 0 || j < 0 || i >= 16 || j >= 16) return false;
+
+        BYTE Block = i * 16 + j;
+        OBJECT_BLOCK* ob = &ObjectBlock[Block];
+        OBJECT* o = ob->Head;
+        while (1)
+        {
+            if (o != NULL)
+            {
+                if (o->Live && o->HiddenMesh == -1 && o->m_bCollisionCheck)
+                {
+                    float dx = eff->Position[0] - o->Position[0];
+                    float dy = eff->Position[1] - o->Position[1];
+                    float Distance = sqrtf(dx * dx + dy * dy);
+                    if (Distance <= Range)
+                    {
+                        if (bCollisionGround)
+                        {
+                            if (o->m_bCollisionCheck && o->ExtState == 0)
+                            {
+                                o->Timer += 0.3f * FPS_ANIMATION_FACTOR;
+                                if (o->Timer >= 5)
+                                {
+                                    o->ExtState = 99;
+                                }
+                            }
+                            return true;
+                        }
+                        else
+                            if (fabs(eff->Position[2] - o->Position[2]) < RangeZ)
+                            {
+                                if (o->m_bCollisionCheck)
+                                {
+                                    if (o->ExtState == 0)
+                                    {
+                                        o->Timer += FPS_ANIMATION_FACTOR;
+                                        if (o->Timer >= 5)
+                                        {
+                                            o->ExtState = 99;
+                                        }
+                                    }
+                                }
+                                eff->LifeTime = 15;
+                                eff->SubType = 99;
+                                eff->HiddenMesh = 99;
+                                return true;
+                            }
+                    }
+                }
+                if (o->Next == NULL) break;
+                o = o->Next;
+            }
+            else break;
+        }
+        return false;
+    }
+
+    bool CalcDistanceChrToChr(OBJECT* o, BYTE Type, float fRange)
+    {
+        for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
+        {
+            CHARACTER* tc = &CharactersClient[i];
+            OBJECT* to = &tc->Object;
+            if (to->Kind == KIND_PLAYER && to->Type == MODEL_PLAYER && to->Visible == true)
+            {
+                if (Type == 0)
+                {
+                    float dx = o->Position[0] - to->Position[0];
+                    float dy = o->Position[1] - to->Position[1];
+                    if (dx < fRange && dy < 100) return true;
+                }
+                else if (Type == 1)
+                {
+                    float dx = fabs(o->Position[0] - to->Position[0]);
+                    float dy = o->Position[1] - to->Position[1];
+                    if (dx < 1 && dy>0 && dy < fRange)
+                    {
+                        return true;
+                    }
+                }
+                else if (Type == 2)
+                {
+                    float dx = o->Position[0] - to->Position[0];
+                    float dy = o->Position[1] - to->Position[1];
+                    float Distance = sqrtf(dx * dx + dy * dy);
+                    if (Distance < fRange) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    void SetCastleGate_Attribute(int x, int y, BYTE Operator, bool bAllClear)
+    {
+        for (int i = 0; i < 6; ++i)
+        {
+            if (bAllClear == true)
+            {
+                DWORD wall = TerrainWall[(g_byGateLocation[i][1] + 1) * TERRAIN_SIZE + (g_byGateLocation[i][0])];
+                if ((wall & TW_NOMOVE) == TW_NOMOVE)
+                {
+                    AddTerrainAttributeRange(g_byGateLocation[i][0] - 1, g_byGateLocation[i][1] + 1, 4, 1, TW_NOMOVE, Operator);
+                }
+            }
+            else
+            {
+                if (x == g_byGateLocation[i][0] && y == g_byGateLocation[i][1])
+                {
+                    AddTerrainAttributeRange(g_byGateLocation[i][0] - 1, g_byGateLocation[i][1] + 1, 4, 1, TW_NOMOVE, Operator);
+                    return;
+                }
+            }
+        }
+    }
+
+    // The pulse of a dark aurora: its second pass is lit by (1 - pulse) x pulse.
+    static float AuroraPulse()
+    {
+        return sinf(WorldTime * 0.0015f) * 0.3f + 0.7f;
+    }
+
+    void RenderAurora(int Type, int RenderType, float x, float y, float sx, float sy, const vec3_t light)
+    {
+        vec3_t Light;
+        VectorCopy(light, Light);
+        float Luminosity = AuroraPulse();
+
+        if (RenderType == RENDER_DARK)
+        {
+            EnableAlphaBlendMinus();
+            Vector(Luminosity, Luminosity, Luminosity, Light);
+        }
+        else
+        {
+            EnableAlphaBlend();
+            Vector(Luminosity * Light[0], Luminosity * Light[1], Luminosity * Light[2], Light);
+        }
+
+        Render::EffectDrawing::ActiveEffectDrawer().DrawDecal(
+            Render::EffectDrawing::Decal(Type, x, y, sx, sy, Light, WorldTime * 0.01f));
+
+        if (RenderType == RENDER_DARK)
+        {
+            Luminosity = 1.f - Luminosity;
+            Vector(Luminosity * Light[0], Luminosity * Light[1], Luminosity * Light[2], Light);
+        }
+        Render::EffectDrawing::ActiveEffectDrawer().DrawDecal(
+            Render::EffectDrawing::Decal(Type, x, y, sx, sy, Light, -WorldTime * 0.01f));
+    }
+
+    void SetBuildTimeLocation(OBJECT* o)
+    {
+        if (o->Type == MODEL_LIFE_STONE && o->m_byBuildTime < 5)
+        {
+            BuildTime bt;
+
+            VectorCopy(o->Position, bt.m_vPosition);
+            bt.m_vPosition[2] += o->BoundingBoxMax[2] + 100.f;
+            bt.m_byBuildTime = o->m_byBuildTime;
+            g_qBuildTimeLocation.push(bt);
+        }
+    }
+
+    void RenderBuildTimes(void)
+    {
+        BuildTime bt;
+        for (int i = 0; i < (int)g_qBuildTimeLocation.size(); ++i)
+        {
+            bt = g_qBuildTimeLocation.front();
+
+            int ScreenX, ScreenY;
+            int Width = 50, Height = 2;
+            CameraProjection::WorldToScreen(g_Camera, bt.m_vPosition, &ScreenX, &ScreenY);
+            ScreenX -= (int)(Width / 2);
+
+            int Time = bt.m_byBuildTime / 5.f * (int)Width;
+            RenderBar(ScreenX, ScreenY + 12, Width, Height, (float)Time);
+
+            g_qBuildTimeLocation.pop();
+        }
+    }
+
+    void Init(void)
+    {
+        if (gMapManager.InBattleCastle() == false) return;
+
+        g_byGuardAI = 0;
+        g_iMp3PlayTime = 0;
+        //        SetBattleCastleStart ( false );
+
+        vec3_t Angle, Position;
+        Vector(0.f, 0.f, 0.f, Angle);
+        Vector(0.f, 0.f, 0.f, Position);
+
+        SocketClient->ToGameServer()->SendGuildLogoOfCastleOwnerRequest();
+
+        OpenMonsterModel(MONSTER_MODEL_BATTLE_GUARD2);
+
+        constexpr float zOffset = 80.f;
+
+        Position[0] = 65 * TERRAIN_SCALE;
+        Position[1] = 113 * TERRAIN_SCALE;
+        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+        Position[0] = 71 * TERRAIN_SCALE;
+        Position[1] = 113 * TERRAIN_SCALE;
+        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+        Position[0] = 91 * TERRAIN_SCALE;
+        Position[1] = 113 * TERRAIN_SCALE;
+        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+        Position[0] = 97 * TERRAIN_SCALE;
+        Position[1] = 113 * TERRAIN_SCALE;
+        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+        Position[0] = 117 * TERRAIN_SCALE;
+        Position[1] = 113 * TERRAIN_SCALE;
+        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+
+        Position[0] = 123 * TERRAIN_SCALE;
+        Position[1] = 113 * TERRAIN_SCALE;
+        Position[2] = RequestTerrainHeight(Position[0], Position[1]) + zOffset;
+        CreateObject(MODEL_BATTLE_GUARD2, Position, Angle);
+    }
+
+    bool    SettingBattleFormation(CHARACTER* c, eBuffState state)
+    {
+        if (gMapManager.InBattleCastle() == false)  return false;
+
+        if (state == eBuff_CastleRegimentAttack1)
+        {
+            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+            {
+                DeleteParts(c);
+            }
+            c->EtcPart = PARTS_ATTACK_TEAM_MARK;
+        }
+
+        else if (state == eBuff_CastleRegimentAttack2)
+        {
+            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+            {
+                DeleteParts(c);
+            }
+            c->EtcPart = PARTS_ATTACK_TEAM_MARK2;
+        }
+        else if (state == eBuff_CastleRegimentAttack3)
+        {
+            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+            {
+                DeleteParts(c);
+            }
+            c->EtcPart = PARTS_ATTACK_TEAM_MARK3;
+        }
+        else if (state == eBuff_CastleRegimentDefense)
+        {
+            if (c->EtcPart == PARTS_ATTACK_TEAM_MARK
+                || c->EtcPart == PARTS_ATTACK_TEAM_MARK2
+                || c->EtcPart == PARTS_ATTACK_TEAM_MARK3
+                )
+            {
+                DeleteParts(c);
+            }
+            c->EtcPart = PARTS_DEFENSE_TEAM_MARK;
+        }
+        else if (c->EtcPart == PARTS_ATTACK_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK
+            || c->EtcPart == PARTS_ATTACK_TEAM_MARK2
+            || c->EtcPart == PARTS_ATTACK_TEAM_MARK3
+            )
+        {
+            DeleteParts(c);
+            return false;
+        }
+        return true;
+    }
+
+    bool    GetGuildMaster(CHARACTER* c)
+    {
+        if (wcscmp(GuildMark[c->GuildMarkIndex].GuildName, L"") == 0) return false;
+        if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == 0 && c->GuildStatus != G_MASTER) return false;
+        if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildMark[c->GuildMarkIndex].GuildName) == 0 && c->GuildStatus != G_MASTER) return false;
+
+        return true;
+    }
+
+    void SettingBattleKing(CHARACTER* c)
+    {
+        OBJECT* o = &c->Object;
+
+        if (GetGuildMaster(c) == false) return;
+
+        if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1))
+        {
+            DeleteParts(c);
+            c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK;
+        }
+        else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack2))
+        {
+            DeleteParts(c);
+            c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK2;
+        }
+        else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack3))
+        {
+            DeleteParts(c);
+            c->EtcPart = PARTS_ATTACK_KING_TEAM_MARK3;
+        }
+        else if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+        {
+            DeleteParts(c);
+            c->EtcPart = PARTS_DEFENSE_KING_TEAM_MARK;
+        }
+    }
+
+    void    DeleteBattleFormation(CHARACTER* c, eBuffState state)
+    {
+        if (gMapManager.InBattleCastle() == false)  return;
+
+        if (eBuff_CastleRegimentAttack1 != state || eBuff_CastleRegimentAttack2 != state
+            || eBuff_CastleRegimentAttack3 != state || eBuff_CastleRegimentDefense != state)
+        {
+            return;
+        }
+
+        OBJECT* o = &c->Object;
+
+        if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1) || g_isCharacterBuff(o, eBuff_CastleRegimentAttack2)
+            || g_isCharacterBuff(o, eBuff_CastleRegimentAttack3) || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+        {
+            if (c->EtcPart == PARTS_DEFENSE_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK
+                || c->EtcPart == PARTS_ATTACK_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3)
+            {
+                DeleteParts(c);
+            }
+        }
+    }
+
+    void ChangeBattleFormation(wchar_t* GuildName, bool bEffect)
+    {
+        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
+        {
+            CHARACTER* c = &CharactersClient[i];
+            OBJECT* o = &c->Object;
+            if (o->Live && o->Visible)
+            {
+                DeleteParts(c);
+                if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == 0)
+                {
+                    // _buffwani_
+                    g_TokenCharacterBuff(o, eBuff_CastleRegimentDefense);
+                    c->EtcPart = PARTS_DEFENSE_TEAM_MARK;
+                }
+                // _buffwani_
+                else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack1)
+                    || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                {
+                    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                        g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
+
+                    g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack1);
+                    c->EtcPart = PARTS_ATTACK_TEAM_MARK;
+                }
+                else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack2)
+                    || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                {
+                    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                        g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
+
+                    g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack2);
+                    c->EtcPart = PARTS_ATTACK_TEAM_MARK2;
+                }
+                else if (g_isCharacterBuff(o, eBuff_CastleRegimentAttack3)
+                    || g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                {
+                    if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+                        g_CharacterUnRegisterBuff(o, eBuff_CastleRegimentDefense);
+
+                    g_CharacterRegisterBuff(o, eBuff_CastleRegimentAttack3);
+                    c->EtcPart = PARTS_ATTACK_TEAM_MARK3;
+                }
+            }
+        }
+    }
+
+    void    CreateBattleCastleCharacter_Visual(CHARACTER* c, OBJECT* o)
+    {
+        if (gMapManager.InBattleCastle() == false)  return;
+        if (IsBattleCastleStart() == false) return;
+
+        if (o->Visible == false) return;
+
+        CreateGuardStoneHealingVisual(c, 380.f);
+    }
+
+    void    DeleteTmpCharacter(void)
+    {
+        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
+        {
+            CHARACTER* c = &CharactersClient[i];
+            OBJECT* o = &c->Object;
+            if (o->Live && o->Kind == KIND_TMP)
+            {
+                o->Live = false;
+                BoneManager::UnregisterBone(c);
+
+                for (int j = 0; j < MAX_MOUNTS; j++)
+                {
+                    OBJECT* b = &Mounts[j];
+                    if (b->Live && b->Owner == o)
+                        b->Live = false;
+                }
+                DeletePet(c);
+                DeleteCloth(c, o);
+                DeleteParts(c);
+            }
+        }
+    }
+
+    void    StartFog(vec3_t Color)
+    {
+        mu::FogParams fogParams{};
+        fogParams.mode = GL_LINEAR;
+        fogParams.start = 2000.f;
+        fogParams.end = 2700.f;
+        fogParams.color[0] = Color[0];
+        fogParams.color[1] = Color[1];
+        fogParams.color[2] = Color[2];
+        fogParams.color[3] = 1.0f;
+        mu::GetRenderer().SetFog(fogParams);
+    }
+
+    void    EndFog(void)
+    {
+        mu::GetRenderer().SetFogEnabled(false);
+    }
+
+    void    RenderBaseSmoke(void)
+    {
+        if (gMapManager.InBattleCastle() == false) return;
+        if (IsBattleCastleStart() == false) return;
+
+        EnableAlphaTest();
+
+        const DWORD smokeColor = RGBA(77, 77, 64, 255);
+        float WindX2 = (float)((int)WorldTime % 100000) * 0.0005f;
+        RenderBitmapUV(BITMAP_CHROME + 3, 0.f, 0.f, (float)REFERENCE_WIDTH,
+            UI::Scaling::ScreenOverlayFullHeight(WindowWidth, WindowHeight), WindX2, 0.f, 3.f, 2.f, smokeColor);
+        EnableAlphaBlend();
+        float WindX = (float)((int)WorldTime % 100000) * 0.0002f;
+        RenderBitmapUV(BITMAP_CHROME + 2, 0.f, 0.f, (float)REFERENCE_WIDTH,
+            UI::Scaling::ScreenOverlayFullHeight(WindowWidth, WindowHeight), WindX, 0.f, 0.3f, 0.3f, smokeColor);
+    }
+
+    bool CreateFireSnuff(PARTICLE* o)
+    {
+        if (gMapManager.WorldActive != WD_55LOGINSCENE)
+        {
+            if (gMapManager.InBattleCastle() == false) return false;
+            if (IsBattleCastleStart() == false) return false;
+            if (InBattleCastle3(Hero->Object.Position) == false) return false;
+        }
+
+        o->Type = BITMAP_FIRE_SNUFF;
+        o->Scale = Random::Rand() % 50 / 100.f + 0.5f;
+        vec3_t Position;
+
+        if (gMapManager.WorldActive == WD_55LOGINSCENE)
+        {
+            Vector(Hero->Object.Position[0] + (float)(Random::Rand() % 1600 - 800),
+                   Hero->Object.Position[1] + (float)(Random::Rand() % 1400 - 500),
+                   Hero->Object.Position[2] + (float)(Random::Rand() % 1000 + 50), Position);
+        }
+        else
+        {
+            Vector(Hero->Object.Position[0] + (float)(Random::Rand() % 1600 - 800),
+                   Hero->Object.Position[1] + (float)(Random::Rand() % 1400 - 500),
+                   Hero->Object.Position[2] + (float)(Random::Rand() % 300 + 50), Position);
+        }
+
+        VectorCopy(Position, o->Position);
+        VectorCopy(Position, o->StartPosition);
+        o->Velocity[0] = -(float)(Random::Rand() % 64 + 64) * 0.1f;
+        if (Position[1] < g_Camera.Position[1] + 400.f)
+        {
+            o->Velocity[0] = -o->Velocity[0] + 3.2f;
+        }
+        o->Velocity[1] = (float)(Random::Rand() % 32 - 16) * 0.1f;
+        o->Velocity[2] = (float)(Random::Rand() % 32 - 16) * 0.1f;
+        o->TurningForce[0] = (float)(Random::Rand() % 16 - 8) * 0.1f;
+        o->TurningForce[1] = (float)(Random::Rand() % 64 - 32) * 0.1f;
+        o->TurningForce[2] = (float)(Random::Rand() % 16 - 8) * 0.1f;
+
+        Vector(1.f, 0.f, 0.f, o->Light);
+
+        return true;
+    }
+
+    void SetAttackDefenseObjectType(OBJECT* o)
+    {
+        switch (o->Type)
+        {
+        case 16:
+        case 38:
+        case 39:
+        case 40:
+        case 50:
+        case 58:
+        case 59:
+        case 78:
+        case 80:
+        case 81:
+        case 82:
+        case 83:
+        case 84:
+        case 85:
+        case 86:
+        case 87:
+            if (IsBattleCastleStart())
+            {
+                o->HiddenMesh = -2;
+            }
+            else
+            {
+                o->HiddenMesh = -1;
+            }
+            break;
+
+        case 4:
+        case 11:
+        case 37:
+        case 41:
+        case 43:
+        case 44:
+        case 45:
+        case 46:
+        case 47:
+        case 48:
+            //        case 66:
+        case 67:
+        case 68:
+        case 69:
+        case 71:
+        case 72:
+        case 73:
+        case 74:
+        case 75:
+        case 76:
+        case 88:
+            if (IsBattleCastleStart())
+            {
+                o->HiddenMesh = -1;
+            }
+            else
+            {
+                o->HiddenMesh = -2;
+            }
+            break;
+        }
+    }
+
+    bool MoveBattleCastleObjectSetting(int& objCount, int object)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        DWORD  current = timeGetTime();
+        double dif = (double)(current - g_iMp3PlayTime) / CLOCKS_PER_SEC;
+        if (dif > 1800 || g_iMp3PlayTime == 0)
+        {
+            g_iMp3PlayTime = current;
+            if (IsBattleCastleStart())
+            {
+                StopMp3(MUSIC_CASTLE_PEACE);
+                PlayMp3(MUSIC_CASTLE_BATTLE_START);
+                //            PlayMp3 ( MUSIC_CASTLE_BATTLE_ING );
+            }
+            else
+            {
+                StopMp3(MUSIC_CASTLE_BATTLE_START);
+                //            StopMp3 ( MUSIC_CASTLE_BATTLE_ING );
+                PlayMp3(MUSIC_CASTLE_PEACE);
+            }
+        }
+
+        PlayBuffer(SOUND_BC_AMBIENT);
+        if (IsBattleCastleStart() && rand_fps_check(10))
+        {
+            if (Random::Rand() % 100 == 0)
+            {
+                PlayBuffer(SOUND_BC_AMBIENT_BATTLE1);
+            }
+            if (Random::Rand() % 100 == 0)
+            {
+                PlayBuffer(SOUND_BC_AMBIENT_BATTLE2);
+            }
+            if (Random::Rand() % 100 == 0)
+            {
+                PlayBuffer(SOUND_BC_AMBIENT_BATTLE3);
+            }
+            if (Random::Rand() % 100 == 0)
+            {
+                PlayBuffer(SOUND_BC_AMBIENT_BATTLE4);
+            }
+            if (Random::Rand() % 100 == 0)
+            {
+                PlayBuffer(SOUND_BC_AMBIENT_BATTLE5);
+            }
+        }
+
+        if (IsBattleCastleStart())
+        {
+            if (LastStoneFlyEffect < WorldTime - StoneFlyEffectInterval)
+            {
+                LastStoneFlyEffect = WorldTime;
+                int HeroY = (Hero->PositionY);
+                if (Random::Rand() % 3)
+                {
+                    if (HeroY > 50 && HeroY < 131)
+                    {
+                        int dx = Random::Rand() % 1000 - 500;
+                        vec3_t Position;
+                        vec3_t Angle = { 0.f, 0.f, 0.f };
+                        vec3_t Light = { 1.f, 1.f, 1.f };
+
+                        if (dx < 30 && dx > 0)
+                            dx = 100 + Random::Rand() % 30;
+                        else if (dx > -30 && dx < 0)
+                            dx -= 100 + Random::Rand() % 30;
+
+                        Position[0] = Hero->Object.Position[0] + dx;
+                        Position[2] = 500.f;
+
+                        int SiegePositionY;
+                        if (HeroY > 55)
+                        {
+                            SiegePositionY = 45;
+                        }
+                        else
+                        {
+                            SiegePositionY = HeroY - (Random::Rand() % 10 + 10);
+                        }
+                        Position[1] = SiegePositionY * TERRAIN_SCALE + (Random::Rand() % 40 - 20);
+                        CreateEffect(MODEL_FLY_BIG_STONE1, Position, Angle, Light, 0);
+                    }
+                }
+                else
+                {
+                    if (HeroY > 70 && HeroY < 177)
+                    {
+                        int dx = Random::Rand() % 1000 - 500;
+                        vec3_t Position;
+                        vec3_t Angle = { 0.f, 0.f, 0.f };
+                        vec3_t Light = { 1.f, 1.f, 1.f };
+
+                        if (dx < 100 && dx > 0)
+                            dx = 100 + Random::Rand() % 30;
+                        else if (dx > -100 && dx < 0)
+                            dx -= 100 + Random::Rand() % 30;
+
+                        Position[0] = Hero->Object.Position[0] + dx;
+                        Position[2] = 500.f;
+
+                        int SiegePositionY;
+                        if (HeroY < 179)
+                        {
+                            SiegePositionY = 179;
+                        }
+                        else
+                        {
+                            SiegePositionY = HeroY - (Random::Rand() % 10 + 10);
+                        }
+                        Position[1] = SiegePositionY * TERRAIN_SCALE - (Random::Rand() % 40 - 20);
+                        CreateEffect(MODEL_FLY_BIG_STONE2, Position, Angle, Light, 0);
+                    }
+                }
+            }
+
+            int HeroY = (Hero->PositionY);
+            if ((HeroY > 58 && HeroY < 113) || (HeroY > 117 && HeroY < 159))
+            {
+                if (LastArrowEffectOnBattlefield < WorldTime - ArrowEffectOnBattlefieldInterval)
+                {
+                    LastArrowEffectOnBattlefield = WorldTime;
+                    int length = (Random::Rand() % 4 + 2) / 2;
+                    int dx = (Random::Rand() % 1400 - 700) - 60.f * length;
+
+                    if (dx < 100 && dx > 0)
+                        dx = 100 + Random::Rand() % 30;
+                    else if (dx > -100 && dx < 0)
+                        dx -= 100 + Random::Rand() % 30;
+
+                    vec3_t Position;
+                    vec3_t Angle = { 0.f, 0.f, 0.f };
+                    vec3_t Light = { 1.f, 1.f, 1.f };
+                    for (int i = -length; i < length; ++i)
+                    {
+                        dx += 60.f;
+
+                        Position[0] = Hero->Object.Position[0] + dx;
+                        Position[2] = 350.f;
+
+                        bool attArrow = Random::Rand() % 2;
+                        if (HeroY < 113)
+                        {
+                            attArrow = true;
+                        }
+                        else if (HeroY > 117)
+                        {
+                            attArrow = false;
+                        }
+
+                        if (attArrow)
+                        {
+                            int SiegePositionY = HeroY - (Random::Rand() % 1 + 10);
+                            Position[1] = SiegePositionY * TERRAIN_SCALE /*+(Random::Rand()%60-30)*/;
+
+                            Angle[2] = 180.f;
+                            CreateEffect(MODEL_ARROW, Position, Angle, Light, 4);
+                        }
+                        else
+                        {
+                            int SiegePositionY = HeroY + (Random::Rand() % 1 + 10);
+                            Position[1] = SiegePositionY * TERRAIN_SCALE /*-(Random::Rand()%60-30)*/;
+
+                            CreateEffect(MODEL_ARROW, Position, Angle, Light, 4);
+                        }
+                    }
+                }
+            }
+
+            if (LastArrowEffectInStampRoom < WorldTime - ArrowEffectInStampRoomInterval)
+            {
+                LastArrowEffectInStampRoom = WorldTime;
+                if (HeroY > 58 && HeroY < 159)
+                {
+                    vec3_t Position;
+                    vec3_t Angle = { 0.f, 0.f, 0.f };
+                    vec3_t Light = { 1.f, 1.f, 1.f };
+
+                    int dx = Random::Rand() % 1400 - 700;
+                    if (dx < 100 && dx > 0)
+                        dx = 100 + Random::Rand() % 30;
+                    else if (dx > -100 && dx < 0)
+                        dx -= 100 + Random::Rand() % 30;
+
+                    Position[0] = Hero->Object.Position[0] + dx;
+                    Position[2] = 350.f;
+
+                    BYTE subtype = 3;
+                    if (HeroY < 82 || HeroY>112 || rand_fps_check(10))
+                    {
+                        subtype = 4;
+                        if (rand_fps_check(10))
+                        {
+                            subtype = 3;
+                        }
+                    }
+
+                    bool attArrow = Random::Rand() % 2;
+                    if (HeroY < 82)
+                    {
+                        attArrow = true;
+                    }
+                    else if (HeroY > 112)
+                    {
+                        attArrow = false;
+                    }
+
+                    if (attArrow)
+                    {
+                        int SiegePositionY = HeroY - (Random::Rand() % 3 + 10);
+                        Position[1] = SiegePositionY * TERRAIN_SCALE + (Random::Rand() % 60 - 30);
+
+                        Angle[2] = 180.f;
+                        CreateEffect(MODEL_ARROW, Position, Angle, Light, subtype);
+                    }
+                    else
+                    {
+                        int SiegePositionY = HeroY + (Random::Rand() % 3 + 10);
+                        Position[1] = SiegePositionY * TERRAIN_SCALE - (Random::Rand() % 60 - 30);
+
+                        CreateEffect(MODEL_ARROW, Position, Angle, Light, subtype);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    bool MoveBattleCastleObject(OBJECT* o, int& object, int& visibleObject)
+    {
+        if (gMapManager.InBattleCastle() == false)  return false;
+
+        switch (o->Type)
+        {
+        case 81:
+            o->BlendMesh = 1;
+            o->BlendMeshLight = 1.f;
+            o->BlendMeshTexCoordV = WorldTime * 0.0002f;
+            break;
+
+        case 83:
+            o->BlendMesh = 1;
+            o->BlendMeshLight = 1.f;
+            o->BlendMeshTexCoordV = -WorldTime * 0.0004f;
+            break;
+
+        case BATTLE_CASTLE_WALL1:
+        case BATTLE_CASTLE_WALL2:
+            if (IsBattleCastleStart() == false) break;
+
+            if (o->ExtState == 0)
+            {
+                o->HiddenMesh = -1;
+            }
+            else if (o->ExtState == 99 && o->Visible)
+            {
+                if (o->HiddenMesh == -1)
+                {
+                    CreateEffect(o->Type, o->Position, o->Angle, o->Light, 1);
+                    PlayBuffer(SOUND_BC_WALL_HIT);
+                }
+                o->HiddenMesh = 0;
+            }
+            break;
+        case BATTLE_CASTLE_WALL3:
+        case BATTLE_CASTLE_WALL4:
+            if (IsBattleCastleStart() == false) break;
+
+            if (o->ExtState == 0)
+            {
+                o->HiddenMesh = -1;
+            }
+            else if (o->ExtState == 99 && o->Visible)
+            {
+                if (o->HiddenMesh == -1)
+                {
+                    CreateEffect(o->Type, o->Position, o->Angle, o->Light, 1);
+                    PlayBuffer(SOUND_BC_WALL_HIT);
+                }
+                o->HiddenMesh = 0;
+            }
+            break;
+        }
+
+        SetAttackDefenseObjectType(o);
+        return false;
+    }
+
+    bool CreateBattleCastleObject(OBJECT* o)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        switch (o->Type)
+        {
+        case 8:
+        case 9:
+            o->ExtState = 0;
+            break;
+
+        case 7:
+        case 10:
+        case 13:
+        case 14:
+            //        case    18 :
+            o->ExtState = 0;
+            o->m_bCollisionCheck = true;
+            break;
+
+        case    BATTLE_CASTLE_WALL1:
+        case    BATTLE_CASTLE_WALL2:
+        case    BATTLE_CASTLE_WALL3:
+        case    BATTLE_CASTLE_WALL4:
+            o->ExtState = 0;
+            o->m_bCollisionCheck = true;
+            break;
+
+        case    19:
+            o->Scale = 1.f;
+            break;
+
+        case    MODEL_BATTLE_GUARD2:
+            o->Scale = 1.f;
+            if (IsBattleCastleStart())
+            {
+                o->HiddenMesh = -2;
+            }
+            else
+            {
+                o->HiddenMesh = -1;
+            }
+            break;
+
+        case 39:
+            o->HiddenMesh = -2;
+            break;
+
+        case 41:
+            o->Timer = float(Random::Rand() % 1000) * 0.01f;
+            break;
+
+        case 77:
+        case 84:
+            CreateOperate(o);
+            break;
+
+        case 79:
+            CreateEffect(MODEL_TOWER_GATE_PLANE, o->Position, o->Angle, o->Light, 0, o);
+            break;
+        }
+
+        SetAttackDefenseObjectType(o);
+        return true;
+    }
+
+    bool    MoveBattleCastleVisual(OBJECT* o)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        float Luminosity;
+        vec3_t Light;
+
+        switch (o->Type)
+        {
+        case 4:
+            o->HiddenMesh = -1;
+            o->BlendMeshTexCoordU = WorldTime * 0.0001f;
+            break;
+
+        case 19:
+            break;
+
+        case 42:
+        case 52:
+        case 54:
+            o->HiddenMesh = -2;
+            break;
+
+        case    0:
+            if (IsBattleCastleStart() == false)
+            {
+                Luminosity = (float)(Random::Rand() % 4 + 3) * 0.1f;
+                Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+                AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 53:
+            if (IsBattleCastleStart())
+            {
+                Luminosity = (float)(Random::Rand() % 4 + 3) * 0.1f;
+                Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+                AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 66:
+            o->HiddenMesh = -2;
+            if (IsBattleCastleStart())
+            {
+                if (g_isCrownState == false)
+                {
+                    o->HiddenMesh = -1;
+                }
+                o->BlendMeshTexCoordV = WorldTime * 0.001f;
+            }
+            break;
+
+        case    BATTLE_CASTLE_WALL1:
+        case    BATTLE_CASTLE_WALL2:
+        case    BATTLE_CASTLE_WALL3:
+        case    BATTLE_CASTLE_WALL4:
+            break;
+
+        case    MODEL_BATTLE_GUARD2:
+            if (IsBattleCastleStart())
+            {
+                o->HiddenMesh = -2;
+            }
+            else
+            {
+                o->HiddenMesh = -1;
+            }
+            break;
+        }
+        return true;
+    }
+
+    bool UpdateBattleCastleObjectEffects(OBJECT* o, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        vec3_t Light;
+
+        switch (o->Type)
+        {
+        case 0:
+            if (IsBattleCastleStart() == false && rand_fps_check(3))
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 0, o->Scale);
+            }
+            break;
+
+        case 41:
+            o->BlendMeshLight = sinf(WorldTime * 0.002f) * 0.3f + 0.7f;
+            break;
+
+        case 42:
+            if (IsBattleCastleStart() && rand_fps_check(3))
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, Light, 21, o->Scale);
+            }
+            break;
+        case 52:
+            if (IsBattleCastleStart() == false)
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticleFpsChecked(BITMAP_WATERFALL_5, o->Position, o->Angle, Light, 6, o->Scale);
+            }
+            break;
+        case 53:
+            if (IsBattleCastleStart() && rand_fps_check(3))
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticle(BITMAP_TRUE_FIRE, o->Position, o->Angle, Light, 0, o->Scale);
+            }
+            break;
+        case 54:
+            if (IsBattleCastleStart() == false)
+            {
+                Vector(1.f, 1.f, 1.f, Light);
+                CreateParticleFpsChecked(BITMAP_WATERFALL_3 + (Random::Rand() % 2), o->Position, o->Angle, Light, 0);
+            }
+            break;
+        }
+
+        return true;
+    }
+
+    bool RenderBattleCastleObjectMesh(const OBJECT* o, DrawLook& look, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false)  return false;
+
+        if (o->Type == 12)
+        {
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
+            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+            b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV, BITMAP_INTERFACE_MAP);
+            return true;
+        }
+        else if (o->Type == 17)
+        {
+            b->StreamMesh = 0;
+            Vector(0.45f, 0.45f, 0.45f, b->BodyLight);
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          (int)WorldTime % 10000 * 0.0002f, look.hiddenMesh);
+            b->StreamMesh = -1;
+            return true;
+        }
+        else if (o->Type == 51)
+        {
+            b->StreamMesh = 0;
+            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                          -(int)WorldTime % 10000 * 0.0002f, look.blendMeshV, look.hiddenMesh);
+            b->StreamMesh = -1;
+            return true;
+        }
+        else if (o->Type == 66)
+        {
+            Vector(0.1f, 0.4f, 0.6f, b->BodyLight);
+            b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh,
+                          sinf(WorldTime * 0.001f) * 0.2f + 0.3f, look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+            return true;
+        }
+        else if (o->Type == 50 || o->Type == 83 || o->Type == 84 || o->Type == 85)
+        {
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV, look.hiddenMesh);
+
+            if (IsBattleCastleStart() == false)
+            {
+                DisableAlphaBlend();
+                b->RenderBodyShadow(look.blendMesh, look.hiddenMesh);
+            }
+            return true;
+        }
+        else if (o->Type == 19)
+        {
+            if (IsBattleCastleStart())
+            {
+                b->BeginRender(look.alpha);
+                b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
+                b->RenderMesh(3, RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, BITMAP_CHROME);
+                Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
+                b->RenderMesh(3, RENDER_BRIGHT | RENDER_METAL, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, BITMAP_CHROME);
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                b->EndRender();
+            }
+            else
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
+                b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
+                b->RenderBody(RENDER_BRIGHT | RENDER_METAL, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+            }
+            return true;
+        }
+        else if (o->Type >= BATTLE_CASTLE_WALL1 && o->Type <= BATTLE_CASTLE_WALL4)
+        {
+            // A wall's debris effect (SubType 1) shows only the debris its first move spawns.
+            if (o->SubType == 0)
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+            }
+            return true;
+        }
+        else
+        {
+            return RenderBattleCastleMonsterObjectMesh(o, look, b);
+        }
+
+        return false;
+    }
+
+    void    MoveFlyBigStone(OBJECT* o)
+    {
+    }
+
+    void ResetCastleGateAttackCount(CHARACTER* c, int Type)
+    {
+        if (Type == MODEL_CASTLE_GATE1)
+        {
+            c->SwordCount = 0;
+        }
+    }
+
+    std::optional<GateLooks> GateLooksOf(const CHARACTER& c)
+    {
+        const Data::Monsters::MonsterGate* gate =
+            GameLogic::Monsters::Setup::GateOf(c, World::Monsters::GetSpawnWorld());
+        if (gate == nullptr)
+            return std::nullopt;
+        const auto animation = [](const std::string& name)
+        { return Data::Monsters::FindMonsterAnimation(name).value_or(0); };
+        return GateLooks{animation(gate->closed), animation(gate->opening), animation(gate->open),
+                         gate->arrivalOpening};
+    }
+
+    void ShowGateOnArrival(CHARACTER& c, const GateLooks& gate, int x, int y, bool closeOnlyWithoutBuffs)
+    {
+        OBJECT* o = &c.Object;
+        if (g_isCharacterBuff(o, eBuff_CastleGateIsOpen))
+        {
+            SetAction(o, gate.arrivalOpening ? gate.opening : gate.open);
+            SetCastleGate_Attribute(x, y, 0);
+        }
+        else if (!closeOnlyWithoutBuffs || g_isNotCharacterBuff(o))
+        {
+            SetAction(o, gate.closed);
+            SetCastleGate_Attribute(x, y, 1);
+        }
+    }
+
+    bool    StopBattleCastleMonster(CHARACTER* c, OBJECT* o)
+    {
+        if (gMapManager.InBattleCastle() == false)  return false;
+
+        // A gate stands as its buff says when an animation ends.
+        if (const std::optional<GateLooks> gate = GateLooksOf(*c))
+        {
+            if (g_isCharacterBuff(o, eBuff_CastleGateIsOpen))
+            {
+                c->m_bIsSelected = false;
+                SetAction(o, gate->open);
+            }
+            else
+            {
+                c->m_bIsSelected = true;
+                SetAction(o, gate->closed);
+            }
+            return true;
+        }
+
+        switch (c->MonsterIndex)
+        {
+        case MONSTER_BATTLE_GUARD1:
+        case MONSTER_BATTLE_GUARD2:
+            if (o->CurrentAction == 5)
+            {
+                o->PriorAction = 4;
+                o->PriorAnimationFrame = 0.f;
+                o->CurrentAction = 4;
+                o->AnimationFrame = 0.f;
+
+                g_byGuardAI = GUARD_ATTACK_READY;
+                o->AI = GUARD_READY;
+                o->AttackPoint[0] = 300;
+                return true;
+            }
+            else if (o->CurrentAction == 4)
+            {
+                o->PriorAction = 4;
+                o->PriorAnimationFrame = 0.f;
+                o->CurrentAction = 4;
+                o->AnimationFrame = 0.f;
+                return true;
+            }
+            else if (o->CurrentAction == 2)
+            {
+                o->PriorAction = 4;
+                o->PriorAnimationFrame = 0.f;
+                o->CurrentAction = 4;
+                o->AnimationFrame = 0.f;
+                return true;
+            }
+            else if (o->CurrentAction == 0)
+            {
+                o->PriorAction = 0;
+                o->PriorAnimationFrame = 0.f;
+                o->CurrentAction = 0;
+                o->AnimationFrame = 0.f;
+                return true;
+            }
+            return false;
+
+        case MONSTER_SLINGSHOT_ATTACK:
+        case MONSTER_SLINGSHOT_DEFENSE:
+            SetAction(o, 0);
+            return true;
+
+        default:
+            break;
+        }
+        return false;
+    }
+
+    void    InitGateAttribute(void)
+    {
+        if (g_bBeGate == false)
+        {
+            SetCastleGate_Attribute(0, 0, 0, true);
+        }
+    }
+
+    void    InitEtcSetting(void)
+    {
+        g_fLifeStoneLocation[0] = 0.f;
+        g_fLifeStoneLocation[1] = 0.f;
+
+        InitGateAttribute();
+        g_bBeGate = false;
+    }
+
+    bool MoveBattleCastleMonster(CHARACTER* c, OBJECT* o)
+    {
+        if (gMapManager.InBattleCastle() == false)  return false;
+
+        switch (c->MonsterIndex)
+        {
+        case MONSTER_CROWN:
+            o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 200.f;
+            g_isCrownState = g_isCharacterBuff(o, eBuff_CastleCrown);
+            c->m_bIsSelected = (g_isCrownState ? true : false);
+            break;
+
+        case MONSTER_CASTLE_GATE1:
+            g_bBeGate = true;
+            break;
+
+        case MONSTER_GUARDIAN_STATUE:
+            o->HiddenMesh = -1;
+            c->m_bIsSelected = true;
+            if (IsBattleCastleStart() == false)
+            {
+                o->HiddenMesh = -2;
+                c->m_bIsSelected = false;
+            }
+            break;
+
+        case MONSTER_BATTLE_GUARD1:
+        case MONSTER_BATTLE_GUARD2:
+        {
+            switch (o->AI)
+            {
+            case GUARD_STOP:
+            {
+                float fRange = 500.f;
+
+                o->AttackPoint[0] = 0;
+
+                if (CalcDistanceChrToChr(o, 1, fRange) || g_byGuardAI == GUARD_ATTACK_READY)
+                {
+                    SetAction(o, 4);
+
+                    g_byGuardAI = GUARD_ATTACK_READY;
+                    o->AI = GUARD_READY;
+                    o->AttackPoint[0] = 300;
+                }
+            }
+            break;
+
+            case GUARD_READY:
+                break;
+
+            case GUARD_ATTACK_READY:
+                break;
+
+            case GUARD_ATTACK:
+                break;
+            }
+            if (o->CurrentAction != MONSTER01_SHOCK && o->AI != GUARD_STOP && (o->AttackPoint[0] < 0 || g_byGuardAI == GUARD_STOP))
+            {
+                float fRange = 500.f;
+
+                if (CalcDistanceChrToChr(o, 1, fRange))//|| g_byGuardAI==GUARD_ATTACK_READY )
+                {
+                    o->AttackPoint[0] = 300;
+                    g_byGuardAI = GUARD_ATTACK_READY;
+                }
+                else
+                {
+                    SetAction(o, 0);
+                    o->AI = GUARD_STOP;
+                    g_byGuardAI = GUARD_STOP;
+                }
+            }
+            o->AttackPoint[0]--;
+        }
+        break;
+
+        case MONSTER_LIFE_STONE:
+            if (c->m_byFriend == 128)
+            {
+                g_fLifeStoneLocation[0] = o->Position[0];
+                g_fLifeStoneLocation[1] = o->Position[1];
+            }
+            break;
+        default:
+            break;
+        }
+        return false;
+    }
+
+    void SetGuardAttackState(OBJECT* o)
+    {
+        if (o->Type == MODEL_BATTLE_GUARD1 || o->Type == MODEL_BATTLE_GUARD2)
+        {
+            o->AI = GUARD_ATTACK;
+        }
+    }
+
+    bool AttackEffect_BattleCastleMonster(CHARACTER* c, OBJECT* o, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        CHARACTER* tc = NULL;
+        OBJECT* to = NULL;
+        vec3_t      Light;
+        vec3_t      p, Position;
+
+        Vector(0.f, 0.f, 0.f, p);
+        Vector(1.f, 1.f, 1.f, Light);
+        if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
+        {
+            tc = &CharactersClient[c->TargetCharacter];
+            to = &tc->Object;
+        }
+
+        switch (c->MonsterIndex)
+        {
+        case MONSTER_TRAP:
+            if (c->CheckAttackTime(5))
+            {
+                VectorCopy(o->Position, Position);
+                Position[2] += 500.f;
+                CreateEffect(MODEL_BATTLE_GUARD2, Position, o->Angle, o->Light, 0);
+                c->SetLastAttackEffectTime();
+            }
+            return true;
+
+        case MONSTER_CANON_TOWER:
+            if (rand_fps_check(1))
+            {
+                CreateEffect(BITMAP_JOINT_FORCE, o->Position, o->Angle, o->Light);
+            }
+            return true;
+        default:
+            break;
+        }
+        return false;
+    }
+
+    void CreateGuardStoneHealingVisual(CHARACTER* c, float Range)
+    {
+        OBJECT* o = &c->Object;
+        bool bHealing = false;
+
+        if (g_isCharacterBuff(o, eBuff_CastleRegimentDefense))
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                if (InArea(g_fGuardStoneLocation[i][0], g_fGuardStoneLocation[i][1], o->Position, Range))
+                {
+                    bHealing = true;
+                    break;
+                }
+            }
+        }
+        else //if ( (o->State&STATE_REGIMENT_ATTACK)==STATE_REGIMENT_ATTACK )
+        {
+            if (g_fLifeStoneLocation[0] != 0.f && g_fLifeStoneLocation[1] != 0.f && Hero->GuildMarkIndex == c->GuildMarkIndex)
+            {
+                if (InArea(g_fLifeStoneLocation[0], g_fLifeStoneLocation[1], o->Position, Range))
+                {
+                    bHealing = true;
+                }
+            }
+        }
+
+        if (bHealing && LastHealingParticle < WorldTime - HealingParticleInterval)
+        {
+            LastHealingParticle = WorldTime;
+            CreateParticle(BITMAP_PLUS, o->Position, o->Angle, o->Light);
+        }
+    }
+
+    // The light a dark aurora's draw left on the body it stands under, which its next draw lit the body with.
+    static void SetDarkAuroraBodyLight(OBJECT* o)
+    {
+        const float pulse = AuroraPulse();
+        const float light = (1.f - pulse) * pulse;
+        Vector(light, light, light, o->Light);
+    }
+
+    bool MoveBattleCastleMonsterVisual(OBJECT* o, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        float  Luminosity;
+        vec3_t Light;
+
+        switch (o->Type)
+        {
+        case 11:
+            //            o->HiddenMesh = -2;
+            break;
+
+        case MODEL_NPC_CROWN:
+            o->HiddenMesh = -1;
+            if (IsBattleCastleStart())
+            {
+                if (g_isCrownState == false)
+                {
+                    o->HiddenMesh = -2;
+                }
+            }
+            break;
+
+        case MODEL_CASTLE_GATE1:
+            o->Angle[2] = 0.f;
+            return true;
+
+        case MODEL_GUARDIAN_STATUE:
+            o->Angle[2] = 0.f;
+            if (!IsBattleCastleStart())
+                SetDarkAuroraBodyLight(o);
+
+            Luminosity = sinf(WorldTime * 0.0005) * 0.58f + 0.42f;
+            Vector(Luminosity * 0.2f, Luminosity * 0.7f, Luminosity * 1.f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
+            return true;
+
+        case MODEL_GREAT_DRAKAN:
+            o->Angle[2] = 0.f;
+            return true;
+
+        case MODEL_BATTLE_GUARD1:
+            o->Angle[2] = 0.f;
+            return true;
+
+        case MODEL_BATTLE_GUARD2:
+            o->Angle[2] = 0.f;
+            return true;
+
+        case MODEL_GOLDEN_GOBLIN:
+            o->Angle[2] = 0.f;
+            return true;
+
+        case MODEL_CANON_TOWER:
+            o->Angle[2] = 45.f;
+            if (IsBattleCastleStart())
+                SetDarkAuroraBodyLight(o);
+            return true;
+        }
+
+        return false;
+    }
+
+    bool UpdateBattleCastleMonsterEffects(CHARACTER* c, OBJECT* o, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        vec3_t Position, Light, p;
+
+        switch (o->Type)
+        {
+        case MODEL_CASTLE_GATE1:
+            break;
+
+        case MODEL_LIFE_STONE:
+            if (o->m_byBuildTime >= 5)
+            {
+                o->BlendMeshLight = sinf(WorldTime * 0.001f) * 0.3 + 0.3f;
+            }
+            else
+            {
+                Vector(0.8f, 0.6f, 0.3f, Light);
+                VectorCopy(o->Position, Position);
+                Position[2] += 50.f;
+                CreateSprite(BITMAP_LIGHT, Position, 4.f, Light, NULL);
+                CreateSprite(BITMAP_SHINY + 1, Position, 2.5f, Light, NULL, Random::Rand() % 360);
+            }
+            return true;
+
+        case MODEL_CANON_TOWER:
+            if (IsBattleCastleStart())
+            {
+                c->m_bIsSelected = true;
+
+                Vector(0.f, 0.f, 0.f, p);
+                Vector(0.8f, 0.6f, 0.3f, Light);
+                b->TransformPosition(o->BoneTransform[1], p, Position, true);
+
+                Position[2] += sinf(WorldTime * 0.001f) * 60.f + 60.f;
+
+                CreateSprite(BITMAP_LIGHT, Position, 3.f, Light, NULL);
+                CreateSprite(BITMAP_SHINY + 1, Position, 1.5f, Light, NULL, Random::Rand() % 360);
+
+                b->TransformPosition(o->BoneTransform[2], p, Position, true);
+                CreateSprite(BITMAP_LIGHT, Position, 4.f, Light, NULL);
+            }
+            else
+            {
+                c->m_bIsSelected = false;
+                o->HiddenMesh = -2;
+            }
+            return true;
+
+        case MODEL_NPC_CHECK_FLOOR:
+            if (IsBattleCastleStart())
+            {
+                o->Position[2] = o->Velocity;
+                c->m_bIsSelected = true;
+            }
+            else
+            {
+                o->Position[2] = o->Velocity - 100.f;
+                c->m_bIsSelected = false;
+            }
+            o->BlendMeshLight = sinf(WorldTime * 0.001f) * 0.3f + 0.5f;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool RenderBattleCastleMonsterVisual(const CHARACTER* c, const OBJECT* o, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false)
+            return false;
+
+        vec3_t Light;
+
+        switch (o->Type)
+        {
+        case MODEL_GUARDIAN_STATUE:
+            if (IsBattleCastleStart())
+            {
+                Vector(0.3f, 0.2f, 0.f, Light);
+                RenderAurora(BITMAP_MAGIC + 1, RENDER_BRIGHT, o->Position[0], o->Position[1], 9.f, 9.f, Light);
+            }
+            else
+            {
+                RenderAurora(BITMAP_MAGIC + 1, RENDER_DARK, o->Position[0], o->Position[1], 5.5f, 5.5f, o->Light);
+            }
+            return true;
+
+        case MODEL_LIFE_STONE:
+            if (o->m_byBuildTime >= 5)
+            {
+                Vector(0.3f, 0.2f, 0.f, Light);
+                RenderAurora(BITMAP_MAGIC + 1, RENDER_BRIGHT, o->Position[0], o->Position[1], 9.f, 9.f, Light);
+            }
+            return true;
+
+        case MODEL_CANON_TOWER:
+            if (IsBattleCastleStart())
+            {
+                RenderAurora(BITMAP_MAGIC + 1, RENDER_DARK, o->Position[0], o->Position[1], 5.5f, 5.5f, o->Light);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    bool RenderBattleCastleMonsterCloth(const CHARACTER* c, const OBJECT* o, bool Translate, int Select)
+    {
+        return false;
+    }
+
+    void UpdateBattleCastleObjectMeshEffects(OBJECT* o, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false)
+            return;
+
+        switch (o->Type)
+        {
+        case MODEL_CASTLE_GATE1:
+            if (o->CurrentAction == MONSTER01_DIE)
+            {
+                o->Live = false;
+                PlayBuffer(SOUND_HIT_GATE2);
+                SkinObjectMeshes(o, b, true);
+                b->SpawnMeshEffects(0, MODEL_GATE_PART1);
+            }
+            break;
+
+        case MODEL_GUARDIAN_STATUE:
+            if (IsBattleCastleStart())
+            {
+                if (o->CurrentAction != MONSTER01_DIE)
+                    o->HiddenMesh = -1;
+
+                if (o->CurrentAction == MONSTER01_DIE)
+                {
+                    o->Live = false;
+
+                    PlayBuffer(SOUND_BC_GUARD_STONE_DIS);
+                    SkinObjectMeshes(o, b, true);
+                    b->SpawnMeshEffects(0, MODEL_STONE_COFFIN);
+                }
+            }
+            break;
+        }
+    }
+
+    bool RenderBattleCastleMonsterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b)
+    {
+        if (gMapManager.InBattleCastle() == false) return false;
+
+        bool    success = false;
+
+        switch (o->Type)
+        {
+        case MODEL_NPC_CAPATULT_ATT:
+        {
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV, look.hiddenMesh);
+
+            OBB_t   OBB;
+            vec3_t  Temp, p, Position;
+            BMD* linkBmd = &Models[MODEL_FLY_BIG_STONE1];
+            linkBmd->BodyHeight = 0.f;
+            linkBmd->ContrastEnable = o->ContrastEnable;
+            BodyLight(o, linkBmd);
+            linkBmd->BodyScale = 1.3f;
+            linkBmd->CurrentAction = 0;
+
+            if (o->CurrentAction == 0 || o->AnimationFrame < 2.f || o->AnimationFrame >= 22.f)
+            {
+                Vector(0.f, 0.f, 0.f, p);
+                b->TransformPosition(o->BoneTransform[12], p, Position, true);
+                VectorCopy(Position, linkBmd->BodyOrigin);
+                linkBmd->Animation(BoneTransform, 0.f, 0.f, 0, o->Angle, o->Angle, true);
+                linkBmd->Transform(BoneTransform, Temp, Temp, &OBB, true);
+                linkBmd->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                    look.blendMeshV, look.hiddenMesh);
+            }
+
+            if (o->CurrentAction == 1 && o->AnimationFrame > 13.f && o->AnimationFrame < 22.f)
+            {
+                Vector(0.f, 0.f, 0.f, p);
+                b->TransformPosition(o->BoneTransform[44], p, Position, true);
+                VectorCopy(Position, linkBmd->BodyOrigin);
+                linkBmd->Animation(BoneTransform, 0.f, 0.f, 0, o->Angle, o->Angle, true);
+                linkBmd->Transform(BoneTransform, Temp, Temp, &OBB, true);
+                linkBmd->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                    look.blendMeshV, look.hiddenMesh);
+            }
+        }
+        success = true;
+        break;
+
+        case MODEL_NPC_BARRIER:
+            Vector(0.3f, 0.3f, 1.f, b->BodyLight);
+            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV, look.hiddenMesh, BITMAP_WATER + WaterTextureNumber);
+            Vector(0.3f, 1.f, 0.3f, b->BodyLight);
+            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV, look.hiddenMesh,
+                          BITMAP_WATER + ((int)(WorldTime * 0.01f) % 32));
+            success = true;
+            break;
+
+        case MODEL_CASTLE_GATE1:
+            // Dying, it shows only the debris UpdateBattleCastleObjectMeshEffects spawns.
+            if (o->CurrentAction != MONSTER01_DIE)
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+            }
+            break;
+
+        case MODEL_GUARDIAN_STATUE:
+            // Dying, it shows only the debris UpdateBattleCastleObjectMeshEffects spawns.
+            if (IsBattleCastleStart() && o->CurrentAction != MONSTER01_DIE)
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                Vector(0.3f, 0.3f, 0.3f, b->BodyLight);
+                b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                Vector(0.2f, 0.2f, 0.5f, b->BodyLight);
+                b->RenderBody(RENDER_BRIGHT | RENDER_METAL, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+            }
+            success = true;
+            break;
+
+        case MODEL_LIFE_STONE:
+            look.blendMeshLight = o->m_byBuildTime / 10.f;
+            Vector(look.blendMeshLight, look.blendMeshLight, look.blendMeshLight, b->BodyLight);
+            if (o->m_byBuildTime >= 2)
+            {
+                b->RenderMesh(0, RENDER_TEXTURE);
+            }
+            if (o->m_byBuildTime >= 3)
+            {
+                b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT);
+            }
+            if (o->m_byBuildTime >= 4)
+            {
+                Vector(look.blendMeshLight * 0.5f, look.blendMeshLight * 0.5f, look.blendMeshLight * 0.5f,
+                       b->BodyLight);
+                b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT);
+            }
+            if (o->m_byBuildTime >= 5)
+            {
+                Vector(0.5f, 0.5f, 0.5f, b->BodyLight);
+                b->RenderMesh(3, RENDER_TEXTURE | RENDER_BRIGHT, 1.f, 3, 1.f, WorldTime * 0.0001f);
+
+                Vector(0.2f, 0.2f, 0.2f, b->BodyLight);
+                b->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, 1.f, 3, 1.f, WorldTime * 0.0001f);
+            }
+            success = true;
+            break;
+        }
+
+        return success;
+    }
+
+    void SpawnMonsterHitEffect(OBJECT* o)
+    {
+        if (gMapManager.InBattleCastle() == false) return;
+
+        switch (o->Type)
+        {
+        case MODEL_CASTLE_GATE1:
+        {
+            vec3_t Position;
+            VectorCopy(o->Position, Position);
+
+            Position[0] += 60.f;
+            Position[1] -= 100.f;
+            Position[2] += 150.f;
+
+            if (!g_isCharacterBuff(o, eBuff_CastleGateIsOpen))
+            {
+                if (!g_isCharacterBuff((&Hero->Object), eBuff_BlessPotion) && !g_isCharacterBuff((&Hero->Object), eBuff_SoulPotion))
+                {
+                    CreateEffect(MODEL_WAVES, Position, o->Angle, o->Light, 6, NULL, 0);
+                }
+
+                for (int i = 0; i < 5; ++i)
+                {
+                    Position[0] = o->Position[0];
+                    Position[1] = o->Position[1];
+                    Position[2] = o->Position[2] + 200 + Random::Rand() % 30;
+
+                    CreateEffect(MODEL_GATE_PART1 + Random::Rand() % 3, Position, o->Angle, o->Light,
+                                 Random::Rand() % 2 + 1);
+                }
+            }
+        }
+        break;
+
+        case MODEL_GUARDIAN_STATUE:
+        {
+            vec3_t Position;
+            for (int i = 0; i < 5; i++)
+            {
+                if (rand_fps_check(2))
+                {
+                    Position[0] = o->Position[0];
+                    Position[1] = o->Position[1];
+                    Position[2] = o->Position[2] + 200 + Random::Rand() % 30;
+
+                    CreateEffect(MODEL_STONE_COFFIN + 1, Position, o->Angle, o->Light);
+                }
+            }
+        }
+        break;
+        }
+    }
+}

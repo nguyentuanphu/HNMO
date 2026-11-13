@@ -1,0 +1,812 @@
+﻿//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "I18N/All.h"
+
+#include "GIPetManager.h"
+
+#include <algorithm>
+#include <cstdint>
+#include <cstring>
+#include <cwchar>
+#include <cwctype>
+#include <string>
+
+#include "Engine/Object/ZzzCharacter.h"
+#include "Engine/Object/ZzzInfomation.h"
+#include "Character/CharacterManager.h"
+#include "CSPetSystem.h"
+#include "Audio/DSPlaySound.h"
+#include "Core/Input/Input.h"
+#include "World/MapInfra/MapManager.h"
+#include "UI/Core/WindowSystem.h"
+#include "GameLogic/Items/ItemOptionSlots.h"
+#include "GameLogic/Items/PersonalShopTitleImp.h"
+#include "UI/Core/UIManager.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Render/Effects/ZzzEffect.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Engine/Object/ZzzInventory.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "UI/Tooltip/LegacyTextListTooltip.h"
+#include "UI/Scaling/UITransform.h"
+#include "Render/Text/CUIRenderText.h"
+
+extern  bool    SkillEnable;
+extern  int     CheckX;
+extern  int     CheckY;
+extern  int     CheckSkill;
+
+namespace
+{
+    constexpr int kShiftKeyCode = 0x10;
+    constexpr std::uint16_t kInvalidTargetKey = 0xFFFF;
+    constexpr std::size_t kTooltipBufferCapacity = 100;
+    constexpr int kPetCommandCount = AT_PET_COMMAND_END - AT_PET_COMMAND_DEFAULT;
+    constexpr int kTooltipLineLimit = 50;
+
+    // The pet command names, in PET_COMMAND order.
+    const wchar_t* const* const kPetCommandNames[] = {
+        &I18N::Game::BasicAction,
+        &I18N::Game::RandomAutomaticAttack,
+        &I18N::Game::AttackWithOwner,
+        &I18N::Game::AttackTarget,
+    };
+    static_assert(std::size(kPetCommandNames) == PET_CMD_END, "one name per pet command");
+
+    // The name of pet command `command` (a PET_COMMAND); empty for any other number.
+    const wchar_t* GetPetCommandName(int command)
+    {
+        if (command < PET_CMD_DEFAULT || command >= PET_CMD_END)
+        {
+            return L"";
+        }
+
+        return *kPetCommandNames[command];
+    }
+
+    std::wstring SanitizeWideStringFormat(const wchar_t* format)
+    {
+        if (format == nullptr)
+        {
+            return L"";
+        }
+
+        std::wstring sanitized;
+        sanitized.reserve(std::wcslen(format) + 1);
+
+        const wchar_t* ptr = format;
+        while (*ptr != L'\0')
+        {
+            if (*ptr != L'%')
+            {
+                sanitized.push_back(*ptr++);
+                continue;
+            }
+
+            sanitized.push_back(*ptr++);
+
+            if (*ptr == L'%')
+            {
+                sanitized.push_back(*ptr++);
+                continue;
+            }
+
+            bool hasLengthModifier = false;
+
+            while (*ptr && std::wcschr(L"-+ #0", *ptr))
+            {
+                sanitized.push_back(*ptr++);
+            }
+
+            while (*ptr && std::iswdigit(*ptr))
+            {
+                sanitized.push_back(*ptr++);
+            }
+
+            if (*ptr == L'*')
+            {
+                sanitized.push_back(*ptr++);
+            }
+
+            if (*ptr == L'.')
+            {
+                sanitized.push_back(*ptr++);
+                while (*ptr && std::iswdigit(*ptr))
+                {
+                    sanitized.push_back(*ptr++);
+                }
+                if (*ptr == L'*')
+                {
+                    sanitized.push_back(*ptr++);
+                }
+            }
+
+            if (*ptr && std::wcschr(L"hljztL", *ptr))
+            {
+                hasLengthModifier = true;
+                wchar_t lengthChar = *ptr;
+                sanitized.push_back(lengthChar);
+                ++ptr;
+
+                if ((lengthChar == L'h' && *ptr == L'h') || (lengthChar == L'l' && *ptr == L'l'))
+                {
+                    sanitized.push_back(*ptr);
+                    ++ptr;
+                }
+            }
+
+            if ((*ptr == L's' || *ptr == L'S') && !hasLengthModifier)
+            {
+                sanitized.push_back(L'l');
+            }
+
+            if (*ptr != L'\0')
+            {
+                sanitized.push_back(*ptr++);
+            }
+        }
+
+        return sanitized;
+    }
+
+    std::uint32_t ComposeItemIndex(int sx, int sy)
+    {
+        const auto clampedX = std::clamp(sx, 0, 0xFFFF);
+        const auto clampedY = std::clamp(sy, 0, 0xFFFF);
+        return static_cast<std::uint32_t>((static_cast<std::uint32_t>(clampedY) << 16) | static_cast<std::uint32_t>(clampedX));
+    }
+
+    bool HasActivePet(const CHARACTER* character)
+    {
+        return character != nullptr && character->m_pPet != nullptr;
+    }
+
+    bool IsVirtualKeyPressed(int virtualKey)
+    {
+        return CInput::Instance().IsKeyDown(virtualKey);
+    }
+
+    CSPetSystem* ResolvePetSystem(const CHARACTER* character)
+    {
+        return HasActivePet(character) ? static_cast<CSPetSystem*>(character->m_pPet) : nullptr;
+    }
+
+    void ClearRightMouseInputState()
+    {
+        MouseRButtonPop = false;
+        MouseRButtonPush = false;
+        MouseRButton = false;
+        MouseRButtonPress = 0;
+    }
+}
+
+namespace giPetManager
+{
+PET_INFO gs_PetInfo{};
+
+static std::uint8_t g_tabBar = 0;
+    static std::uint32_t g_renderItemIndexBackup = 0;
+    static ITEM g_renderItemInfoBackup {};
+
+    void InitPetManager(void)
+    {
+        g_tabBar = 0;
+        gs_PetInfo.m_dwPetType = PET_TYPE_NONE;
+    }
+
+    void CreatePetDarkSpirit(CHARACTER* c)
+    {
+        DeletePet(c);
+
+        if (gMapManager.InChaosCastle())
+        {
+            return;
+        }
+
+        c->m_pPet = new CSPetDarkSpirit(c);
+    }
+
+    void CreatePetDarkSpirit_Now(CHARACTER* c)
+    {
+        if (c->Weapon[1].Type == MODEL_DARK_RAVEN_ITEM)
+        {
+            DeletePet(c);
+            c->m_pPet = new CSPetDarkSpirit(c);
+        }
+    }
+
+    void MovePet(CHARACTER* c)
+    {
+        if (auto* petSystem = ResolvePetSystem(c))
+        {
+            petSystem->MovePet();
+        }
+    }
+
+    void CullPet(CHARACTER* c)
+    {
+        if (auto* petSystem = ResolvePetSystem(c))
+            petSystem->CullPet();
+    }
+
+    void RenderPet(const CHARACTER* c)
+    {
+        const OBJECT* o = &c->Object;
+        if (auto* petSystem = ResolvePetSystem(c))
+        {
+            petSystem->RenderPet(g_isCharacterBuff(o, eBuff_Cloaking) ? 10 : 0);
+        }
+    }
+
+    void UpdatePetEffects(CHARACTER* c)
+    {
+        OBJECT* o = &c->Object;
+        if (auto* petSystem = ResolvePetSystem(c))
+        {
+            if (!g_isCharacterBuff(o, eBuff_Cloaking))
+            {
+                ITEM* pEquipmentItemSlot = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
+                petSystem->SetPetInfo(giPetManager::GetPetInfo(pEquipmentItemSlot));
+            }
+            petSystem->UpdatePetEffects();
+        }
+    }
+
+    bool SelectPetCommand(void)
+    {
+        if (gCharacterManager.GetBaseClass(Hero->Class) != CLASS_DARK_LORD)
+        {
+            return false;
+        }
+
+        if (!IsVirtualKeyPressed(kShiftKeyCode))
+        {
+            return false;
+        }
+
+        for (int commandOffset = 0; commandOffset < kPetCommandCount; ++commandOffset)
+        {
+            const int commandVirtualKey = '1' + commandOffset;
+            if (IsVirtualKeyPressed(commandVirtualKey))
+            {
+                Hero->CurrentSkill = AT_PET_COMMAND_DEFAULT + commandOffset;
+                return true;
+            }
+        }
+
+        return false;
+    }
+    void MovePetCommand(CHARACTER* c)
+    {
+        if (!ResolvePetSystem(c))
+        {
+            return;
+        }
+
+        constexpr int kCommandIconWidth = 32;
+        constexpr int kCommandIconHeight = 36;
+        constexpr int kCommandBarY = 330;
+
+        int skillCount = 0;
+        for (int command = AT_PET_COMMAND_DEFAULT; command < AT_PET_COMMAND_END; ++command)
+        {
+            const int commandBarWidth = (AT_PET_COMMAND_END - AT_PET_COMMAND_DEFAULT) * kCommandIconWidth;
+            const int x = 320 - commandBarWidth / 2 + skillCount * kCommandIconWidth;
+            const int y = kCommandBarY;
+            ++skillCount;
+
+            if (MouseX >= x && MouseX < x + kCommandIconWidth && MouseY >= y && MouseY < y + kCommandIconHeight)
+            {
+                CheckSkill = command;
+                CheckX = x + kCommandIconWidth / 2;
+                CheckY = y;
+                MouseOnWindow = true;
+                if (MouseLButtonPush)
+                {
+                    MouseLButtonPush = false;
+                    Hero->CurrentSkill = command;
+                    SkillEnable = false;
+                    PlayBuffer(SOUND_CLICK01);
+                    MouseUpdateTime = 0;
+                    MouseUpdateTimeMax = 6;
+                }
+            }
+        }
+    }
+
+    bool SendPetCommand(CHARACTER* c, int Index)
+    {
+        auto* petSystem = ResolvePetSystem(c);
+        if (petSystem == nullptr)
+        {
+            return false;
+        }
+
+        if (!(MouseRButtonPush || MouseRButton))
+        {
+            return false;
+        }
+
+        if (Index < AT_PET_COMMAND_DEFAULT || Index >= AT_PET_COMMAND_END)
+        {
+            return false;
+        }
+
+        const auto petCommand = static_cast<PetCommandMode>(Index - AT_PET_COMMAND_DEFAULT);
+        if (Index == AT_PET_COMMAND_TARGET)
+        {
+            if (CheckAttack() && SelectedCharacter != -1)
+            {
+                CHARACTER* targetCharacter = &CharactersClient[SelectedCharacter];
+                if (targetCharacter->Object.Kind == KIND_MONSTER || targetCharacter->Object.Kind == KIND_PLAYER)
+                {
+                    SocketClient->ToGameServer()->SendPetCommandRequest(static_cast<PetType>(petSystem->GetPetType()), petCommand, targetCharacter->Key);
+                }
+            }
+        }
+        else
+        {
+            SocketClient->ToGameServer()->SendPetCommandRequest(static_cast<PetType>(petSystem->GetPetType()), petCommand, kInvalidTargetKey);
+        }
+
+        ClearRightMouseInputState();
+        return true;
+    }
+
+    void SetPetCommand(CHARACTER* c, int Key, std::uint8_t Cmd)
+    {
+        if (auto* petSystem = ResolvePetSystem(c))
+        {
+            petSystem->SetCommand(Key, Cmd);
+        }
+    }
+
+    void SetAttack(CHARACTER* c, int Key, int attackType)
+    {
+        if (auto* petSystem = ResolvePetSystem(c))
+        {
+            petSystem->SetAttack(Key, attackType);
+        }
+    }
+
+    bool BuildPetCmdTooltipModel(int Type, UI::Skills::Tooltip::Model& outModel)
+    {
+        if (Type < AT_PET_COMMAND_DEFAULT || Type >= AT_PET_COMMAND_END) return false;
+        if (gCharacterManager.GetBaseClass(Hero->Class) != CLASS_DARK_LORD) return false;
+
+        using UI::Skills::Tooltip::Line;
+        using UI::Skills::Tooltip::LineColor;
+
+        const int cmdType = Type - AT_PET_COMMAND_DEFAULT;
+
+        // The original's TextNum/SkipNum bookkeeping exactly -- every line here (including the two
+        // blanks AND the body line) incremented SkipNum, so outModel.skipCount must match 1:1 or
+        // Render()'s own height math would drift.
+        auto pushLine = [&outModel](const wchar_t* text, LineColor color, bool bold, bool blank)
+        {
+            if (outModel.count >= UI::Skills::Tooltip::MAX_TOOLTIP_LINES) return;
+            Line& l = outModel.lines[outModel.count++];
+            wcsncpy(l.text, text, UI::Skills::Tooltip::MAX_TOOLTIP_LINE_TEXT - 1);
+            l.text[UI::Skills::Tooltip::MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
+            l.color = color;
+            l.isBold = bold;
+            l.isBlank = blank;
+            ++outModel.skipCount;
+        };
+
+        pushLine(GetPetCommandName(cmdType), LineColor::Blue, true, false);
+        pushLine(L"\n", LineColor::White, false, true);
+        pushLine(L"\n", LineColor::White, false, true);
+
+        switch (cmdType)
+        {
+        case PET_CMD_DEFAULT: pushLine(I18N::Game::FollowAroundTheCharacter, LineColor::White, false, false); break;
+        case PET_CMD_RANDOM: pushLine(I18N::Game::AttackAnyMonstersAroundTheCharacter, LineColor::White, false, false); break;
+        case PET_CMD_OWNER: pushLine(I18N::Game::AttackTheMonsterTogetherWithTheCharacter, LineColor::White, false, false); break;
+        case PET_CMD_TARGET: pushLine(I18N::Game::AttackTheMonsterSelectedByTheCharacter, LineColor::White, false, false); break;
+        }
+
+        return true;
+    }
+
+    void DeletePet(CHARACTER* c)
+    {
+        if (auto* petSystem = ResolvePetSystem(c))
+        {
+            const int objectType = petSystem->GetObjectType();
+            TerminateOwnerEffectObject(objectType);
+            delete petSystem;
+            c->m_pPet = nullptr;
+        }
+    }
+
+    void InitItemBackup(void)
+    {
+        g_renderItemInfoBackup = ITEM {};
+        gs_PetInfo.m_dwPetType = PET_TYPE_NONE;
+    }
+
+    bool RequestPetInfo(int sx, int sy, ITEM* pItem)
+    {
+        const auto itemIndex = ComposeItemIndex(sx, sy);
+        if (gs_PetInfo.m_dwPetType == PET_TYPE_NONE || g_renderItemIndexBackup != itemIndex
+            || g_renderItemInfoBackup.Type != pItem->Type || g_renderItemInfoBackup.Level != pItem->Level)
+        {
+            g_renderItemIndexBackup = itemIndex;
+            g_renderItemInfoBackup.Type = pItem->Type;
+            g_renderItemInfoBackup.Level = pItem->Level;
+
+            std::uint8_t PetType = PET_TYPE_DARK_SPIRIT;
+            if (pItem->Type == ITEM_DARK_HORSE_ITEM)
+            {
+                PetType = PET_TYPE_DARK_HORSE;
+            }
+
+            StorageType iInvenType = StorageType::Inventory;
+            int iItemIndex = 0;
+
+            if ((iItemIndex = g_pMyInventory->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::Inventory;
+            }
+            else if ((iItemIndex = g_pMyShopInventory->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::Inventory;
+            }
+            else if ((iItemIndex = g_pStorageInventory->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::Vault;
+            }
+            else if ((iItemIndex = g_pStorageInventoryExt->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::Vault;
+            }
+            else if ((iItemIndex = g_pTrade->GetPointedItemIndexMyInven()) != -1)
+            {
+                iInvenType = StorageType::TradeOwn;
+            }
+            else if ((iItemIndex = g_pTrade->GetPointedItemIndexYourInven()) != -1)
+            {
+                iInvenType = StorageType::TradeOther;
+            }
+            else if ((iItemIndex = g_pMixInventory->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::Crafting;
+            }
+            else if ((iItemIndex = g_pPurchaseShopInventory->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::PersonalShop;
+            }
+            else if ((iItemIndex = g_pNPCShop->GetPointedItemIndex()) != -1)
+            {
+                iInvenType = StorageType::NpcShop;
+            }
+
+            SocketClient->ToGameServer()->SendPetInfoRequest(static_cast<::PetType>(PetType), iInvenType, iItemIndex);
+
+            return true;
+        }
+        return false;
+    }
+
+    void SetPetInfo(std::uint8_t InvType, std::uint8_t InvPos, PET_INFO* pPetinfo)
+    {
+        CalcPetInfo(pPetinfo);
+
+        if ((InvType == 0) || (InvType == 254) || (InvType == 255))
+        {
+            if ((InvPos == EQUIPMENT_HELPER) || (InvPos == EQUIPMENT_WEAPON_LEFT))
+            {
+                PET_INFO* pHeroPetInfo = Hero->GetEquipedPetInfo(pPetinfo->m_dwPetType);
+                std::memcpy(pHeroPetInfo, pPetinfo, sizeof(PET_INFO));
+
+                if (pPetinfo->m_dwPetType == PET_TYPE_DARK_SPIRIT)
+                {
+                    if (auto* heroPetSystem = ResolvePetSystem(Hero))
+                    {
+                        heroPetSystem->SetPetInfo(pHeroPetInfo);
+
+                        if (InvType == 254)
+                        {
+                            heroPetSystem->Eff_LevelUp();
+                        }
+                        else if (InvType == 255)
+                        {
+                            heroPetSystem->Eff_LevelDown();
+                        }
+                    }
+                }
+                else if (pPetinfo->m_dwPetType == PET_TYPE_DARK_HORSE)
+                {
+                    if (InvType == 254 || InvType == 255)
+                    {
+                        Hero->Object.ExtState = InvType - 253;
+                    }
+
+                    SetPetItemConvert(&CharacterMachine->Equipment[EQUIPMENT_HELPER], pHeroPetInfo);
+                }
+
+                CharacterMachine->CalculateAll();
+
+                //return;
+            }
+        }
+
+        std::memcpy(&gs_PetInfo, pPetinfo, sizeof(PET_INFO));
+    }
+
+    PET_INFO* GetPetInfo(const ITEM* pItem)
+    {
+        if (pItem == &CharacterMachine->Equipment[EQUIPMENT_HELPER])
+        {
+            return Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
+        }
+        else if (pItem == &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT])
+        {
+            return Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
+        }
+        return &gs_PetInfo;
+    }
+
+    void CalcPetInfo(PET_INFO* pPetInfo)
+    {
+        int Charisma = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
+        int Strength = CharacterAttribute->Strength + CharacterAttribute->AddStrength;
+
+        int Level = pPetInfo->m_wLevel + 1;
+
+        switch (pPetInfo->m_dwPetType)
+        {
+        case PET_TYPE_DARK_SPIRIT:
+            pPetInfo->m_dwExp2 = ((10 + Level) * Level * Level * Level * 100);
+            pPetInfo->m_wDamageMin = (180 + (pPetInfo->m_wLevel * 15) + (Charisma / 8));
+            pPetInfo->m_wDamageMax = (200 + (pPetInfo->m_wLevel * 15) + (Charisma / 4));
+            pPetInfo->m_wAttackSpeed = (20 + (pPetInfo->m_wLevel * 4 / 5) + (Charisma / 50));
+            pPetInfo->m_wAttackSuccess = (1000 + pPetInfo->m_wLevel) + (pPetInfo->m_wLevel * 15);
+            break;
+
+        case PET_TYPE_DARK_HORSE:
+            pPetInfo->m_dwExp2 = ((10 + Level) * Level * Level * Level * 100);
+            pPetInfo->m_wDamageMin = (Strength / 10) + (Charisma / 10) + (pPetInfo->m_wLevel * 5);
+            pPetInfo->m_wDamageMax = pPetInfo->m_wDamageMin + (pPetInfo->m_wDamageMin / 2);
+            pPetInfo->m_wAttackSpeed = (20 + (pPetInfo->m_wLevel * 4 / 5) + (Charisma / 50));
+            pPetInfo->m_wAttackSuccess = (1000 + pPetInfo->m_wLevel) + (pPetInfo->m_wLevel * 15);
+            break;
+        }
+    }
+
+    void SetPetItemConvert(ITEM* ip, PET_INFO* pPetInfo)
+    {
+        if (ip->Type == ITEM_DARK_HORSE_ITEM)
+        {
+            const int agility = CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity;
+            const int defense = 5 + (agility / 20) + pPetInfo->m_wLevel * 2;
+            GameLogic::Items::SetOptionSlot(*ip, AT_SET_OPTION_IMPROVE_DEFENCE, defense);
+        }
+    }
+
+    std::uint32_t GetPetItemValue(PET_INFO* pPetInfo)
+    {
+        std::uint32_t gold = 0;
+
+        if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+        {
+            return gold;
+        }
+
+        switch (pPetInfo->m_dwPetType)
+        {
+        case PET_TYPE_DARK_HORSE:
+            gold = static_cast<std::uint32_t>(pPetInfo->m_wLevel) * 2000000u;
+            break;
+
+        case PET_TYPE_DARK_SPIRIT:
+            gold = static_cast<std::uint32_t>(pPetInfo->m_wLevel) * 1000000u;
+            break;
+        }
+
+        return gold;
+    }
+
+    bool RenderPetItemInfo(const UI::Scaling::Transform& screen, int sx, int sy, const ITEM* pItem, int iInvenType)
+    {
+        PET_INFO* pPetInfo = GetPetInfo(pItem);
+
+        if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+        {
+            return false;
+        }
+
+        int TextNum = 0;
+        int SkipNum = 0;
+        ClearTooltipRows();
+        int RequireLevel = 0;
+        int RequireCharisma = 0;
+        const std::wstring priceFormat = SanitizeWideStringFormat(I18N::Game::SellingPriceS);
+        const std::wstring ownershipFormat = SanitizeWideStringFormat(I18N::Game::CanBeEquippedByS);
+
+        auto appendLine = [&](int color, bool bold, bool countForHeight, const wchar_t* format, auto... args)
+        {
+            if (TextNum >= kTooltipLineLimit)
+            {
+                return;
+            }
+
+            TextListColor[TextNum] = color;
+            TextBold[TextNum] = bold;
+            std::swprintf(TextList[TextNum], kTooltipBufferCapacity, format, args...);
+            ++TextNum;
+
+            if (countForHeight)
+            {
+                ++SkipNum;
+            }
+        };
+
+        auto appendEmptyLine = [&]() {
+            appendLine(TEXT_COLOR_WHITE, false, true, L"\n");
+        };
+
+        if (g_pNewUISystem->IsVisible(mu::ui::window::INTERFACE_NPCSHOP))
+        {
+            wchar_t textBuffer[kTooltipBufferCapacity] {};
+            std::uint32_t gold = GetPetItemValue(&giPetManager::gs_PetInfo) / 3u;
+            gold = (gold / 100u) * 100u;
+
+            ConvertGold(gold, textBuffer);
+            appendLine(TEXT_COLOR_WHITE, true, false, priceFormat.c_str(), textBuffer);
+            appendEmptyLine();
+        }
+        else if ((iInvenType == mu::ui::window::TOOLTIP_TYPE_MY_SHOP) || (iInvenType == mu::ui::window::TOOLTIP_TYPE_PURCHASE_SHOP))
+        {
+            GameLogic::PersonalShop::ItemPrice itemPrice;
+            const int indexInv = g_pMyShopInventory->GetInventoryCtrl()->GetIndexByItem(pItem);
+            wchar_t textBuffer[kTooltipBufferCapacity] {};
+
+            const bool hasPrice = GetPersonalItemPrice(indexInv, itemPrice, g_IsPurchaseShop);
+            if (hasPrice && itemPrice.Kind != GameLogic::PersonalShop::PriceKind::Zen)
+            {
+                // The server tells the player when the jewels or coins are not enough.
+                std::swprintf(textBuffer, kTooltipBufferCapacity, L"%d %ls", itemPrice.Amount,
+                              GameLogic::PersonalShop::GetCurrencyName(itemPrice));
+                appendLine(TEXT_COLOR_YELLOW, true, false, priceFormat.c_str(), textBuffer);
+                appendEmptyLine();
+            }
+            else if (hasPrice)
+            {
+                const int price = itemPrice.Amount;
+                ConvertGold(price, textBuffer);
+
+                int priceColor = TEXT_COLOR_WHITE;
+                if (price >= 10000000)
+                {
+                    priceColor = TEXT_COLOR_RED;
+                }
+                else if (price >= 1000000)
+                {
+                    priceColor = TEXT_COLOR_YELLOW;
+                }
+                else if (price >= 100000)
+                {
+                    priceColor = TEXT_COLOR_GREEN;
+                }
+
+                appendLine(priceColor, true, false, priceFormat.c_str(), textBuffer);
+                appendEmptyLine();
+
+                const auto heroGold = CharacterMachine->Gold;
+                if ((static_cast<std::int64_t>(heroGold) < static_cast<std::int64_t>(price)) && (g_IsPurchaseShop == PSHOPWNDTYPE_PURCHASE))
+                {
+                    appendLine(TEXT_COLOR_RED, true, false, I18N::Game::YouAreShortOfZen);
+                    appendEmptyLine();
+                }
+            }
+            else if (g_IsPurchaseShop == PSHOPWNDTYPE_SALE)
+            {
+                appendLine(TEXT_COLOR_RED, true, false, I18N::Game::RightClickForPriceSetting);
+                appendEmptyLine();
+            }
+        }
+
+        if (pItem->Type == ITEM_DARK_HORSE_ITEM)
+        {
+            RequireLevel = (218 + (pPetInfo->m_wLevel * 2));
+            appendLine(TEXT_COLOR_BLUE, true, true, I18N::Game::DarkHorse);
+        }
+        else if (pItem->Type == ITEM_DARK_RAVEN_ITEM)
+        {
+            RequireCharisma = (185 + (pPetInfo->m_wLevel * 15));
+            appendLine(TEXT_COLOR_BLUE, true, true, I18N::Game::DarkRaven);
+        }
+
+        appendEmptyLine();
+        appendEmptyLine();
+
+        appendLine(TEXT_COLOR_WHITE, false, true, I18N::Game::ExpUU, pPetInfo->m_dwExp1, pPetInfo->m_dwExp2);
+        appendLine(TEXT_COLOR_WHITE, false, true, L"%ls : %d", I18N::Game::Level, pPetInfo->m_wLevel);
+
+        if (pItem->Type == ITEM_DARK_RAVEN_ITEM)
+        {
+            appendLine(TEXT_COLOR_WHITE, false, true, I18N::Game::DmgRateDDD, pPetInfo->m_wDamageMin, pPetInfo->m_wDamageMax, pPetInfo->m_wAttackSuccess);
+            appendLine(TEXT_COLOR_WHITE, false, true, I18N::Game::AttackSpeedD, pPetInfo->m_wAttackSpeed);
+        }
+        appendLine(TEXT_COLOR_WHITE, false, true, I18N::Game::LifeD, pPetInfo->m_wLife);
+
+        if (pItem->Type == ITEM_DARK_HORSE_ITEM)
+        {
+            const bool hasLevelRequirement = CharacterAttribute->Level >= RequireLevel;
+            const int requirementColor = hasLevelRequirement ? TEXT_COLOR_WHITE : TEXT_COLOR_RED;
+            appendLine(requirementColor, false, false, I18N::Game::MinimumLevelRequirementD, RequireLevel);
+
+            if (!hasLevelRequirement)
+            {
+                appendLine(TEXT_COLOR_RED, false, false, I18N::Game::LackingD, RequireLevel - CharacterAttribute->Level);
+            }
+        }
+        else if (pItem->Type == ITEM_DARK_RAVEN_ITEM)
+        {
+            const int charismaTotal = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
+            const bool hasCharisma = charismaTotal >= RequireCharisma;
+            const int charismaColor = hasCharisma ? TEXT_COLOR_WHITE : TEXT_COLOR_RED;
+
+            appendLine(charismaColor, false, false, I18N::Game::CharismaRequirementD, RequireCharisma);
+
+            if (!hasCharisma)
+            {
+                appendLine(TEXT_COLOR_RED, false, false, I18N::Game::LackingD, RequireCharisma - charismaTotal);
+            }
+        }
+
+        appendEmptyLine();
+
+        const int ownershipColor = (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD) ? TEXT_COLOR_WHITE : TEXT_COLOR_DARKRED;
+        appendLine(ownershipColor, false, true, ownershipFormat.c_str(), I18N::Game::DarkLord);
+
+        // The defense option a Dark Horse gives is shown from a copy; the tooltip leaves the item as it is.
+        ITEM shown = *pItem;
+        SetPetItemConvert(&shown, &gs_PetInfo);
+        for (int i = 0; i < shown.SpecialNum; ++i)
+        {
+            // An option of the option definitions (an item file may give the pets luck) writes its own lines.
+            if (const std::optional<int> rows = WriteDefinitionOptionLines(shown, i, TextNum, kTooltipLineLimit))
+            {
+                TextNum += *rows;
+                SkipNum += *rows;
+            }
+            else
+            {
+                GetSpecialOptionText(TextList[TextNum], shown.Special[i], shown.SpecialValue[i], 0);
+                TextListColor[TextNum] = TEXT_COLOR_BLUE;
+                TextBold[TextNum] = false;
+                ++TextNum;
+                ++SkipNum;
+            }
+
+            if (TextNum >= kTooltipLineLimit)
+            {
+                break;
+            }
+        }
+
+        if (pItem->Type == ITEM_DARK_HORSE_ITEM)
+        {
+            appendLine(TEXT_COLOR_BLUE, false, true, I18N::Game::AbsorbDAdditionalDamage, (30 + pPetInfo->m_wLevel) / 2);
+            appendLine(TEXT_COLOR_BLUE, false, false, I18N::Game::IncreaseDPossibleAttackDistance, 2);
+        }
+
+        g_pRenderText->SetFont(TextBold[0] ? g_hFontBold : g_hFont);
+        const SIZE TextSize = g_pRenderText->MeasureText(L"Q", 1);
+        int Height = (TextNum - SkipNum) * TextSize.cy + SkipNum * TextSize.cy / 2;
+        if (sy - Height >= 0)
+        {
+            sy -= Height;
+        }
+
+        UI::Tooltip::ShowLegacyTextList(TextNum, UI::Scaling::PositionX(screen, static_cast<float>(sx)),
+                                        UI::Scaling::PositionY(screen, static_cast<float>(sy)));
+        return true;
+    }
+}

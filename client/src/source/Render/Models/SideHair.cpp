@@ -1,0 +1,132 @@
+// SideHair.cpp: implementation of the CSideHair
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "Core/Utilities/Random.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Engine/Object/ZzzInfomation.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Render/Models/ShadowVolume.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "Render/Renderer/MuRenderer.h"
+#include "SideHair.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Render/Effects/EffectDraw.h"
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CSideHair::CSideHair()
+{
+    CShadowVolume();
+}
+
+CSideHair::~CSideHair()
+{
+}
+
+void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, const OBJECT* o, bool SkipTga)
+{
+    VectorSubtract(Hero->Object.Position, g_Camera.Position, m_vLight);
+    VectorNormalize(m_vLight);
+
+    if (o->Alpha < 0.01f)
+    {
+        return;
+    }
+    short nHiddenMesh = o->HiddenMesh;
+    short nBlendMesh = o->BlendMesh;
+    if (nHiddenMesh == -2 || nBlendMesh == -2)
+    {
+        return;
+    }
+
+    int iNumTriangles = 0;
+    for (int i = 1; i < 2; ++i)
+    {
+        if (nHiddenMesh == i || nBlendMesh == i)
+        {
+            continue;
+        }
+        if (Bitmaps[b->IndexTexture[i]].Components == 4)
+        {
+            if (SkipTga) continue;
+        }
+        iNumTriangles += b->Meshs[i].NumTriangles;
+    }
+    m_iNumEdge = 0;
+    m_pEdges = new St_Edges[iNumTriangles * 3];
+
+    for (short i = 1; i < 2; ++i)
+    {
+        if (nHiddenMesh == i || nBlendMesh == i)
+        {
+            continue;
+        }
+
+        bool Tga = false;
+        if (Bitmaps[b->IndexTexture[i]].Components == 4)
+        {
+            Tga = true;
+            if (SkipTga) continue;
+        }
+        DeterminateSilhouette(i, ppVertexTransformed, b->Meshs[i].NumTriangles, b->Meshs[i].Triangles, Tga);
+    }
+}
+
+void CSideHair::Destroy(void)
+{
+    delete[] m_pEdges;
+    delete[] m_pVertices;
+}
+
+void CSideHair::Render(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], vec3_t ppLightTransformed[MAX_MESH][MAX_VERTICES])
+{
+    for (int i = 0; i < m_iNumEdge; ++i)
+    {
+        RenderLine(ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[0]],
+            ppVertexTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nVertexIndex[1]],
+            ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[0]],
+            ppLightTransformed[m_pEdges[i].m_nMesh][m_pEdges[i].m_nNormalIndex[1]]);
+    }
+}
+
+void CSideHair::RenderLine(vec3_t v1, vec3_t v2, vec3_t c1, vec3_t c2)
+{
+    vec3_t p1, p2, d;
+
+    VectorSubtract(v2, v1, d);
+    const float fLength = VectorLength(d);
+    float fTextureMove = 0.0f;
+    fTextureMove = (50.0f - fLength) * 0.5f / 50.0f;
+
+    VectorCopy(v1, p1);
+    VectorCopy(v2, p2);
+    VectorSubtract(p2, p1, d);
+    VectorScale(d, 0.1f, d);
+    VectorSubtract(p1, d, p1);
+    VectorAdd(p2, d, p2);
+
+    float fTextureV = (float)(Random::DrawRand(v1, 1) % 100) * 0.01f;
+    BindTexture(BITMAP_ROBE + 4);
+    EnableAlphaBlendMinus();
+    vec3_t vOrtho;
+    CrossProduct(m_vLight, d, vOrtho);
+    VectorNormalize(vOrtho);
+    VectorScale(vOrtho, 10.f, vOrtho);
+    const mu::Vertex3D quad[4] = {
+        {p1[0] - vOrtho[0], p1[1] - vOrtho[1], p1[2] - vOrtho[2], 0.f, 0.f, 1.f,
+         0.f, fTextureMove + fTextureV, 0xFFFFFFFFu},
+        {p2[0] - vOrtho[0], p2[1] - vOrtho[1], p2[2] - vOrtho[2], 0.f, 0.f, 1.f,
+         0.f, 1.f - fTextureMove + fTextureV, 0xFFFFFFFFu},
+        {p2[0] + vOrtho[0], p2[1] + vOrtho[1], p2[2] + vOrtho[2], 0.f, 0.f, 1.f,
+         1.f, 1.f - fTextureMove + fTextureV, 0xFFFFFFFFu},
+        {p1[0] + vOrtho[0], p1[1] + vOrtho[1], p1[2] + vOrtho[2], 0.f, 0.f, 1.f,
+         1.f, fTextureMove + fTextureV, 0xFFFFFFFFu},
+    };
+    Render::EffectDrawing::ActiveEffectDrawer().DrawQuads({.vertices = quad});
+}

@@ -1,0 +1,480 @@
+#include "stdafx.h"
+#include "ReconnectManager.h"
+
+#include <cmath>
+#include <cwchar>
+
+#include "Network/Server/WSclient.h"   // SocketClient, ConnectForLogin, DeleteSocket,
+                                       // ResetClientToLoginScene, protocol states
+#include "Scenes/SceneCore.h"          // SceneFlag
+#include "Scenes/SceneCommon.h"        // SelectedHero, MAX_CHARACTERS_PER_ACCOUNT
+#include "Scenes/CharacterScene.h"     // StartGame
+#include "Engine/Object/ZzzCharacter.h"// CharactersClient
+#include "UI/Windows/LoginWin.h"       // g_LoginWin
+#include "MUHelper/MuHelper.h"         // MUHelper::g_MuHelper
+#include "UI/Chat/ChatMessages.h"
+#include "I18N/All.h"
+
+// Timing (milliseconds). WorldTime is the wall-clock ms timer the rest of the
+// client uses for timeouts (see ZzzAI.cpp).
+namespace
+{
+constexpr double PROBE_INTERVAL_MS = 5000.0;   // gap between background connects
+constexpr double PROBE_TIMEOUT_MS = 2000.0;    // allow a background connect this long to open
+constexpr double CONNECT_TIMEOUT_MS = 10000.0; // wait for the server hello
+constexpr double LOGIN_TIMEOUT_MS = 10000.0;   // login -> character list
+constexpr double RETRY_INTERVAL_MS = 5000.0;   // gap between re-login retries
+constexpr int STEP_COUNT = 4;                  // progress-bar steps
+}
+
+extern double WorldTime;
+extern int LogIn;
+extern wchar_t LogInID[MAX_USERNAME_SIZE + 1];
+extern BYTE Version[SIZE_PROTOCOLVERSION];
+extern BYTE Serial[SIZE_PROTOCOLSERIAL + 1];
+
+ReconnectManager& ReconnectManager::Instance()
+{
+    static ReconnectManager instance;
+    return instance;
+}
+
+ReconnectManager::ReconnectManager() = default;
+ReconnectManager::~ReconnectManager() = default;
+
+std::unique_ptr<Connection> ReconnectManager::TakeStandby()
+{
+    return std::move(m_standby);
+}
+
+void ReconnectManager::CacheServer(const wchar_t* ip, unsigned short port)
+{
+    if (ip == nullptr)
+    {
+        return;
+    }
+
+    // A connect to the cached server itself passes m_serverIp back in; copying a
+    // string onto itself is undefined.
+    if (ip != m_serverIp)
+    {
+        wcscpy_s(m_serverIp, _countof(m_serverIp), ip);
+    }
+    m_serverPort = port;
+}
+
+void ReconnectManager::CacheCredentials(const wchar_t* username, const wchar_t* password)
+{
+    if (username == nullptr || password == nullptr)
+    {
+        return;
+    }
+
+    wcscpy_s(m_username, _countof(m_username), username);
+    wcscpy_s(m_password, _countof(m_password), password);
+}
+
+void ReconnectManager::CacheCharacter(const wchar_t* characterName)
+{
+    if (characterName == nullptr)
+    {
+        return;
+    }
+
+    wcscpy_s(m_characterName, _countof(m_characterName), characterName);
+
+    // A full session is only usable once we know the server, the account, and
+    // the character to resume.
+    m_hasSession = m_serverIp[0] != L'\0' && m_username[0] != L'\0' && m_characterName[0] != L'\0';
+}
+
+void ReconnectManager::ClearSession()
+{
+    m_hasSession = false;
+    m_serverIp[0] = L'\0';
+    m_username[0] = L'\0';
+    m_password[0] = L'\0';
+    m_characterName[0] = L'\0';
+}
+
+void ReconnectManager::RequestBegin()
+{
+    if (m_active || m_beginPending || !m_hasSession)
+    {
+        return;
+    }
+
+    // Capture the MU Helper state now (at the moment of disconnect), before
+    // anything in the reconnect can touch it, so it can be restored afterwards.
+    m_muHelperWasActive = MUHelper::g_MuHelper.IsActive();
+
+    // Don't tear the game down yet: keep the main scene rendering (frozen, since
+    // no server data arrives) and connect to the server in the background. Only once
+    // that connection opens do we tear down and re-login over it. This just sets state, so it's safe
+    // to call from the render path.
+    m_active = true;
+    EnterPhase(Phase::Probing);
+    // Connect straight away instead of waiting out the first interval, so a brief
+    // blip recovers quickly.
+    m_phaseStartTime = WorldTime - PROBE_INTERVAL_MS;
+}
+
+void ReconnectManager::Begin()
+{
+    // Runs between frames once the background connection found the server back. The
+    // teardown (ReleaseMainData etc.) must run here, not mid-render.
+    if (!m_beginPending)
+    {
+        return;
+    }
+
+    m_beginPending = false;
+
+    if (!m_active)
+    {
+        return;
+    }
+
+    // Tear the live session down to a clean login state.
+    // ResetClientToLoginScene() switches to LOG_IN_SCENE, and this frame's
+    // CreateLogInScene() takes over the background connection to the cached game
+    // server while this reconnect is active.
+    ResetClientToLoginScene();
+
+    // Cancel pressed while probing: stop here at the login screen.
+    if (m_abortAfterTeardown)
+    {
+        m_abortAfterTeardown = false;
+        Abort();
+        return;
+    }
+
+    EnterPhase(Phase::Connecting);
+}
+
+void ReconnectManager::RequestCancel()
+{
+    if (!m_active)
+    {
+        return;
+    }
+
+    // Processed by Update() (scene-update phase) so the teardown never runs from
+    // the dialog's render call.
+    m_cancelRequested = true;
+}
+
+void ReconnectManager::Update()
+{
+    if (m_cancelRequested)
+    {
+        m_cancelRequested = false;
+        if (m_active)
+        {
+            if (m_phase == Phase::Probing && SceneFlag == MAIN_SCENE)
+            {
+                // The game world is still loaded; its teardown must run between
+                // frames (not mid-render), after which we land on the login
+                // screen. m_beginPending defers it: the main loop calls Begin()
+                // each frame and it fires once the flag is set.
+                m_abortAfterTeardown = true;
+                m_beginPending = true;
+            }
+            else
+            {
+                Abort();
+            }
+        }
+        return;
+    }
+
+    if (!m_active)
+    {
+        return;
+    }
+
+    switch (m_phase)
+    {
+    case Phase::Probing:        UpdateProbing();       break;
+    case Phase::Connecting:     UpdateConnecting();    break;
+    case Phase::LoggingIn:      UpdateLoggingIn();     break;
+    case Phase::SelectingChar:  UpdateSelectingChar(); break;
+    case Phase::Joining:        UpdateJoining();       break;
+    case Phase::Retrying:       UpdateRetrying();      break;
+    default:                                           break;
+    }
+}
+
+void ReconnectManager::UpdateProbing()
+{
+    // The server is back; waiting for Begin() to run between frames.
+    if (m_beginPending)
+    {
+        return;
+    }
+
+    if (!m_standby)
+    {
+        if (ElapsedMs() >= PROBE_INTERVAL_MS)
+        {
+            StartStandby();
+        }
+        return;
+    }
+
+    PollStandby();
+}
+
+void ReconnectManager::StartStandby()
+{
+    // The cached address works both as an IP literal and as a host name.
+    m_standby = OpenConnectionForLater(m_serverIp, m_serverPort);
+    m_phaseStartTime = WorldTime;
+}
+
+void ReconnectManager::PollStandby()
+{
+    switch (m_standby->State())
+    {
+    case Network::ConnectionState::Connecting:
+        if (ElapsedMs() > PROBE_TIMEOUT_MS)
+        {
+            m_standby.reset();
+            EnterPhase(Phase::Probing); // no answer in time; try again later
+        }
+        return;
+    case Network::ConnectionState::Open:
+        // Server is up - defer to Begin() (called by the main loop each
+        // frame) to tear down and re-login between frames, over this connection.
+        m_beginPending = true;
+        return;
+    case Network::ConnectionState::Closed:
+        m_standby.reset();
+        EnterPhase(Phase::Probing);
+        return;
+    }
+}
+
+void ReconnectManager::UpdateConnecting()
+{
+    if (!IsSocketAlive())
+    {
+        EnterPhase(Phase::Retrying);
+        return;
+    }
+
+    // The game server answers a fresh connection with its hello packet, which
+    // ReceiveJoinServer turns into RECEIVE_JOIN_SERVER_SUCCESS (LogIn was reset
+    // to 0 by the teardown, so it takes the login branch).
+    if (CurrentProtocolState == RECEIVE_JOIN_SERVER_SUCCESS)
+    {
+        g_LoginWin.Show(false);
+
+        LogIn = 1;
+        wcscpy_s(LogInID, _countof(LogInID), m_username);
+        CurrentProtocolState = REQUEST_LOG_IN;
+        SocketClient->ToGameServer()->SendLogin(m_username, m_password, Version, Serial);
+
+        EnterPhase(Phase::LoggingIn);
+        return;
+    }
+
+    if (ElapsedMs() > CONNECT_TIMEOUT_MS)
+    {
+        EnterPhase(Phase::Retrying);
+    }
+}
+
+void ReconnectManager::UpdateLoggingIn()
+{
+    if (!IsSocketAlive())
+    {
+        EnterPhase(Phase::Retrying);
+        return;
+    }
+
+    // On login success the login-scene loop (NewMoveLogInScene) requests the
+    // character list and switches to the character scene on its own. Wait for
+    // the list to arrive.
+    if (SceneFlag == CHARACTER_SCENE && CurrentProtocolState == RECEIVE_CHARACTERS_LIST)
+    {
+        EnterPhase(Phase::SelectingChar);
+        return;
+    }
+
+    // No progress: most often the server still has the old session marked
+    // "logged in" right after the crash and rejects the re-login. Retry - it
+    // clears within a few seconds. (The player can Cancel if credentials are
+    // genuinely wrong.)
+    if (ElapsedMs() > LOGIN_TIMEOUT_MS)
+    {
+        EnterPhase(Phase::Retrying);
+    }
+}
+
+void ReconnectManager::UpdateSelectingChar()
+{
+    if (!IsSocketAlive())
+    {
+        EnterPhase(Phase::Retrying);
+        return;
+    }
+
+    if (TrySelectCachedCharacter())
+    {
+        EnterPhase(Phase::Joining);
+        return;
+    }
+
+    // The character is gone (deleted on another client?) - fall back to manual
+    // selection rather than looping forever.
+    Abort();
+}
+
+void ReconnectManager::UpdateJoining()
+{
+    if (SceneFlag == MAIN_SCENE)
+    {
+        // Back in the world exactly where we left off.
+        if (m_muHelperWasActive)
+        {
+            // Resume the client-side MU Helper so its state matches what the
+            // player left running (and so the stop toggle works again).
+            MUHelper::g_MuHelper.Start();
+            m_muHelperWasActive = false;
+        }
+
+        // The dialog can be up for a fraction of a second; this line stays in the chat to say what happened.
+        UI::Chat::PostSystem(I18N::Game::ReconnectedAfterConnectionLost, mu::ui::window::TYPE_SYSTEM_MESSAGE);
+        m_active = false;
+        m_phase = Phase::Idle;
+        return;
+    }
+
+    // Loading can be slow, so only retry if the socket actually died.
+    if (!IsSocketAlive())
+    {
+        EnterPhase(Phase::Retrying);
+    }
+}
+
+void ReconnectManager::UpdateRetrying()
+{
+    if (ElapsedMs() < RETRY_INTERVAL_MS)
+    {
+        return;
+    }
+
+    // Already torn down (Begin ran once); just re-open the socket and let the
+    // Connecting phase re-drive the login. ConnectForLogin resets the protocol
+    // state so the server hello is treated as a fresh login rather than a map change.
+    if (ConnectForLogin(m_serverIp, m_serverPort))
+    {
+        EnterPhase(Phase::Connecting);
+        return;
+    }
+
+    EnterPhase(Phase::Retrying);  // server not reachable this time; wait and retry
+}
+
+bool ReconnectManager::TrySelectCachedCharacter()
+{
+    if (m_characterName[0] == L'\0' || CharactersClient == nullptr)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < MAX_CHARACTERS_PER_ACCOUNT; ++i)
+    {
+        if (wcscmp(CharactersClient[i].ID, m_characterName) == 0)
+        {
+            SelectedHero = i;
+            StartGame();   // -> LOADING_SCENE -> MAIN_SCENE (sends SelectCharacter)
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void ReconnectManager::Abort()
+{
+    m_active = false;
+    m_beginPending = false;
+    m_cancelRequested = false;
+    m_abortAfterTeardown = false;
+    m_phase = Phase::Idle;
+    m_standby.reset();
+
+    // Begin() already released the in-game data, so this only needs to land on a
+    // usable login screen and reconnect to the server for a manual login. It
+    // runs from Update() (scene-update phase), so the light scene reset is safe.
+    DeleteSocket();
+    g_sceneInit.ResetForDisconnect();
+    SceneFlag = LOG_IN_SCENE;
+    LogIn = 0;
+    CurrentProtocolState = REQUEST_JOIN_SERVER;
+}
+
+void ReconnectManager::EnterPhase(Phase phase)
+{
+    m_phase = phase;
+    m_phaseStartTime = WorldTime;
+}
+
+double ReconnectManager::ElapsedMs() const
+{
+    return WorldTime - m_phaseStartTime;
+}
+
+bool ReconnectManager::IsSocketAlive() const
+{
+    return SocketClient != nullptr && SocketClient->State() != Network::ConnectionState::Closed;
+}
+
+int ReconnectManager::GetStepCount()
+{
+    return STEP_COUNT;
+}
+
+int ReconnectManager::GetStepIndex() const
+{
+    switch (m_phase)
+    {
+    // Probing/Retrying/Connecting share a step so the bar doesn't jump forward
+    // and snap back when a connect attempt fails and retries.
+    case Phase::Probing:        return 1;
+    case Phase::Retrying:       return 1;
+    case Phase::Connecting:     return 1;
+    case Phase::LoggingIn:      return 2;
+    case Phase::SelectingChar:  return 3;
+    case Phase::Joining:        return 4;
+    default:                    return 0;
+    }
+}
+
+int ReconnectManager::GetCountdownSeconds() const
+{
+    // Seconds until the next attempt, for the dialog's "retrying in N" text.
+    double interval = 0.0;
+    if (m_phase == Phase::Probing && !m_standby)
+    {
+        interval = PROBE_INTERVAL_MS;
+    }
+    else if (m_phase == Phase::Retrying)
+    {
+        interval = RETRY_INTERVAL_MS;
+    }
+    else
+    {
+        return 0;
+    }
+
+    const double remainingMs = interval - ElapsedMs();
+    if (remainingMs <= 0.0)
+    {
+        return 0;
+    }
+
+    return static_cast<int>(std::ceil(remainingMs / 1000.0));
+}

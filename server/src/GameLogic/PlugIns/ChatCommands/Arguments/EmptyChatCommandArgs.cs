@@ -1,0 +1,12 @@
+﻿// <copyright file="EmptyChatCommandArgs.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ChatCommands.Arguments;
+
+/// <summary>
+/// Arguments used by any ChatCommandPlugIn which don't need any arguments.
+/// </summary>
+public class EmptyChatCommandArgs : ArgumentsBase
+{
+}

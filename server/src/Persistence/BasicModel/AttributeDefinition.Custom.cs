@@ -1,0 +1,42 @@
+﻿// <copyright file="AttributeDefinition.Custom.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Persistence.BasicModel;
+
+using HNMO.DataModel;
+
+/// <summary>
+/// A plain implementation of <see cref="HNMO.AttributeSystem.AttributeDefinition"/>.
+/// </summary>
+public partial class AttributeDefinition :
+    IAssignable,
+    IAssignable<HNMO.AttributeSystem.AttributeDefinition>,
+    ICloneable<HNMO.AttributeSystem.AttributeDefinition>
+{
+    /// <inheritdoc />
+    public virtual AttributeSystem.AttributeDefinition Clone(DataModel.Configuration.GameConfiguration gameConfiguration)
+    {
+        var clone = new AttributeDefinition();
+        clone.AssignValuesOf(this, gameConfiguration);
+        return clone;
+    }
+
+    /// <inheritdoc />
+    public virtual void AssignValuesOf(object other, DataModel.Configuration.GameConfiguration gameConfiguration)
+    {
+        if (other is AttributeSystem.AttributeDefinition typedOther)
+        {
+            this.AssignValuesOf(typedOther, gameConfiguration);
+        }
+    }
+
+    /// <inheritdoc />
+    public virtual void AssignValuesOf(AttributeSystem.AttributeDefinition other, DataModel.Configuration.GameConfiguration gameConfiguration)
+    {
+        this.Id = other.Id;
+        this.Designation = other.Designation;
+        this.Description = other.Description;
+        this.MaximumValue = other.MaximumValue;
+    }
+}

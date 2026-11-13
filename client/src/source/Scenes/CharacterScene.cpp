@@ -1,0 +1,540 @@
+///////////////////////////////////////////////////////////////////////////////
+// CharacterScene.cpp - Character selection scene implementation
+///////////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "CharacterScene.h"
+#include "SceneCore.h"
+#include "Audio/SoundEventPlay.h"
+#include "Character/CharacterManager.h"
+#include "World/MapInfra/MapManager.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Renderer/MuRenderer.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Input/Selection.h"
+#include "Engine/Object/ZzzInfomation.h"
+#include "Render/Effects/ZzzEffect.h"
+#include "Engine/AI/GOBoid.h"
+#include "GameLogic/Pets/w_PetProcess.h"
+#include "UI/Core/SceneUICoordinator.h"
+#include "UI/Windows/SysMenuWin.h"
+#include "Character/CharSelMainWin.h"
+#include "Character/CharMakeWin.h"
+#include "Core/Input/Input.h"
+#include "Core/Input/UiInputRouter.h"
+#include "Network/Server/WSclient.h"
+#include "Network/Server/CSMapServer.h"
+#include "Core/Utilities/Log/muConsoleDebug.h"
+#include "UI/Core/WindowSystem.h"
+#include "Audio/DSPlaySound.h"
+#include "App/Platform/Windows/Winmain.h"
+#include "SceneCommon.h"
+#include "Camera/CameraUtility.h"
+#include "Camera/CameraManager.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "LoginScene.h"
+#include "Camera/CameraProjection.h"
+#include "UI/Scaling/UITransform.h"
+#include "Core/Input/ImeInput.h"
+#ifdef _EDITOR
+#include "Camera/CameraMode.h"
+#include "Camera/FrustumRenderer.h"
+#endif
+#include "Scenes/SceneLightingSetup.h"
+#include "Scenes/ScenePostProcessing.h"
+
+// External declarations
+extern EGameScene SceneFlag;
+extern int ErrorMessage;
+extern CHARACTER CharacterView;
+extern int SelectedCharacter;
+extern int g_iKeyPadEnable;
+extern int g_iChatInputType;
+extern HWND g_hWnd;
+extern CErrorReport g_ErrorReport;
+extern double WorldTime;
+extern int MouseX;
+extern int MouseY;
+extern vec3_t MouseTarget;
+
+// Forward declaration
+BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstring& lpszString);
+
+void StartGame()
+{
+    {
+        if (SelectedHero < 0 || SelectedHero >= MAX_CHARACTERS_PER_ACCOUNT)
+        {
+            return;
+        }
+
+        if (CTLCODE_01BLOCKCHAR & CharactersClient[SelectedHero].CtlCode)
+            CSceneUICoordinator::Instance().PopUpMsgWin(MESSAGE_BLOCKED_CHARACTER);
+        else
+        {
+            CharacterAttribute->Level = CharactersClient[SelectedHero].Level;
+            CharacterAttribute->Class = CharactersClient[SelectedHero].Class;
+            CharacterAttribute->Skin = CharactersClient[SelectedHero].Skin;
+            ::wcscpy_s(CharacterAttribute->Name, MAX_USERNAME_SIZE + 1, CharactersClient[SelectedHero].ID);
+
+            ::ReleaseCharacterSceneData();
+            InitLoading = false;
+            SceneFlag = LOADING_SCENE;
+        }
+    }
+}
+
+namespace Scenes
+{
+// A slot holds a character when the list filled its name in.
+static bool HasCharacter(int slot)
+{
+    if (slot < 0 || slot >= MAX_CHARACTERS_PER_ACCOUNT)
+        return false;
+
+    return CharactersClient[slot].ID[0] != L'\0';
+}
+
+const wchar_t* CharacterNameInSlot(int slot)
+{
+    return HasCharacter(slot) ? CharactersClient[slot].ID : L"";
+}
+
+int CharacterLevelInSlot(int slot)
+{
+    return HasCharacter(slot) ? CharactersClient[slot].Level : 0;
+}
+
+int FindCharacterSlot(const wchar_t* name)
+{
+    if (name == nullptr || name[0] == L'\0')
+        return -1;
+
+    for (int slot = 0; slot < MAX_CHARACTERS_PER_ACCOUNT; ++slot)
+    {
+        if (HasCharacter(slot) && wcscmp(CharactersClient[slot].ID, name) == 0)
+            return slot;
+    }
+    return -1;
+}
+
+bool StartGameWithSlot(int slot)
+{
+    if (!HasCharacter(slot))
+        return false;
+
+    // What the double click and the debug /c option do: pick the character
+    // and let StartGame() take it from there.
+    SelectedCharacter = slot;
+    SelectedHero = slot;
+    ::StartGame();
+    return true;
+}
+} // namespace Scenes
+
+void CreateCharacterScene()
+{
+    g_pNewUIMng->ResetActiveUIObj();
+
+    EnableMainRender = true;
+    MouseOnWindow = false;
+    ErrorMessage = 0;
+
+    gMapManager.WorldActive = WD_74NEW_CHARACTER_SCENE;
+
+    gMapManager.LoadWorld(gMapManager.WorldActive);
+    OpenCharacterSceneData();
+
+    CreateCharacterPointer(&CharacterView, MODEL_FACE + 1, 0, 0);
+    CharacterView.Class = CLASS_KNIGHT;
+    CharacterView.SkinIndex = gCharacterManager.GetSkinModelIndex(CLASS_KNIGHT);
+    CharacterView.Object.Kind = 0;
+
+    SelectedHero = -1;
+    CSceneUICoordinator::Instance().CreateCharacterScene();
+
+    ClearInventory();
+    CharacterAttribute->SkillNumber = 0;
+
+    for (int i = 0; i < MAX_MAGIC; i++)
+        CharacterAttribute->Skill[i] = AT_SKILL_UNDEFINED;
+
+    for (int i = EQUIPMENT_WEAPON_RIGHT; i < EQUIPMENT_HELPER; i++)
+        CharacterMachine->Equipment[i].Level = 0;
+
+    g_pNewUISystem->HideAll();
+
+    g_iKeyPadEnable = 0;
+    GuildInputEnable = false;
+    TabInputEnable = false;
+    GoldInputEnable = false;
+    InputEnable = true;
+    ClearInput();
+    InputIndex = 0;
+    InputTextWidth = 90;
+    InputNumber = 1;
+
+    for (int i = 0; i < MAX_WHISPER; i++)
+    {
+        g_pChatListBox->AddText(L"", L"", mu::ui::window::TYPE_WHISPER_MESSAGE);
+    }
+
+    HIMC hIMC = ImmGetContext(g_hWnd);
+    DWORD Conversion, Sentence;
+
+    Conversion = IME_CMODE_NATIVE;
+    Sentence = IME_SMODE_NONE;
+
+    g_bIMEBlock = FALSE;
+    RestoreIMEStatus();
+    ImmSetConversionStatus(hIMC, Conversion, Sentence);
+    ImmGetConversionStatus(hIMC, &g_dwBKConv, &g_dwBKSent);
+    SaveIMEStatus();
+    ImmReleaseContext(g_hWnd, hIMC);
+    g_bIMEBlock = TRUE;
+
+    g_ErrorReport.Write(L"> Character scene init success.\r\n");
+}
+
+static void UpdateSelectedCharacterEffects();
+
+// Moves the camera and builds the view the frame draws and picks with, before anything tests visibility against it.
+static void UpdateCharacterSceneView()
+{
+    MoveMainCamera();
+
+    const auto viewport = UI::Scaling::FullReferenceViewport();
+    UpdateCameraView(viewport.x, viewport.y, viewport.width, viewport.height);
+    CreateFrustrum(static_cast<float>(viewport.width) / REFERENCE_WIDTH,
+                   static_cast<float>(viewport.height) / REFERENCE_HEIGHT);
+    CameraProjection::ScreenToWorldRay(g_Camera, MouseX, MouseY, MouseTarget);
+}
+
+static void MoveCharacterSceneState()
+{
+    // Picks the character under the cursor in what the last frame drew, before anything resets the mouse state.
+    if (!CSceneUICoordinator::Instance().IsCursorOnUI() && !Core::Input::IsMouseOverUI())
+        Input::Selection::SelectObjects();
+
+    MouseOnWindow = false;
+
+    InitTerrainLight();
+    MoveObjects();
+    MoveMounts();
+
+    // Update camera BEFORE checking character visibility
+    MoveCamera();
+    UpdateCharacterSceneView();
+
+    // Now check character visibility with updated frustum
+    MoveCharactersClient();
+    MoveCharacterClient(&CharacterView);
+
+    MoveEffects();
+    MoveJoints();
+    MoveParticles();
+    MoveBoids();
+
+    ThePetProcess().UpdatePets();
+    UpdateCharacterEffects();
+    UpdateObjectEffects();
+    UpdateMountEffects();
+    UpdateEffectModelEffects();
+    UpdateSelectedCharacterEffects();
+
+#if defined _DEBUG || defined FOR_WORK
+    std::wstring lpszTemp = { 0 };
+    if (::Util_CheckOption(::GetCommandLine(), L'c', lpszTemp))
+    {
+        SelectedHero = ::_wtoi(lpszTemp.c_str());
+        ::StartGame();
+    }
+#endif
+
+    CInput& rInput = CInput::Instance();
+    CSceneUICoordinator& rUIMng = CSceneUICoordinator::Instance();
+
+    if (rInput.IsKeyDown(VK_RETURN))
+    {
+        if (!(g_MsgWin.IsVisible() || g_CharMakeWin.IsVisible()
+            || g_SysMenuWin.IsVisible())
+            && SelectedHero > -1 && SelectedHero < MAX_CHARACTERS_PER_ACCOUNT)
+        {
+            // Enter is the Connect button: its theme's click kind (Q-UI1).
+            g_CharSelMainWin.PlayButtonClick("btn_connect");
+
+            if (SelectedCharacter >= 0)
+                SelectedHero = SelectedCharacter;
+
+            ::StartGame();
+        }
+    }
+    // ESC menu toggle is handled by CSceneUICoordinator::Update()
+
+    // Core::Input::IsMouseOverUI() added as a 2nd gate -- IsCursorOnUI() alone runs on CCharSelMainWin's own
+    // UpdateMouseEvent() rect (CalculateFixedAnchorLayout()'s hand-duplicated math), which has
+    // already gone stale relative to the real RmlUi-rendered buttons once (see that function's
+    // own comment on the Delete-button no-op bug). RmlUi's own hit-test is authoritative here
+    // without any new per-window bounding-box query: char_sel_main.rml's #panel spans the full
+    // screen but is pointer-events:none, so IsMouseOverUI() only reports true over the real
+    // interactive children.
+    if (rUIMng.IsCursorOnUI() || Core::Input::IsMouseOverUI())
+    {
+        return;
+    }
+
+    if (rInput.IsLBtnDbl() && g_CharSelMainWin.IsVisible())
+    {
+        if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_PER_ACCOUNT)
+        {
+            return;
+        }
+
+        SelectedHero = SelectedCharacter;
+        ::StartGame();
+    }
+    else if (rInput.IsLBtnDn())
+    {
+        if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_PER_ACCOUNT)
+            SelectedHero = -1;
+        else
+        {
+            SelectedHero = SelectedCharacter;
+            // A click on a character (Q-UI1).
+            Audio::PlayInterfaceEventSound(Data::Sounds::CharacterSelectedEvent, {});
+        }
+        g_CharSelMainWin.UpdateDisplay();
+    }
+
+    g_ConsoleDebug->UpdateMainScene();
+}
+
+// Where the characters stand and how they are lit for the draw, once the input has chosen the selected one.
+static void PlaceCharactersForDraw()
+{
+    for (int i = 0; i < MAX_CHARACTERS_PER_ACCOUNT; i++)
+    {
+        CharactersClient[i].Object.Position[2] = 163.0f;
+        Vector(0.0f, 0.0f, 0.0f, CharactersClient[i].Object.Light);
+    }
+    if (SelectedHero == -1)
+        return;
+    OBJECT* o = &CharactersClient[SelectedHero].Object;
+    if (!o->Live)
+        return;
+    vec3_t Light;
+    Vector(1.0f, 1.0f, 1.0f, Light);
+    Vector(1.0f, 1.0f, 1.0f, o->Light);
+    AddTerrainLight(o->Position[0], o->Position[1], Light, 1, PrimaryTerrainLight);
+}
+
+void NewMoveCharacterScene()
+{
+    // PrepareSceneBeforeFrame creates the scene, between frames, once the list is in.
+    if (CurrentProtocolState < RECEIVE_CHARACTERS_LIST || !InitCharacterScene)
+    {
+        return;
+    }
+    MoveCharacterSceneState();
+    PlaceCharactersForDraw();
+    CullWorld();
+    Scenes::Lighting::PinWorldDynamicLights();
+}
+
+/**
+ * @brief Sets up viewport and character positioning for character selection scene.
+ *
+ * @param outWidth Output screen width
+ * @param outHeight Output screen height
+ */
+static void SetupCharacterSceneViewport(int& outWidth, int& outHeight)
+{
+    const auto viewport = UI::Scaling::FullReferenceViewport();
+    outWidth = viewport.width;
+    outHeight = viewport.height;
+
+    mu::GetRenderer().SetClearColor(0.f, 0.f, 0.f, 1.f);
+    BeginOpengl(viewport.x, viewport.y, outWidth, outHeight);
+    Scenes::Lighting::SubmitSceneLighting();
+}
+
+// The render state the selected character's lighting left (PlaceCharactersForDraw sets the light).
+static void ApplySelectedCharacterLighting()
+{
+    if (SelectedHero == -1)
+        return;
+
+    const OBJECT* o = &CharactersClient[SelectedHero].Object;
+    if (!o->Live)
+        return;
+
+    EnableAlphaBlend();
+    DisableAlphaBlend();
+}
+
+/**
+ * @brief Renders all 3D elements for the character selection scene.
+ */
+static void RenderCharacterScene3D()
+{
+    // Terrain has a real D3D11 path now -- call unconditionally. RenderObjects() (BMD static world
+    // meshes) joins it. RenderCharactersClient()/RenderMount() join it too (see LoginScene.cpp's
+    RenderTerrain(false);
+    RenderObjects();
+    RenderCharactersClient();
+    RenderMount();
+
+    RenderBlurs();
+    RenderJoints();
+    RenderEffects();
+    Scenes::PostProcessing::RenderPetsWithoutBloom();
+    RenderBoids();
+    RenderObjects_AfterCharacter();
+}
+
+/**
+ * @brief Renders special effects for the selected character (aurora, particles).
+ */
+static void RenderSelectedCharacterEffects()
+{
+    if (SelectedHero == -1)
+        return;
+
+    const OBJECT* o = &CharactersClient[SelectedHero].Object;
+    if (!o->Live)
+        return;
+
+    // Aurora luminance pulses between (BASE - AMPLITUDE) and (BASE + AMPLITUDE)
+    // with period ~2π / FREQUENCY ms.
+    constexpr float AURORA_FREQUENCY = 0.0015f;
+    constexpr float AURORA_AMPLITUDE = 0.3f;
+    constexpr float AURORA_BASE_LUMINANCE = 0.5f;
+
+    vec3_t vLight;
+    Vector(1.0f, 1.0f, 1.f, vLight);
+    float fLumi = sinf(WorldTime * AURORA_FREQUENCY) * AURORA_AMPLITUDE + AURORA_BASE_LUMINANCE;
+    Vector(fLumi * vLight[0], fLumi * vLight[1], fLumi * vLight[2], vLight);
+
+    EnableAlphaBlend();
+    RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, o->Position[0], o->Position[1], 1.8f, 1.8f, vLight, WorldTime * 0.01f);
+    RenderTerrainAlphaBitmap(BITMAP_GM_AURORA, o->Position[0], o->Position[1], 1.2f, 1.2f, vLight, -WorldTime * 0.01f);
+    DisableAlphaBlend();
+}
+
+// The selected character's particles and the server's hero name, while the scene draws it.
+static void UpdateSelectedCharacterEffects()
+{
+    if (SelectedHero == -1)
+        return;
+
+    OBJECT* o = &CharactersClient[SelectedHero].Object;
+    if (!o->Live)
+        return;
+
+    Vector(0.15f, 0.15f, 0.15f, o->Light);
+    CreateParticleFpsChecked(BITMAP_EFFECT, o->Position, o->Angle, o->Light, 4);
+    CreateParticleFpsChecked(BITMAP_EFFECT, o->Position, o->Angle, o->Light, 5);
+
+    g_csMapServer.SetHeroID((wchar_t*)CharactersClient[SelectedHero].ID);
+}
+
+/**
+ * @brief Renders the sprites, particles and damage points of the character selection scene.
+ */
+static void RenderCharacterSceneSprites()
+{
+    BeginSprite();
+    RenderSprites();
+    RenderParticles();
+    RenderPoints();
+    EndSprite();
+}
+
+/**
+ * @brief Renders UI elements for character selection scene.
+ */
+static void RenderCharacterSceneUI()
+{
+    BeginBitmap();
+    RenderInfomation();
+
+#ifdef ENABLE_EDIT
+    RenderDebugWindow();
+#endif
+
+    EndBitmap();
+}
+
+/**
+ * @brief Main rendering function for the character selection scene.
+ *
+ * Orchestrates the complete rendering pipeline:
+ * 1. Viewport setup and character positioning
+ * 2. Character lighting application
+ * 3. Character height adjustment
+ * 4. 3D world rendering
+ * 5. Selected character effects
+ * 6. UI rendering
+ *
+ * @param hDC Device context (unused but required by interface)
+ * @return true if rendering succeeded, false if scene not initialized
+ */
+bool NewRenderCharacterScene(HDC hDC)
+{
+    if (!InitCharacterScene)
+    {
+        return false;
+    }
+    if (CurrentProtocolState < RECEIVE_CHARACTERS_LIST)
+    {
+        return false;
+    }
+
+    FogEnable = true;
+
+    int width, height;
+    SetupCharacterSceneViewport(width, height);
+    ApplySelectedCharacterLighting();
+    RenderCharacterScene3D();
+    RenderSelectedCharacterEffects();
+
+#ifdef _EDITOR
+    if (CameraManager::Instance().GetCurrentMode() == CameraMode::FreeFly)
+    {
+        ICamera* spectated = CameraManager::Instance().GetSpectatedCamera();
+        if (spectated)
+            RenderFrustumWireframe(spectated->GetFrustum());
+    }
+#endif
+
+    RenderCharacterSceneSprites();
+    Scenes::PostProcessing::EndSceneGeometry();
+    RenderCharacterSceneUI();
+
+    // Handle option window in login/character scenes (can't use full g_pNewUISystem update).
+    // Update() (not just UpdateMouseEvent()/UpdateKeyEvent()) is required here too -- it's what
+    // runs SyncRmlModel(), which pushes this window's own C++ state (tab/row labels, checkbox
+    // values, everything bound via {{}}) into its RmlUi data model. Without it, every bound field
+    // stays at its default-constructed empty value and the window renders with no text at all
+    // (found live: fixed the moment CManager::Update() started running this window normally, i.e.
+    // after reaching a scene that pumps the full g_pNewUISystem update -- the model, once
+    // populated there, stays populated even back in a scene that skips this call again, which is
+    // why the symptom didn't reappear after visiting one such scene). Same order the full
+    // CManager sweep uses (UpdateMouseEvent -> UpdateKeyEvent -> Update -> Render).
+    if (g_pNewUISystem->IsVisible(mu::ui::window::INTERFACE_OPTION))
+    {
+        g_pOption->UpdateMouseEvent();
+        g_pOption->UpdateKeyEvent();
+        g_pOption->Update();
+        BeginBitmap();
+        g_pOption->Render();
+        EndBitmap();
+    }
+
+    EndOpengl();
+
+    return true;
+}

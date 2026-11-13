@@ -1,0 +1,23 @@
+name: Server tests
+
+# Builds the HNMO server and runs its tests.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['server/**', '.github/workflows/server-tests.yml']
+  pull_request:
+    paths: ['server/**', '.github/workflows/server-tests.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build
+        run: dotnet build server/src/HNMO.sln -c Release
+      - name: Test
+        run: dotnet test server/src/HNMO.sln -c Release --no-build

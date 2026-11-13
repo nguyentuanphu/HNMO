@@ -1,0 +1,8310 @@
+///////////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "Data/DataHandler/DataFileIO.h"
+#include "Core/Utilities/FileHandle.h"
+#include "Core/Utilities/Random.h"
+#include "Camera/CameraMove.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Models/ZzzBMD.h"
+#include "Render/Renderer/RenderUtils.h"   // mu::PackABGR
+#ifdef _EDITOR
+#include "UI/MapEditor/ObjectThumbnail.h"
+#endif
+#include "Engine/Object/ZzzInfomation.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Core/Utilities/FrameProfiler.h"
+#include <array>
+#include <optional>
+#include <unordered_map>
+#include <unordered_set>
+#include "Engine/Object/ZzzCharacter.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Render/Textures/ZzzTexture.h"
+#include "Engine/AI/ZzzAI.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Engine/Object/ItemDropModel.h"
+#include "Engine/Object/ZzzInventory.h"
+#include "Render/Effects/ZzzEffect.h"
+#include "Scenes/SceneCore.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "Audio/DSPlaySound.h"
+#include "Audio/SoundSource.h"
+#include "Camera/ICamera.h"
+
+#include "Render/Models/SideHair.h"
+#include "Engine/Physics/PhysicsManager.h"
+#include "Engine/AI/GOBoid.h"
+#include "GameLogic/Pets/w_PetProcess.h"
+#include "Character/CSParts.h"
+#include "GameLogic/Items/CSItemOption.h"
+#include "GameLogic/Events/CSChaosCastle.h"
+#include "World/MapInfra/MapManager.h"
+#include "World/MapInfra/MapObjectSounds.h"
+#include "UI/Core/UIManager.h"
+#include "GameLogic/Events/Cinematic/CDirection.h"
+#include "GameLogic/Items/CComGem.h"
+#include "Render/Models/BoneManager.h"
+#include "GameLogic/Events/w_CursedTemple.h"
+#include "Character/CharacterManager.h"
+#include "World/MapInfra/w_MapHeaders.h"
+#include "GameLogic/Social/MonkSystem.h"
+#include "UI/Core/WindowSystem.h"
+#include "Camera/CameraManager.h"
+#include "Camera/CameraProjection.h"
+#include "Render/Models/Gltf/SkinnedModel.h"
+#include "Render/Models/ModelLod.h"
+#include "Camera/OrbitalCamera.h"
+#include "Engine/Object/CullingConstants.h"
+#include "Render/Renderer/MuRenderer.h"
+#include "GameLogic/Items/ItemCategories.h"
+#include "Render/Items/ItemDisplay.h"
+#include "Render/Items/ItemGlow.h"
+#include "Render/Items/ItemEffects.h"
+#include "Render/Items/ItemRenderStyles.h"
+#include "Data/GameData/ItemData/ItemModelSlots.h"
+
+// DevEditor function declarations
+#ifdef _EDITOR
+extern "C" bool DevEditor_ShouldShowItemCullSphere();
+extern "C" bool DevEditor_ShouldShowItemPickBoxes();
+extern "C" float DevEditor_GetCullRadiusItem();
+extern "C" float DevEditor_GetLoginObjectDist();
+
+// Per-frame cached DevEditor state
+static bool s_bShowItemCullSphere = false;
+static bool s_bShowItemPickBoxes = false;
+static float s_fCullRadiusItem = 0.0f;
+#endif
+
+extern vec3_t VertexTransform[MAX_MESH][MAX_VERTICES];
+extern vec3_t LightTransform[MAX_MESH][MAX_VERTICES];
+
+int          g_iTotalObj = 0;
+OBJECT_BLOCK ObjectBlock[256];
+OBJECT       Boids[MAX_BOIDS];
+OBJECT       Fishs[MAX_FISHS];
+OBJECT       Mounts[MAX_MOUNTS];
+OPERATE      Operates[MAX_OPERATES];
+//int   World = -1;
+float EarthQuake;
+
+bool SetEarthQuakeAt(const vec3_t sourcePosition, float magnitude)
+{
+    if (Hero == nullptr) return false;
+
+    const float kShakeRadius = TERRAIN_SCALE * 12.f;
+
+    const float dx = sourcePosition[0] - Hero->Object.Position[0];
+    const float dy = sourcePosition[1] - Hero->Object.Position[1];
+    const float distSq = dx * dx + dy * dy;
+    if (distSq >= kShakeRadius * kShakeRadius) return false;
+
+    EarthQuake = magnitude * (1.f - sqrtf(distSq) / kShakeRadius);
+    return true;
+}
+
+static  int g_iThunderTime = 0;
+int g_iActionObjectType = -1;
+int g_iActionWorld = -1;
+int g_iActionTime = -1;
+float g_fActionObjectVelocity = -1;
+
+void ClearActionObject()
+{
+    g_iActionObjectType = -1;
+    g_iActionWorld = -1;
+    g_iActionTime = -1;
+    g_fActionObjectVelocity = -1;
+}
+
+void SetActionObject(int iWorld, int iType, int iLifeTime, int iVel)
+{
+    g_iActionWorld = iWorld;
+    g_iActionObjectType = iType;
+    g_iActionTime = iLifeTime;
+    g_fActionObjectVelocity = (float)iVel;
+}
+
+void ActionObject(OBJECT* o)
+{
+    if (g_iActionWorld < 0)     return;
+    if (g_iActionObjectType < 0)return;
+    if (g_iActionTime < 0)      return;
+
+    if (gMapManager.WorldActive == g_iActionWorld)
+    {
+        if (MoveChaosCastleAllObject(o)) return;
+        {
+            vec3_t  Position, Light;
+
+            Vector(1.f, 1.f, 1.f, Light);
+            if (o->Type == g_iActionObjectType || o->Type == 9 || o->Type == 10)
+            {
+                if (o->Type == 9)
+                {
+                    if (g_iActionTime == 0)
+                    {
+                        o->HiddenMesh = -1;
+                        o->PKKey = 4;
+                    }
+                }
+                else if (o->Type == 10)
+                {
+                    if (g_iActionTime == 0)
+                    {
+                        o->HiddenMesh = -1;
+                        o->PKKey = 4;
+                    }
+                }
+                else if (o->Type == g_iActionObjectType)
+                {
+                    if (g_iActionTime == 20)
+                    {
+                        o->Angle[0] = 35.f;
+                        o->HiddenMesh = -1;
+
+                        PlayBuffer(SOUND_DOWN_GATE);
+                    }
+
+                    if (g_iActionTime >= 0)
+                    {
+                        o->Angle[0] += g_fActionObjectVelocity;
+                        g_fActionObjectVelocity += 1.5f;
+
+                        if (o->Angle[0] >= 90.f)
+                        {
+                            o->Angle[0] -= g_iActionTime;
+                            g_fActionObjectVelocity = 2.f;
+
+                            VectorCopy(o->Position, Position);
+
+                            if (o->Angle[0] == 80)
+                            {
+                                for (int i = 0; i < 10; ++i)
+                                {
+                                    Position[0] = o->Position[0] + (Random::Rand() % 300 - 150.f);
+                                    Position[1] = o->Position[1] - (Random::Rand() % 20 + 600.f);
+                                    CreateParticleFpsChecked(BITMAP_SMOKE + 1, Position, o->Angle, o->Light);
+                                }
+                            }
+                        }
+                        if (g_iActionTime == 0)
+                        {
+                            o->HiddenMesh = -2;
+                            o->Angle[0] = 90.f;
+                            ClearActionObject();
+
+                            AddTerrainAttributeRange(13, 70, 3, 6, TW_NOGROUND, false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+OBJECT* CollisionDetectObjects(OBJECT* PickObject)
+{
+    OBJECT* Object = NULL;
+    InitCollisionDetectLineToFace();
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Head;
+            while (1)
+            {
+                if (o != NULL)
+                {
+                    if (o->Live && o->Visible && o->Alpha >= 0.01f)
+                    {
+                        //if(o != PickObject)
+                        {
+                            BMD* b = &Models[o->Type];
+                            b->BodyScale = o->Scale;
+                            b->CurrentAction = o->CurrentAction;
+                            VectorCopy(o->Position, b->BodyOrigin);
+                            b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle, false, false);
+                            b->Transform(BoneTransform, o->BoundingBoxMin, o->BoundingBoxMax, &o->OBB, true);
+                            if (CollisionDetectLineToOBB(MousePosition, MouseTarget, o->OBB))
+                            {
+                                if (b->CollisionDetectLineToMesh(MousePosition, MouseTarget))
+                                {
+                                    Object = o;
+                                    //return Object;
+                                }
+                            }
+                        }
+                    }
+                    if (o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }
+    return Object;
+}
+
+void BodyLight(const OBJECT* o, BMD* b)
+{
+    if (o->Type == MODEL_DARK_PHEONIX_SHIELD)
+    {
+        Vector(.6f, .6f, .6f, b->BodyLight);
+        return;
+    }
+    if (o->Type == MODEL_PROTECT)
+    {
+        float Luminosity = sinf(WorldTime * 0.003f) * 0.5f + 0.5f;
+        Vector(Luminosity, Luminosity, Luminosity, b->BodyLight);
+        return;
+    }
+
+    b->LightEnable = o->LightEnable;
+    if (o->LightEnable)
+    {
+        vec3_t Light;
+        RequestModelTerrainLight(o->Position[0], o->Position[1], Light);
+        VectorAdd(Light, o->Light, b->BodyLight);
+    }
+    else
+    {
+        vec3_t Light;
+        RequestTerrainLight(o->Position[0], o->Position[1], Light);
+        VectorScale(Light, 0.1f, Light);
+        VectorAdd(Light, o->Light, b->BodyLight);
+    }
+}
+
+extern float BoneScale;
+
+// An object with its own bones keeps the pose the update built; a draw animates it again only when its state
+// changed since. Other objects are animated into the shared bones for each draw.
+// The bones an object is drawn with: its own pose when the update built it, else bones of this draw's (it came into
+// view after the update ran). The draw records nothing on the object.
+static float (*DrawPose(const OBJECT* o, BMD* b, bool Translate, const ObjectGhost* ghost))[3][4]
+{
+    const float frame = ghost != nullptr ? ghost->animationFrame : o->AnimationFrame;
+    if (!o->EnableBoneMatrix)
+    {
+        b->Animation(BoneTransform, frame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle, false,
+                     !Translate);
+        return BoneTransform;
+    }
+    const bool world = !Translate;
+    // A ghost is at another frame than the pose the update built.
+    const bool reused = ghost == nullptr && Engine::Object::Pose::IsCurrent(o, b, world);
+    float (*bones)[3][4] = o->BoneTransform;
+    if (!reused)
+    {
+        bones = Engine::Object::Attachments::DrawBones();
+        b->Animation(bones, frame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle, false, world);
+    }
+#ifdef MU_ENABLE_CONTROL_SOCKET
+    CheckCharacterPose(o, b, reused);
+#endif
+    return bones;
+}
+
+namespace
+{
+// The draw bones of the objects posed by this frame's draws; cleared when the frame's object draws begin.
+std::unordered_map<const OBJECT*, vec34_t*> s_drawnPoses;
+} // namespace
+
+vec34_t* DrawnPose(const OBJECT* o)
+{
+    const auto it = s_drawnPoses.find(o);
+    return it != s_drawnPoses.end() ? it->second : o->BoneTransform;
+}
+
+static void AnimateObjectBones(const OBJECT* o, BMD* b, bool Translate)
+{
+    vec34_t* bones = DrawPose(o, b, Translate, nullptr);
+    // A later draw of the object in the frame (after a ghost's) may be back on its own pose.
+    if (o->EnableBoneMatrix && bones != o->BoneTransform)
+        s_drawnPoses[o] = bones;
+    else
+        s_drawnPoses.erase(o);
+}
+
+void ObjectModelOrigin(const OBJECT* o, vec3_t origin)
+{
+    VectorCopy(o->Position, origin);
+    if (o->Type == MODEL_CASTLE_GATE)
+        origin[1] += 60.f;
+    else if (o->Type == MODEL_STATUE_OF_SAINT)
+        origin[1] += 120.f;
+}
+
+// Where an object's model stands when it is posed and drawn.
+void PlaceObjectModel(const OBJECT* o, BMD* b)
+{
+    b->BodyHeight = 0.f;
+    b->BodyScale = o->Scale;
+    b->CurrentAction = o->CurrentAction;
+    ObjectModelOrigin(o, b->BodyOrigin);
+}
+
+void PlaceObjectBounds(OBJECT* o, const vec3_t origin)
+{
+    VectorAdd(o->BoundingBoxMin, origin, o->OBB.StartPos);
+    Vector(o->BoundingBoxMax[0] - o->BoundingBoxMin[0], 0.f, 0.f, o->OBB.XAxis);
+    Vector(0.f, o->BoundingBoxMax[1] - o->BoundingBoxMin[1], 0.f, o->OBB.YAxis);
+    Vector(0.f, 0.f, o->BoundingBoxMax[2] - o->BoundingBoxMin[2], o->OBB.ZAxis);
+}
+
+void UpdateDrawnObjectHold(OBJECT* o)
+{
+    if (gMapManager.InChaosCastle() == true && Hero->Object.m_bActionStart == true)
+    {
+        o->Alpha -= 0.15f * FPS_ANIMATION_FACTOR;
+    }
+    if (o->Owner != NULL && (g_isCharacterBuff(o->Owner, eDeBuff_Stun) || g_isCharacterBuff(o->Owner, eDeBuff_Sleep)))
+    {
+        o->AnimationFrame = 0.f;
+    }
+}
+
+bool Calc_RenderObject(const OBJECT* o, bool Translate, int Select, int ExtraMon, const float* origin,
+                       const ObjectGhost* ghost)
+{
+    DrawLook look = DrawLook::Of(*o);
+    if (ghost != nullptr)
+        look.alpha = ghost->alpha;
+    if (look.alpha < 0.01f)
+    {
+        return false;
+    }
+
+    BMD* b = &Models[o->Type];
+    b->ContrastEnable = o->ContrastEnable;
+    BodyLight(o, b);
+    PlaceObjectModel(o, b);
+    if (origin != nullptr)
+        VectorCopy(origin, b->BodyOrigin);
+
+    float (*bones)[3][4] = DrawPose(o, b, Translate, ghost);
+
+    BoneScale = 1.f;
+    if (3 == Select)
+    {
+        BoneScale = 1.4f;
+    }
+    else if (2 == Select)
+    {
+        BoneScale = 1.2f;
+    }
+    else if (1 == Select)
+    {
+        b->LightEnable = false;
+
+        if (gMapManager.InChaosCastle() == true || o->Kind != KIND_NPC)
+        {
+            Vector(0.1f, 0.01f, 0.f, b->BodyLight);
+            if (o->Type == MODEL_BALI)
+            {
+                BoneScale = 1.2f;
+            }
+            else
+            {
+                BoneScale = 1.f + (0.1f / o->Scale);
+            }
+            if (o->m_fEdgeScale != 1.2f)
+            {
+                BoneScale = o->m_fEdgeScale;
+            }
+        }
+        else
+        {
+            Vector(0.02f, 0.1f, 0.f, b->BodyLight);
+            BoneScale = 1.2f;
+            BoneScale = o->m_fEdgeScale;
+        }
+        float Scale = BoneScale;
+        RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale, bones, &look);
+
+        if (gMapManager.InChaosCastle() == true || o->Kind != KIND_NPC)
+        {
+            Vector(0.7f, 0.07f, 0.f, b->BodyLight);
+            if (o->Type == MODEL_BALI)
+            {
+                BoneScale = 1.08f;
+            }
+            else
+            {
+                BoneScale = 1.f + (0.04f / o->Scale);
+            }
+            if (o->m_fEdgeScale != 1.2f)
+            {
+                BoneScale = maxf(o->m_fEdgeScale - 0.04f, 1.01f);
+            }
+        }
+        else
+        {
+            Vector(0.16f, 0.7f, 0.f, b->BodyLight);
+            BoneScale = 1.08f;
+            BoneScale = maxf(o->m_fEdgeScale - 0.12f, 1.01f);
+        }
+
+        Scale = BoneScale;
+        RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale, bones, &look);
+        BodyLight(o, b);
+        BoneScale = 1.f;
+    }
+
+    b->Transform(bones, o->BoundingBoxMin, o->BoundingBoxMax, nullptr, Translate);
+
+    return true;
+}
+
+bool Calc_ObjectAnimation(const OBJECT* o, bool Translate, int Select)
+{
+    if (o->Alpha < 0.01f) return false;
+
+    BMD* b = &Models[o->Type];
+    b->BodyHeight = 0.f;
+    b->ContrastEnable = o->ContrastEnable;
+    BodyLight(o, b);
+    b->BodyScale = o->Scale;
+    b->CurrentAction = o->CurrentAction;
+    VectorCopy(o->Position, b->BodyOrigin);
+
+    AnimateObjectBones(o, b, Translate);
+    return true;
+}
+
+// Lost Tower blocks carry a fire layer: BITMAP_CHROME tinted orange, with the
+// texture streaming on one mesh. The look players know shows that fire only
+// through the alpha holes of the strip texture. Drawing the layer as an opaque
+// pass after the stone gives exactly that: the depth test rejects it on the
+// faces the stone already covered and keeps it where the strip was discarded.
+// Drawing it additively on top instead paints the whole block orange (#589).
+static const vec3_t kLostTowerFireTint = {1.f, 0.2f, 0.1f};
+
+static void RenderLostTowerFireBlock(BMD* b, const OBJECT* o, const DrawLook& look, int streamMesh)
+{
+    vec3_t bodyLight;
+    VectorCopy(b->BodyLight, bodyLight);
+
+    b->StreamMesh = -1;
+    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                  look.hiddenMesh);
+
+    VectorCopy(kLostTowerFireTint, b->BodyLight);
+    b->StreamMesh = streamMesh;
+    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                  look.hiddenMesh, BITMAP_CHROME);
+
+    VectorCopy(bodyLight, b->BodyLight);
+    b->StreamMesh = -1;
+}
+
+// The light colour of a Little Santa, by its type.
+static void LittleSantaLight(int type, vec3_t light)
+{
+    switch (type)
+    {
+    case MODEL_LITTLESANTA:
+        Vector(0.5f, 0.5f, 0.0f, light);
+        break;
+    case MODEL_LITTLESANTA + 1:
+        Vector(0.3f, 0.8f, 0.4f, light);
+        break;
+    case MODEL_LITTLESANTA + 2:
+        Vector(0.8f, 0.1f, 0.1f, light);
+        break;
+    case MODEL_LITTLESANTA + 3:
+        Vector(0.3f, 0.3f, 0.8f, light);
+        break;
+    case MODEL_LITTLESANTA + 4:
+    case MODEL_LITTLESANTA + 5:
+        Vector(0.9f, 0.9f, 0.9f, light);
+        break;
+    case MODEL_LITTLESANTA + 6:
+        Vector(0.8f, 0.4f, 0.0f, light);
+        break;
+    case MODEL_LITTLESANTA + 7:
+        Vector(0.9f, 0.5f, 0.7f, light);
+        break;
+    default:
+        break;
+    }
+}
+
+void Draw_RenderObject(const OBJECT* o, bool Translate, int Select, int ExtraMon, const ObjectGhost* ghost)
+{
+    DrawLook look = DrawLook::Of(*o);
+    if (ghost != nullptr)
+        look.alpha = ghost->alpha;
+    const float animationFrame = ghost != nullptr ? ghost->animationFrame : o->AnimationFrame;
+    BMD* b = &Models[o->Type];
+    bool View = true;
+
+    if ((EditFlag != EDIT_NONE) || (EditFlag == EDIT_NONE && look.hiddenMesh != -2))
+    {
+        if (ExtraMon == 10)
+        {
+            float Alpha = 0.5f;
+
+            for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
+            {
+                const CHARACTER* c = &CharactersClient[i];
+                const OBJECT* oa = &c->Object;
+                const OBJECT* ob = o->Owner;
+
+                if (oa == ob)
+                {
+                    if (c != Hero && battleCastle::IsBattleCastleStart() == true && g_isCharacterBuff(ob, eBuff_Cloaking))
+                    {
+                        if (Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK)
+                        {
+                            if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK || c->EtcPart == PARTS_ATTACK_TEAM_MARK))
+                            {
+                                View = false;
+                                break;
+                            }
+                        }
+                        else
+                            if (Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2)
+                            {
+                                if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK2 || c->EtcPart == PARTS_ATTACK_TEAM_MARK2))
+                                {
+                                    View = false;
+                                    break;
+                                }
+                            }
+                            else
+                                if (Hero->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK3)
+                                {
+                                    if (!(c->EtcPart == PARTS_ATTACK_KING_TEAM_MARK3 || c->EtcPart == PARTS_ATTACK_TEAM_MARK3))
+                                    {
+                                        View = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                    if (Hero->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || Hero->EtcPart == PARTS_DEFENSE_TEAM_MARK)
+                                    {
+                                        if (!(c->EtcPart == PARTS_DEFENSE_KING_TEAM_MARK || c->EtcPart == PARTS_DEFENSE_TEAM_MARK))
+                                        {
+                                            View = false;
+                                            break;
+                                        }
+                                    }
+                    }
+                }
+            }
+
+            if (View == true)
+            {
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+                    b->RenderMesh(i, RENDER_BRIGHT | RENDER_CHROME5, Alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU * 8.f, look.blendMeshV * 2.f, BITMAP_CHROME2);
+            }
+
+            return;
+        }
+        if (gMapManager.WorldActive == WD_10HEAVEN)
+        {
+            if (o->Type == MODEL_DRAGON_)
+            {
+                Vector(0.02f, 0.05f, 0.15f, b->BodyLight);
+            }
+        }
+        if (gMapManager.InDevilSquare())
+        {
+            if (o->Type == MODEL_ICE_QUEEN)
+            {
+                Vector(0.0f, 0.3f, 1.0f, b->BodyLight);
+            }
+        }
+        if (ExtraMon && o->Type == MODEL_BALROG)
+        {
+            Vector(0.0f, 0.0f, 1.0f, b->BodyLight);
+        }
+
+        if (o->RenderType == RENDER_DARK)
+        {
+            b->RenderBody(RENDER_TEXTURE | RENDER_DARK, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+        }
+        else if (o->Type == MODEL_CHANGE_UP_EFF)
+        {
+            if (o->SubType == 0 || o->SubType == 1)
+            {
+                Vector(0.1f, 0.4f, 0.6f, b->BodyLight);
+            }
+            else
+            {
+                Vector(0.1f, 0.2f, 0.9f, b->BodyLight);
+            }
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+        }
+        else if (o->Type == MODEL_CHANGE_UP_NASA)
+        {
+            Vector(0.5f, 0.5f, 0.9f, b->BodyLight);
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+        }
+        else if (o->Type == MODEL_CHANGE_UP_CYLINDER)
+        {
+            Vector(0.4f, 0.5f, 1.f, b->BodyLight);
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+        }
+        else if (o->Type == MODEL_SUMMON)
+        {
+            //			Vector(0.4f,0.5f,1.f,b->BodyLight);
+            //			b->RenderBody(RENDER_TEXTURE,look.alpha,look.blendMesh,look.blendMeshLight,look.blendMeshU,look.blendMeshV);
+            if (!M39Kanturu3rd::IsInKanturu3rd())
+            {
+                VectorCopy(o->Light, b->BodyLight);
+                b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV);
+                b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV);
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+            }
+        }
+        else if (o->Type == MODEL_DEASULER)
+        {
+            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+            Vector(0.3f, 0.4f, 1.0f, b->BodyLight);
+            b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV);
+        }
+        else if (o->Type == MODEL_FRED)
+        {
+            if (auto* pCloth = (CPhysicsCloth*)o->m_pCloth)
+            {
+                pCloth[0].Render();
+            }
+
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
+            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+            b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+            b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+
+            if (o->CurrentAction != MONSTER01_ATTACK2 || animationFrame < 2.5f)
+            {
+                b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                Vector(0.4f, 0.5f, 1.0f, b->BodyLight);
+                b->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV);
+            }
+        }
+        else
+            if (o->Type == MODEL_BANSHEE)
+            {
+                float fLumi = (sinf(WorldTime * 0.0015f) + 1.f) * 0.35f;
+
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+
+                Vector(fLumi, fLumi, fLumi, b->BodyLight);
+                b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, BITMAP_ASSASSIN_EFFECT1);
+            }
+            else if (o->Type == MODEL_RAKLION_BOSS_CRACKEFFECT)
+            {
+                float fLumi = look.alpha;
+                Vector(o->Light[0] * fLumi, o->Light[1] * fLumi, o->Light[2] * fLumi, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV);
+            }
+            else if (o->Type == MODEL_RAKLION_BOSS_MAGIC)
+            {
+                float fLumi = look.alpha;
+                Vector(o->Light[0] * fLumi, o->Light[1] * fLumi, o->Light[2] * fLumi, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV);
+            }
+            else if (o->Type == MODEL_NIGHTWATER_01)
+            {
+                float fLumi = look.alpha;
+                Vector(o->Light[0] * fLumi, o->Light[1] * fLumi, o->Light[2] * fLumi, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV);
+            }
+            else if (o->Type == MODEL_KNIGHT_PLANCRACK_A)
+            {
+                float fLumi = look.alpha;
+                Vector(o->Light[0] * fLumi, o->Light[1] * fLumi, o->Light[2] * fLumi, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1, look.blendMeshLight, look.blendMeshU,
+                              -(int)WorldTime % 2000 * 0.0001f);
+            }
+            else if (o->Type == MODEL_KNIGHT_PLANCRACK_B)
+            {
+                float fLumi = look.alpha;
+                Vector(o->Light[0] * fLumi, o->Light[1] * fLumi, o->Light[2] * fLumi, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1, look.blendMeshLight, look.blendMeshU,
+                              -(int)WorldTime % 2000 * 0.0001f);
+            }
+            else if (o->Type == MODEL_ALICE_BUFFSKILL_EFFECT || o->Type == MODEL_ALICE_BUFFSKILL_EFFECT2)
+            {
+                if (o->SubType == 1)
+                {
+                    b->RenderBody(RENDER_TEXTURE | RENDER_DARK, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                }
+                else
+                {
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                }
+            }
+            else if (o->Type == MODEL_CURSEDTEMPLE_HOLYITEM)
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, 0);
+                b->RenderMesh(0, RENDER_TEXTURE, 0.7f, 0, look.blendMeshLight * 3.f, look.blendMeshU,
+                              -WorldTime * 0.004f);
+            }
+            else if (o->Type == MODEL_CURSEDTEMPLE_PRODECTION_SKILL)
+            {
+                Vector(0.3f, 0.3f, 1.0f, b->BodyLight);
+                VectorCopy(o->Angle, b->BodyAngle);
+                b->RenderMesh(0, RENDER_TEXTURE, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                              -WorldTime * 0.0004f);
+            }
+            else if (o->Type == MODEL_CURSEDTEMPLE_RESTRAINT_SKILL)
+            {
+                float fLuminosity = (float)sinf((WorldTime) * 0.0002f) * 0.002f;
+                b->RenderMesh(0, RENDER_TEXTURE, 0.7f, 0, 0.35f + fLuminosity, -WorldTime * 0.0004f, WorldTime * 0.0004f);
+            }
+            else if (gMapManager.IsCursedTemple() == true
+                && (o->Type == 32 || o->Type == 39 || o->Type == 41 || o->Type == 46 || o->Type == 62
+                    || o->Type == 67 || o->Type == 68 || o->Type == 64 || o->Type == 65 || o->Type == 66 || o->Type == 80)
+                )
+            {
+                if (o->Type == 32)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderMesh(1, RENDER_TEXTURE | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->StreamMesh = 2;
+                    b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  -(int)WorldTime % 4000 * 0.00025f, look.blendMeshV);
+                    b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  -(int)WorldTime % 5000 * 0.0002f, look.blendMeshV);
+                    b->StreamMesh = -1;
+                }
+                else if (o->Type == 39 || o->Type == 41)
+                {
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight);
+                }
+                else if (o->Type == 46)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight);
+                }
+                else if (o->Type == 62)
+                {
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                  look.blendMeshLight);
+                    b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                  look.blendMeshLight);
+                }
+                else if (o->Type == 67)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                  look.blendMeshLight);
+                }
+                else if (o->Type == 68)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                  look.blendMeshLight);
+                }
+                else if (o->Type == 64 || o->Type == 65 || o->Type == 66 || o->Type == 80)
+                {
+                    SendAfterCharacter(o);
+                }
+            }
+            else if (o->Type == MODEL_EFFECT_SKURA_ITEM)
+            {
+                b->RenderBody(RENDER_COLOR, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+            }
+
+            else if (o->Type == MODEL_DEVIL)
+            {
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                b->StreamMesh = -1;
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                Vector(0.4f, 0.6f, 1.f, b->BodyLight);
+                b->StreamMesh = 0;
+                b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                b->StreamMesh = -1;
+            }
+            else if (o->Type == MODEL_PEGASUS)
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+            }
+            else if (o->Type == MODEL_SKIN_SHELL)
+            {
+                if (o->SubType == 0)
+                {
+                    VectorCopy(o->Light, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                }
+                else if (o->SubType == 1)
+                {
+                    Vector(0.1f, 0.5f, 1.f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh, BITMAP_CHROME);
+                }
+            }
+            else if (o->Type == MODEL_STUN_STONE)
+            {
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                b->RenderBody(RENDER_CHROME, 0.5f, look.blendMesh, look.blendMeshLight, look.blendMeshU * 5.f,
+                              look.blendMeshV * 2.f, -1, BITMAP_CHROME);
+            }
+            else if (o->Type == MODEL_DARK_HORSE && o->SubType == 1)
+            {
+                if (gMapManager.WorldActive == WD_65DOPPLEGANGER1)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else
+                {
+                    Vector(0.2f, 0.2f, 0.2f, b->BodyLight);
+                    b->RenderBody(RENDER_BRIGHT | RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+            }
+            else if (o->Type == MODEL_DARK_HORSE)
+            {
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+
+                Vector(1.f, 0.8f, 0.3f, b->BodyLight);
+                b->RenderMesh(12, RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                b->RenderMesh(13, RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                b->RenderMesh(14, RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                b->RenderMesh(15, RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+
+                if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.InHellas() == false)
+                {
+                    if (!g_Direction.m_CKanturu.IsMayaScene())
+                    {
+                        EnableAlphaTest();
+
+                        b->RenderBodyShadow(-1, -1, 8, 9);
+                    }
+                }
+            }
+            else if (o->Type == MODEL_FENRIR_BLACK || o->Type == MODEL_FENRIR_BLUE || o->Type == MODEL_FENRIR_RED || o->Type == MODEL_FENRIR_GOLD)
+            {
+                b->BeginRender(1.f);
+
+                b->BodyLight[0] = 1.0f;
+                b->BodyLight[1] = 1.0f;
+                b->BodyLight[2] = 1.0f;
+
+                if (o->Type == MODEL_FENRIR_GOLD)
+                {
+                    b->StreamMesh = 0;
+
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                  look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+
+                    b->StreamMesh = -1;
+                }
+                else
+                {
+                    b->StreamMesh = 0;
+
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+
+                    // custom glow? :
+                    b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                  look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+
+                    if (o->CurrentAction == FENRIR_ATTACK_SKILL)
+                    {
+                        b->BodyLight[0] = 1.0f;
+                        b->BodyLight[1] = 1.0f;
+                        b->BodyLight[2] = 1.0f;
+
+                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh,
+                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                    }
+                    b->StreamMesh = -1;
+                }
+
+                b->EndRender();
+
+                if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.InHellas() == FALSE)
+                {
+                    if (!g_Direction.m_CKanturu.IsMayaScene())
+                    {
+                        EnableAlphaTest();
+
+                        b->RenderBodyShadow();
+                    }
+                }
+            }
+            else if (o->Type >= MODEL_FACE && o->Type <= MODEL_FACE + 6)
+            {
+                Vector(4.8f, 4.8f, 4.8f, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+            }
+            else if (o->Type == MODEL_DARKLORD_SKILL)
+            {
+                VectorCopy(o->Light, b->BodyLight);
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                Vector(1.f, 1.f, 1.f, b->BodyLight);
+            }
+            else if (o->Type == MODEL_DARK_SPIRIT)
+            {
+                b->BeginRender(look.alpha);
+                b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                if (o->WeaponLevel >= 40)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    Vector(0.3f, 0.6f, 1.f, b->BodyLight);
+                    b->RenderMesh(0, RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                    Vector(1.f, 1.f, 1.f, b->BodyLight);
+                    b->RenderMesh(3, RENDER_BRIGHT | RENDER_TEXTURE, look.alpha, 3, sinf(WorldTime * 0.001f),
+                                  look.blendMeshU, look.blendMeshV, BITMAP_MONSTER_SKIN + 2);
+                }
+                else if (o->WeaponLevel >= 20)
+                {
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else
+                {
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                b->EndRender();
+
+                if (gMapManager.WorldActive != WD_10HEAVEN && gMapManager.InHellas() == false)
+                {
+                    if (!g_Direction.m_CKanturu.IsMayaScene())
+                    {
+                        vec3_t Position;
+                        EnableAlphaTest();
+
+                        VectorCopy(o->Position, Position);
+                        Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);
+                        VectorCopy(Position, b->BodyOrigin);
+                        b->RenderBodyShadow();
+                    }
+                }
+            }
+            else if (gMapManager.WorldActive == WD_0LORENCIA && o->Type == MODEL_WATERSPOUT)
+            {
+                b->BeginRender(look.alpha);
+                b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight);
+                b->RenderMesh(3, RENDER_TEXTURE, look.alpha, 3, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                b->EndRender();
+            }
+            else if (gMapManager.WorldActive == WD_4LOSTTOWER && (o->Type == 23 || o->Type == 19 || o->Type == 20 || o->Type == 3 || o->Type == 4))
+            {
+                if (o->Type == 23)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == 19 || o->Type == 20)
+                {
+                    RenderLostTowerFireBlock(b, o, look, 2);
+                }
+                else if (o->Type == 3 || o->Type == 4)
+                {
+                    RenderLostTowerFireBlock(b, o, look, 1);
+                }
+            }
+            else if (gMapManager.WorldActive == WD_8TARKAN && (o->Type == 81))
+            {
+                b->BeginRender(look.alpha);
+                b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                b->RenderMesh(0, RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                              look.blendMeshU, look.blendMeshV, BITMAP_CHROME);
+                b->EndRender();
+            }
+            else if (gMapManager.InBloodCastle() == true && (o->Type == 28 || o->Type == 29))
+            {
+                b->BeginRender(look.alpha);
+                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV, look.hiddenMesh);
+                b->EndRender();
+
+                EnableAlphaTest();
+
+                vec3_t Position;
+
+                VectorCopy(o->Position, Position);
+                Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);
+                VectorCopy(Position, b->BodyOrigin);
+                b->RenderBodyShadow(look.blendMesh, 2);
+            }
+            else if (gMapManager.WorldActive == WD_3NORIA && o->Type == MODEL_WARP3)
+            {
+                b->BodyLight[0] = 0.8f;
+                b->BodyLight[1] = 0.8f;
+                b->BodyLight[2] = 0.8f;
+
+                b->StreamMesh = 0;
+                b->RenderMesh(0, RENDER_DARK, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                b->StreamMesh = -1;
+            }
+            else if (gMapManager.WorldActive == WD_55LOGINSCENE && o->Type == 90)
+            {
+                b->BodyLight[0] = 1.0f;
+                b->BodyLight[1] = 1.0f;
+                b->BodyLight[2] = 1.0f;
+
+                b->StreamMesh = 0;
+                b->RenderMesh(0, RENDER_DARK, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                              look.blendMeshV);
+                b->StreamMesh = -1;
+            }
+            else
+            {
+                BOOL bIsRendered = TRUE;
+
+                if (g_isCharacterBuff(o, eDeBuff_Poison) && g_isCharacterBuff(o, eDeBuff_Freeze))
+                {
+                    Vector(0.3f, 1.f, 0.8f, b->BodyLight);
+                }
+                else if (g_isCharacterBuff(o, eDeBuff_Poison))
+                {
+                    Vector(0.3f, 1.f, 0.5f, b->BodyLight);
+                }
+                else if (g_isCharacterBuff(o, eDeBuff_Freeze))
+                {
+                    Vector(0.3f, 0.5f, 1.f, b->BodyLight);
+                }
+                else if (g_isCharacterBuff(o, eDeBuff_BlowOfDestruction))
+                {
+                    Vector(0.3f, 0.5f, 1.f, b->BodyLight);
+                }
+
+                if (RenderHellasObjectMesh(o, look, b))
+                {
+                }
+                else if (battleCastle::RenderBattleCastleObjectMesh(o, look, b))
+                {
+                }
+                else if (M31HuntingGround::RenderHuntingGroundObjectMesh(o, look, b, ExtraMon))
+                {
+                }
+                else if (M34CryingWolf2nd::RenderCryingWolf2ndObjectMesh(o, look, b))
+                {
+                }
+                else if (M33Aida::RenderAidaObjectMesh(o, look, b, ExtraMon))
+                {
+                }
+                else if (M34CryWolf1st::RenderCryWolf1stObjectMesh(o, look, b, ExtraMon))
+                {
+                }
+                else if (M37Kanturu1st::RenderKanturu1stObjectMesh(o, look, b))
+                {
+                }
+                else if (M38Kanturu2nd::Render_Kanturu2nd_ObjectMesh(o, look, b))
+                {
+                }
+                else if (M39Kanturu3rd::RenderKanturu3rdObjectMesh(o, look, b, ExtraMon))
+                {
+                }
+                else if (SEASON3A::CGM3rdChangeUp::Instance().RenderObjectMesh(o, look, b))
+                {
+                }
+                else if (g_CursedTemple->RenderObjectMesh(o, look, b, ExtraMon))
+                {
+                }
+                else if (SEASON3B::GMNewTown::RenderObject(o, look, b, ExtraMon))
+                {
+                }
+                else if (SEASON3C::GMSwampOfQuiet::RenderObject(o, look, b, ExtraMon))
+                {
+                }
+                else if (TheMapProcess().RenderObjectMesh(o, look, b))
+                {
+                }
+                                else
+                                    if (o->Type == MODEL_KALIMA_SHOP)
+                                    {
+                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                        b->BeginRender(look.alpha);
+                                        b->RenderMesh(4, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                                        b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                                        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                                        b->EndRender();
+                                    }
+                                    else
+                                        if (o->Type == MODEL_NPC_QUARREL)
+                                        {
+                                            Vector(0.5f, 0.5f, 0.8f, b->BodyLight);
+                                            b->BeginRender(look.alpha);
+                                            for (int i = 0; i < Models[o->Type].NumMeshs; i++)
+                                            {
+                                                b->RenderMesh(i, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                              look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                                                b->RenderMesh(i, RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                              look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                                              look.blendMeshV, BITMAP_CHROME);
+                                            }
+                                            b->EndRender();
+                                        }
+                                        else
+                                            if (o->Type == MODEL_SEED_MASTER)
+                                            {
+                                                b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                              look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                                                              look.hiddenMesh);
+                                                float fLumi = (sinf(WorldTime * 0.001f) + 1.0f) * 0.2f + 0.0f;
+                                                b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, fLumi, 1, fLumi,
+                                                              look.blendMeshU, look.blendMeshV);
+                                            }
+                                            else
+                                                if (o->Type == MODEL_MUTANT)
+                                                {
+                                                    if (ExtraMon)
+                                                    {
+                                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        b->BeginRender(look.alpha);
+                                                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV);
+                                                        b->RenderMesh(0, RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, BITMAP_CHROME);
+                                                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV);
+                                                        b->RenderMesh(1, RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, BITMAP_CHROME);
+                                                        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV);
+                                                        b->RenderMesh(2, RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, BITMAP_CHROME);
+                                                        b->EndRender();
+                                                    }
+                                                    else
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                }
+                                                else
+                                                    if (o->Type == MODEL_TANTALLOS && o->SubType == 1)
+                                                    {
+                                                        b->BeginRender(look.alpha);
+                                                        float Light = sinf(WorldTime * 0.002f) * 0.01f + 1.f;
+                                                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0,
+                                                                      Light, look.blendMeshU, look.blendMeshV,
+                                                                      BITMAP_MONSTER_SKIN + 1);
+                                                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1,
+                                                                      Light, look.blendMeshU, look.blendMeshV,
+                                                                      BITMAP_MONSTER_SKIN);
+                                                        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1,
+                                                                      Light, look.blendMeshU, look.blendMeshV);
+                                                        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1,
+                                                                      Light, look.blendMeshU, look.blendMeshV);
+                                                        b->EndRender();
+                                                    }
+                                                    else if (o->Type == MODEL_MAGIC_SKELETON)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, 2, 1.0f,
+                                                                      look.blendMeshU, look.blendMeshV);
+                                                    }
+                                                    else if (o->Type == MODEL_MOLT)
+                                                    {
+                                                        b->BeginRender(look.alpha);
+                                                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV);
+                                                        b->EndRender();
+                                                        auto* pSideHair = new CSideHair;
+                                                        pSideHair->Create(VertexTransform, b, o);
+                                                        pSideHair->Render(VertexTransform, LightTransform);
+                                                        pSideHair->Destroy();
+                                                    }
+                                                    else if (o->Type == MODEL_DRAKAN)
+                                                    {
+                                                        if (ExtraMon)
+                                                        {
+                                                            Vector(.1f, 0.1f, 0.1f, b->BodyLight);
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, 1);
+                                                            Vector(1.0f, 0.1f, 0.1f, b->BodyLight);
+                                                            b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_ORC_ARCHER)
+                                                    {
+                                                        if (ExtraMon)
+                                                        {
+                                                            Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
+                                                            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, BITMAP_DEST_ORC_WAR0);
+                                                            //					b->RenderMesh(1,RENDER_TEXTURE,look.alpha,look.blendMesh,look.blendMeshLight,look.blendMeshU,look.blendMeshV,BITMAP_DEST_ORC_WAR1);
+                                                            b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, BITMAP_DEST_ORC_WAR2);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_ORC)
+                                                    {
+                                                        if (ExtraMon)
+                                                        {
+                                                            Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
+                                                            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, BITMAP_DEST_ORC_WAR1);
+                                                            b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, BITMAP_DEST_ORC_WAR0);
+                                                            // b->RenderMesh(2,RENDER_TEXTURE,look.alpha,look.blendMesh,look.blendMeshLight,look.blendMeshU,look.blendMeshV,BITMAP_DEST_ORC_WAR2);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_CURSED_KING)
+                                                    {
+                                                        if (ExtraMon)
+                                                        {
+                                                            Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, 1, BITMAP_WHITE_WIZARD);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_CRUST)
+                                                    {
+                                                        if (ExtraMon == 0)
+                                                        {
+                                                            float Luminosity = sinf(WorldTime * 0.002f) * 0.3f + 0.5f;
+                                                            Vector(Luminosity + 0.5f, 0.3f - Luminosity * 0.5f, -Luminosity * 0.5f + 0.5f, b->BodyLight);
+                                                            //Vector(1.f,1.f,1.f,b->BodyLight);
+                                                            //if ( c->Dead == 0)
+                                                            {
+                                                                b->StreamMesh = 0;
+                                                                Vector(.4f, .3f, .5f, b->BodyLight);
+                                                                b->RenderBody(RENDER_TEXTURE, look.alpha,
+                                                                              look.blendMesh, look.blendMeshLight,
+                                                                              look.blendMeshU, look.blendMeshV,
+                                                                              look.hiddenMesh, BITMAP_JANUSEXT);
+                                                                Vector(.5f, .5f, .5f, b->BodyLight);
+                                                                b->StreamMesh = -1;
+                                                            }
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                        else
+                                                            if (ExtraMon == 301)
+                                                            {
+                                                                //					b->BodyScale     = o->Scale + (o->Scale/1.0f);
+                                                                //					Vector(0.7f,0.5f,0.8f,b->BodyLight);
+                                                                Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                                b->BeginRender(look.alpha);
+                                                                b->RenderMesh(0, RENDER_TEXTURE, look.alpha,
+                                                                              look.blendMesh, look.blendMeshLight,
+                                                                              look.blendMeshU, look.blendMeshV);
+                                                                b->RenderMesh(0, RENDER_CHROME | RENDER_BRIGHT,
+                                                                              look.alpha, look.blendMesh,
+                                                                              look.blendMeshLight, look.blendMeshU,
+                                                                              look.blendMeshV, BITMAP_CHROME);
+                                                                b->RenderMesh(1, RENDER_TEXTURE, look.alpha,
+                                                                              look.blendMesh, look.blendMeshLight,
+                                                                              look.blendMeshU, look.blendMeshV);
+                                                                b->RenderMesh(1, RENDER_CHROME | RENDER_BRIGHT,
+                                                                              look.alpha, look.blendMesh,
+                                                                              look.blendMeshLight, look.blendMeshU,
+                                                                              look.blendMeshV, BITMAP_CHROME);
+                                                                b->EndRender();
+                                                            }
+                                                            else
+                                                            {
+                                                                Vector(0.1f, 1.0f, .8f, b->BodyLight);
+                                                                b->RenderBody(RENDER_TEXTURE, look.alpha,
+                                                                              look.blendMesh, look.blendMeshLight,
+                                                                              look.blendMeshU, look.blendMeshV,
+                                                                              look.hiddenMesh);
+                                                                //Vector( 0.1f, sinf(WorldTime*0.002f)*0.5f+0.5f, sinf(WorldTime*0.00173f)*0.5f+0.5f,b->BodyLight);
+                                                            }
+                                                    }
+                                                    else if (o->Type == MODEL_PHANTOM_KNIGHT)
+                                                    {
+                                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        Vector(.9f, .8f, 1.0f, b->BodyLight);
+                                                        b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh,
+                                                                      BITMAP_CHROME + 1);
+                                                    }
+                                                    else if (o->Type == MODEL_QUEEN_RAINER)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, 1, -1);
+                                                        // b->RenderMesh(1,RENDER_TEXTURE|RENDER_PONG|RENDER_WAVE,1.0f,look.blendMesh,look.blendMeshLight,look.blendMeshU,look.blendMeshV,look.hiddenMesh);
+                                                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_WAVE, 0.5f,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_WAVE, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_LUNAR_RABBIT)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_MOONHARVEST_MOON)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_MOONHARVEST_GAM)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_MOONHARVEST_SONGPUEN1)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_MOONHARVEST_SONGPUEN2)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_NPC_CHERRYBLOSSOM)
+                                                    {
+                                                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      2.f, look.blendMeshU, look.blendMeshV);
+                                                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_CHROME7, 0.25f,
+                                                                      look.blendMesh, 1.f, look.blendMeshU,
+                                                                      look.blendMeshV);
+                                                        b->RenderBody(RENDER_TEXTURE, 0.8f, look.blendMesh, 2.f,
+                                                                      look.blendMeshU, look.blendMeshV, 0);
+                                                    }
+                                                    else if (o->Type == MODEL_NPC_CHERRYBLOSSOMTREE)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_DARK_PHEONIX)
+                                                    {
+                                                        b->StreamMesh = 0;
+                                                        Vector(1.f, 1.0f, 1.0f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh,
+                                                                      BITMAP_CHROME);
+                                                        b->StreamMesh = -1;
+                                                        Vector(.6f, .6f, .6f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_STATUE_OF_SAINT)
+                                                    {
+                                                        // Dying or appearing, it shows only the debris
+                                                        // UpdateRenderObjectEffects spawns.
+                                                        if (o->CurrentAction != MONSTER01_DIE &&
+                                                            (WorldTime - o->InitialSceneTime) >= 1000)
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                            b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh, BITMAP_CHROME);
+                                                            Vector(0.3f, 0.3f, 1.f, b->BodyLight);
+                                                            b->RenderBody(RENDER_BRIGHT | RENDER_METAL, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh, BITMAP_CHROME);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_CASTLE_GATE && o->CurrentAction == MONSTER01_DIE)
+                                                    {
+                                                        // Shows only the debris UpdateRenderObjectEffects spawns.
+                                                    }
+                                                    else if (o->Type == MODEL_STONE_COFFIN || o->Type == MODEL_STONE_COFFIN + 1)
+                                                    {
+                                                        if (o->SubType == 2 || o->SubType == 3)
+                                                        {
+                                                            if (o->SubType == 2)
+                                                            {
+                                                                Vector(0.1f, 0.3f, 0.6f, b->BodyLight);
+                                                            }
+                                                            else
+                                                            {
+                                                                Vector(0.1f, 0.6f, 0.3f, b->BodyLight);
+                                                            }
+                                                            b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh, BITMAP_CHROME);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                            b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh, BITMAP_CHROME);
+                                                            Vector(0.3f, 0.3f, 1.f, b->BodyLight);
+                                                            b->RenderBody(RENDER_BRIGHT | RENDER_METAL, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh, BITMAP_CHROME);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_FLY_BIG_STONE1)
+                                                    {
+                                                        // Landing, it shows only the debris UpdateRenderObjectEffects
+                                                        // spawns.
+                                                        if (look.hiddenMesh != 99 || !o->Visible)
+                                                        {
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            if (o->SubType <= 1)
+                                                            {
+                                                                Vector(1.0f, 0.2f, 0.1f, b->BodyLight);
+                                                                b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                                              look.blendMesh, 1.f, look.blendMeshU,
+                                                                              look.blendMeshV, look.hiddenMesh);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_FLY_BIG_STONE2)
+                                                    {
+                                                        // Landing, it shows only the debris UpdateRenderObjectEffects
+                                                        // spawns.
+                                                        if (look.hiddenMesh != 99 || !o->Visible)
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_BIG_STONE_PART1 || o->Type == MODEL_BIG_STONE_PART2)
+                                                    {
+                                                        if (o->SubType == 1)
+                                                        {
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            Vector(1.0f, 0.2f, 0.1f, b->BodyLight);
+                                                            b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, look.alpha,
+                                                                          look.blendMesh, 1.f, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        }
+                                                        else if (o->SubType == 2 || o->SubType == 3)
+                                                        {
+                                                            Vector(0.5f, 1.0f, 0.3f, b->BodyLight);
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_WALL_PART1 || o->Type == MODEL_WALL_PART2)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_CHAOS_CASTLE_KNIGHT || o->Type == MODEL_CHAOS_CASTLE_ELF)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_COMBO && o->SubType == 1)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE | o->RenderType, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_CIRCLE_LIGHT && (o->SubType == 3 || o->SubType == 4))
+                                                    {
+                                                        Vector(0.1f, 0.1f, 10.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | o->RenderType, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                    }
+                                                    else if (o->Type == MODEL_CIRCLE && (o->SubType == 2 || o->SubType == 3))
+                                                    {
+                                                        Vector(0.5f, 0.5f, 1.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh,
+                                                                      BITMAP_MAGIC_EMBLEM);
+                                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                    }
+                                                    else if (o->Type == MODEL_MULTI_SHOT1 || o->Type == MODEL_MULTI_SHOT2 || o->Type == MODEL_MULTI_SHOT3)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_DESAIR)
+                                                    {
+                                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_DARK, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_DARK_SCREAM)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, 1.f,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_DARK_SCREAM_FIRE)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, 1.f, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_ARROW_SPARK)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_CHROME5 | RENDER_BRIGHT,
+                                                                      look.alpha, look.blendMesh, 1.f, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_SKULL)
+                                                    {
+                                                        Vector(1.f, 0.6f, 0.3f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_WAVES)
+                                                    {
+                                                        if (o->SubType == 3)
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, -1, BITMAP_PINK_WAVE);
+                                                        else if (o->SubType == 4 || o->SubType == 5)
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, -1, BITMAP_PINK_WAVE);
+                                                        else
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_PROTECTGUILD)
+                                                    {
+                                                        Vector(0.4f, 0.6f, 1.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_WEBZEN_MARK)
+                                                    {
+                                                        Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        Vector(1.f, 0.5f, 0.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_MANA_RUNE && o->SubType == 0)
+                                                    {
+                                                        Vector(0.3f, 0.6f, 1.f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_SKILL_JAVELIN)
+                                                    {
+                                                        Vector(1.f, 0.6f, 0.3f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, 1);
+                                                    }
+                                                    else if (o->Type == MODEL_MAGIC_CAPSULE2 && o->SubType == 1)
+                                                    {
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME4, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, 1);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_ARROW_AUTOLOAD)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_INFINITY_ARROW)
+                                                    {
+                                                        // Only its joints show; the update spawns them.
+                                                    }
+                                                    else if (o->Type >= MODEL_INFINITY_ARROW && o->Type <= MODEL_INFINITY_ARROW4)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_SHIELD_CRASH || o->Type == MODEL_SHIELD_CRASH2)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_IRON_RIDER_ARROW)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_BLADE_SKILL)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        for (int abc = 0; abc < 3; abc++)
+                                                            b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_KENTAUROS_ARROW)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_XMAS_EVENT_EARRING)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      -WorldTime * 0.0002f, look.blendMeshV,
+                                                                      BITMAP_CHROME);
+                                                    }
+                                                    else if (o->Type == MODEL_XMAS_EVENT_ICEHEART)
+                                                    {
+                                                        b->StreamMesh = 0;
+                                                        Vector(1.f, 0.4f, 0.4f, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      -(int)WorldTime % 2000 * 0.0005f, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                        b->StreamMesh = -1;
+                                                    }
+                                                    else if (o->Type == MODEL_ARROW_BEST_CROSSBOW)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_NEWYEARSDAY_EVENT_PIG)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        Vector(1.0f, 0.4f, 0.2f, b->BodyLight);
+                                                        b->RenderBody(RENDER_CHROME3 | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                        Vector(1.0f, 1.f, 1.f, b->BodyLight);
+                                                    }
+                                                    else if (o->Type == MODEL_FENRIR_THUNDER)
+                                                    {
+                                                        if (o->SubType == 1)
+                                                        {
+                                                            VectorCopy(o->Light, b->BodyLight);
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                            Vector(1.f, 1.f, 1.f, b->BodyLight);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, look.hiddenMesh);
+                                                        }
+                                                    }
+                                                    else if (o->Type == MODEL_MAP_TORNADO)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, -1);
+                                                    }
+                                                    else if (o->Type >= MODEL_SUMMONER_CASTING_EFFECT1 && o->Type <= MODEL_SUMMONER_CASTING_EFFECT4)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight,
+                                                                      look.blendMeshU, look.blendMeshV, -1);
+                                                    }
+                                                    else if (o->Type == MODEL_SUMMONER_SUMMON_SAHAMUTT)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, -1);
+                                                        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME7, look.alpha,
+                                                                      look.blendMesh, look.alpha, look.blendMeshU,
+                                                                      look.blendMeshV, -1);
+                                                    }
+                                                    else if (o->Type == MODEL_SUMMONER_SUMMON_NEIL)
+                                                    {
+                                                        if (look.alpha < 0.7f)
+                                                        {
+                                                            b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                          0, look.alpha, look.blendMeshU,
+                                                                          look.blendMeshV, -1);
+                                                            b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                          2, look.alpha, look.blendMeshU,
+                                                                          look.blendMeshV, -1);
+                                                        }
+                                                        else
+                                                        {
+                                                            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, -1);
+                                                            b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                          look.blendMeshLight, look.blendMeshU,
+                                                                          look.blendMeshV, -1);
+                                                        }
+                                                        Vector(1.0f, 0.0f, 0.0f, b->BodyLight);
+                                                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, look.alpha,
+                                                                      look.blendMeshU, look.blendMeshV, -1);
+                                                    }
+                                                    else if (o->Type >= MODEL_SUMMONER_SUMMON_NEIL_NIFE1 && o->Type <= MODEL_SUMMONER_SUMMON_NEIL_NIFE3)
+                                                    {
+                                                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, -1);
+                                                        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, -1);
+                                                        Vector(1.0f, 0.0f, 0.0f, b->BodyLight);
+                                                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1,
+                                                                      look.alpha, look.blendMeshU, look.blendMeshV, -1);
+                                                    }
+                                                    else if (o->Type >= MODEL_SUMMONER_SUMMON_NEIL_GROUND1 && o->Type <= MODEL_SUMMONER_SUMMON_NEIL_GROUND3)
+                                                    {
+                                                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0,
+                                                                      look.alpha, look.blendMeshU, look.blendMeshV, -1);
+                                                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1,
+                                                                      look.alpha, -WorldTime * 0.001f, look.blendMeshV,
+                                                                      -1);
+                                                    }
+                                                    else if (o->Type == MODEL_SUMMONER_SUMMON_LAGUL)
+                                                    {
+                                                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0,
+                                                                      look.alpha, look.blendMeshU, look.blendMeshV, -1);
+                                                        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1,
+                                                                      look.alpha, look.blendMeshU, look.blendMeshV, -1);
+                                                    }
+                                                    else if (o->Type >= MODEL_EFFECT_BROKEN_ICE0 && o->Type <= MODEL_EFFECT_BROKEN_ICE3)
+                                                    {
+                                                        VectorCopy(o->Light, b->BodyLight);
+                                                        b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_MOVE_TARGETPOSITION_EFFECT)
+                                                    {
+                                                        Vector(1.0f, 0.7f, 0.3f, b->BodyLight);
+                                                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha,
+                                                                      look.blendMesh, look.blendMeshLight);
+                                                    }
+                                                    else if (o->Type == MODEL_ARROW_DARKSTINGER)
+                                                    {
+                                                        b->BodyLight[0] = 0.7f;
+                                                        b->BodyLight[1] = 0.7f;
+                                                        b->BodyLight[2] = 0.9f;
+
+                                                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, 0, 1.f,
+                                                                      look.blendMeshU, look.blendMeshV);
+
+                                                        b->BodyLight[0] = 0.3f;
+                                                        b->BodyLight[1] = 0.4f;
+                                                        b->BodyLight[2] = 0.9f;
+                                                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, 1.f,
+                                                                      look.blendMeshU, look.blendMeshV);
+                                                        b->BodyLight[0] = 1.0f;
+                                                        b->BodyLight[1] = 1.0f;
+                                                        b->BodyLight[2] = 1.0f;
+                                                    }
+                                                    else if (o->Type == MODEL_FEATHER)
+                                                    {
+                                                        if (o->SubType == 2 || o->SubType == 3)
+                                                            b->RenderBody(RENDER_TEXTURE | RENDER_DARK, look.alpha,
+                                                                          look.blendMesh, look.blendMeshLight,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh);
+                                                        else
+                                                            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, 0, look.alpha,
+                                                                          look.blendMeshU, look.blendMeshV,
+                                                                          look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_ARROW_GAMBLE)
+                                                    {
+                                                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0,
+                                                                      look.alpha, look.blendMeshU, look.blendMeshV,
+                                                                      look.hiddenMesh);
+                                                    }
+                                                    else if (o->Type == MODEL_DEMON)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                        // b->RenderMesh(0, RENDER_TEXTURE|RENDER_BRIGHT, look.alpha, 0,
+                                                        // look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                                                        // BITMAP_DEMONWING_R);
+                                                    }
+                                                    else if (o->Type == MODEL_SPIRIT_OF_GUARDIAN)
+                                                    {
+                                                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh,
+                                                                      look.blendMeshLight, look.blendMeshU,
+                                                                      look.blendMeshV, look.hiddenMesh);
+                                                    }
+                                                    else
+                                                    {
+                                                        bIsRendered = FALSE;
+                                                    }
+
+                if (bIsRendered == TRUE)
+                {
+                }
+                else if (o->Type == MODEL_XMAS2008_SNOWMAN)
+                {
+                    if (o->CurrentAction != MONSTER01_DIE)
+                    {
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                        b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, 0.5f, look.blendMeshU, look.blendMeshV,
+                                      look.hiddenMesh);
+                    }
+                }
+                else if (o->Type == MODEL_XMAS2008_SNOWMAN_BODY)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, 0.5f, look.blendMeshU, look.blendMeshV,
+                                  look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_FEATHER_FOREIGN)
+                {
+                    if (o->SubType == 2 || o->SubType == 3)
+                        b->RenderBody(RENDER_TEXTURE | RENDER_DARK, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                    else
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, 0, look.alpha, look.blendMeshU, look.blendMeshV,
+                                      look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_SWELL_OF_MAGICPOWER)
+                {
+                    look.blendMesh = 0;
+                    Vector(0.7f, 0.4f, 0.9f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_ARROWSRE06)
+                {
+                    look.blendMesh = 0;
+                    VectorCopy(o->Light, b->BodyLight);
+                    //Vector(0.7f, 0.2f, 0.9f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_XMAS2008_SNOWMAN_NPC)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, 0.5f, look.blendMeshU, look.blendMeshV,
+                                  look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_XMAS2008_SANTA_NPC)
+                {
+                    vec3_t vRelativePos, vWorldPos, Light;
+                    Vector(0.f, 17.f, 0.f, vRelativePos);
+                    Vector(1.0f, 0.4f, 0.0f, Light);
+                    b->TransformPosition(o->BoneTransform[53], vRelativePos, vWorldPos, true);
+                    RenderAurora(BITMAP_LIGHTMARKS, RENDER_BRIGHT, vWorldPos[0], vWorldPos[1], 2.0f, 2.0f, Light);
+                    b->TransformPosition(o->BoneTransform[58], vRelativePos, vWorldPos, true);
+                    RenderAurora(BITMAP_LIGHTMARKS, RENDER_BRIGHT, vWorldPos[0], vWorldPos[1], 2.0f, 2.0f, Light);
+
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_CURSED_SANTA)
+                {
+                    if (o->CurrentAction == MONSTER01_DIE && animationFrame >= 13)
+                    {
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_GOOD_SANTA);
+                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_GOOD_SANTA_BAGGAGE);
+                        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                    }
+                    else if (o->CurrentAction == MONSTER01_DIE && animationFrame >= 9)
+                    {
+                        float fFade = (13.0f - animationFrame) / (13.0f - 9.0f);
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_GOOD_SANTA);
+                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_GOOD_SANTA_BAGGAGE);
+                        b->RenderMesh(2, RENDER_TEXTURE, 1.0f - fFade, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+
+                        b->RenderMesh(0, RENDER_TEXTURE, fFade, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh);
+                        b->RenderMesh(1, RENDER_TEXTURE, fFade, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh);
+                    }
+                    else
+                    {
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                    }
+                }
+                else if (o->Type >= MODEL_LITTLESANTA && o->Type <= MODEL_LITTLESANTA_END)
+                {
+                    float fLumi = (sinf(WorldTime * 0.004f) + 1.2f) * 0.5f + 0.1f;
+                    vec3_t vLight;
+                    LittleSantaLight(o->Type, vLight);
+                    RenderAurora(BITMAP_LIGHTMARKS, RENDER_BRIGHT, o->Position[0], o->Position[1], 2.0f + fLumi,
+                                 2.0f + fLumi, vLight);
+                    RenderAurora(BITMAP_LIGHTMARKS, RENDER_BRIGHT, o->Position[0], o->Position[1], 0.5f + fLumi,
+                                 0.5 + fLumi, vLight);
+
+                    b->RenderBody(RENDER_TEXTURE, 0.9f, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    Vector(b->BodyLight[0] * 0.5f, b->BodyLight[0] * 0.5f, b->BodyLight[0] * 0.5f, b->BodyLight);
+                    b->RenderBody(RENDER_BRIGHT | RENDER_TEXTURE, 0.9f, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV);
+                }
+                else if (o->Type == MODEL_DUEL_NPC_TITUS)
+                {
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(4, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                  look.blendMeshU, WorldTime * 0.0001f);
+                }
+#ifdef ASG_ADD_TIME_LIMIT_QUEST_NPC
+                else if (o->Type == MODEL_GAMBLE_NPC_MOSS || o->Type == MODEL_TIME_LIMIT_QUEST_NPC_ZAIRO)
+#else  // ASG_ADD_TIME_LIMIT_QUEST_NPC
+                else if (o->Type == MODEL_GAMBLE_NPC_MOSS)
+#endif // ASG_ADD_TIME_LIMIT_QUEST_NPC
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_DOPPELGANGER_NPC_LUGARD)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(4, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    // 날개
+                    Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
+                    b->RenderMesh(5, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(5, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 5, 0.1f, look.blendMeshU,
+                                  look.blendMeshV);
+                }
+                else if (o->Type == MODEL_DOPPELGANGER_NPC_BOX || o->Type == MODEL_DOPPELGANGER_NPC_GOLDENBOX)
+                {
+                    if (o->Type == MODEL_DOPPELGANGER_NPC_BOX)
+                    {
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                    }
+                    else if (o->Type == MODEL_DOPPELGANGER_NPC_GOLDENBOX)
+                    {
+                        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_DOPPELGANGER_GOLDENBOX2);
+                        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_DOPPELGANGER_GOLDENBOX1);
+                        b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                        b->RenderMesh(1, RENDER_BRIGHT | RENDER_CHROME7, 0.5f, 1, 0.3f, look.blendMeshU,
+                                      look.blendMeshV);
+                    }
+                }
+                else if (o->Type == MODEL_DOPPELGANGER_SLIME_CHIP)
+                {
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_FIRE_FLAME_GHOST)
+                {
+                    if (o->CurrentAction == MONSTER01_DIE)
+                    {
+                        Vector(1.0f, 0.6f, 0.9f, b->BodyLight);
+                        b->RenderBody(RENDER_TEXTURE, look.alpha, -2, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh);
+                        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh,
+                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                    }
+                    else
+                    {
+                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh);
+                        vec3_t vOriBodyLight;
+                        VectorCopy(b->BodyLight, vOriBodyLight);
+                        Vector(1.0f, 0.6f, 0.5f, b->BodyLight);
+                        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh,
+                                      look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                        VectorCopy(vOriBodyLight, b->BodyLight);
+                    }
+                }
+                else if (o->Type == MODEL_EFFECT_UMBRELLA_GOLD)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV);
+                }
+                else if (o->Type == MODEL_EFFECT_SD_AURA)
+                {
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight, look.blendMeshU,
+                                  WorldTime * 0.0006f);
+                }
+                else if (o->Type == MODEL_UNITEDMARKETPLACE_CHRISTIN)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_UNITEDMARKETPLACE_RAUL)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(4, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV);
+                    b->RenderMesh(5, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(6, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(7, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(8, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(9, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(10, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(11, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(12, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(13, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV);
+                    b->RenderMesh(14, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV);
+                }
+                else if (o->Type == MODEL_UNITEDMARKETPLACE_JULIA)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_TERSIA)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, look.alpha * 0.4f, look.blendMesh,
+                                  look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                }
+                else if (o->Type == MODEL_LUCKYITEM_NPC)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, look.alpha * 0.4f, look.blendMesh,
+                                  look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+                }
+                else if (o->Type == MODEL_KARUTAN_NPC_VOLVO)
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                    float fLumi = (sinf(WorldTime * 0.001f) + 1.0f) * 0.45f + 0.1f;
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, fLumi, look.blendMeshU,
+                                  look.blendMeshV, BITMAP_VOLO_SKIN_EFFECT);
+                }
+                else if (o->Type == MODEL_WOLF_HEAD_EFFECT2)
+                {
+                    float _BlendLight = look.blendMeshLight;
+                    Vector(0.4f, 0.4f, 0.6f, b->BodyLight);
+                    VectorScale(b->BodyLight, 0.3f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, _BlendLight * 0.5f,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_SHOCKWAVE01)
+                {
+                    if (o->SubType == 1)
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        VectorScale(b->BodyLight, 5.0f, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_DAMAGE2);
+                    }
+                    else if (o->SubType == 2)
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        VectorScale(b->BodyLight, 15.0f, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                    }
+                    else if (o->SubType == 3)
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_DAMAGE2);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_DAMAGE2);
+                    }
+                    else if (o->SubType == 4 || o->SubType == 5)
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_DAMAGE2);
+                    }
+                    else
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                    }
+                }
+                else if (o->Type == MODEL_SHOCKWAVE02)
+                {
+                    VectorCopy(o->Light, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_SHOCKWAVE_SPIN01)
+                {
+                    VectorCopy(o->Light, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh, BITMAP_DAMAGE1);
+                }
+                else if (o->Type == MODEL_DRAGON_KICK_DUMMY || o->Type == MODEL_DOWN_ATTACK_DUMMY_L
+                    || o->Type == MODEL_DOWN_ATTACK_DUMMY_R || o->Type == MODEL_WOLF_HEAD_EFFECT)
+                {
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_WINDFOCE)
+                {
+                    VectorCopy(o->Light, b->BodyLight);
+                    VectorScale(b->BodyLight, 6.0f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_WINDFOCE_MIRROR)
+                {
+                    VectorCopy(o->Light, b->BodyLight);
+                    VectorScale(b->BodyLight, 6.0f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                                  look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_SHOCKWAVE_GROUND01)
+                {
+                    if (o->SubType == 1)
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        VectorScale(b->BodyLight, 6.0f, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_KWAVE2);
+                    }
+                    else
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        VectorScale(b->BodyLight, 6.0f, b->BodyLight);
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV);
+                    }
+                }
+                else if (o->Type == MODEL_DRAGON_LOWER_DUMMY)
+                {
+                    Vector(1.0f, 0.8f, 0.2f, b->BodyLight);
+                    VectorScale(b->BodyLight, look.alpha, b->BodyLight);
+                    // grandmark2.jpg
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                  look.blendMeshU, -(int)WorldTime % 2000 * 0.0001f);
+                    b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 2, look.blendMeshLight,
+                                  look.blendMeshU, -(int)WorldTime % 2000 * 0.0001f);
+
+                    Vector(1.0f, 0.2f, 0.1f, b->BodyLight);
+                    VectorScale(b->BodyLight, look.alpha, b->BodyLight);
+                    // lines2.jpg
+                    b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1, look.blendMeshLight,
+                                  look.blendMeshU, -(int)WorldTime % 2000 * 0.0001f);
+                }
+                else if (o->Type == MODEL_VOLCANO_OF_MONK)
+                {
+                    if (o->SubType == 1)
+                    {
+                        VectorCopy(o->Light, b->BodyLight);
+                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh);
+
+                        b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 0, look.blendMeshLight,
+                                      look.blendMeshU, look.blendMeshV, BITMAP_VOLCANO_CORE);
+                    }
+                }
+                else if (o->Type == MODEL_VOLCANO_STONE)
+                {
+                    VectorCopy(o->Light, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                else if (o->Type == MODEL_SWORD_FORCE)
+                {
+                    if (o->SubType == 2 || o->SubType == 3)
+                    {
+                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh, BITMAP_KNIGHTST_BLUE);
+                    }
+                    else
+                    {
+                        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                      look.blendMeshV, look.hiddenMesh);
+                    }
+                }
+                else
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                                  look.blendMeshV, look.hiddenMesh);
+                }
+                if (g_isCharacterBuff(o, eDeBuff_Freeze))
+                {
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, -2, 1.f, look.blendMeshU, look.blendMeshV,
+                                  look.hiddenMesh);
+                }
+                else if (g_isCharacterBuff(o, eDeBuff_BlowOfDestruction))
+                {
+                    Vector(0.3f, 0.5f, 1.f, b->BodyLight);
+                    b->RenderBody(RENDER_TEXTURE, look.alpha, -2, 1.f, look.blendMeshU, look.blendMeshV,
+                                  look.hiddenMesh);
+                }
+
+                if (o->Type == MODEL_HYDRA)
+                {
+                    b->BeginRender(look.alpha);
+                    float Light = sinf(WorldTime * 0.002f) * 0.3f + 0.5f;
+                    b->RenderMesh(0, RENDER_TEXTURE, look.alpha, 0, Light, look.blendMeshU, look.blendMeshV,
+                                  b->IndexTexture[6]);
+                    float TexCoord = (float)((int)WorldTime % 100) * 0.01f;
+                    b->RenderMesh(3, RENDER_CHROME | RENDER_BRIGHT, look.alpha, 3, Light, look.blendMeshU, -TexCoord);
+                    b->EndRender();
+                }
+                if (o->Type == MODEL_NPC_ARCHANGEL_MESSENGER || o->Type == MODEL_NPC_ARCHANGEL)
+                {
+                    b->RenderMesh(0, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight);
+                }
+                if (o->Type == MODEL_ARROW_TANKER_HIT || o->Type == MODEL_ARROW_TANKER)
+                {
+                    b->BodyLight[0] = 1.0f;
+                    b->BodyLight[1] = 1.0f;
+                    b->BodyLight[2] = 1.0f;
+
+                    b->RenderBody(RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, -2, 1.f, look.blendMeshU, look.blendMeshV,
+                                  look.hiddenMesh);
+                }
+            }
+    }
+}
+
+// The frame an effect's draw poses it at: none while its owner is stunned or asleep (Calc_RenderObject).
+static float EffectFrame(const OBJECT* o)
+{
+    if (o->Owner != nullptr &&
+        (g_isCharacterBuff(o->Owner, eDeBuff_Stun) || g_isCharacterBuff(o->Owner, eDeBuff_Sleep)))
+        return 0.f;
+    return o->AnimationFrame;
+}
+
+// An effect's world pose at a frame, as its draw animates it, in scratch bones: effects keep no bones of their own,
+// because the move handlers read an owner's BoneTransform as a character's.
+static vec34_t* EffectWorldPose(OBJECT* o, BMD* b, float frame)
+{
+    static vec34_t bones[MAX_BONES];
+    b->Animation(bones, frame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle, false, true);
+    return bones;
+}
+
+void SkinObjectMeshes(OBJECT* o, BMD* b, bool Translate)
+{
+    PlaceObjectModel(o, b);
+    vec34_t* bones = o->EnableBoneMatrix ? o->BoneTransform : EffectWorldPose(o, b, EffectFrame(o));
+    // The object's own OBB belongs to its draw.
+    OBB_t obb;
+    b->TransformCheap(bones, o->BoundingBoxMin, o->BoundingBoxMax, &obb, Translate);
+}
+
+void UpdateRenderObjectEffects(OBJECT* o)
+{
+    BMD* b = &Models[o->Type];
+    // Where Draw_RenderObject reaches the per-type cases; Calc_RenderObject draws nothing below this alpha.
+    if ((EditFlag == EDIT_NONE && o->HiddenMesh == -2) || o->RenderType == RENDER_DARK || o->Alpha < 0.01f)
+        return;
+
+    if (o->Type >= MODEL_LITTLESANTA && o->Type <= MODEL_LITTLESANTA_END)
+    {
+        auto Rotation = (float)((int)(WorldTime * 0.1f) % 360);
+        vec3_t vWorldPos, vLight;
+        LittleSantaLight(o->Type, vLight);
+        b->TransformByObjectBone(vWorldPos, o, 17);
+        CreateSprite(BITMAP_LIGHTMARKS, vWorldPos, 0.7f, vLight, o, Rotation);
+        CreateSprite(BITMAP_LIGHTMARKS, vWorldPos, 1.3f, vLight, o, Rotation);
+
+        b->TransformByObjectBone(vWorldPos, o, 20);
+        CreateSprite(BITMAP_LIGHTMARKS, vWorldPos, 0.7f, vLight, o, Rotation);
+        CreateSprite(BITMAP_LIGHTMARKS, vWorldPos, 1.3f, vLight, o, Rotation);
+
+        if (Random::Rand() % 50 <= 5)
+        {
+            CreateParticle(BITMAP_LIGHT + 3, o->Position, o->Angle, vLight, 0, 1.0f);
+        }
+        return;
+    }
+
+    UpdateHellasObjectMeshEffects(o, b);
+    battleCastle::UpdateBattleCastleObjectMeshEffects(o, b);
+
+    switch (o->Type)
+    {
+    case MODEL_DESAIR:
+        // The light its draw left on it.
+        Vector(1.f, 1.f, 1.f, o->Light);
+        break;
+    case MODEL_DRAGON_LOWER_DUMMY:
+        // The light its draw left on it, which its sparks take.
+        Vector(1.0f, 0.2f, 0.1f, o->Light);
+        break;
+    case MODEL_WOLF_HEAD_EFFECT2:
+        // The light its draw left on it.
+        Vector(0.4f, 0.4f, 0.6f, o->Light);
+        break;
+    case MODEL_FRED:
+    {
+        MoveEye(o, b, 14, 15, 71, 72, 73, 74);
+        if (!o->m_pCloth)
+        {
+            auto* pCloth = new CPhysicsCloth[1];
+            pCloth[0].Create(o, 10, 0.0f, -10.0f, 0.0f, 5, 12, 150.0f, 190.0f, BITMAP_DEASULER_CLOTH,
+                             BITMAP_DEASULER_CLOTH, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER);
+            pCloth[0].AddCollisionSphere(50.0f, -140.0f, -20.0f, 30.0f, 2);
+            o->m_pCloth = (void*)pCloth;
+            o->m_byNumCloth = 1;
+        }
+        if (!((CPhysicsCloth*)o->m_pCloth)[0].Move2(0.005f, 5))
+        {
+            DeleteCloth(&CharactersClient[(int)o->PKKey], o);
+        }
+    }
+    break;
+    case MODEL_STATUE_OF_SAINT:
+        if (o->CurrentAction == MONSTER01_DIE || (WorldTime - o->InitialSceneTime) < 1000)
+        {
+            if (o->CurrentAction == MONSTER01_DIE)
+            {
+                o->Live = false;
+            }
+
+            PlayBuffer(SOUND_HIT_GATE2);
+            SkinObjectMeshes(o, b, true);
+            b->SpawnMeshEffects(0, MODEL_STONE_COFFIN);
+        }
+        break;
+    case MODEL_CASTLE_GATE:
+        if (o->CurrentAction == MONSTER01_DIE)
+        {
+            o->Live = false;
+
+            PlayBuffer(SOUND_HIT_GATE2);
+            SkinObjectMeshes(o, b, true);
+            b->SpawnMeshEffects(0, MODEL_GATE);
+        }
+        break;
+    case MODEL_FLY_BIG_STONE1:
+    case MODEL_FLY_BIG_STONE2:
+        if (o->HiddenMesh == 99 && o->Visible)
+        {
+            o->HiddenMesh = -2;
+            SkinObjectMeshes(o, b, false);
+            b->SpawnMeshEffects(0, o->Type == MODEL_FLY_BIG_STONE1 ? MODEL_BIG_STONE_PART1 : MODEL_BIG_STONE_PART2);
+        }
+        break;
+    case MODEL_VALKYRIE:
+    case MODEL_ICE_MONSTER:
+    case MODEL_ALQUAMOS:
+    case MODEL_QUEEN_RAINER:
+        if (o->Alpha == 1.0f && o->BlendMeshLight == 0.05f)
+        {
+            o->BlendMeshLight = 1.0f;
+        }
+        break;
+    case MODEL_KALIMA_SHOP:
+    {
+        float Luminosity = sinf(WorldTime * 0.002f) * 0.3f + 0.6f;
+        vec3_t Position, Light, p, Angle;
+        Vector(0.4f, 0.2f, 0.4f, Light);
+        Vector(30.f, 40.f, 0.f, p);
+        b->TransformPosition(o->BoneTransform[3], p, Position);
+
+        VectorAdd(Position, o->Position, Position);
+        CreateSprite(BITMAP_LIGHT, Position, Luminosity + 3.5f, Light, o, 50.f);
+
+        Vector(0.f, 0.f, 0.f, p);
+        b->TransformPosition(o->BoneTransform[21], p, Position);
+        VectorAdd(Position, o->Position, Position);
+        CreateSprite(BITMAP_LIGHT, Position, Luminosity + 3.5f, Light, o, 50.f);
+
+        Vector(0.f, 0.f, 0.f, Angle);
+        Vector(1.f, 1.f, 1.f, Light);
+        VectorCopy(o->Position, Position);
+        Position[0] += 40.f;
+        Position[1] += 30.f;
+        Position[2] -= 90.f;
+        CreateParticleFpsChecked(BITMAP_SMOKE, Position, Angle, Light, 11, 0.4f);
+
+        VectorCopy(o->Position, Position);
+        Position[0] -= 40.f;
+        Position[1] -= 30.f;
+        Position[2] -= 90.f;
+        CreateParticleFpsChecked(BITMAP_SMOKE, Position, Angle, Light, 11, 0.4f);
+        break;
+    }
+    case MODEL_XMAS2008_SNOWMAN:
+        if (o->CurrentAction == MONSTER01_DIE)
+        {
+            if ((int)o->LifeTime == 100)
+            {
+                o->LifeTime = 90;
+                o->m_bRenderShadow = false;
+
+                vec3_t vRelativePos, vWorldPos, Light;
+                Vector(1.0f, 1.0f, 1.0f, Light);
+                Vector(0.f, 0.f, 0.f, vRelativePos);
+
+                b->TransformPosition(o->BoneTransform[7], vRelativePos, vWorldPos, true);
+                CreateEffect(MODEL_XMAS2008_SNOWMAN_HEAD, vWorldPos, o->Angle, Light, 0, o, 0, 0);
+
+                CreateEffect(MODEL_XMAS2008_SNOWMAN_BODY, o->Position, o->Angle, Light, 0, o, 0, 0);
+            }
+        }
+        else
+        {
+            vec3_t vRelativePos, vWorldPos, Light;
+            Vector(0.f, 0.f, 0.f, vRelativePos);
+            Vector(0.8f, 0.8f, 0.9f, Light);
+
+            b->TransformPosition(o->BoneTransform[7], vRelativePos, vWorldPos, true);
+            CreateSprite(BITMAP_LIGHT, vWorldPos, 6.0f, Light, o);
+            CreateSprite(BITMAP_LIGHT, vWorldPos, 4.0f, Light, o);
+
+            b->TransformPosition(o->BoneTransform[34], vRelativePos, vWorldPos, true);
+            CreateParticleFpsChecked(BITMAP_SHINY, vWorldPos, o->Angle, Light, 7);
+            Vector(1.0f, 0.8f, 0.2f, Light);
+            CreateSprite(BITMAP_LIGHT, vWorldPos, 2.0f, Light, o);
+
+            if (o->CurrentAction == MONSTER01_WALK)
+            {
+                vRelativePos[0] = o->Position[0] + sinf(((Random::Rand() % 360) * 6.12)) * 40.0f;
+                vRelativePos[1] = o->Position[1] + sinf(((Random::Rand() % 360) * 6.12)) * 40.0f;
+                vRelativePos[2] = o->Position[2];
+                CreateParticleFpsChecked(BITMAP_SMOKE, vRelativePos, o->Angle, o->Light);
+            }
+        }
+        break;
+    case MODEL_XMAS2008_SNOWMAN_NPC:
+    {
+        vec3_t vRelativePos, vWorldPos, Light;
+        Vector(0.f, 0.f, 0.f, vRelativePos);
+        Vector(0.8f, 0.8f, 0.9f, Light);
+
+        b->TransformPosition(o->BoneTransform[7], vRelativePos, vWorldPos, true);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 6.0f, Light, o);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 4.0f, Light, o);
+
+        b->TransformPosition(o->BoneTransform[34], vRelativePos, vWorldPos, true);
+        CreateParticleFpsChecked(BITMAP_SHINY, vWorldPos, o->Angle, Light, 7);
+        Vector(1.0f, 0.8f, 0.2f, Light);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 2.0f, Light, o);
+        break;
+    }
+    case MODEL_XMAS2008_SANTA_NPC:
+    {
+        vec3_t vRelativePos, vWorldPos, Light;
+        Vector(0.f, 0.f, 0.f, vRelativePos);
+
+        b->TransformPosition(o->BoneTransform[4], vRelativePos, vWorldPos, true);
+        Vector(1.0f, 0.8f, 0.2f, Light);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 8.0f, Light, o);
+
+        b->TransformPosition(o->BoneTransform[13], vRelativePos, vWorldPos, true);
+        Vector(1.0f, 0.4f, 0.0f, Light);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 5.0f, Light, o);
+
+        b->TransformPosition(o->BoneTransform[38], vRelativePos, vWorldPos, true);
+        Vector(1.0f, 0.8f, 0.2f, Light);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 2.0f, Light, o);
+
+        int temp[11] = {39, 41, 43, 44, 46, 49, 40, 42, 45, 47, 48};
+        float fCos1 = cosf(WorldTime * 0.002f);
+        float fCos2 = sinf(WorldTime * 0.002f);
+        float fSize = 0.0f;
+        for (int i = 0; i < 11; i++)
+        {
+            b->TransformPosition(o->BoneTransform[temp[i]], vRelativePos, vWorldPos, true);
+
+            if (i < 6)
+            {
+                Vector(1.0f, 0.9f, 0.3f, Light);
+                fSize = 0.7f * fCos1;
+            }
+            else
+            {
+                Vector(1.0f, 0.5f, 0.5f, Light);
+                fSize = 0.7f * fCos2;
+            }
+            CreateSprite(BITMAP_LIGHT, vWorldPos, fSize, Light, o);
+        }
+
+        float fScale = 0.0f;
+        switch (o->CurrentAction)
+        {
+        case 1:
+            vRelativePos[0] = 20 + (Random::Rand() % 500 - 250) * 0.1f;
+            vRelativePos[1] = (Random::Rand() % 300 - 150) * 0.1f;
+            b->TransformPosition(o->BoneTransform[16], vRelativePos, vWorldPos, true);
+
+            Vector((Random::Rand() % 90 + 10) * 0.01f, (Random::Rand() % 90 + 10) * 0.01f,
+                   (Random::Rand() % 90 + 10) * 0.01f, Light);
+            fScale = (Random::Rand() % 5 + 5) * 0.1f;
+            CreateParticleFpsChecked(BITMAP_LIGHT, vWorldPos, o->Angle, Light, 13, fScale, o);
+            CreateParticleFpsChecked(BITMAP_LIGHT, vWorldPos, o->Angle, Light, 13, fScale, o);
+            CreateParticleFpsChecked(BITMAP_LIGHT, vWorldPos, o->Angle, Light, 13, fScale, o);
+            CreateParticleFpsChecked(BITMAP_SHINY, vWorldPos, o->Angle, Light, 7);
+
+            Vector(1.0f, 0.8f, 0.2f, Light);
+            Vector(0.f, 0.f, 0.f, vRelativePos);
+            b->TransformPosition(o->BoneTransform[16], vRelativePos, vWorldPos, true);
+            CreateSprite(BITMAP_LIGHT, vWorldPos, 2.5f, Light, o);
+            break;
+        case 2:
+            Vector(150.0f, 0.0f, 0.0f, vRelativePos);
+            b->TransformPosition(o->BoneTransform[6], vRelativePos, vWorldPos, true);
+            Vector(0.8f, 0.8f, 0.9f, Light);
+
+            if (o->AnimationFrame < 1)
+                o->AI = 0;
+            if (o->AI == 0 && o->AnimationFrame > 1)
+            {
+                o->AI = 1;
+                CreateSprite(BITMAP_LIGHT, vWorldPos, 0.5f, Light, o);
+                CreateSprite(BITMAP_DS_SHOCK, vWorldPos, 0.15f, Light, o);
+                CreateEffectFpsChecked(BITMAP_FIRECRACKER0002, vWorldPos, o->Angle, Light, o->Skill);
+            }
+            break;
+        }
+        break;
+    }
+    case MODEL_CURSED_SANTA:
+        if (o->CurrentAction == MONSTER01_DIE)
+        {
+            vec3_t vLight;
+            Vector(1.0 * o->Alpha, 0.8 * o->Alpha, 0.5 * o->Alpha, vLight);
+            vec3_t vPosition;
+            Vector(o->Position[0], o->Position[1], o->Position[2] + 200, vPosition);
+
+            if (o->AnimationFrame >= 13)
+            {
+                o->Angle[2] = 45;
+                if (o->AI != 0)
+                {
+                    o->AI -= 1;
+                    vec3_t vPos, Position;
+                    Vector(o->Position[0], o->Position[1], o->Position[2] + 250, vPos);
+
+                    vec3_t vLight;
+                    Vector(0.7f, 0.3f, 0.0f, vLight);
+                    for (int i = 0; i < 30; i++)
+                    {
+                        CreateParticleFpsChecked(BITMAP_SPARK + 1, vPos, o->Angle, vLight, 27);
+                    }
+
+                    for (int i = 0; i < 20; i++)
+                    {
+                        CreateParticleFpsChecked(BITMAP_SPARK + 1, vPos, o->Angle, vLight, 28);
+                    }
+
+                    Vector(vPos[0] + (Random::Rand() % 100 - 50), vPos[1] + (Random::Rand() % 100 - 50), vPos[2],
+                           Position);
+                    CreateSprite(BITMAP_DS_SHOCK, Position, Random::Rand() % 10 * 0.1f + 1.5f, o->Light, o);
+
+                    for (int i = 0; i < 60; i++)
+                    {
+                        Vector(0.3f + (Random::Rand() % 700) * 0.001f, 0.3f + (Random::Rand() % 700) * 0.001f,
+                               0.3f + (Random::Rand() % 700) * 0.001f, vLight);
+                        CreateParticleFpsChecked(BITMAP_SHINY, vPos, o->Angle, vLight, 9);
+                    }
+
+                    vPos[2] += 50;
+
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        CreateEffectFpsChecked(MODEL_HALLOWEEN_CANDY_STAR, vPos, o->Angle, vLight, 1);
+                        CreateEffectFpsChecked(Random::Rand() % 4 + MODEL_XMAS_EVENT_BOX, vPos, o->Angle, vLight, 0, o);
+                        CreateEffectFpsChecked(Random::Rand() % 4 + MODEL_XMAS_EVENT_BOX, vPos, o->Angle, vLight, 0, o);
+                    }
+                }
+
+                CreateSprite(BITMAP_LIGHT, vPosition, 5.5f, vLight, o);
+            }
+            else if (o->AnimationFrame >= 9)
+            {
+                o->AI = 3;
+                o->Alpha = 1.0f;
+
+                o->Angle[2] += 40.0f;
+
+                CreateSprite(BITMAP_LIGHT, vPosition, 5.5f, vLight, o);
+
+                if (o->WeaponLevel == 0)
+                {
+                    o->WeaponLevel = 1;
+                    o->Position[0] = o->StartPosition[0] + (Random::Rand() % 20 + 20) * 0.1f;
+                    o->Position[1] = o->StartPosition[1] + (Random::Rand() % 20 + 20) * 0.1f;
+                }
+                else
+                {
+                    o->WeaponLevel = 0;
+                    o->Position[0] = o->StartPosition[0] - (Random::Rand() % 20 + 20) * 0.1f;
+                    o->Position[1] = o->StartPosition[1] - (Random::Rand() % 20 + 20) * 0.1f;
+                }
+            }
+            else
+            {
+                if (o->AI == 4 && o->AnimationFrame >= 3)
+                {
+                    vec3_t Angle = {0.0f, 0.0f, 0.0f};
+                    vec3_t Position;
+                    for (int i = 0; i < 36; ++i)
+                    {
+                        Vector(0.f, 0.f, (float)(Random::Rand() % 360), Angle);
+                        Position[0] = o->Position[0] + Random::Rand() % 200 - 100;
+                        Position[1] = o->Position[1] + Random::Rand() % 200 - 100;
+                        Position[2] = o->Position[2];
+
+                        CreateJoint(BITMAP_FLARE, Position, Position, Angle, 2, NULL, 40);
+                    }
+                    o->AI = 3;
+                }
+
+                if (o->WeaponLevel == 0)
+                {
+                    o->WeaponLevel = 1;
+                    o->Position[0] = o->StartPosition[0] + (Random::Rand() % 40 + 40) * 0.1f;
+                    o->Position[1] = o->StartPosition[1] + (Random::Rand() % 40 + 40) * 0.1f;
+                }
+                else
+                {
+                    o->WeaponLevel = 0;
+                    o->Position[0] = o->StartPosition[0] - (Random::Rand() % 40 + 40) * 0.1f;
+                    o->Position[1] = o->StartPosition[1] - (Random::Rand() % 40 + 40) * 0.1f;
+                }
+            }
+        }
+        else
+        {
+            VectorCopy(o->Position, o->StartPosition);
+            o->WeaponLevel = 0;
+            o->AI = 4;
+        }
+        break;
+    case MODEL_DUEL_NPC_TITUS:
+    {
+        int iBones[] = {9, 45, 23, 11};
+        vec3_t vLight, vPos, vRelative;
+        Vector(1.0f, 1.0f, 1.0f, vLight);
+        vec3_t vLightFire;
+        Vector(1.0f, 0.2f, 0.0f, vLightFire);
+        for (int i = 0; i < 4; ++i)
+        {
+            float fScale = 1.0f;
+            if (i == 0)
+            {
+                b->TransformByObjectBone(vPos, o, iBones[i]);
+                CreateSprite(BITMAP_LIGHT, vPos, 3.0f, vLightFire, o);
+
+                fScale = 0.8f;
+                Vector((Random::Rand() % 10 - 5) * 1.0f, (Random::Rand() % 10 - 5) * 1.0f,
+                       (Random::Rand() % 10 - 5) * 1.0f, vRelative);
+                b->TransformByObjectBone(vPos, o, iBones[i], vRelative);
+            }
+            else
+            {
+                b->TransformByObjectBone(vPos, o, iBones[i]);
+                CreateSprite(BITMAP_LIGHT, vPos, 2.0f, vLightFire, o);
+
+                fScale = 0.6f;
+                Vector((Random::Rand() % 10 - 5) * 1.0f, (Random::Rand() % 10 - 5) * 1.0f,
+                       (Random::Rand() % 10 - 5) * 1.0f, vRelative);
+                b->TransformByObjectBone(vPos, o, iBones[i], vRelative);
+            }
+            switch (Random::Rand() % 3)
+            {
+            case 0:
+                CreateParticleFpsChecked(BITMAP_FIRE_HIK1, vPos, o->Angle, vLight, 3, fScale);
+                break;
+            case 1:
+                CreateParticleFpsChecked(BITMAP_FIRE_CURSEDLICH, vPos, o->Angle, vLight, 7, fScale);
+                break;
+            case 2:
+                CreateParticleFpsChecked(BITMAP_FIRE_HIK3, vPos, o->Angle, vLight, 3, fScale);
+                break;
+            }
+        }
+        break;
+    }
+    case MODEL_GAMBLE_NPC_MOSS:
+#ifdef ASG_ADD_TIME_LIMIT_QUEST_NPC
+    case MODEL_TIME_LIMIT_QUEST_NPC_ZAIRO:
+#endif // ASG_ADD_TIME_LIMIT_QUEST_NPC
+    {
+        vec3_t vRelativePos, vWorldPos, Light;
+        Vector(0.f, 0.f, 0.f, vRelativePos);
+        Vector(0.8f, 0.8f, 0.8f, Light);
+        b->TransformPosition(o->BoneTransform[41], vRelativePos, vWorldPos, true);
+        CreateParticleFpsChecked(BITMAP_SMOKELINE1 + Random::Rand() % 3, vWorldPos, o->Angle, Light, 1, 0.6f, o);
+        CreateParticleFpsChecked(BITMAP_CLUD64, vWorldPos, o->Angle, Light, 6, 0.6f, o);
+
+        Vector(0.5f, 0.5f, 0.5f, Light);
+        b->TransformPosition(o->BoneTransform[55], vRelativePos, vWorldPos, true);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 2.0f, Light, o);
+        break;
+    }
+    case MODEL_DOPPELGANGER_NPC_BOX:
+    case MODEL_DOPPELGANGER_NPC_GOLDENBOX:
+        if (o->CurrentAction == MONSTER01_DIE)
+        {
+            o->Alpha = (10 - o->AnimationFrame) * 0.1f;
+
+            if (o->AnimationFrame > 9)
+                o->AnimationFrame = 9;
+        }
+
+        if (o->CurrentAction == MONSTER01_DIE && o->AnimationFrame > 1 && o->AnimationFrame < 9)
+        {
+            vec3_t vPos, vLight;
+            for (int i = 0; i < 1; ++i)
+            {
+                vPos[0] = o->Position[0] + Random::Rand() % 120 - 60;
+                vPos[1] = o->Position[1] + Random::Rand() % 120 - 60;
+                vPos[2] = o->Position[2];
+                Vector(0.3f, 0.3f, 0.3f, vLight);
+                CreateParticleFpsChecked(BITMAP_SMOKE, vPos, o->Angle, vLight, 54, 2.0f);
+                Vector(0.3f, 0.3f, 0.3f, vLight);
+                CreateParticleFpsChecked(BITMAP_SMOKE, vPos, o->Angle, vLight, 66, 2.0f, o);
+            }
+
+            if (rand_fps_check(2))
+            {
+                vPos[0] = o->Position[0] + Random::Rand() % 80 - 40;
+                vPos[1] = o->Position[1] + Random::Rand() % 80 - 40;
+                vPos[2] = o->Position[2] + Random::Rand() % 50 + 10;
+                Vector(0.2f, 0.5f, 1.0f, vLight);
+                CreateParticle(BITMAP_PIN_LIGHT, vPos, o->Angle, vLight, 2, 1.0f, o);
+                vPos[2] = o->Position[2] + Random::Rand() % 50 + 10;
+                Vector(1.0f, 0.8f, 0.5f, vLight);
+                CreateParticle(BITMAP_PIN_LIGHT, vPos, o->Angle, vLight, 3, 0.2f, o);
+            }
+
+            Vector(0.9f, 0.7f, 0.0f, vLight);
+            CreateParticleFpsChecked(BITMAP_SHINY, vPos, o->Angle, vLight, 3, 0.5f, o);
+            CreateParticleFpsChecked(BITMAP_SHINY, vPos, o->Angle, vLight, 3, 0.5f, o);
+
+            vPos[0] = o->Position[0];
+            vPos[1] = o->Position[1];
+            if (o->Type == MODEL_DOPPELGANGER_NPC_GOLDENBOX)
+                vPos[2] = o->Position[2] + 80;
+            else
+                vPos[2] = o->Position[2] + 50;
+            Vector(1.0f, 1.0f, 1.0f, vLight);
+            float fRot = (WorldTime * 0.0006f) * 360.0f;
+            CreateSprite(BITMAP_DS_EFFECT, vPos, 2.5f, vLight, o, fRot);
+            Vector(0.9f, 0.7f, 0.0f, vLight);
+            CreateSprite(BITMAP_SHINY + 5, vPos, 0.8f, vLight, o, -fRot);
+            float fLight = (sinf(WorldTime * 0.01f) + 1.0f) * 0.5f * 0.9f + 0.1f;
+            Vector(1.0f * fLight, 1.0f * fLight, 1.0f * fLight, vLight);
+            CreateSprite(BITMAP_FLARE, vPos, 1.5f, vLight, o);
+        }
+        break;
+    case MODEL_DARK_HORSE:
+        if (o->SubType == 1 && gMapManager.WorldActive == WD_65DOPPLEGANGER1)
+            o->Alpha = 0.7f;
+        break;
+    case MODEL_FENRIR_BLACK:
+    case MODEL_FENRIR_BLUE:
+    case MODEL_FENRIR_RED:
+    case MODEL_FENRIR_GOLD:
+    {
+        const auto bones = [o, b] { return Engine::Object::Pose::World(o, b); };
+        vec3_t vLight, vPos, vPosition;
+        float fLuminosity = (float)sinf((WorldTime) * 0.002f) * 0.2f;
+
+        if (o->CurrentAction == FENRIR_ATTACK_SKILL)
+        {
+            Vector(1.0f, 0.0f, 0.0f, vLight);
+            Vector((float)(Random::Rand() % 10 - 10) * 0.5f, 0.f, (float)(Random::Rand() % 40 - 20) * 0.5f, vPos);
+            b->TransformPosition(bones()[14], vPos, vPosition, false);
+            CreateParticleFpsChecked(BITMAP_SPARK + 1, vPosition, o->Angle, vLight, 15, 0.7f + (fLuminosity * 0.05f));
+        }
+
+        Vector(0.9f + fLuminosity, 0.2f + (fLuminosity * 0.5f), 0.1f + (fLuminosity * 0.5f), vLight);
+        Vector(50.f, 2.f, 11.f, vPos);
+        b->TransformPosition(bones()[11], vPos, vPosition, false);
+        CreateSprite(BITMAP_LIGHT, vPosition, 0.5f + (fLuminosity * 0.1f), vLight, o);
+        CreateSprite(BITMAP_LIGHT, vPosition, 0.5f + (fLuminosity * 0.1f), vLight, o);
+        Vector(50.f, 2.f, -11.f, vPos);
+        b->TransformPosition(bones()[11], vPos, vPosition, false);
+        CreateSprite(BITMAP_LIGHT, vPosition, 0.5f + (fLuminosity * 0.1f), vLight, o);
+        CreateSprite(BITMAP_LIGHT, vPosition, 0.5f + (fLuminosity * 0.1f), vLight, o);
+
+        Vector(1.0f, 0.3f, 0.2f, vLight);
+        Vector(40.f, 15.f, 0.f, vPos);
+        b->TransformPosition(bones()[13], vPos, vPosition, false);
+        CreateSprite(BITMAP_LIGHT, vPosition, 1.5f, vLight, o);
+        CreateSprite(BITMAP_LIGHT, vPosition, 1.0f, vLight, o);
+
+        int iSubType = 0;
+        if (o->Type == MODEL_FENRIR_RED)
+        {
+            Vector(0.8f, 0.0f, 0.0f, vLight);
+            iSubType = 1;
+        }
+        else if (o->Type == MODEL_FENRIR_BLUE)
+        {
+            Vector(0.1f, 0.1f, 0.8f, vLight);
+            iSubType = 2;
+        }
+        else if (o->Type == MODEL_FENRIR_GOLD)
+        {
+            Vector(0.8f, 0.8f, 0.1f, vLight);
+            iSubType = 4;
+        }
+        else
+        {
+            Vector(1.0f, 1.0f, 0.2f, vLight);
+            iSubType = 3;
+        }
+        CreateEffectFpsChecked(MODEL_FENRIR_THUNDER, o->Position, o->Angle, vLight, 0, o);
+        CreateEffectFpsChecked(MODEL_FENRIR_THUNDER, o->Position, o->Angle, vLight, 0, o);
+
+        // The feet that touch the ground in this frame of the walk or run.
+        int feet[4] = {};
+        int count = 0;
+        if (o->CurrentAction == FENRIR_WALK && o->AnimationFrame >= 0.0f && o->AnimationFrame <= 1.5f)
+        {
+            feet[count++] = 22;
+            feet[count++] = 28;
+            feet[count++] = 36;
+            feet[count++] = 44;
+        }
+        else if (o->CurrentAction == FENRIR_RUN && o->AnimationFrame > 1.f && o->AnimationFrame <= 1.4f)
+        {
+            feet[count++] = 22;
+            feet[count++] = 28;
+        }
+        else if (o->CurrentAction == FENRIR_RUN && o->AnimationFrame > 4.8f && o->AnimationFrame <= 5.2f)
+        {
+            feet[count++] = 36;
+            feet[count++] = 44;
+        }
+        Vector(1.0f, 1.0f, 1.0f, vLight);
+        for (int i = 0; i < count; ++i)
+        {
+            Vector(0.0f, 0.0f, 0.0f, vPos);
+            b->TransformPosition(bones()[feet[i]], vPos, vPosition, false);
+            CreateEffectFpsChecked(MODEL_FENRIR_FOOT_THUNDER, vPosition, o->Angle, vLight, iSubType, o);
+        }
+        break;
+    }
+    case MODEL_CURSEDTEMPLE_HOLYITEM:
+    {
+        vec3_t Light;
+        float fLuminosity = (float)sinf((WorldTime) * 0.0002f) * 0.002f;
+        Vector(0.9f, 0.4f, 0.4f, Light);
+        CreateSprite(BITMAP_LIGHT, o->Position, 3.f, Light, o, 0.0f, 0);
+        Vector(0.9f, 0.6f, 0.6f, Light);
+        CreateSprite(BITMAP_POUNDING_BALL, o->Position, 0.9f + fLuminosity, Light, NULL, (WorldTime / 10.0f));
+        CreateParticleFpsChecked(BITMAP_POUNDING_BALL, o->Position, o->Angle, Light, 2, 0.1f, o);
+        break;
+    }
+    case MODEL_SKULL:
+    {
+        vec34_t* bones = EffectWorldPose(o, b, EffectFrame(o));
+        vec3_t Light, p;
+
+        Vector(0.f, 0.f, 0.f, p);
+        b->TransformPosition(bones[2], p, o->EyeLeft, false);
+        b->TransformPosition(bones[3], p, o->EyeRight, false);
+
+        Vector(1.f, 0.f, 0.f, Light);
+        CreateSprite(BITMAP_LIGHT, o->EyeLeft, 1.f, Light, o);
+        CreateSprite(BITMAP_LIGHT, o->EyeRight, 1.f, Light, o);
+        Vector(0.5f, 0.5f, 0.5f, Light);
+        CreateSprite(BITMAP_SHINY + 1, o->EyeLeft, 0.5f, Light, o, (float)(Random::Rand() % 360));
+        CreateSprite(BITMAP_SHINY + 1, o->EyeRight, 0.5f, Light, o, (float)(Random::Rand() % 360));
+        break;
+    }
+    case MODEL_ARROW_AUTOLOAD:
+        if (o->SubType == 1 && o->LifeTime > 15)
+        {
+            vec34_t* bones = EffectWorldPose(o, b, EffectFrame(o));
+            vec3_t Light, p1, p2;
+            Vector(0.f, 0.f, 0.f, p1);
+            Vector(1.0f, 0.8f, 0.3f, Light);
+            b->TransformPosition(bones[1], p1, p2);
+            CreateParticleFpsChecked(BITMAP_LIGHT + 1, p2, o->Angle, Light, 5, 0.6f);
+            b->TransformPosition(bones[3], p1, p2);
+            CreateParticleFpsChecked(BITMAP_LIGHT + 1, p2, o->Angle, Light, 5, 0.8f);
+        }
+        break;
+    case MODEL_INFINITY_ARROW:
+        if (o->SubType == 1)
+        {
+            vec34_t* bones = EffectWorldPose(o, b, EffectFrame(o));
+            vec3_t p1, p2;
+            Vector(0.f, 0.f, 0.f, p1);
+
+            for (int idx = 1; idx <= 9; ++idx)
+            {
+                if (idx == 5)
+                    continue;
+                b->TransformPosition(bones[idx], p1, p2);
+                CreateJointFpsChecked(BITMAP_FLARE + 1, p2, o->Position, o->Angle, 16, o, 20.f);
+            }
+        }
+        break;
+    case MODEL_SUMMONER_SUMMON_NEIL:
+    {
+        vec34_t* bones = EffectWorldPose(o, b, EffectFrame(o));
+        vec3_t vPos, vRelative, vLight;
+        Vector(0.0f, 0.0f, 0.0f, vRelative);
+        Vector(1.0f, 0.0f, 0.0f, vLight);
+        for (int i = 51; i <= 59; ++i)
+        {
+            b->TransformPosition(bones[i], vRelative, vPos, false);
+            CreateSprite(BITMAP_LIGHT, vPos, 1.0f, vLight, o);
+        }
+
+        float Start_Frame = 0.f;
+        float End_Frame = 10.0f;
+        if (o->AnimationFrame >= Start_Frame && o->AnimationFrame <= End_Frame && o->CurrentAction == 0)
+        {
+            vec3_t Light;
+            Vector(1.0f, 0.0f, 0.0f, Light);
+
+            vec3_t StartPos, StartRelative;
+            vec3_t EndPos, EndRelative;
+
+            float fActionSpeed = o->Velocity * static_cast<float>(FPS_ANIMATION_FACTOR);
+            float fSpeedPerFrame = fActionSpeed / 10.f;
+            float fAnimationFrame = o->AnimationFrame - fActionSpeed;
+            for (int i = 0; i < 10; i++)
+            {
+                bones = EffectWorldPose(o, b, fAnimationFrame);
+
+                Vector(0.f, 0.f, 0.f, StartRelative);
+                Vector(0.f, 0.f, 0.f, EndRelative);
+
+                b->TransformPosition(bones[51], StartRelative, StartPos, false);
+                b->TransformPosition(bones[59], EndRelative, EndPos, false);
+                CreateObjectBlur(o, StartPos, EndPos, Light, 2);
+
+                fAnimationFrame += fSpeedPerFrame;
+            }
+        }
+        break;
+    }
+    case MODEL_SWELL_OF_MAGICPOWER:
+        if (o->LifeTime <= 20)
+        {
+            o->BlendMeshLight *= pow(0.86f, FPS_ANIMATION_FACTOR);
+        }
+        break;
+    case MODEL_ARROWSRE06:
+        if (o->LifeTime <= 10)
+        {
+            o->BlendMeshLight *= pow(0.8f, FPS_ANIMATION_FACTOR);
+        }
+        break;
+    case MODEL_ARROW_DRILL:
+    {
+        vec34_t* bones = EffectWorldPose(o, b, EffectFrame(o));
+        vec3_t Position, p, Light;
+
+        Vector(1.f, 0.6f, 0.4f, Light);
+        Vector(0.f, 0.f, 0.f, p);
+        b->TransformPosition(bones[1], p, Position);
+        CreateSprite(BITMAP_SHINY + 1, Position, (float)(sinf(WorldTime * 0.002f) * 0.3f + 1.3f), Light, o,
+                     (float)(Random::Rand() % 360));
+        CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o, 90.f);
+        CreateSprite(BITMAP_SHINY + 1, Position, (float)(sinf(WorldTime * 0.002f) * 0.3f + 1.3f), Light, o,
+                     (float)(Random::Rand() % 360));
+        CreateParticleFpsChecked(BITMAP_SPARK, Position, o->Angle, Light);
+        break;
+    }
+    case MODEL_ARROW_TANKER_HIT:
+    case MODEL_ARROW_TANKER:
+    {
+        vec34_t* bones = EffectWorldPose(o, b, EffectFrame(o));
+        vec3_t p1, p2;
+
+        Vector(1.0f, 1.0f, 1.0f, o->Light);
+        CreateParticleFpsChecked(BITMAP_FIRE + 1, o->Position, o->Angle, o->Light, 8, o->Scale - 0.4f, o);
+        CreateParticleFpsChecked(BITMAP_FIRE + 1, o->Position, o->Angle, o->Light, 8, o->Scale - 0.4f, o);
+        CreateParticleFpsChecked(BITMAP_SMOKE, o->Position, o->Angle, o->Light, 38, o->Scale, o);
+        Vector(1.0f, 0.4f, 0.0f, o->Light);
+        CreateParticleFpsChecked(BITMAP_FIRE + 1, o->Position, o->Angle, o->Light, 9, o->Scale - 0.4f, o);
+
+        for (int i = 0; i < 10; i++)
+        {
+            Vector(1.0f - (i * 0.1f), 0.4f - (i * 0.04f), 0.0f, o->Light);
+            Vector(15.0f * i, 1.5f, 0.0f, p1);
+            b->TransformPosition(bones[1], p1, p2);
+            CreateSprite(BITMAP_SPARK + 1, p2, 3.0f + (i * 0.9f), o->Light, o);
+        }
+        break;
+    }
+    case MODEL_FIRE_FLAME_GHOST:
+        if (o->CurrentAction == MONSTER01_DIE)
+            o->m_bRenderShadow = false;
+        break;
+    case MODEL_UNITEDMARKETPLACE_JULIA:
+    {
+        vec3_t vRelativePos, vWorldPos, Light;
+        Vector(0.f, 0.f, 0.f, vRelativePos);
+        float fScale = 0.0f;
+
+        if (o->CurrentAction == 0 && rand_fps_check(5))
+        {
+            Vector(0.f, 0.f, 0.f, vWorldPos);
+            Vector((Random::Rand() % 90 + 10) * 0.01f, (Random::Rand() % 90 + 10) * 0.01f,
+                   (Random::Rand() % 90 + 10) * 0.01f, Light);
+            fScale = (Random::Rand() % 5 + 5) * 0.1f;
+            Vector(0.f, 0.f, 0.f, vRelativePos);
+            vRelativePos[0] = -5 + (Random::Rand() % 1000 - 500) * 0.01f;
+            vRelativePos[1] = (Random::Rand() % 300 - 150) * 0.01f;
+            b->TransformPosition(o->BoneTransform[127], vRelativePos, vWorldPos, true);
+            CreateParticle(BITMAP_LIGHT, vWorldPos, o->Angle, Light, 13, fScale, o);
+            CreateParticle(BITMAP_LIGHT, vWorldPos, o->Angle, Light, 12, fScale * 0.1f, o);
+        }
+
+        Vector(0.f, 0.f, 0.f, vRelativePos);
+        Vector(0.f, 0.f, 0.f, vWorldPos);
+        Vector(1.0f, 1.0f, 1.0f, Light);
+        b->TransformPosition(o->BoneTransform[71], vRelativePos, vWorldPos, true);
+        CreateSprite(BITMAP_LIGHT, vWorldPos, 3.0f, Light, o);
+
+        vec3_t vLight;
+        float fLight = (sinf(WorldTime * 0.001f) + 1.0f) * 0.5f * 0.9f + 0.4f;
+        Vector(1.0f * fLight, 1.0f * fLight, 1.0f * fLight, vLight);
+        CreateSprite(BITMAP_FLARE, vWorldPos, 1.5f, vLight, o);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+namespace
+{
+// The screen height of a model file's rest bounds around `o`, as a fraction of the window's height.
+float ModelScreenHeight(const Render::Models::Gltf::SkinnedModel& model, const OBJECT& o)
+{
+    float rotation[3][4];
+    AngleMatrix(o.Angle, rotation);
+    std::array<float, 8> rows{};
+    bool allInFront = true;
+    for (int corner = 0; corner < 8; ++corner)
+    {
+        const vec3_t local = {(corner & 1 ? model.restBoundsMax[0] : model.restBoundsMin[0]) * o.Scale,
+                              (corner & 2 ? model.restBoundsMax[1] : model.restBoundsMin[1]) * o.Scale,
+                              (corner & 4 ? model.restBoundsMax[2] : model.restBoundsMin[2]) * o.Scale};
+        vec3_t world;
+        VectorRotate(local, rotation, world);
+        VectorAdd(world, o.Position, world);
+        float x = 0.f;
+        allInFront = allInFront && CameraProjection::WorldToWindowPixel(g_Camera, world, &x, &rows[corner]);
+    }
+    return Render::Models::ScreenHeightFraction(rows, allInFront, static_cast<float>(WindowHeight));
+}
+
+// The LOD each object's model file was drawn with, this frame and the last: the draw's hysteresis history.
+std::unordered_map<const void*, unsigned char> s_drawnLods;
+std::unordered_map<const void*, unsigned char> s_lastFrameLods;
+
+int DrawnLod(const std::unordered_map<const void*, unsigned char>& lods, const OBJECT& o)
+{
+    const auto it = lods.find(Random::DrawKey(&o));
+    return it != lods.end() ? it->second : 0;
+}
+
+// Draws a model file's LOD for one object: picks it by screen height (with
+// the LOD drawn last frame for hysteresis) and sets it on the shared model
+// for the draw only.
+class ModelLodScope
+{
+public:
+    explicit ModelLodScope(const OBJECT& o) : model_(Models[o.Type])
+    {
+        const auto* skinned = Render::Models::Gltf::SkinnedModelOf(model_);
+        if (!skinned || skinned->LodCount() < 2)
+        {
+            return;
+        }
+        const int lod = Render::Models::SelectLod(ModelScreenHeight(*skinned, o), DrawnLod(s_lastFrameLods, o),
+                                                  skinned->lodSettings, skinned->LodCount());
+        s_drawnLods[Random::DrawKey(&o)] = static_cast<unsigned char>(lod);
+        model_.ActiveLod = lod;
+    }
+    ~ModelLodScope()
+    {
+        model_.ActiveLod = 0;
+    }
+    ModelLodScope(const ModelLodScope&) = delete;
+    ModelLodScope& operator=(const ModelLodScope&) = delete;
+
+private:
+    BMD& model_;
+};
+
+// Puts the LOD an object was drawn with (ModelLodScope, earlier in the frame)
+// back on its model for a later pass of the object, its planar shadow: the
+// shadow is cast by the mesh on screen. Models without LODs are left alone.
+class DrawnModelLodScope
+{
+public:
+    DrawnModelLodScope(BMD& model, const OBJECT& o, int type) : model_(model), previous_(model.ActiveLod)
+    {
+        const auto* skinned = Render::Models::Gltf::SkinnedModelOf(model_);
+        if (type == o.Type && skinned && skinned->LodCount() >= 2)
+        {
+            model_.ActiveLod = DrawnLod(s_drawnLods, o);
+        }
+    }
+    ~DrawnModelLodScope()
+    {
+        model_.ActiveLod = previous_;
+    }
+    DrawnModelLodScope(const DrawnModelLodScope&) = delete;
+    DrawnModelLodScope& operator=(const DrawnModelLodScope&) = delete;
+
+private:
+    BMD& model_;
+    int previous_;
+};
+} // namespace
+
+void RenderObject(const OBJECT* o, bool Translate, int Select, int ExtraMon, const ObjectGhost* ghost)
+{
+    const ModelLodScope lod(*o);
+    // Split only for map objects; characters' parts come through here too.
+    const bool mapObject = FrameProfiler::CurrentPass() == FrameProfiler::Pass::Objects;
+    {
+        std::optional<FrameProfiler::Scope> animate;
+        if (mapObject)
+            animate.emplace(FrameProfiler::Pass::ObjectsAnimate);
+        if (Calc_RenderObject(o, Translate, Select, ExtraMon, nullptr, ghost) == false)
+        {
+            return;
+        }
+    }
+    std::optional<FrameProfiler::Scope> draw;
+    if (mapObject)
+        draw.emplace(FrameProfiler::Pass::ObjectsDraw);
+    Draw_RenderObject(o, Translate, Select, ExtraMon, ghost);
+}
+
+void RenderObject_AfterImage(const OBJECT* o, bool Translate, int Select, int ExtraMon)
+{
+    // Two ghosts behind the object, at earlier frames and fainter; the object stays as it stands.
+    const ObjectGhost ghosts[] = {{0.2f, o->AnimationFrame - 1.4f}, {0.6f, o->AnimationFrame - 0.7f}};
+    for (const ObjectGhost& ghost : ghosts)
+    {
+        if (ghost.animationFrame > 0.0f)
+            RenderObject(o, Translate, Select, 0, &ghost);
+    }
+    RenderObject(o, Translate, Select, 0);
+}
+
+void RenderCharacter_AfterImage(const CHARACTER* pCha, const PART_t* pPart, vec3_t light, bool Translate, int Select,
+                                float AniInterval1, float AniInterval2)
+{
+    const OBJECT* pObj = &pCha->Object;
+    const int Type = pPart->Type;
+    const float keys = Models[pObj->Type].Actions[pObj->CurrentAction].NumAnimationKeys;
+    // Two ghosts on the way from where the move started, at earlier frames and fainter, drawn from a copy of the
+    // character; then the part as it stands.
+    struct Ghost
+    {
+        float alpha;
+        float interval;
+    };
+    const Ghost ghosts[] = {{0.3f, AniInterval1}, {0.5f, AniInterval2}};
+    OBJECT ghost = *pObj;
+    const Random::DrawnAs drawnAs(&ghost, pObj);
+    for (const Ghost& g : ghosts)
+    {
+        const float frame = pObj->AnimationFrame - g.interval;
+        if (frame <= 0.0f)
+            continue;
+        vec3_t travel;
+        VectorSubtract(pObj->Position, pObj->StartPosition, travel);
+        VectorScale(travel, frame / keys, travel);
+        VectorAdd(pObj->StartPosition, travel, ghost.Position);
+        ghost.Alpha = g.alpha;
+        ghost.AnimationFrame = frame;
+        Calc_ObjectAnimation(&ghost, Translate, Select);
+        RenderPartObject(&ghost, Type, pPart, light, ghost.Alpha, pPart->Level, pPart->ExcellentFlags,
+                         pPart->AncientDiscriminator, false, false, Translate, Select);
+    }
+    Calc_ObjectAnimation(pObj, Translate, Select);
+    RenderPartObject(pObj, Type, pPart, light, pObj->Alpha, pPart->Level, pPart->ExcellentFlags,
+                     pPart->AncientDiscriminator, false, false, Translate, Select);
+}
+
+// Counts CullObjects calls; each object it marked for the draw carries the count it was marked in.
+static unsigned int s_objectCullFrame = 0;
+
+void RenderObjectVisual(const OBJECT* o)
+{
+    DrawLook look = DrawLook::Of(*o);
+    BMD* b = &Models[o->Type];
+
+    switch (gMapManager.WorldActive)
+    {
+    // Their effects spawn in UpdateObjectVisual.
+    case WD_0LORENCIA:
+    case WD_3NORIA:
+    case WD_4LOSTTOWER:
+    case WD_6STADIUM:
+    case WD_8TARKAN:
+    case WD_9DEVILSQUARE:
+    case WD_10HEAVEN:
+    case WD_11BLOODCASTLE1:
+    case WD_11BLOODCASTLE1 + 1:
+    case WD_11BLOODCASTLE1 + 2:
+    case WD_11BLOODCASTLE1 + 3:
+    case WD_11BLOODCASTLE1 + 4:
+    case WD_11BLOODCASTLE1 + 5:
+    case WD_11BLOODCASTLE1 + 6:
+    case WD_52BLOODCASTLE_MASTER_LEVEL:
+#if !defined(DEVIAS_XMAS_EVENT2007) && !defined(DEVIAS_XMAS_EVENT)
+    case WD_2DEVIAS:
+#endif
+        break;
+#if defined(DEVIAS_XMAS_EVENT2007) || defined(DEVIAS_XMAS_EVENT)
+    case WD_2DEVIAS:
+        switch (o->Type)
+        {
+#ifdef DEVIAS_XMAS_EVENT2007
+        case 110:
+        {
+            b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV, look.hiddenMesh);
+            Vector(1.f, 1.0f, 1.f, b->BodyLight);
+            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV);
+        }
+        break;
+#endif // DEVIAS_XMAS_EVENT2007
+#ifdef DEVIAS_XMAS_EVENT
+        case 105:
+        {
+            Vector(1.f, 1.0f, 1.f, b->BodyLight);
+            b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+            b->RenderMesh(0, RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV);
+        }
+        break;
+        case 106:
+        {
+            Vector(1.0f, 1.0f, 1.0f, b->BodyLight);
+            b->RenderMesh(3, RENDER_BRIGHT | RENDER_CHROME, look.alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV, BITMAP_CHROME8);
+        }
+        break;
+#endif // DEVIAS_XMAS_EVENT
+        }
+        break;
+#endif
+    default:
+        // The other per-map hooks spawn in UpdateObjectVisual; these draw.
+        if (M33Aida::RenderAidaObjectVisual(o, look, b))
+            return;
+        if (M37Kanturu1st::RenderKanturu1stObjectVisual(o, look, b))
+            return;
+        if (TheMapProcess().RenderObjectVisual(o, look, b) == true)
+            return;
+    }
+}
+
+void UpdateObjectVisual(OBJECT* o)
+{
+    // The sounds its map's code plays meanwhile are marked here (Q-SM11).
+    const Audio::ScopedSoundPlace place(Audio::SoundKind::MapObject, o->Type, o->Position);
+    // The sound of its type, while it is drawn (Data/Maps/ObjectSounds.json).
+    World::MapObjectSounds::OnObjectDrawn(*o);
+
+    BMD* b = &Models[o->Type];
+    const auto bones = [o, b] { return Engine::Object::Pose::World(o, b); };
+    vec3_t p, Position;
+    vec3_t Light;
+    float Luminosity = (float)(Random::Rand() % 30 + 70) * 0.01f;
+    int Bitmap;
+    float Scale;
+    float Rotation;
+    Vector(0.f, 0.f, 0.f, p);
+
+    // The state and spawns of Draw_RenderObject's map-object cases, for an object it draws.
+    if ((EditFlag != EDIT_NONE || o->HiddenMesh != -2) && o->RenderType != RENDER_DARK && o->Alpha >= 0.01f)
+    {
+        if (gMapManager.IsCursedTemple() && o->Type == 62)
+        {
+            vec3_t vPos, vRelativePos, vLight;
+            Vector(0.f, 0.f, 0.f, vPos);
+            Vector(6.f, 5.f, 2.f, vRelativePos);
+            float fLumi = sinf(WorldTime * 0.001f) * 0.5f + 0.5f;
+            b->TransformPosition(bones()[22], vRelativePos, vPos);
+            Vector(1.f, 0.5f, 0.5f, vLight);
+            CreateSprite(BITMAP_SHINY + 1, vPos, 1.5f + fLumi / 2.f, vLight, NULL);
+            Vector(6.f, -5.f, 2.f, vRelativePos);
+            b->TransformPosition(bones()[23], vRelativePos, vPos);
+            Vector(1.f, 0.5f, 0.5f, vLight);
+            CreateSprite(BITMAP_SHINY + 1, vPos, 1.5f + fLumi / 2.f, vLight, NULL);
+
+            if (rand_fps_check(5))
+            {
+                Vector(0.f, 0.f, 0.f, vRelativePos);
+                b->TransformPosition(bones()[20], vRelativePos, vPos);
+                Vector(1.f, 1.f, 1.f, vLight);
+                CreateParticle(BITMAP_SMOKE, vPos, o->Angle, vLight);
+            }
+        }
+        else if (gMapManager.InBloodCastle() && (o->Type == 28 || o->Type == 29))
+        {
+            o->HiddenMesh = -1;
+        }
+        else if (gMapManager.WorldActive == WD_55LOGINSCENE && o->Type == 90)
+        {
+            o->Alpha = 1.0f;
+            o->BlendMeshLight = 1.0f;
+        }
+    }
+
+    switch (gMapManager.WorldActive)
+    {
+    case WD_0LORENCIA:
+        switch (o->Type)
+        {
+        case MODEL_WATERSPOUT:
+            o->BlendMeshLight = 1.f;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 1000 * 0.001f;
+            if (rand_fps_check(2))
+            {
+                Vector((float)(Random::Rand() % 32 - 16), -20.f, (float)(Random::Rand() % 32 - 16), p);
+                b->TransformPosition(bones()[1], p, Position);
+                CreateParticle(BITMAP_SMOKE, Position, o->Angle, o->Light);
+                Vector((float)(Random::Rand() % 32 - 16), -80.f, (float)(Random::Rand() % 32 - 16), p);
+                b->TransformPosition(bones()[4], p, Position);
+                CreateParticle(BITMAP_SMOKE, Position, o->Angle, o->Light);
+            }
+            break;
+        case MODEL_MERCHANT_ANIMAL01:
+            Scale = Luminosity * 5.f;
+            Vector(Luminosity * 0.6f, Luminosity * 0.3f, Luminosity * 0.1f, Light);
+            b->TransformPosition(bones()[48], Position, p);
+            CreateSprite(BITMAP_LIGHT, p, Scale, Light, o);
+            b->TransformPosition(bones()[57], Position, p);
+            CreateSprite(BITMAP_LIGHT, p, Scale, Light, o);
+            /*b->TransformPosition(bones()[51],Position,p);
+            CreateSprite(BITMAP_LIGHT,p,Scale,Light,o);
+            b->TransformPosition(bones()[54],Position,p);
+            CreateSprite(BITMAP_LIGHT,p,Scale,Light,o);*/
+            break;
+        }
+        break;
+    case WD_2DEVIAS:
+        switch (o->Type)
+        {
+        case 100:
+            Vector(Luminosity * 1.f, Luminosity * 1.f, Luminosity * 1.f, Light);
+            Rotation = (float)((int)(WorldTime * 0.1f) % 360);
+            Vector(0.f, 0.f, 150.f, p);
+            b->TransformPosition(bones()[0], p, Position);
+            CreateSprite(BITMAP_LIGHTNING + 1, Position, 2.5f, Light, o, Rotation);
+            CreateSprite(BITMAP_LIGHTNING + 1, Position, 2.5f, Light, o, -Rotation);
+            break;
+        case 103:		//. Sleddog
+            if ((int)o->AnimationFrame == b->Actions[o->CurrentAction].NumAnimationKeys - 1) {
+                if (rand_fps_check(32))
+                    SetAction(o, 1);
+                else
+                    SetAction(o, 0);
+            }
+            break;
+        }
+        break;
+    case WD_3NORIA:
+        switch (o->Type)
+        {
+        case 9:
+            Vector(Luminosity * 0.4f, Luminosity * 0.7f, Luminosity * 1.f, Light);
+            b->TransformPosition(bones()[1], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
+            break;
+        case 35:
+            Vector(Luminosity * 0.4f, Luminosity * 0.7f, Luminosity * 1.f, Light);
+            b->TransformPosition(bones()[3], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 1.5f, Light, o);
+            break;
+        case 1:
+            Vector(Luminosity * 0.4f, Luminosity * 0.7f, Luminosity * 1.f, Light);
+            b->TransformPosition(bones()[2], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 0.5f, Light, o);
+            b->TransformPosition(bones()[4], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 0.5f, Light, o);
+            b->TransformPosition(bones()[6], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 0.5f, Light, o);
+            break;
+        case 17:
+            Vector(Luminosity * 0.4f, Luminosity * 0.7f, Luminosity * 1.f, Light);
+            b->TransformPosition(bones()[4], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 1.f, Light, o);
+            b->TransformPosition(bones()[7], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 1.f, Light, o);
+            b->TransformPosition(bones()[10], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 1.f, Light, o);
+            b->TransformPosition(bones()[13], p, Position);
+            CreateSprite(BITMAP_LIGHT, Position, 1.f, Light, o);
+            break;
+        case 39:
+            Vector(Luminosity * 0.4f, Luminosity * 0.8f, Luminosity * 1.f, Light);
+            Rotation = (float)((int)(WorldTime * 0.1f) % 360);
+            b->TransformPosition(bones()[57], p, Position);
+            CreateSprite(BITMAP_LIGHTNING + 1, Position, 1.f, Light, o, Rotation);
+            CreateSprite(BITMAP_LIGHTNING + 1, Position, 1.f, Light, o, -Rotation);
+
+            Vector(1.f, 1.f, 1.f, Light);
+
+            for (int i = 61; i <= 65; i++)
+            {
+                b->TransformPosition(bones()[i], p, Position);
+                CreateSprite(BITMAP_LIGHT, Position, 1.f, Light, o);
+                if (rand_fps_check(32))
+                {
+                    CreateParticle(BITMAP_SHINY, Position, o->Angle, Light);
+                    CreateParticle(BITMAP_SHINY, Position, o->Angle, Light, 1);
+                }
+            }
+            b->TransformPosition(bones()[58], p, Position);
+            if (rand_fps_check(8))
+            {
+                vec3_t Angle;
+
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector((float)(Random::Rand() % 60 + 60), 90.f + 50.f, (float)(Random::Rand() % 30), Angle);
+                    CreateJoint(BITMAP_JOINT_SPARK, Position, Position, Angle);
+                    CreateParticle(BITMAP_SPARK, Position, Angle, Light);
+                }
+            }
+            break;
+        }
+        break;
+    case WD_4LOSTTOWER:
+        switch (o->Type)
+        {
+        case 19:
+        case 20:
+            if (o->Type == 19)
+            {
+                Bitmap = BITMAP_MAGIC + 1;
+                Vector(Luminosity * 1.f, Luminosity * 0.2f, Luminosity * 0.f, Light);
+            }
+            else
+            {
+                Bitmap = BITMAP_LIGHTNING + 1;
+                Vector(Luminosity * 0.4f, Luminosity * 0.8f, Luminosity * 1.f, Light);
+            }
+            Rotation = (float)((int)(WorldTime * 0.1f) % 360);
+            b->TransformPosition(bones()[15], p, Position);
+            CreateSprite(Bitmap, Position, 0.3f, Light, o, Rotation);
+            CreateSprite(Bitmap, Position, 0.3f, Light, o, -Rotation);
+            b->TransformPosition(bones()[19], p, Position);
+            CreateSprite(Bitmap, Position, 0.3f, Light, o, Rotation);
+            CreateSprite(Bitmap, Position, 0.3f, Light, o, -Rotation);
+            b->TransformPosition(bones()[21], p, Position);
+            CreateSprite(Bitmap, Position, 1.5f, Light, o, Rotation);
+            CreateSprite(Bitmap, Position, 1.5f, Light, o, -Rotation);
+            break;
+        case 40:
+            Vector(Luminosity * 1.f, Luminosity * 1.f, Luminosity * 1.f, Light);
+            Rotation = (float)((int)(WorldTime * 0.1f) % 360);
+            VectorCopy(o->Position, Position);
+            Vector(0.f, 0.f, 260.f, p);
+            VectorAdd(Position, p, Position);
+            CreateSprite(BITMAP_LIGHTNING + 1, Position, 2.5f, Light, o, Rotation);
+            CreateSprite(BITMAP_LIGHTNING + 1, Position, 2.5f, Light, o, -Rotation);
+            /*{
+                //Vector(1.f,1.f,1.f,Light);
+                Vector(0.f,0.f,1.f,Light);
+                for ( int j = 0; j < 2; ++j)
+                {
+                    for ( int i = 0; i < 3; ++i)
+                    {
+                        VectorCopy( o->Position, Position);
+                        Position[0] += ( float)( 2 * i - 2) / 2.f * 100.f + ( float)( Random::Rand() % 31 - 15);
+                        Position[1] += ( float)( 2 * j - 1) / 1.f * 70.f-80.f + ( float)( Random::Rand() % 31 - 15);
+                        VectorCopy( Position, p);
+                        p[2] += 300.f;
+                        CreateJoint(BITMAP_JOINT_LASER+1,Position,p,o->Angle,0,o,50.f);
+                    }
+                }
+            }*/
+            break;
+        }
+    case WD_6STADIUM:
+        switch (o->Type)
+        {
+        case 9:
+            Scale = Luminosity * 5.f;
+            Vector(Luminosity * 0.6f, Luminosity * 0.3f, Luminosity * 0.1f, Light);
+            b->TransformPosition(bones()[1], Position, p);
+            CreateSprite(BITMAP_LIGHT, p, Scale, Light, o);
+            break;
+        }
+        break;
+    case WD_8TARKAN:
+        switch (o->Type)
+        {
+        case 60:
+            if (o->HiddenMesh != -2)
+            {
+                for (int i = 0; i < 20; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_SMOKE, o->Position, o->Angle, o->Light, 6, o->Scale);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case 63:
+            Luminosity = (float)sinf((WorldTime + (o->Angle[2] * 5)) * 0.002f) * 0.3f + 0.7f;
+
+            Scale = Luminosity * 1.5f;
+            Vector(Luminosity / 1.7f, Luminosity, Luminosity, Light);
+            b->TransformPosition(bones()[2], p, Position);
+            CreateSprite(BITMAP_IMPACT, Position, Scale, Light, o);
+            break;
+
+        case 64:
+            Luminosity = (float)sinf((WorldTime + (o->Angle[2] * 5)) * 0.002f) * 0.3f + 0.7f;
+
+            Scale = Luminosity * 1.5f;
+            Vector(Luminosity, Luminosity * 0.32f, Luminosity * 0.32f, Light);
+            b->TransformPosition(bones()[2], p, Position);
+            CreateSprite(BITMAP_IMPACT, Position, Scale, Light, o);
+            break;
+
+        case 70:
+            o->HiddenMesh = -2;
+            if (rand_fps_check(5))
+                CreateParticle(BITMAP_SMOKE, o->Position, o->Angle, o->Light, 7, o->Scale);
+            break;
+
+        case 76:
+            o->HiddenMesh = -2;
+            {
+                bool Smoke = false;
+
+                if (((int)WorldTime % 5000) > 4500) Smoke = true;
+                if (Smoke)
+                    CreateParticleFpsChecked(BITMAP_SMOKE, o->Position, o->Angle, o->Light, 4, o->Scale);
+            }
+            break;
+        case 83:
+            o->HiddenMesh = -2;
+            {
+                bool Smoke = false;
+                int  inter = (int)o->Angle[2] * 10;
+                int  timing = (int)WorldTime % 10000;
+
+                if (timing > 3500 + inter && timing < 4000 + inter) Smoke = true;
+                if (Smoke)
+                {
+                    Vector(1.f, 1.f, 1.f, Light);
+
+                    CreateParticleFpsChecked(BITMAP_SMOKE, o->Position, o->Angle, o->Light, 8, o->Scale);
+                    if (rand_fps_check(3))
+                    {
+                        Position[0] = o->Position[0] + (Random::Rand() % 128 - 64);
+                        Position[1] = o->Position[1] + (Random::Rand() % 128 - 64);
+                        Position[2] = o->Position[2];
+                        CreateParticle(BITMAP_SMOKE, Position, o->Angle, o->Light, 4, o->Scale * 0.5f);
+                        CreateEffect(MODEL_STONE1 + Random::Rand() % 2, o->Position, o->Angle, o->Light);
+                    }
+                }
+            }
+            break;
+        }
+        break;
+    case WD_9DEVILSQUARE:
+        switch (o->Type)
+        {
+        case 2:
+            Vector(1.f, 1.f, 1.f, Light);
+            Vector(-15.f, 0.f, 0.f, p);
+            if (rand_fps_check(4))
+            {
+                b->TransformPosition(bones()[23], p, Position);
+                CreateParticle(BITMAP_RAIN_CIRCLE + 1, Position, o->Angle, Light);
+            }
+            if (rand_fps_check(4))
+            {
+                b->TransformPosition(bones()[31], p, Position);
+                CreateParticle(BITMAP_RAIN_CIRCLE + 1, Position, o->Angle, Light);
+            }
+            Vector(-15.f, 0.f, 0.f, p);
+            b->TransformPosition(bones()[23], p, Position);
+            CreateParticleFpsChecked(BITMAP_RAIN_CIRCLE + 1, Position, o->Angle, Light);
+            break;
+        }
+        break;
+    case WD_10HEAVEN:
+        switch (o->Type)
+        {
+        case    0:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t  Light;
+                Vector(0.1f, 0.1f, 0.1f, Light);
+                for (int i = 0; i < 20; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 0, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case    1:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t  Light;
+                Vector(0.1f, 0.1f, 0.1f, Light);
+                for (int i = 0; i < 20; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 1, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case    2:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t  Light;
+                Vector(0.1f, 0.1f, 0.1f, Light);
+                for (int i = 0; i < 20; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 2, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case    3:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t  Light;
+                Vector(0.1f, 0.1f, 0.1f, Light);
+                for (int i = 0; i < 10; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 3, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case    4:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t  Light;
+                Vector(0.1f, 0.1f, 0.1f, Light);
+                for (int i = 0; i < 10; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 4, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case    5:
+            if (o->HiddenMesh != -2)
+            {
+                vec3_t  Light;
+                Vector(0.1f, 0.1f, 0.1f, Light);
+                for (int i = 0; i < 10; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_CLOUD, o->Position, o->Angle, Light, 5, o->Scale, o);
+                }
+            }
+            o->HiddenMesh = -2;
+            break;
+
+        case    10:
+        {
+            Vector(0.f, 0.f, 0.f, p);
+            b->TransformPosition(bones()[3], p, Position);
+
+            Vector(1.f, 1.f, 1.f, Light);
+            CreateParticleFpsChecked(BITMAP_LIGHT, Position, o->Angle, Light, 0, 1.f);
+        }
+        case    6:
+        case    7:
+        case    8:
+        case    9:
+        case    11:
+        case    12:
+        case    13:
+        case    14:
+        case    15:
+            //            o->BlendMeshLight = sinf(WorldTime*0.002f)*1.f;
+            //            o->BlendMesh = -2;
+            //            o->HiddenMesh= -99;
+            break;
+        }
+        break;
+
+    case WD_11BLOODCASTLE1:
+    case WD_11BLOODCASTLE1 + 1:
+    case WD_11BLOODCASTLE1 + 2:
+    case WD_11BLOODCASTLE1 + 3:
+    case WD_11BLOODCASTLE1 + 4:
+    case WD_11BLOODCASTLE1 + 5:
+    case WD_11BLOODCASTLE1 + 6:
+    case WD_52BLOODCASTLE_MASTER_LEVEL:
+        switch (o->Type)
+        {
+        case 11:
+        {
+            wchar_t indexLight[7] = { 1, 2, 4, 6, 9, 10, 11 };
+
+            Luminosity = sinf((o->Angle[2] * 20 + WorldTime) * 0.001f) * 0.5f + 0.5f;
+            Vector(Luminosity * 1.f, Luminosity * 0.5f, 0.f, Light);
+
+            for (int i = 0; i < 7; ++i)
+            {
+                Vector(0.f, 0.f, 2.f, p);
+                b->TransformPosition(bones()[indexLight[i]], p, Position);
+                CreateSprite(BITMAP_LIGHT, Position, 0.5f, Light, o);
+            }
+        }
+        break;
+        case 13:
+            Luminosity = sinf(WorldTime * 0.001f) * 0.3f + 0.7f;
+            Vector(Luminosity, Luminosity, Luminosity, Light);
+            Vector(0.f, 0.f, 0.f, p);
+            b->TransformPosition(bones()[3], p, Position);
+            CreateSprite(BITMAP_FLARE, Position, Luminosity + 0.5f, Light, o);
+            break;
+        case 37:
+            Vector(1.f, 1.f, 1.f, Light);
+            if (rand_fps_check(2))
+                if ((int)((o->Timer++) + 2) % 4 == 0)
+                {
+                    CreateParticle(BITMAP_ADV_SMOKE + 1, o->Position, o->Angle, Light);
+                    CreateParticle(BITMAP_ADV_SMOKE, o->Position, o->Angle, Light, 0);
+                }
+            if (rand_fps_check(2))
+                if ((int)(o->Timer++) % 4 == 0)
+                {
+                    CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 6);
+                    CreateParticle(BITMAP_ADV_SMOKE, o->Position, o->Angle, Light, 1);
+
+                    Vector(1.f, 0.8f, 0.8f, Light);
+                    CreateParticle(BITMAP_FLARE, o->Position, o->Angle, Light, 4, 0.19f, NULL);
+                }
+            break;
+        }
+        break;
+    case WD_55LOGINSCENE:
+    {
+        switch (o->Type)
+        {
+        case 84:
+            if (rand_fps_check(5))
+                CreateParticle(BITMAP_CLOUD, o->Position, o->Angle, Light, 10, o->Scale, o);
+            break;
+        case 90:
+        case 86:
+            break;
+        case 89:
+        {
+            int iTimeCheck = (int)WorldTime % 8000;
+
+            if (iTimeCheck >= 7950)
+            {
+                Vector(o->Position[0] + (Random::Rand() % 2048 - 1024), o->Position[1] + (Random::Rand() % 2048 - 1024),
+                       o->Position[2] + (3000 + Random::Rand() % 600), Position);
+                CreateEffectFpsChecked(MODEL_FIRE, Position, o->Angle, o->Light, 9);
+            }
+        }
+        break;
+        }
+    }
+    default:
+        // Same order and stop-on-claim as RenderObjectVisual's chain.
+        if (UpdateChaosCastleObjectEffects(o, b))
+            return;
+        if (UpdateHellasObjectEffects(o, b))
+            return;
+        if (battleCastle::UpdateBattleCastleObjectEffects(o, b))
+            return;
+        if (M31HuntingGround::UpdateHuntingGroundObjectEffects(o, b))
+            return;
+        if (M34CryingWolf2nd::UpdateCryingWolf2ndObjectEffects(o, b))
+            return;
+        if (M33Aida::UpdateAidaObjectEffects(o, b))
+            return;
+        if (M34CryWolf1st::UpdateCryWolf1stObjectEffects(o, b))
+            return;
+        if (M37Kanturu1st::UpdateKanturu1stObjectEffects(o, b))
+            return;
+        if (M38Kanturu2nd::Update_Kanturu2nd_ObjectEffects(o, b))
+            return;
+        if (M39Kanturu3rd::UpdateKanturu3rdObjectEffects(o, b))
+            return;
+        if (SEASON3A::CGM3rdChangeUp::Instance().UpdateObjectEffects(o, b))
+            return;
+        if (g_CursedTemple->UpdateObjectEffects(o, b))
+            return;
+        if (SEASON3B::GMNewTown::UpdateObjectEffects(o, b))
+            return;
+        if (SEASON3C::GMSwampOfQuiet::UpdateObjectEffects(o, b))
+            return;
+        if (TheMapProcess().UpdateObjectEffects(o, b))
+            return;
+    }
+}
+
+void UpdateObjectEffects()
+{
+    // Spawns once per culled frame, for the objects that frame drew, as when the draw spawned them.
+    static unsigned int updatedFrame = 0;
+    if (updatedFrame == s_objectCullFrame)
+        return;
+    updatedFrame = s_objectCullFrame;
+
+    // The pulse the Crywolf flares bob with.
+    if (Time_Effect > 40)
+        Time_Effect = 0;
+    Time_Effect += FPS_ANIMATION_FACTOR;
+
+    for (OBJECT_BLOCK& ob : ObjectBlock)
+    {
+        for (OBJECT* o = ob.Head; o != nullptr; o = o->Next)
+        {
+            if (o->DrawnFrame != s_objectCullFrame)
+                continue;
+            UpdateDrawnObjectHold(o);
+            PlaceObjectModel(o, &Models[o->Type]);
+            UpdateObjectVisual(o);
+        }
+    }
+    // The sounds of the objects drawn, each at its nearest object's level.
+    World::MapObjectSounds::PlayDrawnSounds();
+}
+
+#ifdef _EDITOR
+// Set by the Map Editor's Objects tab (Select & edit mode): the object currently
+// selected in the inspector panel, so it can be outlined in the 3D view. Reuses
+// the existing debug bounding-box wireframe (RenderBoundingBox) instead of a
+// second box-drawing implementation.
+OBJECT* g_MapEditorSelectedObject = nullptr;
+
+// Set every frame while Select & edit mode is enabled: the object currently under
+// the cursor (before any click), so it can be outlined too - lets you see what a
+// click would pick, distinct from what's already selected.
+OBJECT* g_MapEditorHoveredObject = nullptr;
+
+// Set every frame while Place new mode is enabled and the cursor is over
+// terrain: the model that would be placed on a click, at the exact position
+// Editor::ObjectPlace::Place() would use (see ComputePlacementPosition()), so
+// RenderPlacementPreview() can draw it translucent before any click happens.
+bool g_MapEditorPlacementPreviewActive = false;
+int g_MapEditorPlacementPreviewType = -1;
+vec3_t g_MapEditorPlacementPreviewPos = {0.0f, 0.0f, 0.0f};
+float g_MapEditorPlacementPreviewYaw = 0.0f;
+float g_MapEditorPlacementPreviewScale = 1.0f;
+#endif
+
+// The objects the last cull marked, in the order they draw.
+static std::vector<OBJECT*> s_objectsToDraw;
+
+static void MarkDrawn(OBJECT* o)
+{
+    o->DrawnFrame = s_objectCullFrame;
+    s_objectsToDraw.push_back(o);
+    vec3_t origin;
+    ObjectModelOrigin(o, origin);
+    PlaceObjectBounds(o, origin);
+}
+
+void CullObjects()
+{
+    ++s_objectCullFrame;
+    s_objectsToDraw.clear();
+
+    float   range = 0.f;
+    if (gMapManager.WorldActive == WD_10HEAVEN)
+    {
+        range = -10.f;
+    }
+
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+
+            ob->Visible = TestFrustrum2D((float)(i * 16 + 8), (float)(j * 16 + 8), -180.f);
+            if (g_Direction.m_CKanturu.IsMayaScene()
+                || gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                || gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE
+                || gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE
+                || IsIceCity()
+                || gMapManager.IsPKField()
+                || IsDoppelGanger2()
+                )
+            {
+                OBJECT* o = ob->Head;
+
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (g_Direction.m_CKanturu.IsMayaScene() && (o->Type == 0 || o->Type == MODEL_STORM2))
+                        {
+                            MarkDrawn(o);
+                        }
+                        else
+                            if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE)
+                            {
+                                float fDistance_x = g_Camera.Position[0] - o->Position[0];
+                                float fDistance_y = g_Camera.Position[1] - o->Position[1];
+                                float fDistance = sqrtf(fDistance_x * fDistance_x + fDistance_y * fDistance_y);
+#ifdef _EDITOR
+                                float fDis = DevEditor_GetLoginObjectDist();
+#else
+                                float fDis = LoginSceneCameraDefaults::RENDER_OBJECT_DIST;
+#endif
+
+                                if (((o->Type >= 122 && o->Type <= 124) || (o->Type == 159) || (o->Type == 126) || (o->Type == 129) || (o->Type == 127)) &&
+                                    TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -500.f) && fDistance < fDis * 2.0f)
+                                {
+                                    if (o->BlendMeshLight < 1.0f)
+                                        o->BlendMeshLight += 0.03f * FPS_ANIMATION_FACTOR;
+                                    else
+                                        o->BlendMeshLight = 1.0f;
+
+                                    if (o->AlphaTarget < 1.0f)
+                                        o->AlphaTarget += 0.03f * FPS_ANIMATION_FACTOR;
+                                    else
+                                        o->AlphaTarget = 1.0f;
+
+                                    MarkDrawn(o);
+                                }
+                                else if (TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -500.f) && fDistance < fDis && o->Type <= MAX_WORLD_OBJECTS)
+                                {
+                                    if (o->AlphaTarget < 1.0f)
+                                        o->AlphaTarget += 0.03f * FPS_ANIMATION_FACTOR;
+                                    else
+                                        o->AlphaTarget = 1.0f;
+
+                                    MarkDrawn(o);
+                                }
+                                else if (o->AlphaTarget != 0 && fDistance > fDis)
+                                {
+                                    o->BlendMeshLight = 0.0f;
+                                    o->Alpha = 0.0f;
+                                    o->AlphaTarget = 0.0f;
+                                }
+                            }
+
+                            else if ((gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                                ) && ((o->Type >= 5 && o->Type <= 14) || (o->Type >= 87 && o->Type <= 88) || (o->Type == 4 || o->Type == 129)) && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -400.f))
+                            {
+                                MarkDrawn(o);
+                            }
+                            else if ((gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE) && (o->Type == 129 || o->Type == 98))
+                            {
+                                MarkDrawn(o);
+                            }
+                            else if ((gMapManager.WorldActive == WD_57ICECITY || gMapManager.WorldActive == WD_58ICECITY_BOSS) && (o->Type == 30 || o->Type == 31) && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -600.f))
+                            {
+                                MarkDrawn(o);
+                            }
+                            else if (gMapManager.IsPKField() && (o->Type == 16 || o->Type == 67 || o->Type == 68) && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -600.f))
+                            {
+                                MarkDrawn(o);
+                            }
+                            else if (IsDoppelGanger2() && (o->Type == 16 || o->Type == 67 || o->Type == 68) && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -600.f))
+                            {
+                                MarkDrawn(o);
+                            }
+
+                        if (o->Next == NULL)
+                            break;
+                        else
+                            o = o->Next;
+                    }
+                    else
+                        break;
+                }
+            }
+
+            if (ob->Visible || g_Camera.TopViewEnable)
+            {
+                OBJECT* o = ob->Head;
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (o->Live)
+                        {
+                            o->Visible = TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, o->CollisionRange + range);
+                            if ((gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                                ) &&
+                                ((o->Type >= 5 && o->Type <= 14) || (o->Type >= 87 && o->Type <= 88) || (o->Type == 4 || o->Type == 129)));
+                            else
+                                if ((gMapManager.WorldActive == WD_57ICECITY || gMapManager.WorldActive == WD_58ICECITY_BOSS) && (o->Type == 30 || o->Type == 31 || o->Type == 76));
+                                else
+                                    if ((gMapManager.IsPKField() || IsDoppelGanger2()) && (o->Type == 16 || o->Type == 67 || o->Type == 68));
+                                    else
+                                        if (gMapManager.WorldActive == WD_73NEW_LOGIN_SCENE);
+                                        else if ((gMapManager.WorldActive == WD_74NEW_CHARACTER_SCENE) && (o->Type == 129 || o->Type == 98));
+
+                                        else
+                                            if (o->Visible || g_Camera.TopViewEnable)
+                                            {
+                                                bool Success = false;
+                                                if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
+                                                {
+                                                    int Level;
+                                                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+                                                        Level = 50 * 2 / 3;
+                                                    else
+                                                        Level = 50;
+                                                    if (CharacterAttribute->Level >= Level)
+                                                        Success = true;
+                                                }
+                                                else
+                                                    Success = true;
+                                                if (Success)
+                                                {
+                                                    MarkDrawn(o);
+                                                }
+                                            }
+                        }
+
+                        if (o->Next == NULL) break;
+                        o = o->Next;
+                    }
+                    else break;
+                }
+            }
+        }
+    }
+}
+
+void RenderObjects()
+{
+#ifdef _EDITOR
+    s_bShowItemCullSphere = DevEditor_ShouldShowItemCullSphere();
+    s_bShowItemPickBoxes = DevEditor_ShouldShowItemPickBoxes();
+    s_fCullRadiusItem = DevEditor_GetCullRadiusItem();
+
+    // Object-thumbnail requests are queued during CMuEditorCore::Update()
+    // (ImGui widget code, which runs before BeginFrame()) and can only be
+    // rendered here, inside BeginFrame()/EndFrame() - see ObjectThumbnail.h.
+    g_ObjectThumbnail.ProcessPendingRequests();
+#endif
+
+    for (const OBJECT* o : s_objectsToDraw)
+    {
+        RenderObject(o);
+        RenderObjectVisual(o);
+    }
+
+#if defined(CSK_DEBUG_RENDER_BOUNDINGBOX) || defined(_EDITOR)
+    for (const OBJECT_BLOCK& ob : ObjectBlock)
+    {
+        if (!ob.Visible && !g_Camera.TopViewEnable)
+            continue;
+        for (const OBJECT* o = ob.Head; o != nullptr; o = o->Next)
+        {
+            if (!o->Live)
+                continue;
+#ifdef CSK_DEBUG_RENDER_BOUNDINGBOX
+            if (o->Visible == true && g_bRenderBoundingBox == true)
+            {
+                RenderBoundingBox(o);
+            }
+#endif // CSK_DEBUG_RENDER_BOUNDINGBOX
+       // Selection/hover outline is a Map Editor feature, not a debug-only
+       // diagnostic - it must not be gated behind CSK_DEBUG_RENDER_BOUNDINGBOX,
+       // which (see Winmain.h) is only ever defined in Debug builds. It was
+       // nested inside that gate for a while, which meant it silently compiled
+       // out of every Release build with no visible sign anything was wrong.
+#ifdef _EDITOR
+            if (o->Visible == true && o == g_MapEditorSelectedObject)
+            {
+                // Bright flat yellow (same color all three tiers, no
+                // pseudo-3D shading) so the outline is unmistakable
+                // against any background - the dim debug default above
+                // is deliberately subtle and easy to miss by comparison.
+                static const std::uint32_t kSelectedColor = mu::PackABGR(1.0f, 0.9f, 0.1f, 1.0f);
+                RenderObjectOutline(o, kSelectedColor);
+            }
+            else if (o->Visible == true && o == g_MapEditorHoveredObject)
+            {
+                // Distinct color from the selected outline so you can
+                // tell "what a click would pick" apart from "what's
+                // already selected" at a glance.
+                static const std::uint32_t kHoverColor = mu::PackABGR(0.2f, 0.9f, 1.0f, 1.0f);
+                RenderObjectOutline(o, kHoverColor);
+            }
+#endif // _EDITOR
+        }
+    }
+#endif
+
+#ifdef _EDITOR
+    // Drawn once per frame (not per-object - it isn't tied to a real OBJECT
+    // yet), after every real object so it doesn't get occluded by anything
+    // still to come in this loop.
+    RenderPlacementPreview();
+#endif
+}
+
+void RenderObject_AfterCharacter(const OBJECT* o, bool Translate, int Select, int ExtraMon)
+{
+    if (Calc_RenderObject(o, Translate, Select, ExtraMon) == false)
+    {
+        return;
+    }
+    Draw_RenderObject_AfterCharacter(o, Translate, Select, ExtraMon);
+}
+
+void Draw_RenderObject_AfterCharacter(const OBJECT* o, bool Translate, int Select, int ExtraMon)
+{
+    DrawLook look = DrawLook::Of(*o);
+    BMD* b = &Models[o->Type];
+
+    if ((EditFlag != EDIT_NONE) || (EditFlag == EDIT_NONE && look.hiddenMesh != -2))
+    {
+        M37Kanturu1st::RenderKanturu1stAfterObjectMesh(o, look, b);
+        M38Kanturu2nd::Render_Kanturu2nd_AfterObjectMesh(o, look, b);
+        M39Kanturu3rd::RenderKanturu3rdAfterObjectMesh(o, look, b);
+        SEASON3A::CGM3rdChangeUp::Instance().RenderAfterObjectMesh(o, look, b);
+        g_CursedTemple->RenderObject_AfterCharacter(o, look, b);
+        SEASON3B::GMNewTown::RenderObjectAfterCharacter(o, look, b);
+        SEASON3C::GMSwampOfQuiet::RenderObjectAfterCharacter(o, look, b);
+
+        TheMapProcess().RenderAfterObjectMesh(o, look, b);
+    }
+}
+
+namespace
+{
+// Draw-side bookkeeping for one frame, not object state.
+std::unordered_set<const void*> s_sentAfterCharacter;
+} // namespace
+
+namespace
+{
+bool s_shadowPass = false;
+int s_shadowHiddenMesh = ShadowPass::ObjectHiddenMesh;
+} // namespace
+
+ShadowPass::ShadowPass(int hiddenMesh) : previous_(s_shadowPass), previousHiddenMesh_(s_shadowHiddenMesh)
+{
+    s_shadowPass = true;
+    s_shadowHiddenMesh = hiddenMesh;
+}
+
+ShadowPass::~ShadowPass()
+{
+    s_shadowPass = previous_;
+    s_shadowHiddenMesh = previousHiddenMesh_;
+}
+
+bool DrawsShadow(const OBJECT* o)
+{
+    return o->EnableShadow || s_shadowPass;
+}
+
+void BeginObjectDraws()
+{
+    s_sentAfterCharacter.clear();
+    s_drawnPoses.clear();
+    s_lastFrameLods.swap(s_drawnLods);
+    s_drawnLods.clear();
+}
+
+void SendAfterCharacter(const OBJECT* o)
+{
+    s_sentAfterCharacter.insert(Random::DrawKey(o));
+}
+
+bool IsSentAfterCharacter(const OBJECT* o)
+{
+    return s_sentAfterCharacter.contains(Random::DrawKey(o));
+}
+
+void RenderObjects_AfterCharacter()
+{
+    if (!(gMapManager.WorldActive == WD_37KANTURU_1ST || gMapManager.WorldActive == WD_38KANTURU_2ND || gMapManager.WorldActive == WD_39KANTURU_3RD
+        || gMapManager.WorldActive == WD_40AREA_FOR_GM
+        || gMapManager.WorldActive == WD_41CHANGEUP3RD_1ST
+        || gMapManager.WorldActive == WD_42CHANGEUP3RD_2ND
+        || gMapManager.IsCursedTemple()
+
+        || gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+        || gMapManager.WorldActive == WD_56MAP_SWAMP_OF_QUIET
+        || IsIceCity()
+        || gMapManager.IsPKField()
+        || IsDoppelGanger1()
+        || IsDoppelGanger2()
+        || IsDoppelGanger3()
+        || IsDoppelGanger4()
+        || IsUnitedMarketPlace()
+#ifdef ASG_ADD_MAP_KARUTAN
+        || IsKarutanMap()
+#endif	// ASG_ADD_MAP_KARUTAN
+        ))
+        return;
+
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+
+            // CullObjects marked the blocks and their objects.
+
+            if (g_Direction.m_CKanturu.IsMayaScene())
+            {
+                const OBJECT* o = ob->Head;
+
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (o->Type == MODEL_STORM3)
+                        {
+                            RenderObject_AfterCharacter(o);
+                        }
+
+                        if (o->Next == NULL)
+                            break;
+                        else
+                            o = o->Next;
+                    }
+                    else
+                        break;
+                }
+            }
+
+            if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                || IsIceCity()
+                || gMapManager.IsPKField()
+                || IsDoppelGanger2()
+                )
+            {
+                const OBJECT* o = ob->Head;
+
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (gMapManager.WorldActive == WD_51HOME_6TH_CHAR &&
+                            (o->Type == 89)
+                            && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -400.f))
+                        {
+                            RenderObject_AfterCharacter(o);
+                        }
+                        else if ((gMapManager.WorldActive == WD_57ICECITY || gMapManager.WorldActive == WD_58ICECITY_BOSS) && o->Type == 76 && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -600.f))
+                        {
+                            RenderObject_AfterCharacter(o);
+                        }
+                        else if (gMapManager.IsPKField() && (o->Type == 16 || o->Type == 67 || o->Type == 68) && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -600.f))
+                        {
+                            RenderObject_AfterCharacter(o);
+                        }
+                        else if (IsDoppelGanger2() && (o->Type == 16 || o->Type == 67 || o->Type == 68) && TestFrustrum2D(o->Position[0] * 0.01f, o->Position[1] * 0.01f, -600.f))
+                        {
+                            RenderObject_AfterCharacter(o);
+                        }
+                        if (o->Next == NULL)
+                            break;
+                        else
+                            o = o->Next;
+                    }
+                    else
+                        break;
+                }
+            }
+
+            if (ob->Visible || g_Camera.TopViewEnable)
+            {
+                const OBJECT* o = ob->Head;
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (o->Live && IsSentAfterCharacter(o))
+                        {
+                            if ((gMapManager.WorldActive == WD_51HOME_6TH_CHAR
+                                ) && (o->Type == 89));
+                            else
+                                if (IsIceCity() && o->Type == 76);
+                                else
+                                    if (gMapManager.IsPKField() && (o->Type == 16 || o->Type == 67 || o->Type == 68));
+                                    else
+                                        if (IsDoppelGanger2() && (o->Type == 16 || o->Type == 67 || o->Type == 68));
+                                        else
+                                            if (o->Visible || g_Camera.TopViewEnable)
+                                            {
+                                                bool Success = false;
+                                                if (gMapManager.WorldActive == WD_2DEVIAS && o->Type == 100)
+                                                {
+                                                    int Level;
+
+                                                    if (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD
+                                                        || gCharacterManager.GetBaseClass(Hero->Class) == CLASS_RAGEFIGHTER)
+                                                        Level = 80 * 2 / 3;
+                                                    else
+                                                        Level = 80;
+                                                    if (CharacterAttribute->Level >= Level)
+                                                        Success = true;
+                                                }
+                                                else
+                                                    Success = true;
+                                                if (Success)
+                                                {
+                                                    RenderObject_AfterCharacter(o);
+                                                }
+                                            }
+                        }
+                        if (o->Next == NULL) break;
+                        o = o->Next;
+                    }
+                    else break;
+                }
+            }
+        }
+    }
+}
+
+// Forward declarations for LoginScene camera accessors
+int GetLoginCameraCount();
+int GetLoginCameraWalkCut();
+
+void MoveObject(OBJECT* o)
+{
+    // The sounds its map's code plays meanwhile are marked here (Q-SM11).
+    const Audio::ScopedSoundPlace place(Audio::SoundKind::MapObject, o->Type, o->Position);
+    if (gMapManager.WorldActive == 9)
+    {
+        if ((int)WorldTime % 4000 < 1000)
+            if (rand_fps_check(100))
+            {
+                float Luminosity = (float)(Random::Rand() % 12 + 4) * 0.1f;
+                vec3_t Light;
+                Vector(Luminosity * 0.2f, Luminosity * 0.3f, Luminosity * 0.5f, Light);
+                AddTerrainLight(Hero->Object.Position[0] + Random::Rand() % 1200 - 600,
+                                Hero->Object.Position[1] + Random::Rand() % 1200 - 600, Light, 12, PrimaryTerrainLight);
+                //PlayBuffer(SOUND_THUNDER01);
+            }
+        PlayBuffer(SOUND_RAIN01, NULL, true);
+    }
+    if (gMapManager.WorldActive == 0)
+    {
+        if (o->Type == MODEL_HOUSE_WALL01 + 4 || o->Type == MODEL_HOUSE_WALL01 + 5)
+        {
+            if (HeroTile == 4)
+                o->AlphaTarget = 0.f;
+            else
+                o->AlphaTarget = 1.f;
+        }
+#ifdef _PVP_MURDERER_HERO_ITEM
+        else if (o->Type == MODEL_MURDERER_DOG)
+        {
+            if (o->PriorAnimationFrame > o->AnimationFrame)
+            {
+                if (rand_fps_check(10) && o->CurrentAction != MONSTER01_STOP2)
+                    o->CurrentAction = MONSTER01_STOP2;
+                else
+                    o->CurrentAction = MONSTER01_STOP1;
+            }
+        }
+#endif	// _PVP_MURDERER_HERO_ITEM
+    }
+    if (gMapManager.WorldActive == 2)
+    {
+        if (o->Type == 81 || o->Type == 82 || o->Type == 96 || o->Type == 98 || o->Type == 99)
+        {
+            if (HeroTile == 3 || HeroTile >= 10)
+                o->AlphaTarget = 0.f;
+            else
+                o->AlphaTarget = 1.f;
+        }
+    }
+    Alpha(o);
+    if (o->Alpha < 0.01f) return;
+    BMD* b = &Models[o->Type];
+    b->CurrentAction = o->CurrentAction;
+
+    float fSpeed = o->Velocity;
+    if (gMapManager.WorldActive == WD_8TARKAN)
+    {
+        switch (o->Type)
+        {
+        case 8:
+            fSpeed *= 4.0f;
+            break;
+        }
+    }
+    else if (IsIceCity() && (o->Type == 16 || o->Type == 17 || o->Type == 68))
+    {
+        fSpeed = b->Actions[o->CurrentAction].PlaySpeed;
+    }
+#ifdef ASG_ADD_MAP_KARUTAN
+    else if (IsKarutanMap() && (o->Type == 66 || o->Type == 107))
+    {
+        fSpeed = b->Actions[o->CurrentAction].PlaySpeed;
+    }
+#endif	// ASG_ADD_MAP_KARUTAN
+
+    b->PlayAnimation(&o->AnimationFrame, &o->PriorAnimationFrame, &o->PriorAction, fSpeed, o->Position, o->Angle);
+
+    vec3_t p;
+    vec3_t Light;
+    float Luminosity;
+    Vector(0.f, 0.f, 0.f, p);
+    if (SceneFlag == LOG_IN_SCENE || SceneFlag == CHARACTER_SCENE)
+    {
+        switch (o->Type)
+        {
+        case MODEL_LOGO:
+            o->BlendMeshTexCoordV = -((int)WorldTime % 4000 * 0.00025f);
+            break;
+        case MODEL_WAVEBYSHIP:
+            o->BlendMeshTexCoordV = -((int)WorldTime % 4000 * 0.00025f);
+            break;
+        case MODEL_MUGAME:
+            if (GetLoginCameraWalkCut() == 0)
+                Luminosity = GetLoginCameraCount() * 0.02f;
+            else
+            {
+                Luminosity = 1.5f;
+                /*if(GetLoginCameraWalkCut()==1 && GetLoginCameraCount()==0)
+                {
+                for(int i=0;i<100;i++)
+                {
+                Vector((float)(Random::Rand()%200-100),(float)(Random::Rand()%40-20),(float)(Random::Rand()%200-100),Position);
+                VectorAdd(Position,o->Position,Position);
+                Vector(1.f,1.f,1.f,Light);
+                CreateParticle(BITMAP_SPARK,Position,o->Angle,Light);
+                }
+            }*/
+            }
+            Vector(Luminosity * 1.f, Luminosity * 1.f, Luminosity * 1.f, o->Light);
+            o->BlendMeshLight = Luminosity;
+            break;
+        }
+    }
+
+    switch (gMapManager.WorldActive)
+    {
+    case WD_0LORENCIA:
+        switch (o->Type)
+        {
+        case MODEL_HOUSE01 + 3:
+        case MODEL_HOUSE01 + 4:
+            o->BlendMeshTexCoordV = -(int)WorldTime % 1000 * 0.001f;
+            break;
+        case MODEL_HOUSE01 + 2:
+        case MODEL_HOUSE_WALL01 + 1:
+            o->BlendMeshLight = (float)(Random::Rand() % 4 + 4) * 0.1f;
+            break;
+        case MODEL_LIGHT01:
+            CreateFire(0, o, 0.f, 0.f, 0.f);
+            o->HiddenMesh = -2;
+            break;
+        case MODEL_LIGHT01 + 1:
+            CreateFire(1, o, 0.f, 0.f, 0.f);
+            o->HiddenMesh = -2;
+            break;
+        case MODEL_LIGHT01 + 2:
+            CreateFire(2, o, 0.f, 0.f, 0.f);
+            o->HiddenMesh = -2;
+            break;
+        case MODEL_BRIDGE:
+            CreateFire(0, o, 90.f, -200.f, 30.f);
+            CreateFire(0, o, 90.f, 200.f, 30.f);
+            break;
+        case MODEL_DUNGEON_GATE:
+            CreateFire(0, o, -150.f, -150.f, 140.f);
+            CreateFire(0, o, 150.f, -150.f, 140.f);
+            break;
+        case MODEL_FIRE_LIGHT01:
+            CreateFire(0, o, 0.f, 0.f, 200.f);
+            break;
+        case MODEL_FIRE_LIGHT01 + 1:
+            CreateFire(0, o, 0.f, -30.f, 60.f);
+            break;
+        case MODEL_STREET_LIGHT:
+            Luminosity = (float)(Random::Rand() % 2 + 6) * 0.1f;
+            Vector(Luminosity, Luminosity * 0.8f, Luminosity * 0.6f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+            break;
+        case MODEL_BONFIRE:
+            CreateFire(0, o, 0.f, 0.f, 60.f);
+            o->BlendMeshLight = (float)(Random::Rand() % 6 + 4) * 0.1f;
+            //CreateBonfire(o->Position,o->Angle);
+            break;
+            /*	case MODEL_FIREPLACE01:
+            CreateFire(0,o,0.f,0.f,60.f);
+            //CreateBonfire(o->Position,o->Angle);
+            break;
+            case MODEL_DOOR_WOOD01:
+            case MODEL_DOOR_STEEL01:
+            {
+            vec3_t Range;
+            VectorSubtract(Hero->Object.Position,o->Position,Range);
+            float Distance = Range[0]*Range[0]+Range[1]*Range[1];
+            if(Distance <= 120.f*120.f)
+            {
+            o->Direction[2] = (120.f+(Hero->Object.Position[1]-o->Position[1]))*0.6f;
+            }
+            o->Angle[2] = TurnAngle2(o->Angle[2],o->Direction[2],FarAngle(o->Angle[2],o->Direction[2])*0.1f);
+            if(FarAngle(o->Angle[2],o->Direction[2]) < absf(o->Direction[2])*0.2f)
+            o->Direction[2] = -o->Direction[2] * 0.2f;
+            break;
+        }*/
+        case MODEL_CANDLE:
+            Luminosity = (float)(Random::Rand() % 4 + 3) * 0.1f;
+            Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+            break;
+            /*case MODEL_GOLD01:
+            Vector(0.f,-15.f,25.f,p);
+            CreateShiny(o,p);
+            break;*/
+        case MODEL_SIGN01 + 1:
+            Vector(50.f, -10.f, 120.f, p);
+            //CreateShiny(o,p);
+            break;
+            /*case MODEL_STONE_WALL01+3:
+            o->Live = false;
+            break;*/
+        }
+        break;
+    case WD_1DUNGEON:
+        switch (o->Type)
+        {
+        case 52:
+            if (rand_fps_check(3))
+                CreateEffect(MODEL_DUNGEON_STONE01, o->Position, o->Angle, o->Light);
+            //CreateEffect(MODEL_STONE1,o->Position,o->Angle,o->Light);
+            o->HiddenMesh = -2;
+            break;
+        case 22:
+        case 23:
+        case 24:
+            Models[o->Type].StreamMesh = 1;
+            o->BlendMeshTexCoordV = -(float)((int)WorldTime % 1000) * 0.001f;
+            break;
+        case 41:
+            CreateFire(0, o, 0.f, -30.f, 240.f);
+            break;
+        case 42:
+            CreateFire(0, o, 0.f, 0.f, 190.f);
+            break;
+        case 39:
+        case 40:
+        case 51:
+            o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_2DEVIAS:
+        switch (o->Type)
+        {
+        case 78:
+            o->BlendMeshLight = (float)(Random::Rand() % 4 + 4) * 0.1f;
+            break;
+        case 30:
+        {
+            vec3_t Position;
+            Position[0] = o->Position[0];
+            Position[1] = o->Position[1];
+            Position[2] = o->Position[2] + 160.f;
+            CreateParticleFpsChecked(BITMAP_TRUE_FIRE, Position, o->Angle,
+                o->Light, 0, o->Scale);
+            CreateParticleFpsChecked(BITMAP_SMOKE, Position, o->Angle, o->Light, 21,
+                                     0.5f + ((Random::Rand() % 9) * 0.1f));
+        }
+        break;
+        case 66:
+            CreateFire(0, o, 0.f, 0.f, 50.f);
+            break;
+        case 86:
+        case 20:
+        case 65:
+        case 88:
+            if (EditFlag == EDIT_NONE)
+            {
+                float dx = Hero->Object.Position[0] - o->HeadTargetAngle[0];
+                float dy = Hero->Object.Position[1] - o->HeadTargetAngle[1];
+                float Distance = sqrtf(dx * dx + dy * dy);
+                if (Distance < 200.f)
+                {
+                    if (o->Type == 86)
+                    {
+                        if (o->Angle[2] == 90.f)
+                            o->Position[1] = o->HeadTargetAngle[1] + (200.f - Distance) * 2.f;
+                        if (o->Angle[2] == 270.f)
+                            o->Position[1] = o->HeadTargetAngle[1] - (200.f - Distance) * 2.f;
+                        if (o->Angle[2] == 0.f)
+                            o->Position[0] = o->HeadTargetAngle[0] + (200.f - Distance) * 2.f;
+                        if (o->Angle[2] == 180.f)
+                            o->Position[0] = o->HeadTargetAngle[0] - (200.f - Distance) * 2.f;
+                        PlayBuffer(SOUND_DOOR02);
+                    }
+                    else
+                    {
+                        if (o->HeadAngle[2] == 90.f)
+                            o->Angle[2] = 30.f - (200.f - Distance) * 0.5f;
+                        if (o->HeadAngle[2] == 270.f)
+                            o->Angle[2] = 330.f + (200.f - Distance) * 0.5f;
+                        if (o->HeadAngle[2] == 0.f)
+                            o->Angle[2] = 300.f - (200.f - Distance) * 0.5f;
+                        if (o->HeadAngle[2] == 180.f)
+                            o->Angle[2] = 240.f + (200.f - Distance) * 0.5f;
+                        PlayBuffer(SOUND_DOOR01);
+                    }
+                }
+                else
+                {
+                    o->Angle[2] = TurnAngle2(o->Angle[2], o->HeadAngle[2], 10.f);
+                    o->Position[0] += (o->HeadTargetAngle[0] - o->Position[0]) * 0.2f;
+                    o->Position[1] += (o->HeadTargetAngle[1] - o->Position[1]) * 0.2f;
+                }
+            }
+            break;
+        }
+        break;
+    case WD_3NORIA:
+        switch (o->Type)
+        {
+        case MODEL_WARP:
+            vec3_t Position;
+            Vector(o->Position[0], o->Position[1] - 50.f, o->Position[2] + 350.f, Position);
+            Vector(0.5f, 0.5f, 0.5f, Light);
+            CreateParticleFpsChecked(BITMAP_SPARK + 1, Position, o->Angle, Light, 9, 1.4f);
+            break;
+        case 18:
+            o->BlendMeshTexCoordV = (int)WorldTime % 1000 * 0.001f;
+            break;
+        case 39:
+            o->BlendMesh = 1;
+            break;
+        case 41:
+            o->BlendMesh = 0;
+            o->BlendMeshTexCoordV = (int)WorldTime % 2000 * 0.0005f;
+            break;
+        case 42:
+            Models[o->Type].StreamMesh = 0;
+            o->BlendMeshTexCoordU = -(float)((int)WorldTime % 500) * 0.002f;
+            break;
+        case 43:
+            Models[o->Type].StreamMesh = 0;
+            o->BlendMeshTexCoordU = (float)((int)WorldTime % 500) * 0.002f;
+            break;
+        }
+        break;
+    case WD_4LOSTTOWER:
+        switch (o->Type)
+        {
+        case 38:
+        case 39:
+            CheckSkull(o);
+            break;
+        case 3:
+        case 4:
+            o->BlendMeshTexCoordU = -(int)WorldTime % 1000 * 0.001f;
+            break;
+        case 19:
+        case 20:
+            o->BlendMesh = 4;
+            o->BlendMeshTexCoordU = -(int)WorldTime % 1000 * 0.001f;
+            break;
+        case 18:
+            o->BlendMesh = 1;
+            break;
+        case 23:
+            o->BlendMesh = 1;
+            //b->TransformPosition(BoneTransform[1],p,Position);
+            //CreateSprite(BITMAP_LIGHT,Position,2.f,Light,o);
+            break;
+        case 24:
+            o->HiddenMesh = -2;
+            if (rand_fps_check(64))
+                CreateEffect(BITMAP_FLAME, o->Position, o->Angle, o->Light);
+            //o->BlendMeshTexCoordV = (int)WorldTime%1000 * 0.001f;
+            break;
+        case 25:
+            o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_5UNKNOWN:
+        switch (o->Type)
+        {
+        case 2:
+            o->BlendMesh = 0;
+            break;
+        case 3:
+            o->BlendMesh = 0;
+            o->BlendMeshLight = (float)(Random::Rand() % 4 + 6) * 0.1f;
+            break;
+        }
+        break;
+    case WD_6STADIUM:
+        switch (o->Type)
+        {
+        case 21:
+            o->BlendMesh = 3;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 1000 * 0.001f;
+            break;
+        case 38:
+            o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_7ATLANSE:
+        switch (o->Type)
+        {
+        case 22:
+            o->HiddenMesh = -2;
+            o->Timer += 0.1f * FPS_ANIMATION_FACTOR;
+            if (o->Timer > 10.f)
+                o->Timer = 0.f;
+            if (o->Timer > 5.f)
+                CreateParticleFpsChecked(BITMAP_BUBBLE, o->Position, o->Angle, o->Light);
+            break;
+        case 23:
+            o->BlendMesh = 0;
+            //o->BlendMeshLight = o->Light[1]+1.f;
+            o->BlendMeshLight = sinf(WorldTime * 0.002f) * 0.3f + 0.5f;
+            break;
+        case 32:
+        case 34:
+            o->BlendMesh = 1;
+            o->BlendMeshLight = sinf(WorldTime * 0.004f) * 0.5f + 0.5f;
+            break;
+        case 38:
+            o->BlendMesh = 0;
+            //o->BlendMeshLight = sinf(WorldTime*0.004f)*0.3f+0.7f;
+            break;
+        case 40:
+            o->BlendMesh = 0;
+            o->BlendMeshLight = sinf(WorldTime * 0.004f) * 0.3f + 0.5f;
+            o->Velocity = 0.05f;
+            break;
+        }
+        break;
+    case WD_8TARKAN:
+        switch (o->Type)
+        {
+        case 2:
+            o->BlendMesh = 0;
+            o->BlendMeshTexCoordU = -(int)WorldTime % 1000 * 0.001f;
+            break;
+
+        case 4:
+        {
+            float   sine = (float)sinf(WorldTime * 0.002f) * 0.35f + 0.65f;
+            o->BlendMesh = 0;
+            o->BlendMeshLight = sine;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0001f;
+
+            Luminosity = sine;
+            Vector(Luminosity, Luminosity, Luminosity, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+        }
+        break;
+
+        case 7:
+        {
+            float   sine = (float)sinf((WorldTime + (o->Angle[2] * 100)) * 0.002f) * 0.35f + 0.65f;
+
+            o->BlendMesh = 0;
+            o->BlendMeshLight = sine;
+
+            Luminosity = sine;
+            Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 3, PrimaryTerrainLight);
+        }
+        break;
+
+        case 11:
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0002f;
+            break;
+
+        case 12:
+            o->BlendMeshTexCoordU = -(int)WorldTime % 50000 * 0.00005f;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 50000 * 0.00005f;
+            break;
+
+        case 13:
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0002f;
+            break;
+
+        case 61:
+            o->BlendMesh = 1;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 1000 * 0.001f;
+
+            Luminosity = (float)sinf(WorldTime * 0.002f) * 0.35f + 0.65f;
+            Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
+            break;
+
+        case 63:
+        case 64:
+            o->HiddenMesh = -2;
+            break;
+
+        case 65:
+        case 66:
+            o->BlendMesh = 1;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 1000 * 0.001f;
+
+            Luminosity = (float)sinf(WorldTime * 0.002f) * 0.35f + 0.65f;
+            Vector(Luminosity, Luminosity * 0.6f, Luminosity * 0.2f, Light);
+            AddTerrainLight(o->Position[0], o->Position[1], Light, 2, PrimaryTerrainLight);
+            break;
+
+        case 72:
+            o->BlendMesh = 0;
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0002f;
+            break;
+
+        case 73:
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0002f;
+            break;
+
+        case 75:
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0002f;
+            break;
+
+        case 79:
+            o->BlendMeshTexCoordV = -(int)WorldTime % 10000 * 0.0002f;
+            break;
+
+        case 82:
+            o->BlendMesh = 0;
+            Vector(1.0f, 1.0f, 1.0f, o->Light);
+            break;
+        }
+        break;
+
+    case WD_10HEAVEN:
+        break;
+
+    case WD_11BLOODCASTLE1:
+    case WD_11BLOODCASTLE1 + 1:
+    case WD_11BLOODCASTLE1 + 2:
+    case WD_11BLOODCASTLE1 + 3:
+    case WD_11BLOODCASTLE1 + 4:
+    case WD_11BLOODCASTLE1 + 5:
+    case WD_11BLOODCASTLE1 + 6:
+    case WD_52BLOODCASTLE_MASTER_LEVEL:
+        switch (o->Type)
+        {
+        case 9:
+        case 10:
+            if (o->PKKey != 4)
+                o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_55LOGINSCENE:
+    {
+        switch (o->Type)
+        {
+        case 84:
+        case 85:
+        case 87:
+        case 89:
+            o->HiddenMesh = -2;
+            break;
+        case 90:
+        case 86:
+            if (o->Type == 90)
+            {
+                o->Alpha = 1.0f;
+                Vector(1.0f, 1.0f, 1.0f, o->Light);
+                o->Angle[2] -= 0.23f * FPS_ANIMATION_FACTOR;
+            }
+            else
+            {
+                o->Alpha = 0.2f;
+                o->Angle[2] -= 0.6f * FPS_ANIMATION_FACTOR;
+                Vector(1.0f, 0.0f, 0.0f, o->Light);
+            }
+
+            float fTemp1 = sinf(WorldTime * 0.001f) * 0.2 + 0.6f;
+            o->BlendMesh = -2;
+            break;
+        }
+        break;
+    }
+    default:
+        if (MoveHellasVisual(o) == true) return;
+        if (battleCastle::MoveBattleCastleVisual(o) == true) return;
+        if (M31HuntingGround::MoveHuntingGroundObject(o)) return;
+        if (M34CryingWolf2nd::MoveCryingWolf2ndObject(o)) return;
+        if (M33Aida::MoveAidaObject(o)) return;
+        if (M34CryWolf1st::MoveCryWolf1stObject(o)) return;
+        if (M37Kanturu1st::MoveKanturu1stObject(o))	return;
+        if (M38Kanturu2nd::Move_Kanturu2nd_Object(o)) return;
+        if (M39Kanturu3rd::MoveKanturu3rdObject(o)) return;
+        if (SEASON3A::CGM3rdChangeUp::Instance().MoveObject(o)) return;
+        if (g_CursedTemple->MoveObject(o)) return;
+        if (SEASON3B::GMNewTown::MoveObject(o)) return;
+        if (SEASON3C::GMSwampOfQuiet::MoveObject(o)) return;
+        if (TheMapProcess().MoveObject(o)) return;
+        break;
+    }
+}
+
+static  int visibleObject = 0;
+
+int MoveHeavenThunder(void)
+{
+    int     objectCount = 0;
+    float   Luminosity;
+    vec3_t  Light;
+
+    if (rand_fps_check(50))
+    {
+        vec3_t  position, Angle;
+
+        position[0] = Hero->Object.Position[0] + Random::Rand() % 300 - 150.f;
+        position[1] = Hero->Object.Position[1];
+        position[2] = Hero->Object.Position[2] + Random::Rand() % 300 - 150.f;
+
+        Luminosity = (float)(Random::Rand() % 4 + 4) * 0.05f;
+        Vector(Luminosity * 0.3f, Luminosity * 0.3f, Luminosity * 0.081f, Light);
+        AddTerrainLight(position[0], position[1], Light, 2, PrimaryTerrainLight);
+        Vector(0.f, 0.f, 0.f, Angle);
+        CreateEffect(MODEL_CLOUD, Hero->Object.Position, Angle, Light);
+
+        if (visibleObject)
+        {
+            objectCount = Random::Rand() % visibleObject;
+        }
+
+        if (Random::Rand() % 5 == 0)
+        {
+            float Matrix1[3][4];
+            float Matrix2[3][4];
+            vec3_t  pos, position, position2, angle;
+            vec3_t vTempPos;
+
+            Vector(0.f, 0.f, -45.f, angle);
+            AngleMatrix(angle, Matrix1);
+
+            switch (Random::Rand() % 4)
+            {
+            case 0:
+                Vector(-400.f, -1000.f, 0.f, position);
+                VectorCopy(position, vTempPos);
+                VectorRotate(vTempPos, Matrix1, position);
+                VectorAdd(Hero->Object.Position, position, pos);
+                Vector(0.f, 0.f, 240.f, angle);
+                AngleMatrix(angle, Matrix2);
+                Vector(-200.f, -1000.f, 0.f, position);
+                break;
+            case 1:
+                Vector(-300.f, -400.f, 0.f, position);
+                VectorCopy(position, vTempPos);
+                VectorRotate(vTempPos, Matrix1, position);
+                VectorSubtract(Hero->Object.Position, position, pos);
+                Vector(0.f, 0.f, 210.f, angle);
+                AngleMatrix(angle, Matrix2);
+                Vector(-500.f, -1000.f, 0.f, position);
+                break;
+            case 2:
+                Vector(-200.f, -400.f, 0.f, position);
+                VectorCopy(position, vTempPos);
+                VectorRotate(vTempPos, Matrix1, position);
+                VectorAdd(Hero->Object.Position, position, pos);
+                Vector(0.f, 0.f, 235.f, angle);
+                AngleMatrix(angle, Matrix2);
+                Vector(-1000.f, -1500.f, 0.f, position);
+                break;
+            case 3:
+                Vector(-200.f, 400.f, 0.f, position);
+                VectorCopy(position, vTempPos);
+                VectorRotate(vTempPos, Matrix1, position);
+                VectorAdd(Hero->Object.Position, position, pos);
+                Vector(0.f, 0.f, 200.f, angle);
+                AngleMatrix(angle, Matrix2);
+                Vector(-600.f, -1200.f, 0.f, position);
+                break;
+            }
+            VectorCopy(position, vTempPos);
+            VectorRotate(vTempPos, Matrix2, position);
+            VectorSubtract(pos, position, position2);
+            VectorAdd(pos, position, position);
+            position[2] -= 300.f;
+            position2[2] -= 300.f;
+            angle[2] = 0;
+            CreateJoint(BITMAP_JOINT_THUNDER + 1, position, position2, angle, 0, NULL, 40.f + Random::Rand() % 10);
+            CreateJoint(BITMAP_JOINT_THUNDER + 1, position, position2, angle, 0, NULL, 40.f + Random::Rand() % 10);
+        }
+    }
+
+    return objectCount;
+}
+
+void MoveObjectSetting(int& objCount)
+{
+    if (MoveChaosCastleObjectSetting(objCount, visibleObject))                  return;
+    if (MoveHellasObjectSetting(objCount, visibleObject))                       return;
+    if (battleCastle::MoveBattleCastleObjectSetting(objCount, visibleObject))   return;
+
+    if (gMapManager.WorldActive == WD_10HEAVEN)
+    {
+        objCount = MoveHeavenThunder();
+
+        if (0 == (Random::Rand() % 10))
+        {
+            vec3_t Position;
+            Vector(Hero->Object.Position[0] + (float)(Random::Rand() % 5000 - 2500),
+                   Hero->Object.Position[1] + (float)(Random::Rand() % 5000 - 2500), Hero->Object.Position[2] - 1000.f,
+                   Position);
+            vec3_t Light = { 1.f, 1.f, 1.f };
+            vec3_t Angle = { 0.f, 0.f, 0.f };
+            CreateEffect(BITMAP_LIGHT, Position, Angle, Light);
+        }
+        return;
+    }
+    else if (gMapManager.InBloodCastle() == true)
+    {
+        vec3_t Position, Angle;
+        vec3_t  Light;
+
+        Vector(0.f, 0.f, 0.f, Angle);
+        Vector(1.f, 1.f, 1.f, Light);
+
+        Vector(Hero->Object.Position[0] + (float)(Random::Rand() % 900 - 300),
+               Hero->Object.Position[1] + (float)(Random::Rand() % 900 - 300),
+               Hero->Object.Position[2] + Random::Rand() % 50 + 250.f, Position);
+
+        if (rand_fps_check(4))
+        {
+            CreateParticle(BITMAP_FLARE, Position, Angle, Light, 3, 0.19f, NULL);
+        }
+        return;
+    }
+}
+
+void MoveObjectOnEffect(OBJECT* o, int& objCount, int& visObject)
+{
+    vec3_t  Light;
+    if (gMapManager.WorldActive == WD_10HEAVEN)
+    {
+        visObject++;
+        if (objCount)
+        {
+            if (rand_fps_check(10) && o->Type >= 0 && o->Type <= 5)
+            {
+                Vector(Random::Rand() % 10 / 50.f, Random::Rand() % 10 / 50.f, Random::Rand() % 10 / 50.f, Light);
+                CreateSprite(BITMAP_CLOUD + 1, o->Position, 0.5f, Light, &Hero->Object);
+                CreateJoint(BITMAP_JOINT_THUNDER, o->Position, o->Position, o->Angle, 6, o, Random::Rand() % 20 + 10.f);
+                CreateJoint(BITMAP_JOINT_THUNDER, o->Position, o->Position, o->Angle, 6, o, Random::Rand() % 20 + 10.f);
+            }
+            else
+            {
+                visObject--;
+            }
+        }
+    }
+    else
+    {
+        if (MoveChaosCastleObject(o, objCount, visObject))  return;
+        if (battleCastle::MoveBattleCastleObject(o, objCount, visObject))   return;
+    }
+}
+
+void MoveObjects()
+{
+    int     objectCount = 0;
+
+    MoveObjectSetting(objectCount);
+
+    visibleObject = 0;
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            if (ob->Visible)
+            {
+                OBJECT* o = ob->Head;
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (o->Live && o->Visible)
+                        {
+                            MoveObject(o);
+                            MoveObjectOnEffect(o, objectCount, visibleObject);
+                            ActionObject(o);
+                        }
+                        if (o->Next == NULL) break;
+                        o = o->Next;
+                    }
+                    else break;
+                }
+            }
+            else
+            {
+                OBJECT* o = ob->Head;
+                while (1)
+                {
+                    if (o != NULL)
+                    {
+                        if (o->Live)
+                        {
+                            ActionObject(o);
+                        }
+                        o->Visible = false;
+                        if (o->Next == NULL) break;
+                        o = o->Next;
+                    }
+                    else break;
+                }
+            }
+        }
+    }
+    g_iActionTime--;
+}
+
+void CreateOperate(OBJECT* Owner)
+{
+    for (int i = 0; i < MAX_OPERATES; i++)
+    {
+        OPERATE* o = &Operates[i];
+        if (!o->Live)
+        {
+            o->Live = true;
+            o->Owner = Owner;
+            return;
+        }
+    }
+}
+
+OBJECT* CreateObject(int Type, vec3_t Position, vec3_t Angle, float Scale)
+{
+    int i = (int)(Position[0] / (16 * TERRAIN_SCALE));
+    int j = (int)(Position[1] / (16 * TERRAIN_SCALE));
+    if (i < 0 || j < 0 || i >= 16 || j >= 16) return NULL;
+
+    BYTE Block = i * 16 + j;
+    OBJECT_BLOCK* ob = &ObjectBlock[Block];
+    auto* o = new OBJECT;
+
+    o->Initialize();
+
+    if (ob->Head == NULL)
+    {
+        o->Prior = NULL;
+        o->Next = NULL;
+        ob->Head = o;
+        ob->Tail = o;
+    }
+    else
+    {
+        ob->Tail->Next = o;
+        o->Prior = ob->Tail;
+        o->Next = NULL;
+        ob->Tail = o;
+    }
+    o->Live = true;
+    o->Visible = false;
+    o->AlphaEnable = false;
+    o->LightEnable = true;
+    o->ContrastEnable = false;
+    o->EnableBoneMatrix = false;
+
+    o->m_bCollisionCheck = false;
+
+    o->Type = Type;
+    o->Scale = Scale;
+    o->Alpha = 1.f;
+    o->AlphaTarget = 1.f;
+    o->Velocity = 0.16f;
+    o->ShadowScale = 50.f;
+    o->HiddenMesh = -1;
+    o->CurrentAction = 0;
+    o->PriorAction = 0;
+    o->AnimationFrame = 0.f;
+    o->PriorAnimationFrame = 0.f;
+    o->Block = Block;
+    o->BlendMesh = -1;
+    o->BlendMeshLight = 1.f;
+    o->BlendMeshTexCoordU = 0.f;
+    o->BlendMeshTexCoordV = 0.f;
+    g_CharacterClearBuff(o);
+    o->CollisionRange = -30.f;
+    o->Timer = 0.f;
+    o->m_bpcroom = FALSE;
+    o->m_bRenderAfterCharacter = false;
+
+    VectorCopy(Position, o->Position);
+    VectorCopy(Position, o->StartPosition);
+    VectorCopy(Angle, o->Angle);
+    Vector(0.f, 0.f, 0.f, o->Light);
+    Vector(0.f, 0.f, 0.f, o->HeadAngle);
+    Vector(0.f, 0.f, 0.f, o->Direction);
+    Vector(-40.f, -40.f, 0.f, o->BoundingBoxMin);
+    Vector(40.f, 40.f, 80.f, o->BoundingBoxMax);
+    if (SceneFlag == LOG_IN_SCENE || SceneFlag == CHARACTER_SCENE)
+    {
+        switch (Type)
+        {
+        case MODEL_SHIP:
+            o->Scale = 0.8f;
+            Vector(0.2f, 0.2f, 0.2f, o->Light);
+            o->LightEnable = true;
+            break;
+        case MODEL_WAVEBYSHIP:
+            o->Scale = 0.8f;
+            o->BlendMesh = 0;
+            o->BlendMeshLight = 1.f;
+            Vector(1.f, 1.f, 1.f, o->Light);
+            break;
+        case MODEL_MUGAME:
+            o->Scale = 2.2f;
+            o->BlendMesh = 1;
+            o->LightEnable = false;
+            break;
+        case MODEL_LOGO:
+            o->BlendMesh = 1;
+            o->BlendMeshLight = 1.f;
+            o->Scale = 5.f;
+            o->Scale = 0.044f;
+            Vector(1.f, 1.f, 1.f, o->Light);
+            o->LightEnable = false;
+            break;
+        case MODEL_LOGOSUN:
+            o->Scale = 3.f;
+            o->BlendMesh = 0;
+            Vector(0.5f, 0.5f, 0.5f, o->Light);
+            break;
+        case MODEL_LOGO + 4:
+            o->BlendMesh = 10;
+            Vector(1.f, 1.f, 1.f, o->Light);
+            break;
+        case MODEL_DRAGON:
+            o->HiddenMesh = -2;
+            Vector(1.f, 1.f, 1.f, o->Light);
+            CreateEffect(MODEL_DRAGON, o->Position, o->Angle, o->Light, 0, o, -1, 0, 0, 0, 1.6f);
+            break;
+        }
+    }
+    switch (gMapManager.WorldActive)
+    {
+    case WD_0LORENCIA:
+        switch (Type)
+        {
+        case MODEL_BRIDGE:
+            o->CollisionRange = -50.f;
+            break;
+        case MODEL_HOUSE01 + 2:
+            o->BlendMesh = 4;
+            break;
+        case MODEL_HOUSE01 + 3:
+            o->BlendMesh = 8;
+            break;
+        case MODEL_HOUSE01 + 4:
+            o->BlendMesh = 2;
+            break;
+        case MODEL_HOUSE_WALL01 + 1:
+            o->BlendMesh = 4;
+            break;
+        case MODEL_WATERSPOUT:
+            o->BlendMesh = 3;
+            break;
+        case MODEL_BONFIRE:
+            o->BlendMesh = 1;
+            break;
+        case MODEL_CARRIAGE01:
+            o->BlendMesh = 2;
+            break;
+        case MODEL_TREE01:
+        case MODEL_TREE01 + 1:
+            //case MODEL_TREE01+10:
+            Vector(-150.f, -150.f, 0.f, o->BoundingBoxMin);
+            Vector(150.f, 150.f, 500.f, o->BoundingBoxMax);
+            o->Velocity = 1.f / o->Scale * 0.4f;
+            //o->AlphaEnable = true;
+            break;
+        case MODEL_STREET_LIGHT:
+            o->BlendMesh = 1;
+            o->Velocity = 0.3f;
+            break;
+        case MODEL_CANDLE:
+            o->BlendMesh = 1;
+            o->Velocity = 0.3f;
+            break;
+        case MODEL_TREASURE_CHEST:
+            o->Velocity = 0.f;
+            break;
+        case MODEL_SIGN01:
+        case MODEL_SIGN01 + 1:
+            o->Velocity = 0.3f;
+            //CreateNpc(o);
+            break;
+        case MODEL_POSE_BOX:
+            CreateOperate(o);
+            Vector(40.f, 40.f, 160.f, o->BoundingBoxMax);
+            o->HiddenMesh = -2;
+            break;
+        case MODEL_TREE01 + 6:
+        case MODEL_FURNITURE01 + 5:
+        case MODEL_FURNITURE01 + 6:
+            CreateOperate(o);
+            break;
+        }
+        break;
+    case WD_1DUNGEON:
+        switch (Type)
+        {
+        case 59:
+            CreateOperate(o);
+            break;
+        case 60:
+            CreateOperate(o);
+            Vector(40.f, 40.f, 160.f, o->BoundingBoxMax);
+            o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_2DEVIAS:
+        switch (Type)
+        {
+        case MODEL_WARP:
+        {
+            vec3_t Position;
+            Vector(o->Position[0], o->Position[1], o->Position[2] + 360.f, Position);
+            CreateEffect(MODEL_WARP, Position, o->Angle, o->Light, 1);
+
+            Vector(o->Position[0], o->Position[1] + 4.0f, o->Position[2] + 360.f, Position);
+            CreateEffect(MODEL_WARP2, Position, o->Angle, o->Light, 1);
+
+            Vector(o->Position[0], o->Position[1] + 20.0f, o->Position[2] + 360.f, Position);
+            CreateEffect(MODEL_WARP3, Position, o->Angle, o->Light, 1);
+        }
+        break;
+        case 22:
+        case 25:
+        case 40:
+        case 45:
+        case 55:
+        case 73:
+            CreateOperate(o);
+            break;
+        case 91:
+            CreateOperate(o);
+            Vector(40.f, 40.f, 160.f, o->BoundingBoxMax);
+            o->HiddenMesh = -2;
+            break;
+        case 19:
+        case 92:
+        case 93:
+            o->BlendMesh = 0;
+            break;
+        case 54:
+        case 56:
+            o->BlendMesh = 1;
+            break;
+        case 78:
+            o->BlendMesh = 3;
+            break;
+        case 20:
+        case 65:
+        case 88:
+        case 86:
+            o->Angle[2] = (float)((int)o->Angle[2] % 360);
+            VectorCopy(o->Angle, o->HeadAngle);
+            VectorCopy(o->Position, o->HeadTargetAngle);
+            break;
+        case 100:
+            o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_3NORIA:
+        switch (Type)
+        {
+        case MODEL_WARP:
+        {
+            vec3_t Position;
+            Vector(o->Position[0], o->Position[1], o->Position[2] + 350.f, Position);
+            CreateEffect(MODEL_WARP, Position, o->Angle, o->Light);
+
+            Vector(o->Position[0], o->Position[1] + 4.0f, o->Position[2] + 350.f, Position);
+            CreateEffect(MODEL_WARP2, Position, o->Angle, o->Light);
+
+            Vector(o->Position[0], o->Position[1] + 8.0f, o->Position[2] + 350.f, Position);
+            CreateEffect(MODEL_WARP, Position, o->Angle, o->Light);
+
+            Vector(o->Position[0], o->Position[1] + 12.0f, o->Position[2] + 350.f, Position);
+            CreateEffect(MODEL_WARP2, Position, o->Angle, o->Light);
+
+            Vector(o->Position[0], o->Position[1] + 20.0f, o->Position[2] + 350.f, Position);
+            CreateEffect(MODEL_WARP3, Position, o->Angle, o->Light);
+        }
+        break;
+        case 8:
+            CreateOperate(o);
+            break;
+        case 1:
+            o->BlendMesh = 1;
+            break;
+        case 9:
+            o->BlendMesh = 3;
+            break;
+        case 38:
+            CreateOperate(o);
+            o->HiddenMesh = -2;
+            break;
+        case 17:
+        case 37:
+            o->BlendMesh = 0;
+            break;
+        case 19:
+            o->BlendMesh = 0;
+            break;
+        case 18:
+            o->BlendMesh = 2;
+            break;
+        }
+        break;
+    case WD_7ATLANSE:
+        switch (Type)
+        {
+        case 39:
+            CreateOperate(o);
+            o->HiddenMesh = -2;
+            break;
+        }
+        break;
+    case WD_8TARKAN:
+        switch (Type)
+        {
+        case 78:
+            CreateOperate(o);
+            //CreateJoint(BITMAP_JOINT_ENERGY,o->Position,o->Position,o->Angle,2,o,30.f);
+            //CreateJoint(BITMAP_JOINT_ENERGY,o->Position,o->Position,o->Angle,3,o,30.f);
+            break;
+        }
+        break;
+    case WD_55LOGINSCENE:
+    {
+        switch (Type)
+        {
+        case 90:
+        case 86:
+            o->Position[0] = 8600.0f;
+            o->Position[1] = 25000.0f;
+            if (Type == 90)
+            {
+                o->Scale = 110.0f;
+                o->Position[2] = 5000.0f;
+            }
+            else
+            {
+                o->Scale = 60.0f;
+                o->Position[2] = 5000.0f;
+            }
+            Vector(0.0f, 0.0f, 0.0f, o->Angle);
+            break;
+        }
+        break;
+    }
+    default:
+    {
+        if (CreateChaosCastleObject(o) == true) return o;
+        if (CreateHellasObject(o) == true) return o;
+        battleCastle::CreateBattleCastleObject(o);
+        M31HuntingGround::CreateHuntingGroundObject(o);
+        M34CryingWolf2nd::CreateCryingWolf2ndObject(o);
+        M33Aida::CreateAidaObject(o);
+        M34CryWolf1st::CreateCryWolf1stObject(o);
+        M37Kanturu1st::CreateKanturu1stObject(o);
+        M38Kanturu2nd::Create_Kanturu2nd_Object(o);
+        M39Kanturu3rd::CreateKanturu3rdObject(o);
+        SEASON3A::CGM3rdChangeUp::Instance().CreateBalgasBarrackObject(o);
+        SEASON3A::CGM3rdChangeUp::Instance().CreateBalgasRefugeObject(o);
+        g_CursedTemple->CreateObject(o);
+        SEASON3B::GMNewTown::CreateObject(o);
+        SEASON3C::GMSwampOfQuiet::CreateObject(o);
+        TheMapProcess().CreateObject(o);
+    }
+    break;
+    }
+    return o;
+}
+
+void DeleteObject(OBJECT* o, OBJECT_BLOCK* ob)
+{
+    if (o != NULL)
+    {
+        OBJECT* Next = o->Next;
+        OBJECT* Prior = o->Prior;
+        if (Next != NULL)
+        {
+            if (Prior != NULL)
+            {
+                Prior->Next = o->Next;
+                Next->Prior = o->Prior;
+            }
+            else
+            {
+                Next->Prior = NULL;
+                ob->Head = Next;
+            }
+        }
+        else
+        {
+            if (Prior != NULL)
+            {
+                Prior->Next = NULL;
+                ob->Tail = Prior;
+            }
+            else
+            {
+                ob->Head = NULL;
+                ob->Tail = NULL;
+            }
+        }
+        Engine::Object::Pose::Release(o);
+        SAFE_DELETE(o);
+    }
+}
+
+typedef std::vector<OBJECT* > ObjectPtrVec_t;
+typedef std::map<int, ObjectPtrVec_t> SortObj_t;
+void SortInBlockByType()
+{
+    SortObj_t sortMap;
+    for (int i = 0; i < 16; ++i)
+    {
+        for (int j = 0; j < 16; ++j)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Head;
+            while (1)
+            {
+                if (o == NULL) break;
+                sortMap[o->Type].push_back(o);
+                o = o->Next;
+            }
+
+            o = ob->Head;
+            for (SortObj_t::iterator iter = sortMap.begin(); iter != sortMap.end(); ++iter)
+            {
+                ObjectPtrVec_t& rObjectVec = iter->second;
+                for (ObjectPtrVec_t::iterator iter2 = rObjectVec.begin(); iter2 != rObjectVec.end(); ++iter2)
+                {
+                    o = *iter2;
+                    o = o->Next;
+                }
+            }
+
+            sortMap.clear();
+        }
+    }
+}
+
+void DeleteObjectTile(int x, int y)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Head;
+            while (1)
+            {
+                // 0xdddddddd is the 32-bit MSVC debug heap's fill for freed memory.
+                if (o != NULL && o != reinterpret_cast<OBJECT*>(static_cast<std::uintptr_t>(0xdddddddd)))
+                {
+                    if (o->Live && (int)(o->Position[0] / TERRAIN_SCALE) == x && (int)(o->Position[1] / TERRAIN_SCALE) == y)
+                        DeleteObject(o, ob);
+                    if (o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }
+}
+
+int OpenObjects(wchar_t* FileName)
+{
+    Core::Utilities::FileHandle file(_wfopen(FileName, L"rb"));
+    if (!file)
+    {
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls file not found.", FileName);
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return (-1);
+    }
+    std::optional<std::vector<BYTE>> EncData = DataFileIO::ReadAll(file.get());
+    file.reset();
+    if (!EncData || EncData->empty())
+    {
+        DataFileIO::ReportUnusableFile(FileName, L"File corrupted.");
+        return (-1);
+    }
+    const int EncBytes = static_cast<int>(EncData->size());
+
+    const unsigned char* Data = EncData->data();
+    int DataBytes = EncBytes;
+
+    int DataPtr = 0;
+
+    BYTE Version = Data[DataPtr];
+    DataPtr += 1;
+
+    int iMapNumber = 0;
+    short Count = 0;
+    memcpy(&Count, Data + DataPtr, sizeof(Count));
+    DataPtr += sizeof(Count);
+    for (int i = 0; i < Count; i++)
+    {
+        vec3_t Position;
+        vec3_t Angle;
+        short Type = 0;
+        memcpy(&Type, Data + DataPtr, sizeof(Type));
+        DataPtr += sizeof(Type);
+        memcpy(Position, Data + DataPtr, sizeof(vec3_t));
+        DataPtr += sizeof(vec3_t);
+        memcpy(Angle, Data + DataPtr, sizeof(vec3_t));
+        DataPtr += sizeof(vec3_t);
+        float Scale = 0.f;
+        memcpy(&Scale, Data + DataPtr, sizeof(Scale));
+        DataPtr += sizeof(Scale);
+        CreateObject(Type, Position, Angle, Scale);
+    }
+
+    return iMapNumber;
+}
+
+int OpenObjectsEnc(wchar_t* FileName)
+{
+    Core::Utilities::FileHandle file(_wfopen(FileName, L"rb"));
+    if (!file)
+    {
+        wchar_t Text[256];
+        mu_swprintf(Text, L"%ls file not found.", FileName);
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return (-1);
+    }
+    std::optional<std::vector<BYTE>> EncData = DataFileIO::ReadAll(file.get());
+    file.reset();
+    if (!EncData || EncData->empty())
+    {
+        DataFileIO::ReportUnusableFile(FileName, L"File corrupted.");
+        return (-1);
+    }
+    const int EncBytes = static_cast<int>(EncData->size());
+
+    int DataBytes = MapFileDecrypt(NULL, EncData->data(), EncBytes);
+    std::vector<unsigned char> Decrypted(static_cast<std::size_t>(DataBytes));
+    MapFileDecrypt(Decrypted.data(), EncData->data(), EncBytes);
+    const unsigned char* Data = Decrypted.data();
+
+    int DataPtr = 0;
+    DataPtr += 1;
+    int iMapNumber = static_cast<int>(Data[DataPtr]);
+    DataPtr += 1;
+    short Count = 0;
+    memcpy(&Count, Data + DataPtr, sizeof(Count));
+    DataPtr += sizeof(Count);
+    g_iTotalObj = Count;
+    for (int i = 0; i < Count; i++)
+    {
+        vec3_t Position;
+        vec3_t Angle;
+        short Type = 0;
+        memcpy(&Type, Data + DataPtr, sizeof(Type));
+        DataPtr += sizeof(Type);
+        memcpy(Position, Data + DataPtr, sizeof(vec3_t));
+        DataPtr += sizeof(vec3_t);
+        memcpy(Angle, Data + DataPtr, sizeof(vec3_t));
+        DataPtr += sizeof(vec3_t);
+        float Scale = 0.f;
+        memcpy(&Scale, Data + DataPtr, sizeof(Scale));
+        DataPtr += sizeof(Scale);
+        CreateObject(Type, Position, Angle, Scale);
+    }
+
+    return iMapNumber;
+}
+
+bool SaveObjects(wchar_t* FileName, int iMapNumber)
+{
+    FILE* fp = _wfopen(FileName, L"wb");
+
+    short ObjectCount = 0;
+    int CounterPoint = 3;
+    BYTE Version = 0;
+    fwrite(&Version, sizeof(BYTE), 1, fp);
+    fwrite(&iMapNumber, 1, 1, fp);
+    fseek(fp, 4, SEEK_SET);
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Head;
+            while (1)
+            {
+                if (o != NULL)
+                {
+                    if (o->Live)
+                    {
+                        fwrite(&o->Type, 2, 1, fp);
+                        fwrite(o->Position, sizeof(vec3_t), 1, fp);
+                        fwrite(o->Angle, sizeof(vec3_t), 1, fp);
+                        fwrite(&o->Scale, sizeof(float), 1, fp);
+                    }
+                    ObjectCount++;
+                    if (o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }
+    int EndPoint = ftell(fp);
+    fseek(fp, 2, SEEK_SET);
+    fwrite(&ObjectCount, 2, 1, fp);
+    fseek(fp, EndPoint, SEEK_SET);
+
+    fclose(fp);
+
+    {
+        Core::Utilities::FileHandle plain(_wfopen(FileName, L"rb"));
+        std::optional<std::vector<BYTE>> EncData = plain ? DataFileIO::ReadAll(plain.get()) : std::nullopt;
+        plain.reset();
+        if (!EncData)
+        {
+            return false;
+        }
+        const int EncBytes = static_cast<int>(EncData->size());
+
+        int DataBytes = MapFileEncrypt(NULL, EncData->data(), EncBytes);
+        std::vector<unsigned char> Data(static_cast<std::size_t>(DataBytes));
+        MapFileEncrypt(Data.data(), EncData->data(), EncBytes);
+
+        Core::Utilities::FileHandle encrypted(_wfopen(FileName, L"wb"));
+        if (!encrypted)
+        {
+            return false;
+        }
+        fwrite(Data.data(), DataBytes, 1, encrypted.get());
+    }
+    return true;
+}
+
+void SaveTrapObjects(wchar_t* FileName)
+{
+    FILE* fp = _wfopen(FileName, L"wt");
+    fwprintf(fp, L"0\n");
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Head;
+            while (1)
+            {
+                if (o != NULL)
+                {
+                    if ((gMapManager.WorldActive == WD_1DUNGEON && (o->Type == 39 || o->Type == 40 || o->Type == 51)) ||
+                        (gMapManager.WorldActive == WD_4LOSTTOWER && (o->Type == 25)))
+                    {
+                        int Type = 0;
+                        switch (o->Type)
+                        {
+                        case 39:Type = 100; break;
+                        case 40:Type = 101; break;
+                        case 51:Type = 102; break;
+                        case 25:Type = 103; break;
+                        }
+                        fwprintf(fp, L"%4d %4d 0 %4d %4d %4d\n", Type, gMapManager.WorldActive, (BYTE)(o->Position[0] / TERRAIN_SCALE), (BYTE)(o->Position[1] / TERRAIN_SCALE), (BYTE)((o->Angle[2] + 22.5f) / 360.f * 8.f + 1.f) % 8);
+                    }
+                    if (o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }
+    fwprintf(fp, L"end\n");
+    fclose(fp);
+}
+
+void ClearItems()
+{
+    for (int i = 0; i < MAX_ITEMS; i++)
+    {
+        OBJECT* o = &Items[i].Object;
+        o->Live = false;
+    }
+}
+
+void ItemObjectAttribute(OBJECT* o)
+{
+    Vector(0.3f, 0.3f, 0.3f, o->Light);
+    o->LightEnable = true;
+    o->AlphaEnable = false;
+    o->EnableShadow = false;
+    o->Velocity = 0.f;
+    o->CollisionRange = 50.f;
+    o->PriorAnimationFrame = 0.f;
+    o->AnimationFrame = 0.f;
+    o->PriorAction = 0;
+    o->CurrentAction = 0;
+    o->HiddenMesh = -1;
+    o->Gravity = 0.f;
+    o->Alpha = 1.f;
+    o->BlendMesh = -1;
+    o->BlendMeshLight = 1.f;
+    o->BlendMeshTexCoordU = 0.f;
+    o->BlendMeshTexCoordV = 0.f;
+    o->HiddenMesh = -1;
+    o->Scale = 0.8f;
+    g_CharacterClearBuff(o);
+    if (o->Type >= MODEL_SPEAR && o->Type <= MODEL_PLATINA_STAFF)
+        o->Scale = 0.7f;
+    // The glow values of item types are their item effects (Data/Effects/ItemEffects.json, design L27).
+    switch (o->Type)
+    {
+    case MODEL_ETC:
+        o->Scale = 0.7f;
+        break;
+    case MODEL_SMALL_HEALING_POTION:
+        o->Scale = 1.f;
+        break;
+    case MODEL_RENA:
+    case MODEL_WINGS_OF_SPIRITS:
+        o->Scale = 0.5f;
+        break;
+    }
+}
+
+// How a dropped item lies on the ground (Data/Items/Models).
+void ItemAngle(OBJECT* o)
+{
+    const Render::Items::Display::GroundDisplay display = Render::Items::Display::GetGroundDisplay(o->Type);
+    Vector(display.rotation[0], display.rotation[1], display.rotation[2], o->Angle);
+    if (display.scale)
+    {
+        o->Scale = *display.scale;
+    }
+}
+
+namespace
+{
+// The level a ground item's model is drawn at: a Weapon of Archangel's level picks its model (CreateItemDrop), not an
+// upgrade, so the model is drawn at +0.
+int DrawnItemLevel(const ITEM& item)
+{
+    return item.Type == ITEM_WEAPON_OF_ARCHANGEL ? 0 : item.Level;
+}
+} // namespace
+
+void CreateItemDrop(ITEM_t* ip, ItemCreationParams params, vec3_t position, bool isFreshDrop)
+{
+    int Type = params.Group * MAX_ITEM_INDEX + params.Number;
+    ITEM* n = &ip->Item;
+    n->Type = Type;
+    n->Level = params.Level;
+    n->HasSkill = params.WithSkill;
+    n->HasLuck = params.WithLuck;
+    n->OptionLevel = params.OptionLevel;
+    n->OptionType = params.OptionType;
+    n->Durability = params.Durability;
+    n->ExcellentFlags = params.ExcellentFlags;
+    n->AncientDiscriminator = params.AncientDiscriminator;
+    n->AncientBonusOption = params.AncientBonusOption;
+    n->option_380 = params.HasGuardianOption;
+
+    if (isFreshDrop)
+    {
+        if (GameLogic::Items::IsJewelItem(n))
+            PlayBuffer(SOUND_JEWEL01, &ip->Object);
+        else if (Type == ITEM_GEMSTONE)
+            PlayBuffer(SOUND_JEWEL02, &ip->Object);
+        else
+            PlayBuffer(SOUND_DROP_ITEM01, &ip->Object);
+    }
+    
+
+    OBJECT* o = &ip->Object;
+    o->Live = true;
+    o->Type = Engine::Items::Drops::DrawnModel(Type, n->Level);
+    o->SubType = 1;
+    ItemObjectAttribute(o);
+    Vector(-30.f, -30.f, -30.f, o->BoundingBoxMin);
+    Vector(30.f, 30.f, 30.f, o->BoundingBoxMax);
+    VectorCopy(position, o->Position);
+    if (isFreshDrop)
+    {
+        if (o->Type == MODEL_EVENT + 8 || o->Type == MODEL_EVENT + 9)
+        {
+            short  scale = 55;
+            vec3_t Angle;
+            vec3_t light;
+            Vector(1.f, 1.f, 1.f, light);
+            Vector(0.f, 0.f, 0.f, Angle);
+            vec3_t NewPosition;
+            VectorCopy(position, NewPosition);
+            NewPosition[2] = RequestTerrainHeight(position[0], position[1]) + 3;
+            CreateEffect(MODEL_SKILL_FURY_STRIKE + 6, NewPosition, Angle, light, 0, o, scale);
+            CreateEffect(MODEL_SKILL_FURY_STRIKE + 4, NewPosition, Angle, light, 0, o, scale);
+            //CreateEffect(MODEL_SKILL_FURY_STRIKE+5,NewPosition,Angle,light,0,o,scale);
+
+            o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 3.f;
+            o->Gravity = 50.f;
+        }
+        else
+        {
+            o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 180.f;
+            o->Gravity = 20.f;
+        }
+    }
+    else
+    {
+        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);
+    }
+
+    ItemAngle(o);
+}
+
+void CreateMoneyDrop(ITEM_t* ip, int amount, vec3_t position, bool isFreshDrop)
+{
+    int Type = ITEM_ZEN;
+    ITEM* n = &ip->Item;
+    n->Type = Type;
+    n->Level = amount;
+    n->Durability = 0;
+    n->ExcellentFlags = 0;
+    n->AncientDiscriminator = 0;
+    if (isFreshDrop)
+    {
+        // The coins' sound is the item's, where it lands (Q-SM13).
+        const Audio::ScopedSoundPlace place(Audio::SoundKind::Item, Type, position);
+        PlayBuffer(SOUND_DROP_GOLD01);
+    }
+
+    OBJECT* o = &ip->Object;
+    o->Live = true;
+    o->Type = Data::Items::ToModelSlot(Type);
+    o->SubType = 1;
+    
+    ItemObjectAttribute(o);
+    Vector(-30.f, -30.f, -30.f, o->BoundingBoxMin);
+    Vector(30.f, 30.f, 30.f, o->BoundingBoxMax);
+    VectorCopy(position, o->Position);
+    if (isFreshDrop)
+    {
+        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + 180.f;
+        o->Gravity = 20.f;
+    }
+    else
+    {
+        o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);
+    }
+
+    ItemAngle(o);
+}
+
+void CreateShiny(OBJECT* o)
+{
+    vec3_t p, Position;
+    if (o->SubType++ % 48 == 0)
+    {
+        float Matrix[3][4];
+        AngleMatrix(o->Angle, Matrix);
+        Vector((float)(Random::Rand() % 32 + 16), 0.f, (float)(Random::Rand() % 32 + 16), p);
+        VectorRotate(p, Matrix, Position);
+        VectorAdd(o->Position, Position, Position);
+        vec3_t Light;
+        Vector(1.f, 1.f, 1.f, Light);
+
+        CreateParticle(BITMAP_SHINY, Position, o->Angle, Light);
+        CreateParticle(BITMAP_SHINY, Position, o->Angle, Light, 1);
+    }
+}
+
+// Helper: Handle item falling animation
+static void HandleItemFalling(OBJECT* o)
+{
+    if (o->Type >= MODEL_SHIELD && o->Type < MODEL_SHIELD + MAX_ITEM_INDEX)
+        o->Angle[1] = -o->Gravity * 10.f * FPS_ANIMATION_FACTOR;
+    else
+        o->Angle[0] = -o->Gravity * 10.f * FPS_ANIMATION_FACTOR;
+}
+
+// Helper: Handle item on ground (set angle and camera rotation)
+static void HandleItemOnGround(OBJECT* o)
+{
+    o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]) + Render::Items::Display::DroppedItemHeight;
+    if (Render::Items::Display::IsLiftedOnGround(o->Type))
+        o->Position[2] += Render::Items::Display::DroppedWeaponLift;
+
+    // Set default item angle
+    ItemAngle(o);
+
+    // Rotate items with camera when in orbital mode (after default angle is set)
+    if (CameraManager::Instance().GetCurrentMode() == CameraMode::Orbital)
+    {
+        OrbitalCamera* orbitalCam = static_cast<OrbitalCamera*>(CameraManager::Instance().GetActiveCamera());
+        if (orbitalCam)
+        {
+            float cameraYaw = orbitalCam->GetTotalYaw();
+            o->Angle[2] += cameraYaw; // Add camera yaw to default angle
+        }
+    }
+}
+
+// Where RenderItems draws a ground item: some maps bob it.
+static void DrawnItemPosition(int i, const vec3_t position, vec3_t drawn)
+{
+    VectorCopy(position, drawn);
+    if (gMapManager.WorldActive == WD_10HEAVEN)
+    {
+        drawn[2] += 10.0f * (float)sinf((float)(i * 1237 + WorldTime) * 0.002f);
+    }
+    else if (gMapManager.WorldActive == WD_39KANTURU_3RD && g_Direction.m_CKanturu.IsMayaScene())
+    {
+        drawn[2] += 10.0f * (float)sinf((float)(i * 1237 + WorldTime) * 0.002f);
+    }
+    else if (gMapManager.InHellas() == true)
+    {
+        drawn[2] = GetWaterTerrain(position[0], position[1]) + 180;
+    }
+}
+
+void ItemHeight(int Type, BMD* b);
+
+// The sprites a ground item's effect spawns, posed and placed as RenderItems draws it; its sprites stay out of the
+// bloom like its draw.
+static void SpawnGroundItemEffects(int i)
+{
+    OBJECT* o = &Items[i].Object;
+    const int drawnModel = Render::Items::Display::GetDrawnModel(o->Type, DrawnItemLevel(Items[i].Item));
+    if (o->Alpha <= 0.01f || o->EnableShadow || Render::Items::Display::IsDrawnOnCharacterSkeleton(drawnModel) ||
+        !PartObjectSpawns(o, drawnModel))
+        return;
+
+    BMD* b = &Models[drawnModel];
+    b->CurrentAction = o->CurrentAction;
+    ItemHeight(o->Type, b);
+    b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle,
+                 false, false);
+    b->BodyScale = o->Scale;
+
+    vec3_t position;
+    VectorCopy(o->Position, position);
+    DrawnItemPosition(i, position, o->Position);
+    VectorCopy(o->Position, b->BodyOrigin);
+    const mu::ScopedBloomExclusion classicItems;
+    SpawnPartObjectEffect(b, o, drawnModel, BoneTransform);
+    VectorCopy(position, o->Position);
+}
+
+void MoveItems()
+{
+    for (int i = 0; i < MAX_ITEMS; i++)
+    {
+        OBJECT* o = &Items[i].Object;
+        if (o->Live)
+        {
+            // Apply gravity physics
+            o->Position[2] += o->Gravity * FPS_ANIMATION_FACTOR;
+            o->Gravity -= 6.f * FPS_ANIMATION_FACTOR;
+
+            // Calculate ground height
+            float groundHeight =
+                RequestTerrainHeight(o->Position[0], o->Position[1]) + Render::Items::Display::DroppedItemHeight;
+            if (Render::Items::Display::IsLiftedOnGround(o->Type))
+                groundHeight += Render::Items::Display::DroppedWeaponLift;
+
+            // Check if item is on ground or still falling
+            if (o->Position[2] <= groundHeight)
+            {
+                HandleItemOnGround(o);
+            }
+            else
+            {
+                HandleItemFalling(o);
+            }
+
+            // Create shiny particle effect
+            if (rand_fps_check(1))
+            {
+                CreateShiny(o);
+            }
+
+            if (o->Visible)
+                SpawnGroundItemEffects(i);
+        }
+    }
+}
+
+void ItemHeight(int Type, BMD* b)
+{
+    b->BodyHeight = Render::Items::Display::GetGroundDisplay(Type).bodyHeight;
+}
+
+void RenderZen(int itemIndex, const ITEM_t* item, vec3_t light)
+{
+    constexpr int MaxRenderedZenCoins = 12;
+    const auto* o = &item->Object;
+    auto k = itemIndex;
+
+    int coinCount = static_cast<int>(sqrtf(static_cast<float>(Items[k].Item.Level))) / 2;
+
+    coinCount = std::max<int>(std::min<int>(coinCount, MaxRenderedZenCoins), 3);
+
+    vec3_t randomRadius;
+    vec3_t randomAngle;
+    vec3_t randomPosition;
+    float angleMatrix[3][4];
+
+    BMD* b = &Models[MODEL_ZEN];
+    b->BodyScale = o->Scale;
+
+    BoneScale = 1.f;
+    BodyLight(o, b);
+
+    constexpr auto alpha = 1.0f;
+    b->BeginRender(alpha);
+    b->BeginRenderCoinHeap();
+    int target_vertex_index = -1;
+    for (int i = 0; i < coinCount; ++i)
+    {
+        // Get a random angle
+        Vector(0.f, 0.f, static_cast<float>(RandomTable[(k * 20 + i) % 100] % 360), randomAngle);
+
+        // And a random radius
+        const auto maxRadius = coinCount + 20;
+        Vector(static_cast<float>(RandomTable[(k + i) % 100] % maxRadius), 0.f, 0.f, randomRadius);
+
+        // Calculate the position based on the random angle and radius
+        AngleMatrix(randomAngle, angleMatrix);
+        VectorRotate(randomRadius, angleMatrix, randomPosition);
+
+        // Each coin is drawn at its own place around the item.
+        VectorAdd(o->Position, randomPosition, b->BodyOrigin);
+        b->Transform(BoneTransform, o->BoundingBoxMin, o->BoundingBoxMax, nullptr, true);
+
+        target_vertex_index = b->AddToCoinHeap(i, target_vertex_index);
+    }
+
+    b->EndRenderCoinHeap(coinCount);
+    b->EndRender();
+}
+
+// Render dropped items and fall animation and camera rotation for items on the ground
+// Marks the items on the ground the frame's view shows, and where their names go on screen.
+static void CullItems()
+{
+#ifdef _EDITOR
+    const float cullRadius = DevEditor_GetCullRadiusItem();
+#else
+    const float cullRadius = DEFAULT_CULL_RADIUS_ITEM;
+#endif
+    for (int i = 0; i < MAX_ITEMS; i++)
+    {
+        OBJECT* o = &Items[i].Object;
+        if (!o->Live)
+            continue;
+        o->Visible = TestFrustrum(o->Position, cullRadius);
+        if (!o->Visible)
+            continue;
+
+        PlaceObjectBounds(o, o->Position);
+        vec3_t Position;
+        VectorCopy(o->Position, Position);
+        Position[2] += 30.f;
+        int ScreenX, ScreenY;
+        CameraProjection::WorldToScreen(g_Camera, Position, &ScreenX, &ScreenY);
+        o->ScreenX = ScreenX;
+        o->ScreenY = ScreenY;
+    }
+}
+
+void CullWorld()
+{
+    PrepareCharactersForDraw();
+    CullObjects();
+    CullItems();
+    CullMounts();
+    ThePetProcess().CullPets();
+    CullBoids();
+    CullEffects();
+}
+
+void RenderItems()
+{
+    // Items on the ground keep their Classic look like equipped ones: no bloom from them.
+    const mu::ScopedBloomExclusion classicItems;
+    for (int i = 0; i < MAX_ITEMS; i++)
+    {
+        const OBJECT* o = &Items[i].Object;
+        if (o->Live)
+        {
+#ifdef _EDITOR
+            float cullRadius = s_fCullRadiusItem;
+#else
+            float cullRadius = DEFAULT_CULL_RADIUS_ITEM;
+#endif
+
+#ifdef _EDITOR
+            // Debug visualization: frustum-cull sphere (NOT the pick volume)
+            if (s_bShowItemCullSphere)
+            {
+                RenderDebugSphere(o->Position, cullRadius, 1.0f, 1.0f, 0.0f);  // Yellow wireframe
+            }
+#endif
+
+            if (o->Visible)
+            {
+                const int drawnModel = Render::Items::Display::GetDrawnModel(o->Type, DrawnItemLevel(Items[i].Item));
+                // Armor is animated on the character skeleton.
+                BMD* b =
+                    &Models[Render::Items::Display::IsDrawnOnCharacterSkeleton(drawnModel) ? MODEL_PLAYER : drawnModel];
+                b->CurrentAction = 0;
+                b->Skin = gCharacterManager.GetBaseClass(Hero->Class); // ???
+                b->CurrentAction = o->CurrentAction;
+                VectorCopy(o->Position, b->BodyOrigin);
+                ItemHeight(o->Type, b);
+                b->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle, false, false);
+
+                vec3_t Light;
+                RequestModelTerrainLight(o->Position[0], o->Position[1], Light);
+                VectorAdd(Light, o->Light, Light);
+                if (o->Type == MODEL_ZEN) // Zen
+                {
+                    RenderZen(i, &Items[i], Light);
+                }
+                else if (o->Type == MODEL_CAPE_OF_OVERRULE)
+                {
+                    Vector(1.0f, 1.0f, 1.0f, Light);
+                }
+
+                // Drawn from a copy at the item's drawn place.
+                OBJECT drawn = *o;
+                const Random::DrawnAs drawnAs(&drawn, o);
+                DrawnItemPosition(i, o->Position, drawn.Position);
+                RenderPartObject(&drawn, o->Type, NULL, Light, o->Alpha, DrawnItemLevel(Items[i].Item),
+                                 Items[i].Item.ExcellentFlags, Items[i].Item.AncientDiscriminator, true, true, true);
+
+#ifdef _EDITOR
+                // Debug visualization: OBB used by SelectItem for ray-vs-pickup test.
+                if (s_bShowItemPickBoxes)
+                {
+                    RenderDebugBox(o->OBB.StartPos,
+                                   o->OBB.XAxis[0], o->OBB.YAxis[1], o->OBB.ZAxis[2],
+                                   1.0f, 0.0f, 1.0f);  // Magenta wireframe
+                }
+#endif
+            }
+        }
+    }
+}
+
+void PartObjectColor(int Type, float Alpha, float Bright, vec3_t Light, bool ExtraMon)
+{
+    // Monsters keep their colors here; items have theirs in the item model files.
+    std::array<float, 3> color{};
+    if (ExtraMon && (Type == MODEL_BALROG || Type == MODEL_BILL_OF_BALROG))
+    {
+        color = {0.8f, 0.8f, 1.0f};
+    }
+    else if (Type == MODEL_BALROG)
+    {
+        color = {1.0f, 0.2f, 0.0f};
+    }
+    else if (Type == MODEL_VALKYRIE)
+    {
+        color = {1.0f, 1.0f, 1.0f};
+    }
+    else
+    {
+        color = Render::Items::Glow::GetColors(Type).color;
+    }
+
+    Bright *= Alpha;
+    Vector(Bright * color[0], Bright * color[1], Bright * color[2], Light);
+}
+
+void PartObjectColor2(int Type, float Alpha, float Bright, vec3_t Light, bool ExtraMon)
+{
+    const Render::Items::Glow::Colors& colors = Render::Items::Glow::GetColors(Type);
+    if (colors.shineWhite)
+    {
+        Vector(1.f, 1.f, 1.f, Light);
+        return;
+    }
+
+    const Render::Items::Glow::Color& color = colors.shineColor;
+    Bright *= Alpha;
+    Vector(Bright * color[0] * Light[0], Bright * color[1] * Light[1], Bright * color[2] * Light[2], Light);
+}
+
+void PartObjectColor3(int Type, float Alpha, float Bright, vec3_t Light, bool ExtraMon)
+{
+    const Render::Items::Glow::Color& color = Render::Items::Glow::GetColors(Type).ancientColor;
+    Vector(color[0], color[1], color[2], Light);
+}
+
+// The models RenderPartObjectBody draws without a render style: plainly. The part models (the +15 armor
+// decorations, the Phoenix Soul Star's wing and the Phoenix Soul Armor's inventory model) draw with the render style
+// of their entry in PartModels.json (design L28).
+static void RenderModelWithoutStyle(BMD* b, const DrawLook& look, float Alpha, int RenderType)
+{
+    b->RenderBody(RenderType, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+}
+
+// Draws the cloth UpdateTransformSkinEffects simulates.
+static void RenderTransformSkinCloth(const OBJECT* o)
+{
+    if (auto* pCloth = (CPhysicsCloth*)o->m_pCloth)
+    {
+        for (int k = 0; k < o->m_byNumCloth; ++k)
+        {
+            pCloth[k].Render();
+        }
+    }
+}
+
+// Simulates a transformation's cloth; its draw renders it.
+static void SimulateTransformSkinCloth(OBJECT* o)
+{
+    auto* pCloth = (CPhysicsCloth*)o->m_pCloth;
+    float Flag = 0.005f;
+    if (o->SubType != MODEL_HALLOWEEN && (g_isCharacterBuff(o, eDeBuff_Stun) || g_isCharacterBuff(o, eDeBuff_Sleep)))
+    {
+        Flag = 0.0f;
+    }
+    for (int k = 0; k < o->m_byNumCloth; ++k)
+    {
+        if (pCloth[k].Move2(Flag, 5) == FALSE)
+        {
+            DeleteCloth(NULL, o);
+        }
+    }
+}
+
+void UpdateTransformSkinEffects(OBJECT* o)
+{
+    // Where RenderPartObject reaches RenderPartObjectBody's transformation branches: a player's body pass, not cloaked.
+    if (o->Kind != KIND_PLAYER || o->Type != MODEL_PLAYER || o->Alpha <= 0.01f || g_isCharacterBuff(o, eBuff_Cloaking))
+        return;
+
+    switch (o->SubType)
+    {
+    case MODEL_CURSEDTEMPLE_ALLIED_PLAYER:
+    case MODEL_CURSEDTEMPLE_ILLUSION_PLAYER:
+    {
+        BMD* b = &Models[o->SubType];
+        b->BodyScale = o->Scale;
+        VectorCopy(o->Position, b->BodyOrigin);
+        if (g_isCharacterBuff(o, eDeBuff_CursedTempleRestraint) || g_isCharacterBuff(o, eBuff_CursedTempleProdection))
+        {
+            vec3_t vRelativePos, vtaWorldPos, Light;
+            Vector(0.4f, 0.4f, 0.8f, Light);
+            Vector(0.f, 0.f, 0.f, vRelativePos);
+
+            int boneindex[15] = { 1, 2, 17, 18, 19, 20, 44, 25, 27, 34, 37, 3, 5, 10, 12 };
+
+            for (int j = 0; j < 15; ++j)
+            {
+                b->TransformPosition(o->BoneTransform[boneindex[j]], vRelativePos, vtaWorldPos, true);
+                CreateSprite(BITMAP_LIGHT, vtaWorldPos, 1.3f, Light, o);
+            }
+        }
+
+        if (o->SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER)
+        {
+            if (o->m_pCloth == NULL)
+            {
+                int iTex = BITMAP_CURSEDTEMPLE_ALLIED_PHYSICSCLOTH;
+                auto* pCloth = new CPhysicsCloth[1];
+                pCloth[0].Create(o, 19, 0.0f, 8.0f, 0.0f, 10, 10, 140.0f, 140.0f, iTex, iTex,
+                                 PCT_CURVED | PCT_SHORT_SHOULDER | PCT_MASK_ALPHA);
+                o->m_pCloth = (void*)pCloth;
+                o->m_byNumCloth = 1;
+            }
+        }
+        else
+        {
+            if (o->m_pCloth == NULL)
+            {
+                int iTex = BITMAP_CURSEDTEMPLE_ILLUSION_PHYSICSCLOTH;
+                auto* pCloth = new CPhysicsCloth[2];
+                pCloth[0].Create(o, 20, -4.0f, 5.0f, 0.0f, 10, 20, 17.0f, 100.0f, iTex, iTex,
+                                 PCT_SHAPE_HALLOWEEN | PCT_ELASTIC_HALLOWEEN | PCT_MASK_ALPHA);
+                o->m_pCloth = (void*)pCloth;
+                o->m_byNumCloth = 1;
+            }
+        }
+        SimulateTransformSkinCloth(o);
+    }
+    break;
+    case MODEL_HALLOWEEN:
+    {
+        BMD* b = &Models[o->SubType];
+        b->BodyScale = o->Scale;
+        VectorCopy(o->Position, b->BodyOrigin);
+        vec3_t vLight;
+        Vector(1.f, 1.f, 1.f, vLight);
+        vec3_t vPos, vRelativePos;
+        Vector(6.f, 6.f, 0.f, vRelativePos);
+        b->TransformPosition(o->BoneTransform[20], vRelativePos, vPos, true);
+        vPos[2] += 36.f;
+        if (rand_fps_check(2))
+        {
+            CreateParticle(BITMAP_TRUE_FIRE, vPos, o->Angle, vLight, 8, 0.5f, o);
+        }
+        CreateParticleFpsChecked(BITMAP_TRUE_FIRE, vPos, o->Angle, vLight, 9, 0.5f, o);
+
+        vPos[2] -= 5.0f;
+        float fLumi;
+        fLumi = (float)(Random::Rand() % 5 + 10) * 0.1f;
+        Vector(fLumi + 0.5f, fLumi * 0.3f + 0.1f, 0.f, vLight);
+        CreateSprite(BITMAP_LIGHT, vPos, 1.0f + fLumi * 0.1f, vLight, o);
+
+        if (rand_fps_check(8))
+        {
+            vPos[2] -= 10.0f;
+            fLumi = (float)(Random::Rand() % 100) * 0.01f;
+            vLight[0] = fLumi;
+            fLumi = (float)(Random::Rand() % 100) * 0.01f;
+            vLight[1] = fLumi;
+            fLumi = (float)(Random::Rand() % 100) * 0.01f;
+            vLight[2] = fLumi;
+            CreateParticle(BITMAP_SHINY, vPos, o->Angle, vLight, 4, 0.8f);
+        }
+
+        if (o->CurrentAction == PLAYER_JACK_1)
+        {
+            int iAnimationFrame = (int)o->AnimationFrame;
+
+            if (iAnimationFrame == 2 || iAnimationFrame == 9)
+            {
+                Vector(1.f, 1.f, 1.f, vLight);
+                vPos[2] -= 20.f;
+                CreateParticleFpsChecked(BITMAP_SPARK + 2, vPos, o->Angle, vLight, 0, 0.6f);
+                CreateParticleFpsChecked(BITMAP_SPARK + 2, vPos, o->Angle, vLight, 0, 0.6f);
+                for (int i = 0; i < 20; ++i)
+                {
+                    fLumi = (float)(Random::Rand() % 100) * 0.01f;
+                    vLight[0] = fLumi;
+                    fLumi = (float)(Random::Rand() % 100) * 0.01f;
+                    vLight[1] = fLumi;
+                    fLumi = (float)(Random::Rand() % 100) * 0.01f;
+                    vLight[2] = fLumi;
+                    CreateParticleFpsChecked(BITMAP_SHINY, vPos, o->Angle, vLight, 4, 0.8f);
+                }
+                o->m_iAnimation++;
+            }
+
+            if (o->m_iAnimation >= 40 && iAnimationFrame == 9)
+            {
+                Vector(1.f, 1.f, 1.f, vLight);
+                CreateEffect(MODEL_HALLOWEEN_EX, vPos, o->Angle, vLight, 0);
+                vPos[2] -= 40.f;
+                CreateParticleFpsChecked(BITMAP_SPARK + 2, vPos, o->Angle, vLight, 1);
+                SetAction(o, PLAYER_SHOCK);
+                SendRequestAction(*o, PLAYER_SHOCK);
+                o->m_iAnimation = 0;
+            }
+        }
+        else if (o->CurrentAction == PLAYER_JACK_2)
+        {
+            int iAnimationFrame = (int)o->AnimationFrame;
+
+            if (iAnimationFrame == 10 || iAnimationFrame == 19)
+            {
+                Vector(1.f, 1.f, 1.f, vLight);
+                vPos[2] -= 20.f;
+                CreateParticleFpsChecked(BITMAP_SPARK + 2, vPos, o->Angle, vLight, 0, 0.6f);
+                CreateParticleFpsChecked(BITMAP_SPARK + 2, vPos, o->Angle, vLight, 0, 0.6f);
+                for (int i = 0; i < 20; ++i)
+                {
+                    fLumi = (float)(Random::Rand() % 100) * 0.01f;
+                    vLight[0] = fLumi;
+                    fLumi = (float)(Random::Rand() % 100) * 0.01f;
+                    vLight[1] = fLumi;
+                    fLumi = (float)(Random::Rand() % 100) * 0.01f;
+                    vLight[2] = fLumi;
+                    CreateParticleFpsChecked(BITMAP_SHINY, vPos, o->Angle, vLight, 4, 0.8f);
+                }
+                o->m_iAnimation++;
+            }
+
+            if (o->m_iAnimation >= 40 && iAnimationFrame == 19)
+            {
+                Vector(1.f, 1.f, 1.f, vLight);
+                CreateEffect(MODEL_HALLOWEEN_EX, vPos, o->Angle, vLight, 0);
+                vPos[2] -= 40.f;
+                CreateParticleFpsChecked(BITMAP_SPARK + 2, vPos, o->Angle, vLight, 1);
+                SetAction(o, PLAYER_SHOCK);
+                SendRequestAction(*o, PLAYER_SHOCK);
+                o->m_iAnimation = 0;
+            }
+        }
+
+        if (o->m_pCloth == NULL)
+        {
+            int iTex = BITMAP_ROBE + 3;
+            auto* pCloth = new CPhysicsCloth[1];
+            pCloth[0].Create(o, 19, 0.0f, 10.0f, 0.0f, 10, 20, 30.0f, 200.0f, iTex, iTex, PCT_SHAPE_HALLOWEEN | PCT_ELASTIC_HALLOWEEN | PCT_MASK_ALPHA);
+            o->m_pCloth = (void*)pCloth;
+            o->m_byNumCloth = 1;
+        }
+        SimulateTransformSkinCloth(o);
+    }
+    break;
+    case MODEL_PANDA:
+    {
+        vec3_t Light;
+        vec3_t vPos;
+
+        Vector(1.f, 0.6f, 0.2f, Light);
+        if (rand_fps_check(100))
+        {
+            CreateEffect(MODEL_ARROWSRE06, vPos, o->Angle, Light, 2, o, 0, 0, 0, 0, 1.f);
+            CreateEffect(MODEL_ARROWSRE06, vPos, o->Angle, Light, 2, o, 1, 0, 0, 0, 1.f);
+        }
+    }
+    break;
+    case MODEL_XMAS_EVENT_CHANGE_GIRL:
+    {
+        static int iPriorAnimationFrame = 0;
+        int iAnimationFrame = (int)o->AnimationFrame;
+
+        if (o->CurrentAction == PLAYER_SANTA_1)
+        {
+            if (iAnimationFrame == 4 || iAnimationFrame == 8 || iAnimationFrame == 12)
+            {
+                int iEffectType = Random::Rand() % 4 + MODEL_XMAS_EVENT_BOX;
+                vec3_t vPos;
+                vec3_t vLight;
+                Vector(1.f, 1.f, 1.f, vLight);
+                VectorCopy(o->Position, vPos);
+                vPos[2] += 230.f;
+                for (int i = 0; i < 2; ++i)
+                {
+                    CreateEffectFpsChecked(iEffectType, vPos, o->Angle, o->Light);
+                    CreateParticleFpsChecked(BITMAP_SPARK + 1, vPos, o->Angle, o->Light, 20, 1.f);
+                }
+                for (int i = 0; i < 5; ++i)
+                {
+                    CreateParticleFpsChecked(BITMAP_SPARK + 1, vPos, o->Angle, vLight, 20, 1.f);
+                }
+            }
+            if (iAnimationFrame >= 19 && iPriorAnimationFrame != iAnimationFrame)
+            {
+                o->m_iAnimation++;
+            }
+        }
+        else if (o->CurrentAction == PLAYER_SANTA_2)
+        {
+            vec3_t vPos, vLight;
+            VectorCopy(o->Position, vPos);
+            vPos[2] += 230;
+            Vector(1.f, 1.f, 1.f, vLight);
+            CreateParticleFpsChecked(BITMAP_SPARK + 1, vPos, o->Angle, vLight, 20, 1.f);
+            CreateParticleFpsChecked(BITMAP_SMOKE, vPos, o->Angle, vLight, 4, 2.0f);
+            if (rand_fps_check(6))
+            {
+                CreateParticle(BITMAP_SNOW_EFFECT_1, vPos, o->Angle, vLight, 0, 0.3f);
+            }
+            if (rand_fps_check(3))
+            {
+                CreateParticle(BITMAP_SNOW_EFFECT_2, vPos, o->Angle, vLight, 0, 0.5f);
+            }
+
+            if (iAnimationFrame >= 14 && iPriorAnimationFrame != iAnimationFrame)
+            {
+                o->m_iAnimation++;
+                DeleteEffect(MODEL_XMAS_EVENT_ICEHEART, NULL);
+                DeleteParticle(BITMAP_DS_EFFECT);
+                DeleteParticle(BITMAP_LIGHT);
+            }
+        }
+
+        iPriorAnimationFrame = iAnimationFrame;
+    }
+    break;
+    case MODEL_GM_CHARACTER:
+    {
+        o->HiddenMesh = 2;
+        BMD* b = &Models[o->SubType];
+        b->BodyScale = o->Scale;
+        VectorCopy(o->Position, b->BodyOrigin);
+        vec3_t vRelativePos, vPos, vLight, vLight2;
+        float fLight;
+        fLight = sinf(WorldTime * 0.08f) * 0.2f + 0.2f;
+
+        Vector(0.f, 0.3f, 1.2f, vLight);
+        Vector(0.3f + fLight, 0.f + fLight, 0.1f + fLight, vLight2);
+
+        Vector(0.f, 0.f, -7.5f, vRelativePos);
+        b->TransformPosition(o->BoneTransform[26], vRelativePos, vPos, true);
+        CreateSprite(BITMAP_SHINY + 1, vPos, 0.9f, vLight, o, -WorldTime * 0.08f);
+        CreateSprite(BITMAP_LIGHT + 3, vPos, 0.8f, vLight2, o, WorldTime * 0.3f);
+
+        Vector(0.f, 0.f, 7.5f, vRelativePos);
+        b->TransformPosition(o->BoneTransform[35], vRelativePos, vPos, true);
+        CreateSprite(BITMAP_SHINY + 1, vPos, 0.9f, vLight, o, WorldTime * 0.08f);
+        CreateSprite(BITMAP_LIGHT + 3, vPos, 0.8f, vLight2, o, -WorldTime * 0.3f);
+
+        Vector(-5.f, 2.5f, 0.f, vRelativePos);
+        b->TransformPosition(o->BoneTransform[5], vRelativePos, vPos, true);
+        CreateSprite(BITMAP_SHINY + 1, vPos, 0.9f, vLight, o, -WorldTime * 0.08f);
+        CreateSprite(BITMAP_LIGHT + 3, vPos, 0.8f, vLight2, o, WorldTime * 0.3f);
+
+        b->TransformPosition(o->BoneTransform[12], vRelativePos, vPos, true);
+        CreateSprite(BITMAP_SHINY + 1, vPos, 0.9f, vLight, o, -WorldTime * 0.08f);
+        CreateSprite(BITMAP_LIGHT + 3, vPos, 0.8f, vLight2, o, WorldTime * 0.3f);
+    }
+    break;
+    }
+}
+
+void RenderPartObjectBody(BMD* b, const OBJECT* o, DrawLook& look, int Type, float Alpha, int RenderType)
+{
+    if (Type == MODEL_ANGEL && b->NumMeshs)
+    {
+        b->RenderBody(RENDER_TEXTURE, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+        if (RenderType & RENDER_CHROME)
+        {
+            Vector(0.75f, 0.55f, 0.5f, b->BodyLight);
+            b->RenderMesh(0, RENDER_CHROME4 | RENDER_BRIGHT, Alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV);
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
+            b->RenderMesh(0, RENDER_CHROME | RENDER_TEXTURE | RENDER_BRIGHT, Alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU, look.blendMeshV);
+        }
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_SKELETON_PCBANG)
+    {
+        b->RenderBody(RenderType, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+        vec3_t Light;
+        VectorCopy(b->BodyLight, Light);
+        Vector(0.9f, 0.8f, 1.0f, b->BodyLight);
+        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV, BITMAP_FENRIR_THUNDER);
+        b->RenderBody(RENDER_BRIGHT | RENDER_METAL, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV, BITMAP_FENRIR_THUNDER);
+        VectorCopy(Light, b->BodyLight);
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_CURSEDTEMPLE_ALLIED_PLAYER)
+    {
+        b->RenderBody(RenderType, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV, 1);
+
+        if (g_isCharacterBuff(o, eDeBuff_CursedTempleRestraint))
+        {
+            float Luminosity = sinf(WorldTime * 0.002f) * 0.3f + 0.5f;
+            b->RenderMesh(1, RENDER_TEXTURE, 0.4f + Luminosity, 0, look.blendMeshLight * Luminosity,
+                          -WorldTime * 0.0005f, WorldTime * 0.0005f);
+        }
+        RenderTransformSkinCloth(o);
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_CURSEDTEMPLE_ILLUSION_PLAYER)
+    {
+        b->RenderBody(RenderType, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV, 2);
+
+        if (g_isCharacterBuff(o, eDeBuff_CursedTempleRestraint))
+        {
+            float Luminosity = sinf(WorldTime * 0.002f) * 0.3f + 0.5f;
+            b->RenderMesh(2, RENDER_TEXTURE, 0.4f + Luminosity, 0, look.blendMeshLight * Luminosity,
+                          -WorldTime * 0.0005f, WorldTime * 0.0005f);
+        }
+        RenderTransformSkinCloth(o);
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_HALLOWEEN)
+    {
+        b->RenderBody(RenderType, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+
+        if (o->CurrentAction == PLAYER_JACK_1 || o->CurrentAction == PLAYER_JACK_2)
+        {
+            // The pumpkin reddens as the update counts its swings.
+            float fStageG, fStageB;
+            fStageG = 0.8f - ((o->m_iAnimation / 40.f) * 0.8f);
+            if (fStageG < 0.2f)
+            {
+                fStageG = 0.2f;
+            }
+            fStageB = 0.8f - ((o->m_iAnimation / 40.f) * 0.9f);
+            if (fStageB < 0.1f)
+            {
+                fStageB = 0.1f;
+            }
+            vec3_t vLight;
+            VectorCopy(b->BodyLight, vLight);
+            Vector(1.f, fStageG, fStageB, b->BodyLight);
+            b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                          look.blendMeshV);
+            VectorCopy(vLight, b->BodyLight);
+        }
+        RenderTransformSkinCloth(o);
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_PANDA)
+    {
+        float fLumi = (sinf(WorldTime * 0.002f) + 1.f) * 0.5f;
+        b->RenderMesh(0, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV, look.hiddenMesh);
+        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV);
+        b->RenderMesh(1, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, 1, fLumi, look.blendMeshU, look.blendMeshV,
+                      BITMAP_PANDABODY_R);
+        b->RenderMesh(2, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV, look.hiddenMesh);
+        b->RenderMesh(3, RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV, look.hiddenMesh);
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_XMAS_EVENT_CHANGE_GIRL)
+    {
+        b->RenderBody(RenderType, Alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+    }
+    else if (o->SubType == MODEL_XMAS_EVENT_CHA_DEER)
+    {
+        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                      look.hiddenMesh);
+        float fLumi = (sinf(WorldTime * 0.002f) + 1.f) * 0.5f;
+        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, fLumi, look.blendMeshU, look.blendMeshV, BITMAP_BLOOD + 1);
+        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, fLumi, look.blendMeshU, look.blendMeshV, BITMAP_BLOOD + 1);
+        b->RenderMesh(1, RENDER_TEXTURE, look.alpha, 1, fLumi, look.blendMeshU, look.blendMeshV, BITMAP_BLOOD + 1);
+    }
+    else if (o->Kind == KIND_PLAYER && o->Type == MODEL_PLAYER && o->SubType == MODEL_GM_CHARACTER)
+    {
+        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                      look.hiddenMesh);
+        b->RenderMesh(2, RENDER_TEXTURE | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight,
+                      look.blendMeshU, look.blendMeshV);
+    }
+    else
+    {
+        // Items are drawn with the render style of their model entry, after
+        // the player transformations: a transformed Rage Fighter draws its
+        // sword-form gloves with the look of the transformation.
+        if (!Render::Items::Styles::Render(b, o, look, Type, Alpha, RenderType))
+        {
+            RenderModelWithoutStyle(b, look, Alpha, RenderType);
+        }
+    }
+}
+
+void RenderPartObjectBodyColor(BMD* b, const OBJECT* o, DrawLook& look, int Type, float Alpha, int RenderType,
+                               float Bright, int Texture, int iMonsterIndex)
+{
+    if (Type >= MODEL_HELM_MONK && Type <= MODEL_BOOTS_MONK + MODEL_ITEM_COMMONCNT_RAGEFIGHTER)
+        Type = g_CMonkSystem.OrginalTypeCommonItemMonk(Type);
+    if ((RenderType & RENDER_LIGHTMAP) == RENDER_LIGHTMAP)
+    {
+        Vector(1.f, 1.f, 1.f, b->BodyLight);
+    }
+    else if (Type == MODEL_DRAKAN)
+    {
+        if (RenderType & RENDER_EXTRA)
+        {
+            RenderType -= RENDER_EXTRA;
+            Vector(1.f, 0.1f, 0.1f, b->BodyLight);
+        }
+        else
+        {
+            Vector(0.2f, 0.2f, 0.8f, b->BodyLight);
+            //Vector(1.0f,0.5f,0.0f,b->BodyLight);
+        }
+    }
+    else if (iMonsterIndex >= 493 && iMonsterIndex <= 502)
+    {
+        if (iMonsterIndex == 495)
+        {
+            Vector(1.0f, 0.8f, 0.0f, b->BodyLight);
+        }
+        else if (iMonsterIndex == 496)
+        {
+            Vector(1.0f, 0.6f, 0.0f, b->BodyLight);
+        }
+        else if (iMonsterIndex == 499)
+        {
+            Vector(1.0f, 0.5f, 0.0f, b->BodyLight);
+        }
+        else if (iMonsterIndex == 501)
+        {
+            Vector(1.0f, 0.5f, 0.0f, b->BodyLight);
+        }
+        else
+        {
+            Vector(1.f, 0.6f, 0.1f, b->BodyLight);
+        }
+    }
+    else
+    {
+        PartObjectColor(Type, Alpha, Bright, b->BodyLight, (RenderType & RENDER_EXTRA) ? true : false);
+    }
+
+    Render::Items::Glow::RenderGlow(b, o, look, Type, Alpha, RenderType, Texture);
+}
+
+void RenderPartObjectBodyColor2(BMD* b, const OBJECT* o, DrawLook& look, int Type, float Alpha, int RenderType,
+                                float Bright, int Texture)
+{
+    if (Type >= MODEL_HELM_MONK && Type <= MODEL_BOOTS_MONK + MODEL_ITEM_COMMONCNT_RAGEFIGHTER)
+        Type = g_CMonkSystem.OrginalTypeCommonItemMonk(Type);
+
+    if ((RenderType & RENDER_LIGHTMAP) == RENDER_LIGHTMAP)
+    {
+        Vector(1.f, 1.f, 1.f, b->BodyLight);
+    }
+    else if ((RenderType & RENDER_CHROME3) == RENDER_CHROME3)
+    {
+        PartObjectColor3(Type, Alpha, Bright, b->BodyLight, (RenderType & RENDER_EXTRA) ? true : false);
+    }
+    else
+    {
+        PartObjectColor2(Type, Alpha, Bright, b->BodyLight, (RenderType & RENDER_EXTRA) ? true : false);
+    }
+    Render::Items::Glow::RenderShine(b, o, look, Type, Alpha, RenderType, Texture);
+}
+
+void RenderPartObjectBodyColor(BMD* b, const OBJECT* o, int Type, float Alpha, int RenderType, float Bright,
+                               int Texture, int iMonsterIndex)
+{
+    DrawLook look = DrawLook::Of(*o);
+    RenderPartObjectBodyColor(b, o, look, Type, Alpha, RenderType, Bright, Texture, iMonsterIndex);
+}
+
+void RenderPartObjectBodyColor2(BMD* b, const OBJECT* o, int Type, float Alpha, int RenderType, float Bright,
+                                int Texture)
+{
+    DrawLook look = DrawLook::Of(*o);
+    RenderPartObjectBodyColor2(b, o, look, Type, Alpha, RenderType, Bright, Texture);
+}
+
+void SpawnNextGradeWeaponEffects(CHARACTER* c)
+{
+    int weaponIndex;
+    int weaponIndex2;
+    BMD* b = &Models[c->Object.Type];
+    vec3_t vRelativePos, vPos, vLight;
+    float fLight2, fScale;
+    int Level;
+    PART_t* w;
+
+    for (int i = 0; i < 2; i++)
+    {
+        w = &c->Weapon[i];
+        Level = w->Level;
+        if (Level < 15 || w->Type == -1) continue;
+
+        if (MODEL_BOW <= w->Type && w->Type < MODEL_STAFF)
+        {
+            weaponIndex = 27;
+            weaponIndex2 = 28;
+        }
+        else
+        {
+            weaponIndex = (i == 0 ? 27 : 36);
+            weaponIndex2 = (i == 0 ? 28 : 37);
+        }
+
+        switch (Level)
+        {
+        case 15:
+        {
+            Vector(0.0f, 0.0f, 0.0f, vRelativePos);
+            b->TransformByObjectBone(vPos, &c->Object, weaponIndex, vRelativePos);
+            Vector(1.0f, 0.6f, 0.0f, vLight);
+            CreateSprite(BITMAP_LIGHT, vPos, 0.6f, vLight, &c->Object);
+
+            Vector(10.0f, 0.0f, 0.0f, vRelativePos);
+            b->TransformByObjectBone(vPos, &c->Object, weaponIndex, vRelativePos);
+            Vector(1.0f, 0.6f, 0.0f, vLight);
+            CreateSprite(BITMAP_LIGHT, vPos, 0.6f, vLight, &c->Object);
+
+            Vector(20.0f, 0.0f, 0.0f, vRelativePos);
+            b->TransformByObjectBone(vPos, &c->Object, weaponIndex, vRelativePos);
+            Vector(1.0f, 0.6f, 0.0f, vLight);
+            CreateSprite(BITMAP_LIGHT, vPos, 0.6f, vLight, &c->Object);
+
+            Vector(10.0f, 0.0f, 0.0f, vRelativePos);
+            b->TransformByObjectBone(vPos, &c->Object, weaponIndex2, vRelativePos);
+
+            fLight2 = absf(sinf(WorldTime * 0.002f));
+            Vector(0.7f * fLight2 + 0.3f, 0.1f * fLight2 + 0.1f, 0.0f, vLight);
+            CreateSprite(BITMAP_MAGIC, vPos, 0.35f, vLight, &c->Object);
+
+            Vector(1.0f, 1.0f, 1.0f, vLight);
+            fScale = (float)(Random::Rand() % 60) * 0.01f;
+            CreateSprite(BITMAP_FLARE_RED, vPos, 0.6f * fScale + 0.4f, vLight, &c->Object);
+
+            Vector(1.0f, 0.2f, 0.0f, vLight);
+            fScale = (float)(Random::Rand() % 80 + 10) * 0.01f * 1.0f;
+            CreateParticleFpsChecked(BITMAP_LIGHTNING_MEGA1 + Random::Rand() % 3, vPos, c->Object.Angle, vLight, 0,
+                                     fScale);
+        }break;
+        }//switch
+    } //for
+}
+
+void NextGradeObjectRender(const CHARACTER* c)
+{
+    ForEachNextGradeObject(c, [c](const PART_t* w, int type, int bone)
+                           { RenderLinkObject(0.f, 0.f, 0.f, c, w, type, 0, 0, true, true, 0, true, bone); });
+}
+
+void ForEachNextGradeObject(CHARACTER* c, const std::function<void(PART_t* part, int type, int bone)>& visit)
+{
+    // The parts are c's, which the caller may change.
+    ForEachNextGradeObject(static_cast<const CHARACTER*>(c), [&visit](const PART_t* part, int type, int bone)
+                           { visit(const_cast<PART_t*>(part), type, bone); });
+}
+
+void ForEachNextGradeObject(const CHARACTER* c,
+                            const std::function<void(const PART_t* part, int type, int bone)>& visit)
+{
+    int Level;
+    const PART_t* w;
+    int bornIndex[2]{}; // left, right;
+    int gradeType[2]{}; // left, right;
+
+    for (int k = 0; k < MAX_BODYPART; k++)
+    {
+        w = &c->BodyPart[k];
+        Level = w->Level;
+
+        if (k == 0) continue;
+        if (Level < 15 || w->Type == -1) continue;
+
+        switch (k)
+        {
+        case 1:
+        {
+            bornIndex[0] = 20;
+            bornIndex[1] = -1;
+            gradeType[0] = MODEL_15GRADE_ARMOR_OBJ_HEAD;
+            gradeType[1] = -1;
+        }break;
+        case 2:
+        {
+            bornIndex[0] = 35;
+            bornIndex[1] = 26;
+            gradeType[0] = MODEL_15GRADE_ARMOR_OBJ_BODYLEFT;
+            gradeType[1] = MODEL_15GRADE_ARMOR_OBJ_BODYRIGHT;
+        }break;
+        case 3:
+        {
+            bornIndex[0] = 3;
+            bornIndex[1] = 10;
+            gradeType[0] = MODEL_15GRADE_ARMOR_OBJ_PANTLEFT;
+            gradeType[1] = MODEL_15GRADE_ARMOR_OBJ_PANTRIGHT;
+        }break;
+        case 4:
+        {
+            bornIndex[0] = 36;
+            bornIndex[1] = 27;
+            gradeType[0] = MODEL_15GRADE_ARMOR_OBJ_ARMLEFT;
+            gradeType[1] = MODEL_15GRADE_ARMOR_OBJ_ARMRIGHT;
+        }break;
+        case 5:
+        {
+            bornIndex[0] = 4;
+            bornIndex[1] = 11;
+            gradeType[0] = MODEL_15GRADE_ARMOR_OBJ_BOOTLEFT;
+            gradeType[1] = MODEL_15GRADE_ARMOR_OBJ_BOOTRIGHT;
+        }break;
+        default:
+            bornIndex[0] = -1;
+            bornIndex[1] = -1;
+            gradeType[0] = -1;
+            gradeType[1] = -1;
+            break;
+        }
+
+        for (int m = 0; m < 2; m++)
+        {
+            if (gradeType[m] == -1) continue;
+
+            switch (Level)
+            {
+            case 15: // +15
+            {
+                visit(w, gradeType[m], bornIndex[m]);
+            }break;
+            }
+        }
+    } //for
+}
+
+// The effects of the event models of level variants, which have no model
+// entry yet (the items have theirs in Render/Items/ItemEffects).
+static Render::Items::ItemEffects::Result ApplyEventModelEffect(BMD* b, const OBJECT* o, DrawLook& look, int Type,
+                                                                int Level, int ItemLevel)
+{
+    using Render::Items::ItemEffects::Result;
+    if (o->Type == MODEL_EVENT + 14 && Level == 9)
+    {
+        Vector(0.3f, 0.8f, 1.f, b->BodyLight);
+        b->RenderBody(RENDER_TEXTURE, look.alpha, -1, look.blendMeshLight, look.blendMeshU, look.blendMeshV);
+        Vector(1.f, 0.8f, 0.3f, b->BodyLight);
+        b->RenderBody(RENDER_BRIGHT | RENDER_CHROME, look.alpha, -1, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV);
+        return Result::Drawn;
+    }
+    if (o->Type == MODEL_EVENT + 11)
+    {
+        Vector(0.9f, 0.9f, 0.9f, b->BodyLight);
+        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                      look.hiddenMesh);
+        b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, 0.5f, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV, -1, BITMAP_CHROME + 1);
+        return Result::Drawn;
+    }
+    if (Type == MODEL_EVENT + 5 && ItemLevel == 14)
+    {
+        Vector(0.2f, 0.3f, 0.5f, b->BodyLight);
+        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                      look.hiddenMesh);
+        Vector(0.1f, 0.3f, 1.f, b->BodyLight);
+        b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV);
+        b->RenderBody(RENDER_METAL | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV);
+        return Result::Drawn;
+    }
+    if (Type == MODEL_EVENT + 5 && ItemLevel == 15)
+    {
+        Vector(0.5f, 0.3f, 0.2f, b->BodyLight);
+        b->RenderBody(RENDER_TEXTURE, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU, look.blendMeshV,
+                      look.hiddenMesh);
+        Vector(1.f, 0.3f, 0.1f, b->BodyLight);
+        b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV);
+        b->RenderBody(RENDER_METAL | RENDER_BRIGHT, look.alpha, look.blendMesh, look.blendMeshLight, look.blendMeshU,
+                      look.blendMeshV);
+        return Result::Drawn;
+    }
+    if (o->Type == MODEL_EVENT + 12)
+    {
+        return Result::Applied;
+    }
+    if (o->Type == MODEL_EVENT + 6 && Level == 13)
+    {
+        Vector(0.4f, 0.6f, 1.0f, b->BodyLight);
+        b->RenderBody(RENDER_COLOR, 1.0f, 0, 1.0f, look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+        b->RenderBody(RENDER_CHROME | RENDER_BRIGHT, 1.0f, 0, 1.0f, look.blendMeshU, look.blendMeshV, look.hiddenMesh);
+        return Result::Drawn;
+    }
+    if (o->Type == MODEL_EVENT + 13)
+    {
+        b->StreamMesh = 0;
+        look.blendMeshV = (int)-WorldTime % 4000 * 0.00025f;
+        return Result::Applied;
+    }
+    if (Type == MODEL_EVENT + 18)
+    {
+        look.blendMesh = 1;
+        return Result::Applied;
+    }
+    return Result::None;
+}
+
+// Items have the item effect of their model entry; the event models of level
+// variants have theirs in ApplyEventModelEffect.
+Render::Items::ItemEffects::Result ApplyPartObjectEffect(BMD* b, const OBJECT* o, DrawLook& look, int Type,
+                                                         float& Alpha, int& Level, int ItemLevel)
+{
+    const Render::Items::ItemEffects::Result effect = Render::Items::ItemEffects::Apply(b, o, look, Type, Alpha, Level);
+    return effect != Render::Items::ItemEffects::Result::None
+               ? effect
+               : ApplyEventModelEffect(b, o, look, Type, Level, ItemLevel);
+}
+
+// The two event models that spark have no item effect of their own.
+static bool IsSparkingEventModel(const OBJECT* o)
+{
+    return o->Type == MODEL_EVENT + 12 || o->Type == MODEL_EVENT + 13;
+}
+
+bool PartObjectSpawns(const OBJECT* o, int Type)
+{
+    return Render::Items::ItemEffects::Spawns(Type) || Render::Items::Styles::Spawns(Type) || IsSparkingEventModel(o);
+}
+
+void SpawnPartObjectEffect(BMD* b, OBJECT* o, int Type, vec34_t* bones)
+{
+    if (Render::Items::ItemEffects::Spawns(Type))
+    {
+        Render::Items::ItemEffects::Spawn(b, o, Type, bones);
+        return;
+    }
+    if (Render::Items::Styles::Spawns(Type))
+    {
+        Render::Items::Styles::Spawn(b, o, Type, bones);
+        return;
+    }
+    if (!IsSparkingEventModel(o))
+        return;
+
+    const bool red = o->Type == MODEL_EVENT + 13;
+    float Luminosity = (float)sinf((WorldTime) * 0.002f) * 0.35f + 0.65f;
+    vec3_t p, Position, EffLight;
+    if (red)
+    {
+        Vector(0.f, -5.f, -15.f, p);
+        Vector(Luminosity * 2.f, Luminosity * 0.32f, Luminosity * 0.32f, EffLight);
+    }
+    else
+    {
+        Vector(0.f, 0.f, 15.f, p);
+        Vector(Luminosity * 0.32f, Luminosity * 0.32f, Luminosity * 2.f, EffLight);
+    }
+    const float Scale = Luminosity * 0.8f + (red ? 2.5f : 2.f);
+
+    b->TransformPosition(bones[0], p, Position);
+    VectorAdd(Position, o->Position, Position);
+    CreateSprite(BITMAP_SPARK + 1, Position, Scale, EffLight, o);
+}
+
+void RefreshStunSkull(OBJECT* o, vec3_t Light)
+{
+    // RenderPartObjectEffect shows the stun's tint only without cloak, poison or Blow of Destruction.
+    if (g_isCharacterBuff(o, eBuff_Cloaking) || g_isCharacterBuff(o, eDeBuff_Poison) ||
+        g_isCharacterBuff(o, eDeBuff_BlowOfDestruction) || !g_isCharacterBuff(o, eDeBuff_Stun))
+        return;
+    DeleteEffect(BITMAP_SKULL, o, 5);
+    CreateEffect(BITMAP_SKULL, o->Position, o->Angle, Light, 5, o);
+}
+
+extern float g_Luminosity;
+
+void RenderPartObjectEffect(const OBJECT* o, int Type, const vec3_t Light, float Alpha, int ItemLevel,
+                            int ExcellentFlags, int ancientDiscriminator, int Select, int RenderType)
+{
+    // The item effects and styles change the look for this draw; the object keeps its own.
+    DrawLook look = DrawLook::Of(*o);
+    int Level = ItemLevel;
+    // Without the option window (headless, or before the UI exists) everything is drawn at the highest level.
+    const int renderLevel = g_pOption != nullptr ? g_pOption->GetRenderLevel() : 4;
+    if (RenderType & RENDER_WAVE)
+    {
+        Level = 0;
+    }
+    BMD* b = &Models[Type];
+
+    // The level the item glows like, at most what the render level draws.
+    Level = Render::Items::Glow::GetLevel(Type, Level);
+    if (renderLevel < 4)
+    {
+        Level = std::min<int>(Level, renderLevel * 2 + 5);
+    }
+
+    if (DrawsShadow(o))
+    {
+        // The item effect's values first, as the drawing has them (design L49): a mesh it hides stays out of the
+        // shadow.
+        {
+            float shadowAlpha = Alpha;
+            int shadowLevel = Level;
+            Render::Items::ItemEffects::Apply(b, o, look, Type, shadowAlpha, shadowLevel);
+        }
+        if (gMapManager.WorldActive == 7)
+        {
+            EnableAlphaTest();
+        }
+        else
+        {
+            DisableAlphaBlend();
+        }
+        bool bRenderShadow = true;
+
+        if (gMapManager.InHellas())
+        {
+            bRenderShadow = false;
+        }
+
+        if (WD_10HEAVEN == gMapManager.WorldActive || o->m_bySkillCount == 3 || g_Direction.m_CKanturu.IsMayaScene())
+        {
+            bRenderShadow = false;
+        }
+
+        if (g_isCharacterBuff(o, eBuff_Cloaking))
+        {
+            bRenderShadow = false;
+        }
+
+        if (bRenderShadow)
+        {
+            if (o->m_bRenderShadow)
+            {
+                int iHiddenMesh =
+                    s_shadowHiddenMesh != ShadowPass::ObjectHiddenMesh ? s_shadowHiddenMesh : look.hiddenMesh;
+
+                if (o->Type == MODEL_DREADFEAR)
+                {
+                    iHiddenMesh = 2;
+                }
+                else if (o->Type == MODEL_GAYION)
+                {
+                    iHiddenMesh = 0;
+                }
+
+                const DrawnModelLodScope lod(*b, *o, Type);
+                b->RenderBodyShadow(look.blendMesh, iHiddenMesh);
+            }
+        }
+        return;
+    }
+
+    if (ApplyPartObjectEffect(b, o, look, Type, Alpha, Level, ItemLevel) == Render::Items::ItemEffects::Result::Drawn)
+    {
+        return;
+    }
+    // The level the look's conditions read.
+    look.level = Level;
+    // A render style that draws alone draws here, as the item effects that drew the model did (design L47): in the
+    // object's own light, with nothing of the drawing below after it.
+    if (Render::Items::Styles::DrawsAlone(Type) && Render::Items::Styles::Render(b, o, look, Type, Alpha, RenderType))
+    {
+        return;
+    }
+
+    if (!DrawsShadow(o))
+    {
+        float Luminosity = 1.f;
+
+        if (g_isCharacterBuff(o, eBuff_Cloaking))
+        {
+            Alpha = 0.5f;
+            Vector(1.f, 1.f, 1.f, b->BodyLight);
+            b->RenderBody(RENDER_BRIGHT | RENDER_CHROME5, Alpha, look.blendMesh, look.blendMeshLight,
+                          look.blendMeshU * 8.f, look.blendMeshV * 2.f, -1, BITMAP_CHROME2);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_Poison) && g_isCharacterBuff(o, eDeBuff_Freeze))
+        {
+            Vector(Luminosity * 0.3f, Luminosity * 1.f, Luminosity * 1.f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_BlowOfDestruction))
+        {
+            Vector(Luminosity * 0.3f, Luminosity * 1.f, Luminosity * 1.f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_Poison))
+        {
+            Vector(Luminosity * 0.3f, Luminosity * 1.f, Luminosity * 0.5f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_Stun))
+        {
+            Vector(Luminosity * 0.f, Luminosity * 0.f, Luminosity * 1.0f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_Freeze))
+        {
+            Vector(Luminosity * 0.3f, Luminosity * 0.5f, Luminosity * 1.f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_BlowOfDestruction))
+        {
+            Vector(Luminosity * 0.3f, Luminosity * 0.5f, Luminosity * 1.f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (g_isCharacterBuff(o, eDeBuff_Harden))
+        {
+            Vector(Luminosity * 0.3f, Luminosity * 0.5f, Luminosity * 1.f, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (Level < 3)
+        {
+            // Some items shine below +3; their glow names the shine (design L30).
+            const Data::Effects::Shine* shine = Render::Items::Glow::FindShineBelowPlus3(Type);
+            if (shine == nullptr)
+            {
+                VectorCopy(Light, b->BodyLight);
+            }
+            else if (shine->light)
+            {
+                const auto factor = static_cast<float>(*shine->light);
+                Vector(Light[0] * factor, Light[1] * factor, Light[2] * factor, b->BodyLight);
+            }
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+            if (shine != nullptr)
+            {
+                for (const Data::Effects::ShinePass& pass : shine->passes)
+                {
+                    RenderPartObjectBodyColor2(b, o, look, Type, static_cast<float>(pass.opacity),
+                                               Render::Items::Glow::RenderTypeOf(pass) | (RenderType & RENDER_EXTRA),
+                                               static_cast<float>(pass.brightness));
+                }
+            }
+        }
+        else if (Level < 5)
+        {
+            vec3_t l;
+            Vector(g_Luminosity, g_Luminosity * 0.6f, g_Luminosity * 0.6f, l);
+            VectorMul(l, Light, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (Level < 7)
+        {
+            vec3_t l;
+            Vector(g_Luminosity * 0.5f, g_Luminosity * 0.7f, g_Luminosity, l);
+            VectorMul(l, Light, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+        else if (renderLevel)
+        {
+            if (Level < 8 && renderLevel >= 1) //  +7
+            {
+                Vector(Light[0] * 0.8f, Light[1] * 0.8f, Light[2] * 0.8f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha, RENDER_CHROME | RENDER_BRIGHT, 1.f);
+            }
+            else if (Level < 9 && renderLevel >= 1) //  +8
+            {
+                Vector(Light[0] * 0.8f, Light[1] * 0.8f, Light[2] * 0.8f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha, RENDER_CHROME | RENDER_BRIGHT, 1.f);
+            }
+            else if (Level < 10 && renderLevel >= 2) //  +9
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else if (Level < 11 && renderLevel >= 2) //  +10
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else if (Level < 12 && renderLevel >= 3) //  +11
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor2(b, o, look, Type, 1.f,
+                                           RENDER_CHROME2 | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else if (Level < 13 && renderLevel >= 3) //  +12
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor2(b, o, look, Type, 1.f,
+                                           RENDER_CHROME2 | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else if (Level < 14 && renderLevel >= 4) //  +13
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor2(b, o, look, Type, 1.f,
+                                           RENDER_CHROME4 | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else if (Level < 15 && renderLevel >= 4) //  +14
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor2(b, o, look, Type, 1.f,
+                                           RENDER_CHROME4 | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else if (Level < 16 && renderLevel >= 4) //  +15
+            {
+                Vector(Light[0] * 0.9f, Light[1] * 0.9f, Light[2] * 0.9f, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+                RenderPartObjectBodyColor2(b, o, look, Type, 1.f,
+                                           RENDER_CHROME4 | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_METAL | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+                RenderPartObjectBodyColor(b, o, look, Type, Alpha,
+                                          RENDER_CHROME | RENDER_BRIGHT | (RenderType & RENDER_EXTRA), 1.f);
+            }
+            else
+            {
+                VectorCopy(Light, b->BodyLight);
+                RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+            }
+        }
+        else
+        {
+            VectorCopy(Light, b->BodyLight);
+            RenderPartObjectBody(b, o, look, Type, Alpha, RenderType);
+        }
+
+        if (renderLevel == 0)
+        {
+            return;
+        }
+
+        if (!g_isCharacterBuff(o, eDeBuff_Harden) && !g_isCharacterBuff(o, eBuff_Cloaking)
+            && !g_isCharacterBuff(o, eDeBuff_CursedTempleRestraint)
+            )
+        {
+            if ((ExcellentFlags & 63) > 0 && Render::Items::Glow::HasExcellentGlow(o->Type))
+            {
+                Luminosity = sinf(WorldTime * 0.002f) * 0.5f + 0.5f;
+                Vector(Luminosity, Luminosity * 0.3f, 1.f - Luminosity, b->BodyLight);
+                Alpha = 1.f;
+                Render::Items::Glow::RenderExcellentGlow(b, o, look, Type, Alpha);
+            }
+            else if (ancientDiscriminator > 0)
+            {
+                Alpha = sinf(WorldTime * 0.001f) * 0.5f + 0.4f;
+                if (Alpha <= 0.01f)
+                {
+                    b->renderCount = Random::DrawRand(o, static_cast<std::uint32_t>(Type)) % 100;
+                }
+                RenderPartObjectBodyColor2(b, o, look, Type, Alpha, RENDER_CHROME3 | RENDER_BRIGHT, 1.f);
+            }
+        }
+    }
+#ifndef CAMERA_TEST
+    else
+    {
+        if (gMapManager.WorldActive == 7)
+        {
+            EnableAlphaTest();
+        }
+        else
+        {
+            DisableAlphaBlend();
+        }
+        bool bRenderShadow = true;
+
+        if (gMapManager.InHellas())
+        {
+            bRenderShadow = false;
+        }
+
+        if (WD_10HEAVEN == gMapManager.WorldActive || o->m_bySkillCount == 3 || g_Direction.m_CKanturu.IsMayaScene())
+        {
+            bRenderShadow = false;
+        }
+
+        if (g_isCharacterBuff(o, eBuff_Cloaking))
+        {
+            bRenderShadow = false;
+        }
+
+        if (bRenderShadow)
+        {
+            bRenderShadow = o->m_bRenderShadow;
+            if (bRenderShadow)
+            {
+                b->RenderBodyShadow(look.blendMesh, look.hiddenMesh);
+            }
+        }
+#endif
+    }
+}
+
+extern float BoneScale;
+
+void RenderPartObjectEdge(BMD* b, const OBJECT* o, int Flag, bool Translate, float Scale, float (*bones)[3][4],
+                          const DrawLook* look)
+{
+    const DrawLook drawn = look != nullptr ? *look : DrawLook::Of(*o);
+    if (g_isCharacterBuff(o, eBuff_Cloaking))
+    {
+        return;
+    }
+
+    b->LightEnable = false;
+
+    BoneScale = Scale;
+    const bool own = o->EnableBoneMatrix == 1;
+    if (bones == nullptr)
+        bones = own ? DrawnPose(o) : BoneTransform;
+    b->Transform(bones, o->BoundingBoxMin, o->BoundingBoxMax, nullptr, own && Translate);
+
+    if (o->Type == MODEL_WARCRAFT)
+    {
+        b->BeginRender(drawn.alpha);
+        b->RenderMesh(0, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+        b->EndRender();
+    }
+    else if (o->Type == MODEL_PERSONA)
+    {
+        b->RenderMesh(0, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+        b->RenderMesh(1, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+    }
+    else if (o->Type == MODEL_DREADFEAR)
+    {
+        b->RenderMesh(0, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+        b->RenderMesh(1, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+    }
+    else if (o->Type == MODEL_DARK_SKULL_SOLDIER_5)
+    {
+        b->RenderMesh(0, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+        b->RenderMesh(2, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+        b->RenderMesh(3, Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+    }
+    else
+    {
+        b->RenderBody(Flag, drawn.alpha, drawn.blendMesh, drawn.blendMeshLight, drawn.blendMeshU, drawn.blendMeshV,
+                      drawn.hiddenMesh);
+    }
+
+    BoneScale = 1.f;
+}
+
+// Which cloth a body part's model carries: 0 for none.
+static int PartClothKind(int Type)
+{
+    switch (Type)
+    {
+    case MODEL_GRAND_SOUL_PANTS:
+        return 1;
+    case MODEL_DIVINE_PANTS:
+        return 2;
+    case MODEL_DARK_SOUL_PANTS:
+        return 3;
+    }
+    return 0;
+}
+
+void StepPartCloth(OBJECT* o, PART_t* p, int Type, int ItemLevel, bool Translate)
+{
+    Type = Render::Items::Display::GetDrawnModel(Type, ItemLevel);
+    if (p)
+    {
+        const int iCloth = PartClothKind(Type);
+        if (iCloth == 0 && !p->m_pCloth[0])
+            return;
+
+        // The cloth pins to the part's skinned vertices, which the part's draw skins first.
+        BMD* b = &Models[Type];
+        b->BodyScale = o->Scale;
+        VectorCopy(o->Position, b->BodyOrigin);
+        OBB_t obb;
+        b->TransformCheap(o->BoneTransform, o->BoundingBoxMin, o->BoundingBoxMax, &obb, Translate);
+
+        if (!p->m_pCloth[0] && iCloth > 0)
+        {
+            int iCount = 1;
+            CPhysicsClothMesh* pCloth[2] = {NULL, NULL};
+            switch (iCloth)
+            {
+            case 1:
+                if (!CPhysicsClothMesh::CanCreate(Type, 2, 5, 8))
+                    break;
+                pCloth[0] = new CPhysicsClothMesh;
+                pCloth[0]->Create(o, 2, 17, 0.0f, 9.0f, 7.0f, 5, 8, 45.0f, 85.0f, BITMAP_PANTS_G_SOUL,
+                                  BITMAP_PANTS_G_SOUL, PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER,
+                                  Type);
+                pCloth[0]->AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                break;
+            case 2:
+                if (!CPhysicsClothMesh::CanCreate(Type, 3))
+                    break;
+                iCount = 1;
+                pCloth[0] = new CPhysicsClothMesh;
+                pCloth[0]->Create(o, 3, 2, PCT_OPT_CORRECTEDFORCE | PCT_HEAVY, Type);
+                pCloth[0]->AddCollisionSphere(0.0f, 0.0f, -15.0f, 22.0f, 2);
+                pCloth[0]->AddCollisionSphere(0.0f, 0.0f, -27.0f, 23.0f, 2);
+                pCloth[0]->AddCollisionSphere(0.0f, 0.0f, -40.0f, 24.0f, 2);
+                pCloth[0]->AddCollisionSphere(0.0f, 0.0f, -54.0f, 25.0f, 2);
+                pCloth[0]->AddCollisionSphere(0.0f, 0.0f, -69.0f, 26.0f, 2);
+                break;
+            case 3:
+                if (!CPhysicsClothMesh::CanCreate(Type, 2, 7, 5))
+                    break;
+                pCloth[0] = new CPhysicsClothMesh;
+                pCloth[0]->Create(o, 2, 17, 0.0f, 9.0f, 7.0f, 7, 5, 50.0f, 100.0f, b->IndexTexture[b->Meshs[2].Texture],
+                                  b->IndexTexture[b->Meshs[2].Texture],
+                                  PCT_MASK_ALPHA | PCT_HEAVY | PCT_STICKED | PCT_SHORT_SHOULDER, Type);
+                pCloth[0]->AddCollisionSphere(0.0f, -15.0f, -20.0f, 30.0f, 2);
+                break;
+            }
+            p->m_byNumCloth = iCount;
+            p->m_pCloth[0] = (void*)pCloth[0];
+            p->m_pCloth[1] = (void*)pCloth[1];
+        }
+
+        if (p->m_pCloth[0])
+        {
+            if (iCloth > 0)
+            {
+                for (int i = 0; i < p->m_byNumCloth; ++i)
+                {
+                    auto* pCloth = (CPhysicsCloth*)p->m_pCloth[i];
+                    if (!pCloth->Move2(0.005f, 5))
+                    {
+                        DeleteCloth(NULL, o, p);
+                    }
+                }
+            }
+            else if (iCloth == 0)
+            {
+                DeleteCloth(NULL, o, p);
+            }
+        }
+    }
+}
+
+void RenderPartObject(const OBJECT* o, int Type, const void* p2, const vec3_t Light, float Alpha, int ItemLevel,
+                      int ExcellentFlags, int ancientDiscriminator, bool GlobalTransform, bool HideSkin, bool Translate,
+                      int Select, int RenderType)
+{
+    if (Alpha <= 0.01f)
+    {
+        return;
+    }
+
+    const auto* p = static_cast<const PART_t*>(p2);
+
+    Type = Render::Items::Display::GetDrawnModel(Type, ItemLevel);
+
+    BMD* b = &Models[Type];
+    b->HideSkin = HideSkin;
+    b->BodyScale = o->Scale;
+    b->ContrastEnable = o->ContrastEnable;
+    b->LightEnable = o->LightEnable;
+    VectorCopy(o->Position, b->BodyOrigin);
+
+    BoneScale = 1.f;
+    if (3 == Select)
+    {
+        BoneScale = 1.4f;
+    }
+    else if (2 == Select)
+    {
+        BoneScale = 1.2f;
+    }
+    else if (1 == Select)
+    {
+        float Scale = 1.2f;
+        Scale = o->m_fEdgeScale;
+        if (o->Kind == KIND_NPC)
+        {
+            Vector(0.02f, 0.1f, 0.f, b->BodyLight);
+        }
+        else
+        {
+            Vector(0.1f, 0.03f, 0.f, b->BodyLight);
+        }
+
+        if (gMapManager.InChaosCastle())
+        {
+            Vector(0.1f, 0.01f, 0.f, b->BodyLight);
+            Scale = 1.f + 0.1f / o->Scale;
+        }
+
+        RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale);
+        if (o->Kind == KIND_NPC)
+        {
+            Vector(0.16f, 0.7f, 0.f, b->BodyLight);
+        }
+        else
+        {
+            Vector(0.7f, 0.2f, 0.f, b->BodyLight);
+        }
+
+        if (gMapManager.InChaosCastle())
+        {
+            Vector(0.7f, 0.07f, 0.f, b->BodyLight);
+            Scale = 1.f + 0.04f / o->Scale + 0.02f;
+        }
+        RenderPartObjectEdge(b, o, RENDER_BRIGHT, Translate, Scale - 0.02f);
+    }
+    BodyLight(o, b);
+
+    if (GlobalTransform)
+    {
+        b->Transform(BoneTransform, o->BoundingBoxMin, o->BoundingBoxMax, nullptr, Translate);
+    }
+    else
+    {
+        b->Transform(DrawnPose(o), o->BoundingBoxMin, o->BoundingBoxMax, nullptr, Translate);
+    }
+
+    if (p && p->m_pCloth[0] && PartClothKind(Type) > 0)
+    {
+        for (int i = 0; i < p->m_byNumCloth; ++i)
+        {
+            ((CPhysicsCloth*)p->m_pCloth[i])->Render();
+        }
+    }
+
+    if (!g_CMonkSystem.RageFighterEffect(o, Type))
+        RenderPartObjectEffect(o, Type, Light, Alpha, ItemLevel, ExcellentFlags, ancientDiscriminator, Select, RenderType);
+}
+
+float AmbientShadowAngle = 180.f;
+
+void CopyShadowAngle(OBJECT* o, BMD* b)
+{
+    /*VectorCopy(o->ShadowAngle,b->ShadowAngle);
+    if(o->ShadowAlpha >= 0.5f)
+    {
+    }
+    else
+    {
+        b->ShadowAngle[2] = AmbientShadowAngle;
+    }*/
+}
+
+void InitShadowAngle()
+{
+    /*for(int i=0;i<16;i++)
+    {
+        for(int j=0;j<16;j++)
+        {
+            OBJECT_BLOCK *ob = &ObjectBlock[i*16+j];
+            OBJECT       *o  = ob->Head;
+            while(1)
+            {
+                if(o != NULL)
+                {
+                    if(o->Live && o->Visible)
+                    {
+                        o->Distance = 9999.f*9999.f;
+                        o->ShadowAlpha = 0.f;
+                    }
+                    if(o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }*/
+}
+
+void ShadowAngle(OBJECT* Owner)
+{
+    /*for(int i=0;i<16;i++)
+    {
+        for(int j=0;j<16;j++)
+        {
+            OBJECT_BLOCK *ob = &ObjectBlock[i*16+j];
+            OBJECT       *o  = ob->Head;
+            while(1)
+            {
+                if(o != NULL)
+                {
+                    if(o->Live && o->Visible)
+                    {
+                        vec3_t Range;
+                        VectorSubtract(Owner->Position,o->Position,Range);
+                        float Distance = Range[0]*Range[0]+Range[1]*Range[1];
+                        if(Distance<=400.f*400.f && o->Distance>Distance)
+                        {
+                            o->Distance = Distance;
+                            o->ShadowAlpha = (400.f*400.f-Distance)/(400.f*400.f);
+                            o->ShadowAngle[2] = 360.f-CreateAngle2D(o->Position, Owner->Position);
+                        }
+                    }
+                    if(o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }*/
+}
+
+void CreateShadowAngle()
+{
+    for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            OBJECT_BLOCK* ob = &ObjectBlock[i * 16 + j];
+            OBJECT* o = ob->Head;
+            while (1)
+            {
+                if (o != NULL)
+                {
+                    if (o->Live)
+                    {
+                        o->Visible = true;
+                        ShadowAngle(o);
+                    }
+                    if (o->Next == NULL) break;
+                    o = o->Next;
+                }
+                else break;
+            }
+        }
+    }
+}
+
+void RenderObjectShadow()
+{
+}
+
+bool IsPartyMemberBuff(int partyindex, eBuffState buffstate)
+{
+    return false;
+}
+
+bool isPartyMemberBuff(int partyindex)
+{
+    return false;
+}
+
+#ifdef CSK_DEBUG_RENDER_BOUNDINGBOX
+void RenderBoundingBox(const OBJECT* pObj, std::uint32_t darkColor, std::uint32_t midColor, std::uint32_t lightColor)
+{
+    EnableAlphaBlend();
+    mu::GetRenderer().PushMatrix();
+
+    float Matrix[3][4];
+    AngleMatrix(pObj->Angle, Matrix);
+    Matrix[0][3] = pObj->Position[0];
+    Matrix[1][3] = pObj->Position[1];
+    Matrix[2][3] = pObj->Position[2];
+
+    vec3_t BoundingVertices[8];
+    Vector(pObj->BoundingBoxMax[0], pObj->BoundingBoxMax[1], pObj->BoundingBoxMax[2], BoundingVertices[0]);
+    Vector(pObj->BoundingBoxMax[0], pObj->BoundingBoxMax[1], pObj->BoundingBoxMin[2], BoundingVertices[1]);
+    Vector(pObj->BoundingBoxMax[0], pObj->BoundingBoxMin[1], pObj->BoundingBoxMax[2], BoundingVertices[2]);
+    Vector(pObj->BoundingBoxMax[0], pObj->BoundingBoxMin[1], pObj->BoundingBoxMin[2], BoundingVertices[3]);
+    Vector(pObj->BoundingBoxMin[0], pObj->BoundingBoxMax[1], pObj->BoundingBoxMax[2], BoundingVertices[4]);
+    Vector(pObj->BoundingBoxMin[0], pObj->BoundingBoxMax[1], pObj->BoundingBoxMin[2], BoundingVertices[5]);
+    Vector(pObj->BoundingBoxMin[0], pObj->BoundingBoxMin[1], pObj->BoundingBoxMax[2], BoundingVertices[6]);
+    Vector(pObj->BoundingBoxMin[0], pObj->BoundingBoxMin[1], pObj->BoundingBoxMin[2], BoundingVertices[7]);
+
+    vec3_t TransformVertices[8];
+    for (int j = 0; j < 8; j++)
+    {
+        VectorTransform(BoundingVertices[j], Matrix, TransformVertices[j]);
+    }
+
+    const auto MakeVertex = [](const vec3_t& position, std::uint32_t color) -> mu::Vertex3D
+    {
+        return {position[0], position[1], position[2], 0.f, 0.f, 1.f, 0.f, 0.f, color};
+    };
+
+    const mu::Vertex3D lineVertices[] = {
+        MakeVertex(TransformVertices[7], darkColor), MakeVertex(TransformVertices[6], darkColor),
+        MakeVertex(TransformVertices[4], darkColor), MakeVertex(TransformVertices[5], darkColor),
+        MakeVertex(TransformVertices[0], darkColor), MakeVertex(TransformVertices[2], darkColor),
+        MakeVertex(TransformVertices[3], darkColor), MakeVertex(TransformVertices[1], darkColor),
+        MakeVertex(TransformVertices[7], midColor), MakeVertex(TransformVertices[3], midColor),
+        MakeVertex(TransformVertices[2], midColor), MakeVertex(TransformVertices[6], midColor),
+        MakeVertex(TransformVertices[0], midColor), MakeVertex(TransformVertices[1], midColor),
+        MakeVertex(TransformVertices[5], midColor), MakeVertex(TransformVertices[4], midColor),
+        MakeVertex(TransformVertices[7], lightColor), MakeVertex(TransformVertices[5], lightColor),
+        MakeVertex(TransformVertices[1], lightColor), MakeVertex(TransformVertices[3], lightColor),
+        MakeVertex(TransformVertices[0], lightColor), MakeVertex(TransformVertices[4], lightColor),
+        MakeVertex(TransformVertices[6], lightColor), MakeVertex(TransformVertices[2], lightColor),
+    };
+    mu::GetRenderer().RenderLines(lineVertices, 0u);
+
+    mu::GetRenderer().PopMatrix();
+}
+#endif // CSK_DEBUG_RENDER_BOUNDINGBOX
+
+#ifdef _EDITOR
+// "Inflated hull" outline: draws pObj's own mesh pushed outward along each
+// vertex's normal, with each polygon's vertex order reversed. The renderer's
+// world-geometry pipeline always culls back faces (front_face is fixed CCW;
+// there is no cull-front-only mode - see SetCullFace()/SetFrontFace() in
+// MuRenderer.h), so reversing the winding here is what makes ONLY the
+// "inside" of this larger shell survive culling. Drawn after the object's
+// own normal render (same as this function's caller), depth testing then
+// hides that inner surface wherever the real, unexpanded mesh is nearer to
+// the camera - leaving only the sliver that pokes out past the real
+// silhouette, i.e. a thin outline shaped like the actual model instead of a
+// bounding-box cube.
+void RenderObjectOutline(const OBJECT* pObj, std::uint32_t color)
+{
+    if (pObj == nullptr || pObj->Type < 0)
+        return;
+    BMD* b = &Models[pObj->Type];
+    if (b->NumMeshs <= 0 || b->Meshs == nullptr)
+        return;
+
+    // VertexTransform/NormalTransform are shared, mesh-slot-keyed scratch
+    // buffers - any other object using the same model type could have
+    // overwritten them since pObj's own render call earlier this frame, so
+    // recompute pObj's current pose fresh right before reading them.
+    b->BodyScale = pObj->Scale;
+    b->CurrentAction = pObj->CurrentAction;
+    VectorCopy(pObj->Position, b->BodyOrigin);
+    vec3_t bbMin, bbMax;
+    OBB_t obb;
+    b->Animation(BoneTransform, pObj->AnimationFrame, pObj->PriorAnimationFrame, pObj->PriorAction, pObj->Angle,
+                pObj->HeadAngle, false, false);
+    b->Transform(BoneTransform, bbMin, bbMax, &obb, true);
+    // Transform() only eagerly fills VertexTransform/NormalTransform for every
+    // mesh when EditFlag == EDIT_OBJECT; otherwise it stashes the skin request
+    // and defers to these (idempotent, safe-to-call-unconditionally per their
+    // own doc comments) - call them directly so the outline has real data
+    // regardless of the current edit-flag state.
+    b->EnsureCpuVertices();
+    b->EnsureCpuNormals();
+
+    constexpr float kOutlineThickness = 3.0f; // world units
+
+    static std::vector<mu::Vertex3D> s_scratch;
+    s_scratch.clear();
+
+    for (int m = 0; m < b->NumMeshs; ++m)
+    {
+        const Mesh_t& mesh = b->Meshs[m];
+        for (int t = 0; t < mesh.NumTriangles; ++t)
+        {
+            const Triangle_t& tri = mesh.Triangles[t];
+            // Reversed iteration order (Polygon-1 down to 0) flips winding
+            // relative to the normal draw, which iterates 0 up to Polygon-1.
+            for (int k = tri.Polygon - 1; k >= 0; --k)
+            {
+                const int vi = tri.VertexIndex[k];
+                const int ni = tri.NormalIndex[k];
+                if (vi < 0 || vi >= mesh.NumVertices || ni < 0 || ni >= mesh.NumNormals)
+                    continue;
+                const float* pos = VertexTransform[m][vi];
+                const float* nrm = NormalTransform[m][ni];
+                s_scratch.push_back(mu::Vertex3D{pos[0] + nrm[0] * kOutlineThickness,
+                                                 pos[1] + nrm[1] * kOutlineThickness,
+                                                 pos[2] + nrm[2] * kOutlineThickness, 0.f, 0.f, 0.f, 0.f, 0.f, color});
+            }
+        }
+    }
+
+    if (s_scratch.empty())
+        return;
+
+    mu::GetRenderer().SetCullFace(true);
+    mu::GetRenderer().SetDepthTest(true);
+    mu::GetRenderer().DisableBlend();
+    mu::GetRenderer().RenderTriangles(s_scratch, 0u);
+}
+
+extern bool g_MapEditorPlacementPreviewActive;
+extern int g_MapEditorPlacementPreviewType;
+extern vec3_t g_MapEditorPlacementPreviewPos;
+extern float g_MapEditorPlacementPreviewYaw;
+extern float g_MapEditorPlacementPreviewScale;
+
+// Draws the currently-selected palette model, translucent, at the position a
+// click would place it - see the globals' doc comments in this file for how
+// CMapEditorUI::PlaceObjects() keeps them in sync every frame.
+void RenderPlacementPreview()
+{
+    if (!g_MapEditorPlacementPreviewActive || g_MapEditorPlacementPreviewType < 0)
+        return;
+    BMD* b = &Models[g_MapEditorPlacementPreviewType];
+    if (b->NumMeshs <= 0 || b->Meshs == nullptr)
+        return;
+
+    // Unlit, full-bright, same as the palette thumbnails - there's no real
+    // OBJECT yet to derive proper scene lighting from, and a flat readout of
+    // the model's own texture is enough to preview shape/placement.
+    b->BodyScale = g_MapEditorPlacementPreviewScale;
+    VectorCopy(g_MapEditorPlacementPreviewPos, b->BodyOrigin);
+    b->BodyHeight = 0.0f;
+    b->CurrentAction = 0;
+    b->LightEnable = false;
+    b->ContrastEnable = false;
+    b->BodyLight[0] = b->BodyLight[1] = b->BodyLight[2] = 1.0f;
+
+    BoneScale = 1.0f;
+    vec3_t angle = {0.0f, 0.0f, g_MapEditorPlacementPreviewYaw};
+    vec3_t head  = {0.0f, 0.0f, 0.0f};
+    b->Animation(BoneTransform, 0.0f, 0.0f, 0, angle, head, false, false);
+    // Animation() alone isn't enough: RenderBody()'s mesh skinning reads
+    // VertexTransform/NormalTransform, which are only materialized from
+    // Transform()'s stashed bone-matrix/translate/scale state (see
+    // RenderObjectOutline() above, which needs the same two-step sequence).
+    // Without this the preview renders with whatever transform state the
+    // last object drawn this frame left behind - garbled/stretched geometry.
+    vec3_t bbMin, bbMax;
+    OBB_t obb;
+    b->Transform(BoneTransform, bbMin, bbMax, &obb, true);
+    b->EnsureCpuVertices();
+    b->EnsureCpuNormals();
+
+    EnableAlphaBlend();
+    constexpr float kPreviewAlpha = 0.55f;
+    b->RenderBody(RENDER_TEXTURE, kPreviewAlpha, -1, 1.0f, 0.0f, 0.0f);
+}
+#endif // _EDITOR

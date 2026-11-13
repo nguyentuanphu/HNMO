@@ -1,0 +1,33 @@
+# The dapr sidecars read the connection strings from the Kubernetes secret store
+# with the service account of their pod.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "hnmo.fullname" . }}
+  labels:
+    {{- include "hnmo.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "hnmo.fullname" . }}-secret-reader
+  labels:
+    {{- include "hnmo.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "hnmo.fullname" . }}-secret-reader
+  labels:
+    {{- include "hnmo.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "hnmo.fullname" . }}
+roleRef:
+  kind: Role
+  name: {{ include "hnmo.fullname" . }}-secret-reader
+  apiGroup: rbac.authorization.k8s.io

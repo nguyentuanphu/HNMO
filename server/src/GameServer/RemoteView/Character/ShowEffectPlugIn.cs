@@ -1,0 +1,53 @@
+﻿// <copyright file="ShowEffectPlugIn.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameServer.RemoteView.Character;
+
+using System.Runtime.InteropServices;
+using HNMO.GameLogic;
+using HNMO.GameLogic.Views;
+using HNMO.GameLogic.Views.Character;
+using HNMO.Network.Packets.ServerToClient;
+using HNMO.PlugIns;
+
+/// <summary>
+/// The default implementation of the <see cref="IShowEffectPlugIn"/> which is forwarding everything to the game client with specific data packets.
+/// </summary>
+[PlugIn]
+[Display(Name = nameof(PlugInResources.ShowEffectPlugIn_Name), Description = nameof(PlugInResources.ShowEffectPlugIn_Description), ResourceType = typeof(PlugInResources))]
+[Guid("EC433D54-F9CE-40FD-8848-F3515DDD43CF")]
+public class ShowEffectPlugIn : IShowEffectPlugIn
+{
+    private readonly RemotePlayer _player;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ShowEffectPlugIn"/> class.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    public ShowEffectPlugIn(RemotePlayer player) => this._player = player;
+
+    /// <inheritdoc />
+    public async ValueTask ShowEffectAsync(IIdentifiable target, IShowEffectPlugIn.EffectType effectType)
+    {
+        if (effectType == IShowEffectPlugIn.EffectType.Swirl)
+        {
+            await this._player.Connection.SendShowSwirlAsync(target.GetId(this._player)).ConfigureAwait(false);
+        }
+        else
+        {
+            await this._player.Connection.SendShowEffectAsync(target.GetId(this._player), Convert(effectType)).ConfigureAwait(false);
+        }
+    }
+
+    private static ShowEffect.EffectType Convert(IShowEffectPlugIn.EffectType effectType)
+    {
+        return effectType switch
+        {
+            IShowEffectPlugIn.EffectType.LevelUp => Network.Packets.ServerToClient.ShowEffect.EffectType.LevelUp,
+            IShowEffectPlugIn.EffectType.ShieldBurst => Network.Packets.ServerToClient.ShowEffect.EffectType.ShieldBurst,
+            IShowEffectPlugIn.EffectType.ShieldPotion => Network.Packets.ServerToClient.ShowEffect.EffectType.ShieldPotion,
+            _ => throw new ArgumentOutOfRangeException(nameof(effectType), $"Unknown value {effectType}."),
+        };
+    }
+}

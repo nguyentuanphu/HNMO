@@ -1,0 +1,216 @@
+#pragma once
+#include "Core/Globals/_define.h"
+#include "Core/Globals/_enum.h"
+#include "Core/Utilities/Singleton.h"
+#include "UI/Inventory/ItemOptionTooltipModel.h"
+
+#include <array>
+#include <cstdint>
+#include <map>
+#include <span>
+
+struct tagITEM;
+typedef struct tagITEM ITEM;
+
+constexpr std::uint8_t MAX_SET_OPTION = 64; // Maximum number of possible ancient sets
+// The first mastery option; the mastery options increase the damage of one element's skills.
+constexpr std::uint8_t MASTERY_OPTION = 29;
+
+// Each item can be part of up to 2 ancient sets. The following are their identifier.
+constexpr std::uint8_t EXT_A_SET_OPTION = 1;
+constexpr std::uint8_t EXT_B_SET_OPTION = 2;
+
+// Maximum number of equipped sets. This is the maximum number of sets that can be equipped at the same time.
+// It's 5, because the number of equippable items is 12, but one is a wing and one is a pet. To make any set, you need at least 2 items.
+constexpr std::uint8_t MAX_EQUIPPED_SET_ITEMS = MAX_EQUIPMENT_INDEX - 2;
+constexpr std::uint8_t MAX_EQUIPPED_SETS = MAX_EQUIPPED_SET_ITEMS / 2;
+
+constexpr auto MAX_ITEM_SET_NAME = 64;
+
+constexpr auto MAX_ITEM_SET_STANDARD_OPTION_COUNT = 6;
+constexpr auto MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT = 2;
+constexpr auto MAX_ITEM_SET_EXT_OPTION_COUNT = 2;
+constexpr auto MAX_ITEM_SETS_PER_ITEM = 2;
+constexpr auto MAX_ITEM_SET_FULL_OPTION_COUNT = 5;
+
+constexpr auto MAX_OPTIONS_PER_ITEM_SET = MAX_ITEM_SET_STANDARD_OPTION_COUNT * MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT
+                                                + MAX_ITEM_SET_FULL_OPTION_COUNT
+                                                + MAX_ITEM_SET_EXT_OPTION_COUNT;
+
+struct ITEM_SET_TYPE
+{
+    std::array<std::uint8_t, MAX_ITEM_SETS_PER_ITEM> byOption{};
+    std::array<std::uint8_t, MAX_ITEM_SETS_PER_ITEM> byMixItemLevel{};
+};
+
+struct ITEM_SET_OPTION
+{
+    wchar_t strSetName[MAX_ITEM_SET_NAME];
+    std::uint8_t bySetItemCount; // The number of items in the set
+    std::uint8_t byOptionCount; // The total number of options in the set
+
+    // The following arrays are used to store the standard options of the ancient sets.
+    // There is typically one option less than the number of items in the set.
+    // These 2-element-arrays are somehow strange. Only the first element is actually used, I found no use case for the second one.
+    // Theoretically Webzen planned to have 2 options per item, but never implemented it.
+    std::array<std::array<std::uint8_t, MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT>, MAX_ITEM_SET_STANDARD_OPTION_COUNT> byStandardOption{};
+    std::array<std::array<std::uint8_t, MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT>, MAX_ITEM_SET_STANDARD_OPTION_COUNT> byStandardOptionValue{};
+
+    // There are up to 2 ext options which always apply when there are at least two items of a set equipped.
+    // Found no set which uses an ExtOption.
+    std::array<std::uint8_t, MAX_ITEM_SET_EXT_OPTION_COUNT> byExtOption{};
+    std::array<std::uint8_t, MAX_ITEM_SET_EXT_OPTION_COUNT> byExtOptionValue{};
+
+    std::array<std::uint8_t, MAX_ITEM_SET_FULL_OPTION_COUNT> byFullOption{};
+    std::array<std::uint8_t, MAX_ITEM_SET_FULL_OPTION_COUNT> byFullOptionValue{};
+    std::array<std::uint8_t, MAX_CLASS> byRequireClass{};
+};
+
+struct SET_OPTION
+{
+    bool IsActive;
+    bool IsFullOption;
+    bool IsExtOption;
+    std::uint8_t OptionNumber; // m_bySetOptionList[x][0]
+    int Value; //m_iSetOptionListValue
+};
+
+struct SET_SEARCH_RESULT
+{
+    std::uint8_t SetNumber;
+    std::uint8_t CompleteSetItemCount;
+    std::uint8_t ItemCount;
+    std::uint8_t SetTypeIndex;
+    wchar_t SetName[MAX_ITEM_SET_NAME];
+};
+
+struct SET_SEARCH_RESULT_OPT
+    : SET_SEARCH_RESULT
+{
+    int SetOptionCount;
+    SET_OPTION SetOption[MAX_OPTIONS_PER_ITEM_SET];
+};
+
+class CSItemOption : public Singleton<CSItemOption>
+{
+private:
+    ITEM_SET_TYPE	m_ItemSetType[MAX_ITEM];
+    ITEM_SET_OPTION	m_ItemSetOption[MAX_SET_OPTION];
+
+    int m_SetSearchResultCount;
+    SET_SEARCH_RESULT_OPT m_SetSearchResult[MAX_EQUIPPED_SETS];
+
+    bool	m_bViewOptionList;
+    std::uint8_t m_byRenderOptionList;
+    std::uint8_t m_bySelectedItemOption;
+    std::uint8_t m_bySameSetItem;
+
+    typedef std::map<int, std::wstring>	MAP_EQUIPPEDSETITEMNAME;
+    typedef std::map<std::uint8_t, int>		MAP_EQUIPPEDSETITEM_SEQUENCE;
+
+    MAP_EQUIPPEDSETITEMNAME	            m_mapEquippedSetItemName;
+    MAP_EQUIPPEDSETITEMNAME::iterator   m_iterESIN;
+
+    static void TryAddSetOption(std::uint8_t option, int value, int optionIndex, SET_SEARCH_RESULT_OPT& set,
+                                const ITEM_SET_OPTION& setOptions, bool isThisSetComplete, bool isFullOption,
+                                bool isExtOption, int firstClass, int secondClass);
+
+    static bool getExplainText(wchar_t* text, std::uint8_t option, int value);
+    static std::uint8_t RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set, std::uint8_t textIndex, bool bIsEquippedItem, bool bShowInactive);
+
+    bool	OpenItemSetType(const wchar_t* filename);
+    bool	OpenItemSetOption(const wchar_t* filename);
+    void	checkItemType(SET_SEARCH_RESULT* optionList, const int iType, const int ancientDiscriminator) const;
+    void	calcSetOptionList(const SET_SEARCH_RESULT* optionList);
+    
+    void    getAllAddState(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy, std::uint16_t* Vitality, std::uint16_t* Charisma) const;
+
+    void    AddStatsBySetOptions(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy, std::uint16_t* Vitality, std::uint16_t* Charisma) const; //Adds the stats of the active ancient set options to the given pointers, without bonus options
+
+    int AggregateOptionValue(int optionNumber) const;
+
+
+public:
+    CSItemOption(void) { init(); };
+    ~CSItemOption(void) {};
+
+    void init(void)
+    {
+        m_bViewOptionList = false;
+        m_byRenderOptionList = 0;
+        m_bySelectedItemOption = 0;
+        m_bySameSetItem = 0;
+    }
+    bool OpenItemSetScript();
+
+    std::uint8_t    IsChangeSetItem(const int Type, const int SubType = -1);
+    std::uint16_t    GetMixItemLevel(const int Type) const;
+    bool	GetSetItemName(wchar_t* strName, const int iType, const int setType) const;
+
+    // The active set options' value of an AT_SET_OPTION_* effect, added up over the worn sets.
+    int GetSetOptionValue(int Special) const;
+    void	PlusSpecial(std::uint16_t* Value, int Special) const;
+    void	PlusSpecialPercent(std::uint16_t* Value, int Special) const;
+    void    PlusMastery(int* Value, std::uint8_t MasteryType) const;
+
+    // Adds the options of `setOptions` to `set`: its standard options, ext options and full options,
+    // each marked active once enough of the set's items are worn (set.ItemCount of
+    // set.CompleteSetItemCount; the full options need the complete set). `firstClass` is the
+    // wearer's base class, `secondClass` whether it has reached its second class.
+    static void AddSetOptions(SET_SEARCH_RESULT_OPT& set, const ITEM_SET_OPTION& setOptions, int firstClass,
+                              int secondClass);
+    // What the active mastery options of `set` add to the damage of a skill of mastery type
+    // `masteryType` (SKILL_ATTRIBUTE::MasteryType, the skill's element).
+    static int GetMasteryBonus(const SET_SEARCH_RESULT_OPT& set, std::uint8_t masteryType);
+
+    static int     GetDefaultOptionValue(ITEM* ip, std::uint16_t* Value);
+    static bool    GetDefaultOptionText(const ITEM* ip, wchar_t* Text);
+    static int     RenderDefaultOptionText(const ITEM* ip, int TextNum);
+
+    // The format a set option's value is described with (`option` counts from
+    // AT_SET_OPTION_IMPROVE_STRENGTH); nullptr for a number that is no supported set option.
+    static const wchar_t* GetSetOptionFormat(std::uint8_t option);
+
+    static bool    IsNonWeaponSkillOrIsSkillEquipped(ActionSkillType skill);
+    void	CheckItemSetOptions(void);
+    void	MoveSetOptionList(const int StartX, const int StartY);
+    void	RenderSetOptionButton(const int StartX, const int StartY);
+
+    // RmlUi port (CMyInventory) of the former RenderSetOptionList(StartX, StartY) --
+    // same content resolution (per-active-set standard/ext/full option lines via the static
+    // RenderSetOptionList(SET_SEARCH_RESULT_OPT&, ...) helper below, unchanged and still shared
+    // with RenderSetOptionListInItem's own item-tooltip use), no drawing. Returns false (and
+    // leaves outModel untouched) when m_SetSearchResultCount == 0 -- hover gating is the caller's
+    // job now (CMyInventory::SyncRmlModel(), driven by RmlUi's own mouseover/mouseout), unlike the
+    // old native version which also gated on its own m_bViewOptionList flag.
+    // CMyInventory::SyncRmlModel() is the only caller.
+    bool    BuildSetOptionTooltipModel(UI::Inventory::Tooltip::Model& outModel);
+
+    int     RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bIsEquippedItem = false);
+
+    void    ClearOptionHelper(void) { m_byRenderOptionList = 0; }
+    // Opens the option table of the set a chat text "/<set name>" names (see FindSetByName).
+    void    CheckRenderOptionHelper(const wchar_t* FilterName);
+    // The index in `sets` of the set `typed` (the chat text after the /) names, -1 for none.
+    // Capitals and the apostrophe (' or the typographic U+2019) don't matter, and the trailing s is
+    // optional: "warrior", "Warriors" and "Warrior's" name "Warrior's". A set whose name is typed
+    // as it is wins over one that only matches without its apostrophe or s; among equal matches the
+    // first set wins.
+    static int FindSetByName(const wchar_t* typed, std::span<const ITEM_SET_OPTION> sets);
+    // The set's option table, written to the TextList globals without drawing (CSetItemExplanation
+    // draws it through RmlUi); returns the line count, 0 for none.
+    int BuildOptionHelperTextList();
+    // The option table of `setOption`, as BuildOptionHelperTextList() writes it; returns the line count.
+    static int BuildSetOptionTextList(const ITEM_SET_OPTION& setOption);
+
+    bool IsAncientSetEquipped() const { return m_SetSearchResultCount > 0; }
+
+    void SetViewOptionList(bool bView);
+    bool IsViewOptionList();
+
+    void	getAllAddOptionStatesbyCompare(std::uint16_t* Strength, std::uint16_t* Dexterity, std::uint16_t* Energy, std::uint16_t* Vitality, std::uint16_t* Charisma, std::uint16_t iCompareStrength, std::uint16_t iCompareDexterity, std::uint16_t iCompareEnergy, std::uint16_t iCompareVitality, std::uint16_t iC);
+
+    void	getAllAddStateOnlyAddValue(std::uint16_t* AddStrength, std::uint16_t* AddDexterity, std::uint16_t* AddEnergy, std::uint16_t* AddVitality, std::uint16_t* AddCharisma) const; // Gets only the added stats of the active ancient set options plus bonus options
+};
+
+#define g_csItemOption CSItemOption::GetSingleton ()

@@ -1,0 +1,18 @@
+﻿// <copyright file="ChangeLanguageChatCommandArgs.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ChatCommands.Arguments;
+
+/// <summary>
+/// Arguments used by <see cref="ChangeLanguageChatCommandArgs"/>>.
+/// </summary>
+public class ChangeLanguageChatCommandArgs : ArgumentsBase
+{
+    /// <summary>
+    /// Gets or sets the iso 2/3 language code of the requested language.
+    /// </summary>
+    [Argument("isoCode")]
+    [ValueReference(ChatCommandValueReference.LanguageIsoCode)]
+    public string? IsoLanguageCode { get; set; }
+}

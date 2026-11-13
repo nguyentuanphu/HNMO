@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable;CS4014;VSTHRD110;VSTHRD100</WarningsAsErrors>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>HNMO.Network.Analyzer</RootNamespace>
+    <AssemblyName>HNMO.Network.Analyzer.WinForms</AssemblyName>
+    <StartupObject>HNMO.Network.Analyzer.Program</StartupObject>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>bin\Debug\HNMO.Network.Analyzer.WinForms.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>bin\Release\HNMO.Network.Analyzer.WinForms.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DG.AdvancedDataGridView" />
+    <PackageReference Include="System.Linq.Dynamic.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Analyzer\HNMO.Network.Analyzer.csproj" />
+    <ProjectReference Include="..\HNMO.Network.csproj" />
+    <ProjectReference Include="..\Packets\HNMO.Network.Packets.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="MainForm.cs" />
+    <Compile Update="PacketSenderForm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Readme.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

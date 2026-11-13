@@ -1,0 +1,47 @@
+// GM3rdChangeUp.h: interface for the CGM3rdChangeUp class.
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_GM3RDCHANGEUP_H__09F84DB0_6262_425E_98B4_7EB06EA595CC__INCLUDED_)
+#define AFX_GM3RDCHANGEUP_H__09F84DB0_6262_425E_98B4_7EB06EA595CC__INCLUDED_
+
+#pragma once
+
+#include "Render/Models/DrawLook.h"
+
+class BMD;
+
+namespace SEASON3A
+{
+    class CGM3rdChangeUp
+    {
+    protected:
+        CGM3rdChangeUp();
+
+    public:
+        virtual ~CGM3rdChangeUp();
+
+        static CGM3rdChangeUp& Instance();
+
+        bool IsBalgasBarrackMap();
+        bool IsBalgasRefugeMap();
+
+        bool CreateBalgasBarrackObject(OBJECT* pObject);
+        bool CreateBalgasRefugeObject(OBJECT* pObject);
+        bool MoveObject(OBJECT* pObject);
+        bool UpdateObjectEffects(OBJECT* pObject, BMD* pModel);
+        bool RenderObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon = 0);
+        void RenderAfterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b);
+
+        bool CreateFireSnuff(PARTICLE* o);
+        void PlayEffectSound(OBJECT* o);
+        void PlayBGM();
+
+        bool AttackEffectBalgasBarrackMonster(CHARACTER* c, OBJECT* o, BMD* b);
+        bool MoveBalgasBarrackMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+        void MoveBalgasBarrackBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+        bool RenderMonsterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, int ExtraMon);
+        bool UpdateBalgasBarrackMonsterEffects(CHARACTER* c, OBJECT* o, BMD* b);
+    };
+}
+
+#endif // !defined(AFX_GM3RDCHANGEUP_H__09F84DB0_6262_425E_98B4_7EB06EA595CC__INCLUDED_)

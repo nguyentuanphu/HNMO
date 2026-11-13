@@ -1,0 +1,66 @@
+﻿// <copyright file="GetMasterLevelChatCommandPlugIn.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ChatCommands;
+
+using System.Globalization;
+using System.Runtime.InteropServices;
+using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.Views.Character;
+using HNMO.Interfaces;
+using HNMO.PlugIns;
+
+/// <summary>
+/// A chat command plugin to get a character's master level.
+/// </summary>
+[Guid("4CED4BF8-9D91-47F9-82DE-51E2646F77C8")]
+[PlugIn]
+[Display(Name = nameof(PlugInResources.GetMasterLevelChatCommandPlugIn_Name), Description = nameof(PlugInResources.GetMasterLevelChatCommandPlugIn_Description), ResourceType = typeof(PlugInResources))]
+[ChatCommandHelp(Command, typeof(Arguments), MinimumStatus)]
+public class GetMasterLevelChatCommandPlugIn : ChatCommandPlugInBase<GetMasterLevelChatCommandPlugIn.Arguments>, IDisabledByDefault
+{
+    private const string Command = "/getmasterlevel";
+    private const CharacterStatus MinimumStatus = CharacterStatus.GameMaster;
+
+    /// <inheritdoc />
+    public override string Key => Command;
+
+    /// <inheritdoc />
+    public override CharacterStatus MinCharacterStatusRequirement => MinimumStatus;
+
+    /// <inheritdoc />
+    protected override async ValueTask DoHandleCommandAsync(Player player, Arguments arguments)
+    {
+        var targetPlayer = player;
+        if (arguments?.CharacterName is { } characterName)
+        {
+            targetPlayer = player.GameContext.GetPlayerByCharacterName(characterName);
+            if (targetPlayer?.SelectedCharacter is null ||
+                !targetPlayer.SelectedCharacter.Name.Equals(characterName, StringComparison.OrdinalIgnoreCase))
+            {
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.CharacterNotFound), characterName).ConfigureAwait(false);
+                return;
+            }
+        }
+
+        if (targetPlayer.SelectedCharacter is null)
+        {
+            return;
+        }
+
+        await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.MasterLevelInfo), targetPlayer.SelectedCharacter.Name, targetPlayer.Attributes![Stats.MasterLevel]).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Arguments for the Get Master Level chat command.
+    /// </summary>
+    public class Arguments : ArgumentsBase
+    {
+        /// <summary>
+        /// Gets or sets the character name to get master level for.
+        /// </summary>
+        [ValueReference(ChatCommandValueReference.CharacterName)]
+        public string? CharacterName { get; set; }
+    }
+}

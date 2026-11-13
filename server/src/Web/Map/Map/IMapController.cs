@@ -1,0 +1,25 @@
+﻿// <copyright file="IMapController.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Web.Map.Map;
+
+using System.Collections.Concurrent;
+using HNMO.GameLogic;
+
+/// <summary>
+/// Controller which contains the logic for the shown game map.
+/// Extends <see cref="IAsyncDisposable"/> which needs to be used when the user interface removes the container element.
+/// </summary>
+public interface IMapController : IAsyncDisposable
+{
+    /// <summary>
+    /// Occurs when <see cref="Players"/> changed.
+    /// </summary>
+    event EventHandler PlayersChanged;
+
+    /// <summary>
+    /// Gets the objects which are on the map.
+    /// </summary>
+    ConcurrentDictionary<int, Player> Players { get; }
+}

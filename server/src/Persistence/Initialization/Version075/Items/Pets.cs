@@ -1,0 +1,82 @@
+﻿// <copyright file="Pets.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Persistence.Initialization.Version075.Items;
+
+using HNMO.AttributeSystem;
+using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Configuration.Items;
+using HNMO.GameLogic;
+using HNMO.GameLogic.Attributes;
+using HNMO.Interfaces;
+using HNMO.Persistence.Initialization.CharacterClasses;
+using HNMO.Persistence.Initialization.Properties;
+
+/// <summary>
+/// Initializer for pets.
+/// </summary>
+public class Pets : InitializerBase
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Pets"/> class.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="gameConfiguration">The game configuration.</param>
+    public Pets(IContext context, GameConfiguration gameConfiguration)
+        : base(context, gameConfiguration)
+    {
+    }
+
+    /// <inheritdoc />
+    public override void Initialize()
+    {
+#pragma warning disable SA1117 // Parameters should be on same line or separete lines
+        var angel = this.CreatePet(0, LocalizedString.FromResource(() => ItemNames.GuardianAngel), 23,
+            (Stats.DamageReceiveDecrement, 0.8f, AggregateType.Multiplicate),
+            (Stats.MaximumHealth, 50f, AggregateType.AddRaw));
+        this.AddItemToJewelItemDrop(angel);
+        var imp = this.CreatePet(1, LocalizedString.FromResource(() => ItemNames.Imp), 28,
+            (Stats.AttackDamageIncrease, 1.3f, AggregateType.Multiplicate));
+        this.AddItemToJewelItemDrop(imp);
+        var uniria = this.CreatePet(2, LocalizedString.FromResource(() => ItemNames.HornOfUniria), 25,
+            (Stats.IsUniriaEquipped, 1, AggregateType.AddRaw),
+            (Stats.MovementSpeed, MovementSpeedConstants.BasicMountMovementSpeed, AggregateType.Maximum),
+            (Stats.MovementSpeedUnderwater, MovementSpeedConstants.BasicMountMovementSpeed, AggregateType.Maximum));
+        this.AddItemToJewelItemDrop(uniria);
+#pragma warning restore SA1117
+    }
+
+    private ItemDefinition CreatePet(byte number, LocalizedString name, int dropLevelAndLevelRequirement, params (AttributeDefinition, float, AggregateType)[] basePowerUps)
+    {
+        var pet = this.Context.CreateNew<ItemDefinition>();
+        this.GameConfiguration.Items.Add(pet);
+        pet.Group = 13;
+        pet.Number = number;
+        pet.Width = 1;
+        pet.Height = 1;
+        pet.Name = name;
+        pet.DropLevel = (byte)System.Math.Min(255, dropLevelAndLevelRequirement);
+        pet.DropsFromMonsters = true;
+        pet.Durability = 255;
+        pet.ItemSlot = this.GameConfiguration.ItemSlotTypes.First(st => st.ItemSlots.Contains(8));
+        this.GameConfiguration.DetermineCharacterClasses(true, true, true).ForEach(pet.QualifiedCharacters.Add);
+
+        this.CreateItemRequirementIfNeeded(pet, Stats.Level, dropLevelAndLevelRequirement);
+
+        foreach (var basePowerUp in basePowerUps)
+        {
+            if (basePowerUp.Item1 != null)
+            {
+                var powerUpDefinition = this.Context.CreateNew<ItemBasePowerUpDefinition>();
+                powerUpDefinition.TargetAttribute = basePowerUp.Item1.GetPersistent(this.GameConfiguration);
+                powerUpDefinition.BaseValue = basePowerUp.Item2;
+                powerUpDefinition.AggregateType = basePowerUp.Item3;
+                pet.BasePowerUpAttributes.Add(powerUpDefinition);
+            }
+        }
+
+        pet.SetGuid(pet.Group, pet.Number);
+        return pet;
+    }
+}

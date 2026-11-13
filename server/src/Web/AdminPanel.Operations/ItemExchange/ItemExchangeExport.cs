@@ -1,0 +1,181 @@
+// <copyright file="ItemExchangeExport.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Web.AdminPanel.Operations.ItemExchange;
+
+using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Configuration.Items;
+using HNMO.Persistence;
+
+/// <summary>
+/// Writes the items of a game configuration as an item exchange file of the desktop client,
+/// which its editor (HNMO Editor) imports with a diff the user checks by hand.
+/// </summary>
+/// <remarks>
+/// The file uses the client's keys and meanings, see the client's <c>docs/item-data.md</c>.
+/// Its <c>fields</c> list names the item fields the file carries; the client compares and
+/// applies only these and keeps its own values of every other field. A file with this list
+/// has the format version 2, so that a client which doesn't know the list refuses the file
+/// instead of reading the fields it lacks as zero.
+/// </remarks>
+public static class ItemExchangeExport
+{
+    /// <summary>
+    /// Gets the format version of a file with a <c>fields</c> list.
+    /// </summary>
+    public static int FormatVersion { get; } = 2;
+
+    /// <summary>
+    /// Gets the source which the file names.
+    /// </summary>
+    public static string Source { get; } = "HNMO";
+
+    /// <summary>
+    /// Gets the game version of the client's data, the key of the Season 6 data initialization.
+    /// The client refuses a file of another version.
+    /// </summary>
+    public static string ClientGameVersion { get; } = "season6";
+
+    /// <summary>
+    /// Gets the highest item group the client knows.
+    /// </summary>
+    public static int MaximumGroup { get; } = 15;
+
+    /// <summary>
+    /// Gets the highest item number within a group the client knows.
+    /// </summary>
+    public static int MaximumNumber { get; } = 511;
+
+    /// <summary>
+    /// Gets the item fields the file carries, in the order the client writes them.
+    /// </summary>
+    /// <remarks>
+    /// A field has the client's key and meaning, e.g. the size, <c>width</c> and <c>height</c>, is
+    /// the cells the item takes in an item grid.
+    /// </remarks>
+    internal static IReadOnlyList<ItemExchangeField> Fields { get; } =
+    [
+        NumberField("width", item => item.Width),
+        NumberField("height", item => item.Height),
+    ];
+
+    /// <summary>
+    /// Writes the exchange file of the items of the configuration.
+    /// </summary>
+    /// <param name="configuration">The game configuration.</param>
+    /// <param name="gameVersion">
+    /// The game version of the configuration, the key of the data initialization which created it.
+    /// The client only reads a file of its own version, <see cref="ClientGameVersion"/>.
+    /// </param>
+    /// <returns>The file as UTF-8 text with LF line endings, without a byte order mark.</returns>
+    /// <remarks>
+    /// Items are sorted by group and number. An item outside the client's groups or numbers
+    /// is left out, because the client refuses the whole file because of it.
+    /// </remarks>
+    public static byte[] Write(GameConfiguration configuration, string gameVersion)
+    {
+        using var stream = new MemoryStream();
+        using (var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
+        {
+            Indented = true,
+            NewLine = "\n",
+
+            // The names stay readable, as in the client's files.
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        }))
+        {
+            writer.WriteStartObject();
+            writer.WriteNumber("formatVersion", FormatVersion);
+            writer.WriteString("source", Source);
+            writer.WriteString("gameVersion", gameVersion);
+            writer.WriteStartArray("fields");
+            foreach (var field in Fields)
+            {
+                writer.WriteStringValue(field.Key);
+            }
+
+            writer.WriteEndArray();
+            writer.WriteStartArray("items");
+            foreach (var item in GetExportedItems(configuration))
+            {
+                writer.WriteStartObject();
+                writer.WriteNumber("group", item.Group);
+                writer.WriteNumber("number", item.Number);
+                foreach (var field in Fields)
+                {
+                    field.Write(writer, item);
+                }
+
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+            writer.WriteEndObject();
+        }
+
+        stream.WriteByte((byte)'\n');
+        return stream.ToArray();
+    }
+
+    /// <summary>
+    /// Gets the items which the file carries: the ones within the client's groups and numbers,
+    /// sorted by group and number.
+    /// </summary>
+    /// <param name="configuration">The game configuration.</param>
+    /// <returns>The exported items.</returns>
+    /// <remarks>
+    /// HNMO doesn't keep the group and number of an item unique. Items which share them are
+    /// sorted by their id, so that the same configuration always gives the same file; the order
+    /// in which the configuration is loaded can differ.
+    /// </remarks>
+    internal static IEnumerable<ItemDefinition> GetExportedItems(GameConfiguration configuration)
+    {
+        return configuration.Items
+            .Where(IsKnownToTheClient)
+            .OrderBy(item => item.Group)
+            .ThenBy(item => item.Number)
+            .ThenBy(item => item.GetId());
+    }
+
+    /// <summary>
+    /// Gets the items which the file leaves out, because they are outside the client's groups or numbers.
+    /// </summary>
+    /// <param name="configuration">The game configuration.</param>
+    /// <returns>The items which the file leaves out, sorted by group and number.</returns>
+    internal static IReadOnlyList<ItemDefinition> GetLeftOutItems(GameConfiguration configuration)
+    {
+        return configuration.Items
+            .Where(item => !IsKnownToTheClient(item))
+            .OrderBy(item => item.Group)
+            .ThenBy(item => item.Number)
+            .ToList();
+    }
+
+    private static bool IsKnownToTheClient(ItemDefinition item)
+    {
+        return item.Group <= MaximumGroup && item.Number >= 0 && item.Number <= MaximumNumber;
+    }
+
+    /// <summary>
+    /// Creates a number field, which is left out when it's 0, the client's default, as the
+    /// client's files leave it out.
+    /// </summary>
+    /// <param name="key">The client's key of the field, which the file lists and the items carry.</param>
+    /// <param name="value">Gets the field's value of an item.</param>
+    /// <returns>The field.</returns>
+    private static ItemExchangeField NumberField(string key, Func<ItemDefinition, int> value)
+    {
+        return new(key, (writer, item) =>
+        {
+            var number = value(item);
+            if (number != 0)
+            {
+                writer.WriteNumber(key, number);
+            }
+        });
+    }
+}

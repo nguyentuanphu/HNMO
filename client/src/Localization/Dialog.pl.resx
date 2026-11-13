@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Text_0" xml:space="preserve">
+    <value>Tak? Potrzebujesz czegoś?</value>
+  </data>
+  <data name="Text_1" xml:space="preserve">
+    <value>Witaj! Jestem Pasi, Mag. Hahaha! Hmmm... Ruch gwiazd wydaje się nie taki, jak być powinien. Twoja przyszłość... Hmm... Twojej przyszłości też nie widzę... Dlaczego...?</value>
+  </data>
+  <data name="Text_2" xml:space="preserve">
+    <value>Witaj! Nazywam się Baz i jestem strażnikiem skarbca. Mogę ci pomóc, dokądkolwiek pójdziesz. Bez wahania zostaw u mnie swoje rzeczy.</value>
+  </data>
+  <data name="Text_3" xml:space="preserve">
+    <value>Wielu poszukiwaczy przygód mówiło mi, że dźwięk harfy koi i odpędza zmęczenie. Potrzebujesz mojej pomocy?</value>
+  </data>
+  <data name="Text_4" xml:space="preserve">
+    <value>Witaj! Nazywam się Baz i jestem strażnikiem skarbca. Mogę ci pomóc, dokądkolwiek pójdziesz. Bez wahania zostaw u mnie swoje rzeczy.</value>
+  </data>
+  <data name="Text_5" xml:space="preserve">
+    <value>Czy przyniosłeś dość pieniędzy? Bez nich nie połączę przedmiotów, bo potrzebuję pieniędzy, by kontynuować badania. Rozumiesz? Chcesz wiedzieć, ile pieniędzy potrzeba?</value>
+  </data>
+  <data name="Text_6" xml:space="preserve">
+    <value>Witaj w MU! Naciśnij klawisz F1, jeśli podczas wędrówki po kontynencie MU potrzebujesz pomocy.</value>
+  </data>
+  <data name="Text_7" xml:space="preserve">
+    <value>Pierwszy raz w Lorencii? Udaj się do południowo-wschodniego wyjścia przy fontannie i spróbuj polować na Budge Dragony lub Pająki. Szkielety na północnym zachodzie są zbyt niebezpieczne.</value>
+  </data>
+  <data name="Text_8" xml:space="preserve">
+    <value>Witaj w Norii. Jeśli jesteś tu pierwszy raz, przejdź obok strażnika skarbca i udaj się do południowego wyjścia. Spróbuj polować na słabe potwory, takie jak Skorpiony czy Gobliny.</value>
+  </data>
+  <data name="Text_9" xml:space="preserve">
+    <value>Jeśli potrzebujesz szczegółowego przewodnika po kontynencie MU, zajrzyj na http://muonline.webzen.net</value>
+  </data>
+  <data name="Text_50" xml:space="preserve">
+    <value>Podobno 'Zwój Cesarza', który opowiada o Murenie, pierwszym cesarzu MU, widywano w okolicach Lost Tower, Atlans i Dungeonu.</value>
+  </data>
+  <data name="Answer_50_Slot_0" xml:space="preserve">
+    <value>Nie wiedziałem, że coś takiego istnieje...</value>
+  </data>
+  <data name="Text_51" xml:space="preserve">
+    <value>Twoja ofiara dla Boga nie jest wystarczająca. Opowiem ci o wyroczni, jeśli złożysz ofiarę 1 000 000 Zen.</value>
+  </data>
+  <data name="Answer_51_Slot_0" xml:space="preserve">
+    <value>Wrócę z 1 000 000 Zen.</value>
+  </data>
+  <data name="Text_52" xml:space="preserve">
+    <value>Podobno 'Zwój Cesarza', który opowiada o Murenie, pierwszym cesarzu, jaki zjednoczył MU, widywano w okolicach Lost Tower, Atlans i Dungeonu.</value>
+  </data>
+  <data name="Answer_52_Slot_0" xml:space="preserve">
+    <value>Opowiedz więcej.</value>
+  </data>
+  <data name="Text_53" xml:space="preserve">
+    <value>'Zwój Cesarza' spowija potężna moc. Każdy, kto go przeczyta, zostanie pobłogosławiony tą potężną mocą.</value>
+  </data>
+  <data name="Answer_53_Slot_0" xml:space="preserve">
+    <value>Powtórz, proszę, tę historię.</value>
+  </data>
+  <data name="Answer_53_Slot_1" xml:space="preserve">
+    <value>Pójdę go odnaleźć.</value>
+  </data>
+  <data name="Answer_53_Slot_2" xml:space="preserve">
+    <value>Nie obchodzi mnie to.</value>
+  </data>
+  <data name="Text_54" xml:space="preserve">
+    <value>Odnajdź 'Zwój Cesarza'. Po przeczytaniu zostaniesz obdarzony wielką mocą.</value>
+  </data>
+  <data name="Answer_54_Slot_0" xml:space="preserve">
+    <value>Pójdę go odnaleźć.</value>
+  </data>
+  <data name="Text_55" xml:space="preserve">
+    <value>Odnalazłeś 'Zwój Cesarza'! Upamiętnienie zjednoczenia dokonanego przez Murena, pierwszego cesarza Imperium MU, zostało zapisane tu mocą magii. Ten, kto posiada 'Zwój Cesarza', zostaje obdarzony wielką mocą.</value>
+  </data>
+  <data name="Answer_55_Slot_0" xml:space="preserve">
+    <value>Opowiedz mi o tym zapisie.</value>
+  </data>
+  <data name="Text_56" xml:space="preserve">
+    <value>Historyczny zapis o pierwszym cesarzu Murenie upamiętnia pokój osiągnięty dzięki triumfowi nad wszystkimi watażkami — w ten sposób Muren zjednoczył kontynent w Imperium MU.</value>
+  </data>
+  <data name="Answer_56_Slot_0" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_57" xml:space="preserve">
+    <value>Muren był jednym z trzech bohaterów, którzy zakończyli chaos sprowadzony na lud przez inwazję Sekneuma.</value>
+  </data>
+  <data name="Answer_57_Slot_0" xml:space="preserve">
+    <value>Opowiedz poprzednią historię.</value>
+  </data>
+  <data name="Answer_57_Slot_1" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_58" xml:space="preserve">
+    <value>Można odnaleźć magiczne artefakty zwane 'Złamany Miecz', 'Łza Elfa' i 'Odłamek Duszy Czarodzieja'. 'Złamany Miecz' został ofiarowany przez Dark Knightów jako symbol ich odwagi, lojalności i pragnienia pomyślności.</value>
+  </data>
+  <data name="Answer_58_Slot_0" xml:space="preserve">
+    <value>Opowiedz poprzednią historię.</value>
+  </data>
+  <data name="Answer_58_Slot_1" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_59" xml:space="preserve">
+    <value>'Odłamek Duszy Czarodzieja' został ofiarowany przez Dark Wizardów jako symbol ich przysięgi, że użyją swej mocy dla pokoju i wolności imperium. Rok 10 ery MU, fragment zapisu upamiętniającego pokój...</value>
+  </data>
+  <data name="Answer_59_Slot_0" xml:space="preserve">
+    <value>Opowiedz poprzednią historię.</value>
+  </data>
+  <data name="Answer_59_Slot_1" xml:space="preserve">
+    <value>Więc tak to było...</value>
+  </data>
+  <data name="Text_60" xml:space="preserve">
+    <value>Jeśli przeczytałeś 'Zwój Cesarza', odszukaj 'Złamany Miecz', którego starożytni Dark Knightowie użyli podczas upamiętnienia pokoju. Z tego, co słyszałem, kilku Dark Knightów znalazło go w Atlans, Lost Tower i Tarkanie.</value>
+  </data>
+  <data name="Answer_60_Slot_0" xml:space="preserve">
+    <value>Odnajdę go.</value>
+  </data>
+  <data name="Answer_60_Slot_1" xml:space="preserve">
+    <value>Poddaję się.</value>
+  </data>
+  <data name="Text_61" xml:space="preserve">
+    <value>W tych miejscach niebezpieczeństwo czyha za każdym rogiem, a 'Złamany Miecz' niełatwo dostrzec. Lecz jeśli go znajdziesz, zostanie ci dana nowa moc! Wróć do mnie, gdy odnajdziesz 'Złamany Miecz'.</value>
+  </data>
+  <data name="Answer_61_Slot_0" xml:space="preserve">
+    <value>Odnajdę go i wrócę z nim.</value>
+  </data>
+  <data name="Text_62" xml:space="preserve">
+    <value>Dzielny Dark Knight, odnalazłeś 'Złamany Miecz'! Po zjednoczeniu kontynentu MU Muren, pierwszy cesarz, złamał swój miecz 'Apocalypse' na znak pragnienia, by nigdy więcej nie wybuchła wojna.</value>
+  </data>
+  <data name="Answer_62_Slot_0" xml:space="preserve">
+    <value>Opowiedz więcej.</value>
+  </data>
+  <data name="Text_63" xml:space="preserve">
+    <value>Po wojnie Dark Knightowie pragnący zostać Blade Knightami zaczęli szukać starożytnego 'Złamanego Miecza', by dowieść swej odwagi.</value>
+  </data>
+  <data name="Answer_63_Slot_0" xml:space="preserve">
+    <value>Więc tak to się stało!</value>
+  </data>
+  <data name="Text_64" xml:space="preserve">
+    <value>Przeczytałeś 'Zwój Cesarza', prawda? Zatem musisz wiedzieć o 3 skarbach w nim zapisanych. Odnajdź kryształową 'Łzę Elfa', stworzoną przez starożytne elfy z mocy ducha.</value>
+  </data>
+  <data name="Answer_64_Slot_0" xml:space="preserve">
+    <value>Opowiedz mi więcej, proszę.</value>
+  </data>
+  <data name="Text_65" xml:space="preserve">
+    <value>To bardzo niebezpieczne miejsce, a 'Łzę Elfa' niezwykle trudno odnaleźć. Lecz jeśli ją znajdziesz, zostanie ci dana nowa moc. Idź więc, odnajdź 'Łzę Elfa' i wróć do mnie.</value>
+  </data>
+  <data name="Answer_65_Slot_0" xml:space="preserve">
+    <value>Pójdę odnaleźć '{item:14,25:acc}'!</value>
+  </data>
+  <data name="Text_66" xml:space="preserve">
+    <value>Odnalazłeś 'Łzę Elfa'! Po wojnie Lunedil, królowa elfów, stworzyła kamień łzy, rzucając magię na kamień ducha, by elfy mogły przywoływać moc bogini i budować swą potęgę.</value>
+  </data>
+  <data name="Answer_66_Slot_0" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_67" xml:space="preserve">
+    <value>Przeczytałeś 'Zwój Cesarza', prawda? Zatem musisz wiedzieć o 3 skarbach w nim zapisanych.</value>
+  </data>
+  <data name="Answer_67_Slot_0" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_68" xml:space="preserve">
+    <value>Z twoją mocą jestem pewien, że odnajdziesz 'Odłamek Duszy Czarodzieja'. Idź więc, odnajdź go i wróć do mnie, gdy go zdobędziesz.</value>
+  </data>
+  <data name="Answer_68_Slot_0" xml:space="preserve">
+    <value>Pójdę odnaleźć 'Odłamek Duszy Czarodzieja'.</value>
+  </data>
+  <data name="Text_69" xml:space="preserve">
+    <value>Wiedziałem, że odnajdziesz 'Odłamek Duszy Czarodzieja'! Etramu, największy Czarodziej z Arki, stworzył magiczny kamień chroniący duszę, w obawie, że słabi Dark Knightowie mogą ulec atakowi Kunduna.</value>
+  </data>
+  <data name="Answer_69_Slot_0" xml:space="preserve">
+    <value>Opowiedz mi więcej, proszę.</value>
+  </data>
+  <data name="Text_70" xml:space="preserve">
+    <value>Dark Wizard z tym magicznym kamieniem staje się Soul Masterem.</value>
+  </data>
+  <data name="Answer_70_Slot_0" xml:space="preserve">
+    <value>Jestem teraz Soul Masterem!</value>
+  </data>
+  <data name="Text_71" xml:space="preserve">
+    <value>Twoja ofiara dla Boga nie jest wystarczająca. Opowiem ci o wyroczni, jeśli złożysz ofiarę 2 000 000 Zen.</value>
+  </data>
+  <data name="Answer_71_Slot_0" xml:space="preserve">
+    <value>Wrócę z 2 000 000 Zen.</value>
+  </data>
+  <data name="Text_72" xml:space="preserve">
+    <value>Nowa moc została ci dana dzięki twej silnej woli i sile. Niech łaska Lugarda będzie z tobą po wsze czasy.</value>
+  </data>
+  <data name="Answer_72_Slot_0" xml:space="preserve">
+    <value>Niech łaska Boga będzie z tobą...</value>
+  </data>
+  <data name="Text_73" xml:space="preserve">
+    <value>Posiadasz już wielką moc. Nie mam dla ciebie wyroczni.</value>
+  </data>
+  <data name="Answer_73_Slot_0" xml:space="preserve">
+    <value>Wrócę później.</value>
+  </data>
+  <data name="Text_74" xml:space="preserve">
+    <value>Wróć, gdy staniesz się silniejszy.</value>
+  </data>
+  <data name="Answer_74_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę silniejszy.</value>
+  </data>
+  <data name="Text_75" xml:space="preserve">
+    <value>Jeśli wyrośniesz na silnego wojownika, zdołasz go odnaleźć.</value>
+  </data>
+  <data name="Answer_75_Slot_0" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_76" xml:space="preserve">
+    <value>Od tej pory narodził się zwyczaj, że Dark Knightowie pragnący zostać Blade Knightami łamali swe miecze na znak przysięgi, że nigdy nie użyją ich niesprawiedliwie.</value>
+  </data>
+  <data name="Answer_76_Slot_0" xml:space="preserve">
+    <value>Opowiedz więcej.</value>
+  </data>
+  <data name="Text_77" xml:space="preserve">
+    <value>Niektóre z żądnych przygód elfów mówiły, że widywano je w Lost Tower, Atlans i Tarkanie.</value>
+  </data>
+  <data name="Answer_77_Slot_0" xml:space="preserve">
+    <value>Pójdę go odnaleźć!</value>
+  </data>
+  <data name="Answer_77_Slot_1" xml:space="preserve">
+    <value>Nie chcę iść w takie miejsce.</value>
+  </data>
+  <data name="Text_78" xml:space="preserve">
+    <value>To 'Łza Elfa', a elf, który odnajdzie ten kamień, staje się Muse Elfem, zdolnym przywoływać moc elfich Bogiń.</value>
+  </data>
+  <data name="Answer_78_Slot_0" xml:space="preserve">
+    <value>Zostałem Muse Elfem!</value>
+  </data>
+  <data name="Text_79" xml:space="preserve">
+    <value>Skoro odnalazłeś zarówno 'Zwój Cesarza', jak i 'Złamany Miecz', od teraz będą cię zwać Blade Knightem.</value>
+  </data>
+  <data name="Answer_79_Slot_0" xml:space="preserve">
+    <value>Zostałem Blade Knightem!</value>
+  </data>
+  <data name="Text_80" xml:space="preserve">
+    <value>Po zjednoczeniu imperium lud przysiągł wierność cesarzowi. Oto niektóre ze skarbów ofiarowanych na znak tej wierności.</value>
+  </data>
+  <data name="Answer_80_Slot_0" xml:space="preserve">
+    <value>Opowiedz poprzednią historię.</value>
+  </data>
+  <data name="Answer_80_Slot_1" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_81" xml:space="preserve">
+    <value>'Łza Elfa' została ofiarowana przez elfy jako znak ich przysięgi, że wzmocnią potęgę elfów i ludzi.</value>
+  </data>
+  <data name="Answer_81_Slot_0" xml:space="preserve">
+    <value>Opowiedz poprzednią historię.</value>
+  </data>
+  <data name="Answer_81_Slot_1" xml:space="preserve">
+    <value>Mów dalej, proszę.</value>
+  </data>
+  <data name="Text_82" xml:space="preserve">
+    <value>Odnajdź 'Odłamek Duszy Czarodzieja'. Wedle starożytnych Dark Wizardów ostatnio widziano go w okolicach Lost Tower, Atlans i Tarkanu.</value>
+  </data>
+  <data name="Answer_82_Slot_0" xml:space="preserve">
+    <value>Pójdę ją odnaleźć.</value>
+  </data>
+  <data name="Answer_82_Slot_1" xml:space="preserve">
+    <value>Wrócę później.</value>
+  </data>
+  <data name="Text_90" xml:space="preserve">
+    <value>Skończyłeś czytać 'Zwój Cesarza'. Lecz czy wiesz o tajnym układzie między Murenem a Semedenem, przywódcą Summonerów? Murenowi obiecano pewną rzecz w zamian za oddanie Elveland pod władzę imperium.</value>
+  </data>
+  <data name="Answer_90_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_91" xml:space="preserve">
+    <value>Na kontynencie MU znajdowała się brama do wymiaru świata, nadzorowana przez Summonerów. Semeden ofiarował 'Oko Otchłani' jako znak obietnicy. Proszę, idź i przynieś 'Oko Otchłani'.</value>
+  </data>
+  <data name="Answer_91_Slot_0" xml:space="preserve">
+    <value>Przyjmij zadanie</value>
+  </data>
+  <data name="Answer_91_Slot_1" xml:space="preserve">
+    <value>Odrzuć zadanie</value>
+  </data>
+  <data name="Text_92" xml:space="preserve">
+    <value>Słyszałem, że 'Oko Otchłani' odnaleziono w okolicach Atlans, Lost Tower i Tarkanu. Wróć z 'Okiem Otchłani', gdy tylko je znajdziesz.</value>
+  </data>
+  <data name="Answer_92_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+  <data name="Text_93" xml:space="preserve">
+    <value>Odnalazłeś 'Oko Otchłani'. Znane jest jako przedmiot z substancji, która nie istnieje w realnym świecie. Pochodzi ze świata sprzed obecnego, a wraz z nim powraca pamięć.</value>
+  </data>
+  <data name="Answer_93_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_94" xml:space="preserve">
+    <value>'Oko Otchłani' ma dla mnie szczególne znaczenie, gdyż nadzoruję wymiary tego świata i porozumiewam się przez nie. Jeśli przyniesiesz 'Oko Otchłani', nadam ci tytuł Bloody Summonera od Semedena, opiekuna twojego wymiaru.</value>
+  </data>
+  <data name="Answer_94_Slot_0" xml:space="preserve">
+    <value>Przyjmij tytuł Bloody Summonera</value>
+  </data>
+  <data name="Text_100" xml:space="preserve">
+    <value>Legendarny skarb zwany 'Pierścień Chwały' jest potrzebny, by zyskać błogosławieństwo i siłę Murena. Znów objawił swą obecność w naszych ziemiach. Lecz nie jesteś gotów. Poczekaj, aż zdobędziesz więcej doświadczenia.</value>
+  </data>
+  <data name="Answer_100_Slot_0" xml:space="preserve">
+    <value>Co więc mam zrobić?</value>
+  </data>
+  <data name="Text_101" xml:space="preserve">
+    <value>Do przetrwania tego zadania potrzeba więcej doświadczenia. Wróć, gdy osiągniesz 220. poziom, zgodnie z próbami zaginionego imperium.</value>
+  </data>
+  <data name="Answer_101_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy nadejdzie mój czas.</value>
+  </data>
+  <data name="Text_102" xml:space="preserve">
+    <value>Legendarny skarb zwany 'Pierścień Chwały' jest potrzebny, by zyskać błogosławieństwo i siłę Murena. Znów objawił swą obecność w naszych ziemiach.</value>
+  </data>
+  <data name="Answer_102_Slot_0" xml:space="preserve">
+    <value>Chcę usłyszeć więcej.</value>
+  </data>
+  <data name="Text_103" xml:space="preserve">
+    <value>Ktokolwiek posiądzie 'Pierścień Chwały', zyska błogosławieństwo Murena. Podobno można go znaleźć na pustyniach za morzem.</value>
+  </data>
+  <data name="Answer_103_Slot_0" xml:space="preserve">
+    <value>Dlaczego tak?</value>
+  </data>
+  <data name="Text_104" xml:space="preserve">
+    <value>Tamtejsze potwory są dość potężne. To one posiadają pierścień.</value>
+  </data>
+  <data name="Answer_104_Slot_0" xml:space="preserve">
+    <value>Powtórz, proszę, tę historię.</value>
+  </data>
+  <data name="Answer_104_Slot_1" xml:space="preserve">
+    <value>Spróbuję.</value>
+  </data>
+  <data name="Answer_104_Slot_2" xml:space="preserve">
+    <value>Nie jestem jeszcze gotów.</value>
+  </data>
+  <data name="Text_105" xml:space="preserve">
+    <value>'Pierścień Chwały' może być bliżej, niż myślisz. Gdy go zdobędziesz, z pewnością poczujesz zmianę w swej mocy. Lecz nie będzie to łatwe zadanie.</value>
+  </data>
+  <data name="Answer_105_Slot_0" xml:space="preserve">
+    <value>Wrócę z nim.</value>
+  </data>
+  <data name="Text_108" xml:space="preserve">
+    <value>To zaiste 'Pierścień Chwały'. Lśni mistyczną aurą, bardziej, niż sobie wyobrażałem. Z tym pierścieniem wiąże się legenda, której nie zdołasz pojąć. To prawdziwe błogosławieństwo w twych dłoniach.</value>
+  </data>
+  <data name="Answer_108_Slot_0" xml:space="preserve">
+    <value>Rozumiem.</value>
+  </data>
+  <data name="Text_109" xml:space="preserve">
+    <value>Podobno ten pierścień wskrzesza życie i daje wieczną młodość. Lecz działa tylko na bohaterów, którzy mają moc, by władać jego siłą.</value>
+  </data>
+  <data name="Answer_109_Slot_0" xml:space="preserve">
+    <value>Dlaczego tak?</value>
+  </data>
+  <data name="Text_110" xml:space="preserve">
+    <value>To dlatego, że Etramu, Czarodziej z Arki, rzucił zaklęcie, by zło nie mogło go wykorzystać. Lecz pierścień uznaje, że jesteś go godzien.</value>
+  </data>
+  <data name="Answer_110_Slot_0" xml:space="preserve">
+    <value>Czyżby?</value>
+  </data>
+  <data name="Text_111" xml:space="preserve">
+    <value>'Pierścień Chwały' powstał, gdy proroctwo Secromicon stworzono z niezniszczalnego metalu. Oba uważano za święte, lecz ich los stał się nieznany, gdy zostały zabrane podczas buntu zastępcy dowódcy, Gaiona.</value>
+  </data>
+  <data name="Answer_111_Slot_0" xml:space="preserve">
+    <value>Czyżby?!</value>
+  </data>
+  <data name="Text_112" xml:space="preserve">
+    <value>Teraz, gdy odnaleziono 'Pierścień Chwały', zdołasz wyrosnąć na jeszcze potężniejszego wojownika.</value>
+  </data>
+  <data name="Answer_112_Slot_0" xml:space="preserve">
+    <value>Czuję, jak rośnie moja moc!</value>
+  </data>
+  <data name="Text_113" xml:space="preserve">
+    <value>Wyrośniesz na istotę o wiele potężniejszą niż przedtem. Proszę, użyj swej mocy dla pokoju naszego imperium.</value>
+  </data>
+  <data name="Answer_113_Slot_0" xml:space="preserve">
+    <value>Tak uczynię.</value>
+  </data>
+  <data name="Text_114" xml:space="preserve">
+    <value>Posiadasz już świętą moc.</value>
+  </data>
+  <data name="Answer_114_Slot_0" xml:space="preserve">
+    <value>Wrócę później.</value>
+  </data>
+  <data name="Text_115" xml:space="preserve">
+    <value>'Ciemny Kamień', który podobno daje wojownikom nową moc, odnaleziono na kontynencie MU. Lecz nie jesteś gotów, by użyć tej mocy. Poczekaj, aż będziesz gotów.</value>
+  </data>
+  <data name="Answer_115_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę gotów.</value>
+  </data>
+  <data name="Text_116" xml:space="preserve">
+    <value>By zyskać pełnię mocy, musisz przygotować się ze 'Zwojem Cesarza', który zapisuje historyczne fakty o cesarzu Murenie. Udaj się do 'Seviny' w Devias.</value>
+  </data>
+  <data name="Answer_116_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę gotów.</value>
+  </data>
+  <data name="Text_117" xml:space="preserve">
+    <value>Nie udało ci się zostać Blade Knightem. Wróć, gdy zdobędziesz nową moc dzięki 'Pierścieniowi Chwały'.</value>
+  </data>
+  <data name="Answer_117_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę gotów.</value>
+  </data>
+  <data name="Text_118" xml:space="preserve">
+    <value>Musisz ofiarować Bogom 3 000 000 Zen, by uświęcić to zadanie. Twój Zen nie wystarcza.</value>
+  </data>
+  <data name="Answer_118_Slot_0" xml:space="preserve">
+    <value>Wrócę z 3 000 000 Zen.</value>
+  </data>
+  <data name="Text_119" xml:space="preserve">
+    <value>Twoja ofiara dla Boga nie jest wystarczająca. Opowiem ci o wyroczni, jeśli złożysz ofiarę 2 000 000 Zen.</value>
+  </data>
+  <data name="Answer_119_Slot_0" xml:space="preserve">
+    <value>Wrócę z 2 000 000 Zen.</value>
+  </data>
+  <data name="Text_130" xml:space="preserve">
+    <value>To zaiste 'Pierścień Chwały'. Spójrz, jak lśni. Ten pierścień skrywa czas i legendę, których nie zdołasz nawet zacząć pojmować. To błogosławieństwo, że go odnalazłeś!</value>
+  </data>
+  <data name="Answer_130_Slot_0" xml:space="preserve">
+    <value>Zaskakują mnie te słowa!</value>
+  </data>
+  <data name="Text_131" xml:space="preserve">
+    <value>Tak, podobno pierścień ma moc przywracania życia umarłym i dawania wiecznej młodości. Pokaże pełnię swej mocy tylko w dłoniach prawdziwego bohatera, który zdoła nad nią zapanować.</value>
+  </data>
+  <data name="Answer_131_Slot_0" xml:space="preserve">
+    <value>Dlaczego tak?</value>
+  </data>
+  <data name="Text_132" xml:space="preserve">
+    <value>To dlatego, że Etramu, Czarodziej z Arki, rzucił na niego zaklęcie, by nie wpadł w niepowołane ręce. Lecz zdaje się, że ty jesteś właściwą osobą!</value>
+  </data>
+  <data name="Answer_132_Slot_0" xml:space="preserve">
+    <value>Czyżby!</value>
+  </data>
+  <data name="Text_133" xml:space="preserve">
+    <value>'Pierścień Chwały' powstał, gdy proroctwo Secromicon stworzono z niezniszczalnego metalu. Oba uważano za święte, lecz ich los stał się nieznany, gdy zostały zabrane podczas buntu zastępcy dowódcy, Gaiona.</value>
+  </data>
+  <data name="Answer_133_Slot_0" xml:space="preserve">
+    <value>Czyżby!</value>
+  </data>
+  <data name="Text_134" xml:space="preserve">
+    <value>Teraz, gdy odnaleziono 'Pierścień Chwały', zdołasz wyrosnąć na jeszcze potężniejszego wojownika.</value>
+  </data>
+  <data name="Answer_134_Slot_0" xml:space="preserve">
+    <value>Czuję, jak rośnie moja moc!</value>
+  </data>
+  <data name="Text_135" xml:space="preserve">
+    <value>Jeśli pragniesz zyskać nową moc, słuchaj mnie uważnie. 'Ciemny Kamień', który podobno daje wojownikom nową moc, odnaleziono na kontynencie MU.</value>
+  </data>
+  <data name="Answer_135_Slot_0" xml:space="preserve">
+    <value>Chciałbym usłyszeć więcej.</value>
+  </data>
+  <data name="Text_136" xml:space="preserve">
+    <value>Dzięki 'Ciemnemu Kamieniowi' możesz opanować nową umiejętność. Nie będzie to łatwe, lecz skoro zdołałeś zdobyć 'Pierścień Chwały', może i to jest dla ciebie możliwe.</value>
+  </data>
+  <data name="Answer_136_Slot_0" xml:space="preserve">
+    <value>Co mam zrobić?</value>
+  </data>
+  <data name="Text_137" xml:space="preserve">
+    <value>Wieść niesie, że kamień można znaleźć w Tarkanie i Icarus. Strzeż się potworów. Te, które posiadają kamień, zareagują tylko na tych, którzy mają szczególną zdolność.</value>
+  </data>
+  <data name="Answer_137_Slot_0" xml:space="preserve">
+    <value>Powtórz, proszę, tę historię.</value>
+  </data>
+  <data name="Answer_137_Slot_1" xml:space="preserve">
+    <value>W takim razie spróbuję!</value>
+  </data>
+  <data name="Answer_137_Slot_2" xml:space="preserve">
+    <value>Nie czuję się jeszcze pewnie.</value>
+  </data>
+  <data name="Text_138" xml:space="preserve">
+    <value>'Ciemny Kamień' wzywa cię właśnie teraz. Z nim w dłoni z pewnością zyskasz moc, jakiej nigdy wcześniej nie czułeś, lecz wielu innych wojowników również rozpaczliwie go szuka.</value>
+  </data>
+  <data name="Answer_138_Slot_0" xml:space="preserve">
+    <value>Wrócę z 'Ciemnym Kamieniem'.</value>
+  </data>
+  <data name="Text_139" xml:space="preserve">
+    <value>A więc odnalazłeś 'Ciemny Kamień'. Zapisano, że ten kamień to zaschła krew bohatera 'Benelope', który walczył w wojnie Bogów z Szatanem.</value>
+  </data>
+  <data name="Answer_139_Slot_0" xml:space="preserve">
+    <value>Opowiedz więcej.</value>
+  </data>
+  <data name="Text_140" xml:space="preserve">
+    <value>Benelope pochodzi z rodu rycerskiego. Po klęsce w wojnie ćwiczył nową magię i sztuki walki. Umiejętności te po cichu przekazywano wojownikom z krwią rycerza, by walczyli z potężną siłą Kunduna.</value>
+  </data>
+  <data name="Answer_140_Slot_0" xml:space="preserve">
+    <value>Więc...</value>
+  </data>
+  <data name="Text_141" xml:space="preserve">
+    <value>Tak, płynie w tobie krew wojownika. Dlatego moc Benelope zostanie ci dana poprzez 'Ciemny Kamień'.</value>
+  </data>
+  <data name="Answer_141_Slot_0" xml:space="preserve">
+    <value>Otrzymałem nową moc!</value>
+  </data>
+  <data name="Text_142" xml:space="preserve">
+    <value>Zdobyłeś nową moc dzięki 'Pierścieniowi Chwały'. Lecz jest coś, czego nie wiesz.</value>
+  </data>
+  <data name="Answer_142_Slot_0" xml:space="preserve">
+    <value>Cóż takiego?</value>
+  </data>
+  <data name="Text_143" xml:space="preserve">
+    <value>Możliwe, że zdołasz zdobyć nową moc. Legendarny skarb zwany 'Ciemny Kamień', uważany za święty wraz z 'Pierścieniem Chwały', wzywa cię.</value>
+  </data>
+  <data name="Answer_143_Slot_0" xml:space="preserve">
+    <value>Trudno w to uwierzyć!</value>
+  </data>
+  <data name="Text_144" xml:space="preserve">
+    <value>Lugard, Bóg Światła, prosi cię o przysługę. Lecz wciąż nie jesteś godzien. Radzę, byś wrócił, gdy staniesz się silniejszy.</value>
+  </data>
+  <data name="Answer_144_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę silniejszy.</value>
+  </data>
+  <data name="Text_145" xml:space="preserve">
+    <value>Lugard, Bóg Światła, prosi cię o przysługę. Lecz wciąż nie jesteś godzien. Proszę, wróć, gdy ukończysz poprzednie zadanie.</value>
+  </data>
+  <data name="Answer_145_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy je ukończę.</value>
+  </data>
+  <data name="Text_146" xml:space="preserve">
+    <value>Nie masz dość Zen. Możesz zgłosić się do tej misji, ofiarowując Lugardowi 5 000 000 Zen.</value>
+  </data>
+  <data name="Answer_146_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę gotów.</value>
+  </data>
+  <data name="Text_147" xml:space="preserve">
+    <value>Lugard, Bóg Światła, prosi cię o przysługę.</value>
+  </data>
+  <data name="Answer_147_Slot_0" xml:space="preserve">
+    <value>Cóż to takiego?</value>
+  </data>
+  <data name="Text_148" xml:space="preserve">
+    <value>Lugard prosi cię, byś odnalazł bohaterów zdolnych przeciwstawić się nowemu zagrożeniu, jakim Balgass grozi MU.</value>
+  </data>
+  <data name="Answer_148_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_149" xml:space="preserve">
+    <value>Wiemy, że armia Balgassa nadciąga na kontynent MU przez Crywolf Fortress, lecz nie ma jeszcze dokładnego wyjaśnienia całej tej historii.</value>
+  </data>
+  <data name="Answer_149_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_150" xml:space="preserve">
+    <value>Usilnie staramy się pojąć znaczenie zaufania, jakim darzy nas Lugard, lecz wciąż nam to trudno z powodu naszych niedostatecznych zdolności.</value>
+  </data>
+  <data name="Answer_150_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_151" xml:space="preserve">
+    <value>Wierzę, że to ty możesz nam pomóc. Czy chcesz z nami współpracować?</value>
+  </data>
+  <data name="Answer_151_Slot_0" xml:space="preserve">
+    <value>Posłuchaj jeszcze raz.</value>
+  </data>
+  <data name="Answer_151_Slot_1" xml:space="preserve">
+    <value>Przyjmij zadanie</value>
+  </data>
+  <data name="Answer_151_Slot_2" xml:space="preserve">
+    <value>Odrzuć zadanie</value>
+  </data>
+  <data name="Text_152" xml:space="preserve">
+    <value>Byś mógł nam pomóc, musisz stawić czoła armii Balgassa. Zanim zaczniesz, muszę sprawdzić, czy jesteś dość potężny do tej misji.</value>
+  </data>
+  <data name="Answer_152_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_153" xml:space="preserve">
+    <value>Zniszcz potwory Death Beam, Hellmaine i Dark Phoenix, które panują nad Tarkanem, Aidą i Icarus, i przynieś 3 odpowiednie dowody.</value>
+  </data>
+  <data name="Answer_153_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+  <data name="Text_154" xml:space="preserve">
+    <value>Gratulacje, wypełniłeś powinność. Oto drobiazg za twój trud.</value>
+  </data>
+  <data name="Answer_154_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_155" xml:space="preserve">
+    <value>Balgass sam w sobie jest wielkim zagrożeniem, gdyż współdziała z Eresią, Królową Czarów, i sprowadził na ten świat takie niebezpieczeństwo.</value>
+  </data>
+  <data name="Answer_155_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_156" xml:space="preserve">
+    <value>Przewidujemy, że Balgass szykuje nowe zagrożenie dla kontynentu MU swą armią złej magii.</value>
+  </data>
+  <data name="Answer_156_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+  <data name="Text_157" xml:space="preserve">
+    <value>Nie masz dość środków. Ofiaruj Lugardowi 7 000 000 Zen, by zgłosić się do tej misji.</value>
+  </data>
+  <data name="Answer_157_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę gotów.</value>
+  </data>
+  <data name="Text_158" xml:space="preserve">
+    <value>Witaj, teraz naprawdę jesteś gotów, by nam pomóc.</value>
+  </data>
+  <data name="Answer_158_Slot_0" xml:space="preserve">
+    <value>W czym mam pomóc?</value>
+  </data>
+  <data name="Text_159" xml:space="preserve">
+    <value>Otóż wedle naszych informacji Balgass utworzył miejsce zwane Barracks. 12 apostołów Lugarda wierzy, że to nowe zagrożenie ze strony Balgassa.</value>
+  </data>
+  <data name="Answer_159_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_160" xml:space="preserve">
+    <value>Dokładne informacje o 'Barrack' skłaniają do wejścia do strefy Barrack, by zmniejszyć groźbę dalszego rozrostu armii Balgassa.</value>
+  </data>
+  <data name="Answer_160_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_161" xml:space="preserve">
+    <value>Na szczęście opieka Lugarda pomoże znaleźć drogę do Balgass' Barrack. Wejdź do strefy, zniszcz żołnierzy i zdobądź dokładne informacje. Czy przyniesiesz właściwe dane?</value>
+  </data>
+  <data name="Answer_161_Slot_0" xml:space="preserve">
+    <value>Posłuchaj jeszcze raz.</value>
+  </data>
+  <data name="Answer_161_Slot_1" xml:space="preserve">
+    <value>Przyjmij zadanie</value>
+  </data>
+  <data name="Answer_161_Slot_2" xml:space="preserve">
+    <value>Odrzuć zadanie</value>
+  </data>
+  <data name="Text_162" xml:space="preserve">
+    <value>Udaj się na północny cmentarz strefy Crywolf i odnajdź żołnierza zbiega z Balgass' Barrack. Błogosławieństwo Lugarda obdarzyło jednego z nich rozumem. Zwie siebie Werewolf Guardsman.</value>
+  </data>
+  <data name="Answer_162_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_163" xml:space="preserve">
+    <value>Zaprowadzi cię do Balgass' Barrack. Wejdź do strefy i zniszcz co najmniej 10 potworów w Barrack.</value>
+  </data>
+  <data name="Answer_163_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+  <data name="Text_164" xml:space="preserve">
+    <value>Bezpiecznie wypełniłeś powinność. Doceniam twój trud i silną wolę.</value>
+  </data>
+  <data name="Answer_164_Slot_0" xml:space="preserve">
+    <value>Mów dalej.</value>
+  </data>
+  <data name="Text_165" xml:space="preserve">
+    <value>Wielce pomogłeś w budowaniu pokoju na kontynencie MU i w Crywolf dzięki informacjom i zniszczeniu wszystkich potworów.</value>
+  </data>
+  <data name="Answer_165_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+  <data name="Text_166" xml:space="preserve">
+    <value>Nie jesteś jeszcze godzien. Odwiedź Strażnika Mallona i wróć, gdy będziesz w pełni gotów do tej misji.</value>
+  </data>
+  <data name="Answer_166_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść.</value>
+  </data>
+  <data name="Text_167" xml:space="preserve">
+    <value>Nie masz dość środków. Ofiaruj Lugardowi 10 000 000 Zen, by zgłosić się do tej misji.</value>
+  </data>
+  <data name="Answer_167_Slot_0" xml:space="preserve">
+    <value>Wrócę, gdy będę gotów.</value>
+  </data>
+  <data name="Text_168" xml:space="preserve">
+    <value>Twoja odwaga i inicjatywa dały nam wszystkim wielką nadzieję.</value>
+  </data>
+  <data name="Answer_168_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_169" xml:space="preserve">
+    <value>Balgass ukrył się w odosobnionym miejscu, by odzyskać siły w znużonym ciele.</value>
+  </data>
+  <data name="Answer_169_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_170" xml:space="preserve">
+    <value>By wypełnić misję powierzoną przez Lugarda, trzeba odnaleźć dokładne położenie Balgassa i zniszczyć szkolącą się armię.</value>
+  </data>
+  <data name="Answer_170_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_171" xml:space="preserve">
+    <value>Ostatnia misja po zadaniu Lugarda obejmuje wielką i trudną próbę. Czy nadal jesteś zainteresowany?</value>
+  </data>
+  <data name="Answer_171_Slot_0" xml:space="preserve">
+    <value>Posłuchaj jeszcze raz.</value>
+  </data>
+  <data name="Answer_171_Slot_1" xml:space="preserve">
+    <value>Przyjmij zadanie</value>
+  </data>
+  <data name="Answer_171_Slot_2" xml:space="preserve">
+    <value>Odrzuć zadanie</value>
+  </data>
+  <data name="Text_172" xml:space="preserve">
+    <value>Wejdź przez drzwi na północnym krańcu Balgass' Barrack; przygotujemy to miejsce zawczasu.</value>
+  </data>
+  <data name="Answer_172_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+  <data name="Text_173" xml:space="preserve">
+    <value>Gratulacje, przeszedłeś ostatnią próbę Lugarda. Odtąd jego błogosławieństwo będzie z tobą, dokądkolwiek pójdziesz.</value>
+  </data>
+  <data name="Answer_173_Slot_0" xml:space="preserve">
+    <value>Słuchaj dalej.</value>
+  </data>
+  <data name="Text_174" xml:space="preserve">
+    <value>Dzięki twojemu trudowi na kontynencie MU i w Crywolf zapanował pokój, mimo nowego zagrożenia ze strony Balgassa. Głęboko doceniam twą pomoc.</value>
+  </data>
+  <data name="Answer_174_Slot_0" xml:space="preserve">
+    <value>Zakończ opowieść</value>
+  </data>
+</root>

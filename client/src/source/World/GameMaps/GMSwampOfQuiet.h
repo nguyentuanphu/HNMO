@@ -1,0 +1,41 @@
+// GMSwampOfQuiet.h: interface for the GMSwampOfQuiet class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_GMSWAMPOFQUIET_H__26257272_673D_4866_8C8D_F37CA48B6125__INCLUDED_)
+#define AFX_GMSWAMPOFQUIET_H__26257272_673D_4866_8C8D_F37CA48B6125__INCLUDED_
+
+#pragma once
+
+#include "Render/Models/DrawLook.h"
+
+namespace SEASON3C
+{
+    class GMSwampOfQuiet
+    {
+    public:
+        GMSwampOfQuiet();
+        virtual ~GMSwampOfQuiet();
+
+        static bool IsCurrentMap();
+        static void RenderBaseSmoke();
+
+        //. 오브젝트
+        static void CreateObject(OBJECT* pObject);
+        static bool MoveObject(OBJECT* pObject);
+        static bool UpdateObjectEffects(OBJECT* pObject, BMD* pModel);
+        static bool RenderObject(const OBJECT* pObject, DrawLook& look, BMD* pModel, bool ExtraMon = 0);
+        static void RenderObjectAfterCharacter(const OBJECT* pObject, DrawLook& look, BMD* pModel, bool ExtraMon = 0);
+
+        //. 몬스터
+        static bool MoveMonsterVisual(OBJECT* pObject, BMD* pModel);
+        static void MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD* pModel);
+        static bool UpdateMonsterEffects(CHARACTER* pCharacter, OBJECT* pObject, BMD* pModel);
+
+        static bool AttackEffectMonster(CHARACTER* pCharacter, OBJECT* pObject, BMD* pModel);
+
+        static void PlayObjectSound(OBJECT* pObject);
+    };
+}
+
+#endif // !defined(AFX_GMSWAMPOFQUIET_H__26257272_673D_4866_8C8D_F37CA48B6125__INCLUDED_)

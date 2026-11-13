@@ -1,0 +1,62 @@
+// <copyright file="GameContextTestHelper.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Tests;
+
+using Microsoft.Extensions.Logging.Abstractions;
+using HNMO.GameLogic;
+using HNMO.Persistence.InMemory;
+using HNMO.PlugIns;
+
+/// <summary>
+/// Helper functions to create test game contexts.
+/// </summary>
+public static class GameContextTestHelper
+{
+    /// <summary>
+    /// Creates a game context.
+    /// </summary>
+    /// <param name="additionalPlugInConfigurations">Additional plugin configurations which should be applied, e.g. to deactivate specific plugins.</param>
+    /// <param name="dropGenerator">The drop generator to use, e.g. to test reward item drops. Defaults to <see cref="NullDropGenerator"/>, which never generates anything.</param>
+    /// <param name="maximumLevel">The maximum character level of the configuration. Needs to be greater than 0 for tests which grant experience, since experience gain stops at the maximum level.</param>
+    /// <returns>The game context with MuHelperFeaturePlugIn configured.</returns>
+    public static IGameContext CreateGameContext(IEnumerable<PlugInConfiguration>? additionalPlugInConfigurations = null, IDropGenerator? dropGenerator = null, short maximumLevel = 0)
+    {
+        dropGenerator ??= NullDropGenerator.Instance;
+        var contextProvider = new InMemoryPersistenceContextProvider();
+        var context = contextProvider.CreateNewContext();
+        var gameConfig = context.CreateNew<HNMO.Persistence.BasicModel.GameConfiguration>();
+        var mapDef = context.CreateNew<HNMO.Persistence.BasicModel.GameMapDefinition>();
+        mapDef.Number = 0;
+        mapDef.TerrainData = new byte[ushort.MaxValue + 3];
+        gameConfig.Maps.Add(mapDef);
+        gameConfig.MaximumPartySize = 5;
+        gameConfig.RecoveryInterval = int.MaxValue;
+        gameConfig.MaximumInventoryMoney = int.MaxValue;
+        gameConfig.ItemDropDuration = TimeSpan.FromMinutes(1);
+        gameConfig.MaximumLevel = maximumLevel;
+
+        var mapInitializer = new MapInitializer(gameConfig, new NullLogger<MapInitializer>(), NullDropGenerator.Instance, null);
+        var plugInConfigurations = new List<PlugInConfiguration>
+        {
+            new ()
+            {
+                TypeId = new Guid("E90A72C3-0459-4323-B6D3-171F88D35542"), // MuHelperFeaturePlugIn
+                IsActive = true,
+            },
+        };
+
+        if (additionalPlugInConfigurations is { })
+        {
+            plugInConfigurations.AddRange(additionalPlugInConfigurations);
+        }
+
+        var plugInManager = new PlugInManager(plugInConfigurations, new NullLoggerFactory(), null, null);
+        var gameContext = new GameContext(gameConfig, contextProvider, mapInitializer, new NullLoggerFactory(), plugInManager, dropGenerator, new ConfigurationChangeMediator());
+        mapInitializer.PlugInManager = gameContext.PlugInManager;
+        mapInitializer.PathFinderPool = gameContext.PathFinderPool;
+
+        return gameContext;
+    }
+}

@@ -1,0 +1,18 @@
+﻿// <copyright file="BanCharChatCommandArgs.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ChatCommands.Arguments;
+
+/// <summary>
+/// Arguments used by BanCharChatCommandPlugIn.
+/// </summary>
+public class BanCharChatCommandArgs : ArgumentsBase
+{
+    /// <summary>
+    /// Gets or sets the character name.
+    /// </summary>
+    [Argument("char")]
+    [ValueReference(ChatCommandValueReference.CharacterName)]
+    public string? CharacterName { get; set; }
+}

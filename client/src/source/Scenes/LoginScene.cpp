@@ -1,0 +1,541 @@
+///////////////////////////////////////////////////////////////////////////////
+// LoginScene.cpp - Login scene implementation
+///////////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "Core/Utilities/Random.h"
+#include "LoginScene.h"
+#include "Camera/CameraUtility.h"
+#include "Camera/CameraManager.h"
+#include "Camera/CameraMove.h"
+#include "Audio/DSPlaySound.h"
+#include "Render/Textures/ZzzOpenglUtil.h"
+#include "Render/Renderer/MuRenderer.h"
+#include "Engine/Object/ZzzObject.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "Render/Terrain/ZzzLodTerrain.h"
+#include "Engine/Object/ZzzInterface.h"
+#include "Render/Effects/ZzzEffect.h"
+#include "Engine/AI/GOBoid.h"
+#include "GameLogic/Pets/w_PetProcess.h"
+#include "World/MapInfra/MapManager.h"
+#include "UI/Core/SceneUICoordinator.h"
+#include "UI/Windows/CreditWin.h"
+#include "Core/Input/Input.h"
+#include "Network/Server/WSclient.h"
+#include "Network/Reconnect/ReconnectManager.h"
+#include "Core/Utilities/Log/muConsoleDebug.h"
+#include "I18N/All.h"
+#include "Engine/Object/ZzzCharacter.h"
+#include "SceneCommon.h"
+#include "Core/Utilities/FrameProfiler.h"
+#include "Engine/Object/ZzzOpenData.h"
+#include "UI/Core/WindowSystem.h"
+#include "UI/Dialogs/CommonMessageBox.h"
+#include "UI/Scaling/UITransform.h"
+#include "LoginSceneOverlay.h"
+#include "Render/Text/CUIRenderText.h"
+#include "Scenes/SceneLightingSetup.h"
+#include "Scenes/ScenePostProcessing.h"
+
+// External declarations
+extern int DeleteGuildIndex;
+extern EGameScene SceneFlag;
+extern int g_iChatInputType;
+extern float g_fMULogoAlpha;
+extern wchar_t m_Username[MAX_USERNAME_SIZE + 1];
+extern CHARACTER* Hero;
+extern double WorldTime;
+extern HFONT g_hFont;
+extern wchar_t m_ExeVersion[11];
+extern HWND g_hWnd;
+
+#ifdef _EDITOR
+extern "C" float DevEditor_GetLoginTerrainDist();
+#endif
+
+//=============================================================================
+// LoginScene Camera State (local to this file)
+//=============================================================================
+namespace {
+
+struct LoginCameraState {
+    int walkCut = 0;
+    int currentCount = -1;
+    int currentNumber = 0;
+    int currentWalkType = 0;
+    vec3_t currentPosition = {0, 0, 0};
+    vec3_t currentAngle = {0, 0, 0};
+    float currentWalkDelta[6] = {0, 0, 0, 0, 0, 0};
+
+    // Predefined camera animation paths (6 paths × 6 values each)
+    static constexpr float WALK_PATHS[6][6] = {
+        {0.f, -1000.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {0.f, -1100.f, 500.f, -80.f, 0.f, 0.f},
+        {200.f, -800.f, 250.f, -87.f, 0.f, -10.f}
+    };
+
+    void Reset() {
+        currentCount = -1;
+        walkCut = 0;
+        currentNumber = 0;
+        currentWalkType = 0;
+    }
+};
+
+// File-local camera state instance
+LoginCameraState g_loginCamera;
+
+}  // namespace
+
+//=============================================================================
+// Accessor functions for external use
+//=============================================================================
+
+int GetLoginCameraCount() {
+    return g_loginCamera.currentCount;
+}
+
+int GetLoginCameraWalkCut() {
+    return g_loginCamera.walkCut;
+}
+
+//=============================================================================
+// LoginScene Implementation
+//=============================================================================
+
+void MoveCharacterCamera(vec3_t Origin, vec3_t Position, vec3_t Angle)
+{
+    vec3_t TransformPosition;
+    g_Camera.Angle[0] = 0.f;
+    g_Camera.Angle[1] = 0.f;
+    g_Camera.Angle[2] = Angle[2];
+    float Matrix[3][4];
+    AngleMatrix(g_Camera.Angle, Matrix);
+    VectorIRotate(Position, Matrix, TransformPosition);
+    VectorAdd(Origin, TransformPosition, g_Camera.Position);
+    g_Camera.Angle[0] = Angle[0];
+}
+
+/**
+ * @brief Initializes login camera to starting position and angle.
+ */
+static void InitializeLoginCamera()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        g_loginCamera.currentPosition[i] = LoginCameraState::WALK_PATHS[0][i];
+        g_loginCamera.currentAngle[i] = LoginCameraState::WALK_PATHS[0][i + 3];
+    }
+    g_loginCamera.currentNumber = 1;
+    g_loginCamera.currentWalkType = 1;
+
+    for (int i = 0; i < 3; i++)
+    {
+        g_loginCamera.currentWalkDelta[i] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
+        g_loginCamera.currentWalkDelta[i + 3] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
+    }
+}
+
+/**
+ * @brief Calculates movement delta for transitioning to target waypoint.
+ */
+static void CalculateWalkDelta()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        g_loginCamera.currentWalkDelta[i] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i] - g_loginCamera.currentPosition[i]) / 128;
+        g_loginCamera.currentWalkDelta[i + 3] = (LoginCameraState::WALK_PATHS[g_loginCamera.currentNumber][i + 3] - g_loginCamera.currentAngle[i]) / 128;
+    }
+}
+
+/**
+ * @brief Selects next camera waypoint based on scene state.
+ */
+static void SelectNextWaypoint()
+{
+    if (SceneFlag == LOG_IN_SCENE)
+    {
+        g_loginCamera.currentNumber = Random::Rand() % 4 + 1;
+        g_loginCamera.currentWalkType = Random::Rand() % 2;
+    }
+    else
+    {
+        g_loginCamera.currentNumber = 5;
+        g_loginCamera.currentWalkType = 0;
+    }
+}
+
+/**
+ * @brief Updates camera waypoint transition timing and selection.
+ */
+static void UpdateCameraWaypoint()
+{
+    g_loginCamera.currentCount++;
+
+    bool shouldTransition = (g_loginCamera.walkCut == 0 && g_loginCamera.currentCount >= 40) ||
+                           (g_loginCamera.walkCut > 0 && g_loginCamera.currentCount >= 128);
+
+    if (shouldTransition)
+    {
+        g_loginCamera.currentCount = 0;
+
+        if (g_loginCamera.walkCut == 0)
+        {
+            g_loginCamera.walkCut = 1;
+        }
+        else
+        {
+            SelectNextWaypoint();
+        }
+
+        CalculateWalkDelta();
+    }
+}
+
+/**
+ * @brief Interpolates camera position/angle towards the current target waypoint.
+ *
+ * Two walk modes, selected per waypoint via WALK_PATHS[...][6]:
+ *  - Type 0 (smooth): exponential ease toward target (divide by SMOOTH_EASING_FACTOR each frame).
+ *  - Type 1 (linear): step by a precomputed per-frame delta (see CalculateWalkDelta).
+ *
+ * Both modes update all 3 position components AND all 3 angle components so camera
+ * rotation tracks the waypoint pose, not just X/Y translation.
+ */
+static void InterpolateCameraMovement()
+{
+    constexpr int SMOOTH_EASING_FACTOR = 6;
+    const int target = g_loginCamera.currentNumber;
+
+    if (g_loginCamera.currentWalkType == 0)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            g_loginCamera.currentPosition[i] += (LoginCameraState::WALK_PATHS[target][i] - g_loginCamera.currentPosition[i]) / SMOOTH_EASING_FACTOR;
+            g_loginCamera.currentAngle[i]    += (LoginCameraState::WALK_PATHS[target][i + 3] - g_loginCamera.currentAngle[i]) / SMOOTH_EASING_FACTOR;
+        }
+    }
+    else
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            g_loginCamera.currentPosition[i] += g_loginCamera.currentWalkDelta[i];
+            g_loginCamera.currentAngle[i]    += g_loginCamera.currentWalkDelta[i + 3];
+        }
+    }
+}
+
+/**
+ * @brief Updates login scene camera animation along predefined waypoint path.
+ */
+void MoveCamera()
+{
+    if (CCameraMove::GetInstancePtr()->IsTourMode())
+    {
+        return;
+    }
+
+    if (g_loginCamera.currentCount == -1)
+    {
+        InitializeLoginCamera();
+    }
+
+    UpdateCameraWaypoint();
+    InterpolateCameraMovement();
+
+    g_Camera.FOV = 45.f;
+    vec3_t Position;
+    Vector(0.f, 0.f, 0.f, Position);
+    MoveCharacterCamera(Position, g_loginCamera.currentPosition, g_loginCamera.currentAngle);
+}
+
+void CreateLogInScene()
+{
+    EnableMainRender = true;
+    gMapManager.WorldActive = WD_73NEW_LOGIN_SCENE;
+
+    gMapManager.LoadWorld(gMapManager.WorldActive);
+
+    OpenLogoSceneData();
+
+    CSceneUICoordinator::Instance().CreateLoginScene();
+
+    // The in-game reconnect logs in again on the game server it lost, over the connection
+    // that found it back; otherwise the login starts at the connect server's list.
+    ReconnectManager& reconnect = ReconnectManager::Instance();
+    if (reconnect.IsActive())
+        ConnectForLogin(reconnect.GetServerIp(), reconnect.GetServerPort(), reconnect.TakeStandby());
+    else
+        ConnectForLogin(szServerIpAddress, g_ServerPort);
+
+    GuildInputEnable = false;
+    TabInputEnable = false;
+    GoldInputEnable = false;
+    InputEnable = true;
+    ClearInput();
+
+    if (g_iChatInputType == 0)
+    {
+        wcscpy_s(InputText[0], 256, m_Username);
+        InputLength[0] = wcslen(InputText[0]);
+        InputTextMax[0] = MAX_USERNAME_SIZE;
+        if (InputLength[0] == 0)	InputIndex = 0;
+        else InputIndex = 1;
+    }
+    InputNumber = 2;
+    InputTextHide[1] = 1;
+
+    // FIX: Enable tour mode with offset correction
+    // Tour mode waypoints work well for movement, but need position offset
+    // Offset is applied in CCameraMove::GetCurrentCameraPos()
+    CCameraMove::GetInstancePtr()->PlayCameraWalk(Hero->Object.Position, 1000);
+    CCameraMove::GetInstancePtr()->SetTourMode(TRUE, FALSE, 0);  // Start from waypoint 0
+
+    MoveMainCamera();
+
+    g_fMULogoAlpha = 0;
+
+    g_ErrorReport.Write(L"> Login Scene init success.\r\n");
+}
+
+// Moves the camera, builds the view the frame draws with, and culls the map objects and the effects against it.
+static void UpdateLogInSceneView()
+{
+    MoveMainCamera();
+
+#ifdef _EDITOR
+    g_Camera.ViewFar = DevEditor_GetLoginTerrainDist();
+#else
+    g_Camera.ViewFar = LoginSceneCameraDefaults::RENDER_TERRAIN_DIST;
+#endif
+    g_Camera.ViewNear = 100.f; // Push near plane out to preserve z-buffer precision
+
+    const auto viewport = UI::Scaling::FullReferenceViewport();
+    UpdateCameraView(viewport.x, viewport.y, viewport.width, viewport.height);
+
+    // LoginScene doesn't call CreateFrustrum (DefaultCamera tour mode angles differ from
+    // legacy hardcoded values). Instead, TestFrustrum2D is bypassed for LOG_IN_SCENE and
+    // we reset iteration bounds to cover the full terrain so stale bounds from other scenes
+    // don't restrict the render loop.
+    ResetFrustrumBoundsFullTerrain();
+    // Behind the credits the world is not drawn.
+    if (!g_CreditWin.IsVisible())
+    {
+        CullWorld();
+        Scenes::Lighting::PinWorldDynamicLights();
+    }
+}
+
+void PlayLogInSceneMusic()
+{
+    // The credits have their own theme. A login that went through leaves for the character select this frame,
+    // and that screen asks for no music of its own: it keeps the login theme, also when the credits were opened
+    // while the login was on its way. Tracks loop; asking every frame also starts the track once the music is
+    // switched on. A no-op while it plays.
+    const bool leavingForCharacterSelect = CurrentProtocolState == RECEIVE_LOG_IN_SUCCESS;
+    const bool creditsPlay = g_CreditWin.IsVisible() && !leavingForCharacterSelect;
+    ::PlayMp3(creditsPlay ? MUSIC_MUTHEME : MUSIC_LOGIN_THEME);
+}
+
+void NewMoveLogInScene()
+{
+    // PrepareSceneBeforeFrame creates the scene, between frames.
+    if (!InitLogIn)
+        return;
+
+    PlayLogInSceneMusic();
+
+    if (!g_CreditWin.IsVisible())
+    {
+        InitTerrainLight();
+        MoveObjects();
+        MoveMounts();
+        MoveLeaves();
+
+        // Update camera BEFORE checking character visibility
+        MoveCamera();
+
+        // Now check character visibility with updated frustum
+        MoveCharactersClient();
+
+        MoveEffects();
+        MoveJoints();
+        MoveParticles();
+        MoveBoids();
+        ThePetProcess().UpdatePets();
+        UpdateCharacterEffects();
+        UpdateObjectEffects();
+        UpdateMountEffects();
+        UpdateEffectModelEffects();
+    }
+
+    UpdateLogInSceneView();
+
+    // ESC menu toggle is handled by CSceneUICoordinator::Update()
+    if (RECEIVE_LOG_IN_SUCCESS == CurrentProtocolState)
+    {
+        g_ErrorReport.Write(L"> Request Character list\r\n");
+
+        CCameraMove::GetInstancePtr()->SetTourMode(FALSE);
+
+        // Tear down the login scene data before asking the server for the
+        // account characters, otherwise a fast reply can be cleared again.
+        ReleaseLogoSceneData();
+
+        SceneFlag = CHARACTER_SCENE;
+        CurrentProtocolState = REQUEST_CHARACTERS_LIST;
+        SocketClient->ToGameServer()->SendRequestCharacterList(g_pMultiLanguage->GetLanguage());
+    }
+
+    g_ConsoleDebug->UpdateMainScene();
+}
+
+// The logo (tour mode) and the bottom lines, drawn natively when RmlUi is not available, in the
+// text state NewRenderLogInScene() sets.
+static void RenderLoginSceneLinesNative(bool tourMode, const wchar_t* version)
+{
+    if (tourMode)
+    {
+        EnableAlphaBlend();
+        const BYTE glowLevel = static_cast<BYTE>(std::clamp(g_fMULogoAlpha - 0.3f, 0.f, 1.f) * 255.f);
+        RenderColorBitmap(BITMAP_LOG_IN + 17, 320.0f - 128.0f * 0.8f, 25.0f, 256.0f * 0.8f, 128.0f * 0.8f, 0.f, 0.f,
+                          1.f, 1.f, RGBA(glowLevel, glowLevel, glowLevel, glowLevel));
+        EnableAlphaTest();
+        const BYTE logoLevel = static_cast<BYTE>(std::clamp(g_fMULogoAlpha, 0.f, 1.f) * 255.f);
+        RenderColorBitmap(BITMAP_LOG_IN + 16, 320.0f - 128.0f * 0.8f, 25.0f, 256.0f * 0.8f, 128.0f * 0.8f, 0.f, 0.f,
+                          1.f, 1.f, RGBA(logoLevel, logoLevel, logoLevel, logoLevel));
+    }
+
+    SIZE Size;
+    wchar_t Text[100];
+
+    wcscpy_s(Text, 100, I18N::Game::CCopyright2001Webzen);
+    Size = g_pRenderText->MeasureText(Text, lstrlen(Text));
+    g_pRenderText->RenderText(335 - Size.cx, REFERENCE_HEIGHT - Size.cy - 1, Text);
+
+    wcscpy_s(Text, 100, I18N::Game::AllRightsReserved);
+
+    Size = g_pRenderText->MeasureText(Text, lstrlen(Text));
+    g_pRenderText->RenderText(335, REFERENCE_HEIGHT - Size.cy - 1, Text);
+
+    Size = g_pRenderText->MeasureText(version, lstrlen(version));
+    g_pRenderText->RenderText(0, REFERENCE_HEIGHT - Size.cy - 1, version);
+}
+
+bool NewRenderLogInScene(HDC hDC)
+{
+    if (!InitLogIn) return false;
+
+    FogEnable = true;
+
+    mu::GetRenderer().SetClearColor(0.f, 0.f, 0.f, 1.f);
+
+    const auto viewport = UI::Scaling::FullReferenceViewport();
+    BeginOpengl(viewport.x, viewport.y, viewport.width, viewport.height);
+    Scenes::Lighting::SubmitSceneLighting();
+
+    if (!g_CreditWin.IsVisible())
+    {
+        {
+            FRAME_PROFILE(Terrain);
+            RenderTerrain(false);
+        }
+        { FRAME_PROFILE(Characters); RenderCharactersClient(); }
+        { FRAME_PROFILE(Objects); RenderMount(); }
+        {
+            FRAME_PROFILE(Objects);
+            {
+                FRAME_PROFILE(Other);
+                RenderObjects();
+            }
+        }
+        { FRAME_PROFILE(Effects); RenderJoints(); }
+        { FRAME_PROFILE(Effects); RenderEffects(); }
+        { FRAME_PROFILE(Effects); RenderLeaves(); }
+        { FRAME_PROFILE(Effects); RenderBoids(); }
+        {
+            FRAME_PROFILE(Objects);
+            {
+                FRAME_PROFILE(Other);
+                RenderObjects_AfterCharacter();
+            }
+        }
+        {
+            FRAME_PROFILE(Characters);
+            Scenes::PostProcessing::RenderPetsWithoutBloom();
+        }
+    }
+
+    BeginSprite();
+    RenderSprites();
+    RenderParticles();
+    EndSprite();
+
+    Scenes::PostProcessing::EndSceneGeometry();
+
+    BeginBitmap();
+
+    const bool tourMode = CCameraMove::GetInstancePtr()->IsTourMode();
+    if (tourMode)
+    {
+        g_fMULogoAlpha += 0.02f;
+        if (g_fMULogoAlpha > 10.0f) g_fMULogoAlpha = 10.0f;
+    }
+
+    // The text state the native lines set, which RenderInfomation() below draws with.
+    g_pRenderText->SetFont(g_hFont);
+
+    InputTextWidth = 256;
+    g_pRenderText->SetTextColor(255, 255, 255, 255);
+    g_pRenderText->SetBgColor(0, 0, 0, 128);
+
+    wchar_t version[100];
+    swprintf_s(version, 100, I18N::Game::VerS, m_ExeVersion);
+
+    // The logo and the bottom lines in RmlUi (login_scene.rml); natively without RmlUi.
+    if (!Scenes::LoginOverlay::Render(tourMode, g_fMULogoAlpha, I18N::Game::CCopyright2001Webzen,
+                                      I18N::Game::AllRightsReserved, version))
+    {
+        RenderLoginSceneLinesNative(tourMode, version);
+    }
+
+    RenderInfomation();
+
+#ifdef ENABLE_EDIT
+    RenderDebugWindow();
+#endif
+
+    // Handle option window in login/character scenes (can't use full g_pNewUISystem update).
+    // Update() (not just UpdateMouseEvent()/UpdateKeyEvent()) is required here too -- it's what
+    // runs SyncRmlModel(), which pushes this window's own C++ state (tab/row labels, checkbox
+    // values, everything bound via {{}}) into its RmlUi data model. Without it, every bound field
+    // stays at its default-constructed empty value and the window renders with no text at all
+    // (found live: fixed the moment CManager::Update() started running this window normally, i.e.
+    // after reaching a scene that pumps the full g_pNewUISystem update -- the model, once
+    // populated there, stays populated even back in a scene that skips this call again, which is
+    // why the symptom didn't reappear after visiting one such scene). Same order the full
+    // CManager sweep uses (UpdateMouseEvent -> UpdateKeyEvent -> Update -> Render).
+    if (g_pNewUISystem->IsVisible(mu::ui::window::INTERFACE_OPTION))
+    {
+        g_pOption->UpdateMouseEvent();
+        g_pOption->UpdateKeyEvent();
+        g_pOption->Update();
+        g_pOption->Render();
+    }
+
+    // The "Remember Password" prompt (the one dialog that used to need a manual g_MessageBox
+    // pump here, since the login scene skips the full NewUI update) is now its own RmlUi
+    // document -- see UI/Windows/RememberPasswordPrompt.cpp. It's already driven by
+    // RmlUiRuntime's own pre-submit callback, fired unconditionally every frame regardless of
+    // scene, so no equivalent manual pump is needed for it here.
+
+    EndBitmap();
+
+    EndOpengl();
+
+    return true;
+}

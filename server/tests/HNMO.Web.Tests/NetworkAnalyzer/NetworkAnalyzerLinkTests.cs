@@ -1,0 +1,110 @@
+// <copyright file="NetworkAnalyzerLinkTests.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Web.Tests.NetworkAnalyzer;
+
+using Bunit;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using HNMO.Interfaces;
+using HNMO.Network.Analyzer;
+using HNMO.Web.AdminPanel.Pages;
+using HNMO.Web.Shared.Services;
+using HNMO.Web.Tests.AdminAuth;
+
+/// <summary>
+/// Tests for the links which lead to the network analyzer page.
+/// </summary>
+[TestFixture]
+public class NetworkAnalyzerLinkTests
+{
+    /// <summary>
+    /// Tests if an online account is linked to the traffic of its connection.
+    /// </summary>
+    [Test]
+    public void OnlineAccountIsLinkedToItsTraffic()
+    {
+        using var context = CreateContext(new TestCaptureService());
+
+        var component = context.Render<LoggedIn>();
+
+        var link = component.Find("a[title='Analyze the network traffic']");
+        Assert.That(link.GetAttribute("href"), Is.EqualTo("network-analyzer/player/3/Test%20Account"));
+    }
+
+    /// <summary>
+    /// Tests if the link is not offered when the capture service isn't registered, which is
+    /// the case in the distributed deployment.
+    /// </summary>
+    [Test]
+    public void NoLinkWithoutTheCaptureService()
+    {
+        using var context = CreateContext();
+
+        var component = context.Render<LoggedIn>();
+
+        Assert.That(component.FindAll("a[title='Analyze the network traffic']"), Is.Empty);
+    }
+
+    /// <summary>An audit outage shows an error instead of terminating the logged-in page circuit.</summary>
+    [Test]
+    public async Task DisconnectAuditFailureShowsToastAsync()
+    {
+        using var context = CreateContext();
+        var audit = new HNMO.Web.Tests.Mcp.InMemoryAdminAuditRepository { RejectWrites = true };
+        var provider = new Mock<IServerProvider>();
+        provider.SetupGet(p => p.Servers).Returns(new List<IManageableServer>());
+        var login = new Mock<ILoginServer>();
+        context.Services.AddSingleton(new LoggedInAccountService(login.Object, provider.Object, new MemoryCache(new MemoryCacheOptions()), HNMO.Web.Tests.Mcp.AdminOperationTestServices.CreateExecutor(audit: audit)));
+        var toast = new Mock<HNMO.Web.Shared.Components.Toast.IToastService>();
+        context.Services.AddSingleton(toast.Object);
+        var component = context.Render<LoggedIn>();
+        await component.Find("button.btn-warning").ClickAsync(new Microsoft.AspNetCore.Components.Web.MouseEventArgs()).ConfigureAwait(false);
+        toast.Verify(t => t.ShowError(It.Is<string>(message => message.Contains("Audit storage is unavailable", StringComparison.Ordinal)), null), Times.Once);
+        Assert.That(component.Find("h1"), Is.Not.Null);
+    }
+
+    private static BunitContext CreateContext(IPacketCaptureService? captureService = null)
+    {
+        var context = new BunitContext();
+        context.JSInterop.Mode = JSRuntimeMode.Loose;
+        context.AddAdministratorAuthorization();
+
+        var serverProvider = new Mock<IServerProvider>();
+        serverProvider.Setup(provider => provider.Servers).Returns(new List<IManageableServer>());
+
+        context.Services.AddSingleton<NavigationHistory>();
+        context.Services.AddSingleton<HNMO.Web.Shared.Components.Toast.IToastService>(Mock.Of<HNMO.Web.Shared.Components.Toast.IToastService>());
+        context.Services.AddSingleton(new LoggedInAccountService(Mock.Of<ILoginServer>(), serverProvider.Object, new MemoryCache(new MemoryCacheOptions()), HNMO.Web.Tests.Mcp.AdminOperationTestServices.CreateExecutor()));
+        context.Services.AddSingleton(new OfflineAccountService(serverProvider.Object));
+        context.Services.AddSingleton(new BotAccountService(serverProvider.Object, new MemoryCache(new MemoryCacheOptions())));
+        context.Services.AddSingleton<IDataService<LoggedInAccount>>(
+            new TestDataService<LoggedInAccount>([new LoggedInAccount("Test Account", 3)]));
+        context.Services.AddSingleton<IDataService<OfflineAccount>>(new TestDataService<OfflineAccount>([]));
+        context.Services.AddSingleton<IDataService<BotAccount>>(new TestDataService<BotAccount>([]));
+        if (captureService is not null)
+        {
+            context.Services.AddSingleton(captureService);
+        }
+
+        return context;
+    }
+
+    private sealed class TestDataService<T> : IDataService<T>
+        where T : class
+    {
+        private readonly List<T> _items;
+
+        public TestDataService(List<T> items)
+        {
+            this._items = items;
+        }
+
+        public Task<List<T>> GetAsync(int offset, int count)
+        {
+            return Task.FromResult(this._items.Skip(offset).Take(count).ToList());
+        }
+    }
+}

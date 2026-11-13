@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- The HNMO server source, as in ClientLibrary/HNMO.Client.Library.csproj. -->
+    <HnmoServerSource Condition="'$(HnmoServerSource)' == '' And Exists('$(MSBuildThisFileDirectory)../../../../MOnline/src')">$(MSBuildThisFileDirectory)../../../../MOnline</HnmoServerSource>
+    <HnmoServerSource Condition="'$(HnmoServerSource)' == ''">$(MSBuildThisFileDirectory)../../../../server</HnmoServerSource>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The encryptors and Connection the game puts on top of the pipe; the same ones ClientLibrary uses. -->
+    <ProjectReference Include="$(HnmoServerSource)/src/Network/Packets/HNMO.Network.Packets.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../../ClientLibrary/DeferredTcpPipe.cs" Link="DeferredTcpPipe.cs" />
+    <Compile Include="../../../ClientLibrary/ConnectFailure.cs" Link="ConnectFailure.cs" />
+    <Compile Include="../../../ClientLibrary/ManagedLog.cs" Link="ManagedLog.cs" />
+  </ItemGroup>
+</Project>

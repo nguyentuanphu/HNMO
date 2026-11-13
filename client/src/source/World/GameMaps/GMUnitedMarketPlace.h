@@ -1,0 +1,48 @@
+// GMUnitedMarketPlace.h: interface for the GMUnitedMarketPlace class.
+//////////////////////////////////////////////////////////////////////
+#pragma once
+
+#include "Render/Models/DrawLook.h"
+
+#include "World/MapInfra/w_BaseMap.h"
+
+SmartPointer(GMUnitedMarketPlace);
+
+class GMUnitedMarketPlace : public BaseMap
+{
+public:
+    static GMUnitedMarketPlacePtr Make();
+    virtual ~GMUnitedMarketPlace();
+
+public:
+    virtual bool CreateObject(OBJECT* o);
+    virtual bool MoveObject(OBJECT* o);
+    virtual bool UpdateObjectEffects(OBJECT* o, BMD* b);
+    virtual bool RenderObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon = 0);
+    virtual void RenderAfterObjectMesh(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon = 0);
+    virtual void RenderFrontSideVisual();
+    bool RenderMonster(const OBJECT* o, DrawLook& look, BMD* b, bool ExtraMon = 0);
+
+public:
+    virtual bool MoveMonsterVisual(OBJECT* o, BMD* b);
+    virtual void MoveBlurEffect(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool UpdateMonsterEffects(CHARACTER* c, OBJECT* o, BMD* b);
+    virtual bool AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b);
+    bool MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b);
+
+public:
+    virtual void PlayObjectSound(OBJECT* o);
+    void PlayBGM();
+
+public:
+    void Init();
+    void Destroy();
+
+public:
+    bool CreateRain(PARTICLE* o);
+    bool MoveRain(PARTICLE* o);
+
+protected:
+    GMUnitedMarketPlace();
+};
+extern bool IsUnitedMarketPlace();

@@ -1,0 +1,19 @@
+﻿@page "/create-game-server"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+@{
+  var title = Resources.CreateGameServer;
+}
+<PageTitle>HNMO: @title</PageTitle>
+<Breadcrumb Caption="@title"/>
+<h1>@title</h1>
+
+
+@if (this._viewModel is null)
+{
+    return;
+}
+
+<AutoForm Model="this._viewModel" OnValidSubmit="this.OnSaveButtonClickAsync" IsProcessing="this._isProcessing"></AutoForm>
+

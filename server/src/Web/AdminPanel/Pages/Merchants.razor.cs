@@ -1,0 +1,267 @@
+﻿// <copyright file="Merchants.razor.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Web.AdminPanel.Pages;
+
+using System.ComponentModel;
+using System.Threading;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
+using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Entities;
+using HNMO.Persistence;
+using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Properties;
+using HNMO.Web.Shared.Components.Toast;
+using HNMO.Web.Shared.Services;
+
+/// <summary>
+/// Razor page which shows objects of the specified type in a grid.
+/// </summary>
+public partial class Merchants : ComponentBase, IDisposable
+{
+    private readonly PaginationState _merchantPagination = new() { ItemsPerPage = 20 };
+    private readonly PaginationState _itemPagination = new() { ItemsPerPage = 20 };
+    private readonly CancellationTokenSource _disposeCts = new();
+
+    private List<MerchantStorageViewModel>? _viewModels;
+    private MerchantStorageViewModel? _selectedMerchant;
+    private IContext? _persistenceContext;
+    private IDisposable? _navigationLockDisposable;
+
+    /// <summary>
+    /// Gets or sets the guard which checks the permission of the current user before saving.
+    /// </summary>
+    [Inject]
+    public AdminPolicyGuard PolicyGuard { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the data source.
+    /// </summary>
+    [Inject]
+    public IDataSource<GameConfiguration> DataSource { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the context provider.
+    /// </summary>
+    [Inject]
+    public IPersistenceContextProvider ContextProvider { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the toast service.
+    /// </summary>
+    [Inject]
+    public IToastService ToastService { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the navigation manager.
+    /// </summary>
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the java script runtime.
+    /// </summary>
+    [Inject]
+    public IJSRuntime JavaScript { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the logger.
+    /// </summary>
+    [Inject]
+    public ILogger<Merchants> Logger { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets the loading overlay service.
+    /// </summary>
+    [Inject]
+    public LoadingOverlayService LoadingService { get; set; } = null!;
+
+    private IQueryable<MerchantStorageViewModel>? ViewModels => this._viewModels?.AsQueryable();
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        this._navigationLockDisposable?.Dispose();
+        this._navigationLockDisposable = null;
+
+        this._disposeCts.Cancel();
+        this._disposeCts.Dispose();
+    }
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync().ConfigureAwait(true);
+        this._navigationLockDisposable = this.NavigationManager.RegisterLocationChangingHandler(this.OnBeforeInternalNavigationAsync);
+
+        // Awaited within the component lifecycle, so Blazor renders the loading state first and
+        // re-renders on completion - and ignores the completion if the component is gone by then.
+        await this.LoadDataAsync(this._disposeCts.Token).ConfigureAwait(true);
+    }
+
+    private async ValueTask OnBeforeInternalNavigationAsync(LocationChangingContext context)
+    {
+        if (this._persistenceContext?.HasChanges is not true)
+        {
+            return;
+        }
+
+        var isConfirmed = await this.JavaScript.InvokeAsync<bool>(
+                "window.confirm",
+                Resources.UnsavedChangesQuestion)
+            .ConfigureAwait(true);
+
+        if (!isConfirmed)
+        {
+            context.PreventNavigation();
+        }
+        else
+        {
+            await this.DataSource.DiscardChangesAsync().ConfigureAwait(true);
+        }
+    }
+
+    private async Task LoadDataAsync(CancellationToken cancellationToken)
+    {
+        using var loading = this.LoadingService.ShowLoadingIndicator();
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            this._persistenceContext = await this.DataSource.GetContextAsync(cancellationToken).ConfigureAwait(true);
+            await this.DataSource.GetOwnerAsync(cancellationToken: cancellationToken).ConfigureAwait(true);
+
+            var data = this.DataSource.GetAll<MonsterDefinition>()
+                .Where(m => m is { ObjectKind: NpcObjectKind.PassiveNpc, MerchantStore: { } });
+            this._viewModels = data
+                .Select(o => new MerchantStorageViewModel(o))
+                .OrderBy(o => o.Name)
+                .ToList();
+        }
+        catch (OperationCanceledException)
+        {
+            // Expected when navigating away - ignore
+        }
+        catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+        {
+            // The component (and its circuit) got disposed while loading - ignore
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Error loading merchant data");
+        }
+    }
+
+    private async Task OnMerchantEditClickAsync(MerchantStorageViewModel context)
+    {
+        this._selectedMerchant = context;
+        await this.InvokeAsync(async () => await this._itemPagination.SetCurrentPageIndexAsync(0).ConfigureAwait(true)).ConfigureAwait(true);
+    }
+
+    private async Task OnSaveButtonClickAsync()
+    {
+        if (!await this.PolicyGuard.IsAuthorizedAsync(AdminPolicies.Administrator).ConfigureAwait(true))
+        {
+            this.ToastService.ShowError(Resources.ChangeNotPermitted);
+            return;
+        }
+
+        try
+        {
+            if (this._persistenceContext is { } context)
+            {
+                var success = await context.SaveChangesAsync().ConfigureAwait(true);
+                var text = success ? Resources.SavedChanges : Resources.NoChangesToSave;
+                this.ToastService.ShowSuccess(text);
+            }
+            else
+            {
+                this.ToastService.ShowError(Resources.FailedByUninitializedContext);
+            }
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, $"An unexpected error occurred on save: {ex.Message}");
+            this.ToastService.ShowError(string.Format(Resources.UnexpectedErrorOccurred, ex.Message));
+        }
+    }
+
+    private async Task OnCancelButtonClickAsync()
+    {
+        if (this._persistenceContext?.HasChanges is true)
+        {
+            var previousMerchantId = this._selectedMerchant?.Id;
+            await this.DataSource.DiscardChangesAsync().ConfigureAwait(true);
+            await this.LoadDataAsync(this._disposeCts.Token).ConfigureAwait(true);
+            if (previousMerchantId is { } id && this._viewModels is not null)
+            {
+                this._selectedMerchant = this._viewModels.FirstOrDefault(vm => vm.Id == id);
+            }
+        }
+    }
+
+    private async Task OnBackButtonClickAsync()
+    {
+        if (this._persistenceContext?.HasChanges is true)
+        {
+            var isConfirmed = await this.JavaScript.InvokeAsync<bool>(
+                    "window.confirm",
+                    Resources.UnsavedChangesQuestion)
+                .ConfigureAwait(true);
+
+            if (!isConfirmed)
+            {
+                return;
+            }
+
+            await this.OnCancelButtonClickAsync().ConfigureAwait(true);
+        }
+
+        this._selectedMerchant = null;
+    }
+
+    /// <summary>
+    /// The view model for a merchant store.
+    /// </summary>
+    public class MerchantStorageViewModel
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchantStorageViewModel"/> class.
+        /// </summary>
+        /// <param name="merchant">The merchant.</param>
+        public MerchantStorageViewModel(MonsterDefinition merchant)
+        {
+            this.Merchant = merchant;
+            this.Id = merchant.GetId();
+        }
+
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        [Browsable(false)]
+        public Guid Id { get; }
+
+        /// <summary>
+        /// Gets the merchant definition.
+        /// </summary>
+        [Browsable(false)]
+        public MonsterDefinition Merchant { get; }
+
+        /// <summary>
+        /// Gets the name of the merchant.
+        /// </summary>
+        [Browsable(false)]
+        public string Name => this.Merchant.Designation.ToString() ?? string.Empty;
+
+        /// <summary>
+        /// Gets the items of the merchant.
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.Display(Name = nameof(Resources.Items), ResourceType = typeof(Resources))]
+        public ICollection<Item> Items => this.Merchant.MerchantStore!.Items;
+    }
+}

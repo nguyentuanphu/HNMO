@@ -1,0 +1,128 @@
+#ifndef __ZZZINTERFACE_H__
+#define __ZZZINTERFACE_H__
+
+#include <string>
+
+#define TRADELIMITLEVEL		( 6 )
+
+extern bool WhisperEnable;
+
+extern bool LockInputStatus;
+
+extern bool g_bAutoGetItem;
+
+extern bool g_bRenderGameCursor;
+
+extern bool InputEnable;
+extern bool TabInputEnable;
+extern bool GuildInputEnable;
+extern bool GoldInputEnable;
+extern bool g_bScratchTicket;
+
+extern int  InputGold;
+extern int  InputResidentNumber;
+extern int  InputNumber;
+extern int  InputIndex;
+extern int  InputTextWidth;
+extern int  InputTextMax[12];
+extern wchar_t InputText[12][256];
+extern wchar_t InputTextIME[12][4];
+extern int  InputLength[12];
+extern char InputTextHide[12];
+extern wchar_t MacroText[10][256];
+extern uint64_t  RemainingMacroCooldownTime;
+extern int  ItemHelp;
+extern bool DontMove;
+extern int  EditFlag;
+extern int  SelectModel;
+extern int  SelectMapping;
+extern bool DebugEnable;
+extern bool MouseOnWindow;
+extern int  MouseUpdateTime;
+extern int  MouseUpdateTimeMax;
+extern int  TalkNPC;
+extern int  SelectedItem;
+extern int  SelectedNpc;
+extern int  SelectedCharacter;
+extern int  SelectedOperate;
+extern int  Attacking;
+extern int  ActionTarget;
+
+extern int   g_iFollowCharacter;
+extern int  HeroTile;
+extern int  LoadingWorld;
+
+extern int ItemKey;
+extern bool g_bGMObservation;
+
+void Action(CHARACTER* c, OBJECT* o, bool Now);
+void SendRequestAction(OBJECT& obj, BYTE action);
+
+bool PressKey(int Key);
+void MoveHero();
+
+void ClearInput(BOOL bClearWhisperTarget = TRUE);
+// The crown switch holders' lines, one per switch (empty while unheld); leaving the switches'
+// area forgets them.
+void CollectCrownSwitchLines(std::wstring (&lines)[2]);
+
+
+//  HotKey
+int  FindHotKey(int Skill);
+
+void RenderInputText(int x, int y, int Index, int Hide = 0);
+void RenderDebugWindow();
+void RenderTipText(int sx, int sy, const wchar_t* Text);
+
+
+void RenderInterface(bool);
+void MoveInterface();
+void RenderCursor();
+bool CheckArrow();
+void ReloadArrow();
+int SearchArrowCount();
+
+bool FindText(const wchar_t* Text, const wchar_t* Token, bool First = false);
+bool FindTextABS(const wchar_t* Text, const wchar_t* Token, bool First = false);
+bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash = true);
+bool CheckAbuseNameFilter(wchar_t* Text);
+bool CheckCommand(wchar_t* Text, bool bMacroText = false);
+void SetActionClass(CHARACTER* c, OBJECT* o, int Action, int ActionType);
+void RenderBar(float x, float y, float Width, float Height, float Bar, bool Disabled = false, bool clipping = true);
+void RenderOutSides();
+// While a chat macro cools down: true, and how much of the cooldown is left (1 to 0).
+bool MacroCooldownFraction(float& fraction);
+void RenderPartyHP();
+
+void SendMove(CHARACTER* c, OBJECT* o);
+void SetCharacterPos(CHARACTER* c, BYTE posX, BYTE posY, vec3_t position);
+
+bool CheckAttack();
+bool CheckAttack_Fenrir(CHARACTER* c);
+int	 getTargetCharacterKey(CHARACTER* c, int selected);
+
+// A battle soccer goal's flare around the scoring team (GUILD_WAR_EVENT only).
+void MoveBattleSoccerGoalEffect();
+void MoveBattleSoccerEffect(CHARACTER* c);
+
+void GetTime(DWORD time, std::wstring& timeText, bool isSecond = true);
+
+extern int   TargetNpc;
+
+// skill.
+bool IsCanBCSkill(int nType);
+bool CheckSkillUseCondition(OBJECT* o, int Type);
+bool CheckWall(int sx1, int sy1, int sx2, int sy2);
+bool CheckTile(CHARACTER* c, OBJECT* o, float Range);
+void LetHeroStop(CHARACTER* c = NULL, BOOL bSetMovementFalse = FALSE);
+void SendCharacterMove(unsigned short Key, float Angle, unsigned char PathNum, unsigned char* PathX, unsigned char* PathY, unsigned char TargetX, unsigned char TargetY);
+void Attack(CHARACTER* c);
+void SendRequestMagic(int Type, int Key);
+void SendRequestMagicContinue(int Type, int x, int y, int Angle, BYTE Dest, BYTE Tpos, WORD TKey, BYTE* pSkillSerial);
+BYTE GetDestValue(int xPos, int yPos, int xDst, int yDst);
+
+bool IsGMCharacter();
+bool IsNonAttackGM();
+bool IsIllegalMovementByUsingMsg(const wchar_t* szChatText);
+
+#endif //__ZZZINTERFACE_H__

@@ -1,0 +1,16 @@
+﻿// <copyright file="ISupportDataChangedNotification.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Web.Shared.Services;
+
+/// <summary>
+/// Interface for classes which support to notify about changes in their data.
+/// </summary>
+public interface ISupportDataChangedNotification
+{
+    /// <summary>
+    /// Occurs when data has been changed and needs to be updated on the user interface.
+    /// </summary>
+    event EventHandler DataChanged;
+}

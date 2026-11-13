@@ -1,0 +1,284 @@
+﻿// <copyright file="EnterMiniGameAction.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlayerActions.MiniGames;
+
+using HNMO.DataModel.Configuration.Items;
+using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.GuildWar;
+using HNMO.GameLogic.MiniGames;
+using HNMO.GameLogic.PlayerActions.PlayerStore;
+using HNMO.GameLogic.PlugIns.PeriodicTasks;
+using HNMO.GameLogic.Views.Inventory;
+using HNMO.GameLogic.Views.NPC;
+
+/// <summary>
+/// Player action which implements entering a mini game.
+/// </summary>
+public class EnterMiniGameAction
+{
+    private const int UndefinedTicketSlot = 0xFF;
+
+    /// <summary>
+    /// Tries to enter the mini game event of the specified type and level with the specified ticket item.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="miniGameType">The mini game type.</param>
+    /// <param name="gameLevel">The mini game level.</param>
+    /// <param name="gameTicketInventoryIndex">The inventory index of the ticket.</param>
+    public async ValueTask TryEnterMiniGameAsync(Player player, MiniGameType miniGameType, int gameLevel, byte gameTicketInventoryIndex)
+    {
+        if (player.SelectedCharacter?.CharacterClass is null)
+        {
+            throw new InvalidOperationException("Character not selected or initialized.");
+        }
+
+        // The availability includes the entrance map, independently of the map requirements
+        // below, which a running game may waive for rejoining players.
+        var miniGameDefinition = player.GameContext.Configuration.MiniGameDefinitions
+            .FirstOrDefault(def => def.Type == miniGameType && def.GameLevel == gameLevel && def.IsAvailable());
+        if (miniGameDefinition is null
+            || (miniGameDefinition.RequiresMasterClass && !player.SelectedCharacter.CharacterClass.IsMasterClass)
+            || player.CurrentMiniGame is not null)
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameEnterFailed)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+            return;
+        }
+
+        var isSpecialCharacter = player.SelectedCharacter.IsSpecialCharacter();
+        var characterLevel = player.Attributes![Stats.Level];
+        var minLevel = isSpecialCharacter ? miniGameDefinition.MinimumSpecialCharacterLevel : miniGameDefinition.MinimumCharacterLevel;
+        var maxLevel = isSpecialCharacter ? miniGameDefinition.MaximumSpecialCharacterLevel : miniGameDefinition.MaximumCharacterLevel;
+        var requiresMasterLevel = miniGameDefinition.RequiresMasterClass;
+        if (characterLevel < minLevel || (requiresMasterLevel && player.SelectedCharacter?.CharacterClass?.IsMasterClass is not true))
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameCharacterLevelTooLowFormat), minLevel).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.CharacterLevelTooLow)).ConfigureAwait(false);
+            return;
+        }
+
+        if (characterLevel > maxLevel)
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameCharacterLevelTooHighFormat), maxLevel).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.CharacterLevelTooHigh)).ConfigureAwait(false);
+            return;
+        }
+
+        // The mini game entrance warps the player directly, so the requirements of the map
+        // are not checked by the usual warp actions. Some maps require equipped items.
+        // A running game may waive them for rejoining players.
+        var liveGame = player.GameContext.MiniGames.TryGetRunningMiniGame(miniGameDefinition, null);
+        if (miniGameDefinition.Entrance?.Map is { } entranceMap
+            && liveGame?.SkipMapEntryRequirements is not true
+            && entranceMap.TryGetRequirementError(player, out var requirementError))
+        {
+            await player.ShowBlueMessageAsync(requirementError).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!this.CheckTicketItem(miniGameDefinition, player, gameTicketInventoryIndex, out var ticketItem))
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameTicketRequired)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!this.CheckEntranceFee(miniGameDefinition, player, out var entranceFee))
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameEntranceFeeRequiredFormat), miniGameDefinition.EntranceFee).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.NotEnoughMoney)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!this.CheckPlayerKillState(miniGameDefinition, player))
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGamePlayerKillersCantEnter)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.PlayerKillerCantEnter)).ConfigureAwait(false);
+            return;
+        }
+
+        if (player.GuildWarContext is { State: GuildWarState.Started or GuildWarState.Requested })
+        {
+            await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameNotDuringGuildWar)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+            return;
+        }
+
+        // TODO: Check Duel state when duels are implemented
+        if (miniGameDefinition.MapCreationPolicy == MiniGameMapCreationPolicy.Shared)
+        {
+            var miniGameStrategy = player.GameContext.PlugInManager.GetStrategy<MiniGameType, IPeriodicMiniGameStartPlugIn>(miniGameDefinition.Type);
+            if (miniGameStrategy is not null
+                && await miniGameStrategy.GetDurationUntilNextStartAsync(player.GameContext, miniGameDefinition).ConfigureAwait(false) != TimeSpan.Zero
+                && !IsJoinableRunningGame(player, miniGameDefinition))
+            {
+                await ShowRefusalAsync(player, nameof(PlayerMessage.MiniGameNotOpenFormat), miniGameDefinition.Name).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.NotOpen)).ConfigureAwait(false);
+                return;
+            }
+        }
+
+        var entrance = miniGameDefinition.Entrance ?? throw new InvalidOperationException("mini game entrance not defined");
+        var miniGame = await player.GameContext.MiniGames.GetOrCreateAsync(miniGameDefinition, player).ConfigureAwait(false);
+
+        // Snapshot before entering: an event which disallows parties (Chaos Castle) kicks the
+        // entering player out of its party below, losing the knowledge of who was going to follow.
+        var partyBots = Bots.BotMiniGameHandler.SnapshotPartyBots(player);
+
+        var enterResult = await miniGame.TryEnterAsync(player).ConfigureAwait(false);
+        if (enterResult == EnterResult.Success)
+        {
+            if (entranceFee > 0)
+            {
+                player.TryRemoveMoney(entranceFee);
+            }
+
+            await this.ConsumeTicketItemAsync(ticketItem, player).ConfigureAwait(false);
+
+            if (!miniGameDefinition.AllowParty && player.Party is { } party)
+            {
+                await party.KickMySelfAsync(player).ConfigureAwait(false);
+            }
+
+            await player.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
+
+            if (player.ShopStorage?.StoreOpen ?? false)
+            {
+                var storeCloseAction = new CloseStoreAction();
+                await storeCloseAction.CloseStoreAsync(player).ConfigureAwait(false);
+            }
+
+            await player.RemoveSummonAsync().ConfigureAwait(false);
+            await player.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
+            await player.WarpToAsync(entrance).ConfigureAwait(false);
+
+            // The bots of the entering party leader follow them in (each checked against the same
+            // entry restrictions, no ticket needed - the leader's own ticket legitimizes the visit).
+            Bots.BotMiniGameHandler.BringPartyBotsAlong(player, partyBots, miniGameDefinition, miniGame);
+        }
+        else
+        {
+            await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, enterResult)).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Shows the reason why the player can't enter the mini game. The client only knows a fixed set of
+    /// refusal codes per event, and they don't cover every case the server checks - so the reason is
+    /// told in plain words, by the npc the player is talking to, or as a system message when the entry
+    /// was requested without an open npc dialog.
+    /// </summary>
+    /// <param name="player">The player which tried to enter.</param>
+    /// <param name="messageKey">The resource key of the reason, see <see cref="PlayerMessage"/>.</param>
+    /// <param name="arguments">The format arguments of the message.</param>
+    private static async ValueTask ShowRefusalAsync(Player player, string messageKey, params object?[] arguments)
+    {
+        var reason = player.GetLocalizedMessage(messageKey, arguments);
+        if (player.OpenedNpc is { } npc)
+        {
+            await player.InvokeViewPlugInAsync<IShowMessageOfObjectPlugIn>(p => p.ShowMessageOfObjectAsync(reason, npc)).ConfigureAwait(false);
+        }
+        else
+        {
+            await player.ShowBlueMessageAsync(reason).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Determines whether a running game of the definition exists which players may
+    /// still join, e.g. to rejoin an ongoing event.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="miniGameDefinition">The mini game definition.</param>
+    /// <returns><c>true</c> if a joinable game is running; otherwise, <c>false</c>.</returns>
+    private static bool IsJoinableRunningGame(Player player, MiniGameDefinition miniGameDefinition)
+    {
+        return player.GameContext.MiniGames.TryGetRunningMiniGame(miniGameDefinition, null)?.IsJoinable is true;
+    }
+
+    private bool CheckPlayerKillState(MiniGameDefinition miniGameDefinition, Player player)
+    {
+        if (miniGameDefinition.ArePlayerKillersAllowedToEnter)
+        {
+            return true;
+        }
+
+        return player.SelectedCharacter?.State < HeroState.PlayerKiller1stStage;
+    }
+
+    private async ValueTask ConsumeTicketItemAsync(Item? ticketItem, Player player)
+    {
+        if (ticketItem is null)
+        {
+            return;
+        }
+
+        if (ticketItem.Durability > 0)
+        {
+            ticketItem.Durability -= 1;
+        }
+
+        if (ticketItem.Durability == 0)
+        {
+            if (player.Inventory is { } inventory)
+            {
+                await inventory.RemoveItemAsync(ticketItem).ConfigureAwait(false);
+            }
+
+            await player.DestroyInventoryItemAsync(ticketItem).ConfigureAwait(false);
+        }
+        else
+        {
+            await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(ticketItem, false)).ConfigureAwait(false);
+        }
+    }
+
+    private bool CheckTicketItem(MiniGameDefinition miniGameDefinition, Player player, byte gameTicketInventoryIndex, out Item? ticketItem)
+    {
+        ticketItem = null;
+
+        if (miniGameDefinition.TicketItem is not { } ticketItemDefinition)
+        {
+            return true;
+        }
+
+        if (gameTicketInventoryIndex != UndefinedTicketSlot)
+        {
+            ticketItem = player.Inventory?.GetItem(gameTicketInventoryIndex);
+            if (this.IsValidTicket(ticketItem, ticketItemDefinition, miniGameDefinition))
+            {
+                return true;
+            }
+        }
+
+        foreach (var candidateItem in player.Inventory?.FindItemsByDefinition(ticketItemDefinition) ?? Enumerable.Empty<Item>())
+        {
+            if (this.IsValidTicket(candidateItem, ticketItemDefinition, miniGameDefinition))
+            {
+                ticketItem = candidateItem;
+                return true;
+            }
+        }
+
+        // The regular ticket is preferred, because the free ticket is usually bought.
+        ticketItem = FreeTicketItems.Find(player, miniGameDefinition, gameTicketInventoryIndex);
+        return ticketItem is not null;
+    }
+
+    private bool IsValidTicket(Item? ticketItem, ItemDefinition requiredItemDefinition, MiniGameDefinition miniGameDefinition)
+    {
+        return ticketItem is not null
+            && requiredItemDefinition.Equals(ticketItem.Definition)
+            && ticketItem.Durability > 0
+            && ticketItem.Level == miniGameDefinition.TicketItemLevel;
+    }
+
+    private bool CheckEntranceFee(MiniGameDefinition miniGameDefinition, Player player, out int entranceFee)
+    {
+        entranceFee = Math.Max(miniGameDefinition.EntranceFee, 0);
+        return entranceFee <= player.Money;
+    }
+}

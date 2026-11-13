@@ -1,0 +1,117 @@
+﻿// <copyright file="WarpGateAction.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlayerActions;
+
+using System.ComponentModel;
+using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.Views.World;
+using HNMO.Pathfinding;
+
+/// <summary>
+/// Action to warp to another place through a gate.
+/// </summary>
+public class WarpGateAction
+{
+    /// <summary>
+    /// The number of tiles by which the position of the player may be outside of the area of an enter gate.
+    /// </summary>
+    /// <remarks>
+    /// The position known by the server and the one of the client can differ a bit, so some inaccuracy is allowed.
+    /// It's independent of <see cref="DataModel.Configuration.GameConfiguration.InfoRange"/>, which is the view range:
+    /// raising it for wider screens or zoomed out cameras should not allow entering gates from further away.
+    /// 12 is the default info range, which was used here before.
+    /// </remarks>
+    internal const byte GateEntryTolerance = 12;
+
+    /// <summary>
+    /// Enters the gate.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="gate">The enter gate.</param>
+    public async ValueTask EnterGateAsync(Player player, EnterGate gate)
+    {
+        if (await this.IsWarpLegitAsync(player, gate).ConfigureAwait(false))
+        {
+            var eventArgs = new CancelEventArgs();
+            if (player.GameContext.PlugInManager.GetPlugInPoint<IWarpGateEnteringPlugIn>() is { } plugInPoint)
+            {
+                await plugInPoint.WarpGateEnteringAsync(player, gate.TargetGate!, eventArgs).ConfigureAwait(false);
+            }
+
+            if (eventArgs.Cancel)
+            {
+                // Like the original game, the player is warped to its current position.
+                // The game client shows its loading screen until a map change is completed.
+                await this.WarpToCurrentPositionAsync(player).ConfigureAwait(false);
+                return;
+            }
+
+            await player.WarpToAsync(gate.TargetGate!).ConfigureAwait(false);
+        }
+        else
+        {
+            await player.InvokeViewPlugInAsync<IMapChangePlugIn>(p => p.MapChangeFailedAsync()).ConfigureAwait(false);
+        }
+    }
+
+    private async ValueTask<bool> IsWarpLegitAsync(Player player, EnterGate? enterGate)
+    {
+        if (enterGate?.TargetGate?.Map is null)
+        {
+            return false;
+        }
+
+        if (player.SelectedCharacter is null)
+        {
+            return false;
+        }
+
+        var requirement = player.SelectedCharacter?.GetEffectiveMoveLevelRequirement(enterGate.LevelRequirement);
+        if (requirement > player.Attributes![Stats.Level])
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.LevelTooLowToEnterMap)).ConfigureAwait(false);
+            return false;
+        }
+
+        if (enterGate.TargetGate.Map.TryGetRequirementError(player, out var errorMessage))
+        {
+            await player.ShowBlueMessageAsync(errorMessage).ConfigureAwait(false);
+            return false;
+        }
+
+        var currentPosition = player.IsWalking ? player.WalkTarget : player.Position;
+        if (player.CurrentMap!.Definition.EnterGates.Contains(enterGate)
+            && !(this.IsXInRange(currentPosition, enterGate, GateEntryTolerance)
+                 && this.IsYInRange(currentPosition, enterGate, GateEntryTolerance)))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private async ValueTask WarpToCurrentPositionAsync(Player player)
+    {
+        var position = player.IsWalking ? player.WalkTarget : player.Position;
+        var currentPosition = new ExitGate
+        {
+            Map = player.CurrentMap!.Definition,
+            X1 = position.X,
+            X2 = position.X,
+            Y1 = position.Y,
+            Y2 = position.Y,
+            Direction = player.Rotation,
+        };
+
+        await player.WarpToAsync(currentPosition).ConfigureAwait(false);
+    }
+
+    private bool IsXInRange(Point currentPosition, Gate gate, byte inaccuracy) => currentPosition.X >= gate.X1 - inaccuracy
+                                                                                  && currentPosition.X <= gate.X2 + inaccuracy;
+
+    private bool IsYInRange(Point currentPosition, Gate gate, byte inaccuracy) => currentPosition.Y >= gate.Y1 - inaccuracy
+                                                                                  && currentPosition.Y <= gate.Y2 + inaccuracy;
+}

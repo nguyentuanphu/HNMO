@@ -1,0 +1,14 @@
+@ChildContent
+
+@* The modals render in their own component, which re-renders when a modal is shown or closed. Re-rendering this
+   container would render its child content again, and an AuthorizeRouteView in it would authorize the routed page
+   again, which can recreate the page and lose its state (see HNMO#1338). *@
+<ModalStack />
+
+@code {
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
