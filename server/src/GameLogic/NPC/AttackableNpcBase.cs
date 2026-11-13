@@ -14,6 +14,7 @@ using HNMO.GameLogic.Views.World;
 using HNMO.Pathfinding;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// An abstract base class for an <see cref="IAttackable"/> <see cref="NonPlayerCharacter"/>.
@@ -326,15 +327,18 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     {
         if (this.ShouldRespawn)
         {
+            // The killer's logger: a respawn that fails would otherwise leave the monster gone without a trace.
+            var logger = this.GetHitNotificationTarget(attacker)?.Logger;
             _ = Task.Run(async () =>
             {
                 try
                 {
                     await Task.Delay(this.Definition.RespawnDelay).ConfigureAwait(false);
-                    await this.RespawnAsync().ConfigureAwait(false);
+                    await this.RespawnAsync(logger).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
+                    logger?.LogWarning(ex, "Respawning {Npc} failed.", this);
                     Debug.Fail($"Unexpected error during respawning the attackable npc {this}: {ex}", ex.StackTrace);
                 }
             });
@@ -382,7 +386,7 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     /// <summary>
     /// Respawns this instance on the map.
     /// </summary>
-    private async ValueTask RespawnAsync()
+    private async ValueTask RespawnAsync(ILogger? logger)
     {
         try
         {
@@ -404,6 +408,7 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         }
         catch (Exception ex)
         {
+            logger?.LogWarning(ex, "Respawning {Npc} failed.", this);
             Debug.Fail(ex.Message, ex.StackTrace);
         }
     }
