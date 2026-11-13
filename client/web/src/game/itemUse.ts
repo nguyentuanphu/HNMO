@@ -106,6 +106,8 @@ export class ItemHotkeys {
   /** The whole key configuration as the server sent it (skills and options too), kept to save it back. */
   private configuration = new Uint8Array(CONFIGURATION_LENGTH);
   private readonly listeners = new Set<() => void>();
+  /** Told about each key configuration the server sends (the skill hotkeys read it too). */
+  onConfiguration?: (configuration: Uint8Array) => void;
 
   constructor(private readonly connection: Connection) {
     connection.onPacket((bytes) => this.handle(bytes));
@@ -124,6 +126,7 @@ export class ItemHotkeys {
     this.configuration.set(bytes.subarray(4, 4 + CONFIGURATION_LENGTH));
     const c = this.configuration;
     [c[21], c[22], c[23], c[25]].forEach((offset, hotkey) => this.set(hotkey, POTION + offset, c[26 + hotkey]));
+    this.onConfiguration?.(c);
     for (const listener of this.listeners) listener();
   }
 
@@ -144,9 +147,18 @@ export class ItemHotkeys {
     return true;
   }
 
+  /** Saves the skill hotkeys 0-9 (skill numbers, 0xFFFF for none) with the rest of the configuration. */
+  saveSkillHotkeys(numbers: number[]): void {
+    numbers.forEach((number, i) => { this.configuration[i * 2] = (number >> 8) & 0xff; this.configuration[i * 2 + 1] = number & 0xff; });
+    this.save();
+  }
+
+  /** The key configuration as last received or saved. */
+  get keyConfiguration(): Uint8Array { return this.configuration; }
+
   // SaveOptions: the desktop saves when leaving the game; a browser tab may close without warning, so
   // this saves on each change.
-  private save(): void {
+  save(): void {
     const c = this.configuration;
     const offset = (hotkey: number) => (this.types[hotkey] - POTION) & 0xff;
     c[21] = offset(Hotkey.Q); c[22] = offset(Hotkey.W); c[23] = offset(Hotkey.E); c[25] = offset(Hotkey.R);

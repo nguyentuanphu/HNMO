@@ -241,11 +241,35 @@ function outlineShadow(width: string, color: string): string {
   return `text-shadow: ${[[-w, 0], [w, 0], [0, -w], [0, w], [-w, -w], [w, w], [-w, w], [w, -w]].map(([x, y]) => `${x}px ${y}px 0 ${color}`).join(', ')};`;
 }
 
+// Every sprite of the stylesheets loaded so far, for decorators a data model sets at run time
+// (data-style-decorator="image(name)", e.g. the HUD's skill icons).
+const knownSprites: Sprites = new Map();
+const decoratorCss = new Map<string, Promise<string>>();
+
+/** The CSS background for an RCSS decorator value ("image(sprite)", "none"). */
+export function decoratorBackground(value: string): Promise<string> {
+  if (!decoratorCss.has(value)) {
+    const match = /^\s*(image|additive-image)\((.*)\)\s*$/.exec(value);
+    decoratorCss.set(value, match ? imageCss.call({ sprites: knownSprites, sheetUrl: '/' }, match[2]) : Promise.resolve('background: none;'));
+  }
+  return decoratorCss.get(value)!;
+}
+
+function applyDecorator(element: HTMLElement, value: unknown): void {
+  const text = value === undefined || value === null ? 'none' : String(value);
+  if (element.dataset.decorator === text) return;
+  element.dataset.decorator = text;
+  void decoratorBackground(text).then((css) => {
+    if (element.dataset.decorator !== text) return;
+    element.style.background = css.replace(/^background:\s*/, '').replace(/;\s*$/, '');
+  });
+}
+
 export async function rcssToCss(rcss: string, sheetUrl: string, sprites: Sprites = new Map()): Promise<string> {
   const tokenValues = await loadTokens();
   let text = rcss.replace(/\/\*[\s\S]*?\*\//g, '');
   const parsed = parseSpritesheets(text, sheetUrl);
-  for (const [name, sprite] of parsed.sprites) sprites.set(name, sprite);
+  for (const [name, sprite] of parsed.sprites) { sprites.set(name, sprite); knownSprites.set(name, sprite); }
   text = parsed.rest
     .replace(/token\(([\w-]+)\)/g, (_, name: string) => tokenValues[name] ?? 'inherit')
     .replace(/(\d)dp\b/g, '$1px')
@@ -373,6 +397,7 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
       updaters.push((scope) => element.classList.toggle(className, Boolean(evaluate(value, scope))));
     } else if (name.startsWith('data-style-')) {
       const property = name.slice('data-style-'.length);
+      if (property === 'decorator') { updaters.push((scope) => applyDecorator(element, evaluate(value, scope))); continue; }
       updaters.push((scope) => {
         const v = evaluate(value, scope);
         element.style.setProperty(property, v === undefined || v === null ? '' : String(v));

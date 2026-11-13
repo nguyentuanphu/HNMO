@@ -8,6 +8,16 @@ import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from 
 import { experienceForLevel, type CharacterStats } from '../game/stats.js';
 import type { Item } from '../game/inventory.js';
 import { drawItem } from './itemIcons.js';
+import { skillIconSprite, type SkillList } from '../game/skills.js';
+
+/** What the skill bar shows: the skill list and whether a skill can be used now (lit or grey icon). */
+export interface HudSkills {
+  list: SkillList;
+  usable: (skill: number) => boolean;
+  hasPet: () => boolean;
+}
+
+interface SkillCell { skill_index: number; is_current: boolean; icon: string; hotkey: string; cooldown_fraction: number }
 
 /** What the potion slots show and do. */
 export interface HudItemSlots {
@@ -45,6 +55,9 @@ export class Hud {
   private readonly slotSignatures: string[] = ['', '', '', ''];
   private hoveredSlot = -1;
   private spinStart = 0;
+  private skills: HudSkills | null = null;
+  /** The popup cell under the mouse: Ctrl + a number key puts its skill on that key. */
+  hoveredSkill = -1;
 
   constructor(private readonly stats: CharacterStats, actions: HudActions, private readonly itemSlots: HudItemSlots | null = null) {
     const noop = () => undefined;
@@ -72,8 +85,16 @@ export class Hud {
       item_hotkey_hover: (slot: number) => this.hoverSlot(slot),
       item_hotkey_unhover: () => this.hoverSlot(-1),
       item_hotkey_rightclick: noop, // the right button is told apart in open()
-      skill_hotkey_click: noop, skill_hotkey_hover: noop, skill_unhover: noop, skill_current_click: noop, skill_current_hover: noop,
-      skill_grid_click: noop, skill_grid_hover: noop, skill_pet_click: noop, skill_pet_hover: noop,
+      // The skill bar (CSkillList's OnHotkeySlotClick, OnCurrentSkillClick, OnGridCellClick, …).
+      skill_hotkey_click: (slot: number) => this.skillSlotClick(slot),
+      skill_hotkey_hover: noop,
+      skill_unhover: () => { this.hoveredSkill = -1; },
+      skill_current_click: () => { this.model.skill_grid_open = !this.model.skill_grid_open; this.refreshSkills(); },
+      skill_current_hover: noop,
+      skill_grid_click: (index: number) => this.pickSkill(index),
+      skill_grid_hover: (index: number) => { this.hoveredSkill = index; },
+      skill_pet_click: (index: number) => this.pickSkill(index),
+      skill_pet_hover: (index: number) => { this.hoveredSkill = index; },
     };
     stats.onChange(() => this.refresh());
     window.addEventListener('resize', () => this.place());
@@ -143,7 +164,67 @@ export class Hud {
     m.exp_digit = String(digit);
     m.exp_tooltip = `EXP: ${s.experience}/${s.nextExperience}`;
     this.refreshItemSlots();
+    this.refreshSkills();
     this.doc.update();
+  }
+
+  /** Shows the skill list on the bar (call once, with the character's skills). */
+  setSkills(skills: HudSkills): void {
+    this.skills = skills;
+    skills.list.onChange(() => this.refreshSkills());
+    this.refreshSkills();
+  }
+
+  private iconOf(index: number): string {
+    if (!this.skills) return 'none';
+    const skill = index >= 120 && index < 124 ? index : this.skills.list.skillAt(index);
+    const sprite = skillIconSprite(skill, this.skills.usable(skill));
+    return sprite ? `image(${sprite})` : 'none';
+  }
+
+  // SyncRmlModel's skill part: the row's icons and hotkeys, the current skill, the popup's cells.
+  refreshSkills(): void {
+    if (!this.doc || !this.skills) return;
+    const list = this.skills.list, m = this.model, pet = this.skills.hasPet();
+    m.skill_list_up = list.listUp;
+    for (let slot = 0; slot < 5; slot++) {
+      const hotkey = list.slotHotkey(slot, pet);
+      m[`skill_slot_${slot}_icon`] = hotkey >= 0 ? this.iconOf(list.hotkeys[hotkey]) : 'none';
+      m[`skill_slot_${slot}_hotkey`] = hotkey >= 0 ? String(hotkey) : '';
+      m[`skill_slot_${slot}_selected`] = hotkey >= 0 && list.hotkeys[hotkey] === list.current;
+      m[`skill_slot_${slot}_cooldown`] = 0;
+    }
+    const any = list.count > 0;
+    m.current_skill_icon = any ? this.iconOf(list.current) : 'none';
+    const currentHotkey = list.hotkeyOf(list.current);
+    m.current_skill_hotkey = any && currentHotkey >= 0 ? String(currentHotkey) : '';
+    m.current_skill_cooldown = 0;
+    const cell = (index: number): SkillCell => {
+      const hotkey = list.hotkeyOf(index);
+      return { skill_index: index, is_current: index === list.current, icon: this.iconOf(index), hotkey: hotkey >= 0 ? String(hotkey) : '', cooldown_fraction: 0 };
+    };
+    m.skill_grid_cells = m.skill_grid_open ? list.gridIndexes().map(cell) : [];
+    m.pet_skill_cells = m.skill_grid_open && pet ? [120, 121, 122, 123].map(cell) : [];
+    this.doc.update();
+  }
+
+  // OnHotkeySlotClick: the slot's skill becomes the current one.
+  private skillSlotClick(slot: number): void {
+    if (!this.skills) return;
+    const list = this.skills.list;
+    const hotkey = list.slotHotkey(slot, this.skills.hasPet());
+    if (hotkey < 0) return;
+    const index = list.hotkeys[hotkey];
+    const skill = list.skillAt(index);
+    if (skill === 0 || (skill >= 67 && skill <= 72)) return;
+    list.select(index);
+  }
+
+  // OnGridCellClick / OnPetCellClick: pick the skill and close the popup.
+  private pickSkill(index: number): void {
+    if (!this.skills) return;
+    this.model.skill_grid_open = false;
+    this.skills.list.select(index);
   }
 
   /** The potion slots: their items, counts and icons (call when the bag or the bindings change). */

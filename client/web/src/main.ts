@@ -18,6 +18,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { HOTKEY_LETTERS, ItemHotkeys, ItemUser, rightClickBagItem } from './game/itemUse.js';
+import { loadSkillData, SkillList, skillRequirementsMet } from './game/skills.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -46,6 +47,7 @@ export interface GameState {
   stats?: CharacterStats;
   hud?: Hud;
   hotkeys?: ItemHotkeys;
+  skills?: SkillList;
   combat?: Combat;
   overlay?: CombatOverlay;
   ground?: GroundItems;
@@ -414,7 +416,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const connection = await login(settings.relay, address, settings.username, settings.password);
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
-  await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors()]);
+  await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData()]);
   // The server sends who is in view right after the character information, while
   // the map is still loading: keep those packets and replay them once it's ready.
   const earlyPackets: Uint8Array[] = [];
@@ -425,6 +427,10 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // The potion hotkeys come with the key configuration, when the character enters the world.
   const hotkeys = new ItemHotkeys(connection);
   state.hotkeys = hotkeys;
+  // The skills come right after the character too; their hotkeys with the key configuration.
+  const skills = new SkillList(connection, character.classIndex, (numbers) => hotkeys.saveSkillHotkeys(numbers));
+  state.skills = skills;
+  hotkeys.onConfiguration = (configuration) => skills.applyKeyConfiguration(configuration);
   const info = await enterWorld(connection, character.name);
   inventory.money = typeof info.Money === 'number' ? info.Money : 0;
   // Level, experience, life, mana and stats from here on (the HUD and the tooltips read them).
@@ -531,6 +537,22 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     use: useHotkey,
   });
   const hud = state.hud;
+  hud.setSkills({
+    list: skills,
+    usable: (skill) => skillRequirementsMet(skill, stats, character.classIndex),
+    hasPet: () => false, // the Dark Lord's raven comes with the pets
+  });
+  stats.onChange(() => hud.refreshSkills());
+  // The number keys pick the current skill (CSkillList::UpdateKeyEvent); Ctrl + a number over a skill
+  // of the popup puts it on that key.
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (!/^Digit[0-9]$/.test(event.code) || event.altKey || event.metaKey) return;
+    const hotkey = Number(event.code.slice(5));
+    event.preventDefault();
+    if (event.ctrlKey) { if (hud.hoveredSkill >= 0) skills.setHotkey(hotkey, hud.hoveredSkill); return; }
+    skills.useHotkey(hotkey);
+  });
   inventory.onChange(() => hud.refreshItemSlots());
   hotkeys.onChange(() => hud.refreshItemSlots());
   void hud.open();
