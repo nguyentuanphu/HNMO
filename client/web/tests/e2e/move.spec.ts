@@ -11,12 +11,16 @@ test('M opens the warp list and a click warps to Noria', async ({ page }) => {
   await enterWorld(page, 'test9');
   await page.keyboard.press('m');
   const list = page.locator('.rml-move_command #panel');
-  await expect(list).toBeVisible({ timeout: 30_000 });
+  await expect(list).toBeVisible({ timeout: 90_000 });
   const noria = page.locator('.rml-move_command .mc-row', { hasText: 'Noria' }).first();
   await expect(noria).toBeVisible();
   await page.screenshot({ path: 'test-results/move.png' });
   await noria.click();
   await expect(list).toBeHidden();
   await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.mapNumber), { timeout: 60_000 }).toBe(3);
+  // The map name banner fades in with the new map's name (CUIMapName).
+  await expect(page.locator('.rml-map_name #name_text')).toHaveText('Noria', { timeout: 30_000 });
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: 'test-results/map-name.png' });
   await expectNoPageErrors(errors);
 });

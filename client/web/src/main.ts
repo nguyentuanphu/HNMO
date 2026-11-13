@@ -29,6 +29,9 @@ import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
 import { MoveWindow } from './ui/moveWindow.js';
+import { loadWarps } from './game/warps.js';
+import { prepareDocument } from './ui/rml.js';
+import { MapNameBanner } from './ui/mapNameBanner.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
@@ -146,8 +149,12 @@ const toScene = (x: number, y: number, z: number): THREE.Vector3 => new THREE.Ve
 
 // ---------- world ----------
 
+// The map name banner (CUIMapName): shown on entering each map.
+const mapBanner = new MapNameBanner();
+
 async function loadMap(mapNumber: number): Promise<void> {
   if (state.mapNumber === mapNumber) return;
+  if (state.online || ui.login.hidden) void mapBanner.show(mapNumber, mapName(mapNumber));
   if (state.worldGroup) root.remove(state.worldGroup);
   setStatus(`Loading ${mapName(mapNumber)}…`, 0.05);
   const data = await loadWorldData(mapNumber);
@@ -352,6 +359,7 @@ function frame(now: number): void {
     state.projectiles?.update(dt);
     state.effects?.update(dt);
     state.autoPlay?.update();
+    mapBanner.update(dt);
     state.autoPlayExtras?.update();
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
@@ -717,6 +725,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
   });
   inventory.onChange(() => moveWindow.refresh());
+  // Ready in the background, so M opens at once (compiling a window's stylesheets takes a while).
+  void loadWarps().then(() => prepareDocument('move_command')).then(() => prepareDocument('map_name')).catch((error: unknown) => console.warn('Move window', error));
   // HNMO extras: trips to town, selling junk, the stop timer, alerts.
   const healingCount = () => {
     let count = 0;

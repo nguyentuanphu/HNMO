@@ -47,6 +47,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Day light mood, fog per map (`Data/Maps/LightMood.json`) | ⬜ | Fixed fog for now |
 | Enhanced look (`Render/Look`, `Render/PostProcessing`) | ⬜ | |
 | Minimap | ⬜ | |
+| Map name banner on entering a map (`map_name.rml`, ornaments and map icons) | ✅ | `ui/mapNameBanner.ts`: fades in, five seconds, fades out |
 
 ## 3. Characters and monsters (`Character/`, `GameLogic/Monsters`, `Engine/AI`)
 

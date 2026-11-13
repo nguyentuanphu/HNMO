@@ -36,7 +36,7 @@ tests and CI for all of it; strict TypeScript build.
 ## 3. Using items
 1. ✅ Potions on Q W E R (`ConsumeItemRequest`), right-click to use. Left: the dialogs of fruits,
    reset fruits, event tickets and talismans; the elixir check against the buffs (with 2.3).
-2. Jewels on items (Bless, Soul, Life, Chaos …), fruits, scrolls/skill books, town portal, pets.
+2. 🟡 Jewels on items (done: dropped on a bag item; the server refuses worn items), fruits, scrolls/skill books, town portal, pets.
 3. Repair (inventory button and NPCs), durability tints and the durability window.
 
 ## 4. Character
@@ -47,7 +47,7 @@ tests and CI for all of it; strict TypeScript build.
 ## 5. NPCs, shops and quests
 1. 🟡 NPC dialogs (`npc_dialogue.rml`), shops (`npc_shop.rml`): buy, sell, repair (shops done; dialogs, tax rate, gamble shops left).
 2. Quests (`npc_quest.rml`, `my_quest_info.rml`, quest progress), class change quests.
-3. 🟡 Move window M (done) / gates / warps (`move_command.rml`, `gateman.rml`), mini map, map name banner.
+3. 🟡 Move window M (done) / gates / warps (`move_command.rml`, `gateman.rml`), mini map, map name banner (done).
 
 ## 6. Trading and crafting
 Trade (`trade.rml`), personal store (`my_shop`, `PurchaseShopInventory`), chaos machine and every
