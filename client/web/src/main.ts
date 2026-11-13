@@ -8,7 +8,7 @@ import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
 import { createPlayerCharacter, setPlayerAnimationSpeeds } from './game/characters.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
-import { itemDefinition, loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
+import { itemDefinition, itemName, loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { loadGlowColors } from './game/itemGlow.js';
@@ -22,6 +22,10 @@ import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipmen
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
+import { AutoPlay } from './game/autoPlay.js';
+import { AutoPlayBar } from './ui/autoPlayBar.js';
+import { defaultAutoPlayConfig } from './game/autoPlayConfig.js';
+import { maxDurability, repairCost } from './game/itemValue.js';
 import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -58,6 +62,8 @@ export interface GameState {
   projectiles?: ProjectileLayer;
   deaths?: DeathEffects;
   effects?: EffectSystem;
+  autoPlay?: AutoPlay;
+  autoPlayBar?: AutoPlayBar;
 }
 
 declare global {
@@ -337,6 +343,8 @@ function frame(now: number): void {
     state.deaths?.update(dt);
     state.projectiles?.update(dt);
     state.effects?.update(dt);
+    state.autoPlay?.update();
+    if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
@@ -518,6 +526,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       setTimeout(() => { for (const kind of kinds) void projectiles.shoot(actor, target, kind, { fenrir: look?.mount === 'fenrir' }); }, ARROW_RELEASE_DELAY_SECONDS * 1000);
     },
     onKilled: (character) => deaths.died(character, character.kind === 'player' ? null : character.monsterNumber),
+    onHeroAttacked: (attacker) => state.autoPlay?.attackedBy(attacker),
     onSkill: (caster, skill, target) => {
       // Triple Shot's fan of arrows goes through the arrows' own layer (CreateArrows).
       const hands = caster === online.hero
@@ -589,6 +598,53 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     use: useHotkey,
   });
   const hud = state.hud;
+  // Auto play (the desktop's helper): Home starts and stops it, the bar shows where the hero is.
+  const autoPlay = new AutoPlay(connection, {
+    hero: () => online.hero,
+    inSafeZone,
+    monsters: () => online.characters.values(),
+    cast: (skill, target) => state.combat?.cast(target, { ...target.cell }, skill) ?? false,
+    attack: (target) => state.combat?.attack(target),
+    busy: () => (state.combat?.busy ?? false) || online.hero.isPlayingOnce,
+    skillUsable: (skill) => [...skills.skills.values()].includes(skill) && skillRequirementsMet(skill, stats, character.classIndex),
+    life: () => stats.life, maxLife: () => stats.maxLife, money: () => inventory.money,
+    drinkHealingPotion: () => {
+      for (const type of itemTypesInUseOrder('healingPotion')) {
+        const slot = findItemReverse(inventory.items, type, -1);
+        if (slot !== null) return itemUser.use(slot);
+      }
+      return false;
+    },
+    drops: () => [...(state.ground?.drops.values() ?? [])],
+    pickUp: (id) => { const drop = state.ground?.drops.get(id); if (drop) state.ground!.pickUp(drop); },
+    pickingUp: () => state.ground?.pickingUp ?? false,
+    walkTo: (cell) => online.walkTo(cell),
+    worn: () => {
+      const result: { slot: number; percent: number; cost: number }[] = [];
+      for (let slot = 0; slot < 12; slot++) {
+        const item = inventory.items.get(slot);
+        if (!item) continue;
+        try {
+          const max = maxDurability(item);
+          if (max > 0) result.push({ slot, percent: Math.ceil((item.durability * 100) / max), cost: repairCost(item, true) });
+        } catch { /* prices not loaded yet */ }
+      }
+      return result;
+    },
+    repair: (slot) => inventory.repair(slot, true),
+    itemName: (item) => itemName(item.group, item.number),
+    isJewel: (item) => itemDefinition(item.group, item.number)?.tags?.includes('jewel') ?? false,
+    message: (text) => chat.add(text, 'system'),
+  });
+  autoPlay.setConfig(defaultAutoPlayConfig());
+  state.autoPlay = autoPlay;
+  const autoPlayBar = new AutoPlayBar({ settings: () => undefined, toggle: () => autoPlay.toggle() });
+  state.autoPlayBar = autoPlayBar;
+  void autoPlayBar.open();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
+  });
   hud.setSkills({
     list: skills,
     usable: (skill) => skillRequirementsMet(skill, stats, character.classIndex) && skillUsableWithEquipment(skill, {

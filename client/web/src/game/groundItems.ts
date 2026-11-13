@@ -210,6 +210,11 @@ export class GroundItems {
     this.pickupTarget = null;
   }
 
+  /** Whether the hero is on the way to a drop (or its pick-up was just asked). */
+  get pickingUp(): boolean {
+    return this.pickupTarget !== null || this.requested !== null;
+  }
+
   private distance(drop: GroundDrop): number {
     const hero = this.actions.hero();
     return Math.hypot(drop.cell.x - hero.cell.x, drop.cell.y - hero.cell.y);

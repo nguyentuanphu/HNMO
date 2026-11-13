@@ -83,7 +83,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Party, guild, friends, messenger | ⬜ | |
 | Quests | ⬜ | |
 | Events (Blood Castle, Devil Square, Chaos Castle, …) | ⬜ | |
-| MU Helper | ⬜ | |
+| Auto play (the helper) | 🟡 | Home or the helper bar (`mu_helper_bar.rml`: map, position, start/stop) asks the server to start or stop it (`MuHelperStatusChangeRequest`, `MuHelperStatusUpdate`, the zen it costs). The loop of the desktop's helper (`game/autoPlay.ts`): health potions under the threshold, back to the start spot after a while away, picking up drops by the pick-up rules, the nearest monster in the hunting range (or the farthest attacker, counter attack, self defense), the skill rotation (basic skill, activation skills on a timer or a monster count, combo), a plain attack as fallback, self repair; a safe zone stops it. Not yet: the settings windows, buffs, heal and party support, the Dark Raven, the HNMO extras |
 | Cash shop | ⬜ | |
 
 ## 5. Interface (`UI/`, `Render/RmlUi`)

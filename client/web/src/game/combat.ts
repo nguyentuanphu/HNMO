@@ -65,6 +65,8 @@ export interface CombatEvents {
   onSwing?: (actor: Character, target: Character | null, look: AttackLookInput | null) => void;
   /** Someone died (for the death effects). */
   onKilled?: (character: Character) => void;
+  /** A monster attacked the hero (for auto play's counter attack and self defense). */
+  onHeroAttacked?: (attacker: Character) => void;
   /** Someone cast a skill (SkillAnimation / AreaSkillAnimation, and the hero's own cast): for its effects. */
   onSkill?: (caster: Character, skill: number, target: Character | null, cell: { x: number; y: number } | null) => void;
 }
@@ -137,8 +139,8 @@ export class Combat {
 
   // A right click: cast the current skill at a character (or the hero itself for buffs), or at a cell
   // for area skills (the desktop's ExecuteSkill with the selected character and the mouse's tile).
-  cast(target: Character | null, cell: { x: number; y: number } | null): boolean {
-    const skill = this.skills?.current() ?? null;
+  cast(target: Character | null, cell: { x: number; y: number } | null, skillNumber?: number): boolean {
+    const skill = skillNumber ?? this.skills?.current() ?? null;
     if (skill === null || this.hero.dead) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
     if (!plan || plan.packet === 'none') return false;
@@ -148,6 +150,11 @@ export class Combat {
     this.repeatSkill = null;
     if (target && !plan.friendly) { this.target = target; this.events.onTargetChanged?.(target); }
     return true;
+  }
+
+  /** Whether the hero is fighting: a skill about to be cast, or a living target being attacked. */
+  get busy(): boolean {
+    return this.pendingSkill !== null || (this.target !== null && !this.target.dead && this.online.characters.has(this.target.id));
   }
 
   // The player did something else (walked somewhere): the attack stops.
@@ -309,6 +316,7 @@ export class Combat {
       if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
       reaction = monsterAnimationReaction(packet.Animation, actor.attacks, state);
     }
+    if (victim === this.hero && actor.kind === 'monster') this.events.onHeroAttacked?.(actor);
     if (reaction.kind === 'attack' && reaction.action !== null && reaction.action >= 0) {
       actor.playOnce(reaction.action);
       this.events.onSwing?.(actor, victim, null);
@@ -326,6 +334,7 @@ export class Combat {
     let state = this.monsterStates.get(actor.id);
     if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
     state.monsterSkill = packet.SkillNumber;
+    if (victim === this.hero) this.events.onHeroAttacked?.(actor);
     const action = monsterAttackAction(actor.attacks, state);
     if (action !== null && action >= 0) actor.playOnce(action);
   }

@@ -58,7 +58,7 @@ Party (`party_info.rml`, `party_list.rml`), guild (`guild_info.rml`, `guild_make
 messenger and letters, whisper/party/guild chat, duels, Gens.
 
 ## 8. Auto play
-1. The desktop helper (`mu_helper_*.rml`): hunting range, main and 2 activation skills with
+1. 🟡 The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop done; settings windows next: hunting range, main and 2 activation skills with
    conditions, combo, counter-attacks, potions and heal, buffs and party support, Dark Spirit,
    pick-up rules and item list, repair, auto-accept, the helper bar and its zen cost.
 2. Offline leveling (the server already does it).
@@ -90,6 +90,6 @@ each release.
 | 00:30–01:30 | ✅ 2.1 skill list, skill bar, hotkeys and tooltip (cooldown wipes come with casting) |
 | 01:30–02:30 | 🟡 1.1 effect system basics; 2.2 casting with skill animations and first effects |
 | 02:30–03:30 | ✅ 4.1 character window and stat points; ✅ 5.1 NPC shops (buy, sell, repair) |
-| 03:30–04:30 | 8.1 auto play core (hunt, potions, pick up) with its bar; report, package link |
+| 03:30–04:30 | 🟡 8.1 auto play core (hunt, potions, pick up) with its bar (done); settings windows; report |
 
 Order after tonight: the rest of 2, 3, 8, then 5-7, 4, 9, 10, 11.

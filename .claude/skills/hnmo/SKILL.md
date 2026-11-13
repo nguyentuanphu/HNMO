@@ -67,3 +67,5 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - The in-game guide is `client/web/public/guide.html` (the (i) button): update its feature table
   whenever a feature starts working.
 - `dotnet` lives in `~/.dotnet` in the cloud sandbox (`export PATH=$HOME/.dotnet:$PATH`).
+- Night work blocks: when a block finishes early, start the next block at once; don't wait for
+  its scheduled message (owner, 2026-11-14).
