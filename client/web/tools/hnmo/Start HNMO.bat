@@ -10,3 +10,8 @@ if not exist "Data\Monsters" (
 )
 cd web
 HNMO.exe
+if errorlevel 1 (
+  echo.
+  echo HNMO stopped because of the problem shown above.
+  pause
+)

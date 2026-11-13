@@ -13,9 +13,12 @@ panel, the web client and the game data.
 
 ## Play
 
-Download the HNMO folder from the latest **HNMO package** run under
-[Actions](../../actions/workflows/hnmo-package.yml) (artifact `HNMO-windows`),
-unzip it and double-click `Start HNMO.bat`. The game opens in the browser; your
+Sending the game to a friend? Give them [`friends/README.md`](friends/README.md):
+it has the download link and both ways to play.
+
+
+Download [HNMO-windows.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-windows.zip)
+(always the newest build), unzip it and double-click `Start HNMO.bat`. The game opens in the browser; your
 progress is saved in the folder's `save` directory. The folder's `README.txt`
 explains accounts, coins, the admin panel and playing with friends (Tailscale).
 

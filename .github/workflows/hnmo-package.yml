@@ -1,7 +1,8 @@
 name: HNMO package
 
 # Builds the HNMO folder for Windows (game server + admin panel + web client + game
-# data + save database) and offers it as a download on the run's page.
+# data + save database), offers it as a download on the run's page and publishes it
+# as HNMO-windows.zip on the release page (a link that always gives the newest build).
 on:
   workflow_dispatch:
   push:
@@ -12,6 +13,9 @@ on:
 concurrency:
   group: hnmo-package-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: write
 
 jobs:
   package:
@@ -41,3 +45,13 @@ jobs:
           name: HNMO-windows
           path: HNMO
           retention-days: 14
+      - name: Publish HNMO-windows.zip as the latest release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          zip -qr HNMO-windows.zip HNMO
+          gh release delete hnmo-latest --cleanup-tag --yes || true
+          gh release create hnmo-latest HNMO-windows.zip --target "$GITHUB_SHA" --latest \
+            --title "HNMO for Windows" \
+            --notes "The newest HNMO folder for Windows. Unzip it and double-click Start HNMO.bat. Guide: friends/README.md"
