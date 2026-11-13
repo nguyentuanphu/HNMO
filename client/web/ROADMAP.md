@@ -62,8 +62,8 @@ messenger and letters, whisper/party/guild chat, duels, Gens.
    conditions, combo, counter-attacks, potions and heal, buffs and party support, Dark Spirit,
    pick-up rules and item list, repair, auto-accept, the helper bar and its zen cost.
 2. Offline leveling (the server already does it).
-3. **(extra)** back to town when the bag is full or potions run out, buy potions, return.
-4. **(extra)** sell junk to NPCs; **(extra)** stop timer; **(extra)** alerts on death / full bag.
+3. ✅ **(extra)** back to town when the bag is full or potions run out, buy potions, return.
+4. ✅ **(extra)** sell junk to NPCs; **(extra)** stop timer; **(extra)** alerts on death / full bag.
 
 ## 9. Events
 Blood Castle, Devil Square, Chaos Castle, Illusion Temple, Kalima, Crywolf, Castle Siege,

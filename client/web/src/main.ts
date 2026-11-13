@@ -12,18 +12,20 @@ import { itemDefinition, itemName, loadItemCatalog, itemsWithModels, ItemGroup, 
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { loadGlowColors } from './game/itemGlow.js';
-import { Inventory } from './game/inventory.js';
+import { BAG, Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
-import { findItemReverse, HOTKEY_LETTERS, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
+import { findItemReverse, HOTKEY_LETTERS, isHighValue, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
 import { AutoPlay } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
+import { AutoPlayExtras } from './game/autoPlayExtras.js';
+import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { defaultAutoPlayConfig } from './game/autoPlayConfig.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
@@ -64,6 +66,7 @@ export interface GameState {
   effects?: EffectSystem;
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
+  autoPlayExtras?: AutoPlayExtras;
 }
 
 declare global {
@@ -344,6 +347,7 @@ function frame(now: number): void {
     state.projectiles?.update(dt);
     state.effects?.update(dt);
     state.autoPlay?.update();
+    state.autoPlayExtras?.update();
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
@@ -641,9 +645,39 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const autoPlayBar = new AutoPlayBar({ settings: () => undefined, toggle: () => autoPlay.toggle() });
   state.autoPlayBar = autoPlayBar;
   void autoPlayBar.open();
+  // HNMO extras: trips to town, selling junk, the stop timer, alerts.
+  const healingCount = () => {
+    let count = 0;
+    for (const [slot, item] of inventory.items) if (slot >= 12 && itemDefinition(item.group, item.number)?.tags?.includes('healingPotion')) count += item.durability;
+    return count;
+  };
+  const autoPlayExtras = new AutoPlayExtras(character.name, {
+    active: () => autoPlay.active, start: () => autoPlay.requestStart(), stop: () => { autoPlay.requestStop(); autoPlay.stop(); },
+    hero: () => online.hero, mapNumber: () => state.mapNumber, mapWarpName: (map) => mapName(map).toLowerCase(),
+    say: (text) => online.say(text), walkTo: (cell) => online.walkTo(cell),
+    npcs: () => [...online.characters.values()].filter((c) => c.kind === 'npc'), talkTo: (npc) => online.talkTo(npc),
+    shopOpen: () => itemWindows.shop.isOpen && inventory.shop.size > 0, shopItems: () => inventory.shop,
+    buy: (slot) => inventory.buy(slot), sell: (slot) => inventory.sell(slot), selling: () => inventory.sellingSlot !== null,
+    closeShop: () => itemWindows.closeAll(),
+    bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12),
+    // "Full": fewer than four free cells left.
+    bagFull: () => {
+      let free = 0;
+      for (let slot = 12; slot < 76; slot++) if (inventory.fits(inventory.items, BAG, slot, { width: 1, height: 1 }, null)) free++;
+      return free < 4;
+    },
+    healingPotions: healingCount,
+    isHealingPotion: (item) => itemDefinition(item.group, item.number)?.tags?.includes('healingPotion') ?? false,
+    // Kept: everything but plain weapons and armour (groups 0-11) that aren't expensive or unsellable.
+    isKeeper: (item) => item.group > 11 || isHighValue(item) || isSellingBan(item),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.autoPlayExtras = autoPlayExtras;
+  const extrasPanel = new AutoPlayExtrasPanel(autoPlayExtras);
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
+    if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); extrasPanel.toggle(); }
   });
   hud.setSkills({
     list: skills,
