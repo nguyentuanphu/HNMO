@@ -65,7 +65,10 @@ export class Connection {
   }
 
   dispatch(bytes: Uint8Array): void {
-    for (const handler of this.handlers) handler(bytes);
+    // One handler's error mustn't keep the packet from the others.
+    for (const handler of this.handlers) {
+      try { handler(bytes); } catch (error) { console.error('Packet handler failed', bytes[0].toString(16), bytes[2].toString(16), error); }
+    }
     const waiter = this.waiters.find((w) => w.matches(bytes));
     if (!waiter) {
       this.backlog.push(bytes);

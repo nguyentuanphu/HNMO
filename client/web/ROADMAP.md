@@ -47,14 +47,14 @@ tests and CI for all of it; strict TypeScript build.
 ## 5. NPCs, shops and quests
 1. 🟡 NPC dialogs (`npc_dialogue.rml`), shops (`npc_shop.rml`): buy, sell, repair (shops done; dialogs, tax rate, gamble shops left).
 2. Quests (`npc_quest.rml`, `my_quest_info.rml`, quest progress), class change quests.
-3. 🟡 Move window M (done) / gates / warps (`move_command.rml`, `gateman.rml`), mini map, map name banner (done).
+3. 🟡 Move window M (done) / gates / warps (`move_command.rml`, `gateman.rml`), mini map (done, Tab), map name banner (done).
 
 ## 6. Trading and crafting
-Trade (`trade.rml`), personal store (`my_shop`, `PurchaseShopInventory`), chaos machine and every
+🟡 Trade (`trade.rml`, done), personal store (`my_shop`, `PurchaseShopInventory`), chaos machine and every
 mix (`mix_inventory.rml`), Jewel of Harmony, sockets, lucky items, united market.
 
 ## 7. Social
-Party (`party_info.rml`, `party_list.rml`), guild (`guild_info.rml`, `guild_make.rml`), friends,
+🟡 Party (`party_list.rml`, done; `party_info.rml` next), guild (`guild_info.rml`, `guild_make.rml`), friends,
 messenger and letters, whisper/party/guild chat, duels, Gens.
 
 ## 8. Auto play

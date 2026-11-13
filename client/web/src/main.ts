@@ -33,6 +33,11 @@ import { loadWarps } from './game/warps.js';
 import { prepareDocument } from './ui/rml.js';
 import { MapNameBanner } from './ui/mapNameBanner.js';
 import { GameSounds } from './game/gameSounds.js';
+import { Party, facingPlayer } from './game/party.js';
+import { PartyList } from './ui/partyList.js';
+import { confirmInGame } from './ui/confirmDialog.js';
+import { MiniMap } from './ui/miniMap.js';
+import { Trade } from './ui/tradeWindow.js';
 import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
@@ -77,6 +82,9 @@ export interface GameState {
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
   buffs?: BuffTracker;
+  party?: Party;
+  trade?: Trade;
+  miniMap?: MiniMap;
 }
 
 declare global {
@@ -373,6 +381,7 @@ function frame(now: number): void {
     state.autoPlayExtras?.update();
     if (state.autoPlayBar && state.hero && state.mapNumber !== null) state.autoPlayBar.set(mapName(state.mapNumber), state.hero.cell, state.autoPlay?.active ?? false);
     state.overlay?.update(dt);
+    state.miniMap?.update();
     ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     updateCamera();
     updateLabels();
@@ -615,6 +624,14 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     sell: (slot, item) => itemWindows.sell(slot, item),
   });
   itemWindows.message = (text) => chat.add(text, 'system');
+  // Trading with other players (CTrade): requests, the trade window, its packets.
+  state.trade = new Trade({
+    connection, inventory, itemWindows,
+    message: (text) => chat.add(text, 'system'),
+    confirm: (text) => confirmInGame(text),
+    level: () => stats.level, heroName: () => character.name,
+    playerName: (id) => online.characters.get(id)?.name,
+  });
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   itemWindows.bag.onDropOnItem = (from, slot, target) => {
     if (from.storage !== 0 || from.slot < 12) return false;
@@ -751,6 +768,17 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
   });
   inventory.onChange(() => moveWindow.refresh());
+  // The mini map (Tab): the whole map with its NPCs and gates, the hero's arrow in the middle.
+  const miniMap = new MiniMap({
+    hero: () => state.hero ?? null,
+    mapNumber: () => state.mapNumber,
+    closed: () => connection.send('ClientToServer', 'CloseNpcRequest', {}),
+  });
+  state.miniMap = miniMap;
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key === 'Tab' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void miniMap.toggle(); }
+  });
   // Ready in the background, so M opens at once (compiling a window's stylesheets takes a while).
   void loadWarps().then(() => prepareDocument('move_command')).then(() => prepareDocument('map_name')).catch((error: unknown) => console.warn('Move window', error));
   // HNMO extras: trips to town, selling junk, the stop timer, alerts.
@@ -828,7 +856,30 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
   void hud.open();
-  chat.enable((text) => online.say(text));
+  // The party: invitations, the member list, /party.
+  const party = new Party(connection, {
+    confirm: (text) => confirmInGame(text),
+    message: (text) => chat.add(text, 'system'),
+    nameOf: (id) => online.characters.get(id)?.name ?? 'Someone',
+  });
+  state.party = party;
+  // A party kept while the hero was away comes back with its list on entering (the server's auto rejoin).
+  earlyPackets.forEach((bytes) => party.handle(bytes));
+  void new PartyList(party, {
+    heroName: character.name,
+    inSight: (name) => name === character.name || [...online.characters.values()].some((c) => c.kind === 'player' && c.name === name),
+  });
+  chat.enable((text) => {
+    const command = text.trim().toLowerCase();
+    if (command === '/party' || command === '/pt') { party.command(online.hero, online.characters.values(), character.name); return; }
+    if (command === '/trade') {
+      const partner = facingPlayer(online.hero, online.characters.values());
+      if (partner) state.trade?.requestTrade(partner.id);
+      else chat.add('Type /trade with the mouse cursor on a player to trade with them.', 'system');
+      return;
+    }
+    online.say(text);
+  });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');

@@ -25,6 +25,8 @@ export const Storage = { INVENTORY: 0, TRADE: 1, VAULT: 2, CHAOS_MACHINE: 3, PLA
 /** The open merchant's items (a client-side storage: the server knows them by shop slot). */
 export const SHOP_STORAGE = 100;
 export const SHOP: ItemGrid = { firstSlot: 0, columns: 8, rows: 15 };
+/** The own side of an open trade (CTrade's 8 x 4 grids; the server's trade storage). */
+export const TRADE: ItemGrid = { firstSlot: 0, columns: 8, rows: 4 };
 export type Storage = (typeof Storage)[keyof typeof Storage];
 export const NpcWindow = { MERCHANT: 0, MERCHANT1: 1, VAULT: 2, CHAOS_MACHINE: 3 } as const;
 export type NpcWindow = (typeof NpcWindow)[keyof typeof NpcWindow];
@@ -62,7 +64,7 @@ export interface StoredItem {
 }
 
 /** What changed, for Inventory.onChange listeners. */
-export type InventoryChange = 'inventory' | 'vault' | 'shop' | 'window' | 'money' | 'buyFailed';
+export type InventoryChange = 'inventory' | 'vault' | 'shop' | 'trade' | 'window' | 'money' | 'buyFailed';
 
 /** A move the server hasn't answered yet. */
 export interface PendingMove {
@@ -140,9 +142,12 @@ export class Inventory {
   stop: () => void;
   /** The open merchant's items by shop slot (StoreItemList while a merchant's window is open). */
   shop = new Map<number, Item>();
+  /** The items this player put into the open trade, by trade slot (ItemMoved to the trade storage). */
+  trade = new Map<number, Item>();
   /** The bag slot of the item being sold (SellItemToNpcRequest), until the server answers. */
   sellingSlot: number | null = null;
   lastMoveTouchedVault?: boolean;
+  lastMoveTouchedTrade?: boolean;
 
   constructor(connection: Connection, { money = 0 }: { money?: number } = {}) {
     this.connection = connection;
@@ -166,7 +171,7 @@ export class Inventory {
   }
 
   storage(kind: number): Map<number, Item> {
-    return kind === Storage.VAULT ? this.vault : kind === SHOP_STORAGE ? this.shop : this.items;
+    return kind === Storage.VAULT ? this.vault : kind === SHOP_STORAGE ? this.shop : kind === Storage.TRADE ? this.trade : this.items;
   }
 
   handle(bytes: Uint8Array): void {
@@ -231,6 +236,7 @@ export class Inventory {
       this.pendingMove = null;
       this.changed(bytes[data] === Storage.VAULT ? 'vault' : 'inventory');
       if (this.lastMoveTouchedVault) this.changed('vault');
+      if (this.lastMoveTouchedTrade) this.changed('trade');
     } else if (c1 && code === 0x23) {
       // ItemDropResponse: the item we put on the ground left the inventory
       if (bytes[data] !== 0) { this.items.delete(bytes[data + 1]); this.changed('inventory'); }
@@ -260,6 +266,7 @@ export class Inventory {
     if (this.pendingMove) return;
     this.pendingMove = { fromStorage, fromSlot, toStorage, toSlot };
     this.lastMoveTouchedVault = fromStorage === Storage.VAULT || toStorage === Storage.VAULT;
+    this.lastMoveTouchedTrade = fromStorage === Storage.TRADE || toStorage === Storage.TRADE;
     this.connection.send('ClientToServer', 'ItemMoveRequestExtended', { FromStorage: fromStorage, FromSlot: fromSlot, ToStorage: toStorage, ToSlot: toSlot });
     setTimeout(() => { if (this.pendingMove?.fromSlot === fromSlot) { this.pendingMove = null; this.changed('inventory'); } }, 3000);
   }

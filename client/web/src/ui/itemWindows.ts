@@ -5,7 +5,7 @@
 import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { drawItem } from './itemIcons.js';
-import { BAG, VAULT, SHOP, SHOP_STORAGE, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
+import { BAG, VAULT, SHOP, SHOP_STORAGE, TRADE, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
 import type { Item, ItemGrid } from '../game/inventory.js';
 import { itemName } from '../game/items.js';
 import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
@@ -175,6 +175,8 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   onItemClick?: (slot: number, item: Item) => boolean;
   /** A right click on an item of the window (CInventoryActionController::HandleRightClick). */
   onRightClick?: (slot: number, item: Item) => void;
+  /** A right click on an item, before onRightClick: true when handled (the open trade takes bag items). */
+  interceptRightClick?: (slot: number, item: Item) => boolean;
 
   constructor({ inventory, picked, documentName, grid, storage, model }: {
     inventory: Inventory; picked: PickedItem; documentName: string; grid: ItemGrid; storage: number; model: M;
@@ -332,7 +334,7 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const equipment = this.equipmentSlotAt(point);
     const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
     const item = slot === null ? undefined : this.items.get(slot);
-    if (slot !== null && item) this.onRightClick?.(slot, item);
+    if (slot !== null && item && !this.interceptRightClick?.(slot, item)) this.onRightClick?.(slot, item);
   }
 
   hover(event: PointerEvent | null): void {
@@ -553,6 +555,225 @@ export class ShopWindow extends ItemWindow<ShopModel> {
   }
 }
 
+// trade.rml's data model (CTrade::TradeRmlModel).
+interface TradeModel extends ItemWindowModel {
+  big_text_px: number;
+  partner_cells: GridCell[];
+  your_id_text: string; your_guild_visible: boolean; your_guild_name: string; your_level_text: string; your_level_bucket: number;
+  your_gold_text: string; your_gold_tier: string; your_confirm_checked: boolean;
+  my_id_text: string; my_gold_text: string; my_gold_tier: string; my_confirm_checked: boolean; my_confirm_waiting: boolean;
+  warning_label: string; notice_line1: string; notice_line2: string; notice_line3: string; warning_opacity: number;
+  close_tooltip: string; zen_tooltip: string;
+  item_warning_text: string; item_warning_badges: { x: number; y: number; width: number }[];
+  trade_exit_click: () => void; trade_zen_click: () => void; trade_my_confirm_click: () => void;
+}
+
+/** What the trade window shows, kept by the trade (src/ui/tradeWindow.ts). */
+export interface TradeView {
+  partnerName: string;
+  partnerLevel: number;
+  partnerGold: number;
+  partnerConfirmed: boolean;
+  /** The partner's items by trade slot (TradeItemAdded / TradeItemRemoved). */
+  partner: Map<number, Item>;
+  /** The partner's slots whose items changed for the worse since they were last offered (ITEM_COLOR_TRADE_WARNING). */
+  warnings: Set<number>;
+  myName: string;
+  myGold: number;
+  myConfirmed: boolean;
+  /** Until when (performance.now()) the own OK button waits after the offer changed. */
+  waitUntil: number;
+}
+
+/** Hover slots at or above this are the partner's grid (PARTNER_SLOT + trade slot). */
+const PARTNER_SLOT = 1000;
+
+// CTrade::ConvertYourLevel: the partner's level rounded down to the bucket the window shows ("About N").
+export function tradeLevelBucket(level: number): number {
+  for (const bucket of [400, 300, 200, 100, 50]) if (level >= bucket) return bucket;
+  return 10;
+}
+
+// The trade window (CTrade, trade.rml): the partner's 8 x 4 grid, zen and OK mark at the top, the own
+// grid, zen, the zen and close buttons and the own OK button at the bottom. Own items move in and out
+// like in the vault (ItemMoveRequestExtended to the trade storage); the partner's are only shown.
+export class TradeWindow extends ItemWindow<TradeModel> {
+  view: TradeView = {
+    partnerName: '', partnerLevel: 0, partnerGold: 0, partnerConfirmed: false, partner: new Map(), warnings: new Set(),
+    myName: '', myGold: 0, myConfirmed: false, waitUntil: 0,
+  };
+  /** A bag item is about to be put into the trade: false keeps it out (IsTradeBan). */
+  onOffer?: (item: Item) => boolean;
+  /** A bag item was sent into the trade, or an own trade item picked up (the own OK is cleared). */
+  onOfferChanged?: (kind: 'added' | 'picked') => void;
+  /** A right click on an own trade item (it goes back to the bag). */
+  onTradeItemRightClick?: (slot: number, item: Item) => void;
+  partnerOrigin: Point = { x: 16, y: 68 };
+  private partnerCanvases = new Map<number, { canvas: HTMLCanvasElement; signature?: string }>();
+  private pulse: ReturnType<typeof setInterval> | null = null;
+
+  constructor({ inventory, picked, onClose, onZen, onConfirm }: {
+    inventory: Inventory; picked: PickedItem; onClose: () => void; onZen: () => void; onConfirm: () => void;
+  }) {
+    const model: TradeModel = {
+      text_px: 12, big_text_px: 14, title: 'Trade', grid_cells: emptyCells(TRADE.columns * TRADE.rows), partner_cells: emptyCells(TRADE.columns * TRADE.rows),
+      your_id_text: '', your_guild_visible: false, your_guild_name: '', your_level_text: '', your_level_bucket: 10,
+      your_gold_text: '0', your_gold_tier: 'base', your_confirm_checked: false,
+      my_id_text: '', my_gold_text: '0', my_gold_tier: 'base', my_confirm_checked: false, my_confirm_waiting: false,
+      warning_label: 'Warning!', notice_line1: 'Notice! Please check out', notice_line2: 'the level of the player', notice_line3: 'and the items before trading.',
+      warning_opacity: 1, close_tooltip: 'Close', zen_tooltip: 'Zen Trade',
+      item_warning_text: 'Warning!', item_warning_badges: [],
+      window_close: () => onClose(), trade_exit_click: () => onClose(), trade_zen_click: () => onZen(), trade_my_confirm_click: () => onConfirm(),
+    };
+    super({ inventory, picked, documentName: 'trade', grid: TRADE, storage: Storage.TRADE, model });
+    this.onRightClick = (slot, item) => this.onTradeItemRightClick?.(slot, item);
+  }
+
+  override layout(): void {
+    super.layout();
+    const partner = this.doc!.$('#partner_grid');
+    if (partner) this.partnerOrigin = { x: partner.offsetLeft, y: partner.offsetTop };
+    // The "Warning!" word pulses (sin(WorldTime / 200) * 200 + 275) and the OK button waits a moment
+    // after an offer changed: both follow the clock while the window is open.
+    this.pulse ??= setInterval(() => {
+      if (!this.doc) return;
+      const now = performance.now();
+      this.model.warning_opacity = Math.min(255, Math.sin(now / 200) * 200 + 275) / 255;
+      this.model.my_confirm_waiting = now < this.view.waitUntil;
+      this.model.item_warning_badges = this.warningBadges(now);
+      this.doc.update();
+    }, 100);
+  }
+
+  override close(): void {
+    if (this.pulse !== null) { clearInterval(this.pulse); this.pulse = null; }
+    for (const entry of this.partnerCanvases.values()) entry.canvas.remove();
+    this.partnerCanvases.clear();
+    super.close();
+  }
+
+  /** The partner's item under a panel point: its trade slot. */
+  partnerItemAt(point: Point): number | null {
+    const col = Math.floor((point.x - this.partnerOrigin.x) / CELL), row = Math.floor((point.y - this.partnerOrigin.y) / CELL);
+    if (col < 0 || row < 0 || col >= TRADE.columns || row >= TRADE.rows) return null;
+    const cell = row * TRADE.columns + col;
+    for (const [slot, item] of this.view.partner) if (Inventory.cellsOf(TRADE, slot, item)?.includes(cell)) return slot;
+    return null;
+  }
+
+  partnerBoxOf(slot: number, item: Item): Box {
+    return {
+      x: this.partnerOrigin.x + (slot % TRADE.columns) * CELL, y: this.partnerOrigin.y + Math.floor(slot / TRADE.columns) * CELL,
+      w: item.width * CELL, h: item.height * CELL,
+    };
+  }
+
+  override screenBoxOf(slot: number): ScreenBox | null {
+    if (slot < PARTNER_SLOT) return super.screenBoxOf(slot);
+    const item = this.view.partner.get(slot - PARTNER_SLOT);
+    if (!item || !this.doc) return null;
+    const box = this.partnerBoxOf(slot - PARTNER_SLOT, item);
+    const rect = this.panel.getBoundingClientRect();
+    const scale = rect.width / PANEL.width;
+    return { left: rect.left + box.x * scale, top: rect.top + box.y * scale, width: box.w * scale, height: box.h * scale };
+  }
+
+  // The partner's items show their tooltips too.
+  override hover(event: PointerEvent | null): void {
+    const point = event ? this.pointOf(event) : null;
+    const partnerSlot = point ? this.partnerItemAt(point) : null;
+    if (partnerSlot !== null) {
+      if (this.hoverSlot !== PARTNER_SLOT + partnerSlot) {
+        this.hoverSlot = PARTNER_SLOT + partnerSlot;
+        this.onHover?.(this.view.partner.get(partnerSlot) ?? null, event);
+      }
+      this.updateDropPreview(point);
+      return;
+    }
+    if (this.hoverSlot !== null && this.hoverSlot >= PARTNER_SLOT) this.hoverSlot = -1; // left the partner's item
+    super.hover(event);
+  }
+
+  override click(event: MouseEvent): void {
+    if (event.target instanceof Element && event.target.closest('#frame_corner_close, .trade-btn, #my_confirm')) return;
+    const source = this.picked.source;
+    // Only bag items go into the trade (CTrade::SendRequestItemToTrade), and not those that can't be traded.
+    if (source && source.storage !== Storage.TRADE && (source.storage !== Storage.INVENTORY || source.slot < BAG.firstSlot || this.onOffer?.(source.item) === false)) return;
+    const pendingBefore = this.inventory.pendingMove;
+    super.click(event);
+    const pending = this.inventory.pendingMove;
+    if (source && pending && pending !== pendingBefore && pending.fromStorage !== Storage.TRADE) this.onOfferChanged?.('added');
+    else if (!source && this.picked.source?.storage === Storage.TRADE) this.onOfferChanged?.('picked');
+  }
+
+  override updateModel(): void {
+    const view = this.view;
+    const cells = emptyCells(TRADE.columns * TRADE.rows);
+    for (const [slot, item] of view.partner) {
+      for (const cell of Inventory.cellsOf(TRADE, slot, item) ?? []) cells[cell].tint = 'tint-normal';
+      if (item.group === 14 && item.durability > 1) cells[slot].count = String(item.durability);
+    }
+    this.model.partner_cells = cells;
+    this.model.big_text_px = Math.round(this.model.text_px * 7 / 6);
+    this.model.your_id_text = view.partnerName;
+    const bucket = tradeLevelBucket(view.partnerLevel);
+    this.model.your_level_bucket = bucket;
+    this.model.your_level_text = bucket === 400 ? 'Lv.400' : `Lv.About ${bucket}`;
+    this.model.your_gold_text = formatGold(view.partnerGold);
+    this.model.your_gold_tier = goldTier(view.partnerGold);
+    this.model.your_confirm_checked = view.partnerConfirmed;
+    this.model.my_id_text = view.myName;
+    this.model.my_gold_text = formatGold(view.myGold);
+    this.model.my_gold_tier = goldTier(view.myGold);
+    this.model.my_confirm_checked = view.myConfirmed;
+    this.model.my_confirm_waiting = performance.now() < view.waitUntil;
+    this.model.item_warning_badges = this.warningBadges(performance.now());
+  }
+
+  // The "Warning!" badges over the partner's changed items, with the original's little wobble.
+  warningBadges(now: number): { x: number; y: number; width: number }[] {
+    const badges: { x: number; y: number; width: number }[] = [];
+    for (const slot of this.view.warnings) {
+      const item = this.view.partner.get(slot);
+      if (!item) continue;
+      const box = this.partnerBoxOf(slot, item);
+      badges.push({ x: box.x, y: box.y + Math.sin(now * 0.015), width: box.w });
+    }
+    return badges;
+  }
+
+  override drawItems(): void {
+    super.drawItems();
+    const scale = uiScale();
+    const seen = new Set<number>();
+    for (const [slot, item] of this.view.partner) {
+      const box = this.partnerBoxOf(slot, item);
+      seen.add(slot);
+      let entry = this.partnerCanvases.get(slot);
+      if (!entry) {
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'absolute';
+        this.layer.append(canvas);
+        entry = { canvas };
+        this.partnerCanvases.set(slot, entry);
+      }
+      const { canvas } = entry;
+      Object.assign(canvas.style, { left: `${box.x}px`, top: `${box.y}px`, width: `${box.w}px`, height: `${box.h}px` });
+      canvas.title = itemName(item.group, item.number);
+      const signature = `${item.group}:${item.number}:${item.level}:${item.excellent}:${item.ancientSet}:${box.w}x${box.h}:${scale}`;
+      if (entry.signature !== signature) {
+        entry.signature = signature;
+        canvas.width = Math.round(box.w * scale);
+        canvas.height = Math.round(box.h * scale);
+        void drawItem(canvas, item);
+      }
+    }
+    for (const [slot, entry] of this.partnerCanvases) {
+      if (!seen.has(slot)) { entry.canvas.remove(); this.partnerCanvases.delete(slot); }
+    }
+  }
+}
+
 // The inventory and vault windows with the item on the cursor, and the keys that open them.
 export class ItemWindows {
   inventory: Inventory;
@@ -561,6 +782,10 @@ export class ItemWindows {
   bag: InventoryWindow;
   vault: VaultWindow;
   shop: ShopWindow;
+  /** The trade window; the trade itself (src/ui/tradeWindow.ts) fills it and sets its handlers. */
+  trade: TradeWindow;
+  /** The player closed the open trade (Escape, closing the inventory): the trade sets this to cancel it. */
+  onTradeClosed: () => void = () => undefined;
   tooltip: ItemTooltipView;
   /** The repair mode of a repair shop (L): a click on an item repairs it (CNPCShop::ToggleState). */
   repairMode = false;
@@ -577,7 +802,7 @@ export class ItemWindows {
     this.picked = new PickedItem(parent);
     this.tooltip = new ItemTooltipView(parent, character);
     // Get the windows ready in the background, so they open at once.
-    prepareDocument('my_inventory').then(() => prepareDocument('storage')).catch((error) => console.warn('Interface', error));
+    prepareDocument('my_inventory').then(() => prepareDocument('storage')).then(() => prepareDocument('trade')).catch((error) => console.warn('Interface', error));
     this.bag = new InventoryWindow({ inventory, picked: this.picked, onClose: () => this.closeAll() });
     this.vault = new VaultWindow({ inventory, picked: this.picked, onClose: () => this.closeAll(), onMoney: (toVault) => this.askMoney(toVault) });
     this.shop = new ShopWindow({
@@ -585,13 +810,24 @@ export class ItemWindows {
       onRepairMode: () => { this.repairMode = !this.repairMode; },
       onSell: (slot, item) => this.sell(slot, item),
     });
+    // Its buttons call the handlers the trade sets (tradeHandlers).
+    this.trade = new TradeWindow({
+      inventory, picked: this.picked,
+      onClose: () => this.tradeHandlers.close(), onZen: () => this.tradeHandlers.zen(), onConfirm: () => this.tradeHandlers.confirm(),
+    });
+    // While trading, a right click on a bag item puts it into the trade (CTrade::ProcessMyInvenItemAutoMove).
+    this.bag.interceptRightClick = (slot, item) => {
+      if (!this.trade.isOpen) return false;
+      this.tradeHandlers.bagRightClick(slot, item);
+      return true;
+    };
     // In a repair shop's repair mode a click on an item repairs it (RepairItemAtMousePoint).
     this.bag.onItemClick = (slot) => {
       if (!this.repairMode || !this.shop.isOpen) return false;
       this.inventory.repair(slot, false);
       return true;
     };
-    for (const itemWindow of [this.bag, this.vault, this.shop]) {
+    for (const itemWindow of [this.bag, this.vault, this.shop, this.trade]) {
       itemWindow.onPickedChanged = () => { this.tooltip.hide(); this.refresh(); };
       // The hovered item's tooltip, unless an item is on the cursor (CInventoryCtrl only shows it then).
       itemWindow.onHover = (item) => {
@@ -608,7 +844,7 @@ export class ItemWindows {
       if (event.target instanceof Element && event.target.closest('input, textarea')) return;
       const key = event.key.toLowerCase();
       if (key === 'i' || key === 'v') { event.preventDefault(); this.toggle(); }
-      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen || this.shop.isOpen)) this.closeAll();
+      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen || this.shop.isOpen || this.trade.isOpen)) this.closeAll();
       // L: the repair mode of a repair shop; Shift + L repairs everything (CNPCShop::UpdateKeyEvent).
       if (key === 'l' && this.shop.isOpen && this.shop.repairShop) {
         if (event.shiftKey) this.inventory.repair(0xff, false);
@@ -662,7 +898,33 @@ export class ItemWindows {
     if (this.picked.source) this.picked.drop();
     if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
+    // Closing the inventory (or Escape) while trading cancels the trade (CSystem's HideAllGroupA, CTrade::UpdateKeyEvent).
+    if (this.trade.isOpen) { this.trade.close(); this.onTradeClosed(); }
     this.bag.close();
+  }
+
+  /** What the trade window's buttons and a right click on a bag item do while trading: set by the trade. */
+  tradeHandlers: { close: () => void; zen: () => void; confirm: () => void; bagRightClick: (slot: number, item: Item) => void } = {
+    close: () => undefined, zen: () => undefined, confirm: () => undefined, bagRightClick: () => undefined,
+  };
+
+  /** Opens the trade window next to the inventory; the vault and a merchant close (HideAllGroupA). */
+  async openTrade(): Promise<void> {
+    this.tooltip.hide();
+    if (this.picked.source) this.picked.drop();
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
+    if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
+    await this.bag.open(this.parent);
+    await this.trade.open(this.parent);
+    this.placeAll();
+  }
+
+  /** Closes the trade window and the inventory with it, as the server ended the trade. */
+  closeTrade(): void {
+    this.tooltip.hide();
+    if (this.picked.source) this.picked.drop();
+    if (this.trade.isOpen) { this.trade.close(); this.bag.close(); }
+    this.refresh();
   }
 
   /** Panels docked at the right edge before these windows (the character window): the bag moves left of them. */
@@ -673,15 +935,18 @@ export class ItemWindows {
     this.bag.place(right);
     this.vault.place(right + PANEL.width);
     this.shop.place(right + PANEL.width);
+    this.trade.place(right + PANEL.width);
     this.bag.refresh();
     this.vault.refresh();
     this.shop.refresh();
+    this.trade.refresh();
   }
 
   refresh(): void {
     this.bag.refresh();
     this.vault.refresh();
     this.shop.refresh();
+    this.trade.refresh();
   }
 
   // Selling a bag item to the open merchant (HandleSellToNPC / InventoryProcess): not what can't be
