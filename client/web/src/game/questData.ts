@@ -116,6 +116,29 @@ function readLegacyQuests(file: Uint8Array): LegacyQuest[] {
   return quests;
 }
 
+// HNMO's trial quests (group 40 at the Elf Soldier, from level 250; NEW_SKILLS.md): their steps'
+// texts aren't in the game's files. Step 0 starts it, 1 is the quest, 2 is the answer to a refusal.
+const TRIAL_GROUP = 40;
+const TRIAL_WORDS_FIRST = 9_400_000;
+function addTrialQuestTexts(progress: Map<number, QuestProgressEntry>, words: Map<number, string>): void {
+  const texts = [
+    'Trial of Strength', // 0: the subject
+    'Defeat 100 of the monsters I name and bring me a Jewel of Chaos. Then I will teach you the hidden skill of your class.', // 1: the summary
+    'You have grown strong. Strong enough to learn what few of your kind ever learn. Will you take the trial?', // 2
+    'I will take the trial.', // 3
+    'Not now.', // 4
+    'Have you done what I asked? Show me the proof of your strength.', // 5
+    'Come back when you are ready for it.', // 6
+    'I am ready.', // 7
+  ];
+  texts.forEach((text, i) => words.set(TRIAL_WORDS_FIRST + i, text));
+  const w = (i: number) => TRIAL_WORDS_FIRST + i;
+  const index = (number: number) => ((TRIAL_GROUP << 16) | number) >>> 0;
+  if (!progress.has(index(0))) progress.set(index(0), { uiType: 0, npcWords: w(2), playerWords: w(7), answers: [w(3), w(4), 0, 0, 0], subject: w(0), summary: w(1) });
+  if (!progress.has(index(1))) progress.set(index(1), { uiType: 0, npcWords: w(5), playerWords: 0, answers: [0, 0, 0, 0, 0], subject: w(0), summary: w(1) });
+  if (!progress.has(index(2))) progress.set(index(2), { uiType: 0, npcWords: w(6), playerWords: 0, answers: [0, 0, 0, 0, 0], subject: w(0), summary: w(1) });
+}
+
 let scripts: Promise<QuestScripts> | null = null;
 
 export function loadQuestScripts(): Promise<QuestScripts> {
@@ -124,7 +147,9 @@ export function loadQuestScripts(): Promise<QuestScripts> {
       fetchBytes('/data/Local/NPCDialogue.bmd'), fetchBytes('/data/Local/QuestProgress.bmd'),
       fetchBytes('/data/Local/Eng/QuestWords_eng.bmd'), fetchBytes('/data/Local/Eng/Quest_eng.bmd'),
     ]);
-    return { dialogues: readDialogues(dialogues), progress: readProgress(progress), words: readWords(words), legacy: readLegacyQuests(legacy) };
+    const result = { dialogues: readDialogues(dialogues), progress: readProgress(progress), words: readWords(words), legacy: readLegacyQuests(legacy) };
+    addTrialQuestTexts(result.progress, result.words);
+    return result;
   })();
   return scripts;
 }

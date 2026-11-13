@@ -140,3 +140,24 @@ test('talks to a class change quest NPC', async ({ page }) => {
   await expect(page.locator('.rml-npc_quest')).toHaveCount(0);
   await expectNoPageErrors(errors);
 });
+
+test("HNMO's trial quest shows at the Elf Soldier from level 250", async ({ page }) => {
+  test.setTimeout(8 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await enterWorld(page, 'test400'); // level 400
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await page.waitForTimeout(6_000);
+  await page.evaluate(() => (window as unknown as Win).__game.online.walkTo({ x: 131, y: 130 }));
+  await talkToElfSoldier(page);
+  await expect(page.locator('.rml-npc_dialogue #panel')).toBeVisible(OPEN);
+  await pageToAnswers(page, '.rml-npc_dialogue #btn_npc_next', '.rml-npc_dialogue .nd-answer-row');
+  await page.locator('.rml-npc_dialogue .nd-answer-row', { hasText: 'Accept a quest.' }).click();
+  await expect.poll(async () => (await texts(page, '.rml-npc_dialogue .nd-answer-row')).join(' '), OPEN).toContain('[Q]Trial of Strength');
+  await page.locator('.rml-npc_dialogue .nd-answer-row', { hasText: 'Trial of Strength' }).click();
+  await expect(page.locator('.rml-quest_progress #panel')).toBeVisible(OPEN);
+  await expect(page.locator('.rml-quest_progress .qp-subject')).toHaveText('Trial of Strength');
+  await page.screenshot({ path: 'test-results/quests-trial.png' });
+  await page.keyboard.press('Escape');
+  await expectNoPageErrors(errors);
+});
