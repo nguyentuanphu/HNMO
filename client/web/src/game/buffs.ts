@@ -94,6 +94,12 @@ export class BuffTracker {
     for (const listener of this.listeners) listener(id);
   }
 
+  /** A character's effects as a whole (a player coming into view brings them, ReceiveCreatePlayerViewportExtended). */
+  replace(id: number, effects: number[]): void {
+    this.active.set(id, [...effects]);
+    for (const listener of this.listeners) listener(id);
+  }
+
   /** Seconds left of one of the hero's timed buffs, null when it has no known end. */
   secondsLeft(effect: number): number | null {
     const end = this.endsAt.get(effect);
