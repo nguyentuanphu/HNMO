@@ -37,6 +37,7 @@ import { Party, facingPlayer } from './game/party.js';
 import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
 import { confirmInGame } from './ui/confirmDialog.js';
+import { QuestWindows } from './ui/questWindows.js';
 import { MiniMap } from './ui/miniMap.js';
 import { Trade } from './ui/tradeWindow.js';
 import { loginMusic } from './audio/index.js';
@@ -667,6 +668,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const characterWindow = new CharacterWindow({
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
+    onQuest: () => quests.toggleMyQuest(),
     onToggle: (open) => { if (open) state.partyWindow?.close(); itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
   });
   window.addEventListener('keydown', (event) => {
@@ -879,6 +881,11 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'p' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void partyWindow.toggle(); }
   });
+  // NPC dialogues and quests (npc_dialogue, quest_progress, my_quest_info on T, npc_quest; ui/questWindows.ts).
+  const quests = new QuestWindows({ connection, message: (text) => chat.add(text, 'system'), sound: (name) => sounds.audio.play(name),
+    hero: { name: character.name, baseClass: character.classIndex, level: () => stats.level, money: () => inventory.money, bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12).map(([, item]) => item) },
+    closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
+  earlyPackets.forEach((bytes) => quests.handle(bytes));
   void new PartyList(party, {
     heroName: character.name,
     inSight: (name) => name === character.name || [...online.characters.values()].some((c) => c.kind === 'player' && c.name === name),
