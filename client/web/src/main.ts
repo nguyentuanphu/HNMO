@@ -740,7 +740,13 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     busy: () => (state.combat?.busy ?? false) || online.hero.isPlayingOnce,
     skillUsable: (skill) => [...skills.skills.values()].includes(skill) && skillRequirementsMet(skill, stats, character.classIndex),
     knowsSkill: (skill) => [...skills.skills.values()].includes(skill),
-    castSupport: (skill, target) => { state.combat?.cancel(); return state.combat?.cast(target, { ...target.cell }, skill) ?? false; },
+    // The helper picks its next action itself after a support cast (CastSkill's Attacking = -1).
+    castSupport: (skill, target) => {
+      const combat = state.combat;
+      if (!combat?.castable(skill)) return false;
+      combat.cancel();
+      return combat.cast(target, { ...target.cell }, skill);
+    },
     actionBusy: () => online.hero.isWalking || online.hero.isPlayingOnce || (state.combat?.casting ?? false),
     hasBuff: (who, buff) => buffs.has(who === online.hero ? playerId : who.id, buff),
     party: () => (state.party?.members ?? []).map((member) => ({

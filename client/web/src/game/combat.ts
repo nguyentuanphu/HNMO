@@ -152,6 +152,12 @@ export class Combat {
     return true;
   }
 
+  /** Whether the hero has a way to cast a skill now (a cast plan for its class and equipment). */
+  castable(skill: number): boolean {
+    const plan = skillCastPlan(skill, this.classIndex, this.castContext());
+    return plan !== null && plan.packet !== 'none';
+  }
+
   /** Whether a skill is about to be cast (walking into its range or waiting for the last swing). */
   get casting(): boolean {
     return this.pendingSkill !== null;
