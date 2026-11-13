@@ -18,7 +18,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
-import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
+import { loadSkillData, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
@@ -26,7 +26,10 @@ import { AutoPlay } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
-import { defaultAutoPlayConfig } from './game/autoPlayConfig.js';
+import { BuffTracker, loadBuffData } from './game/buffs.js';
+import { BuffStrip } from './ui/buffStrip.js';
+import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
+import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
 import { Combat } from './game/combat.js';
@@ -67,6 +70,7 @@ export interface GameState {
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
+  buffs?: BuffTracker;
 }
 
 declare global {
@@ -448,7 +452,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const connection = await login(settings.relay, address, settings.username, settings.password);
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
-  await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData()]);
+  await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData(), loadBuffData()]);
   // The server sends who is in view right after the character information, while
   // the map is still loading: keep those packets and replay them once it's ready.
   const earlyPackets: Uint8Array[] = [];
@@ -463,6 +467,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const skills = new SkillList(connection, character.classIndex, (numbers) => hotkeys.saveSkillHotkeys(numbers));
   state.skills = skills;
   hotkeys.onConfiguration = (configuration) => skills.applyKeyConfiguration(configuration);
+  // Buffs come as they're switched on, from the start too.
+  const buffs = new BuffTracker(connection, () => connection.playerId ?? 0);
+  state.buffs = buffs;
   const info = await enterWorld(connection, character.name);
   inventory.money = typeof info.Money === 'number' ? info.Money : 0;
   // Level, experience, life, mana and stats from here on (the HUD and the tooltips read them).
@@ -602,6 +609,21 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     use: useHotkey,
   });
   const hud = state.hud;
+  // The buff strip: the hero's buffs; hover for what they do, right-click to cancel a skill's buff.
+  const buffStrip = new BuffStrip({
+    active: () => buffs.of(playerId),
+    secondsLeft: (buff) => buffs.secondsLeft(buff),
+    tooltip: (lines, box) => {
+      if (!lines || !box) { itemWindows.tooltip.hide(); return; }
+      void itemWindows.tooltip.showLines(lines, { left: box.left, top: box.top, width: box.width, height: box.height });
+    },
+    cancel: (skill, name) => {
+      if (window.confirm(`Do you want to cancel the ${name} skill?`)) connection.send('ClientToServer', 'MagicEffectCancelRequest', { SkillId: skill, PlayerId: playerId });
+    },
+    skillName: (skill) => skillInfo(skill)?.name ?? `Skill ${skill}`,
+  });
+  buffs.onChange((id) => { if (id === playerId) buffStrip.refresh(); });
+  void buffStrip.open();
   // Auto play (the desktop's helper): Home starts and stops it, the bar shows where the hero is.
   const autoPlay = new AutoPlay(connection, {
     hero: () => online.hero,
@@ -640,9 +662,29 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     isJewel: (item) => itemDefinition(item.group, item.number)?.tags?.includes('jewel') ?? false,
     message: (text) => chat.add(text, 'system'),
   });
-  autoPlay.setConfig(defaultAutoPlayConfig());
+  // The settings: the desktop's defaults until the server's copy arrives (MuHelperConfigurationData).
+  let autoPlayConfig: AutoPlayConfig = initialAutoPlayConfig();
+  autoPlay.setConfig(autoPlayConfig);
   state.autoPlay = autoPlay;
-  const autoPlayBar = new AutoPlayBar({ settings: () => undefined, toggle: () => autoPlay.toggle() });
+  const settingsWindow = new AutoPlaySettingsWindow({
+    skills, classIndex: character.classIndex, config: () => autoPlayConfig,
+    onSave: (config) => {
+      autoPlayConfig = config;
+      autoPlay.setConfig(config);
+      connection.send('ClientToServer', 'MuHelperSaveDataRequest', { HelperData: encodeAutoPlayConfig(config) });
+    },
+    onApply: (config) => autoPlay.setConfig(config),
+    onMessage: (text) => chat.add(text, 'system'),
+  });
+  const applyServerConfig = (bytes: Uint8Array) => {
+    if (bytes[0] !== 0xc2 || bytes[3] !== 0xae || bytes.length < 4 + AUTO_PLAY_DATA_LENGTH) return;
+    autoPlayConfig = decodeAutoPlayConfig(bytes.subarray(4, 4 + AUTO_PLAY_DATA_LENGTH));
+    autoPlay.setConfig(autoPlayConfig);
+    settingsWindow.load(autoPlayConfig);
+  };
+  connection.onPacket(applyServerConfig);
+  earlyPackets.forEach(applyServerConfig);
+  const autoPlayBar = new AutoPlayBar({ settings: () => { void settingsWindow.toggle(); }, toggle: () => autoPlay.toggle() });
   state.autoPlayBar = autoPlayBar;
   void autoPlayBar.open();
   // HNMO extras: trips to town, selling junk, the stop timer, alerts.
@@ -678,6 +720,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
     if (event.key.toLowerCase() === 'z' && event.shiftKey) { event.preventDefault(); extrasPanel.toggle(); }
+    else if (event.key.toLowerCase() === 'z' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void settingsWindow.toggle(); }
   });
   hud.setSkills({
     list: skills,

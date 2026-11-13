@@ -30,7 +30,7 @@ tests and CI for all of it; strict TypeScript build.
 2. 🟡 Casting: targeted (`TargetedSkill`), area (`AreaSkill`), the skill animations (done for the
    classes' skills except the Rage Fighter's and master skills) and effects per skill (first skills
    done), skill arrows and multi-shot fans. (The desktop never sends `AreaSkillHit`; the server hits.)
-3. Buffs and debuffs (`MagicEffectStatus`), the buff strip (`buff_strip.rml`), their visual effects.
+3. 🟡 Buffs and debuffs (`MagicEffectStatus`), the buff strip (`buff_strip.rml`) (done), their visual effects.
 4. Master level and skill tree (`master_level.rml`).
 
 ## 3. Using items
@@ -58,7 +58,7 @@ Party (`party_info.rml`, `party_list.rml`), guild (`guild_info.rml`, `guild_make
 messenger and letters, whisper/party/guild chat, duels, Gens.
 
 ## 8. Auto play
-1. 🟡 The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop done; settings windows next: hunting range, main and 2 activation skills with
+1. 🟡 The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop, settings windows done; buffs/heal/party/raven in the loop next: hunting range, main and 2 activation skills with
    conditions, combo, counter-attacks, potions and heal, buffs and party support, Dark Spirit,
    pick-up rules and item list, repair, auto-accept, the helper bar and its zen cost.
 2. Offline leveling (the server already does it).

@@ -299,9 +299,9 @@ type Expression = (scope: Scope) => unknown;
 const expressionCache = new Map<string, Expression>();
 
 // RmlUi data expressions are close to JavaScript: names, literals, + - * / == != < > && || ! ?:,
-// and "| transform" pipes, which are left out here.
+// and "| transform" pipes, which are left out here (a single |, not ||).
 function evaluate(expression: string, scope: Scope): unknown {
-  const source = expression.replace(/\|\s*[\w]+(\([^)]*\))?/g, '').trim();
+  const source = expression.replace(/(?<!\|)\|(?!\|)\s*[\w]+(\([^)]*\))?/g, '').trim();
   if (!expressionCache.has(source)) {
     try {
       expressionCache.set(source, new Function('scope', `with (scope) { return (${source}); }`) as Expression);

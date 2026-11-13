@@ -53,3 +53,16 @@ test('auto play hunts nearby monsters with the basic skill', async ({ page }) =>
   await expect.poll(() => active(page), { timeout: 30_000 }).toBe(false);
   await expectNoPageErrors(errors);
 });
+
+test('Z opens the auto play settings and Escape closes them', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await enterWorld(page, 'test9');
+  await page.keyboard.press('z');
+  const settings = page.locator('.rml-mu_helper_config #panel');
+  await expect(settings).toBeVisible({ timeout: 30_000 });
+  await page.screenshot({ path: 'test-results/auto-play-settings.png' });
+  await page.keyboard.press('Escape');
+  await expect(settings).toBeHidden();
+  await expectNoPageErrors(errors);
+});
