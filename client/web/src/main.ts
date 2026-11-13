@@ -35,6 +35,7 @@ import { MapNameBanner } from './ui/mapNameBanner.js';
 import { GameSounds } from './game/gameSounds.js';
 import { Party, facingPlayer } from './game/party.js';
 import { PartyList } from './ui/partyList.js';
+import { PartyWindow } from './ui/partyWindow.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { MiniMap } from './ui/miniMap.js';
 import { Trade } from './ui/tradeWindow.js';
@@ -85,6 +86,7 @@ export interface GameState {
   party?: Party;
   trade?: Trade;
   miniMap?: MiniMap;
+  partyWindow?: PartyWindow;
 }
 
 declare global {
@@ -665,7 +667,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const characterWindow = new CharacterWindow({
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
-    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    onToggle: (open) => { if (open) state.partyWindow?.close(); itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
   });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
@@ -865,6 +867,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.party = party;
   // A party kept while the hero was away comes back with its list on entering (the server's auto rejoin).
   earlyPackets.forEach((bytes) => party.handle(bytes));
+  // The party window (P): docked at the right; opening it closes the inventory and the character window.
+  const partyWindow = new PartyWindow({
+    connection, party, heroName: character.name, mapName,
+    click: () => sounds.click(),
+    onOpen: () => { itemWindows.closeAll(); characterWindow.close(); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+  });
+  state.partyWindow = partyWindow;
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'p' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void partyWindow.toggle(); }
+  });
   void new PartyList(party, {
     heroName: character.name,
     inSight: (name) => name === character.name || [...online.characters.values()].some((c) => c.kind === 'player' && c.name === name),

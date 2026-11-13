@@ -39,6 +39,15 @@ test('a party of two: invite, accept, the cards, leave', async ({ browser }) => 
   await expect.poll(() => members(b), { timeout: 60_000 }).toHaveLength(2);
   await expect(a.locator('.rml-party_list .card')).toHaveCount(2, { timeout: 60_000 });
   await a.screenshot({ path: 'test-results/party.png' });
+  // P opens the party window: a row per member with the map and the life; P closes it.
+  await a.keyboard.press('p');
+  await expect(a.locator('.rml-party_info #panel')).toBeVisible({ timeout: 90_000 });
+  await expect(a.locator('.rml-party_info .party-row')).toHaveCount(2, { timeout: 30_000 });
+  await expect(a.locator('.rml-party_info .party-map').first()).toHaveText('Lorencia');
+  await a.waitForTimeout(1_000);
+  await a.screenshot({ path: 'test-results/party-window.png' });
+  await a.keyboard.press('p');
+  await expect(a.locator('.rml-party_info')).toHaveCount(0);
   // B leaves: the party is over for both (a party of one isn't kept).
   await b.evaluate(() => { const g = (window as unknown as Win).__game; g.party.leave(g.party.members.findIndex((m) => m.name === document.querySelector('#heroName')?.textContent)); });
   await expect.poll(() => members(b), { timeout: 60_000 }).toHaveLength(0);
