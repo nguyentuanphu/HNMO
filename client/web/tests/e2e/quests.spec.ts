@@ -117,3 +117,26 @@ test('talks to an NPC, accepts a quest and finds it in the quest window', async 
   await expect(page.locator('.rml-my_quest_info .quest-empty-msg')).toContainText('There are no active quests.', OPEN);
   await expectNoPageErrors(errors);
 });
+
+// The class change quests: Sebina the Priestess in Devias opens the NPC quest window (npc_quest.rml) with the quest's
+// title, the dialog page and its numbered answers. quest1's first character is level 150 (TestAccounts/Quest150.cs).
+test('talks to a class change quest NPC', async ({ page }) => {
+  test.setTimeout(10 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await enterWorld(page, 'quest1');
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move devias'));
+  await page.waitForTimeout(8_000);
+  await page.evaluate(() => (window as unknown as Win).__game.online.walkTo({ x: 184, y: 34 }));
+  const sebina = () => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].find((c) => c.monsterNumber === 235)?.id ?? null);
+  await expect.poll(sebina, OPEN).not.toBeNull();
+  await page.evaluate((id) => { const g = (window as unknown as Win).__game; g.online.talkTo(g.online.characters.get(id)); }, (await sebina())!);
+  await expect(page.locator('.rml-npc_quest #content_root')).toBeVisible(OPEN);
+  await expect.poll(async () => (await texts(page, '.rml-npc_quest .nq-message-line')).join(' '), OPEN).not.toBe('');
+  await expect.poll(() => page.locator('.rml-npc_quest .nq-answer-row').count()).toBeGreaterThan(0);
+  await expect(page.locator('.rml-npc_quest .nq-quest-title')).not.toHaveText('');
+  await page.screenshot({ path: 'test-results/quests-npc-quest.png' });
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.rml-npc_quest')).toHaveCount(0);
+  await expectNoPageErrors(errors);
+});
