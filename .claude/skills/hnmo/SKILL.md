@@ -71,3 +71,11 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   its scheduled message (owner, 2026-11-14).
 - `server/licenses/LICENSE.txt` (MIT notice, moved out of sight on the owner's request) stays exactly as it is, holder's name included: the license requires
   it and the packaging copies it into `licenses/`. Commit messages about it name nobody.
+- Browser tests share accounts with each other and with earlier runs: a test that moves a
+  character, joins a party or uses items leaves that state behind. Start each test from a known
+  place (`/move lorencia`, walk to the NPC), leave parties first, close extra browser contexts.
+- The server has a potion cooldown (0.5 s): two potions back to back are refused (C1 26 FD).
+- A local server running for hours can run out of monsters; restart it (`start-hnmo.sh` as the
+  `hnmo` user) before blaming the game. GitHub's "Web game tests" start from a fresh save.
+- Packet handlers must not block (no `window.confirm` / `prompt` inside one): use
+  `ui/confirmDialog.ts` (`confirmInGame`).

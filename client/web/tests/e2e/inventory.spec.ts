@@ -73,8 +73,13 @@ test('takes the helm off into the bag and puts it back on; the character changes
 
 test('the vault keeper opens the vault; an item goes into the vault and comes back', async ({ page }) => {
   await enterWorld(page, 'test300');
+  // To Lorencia's town, next to the vault keeper at (146, 110), wherever the character was.
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await expect.poll(() => page.evaluate(() => (window as unknown as Win & { __game: { mapNumber: number } }).__game.mapNumber), { timeout: 60_000 }).toBe(0);
+  await page.waitForTimeout(5_000);
+  await page.evaluate(() => (window as unknown as Win & { __game: { online: { walkTo(cell: { x: number; y: number }): void } } }).__game.online.walkTo({ x: 144, y: 113 }));
   // The vault keeper of the map the character is on (Lorencia, Devias, Noria, … all have one).
-  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].some((c) => /Safety Guardian/.test(c.name))), { timeout: 60_000 }).toBe(true);
+  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].some((c) => /Safety Guardian/.test(c.name))), { timeout: 90_000 }).toBe(true);
   await page.evaluate(() => {
     const game = (window as unknown as Win).__game;
     const keeper = [...game.online.characters.values()].find((c) => /Safety Guardian/.test(c.name));
