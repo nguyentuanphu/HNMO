@@ -108,6 +108,12 @@ export class Connection {
     this.socket!.send(write(group, name, values));
   }
 
+  /** Sends a packet built by hand (for structures the writer doesn't build, e.g. AreaSkillHit's targets). */
+  sendBytes(bytes: Uint8Array): void {
+    if (this.closed) return;
+    this.socket!.send(bytes);
+  }
+
   // T is the shape the caller expects of the answer (see read in packets.js).
   async request<T extends object = PacketValues>(group: string, name: string, values: PacketValues, answerGroup: string, answerName: string): Promise<T> {
     const { PACKETS } = await import('./packets.generated.js');
