@@ -24,6 +24,7 @@ import { loadSkillData, skillCooldowns, SkillList, skillInfo, skillRequirementsM
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
+import { setupMasterLevel } from './ui/masterLevelWindow.js';
 import { AutoPlay } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
@@ -951,6 +952,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     hero: { name: character.name, baseClass: character.classIndex, level: () => stats.level, money: () => inventory.money, bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12).map(([, item]) => item) },
     closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, showItem: (item, box) => void itemWindows.tooltip.show(item, box), hideItem: () => itemWindows.tooltip.hide() });
   earlyPackets.forEach((bytes) => quests.handle(bytes));
+  // The master level and skill tree (A, the character window's button; ui/masterLevelWindow.ts).
+  setupMasterLevel({ connection, classNumber: character.classNumber ?? character.classIndex * 4, classIndex: character.classIndex, stats, skills, inventory, hud, characterWindow, earlyPackets, click: () => sounds.click(), closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); } });
   void new PartyList(party, {
     heroName: character.name,
     inSight: (name) => name === character.name || [...online.characters.values()].some((c) => c.kind === 'player' && c.name === name),

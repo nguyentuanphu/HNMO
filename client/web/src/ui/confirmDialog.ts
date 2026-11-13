@@ -1,7 +1,7 @@
 // A question in the game (the desktop's confirm message box): the lines, OK and Cancel. Doesn't block
 // the page like the browser's confirm(), so packets keep flowing while it's open.
 
-export function confirmInGame(text: string): Promise<boolean> {
+export function confirmInGame(text: string, okOnly = false): Promise<boolean> {
   return new Promise((resolve) => {
     const box = document.createElement('div');
     box.className = 'chip confirm-dialog';
@@ -19,7 +19,7 @@ export function confirmInGame(text: string): Promise<boolean> {
     ok.type = 'button'; ok.className = 'primary confirm-ok'; ok.textContent = 'OK';
     const cancel = document.createElement('button');
     cancel.type = 'button'; cancel.className = 'confirm-cancel'; cancel.textContent = 'Cancel';
-    buttons.append(ok, cancel);
+    buttons.append(...(okOnly ? [ok] : [ok, cancel]));
     box.append(lines, buttons);
     const done = (answer: boolean) => { box.remove(); window.removeEventListener('keydown', onKey, true); resolve(answer); };
     const onKey = (event: KeyboardEvent) => {
@@ -33,4 +33,9 @@ export function confirmInGame(text: string): Promise<boolean> {
     document.body.append(box);
     ok.focus();
   });
+}
+
+/** A message with only OK (the desktop's CreateOkMessageBox). */
+export function messageInGame(text: string): Promise<void> {
+  return confirmInGame(text, true).then(() => undefined);
 }

@@ -19,6 +19,9 @@ export interface HudSkills {
   tooltip?: (index: number | null, box: DOMRect | null) => void;
 }
 
+/** The master level's experience: the total, where the level starts and where the next one does. */
+export interface MasterExperience { experience: number; start: number; next: number }
+
 interface SkillCell { skill_index: number; is_current: boolean; icon: string; hotkey: string; cooldown_fraction: number }
 
 /** What the potion slots show and do. */
@@ -58,6 +61,7 @@ export class Hud {
   private hoveredSlot = -1;
   private spinStart = 0;
   private skills: HudSkills | null = null;
+  private masterExperience: (() => MasterExperience | null) | null = null;
   /** The popup cell under the mouse: Ctrl + a number key puts its skill on that key. */
   hoveredSkill = -1;
   /** The slot or popup cell the mouse is over (found before the document's own handlers run). */
@@ -159,20 +163,29 @@ export class Hud {
     m.hp_tooltip = `Life: ${life}/${s.maxLife}`; m.mp_tooltip = `Mana: ${mana}/${s.maxMana}`;
     m.sd_tooltip = `SD: ${shield}/${s.maxShield}`; m.ag_tooltip = `AG: ${ability}/${s.maxAbility}`;
 
-    // Experience: the bar shows tenths of the way from this level to the next (CMainFrameWindow).
-    const lower = experienceForLevel(s.level);
-    const upper = Math.max(lower, s.nextExperience);
-    const ratio = upper > lower ? Math.min(1, Math.max(0, (Math.min(Math.max(s.experience, lower), upper) - lower) / (upper - lower))) : 0;
+    // Experience: the bar shows tenths of the way from this level to the next (CMainFrameWindow); a master
+    // past level 400 sees the master level's experience instead.
+    const master = this.masterExperience?.() ?? null;
+    const experience = master ? master.experience : s.experience, next = master ? master.next : s.nextExperience;
+    const lower = master ? master.start : experienceForLevel(s.level);
+    const upper = Math.max(lower, next);
+    const ratio = upper > lower ? Math.min(1, Math.max(0, (Math.min(Math.max(experience, lower), upper) - lower) / (upper - lower))) : 0;
     const scaled = ratio * 10;
     let digit = Math.min(9, Math.max(0, Math.floor(scaled)));
     let progress = scaled - Math.floor(scaled);
     if (ratio >= 1) { digit = 9; progress = 1; }
     m.exp_fraction = progress;
     m.exp_digit = String(digit);
-    m.exp_tooltip = `EXP: ${s.experience}/${s.nextExperience}`;
+    m.exp_tooltip = `EXP: ${experience}/${next}`;
     this.refreshItemSlots();
     this.refreshSkills();
     this.doc.update();
+  }
+
+  /** The master experience the bar shows instead (IsMasterExperienceActive), or null for the normal one. */
+  setMasterExperience(source: () => MasterExperience | null): void {
+    this.masterExperience = source;
+    this.refresh();
   }
 
   /** Shows the skill list on the bar (call once, with the character's skills). */
