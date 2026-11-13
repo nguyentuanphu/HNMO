@@ -41,7 +41,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Walkability (`.att`) | ✅ | |
 | Other maps | ✅ | All 36 maps with data load (folders as `GetFilesFolder`, 24-bit heights) |
 | Map changes: warps and teleports (`1C 0F`), `ClientReadyAfterMapChange` | ✅ | Tested with `/move devias`, `/move noria`, `/move lorencia` |
-| Gates (walking into a gate), the move window (M) | ⬜ | |
+| Gates (walking into a gate), the move window (M) | 🟡 | The move window (M, the game's `move_command.rml`): the warp list from `MoveReq_eng.bmd` with level and zen (two thirds of the level for Magic Gladiators, Dark Lords and Rage Fighters), the Icarus and Atlans mount rules, a click warps (`WarpCommandRequest` with the server's key). Gates by walking not yet |
 | Water, grass sway, animated objects (fountain, flags, birds, leaves) | ⬜ | |
 | Map-specific behavior (`World/GameMaps`: Atlans water, Icarus sky, …) | ⬜ | |
 | Day light mood, fog per map (`Data/Maps/LightMood.json`) | ⬜ | Fixed fog for now |

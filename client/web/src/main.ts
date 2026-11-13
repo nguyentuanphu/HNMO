@@ -28,6 +28,7 @@ import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
+import { MoveWindow } from './ui/moveWindow.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
@@ -467,6 +468,13 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const skills = new SkillList(connection, character.classIndex, (numbers) => hotkeys.saveSkillHotkeys(numbers));
   state.skills = skills;
   hotkeys.onConfiguration = (configuration) => skills.applyKeyConfiguration(configuration);
+  // The key the server wants with warp requests (C1 8E 01, ReceiveMoveMapChecksum); it comes early.
+  let moveCommandKey = 0;
+  connection.onPacket((bytes) => {
+    if (bytes[0] === 0xc1 && bytes[2] === 0x8e && bytes[3] === 0x01 && bytes.length >= 8) {
+      moveCommandKey = (bytes[4] | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7] << 24)) >>> 0;
+    }
+  });
   // Buffs come as they're switched on, from the start too.
   const buffs = new BuffTracker(connection, () => connection.playerId ?? 0);
   state.buffs = buffs;
@@ -696,6 +704,19 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const autoPlayBar = new AutoPlayBar({ settings: () => { void settingsWindow.toggle(); }, toggle: () => autoPlay.toggle() });
   state.autoPlayBar = autoPlayBar;
   void autoPlayBar.open();
+  // The move window (M): the warp list; a click warps (WarpCommandRequest).
+  const moveWindow = new MoveWindow({
+    check: () => ({
+      classIndex: character.classIndex, level: stats.level, money: inventory.money, outlaw: false,
+      wings: inventory.items.get(7), helper: inventory.items.get(8), rings: [inventory.items.get(10), inventory.items.get(11)],
+    }),
+    warp: (warp) => connection.send('ClientToServer', 'WarpCommandRequest', { CommandKey: moveCommandKey, WarpInfoIndex: warp.index }),
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void moveWindow.toggle(); }
+  });
+  inventory.onChange(() => moveWindow.refresh());
   // HNMO extras: trips to town, selling junk, the stop timer, alerts.
   const healingCount = () => {
     let count = 0;
