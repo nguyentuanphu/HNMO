@@ -1897,4 +1897,31 @@
   <data name="BotConfiguration_MapsForbiddenForBots_Description" xml:space="preserve">
     <value>Maps bots never warp to: no hunting, following or events there, and a bot which logs in on one leaves it. Players are not affected.</value>
   </data>
+  <data name="LearnSkillsByLevelPlugIn_Name" xml:space="preserve">
+    <value>Learn skills by level</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugIn_Description" xml:space="preserve">
+    <value>Teaches the configured skills of the character's class when it reaches their level, or when it enters the game already past it, and tells the player.</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugInConfiguration_Skills_Name" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugInConfiguration_SkillNumber_Name" xml:space="preserve">
+    <value>Skill number</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugInConfiguration_MinimumLevel_Name" xml:space="preserve">
+    <value>Minimum level</value>
+  </data>
+  <data name="BloodSlashSkillPlugIn_Name" xml:space="preserve">
+    <value>Blood Slash skill</value>
+  </data>
+  <data name="BloodSlashSkillPlugIn_Description" xml:space="preserve">
+    <value>Heals the attacker by a part of the damage which Blood Slash (skill 701) deals.</value>
+  </data>
+  <data name="SoulDrainSkillPlugIn_Name" xml:space="preserve">
+    <value>Soul Drain skill</value>
+  </data>
+  <data name="SoulDrainSkillPlugIn_Description" xml:space="preserve">
+    <value>Gives the attacker mana for the damage which Soul Drain (skill 723) deals, taken from the mana of a player target.</value>
+  </data>
 </root>

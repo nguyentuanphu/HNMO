@@ -1091,5 +1091,10 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized AddProtectionTalismansUpdatePlugIn_Description text.</summary>
         public static string AddProtectionTalismansUpdatePlugIn_Description => ResourceManager.GetString("AddProtectionTalismansUpdatePlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized AddHnmoSkillsUpdatePlugIn_Name text.</summary>
+        public static string AddHnmoSkillsUpdatePlugIn_Name => ResourceManager.GetString("AddHnmoSkillsUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AddHnmoSkillsUpdatePlugIn_Description text.</summary>
+        public static string AddHnmoSkillsUpdatePlugIn_Description => ResourceManager.GetString("AddHnmoSkillsUpdatePlugIn_Description", resourceCulture)!;
     }
 }

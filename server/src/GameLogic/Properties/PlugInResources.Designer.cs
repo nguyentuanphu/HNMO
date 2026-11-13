@@ -5112,5 +5112,86 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("DiscordIntegrationFeaturePlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Learn skills by level.
+        /// </summary>
+        public static string LearnSkillsByLevelPlugIn_Name {
+            get {
+                return ResourceManager.GetString("LearnSkillsByLevelPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Teaches the configured skills of the character&apos;s class when it reaches their level, or when it enters the game already past it, and tells the player..
+        /// </summary>
+        public static string LearnSkillsByLevelPlugIn_Description {
+            get {
+                return ResourceManager.GetString("LearnSkillsByLevelPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Skills.
+        /// </summary>
+        public static string LearnSkillsByLevelPlugInConfiguration_Skills_Name {
+            get {
+                return ResourceManager.GetString("LearnSkillsByLevelPlugInConfiguration_Skills_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Skill number.
+        /// </summary>
+        public static string LearnSkillsByLevelPlugInConfiguration_SkillNumber_Name {
+            get {
+                return ResourceManager.GetString("LearnSkillsByLevelPlugInConfiguration_SkillNumber_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum level.
+        /// </summary>
+        public static string LearnSkillsByLevelPlugInConfiguration_MinimumLevel_Name {
+            get {
+                return ResourceManager.GetString("LearnSkillsByLevelPlugInConfiguration_MinimumLevel_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Blood Slash skill.
+        /// </summary>
+        public static string BloodSlashSkillPlugIn_Name {
+            get {
+                return ResourceManager.GetString("BloodSlashSkillPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Heals the attacker by a part of the damage which Blood Slash (skill 701) deals..
+        /// </summary>
+        public static string BloodSlashSkillPlugIn_Description {
+            get {
+                return ResourceManager.GetString("BloodSlashSkillPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Soul Drain skill.
+        /// </summary>
+        public static string SoulDrainSkillPlugIn_Name {
+            get {
+                return ResourceManager.GetString("SoulDrainSkillPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gives the attacker mana for the damage which Soul Drain (skill 723) deals, taken from the mana of a player target..
+        /// </summary>
+        public static string SoulDrainSkillPlugIn_Description {
+            get {
+                return ResourceManager.GetString("SoulDrainSkillPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

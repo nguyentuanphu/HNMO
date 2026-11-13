@@ -435,6 +435,43 @@ internal enum MagicEffectNumber : short
     /// </summary>
     IncreaseHealthStrengthener = 155,
 
+    // Effects of the HNMO skills (700 to 727), starting at 180.
+
+    /// <summary>
+    /// The effect of the Iron Guard skill: less damage taken.
+    /// </summary>
+    IronGuard = 180,
+
+    /// <summary>
+    /// The effect of the Mana Shield skill: a part of the damage is paid with mana.
+    /// </summary>
+    ManaShield = 181,
+
+    /// <summary>
+    /// The effect of the Forest Blessing skill: health regeneration of the party.
+    /// </summary>
+    ForestBlessing = 182,
+
+    /// <summary>
+    /// The effect of the Twin Power skill: more damage.
+    /// </summary>
+    TwinPower = 183,
+
+    /// <summary>
+    /// The effect of the War Command skill: faster attacks of the party.
+    /// </summary>
+    WarCommand = 184,
+
+    /// <summary>
+    /// The effect of the Iron Body skill: more defense and damage reflection.
+    /// </summary>
+    IronBody = 185,
+
+    /// <summary>
+    /// The effect of the Weakening Curse skill: less defense of the target.
+    /// </summary>
+    WeakeningCurse = 186,
+
     // Artificial effects which are not sent to the client, starting at 200.
 
     /// <summary>

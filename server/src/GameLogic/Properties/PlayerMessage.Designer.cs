@@ -3189,5 +3189,14 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("ItemBoxRequiresLevel", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to You have learned {0}..
+        /// </summary>
+        public static string SkillLearned {
+            get {
+                return ResourceManager.GetString("SkillLearned", resourceCulture);
+            }
+        }
     }
 }

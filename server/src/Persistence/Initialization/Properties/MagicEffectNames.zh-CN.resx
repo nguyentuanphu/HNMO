@@ -153,4 +153,25 @@
   <data name="IllusionTempleRestraint" xml:space="preserve">
     <value>幻影寺院 - 束缚</value>
   </data>
+  <data name="IronGuardEffect" xml:space="preserve">
+    <value>钢铁守护</value>
+  </data>
+  <data name="ManaShieldEffect" xml:space="preserve">
+    <value>魔法护盾</value>
+  </data>
+  <data name="ForestBlessingEffect" xml:space="preserve">
+    <value>森林祝福</value>
+  </data>
+  <data name="TwinPowerEffect" xml:space="preserve">
+    <value>双重之力</value>
+  </data>
+  <data name="WarCommandEffect" xml:space="preserve">
+    <value>战争号令</value>
+  </data>
+  <data name="IronBodyEffect" xml:space="preserve">
+    <value>钢铁之躯</value>
+  </data>
+  <data name="WeakeningCurseEffect" xml:space="preserve">
+    <value>衰弱诅咒</value>
+  </data>
 </root>

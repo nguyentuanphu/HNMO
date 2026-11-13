@@ -377,5 +377,54 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("IllusionTempleRestraint", resourceCulture);
             }
         }
+
+        /// <summary>Gets IronGuardEffect from the configuration name resources.</summary>
+        public static string IronGuardEffect {
+            get {
+                return ResourceManager.GetString("IronGuardEffect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ManaShieldEffect from the configuration name resources.</summary>
+        public static string ManaShieldEffect {
+            get {
+                return ResourceManager.GetString("ManaShieldEffect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets ForestBlessingEffect from the configuration name resources.</summary>
+        public static string ForestBlessingEffect {
+            get {
+                return ResourceManager.GetString("ForestBlessingEffect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TwinPowerEffect from the configuration name resources.</summary>
+        public static string TwinPowerEffect {
+            get {
+                return ResourceManager.GetString("TwinPowerEffect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets WarCommandEffect from the configuration name resources.</summary>
+        public static string WarCommandEffect {
+            get {
+                return ResourceManager.GetString("WarCommandEffect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets IronBodyEffect from the configuration name resources.</summary>
+        public static string IronBodyEffect {
+            get {
+                return ResourceManager.GetString("IronBodyEffect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets WeakeningCurseEffect from the configuration name resources.</summary>
+        public static string WeakeningCurseEffect {
+            get {
+                return ResourceManager.GetString("WeakeningCurseEffect", resourceCulture);
+            }
+        }
     }
 }

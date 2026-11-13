@@ -958,4 +958,10 @@
   <data name="AddProtectionTalismansUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update fügt den Talisman des Wächters, der vor der Todesstrafe schützt, und den Talisman des Gegenstandsschutzes hinzu, der die Haltbarkeit der ausgerüsteten Gegenstände erhält.</value>
   </data>
+  <data name="AddHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>HNMO-Fertigkeiten hinzufügen</value>
+  </data>
+  <data name="AddHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Dieses Update fügt die 28 HNMO-Fertigkeiten (Nummern 700 bis 727, vier pro Klasse) mit ihren Effekten hinzu, sowie die Prüfungsquests des Elfensoldaten in Lorencia, die die vierte Fertigkeit jeder Klasse lehren.</value>
+  </data>
 </root>

@@ -1119,4 +1119,25 @@
   <data name="FindTheScrollOfEmperorDarkKnight" xml:space="preserve">
     <value>寻找“帝王之书”（暗黑骑士）</value>
   </data>
+  <data name="TrialOfTheDarkKnight" xml:space="preserve">
+    <value>黑骑士的试炼</value>
+  </data>
+  <data name="TrialOfTheDarkWizard" xml:space="preserve">
+    <value>黑魔法师的试炼</value>
+  </data>
+  <data name="TrialOfTheFairyElf" xml:space="preserve">
+    <value>精灵的试炼</value>
+  </data>
+  <data name="TrialOfTheMagicGladiator" xml:space="preserve">
+    <value>魔剑士的试炼</value>
+  </data>
+  <data name="TrialOfTheDarkLord" xml:space="preserve">
+    <value>圣导师的试炼</value>
+  </data>
+  <data name="TrialOfTheSummoner" xml:space="preserve">
+    <value>召唤术士的试炼</value>
+  </data>
+  <data name="TrialOfTheRageFighter" xml:space="preserve">
+    <value>格斗家的试炼</value>
+  </data>
 </root>

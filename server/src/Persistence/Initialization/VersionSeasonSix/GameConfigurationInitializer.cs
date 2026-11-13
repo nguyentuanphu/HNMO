@@ -90,6 +90,10 @@ public class GameConfigurationInitializer : GameConfigurationInitializerBase
         new Gates(this.Context, this.GameConfiguration).Initialize();
         new Quest(this.Context, this.GameConfiguration).Initialize();
         new Quests(this.Context, this.GameConfiguration).Initialize();
+
+        // The HNMO skills; their trial quests need the monsters, the items and the elf soldier.
+        new Skills.HnmoSkillsInitializer(this.Context, this.GameConfiguration).Initialize();
+        new Skills.HnmoTrialQuestsInitializer(this.Context, this.GameConfiguration).Initialize();
         new DevilSquareInitializer(this.Context, this.GameConfiguration).Initialize();
         new BloodCastleInitializer(this.Context, this.GameConfiguration).Initialize();
         new ChaosCastleInitializer(this.Context, this.GameConfiguration).Initialize();

@@ -153,4 +153,25 @@
   <data name="IllusionTempleRestraint" xml:space="preserve">
     <value>Illusion Temple - Restraint</value>
   </data>
+  <data name="IronGuardEffect" xml:space="preserve">
+    <value>Iron Guard</value>
+  </data>
+  <data name="ManaShieldEffect" xml:space="preserve">
+    <value>Mana Shield</value>
+  </data>
+  <data name="ForestBlessingEffect" xml:space="preserve">
+    <value>Forest Blessing</value>
+  </data>
+  <data name="TwinPowerEffect" xml:space="preserve">
+    <value>Twin Power</value>
+  </data>
+  <data name="WarCommandEffect" xml:space="preserve">
+    <value>War Command</value>
+  </data>
+  <data name="IronBodyEffect" xml:space="preserve">
+    <value>Iron Body</value>
+  </data>
+  <data name="WeakeningCurseEffect" xml:space="preserve">
+    <value>Weakening Curse</value>
+  </data>
 </root>

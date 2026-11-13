@@ -2631,5 +2631,54 @@ namespace HNMO.Persistence.Initialization.Properties {
                 return ResourceManager.GetString("FindTheScrollOfEmperorDarkKnight", resourceCulture);
             }
         }
+
+        /// <summary>Gets TrialOfTheDarkKnight from the configuration name resources.</summary>
+        public static string TrialOfTheDarkKnight {
+            get {
+                return ResourceManager.GetString("TrialOfTheDarkKnight", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TrialOfTheDarkWizard from the configuration name resources.</summary>
+        public static string TrialOfTheDarkWizard {
+            get {
+                return ResourceManager.GetString("TrialOfTheDarkWizard", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TrialOfTheFairyElf from the configuration name resources.</summary>
+        public static string TrialOfTheFairyElf {
+            get {
+                return ResourceManager.GetString("TrialOfTheFairyElf", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TrialOfTheMagicGladiator from the configuration name resources.</summary>
+        public static string TrialOfTheMagicGladiator {
+            get {
+                return ResourceManager.GetString("TrialOfTheMagicGladiator", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TrialOfTheDarkLord from the configuration name resources.</summary>
+        public static string TrialOfTheDarkLord {
+            get {
+                return ResourceManager.GetString("TrialOfTheDarkLord", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TrialOfTheSummoner from the configuration name resources.</summary>
+        public static string TrialOfTheSummoner {
+            get {
+                return ResourceManager.GetString("TrialOfTheSummoner", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets TrialOfTheRageFighter from the configuration name resources.</summary>
+        public static string TrialOfTheRageFighter {
+            get {
+                return ResourceManager.GetString("TrialOfTheRageFighter", resourceCulture);
+            }
+        }
     }
 }
