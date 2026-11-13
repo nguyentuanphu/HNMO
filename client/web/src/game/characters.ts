@@ -8,7 +8,7 @@ import { sampleHeight, sampleLight } from '../terrain.js';
 import { describeMonster, MonsterAction } from './monsterData.js';
 import { itemModel, ItemGroup } from './items.js';
 import { addItemGlow } from './itemGlow.js';
-import { playerActionSpeed, type MonsterAttacksData } from './combatLook.js';
+import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
 import type { Vec3 } from '../formats.js';
 import type { GeometryPart } from '../bmd.js';
 import type { ModelMonster } from './monsterData.js';
@@ -199,6 +199,12 @@ export interface CharacterOptions {
   keysPerSecond: (action: number) => number;
 }
 
+// The pets a player rides (Horn of Fenrir, Dark Horse, Horn of Uniria, Horn of Dinorant), which change its stance.
+function mountOfPet(pet: AppearanceItem | null | undefined): Mount {
+  if (!pet || pet.group !== 13) return 'none';
+  return ({ 37: 'fenrir', 4: 'darkHorse', 2: 'uniria', 3: 'dinorant' } as Record<number, Mount>)[pet.number] ?? 'none';
+}
+
 export class Character {
   id: number;
   name: string;
@@ -230,6 +236,8 @@ export class Character {
   /** A monster's or NPC's type number, and how it attacks (Monsters.json). */
   monsterNumber: number | null = null;
   attacks: MonsterAttacksData | null = null;
+  /** A player's class (0 Dark Wizard … 6 Rage Fighter): with its weapons it picks how it stands and walks. */
+  classIndex: number | null = null;
 
   constructor({ id, name, model, kind, scale = 1, actions, keysPerSecond }: CharacterOptions) {
     this.id = id;
@@ -293,6 +301,20 @@ export class Character {
     if (dx || dy) this.angle = Math.atan2(dx, -dy);
   }
 
+  // How it stands or walks: a player by its class, weapons, wings and the safe zone (the desktop's
+  // SetPlayerStop / SetPlayerWalk); others always with their stop and walk actions.
+  private stanceAction(world: CharacterWorld): number {
+    if (this.classIndex === null || !this.equipment) return this.isWalking ? this.actions.walk : this.actions.stop;
+    const hand = (item: AppearanceItem | null | undefined) => (item ? { group: item.group, number: item.number } : null);
+    const input = {
+      classIndex: this.classIndex, rightHand: hand(this.equipment.rightHand), leftHand: hand(this.equipment.leftHand),
+      mount: mountOfPet(this.equipment.pet), wings: Boolean(this.equipment.wings),
+      safeZone: (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0,
+    };
+    const action = this.isWalking ? playerWalkAction(input) : playerStopAction(input);
+    return action >= 0 ? action : this.action;
+  }
+
   update(dt: number, world: CharacterWorld): void {
     if (!this.dead) this.advance(dt);
     const keys = (action: number) => Math.max(1, this.model.skeleton.actions[action]?.numKeys ?? 1);
@@ -303,7 +325,7 @@ export class Character {
       if (this.time >= keys(shot.action) - 1 && !shot.hold) { this.oneShot = null; this.time = 0; }
     }
     if (!this.oneShot) {
-      const action = this.isWalking ? this.actions.walk : this.actions.stop;
+      const action = this.stanceAction(world);
       if (action !== this.action) { this.action = action; this.time = 0; }
       this.time += dt * (this.keysPerSecond(action) ?? 6);
     }
@@ -360,6 +382,7 @@ export async function createPlayerCharacter({ id, name, bodySet, equipment, kind
     keysPerSecond: (action: number) => playerActionSpeed(action, { ...playerSpeeds, classIndex: Math.max(0, bodySet - 1) }),
   });
   character.setAttachments(attachments);
+  if (kind === 'player') character.classIndex = Math.max(0, bodySet - 1);
   character.equipment = equipment ?? {};
   return character;
 }

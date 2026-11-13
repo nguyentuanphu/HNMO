@@ -1157,12 +1157,33 @@ function basePlayerSpeeds(): number[] {
   return s;
 }
 
+// SetAttackSpeed's first scale (RGZ_FIX_ATTACK_SPEED, which the desktop defines just
+// before the function): smaller factors for high speeds.
+function speedScale1(speed: number): number {
+  if (speed >= 509 && speed <= 549) return speed * 0.0026;
+  if (speed >= 550 && speed <= 750) return speed * 0.0017;
+  return speed * 0.004;
+}
+
+// SetAttackSpeed's second magic scale, by bands of magic speed.
+function magicScale2(speed: number): number {
+  const bands: readonly [number, number, number][] = [
+    [455, 479, 0.00247], [605, 636, 0.0019], [637, 668, 0.0018], [669, 688, 0.0017],
+    [855, 1040, 0.00163], [1041, 1104, 0.00155], [1301, 1500, 0.00175], [1501, 1524, 0.0015],
+    [1525, 1800, 0.00145], [1801, 1999, 0.0013], [2000, 2167, 0.00125], [2168, 2354, 0.00115],
+    [2855, 3011, 0.0009],
+  ];
+  for (const [from, to, factor] of bands) if (speed >= from && speed <= to) return speed * factor;
+  if (speed >= 3011) return speed * 0.00081;
+  return speed * 0.002;
+}
+
 // SetAttackSpeed: the attack and skill actions, scaled by the attack and magic speed.
 function attackSpeedOverride(action: number, attackSpeed: number, magicSpeed: number): number | undefined {
   const A = PlayerActions;
-  const attack1 = attackSpeed * 0.004;
-  const magic1 = magicSpeed * 0.004;
-  const magic2 = magicSpeed * 0.002;
+  const attack1 = speedScale1(attackSpeed);
+  const magic1 = speedScale1(magicSpeed);
+  const magic2 = magicScale2(magicSpeed);
   const rage = attackSpeed * 0.002;
   const between = (from: number, to: number): boolean => action >= from && action <= to;
   switch (action) {
@@ -1364,4 +1385,250 @@ export function monsterActionPlayback(action: number, holdLastFrame?: readonly s
     default:
       return 'loop';
   }
+}
+
+// ---------------------------------------------------------------------------
+// Standing and walking (SetPlayerStop and SetPlayerWalk in
+// Engine/Object/ZzzCharacter.cpp, SetAction_Fenrir_Walk and SetAction_Fenrir_Run in
+// Engine/AI/ZzzAI.cpp).
+// ---------------------------------------------------------------------------
+
+/**
+ * CCharacterManager::IsFemale: the desktop treats the Elf and the Summoner (base
+ * classes 2 and 5) as female, every other class as male.
+ */
+export function isFemaleClass(classIndex: number): boolean {
+  return classIndex === CharacterClass.ELF || classIndex === CharacterClass.SUMMONER;
+}
+
+/** What standing and walking also depend on, beyond AttackLookInput. */
+export interface StanceInput extends AttackLookInput {
+  /** Defaults to isFemaleClass(classIndex). */
+  female?: boolean;
+  /**
+   * On a swimming map (Atlans, Kalima, the third Doppelganger map) outside a safe
+   * zone: the character swims when walking and floats (the flying stance) when standing.
+   */
+  swimming?: boolean;
+  /** A Dark Spirit (the Dark Lord's raven) is out: its own stand and walk in safe zones. */
+  darkSpirit?: boolean;
+  /** In Blood Castle a safe zone does not put the weapons away. */
+  inBloodCastle?: boolean;
+  /** In Chaos Castle the Summoner stands and walks like the male classes. */
+  inChaosCastle?: boolean;
+}
+
+/** Desktop frames of walking before a character starts running (c->Run reaching 40). */
+export const RUN_DELAY_FRAMES = 40;
+/** On a Fenrir the run starts sooner (FENRIR_RUN_DELAY). */
+export const FENRIR_RUN_DELAY_FRAMES = 20;
+export const RUN_DELAY_SECONDS = RUN_DELAY_FRAMES / ANIMATION_FRAMES_PER_SECOND;
+export const FENRIR_RUN_DELAY_SECONDS = FENRIR_RUN_DELAY_FRAMES / ANIMATION_FRAMES_PER_SECOND;
+
+/**
+ * SetPlayerWalk's run counter: whether walking turns into running (after
+ * RUN_DELAY_SECONDS, or FENRIR_RUN_DELAY_SECONDS on a Fenrir). Never in a safe zone.
+ * Otherwise the Magic Gladiator, Dark Lord and Rage Fighter always run, others with
+ * boots of level 5 or more (gloves on a swimming map), or on a Fenrir. The desktop
+ * checks the worn items of the character and also those of the own character, so
+ * every player runs when the own character's boots are +5; pass the levels it should
+ * see.
+ */
+export function canRun(input: {
+  classIndex: number;
+  mount: Mount;
+  safeZone: boolean;
+  swimmingMap?: boolean;
+  bootsLevel?: number | null;
+  glovesLevel?: number | null;
+}): boolean {
+  if (input.safeZone) return false;
+  const c = input.classIndex;
+  if (c === CharacterClass.MAGIC_GLADIATOR || c === CharacterClass.DARK_LORD || c === CharacterClass.RAGE_FIGHTER) return true;
+  if (input.mount === 'fenrir') return true;
+  const level = input.swimmingMap ? input.glovesLevel : input.bootsLevel;
+  return level !== null && level !== undefined && level >= 5;
+}
+
+// ITEM_MISTERY_STICK .. ITEM_ETERNAL_WING_STICK: the Summoner's sticks.
+function isSummonerStick(item: HandItem | null): boolean {
+  const n = numberInGroup(item, ItemGroups.STAFF);
+  return n !== null && n >= 14 && n <= 20;
+}
+
+function isTwoSwordTwo(item: HandItem): boolean {
+  return item.group === ItemGroups.SWORD && TWO_SWORD_TWO_NUMBERS.includes(item.number);
+}
+
+// MODEL_ARROWS and MODEL_BOLT.
+function isArrows(item: HandItem | null): boolean {
+  return numberInGroup(item, ItemGroups.BOW) === 15;
+}
+function isBolt(item: HandItem | null): boolean {
+  return numberInGroup(item, ItemGroups.BOW) === 7;
+}
+
+function fenrirStopAction(input: StanceInput): number {
+  const A = PlayerActions;
+  const right = input.rightHand !== null;
+  const left = input.leftHand !== null;
+  if (input.classIndex === CharacterClass.RAGE_FIGHTER) {
+    if (right && left) return A.RAGE_FENRIR_STAND_TWO_SWORD;
+    if (right) return A.RAGE_FENRIR_STAND_ONE_RIGHT;
+    if (left) return A.RAGE_FENRIR_STAND_ONE_LEFT;
+    return A.RAGE_FENRIR_STAND;
+  }
+  if (right && left) return A.FENRIR_STAND_TWO_SWORD;
+  if (right) return A.FENRIR_STAND_ONE_RIGHT;
+  if (left) return A.FENRIR_STAND_ONE_LEFT;
+  return A.FENRIR_STAND;
+}
+
+/** SetAction_Fenrir_Walk. */
+function fenrirWalkAction(input: StanceInput): number {
+  const A = PlayerActions;
+  const r = input.rightHand;
+  const l = input.leftHand;
+  if (input.classIndex === CharacterClass.RAGE_FIGHTER) {
+    if (r && l) return A.RAGE_FENRIR_WALK_TWO_SWORD;
+    if (r) return A.RAGE_FENRIR_WALK_ONE_RIGHT;
+    if (l) return A.RAGE_FENRIR_WALK_ONE_LEFT;
+    return A.RAGE_FENRIR_WALK;
+  }
+  if (r && l && !isArrows(r) && !isBolt(l)) return A.FENRIR_WALK_TWO_SWORD;
+  if (r && !l) return A.FENRIR_WALK_ONE_RIGHT;
+  if (r && l && isBolt(l)) return A.FENRIR_WALK_ONE_RIGHT;
+  if (!r && l) return A.FENRIR_WALK_ONE_LEFT;
+  if (r && l && isArrows(r)) return A.FENRIR_WALK_ONE_LEFT;
+  return A.FENRIR_WALK;
+}
+
+/** SetAction_Fenrir_Run: the Elf and the Magic Gladiator have their own runs. */
+function fenrirRunAction(input: StanceInput): number {
+  const A = PlayerActions;
+  const r = input.rightHand;
+  const l = input.leftHand;
+  const c = input.classIndex;
+  const byClass = (elf: number, mg: number, rf: number, other: number): number =>
+    c === CharacterClass.ELF ? elf : c === CharacterClass.MAGIC_GLADIATOR ? mg : c === CharacterClass.RAGE_FIGHTER ? rf : other;
+  if (r && l && !isArrows(r) && !isBolt(l)) {
+    return byClass(A.FENRIR_RUN_TWO_SWORD_ELF, A.FENRIR_RUN_TWO_SWORD_MAGOM, A.RAGE_FENRIR_RUN_TWO_SWORD, A.FENRIR_RUN_TWO_SWORD);
+  }
+  if (r && !l) return byClass(A.FENRIR_RUN_ONE_RIGHT_ELF, A.FENRIR_RUN_ONE_RIGHT_MAGOM, A.RAGE_FENRIR_RUN_ONE_RIGHT, A.FENRIR_RUN_ONE_RIGHT);
+  if (r && l && isBolt(l)) return A.FENRIR_RUN_ONE_RIGHT_ELF;
+  if (!r && l) return byClass(A.FENRIR_RUN_ONE_LEFT_ELF, A.FENRIR_RUN_ONE_LEFT_MAGOM, A.RAGE_FENRIR_RUN_ONE_LEFT, A.FENRIR_RUN_ONE_LEFT);
+  if (r && l && isArrows(r)) return A.FENRIR_RUN_ONE_LEFT_ELF;
+  return byClass(A.FENRIR_RUN_ELF, A.FENRIR_RUN_MAGOM, A.RAGE_FENRIR_RUN, A.FENRIR_RUN);
+}
+
+// The unarmed stand by class (SetPlayerStop); `chaosCastleRule` is the Summoner's
+// exception, which the desktop applies only to the unarmed / safe-zone case.
+function bareHandStopAction(input: StanceInput, chaosCastleRule: boolean): number {
+  const A = PlayerActions;
+  const c = input.classIndex;
+  if (c === CharacterClass.ELF) return A.STOP_FEMALE;
+  if (c === CharacterClass.SUMMONER && !(chaosCastleRule && input.inChaosCastle)) return A.STOP_SUMMONER;
+  if (c === CharacterClass.RAGE_FIGHTER) return A.STOP_RAGEFIGHTER;
+  return A.STOP_MALE;
+}
+
+/**
+ * SetPlayerStop: the standing action for the character's mount, weapons, class, wings,
+ * swimming and safe zone. In a safe zone (outside Blood Castle) the weapons are put
+ * away and mounts stand like walking characters.
+ */
+export function playerStopAction(input: StanceInput): number {
+  const A = PlayerActions;
+  const right = input.rightHand;
+  const left = input.leftHand;
+  const out = !input.safeZone;
+  if (input.mount === 'fenrir' && out) return fenrirStopAction(input);
+  if (input.mount === 'darkHorse' && out) return A.STOP_RIDE_HORSE;
+  if (input.safeZone && input.darkSpirit && !input.inChaosCastle) return A.DARKLORD_STAND;
+  if ((input.mount === 'uniria' || input.mount === 'dinorant') && out) {
+    if (!right && !left) return A.STOP_RIDE;
+    return input.classIndex === CharacterClass.RAGE_FIGHTER ? A.RAGE_UNI_STOP_ONE_RIGHT : A.STOP_RIDE_WEAPON;
+  }
+  // Wings, or a swimming map outside a safe zone: the floating stance.
+  if ((out && input.wings) || (out && input.swimming)) {
+    return equippedBowType(input) === BowType.CROSSBOW ? A.STOP_FLY_CROSSBOW : A.STOP_FLY;
+  }
+  if ((!right && !left) || (input.safeZone && !input.inBloodCastle)) return bareHandStopAction(input, true);
+  if (isSwordAxeOrMace(right)) {
+    if (!isTwoHanded(right)) return A.STOP_SWORD;
+    return isTwoSwordTwo(right) ? A.STOP_TWO_HAND_SWORD_TWO : A.STOP_TWO_HAND_SWORD;
+  }
+  if (THRUST_SPEAR_NUMBERS.includes(numberInGroup(right, ItemGroups.SPEAR) ?? -1)) return A.STOP_SPEAR;
+  if (right && numberInGroup(right, ItemGroups.SPEAR) !== null) return isTwoHanded(right) ? A.STOP_SCYTHE : A.STOP_SWORD;
+  if (isSummonerStick(right)) return A.STOP_WAND;
+  if (right && numberInGroup(right, ItemGroups.STAFF) !== null) return isTwoHanded(right) ? A.STOP_SCYTHE : A.STOP_SWORD;
+  const bow = equippedBowType(input);
+  if (bow === BowType.BOW) return A.STOP_BOW;
+  if (bow === BowType.CROSSBOW) return A.STOP_CROSSBOW;
+  return bareHandStopAction(input, false);
+}
+
+/**
+ * SetPlayerWalk: the walking (or running) action. `running` is whether the run
+ * counter has passed its delay (see canRun and RUN_DELAY_SECONDS /
+ * FENRIR_RUN_DELAY_SECONDS); in a safe zone the desktop never runs. On a Dinorant on
+ * Tarkan, Heavenly ("Icarus") or during Maya's scene the desktop sets no walking action
+ * and keeps the current one: pass `dinorantKeepsAction` and this returns -1.
+ */
+export function playerWalkAction(
+  input: StanceInput & { running?: boolean; swimming?: boolean; dinorantKeepsAction?: boolean },
+): number {
+  const A = PlayerActions;
+  const right = input.rightHand;
+  const left = input.leftHand;
+  const out = !input.safeZone;
+  const running = out && (input.running ?? false);
+  const female = input.female ?? isFemaleClass(input.classIndex);
+  const rageFighter = input.classIndex === CharacterClass.RAGE_FIGHTER;
+
+  if (input.mount === 'fenrir' && out) return running ? fenrirRunAction(input) : fenrirWalkAction(input);
+  if (input.mount === 'darkHorse' && out) return A.RUN_RIDE_HORSE;
+  if (input.safeZone && input.darkSpirit) return A.DARKLORD_WALK;
+  if ((input.mount === 'uniria' || input.mount === 'dinorant') && out) {
+    if (input.mount === 'dinorant' && input.dinorantKeepsAction) return -1;
+    const bare = !right && !left;
+    if (rageFighter) return bare ? A.RAGE_UNI_RUN : A.RAGE_UNI_RUN_ONE_RIGHT;
+    return bare ? A.RUN_RIDE : A.RUN_RIDE_WEAPON;
+  }
+  if (out && input.wings) return equippedBowType(input) === BowType.CROSSBOW ? A.FLY_CROSSBOW : A.FLY;
+  if (out && input.swimming) return running ? A.RUN_SWIM : A.WALK_SWIM;
+
+  if ((!right && !left) || (input.safeZone && !input.inBloodCastle)) {
+    if (running) return A.RUN;
+    if (!female) return A.WALK_MALE;
+    if (input.classIndex === CharacterClass.SUMMONER && input.inChaosCastle) return A.WALK_MALE;
+    return A.WALK_FEMALE;
+  }
+
+  const bow = equippedBowType(input);
+  if (!running) {
+    if (isSwordAxeOrMace(right)) {
+      if (!isTwoHanded(right)) return A.WALK_SWORD;
+      return isTwoSwordTwo(right) ? A.WALK_TWO_HAND_SWORD_TWO : A.WALK_TWO_HAND_SWORD;
+    }
+    if (isSummonerStick(right)) return A.WALK_WAND;
+    if (right && numberInGroup(right, ItemGroups.STAFF) !== null) return isTwoHanded(right) ? A.WALK_SCYTHE : A.WALK_SWORD;
+    if (THRUST_SPEAR_NUMBERS.includes(numberInGroup(right, ItemGroups.SPEAR) ?? -1)) return A.WALK_SPEAR;
+    if (numberInGroup(right, ItemGroups.SPEAR) !== null) return A.WALK_SCYTHE;
+    if (bow === BowType.BOW) return A.WALK_BOW;
+    if (bow === BowType.CROSSBOW) return A.WALK_CROSSBOW;
+    return female ? A.WALK_FEMALE : A.WALK_MALE;
+  }
+
+  if (isSwordAxeOrMace(right)) {
+    if (isSwordAxeOrMace(left)) return rageFighter ? A.RUN : A.RUN_TWO_SWORD;
+    if (!isTwoHanded(right)) return A.RUN_SWORD;
+    return isTwoSwordTwo(right) ? A.RUN_TWO_HAND_SWORD_TWO : A.RUN_TWO_HAND_SWORD;
+  }
+  if (isSummonerStick(right)) return A.RUN_WAND;
+  if (right && numberInGroup(right, ItemGroups.STAFF) !== null) return isTwoHanded(right) ? A.RUN_SPEAR : A.RUN_SWORD;
+  if (numberInGroup(right, ItemGroups.SPEAR) !== null) return A.RUN_SPEAR;
+  if (bow === BowType.BOW) return A.RUN_BOW;
+  if (bow === BowType.CROSSBOW) return A.RUN_CROSSBOW;
+  return A.RUN;
 }
