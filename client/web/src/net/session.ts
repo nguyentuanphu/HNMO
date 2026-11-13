@@ -30,6 +30,8 @@ export interface CharacterListEntry {
   level: number;
   /** Index into CLASSES. */
   classIndex: number;
+  /** The server's class number (the appearance's first byte: second and third classes too). */
+  classNumber?: number;
   equipment: ReturnType<typeof parseAppearance>['equipment'];
 }
 
@@ -140,6 +142,7 @@ export async function fetchCharacters(connection: Connection): Promise<Character
     name: character.Name,
     level: character.Level,
     classIndex: classOfAppearance(character.Appearance),
+    classNumber: character.Appearance?.[0] ?? 0,
     equipment: parseAppearance(character.Appearance).equipment,
   }));
 }

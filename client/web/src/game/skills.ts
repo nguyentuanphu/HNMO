@@ -17,6 +17,8 @@ export interface SkillData {
   level: number; damage: number; mana: number; ability: number; distance: number; delay: number;
   energy: number; leadership: number; masteryType: number; useType: number; brand: number; killCount: number;
   classes: number[]; icon: number; strength: number; dexterity: number;
+  /** The master skill's rank in its tree column (SkillRank). */
+  rank: number;
 }
 
 let skillData: SkillData[] | null = null;
@@ -35,7 +37,7 @@ export async function loadSkillData(): Promise<SkillData[]> {
       name: decoder.decode(r.subarray(0, end >= 0 && end < 50 ? end : 50)),
       level: v.getUint16(50, true), damage: v.getUint16(52, true), mana: v.getUint16(54, true), ability: v.getUint16(56, true),
       distance: v.getUint32(60, true), delay: v.getInt32(64, true), energy: v.getInt32(68, true), leadership: v.getUint16(72, true),
-      masteryType: r[74], useType: r[75], brand: v.getUint32(76, true), killCount: r[80], classes: [...r.subarray(84, 91)], icon: v.getUint16(92, true),
+      masteryType: r[74], useType: r[75], brand: v.getUint32(76, true), killCount: r[80], classes: [...r.subarray(84, 91)], rank: r[91], icon: v.getUint16(92, true),
       strength: v.getInt32(96, true), dexterity: v.getInt32(100, true),
     });
   }
@@ -61,13 +63,13 @@ export const SkillUseType = { NONE: 0, MASTER: 1, BRAND: 2, MASTERLEVEL: 3, MAST
 const isHiddenFromList = (skill: number) => skill >= SkillNumber.STUN && skill <= SkillNumber.REMOVAL_BUFF;
 
 // ResolveSkillIcon + IconSpriteName: the sprite of skill_icons.rcss for a skill, '' for none.
-// Master skills (their own atlas) aren't shown yet.
+// Master skills come from the master tree's atlas (master_skill_icons.rcss), by their data's icon.
 export function skillIconSprite(skill: number, usable: boolean): string {
   if (skill === 0) return '';
   const S = SkillNumber;
   const data = skillInfo(skill);
   const cell = (atlas: string, column: number, row: number) => `skill-icon-${atlas}-${usable ? 'lit' : 'grey'}-${column}-${row}`;
-  if (skill >= S.MASTER_BEGIN) return '';
+  if (skill >= S.MASTER_BEGIN) return data ? masterIconSprite(data.icon, usable) : '';
   if (skill >= S.PET_COMMAND_DEFAULT && skill <= S.PET_COMMAND_END) {
     const command = skill - S.PET_COMMAND_DEFAULT;
     return cell('command', command % 8, Math.floor(command / 8));
@@ -91,6 +93,29 @@ export function skillIconSprite(skill: number, usable: boolean): string {
   if (skill >= S.KILLING_BLOW) return cell('skill3', (skill - S.KILLING_BLOW) % 12, Math.floor((skill - S.KILLING_BLOW) / 12));
   if (skill >= S.SPIRAL_SLASH) return cell('skill2', (skill - S.SPIRAL_SLASH) % 8, Math.floor((skill - S.SPIRAL_SLASH) / 8));
   return cell('skill1', (skill - 1) % 8, Math.floor((skill - 1) / 8));
+}
+
+/** The master tree atlas's sprite of an icon cell (UI::Skills::MasterTree::IconSpriteName). */
+export function masterIconSprite(icon: number, usable: boolean): string {
+  return `master-icon-${usable ? 'lit' : 'grey'}-${icon}`;
+}
+
+// SKILL_REPLACEMENTS: a strengthened (master) skill and the skill it takes the place of.
+export const SKILL_REPLACEMENTS: ReadonlyMap<number, number> = new Map([
+  [384, 1], [379, 3], [480, 3], [378, 5], [483, 5], [389, 7], [489, 7], [385, 9], [487, 9], [388, 10], [382, 13], [484, 13],
+  [381, 14], [486, 14], [403, 16], [404, 403], [328, 19], [329, 20], [326, 22], [479, 22], [327, 23], [414, 24], [418, 414],
+  [413, 26], [417, 27], [423, 417], [420, 28], [422, 420], [387, 38], [330, 41], [481, 41], [332, 330], [331, 42], [333, 331],
+  [336, 43], [356, 48], [360, 356], [424, 51], [416, 52], [490, 55], [482, 56], [509, 66], [508, 61], [514, 508], [512, 62],
+  [516, 512], [511, 64], [515, 511], [517, 515], [441, 77], [518, 78], [458, 214], [455, 215], [469, 218], [454, 219], [456, 230],
+  [337, 232], [383, 380], [380, 233], [551, 260], [554, 551], [552, 261], [555, 552], [558, 262], [559, 263], [560, 264],
+  [573, 267], [569, 268], [572, 569],
+]);
+
+/** CSkillManager::MasterSkillToBaseSkillIndex: the first skill a strengthened skill grew from. */
+export function masterSkillToBaseSkill(skill: number): number {
+  let base = skill;
+  for (let replaced = SKILL_REPLACEMENTS.get(base); replaced !== undefined; replaced = SKILL_REPLACEMENTS.get(base)) base = replaced;
+  return base;
 }
 
 /** The character's stats the skill requirements are checked against. */
@@ -117,6 +142,7 @@ export function skillRequirementsMet(skill: number, stats: SkillStats, classInde
 }
 
 const HOTKEY_COUNT = 10;
+const POWER_SLASH_STR = 482, TRIPLE_SHOT_STR = 414, TRIPLE_SHOT_MASTERY = 418, TRIPLE_SHOT = 24;
 const FREE_HOTKEY = 0xffff;
 const MAX_MAGIC = 64;
 
@@ -186,7 +212,34 @@ export class SkillList {
     const count = this.count;
     if (this.current >= count || count === 1 || this.skillAt(this.current) === 0) this.current = 0;
     for (let i = 0; i < MAX_SKILLS && isHiddenFromList(this.skillAt(this.current)); i++) this.current++;
+    // A strengthened Power Slash or Triple Shot hides the plain one (Master_Skill_Bool).
+    let master = -1, plain = -1;
+    for (const [index, skill] of this.skills) {
+      if (skill === POWER_SLASH_STR || skill === TRIPLE_SHOT_STR || skill === TRIPLE_SHOT_MASTERY) master = index;
+      if (skill === POWER_SLASH || skill === TRIPLE_SHOT) plain = index;
+    }
+    if (master > -1 && plain > -1) this.skills.delete(plain);
     if (this.pendingHotkeys) this.applyHotkeys(this.pendingHotkeys);
+    this.changed();
+  }
+
+  // Receive_Master_LevelGetSkill: a master skill learned or raised takes the place of the skill it
+  // strengthens; a new one goes to the first free index.
+  learnMasterSkill(skill: number, level: number): void {
+    const replaced = SKILL_REPLACEMENTS.get(skill);
+    if (replaced !== undefined) {
+      const index = [...this.skills].find(([, s]) => s === replaced)?.[0];
+      if (index !== undefined) { this.skills.delete(index); this.levels.delete(index); }
+    }
+    const known = [...this.skills].find(([, s]) => s === skill)?.[0];
+    if (known !== undefined) this.levels.set(known, level);
+    else {
+      for (let index = 0; index < MAX_MAGIC; index++) {
+        if (this.skillAt(index) !== 0) continue;
+        this.skills.set(index, skill); this.levels.set(index, level);
+        break;
+      }
+    }
     this.changed();
   }
 
