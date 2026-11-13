@@ -324,12 +324,18 @@ export interface RightClickContext extends UseContext {
   user: ItemUser;
   /** The hero's cell, null while dead (nothing goes on the ground then). */
   heroCell: () => { x: number; y: number } | null;
+  /** Sells to the open merchant (HandleSellToNPC). */
+  sell?: (slot: number, item: Item) => void;
 }
 
 // CInventoryActionController::HandleRightClick for a bag item: into the vault while it's open; else
 // use it, wear it, or put it on the ground at the hero's feet.
 export function rightClickBagItem(slot: number, item: Item, context: RightClickContext): void {
   const { inventory } = context;
+  if ((inventory.openWindow === NpcWindow.MERCHANT || inventory.openWindow === NpcWindow.MERCHANT1) && context.sell) {
+    if (slot >= BAG.firstSlot) context.sell(slot, item);
+    return;
+  }
   if (inventory.openWindow === NpcWindow.VAULT) {
     // CStorageInventory::ProcessMyInvenItemAutoMove (not the Wizard's Ring).
     if (slot < BAG.firstSlot || typeOf(item) === ItemKind.WIZARDS_RING) return;
@@ -349,4 +355,13 @@ export function rightClickBagItem(slot: number, item: Item, context: RightClickC
   if (isHighValue(item)) { context.message('You are not allowed to drop this expensive item.'); return; }
   if (itemDefinition(item.group, item.number)?.droppable === false) { context.message('This item cannot be dropped.'); return; }
   inventory.dropToGround(slot, cell);
+}
+
+// GameLogic::Items::IsSellingBan: Rena +1, Wizard's Ring +1/+2, Remedy of Love +1..+5 and what the
+// item data marks as not sellable.
+export function isSellingBan(item: Item): boolean {
+  const type = typeOf(item);
+  if ((type === POTION + 21 && item.level === 1) || (type === ItemKind.WIZARDS_RING && (item.level === 1 || item.level === 2))
+    || (type === ItemKind.REMEDY_OF_LOVE && item.level >= 1 && item.level <= 5)) return true;
+  return itemDefinition(item.group, item.number)?.sellable === false;
 }

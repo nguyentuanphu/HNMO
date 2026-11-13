@@ -5,11 +5,12 @@
 import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { drawItem } from './itemIcons.js';
-import { BAG, VAULT, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
+import { BAG, VAULT, SHOP, SHOP_STORAGE, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
 import type { Item, ItemGrid } from '../game/inventory.js';
 import { itemName } from '../game/items.js';
 import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
 import type { TooltipCharacter } from '../game/itemTooltip.js';
+import { isHighValue, isSellingBan } from '../game/itemUse.js';
 
 const CELL = 20; // the grid's cell pitch in reference pixels (item_grid.rcss --item-cell)
 const PANEL = { width: 190, height: 429 };
@@ -168,6 +169,8 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   gridOrigin!: Point;
   onPickedChanged?: () => void;
   onHover?: (item: Item | null, event: PointerEvent | null) => void;
+  /** A left click on an item, before it's picked up: true when handled (the shop's repair mode). */
+  onItemClick?: (slot: number, item: Item) => boolean;
   /** A right click on an item of the window (CInventoryActionController::HandleRightClick). */
   onRightClick?: (slot: number, item: Item) => void;
 
@@ -200,8 +203,16 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     return this.inventory.storage(this.storageKind);
   }
 
-  async open(parent: HTMLElement): Promise<void> {
-    if (this.doc) return;
+  private opening: Promise<void> | null = null;
+
+  // Opens the window; calls while it's opening wait for the same window (no second document).
+  open(parent: HTMLElement): Promise<void> {
+    if (this.doc) return Promise.resolve();
+    this.opening ??= this.openDocument(parent).finally(() => { this.opening = null; });
+    return this.opening;
+  }
+
+  private async openDocument(parent: HTMLElement): Promise<void> {
     this.doc = await openDocument(this.documentName, this.model, { parent, scale: uiScale() });
     this.panel = this.doc.$('#panel')!;
     // The theme leaves pointer events to the game's own hit tests (as the desktop client does them in C++).
@@ -297,6 +308,7 @@ class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const equipment = this.equipmentSlotAt(point);
     const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
     if (slot === null || !this.items.has(slot) || this.inventory.pendingMove) return;
+    if (this.onItemClick?.(slot, this.items.get(slot)!)) return;
     this.picked.pick({ storage: this.storageKind, slot }, this.items.get(slot)!);
     this.picked.follow(event);
     this.onPickedChanged?.();
@@ -472,6 +484,63 @@ export class VaultWindow extends ItemWindow<VaultModel> {
   }
 }
 
+
+interface ShopModel extends ItemWindowModel {
+  title: string; tax_rate_text: string; repair_visible: boolean; repair_tooltip: string; repair_all_tooltip: string;
+  repair_all_label: string; repair_gold_text: string; repair_gold_tier: string;
+  window_close: () => void; npc_shop_repair_click: () => void; npc_shop_repair_all_click: () => void;
+}
+
+// A merchant's window (CNPCShop, npc_shop.rml): its items in an 8 x 15 grid; a click buys one, a bag
+// item put on it is sold; repair shops show the repair buttons and what repairing everything costs.
+export class ShopWindow extends ItemWindow<ShopModel> {
+  /** Whether this merchant repairs (SetRepairShop: the smiths and weapon merchants). */
+  repairShop = false;
+  /** What repairing everything costs (RepairAllGold), set by the owner. */
+  repairAllCost: () => number = () => 0;
+
+  constructor({ inventory, picked, onClose, onRepairMode, onSell }: {
+    inventory: Inventory; picked: PickedItem; onClose: () => void; onRepairMode: () => void; onSell: (slot: number, item: Item) => void;
+  }) {
+    const model: ShopModel = {
+      text_px: 12, grid_cells: emptyCells(SHOP.columns * SHOP.rows), title: 'Merchant', tax_rate_text: 'Tax rate 0% (changed in real time)',
+      repair_visible: false, repair_tooltip: 'Repair (L)', repair_all_tooltip: 'Repair all (A)', repair_all_label: 'Repair all',
+      repair_gold_text: '0', repair_gold_tier: 'base',
+      window_close: () => onClose(),
+      npc_shop_repair_click: () => onRepairMode(),
+      npc_shop_repair_all_click: () => inventory.repair(0xff, false),
+    };
+    super({ inventory, picked, documentName: 'npc_shop', grid: SHOP, storage: SHOP_STORAGE, model });
+    this.onSell = onSell;
+  }
+
+  private readonly onSell: (slot: number, item: Item) => void;
+
+  // A click buys the item under the mouse; with a bag item on the cursor it sells that item (InventoryProcess).
+  override click(event: MouseEvent): void {
+    if (event.target instanceof Element && event.target.closest('#frame_corner_close, .shop-btn')) return;
+    const source = this.picked.source;
+    if (source) {
+      if (source.storage === Storage.INVENTORY && source.slot >= BAG.firstSlot) {
+        const item = source.item;
+        this.picked.drop();
+        this.onSell(source.slot, item);
+        this.onPickedChanged?.();
+      }
+      return;
+    }
+    const slot = this.itemAtGridSlot(this.gridSlotAt(this.pointOf(event)));
+    if (slot !== null) this.inventory.buy(slot);
+  }
+
+  override updateModel(): void {
+    this.model.repair_visible = this.repairShop;
+    const cost = this.repairAllCost();
+    this.model.repair_gold_text = formatGold(cost);
+    this.model.repair_gold_tier = goldTier(cost);
+  }
+}
+
 // The inventory and vault windows with the item on the cursor, and the keys that open them.
 export class ItemWindows {
   inventory: Inventory;
@@ -479,7 +548,12 @@ export class ItemWindows {
   picked: PickedItem;
   bag: InventoryWindow;
   vault: VaultWindow;
+  shop: ShopWindow;
   tooltip: ItemTooltipView;
+  /** The repair mode of a repair shop (L): a click on an item repairs it (CNPCShop::ToggleState). */
+  repairMode = false;
+  /** A line for the chat (the shop's refusals). */
+  message: (text: string) => void = () => undefined;
 
   constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null }: {
     inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
@@ -494,7 +568,18 @@ export class ItemWindows {
     prepareDocument('my_inventory').then(() => prepareDocument('storage')).catch((error) => console.warn('Interface', error));
     this.bag = new InventoryWindow({ inventory, picked: this.picked, onClose: () => this.closeAll() });
     this.vault = new VaultWindow({ inventory, picked: this.picked, onClose: () => this.closeAll(), onMoney: (toVault) => this.askMoney(toVault) });
-    for (const itemWindow of [this.bag, this.vault]) {
+    this.shop = new ShopWindow({
+      inventory, picked: this.picked, onClose: () => this.closeAll(),
+      onRepairMode: () => { this.repairMode = !this.repairMode; },
+      onSell: (slot, item) => this.sell(slot, item),
+    });
+    // In a repair shop's repair mode a click on an item repairs it (RepairItemAtMousePoint).
+    this.bag.onItemClick = (slot) => {
+      if (!this.repairMode || !this.shop.isOpen) return false;
+      this.inventory.repair(slot, false);
+      return true;
+    };
+    for (const itemWindow of [this.bag, this.vault, this.shop]) {
       itemWindow.onPickedChanged = () => { this.tooltip.hide(); this.refresh(); };
       // The hovered item's tooltip, unless an item is on the cursor (CInventoryCtrl only shows it then).
       itemWindow.onHover = (item) => {
@@ -511,7 +596,12 @@ export class ItemWindows {
       if (event.target instanceof Element && event.target.closest('input, textarea')) return;
       const key = event.key.toLowerCase();
       if (key === 'i' || key === 'v') { event.preventDefault(); this.toggle(); }
-      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen)) this.closeAll();
+      if (key === 'escape' && (this.bag.isOpen || this.vault.isOpen || this.shop.isOpen)) this.closeAll();
+      // L: the repair mode of a repair shop; Shift + L repairs everything (CNPCShop::UpdateKeyEvent).
+      if (key === 'l' && this.shop.isOpen && this.shop.repairShop) {
+        if (event.shiftKey) this.inventory.repair(0xff, false);
+        else this.repairMode = !this.repairMode;
+      }
     });
     window.addEventListener('resize', () => this.placeAll());
     // A click outside the windows with an inventory item on the cursor drops it on the ground there, as
@@ -537,6 +627,14 @@ export class ItemWindows {
   }
 
   async syncVault(): Promise<void> {
+    const open = this.inventory.openWindow;
+    if (open === NpcWindow.MERCHANT || open === NpcWindow.MERCHANT1) {
+      await this.bag.open(this.parent);
+      await this.shop.open(this.parent);
+      this.placeAll();
+      return;
+    }
+    if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.placeAll(); }
     if (this.inventory.openWindow === NpcWindow.VAULT) {
       await this.bag.open(this.parent);
       await this.vault.open(this.parent);
@@ -551,19 +649,32 @@ export class ItemWindows {
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
     if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
+    if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     this.bag.close();
   }
 
   placeAll(): void {
     this.bag.place(0);
     this.vault.place(PANEL.width);
+    this.shop.place(PANEL.width);
     this.bag.refresh();
     this.vault.refresh();
+    this.shop.refresh();
   }
 
   refresh(): void {
     this.bag.refresh();
     this.vault.refresh();
+    this.shop.refresh();
+  }
+
+  // Selling a bag item to the open merchant (HandleSellToNPC / InventoryProcess): not what can't be
+  // sold, and an expensive item only after asking.
+  sell(slot: number, item: Item): void {
+    if (this.inventory.sellingSlot !== null) return;
+    if (isSellingBan(item)) { this.message('These items cannot be traded.'); return; }
+    if (isHighValue(item) && !window.confirm('An expensive item. Check the item, please. Are you sure you want to sell it?')) return;
+    this.inventory.sell(slot);
   }
 
   askMoney(toVault: boolean): void {

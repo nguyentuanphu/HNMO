@@ -20,6 +20,7 @@ import { setUpGuide } from './ui/guide.js';
 import { findItemReverse, HOTKEY_LETTERS, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, SkillList, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
+import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -248,7 +249,11 @@ ui.canvas.addEventListener('pointerdown', (event) => {
   const monster = pickCharacter(event, ['monster']);
   if (monster && state.combat) { state.combat.attack(monster); return; }
   const npc = pickCharacter(event, ['npc']);
-  if (npc) { state.combat?.cancel(); state.online!.talkTo(npc); return; } // an NPC is only found online
+  if (npc) {
+    state.combat?.cancel();
+    state.online!.talkTo(npc);
+    return;
+  } // an NPC is only found online
   const drop = state.ground?.pick(event);
   if (drop) { state.combat?.cancel(); state.ground!.pickUp(drop); return; }
   const cell = pickCell(event);
@@ -459,6 +464,11 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     }),
   });
   inventory.onChange((what) => { if (what === 'inventory') wearInventory(character); });
+  // TEMP-CHARWIN-BEGIN
+  { const { CharacterWindow } = await import('./ui/characterWindow.js');
+    const characterWindow = new CharacterWindow({ connection, stats, inventory, classIndex: character.classIndex, name: character.name, currentSkill: () => skills.skillAt(skills.current) });
+    window.addEventListener('keydown', (event) => { if (event.target instanceof Element && event.target.closest('input, textarea')) return; if (event.key.toLowerCase() === 'c') void characterWindow.toggle(); }); }
+  // TEMP-CHARWIN-END
   wearInventory(character); // what the hero wears now, from the inventory the server sent with the character
   ui.login.hidden = true;
   const playerId = connection.playerId!; // known since login()
@@ -544,7 +554,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     inventory, user: itemUser, classIndex: character.classIndex, level: stats.level, strength: stats.strength, energy: stats.energy,
     safeZone: inSafeZone(), message: (text) => chat.add(text, 'system'),
     heroCell: () => (online.hero.dead ? null : { ...online.hero.cell }),
+    sell: (slot, item) => itemWindows.sell(slot, item),
   });
+  itemWindows.message = (text) => chat.add(text, 'system');
+  // What repairing everything costs at a repair shop (RepairAllGold, the NPC's price).
+  void loadItemValueData().then(() => { itemWindows.shop.repairAllCost = () => repairAllCost(inventory.items, false); itemWindows.refresh(); })
+    .catch((error: unknown) => console.warn('Item prices', error));
+  // The smiths and weapon merchants also repair (SetRepairShop: Eo, Zienna, Hanzo, Rhea, Bolo).
+  online.onTalk = (npc) => { itemWindows.shop.repairShop = [243, 246, 251, 416, 578].includes(npc.monsterNumber ?? -1); };
+  inventory.onChange((what) => { if (what === 'buyFailed') chat.add('You cannot buy this item.', 'system'); });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     const slot = HOTKEY_LETTERS.indexOf(event.key.toUpperCase() as typeof HOTKEY_LETTERS[number]);

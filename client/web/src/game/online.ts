@@ -79,6 +79,8 @@ export class OnlineWorld {
   goal?: Cell | null;
   /** The NPC to talk to once the hero gets there. */
   talkTarget?: Character | null;
+  /** Told when the hero talks to an NPC (TalkToNpcRequest sent), e.g. which merchant the shop is. */
+  onTalk?: (npc: Character) => void;
 
   constructor({ connection, root, world, hero, playerId, onChange, onMapChanged, onMessage }: OnlineWorldOptions) {
     this.onMapChanged = onMapChanged;
@@ -259,6 +261,7 @@ export class OnlineWorld {
     if (this.talkTarget && !this.hero.isWalking && !this.goal) {
       if (this.closeEnoughToTalk(this.talkTarget)) {
         this.connection.send('ClientToServer', 'TalkToNpcRequest', { NpcId: this.talkTarget.id });
+        this.onTalk?.(this.talkTarget);
         this.hero.faceTo?.(this.talkTarget.cell);
       }
       this.talkTarget = null;

@@ -22,6 +22,9 @@ export interface ItemGrid {
 export const BAG: ItemGrid = { firstSlot: 12, columns: 8, rows: 8 };
 export const VAULT: ItemGrid = { firstSlot: 0, columns: 8, rows: 15 };
 export const Storage = { INVENTORY: 0, TRADE: 1, VAULT: 2, CHAOS_MACHINE: 3, PLAYER_SHOP: 4 } as const;
+/** The open merchant's items (a client-side storage: the server knows them by shop slot). */
+export const SHOP_STORAGE = 100;
+export const SHOP: ItemGrid = { firstSlot: 0, columns: 8, rows: 15 };
 export type Storage = (typeof Storage)[keyof typeof Storage];
 export const NpcWindow = { MERCHANT: 0, MERCHANT1: 1, VAULT: 2, CHAOS_MACHINE: 3 } as const;
 export type NpcWindow = (typeof NpcWindow)[keyof typeof NpcWindow];
@@ -59,7 +62,7 @@ export interface StoredItem {
 }
 
 /** What changed, for Inventory.onChange listeners. */
-export type InventoryChange = 'inventory' | 'vault' | 'shop' | 'window' | 'money';
+export type InventoryChange = 'inventory' | 'vault' | 'shop' | 'window' | 'money' | 'buyFailed';
 
 /** A move the server hasn't answered yet. */
 export interface PendingMove {
@@ -135,8 +138,10 @@ export class Inventory {
   pendingMove: PendingMove | null;
   listeners: Set<(what: InventoryChange) => void>;
   stop: () => void;
-  /** A merchant's items, from the last StoreItemList that wasn't the vault's. */
-  shopItems?: StoredItem[];
+  /** The open merchant's items by shop slot (StoreItemList while a merchant's window is open). */
+  shop = new Map<number, Item>();
+  /** The bag slot of the item being sold (SellItemToNpcRequest), until the server answers. */
+  sellingSlot: number | null = null;
   lastMoveTouchedVault?: boolean;
 
   constructor(connection: Connection, { money = 0 }: { money?: number } = {}) {
@@ -161,7 +166,7 @@ export class Inventory {
   }
 
   storage(kind: number): Map<number, Item> {
-    return kind === Storage.VAULT ? this.vault : this.items;
+    return kind === Storage.VAULT ? this.vault : kind === SHOP_STORAGE ? this.shop : this.items;
   }
 
   handle(bytes: Uint8Array): void {
@@ -176,17 +181,37 @@ export class Inventory {
       // StoreItemList: the vault's (or a merchant's) items
       const kind = bytes[data];
       const list = decodeStoredItems(bytes, data + 2, bytes[data + 1]);
-      if (this.openWindow === NpcWindow.VAULT || kind === 0) {
+      // Both lists are of the "normal" kind; the window the server opened tells them apart.
+      void kind;
+      if (this.openWindow === NpcWindow.MERCHANT || this.openWindow === NpcWindow.MERCHANT1) {
+        this.shop.clear();
+        for (const { slot, item } of list) this.shop.set(slot, item);
+        this.changed('shop');
+      } else {
         this.vault.clear();
         for (const { slot, item } of list) this.vault.set(slot, item);
         this.changed('vault');
-      } else {
-        this.shopItems = list;
-        this.changed('shop');
       }
     } else if (c3 && code === 0x30) {
       this.openWindow = bytes[data];
       this.changed('window');
+    } else if (c1 && code === 0x32 && bytes[data] === 0xff && bytes.length <= 4) {
+      this.changed('buyFailed'); // NpcItemBuyFailed
+    } else if (c1 && code === 0x32 && bytes.length > 5) {
+      // ItemBought: the bought item's place in the bag
+      this.items.set(bytes[data], decodeItem(bytes, data + 1));
+      this.changed('inventory');
+    } else if (c3 && code === 0x33) {
+      // NpcItemSellResult: the item left the bag, the money is the new total
+      if (bytes[data] !== 0 && this.sellingSlot !== null) this.items.delete(this.sellingSlot);
+      if (bytes[data] !== 0) this.money = u32le(bytes, data + 1);
+      this.sellingSlot = null;
+      this.changed('inventory');
+      this.changed('money');
+    } else if (c1 && code === 0x34) {
+      // ItemRepairResponse: the money left after the repair (durabilities come as their own packets)
+      this.money = u32le(bytes, data + 1);
+      this.changed('money');
     } else if (c3 && code === 0x22 && bytes[data] === 0xfe) {
       this.money = u32be(bytes, data + 1);
       this.changed('money');
@@ -246,6 +271,31 @@ export class Inventory {
 
   moveMoney(toVault: boolean, amount: number): void {
     this.connection.send('ClientToServer', 'VaultMoveMoneyRequest', { Direction: toVault ? 0 : 1, Amount: amount });
+  }
+
+  // The merchant's window: buying (BuyItemFromNpcRequest), selling (SellItemToNpcRequest), repairing
+  // (RepairItemRequest: 0xFF repairs everything; selfRepair is the inventory's own repair button).
+  buy(shopSlot: number): void {
+    this.connection.send('ClientToServer', 'BuyItemFromNpcRequest', { ItemSlot: shopSlot });
+  }
+
+  sell(slot: number): boolean {
+    if (this.sellingSlot !== null) return false;
+    this.sellingSlot = slot;
+    this.connection.send('ClientToServer', 'SellItemToNpcRequest', { ItemSlot: slot });
+    setTimeout(() => { if (this.sellingSlot === slot) this.sellingSlot = null; }, 3000);
+    return true;
+  }
+
+  repair(slot: number, selfRepair: boolean): void {
+    this.connection.send('ClientToServer', 'RepairItemRequest', { ItemSlot: slot, IsSelfRepair: selfRepair });
+  }
+
+  closeShop(): void {
+    this.connection.send('ClientToServer', 'CloseNpcRequest', {});
+    this.openWindow = null;
+    this.shop.clear();
+    this.changed('window');
   }
 
   closeVault(): void {

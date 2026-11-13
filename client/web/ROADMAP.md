@@ -45,7 +45,7 @@ tests and CI for all of it; strict TypeScript build.
 3. Pets and mounts drawn (Guardian Angel, Imp, Dark Horse, Fenrir …), capes as cloth.
 
 ## 5. NPCs, shops and quests
-1. NPC dialogs (`npc_dialogue.rml`), shops (`npc_shop.rml`): buy, sell, repair.
+1. 🟡 NPC dialogs (`npc_dialogue.rml`), shops (`npc_shop.rml`): buy, sell, repair (shops done; dialogs, tax rate, gamble shops left).
 2. Quests (`npc_quest.rml`, `my_quest_info.rml`, quest progress), class change quests.
 3. Move window M / gates / warps (`move_command.rml`, `gateman.rml`), mini map, map name banner.
 
