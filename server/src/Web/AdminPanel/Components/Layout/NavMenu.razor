@@ -1,15 +1,18 @@
 ﻿@using HNMO.Web.AdminPanel.Properties
 
-<nav class="rounded-bottom shadow-lg">
-    <div class="top-row ps-4 navbar navbar-dark">
-        <NavLink class="navbar-brand" @onclick="() => NavigationHistory.Clear()">HNMO</NavLink>
-        <button class="navbar-toggler" @onclick="ToggleNavMenu">
+<nav class="hn-sidebar">
+    <div class="top-row navbar navbar-dark">
+        <NavLink class="navbar-brand hn-brand" href="" Match="NavLinkMatch.All" @onclick="() => NavigationHistory.Clear()">
+            <span class="hn-brand__mark" aria-hidden="true">H</span>
+            <span class="hn-brand__text">HNMO <small>@Resources.NavAdmin</small></span>
+        </NavLink>
+        <button class="navbar-toggler" aria-label="@Resources.NavToggleMenu" aria-expanded="@(this._collapseNavMenu ? "false" : "true")" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 
     <!-- Hiding it programmatically is not a good idea here, because we want to hide it based on the width of the device/window. -->
-    <div class="@NavMenuCssClass">
+    <div class="nav-scrollable @NavMenuCssClass">
         <ul class="nav flex-column">
             @if (this._isLoadingConfig)
             {
@@ -29,39 +32,36 @@
             }
             else
             {
+                <li class="nav-section" role="presentation">@Resources.NavOverview</li>
                 <li class="nav-item px-3">
                     <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="() => NavigationHistory.Clear()">
-                        <span class="oi oi-home" aria-hidden="true"></span> @Resources.Home
+                        <span class="oi oi-dashboard" aria-hidden="true"></span> @Resources.Home
                     </NavLink>
                 </li>
-                <AuthorizeView Policy="@AdminPolicies.Administrator">
-                    <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="audit">@Resources.ResourceManager.GetString("AuditHistory", Resources.Culture)</NavLink>
-                    </li>
-                </AuthorizeView>
                 <li class="nav-item px-3">
                     <NavLink class="nav-link" href="servers" @onclick="() => NavigationHistory.Clear()">
                         <span class="oi oi-project" aria-hidden="true"></span> @Resources.Servers
                     </NavLink>
                 </li>
                 <li class="nav-item px-3">
-                  <NavLink class="nav-link" href="accounts" @onclick="() => NavigationHistory.Clear()">
-                    <span class="oi oi-list" aria-hidden="true"></span> @Resources.Accounts
-                  </NavLink>
-                </li>
-                <li class="nav-item px-3">
                   <NavLink class="nav-link" href="logged-in" @onclick="() => NavigationHistory.Clear()">
-                    <span class="oi oi-people" aria-hidden="true" /> @Resources.OnlineAccounts
-                  </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                  <NavLink class="nav-link" href="guilds" @onclick="() => NavigationHistory.Clear()">
-                    <span class="oi oi-flag" aria-hidden="true" /> @Resources.Guilds
+                    <span class="oi oi-pulse" aria-hidden="true"></span> @Resources.OnlineAccounts
                   </NavLink>
                 </li>
                 <li class="nav-item px-3">
                   <NavLink class="nav-link" href="leaderboards" @onclick="() => NavigationHistory.Clear()">
-                    <span class="oi oi-badge" aria-hidden="true" /> @Resources.Leaderboards
+                    <span class="oi oi-badge" aria-hidden="true"></span> @Resources.Leaderboards
+                  </NavLink>
+                </li>
+                <li class="nav-section" role="presentation">@Resources.NavPlayers</li>
+                <li class="nav-item px-3">
+                  <NavLink class="nav-link" href="accounts" @onclick="() => NavigationHistory.Clear()">
+                    <span class="oi oi-person" aria-hidden="true"></span> @Resources.Accounts
+                  </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                  <NavLink class="nav-link" href="guilds" @onclick="() => NavigationHistory.Clear()">
+                    <span class="oi oi-flag" aria-hidden="true"></span> @Resources.Guilds
                   </NavLink>
                 </li>
                 <AuthorizeView Policy="@AdminPolicies.Administrator">
@@ -70,6 +70,12 @@
                             <span class="oi oi-shield" aria-hidden="true"></span> @Resources.CastleSiege
                         </NavLink>
                     </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="audit" @onclick="() => NavigationHistory.Clear()">
+                            <span class="oi oi-clipboard" aria-hidden="true"></span> @Resources.ResourceManager.GetString("AuditHistory", Resources.Culture)
+                        </NavLink>
+                    </li>
+                    <NavGroupMenu Groups="@PlayerDataGroups" />
                 </AuthorizeView>
                 @if (this.GameConfigurationId is { } gameConfigurationId )
                 {
@@ -78,6 +84,7 @@
                     </AuthorizeView>
                 }
             }
+            <li class="nav-section" role="presentation">@Resources.NavAdministration</li>
             <li class="nav-item px-3 dropdown@(this._expandSystem ? " expanded" : "")">
                 <a class="nav-link dropdown-toggle" href="" role="button" aria-haspopup="true" aria-expanded="@(this._expandSystem ? "true" : "false")" @onclick="this.ToggleSystem" @onclick:preventDefault="true">
                     <span class="oi oi-cog" aria-hidden="true"></span> @Resources.System
@@ -173,14 +180,12 @@
                     </a>
                 </li>
             }
-            <li class="nav-item px-3">
-              <CultureSelector />
-            </li>
-            <li class="nav-item px-3">
-                <a class="nav-link" href="https://github.com/nguyentuanphu/HNMO" target="_blank">
-                    <span class="oi oi-info" aria-hidden="true"></span> @Resources.About
-                </a>
-            </li>
         </ul>
+        <div class="nav-footer px-3">
+            <CultureSelector />
+            <a class="nav-link" href="https://github.com/nguyentuanphu/HNMO" target="_blank">
+                <span class="oi oi-info" aria-hidden="true"></span> @Resources.About
+            </a>
+        </div>
     </div>
 </nav>

@@ -61,6 +61,27 @@ public partial class Index : IDisposable
         await this.LoadStatisticsAsync().ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// Gets the shortcuts to the most used parts of the game configuration.
+    /// </summary>
+    private static IEnumerable<(string Caption, string Href, string Icon)> GameConfigurationLinks
+    {
+        get
+        {
+            static string Grid<T>() => $"edit-config-grid/{typeof(T).FullName}/";
+            yield return (Resources.FullConfiguration, $"edit-config/{typeof(DataModel.Configuration.GameConfiguration).FullName}/", "oi-dial");
+            yield return (Resources.Items, Grid<DataModel.Configuration.Items.ItemDefinition>(), "oi-box");
+            yield return (Resources.Monsters, Grid<DataModel.Configuration.MonsterDefinition>(), "oi-bug");
+            yield return (Resources.Skills, Grid<DataModel.Configuration.Skill>(), "oi-bolt");
+            yield return (Resources.CharacterClasses, Grid<DataModel.Configuration.CharacterClass>(), "oi-people");
+            yield return (Resources.GameMaps, Grid<DataModel.Configuration.GameMapDefinition>(), "oi-map");
+            yield return (Resources.MerchantStores, "merchants/", "oi-cart");
+            yield return (Resources.CashShopCatalog, "cash-shop-catalog", "oi-credit-card");
+            yield return (Resources.ItemDrops, "edit-item-drops", "oi-data-transfer-download");
+            yield return (Resources.Plugins, "plugins", "oi-puzzle-piece");
+        }
+    }
+
     private static string GetLoadText(IManageableServer server)
     {
         return server.Type == ServerType.GameServer && server.MaximumConnections < int.MaxValue

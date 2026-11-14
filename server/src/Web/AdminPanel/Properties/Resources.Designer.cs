@@ -8564,5 +8564,140 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("CashShopCoinsDeliveredPending", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Admin.
+        /// </summary>
+        public static string NavAdmin {
+            get {
+                return ResourceManager.GetString("NavAdmin", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show or hide the menu.
+        /// </summary>
+        public static string NavToggleMenu {
+            get {
+                return ResourceManager.GetString("NavToggleMenu", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string NavOverview {
+            get {
+                return ResourceManager.GetString("NavOverview", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Players.
+        /// </summary>
+        public static string NavPlayers {
+            get {
+                return ResourceManager.GetString("NavPlayers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Game.
+        /// </summary>
+        public static string NavGame {
+            get {
+                return ResourceManager.GetString("NavGame", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Administration.
+        /// </summary>
+        public static string NavAdministration {
+            get {
+                return ResourceManager.GetString("NavAdministration", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Characters and skills.
+        /// </summary>
+        public static string NavCharactersAndSkills {
+            get {
+                return ResourceManager.GetString("NavCharactersAndSkills", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to World and monsters.
+        /// </summary>
+        public static string NavWorldAndMonsters {
+            get {
+                return ResourceManager.GetString("NavWorldAndMonsters", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Shops and drops.
+        /// </summary>
+        public static string NavShopsAndDrops {
+            get {
+                return ResourceManager.GetString("NavShopsAndDrops", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Rules and plugins.
+        /// </summary>
+        public static string NavRulesAndEvents {
+            get {
+                return ResourceManager.GetString("NavRulesAndEvents", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced.
+        /// </summary>
+        public static string NavAdvanced {
+            get {
+                return ResourceManager.GetString("NavAdvanced", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Configure the game.
+        /// </summary>
+        public static string DashboardConfigureGame {
+            get {
+                return ResourceManager.GetString("DashboardConfigureGame", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Every setting of the game can be changed here. Changes to the game configuration apply after saving; some need a server restart..
+        /// </summary>
+        public static string DashboardEverythingEditable {
+            get {
+                return ResourceManager.GetString("DashboardEverythingEditable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to More player data.
+        /// </summary>
+        public static string NavPlayerData {
+            get {
+                return ResourceManager.GetString("NavPlayerData", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit guild data.
+        /// </summary>
+        public static string GuildEditData {
+            get {
+                return ResourceManager.GetString("GuildEditData", resourceCulture);
+            }
+        }
     }
 }

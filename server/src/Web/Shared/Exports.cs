@@ -45,7 +45,6 @@ public static class Exports
             var prefix = GetPrefix();
             yield return $"{prefix}/css/bootstrap.min.css";
             yield return $"{prefix}/css/open-iconic/font/css/open-iconic-bootstrap.min.css";
-            yield return $"{prefix}/css/theme.css";
             yield return $"{prefix}/css/navigation.css";
             yield return $"{prefix}/css/main.css";
             yield return $"{prefix}/css/forms.css";
@@ -54,6 +53,9 @@ public static class Exports
             yield return $"{prefix}/css/log.css";
             yield return $"{prefix}/css/map-editor.css";
             yield return $"{prefix}/css/terrain-editor.css";
+
+            // The theme comes last, so its tokens and component styles win over the defaults above.
+            yield return $"{prefix}/css/theme.css";
         }
     }
 

@@ -115,6 +115,20 @@
         </section>
 
         <AuthorizeView Policy="@AdminPolicies.Administrator">
+            <section class="card h-100 configure-game">
+                <div class="card-header">
+                    <h2 class="h6 mb-0">@Resources.DashboardConfigureGame</h2>
+                </div>
+                <div class="card-body">
+                    <p class="small text-body-secondary mb-3">@Resources.DashboardEverythingEditable</p>
+                    <div class="quick-links">
+                        @foreach (var link in GameConfigurationLinks)
+                        {
+                            <a class="quick-link" href="@link.Href"><span class="oi @link.Icon" aria-hidden="true"></span> @link.Caption</a>
+                        }
+                    </div>
+                </div>
+            </section>
             <CastleSiegeCard />
             <SystemInfoCard />
             <ConfigurationUpdatesCard />
