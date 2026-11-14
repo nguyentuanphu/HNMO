@@ -83,3 +83,16 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   New content beyond the desktop (e.g. new skills for every class) goes in the server and the web
   only; don't change the desktop client for it unless asked. New skills reuse the game's own
   effect textures/models and sound files, defined in data (one entry per skill).
+- The web's own data files go in `client/web/public/data/...` and are served at `/data/...` before
+  the game's files of the same path (the bridge's /data route looks there first). HNMO's skill
+  sounds are `public/data/Sound/hnmo/<skill>.mp3` (made with ElevenLabs sound effects, 50 credits
+  each; the free plan sometimes says "busy" or hits a per-minute limit — try again later).
+- New server data reaches existing saves through an update plug-in (Persistence/Initialization/
+  Updates, found by its [PlugIn]/[Guid]); fresh saves through the initializer. To try server
+  changes in the local test folder, copy `server/src/Startup/bin/Release/HNMO.*.dll` (and the
+  language folders' HNMO resource DLLs) into `/home/hnmo/HNMO-clip/server/` and restart it.
+- Accounts the browser tests use besides test0-9/test300/test400: `ancient` (level 330 Blade
+  Knight, red Fenrir), `testgm` (game master: /startbc, /startds, /startcc, /skipwait), `quest1`.
+- Packets can be fed in tests with `window.__game.connection.dispatch(bytes)`.
+- Parallel work: agents in git worktrees, each with its own bridge port (8082-8091) and BASE_URL;
+  merge their branches one at a time and resolve PARITY.md / guide.html conflicts by keeping both.
