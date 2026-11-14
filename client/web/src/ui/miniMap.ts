@@ -6,6 +6,7 @@
 
 import { loadImage, openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { loadMiniMapData, type MiniMapMarker } from '../game/miniMapData.js';
+import { FONT_FAMILY, nativeTextPx, typographyScale } from './nativeText.js';
 
 // ---------- MiniMapLayout (the pure geometry of the desktop's mini map) ----------
 
@@ -127,7 +128,8 @@ const SIDE_ELEMENT_WIDTH = 41.7;
 const SIDE_ELEMENT_HEIGHT = 8;
 // The hint's text: the game font's size in reference units.
 const FONT_SIZE = 12;
-const FONT = `${FONT_SIZE}px Tahoma, Arial, sans-serif`;
+// MeasureText's units: the native text size over the interface's scale, in the theme's font.
+const font = () => `${nativeTextPx() / typographyScale()}px ${FONT_FAMILY}, sans-serif`;
 
 interface Clip { left: number; top: number; width: number; height: number; world_left: number; world_top: number }
 interface MarkerEntry { portal: boolean; size: number; transform: string }
@@ -181,7 +183,7 @@ let measureContext: CanvasRenderingContext2D | null = null;
 function measureText(text: string): { cx: number; cy: number } {
   measureContext ??= document.createElement('canvas').getContext('2d');
   if (!measureContext) return { cx: text.length * 6, cy: FONT_SIZE + 2 };
-  measureContext.font = FONT;
+  measureContext.font = font();
   const metrics = measureContext.measureText(text);
   const cy = Math.round((metrics.fontBoundingBoxAscent || FONT_SIZE) + (metrics.fontBoundingBoxDescent || 2));
   return { cx: Math.round(metrics.width), cy };
@@ -314,7 +316,7 @@ export class MiniMap {
     this.doc.root.style.setProperty('--overlay-scale-x', String(screen.scaleX));
     this.doc.root.style.setProperty('--overlay-scale-y', String(screen.scaleY));
     this.doc.setScale(screen.scaleY);
-    this.model.text_px = FONT_SIZE * screen.scaleY;
+    this.model.text_px = nativeTextPx();
     const lines: string[] = [];
     for (let i = 0; i < SIDE_TILES; i++) {
       const y = i * (TILE_WIDTH - 3);

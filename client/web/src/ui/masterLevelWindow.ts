@@ -21,6 +21,8 @@ import {
 } from '../game/masterLevel.js';
 import type { Hud } from './hud.js';
 import type { CharacterWindow } from './characterWindow.js';
+import { nativeTextPx } from './nativeText.js';
+import { textWidth } from '../game/questData.js';
 
 // The desktop's texts (Localization/Game.en.resx).
 const T = {
@@ -58,12 +60,10 @@ export function formatC(format: string, ...values: number[]): string {
   });
 }
 
-let measure: CanvasRenderingContext2D | null = null;
-// DivideStringByPixel: '#' separates lines (empty ones are skipped), each gets a leading space and wraps at the width.
+// DivideStringByPixel: '#' separates lines (empty ones are skipped), each gets a leading space and wraps at the width
+// (MeasureText: reference units at the native text size).
 function divide(text: string): string[] {
-  measure ??= document.createElement('canvas').getContext('2d');
-  if (measure) measure.font = '12px Tahoma, Arial, sans-serif';
-  const width = (s: string) => (measure ? measure.measureText(s).width : s.length * 6);
+  const width = textWidth;
   const lines: string[] = [];
   for (const token of text.split('#')) {
     if (!token) continue;
@@ -191,8 +191,9 @@ export class MasterLevelWindow {
         transformOrigin: 'left top', pointerEvents: 'none',
       });
       doc.root.style.setProperty('--hud-scale', '1');
+      doc.root.style.setProperty('--board-scale', String(scale));
     }
-    this.model.text_px = 12;
+    this.model.text_px = nativeTextPx();
     this.doc?.update();
   }
 

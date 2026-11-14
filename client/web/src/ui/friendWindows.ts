@@ -12,15 +12,17 @@ import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type
 import { askInGame, noticeInGame, promptInGame } from './socialDialogs.js';
 import { keepTypingInside } from './guildWindows.js';
 import { LAST_ONLINE_SERVER, LETTER_COST, UNAVAILABLE_SERVER, type Letter, type LetterBody, type Messenger } from '../game/messenger.js';
+import { nativeTextPx, typographyScale } from './nativeText.js';
 
 /** The bottom of the area windows may use (above the HUD's main frame, 10.625% of the height). */
 const workspaceBottom = () => window.innerHeight * (1 - 0.10625);
 let topLayer = 70;
-/** The windows grow with the screen like the game's other windows (dp, "native-text"). */
-const shellScale = () => Math.max(0.8, window.innerHeight / REFERENCE_HEIGHT / 1.25);
-// The themes size the text in rem: in RmlUi that is the document's text size, the original's 12 px.
+/** The windows are laid out in dp, which grow with the screen (the dp ratio, TypographyScale). */
+const shellScale = () => typographyScale();
+// The themes size the text in rem: in RmlUi that is the native text size ("native-text"), set on #panel
+// in its own units (--rml-rem, rml.ts).
 const SHELL_CSS = `
-#panel { font-size: calc(12px * var(--hnmo-text-scale, 1)); transform-origin: left top; }
+#panel { transform-origin: left top; }
 #panel button, #panel input, #panel textarea { font-size: inherit; }
 #panel button { border: 0; padding-top: 0; padding-bottom: 0; background-color: transparent; }
 `;
@@ -62,7 +64,11 @@ abstract class ShellWindow<M extends ShellModel> {
     style.textContent = SHELL_CSS;
     doc.host.shadowRoot?.append(style);
     const panel = doc.$('#panel');
-    if (panel) panel.style.transform = `scale(${shellScale().toFixed(3)})`;
+    if (panel) {
+      const scale = shellScale();
+      panel.style.transform = `scale(${scale.toFixed(3)})`;
+      panel.style.setProperty('--rml-rem', `${(nativeTextPx() / scale).toFixed(3)}px`);
+    }
     if (panel) {
       panel.style.pointerEvents = 'auto';
       panel.addEventListener('pointerdown', (event) => { event.stopPropagation(); this.toFront(); });

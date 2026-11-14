@@ -20,6 +20,7 @@ import { ItemWindow, emptyCells, formatGold } from './itemWindows.js';
 import type { ItemWindowModel, ItemWindows, PickedItem } from './itemWindows.js';
 import { REFERENCE_HEIGHT, prepareDocument } from './rml.js';
 import * as THREE from 'three';
+import { nativeTextPx } from './nativeText.js';
 
 // The desktop's texts (I18N::Game).
 export const SHOP_TEXT = {
@@ -348,7 +349,7 @@ class ShopTitles {
       point.project(camera);
       if (point.z > 1) { box.style.display = 'none'; continue; }
       box.style.display = 'block';
-      box.style.fontSize = `${Math.round(12 * scale)}px`;
+      box.style.fontSize = `${nativeTextPx()}px`;
       box.style.transform = `translate(${rect.left + (point.x + 1) / 2 * rect.width}px, ${rect.top + (1 - point.y) / 2 * rect.height - 12 * scale}px) translate(-50%, -100%)`;
     }
   }

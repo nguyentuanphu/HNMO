@@ -9,21 +9,23 @@
 
 import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import { DUEL_ENEMY, DUEL_HERO, DuelText, fill, type Duel } from '../game/duel.js';
+import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // the docked windows' width
-const TEXT_PX = 12;      // the native text size at the 640x480 reference
 
 const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
 
 /** Lays a document's root out as the 640x480 reference screen stretched to the window. */
 function placeBoard(doc: RmlDocument): number {
   const scale = screenScale();
-  doc.setScale(1);
+  // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
+  doc.setScale(scale);
   Object.assign(doc.root.style, {
     width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
+  doc.root.style.setProperty('--board-scale', String(scale));
   return window.innerWidth / scale;
 }
 
@@ -132,7 +134,7 @@ export class DuelScoreHud {
   private doc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
   private shown = false;
-  private readonly model: ScoreModel = { bold_text_px: TEXT_PX, hero_name: '', hero_score: '0', enemy_name: '', enemy_score: '0' };
+  private readonly model: ScoreModel = { bold_text_px: nativeTextPx(), hero_name: '', hero_score: '0', enemy_name: '', enemy_score: '0' };
 
   constructor(private readonly duel: Duel) {
     prepareDocument('duel_window').catch((error: unknown) => console.warn('Interface', error));
@@ -180,8 +182,8 @@ export class DuelWatchWindow {
 
   constructor(private readonly options: { duel: Duel; closeNpc: () => void; click: () => void; closeOthers: () => void }) {
     this.model = {
-      text_px: TEXT_PX, bold_text_px: TEXT_PX, title: DuelText.DoorkeeperTitus, subtitle: DuelText.SelectColosseum, subtitle_px: TEXT_PX,
-      vs_text: 'VS', no_duel_text: DuelText.NoDuelOn, watch_text: DuelText.Watch, label_line_px: TEXT_PX + 2, rooms: [],
+      text_px: nativeTextPx(), bold_text_px: nativeTextPx(), title: DuelText.DoorkeeperTitus, subtitle: DuelText.SelectColosseum, subtitle_px: nativeTextPx(),
+      vs_text: 'VS', no_duel_text: DuelText.NoDuelOn, watch_text: DuelText.Watch, label_line_px: nativeTextPx() + 2, rooms: [],
       duelwatch_join: (index) => { this.options.click(); this.options.duel.watch(index); },
       window_close: () => this.close(),
     };
@@ -242,8 +244,8 @@ export class DuelWatchWindow {
     const scale = screenScale();
     this.doc.setScale(scale);
     Object.assign(panel.style, { left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top' });
-    const px = Math.round(TEXT_PX * scale);
-    Object.assign(this.model, { text_px: px, bold_text_px: px, subtitle_px: px, label_line_px: Math.round((TEXT_PX + 2) * scale) });
+    const px = nativeTextPx();
+    Object.assign(this.model, { text_px: px, bold_text_px: px, subtitle_px: px, label_line_px: nativeLineHeightPx() });
     this.sync();
   }
 }
@@ -286,7 +288,7 @@ export class DuelWatchFrame {
 
   constructor(private readonly duel: Duel, private readonly click: () => void) {
     this.model = {
-      watching: false, exit_hint: DuelText.Finished, hero_name: { text: '', text_px: TEXT_PX }, enemy_name: { text: '', text_px: TEXT_PX },
+      watching: false, exit_hint: DuelText.Finished, hero_name: { text: '', text_px: nativeTextPx() }, enemy_name: { text: '', text_px: nativeTextPx() },
       hero_marks: [], enemy_marks: [], gauges: [],
       duel_watch_exit: () => { this.click(); this.duel.leaveWatch(); },
     };
@@ -332,8 +334,8 @@ export class DuelWatchFrame {
     const watching = this.duel.currentChannel !== -1;
     const hero = this.duel.players[DUEL_HERO], enemy = this.duel.players[DUEL_ENEMY];
     this.model.watching = watching;
-    this.model.hero_name = { text: hero.name, text_px: TEXT_PX };
-    this.model.enemy_name = { text: enemy.name, text_px: TEXT_PX };
+    this.model.hero_name = { text: hero.name, text_px: nativeTextPx() };
+    this.model.enemy_name = { text: enemy.name, text_px: nativeTextPx() };
     doc.update();
     if (!watching) return;
     // A mark per point (the document's data-for has no list expression; the rows are filled here).
@@ -407,7 +409,7 @@ export class SpectatorList {
   private doc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
   private shown = false;
-  private readonly model: SpectatorModel = { text_px: TEXT_PX, spectators: [] };
+  private readonly model: SpectatorModel = { text_px: nativeTextPx(), spectators: [] };
 
   constructor(private readonly duel: Duel) {
     prepareDocument('duel_watch_spectators').catch((error: unknown) => console.warn('Interface', error));

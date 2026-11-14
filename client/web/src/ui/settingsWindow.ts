@@ -12,6 +12,7 @@
 
 import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import { audioSystem, MAX_VOLUME_LEVEL } from '../audio/audioSystem.js';
+import { typographyScale } from './nativeText.js';
 import {
   applyQuality, DEFAULT_QUALITY, FPS_CAPS, isLowSpec, LOW_SPEC, refreshQuality, RENDER_SCALES, VIEW_DISTANCES,
   type QualitySettings, type QualityTarget,
@@ -191,11 +192,11 @@ export class SettingsWindow {
     this.model.__update?.();
   }
 
-  // The window at the size of the game's other windows (they scale with the screen's height).
+  // The window is laid out in dp: the dp ratio (TypographyScale) sizes it; its rem text is the native size.
   private place(): void {
     const panel = this.doc?.root;
     if (!panel) return;
-    const scale = Math.max(0.8, window.innerHeight / REFERENCE_HEIGHT / 1.25);
+    const scale = typographyScale();
     panel.style.transform = `translate(-50%, -50%) scale(${scale.toFixed(3)})`;
   }
 

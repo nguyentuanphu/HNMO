@@ -11,6 +11,7 @@ import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDoc
 import { divideStringByPixel, textWidth } from '../game/questData.js';
 import { GENS_DUPRIAN, GENS_VANERT, GensText, gensMarkCell, gensTitle, type Gens } from '../game/gens.js';
 import type { Character } from '../game/characters.js';
+import { FONT_FAMILY, fitTextPx, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 const TEXT_PX = 12;
@@ -88,7 +89,7 @@ export class GensRankingWindow {
     // NativeTextPxInBox: a line wider than its box (reference px) is drawn smaller to fit it.
     const line = (text: string, box = PANEL_WIDTH, bold = false): Line => {
       const width = textWidth(text) * (bold ? 1.1 : 1);
-      return { text, text_px: width > box ? Math.max(1, Math.floor(px * box / width)) : px };
+      return { text, text_px: fitTextPx(px, width, box) };
     };
     const m = this.model;
     m.title = line(GensText.InfoWindow, PANEL_WIDTH, true);
@@ -120,7 +121,7 @@ export class GensRankingWindow {
     const scale = window.innerHeight / REFERENCE_HEIGHT;
     this.doc.setScale(scale);
     Object.assign(panel.style, { left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top' });
-    this.textPx = Math.round(TEXT_PX * scale);
+    this.textPx = nativeTextPx();
     this.sync();
   }
 }
@@ -150,7 +151,7 @@ export class GensMarks {
     Object.assign(this.tag.style, { position: 'fixed', zIndex: '6', pointerEvents: 'none', display: 'none', transform: 'translate(-50%, -100%)' });
     this.name = document.createElement('div');
     Object.assign(this.name.style, {
-      background: 'rgba(0, 0, 0, 0.6)', color: '#fff', font: 'bold 12px Tahoma, Arial, sans-serif', padding: '1px 4px', whiteSpace: 'nowrap',
+      background: 'rgba(0, 0, 0, 0.6)', color: '#fff', font: `bold ${nativeTextPx()}px ${FONT_FAMILY}, sans-serif`, padding: '1px 4px', whiteSpace: 'nowrap',
     });
     this.mark = document.createElement('div');
     this.mark.className = 'gens-mark';
@@ -204,7 +205,7 @@ export class GensMarks {
     const head = new THREE.Vector3((this.box.min.x + this.box.max.x) / 2, this.box.max.y, (this.box.min.z + this.box.max.z) / 2).project(camera);
     const scale = window.innerHeight / REFERENCE_HEIGHT;
     Object.assign(this.tag.style, { display: 'block', left: `${rect.left + (head.x + 1) / 2 * rect.width}px`, top: `${rect.top + (1 - head.y) / 2 * rect.height - 4}px` });
-    this.name.style.fontSize = `${Math.round(TEXT_PX * scale * 0.9)}px`;
+    this.name.style.fontSize = `${nativeTextPx()}px`;
     if (this.name.textContent !== character.name) this.name.textContent = character.name;
     const mark = this.markOf(character);
     const sheet = mark ? this.sheets.get(mark.gens) : undefined;

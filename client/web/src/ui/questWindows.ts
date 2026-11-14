@@ -23,6 +23,7 @@ import { loadTooltipData } from '../game/itemTooltip.js';
 import { divideStringByPixel, loadQuestScripts, reduceStringByPixel, setMeasureFont } from '../game/questData.js';
 import { LEGACY_DIALOGS, type LegacyDialog } from '../game/legacyQuestDialog.generated.js';
 import { QuestLog, formatText, monsterName, type QuestEvents, type QuestHero, type RewardRow } from '../game/quests.js';
+import { nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 
@@ -86,7 +87,7 @@ class DockedDocument<M extends RmlModel & { text_px: number }> {
     Object.assign(root.style, {
       left: `${window.innerWidth - (this.column + 1) * PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top',
     });
-    this.model.text_px = Math.round(12 * scale);
+    this.model.text_px = nativeTextPx();
     this.doc.update();
   }
 

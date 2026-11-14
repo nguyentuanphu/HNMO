@@ -17,6 +17,7 @@ import { drawItem } from './itemIcons.js';
 import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { askInGame } from './personalShop.js';
+import { nativeTextPx } from './nativeText.js';
 
 // The desktop's texts (I18N::Game); the shop's own name is the game's name (gameName.ts).
 export const IGS_TEXT = {
@@ -275,7 +276,7 @@ export class CashShop {
     if (!this.doc) return;
     const scale = window.innerHeight / REFERENCE_HEIGHT;
     this.doc.setScale(scale);
-    this.model.text_px = Math.round(12 * scale);
+    this.model.text_px = nativeTextPx();
     const panel = this.doc.$('#panel');
     if (panel) Object.assign(panel.style, { transform: `scale(${scale})`, transformOrigin: 'left top', left: `${this.left(scale)}px`, top: `${this.top(scale)}px` });
     this.placeDialog();

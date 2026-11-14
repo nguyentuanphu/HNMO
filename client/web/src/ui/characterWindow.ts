@@ -14,6 +14,7 @@ import { EQUIPMENT_SLOTS, type Inventory } from '../game/inventory.js';
 import { itemCombatValues, loadTooltipData, type TooltipLine } from '../game/itemTooltip.js';
 import { loadSkillData, skillInfo } from '../game/skills.js';
 import { BaseClass, characterSheet, type CharacterSheet, type HeroStats, type LineSource, type WornItem } from '../game/characterCalc.js';
+import { nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // CHAINFO_WINDOW_WIDTH
 const PVP_NEUTRAL = 3;   // CHARACTER::PK of a player who killed no one
@@ -253,7 +254,7 @@ export class CharacterWindow {
       transformOrigin: 'left top',
     });
     this.doc.setScale(scale);
-    this.model.text_px = Math.round(12 * scale);
+    this.model.text_px = nativeTextPx();
     this.doc.update();
   }
 

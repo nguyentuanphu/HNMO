@@ -3,6 +3,7 @@
 
 import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import { canWarp, loadWarps, warpLevel, type Warp, type WarpCheck } from '../game/warps.js';
+import { nativeTextPx } from './nativeText.js';
 
 interface Row { index: number; strife_text: string; map_name: string; req_level: string; req_zen: string; can_move: boolean; level_unmet: boolean; zen_unmet: boolean }
 interface MoveModel extends RmlModel {
@@ -53,7 +54,7 @@ export class MoveWindow {
     if (!this.doc) return;
     const scale = window.innerHeight / REFERENCE_HEIGHT;
     this.doc.setScale(scale);
-    this.model.text_px = Math.round(12 * scale);
+    this.model.text_px = nativeTextPx();
     const panel = this.doc.$('#panel');
     if (panel) Object.assign(panel.style, { transform: `scale(${scale})`, transformOrigin: 'left top', left: `${Math.max(0, (window.innerWidth - (panel.offsetWidth || 220) * scale) / 2)}px`, top: `${Math.round(40 * scale)}px` });
     this.doc.update();

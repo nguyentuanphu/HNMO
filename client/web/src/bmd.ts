@@ -92,6 +92,11 @@ export async function loadTexture(dirs: string | string[], name: string): Promis
 // Meshes whose texture name starts with "hid" are never drawn (Data::Items::IsHiddenTexture).
 const HIDDEN_TEXTURE_PREFIX = 'hid';
 
+/** Whether a mesh with this texture is never drawn (a "hid…" name or the H texture script). */
+export function isHiddenTexture(textureName: string): boolean {
+  return textureKind(textureName).hidden || textureName.startsWith(HIDDEN_TEXTURE_PREFIX);
+}
+
 export interface MaterialOptions {
   /** Draw additively, like a texture whose name asks for it. */
   glow?: boolean;
@@ -181,6 +186,8 @@ export type LightFactor = (seconds: number) => THREE.Color;
 export interface ModelPart extends GeometryPart {
   mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
   lightFactor?: LightFactor | null;
+  /** The light its look draws it in (the item's render style), times the model's light. */
+  tint?: THREE.Color;
 }
 
 /** Extra meshes drawn over a model's parts (game/itemGlow.js), updated every frame. */
@@ -312,6 +319,7 @@ export class AnimatedModel {
     for (const part of this.parts) {
       if (part.mesh.material.blending === THREE.AdditiveBlending) continue;
       part.mesh.material.color.copy(color);
+      if (part.tint) part.mesh.material.color.multiply(part.tint);
       const factor = part.lightFactor?.(seconds);
       if (factor) part.mesh.material.color.multiply(factor);
     }

@@ -16,6 +16,7 @@ import { itemDefinition, itemModel } from './items.js';
 import { itemConditionsHold, itemNameText, loadTooltipData } from './itemTooltip.js';
 import { REFERENCE_HEIGHT } from '../ui/rml.js';
 import type { AnimatedModel } from '../bmd.js';
+import { FONT_FAMILY, nativeTextPx } from '../ui/nativeText.js';
 
 const DEG = Math.PI / 180;
 const PICKUP_REACH = 2;            // cells (Pickup.h PickupReach)
@@ -137,7 +138,7 @@ export class GroundItems {
     const look = item ?? { ...ZEN, level: 0, excellent: 0, ancientSet: 0 };
     const group = new THREE.Group();
     const label = document.createElement('div');
-    Object.assign(label.style, { position: 'absolute', transform: 'translate(-50%, -100%)', whiteSpace: 'nowrap', display: 'none', padding: '0 2px', fontFamily: 'Tahoma, Arial, sans-serif' });
+    Object.assign(label.style, { position: 'absolute', transform: 'translate(-50%, -100%)', whiteSpace: 'nowrap', display: 'none', padding: '0 2px', fontFamily: `${FONT_FAMILY}, sans-serif` });
     const drop: GroundDrop = { id, cell, item, zen, group, model: null, label };
     this.drops.set(id, drop);
     this.root.add(group);
@@ -147,12 +148,15 @@ export class GroundItems {
     label.textContent = text;
     Object.assign(label.style, { color: style.color ?? '#fff', background: style.background ?? '#000', fontWeight: style.bold ? 'bold' : 'normal' });
     try {
-      const model = await createItemModel({ group: look.group, number: look.number, glowLevel: look.level, excellent: look.excellent > 0, ancient: look.ancientSet > 0 });
+      const model = await createItemModel({ group: look.group, number: look.number, glowLevel: look.level, excellent: look.excellent > 0, ancient: look.ancientSet > 0 }, 'ground');
       if (!model || this.drops.get(id) !== drop) return;
       const display = itemModel(look.group, look.number)?.ground;
-      const [rx, ry, rz] = display?.rotation ?? [0, 0, 0];
+      // ItemGroundDisplay: its default turn, and armour at its height on the character's skeleton (BodyHeight).
+      const [rx, ry, rz] = display?.rotation ?? [0, 0, -45];
       model.group.rotation.set(rx * DEG, ry * DEG, rz * DEG, 'ZYX');
-      model.group.scale.setScalar(display?.scale ?? defaultScale(look));
+      const scale = display?.scale ?? defaultScale(look);
+      model.group.scale.setScalar(scale);
+      if (display?.bodyHeight) model.group.position.copy(new THREE.Vector3(0, 0, display.bodyHeight * scale).applyEuler(model.group.rotation));
       model.pose(0, 0);
       model.setLight(new THREE.Color(1, 1, 1));
       group.add(model.group);
@@ -228,7 +232,7 @@ export class GroundItems {
       const show = this.altHeld || this.hovered === drop;
       const at = show ? this.screenOf(drop) : null;
       if (!at) { drop.label.style.display = 'none'; continue; }
-      Object.assign(drop.label.style, { display: 'block', left: `${at.x}px`, top: `${at.y - LABEL_RAISE * scale}px`, fontSize: `${12 * scale}px` });
+      Object.assign(drop.label.style, { display: 'block', left: `${at.x}px`, top: `${at.y - LABEL_RAISE * scale}px`, fontSize: `${nativeTextPx()}px` });
     }
     const target = this.pickupTarget;
     const hero = this.actions.hero();
