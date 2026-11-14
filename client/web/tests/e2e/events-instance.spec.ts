@@ -116,7 +116,7 @@ test('the Illusion Temple, Doppelganger and Imperial Guardian windows', async ({
   const heroId = await page.evaluate(() => (window as unknown as Win).__game.online.playerId);
   try {
     // A running Illusion Temple (the map as if in the first temple): the ready phase (C1 BF 09, state 1)
-    // opens the HUD with the tutorial; the state (C1 BF 01): 10 minutes, the hero's team MU alliance.
+    // opens the HUD with the tutorial; the state (C1 BF 01): 10 minutes, the hero on the allied team.
     await setMap(page, 45);
     await feed(page, [0xc1, 6, 0xbf, 0x09, 1, 1]);
     await expect(page.locator('.rml-cursed_temple_system #game_time_frame')).toBeVisible(OPEN);
@@ -138,7 +138,7 @@ test('the Illusion Temple, Doppelganger and Imperial Guardian windows', async ({
     await expect(page.locator('.rml-cursed_temple_system #ct_kills .ct-digit')).toHaveCount(1, OPEN);
     await page.waitForTimeout(2_000);
     await page.screenshot({ path: 'test-results/events-temple-hud.png' });
-    // The result (C1 BF 04): MU alliance 2, Illusion Sorcery 1, the hero on the winning side.
+    // The result (C1 BF 04): the allies 2, the Illusion Sorcery 1, the hero on the winning side.
     const player = (who: string, team: number, packedClass: number, exp: number) => [...name10(who), 45, team, packedClass, 0, 0, 0, ...u32(exp)];
     const result = [0xc1, 7 + 40, 0xbf, 0x04, 2, 1, 2, ...player('quest2Dl', 0, 0x34, 152340), ...player('Rival', 1, 0x00, 64210)];
     await feed(page, result);
