@@ -20,7 +20,7 @@ has HNMO running.
 
 ## 2. Play on your own computer (offline or as a host)
 
-1. Download **[HNMO-windows.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-windows.zip)**
+1. Download **[HNMO.zip](https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO.zip)**
    (about 700 MB; this link always gives the newest version).
 2. Right-click the zip and choose **Extract All**. You get a folder called `HNMO`.
 3. Open it and double-click **Start HNMO.bat**. Keep the window that opens; closing

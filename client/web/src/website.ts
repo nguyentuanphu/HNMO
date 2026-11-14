@@ -89,8 +89,8 @@ const copy = {
       "Open the browser client, select your server, and create your character.",
     download: "Take the realm with you",
     downloadText:
-      "Download the latest Windows launcher. Extract it and run Start HNMO.bat.",
-    downloadLink: "Download Windows launcher →",
+      "One download for Windows, Ubuntu and macOS. Unzip it and run Start HNMO.bat (Windows) or start-hnmo.sh (Ubuntu, macOS).",
+    downloadLink: "Download HNMO →",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -203,8 +203,8 @@ const copy = {
     chooseText: "Mở trò chơi trên trình duyệt, chọn máy chủ và tạo nhân vật.",
     download: "Mang theo thế giới của bạn",
     downloadText:
-      "Tải trình khởi chạy Windows mới nhất. Giải nén và chạy Start HNMO.bat.",
-    downloadLink: "Tải trình khởi chạy Windows →",
+      "Một bản tải cho Windows, Ubuntu và macOS. Giải nén rồi chạy Start HNMO.bat (Windows) hoặc start-hnmo.sh (Ubuntu, macOS).",
+    downloadLink: "Tải HNMO →",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:

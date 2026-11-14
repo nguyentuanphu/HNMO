@@ -4,7 +4,7 @@
 # installed on the computer that runs it: .NET is included.
 #
 # Usage: web/tools/package-hnmo.sh <path to the server source (the HNMO server)> [runtime] [output folder] [--no-data]
-#   runtime: win-x64 (default), linux-x64, osx-arm64, ...
+#   runtime: portable (one folder for Windows, Linux and macOS), or one system: win-x64 (default), linux-x64, osx-arm64, ...
 #   --no-data: leave the game data out (copy src/bin/Data into HNMO/Data yourself)
 # Environment:
 #   POSTGRES_DIR: a portable PostgreSQL (with bin/, lib/, share/) to put into the folder,
@@ -24,20 +24,50 @@ echo "Building HNMO for $RUNTIME into $OUT"
 rm -rf "$OUT"
 mkdir -p "$OUT"
 
-# The game server as a single self-contained executable (plus the Blazor static-web-assets
-# manifest, wwwroot and a couple of config files), instead of hundreds of loose DLLs. Plugin
-# discovery scans the assemblies loaded into the process (AppDomain.GetAssemblies), which load
-# transparently from the bundle, so [PlugIn] discovery and the admin panel keep working.
-# .pdb / .xml are dropped to keep the folder small.
-dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release -r "$RUNTIME" --self-contained \
-  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
-  -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
-  -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
-  -o "$OUT/server" -v quiet
-dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet \
-  -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
-  -p:AllowedReferenceRelatedFileExtensions=.no-related-files
-find "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "*.xml" \) -delete
+if [ "$RUNTIME" = portable ]; then
+  # One folder for every system: the server and the web server as portable .NET programs (built once),
+  # and Microsoft's .NET runtime for each system next to them (runtime/<system>). The start files pick
+  # the runtime of the computer they run on; the web server starts the game server with the same one.
+  # Lighter than a self-contained build per system (that carries the runtime twice: server and web).
+  # (No UseAppHost=false here: it would reach the build's own code generator, which needs its app host.
+  #  The two app hosts of this build machine's system are removed below instead.)
+  dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release --no-self-contained \
+    -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
+    -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
+    -o "$OUT/server" -v quiet
+  dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release --no-self-contained -o "$OUT/web" -v quiet \
+    -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
+    -p:AllowedReferenceRelatedFileExtensions=.no-related-files
+  rm -f "$OUT/server/HNMO.Startup" "$OUT/server/HNMO.Startup.exe" "$OUT/web/HNMO" "$OUT/web/HNMO.exe"
+  # Debug symbols and the code documentation (HNMO.*.xml) aren't needed to run.
+  find "$OUT/server" "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "HNMO.*.xml" \) -delete
+  ASPNET_VERSION="${HNMO_RUNTIME_VERSION:-$(dotnet --list-runtimes | awk '/Microsoft.AspNetCore.App/{v=$2} END{print v}')}"
+  echo "Adding the .NET runtime $ASPNET_VERSION for Windows, Linux and macOS"
+  for rid in win-x64 linux-x64 osx-arm64 osx-x64; do
+    ext=$([ "$rid" = win-x64 ] && echo zip || echo tar.gz)
+    url="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/$ASPNET_VERSION/aspnetcore-runtime-$ASPNET_VERSION-$rid.$ext"
+    mkdir -p "$OUT/runtime/$rid"
+    curl -fsSL -o "$OUT/runtime/$rid.$ext" "$url"
+    if [ "$ext" = zip ]; then unzip -q "$OUT/runtime/$rid.$ext" -d "$OUT/runtime/$rid"; else tar -xzf "$OUT/runtime/$rid.$ext" -C "$OUT/runtime/$rid"; fi
+    rm -f "$OUT/runtime/$rid.$ext"
+    # The runtime's own licence texts stay with it (ThirdPartyNotices, LICENSE).
+  done
+else
+  # The game server as a single self-contained executable (plus the Blazor static-web-assets
+  # manifest, wwwroot and a couple of config files), instead of hundreds of loose DLLs. Plugin
+  # discovery scans the assemblies loaded into the process (AppDomain.GetAssemblies), which load
+  # transparently from the bundle, so [PlugIn] discovery and the admin panel keep working.
+  # .pdb / .xml are dropped to keep the folder small.
+  dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release -r "$RUNTIME" --self-contained \
+    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+    -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
+    -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
+    -o "$OUT/server" -v quiet
+  dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet \
+    -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
+    -p:AllowedReferenceRelatedFileExtensions=.no-related-files
+  find "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "*.xml" \) -delete
+fi
 
 # The web client (TypeScript, built and type-checked here; a type error stops the build) and its library
 echo "Building the web client"
@@ -181,11 +211,11 @@ if [ -n "$SIGN_KEY_FILE" ]; then
     cd "$OUT"
     MANIFEST_FILES=()
     # The single-file server executable (and any loose HNMO.*.dll, e.g. a non-single-file build).
-    for exe in server/HNMO.Startup server/HNMO.Startup.exe; do
+    for exe in server/HNMO.Startup server/HNMO.Startup.exe server/HNMO.Startup.dll; do
       [ -f "$exe" ] && MANIFEST_FILES+=("$exe")
     done
     while IFS= read -r f; do MANIFEST_FILES+=("$f"); done < <(find server -maxdepth 1 -name 'HNMO.*.dll' | sort)
-    for launcher in web/HNMO web/HNMO.exe; do
+    for launcher in web/HNMO web/HNMO.exe web/HNMO.dll; do
       [ -f "$launcher" ] && MANIFEST_FILES+=("$launcher")
     done
     for bundle in web/wwwroot/js/main.min.js web/wwwroot/js/main.js; do

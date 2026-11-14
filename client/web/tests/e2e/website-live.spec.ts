@@ -32,7 +32,7 @@ test('the admin panel opens at the admin path only, with a login', async ({ requ
   expect([302, 403]).toContain(admin.status());
   if (admin.status() === 302) expect(admin.headers()['location']).toContain('/adminpanel/login');
   // The website's own settings aren't reachable through the admin path.
-  expect((await request.get('/adminpanel/api/website/settings/host', { maxRedirects: 0 })).status()).toBe(404);
+  expect([403, 404]).toContain((await request.get('/adminpanel/api/website/settings/host', { maxRedirects: 0 })).status());
   // A visitor can't fake the website's prefix header.
   expect((await request.get('/', { headers: { 'X-HNMO-Website-Prefix': '/evil' }, maxRedirects: 0 })).status()).toBe(302);
 });

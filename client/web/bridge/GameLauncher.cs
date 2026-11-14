@@ -45,7 +45,53 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
     private string LogDirectory => Path.Combine(this.Full(options.SavePath), "logs");
 
-    private string PostgresTool(string name) => Path.Combine(this.Full(options.PostgresPath), OperatingSystem.IsWindows() ? name + ".exe" : name);
+    private string? _postgresBin;
+
+    private string PostgresTool(string name) => Path.Combine(this._postgresBin ??= this.FindPostgres(), OperatingSystem.IsWindows() ? name + ".exe" : name);
+
+    // The folder's own PostgreSQL (Windows), else one installed on the computer (Ubuntu: apt install
+    // postgresql-16; macOS: brew install postgresql@16 or Postgres.app).
+    private string FindPostgres()
+    {
+        var tool = OperatingSystem.IsWindows() ? "pg_ctl.exe" : "pg_ctl";
+        var candidates = new List<string> { this.Full(options.PostgresPath) };
+        if (OperatingSystem.IsLinux())
+        {
+            foreach (var version in new[] { "17", "16", "15", "14" })
+            {
+                candidates.Add($"/usr/lib/postgresql/{version}/bin");
+            }
+
+            candidates.Add("/usr/pgsql-16/bin");
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            foreach (var root in new[] { "/opt/homebrew/opt", "/usr/local/opt" })
+            {
+                foreach (var version in new[] { "postgresql@17", "postgresql@16", "postgresql@15", "postgresql" })
+                {
+                    candidates.Add($"{root}/{version}/bin");
+                }
+            }
+
+            candidates.Add("/Applications/Postgres.app/Contents/Versions/latest/bin");
+            candidates.Add("/opt/homebrew/bin");
+            candidates.Add("/usr/local/bin");
+        }
+
+        candidates.AddRange((Environment.GetEnvironmentVariable("PATH") ?? string.Empty).Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries));
+        var found = candidates.FirstOrDefault(directory => File.Exists(Path.Combine(directory, tool)));
+        if (found is null)
+        {
+            var hint = OperatingSystem.IsMacOS() ? "brew install postgresql@16 (or Postgres.app)"
+                : OperatingSystem.IsLinux() ? "sudo apt install postgresql-16"
+                : "the folder's postgres folder is missing";
+            throw new InvalidOperationException($"PostgreSQL wasn't found. Install it: {hint}.");
+        }
+
+        logger.LogInformation("PostgreSQL: {Path}", found);
+        return found;
+    }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -133,7 +179,16 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
     {
         var serverDirectory = this.Full(options.ServerPath);
         var program = Path.Combine(serverDirectory, OperatingSystem.IsWindows() ? options.ServerProgram + ".exe" : options.ServerProgram);
-        var start = new ProcessStartInfo(program, ["-autostart", "-resolveIP:loopback", "-deamon"])
+        string[] arguments = ["-autostart", "-resolveIP:loopback", "-deamon"];
+        if (!File.Exists(program) && File.Exists(Path.Combine(serverDirectory, options.ServerProgram + ".dll")))
+        {
+            // The folder for every system: the server is a portable .NET program, started with the same
+            // .NET runtime this web server runs on (the folder's runtime for this system).
+            arguments = [Path.Combine(serverDirectory, options.ServerProgram + ".dll"), .. arguments];
+            program = Environment.ProcessPath ?? "dotnet";
+        }
+
+        var start = new ProcessStartInfo(program, arguments)
         {
             WorkingDirectory = serverDirectory,
             UseShellExecute = false,

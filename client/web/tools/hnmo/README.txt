@@ -2,13 +2,18 @@ HNMO
 ====
 
 Everything in this folder: the game, its server and admin panel, and a small
-database that keeps your progress. You play in a web browser. Nothing needs to be
-installed.
+database that keeps your progress. You play in a web browser. The same folder runs on
+Windows, Ubuntu/Linux and macOS (runtime/ has what each system needs).
 
 START
   Windows: double-click "Start HNMO.bat". One window opens; keep it open while you
            play, close it to stop the game (your progress is saved).
-  Linux/Mac: run ./start-hnmo.sh (Ctrl+C stops it).
+  Ubuntu/Linux: once, install PostgreSQL 16: sudo apt install postgresql-16
+           Then run ./start-hnmo.sh (Ctrl+C stops it).
+  macOS:   once, install PostgreSQL 16: brew install postgresql@16 (or Postgres.app),
+           and allow the folder: xattr -dr com.apple.quarantine HNMO
+           Then run ./start-hnmo.sh in Terminal (Ctrl+C stops it).
+  (Windows needs nothing installed: its database is in the folder.)
 
   The website opens in your browser at http://localhost:8080/ when it's ready: server
   information, rankings, the event schedule, accounts. The game loads in the background;

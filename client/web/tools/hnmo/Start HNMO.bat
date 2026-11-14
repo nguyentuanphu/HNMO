@@ -9,7 +9,12 @@ if not exist "Data\Monsters" (
   exit /b 1
 )
 cd web
-HNMO.exe
+rem The folder for every system has the .NET runtime in runtime\win-x64; a Windows-only folder has HNMO.exe.
+if exist "..\runtime\win-x64\dotnet.exe" (
+  "..\runtime\win-x64\dotnet.exe" HNMO.dll
+) else (
+  HNMO.exe
+)
 if errorlevel 1 (
   echo.
   echo HNMO stopped because of the problem shown above.
