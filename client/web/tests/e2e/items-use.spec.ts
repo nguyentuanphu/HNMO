@@ -43,7 +43,7 @@ test('potions on Q W E R and right-click use in the bag', async ({ page }) => {
 
   // The key configuration arrived; Q drinks healing potions and shows how many are left.
   const healing = await potions(page, HEALING);
-  expect(healing).toBeGreaterThan(1);
+  expect(healing, 'test1 needs a healing potion (each local run drinks one)').toBeGreaterThan(0);
   await expect.poll(() => slotCount(page, 0)).toBe(String(healing));
   await expect(page.locator('.rml-main_frame #item_slot_0 canvas.item-icon')).toBeVisible();
 
