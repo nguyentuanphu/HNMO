@@ -45,6 +45,9 @@ test('schedule, rankings and drops come from the server, in both languages', asy
   await expect(page.locator('#upcoming')).toContainText('Huyết Lâu');
   await expect(page.locator('#event-list .event h3')).toHaveText('Huyết Lâu');
   await expect(page.locator('#drop-table')).toContainText('Hộp May Mắn');
+  // A class name the server sends in English shows with the game's Vietnamese name (Blade Master: Thiên Kiếm).
+  await expect(page.locator('#ranking')).toContainText('Thiên Kiếm');
+  await expect(page.locator('#event-table')).toContainText('Thiên Kiếm');
 });
 
 test('without the server nothing old is shown and the page says so', async ({ page }) => {

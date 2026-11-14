@@ -295,8 +295,30 @@ function node(tag: string, text: string, className = ""): HTMLElement {
   item.className = className;
   return item;
 }
+// The game's own Vietnamese texts (the web game's /data/lang/vi.json): class, event and other names the
+// server sends only in English are shown with the game's Vietnamese name.
+let gameVietnamese: Record<string, string> | null = null;
+let gameVietnameseLoading = false;
+function loadGameVietnamese(): void {
+  if (gameVietnamese || gameVietnameseLoading) return;
+  gameVietnameseLoading = true;
+  fetch("/data/lang/vi.json", { cache: "force-cache" })
+    .then((response) => (response.ok ? response.json() : null))
+    .then((data: { texts?: Record<string, string> } | null) => {
+      gameVietnamese = data?.texts ?? {};
+      render();
+      renderDetails();
+    })
+    .catch(() => { gameVietnamese = {}; });
+}
+
 function localized(value: string | null): string {
   const parts = (value ?? "").split("||");
+  if (language === "vi" && parts.length === 1 && parts[0]) {
+    loadGameVietnamese();
+    const game = gameVietnamese?.[parts[0]];
+    if (game) return game;
+  }
   const translated = parts
     .slice(1)
     .find(
@@ -704,7 +726,7 @@ function renderDetails(): void {
   const characters = details?.characters;
   if (characters === null || characters === undefined) table("ranking", [], [], details ? t("partUnavailable") : "");
   else table("ranking", [[t("rank"), false], [t("character"), false], [t("className"), false], [t("level"), true], [t("masterShort"), true], [t("resets"), true]],
-    characters.map((c) => [c.rank, c.name, c.className, c.level, c.masterLevel, c.resets]), t("noRanking"));
+    characters.map((c) => [c.rank, c.name, localized(c.className), c.level, c.masterLevel, c.resets]), t("noRanking"));
   // Event rankings.
   const select = element("event-ranking") as HTMLSelectElement;
   const boards = details?.eventRankings ?? [];
@@ -714,7 +736,7 @@ function renderDetails(): void {
   const board = boards.find((entry) => entry.type === eventType);
   if (!details?.eventRankings) table("event-table", [], [], details ? t("partUnavailable") : "");
   else table("event-table", [[t("rank"), false], [t("character"), false], [t("className"), false], [t("score"), true], [t("games"), true]],
-    (board?.entries ?? []).map((e) => [e.rank, e.name, e.className, e.score, e.games]), t("noRanking"));
+    (board?.entries ?? []).map((e) => [e.rank, e.name, localized(e.className), e.score, e.games]), t("noRanking"));
   // Drops.
   const drops = details?.drops;
   if (drops === null || drops === undefined) table("drop-table", [], [], details ? t("partUnavailable") : "");
