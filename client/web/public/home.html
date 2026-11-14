@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#11110e" />
+    <title>{game}</title>
+    <link rel="stylesheet" href="/home.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#"
+        ><span class="crest">H</span><span data-game-name></span
+      ></a>
+      <nav>
+        <a href="#realm" data-t="realm"></a
+        ><a href="#events" data-t="events"></a
+        ><a href="#world" data-t="world"></a
+        ><a href="#start" data-t="start"></a>
+      </nav>
+      <div class="languages">
+        <button id="en" lang="en">EN</button
+        ><button id="vi" lang="vi">VI</button>
+      </div>
+      <a class="small-button" href="/account.html" data-t="account"></a>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="hero-art" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow" data-t="eyebrow"></p>
+          <h1 data-t="hero"></h1>
+          <p class="intro" data-t="intro"></p>
+          <div class="actions">
+            <a class="primary" href="/index.html" data-t="play"></a
+            ><a class="secondary" href="#realm" data-t="explore"></a>
+          </div>
+          <p class="caption" data-t="browser"></p>
+        </div>
+        <div class="hero-footer">
+          <span data-t="live"></span><span id="connection" role="status"></span
+          ><button id="refresh" data-t="refresh"></button>
+        </div>
+      </section>
+      <section id="realm">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-t="source"></p>
+            <h2 data-t="realmTitle"></h2>
+          </div>
+          <label
+            ><span data-t="server"></span>
+            <select id="server" aria-label="Server"></select
+          ></label>
+        </div>
+        <p id="notice" role="status"></p>
+        <div class="stats" id="stats"></div>
+        <div class="realm-bottom">
+          <p data-t="truth"></p>
+          <span id="updated"></span>
+        </div>
+      </section>
+      <section id="events">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 / <span data-t="events"></span></p>
+            <h2 data-t="eventTitle"></h2>
+          </div>
+          <span class="muted" data-t="eventHint"></span>
+        </div>
+        <div id="event-list" class="event-list"></div>
+      </section>
+      <section id="world">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 / <span data-t="world"></span></p>
+            <h2 data-t="worldTitle"></h2>
+          </div>
+        </div>
+        <div class="world-grid">
+          <article class="panel">
+            <h3 data-t="classes"></h3>
+            <div id="classes" class="class-list"></div>
+          </article>
+          <article class="panel">
+            <div class="map-head">
+              <h3 data-t="maps"></h3>
+              <input
+                id="search"
+                type="search"
+                data-placeholder="search"
+                aria-label="Search maps"
+              />
+            </div>
+            <div id="maps" class="maps"></div>
+          </article>
+        </div>
+      </section>
+      <section id="start" class="start">
+        <p class="eyebrow" data-t="adventure"></p>
+        <h2 data-t="startTitle"></h2>
+        <div class="steps">
+          <article>
+            <b>01</b>
+            <h3 data-t="create"></h3>
+            <p data-t="createText"></p>
+            <a href="/account.html" data-t="account"></a>
+          </article>
+          <article>
+            <b>02</b>
+            <h3 data-t="choose"></h3>
+            <p data-t="chooseText"></p>
+            <a href="/index.html" data-t="play"></a>
+          </article>
+          <article>
+            <b>03</b>
+            <h3 data-t="download"></h3>
+            <p data-t="downloadText"></p>
+            <a
+              href="https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-windows.zip"
+              data-t="downloadLink"
+            ></a>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span data-game-name></span><span data-t="footer"></span
+      ><a href="#" data-t="top"></a>
+    </footer>
+    <script type="module" src="/js/website.js"></script>
+  </body>
+</html>
