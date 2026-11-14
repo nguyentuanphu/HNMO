@@ -66,7 +66,7 @@ import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, init
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect } from './render/effects/index.js';
-import { helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
+import { DarkRaven, helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -78,6 +78,7 @@ import type { Character } from './game/characters.js';
 import type { AppearanceItem, EquipmentAppearance, EquipmentSlotName, ItemChoice } from './game/items.js';
 import type { CharacterListEntry } from './net/session.js';
 import type { Connection } from './net/connection.js';
+import { read } from './net/packets.js';
 import { HNMO_BUILD_STAMP, HNMO_PROJECT_ID } from './build.js';
 
 // Record the build stamp so it survives bundling/minification and can be read from a
@@ -705,6 +706,21 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     hero: () => online.hero,
     walkTo: (cell) => { online.walkTo(cell); },
     send: (id) => connection.send('ClientToServer', 'PickupItemRequest', { ItemId: id }),
+  });
+  // The Dark Raven's attacks the server reports (ReceivePetAttack, C1 A8): a rush at the target or a missile.
+  connection.onPacket((bytes) => {
+    if (bytes[0] !== 0xc1 || bytes[2] !== 0xa8 || bytes.length < 9) return;
+    const packet = read<{ Pet: number; SkillType: number; OwnerId: number; TargetId: number }>('ServerToClient', 'PetAttack', bytes);
+    const ownerId = packet.OwnerId & 0x7fff; // the high bit marks a new object
+    const owner = ownerId === online.playerId ? online.hero : online.characters.get(ownerId);
+    const target = online.characters.get(packet.TargetId & 0x7fff);
+    const raven = owner?.companions.find((c): c is DarkRaven => c instanceof DarkRaven);
+    if (!raven || !target) return;
+    raven.attack({
+      target: () => (target.group.parent ? new THREE.Vector3(target.position.x, target.position.y, target.group.position.z) : null),
+      magic: packet.SkillType === 1,
+      sound: (id) => sounds.audio.play(id),
+    });
   });
   // Rudolph, the Panda, the Unicorn and the Skeleton pick up the hero's zen nearby (PetActionCollecter).
   setZenCollector({

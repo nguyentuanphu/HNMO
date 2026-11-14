@@ -163,3 +163,63 @@ test('a knight rides its Fenrir outside the town', async ({ page }) => {
   expect(await page.evaluate(() => (window as unknown as Win).__game.mapNumber)).toBe(0);
   await expectNoPageErrors(errors);
 });
+
+// The Dark Raven's attacks (ReceivePetAttack, CSPetSystem::SetAttack): the server's PetAttack makes it rush
+// at the target (PET_ATTACK, then PET_ESCAPE) or, for a range attack, turn to it and cast its missile
+// (PET_ATTACK_MAGIC), then fly on. The attacks are fed to the client as the server sends them.
+test('the Dark Raven rushes at and casts at the target the server names', async ({ page }) => {
+  test.setTimeout(5 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await enterAs(page, 'test300', 'test300Dl');
+  if (await page.evaluate(() => (window as unknown as Win).__game.mapNumber) !== 0) {
+    await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+    await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.mapNumber), { timeout: 60_000 }).toBe(0);
+  }
+  type RavenGame = { hero: { companions: { kind: string; ai?: number }[] }; online: { playerId: number; characters: Map<number, { id: number; kind: string }> }; connection: { dispatch(bytes: Uint8Array): void } };
+  const ravenAi = () => page.evaluate(() => (window as unknown as { __game: RavenGame }).__game.hero.companions.find((c) => c.kind === 'darkRaven')?.ai ?? -1);
+  // The account keeps its raven in the bag: into the left hand (slot 1), whatever is there into the bag.
+  type Inv = { items: Map<number, { group: number; number: number }>; firstEmptySlot(s: unknown, g: unknown, i: unknown): number | null; move(a: number, b: number, c: number, d: number): void };
+  const ravenIn = () => page.evaluate(() => { const inv = (window as unknown as { __game: { inventory: Inv } }).__game.inventory; return [...inv.items].find(([, it]) => it.group === 13 && it.number === 5)?.[0] ?? -1; });
+  await expect.poll(ravenIn, { timeout: 60_000 }).toBeGreaterThanOrEqual(0);
+  if (await ravenIn() !== 1) {
+    await page.evaluate(async () => {
+      const { BAG } = await import('/js/game/inventory.js' as string) as { BAG: unknown };
+      const inv = (window as unknown as { __game: { inventory: Inv } }).__game.inventory;
+      const held = inv.items.get(1);
+      if (held) { const free = inv.firstEmptySlot(inv.items, BAG, held); if (free !== null) inv.move(0, 1, 0, free); }
+    });
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __game: { inventory: Inv } }).__game.inventory.items.has(1)), { timeout: 30_000 }).toBe(false);
+    await page.evaluate(() => { const inv = (window as unknown as { __game: { inventory: Inv } }).__game.inventory; const at = [...inv.items].find(([, it]) => it.group === 13 && it.number === 5)![0]; inv.move(0, at, 0, 1); });
+    await expect.poll(ravenIn, { timeout: 30_000 }).toBe(1);
+  }
+  await expect.poll(ravenAi, { timeout: 60_000 }).toBeGreaterThanOrEqual(0);
+  await walkAndWait(page, await fieldCell(page));
+  await page.waitForTimeout(2000);
+  const attack = (skillType: number) => page.evaluate(async (type) => {
+    const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
+    const g = (window as unknown as { __game: RavenGame }).__game;
+    const target = [...g.online.characters.values()].find((c) => c.kind === 'monster') ?? [...g.online.characters.values()][0];
+    if (!target) return false;
+    g.connection.dispatch(write('ServerToClient', 'PetAttack', { Pet: 0, SkillType: type, OwnerId: g.online.playerId, TargetId: target.id }));
+    return true;
+  }, skillType);
+  // Every state the raven takes from here on.
+  await page.evaluate(() => {
+    const raven = (window as unknown as { __game: RavenGame }).__game.hero.companions.find((c) => c.kind === 'darkRaven') as unknown as { setAi(ai: number): void; history: number[] };
+    raven.history = [];
+    const setAi = raven.setAi.bind(raven);
+    raven.setAi = (ai) => { raven.history.push(ai); setAi(ai); };
+  });
+  const history = () => page.evaluate(() => ((window as unknown as { __game: RavenGame }).__game.hero.companions.find((c) => c.kind === 'darkRaven') as unknown as { history: number[] }).history.join(','));
+  await expect.poll(() => attack(0), { timeout: 60_000 }).toBe(true);
+  // The rush (5), then flying off (6), then on as before (0 / 1).
+  await expect.poll(history, { timeout: 30_000 }).toMatch(/(^|,)5,6,[01]/);
+  // The range attack (7), then on (0).
+  await page.evaluate(() => { ((window as unknown as { __game: RavenGame }).__game.hero.companions.find((c) => c.kind === 'darkRaven') as unknown as { history: number[] }).history = []; });
+  expect(await attack(1)).toBe(true);
+  await expect.poll(history, { timeout: 30_000 }).toMatch(/(^|,)7,0/);
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await page.waitForTimeout(3000);
+  await expectNoPageErrors(errors);
+});

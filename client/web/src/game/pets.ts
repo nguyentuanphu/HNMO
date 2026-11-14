@@ -660,13 +660,55 @@ class Pet extends Companion {
 
 // --- the Dark Raven: CSPetDarkSpirit, flying around and sitting on the shoulder in a safe zone ---
 
-const PetAi = { FLYING: 0, FLY: 1, STAND: 3, STAND_START: 4 } as const;
+const PetAi = { FLYING: 0, FLY: 1, STAND: 3, STAND_START: 4, ATTACK: 5, ESCAPE: 6, ATTACK_MAGIC: 7 } as const;
 type PetAiState = typeof PetAi[keyof typeof PetAi];
+const RAVEN_MAGIC_TURN = 40; // RavenMagicTurnDegrees
 
-class DarkRaven extends Companion {
+/** The raven's attack the server reports (PetAttack): its target's position, and a single or a range attack. */
+export interface RavenAttack { target: () => THREE.Vector3 | null; magic: boolean; sound?: (id: string) => void }
+
+export class DarkRaven extends Companion {
   ai: PetAiState = PetAi.FLYING;
   private moveVelocity = 1;
   private lifeTime = 0;
+  private gravity = 0;
+  private attackTime = 0;
+  private attackTarget: (() => THREE.Vector3 | null) | null = null;
+  private missileTo: THREE.Vector3 | null = null;
+
+  // AttackEffect: the rush's glow, the range attack's lights on the body while it gathers, then the
+  // missile's lights from the raven to the target.
+  override effects(effects: EffectSystem): void {
+    if (this.ai === PetAi.ATTACK && this.attackTime <= 2) {
+      effects.createSprite('light', this.position.clone(), 2, new THREE.Vector3(1, 0.8, 0.6));
+    } else if (this.ai === PetAi.ATTACK_MAGIC && this.attackTime < 15) {
+      for (let bone = rand(2); bone < 66; bone += 8) effects.createSprite('light', this.bonePoint(bone, 0, 0, 0), 1.3, new THREE.Vector3(1, 0.6, 0.4));
+    }
+    if (this.missileTo) {
+      const from = this.position.clone();
+      for (let step = 1; step <= 8; step++) {
+        effects.createSprite('light', from.clone().lerp(this.missileTo, step / 8), 1.5, new THREE.Vector3(1, 0.6, 0.4));
+      }
+      this.missileTo = null;
+    }
+  }
+
+  /**
+   * CSPetSystem::SetAttack: a single-target attack rushes at the target (PET_ATTACK, gaining speed, then
+   * flies off, PET_ESCAPE); a range attack turns to it and casts a missile (PET_ATTACK_MAGIC).
+   */
+  attack({ target, magic, sound }: RavenAttack): void {
+    this.attackTarget = target;
+    this.attackTime = 0;
+    this.setAi(magic ? PetAi.ATTACK_MAGIC : PetAi.ATTACK);
+    if (!magic) {
+      this.moveVelocity = Math.random() * 9 + 20;
+      this.gravity = 0.5;
+      sound?.('SOUND_DSPIRIT_RUSH');
+    } else {
+      sound?.('SOUND_DSPIRIT_MISSILE');
+    }
+  }
 
   protected start(owner: CompanionOwner): void {
     this.scale = 0.7;
@@ -683,10 +725,17 @@ class DarkRaven extends Companion {
     this.lifeTime = 0;
   }
 
+  // A slow frame (more ticks than one update runs) doesn't cut an attack short; a long pause still
+  // brings it back next to its owner.
+  protected override catchUp(owner: CompanionOwner): void {
+    if (this.ai < PetAi.ATTACK) this.start(owner);
+  }
+
   protected tick(owner: CompanionOwner): void {
     const target = ownerPosition(owner, new THREE.Vector3());
     if (owner.safeZone) {
       if (this.ai !== PetAi.STAND && this.ai !== PetAi.STAND_START) {
+        this.attackTarget = null;
         // SetAI(PET_STAND), then always on to PET_STAND_START: it flies to the shoulder first.
         this.setAi(PetAi.STAND_START);
         this.moveVelocity = 3;
@@ -699,6 +748,8 @@ class DarkRaven extends Companion {
       if (this.ai === PetAi.FLY) this.setAction(0);
       else if (this.ai === PetAi.FLYING) this.setAction(1);
       else if (this.ai === PetAi.STAND) this.setAction(2);
+      else if (this.ai === PetAi.ATTACK || this.ai === PetAi.ESCAPE) this.setAction(3);
+      else if (this.ai === PetAi.ATTACK_MAGIC) this.setAction(0);
       else this.setAction(1);
     }
 
@@ -728,6 +779,26 @@ class DarkRaven extends Companion {
       }
       if (this.direction.y < -12) { if (this.ai !== PetAi.FLYING) this.setAi(PetAi.FLYING); }
       else if (this.ai !== PetAi.FLY) this.setAi(PetAi.FLY);
+    } else if (this.ai === PetAi.ATTACK || this.ai === PetAi.ESCAPE) {
+      this.position.add(rotateByAngle(new THREE.Vector3(0, -this.moveVelocity, 0), this.angle));
+      if (this.ai === PetAi.ATTACK) {
+        const goal = this.attackTarget?.();
+        const distance = goal ? moveHumming(this.position, this.angle, goal.clone().setZ(goal.z + 50), this.moveVelocity) : 0;
+        if (!goal || distance < 20 || this.lifeTime > 20) {
+          this.setAi(PetAi.ESCAPE);
+          this.angle.x = -45;
+        }
+        this.moveVelocity += this.gravity;
+        this.gravity += 0.2;
+        this.lifeTime += 1;
+      } else {
+        if (range.x * range.x + range.y * range.y >= (flyRange + 100) ** 2) this.setAi(PetAi.FLYING);
+        this.moveVelocity -= 1;
+      }
+      this.setAction(3);
+    } else if (this.ai === PetAi.ATTACK_MAGIC) {
+      const goal = this.attackTarget?.();
+      if (goal) this.angle.z = turnAngle2(this.angle.z, createAngle2D(this.position, goal), RAVEN_MAGIC_TURN);
     } else if (this.ai === PetAi.STAND) {
       ownerBonePoint(owner, 37, new THREE.Vector3(-10, 0, 10), this.position);
       this.angle.set(0, 0, ownerAngleDegrees(owner) - 120);
@@ -739,6 +810,13 @@ class DarkRaven extends Companion {
       if (distance < 50) this.setAi(PetAi.STAND);
     }
 
+    if (this.ai >= PetAi.ATTACK) this.attackTime = Math.min(this.attackTime + 1, 15);
+    // The range attack: after 15 ticks of gathering light, the missile goes to the target (AttackEffect).
+    if (this.ai === PetAi.ATTACK_MAGIC && this.attackTime >= 15) {
+      this.missileTo = this.attackTarget?.()?.clone() ?? null;
+      this.setAi(PetAi.FLYING);
+      this.attackTime = 0;
+    }
     // Lost far below or away: back over the owner.
     const away = range.x * range.x + range.y * range.y;
     if (this.position.z < target.z - 200 || away > 409600) this.lifeTime += 1;
