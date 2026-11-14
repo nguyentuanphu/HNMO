@@ -140,6 +140,39 @@ public sealed class SkillList : ISkillList, IDisposable
     }
 
     /// <inheritdoc/>
+    public async ValueTask<bool> RemoveLearnedSkillAsync(ushort skillId)
+    {
+        var learnedEntries = this._learnedSkills.Where(s => s.Skill!.Number.ToUnsigned() == skillId).ToList();
+        if (learnedEntries.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var entry in learnedEntries)
+        {
+            this._learnedSkills.Remove(entry);
+            ReleaseCharacterDependentState(entry);
+
+            // Removing it from the collection would only detach the stored entry from the character.
+            await this._player.PersistenceContext.DeleteAsync(entry).ConfigureAwait(false);
+        }
+
+        if (this._itemSkills.FirstOrDefault(s => s.Skill!.Number.ToUnsigned() == skillId) is { } itemSkill)
+        {
+            // An equipped item still grants the skill, so it stays available as the item's skill.
+            this._availableSkills[skillId] = itemSkill;
+            return true;
+        }
+
+        if (this._availableSkills.Remove(skillId, out var removed))
+        {
+            await this._player.InvokeViewPlugInAsync<ISkillListViewPlugIn>(p => p.RemoveSkillAsync(removed.Skill!)).ConfigureAwait(false);
+        }
+
+        return true;
+    }
+
+    /// <inheritdoc/>
     public bool ContainsSkill(ushort skillId)
     {
         return this._availableSkills.ContainsKey(skillId);

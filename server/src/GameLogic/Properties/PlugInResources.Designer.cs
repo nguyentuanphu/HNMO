@@ -5193,5 +5193,41 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("SoulDrainSkillPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO skills of a character (administration)
+        /// </summary>
+        public static string HnmoSkillsAdminOperationPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoSkillsAdminOperationPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Lets the admin panel grant or remove the HNMO skills (700 to 727) of a character which is in the game, e.g. the fourth skill of the class without its trial quest.
+        /// </summary>
+        public static string HnmoSkillsAdminOperationPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoSkillsAdminOperationPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cash shop coins at once (administration)
+        /// </summary>
+        public static string CashShopCoinGrantsAdminOperationPlugIn_Name {
+            get {
+                return ResourceManager.GetString("CashShopCoinGrantsAdminOperationPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Lets the admin panel apply the cash shop coins it granted to an account which is in the game at once, instead of the next time the player opens the cash shop.
+        /// </summary>
+        public static string CashShopCoinGrantsAdminOperationPlugIn_Description {
+            get {
+                return ResourceManager.GetString("CashShopCoinGrantsAdminOperationPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

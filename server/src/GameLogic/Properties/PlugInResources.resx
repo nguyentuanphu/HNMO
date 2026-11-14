@@ -1924,4 +1924,16 @@
   <data name="SoulDrainSkillPlugIn_Description" xml:space="preserve">
     <value>Gives the attacker mana for the damage which Soul Drain (skill 723) deals, taken from the mana of a player target.</value>
   </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>HNMO skills of a character (administration)</value>
+  </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>Lets the admin panel grant or remove the HNMO skills (700 to 727) of a character which is in the game, e.g. the fourth skill of the class without its trial quest.</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>Cash shop coins at once (administration)</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>Lets the admin panel apply the cash shop coins it granted to an account which is in the game at once, instead of the next time the player opens the cash shop.</value>
+  </data>
 </root>
