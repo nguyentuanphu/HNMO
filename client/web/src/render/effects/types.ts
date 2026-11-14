@@ -36,8 +36,10 @@ export interface EffectOwner {
    * when left out.
    */
   hasAura?(): boolean;
-  /** Its right hand weapon's model, for the effects that draw it (Twisting Slash's wheel, Rageful Blow). */
-  weaponModel?(): THREE.Object3D | null;
+  /** Whether it has a buff (eBuffState number), for the buff looks that last while it does. */
+  hasBuff?(buff: number): boolean;
+  /** Its right hand weapon's model and item group, for the effects that draw it (Twisting Slash's wheel, Rageful Blow). */
+  weapon?(): { model: THREE.Object3D; group: number } | null;
 }
 
 /** CreateEffect types ported (names as in Data/Effects/EffectTypes.json). */
@@ -61,12 +63,16 @@ export type EffectType =
   | 'spark3' // BITMAP_SPARK+1: Teleport's column of sparks
   | 'skillWheel1' | 'skillWheel2' // MODEL_SKILL_WHEEL1/2: Twisting Slash's spinning weapon
   | 'skillFuryStrike' // MODEL_SKILL_FURY_STRIKE: Rageful Blow
-  | 'earthQuake' // MODEL_SKILL_FURY_STRIKE+1..8: Rageful Blow's cracks (Skill/EarthQuake0N.bmd)
-  | 'spear' // MODEL_SPEAR: Impale / Death Stab's cones (Skill/Spear01.bmd)
-  | 'spearSkillModel' // MODEL_SPEARSKILL as an effect: Impale's spinning spears
+  | 'earthQuake1' | 'earthQuake2' | 'earthQuake3' | 'earthQuake4' // MODEL_SKILL_FURY_STRIKE+1..8:
+  | 'earthQuake5' | 'earthQuake6' | 'earthQuake7' | 'earthQuake8' // Rageful Blow's cracks (Skill/EarthQuake0N.bmd)
+  | 'wave' // MODEL_WAVE: Rageful Blow's flash (Skill/flashing.bmd)
+  | 'tail' // MODEL_TAIL: Rageful Blow's falling streaks (Skill/tail.bmd)
+  | 'lightSpear' // MODEL_SPEAR: the anchor of Impale's and Death Stab's spiralling flares (no model)
+  | 'spearSkillModel' // MODEL_SPEARSKILL as an effect: Impale's thrusting spears (Skill/RidingSpear01.bmd)
   | 'combo' // MODEL_COMBO: the knights' combo burst
   | 'gathering' // BITMAP_GATHERING: Penetration's / Fire Slash's gathering light
-  | 'multiShot' // MODEL_MULTI_SHOT1..3: Multi-Shot's fan
+  | 'multiShot1' | 'multiShot2' | 'multiShot3' // MODEL_MULTI_SHOT1..3: Multi-Shot's rings (Effect/multishot0N.bmd)
+  | 'infinityArrow' | 'infinityArrow1' | 'infinityArrow2' | 'infinityArrow3' | 'infinityArrow4' // Infinity Arrow (Skill/arrowsre0N.bmd)
   | 'waves' // MODEL_WAVES: Force Wave's rings (Skill/m_Waves.bmd)
   | 'piercing2' // MODEL_PIERCING2: Force Wave's spear (Skill/m_Piercing.bmd)
   | 'pierPart' // MODEL_PIER_PART: Fire Burst's flames (Skill/PierPart.bmd)
@@ -74,7 +80,8 @@ export type EffectType =
   | 'swordForce' // BITMAP_SWORD_FORCE: Fire Slash
   | 'flameStrike' // MODEL_EFFECT_FLAME_STRIKE (Effect/FlameStrike.bmd)
   | 'jointThunderEffect' // BITMAP_JOINT_THUNDER as an effect: Gigantic Storm's bolts
-  | 'magicCircle'; // BITMAP_MAGIC: a magic circle on the ground
+  | 'magicCircle' // BITMAP_MAGIC: a magic circle on the ground
+  | 'buffLight'; // BITMAP_LIGHT SubType 1: the Swell Life buff's rising lights
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare';
@@ -83,7 +90,7 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
 export type SpriteType = BitmapName;
 
 /** CreateJoint types ported (names as in Data/Effects/JointTypes.json). */
-export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'flareForceJoint' | 'jointForce' | 'blur';
+export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'jointSpark' | 'lightJoint' | 'piercing' | 'flareForceJoint' | 'jointForce' | 'blur';
 
 /** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */
 export type RenderType = 'normal' | 'dark';

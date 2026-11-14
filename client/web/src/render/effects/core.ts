@@ -106,7 +106,11 @@ export const BITMAPS = {
   magicGround1: 'Magic_Ground1.jpg', // BITMAP_MAGIC
   jointForce: 'motion_blur_r2.jpg', // BITMAP_JOINT_FORCE
   blur1: 'blur01.jpg', // BITMAP_BLUR
+  blur2: 'motion_blur.jpg', // BITMAP_BLUR+1
+  blur3: 'motion_blur_r.jpg', // BITMAP_BLUR+2
   poundingBall: 'PoundingBall.jpg', // BITMAP_POUNDING_BALL
+  spark1: 'Spark01.jpg', // BITMAP_JOINT_SPARK
+  piercing: 'Piercing.jpg', // BITMAP_PIERCING
 } as const;
 
 export type BitmapName = keyof typeof BITMAPS;

@@ -14,6 +14,8 @@ export interface CharacterOwnerOptions {
   weaponBones?: readonly [number, number];
   /** Whether it has a buff that keeps aura joints alive (eBuff_Attack, eBuff_Defense or eBuff_HelpNpc). */
   hasAura?: () => boolean;
+  /** Whether it has a buff (eBuffState number). */
+  hasBuff?: (buff: number) => boolean;
 }
 
 const owners = new WeakMap<Character, EffectOwner>();
@@ -41,7 +43,12 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
     bonePosition: (bone) => bonePosition(character, bone),
     boneCount: () => character.model.matrices.length,
     currentAction: () => character.oneShot?.action ?? character.action,
+    weapon: () => {
+      const held = character.attachments.find((attachment) => attachment.slot === 'rightHand');
+      return held ? { model: held.model.group, group: held.item.group } : null;
+    },
     hasAura: options.hasAura,
+    hasBuff: options.hasBuff,
   };
   owners.set(character, owner);
   return owner;

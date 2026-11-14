@@ -31,8 +31,12 @@
 // ownerFromCharacter adapts a game/characters.ts Character (same object per character).
 // Only the types and SubTypes the ported skills use are implemented; the others are ignored.
 
+import './knightEffects.js'; // registers the knights' effect and joint types
+import './elfEffects.js'; // and the elves'
+import './lordEffects.js'; // and the gladiators' and lords'
 export { EffectSystem } from './effectSystem.js';
-export type { EffectSystemOptions, TickTask } from './effectSystem.js';
+export type { EffectSystemOptions, TickTask, EffectLayer } from './effectSystem.js';
+export { WeaponTrails } from './weaponTrails.js';
 export { playSkillEffect, playBuffEffect, isPortedSkill, tripleShotAngles, createSpark, SkillEffect, BuffEffect, ATTACK_LIMIT_TIME, SKILL_RELEASE_DELAY_SECONDS } from './skillEffects.js';
 export type { SkillEffectOptions } from './skillEffects.js';
 export { ownerFromCharacter, PLAYER_WEAPON_BONES } from './characterOwner.js';

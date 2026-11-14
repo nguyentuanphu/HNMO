@@ -61,7 +61,7 @@ import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
-import { EffectSystem, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect } from './render/effects/index.js';
+import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect } from './render/effects/index.js';
 import { helperVariant, setCompanionEffects } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -143,6 +143,7 @@ export interface GameState {
   projectiles?: ProjectileLayer;
   deaths?: DeathEffects;
   effects?: EffectSystem;
+  weaponTrails?: WeaponTrails;
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
@@ -693,8 +694,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const effects = new EffectSystem(root, { camera, heightAt });
   state.effects = effects;
   setCompanionEffects(effects); // pets' and mounts' glows
+  // The weapon trails of swinging players (CreateWeaponBlur).
+  const weaponTrails = new WeaponTrails(() => [online.hero, ...online.characters.values()]);
+  effects.addLayer(weaponTrails);
+  state.weaponTrails = weaponTrails;
   // A character as the effects see it; its aura joints live while it has eBuff_Attack, _Defense or _HelpNpc.
-  const ownerFromCharacter = (who: Character) => effectOwnerOf(who, { hasAura: () => [1, 2, 3].some((buff) => buffs.has(who === online.hero ? online.playerId : who.id, buff)) });
+  const ownerFromCharacter = (who: Character) => {
+    const has = (buff: number) => buffs.has(who === online.hero ? online.playerId : who.id, buff);
+    return effectOwnerOf(who, { hasAura: () => [1, 2, 3].some(has), hasBuff: has });
+  };
   // The buffs' looks (InsertBuffPhysicalEffect / ClearBuffLogicalEffect): Soul Barrier's lights.
   const knownBuffs = new Map<number, number[]>();
   buffs.onChange((id) => {

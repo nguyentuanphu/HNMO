@@ -61,7 +61,7 @@ const PARTICLE_TEXTURES: Record<ParticleType, BitmapName> = {
 };
 const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
-  smokeTrail: 'flare', flare: 'flare', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1',
+  smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1',
 };
 
 export interface EffectSystemOptions {
@@ -73,6 +73,15 @@ export interface EffectSystemOptions {
 
 /** Something the system runs once per tick until it returns false (a skill's timeline). */
 export type TickTask = (tick: number) => boolean;
+
+/** Something drawn with the effects that keeps its own records (the weapon trails). */
+export interface EffectLayer {
+  /** Once per 25 FPS tick, after the effects move. */
+  tick(): void;
+  /** Once per drawn frame, before the draw. */
+  frame(): void;
+  draw(quads: QuadBatches): void;
+}
 
 /** CreateEffect's PKKey and SkillIndex, which some types read as numbers. */
 export interface CreateEffectExtra {
@@ -120,6 +129,7 @@ export class EffectSystem {
   private joints: Joint[] = [];
   private sprites: Sprite[] = [];
   private tasks: TickTask[] = [];
+  private readonly layers: EffectLayer[] = [];
   private accumulator = 0;
   private tick = 0;
   private jointIndex = 0;
@@ -160,6 +170,11 @@ export class EffectSystem {
     return this.worldTime;
   }
 
+  /** Adds a layer drawn with the effects (the weapon trails). */
+  addLayer(layer: EffectLayer): void {
+    this.layers.push(layer);
+  }
+
   /** Runs a task once per tick, after the sprites are cleared and before the effects move. */
   schedule(task: TickTask): void {
     this.tasks.push(task);
@@ -173,6 +188,7 @@ export class EffectSystem {
       this.accumulator -= TICK_SECONDS;
       if (ticks++ < MAX_TICKS_PER_UPDATE) this.step();
     }
+    for (const layer of this.layers) layer.frame();
     this.draw();
   }
 
@@ -262,12 +278,21 @@ export class EffectSystem {
         if (o.subType === 1) {
           o.angle.set(randInt(360), randInt(360), randInt(360));
           rotateByAngle(new THREE.Vector3(0, -50, 0), o.angle, o.velocity);
+        } else if (o.subType === 2) { // flies into its owner in ten ticks (BITMAP_GATHERING)
+          if (!o.target) return false;
+          o.lifeTime = 15;
+          o.angle.set(0, 0, 0);
+          o.velocity.copy(o.target.position).sub(o.position).divideScalar(10);
         }
-        return o.subType === 0 || o.subType === 1;
+        return o.subType === 0 || o.subType === 1 || o.subType === 2;
       case 'fire':
       case 'fire3':
         o.lifeTime = 24;
-        if (o.subType === 1) {
+        if (o.subType === 0) {
+          o.velocity.set(0, -(randInt(16) + 32) * 0.1, 0);
+          o.scale = (randInt(64) + 128) * 0.01;
+          o.rotation = randInt(360);
+        } else if (o.subType === 1) {
           o.velocity.set(0, -(randInt(16) + 32) * 0.1, 0);
           o.scale = (randInt(4) + 10) * 0.01;
           o.rotation = randInt(360);
@@ -343,7 +368,12 @@ export class EffectSystem {
         }
         return false;
       case 'light': // BITMAP_LIGHT
-        if (o.subType === 5) o.lifeTime = 50;
+        if (o.subType === 4) { // on a bone of its owner (the Swell Life buff); the scale is the bone
+          o.lifeTime = 10;
+          o.gravity = 0;
+          o.rotation = scale;
+          o.scale = 2;
+        } else if (o.subType === 5) o.lifeTime = 50;
         else if (o.subType === 6) o.lifeTime = 2;
         else return false;
         return true;
@@ -382,6 +412,15 @@ export class EffectSystem {
         break;
       }
       case 'spark3':
+        if (o.subType === 2) {
+          // Placed from where it was by its velocity (the common move above is undone).
+          if (o.lifeTime > 5 && o.target && !ownerLive(o.target)) o.lifeTime = 5;
+          o.light.setScalar(o.lifeTime / 5);
+          o.scale += 0.05;
+          o.position.copy(o.startPosition).add(o.velocity);
+          o.startPosition.copy(o.position);
+          break;
+        }
         o.scale -= o.subType === 1 ? 2 : 0.5;
         if (o.scale < 0.2) o.live = false;
         break;
@@ -391,7 +430,7 @@ export class EffectSystem {
         if (o.subType === 5) {
           o.scale -= 0.04;
           o.rotation += 5;
-        } else if (o.subType === 7) {
+        } else if (o.subType === 7 || o.subType === 0) {
           o.scale -= 0.04;
         } else { // the move's default
           o.scale += o.gravity;
@@ -435,7 +474,17 @@ export class EffectSystem {
         if (o.lifeTime <= 0) o.live = false;
         break;
       case 'light':
-        // SubTypes 5 and 6: drift, shrink and fade (the wind of SubType 0 isn't theirs).
+        // SubType 4 rises from its owner's bone; 5 and 6 drift, shrink and fade.
+        if (o.subType === 4) {
+          const bone = o.target?.bonePosition?.(o.rotation);
+          if (!bone) { o.live = false; break; }
+          o.position.copy(bone);
+          o.gravity += (randInt(40) + 60) / 100 * 9.5;
+          o.scale -= (randInt(400) + 400) / 10000;
+          o.position.z += o.gravity;
+          o.light.multiplyScalar(1 / 1.35);
+          break;
+        }
         if (o.subType === 6) {
           o.position.x += (randInt(2001) - 1000) * 0.0004 * 0.5;
           o.position.y += (randInt(2001) - 1000) * 0.0004 * 0.5;
@@ -475,7 +524,7 @@ export class EffectSystem {
         break;
       }
       default:
-        this.quads.billboard(o.texture, blend, o.position, width, height, o.light, o.rotation);
+        this.quads.billboard(o.texture, blend, o.position, width, height, o.light, o.type === 'light' && o.subType === 4 ? 0 : o.rotation);
     }
   }
 
@@ -484,13 +533,13 @@ export class EffectSystem {
   // =========================================================================
 
   createJoint(type: JointType, position: THREE.Vector3, targetPosition: THREE.Vector3, angle: THREE.Vector3,
-    subType = 0, target: EffectOwner | null = null, scale = 10, skill = 0): Joint | null {
+    subType = 0, target: EffectOwner | null = null, scale = 10, skill = 0, pkKey = 0): Joint | null {
     const o: Joint = {
       type, subType, texture: JOINT_TEXTURES[type],
       position: position.clone(), targetPosition: targetPosition.clone(), startPosition: new THREE.Vector3(),
       angle: angle.clone(), direction: new THREE.Vector3(), light: WHITE.clone(), scale, velocity: 0, lifeTime: 0,
       maxTails: 1, numTails: 0, tails: [], target, index: this.jointIndex++, blend: 'glow', faces: 3,
-      createTails: true, collision: false, counter: 0, skill, pkKey: 0, live: true,
+      createTails: true, collision: false, counter: 0, skill, pkKey, live: true,
     };
     if (!this.initJoint(o)) return null;
     o.tails = new Array<Tail | null>(o.maxTails + 1).fill(null);
@@ -505,6 +554,15 @@ export class EffectSystem {
       case 'jointThunder':
         o.maxTails = 50;
         o.velocity = 50;
+        if (o.subType === 3) { // a short bolt: CreateJoint's SkillIndex is its speed and length, PKKey its life
+          o.velocity = o.skill;
+          o.lifeTime = o.pkKey;
+          o.pkKey = -1;
+          o.maxTails = o.skill;
+          o.light.set(0.5, 0.5, 1);
+          o.startPosition.copy(o.position);
+          return true;
+        }
         if (o.subType !== 0) return false;
         o.lifeTime = 2;
         return true;
@@ -608,6 +666,11 @@ export class EffectSystem {
     return [corner(-half, 0), corner(half, 0), corner(0, -half), corner(0, half)];
   }
 
+  /** CreateTail, for the registered joint types that lay several tails a tick. */
+  layTail(o: Joint, angle: THREE.Vector3): void {
+    this.createTail(o, angle);
+  }
+
   // CreateTail (not blurred): a new tail at the joint's position, the older ones move back.
   private createTail(o: Joint, angle: THREE.Vector3): void {
     o.numTails = Math.min(o.numTails + 1, o.maxTails - 1);
@@ -618,7 +681,8 @@ export class EffectSystem {
   private moveJoint(o: Joint): void {
     // The common move along -y of the joint's angle; the tail is laid with this matrix.
     const matrixAngle = o.angle.clone();
-    if (o.velocity !== 0) o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), o.angle));
+    // (BITMAP_LIGHT and the spear flares place themselves.)
+    if (o.velocity !== 0 && o.type !== 'lightJoint' && o.type !== 'piercing' && o.type !== 'jointForce') o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), o.angle));
     switch (o.type) {
       case 'jointThunder': this.moveThunder(o); break;
       case 'jointHealing': this.moveHealing(o); break;
@@ -639,12 +703,14 @@ export class EffectSystem {
   private moveThunder(o: Joint): void {
     for (let j = 0; j < o.maxTails; j++) {
       if (o.target) o.targetPosition.copy(o.target.position).setZ(o.target.position.z + 80);
-      const distance = moveHumming(o.position, o.angle, o.targetPosition, 50);
+      const distance = moveHumming(o.position, o.angle, o.targetPosition, o.subType === 3 ? 25 : 50);
       o.direction.x = (randInt(1024) - 512) / o.scale;
       o.direction.z = (randInt(1024) - 512) / o.scale;
       const angle = o.angle.clone().add(o.direction);
       this.createTail(o, angle);
-      if (distance < o.velocity * 1.5) {
+      if (o.subType === 3) {
+        if (distance > 150) o.lifeTime = 0;
+      } else if (distance < o.velocity * 1.5) {
         if (o.scale === 50) {
           this.createParticle('energy', o.position, o.angle, o.light);
           if (randInt(8) === 0) this.createParticle('smoke', o.position, o.angle, o.light);
@@ -756,6 +822,13 @@ export class EffectSystem {
       if (o.type === 'smokeTrail' && j < 1) continue;
       const current = o.tails[j], next = o.tails[j + 1];
       if (!current || !next) continue;
+      if (o.type === 'jointForce') {
+        // BITMAP_JOINT_FORCE SubType 0: the x corners only, fading along the arc.
+        const u1 = (o.numTails - j) / (o.maxTails - 1), u2 = (o.numTails - (j + 1)) / (o.maxTails - 1);
+        const luminosity = (o.maxTails - j) / o.maxTails * 2 * o.light.x;
+        this.quads.quad(o.texture, blend, [current[0], current[1], next[1], next[0]], [u1, u1, u2, u2], [0, 1, 1, 0], new THREE.Vector3(luminosity, luminosity, luminosity));
+        continue;
+      }
       let l1 = (o.numTails - j) / (o.maxTails - 1);
       let l2 = (o.numTails - (j + 1)) / (o.maxTails - 1);
       if (thunder) {
@@ -810,6 +883,8 @@ export class EffectSystem {
     o.self = { position: o.position, angle: o.angle, light: o.light, isLive: () => o.live };
     const known = EXTRA_EFFECTS[type];
     if (known) {
+      // A registered type: the catalogue's values (when it has a row), then its creation hook.
+      if (this.catalogue.has(type)) this.catalogue.apply(type, o, { position, angle, light, scale });
       if (!known.create(o, this)) return null;
     } else if (this.catalogue.has(type)) {
       this.catalogue.apply(type, o, { position, angle, light, scale });
@@ -865,6 +940,10 @@ export class EffectSystem {
         return o.subType === 0 || o.subType === 2;
       case 'magicGround2':
         o.lifeTime = 20;
+        if (o.subType === 4) { // Swell Life's circle
+          o.lifeTime = 40;
+          o.scale = (randInt(50) + 50) / 100 * 4;
+        }
         return o.subType >= 1 && o.subType <= 4;
       case 'stone1':
       case 'stone2': {
@@ -1377,10 +1456,14 @@ export class EffectSystem {
   private drawGroundCircle(o: Effect): void {
     let luminosity = 1;
     if (o.lifeTime < 5) luminosity -= (5 - o.lifeTime) * 0.2;
-    const scale = (20 - o.lifeTime) * 0.15;
+    let scale = (20 - o.lifeTime) * 0.15;
+    if (o.subType === 4) {
+      scale = o.scale;
+      if (luminosity === 1) luminosity = Math.sin((60 - o.lifeTime) * 0.05) + 0.5;
+    }
     const light = o.subType === 2 ? new THREE.Vector3(0.4, 1, 0.6)
       : o.subType === 3 ? new THREE.Vector3(1, 0.6, 0.4)
-      : o.subType === 4 ? new THREE.Vector3(1, 0.6, 0.4) : new THREE.Vector3(0.4, 0.6, 1);
+      : o.subType === 4 ? new THREE.Vector3(1, 0.5, 0.1) : new THREE.Vector3(0.4, 0.6, 1);
     light.multiplyScalar(luminosity);
     this.quads.decal('magicGround2', 'glow', o.position.x, o.position.y, scale, light, -o.angle.z,
       this.options.heightAt ?? null, o.position.z);
@@ -1416,11 +1499,20 @@ export class EffectSystem {
       return effect.live;
     });
     for (const effect of this.effects) this.effectSprites(effect);
-    for (let i = 0; i < this.joints.length; i++) if (this.joints[i].live) this.moveJoint(this.joints[i]);
+    for (let i = 0; i < this.joints.length; i++) {
+      const joint = this.joints[i];
+      if (!joint.live) continue;
+      this.moveJoint(joint);
+      // MoveJointForFrame: the spear flares (Impale's, Death Stab's) move again until their life
+      // time reaches a multiple of 12.
+      const spearFlare = joint.type === 'flare' && (joint.subType === 4 || joint.subType === 12);
+      for (let moves = 1; spearFlare && moves < 64 && joint.live && Math.trunc(joint.lifeTime) % 12 !== 0; moves++) this.moveJoint(joint);
+    }
     this.joints = this.joints.filter((joint) => joint.live);
     for (const joint of this.joints) this.jointSprites(joint);
     for (let i = 0; i < this.particles.length; i++) this.moveParticle(this.particles[i]);
     this.particles = this.particles.filter((particle) => particle.live);
+    for (const layer of this.layers) layer.tick();
   }
 
   private draw(): void {
@@ -1431,6 +1523,7 @@ export class EffectSystem {
       EXTRA_EFFECTS[effect.type]?.draw?.(effect, this);
     }
     for (const joint of this.joints) this.drawJoint(joint);
+    for (const layer of this.layers) layer.draw(this.quads);
     for (const particle of this.particles) this.drawParticle(particle);
     for (const sprite of this.sprites) {
       const size = this.quads.textureSize(sprite.type);

@@ -41,14 +41,29 @@ export const SkillEffect = {
   CYCLONE: 22,
   SLASH: 23,
   TRIPLE_SHOT: 24,
+  SUMMON: 30,
+  SUMMON_LAST: 36,
   HEALING: 26,
   DEFENSE: 27,
   ATTACK: 28,
   DECAY: 38,
   ICE_STORM: 39,
   NOVA: 40,
+  TWISTING_SLASH: 41,
+  RAGEFUL_BLOW: 42,
+  DEATH_STAB: 43,
+  IMPALE: 47,
+  SWELL_LIFE: 48,
+  ICE_ARROW: 51,
+  PENETRATION: 52,
+  FIRE_SLASH: 55,
   POWER_SLASH: 56,
   NOVA_BEGIN: 58,
+  COMBO: 59,
+  FORCE: 60,
+  FORCE_WAVE: 66,
+  INFINITY_ARROW: 77,
+  MULTI_SHOT: 235,
 } as const;
 
 /** PLAYER_SKILL_HELL_BEGIN and PLAYER_SKILL_HELL_START: Nova's charge and release actions. */
@@ -103,9 +118,21 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
     novaCharge(system, caster);
     return true;
   }
+  if (skill === SkillEffect.INFINITY_ARROW) { // ReceiveMagic: the quiver's light and rings at once
+    system.createEffect('infinityArrow', caster.position, caster.angle, caster.light ?? WHITE, 0, caster);
+    return true;
+  }
+  if (skill === SkillEffect.MULTI_SHOT) {
+    multiShotRings(system, caster);
+    return true;
+  }
+  if (skill === SkillEffect.COMBO) { // ReceiveMagic: the combo's burst at once
+    system.createEffect('combo', caster.position, caster.angle, caster.light ?? WHITE);
+    return true;
+  }
   let attackTime = 1;
   system.schedule(() => {
-    attackStage(system, skill, caster, attackTime);
+    attackTime = attackStage(system, skill, caster, attackTime, target);
     attackEffect(system, skill, caster, target);
     if (skill === SkillEffect.POWER_SLASH) attackTime = ATTACK_LIMIT_TIME;
     attackTime += 1;
@@ -117,7 +144,11 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
 }
 
 export function isPortedSkill(skill: number): boolean {
-  return (Object.values(SkillEffect) as number[]).includes(skill);
+  return (Object.values(SkillEffect) as number[]).includes(skill) || isSummon(skill);
+}
+
+function isSummon(skill: number): boolean {
+  return skill >= SkillEffect.SUMMON && skill <= SkillEffect.SUMMON_LAST;
 }
 
 /**
@@ -129,14 +160,86 @@ export function tripleShotAngles(rightHand?: number, leftHand?: number): number[
   return fourArrows ? [5, 15, -5, -15] : [0, 15, -15];
 }
 
-// AttackStage: Power Slash's five blades leave in a fan on its first tick.
-function attackStage(system: EffectSystem, skill: number, caster: EffectOwner, attackTime: number): void {
-  if (skill !== SkillEffect.POWER_SLASH || attackTime !== 1) return;
+// AttackStage: Power Slash's five blades leave in a fan on its first tick; Death Stab gathers its
+// wind and cones; Impale makes its cones and thrusts. Returns the AttackTime to go on with.
+function attackStage(system: EffectSystem, skill: number, caster: EffectOwner, attackTime: number, target: EffectOwner | null): number {
+  if (skill === SkillEffect.DEATH_STAB) return deathStabStage(system, caster, attackTime, target);
+  if (skill === SkillEffect.IMPALE) {
+    impaleStage(system, caster, attackTime);
+    return attackTime;
+  }
+  if (skill === SkillEffect.SWELL_LIFE && attackTime > 9) return ATTACK_LIMIT_TIME; // PLAYER_SKILL_VITALITY
+  if (skill === SkillEffect.FIRE_SLASH) {
+    // The charge at the hand on the first two ticks; the sweep when the swing reaches its third
+    // key (PLAYER_ATTACK_SKILL_WHEEL), then the release.
+    if (attackTime === 1 || attackTime === 2) system.createEffect('gathering', caster.position, caster.angle, caster.light ?? WHITE, 1, caster);
+    if (attackTime >= 6) {
+      system.createEffect('swordForce', caster.position, caster.angle, caster.light ?? WHITE, 0, caster);
+      return ATTACK_LIMIT_TIME;
+    }
+    return attackTime;
+  }
+  if (skill === SkillEffect.PENETRATION) { // the charge at 3, the shot at 5 (g_iLimitAttackTime = 5)
+    if (attackTime === 3) system.createEffect('gathering', caster.position, caster.angle, caster.light ?? WHITE, 0, caster);
+    return attackTime >= 4 ? ATTACK_LIMIT_TIME : attackTime;
+  }
+  if (skill !== SkillEffect.POWER_SLASH || attackTime !== 1) return attackTime;
   const angle = caster.angle.clone();
   angle.z -= 40;
   for (let i = 0; i < 5; i++) {
     system.createEffect('magic2', caster.position, angle, caster.light ?? WHITE, 2, caster);
     angle.z += 20;
+  }
+  return attackTime;
+}
+
+/** The point `distance` in front of the caster (sin / -cos of its facing). */
+function ahead(caster: EffectOwner, from: THREE.Vector3, distance: number): THREE.Vector3 {
+  const radians = caster.angle.z * Math.PI / 180;
+  return new THREE.Vector3(from.x + distance * Math.sin(radians), from.y - distance * Math.cos(radians), from.z);
+}
+
+/** GetNearRandomPos: a point up to `range` away on each axis. */
+function nearRandom(at: THREE.Vector3, range: number): THREE.Vector3 {
+  return new THREE.Vector3(at.x + randInt(range * 2 + 1) - range, at.y + randInt(range * 2 + 1) - range, at.z + randInt(range * 2 + 1) - range);
+}
+
+// AttackStage AT_SKILL_DEATHSTAB: from AttackTime 2 to 8 red gusts fly in from far ahead to the
+// sword; from 6 to 12 two spiralling blue flares leave the sword's point every tick; at 12 the release.
+function deathStabStage(system: EffectSystem, caster: EffectOwner, attackTime: number, _target: EffectOwner | null): number {
+  const sword = caster.weaponPosition?.(0) ?? caster.position.clone().setZ(caster.position.z + 120);
+  if (attackTime >= 2 && attackTime <= 8) {
+    for (let j = 0; j < 3; j++) {
+      // GetNearRandomPos, then 1400 along (-sin, +cos) of the facing.
+      const from = ahead(caster, nearRandom(caster.position.clone().setZ(caster.position.z + 120), 300), -1400);
+      system.createJoint('spearSkill', from, from, caster.angle, 2, caster, 40);
+    }
+  }
+  if (attackTime >= 6 && attackTime <= 12) {
+    const position = ahead(caster, sword, 100 + (attackTime - 8) * 10);
+    system.createEffect('lightSpear', position, caster.angle, WHITE, 1, caster);
+    system.createEffect('lightSpear', position, caster.angle, WHITE, 1, caster);
+  }
+  return attackTime >= 12 ? ATTACK_LIMIT_TIME : attackTime;
+}
+
+// AttackStage AT_SKILL_IMPALE: at 8 two spiralling white flares in front of the chest; at 13 and
+// 14 three spears thrust forward around the point.
+function impaleStage(system: EffectSystem, caster: EffectOwner, attackTime: number): void {
+  if (attackTime === 8) {
+    const position = ahead(caster, caster.position, 50);
+    position.z += 110;
+    system.createEffect('lightSpear', position, caster.angle, WHITE, 0, caster);
+    system.createEffect('lightSpear', position, caster.angle, WHITE, 0, caster);
+  }
+  if (attackTime >= 13 && attackTime <= 14) {
+    for (let i = 0; i < 3; i++) {
+      const position = ahead(caster, caster.position, 145);
+      position.x += randInt(60) - 30;
+      position.y += randInt(60) - 30;
+      position.z += 110 + randInt(60) - 30;
+      system.createEffect('spearSkillModel', position, caster.angle, new THREE.Vector3(0.3, 0.3, 0.3), 0, caster);
+    }
   }
 }
 
@@ -173,6 +276,16 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
     case SkillEffect.TRIPLE_SHOT:
       options.shootArrow?.(0, target); // the bow attack's own arrow
       shootFan(options);
+      break;
+    case SkillEffect.FORCE:
+    case SkillEffect.FORCE_WAVE: // two rings and the spear, from the lord along its facing
+      system.createEffect('waves', caster.position, caster.angle, light, 1);
+      system.createEffect('waves', caster.position, caster.angle, light, 1);
+      system.createEffect('piercing2', caster.position, caster.angle, light);
+      break;
+    case SkillEffect.PENETRATION:
+    case SkillEffect.ICE_ARROW:
+      options.shootArrow?.(0, target); // CreateArrows: one arrow
       break;
     case SkillEffect.HEALING:
       system.createEffect('magicGround2', to, target.angle, target.light ?? WHITE, 1, target);
@@ -233,6 +346,7 @@ function cellPosition(system: EffectSystem, cell: { x: number; y: number }): THR
 function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwner, options: SkillEffectOptions): void {
   const light = caster.light ?? WHITE;
   const at = caster.position;
+  if (isSummon(skill)) system.createEffect('magicGround2', at, caster.angle, light, 3, caster);
   switch (skill) {
     case SkillEffect.HELLFIRE:
       system.createEffect('circle', at, caster.angle, light, 0, caster);
@@ -243,6 +357,20 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.TWISTER:
       system.createEffect('storm', at, caster.angle, WHITE, 0, caster);
+      break;
+    case SkillEffect.TWISTING_SLASH:
+      system.createEffect('skillWheel1', at, caster.angle, light, 0, caster);
+      break;
+    case SkillEffect.RAGEFUL_BLOW:
+      system.createEffect('skillFuryStrike', at, caster.angle, light, 0, caster);
+      break;
+    case SkillEffect.SWELL_LIFE:
+      for (let i = 0; i < 36; i++) {
+        const angle = new THREE.Vector3(-10, 0, i * 10);
+        const position = at.clone().setZ(at.z + 100);
+        system.createJoint('jointSpirit', position, position, angle, 2, caster, 60);
+        if (i % 20 === 0) system.createEffect('magicGround2', at, angle, light, 4, caster);
+      }
       break;
     case SkillEffect.INFERNO:
       system.createInferno(at);
@@ -324,6 +452,7 @@ export function createSpark(system: EffectSystem, target: EffectOwner): void {
 export const BuffEffect = {
   DEFENSE: 2,
   WIZ_DEFENSE: 4,
+  LIFE: 8,
 } as const;
 
 /**
@@ -339,5 +468,19 @@ export function playBuffEffect(system: EffectSystem, buff: number, owner: Effect
     case BuffEffect.DEFENSE:
       if (!on) system.deleteJoint('spearSkill', owner, 4);
       break;
+    case BuffEffect.LIFE: // Swell Life: lights rise from the upper body while it lasts
+      if (on) system.createEffect('buffLight', owner.position, owner.angle, owner.light ?? WHITE, 1, owner);
+      break;
   }
+}
+
+// AttackElf AT_SKILL_MULTI_SHOT: three rings grow out in front of the elf as it shoots.
+function multiShotRings(system: EffectSystem, caster: EffectOwner): void {
+  const light = new THREE.Vector3(0.8, 0.9, 1.6);
+  const front = new THREE.Vector3(0, 20, 0).applyEuler(new THREE.Euler(0, 0, caster.angle.z * Math.PI / 180)).add(caster.position);
+  system.createEffect('multiShot3', front, caster.angle, light);
+  system.createEffect('multiShot3', front, caster.angle, light);
+  for (let i = 0; i < 3; i++) system.createEffect('multiShot1', caster.position, caster.angle, light);
+  system.createEffect('multiShot2', front, caster.angle, light);
+  system.createEffect('multiShot2', front, caster.angle, light);
 }
