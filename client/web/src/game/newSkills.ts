@@ -201,8 +201,8 @@ function hnMarkTexture(): THREE.CanvasTexture {
   return hnTexture;
 }
 
-const HN_MARKS = 3;
-const HN_TICKS = 32;
+const HN_MARKS = 2;
+const HN_TICKS = 25;
 
 /** The "HN" letters flying out of the caster (one burst per cast). */
 export function flyHnMarks(system: EffectSystem, caster: EffectOwner): void {
@@ -214,7 +214,7 @@ export function flyHnMarks(system: EffectSystem, caster: EffectOwner): void {
     sprite.name = 'hn-mark';
     system.root.add(sprite);
     const angle = (i / HN_MARKS) * Math.PI * 2 + Math.random() * 0.8;
-    return { sprite, material, velocity: new THREE.Vector3(Math.cos(angle) * 9, Math.sin(angle) * 9, 5 + Math.random() * 3) };
+    return { sprite, material, velocity: new THREE.Vector3(Math.cos(angle) * 4, Math.sin(angle) * 4, 3 + Math.random() * 2) };
   });
   let tick = 0;
   system.schedule(() => {
@@ -223,9 +223,9 @@ export function flyHnMarks(system: EffectSystem, caster: EffectOwner): void {
     for (const mark of marks) {
       mark.sprite.position.add(mark.velocity);
       mark.velocity.multiplyScalar(0.94);
-      const size = 70 + 70 * Math.min(1, t * 2);
+      const size = 26 + 10 * Math.min(1, t * 2); // small and quiet: a mark, not a show
       mark.sprite.scale.set(size * 2, size, 1);
-      mark.material.opacity = t < 0.15 ? t / 0.15 : Math.max(0, 1 - (t - 0.15) / 0.85);
+      mark.material.opacity = 0.6 * (t < 0.15 ? t / 0.15 : Math.max(0, 1 - (t - 0.15) / 0.85));
     }
     if (tick < HN_TICKS) return true;
     for (const mark of marks) { system.root.remove(mark.sprite); mark.material.dispose(); }
