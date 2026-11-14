@@ -48,7 +48,7 @@ cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 # unbundled public/js). three stays external (resolved by the page's import map), and
 # the Data files stay separate. The individual modules are then dropped from the folder.
 echo "Bundling the web client (esbuild)"
-npx --prefix "$WEB" esbuild "$OUT/web/wwwroot/js/main.js" \
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
   --bundle --minify --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
 find "$OUT/web/wwwroot/js" -maxdepth 1 -name '*.js' ! -name 'main.min.js' -delete
