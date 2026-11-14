@@ -2885,4 +2885,7 @@
   <data name="GuildEditData" xml:space="preserve">
     <value>Edit guild data</value>
   </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
 </root>

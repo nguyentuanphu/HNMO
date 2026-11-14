@@ -3477,4 +3477,16 @@
   <data name="ItemPriceRounding_Tens_Description" xml:space="preserve">
     <value>Làm tròn xuống bội số của 10, và độ bền không làm giảm giá, ví dụ với bình thuốc.</value>
   </data>
+  <data name="CastleSiegeConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình công thành chiến</value>
+  </data>
+  <data name="CastleSiegeConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Công thành chiến</value>
+  </data>
+  <data name="CashShopConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình cửa hàng</value>
+  </data>
+  <data name="CashShopConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Cửa hàng</value>
+  </data>
 </root>

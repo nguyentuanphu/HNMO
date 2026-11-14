@@ -6523,4 +6523,16 @@
   <data name="ItemPriceRounding_Tens_Description" xml:space="preserve">
     <value>Rounded down to a multiple of 10, and the durability doesn't reduce the price, e.g. for potions.</value>
   </data>
+  <data name="CastleSiegeConfiguration_TypeCaption" xml:space="preserve">
+    <value>Castle Siege Configuration</value>
+  </data>
+  <data name="CastleSiegeConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Castle Siege</value>
+  </data>
+  <data name="CashShopConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cash Shop Configuration</value>
+  </data>
+  <data name="CashShopConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Cash Shop</value>
+  </data>
 </root>

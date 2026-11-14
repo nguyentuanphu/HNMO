@@ -2916,4 +2916,7 @@
   <data name="GuildEditData" xml:space="preserve">
     <value>Sửa dữ liệu guild</value>
   </data>
+  <data name="Help" xml:space="preserve">
+    <value>Hướng dẫn</value>
+  </data>
 </root>
