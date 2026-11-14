@@ -46,6 +46,7 @@ import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { ChaosMachine } from './ui/mixWindow.js';
 import { PersonalShop } from './ui/personalShop.js';
+import { CashShop } from './ui/cashShop.js';
 import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
@@ -94,6 +95,7 @@ export interface GameState {
   trade?: Trade;
   chaosMachine?: ChaosMachine;
   personalShop?: PersonalShop;
+  cashShop?: CashShop;
   miniMap?: MiniMap;
   cooldowns?: typeof skillCooldowns;
   /** The camera's turn and distance (the mouse and the touch controls change them). */
@@ -679,6 +681,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // The personal store: the own store (S, /personalshop), others' stores (/purchase), the titles over the heads.
   state.personalShop = new PersonalShop({ connection, inventory, itemWindows, message: (text) => chat.add(text, 'system'), confirm: confirmInGame, level: () => stats.level, heroName: character.name, heroId: () => online.playerId, characters: () => online.characters, hero: () => online.hero, mapNumber: () => state.mapNumber ?? 0, camera, canvas: ui.canvas, root, tooltipCharacter: () => ({ classIndex: character.classIndex, level: stats.level, strength: stats.strength, agility: stats.agility, vitality: stats.vitality, energy: stats.energy, leadership: stats.leadership, maxLife: stats.maxLife, maxMana: stats.maxMana }) });
   earlyPackets.forEach((bytes) => state.personalShop?.handle(bytes));
+  // The cash shop (X or the HUD's shop button), with HNMO's free coins.
+  state.cashShop = new CashShop({ connection, heroName: character.name, safeZone: inSafeZone, walking: () => online.hero.isWalking, closeOthers: () => itemWindows.closeAll(), onToggle: (open) => state.hud?.setCashShopOpen(open), click: () => sounds.click() });
+  earlyPackets.forEach((bytes) => state.cashShop?.handle(bytes));
   // Jewels: a jewel dropped on an item is used on it (ConsumeItemRequest with the target slot).
   itemWindows.bag.onDropOnItem = (from, slot, target) => {
     if (from.storage !== 0 || from.slot < 12) return false;
@@ -719,7 +724,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'c' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void characterWindow.toggle(); }
   });
-  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); }, character: () => { void characterWindow.toggle(); } }, {
+  state.hud = new Hud(stats, { inventory: () => { void itemWindows.toggle(); }, character: () => { void characterWindow.toggle(); }, cashShop: () => { void state.cashShop?.toggle(); } }, {
     item: (slot) => { const bagSlot = hotkeys.slotOf(slot, inventory.items); return bagSlot === null ? null : inventory.items.get(bagSlot) ?? null; },
     count: (slot) => hotkeys.count(slot, inventory.items),
     use: useHotkey,

@@ -144,6 +144,9 @@ export class Hud {
     }
   }
 
+  /** Lights the cash shop button while the shop is open (MAINFRAME_BTN_PARTCHARGE). */
+  setCashShopOpen(open: boolean): void { this.model.cshop_open = open; this.doc?.update(); }
+
   refresh(): void {
     if (!this.doc) return;
     const s = this.stats;
