@@ -202,7 +202,7 @@ function hnMarkTexture(): THREE.CanvasTexture {
 }
 
 const HN_MARKS = 2;
-const HN_TICKS = 25;
+const HN_TICKS = 40;
 
 /** The "HN" letters flying out of the caster (one burst per cast). */
 export function flyHnMarks(system: EffectSystem, caster: EffectOwner): void {
