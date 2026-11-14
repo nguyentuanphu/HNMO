@@ -130,6 +130,7 @@ export const BITMAPS = {
   swordEff: '!SwordEff.jpg', // BITMAP_SWORDEFF
   forcePillar: 'force_Pillar.jpg', // BITMAP_FORCEPILLAR
   flareRed: 'flareRed.jpg', // BITMAP_FLARE_RED
+  sahamuttExplosion: 'loungexflow.jpg', // BITMAP_SUMMON_SAHAMUTT_EXPLOSION
 } as const;
 
 export type BitmapName = keyof typeof BITMAPS;

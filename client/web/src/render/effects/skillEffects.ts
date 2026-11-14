@@ -18,6 +18,7 @@ import { createAngle2D, randInt } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
 import { summonerCurse } from './summonerEffects.js';
+import { RageSkill, rageCreateEffect } from './rageEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -86,6 +87,8 @@ export const ATTACK_LIMIT_TIME = 15;
 export const SKILL_RELEASE_DELAY_SECONDS = (ATTACK_LIMIT_TIME - 1) / 25;
 
 const WHITE = new THREE.Vector3(1, 1, 1);
+/** The fighter's party buffs. */
+const RAGE_BUFFS: readonly number[] = [RageSkill.ATT_UP, RageSkill.HP_UP, RageSkill.DEF_UP];
 /** The skills whose AttackStage case sets AttackTime to 15 on the first tick: they release at once. */
 const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK];
 const SWORD_SKILLS: readonly number[] = [SkillEffect.FALLING_SLASH, SkillEffect.LUNGE, SkillEffect.UPPERCUT, SkillEffect.CYCLONE, SkillEffect.SLASH];
@@ -136,6 +139,10 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
     multiShotRings(system, caster);
     return true;
   }
+  // The fighter's effects come with the cast (CMonkSystem::RageCreateEffect); its attack then
+  // releases as any other (the hit's blood).
+  const rage = rageCreateEffect(system, skill, caster, target);
+  if (rage && RAGE_BUFFS.includes(skill)) return true; // no attack follows a party buff
   if (skill === SkillEffect.CHAIN_LIGHTNING) return true; // its links come with ChainLightningHitInfo (playChainLightning)
   if (skill === SkillEffect.COMBO) { // ReceiveMagic: the combo's burst at once
     system.createEffect('combo', caster.position, caster.angle, caster.light ?? WHITE);
@@ -155,7 +162,7 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
 }
 
 export function isPortedSkill(skill: number): boolean {
-  return (Object.values(SkillEffect) as number[]).includes(skill) || isSummon(skill);
+  return (Object.values(SkillEffect) as number[]).includes(skill) || (Object.values(RageSkill) as number[]).includes(skill) || isSummon(skill);
 }
 
 function isSummon(skill: number): boolean {

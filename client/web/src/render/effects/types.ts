@@ -95,7 +95,16 @@ export type EffectType =
   | 'pinLight' // BITMAP_PIN_LIGHT: falling pins of light
   | 'lightningShock' // MODEL_LIGHTNING_SHOCK: Lightning Shock's ball and burst (no model)
   | 'magic' // BITMAP_MAGIC: circles on the ground
-  | 'damage01Mono'; // BITMAP_DAMAGE_01_MONO: a burst on the ground
+  | 'damage01Mono' // BITMAP_DAMAGE_01_MONO: a burst on the ground
+  | 'wolfHeadEffect' // MODEL_WOLF_HEAD_EFFECT: Killing Blow's wolf heads (Effect/wolf_head_effect.bmd)
+  | 'sbumb' // BITMAP_SBUMB: Killing Blow's hits on the target
+  | 'downAttackDummyR' | 'downAttackDummyL' // Beast Uppercut's fists (Effect/down_*_punch.bmd)
+  | 'swordEffectMono' // BITMAP_SWORD_EFFECT_MONO: the party buffs' rising blade
+  | 'shockWaveGround1' // MODEL_SHOCKWAVE_GROUND01: their rings on the ground
+  | 'eventCloud' // BITMAP_EVENT_CLOUD: their clouds on the ground
+  | 'windForce' // MODEL_WINDFOCE: their whirl of wind (Effect/wind_foce.bmd)
+  | 'lightRed' // BITMAP_LIGHT_RED: the party buffs' glow
+  | 'dragonKickDummy'; // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
@@ -104,6 +113,8 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'magicParticle' // BITMAP_MAGIC as a particle: Lightning Shock's shrinking circle
   | 'pinLightParticle' // BITMAP_PIN_LIGHT as a particle: Weakness's and Innovation's falling pins
   | 'shiny5Particle' // BITMAP_SHINY+6 as a particle
+  | 'swordEffectMonoParticle' // BITMAP_SWORD_EFFECT_MONO as a particle
+  | 'sahamuttExplosion' // BITMAP_SUMMON_SAHAMUTT_EXPLOSION: CreateBomb3's explosion
   | 'sbumb'; // BITMAP_SBUMB: Killing Blow's hits
 
 /** CreateSprite types: the bitmap drawn. */

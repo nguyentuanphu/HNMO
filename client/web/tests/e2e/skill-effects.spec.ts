@@ -16,7 +16,7 @@ interface EffectsGame {
 type Win = Window & { __game: EffectsGame };
 
 /** A skill, the objects its effect must make (census keys), and when to take its picture (ms after the cast). */
-interface Case { skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean }
+interface Case { skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean; action?: number }
 
 const WIZARD: Case[] = [
   { skill: 2, name: 'meteorite', expect: ['effect:fireModel'], shotAt: 1100 },
@@ -73,7 +73,17 @@ const SUMMONER: Case[] = [
   { skill: 222, name: 'innovation', expect: ['effect:magicZin', 'effect:summonerCastingEffect222', 'particle:shiny5Particle'], shotAt: 1100 },
 ];
 
-const CASES: Record<string, Case[]> = { wizard: WIZARD, knight: KNIGHT, elf: ELF, gladiator: GLADIATOR, lord: LORD, summoner: SUMMONER };
+const FIGHTER: Case[] = [
+  { skill: 260, name: 'killing-blow', expect: ['effect:wolfHeadEffect', 'effect:sbumb', 'particle:sbumb', 'joint:pinLightJoint'], shotAt: 240 },
+  { skill: 261, name: 'beast-uppercut', expect: ['effect:downAttackDummyR', 'effect:downAttackDummyL', 'joint:forcePillar', 'particle:sahamuttExplosion'], shotAt: 520 },
+  // Its timing follows the fighter's kick (PLAYER_SKILL_DRAGONKICK), played by the hero here.
+  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega'], shotAt: 400, action: 252 },
+  { skill: 266, name: 'increase-attack', expect: ['effect:swordEffectMono', 'particle:swordEffectMonoParticle', 'effect:shockWaveGround1', 'effect:eventCloud', 'effect:windForce', 'effect:magic'], shotAt: 400 },
+  { skill: 267, name: 'increase-health', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:eventCloud'], shotAt: 400 },
+  { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },
+];
+
+const CASES: Record<string, Case[]> = { wizard: WIZARD, knight: KNIGHT, elf: ELF, gladiator: GLADIATOR, lord: LORD, summoner: SUMMONER, fighter: FIGHTER };
 const SHOTS_DIR = process.env.SHOTS_DIR ?? 'test-results/skill-shots';
 
 const game = <T>(page: Page, read: (g: EffectsGame) => T): Promise<T> => page.evaluate(`(${read.toString()})(window.__game)`);
@@ -88,10 +98,11 @@ async function goHunting(page: Page): Promise<void> {
 }
 
 /** Plays the skill as the server shows it: the hero casts at the nearest monster (or a tile ahead). */
-function cast(page: Page, skill: number, area: boolean, chain = false): Promise<boolean> {
-  return page.evaluate(({ skill, area, chain }) => {
+function cast(page: Page, skill: number, area: boolean, chain = false, action?: number): Promise<boolean> {
+  return page.evaluate(({ skill, area, chain, action }) => {
     const g = (window as unknown as Win).__game;
     const hero = g.online.hero;
+    if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
     let best: Fighter | null = null, bestDistance = 8;
     for (const c of g.online.characters.values()) {
       if (c.kind !== 'monster' || c.dead) continue;
@@ -115,7 +126,7 @@ function cast(page: Page, skill: number, area: boolean, chain = false): Promise<
     // Without a monster close by, a targeted skill is aimed at the hero itself.
     g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
     return best !== null;
-  }, { skill, area, chain });
+  }, { skill, area, chain, action });
 }
 
 const groups = process.env.SKILL_GROUPS?.split(',');
@@ -151,7 +162,7 @@ for (const [group, cases] of Object.entries(CASES)) {
           if (++this.__ticks! === freezeAt) this.__frozen = true;
         };
       }, Math.max(1, Math.round(c.shotAt / 40)));
-      await cast(page, c.skill, c.area ?? false, c.chain ?? false);
+      await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action);
       await page.waitForFunction(() => (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen === true, null, { timeout: 30_000 });
       await page.waitForTimeout(400); // a frame or two drawn
       await page.screenshot({ path: `${SHOTS_DIR}/${group}-${c.name}.png` });

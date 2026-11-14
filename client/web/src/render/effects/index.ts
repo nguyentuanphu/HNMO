@@ -35,6 +35,7 @@ import './knightEffects.js'; // registers the knights' effect and joint types
 import './elfEffects.js'; // and the elves'
 import './lordEffects.js'; // and the gladiators' and lords'
 import './summonerEffects.js'; // and the summoners'
+import './rageEffects.js'; // and the rage fighters'
 export { EffectSystem } from './effectSystem.js';
 export type { EffectSystemOptions, TickTask, EffectLayer } from './effectSystem.js';
 export { WeaponTrails } from './weaponTrails.js';
