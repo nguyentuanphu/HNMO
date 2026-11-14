@@ -33,6 +33,16 @@ public class HnmoSkillsLearningTest
     /// and the skills of other classes are not.
     /// </summary>
     /// <returns>The task.</returns>
+    /// <summary>
+    /// Bots don't get the trial quest skills (each class's fourth skill) by level.
+    /// </summary>
+    [Test]
+    public void TrialQuestSkillsAreNotForBotsByLevel()
+    {
+        Assert.That(new[] { 703, 707, 711, 715, 719, 723, 727 }.All(HNMO.GameLogic.Bots.BotProgression.IsTrialQuestSkill), Is.True);
+        Assert.That(new[] { 700, 701, 702, 704, 726, 699, 728 }.Any(HNMO.GameLogic.Bots.BotProgression.IsTrialQuestSkill), Is.False);
+    }
+
     [Test]
     public async Task SkillsAreLearnedAtTheirLevelAsync()
     {
