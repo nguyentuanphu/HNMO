@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BloodCastleStartPlugIn_Name" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="DevilSquareStartPlugIn_Name" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="ChaosCastleStartPlugIn_Name" xml:space="preserve">
+    <value>Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
+    <value>Đền Ảo Ảnh</value>
+  </data>
+  <data name="KanturuStartPlugIn_Name" xml:space="preserve">
+    <value>Kanturu</value>
+  </data>
+  <data name="RedDragonInvasionPlugIn_Name" xml:space="preserve">
+    <value>Rồng Đỏ xâm lăng</value>
+  </data>
+  <data name="GoldenInvasionPlugIn_Name" xml:space="preserve">
+    <value>Quái Vàng xâm lăng</value>
+  </data>
+  <data name="WhiteWizardInvasionPlugIn_Name" xml:space="preserve">
+    <value>Phù Thủy Trắng xâm lăng</value>
+  </data>
+  <data name="HappyHourPlugIn_Name" xml:space="preserve">
+    <value>Giờ vàng</value>
+  </data>
+</root>

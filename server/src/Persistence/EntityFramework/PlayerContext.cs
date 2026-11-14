@@ -1,4 +1,4 @@
-﻿// <copyright file="PlayerContext.cs" company="HNMO">
+// <copyright file="PlayerContext.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -581,8 +581,9 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);
 
+            var classNames = await this.GetCharacterClassNamesAsync(cancellationToken).ConfigureAwait(false);
             return entries
-                .Select(entry => new CharacterSummary(entry.Name, entry.ClassName, (int)entry.Level, (int)entry.MasterLevel, (int)entry.Resets))
+                .Select(entry => new CharacterSummary(entry.Name, ClassNameOf(classNames, entry.ClassId), (int)entry.Level, (int)entry.MasterLevel, (int)entry.Resets))
                 .ToList();
         }
     }
@@ -602,7 +603,13 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            return entry is null ? null : new CharacterSummary(entry.Name, entry.ClassName, (int)entry.Level, (int)entry.MasterLevel, (int)entry.Resets);
+            if (entry is null)
+            {
+                return null;
+            }
+
+            var classNames = await this.GetCharacterClassNamesAsync(cancellationToken).ConfigureAwait(false);
+            return new CharacterSummary(entry.Name, ClassNameOf(classNames, entry.ClassId), (int)entry.Level, (int)entry.MasterLevel, (int)entry.Resets);
         }
     }
 
@@ -619,6 +626,20 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
                 .FirstOrDefaultAsync(abuse => abuse.KillerId == killerId && abuse.VictimId == victimId, cancellationToken)
                 .ConfigureAwait(false);
         }
+    }
+
+    private static string ClassNameOf(IReadOnlyDictionary<Guid, string> classNames, Guid? classId)
+        => classId is { } id && classNames.TryGetValue(id, out var name) ? name : string.Empty;
+
+    // The character classes are configuration, not part of this context's model: their names come from the
+    // game configuration this context was created with (empty names for an empty configuration).
+    private ValueTask<IReadOnlyDictionary<Guid, string>> GetCharacterClassNamesAsync(CancellationToken cancellationToken)
+    {
+        var classes = (this.Context as AccountContext)?.CurrentGameConfiguration?.RawCharacterClasses;
+        IReadOnlyDictionary<Guid, string> names = classes is null
+            ? new Dictionary<Guid, string>()
+            : classes.GroupBy(characterClass => characterClass.Id).ToDictionary(group => group.Key, group => group.First().Name.ToString() ?? string.Empty);
+        return ValueTask.FromResult(names);
     }
 
     /// <summary>
@@ -642,9 +663,9 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
             .Where(account => !account.IsBot && !account.IsTemplate)
             .SelectMany(account => account.RawCharacters)
             .Where(character => character.CharacterStatus == DataModel.Entities.CharacterStatus.Normal)
-            .OrderByDescending(character => character.RawAttributes.Where(a => a.DefinitionId == resetsAttributeId).Select(a => a.Value).FirstOrDefault())
-            .ThenByDescending(character => character.RawAttributes.Where(a => a.DefinitionId == masterLevelAttributeId).Select(a => a.Value).FirstOrDefault())
-            .ThenByDescending(character => character.RawAttributes.Where(a => a.DefinitionId == levelAttributeId).Select(a => a.Value).FirstOrDefault())
+            .OrderByDescending(character => character.RawAttributes.Where(a => a.DefinitionId == resetsAttributeId).Select(a => (float?)a.Value).FirstOrDefault() ?? 0f)
+            .ThenByDescending(character => character.RawAttributes.Where(a => a.DefinitionId == masterLevelAttributeId).Select(a => (float?)a.Value).FirstOrDefault() ?? 0f)
+            .ThenByDescending(character => character.RawAttributes.Where(a => a.DefinitionId == levelAttributeId).Select(a => (float?)a.Value).FirstOrDefault() ?? 0f)
             .ThenByDescending(character => character.MasterExperience)
             .ThenByDescending(character => character.Experience)
             .Take(count);
@@ -668,9 +689,9 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext
     {
         return characters.Select(character => new CharacterRankingRow(
             character.Name,
-            character.RawCharacterClass!.Name,
-            character.RawAttributes.Where(a => a.DefinitionId == levelAttributeId).Select(a => a.Value).FirstOrDefault(),
-            character.RawAttributes.Where(a => a.DefinitionId == masterLevelAttributeId).Select(a => a.Value).FirstOrDefault(),
-            character.RawAttributes.Where(a => a.DefinitionId == resetsAttributeId).Select(a => a.Value).FirstOrDefault()));
+            character.CharacterClassId,
+            character.RawAttributes.Where(a => a.DefinitionId == levelAttributeId).Select(a => (float?)a.Value).FirstOrDefault() ?? 0f,
+            character.RawAttributes.Where(a => a.DefinitionId == masterLevelAttributeId).Select(a => (float?)a.Value).FirstOrDefault() ?? 0f,
+            character.RawAttributes.Where(a => a.DefinitionId == resetsAttributeId).Select(a => (float?)a.Value).FirstOrDefault() ?? 0f));
     }
 }

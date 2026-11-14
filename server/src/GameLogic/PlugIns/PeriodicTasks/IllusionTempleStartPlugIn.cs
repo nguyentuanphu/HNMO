@@ -12,7 +12,7 @@ using HNMO.PlugIns;
 /// This plugin enables the start of the illusion temple.
 /// </summary>
 [PlugIn]
-[Display(Name = nameof(IllusionTempleStartPlugIn), Description = "Illusion Temple event")]
+[Display(Name = nameof(HNMO.GameLogic.Properties.PlugInResources.IllusionTempleStartPlugIn_Name), Description = nameof(HNMO.GameLogic.Properties.PlugInResources.IllusionTempleStartPlugIn_Description), ResourceType = typeof(HNMO.GameLogic.Properties.PlugInResources))]
 [Guid("3AD96A70-ED24-4979-80B8-169E464E545F")]
 public sealed class IllusionTempleStartPlugIn : MiniGameStartBasePlugIn<IllusionTempleStartConfiguration, IllusionTempleGameServerState>
 {

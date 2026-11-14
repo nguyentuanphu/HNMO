@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <!-- The server's own network library: packets and their encryption. -->
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     <ProjectReference Include="$(HnmoServerSource)/src/Network/HNMO.Network.csproj" />
     <ProjectReference Include="$(HnmoServerSource)/src/Network/Packets/HNMO.Network.Packets.csproj" />
     <PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.8" />

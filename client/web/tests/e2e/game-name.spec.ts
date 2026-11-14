@@ -7,14 +7,15 @@ test('the page shows the game name from the server', async ({ page, request }) =
   expect(served.ok()).toBe(true);
   const { name } = await served.json() as { name: string };
   expect(name.length).toBeGreaterThan(0);
-  await page.goto('/');
+  // "/" is the website; the game is at /index.html.
+  await page.goto('/index.html');
   await expect(page.locator('#login h1, h1[data-game-name]').first()).toHaveText(name);
   await expect(page).toHaveTitle(name);
 });
 
 test('a name changed in the admin panel replaces the default everywhere', async ({ page }) => {
   await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Test Realm' } }));
-  await page.goto('/');
+  await page.goto('/index.html');
   await expect(page.locator('h1[data-game-name]').first()).toHaveText('Test Realm');
   await expect(page).toHaveTitle('Test Realm');
   await expect(page.locator('#guideButton')).toHaveAttribute('aria-label', 'Open the Test Realm guide');
@@ -24,13 +25,13 @@ test('a name changed in the admin panel replaces the default everywhere', async 
   await page.goto('/account.html');
   await expect(page.locator('h1')).toHaveText('Test Realm');
   // Nothing a player sees says HNMO any more (the file name "Start HNMO" in the guide is a real file).
-  await page.goto('/');
+  await page.goto('/index.html');
   expect(await page.locator('body').innerText()).not.toContain('HNMO');
 });
 
 test('community links set in the admin panel show on the login screen and in the guide', async ({ page }) => {
   await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Test Realm', links: { zalo: 'https://zalo.me/g/test', discord: 'javascript:alert(1)' } } }));
-  await page.goto('/');
+  await page.goto('/index.html');
   const links = page.locator('#communityLinks');
   await expect(links).toBeVisible();
   await expect(links.locator('a.community-zalo')).toHaveAttribute('href', 'https://zalo.me/g/test');
@@ -42,7 +43,7 @@ test('community links set in the admin panel show on the login screen and in the
 
 test('without links nothing is shown', async ({ page }) => {
   await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Test Realm', links: {} } }));
-  await page.goto('/');
+  await page.goto('/index.html');
   await page.waitForTimeout(500);
   await expect(page.locator('#communityLinks')).toBeHidden();
 });

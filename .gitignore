@@ -1,1 +1,4 @@
 .claude/worktrees/
+
+# The website's API key and other host-only files of a dev bridge
+client/web/save/

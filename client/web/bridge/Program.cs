@@ -27,6 +27,7 @@ builder.Services.AddHostedService(services => new GameLauncher(launcherOptions, 
 builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
 var portalOptions = builder.Configuration.GetSection("Portal").Get<PortalOptions>() ?? new PortalOptions();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpForwarder();
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
 var webRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:WebRoot"] ?? "../public"));
@@ -39,7 +40,11 @@ const int MaximumPacketSize = 0xFFFF;
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
 
+// The admin panel at the website's secret admin path (AdminGateway.cs); before everything else.
+AdminGateway.Use(app, new AdminGateway(portalOptions, app.Services.GetRequiredService<Yarp.ReverseProxy.Forwarder.IHttpForwarder>(), app.Services.GetRequiredService<IHttpClientFactory>(), app.Services.GetRequiredService<ILogger<AdminGateway>>()));
+
 app.MapGet("/health", () => "ok");
+app.MapGet("/", () => Results.Redirect("/home.html"));
 
 // The game's name players see: set in the admin panel (the "Game name" plug-in), asked from its public
 // endpoint and kept for 30 seconds; the default while the admin panel doesn't answer.
@@ -151,6 +156,7 @@ app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 
     await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
 });
+Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
 app.Logger.LogInformation("Web client: {WebRoot}. Game data: {DataRoot}.", webRoot, gameFiles.Root);
 

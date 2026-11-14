@@ -1,0 +1,35 @@
+// <copyright file="WebsiteConfiguration.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns;
+
+using System.ComponentModel.DataAnnotations;
+
+/// <summary>
+/// The configuration of the <see cref="WebsitePlugIn"/>.
+/// </summary>
+public class WebsiteConfiguration
+{
+    /// <summary>
+    /// The admin path when nothing else is set.
+    /// </summary>
+    public const string DefaultAdminPath = "adminpanel";
+
+    /// <summary>
+    /// Gets or sets the path under which the website opens the admin panel (e.g. "adminpanel" for
+    /// https://your-site/adminpanel). Choose something hard to guess; empty turns the website's
+    /// admin access off (the admin panel then only opens on the host computer).
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_AdminPath_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_AdminPath_Description), ResourceType = typeof(Properties.PlugInResources))]
+    [StringLength(40)]
+    [RegularExpression("^$|^[A-Za-z0-9][A-Za-z0-9_-]{2,39}$")]
+    public string AdminPath { get; set; } = DefaultAdminPath;
+
+    /// <summary>
+    /// Gets or sets the OAuth client id of a Google Cloud "Web application" client; empty hides "Sign in with Google".
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_GoogleClientId_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_GoogleClientId_Description), ResourceType = typeof(Properties.PlugInResources))]
+    [StringLength(200)]
+    public string GoogleClientId { get; set; } = string.Empty;
+}

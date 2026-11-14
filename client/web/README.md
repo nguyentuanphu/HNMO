@@ -82,3 +82,50 @@ names the C++ function it follows:
 
 See [PARITY.md](PARITY.md). Next up: attacking monsters (damage, health bars,
 dying), then equipment on characters and the HUD.
+
+## Bilingual website
+
+`Start HNMO` opens the website at `/` (also `/home.html`); while it is open, the browser loads the
+game's code and first data files in the background, so **Enter the game** (`/index.html`) starts
+quickly. English and Vietnamese are switched in the header and remembered by the browser.
+
+**What it shows, all read from the server** (nothing is estimated or made up):
+
+| Section | Source | Refresh |
+|---|---|---|
+| Players online / capacity, EXP and master EXP rates, level, party and character limits, classes, maps, event rules | `/api/website` → `/website/data` | 30 s |
+| Events starting in the next 24 hours (from the event timetables and the server's time zone), shown in the visitor's time zone | `/api/website/details` → `/website/details` | 60 s |
+| Character ranking (resets, master level, level; bots and game masters left out), event rankings (saved scores) | same | 60 s (cached 1 min on the server) |
+| Drop groups (chance per kill, monster level range, monster, number of items) | same | 60 s |
+
+When the server can't be reached, the numbers and tables are cleared and the page says so; old
+values are never shown as current. Each part of the details is independent: one that fails comes
+back as "unavailable" (and is logged on the server) while the others still show.
+
+**Accounts.** The Account section registers through the existing portal (`/portal/register`, the
+host's API key stays on the server). **Sign in with Google** appears when the host sets a Google
+client id (admin panel → Plugins → *Website (admin address, Google sign-in)*; a Google Cloud OAuth
+client of type "Web application" with the website's address as an authorized JavaScript origin).
+The web server checks Google's token with Google (issuer, this client id, a verified e-mail, not
+expired), then finds the game account with that e-mail (the player may set a new game password)
+or creates one with the name and password the player chooses. The game itself still logs in with
+the account name and password.
+
+**Admin panel through the website.** `https://your-site/adminpanel` opens the admin panel's login.
+Change the address in the same plug-in (e.g. to something hard to guess); the website follows
+within 30 seconds and the old address stops working. The admin panel always asks for an admin
+login there, and stays closed there until an admin user exists (create it on the host computer at
+http://127.0.0.1:8095 first). The address is never sent to visitors. Empty turns it off.
+
+**Translations.** Interface texts are in `src/website.ts` (English and Vietnamese). Game content
+uses the server's translations: event names come from `PlugInResources.vi.resx` (added for the
+events); map, class, drop-group and monster names use the `vi=` part of the server's names when
+there is one. Still English on the server (no Vietnamese yet): map, class, drop-group and monster
+names, and the Doppelganger and Imperial Guardian events.
+
+The hero uses the existing six `Interface/lo_back_im*.OZJ` game artwork tiles, assembled as
+`public/images/realm.jpg`; no artwork from any other site is used. The Windows download points
+to this repository's latest release.
+
+Tests: `tests/e2e/website.spec.ts` and `website-details.spec.ts` use fixtures (routed responses);
+`tests/e2e/website-live.spec.ts` checks a real server (`LIVE_SERVER=1 BASE_URL=…`).

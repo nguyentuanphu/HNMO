@@ -5496,5 +5496,75 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("BankTopUpConfiguration_SepayApiKey_Description", resourceCulture);
             }
         }
+            /// <summary>
+        ///   Looks up a localized string similar to WebsitePlugIn_Name.
+        /// </summary>
+        public static string WebsitePlugIn_Name {
+            get {
+                return ResourceManager.GetString("WebsitePlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsitePlugIn_Description.
+        /// </summary>
+        public static string WebsitePlugIn_Description {
+            get {
+                return ResourceManager.GetString("WebsitePlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_AdminPath_Caption.
+        /// </summary>
+        public static string WebsiteConfiguration_AdminPath_Caption {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_AdminPath_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_AdminPath_Description.
+        /// </summary>
+        public static string WebsiteConfiguration_AdminPath_Description {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_AdminPath_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_GoogleClientId_Caption.
+        /// </summary>
+        public static string WebsiteConfiguration_GoogleClientId_Caption {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_GoogleClientId_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_GoogleClientId_Description.
+        /// </summary>
+        public static string WebsiteConfiguration_GoogleClientId_Description {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_GoogleClientId_Description", resourceCulture);
+            }
+        }
+            /// <summary>
+        ///   Looks up a localized string similar to IllusionTempleStartPlugIn_Name.
+        /// </summary>
+        public static string IllusionTempleStartPlugIn_Name {
+            get {
+                return ResourceManager.GetString("IllusionTempleStartPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to IllusionTempleStartPlugIn_Description.
+        /// </summary>
+        public static string IllusionTempleStartPlugIn_Description {
+            get {
+                return ResourceManager.GetString("IllusionTempleStartPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

@@ -87,4 +87,36 @@ public class AccountController : ControllerBase
     [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.AuthenticationScheme, Policy = AdminPolicies.AuthenticatedOperator)]
     public ValueTask<JsonObject> ResetPasswordAsync(string loginName, [FromBody] AccountPasswordChange change, CancellationToken cancellationToken)
         => this._operations.ResetPasswordAsync(loginName, change.Password, change.Reason, cancellationToken);
+
+    /// <summary>
+    /// Finds the account registered with an e-mail address (exact, ignoring case), e.g. for the website's
+    /// Google sign-in after Google verified the address. Only the login name comes back.
+    /// </summary>
+    /// <param name="email">The e-mail address.</param>
+    /// <param name="operations">The shared read operations.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The login name, or 404 when no account has that address (409 when several have it).</returns>
+    [HttpGet("by-email")]
+    [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Roles = nameof(AdminRole.Viewer))]
+    public async ValueTask<IActionResult> FindByEmailAsync([FromQuery] string email, [FromServices] AccountReadOperations operations, CancellationToken cancellationToken)
+    {
+        email = email?.Trim() ?? string.Empty;
+        if (email.Length is < 3 or > 100 || !email.Contains('@', StringComparison.Ordinal))
+        {
+            return this.BadRequest(new { error = "An e-mail address is needed." });
+        }
+
+        var page = await operations.SearchAsync(email, null, 0, 100, cancellationToken).ConfigureAwait(false);
+        var matches = (page["items"]?.AsArray() ?? [])
+            .Where(item => string.Equals(item?["EMail"]?.GetValue<string>() ?? item?["eMail"]?.GetValue<string>(), email, StringComparison.OrdinalIgnoreCase))
+            .Select(item => item?["LoginName"]?.GetValue<string>() ?? item?["loginName"]?.GetValue<string>())
+            .Where(name => !string.IsNullOrEmpty(name))
+            .ToList();
+        return matches.Count switch
+        {
+            0 => this.NotFound(new { error = "No account has this address." }),
+            1 => this.Ok(new { loginName = matches[0] }),
+            _ => this.Conflict(new { error = "Several accounts have this address." }),
+        };
+    }
 }

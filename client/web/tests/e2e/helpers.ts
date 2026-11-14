@@ -23,7 +23,7 @@ const PANEL_WIDTH = 190;
 
 // Logs in, picks the first server and the first character, and waits until the world is drawn.
 export async function enterWorld(page: Page, account: string): Promise<void> {
-  await page.goto('/');
+  await page.goto('/index.html');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');

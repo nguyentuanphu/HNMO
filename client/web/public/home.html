@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#11110e" />
+    <title>{game}</title>
+    <link rel="stylesheet" href="/home.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#"
+        ><span class="crest">H</span><span data-game-name></span
+      ></a>
+      <nav>
+        <a href="#realm" data-t="realm"></a
+        ><a href="#schedule" data-t="scheduleNav"></a
+        ><a href="#rankings" data-t="rankingsNav"></a
+        ><a href="#events" data-t="events"></a
+        ><a href="#world" data-t="world"></a
+        ><a href="#account" data-t="accountNav"></a
+        ><a href="#start" data-t="start"></a>
+      </nav>
+      <div class="languages">
+        <button id="en" lang="en">EN</button
+        ><button id="vi" lang="vi">VI</button>
+      </div>
+      <a class="small-button" href="/account.html" data-t="account"></a>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="hero-art" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow" data-t="eyebrow"></p>
+          <h1 data-t="hero"></h1>
+          <p class="intro" data-t="intro"></p>
+          <div class="actions">
+            <a class="primary" href="/index.html" data-t="play"></a
+            ><a class="secondary" href="#realm" data-t="explore"></a>
+          </div>
+          <p class="caption" data-t="browser"></p>
+        </div>
+        <div class="hero-footer">
+          <span data-t="live"></span><span id="connection" role="status"></span
+          ><button id="refresh" data-t="refresh"></button>
+        </div>
+      </section>
+      <section id="realm">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-t="source"></p>
+            <h2 data-t="realmTitle"></h2>
+          </div>
+          <label
+            ><span data-t="server"></span>
+            <select id="server" aria-label="Server"></select
+          ></label>
+        </div>
+        <p id="notice" role="status"></p>
+        <div class="stats" id="stats"></div>
+        <div class="realm-bottom">
+          <p data-t="truth"></p>
+          <span id="updated"></span>
+        </div>
+      </section>
+      <section id="events">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 / <span data-t="events"></span></p>
+            <h2 data-t="eventTitle"></h2>
+          </div>
+          <span class="muted" data-t="eventHint"></span>
+        </div>
+        <div id="event-list" class="event-list"></div>
+      </section>
+      <section id="schedule">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="scheduleNav"></span></p>
+            <h2 data-t="scheduleTitle"></h2>
+          </div>
+          <span class="muted" id="timezone"></span>
+        </div>
+        <p class="muted" id="details-notice" role="status"></p>
+        <div id="upcoming" class="upcoming"></div>
+      </section>
+      <section id="rankings">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="rankingsNav"></span></p>
+            <h2 data-t="rankingsTitle"></h2>
+          </div>
+        </div>
+        <div class="world-grid">
+          <article class="panel">
+            <h3 data-t="topCharacters"></h3>
+            <div class="table-wrap"><table id="ranking" class="table"></table></div>
+          </article>
+          <article class="panel">
+            <div class="map-head">
+              <h3 data-t="eventRankings"></h3>
+              <select id="event-ranking" aria-label="Event"></select>
+            </div>
+            <div class="table-wrap"><table id="event-table" class="table"></table></div>
+          </article>
+        </div>
+      </section>
+      <section id="drops">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="dropsNav"></span></p>
+            <h2 data-t="dropsTitle"></h2>
+          </div>
+          <span class="muted" data-t="dropsHint"></span>
+        </div>
+        <div class="table-wrap"><table id="drop-table" class="table"></table></div>
+        <button type="button" id="drops-more" class="secondary" hidden></button>
+      </section>
+      <section id="world">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 / <span data-t="world"></span></p>
+            <h2 data-t="worldTitle"></h2>
+          </div>
+        </div>
+        <div class="world-grid">
+          <article class="panel">
+            <h3 data-t="classes"></h3>
+            <div id="classes" class="class-list"></div>
+          </article>
+          <article class="panel">
+            <div class="map-head">
+              <h3 data-t="maps"></h3>
+              <input
+                id="search"
+                type="search"
+                data-placeholder="search"
+                aria-label="Search maps"
+              />
+            </div>
+            <div id="maps" class="maps"></div>
+          </article>
+        </div>
+      </section>
+      <section id="account" class="account">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 / <span data-t="accountNav"></span></p>
+            <h2 data-t="accountTitle"></h2>
+          </div>
+        </div>
+        <div class="world-grid">
+          <article class="panel">
+            <h3 data-t="registerTitle"></h3>
+            <form id="register" class="form" autocomplete="on">
+              <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" autocomplete="username" /></label>
+              <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
+              <label><span data-t="email"></span><input name="email" type="email" maxlength="60" autocomplete="email" /></label>
+              <button class="primary" type="submit" data-t="registerButton"></button>
+              <p class="form-message" id="register-message" role="status"></p>
+            </form>
+          </article>
+          <article class="panel">
+            <h3 data-t="googleTitle"></h3>
+            <p class="muted" id="google-off" data-t="googleOff"></p>
+            <div id="google-button" hidden></div>
+            <form id="google-account" class="form" hidden>
+              <p class="muted" data-t="googleNew"></p>
+              <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" /></label>
+              <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
+              <button class="primary" type="submit" data-t="registerButton"></button>
+            </form>
+            <form id="google-linked" class="form" hidden>
+              <p><span data-t="googleLinked"></span> <strong id="google-login"></strong></p>
+              <label><span data-t="newPassword"></span><input name="newPassword" type="password" minlength="3" maxlength="20" autocomplete="new-password" /></label>
+              <button type="submit" data-t="setPassword"></button>
+              <a class="primary" href="/index.html" data-t="play"></a>
+            </form>
+            <p class="form-message" id="google-message" role="status"></p>
+          </article>
+        </div>
+      </section>
+      <section id="start" class="start">
+        <p class="eyebrow" data-t="adventure"></p>
+        <h2 data-t="startTitle"></h2>
+        <div class="steps">
+          <article>
+            <b>01</b>
+            <h3 data-t="create"></h3>
+            <p data-t="createText"></p>
+            <a href="/account.html" data-t="account"></a>
+          </article>
+          <article>
+            <b>02</b>
+            <h3 data-t="choose"></h3>
+            <p data-t="chooseText"></p>
+            <a href="/index.html" data-t="play"></a>
+          </article>
+          <article>
+            <b>03</b>
+            <h3 data-t="download"></h3>
+            <p data-t="downloadText"></p>
+            <a
+              href="https://github.com/nguyentuanphu/HNMO/releases/latest/download/HNMO-windows.zip"
+              data-t="downloadLink"
+            ></a>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div id="community" data-community-links hidden></div>
+      <span data-game-name></span><span data-t="footer"></span
+      ><a href="#" data-t="top"></a>
+    </footer>
+    <script type="module" src="/js/website.js"></script>
+  </body>
+</html>

@@ -6,6 +6,7 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 internal sealed class PortalOptions
 {
@@ -18,7 +19,12 @@ internal sealed class PortalOptions
     public int StartingCoins { get; set; } = 1000;
 
     public int RegistrationsPerHourPerAddress { get; set; } = 5;
+
+    /// <summary>Google's token check; replaceable for tests.</summary>
+    public string GoogleTokenInfoUrl { get; set; } = "https://oauth2.googleapis.com/tokeninfo";
 }
+
+internal sealed record GoogleSignInRequest(string Credential, string? LoginName, string? Password, string? NewPassword);
 
 internal sealed record RegisterRequest(string LoginName, string Password, string? EMail);
 
@@ -39,6 +45,8 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/register", portal.RegisterAsync);
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
+        app.MapGet("/website/settings", (Func<HttpContext, Task<IResult>>)portal.WebsiteSettingsAsync);
+        app.MapPost("/portal/google", portal.GoogleAsync);
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
@@ -181,5 +189,133 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         Directory.CreateDirectory(Path.GetDirectoryName(this.KeyFile)!);
         await File.WriteAllTextAsync(this.KeyFile, key, context.RequestAborted).ConfigureAwait(false);
         return Results.Json(new { saved = true });
+    }
+
+    // What the website's pages may know (the Google client id); the admin path never leaves the server.
+    private async Task<IResult> WebsiteSettingsAsync(HttpContext context)
+    {
+        var clientId = await this.GoogleClientIdAsync(context.RequestAborted).ConfigureAwait(false);
+        context.Response.Headers.CacheControl = "no-cache";
+        return Results.Json(new { googleClientId = clientId ?? string.Empty });
+    }
+
+    private async Task<string?> GoogleClientIdAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), cancellationToken).ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
+            return document.RootElement.TryGetProperty("googleClientId", out var value) && value.GetString() is { Length: > 0 } id ? id : null;
+        }
+        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            return null;
+        }
+    }
+
+    // "Sign in with Google": Google's ID token proves the e-mail address. The game account with that
+    // address is found (and may get a new game password), or created with a name and password the player
+    // chooses. The game itself still logs in with the account name and password.
+    private async Task<IResult> GoogleAsync(HttpContext context, GoogleSignInRequest request)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "Accounts aren't set up yet. Ask the host to finish the setup (README.txt)." }, statusCode: 503);
+        }
+
+        var clientId = await this.GoogleClientIdAsync(context.RequestAborted).ConfigureAwait(false);
+        if (clientId is null)
+        {
+            return Results.Json(new { error = "Google sign-in isn't set up on this server." }, statusCode: 503);
+        }
+
+        var email = await this.VerifyGoogleTokenAsync(request.Credential, clientId, context.RequestAborted).ConfigureAwait(false);
+        if (email is null)
+        {
+            return Results.Json(new { error = "Google didn't confirm the sign-in. Try again." }, statusCode: 401);
+        }
+
+        using var found = await http.SendAsync(this.ApiRequest(HttpMethod.Get, $"api/accounts/by-email?email={Uri.EscapeDataString(email)}"), context.RequestAborted).ConfigureAwait(false);
+        if (found.StatusCode == HttpStatusCode.Conflict)
+        {
+            return Results.Json(new { error = "Several game accounts use this address. Ask the host." }, statusCode: 409);
+        }
+
+        if (found.IsSuccessStatusCode)
+        {
+            using var document = JsonDocument.Parse(await found.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false));
+            var loginName = document.RootElement.GetProperty("loginName").GetString()!;
+            var passwordChanged = false;
+            if (!string.IsNullOrEmpty(request.NewPassword))
+            {
+                using var changed = await http.SendAsync(this.ApiRequest(HttpMethod.Put, $"api/accounts/{Uri.EscapeDataString(loginName)}/password", new { password = request.NewPassword, reason = "New game password through Google sign-in on the website" }), context.RequestAborted).ConfigureAwait(false);
+                if (!changed.IsSuccessStatusCode)
+                {
+                    return Results.Json(new { error = "The password needs 3 to 20 letters, digits or symbols." }, statusCode: 400);
+                }
+
+                passwordChanged = true;
+                logger.LogInformation("Account {Account} set a new password through Google sign-in.", loginName);
+            }
+
+            return Results.Json(new { loginName, email, passwordChanged });
+        }
+
+        if (found.StatusCode != HttpStatusCode.NotFound)
+        {
+            return Results.Json(new { error = "The game server didn't answer. Is it running?" }, statusCode: 502);
+        }
+
+        if (string.IsNullOrWhiteSpace(request.LoginName) || string.IsNullOrEmpty(request.Password))
+        {
+            // No account with this address yet: the page asks for a name and a password, then sends them.
+            return Results.Json(new { needsAccount = true, email });
+        }
+
+        return await this.RegisterAsync(context, new RegisterRequest(request.LoginName.Trim(), request.Password, email)).ConfigureAwait(false);
+    }
+
+    // Asks Google whether the ID token is genuine, for this site, unexpired and for a verified address.
+    private async Task<string?> VerifyGoogleTokenAsync(string credential, string clientId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(credential) || credential.Length > 4096)
+        {
+            return null;
+        }
+
+        try
+        {
+            using var response = await http.GetAsync($"{options.GoogleTokenInfoUrl}?id_token={Uri.EscapeDataString(credential)}", cancellationToken).ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
+            var root = document.RootElement;
+            string Text(string name) => root.TryGetProperty(name, out var value) ? value.ValueKind == JsonValueKind.String ? value.GetString() ?? string.Empty : value.GetRawText() : string.Empty;
+            var issuer = Text("iss");
+            var expires = long.TryParse(Text("exp"), out var seconds) ? DateTimeOffset.FromUnixTimeSeconds(seconds) : DateTimeOffset.MinValue;
+            if (Text("aud") != clientId
+                || issuer is not ("accounts.google.com" or "https://accounts.google.com")
+                || !string.Equals(Text("email_verified"), "true", StringComparison.OrdinalIgnoreCase)
+                || expires < DateTimeOffset.UtcNow
+                || Text("email") is not { Length: > 3 } email)
+            {
+                return null;
+            }
+
+            return email;
+        }
+        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            logger.LogWarning("Google's token check failed: {Message}", error.Message);
+            return null;
+        }
     }
 }

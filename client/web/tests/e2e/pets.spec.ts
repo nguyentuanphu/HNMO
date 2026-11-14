@@ -26,7 +26,7 @@ const SAFEZONE = 0x01;
 const BLOCKING = 0x04 | 0x08; // NOMOVE, NOGROUND (pathfinding.ts)
 
 async function enterAs(page: Page, account: string, character: string): Promise<void> {
-  await page.goto('/');
+  await page.goto('/index.html');
   await page.fill('#username', account);
   await page.fill('#password', account);
   await page.click('button.primary');
