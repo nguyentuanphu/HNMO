@@ -866,8 +866,11 @@ export function setUpInstanceEvents(options: InstanceEventOptions): InstanceEven
 
   // Every frame, as the desktop updates them.
   let last = performance.now();
+  let lastMap = options.mapNumber();
   const frame = () => {
     const now = performance.now();
+    // A map change closes the entry windows (HideAll on entering a map).
+    if (options.mapNumber() !== lastMap) { lastMap = options.mapNumber(); closeEntries(); }
     events.syncMap();
     events.temple.step(now, ((now - last) / 1000) * 25);
     last = now;
