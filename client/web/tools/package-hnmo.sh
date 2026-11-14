@@ -34,7 +34,10 @@ dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release -r "$
   -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
   -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
   -o "$OUT/server" -v quiet
-dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet -p:HnmoServerSource="$SERVER_SOURCE"
+dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet \
+  -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
+  -p:AllowedReferenceRelatedFileExtensions=.no-related-files
+find "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "*.xml" \) -delete
 
 # The web client (TypeScript, built and type-checked here; a type error stops the build) and its library
 echo "Building the web client"
@@ -51,7 +54,8 @@ echo "Bundling the web client (esbuild)"
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
   --bundle --minify --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -maxdepth 1 -name '*.js' ! -name 'main.min.js' -delete
+find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' -delete
+find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
 # Point the packaged page at the bundle (dev index.html is untouched).
 sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
 
@@ -137,7 +141,7 @@ if [ -n "$SIGN_KEY_FILE" ]; then
       [ -f "$exe" ] && MANIFEST_FILES+=("$exe")
     done
     while IFS= read -r f; do MANIFEST_FILES+=("$f"); done < <(find server -maxdepth 1 -name 'HNMO.*.dll' | sort)
-    for launcher in web/HNMO.Web web/HNMO.Web.exe; do
+    for launcher in web/HNMO web/HNMO.exe; do
       [ -f "$launcher" ] && MANIFEST_FILES+=("$launcher")
     done
     for bundle in web/wwwroot/js/main.min.js web/wwwroot/js/main.js; do
