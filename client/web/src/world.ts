@@ -76,7 +76,7 @@ export function filesFolder(mapNumber: number): number {
 const MAP_NAMES: Record<number, string> = {
   0: 'Lorencia', 1: 'Dungeon', 2: 'Devias', 3: 'Noria', 4: 'Lost Tower', 6: 'Arena', 7: 'Atlans', 8: 'Tarkan',
   9: 'Devil Square', 10: 'Icarus', 11: 'Blood Castle', 18: 'Chaos Castle', 24: 'Kalima', 30: 'Valley of Loren',
-  31: 'Land of Trials', 33: 'Aida', 34: 'Crywolf Fortress', 37: 'Kanturu', 38: 'Kanturu Relics', 39: 'Kanturu Refinery Tower',
+  31: 'Land of Trials', 36: 'Lost Kalima', 33: 'Aida', 34: 'Crywolf Fortress', 37: 'Kanturu', 38: 'Kanturu Relics', 39: 'Kanturu Refinery Tower',
   40: 'Silent Map', 41: 'Barracks of Balgass', 42: 'Balgass Refuge', 45: 'Illusion Temple', 51: 'Elveland',
   56: 'Swamp of Calmness', 57: 'Raklion', 58: 'Raklion Hatchery', 62: 'Santa Village', 63: 'Vulcanus', 64: 'Duel Arena',
   65: 'Doppelganger', 69: 'Imperial Guardian', 79: 'Loren Market', 80: 'Karutan 1', 81: 'Karutan 2',
@@ -88,7 +88,7 @@ export const KNOWN_MAPS = Object.keys(MAP_NAMES).map(Number);
 const EVENT_MAP_NAMES = [
   { maps: [12, 13, 14, 15, 16, 17, 52], name: 'Blood Castle' }, { maps: [19, 20, 21, 22, 23, 53], name: 'Chaos Castle' }, { maps: [32], name: 'Devil Square' },
   { maps: [45, 46, 47, 48, 49, 50], name: 'Illusion Temple' }, { maps: [65, 66, 67, 68], name: 'Doppelganger' },
-  { maps: [69, 70, 71, 72], name: 'Varka' },
+  { maps: [69, 70, 71, 72], name: 'Varka' }, { maps: [25, 26, 27, 28, 29], name: 'Kalima' },
 ];
 
 export function mapName(mapNumber: number): string {

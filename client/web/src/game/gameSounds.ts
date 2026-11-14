@@ -25,8 +25,10 @@ const SKILL_SOUNDS: Record<number, string> = {
 export class GameSounds {
   readonly audio: AudioSystem = audioSystem();
   private lastStepFrame = -1;
-  /** The events' part of the music rule (the temple's state, the Doppelganger running), set by the events. */
+  /** The events' part of the music rule (the temple's state, the Doppelganger running), set by an event. */
   eventMusicState: () => Partial<MapAudioState> = () => ({});
+  /** More event states the music rule reads (Crywolf, the castle siege, …), each pushed by its event. */
+  readonly musicStates: (() => Partial<MapAudioState>)[] = [];
 
   constructor() {
     void this.audio.init().catch(() => undefined);
@@ -38,7 +40,7 @@ export class GameSounds {
   frame(map: number | null, hero: Character | null, tile: number, safeZone: boolean, numKeys: number): void {
     if (map === null || !hero) return;
     this.audio.setListener({ x: hero.position.x, y: hero.position.y, z: 0 }, (hero.angle * 180) / Math.PI);
-    const state: MapAudioState = { ...this.eventMusicState(), world: map, safeZone, heroTile: tile, heroX: hero.cell.x, heroY: hero.cell.y };
+    const state: MapAudioState = Object.assign({ world: map, safeZone, heroTile: tile, heroX: hero.cell.x, heroY: hero.cell.y }, this.eventMusicState(), ...this.musicStates.map((get) => get()));
     this.audio.applyMusicCalls(backgroundMusicCalls(state));
     this.audio.applySoundCalls(ambientCalls(state));
     // Footsteps at walk frames 1.5 and 4.5 (PlayWalkSound).

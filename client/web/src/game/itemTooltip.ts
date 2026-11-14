@@ -15,6 +15,7 @@ import type { Item } from './inventory.js';
 import { loadMonsterCatalog } from './monsterData.js';
 import type { MonsterCatalog } from './monsterData.js';
 import { buxConvert } from '../formats.js';
+import { hellasTooltipLines } from './kalima.js';
 
 /** A row of the tooltip. */
 export interface TooltipLine {
@@ -1405,6 +1406,7 @@ export function tooltipLines(item: Item, character: TooltipCharacter | null = nu
   writer.writeLayoutLines('options');
   writer.writeDescription(true);
   writer.writeLayoutLines('afterOptions');
+  writer.lines.push(...hellasTooltipLines(item, character)); // RenderHellasItemInfo: the Lost Map, the Symbol of Kundun
   setLines(item, writer.lines);
   socketLines(item, character, writer.lines);
   return writer.lines;

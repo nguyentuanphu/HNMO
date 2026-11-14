@@ -90,8 +90,11 @@ contribution, the family mark on the pointed player done; the marks in every pla
    click), the sacred item's progress box, the temple's result and reward, the Doppelganger frame, the Imperial
    Guardian timer and boxes done; the temple skills' effects, the sacred item's model, team outfits and the
    Imperial Guardian's weather next.
-3. Kalima, Crywolf, Castle Siege, Kanturu, Raklion, lucky coins, golden bowman — enter windows, timers,
-   scores, rewards.
+3. 🟡 Kalima, Crywolf, Castle Siege (`game/kalima.ts`, `game/crywolf.ts`, `game/castleSiege.ts`,
+   `ui/castleSiegeWindows.ts`, `ui/fieldEventWindows.ts`): Kalima gates and tooltips, the Crywolf HUD, altars,
+   result and terrain, the siege's guardsman, senior, gatekeeper, gate switch, catapult, HUD and notices done;
+   the gate / catapult animations, the battle skills and the event monsters' effects next.
+4. Kanturu, Raklion, lucky coins, golden bowman — enter windows, timers, scores, rewards.
 
 ## 10. Shell and interface
 1. ✅ **(extra)** The (i) button: an in-game guide of what to play and what each feature does

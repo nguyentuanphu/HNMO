@@ -95,6 +95,8 @@ export class OnlineWorld {
   onTalk?: (npc: Character) => void;
   /** Asked before talking to an NPC: true when it handled the talk itself (an event's own NPCs). */
   interceptTalk?: (npc: Character) => boolean;
+  /** Also asked before TalkToNpcRequest: true when the click was handled otherwise (a Crywolf altar's contract). */
+  beforeTalk?: (npc: Character) => boolean;
 
   constructor({ connection, root, world, hero, playerId, onChange, onMapChanged, onMessage }: OnlineWorldOptions) {
     this.onMapChanged = onMapChanged;
@@ -278,12 +280,14 @@ export class OnlineWorld {
   update(dt: number): void {
     if (this.goal && !this.hero.isWalking) this.walkNextPart();
     if (this.talkTarget && !this.hero.isWalking && !this.goal) {
-      if (this.closeEnoughToTalk(this.talkTarget) && this.interceptTalk?.(this.talkTarget)) {
-        this.hero.faceTo?.(this.talkTarget.cell);
-      } else if (this.closeEnoughToTalk(this.talkTarget)) {
-        this.connection.send('ClientToServer', 'TalkToNpcRequest', { NpcId: this.talkTarget.id });
-        this.onTalk?.(this.talkTarget);
-        this.hero.faceTo?.(this.talkTarget.cell);
+      if (this.closeEnoughToTalk(this.talkTarget)) {
+        if (this.interceptTalk?.(this.talkTarget) || this.beforeTalk?.(this.talkTarget)) {
+          this.hero.faceTo?.(this.talkTarget.cell);
+        } else {
+          this.connection.send('ClientToServer', 'TalkToNpcRequest', { NpcId: this.talkTarget.id });
+          this.onTalk?.(this.talkTarget);
+          this.hero.faceTo?.(this.talkTarget.cell);
+        }
       }
       this.talkTarget = null;
     }
