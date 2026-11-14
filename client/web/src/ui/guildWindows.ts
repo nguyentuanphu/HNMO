@@ -9,7 +9,8 @@
 
 import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import { editorCellColor, GuildStatus, markCellColor, MARK_CELLS, type Guild } from '../game/guild.js';
-import { askInGame, chooseInGame, noticeInGame, promptInGame } from './socialDialogs.js';
+import { askInGame, noticeInGame, promptInGame } from './socialDialogs.js';
+import { MessageBox } from './gameDialogs.js';
 import { fitTextPx, measureText, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
@@ -224,7 +225,7 @@ export class GuildInfoWindow extends DockedWindow<GuildInfoModel> {
         void askInGame(`Character '${selected.name}'\nWould you like to release?`).then((yes) => { if (yes) this.askPassword(selected.name); });
       }
     } else if (this.tab === Tab.MEMBERS && button === Button.GET_POSITION) {
-      if (master && selected && selected.status !== GuildStatus.MASTER) void this.appoint(selected.name, selected.status);
+      if (master && selected && selected.status !== GuildStatus.MASTER) this.appoint(selected.name, selected.status);
     } else if (this.tab === Tab.MEMBERS && button === Button.FREE_POSITION) {
       if (selected && (selected.status === GuildStatus.SUB_MASTER || selected.status === GuildStatus.BATTLE_MASTER)) {
         void askInGame(`Character '${selected.name}'\nWould you like to cancel the ranking?`).then((yes) => {
@@ -256,24 +257,31 @@ export class GuildInfoWindow extends DockedWindow<GuildInfoModel> {
   }
 
   // CGuild_ToPerson_Position: the assistant (the default) or a battle master, then OK.
-  private async appoint(name: string, status: number): Promise<void> {
+  // The desktop draws it with message_box_view.rml (kind guild-appoint, five middle strips): the chosen
+  // appointment's line and the question in bold orange, the two appointments, OK and Close.
+  private appoint(name: string, status: number): void {
     let role: number = GuildStatus.SUB_MASTER;
-    for (;;) {
-      const roleName = role === GuildStatus.SUB_MASTER ? 'Assist. M.' : 'Battle M.';
-      const choice = await chooseInGame(`'${name}'as a ${roleName}\nDo you want to appoint?`, [
-        { label: 'Appoint as assistant guild master', value: 'sub' },
-        { label: 'Appoint as a battle master', value: 'battle' },
-        { label: 'OK', value: 'ok', primary: true },
-        { label: 'Close', value: 'cancel' },
-      ]);
-      if (choice === 'sub') role = GuildStatus.SUB_MASTER;
-      else if (choice === 'battle') role = GuildStatus.BATTLE_MASTER;
-      else if (choice === 'ok') {
+    const ORANGE = 'rgb(255, 128, 0)';
+    const content = () => ({
+      lines: [
+        { text: `'${name}'as a ${role === GuildStatus.SUB_MASTER ? 'Assist. M.' : 'Battle M.'}`, bold: true, color: ORANGE },
+        { text: 'Do you want to appoint?', bold: true, color: ORANGE },
+      ],
+      buttons: ['Appoint as assistant guild master', 'Appoint as a battle master', 'OK', 'Close'],
+    });
+    const box: MessageBox = new MessageBox({ kind: 'guild-appoint', middles: 5, tag: 'guild-appoint-dialog', ...content() }, (index) => {
+      this.options.click?.();
+      if (index === 0 || index === 1) {
+        role = index === 0 ? GuildStatus.SUB_MASTER : GuildStatus.BATTLE_MASTER;
+        box.set(content());
+        return false;
+      }
+      if (index === 2) {
         this.options.guild.assignRole(name, role, status === GuildStatus.PERSON ? 0x01 : 0x02);
         this.options.guild.requestList();
-        return;
-      } else return;
-    }
+      }
+      return true;
+    });
   }
 
   /** SyncContent(): the model from the guild's data. */

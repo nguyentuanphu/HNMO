@@ -16,8 +16,8 @@ import type { ShopCategory, ShopPackage } from '../game/cashShopScript.js';
 import { drawItem } from './itemIcons.js';
 import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
-import { askInGame } from './personalShop.js';
-import { nativeTextPx } from './nativeText.js';
+import { measureText, nativeTextPx } from './nativeText.js';
+import { showConfirm, type DialogLine } from './gameDialogs.js';
 
 // The desktop's texts (I18N::Game); the shop's own name is the game's name (gameName.ts).
 export const IGS_TEXT = {
@@ -47,6 +47,8 @@ export const IGS_TEXT = {
   message: '<Message to the Recipient>', giftConfirm: 'Gifted items cannot be returned. Deliver the gift(s)?', giftDelivered: 'Gift Delivered',
   giftDone: 'Your gift has been delivered.', giftFailed: 'Gift Delivery Failed', notEnoughCash: 'You do not have enough cash.',
   recipientFull: "The recipient's storage is full.", noRecipient: 'Cannot find the recipient.', notGiftable: 'This item cannot be sent as a gift.',
+  noRecipientId: "Gift recipient's ID is missing.", giftToSelf: 'You cannot send a gift to yourself.', giftConfirmation: 'Gift Confirmation',
+  wishToGift: 'Do you want to gift the following item(s)?',
 } as const;
 
 const format = (text: string, ...values: (string | number)[]): string => {
@@ -66,35 +68,22 @@ export function itemOfCode(code: number): Item | null {
   };
 }
 
-/** An OK box in the game with a title (CreateOkMessageBoxWithTitle). Doesn't block. */
-export function messageInGame(title: string, text: string): Promise<void> {
-  return new Promise((resolve) => {
-    const box = document.createElement('div');
-    box.className = 'chip confirm-dialog message-dialog';
-    box.setAttribute('role', 'dialog');
-    Object.assign(box.style, {
-      position: 'fixed', left: '50%', top: '35%', transform: 'translate(-50%, -50%)', zIndex: '96', pointerEvents: 'auto',
-      display: 'grid', gap: '10px', padding: '16px', minWidth: 'min(320px, calc(100vw - 32px))', textAlign: 'center',
-    });
-    const heading = document.createElement('div');
-    heading.className = 'message-title';
-    heading.textContent = title;
-    Object.assign(heading.style, { fontWeight: 'bold', color: '#ffd040' });
-    const lines = document.createElement('div');
-    lines.className = 'message-text';
-    lines.style.whiteSpace = 'pre-line';
-    lines.textContent = text;
-    const ok = document.createElement('button');
-    ok.type = 'button'; ok.className = 'primary confirm-ok'; ok.textContent = 'OK';
-    box.append(heading, lines, ok);
-    const done = () => { box.remove(); window.removeEventListener('keydown', onKey, true); resolve(); };
-    const onKey = (event: KeyboardEvent) => { if (event.key === 'Enter' || event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); done(); } };
-    ok.addEventListener('click', done);
-    box.addEventListener('pointerdown', (event) => event.stopPropagation());
-    window.addEventListener('keydown', onKey, true);
-    document.body.append(box);
-    ok.focus();
-  });
+/** An OK box in the game with a title (CreateOkMessageBoxWithTitle: generic_confirm_dialog.rml). Doesn't block. */
+export async function messageInGame(title: string, text: string): Promise<void> {
+  await showConfirm({ title, lines: [text], tag: 'message-dialog' });
+}
+
+/** DivideStringByPixel: the text broken into lines no wider than `width` screen pixels at the native text size. */
+function wrapToWidth(text: string, width: number): string[] {
+  const px = nativeTextPx();
+  const lines: string[] = [];
+  let line = '';
+  for (const word of text.split(' ')) {
+    const next = line ? `${line} ${word}` : word;
+    if (line && measureText(next, px) > width) { lines.push(line); line = word; } else line = next;
+  }
+  if (line) lines.push(line);
+  return lines;
 }
 
 // '#' breaks a description's lines; long lines wrap (DivideStringByPixel at the box's width, about this many letters).
@@ -406,63 +395,20 @@ export class CashShop {
     if (!this.storageItems.length) { void messageInGame(IGS_TEXT.error, IGS_TEXT.noUsable); return; }
     const item = this.storageItems[this.selectedRow];
     if (!item) return;
-    const lines = this.storageBox === 1
-      ? [IGS_TEXT.giftInfo, item.name, format(IGS_TEXT.giftFrom, item.sender), format(IGS_TEXT.quantity, item.num), format(IGS_TEXT.durationS, item.period), item.message]
-      : [IGS_TEXT.itemInfo, item.name, format(IGS_TEXT.quantity, item.num), format(IGS_TEXT.durationS, item.period)];
-    if (!(await this.confirmWithItem(lines, item.itemCode))) return;
-    if (!(await this.confirmWithItem([IGS_TEXT.useConfirmation, format(IGS_TEXT.wishToUse, item.name)], -1))) return;
+    // ShowIGSGiftStorageItemInfoDialog / ShowIGSStorageItemInfoDialog, then ShowIGSUseItemConfirmDialog.
+    const gift = this.storageBox === 1;
+    const lines: DialogLine[] = [{ text: item.name, bold: true }, ...(gift ? [{ text: format(IGS_TEXT.giftFrom, item.sender) }] : []),
+      { text: format(IGS_TEXT.quantity, item.num) }, { text: format(IGS_TEXT.durationS, item.period) }, ...(gift ? [{ text: item.message }] : [])];
+    if (!(await this.confirmWithItem(gift ? IGS_TEXT.giftInfo : IGS_TEXT.itemInfo, lines, item.itemCode))) return;
+    if (!(await this.confirmWithItem(IGS_TEXT.useConfirmation, [{ text: format(IGS_TEXT.wishToUse, item.name) }], -1))) return;
     this.send('CashShopStorageItemConsumeRequest', { BaseItemCode: item.storageSeq, MainItemCode: item.storageItemSeq, ItemIndex: item.itemCode & 0xffff, ProductType: item.type.charCodeAt(0) });
     this.send('CashShopPointInfoRequest');
   }
 
-  /** The desktop's GenericConfirmDialog (title, lines, an item drawn above them). */
-  private confirmWithItem(lines: string[], itemCode: number): Promise<boolean> {
-    return new Promise((resolve) => {
-      const box = document.createElement('div');
-      box.className = 'chip confirm-dialog igs-confirm';
-      box.setAttribute('role', 'dialog');
-      Object.assign(box.style, {
-        position: 'fixed', left: '50%', top: '35%', transform: 'translate(-50%, -50%)', zIndex: '96', pointerEvents: 'auto',
-        display: 'grid', gap: '8px', padding: '16px', minWidth: 'min(320px, calc(100vw - 32px))', textAlign: 'center',
-      });
-      const [title, ...rest] = lines;
-      const heading = document.createElement('div');
-      heading.textContent = title;
-      Object.assign(heading.style, { fontWeight: 'bold', color: '#ffd040' });
-      box.append(heading);
-      const item = itemOfCode(itemCode);
-      if (item) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 96; canvas.height = 60;
-        canvas.style.margin = '0 auto';
-        box.append(canvas);
-        void drawItem(canvas, item);
-      }
-      for (const text of rest) {
-        const row = document.createElement('div');
-        row.style.whiteSpace = 'pre-line';
-        row.textContent = text;
-        box.append(row);
-      }
-      const buttons = document.createElement('div');
-      buttons.className = 'buttons';
-      const ok = document.createElement('button');
-      ok.type = 'button'; ok.className = 'primary confirm-ok'; ok.textContent = 'OK';
-      const cancel = document.createElement('button');
-      cancel.type = 'button'; cancel.className = 'confirm-cancel'; cancel.textContent = IGS_TEXT.cancel;
-      buttons.append(ok, cancel);
-      box.append(buttons);
-      const done = (answer: boolean) => { box.remove(); window.removeEventListener('keydown', onKey, true); resolve(answer); };
-      const onKey = (event: KeyboardEvent) => {
-        if (event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); done(true); }
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); done(false); }
-      };
-      ok.addEventListener('click', () => done(true));
-      cancel.addEventListener('click', () => done(false));
-      box.addEventListener('pointerdown', (event) => event.stopPropagation());
-      window.addEventListener('keydown', onKey, true);
-      document.body.append(box);
-    });
+  /** The desktop's GenericConfirmDialog with a title, OK and Cancel, and the item drawn left of the lines (item3D). */
+  private async confirmWithItem(title: string, lines: DialogLine[], itemCode: number): Promise<boolean> {
+    const answer = await showConfirm({ title, lines, showCancel: true, item: itemOfCode(itemCode), tag: 'igs-confirm' });
+    return answer.button === 'primary';
   }
 
   // ---------- buying ----------
@@ -569,21 +515,58 @@ export class CashShop {
 
   // ShowIGSBuyConfirmDialog: the item, price and duration; OK sends CashShopItemBuyRequest.
   private async confirmBuy(pack: ShopPackage, priceSeq: number, itemCode: number, cashType: number, name: string, price: string, period: string): Promise<void> {
-    const ok = await this.confirmWithItem([IGS_TEXT.purchaseConfirmation, IGS_TEXT.wishToBuy, format(IGS_TEXT.item, name),
-      format(IGS_TEXT.price, price), format(IGS_TEXT.durationS, period), IGS_TEXT.noReturn], -1);
+    const ok = await this.confirmWithItem(IGS_TEXT.purchaseConfirmation, [{ text: IGS_TEXT.wishToBuy }, { text: format(IGS_TEXT.item, name), bold: true },
+      { text: format(IGS_TEXT.price, price), bold: true }, { text: format(IGS_TEXT.durationS, period), bold: true }, { text: IGS_TEXT.noReturn }], -1);
     if (!ok) return;
     this.send('CashShopItemBuyRequest', { PackageMainIndex: pack.seq, Category: pack.displaySeq, ProductMainIndex: priceSeq, ItemIndex: itemCode & 0xffff, CoinIndex: cashType, MileageFlag: 0 });
   }
 
-  // CMsgBoxIGSSendGift: the recipient and a message, the confirmation, then CashShopItemGiftRequest.
+  // CMsgBoxIGSSendGift (igs_send_gift.rml): the recipient and a message; OK checks the recipient, closes the
+  // box and asks (ShowIGSSendGiftConfirmDialog), then CashShopItemGiftRequest.
   private async sendGift(pack: ShopPackage, priceSeq: number, itemCode: number, cashType: number, name: string, price: string, period: string): Promise<void> {
-    const recipient = await askInGame([IGS_TEXT.sendGift, format(IGS_TEXT.item, name), format(IGS_TEXT.price, price), format(IGS_TEXT.durationS, period), IGS_TEXT.recipient], { maxLength: 10 });
-    if (!recipient) return;
-    const text = await askInGame([IGS_TEXT.message], { maxLength: 200 });
-    if (text === null) return;
-    if (!(await this.confirmWithItem([IGS_TEXT.sendGift, IGS_TEXT.giftConfirm], itemCode))) return;
-    this.send('CashShopItemGiftRequest', { PackageMainIndex: pack.seq, Category: pack.displaySeq, ProductMainIndex: priceSeq, ItemIndex: itemCode & 0xffff,
-      CoinIndex: cashType, MileageFlag: 0, GiftReceiverName: recipient, GiftText: text });
+    this.closeDialog();
+    await prepareDocument('igs_send_gift');
+    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const model: RmlModel = {
+      text_px: this.model.text_px, title: IGS_TEXT.sendGift, recipient_label: IGS_TEXT.recipient, message_label: IGS_TEXT.message,
+      item_lines: [format(IGS_TEXT.item, name), format(IGS_TEXT.price, price), format(IGS_TEXT.durationS, period)],
+      notice_lines: wrapToWidth(IGS_TEXT.giftConfirm, 170 * scale), // DivideStringByPixel at IGS_TEXT_NOTICE_WIDTH
+      recipient: '', message: '', debug_lines: [],
+      buttons: [{ label: 'OK', enabled: true }, { label: IGS_TEXT.cancel, enabled: true }],
+      igs_dialog_button: (i: number) => {
+        const dialog = this.dialog;
+        const recipient = (dialog?.$<HTMLInputElement>('#igs_gift_id')?.value ?? String(model.recipient)).trim().slice(0, 10);
+        const text = (dialog?.$<HTMLTextAreaElement>('#igs_gift_message')?.value ?? String(model.message)).slice(0, 199);
+        this.options.click?.();
+        this.closeDialog();
+        if (i !== 0) return;
+        if (!recipient) { void messageInGame(IGS_TEXT.error, IGS_TEXT.noRecipientId); return; }
+        if (recipient === this.options.heroName) { void messageInGame(IGS_TEXT.error, IGS_TEXT.giftToSelf); return; }
+        void this.confirmWithItem(IGS_TEXT.giftConfirmation, [{ text: IGS_TEXT.wishToGift }, { text: format(IGS_TEXT.item, name), bold: true },
+          { text: format(IGS_TEXT.price, price), bold: true }, { text: format(IGS_TEXT.durationS, period), bold: true }, { text: IGS_TEXT.noReturn }], -1).then((ok) => {
+          if (!ok) return;
+          this.send('CashShopItemGiftRequest', { PackageMainIndex: pack.seq, Category: pack.displaySeq, ProductMainIndex: priceSeq, ItemIndex: itemCode & 0xffff,
+            CoinIndex: cashType, MileageFlag: 0, GiftReceiverName: recipient, GiftText: text });
+        });
+      },
+    };
+    this.dialog = await openDocument('igs_send_gift', model, { parent: document.body });
+    this.dialog.host.style.zIndex = '46';
+    Object.assign(this.dialog.root.style, { position: 'fixed', left: '0', top: '0', width: '100%', height: '100%' });
+    this.dialog.root.addEventListener('pointerdown', (event) => event.stopPropagation());
+    // Typing goes into the fields, not to the game's hotkeys; Tab moves between them (ChangeInputBoxFocus).
+    const id = this.dialog.$<HTMLInputElement>('#igs_gift_id');
+    const message = this.dialog.$<HTMLTextAreaElement>('#igs_gift_message');
+    message?.setAttribute('maxlength', '199');
+    id?.setAttribute('autocomplete', 'off');
+    for (const field of [id, message] as (HTMLElement | null)[]) {
+      field?.addEventListener('keydown', (event: KeyboardEvent) => {
+        event.stopPropagation();
+        if (event.key === 'Tab') { event.preventDefault(); (field === id ? message : id)?.focus(); }
+      });
+    }
+    this.placeDialog();
+    id?.focus();
   }
 
   // ---------- the window's model ----------

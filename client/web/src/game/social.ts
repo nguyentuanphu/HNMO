@@ -55,7 +55,6 @@ const CSS = `
 .chat-form #chatInput { flex: 1; min-width: 0; }
 .label .guild-tag { display: flex; align-items: center; justify-content: center; gap: 3px; color: #ffe08a; font-size: 11px; }
 .label .guild-tag canvas { width: 12px; height: 12px; image-rendering: pixelated; }
-.social-dialog-input { width: 100%; box-sizing: border-box; }
 `;
 
 let current: Social | null = null;

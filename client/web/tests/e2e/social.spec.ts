@@ -110,7 +110,7 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   const idOf = (page: Page, name: string) => page.evaluate((n) => [...(window as unknown as Win).__game.online.characters.values()].find((c) => c.kind === 'player' && c.name === n)?.id ?? null, name);
   await expect.poll(() => idOf(b, nameA), { timeout: 90_000 }).not.toBeNull();
   await b.evaluate((name) => { const g = (window as unknown as Win).__game; g.social.guild.requestJoin([...g.online.characters.values()].find((c) => c.name === name)); }, nameA);
-  await expect(a.locator('.confirm-dialog')).toContainText('You have received an offer to join a guild.', { timeout: 60_000 });
+  await expect(a.locator('.confirm-dialog #panel')).toContainText('You have received an offer to join a guild.', { timeout: 60_000 });
   await a.click('.confirm-dialog .confirm-ok');
   await expect.poll(() => game(b, (g) => g.social.guild.status), { timeout: 60_000 }).toBe(0);
 
@@ -144,7 +144,7 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   await press(a, '.rml-friend_shell .page .actions .btn >> nth=0'); // Add Friend
   await a.locator('.social-dialog-input').fill(nameB);
   await a.click('.social-dialog .confirm-ok');
-  await expect(b.locator('.confirm-dialog')).toContainText('has requested to list you as a friend.', { timeout: 60_000 });
+  await expect(b.locator('.confirm-dialog #panel')).toContainText('has requested to list you as a friend.', { timeout: 60_000 });
   await b.click('.confirm-dialog .confirm-ok');
   await expect.poll(() => game(a, (g) => g.social.messenger.friends.map((f) => f.name)), { timeout: 60_000 }).toContain(nameB);
   await expect.poll(() => game(b, (g) => g.social.messenger.friends.map((f) => f.name)), { timeout: 60_000 }).toContain(nameA);

@@ -1,0 +1,104 @@
+<rml>
+<head>
+	<title>HNMO Auto Play Extras</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's auto play extras (no desktop window): the game's message box frame (window_shell) with
+		   the options window's rows -- label left, its checkbox or number right -- and the menu buttons. */
+		#panel {
+			top: 60dp;
+			left: 50%;
+			margin-left: -130dp;
+			transform: none;
+			width: 260dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 18dp 22dp 18dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.ape-row {
+			position: relative;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			min-height: 18dp;
+			margin-bottom: 4dp;
+			pointer-events: auto;
+		}
+		.ape-check { cursor: pointer; }
+		.ape-label {
+			flex: 1 1 auto;
+			padding-right: 6dp;
+			white-space: normal;
+			line-height: 1.25em;
+			color: token(text-input);
+		}
+		.ape-row .checkbox-box { flex-shrink: 0; }
+		.ape-number {
+			flex-shrink: 0;
+			width: 48dp;
+			height: 16dp;
+			padding: 0 3dp;
+			font-size: 0.9rem;
+			text-align: right;
+		}
+		.ape-hint {
+			display: block;
+			margin: 2dp 0 6dp 0;
+			font-size: 0.9rem;
+			line-height: 1.25em;
+			text-align: center;
+			color: token(text-muted);
+		}
+		.ape-buttons {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+		@spritesheet ape-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			ape-btn-idle:   0px  0px 64px 29px;
+			ape-btn-hover:  0px 29px 64px 29px;
+			ape-btn-active: 0px 58px 64px 29px;
+		}
+		.ape-btn {
+			position: static;
+			width: 64dp;
+			height: 29dp;
+			line-height: 29dp;
+			margin: 0 6dp;
+			decorator: image(ape-btn-idle);
+		}
+		.ape-btn:hover { decorator: image(ape-btn-hover); }
+		.ape-btn:active { decorator: image(ape-btn-active); }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_auto_play_extras">
+	<div class="ape-row" data-for="r : rows" data-class-ape-check="r.number == false"
+	     data-event-click="ape_toggle(it_index)">
+		<span class="ape-label">{{r.label}}</span>
+		<div class="checkbox-box" data-if="r.number == false" data-class-checked="r.on"></div>
+		<input type="text" class="text-field ape-number" data-if="r.number" data-attr-data-index="it_index"
+		       data-attr-data-key="r.key" data-attr-value="r.value" data-attr-maxlength="r.max_length"/>
+	</div>
+	<div class="ape-hint">{{hint}}</div>
+	<div class="ape-buttons">
+		<div class="btn ape-btn ape-save" data-event-click="ape_save">{{save_label}}</div>
+		<div class="btn ape-btn ape-close" data-event-click="ape_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

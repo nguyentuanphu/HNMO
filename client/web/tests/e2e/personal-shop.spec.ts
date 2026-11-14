@@ -103,7 +103,7 @@ test('a player opens a store and another player buys from it', async ({ browser 
   await clickPoint(a, await gridPoint(a, 'my_inventory', offered!.slot - 12, offered!));
   await clickPoint(a, await gridPoint(a, 'my_shop', 0, offered!));
   await expect(a.locator('.ask-dialog')).toBeVisible({ timeout: 30_000 });
-  expect(await a.locator('.ask-dialog').textContent()).toContain('Enter selling price.');
+  expect(await a.locator('.ask-dialog #panel').textContent()).toContain('Enter selling price.');
   const price = 100;
   await a.fill('.ask-dialog .ask-input', String(price));
   await a.click('.ask-dialog .confirm-ok');

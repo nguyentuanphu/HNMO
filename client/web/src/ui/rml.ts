@@ -559,7 +559,9 @@ export function prepareDocument(name: string): Promise<PreparedDocument> {
       const styles: string[] = [];
       // Sprite sheets of earlier stylesheets are known to later ones, so convert in order.
       for (const sheet of sheets) if (sheet) styles.push(await rcssToCss(sheet.text, sheet.url, sprites));
-      for (const style of xml.querySelectorAll('style')) styles.push(await rcssToCss(style.textContent ?? '', url, sprites));
+      // A document's own <style> (the HTML parser puts an <rml> document's head into its body) is
+      // converted here and taken out, so its raw RCSS doesn't land in the window.
+      for (const style of xml.querySelectorAll('style')) { styles.push(await rcssToCss(style.textContent ?? '', url, sprites)); style.remove(); }
       return { xml, css: BASE_CSS + styles.join('\n').replace(/(^|[\s,}])body(?=[\s,{.#:[])/g, '$1.rml-body') };
     })());
   }

@@ -103,7 +103,7 @@ test('opens the cash shop, buys the cheapest item and uses it', async ({ page })
   await page.screenshot({ path: 'test-results/cash-shop-buy.png' });
   await clickIn(page, 'igs_buy_package', '.igs-btn', 0);
   await expect(page.locator('.igs-confirm')).toBeVisible({ timeout: 30_000 });
-  expect(await page.locator('.igs-confirm').textContent()).toContain(cheapest!.pack.name.trim());
+  expect(await page.locator('.igs-confirm #panel').textContent()).toContain(cheapest!.pack.name.trim());
   await page.click('.igs-confirm .confirm-ok');
   if (!affordable) {
     // Without the coins the server refuses it (CashShopItemBuyResult: NotEnoughCoins) and the coins stay.
@@ -119,7 +119,7 @@ test('opens the cash shop, buys the cheapest item and uses it', async ({ page })
   await expect.poll(() => game(page, (g) => g.cashShop.coins.wCoinC), { timeout: 30_000 }).toBe(coins - cheapest!.pack.price);
 
   // The storage list holds it; Use: its window, the question, and it's in the inventory.
-  await expect.poll(() => game(page, (g) => g.cashShop.storageItems.some((i) => i.itemCode === code)), { timeout: 30_000 }).toBe(true);
+  await expect.poll(() => page.evaluate((c) => (window as unknown as { __game: CashGame }).__game.cashShop.storageItems.some((i) => i.itemCode === c), code), { timeout: 30_000 }).toBe(true);
   const index = await page.evaluate((c) => (window as unknown as { __game: CashGame }).__game.cashShop.storageItems.findIndex((i) => i.itemCode === c), code);
   await clickIn(page, 'in_game_shop', '.igs-row', index);
   await expect.poll(() => game(page, (g) => g.cashShop.selectedRow)).toBe(index);
