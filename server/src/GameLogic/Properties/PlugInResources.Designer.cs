@@ -5566,5 +5566,50 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("IllusionTempleStartPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Monster amount per map.
+        /// </summary>
+        public static string MonsterAmountPlugIn_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Multiplies the amount of monsters of maps (×0.5 to ×5) without changing the saved spawn quantitie....
+        /// </summary>
+        public static string MonsterAmountPlugIn_Description {
+            get {
+                return ResourceManager.GetString("MonsterAmountPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string MonsterAmountConfiguration_Maps_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountConfiguration_Maps_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Map number.
+        /// </summary>
+        public static string MonsterAmountConfiguration_MapNumber_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountConfiguration_MapNumber_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Multiplier.
+        /// </summary>
+        public static string MonsterAmountConfiguration_Multiplier_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountConfiguration_Multiplier_Name", resourceCulture);
+            }
+        }
     }
 }

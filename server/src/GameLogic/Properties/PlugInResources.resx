@@ -2050,4 +2050,19 @@
   <data name="IllusionTempleStartPlugIn_Description" xml:space="preserve">
     <value>Illusion Temple event</value>
   </data>
+  <data name="MonsterAmountPlugIn_Name" xml:space="preserve">
+    <value>Monster amount per map</value>
+  </data>
+  <data name="MonsterAmountPlugIn_Description" xml:space="preserve">
+    <value>Multiplies the amount of monsters of maps (×0.5 to ×5) without changing the saved spawn quantities. Set it on the map editor ("Monster amount"); a change counts at once on the running maps.</value>
+  </data>
+  <data name="MonsterAmountConfiguration_Maps_Name" xml:space="preserve">
+    <value>Maps</value>
+  </data>
+  <data name="MonsterAmountConfiguration_MapNumber_Name" xml:space="preserve">
+    <value>Map number</value>
+  </data>
+  <data name="MonsterAmountConfiguration_Multiplier_Name" xml:space="preserve">
+    <value>Multiplier</value>
+  </data>
 </root>

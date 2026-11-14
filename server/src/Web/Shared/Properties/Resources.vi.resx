@@ -571,4 +571,22 @@ Cấp: {2} - {3}</value>
   <data name="ZoomOut" xml:space="preserve">
     <value>Thu nhỏ</value>
   </data>
+  <data name="MonsterAmount" xml:space="preserve">
+    <value>Số lượng quái</value>
+  </data>
+  <data name="MonsterAmountCurrent" xml:space="preserve">
+    <value>Hiện tại: ×{0}</value>
+  </data>
+  <data name="MonsterAmountHint" xml:space="preserve">
+    <value>Nhân số lượng của mọi vùng xuất hiện quái trên bản đồ này; số lượng đã lưu được giữ nguyên (×1 trả lại số lượng ban đầu). Có hiệu lực ngay trên các máy chủ game đang chạy: quái còn thiếu sẽ xuất hiện và quái dư sẽ biến mất. Bản đồ sự kiện và mini game không bị thay đổi.</value>
+  </data>
+  <data name="MonsterAmountSaved" xml:space="preserve">
+    <value>Đã lưu: số lượng quái có hiệu lực ngay.</value>
+  </data>
+  <data name="MonsterAmountSaveFailed" xml:space="preserve">
+    <value>Không lưu được số lượng quái.</value>
+  </data>
+  <data name="MonsterAmountSaveMapFirst" xml:space="preserve">
+    <value>Hãy lưu hoặc hoàn tác các thay đổi của bản đồ trước.</value>
+  </data>
 </root>

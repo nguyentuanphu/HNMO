@@ -2220,4 +2220,19 @@
   <data name="IllusionTempleStartPlugIn_Description" xml:space="preserve">
     <value>Sự kiện Đền Ảo Ảnh</value>
   </data>
+  <data name="MonsterAmountPlugIn_Name" xml:space="preserve">
+    <value>Số lượng quái theo bản đồ</value>
+  </data>
+  <data name="MonsterAmountPlugIn_Description" xml:space="preserve">
+    <value>Nhân số lượng quái của các bản đồ (×0.5 đến ×5) mà không thay đổi số lượng xuất hiện đã lưu. Đặt trong trình chỉnh sửa bản đồ ("Số lượng quái"); thay đổi có hiệu lực ngay trên các bản đồ đang chạy.</value>
+  </data>
+  <data name="MonsterAmountConfiguration_Maps_Name" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="MonsterAmountConfiguration_MapNumber_Name" xml:space="preserve">
+    <value>Số bản đồ</value>
+  </data>
+  <data name="MonsterAmountConfiguration_Multiplier_Name" xml:space="preserve">
+    <value>Hệ số nhân</value>
+  </data>
 </root>

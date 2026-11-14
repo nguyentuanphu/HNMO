@@ -1,0 +1,23 @@
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns
+@using HNMO.Web.Shared.Properties
+@using System.Globalization
+
+<div class="monster-amount d-flex flex-wrap align-items-center gap-2 my-2" data-testid="monster-amount">
+    <label for="monsterAmountSelect" class="text-nowrap">@Resources.MonsterAmount:</label>
+    <select id="monsterAmountSelect" class="form-select w-auto" title="@Resources.MonsterAmount" @bind="this.SelectedText" disabled="@this._isSaving">
+        @foreach (var choice in MonsterAmountConfiguration.Choices)
+        {
+            <option value="@Format(choice)">×@Format(choice)</option>
+        }
+    </select>
+    <button type="button" class="btn btn-primary text-nowrap" disabled="@(this._isSaving || this._selected == this._current)" @onclick="@this.SaveAsync">
+        <span class="oi oi-cloud-upload"></span> @Resources.Save
+    </button>
+    <span class="small text-muted" data-testid="monster-amount-current">@string.Format(CultureInfo.CurrentCulture, Resources.MonsterAmountCurrent, Format(this._current))</span>
+    @if (this._status is { } status)
+    {
+        <span class="small @(this._statusIsError ? "text-danger" : "text-success")" role="status">@status</span>
+    }
+    <div class="w-100 small text-muted">@Resources.MonsterAmountHint</div>
+</div>

@@ -6,9 +6,11 @@ namespace HNMO.GameLogic;
 
 using System.Collections.Concurrent;
 using HNMO.GameLogic.NPC;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views.NPC;
 using HNMO.Pathfinding;
 using HNMO.PlugIns;
+using Nito.AsyncEx;
 
 /// <summary>
 /// A basic map initializer.
@@ -22,6 +24,19 @@ public class MapInitializer : IMapInitializer
     private readonly ILogger<MapInitializer> _logger;
 
     private readonly ConcurrentDictionary<MonsterSpawnArea, int> _spawnedMonsters = new();
+
+    /// <summary>
+    /// The maps whose monster amounts follow the <see cref="MonsterAmountPlugIn"/>, with their spawned monsters
+    /// by spawn area and spawn index.
+    /// </summary>
+    private readonly ConcurrentDictionary<GameMap, ConcurrentDictionary<MonsterSpawnArea, ConcurrentDictionary<int, NonPlayerCharacter>>> _amountMaps = new();
+
+    private readonly AsyncLock _amountLock = new();
+
+    private PlugInManager? _plugInManager;
+    private MonsterAmountConfiguration? _monsterAmounts;
+    private MonsterAmountConfiguration? _lastConfiguredMonsterAmounts;
+    private bool _monsterAmountsRead;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MapInitializer" /> class.
@@ -42,7 +57,32 @@ public class MapInitializer : IMapInitializer
     /// <summary>
     /// Gets or sets the plug in manager.
     /// </summary>
-    public PlugInManager? PlugInManager { get; set; }
+    public PlugInManager? PlugInManager
+    {
+        get => this._plugInManager;
+        set
+        {
+            if (this._plugInManager == value)
+            {
+                return;
+            }
+
+            if (this._plugInManager is { } oldManager)
+            {
+                oldManager.PlugInConfigurationChanged -= this.OnPlugInConfigurationChanged;
+                oldManager.PlugInActivated -= this.OnPlugInActivated;
+                oldManager.PlugInDeactivated -= this.OnPlugInDeactivated;
+            }
+
+            this._plugInManager = value;
+            if (value is not null)
+            {
+                value.PlugInConfigurationChanged += this.OnPlugInConfigurationChanged;
+                value.PlugInActivated += this.OnPlugInActivated;
+                value.PlugInDeactivated += this.OnPlugInDeactivated;
+            }
+        }
+    }
 
     /// <summary>
     /// Gets or sets the path finder pool.
@@ -92,14 +132,21 @@ public class MapInitializer : IMapInitializer
         var automaticSpawns = createdMap.Definition.MonsterSpawns
             .Where(m => m.MonsterDefinition is { IsActive: true })
             .Where(m => m.SpawnTrigger is SpawnTrigger.Automatic);
+        if (!this.IsMiniGameMap(createdMap.Definition))
+        {
+            this._amountMaps.TryAdd(createdMap, new());
+            createdMap.RegisterOwnedRegistration(new DisposeAction(() => this._amountMaps.TryRemove(createdMap, out _)));
+        }
+
         foreach (var spawnArea in automaticSpawns)
         {
-            for (int i = 0; i < spawnArea.Quantity; i++)
+            var quantity = this.GetEffectiveQuantity(createdMap, spawnArea);
+            for (int i = 0; i < quantity; i++)
             {
                 await this.InitializeSpawnAsync(i, createdMap, spawnArea).ConfigureAwait(false);
             }
 
-            this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+            this._spawnedMonsters.AddOrUpdate(spawnArea, quantity, (_, _) => quantity);
         }
 
         var newSpawnRegistration = this._configurationChangeMediator?.RegisterForNew<MonsterSpawnArea, GameMap>(createdMap, async (spawnArea, map) =>
@@ -110,12 +157,13 @@ public class MapInitializer : IMapInitializer
                 return;
             }
 
-            for (int i = 0; i < spawnArea.Quantity; i++)
+            var quantity = this.GetEffectiveQuantity(map, spawnArea);
+            for (int i = 0; i < quantity; i++)
             {
                 await this.InitializeSpawnAsync(i, map, spawnArea).ConfigureAwait(false);
             }
 
-            this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+            this._spawnedMonsters.AddOrUpdate(spawnArea, quantity, (_, _) => quantity);
         });
 
         if (newSpawnRegistration is not null)
@@ -258,6 +306,8 @@ public class MapInitializer : IMapInitializer
                 this.RegisterForConfigChanges(createdMap, spawnArea, npc);
             }
 
+            this.TrackAmountSpawn(createdMap, spawnArea, npc);
+
             return npc;
         }
         catch (Exception ex)
@@ -267,6 +317,74 @@ public class MapInitializer : IMapInitializer
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Applies the current monster amounts of the <see cref="MonsterAmountPlugIn"/> to the running maps:
+    /// missing monsters of a spawn area spawn, the ones above its amount are removed. Mini game maps are left as they are.
+    /// </summary>
+    /// <returns>The task.</returns>
+    public async ValueTask ApplyMonsterAmountsAsync()
+    {
+        if (this.PlugInManager is null || this.PathFinderPool is null)
+        {
+            return;
+        }
+
+        using var lck = await this._amountLock.LockAsync().ConfigureAwait(false);
+        foreach (var (map, spawned) in this._amountMaps.ToList())
+        {
+            if (map.IsTornDown)
+            {
+                continue;
+            }
+
+            var areas = map.Definition.MonsterSpawns
+                .Where(m => m.SpawnTrigger is SpawnTrigger.Automatic && IsAmountMultiplied(m))
+                .ToList();
+            foreach (var area in areas)
+            {
+                var quantity = this.GetEffectiveQuantity(map, area);
+                var byIndex = spawned.GetOrAdd(area, _ => new());
+                foreach (var (index, npc) in byIndex.Where(p => p.Key >= quantity).ToList())
+                {
+                    byIndex.TryRemove(index, out _);
+                    await npc.DisposeAsync().ConfigureAwait(false);
+                }
+
+                for (var i = 0; i < quantity; i++)
+                {
+                    if (!byIndex.ContainsKey(i))
+                    {
+                        await this.InitializeSpawnAsync(i, map, area).ConfigureAwait(false);
+                    }
+                }
+
+                this._spawnedMonsters.AddOrUpdate(area, quantity, (_, _) => quantity);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the quantity of a spawn area which spawns on a map: its stored quantity,
+    /// multiplied by the map's multiplier of the <see cref="MonsterAmountPlugIn"/> for automatic monster spawns.
+    /// </summary>
+    /// <param name="map">The map.</param>
+    /// <param name="spawnArea">The spawn area.</param>
+    /// <returns>The quantity which spawns.</returns>
+    protected int GetEffectiveQuantity(GameMap map, MonsterSpawnArea spawnArea)
+    {
+        if (spawnArea.SpawnTrigger is not SpawnTrigger.Automatic
+            || !IsAmountMultiplied(spawnArea)
+            || !this._amountMaps.ContainsKey(map))
+        {
+            return spawnArea.Quantity;
+        }
+
+        var amounts = this.GetMonsterAmounts();
+        return amounts is null
+            ? spawnArea.Quantity
+            : MonsterAmountConfiguration.Apply(spawnArea.Quantity, amounts.GetMultiplier(map.Definition.Number));
     }
 
     /// <summary>
@@ -295,6 +413,113 @@ public class MapInitializer : IMapInitializer
             : new GameMap(definition, this._configuration.ItemDropDuration, this.ChunkSize);
     }
 
+    private static bool IsAmountMultiplied(MonsterSpawnArea spawnArea)
+    {
+        return spawnArea.MonsterDefinition is { IsActive: true, ObjectKind: NpcObjectKind.Monster };
+    }
+
+    private static MonsterAmountConfiguration? ReadMonsterAmounts(PlugInConfiguration? configuration)
+    {
+        if (configuration is null)
+        {
+            return null;
+        }
+
+        try
+        {
+            return configuration.GetConfiguration<MonsterAmountConfiguration>(null);
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return null;
+        }
+    }
+
+    private MonsterAmountConfiguration? GetMonsterAmounts()
+    {
+        if (!this._monsterAmountsRead)
+        {
+            // Before the plug-in manager reports anything, the saved configuration counts.
+            var configuration = this._configuration.PlugInConfigurations?.FirstOrDefault(c => c.TypeId == typeof(MonsterAmountPlugIn).GUID);
+            this._lastConfiguredMonsterAmounts = ReadMonsterAmounts(configuration);
+            this._monsterAmounts = configuration is { IsActive: true } ? this._lastConfiguredMonsterAmounts : null;
+            this._monsterAmountsRead = true;
+        }
+
+        return this._monsterAmounts;
+    }
+
+    private void OnPlugInConfigurationChanged(object? sender, PlugInConfigurationChangedEventArgs e)
+    {
+        if (e.PlugInType != typeof(MonsterAmountPlugIn))
+        {
+            return;
+        }
+
+        this._lastConfiguredMonsterAmounts = ReadMonsterAmounts(e.Configuration);
+        this._monsterAmounts = e.Configuration.IsActive ? this._lastConfiguredMonsterAmounts : null;
+        this._monsterAmountsRead = true;
+        this.ApplyMonsterAmountsInBackground();
+    }
+
+    private void OnPlugInActivated(object? sender, PlugInEventArgs e)
+    {
+        if (e.PlugInType != typeof(MonsterAmountPlugIn))
+        {
+            return;
+        }
+
+        this.GetMonsterAmounts();
+        this._monsterAmounts = this._lastConfiguredMonsterAmounts;
+        this.ApplyMonsterAmountsInBackground();
+    }
+
+    private void OnPlugInDeactivated(object? sender, PlugInEventArgs e)
+    {
+        if (e.PlugInType != typeof(MonsterAmountPlugIn))
+        {
+            return;
+        }
+
+        this.GetMonsterAmounts();
+        this._monsterAmounts = null;
+        this.ApplyMonsterAmountsInBackground();
+    }
+
+    private void ApplyMonsterAmountsInBackground()
+    {
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await this.ApplyMonsterAmountsAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Applying the monster amounts failed.");
+            }
+        });
+    }
+
+    private void TrackAmountSpawn(GameMap map, MonsterSpawnArea spawnArea, NonPlayerCharacter npc)
+    {
+        if (spawnArea.SpawnTrigger is not SpawnTrigger.Automatic
+            || !IsAmountMultiplied(spawnArea)
+            || !this._amountMaps.TryGetValue(map, out var spawned))
+        {
+            return;
+        }
+
+        var byIndex = spawned.GetOrAdd(spawnArea, _ => new());
+        byIndex[npc.SpawnIndex] = npc;
+        npc.RegisterDisposable(new DisposeAction(() => ((ICollection<KeyValuePair<int, NonPlayerCharacter>>)byIndex).Remove(new(npc.SpawnIndex, npc))));
+    }
+
+    private bool IsMiniGameMap(GameMapDefinition definition)
+    {
+        return this._configuration.MiniGameDefinitions?.Any(m => Equals(m.Entrance?.Map, definition)) ?? false;
+    }
+
     private void RegisterForConfigChanges(GameMap createdMap, MonsterSpawnArea spawnArea, NonPlayerCharacter spawnedObject)
     {
         // Apply changes of the monster definition (e.g. its attributes) instantly to the
@@ -321,11 +546,12 @@ public class MapInitializer : IMapInitializer
             spawnedObject,
             async (unregisterAction, area, o) =>
             {
-                if (area.Quantity < o.SpawnIndex + 1)
+                var quantity = this.GetEffectiveQuantity(createdMap, area);
+                if (quantity < o.SpawnIndex + 1)
                 {
                     await o.DisposeAsync().ConfigureAwait(false);
                     unregisterAction();
-                    this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+                    this._spawnedMonsters.AddOrUpdate(spawnArea, quantity, (_, _) => quantity);
                     return;
                 }
 
@@ -338,7 +564,7 @@ public class MapInitializer : IMapInitializer
                     var newNpc = await this.InitializeSpawnAsync(o.SpawnIndex, createdMap, area).ConfigureAwait(false);
                     if (newNpc is not null)
                     {
-                        this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+                        this._spawnedMonsters.AddOrUpdate(spawnArea, quantity, (_, _) => quantity);
                         this.RegisterForConfigChanges(createdMap, area, newNpc);
                     }
 
@@ -352,12 +578,12 @@ public class MapInitializer : IMapInitializer
 
                 if (this._spawnedMonsters.TryGetValue(area, out var previousSpawnCount))
                 {
-                    for (int i = previousSpawnCount; i < area.Quantity; i++)
+                    for (int i = previousSpawnCount; i < quantity; i++)
                     {
                         await this.InitializeSpawnAsync(i, createdMap, area).ConfigureAwait(false);
                     }
 
-                    this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+                    this._spawnedMonsters.AddOrUpdate(spawnArea, quantity, (_, _) => quantity);
                 }
             },
             async (_, o) =>
@@ -429,5 +655,23 @@ public class MapInitializer : IMapInitializer
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Runs an action when it's disposed.
+    /// </summary>
+    private sealed class DisposeAction : IDisposable
+    {
+        private Action? _action;
+
+        public DisposeAction(Action action)
+        {
+            this._action = action;
+        }
+
+        public void Dispose()
+        {
+            System.Threading.Interlocked.Exchange(ref this._action, null)?.Invoke();
+        }
     }
 }
