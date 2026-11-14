@@ -63,7 +63,12 @@ harmony restore price), Jewel of Harmony, lucky items, united market.
 
 ## 7. Social
 🟡 Party (`party_list.rml`, done; `party_info.rml` next), guild (`guild_info.rml`, `guild_make.rml`), friends,
-messenger and letters, whisper/party/guild chat, duels, Gens.
+messenger and letters, whisper/party/guild chat.
+🟡 Duels (`game/duel.ts`, `ui/duelWindows.ts`): the challenge (`/DuelChallenge`), the question over the duel art, the score
+window, the end and the result, Doorkeeper Titus and the spectator HUD done; the command window's Duel button and the
+duellists' capes next.
+🟡 Gens (`game/gens.ts`, `ui/gensWindow.ts`): joining and leaving at the stewards, the reward answers, the Gens Info window (B),
+contribution, the family mark on the pointed player done; the marks in every player's name box and the strife-map rules next.
 
 ## 8. Auto play
 1. ✅ The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop, settings windows, buffs, heal, Drain Life, party support and the Dark Raven done (the master skill variants and the Rage Fighter's buffs wait for their casting): hunting range, main and 2 activation skills with
