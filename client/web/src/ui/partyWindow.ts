@@ -6,6 +6,7 @@
 import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import type { Party } from '../game/party.js';
 import type { Connection } from '../net/connection.js';
+import { nativeTextPx } from './nativeText.js';
 
 interface MemberRow {
   index: number; name: string; map_text: string; coord_text: string; hp_text: string; hp_percent: number;
@@ -134,7 +135,7 @@ export class PartyWindow {
     Object.assign(panel.style, {
       left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top',
     });
-    this.model.text_px = Math.round(12 * scale);
+    this.model.text_px = nativeTextPx();
     this.doc.update();
   }
 }

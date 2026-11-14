@@ -26,10 +26,9 @@ import { skillInfo, loadSkillData } from '../game/skills.js';
 import { textWidth } from '../game/questData.js';
 import { PlayerActions } from '../game/combatLook.js';
 import type { MapAudioState } from '../audio/index.js';
+import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
-const TEXT_PX = 12;
-const BIG_TEXT_PX = 15;
 const LINE_HEIGHT = 14;
 
 const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
@@ -37,12 +36,14 @@ const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
 /** Lays a document's root out as the 640x480 reference screen stretched to the window. */
 function placeBoard(doc: RmlDocument): number {
   const scale = screenScale();
-  doc.setScale(1);
+  // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
+  doc.setScale(scale);
   Object.assign(doc.root.style, {
     width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
+  doc.root.style.setProperty('--board-scale', String(scale));
   return window.innerWidth / scale;
 }
 
@@ -84,9 +85,8 @@ function placeDocked(doc: RmlDocument): number {
 
 const stopPointer = (element: HTMLElement | null) => element?.addEventListener('pointerdown', (event) => event.stopPropagation());
 
-// The original's font at the 640x480 reference measures about four fifths of the web's 12 px one (its
-// Doppelganger line "Only those in possession of a" fits CutStr's 135 units; textWidth's would not).
-const referenceWidth = (text: string) => textWidth(text) * 0.8;
+// MeasureText: the width in reference units at the native text size.
+const referenceWidth = (text: string) => textWidth(text);
 
 /** CutStr: the text cut at word ends into lines narrower than `width` - 5 units, each a fresh line of the buffer. */
 function cutStr(source: string, width: number, maxLines: number, into: string[]): void {
@@ -120,8 +120,8 @@ class TempleEntryWindow {
 
   constructor(private readonly options: { hero: () => EventHero; members: () => number; enter: () => void; onClose: () => void; click: () => void }) {
     this.model = {
-      text_px: TEXT_PX, bold_text_px: TEXT_PX, line_height_px: LINE_HEIGHT, label_line_px: LINE_HEIGHT, title: '', eligible: false,
-      temple_line: { text: '', text_px: TEXT_PX }, members_line: { text: '', text_px: TEXT_PX }, notice: { text: '', text_px: TEXT_PX },
+      text_px: nativeTextPx(), bold_text_px: nativeTextPx(), line_height_px: LINE_HEIGHT, label_line_px: LINE_HEIGHT, title: '', eligible: false,
+      temple_line: { text: '', text_px: nativeTextPx() }, members_line: { text: '', text_px: nativeTextPx() }, notice: { text: '', text_px: nativeTextPx() },
       bands: [], enter_text: T.Enter, close_text: T.Close,
       temple_enter: () => { this.options.click(); this.options.enter(); },
       temple_close: () => { this.options.click(); this.close(); },
@@ -147,11 +147,11 @@ class TempleEntryWindow {
   sync(): void {
     if (!this.doc) return;
     const scale = screenScale();
-    const px = Math.round(TEXT_PX * scale);
+    const px = nativeTextPx();
     const content = templeEntry(this.options.hero(), this.options.members());
     const line = (text: string, box: number) => ({ text, text_px: fitPx(text, px, box, scale) });
     Object.assign(this.model, {
-      text_px: px, bold_text_px: px, line_height_px: Math.round(LINE_HEIGHT * scale), label_line_px: Math.round(LINE_HEIGHT * scale),
+      text_px: px, bold_text_px: px, line_height_px: nativeLineHeightPx(), label_line_px: nativeLineHeightPx(),
       title: content.title, eligible: content.eligible, temple_line: line(content.templeLine, 220), members_line: line(content.membersLine, 220),
       notice: line(content.notice, 230), bands: content.bands.map((band) => ({ ...line(band.text, 220), hero: band.hero })),
     });
@@ -297,7 +297,7 @@ class TempleHud {
     model.illusion_ones_src = digit('illusion', temple.illusion % 10);
     // SyncTutorialStep: the step's title and three lines (the second row left empty).
     model.tutorial_lines = temple.tutorial.active
-      ? T.TutorialSteps[temple.tutorial.step].map((text, i) => ({ text, text_px: fitPx(text, TEXT_PX, 300, 1), title: i === 0 }))
+      ? T.TutorialSteps[temple.tutorial.step].map((text, i) => ({ text, text_px: fitPx(text, nativeTextPx(), 300, screenScale()), title: i === 0 }))
       : [];
     this.doc.update();
   }
@@ -358,10 +358,10 @@ class TempleResultWindow {
 
   constructor(private readonly options: { heroName: string; onClose: () => void; click: () => void }) {
     this.model = {
-      text_px: TEXT_PX, line_height_px: LINE_HEIGHT, label_line_px: LINE_HEIGHT,
-      hero_list_label: { text: '', text_px: TEXT_PX }, column_header: { text: '', text_px: TEXT_PX },
+      text_px: nativeTextPx(), line_height_px: LINE_HEIGHT, label_line_px: LINE_HEIGHT,
+      hero_list_label: { text: '', text_px: nativeTextPx() }, column_header: { text: '', text_px: nativeTextPx() },
       camp_label: T.Camp, character_label: T.Character, class_label: T.Class, exp_label: T.EXP, point_label: T.Point,
-      reward_hint: { text: '', text_px: TEXT_PX }, allied_rows: [], illusion_rows: [], close_text: T.Close, banner: 0, banner_alpha: 0,
+      reward_hint: { text: '', text_px: nativeTextPx() }, allied_rows: [], illusion_rows: [], close_text: T.Close, banner: 0, banner_alpha: 0,
       result_close: () => { this.options.click(); this.close(); },
     };
     prepareDocument('cursed_temple_result').catch((error: unknown) => console.warn('Interface', error));
@@ -400,10 +400,10 @@ class TempleResultWindow {
   private sync(): void {
     if (!this.doc) return;
     const scale = screenScale();
-    const px = Math.round(TEXT_PX * scale);
+    const px = nativeTextPx();
     const line = (text: string) => ({ text, text_px: fitPx(text, px, 230, scale) });
     Object.assign(this.model, {
-      text_px: px, line_height_px: Math.round(LINE_HEIGHT * scale), label_line_px: Math.round(LINE_HEIGHT * scale),
+      text_px: px, line_height_px: nativeLineHeightPx(), label_line_px: nativeLineHeightPx(),
       hero_list_label: line(T.HeroList), column_header: line(`  ${T.Camp}           ${T.Character}        ${T.Class}     ${T.EXP}    ${T.Point}`),
       reward_hint: line(T.YouMayBeCompensatedByClickingOnTheCloseButton), banner_alpha: this.fade > 0.25 ? this.fade : 0,
     });
@@ -442,7 +442,7 @@ class SacredItemProgress {
   private npc = 0;
   private frame = 0;
   private readonly model: ProgressModel = {
-    kind: 'progress', text_px: TEXT_PX, bold_text_px: TEXT_PX, line_height: LINE_HEIGHT, bold_line_height: LINE_HEIGHT, strips: [], lines: [], buttons: [],
+    kind: 'progress', text_px: nativeTextPx(), bold_text_px: nativeTextPx(), line_height: LINE_HEIGHT, bold_line_height: LINE_HEIGHT, strips: [], lines: [], buttons: [],
     progress_shown: true, progress_width: 0, list_shown: false, list_rows: [], message_box_button: () => undefined,
   };
 
@@ -505,7 +505,7 @@ class ItemEntryWindow {
     texts: () => EntryText[]; enterLocked: () => boolean; enter: () => void; onClose: () => void; click: () => void;
   }) {
     this.model = {
-      text_px: TEXT_PX, bold_text_px: TEXT_PX, input_value: '', texts: [], buttons: [],
+      text_px: nativeTextPx(), bold_text_px: nativeTextPx(), input_value: '', texts: [], buttons: [],
       item_entry_press: (index) => this.press(index),
       window_close: () => { this.options.click(); this.close(); },
     };
@@ -538,11 +538,11 @@ class ItemEntryWindow {
   sync(): void {
     if (!this.doc) return;
     const scale = screenScale();
-    const px = Math.round(TEXT_PX * scale);
+    const px = nativeTextPx();
     this.model.text_px = px;
     this.model.bold_text_px = px;
     this.model.texts = this.options.texts().map((t) => ({ text: t.text, text_px: fitPx(t.text, px, t.width, scale) }));
-    const lineHeight = Math.round(LINE_HEIGHT * scale);
+    const lineHeight = nativeLineHeightPx();
     this.model.buttons = [
       { label: T.Enter, locked: this.options.enterLocked(), bold: false, label_line_px: lineHeight, hint: '' },
       { label: T.Close, locked: false, bold: false, label_line_px: lineHeight, hint: '' },
@@ -591,7 +591,7 @@ class DoppelgangerHud {
   private doc: RmlDocument | null = null;
   private opening = false;
   private readonly model: DoppelgangerModel = {
-    passed_line: { text: '', text_px: TEXT_PX }, passed_state: 'none', time_label: { text: '', text_px: TEXT_PX }, time_line: { text: '', text_px: BIG_TEXT_PX },
+    passed_line: { text: '', text_px: nativeTextPx() }, passed_state: 'none', time_label: { text: '', text_px: nativeTextPx() }, time_line: { text: '', text_px: nativeTextPx('big') },
     bars: [], ice_walker_visible: false, ice_walker_left: 0, markers: [],
   };
 
@@ -622,12 +622,12 @@ class DoppelgangerHud {
     if (!this.doc) return;
     const frame = this.events.doppelganger;
     frame.step();
-    const entry = (text: string, px: number) => ({ text, text_px: fitPx(text, px, 110, 1) });
+    const entry = (text: string, px: number) => ({ text, text_px: fitPx(text, px, 110, screenScale()) });
     this.model.passed_state = frame.entered === 1 ? 'one' : frame.entered >= 2 ? 'several' : 'none';
-    this.model.passed_line = entry(format(T.MonstersPassedDD, frame.entered, frame.max), TEXT_PX);
-    this.model.time_label = entry(T.TimeLeft, TEXT_PX);
+    this.model.passed_line = entry(format(T.MonstersPassedDD, frame.entered, frame.max), nativeTextPx());
+    this.model.time_label = entry(T.TimeLeft, nativeTextPx());
     const hundredths = frame.timerStopped ? 0 : 99 - (Math.floor(performance.now()) % 100);
-    this.model.time_line = entry(format('%.2d:%.2d:%.2d', Math.floor(frame.time / 60), frame.time % 60, hundredths), BIG_TEXT_PX);
+    this.model.time_line = entry(format('%.2d:%.2d:%.2d', Math.floor(frame.time / 60), frame.time % 60, hundredths), nativeTextPx('big'));
     // The gauge: yellow up to the first monster, then yellow under orange, then orange under red.
     const piece = (file: string, fill: number) => ({ src: IMG(file), rect: `${165 * (1 - fill)} 0 ${165 * fill} 6`, left: 59 + 167 * (1 - fill), width: 167 * fill });
     const yellow = 'Double_bar(Y).jpg', orange = 'Double_bar(O).jpg', red = 'Double_bar(R).jpg';
@@ -652,7 +652,7 @@ class ImperialTimerHud {
   private doc: RmlDocument | null = null;
   private opening = false;
   private readonly model: TimerModel = {
-    text_px: TEXT_PX, big_text_px: BIG_TEXT_PX, kills_text: '', kills_state: 'plain', time_left_text: '', time_left_state: 'standby', time_text: '', time_state: 'normal',
+    text_px: nativeTextPx(), big_text_px: nativeTextPx('big'), kills_text: '', kills_state: 'plain', time_left_text: '', time_left_state: 'standby', time_text: '', time_state: 'normal',
   };
 
   constructor(private readonly events: InstanceEvents) {
@@ -681,9 +681,9 @@ class ImperialTimerHud {
     if (!this.doc) return;
     const lines = imperialTimerLines(this.events.imperial);
     // Each line centred on 110 units and shrunk to them (they share one size here).
-    const px = Math.min(fitPx(lines.round, TEXT_PX, 110, 1), fitPx(lines.caption, TEXT_PX, 110, 1));
+    const px = Math.min(fitPx(lines.round, nativeTextPx(), 110, screenScale()), fitPx(lines.caption, nativeTextPx(), 110, screenScale()));
     Object.assign(this.model, {
-      text_px: px, big_text_px: fitPx(lines.time, BIG_TEXT_PX, 110, 1),
+      text_px: px, big_text_px: fitPx(lines.time, nativeTextPx('big'), 110, screenScale()),
       kills_text: lines.round, kills_state: 'plain', time_left_text: lines.caption, time_left_state: lines.captionState, time_text: lines.time, time_state: lines.timeState,
     });
     this.doc.update();

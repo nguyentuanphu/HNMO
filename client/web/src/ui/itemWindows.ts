@@ -11,6 +11,7 @@ import { itemName } from '../game/items.js';
 import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
 import type { TooltipCharacter } from '../game/itemTooltip.js';
 import { isHighValue, isSellingBan } from '../game/itemUse.js';
+import { nativeTextPx } from './nativeText.js';
 
 const CELL = 20; // the grid's cell pitch in reference pixels (item_grid.rcss --item-cell)
 const PANEL = { width: 190, height: 429 };
@@ -247,7 +248,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const scale = uiScale();
     Object.assign(this.panel.style, { left: `${window.innerWidth - (right + PANEL.width) * scale}px`, top: '0px', transform: `scale(${scale})` });
     this.doc.setScale(scale);
-    this.model.text_px = Math.round(12 * scale);
+    this.model.text_px = nativeTextPx();
     this.doc.update();
   }
 
@@ -714,7 +715,7 @@ export class TradeWindow extends ItemWindow<TradeModel> {
       if (item.group === 14 && item.durability > 1) cells[slot].count = String(item.durability);
     }
     this.model.partner_cells = cells;
-    this.model.big_text_px = Math.round(this.model.text_px * 7 / 6);
+    this.model.big_text_px = nativeTextPx('big');
     this.model.your_id_text = view.partnerName;
     const bucket = tradeLevelBucket(view.partnerLevel);
     this.model.your_level_bucket = bucket;

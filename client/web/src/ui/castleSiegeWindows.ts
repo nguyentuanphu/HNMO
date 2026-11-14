@@ -8,9 +8,10 @@
 
 import { CastleSiege, GATE_NPC, NpcUpgrade, STATUE_NPC, SiegePhase, senatus, type DefenseNpc } from '../game/castleSiege.js';
 import { GuildStatus } from '../game/guild.js';
-import { centreScreen, DockedWindow, format, gold, sizedLine, syncImages, TEXT_PX, screenScale, type FieldDialogs, type SizedLine } from './fieldEventDocs.js';
+import { centreScreen, DockedWindow, format, gold, sizedLine, syncImages, screenScale, type FieldDialogs, type SizedLine } from './fieldEventDocs.js';
 import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import type { Item } from '../game/inventory.js';
+import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
 
 const T = {
   GuardNPC: 'Guard NPC', OfficialSealOfKingS: 'Official seal of king: %s', None: 'None', AffiliatedGuildS: 'Affiliated guild: %s',
@@ -79,7 +80,7 @@ export interface SiegeWindowsOptions {
 type Button = { label: string; shown: boolean; locked: boolean };
 const hidden = (): Button => ({ label: '', shown: false, locked: false });
 const empty = (): SizedLine => ({ text: '', text_px: 0 });
-const nativePx = () => Math.round(TEXT_PX * screenScale());
+const nativePx = () => nativeTextPx();
 const pageLine = (text: string, bold = false) => sizedLine(text, bold, 190);
 const date = (pattern: string, d: { year: number; month: number; day: number; hour: number; minute: number }) => format(pattern, d.year, d.month, d.day, d.hour, d.minute);
 
@@ -108,7 +109,7 @@ export class GuardWindow {
   constructor(private readonly o: SiegeWindowsOptions) {
     const lines = Object.fromEntries(GUARD_LINES.map((name) => [name, empty()])) as Record<GuardLineName, SizedLine>;
     const model: GuardModel = {
-      ...lines, text_px: TEXT_PX, line_height_px: 14, active_tab: 0, tabs: [], register_bold: false,
+      ...lines, text_px: nativeTextPx(), line_height_px: 14, active_tab: 0, tabs: [], register_bold: false,
       proclaim_button: hidden(), register_button: hidden(), give_up_button: hidden(), list_kind: 0, declare_rows: [], siege_rows: [],
       header_name: T.NAME, header_mark_count: T.NoReg, header_state: T.Stat, header_order: T.Order, header_side: T.Camp, header_involvement: T.Maintain,
       score_label: T.Score, score_value: '', exit_tooltip: T.Close388,
@@ -189,7 +190,7 @@ export class GuardWindow {
     const phase = siege.phase;
     const master = hero.guildStatus === GuildStatus.MASTER;
     m.text_px = nativePx();
-    m.line_height_px = Math.round(14 * screenScale());
+    m.line_height_px = nativeLineHeightPx();
     m.title = sizedLine(T.GuardNPC, true, 160);
     m.owner_master = pageLine(format(T.OfficialSealOfKingS, siege.ownerGuildMaster || T.None), true);
     m.owner_guild = pageLine(format(T.AffiliatedGuildS, siege.ownerGuild || T.None), true);
@@ -282,7 +283,7 @@ export class SeniorWindow {
     const lines = Object.fromEntries(SENIOR_LINES.map((name) => [name, empty()])) as Record<SeniorLineName, CastleLine>;
     const buttons = Object.fromEntries(SENIOR_BUTTONS.map((name) => [name, hidden()])) as Record<SeniorButtonName, Button>;
     const model: SeniorModel = {
-      ...lines, ...buttons, text_px: TEXT_PX, line_height_px: 14, active_tab: 0, tabs: [], statue_page: false, item_live: false, map_items: [], exit_tooltip: T.Close388,
+      ...lines, ...buttons, text_px: nativeTextPx(), line_height_px: 14, active_tab: 0, tabs: [], statue_page: false, item_live: false, map_items: [], exit_tooltip: T.Close388,
       senatus_tab: (tab) => this.selectTab(tab),
       senatus_pick: (index) => this.pick(index),
       senatus_button: (button) => this.press(button),
@@ -355,7 +356,7 @@ export class SeniorWindow {
   private sync(): void {
     const m = this.window.model, { siege } = this.o;
     m.text_px = nativePx();
-    m.line_height_px = Math.round(14 * screenScale());
+    m.line_height_px = nativeLineHeightPx();
     m.active_tab = this.tab;
     m.title = sizedLine(T.SeniorNPC, true, 160);
     m.tabs = [T.CastleGate, T.GuardianStatue, T.Tax, T.Store1640].map((label, i) => ({ label, text_px: sizedLine(label, false, 40).text_px, selected: i === this.tab }));
@@ -436,7 +437,7 @@ export class GatekeeperWindow {
   constructor(private readonly o: SiegeWindowsOptions) {
     const lines = Object.fromEntries(GATEMAN_LINES.map((name) => [name, empty()])) as Record<GatemanLineName, SizedLine>;
     const model: GatemanModel = {
-      ...lines, text_px: TEXT_PX, line_height_px: 14, page: 0, is_public: false, guest_can_afford: true, confirm_button: hidden(), enter_button: hidden(),
+      ...lines, text_px: nativeTextPx(), line_height_px: 14, page: 0, is_public: false, guest_can_afford: true, confirm_button: hidden(), enter_button: hidden(),
       exit_tooltip: T.Close388,
       gateman_public_toggle: () => { if (o.siege.gatekeeper.type === TouchType.GUILD_MASTER) { o.click(); o.siege.togglePublic(); } },
       gateman_button: (button) => this.press(button),
@@ -468,7 +469,7 @@ export class GatekeeperWindow {
   private sync(): void {
     const m = this.window.model, keeper = this.o.siege.gatekeeper;
     m.text_px = nativePx();
-    m.line_height_px = Math.round(14 * screenScale());
+    m.line_height_px = nativeLineHeightPx();
     m.title = sizedLine(T.GuardNPC, true, 160);
     for (const name of GATEMAN_LINES.slice(1)) m[name] = empty();
     m.confirm_button = hidden(); m.enter_button = hidden();
@@ -524,7 +525,7 @@ export class GateSwitchWindow {
 
   constructor(private readonly o: SiegeWindowsOptions) {
     const model: GateSwitchModel = {
-      text_px: TEXT_PX, bold_text_px: TEXT_PX, title: T.CastleGateSwitch, title_px: TEXT_PX, line1: T.CanCommandToOpenOrClose, line2: T.TheCastleGateInFront,
+      text_px: nativeTextPx(), bold_text_px: nativeTextPx(), title: T.CastleGateSwitch, title_px: nativeTextPx(), line1: T.CanCommandToOpenOrClose, line2: T.TheCastleGateInFront,
       warning: T.BeCarefulItMightBeBeneficialToTheEnemy, gate_opened: false, button_text: T.Open1107, label_line_px: 14, exit_tooltip: T.Close388,
       gate_switch_toggle: () => { o.click(); o.siege.toggleGate(); this.window.close(); },
       gate_switch_exit: () => { o.click(); this.window.close(); },
@@ -541,7 +542,7 @@ export class GateSwitchWindow {
     m.title_px = sizedLine(T.CastleGateSwitch, true, 160).text_px;
     m.gate_opened = this.o.siege.gateSwitch.opened;
     m.button_text = m.gate_opened ? T.Close388 : T.Open1107;
-    m.label_line_px = Math.round(14 * screenScale());
+    m.label_line_px = nativeLineHeightPx();
   }
 }
 
@@ -563,7 +564,7 @@ export class CatapultWindow {
 
   constructor(private readonly o: SiegeWindowsOptions) {
     const model: CatapultModel = {
-      text_px: TEXT_PX, title: '', title_px: TEXT_PX, lines: [], mode: 0, line_height_px: 14, fire_text: T.Shoot, fire_locked: true, areas: [], exit_tooltip: T.Close388,
+      text_px: nativeTextPx(), title: '', title_px: nativeTextPx(), lines: [], mode: 0, line_height_px: 14, fire_text: T.Shoot, fire_locked: true, areas: [], exit_tooltip: T.Close388,
       catapult_area: (index) => {
         const c = o.siege.catapult, count = c.type === CATAPULT_ATTACK ? ATTACK_AREAS.length : c.type === CATAPULT_DEFENSE ? DEFENSE_AREAS.length : 0;
         if (index >= 0 && index < count && index !== c.area) { o.click(); c.area = index; c.fireLocked = false; }
@@ -586,7 +587,7 @@ export class CatapultWindow {
   private sync(): void {
     const m = this.window.model, c = this.o.siege.catapult;
     m.text_px = nativePx();
-    m.line_height_px = Math.round(14 * screenScale());
+    m.line_height_px = nativeLineHeightPx();
     m.title = c.type === CATAPULT_ATTACK ? T.WeaponForInvadingTeam : c.type === CATAPULT_DEFENSE ? T.WeaponForDefendingTeam : '';
     m.title_px = sizedLine(m.title, true, 190).text_px;
     m.lines = [T.DesiredAttackingLocation, T.SelectTheButtonAndPress, T.ToShoot].map((t) => sizedLine(t, true, 190));
@@ -626,7 +627,7 @@ export class SiegeHud {
     /** The commander: a guild master of a guild alone or leading its alliance, on a side of the siege. */
     commander: () => boolean; click: () => void; }) {
     this.model = {
-      bold_text_px: TEXT_PX, big_text_px: 15, alpha: 1, map_rect: '0 0 128 128', alpha_label: '100', time_visible: false, time_text: '', dots: [], hero_left: 0, hero_top: 0,
+      bold_text_px: nativeTextPx(), big_text_px: 15, alpha: 1, map_rect: '0 0 128 128', alpha_label: '100', time_visible: false, time_text: '', dots: [], hero_left: 0, hero_top: 0,
       commands: [], skill_visible: false, skill_rect: '0 0 20 28', skill_affordable: false, kills_needed: '', kills: '', teams: [], orders_visible: false,
       chosen_team: -1, cursor_visible: false, cursor_left: 0, cursor_top: 0, cursor_command: 0, cursor_team: "",
       siege_alpha_click: () => { this.model.alpha = this.model.alpha <= 0.5 ? 1 : this.model.alpha - 0.1; },
@@ -684,7 +685,7 @@ export class SiegeHud {
     m.hero_top = wy - this.offset.y + MINI_MAP.y;
     m.map_rect = `${this.offset.x * this.scale} ${this.offset.y * this.scale} ${128 * this.scale} ${128 * this.scale}`;
     m.alpha_label = String(Math.floor(m.alpha * 100.5));
-    m.bold_text_px = m.big_text_px = TEXT_PX; // the board is scaled as a whole
+    m.bold_text_px = m.big_text_px = nativeTextPx(); // the board is scaled as a whole
     m.time_visible = siege.battleStarted;
     if (m.time_visible) {
       const { hour, minute } = siege.time();

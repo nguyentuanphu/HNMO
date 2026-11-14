@@ -19,6 +19,7 @@ import {
   cloneAutoPlayConfig, initialAutoPlayConfig, normalizeExtraItems, PetAttackMode, SkillActivation,
 } from '../game/autoPlayConfig.js';
 import type { AutoPlayConfig } from '../game/autoPlayConfig.js';
+import { nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // the docked panels' width in reference px
 const SKILL_SLOTS = 6; // attack skills 0-2, buffs 3-5
@@ -124,7 +125,7 @@ function skillDecorator(skill: number): string {
 }
 
 const uiScale = () => window.innerHeight / REFERENCE_HEIGHT;
-const textPx = (scale: number) => Math.round(12 * scale);
+const textPx = (_scale: number) => nativeTextPx();
 
 interface ConfigLabels {
   title: string; tab_hunting: string; tab_obtaining: string; tab_other: string;

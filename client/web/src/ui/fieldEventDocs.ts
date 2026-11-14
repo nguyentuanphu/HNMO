@@ -4,9 +4,9 @@
 // progress boxes (CProgressMsgBox). Nothing here knows an event; ui/fieldEventWindows.ts wires them.
 
 import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { nativeLineHeightPx, nativeTextPx, nativeTextPxInBox } from './nativeText.js';
 
 export const PANEL_WIDTH = 190;   // the docked windows' width
-export const TEXT_PX = 12;        // the native text size at the 640x480 reference
 const REFRESH_MS = 200;
 
 export const screenScale = (): number => window.innerHeight / REFERENCE_HEIGHT;
@@ -14,32 +14,23 @@ export const screenScale = (): number => window.innerHeight / REFERENCE_HEIGHT;
 /** A line of a docked window: what it says and its native size, shrunk to its box like NativeTextPxInBox. */
 export interface SizedLine { text: string; text_px: number }
 
-let measureContext: CanvasRenderingContext2D | null = null;
-
 /** The line in the window's font at the native size, shrunk until it fits a box of `box` reference px (0: no box). */
 export function sizedLine(text: string, bold = false, box = 0): SizedLine {
-  const scale = screenScale();
-  const native = Math.round(TEXT_PX * scale);
-  if (!text) return { text: '', text_px: native };
-  if (box <= 0) return { text, text_px: native };
-  measureContext ??= document.createElement('canvas').getContext('2d');
-  if (!measureContext) return { text, text_px: native };
-  measureContext.font = `${bold ? 'bold ' : ''}${TEXT_PX}px sans-serif`;
-  // The canvas's sans-serif runs narrower than the themes' font.
-  const width = measureContext.measureText(text).width * 1.15;
-  if (width <= box) return { text, text_px: native };
-  return { text, text_px: Math.max(Math.round(native * 0.6), Math.floor(native * box / width)) };
+  if (!text) return { text: '', text_px: nativeTextPx() };
+  return { text, text_px: nativeTextPxInBox(text, box * screenScale(), bold) };
 }
 
 /** Lays a document's root out as the 640x480 reference screen stretched to the window (a .stage / .hud-board). */
 export function placeBoard(doc: RmlDocument): number {
   const scale = screenScale();
-  doc.setScale(1);
+  // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
+  doc.setScale(scale);
   Object.assign(doc.root.style, {
     width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
+  doc.root.style.setProperty('--board-scale', String(scale));
   return window.innerWidth / scale;
 }
 
@@ -267,7 +258,7 @@ export class ProgressBox {
   private duration = 0;
   private timer: ReturnType<typeof setInterval> | null = null;
   private readonly model: BoxModel = {
-    kind: 'progress', text_px: TEXT_PX, bold_text_px: TEXT_PX, line_height: 14, bold_line_height: 14, strips: [], lines: [], buttons: [],
+    kind: 'progress', text_px: nativeTextPx(), bold_text_px: nativeTextPx(), line_height: 14, bold_line_height: 14, strips: [], lines: [], buttons: [],
     progress_shown: true, progress_width: 0, list_shown: false, list_rows: [],
     message_box_button: () => this.close(),
   };

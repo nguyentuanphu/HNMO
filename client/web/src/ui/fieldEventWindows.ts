@@ -19,13 +19,14 @@ import { fetchBytes } from '../bmd.js';
 import { parseTerrainAttributes, TerrainFlag } from '../formats.js';
 import { loadLightMap, type TerrainMesh } from '../terrain.js';
 import { CatapultWindow, GatekeeperWindow, GateSwitchWindow, GuardWindow, SeniorWindow, SiegeHud } from './castleSiegeWindows.js';
-import { centreScreen, FieldDialogs, ProgressBox, syncImages, TEXT_PX } from './fieldEventDocs.js';
+import { centreScreen, FieldDialogs, ProgressBox, syncImages } from './fieldEventDocs.js';
 import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import type { Connection } from '../net/connection.js';
 import type { OnlineWorld } from '../game/online.js';
 import type { Character } from '../game/characters.js';
 import type { Inventory, Item } from '../game/inventory.js';
 import type { MapAudioState } from '../audio/index.js';
+import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
 
 const TERRAIN_SIZE = 256;
 const PET_SLOT = 8;
@@ -40,7 +41,7 @@ type CrywolfModel = RmlModel & CrywolfView & { normal_text_px: number; bold_text
 export class CrywolfHud {
   private doc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
-  readonly model: CrywolfModel = { ...Crywolf.emptyView(), normal_text_px: TEXT_PX, bold_text_px: TEXT_PX, bold_line_px: 14 };
+  readonly model: CrywolfModel = { ...Crywolf.emptyView(), normal_text_px: nativeTextPx(), bold_text_px: nativeTextPx(), bold_line_px: 14 };
 
   constructor() {
     prepareDocument('crywolf').catch((error: unknown) => console.warn('Interface', error));
@@ -53,7 +54,7 @@ export class CrywolfHud {
     if (!view.hud_visible && !view.result_visible) { this.doc?.close(); this.doc = null; return; }
     Object.assign(this.model, view);
     // The board is scaled as a whole: its text takes the reference size.
-    this.model.normal_text_px = this.model.bold_text_px = TEXT_PX;
+    this.model.normal_text_px = this.model.bold_text_px = nativeTextPx();
     this.model.bold_line_px = 14;
     if (this.doc) { this.doc.update(); syncImages(this.doc); return; }
     this.opening ??= openDocument('crywolf', this.model, { parent: document.body }).then((doc) => {

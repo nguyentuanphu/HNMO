@@ -5,6 +5,7 @@
 // data-class-*, data-style-*, data-event-*).
 
 import { decodeTGA } from '../formats.js';
+import { FONT_FAMILY, fitTextToBoxes, loadThemeFonts, nativeTextPx, runMarquees } from './nativeText.js';
 
 const ROOT = '/data/Interface/RmlUi';
 const THEMES: Record<string, string | null> = { classic: 'legacy', legacy: null, modern: null }; // a theme and the one it inherits from
@@ -318,6 +319,9 @@ export async function rcssToCss(rcss: string, sheetUrl: string, sprites: Sprites
   text = parsed.rest
     .replace(/token\(([\w-]+)\)/g, (_, name: string) => tokenValues[name] ?? 'inherit')
     .replace(/(\d)dp\b/g, '$1px')
+    // A rem is the document's root font size: the native text size for "native-text" documents
+    // (RmlNativeText); a shadow root has no root of its own, so it's a variable set on open.
+    .replace(/(?<![\w.-])(\d*\.?\d+)rem\b/g, 'calc($1 * var(--rml-rem, 12px))')
     .replace(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+(?:\.\d+)?)\s*\)/g, (all: string, r: string, g: string, b: string, a: string) => (a.includes('.') ? all : `rgba(${r}, ${g}, ${b}, ${(Number(a) / 255).toFixed(3)})`))
     // RCSS colours with alpha 0-255 in four hex pairs are the same as CSS's #rrggbbaa.
     .replace(/font-effect:\s*outline\(\s*([\d.]+px)\s+([^)]+)\)\s*;/g, (_, w: string, c: string) => outlineShadow(w, c.trim()))
@@ -497,13 +501,17 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
 
 const BASE_CSS = `
 :host { all: initial; position: absolute; left: 0; top: 0; width: 0; height: 0; }
-.rml-body { position: absolute; left: 0; top: 0; color: #fff; font-family: Tahoma, Arial, sans-serif; font-size: calc(12px * var(--hnmo-text-scale, 1)); line-height: 1.2; }
+.rml-body { position: absolute; left: 0; top: 0; color: #fff; font-family: ${FONT_FAMILY}, sans-serif; font-size: calc(12px * var(--hnmo-text-scale, 1)); line-height: 1.2; }
 :where(.rml-body) :where(div, p, h1, h2, h3) { display: block; margin: 0; padding: 0; box-sizing: content-box; }
 :where(.rml-body) :where(img) { display: block; }
 :where(.rml-body) :where(img:not([src])) { visibility: hidden; }
 :where(.rml-body) :where(.counter-scaled) { transform: scale(calc(1 / var(--root-scale, 1))); }
 :where(.rml-body) :where(button, input) { font: inherit; }
 .rml-body .hidden { display: none !important; }
+/* A root the web scales as a whole (the 640x480 board stretched to the window, --board-scale): a
+   .stage / .hud-board inside counter-scales its text by the whole scale, as on the desktop. */
+.rml-body .stage { --root-scale: calc(var(--ui-scale, 1) * var(--board-scale, 1)); }
+.rml-body .hud-board { --root-scale: calc(var(--hud-scale, 1) * var(--board-scale, 1)); }
 `;
 
 // Opens an interface document over the game: returns { host, root, update(), close() }.
@@ -577,11 +585,36 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
   }
   shadow.append(root);
 
+  loadThemeFonts();
   const updaters: Updater[] = [];
   bindTree(root, model, {}, updaters);
+  // After a change, once a frame: the rem size, the shrink-to-fit texts and the marquees, which need the layout.
+  const usesRem = css.includes('--rml-rem');
+  const hasMarquee = /\bmarquee\b/.test(css);
+  let fitPending = false;
+  const fit = () => {
+    fitPending = false;
+    if (!host.isConnected) return;
+    if (usesRem) {
+      // A rem is the native text size in screen pixels, in the units the root is laid out in.
+      const box = root.getBoundingClientRect();
+      const rootScale = root.offsetWidth > 0 && box.width > 0 ? box.width / root.offsetWidth : 1;
+      const rem = `${(nativeTextPx() / (rootScale || 1)).toFixed(3)}px`;
+      if (root.style.getPropertyValue('--rml-rem') !== rem) root.style.setProperty('--rml-rem', rem);
+    }
+    fitTextToBoxes(shadow);
+    if (hasMarquee && runMarquees(shadow)) schedule();
+  };
+  const schedule = () => { if (!fitPending) { fitPending = true; requestAnimationFrame(fit); } };
+  // A marquee starts scrolling when the pointer comes onto it.
+  if (hasMarquee) {
+    const onMove = () => { if (!host.isConnected) window.removeEventListener('pointermove', onMove); else schedule(); };
+    window.addEventListener('pointermove', onMove, { passive: true });
+  }
   const update = () => {
     const scope = scopeProxy(model, {});
     for (const updater of updaters) updater(scope);
+    schedule();
   };
   model.__update = update;
   update();

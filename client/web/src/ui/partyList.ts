@@ -75,5 +75,6 @@ export class PartyList {
     this.doc.root.style.setProperty('--world-left', '0px');
     this.doc.root.style.setProperty('--world-right', `${width - (this.actions.dockedRight?.() ?? 0)}px`);
     this.doc.root.style.setProperty('--hud-scale', '1');
+    this.doc.root.style.setProperty('--board-scale', String(scale));
   }
 }

@@ -21,6 +21,7 @@ import {
 } from '../game/masterLevel.js';
 import type { Hud } from './hud.js';
 import type { CharacterWindow } from './characterWindow.js';
+import { nativeTextPx } from './nativeText.js';
 
 // The desktop's texts (Localization/Game.en.resx).
 const T = {
@@ -191,8 +192,9 @@ export class MasterLevelWindow {
         transformOrigin: 'left top', pointerEvents: 'none',
       });
       doc.root.style.setProperty('--hud-scale', '1');
+      doc.root.style.setProperty('--board-scale', String(scale));
     }
-    this.model.text_px = 12;
+    this.model.text_px = nativeTextPx();
     this.doc?.update();
   }
 

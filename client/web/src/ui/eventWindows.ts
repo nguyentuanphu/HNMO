@@ -13,22 +13,23 @@ import {
 } from '../game/events.js';
 import type { Connection } from '../net/connection.js';
 import type { Item } from '../game/inventory.js';
+import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;   // the docked windows' width
-const TEXT_PX = 12;        // the native text size at the 640x480 reference
-const BIG_TEXT_PX = 15;
 
 const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
 
 /** Lays a document's root out as the 640x480 reference screen stretched to the window (a .stage / .hud-board). */
 function placeBoard(doc: RmlDocument): number {
   const scale = screenScale();
-  doc.setScale(1);
+  // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
+  doc.setScale(scale);
   Object.assign(doc.root.style, {
     width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
+  doc.root.style.setProperty('--board-scale', String(scale));
   return window.innerWidth / scale;
 }
 
@@ -55,7 +56,7 @@ export class EventEntryWindow {
     click: () => void;
   }) {
     this.model = {
-      text_px: TEXT_PX, bold_text_px: TEXT_PX, title_text: '', exit_tooltip: T.Close, lines: [], buttons: [],
+      text_px: nativeTextPx(), bold_text_px: nativeTextPx(), title_text: '', exit_tooltip: T.Close, lines: [], buttons: [],
       entry_press: (index) => this.press(index),
       entry_exit: () => this.close(),
     };
@@ -113,8 +114,8 @@ export class EventEntryWindow {
     Object.assign(panel.style, {
       left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
     });
-    this.model.text_px = Math.round(TEXT_PX * scale);
-    this.model.bold_text_px = Math.round(TEXT_PX * scale);
+    this.model.text_px = nativeTextPx();
+    this.model.bold_text_px = nativeTextPx();
     this.doc.update();
   }
 }
@@ -132,7 +133,7 @@ export class EventTimerHud {
   private opening: Promise<void> | null = null;
   private kind: TimerView['kind'] | null = null;
   private readonly model: TimerModel = {
-    text_px: TEXT_PX, big_text_px: BIG_TEXT_PX, kills_text: '', kills_state: 'normal', time_left_text: T.TimeLeft, time_left_state: 'normal',
+    text_px: nativeTextPx(), big_text_px: nativeTextPx('big'), kills_text: '', kills_state: 'normal', time_left_text: T.TimeLeft, time_left_state: 'normal',
     time_text: '', time_state: 'normal',
   };
 
@@ -189,7 +190,7 @@ interface StatusModel extends RmlModel {
 export class CountdownLine {
   private doc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
-  private readonly model: StatusModel = { text_px: TEXT_PX, switch_first: '', switch_second: '', macro_visible: false, macro_fraction: 0, world_centre: 320, countdown: '' };
+  private readonly model: StatusModel = { text_px: nativeTextPx(), switch_first: '', switch_second: '', macro_visible: false, macro_fraction: 0, world_centre: 320, countdown: '' };
 
   constructor() {
     window.addEventListener('resize', () => this.place());
@@ -238,7 +239,7 @@ function strips(kind: MatchResult['kind']): { kind: string }[] {
 export class ResultBox {
   private doc: RmlDocument | null = null;
   private readonly model: BoxModel = {
-    kind: '', text_px: TEXT_PX, bold_text_px: TEXT_PX, line_height: 14, bold_line_height: 14, strips: [], lines: [], buttons: [],
+    kind: '', text_px: nativeTextPx(), bold_text_px: nativeTextPx(), line_height: 14, bold_line_height: 14, strips: [], lines: [], buttons: [],
     progress_shown: false, progress_width: 0, list_shown: false, list_rows: [],
     message_box_button: () => this.close(),
   };

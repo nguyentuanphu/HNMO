@@ -10,6 +10,7 @@
 // then words are wrapped to a pixel width).
 
 import { fetchBytes } from '../bmd.js';
+import { FONT_FAMILY, nativeTextPx, typographyScale } from '../ui/nativeText.js';
 
 const BUX = [0xfc, 0xcf, 0xab];
 
@@ -157,15 +158,18 @@ export function loadQuestScripts(): Promise<QuestScripts> {
 // ---------- text wrapping ----------
 
 let measureContext: CanvasRenderingContext2D | null = null;
-let measureFamily = 'Tahoma, Arial, sans-serif';
+let measureFamily = `${FONT_FAMILY}, sans-serif`;
 /** The font family the windows draw their texts with (read from an opened document), for textWidth. */
 export function setMeasureFont(family: string): void { if (family) measureFamily = family; }
-/** A text's width at the interface's normal font (12 reference pixels). */
+/** A text's width in reference pixels, as the desktop's MeasureText gives it: drawn at the native
+ * text size in screen pixels, divided by the interface's scale. */
 export function textWidth(text: string): number {
   measureContext ??= document.createElement('canvas').getContext('2d');
-  if (!measureContext) return text.length * 6;
-  measureContext.font = `12px ${measureFamily}`;
-  return measureContext.measureText(text).width;
+  const scale = typographyScale();
+  const px = nativeTextPx();
+  if (!measureContext) return text.length * px * 0.6 / scale;
+  measureContext.font = `${px}px ${measureFamily}`;
+  return measureContext.measureText(text).width / scale;
 }
 
 /** CutStr: words wrapped to `width` pixels (a word longer than a line is cut). */

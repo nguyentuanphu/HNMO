@@ -10,25 +10,19 @@
 import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import { editorCellColor, GuildStatus, markCellColor, MARK_CELLS, type Guild } from '../game/guild.js';
 import { askInGame, chooseInGame, noticeInGame, promptInGame } from './socialDialogs.js';
+import { fitTextPx, measureText, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
-const TEXT_PX = 12;
 
-let measurer: CanvasRenderingContext2D | null = null;
-/** RenderText()'s shrink: the size a text is drawn at so it fits its box (reference px at the
- * panel's scale); 0 means no box, the native size. */
+/** RenderText()'s shrink (NativeTextPxInBox): the size a text of `px` screen pixels is drawn at so it
+ * fits its box (reference px at the panel's scale), not below the native minimum; 0 means no box. */
 export function fitPx(text: string, px: number, box: number, scale: number): number {
   if (!box || !text) return px;
-  measurer ??= document.createElement('canvas').getContext('2d');
-  if (!measurer) return px;
-  measurer.font = `${px}px "DejaVu Sans", Tahoma, sans-serif`;
-  const width = measurer.measureText(text).width;
-  const room = box * scale;
-  return width > room ? Math.max(6, Math.floor((px * room) / width)) : px;
+  return fitTextPx(px, measureText(text, px), box * scale);
 }
 
-/** The original's text size, which grows about half as fast as the rest of the interface. */
-const nativePx = (scale: number) => Math.round(TEXT_PX * (1 + (scale - 1) / 2));
+/** The native text size (NativeTextPx), which grows more slowly than the panels. */
+const nativePx = (_scale: number) => nativeTextPx();
 
 interface GuildLine { text: string; text_px: number }
 interface ActionButton { label: string; shown: boolean }
@@ -174,9 +168,9 @@ export class GuildInfoWindow extends DockedWindow<GuildInfoModel> {
   private unionRequested = false;
 
   constructor(private readonly options: GuildInfoOptions) {
-    const line = (): GuildLine => ({ text: '', text_px: TEXT_PX });
+    const line = (): GuildLine => ({ text: '', text_px: nativeTextPx() });
     super('guild_info', {
-      text_px: TEXT_PX, label_line_px: 14, no_guild: true, tab: Tab.MEMBERS, union_shown: false, mark_cells: [],
+      text_px: nativeTextPx(), label_line_px: 14, no_guild: true, tab: Tab.MEMBERS, union_shown: false, mark_cells: [],
       hint_title: line(), hint_line1: line(), hint_line2: line(), hint_line3: line(), title: line(), guild_name: line(),
       tab_info: line(), tab_members: line(), tab_union: line(), notice_label: line(), created: line(), score: line(),
       member_count: line(), rival: line(), header_name: line(), header_position: line(), header_server: line(),
@@ -383,8 +377,8 @@ export class GuildMakeWindow extends DockedWindow<GuildMakeModel> {
 
   constructor(private readonly options: GuildMakeOptions) {
     super('guild_make', {
-      text_px: TEXT_PX, label_line_px: 14, page: Page.INFO, title_text: 'Guild', title_px: TEXT_PX, info_text: 'Do you wish to be the guild master?', info_px: TEXT_PX,
-      make_text: 'Create guild', back_text: 'Back', next_text: 'Next', name_text: 'NAME', result_text: '', result_px: TEXT_PX,
+      text_px: nativeTextPx(), label_line_px: 14, page: Page.INFO, title_text: 'Guild', title_px: nativeTextPx(), info_text: 'Do you wish to be the guild master?', info_px: nativeTextPx(),
+      make_text: 'Create guild', back_text: 'Back', next_text: 'Next', name_text: 'NAME', result_text: '', result_px: nativeTextPx(),
       palette_hint_1: 'After selecting a color with', palette_hint_2: 'the mouse, please draw.', exit_tooltip: 'Close', guild_name: '',
       cells: [], palette: [], selected: editorCellColor(1), mark_cells: [],
       guild_mark_paint: (cell) => this.paint(cell),
