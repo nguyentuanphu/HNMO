@@ -44,7 +44,7 @@ export interface MonsterSoundSituation {
   drawn?: boolean;
   /** A once event played since it last stood or walked. */
   oncePlayed?: boolean;
-  /** Distance from the hero on the ground (MU units); unknown counts as heard. */
+  /** Distance from the hero on the ground (world units); unknown counts as heard. */
   heroDistance?: number;
   /** The server map shown, for the set's maps; unknown counts as named. */
   serverMap?: number;

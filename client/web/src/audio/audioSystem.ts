@@ -31,7 +31,7 @@ export interface Vec3 {
 
 export interface PlayOptions {
   /**
-   * Where the sound is in the world (MU units, 100 per tile). Plays like a map object's sound:
+   * Where the sound is in the world (world units, 100 per tile). Plays like a map object's sound:
    * on a free channel only, at DistanceLevel of its distance from the listener.
    */
   at?: Vec3;
@@ -270,7 +270,7 @@ export class AudioSystem {
   // --- listener -----------------------------------------------------------------------------
 
   /**
-   * The hero's position (MU units) for the distance of `play(id, { at })`. The facing is kept
+   * The hero's position (world units) for the distance of `play(id, { at })`. The facing is kept
    * for callers that read it; the desktop pans nothing, so neither does this.
    */
   setListener(position: Vec3, facingDegrees = 0): void {

@@ -5,7 +5,7 @@
 // -----
 //   import { EffectSystem, playSkillEffect, ownerFromCharacter, SkillEffect } from './render/effects/index.js';
 //
-//   // Once, with the scene's MU-space root (x, y on the ground, z up; main.ts's `root`):
+//   // Once, with the scene's world-space root (x, y on the ground, z up; main.ts's `root`):
 //   const effects = new EffectSystem(root, { camera, heightAt: (x, y) => sampleHeight(world.heights, x, y) });
 //   // Every frame (seconds); it steps in whole 40 ms ticks like the desktop and redraws:
 //   effects.update(dt);
@@ -26,7 +26,7 @@
 //   effects.createSprite(type, position, scale, light, owner?, rotation?, subType?)    CreateSprite
 //   effects.createJoint(type, position, targetPosition, angle, subType?, target?, scale?) CreateJoint
 //   effects.schedule(task)  runs task(tick) every tick until it returns false
-// Positions are MU units, angles degrees (z = facing, 0 faces -y), lights r g b (may exceed 1).
+// Positions are world units, angles degrees (z = facing, 0 faces -y), lights r g b (may exceed 1).
 // An owner is any EffectOwner ({ position, angle, light?, isLive?, weaponPosition?, hasAura? });
 // ownerFromCharacter adapts a game/characters.ts Character (same object per character).
 // Only the types and SubTypes the ported skills use are implemented; the others are ignored.

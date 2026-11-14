@@ -102,7 +102,7 @@ export class EffectSystem {
   /** Resolves when the catalogue and the textures are loaded. */
   readonly ready: Promise<void>;
 
-  /** Adds the effects to `parent` (the scene's MU-space root: x, y ground, z up). */
+  /** Adds the effects to `parent` (the scene's world-space root: x, y ground, z up). */
   constructor(parent: THREE.Object3D, options: EffectSystemOptions = {}) {
     this.options = options;
     this.root = new THREE.Group();

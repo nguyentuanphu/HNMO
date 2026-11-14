@@ -28,7 +28,7 @@ export type HeightAt = (x: number, y: number) => number;
 export class QuadBatches {
   private readonly root: THREE.Object3D;
   private readonly batches = new Map<string, Batch>();
-  /** The camera's right and up axes in the effect root's (MU) space, set by beginFrame. */
+  /** The camera's right and up axes in the effect root's (world units) space, set by beginFrame. */
   private readonly right = new THREE.Vector3(1, 0, 0);
   private readonly up = new THREE.Vector3(0, 0, 1);
   private readonly corner = new THREE.Vector3();

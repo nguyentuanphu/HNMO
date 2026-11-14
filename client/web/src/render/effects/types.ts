@@ -11,7 +11,7 @@ import type { BitmapName } from './core.js';
  * system reads it every tick, so keep the vectors up to date (or return live views).
  */
 export interface EffectOwner {
-  /** Where it stands: x, y on the ground and z at its feet (MU units). */
+  /** Where it stands: x, y on the ground and z at its feet (world units). */
   readonly position: THREE.Vector3;
   /** Its angles in degrees; z is the facing (0 faces -y, as the desktop's o->Angle[2]). */
   readonly angle: THREE.Vector3;

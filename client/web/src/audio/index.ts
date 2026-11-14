@@ -15,7 +15,7 @@
 //       id: a SOUND_* id of SoundFiles.json or a file ("Data/Sound/mBull1.wav").
 //       PlayBuffer's rules: round robin over the id's channels (max copies at once); a sound with
 //       one channel, `anchored` (PlayBuffer with an object) or `loop` does not restart while it
-//       plays. `at` (MU units): a map object's sound, free channel only, volume by distance from
+//       plays. `at` (world units): a map object's sound, free channel only, volume by distance from
 //       the listener (distanceLevel: 1 within 300, down to 0.25 at 1500+). Missing or bad files
 //       are silent. A one-shot still loading more than 0.6 s after the call is dropped.
 //   stop(id) · stopAll() · isPlaying(id) · preload(ids)

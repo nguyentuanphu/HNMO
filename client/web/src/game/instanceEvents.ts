@@ -53,7 +53,7 @@ export const T = {
   WeHaveEnteredTheHeartOf: 'We have entered the heart of the Illusion Temple. The sacred items of this temple are our ultimate goal. Move as many sacred items as you can to our storage. The brave one will certainly be compensated',
   ListenToThisTheAlliesHave: 'Listen to this. The allies have approached the entrance of this temple. We must fight with all our might and keep the temple from them so that we may secure the sacred items as they are.',
   YouAreCurrentGainingTheSacredItem: 'You are current gaining the sacred item.', YouAreCurrentlyStoringTheSacredItem: 'You are currently storing the sacred item.',
-  MUAlliance: 'MU alliance', IllusionSorcery: 'Illusion Sorcery', HeroList: 'Hero List', Camp: 'Camp', Character: 'Character', Class: 'Class', EXP: 'EXP', Point: 'point',
+  MUAlliance: 'HNMO alliance', IllusionSorcery: 'Illusion Sorcery', HeroList: 'Hero List', Camp: 'Camp', Character: 'Character', Class: 'Class', EXP: 'EXP', Point: 'point',
   YouMayBeCompensatedByClickingOnTheCloseButton: 'You may be compensated by clicking on the Close button.',
   // Doppelganger
   BattleHasAlreadyCommencedYouCannotEnter: 'Battle has already commenced. You cannot enter.',

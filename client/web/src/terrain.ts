@@ -217,7 +217,7 @@ export async function createTerrain({ worldDir, heights, mapping, light, fog }: 
   return mesh;
 }
 
-// Height at a world position (MU units), interpolated between the four corners of its cell.
+// Height at a world position (world units), interpolated between the four corners of its cell.
 export function sampleHeight(heights: Float32Array, x: number, y: number): number {
   const fx = Math.min(Math.max(x / TERRAIN_SCALE, 0), TERRAIN_SIZE - 1.001);
   const fy = Math.min(Math.max(y / TERRAIN_SCALE, 0), TERRAIN_SIZE - 1.001);
