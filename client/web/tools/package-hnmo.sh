@@ -82,4 +82,15 @@ cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
 cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
 chmod +x "$OUT/start-hnmo.sh"
 
+# HNMO ownership watermark. The marker locations are documented in the (unshipped)
+# note client/web/tools/hnmo/WATERMARKS.private.md. See also PROTECTION.md.
+REPO_ROOT="$(cd "$CLIENT_REPO/.." && pwd)"
+PROJECT_ID="$(cat "$REPO_ROOT/PROJECT_ID.txt")"
+STAMP="HNMO-$PROJECT_ID-$(date -u +%Y%m%d)"
+# 1) A hidden dot-file at a non-obvious path.
+printf '%s\n' "$STAMP" > "$OUT/web/wwwroot/.hnmo-build"
+# 2) A few bytes appended after a newline at the end of an existing shipped file
+#    (an HTML comment is not rendered, so it stays out of sight but travels with the build).
+printf '\n<!-- %s -->\n' "$STAMP" >> "$OUT/web/wwwroot/index.html"
+
 echo "Done: $OUT"

@@ -37,7 +37,8 @@
     <ProjectReference Include="..\GameLogic\HNMO.GameLogic.csproj" />
     <ProjectReference Include="..\GameServer\HNMO.GameServer.csproj" /> 
     <ProjectReference Include="..\GuildServer\HNMO.GuildServer.csproj" />
-    <ProjectReference Include="..\Interfaces\HNMO.Interfaces.csproj" />    
+    <ProjectReference Include="..\Integrity\HNMO.Integrity.csproj" />
+    <ProjectReference Include="..\Interfaces\HNMO.Interfaces.csproj" />
     <ProjectReference Include="..\Network\Analyzer\HNMO.Network.Analyzer.csproj" />
     <ProjectReference Include="..\LoginServer\HNMO.LoginServer.csproj" />
     <ProjectReference Include="..\Persistence\InMemory\HNMO.Persistence.InMemory.csproj" />
