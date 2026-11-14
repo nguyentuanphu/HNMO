@@ -96,3 +96,12 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Packets can be fed in tests with `window.__game.connection.dispatch(bytes)`.
 - Parallel work: agents in git worktrees, each with its own bridge port (8082-8091) and BASE_URL;
   merge their branches one at a time and resolve PARITY.md / guide.html conflicts by keeping both.
+- Owner wants (2026-11-14), to do AFTER the protection/keypair agent lands its public key:
+  1. A default limit of 20 concurrent players; a `license.hnmo` file signed with the owner's
+     private key (reuse the integrity keypair) raises it. The server already has a MaximumPlayers
+     config field (ServerConfiguration.MaximumPlayers, used in BotServerPartition). Enforce 20 by
+     default on login; a valid signed license lifts it. Give the owner a small command to sign a license.
+  2. Ship Ubuntu (linux-x64) and macOS (osx-arm64/osx-x64) release packages too, not only Windows.
+     package-hnmo.sh already takes the runtime arg; start-hnmo.sh already exists for non-Windows.
+     The extra work is bundling the right PostgreSQL per OS (or relying on a system pg via POSTGRES_BIN).
+     Update .github/workflows/hnmo-package.yml to a per-OS matrix.
