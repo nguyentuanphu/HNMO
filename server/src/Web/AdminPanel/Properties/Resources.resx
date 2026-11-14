@@ -2732,4 +2732,112 @@
   <data name="ExcellentOptionsHint" xml:space="preserve">
     <value>Empty means that the value of the excellent option definition of the item applies. The first option is always added without a chance.</value>
   </data>
+  <data name="HnmoSkills" xml:space="preserve">
+    <value>HNMO skills</value>
+  </data>
+  <data name="HnmoSkillsOf" xml:space="preserve">
+    <value>HNMO skills of {0}</value>
+  </data>
+  <data name="HnmoSkillsDescription" xml:space="preserve">
+    <value>Grant or remove the HNMO skills (700 to 727) of a character's class, e.g. the fourth skill (D) without its trial quest. A character which is in the game gets the change at once; an offline character has it at its next login. Skills A, B and C are learned again by level when the character enters the game, so removing one of them only lasts while the character is below that level.</value>
+  </data>
+  <data name="HnmoSkillsAccountNotFound" xml:space="preserve">
+    <value>The account doesn't exist.</value>
+  </data>
+  <data name="HnmoSkillsNoCharacters" xml:space="preserve">
+    <value>This account has no characters.</value>
+  </data>
+  <data name="HnmoSkillsSkill" xml:space="preserve">
+    <value>Skill</value>
+  </data>
+  <data name="HnmoSkillsHowLearned" xml:space="preserve">
+    <value>How it's learned</value>
+  </data>
+  <data name="HnmoSkillsAtLevel" xml:space="preserve">
+    <value>at level {0}</value>
+  </data>
+  <data name="HnmoSkillsByTrial" xml:space="preserve">
+    <value>trial quest (from level {0})</value>
+  </data>
+  <data name="HnmoSkillsLearned" xml:space="preserve">
+    <value>Learned</value>
+  </data>
+  <data name="HnmoSkillsGrant" xml:space="preserve">
+    <value>Grant</value>
+  </data>
+  <data name="HnmoSkillsRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="HnmoSkillsCharacterInfo" xml:space="preserve">
+    <value>{0}, level {1}</value>
+  </data>
+  <data name="HnmoSkillsOnline" xml:space="preserve">
+    <value>The account is online: changes reach the character in the game at once.</value>
+  </data>
+  <data name="HnmoSkillsOffline" xml:space="preserve">
+    <value>The account is offline: the character has the changes when it logs in.</value>
+  </data>
+  <data name="HnmoSkillsGranted" xml:space="preserve">
+    <value>{0} now has the skill {1}.</value>
+  </data>
+  <data name="HnmoSkillsRemoved" xml:space="preserve">
+    <value>The skill {1} was removed from {0}.</value>
+  </data>
+  <data name="HnmoSkillsUnchanged" xml:space="preserve">
+    <value>Nothing changed: {0} already had (or didn't have) the skill {1}.</value>
+  </data>
+  <data name="HnmoSkillsReachedGame" xml:space="preserve">
+    <value>The player sees it in the game now.</value>
+  </data>
+  <data name="HnmoSkillsReachedStored" xml:space="preserve">
+    <value>The character was offline; the player has it at the next login.</value>
+  </data>
+  <data name="HnmoSkillsCharacterNotFound" xml:space="preserve">
+    <value>The character doesn't exist.</value>
+  </data>
+  <data name="HnmoSkillsSkillNotOfClass" xml:space="preserve">
+    <value>This isn't an HNMO skill of the character's class.</value>
+  </data>
+  <data name="HnmoSkillsAccountBusy" xml:space="preserve">
+    <value>The account is logging in or being changed right now; nothing changed. Try again in a moment.</value>
+  </data>
+  <data name="HnmoSkillsNotInGame" xml:space="preserve">
+    <value>The account is logged in, but its character is not in the game (e.g. in the character selection); nothing changed. Try again when the character is in the game or logged out. ({0})</value>
+  </data>
+  <data name="HnmoSkillsServerUnavailable" xml:space="preserve">
+    <value>The account is online, but its game server can't be reached; nothing changed.</value>
+  </data>
+  <data name="CashShopCoinMode" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="CashShopCoinModeAdd" xml:space="preserve">
+    <value>Add (a negative amount takes coins)</value>
+  </data>
+  <data name="CashShopCoinModeSet" xml:space="preserve">
+    <value>Set the balance to</value>
+  </data>
+  <data name="CashShopApply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="CashShopBalanceMustNotBeNegative" xml:space="preserve">
+    <value>The balance can't be negative.</value>
+  </data>
+  <data name="CashShopCoinsAdded" xml:space="preserve">
+    <value>{0} {1} added to {2}.</value>
+  </data>
+  <data name="CashShopCoinsBalanceSet" xml:space="preserve">
+    <value>The {1} balance of {2} is set to {0} (a grant of {3}).</value>
+  </data>
+  <data name="CashShopCoinsBalanceUnchanged" xml:space="preserve">
+    <value>The {1} balance of {2} already is {0}; nothing changed.</value>
+  </data>
+  <data name="CashShopCoinsDeliveredNow" xml:space="preserve">
+    <value>The player is in the game: the new balance applies at once.</value>
+  </data>
+  <data name="CashShopCoinsDeliveredLater" xml:space="preserve">
+    <value>The player is offline: the coins arrive the next time the cash shop is opened in the game.</value>
+  </data>
+  <data name="CashShopCoinsDeliveredPending" xml:space="preserve">
+    <value>The account is online, but not in the game: the coins arrive the next time the cash shop is opened.</value>
+  </data>
 </root>

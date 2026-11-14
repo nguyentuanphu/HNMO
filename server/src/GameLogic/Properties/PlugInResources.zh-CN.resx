@@ -1804,4 +1804,16 @@
   <data name="IllusionTempleAllianceStorageTalkPlugIn_Description" xml:space="preserve"><value>处理玩家与幻影寺院盟军物品仓库的交互。盟军将圣物送至此处可获得一分。</value></data>
   <data name="IllusionTempleIllusionStorageTalkPlugIn_Name" xml:space="preserve"><value>幻影寺院幻影物品仓库交互</value></data>
   <data name="IllusionTempleIllusionStorageTalkPlugIn_Description" xml:space="preserve"><value>处理玩家与幻影寺院幻影物品仓库的交互。幻影军将圣物送至此处可获得一分。</value></data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>角色的 HNMO 技能（管理）</value>
+  </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>允许管理面板为在线角色授予或移除 HNMO 技能（700 至 727），例如无需完成试炼任务即可获得职业的第四个技能。</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>立即发放商城币（管理）</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>允许管理面板立即为在线账号发放已授予的商城币，而不必等到玩家下次打开商城。</value>
+  </data>
 </root>

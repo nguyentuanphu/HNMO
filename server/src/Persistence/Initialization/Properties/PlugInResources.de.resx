@@ -964,4 +964,10 @@
   <data name="AddHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>Dieses Update fügt die 28 HNMO-Fertigkeiten (Nummern 700 bis 727, vier pro Klasse) mit ihren Effekten hinzu, sowie die Prüfungsquests des Elfensoldaten in Lorencia, die die vierte Fertigkeit jeder Klasse lehren.</value>
   </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>HNMO-Fertigkeiten verstärken</value>
+  </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Dieses Update macht die 28 HNMO-Fertigkeiten um 20 % stärker (Schaden, Buffs und Debuffs; Kosten und Abklingzeiten bleiben) und lässt die Prüfungsquests des Elfensoldaten 200 Tötungen und fünf Juwelen des Chaos verlangen.</value>
+  </data>
 </root>

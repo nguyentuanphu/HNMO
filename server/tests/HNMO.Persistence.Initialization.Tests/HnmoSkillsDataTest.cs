@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging.Abstractions;
 using HNMO.AttributeSystem;
+using HNMO.DataModel.Attributes;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Quests;
 using HNMO.GameLogic.Attributes;
@@ -48,6 +49,23 @@ internal class HnmoSkillsDataTest
 
     private static readonly int[] Levels = [80, 150, 220, 250];
 
+    private static readonly Dictionary<short, short> SkillOfEffect = new()
+    {
+        [180] = 702, [181] = 707, [182] = 710, [183] = 714, [184] = 717, [185] = 726, [186] = 722,
+    };
+
+    private static readonly (short Number, int Damage)[] OldDamage =
+    [
+        (700, 90), (701, 60), (703, 120), (704, 75), (705, 40), (706, 60), (708, 70), (709, 55), (712, 80), (713, 100),
+        (715, 130), (716, 85), (718, 110), (719, 160), (720, 50), (723, 70), (724, 90), (725, 30), (727, 150),
+    ];
+
+    private static readonly (short Number, int Damage)[] StrongerDamage =
+    [
+        (700, 108), (701, 72), (703, 144), (704, 90), (705, 48), (706, 72), (708, 84), (709, 66), (712, 96), (713, 120),
+        (715, 156), (716, 102), (718, 132), (719, 192), (720, 60), (723, 84), (724, 108), (725, 36), (727, 180),
+    ];
+
     /// <summary>
     /// A new database has the 28 skills with their numbers, names, classes and levels, and their effects.
     /// </summary>
@@ -61,8 +79,8 @@ internal class HnmoSkillsDataTest
     }
 
     /// <summary>
-    /// A new database has the trial quests of the elf soldier: one per class evolution, from level 250, 100 kills and
-    /// a jewel of chaos, rewarded with the D skill of the class.
+    /// A new database has the trial quests of the elf soldier: one per class evolution, from level 250, 200 kills and
+    /// five jewels of chaos, rewarded with the D skill of the class.
     /// </summary>
     /// <returns>The task.</returns>
     [Test]
@@ -102,6 +120,67 @@ internal class HnmoSkillsDataTest
             await update.ApplyUpdateAsync(contextProvider.CreateNewContext(), gameConfiguration).ConfigureAwait(false);
         }
 
+        AssertSkills(gameConfiguration);
+        AssertTrialQuests(gameConfiguration);
+    }
+
+    /// <summary>
+    /// The update which makes the skills stronger sets the new values on a save which has the old ones, and applying it
+    /// a second time changes nothing.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task StrongerUpdateChangesTheValuesOfAnOldSaveAsync()
+    {
+        var contextProvider = new InMemoryPersistenceContextProvider();
+        var gameConfiguration = await CreateConfigurationAsync(contextProvider).ConfigureAwait(false);
+        SetOldValues(gameConfiguration);
+        Assert.That(gameConfiguration.Skills.Single(s => s.Number == 703).AttackDamage, Is.EqualTo(120), "the old save");
+
+        var update = new StrongerHnmoSkillsUpdatePlugIn();
+        await update.ApplyUpdateAsync(contextProvider.CreateNewContext(), gameConfiguration).ConfigureAwait(false);
+        AssertSkills(gameConfiguration);
+        AssertTrialQuests(gameConfiguration);
+        var effectCount = gameConfiguration.MagicEffects.Count;
+        var skillCount = gameConfiguration.Skills.Count;
+
+        await update.ApplyUpdateAsync(contextProvider.CreateNewContext(), gameConfiguration).ConfigureAwait(false);
+        AssertSkills(gameConfiguration);
+        AssertTrialQuests(gameConfiguration);
+        Assert.That(gameConfiguration.MagicEffects, Has.Count.EqualTo(effectCount), "no effects added");
+        Assert.That(gameConfiguration.Skills, Has.Count.EqualTo(skillCount), "no skills added");
+    }
+
+    /// <summary>
+    /// The update which makes the skills stronger depends on the one which adds them, so a save which doesn't have
+    /// them yet gets them first. On its own it doesn't fail when they're missing.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task StrongerUpdateComesAfterTheSkillsAsync()
+    {
+        var update = new StrongerHnmoSkillsUpdatePlugIn();
+        Assert.That(update.DependsOn.Select(d => d.Key), Is.EquivalentTo(new[] { typeof(AddHnmoSkillsUpdatePlugIn).GUID }));
+        Assert.That(update.IsMandatory, Is.True);
+        Assert.That(update.Key, Is.Not.EqualTo(new AddHnmoSkillsUpdatePlugIn().Key));
+
+        var contextProvider = new InMemoryPersistenceContextProvider();
+        var gameConfiguration = await CreateConfigurationAsync(contextProvider).ConfigureAwait(false);
+        foreach (var skill in gameConfiguration.Skills.Where(IsHnmoSkill).ToList())
+        {
+            gameConfiguration.Skills.Remove(skill);
+        }
+
+        var elfSoldier = gameConfiguration.Monsters.Single(m => m.Number == HnmoTrialQuestsInitializer.ElfSoldierNumber);
+        foreach (var quest in elfSoldier.Quests.Where(q => q.Group == HnmoTrialQuestsInitializer.TrialQuestGroup).ToList())
+        {
+            elfSoldier.Quests.Remove(quest);
+        }
+
+        await update.ApplyUpdateAsync(contextProvider.CreateNewContext(), gameConfiguration).ConfigureAwait(false);
+        Assert.That(gameConfiguration.Skills.Any(IsHnmoSkill), Is.False);
+
+        await new AddHnmoSkillsUpdatePlugIn().ApplyUpdateAsync(contextProvider.CreateNewContext(), gameConfiguration).ConfigureAwait(false);
         AssertSkills(gameConfiguration);
         AssertTrialQuests(gameConfiguration);
     }
@@ -185,7 +264,66 @@ internal class HnmoSkillsDataTest
         Assert.That(skills.Single(s => s.Number == 703).MagicEffectDef?.PowerUpDefinitions.Any(p => p.TargetAttribute == Stats.IsStunned), Is.True, "Charge stuns");
         Assert.That(gameConfiguration.Monsters.Any(m => m.Number == 351), Is.True, "the monster of Spirit Wolf");
         Assert.That(gameConfiguration.Monsters.Any(m => m.Number == 37), Is.True, "the monster of Little Demon");
+        AssertStrongerValues(gameConfiguration);
     }
+
+    /// <summary>
+    /// Checks the values which the owner made 20 % stronger on 2026-11-14: the damage, the effects and the trial.
+    /// </summary>
+    private static void AssertStrongerValues(GameConfiguration gameConfiguration)
+    {
+        foreach (var (number, damage) in StrongerDamage)
+        {
+            Assert.That(gameConfiguration.Skills.Single(s => s.Number == number).AttackDamage, Is.EqualTo(damage), $"damage of skill {number}");
+        }
+
+        Assert.That(EffectValue(gameConfiguration, 180, Stats.DamageReceiveDecrement), Is.EqualTo(0.76f).Within(0.0001f), "Iron Guard");
+        Assert.That(EffectValue(gameConfiguration, 181, Stats.SoulBarrierReceiveDecrement), Is.EqualTo(0.36f).Within(0.0001f), "Mana Shield");
+        Assert.That(EffectValue(gameConfiguration, 182, Stats.HealthRecoveryAbsolute), Is.EqualTo(36f).Within(0.0001f), "Forest Blessing");
+        Assert.That(PowerUp(gameConfiguration, 182, Stats.HealthRecoveryAbsolute).Boost!.RelatedValues.Single().InputOperand, Is.EqualTo(0.06f).Within(0.0001f), "Forest Blessing per energy");
+        Assert.That(EffectValue(gameConfiguration, 183, Stats.AttackDamageIncrease), Is.EqualTo(1.12f).Within(0.0001f), "Twin Power");
+        Assert.That(EffectValue(gameConfiguration, 184, Stats.AttackSpeed), Is.EqualTo(24f).Within(0.0001f), "War Command attack speed");
+        Assert.That(EffectValue(gameConfiguration, 184, Stats.MagicSpeed), Is.EqualTo(24f).Within(0.0001f), "War Command magic speed");
+        Assert.That(EffectValue(gameConfiguration, 185, Stats.DefenseFinal), Is.EqualTo(1.24f).Within(0.0001f), "Iron Body defense");
+        Assert.That(EffectValue(gameConfiguration, 185, Stats.DamageReflection), Is.EqualTo(0.12f).Within(0.0001f), "Iron Body reflection");
+        Assert.That(EffectValue(gameConfiguration, 186, Stats.DefenseDecrement), Is.EqualTo(0.76f).Within(0.0001f), "Weakening Curse");
+    }
+
+    private static PowerUpDefinition PowerUp(GameConfiguration gameConfiguration, short effectNumber, AttributeDefinition attribute)
+        => gameConfiguration.Skills.Single(s => s.Number == SkillOfEffect[effectNumber]).MagicEffectDef!.PowerUpDefinitions.Single(p => p.TargetAttribute == attribute);
+
+    private static float EffectValue(GameConfiguration gameConfiguration, short effectNumber, AttributeDefinition attribute)
+        => PowerUp(gameConfiguration, effectNumber, attribute).Boost!.ConstantValue.Value;
+
+    /// <summary>
+    /// Sets the values which the skills and quests had before they were made stronger, as an older save has them.
+    /// </summary>
+    private static void SetOldValues(GameConfiguration gameConfiguration)
+    {
+        foreach (var (number, damage) in OldDamage)
+        {
+            gameConfiguration.Skills.Single(s => s.Number == number).AttackDamage = damage;
+        }
+
+        PowerUp(gameConfiguration, 180, Stats.DamageReceiveDecrement).Boost!.ConstantValue.Value = 0.8f;
+        PowerUp(gameConfiguration, 181, Stats.SoulBarrierReceiveDecrement).Boost!.ConstantValue.Value = 0.3f;
+        PowerUp(gameConfiguration, 182, Stats.HealthRecoveryAbsolute).Boost!.ConstantValue.Value = 30;
+        PowerUp(gameConfiguration, 182, Stats.HealthRecoveryAbsolute).Boost!.RelatedValues.Single().InputOperand = 1f / 20;
+        PowerUp(gameConfiguration, 183, Stats.AttackDamageIncrease).Boost!.ConstantValue.Value = 1.1f;
+        PowerUp(gameConfiguration, 184, Stats.AttackSpeed).Boost!.ConstantValue.Value = 20;
+        PowerUp(gameConfiguration, 184, Stats.MagicSpeed).Boost!.ConstantValue.Value = 20;
+        PowerUp(gameConfiguration, 185, Stats.DefenseFinal).Boost!.ConstantValue.Value = 1.2f;
+        PowerUp(gameConfiguration, 185, Stats.DamageReflection).Boost!.ConstantValue.Value = 0.1f;
+        PowerUp(gameConfiguration, 186, Stats.DefenseDecrement).Boost!.ConstantValue.Value = 0.8f;
+        foreach (var quest in TrialQuests(gameConfiguration))
+        {
+            quest.RequiredMonsterKills.Single().MinimumNumber = 100;
+            quest.RequiredItems.Single().MinimumNumber = 1;
+        }
+    }
+
+    private static IEnumerable<QuestDefinition> TrialQuests(GameConfiguration gameConfiguration)
+        => gameConfiguration.Monsters.Single(m => m.Number == HnmoTrialQuestsInitializer.ElfSoldierNumber).Quests.Where(q => q.Group == HnmoTrialQuestsInitializer.TrialQuestGroup);
 
     private static void AssertTrialQuests(GameConfiguration gameConfiguration)
     {
@@ -199,9 +337,10 @@ internal class HnmoSkillsDataTest
                 var quest = quests.Single(q => q.QualifiedCharacter?.Number == (byte)classNumber);
                 Assert.That(quest.MinimumCharacterLevel, Is.EqualTo(250));
                 Assert.That(quest.Repeatable, Is.False);
-                Assert.That(quest.RequiredMonsterKills.Single().MinimumNumber, Is.EqualTo(100));
+                Assert.That(quest.RequiredMonsterKills.Single().MinimumNumber, Is.EqualTo(200));
                 Assert.That(quest.RequiredMonsterKills.Single().Monster, Is.Not.Null);
                 Assert.That(quest.RequiredItems.Single().Item, Is.SameAs(gameConfiguration.Items.Single(item => item.Group == 12 && item.Number == 15)));
+                Assert.That(quest.RequiredItems.Single().MinimumNumber, Is.EqualTo(5));
                 var reward = quest.Rewards.Single();
                 Assert.That(reward.RewardType, Is.EqualTo(QuestRewardType.Skill));
                 Assert.That(reward.SkillReward?.Number, Is.EqualTo(700 + (4 * i) + 3), classNumber.ToString());

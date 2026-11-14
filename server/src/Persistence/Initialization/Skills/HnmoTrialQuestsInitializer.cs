@@ -17,7 +17,7 @@ using HNMO.Persistence.Initialization.CharacterClasses;
 /// </summary>
 /// <remarks>
 /// The Elf Soldier, who stands in Lorencia and gives the other quests of the quest dialog already, gives one trial
-/// quest per class, from level 250: kill 100 monsters of a set kind and bring one Jewel of Chaos. The reward is the
+/// quest per class, from level 250: kill 200 monsters of a set kind and bring five Jewels of Chaos. The reward is the
 /// D skill of the class. As quests are bound to one character class, every evolution of a class gets its own copy.
 /// </remarks>
 internal class HnmoTrialQuestsInitializer : InitializerBase
@@ -35,7 +35,12 @@ internal class HnmoTrialQuestsInitializer : InitializerBase
     /// <summary>
     /// The number of monsters which have to be killed.
     /// </summary>
-    internal const int RequiredKills = 100;
+    internal const int RequiredKills = HnmoSkillValues.TrialRequiredKills;
+
+    /// <summary>
+    /// The number of Jewels of Chaos which have to be brought.
+    /// </summary>
+    internal const int RequiredJewels = HnmoSkillValues.TrialRequiredJewels;
 
     private const short StartingNumber = 0;
 
@@ -104,6 +109,14 @@ internal class HnmoTrialQuestsInitializer : InitializerBase
         }
     }
 
+    /// <summary>
+    /// Determines whether the item requirement asks for Jewels of Chaos.
+    /// </summary>
+    /// <param name="requirement">The item requirement.</param>
+    /// <returns><c>true</c>, if the requirement asks for Jewels of Chaos.</returns>
+    internal static bool IsJewelOfChaos(QuestItemRequirement requirement)
+        => requirement.Item is { Group: JewelOfChaosGroup, Number: JewelOfChaosNumber };
+
     private void CreateQuest(MonsterDefinition questGiver, CharacterClass characterClass, LocalizedString name, MonsterDefinition monster, ItemDefinition jewel, Skill skill)
     {
         var quest = this.Context.CreateNew<QuestDefinition>();
@@ -125,7 +138,7 @@ internal class HnmoTrialQuestsInitializer : InitializerBase
         quest.RequiredMonsterKills.Add(kills);
 
         var jewelRequirement = this.Context.CreateNew<QuestItemRequirement>();
-        jewelRequirement.MinimumNumber = 1;
+        jewelRequirement.MinimumNumber = RequiredJewels;
         jewelRequirement.Item = jewel;
         quest.RequiredItems.Add(jewelRequirement);
 

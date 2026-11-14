@@ -122,6 +122,27 @@ player is online. That's why the balances can't be edited directly: the game
 server keeps the account of an online player in memory and would overwrite such a
 change.
 
+**Change** chooses between **Add** (the amount is added; a negative amount takes
+coins) and **Set the balance to** (the panel grants the difference between the
+saved balance plus the pending grants and the new balance). After **Apply** the
+page says what changed. When the player is in the game, the game server applies
+the grant at once (the plug-in "Cash shop coins at once (administration)"), and an
+open cash shop shows the new balance; otherwise the grant waits for the next time
+the cash shop is opened.
+
+### HNMO skills
+
+**HNMO skills** next to an account lists its characters with the HNMO skills of
+their class (700 to 727, four per class: A, B and C are learned at levels 80, 150
+and 220, D by the trial quest of the Elf Soldier). **Grant** teaches a skill —
+e.g. the D skill without the trial — and **Remove** takes it away; the page says
+what changed. A character which is in the game gets the change at once (the
+plug-in "HNMO skills of a character (administration)"); for an offline character
+the stored character is changed while its account is reserved, so it has the
+change at its next login. A, B and C are learned again by level when the
+character enters the game, so removing one only lasts while the character is
+below that level.
+
 ### Granting attributes for a limited time (e.g. VIP)
 
 The **Attribute Grants** of an account add a value to an attribute, optionally

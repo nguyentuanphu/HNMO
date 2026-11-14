@@ -23,9 +23,9 @@ public class BloodSlashSkillPlugIn : IAreaSkillPlugIn
     /// The part of the damage which heals the hero.
     /// </summary>
     /// <remarks>
-    /// A fixed part of the skill as defined for HNMO (5 %), not a value a server owner should have to tune separately.
+    /// A fixed part of the skill as defined for HNMO (6 %), not a value a server owner should have to tune separately.
     /// </remarks>
-    internal const float HealedPartOfDamage = 0.05f;
+    internal const float HealedPartOfDamage = 0.06f;
 
     /// <inheritdoc/>
     public short Key => 701;

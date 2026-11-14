@@ -2010,4 +2010,16 @@
   <data name="MediumEliteHealingPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
     <value>Plugin, das den Verbrauch des mittleren Elite-Heiltranks verarbeitet. Er stellt einen Teil der Lebenspunkte sofort wieder her.</value>
   </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>HNMO-Fertigkeiten eines Charakters (Verwaltung)</value>
+  </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>Erlaubt dem Admin-Panel, einem Charakter im Spiel HNMO-Fertigkeiten (700 bis 727) zu geben oder zu nehmen, z. B. die vierte Fertigkeit der Klasse ohne ihre Prüfungsquest.</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>Shop-Münzen sofort (Verwaltung)</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>Erlaubt dem Admin-Panel, gewährte Shop-Münzen einem Konto im Spiel sofort gutzuschreiben, statt erst beim nächsten Öffnen des Shops.</value>
+  </data>
 </root>

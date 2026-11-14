@@ -6,7 +6,9 @@ namespace HNMO.Tests;
 
 using Moq;
 using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Configuration.Quests;
+using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlayerActions.Quests;
@@ -16,6 +18,7 @@ using HNMO.Interfaces;
 using CharacterQuestState = HNMO.Persistence.BasicModel.CharacterQuestState;
 using MonsterDefinition = HNMO.Persistence.BasicModel.MonsterDefinition;
 using QuestDefinition = HNMO.Persistence.BasicModel.QuestDefinition;
+using QuestItemRequirement = HNMO.Persistence.BasicModel.QuestItemRequirement;
 using QuestMonsterKillRequirement = HNMO.Persistence.BasicModel.QuestMonsterKillRequirement;
 using QuestMonsterKillRequirementState = HNMO.Persistence.BasicModel.QuestMonsterKillRequirementState;
 using QuestReward = HNMO.Persistence.BasicModel.QuestReward;
@@ -27,6 +30,10 @@ using QuestReward = HNMO.Persistence.BasicModel.QuestReward;
 public class HnmoSkillsLearningTest
 {
     private const short TrialQuestGroup = 40;
+
+    private const int RequiredKills = 200;
+
+    private const int RequiredJewels = 5;
 
     /// <summary>
     /// The skills of a level are learned when the character reaches it, with a message; the skills of higher levels
@@ -121,13 +128,34 @@ public class HnmoSkillsLearningTest
     {
         var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
         var skill = AddSkill(player, 703, "Charge", player.SelectedCharacter!.CharacterClass!);
-        var (quest, state) = SetUpTrialQuest(player, skill, killCount: 100);
+        var (quest, state) = SetUpTrialQuest(player, skill, killCount: RequiredKills);
+        var jewel = await AddJewelsAsync(player, RequiredJewels).ConfigureAwait(false);
 
         await new QuestCompletionAction().CompleteQuestAsync(player, TrialQuestGroup, quest.Number).ConfigureAwait(false);
 
         Assert.That(player.SkillList!.ContainsSkill(703), Is.True);
         Assert.That(state.LastFinishedQuest, Is.SameAs(quest));
         Assert.That(state.ActiveQuest, Is.Null);
+        Assert.That(player.Inventory!.Items.Count(i => i.Definition == jewel), Is.Zero, "the five jewels are taken");
+    }
+
+    /// <summary>
+    /// A trial quest needs five Jewels of Chaos: with four, it isn't completed and doesn't teach the skill.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task QuestRewardNeedsFiveJewelsAsync()
+    {
+        var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        var skill = AddSkill(player, 703, "Charge", player.SelectedCharacter!.CharacterClass!);
+        var (quest, state) = SetUpTrialQuest(player, skill, killCount: RequiredKills);
+        var jewel = await AddJewelsAsync(player, RequiredJewels - 1).ConfigureAwait(false);
+
+        await new QuestCompletionAction().CompleteQuestAsync(player, TrialQuestGroup, quest.Number).ConfigureAwait(false);
+
+        Assert.That(player.SkillList!.ContainsSkill(703), Is.False);
+        Assert.That(state.ActiveQuest, Is.SameAs(quest));
+        Assert.That(player.Inventory!.Items.Count(i => i.Definition == jewel), Is.EqualTo(RequiredJewels - 1), "no jewel is taken");
     }
 
     /// <summary>
@@ -139,12 +167,39 @@ public class HnmoSkillsLearningTest
     {
         var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
         var skill = AddSkill(player, 703, "Charge", player.SelectedCharacter!.CharacterClass!);
-        var (quest, state) = SetUpTrialQuest(player, skill, killCount: 99);
+        var (quest, state) = SetUpTrialQuest(player, skill, killCount: RequiredKills - 1);
+        await AddJewelsAsync(player, RequiredJewels).ConfigureAwait(false);
 
         await new QuestCompletionAction().CompleteQuestAsync(player, TrialQuestGroup, quest.Number).ConfigureAwait(false);
 
         Assert.That(player.SkillList!.ContainsSkill(703), Is.False);
         Assert.That(state.ActiveQuest, Is.SameAs(quest));
+    }
+
+    private static ItemDefinition GetJewelOfChaos(Player player)
+    {
+        if (player.GameContext.Configuration.Items.FirstOrDefault(i => i.Group == 12 && i.Number == 15) is { } existing)
+        {
+            return existing;
+        }
+
+        var jewel = new ItemDefinition { Name = "Jewel of Chaos", Group = 12, Number = 15, Width = 1, Height = 1 };
+        player.GameContext.Configuration.Items.Add(jewel);
+        return jewel;
+    }
+
+    private static async ValueTask<ItemDefinition> AddJewelsAsync(Player player, int count)
+    {
+        var jewel = GetJewelOfChaos(player);
+        for (var i = 0; i < count; i++)
+        {
+            var item = player.PersistenceContext.CreateNew<Item>();
+            item.Definition = jewel;
+            item.Durability = 1;
+            Assert.That(await player.Inventory!.AddItemAsync(item).ConfigureAwait(false), Is.True);
+        }
+
+        return jewel;
     }
 
     private static Skill AddSkill(Player player, short number, string name, CharacterClass characterClass)
@@ -162,9 +217,10 @@ public class HnmoSkillsLearningTest
 
     private static (QuestDefinition Quest, CharacterQuestState State) SetUpTrialQuest(Player player, Skill skill, int killCount)
     {
-        var kills = new QuestMonsterKillRequirement { MinimumNumber = 100, Monster = new MonsterDefinition { Number = 352 } };
+        var kills = new QuestMonsterKillRequirement { MinimumNumber = RequiredKills, Monster = new MonsterDefinition { Number = 352 } };
         var quest = new QuestDefinition { Group = TrialQuestGroup, Number = 1, MinimumCharacterLevel = 250 };
         quest.RequiredMonsterKills.Add(kills);
+        quest.RequiredItems.Add(new QuestItemRequirement { MinimumNumber = RequiredJewels, Item = GetJewelOfChaos(player) });
         quest.Rewards.Add(new QuestReward { RewardType = QuestRewardType.Skill, Value = 1, SkillReward = skill });
 
         var state = new CharacterQuestState { Group = TrialQuestGroup, ActiveQuest = quest };

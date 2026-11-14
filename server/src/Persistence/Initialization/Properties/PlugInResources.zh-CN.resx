@@ -487,4 +487,10 @@
   <data name="AddHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>添加 28 个 HNMO 技能（编号 700 至 727，每个职业四个）及其效果，以及勇者大陆精灵士兵的试炼任务，完成后学会各职业的第四个技能。</value>
   </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>增强 HNMO 技能</value>
+  </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>将 28 个 HNMO 技能增强 20%（伤害、增益和减益效果；消耗和冷却时间不变），并将精灵士兵的试炼任务改为击杀 200 个怪物并上交五颗玛雅之石。</value>
+  </data>
 </root>

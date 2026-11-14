@@ -1,0 +1,73 @@
+@page "/accounts/{LoginName}/hnmo-skills"
+@attribute [Authorize(Policy = AdminPolicies.Operator)]
+
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+@{
+    var title = string.Format(Resources.HnmoSkillsOf, this.LoginName);
+}
+<PageTitle>HNMO: @title</PageTitle>
+<Breadcrumb Caption="@title" />
+<h1>@title</h1>
+
+<p class="text-muted">@Resources.HnmoSkillsDescription</p>
+
+@if (this._lastResult is { } lastResult)
+{
+    <div class="alert @(lastResult.Success ? "alert-success" : "alert-warning")" role="status" id="hnmo-skills-result">@lastResult.Text</div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._characters is not { } characters)
+{
+    <p>@Resources.HnmoSkillsAccountNotFound</p>
+}
+else if (characters.Count == 0)
+{
+    <p>@Resources.HnmoSkillsNoCharacters</p>
+}
+else
+{
+    <p class="@(characters[0].Online ? "text-success" : "text-muted")">@(characters[0].Online ? Resources.HnmoSkillsOnline : Resources.HnmoSkillsOffline)</p>
+
+    @foreach (var character in characters)
+    {
+        <h2>@character.CharacterName <small class="text-muted">@string.Format(Resources.HnmoSkillsCharacterInfo, character.ClassName, character.Level)</small></h2>
+        <div class="table-responsive">
+        <table class="table table-sm w-auto" data-character="@character.CharacterName">
+            <thead>
+            <tr>
+                <th>@Resources.HnmoSkillsSkill</th>
+                <th>@Resources.HnmoSkillsHowLearned</th>
+                <th>@Resources.HnmoSkillsLearned</th>
+                <th>@Resources.Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var skill in character.Skills)
+            {
+                <tr data-skill="@skill.Number">
+                    <td>@skill.Letter. @skill.Name <span class="text-muted">(@skill.Number)</span></td>
+                    <td>@(skill.Letter == 'D' ? string.Format(Resources.HnmoSkillsByTrial, skill.RequiredLevel) : string.Format(Resources.HnmoSkillsAtLevel, skill.RequiredLevel))</td>
+                    <td>@(skill.Learned ? Resources.Yes : Resources.No)</td>
+                    <td>
+                        @if (skill.Learned)
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-danger" disabled="@this._isChanging" @onclick="() => this.OnChangeAsync(character.CharacterName, skill, false)">@Resources.HnmoSkillsRemove</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-sm btn-primary" disabled="@this._isChanging" @onclick="() => this.OnChangeAsync(character.CharacterName, skill, true)">@Resources.HnmoSkillsGrant</button>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        </div>
+    }
+}

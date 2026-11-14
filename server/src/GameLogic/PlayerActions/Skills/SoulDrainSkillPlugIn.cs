@@ -23,9 +23,9 @@ public class SoulDrainSkillPlugIn : IAreaSkillPlugIn
     /// The part of the damage which the hero gets as mana.
     /// </summary>
     /// <remarks>
-    /// A fixed part of the skill as defined for HNMO (10 %), not a value a server owner should have to tune separately.
+    /// A fixed part of the skill as defined for HNMO (12 %), not a value a server owner should have to tune separately.
     /// </remarks>
-    internal const float DrainedPartOfDamage = 0.1f;
+    internal const float DrainedPartOfDamage = 0.12f;
 
     /// <inheritdoc/>
     public short Key => 723;

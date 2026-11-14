@@ -12,11 +12,13 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
+using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Pages;
 using HNMO.Web.AdminPanel.Properties;
+using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Tests.Mcp;
 
@@ -64,6 +66,9 @@ public class CashShopCoinsPageTests
         this._context.Services.AddSingleton<IPersistenceContextProvider>(this._persistenceContextProvider);
         this._context.Services.AddSingleton(gameConfigurationSource.Object);
         this._context.Services.AddSingleton(this._toastService.Object);
+        var loginServer = new Mock<ILoginServer>();
+        loginServer.Setup(l => l.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte>());
+        this._context.Services.AddSingleton(new CashShopCoinDelivery(loginServer.Object, Mock.Of<IServerProvider>()));
         this._context.Services.AddSingleton(Mock.Of<ILogger<CashShopCoins>>());
         this._context.ComponentFactories.AddStub<HNMO.Web.Shared.Components.Breadcrumb>();
     }
@@ -94,7 +99,25 @@ public class CashShopCoinsPageTests
         cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain("Event reward")));
         Assert.That(cut.Markup, Does.Contain(Resources.CashShopPending));
         Assert.That(cut.Markup, Does.Contain(string.Format(Resources.CashShopPendingAmount, "+500")));
-        this._toastService.Verify(t => t.ShowSuccess(Resources.CashShopCoinsGranted), Times.Once);
+        this._toastService.Verify(t => t.ShowSuccess(It.Is<string>(m => m.Contains("+500") && m.Contains("buyer")), Resources.CashShopCoinsGranted), Times.Once);
+        Assert.That(cut.Find("#cash-shop-result").TextContent, Does.Contain(Resources.CashShopCoinsDeliveredLater));
+    }
+
+    /// <summary>
+    /// "Set the balance to" grants the difference to the saved balance, and says so.
+    /// </summary>
+    [Test]
+    public void SetBalanceGrantsTheDifference()
+    {
+        var cut = this._context.Render<CashShopCoins>(parameters => parameters.Add(p => p.LoginName, "buyer"));
+        cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain(1234.ToString("N0"))));
+
+        cut.Find("#mode").Change("true");
+        cut.Find("#amount").Change("2000");
+        cut.Find("form").Submit();
+
+        cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain(string.Format(Resources.CashShopPendingAmount, "+766"))));
+        Assert.That(cut.Find("#cash-shop-result").TextContent, Does.Contain(2000.ToString("N0")).And.Contain("+766"));
     }
 
     /// <summary>

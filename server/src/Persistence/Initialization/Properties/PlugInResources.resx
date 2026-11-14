@@ -456,4 +456,10 @@
   <data name="AddHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
     <value>This update adds the 28 HNMO skills (numbers 700 to 727, four per class) with their effects, and the trial quests of the Elf Soldier in Lorencia, which teach the fourth skill of each class.</value>
   </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Make the HNMO skills stronger</value>
+  </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>This update makes the 28 HNMO skills 20 % stronger (damage, buffs and debuffs; costs and cooldowns stay) and lets the trial quests of the Elf Soldier ask for 200 kills and five Jewels of Chaos.</value>
+  </data>
 </root>

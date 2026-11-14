@@ -40,8 +40,20 @@ else
     </table>
 
     <h2>@Resources.CashShopGrantCoins</h2>
+    @if (this._lastResult is { } lastResult)
+    {
+        <div class="alert @(lastResult.Success ? "alert-success" : "alert-warning")" role="status" id="cash-shop-result">@lastResult.Text</div>
+    }
+
     <EditForm Model="this._input" OnValidSubmit="this.OnGrantAsync" class="row g-2 align-items-end mb-4">
         <DataAnnotationsValidator />
+        <div class="col-auto">
+            <label class="form-label" for="mode">@Resources.CashShopCoinMode</label>
+            <InputSelect id="mode" class="form-select" @bind-Value="this._input.SetBalance">
+                <option value="false">@Resources.CashShopCoinModeAdd</option>
+                <option value="true">@Resources.CashShopCoinModeSet</option>
+            </InputSelect>
+        </div>
         <div class="col-auto">
             <label class="form-label" for="coinType">@Resources.CashShopCoinType</label>
             <InputSelect id="coinType" class="form-select" @bind-Value="this._input.CoinType">
@@ -60,7 +72,7 @@ else
             <InputText id="reason" class="form-control" @bind-Value="this._input.Reason" />
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary" disabled="@this._isGranting">@Resources.CashShopGrantCoins</button>
+            <button type="submit" class="btn btn-primary" disabled="@this._isGranting">@Resources.CashShopApply</button>
         </div>
         <ValidationSummary />
     </EditForm>
