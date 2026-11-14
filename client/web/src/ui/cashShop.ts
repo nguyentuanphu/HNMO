@@ -601,6 +601,16 @@ export class CashShop {
     }
     this.placeDialog();
     fitDialogLines(this.dialog, model);
+    // The recipient's label ends where its field starts (the long English label ran under the field).
+    const fitLines = model.__update;
+    const dialog = this.dialog;
+    model.__update = () => {
+      fitLines?.();
+      const label = dialog.$('#igs_recipient_label');
+      if (label && id) fitElementLine(label, id.getBoundingClientRect().left - label.getBoundingClientRect().left - 4);
+    };
+    dialog.update = model.__update;
+    model.__update();
     id?.focus();
   }
 
