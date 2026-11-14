@@ -171,6 +171,8 @@
   <h2 id="friends">Playing with friends</h2>
   <p>One person starts the game folder (<i>Start HNMO</i>, the file to open); everyone opens the game's address in a browser. Over the internet, friends join the host through Tailscale and use the host's Tailscale address. Your progress is saved in the host's folder.</p>
   <p data-community-links="Talk to us: " hidden></p>
+  <h2 id="topup">Top up coins (host)</h2>
+  <p>Players can buy cash shop coins by bank transfer on the <a href="/topup.html">top-up page</a>: it shows a VietQR code for your Techcombank or Vietcombank account with the amount and the message (e.g. <i>HNMO test2</i>) filled in. Set it up in the admin panel: Plugins, <i>Bank top-up (VietQR, Casso, SePay)</i>: your name as the bank shows it, the account numbers, the VND per coin, then activate it. For coins to arrive by themselves, connect your bank to Casso or SePay and add a webhook there pointing to your game's public https address: <i>/topup/casso</i> (Casso, with a Security Key) or <i>/topup/sepay</i> (SePay, authentication "API Key"), and put the same key in the plug-in. Each bank transaction is counted once, even when both services report it. Transfers without an account name or below the minimum are only written to the server log; add those coins by hand (Accounts, Cash shop).</p>
   <p>The host can rename the game: in the admin panel (on the host's computer, http://127.0.0.1:8095), open Plugins, find <i>Game name and community links</i>, edit its configuration (the name, and Zalo, Discord or Facebook links shown on the login screen and here) and save. Players see the change on the next page load (within a minute).</p>
 </main>
   <script>

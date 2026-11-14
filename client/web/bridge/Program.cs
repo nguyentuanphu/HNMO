@@ -79,6 +79,50 @@ app.MapGet("/game-name.json", async (HttpContext context) =>
     return Results.Json(new { name = gameInfo.Item1, links = gameInfo.Item2 });
 });
 
+// Top-ups by bank transfer: the top-up page's information and the payment services' webhooks (Casso,
+// SePay) go to the admin panel, which only listens on this computer. Only these three paths pass, with
+// the body and the webhooks' key headers; the admin panel checks the keys.
+var topUpBase = (app.Configuration["GameName:AdminUrl"] ?? app.Configuration["Launcher:AdminUrl"] ?? "http://127.0.0.1:8095").TrimEnd('/') + "/api/topup/";
+var topUpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
+async Task ForwardTopUpAsync(HttpContext context, string action)
+{
+    using var request = new HttpRequestMessage(new HttpMethod(context.Request.Method), topUpBase + action);
+    if (HttpMethods.IsPost(context.Request.Method))
+    {
+        using var reader = new StreamReader(context.Request.Body);
+        var body = await reader.ReadToEndAsync(context.RequestAborted);
+        if (body.Length > 64 * 1024)
+        {
+            context.Response.StatusCode = StatusCodes.Status413PayloadTooLarge;
+            return;
+        }
+
+        request.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+        foreach (var header in new[] { "secure-token", "Authorization" })
+        {
+            if (context.Request.Headers.TryGetValue(header, out var value)) request.Headers.TryAddWithoutValidation(header, value.ToString());
+        }
+    }
+
+    try
+    {
+        using var response = await topUpClient.SendAsync(request, context.RequestAborted);
+        context.Response.StatusCode = (int)response.StatusCode;
+        context.Response.ContentType = "application/json";
+        context.Response.Headers.CacheControl = "no-cache";
+        await context.Response.WriteAsync(await response.Content.ReadAsStringAsync(context.RequestAborted), context.RequestAborted);
+    }
+    catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+    {
+        // The admin panel isn't up: the services send the webhook again later.
+        context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+    }
+}
+
+app.MapGet("/topup/info", (HttpContext context) => ForwardTopUpAsync(context, "info"));
+app.MapPost("/topup/casso", (HttpContext context) => ForwardTopUpAsync(context, "casso"));
+app.MapPost("/topup/sepay", (HttpContext context) => ForwardTopUpAsync(context, "sepay"));
+
 // The web client and its libraries, then the game's data files.
 app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
 app.UseStaticFiles(new StaticFileOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
