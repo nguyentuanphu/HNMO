@@ -452,8 +452,9 @@ public sealed partial class GameServer : IGameServer, IDisposable, IAsyncDisposa
     /// <inheritdoc/>
     public async ValueTask GuildDeletedAsync(uint guildId)
     {
-        await this._gameContext.RemoveGuildAsync(guildId).ConfigureAwait(false);
+        // The members first: removing the guild drops its member list, and then no member would be told.
         await this._gameContext.ForEachGuildPlayerAsync(guildId, p => this.RemovePlayerFromGuildAsync(p, false).AsTask()).ConfigureAwait(false);
+        await this._gameContext.RemoveGuildAsync(guildId).ConfigureAwait(false);
 
         //// todo: alliance things?
     }
