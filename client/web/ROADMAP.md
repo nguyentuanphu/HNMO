@@ -142,16 +142,26 @@ One background agent at a time, in this order; each with tests, docs, English an
 2. 🔄 **Chat on the server** (with the map monster multiplier): offline whispers, the GMs' chat log
    with mute, the spam guard, the Discord check. (Agent running.)
 3. ⏳ **Daily and weekly missions** (idea 2): a mission board (e.g. kill 300 monsters in a map, win an
-   event, use the chaos machine), rewards (zen, jewels, coins), a daily streak; configured in the
-   admin panel; a window in the web game; the website shows them.
+   event, use the chaos machine), rewards (zen, jewels, coins), a daily streak (day 7 pays more);
+   configured in the admin panel; a window in the web game; the website shows them. With them, the
+   **earned coins** (the owner agreed on 2026-11-15): Goblin Points for online time (a few per hour,
+   capped per day, auto play counts half), one-time rewards at level 100/200/300/400 and per reset,
+   invite a friend (paid when the friend reaches level 150), a monthly login calendar (bigger rewards
+   on days 7, 14 and 28). Earned coins (Goblin Points) stay apart from paid coins (W Coin); a daily cap
+   on earned coins per account, rewards per account, every grant in the coins history; all amounts in
+   the admin panel.
 4. ⏳ **World bosses** (idea 5): a boss every N hours on a chosen map, announced in the game, on
    Discord and on the website; rewards by damage dealt, a small reward for everyone who joined;
    configured in the admin panel.
+   With it, **weekly ranking rewards** in coins: the top 10 of each event (Blood Castle, Devil
+   Square, Chaos Castle) and the castle siege's winning guild; boss coins only for players who did
+   damage. Bosses, drops and events give coins (the owner's choice).
 5. ⏳ **Onboarding** (idea 3): a guided first half hour (talk to the NPCs, walk, fight, first potion,
    first skill, first party, first event) with a starter kit, shown in the web game; skippable.
 6. ⏳ **Guilds** (idea 6): guild levels from the members' play, small guild buffs, a weekly guild ladder,
    the castle siege results and the guild ladder on the website.
-7. ⏳ **Community** (idea 7): rewards for linking Discord or Zalo, automatic posts of rare drops and
-   boss kills (Discord), a share button for screenshots.
+7. ⏳ **Community** (idea 7): one-time coins for linking Discord or Zalo and joining the group, coins
+   for community events, automatic posts of rare drops and boss kills (Discord), a share button for
+   screenshots.
 8. ⏳ **A fair cash shop** (idea 8): cosmetics, convenience and a season pass instead of power items; a
    review of the catalog with the owner first (which items are "power").
