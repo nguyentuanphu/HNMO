@@ -92,7 +92,7 @@ export function setupSocial(options: SocialOptions): Social {
 
   const friendWindow = new FriendWindow({ messenger, heroName, click: options.click, chatWith: whisperTo });
 
-  connection.onPacket((bytes) => {
+  const whispers = (bytes: Uint8Array) => {
     if (bytes[0] !== 0xc1) return;
     if (bytes[2] === 0x02 && bytes.length > 13) {
       // ReceiveChatWhisper (nothing while whispers are blocked)
@@ -105,7 +105,10 @@ export function setupSocial(options: SocialOptions): Social {
       // ReceiveChatWhisperResult
       say(`${lastWhisperTarget}: No users`, 'error');
     }
-  });
+  };
+  // Whispers that came while the map loaded (offline whispers arrive right after entering the game).
+  for (const bytes of options.earlyPackets) whispers(bytes);
+  connection.onPacket(whispers);
 
   // Commands of the chat line, before the others (CheckCommand); a name in the whisper box whispers.
   const send = chat.send;
