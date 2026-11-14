@@ -82,3 +82,30 @@ names the C++ function it follows:
 
 See [PARITY.md](PARITY.md). Next up: attacking monsters (damage, health bars,
 dying), then equipment on characters and the HUD.
+
+## Bilingual website
+
+The launcher opens the website at `/` (also `/home.html`). **Enter the game**
+opens the existing `/index.html` client. English and Vietnamese can be switched
+in the header; the browser remembers the selection.
+
+Deploy the updated admin panel and bridge together. The bridge reads
+`/api/website` from the existing `Portal:ApiBaseUrl` (default
+`http://127.0.0.1:8095`) and exposes it at `/website/data`. No new API key is
+needed. The public endpoint only includes player counts, capacity, experience
+rates, level/party limits, active creatable classes, hosted maps and active event
+rules. It never returns account records, passwords, API keys or admin settings.
+The visible game name still comes from the admin panel's Game name plugin.
+
+Values refresh every 30 seconds while the page is visible. When the server cannot
+be reached, the site clears its numbers and shows an unavailable message.
+Each server has its own selector entry. Event durations and entry requirements
+are configured rules, **not a live schedule**. Global rankings, announcements,
+drop probabilities and event start times are not currently exposed by this feed
+and are not fabricated on the website. Game names/descriptions use server `vi`
+translations when available, otherwise the server's neutral text; translate those
+entries in the game configuration to finish Vietnamese game content.
+
+The hero uses the existing six `Interface/lo_back_im*.OZJ` game artwork tiles,
+assembled as `public/images/realm.jpg`; no artwork from the reference site is
+redistributed. The Windows download points to this repository's latest release.

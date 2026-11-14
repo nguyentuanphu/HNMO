@@ -40,6 +40,7 @@ const int MaximumPacketSize = 0xFFFF;
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
 
 app.MapGet("/health", () => "ok");
+app.MapGet("/", () => Results.Redirect("/home.html"));
 
 // The game's name players see: set in the admin panel (the "Game name" plug-in), asked from its public
 // endpoint and kept for 30 seconds; the default while the admin panel doesn't answer.
@@ -107,6 +108,7 @@ app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 
     await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
 });
+Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
 app.Logger.LogInformation("Web client: {WebRoot}. Game data: {DataRoot}.", webRoot, gameFiles.Root);
 
