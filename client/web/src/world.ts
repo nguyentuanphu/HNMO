@@ -87,10 +87,13 @@ export const KNOWN_MAPS = Object.keys(MAP_NAMES).map(Number);
 // FindMapName's event maps: every map of an event has the event's name (EventMapName).
 const EVENT_MAP_NAMES = [
   { maps: [12, 13, 14, 15, 16, 17, 52], name: 'Blood Castle' }, { maps: [19, 20, 21, 22, 23, 53], name: 'Chaos Castle' }, { maps: [32], name: 'Devil Square' },
+  { maps: [45, 46, 47, 48, 49, 50], name: 'Illusion Temple' }, { maps: [65, 66, 67, 68], name: 'Doppelganger' },
+  { maps: [69, 70, 71, 72], name: 'Varka' },
 ];
 
 export function mapName(mapNumber: number): string {
-  return MAP_NAMES[mapNumber] ?? EVENT_MAP_NAMES.find((entry) => entry.maps.includes(mapNumber))?.name ?? `Map ${mapNumber}`;
+  // The event names come first (CMapManager::FindMapName).
+  return EVENT_MAP_NAMES.find((entry) => entry.maps.includes(mapNumber))?.name ?? MAP_NAMES[mapNumber] ?? `Map ${mapNumber}`;
 }
 
 export async function loadWorldData(mapNumber: number): Promise<WorldData> {

@@ -163,6 +163,26 @@ async function spriteUrl(url: string | null, rect: number[] | null | undefined):
   return spriteCache.get(key)!;
 }
 
+// RmlUi's <img src rect>: the image's rect (x y w h) stretched over the element. The game's own
+// images named relative to the documents (.tga / .jpg, "../../../newui_number1.tga": from a theme's
+// folder, i.e. Data/Interface) are decoded here; other sources are left to the browser.
+const GAME_IMAGE = /^\.\.\/.*\.(tga|jpe?g)$/i;
+
+function syncGameImage(img: HTMLElement): void {
+  const src = img.dataset.rmlSrc ?? '';
+  const rect = img.dataset.rmlRect ?? '';
+  const key = `${src}#${rect}`;
+  if (img.dataset.rmlShown === key) return;
+  img.dataset.rmlShown = key;
+  if (!src) { img.removeAttribute('src'); return; }
+  const numbers = rect.trim() ? rect.trim().split(/\s+/).map(Number) : [];
+  void spriteUrl(new URL(src, `http://x${ROOT}/themes/legacy/`).pathname, numbers.length === 4 ? numbers : null).then((cut) => {
+    if (img.dataset.rmlShown !== key) return;
+    if (cut) img.setAttribute('src', cut);
+    else img.removeAttribute('src');
+  });
+}
+
 // ---------- RCSS to CSS ----------
 
 const px = (value: unknown): number => Number(String(value).replace(/px|dp/, ''));
@@ -403,6 +423,12 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
     return;
   }
 
+  // A game image named in the document itself (its rect may still be bound).
+  // (prepareDocument moved its src aside, so the browser doesn't try to load it).
+  if (element.tagName === 'IMG' && element.dataset.rmlSrc !== undefined && !element.hasAttribute('data-attr-src')) {
+    element.dataset.rmlRect = element.getAttribute('rect') ?? '';
+    updaters.push(() => syncGameImage(element));
+  }
   const ifExpr = element.getAttribute('data-if');
   if (ifExpr) updaters.push((scope) => { element.style.display = evaluate(ifExpr, scope) ? '' : 'none'; });
   const visibleExpr = element.getAttribute('data-visible');
@@ -412,6 +438,26 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
     const { name, value } = attribute;
     if (name.startsWith('data-attr-')) {
       const target = name.slice('data-attr-'.length);
+      if (element.tagName === 'IMG' && (target === 'src' || target === 'rect')) {
+        // A game image and its rect go through syncGameImage; any other source is the browser's.
+        updaters.push((scope) => {
+          const v = evaluate(value, scope);
+          const text = v === undefined || v === null || v === false ? '' : String(v);
+          if (target === 'rect') {
+            element.dataset.rmlRect = text;
+            if (element.getAttribute('rect') !== text) element.setAttribute('rect', text);
+          } else if (GAME_IMAGE.test(text)) {
+            element.dataset.rmlSrc = text;
+          } else {
+            delete element.dataset.rmlSrc;
+            delete element.dataset.rmlShown;
+            if (!text) element.removeAttribute('src');
+            else if (element.getAttribute('src') !== text) element.setAttribute('src', text);
+          }
+          if (element.dataset.rmlSrc !== undefined) syncGameImage(element);
+        });
+        continue;
+      }
       updaters.push((scope) => {
         const v = evaluate(value, scope);
         if (v === undefined || v === null || v === false) element.removeAttribute(target);
@@ -494,6 +540,10 @@ export function prepareDocument(name: string): Promise<PreparedDocument> {
       const xml = new DOMParser().parseFromString(text.replace(/&nbsp;/g, '&#160;'), 'text/html');
       const templateName = xml.body.getAttribute('template');
       if (templateName) await applyTemplate(xml, templateName);
+      for (const img of xml.querySelectorAll('img[src]')) {
+        const src = img.getAttribute('src') ?? '';
+        if (GAME_IMAGE.test(src)) { img.setAttribute('data-rml-src', src); img.removeAttribute('src'); }
+      }
       const links = [...xml.querySelectorAll('link[type="text/rcss"], link[href$=".rcss"]')].map((link) => link.getAttribute('href') ?? '');
       const sprites: Sprites = new Map();
       const sheets = await Promise.all(links.map((href) => findStylesheet(href, url)));
