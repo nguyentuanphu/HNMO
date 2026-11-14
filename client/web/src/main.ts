@@ -469,6 +469,21 @@ installTouchControls({
     const monster = pickCharacter(at, ['monster']);
     state.combat.cast(monster, monster ? { ...monster.cell } : pickCell(at));
   },
+  // The nearest live monster within 8 cells: the current skill at it, else a plain attack.
+  fight: () => {
+    const online = state.online, combat = state.combat;
+    if (!online || !combat) return false;
+    const hero = online.hero.cell;
+    let best: Character | null = null, distance = 9;
+    for (const c of online.characters.values()) {
+      if (c.kind !== 'monster' || c.dead) continue;
+      const d = Math.max(Math.abs(c.cell.x - hero.x), Math.abs(c.cell.y - hero.y));
+      if (d < distance) { best = c; distance = d; }
+    }
+    if (!best) { chat.add('No monster nearby.', 'system'); return false; }
+    if (!combat.cast(best, { ...best.cell })) combat.attack(best);
+    return true;
+  },
 });
 
 // ---------- name labels ----------

@@ -39,3 +39,33 @@ test('touch: the button bar, a tap walks, two fingers zoom and turn', async ({ p
   await page.screenshot({ path: 'test-results/touch.png' });
   await expectNoPageErrors(errors);
 });
+
+// Phones (HNMO): the fight button attacks the nearest monster, the more button opens the other
+// windows (here the command window), the manifest lets the game go on the home screen, and a phone
+// held upright is asked to turn.
+test('touch: fight, more windows, home screen manifest, turn hint', async ({ page, request }) => {
+  test.setTimeout(5 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  const manifest = await (await request.get('/manifest.webmanifest')).json() as { name: string; display: string; icons: unknown[] };
+  expect(manifest.display).toBe('fullscreen');
+  expect(manifest.icons.length).toBe(2);
+  expect(manifest.name.length).toBeGreaterThan(0);
+  await enterWorld(page, 'test5');
+  await page.evaluate(() => (window as unknown as { __game: { online: { say(t: string): void } } }).__game.online.say('/move lorencia'));
+  await page.waitForTimeout(3000);
+  await page.locator('#touchBar button', { hasText: '⋯' }).tap();
+  await page.locator('#touchMore button', { hasText: 'D' }).tap();
+  await expect(page.locator('.rml-command_window')).toHaveCount(1, { timeout: 30_000 });
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#touchFight .fight')).toBeVisible();
+  await expect(page.locator('#touchFight button')).toHaveCount(10);
+  await page.screenshot({ path: 'test-results/touch-phone.png' });
+  // Upright: the hint shows, and can be passed.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => window.dispatchEvent(new Event('resize')));
+  await expect(page.locator('#touchRotate')).toBeVisible();
+  await page.locator('#touchRotate button').tap();
+  await expect(page.locator('#touchRotate')).toBeHidden();
+  await expectNoPageErrors(errors);
+});

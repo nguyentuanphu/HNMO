@@ -67,7 +67,7 @@ const string DefaultGameName = "HenryN Mu Online";
 var gameNameSource = (app.Configuration["GameName:AdminUrl"] ?? app.Configuration["Launcher:AdminUrl"] ?? "http://127.0.0.1:8095").TrimEnd('/') + "/api/game-name";
 var gameNameClient = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
 var gameInfo = Tuple.Create(DefaultGameName, new Dictionary<string, string>(), DateTime.MinValue); // swapped whole
-app.MapGet("/game-name.json", async (HttpContext context) =>
+async Task RefreshGameInfoAsync(HttpContext context)
 {
     if (DateTime.UtcNow >= gameInfo.Item3)
     {
@@ -94,9 +94,39 @@ app.MapGet("/game-name.json", async (HttpContext context) =>
 
         gameInfo = Tuple.Create(name, links, DateTime.UtcNow.AddSeconds(30));
     }
+}
 
+app.MapGet("/game-name.json", async (HttpContext context) =>
+{
+    await RefreshGameInfoAsync(context).ConfigureAwait(false);
     context.Response.Headers.CacheControl = "no-cache";
     return Results.Json(new { name = gameInfo.Item1, links = gameInfo.Item2 });
+});
+
+// The web app manifest: the game can be put on a phone's home screen and opens full screen, landscape,
+// with the game's name.
+app.MapGet("/manifest.webmanifest", async (HttpContext context) =>
+{
+    await RefreshGameInfoAsync(context).ConfigureAwait(false);
+    context.Response.Headers.CacheControl = "no-cache";
+    var name = gameInfo.Item1;
+    return Results.Json(
+        new
+        {
+            name,
+            short_name = name.Length <= 12 ? name : "HNMO",
+            start_url = "/",
+            display = "fullscreen",
+            orientation = "landscape",
+            background_color = "#11110e",
+            theme_color = "#11110e",
+            icons = new[]
+            {
+                new { src = "/images/icon-192.png", sizes = "192x192", type = "image/png" },
+                new { src = "/images/icon-512.png", sizes = "512x512", type = "image/png" },
+            },
+        },
+        contentType: "application/manifest+json");
 });
 
 // Top-ups by bank transfer: the top-up page's information and the payment services' webhooks (Casso,
