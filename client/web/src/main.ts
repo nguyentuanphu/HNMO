@@ -42,6 +42,7 @@ import { PartyWindow } from './ui/partyWindow.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
+import { setUpDuelAndGens, type DuelAndGens } from './ui/duelAndGens.js';
 import { MiniMap } from './ui/miniMap.js';
 import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
 import { installTouchControls } from './ui/touchControls.js';
@@ -102,6 +103,7 @@ export interface GameState {
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
   events?: EventSystem;
+  duelAndGens?: DuelAndGens;
 }
 
 declare global {
@@ -977,6 +979,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     }
     online.say(text);
   });
+  // Duels (/DuelChallenge, the score window, Doorkeeper Titus) and Gens (the stewards, B); ui/duelAndGens.ts.
+  state.duelAndGens = setUpDuelAndGens({ connection, heroName: character.name, hero: () => online.hero, players: () => online.characters.values(), level: () => stats.level, mapNumber: () => state.mapNumber, chat, buffs, quests, camera, canvas: ui.canvas, click: () => sounds.click(), sound: (id) => sounds.audio.play(id), duelBlocked: () => !!state.chaosMachine?.isOpen || itemWindows.vault.isOpen, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, earlyPackets });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');

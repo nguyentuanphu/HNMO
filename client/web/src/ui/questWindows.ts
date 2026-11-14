@@ -251,6 +251,11 @@ class NpcDialogueWindow {
     }
   }
 
+  /** ProcessGensJoiningReceive / ProcessGensSecessionReceive / ProcessGensRewardReceive: the answer's state. */
+  gensAnswered(state: number): void {
+    if (this.view.isOpen) this.setContents(state);
+  }
+
   /** ProcessQuestListReceive */
   questList(indices: number[]): void {
     if (!this.view.isOpen) return;
@@ -307,8 +312,9 @@ class NpcDialogueWindow {
     }
     m.ans_prev_enabled = this.selPage > 0;
     m.ans_next_enabled = this.selPage < this.maxSelPage;
-    // The gens banner: only at the own gens' NPC (543 Duprian, 544 Vanert); this web client keeps no gens membership yet.
-    m.show_contribute = false;
+    // The gens banner: only at the own gens' NPC (543 Duprian, 544 Vanert).
+    const npc = this.log.npcIndex, influence = this.quests.gensInfluence();
+    m.show_contribute = (npc === 543 && influence === 1) || (npc === 544 && influence === 2);
     m.contribute_text = formatText(T.GainContribution, this.contribution);
     this.view.update();
   }
@@ -779,6 +785,11 @@ export class QuestWindows implements QuestEvents {
   }
 
   questList(indices: number[]): void { this.dialogue.questList(indices); }
+
+  /** The hero's gens (Hero->m_byGensInfluence), set by the gens setup (ui/duelAndGens.ts). */
+  gensInfluence: () => number = () => 0;
+  /** GensJoinAnswered / GensLeaveAnswered / GensRewardAnswered: dropped when the dialogue has closed. */
+  gensAnswered(state: number): void { this.dialogue.gensAnswered(state); }
 
   showProgress(index: number, byEtc: boolean): Promise<void> {
     const window = byEtc ? this.progressEtc : this.progress;
