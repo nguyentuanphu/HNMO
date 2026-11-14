@@ -22,6 +22,20 @@ test('the login screen switches between English and Vietnamese', async ({ page }
   await expect(page.locator('#loginForm button.primary')).toHaveText('Connect');
 });
 
+test('every language of the list can be chosen (German and Chinese)', async ({ page }) => {
+  await page.goto('/');
+  const picker = page.locator('#loginLanguage');
+  await expect(picker.locator('option')).toHaveCount(13);
+  await picker.selectOption('de');
+  await expect(page.locator('label[for="username"]')).toHaveText('Konto');
+  await expect(page.locator('label[for="password"]')).toHaveText('Passwort');
+  await picker.selectOption('zh-TW');
+  await expect(page.locator('label[for="username"]')).toHaveText('帳戶');
+  await page.reload();
+  await expect(page.locator('#loginLanguage')).toHaveValue('zh-TW');
+  await expect(page.locator('label[for="password"]')).toHaveText('密碼');
+});
+
 test('game windows show Vietnamese, and players\' chat stays as typed', async ({ page }) => {
   test.setTimeout(4 * 60_000);
   await enterWorld(page, 'test3');

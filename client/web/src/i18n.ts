@@ -1,5 +1,7 @@
 // The game's language: English (the default) or Vietnamese. The interface texts are the desktop's own
-// English texts; the Vietnamese ones (public/data/lang/vi.json) were matched to them line by line.
+// English texts; each other language (public/data/lang/<code>.json, listed in index.json) maps them to
+// its own: Vietnamese from a Vietnamese client's texts (tools/lang/build-vi.py), the others from the
+// desktop's translation files (tools/lang/build-from-resx.py).
 // Instead of touching every window, the page's text is translated where it appears: each text node
 // and the title / placeholder / aria-label attributes whose whole text is a known English text, or
 // one with numbers and names in it ("Level: %d"), are shown in Vietnamese. Players' chat and names
@@ -7,7 +9,10 @@
 
 import { gameName } from './gameName.js';
 
-export type Language = 'en' | 'vi';
+/** A language code of public/data/lang/index.json: 'en' (the game's own texts), 'vi', 'de', 'zh-TW', … */
+export type Language = string;
+
+export interface LanguageInfo { code: Language; name: string }
 
 const STORAGE_KEY = 'hnmo.language';
 const ATTRIBUTES = ['title', 'placeholder', 'aria-label'] as const;
@@ -175,42 +180,70 @@ export function watchRoot(root: ShadowRoot): void {
   ensureObserver().observe(root, OBSERVE);
 }
 
-async function loadTexts(): Promise<void> {
-  if (texts.size) return;
-  const response = await fetch('/data/lang/vi.json');
-  if (!response.ok) throw new Error(`${response.status} /data/lang/vi.json`);
-  const file = (await response.json()) as LanguageFile;
-  texts = new Map(Object.entries(file.texts));
-  patterns = buildPatterns(file.texts);
+const loaded = new Map<Language, { texts: Map<string, string>; patterns: Pattern[] }>();
+
+async function loadTexts(code: Language): Promise<void> {
+  let entry = loaded.get(code);
+  if (!entry) {
+    const url = `/data/lang/${encodeURIComponent(code)}.json`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`${response.status} ${url}`);
+    const file = (await response.json()) as LanguageFile;
+    entry = { texts: new Map(Object.entries(file.texts)), patterns: buildPatterns(file.texts) };
+    loaded.set(code, entry);
+  }
+  texts = entry.texts;
+  patterns = entry.patterns;
+}
+
+/** The languages there are (public/data/lang/index.json); English alone when the list can't be read. */
+export async function availableLanguages(): Promise<LanguageInfo[]> {
+  try {
+    const response = await fetch('/data/lang/index.json');
+    if (!response.ok) throw new Error(String(response.status));
+    const { languages } = (await response.json()) as { languages: LanguageInfo[] };
+    return languages.filter((language) => typeof language.code === 'string' && typeof language.name === 'string');
+  } catch {
+    return [{ code: 'en', name: 'English' }];
+  }
 }
 
 /** Switches the language, remembers it in this browser, and redraws the page's texts. */
+function translateAll(): void {
+  translateTree(document.body);
+  for (const root of shadowRoots) {
+    if (root.host.isConnected) translateTree(root);
+    else shadowRoots.delete(root);
+  }
+}
+
 export async function setLanguage(next: Language): Promise<void> {
-  if (next === 'vi') await loadTexts();
-  language = next;
-  cache.clear();
-  try { localStorage.setItem(STORAGE_KEY, next); } catch { /* private mode: only for now */ }
-  document.documentElement.lang = next;
+  if (next !== 'en') await loadTexts(next);
   busy = true;
   try {
-    translateTree(document.body);
-    for (const root of shadowRoots) {
-      if (root.host.isConnected) translateTree(root);
-      else shadowRoots.delete(root);
-    }
+    // From one translation to another: the English comes back first, then the new language.
+    if (language !== 'en' && next !== language) { language = 'en'; cache.clear(); translateAll(); }
+    language = next;
+    cache.clear();
+    translateAll();
   } finally { busy = false; }
+  try { localStorage.setItem(STORAGE_KEY, next); } catch { /* private mode: only for now */ }
+  document.documentElement.lang = next;
   observe();
   for (const listener of listeners) listener(next);
 }
 
 /** The language this browser chose last time (English when none). */
 export function savedLanguage(): Language {
-  try { return localStorage.getItem(STORAGE_KEY) === 'vi' ? 'vi' : 'en'; } catch { return 'en'; }
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved && /^[a-z]{2}(-[A-Z]{2})?$/.test(saved) ? saved : 'en';
+  } catch { return 'en'; }
 }
 
 /** Starts with the saved language; a failed load of the Vietnamese texts leaves English. */
 export async function initLanguage(): Promise<void> {
   const saved = savedLanguage();
   if (saved === 'en') return;
-  try { await setLanguage(saved); } catch (error) { console.warn('Vietnamese texts could not be loaded', error); }
+  try { await setLanguage(saved); } catch (error) { console.warn(`The ${saved} texts could not be loaded`, error); }
 }

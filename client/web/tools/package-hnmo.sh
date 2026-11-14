@@ -121,12 +121,31 @@ else
   mkdir -p "$OUT/Data"
 fi
 
+# One licence file for the folder: HNMO's own notice first, then each part's licence text
+# word for word (their copyright notices must stay in every copy).
 mkdir -p "$OUT/licenses"
-cp "$SERVER_SOURCE/licenses/LICENSE.txt" "$OUT/licenses/server-LICENSE.txt"
-cp "$WEB/node_modules/three/LICENSE" "$OUT/licenses/three.js-LICENSE.txt"
-if [ -n "${POSTGRES_DIR:-}" ]; then
-  echo "PostgreSQL is released under the PostgreSQL License: https://www.postgresql.org/about/licence/" > "$OUT/licenses/postgresql-LICENSE.txt"
-fi
+{
+  printf 'HNMO\nCopyright %s HNMO. All rights reserved for HNMO'"'"'s own additions.\n\n' "$(date -u +%Y)"
+  printf 'This folder contains the following parts under their own licences.\n\n'
+  printf '================================================================================\n'
+  printf 'Game server and admin panel (MIT License)\n'
+  printf '================================================================================\n\n'
+  cat "$SERVER_SOURCE/licenses/LICENSE.txt"; printf '\n\n'
+  printf '================================================================================\n'
+  printf 'three.js (MIT License), the web game'"'"'s 3D library\n'
+  printf '================================================================================\n\n'
+  cat "$WEB/node_modules/three/LICENSE"; printf '\n\n'
+  printf '================================================================================\n'
+  printf 'DejaVu fonts (Bitstream Vera / DejaVu licence), the web game'"'"'s text\n'
+  printf '================================================================================\n\n'
+  cat "$WEB/public/fonts/DejaVuSans-LICENSE"; printf '\n\n'
+  if [ -n "${POSTGRES_DIR:-}" ]; then
+    printf '================================================================================\n'
+    printf 'PostgreSQL (PostgreSQL License), the save game database\n'
+    printf '================================================================================\n\n'
+    printf 'PostgreSQL is released under the PostgreSQL License: https://www.postgresql.org/about/licence/\n'
+  fi
+} > "$OUT/licenses/LICENSES.txt"
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
 cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
 chmod +x "$OUT/start-hnmo.sh"

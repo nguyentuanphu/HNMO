@@ -1,7 +1,7 @@
 // The web client: log in through the relay and play on the HNMO server, or explore
 // Lorencia offline. Left-click walks, right-drag turns the camera, the wheel zooms.
 
-import { currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, type Language } from './i18n.js';
+import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, type Language } from './i18n.js';
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
@@ -88,9 +88,16 @@ void loadGameName();
 // The language (English by default, or Vietnamese): the pickers on the login screen and the top bar.
 const languagePickers = [...document.querySelectorAll<HTMLSelectElement>('select.language-select')];
 const showLanguage = (language: Language) => { for (const picker of languagePickers) picker.value = language; };
+// Every language of public/data/lang/index.json (the page lists English and Vietnamese until it's read).
+void availableLanguages().then((languages) => {
+  for (const picker of languagePickers) {
+    picker.replaceChildren(...languages.map((language) => new Option(language.name, language.code)));
+  }
+  showLanguage(currentLanguage() === 'en' ? savedLanguage() : currentLanguage());
+});
 for (const picker of languagePickers) {
   picker.addEventListener('change', () => {
-    void setLanguage(picker.value === 'vi' ? 'vi' : 'en').catch(() => showLanguage(currentLanguage()));
+    void setLanguage(picker.value).catch(() => showLanguage(currentLanguage()));
     if (picker.id !== 'loginLanguage') picker.blur(); // the game's keys (I, C, …) go back to the game
   });
 }
