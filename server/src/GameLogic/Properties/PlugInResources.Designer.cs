@@ -5566,5 +5566,212 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("IllusionTempleStartPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Monster amount per map.
+        /// </summary>
+        public static string MonsterAmountPlugIn_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Multiplies the amount of monsters of maps (×0.5 to ×5) without changing the saved spawn quantitie....
+        /// </summary>
+        public static string MonsterAmountPlugIn_Description {
+            get {
+                return ResourceManager.GetString("MonsterAmountPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string MonsterAmountConfiguration_Maps_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountConfiguration_Maps_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Map number.
+        /// </summary>
+        public static string MonsterAmountConfiguration_MapNumber_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountConfiguration_MapNumber_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Multiplier.
+        /// </summary>
+        public static string MonsterAmountConfiguration_Multiplier_Name {
+            get {
+                return ResourceManager.GetString("MonsterAmountConfiguration_Multiplier_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Offline whispers.
+        /// </summary>
+        public static string OfflineWhisperPlugIn_Name {
+            get {
+                return ResourceManager.GetString("OfflineWhisperPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Keeps a whisper to a character which isn't in the game and delivers it, marked "(offline)", when ....
+        /// </summary>
+        public static string OfflineWhisperPlugIn_Description {
+            get {
+                return ResourceManager.GetString("OfflineWhisperPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum per receiver.
+        /// </summary>
+        public static string OfflineWhisperConfiguration_MaximumPerReceiver_Name {
+            get {
+                return ResourceManager.GetString("OfflineWhisperConfiguration_MaximumPerReceiver_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How many whispers wait at most for one character; further ones are refused..
+        /// </summary>
+        public static string OfflineWhisperConfiguration_MaximumPerReceiver_Description {
+            get {
+                return ResourceManager.GetString("OfflineWhisperConfiguration_MaximumPerReceiver_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum age (days).
+        /// </summary>
+        public static string OfflineWhisperConfiguration_MaximumAgeDays_Name {
+            get {
+                return ResourceManager.GetString("OfflineWhisperConfiguration_MaximumAgeDays_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Whispers which wait longer are dropped..
+        /// </summary>
+        public static string OfflineWhisperConfiguration_MaximumAgeDays_Description {
+            get {
+                return ResourceManager.GetString("OfflineWhisperConfiguration_MaximumAgeDays_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string OfflineWhisperConfiguration_FileName_Name {
+            get {
+                return ResourceManager.GetString("OfflineWhisperConfiguration_FileName_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The file in the server's folder which keeps the waiting whispers over restarts; empty keeps them ....
+        /// </summary>
+        public static string OfflineWhisperConfiguration_FileName_Description {
+            get {
+                return ResourceManager.GetString("OfflineWhisperConfiguration_FileName_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat log.
+        /// </summary>
+        public static string ChatLogPlugIn_Name {
+            get {
+                return ResourceManager.GetString("ChatLogPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Keeps the last 2000 public, party, guild, alliance, world and whisper lines in memory for the adm....
+        /// </summary>
+        public static string ChatLogPlugIn_Description {
+            get {
+                return ResourceManager.GetString("ChatLogPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat spam guard.
+        /// </summary>
+        public static string ChatSpamGuardPlugIn_Name {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Drops the chat lines of a player who sends the same text too often or too many lines in a short t....
+        /// </summary>
+        public static string ChatSpamGuardPlugIn_Description {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Same text at most.
+        /// </summary>
+        public static string ChatSpamGuardConfiguration_MaximumRepeats_Name {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardConfiguration_MaximumRepeats_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How often the same text may be sent within the repeat time; 0 doesn't check it..
+        /// </summary>
+        public static string ChatSpamGuardConfiguration_MaximumRepeats_Description {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardConfiguration_MaximumRepeats_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat time (seconds).
+        /// </summary>
+        public static string ChatSpamGuardConfiguration_RepeatSeconds_Name {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardConfiguration_RepeatSeconds_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Lines at most.
+        /// </summary>
+        public static string ChatSpamGuardConfiguration_MaximumLines_Name {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardConfiguration_MaximumLines_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How many lines may be sent within the line time; 0 doesn't check it..
+        /// </summary>
+        public static string ChatSpamGuardConfiguration_MaximumLines_Description {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardConfiguration_MaximumLines_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Line time (seconds).
+        /// </summary>
+        public static string ChatSpamGuardConfiguration_LineSeconds_Name {
+            get {
+                return ResourceManager.GetString("ChatSpamGuardConfiguration_LineSeconds_Name", resourceCulture);
+            }
+        }
     }
 }

@@ -3198,5 +3198,41 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("SkillLearned", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is offline: your message will be delivered when they log in..
+        /// </summary>
+        public static string OfflineWhisperStored {
+            get {
+                return ResourceManager.GetString("OfflineWhisperStored", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is offline and can't get more messages now..
+        /// </summary>
+        public static string OfflineWhisperReceiverFull {
+            get {
+                return ResourceManager.GetString("OfflineWhisperReceiverFull", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to (offline) .
+        /// </summary>
+        public static string OfflineWhisperPrefix {
+            get {
+                return ResourceManager.GetString("OfflineWhisperPrefix", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Please don't spam..
+        /// </summary>
+        public static string ChatSpamWarning {
+            get {
+                return ResourceManager.GetString("ChatSpamWarning", resourceCulture);
+            }
+        }
     }
 }

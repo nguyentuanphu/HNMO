@@ -2050,4 +2050,73 @@
   <data name="IllusionTempleStartPlugIn_Description" xml:space="preserve">
     <value>Illusion Temple event</value>
   </data>
+  <data name="MonsterAmountPlugIn_Name" xml:space="preserve">
+    <value>Monster amount per map</value>
+  </data>
+  <data name="MonsterAmountPlugIn_Description" xml:space="preserve">
+    <value>Multiplies the amount of monsters of maps (×0.5 to ×5) without changing the saved spawn quantities. Set it on the map editor ("Monster amount"); a change counts at once on the running maps.</value>
+  </data>
+  <data name="MonsterAmountConfiguration_Maps_Name" xml:space="preserve">
+    <value>Maps</value>
+  </data>
+  <data name="MonsterAmountConfiguration_MapNumber_Name" xml:space="preserve">
+    <value>Map number</value>
+  </data>
+  <data name="MonsterAmountConfiguration_Multiplier_Name" xml:space="preserve">
+    <value>Multiplier</value>
+  </data>
+  <data name="OfflineWhisperPlugIn_Name" xml:space="preserve">
+    <value>Offline whispers</value>
+  </data>
+  <data name="OfflineWhisperPlugIn_Description" xml:space="preserve">
+    <value>Keeps a whisper to a character which isn't in the game and delivers it, marked "(offline)", when the character enters the game. The sender is told that the receiver is offline. The whispers are kept in a file in the server's folder, so they outlast a restart.</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumPerReceiver_Name" xml:space="preserve">
+    <value>Maximum per receiver</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumPerReceiver_Description" xml:space="preserve">
+    <value>How many whispers wait at most for one character; further ones are refused.</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumAgeDays_Name" xml:space="preserve">
+    <value>Maximum age (days)</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumAgeDays_Description" xml:space="preserve">
+    <value>Whispers which wait longer are dropped.</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_FileName_Name" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_FileName_Description" xml:space="preserve">
+    <value>The file in the server's folder which keeps the waiting whispers over restarts; empty keeps them in memory only.</value>
+  </data>
+  <data name="ChatLogPlugIn_Name" xml:space="preserve">
+    <value>Chat log</value>
+  </data>
+  <data name="ChatLogPlugIn_Description" xml:space="preserve">
+    <value>Keeps the last 2000 public, party, guild, alliance, world and whisper lines in memory for the admin panel's chat log (Players, Chat log).</value>
+  </data>
+  <data name="ChatSpamGuardPlugIn_Name" xml:space="preserve">
+    <value>Chat spam guard</value>
+  </data>
+  <data name="ChatSpamGuardPlugIn_Description" xml:space="preserve">
+    <value>Drops the chat lines of a player who sends the same text too often or too many lines in a short time, and tells the player "Please don't spam.". Game masters aren't checked.</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumRepeats_Name" xml:space="preserve">
+    <value>Same text at most</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumRepeats_Description" xml:space="preserve">
+    <value>How often the same text may be sent within the repeat time; 0 doesn't check it.</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_RepeatSeconds_Name" xml:space="preserve">
+    <value>Repeat time (seconds)</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumLines_Name" xml:space="preserve">
+    <value>Lines at most</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumLines_Description" xml:space="preserve">
+    <value>How many lines may be sent within the line time; 0 doesn't check it.</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_LineSeconds_Name" xml:space="preserve">
+    <value>Line time (seconds)</value>
+  </data>
 </root>

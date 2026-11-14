@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.Chat;
 
 using System.ComponentModel;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.Chat;
 using HNMO.GameLogic.Views;
 
 /// <summary>
@@ -16,7 +17,21 @@ public class ChatMessageWhisperProcessor : BannableChatMessageBaseProcessor
     /// <inheritdoc />
     public override async ValueTask SubclassProcessMessageAsync(Player sender, (string Message, string PlayerName) content)
     {
-        var whisperReceiver = sender.GameContext.GetPlayerByCharacterName(content.PlayerName);
+        // The receiver may be on another game server of this process.
+        var whisperReceiver = sender.GameContext.GetPlayerByCharacterName(content.PlayerName)
+                              ?? OnlineCharacters.Get(content.PlayerName);
+        if (whisperReceiver is null)
+        {
+            // Kept until the receiver enters the game, if the offline whispers are active.
+            if (OfflineWhisperPlugIn.Get(sender.GameContext) is { } offlineWhispers
+                && await offlineWhispers.StoreAsync(sender, content.PlayerName, content.Message).ConfigureAwait(false))
+            {
+                ChatLogPlugIn.Record(sender, ChatMessageType.Whisper, content.PlayerName, content.Message);
+            }
+
+            return;
+        }
+
         if (whisperReceiver != null)
         {
             var eventArgs = new CancelEventArgs();

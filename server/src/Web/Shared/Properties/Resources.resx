@@ -662,4 +662,22 @@ Level: {2} - {3}</value>
   <data name="ZoomOut" xml:space="preserve">
     <value>Zoom out</value>
   </data>
+  <data name="MonsterAmount" xml:space="preserve">
+    <value>Monster amount</value>
+  </data>
+  <data name="MonsterAmountCurrent" xml:space="preserve">
+    <value>Now: ×{0}</value>
+  </data>
+  <data name="MonsterAmountHint" xml:space="preserve">
+    <value>Multiplies the amount of every monster spawn area of this map; the saved quantities stay as they are (×1 brings back the original amounts). It applies at once on the running game servers: missing monsters spawn and extra ones disappear. Event and mini game maps aren't changed.</value>
+  </data>
+  <data name="MonsterAmountSaved" xml:space="preserve">
+    <value>Saved: the monster amount applies now.</value>
+  </data>
+  <data name="MonsterAmountSaveFailed" xml:space="preserve">
+    <value>The monster amount couldn't be saved.</value>
+  </data>
+  <data name="MonsterAmountSaveMapFirst" xml:space="preserve">
+    <value>Save or undo the changes of the map first.</value>
+  </data>
 </root>

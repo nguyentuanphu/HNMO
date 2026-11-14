@@ -1063,4 +1063,16 @@ Mở rộng hành trang: {18}</value>
   <data name="SkillLearned" xml:space="preserve">
     <value>Bạn đã học {0}.</value>
   </data>
+  <data name="OfflineWhisperStored" xml:space="preserve">
+    <value>{0} đang ngoại tuyến: tin nhắn của bạn sẽ được gửi khi họ đăng nhập.</value>
+  </data>
+  <data name="OfflineWhisperReceiverFull" xml:space="preserve">
+    <value>{0} đang ngoại tuyến và hiện không thể nhận thêm tin nhắn.</value>
+  </data>
+  <data name="OfflineWhisperPrefix" xml:space="preserve">
+    <value>(ngoại tuyến) </value>
+  </data>
+  <data name="ChatSpamWarning" xml:space="preserve">
+    <value>Vui lòng không spam.</value>
+  </data>
 </root>

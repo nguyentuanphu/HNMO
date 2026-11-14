@@ -2919,4 +2919,88 @@
   <data name="Help" xml:space="preserve">
     <value>Hướng dẫn</value>
   </data>
+  <data name="ChatLog" xml:space="preserve">
+    <value>Nhật ký chat</value>
+  </data>
+  <data name="ChatLogHint" xml:space="preserve">
+    <value>Các dòng chat gần nhất của máy chủ game (công khai, nhóm, bang hội, liên minh, thế giới, thì thầm), mới nhất trước. Thời gian theo giờ Sydney. Các dòng chỉ được giữ trong bộ nhớ: khởi động lại máy chủ sẽ xóa nhật ký.</value>
+  </data>
+  <data name="ChatLogSearch" xml:space="preserve">
+    <value>Người gửi hoặc nội dung ...</value>
+  </data>
+  <data name="ChatLogLiveRefresh" xml:space="preserve">
+    <value>Tự động làm mới</value>
+  </data>
+  <data name="ChatLogRefresh" xml:space="preserve">
+    <value>Làm mới</value>
+  </data>
+  <data name="ChatLogShown" xml:space="preserve">
+    <value>Đang hiện {0} dòng (máy chủ giữ {1} dòng gần nhất)</value>
+  </data>
+  <data name="ChatLogTime" xml:space="preserve">
+    <value>Thời gian (Sydney)</value>
+  </data>
+  <data name="ChatLogMap" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="ChatLogSender" xml:space="preserve">
+    <value>Người gửi</value>
+  </data>
+  <data name="ChatLogKind" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="ChatLogText" xml:space="preserve">
+    <value>Nội dung</value>
+  </data>
+  <data name="ChatLogEmpty" xml:space="preserve">
+    <value>Chưa có dòng chat nào.</value>
+  </data>
+  <data name="ChatLogMute" xml:space="preserve">
+    <value>Cấm chat người gửi</value>
+  </data>
+  <data name="ChatLogMute10Minutes" xml:space="preserve">
+    <value>Cấm 10 phút</value>
+  </data>
+  <data name="ChatLogMute1Hour" xml:space="preserve">
+    <value>1 giờ</value>
+  </data>
+  <data name="ChatLogMute1Day" xml:space="preserve">
+    <value>1 ngày</value>
+  </data>
+  <data name="ChatLogOpenAccount" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="ChatLogMuted" xml:space="preserve">
+    <value>{0} bị cấm chat đến {1} (giờ Sydney).</value>
+  </data>
+  <data name="ChatLogCharacterNotFound" xml:space="preserve">
+    <value>Không tìm thấy nhân vật {0}.</value>
+  </data>
+  <data name="ChatLogMuteFailed" xml:space="preserve">
+    <value>Không thể cấm chat {0}.</value>
+  </data>
+  <data name="ChatLogKindNormal" xml:space="preserve">
+    <value>Công khai</value>
+  </data>
+  <data name="ChatLogKindParty" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="ChatLogKindGuild" xml:space="preserve">
+    <value>Bang hội</value>
+  </data>
+  <data name="ChatLogKindAlliance" xml:space="preserve">
+    <value>Liên minh</value>
+  </data>
+  <data name="ChatLogKindWhisper" xml:space="preserve">
+    <value>Thì thầm</value>
+  </data>
+  <data name="ChatLogKindWorld" xml:space="preserve">
+    <value>Thế giới</value>
+  </data>
+  <data name="ChatLogKindGens" xml:space="preserve">
+    <value>Gens</value>
+  </data>
+  <data name="ChatLogKindNotice" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
 </root>

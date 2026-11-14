@@ -1,0 +1,77 @@
+@page "/chat-log"
+@using HNMO.DataModel.Entities
+@using HNMO.GameLogic.PlugIns.Chat
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @Resources.ChatLog</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ChatLog" />
+<h1>@Resources.ChatLog</h1>
+
+<p class="text-muted small">@Resources.ChatLogHint</p>
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+    <div class="input-group w-auto flex-grow-1">
+        <span class="input-group-text"><span class="oi oi-magnifying-glass" aria-hidden="true"></span></span>
+        <input class="form-control" type="search" data-testid="chat-log-search" @bind="this.Search" @bind:event="oninput" placeholder="@Resources.ChatLogSearch" />
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="chatLogLive" data-testid="chat-log-live" @bind="this.LiveRefresh" />
+        <label class="form-check-label" for="chatLogLive">@Resources.ChatLogLiveRefresh</label>
+    </div>
+    <button type="button" class="btn btn-secondary" @onclick="this.Refresh"><span class="oi oi-reload" aria-hidden="true"></span> @Resources.ChatLogRefresh</button>
+    <span class="small text-muted">@string.Format(Resources.ChatLogShown, this._entries.Count, this.Log.Capacity)</span>
+</div>
+
+@if (this._status is { } status)
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-1" role="status">@status</div>
+}
+
+<table class="table table-sm table-striped align-middle" data-testid="chat-log-table">
+    <thead>
+        <tr>
+            <th class="text-nowrap">@Resources.ChatLogTime</th>
+            <th>@Resources.ServerID</th>
+            <th>@Resources.ChatLogMap</th>
+            <th>@Resources.ChatLogSender</th>
+            <th>@Resources.ChatLogKind</th>
+            <th class="w-50">@Resources.ChatLogText</th>
+            <th>@Resources.Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (this._entries.Count == 0)
+        {
+            <tr><td colspan="7" class="text-muted">@Resources.ChatLogEmpty</td></tr>
+        }
+
+        @foreach (var entry in this._entries)
+        {
+            <tr @key="entry.Id">
+                <td class="text-nowrap">@FormatTime(entry.TimeUtc)</td>
+                <td>@entry.ServerId</td>
+                <td>@entry.MapName</td>
+                <td>@entry.Sender</td>
+                <td class="text-nowrap">@KindText(entry)</td>
+                <td class="text-break">@entry.Text</td>
+                <td class="text-nowrap">
+                    @if (this._canMute)
+                    {
+                        <div class="btn-group btn-group-sm" role="group" aria-label="@Resources.ChatLogMute">
+                            <button type="button" class="btn btn-outline-warning" title="@Resources.ChatLogMute" @onclick="() => this.MuteAsync(entry, TimeSpan.FromMinutes(10))">@Resources.ChatLogMute10Minutes</button>
+                            <button type="button" class="btn btn-outline-warning" title="@Resources.ChatLogMute" @onclick="() => this.MuteAsync(entry, TimeSpan.FromHours(1))">@Resources.ChatLogMute1Hour</button>
+                            <button type="button" class="btn btn-outline-warning" title="@Resources.ChatLogMute" @onclick="() => this.MuteAsync(entry, TimeSpan.FromDays(1))">@Resources.ChatLogMute1Day</button>
+                        </div>
+                    }
+
+                    @if (entry.AccountId != Guid.Empty)
+                    {
+                        <a class="btn btn-sm btn-secondary ms-1" href="@($"edit-account/{entry.AccountId}/{typeof(Account).FullName}/{entry.AccountId}")">
+                            <span class="oi oi-person" aria-hidden="true"></span> @Resources.ChatLogOpenAccount
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

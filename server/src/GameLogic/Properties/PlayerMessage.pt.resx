@@ -1174,4 +1174,16 @@ Extensões de inventário: {18}</value>
   <data name="SkillLearned" xml:space="preserve">
     <value>Você aprendeu {0}.</value>
   </data>
+  <data name="OfflineWhisperStored" xml:space="preserve">
+    <value>{0} está offline: sua mensagem será entregue quando entrar no jogo.</value>
+  </data>
+  <data name="OfflineWhisperReceiverFull" xml:space="preserve">
+    <value>{0} está offline e não pode receber mais mensagens agora.</value>
+  </data>
+  <data name="OfflineWhisperPrefix" xml:space="preserve">
+    <value>(offline) </value>
+  </data>
+  <data name="ChatSpamWarning" xml:space="preserve">
+    <value>Por favor, não faça spam.</value>
+  </data>
 </root>

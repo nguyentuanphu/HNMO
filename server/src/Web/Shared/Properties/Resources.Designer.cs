@@ -1145,5 +1145,58 @@ namespace HNMO.Web.Shared.Properties {
         /// <summary>Gets the localized ZoomOut text.</summary>
         public static string ZoomOut => ResourceManager.GetString("ZoomOut", resourceCulture)!;
 
+        /// <summary>
+        ///   Looks up a localized string similar to Monster amount.
+        /// </summary>
+        public static string MonsterAmount {
+            get {
+                return ResourceManager.GetString("MonsterAmount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Now: ×{0}.
+        /// </summary>
+        public static string MonsterAmountCurrent {
+            get {
+                return ResourceManager.GetString("MonsterAmountCurrent", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Multiplies the amount of every monster spawn area of this map; the saved quantities stay as they ....
+        /// </summary>
+        public static string MonsterAmountHint {
+            get {
+                return ResourceManager.GetString("MonsterAmountHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Saved: the monster amount applies now..
+        /// </summary>
+        public static string MonsterAmountSaved {
+            get {
+                return ResourceManager.GetString("MonsterAmountSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The monster amount couldn't be saved..
+        /// </summary>
+        public static string MonsterAmountSaveFailed {
+            get {
+                return ResourceManager.GetString("MonsterAmountSaveFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Save or undo the changes of the map first..
+        /// </summary>
+        public static string MonsterAmountSaveMapFirst {
+            get {
+                return ResourceManager.GetString("MonsterAmountSaveMapFirst", resourceCulture);
+            }
+        }
     }
 }

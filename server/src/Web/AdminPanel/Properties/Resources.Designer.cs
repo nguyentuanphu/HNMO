@@ -8708,5 +8708,257 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("GuildEditData", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat log.
+        /// </summary>
+        public static string ChatLog {
+            get {
+                return ResourceManager.GetString("ChatLog", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The last chat lines of the game servers (public, party, guild, alliance, world, whispers), newest....
+        /// </summary>
+        public static string ChatLogHint {
+            get {
+                return ResourceManager.GetString("ChatLogHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sender or text ....
+        /// </summary>
+        public static string ChatLogSearch {
+            get {
+                return ResourceManager.GetString("ChatLogSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Live refresh.
+        /// </summary>
+        public static string ChatLogLiveRefresh {
+            get {
+                return ResourceManager.GetString("ChatLogLiveRefresh", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string ChatLogRefresh {
+            get {
+                return ResourceManager.GetString("ChatLogRefresh", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} lines shown (the server keeps the last {1}).
+        /// </summary>
+        public static string ChatLogShown {
+            get {
+                return ResourceManager.GetString("ChatLogShown", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Time (Sydney).
+        /// </summary>
+        public static string ChatLogTime {
+            get {
+                return ResourceManager.GetString("ChatLogTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string ChatLogMap {
+            get {
+                return ResourceManager.GetString("ChatLogMap", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sender.
+        /// </summary>
+        public static string ChatLogSender {
+            get {
+                return ResourceManager.GetString("ChatLogSender", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string ChatLogKind {
+            get {
+                return ResourceManager.GetString("ChatLogKind", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Text.
+        /// </summary>
+        public static string ChatLogText {
+            get {
+                return ResourceManager.GetString("ChatLogText", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No chat lines yet..
+        /// </summary>
+        public static string ChatLogEmpty {
+            get {
+                return ResourceManager.GetString("ChatLogEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Mute the sender.
+        /// </summary>
+        public static string ChatLogMute {
+            get {
+                return ResourceManager.GetString("ChatLogMute", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Mute 10 min.
+        /// </summary>
+        public static string ChatLogMute10Minutes {
+            get {
+                return ResourceManager.GetString("ChatLogMute10Minutes", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to 1 h.
+        /// </summary>
+        public static string ChatLogMute1Hour {
+            get {
+                return ResourceManager.GetString("ChatLogMute1Hour", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to 1 day.
+        /// </summary>
+        public static string ChatLogMute1Day {
+            get {
+                return ResourceManager.GetString("ChatLogMute1Day", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string ChatLogOpenAccount {
+            get {
+                return ResourceManager.GetString("ChatLogOpenAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is muted until {1} (Sydney time)..
+        /// </summary>
+        public static string ChatLogMuted {
+            get {
+                return ResourceManager.GetString("ChatLogMuted", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The character {0} wasn't found..
+        /// </summary>
+        public static string ChatLogCharacterNotFound {
+            get {
+                return ResourceManager.GetString("ChatLogCharacterNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} couldn't be muted..
+        /// </summary>
+        public static string ChatLogMuteFailed {
+            get {
+                return ResourceManager.GetString("ChatLogMuteFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Public.
+        /// </summary>
+        public static string ChatLogKindNormal {
+            get {
+                return ResourceManager.GetString("ChatLogKindNormal", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Party.
+        /// </summary>
+        public static string ChatLogKindParty {
+            get {
+                return ResourceManager.GetString("ChatLogKindParty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Guild.
+        /// </summary>
+        public static string ChatLogKindGuild {
+            get {
+                return ResourceManager.GetString("ChatLogKindGuild", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Alliance.
+        /// </summary>
+        public static string ChatLogKindAlliance {
+            get {
+                return ResourceManager.GetString("ChatLogKindAlliance", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Whisper.
+        /// </summary>
+        public static string ChatLogKindWhisper {
+            get {
+                return ResourceManager.GetString("ChatLogKindWhisper", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to World.
+        /// </summary>
+        public static string ChatLogKindWorld {
+            get {
+                return ResourceManager.GetString("ChatLogKindWorld", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gens.
+        /// </summary>
+        public static string ChatLogKindGens {
+            get {
+                return ResourceManager.GetString("ChatLogKindGens", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Notice.
+        /// </summary>
+        public static string ChatLogKindNotice {
+            get {
+                return ResourceManager.GetString("ChatLogKindNotice", resourceCulture);
+            }
+        }
     }
 }
