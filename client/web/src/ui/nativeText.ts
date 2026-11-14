@@ -17,9 +17,21 @@ const POINT_RANGE: Record<FontRole, [number, number]> = { normal: [11, 16], big:
 /** The family the legacy theme's texts use (tokens.ini). */
 export const FONT_FAMILY = '"DejaVu Sans"';
 
-/** TypographyScale (= the panels' dp ratio): the 640x480 reference fitted to the window, 1..2. */
+/** The interface size the player chose (the options' UI size, GameConfig::GetUIScalePercent), in percent. */
+let uiScalePercent = 100;
+export function setUiScalePercent(percent: number): void { uiScalePercent = percent; }
+export function getUiScalePercent(): number { return uiScalePercent; }
+
+// WithUIScalePercent: the fitted scale times the chosen size, but never past what fits the window
+// (unless the fitted scale itself already does).
+function withUiScalePercent(fit: number, width: number, height: number): number {
+  const fitsWindow = Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT);
+  return Math.min(fit * uiScalePercent / 100, Math.max(fit, fitsWindow));
+}
+
+/** TypographyScale (= the panels' dp ratio): the 640x480 reference fitted to the window, 1..2, at the chosen UI size. */
 export function typographyScale(width = window.innerWidth, height = window.innerHeight): number {
-  return Math.min(Math.max(Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT), 1), MAXIMUM_PANEL_SCALE);
+  return withUiScalePercent(Math.min(Math.max(Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT), 1), MAXIMUM_PANEL_SCALE), width, height);
 }
 
 /** kMaximumDockScale. */
@@ -31,7 +43,7 @@ const DOCK_LOGICAL_BOTTOM = 432;
 
 /** The windows' scale (CappedUniformScale with kMaximumDockScale): the 640x480 reference fitted to the window, 1..2.25. */
 export function uiScale(width = window.innerWidth, height = window.innerHeight): number {
-  return Math.min(Math.max(Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT), 1), MAXIMUM_DOCK_SCALE);
+  return withUiScalePercent(Math.min(Math.max(Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT), 1), MAXIMUM_DOCK_SCALE), width, height);
 }
 
 /** BottomHudScale: the HUD's and the chat's scale, 1..2. */

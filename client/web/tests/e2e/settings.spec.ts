@@ -49,9 +49,16 @@ test('the settings window keeps the music volume and text size, and low-spec mod
 
   // Display: text size Large.
   await tab(page, 0).click();
-  await page.locator(`${WINDOW} [data-event-click="option_toggle_dropdown(5)"]`).click();
-  await page.locator(`${WINDOW} .option-dropdown-option`, { hasText: 'Large' }).click();
+  await page.locator(`${WINDOW} #hnmo_text_size .option-dropdown-value`).click();
+  await page.locator(`${WINDOW} #hnmo_text_size .option-dropdown-option`, { hasText: 'Large' }).click();
   await expect.poll(() => textScale(page)).toBe('1.2');
+  // UI size 75 %: the windows get smaller (at 1280 x 720 the fitted scale is 1.5).
+  const windowScale = () => page.evaluate(async () => (await import('/js/ui/nativeText.js' as string) as { uiScale(): number }).uiScale());
+  expect(await windowScale()).toBeCloseTo(1.5, 2);
+  await page.locator(`${WINDOW} [data-event-click="option_toggle_dropdown(5)"]`).click();
+  await page.locator(`${WINDOW} .option-row:has([data-event-click="option_toggle_dropdown(5)"]) .option-dropdown-option`).getByText('75 %', { exact: true }).click();
+  await expect.poll(windowScale).toBeCloseTo(1.125, 2);
+  await page.screenshot({ path: test.info().outputPath('ui-size-75.png') });
 
   // Graphics: low-spec mode draws at half the pixel ratio.
   await tab(page, 1).click();
@@ -67,8 +74,14 @@ test('the settings window keeps the music volume and text size, and low-spec mod
   await expect.poll(() => textScale(page), { timeout: 60_000 }).toBe('1.2');
   await expect.poll(() => musicLevel(page)).toBe(8);
   await expect.poll(() => pixelRatio(page)).toBeCloseTo(fullRatio * 0.5, 1);
+  await expect.poll(windowScale, { timeout: 60_000 }).toBeCloseTo(1.125, 2);
   await openSettings(page);
-  await expect(page.locator(`${WINDOW} [data-event-click="option_toggle_dropdown(5)"]`)).toHaveText('Large');
+  await expect(page.locator(`${WINDOW} [data-event-click="option_toggle_dropdown(5)"]`)).toHaveText('75 %');
+  await expect(page.locator(`${WINDOW} #hnmo_text_size .option-dropdown-value`)).toHaveText('Large');
+  // Back to 100 %.
+  await page.locator(`${WINDOW} [data-event-click="option_toggle_dropdown(5)"]`).click();
+  await page.locator(`${WINDOW} .option-row:has([data-event-click="option_toggle_dropdown(5)"]) .option-dropdown-option`).getByText('100 %', { exact: true }).click();
+  await expect.poll(windowScale).toBeCloseTo(1.5, 2);
   await tab(page, 2).click();
   await expect(musicFill(page)).toHaveClass(/level-8/);
 

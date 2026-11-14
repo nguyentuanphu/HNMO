@@ -1,7 +1,8 @@
 // The settings window (O, or the ⚙ button): the desktop's option window (option_window.rml in the
 // window_shell frame, COptionWindow) with what the web game can switch. HNMO extras:
 //  - Display: render scale (the desktop's resolution row), windowed / full screen, the FPS limit
-//    (the desktop's choices) and the text size (the UI scale row: small / normal / large).
+//    (the desktop's choices), the UI size (the desktop's 75-150 %, plus 175 and 200 % for large screens;
+//    never larger than the window fits) and the text size (small / normal / large).
 //  - Graphics: a low-spec mode switch, the view distance and skill effects off (render/quality.ts).
 //  - Audio: the desktop's sound and music volume bars (levels 0..10, audioSystem) and a mute
 //    switch (the same as the ♪ button).
@@ -12,7 +13,7 @@
 
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { audioSystem, MAX_VOLUME_LEVEL } from '../audio/audioSystem.js';
-import { typographyScale } from './nativeText.js';
+import { setUiScalePercent, typographyScale } from './nativeText.js';
 import {
   applyQuality, DEFAULT_QUALITY, FPS_CAPS, isLowSpec, LOW_SPEC, refreshQuality, RENDER_SCALES, VIEW_DISTANCES,
   type QualitySettings, type QualityTarget,
@@ -21,6 +22,10 @@ import {
 const STORAGE_KEY = 'hnmo.settings';
 export const TEXT_SCALES = [0.85, 1, 1.2];
 const TEXT_SIZE_LABELS = ['Small', 'Normal', 'Large'];
+/** UIScalePercentChoices, and 175 / 200 % for large screens (an HNMO extra). */
+export const UI_SIZES = [75, 80, 90, 100, 125, 150, 175, 200];
+/** The HNMO text size dropdown's id among the window's dropdowns. */
+const TEXT_SIZE_DROPDOWN = 101;
 const VIEW_DISTANCE_LABELS = ['Near', 'Medium', 'Far'];
 /** The HNMO view distance dropdown's id among the window's dropdowns (the desktop's go up to 8). */
 const VIEW_DISTANCE_DROPDOWN = 100;
@@ -31,10 +36,12 @@ export interface GameSettings {
   quality: QualitySettings;
   /** Index of TEXT_SCALES. */
   textSize: number;
+  /** The UI size in percent (UI_SIZES). */
+  uiSize: number;
   showFps: boolean;
 }
 
-const DEFAULT_SETTINGS: GameSettings = { quality: { ...DEFAULT_QUALITY }, textSize: 1, showFps: true };
+const DEFAULT_SETTINGS: GameSettings = { quality: { ...DEFAULT_QUALITY }, textSize: 1, uiSize: 100, showFps: true };
 
 function pick<T>(list: readonly T[], value: unknown, fallback: T): T {
   return list.includes(value as T) ? value as T : fallback;
@@ -45,7 +52,7 @@ export function loadSettings(): GameSettings {
   try {
     const text = localStorage.getItem(STORAGE_KEY);
     if (text === null) return settings;
-    const saved = JSON.parse(text) as { quality?: Partial<Record<keyof QualitySettings, unknown>>; textSize?: unknown; showFps?: unknown };
+    const saved = JSON.parse(text) as { quality?: Partial<Record<keyof QualitySettings, unknown>>; textSize?: unknown; uiSize?: unknown; showFps?: unknown };
     const q = saved.quality ?? {};
     settings.quality = {
       renderScale: pick(RENDER_SCALES, q.renderScale, DEFAULT_QUALITY.renderScale),
@@ -54,6 +61,7 @@ export function loadSettings(): GameSettings {
       effects: typeof q.effects === 'boolean' ? q.effects : DEFAULT_QUALITY.effects,
     };
     settings.textSize = pick([0, 1, 2], saved.textSize, 1);
+    settings.uiSize = pick(UI_SIZES, saved.uiSize, 100);
     if (typeof saved.showFps === 'boolean') settings.showFps = saved.showFps;
   } catch {
     /* storage unavailable or damaged: defaults */
@@ -80,6 +88,8 @@ const EXTRA_CSS = `
 #panel { pointer-events: auto; }
 .option-row, .option-tab-btn, .option-close-btn, .option-dropdown-option, .option-dropdown-value, .level-gauge-hit { pointer-events: auto; }
 .hnmo-left-out { display: none !important; }
+/* The UI size list (8 sizes) opens upward: it stays below the tabs and scrolls. */
+.option-opens-up .option-dropdown-list { max-height: 7.5em; overflow-y: auto; pointer-events: auto; }
 `;
 
 interface OptionModel extends RmlModel {
@@ -109,7 +119,7 @@ export class SettingsWindow {
   private opening: Promise<void> | null = null;
   private readonly settings: GameSettings = loadSettings();
   private readonly model: OptionModel;
-  private extras: { lowSpec?: HTMLDivElement; mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[] } = { viewOptions: [] };
+  private extras: { lowSpec?: HTMLDivElement; mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[]; textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[] } = { viewOptions: [], textOptions: [] };
 
   constructor(private readonly target: QualityTarget) {
     const close = () => this.close();
@@ -120,7 +130,7 @@ export class SettingsWindow {
       resolution_row_label: 'Render scale', resolution_labels: RENDER_SCALES.map((scale) => `${Math.round(scale * 100)} %`),
       windowed_mode_label: 'Windowed mode', windowed_mode: true,
       fps_cap_row_label: 'FPS limit', fps_cap_labels: FPS_CAPS.map((fps) => (fps > 0 ? `${fps} FPS` : 'Uncapped')),
-      ui_scale_row_label: 'Text size', ui_scale_labels: TEXT_SIZE_LABELS, ui_scale_tooltip: '',
+      ui_scale_row_label: 'UI size', ui_scale_labels: UI_SIZES.map((size) => `${size} %`), ui_scale_tooltip: 'The size of the windows and the HUD; never larger than the window fits',
       section_quality_label: 'Quality', section_effects_label: 'Effects', section_shadows_label: 'Shadows',
       disable_effects_label: 'Disable skill effects',
       sound_volume_label: 'Sound volume', music_volume_label: 'Music volume',
@@ -209,8 +219,8 @@ export class SettingsWindow {
     m.windowed_mode = !document.fullscreenElement;
     m.fps_cap_index = FPS_CAPS.indexOf(q.fpsCap);
     m.fps_cap_value_label = (m.fps_cap_labels as string[])[FPS_CAPS.indexOf(q.fpsCap)];
-    m.ui_scale_index = this.settings.textSize;
-    m.ui_scale_value_label = TEXT_SIZE_LABELS[this.settings.textSize];
+    m.ui_scale_index = UI_SIZES.indexOf(this.settings.uiSize);
+    m.ui_scale_value_label = `${this.settings.uiSize} %`;
     m.disable_effects = !q.effects;
     m.sound_volume = audio.effectsLevel;
     m.music_volume = audio.musicLevel;
@@ -221,7 +231,8 @@ export class SettingsWindow {
     this.model.open_dropdown = -1;
     if (id === 0 && index >= 0 && index < RENDER_SCALES.length) this.setQuality({ renderScale: RENDER_SCALES[index] });
     else if (id === 1 && index >= 0 && index < FPS_CAPS.length) this.setQuality({ fpsCap: FPS_CAPS[index] });
-    else if (id === 5 && index >= 0 && index < TEXT_SCALES.length) { this.settings.textSize = index; this.applyPage(); saveSettings(this.settings); }
+    else if (id === 5 && index >= 0 && index < UI_SIZES.length) { this.settings.uiSize = UI_SIZES[index]; this.applyPage(); saveSettings(this.settings); window.dispatchEvent(new Event('resize')); }
+    else if (id === TEXT_SIZE_DROPDOWN && index >= 0 && index < TEXT_SCALES.length) { this.settings.textSize = index; this.applyPage(); saveSettings(this.settings); }
     else if (id === VIEW_DISTANCE_DROPDOWN && index >= 0 && index < VIEW_DISTANCES.length) this.setQuality({ viewDistance: VIEW_DISTANCES[index] });
   }
 
@@ -232,6 +243,7 @@ export class SettingsWindow {
   }
 
   private applyPage(): void {
+    setUiScalePercent(this.settings.uiSize);
     document.documentElement.style.setProperty('--hnmo-text-scale', String(TEXT_SCALES[this.settings.textSize]));
     const fps = document.getElementById('fps');
     if (fps) fps.hidden = !this.settings.showFps;
@@ -304,6 +316,14 @@ export class SettingsWindow {
       if (first) first.after(lowSpec.row, row); else graphics.prepend(lowSpec.row, row);
       this.extras = { ...this.extras, lowSpec: lowSpec.box, viewValue: value, viewList: list, viewOptions: options };
     }
+    const display = panels[0];
+    const uiRow = doc.root.querySelector('[data-event-click="option_toggle_dropdown(5)"]')?.closest('.option-row');
+    if (display && uiRow) {
+      const { row, value, list, options } = this.dropdownRow('Text size', TEXT_SIZE_DROPDOWN, TEXT_SIZE_LABELS);
+      row.id = 'hnmo_text_size';
+      uiRow.after(row);
+      this.extras = { ...this.extras, textValue: value, textList: list, textOptions: options };
+    }
     if (audio) {
       const mute = checkboxRow('Mute all sound', () => { this.setMuted(!audioSystem().getSettings().muted); this.update(); });
       mute.row.id = 'hnmo_mute';
@@ -312,8 +332,38 @@ export class SettingsWindow {
     }
   }
 
+  // A dropdown row like the window's own (the HNMO rows).
+  private dropdownRow(text: string, id: number, labels: string[]): { row: HTMLDivElement; value: HTMLDivElement; list: HTMLDivElement; options: HTMLDivElement[] } {
+    const row = document.createElement('div');
+    row.className = 'option-row option-select-row hnmo-extra';
+    const label = document.createElement('span');
+    label.className = 'option-row-label';
+    label.textContent = text;
+    const dropdown = document.createElement('div');
+    dropdown.className = 'option-dropdown';
+    const value = document.createElement('div');
+    value.className = 'option-dropdown-value';
+    value.addEventListener('click', () => { this.model.open_dropdown = this.model.open_dropdown === id ? -1 : id; this.update(); });
+    const list = document.createElement('div');
+    list.className = 'option-dropdown-list';
+    const options = labels.map((name, index) => {
+      const option = document.createElement('div');
+      option.className = 'option-dropdown-option';
+      option.textContent = name;
+      option.addEventListener('click', () => { this.choose(id, index); this.update(); });
+      return option;
+    });
+    list.append(...options);
+    dropdown.append(value, list);
+    row.append(label, dropdown);
+    return { row, value, list, options };
+  }
+
   private refreshExtras(): void {
-    const { lowSpec, mute, viewValue, viewList, viewOptions } = this.extras;
+    const { lowSpec, mute, viewValue, viewList, viewOptions, textValue, textList, textOptions } = this.extras;
+    if (textValue) textValue.textContent = TEXT_SIZE_LABELS[this.settings.textSize] ?? '';
+    textList?.classList.toggle('hidden', this.model.open_dropdown !== TEXT_SIZE_DROPDOWN);
+    textOptions.forEach((option, i) => option.classList.toggle('selected', i === this.settings.textSize));
     const q = this.settings.quality;
     lowSpec?.classList.toggle('checked', isLowSpec(q));
     mute?.classList.toggle('checked', audioSystem().getSettings().muted);
