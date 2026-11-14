@@ -1936,4 +1936,16 @@
   <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
     <value>Lets the admin panel apply the cash shop coins it granted to an account which is in the game at once, instead of the next time the player opens the cash shop.</value>
   </data>
+  <data name="GameNamePlugIn_Name" xml:space="preserve">
+    <value>Game name</value>
+  </data>
+  <data name="GameNamePlugIn_Description" xml:space="preserve">
+    <value>The game's name which players see: the page title, the login screen, the guide and the item shop of the web game.</value>
+  </data>
+  <data name="GameNameConfiguration_Name_Caption" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GameNameConfiguration_Name_Description" xml:space="preserve">
+    <value>Shown to players instead of the default (1 to 60 characters). The web game picks it up within a minute.</value>
+  </data>
 </root>

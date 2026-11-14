@@ -24,13 +24,13 @@ export class AutoPlayExtrasPanel {
     const panel = document.createElement('div');
     panel.className = 'chip auto-play-extras';
     panel.setAttribute('role', 'dialog');
-    panel.setAttribute('aria-label', 'Auto play: HNMO extras');
+    panel.setAttribute('aria-label', 'Auto play: extras');
     Object.assign(panel.style, { position: 'fixed', left: '50%', top: '18%', transform: 'translateX(-50%)', zIndex: '80', width: 'min(340px, calc(100vw - 32px))', display: 'grid', gap: '8px', padding: '14px', pointerEvents: 'auto' });
     const check = (key: keyof AutoPlayExtrasSettings, label: string) =>
       `<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-key="${key}" ${s[key] ? 'checked' : ''}> ${label}</label>`;
     const number = (key: keyof AutoPlayExtrasSettings, label: string, max: number) =>
       `<label style="display:flex;gap:8px;align-items:center;justify-content:space-between">${label}<input type="number" min="0" max="${max}" data-key="${key}" value="${Number(s[key])}" style="width:72px"></label>`;
-    panel.innerHTML = `<strong style="color:var(--gold)">Auto play: HNMO extras</strong>
+    panel.innerHTML = `<strong style="color:var(--gold)">Auto play: extras</strong>
       ${check('returnWhenBagFull', 'Back to town when the bag is full')}
       ${check('returnWhenOutOfPotions', 'Back to town when the healing potions run out')}
       ${number('potionsToBuy', 'Healing potions to buy', 255)}

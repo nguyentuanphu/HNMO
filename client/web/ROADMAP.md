@@ -107,6 +107,10 @@ contribution, the family mark on the pointed player done; the marks in every pla
 5. ✅ Option window (`O` or ⚙, `ui/settingsWindow.ts`): FPS limit, sound and music volume,
    windowed mode, effects off, FPS counter; **(extra)** render scale, text size, mute, view
    distance and a low-spec mode for slow PCs (`render/quality.ts`).
+6. ✅ **(extra)** The game's name players see (default "HenryN Mu Online") is set in the admin panel:
+   Plugins, "Game name" (`GameNamePlugIn`); the web game reads it through `/game-name.json`
+   (`src/gameName.ts`, test `game-name.spec.ts`).
+7. **(extra)** Admin panel redesign, and a check that every game setting can be changed there.
 
 ## 11. Release
 Windows build tried on a real PC, performance on a normal laptop, the friends guide updated with

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HNMO Account</title>
+  <title>HenryN Mu Online Account</title>
   <style>
     [hidden] { display: none !important; }
     :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; --ok: #7cc98a; }
@@ -34,7 +34,7 @@
 <body>
   <main>
     <header>
-      <h1>HNMO</h1>
+      <h1 data-game-name>HenryN Mu Online</h1>
       <a href="/">Play the game →</a>
     </header>
 
@@ -127,6 +127,15 @@
         show($('coinsMessage'), waiting ? `Includes ${waiting} new coins, which arrive in your account when you open the cash shop in the game.` : '', true);
       } catch (error) { $('coins').hidden = true; show($('coinsMessage'), error.message, false); }
     });
+  </script>
+  <script>
+    // The game's name from the admin panel (the "Game name" plug-in), else the default above.
+    fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+      const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
+      if (!name) return;
+      document.title = document.title.replace('HenryN Mu Online', name);
+      for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = (e.dataset.gameName || '{game}').replaceAll('{game}', name);
+    }).catch(() => {});
   </script>
 </body>
 </html>

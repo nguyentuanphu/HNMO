@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HNMO</title>
+  <title>HenryN Mu Online</title>
   <style>
     :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; }
     [hidden] { display: none !important; }
@@ -68,15 +68,15 @@
 <body>
   <div id="stage"><canvas id="view"></canvas></div>
   <div id="labels"></div>
-  <div id="guide" hidden role="dialog" aria-label="HNMO guide">
-    <div class="frame"><iframe title="HNMO guide" src="about:blank"></iframe><button type="button" class="close">Close</button></div>
+  <div id="guide" hidden role="dialog" aria-label="Guide" data-game-name="{game} guide" data-game-name-attr="aria-label">
+    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="close">Close</button></div>
   </div>
   <div class="hud" id="hud" hidden>
     <span class="chip" id="heroName">-</span>
     <span class="chip">Cell <span id="position">-</span></span>
     <span class="chip" id="fps">- fps</span>
     <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
-    <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the HNMO guide">i</button>
+    <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
     <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
   </div>
   <div class="chip wardrobe" id="wardrobe" hidden>
@@ -98,7 +98,7 @@
   </div>
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">
-      <h1>HNMO</h1>
+      <h1 data-game-name>HenryN Mu Online</h1>
       <fieldset>
         <div class="row"><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
         <div class="row"><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>
@@ -124,7 +124,7 @@
   <div id="chatLog" class="chat-log" hidden></div>
   <form id="chatForm" class="chat-form" hidden autocomplete="off"><input id="chatInput" maxlength="60" placeholder="Enter to chat, e.g. /move devias" aria-label="Chat message"></form>
   <div class="chip map-picker" id="mapPicker" hidden><label for="mapSelect">Map</label><select id="mapSelect"></select></div>
-  <div id="loading" class="chip"><div id="status">Log in to the HNMO server, or explore offline.</div><div id="track"><div id="bar"></div></div></div>
+  <div id="loading" class="chip"><div id="status">Log in to the server, or explore offline.</div><div id="track"><div id="bar"></div></div></div>
   <script type="module" src="/js/main.js"></script>
 </body>
 </html>

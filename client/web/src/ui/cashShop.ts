@@ -6,6 +6,7 @@
 // CashShopItemBuyRequest; a bought item waits in the storage until Use (CashShopStorageItemConsumeRequest) moves it
 // to the inventory (seals and scrolls work at once).
 
+import { gameName } from '../gameName.js';
 import { itemDefinition } from '../game/items.js';
 import type { Item } from '../game/inventory.js';
 import type { Connection } from '../net/connection.js';
@@ -17,13 +18,15 @@ import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { askInGame } from './personalShop.js';
 
-// The desktop's texts (I18N::Game); the shop's own name is HNMO's.
+// The desktop's texts (I18N::Game); the shop's own name is the game's name (gameName.ts).
 export const IGS_TEXT = {
   myWCoin: 'My W Coin : ', myWCoinP: 'My W Coin(P) : ', goblinPoints: 'Goblin Points : ', storage: 'Storage', giftInventory: 'Gift Inventory',
   buy: 'Buy', gift: 'Gift', cancel: 'Cancel', use: 'Use', itemName: 'Item Name', duration: 'Duration', sendWCoin: 'Send W Coin',
   recharge: 'Recharge W Coin', update: 'Update Information', close: 'Close', shop: 'Shop', error: 'Error', error2: 'error2',
-  restricted: 'Restricted Function', notSupported: 'This function is not supported in the HNMO Item Shop.',
-  safeZoneOnly: 'You can only use the HNMO Item Shop in a town or safe zone.', reconnect: 'Cannot open HNMO Item Shop.\nPlease reconnect to the game.',
+  restricted: 'Restricted Function',
+  get notSupported() { return `This function is not supported in the ${gameName()} Item Shop.`; },
+  get safeZoneOnly() { return `You can only use the ${gameName()} Item Shop in a town or safe zone.`; },
+  get reconnect() { return `Cannot open ${gameName()} Item Shop.\nPlease reconnect to the game.`; },
   purchaseConfirmation: 'Purchase Confirmation', wishToBuy: 'Do you wish to buy the following item(s)?', item: 'Item: %s', price: 'Price: %s',
   durationS: 'Duration: %s', noReturn: 'Bought items used or taken out of storage cannot be returned.',
   purchaseCompleted: 'Purchase Completed', purchaseMade: 'Your purchase has been made.', purchaseFailed: 'Purchase Failed',
@@ -219,7 +222,7 @@ export class CashShop {
       const v = this.scriptVersion;
       this.script = await loadCashShopScript(scriptFolder(v.zone, v.year, v.id));
     } catch (error) {
-      void messageInGame(IGS_TEXT.error, `HNMO Item Shop information download failed!\n\nPlease reconnect to the game.\n${String(error)}`);
+      void messageInGame(IGS_TEXT.error, `${gameName()} Item Shop information download failed!\n\nPlease reconnect to the game.\n${String(error)}`);
       return;
     }
     if (this.bannerVersion && !this.model.banner_src) {

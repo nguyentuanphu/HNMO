@@ -1,6 +1,7 @@
 // The web client: log in through the relay and play on the HNMO server, or explore
 // Lorencia offline. Left-click walks, right-drag turns the camera, the wheel zooms.
 
+import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight } from './terrain.js';
@@ -78,6 +79,10 @@ import { HNMO_BUILD_STAMP, HNMO_PROJECT_ID } from './build.js';
 // suspect build (window.__hnmoBuild / the console line). See tools/hnmo/PROTECTION.md.
 (globalThis as { __hnmoBuild?: string }).__hnmoBuild = HNMO_BUILD_STAMP;
 console.log(`HNMO build ${HNMO_BUILD_STAMP} (project ${HNMO_PROJECT_ID})`);
+
+// The game's name players see (set in the admin panel): the page shows the default until it's here.
+applyGameName();
+void loadGameName();
 
 // The map the hero is on: its data and the terrain mesh the pointer is cast against.
 export type GameWorld = WorldData & { terrain: TerrainMesh };

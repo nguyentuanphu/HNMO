@@ -14,6 +14,7 @@
 //   C1 F3 40 1    an event NPC's line (ReceiveServerCommand)
 // No DOM here: the windows are ui/eventWindows.ts.
 
+import { gameName } from '../gameName.js';
 import type { Connection } from '../net/connection.js';
 import type { Item } from './inventory.js';
 
@@ -83,11 +84,11 @@ const DEVIL_SQUARE_NPC_LINES = [
   'If you want to find out about the Devil Square, go meet Charon in Noria',
   'The Devil Square is a place where warriors prove their courage. Qualified warriors will be given the Devil invitation. Go to the Chaos Goblin in Noria with the Devil eye, Devil key, Jewel of Chaos and enough Zen.',
   'You have come too soon. You may be able to enter the Devil Square if you wait for your time and revisit later.',
-  'Some say that the Devil eyes have been found on some monsters on the continent of HNMO. Try to hunt as many monsters as possible to get Devil eyes. If you get one, go meet Charon in Noria.',
+  'Some say that the Devil eyes have been found on some monsters on the continent of {game}. Try to hunt as many monsters as possible to get Devil eyes. If you get one, go meet Charon in Noria.',
   'Many adventurers and warriors are crowding into Devil Square to prove their courage. Warrior, are you on your way to Devil Square?',
   'Do not you want to prove that you are the bravest of the bravest. Opportunity lies ahead of you. If you get the Devil Eye and Key, you will be one step closer to that opportunity.',
-  'Thousands of years ago, the Devil Eye and Key had once existed in the Continent of HNMO and disappeared. But now they can be seen all over the continent. Go and find them, and bring them to the Chaos Goblin in Noria',
-  'Are you looking for the Devil Eye too? The Devil Eye can be found on most monsters on the continent of HNMO. If God is with you, you will be able to find what you seek.',
+  'Thousands of years ago, the Devil Eye and Key had once existed in the Continent of {game} and disappeared. But now they can be seen all over the continent. Go and find them, and bring them to the Chaos Goblin in Noria',
+  'Are you looking for the Devil Eye too? The Devil Eye can be found on most monsters on the continent of {game}. If God is with you, you will be able to find what you seek.',
   "Bring me the Devil Eye, Devil's Key, and a Jewel of Chaos. The Devil's invitation will be granted to you only after you bring me those three items.",
   "You've brought the Devil's treasure! May the Goddess of fortune be with you so you may find treasure that suits your needs.",
   'Finally, the gate of Devil Square has opened again. Charon the gate keeper will allow you to enter Devil Square',
@@ -119,7 +120,7 @@ const BLOOD_CASTLE_NPC_LINES = [
 
 /** Network::ServerMessages::GetEventNpcLine: empty past the last line. */
 export function eventNpcLine(number: number): string {
-  if (number < FIRST_BLOOD_CASTLE_LINE) return DEVIL_SQUARE_NPC_LINES[number] ?? '';
+  if (number < FIRST_BLOOD_CASTLE_LINE) return (DEVIL_SQUARE_NPC_LINES[number] ?? '').replaceAll('{game}', gameName());
   return BLOOD_CASTLE_NPC_LINES[number - FIRST_BLOOD_CASTLE_LINE] ?? '';
 }
 

@@ -8,6 +8,7 @@
 // - alerts (a browser notification and a chat line) when the hero dies or the bag is full.
 // The settings are kept in this browser per character.
 
+import { gameName } from '../gameName.js';
 import type { Character } from './characters.js';
 import type { Item } from './inventory.js';
 
@@ -213,7 +214,7 @@ export class AutoPlayExtras {
     this.world.message(`Auto play: ${text}`);
     try {
       if ('Notification' in window) {
-        if (Notification.permission === 'granted') new Notification('HNMO', { body: text });
+        if (Notification.permission === 'granted') new Notification(gameName(), { body: text });
         else if (Notification.permission === 'default') void Notification.requestPermission();
       }
     } catch { /* notifications unavailable */ }

@@ -41,6 +41,34 @@ app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSecond
 
 app.MapGet("/health", () => "ok");
 
+// The game's name players see: set in the admin panel (the "Game name" plug-in), asked from its public
+// endpoint and kept for 30 seconds; the default while the admin panel doesn't answer.
+const string DefaultGameName = "HenryN Mu Online";
+var gameNameSource = (app.Configuration["GameName:AdminUrl"] ?? app.Configuration["Launcher:AdminUrl"] ?? "http://127.0.0.1:8095").TrimEnd('/') + "/api/game-name";
+var gameNameClient = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+var gameName = Tuple.Create(DefaultGameName, DateTime.MinValue); // swapped whole, so readers never see half of it
+app.MapGet("/game-name.json", async (HttpContext context) =>
+{
+    if (DateTime.UtcNow >= gameName.Item2)
+    {
+        var name = gameName.Item1;
+        try
+        {
+            using var document = System.Text.Json.JsonDocument.Parse(await gameNameClient.GetStringAsync(gameNameSource, context.RequestAborted));
+            if (document.RootElement.TryGetProperty("name", out var value) && value.GetString() is { Length: > 0 } fetched) name = fetched.Trim();
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
+        {
+            // The admin panel is still starting or not reachable: keep the last known name.
+        }
+
+        gameName = Tuple.Create(name, DateTime.UtcNow.AddSeconds(30));
+    }
+
+    context.Response.Headers.CacheControl = "no-cache";
+    return Results.Json(new { name = gameName.Item1 });
+});
+
 // The web client and its libraries, then the game's data files.
 app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
 app.UseStaticFiles(new StaticFileOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
