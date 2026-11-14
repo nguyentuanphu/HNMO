@@ -28,6 +28,19 @@ builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSe
 var portalOptions = builder.Configuration.GetSection("Portal").Get<PortalOptions>() ?? new PortalOptions();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpForwarder();
+// Request rates per visitor address for the account and payment endpoints (VisitorLimits.cs covers the game connections).
+builder.Services.AddRateLimiter(limiter =>
+{
+    limiter.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    limiter.AddPolicy("per-visitor", context => System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress is { } address && !IPAddress.IsLoopback(address) ? address.ToString() : "local",
+        key => new System.Threading.RateLimiting.FixedWindowRateLimiterOptions
+        {
+            PermitLimit = key == "local" ? 1000 : 30,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0,
+        }));
+});
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
 var webRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:WebRoot"] ?? "../public"));
@@ -39,6 +52,8 @@ var connectTimeout = TimeSpan.FromSeconds(app.Configuration.GetValue("Relay:Conn
 const int MaximumPacketSize = 0xFFFF;
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
+app.UseRateLimiter();
+var visitorLimits = new VisitorLimits(app.Configuration.GetSection("Limits").Get<VisitorLimitOptions>() ?? new VisitorLimitOptions());
 
 // The admin panel at the website's secret admin path (AdminGateway.cs); before everything else.
 AdminGateway.Use(app, new AdminGateway(portalOptions, app.Services.GetRequiredService<Yarp.ReverseProxy.Forwarder.IHttpForwarder>(), app.Services.GetRequiredService<IHttpClientFactory>(), app.Services.GetRequiredService<ILogger<AdminGateway>>()));
@@ -125,8 +140,8 @@ async Task ForwardTopUpAsync(HttpContext context, string action)
 }
 
 app.MapGet("/topup/info", (HttpContext context) => ForwardTopUpAsync(context, "info"));
-app.MapPost("/topup/casso", (HttpContext context) => ForwardTopUpAsync(context, "casso"));
-app.MapPost("/topup/sepay", (HttpContext context) => ForwardTopUpAsync(context, "sepay"));
+app.MapPost("/topup/casso", (HttpContext context) => ForwardTopUpAsync(context, "casso")).RequireRateLimiting("per-visitor");
+app.MapPost("/topup/sepay", (HttpContext context) => ForwardTopUpAsync(context, "sepay")).RequireRateLimiting("per-visitor");
 
 // The web client and its libraries, then the game's data files.
 app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
@@ -181,6 +196,14 @@ app.Map("/relay", async context =>
     {
         app.Logger.LogWarning("Refused relay to {Host}:{Port}, it isn't an allowed host.", host, port);
         context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return;
+    }
+
+    using var place = visitorLimits.TryOpen(context.Connection.RemoteIpAddress);
+    if (place is null)
+    {
+        app.Logger.LogWarning("Refused a game connection from {Address}: too many connections from it.", context.Connection.RemoteIpAddress);
+        context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
         return;
     }
 
@@ -263,6 +286,7 @@ async Task RelayAsync(WebSocket socket, IPEndPoint endPoint, bool encrypted, Can
 async Task ForwardBrowserPacketsAsync(WebSocket socket, Connection connection, CancellationToken cancellationToken)
 {
     var buffer = new byte[MaximumPacketSize];
+    var budget = visitorLimits.NewBucket();
     while (socket.State == WebSocketState.Open && connection.Connected)
     {
         var length = 0;
@@ -287,6 +311,13 @@ async Task ForwardBrowserPacketsAsync(WebSocket socket, Connection connection, C
         if (!IsWholePacket(buffer.AsSpan(0, length)))
         {
             throw new InvalidOperationException("The browser sent a malformed packet.");
+        }
+
+        // A flood of packets (far more than playing sends) ends the connection.
+        if (!budget.TryTake())
+        {
+            app.Logger.LogWarning("Closed a game connection: it sent packets too fast (more than {Rate} a second).", visitorLimits.Options.PacketsPerSecond);
+            throw new InvalidOperationException("The browser sent packets too fast.");
         }
 
         using (await connection.OutputLock.LockAsync().ConfigureAwait(false))

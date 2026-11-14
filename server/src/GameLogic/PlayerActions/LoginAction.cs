@@ -25,11 +25,27 @@ public class LoginAction
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
 
+        // Password guessing: too many wrong passwords lock the account (or address) for a while.
+        var address = (player as IHasIpAddress)?.IpAddress;
+        if (LoginAttemptGuard.IsLocked(username, address))
+        {
+            player.Logger.LogWarning("Login of [{Username}] refused: too many wrong passwords recently.", username);
+            await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.ConnectionClosed3Fails)).ConfigureAwait(false);
+            return;
+        }
+
         var state = await this.AuthenticateAsync(player, username, password).ConfigureAwait(false);
         if (state is null)
         {
+            if (LoginAttemptGuard.RecordFailure(username, address))
+            {
+                player.Logger.LogWarning("Logins of [{Username}] (address {Address}) locked for {Minutes} minutes after too many wrong passwords.", username, address, LoginAttemptGuard.LockTime.TotalMinutes);
+            }
+
             return;
         }
+
+        LoginAttemptGuard.RecordSuccess(username);
 
         if (!await this.ValidateAccountStateAsync(player, state.Value).ConfigureAwait(false))
         {

@@ -42,11 +42,11 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         // Handlers that take only the HttpContext are cast to Func<..., Task<IResult>>, so their answer is sent:
         // as a plain RequestDelegate the result would be dropped (ASP0016).
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
-        app.MapPost("/portal/register", portal.RegisterAsync);
+        app.MapPost("/portal/register", portal.RegisterAsync).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
         app.MapGet("/website/settings", (Func<HttpContext, Task<IResult>>)portal.WebsiteSettingsAsync);
-        app.MapPost("/portal/google", portal.GoogleAsync);
+        app.MapPost("/portal/google", portal.GoogleAsync).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
