@@ -40,11 +40,12 @@ const hasLetter = (page: Page, subject: string) => page.evaluate((s) => (window 
 const chatLines = (page: Page) => page.evaluate(() => [...document.querySelectorAll('#chatLog .line')].map((line) => `${line.className}|${line.textContent ?? ''}`));
 
 // Leaves a guild left over from an earlier run (the master disbands it), with the account's password.
-async function leaveGuild(page: Page, password: string): Promise<void> {
+async function leaveGuild(page: Page, password: string): Promise<boolean> {
   const status = await game(page, (g) => g.social.guild.status);
-  if (status === NONE) return;
+  if (status === NONE) return false;
   await page.evaluate((pw) => { const g = (window as unknown as Win).__game; g.social.guild.kick(g.hero.name, pw); }, password);
   await expect.poll(() => game(page, (g) => g.social.guild.status), { timeout: 60_000 }).toBe(NONE);
+  return true;
 }
 
 test('guild, friends, a letter and a whisper between two players', async ({ browser }) => {
@@ -60,11 +61,18 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   // A clean start: no guild, not friends, no letter from A in B's box.
   await a.waitForTimeout(5_000); // the guild and the messenger arrive on entering
   await leaveGuild(b, 'test4');
-  await leaveGuild(a, 'test300');
+  // The server keeps a disbanded guild's master as a member until it enters the game again (its
+  // GuildDeletedAsync forgets the guild's players before it lets them go): enter again.
+  if (await leaveGuild(a, 'test300')) { await enterWorld(a, 'test300'); await a.waitForTimeout(5_000); }
   if (await game(a, (g) => g.social.messenger.friends.length) > 0) {
     await a.evaluate((name) => (window as unknown as Win).__game.social.messenger.deleteFriend(name), nameB);
   }
-  await b.evaluate((sender) => { const m = (window as unknown as Win).__game.social.messenger; for (const l of m.letters) if (l.sender === sender) m.deleteLetter(l.id); }, nameA);
+  // One at a time: the server renumbers the letters after each deletion.
+  const lettersFromA = () => b.evaluate((sender) => (window as unknown as Win).__game.social.messenger.letters.filter((l) => l.sender === sender).length, nameA);
+  for (let left = await lettersFromA(); left > 0; left = await lettersFromA()) {
+    await b.evaluate((sender) => { const m = (window as unknown as Win).__game.social.messenger; const l = m.letters.find((x) => x.sender === sender); if (l) m.deleteLetter(l.id); }, nameA);
+    await expect.poll(lettersFromA, { timeout: 30_000 }).toBe(left - 1);
+  }
 
   // Both go to Devias; A walks to the guild master and talks to it: its window opens.
   for (const page of [a, b]) await page.evaluate(() => (window as unknown as Win).__game.online.say('/move devias'));

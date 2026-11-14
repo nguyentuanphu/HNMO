@@ -123,8 +123,13 @@ export class Messenger {
       case 0xc8: { // ReceiveLetterDeleteResult
         const id = bytes[4] | (bytes[5] << 8);
         if (bytes[3] === 1) {
+          // The server numbers the letters by their place in its list, so the ones after the deleted
+          // letter move up one (the desktop keeps the old numbers and then mixes letters up).
           this.letters = this.letters.filter((l) => l.id !== id);
-          this.bodies.delete(id);
+          for (const letter of this.letters) if (letter.id > id) letter.id--;
+          const bodies = [...this.bodies.values()].filter((body) => body.id !== id);
+          this.bodies.clear();
+          for (const body of bodies) { if (body.id > id) body.id--; this.bodies.set(body.id, body); }
           this.emit({ kind: 'letters' });
         } else this.emit({ kind: 'notice', text: "Couldn't delete letter." });
         break;

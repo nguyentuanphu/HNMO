@@ -22,6 +22,7 @@ const shellScale = () => Math.max(0.8, window.innerHeight / REFERENCE_HEIGHT / 1
 const SHELL_CSS = `
 #panel { font-size: calc(12px * var(--hnmo-text-scale, 1)); transform-origin: left top; }
 #panel button, #panel input, #panel textarea { font-size: inherit; }
+#panel button { border: 0; padding-top: 0; padding-bottom: 0; background-color: transparent; }
 `;
 
 interface ShellModel extends RmlModel {
