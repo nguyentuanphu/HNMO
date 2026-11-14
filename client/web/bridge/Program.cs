@@ -47,27 +47,37 @@ app.MapGet("/", () => Results.Redirect("/home.html"));
 const string DefaultGameName = "HenryN Mu Online";
 var gameNameSource = (app.Configuration["GameName:AdminUrl"] ?? app.Configuration["Launcher:AdminUrl"] ?? "http://127.0.0.1:8095").TrimEnd('/') + "/api/game-name";
 var gameNameClient = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
-var gameName = Tuple.Create(DefaultGameName, DateTime.MinValue); // swapped whole, so readers never see half of it
+var gameInfo = Tuple.Create(DefaultGameName, new Dictionary<string, string>(), DateTime.MinValue); // swapped whole
 app.MapGet("/game-name.json", async (HttpContext context) =>
 {
-    if (DateTime.UtcNow >= gameName.Item2)
+    if (DateTime.UtcNow >= gameInfo.Item3)
     {
-        var name = gameName.Item1;
+        var (name, links) = (gameInfo.Item1, gameInfo.Item2);
         try
         {
             using var document = System.Text.Json.JsonDocument.Parse(await gameNameClient.GetStringAsync(gameNameSource, context.RequestAborted));
-            if (document.RootElement.TryGetProperty("name", out var value) && value.GetString() is { Length: > 0 } fetched) name = fetched.Trim();
+            var root = document.RootElement;
+            if (root.TryGetProperty("name", out var value) && value.GetString() is { Length: > 0 } fetched) name = fetched.Trim();
+            links = new Dictionary<string, string>();
+            if (root.TryGetProperty("links", out var linkList) && linkList.ValueKind == System.Text.Json.JsonValueKind.Object)
+            {
+                foreach (var link in linkList.EnumerateObject())
+                {
+                    // Only https links (the admin panel already checks; this keeps the page safe either way).
+                    if (link.Value.GetString() is { } url && Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps) links[link.Name] = uri.AbsoluteUri;
+                }
+            }
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
         {
-            // The admin panel is still starting or not reachable: keep the last known name.
+            // The admin panel is still starting or not reachable: keep what's known.
         }
 
-        gameName = Tuple.Create(name, DateTime.UtcNow.AddSeconds(30));
+        gameInfo = Tuple.Create(name, links, DateTime.UtcNow.AddSeconds(30));
     }
 
     context.Response.Headers.CacheControl = "no-cache";
-    return Results.Json(new { name = gameName.Item1 });
+    return Results.Json(new { name = gameInfo.Item1, links = gameInfo.Item2 });
 });
 
 // The web client and its libraries, then the game's data files.

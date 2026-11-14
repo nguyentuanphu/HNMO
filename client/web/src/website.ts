@@ -1,8 +1,9 @@
-import { loadGameName } from "./gameName.js";
+import { loadGameName, showCommunityLinks } from "./gameName.js";
 
 type Language = "en" | "vi";
 const copy = {
   en: {
+    contact: "Community:",
     realm: "The realm",
     events: "Events",
     world: "World",
@@ -67,6 +68,7 @@ const copy = {
       "Event schedules and global rankings are not supplied by this feed.",
   },
   vi: {
+    contact: "Cộng đồng:",
     realm: "Máy chủ",
     events: "Sự kiện",
     world: "Thế giới",
@@ -283,6 +285,8 @@ function renderMaps(): void {
 }
 function render(): void {
   document.documentElement.lang = language;
+  element("community").dataset.communityLinks = t("contact");
+  showCommunityLinks();
   for (const item of document.querySelectorAll<HTMLElement>("[data-t]"))
     item.textContent = t(item.dataset.t as CopyKey);
   (element("search") as HTMLInputElement).placeholder = t("search");

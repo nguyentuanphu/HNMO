@@ -5264,5 +5264,58 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("GameNameConfiguration_Name_Description", resourceCulture);
             }
         }
+            /// <summary>
+        ///   Looks up a localized string similar to GameNameConfiguration_ZaloLink_Caption.
+        /// </summary>
+        public static string GameNameConfiguration_ZaloLink_Caption {
+            get {
+                return ResourceManager.GetString("GameNameConfiguration_ZaloLink_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to GameNameConfiguration_ZaloLink_Description.
+        /// </summary>
+        public static string GameNameConfiguration_ZaloLink_Description {
+            get {
+                return ResourceManager.GetString("GameNameConfiguration_ZaloLink_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to GameNameConfiguration_DiscordLink_Caption.
+        /// </summary>
+        public static string GameNameConfiguration_DiscordLink_Caption {
+            get {
+                return ResourceManager.GetString("GameNameConfiguration_DiscordLink_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to GameNameConfiguration_DiscordLink_Description.
+        /// </summary>
+        public static string GameNameConfiguration_DiscordLink_Description {
+            get {
+                return ResourceManager.GetString("GameNameConfiguration_DiscordLink_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to GameNameConfiguration_FacebookLink_Caption.
+        /// </summary>
+        public static string GameNameConfiguration_FacebookLink_Caption {
+            get {
+                return ResourceManager.GetString("GameNameConfiguration_FacebookLink_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to GameNameConfiguration_FacebookLink_Description.
+        /// </summary>
+        public static string GameNameConfiguration_FacebookLink_Description {
+            get {
+                return ResourceManager.GetString("GameNameConfiguration_FacebookLink_Description", resourceCulture);
+            }
+        }
     }
 }

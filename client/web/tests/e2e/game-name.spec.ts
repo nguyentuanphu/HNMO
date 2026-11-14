@@ -27,3 +27,22 @@ test('a name changed in the admin panel replaces the default everywhere', async 
   await page.goto('/');
   expect(await page.locator('body').innerText()).not.toContain('HNMO');
 });
+
+test('community links set in the admin panel show on the login screen and in the guide', async ({ page }) => {
+  await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Test Realm', links: { zalo: 'https://zalo.me/g/test', discord: 'javascript:alert(1)' } } }));
+  await page.goto('/');
+  const links = page.locator('#communityLinks');
+  await expect(links).toBeVisible();
+  await expect(links.locator('a.community-zalo')).toHaveAttribute('href', 'https://zalo.me/g/test');
+  // Anything but https is left out.
+  await expect(links.locator('a')).toHaveCount(1);
+  await page.goto('/guide.html');
+  await expect(page.locator('[data-community-links] a')).toHaveText('Zalo');
+});
+
+test('without links nothing is shown', async ({ page }) => {
+  await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Test Realm', links: {} } }));
+  await page.goto('/');
+  await page.waitForTimeout(500);
+  await expect(page.locator('#communityLinks')).toBeHidden();
+});

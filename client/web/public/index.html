@@ -46,6 +46,11 @@
     .chat-form input { width: 100%; box-sizing: border-box; background: rgba(10,12,20,.75); }
     #soundButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 15px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #soundButton[aria-pressed="true"] { color: var(--muted); border-color: var(--line); text-decoration: line-through; }
+    .community { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .community-link { padding: 3px 10px; border-radius: 999px; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-weight: 600; }
+    .community-link:hover { background: var(--gold); color: #1b1408; }
+    .community-zalo { border-color: #0068ff; color: #6aa8ff; }
+    .community-zalo:hover { background: #0068ff; color: #fff; }
     .language-picker { pointer-events: auto; display: inline-flex; gap: 4px; align-items: center; }
     .language-picker button { height: 30px; min-width: 38px; padding: 0 8px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font: 600 12px system-ui, sans-serif; }
     .language-picker button[aria-pressed="true"] { color: #1b1408; background: var(--gold); border-color: var(--gold); }
@@ -124,6 +129,7 @@
       <p id="loginError" role="alert" hidden></p>
       <div class="choices" id="servers" hidden></div>
       <div class="choices" id="characters" hidden></div>
+      <p class="hint community" id="communityLinks" data-community-links="Contact:" hidden></p>
       <p class="hint">No account yet? <a href="/account.html" style="color:var(--gold)">Create one</a> (free coins included). Test accounts: test300 / test300. New here? <a href="#" id="loginGuide" style="color:var(--gold)">Read the guide</a>.</p>
     </form>
   </div>
