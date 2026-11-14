@@ -244,6 +244,8 @@ export interface AppearanceItem {
   glowLevel?: number;
   excellent?: boolean;
   ancient?: boolean;
+  /** The helper's variant (a Fenrir's colour: 0 red, 1 black, 2 blue, 3 gold). */
+  variant?: number;
 }
 
 export type EquipmentSlotName = 'rightHand' | 'leftHand' | 'helm' | 'armor' | 'pants' | 'gloves' | 'boots' | 'wings' | 'pet';
@@ -270,6 +272,15 @@ function plainItem(bytes: ArrayLike<number>, at: number): AppearanceItem | null 
   return { group, number };
 }
 
+// The helper slot: bits 1-3 of the first byte carry the variant (ReadEquipmentExtended's HelperVariant,
+// the number masked to MAX_ITEM_INDEX - 1).
+const HELPER_NUMBER_MASK = 0x1ff;
+function helperItem(bytes: ArrayLike<number>, at: number): AppearanceItem | null {
+  const item = plainItem(bytes, at);
+  if (!item) return null;
+  return { group: item.group, number: item.number & HELPER_NUMBER_MASK, variant: (bytes[at] & 0x0e) >> 1 };
+}
+
 // the server's extended appearance (AppearanceSerializerExtended, 27 bytes), which it
 // sends to the desktop client in character lists and when players come into view.
 export function parseAppearance(bytes: ArrayLike<number> | null | undefined): Appearance {
@@ -286,7 +297,7 @@ export function parseAppearance(bytes: ArrayLike<number> | null | undefined): Ap
       gloves: shinyItem(bytes, items + 15),
       boots: shinyItem(bytes, items + 18),
       wings: plainItem(bytes, items + 21),
-      pet: plainItem(bytes, items + 23),
+      pet: helperItem(bytes, items + 23),
     },
   };
 }

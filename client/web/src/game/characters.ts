@@ -8,6 +8,8 @@ import { sampleHeight, sampleLight } from '../terrain.js';
 import { describeMonster, MonsterAction } from './monsterData.js';
 import { itemModel, ItemGroup } from './items.js';
 import { addItemGlow } from './itemGlow.js';
+import { createCompanions, isDarkRaven } from './pets.js';
+import type { Companion, CompanionOwner } from './pets.js';
 import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
 import type { Vec3 } from '../formats.js';
 import type { GeometryPart } from '../bmd.js';
@@ -28,6 +30,8 @@ export interface CharacterWorld {
   light: Float32Array;
   /** Terrain flags per cell (TerrainFlag). */
   flags: ArrayLike<number>;
+  /** The map's number (pets and mounts look different on some maps). */
+  mapNumber?: number;
 }
 
 /** The animation actions a character plays when standing and walking. */
@@ -167,7 +171,8 @@ export class Attachment {
 }
 
 export async function createAttachments(equipment?: EquipmentAppearance | null): Promise<Attachment[]> {
-  const slots = (['rightHand', 'leftHand', 'wings'] as const).filter((slot) => equipment?.[slot]);
+  // The Dark Raven in a hand flies next to its owner instead (pets.ts).
+  const slots = (['rightHand', 'leftHand', 'wings'] as const).filter((slot) => equipment?.[slot] && !isDarkRaven(equipment[slot]));
   const attachments = await Promise.all(slots.map(async (slot) => {
     const item = equipment![slot]!; // the filter keeps the worn slots
     try {
@@ -229,6 +234,8 @@ export class Character {
   equipment?: EquipmentAppearance;
   /** An animation played once over the standing or walking one (an attack, getting hit, dying). */
   oneShot: { action: number; keysPerSecond: number; hold: boolean } | null = null;
+  /** Pets and mounts next to it (the helper slot, the Dark Raven), drawn beside its group. */
+  companions: Companion[] = [];
   /** Life left as a share (0-1) from the last hit the server reported; -1 while unknown. */
   healthStatus = -1;
   /** Set once the server reported its death: the death animation holds its last key. */
@@ -258,6 +265,22 @@ export class Character {
     this.weaponsOnBack = false;
     this.holdWeapons = false; // the wardrobe can show weapons in the hands in town
     this.clock = 0;
+    // Companions live beside the character in the map's group: they come and go with it.
+    this.group.addEventListener('added', () => { for (const companion of this.companions) this.showCompanion(companion); });
+    this.group.addEventListener('removed', () => { for (const companion of this.companions) companion.detach(); });
+  }
+
+  private showCompanion(companion: Companion): void {
+    const parent = this.group.parent;
+    if (!parent) return;
+    parent.add(companion.group);
+    companion.attach();
+  }
+
+  setCompanions(companions: Companion[]): void {
+    for (const companion of this.companions) companion.detach();
+    this.companions = companions;
+    for (const companion of companions) this.showCompanion(companion);
   }
 
   setAttachments(attachments: Attachment[]): void {
@@ -342,6 +365,17 @@ export class Character {
       attachment.place(this.model.matrices, this.weaponsOnBack, this.clock);
       attachment.model.setLight(light, this.clock);
     }
+    if (this.companions.length) this.updateCompanions(dt, world);
+  }
+
+  private updateCompanions(dt: number, world: CharacterWorld): void {
+    const safeZone = (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0;
+    const owner: CompanionOwner = {
+      position: this.position, height: this.group.position.z, angle: this.angle, action: this.action,
+      scale: this.group.scale.x, safeZone, boneMatrices: this.model.matrices, mapNumber: world.mapNumber ?? null,
+      ridesDarkHorse: this.equipment?.pet?.group === 13 && this.equipment.pet.number === 4,
+    };
+    for (const companion of this.companions) companion.update(dt, owner, world.light);
   }
 
   advance(dt: number): void {
@@ -375,13 +409,16 @@ export interface PlayerCharacterOptions {
 }
 
 export async function createPlayerCharacter({ id, name, bodySet, equipment, kind = 'player' }: PlayerCharacterOptions): Promise<Character> {
-  const [model, attachments] = await Promise.all([createPlayerModel(bodySet, equipment), createAttachments(equipment)]);
+  const [model, attachments, companions] = await Promise.all([
+    createPlayerModel(bodySet, equipment), createAttachments(equipment), kind === 'player' ? createCompanions(equipment) : Promise.resolve([]),
+  ]);
   const character = new Character({
     id, name, kind, model,
     actions: { stop: PlayerAction.STOP, walk: PlayerAction.WALK },
     keysPerSecond: (action: number) => playerActionSpeed(action, { ...playerSpeeds, classIndex: Math.max(0, bodySet - 1) }),
   });
   character.setAttachments(attachments);
+  character.setCompanions(companions);
   if (kind === 'player') character.classIndex = Math.max(0, bodySet - 1);
   character.equipment = equipment ?? {};
   return character;

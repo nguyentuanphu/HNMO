@@ -47,7 +47,7 @@ tests and CI for all of it; strict TypeScript build.
 ## 4. Character
 1. ✅ Character window C (`character_info.rml`): stats, adding level-up points (buffs, set/socket options and master level count once those exist).
 2. Running after walking a while (`canRun`, run delays), swimming maps.
-3. Pets and mounts drawn (Guardian Angel, Imp, Dark Horse, Fenrir …), capes as cloth.
+3. 🟡 Pets and mounts drawn (done: Uniria, Dinorant, Dark Horse, Fenrir in its colours ridden; Guardian Angel, Imp, Dark Raven and the pet.bmd pets following; test `pets.spec.ts`). Left: pet attacks on command, zen pick-up by the collector pets, the effects the effect system lacks (see PARITY), capes as cloth.
 
 ## 5. NPCs, shops and quests
 1. 🟡 NPC dialogs (`npc_dialogue.rml`, done), shops (`npc_shop.rml`): buy, sell, repair (done; tax rate, gamble shops left).
