@@ -173,4 +173,13 @@ else
   echo "WARNING: no signing key (HNMO_SIGNING_KEY / HNMO_SIGNING_KEY_FILE) — this is an UNSIGNED dev build; the server will start with an integrity warning."
 fi
 
+# Guard: no source must ever leak into a shared folder. Fail hard if it did.
+echo "Checking that no source leaked into the folder"
+LEAKED="$(find "$OUT" \( -name '*.ts' -o -name '*.cs' -o -name '*.csproj' -o -name '.git' \) -print)"
+if [ -n "$LEAKED" ]; then
+  echo "ERROR: source files leaked into the package — refusing to ship:" >&2
+  echo "$LEAKED" >&2
+  exit 1
+fi
+
 echo "Done: $OUT"
