@@ -45,8 +45,17 @@ interface Placement { x: number; y: number; targetX: number; targetY: number; ro
 /** The player's own character; it may know how to turn to a cell. */
 export type Hero = Character & { faceTo?(cell: Cell): void };
 
-/** How a message shows in the chat: said by someone, or from the server. */
-export type MessageKind = 'chat' | 'system';
+/** How a message shows in the chat: said by someone (in public, to the party, the guild, the alliance, the Gens), whispered, or from the server. */
+export type MessageKind = 'chat' | 'system' | 'party' | 'guild' | 'union' | 'gens' | 'whisper' | 'error';
+
+/** ReceiveChat: the channel prefix says where a line belongs (~ party, @@ alliance, @ guild, $ Gens) and is cut off. */
+export function chatKind(message: string): [MessageKind, string] {
+  if (message.startsWith('~')) return ['party', message.slice(1)];
+  if (message.startsWith('@@')) return ['union', message.slice(2)];
+  if (message.startsWith('@')) return ['guild', message.slice(1)];
+  if (message.startsWith('$')) return ['gens', message.slice(2)];
+  return ['chat', message];
+}
 
 export interface OnlineWorldOptions {
   connection: Connection;
@@ -104,7 +113,7 @@ export class OnlineWorld {
     const { code, subCode } = packetCode(bytes);
     try {
       if (code === Code.MAP_CHANGED && bytes[0] === 0xc3 && subCode === MAP_CHANGED_SUB_CODE) return this.mapChanged(read<MapChangedPacket>('ServerToClient', 'MapChanged', bytes));
-      if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read<ChatMessagePacket>('ServerToClient', 'ChatMessage', bytes); return this.onMessage?.(`${m.Sender}: ${m.Message}`, 'chat'); }
+      if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read<ChatMessagePacket>('ServerToClient', 'ChatMessage', bytes); const [kind, text] = chatKind(m.Message); return this.onMessage?.(`${m.Sender}: ${text}`, kind); }
       // The client reads every notice with the layout of PRECEIVE_NOTICE: type, count, delay, color, speed, text (ReceiveNotice).
       if (code === Code.SERVER_MESSAGE && bytes[0] === 0xc1 && bytes.length > 13) return this.onMessage?.(read<SlideNoticePacket>('ServerToClient', 'SlideNotice', bytes).Message, 'system');
       if (code === Code.ADD_NPCS && bytes[0] === 0xc2) this.addNpcs(read<AddNpcsPacket>('ServerToClient', 'AddNpcsToScope', bytes));

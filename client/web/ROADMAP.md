@@ -62,8 +62,11 @@ menu as RML, the pet trainer, Elpis, seed master / researcher menus and the sock
 harmony restore price), Jewel of Harmony, lucky items, united market.
 
 ## 7. Social
-🟡 Party (`party_list.rml`, done; `party_info.rml` next), guild (`guild_info.rml`, `guild_make.rml`), friends,
-messenger and letters, whisper/party/guild chat, duels, Gens.
+🟡 Party (`party_list.rml`, `party_info.rml`, done), guild (`guild_info.rml`, `guild_make.rml`, done: create,
+join, members and positions, leave / disband / release, alliances, tags over heads), friends, messenger
+and letters (`friend_shell.rml`, `letter_read.rml`, `letter_write.rml`, done), whisper / party / guild
+chat (done). Left: friend chat rooms (the chat server), letter portraits, the guild mark on the chest,
+guild wars and Battle Soccer, duels, Gens.
 
 ## 8. Auto play
 1. ✅ The desktop helper (`mu_helper_*.rml`) — core loop, bar, start/stop, settings windows, buffs, heal, Drain Life, party support and the Dark Raven done (the master skill variants and the Rage Fighter's buffs wait for their casting): hunting range, main and 2 activation skills with
