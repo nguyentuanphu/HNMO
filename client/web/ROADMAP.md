@@ -136,6 +136,12 @@ Order after tonight: the rest of 2, 3, 8, then 5-7, 4, 9, 10, 11.
 
 One background agent at a time, in this order; each with tests, docs, English and Vietnamese texts.
 
+**Every coin reward is set in the admin panel** (the owner, 2026-11-15): for each source (missions,
+online time, milestones, invites, login calendar, bosses, drops, events, rankings, community) an
+on/off switch, the coin type (earned Goblin Points or paid W Coin), the amounts, the chances, the
+daily and per-account caps, and the schedules; changes apply without a restart where possible, and
+the coins history shows every grant.
+
 1. ✅ **Phones** (idea 4): fight button, skill and potion buttons, "more" windows, full screen in
    landscape, the turn hint, the home screen manifest. Still to do: a "Play on your phone" part on
    the website.

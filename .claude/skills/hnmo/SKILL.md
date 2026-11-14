@@ -30,6 +30,8 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - **Decisions in a pop-up:** when a choice is the owner's (e.g. which cash shop items are "power" items), ask with the pop-up question tool when that task comes up, not in a chat message.
 - **Schedule:** a resume task runs every 5 hours from 11:00 Sydney (11, 16, 21, 02, 07); one background agent at a time.
 
+- **Everything the owner may want to tune is in the admin panel:** coin rewards (each source on/off, coin type, amounts, chances, caps, schedules), events, bosses, missions. No hard-coded amounts.
+
 ## How to work
 
 1. Read `CLAUDE.md`, then `client/web/PARITY.md` for what's done and what's next.
