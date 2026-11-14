@@ -9,6 +9,10 @@ when you learn something new about how they work (see the `hnmo` skill).
   commits, pull requests, docs, comments and code, never mention the original
   game, its publisher or the projects this one started from. Keep third-party
   copyright notices and license files as they are (they're legally required).
+- **Name players see:** the owner chose "HenryN Mu Online" (2026-11-14) as the visible game name.
+  It's set in the admin panel (Plugins, "Game name"); the web game reads it (`src/gameName.ts`).
+  Never hard-code a name in visible text: use `gameName()` / `data-game-name`. Code, commits and
+  docs still say HNMO.
 - **Time:** read and report all times in Sydney time (Australia/Sydney).
 - **Same as the desktop:** the web game must do everything the desktop client does, the same
   way. Check each feature against the desktop client's code and data before calling it done.

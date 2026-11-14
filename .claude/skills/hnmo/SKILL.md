@@ -111,3 +111,13 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   can't be re-shared). No license => default 10. Provide a signing command the owner runs locally.
 - Usage: the owner conserves usage (5-hour reset windows). Run at most ONE background agent at a time;
   prefer doing work directly. A recurring trigger resumes at 8pm Sydney and every 5h (01,06,11,16,20).
+
+## 2026-11-14 (later)
+- Visible game name: "HenryN Mu Online" by default, changeable in the admin panel (Plugins, "Game name").
+  Web: `gameName()` / `data-game-name`; server: `GameNamePlugIn.GetName(context)`; admin API `api/game-name`.
+- The owner wants the admin panel redesigned (better looking) and every game setting editable there.
+- MUVIETNAM2 can be used for assets the game data is missing (99 sounds came from it); extract only
+  the files needed, never run anything from it.
+- Deploying the server to the test folder: `dotnet publish Startup -c Release -r linux-x64 --self-contained
+  -o /home/hnmo/HNMO-clip/server` (keep its ConnectionSettings.xml); copying loose DLLs and deps.json from a
+  plain build breaks the self-contained start ("Could not resolve CoreCLR path").
