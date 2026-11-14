@@ -44,6 +44,7 @@ import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
 import { MiniMap } from './ui/miniMap.js';
 import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
+import { PlayerActions } from './game/combatLook.js';
 import { installTouchControls } from './ui/touchControls.js';
 import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
@@ -96,6 +97,7 @@ export interface GameState {
   trade?: Trade;
   chaosMachine?: ChaosMachine;
   miniMap?: MiniMap;
+  connection?: Connection;
   cooldowns?: typeof skillCooldowns;
   /** The camera's turn and distance (the mouse and the touch controls change them). */
   view?: { yaw: number; distance: number };
@@ -521,6 +523,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
   const connection = await login(settings.relay, address, settings.username, settings.password);
+  state.connection = connection; // tests feed recorded packets through it (dispatch)
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
   await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData(), loadBuffData()]);
@@ -930,6 +933,26 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   inventory.onChange(() => { hud.refreshItemSlots(); hud.refreshSkills(); });
   hotkeys.onChange(() => hud.refreshItemSlots());
   void hud.open();
+  // ReceiveQuestPrize (LegacyQuestReward, C1 A3): the class change quests' rewards — level-up
+  // points (200, 202) for the hero; a class change (201-203) salutes; all of them light up the player.
+  connection.onPacket((bytes) => {
+    if (bytes[0] !== 0xc1 || bytes[2] !== 0xa3 || bytes.length < 7) return;
+    const id = ((bytes[3] << 8) | bytes[4]) & 0x7fff, reward = bytes[5], count = bytes[6];
+    if (reward < 200 || reward > 203) return;
+    const who = id === online.playerId ? online.hero : online.characters.get(id);
+    if (!who) return;
+    if (who === online.hero && (reward === 200 || reward === 202)) stats.addLevelUpPoints(count);
+    if (reward !== 200) who.playOnce(PlayerActions.SALUTE1);
+    const owner = ownerFromCharacter(who);
+    const up = owner.position.clone();
+    up.z += 200;
+    for (let i = 0; i < 15; i++) {
+      effects.createSprite('light', owner.position.clone().setZ(owner.position.z + 40 + i * 12), 1.5, new THREE.Vector3(1, 0.9, 0.6));
+      if (reward !== 200) effects.createSprite('shiny2', up, 1.2, new THREE.Vector3(1, 0.9, 0.6));
+    }
+    effects.createEffect('magicGround2', owner.position, owner.angle, new THREE.Vector3(1, 1, 1), 0, owner);
+    sounds.audio.play('SOUND_CHANGE_UP');
+  });
   // The party: invitations, the member list, /party.
   const party = new Party(connection, {
     confirm: (text) => confirmInGame(text),

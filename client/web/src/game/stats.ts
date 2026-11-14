@@ -67,6 +67,12 @@ export class CharacterStats implements StatValues {
     for (const listener of this.listeners) listener(change, detail);
   }
 
+  /** Level-up points a reward gave (the class change quests' LegacyQuestReward). */
+  addLevelUpPoints(points: number): void {
+    this.levelUpPoints += points;
+    this.changed('stats');
+  }
+
   handle(bytes: Uint8Array): void {
     if (bytes[0] === 0xc1 && bytes[2] === 0x26 && bytes[3] === 0xff) {
       const p = read('ServerToClient', 'CurrentStatsExtended', bytes);
