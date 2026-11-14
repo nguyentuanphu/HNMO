@@ -5,7 +5,11 @@
 namespace HNMO.Web.Tests.Pages;
 
 using System.Text.Json.Nodes;
+using System.Globalization;
 using System.Threading;
+using Bunit;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
@@ -14,7 +18,10 @@ using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
 using HNMO.Web.AdminPanel.Pages;
+using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
+using HNMO.Web.Shared.Components.Toast;
+using HNMO.Web.Tests.Mcp;
 
 /// <summary>
 /// Tests the logic of the admin panel's "HNMO skills" page (<see cref="HnmoSkillService"/>) and of setting and
@@ -210,6 +217,38 @@ public class HnmoSkillServiceTests
         Assert.That(offline.Success, Is.True);
         Assert.That(offline.Text, Does.Contain("removed").And.Contain("next login"));
         Assert.That(HnmoSkills.Describe(new HnmoSkillChangeResult(HnmoSkillChangeStatus.AccountBusy, false), "Hero", "Charge").Success, Is.False);
+    }
+
+    /// <summary>
+    /// The page shows the four skills of the character; "Grant" on the D skill teaches it and the page says so.
+    /// </summary>
+    [Test]
+    public void PageGrantsTheSkill()
+    {
+        var previousCulture = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
+        try
+        {
+            using var context = new BunitContext();
+            context.Services.AddSingleton(this._service);
+            context.Services.AddSingleton(AdminOperationTestServices.CreateExecutor());
+            context.Services.AddSingleton(Mock.Of<IToastService>());
+            context.Services.AddSingleton(Mock.Of<ILogger<HnmoSkills>>());
+            context.ComponentFactories.AddStub<HNMO.Web.Shared.Components.Breadcrumb>();
+
+            var cut = context.Render<HnmoSkills>(parameters => parameters.Add(p => p.LoginName, "knight"));
+            cut.WaitForAssertion(() => Assert.That(cut.FindAll("tr[data-skill]"), Has.Count.EqualTo(4)));
+            Assert.That(cut.Markup, Does.Contain(Resources.HnmoSkillsOffline));
+
+            cut.Find("tr[data-skill='703'] button").Click();
+
+            cut.WaitForAssertion(() => Assert.That(cut.Find("#hnmo-skills-result").TextContent, Does.Contain("Hero now has the skill Charge (703).")));
+            Assert.That(cut.Find("tr[data-skill='703'] button").TextContent, Is.EqualTo(Resources.HnmoSkillsRemove));
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = previousCulture;
+        }
     }
 
     /// <summary>
