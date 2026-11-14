@@ -4,6 +4,8 @@
 
 import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
 import type { Party } from '../game/party.js';
+import { fitTextPx, nativeTextPx } from './nativeText.js';
+import { textWidth } from '../game/questData.js';
 
 interface Card {
   index: number; name: string; name_text_px: number; leader: boolean; absent: boolean; defense_buff: boolean;
@@ -58,7 +60,8 @@ export class PartyList {
     this.model.cards = this.party.members.map((member, index) => {
       const absent = !this.actions.inSight(member.name);
       return {
-        index, name: member.name, name_text_px: 12, leader: index === 0, absent, defense_buff: false,
+        // NativeTextPxInBox: the name shrunk to its box (48 units for the leader, 58 for the others).
+        index, name: member.name, name_text_px: fitTextPx(nativeTextPx(), textWidth(member.name), index === 0 ? 48 : 58), leader: index === 0, absent, defense_buff: false,
         selected: !absent && this.hovered === index, show_leave: this.party.canLeave(index, this.actions.heroName),
         health_length: (Math.min(HEALTH_STEPS, Math.max(0, member.healthStep)) / HEALTH_STEPS) * HEALTH_BAR_WIDTH,
       };

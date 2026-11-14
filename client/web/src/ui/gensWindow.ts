@@ -11,7 +11,7 @@ import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDoc
 import { divideStringByPixel, textWidth } from '../game/questData.js';
 import { GENS_DUPRIAN, GENS_VANERT, GensText, gensMarkCell, gensTitle, type Gens } from '../game/gens.js';
 import type { Character } from '../game/characters.js';
-import { fitTextPx, nativeTextPx } from './nativeText.js';
+import { FONT_FAMILY, fitTextPx, nativeTextPx } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 const TEXT_PX = 12;
@@ -151,7 +151,7 @@ export class GensMarks {
     Object.assign(this.tag.style, { position: 'fixed', zIndex: '6', pointerEvents: 'none', display: 'none', transform: 'translate(-50%, -100%)' });
     this.name = document.createElement('div');
     Object.assign(this.name.style, {
-      background: 'rgba(0, 0, 0, 0.6)', color: '#fff', font: 'bold 12px Tahoma, Arial, sans-serif', padding: '1px 4px', whiteSpace: 'nowrap',
+      background: 'rgba(0, 0, 0, 0.6)', color: '#fff', font: `bold ${nativeTextPx()}px ${FONT_FAMILY}, sans-serif`, padding: '1px 4px', whiteSpace: 'nowrap',
     });
     this.mark = document.createElement('div');
     this.mark.className = 'gens-mark';

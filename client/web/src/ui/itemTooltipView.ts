@@ -2,12 +2,11 @@
 // game/itemTooltip.ts in the game's tooltip document (tooltip.rml), centred text in a black box
 // centred on the item, below it, or above it when there's no room below (RmlTooltip's Place()).
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { nativeLineHeightPx, nativeTextPx, typographyScale } from './nativeText.js';
 import { loadTooltipData, tooltipLines, type TooltipCharacter, type TooltipLine } from '../game/itemTooltip.js';
 import type { Item } from '../game/inventory.js';
 
-const TEXT_UNITS = 12;        // the tooltip's text size in reference pixels
-const LINE_UNITS = 15;        // a row's advance
 const PADDING_UNITS = 2;      // RmlTooltip's kNativePaddingUnits, per side
 const BORDER_UNITS = 1;       // RmlTooltip's kNativeBorderUnits
 
@@ -73,17 +72,19 @@ export class ItemTooltipView {
     this.shownFor = owner;
     const doc = await this.document();
     if (this.shownFor !== owner) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    // ApplyNativeMetrics: the native text size and line height, the frame in typography units.
+    const scale = typographyScale();
     const panel = doc.$('#tooltip_panel');
     if (!panel) return;
+    const linePx = Math.round(nativeLineHeightPx() / scale) * scale;
     Object.assign(panel.style, {
-      fontSize: `${TEXT_UNITS * scale}px`,
+      fontSize: `${nativeTextPx()}px`,
       width: 'max-content',
       padding: `0 ${PADDING_UNITS * scale}px`,
       border: `${BORDER_UNITS * scale}px solid #000`,
     });
-    panel.style.setProperty('--line-px', `${LINE_UNITS * scale}px`);
-    panel.style.setProperty('--bold-line-px', `${LINE_UNITS * scale}px`);
+    panel.style.setProperty('--line-px', `${linePx}px`);
+    panel.style.setProperty('--bold-line-px', `${linePx}px`);
     this.model.lines = lines.map(row);
     this.model.pos_x = -10000;
     doc.update();
