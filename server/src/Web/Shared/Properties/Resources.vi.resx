@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Loading" xml:space="preserve">
+    <value>Đang tải ...</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="TargetMap" xml:space="preserve">
+    <value>Bản đồ đích</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>Đích</value>
+  </data>
+  <data name="SelectedMap" xml:space="preserve">
+    <value>Bản đồ đã chọn</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="Toolbar" xml:space="preserve">
+    <value>Thanh công cụ</value>
+  </data>
+  <data name="CreationGroup" xml:space="preserve">
+    <value>Nhóm tạo</value>
+  </data>
+  <data name="ControlGroup" xml:space="preserve">
+    <value>Nhóm điều khiển</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Gỡ bỏ</value>
+  </data>
+  <data name="TerrainOf" xml:space="preserve">
+    <value>Địa hình của {0}</value>
+  </data>
+  <data name="SelectedObject" xml:space="preserve">
+    <value>Đối tượng đã chọn</value>
+  </data>
+  <data name="AncientOptionLevel" xml:space="preserve">
+    <value>Cấp dòng thần</value>
+  </data>
+  <data name="Bonus" xml:space="preserve">
+    <value>Thưởng</value>
+  </data>
+  <data name="OptionLevel" xml:space="preserve">
+    <value>Cấp dòng</value>
+  </data>
+  <data name="HasGuardianOption" xml:space="preserve">
+    <value>Có dòng Guardian (PvP cấp 380)</value>
+  </data>
+  <data name="SocketNumber" xml:space="preserve">
+    <value>Lỗ socket {0}</value>
+  </data>
+  <data name="AccountCreationParameters_LoginName_Name" xml:space="preserve">
+    <value>Tên đăng nhập</value>
+  </data>
+  <data name="AccountCreationParameters_Password_Name" xml:space="preserve">
+    <value>Mật khẩu</value>
+  </data>
+  <data name="AccountCreationParameters_SecurityCode_Name" xml:space="preserve">
+    <value>Mã bảo mật</value>
+  </data>
+  <data name="AccountCreationParameters_EMail_Name" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="AccountCreationParameters_State_Name" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="UserCreationParameters_LoginName_Name" xml:space="preserve">
+    <value>Tên người dùng</value>
+  </data>
+  <data name="UserCreationParameters_Password_Name" xml:space="preserve">
+    <value>Mật khẩu</value>
+  </data>
+  <data name="TheValueMustNotContain" xml:space="preserve">
+    <value>{0}: Giá trị không được chứa "{1}".</value>
+  </data>
+  <data name="PleaseSelectItemDefinition" xml:space="preserve">
+    <value>&lt;Hãy chọn một định nghĩa&gt;</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Nhân bản</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Lọc</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Tìm kiếm</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Không có kết quả</value>
+  </data>
+  <data name="Monster" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="TargetMaps" xml:space="preserve">
+    <value>Bản đồ đích</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="SpawnRules" xml:space="preserve">
+    <value>Quy tắc xuất hiện</value>
+  </data>
+  <data name="SpawnOnAllSelectedMaps" xml:space="preserve">
+    <value>Xuất hiện trên mọi bản đồ đã chọn</value>
+  </data>
+  <data name="SpawnOnAllSelectedMapsTooltip" xml:space="preserve">
+    <value>Nếu bật, quái xuất hiện trên mọi bản đồ đã chọn; nếu tắt, chọn ngẫu nhiên một bản đồ.</value>
+  </data>
+  <data name="AnnounceDeath" xml:space="preserve">
+    <value>Thông báo khi chết</value>
+  </data>
+  <data name="AnnounceDeathTooltip" xml:space="preserve">
+    <value>Gửi thông báo toàn server khi loại quái này bị hạ.</value>
+  </data>
+  <data name="AddValue" xml:space="preserve">
+    <value>Thêm giá trị</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Đặt lại thu phóng (100%)</value>
+  </data>
+  <data name="ToggleGrid" xml:space="preserve">
+    <value>Bật/tắt lưới</value>
+  </data>
+  <data name="NoSelection" xml:space="preserve">
+    <value>Chưa chọn gì</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Hoàn tác</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="TypeFilter" xml:space="preserve">
+    <value>Lọc theo loại</value>
+  </data>
+  <data name="Monsters" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="Npcs" xml:space="preserve">
+    <value>NPC</value>
+  </data>
+  <data name="Gates" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Khác</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="DiscardEntryTitle" xml:space="preserve">
+    <value>Bỏ mục đang tạo?</value>
+  </data>
+  <data name="DiscardEntryQuestion" xml:space="preserve">
+    <value>Bạn đang tạo một '{0}'. Bạn có muốn bỏ nó và bắt đầu mục mới?</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Làm mới</value>
+  </data>
+  <data name="ToggleTheme" xml:space="preserve">
+    <value>Đổi giao diện</value>
+  </data>
+  <data name="SwitchToDarkMode" xml:space="preserve">
+    <value>Chuyển sang giao diện tối</value>
+  </data>
+  <data name="SwitchToLightMode" xml:space="preserve">
+    <value>Chuyển sang giao diện sáng</value>
+  </data>
+  <data name="MapEditorShortcutPan" xml:space="preserve">
+    <value>Bấm vào chỗ trống và kéo để di chuyển bản đồ</value>
+  </data>
+  <data name="MapEditorShortcutDrag" xml:space="preserve">
+    <value>CTRL + bấm vào đối tượng để kéo nó</value>
+  </data>
+  <data name="MapEditorShortcutCycle" xml:space="preserve">
+    <value>SHIFT + bấm để lần lượt chọn các đối tượng chồng nhau</value>
+  </data>
+  <data name="MapEditorShortcutDelete" xml:space="preserve">
+    <value>DELETE để xóa đối tượng đã chọn</value>
+  </data>
+  <data name="ExportMap" xml:space="preserve">
+    <value>Xuất bản đồ</value>
+  </data>
+  <data name="ImportMap" xml:space="preserve">
+    <value>Nhập bản đồ</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Có</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="UnknownSkill" xml:space="preserve">
+    <value>Kỹ năng không rõ</value>
+  </data>
+  <data name="AddSkill" xml:space="preserve">
+    <value>Thêm kỹ năng</value>
+  </data>
+  <data name="MasterSkillTree" xml:space="preserve">
+    <value>Cây kỹ năng Master</value>
+  </data>
+  <data name="SpentMasterPoints" xml:space="preserve">
+    <value>Điểm đã dùng: {0}</value>
+  </data>
+  <data name="ResetMasterSkillTree" xml:space="preserve">
+    <value>Đặt lại cây kỹ năng Master</value>
+  </data>
+  <data name="ResetMasterSkillTreeQuestion" xml:space="preserve">
+    <value>Bạn thật sự muốn gỡ mọi kỹ năng Master của nhân vật?</value>
+  </data>
+  <data name="ResetMasterSkillTreeAndRefundQuestion" xml:space="preserve">
+    <value>Bạn thật sự muốn gỡ mọi kỹ năng Master của nhân vật? {0} điểm đã dùng sẽ được cộng lại vào điểm Master.</value>
+  </data>
+  <data name="MasterSkillTooltip" xml:space="preserve">
+    <value>{0} (#{1})
+Cấp: {2} - {3}</value>
+  </data>
+  <data name="MasterSkillRequirementsNotFulfilled" xml:space="preserve">
+    <value>Cảnh báo: chưa đủ điều kiện học kỹ năng này. Các kỹ năng yêu cầu và một kỹ năng ở bậc trước cần cấp ít nhất {0}.</value>
+  </data>
+  <data name="MasterSkillRequirementsNotYetFulfilled" xml:space="preserve">
+    <value>Cần các kỹ năng yêu cầu và một kỹ năng ở bậc trước có cấp ít nhất {0}.</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Tạo mới</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Sửa</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Đổi</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="Collapse" xml:space="preserve">
+    <value>Thu gọn</value>
+  </data>
+  <data name="ExpandItems" xml:space="preserve">
+    <value>Mở rộng ({0} mục)</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Trước</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Sau</value>
+  </data>
+  <data name="Navigation" xml:space="preserve">
+    <value>Điều hướng</value>
+  </data>
+  <data name="Breadcrumb" xml:space="preserve">
+    <value>Đường dẫn</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Trang chủ</value>
+  </data>
+  <data name="PageNumber" xml:space="preserve">
+    <value>Trang {0}</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Tải về</value>
+  </data>
+  <data name="LoadFile" xml:space="preserve">
+    <value>Tải tệp lên</value>
+  </data>
+  <data name="CurrentByteSize" xml:space="preserve">
+    <value>Kích thước hiện tại: {0} byte</value>
+  </data>
+  <data name="EmptyBinaryValue" xml:space="preserve">
+    <value>Hiện đang trống. Hãy nhập giá trị dạng chuỗi hex hoặc tải tệp lên.</value>
+  </data>
+  <data name="NewPasswordPlaceholder" xml:space="preserve">
+    <value>Mật khẩu mới ...</value>
+  </data>
+  <data name="RepeatPasswordPlaceholder" xml:space="preserve">
+    <value>Nhập lại mật khẩu ...</value>
+  </data>
+  <data name="PasswordMinimumLength" xml:space="preserve">
+    <value>Nhập ít nhất 3 ký tự.</value>
+  </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>Mật khẩu không khớp.</value>
+  </data>
+  <data name="ExtensionNumber" xml:space="preserve">
+    <value>Mở rộng {0}</value>
+  </data>
+  <data name="PersonalStore" xml:space="preserve">
+    <value>Cửa hàng cá nhân</value>
+  </data>
+  <data name="SelectType" xml:space="preserve">
+    <value>Chọn {0}</value>
+  </data>
+  <data name="CreateType" xml:space="preserve">
+    <value>Tạo {0}</value>
+  </data>
+  <data name="NoMoreAvailable" xml:space="preserve">
+    <value>Không còn mục nào</value>
+  </data>
+  <data name="AddPlaceholder" xml:space="preserve">
+    <value>Thêm ...</value>
+  </data>
+  <data name="Object" xml:space="preserve">
+    <value>Đối tượng</value>
+  </data>
+  <data name="ExitGateSelector" xml:space="preserve">
+    <value>Chọn cổng ra</value>
+  </data>
+  <data name="NumberRangeError" xml:space="preserve">
+    <value>Trường {0} phải là số từ {1} đến {2}.</value>
+  </data>
+  <data name="InvalidField" xml:space="preserve">
+    <value>Trường {0} không hợp lệ.</value>
+  </data>
+  <data name="ItemBonusAtLevel" xml:space="preserve">
+    <value>+{0} {1} (cấp {2})</value>
+  </data>
+  <data name="ItemEdit_ItemSlot" xml:space="preserve">
+    <value>Ô vật phẩm</value>
+  </data>
+  <data name="ItemEdit_Definition" xml:space="preserve">
+    <value>Định nghĩa</value>
+  </data>
+  <data name="ItemEdit_Level" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="ItemEdit_Durability" xml:space="preserve">
+    <value>Độ bền</value>
+  </data>
+  <data name="ItemEdit_Amount" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="ItemEdit_PetExperience" xml:space="preserve">
+    <value>Kinh nghiệm thú cưng</value>
+  </data>
+  <data name="ItemEdit_HasSkill" xml:space="preserve">
+    <value>Có kỹ năng</value>
+  </data>
+  <data name="ItemEdit_HasLuck" xml:space="preserve">
+    <value>Có may mắn</value>
+  </data>
+  <data name="ItemEdit_AncientSet" xml:space="preserve">
+    <value>Bộ thần</value>
+  </data>
+  <data name="ItemEdit_ExcellentOptions" xml:space="preserve">
+    <value>Dòng excellent</value>
+  </data>
+  <data name="ItemEdit_WingOptions" xml:space="preserve">
+    <value>Dòng cánh</value>
+  </data>
+  <data name="ItemEdit_NormalOption" xml:space="preserve">
+    <value>Dòng cộng thêm</value>
+  </data>
+  <data name="ItemEdit_HasOption" xml:space="preserve">
+    <value>Có dòng cộng thêm</value>
+  </data>
+  <data name="ItemEdit_HarmonyOption" xml:space="preserve">
+    <value>Dòng harmony</value>
+  </data>
+  <data name="ItemEdit_SocketCount" xml:space="preserve">
+    <value>Số lỗ socket</value>
+  </data>
+  <data name="ItemEdit_SocketBonusOption" xml:space="preserve">
+    <value>Dòng thưởng socket</value>
+  </data>
+  <data name="ItemEdit_FenrirOption" xml:space="preserve">
+    <value>Dòng Fenrir</value>
+  </data>
+  <data name="ItemEdit_HasGuardianOption" xml:space="preserve">
+    <value>Có dòng Guardian</value>
+  </data>
+  <data name="WrongFormat" xml:space="preserve">
+    <value>Sai định dạng.</value>
+  </data>
+  <data name="HexFormatError" xml:space="preserve">
+    <value>Sai định dạng. Ví dụ đúng: AB 03 DC</value>
+  </data>
+  <data name="IntegerListFormatError" xml:space="preserve">
+    <value>Sai định dạng. Ví dụ đúng: 1;2;3</value>
+  </data>
+  <data name="UnknownTimeZone" xml:space="preserve">
+    <value>Không rõ múi giờ '{0}'. Để trống cho UTC hoặc chọn một gợi ý, ví dụ Asia/Ho_Chi_Minh.</value>
+  </data>
+  <data name="MillisecondsHint" xml:space="preserve">
+    <value>{0} tính bằng mili giây</value>
+  </data>
+  <data name="FileLoaded" xml:space="preserve">
+    <value>Đã tải {0} với {1} byte.</value>
+  </data>
+  <data name="PaginationItems" xml:space="preserve">
+    <value>{0} mục</value>
+  </data>
+  <data name="PaginationPage" xml:space="preserve">
+    <value>Trang {0} / {1}</value>
+  </data>
+  <data name="FirstPage" xml:space="preserve">
+    <value>Trang đầu</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>Trang cuối</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Trường {0} phải là số.</value>
+  </data>
+  <data name="MonsterLabel" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="MapsLabel" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="CharacterCreationHint" xml:space="preserve">
+    <value>Nhân vật nhận các chỉ số của lớp với giá trị khởi đầu, bắt đầu ở bản đồ nhà của lớp, có túi đồ trống và cấu hình phím mặc định. Sau đó các plugin "Character created" đang bật sẽ chạy, cấp cho nó ví dụ vật phẩm và kỹ năng ban đầu, giống trong game.</value>
+  </data>
+  <data name="CharacterNameRequired" xml:space="preserve">
+    <value>Hãy nhập tên.</value>
+  </data>
+  <data name="CharacterNameInvalid" xml:space="preserve">
+    <value>Tên không khớp mẫu đã cấu hình: {0}</value>
+  </data>
+  <data name="CharacterClassRequired" xml:space="preserve">
+    <value>Hãy chọn lớp nhân vật.</value>
+  </data>
+  <data name="CharacterClassWithoutHomeMap" xml:space="preserve">
+    <value>Lớp nhân vật này không có bản đồ nhà, nên nhân vật sẽ không có vị trí bắt đầu.</value>
+  </data>
+  <data name="NoFreeCharacterSlot" xml:space="preserve">
+    <value>Tài khoản không còn ô nhân vật trống. Một tài khoản có tối đa {0} nhân vật.</value>
+  </data>
+  <data name="CharacterCreatedPlugInsFailed" xml:space="preserve">
+    <value>Đã tạo nhân vật, nhưng các plugin "Character created" bị lỗi, nên có thể thiếu vật phẩm hoặc kỹ năng ban đầu: {0}</value>
+  </data>
+  <data name="GameServerSelection_AllServersHint" xml:space="preserve">
+    <value>Không chọn nghĩa là sự kiện chạy trên mọi game server, kể cả server thêm sau này. Dùng Chọn tất cả để chỉ chọn các server hiện có.</value>
+  </data>
+  <data name="GameServerSelection_SelectAll" xml:space="preserve">
+    <value>Chọn tất cả</value>
+  </data>
+  <data name="GameServerSelection_Clear" xml:space="preserve">
+    <value>Bỏ chọn</value>
+  </data>
+  <data name="GameServerSelection_NoServers" xml:space="preserve">
+    <value>Không có game server nào.</value>
+  </data>
+  <data name="GameServerSelection_PvpBadge" xml:space="preserve">
+    <value>PvP</value>
+  </data>
+  <data name="GameServerSelection_PveBadge" xml:space="preserve">
+    <value>PvE</value>
+  </data>
+  <data name="GameServerSelection_UnknownServer" xml:space="preserve">
+    <value>Máy chủ {0} (không còn tồn tại)</value>
+  </data>
+  <data name="GameServerSelection_LoadFailed" xml:space="preserve">
+    <value>Không tải được danh sách game server. Đóng hộp thoại và thử lại.</value>
+  </data>
+  <data name="TerrainEditorTerrain" xml:space="preserve">
+    <value>Địa hình</value>
+  </data>
+  <data name="DefaultTerrain" xml:space="preserve">
+    <value>Địa hình mặc định</value>
+  </data>
+  <data name="TerrainTool" xml:space="preserve">
+    <value>Công cụ</value>
+  </data>
+  <data name="TerrainToolBrush" xml:space="preserve">
+    <value>Cọ</value>
+  </data>
+  <data name="TerrainToolRectangle" xml:space="preserve">
+    <value>Hình chữ nhật</value>
+  </data>
+  <data name="TerrainToolFill" xml:space="preserve">
+    <value>Tô kín</value>
+  </data>
+  <data name="TerrainBrushSize" xml:space="preserve">
+    <value>Cỡ cọ</value>
+  </data>
+  <data name="TerrainEditMode" xml:space="preserve">
+    <value>Chế độ</value>
+  </data>
+  <data name="TerrainEditModeAdd" xml:space="preserve">
+    <value>Thêm thuộc tính</value>
+  </data>
+  <data name="TerrainEditModeRemove" xml:space="preserve">
+    <value>Bỏ thuộc tính</value>
+  </data>
+  <data name="TerrainEditModeReplace" xml:space="preserve">
+    <value>Thay mọi thuộc tính</value>
+  </data>
+  <data name="TerrainAttributes" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="TerrainWalkable" xml:space="preserve">
+    <value>Đi được</value>
+  </data>
+  <data name="TerrainOtherAttributes" xml:space="preserve">
+    <value>Thuộc tính khác</value>
+  </data>
+  <data name="TerrainLegend" xml:space="preserve">
+    <value>Chú thích</value>
+  </data>
+  <data name="Redo" xml:space="preserve">
+    <value>Làm lại</value>
+  </data>
+  <data name="ImportTerrain" xml:space="preserve">
+    <value>Nhập tệp địa hình</value>
+  </data>
+  <data name="ImportTerrainHint" xml:space="preserve">
+    <value>Nhận tệp *.att của máy chủ và tệp EncTerrain*.att của client.</value>
+  </data>
+  <data name="DownloadServerTerrain" xml:space="preserve">
+    <value>Tệp địa hình máy chủ</value>
+  </data>
+  <data name="DownloadServerTerrainHint" xml:space="preserve">
+    <value>Tải địa hình về dạng *.att của máy chủ gốc.</value>
+  </data>
+  <data name="DownloadClientTerrain" xml:space="preserve">
+    <value>Tệp địa hình client</value>
+  </data>
+  <data name="DownloadClientTerrainHint" xml:space="preserve">
+    <value>Tải tệp địa hình đã mã hóa của client game. Đặt nó thành Data\World{0}\EncTerrain{0}.att trong client.</value>
+  </data>
+  <data name="InvalidTerrainFile" xml:space="preserve">
+    <value>Tệp này không phải tệp địa hình của máy chủ hay client.</value>
+  </data>
+  <data name="TerrainImported" xml:space="preserve">
+    <value>Đã nhập tệp địa hình. Bấm Lưu để áp dụng.</value>
+  </data>
+  <data name="TerrainEditorShortcutPaint" xml:space="preserve">
+    <value>Bấm chuột trái để sửa ô bằng công cụ đã chọn</value>
+  </data>
+  <data name="TerrainEditorShortcutPan" xml:space="preserve">
+    <value>Bấm chuột phải và kéo để di chuyển địa hình</value>
+  </data>
+  <data name="TerrainEditorShortcutZoom" xml:space="preserve">
+    <value>Lăn chuột để thu phóng</value>
+  </data>
+  <data name="TerrainEditorRestartHint" xml:space="preserve">
+    <value>Địa hình đã đổi được áp dụng vào game sau khi khởi động lại game server. Người chơi cũng cần tệp địa hình client để thấy thay đổi.</value>
+  </data>
+  <data name="TerrainTransferFailed" xml:space="preserve">
+    <value>Không chuyển được địa hình đã sửa: {0}</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Phóng to</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Thu nhỏ</value>
+  </data>
+</root>

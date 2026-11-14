@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="OnlinePlayers" xml:space="preserve">
+    <value>Người chơi online:</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Vị trí</value>
+  </data>
+  <data name="TerrainOf" xml:space="preserve">
+    <value>Địa hình của {0}</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Đang khởi tạo...</value>
+  </data>
+  <data name="NoGameMapsHosted" xml:space="preserve">
+    <value>Chưa có bản đồ nào đang chạy. Bản đồ được tạo khi có người chơi vào.</value>
+  </data>
+  <data name="MapName" xml:space="preserve">
+    <value>Tên bản đồ</value>
+  </data>
+  <data name="PlayerCount" xml:space="preserve">
+    <value>Người chơi</value>
+  </data>
+  <data name="Spectate" xml:space="preserve">
+    <value>Quan sát</value>
+  </data>
+  <data name="PlayerName" xml:space="preserve">
+    <value>Tên người chơi</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Thao tác</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Ngắt kết nối</value>
+  </data>
+  <data name="TemporarilyBan" xml:space="preserve">
+    <value>Khóa tạm thời</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Giới thiệu</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Trang chủ</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="Follow" xml:space="preserve">
+    <value>Theo dõi</value>
+  </data>
+  <data name="Following" xml:space="preserve">
+    <value>Đang theo dõi</value>
+  </data>
+  <data name="SelectPlayer" xml:space="preserve">
+    <value>Chọn người chơi trên bản đồ</value>
+  </data>
+  <data name="AnalyzeTraffic" xml:space="preserve">
+    <value>Phân tích lưu lượng mạng</value>
+  </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Xóa bộ lọc</value>
+  </data>
+  <data name="FilterContains" xml:space="preserve">
+    <value>chứa</value>
+  </data>
+  <data name="FilterEndsWith" xml:space="preserve">
+    <value>kết thúc bằng</value>
+  </data>
+  <data name="FilterMonsters" xml:space="preserve">
+    <value>Lọc quái vật</value>
+  </data>
+  <data name="FilterMonstersPlaceholder" xml:space="preserve">
+    <value>Tên hoặc một phần tên</value>
+  </data>
+  <data name="FilterStartsWith" xml:space="preserve">
+    <value>bắt đầu bằng</value>
+  </data>
+  <data name="MatchingMonsters" xml:space="preserve">
+    <value>{0} quái khớp</value>
+  </data>
+  <data name="NoMatchingMonsters" xml:space="preserve">
+    <value>Không có quái nào khớp trên bản đồ này</value>
+  </data>
+</root>

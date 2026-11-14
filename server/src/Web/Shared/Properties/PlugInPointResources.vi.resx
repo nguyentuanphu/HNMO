@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Sub-Packet Handlers" xml:space="preserve">
+    <value>Xử lý gói tin con</value>
+  </data>
+  <data name="Plugin Container for sub packet handlers which belong to a group." xml:space="preserve">
+    <value>Nhóm plugin xử lý các gói tin con thuộc một nhóm.</value>
+  </data>
+  <data name="Packet Handlers" xml:space="preserve">
+    <value>Xử lý gói tin</value>
+  </data>
+  <data name="Plugin Container for packet handlers." xml:space="preserve">
+    <value>Nhóm plugin xử lý gói tin.</value>
+  </data>
+  <data name="Network Encryption Factories" xml:space="preserve">
+    <value>Mã hóa mạng</value>
+  </data>
+  <data name="Plugins which will be executed when a client connects to a server. It provides network packet encryptors and decryptors for a specific game client version." xml:space="preserve">
+    <value>Plugin chạy khi client kết nối tới máy chủ. Cung cấp bộ mã hóa và giải mã gói tin cho một phiên bản client game.</value>
+  </data>
+  <data name="Data initialization" xml:space="preserve">
+    <value>Khởi tạo dữ liệu</value>
+  </data>
+  <data name="Provides an initialization for initial data." xml:space="preserve">
+    <value>Cung cấp việc khởi tạo dữ liệu ban đầu.</value>
+  </data>
+  <data name="Configuration update" xml:space="preserve">
+    <value>Cập nhật cấu hình</value>
+  </data>
+  <data name="Provides updates for initialized data." xml:space="preserve">
+    <value>Cung cấp bản cập nhật cho dữ liệu đã khởi tạo.</value>
+  </data>
+  <data name="Feature Plugins" xml:space="preserve">
+    <value>Plugin tính năng</value>
+  </data>
+  <data name="Feature plugins can group other plugins and provide a configuration." xml:space="preserve">
+    <value>Plugin tính năng có thể gom các plugin khác và cung cấp cấu hình.</value>
+  </data>
+  <data name="Object removed from map" xml:space="preserve">
+    <value>Đối tượng rời bản đồ</value>
+  </data>
+  <data name="Plugins which will be executed when any object is removed from the game map." xml:space="preserve">
+    <value>Plugin chạy khi một đối tượng bị gỡ khỏi bản đồ.</value>
+  </data>
+  <data name="Item moving" xml:space="preserve">
+    <value>Đang chuyển vật phẩm</value>
+  </data>
+  <data name="Plugins which are called when an item is about to be moved by the player." xml:space="preserve">
+    <value>Plugin chạy khi người chơi sắp chuyển một vật phẩm.</value>
+  </data>
+  <data name="Targeted skill plugins" xml:space="preserve">
+    <value>Kỹ năng đơn mục tiêu</value>
+  </data>
+  <data name="Is called when a target got attacked by a targeted skill." xml:space="preserve">
+    <value>Chạy khi một mục tiêu bị tấn công bằng kỹ năng đơn mục tiêu.</value>
+  </data>
+  <data name="Area skill target filter" xml:space="preserve">
+    <value>Lọc mục tiêu kỹ năng vùng</value>
+  </data>
+  <data name="Plugins which will be executed when an area skill is about to hit its targets. It allows to filter out targets which are out of range." xml:space="preserve">
+    <value>Plugin chạy khi kỹ năng vùng sắp trúng mục tiêu. Cho phép loại bỏ mục tiêu ngoài tầm.</value>
+  </data>
+  <data name="Player spawn gate selection" xml:space="preserve">
+    <value>Chọn cổng xuất hiện của người chơi</value>
+  </data>
+  <data name="Plugins which determine the gate at which a player is spawned." xml:space="preserve">
+    <value>Plugin quyết định cổng nơi người chơi xuất hiện.</value>
+  </data>
+  <data name="Item sold to merchant npc" xml:space="preserve">
+    <value>Bán vật phẩm cho NPC</value>
+  </data>
+  <data name="Is called when an item got sold to a merchant npc." xml:space="preserve">
+    <value>Chạy khi một vật phẩm được bán cho NPC thương nhân.</value>
+  </data>
+  <data name="Character deleted" xml:space="preserve">
+    <value>Nhân vật bị xóa</value>
+  </data>
+  <data name="Is called when a character got deleted." xml:space="preserve">
+    <value>Chạy khi một nhân vật bị xóa.</value>
+  </data>
+  <data name="Player talks to NPC" xml:space="preserve">
+    <value>Người chơi nói chuyện với NPC</value>
+  </data>
+  <data name="Plugins which will be executed when a player talks to an npc." xml:space="preserve">
+    <value>Plugin chạy khi người chơi nói chuyện với NPC.</value>
+  </data>
+  <data name="Object added to map" xml:space="preserve">
+    <value>Đối tượng vào bản đồ</value>
+  </data>
+  <data name="Plugins which will be executed when any object is added to the game map." xml:space="preserve">
+    <value>Plugin chạy khi một đối tượng được thêm vào bản đồ.</value>
+  </data>
+  <data name="Chat message received" xml:space="preserve">
+    <value>Nhận tin nhắn chat</value>
+  </data>
+  <data name="Plugins which will be executed when a chat message arrives." xml:space="preserve">
+    <value>Plugin chạy khi có tin nhắn chat.</value>
+  </data>
+  <data name="Item sold to other player" xml:space="preserve">
+    <value>Bán vật phẩm cho người chơi khác</value>
+  </data>
+  <data name="Is called when an item got sold to another player through the personal store." xml:space="preserve">
+    <value>Chạy khi một vật phẩm được bán cho người chơi khác qua cửa hàng cá nhân.</value>
+  </data>
+  <data name="Attackable moved" xml:space="preserve">
+    <value>Đối tượng tấn công được di chuyển</value>
+  </data>
+  <data name="Plugins which are called when an attackable object moved on the game map." xml:space="preserve">
+    <value>Plugin chạy khi một đối tượng tấn công được di chuyển trên bản đồ.</value>
+  </data>
+  <data name="Item consumed" xml:space="preserve">
+    <value>Đã dùng vật phẩm</value>
+  </data>
+  <data name="Plugins which will be executed when an item got consumed." xml:space="preserve">
+    <value>Plugin chạy khi một vật phẩm đã được dùng.</value>
+  </data>
+  <data name="Attackable got hit" xml:space="preserve">
+    <value>Đối tượng bị đánh trúng</value>
+  </data>
+  <data name="Plugins which will be executed when an attackable object got hit by an attacker." xml:space="preserve">
+    <value>Plugin chạy khi một đối tượng bị kẻ tấn công đánh trúng.</value>
+  </data>
+  <data name="Player gained master level" xml:space="preserve">
+    <value>Người chơi lên cấp Master</value>
+  </data>
+  <data name="Plugins which will be executed when a player gained a master level." xml:space="preserve">
+    <value>Plugin chạy khi người chơi lên một cấp Master.</value>
+  </data>
+  <data name="Attackable got killed" xml:space="preserve">
+    <value>Đối tượng bị hạ</value>
+  </data>
+  <data name="Plugins which will be executed when an attackable object got killed by an attacker." xml:space="preserve">
+    <value>Plugin chạy khi một đối tượng bị kẻ tấn công hạ gục.</value>
+  </data>
+  <data name="Area skill plugins" xml:space="preserve">
+    <value>Kỹ năng vùng</value>
+  </data>
+  <data name="Is called when a target got attacked by an area skill." xml:space="preserve">
+    <value>Chạy khi một mục tiêu bị tấn công bằng kỹ năng vùng.</value>
+  </data>
+  <data name="Player gained experience" xml:space="preserve">
+    <value>Người chơi nhận kinh nghiệm</value>
+  </data>
+  <data name="Plugins which are executed after a player gained experience for a kill." xml:space="preserve">
+    <value>Plugin chạy sau khi người chơi nhận kinh nghiệm từ một lần hạ quái.</value>
+  </data>
+  <data name="Item dropping" xml:space="preserve">
+    <value>Thả vật phẩm</value>
+  </data>
+  <data name="Plugins which are called when an item has been dropped to the ground by the player." xml:space="preserve">
+    <value>Plugin chạy khi người chơi thả một vật phẩm xuống đất.</value>
+  </data>
+  <data name="Item destroyed" xml:space="preserve">
+    <value>Vật phẩm bị hủy</value>
+  </data>
+  <data name="Is called when an item got destroyed, e.g. because it has been consumed or destroyed by the chaos machine or disappeared as item drop." xml:space="preserve">
+    <value>Chạy khi một vật phẩm bị hủy, ví dụ vì đã dùng, bị máy Chaos hủy hoặc biến mất khi nằm trên đất.</value>
+  </data>
+  <data name="Player state changed" xml:space="preserve">
+    <value>Trạng thái người chơi đã đổi</value>
+  </data>
+  <data name="Is called when a player state got changed." xml:space="preserve">
+    <value>Chạy khi trạng thái của người chơi đã thay đổi.</value>
+  </data>
+  <data name="Item bought from merchant npc" xml:space="preserve">
+    <value>Mua vật phẩm từ NPC</value>
+  </data>
+  <data name="Is called when an item got bought from a merchant npc." xml:space="preserve">
+    <value>Chạy khi một vật phẩm được mua từ NPC thương nhân.</value>
+  </data>
+  <data name="Whisper chat message received" xml:space="preserve">
+    <value>Nhận tin nhắn thì thầm</value>
+  </data>
+  <data name="Plugins which will be executed when a whispered chat message arrives." xml:space="preserve">
+    <value>Plugin chạy khi có tin nhắn thì thầm.</value>
+  </data>
+  <data name="Item stacked" xml:space="preserve">
+    <value>Gộp vật phẩm</value>
+  </data>
+  <data name="Plugins which are called when an item has been stacked by the player." xml:space="preserve">
+    <value>Plugin chạy khi người chơi gộp chồng một vật phẩm.</value>
+  </data>
+  <data name="Item moved" xml:space="preserve">
+    <value>Đã chuyển vật phẩm</value>
+  </data>
+  <data name="Plugins which are called when an item has been moved by the player." xml:space="preserve">
+    <value>Plugin chạy khi người chơi đã chuyển một vật phẩm.</value>
+  </data>
+  <data name="Player leveled up" xml:space="preserve">
+    <value>Người chơi lên cấp</value>
+  </data>
+  <data name="Plugins which will be executed when a player leveled up." xml:space="preserve">
+    <value>Plugin chạy khi người chơi lên cấp.</value>
+  </data>
+  <data name="Character created" xml:space="preserve">
+    <value>Nhân vật được tạo</value>
+  </data>
+  <data name="Is called when a character got created." xml:space="preserve">
+    <value>Chạy khi một nhân vật được tạo.</value>
+  </data>
+  <data name="Speedhack Cheat Check" xml:space="preserve">
+    <value>Kiểm tra hack tốc độ</value>
+  </data>
+  <data name="Is called for walk/attack speedhack checks and movement state resets." xml:space="preserve">
+    <value>Chạy để kiểm tra hack tốc độ đi/đánh và đặt lại trạng thái di chuyển.</value>
+  </data>
+  <data name="Item traded" xml:space="preserve">
+    <value>Giao dịch vật phẩm</value>
+  </data>
+  <data name="Is called when an item got traded to another player." xml:space="preserve">
+    <value>Chạy khi một vật phẩm được giao dịch cho người chơi khác.</value>
+  </data>
+  <data name="Item consuming" xml:space="preserve">
+    <value>Đang dùng vật phẩm</value>
+  </data>
+  <data name="Plugins which will be executed when an item is about to get consumed." xml:space="preserve">
+    <value>Plugin chạy khi một vật phẩm sắp được dùng.</value>
+  </data>
+  <data name="Periodic Tasks" xml:space="preserve">
+    <value>Tác vụ định kỳ</value>
+  </data>
+  <data name="Is called in an periodic interval." xml:space="preserve">
+    <value>Chạy theo chu kỳ.</value>
+  </data>
+  <data name="Player state changing" xml:space="preserve">
+    <value>Trạng thái người chơi đang đổi</value>
+  </data>
+  <data name="Is called when a player state changes." xml:space="preserve">
+    <value>Chạy khi trạng thái người chơi thay đổi.</value>
+  </data>
+  <data name="Experience calculation" xml:space="preserve">
+    <value>Tính kinh nghiệm</value>
+  </data>
+  <data name="Plugins which modify the amount of experience which a player gains for a kill." xml:space="preserve">
+    <value>Plugin điều chỉnh lượng kinh nghiệm người chơi nhận khi hạ quái.</value>
+  </data>
+  <data name="Periodic Mini Game Start Plugins" xml:space="preserve">
+    <value>Bắt đầu sự kiện định kỳ</value>
+  </data>
+  <data name="Plugin Container for mini game start plugins, e.g. for chaos castle." xml:space="preserve">
+    <value>Nhóm plugin bắt đầu sự kiện, ví dụ Hỗn Nguyên Lâu.</value>
+  </data>
+  <data name="Chat commands" xml:space="preserve">
+    <value>Lệnh chat</value>
+  </data>
+  <data name="Plugins which will be executed when a chat message arrives with a slash prefix." xml:space="preserve">
+    <value>Plugin chạy khi có tin nhắn chat bắt đầu bằng dấu gạch chéo.</value>
+  </data>
+  <data name="Item consume handlers" xml:space="preserve">
+    <value>Xử lý dùng vật phẩm</value>
+  </data>
+  <data name="Plugins which will be executed to consume an item." xml:space="preserve">
+    <value>Plugin chạy để dùng một vật phẩm.</value>
+  </data>
+  <data name="Item Registration Strategies" xml:space="preserve">
+    <value>Cách đăng ký vật phẩm</value>
+  </data>
+  <data name="Plugins which implement item registration for specific NPCs." xml:space="preserve">
+    <value>Plugin thực hiện việc đăng ký vật phẩm cho các NPC cụ thể.</value>
+  </data>
+  <data name="View PlugIns" xml:space="preserve">
+    <value>Plugin hiển thị</value>
+  </data>
+  <data name="This is a custom plugin point which collects all view plugins which are suitable for a specific game client version." xml:space="preserve">
+    <value>Điểm plugin riêng gom mọi plugin hiển thị phù hợp với một phiên bản client game.</value>
+  </data>
+  <data name="Skill animation counter strategies" xml:space="preserve">
+    <value>Cách đếm hoạt ảnh kỹ năng</value>
+  </data>
+  <data name="Plugins which describe how the game client counts the animations of specific skills." xml:space="preserve">
+    <value>Plugin mô tả cách client game đếm hoạt ảnh của các kỹ năng.</value>
+  </data>
+</root>

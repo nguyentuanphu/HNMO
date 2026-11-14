@@ -7,11 +7,11 @@
       {
         if (object.Equals(culture.Name, this.SelectedCultureCode))
         {
-          <option value="@culture.Name" selected="selected">@(culture.Name == "zh-CN" ? "简体中文" : culture.NativeName)</option>
+          <option value="@culture.Name" selected="selected">@(culture.Name == "zh-CN" ? "简体中文" : culture.Name == "vi" ? "Tiếng Việt" : culture.NativeName)</option>
         }
         else
         {
-          <option value="@culture.Name">@(culture.Name == "zh-CN" ? "简体中文" : culture.NativeName)</option>
+          <option value="@culture.Name">@(culture.Name == "zh-CN" ? "简体中文" : culture.Name == "vi" ? "Tiếng Việt" : culture.NativeName)</option>
         }
       }
     </InputSelect>
