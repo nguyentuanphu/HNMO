@@ -1,0 +1,2673 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnimationHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý hoạt ảnh</value>
+  </data>
+  <data name="AnimationHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin hoạt ảnh.</value>
+  </data>
+  <data name="AreaSkillAttackHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý tấn công kỹ năng vùng</value>
+  </data>
+  <data name="AreaSkillAttackHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tấn công kỹ năng vùng.</value>
+  </data>
+  <data name="AreaSkillAttackHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý tấn công kỹ năng vùng (075)</value>
+  </data>
+  <data name="AreaSkillAttackHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin tấn công kỹ năng vùng cho phiên bản 0.75</value>
+  </data>
+  <data name="AreaSkillAttackHandlerPlugIn095_Name" xml:space="preserve">
+    <value>Xử lý tấn công kỹ năng vùng (095)</value>
+  </data>
+  <data name="AreaSkillAttackHandlerPlugIn095_Description" xml:space="preserve">
+    <value>Xử lý gói tin tấn công kỹ năng vùng cho phiên bản 0.95</value>
+  </data>
+  <data name="AreaSkillHitHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trúng kỹ năng vùng</value>
+  </data>
+  <data name="AreaSkillHitHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trúng kỹ năng vùng.</value>
+  </data>
+  <data name="AreaSkillHitHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý trúng kỹ năng vùng (075)</value>
+  </data>
+  <data name="AreaSkillHitHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin trúng kỹ năng vùng.</value>
+  </data>
+  <data name="AreaSkillHitHandlerPlugIn095_Name" xml:space="preserve">
+    <value>Xử lý trúng kỹ năng vùng (095)</value>
+  </data>
+  <data name="AreaSkillHitHandlerPlugIn095_Description" xml:space="preserve">
+    <value>Xử lý gói tin trúng kỹ năng vùng.</value>
+  </data>
+  <data name="CharacterMoveHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý di chuyển nhân vật (ENG)</value>
+  </data>
+  <data name="CharacterMoveHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đi bộ.</value>
+  </data>
+  <data name="CharacterMoveHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý di chuyển nhân vật (0.75)</value>
+  </data>
+  <data name="CharacterMoveHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin di chuyển, phiên bản 0.75.</value>
+  </data>
+  <data name="CharacterWalkHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đi bộ nhân vật</value>
+  </data>
+  <data name="CharacterWalkHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đi bộ.</value>
+  </data>
+  <data name="CharacterWalkHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý đi bộ nhân vật</value>
+  </data>
+  <data name="CharacterWalkHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin đi bộ.</value>
+  </data>
+  <data name="ChatMessageHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý tin nhắn chat</value>
+  </data>
+  <data name="ChatMessageHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tin nhắn chat.</value>
+  </data>
+  <data name="CloseNpcDialogHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đóng hội thoại NPC</value>
+  </data>
+  <data name="CloseNpcDialogHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đóng NPC.</value>
+  </data>
+  <data name="EnterOnGatekeeperHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vào qua người gác cổng</value>
+  </data>
+  <data name="EnterOnGatekeeperHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin EnterOnGatekeeperRequest.</value>
+  </data>
+  <data name="EnterOnWerewolfHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vào qua Werewolf</value>
+  </data>
+  <data name="EnterOnWerewolfHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin EnterOnWerewolfRequest.</value>
+  </data>
+  <data name="HitHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đòn đánh</value>
+  </data>
+  <data name="HitHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đòn đánh.</value>
+  </data>
+  <data name="HitHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý đòn đánh 0.75</value>
+  </data>
+  <data name="HitHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin đòn đánh.</value>
+  </data>
+  <data name="MagicEffectCancelHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý hủy hiệu ứng phép</value>
+  </data>
+  <data name="MagicEffectCancelHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin hủy hiệu ứng phép.</value>
+  </data>
+  <data name="TalkNpcHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý nói chuyện NPC</value>
+  </data>
+  <data name="TalkNpcHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu nói chuyện với NPC.</value>
+  </data>
+  <data name="TalkNpcHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý nói chuyện NPC (075)</value>
+  </data>
+  <data name="TalkNpcHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu nói chuyện với NPC.</value>
+  </data>
+  <data name="TargetedSkillHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý kỹ năng có mục tiêu</value>
+  </data>
+  <data name="TargetedSkillHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin kỹ năng có mục tiêu.</value>
+  </data>
+  <data name="TargetedSkillHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý kỹ năng có mục tiêu (075)</value>
+  </data>
+  <data name="TargetedSkillHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin kỹ năng có mục tiêu cho phiên bản 0.75</value>
+  </data>
+  <data name="TargetedSkillHandlerPlugIn095_Name" xml:space="preserve">
+    <value>Xử lý kỹ năng có mục tiêu (095)</value>
+  </data>
+  <data name="TargetedSkillHandlerPlugIn095_Description" xml:space="preserve">
+    <value>Xử lý gói tin kỹ năng có mục tiêu cho phiên bản 0.95.</value>
+  </data>
+  <data name="TeleportTargetHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dịch chuyển mục tiêu</value>
+  </data>
+  <data name="TeleportTargetHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin dịch chuyển mục tiêu của kỹ năng dịch chuyển đồng đội.</value>
+  </data>
+  <data name="WarpGateHandler075PlugIn_Name" xml:space="preserve">
+    <value>Xử lý cổng dịch chuyển 075</value>
+  </data>
+  <data name="WarpGateHandler075PlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin cổng dịch chuyển.</value>
+  </data>
+  <data name="WarpGateHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý cổng dịch chuyển</value>
+  </data>
+  <data name="WarpGateHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin cổng dịch chuyển.</value>
+  </data>
+  <data name="WarpHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dịch chuyển</value>
+  </data>
+  <data name="WarpHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu dịch chuyển.</value>
+  </data>
+  <data name="WhisperedChatMessageHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý tin nhắn thì thầm</value>
+  </data>
+  <data name="WhisperedChatMessageHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tin nhắn thì thầm.</value>
+  </data>
+  <data name="AppearanceSerializer_Name" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình mặc định</value>
+  </data>
+  <data name="AppearanceSerializer_Description" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình mặc định của người chơi. Nhiều khả năng chỉ hoạt động đúng với season 6.</value>
+  </data>
+  <data name="AppearanceSerializer075_Name" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình 0.75</value>
+  </data>
+  <data name="AppearanceSerializer075_Description" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình của người chơi, tương thích client phiên bản 0.75.</value>
+  </data>
+  <data name="AppearanceSerializer095_Name" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình 0.95</value>
+  </data>
+  <data name="AppearanceSerializer095_Description" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình của người chơi, tương thích client phiên bản 0.95</value>
+  </data>
+  <data name="AppearanceSerializerExtended_Name" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình mở rộng</value>
+  </data>
+  <data name="AppearanceSerializerExtended_Description" xml:space="preserve">
+    <value>Bộ mã hóa ngoại hình mở rộng của người chơi.</value>
+  </data>
+  <data name="ChatViewPlugIn_Name" xml:space="preserve">
+    <value>Plugin hiển thị chat</value>
+  </data>
+  <data name="ChatViewPlugIn_Description" xml:space="preserve">
+    <value>Plugin hiển thị để gửi tin nhắn chat cho người chơi</value>
+  </data>
+  <data name="ConsumeSpecialItemPlugIn_Name" xml:space="preserve">
+    <value>Dùng vật phẩm đặc biệt</value>
+  </data>
+  <data name="ConsumeSpecialItemPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IConsumeSpecialItemPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemSerializer_Name" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm</value>
+  </data>
+  <data name="ItemSerializer_Description" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm mặc định. Nhiều khả năng chỉ đúng với season 6.</value>
+  </data>
+  <data name="ItemSerializer075_Name" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm 0.75</value>
+  </data>
+  <data name="ItemSerializer075_Description" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm cho game client phiên bản 0.75</value>
+  </data>
+  <data name="ItemSerializer095_Name" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm 0.95</value>
+  </data>
+  <data name="ItemSerializer095_Description" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm cho game client phiên bản 0.95</value>
+  </data>
+  <data name="ItemSerializerExtended_Name" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm</value>
+  </data>
+  <data name="ItemSerializerExtended_Description" xml:space="preserve">
+    <value>Bộ mã hóa vật phẩm mở rộng. Nhiều khả năng chỉ đúng với season 6.</value>
+  </data>
+  <data name="ShowMessagePlugIn_Name" xml:space="preserve">
+    <value>Hiện thông báo</value>
+  </data>
+  <data name="ShowMessagePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMessagePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="CancelGuildCreationHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý hủy tạo guild</value>
+  </data>
+  <data name="CancelGuildCreationHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin CancelGuildCreation.</value>
+  </data>
+  <data name="GuildCreateHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý tạo guild</value>
+  </data>
+  <data name="GuildCreateHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tạo guild.</value>
+  </data>
+  <data name="GuildCreateHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý tạo guild (075)</value>
+  </data>
+  <data name="GuildCreateHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin tạo guild.</value>
+  </data>
+  <data name="GuildInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin guild</value>
+  </data>
+  <data name="GuildInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu thông tin guild.</value>
+  </data>
+  <data name="GuildKickPlayerHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đuổi khỏi guild</value>
+  </data>
+  <data name="GuildKickPlayerHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đuổi người chơi khỏi guild.</value>
+  </data>
+  <data name="GuildListRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách guild</value>
+  </data>
+  <data name="GuildListRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu danh sách guild.</value>
+  </data>
+  <data name="GuildMasterAnswerHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời của Guild Master</value>
+  </data>
+  <data name="GuildMasterAnswerHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời của Guild Master.</value>
+  </data>
+  <data name="GuildRequestAnswerHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời xin vào guild</value>
+  </data>
+  <data name="GuildRequestAnswerHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời xin vào guild.</value>
+  </data>
+  <data name="GuildRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý xin vào guild</value>
+  </data>
+  <data name="GuildRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu xin vào guild.</value>
+  </data>
+  <data name="GuildWarResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời chiến tranh guild</value>
+  </data>
+  <data name="GuildWarResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời chiến tranh guild.</value>
+  </data>
+  <data name="GuildRelationshipChangeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý thay đổi quan hệ guild</value>
+  </data>
+  <data name="GuildRelationshipChangeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu thay đổi quan hệ guild (yêu cầu liên minh/thù địch).</value>
+  </data>
+  <data name="GuildRelationshipChangeResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời thay đổi quan hệ guild</value>
+  </data>
+  <data name="GuildRelationshipChangeResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời thay đổi quan hệ guild (câu trả lời của Guild Master đích).</value>
+  </data>
+  <data name="AllianceListRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách liên minh</value>
+  </data>
+  <data name="AllianceListRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu danh sách liên minh.</value>
+  </data>
+  <data name="AllianceGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý liên minh</value>
+  </data>
+  <data name="AllianceGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Nhóm xử lý gói tin liên minh (mã 0xEB).</value>
+  </data>
+  <data name="RemoveAllianceGuildHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gỡ guild khỏi liên minh</value>
+  </data>
+  <data name="RemoveAllianceGuildHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu gỡ guild khỏi liên minh.</value>
+  </data>
+  <data name="BuyNpcItemHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý mua vật phẩm NPC</value>
+  </data>
+  <data name="BuyNpcItemHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mua vật phẩm của NPC.</value>
+  </data>
+  <data name="ChaosMixHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý ghép Chaos</value>
+  </data>
+  <data name="ChaosMixHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin ghép Chaos.</value>
+  </data>
+  <data name="ConsumeItemHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng vật phẩm</value>
+  </data>
+  <data name="ConsumeItemHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin dùng vật phẩm.</value>
+  </data>
+  <data name="ConsumeItemHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý dùng vật phẩm (075)</value>
+  </data>
+  <data name="ConsumeItemHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin dùng vật phẩm của phiên bản 0.75</value>
+  </data>
+  <data name="DropItemHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vứt vật phẩm</value>
+  </data>
+  <data name="DropItemHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin vứt vật phẩm.</value>
+  </data>
+  <data name="ItemMoveExtendedHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý di chuyển vật phẩm mở rộng</value>
+  </data>
+  <data name="ItemMoveExtendedHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin di chuyển vật phẩm mở rộng.</value>
+  </data>
+  <data name="ItemMoveHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý di chuyển vật phẩm</value>
+  </data>
+  <data name="ItemMoveHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin di chuyển vật phẩm.</value>
+  </data>
+  <data name="ItemRepairHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý sửa vật phẩm</value>
+  </data>
+  <data name="ItemRepairHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin sửa vật phẩm.</value>
+  </data>
+  <data name="JewelMixHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý ghép ngọc</value>
+  </data>
+  <data name="JewelMixHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin ghép ngọc.</value>
+  </data>
+  <data name="KanturuEnterRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu vào Kanturu</value>
+  </data>
+  <data name="KanturuEnterRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý 0xD1/0x01 (KanturuEnterRequest) và dịch chuyển người chơi vào sự kiện.</value>
+  </data>
+  <data name="KanturuGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý Kanturu</value>
+  </data>
+  <data name="KanturuGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Chuyển gói tin client 0xD1 của Kanturu đến các bộ xử lý con.</value>
+  </data>
+  <data name="KanturuInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin Kanturu</value>
+  </data>
+  <data name="KanturuInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Trả lời 0xD1/0x00 (KanturuInfoRequest) bằng thông tin trạng thái sự kiện mới nhất.</value>
+  </data>
+  <data name="PickupItemHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý nhặt vật phẩm</value>
+  </data>
+  <data name="PickupItemHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin nhặt vật phẩm.</value>
+  </data>
+  <data name="PickupItemHandlerPlugIn075_Name" xml:space="preserve">
+    <value>Xử lý nhặt vật phẩm 0.75</value>
+  </data>
+  <data name="PickupItemHandlerPlugIn075_Description" xml:space="preserve">
+    <value>Xử lý gói tin nhặt vật phẩm cho phiên bản 0.75.</value>
+  </data>
+  <data name="SellItemToNpcHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý bán vật phẩm cho NPC</value>
+  </data>
+  <data name="SellItemToNpcHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin bán vật phẩm cho NPC.</value>
+  </data>
+  <data name="LogInHandlerPlugIn_Name" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+  <data name="LogInHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đăng nhập.</value>
+  </data>
+  <data name="LogOutHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đăng xuất</value>
+  </data>
+  <data name="LogOutHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đăng xuất.</value>
+  </data>
+  <data name="AddFriendHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý thêm bạn</value>
+  </data>
+  <data name="AddFriendHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin thêm bạn.</value>
+  </data>
+  <data name="ChangeOnlineStateHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đổi trạng thái online</value>
+  </data>
+  <data name="ChangeOnlineStateHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đổi trạng thái online.</value>
+  </data>
+  <data name="ChatRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu chat</value>
+  </data>
+  <data name="ChatRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu chat.</value>
+  </data>
+  <data name="ChatRoomInvitationRequestPlugIn_Name" xml:space="preserve">
+    <value>Yêu cầu mời vào phòng chat</value>
+  </data>
+  <data name="ChatRoomInvitationRequestPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mời vào phòng chat, khi người chơi mời thêm người vào phòng chat có sẵn.</value>
+  </data>
+  <data name="DeleteFriendHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý xóa bạn</value>
+  </data>
+  <data name="DeleteFriendHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin xóa bạn.</value>
+  </data>
+  <data name="FriendAddResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời kết bạn</value>
+  </data>
+  <data name="FriendAddResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời kết bạn.</value>
+  </data>
+  <data name="LetterDeleteHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý xóa thư</value>
+  </data>
+  <data name="LetterDeleteHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin xóa thư.</value>
+  </data>
+  <data name="LetterReadRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu đọc thư</value>
+  </data>
+  <data name="LetterReadRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu đọc thư.</value>
+  </data>
+  <data name="LetterSendHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gửi thư</value>
+  </data>
+  <data name="LetterSendHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin gửi thư.</value>
+  </data>
+  <data name="BloodCastleEnterHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vào Huyết Lâu</value>
+  </data>
+  <data name="BloodCastleEnterHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu vào Huyết Lâu.</value>
+  </data>
+  <data name="ChaosCastleEnterHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vào Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="ChaosCastleEnterHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu vào Hỗn Nguyên Lâu.</value>
+  </data>
+  <data name="IllusionTempleEnterHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vào Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleEnterHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu vào Đền Ảo Ảnh.</value>
+  </data>
+  <data name="IllusionTempleRewardRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu nhận thưởng Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleRewardRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu nhận thưởng Đền Ảo Ảnh, gửi khi người chơi đóng hộp thoại kết quả.</value>
+  </data>
+  <data name="IllusionTempleSkillRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu kỹ năng Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleSkillRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu kỹ năng đặc biệt Đền Ảo Ảnh.</value>
+  </data>
+  <data name="DevilSquareEnterHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vào Quảng Trường Quỷ</value>
+  </data>
+  <data name="DevilSquareEnterHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin vào Quảng Trường Quỷ.</value>
+  </data>
+  <data name="MiniGameOpeningStateRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu trạng thái mở sự kiện</value>
+  </data>
+  <data name="MiniGameOpeningStateRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu trạng thái mở của sự kiện.</value>
+  </data>
+  <data name="MuHelperSaveDataRequestHandlerPlugin_Name" xml:space="preserve">
+    <value>Xử lý lưu dữ liệu MU Helper</value>
+  </data>
+  <data name="MuHelperSaveDataRequestHandlerPlugin_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu lưu dữ liệu MU Helper.</value>
+  </data>
+  <data name="MuHelperStatusChangeRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đổi trạng thái MU Helper</value>
+  </data>
+  <data name="MuHelperStatusChangeRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu đổi trạng thái MU Helper.</value>
+  </data>
+  <data name="PartyKickHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đuổi khỏi tổ đội</value>
+  </data>
+  <data name="PartyKickHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đuổi khỏi tổ đội.</value>
+  </data>
+  <data name="PartyListRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách tổ đội</value>
+  </data>
+  <data name="PartyListRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu danh sách tổ đội.</value>
+  </data>
+  <data name="PartyRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý mời vào tổ đội</value>
+  </data>
+  <data name="PartyRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin mời vào tổ đội.</value>
+  </data>
+  <data name="PartyResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời mời tổ đội</value>
+  </data>
+  <data name="PartyResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời mời tổ đội.</value>
+  </data>
+  <data name="PetCommandRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý lệnh thú cưng</value>
+  </data>
+  <data name="PetCommandRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu lệnh thú cưng.</value>
+  </data>
+  <data name="PetInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin thú cưng</value>
+  </data>
+  <data name="PetInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu thông tin thú cưng.</value>
+  </data>
+  <data name="StoreHandlerGroupPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý cửa hàng</value>
+  </data>
+  <data name="StoreHandlerGroupPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các gói tin về cửa hàng người chơi.</value>
+  </data>
+  <data name="TradeAcceptHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý chấp nhận giao dịch</value>
+  </data>
+  <data name="TradeAcceptHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý được gọi khi người chơi trả lời lời mời giao dịch.</value>
+  </data>
+  <data name="TradeButtonHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý nút giao dịch</value>
+  </data>
+  <data name="TradeButtonHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin nút giao dịch.</value>
+  </data>
+  <data name="TradeCancelHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý hủy giao dịch</value>
+  </data>
+  <data name="TradeCancelHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin hủy giao dịch.</value>
+  </data>
+  <data name="TradeMoneyHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý zen giao dịch</value>
+  </data>
+  <data name="TradeMoneyHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin zen giao dịch.</value>
+  </data>
+  <data name="TradeRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý mời giao dịch</value>
+  </data>
+  <data name="TradeRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin mời giao dịch.</value>
+  </data>
+  <data name="VaultCloseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đóng kho đồ</value>
+  </data>
+  <data name="VaultCloseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đóng kho đồ.</value>
+  </data>
+  <data name="VaultMoneyHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý zen kho đồ</value>
+  </data>
+  <data name="VaultMoneyHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin zen kho đồ.</value>
+  </data>
+  <data name="AddExperienceExtendedPlugIn_Name" xml:space="preserve">
+    <value>Cộng kinh nghiệm (mở rộng)</value>
+  </data>
+  <data name="AddExperienceExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IAddExperiencePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="AddExperiencePlugIn_Name" xml:space="preserve">
+    <value>Cộng kinh nghiệm</value>
+  </data>
+  <data name="AddExperiencePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IAddExperiencePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ApplyKeyConfigurationPlugIn_Name" xml:space="preserve">
+    <value>Áp dụng cấu hình phím</value>
+  </data>
+  <data name="ApplyKeyConfigurationPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateVaultMoneyPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="CharacterFocusedPlugIn_Name" xml:space="preserve">
+    <value>Chọn nhân vật làm mục tiêu</value>
+  </data>
+  <data name="CharacterFocusedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ICharacterFocusedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="FruitConsumptionResultPlugIn_Name" xml:space="preserve">
+    <value>Kết quả dùng quả</value>
+  </data>
+  <data name="FruitConsumptionResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IFruitConsumptionResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="MasterSkillLevelChangedPlugIn_Name" xml:space="preserve">
+    <value>Thay đổi cấp kỹ năng Master</value>
+  </data>
+  <data name="MasterSkillLevelChangedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IMasterSkillLevelChangedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowCharacterCreationFailedPlugIn_Name" xml:space="preserve">
+    <value>Hiện tạo nhân vật thất bại</value>
+  </data>
+  <data name="ShowCharacterCreationFailedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowCharacterCreationFailedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowCharacterDeleteResponsePlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả xóa nhân vật</value>
+  </data>
+  <data name="ShowCharacterDeleteResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowCharacterDeleteResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowCharacterListExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách nhân vật (mở rộng)</value>
+  </data>
+  <data name="ShowCharacterListExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowCharacterListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowCharacterListPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách nhân vật</value>
+  </data>
+  <data name="ShowCharacterListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowCharacterListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowCharacterListPlugIn075_Name" xml:space="preserve">
+    <value>Hiện danh sách nhân vật 0.75</value>
+  </data>
+  <data name="ShowCharacterListPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt của IShowCharacterListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="ShowCharacterListPlugIn095_Name" xml:space="preserve">
+    <value>Hiện danh sách nhân vật (095)</value>
+  </data>
+  <data name="ShowCharacterListPlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt của IShowCharacterListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="ShowCreatedCharacterPlugIn_Name" xml:space="preserve">
+    <value>Hiện nhân vật vừa tạo</value>
+  </data>
+  <data name="ShowCreatedCharacterPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowCreatedCharacterPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowDialogPlugIn_Name" xml:space="preserve">
+    <value>Hiện hộp thoại</value>
+  </data>
+  <data name="ShowDialogPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowDialogPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowEffectPlugIn_Name" xml:space="preserve">
+    <value>Hiện hiệu ứng</value>
+  </data>
+  <data name="ShowEffectPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowEffectPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowItemDropEffectPlugIn_Name" xml:space="preserve">
+    <value>Hiện hiệu ứng vật phẩm rơi</value>
+  </data>
+  <data name="ShowItemDropEffectPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ShowItemDropEffectPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="SkillListViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị danh sách kỹ năng</value>
+  </data>
+  <data name="SkillListViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ISkillListViewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="SkillListViewPlugIn075_Name" xml:space="preserve">
+    <value>Hiển thị danh sách kỹ năng (075)</value>
+  </data>
+  <data name="SkillListViewPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt ISkillListViewPlugIn cho phiên bản 0.75, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="SkillListViewPlugIn095_Name" xml:space="preserve">
+    <value>Hiển thị danh sách kỹ năng (095)</value>
+  </data>
+  <data name="SkillListViewPlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt ISkillListViewPlugIn cho phiên bản 0.95, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="StatIncreaseResultExtendedPlugIn_Name" xml:space="preserve">
+    <value>Kết quả tăng chỉ số</value>
+  </data>
+  <data name="StatIncreaseResultExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IStatIncreaseResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="StatIncreaseResultPlugIn_Name" xml:space="preserve">
+    <value>Kết quả tăng chỉ số</value>
+  </data>
+  <data name="StatIncreaseResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IStatIncreaseResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateCharacterBaseStatsExtendedPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số gốc nhân vật (mở rộng)</value>
+  </data>
+  <data name="UpdateCharacterBaseStatsExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IUpdateCharacterBaseStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateCharacterHeroStatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái anh hùng nhân vật</value>
+  </data>
+  <data name="UpdateCharacterHeroStatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateCharacterHeroStatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateCharacterStatsExtendedPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số nhân vật (mở rộng)</value>
+  </data>
+  <data name="UpdateCharacterStatsExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IUpdateCharacterStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateCharacterStatsPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số nhân vật</value>
+  </data>
+  <data name="UpdateCharacterStatsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateCharacterStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateCharacterStatsPlugIn075_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số nhân vật 0.75</value>
+  </data>
+  <data name="UpdateCharacterStatsPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateCharacterStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="UpdateCharacterStatsPlugIn097_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số nhân vật (097)</value>
+  </data>
+  <data name="UpdateCharacterStatsPlugIn097_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateCharacterStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateLevelExtendedPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật cấp (mở rộng)</value>
+  </data>
+  <data name="UpdateLevelExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IUpdateLevelPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateLevelPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật cấp</value>
+  </data>
+  <data name="UpdateLevelPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateLevelPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateMasterSkillsPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật kỹ năng Master</value>
+  </data>
+  <data name="UpdateMasterSkillsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateMasterSkillsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateMasterStatsExtendedPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số Master (mở rộng)</value>
+  </data>
+  <data name="UpdateMasterStatsExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IUpdateMasterStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateMasterStatsPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số Master</value>
+  </data>
+  <data name="UpdateMasterStatsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateMasterStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateStatsExtendedPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số (mở rộng)</value>
+  </data>
+  <data name="UpdateStatsExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IUpdateStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateStatsPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật chỉ số</value>
+  </data>
+  <data name="UpdateStatsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateStatsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelEndedPlugIn_Name" xml:space="preserve">
+    <value>Đấu tay đôi đã kết thúc</value>
+  </data>
+  <data name="DuelEndedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelEndedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelFinishedPlugIn_Name" xml:space="preserve">
+    <value>Đấu tay đôi đã xong</value>
+  </data>
+  <data name="DuelFinishedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelFinishedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelHealthUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật máu đấu tay đôi</value>
+  </data>
+  <data name="DuelHealthUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelHealthUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelSpectatorAddedPlugIn_Name" xml:space="preserve">
+    <value>Thêm người xem đấu tay đôi</value>
+  </data>
+  <data name="DuelSpectatorAddedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelSpectatorAddedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelSpectatorListUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật danh sách người xem đấu tay đôi</value>
+  </data>
+  <data name="DuelSpectatorListUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelSpectatorListUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelSpectatorRemovedPlugIn_Name" xml:space="preserve">
+    <value>Gỡ người xem đấu tay đôi</value>
+  </data>
+  <data name="DuelSpectatorRemovedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelSpectatorRemovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DuelStatusUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái đấu tay đôi</value>
+  </data>
+  <data name="DuelStatusUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDuelStatusUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="InitializeDuelPlugIn_Name" xml:space="preserve">
+    <value>Khởi tạo đấu tay đôi</value>
+  </data>
+  <data name="InitializeDuelPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IInitializeDuelPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowDuelRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện lời mời đấu tay đôi</value>
+  </data>
+  <data name="ShowDuelRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowDuelRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowDuelRequestResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả lời mời đấu tay đôi</value>
+  </data>
+  <data name="ShowDuelRequestResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowDuelRequestResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowDuelScoreUpdatePlugIn_Name" xml:space="preserve">
+    <value>Hiện cập nhật điểm đấu tay đôi</value>
+  </data>
+  <data name="ShowDuelScoreUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowDuelScoreUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="AssignPlayersToGuildPlugIn_Name" xml:space="preserve">
+    <value>Gán người chơi vào guild</value>
+  </data>
+  <data name="AssignPlayersToGuildPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IAssignPlayersToGuildPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="AssignPlayersToGuildPlugIn075_Name" xml:space="preserve">
+    <value>Gán người chơi vào guild (075)</value>
+  </data>
+  <data name="AssignPlayersToGuildPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IAssignPlayersToGuildPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="GuildJoinResponsePlugIn_Name" xml:space="preserve">
+    <value>Trả lời vào guild</value>
+  </data>
+  <data name="GuildJoinResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IGuildJoinResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="GuildKickResultPlugIn_Name" xml:space="preserve">
+    <value>Kết quả đuổi khỏi guild</value>
+  </data>
+  <data name="GuildKickResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IGuildKickResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="GuildWarScoreUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật điểm chiến tranh guild</value>
+  </data>
+  <data name="GuildWarScoreUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IGuildWarScoreUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PlayerLeftGuildPlugIn_Name" xml:space="preserve">
+    <value>Người chơi rời guild</value>
+  </data>
+  <data name="PlayerLeftGuildPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IPlayerLeftGuildPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildCreateResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả tạo guild</value>
+  </data>
+  <data name="ShowGuildCreateResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildCreateResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildCreationDialogPlugIn_Name" xml:space="preserve">
+    <value>Hiện hộp thoại tạo guild</value>
+  </data>
+  <data name="ShowGuildCreationDialogPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildCreationDialogPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildInfoPlugIn_Name" xml:space="preserve">
+    <value>Hiện thông tin guild</value>
+  </data>
+  <data name="ShowGuildInfoPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildInfoPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildJoinRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện yêu cầu xin vào guild</value>
+  </data>
+  <data name="ShowGuildJoinRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildJoinRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildListPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách guild</value>
+  </data>
+  <data name="ShowGuildListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildListPlugIn075_Name" xml:space="preserve">
+    <value>Hiện danh sách guild (075)</value>
+  </data>
+  <data name="ShowGuildListPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildMasterDialogPlugIn_Name" xml:space="preserve">
+    <value>Hiện hộp thoại Guild Master</value>
+  </data>
+  <data name="ShowGuildMasterDialogPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildMasterDialogPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildWarDeclaredPlugIn_Name" xml:space="preserve">
+    <value>Hiện tuyên chiến guild</value>
+  </data>
+  <data name="ShowGuildWarDeclaredPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildWarDeclaredPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildWarRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện lời mời chiến tranh guild</value>
+  </data>
+  <data name="ShowGuildWarRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildWarRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildWarResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả chiến tranh guild</value>
+  </data>
+  <data name="ShowGuildWarResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildWarResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildRelationshipChangeResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả thay đổi quan hệ guild</value>
+  </data>
+  <data name="ShowGuildRelationshipChangeResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IGuildRelationshipChangeResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowGuildRelationshipRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện yêu cầu quan hệ guild</value>
+  </data>
+  <data name="ShowGuildRelationshipRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowGuildRelationshipRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAllianceListPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách liên minh</value>
+  </data>
+  <data name="ShowAllianceListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAllianceListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowShowGuildWarRequestResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả lời mời chiến tranh guild</value>
+  </data>
+  <data name="ShowShowGuildWarRequestResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowShowGuildWarRequestResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="BuyNpcItemFailedPlugIn_Name" xml:space="preserve">
+    <value>Mua vật phẩm NPC thất bại</value>
+  </data>
+  <data name="BuyNpcItemFailedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IBuyNpcItemFailedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemAppearPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm xuất hiện</value>
+  </data>
+  <data name="ItemAppearPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemAppearPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemDropResultPlugIn_Name" xml:space="preserve">
+    <value>Kết quả vứt vật phẩm</value>
+  </data>
+  <data name="ItemDropResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemDropResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemDurabilityChangedPlugIn_Name" xml:space="preserve">
+    <value>Độ bền vật phẩm thay đổi</value>
+  </data>
+  <data name="ItemDurabilityChangedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemDurabilityChangedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemMovedPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm đã di chuyển</value>
+  </data>
+  <data name="ItemMovedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemMovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemMoveFailedPlugIn_Name" xml:space="preserve">
+    <value>Di chuyển vật phẩm thất bại</value>
+  </data>
+  <data name="ItemMoveFailedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemMoveFailedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemPickUpFailedPlugIn_Name" xml:space="preserve">
+    <value>Nhặt vật phẩm thất bại</value>
+  </data>
+  <data name="ItemPickUpFailedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemPickUpFailedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemPriceSetResponsePlugIn_Name" xml:space="preserve">
+    <value>Kết quả đặt giá vật phẩm</value>
+  </data>
+  <data name="ItemPriceSetResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemPriceSetResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemRemovedPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm đã bị gỡ</value>
+  </data>
+  <data name="ItemRemovedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemRemovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemSoldByPlayerShopPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm đã bán ở cửa hàng người chơi</value>
+  </data>
+  <data name="ItemSoldByPlayerShopPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemSoldByPlayerShopPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemSoldToNpcPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm đã bán cho NPC</value>
+  </data>
+  <data name="ItemSoldToNpcPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemSoldToNpcPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ItemUpgradedPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm đã nâng cấp</value>
+  </data>
+  <data name="ItemUpgradedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IItemUpgradedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="NpcItemBoughtPlugIn_Name" xml:space="preserve">
+    <value>Đã mua vật phẩm NPC</value>
+  </data>
+  <data name="NpcItemBoughtPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INpcItemBoughtPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PlayerShopBuyRequestResultExtendedPlugIn_Name" xml:space="preserve">
+    <value>Kết quả mua ở cửa hàng người chơi (mở rộng)</value>
+  </data>
+  <data name="PlayerShopBuyRequestResultExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IPlayerShopBuyRequestResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PlayerShopBuyRequestResultPlugIn_Name" xml:space="preserve">
+    <value>Kết quả mua ở cửa hàng người chơi</value>
+  </data>
+  <data name="PlayerShopBuyRequestResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IPlayerShopBuyRequestResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RequestedItemConsumptionFailedExtendedPlugIn_Name" xml:space="preserve">
+    <value>Dùng vật phẩm thất bại (mở rộng)</value>
+  </data>
+  <data name="RequestedItemConsumptionFailedExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IRequestedItemConsumptionFailedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RequestedItemConsumptionFailedPlugIn_Name" xml:space="preserve">
+    <value>Dùng vật phẩm thất bại</value>
+  </data>
+  <data name="RequestedItemConsumptionFailedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IRequestedItemConsumptionFailedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateInventoryListPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật danh sách hành trang</value>
+  </data>
+  <data name="UpdateInventoryListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateInventoryListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateMoneyPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật zen</value>
+  </data>
+  <data name="UpdateMoneyPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateMoneyPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="LogoutPlugIn_Name" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="LogoutPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ILogoutPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowLoginResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả đăng nhập</value>
+  </data>
+  <data name="ShowLoginResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowLoginResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowLoginWindowPlugIn_Name" xml:space="preserve">
+    <value>Hiện cửa sổ đăng nhập</value>
+  </data>
+  <data name="ShowLoginWindowPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowLoginWindowPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="AddToLetterListPlugIn_Name" xml:space="preserve">
+    <value>Thêm vào danh sách thư</value>
+  </data>
+  <data name="AddToLetterListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IAddToLetterListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ChatRoomCreatedPlugIn_Name" xml:space="preserve">
+    <value>Đã tạo phòng chat</value>
+  </data>
+  <data name="ChatRoomCreatedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IChatRoomCreatedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="FriendAddedPlugIn_Name" xml:space="preserve">
+    <value>Đã thêm bạn</value>
+  </data>
+  <data name="FriendAddedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IFriendAddedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="FriendDeletedPlugIn_Name" xml:space="preserve">
+    <value>Đã xóa bạn</value>
+  </data>
+  <data name="FriendDeletedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IFriendDeletedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="FriendStateUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái bạn bè</value>
+  </data>
+  <data name="FriendStateUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IFriendStateUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="InitializeMessengerPlugIn_Name" xml:space="preserve">
+    <value>Khởi tạo messenger</value>
+  </data>
+  <data name="InitializeMessengerPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IInitializeMessengerPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="LetterDeletedPlugIn_Name" xml:space="preserve">
+    <value>Đã xóa thư</value>
+  </data>
+  <data name="LetterDeletedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ILetterDeletedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="LetterSendResultPlugIn_Name" xml:space="preserve">
+    <value>Kết quả gửi thư</value>
+  </data>
+  <data name="LetterSendResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ILetterSendResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowFriendInvitationResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả mời kết bạn</value>
+  </data>
+  <data name="ShowFriendInvitationResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowFriendInvitationResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowFriendRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện lời mời kết bạn</value>
+  </data>
+  <data name="ShowFriendRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowFriendRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowLetterExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện thư (mở rộng)</value>
+  </data>
+  <data name="ShowLetterExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowLetterPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowLetterPlugIn_Name" xml:space="preserve">
+    <value>Hiện thư</value>
+  </data>
+  <data name="ShowLetterPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowLetterPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="BloodCastleScoreTableViewPlugin_Name" xml:space="preserve">
+    <value>Bảng điểm Huyết Lâu</value>
+  </data>
+  <data name="BloodCastleScoreTableViewPlugin_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IBloodCastleScoreTableViewPlugin, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="BloodCastleStateViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị trạng thái Huyết Lâu</value>
+  </data>
+  <data name="BloodCastleStateViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IBloodCastleStateViewPlugin, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ChangeTerrainAttributesViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị thay đổi thuộc tính địa hình</value>
+  </data>
+  <data name="ChangeTerrainAttributesViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IChangeTerrainAttributesViewPlugin, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ChaosCastleScoreTableViewPlugin_Name" xml:space="preserve">
+    <value>Bảng điểm Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="ChaosCastleScoreTableViewPlugin_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IChaosCastleScoreTableViewPlugin, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ChaosCastleStateViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị trạng thái Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="ChaosCastleStateViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IChaosCastleStateViewPlugin, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DoppelgangerEnterRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu vào Doppelganger</value>
+  </data>
+  <data name="DoppelgangerEnterRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu vào sự kiện Doppelganger qua NPC Lugard.</value>
+  </data>
+  <data name="DoppelgangerEventViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị sự kiện Doppelganger</value>
+  </data>
+  <data name="DoppelgangerEventViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi các gói tin sự kiện Doppelganger (0xBF 0x0F - 0x14) đến client.</value>
+  </data>
+  <data name="KanturuEventViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị sự kiện Kanturu</value>
+  </data>
+  <data name="KanturuEventViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi các gói tin trạng thái/kết quả/HUD của sự kiện Kanturu (nhóm 0xD1) đến client.</value>
+  </data>
+  <data name="MiniGameScoreTableViewPlugin_Name" xml:space="preserve">
+    <value>Bảng điểm sự kiện</value>
+  </data>
+  <data name="MiniGameScoreTableViewPlugin_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IMiniGameScoreTableViewPlugin, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMiniGameEnterResultViewPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả vào sự kiện</value>
+  </data>
+  <data name="ShowMiniGameEnterResultViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMiniGameEnterResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMiniGameOpeningStateViewPlugIn_Name" xml:space="preserve">
+    <value>Hiện trạng thái mở sự kiện</value>
+  </data>
+  <data name="ShowMiniGameOpeningStateViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMiniGameOpeningStatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateMiniGameStateViewViewPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái sự kiện</value>
+  </data>
+  <data name="UpdateMiniGameStateViewViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateMiniGameStateViewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="MuHelperConfigurationUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật cấu hình MU Helper</value>
+  </data>
+  <data name="MuHelperConfigurationUpdatePlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái MU Helper mới đến client.</value>
+  </data>
+  <data name="MuHelperStatusUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái MU Helper</value>
+  </data>
+  <data name="MuHelperStatusUpdatePlugIn_Description" xml:space="preserve">
+    <value>Gửi cập nhật trạng thái MU Helper đến client.</value>
+  </data>
+  <data name="NpcDialogClosedPlugIn075_Name" xml:space="preserve">
+    <value>Đã đóng hội thoại NPC (075)</value>
+  </data>
+  <data name="NpcDialogClosedPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INpcDialogClosedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="OpenNpcWindowPlugIn_Name" xml:space="preserve">
+    <value>Mở cửa sổ NPC</value>
+  </data>
+  <data name="OpenNpcWindowPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IOpenNpcWindowPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowItemCraftingResultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả chế tạo vật phẩm</value>
+  </data>
+  <data name="ShowItemCraftingResultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowItemCraftingResultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMerchantStoreItemListPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách vật phẩm cửa hàng NPC</value>
+  </data>
+  <data name="ShowMerchantStoreItemListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMerchantStoreItemListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMessageOfObjectPlugIn_Name" xml:space="preserve">
+    <value>Hiện thông báo của đối tượng</value>
+  </data>
+  <data name="ShowMessageOfObjectPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMessageOfObjectPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PartyHealthViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị tổ đội</value>
+  </data>
+  <data name="PartyHealthViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của hiển thị tổ đội, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PartyMemberRemovedPlugIn_Name" xml:space="preserve">
+    <value>Thành viên tổ đội bị gỡ</value>
+  </data>
+  <data name="PartyMemberRemovedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IPartyMemberRemovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowPartyRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện lời mời tổ đội</value>
+  </data>
+  <data name="ShowPartyRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowPartyRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdatePartyListPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật danh sách tổ đội</value>
+  </data>
+  <data name="UpdatePartyListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdatePartyListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdatePartyListPlugIn075_Name" xml:space="preserve">
+    <value>Cập nhật danh sách tổ đội (075)</value>
+  </data>
+  <data name="UpdatePartyListPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdatePartyListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PetAttackViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị đòn tấn công của thú cưng</value>
+  </data>
+  <data name="PetAttackViewPlugIn_Description" xml:space="preserve">
+    <value>Plugin hiển thị đòn tấn công của thú cưng.</value>
+  </data>
+  <data name="PetBehaviourChangedViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị thay đổi hành vi thú cưng</value>
+  </data>
+  <data name="PetBehaviourChangedViewPlugIn_Description" xml:space="preserve">
+    <value>Plugin hiển thị báo hành vi thú cưng đã thay đổi.</value>
+  </data>
+  <data name="PetInfoViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị thông tin thú cưng</value>
+  </data>
+  <data name="PetInfoViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IPetInfoViewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PlayerShopClosedPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi đã đóng</value>
+  </data>
+  <data name="PlayerShopClosedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IPlayerShopClosedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="PlayerShopOpenedPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi đã mở</value>
+  </data>
+  <data name="PlayerShopOpenedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IPlayerShopOpenedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowShopItemListExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách vật phẩm cửa hàng (mở rộng)</value>
+  </data>
+  <data name="ShowShopItemListExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowShopItemListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowShopItemListPlugIn_Name" xml:space="preserve">
+    <value>Hiện danh sách vật phẩm cửa hàng</value>
+  </data>
+  <data name="ShowShopItemListPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowShopItemListPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowShopsOfPlayersPlugIn_Name" xml:space="preserve">
+    <value>Hiện cửa hàng của người chơi</value>
+  </data>
+  <data name="ShowShopsOfPlayersPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowShopsOfPlayersPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="CurrentlyActiveQuestsPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Nhiệm vụ đang làm</value>
+  </data>
+  <data name="CurrentlyActiveQuestsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ICurrentlyActiveQuestsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="LegacyQuestRewardPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Phần thưởng</value>
+  </data>
+  <data name="LegacyQuestRewardPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ILegacyQuestRewardPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="LegacyQuestStateDialogPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Hộp thoại trạng thái</value>
+  </data>
+  <data name="LegacyQuestStateDialogPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ILegacyQuestStateDialogPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestCancelledPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Đã hủy</value>
+  </data>
+  <data name="QuestCancelledPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestCancelledPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestCompletionResponsePlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Trả lời hoàn thành</value>
+  </data>
+  <data name="QuestCompletionResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestCompletionResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestEventResponsePlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Trả lời nhiệm vụ sự kiện</value>
+  </data>
+  <data name="QuestEventResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestEventResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestProgressExtendedPlugIn_Name" xml:space="preserve">
+    <value>Tiến độ nhiệm vụ (mở rộng)</value>
+  </data>
+  <data name="QuestProgressExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IQuestProgressPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestProgressPlugIn_Name" xml:space="preserve">
+    <value>Tiến độ nhiệm vụ</value>
+  </data>
+  <data name="QuestProgressPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestProgressPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestStartedPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Đã bắt đầu</value>
+  </data>
+  <data name="QuestStartedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestStartedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestStateResponseExtendedPlugIn_Name" xml:space="preserve">
+    <value>Trả lời trạng thái nhiệm vụ (mở rộng)</value>
+  </data>
+  <data name="QuestStateResponseExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IQuestStateResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestStateResponsePlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Trả lời trạng thái</value>
+  </data>
+  <data name="QuestStateResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestStateResponsePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="QuestStepInfoPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Thông tin bước</value>
+  </data>
+  <data name="QuestStepInfoPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IQuestStepInfoPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAvailableQuestsPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Hiện nhiệm vụ có thể nhận</value>
+  </data>
+  <data name="ShowAvailableQuestsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAvailableQuestsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ChangeTradeButtonStatePlugIn_Name" xml:space="preserve">
+    <value>Đổi trạng thái nút giao dịch</value>
+  </data>
+  <data name="ChangeTradeButtonStatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IChangeTradeButtonStatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RequestedTradeMoneyHasBeenSetPlugIn_Name" xml:space="preserve">
+    <value>Đã đặt zen giao dịch được yêu cầu</value>
+  </data>
+  <data name="RequestedTradeMoneyHasBeenSetPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IRequestedTradeMoneyHasBeenSetPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="SetTradeMoneyPlugIn_Name" xml:space="preserve">
+    <value>Đặt zen giao dịch</value>
+  </data>
+  <data name="SetTradeMoneyPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ISetTradeMoneyPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowTradeRequestAnswerPlugIn_Name" xml:space="preserve">
+    <value>Hiện trả lời lời mời giao dịch</value>
+  </data>
+  <data name="ShowTradeRequestAnswerPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowTradeRequestAnswerPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowTradeRequestPlugIn_Name" xml:space="preserve">
+    <value>Hiện lời mời giao dịch</value>
+  </data>
+  <data name="ShowTradeRequestPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowTradeRequestPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="TradeFinishedPlugIn_Name" xml:space="preserve">
+    <value>Giao dịch đã xong</value>
+  </data>
+  <data name="TradeFinishedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ITradeFinishedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="TradeItemAppearPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm giao dịch xuất hiện</value>
+  </data>
+  <data name="TradeItemAppearPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ITradeItemAppearPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="TradeItemDisappearPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm giao dịch biến mất</value>
+  </data>
+  <data name="TradeItemDisappearPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ITradeItemDisappearPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="CloseVaultPlugIn_Name" xml:space="preserve">
+    <value>Đóng kho đồ</value>
+  </data>
+  <data name="CloseVaultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ICloseVaultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowVaultLockChangeResponsePlugIn_Name" xml:space="preserve">
+    <value>Hiện kết quả đổi khóa kho đồ</value>
+  </data>
+  <data name="ShowVaultLockChangeResponsePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowVaultLockChangeResponse, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowVaultPlugIn_Name" xml:space="preserve">
+    <value>Hiện kho đồ</value>
+  </data>
+  <data name="ShowVaultPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowVaultPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateVaultMoneyPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật zen kho đồ</value>
+  </data>
+  <data name="UpdateVaultMoneyPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateVaultMoneyPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateVaultStatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái kho đồ</value>
+  </data>
+  <data name="UpdateVaultStatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateVaultStatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="AppearanceChangedPlugIn_Name" xml:space="preserve">
+    <value>Ngoại hình đã thay đổi</value>
+  </data>
+  <data name="AppearanceChangedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IAppearanceChangedPlugIn, chuyển thay đổi ngoại hình của người chơi khác đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DeActivateMagicEffectPlugIn_Name" xml:space="preserve">
+    <value>Bật &amp; tắt hiệu ứng phép</value>
+  </data>
+  <data name="DeActivateMagicEffectPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IActivateMagicEffectPlugIn và IDeactivateMagicEffectPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DeActivateMagicEffectPlugIn075_Name" xml:space="preserve">
+    <value>Bật &amp; tắt hiệu ứng phép (075)</value>
+  </data>
+  <data name="DeActivateMagicEffectPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IActivateMagicEffectPlugIn và IDeactivateMagicEffectPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DroppedItemsDisappearedPlugIn_Name" xml:space="preserve">
+    <value>Vật phẩm rơi đã biến mất</value>
+  </data>
+  <data name="DroppedItemsDisappearedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IDroppedItemsDisappearedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="MapChangeExtendedPlugIn_Name" xml:space="preserve">
+    <value>Đổi bản đồ (mở rộng)</value>
+  </data>
+  <data name="MapChangeExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IMapChangePlugIn, gửi kèm mã phân biệt bản đồ (ví dụ tầng Quảng Trường Quỷ) đến game client.</value>
+  </data>
+  <data name="TeleportExtendedPlugIn_Name" xml:space="preserve">
+    <value>Dịch chuyển (mở rộng)</value>
+  </data>
+  <data name="TeleportExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của ITeleportPlugIn, gửi kèm mã phân biệt bản đồ (ví dụ tầng Quảng Trường Quỷ) đến game client.</value>
+  </data>
+  <data name="MapChangePlugIn_Name" xml:space="preserve">
+    <value>Đổi bản đồ</value>
+  </data>
+  <data name="MapChangePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IMapChangePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="MapChangePlugIn075_Name" xml:space="preserve">
+    <value>Đổi bản đồ (075)</value>
+  </data>
+  <data name="MapChangePlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IMapChangePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="MapEventStateUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật trạng thái sự kiện bản đồ</value>
+  </data>
+  <data name="MapEventStateUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IMapEventStateUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="NewNpcsInScopePlugIn_Name" xml:space="preserve">
+    <value>NPC trong tầm nhìn</value>
+  </data>
+  <data name="NewNpcsInScopePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INewNpcsInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="NewNpcsInScopePlugIn075_Name" xml:space="preserve">
+    <value>NPC trong tầm nhìn 0.75</value>
+  </data>
+  <data name="NewNpcsInScopePlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INewNpcsInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="NewNpcsInScopePlugIn095_Name" xml:space="preserve">
+    <value>NPC mới trong tầm nhìn (095)</value>
+  </data>
+  <data name="NewNpcsInScopePlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INewNpcsInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="NewPlayersInScopeExtendedPlugIn_Name" xml:space="preserve">
+    <value>Người chơi mới trong tầm nhìn (mở rộng)</value>
+  </data>
+  <data name="NewPlayersInScopeExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của INewPlayersInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="NewPlayersInScopePlugIn_Name" xml:space="preserve">
+    <value>Người chơi mới trong tầm nhìn</value>
+  </data>
+  <data name="NewPlayersInScopePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INewPlayersInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="NewPlayersInScopePlugIn075_Name" xml:space="preserve">
+    <value>Người chơi mới trong tầm nhìn (075)</value>
+  </data>
+  <data name="NewPlayersInScopePlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INewPlayersInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="NewPlayersInScopePlugIn095_Name" xml:space="preserve">
+    <value>Người chơi mới trong tầm nhìn (095)</value>
+  </data>
+  <data name="NewPlayersInScopePlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của INewPlayersInScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng cho phiên bản 0.75.</value>
+  </data>
+  <data name="ObjectGotKilledPlugIn_Name" xml:space="preserve">
+    <value>Đối tượng bị hạ</value>
+  </data>
+  <data name="ObjectGotKilledPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IObjectGotKilledPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ObjectMovedPlugIn_Name" xml:space="preserve">
+    <value>Đối tượng đã di chuyển</value>
+  </data>
+  <data name="ObjectMovedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IObjectMovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ObjectMovedPlugIn075_Name" xml:space="preserve">
+    <value>Đối tượng đã di chuyển 0.75</value>
+  </data>
+  <data name="ObjectMovedPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IObjectMovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ObjectMovedPlugInExtended_Name" xml:space="preserve">
+    <value>Đối tượng đã di chuyển (mở rộng)</value>
+  </data>
+  <data name="ObjectMovedPlugInExtended_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IObjectMovedPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ObjectsOutOfScopePlugIn_Name" xml:space="preserve">
+    <value>Đối tượng ra khỏi tầm nhìn</value>
+  </data>
+  <data name="ObjectsOutOfScopePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IObjectsOutOfScopePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RespawnAfterDeathExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hồi sinh sau khi chết (mở rộng)</value>
+  </data>
+  <data name="RespawnAfterDeathExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IRespawnAfterDeathPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RespawnAfterDeathPlugIn_Name" xml:space="preserve">
+    <value>Hồi sinh sau khi chết</value>
+  </data>
+  <data name="RespawnAfterDeathPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IRespawnAfterDeathPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RespawnAfterDeathPlugIn075_Name" xml:space="preserve">
+    <value>Hồi sinh sau khi chết (075)</value>
+  </data>
+  <data name="RespawnAfterDeathPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IRespawnAfterDeathPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="RespawnAfterDeathPlugIn095_Name" xml:space="preserve">
+    <value>Hồi sinh sau khi chết (095)</value>
+  </data>
+  <data name="RespawnAfterDeathPlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IRespawnAfterDeathPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAnimationPlugIn_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh</value>
+  </data>
+  <data name="ShowAnimationPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAnimationPlugIn075_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh (075)</value>
+  </data>
+  <data name="ShowAnimationPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAreaSkillAnimationPlugIn_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh kỹ năng vùng</value>
+  </data>
+  <data name="ShowAreaSkillAnimationPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAreaSkillAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAreaSkillAnimationPlugIn075_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh kỹ năng vùng (075)</value>
+  </data>
+  <data name="ShowAreaSkillAnimationPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAreaSkillAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowAreaSkillAnimationPlugIn095_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh kỹ năng vùng (095)</value>
+  </data>
+  <data name="ShowAreaSkillAnimationPlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowAreaSkillAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowChainLightningPlugIn_Name" xml:space="preserve">
+    <value>Hiện Chain Lightning</value>
+  </data>
+  <data name="ShowChainLightningPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowChainLightningPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowDroppedItemsPlugIn_Name" xml:space="preserve">
+    <value>Hiện vật phẩm rơi</value>
+  </data>
+  <data name="ShowDroppedItemsPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowDroppedItemsPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowHitExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện đòn trúng (mở rộng)</value>
+  </data>
+  <data name="ShowHitExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowHitPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowHitPlugIn_Name" xml:space="preserve">
+    <value>Hiện đòn trúng</value>
+  </data>
+  <data name="ShowHitPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowHitPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMoneyDrop075_Name" xml:space="preserve">
+    <value>Hiện zen rơi 0.75</value>
+  </data>
+  <data name="ShowMoneyDrop075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMoneyDropPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMoneyDropExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện zen rơi (mở rộng)</value>
+  </data>
+  <data name="ShowMoneyDropExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowMoneyDropPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowMoneyDropPlugIn_Name" xml:space="preserve">
+    <value>Hiện zen rơi</value>
+  </data>
+  <data name="ShowMoneyDropPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowMoneyDropPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowRageAttackPlugIn_Name" xml:space="preserve">
+    <value>Hiện đòn Rage</value>
+  </data>
+  <data name="ShowRageAttackPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowRageAttackPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowRageAttackRangePlugIn_Name" xml:space="preserve">
+    <value>Hiện tầm đòn Rage</value>
+  </data>
+  <data name="ShowRageAttackRangePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowRageAttackRangePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowSkillAnimationPlugIn_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh kỹ năng</value>
+  </data>
+  <data name="ShowSkillAnimationPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowSkillAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowSkillAnimationPlugIn075_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh kỹ năng (075)</value>
+  </data>
+  <data name="ShowSkillAnimationPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowSkillAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="ShowSkillAnimationPlugIn095_Name" xml:space="preserve">
+    <value>Hiện hoạt ảnh kỹ năng (095)</value>
+  </data>
+  <data name="ShowSkillAnimationPlugIn095_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowSkillAnimationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="SkillStageUpdatePlugInPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật giai đoạn kỹ năng</value>
+  </data>
+  <data name="SkillStageUpdatePlugInPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IShowSkillStageUpdate, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="TeleportPlugIn_Name" xml:space="preserve">
+    <value>Dịch chuyển</value>
+  </data>
+  <data name="TeleportPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ITeleportPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="TeleportPlugIn075_Name" xml:space="preserve">
+    <value>Dịch chuyển (075)</value>
+  </data>
+  <data name="TeleportPlugIn075_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ITeleportPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="UpdateRotationPlugIn_Name" xml:space="preserve">
+    <value>Cập nhật hướng xoay</value>
+  </data>
+  <data name="UpdateRotationPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IUpdateRotationPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="WeatherStatusUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật thời tiết</value>
+  </data>
+  <data name="WeatherStatusUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của IWeatherStatusUpdatePlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="CraftingDialogCloseRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu đóng hộp thoại chế tạo</value>
+  </data>
+  <data name="CraftingDialogCloseRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các gói tin cần đóng hộp thoại chế tạo (Máy Chaos).</value>
+  </data>
+  <data name="NpcActionGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gói tin hành động NPC</value>
+  </data>
+  <data name="NpcActionGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin hành động NPC (mã 0xD0).</value>
+  </data>
+  <data name="RageSkillAttackHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý tấn công kỹ năng Rage</value>
+  </data>
+  <data name="RageSkillAttackHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tấn công kỹ năng vùng của Rage Fighter (dark side).</value>
+  </data>
+  <data name="RageSkillAttackRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu tấn công kỹ năng Rage</value>
+  </data>
+  <data name="RageSkillAttackRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tấn công kỹ năng vùng của Rage Fighter (dark side).</value>
+  </data>
+  <data name="CharacterAddMasterPointPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Cộng điểm kỹ năng Master</value>
+  </data>
+  <data name="CharacterAddMasterPointPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin cộng điểm kỹ năng Master cho nhân vật (mã 0xF3, 0x52).</value>
+  </data>
+  <data name="CharacterClientReadyPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Client sẵn sàng</value>
+  </data>
+  <data name="CharacterClientReadyPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin 'client sẵn sàng' (mã 0xF3, 0x12) được gửi sau khi đổi bản đồ.</value>
+  </data>
+  <data name="CharacterCreatePacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Tạo</value>
+  </data>
+  <data name="CharacterCreatePacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tạo nhân vật (mã 0xF3, 0x01).</value>
+  </data>
+  <data name="CharacterDeletePacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Xóa</value>
+  </data>
+  <data name="CharacterDeletePacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin xóa nhân vật (mã 0xF3, 0x02).</value>
+  </data>
+  <data name="CharacterFocusPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Chọn mục tiêu</value>
+  </data>
+  <data name="CharacterFocusPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin chọn mục tiêu nhân vật (mã 0xF3, 0x15).</value>
+  </data>
+  <data name="CharacterGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gói tin nhân vật</value>
+  </data>
+  <data name="CharacterGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin nhân vật (mã 0xF3).</value>
+  </data>
+  <data name="CastleSiegeGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý gói tin Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Chuyển các mã con của gói tin Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeHuntZoneGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm gói tin vùng săn Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeHuntZoneGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý nhóm gói tin vùng săn Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeMachineGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm gói tin máy công thành</value>
+  </data>
+  <data name="CastleSiegeMachineGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Chuyển các mã con của gói tin máy công thành.</value>
+  </data>
+  <data name="CastleSiegeMachineUseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý bắn máy công thành</value>
+  </data>
+  <data name="CastleSiegeMachineUseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu bắn của máy công thành.</value>
+  </data>
+  <data name="CastleSiegeMachineInterfacePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị giao diện máy công thành</value>
+  </data>
+  <data name="CastleSiegeMachineInterfacePlugIn_Description" xml:space="preserve">
+    <value>Gửi gói tin giao diện máy công thành đến game client.</value>
+  </data>
+  <data name="CastleSiegeMachineRegionNotifyPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị vùng ảnh hưởng máy công thành</value>
+  </data>
+  <data name="CastleSiegeMachineRegionNotifyPlugIn_Description" xml:space="preserve">
+    <value>Gửi thông báo vùng ảnh hưởng của máy công thành đến game client.</value>
+  </data>
+  <data name="CastleSiegeMachineUseResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị kết quả dùng máy công thành</value>
+  </data>
+  <data name="CastleSiegeMachineUseResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả bắn của máy công thành đến game client.</value>
+  </data>
+  <data name="CastleSiegeDefenseBuyHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý mua công trình phòng thủ</value>
+  </data>
+  <data name="CastleSiegeDefenseBuyHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mua công trình phòng thủ Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeDefenseRepairHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý sửa công trình phòng thủ</value>
+  </data>
+  <data name="CastleSiegeDefenseRepairHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu sửa công trình phòng thủ Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeDefenseUpgradeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý nâng cấp công trình phòng thủ</value>
+  </data>
+  <data name="CastleSiegeDefenseUpgradeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu nâng cấp công trình phòng thủ Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeGateListHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý danh sách cổng thành</value>
+  </data>
+  <data name="CastleSiegeGateListHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách cổng Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeGateOperateHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đóng mở cổng thành</value>
+  </data>
+  <data name="CastleSiegeGateOperateHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mở và đóng cổng Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeNpcGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý gói tin NPC Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeNpcGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Chuyển các mã con của gói tin danh sách NPC Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeStatueListHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý danh sách tượng Guardian</value>
+  </data>
+  <data name="CastleSiegeStatueListHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách tượng Guardian của Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeNpcListPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị danh sách NPC Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeNpcListPlugIn_Description" xml:space="preserve">
+    <value>Gửi danh sách công trình phòng thủ Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeNpcOperationResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị kết quả thao tác NPC Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeNpcOperationResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả thao tác công trình phòng thủ Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeRegistrationHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đăng ký Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeRegistrationHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu đăng ký guild cho Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeUnregisterHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý hủy đăng ký Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeUnregisterHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu hủy đăng ký guild khỏi Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeRegistrationStateHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trạng thái đăng ký Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeRegistrationStateHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu trạng thái đăng ký Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeMarkRegistrationHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý nộp Sign of Lord</value>
+  </data>
+  <data name="CastleSiegeMarkRegistrationHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu nộp Sign of Lord cho Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeMarkRegistrationResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị nộp Sign of Lord</value>
+  </data>
+  <data name="CastleSiegeMarkRegistrationResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả nộp Sign of Lord đến game client.</value>
+  </data>
+  <data name="CastleSiegeRegistrationResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị kết quả đăng ký Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeRegistrationResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả đăng ký Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeRegistrationStatePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị trạng thái đăng ký Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeRegistrationStatePlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái đăng ký Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeGuildListHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý danh sách guild Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeGuildListHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách guild đã chọn cho Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeRegisteredGuildListHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý danh sách guild đã đăng ký</value>
+  </data>
+  <data name="CastleSiegeRegisteredGuildListHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách guild hiện đã đăng ký Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeGuildListPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị danh sách guild Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeGuildListPlugIn_Description" xml:space="preserve">
+    <value>Gửi danh sách guild đã chọn cho Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeRegisteredGuildListPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị danh sách guild đã đăng ký</value>
+  </data>
+  <data name="CastleSiegeRegisteredGuildListPlugIn_Description" xml:space="preserve">
+    <value>Gửi danh sách guild hiện đã đăng ký Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeJoinSidePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị phe tham chiến</value>
+  </data>
+  <data name="CastleSiegeJoinSidePlugIn_Description" xml:space="preserve">
+    <value>Gửi phe Công thành chiến được gán cho người chơi đến game client.</value>
+  </data>
+  <data name="CharacterKeyConfigurationPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Cấu hình phím</value>
+  </data>
+  <data name="CharacterKeyConfigurationPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin cấu hình phím của nhân vật (mã 0xF3, 0x30).</value>
+  </data>
+  <data name="CharacterListRequestPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Yêu cầu danh sách</value>
+  </data>
+  <data name="CharacterListRequestPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu danh sách nhân vật (mã 0xF3, 0x00).</value>
+  </data>
+  <data name="CharacterSelectPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Chọn</value>
+  </data>
+  <data name="CharacterSelectPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin chọn nhân vật (mã 0xF3, 0x03).</value>
+  </data>
+  <data name="CharacterStatIncreasePacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhân vật - Tăng chỉ số</value>
+  </data>
+  <data name="CharacterStatIncreasePacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin tăng chỉ số nhân vật (mã 0xF3, 0x06).</value>
+  </data>
+  <data name="DuelChannelJoinRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu vào kênh đấu tay đôi</value>
+  </data>
+  <data name="DuelChannelJoinRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu vào kênh đấu tay đôi (hệ thống đấu mới), do người xem gửi.</value>
+  </data>
+  <data name="DuelChannelQuitRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu rời kênh đấu tay đôi</value>
+  </data>
+  <data name="DuelChannelQuitRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu rời kênh đấu tay đôi (hệ thống đấu mới), do người xem gửi.</value>
+  </data>
+  <data name="DuelGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý đấu tay đôi</value>
+  </data>
+  <data name="DuelGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đấu tay đôi (hệ thống mới).</value>
+  </data>
+  <data name="DuelStartRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu bắt đầu đấu tay đôi</value>
+  </data>
+  <data name="DuelStartRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu bắt đầu đấu tay đôi (hệ thống đấu mới).</value>
+  </data>
+  <data name="DuelStartResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý trả lời bắt đầu đấu tay đôi</value>
+  </data>
+  <data name="DuelStartResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin trả lời bắt đầu đấu tay đôi (hệ thống đấu mới).</value>
+  </data>
+  <data name="DuelStopResponseHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dừng đấu tay đôi</value>
+  </data>
+  <data name="DuelStopResponseHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu dừng đấu tay đôi (hệ thống đấu mới).</value>
+  </data>
+  <data name="LogInOutGroup_Name" xml:space="preserve">
+    <value>Nhóm đăng nhập &amp; đăng xuất</value>
+  </data>
+  <data name="LogInOutGroup_Description" xml:space="preserve">
+    <value>Nhóm xử lý gói tin đăng nhập và đăng xuất (0xF1).</value>
+  </data>
+  <data name="LogOutByCheatDetectionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đăng xuất do gian lận</value>
+  </data>
+  <data name="LogOutByCheatDetectionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đăng xuất (do gian lận).</value>
+  </data>
+  <data name="MuHelperGroupHandler_Name" xml:space="preserve">
+    <value>Nhóm xử lý MU Helper</value>
+  </data>
+  <data name="MuHelperGroupHandler_Description" xml:space="preserve">
+    <value>Nhóm xử lý gói tin MU Helper (mã 0xBF).</value>
+  </data>
+  <data name="PlayerShopBuyRequestPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi - Yêu cầu mua</value>
+  </data>
+  <data name="PlayerShopBuyRequestPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mua ở cửa hàng người chơi (3F 06).</value>
+  </data>
+  <data name="PlayerShopClosePacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi - Đóng</value>
+  </data>
+  <data name="PlayerShopClosePacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý mở cửa hàng người chơi (3F 03).</value>
+  </data>
+  <data name="PlayerShopOpenPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi - Mở</value>
+  </data>
+  <data name="PlayerShopOpenPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý mở cửa hàng người chơi (3F 02).</value>
+  </data>
+  <data name="PlayerShopRequestItemListPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi - Yêu cầu danh sách vật phẩm</value>
+  </data>
+  <data name="PlayerShopRequestItemListPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách vật phẩm của người chơi khác (3F 05).</value>
+  </data>
+  <data name="PlayerShopSetItemPricePacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi - Đặt giá</value>
+  </data>
+  <data name="PlayerShopSetItemPricePacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý đặt giá cho vật phẩm trong cửa hàng người chơi (3F 01).</value>
+  </data>
+  <data name="ActiveQuestListRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu danh sách nhiệm vụ đang làm</value>
+  </data>
+  <data name="ActiveQuestListRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin chọn mục tiêu nhân vật (mã 0xF3, 0x15).</value>
+  </data>
+  <data name="AvailableQuestsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu nhiệm vụ có thể nhận</value>
+  </data>
+  <data name="AvailableQuestsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu nhiệm vụ có thể nhận (mã 0xF6, 0x30)</value>
+  </data>
+  <data name="BuffRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu nhiệm vụ có thể nhận</value>
+  </data>
+  <data name="BuffRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu buff (lính Elf) (mã 0xF6, 0x31)</value>
+  </data>
+  <data name="EventQuestStateRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu trạng thái nhiệm vụ sự kiện</value>
+  </data>
+  <data name="EventQuestStateRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu trạng thái nhiệm vụ sự kiện (mã 0xF6, 0x21)</value>
+  </data>
+  <data name="QuestCancelRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu hủy</value>
+  </data>
+  <data name="QuestCancelRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu hủy nhiệm vụ (mã 0xF6, 0x0F)</value>
+  </data>
+  <data name="QuestClientActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Thao tác client</value>
+  </data>
+  <data name="QuestClientActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin thao tác client của nhiệm vụ (mã 0xF6, 0x10)</value>
+  </data>
+  <data name="QuestCompletionRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu hoàn thành</value>
+  </data>
+  <data name="QuestCompletionRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu hoàn thành nhiệm vụ (mã 0xF6, 0x0D)</value>
+  </data>
+  <data name="QuestGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gói tin nhiệm vụ</value>
+  </data>
+  <data name="QuestGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin nhiệm vụ (mã 0xF6).</value>
+  </data>
+  <data name="QuestProceedRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu tiếp tục</value>
+  </data>
+  <data name="QuestProceedRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu tiếp tục nhiệm vụ (mã 0xF6, 0x0B)</value>
+  </data>
+  <data name="QuestSelectRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu chọn</value>
+  </data>
+  <data name="QuestSelectRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu chọn nhiệm vụ (mã 0xF6, 0x0A)</value>
+  </data>
+  <data name="QuestStateListLegacyRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Yêu cầu danh sách trạng thái nhiệm vụ (cũ)</value>
+  </data>
+  <data name="QuestStateListLegacyRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách trạng thái nhiệm vụ của hệ thống nhiệm vụ cũ (mã 0xA0)</value>
+  </data>
+  <data name="QuestStateRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhiệm vụ - Yêu cầu trạng thái nhiệm vụ</value>
+  </data>
+  <data name="QuestStateRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin yêu cầu trạng thái nhiệm vụ (mã 0xF6, 0x1B)</value>
+  </data>
+  <data name="QuestStateSetLegacyRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Yêu cầu đặt trạng thái nhiệm vụ (cũ)</value>
+  </data>
+  <data name="QuestStateSetLegacyRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu đặt trạng thái nhiệm vụ của hệ thống nhiệm vụ cũ (mã 0xA2).</value>
+  </data>
+  <data name="RemoveVaultPinPlugIn_Name" xml:space="preserve">
+    <value>Khóa kho đồ - Gỡ mã PIN</value>
+  </data>
+  <data name="RemoveVaultPinPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin gỡ mã PIN kho đồ (mã 0x83, 0x02).</value>
+  </data>
+  <data name="SetVaultPinPlugIn_Name" xml:space="preserve">
+    <value>Khóa kho đồ - Đặt mã PIN</value>
+  </data>
+  <data name="SetVaultPinPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin đặt mã PIN kho đồ (mã 0x83, 0x01).</value>
+  </data>
+  <data name="UnlockVaultPlugIn_Name" xml:space="preserve">
+    <value>Khóa kho đồ - Mở khóa</value>
+  </data>
+  <data name="UnlockVaultPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin mở khóa kho đồ (mã 0x83, 0x00).</value>
+  </data>
+  <data name="VaultLockGroupPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gói tin khóa kho đồ</value>
+  </data>
+  <data name="VaultLockGroupPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin khóa kho đồ (mã 0x83).</value>
+  </data>
+  <data name="AppearanceChangedExtendedPlugIn_Name" xml:space="preserve">
+    <value>Ngoại hình đã thay đổi (mở rộng)</value>
+  </data>
+  <data name="AppearanceChangedExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IAppearanceChangedPlugIn, chuyển thay đổi ngoại hình của người chơi khác đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="MuHelperSettingsInitializationPlugIn_Name" xml:space="preserve">
+    <value>Khởi tạo cài đặt MU Helper</value>
+  </data>
+  <data name="MuHelperSettingsInitializationPlugIn_Description" xml:space="preserve">
+    <value>Khởi tạo cài đặt MU Helper khi người chơi vào game.</value>
+  </data>
+  <data name="ChatCommandListViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị danh sách lệnh chat</value>
+  </data>
+  <data name="ChatCommandListViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi các lệnh chat người chơi dùng được, để client có thể hiển thị chúng trên giao diện.</value>
+  </data>
+  <data name="ChatCommandGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý gói tin lệnh chat</value>
+  </data>
+  <data name="ChatCommandGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các gói tin về lệnh chat (0xF5).</value>
+  </data>
+  <data name="ChatCommandListRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách lệnh chat</value>
+  </data>
+  <data name="ChatCommandListRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách lệnh chat mà người chơi dùng được.</value>
+  </data>
+  <data name="CastleSiegeCrownStatePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị trạng thái Vương miện</value>
+  </data>
+  <data name="CastleSiegeCrownStatePlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái khóa hiện tại của Vương miện Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeCrownAccessStatePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị tiến độ chiếm Vương miện</value>
+  </data>
+  <data name="CastleSiegeCrownAccessStatePlugIn_Description" xml:space="preserve">
+    <value>Gửi tiến độ chiếm Vương miện Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeSwitchInfoPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị thông tin công tắc</value>
+  </data>
+  <data name="CastleSiegeSwitchInfoPlugIn_Description" xml:space="preserve">
+    <value>Gửi thông tin chiếm giữ công tắc Vương miện Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeOwnershipChangePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị đổi chủ lâu đài</value>
+  </data>
+  <data name="CastleSiegeOwnershipChangePlugIn_Description" xml:space="preserve">
+    <value>Gửi thay đổi chủ sở hữu lâu đài đến game client.</value>
+  </data>
+  <data name="CastleSiegeTaxInfoHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin thuế</value>
+  </data>
+  <data name="CastleSiegeTaxInfoHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin thuế và ngân khố Công thành chiến hiện tại.</value>
+  </data>
+  <data name="CastleSiegeTaxChangeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu đổi thuế</value>
+  </data>
+  <data name="CastleSiegeTaxChangeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu đổi mức thuế Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeTributeWithdrawHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu rút ngân khố</value>
+  </data>
+  <data name="CastleSiegeTributeWithdrawHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu rút zen từ ngân khố lâu đài.</value>
+  </data>
+  <data name="CastleSiegeHuntZoneToggleHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý quyền vào vùng săn</value>
+  </data>
+  <data name="CastleSiegeHuntZoneToggleHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu đổi quyền vào công khai của vùng săn Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeHuntZoneEnterHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu vào vùng săn</value>
+  </data>
+  <data name="CastleSiegeHuntZoneEnterHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu vào vùng săn Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeTaxInfoPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị thông tin thuế</value>
+  </data>
+  <data name="CastleSiegeTaxInfoPlugIn_Description" xml:space="preserve">
+    <value>Gửi thông tin thuế và ngân khố Công thành chiến hiện tại đến game client.</value>
+  </data>
+  <data name="CastleSiegeTaxChangeResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị kết quả đổi thuế</value>
+  </data>
+  <data name="CastleSiegeTaxChangeResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi các thay đổi thuế Công thành chiến và kết quả đến game client.</value>
+  </data>
+  <data name="CastleSiegeTributeWithdrawResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị kết quả rút ngân khố</value>
+  </data>
+  <data name="CastleSiegeTributeWithdrawResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả rút ngân khố lâu đài đến game client.</value>
+  </data>
+  <data name="CastleSiegeHuntZoneGuardInfoPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị lính gác vùng săn</value>
+  </data>
+  <data name="CastleSiegeHuntZoneGuardInfoPlugIn_Description" xml:space="preserve">
+    <value>Gửi thông tin quyền vào vùng săn Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeHuntZoneResultPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị kết quả vùng săn</value>
+  </data>
+  <data name="CastleSiegeHuntZoneResultPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả yêu cầu vùng săn Công thành chiến đến game client.</value>
+  </data>
+  <data name="CastleSiegeCommandHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý lệnh guild Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeCommandHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các lệnh chỉ hướng cho guild do chủ liên minh ra trong Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeCommandPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị lệnh guild Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeCommandPlugIn_Description" xml:space="preserve">
+    <value>Chuyển lệnh chỉ hướng của chủ liên minh đến người chơi cùng phe.</value>
+  </data>
+  <data name="CastleSiegeMiniMapPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị bản đồ nhỏ Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeMiniMapPlugIn_Description" xml:space="preserve">
+    <value>Gửi vị trí người chơi và NPC trên bản đồ nhỏ Công thành chiến cho chủ liên minh.</value>
+  </data>
+  <data name="CastleSiegeLifeStoneStatePlugIn_Name" xml:space="preserve">
+    <value>Hiển thị trạng thái Life Stone</value>
+  </data>
+  <data name="CastleSiegeLifeStoneStatePlugIn_Description" xml:space="preserve">
+    <value>Gửi tiến độ tạo Life Stone Công thành chiến đến game client.</value>
+  </data>
+  <data name="EnterMarketPlace_Name" xml:space="preserve">
+    <value>Xử lý vào chợ</value>
+  </data>
+  <data name="EnterMarketPlace_Description" xml:space="preserve">
+    <value>Đưa người chơi qua lại giữa Lorencia và chợ Loren khi dùng nút 'Warp' của Julia (Market Union).</value>
+  </data>
+  <data name="GuildRoleAssignHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý gán chức vụ guild</value>
+  </data>
+  <data name="GuildRoleAssignHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin gán chức vụ guild.</value>
+  </data>
+  <data name="RaklionEventViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị sự kiện Raklion</value>
+  </data>
+  <data name="RaklionEventViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái sự kiện Raklion và kỹ năng của Selupan đến client.</value>
+  </data>
+  <data name="RaklionStateInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu trạng thái Raklion</value>
+  </data>
+  <data name="RaklionStateInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu của client về trạng thái sự kiện Raklion.</value>
+  </data>
+  <data name="CrywolfEventViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị sự kiện Crywolf</value>
+  </data>
+  <data name="CrywolfEventViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái sự kiện Crywolf, các bàn thờ và kết quả đến client.</value>
+  </data>
+  <data name="CrywolfGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý Crywolf</value>
+  </data>
+  <data name="CrywolfGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các gói tin của sự kiện Crywolf.</value>
+  </data>
+  <data name="CrywolfInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin Crywolf</value>
+  </data>
+  <data name="CrywolfInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu của client về trạng thái sự kiện Crywolf.</value>
+  </data>
+  <data name="CrywolfContractRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu giao ước Crywolf</value>
+  </data>
+  <data name="CrywolfContractRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu của Elf giao ước với một bàn thờ trong sự kiện Crywolf.</value>
+  </data>
+  <data name="CrywolfChaosRateBenefitRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thưởng tỉ lệ Chaos</value>
+  </data>
+  <data name="CrywolfChaosRateBenefitRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu của client về tỉ lệ thành công cộng thêm của Máy Chaos.</value>
+  </data>
+  <data name="ImperialGuardianGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý Imperial Guardian</value>
+  </data>
+  <data name="ImperialGuardianGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các gói tin của sự kiện Imperial Guardian (0xF7).</value>
+  </data>
+  <data name="ImperialGuardianEnterRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu vào Imperial Guardian</value>
+  </data>
+  <data name="ImperialGuardianEnterRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu vào sự kiện Imperial Guardian, gửi từ cửa sổ của Jerint.</value>
+  </data>
+  <data name="ImperialGuardianViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị Imperial Guardian</value>
+  </data>
+  <data name="ImperialGuardianViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi kết quả vào, đồng hồ và kết quả của sự kiện Imperial Guardian đến client.</value>
+  </data>
+  <data name="GensGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý Gens</value>
+  </data>
+  <data name="GensGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các gói tin của hệ thống Gens (0xF8).</value>
+  </data>
+  <data name="GensJoinRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu gia nhập Gens</value>
+  </data>
+  <data name="GensJoinRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu gia nhập Gens của người chơi.</value>
+  </data>
+  <data name="GensLeaveRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu rời Gens</value>
+  </data>
+  <data name="GensLeaveRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu rời Gens của người chơi.</value>
+  </data>
+  <data name="GensRankingRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu xếp hạng Gens</value>
+  </data>
+  <data name="GensRankingRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu xếp hạng Gens, client gửi khi mở cửa sổ thông tin Gens.</value>
+  </data>
+  <data name="GensViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị Gens</value>
+  </data>
+  <data name="GensViewPlugIn_Description" xml:space="preserve">
+    <value>Hiển thị kết quả các yêu cầu Gens và thông tin Gens của người chơi.</value>
+  </data>
+  <data name="AssignPlayersToGensPlugIn_Name" xml:space="preserve">
+    <value>Gán người chơi vào Gens</value>
+  </data>
+  <data name="AssignPlayersToGensPlugIn_Description" xml:space="preserve">
+    <value>Hiển thị dấu và cấp bậc Gens của người chơi trong tầm nhìn.</value>
+  </data>
+  <data name="GensRewardRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thưởng Gens</value>
+  </data>
+  <data name="GensRewardRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu nhận thưởng xếp hạng Gens của người chơi.</value>
+  </data>
+  <data name="PingHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý ping</value>
+  </data>
+  <data name="PingHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý ping client gửi định kỳ để báo còn hoạt động.</value>
+  </data>
+  <data name="CashShopGroupHandlerPlugIn_Name" xml:space="preserve">
+    <value>Nhóm xử lý cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopGroupHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý gói tin cửa hàng tiền mặt (mã 0xD2).</value>
+  </data>
+  <data name="CashShopOpenStateHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý đóng mở cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopOpenStateHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý mở và đóng cửa hàng tiền mặt (mã 0xD2, 0x02).</value>
+  </data>
+  <data name="CashShopPointInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin điểm</value>
+  </data>
+  <data name="CashShopPointInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin điểm của cửa hàng tiền mặt (mã 0xD2, 0x01).</value>
+  </data>
+  <data name="CashShopStorageListRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách kho</value>
+  </data>
+  <data name="CashShopStorageListRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu danh sách kho của cửa hàng tiền mặt (mã 0xD2, 0x05).</value>
+  </data>
+  <data name="CashShopViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopViewPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mặc định của ICashShopViewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="CashShopItemBuyRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu mua ở cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopItemBuyRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mua ở cửa hàng tiền mặt (mã 0xD2, 0x03).</value>
+  </data>
+  <data name="CashShopStorageItemConsumeRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng vật phẩm trong kho cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopStorageItemConsumeRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu dùng một vật phẩm trong kho cửa hàng tiền mặt (mã 0xD2, 0x0B).</value>
+  </data>
+  <data name="CashShopItemGiftRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu tặng quà</value>
+  </data>
+  <data name="CashShopItemGiftRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu tặng quà của cửa hàng tiền mặt (mã 0xD2, 0x04).</value>
+  </data>
+  <data name="PlayerShopSetItemPriceExtendedPacketHandlerPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng người chơi - Đặt giá (kèm tiền tệ)</value>
+  </data>
+  <data name="PlayerShopSetItemPriceExtendedPacketHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý đặt giá bằng một loại tiền tệ cho vật phẩm trong cửa hàng người chơi (3F 09).</value>
+  </data>
+  <data name="ShowShopCurrenciesExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện tiền tệ cửa hàng (mở rộng)</value>
+  </data>
+  <data name="ShowShopCurrenciesExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowShopCurrenciesPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+  <data name="DiscordIntegrationInfoRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin tích hợp Discord</value>
+  </data>
+  <data name="DiscordIntegrationInfoRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu thông tin tích hợp Discord (F5 02).</value>
+  </data>
+  <data name="DiscordLinkCodeRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu mã liên kết Discord</value>
+  </data>
+  <data name="DiscordLinkCodeRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu mã để liên kết tài khoản với người dùng Discord (F5 04).</value>
+  </data>
+  <data name="DiscordUnlinkRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu gỡ liên kết Discord</value>
+  </data>
+  <data name="DiscordUnlinkRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu gỡ liên kết tài khoản với người dùng Discord (F5 06).</value>
+  </data>
+  <data name="DiscordIntegrationViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị tích hợp Discord</value>
+  </data>
+  <data name="DiscordIntegrationViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi thông tin tích hợp Discord, mã liên kết và tin nhắn viết trong Discord đến game client.</value>
+  </data>
+  <data name="CastleSiegeOwnerLogoHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu biểu tượng chủ lâu đài</value>
+  </data>
+  <data name="CastleSiegeOwnerLogoHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu biểu tượng guild của chủ lâu đài, client gửi khi vào bản đồ Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeOwnerLogoPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị biểu tượng chủ lâu đài</value>
+  </data>
+  <data name="CastleSiegeOwnerLogoPlugIn_Description" xml:space="preserve">
+    <value>Gửi biểu tượng guild của chủ lâu đài đến game client.</value>
+  </data>
+  <data name="CastleSiegeWeaponExplosionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý nổ vũ khí công thành</value>
+  </data>
+  <data name="CastleSiegeWeaponExplosionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Nhận yêu cầu nổ vũ khí của client. Sát thương của máy công thành do máy chủ tính khi đạn rơi xuống, nên yêu cầu này không có tác dụng.</value>
+  </data>
+  <data name="CastleSiegeStatusHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu tình trạng Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeStatusHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu tình trạng Công thành chiến client gửi khi cửa sổ lính gác mở.</value>
+  </data>
+  <data name="CastleSiegeStatusPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị tình trạng Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeStatusPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái, lịch và chủ lâu đài của Công thành chiến đến game client.</value>
+  </data>
+  <data name="ShowItemCraftingPreviewExtendedPlugIn_Name" xml:space="preserve">
+    <value>Hiện xem trước chế tạo vật phẩm (mở rộng)</value>
+  </data>
+  <data name="ShowItemCraftingPreviewExtendedPlugIn_Description" xml:space="preserve">
+    <value>Bản cài đặt mở rộng của IShowItemCraftingPreviewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
+  </data>
+</root>

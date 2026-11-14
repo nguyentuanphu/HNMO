@@ -1,0 +1,3480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_TypeCaption" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="Account_TypeCaptionPlural" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="Account_LoginName_Caption" xml:space="preserve">
+    <value>Tên đăng nhập</value>
+  </data>
+  <data name="Account_PasswordHash_Caption" xml:space="preserve">
+    <value>Mã băm mật khẩu</value>
+  </data>
+  <data name="Account_SecurityCode_Caption" xml:space="preserve">
+    <value>Mã bảo mật</value>
+  </data>
+  <data name="Account_EMail_Caption" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Account_LanguageIsoCode_Caption" xml:space="preserve">
+    <value>Mã ngôn ngữ ISO</value>
+  </data>
+  <data name="Account_ChatBanUntil_Caption" xml:space="preserve">
+    <value>Cấm chat đến</value>
+  </data>
+  <data name="Account_UnlockedCharacterClasses_Caption" xml:space="preserve">
+    <value>Lớp nhân vật đã mở khóa</value>
+  </data>
+  <data name="Account_RegistrationDate_Caption" xml:space="preserve">
+    <value>Ngày đăng ký</value>
+  </data>
+  <data name="Account_State_Caption" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Account_TimeZone_Caption" xml:space="preserve">
+    <value>Múi giờ</value>
+  </data>
+  <data name="Account_VaultPassword_Caption" xml:space="preserve">
+    <value>Mật khẩu kho đồ</value>
+  </data>
+  <data name="Account_Vault_Caption" xml:space="preserve">
+    <value>Kho đồ</value>
+  </data>
+  <data name="Account_IsVaultExtended_Caption" xml:space="preserve">
+    <value>Kho đồ mở rộng</value>
+  </data>
+  <data name="Account_WCoinC_Caption" xml:space="preserve">
+    <value>WCoin (C)</value>
+  </data>
+  <data name="Account_WCoinC_Description" xml:space="preserve">
+    <value>Số WCoin (C) hiện có trong cửa hàng tiền mặt.</value>
+  </data>
+  <data name="Account_WCoinP_Caption" xml:space="preserve">
+    <value>WCoin (P)</value>
+  </data>
+  <data name="Account_WCoinP_Description" xml:space="preserve">
+    <value>Số WCoin (P) hiện có trong cửa hàng tiền mặt.</value>
+  </data>
+  <data name="Account_GoblinPoints_Caption" xml:space="preserve">
+    <value>Goblin Point</value>
+  </data>
+  <data name="Account_GoblinPoints_Description" xml:space="preserve">
+    <value>Số Goblin Point hiện có trong cửa hàng tiền mặt.</value>
+  </data>
+  <data name="Account_IsTemplate_Caption" xml:space="preserve">
+    <value>Tài khoản mẫu</value>
+  </data>
+  <data name="Account_IsTemplate_Description" xml:space="preserve">
+    <value>Tài khoản mẫu có thể đăng nhập nhiều lần để thử nghiệm và chỉ được đọc.</value>
+  </data>
+  <data name="Account_Characters_Caption" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="Account_Attributes_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="AccountState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái tài khoản</value>
+  </data>
+  <data name="AccountState_Normal_Caption" xml:space="preserve">
+    <value>Bình thường</value>
+  </data>
+  <data name="AccountState_Spectator_Caption" xml:space="preserve">
+    <value>Người xem</value>
+  </data>
+  <data name="AccountState_GameMaster_Caption" xml:space="preserve">
+    <value>Game Master</value>
+  </data>
+  <data name="AccountState_GameMasterInvisible_Caption" xml:space="preserve">
+    <value>Game Master ẩn thân</value>
+  </data>
+  <data name="AccountState_Banned_Caption" xml:space="preserve">
+    <value>Bị khóa</value>
+  </data>
+  <data name="AccountState_TemporarilyBanned_Caption" xml:space="preserve">
+    <value>Bị khóa tạm thời</value>
+  </data>
+  <data name="AggregateRootAttribute_TypeCaption" xml:space="preserve">
+    <value>Thuộc tính gốc tổng hợp</value>
+  </data>
+  <data name="AggregateRootAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>Thuộc tính gốc tổng hợp</value>
+  </data>
+  <data name="AppearanceData_TypeCaption" xml:space="preserve">
+    <value>Dữ liệu ngoại hình</value>
+  </data>
+  <data name="AppearanceData_TypeCaptionPlural" xml:space="preserve">
+    <value>Dữ liệu ngoại hình</value>
+  </data>
+  <data name="AppearanceData_CharacterClass_Caption" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="AppearanceData_CharacterStatus_Caption" xml:space="preserve">
+    <value>Trạng thái nhân vật</value>
+  </data>
+  <data name="AppearanceData_Pose_Caption" xml:space="preserve">
+    <value>Tư thế</value>
+  </data>
+  <data name="AppearanceData_FullAncientSetEquipped_Caption" xml:space="preserve">
+    <value>Mặc đủ bộ thần</value>
+  </data>
+  <data name="AppearanceData_EquippedItems_Caption" xml:space="preserve">
+    <value>Vật phẩm đang mặc</value>
+  </data>
+  <data name="AreaSkillSettings_TypeCaption" xml:space="preserve">
+    <value>Cài đặt kỹ năng vùng</value>
+  </data>
+  <data name="AreaSkillSettings_TypeCaptionPlural" xml:space="preserve">
+    <value>Cài đặt kỹ năng vùng</value>
+  </data>
+  <data name="AreaSkillSettings_UseFrustumFilter_Caption" xml:space="preserve">
+    <value>Dùng bộ lọc hình nón</value>
+  </data>
+  <data name="AreaSkillSettings_FrustumStartWidth_Caption" xml:space="preserve">
+    <value>Độ rộng đầu hình nón</value>
+  </data>
+  <data name="AreaSkillSettings_FrustumEndWidth_Caption" xml:space="preserve">
+    <value>Độ rộng cuối hình nón</value>
+  </data>
+  <data name="AreaSkillSettings_FrustumDistance_Caption" xml:space="preserve">
+    <value>Khoảng cách hình nón</value>
+  </data>
+  <data name="AreaSkillSettings_UseTargetAreaFilter_Caption" xml:space="preserve">
+    <value>Dùng bộ lọc vùng mục tiêu</value>
+  </data>
+  <data name="AreaSkillSettings_TargetAreaDiameter_Caption" xml:space="preserve">
+    <value>Đường kính vùng mục tiêu</value>
+  </data>
+  <data name="AreaSkillSettings_UseDeferredHits_Caption" xml:space="preserve">
+    <value>Dùng đòn đánh trễ</value>
+  </data>
+  <data name="AreaSkillSettings_DelayPerOneDistance_Caption" xml:space="preserve">
+    <value>Độ trễ mỗi đơn vị khoảng cách</value>
+  </data>
+  <data name="AreaSkillSettings_DelayBetweenHits_Caption" xml:space="preserve">
+    <value>Độ trễ giữa các đòn</value>
+  </data>
+  <data name="AreaSkillSettings_MinimumNumberOfHitsPerTarget_Caption" xml:space="preserve">
+    <value>Số đòn tối thiểu mỗi mục tiêu</value>
+  </data>
+  <data name="AreaSkillSettings_MaximumNumberOfHitsPerTarget_Caption" xml:space="preserve">
+    <value>Số đòn tối đa mỗi mục tiêu</value>
+  </data>
+  <data name="AreaSkillSettings_MaximumNumberOfHitsPerAttack_Caption" xml:space="preserve">
+    <value>Số đòn tối đa mỗi lần tấn công</value>
+  </data>
+  <data name="AreaSkillSettings_HitChancePerDistanceMultiplier_Caption" xml:space="preserve">
+    <value>Hệ số tỉ lệ trúng theo khoảng cách</value>
+  </data>
+  <data name="AssignableExtensions_TypeCaption" xml:space="preserve">
+    <value>Phần mở rộng có thể gán</value>
+  </data>
+  <data name="AssignableExtensions_TypeCaptionPlural" xml:space="preserve">
+    <value>Phần mở rộng có thể gán</value>
+  </data>
+  <data name="AttributeRequirement_TypeCaption" xml:space="preserve">
+    <value>Yêu cầu thuộc tính</value>
+  </data>
+  <data name="AttributeRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>Yêu cầu thuộc tính</value>
+  </data>
+  <data name="AttributeRequirement_Attribute_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="AttributeRequirement_MinimumValue_Caption" xml:space="preserve">
+    <value>Giá trị tối thiểu</value>
+  </data>
+  <data name="BattleType_TypeCaption" xml:space="preserve">
+    <value>Kiểu trận đấu</value>
+  </data>
+  <data name="BattleType_Normal_Caption" xml:space="preserve">
+    <value>Bình thường</value>
+  </data>
+  <data name="BattleType_Soccer_Caption" xml:space="preserve">
+    <value>Bóng đá</value>
+  </data>
+  <data name="BattleZoneDefinition_TypeCaption" xml:space="preserve">
+    <value>Khu vực thi đấu</value>
+  </data>
+  <data name="BattleZoneDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Khu vực thi đấu</value>
+  </data>
+  <data name="BattleZoneDefinition_Type_Caption" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="BattleZoneDefinition_LeftTeamSpawnPointX_Caption" xml:space="preserve">
+    <value>Điểm xuất hiện đội trái X</value>
+  </data>
+  <data name="BattleZoneDefinition_LeftTeamSpawnPointY_Caption" xml:space="preserve">
+    <value>Điểm xuất hiện đội trái Y</value>
+  </data>
+  <data name="BattleZoneDefinition_RightTeamSpawnPointX_Caption" xml:space="preserve">
+    <value>Điểm xuất hiện đội phải X</value>
+  </data>
+  <data name="BattleZoneDefinition_RightTeamSpawnPointY_Caption" xml:space="preserve">
+    <value>Điểm xuất hiện đội phải Y</value>
+  </data>
+  <data name="BattleZoneDefinition_Ground_Caption" xml:space="preserve">
+    <value>Sân</value>
+  </data>
+  <data name="BattleZoneDefinition_LeftGoal_Caption" xml:space="preserve">
+    <value>Khung thành trái</value>
+  </data>
+  <data name="BattleZoneDefinition_RightGoal_Caption" xml:space="preserve">
+    <value>Khung thành phải</value>
+  </data>
+  <data name="Character_TypeCaption" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="Character_TypeCaptionPlural" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="Character_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Character_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Character_CharacterClass_Caption" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="Character_CharacterSlot_Caption" xml:space="preserve">
+    <value>Ô nhân vật</value>
+  </data>
+  <data name="Character_CreateDate_Caption" xml:space="preserve">
+    <value>Ngày tạo</value>
+  </data>
+  <data name="Character_Experience_Caption" xml:space="preserve">
+    <value>Kinh nghiệm</value>
+  </data>
+  <data name="Character_MasterExperience_Caption" xml:space="preserve">
+    <value>Kinh nghiệm Master</value>
+  </data>
+  <data name="Character_LevelUpPoints_Caption" xml:space="preserve">
+    <value>Điểm lên cấp</value>
+  </data>
+  <data name="Character_MasterLevelUpPoints_Caption" xml:space="preserve">
+    <value>Điểm Master</value>
+  </data>
+  <data name="Character_CurrentMap_Caption" xml:space="preserve">
+    <value>Bản đồ hiện tại</value>
+  </data>
+  <data name="Character_PositionX_Caption" xml:space="preserve">
+    <value>Vị trí X</value>
+  </data>
+  <data name="Character_PositionY_Caption" xml:space="preserve">
+    <value>Vị trí Y</value>
+  </data>
+  <data name="Character_PlayerKillCount_Caption" xml:space="preserve">
+    <value>Số lần giết người chơi</value>
+  </data>
+  <data name="Character_StateRemainingSeconds_Caption" xml:space="preserve">
+    <value>Số giây còn lại của trạng thái</value>
+  </data>
+  <data name="Character_State_Caption" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Character_CharacterStatus_Caption" xml:space="preserve">
+    <value>Trạng thái nhân vật</value>
+  </data>
+  <data name="Character_Pose_Caption" xml:space="preserve">
+    <value>Tư thế</value>
+  </data>
+  <data name="Character_UsedFruitPoints_Caption" xml:space="preserve">
+    <value>Điểm quả đã dùng</value>
+  </data>
+  <data name="Character_UsedNegFruitPoints_Caption" xml:space="preserve">
+    <value>Điểm quả giảm đã dùng</value>
+  </data>
+  <data name="Character_InventoryExtensions_Caption" xml:space="preserve">
+    <value>Mở rộng hành trang</value>
+  </data>
+  <data name="Character_KeyConfiguration_Caption" xml:space="preserve">
+    <value>Cấu hình phím</value>
+  </data>
+  <data name="Character_MuHelperConfiguration_Caption" xml:space="preserve">
+    <value>Cấu hình MU Helper</value>
+  </data>
+  <data name="Character_StoreName_Caption" xml:space="preserve">
+    <value>Tên cửa hàng</value>
+  </data>
+  <data name="Character_IsStoreOpened_Caption" xml:space="preserve">
+    <value>Cửa hàng đang mở</value>
+  </data>
+  <data name="Character_Attributes_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="Character_Letters_Caption" xml:space="preserve">
+    <value>Thư</value>
+  </data>
+  <data name="Character_LearnedSkills_Caption" xml:space="preserve">
+    <value>Kỹ năng đã học</value>
+  </data>
+  <data name="Character_Inventory_Caption" xml:space="preserve">
+    <value>Hành trang</value>
+  </data>
+  <data name="Character_DropItemGroups_Caption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="Character_QuestStates_Caption" xml:space="preserve">
+    <value>Trạng thái nhiệm vụ</value>
+  </data>
+  <data name="CharacterClass_TypeCaption" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="CharacterClass_TypeCaptionPlural" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="CharacterClass_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="CharacterClass_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="CharacterClass_IsActive_Caption" xml:space="preserve">
+    <value>Kích hoạt</value>
+  </data>
+  <data name="CharacterClass_IsActive_Description" xml:space="preserve">
+    <value>Lớp nhân vật này có trong game hay không. Lớp không kích hoạt vẫn nằm trong cấu hình, ví dụ để giới hạn game ở nội dung của một phiên bản nhất định.</value>
+  </data>
+  <data name="CharacterClass_IntroducedIn_Caption" xml:space="preserve">
+    <value>Ra mắt ở</value>
+  </data>
+  <data name="CharacterClass_IntroducedIn_Description" xml:space="preserve">
+    <value>Phiên bản game đã thêm lớp nhân vật này. Chỉ để tham khảo, cho phép bật hoặc tắt hàng loạt nội dung của một phiên bản game.</value>
+  </data>
+  <data name="CharacterClass_CanGetCreated_Caption" xml:space="preserve">
+    <value>Có thể tạo</value>
+  </data>
+  <data name="CharacterClass_LevelRequirementByCreation_Caption" xml:space="preserve">
+    <value>Cấp yêu cầu để tạo</value>
+  </data>
+  <data name="CharacterClass_CreationAllowedFlag_Caption" xml:space="preserve">
+    <value>Cờ cho phép tạo</value>
+  </data>
+  <data name="CharacterClass_NextGenerationClass_Caption" xml:space="preserve">
+    <value>Lớp thế hệ tiếp theo</value>
+  </data>
+  <data name="CharacterClass_IsMasterClass_Caption" xml:space="preserve">
+    <value>Là lớp Master</value>
+  </data>
+  <data name="CharacterClass_LevelWarpRequirementReductionPercent_Caption" xml:space="preserve">
+    <value>Phần trăm giảm cấp yêu cầu dịch chuyển</value>
+  </data>
+  <data name="CharacterClass_FruitCalculation_Caption" xml:space="preserve">
+    <value>Cách tính quả</value>
+  </data>
+  <data name="CharacterClass_StatAttributes_Caption" xml:space="preserve">
+    <value>Thuộc tính chỉ số</value>
+  </data>
+  <data name="CharacterClass_AttributeCombinations_Caption" xml:space="preserve">
+    <value>Kết hợp thuộc tính</value>
+  </data>
+  <data name="CharacterClass_BaseAttributeValues_Caption" xml:space="preserve">
+    <value>Giá trị thuộc tính gốc</value>
+  </data>
+  <data name="CharacterClass_HomeMap_Caption" xml:space="preserve">
+    <value>Bản đồ nhà</value>
+  </data>
+  <data name="CharacterClass_ComboDefinition_Caption" xml:space="preserve">
+    <value>Combo</value>
+  </data>
+  <data name="CharacterPose_TypeCaption" xml:space="preserve">
+    <value>Tư thế nhân vật</value>
+  </data>
+  <data name="CharacterPose_Standing_Caption" xml:space="preserve">
+    <value>Đứng</value>
+  </data>
+  <data name="CharacterPose_Sitting_Caption" xml:space="preserve">
+    <value>Ngồi</value>
+  </data>
+  <data name="CharacterPose_Leaning_Caption" xml:space="preserve">
+    <value>Dựa</value>
+  </data>
+  <data name="CharacterPose_Hanging_Caption" xml:space="preserve">
+    <value>Treo</value>
+  </data>
+  <data name="CharacterQuestState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái nhiệm vụ của nhân vật</value>
+  </data>
+  <data name="CharacterQuestState_TypeCaptionPlural" xml:space="preserve">
+    <value>Trạng thái nhiệm vụ của nhân vật</value>
+  </data>
+  <data name="CharacterQuestState_Group_Caption" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="CharacterQuestState_ClientActionPerformed_Caption" xml:space="preserve">
+    <value>Đã thực hiện thao tác client</value>
+  </data>
+  <data name="CharacterQuestState_LastFinishedQuest_Caption" xml:space="preserve">
+    <value>Nhiệm vụ hoàn thành gần nhất</value>
+  </data>
+  <data name="CharacterQuestState_ActiveQuest_Caption" xml:space="preserve">
+    <value>Nhiệm vụ đang làm</value>
+  </data>
+  <data name="CharacterQuestState_RequirementStates_Caption" xml:space="preserve">
+    <value>Trạng thái yêu cầu</value>
+  </data>
+  <data name="CharacterStatus_TypeCaption" xml:space="preserve">
+    <value>Trạng thái nhân vật</value>
+  </data>
+  <data name="CharacterStatus_Normal_Caption" xml:space="preserve">
+    <value>Bình thường</value>
+  </data>
+  <data name="CharacterStatus_Banned_Caption" xml:space="preserve">
+    <value>Bị khóa</value>
+  </data>
+  <data name="CharacterStatus_GameMaster_Caption" xml:space="preserve">
+    <value>Game Master</value>
+  </data>
+  <data name="ChatServerDefinition_TypeCaption" xml:space="preserve">
+    <value>Chat Server</value>
+  </data>
+  <data name="ChatServerDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Chat Server</value>
+  </data>
+  <data name="ChatServerDefinition_ServerId_Caption" xml:space="preserve">
+    <value>Id máy chủ</value>
+  </data>
+  <data name="ChatServerDefinition_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ChatServerDefinition_MaximumConnections_Caption" xml:space="preserve">
+    <value>Số kết nối tối đa</value>
+  </data>
+  <data name="ChatServerDefinition_ClientTimeout_Caption" xml:space="preserve">
+    <value>Thời gian chờ client</value>
+  </data>
+  <data name="ChatServerDefinition_ClientCleanUpInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ dọn client</value>
+  </data>
+  <data name="ChatServerDefinition_RoomCleanUpInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ dọn phòng</value>
+  </data>
+  <data name="ChatServerDefinition_Endpoints_Caption" xml:space="preserve">
+    <value>Điểm kết nối</value>
+  </data>
+  <data name="ChatServerEndpoint_TypeCaption" xml:space="preserve">
+    <value>Điểm kết nối Chat Server</value>
+  </data>
+  <data name="ChatServerEndpoint_TypeCaptionPlural" xml:space="preserve">
+    <value>Điểm kết nối Chat Server</value>
+  </data>
+  <data name="CombinationBonusRequirement_TypeCaption" xml:space="preserve">
+    <value>Yêu cầu thưởng kết hợp</value>
+  </data>
+  <data name="CombinationBonusRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>Yêu cầu thưởng kết hợp</value>
+  </data>
+  <data name="CombinationBonusRequirement_OptionType_Caption" xml:space="preserve">
+    <value>Loại dòng</value>
+  </data>
+  <data name="CombinationBonusRequirement_SubOptionType_Caption" xml:space="preserve">
+    <value>Loại dòng phụ</value>
+  </data>
+  <data name="CombinationBonusRequirement_MinimumCount_Caption" xml:space="preserve">
+    <value>Số lượng tối thiểu</value>
+  </data>
+  <data name="ConfigurationUpdate_TypeCaption" xml:space="preserve">
+    <value>Cập nhật cấu hình</value>
+  </data>
+  <data name="ConfigurationUpdate_TypeCaptionPlural" xml:space="preserve">
+    <value>Cập nhật cấu hình</value>
+  </data>
+  <data name="ConfigurationUpdate_Key_Caption" xml:space="preserve">
+    <value>Khóa</value>
+  </data>
+  <data name="ConfigurationUpdate_Version_Caption" xml:space="preserve">
+    <value>Phiên bản</value>
+  </data>
+  <data name="ConfigurationUpdate_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ConfigurationUpdate_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ConfigurationUpdate_CreatedAt_Caption" xml:space="preserve">
+    <value>Tạo lúc</value>
+  </data>
+  <data name="ConfigurationUpdate_UpdatedAt_Caption" xml:space="preserve">
+    <value>Cập nhật lúc</value>
+  </data>
+  <data name="ConfigurationUpdate_InstalledAt_Caption" xml:space="preserve">
+    <value>Cài đặt lúc</value>
+  </data>
+  <data name="ConfigurationUpdateState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái cập nhật cấu hình</value>
+  </data>
+  <data name="ConfigurationUpdateState_TypeCaptionPlural" xml:space="preserve">
+    <value>Trạng thái cập nhật cấu hình</value>
+  </data>
+  <data name="ConfigurationUpdateState_InitializationKey_Caption" xml:space="preserve">
+    <value>Khóa khởi tạo</value>
+  </data>
+  <data name="ConnectServerDefinition_TypeCaption" xml:space="preserve">
+    <value>Connect Server</value>
+  </data>
+  <data name="ConnectServerDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Connect Server</value>
+  </data>
+  <data name="ConnectServerDefinition_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="ConnectServerDefinition_ConfigurationId_Caption" xml:space="preserve">
+    <value>Id cấu hình</value>
+  </data>
+  <data name="ConnectServerDefinition_ServerId_Caption" xml:space="preserve">
+    <value>Id máy chủ</value>
+  </data>
+  <data name="ConnectServerDefinition_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ConnectServerDefinition_Client_Caption" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="ConnectServerDefinition_DisconnectOnUnknownPacket_Caption" xml:space="preserve">
+    <value>Ngắt kết nối khi gặp gói tin lạ</value>
+  </data>
+  <data name="ConnectServerDefinition_MaximumReceiveSize_Caption" xml:space="preserve">
+    <value>Kích thước nhận tối đa</value>
+  </data>
+  <data name="ConnectServerDefinition_ClientListenerPort_Caption" xml:space="preserve">
+    <value>Cổng lắng nghe client</value>
+  </data>
+  <data name="ConnectServerDefinition_Timeout_Caption" xml:space="preserve">
+    <value>Thời gian chờ</value>
+  </data>
+  <data name="ConnectServerDefinition_CurrentPatchVersion_Caption" xml:space="preserve">
+    <value>Phiên bản bản vá hiện tại</value>
+  </data>
+  <data name="ConnectServerDefinition_PatchAddress_Caption" xml:space="preserve">
+    <value>Địa chỉ bản vá</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxConnectionsPerAddress_Caption" xml:space="preserve">
+    <value>Số kết nối tối đa mỗi địa chỉ</value>
+  </data>
+  <data name="ConnectServerDefinition_CheckMaxConnectionsPerAddress_Caption" xml:space="preserve">
+    <value>Kiểm tra số kết nối tối đa mỗi địa chỉ</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxConnections_Caption" xml:space="preserve">
+    <value>Số kết nối tối đa</value>
+  </data>
+  <data name="ConnectServerDefinition_ListenerBacklog_Caption" xml:space="preserve">
+    <value>Hàng đợi lắng nghe</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxFtpRequests_Caption" xml:space="preserve">
+    <value>Số yêu cầu FTP tối đa</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxIpRequests_Caption" xml:space="preserve">
+    <value>Số yêu cầu IP tối đa</value>
+  </data>
+  <data name="ConnectServerDefinition_MaxServerListRequests_Caption" xml:space="preserve">
+    <value>Số yêu cầu danh sách máy chủ tối đa</value>
+  </data>
+  <data name="DamageType_TypeCaption" xml:space="preserve">
+    <value>Loại sát thương</value>
+  </data>
+  <data name="DamageType_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="DamageType_Physical_Caption" xml:space="preserve">
+    <value>Vật lý</value>
+  </data>
+  <data name="DamageType_Wizardry_Caption" xml:space="preserve">
+    <value>Phép thuật</value>
+  </data>
+  <data name="DamageType_Curse_Caption" xml:space="preserve">
+    <value>Nguyền rủa</value>
+  </data>
+  <data name="DamageType_SummonedMonster_Caption" xml:space="preserve">
+    <value>Quái triệu hồi</value>
+  </data>
+  <data name="DamageType_Fenrir_Caption" xml:space="preserve">
+    <value>Fenrir</value>
+  </data>
+  <data name="DamageType_All_Caption" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="Direction_TypeCaption" xml:space="preserve">
+    <value>Hướng</value>
+  </data>
+  <data name="Direction_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="Direction_West_Caption" xml:space="preserve">
+    <value>Tây</value>
+  </data>
+  <data name="Direction_SouthWest_Caption" xml:space="preserve">
+    <value>Tây Nam</value>
+  </data>
+  <data name="Direction_South_Caption" xml:space="preserve">
+    <value>Nam</value>
+  </data>
+  <data name="Direction_SouthEast_Caption" xml:space="preserve">
+    <value>Đông Nam</value>
+  </data>
+  <data name="Direction_East_Caption" xml:space="preserve">
+    <value>Đông</value>
+  </data>
+  <data name="Direction_NorthEast_Caption" xml:space="preserve">
+    <value>Đông Bắc</value>
+  </data>
+  <data name="Direction_North_Caption" xml:space="preserve">
+    <value>Bắc</value>
+  </data>
+  <data name="Direction_NorthWest_Caption" xml:space="preserve">
+    <value>Tây Bắc</value>
+  </data>
+  <data name="DropItemGroup_TypeCaption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="DropItemGroup_TypeCaptionPlural" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="DropItemGroup_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="DropItemGroup_Chance_Caption" xml:space="preserve">
+    <value>Tỉ lệ</value>
+  </data>
+  <data name="DropItemGroup_MinimumMonsterLevel_Caption" xml:space="preserve">
+    <value>Cấp quái tối thiểu</value>
+  </data>
+  <data name="DropItemGroup_MaximumMonsterLevel_Caption" xml:space="preserve">
+    <value>Cấp quái tối đa</value>
+  </data>
+  <data name="DropItemGroup_Monster_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="DropItemGroup_ItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm</value>
+  </data>
+  <data name="DropItemGroup_ItemType_Caption" xml:space="preserve">
+    <value>Loại vật phẩm</value>
+  </data>
+  <data name="DropItemGroup_PossibleItems_Caption" xml:space="preserve">
+    <value>Vật phẩm có thể rơi</value>
+  </data>
+  <data name="DropItemGroup_ExcellentOptionsAddChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ dòng excellent</value>
+  </data>
+  <data name="DropItemGroup_ExcellentOptionsAddChance_Description" xml:space="preserve">
+    <value>Tỉ lệ cho mỗi dòng excellent khi nhóm này rơi vật phẩm excellent. Để trống để dùng tỉ lệ trong định nghĩa dòng excellent của vật phẩm.</value>
+  </data>
+  <data name="DropItemGroup_ExcellentOptionsMaximumOptionsPerItem_Caption" xml:space="preserve">
+    <value>Số dòng excellent tối đa mỗi vật phẩm</value>
+  </data>
+  <data name="DropItemGroup_ExcellentOptionsMaximumOptionsPerItem_Description" xml:space="preserve">
+    <value>Số dòng excellent tối đa mà vật phẩm của nhóm này có thể nhận. Để trống để dùng giá trị trong định nghĩa dòng excellent của vật phẩm. Dòng đầu tiên luôn được thêm, không theo tỉ lệ.</value>
+  </data>
+  <data name="DuelArea_TypeCaption" xml:space="preserve">
+    <value>Khu đấu tay đôi</value>
+  </data>
+  <data name="DuelArea_TypeCaptionPlural" xml:space="preserve">
+    <value>Khu đấu tay đôi</value>
+  </data>
+  <data name="DuelArea_Index_Caption" xml:space="preserve">
+    <value>Chỉ số</value>
+  </data>
+  <data name="DuelArea_FirstPlayerGate_Caption" xml:space="preserve">
+    <value>Cổng người chơi thứ nhất</value>
+  </data>
+  <data name="DuelArea_SecondPlayerGate_Caption" xml:space="preserve">
+    <value>Cổng người chơi thứ hai</value>
+  </data>
+  <data name="DuelArea_SpectatorsGate_Caption" xml:space="preserve">
+    <value>Cổng người xem</value>
+  </data>
+  <data name="DuelConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình đấu tay đôi</value>
+  </data>
+  <data name="DuelConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Cấu hình đấu tay đôi</value>
+  </data>
+  <data name="DuelConfiguration_MaximumScore_Caption" xml:space="preserve">
+    <value>Điểm tối đa</value>
+  </data>
+  <data name="DuelConfiguration_EntranceFee_Caption" xml:space="preserve">
+    <value>Phí vào</value>
+  </data>
+  <data name="DuelConfiguration_MinimumCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật tối thiểu</value>
+  </data>
+  <data name="DuelConfiguration_MaximumSpectatorsPerDuelRoom_Caption" xml:space="preserve">
+    <value>Số người xem tối đa mỗi phòng đấu</value>
+  </data>
+  <data name="DuelConfiguration_Exit_Caption" xml:space="preserve">
+    <value>Lối ra</value>
+  </data>
+  <data name="DuelConfiguration_DuelAreas_Caption" xml:space="preserve">
+    <value>Khu đấu tay đôi</value>
+  </data>
+  <data name="EnterGate_TypeCaption" xml:space="preserve">
+    <value>Cổng vào</value>
+  </data>
+  <data name="EnterGate_TypeCaptionPlural" xml:space="preserve">
+    <value>Cổng vào</value>
+  </data>
+  <data name="EnterGate_TargetGate_Caption" xml:space="preserve">
+    <value>Cổng đích</value>
+  </data>
+  <data name="EnterGate_LevelRequirement_Caption" xml:space="preserve">
+    <value>Cấp yêu cầu</value>
+  </data>
+  <data name="EnterGate_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="Error_TypeCaption" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="Error_TypeCaptionPlural" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="ExitGate_TypeCaption" xml:space="preserve">
+    <value>Cổng ra</value>
+  </data>
+  <data name="ExitGate_TypeCaptionPlural" xml:space="preserve">
+    <value>Cổng ra</value>
+  </data>
+  <data name="ExitGate_Direction_Caption" xml:space="preserve">
+    <value>Hướng</value>
+  </data>
+  <data name="ExitGate_Map_Caption" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="ExitGate_IsSpawnGate_Caption" xml:space="preserve">
+    <value>Là cổng xuất hiện</value>
+  </data>
+  <data name="FruitCalculationStrategy_TypeCaption" xml:space="preserve">
+    <value>Cách tính quả</value>
+  </data>
+  <data name="FruitCalculationStrategy_Default_Caption" xml:space="preserve">
+    <value>Mặc định</value>
+  </data>
+  <data name="FruitCalculationStrategy_MagicGladiator_Caption" xml:space="preserve">
+    <value>Magic Gladiator</value>
+  </data>
+  <data name="FruitCalculationStrategy_DarkLord_Caption" xml:space="preserve">
+    <value>Dark Lord</value>
+  </data>
+  <data name="GameClientDefinition_TypeCaption" xml:space="preserve">
+    <value>Game Client</value>
+  </data>
+  <data name="GameClientDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Game Client</value>
+  </data>
+  <data name="GameClientDefinition_Season_Caption" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="GameClientDefinition_Episode_Caption" xml:space="preserve">
+    <value>Episode</value>
+  </data>
+  <data name="GameClientDefinition_Language_Caption" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="GameClientDefinition_Version_Caption" xml:space="preserve">
+    <value>Phiên bản</value>
+  </data>
+  <data name="GameClientDefinition_Serial_Caption" xml:space="preserve">
+    <value>Serial</value>
+  </data>
+  <data name="GameClientDefinition_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="GameConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình game</value>
+  </data>
+  <data name="GameConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Cấu hình game</value>
+  </data>
+  <data name="GameConfiguration_MaximumLevel_Caption" xml:space="preserve">
+    <value>Cấp tối đa</value>
+  </data>
+  <data name="GameConfiguration_MaximumMasterLevel_Caption" xml:space="preserve">
+    <value>Cấp Master tối đa</value>
+  </data>
+  <data name="GameConfiguration_ExperienceRate_Caption" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm</value>
+  </data>
+  <data name="GameConfiguration_MasterExperienceRate_Caption" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm Master</value>
+  </data>
+  <data name="GameConfiguration_PreventExperienceOverflow_Caption" xml:space="preserve">
+    <value>Chặn tràn kinh nghiệm</value>
+  </data>
+  <data name="GameConfiguration_MinimumMonsterLevelForMasterExperience_Caption" xml:space="preserve">
+    <value>Cấp quái tối thiểu cho kinh nghiệm Master</value>
+  </data>
+  <data name="GameConfiguration_InfoRange_Caption" xml:space="preserve">
+    <value>Phạm vi hiển thị</value>
+  </data>
+  <data name="GameConfiguration_AreaSkillHitsPlayer_Caption" xml:space="preserve">
+    <value>Kỹ năng vùng trúng người chơi</value>
+  </data>
+  <data name="GameConfiguration_MaximumInventoryMoney_Caption" xml:space="preserve">
+    <value>Zen tối đa trong hành trang</value>
+  </data>
+  <data name="GameConfiguration_MaximumVaultMoney_Caption" xml:space="preserve">
+    <value>Zen tối đa trong kho đồ</value>
+  </data>
+  <data name="GameConfiguration_ClampMoneyOnPickup_Caption" xml:space="preserve">
+    <value>Giới hạn zen khi nhặt</value>
+  </data>
+  <data name="GameConfiguration_ExperienceFormula_Caption" xml:space="preserve">
+    <value>Công thức kinh nghiệm</value>
+  </data>
+  <data name="GameConfiguration_MasterExperienceFormula_Caption" xml:space="preserve">
+    <value>Công thức kinh nghiệm Master</value>
+  </data>
+  <data name="GameConfiguration_RecoveryInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ hồi phục</value>
+  </data>
+  <data name="GameConfiguration_MaximumLetters_Caption" xml:space="preserve">
+    <value>Số thư tối đa</value>
+  </data>
+  <data name="GameConfiguration_LetterSendPrice_Caption" xml:space="preserve">
+    <value>Phí gửi thư</value>
+  </data>
+  <data name="GameConfiguration_MaximumCharactersPerAccount_Caption" xml:space="preserve">
+    <value>Số nhân vật tối đa mỗi tài khoản</value>
+  </data>
+  <data name="GameConfiguration_CharacterNameRegex_Caption" xml:space="preserve">
+    <value>Biểu thức chính quy tên nhân vật</value>
+  </data>
+  <data name="GameConfiguration_MaximumPasswordLength_Caption" xml:space="preserve">
+    <value>Độ dài mật khẩu tối đa</value>
+  </data>
+  <data name="GameConfiguration_MaximumPartySize_Caption" xml:space="preserve">
+    <value>Số thành viên tổ đội tối đa</value>
+  </data>
+  <data name="GameConfiguration_ShouldDropMoney_Caption" xml:space="preserve">
+    <value>Rơi zen</value>
+  </data>
+  <data name="GameConfiguration_ItemDropDuration_Caption" xml:space="preserve">
+    <value>Thời gian vật phẩm nằm trên đất</value>
+  </data>
+  <data name="GameConfiguration_MaximumItemOptionLevelDrop_Caption" xml:space="preserve">
+    <value>Cấp dòng tối đa khi rơi</value>
+  </data>
+  <data name="GameConfiguration_DamagePerOneItemDurability_Caption" xml:space="preserve">
+    <value>Sát thương cho mỗi điểm độ bền vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_DamagePerOnePetDurability_Caption" xml:space="preserve">
+    <value>Sát thương cho mỗi điểm độ bền thú cưng</value>
+  </data>
+  <data name="GameConfiguration_HitsPerOneItemDurability_Caption" xml:space="preserve">
+    <value>Số đòn cho mỗi điểm độ bền vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_DuelConfiguration_Caption" xml:space="preserve">
+    <value>Cấu hình đấu tay đôi</value>
+  </data>
+  <data name="GameConfiguration_JewelMixes_Caption" xml:space="preserve">
+    <value>Ghép ngọc</value>
+  </data>
+  <data name="GameConfiguration_WarpList_Caption" xml:space="preserve">
+    <value>Danh sách dịch chuyển</value>
+  </data>
+  <data name="GameConfiguration_DropItemGroups_Caption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="GameConfiguration_Skills_Caption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="GameConfiguration_CharacterClasses_Caption" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="GameConfiguration_Items_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemLevelBonusTables_Caption" xml:space="preserve">
+    <value>Bảng thưởng theo cấp vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemPriceDefinitions_Caption" xml:space="preserve">
+    <value>Định nghĩa giá vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemPriceDefinitions_Description" xml:space="preserve">
+    <value>Các định nghĩa giá vật phẩm, được các định nghĩa vật phẩm tham chiếu.</value>
+  </data>
+  <data name="GameConfiguration_ItemSlotTypes_Caption" xml:space="preserve">
+    <value>Loại ô vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemOptions_Caption" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemOptionTypes_Caption" xml:space="preserve">
+    <value>Loại dòng vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemSetGroups_Caption" xml:space="preserve">
+    <value>Nhóm bộ vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemOptionCombinationBonuses_Caption" xml:space="preserve">
+    <value>Thưởng kết hợp dòng vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_Maps_Caption" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="GameConfiguration_Monsters_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="GameConfiguration_Attributes_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="GameConfiguration_MagicEffects_Caption" xml:space="preserve">
+    <value>Hiệu ứng phép</value>
+  </data>
+  <data name="GameConfiguration_MasterSkillRoots_Caption" xml:space="preserve">
+    <value>Gốc kỹ năng Master</value>
+  </data>
+  <data name="GameConfiguration_PlugInConfigurations_Caption" xml:space="preserve">
+    <value>Cấu hình plugin</value>
+  </data>
+  <data name="GameConfiguration_MiniGameDefinitions_Caption" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="GameConfigurationHelper_TypeCaption" xml:space="preserve">
+    <value>Trợ giúp cấu hình game</value>
+  </data>
+  <data name="GameConfigurationHelper_TypeCaptionPlural" xml:space="preserve">
+    <value>Trợ giúp cấu hình game</value>
+  </data>
+  <data name="GameMapDefinition_TypeCaption" xml:space="preserve">
+    <value>Bản đồ game</value>
+  </data>
+  <data name="GameMapDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Bản đồ game</value>
+  </data>
+  <data name="GameMapDefinition_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="GameMapDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="GameMapDefinition_IsActive_Caption" xml:space="preserve">
+    <value>Kích hoạt</value>
+  </data>
+  <data name="GameMapDefinition_IsActive_Description" xml:space="preserve">
+    <value>Bản đồ này có trong game hay không. Bản đồ không kích hoạt vẫn nằm trong cấu hình, ví dụ để giới hạn game ở nội dung của một phiên bản nhất định.</value>
+  </data>
+  <data name="GameMapDefinition_IntroducedIn_Caption" xml:space="preserve">
+    <value>Ra mắt ở</value>
+  </data>
+  <data name="GameMapDefinition_IntroducedIn_Description" xml:space="preserve">
+    <value>Phiên bản game đã thêm bản đồ này. Chỉ để tham khảo, cho phép bật hoặc tắt hàng loạt nội dung của một phiên bản game.</value>
+  </data>
+  <data name="GameMapDefinition_TerrainData_Caption" xml:space="preserve">
+    <value>Dữ liệu địa hình</value>
+  </data>
+  <data name="GameMapDefinition_MonsterSpawns_Caption" xml:space="preserve">
+    <value>Điểm xuất hiện quái</value>
+  </data>
+  <data name="GameMapDefinition_EnterGates_Caption" xml:space="preserve">
+    <value>Cổng vào</value>
+  </data>
+  <data name="GameMapDefinition_ExpMultiplier_Caption" xml:space="preserve">
+    <value>Hệ số kinh nghiệm</value>
+  </data>
+  <data name="GameMapDefinition_Discriminator_Caption" xml:space="preserve">
+    <value>Mã phân biệt</value>
+  </data>
+  <data name="GameMapDefinition_SafezoneMap_Caption" xml:space="preserve">
+    <value>Bản đồ vùng an toàn</value>
+  </data>
+  <data name="GameMapDefinition_BattleZone_Caption" xml:space="preserve">
+    <value>Khu vực thi đấu</value>
+  </data>
+  <data name="GameMapDefinition_ExitGates_Caption" xml:space="preserve">
+    <value>Cổng ra</value>
+  </data>
+  <data name="GameMapDefinition_DropItemGroups_Caption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="GameMapDefinition_MapRequirements_Caption" xml:space="preserve">
+    <value>Yêu cầu vào bản đồ</value>
+  </data>
+  <data name="GameMapDefinition_CharacterPowerUpDefinitions_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh nhân vật</value>
+  </data>
+  <data name="GameServerConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình Game Server</value>
+  </data>
+  <data name="GameServerConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Cấu hình Game Server</value>
+  </data>
+  <data name="GameServerConfiguration_MaximumPlayers_Caption" xml:space="preserve">
+    <value>Số người chơi tối đa</value>
+  </data>
+  <data name="GameServerConfiguration_Maps_Caption" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="GameServerDefinition_TypeCaption" xml:space="preserve">
+    <value>Game Server</value>
+  </data>
+  <data name="GameServerDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Game Server</value>
+  </data>
+  <data name="GameServerDefinition_ServerID_Caption" xml:space="preserve">
+    <value>ID máy chủ</value>
+  </data>
+  <data name="GameServerDefinition_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="GameServerDefinition_ExperienceRate_Caption" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm</value>
+  </data>
+  <data name="GameServerDefinition_PvpEnabled_Caption" xml:space="preserve">
+    <value>Bật PvP</value>
+  </data>
+  <data name="GameServerDefinition_ServerConfiguration_Caption" xml:space="preserve">
+    <value>Cấu hình máy chủ</value>
+  </data>
+  <data name="GameServerDefinition_GameConfiguration_Caption" xml:space="preserve">
+    <value>Cấu hình game</value>
+  </data>
+  <data name="GameServerDefinition_Endpoints_Caption" xml:space="preserve">
+    <value>Điểm kết nối</value>
+  </data>
+  <data name="GameServerEndpoint_TypeCaption" xml:space="preserve">
+    <value>Điểm kết nối Game Server</value>
+  </data>
+  <data name="GameServerEndpoint_TypeCaptionPlural" xml:space="preserve">
+    <value>Điểm kết nối Game Server</value>
+  </data>
+  <data name="GameServerEndpoint_AlternativePublishedPort_Caption" xml:space="preserve">
+    <value>Cổng công khai thay thế</value>
+  </data>
+  <data name="GameVersion_TypeCaption" xml:space="preserve">
+    <value>Phiên bản game</value>
+  </data>
+  <data name="GameVersion_TypeDescription" xml:space="preserve">
+    <value>Một phiên bản game, ví dụ số phiên bản như 0.97d, hoặc một season và episode của nó.</value>
+  </data>
+  <data name="GameVersion_Unknown_Caption" xml:space="preserve">
+    <value>Không rõ</value>
+  </data>
+  <data name="Gate_TypeCaption" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="Gate_TypeCaptionPlural" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="Guild_TypeCaption" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="Guild_TypeCaptionPlural" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="Guild_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Guild_Members_Caption" xml:space="preserve">
+    <value>Thành viên</value>
+  </data>
+  <data name="GuildMember_TypeCaption" xml:space="preserve">
+    <value>Thành viên guild</value>
+  </data>
+  <data name="GuildMember_TypeCaptionPlural" xml:space="preserve">
+    <value>Thành viên guild</value>
+  </data>
+  <data name="GuildMember_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="GuildMember_GuildId_Caption" xml:space="preserve">
+    <value>Id guild</value>
+  </data>
+  <data name="GuildMember_Status_Caption" xml:space="preserve">
+    <value>Chức vụ</value>
+  </data>
+  <data name="HeroState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái anh hùng</value>
+  </data>
+  <data name="HeroState_New_Caption" xml:space="preserve">
+    <value>Mới</value>
+  </data>
+  <data name="HeroState_Hero_Caption" xml:space="preserve">
+    <value>Anh hùng</value>
+  </data>
+  <data name="HeroState_LightHero_Caption" xml:space="preserve">
+    <value>Anh hùng nhẹ</value>
+  </data>
+  <data name="HeroState_Normal_Caption" xml:space="preserve">
+    <value>Bình thường</value>
+  </data>
+  <data name="HeroState_PlayerKillWarning_Caption" xml:space="preserve">
+    <value>Cảnh báo sát thủ</value>
+  </data>
+  <data name="HeroState_PlayerKiller1stStage_Caption" xml:space="preserve">
+    <value>Sát thủ cấp 1</value>
+  </data>
+  <data name="HeroState_PlayerKiller2ndStage_Caption" xml:space="preserve">
+    <value>Sát thủ cấp 2</value>
+  </data>
+  <data name="HiddenAtCreationAttribute_TypeCaption" xml:space="preserve">
+    <value>Thuộc tính ẩn khi tạo</value>
+  </data>
+  <data name="HiddenAtCreationAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>Thuộc tính ẩn khi tạo</value>
+  </data>
+  <data name="IncreasableItemOption_TypeCaption" xml:space="preserve">
+    <value>Dòng vật phẩm có thể tăng</value>
+  </data>
+  <data name="IncreasableItemOption_TypeCaptionPlural" xml:space="preserve">
+    <value>Dòng vật phẩm có thể tăng</value>
+  </data>
+  <data name="IncreasableItemOption_LevelType_Caption" xml:space="preserve">
+    <value>Kiểu cấp</value>
+  </data>
+  <data name="IncreasableItemOption_Weight_Caption" xml:space="preserve">
+    <value>Trọng số</value>
+  </data>
+  <data name="IncreasableItemOption_LevelDependentOptions_Caption" xml:space="preserve">
+    <value>Dòng theo cấp</value>
+  </data>
+  <data name="InventoryConstants_TypeCaption" xml:space="preserve">
+    <value>Hằng số hành trang</value>
+  </data>
+  <data name="InventoryConstants_TypeCaptionPlural" xml:space="preserve">
+    <value>Hằng số hành trang</value>
+  </data>
+  <data name="Item_TypeCaption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="Item_TypeCaptionPlural" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="Item_ItemSlot_Caption" xml:space="preserve">
+    <value>Ô vật phẩm</value>
+  </data>
+  <data name="Item_Definition_Caption" xml:space="preserve">
+    <value>Định nghĩa</value>
+  </data>
+  <data name="Item_Durability_Caption" xml:space="preserve">
+    <value>Độ bền</value>
+  </data>
+  <data name="Item_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="Item_HasSkill_Caption" xml:space="preserve">
+    <value>Có kỹ năng</value>
+  </data>
+  <data name="Item_ItemOptions_Caption" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="Item_ItemSetGroups_Caption" xml:space="preserve">
+    <value>Nhóm bộ vật phẩm</value>
+  </data>
+  <data name="Item_SocketCount_Caption" xml:space="preserve">
+    <value>Số lỗ socket</value>
+  </data>
+  <data name="Item_StorePrice_Caption" xml:space="preserve">
+    <value>Giá cửa hàng</value>
+  </data>
+  <data name="Item_PetExperience_Caption" xml:space="preserve">
+    <value>Kinh nghiệm thú cưng</value>
+  </data>
+  <data name="ItemAppearance_TypeCaption" xml:space="preserve">
+    <value>Ngoại hình vật phẩm</value>
+  </data>
+  <data name="ItemAppearance_TypeCaptionPlural" xml:space="preserve">
+    <value>Ngoại hình vật phẩm</value>
+  </data>
+  <data name="ItemAppearance_ItemSlot_Caption" xml:space="preserve">
+    <value>Ô vật phẩm</value>
+  </data>
+  <data name="ItemAppearance_Definition_Caption" xml:space="preserve">
+    <value>Định nghĩa</value>
+  </data>
+  <data name="ItemAppearance_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="ItemAppearance_VisibleOptions_Caption" xml:space="preserve">
+    <value>Dòng hiển thị</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_TypeCaption" xml:space="preserve">
+    <value>Sức mạnh gốc vật phẩm</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Sức mạnh gốc vật phẩm</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_TargetAttribute_Caption" xml:space="preserve">
+    <value>Thuộc tính đích</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_BonusPerLevelTable_Caption" xml:space="preserve">
+    <value>Bảng thưởng theo cấp</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_BaseValue_Caption" xml:space="preserve">
+    <value>Giá trị gốc</value>
+  </data>
+  <data name="ItemBasePowerUpDefinition_AggregateType_Caption" xml:space="preserve">
+    <value>Kiểu cộng dồn</value>
+  </data>
+  <data name="ItemCrafting_TypeCaption" xml:space="preserve">
+    <value>Chế tạo vật phẩm</value>
+  </data>
+  <data name="ItemCrafting_TypeCaptionPlural" xml:space="preserve">
+    <value>Chế tạo vật phẩm</value>
+  </data>
+  <data name="ItemCrafting_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="ItemCrafting_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemCrafting_ItemCraftingHandlerClassName_Caption" xml:space="preserve">
+    <value>Tên lớp xử lý chế tạo</value>
+  </data>
+  <data name="ItemCrafting_SimpleCraftingSettings_Caption" xml:space="preserve">
+    <value>Cài đặt chế tạo đơn giản</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_TypeCaption" xml:space="preserve">
+    <value>Vật phẩm yêu cầu khi chế tạo</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_TypeCaptionPlural" xml:space="preserve">
+    <value>Vật phẩm yêu cầu khi chế tạo</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_PossibleItems_Caption" xml:space="preserve">
+    <value>Vật phẩm có thể dùng</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MinimumItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm tối thiểu</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MaximumItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm tối đa</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_RequiredItemOptions_Caption" xml:space="preserve">
+    <value>Dòng vật phẩm yêu cầu</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MinimumAmount_Caption" xml:space="preserve">
+    <value>Số lượng tối thiểu</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_MaximumAmount_Caption" xml:space="preserve">
+    <value>Số lượng tối đa</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_SuccessResult_Caption" xml:space="preserve">
+    <value>Kết quả khi thành công</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_FailResult_Caption" xml:space="preserve">
+    <value>Kết quả khi thất bại</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_NpcPriceDivisor_Caption" xml:space="preserve">
+    <value>Hệ số chia giá NPC</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_AddPercentage_Caption" xml:space="preserve">
+    <value>Phần trăm cộng thêm</value>
+  </data>
+  <data name="ItemCraftingRequiredItem_Reference_Caption" xml:space="preserve">
+    <value>Tham chiếu</value>
+  </data>
+  <data name="ItemCraftingResultItem_TypeCaption" xml:space="preserve">
+    <value>Vật phẩm kết quả chế tạo</value>
+  </data>
+  <data name="ItemCraftingResultItem_TypeCaptionPlural" xml:space="preserve">
+    <value>Vật phẩm kết quả chế tạo</value>
+  </data>
+  <data name="ItemCraftingResultItem_ItemDefinition_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="ItemCraftingResultItem_RandomMinimumLevel_Caption" xml:space="preserve">
+    <value>Cấp ngẫu nhiên tối thiểu</value>
+  </data>
+  <data name="ItemCraftingResultItem_RandomMaximumLevel_Caption" xml:space="preserve">
+    <value>Cấp ngẫu nhiên tối đa</value>
+  </data>
+  <data name="ItemCraftingResultItem_Durability_Caption" xml:space="preserve">
+    <value>Độ bền</value>
+  </data>
+  <data name="ItemCraftingResultItem_Reference_Caption" xml:space="preserve">
+    <value>Tham chiếu</value>
+  </data>
+  <data name="ItemCraftingResultItem_AddLevel_Caption" xml:space="preserve">
+    <value>Cộng cấp</value>
+  </data>
+  <data name="ItemDefinition_TypeCaption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="ItemDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="ItemDefinition_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="ItemDefinition_ItemSlot_Caption" xml:space="preserve">
+    <value>Ô vật phẩm</value>
+  </data>
+  <data name="ItemDefinition_Width_Caption" xml:space="preserve">
+    <value>Chiều rộng</value>
+  </data>
+  <data name="ItemDefinition_Height_Caption" xml:space="preserve">
+    <value>Chiều cao</value>
+  </data>
+  <data name="ItemDefinition_DropsFromMonsters_Caption" xml:space="preserve">
+    <value>Rơi từ quái</value>
+  </data>
+  <data name="ItemDefinition_IsAmmunition_Caption" xml:space="preserve">
+    <value>Là đạn</value>
+  </data>
+  <data name="ItemDefinition_IsBoundToCharacter_Caption" xml:space="preserve">
+    <value>Gắn với nhân vật</value>
+  </data>
+  <data name="ItemDefinition_StorageLimitPerCharacter_Caption" xml:space="preserve">
+    <value>Giới hạn cất giữ mỗi nhân vật</value>
+  </data>
+  <data name="ItemDefinition_IsTradable_Caption" xml:space="preserve">
+    <value>Giao dịch được</value>
+  </data>
+  <data name="ItemDefinition_IsTradable_Description" xml:space="preserve">
+    <value>Vật phẩm này có thể giao dịch với người chơi khác hay không.</value>
+  </data>
+  <data name="ItemDefinition_IsDroppable_Caption" xml:space="preserve">
+    <value>Vứt được</value>
+  </data>
+  <data name="ItemDefinition_IsDroppable_Description" xml:space="preserve">
+    <value>Vật phẩm này có thể vứt xuống đất hay không. Không ảnh hưởng đến đồ rơi từ quái.</value>
+  </data>
+  <data name="ItemDefinition_IsStorable_Caption" xml:space="preserve">
+    <value>Cất vào kho đồ được</value>
+  </data>
+  <data name="ItemDefinition_IsStorable_Description" xml:space="preserve">
+    <value>Vật phẩm này có thể cất vào kho đồ hay không.</value>
+  </data>
+  <data name="ItemDefinition_IsSellableToNpc_Caption" xml:space="preserve">
+    <value>Bán cho NPC được</value>
+  </data>
+  <data name="ItemDefinition_IsSellableToNpc_Description" xml:space="preserve">
+    <value>Vật phẩm này có thể bán cho NPC thương nhân hay không.</value>
+  </data>
+  <data name="ItemDefinition_IsPersonalStoreSellable_Caption" xml:space="preserve">
+    <value>Bán ở cửa hàng cá nhân được</value>
+  </data>
+  <data name="ItemDefinition_IsPersonalStoreSellable_Description" xml:space="preserve">
+    <value>Vật phẩm này có thể bày bán ở cửa hàng cá nhân hay không.</value>
+  </data>
+  <data name="ItemDefinition_IsRepairable_Caption" xml:space="preserve">
+    <value>Sửa bình thường được</value>
+  </data>
+  <data name="ItemDefinition_IsRepairable_Description" xml:space="preserve">
+    <value>Vật phẩm này có thể sửa bởi NPC hoặc bằng chức năng sửa trong hành trang hay không. Các cách hồi độ bền đặc biệt không bị ảnh hưởng.</value>
+  </data>
+  <data name="ItemDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemDefinition_IsActive_Caption" xml:space="preserve">
+    <value>Kích hoạt</value>
+  </data>
+  <data name="ItemDefinition_IsActive_Description" xml:space="preserve">
+    <value>Vật phẩm này có trong game hay không. Vật phẩm không kích hoạt vẫn nằm trong cấu hình, ví dụ để giới hạn game ở nội dung của một phiên bản nhất định.</value>
+  </data>
+  <data name="ItemDefinition_IntroducedIn_Caption" xml:space="preserve">
+    <value>Ra mắt ở</value>
+  </data>
+  <data name="ItemDefinition_IntroducedIn_Description" xml:space="preserve">
+    <value>Phiên bản game đã thêm vật phẩm này. Chỉ để tham khảo, cho phép bật hoặc tắt hàng loạt nội dung của một phiên bản game.</value>
+  </data>
+  <data name="ItemDefinition_DropLevel_Caption" xml:space="preserve">
+    <value>Cấp rơi</value>
+  </data>
+  <data name="ItemDefinition_MaximumDropLevel_Caption" xml:space="preserve">
+    <value>Cấp rơi tối đa</value>
+  </data>
+  <data name="ItemDefinition_MaximumItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm tối đa</value>
+  </data>
+  <data name="ItemDefinition_Durability_Caption" xml:space="preserve">
+    <value>Độ bền</value>
+  </data>
+  <data name="ItemDefinition_Group_Caption" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="ItemDefinition_Value_Caption" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="ItemDefinition_PetExperienceFormula_Caption" xml:space="preserve">
+    <value>Công thức kinh nghiệm thú cưng</value>
+  </data>
+  <data name="ItemDefinition_PriceDefinition_Caption" xml:space="preserve">
+    <value>Định nghĩa giá</value>
+  </data>
+  <data name="ItemDefinition_PriceDefinition_Description" xml:space="preserve">
+    <value>Cách tính giá của vật phẩm này. Nếu không có, vật phẩm dùng giá tự động của trang bị.</value>
+  </data>
+  <data name="ItemDefinition_ConsumeEffect_Caption" xml:space="preserve">
+    <value>Hiệu ứng khi dùng</value>
+  </data>
+  <data name="ItemDefinition_MaximumSockets_Caption" xml:space="preserve">
+    <value>Số lỗ socket tối đa</value>
+  </data>
+  <data name="ItemDefinition_Skill_Caption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="ItemDefinition_QualifiedCharacters_Caption" xml:space="preserve">
+    <value>Nhân vật dùng được</value>
+  </data>
+  <data name="ItemDefinition_PossibleItemSetGroups_Caption" xml:space="preserve">
+    <value>Nhóm bộ vật phẩm có thể có</value>
+  </data>
+  <data name="ItemDefinition_PossibleItemOptions_Caption" xml:space="preserve">
+    <value>Dòng vật phẩm có thể có</value>
+  </data>
+  <data name="ItemDefinition_Requirements_Caption" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="ItemDefinition_BasePowerUpAttributes_Caption" xml:space="preserve">
+    <value>Thuộc tính sức mạnh gốc</value>
+  </data>
+  <data name="ItemDefinition_DropItems_Caption" xml:space="preserve">
+    <value>Vật phẩm rơi</value>
+  </data>
+  <data name="ItemDropEffect_TypeCaption" xml:space="preserve">
+    <value>Hiệu ứng khi rơi</value>
+  </data>
+  <data name="ItemDropEffect_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="ItemDropEffect_Fireworks_Caption" xml:space="preserve">
+    <value>Pháo hoa</value>
+  </data>
+  <data name="ItemDropEffect_ChristmasFireworks_Caption" xml:space="preserve">
+    <value>Pháo hoa Giáng sinh</value>
+  </data>
+  <data name="ItemDropEffect_FanfareSound_Caption" xml:space="preserve">
+    <value>Tiếng kèn</value>
+  </data>
+  <data name="ItemDropEffect_Swirl_Caption" xml:space="preserve">
+    <value>Xoáy</value>
+  </data>
+  <data name="ItemDropItemGroup_TypeCaption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi từ vật phẩm</value>
+  </data>
+  <data name="ItemDropItemGroup_TypeCaptionPlural" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi từ vật phẩm</value>
+  </data>
+  <data name="ItemDropItemGroup_SourceItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm nguồn</value>
+  </data>
+  <data name="ItemDropItemGroup_MoneyAmount_Caption" xml:space="preserve">
+    <value>Số zen</value>
+  </data>
+  <data name="ItemDropItemGroup_MinimumLevel_Caption" xml:space="preserve">
+    <value>Cấp tối thiểu</value>
+  </data>
+  <data name="ItemDropItemGroup_MaximumLevel_Caption" xml:space="preserve">
+    <value>Cấp tối đa</value>
+  </data>
+  <data name="ItemDropItemGroup_RequiredCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật yêu cầu</value>
+  </data>
+  <data name="ItemDropItemGroup_DropEffect_Caption" xml:space="preserve">
+    <value>Hiệu ứng khi rơi</value>
+  </data>
+  <data name="ItemExtensions_TypeCaption" xml:space="preserve">
+    <value>Phần mở rộng vật phẩm</value>
+  </data>
+  <data name="ItemExtensions_TypeCaptionPlural" xml:space="preserve">
+    <value>Phần mở rộng vật phẩm</value>
+  </data>
+  <data name="ItemLevelBonusTable_TypeCaption" xml:space="preserve">
+    <value>Bảng thưởng theo cấp vật phẩm</value>
+  </data>
+  <data name="ItemLevelBonusTable_TypeCaptionPlural" xml:space="preserve">
+    <value>Bảng thưởng theo cấp vật phẩm</value>
+  </data>
+  <data name="ItemLevelBonusTable_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemLevelBonusTable_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ItemLevelBonusTable_BonusPerLevel_Caption" xml:space="preserve">
+    <value>Thưởng mỗi cấp</value>
+  </data>
+  <data name="ItemOfItemSet_TypeCaption" xml:space="preserve">
+    <value>Vật phẩm của bộ</value>
+  </data>
+  <data name="ItemOfItemSet_TypeCaptionPlural" xml:space="preserve">
+    <value>Vật phẩm của bộ</value>
+  </data>
+  <data name="ItemOfItemSet_AncientSetDiscriminator_Caption" xml:space="preserve">
+    <value>Mã phân biệt bộ thần</value>
+  </data>
+  <data name="ItemOfItemSet_ItemSetGroup_Caption" xml:space="preserve">
+    <value>Nhóm bộ vật phẩm</value>
+  </data>
+  <data name="ItemOfItemSet_ItemDefinition_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="ItemOfItemSet_BonusOption_Caption" xml:space="preserve">
+    <value>Dòng thưởng</value>
+  </data>
+  <data name="ItemOfItemSet_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemOption_TypeCaption" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="ItemOption_TypeCaptionPlural" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="ItemOption_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="ItemOption_SubOptionType_Caption" xml:space="preserve">
+    <value>Loại dòng phụ</value>
+  </data>
+  <data name="ItemOption_OptionType_Caption" xml:space="preserve">
+    <value>Loại dòng</value>
+  </data>
+  <data name="ItemOption_PowerUpDefinition_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_TypeCaption" xml:space="preserve">
+    <value>Thưởng kết hợp dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_TypeCaptionPlural" xml:space="preserve">
+    <value>Thưởng kết hợp dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_AppliesMultipleTimes_Caption" xml:space="preserve">
+    <value>Áp dụng nhiều lần</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Requirements_Caption" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="ItemOptionCombinationBonus_Bonus_Caption" xml:space="preserve">
+    <value>Thưởng</value>
+  </data>
+  <data name="ItemOptionDefinition_TypeCaption" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemOptionDefinition_AddsRandomly_Caption" xml:space="preserve">
+    <value>Thêm ngẫu nhiên</value>
+  </data>
+  <data name="ItemOptionDefinition_AddChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ thêm</value>
+  </data>
+  <data name="ItemOptionDefinition_MaximumOptionsPerItem_Caption" xml:space="preserve">
+    <value>Số dòng tối đa mỗi vật phẩm</value>
+  </data>
+  <data name="ItemOptionDefinition_PossibleOptions_Caption" xml:space="preserve">
+    <value>Dòng có thể có</value>
+  </data>
+  <data name="ItemOptionLink_TypeCaption" xml:space="preserve">
+    <value>Liên kết dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionLink_TypeCaptionPlural" xml:space="preserve">
+    <value>Liên kết dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionLink_ItemOption_Caption" xml:space="preserve">
+    <value>Dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionLink_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="ItemOptionLink_Index_Caption" xml:space="preserve">
+    <value>Chỉ số</value>
+  </data>
+  <data name="ItemOptionOfLevel_TypeCaption" xml:space="preserve">
+    <value>Dòng vật phẩm theo cấp</value>
+  </data>
+  <data name="ItemOptionOfLevel_TypeCaptionPlural" xml:space="preserve">
+    <value>Dòng vật phẩm theo cấp</value>
+  </data>
+  <data name="ItemOptionOfLevel_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="ItemOptionOfLevel_RequiredItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm yêu cầu</value>
+  </data>
+  <data name="ItemOptionOfLevel_PowerUpDefinition_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh</value>
+  </data>
+  <data name="ItemOptionType_TypeCaption" xml:space="preserve">
+    <value>Loại dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionType_TypeCaptionPlural" xml:space="preserve">
+    <value>Loại dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionType_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="ItemOptionType_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemOptionType_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ItemOptionType_IsVisible_Caption" xml:space="preserve">
+    <value>Hiển thị</value>
+  </data>
+  <data name="ItemOptionTypes_TypeCaption" xml:space="preserve">
+    <value>Loại dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionTypes_TypeCaptionPlural" xml:space="preserve">
+    <value>Loại dòng vật phẩm</value>
+  </data>
+  <data name="ItemOptionTypes_Excellent_Caption" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="ItemOptionTypes_Wing_Caption" xml:space="preserve">
+    <value>Cánh</value>
+  </data>
+  <data name="ItemOptionTypes_Luck_Caption" xml:space="preserve">
+    <value>May mắn</value>
+  </data>
+  <data name="ItemOptionTypes_Option_Caption" xml:space="preserve">
+    <value>Dòng</value>
+  </data>
+  <data name="ItemOptionTypes_HarmonyOption_Caption" xml:space="preserve">
+    <value>Dòng harmony</value>
+  </data>
+  <data name="ItemOptionTypes_AncientOption_Caption" xml:space="preserve">
+    <value>Dòng thần</value>
+  </data>
+  <data name="ItemOptionTypes_AncientBonus_Caption" xml:space="preserve">
+    <value>Thưởng bộ thần</value>
+  </data>
+  <data name="ItemOptionTypes_GuardianOption_Caption" xml:space="preserve">
+    <value>Dòng Guardian</value>
+  </data>
+  <data name="ItemOptionTypes_SocketOption_Caption" xml:space="preserve">
+    <value>Dòng socket</value>
+  </data>
+  <data name="ItemOptionTypes_SocketBonusOption_Caption" xml:space="preserve">
+    <value>Dòng thưởng socket</value>
+  </data>
+  <data name="ItemOptionTypes_BlueFenrir_Caption" xml:space="preserve">
+    <value>Fenrir xanh</value>
+  </data>
+  <data name="ItemOptionTypes_BlackFenrir_Caption" xml:space="preserve">
+    <value>Fenrir đen</value>
+  </data>
+  <data name="ItemOptionTypes_GoldFenrir_Caption" xml:space="preserve">
+    <value>Fenrir vàng</value>
+  </data>
+  <data name="ItemOptionTypes_DarkHorse_Caption" xml:space="preserve">
+    <value>Dark Horse</value>
+  </data>
+  <data name="ItemSetGroup_TypeCaption" xml:space="preserve">
+    <value>Nhóm bộ vật phẩm</value>
+  </data>
+  <data name="ItemSetGroup_TypeCaptionPlural" xml:space="preserve">
+    <value>Nhóm bộ vật phẩm</value>
+  </data>
+  <data name="ItemSetGroup_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemSetGroup_AlwaysApplies_Caption" xml:space="preserve">
+    <value>Luôn áp dụng</value>
+  </data>
+  <data name="ItemSetGroup_CountDistinct_Caption" xml:space="preserve">
+    <value>Đếm không trùng</value>
+  </data>
+  <data name="ItemSetGroup_MinimumItemCount_Caption" xml:space="preserve">
+    <value>Số vật phẩm tối thiểu</value>
+  </data>
+  <data name="ItemSetGroup_SetLevel_Caption" xml:space="preserve">
+    <value>Cấp bộ</value>
+  </data>
+  <data name="ItemSetGroup_Options_Caption" xml:space="preserve">
+    <value>Dòng</value>
+  </data>
+  <data name="ItemSetGroup_Items_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="ItemSlotType_TypeCaption" xml:space="preserve">
+    <value>Loại ô vật phẩm</value>
+  </data>
+  <data name="ItemSlotType_TypeCaptionPlural" xml:space="preserve">
+    <value>Loại ô vật phẩm</value>
+  </data>
+  <data name="ItemSlotType_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="ItemSlotType_ItemSlots_Caption" xml:space="preserve">
+    <value>Ô vật phẩm</value>
+  </data>
+  <data name="ItemStorage_TypeCaption" xml:space="preserve">
+    <value>Kho vật phẩm</value>
+  </data>
+  <data name="ItemStorage_TypeCaptionPlural" xml:space="preserve">
+    <value>Kho vật phẩm</value>
+  </data>
+  <data name="ItemStorage_Items_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="ItemStorage_Money_Caption" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="JewelMix_TypeCaption" xml:space="preserve">
+    <value>Ghép ngọc</value>
+  </data>
+  <data name="JewelMix_TypeCaptionPlural" xml:space="preserve">
+    <value>Ghép ngọc</value>
+  </data>
+  <data name="JewelMix_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="JewelMix_SingleJewel_Caption" xml:space="preserve">
+    <value>Ngọc đơn</value>
+  </data>
+  <data name="JewelMix_MixedJewel_Caption" xml:space="preserve">
+    <value>Ngọc đã ghép</value>
+  </data>
+  <data name="KillTarget_TypeCaption" xml:space="preserve">
+    <value>Mục tiêu tiêu diệt</value>
+  </data>
+  <data name="KillTarget_AnyObject_Caption" xml:space="preserve">
+    <value>Bất kỳ đối tượng</value>
+  </data>
+  <data name="KillTarget_AnyMonster_Caption" xml:space="preserve">
+    <value>Bất kỳ quái vật</value>
+  </data>
+  <data name="KillTarget_Specific_Caption" xml:space="preserve">
+    <value>Cụ thể</value>
+  </data>
+  <data name="LetterBody_TypeCaption" xml:space="preserve">
+    <value>Nội dung thư</value>
+  </data>
+  <data name="LetterBody_TypeCaptionPlural" xml:space="preserve">
+    <value>Nội dung thư</value>
+  </data>
+  <data name="LetterBody_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="LetterBody_Header_Caption" xml:space="preserve">
+    <value>Tiêu đề</value>
+  </data>
+  <data name="LetterBody_Message_Caption" xml:space="preserve">
+    <value>Lời nhắn</value>
+  </data>
+  <data name="LetterBody_Rotation_Caption" xml:space="preserve">
+    <value>Xoay</value>
+  </data>
+  <data name="LetterBody_Animation_Caption" xml:space="preserve">
+    <value>Hoạt ảnh</value>
+  </data>
+  <data name="LetterBody_SenderAppearance_Caption" xml:space="preserve">
+    <value>Ngoại hình người gửi</value>
+  </data>
+  <data name="LevelBonus_TypeCaption" xml:space="preserve">
+    <value>Thưởng theo cấp</value>
+  </data>
+  <data name="LevelBonus_TypeCaptionPlural" xml:space="preserve">
+    <value>Thưởng theo cấp</value>
+  </data>
+  <data name="LevelBonus_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="LevelBonus_AdditionalValue_Caption" xml:space="preserve">
+    <value>Giá trị cộng thêm</value>
+  </data>
+  <data name="LevelDependentDamage_TypeCaption" xml:space="preserve">
+    <value>Sát thương theo cấp</value>
+  </data>
+  <data name="LevelDependentDamage_TypeCaptionPlural" xml:space="preserve">
+    <value>Sát thương theo cấp</value>
+  </data>
+  <data name="LevelDependentDamage_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="LevelDependentDamage_Damage_Caption" xml:space="preserve">
+    <value>Sát thương</value>
+  </data>
+  <data name="LevelType_TypeCaption" xml:space="preserve">
+    <value>Kiểu cấp</value>
+  </data>
+  <data name="LevelType_OptionLevel_Caption" xml:space="preserve">
+    <value>Cấp dòng</value>
+  </data>
+  <data name="LevelType_ItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm</value>
+  </data>
+  <data name="MagicEffectDefinition_TypeCaption" xml:space="preserve">
+    <value>Hiệu ứng phép</value>
+  </data>
+  <data name="MagicEffectDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Hiệu ứng phép</value>
+  </data>
+  <data name="MagicEffectDefinition_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="MagicEffectDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="MagicEffectDefinition_SubType_Caption" xml:space="preserve">
+    <value>Loại phụ</value>
+  </data>
+  <data name="MagicEffectDefinition_InformObservers_Caption" xml:space="preserve">
+    <value>Thông báo người quan sát</value>
+  </data>
+  <data name="MagicEffectDefinition_StopByDeath_Caption" xml:space="preserve">
+    <value>Dừng khi chết</value>
+  </data>
+  <data name="MagicEffectDefinition_SendDuration_Caption" xml:space="preserve">
+    <value>Gửi thời lượng</value>
+  </data>
+  <data name="MagicEffectDefinition_DurationDependsOnTargetLevel_Caption" xml:space="preserve">
+    <value>Thời lượng theo cấp mục tiêu</value>
+  </data>
+  <data name="MagicEffectDefinition_MonsterTargetLevelDivisor_Caption" xml:space="preserve">
+    <value>Hệ số chia cấp mục tiêu quái</value>
+  </data>
+  <data name="MagicEffectDefinition_PlayerTargetLevelDivisor_Caption" xml:space="preserve">
+    <value>Hệ số chia cấp mục tiêu người chơi</value>
+  </data>
+  <data name="MagicEffectDefinition_Chance_Caption" xml:space="preserve">
+    <value>Tỉ lệ</value>
+  </data>
+  <data name="MagicEffectDefinition_ChancePvp_Caption" xml:space="preserve">
+    <value>Tỉ lệ PvP</value>
+  </data>
+  <data name="MagicEffectDefinition_Duration_Caption" xml:space="preserve">
+    <value>Thời lượng</value>
+  </data>
+  <data name="MagicEffectDefinition_DurationPvp_Caption" xml:space="preserve">
+    <value>Thời lượng PvP</value>
+  </data>
+  <data name="MagicEffectDefinition_PowerUpDefinitions_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh</value>
+  </data>
+  <data name="MagicEffectDefinition_PowerUpDefinitionsPvp_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh PvP</value>
+  </data>
+  <data name="MasterSkillDefinition_TypeCaption" xml:space="preserve">
+    <value>Kỹ năng Master</value>
+  </data>
+  <data name="MasterSkillDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Kỹ năng Master</value>
+  </data>
+  <data name="MasterSkillDefinition_Root_Caption" xml:space="preserve">
+    <value>Gốc</value>
+  </data>
+  <data name="MasterSkillDefinition_RequiredMasterSkills_Caption" xml:space="preserve">
+    <value>Kỹ năng Master yêu cầu</value>
+  </data>
+  <data name="MasterSkillDefinition_Rank_Caption" xml:space="preserve">
+    <value>Bậc</value>
+  </data>
+  <data name="MasterSkillDefinition_MaximumLevel_Caption" xml:space="preserve">
+    <value>Cấp tối đa</value>
+  </data>
+  <data name="MasterSkillDefinition_MinimumLevel_Caption" xml:space="preserve">
+    <value>Cấp tối thiểu</value>
+  </data>
+  <data name="MasterSkillDefinition_ValueFormula_Caption" xml:space="preserve">
+    <value>Công thức giá trị</value>
+  </data>
+  <data name="MasterSkillDefinition_DisplayValueFormula_Caption" xml:space="preserve">
+    <value>Công thức giá trị hiển thị</value>
+  </data>
+  <data name="MasterSkillDefinition_TargetAttribute_Caption" xml:space="preserve">
+    <value>Thuộc tính đích</value>
+  </data>
+  <data name="MasterSkillDefinition_Aggregation_Caption" xml:space="preserve">
+    <value>Kiểu cộng dồn</value>
+  </data>
+  <data name="MasterSkillDefinition_ReplacedSkill_Caption" xml:space="preserve">
+    <value>Kỹ năng được thay thế</value>
+  </data>
+  <data name="MasterSkillDefinition_ExtendsDuration_Caption" xml:space="preserve">
+    <value>Kéo dài thời lượng</value>
+  </data>
+  <data name="MasterSkillRoot_TypeCaption" xml:space="preserve">
+    <value>Gốc kỹ năng Master</value>
+  </data>
+  <data name="MasterSkillRoot_TypeCaptionPlural" xml:space="preserve">
+    <value>Gốc kỹ năng Master</value>
+  </data>
+  <data name="MasterSkillRoot_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="MasterSkillRoot_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="MemberOfAggregateAttribute_TypeCaption" xml:space="preserve">
+    <value>Thành phần của thuộc tính tổng hợp</value>
+  </data>
+  <data name="MemberOfAggregateAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>Thành phần của thuộc tính tổng hợp</value>
+  </data>
+  <data name="MiniGameChangeEvent_TypeCaption" xml:space="preserve">
+    <value>Sự kiện thay đổi trong sự kiện</value>
+  </data>
+  <data name="MiniGameChangeEvent_TypeCaptionPlural" xml:space="preserve">
+    <value>Sự kiện thay đổi trong sự kiện</value>
+  </data>
+  <data name="MiniGameChangeEvent_Index_Caption" xml:space="preserve">
+    <value>Chỉ số</value>
+  </data>
+  <data name="MiniGameChangeEvent_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="MiniGameChangeEvent_Message_Caption" xml:space="preserve">
+    <value>Lời nhắn</value>
+  </data>
+  <data name="MiniGameChangeEvent_Target_Caption" xml:space="preserve">
+    <value>Mục tiêu</value>
+  </data>
+  <data name="MiniGameChangeEvent_MinimumTargetLevel_Caption" xml:space="preserve">
+    <value>Cấp mục tiêu tối thiểu</value>
+  </data>
+  <data name="MiniGameChangeEvent_NumberOfKills_Caption" xml:space="preserve">
+    <value>Số lần tiêu diệt</value>
+  </data>
+  <data name="MiniGameChangeEvent_MultiplyKillsByPlayers_Caption" xml:space="preserve">
+    <value>Nhân số lần tiêu diệt theo số người chơi</value>
+  </data>
+  <data name="MiniGameChangeEvent_TargetDefinition_Caption" xml:space="preserve">
+    <value>Mục tiêu</value>
+  </data>
+  <data name="MiniGameChangeEvent_SpawnArea_Caption" xml:space="preserve">
+    <value>Vùng xuất hiện</value>
+  </data>
+  <data name="MiniGameChangeEvent_TerrainChanges_Caption" xml:space="preserve">
+    <value>Thay đổi địa hình</value>
+  </data>
+  <data name="MiniGameDefinition_TypeCaption" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="MiniGameDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="MiniGameDefinition_Type_Caption" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="MiniGameDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="MiniGameDefinition_IsActive_Caption" xml:space="preserve">
+    <value>Kích hoạt</value>
+  </data>
+  <data name="MiniGameDefinition_IsActive_Description" xml:space="preserve">
+    <value>Sự kiện này có trong game hay không. Sự kiện không kích hoạt vẫn nằm trong cấu hình, ví dụ để giới hạn game ở nội dung của một phiên bản nhất định.</value>
+  </data>
+  <data name="MiniGameDefinition_IntroducedIn_Caption" xml:space="preserve">
+    <value>Ra mắt ở</value>
+  </data>
+  <data name="MiniGameDefinition_IntroducedIn_Description" xml:space="preserve">
+    <value>Phiên bản game đã thêm sự kiện này. Chỉ để tham khảo, cho phép bật hoặc tắt hàng loạt nội dung của một phiên bản game.</value>
+  </data>
+  <data name="MiniGameDefinition_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="MiniGameDefinition_GameLevel_Caption" xml:space="preserve">
+    <value>Cấp sự kiện</value>
+  </data>
+  <data name="MiniGameDefinition_MapCreationPolicy_Caption" xml:space="preserve">
+    <value>Cách tạo bản đồ</value>
+  </data>
+  <data name="MiniGameDefinition_EnterDuration_Caption" xml:space="preserve">
+    <value>Thời gian vào</value>
+  </data>
+  <data name="MiniGameDefinition_GameDuration_Caption" xml:space="preserve">
+    <value>Thời gian diễn ra</value>
+  </data>
+  <data name="MiniGameDefinition_ExitDuration_Caption" xml:space="preserve">
+    <value>Thời gian rời</value>
+  </data>
+  <data name="MiniGameDefinition_MaximumPlayerCount_Caption" xml:space="preserve">
+    <value>Số người chơi tối đa</value>
+  </data>
+  <data name="MiniGameDefinition_SaveRankingStatistics_Caption" xml:space="preserve">
+    <value>Lưu thống kê xếp hạng</value>
+  </data>
+  <data name="MiniGameDefinition_RequiresMasterClass_Caption" xml:space="preserve">
+    <value>Yêu cầu lớp Master</value>
+  </data>
+  <data name="MiniGameDefinition_MinimumCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật tối thiểu</value>
+  </data>
+  <data name="MiniGameDefinition_MaximumCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật tối đa</value>
+  </data>
+  <data name="MiniGameDefinition_MinimumSpecialCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật đặc biệt tối thiểu</value>
+  </data>
+  <data name="MiniGameDefinition_MaximumSpecialCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật đặc biệt tối đa</value>
+  </data>
+  <data name="MiniGameDefinition_TicketItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vé vào</value>
+  </data>
+  <data name="MiniGameDefinition_EntranceFee_Caption" xml:space="preserve">
+    <value>Phí vào</value>
+  </data>
+  <data name="MiniGameDefinition_ArePlayerKillersAllowedToEnter_Caption" xml:space="preserve">
+    <value>Cho phép sát thủ vào</value>
+  </data>
+  <data name="MiniGameDefinition_AllowParty_Caption" xml:space="preserve">
+    <value>Cho phép tổ đội</value>
+  </data>
+  <data name="MiniGameDefinition_Entrance_Caption" xml:space="preserve">
+    <value>Lối vào</value>
+  </data>
+  <data name="MiniGameDefinition_TicketItem_Caption" xml:space="preserve">
+    <value>Vé vào</value>
+  </data>
+  <data name="MiniGameDefinition_Rewards_Caption" xml:space="preserve">
+    <value>Phần thưởng</value>
+  </data>
+  <data name="MiniGameDefinition_SpawnWaves_Caption" xml:space="preserve">
+    <value>Đợt xuất hiện quái</value>
+  </data>
+  <data name="MiniGameDefinition_ChangeEvents_Caption" xml:space="preserve">
+    <value>Sự kiện thay đổi</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_TypeCaption" xml:space="preserve">
+    <value>Cách tạo bản đồ sự kiện</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_OnePerParty_Caption" xml:space="preserve">
+    <value>Mỗi tổ đội một bản đồ</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_OnePerPlayer_Caption" xml:space="preserve">
+    <value>Mỗi người chơi một bản đồ</value>
+  </data>
+  <data name="MiniGameMapCreationPolicy_Shared_Caption" xml:space="preserve">
+    <value>Dùng chung</value>
+  </data>
+  <data name="MiniGameRankingEntry_TypeCaption" xml:space="preserve">
+    <value>Mục xếp hạng sự kiện</value>
+  </data>
+  <data name="MiniGameRankingEntry_TypeCaptionPlural" xml:space="preserve">
+    <value>Mục xếp hạng sự kiện</value>
+  </data>
+  <data name="MiniGameRankingEntry_GameInstanceId_Caption" xml:space="preserve">
+    <value>Id phiên sự kiện</value>
+  </data>
+  <data name="MiniGameRankingEntry_Timestamp_Caption" xml:space="preserve">
+    <value>Thời điểm</value>
+  </data>
+  <data name="MiniGameRankingEntry_Score_Caption" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="MiniGameRankingEntry_Rank_Caption" xml:space="preserve">
+    <value>Hạng</value>
+  </data>
+  <data name="MiniGameRankingEntry_Character_Caption" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="MiniGameRankingEntry_MiniGame_Caption" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="MiniGameReward_TypeCaption" xml:space="preserve">
+    <value>Phần thưởng sự kiện</value>
+  </data>
+  <data name="MiniGameReward_TypeCaptionPlural" xml:space="preserve">
+    <value>Phần thưởng sự kiện</value>
+  </data>
+  <data name="MiniGameReward_Rank_Caption" xml:space="preserve">
+    <value>Hạng</value>
+  </data>
+  <data name="MiniGameReward_RewardType_Caption" xml:space="preserve">
+    <value>Loại phần thưởng</value>
+  </data>
+  <data name="MiniGameReward_RewardAmount_Caption" xml:space="preserve">
+    <value>Số lượng thưởng</value>
+  </data>
+  <data name="MiniGameReward_RequiredSuccess_Caption" xml:space="preserve">
+    <value>Điều kiện thành công</value>
+  </data>
+  <data name="MiniGameReward_ItemReward_Caption" xml:space="preserve">
+    <value>Vật phẩm thưởng</value>
+  </data>
+  <data name="MiniGameReward_RequiredKill_Caption" xml:space="preserve">
+    <value>Yêu cầu tiêu diệt</value>
+  </data>
+  <data name="MiniGameRewardType_TypeCaption" xml:space="preserve">
+    <value>Loại phần thưởng sự kiện</value>
+  </data>
+  <data name="MiniGameRewardType_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="MiniGameRewardType_Money_Caption" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="MiniGameRewardType_Experience_Caption" xml:space="preserve">
+    <value>Kinh nghiệm</value>
+  </data>
+  <data name="MiniGameRewardType_ExperiencePerRemainingSeconds_Caption" xml:space="preserve">
+    <value>Kinh nghiệm theo số giây còn lại</value>
+  </data>
+  <data name="MiniGameRewardType_Item_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="MiniGameRewardType_ItemDrop_Caption" xml:space="preserve">
+    <value>Rơi vật phẩm</value>
+  </data>
+  <data name="MiniGameRewardType_Score_Caption" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="MiniGameSpawnWave_TypeCaption" xml:space="preserve">
+    <value>Đợt xuất hiện quái của sự kiện</value>
+  </data>
+  <data name="MiniGameSpawnWave_TypeCaptionPlural" xml:space="preserve">
+    <value>Đợt xuất hiện quái của sự kiện</value>
+  </data>
+  <data name="MiniGameSpawnWave_WaveNumber_Caption" xml:space="preserve">
+    <value>Số đợt</value>
+  </data>
+  <data name="MiniGameSpawnWave_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="MiniGameSpawnWave_Message_Caption" xml:space="preserve">
+    <value>Lời nhắn</value>
+  </data>
+  <data name="MiniGameSpawnWave_StartTime_Caption" xml:space="preserve">
+    <value>Thời điểm bắt đầu</value>
+  </data>
+  <data name="MiniGameSpawnWave_EndTime_Caption" xml:space="preserve">
+    <value>Thời điểm kết thúc</value>
+  </data>
+  <data name="MiniGameSuccessFlags_TypeCaption" xml:space="preserve">
+    <value>Cờ thành công của sự kiện</value>
+  </data>
+  <data name="MiniGameSuccessFlags_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Winner_Caption" xml:space="preserve">
+    <value>Người thắng</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinningParty_Caption" xml:space="preserve">
+    <value>Tổ đội thắng</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinnerOrInWinningParty_Caption" xml:space="preserve">
+    <value>Người thắng hoặc trong tổ đội thắng</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Loser_Caption" xml:space="preserve">
+    <value>Người thua</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Alive_Caption" xml:space="preserve">
+    <value>Còn sống</value>
+  </data>
+  <data name="MiniGameSuccessFlags_Dead_Caption" xml:space="preserve">
+    <value>Đã chết</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinnerExists_Caption" xml:space="preserve">
+    <value>Có người thắng</value>
+  </data>
+  <data name="MiniGameSuccessFlags_WinnerNotExists_Caption" xml:space="preserve">
+    <value>Không có người thắng</value>
+  </data>
+  <data name="MiniGameTerrainChange_TypeCaption" xml:space="preserve">
+    <value>Thay đổi địa hình của sự kiện</value>
+  </data>
+  <data name="MiniGameTerrainChange_TypeCaptionPlural" xml:space="preserve">
+    <value>Thay đổi địa hình của sự kiện</value>
+  </data>
+  <data name="MiniGameTerrainChange_TerrainAttribute_Caption" xml:space="preserve">
+    <value>Thuộc tính địa hình</value>
+  </data>
+  <data name="MiniGameTerrainChange_SetTerrainAttribute_Caption" xml:space="preserve">
+    <value>Đặt thuộc tính địa hình</value>
+  </data>
+  <data name="MiniGameTerrainChange_IsClientUpdateRequired_Caption" xml:space="preserve">
+    <value>Cần cập nhật client</value>
+  </data>
+  <data name="MiniGameTerrainChange_StartX_Caption" xml:space="preserve">
+    <value>X bắt đầu</value>
+  </data>
+  <data name="MiniGameTerrainChange_StartY_Caption" xml:space="preserve">
+    <value>Y bắt đầu</value>
+  </data>
+  <data name="MiniGameTerrainChange_EndX_Caption" xml:space="preserve">
+    <value>X kết thúc</value>
+  </data>
+  <data name="MiniGameTerrainChange_EndY_Caption" xml:space="preserve">
+    <value>Y kết thúc</value>
+  </data>
+  <data name="MiniGameType_TypeCaption" xml:space="preserve">
+    <value>Loại sự kiện</value>
+  </data>
+  <data name="MiniGameType_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="MiniGameType_DevilSquare_Caption" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="MiniGameType_BloodCastle_Caption" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="MiniGameType_ChaosCastle_Caption" xml:space="preserve">
+    <value>Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="MiniGameType_IllusionTemple_Caption" xml:space="preserve">
+    <value>Đền Ảo Ảnh</value>
+  </data>
+  <data name="MiniGameType_Doppelganger_Caption" xml:space="preserve">
+    <value>Doppelganger</value>
+  </data>
+  <data name="MixResult_TypeCaption" xml:space="preserve">
+    <value>Kết quả ghép</value>
+  </data>
+  <data name="MixResult_Disappear_Caption" xml:space="preserve">
+    <value>Biến mất</value>
+  </data>
+  <data name="MixResult_StaysAsIs_Caption" xml:space="preserve">
+    <value>Giữ nguyên</value>
+  </data>
+  <data name="MixResult_ChaosWeaponAndFirstWingsDowngradedRandom_Caption" xml:space="preserve">
+    <value>Vũ khí Chaos và cánh cấp 1 bị giảm ngẫu nhiên</value>
+  </data>
+  <data name="MixResult_ThirdWingsDowngradedRandom_Caption" xml:space="preserve">
+    <value>Cánh cấp 3 bị giảm ngẫu nhiên</value>
+  </data>
+  <data name="MixResult_DisappearAndProtectReferencedItems_Caption" xml:space="preserve">
+    <value>Biến mất và bảo vệ vật phẩm tham chiếu</value>
+  </data>
+  <data name="MixResult_DisappearAndProtectReferencedItems_Description" xml:space="preserve">
+    <value>Vật phẩm biến mất. Khi chế tạo thất bại, các vật phẩm tham chiếu (ví dụ vật phẩm được nâng cấp) vẫn giữ nguyên.</value>
+  </data>
+  <data name="ModelResourceProvider_TypeCaption" xml:space="preserve">
+    <value>Nguồn tài nguyên mô hình</value>
+  </data>
+  <data name="ModelResourceProvider_TypeCaptionPlural" xml:space="preserve">
+    <value>Nguồn tài nguyên mô hình</value>
+  </data>
+  <data name="MonsterAttribute_TypeCaption" xml:space="preserve">
+    <value>Thuộc tính quái vật</value>
+  </data>
+  <data name="MonsterAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>Thuộc tính quái vật</value>
+  </data>
+  <data name="MonsterAttribute_AttributeDefinition_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="MonsterAttribute_Value_Caption" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="MonsterDefinition_TypeCaption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="MonsterDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="MonsterDefinition_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="MonsterDefinition_Designation_Caption" xml:space="preserve">
+    <value>Tên gọi</value>
+  </data>
+  <data name="MonsterDefinition_IsActive_Caption" xml:space="preserve">
+    <value>Kích hoạt</value>
+  </data>
+  <data name="MonsterDefinition_IsActive_Description" xml:space="preserve">
+    <value>Quái vật này có trong game hay không. Quái không kích hoạt vẫn nằm trong cấu hình, ví dụ để giới hạn game ở nội dung của một phiên bản nhất định.</value>
+  </data>
+  <data name="MonsterDefinition_IntroducedIn_Caption" xml:space="preserve">
+    <value>Ra mắt ở</value>
+  </data>
+  <data name="MonsterDefinition_IntroducedIn_Description" xml:space="preserve">
+    <value>Phiên bản game đã thêm quái vật này. Chỉ để tham khảo, cho phép bật hoặc tắt hàng loạt nội dung của một phiên bản game.</value>
+  </data>
+  <data name="MonsterDefinition_MoveRange_Caption" xml:space="preserve">
+    <value>Phạm vi di chuyển</value>
+  </data>
+  <data name="MonsterDefinition_AttackRange_Caption" xml:space="preserve">
+    <value>Tầm tấn công</value>
+  </data>
+  <data name="MonsterDefinition_ViewRange_Caption" xml:space="preserve">
+    <value>Tầm nhìn</value>
+  </data>
+  <data name="MonsterDefinition_MoveDelay_Caption" xml:space="preserve">
+    <value>Độ trễ di chuyển</value>
+  </data>
+  <data name="MonsterDefinition_AttackDelay_Caption" xml:space="preserve">
+    <value>Độ trễ tấn công</value>
+  </data>
+  <data name="MonsterDefinition_RespawnDelay_Caption" xml:space="preserve">
+    <value>Thời gian hồi sinh</value>
+  </data>
+  <data name="MonsterDefinition_Attribute_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="MonsterDefinition_NumberOfMaximumItemDrops_Caption" xml:space="preserve">
+    <value>Số vật phẩm rơi tối đa</value>
+  </data>
+  <data name="MonsterDefinition_NpcWindow_Caption" xml:space="preserve">
+    <value>Cửa sổ NPC</value>
+  </data>
+  <data name="MonsterDefinition_ObjectKind_Caption" xml:space="preserve">
+    <value>Loại đối tượng</value>
+  </data>
+  <data name="MonsterDefinition_IntelligenceTypeName_Caption" xml:space="preserve">
+    <value>Tên kiểu trí tuệ</value>
+  </data>
+  <data name="MonsterDefinition_AttackSkill_Caption" xml:space="preserve">
+    <value>Kỹ năng tấn công</value>
+  </data>
+  <data name="MonsterDefinition_MerchantStore_Caption" xml:space="preserve">
+    <value>Cửa hàng NPC</value>
+  </data>
+  <data name="MonsterDefinition_ItemCraftings_Caption" xml:space="preserve">
+    <value>Chế tạo vật phẩm</value>
+  </data>
+  <data name="MonsterDefinition_DropItemGroups_Caption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="MonsterDefinition_Attributes_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="MonsterDefinition_Quests_Caption" xml:space="preserve">
+    <value>Nhiệm vụ</value>
+  </data>
+  <data name="MonsterSpawnArea_TypeCaption" xml:space="preserve">
+    <value>Vùng xuất hiện quái</value>
+  </data>
+  <data name="MonsterSpawnArea_TypeCaptionPlural" xml:space="preserve">
+    <value>Vùng xuất hiện quái</value>
+  </data>
+  <data name="MonsterSpawnArea_MonsterDefinition_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="MonsterSpawnArea_GameMap_Caption" xml:space="preserve">
+    <value>Bản đồ game</value>
+  </data>
+  <data name="MonsterSpawnArea_Direction_Caption" xml:space="preserve">
+    <value>Hướng</value>
+  </data>
+  <data name="MonsterSpawnArea_Quantity_Caption" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="MonsterSpawnArea_SpawnTrigger_Caption" xml:space="preserve">
+    <value>Điều kiện xuất hiện</value>
+  </data>
+  <data name="MonsterSpawnArea_WaveNumber_Caption" xml:space="preserve">
+    <value>Số đợt</value>
+  </data>
+  <data name="MonsterSpawnArea_MaximumHealthOverride_Caption" xml:space="preserve">
+    <value>Ghi đè máu tối đa</value>
+  </data>
+  <data name="NpcObjectKind_TypeCaption" xml:space="preserve">
+    <value>Loại đối tượng NPC</value>
+  </data>
+  <data name="NpcObjectKind_Monster_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="NpcObjectKind_PassiveNpc_Caption" xml:space="preserve">
+    <value>NPC thụ động</value>
+  </data>
+  <data name="NpcObjectKind_Guard_Caption" xml:space="preserve">
+    <value>Lính gác</value>
+  </data>
+  <data name="NpcObjectKind_Trap_Caption" xml:space="preserve">
+    <value>Bẫy</value>
+  </data>
+  <data name="NpcObjectKind_Gate_Caption" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="NpcObjectKind_Statue_Caption" xml:space="preserve">
+    <value>Tượng</value>
+  </data>
+  <data name="NpcObjectKind_SoccerBall_Caption" xml:space="preserve">
+    <value>Quả bóng</value>
+  </data>
+  <data name="NpcObjectKind_Destructible_Caption" xml:space="preserve">
+    <value>Phá hủy được</value>
+  </data>
+  <data name="NpcWindow_TypeCaption" xml:space="preserve">
+    <value>Cửa sổ NPC</value>
+  </data>
+  <data name="NpcWindow_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="NpcWindow_Merchant_Caption" xml:space="preserve">
+    <value>Thương nhân</value>
+  </data>
+  <data name="NpcWindow_Merchant1_Caption" xml:space="preserve">
+    <value>Thương nhân 1</value>
+  </data>
+  <data name="NpcWindow_Storage_Caption" xml:space="preserve">
+    <value>Kho</value>
+  </data>
+  <data name="NpcWindow_VaultStorage_Caption" xml:space="preserve">
+    <value>Kho đồ</value>
+  </data>
+  <data name="NpcWindow_ChaosMachine_Caption" xml:space="preserve">
+    <value>Máy Chaos</value>
+  </data>
+  <data name="NpcWindow_DevilSquare_Caption" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="NpcWindow_BloodCastle_Caption" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="NpcWindow_PetTrainer_Caption" xml:space="preserve">
+    <value>Huấn luyện thú cưng</value>
+  </data>
+  <data name="NpcWindow_Lahap_Caption" xml:space="preserve">
+    <value>Lahap</value>
+  </data>
+  <data name="NpcWindow_CastleSeniorNPC_Caption" xml:space="preserve">
+    <value>NPC cao cấp lâu đài</value>
+  </data>
+  <data name="NpcWindow_ElphisRefinery_Caption" xml:space="preserve">
+    <value>Lò tinh luyện Elphis</value>
+  </data>
+  <data name="NpcWindow_RefineStoneMaking_Caption" xml:space="preserve">
+    <value>Chế tạo đá tinh luyện</value>
+  </data>
+  <data name="NpcWindow_RemoveJohOption_Caption" xml:space="preserve">
+    <value>Gỡ dòng Joh</value>
+  </data>
+  <data name="NpcWindow_IllusionTemple_Caption" xml:space="preserve">
+    <value>Đền Ảo Ảnh</value>
+  </data>
+  <data name="NpcWindow_ChaosCardCombination_Caption" xml:space="preserve">
+    <value>Ghép thẻ Chaos</value>
+  </data>
+  <data name="NpcWindow_CherryBlossomBranchesAssembly_Caption" xml:space="preserve">
+    <value>Ghép cành hoa anh đào</value>
+  </data>
+  <data name="NpcWindow_SeedMaster_Caption" xml:space="preserve">
+    <value>Seed Master</value>
+  </data>
+  <data name="NpcWindow_SeedResearcher_Caption" xml:space="preserve">
+    <value>Seed Researcher</value>
+  </data>
+  <data name="NpcWindow_StatReInitializer_Caption" xml:space="preserve">
+    <value>Đặt lại chỉ số</value>
+  </data>
+  <data name="NpcWindow_DelgadoLuckyCoinRegistration_Caption" xml:space="preserve">
+    <value>Đăng ký Lucky Coin (Delgado)</value>
+  </data>
+  <data name="NpcWindow_DoorkeeperTitusDuelWatch_Caption" xml:space="preserve">
+    <value>Xem đấu tay đôi (Người gác cổng Titus)</value>
+  </data>
+  <data name="NpcWindow_LugardDoppelgangerEntry_Caption" xml:space="preserve">
+    <value>Vào Doppelganger (Lugard)</value>
+  </data>
+  <data name="NpcWindow_JerintGaionEvententry_Caption" xml:space="preserve">
+    <value>Vào sự kiện (Jerint Gaion)</value>
+  </data>
+  <data name="NpcWindow_JuliaWarpMarketServer_Caption" xml:space="preserve">
+    <value>Market Server (Julia)</value>
+  </data>
+  <data name="NpcWindow_GuildMaster_Caption" xml:space="preserve">
+    <value>Guild Master</value>
+  </data>
+  <data name="NpcWindow_CombineLuckyItem_Caption" xml:space="preserve">
+    <value>Ghép vật phẩm may mắn</value>
+  </data>
+  <data name="NpcWindow_NpcDialog_Caption" xml:space="preserve">
+    <value>Hội thoại NPC</value>
+  </data>
+  <data name="NpcWindow_LegacyQuest_Caption" xml:space="preserve">
+    <value>Nhiệm vụ cũ</value>
+  </data>
+  <data name="PowerUpDefinition_TypeCaption" xml:space="preserve">
+    <value>Tăng sức mạnh</value>
+  </data>
+  <data name="PowerUpDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Tăng sức mạnh</value>
+  </data>
+  <data name="PowerUpDefinition_TargetAttribute_Caption" xml:space="preserve">
+    <value>Thuộc tính đích</value>
+  </data>
+  <data name="PowerUpDefinition_Boost_Caption" xml:space="preserve">
+    <value>Mức tăng</value>
+  </data>
+  <data name="PowerUpDefinitionValue_TypeCaption" xml:space="preserve">
+    <value>Giá trị tăng sức mạnh</value>
+  </data>
+  <data name="PowerUpDefinitionValue_TypeCaptionPlural" xml:space="preserve">
+    <value>Giá trị tăng sức mạnh</value>
+  </data>
+  <data name="PowerUpDefinitionValue_ConstantValue_Caption" xml:space="preserve">
+    <value>Giá trị cố định</value>
+  </data>
+  <data name="PowerUpDefinitionValue_RelatedValues_Caption" xml:space="preserve">
+    <value>Giá trị liên quan</value>
+  </data>
+  <data name="PowerUpDefinitionValue_MaximumValue_Caption" xml:space="preserve">
+    <value>Giá trị tối đa</value>
+  </data>
+  <data name="QuestDefinition_TypeCaption" xml:space="preserve">
+    <value>Nhiệm vụ</value>
+  </data>
+  <data name="QuestDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Nhiệm vụ</value>
+  </data>
+  <data name="QuestDefinition_QuestGiver_Caption" xml:space="preserve">
+    <value>Người giao nhiệm vụ</value>
+  </data>
+  <data name="QuestDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="QuestDefinition_Group_Caption" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="QuestDefinition_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="QuestDefinition_StartingNumber_Caption" xml:space="preserve">
+    <value>Số bắt đầu</value>
+  </data>
+  <data name="QuestDefinition_RefuseNumber_Caption" xml:space="preserve">
+    <value>Số từ chối</value>
+  </data>
+  <data name="QuestDefinition_Repeatable_Caption" xml:space="preserve">
+    <value>Làm lại được</value>
+  </data>
+  <data name="QuestDefinition_RequiresClientAction_Caption" xml:space="preserve">
+    <value>Cần thao tác client</value>
+  </data>
+  <data name="QuestDefinition_RequiredStartMoney_Caption" xml:space="preserve">
+    <value>Zen yêu cầu khi bắt đầu</value>
+  </data>
+  <data name="QuestDefinition_MinimumCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật tối thiểu</value>
+  </data>
+  <data name="QuestDefinition_MaximumCharacterLevel_Caption" xml:space="preserve">
+    <value>Cấp nhân vật tối đa</value>
+  </data>
+  <data name="QuestDefinition_QualifiedCharacter_Caption" xml:space="preserve">
+    <value>Nhân vật đủ điều kiện</value>
+  </data>
+  <data name="QuestDefinition_RequiredMonsterKills_Caption" xml:space="preserve">
+    <value>Yêu cầu tiêu diệt quái</value>
+  </data>
+  <data name="QuestDefinition_RequiredItems_Caption" xml:space="preserve">
+    <value>Vật phẩm yêu cầu</value>
+  </data>
+  <data name="QuestDefinition_Rewards_Caption" xml:space="preserve">
+    <value>Phần thưởng</value>
+  </data>
+  <data name="QuestItemRequirement_TypeCaption" xml:space="preserve">
+    <value>Yêu cầu vật phẩm nhiệm vụ</value>
+  </data>
+  <data name="QuestItemRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>Yêu cầu vật phẩm nhiệm vụ</value>
+  </data>
+  <data name="QuestItemRequirement_Item_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="QuestItemRequirement_DropItemGroup_Caption" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi</value>
+  </data>
+  <data name="QuestItemRequirement_MinimumNumber_Caption" xml:space="preserve">
+    <value>Số lượng tối thiểu</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_TypeCaption" xml:space="preserve">
+    <value>Yêu cầu tiêu diệt quái của nhiệm vụ</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_TypeCaptionPlural" xml:space="preserve">
+    <value>Yêu cầu tiêu diệt quái của nhiệm vụ</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_Monster_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="QuestMonsterKillRequirement_MinimumNumber_Caption" xml:space="preserve">
+    <value>Số lượng tối thiểu</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái yêu cầu tiêu diệt quái</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_TypeCaptionPlural" xml:space="preserve">
+    <value>Trạng thái yêu cầu tiêu diệt quái</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_Requirement_Caption" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="QuestMonsterKillRequirementState_KillCount_Caption" xml:space="preserve">
+    <value>Số lần tiêu diệt</value>
+  </data>
+  <data name="QuestReward_TypeCaption" xml:space="preserve">
+    <value>Phần thưởng nhiệm vụ</value>
+  </data>
+  <data name="QuestReward_TypeCaptionPlural" xml:space="preserve">
+    <value>Phần thưởng nhiệm vụ</value>
+  </data>
+  <data name="QuestReward_RewardType_Caption" xml:space="preserve">
+    <value>Loại phần thưởng</value>
+  </data>
+  <data name="QuestReward_Value_Caption" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="QuestReward_ItemReward_Caption" xml:space="preserve">
+    <value>Vật phẩm thưởng</value>
+  </data>
+  <data name="QuestReward_AttributeReward_Caption" xml:space="preserve">
+    <value>Thuộc tính thưởng</value>
+  </data>
+  <data name="QuestReward_SkillReward_Caption" xml:space="preserve">
+    <value>Kỹ năng thưởng</value>
+  </data>
+  <data name="QuestRewardType_TypeCaption" xml:space="preserve">
+    <value>Loại phần thưởng nhiệm vụ</value>
+  </data>
+  <data name="QuestRewardType_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="QuestRewardType_Experience_Caption" xml:space="preserve">
+    <value>Kinh nghiệm</value>
+  </data>
+  <data name="QuestRewardType_Money_Caption" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="QuestRewardType_Item_Caption" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="QuestRewardType_GensAttribution_Caption" xml:space="preserve">
+    <value>Gia nhập Gens</value>
+  </data>
+  <data name="QuestRewardType_LevelUpPoints_Caption" xml:space="preserve">
+    <value>Điểm lên cấp</value>
+  </data>
+  <data name="QuestRewardType_CharacterEvolutionFirstToSecond_Caption" xml:space="preserve">
+    <value>Chuyển lớp nhân vật lần 1 sang 2</value>
+  </data>
+  <data name="QuestRewardType_CharacterEvolutionSecondToThird_Caption" xml:space="preserve">
+    <value>Chuyển lớp nhân vật lần 2 sang 3</value>
+  </data>
+  <data name="QuestRewardType_Attribute_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="QuestRewardType_Skill_Caption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="Rectangle_TypeCaption" xml:space="preserve">
+    <value>Hình chữ nhật</value>
+  </data>
+  <data name="Rectangle_TypeCaptionPlural" xml:space="preserve">
+    <value>Hình chữ nhật</value>
+  </data>
+  <data name="Resources_TypeCaption" xml:space="preserve">
+    <value>Tài nguyên</value>
+  </data>
+  <data name="Resources_TypeCaptionPlural" xml:space="preserve">
+    <value>Tài nguyên</value>
+  </data>
+  <data name="Resources_ResourceManager_Caption" xml:space="preserve">
+    <value>Trình quản lý tài nguyên</value>
+  </data>
+  <data name="Resources_Culture_Caption" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="ResultItemSelection_TypeCaption" xml:space="preserve">
+    <value>Chọn vật phẩm kết quả</value>
+  </data>
+  <data name="ResultItemSelection_Any_Caption" xml:space="preserve">
+    <value>Bất kỳ</value>
+  </data>
+  <data name="ResultItemSelection_All_Caption" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="ServerEndpoint_TypeCaption" xml:space="preserve">
+    <value>Điểm kết nối máy chủ</value>
+  </data>
+  <data name="ServerEndpoint_TypeCaptionPlural" xml:space="preserve">
+    <value>Điểm kết nối máy chủ</value>
+  </data>
+  <data name="ServerEndpoint_NetworkPort_Caption" xml:space="preserve">
+    <value>Cổng mạng</value>
+  </data>
+  <data name="ServerEndpoint_Client_Caption" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="SimpleCraftingSettings_TypeCaption" xml:space="preserve">
+    <value>Cài đặt chế tạo đơn giản</value>
+  </data>
+  <data name="SimpleCraftingSettings_TypeCaptionPlural" xml:space="preserve">
+    <value>Cài đặt chế tạo đơn giản</value>
+  </data>
+  <data name="SimpleCraftingSettings_Money_Caption" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="SimpleCraftingSettings_MoneyPerFinalSuccessPercentage_Caption" xml:space="preserve">
+    <value>Zen cho mỗi phần trăm thành công cuối</value>
+  </data>
+  <data name="SimpleCraftingSettings_NpcPriceDivisor_Caption" xml:space="preserve">
+    <value>Hệ số chia giá NPC</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercent_Caption" xml:space="preserve">
+    <value>Phần trăm thành công</value>
+  </data>
+  <data name="SimpleCraftingSettings_MaximumSuccessPercent_Caption" xml:space="preserve">
+    <value>Phần trăm thành công tối đa</value>
+  </data>
+  <data name="SimpleCraftingSettings_MultipleAllowed_Caption" xml:space="preserve">
+    <value>Cho phép nhiều lần</value>
+  </data>
+  <data name="SimpleCraftingSettings_RequiredItems_Caption" xml:space="preserve">
+    <value>Vật phẩm yêu cầu</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItems_Caption" xml:space="preserve">
+    <value>Vật phẩm kết quả</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemSelect_Caption" xml:space="preserve">
+    <value>Chọn vật phẩm kết quả</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForLuck_Caption" xml:space="preserve">
+    <value>Cộng tỉ lệ thành công cho may mắn</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForExcellentItem_Caption" xml:space="preserve">
+    <value>Cộng tỉ lệ thành công cho vật phẩm excellent</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForAncientItem_Caption" xml:space="preserve">
+    <value>Cộng tỉ lệ thành công cho vật phẩm thần</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForGuardianItem_Caption" xml:space="preserve">
+    <value>Cộng tỉ lệ thành công cho vật phẩm Guardian</value>
+  </data>
+  <data name="SimpleCraftingSettings_SuccessPercentageAdditionForSocketItem_Caption" xml:space="preserve">
+    <value>Cộng tỉ lệ thành công cho vật phẩm socket</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemLuckOptionChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ dòng may mắn của vật phẩm kết quả</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemSkillChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ có kỹ năng của vật phẩm kết quả</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemExcellentOptionChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ dòng excellent của vật phẩm kết quả</value>
+  </data>
+  <data name="SimpleCraftingSettings_ResultItemMaxExcOptionCount_Caption" xml:space="preserve">
+    <value>Số dòng excellent tối đa của vật phẩm kết quả</value>
+  </data>
+  <data name="Skill_TypeCaption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="Skill_TypeCaptionPlural" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="Skill_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="Skill_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Skill_AttackDamage_Caption" xml:space="preserve">
+    <value>Sát thương tấn công</value>
+  </data>
+  <data name="Skill_Requirements_Caption" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="Skill_ConsumeRequirements_Caption" xml:space="preserve">
+    <value>Yêu cầu tiêu hao</value>
+  </data>
+  <data name="Skill_AttributeRelationships_Caption" xml:space="preserve">
+    <value>Quan hệ thuộc tính</value>
+  </data>
+  <data name="Skill_Range_Caption" xml:space="preserve">
+    <value>Tầm</value>
+  </data>
+  <data name="Skill_DamageType_Caption" xml:space="preserve">
+    <value>Loại sát thương</value>
+  </data>
+  <data name="Skill_SkillType_Caption" xml:space="preserve">
+    <value>Loại kỹ năng</value>
+  </data>
+  <data name="Skill_Target_Caption" xml:space="preserve">
+    <value>Mục tiêu</value>
+  </data>
+  <data name="Skill_ImplicitTargetRange_Caption" xml:space="preserve">
+    <value>Tầm mục tiêu ngầm định</value>
+  </data>
+  <data name="Skill_TargetRestriction_Caption" xml:space="preserve">
+    <value>Giới hạn mục tiêu</value>
+  </data>
+  <data name="Skill_MovesToTarget_Caption" xml:space="preserve">
+    <value>Di chuyển đến mục tiêu</value>
+  </data>
+  <data name="Skill_MovesTarget_Caption" xml:space="preserve">
+    <value>Di chuyển mục tiêu</value>
+  </data>
+  <data name="Skill_ElementalModifierTarget_Caption" xml:space="preserve">
+    <value>Mục tiêu hiệu chỉnh nguyên tố</value>
+  </data>
+  <data name="Skill_MagicEffectDef_Caption" xml:space="preserve">
+    <value>Hiệu ứng phép</value>
+  </data>
+  <data name="Skill_QualifiedCharacters_Caption" xml:space="preserve">
+    <value>Nhân vật dùng được</value>
+  </data>
+  <data name="Skill_MasterDefinition_Caption" xml:space="preserve">
+    <value>Master</value>
+  </data>
+  <data name="Skill_AreaSkillSettings_Caption" xml:space="preserve">
+    <value>Cài đặt kỹ năng vùng</value>
+  </data>
+  <data name="SkillComboDefinition_TypeCaption" xml:space="preserve">
+    <value>Combo kỹ năng</value>
+  </data>
+  <data name="SkillComboDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Combo kỹ năng</value>
+  </data>
+  <data name="SkillComboDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="SkillComboDefinition_MaximumCompletionTime_Caption" xml:space="preserve">
+    <value>Thời gian hoàn thành tối đa</value>
+  </data>
+  <data name="SkillComboDefinition_Steps_Caption" xml:space="preserve">
+    <value>Các bước</value>
+  </data>
+  <data name="SkillComboStep_TypeCaption" xml:space="preserve">
+    <value>Bước combo kỹ năng</value>
+  </data>
+  <data name="SkillComboStep_TypeCaptionPlural" xml:space="preserve">
+    <value>Bước combo kỹ năng</value>
+  </data>
+  <data name="SkillComboStep_Order_Caption" xml:space="preserve">
+    <value>Thứ tự</value>
+  </data>
+  <data name="SkillComboStep_IsFinalStep_Caption" xml:space="preserve">
+    <value>Là bước cuối</value>
+  </data>
+  <data name="SkillComboStep_Skill_Caption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="SkillEntry_TypeCaption" xml:space="preserve">
+    <value>Mục kỹ năng</value>
+  </data>
+  <data name="SkillEntry_TypeCaptionPlural" xml:space="preserve">
+    <value>Mục kỹ năng</value>
+  </data>
+  <data name="SkillEntry_Skill_Caption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="SkillEntry_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="SkillEntry_PowerUps_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh</value>
+  </data>
+  <data name="SkillEntry_PowerUpsPvp_Caption" xml:space="preserve">
+    <value>Tăng sức mạnh PvP</value>
+  </data>
+  <data name="SkillEntry_PowerUpDuration_Caption" xml:space="preserve">
+    <value>Thời lượng tăng sức mạnh</value>
+  </data>
+  <data name="SkillEntry_PowerUpDurationPvp_Caption" xml:space="preserve">
+    <value>Thời lượng tăng sức mạnh PvP</value>
+  </data>
+  <data name="SkillEntry_PowerUpChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ tăng sức mạnh</value>
+  </data>
+  <data name="SkillEntry_PowerUpChancePvp_Caption" xml:space="preserve">
+    <value>Tỉ lệ tăng sức mạnh PvP</value>
+  </data>
+  <data name="SkillEntry_Attributes_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="SkillTarget_TypeCaption" xml:space="preserve">
+    <value>Mục tiêu kỹ năng</value>
+  </data>
+  <data name="SkillTarget_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="SkillTarget_Explicit_Caption" xml:space="preserve">
+    <value>Chỉ định</value>
+  </data>
+  <data name="SkillTarget_ImplicitParty_Caption" xml:space="preserve">
+    <value>Tổ đội (ngầm định)</value>
+  </data>
+  <data name="SkillTarget_ImplicitPlayersInRange_Caption" xml:space="preserve">
+    <value>Người chơi trong tầm (ngầm định)</value>
+  </data>
+  <data name="SkillTarget_ImplicitNpcsInRange_Caption" xml:space="preserve">
+    <value>NPC trong tầm (ngầm định)</value>
+  </data>
+  <data name="SkillTarget_ImplicitAllInRange_Caption" xml:space="preserve">
+    <value>Tất cả trong tầm (ngầm định)</value>
+  </data>
+  <data name="SkillTarget_ExplicitWithImplicitInRange_Caption" xml:space="preserve">
+    <value>Chỉ định kèm các mục tiêu trong tầm</value>
+  </data>
+  <data name="SkillTarget_ImplicitPlayer_Caption" xml:space="preserve">
+    <value>Người chơi (ngầm định)</value>
+  </data>
+  <data name="SkillTargetRestriction_TypeCaption" xml:space="preserve">
+    <value>Giới hạn mục tiêu kỹ năng</value>
+  </data>
+  <data name="SkillTargetRestriction_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="SkillTargetRestriction_Self_Caption" xml:space="preserve">
+    <value>Bản thân</value>
+  </data>
+  <data name="SkillTargetRestriction_Party_Caption" xml:space="preserve">
+    <value>Tổ đội</value>
+  </data>
+  <data name="SkillTargetRestriction_Player_Caption" xml:space="preserve">
+    <value>Người chơi</value>
+  </data>
+  <data name="SkillType_TypeCaption" xml:space="preserve">
+    <value>Loại kỹ năng</value>
+  </data>
+  <data name="SkillType_DirectHit_Caption" xml:space="preserve">
+    <value>Đánh trực tiếp</value>
+  </data>
+  <data name="SkillType_CastleSiegeSpecial_Caption" xml:space="preserve">
+    <value>Đặc biệt công thành chiến</value>
+  </data>
+  <data name="SkillType_CastleSiegeSkill_Caption" xml:space="preserve">
+    <value>Kỹ năng công thành chiến</value>
+  </data>
+  <data name="SkillType_AreaSkillAutomaticHits_Caption" xml:space="preserve">
+    <value>Kỹ năng vùng trúng tự động</value>
+  </data>
+  <data name="SkillType_AreaSkillExplicitHits_Caption" xml:space="preserve">
+    <value>Kỹ năng vùng trúng chỉ định</value>
+  </data>
+  <data name="SkillType_AreaSkillExplicitTarget_Caption" xml:space="preserve">
+    <value>Kỹ năng vùng có mục tiêu chỉ định</value>
+  </data>
+  <data name="SkillType_Buff_Caption" xml:space="preserve">
+    <value>Buff</value>
+  </data>
+  <data name="SkillType_Regeneration_Caption" xml:space="preserve">
+    <value>Hồi phục</value>
+  </data>
+  <data name="SkillType_PassiveBoost_Caption" xml:space="preserve">
+    <value>Tăng cường bị động</value>
+  </data>
+  <data name="SkillType_SummonMonster_Caption" xml:space="preserve">
+    <value>Triệu hồi quái</value>
+  </data>
+  <data name="SkillType_Other_Caption" xml:space="preserve">
+    <value>Khác</value>
+  </data>
+  <data name="SpawnTrigger_TypeCaption" xml:space="preserve">
+    <value>Điều kiện xuất hiện</value>
+  </data>
+  <data name="SpawnTrigger_Automatic_Caption" xml:space="preserve">
+    <value>Tự động</value>
+  </data>
+  <data name="SpawnTrigger_AutomaticDuringEvent_Caption" xml:space="preserve">
+    <value>Tự động trong sự kiện</value>
+  </data>
+  <data name="SpawnTrigger_OnceAtEventStart_Caption" xml:space="preserve">
+    <value>Một lần khi sự kiện bắt đầu</value>
+  </data>
+  <data name="SpawnTrigger_AutomaticDuringWave_Caption" xml:space="preserve">
+    <value>Tự động trong đợt</value>
+  </data>
+  <data name="SpawnTrigger_OnceAtWaveStart_Caption" xml:space="preserve">
+    <value>Một lần khi đợt bắt đầu</value>
+  </data>
+  <data name="SpawnTrigger_ManuallyForEvent_Caption" xml:space="preserve">
+    <value>Thủ công cho sự kiện</value>
+  </data>
+  <data name="SpawnTrigger_Wandering_Caption" xml:space="preserve">
+    <value>Đi lang thang</value>
+  </data>
+  <data name="SpecialItemType_TypeCaption" xml:space="preserve">
+    <value>Loại vật phẩm đặc biệt</value>
+  </data>
+  <data name="SpecialItemType_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="SpecialItemType_Ancient_Caption" xml:space="preserve">
+    <value>Thần</value>
+  </data>
+  <data name="SpecialItemType_Excellent_Caption" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="SpecialItemType_RandomItem_Caption" xml:space="preserve">
+    <value>Vật phẩm ngẫu nhiên</value>
+  </data>
+  <data name="SpecialItemType_SocketItem_Caption" xml:space="preserve">
+    <value>Vật phẩm socket</value>
+  </data>
+  <data name="SpecialItemType_Money_Caption" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="StatAttributeDefinition_TypeCaption" xml:space="preserve">
+    <value>Thuộc tính chỉ số</value>
+  </data>
+  <data name="StatAttributeDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Thuộc tính chỉ số</value>
+  </data>
+  <data name="StatAttributeDefinition_Attribute_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="StatAttributeDefinition_BaseValue_Caption" xml:space="preserve">
+    <value>Giá trị gốc</value>
+  </data>
+  <data name="StatAttributeDefinition_IncreasableByPlayer_Caption" xml:space="preserve">
+    <value>Người chơi tăng được</value>
+  </data>
+  <data name="SystemConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình hệ thống</value>
+  </data>
+  <data name="SystemConfiguration_TypeCaptionPlural" xml:space="preserve">
+    <value>Cấu hình hệ thống</value>
+  </data>
+  <data name="SystemConfiguration_IpResolver_Caption" xml:space="preserve">
+    <value>Bộ xác định IP</value>
+  </data>
+  <data name="SystemConfiguration_IpResolverParameter_Caption" xml:space="preserve">
+    <value>Tham số bộ xác định IP</value>
+  </data>
+  <data name="SystemConfiguration_AutoStart_Caption" xml:space="preserve">
+    <value>Tự khởi động</value>
+  </data>
+  <data name="SystemConfiguration_AutoUpdateSchema_Caption" xml:space="preserve">
+    <value>Tự cập nhật lược đồ</value>
+  </data>
+  <data name="SystemConfiguration_ReadConsoleInput_Caption" xml:space="preserve">
+    <value>Đọc nhập từ console</value>
+  </data>
+  <data name="TerrainAttributeType_TypeCaption" xml:space="preserve">
+    <value>Loại thuộc tính địa hình</value>
+  </data>
+  <data name="TerrainAttributeType_Safezone_Caption" xml:space="preserve">
+    <value>Vùng an toàn</value>
+  </data>
+  <data name="TerrainAttributeType_Character_Caption" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="TerrainAttributeType_Blocked_Caption" xml:space="preserve">
+    <value>Bị chặn</value>
+  </data>
+  <data name="TerrainAttributeType_NoGround_Caption" xml:space="preserve">
+    <value>Không có mặt đất</value>
+  </data>
+  <data name="TerrainAttributeType_Water_Caption" xml:space="preserve">
+    <value>Nước</value>
+  </data>
+  <data name="TransientAttribute_TypeCaption" xml:space="preserve">
+    <value>Thuộc tính tạm thời</value>
+  </data>
+  <data name="TransientAttribute_TypeCaptionPlural" xml:space="preserve">
+    <value>Thuộc tính tạm thời</value>
+  </data>
+  <data name="WarpInfo_TypeCaption" xml:space="preserve">
+    <value>Thông tin dịch chuyển</value>
+  </data>
+  <data name="WarpInfo_TypeCaptionPlural" xml:space="preserve">
+    <value>Thông tin dịch chuyển</value>
+  </data>
+  <data name="WarpInfo_Index_Caption" xml:space="preserve">
+    <value>Chỉ số</value>
+  </data>
+  <data name="WarpInfo_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="WarpInfo_Costs_Caption" xml:space="preserve">
+    <value>Chi phí</value>
+  </data>
+  <data name="WarpInfo_LevelRequirement_Caption" xml:space="preserve">
+    <value>Cấp yêu cầu</value>
+  </data>
+  <data name="WarpInfo_Gate_Caption" xml:space="preserve">
+    <value>Cổng</value>
+  </data>
+  <data name="GameMapTerrainVariant_TypeCaption" xml:space="preserve">
+    <value>Biến thể địa hình</value>
+  </data>
+  <data name="GameMapTerrainVariant_TypeCaptionPlural" xml:space="preserve">
+    <value>Biến thể địa hình</value>
+  </data>
+  <data name="GameMapTerrainVariant_TypeDescription" xml:space="preserve">
+    <value>Một địa hình thay thế của bản đồ, dùng thay địa hình gốc ở một trạng thái nhất định.</value>
+  </data>
+  <data name="GameMapTerrainVariant_Number_Caption" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="GameMapTerrainVariant_Number_Description" xml:space="preserve">
+    <value>Số nhận diện biến thể trên bản đồ, ví dụ trạng thái mà nó áp dụng.</value>
+  </data>
+  <data name="GameMapTerrainVariant_Description_Caption" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="GameMapTerrainVariant_TerrainData_Caption" xml:space="preserve">
+    <value>Dữ liệu địa hình</value>
+  </data>
+  <data name="GameMapTerrainVariant_TerrainData_Description" xml:space="preserve">
+    <value>Nội dung tệp *.att của máy chủ.</value>
+  </data>
+  <data name="GameMapDefinition_TerrainVariants_Caption" xml:space="preserve">
+    <value>Biến thể địa hình</value>
+  </data>
+  <data name="GameMapDefinition_TerrainVariants_Description" xml:space="preserve">
+    <value>Các địa hình thay thế của bản đồ, dùng thay địa hình gốc ở một trạng thái nhất định, ví dụ khi pháo đài Crywolf bị chiếm.</value>
+  </data>
+  <data name="AttributeRequirement_MinimumItemLevel_Caption" xml:space="preserve">
+    <value>Cấp vật phẩm tối thiểu</value>
+  </data>
+  <data name="AttributeRequirement_MinimumItemLevel_Description" xml:space="preserve">
+    <value>Cấp vật phẩm mà từ đó yêu cầu này bắt đầu áp dụng. Để trống để luôn áp dụng.</value>
+  </data>
+  <data name="GameConfiguration_ExcellentDropLevelBonus_Caption" xml:space="preserve">
+    <value>Thưởng cấp rơi excellent</value>
+  </data>
+  <data name="GameConfiguration_ExcellentDropLevelBonus_Description" xml:space="preserve">
+    <value>Số mà công thức vật phẩm cộng vào cấp rơi của vật phẩm excellent: cho yêu cầu khi nó không phải đồ thần, và cho giá của nó. Không liên quan đến việc vật phẩm nào rơi ra excellent. Mặc định: 25, như trong game client.</value>
+  </data>
+  <data name="GameConfiguration_AncientDropLevelBonus_Caption" xml:space="preserve">
+    <value>Thưởng cấp rơi đồ thần</value>
+  </data>
+  <data name="GameConfiguration_AncientDropLevelBonus_Description" xml:space="preserve">
+    <value>Số mà công thức vật phẩm cộng vào cấp rơi của vật phẩm thần: cho yêu cầu, và cho giá trị thưởng thần. Mặc định: 30, như trong game client.</value>
+  </data>
+  <data name="GameConfiguration_ItemStatProfiles_Caption" xml:space="preserve">
+    <value>Hồ sơ chỉ số vật phẩm</value>
+  </data>
+  <data name="GameConfiguration_ItemStatProfiles_Description" xml:space="preserve">
+    <value>Các công thức vật phẩm có tên: cấp, dòng excellent, bộ thần và cấp dòng của vật phẩm cộng gì vào chỉ số và yêu cầu. Hồ sơ 'default' ghi mọi phần, các hồ sơ khác chỉ ghi phần khác với nó.</value>
+  </data>
+  <data name="ItemDefinition_StatProfile_Caption" xml:space="preserve">
+    <value>Hồ sơ chỉ số</value>
+  </data>
+  <data name="ItemDefinition_StatProfile_Description" xml:space="preserve">
+    <value>Công thức vật phẩm của vật phẩm này. Nếu không có, vật phẩm dùng công thức của hồ sơ 'default'. Cấu hình mới gán cho mỗi vật phẩm hồ sơ theo loại của nó.</value>
+  </data>
+  <data name="ItemDefinition_ExcellentBonus_Caption" xml:space="preserve">
+    <value>Thưởng excellent cố định</value>
+  </data>
+  <data name="ItemDefinition_ExcellentBonus_Description" xml:space="preserve">
+    <value>Thưởng cố định mà vật phẩm excellent loại này nhận vào sát thương và sức mạnh phép, thay cho phần excellent của hồ sơ chỉ số. 0: dùng phần excellent.</value>
+  </data>
+  <data name="ItemDefinition_ExcellentRaisesLevel_Caption" xml:space="preserve">
+    <value>Excellent tăng cấp yêu cầu</value>
+  </data>
+  <data name="ItemDefinition_ExcellentRaisesLevel_Description" xml:space="preserve">
+    <value>Vật phẩm excellent loại này có cần cấp cao hơn hay không, theo 'cộng cấp yêu cầu excellent' của hồ sơ chỉ số.</value>
+  </data>
+  <data name="ItemStatProfile_TypeCaption" xml:space="preserve">
+    <value>Hồ sơ chỉ số vật phẩm</value>
+  </data>
+  <data name="ItemStatProfile_TypeCaptionPlural" xml:space="preserve">
+    <value>Hồ sơ chỉ số vật phẩm</value>
+  </data>
+  <data name="ItemStatProfile_TypeDescription" xml:space="preserve">
+    <value>Các công thức vật phẩm có tên. Hồ sơ 'default' ghi mọi phần; hồ sơ khác chỉ ghi phần khác với nó.</value>
+  </data>
+  <data name="ItemStatProfile_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemStatProfile_Name_Description" xml:space="preserve">
+    <value>Duy nhất trong cấu hình. 'default' là hồ sơ ghi mọi phần. Tên giống như trong tệp chỉ số vật phẩm của game client.</value>
+  </data>
+  <data name="ItemStatProfile_LevelPerItemLevel_Caption" xml:space="preserve">
+    <value>Cấp yêu cầu mỗi cấp vật phẩm</value>
+  </data>
+  <data name="ItemStatProfile_LevelPerItemLevel_Description" xml:space="preserve">
+    <value>Số mà mỗi cấp vật phẩm cộng vào cấp yêu cầu. Để trống: như hồ sơ 'default'.</value>
+  </data>
+  <data name="ItemStatProfile_ExcellentLevelAdd_Caption" xml:space="preserve">
+    <value>Cộng cấp yêu cầu excellent</value>
+  </data>
+  <data name="ItemStatProfile_ExcellentLevelAdd_Description" xml:space="preserve">
+    <value>Cấp yêu cầu thêm của vật phẩm excellent, nếu excellent tăng cấp yêu cầu. Để trống: như hồ sơ 'default'.</value>
+  </data>
+  <data name="ItemStatProfile_StrengthPerOptionLevel_Caption" xml:space="preserve">
+    <value>Sức mạnh yêu cầu mỗi cấp dòng</value>
+  </data>
+  <data name="ItemStatProfile_StrengthPerOptionLevel_Description" xml:space="preserve">
+    <value>Số mà mỗi cấp dòng cộng vào sức mạnh yêu cầu. Để trống: như hồ sơ 'default'.</value>
+  </data>
+  <data name="ItemStatProfile_StatTerms_Caption" xml:space="preserve">
+    <value>Thành phần chỉ số</value>
+  </data>
+  <data name="ItemStatProfile_StatTerms_Description" xml:space="preserve">
+    <value>Một mục cho mỗi chỉ số mà hồ sơ ghi.</value>
+  </data>
+  <data name="ItemStatProfile_RequirementFormulas_Caption" xml:space="preserve">
+    <value>Công thức yêu cầu</value>
+  </data>
+  <data name="ItemStatProfile_RequirementFormulas_Description" xml:space="preserve">
+    <value>Một mục cho mỗi yêu cầu chỉ số mà hồ sơ ghi.</value>
+  </data>
+  <data name="ItemStatTerms_TypeCaption" xml:space="preserve">
+    <value>Thành phần chỉ số vật phẩm</value>
+  </data>
+  <data name="ItemStatTerms_TypeCaptionPlural" xml:space="preserve">
+    <value>Thành phần chỉ số vật phẩm</value>
+  </data>
+  <data name="ItemStatTerms_TypeDescription" xml:space="preserve">
+    <value>Bảng thưởng theo cấp của một chỉ số, và phần thêm của vật phẩm excellent và thần.</value>
+  </data>
+  <data name="ItemStatTerms_TableState_Caption" xml:space="preserve">
+    <value>Bảng</value>
+  </data>
+  <data name="ItemStatTerms_TableState_Description" xml:space="preserve">
+    <value>Không ghi: như hồ sơ 'default'. Không: chỉ số không có bảng thưởng theo cấp. Giá trị: bảng thưởng theo cấp bên dưới.</value>
+  </data>
+  <data name="ItemStatTerms_Table_Caption" xml:space="preserve">
+    <value>Bảng thưởng theo cấp</value>
+  </data>
+  <data name="ItemStatTerms_Table_Description" xml:space="preserve">
+    <value>Số mà mỗi cấp vật phẩm cộng vào chỉ số.</value>
+  </data>
+  <data name="ItemStatTerms_ExcellentState_Caption" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="ItemStatTerms_ExcellentState_Description" xml:space="preserve">
+    <value>Không ghi: như hồ sơ 'default'. Không: vật phẩm excellent không được thêm gì. Giá trị: gốc × hệ số ÷ cấp rơi + cộng + cấp rơi ÷ số chia.</value>
+  </data>
+  <data name="ItemStatTerms_ExcellentTimes_Caption" xml:space="preserve">
+    <value>Hệ số excellent</value>
+  </data>
+  <data name="ItemStatTerms_ExcellentAdd_Caption" xml:space="preserve">
+    <value>Cộng excellent</value>
+  </data>
+  <data name="ItemStatTerms_ExcellentDropLevelDivisor_Caption" xml:space="preserve">
+    <value>Số chia cấp rơi excellent</value>
+  </data>
+  <data name="ItemStatTerms_ExcellentDropLevelDivisor_Description" xml:space="preserve">
+    <value>0 bỏ qua phần này.</value>
+  </data>
+  <data name="ItemStatTerms_AncientState_Caption" xml:space="preserve">
+    <value>Thần</value>
+  </data>
+  <data name="ItemStatTerms_AncientState_Description" xml:space="preserve">
+    <value>Không ghi: như hồ sơ 'default'. Không: vật phẩm thần không được thêm gì. Giá trị: giá trị × hệ số ÷ d + cộng + d ÷ số chia, với d là cấp rơi cộng thưởng cấp rơi đồ thần.</value>
+  </data>
+  <data name="ItemStatTerms_AncientTimes_Caption" xml:space="preserve">
+    <value>Hệ số thần</value>
+  </data>
+  <data name="ItemStatTerms_AncientAdd_Caption" xml:space="preserve">
+    <value>Cộng thần</value>
+  </data>
+  <data name="ItemStatTerms_AncientDropLevelDivisor_Caption" xml:space="preserve">
+    <value>Số chia cấp rơi thần</value>
+  </data>
+  <data name="ItemStatTerms_AncientDropLevelDivisor_Description" xml:space="preserve">
+    <value>0 bỏ qua phần này.</value>
+  </data>
+  <data name="ItemStatTerms_AncientAfterLevelBonus_Caption" xml:space="preserve">
+    <value>Thần sau thưởng cấp</value>
+  </data>
+  <data name="ItemStatTerms_AncientAfterLevelBonus_Description" xml:space="preserve">
+    <value>Giá trị của phần thần có bao gồm thưởng theo cấp hay không.</value>
+  </data>
+  <data name="ItemStatTerms_PerLevelAfterHalving_Caption" xml:space="preserve">
+    <value>Mỗi cấp sau khi chia đôi</value>
+  </data>
+  <data name="ItemStatTerms_PerLevelAfterHalving_Description" xml:space="preserve">
+    <value>Chỉ cho sức mạnh phép: số mà mỗi cấp vật phẩm cộng thêm sau khi sức mạnh phép được chia đôi. Để trống: như hồ sơ 'default'.</value>
+  </data>
+  <data name="ItemRequirementFormula_TypeCaption" xml:space="preserve">
+    <value>Công thức yêu cầu vật phẩm</value>
+  </data>
+  <data name="ItemRequirementFormula_TypeCaptionPlural" xml:space="preserve">
+    <value>Công thức yêu cầu vật phẩm</value>
+  </data>
+  <data name="ItemRequirementFormula_TypeDescription" xml:space="preserve">
+    <value>Cách yêu cầu chỉ số tăng: cộng + gốc × (cấp rơi + cấp vật phẩm × trọng số cấp) × phần trăm ÷ 100. Giá trị gốc 0 vẫn là 0.</value>
+  </data>
+  <data name="ItemRequirementFormula_KeepBase_Caption" xml:space="preserve">
+    <value>Giữ giá trị gốc</value>
+  </data>
+  <data name="ItemRequirementFormula_KeepBase_Description" xml:space="preserve">
+    <value>Yêu cầu có giữ giá trị gốc thay vì tăng theo công thức hay không.</value>
+  </data>
+  <data name="ItemRequirementFormula_Add_Caption" xml:space="preserve">
+    <value>Cộng</value>
+  </data>
+  <data name="ItemRequirementFormula_LevelWeight_Caption" xml:space="preserve">
+    <value>Trọng số cấp</value>
+  </data>
+  <data name="ItemRequirementFormula_LevelWeight_Description" xml:space="preserve">
+    <value>Hệ số của cấp vật phẩm, được cộng vào cấp rơi.</value>
+  </data>
+  <data name="ItemRequirementFormula_Percent_Caption" xml:space="preserve">
+    <value>Phần trăm</value>
+  </data>
+  <data name="ItemRequirementFormula_Percent_Description" xml:space="preserve">
+    <value>Phần trăm giá trị gốc mà mỗi cấp rơi cộng thêm.</value>
+  </data>
+  <data name="ItemRequirementFormula_LevelRequirementBasis_Caption" xml:space="preserve">
+    <value>Dựa trên cấp yêu cầu</value>
+  </data>
+  <data name="ItemRequirementFormula_LevelRequirementBasis_Description" xml:space="preserve">
+    <value>Công thức có dùng cấp yêu cầu của vật phẩm thay cho cấp rơi (không có trọng số cấp) khi vật phẩm có cấp yêu cầu hay không.</value>
+  </data>
+  <data name="ItemStatTermState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái thành phần chỉ số</value>
+  </data>
+  <data name="ItemStatTermState_NotWritten_Caption" xml:space="preserve">
+    <value>Không ghi</value>
+  </data>
+  <data name="ItemStatTermState_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="ItemStatTermState_Values_Caption" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="ItemStatTerms_Attribute_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="ItemStatTerms_Attribute_Description" xml:space="preserve">
+    <value>Thuộc tính sức mạnh gốc của vật phẩm mà các thành phần này dành cho. Phần excellent và thần của sát thương vật lý tối thiểu cũng áp dụng cho sát thương vật lý tối đa.</value>
+  </data>
+  <data name="ItemRequirementFormula_Attribute_Caption" xml:space="preserve">
+    <value>Thuộc tính</value>
+  </data>
+  <data name="ItemRequirementFormula_Attribute_Description" xml:space="preserve">
+    <value>Thuộc tính yêu cầu vật phẩm mà công thức này dành cho.</value>
+  </data>
+  <data name="ItemPriceDefinition_TypeCaption" xml:space="preserve">
+    <value>Định nghĩa giá vật phẩm</value>
+  </data>
+  <data name="ItemPriceDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Định nghĩa giá vật phẩm</value>
+  </data>
+  <data name="ItemPriceDefinition_TypeDescription" xml:space="preserve">
+    <value>Cách tính giá của vật phẩm, nếu khác với giá tự động của trang bị.</value>
+  </data>
+  <data name="ItemPriceDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="ItemPriceDefinition_BasePriceFormula_Caption" xml:space="preserve">
+    <value>Công thức giá gốc</value>
+  </data>
+  <data name="ItemPriceDefinition_BasePriceFormula_Description" xml:space="preserve">
+    <value>Công thức giá của một đơn vị, ví dụ "(level + 1) * 200000". Biến: level, durability, maxDurability, value, dropLevel, optionLevel, optionCount, healthRecoveryOptionLevel và automaticPrice. Nếu không có công thức, dùng giá tự động của trang bị.</value>
+  </data>
+  <data name="ItemPriceDefinition_PricePerLevel_Caption" xml:space="preserve">
+    <value>Giá theo cấp</value>
+  </data>
+  <data name="ItemPriceDefinition_PricePerLevel_Description" xml:space="preserve">
+    <value>Giá cố định cho các cấp vật phẩm cụ thể. Được ưu tiên hơn công thức.</value>
+  </data>
+  <data name="ItemPriceDefinition_QuantityScaling_Caption" xml:space="preserve">
+    <value>Tỉ lệ theo số lượng</value>
+  </data>
+  <data name="ItemPriceDefinition_QuantityScaling_Description" xml:space="preserve">
+    <value>Cách số lượng (độ bền) của vật phẩm ảnh hưởng đến giá.</value>
+  </data>
+  <data name="ItemPriceDefinition_Modifiers_Caption" xml:space="preserve">
+    <value>Hệ số điều chỉnh</value>
+  </data>
+  <data name="ItemPriceDefinition_Modifiers_Description" xml:space="preserve">
+    <value>Các dòng làm tăng giá, như với trang bị.</value>
+  </data>
+  <data name="ItemPriceDefinition_SellingPriceRounding_Caption" xml:space="preserve">
+    <value>Làm tròn giá bán</value>
+  </data>
+  <data name="ItemPriceDefinition_SellingPriceRounding_Description" xml:space="preserve">
+    <value>Cách làm tròn giá bán.</value>
+  </data>
+  <data name="ItemPriceDefinition_CraftingReferencePrice_Caption" xml:space="preserve">
+    <value>Giá tham chiếu khi chế tạo</value>
+  </data>
+  <data name="ItemPriceDefinition_CraftingReferencePrice_Description" xml:space="preserve">
+    <value>Giá dùng cho tỉ lệ thành công khi chế tạo thay cho giá mua. Để trống là dùng giá mua.</value>
+  </data>
+  <data name="ItemLevelPrice_TypeCaption" xml:space="preserve">
+    <value>Giá theo cấp vật phẩm</value>
+  </data>
+  <data name="ItemLevelPrice_TypeCaptionPlural" xml:space="preserve">
+    <value>Giá theo cấp vật phẩm</value>
+  </data>
+  <data name="ItemLevelPrice_TypeDescription" xml:space="preserve">
+    <value>Giá cố định của vật phẩm ở một cấp cụ thể.</value>
+  </data>
+  <data name="ItemLevelPrice_Level_Caption" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="ItemLevelPrice_Price_Caption" xml:space="preserve">
+    <value>Giá</value>
+  </data>
+  <data name="ItemLevelPrice_Price_Description" xml:space="preserve">
+    <value>Giá một đơn vị ở cấp này.</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_TypeCaption" xml:space="preserve">
+    <value>Tỉ lệ giá theo số lượng</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_None_Description" xml:space="preserve">
+    <value>Số lượng không ảnh hưởng đến giá.</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_PerPiece_Caption" xml:space="preserve">
+    <value>Theo từng cái</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_PerPiece_Description" xml:space="preserve">
+    <value>Giá nhân với số lượng, ví dụ với bình thuốc.</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_ByFillRatio_Caption" xml:space="preserve">
+    <value>Theo tỉ lệ đầy</value>
+  </data>
+  <data name="ItemPriceQuantityScaling_ByFillRatio_Description" xml:space="preserve">
+    <value>Giá nhân với độ bền và chia cho độ bền tối đa, ví dụ với mũi tên.</value>
+  </data>
+  <data name="ItemPriceModifiers_TypeCaption" xml:space="preserve">
+    <value>Hệ số điều chỉnh giá vật phẩm</value>
+  </data>
+  <data name="ItemPriceModifiers_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="ItemPriceModifiers_Skill_Caption" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="ItemPriceModifiers_Skill_Description" xml:space="preserve">
+    <value>Kỹ năng tăng giá thêm 150 phần trăm.</value>
+  </data>
+  <data name="ItemPriceModifiers_Luck_Caption" xml:space="preserve">
+    <value>May mắn</value>
+  </data>
+  <data name="ItemPriceModifiers_Luck_Description" xml:space="preserve">
+    <value>Dòng may mắn tăng giá thêm 25 phần trăm.</value>
+  </data>
+  <data name="ItemPriceModifiers_Option_Caption" xml:space="preserve">
+    <value>Dòng</value>
+  </data>
+  <data name="ItemPriceModifiers_Option_Description" xml:space="preserve">
+    <value>Dòng thường tăng giá tùy theo cấp của nó.</value>
+  </data>
+  <data name="ItemPriceModifiers_WingOption_Caption" xml:space="preserve">
+    <value>Dòng cánh</value>
+  </data>
+  <data name="ItemPriceModifiers_WingOption_Description" xml:space="preserve">
+    <value>Mỗi dòng cánh tăng giá thêm 25 phần trăm.</value>
+  </data>
+  <data name="ItemPriceModifiers_Excellent_Caption" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="ItemPriceModifiers_Excellent_Description" xml:space="preserve">
+    <value>Mỗi dòng excellent nhân đôi giá.</value>
+  </data>
+  <data name="ItemPriceModifiers_All_Caption" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="ItemPriceModifiers_All_Description" xml:space="preserve">
+    <value>Áp dụng mọi hệ số, như với trang bị.</value>
+  </data>
+  <data name="ItemPriceRounding_TypeCaption" xml:space="preserve">
+    <value>Làm tròn giá vật phẩm</value>
+  </data>
+  <data name="ItemPriceRounding_Default_Caption" xml:space="preserve">
+    <value>Mặc định</value>
+  </data>
+  <data name="ItemPriceRounding_Default_Description" xml:space="preserve">
+    <value>Làm tròn xuống bội số của 100 từ 1.000, và bội số của 10 từ 100. Độ bền làm giảm giá.</value>
+  </data>
+  <data name="ItemPriceRounding_Tens_Caption" xml:space="preserve">
+    <value>Hàng chục</value>
+  </data>
+  <data name="ItemPriceRounding_Tens_Description" xml:space="preserve">
+    <value>Làm tròn xuống bội số của 10, và độ bền không làm giảm giá, ví dụ với bình thuốc.</value>
+  </data>
+</root>

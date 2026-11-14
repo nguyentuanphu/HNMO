@@ -1,0 +1,1254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name_AbilityrecoverafterMonsterkillabsolute" xml:space="preserve">
+    <value>Hồi AG sau khi hạ quái, tuyệt đối</value>
+  </data>
+  <data name="Name_AbilityrecoverafterMonsterkillmultiplierofmaxability" xml:space="preserve">
+    <value>Hồi AG sau khi hạ quái, hệ số theo AG tối đa</value>
+  </data>
+  <data name="Name_AbilityRecoveryAbsoluteIncrease" xml:space="preserve">
+    <value>Tăng hồi AG tuyệt đối</value>
+  </data>
+  <data name="Name_AbilityRecoveryMultiplier" xml:space="preserve">
+    <value>Hệ số hồi AG</value>
+  </data>
+  <data name="Name_AbilityUsageReduction" xml:space="preserve">
+    <value>Giảm tiêu hao AG</value>
+  </data>
+  <data name="Description_AbilityUsageReduction" xml:space="preserve">
+    <value>Hệ số (0~1) cho biết phần AG yêu cầu của kỹ năng không bị tiêu hao.</value>
+  </data>
+  <data name="Name_AgilityRequirementreduction" xml:space="preserve">
+    <value>Giảm yêu cầu Nhanh nhẹn</value>
+  </data>
+  <data name="Description_AgilityRequirementreduction" xml:space="preserve">
+    <value>Vật phẩm có dòng này cần ít Nhanh nhẹn hơn, theo giá trị của dòng.</value>
+  </data>
+  <data name="Name_AmmunitionDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương đạn</value>
+  </data>
+  <data name="Description_AmmunitionDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương đạn (tương đối), được nhân với sát thương gốc min/max.</value>
+  </data>
+  <data name="Name_Ammunitiondamageincrease" xml:space="preserve">
+    <value>Tăng sát thương đạn</value>
+  </data>
+  <data name="Name_ArcheryAttackMode" xml:space="preserve">
+    <value>Chế độ bắn cung</value>
+  </data>
+  <data name="Description_ArcheryAttackMode" xml:space="preserve">
+    <value>Công tắc chế độ bắn cung của Elf.</value>
+  </data>
+  <data name="Name_ArcheryMaximumDamage" xml:space="preserve">
+    <value>Sát thương cung tối đa</value>
+  </data>
+  <data name="Description_ArcheryMaximumDamage" xml:space="preserve">
+    <value>Sát thương cung tối đa của Elf, được cộng vào đòn tấn công bằng vũ khí bắn.</value>
+  </data>
+  <data name="Name_ArcheryMinimumDamage" xml:space="preserve">
+    <value>Sát thương cung tối thiểu</value>
+  </data>
+  <data name="Description_ArcheryMinimumDamage" xml:space="preserve">
+    <value>Sát thương cung tối thiểu của Elf, được cộng vào đòn tấn công bằng vũ khí bắn.</value>
+  </data>
+  <data name="Name_Aretwoweaponsequipped" xml:space="preserve">
+    <value>Đang cầm hai vũ khí</value>
+  </data>
+  <data name="Name_ArmorDamageDecrease" xml:space="preserve">
+    <value>Giảm sát thương nhờ giáp</value>
+  </data>
+  <data name="Description_ArmorDamageDecrease" xml:space="preserve">
+    <value>Tổng hệ số giảm sát thương từ các dòng excellent, harmony và socket, được nhân với sát thương cuối và trừ vào nó.</value>
+  </data>
+  <data name="Name_AttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Hệ số tăng sát thương tấn công</value>
+  </data>
+  <data name="Name_Attackrateofthedarkraven" xml:space="preserve">
+    <value>Tỉ lệ tấn công của Dark Raven.</value>
+  </data>
+  <data name="Name_AttackRatePvM" xml:space="preserve">
+    <value>Tỉ lệ tấn công (PvM)</value>
+  </data>
+  <data name="Name_AttackRatePvP" xml:space="preserve">
+    <value>Tỉ lệ tấn công (PvP)</value>
+  </data>
+  <data name="Name_AttackSpeed" xml:space="preserve">
+    <value>Tốc độ đánh</value>
+  </data>
+  <data name="Name_AttackSpeedAny" xml:space="preserve">
+    <value>Tốc độ đánh chung</value>
+  </data>
+  <data name="Description_AttackSpeedAny" xml:space="preserve">
+    <value>Tốc độ đánh chung, góp vào cả tốc độ đánh và tốc độ phép.</value>
+  </data>
+  <data name="Name_AttackSpeedbyWeapons" xml:space="preserve">
+    <value>Tốc độ đánh từ vũ khí</value>
+  </data>
+  <data name="Name_Attackspeedofthedarkraven" xml:space="preserve">
+    <value>Tốc độ đánh của Dark Raven.</value>
+  </data>
+  <data name="Name_BaseAgility" xml:space="preserve">
+    <value>Nhanh nhẹn gốc</value>
+  </data>
+  <data name="Description_BaseAgility" xml:space="preserve">
+    <value>Nhanh nhẹn gốc của nhân vật.</value>
+  </data>
+  <data name="Name_BaseDamageBonusphysicalandwizardryminandmax" xml:space="preserve">
+    <value>Thưởng sát thương gốc (vật lý và phép, min và max)</value>
+  </data>
+  <data name="Description_BaseDamageBonusphysicalandwizardryminandmax" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào sát thương gốc min và max vật lý và phép khi tính sát thương.</value>
+  </data>
+  <data name="Name_BaseDefense" xml:space="preserve">
+    <value>Phòng thủ gốc</value>
+  </data>
+  <data name="Name_BaseEnergy" xml:space="preserve">
+    <value>Năng lượng gốc</value>
+  </data>
+  <data name="Name_BaseLeadership" xml:space="preserve">
+    <value>Mệnh lệnh gốc</value>
+  </data>
+  <data name="Name_BaseMaxDamageBonusphysicalandwizardry" xml:space="preserve">
+    <value>Thưởng sát thương gốc tối đa (vật lý và phép)</value>
+  </data>
+  <data name="Description_BaseMaxDamageBonusphysicalandwizardry" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào sát thương gốc tối đa vật lý và phép khi tính sát thương.</value>
+  </data>
+  <data name="Name_BaseMinDamageBonusphysicalandwizardry" xml:space="preserve">
+    <value>Thưởng sát thương gốc tối thiểu (vật lý và phép)</value>
+  </data>
+  <data name="Description_BaseMinDamageBonusphysicalandwizardry" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào sát thương gốc tối thiểu vật lý và phép khi tính sát thương.</value>
+  </data>
+  <data name="Name_BaseStrength" xml:space="preserve">
+    <value>Sức mạnh gốc</value>
+  </data>
+  <data name="Description_BaseStrength" xml:space="preserve">
+    <value>Sức mạnh gốc của nhân vật.</value>
+  </data>
+  <data name="Name_BaseVitality" xml:space="preserve">
+    <value>Thể lực gốc</value>
+  </data>
+  <data name="Name_BerserkerCurseMultiplierMST" xml:space="preserve">
+    <value>Hệ số nguyền Berserker (MST)</value>
+  </data>
+  <data name="Description_BerserkerCurseMultiplierMST" xml:space="preserve">
+    <value>Hệ số sát thương nguyền của Berserker cường hóa, được nhân với min/max gốc và cộng vào nó.</value>
+  </data>
+  <data name="Name_BerserkerHealthDecrement" xml:space="preserve">
+    <value>Giảm máu Berserker</value>
+  </data>
+  <data name="Description_BerserkerHealthDecrement" xml:space="preserve">
+    <value>Mức giảm máu của Berserker, tối đa nên là -10%.</value>
+  </data>
+  <data name="Name_BerserkerManaMultiplier" xml:space="preserve">
+    <value>Hệ số mana Berserker</value>
+  </data>
+  <data name="Description_BerserkerManaMultiplier" xml:space="preserve">
+    <value>Hệ số mana Berserker, dùng để tăng cả mana và sát thương (mọi loại) của người dùng.</value>
+  </data>
+  <data name="Name_BerserkerMaximumCurseDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương nguyền tối đa Berserker</value>
+  </data>
+  <data name="Name_BerserkerMaximumPhysicalDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương vật lý tối đa Berserker</value>
+  </data>
+  <data name="Name_BerserkerMaximumWizardryDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương phép tối đa Berserker</value>
+  </data>
+  <data name="Name_BerserkerMinimumCurseDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương nguyền tối thiểu Berserker</value>
+  </data>
+  <data name="Name_BerserkerMinimumPhysicalDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương vật lý tối thiểu Berserker</value>
+  </data>
+  <data name="Name_BerserkerMinimumWizardryDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương phép tối thiểu Berserker</value>
+  </data>
+  <data name="Name_BerserkerProficiencyMultiplierMST" xml:space="preserve">
+    <value>Hệ số thành thạo Berserker (MST)</value>
+  </data>
+  <data name="Description_BerserkerProficiencyMultiplierMST" xml:space="preserve">
+    <value>Hệ số sát thương thành thạo của Berserker, được cộng vào hệ số phép nhưng chính nó cũng được nhân với sát thương cuối phép/nguyền và cộng vào đó.</value>
+  </data>
+  <data name="Name_BerserkerWizardryMultiplier" xml:space="preserve">
+    <value>Hệ số phép Berserker</value>
+  </data>
+  <data name="Description_BerserkerWizardryMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương phép của Berserker, được nhân với min/max gốc và cộng vào nó.</value>
+  </data>
+  <data name="Name_BleedingDamageMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương chảy máu</value>
+  </data>
+  <data name="Name_BonusExperienceRate" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm thưởng</value>
+  </data>
+  <data name="Description_BonusExperienceRate" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm thưởng, được cộng vào hệ số tỉ lệ kinh nghiệm gốc.</value>
+  </data>
+  <data name="Name_BookBonusBaseDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương gốc của sách (MST)</value>
+  </data>
+  <data name="Name_BookRisePercentage" xml:space="preserve">
+    <value>Phần trăm tăng của sách</value>
+  </data>
+  <data name="Name_BowStrengthenerBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương cung cường hóa (MST)</value>
+  </data>
+  <data name="Name_Chancetofullyrecoverhealthwhengettinghit" xml:space="preserve">
+    <value>Tỉ lệ hồi đầy máu khi bị đánh</value>
+  </data>
+  <data name="Description_Chancetofullyrecoverhealthwhengettinghit" xml:space="preserve">
+    <value>Dòng cánh cấp 3</value>
+  </data>
+  <data name="Name_Chancetofullyrecovermanawhengettinghit" xml:space="preserve">
+    <value>Tỉ lệ hồi đầy mana khi bị đánh</value>
+  </data>
+  <data name="Description_Chancetofullyrecovermanawhengettinghit" xml:space="preserve">
+    <value>Dòng cánh cấp 3</value>
+  </data>
+  <data name="Name_Chancetofullyreflectdamagewhengettinghit" xml:space="preserve">
+    <value>Tỉ lệ phản toàn bộ sát thương khi bị đánh</value>
+  </data>
+  <data name="Description_Chancetofullyreflectdamagewhengettinghit" xml:space="preserve">
+    <value>Dòng cánh cấp 3</value>
+  </data>
+  <data name="Name_CharactertoMonstertransformation" xml:space="preserve">
+    <value>Biến nhân vật thành quái</value>
+  </data>
+  <data name="Description_CharactertoMonstertransformation" xml:space="preserve">
+    <value>Giá trị này &gt; 0 khi nhân vật bị biến thành quái do đeo nhẫn biến hình. Giá trị cho biết loại quái (hình dạng).</value>
+  </data>
+  <data name="Name_ComboBonus" xml:space="preserve">
+    <value>Thưởng combo</value>
+  </data>
+  <data name="Name_CriticalDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương chí mạng</value>
+  </data>
+  <data name="Description_CriticalDamageBonus" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào khi tính sát thương nếu có sát thương chí mạng.</value>
+  </data>
+  <data name="Name_CriticalDamageChance" xml:space="preserve">
+    <value>Tỉ lệ sát thương chí mạng</value>
+  </data>
+  <data name="Name_CrossBowMasteryPvPBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương PvP thành thạo nỏ (MST)</value>
+  </data>
+  <data name="Name_CrossBowStrengthenerBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương nỏ cường hóa (MST)</value>
+  </data>
+  <data name="Name_CurrentAbility" xml:space="preserve">
+    <value>AG hiện tại</value>
+  </data>
+  <data name="Name_CurrentHealth" xml:space="preserve">
+    <value>Máu hiện tại</value>
+  </data>
+  <data name="Name_CurrentMana" xml:space="preserve">
+    <value>Mana hiện tại</value>
+  </data>
+  <data name="Name_CurrentShield" xml:space="preserve">
+    <value>SD hiện tại</value>
+  </data>
+  <data name="Name_CurseAttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Hệ số tăng sát thương nguyền</value>
+  </data>
+  <data name="Description_CurseAttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Mức tăng sát thương nguyền, được nhân với sát thương nguyền gốc min/max và cộng vào nó.</value>
+  </data>
+  <data name="Name_CurseBaseDamageminandmax" xml:space="preserve">
+    <value>Sát thương nguyền gốc (min và max)</value>
+  </data>
+  <data name="Name_DamageIncreaseBonusabsoluteWithequippedScepter" xml:space="preserve">
+    <value>Thưởng tăng sát thương (tuyệt đối) khi cầm quyền trượng</value>
+  </data>
+  <data name="Name_DamageIncreaseBonusabsoluteWithequippedScepterCommandDivisorMST" xml:space="preserve">
+    <value>Thưởng tăng sát thương (tuyệt đối) khi cầm quyền trượng, số chia Mệnh lệnh (MST)</value>
+  </data>
+  <data name="Name_DamageReceiveFromDarkHorseMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương nhận từ Dark Horse</value>
+  </data>
+  <data name="Name_DamageReceiveMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương nhận vào</value>
+  </data>
+  <data name="Name_DamageReflection" xml:space="preserve">
+    <value>Phản sát thương</value>
+  </data>
+  <data name="Name_DarkHorseLevel" xml:space="preserve">
+    <value>Cấp Dark Horse</value>
+  </data>
+  <data name="Name_DarkRavenBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương Dark Raven (MST)</value>
+  </data>
+  <data name="Name_DarkRavenLevel" xml:space="preserve">
+    <value>Cấp Dark Raven</value>
+  </data>
+  <data name="Name_DefenseDecrement" xml:space="preserve">
+    <value>Giảm phòng thủ</value>
+  </data>
+  <data name="Description_DefenseDecrement" xml:space="preserve">
+    <value>Mức giảm phòng thủ do hiệu ứng phép của nhiều kỹ năng, được nhân với phòng thủ cuối và trừ vào nó.</value>
+  </data>
+  <data name="Name_DefenseIgnoreChance" xml:space="preserve">
+    <value>Tỉ lệ bỏ qua phòng thủ</value>
+  </data>
+  <data name="Name_DefenseIncreaseBonusabsoluteWithequippedHorseMST" xml:space="preserve">
+    <value>Thưởng tăng phòng thủ (tuyệt đối) khi cưỡi ngựa (MST)</value>
+  </data>
+  <data name="Name_DefenseIncreaseBonusabsoluteWithequippedShieldMST" xml:space="preserve">
+    <value>Thưởng tăng phòng thủ (tuyệt đối) khi cầm khiên (MST)</value>
+  </data>
+  <data name="Name_DefenseIncreaseMultiplierWithEquippedShield" xml:space="preserve">
+    <value>Hệ số tăng phòng thủ khi cầm khiên</value>
+  </data>
+  <data name="Name_DefensePvM" xml:space="preserve">
+    <value>Phòng thủ (PvM)</value>
+  </data>
+  <data name="Name_DefensePvP" xml:space="preserve">
+    <value>Phòng thủ (PvP)</value>
+  </data>
+  <data name="Name_DefenseRatePvM" xml:space="preserve">
+    <value>Tỉ lệ phòng thủ (PvM)</value>
+  </data>
+  <data name="Name_DefenseRatePvMIncreaseBonusabsoluteWithequippedShieldMST" xml:space="preserve">
+    <value>Thưởng tăng tỉ lệ phòng thủ (PvM) (tuyệt đối) khi cầm khiên (MST)</value>
+  </data>
+  <data name="Name_DefenseRatePvP" xml:space="preserve">
+    <value>Tỉ lệ phòng thủ (PvP)</value>
+  </data>
+  <data name="Name_DoubleDamageChance" xml:space="preserve">
+    <value>Tỉ lệ sát thương gấp đôi</value>
+  </data>
+  <data name="Name_DoubleWieldWeaponCount" xml:space="preserve">
+    <value>Số vũ khí khi cầm hai tay</value>
+  </data>
+  <data name="Name_DrainLifeStrengthenerBonusHealingMST" xml:space="preserve">
+    <value>Thưởng hồi máu Drain Life cường hóa (MST)</value>
+  </data>
+  <data name="Name_DurabilityReductionFactor" xml:space="preserve">
+    <value>Hệ số giảm độ bền</value>
+  </data>
+  <data name="Name_EarthDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương Đất</value>
+  </data>
+  <data name="Name_EarthResistance" xml:space="preserve">
+    <value>Kháng Đất</value>
+  </data>
+  <data name="Name_EnergyRequirementreduction" xml:space="preserve">
+    <value>Giảm yêu cầu Năng lượng</value>
+  </data>
+  <data name="Description_EnergyRequirementreduction" xml:space="preserve">
+    <value>Vật phẩm có dòng này cần ít Năng lượng hơn, theo giá trị của dòng.</value>
+  </data>
+  <data name="Name_EquippedWeaponCount" xml:space="preserve">
+    <value>Số vũ khí đang trang bị</value>
+  </data>
+  <data name="Name_ExcellentDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương excellent</value>
+  </data>
+  <data name="Description_ExcellentDamageBonus" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào khi tính sát thương nếu có sát thương excellent.</value>
+  </data>
+  <data name="Name_ExcellentDamageChance" xml:space="preserve">
+    <value>Tỉ lệ sát thương excellent</value>
+  </data>
+  <data name="Name_ExperienceRate" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm</value>
+  </data>
+  <data name="Description_ExperienceRate" xml:space="preserve">
+    <value>Hệ số tỉ lệ kinh nghiệm của nhân vật. Mặc định là 1.0 và có thể thay đổi bởi ấn hoặc thứ khác.</value>
+  </data>
+  <data name="Name_ExplosionBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương Explosion (MST)</value>
+  </data>
+  <data name="Description_ExplosionBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương của kỹ năng Explosion (sách Samut), tăng theo Fire Tome Strengthener và được cộng ở giai đoạn cuối.</value>
+  </data>
+  <data name="Name_ExtraProjectiles" xml:space="preserve">
+    <value>Mũi tên phụ</value>
+  </data>
+  <data name="Description_ExtraProjectiles" xml:space="preserve">
+    <value>Số mũi tên phụ được thêm vào mọi kỹ năng nhiều mũi tên có dùng chúng.</value>
+  </data>
+  <data name="Name_FenrirBaseDamage" xml:space="preserve">
+    <value>Sát thương gốc Fenrir</value>
+  </data>
+  <data name="Name_FinalBerserkerhealthdecrement" xml:space="preserve">
+    <value>Giảm máu Berserker cuối cùng</value>
+  </data>
+  <data name="Name_FinalDamageIncreasePvP" xml:space="preserve">
+    <value>Tăng sát thương cuối (PvP)</value>
+  </data>
+  <data name="Name_FinalDefense" xml:space="preserve">
+    <value>Phòng thủ cuối</value>
+  </data>
+  <data name="Name_FireDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương Lửa</value>
+  </data>
+  <data name="Name_FireResistance" xml:space="preserve">
+    <value>Kháng Lửa</value>
+  </data>
+  <data name="Name_Flagifthecharacterislocatedinasafezoneofagamemap" xml:space="preserve">
+    <value>Cờ nhân vật đang ở vùng an toàn của bản đồ</value>
+  </data>
+  <data name="Description_Flagifthecharacterislocatedinasafezoneofagamemap" xml:space="preserve">
+    <value>Nhân vật ở vùng an toàn hồi thêm máu và SD.</value>
+  </data>
+  <data name="Name_Flagifthecharacterislocatedonanunderwatergamemap" xml:space="preserve">
+    <value>Cờ nhân vật đang ở bản đồ dưới nước</value>
+  </data>
+  <data name="Description_Flagifthecharacterislocatedonanunderwatergamemap" xml:space="preserve">
+    <value>Nhân vật ở bản đồ dưới nước dùng thuộc tính tốc độ di chuyển dưới nước.</value>
+  </data>
+  <data name="Name_Flagifthecharacterisrestingsittingleaningorhanging" xml:space="preserve">
+    <value>Cờ nhân vật đang nghỉ (ngồi, dựa hoặc treo)</value>
+  </data>
+  <data name="Description_Flagifthecharacterisrestingsittingleaningorhanging" xml:space="preserve">
+    <value>Nhân vật đang nghỉ hồi thêm máu và mana.</value>
+  </data>
+  <data name="Name_GloveWeaponBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương vũ khí găng (MST)</value>
+  </data>
+  <data name="Name_GloveWeaponMasteryDoubleDamageChanceMST" xml:space="preserve">
+    <value>Tỉ lệ sát thương gấp đôi khi thành thạo vũ khí găng (MST)</value>
+  </data>
+  <data name="Name_GreaterDamageBonus" xml:space="preserve">
+    <value>Thưởng Greater Damage</value>
+  </data>
+  <data name="Name_GreaterDefenseBonus" xml:space="preserve">
+    <value>Thưởng Greater Defense</value>
+  </data>
+  <data name="Name_HasDoubleWield" xml:space="preserve">
+    <value>Cầm hai tay</value>
+  </data>
+  <data name="Description_HasDoubleWield" xml:space="preserve">
+    <value>Cầm hai vũ khí tăng 10% sát thương vật lý. Chỉ DK, MG và RF cầm được hai vũ khí.</value>
+  </data>
+  <data name="Name_Healthlossafterhittingatarget" xml:space="preserve">
+    <value>Mất máu sau khi đánh mục tiêu</value>
+  </data>
+  <data name="Description_Healthlossafterhittingatarget" xml:space="preserve">
+    <value>Do đeo cánh</value>
+  </data>
+  <data name="Name_HealthrecoverafterMonsterkillabsolute" xml:space="preserve">
+    <value>Hồi máu sau khi hạ quái, tuyệt đối</value>
+  </data>
+  <data name="Name_HealthrecoverafterMonsterkillmultiplierofmaxhealth" xml:space="preserve">
+    <value>Hồi máu sau khi hạ quái, hệ số theo máu tối đa</value>
+  </data>
+  <data name="Name_HealthRecoveryAbsoluteIncrease" xml:space="preserve">
+    <value>Tăng hồi máu tuyệt đối</value>
+  </data>
+  <data name="Name_HealthRecoveryMultiplier" xml:space="preserve">
+    <value>Hệ số hồi máu</value>
+  </data>
+  <data name="Name_IceDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương Băng</value>
+  </data>
+  <data name="Name_IceResistance" xml:space="preserve">
+    <value>Kháng Băng</value>
+  </data>
+  <data name="Name_IncreaseBlockBonus" xml:space="preserve">
+    <value>Thưởng Increase Block</value>
+  </data>
+  <data name="Name_InnovationDefenseDecrement" xml:space="preserve">
+    <value>Giảm phòng thủ Innovation</value>
+  </data>
+  <data name="Description_InnovationDefenseDecrement" xml:space="preserve">
+    <value>Mức giảm phòng thủ do hiệu ứng phép của kỹ năng Innovation, được nhân với phòng thủ cuối và trừ vào nó.</value>
+  </data>
+  <data name="Name_Isasleep" xml:space="preserve">
+    <value>Đang ngủ</value>
+  </data>
+  <data name="Description_Isasleep" xml:space="preserve">
+    <value>Người chơi đang ngủ và không di chuyển được cho đến khi bị đánh.</value>
+  </data>
+  <data name="Name_Isbleeding" xml:space="preserve">
+    <value>Đang chảy máu</value>
+  </data>
+  <data name="Description_Isbleeding" xml:space="preserve">
+    <value>Người chơi mất máu mỗi giây trong một thời gian.</value>
+  </data>
+  <data name="Name_IsBookEquipped" xml:space="preserve">
+    <value>Đang cầm sách</value>
+  </data>
+  <data name="Name_IsBowEquipped" xml:space="preserve">
+    <value>Đang cầm cung</value>
+  </data>
+  <data name="Name_IsCrossBowEquipped" xml:space="preserve">
+    <value>Đang cầm nỏ</value>
+  </data>
+  <data name="Name_IsDinorantEquipped" xml:space="preserve">
+    <value>Đang cưỡi Dinorant</value>
+  </data>
+  <data name="Name_Isfrozen" xml:space="preserve">
+    <value>Bị đóng băng</value>
+  </data>
+  <data name="Description_Isfrozen" xml:space="preserve">
+    <value>Người chơi không di chuyển được vì bị đóng băng (Ice Arrow).</value>
+  </data>
+  <data name="Name_IsGainHeroStatusQuestcompleted" xml:space="preserve">
+    <value>Đã hoàn thành nhiệm vụ 'Gain Hero Status'?</value>
+  </data>
+  <data name="Name_IsGloveWeaponEquipped" xml:space="preserve">
+    <value>Đang cầm vũ khí găng</value>
+  </data>
+  <data name="Name_IsHorseEquipped" xml:space="preserve">
+    <value>Đang cưỡi ngựa</value>
+  </data>
+  <data name="Name_Isiced" xml:space="preserve">
+    <value>Bị làm lạnh</value>
+  </data>
+  <data name="Description_Isiced" xml:space="preserve">
+    <value>Người chơi chỉ di chuyển chậm được</value>
+  </data>
+  <data name="Name_Isinvisible" xml:space="preserve">
+    <value>Tàng hình</value>
+  </data>
+  <data name="Description_Isinvisible" xml:space="preserve">
+    <value>Giá trị này &gt; 0 khi nhân vật là Game Master đã dùng lệnh ẩn thân, hoặc khi người chơi đang xem đấu tay đôi.</value>
+  </data>
+  <data name="Name_IsMaceEquipped" xml:space="preserve">
+    <value>Đang cầm chùy</value>
+  </data>
+  <data name="Name_IsMUHelperactive" xml:space="preserve">
+    <value>MU Helper đang bật</value>
+  </data>
+  <data name="Name_IsOneHandedStaffEquipped" xml:space="preserve">
+    <value>Đang cầm gậy một tay</value>
+  </data>
+  <data name="Name_IsOneHandedSwordEquipped" xml:space="preserve">
+    <value>Đang cầm kiếm một tay</value>
+  </data>
+  <data name="Name_IsPetSkeletonEquipped" xml:space="preserve">
+    <value>Đang mang Pet Skeleton</value>
+  </data>
+  <data name="Name_Ispoisoned" xml:space="preserve">
+    <value>Bị trúng độc</value>
+  </data>
+  <data name="Description_Ispoisoned" xml:space="preserve">
+    <value>Người chơi bị trúng độc và mất máu</value>
+  </data>
+  <data name="Name_IsScepterEquipped" xml:space="preserve">
+    <value>Đang cầm quyền trượng</value>
+  </data>
+  <data name="Name_IsShieldEquipped" xml:space="preserve">
+    <value>Đang cầm khiên</value>
+  </data>
+  <data name="Name_IsShieldRecoveryActive" xml:space="preserve">
+    <value>Đang hồi SD</value>
+  </data>
+  <data name="Name_IsShieldRecoveryActiveEverwhere" xml:space="preserve">
+    <value>Hồi SD ở mọi nơi</value>
+  </data>
+  <data name="Description_IsShieldRecoveryActiveEverwhere" xml:space="preserve">
+    <value>Mặc định, hồi SD chỉ có ở vùng an toàn. Với thuộc tính này (giá trị &gt;= 1), hồi SD có ở mọi nơi trên bản đồ.</value>
+  </data>
+  <data name="Name_IsSkillComboAvailable" xml:space="preserve">
+    <value>Có combo kỹ năng</value>
+  </data>
+  <data name="Name_IsSpearEquipped" xml:space="preserve">
+    <value>Đang cầm giáo</value>
+  </data>
+  <data name="Name_IsStickEquipped" xml:space="preserve">
+    <value>Đang cầm trượng</value>
+  </data>
+  <data name="Name_Isstunned" xml:space="preserve">
+    <value>Bị choáng</value>
+  </data>
+  <data name="Description_Isstunned" xml:space="preserve">
+    <value>Người chơi bị choáng và không di chuyển được.</value>
+  </data>
+  <data name="Name_IsTwoHandedStaffEquipped" xml:space="preserve">
+    <value>Đang cầm gậy hai tay</value>
+  </data>
+  <data name="Name_IsTwoHandedSwordEquipped" xml:space="preserve">
+    <value>Đang cầm kiếm hai tay</value>
+  </data>
+  <data name="Name_IsTwoHandedWeaponEquipped" xml:space="preserve">
+    <value>Đang cầm vũ khí hai tay</value>
+  </data>
+  <data name="Name_IsVIP" xml:space="preserve">
+    <value>Là VIP</value>
+  </data>
+  <data name="Description_IsVIP" xml:space="preserve">
+    <value>Cờ cho biết tài khoản có phải VIP.</value>
+  </data>
+  <data name="Name_ItemDurationIncrease" xml:space="preserve">
+    <value>Tăng thời hạn vật phẩm</value>
+  </data>
+  <data name="Name_LateDamageBonusanytype" xml:space="preserve">
+    <value>Thưởng sát thương muộn (mọi loại)</value>
+  </data>
+  <data name="Description_LateDamageBonusanytype" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào sát thương cuối khi tính sát thương.</value>
+  </data>
+  <data name="Name_LeadershipRequirementreduction" xml:space="preserve">
+    <value>Giảm yêu cầu Mệnh lệnh</value>
+  </data>
+  <data name="Description_LeadershipRequirementreduction" xml:space="preserve">
+    <value>Vật phẩm có dòng này cần ít Mệnh lệnh hơn, theo giá trị của dòng.</value>
+  </data>
+  <data name="Name_Level" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="Description_Level" xml:space="preserve">
+    <value>Cấp của nhân vật.</value>
+  </data>
+  <data name="Name_LightningDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương Sét</value>
+  </data>
+  <data name="Name_LightningResistance" xml:space="preserve">
+    <value>Kháng Sét</value>
+  </data>
+  <data name="Name_MaceBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương chùy (MST)</value>
+  </data>
+  <data name="Name_MaceMasteryStunChanceMST" xml:space="preserve">
+    <value>Tỉ lệ gây choáng khi thành thạo chùy (MST)</value>
+  </data>
+  <data name="Name_MagicSpeed" xml:space="preserve">
+    <value>Tốc độ phép</value>
+  </data>
+  <data name="Name_ManarecoverafterMonsterkillabsolute" xml:space="preserve">
+    <value>Hồi mana sau khi hạ quái, tuyệt đối</value>
+  </data>
+  <data name="Name_ManarecoverafterMonsterkillmultiplierofmaxmana" xml:space="preserve">
+    <value>Hồi mana sau khi hạ quái, hệ số theo mana tối đa</value>
+  </data>
+  <data name="Name_ManaRecoveryAbsoluteIncrease" xml:space="preserve">
+    <value>Tăng hồi mana tuyệt đối</value>
+  </data>
+  <data name="Name_ManaRecoveryMultiplier" xml:space="preserve">
+    <value>Hệ số hồi mana</value>
+  </data>
+  <data name="Name_ManaUsageReduction" xml:space="preserve">
+    <value>Giảm tiêu hao mana</value>
+  </data>
+  <data name="Description_ManaUsageReduction" xml:space="preserve">
+    <value>Hệ số (0~1) cho biết phần mana yêu cầu của kỹ năng không bị tiêu hao.</value>
+  </data>
+  <data name="Name_MasterExperienceRate" xml:space="preserve">
+    <value>Tỉ lệ kinh nghiệm Master</value>
+  </data>
+  <data name="Name_MasterLevel" xml:space="preserve">
+    <value>Cấp Master</value>
+  </data>
+  <data name="Description_MasterLevel" xml:space="preserve">
+    <value>Cấp của nhân vật.</value>
+  </data>
+  <data name="Name_MasterpointspermasterLevelup" xml:space="preserve">
+    <value>Điểm Master mỗi cấp Master</value>
+  </data>
+  <data name="Description_MasterpointspermasterLevelup" xml:space="preserve">
+    <value>Số điểm Master nhận được cho mỗi cấp Master đạt được.</value>
+  </data>
+  <data name="Name_MasterSkillPhysicalBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương vật lý kỹ năng Master (MST)</value>
+  </data>
+  <data name="Description_MasterSkillPhysicalBonusDamageMST" xml:space="preserve">
+    <value>Thuộc tính thưởng sát thương vật lý chung của cây Master, dùng làm nơi gom thưởng sát thương vật lý ở giai đoạn cuối.</value>
+  </data>
+  <data name="Name_MasteryMoveTargetChanceMST" xml:space="preserve">
+    <value>Tỉ lệ đẩy mục tiêu khi thành thạo (MST)</value>
+  </data>
+  <data name="Description_MasteryMoveTargetChanceMST" xml:space="preserve">
+    <value>Thuộc tính tỉ lệ đẩy mục tiêu chung của cây Master, dùng làm nơi gom cho các kỹ năng "mastery".</value>
+  </data>
+  <data name="Name_MasteryStunChanceMST" xml:space="preserve">
+    <value>Tỉ lệ gây choáng khi thành thạo (MST)</value>
+  </data>
+  <data name="Description_MasteryStunChanceMST" xml:space="preserve">
+    <value>Thuộc tính tỉ lệ gây choáng chung của cây Master, dùng làm nơi gom cho các kỹ năng "mastery".</value>
+  </data>
+  <data name="Name_MaximumAbility" xml:space="preserve">
+    <value>AG tối đa</value>
+  </data>
+  <data name="Name_MaximumAllianceSize" xml:space="preserve">
+    <value>Số guild tối đa trong liên minh</value>
+  </data>
+  <data name="Name_MaximumCurseBaseDamage" xml:space="preserve">
+    <value>Sát thương nguyền gốc tối đa</value>
+  </data>
+  <data name="Name_Maximumdamageofthedarkraven" xml:space="preserve">
+    <value>Sát thương tối đa của Dark Raven.</value>
+  </data>
+  <data name="Name_MaximumGuildSize" xml:space="preserve">
+    <value>Số thành viên guild tối đa</value>
+  </data>
+  <data name="Name_MaximumHealth" xml:space="preserve">
+    <value>Máu tối đa</value>
+  </data>
+  <data name="Name_MaximumMana" xml:space="preserve">
+    <value>Mana tối đa</value>
+  </data>
+  <data name="Name_MaximumPhysicalBaseDamage" xml:space="preserve">
+    <value>Sát thương vật lý gốc tối đa</value>
+  </data>
+  <data name="Name_MaximumPhysicalBaseDamageByRightWeapon" xml:space="preserve">
+    <value>Sát thương vật lý gốc tối đa từ vũ khí tay phải</value>
+  </data>
+  <data name="Name_MaximumPhysicalBaseDamageByWeapon" xml:space="preserve">
+    <value>Sát thương vật lý gốc tối đa từ vũ khí</value>
+  </data>
+  <data name="Name_MaximumShield" xml:space="preserve">
+    <value>SD tối đa</value>
+  </data>
+  <data name="Name_Maximumshieldlevelpowintermediate" xml:space="preserve">
+    <value>Giá trị trung gian lũy thừa cấp của SD tối đa</value>
+  </data>
+  <data name="Description_Maximumshieldlevelpowintermediate" xml:space="preserve">
+    <value>Giá trị trung gian cho SD tối đa</value>
+  </data>
+  <data name="Name_MaximumWizardryBaseDamage" xml:space="preserve">
+    <value>Sát thương phép gốc tối đa</value>
+  </data>
+  <data name="Name_MeleeAttackMode" xml:space="preserve">
+    <value>Chế độ cận chiến</value>
+  </data>
+  <data name="Description_MeleeAttackMode" xml:space="preserve">
+    <value>Công tắc chế độ cận chiến của Elf.</value>
+  </data>
+  <data name="Name_MeleeMaximumDamage" xml:space="preserve">
+    <value>Sát thương cận chiến tối đa</value>
+  </data>
+  <data name="Description_MeleeMaximumDamage" xml:space="preserve">
+    <value>Sát thương cận chiến tối đa của Elf, được cộng vào đòn đánh tầm gần.</value>
+  </data>
+  <data name="Name_MeleeMinimumDamage" xml:space="preserve">
+    <value>Sát thương cận chiến tối thiểu</value>
+  </data>
+  <data name="Description_MeleeMinimumDamage" xml:space="preserve">
+    <value>Sát thương cận chiến tối thiểu của Elf, được cộng vào đòn đánh tầm gần.</value>
+  </data>
+  <data name="Name_MinBerserkerhealthdecrement" xml:space="preserve">
+    <value>Giảm máu Berserker tối thiểu</value>
+  </data>
+  <data name="Name_MinimumCurseBaseDamage" xml:space="preserve">
+    <value>Sát thương nguyền gốc tối thiểu</value>
+  </data>
+  <data name="Name_Minimumdamageofthedarkraven" xml:space="preserve">
+    <value>Sát thương tối thiểu của Dark Raven.</value>
+  </data>
+  <data name="Name_MinimumPhysicalBaseDamage" xml:space="preserve">
+    <value>Sát thương vật lý gốc tối thiểu</value>
+  </data>
+  <data name="Name_MinimumPhysicalBaseDamageByRightWeapon" xml:space="preserve">
+    <value>Sát thương vật lý gốc tối thiểu từ vũ khí tay phải</value>
+  </data>
+  <data name="Name_MinimumPhysicalBaseDamageByWeapon" xml:space="preserve">
+    <value>Sát thương vật lý gốc tối thiểu từ vũ khí</value>
+  </data>
+  <data name="Name_MinimumWizardryAndCurseBaseDamageBonusMST" xml:space="preserve">
+    <value>Thưởng sát thương gốc tối thiểu phép và nguyền (MST)</value>
+  </data>
+  <data name="Name_MinimumWizardryBaseDamage" xml:space="preserve">
+    <value>Sát thương phép gốc tối thiểu</value>
+  </data>
+  <data name="Name_MoneyDropAmountRate" xml:space="preserve">
+    <value>Tỉ lệ số zen rơi</value>
+  </data>
+  <data name="Description_MoneyDropAmountRate" xml:space="preserve">
+    <value>Hệ số nhân cho số zen rơi ra.</value>
+  </data>
+  <data name="Name_MovementSpeed" xml:space="preserve">
+    <value>Tốc độ di chuyển</value>
+  </data>
+  <data name="Description_MovementSpeed" xml:space="preserve">
+    <value>Tốc độ di chuyển của nhân vật trên địa hình thường.</value>
+  </data>
+  <data name="Name_MovementSpeedFactor" xml:space="preserve">
+    <value>Hệ số tốc độ di chuyển</value>
+  </data>
+  <data name="Description_MovementSpeedFactor" xml:space="preserve">
+    <value>Hệ số áp dụng cho tốc độ di chuyển cuối của nhân vật.</value>
+  </data>
+  <data name="Name_Nearbypartymembercount" xml:space="preserve">
+    <value>Số thành viên tổ đội ở gần</value>
+  </data>
+  <data name="Description_Nearbypartymembercount" xml:space="preserve">
+    <value>Số thành viên tổ đội hiện đang ở gần.</value>
+  </data>
+  <data name="Name_NovaStageDamage" xml:space="preserve">
+    <value>Sát thương giai đoạn Nova</value>
+  </data>
+  <data name="Description_NovaStageDamage" xml:space="preserve">
+    <value>Thưởng giai đoạn Nova hiện đạt được, tùy theo thời gian giữ kỹ năng.</value>
+  </data>
+  <data name="Name_OneHandedStaffBonusBaseDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương gốc gậy một tay (MST)</value>
+  </data>
+  <data name="Name_OneHandedSwordBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương kiếm một tay (MST)</value>
+  </data>
+  <data name="Name_PetDurationIncrease" xml:space="preserve">
+    <value>Tăng thời hạn thú cưng</value>
+  </data>
+  <data name="Name_PhysicalBaseDamageIncrease" xml:space="preserve">
+    <value>Tăng sát thương vật lý gốc</value>
+  </data>
+  <data name="Name_PhysicalBaseDamageminandmax" xml:space="preserve">
+    <value>Sát thương vật lý gốc (min và max)</value>
+  </data>
+  <data name="Name_PointsperLevelup" xml:space="preserve">
+    <value>Điểm mỗi lần lên cấp</value>
+  </data>
+  <data name="Description_PointsperLevelup" xml:space="preserve">
+    <value>Số điểm lên cấp nhận được cho mỗi cấp đạt được.</value>
+  </data>
+  <data name="Name_PointsPerReset" xml:space="preserve">
+    <value>Điểm mỗi lần reset</value>
+  </data>
+  <data name="Description_PointsPerReset" xml:space="preserve">
+    <value>Số điểm người chơi nhận được khi reset, ghi đè giá trị 'PointsPerReset' mặc định của cấu hình reset.</value>
+  </data>
+  <data name="Name_PoisonDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương độc</value>
+  </data>
+  <data name="Name_PoisonDamageMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương độc</value>
+  </data>
+  <data name="Name_PoisonResistance" xml:space="preserve">
+    <value>Kháng độc</value>
+  </data>
+  <data name="Name_PollutionBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương Pollution (MST)</value>
+  </data>
+  <data name="Description_PollutionBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương của kỹ năng Pollution (sách Lagle), tăng theo Lightning Tome Strengthener và được cộng ở giai đoạn cuối.</value>
+  </data>
+  <data name="Name_RagefulBlowMasteryDurabilityDecreaseChanceMST" xml:space="preserve">
+    <value>Tỉ lệ giảm độ bền khi thành thạo Rageful Blow (MST)</value>
+  </data>
+  <data name="Name_RandomExperienceMaxMultiplier" xml:space="preserve">
+    <value>Hệ số kinh nghiệm ngẫu nhiên tối đa</value>
+  </data>
+  <data name="Description_RandomExperienceMaxMultiplier" xml:space="preserve">
+    <value>Hệ số tối đa cho kinh nghiệm nhận được ngẫu nhiên.</value>
+  </data>
+  <data name="Name_RandomExperienceMinMultiplier" xml:space="preserve">
+    <value>Hệ số kinh nghiệm ngẫu nhiên tối thiểu</value>
+  </data>
+  <data name="Description_RandomExperienceMinMultiplier" xml:space="preserve">
+    <value>Hệ số tối thiểu cho kinh nghiệm nhận được ngẫu nhiên.</value>
+  </data>
+  <data name="Name_RavenAttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Hệ số tăng sát thương Raven</value>
+  </data>
+  <data name="Description_RavenAttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Mức tăng sát thương Raven, được nhân với sát thương gốc min/max của Raven và cộng vào nó.</value>
+  </data>
+  <data name="Name_Ravencriticaldamagechance" xml:space="preserve">
+    <value>Tỉ lệ chí mạng của Raven</value>
+  </data>
+  <data name="Name_Ravenexcdamagechance" xml:space="preserve">
+    <value>Tỉ lệ excellent của Raven</value>
+  </data>
+  <data name="Name_RegisteredRenas" xml:space="preserve">
+    <value>Rena đã đăng ký</value>
+  </data>
+  <data name="Description_RegisteredRenas" xml:space="preserve">
+    <value>Tiến độ đến phần thưởng đăng ký vật phẩm tiếp theo</value>
+  </data>
+  <data name="Name_RequiemBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương Requiem (MST)</value>
+  </data>
+  <data name="Description_RequiemBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương của kỹ năng Requiem (sách Neil), tăng theo Wind Tome Strengthener và được cộng ở giai đoạn cuối.</value>
+  </data>
+  <data name="Name_RequirementoftheIcarusmap" xml:space="preserve">
+    <value>Yêu cầu của bản đồ Icarus.</value>
+  </data>
+  <data name="Description_RequirementoftheIcarusmap" xml:space="preserve">
+    <value>Chỉ vào được Icarus khi có cánh, Dinorant hoặc Fenrir.</value>
+  </data>
+  <data name="Name_RequirementoftheKanturuEventMapduringtheevent" xml:space="preserve">
+    <value>Yêu cầu của bản đồ sự kiện Kanturu trong lúc diễn ra.</value>
+  </data>
+  <data name="Description_RequirementoftheKanturuEventMapduringtheevent" xml:space="preserve">
+    <value>Chỉ vào được sự kiện Kanturu khi đeo Moonstone Pendant.</value>
+  </data>
+  <data name="Name_Resets" xml:space="preserve">
+    <value>Số lần reset</value>
+  </data>
+  <data name="Description_Resets" xml:space="preserve">
+    <value>Số lần reset của nhân vật hiện tại</value>
+  </data>
+  <data name="Name_ScepterMasteryPvPBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương PvP thành thạo quyền trượng (MST)</value>
+  </data>
+  <data name="Name_ScepterPetBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương thú cưng quyền trượng (MST)</value>
+  </data>
+  <data name="Name_ScepterRisePercentage" xml:space="preserve">
+    <value>Phần trăm tăng của quyền trượng</value>
+  </data>
+  <data name="Name_ScepterStrengthenerBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương quyền trượng cường hóa (MST)</value>
+  </data>
+  <data name="Name_SDdecreaserateincrease" xml:space="preserve">
+    <value>Tăng tỉ lệ giảm SD</value>
+  </data>
+  <data name="Description_SDdecreaserateincrease" xml:space="preserve">
+    <value>Sát thương bị SD của đối thủ hấp thụ trong PvP được chuyển thẳng thành sát thương HP theo giá trị đặt.</value>
+  </data>
+  <data name="Name_SDRateIncrease" xml:space="preserve">
+    <value>Tăng tỉ lệ SD</value>
+  </data>
+  <data name="Description_SDRateIncrease" xml:space="preserve">
+    <value>Tăng tỉ lệ hấp thụ sát thương của SD trong PvP theo giá trị đặt.</value>
+  </data>
+  <data name="Name_ShieldBypassChance" xml:space="preserve">
+    <value>Tỉ lệ xuyên SD</value>
+  </data>
+  <data name="Name_ShieldDefenseitem" xml:space="preserve">
+    <value>Phòng thủ khiên (vật phẩm)</value>
+  </data>
+  <data name="Name_ShieldItemDefenseIncreaseMultiplier" xml:space="preserve">
+    <value>Hệ số tăng phòng thủ của khiên</value>
+  </data>
+  <data name="Name_ShieldrecoverafterMonsterkillabsolute" xml:space="preserve">
+    <value>Hồi SD sau khi hạ quái, tuyệt đối</value>
+  </data>
+  <data name="Name_ShieldrecoverafterMonsterkillmultiplierofmaxshield" xml:space="preserve">
+    <value>Hồi SD sau khi hạ quái, hệ số theo SD tối đa</value>
+  </data>
+  <data name="Name_ShieldRecoveryAbsolute" xml:space="preserve">
+    <value>Hồi SD tuyệt đối</value>
+  </data>
+  <data name="Name_ShieldRecoveryHiatus" xml:space="preserve">
+    <value>Tạm ngưng hồi SD</value>
+  </data>
+  <data name="Description_ShieldRecoveryHiatus" xml:space="preserve">
+    <value>Số giây kể từ lần cuối hồi SD bị gián đoạn, do rời vùng an toàn, SD bị đánh hoặc đã đầy.</value>
+  </data>
+  <data name="Name_ShieldRecoveryMultiplier" xml:space="preserve">
+    <value>Hệ số hồi SD</value>
+  </data>
+  <data name="Name_ShieldRecoveryRampFactor" xml:space="preserve">
+    <value>Hệ số tăng dần hồi SD</value>
+  </data>
+  <data name="Description_ShieldRecoveryRampFactor" xml:space="preserve">
+    <value>Hệ số tăng tốc độ hồi SD. Tăng tuyến tính theo thời gian hồi SD liên tục.</value>
+  </data>
+  <data name="Name_SkillBaseDamageBonusskillattribute" xml:space="preserve">
+    <value>Thưởng sát thương gốc kỹ năng (thuộc tính kỹ năng)</value>
+  </data>
+  <data name="Name_SkillBaseDamageMultiplierskillattribute" xml:space="preserve">
+    <value>Hệ số sát thương gốc kỹ năng (thuộc tính kỹ năng)</value>
+  </data>
+  <data name="Name_SkillDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương kỹ năng</value>
+  </data>
+  <data name="Description_SkillDamageBonus" xml:space="preserve">
+    <value>Giá trị thưởng được cộng vào khi tính sát thương bằng kỹ năng.</value>
+  </data>
+  <data name="Name_SkillDamageMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương kỹ năng</value>
+  </data>
+  <data name="Name_Skillextramanacost" xml:space="preserve">
+    <value>Mana tiêu hao thêm của kỹ năng</value>
+  </data>
+  <data name="Description_Skillextramanacost" xml:space="preserve">
+    <value>Do hiệu ứng Infinity Arrow</value>
+  </data>
+  <data name="Name_SkillExtraProjectiles" xml:space="preserve">
+    <value>Mũi tên phụ của kỹ năng</value>
+  </data>
+  <data name="Description_SkillExtraProjectiles" xml:space="preserve">
+    <value>Số mũi tên phụ mà kỹ năng nhiều mũi tên thực sự bắn ra.</value>
+  </data>
+  <data name="Name_SkillFinalDamageBonusskillattribute" xml:space="preserve">
+    <value>Thưởng sát thương cuối kỹ năng (thuộc tính kỹ năng)</value>
+  </data>
+  <data name="Name_SkillFinalDamageMultiplierskillattribute" xml:space="preserve">
+    <value>Hệ số sát thương cuối kỹ năng (thuộc tính kỹ năng)</value>
+  </data>
+  <data name="Name_Skilllevel" xml:space="preserve">
+    <value>Cấp kỹ năng</value>
+  </data>
+  <data name="Description_Skilllevel" xml:space="preserve">
+    <value>Cấp của một kỹ năng.</value>
+  </data>
+  <data name="Name_SleepStrengthenerBonusChanceMST" xml:space="preserve">
+    <value>Thưởng tỉ lệ Sleep cường hóa (MST)</value>
+  </data>
+  <data name="Name_SoulBarrierDamageReceiveDecrement" xml:space="preserve">
+    <value>Giảm sát thương nhận vào nhờ Soul Barrier</value>
+  </data>
+  <data name="Description_SoulBarrierDamageReceiveDecrement" xml:space="preserve">
+    <value>Hệ số sát thương nhận vào của kỹ năng Soul Barrier, được nhân với sát thương cuối và trừ vào nó.</value>
+  </data>
+  <data name="Name_SoulBarrierManaTollPerReceivedHit" xml:space="preserve">
+    <value>Mana tiêu hao của Soul Barrier mỗi đòn nhận</value>
+  </data>
+  <data name="Description_SoulBarrierManaTollPerReceivedHit" xml:space="preserve">
+    <value>Lượng mana cần có để Soul Barrier giảm sát thương.</value>
+  </data>
+  <data name="Name_SpearBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương giáo (MST)</value>
+  </data>
+  <data name="Name_SpearMasteryDoubleDamageChanceMST" xml:space="preserve">
+    <value>Tỉ lệ sát thương gấp đôi khi thành thạo giáo (MST)</value>
+  </data>
+  <data name="Name_StaffRisePercentage" xml:space="preserve">
+    <value>Phần trăm tăng của gậy</value>
+  </data>
+  <data name="Name_Statsdefense" xml:space="preserve">
+    <value>Phòng thủ từ chỉ số</value>
+  </data>
+  <data name="Name_Statsmaxwizandcursebasedmg" xml:space="preserve">
+    <value>Sát thương phép và nguyền gốc tối đa từ chỉ số</value>
+  </data>
+  <data name="Name_Statsminwizandcursebasedmg" xml:space="preserve">
+    <value>Sát thương phép và nguyền gốc tối thiểu từ chỉ số</value>
+  </data>
+  <data name="Name_StickBonusBaseDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương gốc trượng (MST)</value>
+  </data>
+  <data name="Name_StickMasteryPvPBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương PvP thành thạo trượng (MST)</value>
+  </data>
+  <data name="Name_StrengthRequirementreduction" xml:space="preserve">
+    <value>Giảm yêu cầu Sức mạnh</value>
+  </data>
+  <data name="Description_StrengthRequirementreduction" xml:space="preserve">
+    <value>Vật phẩm có dòng này cần ít Sức mạnh hơn, theo giá trị của dòng.</value>
+  </data>
+  <data name="Name_SummonedMonsterDefenseIncrease" xml:space="preserve">
+    <value>Tăng phòng thủ quái triệu hồi</value>
+  </data>
+  <data name="Name_SummonedMonsterHealthIncrease" xml:space="preserve">
+    <value>Tăng máu quái triệu hồi %</value>
+  </data>
+  <data name="Name_SwellLifeHealthIncrease" xml:space="preserve">
+    <value>Tăng máu Swell Life</value>
+  </data>
+  <data name="Name_SwellLifeManaIncrease" xml:space="preserve">
+    <value>Tăng mana Swell Life</value>
+  </data>
+  <data name="Name_TempDefenseBonusmultiplierwithShield" xml:space="preserve">
+    <value>Hệ số thưởng phòng thủ tạm khi cầm khiên</value>
+  </data>
+  <data name="Name_TempHalfweaponattackspeed" xml:space="preserve">
+    <value>Tốc độ đánh tạm của nửa vũ khí</value>
+  </data>
+  <data name="Name_TempInnovationdefensedecrement" xml:space="preserve">
+    <value>Giảm phòng thủ Innovation tạm</value>
+  </data>
+  <data name="Name_Theamountofammowhichisequipped" xml:space="preserve">
+    <value>Số đạn đang trang bị.</value>
+  </data>
+  <data name="Description_Theamountofammowhichisequipped" xml:space="preserve">
+    <value>Chỉ dùng được một số kỹ năng khi đủ đạn, hoặc khi tỉ lệ tiêu hao đạn là 0.</value>
+  </data>
+  <data name="Name_Theamountofammowhichisrequiredtoperformcertainskills" xml:space="preserve">
+    <value>Số đạn cần để dùng một số kỹ năng.</value>
+  </data>
+  <data name="Description_Theamountofammowhichisrequiredtoperformcertainskills" xml:space="preserve">
+    <value>Chỉ dùng được một số kỹ năng khi đủ đạn, hoặc khi tỉ lệ này là 0.</value>
+  </data>
+  <data name="Name_TotalAgility" xml:space="preserve">
+    <value>Tổng Nhanh nhẹn</value>
+  </data>
+  <data name="Description_TotalAgility" xml:space="preserve">
+    <value>Tổng Nhanh nhẹn của nhân vật.</value>
+  </data>
+  <data name="Name_TotalAgilityRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Nhanh nhẹn</value>
+  </data>
+  <data name="Description_TotalAgilityRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Nhanh nhẹn của vật phẩm, dùng để tính tổng Nhanh nhẹn nhân vật cần để mặc vật phẩm. Giá trị này phụ thuộc vào dòng, cấp rơi và cấp của vật phẩm.</value>
+  </data>
+  <data name="Name_TotalEnergy" xml:space="preserve">
+    <value>Tổng Năng lượng</value>
+  </data>
+  <data name="Name_TotalEnergyminus15" xml:space="preserve">
+    <value>Tổng Năng lượng trừ 15</value>
+  </data>
+  <data name="Description_TotalEnergyminus15" xml:space="preserve">
+    <value>Tổng Năng lượng trừ 15</value>
+  </data>
+  <data name="Name_TotalEnergyRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Năng lượng</value>
+  </data>
+  <data name="Description_TotalEnergyRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Năng lượng của vật phẩm, dùng để tính tổng Năng lượng nhân vật cần để mặc vật phẩm. Giá trị này phụ thuộc vào dòng, cấp rơi và cấp của vật phẩm.</value>
+  </data>
+  <data name="Name_TotalLeadership" xml:space="preserve">
+    <value>Tổng Mệnh lệnh</value>
+  </data>
+  <data name="Name_TotalLeadershipRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Mệnh lệnh</value>
+  </data>
+  <data name="Description_TotalLeadershipRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Mệnh lệnh của vật phẩm, dùng để tính tổng Mệnh lệnh nhân vật cần để mặc vật phẩm. Giá trị này phụ thuộc vào dòng, cấp rơi và cấp của vật phẩm.</value>
+  </data>
+  <data name="Name_TotalLevel" xml:space="preserve">
+    <value>Tổng cấp</value>
+  </data>
+  <data name="Description_TotalLevel" xml:space="preserve">
+    <value>Cấp cộng cấp Master của nhân vật.</value>
+  </data>
+  <data name="Name_TotalRegisteredRenas" xml:space="preserve">
+    <value>Tổng số Rena đã đăng ký</value>
+  </data>
+  <data name="Description_TotalRegisteredRenas" xml:space="preserve">
+    <value>Tổng số vật phẩm đã đăng ký (bộ đếm từ trước đến nay)</value>
+  </data>
+  <data name="Name_TotalStrength" xml:space="preserve">
+    <value>Tổng Sức mạnh</value>
+  </data>
+  <data name="Description_TotalStrength" xml:space="preserve">
+    <value>Tổng Sức mạnh của nhân vật, gồm Sức mạnh gốc và Sức mạnh cộng thêm</value>
+  </data>
+  <data name="Name_TotalStrengthandAgility" xml:space="preserve">
+    <value>Tổng Sức mạnh và Nhanh nhẹn</value>
+  </data>
+  <data name="Name_TotalStrengthRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Sức mạnh</value>
+  </data>
+  <data name="Description_TotalStrengthRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Sức mạnh của vật phẩm, dùng để tính tổng Sức mạnh nhân vật cần để mặc vật phẩm. Giá trị này phụ thuộc vào dòng, cấp rơi và cấp của vật phẩm.</value>
+  </data>
+  <data name="Name_TotalVitality" xml:space="preserve">
+    <value>Tổng Thể lực</value>
+  </data>
+  <data name="Name_TotalVitalityRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Thể lực</value>
+  </data>
+  <data name="Description_TotalVitalityRequirementValue" xml:space="preserve">
+    <value>Giá trị yêu cầu tổng Thể lực của vật phẩm, dùng để tính tổng Thể lực nhân vật cần để mặc vật phẩm. Giá trị này phụ thuộc vào dòng, cấp rơi và cấp của vật phẩm.</value>
+  </data>
+  <data name="Name_TripleShotExtraProjectiles" xml:space="preserve">
+    <value>Mũi tên phụ Triple Shot</value>
+  </data>
+  <data name="Description_TripleShotExtraProjectiles" xml:space="preserve">
+    <value>Số mũi tên phụ mà Triple Shot Mastery mang lại.</value>
+  </data>
+  <data name="Name_TwoHandedStaffBonusBaseDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương gốc gậy hai tay (MST)</value>
+  </data>
+  <data name="Name_TwoHandedStaffMasteryPvPBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương PvP thành thạo gậy hai tay (MST)</value>
+  </data>
+  <data name="Name_TwoHandedSwordMasteryPvPBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương PvP thành thạo kiếm hai tay (MST)</value>
+  </data>
+  <data name="Name_TwoHandedSwordStrengthenerBonusDamageMST" xml:space="preserve">
+    <value>Thưởng sát thương kiếm hai tay cường hóa (MST)</value>
+  </data>
+  <data name="Name_TwoHandedWeaponPhysicalDamageIncreaseAncientOption" xml:space="preserve">
+    <value>Tăng sát thương vật lý vũ khí hai tay (dòng thần)</value>
+  </data>
+  <data name="Description_TwoHandedWeaponPhysicalDamageIncreaseAncientOption" xml:space="preserve">
+    <value>Mức tăng sát thương vật lý, được nhân với sát thương cuối và cộng vào nó khi dùng vũ khí hai tay.</value>
+  </data>
+  <data name="Name_UnderwaterMovementSpeed" xml:space="preserve">
+    <value>Tốc độ di chuyển dưới nước</value>
+  </data>
+  <data name="Description_UnderwaterMovementSpeed" xml:space="preserve">
+    <value>Tốc độ di chuyển của nhân vật trên địa hình dưới nước.</value>
+  </data>
+  <data name="Name_VitalityRequirementreduction" xml:space="preserve">
+    <value>Giảm yêu cầu Thể lực</value>
+  </data>
+  <data name="Description_VitalityRequirementreduction" xml:space="preserve">
+    <value>Vật phẩm có dòng này cần ít Thể lực hơn, theo giá trị của dòng.</value>
+  </data>
+  <data name="Name_VitalitySkillDamageMultiplier" xml:space="preserve">
+    <value>Hệ số sát thương kỹ năng theo Thể lực</value>
+  </data>
+  <data name="Name_WalkSpeed" xml:space="preserve">
+    <value>Tốc độ đi</value>
+  </data>
+  <data name="Name_WaterDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương Nước</value>
+  </data>
+  <data name="Name_WaterResistance" xml:space="preserve">
+    <value>Kháng Nước</value>
+  </data>
+  <data name="Name_WeaknessPhysicalDamageDecrement" xml:space="preserve">
+    <value>Giảm sát thương vật lý do Weakness</value>
+  </data>
+  <data name="Description_WeaknessPhysicalDamageDecrement" xml:space="preserve">
+    <value>Mức giảm sát thương vật lý gây ra do hiệu ứng phép của kỹ năng Weakness hoặc Killing Blow, được nhân với sát thương cuối và trừ vào nó.</value>
+  </data>
+  <data name="Name_WeaponMasteryBonusAttackSpeedMST" xml:space="preserve">
+    <value>Thưởng tốc độ đánh khi thành thạo vũ khí (MST)</value>
+  </data>
+  <data name="Description_WeaponMasteryBonusAttackSpeedMST" xml:space="preserve">
+    <value>Thuộc tính thưởng tốc độ đánh chung của cây Master, dùng làm nơi gom cho các kỹ năng "mastery".</value>
+  </data>
+  <data name="Name_WindDamageBonus" xml:space="preserve">
+    <value>Thưởng sát thương Gió</value>
+  </data>
+  <data name="Name_WindResistance" xml:space="preserve">
+    <value>Kháng Gió</value>
+  </data>
+  <data name="Name_WizardryAndCurseBaseDamageBonusminandmaxMST" xml:space="preserve">
+    <value>Thưởng sát thương gốc phép và nguyền (min và max, MST)</value>
+  </data>
+  <data name="Name_WizardryAttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Hệ số tăng sát thương phép</value>
+  </data>
+  <data name="Description_WizardryAttackDamageIncreaseMultiplier" xml:space="preserve">
+    <value>Mức tăng sát thương phép, được nhân với sát thương phép gốc min/max và cộng vào nó.</value>
+  </data>
+  <data name="Name_WizardryBaseDamageIncrease" xml:space="preserve">
+    <value>Tăng sát thương phép gốc</value>
+  </data>
+  <data name="Name_WizardryBaseDamageminandmax" xml:space="preserve">
+    <value>Sát thương phép gốc (min và max)</value>
+  </data>
+  <data name="AggregateType_AddRaw" xml:space="preserve">
+    <value>Cộng thô</value>
+  </data>
+  <data name="AggregateType_Multiplicate" xml:space="preserve">
+    <value>Nhân</value>
+  </data>
+  <data name="AggregateType_AddFinal" xml:space="preserve">
+    <value>Cộng cuối</value>
+  </data>
+  <data name="AggregateType_Maximum" xml:space="preserve">
+    <value>Tối đa</value>
+  </data>
+  <data name="Name_ShieldRecoveryActiveEverywhere" xml:space="preserve">
+    <value>Hồi SD ở mọi nơi</value>
+  </data>
+  <data name="Name_WeaponAndArmorDurationIncreaseMST" xml:space="preserve">
+    <value>Tăng thời hạn vũ khí và giáp (MST)</value>
+  </data>
+  <data name="Name_JewelryAndWingsDurationIncreaseMST" xml:space="preserve">
+    <value>Tăng thời hạn trang sức và cánh (MST)</value>
+  </data>
+  <data name="Name_PetDurationIncreaseMST" xml:space="preserve">
+    <value>Tăng thời hạn thú cưng (MST)</value>
+  </data>
+  <data name="Name_TrainablePetDurationIncreaseMST" xml:space="preserve">
+    <value>Tăng thời hạn thú cưng luyện được (MST)</value>
+  </data>
+  <data name="Name_WeaponDurationIncrease" xml:space="preserve">
+    <value>Tăng thời hạn vũ khí</value>
+  </data>
+  <data name="Name_SkillFinalDamageMultiplierPvEskillattribute" xml:space="preserve">
+    <value>Hệ số sát thương cuối kỹ năng (PvE) (thuộc tính kỹ năng)</value>
+  </data>
+  <data name="Name_MasterSkillValueskillattribute" xml:space="preserve">
+    <value>Giá trị kỹ năng Master (thuộc tính kỹ năng)</value>
+  </data>
+  <data name="Description_ShieldRecoveryActiveEverywhere" xml:space="preserve">
+    <value>Mặc định, hồi SD chỉ có ở vùng an toàn. Với thuộc tính này (giá trị &gt;= 1), hồi SD có ở mọi nơi trên bản đồ.</value>
+  </data>
+</root>
