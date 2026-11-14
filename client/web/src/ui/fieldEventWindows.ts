@@ -15,12 +15,11 @@ import { gateLabel, hellasTooltipLines, isKalimaGate, kalimaTicketRefused, Kalim
 import { GuildStatus, type Guild } from '../game/guild.js';
 import { MixType } from '../game/mixRecipes.js';
 import { createMonsterCharacter } from '../game/characters.js';
-import { read } from '../net/packets.js';
 import { fetchBytes } from '../bmd.js';
 import { parseTerrainAttributes, TerrainFlag } from '../formats.js';
 import { loadLightMap, type TerrainMesh } from '../terrain.js';
 import { CatapultWindow, GatekeeperWindow, GateSwitchWindow, GuardWindow, SeniorWindow, SiegeHud } from './castleSiegeWindows.js';
-import { centreScreen, FieldDialogs, ProgressBox, screenScale, syncImages, TEXT_PX } from './fieldEventDocs.js';
+import { centreScreen, FieldDialogs, ProgressBox, syncImages, TEXT_PX } from './fieldEventDocs.js';
 import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import type { Connection } from '../net/connection.js';
 import type { OnlineWorld } from '../game/online.js';
@@ -53,9 +52,9 @@ export class CrywolfHud {
   show(view: CrywolfView): void {
     if (!view.hud_visible && !view.result_visible) { this.doc?.close(); this.doc = null; return; }
     Object.assign(this.model, view);
-    const px = Math.round(TEXT_PX * screenScale());
-    this.model.normal_text_px = this.model.bold_text_px = px;
-    this.model.bold_line_px = Math.round(14 * screenScale());
+    // The board is scaled as a whole: its text takes the reference size.
+    this.model.normal_text_px = this.model.bold_text_px = TEXT_PX;
+    this.model.bold_line_px = 14;
     if (this.doc) { this.doc.update(); syncImages(this.doc); return; }
     this.opening ??= openDocument('crywolf', this.model, { parent: document.body }).then((doc) => {
       this.doc = doc;
@@ -121,8 +120,22 @@ export interface FieldEvents {
   siegeHud: SiegeHud;
 }
 
-interface SummonPacket {
-  SummonedMonsters: { Id: number; TypeNumber: number; CurrentPositionX: number; CurrentPositionY: number; TargetPositionX: number; TargetPositionY: number; Rotation: number; OwnerCharacterName: string }[];
+interface Summon { Id: number; TypeNumber: number; CurrentPositionX: number; CurrentPositionY: number; TargetPositionX: number; TargetPositionY: number; Rotation: number; OwnerCharacterName: string }
+
+/** AddSummonedMonstersToScope (C2 1F): each entry is 20 bytes and its effects (one byte each). */
+function readSummons(bytes: Uint8Array): Summon[] {
+  const summons: Summon[] = [];
+  let at = 5;
+  for (let i = 0; i < bytes[4] && at + 20 <= bytes.length; i++) {
+    const raw = bytes.subarray(at + 9, at + 19);
+    const end = raw.indexOf(0);
+    summons.push({
+      Id: (bytes[at] << 8) | bytes[at + 1], TypeNumber: (bytes[at + 2] << 8) | bytes[at + 3], CurrentPositionX: bytes[at + 4], CurrentPositionY: bytes[at + 5],
+      TargetPositionX: bytes[at + 6], TargetPositionY: bytes[at + 7], Rotation: bytes[at + 8] >> 4, OwnerCharacterName: new TextDecoder().decode(end < 0 ? raw : raw.subarray(0, end)),
+    });
+    at += 20 + bytes[at + 19];
+  }
+  return summons;
 }
 
 function lightTexture(light: Float32Array): THREE.DataTexture {
@@ -171,9 +184,8 @@ export function setUpFieldEvents(options: FieldEventsOptions): FieldEvents {
   connection.onPacket((bytes) => {
     if (bytes[0] === 0xc2 && bytes[3] === 0x1f) {
       // ReceiveCreateSummonViewport: a Kalima gate (CreateHellGate) or another summon, owner in its name.
-      let packet: SummonPacket;
-      try { packet = read<SummonPacket>('ServerToClient', 'AddSummonedMonstersToScope', bytes); } catch (error) { console.warn('Summons', error); return; }
-      for (const summon of packet.SummonedMonsters ?? []) {
+      const packet = readSummons(bytes);
+      for (const summon of packet) {
         const id = summon.Id & 0x7fff, type = summon.TypeNumber;
         void online.spawn(id, async () => {
           const character = await createMonsterCharacter({ id, type });

@@ -7,6 +7,7 @@ import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDoc
 
 export const PANEL_WIDTH = 190;   // the docked windows' width
 export const TEXT_PX = 12;        // the native text size at the 640x480 reference
+const REFRESH_MS = 200;
 
 export const screenScale = (): number => window.innerHeight / REFERENCE_HEIGHT;
 
@@ -24,7 +25,8 @@ export function sizedLine(text: string, bold = false, box = 0): SizedLine {
   measureContext ??= document.createElement('canvas').getContext('2d');
   if (!measureContext) return { text, text_px: native };
   measureContext.font = `${bold ? 'bold ' : ''}${TEXT_PX}px sans-serif`;
-  const width = measureContext.measureText(text).width;
+  // The canvas's sans-serif runs narrower than the themes' font.
+  const width = measureContext.measureText(text).width * 1.15;
   if (width <= box) return { text, text_px: native };
   return { text, text_px: Math.max(Math.round(native * 0.6), Math.floor(native * box / width)) };
 }
@@ -41,11 +43,9 @@ export function placeBoard(doc: RmlDocument): number {
   return window.innerWidth / scale;
 }
 
-/** A .screen on the board: the 640 reference px in the middle of a wider window. */
-export function centreScreen(doc: RmlDocument, selector = '.screen'): void {
-  const width = placeBoard(doc);
-  const screen = doc.$(selector);
-  if (screen) Object.assign(screen.style, { position: 'absolute', left: `${(width - 640) / 2}px`, top: '0px', width: '640px', height: `${REFERENCE_HEIGHT}px` });
+/** A HUD board document (.screen.hud-board): the theme centres it at the bottom; the root is the 640x480 screen scaled to the window. */
+export function centreScreen(doc: RmlDocument): void {
+  placeBoard(doc);
 }
 
 // The themed documents load their art from Data/Interface/RmlUi/themes/<theme>/.
@@ -122,6 +122,8 @@ export class DockedWindow<M extends RmlModel> {
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.isOpen) { this.close(); this.options.click(); }
     });
+    // The desktop syncs its windows every frame: the server's answers show without a click.
+    setInterval(() => { if (this.doc) this.refresh(); }, REFRESH_MS);
   }
 
   get isOpen(): boolean { return this.wanted; }

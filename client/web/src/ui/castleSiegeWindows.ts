@@ -684,7 +684,7 @@ export class SiegeHud {
     m.hero_top = wy - this.offset.y + MINI_MAP.y;
     m.map_rect = `${this.offset.x * this.scale} ${this.offset.y * this.scale} ${128 * this.scale} ${128 * this.scale}`;
     m.alpha_label = String(Math.floor(m.alpha * 100.5));
-    m.bold_text_px = m.big_text_px = Math.round(TEXT_PX * screenScale());
+    m.bold_text_px = m.big_text_px = TEXT_PX; // the board is scaled as a whole
     m.time_visible = siege.battleStarted;
     if (m.time_visible) {
       const { hour, minute } = siege.time();
@@ -724,7 +724,7 @@ export class SiegeHud {
 
   private place(): void {
     if (!this.doc) return;
-    centreScreen(this.doc, '#screen');
+    centreScreen(this.doc);
     this.doc.update();
   }
 
