@@ -14,9 +14,9 @@ import { read } from '../net/packets.js';
 import { CashShopScript, GIFT_ENABLED, PACKAGES_PER_PAGE, convertGold, loadCashShopBanner, loadCashShopScript, scriptFolder } from '../game/cashShopScript.js';
 import type { ShopCategory, ShopPackage } from '../game/cashShopScript.js';
 import { drawItem } from './itemIcons.js';
-import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
+import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
-import { fitCentredLines, fitElementLine, measureText, nativeTextPx } from './nativeText.js';
+import { fitCentredLines, fitElementLine, measureText, nativeTextPx, uiScale } from './nativeText.js';
 import { showConfirm, type DialogLine } from './gameDialogs.js';
 
 // The desktop's texts (I18N::Game); the shop's own name is the game's name (gameName.ts).
@@ -296,7 +296,7 @@ export class CashShop {
 
   private place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     this.model.text_px = nativeTextPx();
     const panel = this.doc.$('#panel');
@@ -525,7 +525,7 @@ export class CashShop {
     const item = itemOfCode(code);
     if (!item) return;
     const canvas = document.createElement('canvas');
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     canvas.width = Math.round(96 * scale); canvas.height = Math.round(60 * scale);
     Object.assign(canvas.style, { width: '100%', height: '100%' });
     box.append(canvas);
@@ -534,7 +534,7 @@ export class CashShop {
 
   private placeDialog(): void {
     if (!this.dialog) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.dialog.setScale(scale);
     const stage = this.dialog.$('#stage');
     // .stage centres the cash shop's 640 x 480 at the UI scale (base.rcss), as the shop itself is.
@@ -560,7 +560,7 @@ export class CashShop {
   private async sendGift(pack: ShopPackage, priceSeq: number, itemCode: number, cashType: number, name: string, price: string, period: string): Promise<void> {
     this.closeDialog();
     await prepareDocument('igs_send_gift');
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     const model: RmlModel = {
       text_px: this.model.text_px, title: IGS_TEXT.sendGift, recipient_label: IGS_TEXT.recipient, message_label: IGS_TEXT.message,
       item_lines: [format(IGS_TEXT.item, name), format(IGS_TEXT.price, price), format(IGS_TEXT.durationS, period)],
@@ -645,7 +645,7 @@ export class CashShop {
   // RenderItems: each shown package's item in its card.
   private drawPackages(shown: ShopPackage[]): void {
     const boxes = [...(this.doc?.root.querySelectorAll<HTMLElement>('.igs-package-item') ?? [])];
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     boxes.forEach((box, i) => {
       const code = shown[i]?.itemCode ?? -1;
       const signature = `${code}:${scale}`;

@@ -2,9 +2,9 @@
 // the leader's flag, the name, the health bar in tenths, red when the member isn't in sight; the
 // leave button for the hero (and for every member when the hero leads).
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import type { Party } from '../game/party.js';
-import { fitTextPx, nativeTextPx } from './nativeText.js';
+import { fitTextPx, nativeTextPx, uiScale } from './nativeText.js';
 import { textWidth } from '../game/questData.js';
 
 interface Card {
@@ -71,10 +71,10 @@ export class PartyList {
 
   place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     const width = window.innerWidth / scale;
     this.doc.setScale(scale);
-    Object.assign(this.doc.root.style, { width: `${width}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none' });
+    Object.assign(this.doc.root.style, { width: `${width}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none' });
     this.doc.root.style.setProperty('--world-left', '0px');
     this.doc.root.style.setProperty('--world-right', `${width - (this.actions.dockedRight?.() ?? 0)}px`);
     this.doc.root.style.setProperty('--hud-scale', '1');

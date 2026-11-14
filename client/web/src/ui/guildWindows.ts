@@ -7,11 +7,11 @@
 //    the question, then the name and the 8 x 8 mark editor, then the finished mark; Next creates.
 // Leaving, disbanding and releasing ask for the account's password, as the desktop does.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { editorCellColor, GuildStatus, markCellColor, MARK_CELLS, type Guild } from '../game/guild.js';
 import { askInGame, noticeInGame, promptInGame } from './socialDialogs.js';
 import { MessageBox } from './gameDialogs.js';
-import { fitTextPx, measureText, nativeTextPx } from './nativeText.js';
+import { fitTextPx, measureText, nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 
@@ -110,7 +110,7 @@ abstract class DockedWindow<M extends RmlModel & { text_px: number }> {
     this.docked.onOpen?.();
     this.opened();
     this.refresh();
-    const doc = await openDocument(this.documentName, this.model, { parent: this.docked.parent ?? document.body, scale: window.innerHeight / REFERENCE_HEIGHT });
+    const doc = await openDocument(this.documentName, this.model, { parent: this.docked.parent ?? document.body, scale: uiScale() });
     if (this.doc) { doc.close(); return; }
     this.doc = doc;
     const panel = doc.$('#panel');
@@ -137,10 +137,10 @@ abstract class DockedWindow<M extends RmlModel & { text_px: number }> {
     if (!this.doc) return;
     const panel = this.doc.$('#panel');
     if (!panel) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     Object.assign(panel.style, {
-      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top',
+      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top',
     });
     this.scale = scale;
     this.model.text_px = nativePx(scale);

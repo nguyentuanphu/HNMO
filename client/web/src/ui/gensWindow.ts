@@ -7,11 +7,11 @@
 // The gens state is game/gens.ts.
 
 import * as THREE from 'three';
-import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { loadImage, openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { divideStringByPixel, textWidth } from '../game/questData.js';
 import { GENS_DUPRIAN, GENS_VANERT, GensText, gensMarkCell, gensTitle, type Gens } from '../game/gens.js';
 import type { Character } from '../game/characters.js';
-import { FONT_FAMILY, fitTextPx, nativeTextPx } from './nativeText.js';
+import { FONT_FAMILY, fitTextPx, nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 const TEXT_PX = 12;
@@ -68,7 +68,7 @@ export class GensRankingWindow {
     this.options.closeOthers();
     this.options.send();
     this.sync();
-    const doc = await openDocument('gens_ranking', this.model, { parent: document.body, scale: window.innerHeight / REFERENCE_HEIGHT });
+    const doc = await openDocument('gens_ranking', this.model, { parent: document.body, scale: uiScale() });
     if (this.doc) { doc.close(); return; }
     this.doc = doc;
     const panel = doc.$('#panel');
@@ -118,9 +118,9 @@ export class GensRankingWindow {
     if (!this.doc) return;
     const panel = this.doc.$('#panel');
     if (!panel) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
-    Object.assign(panel.style, { left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top' });
+    Object.assign(panel.style, { left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top' });
     this.textPx = nativeTextPx();
     this.sync();
   }
@@ -207,7 +207,7 @@ export class GensMarks {
     const rect = canvas.getBoundingClientRect();
     this.box.setFromObject(character.group);
     const head = new THREE.Vector3((this.box.min.x + this.box.max.x) / 2, this.box.max.y, (this.box.min.z + this.box.max.z) / 2).project(camera);
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     Object.assign(this.tag.style, { display: 'block', left: `${rect.left + (head.x + 1) / 2 * rect.width}px`, top: `${rect.top + (1 - head.y) / 2 * rect.height - 4}px` });
     this.name.style.fontSize = `${nativeTextPx()}px`;
     if (this.options.decorate) this.options.decorate(character, this.name);

@@ -18,9 +18,9 @@ import { read } from '../net/packets.js';
 import type { Connection } from '../net/connection.js';
 import { ItemWindow, emptyCells, formatGold } from './itemWindows.js';
 import type { ItemWindowModel, ItemWindows, PickedItem } from './itemWindows.js';
-import { REFERENCE_HEIGHT, prepareDocument } from './rml.js';
+import { prepareDocument } from './rml.js';
 import * as THREE from 'three';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale } from './nativeText.js';
 import { showConfirm } from './gameDialogs.js';
 
 // The desktop's texts (I18N::Game).
@@ -306,7 +306,7 @@ class ShopTitles {
   private update(): void {
     const { camera, canvas, root } = this.options;
     const rect = canvas.getBoundingClientRect();
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     const point = new THREE.Vector3();
     for (const [id, box] of this.boxes) {
       const character = this.options.characterOf(id);

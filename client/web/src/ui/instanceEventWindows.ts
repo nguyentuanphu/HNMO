@@ -10,7 +10,7 @@
 //   empire_guardian_timer    CEmpireGuardianTimer, the HUD slot (507, 342)
 // setUpInstanceEvents() wires them to game/instanceEvents.ts with one call from main.ts.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { fitPx } from './guildWindows.js';
 import { drawItem } from './itemIcons.js';
 import {
@@ -26,12 +26,12 @@ import { skillInfo, loadSkillData } from '../game/skills.js';
 import { textWidth } from '../game/questData.js';
 import { PlayerActions } from '../game/combatLook.js';
 import type { MapAudioState } from '../audio/index.js';
-import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
+import { nativeLineHeightPx, nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 const LINE_HEIGHT = 14;
 
-const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
+const screenScale = () => uiScale();
 
 /** Lays a document's root out as the 640x480 reference screen stretched to the window. */
 function placeBoard(doc: RmlDocument): number {
@@ -39,7 +39,7 @@ function placeBoard(doc: RmlDocument): number {
   // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
   doc.setScale(scale);
   Object.assign(doc.root.style, {
-    width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
+    width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
@@ -77,7 +77,7 @@ function placeDocked(doc: RmlDocument): number {
   doc.setScale(scale);
   if (panel) {
     Object.assign(panel.style, {
-      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
+      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
     });
   }
   return scale;

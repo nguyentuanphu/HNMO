@@ -2,7 +2,7 @@
 // CMyInventory and CStorageInventory: the equipment slots and the 8 x 8 bag, the vault's 8 x 15
 // grid, the money, and moving items by clicking an item to pick it up and clicking where it goes.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
+import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { drawItem } from './itemIcons.js';
 import { BAG, VAULT, SHOP, SHOP_STORAGE, TRADE, Equipment, Inventory, NpcWindow, Storage } from '../game/inventory.js';
@@ -11,7 +11,7 @@ import { itemName } from '../game/items.js';
 import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
 import type { TooltipCharacter } from '../game/itemTooltip.js';
 import { isHighValue, isSellingBan } from '../game/itemUse.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const CELL = 20; // the grid's cell pitch in reference pixels (item_grid.rcss --item-cell)
 const PANEL = { width: 190, height: 429 };
@@ -104,10 +104,6 @@ export function goldTier(amount: number): string {
   if (amount >= 1_000_000) return 'million';
   if (amount >= 100_000) return 'hundred-thousand';
   return 'base';
-}
-
-function uiScale(): number {
-  return window.innerHeight / REFERENCE_HEIGHT;
 }
 
 export function emptyCells(count: number): GridCell[] {
@@ -246,7 +242,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   place(right: number): void {
     if (!this.doc) return;
     const scale = uiScale();
-    Object.assign(this.panel.style, { left: `${window.innerWidth - (right + PANEL.width) * scale}px`, top: '0px', transform: `scale(${scale})` });
+    Object.assign(this.panel.style, { left: `${window.innerWidth - (right + PANEL.width) * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})` });
     this.doc.setScale(scale);
     this.model.text_px = nativeTextPx();
     this.doc.update();

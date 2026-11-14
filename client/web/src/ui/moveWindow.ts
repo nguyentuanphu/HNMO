@@ -1,9 +1,9 @@
 // The move window (M, CMoveCommandWindow, move_command.rml): the warp list with each map's level and
 // zen; a click on a map the hero may enter warps there (WarpCommandRequest with the server's key).
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { canWarp, loadWarps, warpLevel, type Warp, type WarpCheck } from '../game/warps.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale } from './nativeText.js';
 
 interface Row { index: number; strife_text: string; map_name: string; req_level: string; req_zen: string; can_move: boolean; level_unmet: boolean; zen_unmet: boolean }
 interface MoveModel extends RmlModel {
@@ -52,7 +52,7 @@ export class MoveWindow {
 
   private place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     this.model.text_px = nativeTextPx();
     const panel = this.doc.$('#panel');

@@ -87,7 +87,10 @@ function keepGlowSeeThrough(root: THREE.Object3D): void {
  * height the 1 degree field of view covers at the item's depth.
  */
 export function itemPixelsPerUnit(): number {
-  const referenceHeight = window.innerHeight / typographyScale() || REFERENCE_HEIGHT;
+  // A window taller than 4:3 (a portrait screen) would draw the items larger than their boxes: the height
+  // counts at most as a 4:3 window of the same width. Landscape windows are as the desktop's.
+  const height = Math.min(window.innerHeight, window.innerWidth * 0.75);
+  const referenceHeight = height / typographyScale() || REFERENCE_HEIGHT;
   return referenceHeight / (2 * ITEM_DEPTH * Math.tan(ITEM_FIELD_OF_VIEW / 2 * DEG));
 }
 

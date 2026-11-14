@@ -8,7 +8,7 @@
 //    send (it costs zen), close (asks when something was written).
 // The windows can be dragged by their title; a press brings one to the front.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { askInGame, noticeInGame, promptInGame } from './socialDialogs.js';
 import { keepTypingInside } from './guildWindows.js';
 import { LAST_ONLINE_SERVER, LETTER_COST, UNAVAILABLE_SERVER, type Letter, type LetterBody, type Messenger } from '../game/messenger.js';

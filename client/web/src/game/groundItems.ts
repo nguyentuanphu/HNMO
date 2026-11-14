@@ -14,9 +14,9 @@ import { createItemModel, cellCenter, type Character, type CharacterWorld } from
 import { decodeItem, type Item } from './inventory.js';
 import { itemDefinition, itemModel } from './items.js';
 import { itemConditionsHold, itemNameText, loadTooltipData } from './itemTooltip.js';
-import { REFERENCE_HEIGHT } from '../ui/rml.js';
+import {  } from '../ui/rml.js';
 import type { AnimatedModel } from '../bmd.js';
-import { FONT_FAMILY, nativeTextPx } from '../ui/nativeText.js';
+import { FONT_FAMILY, nativeTextPx, uiScale } from '../ui/nativeText.js';
 
 const DEG = Math.PI / 180;
 const PICKUP_REACH = 2;            // cells (Pickup.h PickupReach)
@@ -188,7 +188,7 @@ export class GroundItems {
   // The drop under the mouse: its label or its spot on the ground.
   pick(event: MouseEvent): GroundDrop | null {
     let best: { drop: GroundDrop; distance: number } | null = null;
-    const radius = 22 * (window.innerHeight / REFERENCE_HEIGHT);
+    const radius = 22 * (uiScale());
     for (const drop of this.drops.values()) {
       const rect = drop.label.style.display === 'block' ? drop.label.getBoundingClientRect() : null;
       if (rect && event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom) return drop;
@@ -225,7 +225,7 @@ export class GroundItems {
   }
 
   update(world: CharacterWorld): void {
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     for (const drop of this.drops.values()) {
       const x = cellCenter(drop.cell.x), y = cellCenter(drop.cell.y);
       drop.group.position.set(x, y, sampleHeight(world.heights, x, y));

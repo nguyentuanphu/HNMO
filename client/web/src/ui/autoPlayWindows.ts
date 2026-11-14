@@ -10,7 +10,7 @@
 // held by the settings window and written by its Save; the detail panel's gauges and buff interval
 // are held by the panel and written by its own Save.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
+import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { loadSkillData, skillIconSprite, skillInfo, SkillNumber, SkillUseType } from '../game/skills.js';
 import type { SkillList } from '../game/skills.js';
@@ -19,7 +19,7 @@ import {
   cloneAutoPlayConfig, initialAutoPlayConfig, normalizeExtraItems, PetAttackMode, SkillActivation,
 } from '../game/autoPlayConfig.js';
 import type { AutoPlayConfig } from '../game/autoPlayConfig.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // the docked panels' width in reference px
 const SKILL_SLOTS = 6; // attack skills 0-2, buffs 3-5
@@ -124,7 +124,6 @@ function skillDecorator(skill: number): string {
   return sprite ? `image(${sprite})` : 'none';
 }
 
-const uiScale = () => window.innerHeight / REFERENCE_HEIGHT;
 const textPx = (_scale: number) => nativeTextPx();
 
 interface ConfigLabels {
@@ -502,7 +501,7 @@ export class AutoPlaySettingsWindow {
       const panel = doc.$('#panel');
       if (!panel) return;
       Object.assign(panel.style, {
-        left: `${window.innerWidth - (right + (column + 1) * PANEL_WIDTH) * scale}px`, top: '0px',
+        left: `${window.innerWidth - (right + (column + 1) * PANEL_WIDTH) * scale}px`, top: `${dockTop()}px`,
         transform: `scale(${scale})`, transformOrigin: 'left top',
       });
       doc.setScale(scale);

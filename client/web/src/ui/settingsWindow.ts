@@ -10,7 +10,7 @@
 // kept in the browser (localStorage 'hnmo.settings'; the volumes in the audio system's own key)
 // and applied when the page loads.
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { audioSystem, MAX_VOLUME_LEVEL } from '../audio/audioSystem.js';
 import { typographyScale } from './nativeText.js';
 import {

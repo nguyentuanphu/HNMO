@@ -4,8 +4,8 @@
 // end hostility, add friend, follow, duel. While a command is armed the target box follows the
 // pointer over a player, with the name in red when the player is too far. Escape and the X close it.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
-import { nativeTextPx } from './nativeText.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 import type { Character } from '../game/characters.js';
 
 export const Command = {
@@ -99,7 +99,7 @@ export class CommandWindow {
   private async load(): Promise<void> {
     this.options.onOpen?.();
     this.selected = Command.NONE; // OpenningProcess
-    const doc = await openDocument('command_window', this.model, { parent: this.options.parent ?? document.body, scale: window.innerHeight / REFERENCE_HEIGHT });
+    const doc = await openDocument('command_window', this.model, { parent: this.options.parent ?? document.body, scale: uiScale() });
     if (this.doc) { doc.close(); return; }
     this.doc = doc;
     doc.host.style.zIndex = '26';
@@ -166,7 +166,7 @@ export class CommandWindow {
     this.model.target_visible = visible;
     if (player && visible) {
       const panel = this.doc.$('#panel')?.getBoundingClientRect();
-      const scale = window.innerHeight / REFERENCE_HEIGHT;
+      const scale = uiScale();
       this.model.target_left = (event.clientX - (panel?.left ?? 0)) / scale + TARGET_OFFSET;
       this.model.target_top = (event.clientY - (panel?.top ?? 0)) / scale + TARGET_OFFSET;
       this.model.target_name = player.name;
@@ -193,10 +193,10 @@ export class CommandWindow {
     if (!this.doc) return;
     const panel = this.doc.$('#panel');
     if (!panel) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     Object.assign(panel.style, {
-      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top',
+      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top',
     });
     this.refresh();
   }

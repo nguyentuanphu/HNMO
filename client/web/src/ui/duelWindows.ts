@@ -7,13 +7,13 @@
 //   duel_watch_spectators    CDuelWatchUserListWindow: the spectators of the watched duel
 // The duel state is game/duel.ts.
 
-import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { loadImage, openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { DUEL_ENEMY, DUEL_HERO, DuelText, fill, type Duel } from '../game/duel.js';
-import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
+import { nativeLineHeightPx, nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // the docked windows' width
 
-const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
+const screenScale = () => uiScale();
 
 /** Lays a document's root out as the 640x480 reference screen stretched to the window. */
 function placeBoard(doc: RmlDocument): number {
@@ -21,7 +21,7 @@ function placeBoard(doc: RmlDocument): number {
   // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
   doc.setScale(scale);
   Object.assign(doc.root.style, {
-    width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
+    width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
@@ -243,7 +243,7 @@ export class DuelWatchWindow {
     if (!panel) return;
     const scale = screenScale();
     this.doc.setScale(scale);
-    Object.assign(panel.style, { left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top' });
+    Object.assign(panel.style, { left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top' });
     const px = nativeTextPx();
     Object.assign(this.model, { text_px: px, bold_text_px: px, subtitle_px: px, label_line_px: nativeLineHeightPx() });
     this.sync();

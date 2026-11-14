@@ -11,7 +11,8 @@
 //    messages on / off, chat log on / off, the frame; the whisper box (a name there whispers the
 //    line; F3 turns it off), the line and whisper histories (Up / Down), one line a second.
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from '../ui/rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from '../ui/rml.js';
+import { hudScale } from '../ui/nativeText.js';
 
 /** How a message shows: said (in public, to the party, guild, alliance or Gens), whispered, from the game, or from a game master. */
 export type ChatKind = 'chat' | 'whisper' | 'system' | 'error' | 'party' | 'guild' | 'union' | 'gens' | 'gm';
@@ -230,11 +231,11 @@ export class Chat {
 
   // The roots stand for the 640 x 480 screen, scaled to the window, like the HUD under them.
   private place(): void {
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = hudScale();
     for (const doc of [this.systemLog, this.log, this.input]) {
       if (!doc) continue;
       Object.assign(doc.root.style, {
-        width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`,
+        width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`,
         transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
       });
       doc.setScale(scale);
@@ -289,7 +290,7 @@ export class Chat {
   private resizeDrag(start: PointerEvent): void {
     start.preventDefault();
     start.stopPropagation();
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = hudScale();
     const from = this.showingLines;
     const move = (event: PointerEvent) => {
       const rows = Math.round((start.clientY - event.clientY) / scale / ROW / 3) * 3;
@@ -324,7 +325,7 @@ export class Chat {
       const well = lines.getBoundingClientRect();
       if (x >= well.left && x < well.right && y >= well.top && y < well.bottom) {
         const rows = [...lines.querySelectorAll<HTMLElement>('.chat-line')].filter((row) => row !== this.measure);
-        const scale = window.innerHeight / REFERENCE_HEIGHT;
+        const scale = hudScale();
         rows.some((row, index) => {
           const box = row.getBoundingClientRect();
           if (y < box.top || y >= box.top + ROW * scale) return false;

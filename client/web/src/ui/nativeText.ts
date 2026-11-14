@@ -22,6 +22,28 @@ export function typographyScale(width = window.innerWidth, height = window.inner
   return Math.min(Math.max(Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT), 1), MAXIMUM_PANEL_SCALE);
 }
 
+/** kMaximumDockScale. */
+const MAXIMUM_DOCK_SCALE = 2.25;
+/** kHudFrameHeight: the HUD's height in reference units. */
+const HUD_FRAME_HEIGHT = 51;
+/** UI::Scaling::DockLogicalBottom: where a docked window ends, in its own units (on the HUD's top edge). */
+const DOCK_LOGICAL_BOTTOM = 432;
+
+/** The windows' scale (CappedUniformScale with kMaximumDockScale): the 640x480 reference fitted to the window, 1..2.25. */
+export function uiScale(width = window.innerWidth, height = window.innerHeight): number {
+  return Math.min(Math.max(Math.min(width / REFERENCE_WIDTH, height / REFERENCE_HEIGHT), 1), MAXIMUM_DOCK_SCALE);
+}
+
+/** BottomHudScale: the HUD's and the chat's scale, 1..2. */
+export function hudScale(width = window.innerWidth, height = window.innerHeight): number {
+  return typographyScale(width, height);
+}
+
+/** DockTransform's offset: a docked window's top, so that its bottom (432 units) meets the HUD's top. */
+export function dockTop(): number {
+  return Math.max(0, window.innerHeight - HUD_FRAME_HEIGHT * hudScale() - DOCK_LOGICAL_BOTTOM * uiScale());
+}
+
 /** NativeTextPixelSize: the size the native text renderer draws at, in screen pixels. It grows more slowly than the panels. */
 export function nativeTextPx(role: FontRole = 'normal', width = window.innerWidth, height = window.innerHeight): number {
   const [minimum, maximum] = POINT_RANGE[role];

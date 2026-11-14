@@ -4,11 +4,12 @@
 // the potion slots Q W E R (CItemHotKey: the item each uses next, drawn as its 3D model, and how
 // many are left). Skill slots come with the skills.
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { experienceForLevel, type CharacterStats } from '../game/stats.js';
 import type { Item } from '../game/inventory.js';
 import { drawItem } from './itemIcons.js';
 import { skillCooldowns, skillIconSprite, type SkillList } from '../game/skills.js';
+import { hudScale } from './nativeText.js';
 
 /** What the skill bar shows: the skill list and whether a skill can be used now (lit or grey icon). */
 export interface HudSkills {
@@ -134,9 +135,9 @@ export class Hud {
   // The root stands for the 640 x 480 reference screen, scaled to the window; the HUD docks to its bottom centre.
   private place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = hudScale();
     Object.assign(this.doc.root.style, {
-      width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`,
+      width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`,
       transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
     });
     this.doc.setScale(scale);

@@ -1,9 +1,10 @@
 // The buff strip (CBuffStrip, buff_strip.rml): the hero's buffs and debuffs as icons, a tooltip with
 // the name and description on hover, and a right click that offers to cancel the buffs a skill gave.
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { buffDefinition, buffStripOrder } from '../game/buffs.js';
 import type { TooltipLine } from '../game/itemTooltip.js';
+import { hudScale } from './nativeText.js';
 
 interface StripModel extends RmlModel {
   buffs: { decorator: string }[];
@@ -63,10 +64,10 @@ export class BuffStrip {
 
   place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = hudScale();
     this.doc.setScale(scale);
     const width = window.innerWidth / scale;
-    Object.assign(this.doc.root.style, { width: `${width}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none' });
+    Object.assign(this.doc.root.style, { width: `${width}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none' });
     // The theme centres the strip between the world's left and right edges (the docks leave the rest).
     this.doc.root.style.setProperty('--world-left', '0px');
     this.doc.root.style.setProperty('--world-right', `${width - (this.actions.dockedRight?.() ?? 0)}px`);

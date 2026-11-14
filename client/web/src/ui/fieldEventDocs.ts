@@ -3,13 +3,13 @@
 // generic_confirm_dialog OK boxes, questions and the amount entry, and message_box_view's
 // progress boxes (CProgressMsgBox). Nothing here knows an event; ui/fieldEventWindows.ts wires them.
 
-import { loadImage, openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
-import { nativeLineHeightPx, nativeTextPx, nativeTextPxInBox } from './nativeText.js';
+import { loadImage, openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { nativeLineHeightPx, nativeTextPx, nativeTextPxInBox, uiScale, dockTop } from './nativeText.js';
 
 export const PANEL_WIDTH = 190;   // the docked windows' width
 const REFRESH_MS = 200;
 
-export const screenScale = (): number => window.innerHeight / REFERENCE_HEIGHT;
+export const screenScale = (): number => uiScale();
 
 /** A line of a docked window: what it says and its native size, shrunk to its box like NativeTextPxInBox. */
 export interface SizedLine { text: string; text_px: number }
@@ -26,7 +26,7 @@ export function placeBoard(doc: RmlDocument): number {
   // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
   doc.setScale(scale);
   Object.assign(doc.root.style, {
-    width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
+    width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
@@ -88,7 +88,7 @@ export function dockRight(doc: RmlDocument): number {
   doc.setScale(scale);
   if (panel) {
     Object.assign(panel.style, {
-      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
+      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
     });
   }
   return scale;

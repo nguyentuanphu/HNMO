@@ -6,7 +6,7 @@
 // (CheckAttributeArea); the server's answer updates the tree, the skill list and the HUD. A opens and closes
 // it (HotKey), Escape and the close button close it. setupMasterLevel wires it into the game.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { ItemTooltipView } from './itemTooltipView.js';
 import { confirmInGame, messageInGame } from './confirmDialog.js';
 import type { Connection } from '../net/connection.js';
@@ -21,7 +21,7 @@ import {
 } from '../game/masterLevel.js';
 import type { Hud } from './hud.js';
 import type { CharacterWindow } from './characterWindow.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale } from './nativeText.js';
 import { textWidth } from '../game/questData.js';
 
 // The desktop's texts (Localization/Game.en.resx).
@@ -182,12 +182,12 @@ export class MasterLevelWindow {
 
   // The 640 x 480 reference screen at the HUD's scale; the theme stands the tree on its bottom, centred.
   place(): void {
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     for (const doc of [this.doc, this.band]) {
       if (!doc) continue;
       doc.setScale(scale);
       Object.assign(doc.root.style, {
-        width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`,
+        width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`,
         transformOrigin: 'left top', pointerEvents: 'none',
       });
       doc.root.style.setProperty('--hud-scale', '1');

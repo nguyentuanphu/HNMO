@@ -1,7 +1,8 @@
 // The auto play bar (CMuHelperBar, mu_helper_bar.rml): the map and the hero's position, the settings
 // button and the start / stop button.
 
-import { openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { uiScale } from './nativeText.js';
 
 interface BarModel extends RmlModel {
   position_text: string; mu_helper_active: boolean; config_hint: string; start_hint: string; stop_hint: string;
@@ -31,7 +32,7 @@ export class AutoPlayBar {
 
   private place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     Object.assign(this.doc.root.style, { transform: `scale(${scale})`, transformOrigin: 'left top' });
   }

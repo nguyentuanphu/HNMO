@@ -5,7 +5,7 @@
 // (IncreaseCharacterStatPoint; game/stats.ts follows the server's answer), the hints of the damage and critical
 // damage rate lines, and the close buttons.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
+import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { ItemTooltipView } from './itemTooltipView.js';
 import type { Connection } from '../net/connection.js';
@@ -14,7 +14,7 @@ import { EQUIPMENT_SLOTS, type Inventory } from '../game/inventory.js';
 import { itemCombatValues, loadTooltipData, type TooltipLine } from '../game/itemTooltip.js';
 import { loadSkillData, skillInfo } from '../game/skills.js';
 import { BaseClass, characterSheet, type CharacterSheet, type HeroStats, type LineSource, type WornItem } from '../game/characterCalc.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190; // CHAINFO_WINDOW_WIDTH
 const PVP_NEUTRAL = 3;   // CHARACTER::PK of a player who killed no one
@@ -207,7 +207,7 @@ export class CharacterWindow {
   private async openDocument(): Promise<void> {
     await Promise.all([prepareDocument('character_info'), loadTooltipData(), loadSkillData()]);
     if (this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.refresh(false);
     const doc = await openDocument('character_info', this.model, { parent: this.parent, scale });
     this.doc = doc;
@@ -247,10 +247,10 @@ export class CharacterWindow {
   /** Docks the window at the right edge (the workspace's dock-right column, where it is the first window). */
   place(): void {
     if (!this.doc || !this.panel) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     const right = this.options.dockRight?.() ?? 0;
     Object.assign(this.panel.style, {
-      left: `${window.innerWidth - (right + PANEL_WIDTH) * scale}px`, top: '0px', transform: `scale(${scale})`,
+      left: `${window.innerWidth - (right + PANEL_WIDTH) * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`,
       transformOrigin: 'left top',
     });
     this.doc.setScale(scale);

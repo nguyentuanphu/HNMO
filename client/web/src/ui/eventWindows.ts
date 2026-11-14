@@ -6,18 +6,18 @@
 //   generic_confirm_dialog                    the OK boxes and questions (CreateOkMessageBox, ShowConfirm)
 // setUpEvents() wires them to the event state (game/events.ts) with one call from main.ts.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import {
   bloodCastleEntry, devilSquareEntry, EventMatches, T,
   type EntryContent, type EventHero, type MatchResult, type TimerView,
 } from '../game/events.js';
 import type { Connection } from '../net/connection.js';
 import type { Item } from '../game/inventory.js';
-import { nativeLineHeightPx, nativeTextPx } from './nativeText.js';
+import { nativeLineHeightPx, nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190;   // the docked windows' width
 
-const screenScale = () => window.innerHeight / REFERENCE_HEIGHT;
+const screenScale = () => uiScale();
 
 /** Lays a document's root out as the 640x480 reference screen stretched to the window (a .stage / .hud-board). */
 function placeBoard(doc: RmlDocument): number {
@@ -25,7 +25,7 @@ function placeBoard(doc: RmlDocument): number {
   // Counter-scaled text cancels the whole board's scale (rml.ts --board-scale).
   doc.setScale(scale);
   Object.assign(doc.root.style, {
-    width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
+    width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
   });
   doc.root.style.setProperty('--ui-scale', '1');
   doc.root.style.setProperty('--hud-scale', '1');
@@ -112,7 +112,7 @@ export class EventEntryWindow {
     const scale = screenScale();
     this.doc.setScale(scale);
     Object.assign(panel.style, {
-      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
+      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'auto',
     });
     this.model.text_px = nativeTextPx();
     this.model.bold_text_px = nativeTextPx();

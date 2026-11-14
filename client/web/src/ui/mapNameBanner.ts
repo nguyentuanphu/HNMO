@@ -2,7 +2,8 @@
 // ornaments and the map's icon (Data/Interface/MapNameOrnament: MapIcons.json, Layout.json), stays
 // five seconds and fades out (0.015 alpha a frame at the desktop's 25 frames a second).
 
-import { loadImage, openDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { loadImage, openDocument, type RmlDocument, type RmlModel } from './rml.js';
+import { uiScale } from './nativeText.js';
 
 interface BannerModel extends RmlModel {
   alpha: number; map_name: string; language: string; icon: boolean; icon_source: string; icon_style: string; strife: boolean; strife_source: string;
@@ -70,9 +71,9 @@ export class MapNameBanner {
 
   private place(): void {
     if (!this.doc) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
-    Object.assign(this.doc.root.style, { width: `${window.innerWidth / scale}px`, height: `${REFERENCE_HEIGHT}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none' });
+    Object.assign(this.doc.root.style, { width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`, transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none' });
   }
 
   /** Every frame: the fade. */

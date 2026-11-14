@@ -5,8 +5,9 @@
 // - the damage numbers that rise from whoever got hit.
 
 import * as THREE from 'three';
-import { REFERENCE_HEIGHT } from './rml.js';
+import {  } from './rml.js';
 import { damageTextMotion, DAMAGE_TEXT_LIFETIME_SECONDS, type DamageText } from '../game/combatLook.js';
+import { uiScale } from './nativeText.js';
 
 
 const BAR = { steps: 20, span: 80, border: 2, gap: 1, height: 5, nameTop: 2, barTop: 15 };
@@ -42,7 +43,7 @@ export class CombatOverlay {
     parent.append(this.root);
   }
 
-  private get scale(): number { return window.innerHeight / REFERENCE_HEIGHT; }
+  private get scale(): number { return uiScale(); }
 
   // The selected monster's name and health bar; null hides them. health < 0: not known yet (full bar).
   showTarget(target: { name: string; healthStatus: number } | null): void {

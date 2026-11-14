@@ -13,7 +13,7 @@
 //    the kill counts, the cost, "Proceed with quest" (LegacyQuestStateSetRequest).
 // The quest state and the packets are game/quests.ts.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { confirmInGame } from './confirmDialog.js';
 import { formatGold, goldTier } from './itemWindows.js';
 import type { Connection } from '../net/connection.js';
@@ -23,7 +23,7 @@ import { loadTooltipData } from '../game/itemTooltip.js';
 import { divideStringByPixel, loadQuestScripts, reduceStringByPixel, setMeasureFont } from '../game/questData.js';
 import { LEGACY_DIALOGS, type LegacyDialog } from '../game/legacyQuestDialog.generated.js';
 import { QuestLog, formatText, monsterName, type QuestEvents, type QuestHero, type RewardRow } from '../game/quests.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 const PANEL_WIDTH = 190;
 
@@ -54,7 +54,7 @@ class DockedDocument<M extends RmlModel & { text_px: number }> {
   async open(): Promise<void> {
     if (this.doc) { this.update(); return; }
     this.opening ??= (async () => {
-      const doc = await openDocument(this.name, this.model, { parent: this.parent, scale: window.innerHeight / REFERENCE_HEIGHT });
+      const doc = await openDocument(this.name, this.model, { parent: this.parent, scale: uiScale() });
       if (this.doc) { doc.close(); return; }
       this.doc = doc;
       doc.host.style.zIndex = '30';
@@ -82,10 +82,10 @@ class DockedDocument<M extends RmlModel & { text_px: number }> {
     if (!this.doc) return;
     const root = this.doc.$(this.rootSelector);
     if (!root) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     Object.assign(root.style, {
-      left: `${window.innerWidth - (this.column + 1) * PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top',
+      left: `${window.innerWidth - (this.column + 1) * PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top',
     });
     this.model.text_px = nativeTextPx();
     this.doc.update();

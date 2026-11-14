@@ -3,10 +3,10 @@
 // the leader's flag, the map, the position, the life bar and "life / max"; the X for the leader (on
 // everyone) or the hero (on itself) leaves or removes. Without a party, how to make one.
 
-import { openDocument, prepareDocument, REFERENCE_HEIGHT, type RmlDocument, type RmlModel } from './rml.js';
+import { openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import type { Party } from '../game/party.js';
 import type { Connection } from '../net/connection.js';
-import { nativeTextPx } from './nativeText.js';
+import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
 interface MemberRow {
   index: number; name: string; map_text: string; coord_text: string; hp_text: string; hp_percent: number;
@@ -80,7 +80,7 @@ export class PartyWindow {
     // OpenningProcess(): the newest list from the server.
     this.options.connection.send('ClientToServer', 'PartyListRequest', {});
     this.refresh();
-    const doc = await openDocument('party_info', this.model, { parent: this.options.parent ?? document.body, scale: window.innerHeight / REFERENCE_HEIGHT });
+    const doc = await openDocument('party_info', this.model, { parent: this.options.parent ?? document.body, scale: uiScale() });
     if (this.doc) { doc.close(); return; }
     this.doc = doc;
     const panel = doc.$('#panel');
@@ -130,10 +130,10 @@ export class PartyWindow {
     if (!this.doc) return;
     const panel = this.doc.$('#panel');
     if (!panel) return;
-    const scale = window.innerHeight / REFERENCE_HEIGHT;
+    const scale = uiScale();
     this.doc.setScale(scale);
     Object.assign(panel.style, {
-      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: '0px', transform: `scale(${scale})`, transformOrigin: 'left top',
+      left: `${window.innerWidth - PANEL_WIDTH * scale}px`, top: `${dockTop()}px`, transform: `scale(${scale})`, transformOrigin: 'left top',
     });
     this.model.text_px = nativeTextPx();
     this.doc.update();
