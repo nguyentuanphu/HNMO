@@ -1,4 +1,4 @@
-﻿// <copyright file="CharacterRankingRow.cs" company="HNMO">
+// <copyright file="CharacterRankingRow.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -10,8 +10,8 @@ using HNMO.Interfaces;
 /// A row of the query of the character ranking.
 /// </summary>
 /// <param name="Name">The name of the character.</param>
-/// <param name="ClassName">The name of the character class.</param>
+/// <param name="ClassId">The id of the character class (the names are looked up separately: a translated name can't be read in the query).</param>
 /// <param name="Level">The level.</param>
 /// <param name="MasterLevel">The master level.</param>
 /// <param name="Resets">The resets.</param>
-internal sealed record CharacterRankingRow(string Name, LocalizedString ClassName, float Level, float MasterLevel, float Resets);
+internal sealed record CharacterRankingRow(string Name, Guid? ClassId, float Level, float MasterLevel, float Resets);

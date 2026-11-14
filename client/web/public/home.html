@@ -14,8 +14,11 @@
       ></a>
       <nav>
         <a href="#realm" data-t="realm"></a
+        ><a href="#schedule" data-t="scheduleNav"></a
+        ><a href="#rankings" data-t="rankingsNav"></a
         ><a href="#events" data-t="events"></a
         ><a href="#world" data-t="world"></a
+        ><a href="#account" data-t="accountNav"></a
         ><a href="#start" data-t="start"></a>
       </nav>
       <div class="languages">
@@ -70,6 +73,49 @@
         </div>
         <div id="event-list" class="event-list"></div>
       </section>
+      <section id="schedule">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="scheduleNav"></span></p>
+            <h2 data-t="scheduleTitle"></h2>
+          </div>
+          <span class="muted" id="timezone"></span>
+        </div>
+        <p class="muted" id="details-notice" role="status"></p>
+        <div id="upcoming" class="upcoming"></div>
+      </section>
+      <section id="rankings">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="rankingsNav"></span></p>
+            <h2 data-t="rankingsTitle"></h2>
+          </div>
+        </div>
+        <div class="world-grid">
+          <article class="panel">
+            <h3 data-t="topCharacters"></h3>
+            <div class="table-wrap"><table id="ranking" class="table"></table></div>
+          </article>
+          <article class="panel">
+            <div class="map-head">
+              <h3 data-t="eventRankings"></h3>
+              <select id="event-ranking" aria-label="Event"></select>
+            </div>
+            <div class="table-wrap"><table id="event-table" class="table"></table></div>
+          </article>
+        </div>
+      </section>
+      <section id="drops">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="dropsNav"></span></p>
+            <h2 data-t="dropsTitle"></h2>
+          </div>
+          <span class="muted" data-t="dropsHint"></span>
+        </div>
+        <div class="table-wrap"><table id="drop-table" class="table"></table></div>
+        <button type="button" id="drops-more" class="secondary" hidden></button>
+      </section>
       <section id="world">
         <div class="section-head">
           <div>
@@ -93,6 +139,44 @@
               />
             </div>
             <div id="maps" class="maps"></div>
+          </article>
+        </div>
+      </section>
+      <section id="account" class="account">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 / <span data-t="accountNav"></span></p>
+            <h2 data-t="accountTitle"></h2>
+          </div>
+        </div>
+        <div class="world-grid">
+          <article class="panel">
+            <h3 data-t="registerTitle"></h3>
+            <form id="register" class="form" autocomplete="on">
+              <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" autocomplete="username" /></label>
+              <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
+              <label><span data-t="email"></span><input name="email" type="email" maxlength="60" autocomplete="email" /></label>
+              <button class="primary" type="submit" data-t="registerButton"></button>
+              <p class="form-message" id="register-message" role="status"></p>
+            </form>
+          </article>
+          <article class="panel">
+            <h3 data-t="googleTitle"></h3>
+            <p class="muted" id="google-off" data-t="googleOff"></p>
+            <div id="google-button" hidden></div>
+            <form id="google-account" class="form" hidden>
+              <p class="muted" data-t="googleNew"></p>
+              <label><span data-t="loginName"></span><input name="loginName" required minlength="3" maxlength="10" pattern="[A-Za-z0-9]+" /></label>
+              <label><span data-t="password"></span><input name="password" type="password" required minlength="3" maxlength="20" autocomplete="new-password" /></label>
+              <button class="primary" type="submit" data-t="registerButton"></button>
+            </form>
+            <form id="google-linked" class="form" hidden>
+              <p><span data-t="googleLinked"></span> <strong id="google-login"></strong></p>
+              <label><span data-t="newPassword"></span><input name="newPassword" type="password" minlength="3" maxlength="20" autocomplete="new-password" /></label>
+              <button type="submit" data-t="setPassword"></button>
+              <a class="primary" href="/index.html" data-t="play"></a>
+            </form>
+            <p class="form-message" id="google-message" role="status"></p>
           </article>
         </div>
       </section>

@@ -1436,13 +1436,13 @@
   <data name="NpcItemRegistrationRule_RewardZen_Description" xml:space="preserve"><value>Zen awarded upon reaching the required item count.</value></data>
   <data name="NpcItemRegistrationRule_RewardDropItemGroup_Name" xml:space="preserve"><value>Reward Drop Item Group</value></data>
   <data name="NpcItemRegistrationRule_RewardDropItemGroup_Description" xml:space="preserve"><value>The DropItemGroup used to generate the item reward drop. If empty, no item drops (Zen reward only).</value></data>
-  <data name="ChaosCastleStartPlugIn_Name" xml:space="preserve"><value>ChaosCastleStartPlugIn</value></data>
+  <data name="ChaosCastleStartPlugIn_Name" xml:space="preserve"><value>Chaos Castle</value></data>
   <data name="ChaosCastleStartPlugIn_Description" xml:space="preserve"><value>Chaos Castle event</value></data>
-  <data name="KanturuStartPlugIn_Name" xml:space="preserve"><value>KanturuStartPlugIn</value></data>
+  <data name="KanturuStartPlugIn_Name" xml:space="preserve"><value>Kanturu</value></data>
   <data name="KanturuStartPlugIn_Description" xml:space="preserve"><value>Kanturu Refinery Tower event</value></data>
-  <data name="BloodCastleStartPlugIn_Name" xml:space="preserve"><value>BloodCastleStartPlugIn</value></data>
+  <data name="BloodCastleStartPlugIn_Name" xml:space="preserve"><value>Blood Castle</value></data>
   <data name="BloodCastleStartPlugIn_Description" xml:space="preserve"><value>Blood Castle event</value></data>
-  <data name="DevilSquareStartPlugIn_Name" xml:space="preserve"><value>DevilSquareStartPlugIn</value></data>
+  <data name="DevilSquareStartPlugIn_Name" xml:space="preserve"><value>Devil Square</value></data>
   <data name="DevilSquareStartPlugIn_Description" xml:space="preserve"><value>Devil Square event</value></data>
   <data name="PKClearConfiguration_ZenCostPerKill_Name" xml:space="preserve"><value>Zen Cost Per Kill</value></data>
   <data name="PKClearConfiguration_ZenCostPerKill_Description" xml:space="preserve"><value>The amount of Zen required to clear one PK count.</value></data>
@@ -2025,5 +2025,29 @@
   </data>
   <data name="BankTopUpConfiguration_SepayApiKey_Description" xml:space="preserve">
     <value>The API key of your SePay webhook (authentication: API Key). Empty: SePay is not accepted.</value>
+  </data>
+  <data name="WebsitePlugIn_Name" xml:space="preserve">
+    <value>Website (admin address, Google sign-in)</value>
+  </data>
+  <data name="WebsitePlugIn_Description" xml:space="preserve">
+    <value>Settings of the public website: the secret address under which it opens the admin panel, and the Google client id for "Sign in with Google".</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Caption" xml:space="preserve">
+    <value>Admin panel address</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Description" xml:space="preserve">
+    <value>The website opens the admin panel at https://your-site/&lt;this&gt;. Change it to something hard to guess (3 to 40 letters, digits, - or _). Empty: the admin panel only opens on the host computer. The website follows a change within 30 seconds. The admin panel always asks for an admin login there, and stays closed there until an admin user exists.</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Caption" xml:space="preserve">
+    <value>Google client id</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
+    <value>The client id of a Google Cloud OAuth client (type: Web application, with your website address as an authorized JavaScript origin). Empty: no "Sign in with Google".</value>
+  </data>
+  <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
+    <value>Illusion Temple</value>
+  </data>
+  <data name="IllusionTempleStartPlugIn_Description" xml:space="preserve">
+    <value>Illusion Temple event</value>
   </data>
 </root>

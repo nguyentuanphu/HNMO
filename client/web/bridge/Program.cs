@@ -27,6 +27,7 @@ builder.Services.AddHostedService(services => new GameLauncher(launcherOptions, 
 builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
 var portalOptions = builder.Configuration.GetSection("Portal").Get<PortalOptions>() ?? new PortalOptions();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpForwarder();
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
 var webRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:WebRoot"] ?? "../public"));
@@ -38,6 +39,9 @@ var connectTimeout = TimeSpan.FromSeconds(app.Configuration.GetValue("Relay:Conn
 const int MaximumPacketSize = 0xFFFF;
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
+
+// The admin panel at the website's secret admin path (AdminGateway.cs); before everything else.
+AdminGateway.Use(app, new AdminGateway(portalOptions, app.Services.GetRequiredService<Yarp.ReverseProxy.Forwarder.IHttpForwarder>(), app.Services.GetRequiredService<IHttpClientFactory>(), app.Services.GetRequiredService<ILogger<AdminGateway>>()));
 
 app.MapGet("/health", () => "ok");
 app.MapGet("/", () => Results.Redirect("/home.html"));

@@ -53,6 +53,8 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers) : C
                     events = config.MiniGameDefinitions.Where(item => item.IsActive)
                         .Select(item => new
                         {
+                            type = item.Type.ToString(),
+                            typeName = new { en = EventTypeName(item.Type.ToString(), "en"), vi = EventTypeName(item.Type.ToString(), "vi") },
                             name = item.Name.Value,
                             description = item.Description.Value,
                             level = item.GameLevel,
@@ -65,5 +67,15 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers) : C
                 };
             }),
         });
+    }
+
+    /// <summary>
+    /// The event's name in a language, from the server's translations of its start plug-in
+    /// ("BloodCastleStartPlugIn_Name"); the type itself when there is none.
+    /// </summary>
+    private static string EventTypeName(string type, string language)
+    {
+        var name = HNMO.GameLogic.Properties.PlugInResources.ResourceManager.GetString($"{type}StartPlugIn_Name", System.Globalization.CultureInfo.GetCultureInfo(language));
+        return string.IsNullOrWhiteSpace(name) || name.EndsWith("PlugIn", StringComparison.Ordinal) ? type : name;
     }
 }

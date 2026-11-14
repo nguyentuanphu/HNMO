@@ -3,14 +3,20 @@ internal static class Website
 {
     public static void Map(WebApplication app, PortalOptions options, IHttpClientFactory clients)
     {
-        app.MapGet("/website/data", async (HttpContext context) =>
+        Forward(app, "/website/data", "api/website", options, clients);
+        Forward(app, "/website/details", "api/website/details", options, clients);
+    }
+
+    private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)
+    {
+        app.MapGet(route, async (HttpContext context) =>
         {
             context.Response.Headers.CacheControl = "no-store";
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
-            timeout.CancelAfter(TimeSpan.FromSeconds(5));
+            timeout.CancelAfter(TimeSpan.FromSeconds(10));
             try
             {
-                var source = new Uri(new Uri(options.ApiBaseUrl), "api/website");
+                var source = new Uri(new Uri(options.ApiBaseUrl), apiPath);
                 using var response = await clients.CreateClient().GetAsync(source, timeout.Token).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
