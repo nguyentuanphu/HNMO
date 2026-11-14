@@ -43,6 +43,7 @@ import { setupSocial, decorateLabel, type Social } from './game/social.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
+import { setUpDuelAndGens, type DuelAndGens } from './ui/duelAndGens.js';
 import { MiniMap } from './ui/miniMap.js';
 import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
 import { PlayerActions } from './game/combatLook.js';
@@ -111,6 +112,7 @@ export interface GameState {
   partyWindow?: PartyWindow;
   events?: EventSystem;
   social?: Social;
+  duelAndGens?: DuelAndGens;
 }
 
 declare global {
@@ -1018,6 +1020,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   });
   // Guild, friends, letters and whispers (game/social.ts): G, F, /guild, the guild master NPC.
   state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); } });
+  // Duels (/DuelChallenge, the score window, Doorkeeper Titus) and Gens (the stewards, B); ui/duelAndGens.ts.
+  state.duelAndGens = setUpDuelAndGens({ connection, heroName: character.name, hero: () => online.hero, players: () => online.characters.values(), level: () => stats.level, mapNumber: () => state.mapNumber, chat, buffs, quests, camera, canvas: ui.canvas, click: () => sounds.click(), sound: (id) => sounds.audio.play(id), duelBlocked: () => !!state.chaosMachine?.isOpen || itemWindows.vault.isOpen, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, earlyPackets });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
