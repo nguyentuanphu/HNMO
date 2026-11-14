@@ -10,7 +10,7 @@ import {
 import type { Character } from './characters.js';
 import type { Item } from './inventory.js';
 import { isFemaleClass } from './combatLook.js';
-import { NEW_SKILL_LOOKS } from './newSkills.js';
+import { isNewSkill, NEW_SKILL_LOOKS } from './newSkills.js';
 
 /** A skill's own sound (ReceiveMagic / AttackEffect), by skill number. */
 const SKILL_SOUNDS: Record<number, string> = {
@@ -96,7 +96,8 @@ export class GameSounds {
   }
 
   skill(skill: number): void {
-    const sound = SKILL_SOUNDS[skill] ?? NEW_SKILL_LOOKS[skill]?.sound;
+    // HNMO's own skills have their own sounds (made for them); the game's sound is the spare.
+    const sound = isNewSkill(skill) ? `Sound/hnmo/${skill}.mp3` : SKILL_SOUNDS[skill] ?? NEW_SKILL_LOOKS[skill]?.sound;
     if (sound) this.audio.play(sound, { anchored: true });
   }
 

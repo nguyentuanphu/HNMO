@@ -15,7 +15,7 @@ classes in this order: Dark Knight 0, Dark Wizard 1, Fairy Elf 2, Magic Gladiato
 Summoner 5, Rage Fighter 6. So Dark Knight A is 700, Rage Fighter D is 727. They go into existing
 saves with a server update plug-in, and into fresh saves with the initializer.
 
-Sounds: generated with ElevenLabs sound effects (one per skill) while the free credits last, then the
+Sounds: made with ElevenLabs sound effects, one per skill (client/web/public/data/Sound/hnmo), the
 game's own sound files. Effects come from the game's own textures and models. Icons come from the
 game's own skill icons, recoloured or combined.
 

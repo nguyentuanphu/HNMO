@@ -53,7 +53,22 @@ if (Directory.Exists(Path.Combine(vendorRoot, "three")))
     });
 }
 
-app.MapGet("/data/{**path}", (HttpContext context, string path) => gameFiles.ServeAsync(context, path));
+// The web client's own data (public/data: HNMO's skills list, their sounds) comes before the game's
+// files of the same path; a matched endpoint skips the static files above, so it's looked up here.
+var webData = Path.Combine(webRoot, "data");
+var contentTypes = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
+{
+    var local = Path.GetFullPath(Path.Combine(webData, path));
+    if (local.StartsWith(webData + Path.DirectorySeparatorChar, StringComparison.Ordinal) && File.Exists(local))
+    {
+        context.Response.ContentType = contentTypes.TryGetContentType(local, out var type) ? type : "application/octet-stream";
+        await context.Response.SendFileAsync(local, context.RequestAborted).ConfigureAwait(false);
+        return;
+    }
+
+    await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
+});
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
 app.Logger.LogInformation("Web client: {WebRoot}. Game data: {DataRoot}.", webRoot, gameFiles.Root);
 

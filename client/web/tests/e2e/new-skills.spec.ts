@@ -41,7 +41,9 @@ test('a Dark Knight has its new skills by level and casts them', async ({ page }
   expect(await game(page, (g) => g.combat.cast(null, { ...g.online.hero.cell }, 700))).toBe(true);
   await expect.poll(async () => { const now = await game(page, (g) => g.effects?.counts() ?? null); return (now?.particles ?? 0) + (now?.effects ?? 0) > (before?.particles ?? 0) + (before?.effects ?? 0); }, { timeout: 20_000 }).toBe(true);
   await page.screenshot({ path: 'test-results/new-skill.png' });
-  // The skill list shows them with their own icons.
+  // Their own sounds are there (made for them, one per skill).
+  const sounds = await page.evaluate(async () => (await Promise.all([700, 713, 727].map((n) => fetch(`/data/Sound/hnmo/${n}.mp3`).then((r) => r.ok && (r.headers.get('content-type') ?? '').includes('audio'))))));
+  expect(sounds).toEqual([true, true, true]);
   await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
   await expectNoPageErrors(errors);
 });
