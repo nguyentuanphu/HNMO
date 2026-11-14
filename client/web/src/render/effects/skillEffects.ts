@@ -20,6 +20,7 @@ import type { EffectOwner } from './types.js';
 import { summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst } from './lordEffects.js';
+import { multiShotArrows } from './elfEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -142,6 +143,11 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
   }
   if (skill === SkillEffect.MULTI_SHOT) {
     multiShotRings(system, caster);
+    // The fan over the head (CalcAddPosition 0, -120, 145) and its arrows.
+    const fan = new THREE.Vector3(0, -120, 145).applyEuler(new THREE.Euler(0, 0, caster.angle.z * Math.PI / 180)).add(caster.position);
+    system.createEffect('bladeSkill', fan, caster.angle, new THREE.Vector3(0.8, 0.9, 1.6), 1, caster);
+    const shoot = options.shootArrow;
+    if (shoot) multiShotArrows(system, (offset) => shoot(offset, null));
     return true;
   }
   // The fighter's effects come with the cast (CMonkSystem::RageCreateEffect); its attack then

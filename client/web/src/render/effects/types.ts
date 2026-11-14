@@ -106,7 +106,8 @@ export type EffectType =
   | 'eventCloud' // BITMAP_EVENT_CLOUD: their clouds on the ground
   | 'windForce' // MODEL_WINDFOCE: their whirl of wind (Effect/wind_foce.bmd)
   | 'lightRed' // BITMAP_LIGHT_RED: the party buffs' glow
-  | 'dragonKickDummy'; // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
+  | 'dragonKickDummy' // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
+  | 'bladeSkill'; // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
