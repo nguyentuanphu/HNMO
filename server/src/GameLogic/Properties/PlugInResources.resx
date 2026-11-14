@@ -1937,15 +1937,33 @@
     <value>Lets the admin panel apply the cash shop coins it granted to an account which is in the game at once, instead of the next time the player opens the cash shop.</value>
   </data>
   <data name="GameNamePlugIn_Name" xml:space="preserve">
-    <value>Game name</value>
+    <value>Game name and community links</value>
   </data>
   <data name="GameNamePlugIn_Description" xml:space="preserve">
-    <value>The game's name which players see: the page title, the login screen, the guide and the item shop of the web game.</value>
+    <value>The game's name which players see (the page title, the login screen, the guide and the item shop of the web game) and the community links shown on the login screen and in the guide (Zalo, Discord, Facebook).</value>
   </data>
   <data name="GameNameConfiguration_Name_Caption" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="GameNameConfiguration_Name_Description" xml:space="preserve">
     <value>Shown to players instead of the default (1 to 60 characters). The web game picks it up within a minute.</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Caption" xml:space="preserve">
+    <value>Zalo</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Description" xml:space="preserve">
+    <value>A Zalo group or contact link players can use to reach you, e.g. https://zalo.me/g/... Empty: not shown.</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Caption" xml:space="preserve">
+    <value>Discord</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Description" xml:space="preserve">
+    <value>A Discord invite link. Empty: not shown.</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Caption" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Description" xml:space="preserve">
+    <value>A Facebook page or group link. Empty: not shown.</value>
   </data>
 </root>

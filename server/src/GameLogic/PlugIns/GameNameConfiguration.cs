@@ -22,4 +22,25 @@ public class GameNameConfiguration
     [Display(Name = nameof(Properties.PlugInResources.GameNameConfiguration_Name_Caption), Description = nameof(Properties.PlugInResources.GameNameConfiguration_Name_Description), ResourceType = typeof(Properties.PlugInResources))]
     [StringLength(60, MinimumLength = 1)]
     public string Name { get; set; } = DefaultName;
+
+    /// <summary>
+    /// Gets or sets the Zalo link shown to players on the login screen and in the guide (empty: not shown).
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.GameNameConfiguration_ZaloLink_Caption), Description = nameof(Properties.PlugInResources.GameNameConfiguration_ZaloLink_Description), ResourceType = typeof(Properties.PlugInResources))]
+    [StringLength(200)]
+    public string ZaloLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the Discord link shown to players on the login screen and in the guide (empty: not shown).
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.GameNameConfiguration_DiscordLink_Caption), Description = nameof(Properties.PlugInResources.GameNameConfiguration_DiscordLink_Description), ResourceType = typeof(Properties.PlugInResources))]
+    [StringLength(200)]
+    public string DiscordLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the Facebook link shown to players on the login screen and in the guide (empty: not shown).
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.GameNameConfiguration_FacebookLink_Caption), Description = nameof(Properties.PlugInResources.GameNameConfiguration_FacebookLink_Description), ResourceType = typeof(Properties.PlugInResources))]
+    [StringLength(200)]
+    public string FacebookLink { get; set; } = string.Empty;
 }

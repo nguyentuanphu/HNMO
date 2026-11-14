@@ -132,6 +132,17 @@
     // The game's name from the admin panel (the "Game name" plug-in), else the default above.
     fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
       const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
+      if (d && d.links) {
+        const labels = { zalo: 'Zalo', discord: 'Discord', facebook: 'Facebook' };
+        for (const box of document.querySelectorAll('[data-community-links]')) {
+          const found = Object.entries(d.links).filter(([kind, url]) => labels[kind] && typeof url === 'string' && url.startsWith('https://'));
+          if (!found.length) continue;
+          box.hidden = false;
+          box.replaceChildren(document.createTextNode(box.dataset.communityLinks || 'Contact: '), ...found.map(([kind, url]) => {
+            const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = labels[kind]; a.style.marginRight = '10px'; return a;
+          }));
+        }
+      }
       if (!name) return;
       document.title = document.title.replace('HenryN Mu Online', name);
       for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = (e.dataset.gameName || '{game}').replaceAll('{game}', name);
