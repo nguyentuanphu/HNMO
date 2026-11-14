@@ -97,11 +97,17 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Parallel work: agents in git worktrees, each with its own bridge port (8082-8091) and BASE_URL;
   merge their branches one at a time and resolve PARITY.md / guide.html conflicts by keeping both.
 - Owner wants (2026-11-14), to do AFTER the protection/keypair agent lands its public key:
-  1. A default limit of 20 concurrent players; a `license.hnmo` file signed with the owner's
+  1. A default limit of 10 concurrent players (owner set 10; they will adjust); a `license.hnmo` file signed with the owner's
      private key (reuse the integrity keypair) raises it. The server already has a MaximumPlayers
-     config field (ServerConfiguration.MaximumPlayers, used in BotServerPartition). Enforce 20 by
+     config field (ServerConfiguration.MaximumPlayers, used in BotServerPartition). Enforce 10 by
      default on login; a valid signed license lifts it. Give the owner a small command to sign a license.
   2. Ship Ubuntu (linux-x64) and macOS (osx-arm64/osx-x64) release packages too, not only Windows.
      package-hnmo.sh already takes the runtime arg; start-hnmo.sh already exists for non-Windows.
      The extra work is bundling the right PostgreSQL per OS (or relying on a system pg via POSTGRES_BIN).
      Update .github/workflows/hnmo-package.yml to a per-OS matrix.
+- Per-person server licensing (owner, 2026-11-14): default limit 10 concurrent players. When the owner
+  shares the server to several hosts, each host gets their OWN license.hnmo that the owner signs with
+  the private key, setting THAT host's max players (and optionally an expiry and a machine binding so it
+  can't be re-shared). No license => default 10. Provide a signing command the owner runs locally.
+- Usage: the owner conserves usage (5-hour reset windows). Run at most ONE background agent at a time;
+  prefer doing work directly. A recurring trigger resumes at 8pm Sydney and every 5h (01,06,11,16,20).
