@@ -53,6 +53,7 @@ import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, init
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
+import { helperVariant, setCompanionEffects } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -218,13 +219,13 @@ async function placeHero({ id, name, bodySet, equipment, x, y }: {
 
 // The hero wears what the inventory's equipment slots hold (the desktop client draws its own
 // character from CharacterMachine->Equipment): put on again when that changes.
-const EQUIPMENT_OF_SLOT: EquipmentSlotName[] = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings'];
+const EQUIPMENT_OF_SLOT: EquipmentSlotName[] = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings', 'pet'];
 let wornSignature: string | null = null;
 async function wearInventory(character: CharacterListEntry): Promise<void> {
   const equipment: EquipmentAppearance = {};
   EQUIPMENT_OF_SLOT.forEach((name, slot) => {
     const item = state.inventory!.items.get(slot);
-    equipment[name] = item ? { group: item.group, number: item.number, glowLevel: item.level, excellent: item.excellent > 0, ancient: item.ancientSet > 0 } : null;
+    equipment[name] = item ? { group: item.group, number: item.number, glowLevel: item.level, excellent: item.excellent > 0, ancient: item.ancientSet > 0, variant: helperVariant(item.group, item.number, item.excellent) } : null;
   });
   const signature = JSON.stringify(equipment);
   if (signature === wornSignature) return;
@@ -603,6 +604,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // Skill effects (the desktop's effect system): played when anyone casts.
   const effects = new EffectSystem(root, { camera, heightAt });
   state.effects = effects;
+  setCompanionEffects(effects); // pets' and mounts' glows
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => {
       overlay.addNumbers(() => Combat.anchorOf(target, 0), texts);
