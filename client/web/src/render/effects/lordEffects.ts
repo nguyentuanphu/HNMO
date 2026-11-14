@@ -6,6 +6,8 @@
 //   CreateJoint / MoveJoint / DescribeJoint: BITMAP_JOINT_FORCE (0), BITMAP_PIERCING (0)
 //                                                                                ZzzEffectJoint.cpp
 //   EffectTypes.json: MODEL_PIERCING2 (its creation values)
+//   CreateEffect / Move_MODEL_EFFECT_FLAME_STRIKE and its draw in RenderEffects (the blurs not yet);
+//   CreateEffect / Move_BITMAP_JOINT_THUNDER (Gigantic Storm; its stones, smoke and chrome not yet)
 
 import * as THREE from 'three';
 import { randInt, rotateByAngle } from './core.js';
@@ -183,5 +185,78 @@ EXTRA_JOINTS.piercing = {
     }
     o.velocity -= 2;
     o.light.multiplyScalar(1 / 1.4);
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Gigantic Storm (CreateEffect BITMAP_JOINT_THUNDER, Move_BITMAP_JOINT_THUNDER; the catalogue's
+// row: LifeTime 20, StartPosition 800 over it): five storms around the gladiator, each a
+// column of bolts from high above with blue circles on the ground.
+// ---------------------------------------------------------------------------
+
+EXTRA_EFFECTS.jointThunderEffect = {
+  create: (o) => {
+    o.lifeTime = 20;
+    o.startPosition.copy(o.position).setZ(o.position.z + 800);
+    return o.subType === 0 || o.subType === 1;
+  },
+  move: (o, system) => {
+    const scale = (randInt(400) + 100) / 10;
+    const from = o.startPosition.clone(), to = o.position.clone();
+    from.x += randInt(100) - 50;
+    from.y += randInt(100) - 50;
+    to.x += randInt(100) - 50;
+    to.y += randInt(100) - 50;
+    if (randInt(2) === 0) system.createJoint('jointThunder', from, to, o.angle, 16, null, scale);
+    const light = new THREE.Vector3(0.45, 0.45, 0.7);
+    if (o.lifeTime > 10 && randInt(2) === 0) system.createEffect('magicGround2', to, o.angle, light, 11, o.self);
+    return true;
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Flame Strike (MODEL_EFFECT_FLAME_STRIKE, Effect/FlameStrike.bmd): a burning blade held in the
+// gladiator's right hand that follows its swing, fading in and out.
+// ---------------------------------------------------------------------------
+
+/** PLAYER_SKILL_FLAMESTRIKE. */
+const FLAME_STRIKE_ACTION = 184;
+const flameMatrix = new THREE.Matrix4();
+
+EXTRA_EFFECTS.flameStrike = {
+  model: ['Effect', 'FlameStrike.bmd'],
+  create: (o) => {
+    if (o.subType !== 0 || !o.owner) return false;
+    o.alpha = 0;
+    o.lifeTime = 35;
+    o.velocity = o.owner.playSpeed?.(FLAME_STRIKE_ACTION) ?? 0.3;
+    o.blendMesh = -2; // RENDER_BRIGHT: both meshes glow with Alpha
+    o.kind = 0; // o->AI: the swing has passed
+    return true;
+  },
+  move: (o, system) => {
+    const owner = o.owner;
+    if ((o.lifeTime < 20 && o.alpha < 0.1) || !owner) {
+      o.live = false;
+      return false;
+    }
+    if (o.lifeTime < 20) o.alpha -= 0.1;
+    else if (o.alpha < 1) o.alpha += 0.1;
+    o.blendMeshLight = o.alpha;
+    const frame = owner.animationFrame?.() ?? 0;
+    if (frame > 13 || o.kind === 1) o.kind = 1;
+    else if (owner.currentAction?.() === FLAME_STRIKE_ACTION) o.animationFrame = frame;
+    // The flame's second mesh scrolls through four rows of its texture.
+    o.blendMeshTexCoordV = Math.trunc((Math.trunc(system.time * 0.05) % 16) / 4) * 0.25;
+    return true;
+  },
+  draw: (o) => {
+    // Its bones hang from the hand's bone (the owner's BoneTransform[33] as the parent matrix).
+    const hand = o.owner?.boneMatrix?.(HAND_BONE);
+    const model = o.model;
+    if (!hand || !model) return;
+    model.group.matrixAutoUpdate = false;
+    model.group.matrix.copy(hand).multiply(flameMatrix.makeScale(o.scale, o.scale, o.scale));
+    model.group.matrixWorldNeedsUpdate = true;
   },
 };

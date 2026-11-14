@@ -26,6 +26,8 @@ export interface EffectOwner {
   weaponPosition?(hand: 0 | 1): THREE.Vector3 | null;
   /** The world position of one of its model's bones (b->TransformPosition(o->BoneTransform[bone])). */
   bonePosition?(bone: number): THREE.Vector3 | null;
+  /** A bone's whole world matrix (o->BoneTransform[bone] placed in the world), for models held in a hand. */
+  boneMatrix?(bone: number): THREE.Matrix4 | null;
   /** How many bones its model has (b->NumBones). */
   boneCount?(): number;
   /** The action its model plays (o->CurrentAction), for effects that last while an action plays. */

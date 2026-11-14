@@ -73,6 +73,8 @@ export const SkillEffect = {
   WEAKNESS: 221,
   INNOVATION: 222,
   LIGHTNING_SHOCK: 230,
+  FLAME_STRIKE: 236,
+  GIGANTIC_STORM: 237,
 } as const;
 
 /** PLAYER_SKILL_HELL_BEGIN and PLAYER_SKILL_HELL_START: Nova's charge and release actions. */
@@ -90,7 +92,7 @@ const WHITE = new THREE.Vector3(1, 1, 1);
 /** The fighter's party buffs. */
 const RAGE_BUFFS: readonly number[] = [RageSkill.ATT_UP, RageSkill.HP_UP, RageSkill.DEF_UP];
 /** The skills whose AttackStage case sets AttackTime to 15 on the first tick: they release at once. */
-const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK];
+const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK, SkillEffect.FLAME_STRIKE];
 const SWORD_SKILLS: readonly number[] = [SkillEffect.FALLING_SLASH, SkillEffect.LUNGE, SkillEffect.UPPERCUT, SkillEffect.CYCLONE, SkillEffect.SLASH];
 /** AttackEffect: a monster's lightning starts this far down its weapon bone; without a bone the start is over the feet. */
 const LIGHTNING_FALLBACK_HEIGHT = 130;
@@ -398,6 +400,15 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.LIGHTNING_SHOCK:
       system.createEffect('lightningShock', at, caster.angle, WHITE, 0, caster);
+      break;
+    case SkillEffect.FLAME_STRIKE:
+      system.createEffect('flameStrike', at, caster.angle, light, 0, caster);
+      break;
+    case SkillEffect.GIGANTIC_STORM: // five storms 200 around the gladiator
+      for (let i = 0; i < 5; i++) {
+        const p = new THREE.Vector3(0, 200, 0).applyEuler(new THREE.Euler(0, 0, (caster.angle.z + i * 72) * Math.PI / 180)).add(at);
+        system.createEffect('jointThunderEffect', p, caster.angle, light);
+      }
       break;
     case SkillEffect.TWISTING_SLASH:
       system.createEffect('skillWheel1', at, caster.angle, light, 0, caster);

@@ -16,7 +16,11 @@ interface EffectsGame {
 type Win = Window & { __game: EffectsGame };
 
 /** A skill, the objects its effect must make (census keys), and when to take its picture (ms after the cast). */
-interface Case { skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean; action?: number }
+interface Case {
+  skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean; action?: number;
+  /** An effect type whose model the picture waits for (a slow first load on the test machine). */
+  model?: string;
+}
 
 const WIZARD: Case[] = [
   { skill: 2, name: 'meteorite', expect: ['effect:fireModel'], shotAt: 1100 },
@@ -56,6 +60,9 @@ const ELF: Case[] = [
 const GLADIATOR: Case[] = [
   { skill: 55, name: 'fire-slash', expect: ['effect:gathering', 'effect:swordForce', 'joint:jointForce', 'joint:jointThunder'], shotAt: 400 },
   { skill: 56, name: 'power-slash', expect: ['effect:magic2'], shotAt: 250 },
+  { skill: 237, name: 'gigantic-storm', expect: ['effect:jointThunderEffect', 'joint:jointThunder', 'effect:magicGround2'], shotAt: 800 },
+  // The flame follows the gladiator's swing (PLAYER_SKILL_FLAMESTRIKE), played by the hero here.
+  { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike' },
 ];
 
 const LORD: Case[] = [
@@ -164,6 +171,10 @@ for (const [group, cases] of Object.entries(CASES)) {
       }, Math.max(1, Math.round(c.shotAt / 40)));
       await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action);
       await page.waitForFunction(() => (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen === true, null, { timeout: 30_000 });
+      if (c.model) {
+        await page.waitForFunction((type) => (window as unknown as { __game: { effects: { effects: { type: string; model: unknown }[] } } }).__game.effects.effects
+          .some((e) => e.type === type && e.model !== null), c.model, { timeout: 180_000 });
+      }
       await page.waitForTimeout(400); // a frame or two drawn
       await page.screenshot({ path: `${SHOTS_DIR}/${group}-${c.name}.png` });
       await page.evaluate(() => { (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen = false; });

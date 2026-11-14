@@ -576,6 +576,11 @@ export class EffectSystem {
           o.startPosition.copy(o.position);
           return true;
         }
+        if (o.subType === 16) { // Gigantic Storm's bolts: short, slower
+          o.velocity = 20 + randInt(10);
+          o.lifeTime = randInt(2) + 2;
+          return true;
+        }
         if (o.subType !== 0) return false;
         o.lifeTime = 2;
         return true;
