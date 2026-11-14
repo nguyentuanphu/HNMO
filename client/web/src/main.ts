@@ -43,6 +43,7 @@ import { setupSocial, decorateLabel, type Social } from './game/social.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
+import { setUpInstanceEvents, type InstanceEventSystem } from './ui/instanceEventWindows.js';
 import { setUpDuelAndGens, type DuelAndGens } from './ui/duelAndGens.js';
 import { MiniMap } from './ui/miniMap.js';
 import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
@@ -111,6 +112,7 @@ export interface GameState {
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
   events?: EventSystem;
+  instanceEvents?: InstanceEventSystem;
   social?: Social;
   duelAndGens?: DuelAndGens;
 }
@@ -1000,6 +1002,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.events = setUpEvents({ connection, heroName: character.name, hero: () => ({ level: stats.level, classIndex: character.classIndex, master: character.master ?? false }),
     mapNumber: () => state.mapNumber, flags: () => state.world?.flags ?? null, safeZone: inSafeZone, message: (text) => chat.add(text, 'system'), audio: sounds.audio,
     closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, inventory });
+  // Illusion Temple, Doppelganger, Imperial Guardian (ui/instanceEventWindows.ts).
+  state.instanceEvents = setUpInstanceEvents({ connection, events: state.events, heroName: character.name, hero: () => ({ level: stats.level, classIndex: character.classIndex, master: character.master ?? false }), heroCharacter: () => online.hero, heroId: () => online.playerId, characters: () => online.characters.values(), mapNumber: () => state.mapNumber, message: (text, kind) => chat.add(text, kind), audio: sounds.audio, sounds, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, inventory, online, pickPlayer: (event) => pickCharacter(event, ['player']) });
   // The master level and skill tree (A, the character window's button; ui/masterLevelWindow.ts).
   setupMasterLevel({ connection, classNumber: character.classNumber ?? character.classIndex * 4, classIndex: character.classIndex, stats, skills, inventory, hud, characterWindow, earlyPackets, click: () => sounds.click(), closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); } });
   void new PartyList(party, {
