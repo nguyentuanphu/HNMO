@@ -4,6 +4,7 @@
 // window's data model drives the RML data bindings (data-for, data-if, {{…}}, data-attr-*,
 // data-class-*, data-style-*, data-event-*).
 
+import { watchRoot } from '../i18n.js';
 import { decodeTGA } from '../formats.js';
 import { FONT_FAMILY, fitTextToBoxes, loadThemeFonts, nativeTextPx, runMarquees } from './nativeText.js';
 
@@ -588,6 +589,7 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
   loadThemeFonts();
   const updaters: Updater[] = [];
   bindTree(root, model, {}, updaters);
+  watchRoot(shadow); // the chosen language (i18n.ts)
   // After a change, once a frame: the rem size, the shrink-to-fit texts and the marquees, which need the layout.
   const usesRem = css.includes('--rml-rem');
   const hasMarquee = /\bmarquee\b/.test(css);
@@ -597,8 +599,18 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
     if (!host.isConnected) return;
     if (usesRem) {
       // A rem is the native text size in screen pixels, in the units the root is laid out in.
-      const box = root.getBoundingClientRect();
-      const rootScale = root.offsetWidth > 0 && box.width > 0 ? box.width / root.offsetWidth : 1;
+      // Measured on a hidden 100-unit probe: a root with only absolutely placed children has no
+      // width of its own, and then its transform (e.g. the auto play bar's) went unnoticed.
+      let probe = root.querySelector<HTMLElement>(':scope > .rml-scale-probe');
+      if (!probe) {
+        probe = document.createElement('div');
+        probe.className = 'rml-scale-probe';
+        probe.setAttribute('aria-hidden', 'true');
+        Object.assign(probe.style, { position: 'absolute', left: '0', top: '0', width: '100px', height: '0', visibility: 'hidden', pointerEvents: 'none' });
+        root.append(probe);
+      }
+      const measured = probe.getBoundingClientRect().width / 100;
+      const rootScale = measured > 0 ? measured : 1;
       const rem = `${(nativeTextPx() / (rootScale || 1)).toFixed(3)}px`;
       if (root.style.getPropertyValue('--rml-rem') !== rem) root.style.setProperty('--rml-rem', rem);
     }

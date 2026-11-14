@@ -46,6 +46,7 @@
     .chat-form input { width: 100%; box-sizing: border-box; background: rgba(10,12,20,.75); }
     #soundButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 15px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #soundButton[aria-pressed="true"] { color: var(--muted); border-color: var(--line); text-decoration: line-through; }
+    .language-select { pointer-events: auto; height: 30px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font: 13px system-ui, sans-serif; }
     #guideButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: italic 700 16px/1 Georgia, serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #settingsButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 16px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #guide { position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, .6); display: grid; place-items: center; padding: 16px; }
@@ -77,6 +78,7 @@
     <span class="chip" id="fps">- fps</span>
     <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
     <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
+    <select class="language-select" data-no-i18n title="Language / Ngôn ngữ" aria-label="Language"><option value="en">English</option><option value="vi">Tiếng Việt</option></select>
     <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
   </div>
   <div class="chip wardrobe" id="wardrobe" hidden>
@@ -110,6 +112,7 @@
           </div>
           <div class="row"><label for="relay">Relay</label><input id="relay" name="relay" required></div>
         </details>
+        <div class="row"><label for="loginLanguage">Language / Ngôn ngữ</label><select id="loginLanguage" class="language-select" data-no-i18n title="Language / Ngôn ngữ" aria-label="Language"><option value="en">English</option><option value="vi">Tiếng Việt</option></select></div>
         <div class="buttons">
           <button class="primary" type="submit">Connect</button>
           <button type="button" id="offline">Explore offline</button>

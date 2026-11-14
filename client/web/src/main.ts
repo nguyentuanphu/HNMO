@@ -1,6 +1,7 @@
 // The web client: log in through the relay and play on the HNMO server, or explore
 // Lorencia offline. Left-click walks, right-drag turns the camera, the wheel zooms.
 
+import { currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, type Language } from './i18n.js';
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
@@ -83,6 +84,19 @@ console.log(`HNMO build ${HNMO_BUILD_STAMP} (project ${HNMO_PROJECT_ID})`);
 // The game's name players see (set in the admin panel): the page shows the default until it's here.
 applyGameName();
 void loadGameName();
+
+// The language (English by default, or Vietnamese): the pickers on the login screen and the top bar.
+const languagePickers = [...document.querySelectorAll<HTMLSelectElement>('select.language-select')];
+const showLanguage = (language: Language) => { for (const picker of languagePickers) picker.value = language; };
+for (const picker of languagePickers) {
+  picker.addEventListener('change', () => {
+    void setLanguage(picker.value === 'vi' ? 'vi' : 'en').catch(() => showLanguage(currentLanguage()));
+    if (picker.id !== 'loginLanguage') picker.blur(); // the game's keys (I, C, …) go back to the game
+  });
+}
+onLanguageChange(showLanguage);
+showLanguage(savedLanguage());
+void initLanguage();
 
 // The map the hero is on: its data and the terrain mesh the pointer is cast against.
 export type GameWorld = WorldData & { terrain: TerrainMesh };
@@ -242,6 +256,25 @@ async function placeHero({ id, name, bodySet, equipment, x, y }: {
   ui.heroName.textContent = name;
 }
 
+// The first character of each class to come into view loads its models and textures; done while
+// walking, that froze the game for a moment. So once the hero stands in the world, the classes'
+// bodies are loaded in the background, one at a time between frames (each later one is then cached).
+let charactersWarmed = false;
+function warmCharacterModels(): void {
+  if (charactersWarmed) return;
+  charactersWarmed = true;
+  const bodySets = [1, 2, 3, 4, 5, 6, 7];
+  const next = () => {
+    const bodySet = bodySets.shift();
+    if (bodySet === undefined) return;
+    void createPlayerCharacter({ id: -bodySet, name: '', bodySet }).catch(() => undefined).finally(() => {
+      const idle = (window as { requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number }).requestIdleCallback;
+      if (idle) idle(next, { timeout: 2000 }); else setTimeout(next, 200);
+    });
+  };
+  setTimeout(next, 1500);
+}
+
 // The hero wears what the inventory's equipment slots hold (the desktop client draws its own
 // character from CharacterMachine->Equipment): put on again when that changes.
 const EQUIPMENT_OF_SLOT: EquipmentSlotName[] = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings', 'pet'];
@@ -311,12 +344,14 @@ function pickCharacter(event: MouseEvent, kinds: string[]): Character | null {
     // A box with NaN in it (a broken model matrix) would pass every bounds test below and take every click.
     if (npcBox.isEmpty() || ![npcBox.min.x, npcBox.min.y, npcBox.min.z, npcBox.max.x, npcBox.max.y, npcBox.max.z].every(Number.isFinite)) continue;
     // The screen rectangle around all eight corners of the box (two corners alone miss part of it when the camera turns).
-    let left = Infinity, right = -Infinity, upper = Infinity, lower = -Infinity;
-    for (let corner = 0; corner < 8; corner++) {
+    let left = Infinity, right = -Infinity, upper = Infinity, lower = -Infinity, behind = false;
+    for (let corner = 0; corner < 8 && !behind; corner++) {
       const v = new THREE.Vector3(corner & 1 ? npcBox.max.x : npcBox.min.x, corner & 2 ? npcBox.max.y : npcBox.min.y, corner & 4 ? npcBox.max.z : npcBox.min.z).project(camera);
+      if (v.z < -1 || v.z > 1) { behind = true; break; } // behind the camera or past the far plane: projects to nonsense
       const x = rect.left + (v.x + 1) / 2 * rect.width, y = rect.top + (1 - v.y) / 2 * rect.height;
       left = Math.min(left, x); right = Math.max(right, x); upper = Math.min(upper, y); lower = Math.max(lower, y);
     }
+    if (behind) continue;
     const pad = 8;
     if (event.clientX < left - pad || event.clientX > right + pad || event.clientY < upper - pad || event.clientY > lower + pad) continue;
     const distance = Math.hypot(event.clientX - (left + right) / 2, event.clientY - (upper + lower) / 2);
@@ -1048,6 +1083,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
+  warmCharacterModels();
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }
 

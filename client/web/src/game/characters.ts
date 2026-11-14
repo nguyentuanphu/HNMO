@@ -358,6 +358,13 @@ export class Character {
 
   get isWalking(): boolean { return this.path.length > 0; }
 
+  /** The walkable cell the character stands closest to (it can be between two cells while walking). */
+  nearestCell(flags: ArrayLike<number>): Cell {
+    const here = { x: Math.floor(this.position.x / TERRAIN_SCALE), y: Math.floor(this.position.y / TERRAIN_SCALE) };
+    const walkable = (c: Cell) => c.x >= 0 && c.y >= 0 && c.x < TERRAIN_SIZE && c.y < TERRAIN_SIZE && (flags[c.y * TERRAIN_SIZE + c.x] & TerrainFlag.NOMOVE) === 0;
+    return walkable(here) ? here : { ...this.cell };
+  }
+
   // Plays an animation once, then goes back to standing or walking; hold keeps its last key (death).
   playOnce(action: number, keysPerSecond?: number, hold = false): void {
     this.oneShot = { action, keysPerSecond: keysPerSecond ?? this.keysPerSecond(action) ?? 6, hold };

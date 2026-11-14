@@ -22,9 +22,20 @@ export async function fetchBytes(url: string): Promise<Uint8Array> {
   return fileCache.get(url)!;
 }
 
-export async function loadModel(dir: string, fileName: string): Promise<BMDModel> {
-  const bytes = await fetchBytes(`/data/${dir}/${fileName}`);
-  return parseBMD(bytes);
+// Parsed once per file: every player shares player.bmd (3 MB, ~25 ms to parse), so parsing it for each
+// character that came into view froze the game for a moment (the hero stopped mid-walk). Nothing
+// changes a parsed model; the geometry built from it is each character's own.
+const modelCache = new Map<string, Promise<BMDModel>>();
+
+export function loadModel(dir: string, fileName: string): Promise<BMDModel> {
+  const url = `/data/${dir}/${fileName}`;
+  let model = modelCache.get(url);
+  if (!model) {
+    model = fetchBytes(url).then(parseBMD);
+    model.catch(() => modelCache.delete(url)); // a failed load may be tried again
+    modelCache.set(url, model);
+  }
+  return model;
 }
 
 // Texture scripts in the file name (TextureScript.cpp): the letters after the first

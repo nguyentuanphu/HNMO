@@ -256,20 +256,23 @@ export class OnlineWorld {
   walkNextPart(): boolean {
     const cell = this.goal;
     if (!cell || (cell.x === this.hero.cell.x && cell.y === this.hero.cell.y)) { this.goal = null; return false; }
-    const path = findPath(this.world.flags, this.hero.cell, cell).slice(0, MAX_STEPS_PER_WALK);
+    // A new click while walking starts from the cell the hero is closest to now: the last cell it
+    // reached is behind it, and starting there made it turn back half a step first.
+    const start = this.hero.isWalking ? this.hero.nearestCell(this.world.flags) : this.hero.cell;
+    const path = findPath(this.world.flags, start, cell).slice(0, MAX_STEPS_PER_WALK);
     if (!path.length) { this.goal = null; return false; }
     const directions = new Uint8Array(Math.ceil(path.length / 2));
-    let previous = this.hero.cell;
+    let previous = start;
     path.forEach((step, index) => {
       const direction = directionBetween(previous, step);
       directions[index >> 1] |= index % 2 === 0 ? direction << 4 : direction;
       previous = step;
     });
-    const last = directionBetween(path.length > 1 ? path[path.length - 2] : this.hero.cell, path[path.length - 1]);
+    const last = directionBetween(path.length > 1 ? path[path.length - 2] : start, path[path.length - 1]);
     this.connection.send('ClientToServer', 'WalkRequest', {
-      SourceX: this.hero.cell.x, SourceY: this.hero.cell.y, StepCount: path.length, TargetRotation: last, Directions: directions,
+      SourceX: start.x, SourceY: start.y, StepCount: path.length, TargetRotation: last, Directions: directions,
     });
-    this.hero.walk(path);
+    this.hero.walk(start === this.hero.cell ? path : [start, ...path]);
     return true;
   }
 
