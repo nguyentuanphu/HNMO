@@ -7,8 +7,30 @@ import * as THREE from 'three';
 import { effectTexture } from './core.js';
 import type { BitmapName } from './core.js';
 
-/** The desktop's blend states the ported effects use. */
-export type Blend = 'glow' | 'alpha';
+/**
+ * The desktop's blend states the ported effects use: glow (ONE, ONE), alpha (the alpha tested
+ * TGA textures), subtract (ZERO, ONE_MINUS_SRC_COLOR: darkens), blend2 (ONE_MINUS_SRC_COLOR, ONE)
+ * and blend3 (SRC_ALPHA, ONE_MINUS_SRC_ALPHA).
+ */
+export type Blend = 'glow' | 'alpha' | 'subtract' | 'blend2' | 'blend3';
+
+/** Sets a material's blend state to the desktop's. */
+export function applyBlend(material: THREE.Material, blend: Blend): void {
+  material.transparent = true;
+  material.depthWrite = false;
+  switch (blend) {
+    case 'glow': material.blending = THREE.AdditiveBlending; break;
+    case 'alpha': material.blending = THREE.NormalBlending; material.alphaTest = 0.25; break;
+    case 'blend3': material.blending = THREE.NormalBlending; break;
+    case 'subtract':
+    case 'blend2':
+      material.blending = THREE.CustomBlending;
+      material.blendEquation = THREE.AddEquation;
+      material.blendSrc = blend === 'subtract' ? THREE.ZeroFactor : THREE.OneMinusSrcColorFactor;
+      material.blendDst = blend === 'subtract' ? THREE.OneMinusSrcColorFactor : THREE.OneFactor;
+      break;
+  }
+}
 
 interface Batch {
   mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
@@ -151,11 +173,8 @@ export class QuadBatches {
     const key = `${bitmap}|${blend}`;
     let batch = this.batches.get(key);
     if (!batch) {
-      const material = new THREE.MeshBasicMaterial({
-        map: texture.texture, vertexColors: true, transparent: true, depthWrite: false, side: THREE.DoubleSide,
-        blending: blend === 'glow' ? THREE.AdditiveBlending : THREE.NormalBlending,
-      });
-      if (blend === 'alpha') material.alphaTest = 0.25;
+      const material = new THREE.MeshBasicMaterial({ map: texture.texture, vertexColors: true, side: THREE.DoubleSide });
+      applyBlend(material, blend);
       const mesh = new THREE.Mesh(new THREE.BufferGeometry(), material);
       mesh.frustumCulled = false;
       mesh.renderOrder = 2;

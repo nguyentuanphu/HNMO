@@ -22,7 +22,7 @@ import { setUpGuide } from './ui/guide.js';
 import { setUpSettings } from './ui/settingsWindow.js';
 import { frameDue } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
-import { loadSkillData, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
+import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
 import { loadItemValueData, repairAllCost } from './game/itemValue.js';
 import { CharacterWindow } from './ui/characterWindow.js';
@@ -61,7 +61,7 @@ import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
-import { EffectSystem, ownerFromCharacter, playSkillEffect } from './render/effects/index.js';
+import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect } from './render/effects/index.js';
 import { helperVariant, setCompanionEffects } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -143,6 +143,7 @@ export interface GameState {
   projectiles?: ProjectileLayer;
   deaths?: DeathEffects;
   effects?: EffectSystem;
+  weaponTrails?: WeaponTrails;
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
@@ -693,6 +694,25 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const effects = new EffectSystem(root, { camera, heightAt });
   state.effects = effects;
   setCompanionEffects(effects); // pets' and mounts' glows
+  // The weapon trails of swinging players (CreateWeaponBlur).
+  const weaponTrails = new WeaponTrails(() => [online.hero, ...online.characters.values()]);
+  effects.addLayer(weaponTrails);
+  state.weaponTrails = weaponTrails;
+  // A character as the effects see it; its aura joints live while it has eBuff_Attack, _Defense or _HelpNpc.
+  const ownerFromCharacter = (who: Character) => {
+    const has = (buff: number) => buffs.has(who === online.hero ? online.playerId : who.id, buff);
+    return effectOwnerOf(who, { hasAura: () => [1, 2, 3].some(has), hasBuff: has });
+  };
+  // The buffs' looks (InsertBuffPhysicalEffect / ClearBuffLogicalEffect): Soul Barrier's lights.
+  const knownBuffs = new Map<number, number[]>();
+  buffs.onChange((id) => {
+    const who = id === online.playerId ? online.hero : online.characters.get(id);
+    const now = buffs.of(id), before = knownBuffs.get(id) ?? [];
+    knownBuffs.set(id, [...now]);
+    if (!who || who.kind !== 'player') return;
+    for (const buff of now) if (!before.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), true);
+    for (const buff of before) if (!now.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), false);
+  });
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => {
       overlay.addNumbers(() => Combat.anchorOf(target, 0), texts);
@@ -720,8 +740,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       else sounds.playerHurt(dead === online.hero ? character.classIndex : dead.classIndex ?? 0, true);
     },
     onHeroAttacked: (attacker) => state.autoPlay?.attackedBy(attacker),
-    onSkill: (caster, skill, target) => {
-      sounds.skill(skill);
+    onSkill: (caster, castSkill, target, cell) => {
+      sounds.skill(castSkill);
+      const skill = masterSkillToBaseSkill(castSkill);
       // Triple Shot's fan of arrows goes through the arrows' own layer (CreateArrows).
       const hands = caster === online.hero
         ? { right: inventory.items.get(0), left: inventory.items.get(1) }
@@ -731,6 +752,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
         shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
         bowNumbers: { rightHand: hands.right?.number, leftHand: hands.left?.number },
+        cell,
       });
     },
     onHeroDied: () => chat.add('You died.', 'system'),

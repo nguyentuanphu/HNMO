@@ -94,6 +94,12 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Accounts the browser tests use besides test0-9/test300/test400: `ancient` (level 330 Blade
   Knight, red Fenrir), `testgm` (game master: /startbc, /startds, /startcc, /skipwait), `quest1`.
 - Packets can be fed in tests with `window.__game.connection.dispatch(bytes)`.
+- Skill effects (`client/web/src/render/effects/`): the core and the wizard's types are in effectSystem.ts,
+  the other classes' types register in extraEffects.ts's tables (knightEffects.ts, elfEffects.ts,
+  lordEffects.ts); the skills' timelines are in skillEffects.ts. `tests/e2e/skill-effects.spec.ts` plays
+  each skill through Combat's onSkill hook and freezes the effect ticks for its pictures (headless
+  Chromium draws only a few frames a second); SKILL_GROUPS / SKILLS / SHOTS_DIR pick what it runs.
+  Don't name an env variable GROUPS in bash (it's a shell builtin).
 - Parallel work: agents in git worktrees, each with its own bridge port (8082-8091) and BASE_URL;
   merge their branches one at a time and resolve PARITY.md / guide.html conflicts by keeping both.
 - Owner wants (2026-11-14), to do AFTER the protection/keypair agent lands its public key:
