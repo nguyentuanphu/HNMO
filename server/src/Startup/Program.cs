@@ -24,6 +24,7 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.TestActors;
 using HNMO.GameServer;
 using HNMO.GuildServer;
+using HNMO.Integrity;
 using HNMO.Interfaces;
 using HNMO.LoginServer;
 using HNMO.Network;
@@ -167,6 +168,8 @@ internal sealed class Program : IDisposable
         JsonConverterRegistry.RegisterConverter(new LocalizedStringJsonConverter());
         JsonConverterRegistry.RegisterConverter(new BinaryAsHexJsonConverter());
 
+        this.VerifyBuildIntegrity();
+
         this._logger.Information("Creating host...");
         this._serverHost = await this.CreateHostAsync(args).ConfigureAwait(false);
 
@@ -204,6 +207,44 @@ internal sealed class Program : IDisposable
     {
         this._serverHost?.StopAsync().WaitAndUnwrapException();
         this._serverHost?.Dispose();
+    }
+
+    /// <summary>
+    /// Verifies the signed HNMO build integrity manifest, if one is present. An unsigned build
+    /// (e.g. a local/development build) logs a warning and continues. A present but invalid
+    /// signature always refuses to start; a file mismatch refuses only when configured to
+    /// (<c>Integrity:OnMismatch</c> = <c>refuse</c>), otherwise it warns and continues.
+    /// </summary>
+    private void VerifyBuildIntegrity()
+    {
+        var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
+        if (publicKeyPem is null)
+        {
+            this._logger.Warning("HNMO integrity: no public key is embedded; skipping the build integrity check.");
+            return;
+        }
+
+        var serverDir = AppContext.BaseDirectory;
+        var contentRoot = Path.GetFullPath(Path.Combine(serverDir, ".."));
+        var result = IntegrityVerifier.VerifyFolder(serverDir, contentRoot, publicKeyPem);
+        var enforceOnMismatch = string.Equals(this._configuration["Integrity:OnMismatch"], "refuse", StringComparison.OrdinalIgnoreCase);
+
+        if (result.Status == IntegrityStatus.Ok)
+        {
+            this._logger.Information(result.Message);
+            return;
+        }
+
+        this._logger.Warning(result.Message);
+        foreach (var file in result.MismatchedFiles)
+        {
+            this._logger.Warning("HNMO integrity: {File}", file);
+        }
+
+        if (result.ShouldRefuseStartup(enforceOnMismatch))
+        {
+            throw new StartupCancelledException(result.Message);
+        }
     }
 
     /// <summary>

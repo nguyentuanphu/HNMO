@@ -93,4 +93,60 @@ printf '%s\n' "$STAMP" > "$OUT/web/wwwroot/.hnmo-build"
 #    (an HTML comment is not rendered, so it stays out of sight but travels with the build).
 printf '\n<!-- %s -->\n' "$STAMP" >> "$OUT/web/wwwroot/index.html"
 
+# Tamper-evident integrity manifest: hash the key files and sign the manifest with the
+# private Ed25519 key (never shipped). The server re-hashes and verifies at startup against
+# the embedded public key. The private key comes from HNMO_SIGNING_KEY (PEM contents) or
+# HNMO_SIGNING_KEY_FILE (path); with neither, the build is UNSIGNED (a dev build).
+SIGN_KEY_FILE=""
+TMP_KEY=""
+if [ -n "${HNMO_SIGNING_KEY_FILE:-}" ]; then
+  SIGN_KEY_FILE="$HNMO_SIGNING_KEY_FILE"
+elif [ -n "${HNMO_SIGNING_KEY:-}" ]; then
+  TMP_KEY="$(mktemp)"
+  printf '%s' "$HNMO_SIGNING_KEY" > "$TMP_KEY"
+  SIGN_KEY_FILE="$TMP_KEY"
+fi
+
+if [ -n "$SIGN_KEY_FILE" ]; then
+  echo "Signing the integrity manifest"
+  (
+    cd "$OUT"
+    MANIFEST_FILES=()
+    while IFS= read -r f; do MANIFEST_FILES+=("$f"); done < <(find server -maxdepth 1 -name 'HNMO.*.dll' | sort)
+    for launcher in web/HNMO.Web web/HNMO.Web.exe; do
+      [ -f "$launcher" ] && MANIFEST_FILES+=("$launcher")
+    done
+    for bundle in web/wwwroot/js/main.min.js web/wwwroot/js/main.js; do
+      if [ -f "$bundle" ]; then MANIFEST_FILES+=("$bundle"); break; fi
+    done
+
+    {
+      printf '{\n'
+      printf '  "projectId": "%s",\n' "$PROJECT_ID"
+      printf '  "buildStamp": "%s",\n' "$STAMP"
+      printf '  "created": "%s",\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      printf '  "algorithm": "SHA-256",\n'
+      printf '  "files": [\n'
+      last=$(( ${#MANIFEST_FILES[@]} - 1 ))
+      for i in "${!MANIFEST_FILES[@]}"; do
+        f="${MANIFEST_FILES[$i]}"
+        h="$(sha256sum "$f" | cut -d' ' -f1)"
+        sep=","
+        [ "$i" -eq "$last" ] && sep=""
+        printf '    { "path": "%s", "sha256": "%s" }%s\n' "$f" "$h" "$sep"
+      done
+      printf '  ]\n'
+      printf '}\n'
+    } > server/HNMO.integrity.json
+
+    openssl pkeyutl -sign -inkey "$SIGN_KEY_FILE" -rawin -in server/HNMO.integrity.json -out /tmp/hnmo-integrity.sig.bin
+    base64 -w0 /tmp/hnmo-integrity.sig.bin > server/HNMO.integrity.sig
+    rm -f /tmp/hnmo-integrity.sig.bin
+    echo "Signed ${#MANIFEST_FILES[@]} file(s) into server/HNMO.integrity.json"
+  )
+  [ -n "$TMP_KEY" ] && rm -f "$TMP_KEY"
+else
+  echo "WARNING: no signing key (HNMO_SIGNING_KEY / HNMO_SIGNING_KEY_FILE) — this is an UNSIGNED dev build; the server will start with an integrity warning."
+fi
+
 echo "Done: $OUT"
