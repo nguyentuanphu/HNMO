@@ -75,7 +75,7 @@ test('the item icons', async ({ page }) => {
   test.setTimeout(30 * 60_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/index.html');
   const groups = (process.env.GROUPS ?? '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15').split(',').map(Number);
   const flaggedAll: string[] = [];
   for (const group of groups) {

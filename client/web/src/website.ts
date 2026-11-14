@@ -614,7 +614,9 @@ element("google-linked").addEventListener("submit", (event) => {
   void post("/portal/google", { credential: googleCredential, newPassword }).then(showGoogleAnswer);
 });
 
-void setUpGoogle();
+// After the page has loaded: a slow or blocked Google script must not hold up the page.
+if (document.readyState === "complete") void setUpGoogle();
+else window.addEventListener("load", () => void setUpGoogle(), { once: true });
 
 // ---------- the game loads in the background ----------
 // While the website is open, the browser fetches the game's code and its first, largest data files

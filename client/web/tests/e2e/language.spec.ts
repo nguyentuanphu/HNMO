@@ -4,7 +4,7 @@ import { enterWorld } from './helpers.js';
 // English is the default; the picker switches the interface to Vietnamese and back, and the
 // browser remembers the choice.
 test('the login screen switches between English and Vietnamese', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/index.html');
   const picker = page.locator('#loginLanguage');
   await expect(picker.locator('button[data-lang="en"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('label[for="username"]')).toHaveText('Account');
@@ -23,7 +23,7 @@ test('the login screen switches between English and Vietnamese', async ({ page }
 });
 
 test('every language of the list can be chosen (German and Chinese)', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/index.html');
   const more = page.locator('#loginLanguage select.language-more');
   await expect(more.locator('option')).toHaveCount(12); // "More…" and the 11 others
   await more.selectOption('de');

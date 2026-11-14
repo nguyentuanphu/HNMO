@@ -76,7 +76,7 @@ test('potions on Q W E R and right-click use in the bag', async ({ page }) => {
 });
 
 test('the (i) button opens the guide', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/index.html');
   await page.click('#loginGuide'); // on the login screen; in the game the (i) button next to the name
   await expect(page.locator('#guide iframe')).toBeVisible();
   await page.click('#guide .close');

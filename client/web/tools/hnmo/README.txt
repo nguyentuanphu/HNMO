@@ -10,7 +10,9 @@ START
            play, close it to stop the game (your progress is saved).
   Linux/Mac: run ./start-hnmo.sh (Ctrl+C stops it).
 
-  The game opens in your browser at http://localhost:8080/ when it's ready. The very
+  The website opens in your browser at http://localhost:8080/ when it's ready: server
+  information, rankings, the event schedule, accounts. The game loads in the background;
+  "Enter the game" starts it (also at http://localhost:8080/index.html). The very
   first start sets up the save game and takes up to a few minutes.
 
   Windows may warn "Windows protected your PC" (the files aren't signed):
@@ -22,7 +24,10 @@ SAVE GAME
   game and delete the "save" folder.
 
 ACCOUNTS AND COINS
-  http://localhost:8080/account.html  (friends use your address instead of localhost)
+  On the website (Account section) or http://localhost:8080/account.html
+  (friends use your address instead of localhost).
+  - Sign in with Google: set a Google client id in the admin panel, Plugins,
+    "Website (admin address, Google sign-in)".
   - Create an account: new accounts get free cash shop coins.
   - My coins: shows an account's coins.
   First, once, on the host computer:
@@ -37,7 +42,11 @@ IN THE GAME
   mouse wheel to zoom. Press Enter to chat; "/move devias" travels to Devias.
 
 ADMIN PANEL
-  http://localhost:8095/  - only on the host computer, on purpose.
+  http://localhost:8095/  - on the host computer.
+  Through the website: http://YOUR-ADDRESS:8080/adminpanel (an admin login is always
+  needed there; it stays closed until an admin user exists). Change "adminpanel" to an
+  address that's hard to guess: admin panel, Plugins, "Website (admin address, Google
+  sign-in)". Leave it empty to allow the admin panel only on the host computer.
 
 PLAY WITH FRIENDS
   One person runs this folder (the host); friends need only a web browser.
