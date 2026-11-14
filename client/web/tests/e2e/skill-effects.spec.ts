@@ -87,7 +87,8 @@ function cast(page: Page, skill: number, area: boolean): Promise<boolean> {
       if (d < bestDistance) { best = c; bestDistance = d; }
     }
     const cell = best ? { ...best.cell } : { x: hero.cell.x + 3, y: hero.cell.y - 3 };
-    g.combat.events.onSkill(hero, skill, area ? null : best, area || !best ? cell : cell);
+    // Without a monster close by, a targeted skill is aimed at the hero itself.
+    g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
     return best !== null;
   }, { skill, area });
 }
