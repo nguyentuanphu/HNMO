@@ -26,9 +26,9 @@ public class OfflineWhisperConfiguration
     public int MaximumAgeDays { get; set; } = 7;
 
     /// <summary>
-    /// Gets or sets the file which keeps the waiting whispers over restarts, relative to the server's folder; empty keeps them in memory only.
+    /// Gets or sets the file which keeps the waiting whispers over restarts, relative to the server's folder (by default in the save folder, next to the database, so an update of the game folder keeps them); empty keeps them in memory only.
     /// </summary>
     [Display(ResourceType = typeof(PlugInResources), Name = nameof(PlugInResources.OfflineWhisperConfiguration_FileName_Name), Description = nameof(PlugInResources.OfflineWhisperConfiguration_FileName_Description))]
     [StringLength(260)]
-    public string FileName { get; set; } = "offline-whispers.json";
+    public string FileName { get; set; } = "../save/offline-whispers.json";
 }
