@@ -24,30 +24,69 @@ export interface EffectOwner {
    * player model). Lightning starts there; without it the start is 130 units over the feet.
    */
   weaponPosition?(hand: 0 | 1): THREE.Vector3 | null;
+  /** The world position of one of its model's bones (b->TransformPosition(o->BoneTransform[bone])). */
+  bonePosition?(bone: number): THREE.Vector3 | null;
+  /** How many bones its model has (b->NumBones). */
+  boneCount?(): number;
+  /** The action its model plays (o->CurrentAction), for effects that last while an action plays. */
+  currentAction?(): number;
   /**
    * Whether it still has a buff that keeps aura joints (Greater Defense's orbiting lights) alive:
    * eBuff_Attack, eBuff_Defense or eBuff_HelpNpc (ShouldKeepAuraJointAlive). Alive while it lives
    * when left out.
    */
   hasAura?(): boolean;
+  /** Its right hand weapon's model, for the effects that draw it (Twisting Slash's wheel, Rageful Blow). */
+  weaponModel?(): THREE.Object3D | null;
 }
 
 /** CreateEffect types ported (names as in Data/Effects/EffectTypes.json). */
 export type EffectType =
   | 'energy' // BITMAP_ENERGY: Energy Ball's flying ball
-  | 'fireModel' // MODEL_FIRE: Fire Ball's ball (Skill/Fire01.bmd)
+  | 'fireModel' // MODEL_FIRE: Fire Ball's ball, Meteorite's rock, Decay's falling poison (Skill/Fire01.bmd)
   | 'magic2' // MODEL_MAGIC2: Power Wave's wave, Power Slash's blades (Skill/Magic02.bmd)
   | 'magicGround2' // BITMAP_MAGIC+1: the healing / buff circle on the ground
-  | 'stone1' | 'stone2'; // MODEL_STONE1/2: debris of an exploding fire ball
+  | 'stone1' | 'stone2' // MODEL_STONE1/2: debris
+  | 'ice' // MODEL_ICE: Ice's crystal (Skill/Ice01.bmd)
+  | 'iceSmall' // MODEL_ICE_SMALL: its shards (Skill/Ice02.bmd)
+  | 'poison' // MODEL_POISON: Poison's cloud (Skill/Poison01.bmd)
+  | 'flame' // BITMAP_FLAME: Flame's burning ground
+  | 'storm' // MODEL_STORM: Twister (Skill/Storm01.bmd)
+  | 'circle' // MODEL_CIRCLE: Hellfire's circle, Nova's ring (Skill/Circle01.bmd)
+  | 'circleLight' // MODEL_CIRCLE_LIGHT: Hellfire's light (Skill/Circle02.bmd)
+  | 'bossLaser' // BITMAP_BOSS_LASER: Aqua Beam
+  | 'skillInferno' // MODEL_SKILL_INFERNO: Inferno's ring, Decay's splash (Skill/Inferno01.bmd)
+  | 'blizzardModel' // MODEL_BLIZZARD: Ice Storm's ice (Skill/blizzard.bmd)
+  | 'laser' // MODEL_LASER: Evil Spirit's dark heads (Skill/Laser01.bmd)
+  | 'spark3' // BITMAP_SPARK+1: Teleport's column of sparks
+  | 'skillWheel1' | 'skillWheel2' // MODEL_SKILL_WHEEL1/2: Twisting Slash's spinning weapon
+  | 'skillFuryStrike' // MODEL_SKILL_FURY_STRIKE: Rageful Blow
+  | 'earthQuake' // MODEL_SKILL_FURY_STRIKE+1..8: Rageful Blow's cracks (Skill/EarthQuake0N.bmd)
+  | 'spear' // MODEL_SPEAR: Impale / Death Stab's cones (Skill/Spear01.bmd)
+  | 'spearSkillModel' // MODEL_SPEARSKILL as an effect: Impale's spinning spears
+  | 'combo' // MODEL_COMBO: the knights' combo burst
+  | 'gathering' // BITMAP_GATHERING: Penetration's / Fire Slash's gathering light
+  | 'multiShot' // MODEL_MULTI_SHOT1..3: Multi-Shot's fan
+  | 'waves' // MODEL_WAVES: Force Wave's rings (Skill/m_Waves.bmd)
+  | 'piercing2' // MODEL_PIERCING2: Force Wave's spear (Skill/m_Piercing.bmd)
+  | 'pierPart' // MODEL_PIER_PART: Fire Burst's flames (Skill/PierPart.bmd)
+  | 'darkLordSkill' // MODEL_DARKLORD_SKILL: the lord's glowing hands (Skill/DarkLordSkill.bmd)
+  | 'swordForce' // BITMAP_SWORD_FORCE: Fire Slash
+  | 'flameStrike' // MODEL_EFFECT_FLAME_STRIKE (Effect/FlameStrike.bmd)
+  | 'jointThunderEffect' // BITMAP_JOINT_THUNDER as an effect: Gigantic Storm's bolts
+  | 'magicCircle'; // BITMAP_MAGIC: a magic circle on the ground
 
-/** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json). */
-export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'smoke' | 'blood2';
+/** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
+export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare';
 
-/** CreateSprite types ported (names as in Data/Effects/SpriteTypes.json). */
-export type SpriteType = 'energy' | 'light' | 'shiny2' | 'flareBlue';
+/** CreateSprite types: the bitmap drawn. */
+export type SpriteType = BitmapName;
 
 /** CreateJoint types ported (names as in Data/Effects/JointTypes.json). */
-export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill';
+export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'flareForceJoint' | 'jointForce' | 'blur';
+
+/** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */
+export type RenderType = 'normal' | 'dark';
 
 export interface Effect {
   type: EffectType;
@@ -55,6 +94,7 @@ export interface Effect {
   position: THREE.Vector3;
   startPosition: THREE.Vector3;
   angle: THREE.Vector3;
+  headAngle: THREE.Vector3;
   direction: THREE.Vector3;
   light: THREE.Vector3;
   scale: number;
@@ -65,12 +105,24 @@ export interface Effect {
   blendMesh: number;
   blendMeshLight: number;
   blendMeshTexCoordU: number;
+  blendMeshTexCoordV: number;
   hiddenMesh: number;
   alpha: number;
+  renderType: RenderType;
   owner: EffectOwner | null;
   animationFrame: number;
+  /** o->Weapon, o->Kind, o->Skill, o->PKKey, o->Distance: counters some moves keep. */
+  counter: number;
+  kind: number;
+  skill: number;
+  pkKey: number;
+  distance: number;
   /** The drawn model, once loaded (model effects only). */
   model: AnimatedModel | null;
+  /** A model the effect draws besides its own (the caster's weapon for Twisting Slash). */
+  extra: THREE.Object3D | null;
+  /** This effect as an owner other effects can follow. */
+  self: EffectOwner;
   live: boolean;
 }
 
@@ -95,7 +147,7 @@ export interface Particle {
 
 export interface Sprite {
   type: SpriteType;
-  /** 0 glow (additive), the only blend the ported calls use. */
+  /** 0 glow (additive); 1 subtracted (the dark sprites). */
   subType: number;
   position: THREE.Vector3;
   scale: number;
@@ -106,12 +158,16 @@ export interface Sprite {
 /** One cross-section of a trail: four corners (two along x, two along z of its matrix). */
 export type Tail = [THREE.Vector3, THREE.Vector3, THREE.Vector3, THREE.Vector3];
 
+/** RENDER_TYPE_ALPHA_BLEND (glow), _ALPHA_BLEND_MINUS (subtract), _ALPHA_BLEND_OTHER (blend2). */
+export type JointBlend = 'glow' | 'subtract' | 'blend2';
+
 export interface Joint {
   type: JointType;
   subType: number;
   texture: BitmapName;
   position: THREE.Vector3;
   targetPosition: THREE.Vector3;
+  startPosition: THREE.Vector3;
   angle: THREE.Vector3;
   direction: THREE.Vector3;
   light: THREE.Vector3;
@@ -124,5 +180,14 @@ export interface Joint {
   target: EffectOwner | null;
   /** The joint's slot number on the desktop; orbits use it to differ. */
   index: number;
+  blend: JointBlend;
+  /** RENDER_FACE_ONE (1, the z corners) and RENDER_FACE_TWO (2, the x corners). */
+  faces: number;
+  createTails: boolean;
+  collision: boolean;
+  /** o->Weapon, o->Skill, o->PKKey: counters some moves keep. */
+  counter: number;
+  skill: number;
+  pkKey: number;
   live: boolean;
 }

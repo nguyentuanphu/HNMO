@@ -33,7 +33,7 @@
 
 export { EffectSystem } from './effectSystem.js';
 export type { EffectSystemOptions, TickTask } from './effectSystem.js';
-export { playSkillEffect, isPortedSkill, tripleShotAngles, createSpark, SkillEffect, ATTACK_LIMIT_TIME, SKILL_RELEASE_DELAY_SECONDS } from './skillEffects.js';
+export { playSkillEffect, playBuffEffect, isPortedSkill, tripleShotAngles, createSpark, SkillEffect, BuffEffect, ATTACK_LIMIT_TIME, SKILL_RELEASE_DELAY_SECONDS } from './skillEffects.js';
 export type { SkillEffectOptions } from './skillEffects.js';
 export { ownerFromCharacter, PLAYER_WEAPON_BONES } from './characterOwner.js';
 export type { CharacterOwnerOptions } from './characterOwner.js';

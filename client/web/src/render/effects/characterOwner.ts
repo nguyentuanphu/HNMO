@@ -37,14 +37,20 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
       return light.set(character.light.r, character.light.g, character.light.b);
     },
     isLive: () => !character.dead && character.group.visible && character.group.parent !== null,
-    weaponPosition: (hand) => {
-      const bone = character.model.matrices[bones[hand]];
-      if (!bone) return null;
-      character.group.updateMatrix();
-      return new THREE.Vector3().applyMatrix4(bone).applyMatrix4(character.group.matrix);
-    },
+    weaponPosition: (hand) => bonePosition(character, bones[hand]),
+    bonePosition: (bone) => bonePosition(character, bone),
+    boneCount: () => character.model.matrices.length,
+    currentAction: () => character.oneShot?.action ?? character.action,
     hasAura: options.hasAura,
   };
   owners.set(character, owner);
   return owner;
+}
+
+/** b->TransformPosition(o->BoneTransform[bone], 0): a bone's world position. */
+function bonePosition(character: Character, bone: number): THREE.Vector3 | null {
+  const matrix = character.model.matrices[bone];
+  if (!matrix) return null;
+  character.group.updateMatrix();
+  return new THREE.Vector3().applyMatrix4(matrix).applyMatrix4(character.group.matrix);
 }
