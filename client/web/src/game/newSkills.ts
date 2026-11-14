@@ -172,10 +172,72 @@ export function newSkillEntry(skill: number): NewSkillEntry | null {
 const point = new THREE.Vector3();
 const UP = new THREE.Vector3(0, 0, 0);
 
+// HNMO's mark: every HNMO skill sends a few glowing gold "HN" letters flying out of the caster, so
+// players can tell the skill is HNMO's own.
+let hnTexture: THREE.CanvasTexture | null = null;
+function hnMarkTexture(): THREE.CanvasTexture {
+  if (hnTexture) return hnTexture;
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 128;
+  const context = canvas.getContext('2d')!;
+  context.font = '900 96px Georgia, "Times New Roman", serif';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.shadowColor = 'rgba(255, 170, 40, 1)';
+  context.shadowBlur = 24;
+  const gradient = context.createLinearGradient(0, 20, 0, 110);
+  gradient.addColorStop(0, '#fff6c8');
+  gradient.addColorStop(0.5, '#ffd257');
+  gradient.addColorStop(1, '#e88a10');
+  context.fillStyle = gradient;
+  context.fillText('HN', 128, 68);
+  context.shadowBlur = 0;
+  context.lineWidth = 3;
+  context.strokeStyle = 'rgba(120, 50, 0, 0.9)';
+  context.strokeText('HN', 128, 68);
+  hnTexture = new THREE.CanvasTexture(canvas);
+  hnTexture.colorSpace = THREE.SRGBColorSpace;
+  return hnTexture;
+}
+
+const HN_MARKS = 3;
+const HN_TICKS = 32;
+
+/** The "HN" letters flying out of the caster (one burst per cast). */
+export function flyHnMarks(system: EffectSystem, caster: EffectOwner): void {
+  const marks = Array.from({ length: HN_MARKS }, (_, i) => {
+    const material = new THREE.SpriteMaterial({ map: hnMarkTexture(), transparent: true, depthWrite: false, depthTest: false });
+    const sprite = new THREE.Sprite(material);
+    sprite.position.set(caster.position.x, caster.position.y, caster.position.z + 140);
+    sprite.renderOrder = 10;
+    sprite.name = 'hn-mark';
+    system.root.add(sprite);
+    const angle = (i / HN_MARKS) * Math.PI * 2 + Math.random() * 0.8;
+    return { sprite, material, velocity: new THREE.Vector3(Math.cos(angle) * 9, Math.sin(angle) * 9, 5 + Math.random() * 3) };
+  });
+  let tick = 0;
+  system.schedule(() => {
+    tick++;
+    const t = tick / HN_TICKS;
+    for (const mark of marks) {
+      mark.sprite.position.add(mark.velocity);
+      mark.velocity.multiplyScalar(0.94);
+      const size = 70 + 70 * Math.min(1, t * 2);
+      mark.sprite.scale.set(size * 2, size, 1);
+      mark.material.opacity = t < 0.15 ? t / 0.15 : Math.max(0, 1 - (t - 0.15) / 0.85);
+    }
+    if (tick < HN_TICKS) return true;
+    for (const mark of marks) { system.root.remove(mark.sprite); mark.material.dispose(); }
+    return false;
+  });
+}
+
 /** Plays a new skill's effect at its cast (the caster's and the target's positions are read live). */
 export function playNewSkillEffect(system: EffectSystem, skill: number, caster: EffectOwner, target: EffectOwner | null): boolean {
   const look = NEW_SKILL_LOOKS[skill];
   if (!look) return false;
+  flyHnMarks(system, caster);
   const last = Math.max(...look.effect.map((s) => (s.start ?? 0) + (s.ticks ?? 1)));
   let tick = 0;
   system.schedule(() => {

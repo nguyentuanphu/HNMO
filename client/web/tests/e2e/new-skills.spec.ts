@@ -9,7 +9,7 @@ interface NewSkillsGame {
   combat: { cast(target: unknown, cell: { x: number; y: number } | null, skill?: number): boolean };
   buffs: { has(id: number, buff: number): boolean };
   online: { playerId: number; say(text: string): void; walkTo(cell: { x: number; y: number }): void; hero: { isWalking: boolean; cell: { x: number; y: number } } };
-  effects?: { counts(): { effects: number; particles: number; joints: number; sprites: number } };
+  effects?: { counts(): { effects: number; particles: number; joints: number; sprites: number }; root: { children: { name: string }[] } };
   mapNumber: number | null;
 }
 type Win = Window & { __game: NewSkillsGame };
@@ -40,6 +40,8 @@ test('a Dark Knight has its new skills by level and casts them', async ({ page }
   const before = await game(page, (g) => g.effects?.counts() ?? null);
   expect(await game(page, (g) => g.combat.cast(null, { ...g.online.hero.cell }, 700))).toBe(true);
   await expect.poll(async () => { const now = await game(page, (g) => g.effects?.counts() ?? null); return (now?.particles ?? 0) + (now?.effects ?? 0) > (before?.particles ?? 0) + (before?.effects ?? 0); }, { timeout: 20_000 }).toBe(true);
+  // HNMO's mark: the "HN" letters fly out of the caster.
+  await expect.poll(() => game(page, (g) => g.effects?.root.children.filter((c) => c.name === 'hn-mark').length ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
   await page.screenshot({ path: 'test-results/new-skill.png' });
   // Their own sounds are there (made for them, one per skill).
   const sounds = await page.evaluate(async () => (await Promise.all([700, 713, 727].map((n) => fetch(`/data/Sound/hnmo/${n}.mp3`).then((r) => r.ok && (r.headers.get('content-type') ?? '').includes('audio'))))));
