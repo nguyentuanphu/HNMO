@@ -6,33 +6,33 @@ import { enterWorld } from './helpers.js';
 test('the login screen switches between English and Vietnamese', async ({ page }) => {
   await page.goto('/');
   const picker = page.locator('#loginLanguage');
-  await expect(picker).toHaveValue('en');
+  await expect(picker.locator('button[data-lang="en"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('label[for="username"]')).toHaveText('Account');
-  await picker.selectOption('vi');
+  await picker.locator('button[data-lang="vi"]').click();
   await expect(page.locator('label[for="username"]')).toHaveText('Tài khoản');
   await expect(page.locator('label[for="password"]')).toHaveText('Mật khẩu');
   await expect(page.locator('#loginForm button.primary')).toHaveText('Kết nối');
   // Remembered after a reload.
   await page.reload();
-  await expect(page.locator('#loginLanguage')).toHaveValue('vi');
+  await expect(page.locator('#loginLanguage button[data-lang="vi"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('label[for="username"]')).toHaveText('Tài khoản');
   // And back to English.
-  await page.locator('#loginLanguage').selectOption('en');
+  await page.locator('#loginLanguage button[data-lang="en"]').click();
   await expect(page.locator('label[for="username"]')).toHaveText('Account');
   await expect(page.locator('#loginForm button.primary')).toHaveText('Connect');
 });
 
 test('every language of the list can be chosen (German and Chinese)', async ({ page }) => {
   await page.goto('/');
-  const picker = page.locator('#loginLanguage');
-  await expect(picker.locator('option')).toHaveCount(13);
-  await picker.selectOption('de');
+  const more = page.locator('#loginLanguage select.language-more');
+  await expect(more.locator('option')).toHaveCount(12); // "More…" and the 11 others
+  await more.selectOption('de');
   await expect(page.locator('label[for="username"]')).toHaveText('Konto');
   await expect(page.locator('label[for="password"]')).toHaveText('Passwort');
-  await picker.selectOption('zh-TW');
+  await more.selectOption('zh-TW');
   await expect(page.locator('label[for="username"]')).toHaveText('帳戶');
   await page.reload();
-  await expect(page.locator('#loginLanguage')).toHaveValue('zh-TW');
+  await expect(page.locator('#loginLanguage select.language-more')).toHaveValue('zh-TW');
   await expect(page.locator('label[for="password"]')).toHaveText('密碼');
 });
 
@@ -41,7 +41,7 @@ test('game windows show Vietnamese, and players\' chat stays as typed', async ({
   await enterWorld(page, 'test3');
   // Like the character test: the hero's stats are there before the window opens.
   await page.waitForFunction(() => (window as unknown as { __game: { hero?: { name?: string } } }).__game.hero?.name);
-  await page.locator('select.language-select:not(#loginLanguage)').selectOption('vi');
+  await page.locator('.language-picker:not(#loginLanguage) button[data-lang="vi"]').click();
   const window = page.locator('.rml-character_info');
   // The C key works once the game has set up its windows, a moment after the world shows.
   await expect(async () => {
@@ -63,6 +63,6 @@ test('game windows show Vietnamese, and players\' chat stays as typed', async ({
   await page.waitForTimeout(300);
   await expect(page.locator('#chatLog div').last()).toHaveText('STR');
   // Back to English: the open window's texts come back.
-  await page.locator('select.language-select:not(#loginLanguage)').selectOption('en');
+  await page.locator('.language-picker:not(#loginLanguage) button[data-lang="en"]').click();
   await expect(window.getByText('STR', { exact: true }).first()).toBeVisible({ timeout: 10_000 });
 });

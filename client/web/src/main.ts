@@ -85,21 +85,36 @@ console.log(`HNMO build ${HNMO_BUILD_STAMP} (project ${HNMO_PROJECT_ID})`);
 applyGameName();
 void loadGameName();
 
-// The language (English by default, or Vietnamese): the pickers on the login screen and the top bar.
-const languagePickers = [...document.querySelectorAll<HTMLSelectElement>('select.language-select')];
-const showLanguage = (language: Language) => { for (const picker of languagePickers) picker.value = language; };
-// Every language of public/data/lang/index.json (the page lists English and Vietnamese until it's read).
-void availableLanguages().then((languages) => {
+// The language (English by default): EN and VN buttons and a list of the other languages, on the
+// login screen and in the top bar.
+const languagePickers = [...document.querySelectorAll<HTMLElement>('.language-picker')];
+const MAIN_LANGUAGES = ['en', 'vi'];
+const showLanguage = (language: Language) => {
   for (const picker of languagePickers) {
-    picker.replaceChildren(...languages.map((language) => new Option(language.name, language.code)));
+    for (const button of picker.querySelectorAll<HTMLButtonElement>('button[data-lang]')) button.setAttribute('aria-pressed', String(button.dataset.lang === language));
+    const more = picker.querySelector<HTMLSelectElement>('select.language-more');
+    if (more) more.value = MAIN_LANGUAGES.includes(language) ? '' : language;
+  }
+};
+const chooseLanguage = (language: Language, from: HTMLElement) => {
+  void setLanguage(language).catch(() => showLanguage(currentLanguage()));
+  if (!from.closest('#loginLanguage')) from.blur(); // the game's keys (I, C, …) go back to the game
+};
+// The other languages of public/data/lang/index.json go into the list.
+void availableLanguages().then((languages) => {
+  const others = languages.filter((language) => !MAIN_LANGUAGES.includes(language.code));
+  for (const picker of languagePickers) {
+    const more = picker.querySelector<HTMLSelectElement>('select.language-more');
+    if (more) more.replaceChildren(new Option('More…', ''), ...others.map((language) => new Option(language.name, language.code)));
   }
   showLanguage(currentLanguage() === 'en' ? savedLanguage() : currentLanguage());
 });
 for (const picker of languagePickers) {
-  picker.addEventListener('change', () => {
-    void setLanguage(picker.value).catch(() => showLanguage(currentLanguage()));
-    if (picker.id !== 'loginLanguage') picker.blur(); // the game's keys (I, C, …) go back to the game
-  });
+  for (const button of picker.querySelectorAll<HTMLButtonElement>('button[data-lang]')) {
+    button.addEventListener('click', () => chooseLanguage(button.dataset.lang ?? 'en', button));
+  }
+  const more = picker.querySelector<HTMLSelectElement>('select.language-more');
+  more?.addEventListener('change', () => { if (more.value) chooseLanguage(more.value, more); });
 }
 onLanguageChange(showLanguage);
 showLanguage(savedLanguage());
