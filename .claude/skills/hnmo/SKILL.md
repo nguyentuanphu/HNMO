@@ -96,9 +96,9 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Packets can be fed in tests with `window.__game.connection.dispatch(bytes)`.
 - Skill effects (`client/web/src/render/effects/`): the core and the wizard's types are in effectSystem.ts,
   the other classes' types register in extraEffects.ts's tables (knightEffects.ts, elfEffects.ts,
-  lordEffects.ts); the skills' timelines are in skillEffects.ts. `tests/e2e/skill-effects.spec.ts` plays
+  lordEffects.ts, summonerEffects.ts, rageEffects.ts; extra particle types in EXTRA_PARTICLES); the skills' timelines are in skillEffects.ts (the Rage Fighter's effects start at the cast, rageCreateEffect; Chain Lightning comes from its own packet, playChainLightning). `tests/e2e/skill-effects.spec.ts` plays
   each skill through Combat's onSkill hook and freezes the effect ticks for its pictures (headless
-  Chromium draws only a few frames a second); SKILL_GROUPS / SKILLS / SHOTS_DIR pick what it runs.
+  Chromium draws only a few frames a second); SKILL_GROUPS / SKILLS / SHOTS_DIR pick what it runs. The test machine loads a new model's textures very slowly (tens of seconds): a case's `warm` loads them before the cast and `model` waits for them before the picture.
   Don't name an env variable GROUPS in bash (it's a shell builtin).
 - Parallel work: agents in git worktrees, each with its own bridge port (8082-8091) and BASE_URL;
   merge their branches one at a time and resolve PARITY.md / guide.html conflicts by keeping both.
