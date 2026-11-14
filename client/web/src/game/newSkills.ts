@@ -298,11 +298,11 @@ function make(system: EffectSystem, step: Step, at: THREE.Vector3, caster: Effec
 
 /** The buffs and debuffs of HNMO's skills (the server's magic effects 180-186), for the buff strip: a name, what it does, and the game buff whose icon it shows. */
 export const NEW_SKILL_BUFFS: { number: number; name: string; kind: 'buff' | 'debuff'; text: string; iconFrom: number }[] = [
-  { number: 180, name: 'Iron Guard', kind: 'buff', text: 'Damage taken decreases by 20%.', iconFrom: 2 },
+  { number: 180, name: 'Iron Guard', kind: 'buff', text: 'Damage taken decreases by 24%.', iconFrom: 2 },
   { number: 181, name: 'Mana Shield', kind: 'buff', text: 'Part of the damage taken is paid with mana.', iconFrom: 4 },
   { number: 182, name: 'Forest Blessing', kind: 'buff', text: 'Life recovers over time.', iconFrom: 8 },
-  { number: 183, name: 'Twin Power', kind: 'buff', text: 'All damage increases by 10%.', iconFrom: 1 },
+  { number: 183, name: 'Twin Power', kind: 'buff', text: 'All damage increases by 12%.', iconFrom: 1 },
   { number: 184, name: 'War Command', kind: 'buff', text: 'Attack and magic speed increase.', iconFrom: 5 },
   { number: 185, name: 'Iron Body', kind: 'buff', text: 'Defence increases and part of the damage is reflected.', iconFrom: 2 },
-  { number: 186, name: 'Weakening Curse', kind: 'debuff', text: 'Defence decreases by 20%.', iconFrom: 58 },
+  { number: 186, name: 'Weakening Curse', kind: 'debuff', text: 'Defence decreases by 24%.', iconFrom: 58 },
 ];

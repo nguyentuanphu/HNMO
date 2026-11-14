@@ -123,7 +123,7 @@ const TRIAL_WORDS_FIRST = 9_400_000;
 function addTrialQuestTexts(progress: Map<number, QuestProgressEntry>, words: Map<number, string>): void {
   const texts = [
     'Trial of Strength', // 0: the subject
-    'Defeat 100 of the monsters I name and bring me a Jewel of Chaos. Then I will teach you the hidden skill of your class.', // 1: the summary
+    'Defeat 200 of the monsters I name and bring me five Jewels of Chaos. Then I will teach you the hidden skill of your class.', // 1: the summary
     'You have grown strong. Strong enough to learn what few of your kind ever learn. Will you take the trial?', // 2
     'I will take the trial.', // 3
     'Not now.', // 4
