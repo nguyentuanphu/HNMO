@@ -116,7 +116,7 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Visible game name: "HenryN Mu Online" by default, changeable in the admin panel (Plugins, "Game name").
   Web: `gameName()` / `data-game-name`; server: `GameNamePlugIn.GetName(context)`; admin API `api/game-name`.
 - The owner wants the admin panel redesigned (better looking) and every game setting editable there.
-- MUVIETNAM2 can be used for assets the game data is missing (99 sounds came from it); extract only
+- the Vietnamese client archive can be used for assets the game data is missing (99 sounds came from it); extract only
   the files needed, never run anything from it.
 - Deploying the server to the test folder: `dotnet publish Startup -c Release -r linux-x64 --self-contained
   -o /home/hnmo/HNMO-clip/server` (keep its ConnectionSettings.xml); copying loose DLLs and deps.json from a

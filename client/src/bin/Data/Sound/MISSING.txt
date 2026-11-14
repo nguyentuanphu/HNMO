@@ -1,5 +1,1 @@
 # Sounds that were damaged in the archive these came from; a good copy can fill them in.
-mDAngelPain.wav
-mLsPain2.wav
-mNecronPain2.wav
-pWalk(Soil).wav
