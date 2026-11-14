@@ -92,6 +92,31 @@ JSON
 if [ "$WITH_DATA" = 1 ]; then
   echo "Copying the game data"
   cp -r "$CLIENT_REPO/src/bin/Data" "$OUT/Data"
+  # Sounds and music as Opus: about 250 MB less (WAV effects shrink ~95 %). The web game asks for
+  # the .opus names when Data/Audio/Opus.json is there and the browser plays Opus. Set
+  # HNMO_KEEP_WAV=1 to keep the original files.
+  if [ "${HNMO_KEEP_WAV:-0}" != 1 ] && command -v ffmpeg >/dev/null; then
+    echo "Converting the sounds and music to Opus"
+    convert_audio() {
+      local file="$1" rate out
+      out="${file%.*}.opus"
+      case "$file" in */[Mm]usic/*) rate=96k ;; *) rate=48k ;; esac
+      if ffmpeg -nostdin -v error -y -i "$file" -c:a libopus -b:a "$rate" -vbr on "$out" && [ -s "$out" ]; then
+        rm -f "$file"
+      else
+        rm -f "$out"; echo "  kept $file (could not convert)" >&2
+      fi
+    }
+    export -f convert_audio
+    # The web game's own sounds (the HNMO skills', web/wwwroot/data/Sound) go with them.
+    find "$OUT/Data/Sound" "$OUT/Data/Music" "$OUT/web/wwwroot/data/Sound" -type f \( -iname '*.wav' -o -iname '*.mp3' -o -iname '*.ogg' \) -print0 \
+      | xargs -0 -P "$(nproc)" -I{} bash -c 'convert_audio "$1"' _ {}
+    mkdir -p "$OUT/Data/Audio"
+    printf '{ "opus": true }\n' > "$OUT/Data/Audio/Opus.json"
+    du -sh "$OUT/Data/Sound" "$OUT/Data/Music"
+  elif [ "${HNMO_KEEP_WAV:-0}" != 1 ]; then
+    echo "WARNING: ffmpeg not found: the sounds stay WAV / MP3 (about 250 MB more)."
+  fi
 else
   mkdir -p "$OUT/Data"
 fi

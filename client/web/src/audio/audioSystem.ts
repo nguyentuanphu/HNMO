@@ -115,6 +115,11 @@ export function dataUrl(file: string, dataRoot = '/data'): string {
   return `${dataRoot}/${parts.map((part) => encodeURIComponent(part)).join('/')}`;
 }
 
+/** A sound or music file's name with its extension changed to .opus (the packaged folder's form). */
+export function opusName(file: string): string {
+  return file.replace(/\.(wav|mp3|ogg)$/i, '.opus');
+}
+
 /** A file name as the desktop compares them: forward slashes, lower case. */
 function fileKey(file: string): string {
   return file.replace(/\\/g, '/').toLowerCase();
@@ -184,9 +189,16 @@ export class AudioSystem {
   private readonly failedMusic = new Set<string>();
   private unlocked = false;
   private readonly unlockHandler = (): void => this.unlock();
+  /** Whether the sound files are asked for as .opus. */
+  private readonly opus: Promise<boolean>;
 
   constructor(options: { dataRoot?: string } = {}) {
     this.dataRoot = options.dataRoot ?? '/data';
+    // The packaged folder keeps its sounds and music as Opus (Data/Audio/Opus.json says so); a
+    // browser that plays Opus asks for those, others for the original names.
+    this.opus = typeof fetch === 'function'
+      ? fetch(`${this.dataRoot}/Audio/Opus.json`).then((response) => response.ok && canPlayOpus()).catch(() => false)
+      : Promise.resolve(false);
     this.settings = readSettings();
     const Context = findAudioContext();
     let context: AudioContext | null = null;
@@ -368,7 +380,8 @@ export class AudioSystem {
     const context = this.context;
     if (context === null) return Promise.resolve(null);
     if (!this.channelCounts.has(key)) this.channelCounts.set(key, channels);
-    const promise = fetch(dataUrl(file, this.dataRoot))
+    const promise = this.opus
+      .then((opus) => fetch(dataUrl(opus ? opusName(file) : file, this.dataRoot)))
       .then(async (response) => {
         if (!response.ok) return null;
         const bytes = await response.arrayBuffer();
@@ -486,7 +499,7 @@ export class AudioSystem {
     this.releaseMusic();
     if (!force && this.failedMusic.has(key)) return;
     if (typeof Audio === 'undefined') return;
-    const element = new Audio(dataUrl(file, this.dataRoot));
+    const element = new Audio();
     element.loop = true;
     element.preload = 'auto';
     element.addEventListener('error', () => {
@@ -497,8 +510,12 @@ export class AudioSystem {
     this.musicName = file;
     this.failedMusic.delete(key);
     this.applyVolumes();
-    // Before a user gesture the browser refuses; unlock() starts it then.
-    element.play().catch(() => undefined);
+    void this.opus.then((opus) => {
+      if (this.music !== element) return;
+      element.src = dataUrl(opus ? opusName(file) : file, this.dataRoot);
+      // Before a user gesture the browser refuses; unlock() starts it then.
+      element.play().catch(() => undefined);
+    });
   }
 
   /**
@@ -557,4 +574,10 @@ let shared: AudioSystem | null = null;
 export function audioSystem(): AudioSystem {
   if (shared === null) shared = new AudioSystem();
   return shared;
+}
+
+/** Whether this browser plays Ogg Opus (Chrome, Edge, Firefox, recent Safari). */
+function canPlayOpus(): boolean {
+  if (typeof Audio === 'undefined') return false;
+  try { return new Audio().canPlayType('audio/ogg; codecs="opus"') !== ''; } catch { return false; }
 }
