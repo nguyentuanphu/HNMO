@@ -85,8 +85,12 @@ contribution, the family mark on the pointed player done; the marks in every pla
 1. 🟡 Blood Castle, Devil Square, Chaos Castle (`game/events.ts`, `ui/eventWindows.ts`): entry windows,
    tickets, refusals, the time window, countdowns, terrain changes, results, NPC lines done; the gate and
    bridge animations, the weapon on its carrier, the rush pose, free tickets and on-screen golden notices next.
-2. Illusion Temple, Kalima, Crywolf, Castle Siege, Doppelganger, Imperial Guardian, Kanturu, Raklion,
-   lucky coins, golden bowman — enter windows, timers, scores, rewards.
+2. 🟡 Kalima, Crywolf, Castle Siege (`game/kalima.ts`, `game/crywolf.ts`, `game/castleSiege.ts`,
+   `ui/castleSiegeWindows.ts`, `ui/fieldEventWindows.ts`): Kalima gates and tooltips, the Crywolf HUD, altars,
+   result and terrain, the siege's guardsman, senior, gatekeeper, gate switch, catapult, HUD and notices done;
+   the gate / catapult animations, the battle skills and the event monsters' effects next.
+3. Illusion Temple, Doppelganger, Imperial Guardian, Kanturu, Raklion, lucky coins, golden bowman — enter
+   windows, timers, scores, rewards.
 
 ## 10. Shell and interface
 1. ✅ **(extra)** The (i) button: an in-game guide of what to play and what each feature does
