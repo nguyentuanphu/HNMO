@@ -1,0 +1,17 @@
+@foreach (var group in this.Groups)
+{
+    var expanded = this.IsExpanded(group);
+    <li class="nav-item px-3 dropdown nav-group@(expanded ? " expanded" : "")" data-group="@group.Key">
+        <a class="nav-link dropdown-toggle" href="" role="button" aria-haspopup="true" aria-expanded="@(expanded ? "true" : "false")" @onclick="() => this.Toggle(group)" @onclick:preventDefault="true">
+            <span class="oi @group.Icon" aria-hidden="true"></span> @group.Caption
+        </a>
+        <div class="dropdown-menu@(expanded ? " show" : "")">
+            @foreach (var entry in group.Entries)
+            {
+                <NavLink class="dropdown-item" href="@entry.Href" Match="@entry.Match" @onclick="() => NavigationHistory.Clear()">
+                    <span class="oi @entry.Icon" aria-hidden="true"></span> @entry.Caption
+                </NavLink>
+            }
+        </div>
+    </li>
+}

@@ -2840,4 +2840,49 @@
   <data name="CashShopCoinsDeliveredPending" xml:space="preserve">
     <value>The account is online, but not in the game: the coins arrive the next time the cash shop is opened.</value>
   </data>
+  <data name="NavAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="NavToggleMenu" xml:space="preserve">
+    <value>Show or hide the menu</value>
+  </data>
+  <data name="NavOverview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="NavPlayers" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="NavGame" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="NavAdministration" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="NavCharactersAndSkills" xml:space="preserve">
+    <value>Characters and skills</value>
+  </data>
+  <data name="NavWorldAndMonsters" xml:space="preserve">
+    <value>World and monsters</value>
+  </data>
+  <data name="NavShopsAndDrops" xml:space="preserve">
+    <value>Shops and drops</value>
+  </data>
+  <data name="NavRulesAndEvents" xml:space="preserve">
+    <value>Rules and plugins</value>
+  </data>
+  <data name="NavAdvanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="DashboardConfigureGame" xml:space="preserve">
+    <value>Configure the game</value>
+  </data>
+  <data name="DashboardEverythingEditable" xml:space="preserve">
+    <value>Every setting of the game can be changed here. Changes to the game configuration apply after saving; some need a server restart.</value>
+  </data>
+  <data name="NavPlayerData" xml:space="preserve">
+    <value>More player data</value>
+  </data>
+  <data name="GuildEditData" xml:space="preserve">
+    <value>Edit guild data</value>
+  </data>
 </root>

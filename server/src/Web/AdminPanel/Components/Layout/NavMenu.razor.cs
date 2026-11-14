@@ -44,6 +44,9 @@ public partial class NavMenu : IDisposable
     [Inject]
     private IServiceProvider ServiceProvider { get; set; } = null!;
 
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = null!;
+
     /// <summary>
     /// Gets or sets a value indicating whether the network analyzer is available. It needs the
     /// servers in the same process, so it's only registered in the all-in-one deployment.
@@ -57,6 +60,22 @@ public partial class NavMenu : IDisposable
     private Guid? GameConfigurationId { get; set; }
 
     /// <summary>
+    /// Gets the group with the stored player data which has no own page, edited with the generic editors.
+    /// </summary>
+    private static IReadOnlyList<NavGroup> PlayerDataGroups { get; } =
+    [
+        new("player-data", Properties.Resources.NavPlayerData, "oi-folder",
+        [
+            ConfigNavMenu.GridEntry<HNMO.DataModel.Entities.Character>("oi-person"),
+            ConfigNavMenu.GridEntry<HNMO.DataModel.Entities.LetterBody>("oi-envelope-closed"),
+            ConfigNavMenu.GridEntry<HNMO.DataModel.Entities.GensMember>("oi-badge"),
+            ConfigNavMenu.GridEntry<HNMO.DataModel.Entities.CashShopStorageItem>("oi-basket"),
+            ConfigNavMenu.GridEntry<HNMO.DataModel.Entities.CastleSiegeData>("oi-shield"),
+            ConfigNavMenu.GridEntry<HNMO.DataModel.Entities.CrywolfData>("oi-moon"),
+        ]),
+    ];
+
+    /// <summary>
     /// Gets the class for the entries of the navigation menu.
     /// "collapse" is a class of bootstrap which hides it.
     /// In our CSS we also define to show it anyway, if the width sufficient.
@@ -68,6 +87,7 @@ public partial class NavMenu : IDisposable
     {
         this.SetupService.DatabaseInitialized -= this.OnDatabaseInitializedAsync;
         this.UpdateService.UpdatesInstalled -= this.OnUpdatesInstalledAsync;
+        this.NavigationManager.LocationChanged -= this.OnLocationChanged;
     }
 
     /// <inheritdoc />
@@ -77,6 +97,7 @@ public partial class NavMenu : IDisposable
         await base.OnInitializedAsync().ConfigureAwait(false);
         this.SetupService.DatabaseInitialized += this.OnDatabaseInitializedAsync;
         this.UpdateService.UpdatesInstalled += this.OnUpdatesInstalledAsync;
+        this.NavigationManager.LocationChanged += this.OnLocationChanged;
         _ = Task.Run(async () =>
         {
             await this.LoadGameConfigurationAsync().ConfigureAwait(false);
@@ -158,6 +179,16 @@ public partial class NavMenu : IDisposable
     private void ToggleNavMenu()
     {
         this._collapseNavMenu = !this._collapseNavMenu;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        // On small screens the menu covers the page, so it closes again after a link was chosen.
+        if (!this._collapseNavMenu)
+        {
+            this._collapseNavMenu = true;
+            _ = this.InvokeAsync(this.StateHasChanged);
+        }
     }
 
     private void ToggleSystem()

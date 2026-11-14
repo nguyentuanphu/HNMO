@@ -18,6 +18,11 @@ else if (this._guild is { } guild)
         <NavLink href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
         <GuildLogo Logo="@guild.Logo" Size="32" class="border rounded-1" />
         <h1 class="mb-0">@guild.Name</h1>
+        <AuthorizeView Policy="@AdminPolicies.Administrator">
+            <NavLink href="@($"edit-config/{typeof(HNMO.DataModel.Entities.Guild).FullName}/{this.GuildId}")" class="btn btn-outline-primary ms-auto">
+                <span class="oi oi-pencil" aria-hidden="true"></span> @Resources.GuildEditData
+            </NavLink>
+        </AuthorizeView>
     </div>
     <hr />
 
