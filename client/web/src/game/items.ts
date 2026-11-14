@@ -2,6 +2,8 @@
 // docs/item-data.md): an item is a group (0-15) and a number, and its model entry
 // names the .bmd file and the folders of its textures.
 
+import { loadItemLooks } from './itemLooks.js';
+
 const GROUP_FILES = ['Group00_Sword', 'Group01_Axe', 'Group02_Mace', 'Group03_Spear', 'Group04_Bow', 'Group05_Staff',
   'Group06_Shield', 'Group07_Helm', 'Group08_Armor', 'Group09_Pants', 'Group10_Gloves', 'Group11_Boots', 'Group12_Wing',
   'Group13_Helper', 'Group14_Potion', 'Group15_Etc'];
@@ -80,7 +82,7 @@ export interface ItemModelData extends ModelFileData {
   renderStyle?: string;
   renderStyleValues?: Record<string, unknown>;
   itemEffect?: string;
-  itemEffectValues?: { glowMesh?: number | 'all'; glowStrength?: unknown };
+  itemEffectValues?: Record<string, unknown>;
   cloth?: boolean;
 }
 
@@ -121,8 +123,8 @@ export interface ItemModelSource {
   dir: string;
   fileName: string;
   textureDir: string[];
-  /** Whether a mesh (by index) is drawn additively. */
-  isGlowMesh: (index: number) => boolean;
+  /** Its look: the item effect and render style that say how its meshes are drawn (game/itemLooks.ts). */
+  look: { itemEffect?: string; itemEffectValues?: Record<string, unknown>; renderStyle?: string; renderStyleValues?: Record<string, unknown> };
   glow: ItemGlowData;
   inventory: InventoryDisplay | null;
   /** How it lies on the ground. */
@@ -152,20 +154,9 @@ function splitPath(file: string): { dir: string; fileName: string } {
   return { dir: path.slice(0, slash), fileName: path.slice(slash + 1) };
 }
 
-const GLOW_EFFECTS = new Set<string | undefined>(['glowingMesh', 'pulsingGlow']);
-
-// Which meshes are drawn additively, like the client's BlendMesh: the item effect's
-// glow mesh ("all" for every mesh), except the meshes listed in noneBlendMeshes.
-// Meshes a glow style marks as its own (glow.hiddenMesh, e.g. Flamberge's fire) glow too.
-function glowMeshRule(entry: ItemModelData, model: ModelFileData): (index: number) => boolean {
-  const noBlend = new Set(model.noneBlendMeshes ?? entry.noneBlendMeshes ?? []);
-  const glowMesh = GLOW_EFFECTS.has(entry.itemEffect) ? entry.itemEffectValues?.glowMesh : undefined;
-  const glowStyleMesh = entry.glow?.hiddenMesh;
-  return (index: number) => !noBlend.has(index) && (glowMesh === 'all' || glowMesh === index || glowStyleMesh === index);
-}
-
 export async function loadItemCatalog(): Promise<ItemCatalog> {
   if (catalog) return catalog;
+  const looks = loadItemLooks();
   const [shared, ...groups] = await Promise.all([
     fetchJson<SharedModelsFile>('/data/Items/Models/SharedModels.json'),
     ...GROUP_FILES.map((name) => fetchJson<ItemModelsFile>(`/data/Items/Models/${name}.json`)),
@@ -182,7 +173,7 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
       models.set(`${groupIndex}:${entry.number}`, {
         ...splitPath(model.file),
         textureDir: model.textureFolders?.length ? model.textureFolders : ['Item'],
-        isGlowMesh: glowMeshRule(entry, model),
+        look: { itemEffect: entry.itemEffect, itemEffectValues: entry.itemEffectValues, renderStyle: entry.renderStyle, renderStyleValues: entry.renderStyleValues },
         glow: entry.glow ?? {},
         inventory: entry.inventory ?? model.inventory ?? null,
         ground: entry.ground ?? model.ground ?? null,
@@ -195,6 +186,7 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
       definitions.set(`${groupIndex}:${item.number}`, item);
     }
   });
+  await looks;
   catalog = { models, names, definitions };
   return catalog;
 }

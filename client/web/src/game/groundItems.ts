@@ -147,7 +147,7 @@ export class GroundItems {
     label.textContent = text;
     Object.assign(label.style, { color: style.color ?? '#fff', background: style.background ?? '#000', fontWeight: style.bold ? 'bold' : 'normal' });
     try {
-      const model = await createItemModel({ group: look.group, number: look.number, glowLevel: look.level, excellent: look.excellent > 0, ancient: look.ancientSet > 0 });
+      const model = await createItemModel({ group: look.group, number: look.number, glowLevel: look.level, excellent: look.excellent > 0, ancient: look.ancientSet > 0 }, 'ground');
       if (!model || this.drops.get(id) !== drop) return;
       const display = itemModel(look.group, look.number)?.ground;
       const [rx, ry, rz] = display?.rotation ?? [0, 0, 0];

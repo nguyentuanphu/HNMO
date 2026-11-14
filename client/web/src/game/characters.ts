@@ -3,7 +3,8 @@
 
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from '../formats.js';
-import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, AnimatedModel } from '../bmd.js';
+import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, isHiddenTexture, AnimatedModel } from '../bmd.js';
+import { meshDraws, type ItemPlace, type MeshDraw } from './itemLooks.js';
 import { sampleHeight, sampleLight } from '../terrain.js';
 import { describeMonster, MonsterAction } from './monsterData.js';
 import { itemModel, ItemGroup } from './items.js';
@@ -131,13 +132,61 @@ function backPlacement(item: AppearanceItem, rightHand: boolean): THREE.Matrix4 
   return matrix;
 }
 
-export async function createItemModel(item: AppearanceItem): Promise<AnimatedModel | null> {
+/** A texture a look names ("Item/Deye_R.jpg" under Data): its folder and file. */
+function lookTexture(path: string): { dir: string; name: string } {
+  const slash = path.lastIndexOf('/');
+  return { dir: path.slice(0, slash), name: path.slice(slash + 1) };
+}
+
+// A mesh as one drawing of its look draws it (game/itemLooks.ts).
+async function drawMaterial(textureDir: string[], textureName: string, draw: MeshDraw): Promise<THREE.MeshBasicMaterial> {
+  const texture = draw.texture ? lookTexture(draw.texture) : null;
+  const material = await createMaterial(texture ? [texture.dir] : textureDir, texture ? texture.name : textureName, { glow: draw.additive });
+  // An additive drawing keeps its light as its colour (setLight leaves additive materials alone).
+  if (draw.additive) material.color.setRGB(...draw.light);
+  return material;
+}
+
+/**
+ * An item's model as its look draws it: each mesh with its first drawing, further drawings of a mesh as
+ * extra meshes over it, meshes the look doesn't draw hidden; then its level / excellent / ancient glow.
+ * `place`: worn by a character, in a window, or on the ground (some looks differ).
+ */
+export async function createItemModel(item: AppearanceItem, place: ItemPlace = 'worn'): Promise<AnimatedModel | null> {
   const source = itemModel(item.group, item.number);
   if (!source) return null;
   const model = await loadModel(source.dir, source.fileName);
   const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
-  const materials = await Promise.all(parts.map((part, index) => createMaterial(source.textureDir, part.textureName, { glow: source.isGlowMesh?.(index) })));
+  const draws = meshDraws({ ...source.look, level: item.glowLevel ?? 0 }, {
+    meshTextures: model.meshes.map((mesh) => mesh.texture),
+    hiddenByTexture: (mesh) => isHiddenTexture(model.meshes[mesh]?.textureName ?? ''),
+  }, place);
+  const hidden = () => new THREE.MeshBasicMaterial({ visible: false });
+  // In a window and on the ground the item is drawn without the skin and hair it has on a character
+  // (BMD HideSkin; MarkSkinAndHair: textures named "ski…", "level…" and "hair…").
+  if (place !== 'worn') {
+    for (const part of parts) if (/^(ski|hair)/.test(part.textureName) || /^level/i.test(part.textureName)) draws[part.meshIndex] = [];
+  }
+  const materials = await Promise.all(parts.map((part) => {
+    const first = draws[part.meshIndex]?.[0];
+    return first ? drawMaterial(source.textureDir, part.textureName, first) : Promise.resolve(hidden());
+  }));
   const animated = new AnimatedModel(model, parts, materials);
+  for (const part of animated.parts) {
+    const first = draws[part.meshIndex]?.[0];
+    if (first && !first.additive && first.light.some((channel) => channel !== 1)) part.tint = new THREE.Color(...first.light);
+  }
+  const extra: THREE.Mesh[] = [];
+  for (const part of animated.parts) {
+    for (const draw of (draws[part.meshIndex] ?? []).slice(1)) {
+      const material = await drawMaterial(source.textureDir, part.textureName, draw);
+      if (!draw.additive) material.color.setRGB(...draw.light);
+      const mesh = new THREE.Mesh(part.geometry, material);
+      mesh.frustumCulled = false;
+      extra.push(mesh);
+    }
+  }
+  if (extra.length) animated.addGlow({ meshes: extra, update: () => { /* still */ } });
   await addItemGlow(animated, animated.parts, source.glow, item);
   return animated;
 }

@@ -136,7 +136,7 @@ export class PickedItem {
     this.canvas.height = Math.round(h);
     this.canvas.style.width = `${w}px`;
     this.canvas.style.height = `${h}px`;
-    await drawItem(this.canvas, item);
+    await drawItem(this.canvas, item, { pixelsPerReference: scale });
     this.canvas.style.display = 'block';
   }
 
@@ -421,7 +421,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
         entry.signature = signature;
         canvas.width = Math.round(box.w * scale);
         canvas.height = Math.round(box.h * scale);
-        drawItem(canvas, item);
+        drawItem(canvas, item, { pixelsPerReference: scale });
       }
     }
     for (const [key, entry] of this.canvases) {
@@ -766,7 +766,7 @@ export class TradeWindow extends ItemWindow<TradeModel> {
         entry.signature = signature;
         canvas.width = Math.round(box.w * scale);
         canvas.height = Math.round(box.h * scale);
-        void drawItem(canvas, item);
+        void drawItem(canvas, item, { pixelsPerReference: scale });
       }
     }
     for (const [slot, entry] of this.partnerCanvases) {
