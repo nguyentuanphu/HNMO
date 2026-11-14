@@ -2783,4 +2783,112 @@
   <data name="Inspect" xml:space="preserve">
     <value>检查</value>
   </data>
+  <data name="HnmoSkills" xml:space="preserve">
+    <value>HNMO 技能</value>
+  </data>
+  <data name="HnmoSkillsOf" xml:space="preserve">
+    <value>{0} 的 HNMO 技能</value>
+  </data>
+  <data name="HnmoSkillsDescription" xml:space="preserve">
+    <value>授予或移除角色职业的 HNMO 技能（700 至 727），例如无需试炼任务即可获得第四个技能（D）。在游戏中的角色会立即获得更改；离线角色在下次登录时获得。技能 A、B 和 C 会在角色进入游戏时按等级重新学会，因此移除它们只在角色低于该等级时有效。</value>
+  </data>
+  <data name="HnmoSkillsAccountNotFound" xml:space="preserve">
+    <value>该账号不存在。</value>
+  </data>
+  <data name="HnmoSkillsNoCharacters" xml:space="preserve">
+    <value>该账号没有角色。</value>
+  </data>
+  <data name="HnmoSkillsSkill" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="HnmoSkillsHowLearned" xml:space="preserve">
+    <value>学习方式</value>
+  </data>
+  <data name="HnmoSkillsAtLevel" xml:space="preserve">
+    <value>{0} 级</value>
+  </data>
+  <data name="HnmoSkillsByTrial" xml:space="preserve">
+    <value>试炼任务（{0} 级起）</value>
+  </data>
+  <data name="HnmoSkillsLearned" xml:space="preserve">
+    <value>已学会</value>
+  </data>
+  <data name="HnmoSkillsGrant" xml:space="preserve">
+    <value>授予</value>
+  </data>
+  <data name="HnmoSkillsRemove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="HnmoSkillsCharacterInfo" xml:space="preserve">
+    <value>{0}，{1} 级</value>
+  </data>
+  <data name="HnmoSkillsOnline" xml:space="preserve">
+    <value>账号在线：更改会立即作用于游戏中的角色。</value>
+  </data>
+  <data name="HnmoSkillsOffline" xml:space="preserve">
+    <value>账号离线：角色登录时即拥有这些更改。</value>
+  </data>
+  <data name="HnmoSkillsGranted" xml:space="preserve">
+    <value>{0} 现在拥有技能 {1}。</value>
+  </data>
+  <data name="HnmoSkillsRemoved" xml:space="preserve">
+    <value>已从 {0} 移除技能 {1}。</value>
+  </data>
+  <data name="HnmoSkillsUnchanged" xml:space="preserve">
+    <value>未更改：{0} 已经拥有（或没有）技能 {1}。</value>
+  </data>
+  <data name="HnmoSkillsReachedGame" xml:space="preserve">
+    <value>玩家现在就能在游戏中看到。</value>
+  </data>
+  <data name="HnmoSkillsReachedStored" xml:space="preserve">
+    <value>角色离线；玩家下次登录时即可拥有。</value>
+  </data>
+  <data name="HnmoSkillsCharacterNotFound" xml:space="preserve">
+    <value>该角色不存在。</value>
+  </data>
+  <data name="HnmoSkillsSkillNotOfClass" xml:space="preserve">
+    <value>这不是该角色职业的 HNMO 技能。</value>
+  </data>
+  <data name="HnmoSkillsAccountBusy" xml:space="preserve">
+    <value>该账号正在登录或正在被修改；未更改。请稍后再试。</value>
+  </data>
+  <data name="HnmoSkillsNotInGame" xml:space="preserve">
+    <value>账号已登录，但其角色不在游戏中（例如在角色选择界面）；未更改。请在角色进入游戏或登出后再试。（{0}）</value>
+  </data>
+  <data name="HnmoSkillsServerUnavailable" xml:space="preserve">
+    <value>账号在线，但无法连接其游戏服务器；未更改。</value>
+  </data>
+  <data name="CashShopCoinMode" xml:space="preserve">
+    <value>方式</value>
+  </data>
+  <data name="CashShopCoinModeAdd" xml:space="preserve">
+    <value>增加（负数表示扣除）</value>
+  </data>
+  <data name="CashShopCoinModeSet" xml:space="preserve">
+    <value>将余额设为</value>
+  </data>
+  <data name="CashShopApply" xml:space="preserve">
+    <value>执行</value>
+  </data>
+  <data name="CashShopBalanceMustNotBeNegative" xml:space="preserve">
+    <value>余额不能为负数。</value>
+  </data>
+  <data name="CashShopCoinsAdded" xml:space="preserve">
+    <value>已为 {2} 增加 {0} {1}。</value>
+  </data>
+  <data name="CashShopCoinsBalanceSet" xml:space="preserve">
+    <value>{2} 的 {1} 余额已设为 {0}（发放 {3}）。</value>
+  </data>
+  <data name="CashShopCoinsBalanceUnchanged" xml:space="preserve">
+    <value>{2} 的 {1} 余额已经是 {0}；未更改。</value>
+  </data>
+  <data name="CashShopCoinsDeliveredNow" xml:space="preserve">
+    <value>玩家在游戏中：新余额立即生效。</value>
+  </data>
+  <data name="CashShopCoinsDeliveredLater" xml:space="preserve">
+    <value>玩家离线：下次在游戏中打开商城时到账。</value>
+  </data>
+  <data name="CashShopCoinsDeliveredPending" xml:space="preserve">
+    <value>账号在线但不在游戏中：下次打开商城时到账。</value>
+  </data>
 </root>

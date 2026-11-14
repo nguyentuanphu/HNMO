@@ -126,6 +126,67 @@ public class CashShopCoinService
         return (CashShopCoinGrantStatus.Created, CashShopCoinGrantInfo.From(grant));
     }
 
+    /// <summary>
+    /// Sets the balance of a coin type of an account, by granting the difference to the saved balance and the pending grants.
+    /// </summary>
+    /// <remarks>
+    /// When the player spends coins between the calculation and the time the game server applies the grant,
+    /// the balance ends up lower by that amount; it never goes below zero.
+    /// </remarks>
+    /// <param name="loginName">The login name of the account.</param>
+    /// <param name="coinType">The coin type.</param>
+    /// <param name="balance">The new balance, zero or more.</param>
+    /// <param name="reason">The reason.</param>
+    /// <param name="grantedBy">The name of the administrator.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>
+    /// The status of the grant and its amount; the status is <c>null</c> when the balance is already the requested one,
+    /// so no grant was created.
+    /// </returns>
+    public async ValueTask<(CashShopCoinGrantStatus? Status, int Amount)> SetBalanceAsync(
+        string loginName,
+        CashShopCoinType coinType,
+        int balance,
+        string? reason,
+        string? grantedBy,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(balance);
+        if (!Enum.IsDefined(coinType))
+        {
+            throw new ArgumentOutOfRangeException(nameof(coinType), coinType, "The coin type is unknown.");
+        }
+
+        long expected;
+        using (var context = await this.CreateContextAsync(cancellationToken).ConfigureAwait(false))
+        {
+            if (await context.GetAccountByLoginNameAsync(loginName, cancellationToken).ConfigureAwait(false) is not { } account)
+            {
+                return (CashShopCoinGrantStatus.AccountNotFound, 0);
+            }
+
+            var pending = await context.GetPendingCashShopCoinGrantsAsync(account.GetId(), cancellationToken).ConfigureAwait(false);
+            expected = GetBalance(account, coinType) + pending.Where(g => g.CoinType == coinType).Sum(g => (long)g.Amount);
+        }
+
+        // The pending grants are applied one after the other and none goes below zero; the expected balance doesn't either.
+        var amount = (int)Math.Clamp(balance - Math.Max(0, expected), int.MinValue, int.MaxValue);
+        if (amount == 0)
+        {
+            return (null, 0);
+        }
+
+        var (status, _) = await this.GrantAsync(loginName, coinType, amount, reason, null, grantedBy, cancellationToken).ConfigureAwait(false);
+        return (status, amount);
+    }
+
+    private static int GetBalance(Account account, CashShopCoinType coinType) => coinType switch
+    {
+        CashShopCoinType.WCoinC => account.WCoinC,
+        CashShopCoinType.WCoinP => account.WCoinP,
+        _ => account.GoblinPoints,
+    };
+
     private async ValueTask<(CashShopCoinGrantStatus Status, CashShopCoinGrantInfo? Grant)?> GetExistingGrantAsync(string reference, Guid accountId, CancellationToken cancellationToken)
     {
         using var context = await this.CreateContextAsync(cancellationToken).ConfigureAwait(false);

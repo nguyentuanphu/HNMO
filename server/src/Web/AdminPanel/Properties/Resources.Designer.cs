@@ -8240,5 +8240,329 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("ExcellentOptionsHint", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO skills
+        /// </summary>
+        public static string HnmoSkills {
+            get {
+                return ResourceManager.GetString("HnmoSkills", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO skills of {0}
+        /// </summary>
+        public static string HnmoSkillsOf {
+            get {
+                return ResourceManager.GetString("HnmoSkillsOf", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Grant or remove the HNMO skills (700 to 727) of a character's class, e.g. the fourth skill (D) without its trial quest. A character which is in the game gets the change at once; an offline character has it at its next login. Skills A, B and C are learned again by level when the character enters the game, so removing one of them only lasts while the character is below that level.
+        /// </summary>
+        public static string HnmoSkillsDescription {
+            get {
+                return ResourceManager.GetString("HnmoSkillsDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account doesn't exist.
+        /// </summary>
+        public static string HnmoSkillsAccountNotFound {
+            get {
+                return ResourceManager.GetString("HnmoSkillsAccountNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This account has no characters.
+        /// </summary>
+        public static string HnmoSkillsNoCharacters {
+            get {
+                return ResourceManager.GetString("HnmoSkillsNoCharacters", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Skill
+        /// </summary>
+        public static string HnmoSkillsSkill {
+            get {
+                return ResourceManager.GetString("HnmoSkillsSkill", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How it's learned
+        /// </summary>
+        public static string HnmoSkillsHowLearned {
+            get {
+                return ResourceManager.GetString("HnmoSkillsHowLearned", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to at level {0}
+        /// </summary>
+        public static string HnmoSkillsAtLevel {
+            get {
+                return ResourceManager.GetString("HnmoSkillsAtLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to trial quest (from level {0})
+        /// </summary>
+        public static string HnmoSkillsByTrial {
+            get {
+                return ResourceManager.GetString("HnmoSkillsByTrial", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Learned
+        /// </summary>
+        public static string HnmoSkillsLearned {
+            get {
+                return ResourceManager.GetString("HnmoSkillsLearned", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Grant
+        /// </summary>
+        public static string HnmoSkillsGrant {
+            get {
+                return ResourceManager.GetString("HnmoSkillsGrant", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove
+        /// </summary>
+        public static string HnmoSkillsRemove {
+            get {
+                return ResourceManager.GetString("HnmoSkillsRemove", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0}, level {1}
+        /// </summary>
+        public static string HnmoSkillsCharacterInfo {
+            get {
+                return ResourceManager.GetString("HnmoSkillsCharacterInfo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account is online: changes reach the character in the game at once.
+        /// </summary>
+        public static string HnmoSkillsOnline {
+            get {
+                return ResourceManager.GetString("HnmoSkillsOnline", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account is offline: the character has the changes when it logs in.
+        /// </summary>
+        public static string HnmoSkillsOffline {
+            get {
+                return ResourceManager.GetString("HnmoSkillsOffline", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} now has the skill {1}.
+        /// </summary>
+        public static string HnmoSkillsGranted {
+            get {
+                return ResourceManager.GetString("HnmoSkillsGranted", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The skill {1} was removed from {0}.
+        /// </summary>
+        public static string HnmoSkillsRemoved {
+            get {
+                return ResourceManager.GetString("HnmoSkillsRemoved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing changed: {0} already had (or didn't have) the skill {1}.
+        /// </summary>
+        public static string HnmoSkillsUnchanged {
+            get {
+                return ResourceManager.GetString("HnmoSkillsUnchanged", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The player sees it in the game now.
+        /// </summary>
+        public static string HnmoSkillsReachedGame {
+            get {
+                return ResourceManager.GetString("HnmoSkillsReachedGame", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The character was offline; the player has it at the next login.
+        /// </summary>
+        public static string HnmoSkillsReachedStored {
+            get {
+                return ResourceManager.GetString("HnmoSkillsReachedStored", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The character doesn't exist.
+        /// </summary>
+        public static string HnmoSkillsCharacterNotFound {
+            get {
+                return ResourceManager.GetString("HnmoSkillsCharacterNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This isn't an HNMO skill of the character's class.
+        /// </summary>
+        public static string HnmoSkillsSkillNotOfClass {
+            get {
+                return ResourceManager.GetString("HnmoSkillsSkillNotOfClass", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account is logging in or being changed right now; nothing changed. Try again in a moment.
+        /// </summary>
+        public static string HnmoSkillsAccountBusy {
+            get {
+                return ResourceManager.GetString("HnmoSkillsAccountBusy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account is logged in, but its character is not in the game (e.g. in the character selection); nothing changed. Try again when the character is in the game or logged out. ({0})
+        /// </summary>
+        public static string HnmoSkillsNotInGame {
+            get {
+                return ResourceManager.GetString("HnmoSkillsNotInGame", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account is online, but its game server can't be reached; nothing changed.
+        /// </summary>
+        public static string HnmoSkillsServerUnavailable {
+            get {
+                return ResourceManager.GetString("HnmoSkillsServerUnavailable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Change
+        /// </summary>
+        public static string CashShopCoinMode {
+            get {
+                return ResourceManager.GetString("CashShopCoinMode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add (a negative amount takes coins)
+        /// </summary>
+        public static string CashShopCoinModeAdd {
+            get {
+                return ResourceManager.GetString("CashShopCoinModeAdd", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Set the balance to
+        /// </summary>
+        public static string CashShopCoinModeSet {
+            get {
+                return ResourceManager.GetString("CashShopCoinModeSet", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Apply
+        /// </summary>
+        public static string CashShopApply {
+            get {
+                return ResourceManager.GetString("CashShopApply", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The balance can't be negative.
+        /// </summary>
+        public static string CashShopBalanceMustNotBeNegative {
+            get {
+                return ResourceManager.GetString("CashShopBalanceMustNotBeNegative", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} added to {2}.
+        /// </summary>
+        public static string CashShopCoinsAdded {
+            get {
+                return ResourceManager.GetString("CashShopCoinsAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The {1} balance of {2} is set to {0} (a grant of {3}).
+        /// </summary>
+        public static string CashShopCoinsBalanceSet {
+            get {
+                return ResourceManager.GetString("CashShopCoinsBalanceSet", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The {1} balance of {2} already is {0}; nothing changed.
+        /// </summary>
+        public static string CashShopCoinsBalanceUnchanged {
+            get {
+                return ResourceManager.GetString("CashShopCoinsBalanceUnchanged", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The player is in the game: the new balance applies at once.
+        /// </summary>
+        public static string CashShopCoinsDeliveredNow {
+            get {
+                return ResourceManager.GetString("CashShopCoinsDeliveredNow", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The player is offline: the coins arrive the next time the cash shop is opened in the game.
+        /// </summary>
+        public static string CashShopCoinsDeliveredLater {
+            get {
+                return ResourceManager.GetString("CashShopCoinsDeliveredLater", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The account is online, but not in the game: the coins arrive the next time the cash shop is opened.
+        /// </summary>
+        public static string CashShopCoinsDeliveredPending {
+            get {
+                return ResourceManager.GetString("CashShopCoinsDeliveredPending", resourceCulture);
+            }
+        }
     }
 }

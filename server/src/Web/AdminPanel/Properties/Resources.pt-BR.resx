@@ -2726,4 +2726,112 @@
   <data name="ExcellentOptionsHint" xml:space="preserve">
     <value>Vazio significa que se aplica o valor da definição de opção excelente do item. A primeira opção é sempre adicionada sem chance.</value>
   </data>
+  <data name="HnmoSkills" xml:space="preserve">
+    <value>Habilidades HNMO</value>
+  </data>
+  <data name="HnmoSkillsOf" xml:space="preserve">
+    <value>Habilidades HNMO de {0}</value>
+  </data>
+  <data name="HnmoSkillsDescription" xml:space="preserve">
+    <value>Concede ou remove as habilidades HNMO (700 a 727) da classe de um personagem, por exemplo a quarta habilidade (D) sem a missão de prova. Um personagem no jogo recebe a mudança na hora; um personagem offline a recebe no próximo login. As habilidades A, B e C são aprendidas de novo pelo nível quando o personagem entra no jogo, então remover uma delas só vale enquanto o personagem estiver abaixo desse nível.</value>
+  </data>
+  <data name="HnmoSkillsAccountNotFound" xml:space="preserve">
+    <value>A conta não existe.</value>
+  </data>
+  <data name="HnmoSkillsNoCharacters" xml:space="preserve">
+    <value>Esta conta não tem personagens.</value>
+  </data>
+  <data name="HnmoSkillsSkill" xml:space="preserve">
+    <value>Habilidade</value>
+  </data>
+  <data name="HnmoSkillsHowLearned" xml:space="preserve">
+    <value>Como é aprendida</value>
+  </data>
+  <data name="HnmoSkillsAtLevel" xml:space="preserve">
+    <value>no nível {0}</value>
+  </data>
+  <data name="HnmoSkillsByTrial" xml:space="preserve">
+    <value>missão de prova (a partir do nível {0})</value>
+  </data>
+  <data name="HnmoSkillsLearned" xml:space="preserve">
+    <value>Aprendida</value>
+  </data>
+  <data name="HnmoSkillsGrant" xml:space="preserve">
+    <value>Conceder</value>
+  </data>
+  <data name="HnmoSkillsRemove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="HnmoSkillsCharacterInfo" xml:space="preserve">
+    <value>{0}, nível {1}</value>
+  </data>
+  <data name="HnmoSkillsOnline" xml:space="preserve">
+    <value>A conta está online: as mudanças chegam ao personagem no jogo na hora.</value>
+  </data>
+  <data name="HnmoSkillsOffline" xml:space="preserve">
+    <value>A conta está offline: o personagem terá as mudanças ao entrar.</value>
+  </data>
+  <data name="HnmoSkillsGranted" xml:space="preserve">
+    <value>{0} agora tem a habilidade {1}.</value>
+  </data>
+  <data name="HnmoSkillsRemoved" xml:space="preserve">
+    <value>A habilidade {1} foi removida de {0}.</value>
+  </data>
+  <data name="HnmoSkillsUnchanged" xml:space="preserve">
+    <value>Nada mudou: {0} já tinha (ou não tinha) a habilidade {1}.</value>
+  </data>
+  <data name="HnmoSkillsReachedGame" xml:space="preserve">
+    <value>O jogador já vê no jogo.</value>
+  </data>
+  <data name="HnmoSkillsReachedStored" xml:space="preserve">
+    <value>O personagem estava offline; o jogador terá no próximo login.</value>
+  </data>
+  <data name="HnmoSkillsCharacterNotFound" xml:space="preserve">
+    <value>O personagem não existe.</value>
+  </data>
+  <data name="HnmoSkillsSkillNotOfClass" xml:space="preserve">
+    <value>Esta não é uma habilidade HNMO da classe do personagem.</value>
+  </data>
+  <data name="HnmoSkillsAccountBusy" xml:space="preserve">
+    <value>A conta está entrando ou sendo alterada agora; nada mudou. Tente de novo em instantes.</value>
+  </data>
+  <data name="HnmoSkillsNotInGame" xml:space="preserve">
+    <value>A conta está conectada, mas o personagem não está no jogo (por exemplo, na seleção de personagens); nada mudou. Tente quando o personagem estiver no jogo ou desconectado. ({0})</value>
+  </data>
+  <data name="HnmoSkillsServerUnavailable" xml:space="preserve">
+    <value>A conta está online, mas o servidor de jogo dela não responde; nada mudou.</value>
+  </data>
+  <data name="CashShopCoinMode" xml:space="preserve">
+    <value>Alteração</value>
+  </data>
+  <data name="CashShopCoinModeAdd" xml:space="preserve">
+    <value>Adicionar (um valor negativo tira moedas)</value>
+  </data>
+  <data name="CashShopCoinModeSet" xml:space="preserve">
+    <value>Definir o saldo para</value>
+  </data>
+  <data name="CashShopApply" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="CashShopBalanceMustNotBeNegative" xml:space="preserve">
+    <value>O saldo não pode ser negativo.</value>
+  </data>
+  <data name="CashShopCoinsAdded" xml:space="preserve">
+    <value>{0} {1} adicionados a {2}.</value>
+  </data>
+  <data name="CashShopCoinsBalanceSet" xml:space="preserve">
+    <value>O saldo de {1} de {2} foi definido para {0} (uma concessão de {3}).</value>
+  </data>
+  <data name="CashShopCoinsBalanceUnchanged" xml:space="preserve">
+    <value>O saldo de {1} de {2} já é {0}; nada mudou.</value>
+  </data>
+  <data name="CashShopCoinsDeliveredNow" xml:space="preserve">
+    <value>O jogador está no jogo: o novo saldo vale na hora.</value>
+  </data>
+  <data name="CashShopCoinsDeliveredLater" xml:space="preserve">
+    <value>O jogador está offline: as moedas chegam na próxima vez que a loja for aberta no jogo.</value>
+  </data>
+  <data name="CashShopCoinsDeliveredPending" xml:space="preserve">
+    <value>A conta está online, mas não no jogo: as moedas chegam na próxima vez que a loja for aberta.</value>
+  </data>
 </root>

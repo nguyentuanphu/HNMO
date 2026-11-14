@@ -50,6 +50,8 @@ public static class AdminOperationsExtensions
         services.AddScoped<LogOperations>();
         services.AddScoped<AuditReadOperations>();
         services.AddScoped<CashShopCoinService>();
+        services.AddScoped<CashShopCoinDelivery>();
+        services.AddScoped<HnmoSkillService>();
         services.AddScoped<CastleSiegeManagementService>();
         return services;
     }

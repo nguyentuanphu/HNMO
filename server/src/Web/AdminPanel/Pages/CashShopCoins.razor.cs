@@ -27,6 +27,7 @@ public partial class CashShopCoins : ComponentBase
     private CashShopCoinSummary? _summary;
     private bool _isLoading = true;
     private bool _isGranting;
+    private (bool Success, string Text)? _lastResult;
 
     /// <summary>
     /// Gets or sets the login name of the account.
@@ -52,6 +53,9 @@ public partial class CashShopCoins : ComponentBase
     [Inject]
     private AdminOperationExecutor Executor { get; set; } = null!;
 
+    [Inject]
+    private CashShopCoinDelivery CoinDelivery { get; set; } = null!;
+
     private CashShopCoinService CoinService => new(this.PersistenceContextProvider, this.GameConfigurationSource);
 
     /// <inheritdoc />
@@ -60,6 +64,13 @@ public partial class CashShopCoins : ComponentBase
         await this.LoadAsync().ConfigureAwait(true);
         await base.OnParametersSetAsync().ConfigureAwait(true);
     }
+
+    private static string DescribeDelivery(CashShopCoinDeliveryStatus status) => status switch
+    {
+        CashShopCoinDeliveryStatus.Applied => Resources.CashShopCoinsDeliveredNow,
+        CashShopCoinDeliveryStatus.Pending => Resources.CashShopCoinsDeliveredPending,
+        _ => Resources.CashShopCoinsDeliveredLater,
+    };
 
     private static int GetBalance(CashShopCoinSummary summary, CashShopCoinType coinType)
     {
@@ -97,9 +108,15 @@ public partial class CashShopCoins : ComponentBase
 
     private async Task OnGrantAsync()
     {
-        if (this._input.Amount == 0)
+        if (!this._input.SetBalance && this._input.Amount == 0)
         {
             this.ToastService.ShowError(Resources.CashShopAmountMustNotBeZero);
+            return;
+        }
+
+        if (this._input.SetBalance && this._input.Amount < 0)
+        {
+            this.ToastService.ShowError(Resources.CashShopBalanceMustNotBeNegative);
             return;
         }
 
@@ -107,26 +124,56 @@ public partial class CashShopCoins : ComponentBase
         try
         {
             var user = this.AuthenticationState is { } state ? (await state.ConfigureAwait(true)).User.Identity?.Name : null;
-            var status = await this.Executor.ExecuteAsync(
-                AdminRoles.CashShop,
-                "cashshop_grant",
-                new { this.LoginName, this._input.CoinType, this._input.Amount, this._input.Reason },
-                async actor =>
-                {
-                    var result = await this.CoinService.GrantAsync(this.LoginName, this._input.CoinType, this._input.Amount, this._input.Reason, null, actor.Name).ConfigureAwait(false);
-                    return result.Status;
-                },
-                default,
-                value => value is CashShopCoinGrantStatus.Created or CashShopCoinGrantStatus.AlreadyGranted).ConfigureAwait(true);
-            if (status == CashShopCoinGrantStatus.Created)
+            var coinType = this._input.CoinType;
+            var amount = this._input.Amount;
+            var coinCaption = CashShopCoinCaption.Get(coinType);
+            (CashShopCoinGrantStatus? Status, int Amount) outcome;
+            if (this._input.SetBalance)
             {
-                this.Logger.LogInformation("Admin {User} granted {Amount} {CoinType} to account {LoginName}.", user, this._input.Amount, this._input.CoinType, this.LoginName);
-                this.ToastService.ShowSuccess(Resources.CashShopCoinsGranted);
+                outcome = await this.Executor.ExecuteAsync(
+                    AdminRoles.CashShop,
+                    "cashshop_set_balance",
+                    new { this.LoginName, coinType, balance = amount, this._input.Reason },
+                    actor => this.CoinService.SetBalanceAsync(this.LoginName, coinType, amount, this._input.Reason, actor.Name),
+                    default,
+                    value => value.Status is null or CashShopCoinGrantStatus.Created).ConfigureAwait(true);
+            }
+            else
+            {
+                var status = await this.Executor.ExecuteAsync(
+                    AdminRoles.CashShop,
+                    "cashshop_grant",
+                    new { this.LoginName, coinType, amount, this._input.Reason },
+                    async actor =>
+                    {
+                        var result = await this.CoinService.GrantAsync(this.LoginName, coinType, amount, this._input.Reason, null, actor.Name).ConfigureAwait(false);
+                        return result.Status;
+                    },
+                    default,
+                    value => value is CashShopCoinGrantStatus.Created or CashShopCoinGrantStatus.AlreadyGranted).ConfigureAwait(true);
+                outcome = (status, amount);
+            }
+
+            if (outcome.Status is null)
+            {
+                this._lastResult = (true, string.Format(Resources.CashShopCoinsBalanceUnchanged, amount.ToString("N0"), coinCaption, this.LoginName));
+                this.ToastService.ShowInfo(this._lastResult.Value.Text);
+            }
+            else if (outcome.Status == CashShopCoinGrantStatus.Created)
+            {
+                this.Logger.LogInformation("Admin {User} granted {Amount} {CoinType} to account {LoginName}.", user, outcome.Amount, coinType, this.LoginName);
+                var delivery = await this.CoinDelivery.ApplyNowAsync(this.LoginName).ConfigureAwait(true);
+                var changed = this._input.SetBalance
+                    ? string.Format(Resources.CashShopCoinsBalanceSet, amount.ToString("N0"), coinCaption, this.LoginName, outcome.Amount.ToString("+#,0;-#,0"))
+                    : string.Format(Resources.CashShopCoinsAdded, outcome.Amount.ToString("+#,0;-#,0"), coinCaption, this.LoginName);
+                this._lastResult = (true, $"{changed} {DescribeDelivery(delivery)}");
+                this.ToastService.ShowSuccess(this._lastResult.Value.Text, Resources.CashShopCoinsGranted);
                 this._input.Amount = 0;
                 this._input.Reason = null;
             }
             else
             {
+                this._lastResult = (false, Resources.CashShopCoinsAccountNotFound);
                 this.ToastService.ShowError(Resources.CashShopCoinsAccountNotFound);
             }
 
@@ -154,7 +201,12 @@ public partial class CashShopCoins : ComponentBase
         public CashShopCoinType CoinType { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount.
+        /// Gets or sets a value indicating whether the <see cref="Amount"/> is the new balance, instead of an amount to add.
+        /// </summary>
+        public bool SetBalance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount to add, or the new balance.
         /// </summary>
         public int Amount { get; set; }
 
