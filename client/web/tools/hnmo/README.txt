@@ -74,4 +74,4 @@ PLAY WITH FRIENDS
        shown in the Tailscale app).
 
 LICENSES
-  See the "licenses" folder.
+  HNMO: licenses/LICENSE.txt. Parts made by others: licenses/THIRD-PARTY-NOTICES.txt.

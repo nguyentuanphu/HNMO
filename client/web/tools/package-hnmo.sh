@@ -151,31 +151,29 @@ else
   mkdir -p "$OUT/Data"
 fi
 
-# One licence file for the folder: HNMO's own notice first, then each part's licence text
-# word for word (their copyright notices must stay in every copy).
+# HNMO's own licence is licenses/LICENSE.txt. The parts HNMO is built on keep their licence
+# texts word for word (their copyright notices must stay in every copy) in one separate file,
+# licenses/THIRD-PARTY-NOTICES.txt.
 mkdir -p "$OUT/licenses"
 {
-  printf 'HNMO\nCopyright %s HNMO. All rights reserved for HNMO'"'"'s own additions.\n\n' "$(date -u +%Y)"
-  printf 'This folder contains the following parts under their own licences.\n\n'
-  printf '================================================================================\n'
-  printf 'Game server and admin panel (MIT License)\n'
-  printf '================================================================================\n\n'
+  printf 'HNMO\nCopyright %s HNMO. All rights reserved.\n\n' "$(date -u +%Y)"
+  printf 'This folder also contains parts made by others, each under its own licence:\n'
+  printf 'see THIRD-PARTY-NOTICES.txt next to this file.\n'
+} > "$OUT/licenses/LICENSE.txt"
+notice() { printf '================================================================================\n%s\n================================================================================\n\n' "$1"; }
+{
+  printf 'Third-party notices\n\nHNMO includes the following parts, under their own licences.\n\n'
+  notice 'Game server and admin panel (MIT License)'
   cat "$SERVER_SOURCE/licenses/LICENSE.txt"; printf '\n\n'
-  printf '================================================================================\n'
-  printf 'three.js (MIT License), the web game'"'"'s 3D library\n'
-  printf '================================================================================\n\n'
+  notice 'three.js (MIT License), the 3D library of the web game'
   cat "$WEB/node_modules/three/LICENSE"; printf '\n\n'
-  printf '================================================================================\n'
-  printf 'DejaVu fonts (Bitstream Vera / DejaVu licence), the web game'"'"'s text\n'
-  printf '================================================================================\n\n'
+  notice 'DejaVu fonts (Bitstream Vera / DejaVu licence), the text of the web game'
   cat "$WEB/public/fonts/DejaVuSans-LICENSE"; printf '\n\n'
   if [ -n "${POSTGRES_DIR:-}" ]; then
-    printf '================================================================================\n'
-    printf 'PostgreSQL (PostgreSQL License), the save game database\n'
-    printf '================================================================================\n\n'
+    notice 'PostgreSQL (PostgreSQL License), the save game database'
     printf 'PostgreSQL is released under the PostgreSQL License: https://www.postgresql.org/about/licence/\n'
   fi
-} > "$OUT/licenses/LICENSES.txt"
+} > "$OUT/licenses/THIRD-PARTY-NOTICES.txt"
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
 cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
 chmod +x "$OUT/start-hnmo.sh"
