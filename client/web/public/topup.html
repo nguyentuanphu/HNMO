@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HenryN Mu Online Top up</title>
+  <style>
+    [hidden] { display: none !important; }
+    :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; --ok: #7cc98a; }
+    html, body { min-height: 100%; margin: 0; color: var(--text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    body { background: radial-gradient(ellipse at top, #1a1f2e 0%, #07090f 70%) fixed; padding: 32px max(16px, env(safe-area-inset-left)) 48px; }
+    main { max-width: 820px; margin: 0 auto; display: grid; gap: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    h1 { margin: 0; color: var(--gold); letter-spacing: .04em; font-size: 28px; }
+    h2 { margin: 0; font-size: 18px; }
+    a { color: var(--gold); }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; align-content: start; }
+    .panel p { margin: 0; color: var(--muted); font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+    input { background: #151a26; color: var(--text); border: 1px solid #2c3446; border-radius: 6px; padding: 9px 10px; font: inherit; }
+    button { font: inherit; border-radius: 6px; padding: 8px 12px; cursor: pointer; border: 1px solid var(--line); background: #151a26; color: var(--text); }
+    button[aria-pressed="true"] { border-color: var(--gold); background: var(--gold); color: #1a1408; font-weight: 600; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .qr { display: grid; justify-items: center; gap: 8px; }
+    .qr img { width: min(320px, 100%); aspect-ratio: 1; border-radius: 10px; background: #fff; object-fit: contain; }
+    dl { display: grid; grid-template-columns: auto 1fr auto; gap: 8px 12px; margin: 0; align-items: center; font-size: 14px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; font-weight: 600; word-break: break-all; }
+    .copy { padding: 4px 10px; font-size: 12px; }
+    .coins { font-size: 18px; color: var(--ok); font-weight: 700; }
+    .warn { color: var(--gold); font-size: 14px; }
+    .off { color: var(--muted); }
+    .lang { display: flex; gap: 6px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1><span data-game-name>HenryN Mu Online</span> · <span data-t="title">Top up coins</span></h1>
+      <div class="lang"><button type="button" data-lang="en">EN</button><button type="button" data-lang="vi">VN</button> <a href="/" data-t="play">Play the game →</a></div>
+    </header>
+
+    <section class="panel off" id="off" hidden><p data-t="off">Top-up by bank transfer isn't open yet. Ask the host.</p></section>
+
+    <div class="grid" id="topup" hidden>
+      <section class="panel">
+        <h2 data-t="step1">1. Your account and amount</h2>
+        <label><span data-t="account">Account name (the one you log in with)</span><input id="account" maxlength="10" autocomplete="username" spellcheck="false"></label>
+        <label><span data-t="amount">Amount (VND)</span><input id="amount" type="number" inputmode="numeric" min="10000" step="10000" value="50000"></label>
+        <div class="choices" id="presets"></div>
+        <p><span data-t="youGet">You get</span> <span class="coins" id="coins">0</span> <span id="coinName">W Coin</span></p>
+        <h2 data-t="step2">2. Bank</h2>
+        <div class="choices" id="banks"></div>
+      </section>
+      <section class="panel">
+        <h2 data-t="step3">3. Scan with your banking app</h2>
+        <div class="qr"><img id="qr" alt="VietQR" referrerpolicy="no-referrer"><p id="needAccount" class="warn" data-t="needAccount">Enter your account name first.</p></div>
+        <dl id="details">
+          <dt data-t="bank">Bank</dt><dd id="bankName"></dd><span></span>
+          <dt data-t="number">Account number</dt><dd id="bankAccount"></dd><button type="button" class="copy" data-copy="bankAccount" data-t="copy">Copy</button>
+          <dt data-t="holder">Account holder</dt><dd id="holder"></dd><span></span>
+          <dt data-t="amountShort">Amount</dt><dd id="amountText"></dd><button type="button" class="copy" data-copy="amountRaw" data-t="copy">Copy</button>
+          <dt data-t="message">Transfer message</dt><dd id="message"></dd><button type="button" class="copy" data-copy="message" data-t="copy">Copy</button>
+        </dl>
+        <p class="warn" data-t="keepMessage">Keep the transfer message exactly as shown: it tells the game which account gets the coins.</p>
+        <p data-t="arrive">The coins arrive by themselves within a minute or two after the transfer: open the cash shop (X) in the game to see them. If they don't come, contact the host with the time of the transfer.</p>
+        <span id="amountRaw" hidden></span>
+      </section>
+    </div>
+  </main>
+  <script>
+    const TEXT = {
+      vi: {
+        title: 'Nạp coin', play: 'Vào game →', off: 'Chưa mở nạp coin bằng chuyển khoản. Hãy hỏi chủ server.',
+        step1: '1. Tài khoản và số tiền', account: 'Tên tài khoản (tên đăng nhập game)', amount: 'Số tiền (VND)', youGet: 'Bạn nhận được',
+        step2: '2. Ngân hàng', step3: '3. Quét mã bằng app ngân hàng', needAccount: 'Hãy nhập tên tài khoản trước.',
+        bank: 'Ngân hàng', number: 'Số tài khoản', holder: 'Chủ tài khoản', amountShort: 'Số tiền', message: 'Nội dung chuyển khoản', copy: 'Sao chép', copied: 'Đã chép',
+        keepMessage: 'Giữ nguyên nội dung chuyển khoản như trên: game dựa vào đó để biết tài khoản nào nhận coin.',
+        arrive: 'Coin sẽ tự động vào tài khoản trong 1–2 phút sau khi chuyển: mở cửa hàng (X) trong game để thấy. Nếu chưa nhận được, hãy liên hệ chủ server kèm thời gian chuyển khoản.',
+        minimum: 'Tối thiểu',
+      },
+      en: { copied: 'Copied', minimum: 'Minimum' },
+    };
+    const english = new Map();
+    let lang = 'vi';
+    try { lang = localStorage.getItem('hnmo.language') === 'en' ? 'en' : 'vi'; } catch {}
+    const t = (key) => (TEXT[lang] && TEXT[lang][key]) || english.get(key) || TEXT.en[key] || key;
+    function applyLanguage() {
+      document.documentElement.lang = lang;
+      for (const element of document.querySelectorAll('[data-t]')) {
+        if (!english.has(element.dataset.t)) english.set(element.dataset.t, element.textContent);
+        element.textContent = t(element.dataset.t);
+      }
+      for (const button of document.querySelectorAll('[data-lang]')) button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
+      render();
+    }
+    for (const button of document.querySelectorAll('[data-lang]')) {
+      button.addEventListener('click', () => { lang = button.dataset.lang; try { localStorage.setItem('hnmo.language', lang); } catch {} applyLanguage(); });
+    }
+
+    let info = null, bank = null;
+    const $ = (id) => document.getElementById(id);
+    const vnd = (n) => new Intl.NumberFormat('vi-VN').format(n) + ' đ';
+    const params = new URLSearchParams(location.search);
+    if (params.get('account')) $('account').value = params.get('account').slice(0, 10);
+
+    function render() {
+      if (!info) return;
+      const account = $('account').value.trim().replace(/[^A-Za-z0-9]/g, '');
+      const amount = Math.max(0, Math.floor(Number($('amount').value) || 0));
+      $('coins').textContent = new Intl.NumberFormat('vi-VN').format(Math.floor(amount / info.vndPerCoin));
+      $('coinName').textContent = info.coinType === 'WCoinP' ? 'W Coin (P)' : info.coinType === 'GoblinPoints' ? 'Goblin Points' : 'W Coin (C)';
+      for (const b of $('banks').children) b.setAttribute('aria-pressed', String(b.dataset.code === bank.code));
+      for (const b of $('presets').children) b.setAttribute('aria-pressed', String(Number(b.dataset.amount) === amount));
+      const message = `${info.prefix} ${account}`;
+      $('bankName').textContent = bank.name;
+      $('bankAccount').textContent = bank.account;
+      $('holder').textContent = info.accountName;
+      $('amountText').textContent = amount < info.minimumVnd ? `${vnd(amount)} (${t('minimum')} ${vnd(info.minimumVnd)})` : vnd(amount);
+      $('amountRaw').textContent = String(amount);
+      $('message').textContent = account ? message : '—';
+      const ready = account.length >= 3 && amount >= info.minimumVnd;
+      $('needAccount').hidden = account.length >= 3;
+      $('qr').hidden = !ready;
+      if (ready) {
+        // VietQR's free image service (NAPAS bank id - account number), with the amount and message filled in.
+        const url = new URL(`https://img.vietqr.io/image/${bank.bin}-${encodeURIComponent(bank.account)}-compact2.png`);
+        url.searchParams.set('amount', String(amount));
+        url.searchParams.set('addInfo', message);
+        url.searchParams.set('accountName', info.accountName);
+        if ($('qr').src !== url.href) $('qr').src = url.href;
+      }
+    }
+
+    for (const id of ['account', 'amount']) $(id).addEventListener('input', render);
+    for (const button of document.querySelectorAll('.copy')) {
+      button.addEventListener('click', async () => {
+        const text = $(button.dataset.copy).textContent;
+        try { await navigator.clipboard.writeText(text); button.textContent = t('copied'); setTimeout(() => { button.textContent = t('copy'); }, 1200); } catch {}
+      });
+    }
+
+    fetch('/topup/info', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((data) => {
+      if (!data || !data.enabled || !Array.isArray(data.banks) || !data.banks.length) { $('off').hidden = false; return; }
+      info = data;
+      bank = data.banks[0];
+      $('banks').replaceChildren(...data.banks.map((b) => {
+        const button = document.createElement('button');
+        button.type = 'button'; button.dataset.code = b.code; button.textContent = b.name;
+        button.addEventListener('click', () => { bank = b; render(); });
+        return button;
+      }));
+      $('amount').min = String(data.minimumVnd);
+      const presets = [20000, 50000, 100000, 200000, 500000, 1000000].filter((n) => n >= data.minimumVnd);
+      $('presets').replaceChildren(...presets.map((n) => {
+        const button = document.createElement('button');
+        button.type = 'button'; button.dataset.amount = String(n); button.textContent = vnd(n);
+        button.addEventListener('click', () => { $('amount').value = String(n); render(); });
+        return button;
+      }));
+      $('topup').hidden = false;
+      render();
+    }).catch(() => { $('off').hidden = false; });
+
+    // The game's name (set in the admin panel).
+    fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+      const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
+      if (!name) return;
+      document.title = document.title.replace('HenryN Mu Online', name);
+      for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = name;
+    }).catch(() => {});
+    applyLanguage();
+  </script>
+</body>
+</html>

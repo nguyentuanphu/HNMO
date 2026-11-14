@@ -5317,5 +5317,184 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("GameNameConfiguration_FacebookLink_Description", resourceCulture);
             }
         }
+            /// <summary>
+        ///   Looks up a localized string similar to BankTopUpPlugIn_Name.
+        /// </summary>
+        public static string BankTopUpPlugIn_Name {
+            get {
+                return ResourceManager.GetString("BankTopUpPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpPlugIn_Description.
+        /// </summary>
+        public static string BankTopUpPlugIn_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_AccountName_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_AccountName_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_AccountName_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_AccountName_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_AccountName_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_AccountName_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_TechcombankAccount_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_TechcombankAccount_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_TechcombankAccount_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_TechcombankAccount_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_TechcombankAccount_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_TechcombankAccount_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_VietcombankAccount_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_VietcombankAccount_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_VietcombankAccount_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_VietcombankAccount_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_VietcombankAccount_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_VietcombankAccount_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_VndPerCoin_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_VndPerCoin_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_VndPerCoin_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_VndPerCoin_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_VndPerCoin_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_VndPerCoin_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_MinimumVnd_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_MinimumVnd_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_MinimumVnd_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_MinimumVnd_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_MinimumVnd_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_MinimumVnd_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_CoinType_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_CoinType_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_CoinType_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_CoinType_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_CoinType_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_CoinType_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_TransferPrefix_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_TransferPrefix_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_TransferPrefix_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_TransferPrefix_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_TransferPrefix_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_TransferPrefix_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_CassoSecureToken_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_CassoSecureToken_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_CassoSecureToken_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_CassoSecureToken_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_CassoSecureToken_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_CassoSecureToken_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_SepayApiKey_Caption.
+        /// </summary>
+        public static string BankTopUpConfiguration_SepayApiKey_Caption {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_SepayApiKey_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BankTopUpConfiguration_SepayApiKey_Description.
+        /// </summary>
+        public static string BankTopUpConfiguration_SepayApiKey_Description {
+            get {
+                return ResourceManager.GetString("BankTopUpConfiguration_SepayApiKey_Description", resourceCulture);
+            }
+        }
     }
 }

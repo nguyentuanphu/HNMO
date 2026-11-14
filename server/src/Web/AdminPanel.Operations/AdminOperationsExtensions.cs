@@ -52,6 +52,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<CashShopCoinService>();
         services.AddScoped<CashShopCoinDelivery>();
         services.AddScoped<HnmoSkillService>();
+        services.AddScoped<BankTopUpService>();
         services.AddScoped<CastleSiegeManagementService>();
         return services;
     }
