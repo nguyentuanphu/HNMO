@@ -51,7 +51,7 @@ tests and CI for all of it; strict TypeScript build.
 3. 🟡 Move window M (done) / gates by walking (done) / warps (`move_command.rml`, `gateman.rml`), mini map (done, Tab), map name banner (done).
 
 ## 6. Trading and crafting
-🟡 Trade (`trade.rml`, done), personal store (`my_shop`, `PurchaseShopInventory`), chaos machine (`mix_inventory.rml`,
+🟡 Trade (`trade.rml`, done), personal store (`my_shop`, `purchase_shop`, done; left: prices in other currencies, the command window's Purchase), chaos machine (`mix_inventory.rml`,
 done for the Chaos Goblin, the refinery, restore, chaos card and cherry blossom NPCs; left: the mix sparkle, the method
 menu as RML, the pet trainer, Elpis, seed master / researcher menus and the socket list, the 380 option lines, the
 harmony restore price), Jewel of Harmony, lucky items, united market.
@@ -76,7 +76,7 @@ timers, scores, rewards.
 ## 10. Shell and interface
 1. ✅ **(extra)** The (i) button: an in-game guide of what to play and what each feature does
    (`public/guide.html`; keep its feature table up to date with each step).
-2. Cash shop with the free coins (`in_game_shop.rml` and the gift/package windows).
+2. ✅ Cash shop with the free coins (`in_game_shop.rml`, `igs_buy_package.rml`, `igs_buy_select.rml`, done; left: event packages, the buff warning on use, `igs_send_gift.rml` as the game's own window).
 3. Login, server and character select as the game's own RML scenes; the option window's other rows
    (auto attack, whisper sound, theme, the Enhanced look, shadows), system menu, help, command
    window, translations, themes and UI scale.
