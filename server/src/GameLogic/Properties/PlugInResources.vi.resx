@@ -12,31 +12,2212 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BloodCastleStartPlugIn_Name" xml:space="preserve">
-    <value>Huyết Lâu</value>
+  <data name="CastleSiegeLeverTalkPlugIn_Name" xml:space="preserve">
+    <value>Cần gạt cổng Công thành chiến</value>
   </data>
-  <data name="DevilSquareStartPlugIn_Name" xml:space="preserve">
-    <value>Quảng Trường Quỷ</value>
+  <data name="CastleSiegeLeverTalkPlugIn_Description" xml:space="preserve">
+    <value>Mở giao diện điều khiển cần gạt cổng Công thành chiến.</value>
   </data>
-  <data name="ChaosCastleStartPlugIn_Name" xml:space="preserve">
-    <value>Hỗn Nguyên Lâu</value>
+  <data name="CastleSiegeMachineTalkPlugIn_Name" xml:space="preserve">
+    <value>Máy công thành</value>
   </data>
-  <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
-    <value>Đền Ảo Ảnh</value>
+  <data name="CastleSiegeMachineTalkPlugIn_Description" xml:space="preserve">
+    <value>Mở máy công thành cho người chơi có quyền.</value>
   </data>
-  <data name="KanturuStartPlugIn_Name" xml:space="preserve">
-    <value>Kanturu</value>
+  <data name="CastleSiegePlugIn_Name" xml:space="preserve">
+    <value>Công thành chiến</value>
   </data>
-  <data name="RedDragonInvasionPlugIn_Name" xml:space="preserve">
-    <value>Rồng Đỏ xâm lăng</value>
+  <data name="CastleSiegePlugIn_Description" xml:space="preserve">
+    <value>Điều khiển chu kỳ trạng thái Công thành chiến hằng tuần.</value>
+  </data>
+  <data name="CastleSiegePendingRewardPlugIn_Name" xml:space="preserve">
+    <value>Trao thưởng Công thành chiến còn chờ</value>
+  </data>
+  <data name="CastleSiegePendingRewardPlugIn_Description" xml:space="preserve">
+    <value>Trao các phần thưởng tham gia Công thành chiến đang chờ khi nhân vật vào game.</value>
+  </data>
+  <data name="CastleSiegeLandOfTrialsGuardTalkPlugIn_Name" xml:space="preserve">
+    <value>Lính gác Land of Trials (Công thành chiến)</value>
+  </data>
+  <data name="CastleSiegeLandOfTrialsGuardTalkPlugIn_Description" xml:space="preserve">
+    <value>Cho biết Land of Trials có mở không và phí vào hiện áp dụng.</value>
+  </data>
+  <data name="MuHelperFeaturePlugIn_Name" xml:space="preserve">
+    <value>Tính năng MU Helper</value>
+  </data>
+  <data name="MuHelperFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cung cấp cấu hình cho tính năng MU Helper.</value>
+  </data>
+  <data name="UpdatePetCommandManagerOnItemMovePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật lệnh thú cưng khi di chuyển vật phẩm</value>
+  </data>
+  <data name="UpdatePetCommandManagerOnItemMovePlugIn_Description" xml:space="preserve">
+    <value>Cập nhật trình quản lý lệnh thú cưng của người chơi sau khi trang bị hoặc tháo thú cưng.</value>
+  </data>
+  <data name="GuildWarKillScorePlugIn_Name" xml:space="preserve">
+    <value>Điểm hạ gục trong bóng đá guild</value>
+  </data>
+  <data name="GuildWarKillScorePlugIn_Description" xml:space="preserve">
+    <value>Plugin này tăng điểm của trận bóng đá khi có người bị hạ.</value>
+  </data>
+  <data name="PeriodicSaveProgressPlugIn_Name" xml:space="preserve">
+    <value>Lưu tiến trình định kỳ</value>
+  </data>
+  <data name="PeriodicSaveProgressPlugIn_Description" xml:space="preserve">
+    <value>Lưu tiến trình của người chơi định kỳ khi trạng thái của họ là 'EnteredWorld'.</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugIn_Name" xml:space="preserve">
+    <value>Mất kinh nghiệm khi chết</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugIn_Description" xml:space="preserve">
+    <value>Plugin này trừ kinh nghiệm sau khi người chơi bị quái giết.</value>
+  </data>
+  <data name="QuestMonsterKillCountPlugIn_Name" xml:space="preserve">
+    <value>Đếm quái nhiệm vụ đã giết</value>
+  </data>
+  <data name="QuestMonsterKillCountPlugIn_Description" xml:space="preserve">
+    <value>Plugin này tăng số quái đã giết trong trạng thái của các nhiệm vụ đang làm.</value>
+  </data>
+  <data name="SelfDefensePlugIn_Name" xml:space="preserve">
+    <value>Tự vệ</value>
+  </data>
+  <data name="SelfDefensePlugIn_Description" xml:space="preserve">
+    <value>Cập nhật trạng thái của hệ thống tự vệ.</value>
+  </data>
+  <data name="ShieldRecoveryHiatusPlugIn_Name" xml:space="preserve">
+    <value>Tạm ngưng hồi SD</value>
+  </data>
+  <data name="ShieldRecoveryHiatusPlugIn_Description" xml:space="preserve">
+    <value>Cập nhật và đặt lại thuộc tính tạm ngưng hồi SD.</value>
+  </data>
+  <data name="ShowMessageToAllWhenPlayerEnteredWorldPlugIn_Name" xml:space="preserve">
+    <value>Thông báo cho mọi người khi người chơi vào game</value>
+  </data>
+  <data name="ShowMessageToAllWhenPlayerEnteredWorldPlugIn_Description" xml:space="preserve">
+    <value>Gửi thông báo cho mọi người chơi khi một người chơi vào game.</value>
+  </data>
+  <data name="UpdateIsInSafezoneAfterPlayerMoved_Name" xml:space="preserve">
+    <value>Cập nhật vùng an toàn sau khi di chuyển</value>
+  </data>
+  <data name="UpdateIsInSafezoneAfterPlayerMoved_Description" xml:space="preserve">
+    <value>Cập nhật thuộc tính người chơi có đang ở vùng an toàn hay không. Ví dụ, điều này bật tự hồi máu và SD.</value>
+  </data>
+  <data name="WeatherUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật thời tiết</value>
+  </data>
+  <data name="WeatherUpdatePlugIn_Description" xml:space="preserve">
+    <value>Cập nhật ngẫu nhiên thời tiết của từng bản đồ.</value>
+  </data>
+  <data name="GatekeeperNpcPlugin_Name" xml:space="preserve">
+    <value>NPC người gác cổng</value>
+  </data>
+  <data name="GatekeeperNpcPlugin_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu với NPC người gác cổng</value>
+  </data>
+  <data name="ResetCharacterNpcPlugin_Name" xml:space="preserve">
+    <value>NPC reset nhân vật</value>
+  </data>
+  <data name="ResetCharacterNpcPlugin_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu với NPC reset nhân vật</value>
+  </data>
+  <data name="ResetChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat reset</value>
+  </data>
+  <data name="ResetChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/reset'.</value>
+  </data>
+  <data name="ResetInfoChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat thông tin reset</value>
+  </data>
+  <data name="ResetInfoChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/resetinfo'. Cho biết chi phí cần và số điểm nhận được ở lần reset tiếp theo.</value>
+  </data>
+  <data name="ResetFeaturePlugIn_Name" xml:space="preserve">
+    <value>Tính năng reset</value>
+  </data>
+  <data name="ResetFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cung cấp cấu hình cho tính năng reset.</value>
+  </data>
+  <data name="EndDuelWhenLeavingDuelMapPlugIn_Name" xml:space="preserve">
+    <value>Kết thúc đấu khi rời bản đồ đấu</value>
+  </data>
+  <data name="EndDuelWhenLeavingDuelMapPlugIn_Description" xml:space="preserve">
+    <value>Kết thúc trận đấu tay đôi khi một người đấu rời bản đồ đấu. Nếu người xem rời bản đồ đấu, họ cũng bị xóa khỏi danh sách người xem.</value>
+  </data>
+  <data name="UpdateDuelScorePlugIn_Name" xml:space="preserve">
+    <value>Cập nhật điểm đấu tay đôi</value>
+  </data>
+  <data name="UpdateDuelScorePlugIn_Description" xml:space="preserve">
+    <value>Plugin này tăng điểm trận đấu tay đôi khi có người bị hạ.</value>
+  </data>
+  <data name="AlcoholConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng rượu</value>
+  </data>
+  <data name="AlcoholConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng rượu.</value>
+  </data>
+  <data name="AntidoteConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng thuốc giải độc</value>
+  </data>
+  <data name="AntidoteConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng thuốc giải độc.</value>
+  </data>
+  <data name="AppleConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng táo</value>
+  </data>
+  <data name="AppleConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng táo.</value>
+  </data>
+  <data name="BlessJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng ngọc Ước Nguyện</value>
+  </data>
+  <data name="BlessJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng ngọc Ước Nguyện (Bless).</value>
+  </data>
+  <data name="FruitConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng quả</value>
+  </data>
+  <data name="FruitConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng quả.</value>
+  </data>
+  <data name="StrengthResetFruitConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng quả giảm Sức mạnh</value>
+  </data>
+  <data name="StrengthResetFruitConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý quả giảm Sức mạnh, lấy lại điểm Sức mạnh đã cộng và trả lại thành điểm lên cấp.</value>
+  </data>
+  <data name="AgilityResetFruitConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng quả giảm Nhanh nhẹn</value>
+  </data>
+  <data name="AgilityResetFruitConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý quả giảm Nhanh nhẹn, lấy lại điểm Nhanh nhẹn đã cộng và trả lại thành điểm lên cấp.</value>
+  </data>
+  <data name="VitalityResetFruitConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng quả giảm Thể lực</value>
+  </data>
+  <data name="VitalityResetFruitConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý quả giảm Thể lực, lấy lại điểm Thể lực đã cộng và trả lại thành điểm lên cấp.</value>
+  </data>
+  <data name="EnergyResetFruitConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng quả giảm Năng lượng</value>
+  </data>
+  <data name="EnergyResetFruitConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý quả giảm Năng lượng, lấy lại điểm Năng lượng đã cộng và trả lại thành điểm lên cấp.</value>
+  </data>
+  <data name="CommandResetFruitConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng quả giảm Mệnh lệnh</value>
+  </data>
+  <data name="CommandResetFruitConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý quả giảm Mệnh lệnh, lấy lại điểm Mệnh lệnh đã cộng và trả lại thành điểm lên cấp.</value>
+  </data>
+  <data name="ResetFruitConsumeHandlerConfiguration_PointsPerDurability_Name" xml:space="preserve">
+    <value>Điểm mỗi độ bền</value>
+  </data>
+  <data name="ResetFruitConsumeHandlerConfiguration_PointsPerDurability_Description" xml:space="preserve">
+    <value>Số điểm chỉ số mà một độ bền của quả giảm lấy lại.</value>
+  </data>
+  <data name="HarmonyJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng ngọc Harmony</value>
+  </data>
+  <data name="HarmonyJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng ngọc Harmony.</value>
+  </data>
+  <data name="HigherRefineStoneConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng đá tinh luyện cao cấp</value>
+  </data>
+  <data name="HigherRefineStoneConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng đá tinh luyện cao cấp.</value>
+  </data>
+  <data name="LargeComplexPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình hỗn hợp lớn</value>
+  </data>
+  <data name="LargeComplexPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình hỗn hợp lớn.</value>
+  </data>
+  <data name="LargeHealthPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình máu lớn</value>
+  </data>
+  <data name="LargeHealthPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình máu lớn.</value>
+  </data>
+  <data name="LargeManaPotionConsumeHandler_Name" xml:space="preserve">
+    <value>Xử lý dùng bình mana lớn</value>
+  </data>
+  <data name="LargeManaPotionConsumeHandler_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình mana lớn.</value>
+  </data>
+  <data name="LargeShieldPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình SD lớn</value>
+  </data>
+  <data name="LargeShieldPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình SD lớn.</value>
+  </data>
+  <data name="LifeJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng ngọc Sinh Mệnh</value>
+  </data>
+  <data name="LifeJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng ngọc Sinh Mệnh (Life).</value>
+  </data>
+  <data name="LowerRefineStoneConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng đá tinh luyện thấp</value>
+  </data>
+  <data name="LowerRefineStoneConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng đá tinh luyện thấp.</value>
+  </data>
+  <data name="MediumComplexPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình hỗn hợp vừa</value>
+  </data>
+  <data name="MediumComplexPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình hỗn hợp vừa.</value>
+  </data>
+  <data name="MediumHealthPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình máu vừa</value>
+  </data>
+  <data name="MediumHealthPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình máu vừa.</value>
+  </data>
+  <data name="MediumManaPotionConsumeHandler_Name" xml:space="preserve">
+    <value>Xử lý dùng bình mana vừa</value>
+  </data>
+  <data name="MediumManaPotionConsumeHandler_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình mana vừa.</value>
+  </data>
+  <data name="MediumShieldPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình SD vừa</value>
+  </data>
+  <data name="MediumShieldPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình SD vừa.</value>
+  </data>
+  <data name="SiegePotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng thuốc công thành</value>
+  </data>
+  <data name="SiegePotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng thuốc công thành.</value>
+  </data>
+  <data name="SmallComplexPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình hỗn hợp nhỏ</value>
+  </data>
+  <data name="SmallComplexPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình hỗn hợp nhỏ.</value>
+  </data>
+  <data name="SmallHealthPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình máu nhỏ</value>
+  </data>
+  <data name="SmallHealthPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình máu nhỏ.</value>
+  </data>
+  <data name="SmallManaPotionConsumeHandler_Name" xml:space="preserve">
+    <value>Xử lý dùng bình mana nhỏ</value>
+  </data>
+  <data name="SmallManaPotionConsumeHandler_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình mana nhỏ.</value>
+  </data>
+  <data name="SmallShieldPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình SD nhỏ</value>
+  </data>
+  <data name="SmallShieldPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình SD nhỏ.</value>
+  </data>
+  <data name="SoulJewelConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng ngọc Tâm Linh</value>
+  </data>
+  <data name="SoulJewelConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng ngọc Tâm Linh (Soul).</value>
+  </data>
+  <data name="SummoningOrbConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng ngọc triệu hồi</value>
+  </data>
+  <data name="SummoningOrbConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng ngọc triệu hồi.</value>
+  </data>
+  <data name="TownPortalScrollConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng giấy dịch chuyển về thành</value>
+  </data>
+  <data name="TownPortalScrollConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng giấy dịch chuyển về thành.</value>
+  </data>
+  <data name="ChainLightningSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Chain Lightning</value>
+  </data>
+  <data name="ChainLightningSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Chain Lightning của Summoner. Ngoài mục tiêu bị tấn công, kỹ năng trúng thêm tối đa hai mục tiêu.</value>
+  </data>
+  <data name="DragonRoarSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Dragon Roar</value>
+  </data>
+  <data name="DragonRoarSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Dragon Roar của Rage Fighter. Ngoài mục tiêu bị tấn công, kỹ năng trúng thêm tối đa bảy mục tiêu.</value>
+  </data>
+  <data name="DrainLifeSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Drain Life</value>
+  </data>
+  <data name="DrainLifeSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Drain Life của Summoner. Ngoài việc đánh mục tiêu, kỹ năng hồi máu theo sát thương gây ra.</value>
+  </data>
+  <data name="EarthShakeSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Earth Shake</value>
+  </data>
+  <data name="EarthShakeSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Earth Shake của Dark Horse. Đẩy các mục tiêu ra xa người tấn công.</value>
+  </data>
+  <data name="FireScreamSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Fire Scream</value>
+  </data>
+  <data name="FireScreamSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Fire Scream của Dark Lord. Theo tỉ lệ, kỹ năng gây thêm sát thương (nổ) cho mọi mục tiêu trong bán kính tính từ chính mục tiêu.</value>
+  </data>
+  <data name="ForceSkillAction_Name" xml:space="preserve">
+    <value>Kỹ năng Force</value>
+  </data>
+  <data name="ForceSkillAction_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Force của Dark Lord.</value>
+  </data>
+  <data name="ForceWaveStrengSkillAction_Name" xml:space="preserve">
+    <value>Kỹ năng Force Wave cường hóa</value>
+  </data>
+  <data name="ForceWaveStrengSkillAction_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Force Wave cường hóa của Dark Lord.</value>
+  </data>
+  <data name="NovaSkillStartPlugin_Name" xml:space="preserve">
+    <value>Bắt đầu kỹ năng Nova</value>
+  </data>
+  <data name="NovaSkillStartPlugin_Description" xml:space="preserve">
+    <value>Xử lý việc bắt đầu kỹ năng Nova của Wizard.</value>
+  </data>
+  <data name="NovaSkillStopPlugin_Name" xml:space="preserve">
+    <value>Dừng kỹ năng Nova</value>
+  </data>
+  <data name="NovaSkillStopPlugin_Description" xml:space="preserve">
+    <value>Xử lý việc dừng kỹ năng Nova của Wizard.</value>
+  </data>
+  <data name="PhoenixShotSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Phoenix Shot</value>
+  </data>
+  <data name="PhoenixShotSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng vũ khí Phoenix Shot của Rage Fighter. Ngoài mục tiêu bị tấn công, kỹ năng trúng thêm tối đa bảy mục tiêu.</value>
+  </data>
+  <data name="PollutionSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Pollution</value>
+  </data>
+  <data name="PollutionSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Pollution (sách Lagle) của Summoner. Theo tỉ lệ, kỹ năng có thể đẩy mục tiêu ra xa người tấn công 2 ô.</value>
+  </data>
+  <data name="RequiemSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Requiem</value>
+  </data>
+  <data name="RequiemSkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Requiem (sách Neil) của Summoner. Theo tỉ lệ, kỹ năng có thể làm choáng mục tiêu.</value>
+  </data>
+  <data name="SoulBarrierProficieSkillAction_Name" xml:space="preserve">
+    <value>Kỹ năng Soul Barrier thành thạo</value>
+  </data>
+  <data name="SoulBarrierProficieSkillAction_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Soul Barrier thành thạo của Grand Master.</value>
+  </data>
+  <data name="SoulBarrierStrengSkillAction_Name" xml:space="preserve">
+    <value>Kỹ năng Soul Barrier cường hóa</value>
+  </data>
+  <data name="SoulBarrierStrengSkillAction_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Soul Barrier cường hóa của Grand Master.</value>
+  </data>
+  <data name="SummonPartySkillPlugin_Name" xml:space="preserve">
+    <value>Kỹ năng triệu tập tổ đội</value>
+  </data>
+  <data name="SummonPartySkillPlugin_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng triệu tập tổ đội của Dark Lord.</value>
+  </data>
+  <data name="TwistingSlashMasterySkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Twisting Slash Mastery</value>
+  </data>
+  <data name="TwistingSlashMasterySkillPlugIn_Description" xml:space="preserve">
+    <value>Xử lý kỹ năng Twisting Slash Mastery của Dark Knight. Theo tỉ lệ, kỹ năng có thể đẩy mục tiêu ra xa người tấn công 2 ô.</value>
+  </data>
+  <data name="AddAgilityStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat cộng Nhanh nhẹn</value>
+  </data>
+  <data name="AddAgilityStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cộng số điểm Nhanh nhẹn đã chỉ định cho nhân vật.</value>
+  </data>
+  <data name="AddCommandStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat cộng Mệnh lệnh</value>
+  </data>
+  <data name="AddCommandStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cộng số điểm Mệnh lệnh đã chỉ định cho nhân vật.</value>
+  </data>
+  <data name="AddEnergyStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat cộng Năng lượng</value>
+  </data>
+  <data name="AddEnergyStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cộng số điểm Năng lượng đã chỉ định cho nhân vật.</value>
+  </data>
+  <data name="AddStrengthStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat cộng Sức mạnh</value>
+  </data>
+  <data name="AddStrengthStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cộng số điểm Sức mạnh đã chỉ định cho nhân vật.</value>
+  </data>
+  <data name="AddVitalityStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat cộng Thể lực</value>
+  </data>
+  <data name="AddVitalityStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cộng số điểm Thể lực đã chỉ định cho nhân vật.</value>
+  </data>
+  <data name="BanAccChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh khóa tài khoản</value>
+  </data>
+  <data name="BanAccChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/banacc &lt;acc&gt;'. Khóa một tài khoản khỏi game.</value>
+  </data>
+  <data name="BanCharChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh khóa nhân vật</value>
+  </data>
+  <data name="BanCharChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/banchar &lt;char&gt;'. Khóa tài khoản của một nhân vật khỏi game.</value>
+  </data>
+  <data name="ChangeLanguageChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đổi ngôn ngữ</value>
+  </data>
+  <data name="ChangeLanguageChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/language &lt;isoCode&gt;'. Đổi ngôn ngữ của tài khoản.</value>
+  </data>
+  <data name="CharInfoChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh thông tin nhân vật</value>
+  </data>
+  <data name="CharInfoChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/charinfo &lt;char&gt;'. Gửi lại thông tin về nhân vật cho người yêu cầu.</value>
+  </data>
+  <data name="ChatBanCharChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh cấm chat nhân vật</value>
+  </data>
+  <data name="ChatBanCharChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/chatban &lt;characterName&gt; &lt;durationMinutes&gt;'. Cấm tài khoản của một nhân vật chat trong số phút đã chỉ định.</value>
+  </data>
+  <data name="ChatUnbanCharChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh bỏ cấm chat nhân vật</value>
+  </data>
+  <data name="ChatUnbanCharChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/chatunban &lt;characterName&gt;'. Bỏ cấm chat cho tài khoản của một nhân vật.</value>
+  </data>
+  <data name="CreateMonsterChatCommand_Name" xml:space="preserve">
+    <value>Lệnh chat tạo quái</value>
+  </data>
+  <data name="CreateMonsterChatCommand_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/createmonster &lt;number&gt; &lt;intelligent&gt;'. Tạo một quái mà GM có thể điều khiển từ xa.</value>
+  </data>
+  <data name="DisconnectChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat ngắt kết nối</value>
+  </data>
+  <data name="DisconnectChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/disconnect &lt;char&gt;'. Ngắt kết nối một người chơi khỏi game server.</value>
+  </data>
+  <data name="GuildBattleSoccerChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bóng đá guild</value>
+  </data>
+  <data name="GuildBattleSoccerChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/battlesoccer &lt;guildname&gt;'. Gửi lời mời đến Guild Master của guild được chỉ định.</value>
+  </data>
+  <data name="GuildDisconnectChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat ngắt kết nối guild</value>
+  </data>
+  <data name="GuildDisconnectChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/guilddisconnect &lt;guild&gt;'. Ngắt kết nối các thành viên guild.</value>
+  </data>
+  <data name="GuildMoveChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat di chuyển guild</value>
+  </data>
+  <data name="GuildMoveChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/guildmove &lt;guild&gt; &lt;map&gt; &lt;x?&gt; &lt;y?&gt;'. Di chuyển nhân vật của một guild đến bản đồ và tọa độ đã chỉ định.</value>
+  </data>
+  <data name="GuildWarChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat chiến tranh guild</value>
+  </data>
+  <data name="GuildWarChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/war &lt;guild&gt;'. Gửi lời mời đến Guild Master của guild được chỉ định.</value>
+  </data>
+  <data name="HelpCommand_Name" xml:space="preserve">
+    <value>Lệnh trợ giúp</value>
+  </data>
+  <data name="HelpCommand_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat /help &lt;command&gt;. Hiển thị thông tin về lệnh được hỏi.</value>
+  </data>
+  <data name="HideChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh ẩn thân</value>
+  </data>
+  <data name="HideChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/hide'. Ẩn người chơi của mình khỏi người khác.</value>
+  </data>
+  <data name="ItemChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat vật phẩm</value>
+  </data>
+  <data name="ItemChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/item &lt;group&gt; &lt;number&gt; &lt;lvl?&gt; &lt;exc?&gt; &lt;sk?&gt; &lt;lu?&gt; &lt;opt?&gt; &lt;anc?&gt; &lt;ancBonuslvl?&gt;'. Thả một vật phẩm cụ thể cạnh nhân vật.</value>
+  </data>
+  <data name="KillAllMonstersChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat giết mọi quái</value>
+  </data>
+  <data name="KillAllMonstersChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/killall'. Giết mọi quái trên bản đồ hiện tại.</value>
+  </data>
+  <data name="ListCommand_Name" xml:space="preserve">
+    <value>Lệnh liệt kê</value>
+  </data>
+  <data name="ListCommand_Description" xml:space="preserve">
+    <value>Liệt kê mọi lệnh.</value>
+  </data>
+  <data name="MoveChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat di chuyển</value>
+  </data>
+  <data name="MoveChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/move &lt;target&gt; &lt;mapIdOrName?&gt; &lt;x?&gt; &lt;y?&gt;'. Di chuyển nhân vật đến đích đã chỉ định.</value>
+  </data>
+  <data name="MoveMonsterChatCommand_Name" xml:space="preserve">
+    <value>Lệnh chat di chuyển quái điều khiển</value>
+  </data>
+  <data name="MoveMonsterChatCommand_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/movemonster &lt;id&gt; &lt;x&gt; &lt;y&gt;'. Di chuyển một quái đã tạo trước đó mà GM có thể điều khiển từ xa.</value>
+  </data>
+  <data name="NoticeChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat thông báo</value>
+  </data>
+  <data name="NoticeChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/goldnotice message'. Gửi thông báo vàng toàn server đến mọi người chơi.</value>
+  </data>
+  <data name="SlideNoticeChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat thông báo chạy chữ</value>
+  </data>
+  <data name="SlideNoticeChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/slidenotice message'. Gửi thông báo toàn server đến mọi người chơi, chạy ngang phía trên màn hình.</value>
+  </data>
+  <data name="NpcChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat mở cửa hàng NPC</value>
+  </data>
+  <data name="NpcChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Mở cửa hàng của NPC thương nhân.</value>
+  </data>
+  <data name="OnlineChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat trực tuyến</value>
+  </data>
+  <data name="OnlineChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/online'. Cho biết số Game Master và người chơi đang trực tuyến.</value>
+  </data>
+  <data name="OpenWarehouseChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat mở kho đồ</value>
+  </data>
+  <data name="OpenWarehouseChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Mở kho đồ.</value>
+  </data>
+  <data name="PkChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat PK</value>
+  </data>
+  <data name="PkChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/pk &lt;char&gt; &lt;pk_lvl&gt; &lt;pk_count&gt;'. Đặt cấp sát thủ và số lần giết người chơi của một nhân vật.</value>
+  </data>
+  <data name="PkClearChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat xóa PK</value>
+  </data>
+  <data name="PkClearChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/pkclear &lt;char&gt;'. Xóa số lần giết người chơi.</value>
+  </data>
+  <data name="PostChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat post</value>
+  </data>
+  <data name="PostChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/post message'. Gửi thông báo hệ thống màu xanh toàn server đến mọi người chơi.</value>
+  </data>
+  <data name="RemoveNpcChatCommand_Name" xml:space="preserve">
+    <value>Lệnh chat xóa NPC</value>
+  </data>
+  <data name="RemoveNpcChatCommand_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/removenpc &lt;id&gt;'.</value>
+  </data>
+  <data name="ShowFireworksEffectChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bắn pháo hoa</value>
+  </data>
+  <data name="ShowFireworksEffectChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/fireworks &lt;x&gt; &lt;y&gt;'. Bắn pháo hoa tại tọa độ đã chỉ định.</value>
+  </data>
+  <data name="ShowXmasFireworksEffectChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat pháo hoa Giáng sinh</value>
+  </data>
+  <data name="ShowXmasFireworksEffectChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/xmasfireworks &lt;x&gt; &lt;y&gt;'. Bắn pháo hoa Giáng sinh tại tọa độ đã chỉ định.</value>
+  </data>
+  <data name="SkinChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat đổi hình</value>
+  </data>
+  <data name="SkinChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/skin &lt;number&gt;'. Biến nhân vật của Game Master thành hình một quái vật.</value>
+  </data>
+  <data name="SkipMiniGameWaitChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bỏ qua thời gian chờ sự kiện</value>
+  </data>
+  <data name="SkipMiniGameWaitChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/skipwait'. Bỏ qua giai đoạn chờ hiện tại của sự kiện (vào cửa, đếm ngược, chờ); giai đoạn bị bỏ qua được tính là đã xong.</value>
+  </data>
+  <data name="StartBloodCastleEventChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bắt đầu Huyết Lâu</value>
+  </data>
+  <data name="StartBloodCastleEventChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/startbc'. Bắt đầu sự kiện Huyết Lâu sớm nhất có thể.</value>
+  </data>
+  <data name="StartChaosCastleEventChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bắt đầu Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="StartChaosCastleEventChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/startcc'. Bắt đầu sự kiện Hỗn Nguyên Lâu sớm nhất có thể.</value>
+  </data>
+  <data name="StartIllusionTempleEventChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bắt đầu Đền Ảo Ảnh</value>
+  </data>
+  <data name="StartIllusionTempleEventChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/startit'. Bắt đầu sự kiện Đền Ảo Ảnh sớm nhất có thể.</value>
+  </data>
+  <data name="StartDevilSquareEventChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bắt đầu Quảng Trường Quỷ</value>
+  </data>
+  <data name="StartDevilSquareEventChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/startds'. Bắt đầu sự kiện Quảng Trường Quỷ sớm nhất có thể.</value>
+  </data>
+  <data name="StartKanturuEventChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat bắt đầu Kanturu</value>
+  </data>
+  <data name="StartKanturuEventChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/startkanturu'. Bắt đầu sự kiện Kanturu sớm nhất có thể.</value>
+  </data>
+  <data name="TeleportChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat dịch chuyển</value>
+  </data>
+  <data name="TeleportChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/teleport &lt;x&gt; &lt;y&gt;'. Dịch chuyển Game Master đến tọa độ đã chỉ định.</value>
+  </data>
+  <data name="TraceChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat đến chỗ người chơi</value>
+  </data>
+  <data name="TraceChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/trace &lt;char&gt;'. Đưa Game Master đến vị trí của nhân vật.</value>
+  </data>
+  <data name="TrackChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat gọi người chơi</value>
+  </data>
+  <data name="TrackChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/track &lt;char&gt;'. Đưa người chơi đến vị trí của Game Master.</value>
+  </data>
+  <data name="UnBanAccChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh mở khóa tài khoản</value>
+  </data>
+  <data name="UnBanAccChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/unbanacc &lt;acc&gt;'. Mở khóa một tài khoản.</value>
+  </data>
+  <data name="UnBanCharChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh mở khóa nhân vật</value>
+  </data>
+  <data name="UnBanCharChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/unbanchar &lt;char&gt;'. Mở khóa tài khoản của một nhân vật.</value>
+  </data>
+  <data name="UnHideChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh hiện thân</value>
+  </data>
+  <data name="UnHideChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/unhide'. Hiện lại người chơi của mình cho người khác thấy.</value>
+  </data>
+  <data name="WalkMonsterChatCommand_Name" xml:space="preserve">
+    <value>Lệnh chat cho quái điều khiển đi bộ</value>
+  </data>
+  <data name="WalkMonsterChatCommand_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/walkmonster &lt;id&gt; &lt;x&gt; &lt;y&gt;'. Cho một quái đã tạo trước đó mà GM điều khiển từ xa đi bộ đến vị trí.</value>
   </data>
   <data name="GoldenInvasionPlugIn_Name" xml:space="preserve">
     <value>Quái Vàng xâm lăng</value>
   </data>
-  <data name="WhiteWizardInvasionPlugIn_Name" xml:space="preserve">
-    <value>Phù Thủy Trắng xâm lăng</value>
+  <data name="GoldenInvasionPlugIn_Description" xml:space="preserve">
+    <value>Xử lý sự kiện xâm lăng vàng</value>
+  </data>
+  <data name="RedDragonInvasionPlugIn_Name" xml:space="preserve">
+    <value>Rồng Đỏ xâm lăng</value>
+  </data>
+  <data name="RedDragonInvasionPlugIn_Description" xml:space="preserve">
+    <value>Xử lý sự kiện Rồng Đỏ xâm lăng</value>
+  </data>
+  <data name="DurabilityDecayPlugIn_Name" xml:space="preserve">
+    <value>Giảm độ bền theo thời gian</value>
+  </data>
+  <data name="DurabilityDecayPlugIn_Description" xml:space="preserve">
+    <value>Cập nhật độ bền của các vật phẩm giảm theo thời gian.</value>
   </data>
   <data name="HappyHourPlugIn_Name" xml:space="preserve">
     <value>Giờ vàng</value>
+  </data>
+  <data name="HappyHourPlugIn_Description" xml:space="preserve">
+    <value>Xử lý sự kiện giờ vàng</value>
+  </data>
+  <data name="UnlockDarkLordAtLevel250_Name" xml:space="preserve">
+    <value>Mở khóa Dark Lord ở cấp 250</value>
+  </data>
+  <data name="UnlockDarkLordAtLevel250_Description" xml:space="preserve">
+    <value>Mở khóa lớp Dark Lord ngay khi nhân vật đầu tiên của tài khoản đạt cấp 250.</value>
+  </data>
+  <data name="UnlockMagicGladiatorAtLevel220_Name" xml:space="preserve">
+    <value>Mở khóa Magic Gladiator ở cấp 220</value>
+  </data>
+  <data name="UnlockMagicGladiatorAtLevel220_Description" xml:space="preserve">
+    <value>Mở khóa lớp Magic Gladiator ngay khi nhân vật đầu tiên của tài khoản đạt cấp 220.</value>
+  </data>
+  <data name="UnlockRageFighterAtLevel150_Name" xml:space="preserve">
+    <value>Mở khóa Rage Fighter ở cấp 150</value>
+  </data>
+  <data name="UnlockRageFighterAtLevel150_Description" xml:space="preserve">
+    <value>Mở khóa lớp Rage Fighter ngay khi nhân vật đầu tiên của tài khoản đạt cấp 150.</value>
+  </data>
+  <data name="UnlockSummonerAtLevel1_Name" xml:space="preserve">
+    <value>Mở khóa Summoner ở cấp 1</value>
+  </data>
+  <data name="UnlockSummonerAtLevel1_Description" xml:space="preserve">
+    <value>Mở khóa lớp Summoner ngay khi nhân vật đầu tiên của tài khoản đạt cấp 1.</value>
+  </data>
+  <data name="WanderingMerchantsPlugIn_Name" xml:space="preserve">
+    <value>Thương nhân lang thang</value>
+  </data>
+  <data name="WanderingMerchantsPlugIn_Description" xml:space="preserve">
+    <value>Plugin này cho thương nhân lang thang xuất hiện và di chuyển.</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugIn_Name" xml:space="preserve">
+    <value>Mất zen khi chết</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugIn_Description" xml:space="preserve">
+    <value>Plugin này trừ zen sau khi người chơi bị quái giết.</value>
+  </data>
+  <data name="LearnablesConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng vật phẩm học kỹ năng</value>
+  </data>
+  <data name="LearnablesConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng các vật phẩm thêm kỹ năng (ví dụ sách, ngọc kỹ năng).</value>
+  </data>
+  <data name="TargetedSkillDefaultPlugin_Name" xml:space="preserve">
+    <value>Kỹ năng có mục tiêu mặc định</value>
+  </data>
+  <data name="TargetedSkillDefaultPlugin_Description" xml:space="preserve">
+    <value>Xử lý mặc định (cho mọi trường hợp còn lại) của kỹ năng có mục tiêu</value>
+  </data>
+  <data name="AddStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat cộng chỉ số</value>
+  </data>
+  <data name="AddStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/add (ene|agi|vit|str|cmd) (amount)'. Cộng số điểm đã chỉ định vào chỉ số đã chọn của nhân vật.</value>
+  </data>
+  <data name="ClearInventoryChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat dọn hành trang</value>
+  </data>
+  <data name="ClearInventoryChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Dọn sạch hành trang. Cách dùng: /clearinv (optional:character)</value>
+  </data>
+  <data name="GetLevelChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh xem cấp</value>
+  </data>
+  <data name="GetLevelChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem cấp của người chơi. Cách dùng: /getlevel (optional:character)</value>
+  </data>
+  <data name="GetLevelUpPointsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh xem điểm lên cấp</value>
+  </data>
+  <data name="GetLevelUpPointsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem điểm lên cấp của người chơi. Cách dùng: /getleveluppoints (optional:character)</value>
+  </data>
+  <data name="GetMasterLevelChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh xem cấp Master</value>
+  </data>
+  <data name="GetMasterLevelChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem cấp Master của người chơi. Cách dùng: /getmasterlevel (optional:character)</value>
+  </data>
+  <data name="GetMasterLevelUpPointsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh xem điểm Master</value>
+  </data>
+  <data name="GetMasterLevelUpPointsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem điểm Master của người chơi. Cách dùng: /getmasterleveluppoints (optional:character)</value>
+  </data>
+  <data name="GetMoneyChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh xem zen</value>
+  </data>
+  <data name="GetMoneyChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem zen của người chơi. Cách dùng: /getmoney (optional:character)</value>
+  </data>
+  <data name="GetResetsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh xem số lần reset</value>
+  </data>
+  <data name="GetResetsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem số lần reset của người chơi. Cách dùng: /getresets (optional:character)</value>
+  </data>
+  <data name="GetStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat xem chỉ số</value>
+  </data>
+  <data name="GetStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xem điểm chỉ số. Cách dùng: /get (ene|agi|vit|str|cmd) (optional:character)</value>
+  </data>
+  <data name="SetLevelChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đặt cấp</value>
+  </data>
+  <data name="SetLevelChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt cấp của người chơi. Cách dùng: /setlevel (level) (optional:character)</value>
+  </data>
+  <data name="SetLevelUpPointsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đặt điểm lên cấp</value>
+  </data>
+  <data name="SetLevelUpPointsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt điểm lên cấp của người chơi. Cách dùng: /setleveluppoints (points) (optional:character)</value>
+  </data>
+  <data name="SetMasterLevelChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đặt cấp Master</value>
+  </data>
+  <data name="SetMasterLevelChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt cấp Master của người chơi. Cách dùng: /setmasterlevel (level) (optional:character)</value>
+  </data>
+  <data name="SetMasterLevelUpPointsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đặt điểm Master</value>
+  </data>
+  <data name="SetMasterLevelUpPointsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt điểm Master của người chơi. Cách dùng: /setmasterleveluppoints (points) (optional:character)</value>
+  </data>
+  <data name="SetMoneyChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đặt zen</value>
+  </data>
+  <data name="SetMoneyChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt zen của người chơi. Cách dùng: /setmoney (amount) (optional:character)</value>
+  </data>
+  <data name="SetResetsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh đặt số lần reset</value>
+  </data>
+  <data name="SetResetsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt số lần reset của người chơi. Cách dùng: /setresets (resets) (optional:character)</value>
+  </data>
+  <data name="SetStatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat đặt chỉ số</value>
+  </data>
+  <data name="SetStatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt điểm chỉ số. Cách dùng: /set (ene|agi|vit|str|cmd) (amount) (optional:character)</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_SuccessRatePercentage_Name" xml:space="preserve">
+    <value>Tỉ lệ thành công %</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_SuccessRatePercentage_Description" xml:space="preserve">
+    <value>Phần trăm thành công khi nâng cấp vật phẩm.</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_SuccessRateBonusWithLuckPercentage_Name" xml:space="preserve">
+    <value>Thưởng tỉ lệ thành công khi có may mắn %</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_SuccessRateBonusWithLuckPercentage_Description" xml:space="preserve">
+    <value>Tỉ lệ thành công cộng thêm khi vật phẩm có dòng may mắn.</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_MinimumLevel_Name" xml:space="preserve">
+    <value>Cấp vật phẩm tối thiểu</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_MinimumLevel_Description" xml:space="preserve">
+    <value>Cấp tối thiểu mà vật phẩm phải có trước khi dùng ngọc.</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_MaximumLevel_Name" xml:space="preserve">
+    <value>Cấp vật phẩm tối đa</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_MaximumLevel_Description" xml:space="preserve">
+    <value>Cấp tối đa mà vật phẩm được có trước khi dùng ngọc.</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_LevelAmount_Name" xml:space="preserve">
+    <value>Số cấp cộng thêm</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_LevelAmount_Description" xml:space="preserve">
+    <value>Cộng cho vật phẩm bao nhiêu cấp (không vượt quá cấp tối đa cho phép).</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_ResetToLevel0WhenFailMinLevel_Name" xml:space="preserve">
+    <value>Cấp tối thiểu để thất bại về 0</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_ResetToLevel0WhenFailMinLevel_Description" xml:space="preserve">
+    <value>Cấp vật phẩm mà từ đó vật phẩm về cấp 0 khi thất bại.</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_AllowedItems_Name" xml:space="preserve">
+    <value>Vật phẩm được phép</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_AllowedItems_Description" xml:space="preserve">
+    <value>Các vật phẩm được phép nâng cấp. Nếu để trống, mọi vật phẩm đều được phép trừ những vật phẩm trong 'vật phẩm không được phép'.</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_DisallowedItems_Name" xml:space="preserve">
+    <value>Vật phẩm không được phép</value>
+  </data>
+  <data name="UpgradeItemLevelConfiguration_DisallowedItems_Description" xml:space="preserve">
+    <value>Các vật phẩm không được phép nâng cấp.</value>
+  </data>
+  <data name="ClearInventoryConfiguration_MoneyCost_Name" xml:space="preserve">
+    <value>Phí zen</value>
+  </data>
+  <data name="ClearInventoryConfiguration_MoneyCost_Description" xml:space="preserve">
+    <value>Số zen phải trả để dọn hành trang (trừ GM). Mặc định: 0.</value>
+  </data>
+  <data name="ClearInventoryConfiguration_RequireConfirmation_Name" xml:space="preserve">
+    <value>Yêu cầu xác nhận</value>
+  </data>
+  <data name="ClearInventoryConfiguration_RequireConfirmation_Description" xml:space="preserve">
+    <value>Nếu bật, người chơi phải gõ lại lệnh trong vòng 10 giây để xác nhận dọn hành trang (trừ GM).</value>
+  </data>
+  <data name="ClearInventoryConfiguration_ConfirmationMessage_Name" xml:space="preserve">
+    <value>Thông báo xác nhận</value>
+  </data>
+  <data name="ClearInventoryConfiguration_ConfirmationMessage_Description" xml:space="preserve">
+    <value>Thông báo hiển thị khi người chơi cần gõ lại lệnh trong vòng 10 giây để xác nhận dọn hành trang.</value>
+  </data>
+  <data name="ClearInventoryConfiguration_NotEnoughMoneyMessage_Name" xml:space="preserve">
+    <value>Thông báo không đủ zen</value>
+  </data>
+  <data name="ClearInventoryConfiguration_NotEnoughMoneyMessage_Description" xml:space="preserve">
+    <value>Thông báo hiển thị khi người chơi không đủ zen để dùng lệnh.</value>
+  </data>
+  <data name="ClearInventoryConfiguration_InventoryClearedMessage_Name" xml:space="preserve">
+    <value>Thông báo đã dọn hành trang</value>
+  </data>
+  <data name="ClearInventoryConfiguration_InventoryClearedMessage_Description" xml:space="preserve">
+    <value>Thông báo hiển thị khi hành trang đã được dọn.</value>
+  </data>
+  <data name="NpcChatCommandConfiguration_OpenMerchantNpc_Name" xml:space="preserve">
+    <value>ID NPC</value>
+  </data>
+  <data name="NpcChatCommandConfiguration_OpenMerchantNpc_Description" xml:space="preserve">
+    <value>ID của NPC để mở cửa hàng. Mặc định: Potion Girl Amy - 253.</value>
+  </data>
+  <data name="NpcChatCommandConfiguration_MinimumVipLevel_Name" xml:space="preserve">
+    <value>Cấp VIP tối thiểu</value>
+  </data>
+  <data name="NpcChatCommandConfiguration_MinimumVipLevel_Description" xml:space="preserve">
+    <value>Cấp VIP tối thiểu để dùng lệnh. Mặc định: 0.</value>
+  </data>
+  <data name="NpcChatCommandConfiguration_InsufficientVipLevelMessage_Name" xml:space="preserve">
+    <value>Thông báo không đủ cấp VIP</value>
+  </data>
+  <data name="NpcChatCommandConfiguration_InsufficientVipLevelMessage_Description" xml:space="preserve">
+    <value>Thông báo hiển thị khi người chơi không có cấp VIP cần cho lệnh này (trừ GM).</value>
+  </data>
+  <data name="OpenWarehouseChatCommandConfiguration_MinimumVipLevel_Name" xml:space="preserve">
+    <value>Cấp VIP tối thiểu</value>
+  </data>
+  <data name="OpenWarehouseChatCommandConfiguration_MinimumVipLevel_Description" xml:space="preserve">
+    <value>Cấp VIP tối thiểu để dùng lệnh (trừ GM). Mặc định: 0.</value>
+  </data>
+  <data name="OpenWarehouseChatCommandConfiguration_InsufficientVipLevelMessage_Name" xml:space="preserve">
+    <value>Thông báo không đủ cấp VIP</value>
+  </data>
+  <data name="OpenWarehouseChatCommandConfiguration_InsufficientVipLevelMessage_Description" xml:space="preserve">
+    <value>Thông báo hiển thị khi người chơi không có cấp VIP cần cho lệnh này (trừ GM).</value>
+  </data>
+  <data name="ShowNpcIdsChatCommand_ShowNpcIdsChatCommand_Name" xml:space="preserve">
+    <value>Lệnh chat hiện id NPC</value>
+  </data>
+  <data name="ShowNpcIdsChatCommand_ShowNpcIdsChatCommand_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/showids'.</value>
+  </data>
+  <data name="MuHelperConfiguration_CostPerStage_Name" xml:space="preserve">
+    <value>Phí mỗi giai đoạn</value>
+  </data>
+  <data name="MuHelperConfiguration_CostPerStage_Description" xml:space="preserve">
+    <value>Giá trị này áp dụng cho mỗi chu kỳ trả phí và được nhân với tổng cấp nhân vật.</value>
+  </data>
+  <data name="MuHelperConfiguration_PayInterval_Name" xml:space="preserve">
+    <value>Chu kỳ trả phí</value>
+  </data>
+  <data name="MuHelperConfiguration_StageInterval_Name" xml:space="preserve">
+    <value>Chu kỳ giai đoạn</value>
+  </data>
+  <data name="MuHelperConfiguration_StageInterval_Description" xml:space="preserve">
+    <value>Sau mỗi chu kỳ, giai đoạn tăng lên mức tiếp theo, thường với phí cao hơn.</value>
+  </data>
+  <data name="MuHelperConfiguration_MinLevel_Name" xml:space="preserve">
+    <value>Cấp nhân vật tối thiểu</value>
+  </data>
+  <data name="MuHelperConfiguration_MaxLevel_Name" xml:space="preserve">
+    <value>Cấp nhân vật tối đa</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_TotalRecoverPercentage_Name" xml:space="preserve">
+    <value>Tổng phần trăm hồi phục</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_RecoverPercentageIncreaseByPotionLevel_Name" xml:space="preserve">
+    <value>Phần trăm hồi phục tăng theo cấp bình thuốc</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_RecoverDelayReductionByPotionLevel_Name" xml:space="preserve">
+    <value>Độ trễ hồi phục giảm theo cấp bình thuốc</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_RecoverDelayReductionByPotionLevel_Description" xml:space="preserve">
+    <value>Một giá trị từ 0 đến 1 (không gồm 1). 1 nghĩa là hồi phục tức thì từ cấp 1.</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_AdditionalRecoverMinusCharacterLevel_Name" xml:space="preserve">
+    <value>Hồi phục thêm trừ cấp nhân vật</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_AdditionalRecoverMinusCharacterLevel_Description" xml:space="preserve">
+    <value>Giá trị được hồi thêm. Cấp nhân vật được trừ vào giá trị này.</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_CooldownTime_Name" xml:space="preserve">
+    <value>Thời gian hồi chiêu</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_CooldownTime_Description" xml:space="preserve">
+    <value>Thời gian chờ trước lần dùng tiếp theo.</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_RecoverSteps_Name" xml:space="preserve">
+    <value>Cấp nhân vật tối đa</value>
+  </data>
+  <data name="RecoverConsumeHandlerConfiguration_RecoverSteps_Description" xml:space="preserve">
+    <value>Nếu không định nghĩa bước nào, hồi phục diễn ra tức thì.</value>
+  </data>
+  <data name="SelfDefensePlugInConfiguration_SelfDefenseTimeOut_Name" xml:space="preserve">
+    <value>Thời gian tự vệ.</value>
+  </data>
+  <data name="QuestMonsterKillCountPlugInConfiguration_Message_Name" xml:space="preserve">
+    <value>Lời nhắn</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugInConfiguration_LossesPerLevel_Name" xml:space="preserve">
+    <value>Mức mất theo cấp</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugInConfiguration_MinimumLevel_Name" xml:space="preserve">
+    <value>Cấp tối thiểu</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugInConfiguration_IsMaster_Name" xml:space="preserve">
+    <value>Là Master</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugInConfiguration_InventoryMoneyLossPercentage_Name" xml:space="preserve">
+    <value>Zen hành trang bị mất %</value>
+  </data>
+  <data name="PlayerLosesMoneyAfterDeathPlugInConfiguration_VaultMoneyLossPercentage_Name" xml:space="preserve">
+    <value>Zen kho đồ bị mất %</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugInConfiguration_LossesPerLevel_Name" xml:space="preserve">
+    <value>Mức mất theo cấp</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugInConfiguration_MinimumLevel_Name" xml:space="preserve">
+    <value>Cấp tối thiểu</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugInConfiguration_IsMaster_Name" xml:space="preserve">
+    <value>Là Master</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugInConfiguration_Losses_Name" xml:space="preserve">
+    <value>Mức mất theo giai đoạn</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugInConfiguration_State_Name" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="PlayerLosesExperienceAfterDeathPlugInConfiguration_ExperienceLossPercentage_Name" xml:space="preserve">
+    <value>Kinh nghiệm bị mất %</value>
+  </data>
+  <data name="PeriodicSaveProgressPlugInConfiguration_Interval_Name" xml:space="preserve">
+    <value>Chu kỳ lưu</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_Timetable_Name" xml:space="preserve">
+    <value>Lịch</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_AllowedServerIds_Name" xml:space="preserve">
+    <value>Chạy trên máy chủ</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_AllowedServerIds_Description" xml:space="preserve">
+    <value>Giới hạn sự kiện ở các game server đã chọn. Không chọn gì nghĩa là sự kiện chạy trên mọi máy chủ.</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_PreStartMessageDelay_Name" xml:space="preserve">
+    <value>Thông báo trước khi bắt đầu</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_TaskDuration_Name" xml:space="preserve">
+    <value>Thời lượng (tối thiểu)</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_StartMessage_Name" xml:space="preserve">
+    <value>Thông báo bắt đầu</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_StartMessage_Description" xml:space="preserve">
+    <value>Dòng chữ hiện thành thông báo vàng trong game khi bắt đầu.</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_EndMessage_Name" xml:space="preserve">
+    <value>Thông báo kết thúc</value>
+  </data>
+  <data name="PeriodicTaskConfiguration_EndMessage_Description" xml:space="preserve">
+    <value>Dòng chữ hiện thành thông báo vàng trong game khi kết thúc.</value>
+  </data>
+  <data name="ResetConfiguration_ResetLimit_Name" xml:space="preserve">
+    <value>Giới hạn reset</value>
+  </data>
+  <data name="ResetConfiguration_RequiredLevel_Name" xml:space="preserve">
+    <value>Cấp yêu cầu</value>
+  </data>
+  <data name="ResetConfiguration_LevelAfterReset_Name" xml:space="preserve">
+    <value>Cấp sau reset</value>
+  </data>
+  <data name="ResetConfiguration_RequiredMoney_Name" xml:space="preserve">
+    <value>Zen yêu cầu</value>
+  </data>
+  <data name="ResetConfiguration_MultiplyRequiredMoneyByResetCount_Name" xml:space="preserve">
+    <value>Nhân zen yêu cầu theo số lần reset</value>
+  </data>
+  <data name="ResetConfiguration_ResetStats_Name" xml:space="preserve">
+    <value>Đặt lại chỉ số gốc về mặc định của lớp</value>
+  </data>
+  <data name="ResetConfiguration_PointsPerReset_Name" xml:space="preserve">
+    <value>Điểm mỗi lần reset</value>
+  </data>
+  <data name="ResetConfiguration_MultiplyPointsByResetCount_Name" xml:space="preserve">
+    <value>Nhân điểm theo số lần reset</value>
+  </data>
+  <data name="ResetConfiguration_ReplacePointsPerReset_Name" xml:space="preserve">
+    <value>Thay điểm lên cấp bằng tổng điểm reset</value>
+  </data>
+  <data name="ResetConfiguration_MoveHome_Name" xml:space="preserve">
+    <value>Về thành</value>
+  </data>
+  <data name="ResetConfiguration_LogOut_Name" xml:space="preserve">
+    <value>Thoát game</value>
+  </data>
+  <data name="MiniGameStartConfiguration_EntranceOpenedMessage_Name" xml:space="preserve">
+    <value>Thông báo mở cửa vào</value>
+  </data>
+  <data name="MiniGameStartConfiguration_EntranceClosedMessage_Name" xml:space="preserve">
+    <value>Thông báo đóng cửa vào</value>
+  </data>
+  <data name="KanturuStartConfiguration_TowerOpenDuration_Name" xml:space="preserve">
+    <value>Thời gian mở tháp</value>
+  </data>
+  <data name="KanturuStartConfiguration_TowerOpenDuration_Description" xml:space="preserve">
+    <value>Tháp Tinh Luyện mở bao lâu sau khi boss Nightmare bị hạ. Trong thời gian mở, các lần bắt đầu theo lịch bị bỏ qua; Game Master vẫn bắt đầu được và việc đó kết thúc thời gian mở.</value>
+  </data>
+  <data name="KanturuStartConfiguration_TowerOpenUntilUtc_Name" xml:space="preserve">
+    <value>Tháp mở đến (UTC)</value>
+  </data>
+  <data name="KanturuStartConfiguration_TowerOpenUntilUtc_Description" xml:space="preserve">
+    <value>Thời điểm kết thúc lần mở hiện tại theo UTC. Tự đặt khi Nightmare bị hạ.</value>
+  </data>
+  <data name="HappyHourConfiguration_ExperienceMultiplier_Name" xml:space="preserve">
+    <value>Hệ số kinh nghiệm</value>
+  </data>
+  <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
+    <value>Thời gian xuất hiện tối thiểu</value>
+  </data>
+  <data name="WanderingMerchantsConfiguration_MaximumSpawnDuration_Name" xml:space="preserve">
+    <value>Thời gian xuất hiện tối đa</value>
+  </data>
+  <data name="BaseInvasionPlugIn_DefaultStartMessage" xml:space="preserve">
+    <value>[{mapName}] Xâm lăng!</value>
+  </data>
+  <data name="OfflineLevelingChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh luyện cấp offline</value>
+  </data>
+  <data name="OfflineLevelingChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cho phép người chơi luyện cấp offline bằng /offlevel. Nhân vật ở lại trong game sau khi client ngắt kết nối và dừng khi người chơi đăng nhập lại.</value>
+  </data>
+  <data name="PartyAutoRejoinPlugIn_Name" xml:space="preserve">
+    <value>Tự vào lại tổ đội</value>
+  </data>
+  <data name="PartyAutoRejoinPlugIn_Description" xml:space="preserve">
+    <value>Tự đưa người chơi vào lại tổ đội trước đó khi vào game.</value>
+  </data>
+  <data name="MonsterAttributeScaler_Name" xml:space="preserve">
+    <value>Tăng chỉ số quái</value>
+  </data>
+  <data name="MonsterAttributeScaler_Description" xml:space="preserve">
+    <value>Tăng mọi chỉ số gốc của quái theo phần trăm tùy chỉnh.</value>
+  </data>
+  <data name="StatResetFeaturePlugIn_Name" xml:space="preserve">
+    <value>Tính năng đặt lại chỉ số</value>
+  </data>
+  <data name="StatResetFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cung cấp cấu hình cho tính năng đặt lại chỉ số.</value>
+  </data>
+  <data name="ResetStatsChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat đặt lại chỉ số</value>
+  </data>
+  <data name="ResetStatsChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Xử lý lệnh chat '/resetstats'.</value>
+  </data>
+  <data name="StatResetConfiguration_RequiredLevel_Name" xml:space="preserve">
+    <value>Cấp yêu cầu</value>
+  </data>
+  <data name="StatResetConfiguration_RequiredMoney_Name" xml:space="preserve">
+    <value>Zen yêu cầu</value>
+  </data>
+  <data name="StatResetConfiguration_RequiredResetItem_Name" xml:space="preserve">
+    <value>Vật phẩm yêu cầu</value>
+  </data>
+  <data name="StatResetConfiguration_ChatCommandEnabled_Name" xml:space="preserve">
+    <value>Bật lệnh chat</value>
+  </data>
+  <data name="StatResetConfiguration_MoveHome_Name" xml:space="preserve">
+    <value>Về thành</value>
+  </data>
+  <data name="StatResetConfiguration_LogOut_Name" xml:space="preserve">
+    <value>Thoát game</value>
+  </data>
+  <data name="CastleSiegeLifeStoneConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng Life Stone Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeLifeStoneConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Tiêu hao Life Stone sau khi được đặt thành công trong Công thành chiến.</value>
+  </data>
+  <data name="DoppelgangerRewardChestPlugIn_Name" xml:space="preserve">
+    <value>Rương thưởng Doppelganger</value>
+  </data>
+  <data name="DoppelgangerRewardChestPlugIn_Description" xml:space="preserve">
+    <value>Mở rương thưởng của sự kiện Doppelganger khi người chơi nói chuyện với nó.</value>
+  </data>
+  <data name="SignOfDimensionsStackedPlugIn_Name" xml:space="preserve">
+    <value>Ghép chồng Sign of Dimensions</value>
+  </data>
+  <data name="SignOfDimensionsStackedPlugIn_Description" xml:space="preserve">
+    <value>Biến một chồng Sign of Dimensions đầy thành Mirror of Dimensions.</value>
+  </data>
+  <data name="DoppelgangerFeaturePlugIn_Name" xml:space="preserve">
+    <value>Sự kiện Doppelganger</value>
+  </data>
+  <data name="DoppelgangerFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cấu hình diễn biến của sự kiện Doppelganger, ví dụ quái, đường đi và hệ số của chúng.</value>
+  </data>
+  <data name="BotConfiguration_Enabled_Name" xml:space="preserve">
+    <value>Bật</value>
+  </data>
+  <data name="BotConfiguration_Enabled_Description" xml:space="preserve">
+    <value>Nếu bật, bot xuất hiện sau khi máy chủ khởi động.</value>
+  </data>
+  <data name="BotConfiguration_ResetBots_Name" xml:space="preserve">
+    <value>Đặt lại bot</value>
+  </data>
+  <data name="BotConfiguration_ResetBots_Description" xml:space="preserve">
+    <value>Xóa mọi tài khoản và nhân vật bot ở lần khởi động tới, rồi tạo lại. Tự tắt sau đó.</value>
+  </data>
+  <data name="BotConfiguration_PurgeBots_Name" xml:space="preserve">
+    <value>Xóa sạch bot</value>
+  </data>
+  <data name="BotConfiguration_PurgeBots_Description" xml:space="preserve">
+    <value>Xóa mọi tài khoản và nhân vật bot và tắt tính năng bot, không tạo bot mới. Tự tắt sau đó.</value>
+  </data>
+  <data name="BotConfiguration_StartAsFreshCharacters_Name" xml:space="preserve">
+    <value>Bắt đầu như nhân vật mới</value>
+  </data>
+  <data name="BotConfiguration_StartAsFreshCharacters_Description" xml:space="preserve">
+    <value>Bot mới tạo bắt đầu ở cấp 1 với trang bị khởi đầu cấp 0, như nhân vật người chơi vừa tạo, thay vì cấp ngẫu nhiên, lịch sử reset và đồ đã nâng cấp.</value>
+  </data>
+  <data name="BotConfiguration_PresenceRotation_Name" xml:space="preserve">
+    <value>Luân phiên online</value>
+  </data>
+  <data name="BotConfiguration_PresenceRotation_Description" xml:space="preserve">
+    <value>Bot đăng nhập và thoát trong ngày (ít nhất ban đêm, nhiều nhất buổi tối) thay vì online cả ngày.</value>
+  </data>
+  <data name="BotConfiguration_MinOnlineSharePercent_Name" xml:space="preserve">
+    <value>Tỉ lệ online tối thiểu %</value>
+  </data>
+  <data name="BotConfiguration_MinOnlineSharePercent_Description" xml:space="preserve">
+    <value>Phần trăm số bot vẫn online vào giờ vắng nhất (100 = không luân phiên).</value>
+  </data>
+  <data name="BotConfiguration_NumberOfAccounts_Name" xml:space="preserve">
+    <value>Số tài khoản</value>
+  </data>
+  <data name="BotConfiguration_NumberOfAccounts_Description" xml:space="preserve">
+    <value>Số tài khoản bot cần duy trì.</value>
+  </data>
+  <data name="BotConfiguration_MaxCharactersPerAccount_Name" xml:space="preserve">
+    <value>Nhân vật mỗi tài khoản</value>
+  </data>
+  <data name="BotConfiguration_MaxCharactersPerAccount_Description" xml:space="preserve">
+    <value>Số nhân vật mỗi tài khoản bot (tối đa 5).</value>
+  </data>
+  <data name="BotConfiguration_BotCapacityPercent_Name" xml:space="preserve">
+    <value>Sức chứa bot %</value>
+  </data>
+  <data name="BotConfiguration_BotCapacityPercent_Description" xml:space="preserve">
+    <value>Phần số người chơi tối đa của game server mà bot được chiếm; phần còn lại dành cho người chơi thật.</value>
+  </data>
+  <data name="BotConfiguration_BotsPayResetCosts_Name" xml:space="preserve">
+    <value>Bot trả phí reset</value>
+  </data>
+  <data name="BotConfiguration_BotsPayResetCosts_Description" xml:space="preserve">
+    <value>Nếu bật, bot tốn zen/vật phẩm cho reset như người chơi (mặc định: bot reset miễn phí).</value>
+  </data>
+  <data name="BotConfiguration_JewelStockPerKind_Name" xml:space="preserve">
+    <value>Số ngọc dự trữ mỗi loại</value>
+  </data>
+  <data name="BotConfiguration_JewelStockPerKind_Description" xml:space="preserve">
+    <value>Số ngọc Ước Nguyện/Tâm Linh/Sinh Mệnh bot giữ cho mỗi loại; vượt quá thì bot ngừng nhặt và bán phần dư.</value>
+  </data>
+  <data name="BotConfiguration_PotionStockCharges_Name" xml:space="preserve">
+    <value>Số bình thuốc dự trữ</value>
+  </data>
+  <data name="BotConfiguration_PotionStockCharges_Description" xml:space="preserve">
+    <value>Số bình máu và mana bot mua tối đa ở thương nhân.</value>
+  </data>
+  <data name="BotConfiguration_ProofOfConceptAccounts_Name" xml:space="preserve">
+    <value>Tài khoản thêm để điều khiển</value>
+  </data>
+  <data name="BotConfiguration_ProofOfConceptAccounts_Description" xml:space="preserve">
+    <value>Tên đăng nhập của các tài khoản có sẵn, cách nhau bằng dấu phẩy, để điều khiển như bot, ngoài số bot được tạo.</value>
+  </data>
+  <data name="BotSelfDefensePlugIn_Name" xml:space="preserve">
+    <value>Bot tự vệ</value>
+  </data>
+  <data name="BotSelfDefensePlugIn_Description" xml:space="preserve">
+    <value>Cho bot phía máy chủ đánh trả khi bị người chơi tấn công.</value>
+  </data>
+  <data name="BotRevengePlugIn_Name" xml:space="preserve">
+    <value>Bot trả thù</value>
+  </data>
+  <data name="BotRevengePlugIn_Description" xml:space="preserve">
+    <value>Cho bot phía máy chủ quay lại nơi bị giết và trả thù người chơi đã giết nó.</value>
+  </data>
+  <data name="BotSkillProgressionPlugIn_Name" xml:space="preserve">
+    <value>Bot phát triển kỹ năng</value>
+  </data>
+  <data name="BotSkillProgressionPlugIn_Description" xml:space="preserve">
+    <value>Cộng điểm chỉ số và dạy bot phía máy chủ các kỹ năng mới phù hợp lớp và cấp khi lên cấp.</value>
+  </data>
+  <data name="BotFeaturePlugIn_Name" xml:space="preserve">
+    <value>Bot</value>
+  </data>
+  <data name="BotFeaturePlugIn_Description" xml:space="preserve">
+    <value>Tạo bot phía máy chủ đi săn quái trên các bản đồ. Cấu hình tài khoản để điều khiển và bật tính năng.</value>
+  </data>
+  <data name="MaximumConnectionsPerIpPlugIn_Name" xml:space="preserve">
+    <value>Số kết nối tối đa mỗi IP</value>
+  </data>
+  <data name="MaximumConnectionsPerIpPlugIn_Description" xml:space="preserve">
+    <value>Giới hạn số kết nối song song tối đa từ cùng một địa chỉ IP.</value>
+  </data>
+  <data name="LoginTimeoutPlugIn_Name" xml:space="preserve">
+    <value>Hết thời gian đăng nhập</value>
+  </data>
+  <data name="LoginTimeoutPlugIn_Description" xml:space="preserve">
+    <value>Ngắt kết nối client không đăng nhập trong thời gian đã cấu hình sau khi kết nối.</value>
+  </data>
+  <data name="SpeedHackDetectPlugIn_Name" xml:space="preserve">
+    <value>Chống hack tốc độ</value>
+  </data>
+  <data name="SpeedHackDetectPlugIn_Description" xml:space="preserve">
+    <value>Phát hiện và chặn hack tốc độ đi và đánh của người chơi.</value>
+  </data>
+  <data name="KanturuGatewayPlugIn_Name" xml:space="preserve">
+    <value>Cổng Kanturu</value>
+  </data>
+  <data name="KanturuGatewayPlugIn_Description" xml:space="preserve">
+    <value>Xử lý NPC máy cổng Kanturu để vào sự kiện.</value>
+  </data>
+  <data name="SymbolOfKundunStackedPlugIn_Name" xml:space="preserve">
+    <value>Ghép chồng Symbol of Kundun</value>
+  </data>
+  <data name="SymbolOfKundunStackedPlugIn_Description" xml:space="preserve">
+    <value>Plugin này biến một chồng Symbol of Kundun thành Lost Map.</value>
+  </data>
+  <data name="DuelSpawnGatePlugIn_Name" xml:space="preserve">
+    <value>Cổng xuất hiện khi đấu tay đôi</value>
+  </data>
+  <data name="DuelSpawnGatePlugIn_Description" xml:space="preserve">
+    <value>Cho người chơi đang đấu tay đôi xuất hiện ở phía của mình trong khu đấu.</value>
+  </data>
+  <data name="SoccerSpawnGatePlugIn_Name" xml:space="preserve">
+    <value>Cổng xuất hiện bóng đá</value>
+  </data>
+  <data name="SoccerSpawnGatePlugIn_Description" xml:space="preserve">
+    <value>Cho người chơi của trận bóng đá đang diễn ra xuất hiện trên sân bóng.</value>
+  </data>
+  <data name="PetExperiencePlugIn_Name" xml:space="preserve">
+    <value>Kinh nghiệm thú cưng</value>
+  </data>
+  <data name="PetExperiencePlugIn_Description" xml:space="preserve">
+    <value>Chia cho thú cưng luyện được của người chơi một phần kinh nghiệm mà người chơi nhận khi hạ quái.</value>
+  </data>
+  <data name="PeriodicInvasionConfiguration_ForceSingleMap_Name" xml:space="preserve">
+    <value>Chỉ một bản đồ</value>
+  </data>
+  <data name="PeriodicInvasionConfiguration_Mobs_Name" xml:space="preserve">
+    <value>Quái xuất hiện</value>
+  </data>
+  <data name="WhiteWizardInvasionPlugIn_Name" xml:space="preserve">
+    <value>Phù Thủy Trắng xâm lăng</value>
+  </data>
+  <data name="WhiteWizardInvasionPlugIn_Description" xml:space="preserve">
+    <value>Bật tính năng White Wizard xâm lăng.</value>
+  </data>
+  <data name="ItemRegistrationConfiguration_Rules_Name" xml:space="preserve">
+    <value>Quy tắc đăng ký với NPC</value>
+  </data>
+  <data name="ItemRegistrationConfiguration_Rules_Description" xml:space="preserve">
+    <value>Cấu hình quy tắc đăng ký vật phẩm cho các NPC.</value>
+  </data>
+  <data name="NpcItemRegistrationRule_NpcNumber_Name" xml:space="preserve">
+    <value>Số NPC</value>
+  </data>
+  <data name="NpcItemRegistrationRule_NpcNumber_Description" xml:space="preserve">
+    <value>Số định nghĩa NPC (ví dụ 236 cho Golden Archer).</value>
+  </data>
+  <data name="NpcItemRegistrationRule_AcceptedItemGroup_Name" xml:space="preserve">
+    <value>Nhóm vật phẩm nhận</value>
+  </data>
+  <data name="NpcItemRegistrationRule_AcceptedItemGroup_Description" xml:space="preserve">
+    <value>Nhóm của vật phẩm được nhận (ví dụ 14 cho vật phẩm sự kiện).</value>
+  </data>
+  <data name="NpcItemRegistrationRule_AcceptedItemNumber_Name" xml:space="preserve">
+    <value>Số vật phẩm nhận</value>
+  </data>
+  <data name="NpcItemRegistrationRule_AcceptedItemNumber_Description" xml:space="preserve">
+    <value>Số của vật phẩm được nhận (ví dụ 21 cho Rena).</value>
+  </data>
+  <data name="NpcItemRegistrationRule_RequiredItemsCount_Name" xml:space="preserve">
+    <value>Số vật phẩm yêu cầu</value>
+  </data>
+  <data name="NpcItemRegistrationRule_RequiredItemsCount_Description" xml:space="preserve">
+    <value>Số vật phẩm cần để nhận thưởng.</value>
+  </data>
+  <data name="NpcItemRegistrationRule_RewardZen_Name" xml:space="preserve">
+    <value>Zen thưởng</value>
+  </data>
+  <data name="NpcItemRegistrationRule_RewardZen_Description" xml:space="preserve">
+    <value>Số zen thưởng khi đạt đủ số vật phẩm yêu cầu.</value>
+  </data>
+  <data name="NpcItemRegistrationRule_RewardDropItemGroup_Name" xml:space="preserve">
+    <value>Nhóm vật phẩm rơi thưởng</value>
+  </data>
+  <data name="NpcItemRegistrationRule_RewardDropItemGroup_Description" xml:space="preserve">
+    <value>DropItemGroup dùng để tạo vật phẩm thưởng. Nếu để trống, không rơi vật phẩm (chỉ thưởng zen).</value>
+  </data>
+  <data name="ChaosCastleStartPlugIn_Name" xml:space="preserve">
+    <value>Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="ChaosCastleStartPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="KanturuStartPlugIn_Name" xml:space="preserve">
+    <value>Kanturu</value>
+  </data>
+  <data name="KanturuStartPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện Tháp Tinh Luyện Kanturu</value>
+  </data>
+  <data name="BloodCastleStartPlugIn_Name" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="BloodCastleStartPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện Huyết Lâu</value>
+  </data>
+  <data name="DevilSquareStartPlugIn_Name" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="DevilSquareStartPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện Quảng Trường Quỷ</value>
+  </data>
+  <data name="PKClearConfiguration_ZenCostPerKill_Name" xml:space="preserve">
+    <value>Zen cho mỗi lần giết</value>
+  </data>
+  <data name="PKClearConfiguration_ZenCostPerKill_Description" xml:space="preserve">
+    <value>Số zen cần để xóa một lần PK.</value>
+  </data>
+  <data name="PKClearConfiguration_AllowRegularPlayers_Name" xml:space="preserve">
+    <value>Cho phép người chơi thường</value>
+  </data>
+  <data name="PKClearConfiguration_AllowRegularPlayers_Description" xml:space="preserve">
+    <value>Cho phép người chơi thường dùng lệnh này để tự xóa trạng thái PK bằng zen.</value>
+  </data>
+  <data name="LostMapDroppedPlugIn_Name" xml:space="preserve">
+    <value>Rơi Lost Map</value>
+  </data>
+  <data name="LostMapDroppedPlugIn_Description" xml:space="preserve">
+    <value>Plugin này xử lý khi vật phẩm Lost Map rơi. Nó tạo cổng đến bản đồ Kalima.</value>
+  </data>
+  <data name="ItemBoxDroppedPlugIn_Name" xml:space="preserve">
+    <value>Rơi hộp vật phẩm</value>
+  </data>
+  <data name="ItemBoxDroppedPlugIn_Description" xml:space="preserve">
+    <value>Plugin này xử lý khi hộp vật phẩm rơi, ví dụ Box of Kundun.</value>
+  </data>
+  <data name="ResetConfiguration_RequiredResetItem_Name" xml:space="preserve">
+    <value>Vật phẩm yêu cầu khi reset</value>
+  </data>
+  <data name="ResetConfiguration_ItemCostTiers_Name" xml:space="preserve">
+    <value>Bậc chi phí vật phẩm</value>
+  </data>
+  <data name="ResetConfiguration_PointsTiers_Name" xml:space="preserve">
+    <value>Bậc điểm</value>
+  </data>
+  <data name="ResetPointTier_MinimumResetCount_Name" xml:space="preserve">
+    <value>Số lần reset tối thiểu</value>
+  </data>
+  <data name="ResetPointTier_PointsGranted_Name" xml:space="preserve">
+    <value>Điểm được nhận</value>
+  </data>
+  <data name="ResetItemCostTier_MinimumResetCount_Name" xml:space="preserve">
+    <value>Số lần reset tối thiểu</value>
+  </data>
+  <data name="ResetItemCostTier_RequiredItemAmount_Name" xml:space="preserve">
+    <value>Số vật phẩm yêu cầu</value>
+  </data>
+  <data name="ActorHitRecorderPlugIn_Name" xml:space="preserve">
+    <value>Ghi nhận đòn đánh của nhân vật thử nghiệm</value>
+  </data>
+  <data name="ActorHitRecorderPlugIn_Description" xml:space="preserve">
+    <value>Ghi lại các đòn mà nhân vật thử nghiệm theo kịch bản gây ra và nhận vào luồng sự kiện của chúng.</value>
+  </data>
+  <data name="MonsterAttributeScalerConfiguration_HealthPercentage_Caption" xml:space="preserve">
+    <value>Phần trăm máu</value>
+  </data>
+  <data name="MonsterAttributeScalerConfiguration_DefensePercentage_Caption" xml:space="preserve">
+    <value>Phần trăm phòng thủ</value>
+  </data>
+  <data name="MonsterAttributeScalerConfiguration_DefenseRatePercentage_Caption" xml:space="preserve">
+    <value>Phần trăm tỉ lệ phòng thủ</value>
+  </data>
+  <data name="MonsterAttributeScalerConfiguration_AttackRatePercentage_Caption" xml:space="preserve">
+    <value>Phần trăm tỉ lệ tấn công</value>
+  </data>
+  <data name="MonsterAttributeScalerConfiguration_DamagePercentage_Caption" xml:space="preserve">
+    <value>Phần trăm sát thương</value>
+  </data>
+  <data name="MonsterAttributeScalerConfiguration_ScaleAllPercentage_Caption" xml:space="preserve">
+    <value>Phần trăm tăng tất cả</value>
+  </data>
+  <data name="MaximumConnectionsPerIpPlugInConfiguration_MaximumConnectionsPerIp_Caption" xml:space="preserve">
+    <value>Số kết nối tối đa mỗi IP</value>
+  </data>
+  <data name="LoginTimeoutPlugInConfiguration_Timeout_Caption" xml:space="preserve">
+    <value>Thời gian chờ</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AttackSpeedMinIntervalMs_Caption" xml:space="preserve">
+    <value>Khoảng tối thiểu tốc độ đánh (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AttackSpeedScalingFactor_Caption" xml:space="preserve">
+    <value>Hệ số tốc độ đánh</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AttackSpeedBaseDelayMs_Caption" xml:space="preserve">
+    <value>Độ trễ gốc tốc độ đánh (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_MaxAttackTokens_Caption" xml:space="preserve">
+    <value>Số lượt đánh tích lũy tối đa</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_MaxAllowedWalkStartOffset_Caption" xml:space="preserve">
+    <value>Độ lệch tối đa khi bắt đầu đi</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_SkillHitAreaRangeSlack_Caption" xml:space="preserve">
+    <value>Dung sai tầm vùng trúng kỹ năng</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_SkillHitCounterReplayWindowMs_Caption" xml:space="preserve">
+    <value>Khoảng thời gian chống phát lại bộ đếm trúng kỹ năng (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_SkillHitMaxAreaToHitDelaySeconds_Caption" xml:space="preserve">
+    <value>Thời gian tối đa từ vùng đến trúng kỹ năng (giây)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_EnforceWalkSpeed_Caption" xml:space="preserve">
+    <value>Bắt buộc tốc độ đi</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_WalkSpeedWindowSeconds_Caption" xml:space="preserve">
+    <value>Khoảng đo tốc độ đi (giây)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_WalkSpeedToleranceMs_Caption" xml:space="preserve">
+    <value>Dung sai tốc độ đi (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_WarningHistoryHours_Caption" xml:space="preserve">
+    <value>Giữ lịch sử cảnh báo (giờ)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AlertDebounceSeconds_Caption" xml:space="preserve">
+    <value>Khoảng chống lặp cảnh báo (giây)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_MaxWarnings_Caption" xml:space="preserve">
+    <value>Số cảnh báo tối đa</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_DisconnectOnViolation_Caption" xml:space="preserve">
+    <value>Ngắt kết nối khi vi phạm</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_ObserveOnly_Caption" xml:space="preserve">
+    <value>Chỉ quan sát</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_ViolationScoreRejectThreshold_Caption" xml:space="preserve">
+    <value>Ngưỡng điểm vi phạm để từ chối</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_ViolationScoreHalfLifeMinutes_Caption" xml:space="preserve">
+    <value>Chu kỳ bán rã điểm vi phạm (phút)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AutoBan_Caption" xml:space="preserve">
+    <value>Tự khóa</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_MagicSpeedBaseDelayMs_Caption" xml:space="preserve">
+    <value>Độ trễ gốc tốc độ phép (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_MagicSpeedScalingFactor_Caption" xml:space="preserve">
+    <value>Hệ số tốc độ phép</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_MagicSpeedMinIntervalMs_Caption" xml:space="preserve">
+    <value>Khoảng tối thiểu tốc độ phép (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_PingClockToleranceMs_Caption" xml:space="preserve">
+    <value>Dung sai đồng hồ ping (ms)</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_PingAttackSpeedTolerance_Caption" xml:space="preserve">
+    <value>Dung sai tốc độ đánh theo ping</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AttackSpeedProfiles_Caption" xml:space="preserve">
+    <value>Hồ sơ tốc độ đánh theo kỹ năng</value>
+  </data>
+  <data name="SpeedHackDetectConfiguration_AttackSpeedProfiles_Description" xml:space="preserve">
+    <value>Ghi đè tùy chọn cho từng kỹ năng. Một hồ sơ thay cho cài đặt tốc độ đánh hoặc tốc độ phép chung của kỹ năng đó.</value>
+  </data>
+  <data name="AttackSpeedProfile_SkillId_Caption" xml:space="preserve">
+    <value>Id kỹ năng</value>
+  </data>
+  <data name="AttackSpeedProfile_SpeedSource_Caption" xml:space="preserve">
+    <value>Nguồn tốc độ</value>
+  </data>
+  <data name="AttackSpeedProfile_SpeedSource_Description" xml:space="preserve">
+    <value>Thuộc tính tốc độ nào điều chỉnh độ trễ: tốc độ đánh cho kỹ năng vật lý, tốc độ phép cho kỹ năng phép thuật và nguyền rủa.</value>
+  </data>
+  <data name="AttackSpeedProfile_BaseDelayMs_Caption" xml:space="preserve">
+    <value>Độ trễ gốc (ms)</value>
+  </data>
+  <data name="AttackSpeedProfile_ScalingFactor_Caption" xml:space="preserve">
+    <value>Hệ số</value>
+  </data>
+  <data name="AttackSpeedProfile_MinimumIntervalMs_Caption" xml:space="preserve">
+    <value>Khoảng tối thiểu (ms)</value>
+  </data>
+  <data name="AttackSpeedSource_AttackSpeed" xml:space="preserve">
+    <value>Tốc độ đánh</value>
+  </data>
+  <data name="AttackSpeedSource_MagicSpeed" xml:space="preserve">
+    <value>Tốc độ phép</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_IsSpawnOnAllMaps_Caption" xml:space="preserve">
+    <value>Xuất hiện trên mọi bản đồ</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_AnnounceDeath_Caption" xml:space="preserve">
+    <value>Thông báo khi chết</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_MapStrategy_Caption" xml:space="preserve">
+    <value>Cách chọn bản đồ</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_MapIds_Caption" xml:space="preserve">
+    <value>Id bản đồ</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_Count_Caption" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="InvasionSpawnConfiguration_MonsterId_Caption" xml:space="preserve">
+    <value>Id quái</value>
+  </data>
+  <data name="KanturuStartConfiguration_EventDefinition_Caption" xml:space="preserve">
+    <value>Định nghĩa sự kiện</value>
+  </data>
+  <data name="BlessJewelConsumeHandlerPlugInConfiguration_RepairTargetItems_Caption" xml:space="preserve">
+    <value>Vật phẩm được sửa</value>
+  </data>
+  <data name="RaklionPlugIn_Name" xml:space="preserve">
+    <value>Sự kiện Raklion</value>
+  </data>
+  <data name="RaklionPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện ở ổ trứng Raklion: khi mọi trứng nhện bị phá, Selupan xuất hiện. Sau trận đánh, ổ trứng đóng cửa một thời gian.</value>
+  </data>
+  <data name="CrywolfPlugIn_Name" xml:space="preserve">
+    <value>Sự kiện Crywolf</value>
+  </data>
+  <data name="CrywolfPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện ở pháo đài Crywolf: người chơi bảo vệ tượng Sói Thần trước đội quân của Balgass. Kết quả được giữ đến sự kiện tiếp theo.</value>
+  </data>
+  <data name="CrywolfChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat: /crywolf</value>
+  </data>
+  <data name="CrywolfChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Cho sự kiện Crywolf tiến tiếp: bắt đầu sự kiện khi chưa chạy, và trong trận đánh thì Balgass xuất hiện nếu chưa xuất hiện. Nếu không, trạng thái hiện tại kết thúc.</value>
+  </data>
+  <data name="ImperialGuardianFeaturePlugIn_Name" xml:space="preserve">
+    <value>Sự kiện Imperial Guardian</value>
+  </data>
+  <data name="ImperialGuardianFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cấu hình diễn biến của sự kiện Imperial Guardian, ví dụ thời gian, phần thưởng kinh nghiệm và độ mạnh của quái.</value>
+  </data>
+  <data name="SuspiciousScrapOfPaperStackedPlugIn_Name" xml:space="preserve">
+    <value>Ghép chồng Suspicious Scrap of Paper</value>
+  </data>
+  <data name="SuspiciousScrapOfPaperStackedPlugIn_Description" xml:space="preserve">
+    <value>Biến một chồng Suspicious Scrap of Paper đầy thành Gaion's Order.</value>
+  </data>
+  <data name="GensFeaturePlugIn_Name" xml:space="preserve">
+    <value>Hệ thống Gens</value>
+  </data>
+  <data name="GensFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cấu hình hệ thống Gens, trong đó người chơi có thể gia nhập Duprian hoặc Vanert tại NPC của chúng.</value>
+  </data>
+  <data name="GensMembershipPlugIn_Name" xml:space="preserve">
+    <value>Thành viên Gens</value>
+  </data>
+  <data name="GensMembershipPlugIn_Description" xml:space="preserve">
+    <value>Tải thông tin Gens của nhân vật khi vào game và hiển thị cho người chơi.</value>
+  </data>
+  <data name="GensBattleZonePlugIn_Name" xml:space="preserve">
+    <value>Chiến trường Gens</value>
+  </data>
+  <data name="GensBattleZonePlugIn_Description" xml:space="preserve">
+    <value>Chỉ thành viên Gens mới vào được chiến trường. Hạ người của Gens khác ở đó thay đổi điểm đóng góp, mà không biến người giết thành sát thủ.</value>
+  </data>
+  <data name="GensRankingPlugIn_Name" xml:space="preserve">
+    <value>Xếp hạng Gens</value>
+  </data>
+  <data name="GensRankingPlugIn_Description" xml:space="preserve">
+    <value>Tính xếp hạng Gens theo chu kỳ đã cấu hình, và cập nhật thứ hạng và cấp bậc của mọi thành viên.</value>
+  </data>
+  <data name="GensRelationshipRulesPlugIn_Name" xml:space="preserve">
+    <value>Quy tắc quan hệ Gens</value>
+  </data>
+  <data name="GensRelationshipRulesPlugIn_Description" xml:space="preserve">
+    <value>Quy tắc Gens cho tổ đội, guild và liên minh: không lập tổ đội giữa các Gens khác nhau và trong chiến trường, guild và liên minh chỉ trong cùng một Gens.</value>
+  </data>
+  <data name="KalimaTicketConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng vé Kalima</value>
+  </data>
+  <data name="KalimaTicketConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Mở cổng đến tầng Kalima phù hợp với cấp nhân vật. Mỗi lần dùng tốn một lượt của vé.</value>
+  </data>
+  <data name="KalimaTicketConsumeHandlerConfiguration_MinimumLevels_Name" xml:space="preserve">
+    <value>Cấp tối thiểu của các tầng Kalima</value>
+  </data>
+  <data name="KalimaTicketConsumeHandlerConfiguration_SpecialCharacterMinimumLevels_Name" xml:space="preserve">
+    <value>Cấp tối thiểu của các tầng Kalima cho nhân vật đặc biệt</value>
+  </data>
+  <data name="SiegePotionConsumeHandlerConfiguration_BlessEffectNumber_Name" xml:space="preserve">
+    <value>Số hiệu ứng của Potion of Bless</value>
+  </data>
+  <data name="SiegePotionConsumeHandlerConfiguration_SoulEffectNumber_Name" xml:space="preserve">
+    <value>Số hiệu ứng của Potion of Soul</value>
+  </data>
+  <data name="BloodCastleArchangelTalkPlugIn_Name" xml:space="preserve">
+    <value>Tổng lãnh thiên thần Huyết Lâu</value>
+  </data>
+  <data name="BloodCastleArchangelTalkPlugIn_Description" xml:space="preserve">
+    <value>Xử lý khi nói chuyện với Tổng lãnh thiên thần trong sự kiện Huyết Lâu, nơi người chơi nộp vật phẩm nhiệm vụ để thắng sự kiện.</value>
+  </data>
+  <data name="IllusionTempleStoneStatueTalkPlugIn_Name" xml:space="preserve">
+    <value>Tượng đá Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleStoneStatueTalkPlugIn_Description" xml:space="preserve">
+    <value>Xử lý khi nói chuyện với Tượng đá trong sự kiện Đền Ảo Ảnh, nơi người chơi nhặt thánh vật.</value>
+  </data>
+  <data name="IllusionTempleAllianceStorageTalkPlugIn_Name" xml:space="preserve">
+    <value>Kho vật phẩm Liên minh Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleAllianceStorageTalkPlugIn_Description" xml:space="preserve">
+    <value>Xử lý khi nói chuyện với Kho vật phẩm Liên minh trong sự kiện Đền Ảo Ảnh, nơi quân Liên minh mang thánh vật đến để ghi điểm.</value>
+  </data>
+  <data name="IllusionTempleIllusionStorageTalkPlugIn_Name" xml:space="preserve">
+    <value>Kho vật phẩm Ảo Ảnh Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleIllusionStorageTalkPlugIn_Description" xml:space="preserve">
+    <value>Xử lý khi nói chuyện với Kho vật phẩm Ảo Ảnh trong sự kiện Đền Ảo Ảnh, nơi quân Ảo Ảnh mang thánh vật đến để ghi điểm.</value>
+  </data>
+  <data name="NpcTalkPlugInConfiguration_Npc_Name" xml:space="preserve">
+    <value>NPC</value>
+  </data>
+  <data name="NpcTalkPlugInConfiguration_Npc_Description" xml:space="preserve">
+    <value>NPC mà plugin này xử lý. Nếu không đặt NPC, plugin không xử lý NPC nào.</value>
+  </data>
+  <data name="TwisterAnimationCounterStrategy_Name" xml:space="preserve">
+    <value>Bộ đếm hoạt ảnh Twister</value>
+  </data>
+  <data name="TwisterAnimationCounterStrategy_Description" xml:space="preserve">
+    <value>Mô tả cách game client đếm hoạt ảnh của Twister: mọi hoạt ảnh đều được đếm, và các đòn trúng không chứa bộ đếm hoạt ảnh.</value>
+  </data>
+  <data name="EvilSpiritAnimationCounterStrategy_Name" xml:space="preserve">
+    <value>Bộ đếm hoạt ảnh Evil Spirit</value>
+  </data>
+  <data name="EvilSpiritAnimationCounterStrategy_Description" xml:space="preserve">
+    <value>Mô tả cách game client đếm hoạt ảnh của Evil Spirit: mọi hoạt ảnh đều được đếm.</value>
+  </data>
+  <data name="MultiShotAnimationCounterStrategy_Name" xml:space="preserve">
+    <value>Bộ đếm hoạt ảnh Multi-Shot</value>
+  </data>
+  <data name="MultiShotAnimationCounterStrategy_Description" xml:space="preserve">
+    <value>Mô tả cách game client đếm hoạt ảnh của Multi-Shot: các đòn trúng không chứa bộ đếm hoạt ảnh.</value>
+  </data>
+  <data name="LostConnectionDetectionPlugIn_Name" xml:space="preserve">
+    <value>Phát hiện mất kết nối</value>
+  </data>
+  <data name="LostConnectionDetectionPlugIn_Description" xml:space="preserve">
+    <value>Ngắt kết nối người chơi có client ngừng báo còn hoạt động, vì kết nối bị mất mà không được đóng. Nếu không, họ vẫn ở trạng thái kết nối và các lần đăng nhập sau của tài khoản bị từ chối.</value>
+  </data>
+  <data name="LostConnectionDetectionConfiguration_Timeout_Name" xml:space="preserve">
+    <value>Thời gian chờ</value>
+  </data>
+  <data name="LostConnectionDetectionConfiguration_Timeout_Description" xml:space="preserve">
+    <value>Thời gian sau đó kết nối bị coi là mất, khi client không báo còn hoạt động. Game client báo mỗi 20 giây. Giá trị 0 tắt việc phát hiện.</value>
+  </data>
+  <data name="CashShopVersionPlugIn_Name" xml:space="preserve">
+    <value>Phiên bản cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopVersionPlugIn_Description" xml:space="preserve">
+    <value>Gửi phiên bản script và banner của cửa hàng tiền mặt cho người chơi khi vào game.</value>
+  </data>
+  <data name="CashShopFeaturePlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng tiền mặt</value>
+  </data>
+  <data name="CashShopFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cửa hàng tiền mặt trong game. Khi tắt, không thể mở cửa hàng. Cấu hình chứa các cài đặt, ví dụ về quà tặng và dung lượng kho.</value>
+  </data>
+  <data name="GoblinPointsForPlayTimePlugIn_Name" xml:space="preserve">
+    <value>Goblin Point theo thời gian chơi</value>
+  </data>
+  <data name="GoblinPointsForPlayTimePlugIn_Description" xml:space="preserve">
+    <value>Tặng người chơi Goblin Point của cửa hàng tiền mặt theo thời gian chơi.</value>
+  </data>
+  <data name="VaultExtensionDeliveryPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng tiền mặt: Vault Expansion Certificate</value>
+  </data>
+  <data name="VaultExtensionDeliveryPlugIn_Description" xml:space="preserve">
+    <value>Mở rộng kho đồ của tài khoản khi người chơi dùng Vault Expansion Certificate từ kho cửa hàng tiền mặt.</value>
+  </data>
+  <data name="InventoryExtensionDeliveryPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng tiền mặt: Magic Backpack</value>
+  </data>
+  <data name="InventoryExtensionDeliveryPlugIn_Description" xml:space="preserve">
+    <value>Thêm một phần mở rộng hành trang cho nhân vật khi người chơi dùng Magic Backpack từ kho cửa hàng tiền mặt.</value>
+  </data>
+  <data name="SummonerCharacterCardDeliveryPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng tiền mặt: Summoner Character Card</value>
+  </data>
+  <data name="SummonerCharacterCardDeliveryPlugIn_Description" xml:space="preserve">
+    <value>Mở khóa lớp Summoner cho tài khoản khi người chơi dùng Summoner Character Card từ kho cửa hàng tiền mặt.</value>
+  </data>
+  <data name="RageFighterCharacterCardDeliveryPlugIn_Name" xml:space="preserve">
+    <value>Cửa hàng tiền mặt: Rage Fighter Character Card</value>
+  </data>
+  <data name="RageFighterCharacterCardDeliveryPlugIn_Description" xml:space="preserve">
+    <value>Mở khóa lớp Rage Fighter cho tài khoản khi người chơi dùng Rage Fighter Character Card từ kho cửa hàng tiền mặt.</value>
+  </data>
+  <data name="GameEventPublisherPlugIn_Name" xml:space="preserve">
+    <value>Phát sự kiện game</value>
+  </data>
+  <data name="GameEventPublisherPlugIn_Description" xml:space="preserve">
+    <value>Phát các sự kiện của game, như sự kiện nhỏ, xâm lăng, thay đổi trạng thái Công thành chiến và đồ hiếm rơi, ra toàn máy chủ, ví dụ cho tích hợp Discord.</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishMiniGameEvents_Name" xml:space="preserve">
+    <value>Phát sự kiện mini game</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishInvasionEvents_Name" xml:space="preserve">
+    <value>Phát sự kiện xâm lăng</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishCastleSiegeEvents_Name" xml:space="preserve">
+    <value>Phát sự kiện Công thành chiến</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishGlobalNotices_Name" xml:space="preserve">
+    <value>Phát thông báo toàn server của Game Master</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishExcellentItemDrops_Name" xml:space="preserve">
+    <value>Phát đồ excellent rơi</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishAncientItemDrops_Name" xml:space="preserve">
+    <value>Phát đồ thần rơi</value>
+  </data>
+  <data name="PlayerShopCurrenciesFeaturePlugIn_Name" xml:space="preserve">
+    <value>Tiền tệ cửa hàng người chơi</value>
+  </data>
+  <data name="PlayerShopCurrenciesFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cho phép người chơi đặt giá vật phẩm trong cửa hàng cá nhân bằng các vật phẩm đã cấu hình như ngọc, hoặc bằng coin tài khoản. Chỉ client mã nguồn mở hiển thị các giá này; với client khác, có thể đặt bằng lệnh chat.</value>
+  </data>
+  <data name="ShowShopCurrenciesAfterEnterWorldPlugIn_Name" xml:space="preserve">
+    <value>Hiện tiền tệ cửa hàng người chơi khi vào game</value>
+  </data>
+  <data name="ShowShopCurrenciesAfterEnterWorldPlugIn_Description" xml:space="preserve">
+    <value>Báo cho client biết các loại tiền tệ dùng được cho giá ở cửa hàng cá nhân, khi người chơi vào game.</value>
+  </data>
+  <data name="ShopPriceChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat đặt giá cửa hàng</value>
+  </data>
+  <data name="ShopPriceChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Đặt giá một vật phẩm trong cửa hàng cá nhân của mình bằng một loại tiền tệ được bật, ví dụ '/shopprice 1 10 bless'. Không có tham số thì liệt kê các giá.</value>
+  </data>
+  <data name="ServerAnnouncementsPlugIn_Name" xml:space="preserve">
+    <value>Thông báo máy chủ</value>
+  </data>
+  <data name="ServerAnnouncementsPlugIn_Description" xml:space="preserve">
+    <value>Hiển thị lần lượt một danh sách thông báo đã cấu hình cho mọi người chơi của game server, theo chu kỳ cố định.</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Interval_Name" xml:space="preserve">
+    <value>Chu kỳ</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Interval_Description" xml:space="preserve">
+    <value>Thời gian giữa hai thông báo. Tối thiểu 10 giây.</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Messages_Name" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Messages_Description" xml:space="preserve">
+    <value>Các thông báo, theo thứ tự hiển thị. Sau thông báo cuối, bắt đầu lại từ thông báo đầu.</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Text_Name" xml:space="preserve">
+    <value>Nội dung</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Type_Name" xml:space="preserve">
+    <value>Loại thông báo</value>
+  </data>
+  <data name="ServerAnnouncementsConfiguration_Type_Description" xml:space="preserve">
+    <value>Cách hiển thị thông báo, ví dụ chữ vàng giữa màn hình hoặc thông báo hệ thống màu xanh.</value>
+  </data>
+  <data name="CastleSiegeRegistrationGuardsmanTalkPlugIn_Name" xml:space="preserve">
+    <value>Lính gác đăng ký Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeRegistrationGuardsmanTalkPlugIn_Description" xml:space="preserve">
+    <value>Mở cửa sổ đăng ký Công thành chiến, cho biết tình trạng Công thành chiến, khi người chơi nói chuyện với lính gác trên bản đồ Công thành chiến.</value>
+  </data>
+  <data name="CastleSiegeGuardsmanTalkPlugIn_Name" xml:space="preserve">
+    <value>Lính gác Công thành chiến</value>
+  </data>
+  <data name="CastleSiegeGuardsmanTalkPlugIn_Description" xml:space="preserve">
+    <value>Cho biết Land of Trials có mở không và phí vào hiện áp dụng.</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishBossKills_Name" xml:space="preserve">
+    <value>Phát việc hạ boss</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_BossMonsterNumbers_Name" xml:space="preserve">
+    <value>Số quái boss</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishLevelMilestones_Name" xml:space="preserve">
+    <value>Phát mốc cấp</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_LevelMilestones_Name" xml:space="preserve">
+    <value>Mốc cấp</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_MasterLevelMilestones_Name" xml:space="preserve">
+    <value>Mốc cấp Master</value>
+  </data>
+  <data name="DiscordChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh Discord</value>
+  </data>
+  <data name="DiscordChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Liên kết tài khoản với người dùng Discord: '/discord link' tạo mã để nhập trong Discord, '/discord unlink' gỡ liên kết, '/discord notify letter' bật hoặc tắt tin nhắn riêng về thư (cũng có 'login' và 'friend').</value>
+  </data>
+  <data name="WorldChatChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat thế giới</value>
+  </data>
+  <data name="WorldChatChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Gửi tin nhắn vào kênh chat thế giới, mọi người chơi trên mọi game server đều đọc được, ví dụ '/world Hello!'. Có thể nối sang Discord.</value>
+  </data>
+  <data name="GameEventPublisherConfiguration_PublishChatMessages_Name" xml:space="preserve">
+    <value>Phát chat guild, liên minh và thế giới</value>
+  </data>
+  <data name="GuildChatBridgeNoticePlugIn_Name" xml:space="preserve">
+    <value>Thông báo về cầu nối chat</value>
+  </data>
+  <data name="GuildChatBridgeNoticePlugIn_Description" xml:space="preserve">
+    <value>Báo cho người chơi khi vào game nếu chat của guild hoặc liên minh của họ được sao sang Discord.</value>
+  </data>
+  <data name="DiscordIntegrationFeaturePlugIn_Name" xml:space="preserve">
+    <value>Tích hợp Discord của client</value>
+  </data>
+  <data name="DiscordIntegrationFeaturePlugIn_Description" xml:space="preserve">
+    <value>Cho game client nào hỏi biết máy chủ kết nối với Discord thế nào (link mời, ứng dụng Rich Presence, liên kết tài khoản, chat được sao), cho người chơi liên kết tài khoản từ client, và gửi cho họ tin nhắn viết trong Discord.</value>
+  </data>
+  <data name="EliteHealingPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình máu Elite</value>
+  </data>
+  <data name="EliteHealingPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình máu Elite. Hồi máu ngay lập tức.</value>
+  </data>
+  <data name="EliteManaPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình mana Elite</value>
+  </data>
+  <data name="EliteManaPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình mana Elite. Hồi mana ngay lập tức.</value>
+  </data>
+  <data name="EliteShieldPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình SD Elite</value>
+  </data>
+  <data name="EliteShieldPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình SD Elite. Hồi SD ngay lập tức.</value>
+  </data>
+  <data name="MediumEliteHealingPotionConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng bình máu Elite vừa</value>
+  </data>
+  <data name="MediumEliteHealingPotionConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý việc dùng bình máu Elite vừa. Hồi một phần máu ngay lập tức.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_OptionType_Name" xml:space="preserve">
+    <value>Loại dòng</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_OptionType_Description" xml:space="preserve">
+    <value>Loại dòng vật phẩm được nâng: dòng thường với ngọc Sinh Mệnh, dòng harmony với ngọc Harmony và đá tinh luyện.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_AddsOption_Name" xml:space="preserve">
+    <value>Thêm dòng</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_AddsOption_Description" xml:space="preserve">
+    <value>Vật phẩm chưa có dòng có thể nhận dòng khi dùng vật phẩm nguồn hay không.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_IncreasesOption_Name" xml:space="preserve">
+    <value>Tăng dòng</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_IncreasesOption_Description" xml:space="preserve">
+    <value>Có thể tăng cấp dòng sẵn có của vật phẩm hay không.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_SuccessChance_Name" xml:space="preserve">
+    <value>Tỉ lệ thành công</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_SuccessChance_Description" xml:space="preserve">
+    <value>Tỉ lệ từ 0 đến 1 để một lần thử thành công. Ngọc Sinh Mệnh dùng 0.5.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_FailResult_Name" xml:space="preserve">
+    <value>Khi thất bại</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_FailResult_Description" xml:space="preserve">
+    <value>Điều gì xảy ra với dòng khi kiểm tra ngẫu nhiên thất bại: không gì cả, dòng về cấp gốc, hoặc dòng bị xóa.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_BoostOptionType_Name" xml:space="preserve">
+    <value>Loại dòng tăng tỉ lệ</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_BoostOptionType_Description" xml:space="preserve">
+    <value>Một dòng của vật phẩm đích làm tăng tỉ lệ thành công, ví dụ dòng may mắn.</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_SuccessChanceBoost_Name" xml:space="preserve">
+    <value>Tỉ lệ thành công cộng thêm</value>
+  </data>
+  <data name="ItemUpgradeConfiguration_SuccessChanceBoost_Description" xml:space="preserve">
+    <value>Tỉ lệ thành công cộng thêm khi vật phẩm đích có loại dòng tăng tỉ lệ.</value>
+  </data>
+  <data name="SantaVillageInvitationConsumeHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý dùng thiệp mời Làng Ông Già Noel</value>
+  </data>
+  <data name="SantaVillageInvitationConsumeHandlerPlugIn_Description" xml:space="preserve">
+    <value>Plugin xử lý thiệp mời đến Làng Ông Già Noel, đưa người chơi đến Làng Ông Già Noel.</value>
+  </data>
+  <data name="SantaVillageInvitationConsumeHandlerConfiguration_MapNumber_Name" xml:space="preserve">
+    <value>Số bản đồ</value>
+  </data>
+  <data name="BotConfiguration_MapsForbiddenForBots_Name" xml:space="preserve">
+    <value>Bản đồ cấm bot</value>
+  </data>
+  <data name="BotConfiguration_MapsForbiddenForBots_Description" xml:space="preserve">
+    <value>Bản đồ bot không bao giờ đến: không săn, theo hay tham gia sự kiện ở đó, và bot đăng nhập ở đó sẽ rời đi. Không ảnh hưởng người chơi.</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugIn_Name" xml:space="preserve">
+    <value>Học kỹ năng theo cấp</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugIn_Description" xml:space="preserve">
+    <value>Dạy các kỹ năng đã cấu hình của lớp nhân vật khi nhân vật đạt cấp của kỹ năng, hoặc khi vào game đã vượt cấp đó, và báo cho người chơi.</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugInConfiguration_Skills_Name" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugInConfiguration_SkillNumber_Name" xml:space="preserve">
+    <value>Số kỹ năng</value>
+  </data>
+  <data name="LearnSkillsByLevelPlugInConfiguration_MinimumLevel_Name" xml:space="preserve">
+    <value>Cấp tối thiểu</value>
+  </data>
+  <data name="BloodSlashSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Blood Slash</value>
+  </data>
+  <data name="BloodSlashSkillPlugIn_Description" xml:space="preserve">
+    <value>Hồi máu cho người tấn công bằng một phần sát thương mà Blood Slash (kỹ năng 701) gây ra.</value>
+  </data>
+  <data name="SoulDrainSkillPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Soul Drain</value>
+  </data>
+  <data name="SoulDrainSkillPlugIn_Description" xml:space="preserve">
+    <value>Cho người tấn công mana theo sát thương mà Soul Drain (kỹ năng 723) gây ra, lấy từ mana của mục tiêu người chơi.</value>
+  </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng HNMO của nhân vật (quản trị)</value>
+  </data>
+  <data name="HnmoSkillsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>Cho trang quản trị cấp hoặc gỡ kỹ năng HNMO (700 đến 727) của nhân vật đang trong game, ví dụ kỹ năng thứ tư của lớp mà không cần nhiệm vụ thử thách.</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Name" xml:space="preserve">
+    <value>Coin cửa hàng tiền mặt ngay lập tức (quản trị)</value>
+  </data>
+  <data name="CashShopCoinGrantsAdminOperationPlugIn_Description" xml:space="preserve">
+    <value>Cho trang quản trị áp dụng ngay coin cửa hàng tiền mặt đã cấp cho tài khoản đang trong game, thay vì chờ lần sau người chơi mở cửa hàng.</value>
+  </data>
+  <data name="GameNamePlugIn_Name" xml:space="preserve">
+    <value>Tên game và liên kết cộng đồng</value>
+  </data>
+  <data name="GameNamePlugIn_Description" xml:space="preserve">
+    <value>Tên game mà người chơi thấy (tiêu đề trang, màn hình đăng nhập, hướng dẫn và cửa hàng vật phẩm của web game) và các liên kết cộng đồng hiển thị ở màn hình đăng nhập và trong hướng dẫn (Zalo, Discord, Facebook).</value>
+  </data>
+  <data name="GameNameConfiguration_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="GameNameConfiguration_Name_Description" xml:space="preserve">
+    <value>Hiển thị cho người chơi thay cho tên mặc định (1 đến 60 ký tự). Web game cập nhật trong vòng một phút.</value>
+  </data>
+  <data name="GameNameConfiguration_ZaloLink_Description" xml:space="preserve">
+    <value>Link nhóm hoặc liên hệ Zalo để người chơi liên lạc với bạn, ví dụ https://zalo.me/g/... Để trống: không hiển thị.</value>
+  </data>
+  <data name="GameNameConfiguration_DiscordLink_Description" xml:space="preserve">
+    <value>Link mời Discord. Để trống: không hiển thị.</value>
+  </data>
+  <data name="GameNameConfiguration_FacebookLink_Description" xml:space="preserve">
+    <value>Link trang hoặc nhóm Facebook. Để trống: không hiển thị.</value>
+  </data>
+  <data name="BankTopUpPlugIn_Name" xml:space="preserve">
+    <value>Nạp qua ngân hàng (VietQR, Casso, SePay)</value>
+  </data>
+  <data name="BankTopUpPlugIn_Description" xml:space="preserve">
+    <value>Người chơi nạp coin cửa hàng tiền mặt bằng chuyển khoản: web game hiển thị mã VietQR cho tài khoản Techcombank hoặc Vietcombank của bạn, và Casso hoặc SePay báo cho trang quản trị mỗi giao dịch đến, rồi coin được cộng vào tài khoản ghi trong nội dung chuyển khoản.</value>
+  </data>
+  <data name="BankTopUpConfiguration_AccountName_Caption" xml:space="preserve">
+    <value>Tên chủ tài khoản</value>
+  </data>
+  <data name="BankTopUpConfiguration_AccountName_Description" xml:space="preserve">
+    <value>Tên trên tài khoản ngân hàng của bạn, như ngân hàng hiển thị (ví dụ NGUYEN VAN A).</value>
+  </data>
+  <data name="BankTopUpConfiguration_TechcombankAccount_Caption" xml:space="preserve">
+    <value>Số tài khoản Techcombank</value>
+  </data>
+  <data name="BankTopUpConfiguration_TechcombankAccount_Description" xml:space="preserve">
+    <value>Để trống: không dùng Techcombank.</value>
+  </data>
+  <data name="BankTopUpConfiguration_VietcombankAccount_Caption" xml:space="preserve">
+    <value>Số tài khoản Vietcombank</value>
+  </data>
+  <data name="BankTopUpConfiguration_VietcombankAccount_Description" xml:space="preserve">
+    <value>Để trống: không dùng Vietcombank.</value>
+  </data>
+  <data name="BankTopUpConfiguration_VndPerCoin_Caption" xml:space="preserve">
+    <value>VND mỗi coin</value>
+  </data>
+  <data name="BankTopUpConfiguration_VndPerCoin_Description" xml:space="preserve">
+    <value>Một coin giá bao nhiêu VND (ví dụ 100: 50.000 VND được 500 coin).</value>
+  </data>
+  <data name="BankTopUpConfiguration_MinimumVnd_Caption" xml:space="preserve">
+    <value>Chuyển khoản tối thiểu (VND)</value>
+  </data>
+  <data name="BankTopUpConfiguration_MinimumVnd_Description" xml:space="preserve">
+    <value>Giao dịch nhỏ hơn không được đổi thành coin (tự cộng tay nếu muốn).</value>
+  </data>
+  <data name="BankTopUpConfiguration_CoinType_Caption" xml:space="preserve">
+    <value>Coin</value>
+  </data>
+  <data name="BankTopUpConfiguration_CoinType_Description" xml:space="preserve">
+    <value>Loại coin mà chuyển khoản mua.</value>
+  </data>
+  <data name="BankTopUpConfiguration_TransferPrefix_Caption" xml:space="preserve">
+    <value>Từ khóa nội dung chuyển khoản</value>
+  </data>
+  <data name="BankTopUpConfiguration_TransferPrefix_Description" xml:space="preserve">
+    <value>Người chơi ghi từ này và tên tài khoản trong nội dung chuyển khoản, ví dụ HNMO test2.</value>
+  </data>
+  <data name="BankTopUpConfiguration_CassoSecureToken_Caption" xml:space="preserve">
+    <value>Khóa bảo mật Casso</value>
+  </data>
+  <data name="BankTopUpConfiguration_CassoSecureToken_Description" xml:space="preserve">
+    <value>Security Key của webhook Casso. Để trống: không nhận Casso.</value>
+  </data>
+  <data name="BankTopUpConfiguration_SepayApiKey_Caption" xml:space="preserve">
+    <value>Khóa API SePay</value>
+  </data>
+  <data name="BankTopUpConfiguration_SepayApiKey_Description" xml:space="preserve">
+    <value>Khóa API của webhook SePay (xác thực: API Key). Để trống: không nhận SePay.</value>
+  </data>
+  <data name="WebsitePlugIn_Name" xml:space="preserve">
+    <value>Website (địa chỉ quản trị, đăng nhập Google)</value>
+  </data>
+  <data name="WebsitePlugIn_Description" xml:space="preserve">
+    <value>Cài đặt của website công khai: địa chỉ bí mật dùng để mở trang quản trị, và client id Google cho "Đăng nhập bằng Google".</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Caption" xml:space="preserve">
+    <value>Địa chỉ trang quản trị</value>
+  </data>
+  <data name="WebsiteConfiguration_AdminPath_Description" xml:space="preserve">
+    <value>Website mở trang quản trị tại https://your-site/&lt;this&gt;. Hãy đổi thành chuỗi khó đoán (3 đến 40 chữ cái, chữ số, - hoặc _). Để trống: trang quản trị chỉ mở trên máy chủ. Website nhận thay đổi trong vòng 30 giây. Ở đó trang quản trị luôn yêu cầu đăng nhập quản trị, và đóng cho đến khi có người quản trị.</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Caption" xml:space="preserve">
+    <value>Client id Google</value>
+  </data>
+  <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
+    <value>Client id của một OAuth client Google Cloud (loại: Web application, với địa chỉ website của bạn là JavaScript origin được phép). Để trống: không có "Đăng nhập bằng Google".</value>
+  </data>
+  <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
+    <value>Đền Ảo Ảnh</value>
+  </data>
+  <data name="IllusionTempleStartPlugIn_Description" xml:space="preserve">
+    <value>Sự kiện Đền Ảo Ảnh</value>
   </data>
 </root>

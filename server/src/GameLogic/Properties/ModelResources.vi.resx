@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="KanturuTransitionDefinition_TypeCaption" xml:space="preserve">
+    <value>Định nghĩa chuyển cảnh Kanturu</value>
+  </data>
+  <data name="KanturuTransitionDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Định nghĩa chuyển cảnh Kanturu</value>
+  </data>
+  <data name="KanturuTransitionDefinition_CinematicDuration_Caption" xml:space="preserve">
+    <value>Thời lượng đoạn phim</value>
+  </data>
+  <data name="KanturuTransitionDefinition_EntryPointX_Caption" xml:space="preserve">
+    <value>Điểm vào X</value>
+  </data>
+  <data name="KanturuTransitionDefinition_EntryPointY_Caption" xml:space="preserve">
+    <value>Điểm vào Y</value>
+  </data>
+  <data name="KanturuTransitionDefinition_WarpAnimationDelay_Caption" xml:space="preserve">
+    <value>Độ trễ hoạt ảnh dịch chuyển</value>
+  </data>
+  <data name="KanturuNightmareHpPhase_TypeCaption" xml:space="preserve">
+    <value>Giai đoạn máu Nightmare Kanturu</value>
+  </data>
+  <data name="KanturuNightmareHpPhase_TypeCaptionPlural" xml:space="preserve">
+    <value>Giai đoạn máu Nightmare Kanturu</value>
+  </data>
+  <data name="KanturuNightmareHpPhase_HealthPercentage_Caption" xml:space="preserve">
+    <value>Phần trăm máu</value>
+  </data>
+  <data name="KanturuNightmareHpPhase_TeleportTargetX_Caption" xml:space="preserve">
+    <value>Điểm dịch chuyển X</value>
+  </data>
+  <data name="KanturuNightmareHpPhase_TeleportTargetY_Caption" xml:space="preserve">
+    <value>Điểm dịch chuyển Y</value>
+  </data>
+  <data name="KanturuNightmareHpPhase_MessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo</value>
+  </data>
+  <data name="KanturuTerrainArea_TypeCaption" xml:space="preserve">
+    <value>Vùng địa hình Kanturu</value>
+  </data>
+  <data name="KanturuTerrainArea_TypeCaptionPlural" xml:space="preserve">
+    <value>Vùng địa hình Kanturu</value>
+  </data>
+  <data name="KanturuTerrainArea_StartX_Caption" xml:space="preserve">
+    <value>X bắt đầu</value>
+  </data>
+  <data name="KanturuTerrainArea_StartY_Caption" xml:space="preserve">
+    <value>Y bắt đầu</value>
+  </data>
+  <data name="KanturuTerrainArea_EndX_Caption" xml:space="preserve">
+    <value>X kết thúc</value>
+  </data>
+  <data name="KanturuTerrainArea_EndY_Caption" xml:space="preserve">
+    <value>Y kết thúc</value>
+  </data>
+  <data name="KanturuPhaseDefinition_TypeCaption" xml:space="preserve">
+    <value>Định nghĩa giai đoạn Kanturu</value>
+  </data>
+  <data name="KanturuPhaseDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Định nghĩa giai đoạn Kanturu</value>
+  </data>
+  <data name="KanturuPhaseDefinition_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="KanturuPhaseDefinition_Kind_Caption" xml:space="preserve">
+    <value>Kiểu</value>
+  </data>
+  <data name="KanturuPhaseDefinition_State_Caption" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="KanturuPhaseDefinition_DetailState_Caption" xml:space="preserve">
+    <value>Trạng thái chi tiết</value>
+  </data>
+  <data name="KanturuPhaseDefinition_TimeLimit_Caption" xml:space="preserve">
+    <value>Giới hạn thời gian</value>
+  </data>
+  <data name="KanturuPhaseDefinition_SpawnWaveNumber_Caption" xml:space="preserve">
+    <value>Số đợt xuất hiện quái</value>
+  </data>
+  <data name="KanturuPhaseDefinition_StartDelay_Caption" xml:space="preserve">
+    <value>Độ trễ bắt đầu</value>
+  </data>
+  <data name="KanturuPhaseDefinition_KillTarget_Caption" xml:space="preserve">
+    <value>Mục tiêu tiêu diệt</value>
+  </data>
+  <data name="KanturuPhaseDefinition_CountedMonsters_Caption" xml:space="preserve">
+    <value>Quái được tính</value>
+  </data>
+  <data name="KanturuPhaseDefinition_Duration_Caption" xml:space="preserve">
+    <value>Thời lượng</value>
+  </data>
+  <data name="KanturuPhaseDefinition_StartMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo bắt đầu</value>
+  </data>
+  <data name="KanturuPhaseDefinition_CompletedMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo hoàn thành</value>
+  </data>
+  <data name="KanturuPhaseDefinition_StandbyDuration_Caption" xml:space="preserve">
+    <value>Thời gian chờ</value>
+  </data>
+  <data name="KanturuPhaseDefinition_Transition_Caption" xml:space="preserve">
+    <value>Chuyển cảnh</value>
+  </data>
+  <data name="KanturuPhaseDefinition_Nightmare_Caption" xml:space="preserve">
+    <value>Nightmare</value>
+  </data>
+  <data name="KanturuEventDefinition_TypeCaption" xml:space="preserve">
+    <value>Định nghĩa sự kiện Kanturu</value>
+  </data>
+  <data name="KanturuEventDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Định nghĩa sự kiện Kanturu</value>
+  </data>
+  <data name="KanturuEventDefinition_IntroSpawnWaveNumber_Caption" xml:space="preserve">
+    <value>Số đợt quái mở đầu</value>
+  </data>
+  <data name="KanturuEventDefinition_IntroMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo mở đầu</value>
+  </data>
+  <data name="KanturuEventDefinition_IntroState_Caption" xml:space="preserve">
+    <value>Trạng thái mở đầu</value>
+  </data>
+  <data name="KanturuEventDefinition_IntroDetailState_Caption" xml:space="preserve">
+    <value>Trạng thái chi tiết mở đầu</value>
+  </data>
+  <data name="KanturuEventDefinition_IntroDuration_Caption" xml:space="preserve">
+    <value>Thời lượng mở đầu</value>
+  </data>
+  <data name="KanturuEventDefinition_MayaAttackInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ tấn công của Maya</value>
+  </data>
+  <data name="KanturuEventDefinition_Phases_Caption" xml:space="preserve">
+    <value>Giai đoạn</value>
+  </data>
+  <data name="KanturuEventDefinition_RequiredItemDurabilityLossInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ mất độ bền vật phẩm yêu cầu</value>
+  </data>
+  <data name="KanturuEventDefinition_RequiredItemDurabilityLoss_Caption" xml:space="preserve">
+    <value>Độ bền mất của vật phẩm yêu cầu</value>
+  </data>
+  <data name="KanturuEventDefinition_RequiredItemDestroyedMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo vật phẩm yêu cầu bị phá hủy</value>
+  </data>
+  <data name="KanturuEventDefinition_BarrierOpeningMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo mở rào chắn</value>
+  </data>
+  <data name="KanturuEventDefinition_VictoryCinematicDuration_Caption" xml:space="preserve">
+    <value>Thời lượng đoạn phim chiến thắng</value>
+  </data>
+  <data name="KanturuEventDefinition_BarrierAreas_Caption" xml:space="preserve">
+    <value>Vùng rào chắn</value>
+  </data>
+  <data name="KanturuEventDefinition_TowerOfRefinementDuration_Caption" xml:space="preserve">
+    <value>Thời lượng Tháp Tinh Luyện</value>
+  </data>
+  <data name="KanturuEventDefinition_TowerClosingWarningOffset_Caption" xml:space="preserve">
+    <value>Thời điểm cảnh báo đóng tháp</value>
+  </data>
+  <data name="KanturuEventDefinition_TowerConqueredMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo chiếm tháp</value>
+  </data>
+  <data name="KanturuEventDefinition_TowerClosingWarningMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo cảnh báo đóng tháp</value>
+  </data>
+  <data name="KanturuEventDefinition_TowerClosedMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo tháp đã đóng</value>
+  </data>
+  <data name="KanturuEventDefinition_VictoryMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo chiến thắng</value>
+  </data>
+  <data name="KanturuEventDefinition_DefeatMessageKey_Caption" xml:space="preserve">
+    <value>Khóa thông báo thất bại</value>
+  </data>
+  <data name="KanturuNightmareDefinition_TypeCaption" xml:space="preserve">
+    <value>Định nghĩa Nightmare Kanturu</value>
+  </data>
+  <data name="KanturuNightmareDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Định nghĩa Nightmare Kanturu</value>
+  </data>
+  <data name="KanturuNightmareDefinition_Monster_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="KanturuNightmareDefinition_SpawnTimeout_Caption" xml:space="preserve">
+    <value>Thời gian chờ xuất hiện</value>
+  </data>
+  <data name="KanturuNightmareDefinition_HealthCheckInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ kiểm tra máu</value>
+  </data>
+  <data name="KanturuNightmareDefinition_TeleportDelay_Caption" xml:space="preserve">
+    <value>Độ trễ dịch chuyển</value>
+  </data>
+  <data name="KanturuNightmareDefinition_SpecialAttackSkillNumber_Caption" xml:space="preserve">
+    <value>Số kỹ năng tấn công đặc biệt</value>
+  </data>
+  <data name="KanturuNightmareDefinition_SpecialAttackInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ tấn công đặc biệt</value>
+  </data>
+  <data name="KanturuNightmareDefinition_BattleDetailState_Caption" xml:space="preserve">
+    <value>Trạng thái chi tiết khi chiến đấu</value>
+  </data>
+  <data name="KanturuNightmareDefinition_HpPhases_Caption" xml:space="preserve">
+    <value>Giai đoạn máu</value>
+  </data>
+  <data name="DoppelgangerPathArea_TypeCaption" xml:space="preserve">
+    <value>Vùng đường đi Doppelganger</value>
+  </data>
+  <data name="DoppelgangerPathArea_TypeCaptionPlural" xml:space="preserve">
+    <value>Vùng đường đi Doppelganger</value>
+  </data>
+  <data name="DoppelgangerHerdSize_TypeCaption" xml:space="preserve">
+    <value>Quy mô bầy Doppelganger</value>
+  </data>
+  <data name="DoppelgangerHerdSize_TypeCaptionPlural" xml:space="preserve">
+    <value>Quy mô bầy Doppelganger</value>
+  </data>
+  <data name="DoppelgangerHerdSize_StartsAfter_Caption" xml:space="preserve">
+    <value>Bắt đầu sau</value>
+  </data>
+  <data name="DoppelgangerHerdSize_BaseCount_Caption" xml:space="preserve">
+    <value>Số lượng gốc</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_TypeCaption" xml:space="preserve">
+    <value>Định nghĩa sự kiện Doppelganger</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_TypeCaptionPlural" xml:space="preserve">
+    <value>Định nghĩa sự kiện Doppelganger</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_MaximumGoalCount_Caption" xml:space="preserve">
+    <value>Số lần về đích tối đa</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_PlayInfoInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ thông tin trận</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_HerdInterval_Caption" xml:space="preserve">
+    <value>Chu kỳ bầy quái</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_HerdMonsters_Caption" xml:space="preserve">
+    <value>Quái trong bầy</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_HerdSizes_Caption" xml:space="preserve">
+    <value>Quy mô bầy</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_AttackFirstChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ tấn công trước</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_AlwaysAttackingMonsters_Caption" xml:space="preserve">
+    <value>Quái luôn tấn công</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_AdditionalSpawns_Caption" xml:space="preserve">
+    <value>Xuất hiện thêm</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_IceWalker_Caption" xml:space="preserve">
+    <value>Ice Walker</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_IceWalkerSpawnTime_Caption" xml:space="preserve">
+    <value>Thời điểm xuất hiện Ice Walker</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_IceWalkerMissionDuration_Caption" xml:space="preserve">
+    <value>Thời lượng nhiệm vụ Ice Walker</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_IceWalkerMinimumPosition_Caption" xml:space="preserve">
+    <value>Vị trí tối thiểu của Ice Walker</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_IceWalkerMaximumPosition_Caption" xml:space="preserve">
+    <value>Vị trí tối đa của Ice Walker</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_IceWalkerMissionFailedMultiplier_Caption" xml:space="preserve">
+    <value>Hệ số khi nhiệm vụ Ice Walker thất bại</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_MonsterScalings_Caption" xml:space="preserve">
+    <value>Tỉ lệ sức mạnh quái</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_InterimChestMonsters_Caption" xml:space="preserve">
+    <value>Quái rương giữa trận</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_InterimRewardChest_Caption" xml:space="preserve">
+    <value>Rương thưởng giữa trận</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_InterimChestCount_Caption" xml:space="preserve">
+    <value>Số rương giữa trận</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_InterimChestDuration_Caption" xml:space="preserve">
+    <value>Thời lượng rương giữa trận</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_LarvaChance_Caption" xml:space="preserve">
+    <value>Tỉ lệ ấu trùng</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_Larva_Caption" xml:space="preserve">
+    <value>Ấu trùng</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_FinalRewardChest_Caption" xml:space="preserve">
+    <value>Rương thưởng cuối</value>
+  </data>
+  <data name="DoppelgangerEventDefinition_Paths_Caption" xml:space="preserve">
+    <value>Đường đi</value>
+  </data>
+  <data name="DoppelgangerPath_TypeCaption" xml:space="preserve">
+    <value>Đường đi Doppelganger</value>
+  </data>
+  <data name="DoppelgangerPath_TypeCaptionPlural" xml:space="preserve">
+    <value>Đường đi Doppelganger</value>
+  </data>
+  <data name="DoppelgangerPath_MapNumber_Caption" xml:space="preserve">
+    <value>Số bản đồ</value>
+  </data>
+  <data name="DoppelgangerPath_Areas_Caption" xml:space="preserve">
+    <value>Vùng</value>
+  </data>
+  <data name="DoppelgangerMonsterSpawn_TypeCaption" xml:space="preserve">
+    <value>Quái xuất hiện Doppelganger</value>
+  </data>
+  <data name="DoppelgangerMonsterSpawn_TypeCaptionPlural" xml:space="preserve">
+    <value>Quái xuất hiện Doppelganger</value>
+  </data>
+  <data name="DoppelgangerMonsterSpawn_SpawnTime_Caption" xml:space="preserve">
+    <value>Thời điểm xuất hiện</value>
+  </data>
+  <data name="DoppelgangerMonsterSpawn_Monsters_Caption" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_TypeCaption" xml:space="preserve">
+    <value>Tỉ lệ sức mạnh quái Doppelganger</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_TypeCaptionPlural" xml:space="preserve">
+    <value>Tỉ lệ sức mạnh quái Doppelganger</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_MaximumPlayerLevel_Caption" xml:space="preserve">
+    <value>Cấp người chơi tối đa</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_LevelMultipliers_Caption" xml:space="preserve">
+    <value>Hệ số cấp</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_HealthMultipliers_Caption" xml:space="preserve">
+    <value>Hệ số máu</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_DamageMultipliers_Caption" xml:space="preserve">
+    <value>Hệ số sát thương</value>
+  </data>
+  <data name="DoppelgangerMonsterScaling_DefenseMultipliers_Caption" xml:space="preserve">
+    <value>Hệ số phòng thủ</value>
+  </data>
+  <data name="SpawnMapStrategy_RandomMap_Caption" xml:space="preserve">
+    <value>Bản đồ ngẫu nhiên</value>
+  </data>
+  <data name="SpawnMapStrategy_AllMaps_Caption" xml:space="preserve">
+    <value>Tất cả bản đồ</value>
+  </data>
+  <data name="KanturuPhaseKind_MonsterWave_Caption" xml:space="preserve">
+    <value>Đợt quái</value>
+  </data>
+  <data name="KanturuPhaseKind_Transition_Caption" xml:space="preserve">
+    <value>Chuyển cảnh</value>
+  </data>
+  <data name="KanturuPhaseKind_Nightmare_Caption" xml:space="preserve">
+    <value>Nightmare</value>
+  </data>
+  <data name="KanturuState_None_Caption" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="KanturuState_Standby_Caption" xml:space="preserve">
+    <value>Chờ</value>
+  </data>
+  <data name="KanturuState_MayaBattle_Caption" xml:space="preserve">
+    <value>Đánh Maya</value>
+  </data>
+  <data name="KanturuState_NightmareBattle_Caption" xml:space="preserve">
+    <value>Đánh Nightmare</value>
+  </data>
+  <data name="KanturuState_Tower_Caption" xml:space="preserve">
+    <value>Tháp</value>
+  </data>
+  <data name="KanturuState_End_Caption" xml:space="preserve">
+    <value>Kết thúc</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_TypeCaption" xml:space="preserve">
+    <value>Cấu hình tiền tệ cửa hàng người chơi</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_PriceItems_Caption" xml:space="preserve">
+    <value>Vật phẩm dùng làm giá</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_PriceItems_Description" xml:space="preserve">
+    <value>Các vật phẩm có thể dùng để trả giá, ví dụ ngọc.</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_IsWCoinCAllowed_Caption" xml:space="preserve">
+    <value>Cho phép WCoin (C)</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_IsWCoinCAllowed_Description" xml:space="preserve">
+    <value>Cho phép giá bằng WCoin (C).</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_IsWCoinPAllowed_Caption" xml:space="preserve">
+    <value>Cho phép WCoin (P)</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_IsWCoinPAllowed_Description" xml:space="preserve">
+    <value>Cho phép giá bằng WCoin (P).</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_IsGoblinPointsAllowed_Caption" xml:space="preserve">
+    <value>Cho phép Goblin Point</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_IsGoblinPointsAllowed_Description" xml:space="preserve">
+    <value>Cho phép giá bằng Goblin Point.</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_MaximumItemAmount_Caption" xml:space="preserve">
+    <value>Số vật phẩm tối đa</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_MaximumItemAmount_Description" xml:space="preserve">
+    <value>Số vật phẩm tối đa của một mức giá; tối đa 65535.</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_MaximumCoinAmount_Caption" xml:space="preserve">
+    <value>Số coin tối đa</value>
+  </data>
+  <data name="PlayerShopCurrenciesConfiguration_MaximumCoinAmount_Description" xml:space="preserve">
+    <value>Số coin tài khoản tối đa của một mức giá.</value>
+  </data>
+</root>

@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DataInitialization075_Name" xml:space="preserve">
+    <value>Khởi tạo phiên bản 0.75</value>
+  </data>
+  <data name="DataInitialization075_Description" xml:space="preserve">
+    <value>Cung cấp dữ liệu ban đầu cho phiên bản 0.75</value>
+  </data>
+  <data name="DataInitialization095d_Name" xml:space="preserve">
+    <value>Khởi tạo phiên bản 0.95d</value>
+  </data>
+  <data name="DataInitialization095d_Description" xml:space="preserve">
+    <value>Cung cấp dữ liệu ban đầu cho phiên bản 0.95d</value>
+  </data>
+  <data name="DataInitialization_Name" xml:space="preserve">
+    <value>Khởi tạo Season 6 Episode 3</value>
+  </data>
+  <data name="DataInitialization_Description" xml:space="preserve">
+    <value>Cung cấp dữ liệu ban đầu cho Season 6 Episode 3.</value>
+  </data>
+  <data name="AddArrowsForFairyElf_Name" xml:space="preserve">
+    <value>Thêm mũi tên cho Fairy Elf</value>
+  </data>
+  <data name="AddArrowsForFairyElf_Description" xml:space="preserve">
+    <value>Thêm mũi tên cho nhân vật Fairy Elf mới tạo.</value>
+  </data>
+  <data name="AddChargeForRageFighter_Name" xml:space="preserve">
+    <value>Thêm Charge cho Rage Fighter</value>
+  </data>
+  <data name="AddChargeForRageFighter_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Charge cho nhân vật Rage Fighter mới tạo.</value>
+  </data>
+  <data name="AddEnergyBallForDarkWizard_Name" xml:space="preserve">
+    <value>Thêm Energy Ball cho Dark Wizard</value>
+  </data>
+  <data name="AddEnergyBallForDarkWizard_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Energy Ball cho nhân vật Dark Wizard mới tạo.</value>
+  </data>
+  <data name="AddForceForDarkLord_Name" xml:space="preserve">
+    <value>Thêm Force cho Dark Lord</value>
+  </data>
+  <data name="AddForceForDarkLord_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Force cho nhân vật Dark Lord mới tạo.</value>
+  </data>
+  <data name="AddLanceForSummoner_Name" xml:space="preserve">
+    <value>Thêm Lance cho Summoner</value>
+  </data>
+  <data name="AddLanceForSummoner_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Lance cho nhân vật Summoner mới tạo.</value>
+  </data>
+  <data name="AddRingOfWarriorLevel40ForNewCharacters_Name" xml:space="preserve">
+    <value>Thêm Ring of Warrior cấp 40 cho nhân vật mới</value>
+  </data>
+  <data name="AddRingOfWarriorLevel40ForNewCharacters_Description" xml:space="preserve">
+    <value>Thêm chiếc nhẫn có thể thả ra ở cấp 40.</value>
+  </data>
+  <data name="AddRingOfWarriorLevel80ForNewCharacters_Name" xml:space="preserve">
+    <value>Thêm Ring of Warrior cấp 80 cho nhân vật mới</value>
+  </data>
+  <data name="AddRingOfWarriorLevel80ForNewCharacters_Description" xml:space="preserve">
+    <value>Thêm chiếc nhẫn có thể thả ra ở cấp 80.</value>
+  </data>
+  <data name="AddShortBowForFairyElf_Name" xml:space="preserve">
+    <value>Thêm Short Bow cho Fairy Elf</value>
+  </data>
+  <data name="AddShortBowForFairyElf_Description" xml:space="preserve">
+    <value>Thêm Short Bow cho nhân vật Fairy Elf mới tạo.</value>
+  </data>
+  <data name="AddShortSwordForDarkLord_Name" xml:space="preserve">
+    <value>Thêm Short Sword cho Dark Lord</value>
+  </data>
+  <data name="AddShortSwordForDarkLord_Description" xml:space="preserve">
+    <value>Thêm Short Sword cho nhân vật Dark Lord mới tạo.</value>
+  </data>
+  <data name="AddShortSwordForMagicGladiator_Name" xml:space="preserve">
+    <value>Thêm Short Sword cho Magic Gladiator</value>
+  </data>
+  <data name="AddShortSwordForMagicGladiator_Description" xml:space="preserve">
+    <value>Thêm Short Sword cho nhân vật Magic Gladiator mới tạo.</value>
+  </data>
+  <data name="AddSmallAxeForDarkKnight_Name" xml:space="preserve">
+    <value>Thêm Small Axe cho Dark Knight</value>
+  </data>
+  <data name="AddSmallAxeForDarkKnight_Description" xml:space="preserve">
+    <value>Thêm Small Axe cho nhân vật Dark Knight mới tạo.</value>
+  </data>
+  <data name="AddSmallShieldForDarkLord_Name" xml:space="preserve">
+    <value>Thêm Small Shield cho Dark Lord</value>
+  </data>
+  <data name="AddSmallShieldForDarkLord_Description" xml:space="preserve">
+    <value>Thêm Small Shield cho nhân vật Dark Lord mới tạo.</value>
+  </data>
+  <data name="AddSmallShieldForMagicGladiator_Name" xml:space="preserve">
+    <value>Thêm Small Shield cho Magic Gladiator</value>
+  </data>
+  <data name="AddSmallShieldForMagicGladiator_Description" xml:space="preserve">
+    <value>Thêm Small Shield cho nhân vật Magic Gladiator mới tạo.</value>
+  </data>
+  <data name="AddCrescentMoonSlashForDarkKnight_Name" xml:space="preserve">
+    <value>Thêm Crescent Moon Slash cho Dark Knight</value>
+  </data>
+  <data name="AddCrescentMoonSlashForDarkKnight_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Crescent Moon Slash (dùng trong Công thành chiến) cho nhân vật Dark Knight mới tạo.</value>
+  </data>
+  <data name="AddStarfallForFairyElf_Name" xml:space="preserve">
+    <value>Thêm Starfall cho Fairy Elf</value>
+  </data>
+  <data name="AddStarfallForFairyElf_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Starfall (dùng trong Công thành chiến) cho nhân vật Fairy Elf mới tạo.</value>
+  </data>
+  <data name="AddManaRaysForMagicGladiator_Name" xml:space="preserve">
+    <value>Thêm Mana Rays cho Magic Gladiator</value>
+  </data>
+  <data name="AddManaRaysForMagicGladiator_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Mana Rays (dùng trong Công thành chiến) cho nhân vật Magic Gladiator mới tạo.</value>
+  </data>
+  <data name="AddFireBlastForDarkLord_Name" xml:space="preserve">
+    <value>Thêm Fire Blast cho Dark Lord</value>
+  </data>
+  <data name="AddFireBlastForDarkLord_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Fire Blast (dùng trong Công thành chiến) cho nhân vật Dark Lord mới tạo.</value>
+  </data>
+  <data name="AddSpiralSlashForMagicGladiator_Name" xml:space="preserve">
+    <value>Thêm Spiral Slash cho Magic Gladiator</value>
+  </data>
+  <data name="AddSpiralSlashForMagicGladiator_Description" xml:space="preserve">
+    <value>Thêm kỹ năng Spiral Slash (dùng trong Công thành chiến) cho nhân vật Magic Gladiator mới tạo.</value>
+  </data>
+  <data name="FixWeaponRisePercentagePlugInSeason6_Name" xml:space="preserve">
+    <value>Sửa phần trăm tăng của vũ khí, dòng phép/nguyền của đồ Summoner và tỉ lệ sát thương của một số cánh cấp 3</value>
+  </data>
+  <data name="FixWeaponRisePercentagePlugInSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa phần trăm tăng của vũ khí (gậy, trượng, sách, quyền trượng); dòng phép/nguyền của vũ khí và cánh Summoner; và tỉ lệ sát thương của Wing of Dimension (tăng/giảm), Cape of Overrule (tăng/giảm), Cape of Emperor (giảm). Cũng sửa Divine Staff of Archangel và Eternal Wing Stick.</value>
+  </data>
+  <data name="AddMissingMerchantStoresPlugIn_Name" xml:space="preserve">
+    <value>Thêm cửa hàng NPC còn thiếu</value>
+  </data>
+  <data name="AddMissingMerchantStoresPlugIn_Description" xml:space="preserve">
+    <value>Cho Christine, thương nhân tạp hóa (545), vốn có cửa sổ cửa hàng nhưng không có hàng, một cửa hàng tạp hóa sao chép từ thương nhân Thompson (231).</value>
+  </data>
+  <data name="FixEventItemsDropFromMonstersUpdatePlugInSeason6_Name" xml:space="preserve">
+    <value>Sửa DropsFromMonsters của vật phẩm sự kiện (Season 6)</value>
+  </data>
+  <data name="FixEventItemsDropFromMonstersUpdatePlugInSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa các vật phẩm sự kiện có DropsFromMonsters bật, khiến chúng rơi ở cấp 0 thay vì dùng DropItemGroup riêng của chúng.</value>
+  </data>
+  <data name="InfinityArrowSkillOnQuestCompletionPlugIn_Name" xml:space="preserve">
+    <value>Thêm kỹ năng Infinity Arrow qua nhiệm vụ</value>
+  </data>
+  <data name="InfinityArrowSkillOnQuestCompletionPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm kỹ năng Infinity Arrow làm phần thưởng của nhiệm vụ 'Gain Hero Status (Muse Elf)'.</value>
+  </data>
+  <data name="RegenerationsRefactorPlugInBase_Name" xml:space="preserve">
+    <value>Làm lại hồi phục</value>
+  </data>
+  <data name="RegenerationsRefactorPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa và làm lại một số thuộc tính hồi phục (máu, mana, AG).</value>
+  </data>
+  <data name="AddDuelConfigurationPlugIn_Name" xml:space="preserve">
+    <value>Thêm cấu hình đấu tay đôi</value>
+  </data>
+  <data name="AddDuelConfigurationPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm dữ liệu cho cấu hình đấu tay đôi</value>
+  </data>
+  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa thuộc tính quái Huyết Lâu 7/8</value>
+  </data>
+  <data name="FixBloodCastleMonsterAttributesUpdatePlugIn_Description" xml:space="preserve">
+    <value>Đổi giá trị thuộc tính giữa BC7 (quái 138-143) và BC8 (quái 428-433) để độ khó tăng đúng: BC6 → BC7 → BC8.</value>
+  </data>
+  <data name="AddDoppelgangerDataUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm dữ liệu Doppelganger</value>
+  </data>
+  <data name="AddDoppelgangerDataUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cấu hình sự kiện Doppelganger.</value>
+  </data>
+  <data name="FinishSummonerMasterTreePlugIn_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Summoner</value>
+  </data>
+  <data name="FinishSummonerMasterTreePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện cây Master của Summoner và sửa một số giá trị kỹ năng.</value>
+  </data>
+  <data name="AddMaximumAllianceSizeUpdatePlugInSeason6_Name" xml:space="preserve">
+    <value>Thêm thuộc tính số guild tối đa trong liên minh (Season 6)</value>
+  </data>
+  <data name="AddMaximumAllianceSizeUpdatePlugInSeason6_Description" xml:space="preserve">
+    <value>Thêm thuộc tính gốc toàn cục MaximumAllianceSize với giá trị mặc định 5 vào cấu hình game Season 6.</value>
+  </data>
+  <data name="FixAncientDiscriminatorsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa mã phân biệt đồ thần</value>
+  </data>
+  <data name="FixAncientDiscriminatorsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa mã phân biệt của một số vật phẩm thần.</value>
+  </data>
+  <data name="AddSummonerBuffSkillsPlugIn_Name" xml:space="preserve">
+    <value>Thêm kỹ năng buff của Summoner</value>
+  </data>
+  <data name="AddSummonerBuffSkillsPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm các kỹ năng buff Sleep, Innovation, Damage Reflection và Weakness của Summoner. Cũng sửa dòng phản đòn toàn bộ của cánh cấp 3.</value>
+  </data>
+  <data name="WizEnhanceAndRagefighterSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm một số kỹ năng</value>
+  </data>
+  <data name="WizEnhanceAndRagefighterSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm các kỹ năng: Wizardry Enhance, Increase Health, Increase Block, Ignore Defense.</value>
+  </data>
+  <data name="FixJeweleryPetsDamageCalcsPlugInBase_Name" xml:space="preserve">
+    <value>Sửa tính kháng của trang sức</value>
+  </data>
+  <data name="FixJeweleryPetsDamageCalcsPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa giá trị kháng của trang sức.</value>
+  </data>
+  <data name="FixChaosMixesPlugInBase_Name" xml:space="preserve">
+    <value>Sửa cài đặt ghép Chaos</value>
+  </data>
+  <data name="FixChaosMixesPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa cài đặt chế tạo vũ khí Chaos.</value>
+  </data>
+  <data name="FixDamageAbsorbItemsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa vật phẩm/kỹ năng hấp thụ sát thương</value>
+  </data>
+  <data name="FixDamageAbsorbItemsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa cài đặt hấp thụ sát thương của vật phẩm và kỹ năng.</value>
+  </data>
+  <data name="AddHarmonyOptionWeightsUpdateSeason6_Name" xml:space="preserve">
+    <value>Thêm trọng số dòng harmony</value>
+  </data>
+  <data name="AddHarmonyOptionWeightsUpdateSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm trọng số dòng ngọc Harmony dùng khi gán dòng, sửa một số dòng và sửa công thức khôi phục vật phẩm</value>
+  </data>
+  <data name="AddQuestItemLimitPlugIn_Name" xml:space="preserve">
+    <value>Thêm giới hạn vật phẩm nhiệm vụ</value>
+  </data>
+  <data name="AddQuestItemLimitPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này giới hạn vật phẩm nhiệm vụ để chỉ nhặt được một cái.</value>
+  </data>
+  <data name="FinishDarkKnightMasterTreePlugInSeason6_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Dark Knight</value>
+  </data>
+  <data name="FinishDarkKnightMasterTreePlugInSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện kỹ năng và hiệu ứng cây Master của Dark Knight. Cũng sửa cách tính sát thương khi cầm hai tay.</value>
+  </data>
+  <data name="AddLorenMarketJuliaWarpPlugIn_Name" xml:space="preserve">
+    <value>Thêm dịch chuyển Julia ở chợ Loren</value>
+  </data>
+  <data name="AddLorenMarketJuliaWarpPlugIn_Description" xml:space="preserve">
+    <value>Biến Julia (Market Union, 547) thành NPC dịch chuyển hoạt động được giữa Lorencia và chợ Loren, ở cả hai phía, thay vì một thương nhân trống.</value>
+  </data>
+  <data name="LimitWhiteWizardDropsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Giới hạn đồ rơi của White Wizard</value>
+  </data>
+  <data name="LimitWhiteWizardDropsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Giới hạn Wizard's Ring một chiếc mỗi nhân vật.</value>
+  </data>
+  <data name="ChaosCastleDataUpdatePlugIn_Name" xml:space="preserve">
+    <value>Dữ liệu Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="ChaosCastleDataUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này tạo dữ liệu cấu hình cho sự kiện Hỗn Nguyên Lâu.</value>
+  </data>
+  <data name="FinishDarkLordMasterTreePlugIn_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Dark Lord</value>
+  </data>
+  <data name="FinishDarkLordMasterTreePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện kỹ năng và hiệu ứng cây Master của Dark Lord.</value>
+  </data>
+  <data name="FixWingsAndCapesCraftingsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa chế tạo cánh và áo choàng</value>
+  </data>
+  <data name="FixWingsAndCapesCraftingsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này đặt đúng cài đặt cho chế tạo cánh và áo choàng.</value>
+  </data>
+  <data name="AddRenaItemUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vật phẩm Rena</value>
+  </data>
+  <data name="AddRenaItemUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm vật phẩm Rena còn thiếu, cần cho tính năng đăng ký vật phẩm.</value>
+  </data>
+  <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Name" xml:space="preserve">
+    <value>Thêm nhóm rơi Crest of Monarch</value>
+  </data>
+  <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Description" xml:space="preserve">
+    <value>Thêm nhóm vật phẩm rơi Crest of Monarch (Loch's Feather +1) vào Icarus.</value>
+  </data>
+  <data name="FixSummonerCurseSkillsPlugIn_Name" xml:space="preserve">
+    <value>Sửa kỹ năng nguyền của Summoner</value>
+  </data>
+  <data name="FixSummonerCurseSkillsPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cài đặt kỹ năng vùng còn thiếu cho kỹ năng nguyền (sách) và Lightning Shock của Summoner.</value>
+  </data>
+  <data name="AddAreaSkillSettingsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm cài đặt kỹ năng vùng</value>
+  </data>
+  <data name="AddAreaSkillSettingsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Thêm cài đặt kỹ năng vùng mới cho các kỹ năng như Evil Spirit để chúng hoạt động đúng trở lại.</value>
+  </data>
+  <data name="FinishDarkWizardMasterTreePlugIn_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Dark Wizard</value>
+  </data>
+  <data name="FinishDarkWizardMasterTreePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện phần mở rộng hiệu ứng phép thuật trong cây Master của Dark Wizard.</value>
+  </data>
+  <data name="RemoveJewelDropLevelGapPlugInBase_Name" xml:space="preserve">
+    <value>Bỏ chênh lệch cấp rơi của ngọc</value>
+  </data>
+  <data name="RemoveJewelDropLevelGapPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này bỏ điều kiện chênh lệch cấp rơi hiện có cho ngọc và các vật phẩm tương tự luôn được rơi.</value>
+  </data>
+  <data name="FixSetBonusesPlugIn_Name" xml:space="preserve">
+    <value>Sửa thưởng bộ vật phẩm</value>
+  </data>
+  <data name="FixSetBonusesPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa thưởng bộ cho phòng thủ cộng thêm của bộ +10~15 và tỉ lệ phòng thủ.</value>
+  </data>
+  <data name="AddElfSoldierBuffPlugIn_Name" xml:space="preserve">
+    <value>Thêm buff lính Elf</value>
+  </data>
+  <data name="AddElfSoldierBuffPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm buff lính Elf (tăng phòng thủ và sát thương) thành buff tùy chỉnh được.</value>
+  </data>
+  <data name="FixSocketSeedCraftingUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa chế tạo seed socket</value>
+  </data>
+  <data name="FixSocketSeedCraftingUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này đặt đúng cài đặt cho chế tạo seed socket.</value>
+  </data>
+  <data name="FixWarriorMorningStarPlugIn_Name" xml:space="preserve">
+    <value>Sửa Morning Star của bộ Warrior</value>
+  </data>
+  <data name="FixWarriorMorningStarPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa vũ khí của bộ thần Warrior. Hand Axe được thay bằng Morning Star.</value>
+  </data>
+  <data name="SpawnFixesUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa điểm xuất hiện</value>
+  </data>
+  <data name="SpawnFixesUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa điểm xuất hiện của NPC. 1) Sửa tượng Crywolf. 2) Thương nhân lang thang và Marlon. 3) Điều kiện xuất hiện ở Hỗn Nguyên Lâu 1</value>
+  </data>
+  <data name="FixJeweleryPetsDamageCalcsPlugInSeason6_Name" xml:space="preserve">
+    <value>Sửa tính sát thương của trang sức và thú cưng</value>
+  </data>
+  <data name="FixJeweleryPetsDamageCalcsPlugInSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa các dòng liên quan đến sát thương của trang sức và thú cưng, và giá trị kháng của trang sức.</value>
+  </data>
+  <data name="RemoveDuplicateStatAttributesPlugInBase_Name" xml:space="preserve">
+    <value>Bỏ thuộc tính chỉ số trùng lặp</value>
+  </data>
+  <data name="RemoveDuplicateStatAttributesPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này bỏ các thuộc tính chỉ số được định nghĩa nhiều lần cho một lớp nhân vật.</value>
+  </data>
+  <data name="FixWeaponRisePercentagePlugInBase_Name" xml:space="preserve">
+    <value>Sửa phần trăm tăng của vũ khí</value>
+  </data>
+  <data name="FixWeaponRisePercentagePlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa phần trăm tăng của vũ khí (gậy)</value>
+  </data>
+  <data name="FixItemRequirementsPlugIn_Name" xml:space="preserve">
+    <value>Sửa yêu cầu vật phẩm (cung Elf)</value>
+  </data>
+  <data name="FixItemRequirementsPlugIn_Description" xml:space="preserve">
+    <value>Cập nhật một số yêu cầu vật phẩm của cung Elf bị khởi tạo sai.</value>
+  </data>
+  <data name="AddCastleSiegeDataUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm dữ liệu Công thành chiến</value>
+  </data>
+  <data name="AddCastleSiegeDataUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cấu hình và trạng thái lưu trữ của Công thành chiến.</value>
+  </data>
+  <data name="AddCashShopUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm cửa hàng tiền mặt</value>
+  </data>
+  <data name="AddCashShopUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cấu hình cửa hàng tiền mặt với các gói của script cửa hàng 512.2012.084 của game client, và các vật phẩm được áp dụng khi dùng từ kho cửa hàng tiền mặt (thẻ nhân vật, mở rộng kho đồ và hành trang).</value>
+  </data>
+  <data name="FixAttackSpeedCalculationUpdate_Name" xml:space="preserve">
+    <value>Sửa cách tính tốc độ đánh</value>
+  </data>
+  <data name="FixAttackSpeedCalculationUpdate_Description" xml:space="preserve">
+    <value>Thêm thuộc tính và quan hệ cho tốc độ đánh. Thêm hiệu ứng cho Ale và Potion of Soul.</value>
+  </data>
+  <data name="FixItemOptionsAndAttackSpeedPlugInBase_Name" xml:space="preserve">
+    <value>Sửa dòng vật phẩm và tốc độ đánh</value>
+  </data>
+  <data name="FixItemOptionsAndAttackSpeedPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa một số dòng vật phẩm (sát thương, tỉ lệ phòng thủ) và tốc độ đánh của vũ khí.</value>
+  </data>
+  <data name="FinishDarkKnightMasterTreePlugInBase_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Dark Knight</value>
+  </data>
+  <data name="FinishDarkKnightMasterTreePlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện kỹ năng và hiệu ứng cây Master của Dark Knight. Cũng sửa cách tính sát thương khi cầm hai tay.</value>
+  </data>
+  <data name="AddGlobalMoneyAmountRateAttributePlugInBase_Name" xml:space="preserve">
+    <value>Thêm thuộc tính tỉ lệ zen toàn cục</value>
+  </data>
+  <data name="AddGlobalMoneyAmountRateAttributePlugInBase_Description" xml:space="preserve">
+    <value>Chuyển thuộc tính MoneyAmountRate từ thuộc tính gốc của lớp nhân vật sang thuộc tính gốc toàn cục.</value>
+  </data>
+  <data name="FixDamageCalcsPlugInBase_Name" xml:space="preserve">
+    <value>Sửa cách tính sát thương</value>
+  </data>
+  <data name="FixDamageCalcsPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa chỉ số nhân vật, hiệu ứng phép, vật phẩm và các dòng liên quan đến sát thương.</value>
+  </data>
+  <data name="FixEventItemsDropFromMonstersUpdatePlugIn095d_Name" xml:space="preserve">
+    <value>Sửa DropsFromMonsters của vật phẩm sự kiện (0.95d)</value>
+  </data>
+  <data name="FixEventItemsDropFromMonstersUpdatePlugIn095d_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa các vật phẩm sự kiện có DropsFromMonsters bật, khiến chúng rơi ở cấp 0 thay vì dùng DropItemGroup riêng của chúng.</value>
+  </data>
+  <data name="AddItemDropGroupForJewelsUpdate075_Name" xml:space="preserve">
+    <value>Tạo nhóm vật phẩm rơi cho ngọc</value>
+  </data>
+  <data name="AddItemDropGroupForJewelsUpdate075_Description" xml:space="preserve">
+    <value>Bản cập nhật này tạo một nhóm vật phẩm rơi riêng cho ngọc với tỉ lệ mặc định 5%.</value>
+  </data>
+  <data name="FixCharStatsForceWavePlugInBase_Name" xml:space="preserve">
+    <value>Sửa hệ số phòng thủ của DW</value>
+  </data>
+  <data name="FixCharStatsForceWavePlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa hệ số Nhanh nhẹn ra phòng thủ của DW.</value>
+  </data>
+  <data name="FixOrbRequirementsPlugInBase_Name" xml:space="preserve">
+    <value>Sửa yêu cầu của ngọc kỹ năng</value>
+  </data>
+  <data name="FixOrbRequirementsPlugInBase_Description" xml:space="preserve">
+    <value>Sửa yêu cầu Năng lượng, Sức mạnh và Nhanh nhẹn của ngọc, pha lê và sách dùng để học kỹ năng. Ví dụ Orb of Healing, Greater Defense và Greater Damage yêu cầu 100 Năng lượng thay vì 52, 72 và 92.</value>
+  </data>
+  <data name="FinishElfMasterTreePlugIn_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Elf</value>
+  </data>
+  <data name="FinishElfMasterTreePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện cây Master của Elf và sửa một số giá trị kỹ năng. Cũng thêm mũi tên phụ (thứ 4) còn thiếu cho một số cung (nỏ) cấp cao.</value>
+  </data>
+  <data name="ScopeExtraProjectilesPlugIn_Name" xml:space="preserve">
+    <value>Giới hạn mũi tên phụ theo kỹ năng</value>
+  </data>
+  <data name="ScopeExtraProjectilesPlugIn_Description" xml:space="preserve">
+    <value>Cho mũi tên phụ của Triple Shot Mastery chỉ áp dụng cho kỹ năng Triple Shot, còn khi trang bị một số cung (nỏ) thì vẫn tăng mọi kỹ năng nhiều mũi tên.</value>
+  </data>
+  <data name="AddItemRegistrationAttributesUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm thuộc tính đăng ký vật phẩm</value>
+  </data>
+  <data name="AddItemRegistrationAttributesUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm dữ liệu cho thuộc tính đăng ký vật phẩm.</value>
+  </data>
+  <data name="FixWingsDmgRatesUpdatePlugInBase_Name" xml:space="preserve">
+    <value>Sửa tỉ lệ sát thương của cánh</value>
+  </data>
+  <data name="FixWingsDmgRatesUpdatePlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa giá trị bảng thưởng theo cấp về hấp thụ và tăng sát thương của cánh.</value>
+  </data>
+  <data name="FixLifeSwellEffectUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa hiệu ứng Life Swell</value>
+  </data>
+  <data name="FixLifeSwellEffectUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này đặt đúng cài đặt cho hiệu ứng Life Swell.</value>
+  </data>
+  <data name="AddPointsPerResetAttributePlugIn_Name" xml:space="preserve">
+    <value>Thêm thuộc tính PointsPerReset</value>
+  </data>
+  <data name="AddPointsPerResetAttributePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm thuộc tính PointsPerReset.</value>
+  </data>
+  <data name="ChainLightningUpdatePlugIn_Name" xml:space="preserve">
+    <value>Kỹ năng Chain Lightning</value>
+  </data>
+  <data name="ChainLightningUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này đặt đúng cài đặt cho kỹ năng Chain Lightning.</value>
+  </data>
+  <data name="FixDefenseCalcsPlugInBase_Name" xml:space="preserve">
+    <value>Sửa cách tính phòng thủ</value>
+  </data>
+  <data name="FixDefenseCalcsPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa chỉ số nhân vật, hiệu ứng phép và các dòng liên quan đến phòng thủ.</value>
+  </data>
+  <data name="FixDuelArenaSafezoneMapUpdate_Name" xml:space="preserve">
+    <value>Sửa bản đồ vùng an toàn của đấu trường</value>
+  </data>
+  <data name="FixDuelArenaSafezoneMapUpdate_Description" xml:space="preserve">
+    <value>Đặt vùng an toàn của đấu trường tay đôi là Lorencia.</value>
+  </data>
+  <data name="AddMovementSpeedAttributesPlugInBase_Name" xml:space="preserve">
+    <value>Thêm thuộc tính tốc độ di chuyển</value>
+  </data>
+  <data name="AddMovementSpeedAttributesPlugInBase_Description" xml:space="preserve">
+    <value>Thêm cấu hình tốc độ di chuyển dựa trên thuộc tính cho người chơi, quái, vật phẩm, hiệu ứng và bản đồ dưới nước.</value>
+  </data>
+  <data name="AddShieldRatioAttributesPlugIn_Name" xml:space="preserve">
+    <value>Thêm thuộc tính tỉ lệ SD</value>
+  </data>
+  <data name="AddShieldRatioAttributesPlugIn_Description" xml:space="preserve">
+    <value>Thêm tỉ lệ sát thương vào SD tùy chỉnh được và ngưỡng phá SD.</value>
+  </data>
+  <data name="SystemConfigurationAddedPlugInBase_Name" xml:space="preserve">
+    <value>Thêm cấu hình hệ thống</value>
+  </data>
+  <data name="SystemConfigurationAddedPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cấu hình hệ thống mới.</value>
+  </data>
+  <data name="AddKanturuDataUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm dữ liệu Kanturu</value>
+  </data>
+  <data name="AddKanturuDataUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cấu hình sự kiện Tháp Tinh Luyện Kanturu.</value>
+  </data>
+  <data name="StandardizeEventEnterDurationPlugInBase_Name" xml:space="preserve">
+    <value>Thống nhất thời gian vào sự kiện</value>
+  </data>
+  <data name="StandardizeEventEnterDurationPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này nâng thời gian vào của các sự kiện có lối vào chung, như Huyết Lâu, Quảng Trường Quỷ và Kanturu, lên năm phút như mọi thông báo mở cửa sự kiện.</value>
+  </data>
+  <data name="FixDrainLifeSkillUpdate_Name" xml:space="preserve">
+    <value>Sửa kỹ năng Drain Life</value>
+  </data>
+  <data name="FixDrainLifeSkillUpdate_Description" xml:space="preserve">
+    <value>Cập nhật thuộc tính của kỹ năng Drain Life của Summoner để hoạt động đúng.</value>
+  </data>
+  <data name="FinishRageFighterMasterTreePlugIn_Name" xml:space="preserve">
+    <value>Hoàn thiện cây Master của Rage Fighter</value>
+  </data>
+  <data name="FinishRageFighterMasterTreePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này hoàn thiện cây Master của Rage Fighter và sửa một số giá trị kỹ năng.</value>
+  </data>
+  <data name="FixIgnoreDefenseSkillUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa kỹ năng Ignore Defense</value>
+  </data>
+  <data name="FixIgnoreDefenseSkillUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm định nghĩa hiệu ứng phép cho kỹ năng Ignore Defense.</value>
+  </data>
+  <data name="FixMaxManaAndAbilityJewelryOptionsUpdateSeason6_Name" xml:space="preserve">
+    <value>Sửa dòng trang sức tăng % mana/AG tối đa</value>
+  </data>
+  <data name="FixMaxManaAndAbilityJewelryOptionsUpdateSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa cách tính % tăng mana/AG tối đa của dòng Ring of Magic/Pendant of Ability</value>
+  </data>
+  <data name="AddRandomExperienceConfigAttributesPlugInBase_Name" xml:space="preserve">
+    <value>Thêm thuộc tính cấu hình kinh nghiệm ngẫu nhiên</value>
+  </data>
+  <data name="AddRandomExperienceConfigAttributesPlugInBase_Description" xml:space="preserve">
+    <value>Thêm các thuộc tính cấu hình kinh nghiệm ngẫu nhiên mới vào cấu hình game.</value>
+  </data>
+  <data name="FixCharStatsForceWavePlugInSeason6_Name" xml:space="preserve">
+    <value>Sửa chỉ số nhân vật và kỹ năng Force Wave Str của DL</value>
+  </data>
+  <data name="FixCharStatsForceWavePlugInSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa một số giá trị chỉ số nhân vật và kỹ năng Master Force Wave Strengthener của DL.</value>
+  </data>
+  <data name="FixWarpLevelUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa giảm cấp dịch chuyển</value>
+  </data>
+  <data name="FixWarpLevelUpdatePlugIn_Description" xml:space="preserve">
+    <value>Plugin này cập nhật LevelWarpRequirementReductionPercent cho MG, DL và RF.</value>
+  </data>
+  <data name="FixSkillMultipliersPlugIn_Name" xml:space="preserve">
+    <value>Sửa hệ số kỹ năng</value>
+  </data>
+  <data name="FixSkillMultipliersPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa hệ số kỹ năng của RF và thêm một số hệ số riêng cho kỹ năng.</value>
+  </data>
+  <data name="AddWhiteWizardInvasionMobsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm quái White Wizard xâm lăng</value>
+  </data>
+  <data name="AddWhiteWizardInvasionMobsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Thêm White Wizard (135), Destructive Ogre Soldier (136) và Destructive Ogre Archer (137) cùng nhóm vật phẩm rơi cho cơ sở dữ liệu có sẵn.</value>
+  </data>
+  <data name="AddKalimaPlugIn_Name" xml:space="preserve">
+    <value>Thêm Kalima</value>
+  </data>
+  <data name="AddKalimaPlugIn_Description" xml:space="preserve">
+    <value>Thêm các vật phẩm cần để vào bản đồ Kalima.</value>
+  </data>
+  <data name="FixEventItemsDropFromMonstersUpdatePlugInBase_Name" xml:space="preserve">
+    <value>Sửa DropsFromMonsters của vật phẩm sự kiện</value>
+  </data>
+  <data name="FixEventItemsDropFromMonstersUpdatePlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa các vật phẩm sự kiện có DropsFromMonsters bật, khiến chúng rơi ở cấp 0 thay vì dùng DropItemGroup riêng của chúng.</value>
+  </data>
+  <data name="FixCharStatsForceWavePlugIn095d_Name" xml:space="preserve">
+    <value>Sửa chỉ số nhân vật DW và MG</value>
+  </data>
+  <data name="FixCharStatsForceWavePlugIn095d_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa hệ số Nhanh nhẹn ra phòng thủ (DW) và Năng lượng gốc (MG).</value>
+  </data>
+  <data name="FixHorseFenrirOptionsSoulBarrierPlugIn_Name" xml:space="preserve">
+    <value>Sửa dòng Dark Horse và Fenrir vàng, và hiệu ứng Soul Barrier</value>
+  </data>
+  <data name="FixHorseFenrirOptionsSoulBarrierPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm dòng Dark Horse, sửa dòng Fenrir vàng và hiệu ứng Soul Barrier.</value>
+  </data>
+  <data name="FixLevelDiv20ExcOptionUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa dòng excellent sát thương cấp/20</value>
+  </data>
+  <data name="FixLevelDiv20ExcOptionUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa dòng excellent cộng cấp / 20 vào sát thương phép</value>
+  </data>
+  <data name="AddGuardsDataPlugIn_Name" xml:space="preserve">
+    <value>Thêm dữ liệu NPC lính gác</value>
+  </data>
+  <data name="AddGuardsDataPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm dữ liệu cho NPC lính gác để chúng có thể tấn công và đi lại.</value>
+  </data>
+  <data name="FixRageFighterMultipleHitSkillsPlugIn_Name" xml:space="preserve">
+    <value>Sửa kỹ năng nhiều đòn của Rage Fighter</value>
+  </data>
+  <data name="FixRageFighterMultipleHitSkillsPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm số đòn còn thiếu cho các kỹ năng Killing Blow, Beast Uppercut, Chain Drive, Dragon Roar và Phoenix Shot của Rage Fighter, cùng hiệu ứng phép của chúng.</value>
+  </data>
+  <data name="FixChaosMixesPlugInSeason6_Name" xml:space="preserve">
+    <value>Sửa cài đặt ghép Chaos và một số dòng</value>
+  </data>
+  <data name="FixChaosMixesPlugInSeason6_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa cài đặt chế tạo vũ khí Chaos, cánh cấp 1, Dinorant, nâng cấp vật phẩm, cánh cấp 2, cánh cấp 3, áo choàng, bình SD, dòng Guardian và Secromicon; giá trị dòng giảm sát thương của Fenrir xanh (Protect); dòng phép của Wizard's Ring; dòng Guardian của đồ cấp 380 cho Summoner và Rage Fighter.</value>
+  </data>
+  <data name="AddFenrirMaterialDropGroupsUpdateSeason6_Name" xml:space="preserve">
+    <value>Thêm nhóm rơi nguyên liệu Fenrir</value>
+  </data>
+  <data name="AddFenrirMaterialDropGroupsUpdateSeason6_Description" xml:space="preserve">
+    <value>Thêm đồ rơi Splinter of Armor (5 %), Bless of Guardian (2 %) và Claw of Beast (0.5 %) cho mọi quái ở Crywolf. Nguyên liệu đã rơi ở Crywolf theo nhóm khác được bỏ qua.</value>
+  </data>
+  <data name="AddGensRewardItemsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vật phẩm thưởng Gens</value>
+  </data>
+  <data name="AddGensRewardItemsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm các hộp trang sức (14/141 đến 14/144), thành viên Gens nhận làm phần thưởng hằng tháng.</value>
+  </data>
+  <data name="FixVulcanusWarpIndexUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa số dịch chuyển Vulcanus</value>
+  </data>
+  <data name="FixVulcanusWarpIndexUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa số mục dịch chuyển của Vulcanus thành 42, như game client season 6 yêu cầu.</value>
+  </data>
+  <data name="FixFireScreamRequirementsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa yêu cầu của Fire Scream</value>
+  </data>
+  <data name="FixFireScreamRequirementsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này sửa yêu cầu Năng lượng và Mệnh lệnh của kỹ năng Fire Scream thành 150 và 70. Hai giá trị bị đảo, nên Dark Lord có ít hơn 150 Mệnh lệnh học được kỹ năng nhưng không dùng được.</value>
+  </data>
+  <data name="AddCrywolfEventUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm sự kiện Crywolf</value>
+  </data>
+  <data name="AddCrywolfEventUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm quái của sự kiện Crywolf và điểm xuất hiện, cho tượng và bàn thờ của pháo đài luôn có trên bản đồ, thêm mục dịch chuyển của pháo đài và địa hình của các trạng thái chiếm đóng.</value>
+  </data>
+  <data name="AddSmallWingsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm cánh và áo choàng nhỏ</value>
+  </data>
+  <data name="AddSmallWingsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm cánh và áo choàng nhỏ còn thiếu của cửa hàng trong game: Small Cape of Lord, Small Wing of Curse, Small Wings of Elf, Small Wings of Heaven, Small Wings of Satan và Little Warrior's Cloak. Vật phẩm có sẵn cùng số được giữ nguyên.</value>
+  </data>
+  <data name="SetIntroducedGameVersionsPlugInBase_Name" xml:space="preserve">
+    <value>Đặt phiên bản game của nội dung</value>
+  </data>
+  <data name="SetIntroducedGameVersionsPlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này ghi lại phiên bản game đã thêm các bản đồ, lớp nhân vật, quái, vật phẩm và sự kiện. Cho phép bật hoặc tắt hàng loạt nội dung của một số phiên bản game. Phiên bản đã đặt trước được giữ.</value>
+  </data>
+  <data name="FixDinorantOptionNumbersPlugIn_Name" xml:space="preserve">
+    <value>Sửa số dòng Dinorant</value>
+  </data>
+  <data name="FixDinorantOptionNumbersPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này cho mỗi dòng Dinorant một số riêng, là bit của nó trong trường dòng mà client mong đợi.</value>
+  </data>
+  <data name="ConfigureNpcTalkPlugInsPlugIn_Name" xml:space="preserve">
+    <value>Cấu hình NPC của plugin nói chuyện</value>
+  </data>
+  <data name="ConfigureNpcTalkPlugInsPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này cấu hình NPC của các plugin xử lý nói chuyện với NPC, ví dụ NPC reset hoặc Tổng lãnh thiên thần Huyết Lâu.</value>
+  </data>
+  <data name="AddIronKnightStabUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cho Iron Knight dùng đòn đâm</value>
+  </data>
+  <data name="AddIronKnightStabUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này cho Iron Knight ở Raklion tấn công bằng đòn đâm, client hiển thị bằng hiệu ứng combo.</value>
+  </data>
+  <data name="AddLorenMarketRaulJewelBundlePlugIn_Name" xml:space="preserve">
+    <value>Thêm gói ngọc của thợ kim hoàn Raul ở chợ Loren</value>
+  </data>
+  <data name="AddLorenMarketRaulJewelBundlePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này cho thợ kim hoàn Raul (546) ở chợ Loren mở cửa sổ gói ngọc, để gộp ngọc thành gói và tách ra, như Lahap.</value>
+  </data>
+  <data name="MoveServerPortsOutOfDynamicRangePlugInBase_Name" xml:space="preserve">
+    <value>Chuyển cổng máy chủ ra khỏi dải cổng động</value>
+  </data>
+  <data name="MoveServerPortsOutOfDynamicRangePlugInBase_Description" xml:space="preserve">
+    <value>Bản cập nhật này chuyển cổng của game server và chat server từ 55900 – 55999 sang 45900 – 45999 (ví dụ 55901 thành 45901 và 55980 thành 45980), vì các cổng cũ nằm trong dải cổng động của hệ điều hành và có thể đã bị dùng. Hãy chỉnh tường lửa, chuyển tiếp cổng và tệp docker compose cho phù hợp.</value>
+  </data>
+  <data name="FixTransformationRingRulesUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa quy tắc nhẫn biến hình</value>
+  </data>
+  <data name="FixTransformationRingRulesUpdatePlugIn_Description" xml:space="preserve">
+    <value>Yêu cầu cấp nhân vật 50 cho nhẫn biến hình cấp 3 đến 5 và thêm thưởng 20% máu tối đa của nhẫn Death Cow.</value>
+  </data>
+  <data name="AddRageFighterAncientSetsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm bộ thần Rage Fighter</value>
+  </data>
+  <data name="AddRageFighterAncientSetsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm các bộ thần Vega và Chamer của đồ Sacred.</value>
+  </data>
+  <data name="ConfigureCastleSiegeGuardTalkPlugInsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Cấu hình lính gác Công thành chiến</value>
+  </data>
+  <data name="ConfigureCastleSiegeGuardTalkPlugInsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Lính gác ở cầu của bản đồ Công thành chiến mở cửa sổ đăng ký, và lính gác ở lối vào Land of Trials thành NPC thụ động mở hộp thoại Land of Trials.</value>
+  </data>
+  <data name="AddItemStatProfilesUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm hồ sơ chỉ số vật phẩm</value>
+  </data>
+  <data name="AddItemStatProfilesUpdatePlugIn_Description" xml:space="preserve">
+    <value>Thêm các hồ sơ chỉ số vật phẩm, chứa công thức vật phẩm (yêu cầu tăng thế nào, đồ excellent và thần được thêm gì) dưới dạng dữ liệu, và gán cho mỗi vật phẩm hồ sơ theo loại của nó. Giá trị game tính ra không đổi; hồ sơ có sẵn và vật phẩm đã có hồ sơ được giữ.</value>
+  </data>
+  <data name="AddCraftingBonusPercentageAttributePlugInBase_Name" xml:space="preserve">
+    <value>Thêm thuộc tính phần trăm thưởng chế tạo</value>
+  </data>
+  <data name="AddCraftingBonusPercentageAttributePlugInBase_Description" xml:space="preserve">
+    <value>Thêm thuộc tính xác định số điểm phần trăm cộng vào tỉ lệ thành công khi chế tạo vật phẩm.</value>
+  </data>
+  <data name="FixSeedSphereMaximumItemLevelUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa cấp vật phẩm tối đa của seed sphere</value>
+  </data>
+  <data name="FixSeedSphereMaximumItemLevelUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này đặt cấp vật phẩm tối đa của seed sphere bằng số dòng cao nhất của nguyên tố đó. Cấp vật phẩm của seed sphere xác định dòng của nó, nên trước đây không tạo được seed sphere có dòng khác dòng đầu tiên, ví dụ bằng lệnh chat item.</value>
+  </data>
+  <data name="AddItemPriceDefinitionsPlugIn_Name" xml:space="preserve">
+    <value>Thêm định nghĩa giá vật phẩm</value>
+  </data>
+  <data name="AddItemPriceDefinitionsPlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm định nghĩa giá của các vật phẩm đặc biệt như ngọc, bình thuốc và vé sự kiện, trước đây được viết cứng trong mã. Nếu không có, các vật phẩm này có giá như trang bị thường.</value>
+  </data>
+  <data name="AddCrystalSwordIceChanceUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm tỉ lệ đóng băng của Crystal Sword</value>
+  </data>
+  <data name="AddCrystalSwordIceChanceUpdatePlugIn_Description" xml:space="preserve">
+    <value>Thêm tỉ lệ đóng băng của Crystal Sword, biến một đòn tấn công thành kỹ năng băng.</value>
+  </data>
+  <data name="AddResetFruitsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm quả giảm</value>
+  </data>
+  <data name="AddResetFruitsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm quả giảm Sức mạnh, Nhanh nhẹn, Thể lực, Năng lượng và Mệnh lệnh, lấy lại điểm đã cộng vào chỉ số và trả lại thành điểm lên cấp. Các gói của cửa hàng trong game chứa chúng được mở bán.</value>
+  </data>
+  <data name="AddFreeTicketItemsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vé sự kiện miễn phí</value>
+  </data>
+  <data name="AddFreeTicketItemsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm vé miễn phí của Quảng Trường Quỷ, Huyết Lâu, Đền Ảo Ảnh và Hỗn Nguyên Lâu, cho phép vào sự kiện ở bất kỳ cấp nào. Các gói của cửa hàng trong game chứa chúng được mở bán.</value>
+  </data>
+  <data name="AddGoblinBoxesUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm hộp vàng và hộp bạc</value>
+  </data>
+  <data name="AddGoblinBoxesUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm Gold Key và Silver Key, Sealed Golden Box và Sealed Silver Box mà chìa khóa mở ở Chaos Goblin, và Golden Box và Silver Box cho vật phẩm hoặc zen khi được thả ra. Các gói của cửa hàng trong game chứa chìa khóa được mở bán.</value>
+  </data>
+  <data name="AddKalimaTicketUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vé Kalima</value>
+  </data>
+  <data name="AddKalimaTicketUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm vé Kalima, mở cổng đến tầng Kalima phù hợp với cấp nhân vật. Các gói của cửa hàng trong game chứa nó được mở bán.</value>
+  </data>
+  <data name="AddCashShopJeweleryUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm nhẫn và dây chuyền của cửa hàng tiền mặt</value>
+  </data>
+  <data name="AddCashShopJeweleryUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm Lethal Wizard's Ring, các nhẫn Sapphire, Ruby, Topaz và Amethyst và các dây chuyền Ruby, Emerald và Sapphire của cửa hàng trong game, với thưởng cố định. Các gói của chúng vẫn chưa bán, vì cửa hàng bán chúng có thời hạn, điều chưa được hỗ trợ.</value>
+  </data>
+  <data name="AddLuckyItemsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vật phẩm may mắn</value>
+  </data>
+  <data name="AddLuckyItemsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm các bộ giáp may mắn, vé vật phẩm may mắn và ngọc mở rộng và nâng cấp. David ở Elveland đổi một vé lấy bộ giáp may mắn hợp với lớp nhân vật. Các gói của cửa hàng trong game chứa vé được mở bán.</value>
+  </data>
+  <data name="AddBuffItemsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vật phẩm buff</value>
+  </data>
+  <data name="AddBuffItemsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm các ấn, sách, thuốc tiên và hào quang của cửa hàng trong game, tạo hiệu ứng có thời hạn khi dùng. Vật phẩm có sẵn cùng số được giữ nguyên.</value>
+  </data>
+  <data name="AddElitePotionsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm bình thuốc Elite</value>
+  </data>
+  <data name="AddElitePotionsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm bình máu, mana và SD Elite của cửa hàng trong game, hồi máu, mana hoặc SD ngay lập tức. Các gói của cửa hàng trong game chứa chúng được mở bán.</value>
+  </data>
+  <data name="AddCraftingTalismansUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm bùa chế tạo</value>
+  </data>
+  <data name="AddCraftingTalismansUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm Talisman of Luck, tăng tỉ lệ thành công khi chế tạo theo phần trăm bằng độ bền của nó, và Talisman of Chaos Assembly, giữ lại vật phẩm khi nâng cấp +10 đến +15 thất bại. Chúng được thêm vào các công thức chấp nhận chúng, và các gói của cửa hàng trong game chứa chúng được mở bán.</value>
+  </data>
+  <data name="FixMurenRingOfFireBonusPlugIn_Name" xml:space="preserve">
+    <value>Sửa thưởng Ring of Fire của bộ Muren</value>
+  </data>
+  <data name="FixMurenRingOfFireBonusPlugIn_Description" xml:space="preserve">
+    <value>Cho Ring of Fire của bộ thần Muren thưởng Năng lượng, trước đây bị khởi tạo là Thể lực.</value>
+  </data>
+  <data name="FixDestroyPhantomArmorNamesPlugIn_Name" xml:space="preserve">
+    <value>Sửa tên giáp Destroy và Phantom</value>
+  </data>
+  <data name="FixDestroyPhantomArmorNamesPlugIn_Description" xml:space="preserve">
+    <value>Đổi tên của bộ giáp Phantom (47) và Destroy (48) cùng thưởng bộ của chúng, vốn bị khởi tạo với tên của nhau, và sửa lỗi chính tả "Destory".</value>
+  </data>
+  <data name="AddSantaVillageInvitationUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm thiệp mời đến Làng Ông Già Noel</value>
+  </data>
+  <data name="AddSantaVillageInvitationUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm thiệp mời đến Làng Ông Già Noel, đưa người chơi đến Làng Ông Già Noel, và một cổng xuất hiện ở Làng Ông Già Noel.</value>
+  </data>
+  <data name="AddHitShockSettingsPlugIn_Name" xml:space="preserve">
+    <value>Thêm cài đặt choáng khi trúng đòn</value>
+  </data>
+  <data name="AddHitShockSettingsPlugIn_Description" xml:space="preserve">
+    <value>Thêm cài đặt toàn cục về tỉ lệ choáng khi trúng đòn và ngưỡng sát thương, và dấu Uniria để người chơi cưỡi Uniria không bị choáng khi trúng đòn.</value>
+  </data>
+  <data name="FixKanturuRuins3LandingUpdatePlugIn_Name" xml:space="preserve">
+    <value>Sửa vùng đáp xuống Kanturu Ruins 3</value>
+  </data>
+  <data name="FixKanturuRuins3LandingUpdatePlugIn_Description" xml:space="preserve">
+    <value>Thu hẹp vùng đáp xuống gốc khi dịch chuyển đến Kanturu Ruins 3 vào phần địa hình đi được. Đích đã tùy chỉnh và các cài đặt khác được giữ.</value>
+  </data>
+  <data name="AdjustIceArrowFreezeDurationUpdatePlugIn_Name" xml:space="preserve">
+    <value>Chỉnh thời gian đóng băng của Ice Arrow</value>
+  </data>
+  <data name="AdjustIceArrowFreezeDurationUpdatePlugIn_Description" xml:space="preserve">
+    <value>Kéo dài thời gian đóng băng mặc định của Ice Arrow, và thêm việc giảm thời gian khi trúng đòn. Thời gian đã tùy chỉnh được giữ nguyên. Cũng đồng bộ Ice Arrow Str, Chain Drive Str, Strike of Destruction Str và Poison Str với hiệu ứng phép của kỹ năng gốc.</value>
+  </data>
+  <data name="FieldMonsterSpawnsUpdatePlugInSeason6_Name" xml:space="preserve">
+    <value>Điểm xuất hiện quái Season 6 ở Devias, Noria và Elvenland</value>
+  </data>
+  <data name="FieldMonsterSpawnsUpdatePlugInSeason6_Description" xml:space="preserve">
+    <value>Thay điểm xuất hiện quái của Devias, Noria và Elvenland, vốn trải trên các phần tư bản đồ, bằng bố cục Season 6 gồm các vùng nhỏ và điểm đơn. Thêm nhện vào Noria và Elvenland. Điểm xuất hiện đã tùy chỉnh của quái ngoài đồng ở các bản đồ này bị ghi đè. Cũng bỏ điểm xuất hiện quái trùng ở Dungeon (254) và Lost Tower (2).</value>
+  </data>
+  <data name="FieldMonsterSpawnsUpdatePlugInBase_Name" xml:space="preserve">
+    <value>Bỏ điểm xuất hiện quái trùng ở Dungeon và Lost Tower</value>
+  </data>
+  <data name="FieldMonsterSpawnsUpdatePlugInBase_Description" xml:space="preserve">
+    <value>Bỏ các điểm xuất hiện quái bị định nghĩa hai lần: 254 ở Dungeon, vì vậy có gấp đôi số quái dự định, và 2 ở Lost Tower. Các điểm khác được giữ.</value>
+  </data>
+  <data name="AddProtectionTalismansUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm bùa bảo vệ</value>
+  </data>
+  <data name="AddProtectionTalismansUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm Talisman of Guardian, bảo vệ khỏi hình phạt khi chết, và Talisman of Item Protection, giữ độ bền của vật phẩm đang mặc.</value>
+  </data>
+  <data name="AddHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm kỹ năng HNMO</value>
+  </data>
+  <data name="AddHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm 28 kỹ năng HNMO (số 700 đến 727, bốn kỹ năng mỗi lớp) cùng hiệu ứng, và nhiệm vụ thử thách của lính Elf ở Lorencia, dạy kỹ năng thứ tư của mỗi lớp.</value>
+  </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Name" xml:space="preserve">
+    <value>Tăng sức mạnh kỹ năng HNMO</value>
+  </data>
+  <data name="StrongerHnmoSkillsUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này làm 28 kỹ năng HNMO mạnh hơn 20 % (sát thương, buff và debuff; chi phí và thời gian hồi giữ nguyên) và cho nhiệm vụ thử thách của lính Elf yêu cầu 200 lần hạ quái và năm ngọc Chaos.</value>
+  </data>
+</root>

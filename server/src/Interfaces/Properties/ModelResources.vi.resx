@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LetterHeader_TypeCaption" xml:space="preserve">
+    <value>Tiêu đề thư</value>
+  </data>
+  <data name="LetterHeader_TypeCaptionPlural" xml:space="preserve">
+    <value>Tiêu đề thư</value>
+  </data>
+  <data name="LetterHeader_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="LetterHeader_SenderName_Caption" xml:space="preserve">
+    <value>Tên người gửi</value>
+  </data>
+  <data name="LetterHeader_ReceiverName_Caption" xml:space="preserve">
+    <value>Tên người nhận</value>
+  </data>
+  <data name="LetterHeader_Subject_Caption" xml:space="preserve">
+    <value>Chủ đề</value>
+  </data>
+  <data name="LetterHeader_LetterDate_Caption" xml:space="preserve">
+    <value>Ngày gửi</value>
+  </data>
+  <data name="LetterHeader_ReadFlag_Caption" xml:space="preserve">
+    <value>Đã đọc</value>
+  </data>
+  <data name="GuildListEntry_TypeCaption" xml:space="preserve">
+    <value>Mục danh sách guild</value>
+  </data>
+  <data name="GuildListEntry_TypeCaptionPlural" xml:space="preserve">
+    <value>Mục danh sách guild</value>
+  </data>
+  <data name="GuildListEntry_PlayerName_Caption" xml:space="preserve">
+    <value>Tên người chơi</value>
+  </data>
+  <data name="GuildListEntry_ServerId_Caption" xml:space="preserve">
+    <value>Id máy chủ</value>
+  </data>
+  <data name="GuildListEntry_PlayerPosition_Caption" xml:space="preserve">
+    <value>Chức vụ người chơi</value>
+  </data>
+  <data name="Guild_TypeCaption" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="Guild_TypeCaptionPlural" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="Guild_Name_Caption" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Guild_Logo_Caption" xml:space="preserve">
+    <value>Biểu tượng</value>
+  </data>
+  <data name="Guild_Score_Caption" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="Guild_Notice_Caption" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="Guild_Hostility_Caption" xml:space="preserve">
+    <value>Guild thù địch</value>
+  </data>
+  <data name="Guild_AllianceGuild_Caption" xml:space="preserve">
+    <value>Guild liên minh</value>
+  </data>
+  <data name="Friend_TypeCaption" xml:space="preserve">
+    <value>Bạn bè</value>
+  </data>
+  <data name="Friend_TypeCaptionPlural" xml:space="preserve">
+    <value>Bạn bè</value>
+  </data>
+  <data name="Friend_Id_Caption" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Friend_CharacterId_Caption" xml:space="preserve">
+    <value>Id nhân vật</value>
+  </data>
+  <data name="Friend_FriendId_Caption" xml:space="preserve">
+    <value>Id bạn bè</value>
+  </data>
+  <data name="Friend_Accepted_Caption" xml:space="preserve">
+    <value>Đã chấp nhận</value>
+  </data>
+  <data name="Friend_RequestOpen_Caption" xml:space="preserve">
+    <value>Đang chờ chấp nhận</value>
+  </data>
+  <data name="GuildMemberStatus_TypeCaption" xml:space="preserve">
+    <value>Trạng thái thành viên guild</value>
+  </data>
+  <data name="GuildMemberStatus_TypeCaptionPlural" xml:space="preserve">
+    <value>Trạng thái thành viên guild</value>
+  </data>
+  <data name="GuildMemberStatus_GuildId_Caption" xml:space="preserve">
+    <value>Id guild</value>
+  </data>
+  <data name="GuildMemberStatus_Position_Caption" xml:space="preserve">
+    <value>Chức vụ</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_TypeCaption" xml:space="preserve">
+    <value>Thông tin xác thực Chat Server</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_TypeCaptionPlural" xml:space="preserve">
+    <value>Thông tin xác thực Chat Server</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_Index_Caption" xml:space="preserve">
+    <value>Chỉ số</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_RoomId_Caption" xml:space="preserve">
+    <value>Id phòng</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_ClientName_Caption" xml:space="preserve">
+    <value>Tên client</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_AuthenticationToken_Caption" xml:space="preserve">
+    <value>Mã xác thực</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_HostAddress_Caption" xml:space="preserve">
+    <value>Địa chỉ máy chủ</value>
+  </data>
+  <data name="ChatServerAuthenticationInfo_AuthenticationRequiredUntil_Caption" xml:space="preserve">
+    <value>Cần xác thực đến</value>
+  </data>
+  <data name="FriendViewItem_TypeCaption" xml:space="preserve">
+    <value>Mục bạn bè</value>
+  </data>
+  <data name="FriendViewItem_TypeCaptionPlural" xml:space="preserve">
+    <value>Mục bạn bè</value>
+  </data>
+  <data name="FriendViewItem_CharacterName_Caption" xml:space="preserve">
+    <value>Tên nhân vật</value>
+  </data>
+  <data name="FriendViewItem_FriendName_Caption" xml:space="preserve">
+    <value>Tên bạn bè</value>
+  </data>
+  <data name="LocalizableException_TypeCaption" xml:space="preserve">
+    <value>Ngoại lệ có bản địa hóa</value>
+  </data>
+  <data name="LocalizableException_TypeCaptionPlural" xml:space="preserve">
+    <value>Ngoại lệ có bản địa hóa</value>
+  </data>
+  <data name="LocalizableException_InnerException_Caption" xml:space="preserve">
+    <value>Ngoại lệ bên trong</value>
+  </data>
+  <data name="SpecialServerId_TypeCaption" xml:space="preserve">
+    <value>Id máy chủ đặc biệt</value>
+  </data>
+  <data name="SpecialServerId_Offline_Caption" xml:space="preserve">
+    <value>Ngoại tuyến</value>
+  </data>
+  <data name="SpecialServerId_Invisible_Caption" xml:space="preserve">
+    <value>Ẩn</value>
+  </data>
+  <data name="NoneConfigurationChangePublisher_TypeCaption" xml:space="preserve">
+    <value>Bộ phát thay đổi cấu hình rỗng</value>
+  </data>
+  <data name="NoneConfigurationChangePublisher_TypeCaptionPlural" xml:space="preserve">
+    <value>Bộ phát thay đổi cấu hình rỗng</value>
+  </data>
+  <data name="GuildPosition_TypeCaption" xml:space="preserve">
+    <value>Chức vụ guild</value>
+  </data>
+  <data name="GuildPosition_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="GuildPosition_NormalMember_Caption" xml:space="preserve">
+    <value>Thành viên thường</value>
+  </data>
+  <data name="GuildPosition_GuildMaster_Caption" xml:space="preserve">
+    <value>Guild Master</value>
+  </data>
+  <data name="GuildPosition_BattleMaster_Caption" xml:space="preserve">
+    <value>Battle Master</value>
+  </data>
+  <data name="GuildPosition_AssistantMaster_Caption" xml:space="preserve">
+    <value>Phó Guild Master</value>
+  </data>
+  <data name="LocalizableExceptionBase_TypeCaption" xml:space="preserve">
+    <value>Ngoại lệ có bản địa hóa (gốc)</value>
+  </data>
+  <data name="LocalizableExceptionBase_TypeCaptionPlural" xml:space="preserve">
+    <value>Ngoại lệ có bản địa hóa (gốc)</value>
+  </data>
+  <data name="LocalizableExceptionBase_FormatArguments_Caption" xml:space="preserve">
+    <value>Tham số định dạng</value>
+  </data>
+  <data name="LocalizableExceptionBase_ResourceKey_Caption" xml:space="preserve">
+    <value>Khóa tài nguyên</value>
+  </data>
+  <data name="SpecialServerIds_TypeCaption" xml:space="preserve">
+    <value>Id máy chủ đặc biệt</value>
+  </data>
+  <data name="SpecialServerIds_TypeCaptionPlural" xml:space="preserve">
+    <value>Id máy chủ đặc biệt</value>
+  </data>
+  <data name="ServerType_TypeCaption" xml:space="preserve">
+    <value>Loại máy chủ</value>
+  </data>
+  <data name="ServerType_Undefined_Caption" xml:space="preserve">
+    <value>Không xác định</value>
+  </data>
+  <data name="ServerType_GameServer_Caption" xml:space="preserve">
+    <value>Game Server</value>
+  </data>
+  <data name="ServerType_ConnectServer_Caption" xml:space="preserve">
+    <value>Connect Server</value>
+  </data>
+  <data name="ServerType_ChatServer_Caption" xml:space="preserve">
+    <value>Chat Server</value>
+  </data>
+  <data name="ServerState_TypeCaption" xml:space="preserve">
+    <value>Trạng thái máy chủ</value>
+  </data>
+  <data name="ServerState_Stopped_Caption" xml:space="preserve">
+    <value>Đã dừng</value>
+  </data>
+  <data name="ServerState_Starting_Caption" xml:space="preserve">
+    <value>Đang khởi động</value>
+  </data>
+  <data name="ServerState_Started_Caption" xml:space="preserve">
+    <value>Đang chạy</value>
+  </data>
+  <data name="ServerState_Stopping_Caption" xml:space="preserve">
+    <value>Đang dừng</value>
+  </data>
+  <data name="ServerState_Timeout_Caption" xml:space="preserve">
+    <value>Hết thời gian chờ</value>
+  </data>
+  <data name="MessageType_TypeCaption" xml:space="preserve">
+    <value>Loại thông báo</value>
+  </data>
+  <data name="MessageType_GoldenCenter_Caption" xml:space="preserve">
+    <value>Vàng giữa màn hình</value>
+  </data>
+  <data name="MessageType_BlueNormal_Caption" xml:space="preserve">
+    <value>Xanh thường</value>
+  </data>
+  <data name="MessageType_GuildNotice_Caption" xml:space="preserve">
+    <value>Thông báo guild</value>
+  </data>
+</root>
