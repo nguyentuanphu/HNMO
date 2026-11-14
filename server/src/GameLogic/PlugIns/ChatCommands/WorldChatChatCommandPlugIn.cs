@@ -46,6 +46,11 @@ public class WorldChatChatCommandPlugIn : IChatCommandPlugIn
             return;
         }
 
+        if (!await Chat.ChatSpamGuardPlugIn.CheckAsync(player, message).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var eventArgs = new CancelEventArgs();
         player.GameContext.PlugInManager.GetPlugInPoint<IChatMessageReceivedPlugIn>()?.ChatMessageReceived(player, message, eventArgs);
         if (eventArgs.Cancel)

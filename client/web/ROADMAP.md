@@ -111,6 +111,13 @@ contribution, the family mark on the pointed player done; the marks in every pla
    Plugins, "Game name" (`GameNamePlugIn`); the web game reads it through `/game-name.json`
    (`src/gameName.ts`, test `game-name.spec.ts`).
 7. **(extra)** Admin panel redesign, and a check that every game setting can be changed there.
+8. ✅ **(extra, server)** Monster amount per map ×0.5 to ×5 on the admin panel's map editor
+   (`MonsterAmountPlugIn`, applied at once to the running maps; the saved quantities stay).
+9. ✅ **(extra, server)** Chat: offline whispers kept (20 per receiver, 7 days, file
+   `offline-whispers.json` in the server folder) and delivered "(offline)" on entering; a whisper reaches
+   other game servers of the same process; the admin panel's chat log (Players, Chat log: the last 2000
+   lines, search, live refresh, mute 10 min / 1 h / 1 day for operators, open the account); a spam guard
+   (the same text more than 3 times in 10 s or more than 8 lines in 5 s: "Please don't spam.", GMs exempt).
 
 ## 11. Release
 - ✅ **(extra)** Player limit: 10 at once without a license; a signed `license.hnmo` (owner's

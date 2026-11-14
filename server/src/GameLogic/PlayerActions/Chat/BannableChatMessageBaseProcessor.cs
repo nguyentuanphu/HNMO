@@ -4,6 +4,8 @@
 
 namespace HNMO.GameLogic.PlayerActions.Chat;
 
+using HNMO.GameLogic.PlugIns.Chat;
+
 /// <summary>
 /// A chat message processor for normal chat.
 /// </summary>
@@ -24,6 +26,11 @@ public abstract class BannableChatMessageBaseProcessor : IChatMessageProcessor
                 await sender.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ChatBanSecondsRemaining), (int)Math.Ceiling(remainingChatBan.TotalSeconds)).ConfigureAwait(false);
             }
 
+            return;
+        }
+
+        if (!await ChatSpamGuardPlugIn.CheckAsync(sender, content.Message).ConfigureAwait(false))
+        {
             return;
         }
 

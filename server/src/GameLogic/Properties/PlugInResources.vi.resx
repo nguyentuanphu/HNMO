@@ -2235,4 +2235,58 @@
   <data name="MonsterAmountConfiguration_Multiplier_Name" xml:space="preserve">
     <value>Hệ số nhân</value>
   </data>
+  <data name="OfflineWhisperPlugIn_Name" xml:space="preserve">
+    <value>Thì thầm khi ngoại tuyến</value>
+  </data>
+  <data name="OfflineWhisperPlugIn_Description" xml:space="preserve">
+    <value>Giữ tin thì thầm gửi tới nhân vật không ở trong game và chuyển tới, có đánh dấu "(ngoại tuyến)", khi nhân vật vào game. Người gửi được báo rằng người nhận đang ngoại tuyến. Tin được lưu trong một tệp ở thư mục máy chủ nên vẫn còn sau khi khởi động lại.</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumPerReceiver_Name" xml:space="preserve">
+    <value>Tối đa mỗi người nhận</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumPerReceiver_Description" xml:space="preserve">
+    <value>Số tin thì thầm tối đa chờ một nhân vật; tin thêm sẽ bị từ chối.</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumAgeDays_Name" xml:space="preserve">
+    <value>Thời gian tối đa (ngày)</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_MaximumAgeDays_Description" xml:space="preserve">
+    <value>Tin thì thầm chờ lâu hơn sẽ bị xóa.</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_FileName_Name" xml:space="preserve">
+    <value>Tệp</value>
+  </data>
+  <data name="OfflineWhisperConfiguration_FileName_Description" xml:space="preserve">
+    <value>Tệp trong thư mục máy chủ giữ các tin đang chờ qua các lần khởi động lại; để trống thì chỉ giữ trong bộ nhớ.</value>
+  </data>
+  <data name="ChatLogPlugIn_Name" xml:space="preserve">
+    <value>Nhật ký chat</value>
+  </data>
+  <data name="ChatLogPlugIn_Description" xml:space="preserve">
+    <value>Giữ 2000 dòng chat công khai, nhóm, bang hội, liên minh, thế giới và thì thầm gần nhất trong bộ nhớ cho nhật ký chat của trang quản trị (Người chơi, Nhật ký chat).</value>
+  </data>
+  <data name="ChatSpamGuardPlugIn_Name" xml:space="preserve">
+    <value>Chống spam chat</value>
+  </data>
+  <data name="ChatSpamGuardPlugIn_Description" xml:space="preserve">
+    <value>Bỏ các dòng chat của người chơi gửi cùng một nội dung quá nhiều lần hoặc quá nhiều dòng trong thời gian ngắn, và báo "Vui lòng không spam.". GM không bị kiểm tra.</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumRepeats_Name" xml:space="preserve">
+    <value>Cùng nội dung tối đa</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumRepeats_Description" xml:space="preserve">
+    <value>Số lần tối đa được gửi cùng một nội dung trong thời gian lặp; 0 là không kiểm tra.</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_RepeatSeconds_Name" xml:space="preserve">
+    <value>Thời gian lặp (giây)</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumLines_Name" xml:space="preserve">
+    <value>Số dòng tối đa</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_MaximumLines_Description" xml:space="preserve">
+    <value>Số dòng tối đa được gửi trong thời gian dòng; 0 là không kiểm tra.</value>
+  </data>
+  <data name="ChatSpamGuardConfiguration_LineSeconds_Name" xml:space="preserve">
+    <value>Thời gian dòng (giây)</value>
+  </data>
 </root>

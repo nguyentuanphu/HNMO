@@ -2888,4 +2888,88 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="ChatLog" xml:space="preserve">
+    <value>Chat log</value>
+  </data>
+  <data name="ChatLogHint" xml:space="preserve">
+    <value>The last chat lines of the game servers (public, party, guild, alliance, world, whispers), newest first. Times are Sydney time. The lines are kept in memory only: a restart of the server empties the log.</value>
+  </data>
+  <data name="ChatLogSearch" xml:space="preserve">
+    <value>Sender or text ...</value>
+  </data>
+  <data name="ChatLogLiveRefresh" xml:space="preserve">
+    <value>Live refresh</value>
+  </data>
+  <data name="ChatLogRefresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="ChatLogShown" xml:space="preserve">
+    <value>{0} lines shown (the server keeps the last {1})</value>
+  </data>
+  <data name="ChatLogTime" xml:space="preserve">
+    <value>Time (Sydney)</value>
+  </data>
+  <data name="ChatLogMap" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="ChatLogSender" xml:space="preserve">
+    <value>Sender</value>
+  </data>
+  <data name="ChatLogKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="ChatLogText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ChatLogEmpty" xml:space="preserve">
+    <value>No chat lines yet.</value>
+  </data>
+  <data name="ChatLogMute" xml:space="preserve">
+    <value>Mute the sender</value>
+  </data>
+  <data name="ChatLogMute10Minutes" xml:space="preserve">
+    <value>Mute 10 min</value>
+  </data>
+  <data name="ChatLogMute1Hour" xml:space="preserve">
+    <value>1 h</value>
+  </data>
+  <data name="ChatLogMute1Day" xml:space="preserve">
+    <value>1 day</value>
+  </data>
+  <data name="ChatLogOpenAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="ChatLogMuted" xml:space="preserve">
+    <value>{0} is muted until {1} (Sydney time).</value>
+  </data>
+  <data name="ChatLogCharacterNotFound" xml:space="preserve">
+    <value>The character {0} wasn't found.</value>
+  </data>
+  <data name="ChatLogMuteFailed" xml:space="preserve">
+    <value>{0} couldn't be muted.</value>
+  </data>
+  <data name="ChatLogKindNormal" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="ChatLogKindParty" xml:space="preserve">
+    <value>Party</value>
+  </data>
+  <data name="ChatLogKindGuild" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="ChatLogKindAlliance" xml:space="preserve">
+    <value>Alliance</value>
+  </data>
+  <data name="ChatLogKindWhisper" xml:space="preserve">
+    <value>Whisper</value>
+  </data>
+  <data name="ChatLogKindWorld" xml:space="preserve">
+    <value>World</value>
+  </data>
+  <data name="ChatLogKindGens" xml:space="preserve">
+    <value>Gens</value>
+  </data>
+  <data name="ChatLogKindNotice" xml:space="preserve">
+    <value>Notice</value>
+  </data>
 </root>

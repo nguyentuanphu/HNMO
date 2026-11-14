@@ -1174,4 +1174,16 @@ Inventory Extensions: {18}</value>
   <data name="SkillLearned" xml:space="preserve">
     <value>You have learned {0}.</value>
   </data>
+  <data name="OfflineWhisperStored" xml:space="preserve">
+    <value>{0} is offline: your message will be delivered when they log in.</value>
+  </data>
+  <data name="OfflineWhisperReceiverFull" xml:space="preserve">
+    <value>{0} is offline and can't get more messages now.</value>
+  </data>
+  <data name="OfflineWhisperPrefix" xml:space="preserve">
+    <value>(offline) </value>
+  </data>
+  <data name="ChatSpamWarning" xml:space="preserve">
+    <value>Please don't spam.</value>
+  </data>
 </root>

@@ -458,6 +458,7 @@ public class GameContext : AsyncDisposable, IGameContext
         if (player.SelectedCharacter != null)
         {
             this.PlayersByCharacterName.TryRemove(player.SelectedCharacter.Name, out _);
+            PlugIns.Chat.OnlineCharacters.Remove(player.SelectedCharacter.Name, player);
         }
 
         if (player.CurrentMap is { } currentMap)
@@ -758,12 +759,14 @@ public class GameContext : AsyncDisposable, IGameContext
     private ValueTask PlayerEnteredWorldAsync(Player player)
     {
         this.PlayersByCharacterName.TryAdd(player.SelectedCharacter!.Name, player);
+        PlugIns.Chat.OnlineCharacters.Add(player.SelectedCharacter.Name, player);
         return ValueTask.CompletedTask;
     }
 
     private ValueTask PlayerLeftWorldAsync(Player player)
     {
         this.PlayersByCharacterName.TryRemove(player.SelectedCharacter!.Name, out _);
+        PlugIns.Chat.OnlineCharacters.Remove(player.SelectedCharacter.Name, player);
         return ValueTask.CompletedTask;
     }
 
