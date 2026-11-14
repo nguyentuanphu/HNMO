@@ -8,7 +8,7 @@
 //    disbands it, both go back to Lorencia.
 // Creating a guild needs level 100 (the server's rule), so A is test300; B is test4.
 import { test, expect, type Page } from '@playwright/test';
-import { enterWorld, expectNoPageErrors } from './helpers.js';
+import { enterWorld, expectNoPageErrors, screenPointOf } from './helpers.js';
 
 interface Npc { id: number; name: string; kind: string; monsterNumber: number | null; cell: { x: number; y: number } }
 interface SocialGame {
@@ -21,6 +21,7 @@ interface SocialGame {
     friendWindow: { isOpen: boolean; tab: number; openLetter(id: number): void; write(o: { to?: string }): { fill(v: { to?: string; subject?: string; body?: string }): void } };
     whisperTo(name: string): void;
   };
+  chat: { entries: { kind: string; text: string }[]; setWhisperTarget(name: string): void };
 }
 type Win = Window & { __game: SocialGame };
 
@@ -37,7 +38,7 @@ async function press(page: Page, selector: string): Promise<void> {
 }
 
 const hasLetter = (page: Page, subject: string) => page.evaluate((s) => (window as unknown as Win).__game.social.messenger.letters.some((l) => l.subject === s), subject);
-const chatLines = (page: Page) => page.evaluate(() => [...document.querySelectorAll('#chatLog .line')].map((line) => `${line.className}|${line.textContent ?? ''}`));
+const chatLines = (page: Page) => page.evaluate(() => (window as unknown as Win).__game.chat.entries.map((line) => `line ${line.kind}|${line.text}`));
 
 // Leaves a guild left over from an earlier run (the master disbands it), with the account's password.
 async function leaveGuild(page: Page, password: string): Promise<boolean> {
@@ -132,9 +133,12 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
     await page.keyboard.press('g');
     await expect(page.locator('.rml-guild_info')).toHaveCount(0, { timeout: 30_000 });
   }
-  // The guild's tag over B's head on A's screen, and the guild chat.
-  await expect.poll(() => a.evaluate((name) => [...document.querySelectorAll('#labels .label')].find((l) => l.textContent?.endsWith(name))?.querySelector('.guild-tag')?.textContent ?? '', nameB), { timeout: 60_000 })
-    .toContain(`[${guildName}]`);
+  // The guild's tag over B's head on A's screen (names show for the player under the pointer), and the guild chat.
+  await expect.poll(async () => {
+    const at = await screenPointOf(a, nameB);
+    if (at) await a.mouse.move(at.x, at.y);
+    return a.evaluate((name) => [...document.querySelectorAll('.player-name-tag')].find((l) => l.textContent?.endsWith(name))?.querySelector('.guild-tag')?.textContent ?? '', nameB);
+  }, { timeout: 60_000 }).toContain(`[${guildName}]`);
   await a.evaluate(() => (window as unknown as Win).__game.online.say('@hello guild'));
   await expect.poll(async () => (await chatLines(b)).some((line) => line.startsWith('line guild|') && line.includes('hello guild')), { timeout: 60_000 }).toBe(true);
 
@@ -183,8 +187,8 @@ test('guild, friends, a letter and a whisper between two players', async ({ brow
   await a.evaluate((name) => (window as unknown as Win).__game.social.whisperTo(name), nameB);
   await a.keyboard.type('psst, guild meeting');
   await a.keyboard.press('Enter');
-  await expect.poll(async () => (await chatLines(b)).some((line) => line.startsWith('line whisper|') && line.includes(`${nameA}: psst, guild meeting`)), { timeout: 60_000 }).toBe(true);
-  await a.evaluate(() => { const box = document.querySelector<HTMLInputElement>('#whisperInput'); if (box) box.value = ''; });
+  await expect.poll(async () => (await chatLines(b)).some((line) => line.startsWith('line whisper|') && line.includes(`${nameA} : psst, guild meeting`)), { timeout: 60_000 }).toBe(true);
+  await a.evaluate(() => (window as unknown as Win).__game.chat.setWhisperTarget(''));
 
   // Clean up: B deletes the letter from its window (Delete, Yes); A removes the friend; B leaves the
   // guild and A disbands it (both with the password); both go back to Lorencia.

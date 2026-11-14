@@ -486,9 +486,34 @@ class GuardianAngel extends Companion {
 const CIRCLE_STAND_RADIUS = 50;
 const SEARCH_LENGTH = 300;
 
+/** A zen drop a collecting pet goes for. */
+export interface ZenDrop { id: number; x: number; y: number; z: number }
+
+/** The hero's zen on the ground and the pick-up request, for the collecting pets (main.ts). */
+export interface ZenCollector {
+  /** The hero's ground position (the owner whose pet picks up zen). */
+  heroPosition(): THREE.Vector2;
+  /** A zen drop within the radius of x, y, if any (FindZen). */
+  find(x: number, y: number, radius: number): ZenDrop | null;
+  /** Whether the drop is still on the ground. */
+  exists(id: number): boolean;
+  /** Asks the server for it (SendPickupItemRequest), unless a pick-up is under way. */
+  pickup(id: number): void;
+}
+
+let zenCollector: ZenCollector | null = null;
+export function setZenCollector(collector: ZenCollector | null): void { zenCollector = collector; }
+
+type CollectState = 'stand' | 'move' | 'get' | 'return';
+
 class Pet extends Companion {
   private readonly info: PetInfo | undefined;
   private baseVelocity = 0.5;
+  // PetActionCollecter's state: the zen it goes for and when it got there.
+  private collectState: CollectState = 'stand';
+  private rootItem: ZenDrop | null = null;
+  private sendDelayTime = 0;
+  private rootingTime = 0;
 
   constructor(kind: CompanionKind, model: AnimatedModel, info: PetInfo | undefined) {
     super(kind, model);
@@ -533,24 +558,71 @@ class Pet extends Companion {
   }
 
   // PetActionCollecter (Rudolph), PetActionCollecterAdd (Panda), PetActionUnicorn and
-  // PetActionCollecterSkeleton, standing by: circling the owner or following it.
+  // PetActionCollecterSkeleton: standing by, circling the owner or following it; the hero's pet flies to
+  // zen within 300 units of the hero (FindZen), circles it and asks the server for it after a second
+  // there (SendPickupItemRequest), then comes back.
   private collect(owner: CompanionOwner, target: THREE.Vector3): void {
     const circle = (2 * Math.PI / 4000) * (this.time % 4000);
+    const circleGet = (2 * Math.PI / 2000) * (this.time % 2000);
     const height = this.kind === 'unicorn' ? 200 * owner.scale : this.kind === 'skeleton' ? 50 * owner.scale : 20;
     const flyRange = this.kind === 'skeleton' ? 12 : 10;
+    const collector = zenCollector && owner.position === zenCollector.heroPosition() ? zenCollector : null;
+    if (collector && !this.rootItem) {
+      this.rootItem = collector.find(owner.position.x, owner.position.y, SEARCH_LENGTH);
+      if (this.rootItem && this.collectState === 'stand') this.collectState = 'move';
+    }
+    if (this.rootItem && collector && !collector.exists(this.rootItem.id)) this.rootItem = null;
     this.position.z = target.z + height;
     let distance = Math.hypot(this.position.x - target.x, this.position.y - target.y);
     if (distance > SEARCH_LENGTH * 3) {
       this.position.x = target.x + Math.sin(circle) * CIRCLE_STAND_RADIUS;
       this.position.y = target.y + Math.cos(circle) * CIRCLE_STAND_RADIUS;
       this.angle.z = ownerAngleDegrees(owner);
+      this.collectState = 'stand';
+      this.rootItem = null;
     }
     const circles = this.kind === 'rudolph' || this.kind === 'panda';
-    const goal = circles
+    const ownerGoal = circles
       ? new THREE.Vector3(target.x + Math.sin(circle) * CIRCLE_STAND_RADIUS, target.y + Math.cos(circle) * CIRCLE_STAND_RADIUS, target.z)
       : target;
-    distance = Math.hypot(goal.x - this.position.x, goal.y - this.position.y);
-    this.angle.z = turnAngle2(this.angle.z, createAngle2D(this.position, goal), 8);
+    if (this.collectState === 'move' && !this.rootItem) this.collectState = 'return';
+    if (this.collectState === 'get' && (!this.rootItem || SEARCH_LENGTH < distance || this.time - this.rootingTime > 3000)) {
+      this.rootItem = null;
+      this.rootingTime = this.time;
+      this.collectState = 'return';
+    }
+    if (this.collectState === 'move' && this.rootItem) {
+      const goal = new THREE.Vector3(this.rootItem.x + Math.sin(circleGet) * CIRCLE_STAND_RADIUS, this.rootItem.y + Math.cos(circleGet) * CIRCLE_STAND_RADIUS, this.rootItem.z);
+      distance = Math.hypot(goal.x - this.position.x, goal.y - this.position.y);
+      if (distance >= flyRange) this.angle.z = turnAngle2(this.angle.z, createAngle2D(this.position, goal), 20);
+      this.position.add(rotateByAngle(this.direction, this.angle));
+      const speed = distance <= 20 ? 0 : Math.log(distance) * 2.5;
+      this.direction.set(0, -speed, 0);
+      if (speed === 0 || this.time - this.rootingTime > 100000) {
+        this.sendDelayTime = this.time;
+        this.rootingTime = this.time;
+        this.collectState = 'get';
+      }
+      return;
+    }
+    if (this.collectState === 'get' && this.rootItem) {
+      this.angle.z = turnAngle2(this.angle.z, createAngle2D(this.position, new THREE.Vector3(this.rootItem.x, this.rootItem.y, this.rootItem.z)), 10);
+      if (this.time - this.sendDelayTime > 1000) {
+        this.sendDelayTime = this.time;
+        collector?.pickup(this.rootItem.id);
+      }
+      return;
+    }
+    distance = Math.hypot(ownerGoal.x - this.position.x, ownerGoal.y - this.position.y);
+    if (this.collectState === 'return') {
+      if (distance >= flyRange) this.angle.z = turnAngle2(this.angle.z, createAngle2D(this.position, ownerGoal), 20);
+      this.position.add(rotateByAngle(this.direction, this.angle));
+      const speed = flyRange >= distance ? 0 : Math.log(distance) * 2.5;
+      this.direction.set(0, -speed, 0);
+      if (speed === 0 || this.time - this.rootingTime > 3000) this.collectState = 'stand';
+      return;
+    }
+    this.angle.z = turnAngle2(this.angle.z, createAngle2D(this.position, ownerGoal), 8);
     this.position.add(rotateByAngle(this.direction, this.angle));
     // Rudolph and the Panda stop within the fly range, the Unicorn and the Skeleton within its square.
     const stopAt = circles ? flyRange : flyRange * flyRange;

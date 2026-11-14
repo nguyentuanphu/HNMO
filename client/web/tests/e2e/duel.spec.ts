@@ -3,7 +3,8 @@
 // (duel_window: both names and scores), A ends it (DuelStopRequest) and both are told the duel is over.
 // Both characters are sent back to Lorencia at the end.
 import { test, expect, type Page } from '@playwright/test';
-import { enterWorld, expectNoPageErrors } from './helpers.js';
+import { enterWorld, expectNoPageErrors, chatText } from './helpers.js';
+const OPEN_CHAT = { timeout: 30_000 };
 
 interface DuelGame {
   online: { characters: Map<number, { id: number; name: string; kind: string }>; say(text: string): void };
@@ -58,7 +59,7 @@ test('a duel of two: challenge, the question, the score window, the end', async 
       await expect(score.locator('#hero_score')).toHaveText('0');
       await expect(score.locator('#enemy_score')).toHaveText('0');
     }
-    await expect(a.locator('.chat-log')).toContainText(`${bName} has accepted your challenge.`);
+    await expect.poll(() => chatText(a), OPEN_CHAT).toContain(`${bName} has accepted your challenge.`);
     await a.waitForTimeout(3_000);
     console.log('map after the start:', await a.evaluate(() => (window as unknown as Win).__game.mapNumber));
     await a.screenshot({ path: 'test-results/duel-score.png' });
@@ -68,7 +69,7 @@ test('a duel of two: challenge, the question, the score window, the end', async 
     for (const page of [a, b]) {
       await expect.poll(() => enabled(page), OPEN).toBe(false);
       await expect(page.locator('.rml-duel_window')).toHaveCount(0);
-      await expect(page.locator('.chat-log')).toContainText('The duel has been canceled.');
+      await expect.poll(() => chatText(page), OPEN_CHAT).toContain('The duel has been canceled.');
     }
     await expectNoPageErrors(errors);
   } finally {

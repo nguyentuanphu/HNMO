@@ -4,7 +4,8 @@
 // at the steward (GensLeaveRequest) ends the membership, so the next run starts the same.
 // test7's first character is level 71: the server's minimum is 50 (GensConfiguration), and it must not be in a party.
 import { test, expect, type Page } from '@playwright/test';
-import { enterWorld, expectNoPageErrors } from './helpers.js';
+import { enterWorld, expectNoPageErrors, chatText } from './helpers.js';
+const OPEN_CHAT = { timeout: 30_000 };
 
 interface Npc { id: number; kind: string; monsterNumber: number | null; cell: { x: number; y: number } }
 interface GensGame {
@@ -82,7 +83,7 @@ test('joins the Duprian gens at its steward, shows the Gens window, leaves again
   await page.keyboard.press('Escape');
   await expect(page.locator('.rml-npc_dialogue')).toHaveCount(0);
   await page.keyboard.press('b');
-  await expect(page.locator('.chat-log')).toContainText('You have not joined a gens.');
+  await expect.poll(() => chatText(page), OPEN_CHAT).toContain('You have not joined a gens.');
   await expect(page.locator('.rml-gens_ranking')).toHaveCount(0);
 
   // Joining: the answer goes to the server, its answer changes the dialogue and the hero's family.

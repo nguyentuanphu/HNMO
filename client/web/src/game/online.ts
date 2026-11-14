@@ -67,7 +67,7 @@ export interface OnlineWorldOptions {
   onChange?: () => void;
   /** Loads another map and puts the hero at x, y. */
   onMapChanged?: (mapNumber: number, x: number, y: number) => Promise<void> | void;
-  onMessage?: (text: string, kind: MessageKind) => void;
+  onMessage?: (text: string, kind: MessageKind, sender?: string) => void;
 }
 
 export class OnlineWorld {
@@ -89,6 +89,8 @@ export class OnlineWorld {
   pingTimer: ReturnType<typeof setInterval>;
   /** Where the hero is walking to, over several walk packets. */
   goal?: Cell | null;
+  /** The player the hero follows (the command window's Follow, g_iFollowCharacter); a walk of the player's own ends it. */
+  followId: number | null = null;
   /** The NPC to talk to once the hero gets there. */
   talkTarget?: Character | null;
   /** Told when the hero talks to an NPC (TalkToNpcRequest sent), e.g. which merchant the shop is. */
@@ -117,7 +119,7 @@ export class OnlineWorld {
     const { code, subCode } = packetCode(bytes);
     try {
       if (code === Code.MAP_CHANGED && bytes[0] === 0xc3 && subCode === MAP_CHANGED_SUB_CODE) return this.mapChanged(read<MapChangedPacket>('ServerToClient', 'MapChanged', bytes));
-      if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read<ChatMessagePacket>('ServerToClient', 'ChatMessage', bytes); const [kind, text] = chatKind(m.Message); return this.onMessage?.(`${m.Sender}: ${text}`, kind); }
+      if (code === Code.CHAT && bytes[0] === 0xc1) { const m = read<ChatMessagePacket>('ServerToClient', 'ChatMessage', bytes); const [kind, text] = chatKind(m.Message); return this.onMessage?.(text, kind, m.Sender); }
       // The client reads every notice with the layout of PRECEIVE_NOTICE: type, count, delay, color, speed, text (ReceiveNotice).
       if (code === Code.SERVER_MESSAGE && bytes[0] === 0xc1 && bytes.length > 13) return this.onMessage?.(read<SlideNoticePacket>('ServerToClient', 'SlideNotice', bytes).Message, 'system');
       if (code === Code.ADD_NPCS && bytes[0] === 0xc2) this.addNpcs(read<AddNpcsPacket>('ServerToClient', 'AddNpcsToScope', bytes));
@@ -200,6 +202,7 @@ export class OnlineWorld {
   // Mirrors ReceiveTeleport (WSclient.cpp), which ends with ClientReadyAfterMapChange.
   async mapChanged(packet: MapChangedPacket): Promise<void> {
     this.goal = null;
+    this.followId = null;
     this.clearCharacters();
     if (packet.IsMapChange) await this.onMapChanged?.(packet.MapNumber, packet.PositionX, packet.PositionY);
     else this.hero.placeAt(packet.PositionX, packet.PositionY);
@@ -247,8 +250,9 @@ export class OnlineWorld {
 
   // Walks the player to a cell and tells the server, as the client's SendRequestMove does.
   // A walk packet holds at most 15 steps; longer walks continue when a part ends.
-  walkTo(cell: Cell, { keepTalk = false }: { keepTalk?: boolean; keepAttack?: boolean } = {}): boolean {
+  walkTo(cell: Cell, { keepTalk = false, keepFollow = false }: { keepTalk?: boolean; keepAttack?: boolean; keepFollow?: boolean } = {}): boolean {
     if (!keepTalk) this.talkTarget = null;
+    if (!keepFollow) this.followId = null;
     this.goal = { x: cell.x, y: cell.y };
     return this.walkNextPart();
   }
@@ -281,6 +285,15 @@ export class OnlineWorld {
   }
 
   update(dt: number): void {
+    // Following: the hero walks to the followed player's cell whenever it stands and the player is further
+    // than a cell away; the player gone from view ends it.
+    if (this.followId !== null && !this.hero.isWalking && !this.goal) {
+      const followed = this.characters.get(this.followId);
+      if (!followed) this.followId = null;
+      else if (Math.max(Math.abs(followed.cell.x - this.hero.cell.x), Math.abs(followed.cell.y - this.hero.cell.y)) > 1) {
+        this.walkTo(followed.cell, { keepFollow: true });
+      }
+    }
     if (this.goal && !this.hero.isWalking) this.walkNextPart();
     if (this.talkTarget && !this.hero.isWalking && !this.goal) {
       if (this.closeEnoughToTalk(this.talkTarget)) {

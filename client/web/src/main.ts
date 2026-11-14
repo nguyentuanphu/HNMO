@@ -8,11 +8,13 @@ import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight } from './terrain.js';
 import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
 import { createPlayerCharacter, setPlayerAnimationSpeeds } from './game/characters.js';
+import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
 import { itemDefinition, itemName, loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
+import { eventOfMap } from './game/events.js';
 import { loadGlowColors } from './game/itemGlow.js';
 import { BAG, Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
@@ -41,6 +43,8 @@ import { GameSounds } from './game/gameSounds.js';
 import { Party, facingPlayer } from './game/party.js';
 import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
+import { CommandWindow } from './ui/commandWindow.js';
+import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
 import { setupSocial, decorateLabel, type Social } from './game/social.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
@@ -62,7 +66,7 @@ import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, init
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect } from './render/effects/index.js';
-import { helperVariant, setCompanionEffects } from './game/pets.js';
+import { helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
@@ -129,6 +133,8 @@ export interface GameState {
   worldGroup?: THREE.Group;
   hero: Character | null;
   online: OnlineWorld | null;
+  /** The chat log, system log and input box (game/chat.ts). */
+  chat?: Chat;
   mapNumber: number | null;
   camera: THREE.PerspectiveCamera;
   inventory?: Inventory;
@@ -160,6 +166,7 @@ export interface GameState {
   view?: { yaw: number; distance: number };
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
+  commandWindow?: CommandWindow;
   events?: EventSystem;
   instanceEvents?: InstanceEventSystem;
   social?: Social;
@@ -198,7 +205,7 @@ const ui = {
   mapPicker: $('mapPicker'), mapSelect: $<HTMLSelectElement>('mapSelect'),
 };
 
-const chat = new Chat({ log: $('chatLog'), form: $<HTMLFormElement>('chatForm'), input: $<HTMLInputElement>('chatInput') });
+const chat = new Chat({ click: () => sounds.click() });
 
 const renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: true });
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
@@ -212,6 +219,7 @@ scene.add(root);
 
 const state: GameState = { world: null, hero: null, online: null, mapNumber: null, camera };
 state.cooldowns = skillCooldowns;
+state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
 
 // The loading line; once something has finished loading (progress 1) it goes away after a few
@@ -418,9 +426,14 @@ window.addEventListener('pointerup', (event) => {
   // button): at the monster under the mouse, else at the ground there (area skills, buffs on the hero).
   if (event.button === 2 && view.dragging && state.combat && state.online && event.target === ui.canvas
     && Math.hypot(event.clientX - view.rightDownX, event.clientY - view.rightDownY) < 6) {
+    // A command armed in the command window takes the right click (RunCommand).
+    if (state.commandWindow?.rightClick(event)) { view.dragging = false; return; }
     const monster = pickCharacter(event, ['monster']);
     const cell = monster ? { ...monster.cell } : pickCell(event);
     state.combat.cast(monster, cell);
+    // A right click on a player puts the name in the chat's whisper box (UpdateWhisperTargetFromRightClick; not in Chaos Castle).
+    const player = monster ? null : pickCharacter(event, ['player']);
+    if (player && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle') chat.setWhisperTarget(player.name);
   }
   view.dragging = false;
 });
@@ -448,15 +461,22 @@ installTouchControls({
 
 // ---------- name labels ----------
 
+// As the desktop's name window (CNameWindow::RefreshNameTags): only the player or NPC under the pointer
+// has its name over its head (not in Chaos Castle); the pointer is looked at once a frame.
 const labelElements = new Map<Character, HTMLSpanElement>();
+let labelPointer: MouseEvent | null = null;
+ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, { passive: true });
+ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
 
 function updateLabels(): void {
   const visible = new Set<Character>();
   const hero = state.hero, world = state.world;
+  const pointed = labelPointer && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle' ? pickCharacter(labelPointer, ['npc']) : null;
   if (state.online && hero && world) {
     const rect = ui.canvas.getBoundingClientRect();
     for (const character of state.online.characters.values()) {
-      if (character.kind === 'monster') continue;
+      // A pointed player's name box (with its Gens mark and guild line) is the Gens marks' (ui/gensWindow.ts).
+      if ((character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
       const dx = character.cell.x - hero.cell.x, dy = character.cell.y - hero.cell.y;
       if (Math.hypot(dx, dy) > LABEL_RANGE_CELLS) continue;
       const point = toScene(character.position.x, character.position.y, sampleHeight(world.heights, character.position.x, character.position.y) + 220).project(camera);
@@ -533,6 +553,7 @@ function saveSettings(settings: Record<string, string>): void {
 }
 
 function showError(error: unknown): void {
+  hideLoadingScreen();
   ui.loginError.textContent = error instanceof Error ? error.message : String(error);
   ui.loginError.hidden = false;
 }
@@ -613,6 +634,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.connection = connection; // tests feed recorded packets through it (dispatch)
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
+  showLoadingScreen(); // until the world is ready (CLoadingScene)
   await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData(), loadBuffData()]);
   // The server sends who is in view right after the character information, while
   // the map is still loading: keep those packets and replay them once it's ready.
@@ -661,7 +683,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // The world and the hero are there now; the map changes only come once state.online is set.
   state.online = new OnlineWorld({
     connection, root, world: state.world!, hero: state.hero!, playerId,
-    onMessage: (text, kind) => chat.add(text, kind),
+    onMessage: (text, kind, sender) => chat.add(text, kind, sender),
     onMapChanged: async (map, x, y) => {
       state.ground?.clear(); // the server sends the new map's drops
       await loadMap(map);
@@ -683,6 +705,20 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     hero: () => online.hero,
     walkTo: (cell) => { online.walkTo(cell); },
     send: (id) => connection.send('ClientToServer', 'PickupItemRequest', { ItemId: id }),
+  });
+  // Rudolph, the Panda, the Unicorn and the Skeleton pick up the hero's zen nearby (PetActionCollecter).
+  setZenCollector({
+    heroPosition: () => online.hero.position,
+    find: (x, y, radius) => {
+      for (const drop of state.ground?.drops.values() ?? []) {
+        if (drop.item) continue;
+        const p = drop.group.position;
+        if (Math.hypot(p.x - x, p.y - y) < radius) return { id: drop.id, x: p.x, y: p.y, z: p.z };
+      }
+      return null;
+    },
+    exists: (id) => state.ground?.drops.has(id) ?? false,
+    pickup: (id) => { if (!state.ground?.pickingUp) connection.send('ClientToServer', 'PickupItemRequest', { ItemId: id }); },
   });
   const heightAt = (x: number, y: number) => (state.world ? sampleHeight(state.world.heights, x, y) : 0);
   void loadCombatEffectsData();
@@ -1089,6 +1125,51 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'p' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void partyWindow.toggle(); }
   });
+  // The command window (D): a button arms a command for the next right click on a player (ui/commandWindow.ts).
+  const say = (text: string, kind: 'system' | 'error' = 'system') => chat.add(text, kind);
+  const guildStatus = () => state.social?.guild.status ?? GuildStatus.NONE;
+  const statusOf = (player: Character) => state.social?.guild.guildOf(player.id)?.player.status ?? GuildStatus.NONE;
+  const masterChecked = (player: Character, run: () => void) => {
+    if (guildStatus() !== GuildStatus.MASTER) { say('Not a guild master'); return; }
+    if (statusOf(player) !== GuildStatus.MASTER) { say('The user is not a guild master.'); return; }
+    run();
+  };
+  state.commandWindow = new CommandWindow({
+    click: () => sounds.click(),
+    hero: () => online.hero,
+    playerAt: (event) => pickCharacter(event, ['player']),
+    allowed: () => eventOfMap(state.mapNumber ?? null) !== 'chaosCastle',
+    onOpen: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    actions: {
+      trade: (player) => state.trade?.requestTrade(player.id),
+      purchase: (player) => state.personalShop?.requestList(player.id),
+      party: (player) => {
+        if (party.members.length > 0 && party.members[0].name !== character.name) { say('You are already in a party', 'error'); return; }
+        party.invite(player);
+      },
+      whisper: (player) => chat.setWhisperTarget(player.name),
+      guild: (player) => {
+        if (guildStatus() !== GuildStatus.NONE) { say('You are already in a guild'); return; }
+        if (!state.social?.guild.guildOf(player.id) || statusOf(player) !== GuildStatus.MASTER) { say('The user is not a guild master.'); return; }
+        state.social.guild.requestJoin(player);
+      },
+      alliance: (player) => {
+        if (guildStatus() !== GuildStatus.MASTER) { say('Not a guild master'); return; }
+        if (!state.social?.guild.guildOf(player.id)) { say('This does not belong to the guild.'); return; }
+        masterChecked(player, () => state.social?.guild.changeRelationship(1, 1, player.id));
+      },
+      rival: (player) => masterChecked(player, () => state.social?.guild.changeRelationship(2, 1, player.id)),
+      rivalOff: (player) => masterChecked(player, () => state.social?.guild.changeRelationship(2, 2, player.id)),
+      addFriend: (player) => { if (state.social?.messenger.serverEnabled) state.social.messenger.addFriend(player.name); },
+      follow: (player) => { online.followId = player.id; },
+      duel: (player) => state.duelAndGens?.duel.challenge(player),
+    },
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'd' && !event.ctrlKey && !event.altKey && !event.metaKey && !event.repeat) { event.preventDefault(); void state.commandWindow?.toggle(); }
+  });
   // NPC dialogues and quests (npc_dialogue, quest_progress, my_quest_info on T, npc_quest; ui/questWindows.ts).
   const quests = new QuestWindows({ connection, message: (text) => chat.add(text, 'system'), sound: (name) => sounds.audio.play(name),
     hero: { name: character.name, baseClass: character.classIndex, level: () => stats.level, money: () => inventory.money, bagItems: () => [...inventory.items].filter(([slot]) => slot >= 12).map(([, item]) => item) },
@@ -1126,6 +1207,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.fieldEvents = setUpFieldEvents({ connection, online, hero: () => ({ level: stats.level, classIndex: character.classIndex }), inventory, mapNumber: () => state.mapNumber, world: () => state.world, worldGroup: () => state.worldGroup ?? null, camera, canvas: ui.canvas, audio: sounds.audio, music: sounds.musicStates, message: (text) => chat.add(text, 'system'), safeZone: inSafeZone, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, guild: () => state.social?.guild ?? null, openMix: (type) => { void state.chaosMachine?.open(type); } });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
+  hideLoadingScreen();
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
   warmCharacterModels();
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);

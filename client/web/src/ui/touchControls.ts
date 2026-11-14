@@ -57,11 +57,6 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
     element.addEventListener('pointerdown', (event) => event.stopPropagation());
     element.addEventListener('click', (event) => {
       event.stopPropagation();
-      if (button.key === 'Enter') {
-        // The chat opens on Enter outside the input: focus it directly (no key event reaches it on a phone).
-        document.querySelector<HTMLInputElement>('#chatInput')?.focus();
-        return;
-      }
       window.dispatchEvent(new KeyboardEvent('keydown', { key: button.key, bubbles: true }));
     });
     bar.append(element);

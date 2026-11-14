@@ -703,7 +703,7 @@ export interface InstanceEventOptions {
   heroId: () => number;
   characters: () => Iterable<Character>;
   mapNumber: () => number | null;
-  message: (text: string, kind?: string) => void;
+  message: (text: string, kind?: 'system' | 'error') => void;
   audio: { play: (id: string) => void };
   /** The music rule's event part (the temple's state, the Doppelganger running). */
   sounds: { eventMusicState: () => Partial<MapAudioState> };

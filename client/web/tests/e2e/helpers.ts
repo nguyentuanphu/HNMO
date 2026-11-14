@@ -77,3 +77,25 @@ export async function expectNoPageErrors(errors: string[]): Promise<void> {
 }
 
 export { PANEL_WIDTH };
+
+/** Every line of the chat log and the system log, one per line ("name : text" for said lines). */
+export function chatText(page: Page): Promise<string> {
+  return page.evaluate(() => (window as unknown as { __game: { chat: { entries: { text: string }[] } } }).__game.chat.entries.map((line) => line.text).join('\n'));
+}
+
+/** Where a character (by name) stands on the screen: its body, a little over its feet. */
+export function screenPointOf(page: Page, name: string): Promise<{ x: number; y: number } | null> {
+  return page.evaluate((n) => {
+    type V3 = { project(c: unknown): { x: number; y: number } };
+    const g = (window as unknown as { __game: { camera: { position: { constructor: new (x: number, y: number, z: number) => unknown }; updateMatrixWorld(): void }; online: { characters: Map<number, { name: string; group: { position: { x: number; y: number; z: number }; parent: { localToWorld(v: unknown): V3 } } }> } } }).__game;
+    const c = [...g.online.characters.values()].find((p) => p.name === n);
+    if (!c) return null;
+    const V = g.camera.position.constructor;
+    const p = c.group.position;
+    const w = c.group.parent.localToWorld(new V(p.x, p.y, p.z + 80));
+    g.camera.updateMatrixWorld();
+    const s = w.project(g.camera);
+    const r = document.querySelector('#view')!.getBoundingClientRect();
+    return { x: r.left + (s.x + 1) / 2 * r.width, y: r.top + (1 - s.y) / 2 * r.height };
+  }, name);
+}

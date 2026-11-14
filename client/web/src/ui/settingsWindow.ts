@@ -69,10 +69,9 @@ function saveSettings(settings: GameSettings): void {
   }
 }
 
-// The page's own text (chat, name labels) follows the text size too; the game's windows read the
-// same variable (ui/rml.ts).
+// The page's own text (name labels) follows the text size too; the game's windows, the chat
+// among them, read the same variable (ui/rml.ts).
 const PAGE_TEXT_CSS = `
-.chat-log { font-size: calc(13px * var(--hnmo-text-scale, 1)); }
 #labels .label { font-size: calc(12px * var(--hnmo-text-scale, 1)); }
 `;
 

@@ -145,6 +145,10 @@ export class GensMarks {
 
   constructor(private readonly options: {
     gens: Gens; camera: THREE.Camera; canvas: HTMLCanvasElement; players: () => Iterable<Character>;
+    /** Fills the name box (the name, and the guild's line over it). */
+    decorate?: (character: Character, element: HTMLElement) => void;
+    /** No name box now (Chaos Castle). */
+    hidden?: () => boolean;
   }) {
     this.tag = document.createElement('div');
     this.tag.className = 'player-name-tag';
@@ -198,7 +202,7 @@ export class GensMarks {
 
   private update(): void {
     const character = this.hovered;
-    if (!character || !character.group.parent) { this.tag.style.display = 'none'; return; }
+    if (!character || !character.group.parent || this.options.hidden?.()) { this.tag.style.display = 'none'; return; }
     const { camera, canvas } = this.options;
     const rect = canvas.getBoundingClientRect();
     this.box.setFromObject(character.group);
@@ -206,7 +210,8 @@ export class GensMarks {
     const scale = window.innerHeight / REFERENCE_HEIGHT;
     Object.assign(this.tag.style, { display: 'block', left: `${rect.left + (head.x + 1) / 2 * rect.width}px`, top: `${rect.top + (1 - head.y) / 2 * rect.height - 4}px` });
     this.name.style.fontSize = `${nativeTextPx()}px`;
-    if (this.name.textContent !== character.name) this.name.textContent = character.name;
+    if (this.options.decorate) this.options.decorate(character, this.name);
+    else if (this.name.textContent !== character.name) this.name.textContent = character.name;
     const mark = this.markOf(character);
     const sheet = mark ? this.sheets.get(mark.gens) : undefined;
     const cell = mark ? gensMarkCell(mark.rank) : -1;

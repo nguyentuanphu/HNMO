@@ -39,11 +39,6 @@
     #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
     .label { position: absolute; left: 0; top: 0; font-size: 12px; white-space: nowrap; color: #f2f3f7; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
     .label.npc { color: #9fe0a8; }
-    .chat-log { position: fixed; left: 12px; bottom: calc(10.625vh + 44px); width: min(460px, calc(100vw - 24px)); max-height: 30vh; overflow-y: auto; font-size: 13px; text-shadow: 0 1px 2px #000; pointer-events: none; display: grid; gap: 2px; }
-    .chat-log .system { color: #f0d27a; }
-    .chat-log .chat { color: #f2f3f7; }
-    .chat-form { position: fixed; left: 12px; bottom: calc(10.625vh + 8px); width: min(460px, calc(100vw - 24px)); }
-    .chat-form input { width: 100%; box-sizing: border-box; background: rgba(10,12,20,.75); }
     #soundButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 15px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #soundButton[aria-pressed="true"] { color: var(--muted); border-color: var(--line); text-decoration: line-through; }
     .community { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -133,8 +128,6 @@
       <p class="hint">No account yet? <a href="/account.html" style="color:var(--gold)">Create one</a> (free coins included). <a href="/topup.html" style="color:var(--gold)">Top up coins</a>. Test accounts: test300 / test300. New here? <a href="#" id="loginGuide" style="color:var(--gold)">Read the guide</a>.</p>
     </form>
   </div>
-  <div id="chatLog" class="chat-log" hidden></div>
-  <form id="chatForm" class="chat-form" hidden autocomplete="off"><input id="chatInput" maxlength="60" placeholder="Enter to chat, e.g. /move devias" aria-label="Chat message"></form>
   <div class="chip map-picker" id="mapPicker" hidden><label for="mapSelect">Map</label><select id="mapSelect"></select></div>
   <div id="loading" class="chip"><div id="status">Log in to the server, or explore offline.</div><div id="track"><div id="bar"></div></div></div>
   <script type="module" src="/js/main.js"></script>

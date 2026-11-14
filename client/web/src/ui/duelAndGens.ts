@@ -5,6 +5,7 @@
 //   - Gens (game/gens.ts, ui/gensWindow.ts): the stewards' answers in the NPC dialogue, the Gens Info
 //     window on B, the family mark beside a player's name.
 
+import { decorateLabel } from '../game/social.js';
 import { Duel, DUEL_WATCH_BUFF, type DuelView } from '../game/duel.js';
 import { Gens, GENS_JOIN_STATE, GENS_LEAVE_STATE, GENS_REWARD_STATE } from '../game/gens.js';
 import { facingPlayer } from '../game/party.js';
@@ -91,7 +92,10 @@ export function setUpDuelAndGens(options: DuelAndGensOptions): DuelAndGens {
   // with nobody under the pointer, the player next to the hero that faces it.
   let pointed: Character | null = null;
   const gens = new Gens(connection);
-  const marks = new GensMarks({ gens, camera: options.camera, canvas: options.canvas, players: options.players });
+  const marks = new GensMarks({
+    gens, camera: options.camera, canvas: options.canvas, players: options.players, decorate: decorateLabel,
+    hidden: () => { const map = options.mapNumber(); return map !== null && (map >= 18 && map <= 23 || map === 53); },
+  });
   const duelTarget = (): Character | null => {
     const hero = options.hero();
     if (pointed && pointed.group.parent) {

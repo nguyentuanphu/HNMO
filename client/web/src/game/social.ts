@@ -44,15 +44,6 @@ export interface SocialOptions {
 export interface Social { guild: Guild; messenger: Messenger; guildWindow: GuildInfoWindow; guildMakeWindow: GuildMakeWindow; friendWindow: FriendWindow; whisperTo(name: string): void }
 
 const CSS = `
-.chat-log .whisper { background: rgba(255,200,50,.59); color: #000; text-shadow: none; }
-.chat-log .error { color: rgb(255,30,0); }
-.chat-log .party { background: rgba(0,200,255,.59); color: #000; text-shadow: none; }
-.chat-log .guild { background: rgba(0,255,150,.78); color: #000; text-shadow: none; }
-.chat-log .union { background: rgba(200,200,0,.78); color: #000; text-shadow: none; }
-.chat-log .gens { background: rgba(150,200,100,.78); color: #000; text-shadow: none; }
-.chat-form:not([hidden]) { display: flex; gap: 4px; }
-.chat-form #whisperInput { width: 92px; flex: none; box-sizing: border-box; background: rgba(40,30,10,.75); }
-.chat-form #chatInput { flex: 1; min-width: 0; }
 .label .guild-tag { display: flex; align-items: center; justify-content: center; gap: 3px; color: #ffe08a; font-size: 11px; }
 .label .guild-tag canvas { width: 12px; height: 12px; image-rendering: pixelated; }
 `;
@@ -86,30 +77,17 @@ export function setupSocial(options: SocialOptions): Social {
   });
   const guildMakeWindow: GuildMakeWindow = new GuildMakeWindow({ ...docked, guild, onOpen: () => { options.closeDocked(); guildWindow.close(); } });
 
-  // Whispers: the desktop's whisper box in front of the chat line.
-  const whisperInput = document.createElement('input');
-  whisperInput.id = 'whisperInput';
-  whisperInput.maxLength = MAX_NAME;
-  whisperInput.placeholder = 'Whisper to';
-  whisperInput.autocomplete = 'off';
-  whisperInput.setAttribute('aria-label', 'Whisper to');
-  chat.form.prepend(whisperInput);
-  // A form with two fields isn't sent by Enter on its own: Enter in the chat line sends it, Enter
-  // in the whisper box goes on to the chat line.
-  chat.input.addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); chat.form.requestSubmit(); } });
-  whisperInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') { event.preventDefault(); chat.input.focus(); }
-    else if (event.key === 'Escape') { whisperInput.blur(); }
-  });
+  // Whispers: the input box's whisper box (game/chat.ts) sends a line to the name in it.
   let lastWhisperTarget = '';
   const whisper = (name: string, text: string) => {
     lastWhisperTarget = name;
     connection.send('ClientToServer', 'WhisperMessage', { ReceiverName: name, Message: text });
-    say(`${heroName}: ${text}`, 'whisper');
+    chat.add(text.replace(/^(~|@@|@|\$)/, ''), 'whisper', heroName);
   };
+  chat.whisper = whisper;
   const whisperTo = (name: string) => {
-    whisperInput.value = name;
-    chat.input.focus();
+    chat.setWhisperTarget(name);
+    chat.openInput();
   };
 
   const friendWindow = new FriendWindow({ messenger, heroName, click: options.click, chatWith: whisperTo });
@@ -117,11 +95,12 @@ export function setupSocial(options: SocialOptions): Social {
   connection.onPacket((bytes) => {
     if (bytes[0] !== 0xc1) return;
     if (bytes[2] === 0x02 && bytes.length > 13) {
-      // ReceiveChatWhisper
+      // ReceiveChatWhisper (nothing while whispers are blocked)
+      if (chat.blockWhisper) return;
       const decoder = new TextDecoder();
       const cut = (from: number, to: number) => { const raw = bytes.subarray(from, to); const end = raw.indexOf(0); return decoder.decode(end < 0 ? raw : raw.subarray(0, end)); };
       sound('SOUND_WHISPER');
-      say(`${cut(3, 13)}: ${cut(13, bytes.length)}`, 'whisper');
+      chat.add(cut(13, bytes.length), 'whisper', cut(3, 13));
     } else if (bytes[2] === 0x0c && bytes.length >= 4 && bytes[3] === 0) {
       // ReceiveChatWhisperResult
       say(`${lastWhisperTarget}: No users`, 'error');
@@ -139,8 +118,6 @@ export function setupSocial(options: SocialOptions): Social {
     if (command === '/rivaloff') { guild.relationshipCommand(2, 2, hero, options.players()); return; }
     const w = /^\/w\s+(\S+)\s+(.+)$/i.exec(text.trim());
     if (w) { whisper(w[1].slice(0, MAX_NAME), w[2]); return; }
-    const target = whisperInput.value.trim();
-    if (target && !text.startsWith('/')) { whisper(target, text); return; }
     send?.(text);
   };
 
@@ -181,11 +158,12 @@ function markCanvas(mark: GuildMark): HTMLCanvasElement {
 
 /** Puts a player's guild ("[Name] Members" and the mark) above its name label; called each frame. */
 export function decorateLabel(character: Character, element: HTMLElement): void {
-  if (!current || character.kind !== 'player') return;
+  if (!current || character.kind !== 'player') { if (element.textContent !== character.name) element.textContent = character.name; return; }
   const found = current.guild.guildOf(character.id);
   const text = found ? `[${found.mark.name}] ${ROLE_NAMES[found.player.status] ?? ''}`.trim() : '';
   const alliance = found?.mark.allianceName ? `<${found.mark.allianceName}>` : '';
-  const key = found ? `${text}|${alliance}|${found.mark.cells.join('')}` : '';
+  // The element may show another player next (the name box over the pointed player): the name is in the key.
+  const key = found ? `${character.name}|${text}|${alliance}|${found.mark.cells.join('')}` : character.name;
   if (element.dataset.guild === key) return;
   element.dataset.guild = key;
   if (!found) { element.textContent = character.name; return; }

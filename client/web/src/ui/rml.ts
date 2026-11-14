@@ -476,7 +476,8 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
       if (property === 'decorator') { updaters.push((scope) => applyDecorator(element, evaluate(value, scope))); continue; }
       updaters.push((scope) => {
         const v = evaluate(value, scope);
-        const text = v === undefined || v === null ? '' : String(v);
+        // A bound length in dp (e.g. the chat log's "130dp") is a reference pixel, as in the stylesheets.
+        const text = v === undefined || v === null ? '' : String(v).replace(/(\d)dp\b/g, '$1px');
         // Bound text sizes follow the HNMO text size setting (--hnmo-text-scale, ui/settingsWindow.ts).
         element.style.setProperty(property, property === 'font-size' && text ? `calc(${text} * var(--hnmo-text-scale, 1))` : text);
       });

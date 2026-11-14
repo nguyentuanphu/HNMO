@@ -53,15 +53,9 @@ test('game windows show Vietnamese, and players\' chat stays as typed', async ({
   await expect(window.getByText('Nhanh nhẹn').first()).toBeVisible();
   await page.screenshot({ path: 'test-results/language-vi.png' });
   // A chat line that happens to be an interface word isn't translated.
-  await page.evaluate(() => {
-    const log = document.querySelector('#chatLog')!;
-    log.removeAttribute('hidden');
-    const line = document.createElement('div');
-    line.textContent = 'STR';
-    log.append(line);
-  });
+  await page.evaluate(() => (window as unknown as { __game: { chat: { add(text: string, kind: string): void } } }).__game.chat.add('STR', 'chat'));
   await page.waitForTimeout(300);
-  await expect(page.locator('#chatLog div').last()).toHaveText('STR');
+  await expect(page.locator('.rml-chat_log .chat-line').last()).toHaveText('STR');
   // Back to English: the open window's texts come back.
   await page.locator('.language-picker:not(#loginLanguage) button[data-lang="en"]').click();
   await expect(window.getByText('STR', { exact: true }).first()).toBeVisible({ timeout: 10_000 });
