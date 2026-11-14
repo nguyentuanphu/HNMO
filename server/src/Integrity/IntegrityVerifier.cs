@@ -173,7 +173,12 @@ public static class IntegrityVerifier
         return (buildStamp, entries);
     }
 
-    private static bool VerifySignature(byte[] message, byte[] signature, byte[] publicKeyPem)
+    /// <summary>Verifies an Ed25519 signature over a message with a public key (PEM).</summary>
+    /// <param name="message">The signed bytes.</param>
+    /// <param name="signature">The raw signature.</param>
+    /// <param name="publicKeyPem">The public key in PEM form.</param>
+    /// <returns><c>true</c> for a valid signature.</returns>
+    public static bool VerifySignature(byte[] message, byte[] signature, byte[] publicKeyPem)
     {
         try
         {

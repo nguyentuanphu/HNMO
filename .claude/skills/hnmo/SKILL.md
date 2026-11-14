@@ -121,3 +121,12 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Deploying the server to the test folder: `dotnet publish Startup -c Release -r linux-x64 --self-contained
   -o /home/hnmo/HNMO-clip/server` (keep its ConnectionSettings.xml); copying loose DLLs and deps.json from a
   plain build breaks the self-contained start ("Could not resolve CoreCLR path").
+
+## Player license (2026-11-15)
+- 10 players at once by default (all game servers together, per account; bots/templates don't count),
+  enforced in LoginAction (not a plug-in, so a host can't switch it off).
+- `license.hnmo` next to "Start HNMO" (or in server/), signed with the integrity key:
+  `HNMO_SIGNING_KEY_FILE=<key> client/web/tools/hnmo/sign-license.sh "<licensee>" <max> [YYYY-MM-DD|-] [machine id|-]`.
+  The server logs "HNMO license: …" and "this computer's id" at startup. sign-license.sh is never packaged.
+- Website work (PR #1, branch codex/bilingual-server-website) isn't in main yet: don't deploy main's GameLogic
+  next to the website branch's admin panel on the test server (type load error). Publish one branch fully.

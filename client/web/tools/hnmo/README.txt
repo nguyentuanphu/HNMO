@@ -39,6 +39,12 @@ IN THE GAME
 ADMIN PANEL
   http://localhost:8095/  - only on the host computer, on purpose.
 
+PLAYERS AT ONCE
+  Up to 10 players can be in the game at once. A license file from the owner
+  (license.hnmo) raises that: put it next to "Start HNMO" and restart. The server's log
+  says what it allows ("HNMO license: ...") and this computer's id, which the owner needs
+  for a license tied to this computer.
+
 PLAY WITH FRIENDS
   One person runs this folder (the host); friends need only a web browser.
 

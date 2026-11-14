@@ -113,6 +113,10 @@ contribution, the family mark on the pointed player done; the marks in every pla
 7. **(extra)** Admin panel redesign, and a check that every game setting can be changed there.
 
 ## 11. Release
+- ✅ **(extra)** Player limit: 10 at once without a license; a signed `license.hnmo` (owner's
+  Ed25519 key, `tools/hnmo/sign-license.sh`) raises it, with an optional end date and computer
+  (`server/src/Integrity/PlayerLicense.cs`, `GameLogic/LicensedPlayerLimit.cs`, checked in the login).
+
 Windows build tried on a real PC, performance on a normal laptop, the friends guide updated with
 each release.
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="HNMO">
+// <copyright file="Program.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -169,6 +169,7 @@ internal sealed class Program : IDisposable
         JsonConverterRegistry.RegisterConverter(new BinaryAsHexJsonConverter());
 
         this.VerifyBuildIntegrity();
+        this.ApplyPlayerLicense();
 
         this._logger.Information("Creating host...");
         this._serverHost = await this.CreateHostAsync(args).ConfigureAwait(false);
@@ -207,6 +208,23 @@ internal sealed class Program : IDisposable
     {
         this._serverHost?.StopAsync().WaitAndUnwrapException();
         this._serverHost?.Dispose();
+    }
+
+    /// <summary>
+    /// Sets the players allowed at once from the folder's license (license.hnmo, signed with the owner's key):
+    /// 10 without one. The license may name an expiry date and a computer (its id is logged here).
+    /// </summary>
+    private void ApplyPlayerLicense()
+    {
+        var serverDir = AppContext.BaseDirectory;
+        var folder = Path.GetFullPath(Path.Combine(serverDir, ".."));
+        var file = new[] { Path.Combine(folder, PlayerLicense.FileName), Path.Combine(serverDir, PlayerLicense.FileName) }.FirstOrDefault(File.Exists);
+        var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
+        var license = publicKeyPem is null
+            ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
+            : PlayerLicense.Check(file is null ? null : File.ReadAllBytes(file), publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+        LicensedPlayerLimit.Maximum = license.MaximumPlayers;
+        this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
     }
 
     /// <summary>

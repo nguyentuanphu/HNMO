@@ -100,6 +100,20 @@ public class LoginAction
         return null;
     }
 
+    private static bool TryAdmitLicensed(Player player, string username)
+    {
+        if (LicensedPlayerLimit.TryAdmit(player, username))
+        {
+            return true;
+        }
+
+        player.Logger.LogWarning(
+            "Login of [{Username}] refused: the licensed limit of {Maximum} players at once is reached (license.hnmo raises it).",
+            username,
+            LicensedPlayerLimit.Maximum);
+        return false;
+    }
+
     /// <summary>
     /// Refuses the login, because the game server is full. The connection stays at the login screen.
     /// </summary>
@@ -206,6 +220,12 @@ public class LoginAction
                     return (false, null);
                 }
 
+                // The folder's licensed player limit, before the offline session is stopped (see LicensedPlayerLimit).
+                if (!offlinePlayer.IsTemplatePlayer && offlinePlayer.Account is not { IsBot: true } && !TryAdmitLicensed(player, username))
+                {
+                    return await RefuseBecauseFullAsync(player, context).ConfigureAwait(false);
+                }
+
                 var offlineAccount = await this.HandleOfflineSessionHandoverAsync(player, username).ConfigureAwait(false);
                 if (offlineAccount is null)
                 {
@@ -274,6 +294,12 @@ public class LoginAction
 
             reservedPlace ??= TryReservePlace(player, gameServerContext, username, null);
             if (reservedPlace is null)
+            {
+                return await RefuseBecauseFullAsync(player, context).ConfigureAwait(false);
+            }
+
+            // The folder's licensed player limit (see LicensedPlayerLimit); bots and templates don't count.
+            if (!loadedAccount.IsBot && !loadedAccount.IsTemplate && !TryAdmitLicensed(player, username))
             {
                 return await RefuseBecauseFullAsync(player, context).ConfigureAwait(false);
             }

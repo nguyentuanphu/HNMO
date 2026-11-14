@@ -1,8 +1,9 @@
 name: HNMO package
 
-# Builds the HNMO folder for Windows (game server + admin panel + web client + game
-# data + save database), offers it as a download on the run's page and publishes it
-# as HNMO-windows.zip on the release page (a link that always gives the newest build).
+# Builds the HNMO folder (game server + admin panel + web client + game data + save database) for
+# Windows, Ubuntu/Linux and macOS (Apple silicon), offers each as a download on the run's page and
+# publishes them on the release page (links that always give the newest build):
+#   HNMO-windows.zip, HNMO-linux.tar.gz, HNMO-macos.tar.gz
 on:
   workflow_dispatch:
   push:
@@ -20,6 +21,25 @@ permissions:
 jobs:
   package:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows
+            runtime: win-x64
+            # A portable PostgreSQL goes into the folder.
+            postgres: https://get.enterprisedb.com/postgresql/postgresql-VERSION-windows-x64-binaries.zip
+            archive: zip
+          - name: macos
+            runtime: osx-arm64
+            postgres: https://get.enterprisedb.com/postgresql/postgresql-VERSION-osx-binaries.zip
+            archive: tar
+          - name: linux
+            runtime: linux-x64
+            # No portable PostgreSQL for Linux: the folder uses the one installed on the computer
+            # (sudo apt install postgresql-16), see README.txt.
+            postgres: ''
+            archive: tar
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -32,28 +52,45 @@ jobs:
         run: npm ci --prefix client/web
       - name: Get ffmpeg (sounds and music to Opus)
         run: command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
-      - name: Get a portable PostgreSQL for Windows (the save game database)
+      - name: Get a portable PostgreSQL (the save game database)
+        if: matrix.postgres != ''
         run: |
           for version in 16.9-1 16.8-1 16.6-1 16.4-1; do
-            if curl -fsSL -o pg.zip "https://get.enterprisedb.com/postgresql/postgresql-$version-windows-x64-binaries.zip"; then echo "PostgreSQL $version"; break; fi
+            url="${{ matrix.postgres }}"
+            if curl -fsSL -o pg.zip "${url/VERSION/$version}"; then echo "PostgreSQL $version"; break; fi
           done
           unzip -q pg.zip -d pg
           # Only what the database needs; leave out pgAdmin, StackBuilder, docs and headers
-          rm -rf pg/pgsql/pgAdmin* pg/pgsql/StackBuilder pg/pgsql/doc pg/pgsql/include pg/pgsql/symbols
+          rm -rf pg/pgsql/pgAdmin* pg/pgsql/StackBuilder pg/pgsql/stackbuilder pg/pgsql/doc pg/pgsql/include pg/pgsql/symbols
+          echo "POSTGRES_DIR=$GITHUB_WORKSPACE/pg/pgsql" >> "$GITHUB_ENV"
       - name: Build the HNMO folder
-        run: POSTGRES_DIR="$GITHUB_WORKSPACE/pg/pgsql" client/web/tools/package-hnmo.sh "$GITHUB_WORKSPACE/server" win-x64 "$GITHUB_WORKSPACE/HNMO"
+        run: client/web/tools/package-hnmo.sh "$GITHUB_WORKSPACE/server" ${{ matrix.runtime }} "$GITHUB_WORKSPACE/HNMO"
+      - name: Pack it
+        run: |
+          if [ "${{ matrix.archive }}" = zip ]; then zip -qr "HNMO-${{ matrix.name }}.zip" HNMO
+          else tar -czf "HNMO-${{ matrix.name }}.tar.gz" HNMO; fi
       - uses: actions/upload-artifact@v4
         with:
-          name: HNMO-windows
-          path: HNMO
+          name: HNMO-${{ matrix.name }}
+          path: HNMO-${{ matrix.name }}.*
           retention-days: 14
-      - name: Publish HNMO-windows.zip as the latest release
-        if: github.ref == 'refs/heads/main'
+
+  release:
+    needs: package
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: packages
+          merge-multiple: true
+      - name: Publish the packages as the latest release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
-          zip -qr HNMO-windows.zip HNMO
+          ls -la packages
           gh release delete hnmo-latest --cleanup-tag --yes || true
-          gh release create hnmo-latest HNMO-windows.zip --target "$GITHUB_SHA" --latest \
-            --title "HNMO for Windows" \
-            --notes "The newest HNMO folder for Windows. Unzip it and double-click Start HNMO.bat. Guide: friends/README.md"
+          gh release create hnmo-latest packages/* --target "$GITHUB_SHA" --latest \
+            --title "HNMO" \
+            --notes "The newest HNMO folder. Windows: unzip HNMO-windows.zip and double-click Start HNMO.bat. Ubuntu: install PostgreSQL 16 (sudo apt install postgresql-16), unpack HNMO-linux.tar.gz, run ./start-hnmo.sh. macOS (Apple silicon): unpack HNMO-macos.tar.gz, run ./start-hnmo.sh (the first time: xattr -dr com.apple.quarantine HNMO; if macOS stops the programs, sign them for this Mac: codesign --force --sign - HNMO/web/HNMO HNMO/server/HNMO.Startup). Guide: friends/README.md"
