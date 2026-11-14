@@ -39,7 +39,7 @@ for group in ('Game', 'Dialog'):
     for entry in ET.parse(web.parent / 'src' / 'Localization' / f'{group}.en.resx').getroot().findall('data'):
         known.add((entry.find('value').text or '').strip())
 
-contact = re.compile(r'0333|898|zalo|facebook|fb\.|http|www|\.com|\.vn|viet ?nam|muvn|mu vn|admin|gamegua|mubox', re.I)
+contact = re.compile(r'\d{3,4}[. ]\d{3}[. ]\d{3}|zalo|facebook|fb\.|http|www|\.com|\.vn|viet ?nam|muvn|mu vn|admin|gamegua|mubox', re.I)
 placeholder = re.compile(r'%(?:I64d|lld|[-+ #0]*\d*(?:\.\d+)?[dsfuxXlc%])')
 texts = {}
 for index, text in english.items():
