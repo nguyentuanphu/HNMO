@@ -11,10 +11,11 @@ Build stamp shape: `HNMO-<projectId>-<yyyyMMdd>`.
 
 1. **Server binaries (compiled in).** Every `HNMO.*.dll` carries two assembly metadata
    attributes, `HNMO.ProjectId` and `HNMO.BuildStamp` (from `server/src/SharedAssemblyInfo.cs`).
-   `HNMO.Integrity.HnmoBuildStamp` also holds them as `const` strings.
-   Read from a DLL:
-   `strings HNMO.GameServer.dll | grep -i 'HNMO-1abdb72e'`
-   or load it and read `AssemblyMetadataAttribute`.
+   `HNMO.Integrity.HnmoBuildStamp` also holds them as `const` strings. In the shipped (single-file)
+   build the DLLs are bundled into `server/HNMO.Startup` (or `server/HNMO.Startup.exe`), so read
+   the stamp from the executable:
+   `strings server/HNMO.Startup | grep -i 'HNMO-1abdb72e'`
+   or load a DLL and read `AssemblyMetadataAttribute`.
 
 2. **Web client (compiled into the JS).** `client/web/src/build.ts` defines the stamp;
    it is logged to the console on load and set on `window.__hnmoBuild`. It appears in the

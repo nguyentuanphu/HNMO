@@ -24,8 +24,16 @@ echo "Building HNMO for $RUNTIME into $OUT"
 rm -rf "$OUT"
 mkdir -p "$OUT"
 
+# The game server as a single self-contained executable (plus the Blazor static-web-assets
+# manifest, wwwroot and a couple of config files), instead of hundreds of loose DLLs. Plugin
+# discovery scans the assemblies loaded into the process (AppDomain.GetAssemblies), which load
+# transparently from the bundle, so [PlugIn] discovery and the admin panel keep working.
+# .pdb / .xml are dropped to keep the folder small.
 dotnet publish "$SERVER_SOURCE/src/Startup/HNMO.Startup.csproj" -c Release -r "$RUNTIME" --self-contained \
-  -p:PublishSingleFile=false -o "$OUT/server" -v quiet
+  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+  -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
+  -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
+  -o "$OUT/server" -v quiet
 dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet -p:HnmoServerSource="$SERVER_SOURCE"
 
 # The web client (TypeScript, built and type-checked here; a type error stops the build) and its library
@@ -35,6 +43,18 @@ mkdir -p "$OUT/web/wwwroot" "$OUT/web/vendor/three"
 cp -r "$WEB/public/." "$OUT/web/wwwroot/"
 find "$OUT/web/wwwroot" -name '*.js.map' -delete
 cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
+
+# Bundle + minify the web client into a single file for the package (dev keeps the
+# unbundled public/js). three stays external (resolved by the page's import map), and
+# the Data files stay separate. The individual modules are then dropped from the folder.
+echo "Bundling the web client (esbuild)"
+npx --prefix "$WEB" esbuild "$OUT/web/wwwroot/js/main.js" \
+  --bundle --minify --format=esm --external:three \
+  --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
+find "$OUT/web/wwwroot/js" -maxdepth 1 -name '*.js' ! -name 'main.min.js' -delete
+# Point the packaged page at the bundle (dev index.html is untouched).
+sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
+
 # The save game database: bundled, or one installed on the computer
 POSTGRES_BIN_IN_FOLDER="../postgres/bin"
 if [ -n "${POSTGRES_DIR:-}" ]; then
@@ -112,6 +132,10 @@ if [ -n "$SIGN_KEY_FILE" ]; then
   (
     cd "$OUT"
     MANIFEST_FILES=()
+    # The single-file server executable (and any loose HNMO.*.dll, e.g. a non-single-file build).
+    for exe in server/HNMO.Startup server/HNMO.Startup.exe; do
+      [ -f "$exe" ] && MANIFEST_FILES+=("$exe")
+    done
     while IFS= read -r f; do MANIFEST_FILES+=("$f"); done < <(find server -maxdepth 1 -name 'HNMO.*.dll' | sort)
     for launcher in web/HNMO.Web web/HNMO.Web.exe; do
       [ -f "$launcher" ] && MANIFEST_FILES+=("$launcher")

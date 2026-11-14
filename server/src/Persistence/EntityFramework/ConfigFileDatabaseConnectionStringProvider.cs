@@ -82,7 +82,15 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         };
         var result = new Dictionary<Type, ConnectionSetting>();
 
-        var configurationFilePath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(ConnectionConfigurator).Assembly.Location!).LocalPath)!, this._fileName);
+        // Assembly.Location is empty for a single-file build; fall back to the app base directory,
+        // where the configuration file sits next to the executable.
+#pragma warning disable IL3000
+        var assemblyLocation = typeof(ConnectionConfigurator).Assembly.Location;
+#pragma warning restore IL3000
+        var baseDirectory = string.IsNullOrEmpty(assemblyLocation)
+            ? AppContext.BaseDirectory
+            : Path.GetDirectoryName(new Uri(assemblyLocation).LocalPath)!;
+        var configurationFilePath = Path.Combine(baseDirectory, this._fileName);
         using var xmlReader = XmlReader.Create(File.OpenRead(configurationFilePath), settings);
         var serializer = new XmlSerializer(typeof(ConnectionSettings));
         if (serializer.CanDeserialize(xmlReader))
