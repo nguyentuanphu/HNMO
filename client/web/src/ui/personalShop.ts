@@ -21,6 +21,7 @@ import type { ItemWindowModel, ItemWindows, PickedItem } from './itemWindows.js'
 import { REFERENCE_HEIGHT, prepareDocument } from './rml.js';
 import * as THREE from 'three';
 import { nativeTextPx } from './nativeText.js';
+import { showConfirm } from './gameDialogs.js';
 
 // The desktop's texts (I18N::Game).
 export const SHOP_TEXT = {
@@ -116,47 +117,15 @@ function priceLines(price: StorePrice | undefined, sale: boolean, money: number)
 }
 
 /** A question with a text field in the game (the desktop's GenericConfirmDialog with an input). Doesn't block. */
-export function askInGame(lines: string[], { numeric = false, maxLength = 8, initial = '', keepOpen }: {
+export async function askInGame(lines: string[], { numeric = false, maxLength = 8, initial = '', keepOpen }: {
   numeric?: boolean; maxLength?: number; initial?: string; keepOpen?: (text: string) => boolean;
 } = {}): Promise<string | null> {
-  return new Promise((resolve) => {
-    const box = document.createElement('div');
-    box.className = 'chip confirm-dialog ask-dialog';
-    box.setAttribute('role', 'dialog');
-    Object.assign(box.style, {
-      position: 'fixed', left: '50%', top: '35%', transform: 'translate(-50%, -50%)', zIndex: '95', pointerEvents: 'auto',
-      display: 'grid', gap: '10px', padding: '16px', minWidth: 'min(320px, calc(100vw - 32px))', textAlign: 'center',
-    });
-    const text = document.createElement('div');
-    text.style.whiteSpace = 'pre-line';
-    text.textContent = lines.join('\n');
-    const input = document.createElement('input');
-    input.className = 'ask-input';
-    input.maxLength = maxLength;
-    input.value = initial;
-    if (numeric) { input.inputMode = 'numeric'; input.addEventListener('input', () => { input.value = input.value.replace(/\D/g, ''); }); }
-    const buttons = document.createElement('div');
-    buttons.className = 'buttons';
-    const ok = document.createElement('button');
-    ok.type = 'button'; ok.className = 'primary confirm-ok'; ok.textContent = 'OK';
-    const cancel = document.createElement('button');
-    cancel.type = 'button'; cancel.className = 'confirm-cancel'; cancel.textContent = 'Cancel';
-    buttons.append(ok, cancel);
-    box.append(text, input, buttons);
-    const done = (answer: string | null) => { box.remove(); window.removeEventListener('keydown', onKey, true); resolve(answer); };
-    const accept = () => { if (!keepOpen?.(input.value)) done(input.value); };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); accept(); }
-      else if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); done(null); }
-      else event.stopPropagation(); // typing stays in the field (no hotkeys)
-    };
-    ok.addEventListener('click', accept);
-    cancel.addEventListener('click', () => done(null));
-    box.addEventListener('pointerdown', (event) => event.stopPropagation());
-    window.addEventListener('keydown', onKey, true);
-    document.body.append(box);
-    input.focus();
+  const answer = await showConfirm({
+    lines, showCancel: true, tag: 'ask-dialog',
+    input: { numericOnly: numeric, maxLength, initialText: initial },
+    accept: (text) => !keepOpen?.(text),
   });
+  return answer.button === 'primary' ? answer.text : null;
 }
 
 // my_shop.rml's data model (MyShopRmlModel).

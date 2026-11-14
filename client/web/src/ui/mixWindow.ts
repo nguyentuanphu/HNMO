@@ -14,6 +14,7 @@ import type { MixItem } from '../game/mixRecipes.js';
 import type { Connection } from '../net/connection.js';
 import { ItemWindow, emptyCells, formatGold } from './itemWindows.js';
 import { prepareDocument } from './rml.js';
+import { showMenu } from './gameDialogs.js';
 import type { ItemWindowModel, ItemWindows, PickedItem } from './itemWindows.js';
 
 /** CMixInventory::MIX_STATE. */
@@ -247,46 +248,14 @@ export class MixWindow extends ItemWindow<MixModel> {
   }
 }
 
-/** A choice in the game (the desktop's menu message boxes): a title, buttons with their lines, Close. Doesn't block. */
+/**
+ * ShowChaosMixMenuDialog: the desktop's generic_menu_dialog.rml laid out like its chaos-mix box: the
+ * highlighted title, each recipe's lines above its button, and Close. The index chosen, null for Close.
+ */
 export function chooseInGame(title: string, options: { label: string; lines: readonly string[] }[], closeLabel: string): Promise<number | null> {
-  return new Promise((resolve) => {
-    const box = document.createElement('div');
-    box.className = 'chip choose-dialog mix-method-dialog';
-    box.setAttribute('role', 'dialog');
-    Object.assign(box.style, {
-      position: 'fixed', left: '50%', top: '35%', transform: 'translate(-50%, -50%)', zIndex: '95', pointerEvents: 'auto',
-      display: 'grid', gap: '8px', padding: '16px', minWidth: 'min(320px, calc(100vw - 32px))', textAlign: 'center',
-    });
-    const heading = document.createElement('div');
-    heading.textContent = title;
-    heading.style.fontWeight = 'bold';
-    heading.style.color = '#ffd040';
-    box.append(heading);
-    const done = (answer: number | null) => { box.remove(); window.removeEventListener('keydown', onKey, true); resolve(answer); };
-    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); done(null); } };
-    options.forEach((option, index) => {
-      for (const text of option.lines) {
-        const row = document.createElement('div');
-        row.textContent = text;
-        row.style.fontSize = '0.85em';
-        box.append(row);
-      }
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = `primary choose-option choose-option-${index}`;
-      button.textContent = option.label;
-      button.addEventListener('click', () => done(index));
-      box.append(button);
-    });
-    const close = document.createElement('button');
-    close.type = 'button';
-    close.className = 'choose-close';
-    close.textContent = closeLabel;
-    close.addEventListener('click', () => done(null));
-    box.append(close);
-    box.addEventListener('pointerdown', (event) => event.stopPropagation());
-    window.addEventListener('keydown', onKey, true);
-    document.body.append(box);
+  return showMenu({
+    kind: 'chaos-mix', title, highlightTitle: true, tag: 'mix-method-dialog',
+    buttons: [...options.map((option) => ({ label: option.label, lines: option.lines })), { label: closeLabel, compact: true }],
   });
 }
 

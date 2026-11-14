@@ -6,7 +6,7 @@
 
 import { watchRoot } from '../i18n.js';
 import { decodeTGA } from '../formats.js';
-import { FONT_FAMILY, fitTextToBoxes, loadThemeFonts, nativeTextPx, runMarquees } from './nativeText.js';
+import { FONT_FAMILY, fitOverflowingLines, fitTextToBoxes, loadThemeFonts, nativeTextPx, runMarquees } from './nativeText.js';
 
 const ROOT = '/data/Interface/RmlUi';
 const THEMES: Record<string, string | null> = { classic: 'legacy', legacy: null, modern: null }; // a theme and the one it inherits from
@@ -559,7 +559,9 @@ export function prepareDocument(name: string): Promise<PreparedDocument> {
       const styles: string[] = [];
       // Sprite sheets of earlier stylesheets are known to later ones, so convert in order.
       for (const sheet of sheets) if (sheet) styles.push(await rcssToCss(sheet.text, sheet.url, sprites));
-      for (const style of xml.querySelectorAll('style')) styles.push(await rcssToCss(style.textContent ?? '', url, sprites));
+      // A document's own <style> (the HTML parser puts an <rml> document's head into its body) is
+      // converted here and taken out, so its raw RCSS doesn't land in the window.
+      for (const style of xml.querySelectorAll('style')) { styles.push(await rcssToCss(style.textContent ?? '', url, sprites)); style.remove(); }
       return { xml, css: BASE_CSS + styles.join('\n').replace(/(^|[\s,}])body(?=[\s,{.#:[])/g, '$1.rml-body') };
     })());
   }
@@ -615,6 +617,7 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
       if (root.style.getPropertyValue('--rml-rem') !== rem) root.style.setProperty('--rml-rem', rem);
     }
     fitTextToBoxes(shadow);
+    fitOverflowingLines(shadow);
     if (hasMarquee && runMarquees(shadow)) schedule();
   };
   const schedule = () => { if (!fitPending) { fitPending = true; requestAnimationFrame(fit); } };

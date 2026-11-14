@@ -78,7 +78,7 @@ test('mixes a jewel into a potion at the Chaos Goblin', async ({ page }) => {
   const before = await money(page);
   await page.locator('.rml-mix_inventory').evaluate((host) => (host.shadowRoot!.querySelector('#btn_mix') as HTMLElement).click());
   await expect(page.locator('.confirm-dialog')).toBeVisible({ timeout: 30_000 });
-  expect(await page.locator('.confirm-dialog').textContent()).toContain('Do you want to combine your items?');
+  expect(await page.locator('.confirm-dialog #panel').textContent()).toContain('Do you want to combine your items?');
   await page.click('.confirm-dialog .confirm-ok');
   await expect.poll(async () => (await mix(page)).some((i) => !(i.group === 14 && i.number === jewel!.number)) || (await mix(page)).length === 0, { timeout: 90_000 }).toBe(true);
   await expect.poll(() => money(page), { timeout: 30_000 }).toBeLessThan(before);

@@ -50,7 +50,7 @@ test('the master skill tree shows the class tree and spends a point', async ({ p
   if (points > 0 && before < 20) {
     // A press asks first; OK sends the learn request and the server's answer raises the level.
     await node.locator('.node-icon').dispatchEvent('mousedown');
-    await expect(page.locator('.confirm-dialog')).toContainText('Would you like to strengthen the skill?');
+    await expect(page.locator('.confirm-dialog #panel')).toContainText('Would you like to strengthen the skill?');
     await page.click('.confirm-dialog .confirm-ok');
     await expect(node.locator('.node-level')).toHaveText(String(before + 1), { timeout: 60_000 });
     await expect(tree.locator('#level_point')).toHaveText(`Level point: ${points - 1}`);
