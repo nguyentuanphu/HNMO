@@ -19,6 +19,7 @@ import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
 import { summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
+import { criticalDamage, fireBurst } from './lordEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -73,6 +74,8 @@ export const SkillEffect = {
   WEAKNESS: 221,
   INNOVATION: 222,
   LIGHTNING_SHOCK: 230,
+  FIRE_BURST: 61,
+  CRITICAL_DAMAGE: 64,
   FLAME_STRIKE: 236,
   GIGANTIC_STORM: 237,
 } as const;
@@ -349,6 +352,9 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
       system.deleteJoint('spearSkill', target, 0);
       for (let j = 0; j < 5; j++) system.createJoint('spearSkill', to, to, target.angle, 0, target, 20);
       break;
+    case SkillEffect.FIRE_BURST:
+      fireBurst(system, caster, target);
+      break;
     case SkillEffect.DRAIN_LIFE: // the caster's Owner is the target (pSourceObj->Owner)
       system.createEffect('aliceDrainLife', caster.position, caster.angle, light, 0, caster, 0, { target });
       break;
@@ -403,6 +409,9 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.FLAME_STRIKE:
       system.createEffect('flameStrike', at, caster.angle, light, 0, caster);
+      break;
+    case SkillEffect.CRITICAL_DAMAGE:
+      criticalDamage(system, caster);
       break;
     case SkillEffect.GIGANTIC_STORM: // five storms 200 around the gladiator
       for (let i = 0; i < 5; i++) {

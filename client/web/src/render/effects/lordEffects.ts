@@ -8,12 +8,14 @@
 //   EffectTypes.json: MODEL_PIERCING2 (its creation values)
 //   CreateEffect / Move_MODEL_EFFECT_FLAME_STRIKE and its draw in RenderEffects (the blurs not yet);
 //   CreateEffect / Move_BITMAP_JOINT_THUNDER (Gigantic Storm; its stones, smoke and chrome not yet)
+//   CreateEffect / Move_MODEL_PIER_PART (0, 1), MODEL_DARKLORD_SKILL; MoveCharacter's release for
+//   AT_SKILL_FIREBURST and AT_SKILL_ADD_CRITICAL (the trails' BITMAP_FIRE+1 not yet)
 
 import * as THREE from 'three';
-import { randInt, rotateByAngle } from './core.js';
+import { moveHumming, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
-import type { Effect } from './types.js';
+import type { Effect, EffectOwner } from './types.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 /** The bone Fire Slash's gathering sits on (BoneTransform[33], the right hand). */
@@ -260,3 +262,98 @@ EXTRA_EFFECTS.flameStrike = {
     model.group.matrixWorldNeedsUpdate = true;
   },
 };
+
+// ---------------------------------------------------------------------------
+// Fire Burst (MODEL_PIER_PART, Skill/PierPart.bmd): three flames shoot from the lord and swerve
+// into the target, leaving burning trails (SubType 1); Critical Damage and Fire Burst light the
+// lord's hands (MODEL_DARKLORD_SKILL, Skill/DarkLordSkill.bmd).
+// ---------------------------------------------------------------------------
+
+EXTRA_EFFECTS.pierPart = {
+  model: ['Skill', 'PierPart.bmd'],
+  create: (o) => {
+    if (o.subType === 0) {
+      o.lifeTime = 20;
+      o.gravity = 2;
+      o.velocity = 10;
+      o.hiddenMesh = 1;
+      o.scale = 1.2;
+      o.startPosition.copy(o.light); // the call's light is the aim's offset over the target
+      o.light.set(1, 1, 1);
+      o.direction.set(0, -26, 0);
+      o.headAngle.copy(o.angle);
+      o.angle.set(0, 0, o.angle.z);
+      return o.owner !== null;
+    }
+    if (o.subType === 1) {
+      o.lifeTime = o.skill; // the flame's life time (o->Owner->LifeTime)
+      o.hiddenMesh = 0;
+      o.scale = 0.5;
+      o.alpha = (20 - o.lifeTime) / 5;
+      o.direction.set(0, 0, 0);
+      return true;
+    }
+    return false;
+  },
+  move: (o, system) => {
+    if (o.subType === 0) {
+      const owner = o.owner;
+      if (!owner) return true;
+      const p = owner.position.clone().add(o.startPosition);
+      for (let i = 1; i < o.gravity; i++) {
+        if (randInt(2) === 0) o.angle.x += o.angle.x < -90 ? 20 : -20;
+        moveHumming(o.position, o.angle, p, o.velocity);
+        o.velocity += 0.4;
+        if (o.lifeTime < 10) o.velocity += 0.1;
+        o.position.add(rotateByAngle(o.direction, o.angle));
+        system.createEffect('pierPart', o.position, o.angle, o.light, 1, o.self, 0, { skillIndex: o.lifeTime });
+      }
+      o.gravity += 0.1;
+    } else if (o.lifeTime < 5) {
+      o.alpha *= 1 / 1.3;
+    }
+    return true;
+  },
+};
+
+// MODEL_DARKLORD_SKILL: a small burst turned 45 degrees at a hand for ten ticks.
+EXTRA_EFFECTS.darkLordSkill = {
+  model: ['Skill', 'DarkLordSkill.bmd'],
+  create: (o) => {
+    o.lifeTime = 10;
+    o.scale = 0.2;
+    o.velocity = 0.1;
+    if (o.subType > 1) return false;
+    let angle = 45 - 90 * o.subType;
+    if (randInt(2) === 0) angle = o.subType ? 45 - 90 : 45;
+    o.angle.set(45, angle, 0);
+    return true;
+  },
+  move: () => true,
+};
+
+/** The height Fire Burst aims at over its target (to->BoundingBoxMax[2]; a man's height here). */
+const FIRE_BURST_AIM = 150;
+
+/** MoveCharacter's release for AT_SKILL_FIREBURST: three flames from in front of the lord into the target. */
+export function fireBurst(system: EffectSystem, caster: EffectOwner, target: EffectOwner): void {
+  const root = caster.boneMatrix?.(0);
+  const position = root ? new THREE.Vector3(40, 0, 10).applyMatrix4(root) : caster.position.clone().setZ(caster.position.z + 10);
+  const aim = new THREE.Vector3(0, 0, FIRE_BURST_AIM);
+  system.createEffect('pierPart', position, new THREE.Vector3(0, 0, caster.angle.z + 90), aim, 0, target);
+  aim.z -= FIRE_BURST_AIM / 2;
+  system.createEffect('pierPart', position, new THREE.Vector3(0, 0, caster.angle.z), aim, 0, target);
+  system.createEffect('pierPart', position, new THREE.Vector3(0, 0, caster.angle.z - 90), aim, 0, target);
+  const light = new THREE.Vector3(1, 0.6, 0.3);
+  system.createEffect('darkLordSkill', position, caster.angle, light, 0);
+  system.createEffect('darkLordSkill', position, caster.angle, light, 1);
+}
+
+/** The release of Critical Damage: a burst at each hand that holds a weapon. */
+export function criticalDamage(system: EffectSystem, caster: EffectOwner): void {
+  const light = new THREE.Vector3(1, 0.6, 0.3);
+  for (const hand of [0, 1] as const) {
+    const at = caster.weaponPosition?.(hand);
+    if (at) system.createEffect('darkLordSkill', at, caster.angle, light, hand);
+  }
+}

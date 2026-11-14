@@ -20,6 +20,8 @@ interface Case {
   skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean; action?: number;
   /** An effect type whose model the picture waits for (a slow first load on the test machine). */
   model?: string;
+  /** Models (directory, file) loaded with their textures before the cast. */
+  warm?: [string, string][];
 }
 
 const WIZARD: Case[] = [
@@ -62,11 +64,13 @@ const GLADIATOR: Case[] = [
   { skill: 56, name: 'power-slash', expect: ['effect:magic2'], shotAt: 250 },
   { skill: 237, name: 'gigantic-storm', expect: ['effect:jointThunderEffect', 'joint:jointThunder', 'effect:magicGround2'], shotAt: 800 },
   // The flame follows the gladiator's swing (PLAYER_SKILL_FLAMESTRIKE), played by the hero here.
-  { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike' },
+  { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
 ];
 
 const LORD: Case[] = [
   { skill: 66, name: 'force-wave', expect: ['effect:waves', 'effect:piercing2', 'joint:piercing'], shotAt: 680 },
+  { skill: 61, name: 'fire-burst', expect: ['effect:pierPart', 'effect:darkLordSkill'], shotAt: 680, model: 'pierPart', warm: [['Skill', 'PierPart.bmd'], ['Skill', 'DarkLordSkill.bmd']] },
+  { skill: 64, name: 'critical-damage', expect: ['effect:darkLordSkill'], shotAt: 620, model: 'darkLordSkill', warm: [['Skill', 'DarkLordSkill.bmd']] },
 ];
 
 const SUMMONER: Case[] = [
@@ -151,6 +155,20 @@ for (const [group, cases] of Object.entries(CASES)) {
     for (const c of cases) {
       if (only && !only.includes(c.name)) continue;
       await expect.poll(() => game(page, (g) => g.effects.counts().effects + g.effects.counts().joints), { timeout: 30_000 }).toBe(0);
+      if (c.warm) {
+        // The test machine draws a few frames a second and loads a model's textures slowly: load them first.
+        await page.evaluate(async (models) => {
+          type Bmd = {
+            loadModel(dir: string, file: string): Promise<unknown>; computeBoneMatrices(model: unknown, action: number, time: number): unknown;
+            buildGeometries(model: unknown, bones: unknown): { textureName: string }[]; createMaterial(dirs: string[], name: string, options: { glow: boolean }): Promise<unknown>;
+          };
+          const bmd = await import('/js/bmd.js' as string) as Bmd;
+          for (const [dir, file] of models) {
+            const model = await bmd.loadModel(dir, file);
+            for (const part of bmd.buildGeometries(model, bmd.computeBoneMatrices(model, 0, 0))) await bmd.createMaterial(['Skill', 'Effect', 'Item'], part.textureName, { glow: true });
+          }
+        }, c.warm);
+      }
       // The effect system's tick is watched from the page: what each tick holds is gathered, and at
       // the picture's tick the effects stop moving (they are still drawn) until the picture is taken,
       // so the pictures don't depend on how fast the test machine draws.
