@@ -36,6 +36,7 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="BouncyCastle.Cryptography" />
   </ItemGroup>
   
   <ItemGroup>
@@ -46,6 +47,7 @@
     <ProjectReference Include="..\..\src\GameLogic\HNMO.GameLogic.csproj" />
     <ProjectReference Include="..\..\src\GameServer\HNMO.GameServer.csproj" />
     <ProjectReference Include="..\..\src\GuildServer\HNMO.GuildServer.csproj" />
+    <ProjectReference Include="..\..\src\Integrity\HNMO.Integrity.csproj" />
     <ProjectReference Include="..\..\src\Interfaces\HNMO.Interfaces.csproj" />
     <ProjectReference Include="..\..\src\Dapr\GameServer.Host\HNMO.GameServer.Host.csproj" />
     <ProjectReference Include="..\..\src\Dapr\CentralServer.Host\HNMO.CentralServer.Host.csproj" />
