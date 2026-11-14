@@ -4,7 +4,9 @@
 // their own modules (knightEffects.ts, ...), imported by index.ts.
 
 import type { EffectSystem } from './effectSystem.js';
-import type { Effect, EffectType, Joint, JointType } from './types.js';
+import type { BitmapName } from './core.js';
+import type { Blend } from './quadBatch.js';
+import type { Effect, EffectType, Joint, JointType, Particle, ParticleType } from './types.js';
 
 export interface ExtraEffect {
   /** The model drawn (directory under Data, file), if the effect has one. */
@@ -26,5 +28,19 @@ export interface ExtraJoint {
   move(o: Joint, system: EffectSystem): void;
 }
 
+export interface ExtraParticle {
+  /** The bitmap drawn (o->TexType). */
+  texture: BitmapName;
+  /** The CreateParticle case (the call's scale); false when the SubType isn't ported. */
+  init(o: Particle, scale: number, system: EffectSystem): boolean;
+  /** The MoveParticles case (after the life time and the common move). */
+  move(o: Particle, system: EffectSystem): void;
+  /** DescribeParticle's blend, when not the texture's (glow for JPEGs). */
+  blend?(o: Particle): Blend;
+  /** Its own draw (a strip of frames, an offset). */
+  draw?(o: Particle, system: EffectSystem, width: number, height: number, blend: Blend): void;
+}
+
 export const EXTRA_EFFECTS: Partial<Record<EffectType, ExtraEffect>> = {};
 export const EXTRA_JOINTS: Partial<Record<JointType, ExtraJoint>> = {};
+export const EXTRA_PARTICLES: Partial<Record<ParticleType, ExtraParticle>> = {};

@@ -37,6 +37,7 @@ interface ExperiencePacket { Type: number; AddedExperience: number; DamageOfLast
 interface RespawnPacket { PositionX: number; PositionY: number; MapNumber: number; Direction: number }
 interface SkillAnimationPacket { SkillId: number; PlayerId: number; TargetId: number }
 interface AreaSkillAnimationPacket { SkillId: number; PlayerId: number; PointX: number; PointY: number; Rotation: number }
+interface ChainLightningPacket { SkillNumber: number; PlayerId: number; TargetCount: number; Targets: { TargetId: number }[] }
 
 /** What casting needs from the rest of the game: the current skill and the hero's mana and AG. */
 export interface SkillSource {
@@ -69,6 +70,8 @@ export interface CombatEvents {
   onHeroAttacked?: (attacker: Character) => void;
   /** Someone cast a skill (SkillAnimation / AreaSkillAnimation, and the hero's own cast): for its effects. */
   onSkill?: (caster: Character, skill: number, target: Character | null, cell: { x: number; y: number } | null) => void;
+  /** Chain Lightning jumped from the caster through these targets (ChainLightningHitInfo, ReceiveChainMagic). */
+  onChainLightning?: (caster: Character, skill: number, targets: Character[]) => void;
 }
 
 // The pets that change how the hero attacks (inventory slot 8): Horn of Fenrir, Dark Horse, Uniria, Dinorant.
@@ -275,6 +278,7 @@ export class Combat {
       else if (bytes[0] === 0xc1 && code === 0xf3 && bytes[3] === 0x04) this.respawn(read<RespawnPacket>('ServerToClient', 'RespawnAfterDeathExtended', bytes));
       else if (bytes[0] === 0xc3 && code === 0x19 && bytes.length >= 9) this.skillAnimation(read<SkillAnimationPacket>('ServerToClient', 'SkillAnimation', bytes));
       else if (bytes[0] === 0xc3 && code === 0x1e && bytes.length >= 10) this.areaSkillAnimation(read<AreaSkillAnimationPacket>('ServerToClient', 'AreaSkillAnimation', bytes));
+      else if (bytes[0] === 0xc1 && code === 0xbf && bytes[3] === 0x0a && bytes.length >= 10) this.chainLightning(read<ChainLightningPacket>('ServerToClient', 'ChainLightningHitInfo', bytes));
     } catch (error) {
       console.warn('Combat packet not handled:', error);
     }
@@ -376,6 +380,18 @@ export class Combat {
     const action = caster.kind === 'player' ? skillAnimationAction(packet.SkillId, caster.classIndex ?? 0, { own: false, via: 'area' }) : null;
     if (action !== null) caster.playOnce(action);
     this.events.onSkill?.(caster, packet.SkillId, null, cell);
+  }
+
+  // ChainLightningHitInfo (ReceiveChainMagic): the links of a Chain Lightning, for everyone's caster.
+  private chainLightning(packet: ChainLightningPacket): void {
+    const caster = this.characterById(packet.PlayerId & ID_MASK);
+    if (!caster || caster.dead) return;
+    const targets: Character[] = [];
+    for (const { TargetId } of packet.Targets.slice(0, packet.TargetCount)) {
+      const target = this.characterById(TargetId & ID_MASK);
+      if (target) targets.push(target);
+    }
+    this.events.onChainLightning?.(caster, packet.SkillNumber, targets);
   }
 
   private experience(packet: ExperiencePacket): void {

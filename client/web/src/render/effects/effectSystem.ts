@@ -25,7 +25,7 @@ import {
 import type { BitmapName } from './core.js';
 import { QuadBatches, applyBlend } from './quadBatch.js';
 import type { Blend, HeightAt } from './quadBatch.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type {
   Effect, EffectOwner, EffectType, Joint, JointBlend, JointType, Particle, ParticleType, Sprite, SpriteType, Tail,
 } from './types.js';
@@ -55,13 +55,14 @@ const EFFECT_MODELS: Partial<Record<EffectType, [string, string]>> = {
 const MODEL_TEXTURE_DIRS = ['Skill', 'Effect', 'Item'];
 
 /** The particle types' textures (o->TexType = o->Type). */
-const PARTICLE_TEXTURES: Record<ParticleType, BitmapName> = {
+const PARTICLE_TEXTURES: Partial<Record<ParticleType, BitmapName>> = {
   energy: 'energy', spark: 'spark', spark3: 'spark3', fire: 'fire', fire3: 'fire3', smoke: 'smoke', blood2: 'blood2',
   explosion: 'explosion', flame: 'flame', light: 'light', flareBlue: 'flareBlue', flare: 'flare',
 };
 const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
   smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1',
+  drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
 };
 
 export interface EffectSystemOptions {
@@ -87,6 +88,8 @@ export interface EffectLayer {
 export interface CreateEffectExtra {
   pkKey?: number;
   skillIndex?: number;
+  /** The character the effect reaches besides its owner (o->Owner->Owner, m_sTargetIndex). */
+  target?: EffectOwner | null;
 }
 
 const modelLoads = new Map<string, Promise<BMDModel | null>>();
@@ -114,6 +117,8 @@ function ownerLive(owner: EffectOwner | null): boolean {
 
 /** The draw state a particle takes: glow for three-component textures, alpha tested for the rest (RenderParticles). */
 function particleBlend(o: Particle): Blend {
+  const extra = EXTRA_PARTICLES[o.type]?.blend?.(o);
+  if (extra) return extra;
   if (o.type === 'smoke' && [2, 5, 12, 14, 15, 20, 21, 29, 37, 38, 59].includes(o.subType)) return 'subtract';
   return o.texture === 'blood2' ? 'alpha' : 'glow';
 }
@@ -240,10 +245,10 @@ export class EffectSystem {
   createParticle(type: ParticleType, position: THREE.Vector3, angle: THREE.Vector3, light: THREE.Vector3,
     subType = 0, scale = 1, owner: EffectOwner | null = null): void {
     const o: Particle = {
-      type, subType, texture: PARTICLE_TEXTURES[type],
+      type, subType, texture: PARTICLE_TEXTURES[type] ?? EXTRA_PARTICLES[type]?.texture ?? 'light',
       position: position.clone(), startPosition: position.clone(), velocity: new THREE.Vector3(),
       angle: angle.clone(), light: light.clone(), turningForce: new THREE.Vector3(),
-      scale, gravity: 0, lifeTime: 2, frame: 0, rotation: 0, target: owner, live: true,
+      scale, gravity: 0, lifeTime: 2, frame: 0, rotation: 0, target: owner, alpha: 1, live: true,
     };
     if (!this.initParticle(o, angle, scale)) return;
     this.particles.push(o);
@@ -380,6 +385,8 @@ export class EffectSystem {
       case 'flareBlue':
       case 'flare':
         return false;
+      default:
+        return EXTRA_PARTICLES[o.type]?.init(o, scale, this) ?? false;
     }
   }
 
@@ -498,6 +505,7 @@ export class EffectSystem {
         if (o.scale <= 0.1) o.live = false;
         break;
       default:
+        EXTRA_PARTICLES[o.type]?.move(o, this);
         break;
     }
   }
@@ -508,6 +516,11 @@ export class EffectSystem {
     if (!size) return;
     const width = size.width * o.scale, height = size.height * o.scale;
     const blend = particleBlend(o);
+    const extra = EXTRA_PARTICLES[o.type];
+    if (extra?.draw) {
+      extra.draw(o, this, width, height, blend);
+      return;
+    }
     switch (o.type) {
       case 'blood2':
         this.quads.billboard(o.texture, blend, o.position, width, height, o.light, 0, (o.frame % 2) * 0.5, Math.trunc(o.frame / 2) * 0.5, 0.5, 0.5);
@@ -533,11 +546,11 @@ export class EffectSystem {
   // =========================================================================
 
   createJoint(type: JointType, position: THREE.Vector3, targetPosition: THREE.Vector3, angle: THREE.Vector3,
-    subType = 0, target: EffectOwner | null = null, scale = 10, skill = 0, pkKey = 0): Joint | null {
+    subType = 0, target: EffectOwner | null = null, scale = 10, skill = 0, pkKey = 0, light: THREE.Vector3 | null = null): Joint | null {
     const o: Joint = {
       type, subType, texture: JOINT_TEXTURES[type],
       position: position.clone(), targetPosition: targetPosition.clone(), startPosition: new THREE.Vector3(),
-      angle: angle.clone(), direction: new THREE.Vector3(), light: WHITE.clone(), scale, velocity: 0, lifeTime: 0,
+      angle: angle.clone(), direction: new THREE.Vector3(), light: (light ?? WHITE).clone(), scale, velocity: 0, lifeTime: 0,
       maxTails: 1, numTails: 0, tails: [], target, index: this.jointIndex++, blend: 'glow', faces: 3,
       createTails: true, collision: false, counter: 0, skill, pkKey, live: true,
     };
@@ -574,6 +587,11 @@ export class EffectSystem {
           o.lifeTime = 17;
           o.maxTails = 3;
           o.light.set(0.5, 0.5, randInt(128) / 255 + 0.5);
+          return true;
+        }
+        if (o.subType === 15 || o.subType === 16) { // the Summoner's curse rings: they keep the caller's colour
+          o.lifeTime = 10;
+          if (o.subType === 16) o.blend = 'subtract';
           return true;
         }
         return o.subType >= 1 && o.subType <= 3;
@@ -725,6 +743,13 @@ export class EffectSystem {
   // SubType 8 (CreateForce) homes in on the point it was made for.
   private moveHealing(o: Joint): void {
     o.velocity += 4;
+    if (o.subType === 15 || o.subType === 16) { // homing on the ring (MODEL_ALICE_BUFFSKILL_EFFECT), fading
+      const p = o.target ? o.target.position.clone() : o.targetPosition.clone();
+      moveHumming(o.position, o.angle, p, 10);
+      o.light.multiplyScalar(1 / 1.08);
+      this.createSprite('shiny2', p, (randInt(4) + 4) * 0.2, o.light, o.target, randInt(360), o.subType === 16 ? 1 : 0);
+      return;
+    }
     if (o.subType === 8) {
       if (o.lifeTime > 10) moveHumming(o.position, o.angle, o.targetPosition, 10);
       else if (o.lifeTime < 6) o.light.multiplyScalar(1 / 1.8);
@@ -876,7 +901,7 @@ export class EffectSystem {
       type, subType, position: newVector(position), startPosition: new THREE.Vector3(), angle: newVector(angle),
       headAngle: new THREE.Vector3(), direction: new THREE.Vector3(), light: newVector(light), scale: scale <= 0 ? 0.9 : scale,
       lifeTime: 0, gravity: 0, velocity: 0.3, blendMesh: -1, blendMeshLight: 1, blendMeshTexCoordU: 0, blendMeshTexCoordV: 0,
-      hiddenMesh: -1, alpha: 1, renderType: 'normal', owner, animationFrame: 0,
+      hiddenMesh: -1, alpha: 1, renderType: 'normal', owner, target: extra.target ?? null, callScale: scale, animationFrame: 0,
       counter: 0, kind: 0, skill: extra.skillIndex ?? 0, pkKey: extra.pkKey ?? -1, distance: 0,
       model: null, extra: null, self: null as unknown as EffectOwner, live: true,
     };
@@ -944,7 +969,7 @@ export class EffectSystem {
           o.lifeTime = 40;
           o.scale = (randInt(50) + 50) / 100 * 4;
         }
-        return o.subType >= 1 && o.subType <= 4;
+        return (o.subType >= 1 && o.subType <= 4) || o.subType === 11 || o.subType === 12;
       case 'stone1':
       case 'stone2': {
         if (o.subType !== 0 && o.subType !== 1 && o.subType !== 2 && o.subType !== 10) return false;
@@ -1123,8 +1148,8 @@ export class EffectSystem {
         case 'energy': this.moveEnergy(o); break;
         case 'fireModel': this.moveFire(o, luminosity); break;
         case 'magic2': this.moveMagic2(o, luminosity); break;
-        case 'magicGround2':
-          if (o.subType !== 4) this.createHealing(o);
+        case 'magicGround2': // the subtypes that make no healing trails (MoveEffect's BITMAP_MAGIC+1)
+          if (o.subType >= 1 && ![4, 6, 7, 8, 9, 10, 11, 12, 13].includes(o.subType)) this.createHealing(o);
           break;
         case 'stone1':
         case 'stone2':
@@ -1461,11 +1486,13 @@ export class EffectSystem {
       scale = o.scale;
       if (luminosity === 1) luminosity = Math.sin((60 - o.lifeTime) * 0.05) + 0.5;
     }
+    // SubTypes 11 and 12 (the Summoner's curses) take the caller's colour; 12 is subtracted.
     const light = o.subType === 2 ? new THREE.Vector3(0.4, 1, 0.6)
       : o.subType === 3 ? new THREE.Vector3(1, 0.6, 0.4)
-      : o.subType === 4 ? new THREE.Vector3(1, 0.5, 0.1) : new THREE.Vector3(0.4, 0.6, 1);
+      : o.subType === 4 ? new THREE.Vector3(1, 0.5, 0.1)
+      : o.subType === 11 || o.subType === 12 ? o.light.clone() : new THREE.Vector3(0.4, 0.6, 1);
     light.multiplyScalar(luminosity);
-    this.quads.decal('magicGround2', 'glow', o.position.x, o.position.y, scale, light, -o.angle.z,
+    this.quads.decal('magicGround2', o.subType === 12 ? 'subtract' : 'glow', o.position.x, o.position.y, scale, light, -o.angle.z,
       this.options.heightAt ?? null, o.position.z);
   }
 
@@ -1529,7 +1556,7 @@ export class EffectSystem {
       const size = this.quads.textureSize(sprite.type);
       if (!size) continue;
       // DescribeSprite: Width x Height of the texture times the scale; SubType 0 glows.
-      this.quads.billboard(sprite.type, 'glow', sprite.position, size.width * sprite.scale, size.height * sprite.scale, sprite.light, sprite.rotation);
+      this.quads.billboard(sprite.type, sprite.subType === 1 ? 'subtract' : 'glow', sprite.position, size.width * sprite.scale, size.height * sprite.scale, sprite.light, sprite.rotation);
     }
     this.quads.endFrame();
   }
