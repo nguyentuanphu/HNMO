@@ -15,7 +15,8 @@ interface MonsterEntry {
   kind?: string;
   /** A model slot of Models.json, or 'player'. */
   model?: string;
-  scale?: number;
+  /** Its size, or 'character': the size a player has (docs/monster-data.md). */
+  scale?: number | 'character';
   numbers: { number: number; maps?: number[] }[];
   /** How it attacks (which animation for which skill), read by combatLook's monsterAttackAction. */
   attacks?: MonsterAttacksData;
@@ -72,6 +73,13 @@ export type MonsterDescription = PlayerModelMonster | ModelMonster;
 
 let catalog: MonsterCatalog | null = null;
 
+/** A type's size: 'character' (and anything else that isn't a number) is a player's size, 1. */
+function sizeOf(scale: MonsterEntry['scale'], fallback?: number): number {
+  if (typeof scale === 'number' && Number.isFinite(scale)) return scale;
+  if (scale === undefined && typeof fallback === 'number' && Number.isFinite(fallback)) return fallback;
+  return 1;
+}
+
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`${response.status} ${url}`);
@@ -97,7 +105,7 @@ export function describeMonster(number: number): MonsterDescription {
   const monster = catalog.byNumber.get(number);
   const slot = monster?.model ?? catalog.unknown.model;
   const name = monster?.name?.en ?? `Monster ${number}`;
-  if (slot === 'player') return { name, usesPlayerModel: true, scale: monster?.scale ?? 1, kind: monster?.kind, attacks: monster?.attacks ?? null };
+  if (slot === 'player') return { name, usesPlayerModel: true, scale: sizeOf(monster?.scale), kind: monster?.kind, attacks: monster?.attacks ?? null };
   // The unknown monsters' model is always in Models.json.
   const model = catalog.modelsBySlot.get(slot) ?? catalog.modelsBySlot.get(catalog.unknown.model)!;
   const file = model.file.replace(/^Data\//, '');
@@ -110,7 +118,7 @@ export function describeMonster(number: number): MonsterDescription {
     dir,
     fileName: file.slice(dir.length + 1),
     textureDir: model.textureFolders?.length ? model.textureFolders : [dir],
-    scale: monster?.scale ?? model.scale ?? 1,
+    scale: sizeOf(monster?.scale, model.scale),
     keysPerSecond: speeds,
     attacks: monster?.attacks ?? null,
   };

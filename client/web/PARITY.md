@@ -56,7 +56,7 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Own character: class body set, stand and walk animations | ✅ | |
 | Other players in view (`12`), out of view (`14`), walking (`D4`), moved (`15`) | ✅ | Others walk straight to their target |
 | NPCs and monsters in view (`13`) with models from `Data/Monsters` | ✅ | Scale and animation speeds from the data |
-| Pathfinding and walk packets (15 steps per packet, continued) | ✅ | Verified: another player sees the same cell |
+| Pathfinding and walk packets (15 steps per packet, continued) | ✅ | Verified: another player sees the same cell. A left click on the ground walks to the clicked cell (test `click-walk.spec.ts`); NPCs drawn with the player model ("scale": "character" in Monsters.json, e.g. Leo the Helper next to the Lorencia spawn) get a player's size, where the text once turned into NaN and the NPC took every click |
 | Name labels | 🟡 | Players and NPCs, always shown; the client shows them on hover |
 | Armour on characters from the appearance bytes (helm, armour, pants, gloves, boots) | ✅ | Models from `Data/Items/Models`; class body where nothing is worn |
 | Weapons and shields in the hands, on the back in safe zones | ✅ | Bones 33, 42 and 47 with the back placements of `PlaceLinkedPart`; crossbow and a few special placements not yet |

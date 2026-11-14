@@ -303,11 +303,15 @@ function pickCharacter(event: MouseEvent, kinds: string[]): Character | null {
   for (const character of state.online.characters.values()) {
     if (!kinds.includes(character.kind) || character.dead) continue;
     npcBox.setFromObject(character.group);
-    if (npcBox.isEmpty()) continue;
-    const top = npcBox.max.clone().project(camera), bottom = npcBox.min.clone().project(camera);
-    const toScreen = (v: THREE.Vector3) => ({ x: rect.left + (v.x + 1) / 2 * rect.width, y: rect.top + (1 - v.y) / 2 * rect.height });
-    const a = toScreen(top), b = toScreen(bottom);
-    const left = Math.min(a.x, b.x), right = Math.max(a.x, b.x), upper = Math.min(a.y, b.y), lower = Math.max(a.y, b.y);
+    // A box with NaN in it (a broken model matrix) would pass every bounds test below and take every click.
+    if (npcBox.isEmpty() || ![npcBox.min.x, npcBox.min.y, npcBox.min.z, npcBox.max.x, npcBox.max.y, npcBox.max.z].every(Number.isFinite)) continue;
+    // The screen rectangle around all eight corners of the box (two corners alone miss part of it when the camera turns).
+    let left = Infinity, right = -Infinity, upper = Infinity, lower = -Infinity;
+    for (let corner = 0; corner < 8; corner++) {
+      const v = new THREE.Vector3(corner & 1 ? npcBox.max.x : npcBox.min.x, corner & 2 ? npcBox.max.y : npcBox.min.y, corner & 4 ? npcBox.max.z : npcBox.min.z).project(camera);
+      const x = rect.left + (v.x + 1) / 2 * rect.width, y = rect.top + (1 - v.y) / 2 * rect.height;
+      left = Math.min(left, x); right = Math.max(right, x); upper = Math.min(upper, y); lower = Math.max(lower, y);
+    }
     const pad = 8;
     if (event.clientX < left - pad || event.clientX > right + pad || event.clientY < upper - pad || event.clientY > lower + pad) continue;
     const distance = Math.hypot(event.clientX - (left + right) / 2, event.clientY - (upper + lower) / 2);
