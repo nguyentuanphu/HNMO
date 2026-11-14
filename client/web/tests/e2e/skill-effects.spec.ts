@@ -8,14 +8,21 @@ import { enterWorld } from './helpers.js';
 
 interface Fighter { id: number; kind: string; dead: boolean; cell: { x: number; y: number } }
 interface EffectsGame {
-  online: { characters: Map<number, Fighter>; hero: Fighter & { isWalking: boolean }; walkTo(cell: { x: number; y: number }): boolean; say(text: string): void };
+  online: { characters: Map<number, Fighter>; hero: Fighter & { isWalking: boolean }; playerId: number; walkTo(cell: { x: number; y: number }): boolean; say(text: string): void };
+  connection: { dispatch(bytes: Uint8Array): void };
   combat: { events: { onSkill(caster: unknown, skill: number, target: unknown, cell: { x: number; y: number } | null): void } };
   effects: { ready: Promise<void>; counts(): { effects: number; particles: number; joints: number; sprites: number }; census(): Record<string, number> };
 }
 type Win = Window & { __game: EffectsGame };
 
 /** A skill, the objects its effect must make (census keys), and when to take its picture (ms after the cast). */
-interface Case { skill: number; name: string; expect: string[]; shotAt: number; area?: boolean }
+interface Case {
+  skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean; action?: number;
+  /** An effect type whose model the picture waits for (a slow first load on the test machine). */
+  model?: string;
+  /** Models (directory, file) loaded with their textures before the cast. */
+  warm?: [string, string][];
+}
 
 const WIZARD: Case[] = [
   { skill: 2, name: 'meteorite', expect: ['effect:fireModel'], shotAt: 1100 },
@@ -47,7 +54,7 @@ const KNIGHT: Case[] = [
 
 const ELF: Case[] = [
   { skill: 52, name: 'penetration', expect: ['effect:gathering', 'particle:spark3'], shotAt: 240 },
-  { skill: 235, name: 'multi-shot', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3'], shotAt: 200 },
+  { skill: 235, name: 'multi-shot', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'effect:bladeSkill'], shotAt: 200, model: 'bladeSkill', warm: [['Effect', 'bladetonedo.bmd']] },
   { skill: 77, name: 'infinity-arrow', expect: ['effect:infinityArrow', 'effect:infinityArrow1', 'effect:infinityArrow4'], shotAt: 300 },
   { skill: 30, name: 'summon', expect: ['effect:magicGround2', 'joint:jointHealing'], shotAt: 800 },
 ];
@@ -55,13 +62,39 @@ const ELF: Case[] = [
 const GLADIATOR: Case[] = [
   { skill: 55, name: 'fire-slash', expect: ['effect:gathering', 'effect:swordForce', 'joint:jointForce', 'joint:jointThunder'], shotAt: 400 },
   { skill: 56, name: 'power-slash', expect: ['effect:magic2'], shotAt: 250 },
+  { skill: 237, name: 'gigantic-storm', expect: ['effect:jointThunderEffect', 'joint:jointThunder', 'effect:magicGround2'], shotAt: 800 },
+  // The flame follows the gladiator's swing (PLAYER_SKILL_FLAMESTRIKE), played by the hero here.
+  { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
 ];
 
 const LORD: Case[] = [
   { skill: 66, name: 'force-wave', expect: ['effect:waves', 'effect:piercing2', 'joint:piercing'], shotAt: 680 },
+  { skill: 61, name: 'fire-burst', expect: ['effect:pierPart', 'effect:darkLordSkill'], shotAt: 680, model: 'pierPart', warm: [['Skill', 'PierPart.bmd'], ['Skill', 'DarkLordSkill.bmd']] },
+  { skill: 64, name: 'critical-damage', expect: ['effect:darkLordSkill'], shotAt: 620, model: 'darkLordSkill', warm: [['Skill', 'DarkLordSkill.bmd']] },
 ];
 
-const CASES: Record<string, Case[]> = { wizard: WIZARD, knight: KNIGHT, elf: ELF, gladiator: GLADIATOR, lord: LORD };
+const SUMMONER: Case[] = [
+  { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy'], shotAt: 1000 },
+  // Its links come with the server's ChainLightningHitInfo, fed to the game here.
+  { skill: 215, name: 'chain-lightning', expect: ['effect:chainLightning', 'joint:jointThunder', 'particle:light'], shotAt: 200, chain: true },
+  { skill: 230, name: 'lightning-shock', expect: ['effect:lightningShock', 'particle:lightningMega', 'effect:magic', 'effect:damage01Mono'], shotAt: 240 },
+  { skill: 219, name: 'sleep', expect: ['effect:aliceBuffSkillEffect', 'effect:aliceBuffSkillEffect2', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
+  { skill: 218, name: 'berserker', expect: ['effect:aliceBuffSkillEffect', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
+  { skill: 221, name: 'weakness', expect: ['effect:magicZin', 'effect:summonerCastingEffect2', 'effect:shiny5', 'particle:pinLightParticle'], shotAt: 1100 },
+  { skill: 222, name: 'innovation', expect: ['effect:magicZin', 'effect:summonerCastingEffect222', 'particle:shiny5Particle'], shotAt: 1100 },
+];
+
+const FIGHTER: Case[] = [
+  { skill: 260, name: 'killing-blow', expect: ['effect:wolfHeadEffect', 'effect:sbumb', 'particle:sbumb', 'joint:pinLightJoint'], shotAt: 240 },
+  { skill: 261, name: 'beast-uppercut', expect: ['effect:downAttackDummyR', 'effect:downAttackDummyL', 'joint:forcePillar', 'particle:sahamuttExplosion'], shotAt: 520 },
+  // Its timing follows the fighter's kick (PLAYER_SKILL_DRAGONKICK), played by the hero here.
+  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega'], shotAt: 400, action: 252 },
+  { skill: 266, name: 'increase-attack', expect: ['effect:swordEffectMono', 'particle:swordEffectMonoParticle', 'effect:shockWaveGround1', 'effect:eventCloud', 'effect:windForce', 'effect:magic'], shotAt: 400 },
+  { skill: 267, name: 'increase-health', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:eventCloud'], shotAt: 400 },
+  { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },
+];
+
+const CASES: Record<string, Case[]> = { wizard: WIZARD, knight: KNIGHT, elf: ELF, gladiator: GLADIATOR, lord: LORD, summoner: SUMMONER, fighter: FIGHTER };
 const SHOTS_DIR = process.env.SHOTS_DIR ?? 'test-results/skill-shots';
 
 const game = <T>(page: Page, read: (g: EffectsGame) => T): Promise<T> => page.evaluate(`(${read.toString()})(window.__game)`);
@@ -76,10 +109,11 @@ async function goHunting(page: Page): Promise<void> {
 }
 
 /** Plays the skill as the server shows it: the hero casts at the nearest monster (or a tile ahead). */
-function cast(page: Page, skill: number, area: boolean): Promise<boolean> {
-  return page.evaluate(({ skill, area }) => {
+function cast(page: Page, skill: number, area: boolean, chain = false, action?: number): Promise<boolean> {
+  return page.evaluate(({ skill, area, chain, action }) => {
     const g = (window as unknown as Win).__game;
     const hero = g.online.hero;
+    if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
     let best: Fighter | null = null, bestDistance = 8;
     for (const c of g.online.characters.values()) {
       if (c.kind !== 'monster' || c.dead) continue;
@@ -87,10 +121,23 @@ function cast(page: Page, skill: number, area: boolean): Promise<boolean> {
       if (d < bestDistance) { best = c; bestDistance = d; }
     }
     const cell = best ? { ...best.cell } : { x: hero.cell.x + 3, y: hero.cell.y - 3 };
+    if (chain) {
+      // ChainLightningHitInfo (C1 BF 0A): the hero's lightning through the nearest monsters (or the hero).
+      const near = [...g.online.characters.values()].filter((c) => c.kind === 'monster' && !c.dead)
+        .sort((a, b) => Math.hypot(a.cell.x - hero.cell.x, a.cell.y - hero.cell.y) - Math.hypot(b.cell.x - hero.cell.x, b.cell.y - hero.cell.y));
+      const ids = near.slice(0, 3).map((c) => c.id);
+      const self = g.online.playerId;
+      const packet = [0xc1, 10 + ids.length * 2, 0xbf, 0x0a, skill >> 8, skill & 0xff, self & 0xff, self >> 8, ids.length, 0];
+      for (const id of ids.length ? ids : [self]) packet.push(id & 0xff, id >> 8);
+      packet[1] = packet.length;
+      packet[8] = (packet.length - 10) / 2;
+      g.connection.dispatch(new Uint8Array(packet));
+      return best !== null;
+    }
     // Without a monster close by, a targeted skill is aimed at the hero itself.
     g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
     return best !== null;
-  }, { skill, area });
+  }, { skill, area, chain, action });
 }
 
 const groups = process.env.SKILL_GROUPS?.split(',');
@@ -108,6 +155,20 @@ for (const [group, cases] of Object.entries(CASES)) {
     for (const c of cases) {
       if (only && !only.includes(c.name)) continue;
       await expect.poll(() => game(page, (g) => g.effects.counts().effects + g.effects.counts().joints), { timeout: 30_000 }).toBe(0);
+      if (c.warm) {
+        // The test machine draws a few frames a second and loads a model's textures slowly: load them first.
+        await page.evaluate(async (models) => {
+          type Bmd = {
+            loadModel(dir: string, file: string): Promise<unknown>; computeBoneMatrices(model: unknown, action: number, time: number): unknown;
+            buildGeometries(model: unknown, bones: unknown): { textureName: string }[]; createMaterial(dirs: string[], name: string, options: { glow: boolean }): Promise<unknown>;
+          };
+          const bmd = await import('/js/bmd.js' as string) as Bmd;
+          for (const [dir, file] of models) {
+            const model = await bmd.loadModel(dir, file);
+            for (const part of bmd.buildGeometries(model, bmd.computeBoneMatrices(model, 0, 0))) await bmd.createMaterial(['Skill', 'Effect', 'Item'], part.textureName, { glow: true });
+          }
+        }, c.warm);
+      }
       // The effect system's tick is watched from the page: what each tick holds is gathered, and at
       // the picture's tick the effects stop moving (they are still drawn) until the picture is taken,
       // so the pictures don't depend on how fast the test machine draws.
@@ -126,8 +187,12 @@ for (const [group, cases] of Object.entries(CASES)) {
           if (++this.__ticks! === freezeAt) this.__frozen = true;
         };
       }, Math.max(1, Math.round(c.shotAt / 40)));
-      await cast(page, c.skill, c.area ?? false);
+      await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action);
       await page.waitForFunction(() => (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen === true, null, { timeout: 30_000 });
+      if (c.model) {
+        await page.waitForFunction((type) => (window as unknown as { __game: { effects: { effects: { type: string; model: unknown }[] } } }).__game.effects.effects
+          .some((e) => e.type === type && e.model !== null), c.model, { timeout: 180_000 });
+      }
       await page.waitForTimeout(400); // a frame or two drawn
       await page.screenshot({ path: `${SHOTS_DIR}/${group}-${c.name}.png` });
       await page.evaluate(() => { (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen = false; });

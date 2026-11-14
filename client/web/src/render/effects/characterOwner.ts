@@ -3,6 +3,7 @@
 
 import * as THREE from 'three';
 import type { Character } from '../../game/characters.js';
+import { TICKS_PER_SECOND } from './core.js';
 import type { EffectOwner } from './types.js';
 
 /** c->Weapon[0].LinkBone and c->Weapon[1].LinkBone of the player model (ZzzCharacter.cpp). */
@@ -41,8 +42,16 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
     isLive: () => !character.dead && character.group.visible && character.group.parent !== null,
     weaponPosition: (hand) => bonePosition(character, bones[hand]),
     bonePosition: (bone) => bonePosition(character, bone),
+    boneMatrix: (bone) => {
+      const matrix = character.model.matrices[bone];
+      if (!matrix) return null;
+      character.group.updateMatrix();
+      return character.group.matrix.clone().multiply(matrix);
+    },
     boneCount: () => character.model.matrices.length,
     currentAction: () => character.oneShot?.action ?? character.action,
+    animationFrame: () => character.time,
+    playSpeed: (action) => (character.keysPerSecond(action) ?? 6) / TICKS_PER_SECOND,
     weapon: () => {
       const held = character.attachments.find((attachment) => attachment.slot === 'rightHand');
       return held ? { model: held.model.group, group: held.item.group } : null;

@@ -9,6 +9,7 @@
 
 import * as THREE from 'three';
 import { randInt, rotateByAngle } from './core.js';
+import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS } from './extraEffects.js';
 import type { EffectType } from './types.js';
 
@@ -132,3 +133,50 @@ EXTRA_EFFECTS.gathering = {
     return false;
   },
 };
+
+// MODEL_BLADE_SKILL SubType 1 (Multi-Shot, Effect/bladetonedo.bmd; the catalogue: LifeTime 14,
+// Scale 1): a glowing fan over the elf's head that fades; every other tick from the start it
+// throws shines and the elf shoots an arrow turned 7, 21 or 35 degrees aside (multiShotArrows).
+EXTRA_EFFECTS.bladeSkill = {
+  model: ['Effect', 'bladetonedo.bmd'],
+  create: (o) => {
+    o.blendMesh = -2;
+    return o.subType === 1 && o.owner !== null;
+  },
+  move: (o, system) => {
+    o.blendMeshLight = o.lifeTime / 14;
+    o.alpha = o.blendMeshLight;
+    if (o.lifeTime >= 3 && Math.trunc(o.lifeTime) % 2 === 0) {
+      for (let i = 0; i < 3; i++) {
+        const p = o.position.clone();
+        p.y += randInt(200) - 100;
+        p.z += randInt(200) - 100;
+        system.createSprite('shiny2', p, (randInt(8) + 8) * 0.2, new THREE.Vector3(0.2, 0.3, 1), o.owner, randInt(360));
+        system.createSprite('shiny2', p, (randInt(8) + 8) * 0.07, new THREE.Vector3(1, 1, 1), o.owner, randInt(360));
+      }
+    }
+    return true;
+  },
+};
+
+/** The offsets Multi-Shot's arrows leave at, one picked each time but never the one before. */
+const MULTI_SHOT_OFFSETS = [7, 21, 35, -7, -21, -35];
+
+/**
+ * Multi-Shot's arrows (CreateArrow in Move_MODEL_BLADE_SKILL): six arrows, one every other tick
+ * of the fan's life, each turned aside from the elf's facing.
+ */
+export function multiShotArrows(system: EffectSystem, shoot: (angleOffsetDegrees: number) => void): void {
+  let lifeTime = 14;
+  let previous = -1;
+  system.schedule(() => {
+    if (lifeTime >= 3 && lifeTime % 2 === 0) {
+      let pick = randInt(6);
+      while (pick === previous) pick = randInt(6);
+      previous = pick;
+      shoot(MULTI_SHOT_OFFSETS[pick]);
+    }
+    lifeTime -= 1;
+    return lifeTime > 0;
+  });
+}

@@ -111,6 +111,26 @@ export const BITMAPS = {
   poundingBall: 'PoundingBall.jpg', // BITMAP_POUNDING_BALL
   spark1: 'Spark01.jpg', // BITMAP_JOINT_SPARK
   piercing: 'Piercing.jpg', // BITMAP_PIERCING
+  light3: 'cra_04.jpg', // BITMAP_LIGHT+2
+  shiny5: 'shiny05.jpg', // BITMAP_SHINY+5 (loaded twice; shiny05 is the last) and BITMAP_SHINY+6
+  pinLight: 'pin_lights.jpg', // BITMAP_PIN_LIGHT
+  magicZin: 'mzine_typer2.jpg', // BITMAP_MAGIC_ZIN
+  drainLifeGhost: 'gostmark01.jpg', // BITMAP_DRAIN_LIFE_GHOST
+  jointEnergy: 'JointLaser01.jpg', // BITMAP_JOINT_ENERGY
+  lightningMega1: 'lighting_mega01.jpg', // BITMAP_LIGHTNING_MEGA1
+  lightningMega2: 'lighting_mega02.jpg', // BITMAP_LIGHTNING_MEGA2
+  lightningMega3: 'lighting_mega03.jpg', // BITMAP_LIGHTNING_MEGA3
+  damage01Mono: 'damage01mono.jpg', // BITMAP_DAMAGE_01_MONO
+  summonImpact: 'empact01.jpg', // BITMAP_SUMMON_IMPACT
+  sbumb: 'sbumb.jpg', // BITMAP_SBUMB
+  swordEffectMono: 'SwordEff_mono.jpg', // BITMAP_SWORD_EFFECT_MONO
+  eventCloud: 'clouds2.jpg', // BITMAP_EVENT_CLOUD
+  lightRed: 'flare01_red.jpg', // BITMAP_LIGHT_RED
+  lava: 'Lava.jpg', // BITMAP_LAVA
+  swordEff: '!SwordEff.jpg', // BITMAP_SWORDEFF
+  forcePillar: 'force_Pillar.jpg', // BITMAP_FORCEPILLAR
+  flareRed: 'flareRed.jpg', // BITMAP_FLARE_RED
+  sahamuttExplosion: 'loungexflow.jpg', // BITMAP_SUMMON_SAHAMUTT_EXPLOSION
 } as const;
 
 export type BitmapName = keyof typeof BITMAPS;

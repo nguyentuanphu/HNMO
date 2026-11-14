@@ -17,6 +17,10 @@ import * as THREE from 'three';
 import { createAngle2D, randInt } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
+import { summonerCurse } from './summonerEffects.js';
+import { RageSkill, rageCreateEffect } from './rageEffects.js';
+import { criticalDamage, fireBurst } from './lordEffects.js';
+import { multiShotArrows } from './elfEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -64,6 +68,17 @@ export const SkillEffect = {
   FORCE_WAVE: 66,
   INFINITY_ARROW: 77,
   MULTI_SHOT: 235,
+  DRAIN_LIFE: 214,
+  CHAIN_LIGHTNING: 215,
+  BERSERKER: 218,
+  SLEEP: 219,
+  WEAKNESS: 221,
+  INNOVATION: 222,
+  LIGHTNING_SHOCK: 230,
+  FIRE_BURST: 61,
+  CRITICAL_DAMAGE: 64,
+  FLAME_STRIKE: 236,
+  GIGANTIC_STORM: 237,
 } as const;
 
 /** PLAYER_SKILL_HELL_BEGIN and PLAYER_SKILL_HELL_START: Nova's charge and release actions. */
@@ -78,6 +93,10 @@ export const ATTACK_LIMIT_TIME = 15;
 export const SKILL_RELEASE_DELAY_SECONDS = (ATTACK_LIMIT_TIME - 1) / 25;
 
 const WHITE = new THREE.Vector3(1, 1, 1);
+/** The fighter's party buffs. */
+const RAGE_BUFFS: readonly number[] = [RageSkill.ATT_UP, RageSkill.HP_UP, RageSkill.DEF_UP];
+/** The skills whose AttackStage case sets AttackTime to 15 on the first tick: they release at once. */
+const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK, SkillEffect.FLAME_STRIKE];
 const SWORD_SKILLS: readonly number[] = [SkillEffect.FALLING_SLASH, SkillEffect.LUNGE, SkillEffect.UPPERCUT, SkillEffect.CYCLONE, SkillEffect.SLASH];
 /** AttackEffect: a monster's lightning starts this far down its weapon bone; without a bone the start is over the feet. */
 const LIGHTNING_FALLBACK_HEIGHT = 130;
@@ -124,8 +143,18 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
   }
   if (skill === SkillEffect.MULTI_SHOT) {
     multiShotRings(system, caster);
+    // The fan over the head (CalcAddPosition 0, -120, 145) and its arrows.
+    const fan = new THREE.Vector3(0, -120, 145).applyEuler(new THREE.Euler(0, 0, caster.angle.z * Math.PI / 180)).add(caster.position);
+    system.createEffect('bladeSkill', fan, caster.angle, new THREE.Vector3(0.8, 0.9, 1.6), 1, caster);
+    const shoot = options.shootArrow;
+    if (shoot) multiShotArrows(system, (offset) => shoot(offset, null));
     return true;
   }
+  // The fighter's effects come with the cast (CMonkSystem::RageCreateEffect); its attack then
+  // releases as any other (the hit's blood).
+  const rage = rageCreateEffect(system, skill, caster, target);
+  if (rage && RAGE_BUFFS.includes(skill)) return true; // no attack follows a party buff
+  if (skill === SkillEffect.CHAIN_LIGHTNING) return true; // its links come with ChainLightningHitInfo (playChainLightning)
   if (skill === SkillEffect.COMBO) { // ReceiveMagic: the combo's burst at once
     system.createEffect('combo', caster.position, caster.angle, caster.light ?? WHITE);
     return true;
@@ -144,7 +173,7 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
 }
 
 export function isPortedSkill(skill: number): boolean {
-  return (Object.values(SkillEffect) as number[]).includes(skill) || isSummon(skill);
+  return (Object.values(SkillEffect) as number[]).includes(skill) || (Object.values(RageSkill) as number[]).includes(skill) || isSummon(skill);
 }
 
 function isSummon(skill: number): boolean {
@@ -169,6 +198,7 @@ function attackStage(system: EffectSystem, skill: number, caster: EffectOwner, a
     return attackTime;
   }
   if (skill === SkillEffect.SWELL_LIFE && attackTime > 9) return ATTACK_LIMIT_TIME; // PLAYER_SKILL_VITALITY
+  if (IMMEDIATE_SKILLS.includes(skill)) return ATTACK_LIMIT_TIME; // AttackStage sets AttackTime to 15 at once
   if (skill === SkillEffect.FIRE_SLASH) {
     // The charge at the hand on the first two ticks; the sweep when the swing reaches its third
     // key (PLAYER_ATTACK_SKILL_WHEEL), then the release.
@@ -328,6 +358,17 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
       system.deleteJoint('spearSkill', target, 0);
       for (let j = 0; j < 5; j++) system.createJoint('spearSkill', to, to, target.angle, 0, target, 20);
       break;
+    case SkillEffect.FIRE_BURST:
+      fireBurst(system, caster, target);
+      break;
+    case SkillEffect.DRAIN_LIFE: // the caster's Owner is the target (pSourceObj->Owner)
+      system.createEffect('aliceDrainLife', caster.position, caster.angle, light, 0, caster, 0, { target });
+      break;
+    case SkillEffect.SLEEP:
+      system.createEffect('magicGround2', caster.position, caster.angle, new THREE.Vector3(0.7, 0.3, 0.8), 11, caster);
+      system.createEffect('aliceBuffSkillEffect', to, target.angle, new THREE.Vector3(0.8, 0.3, 0.9), 0, target);
+      system.createEffect('aliceBuffSkillEffect2', to, target.angle, new THREE.Vector3(0.8, 0.3, 0.9), 0, target);
+      break;
     case SkillEffect.FLAME:
       if (options.cell) break; // the area cast burns at its tile (releaseAtCaster)
       system.createEffect('flame', new THREE.Vector3(to.x, to.y, system.heightAt(to.x, to.y)), caster.angle, light, 5, caster);
@@ -357,6 +398,32 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.TWISTER:
       system.createEffect('storm', at, caster.angle, WHITE, 0, caster);
+      break;
+    case SkillEffect.BERSERKER: {
+      const red = new THREE.Vector3(1, 0.1, 0.2);
+      system.createEffect('magicGround2', at, caster.angle, red, 11, caster);
+      system.createEffect('aliceBuffSkillEffect', at, caster.angle, red, 0, caster);
+      system.createEffect('aliceBuffSkillEffect2', at, caster.angle, red, 0, caster);
+      break;
+    }
+    case SkillEffect.WEAKNESS:
+    case SkillEffect.INNOVATION:
+      summonerCurse(system, at, caster.angle, skill === SkillEffect.WEAKNESS);
+      break;
+    case SkillEffect.LIGHTNING_SHOCK:
+      system.createEffect('lightningShock', at, caster.angle, WHITE, 0, caster);
+      break;
+    case SkillEffect.FLAME_STRIKE:
+      system.createEffect('flameStrike', at, caster.angle, light, 0, caster);
+      break;
+    case SkillEffect.CRITICAL_DAMAGE:
+      criticalDamage(system, caster);
+      break;
+    case SkillEffect.GIGANTIC_STORM: // five storms 200 around the gladiator
+      for (let i = 0; i < 5; i++) {
+        const p = new THREE.Vector3(0, 200, 0).applyEuler(new THREE.Euler(0, 0, (caster.angle.z + i * 72) * Math.PI / 180)).add(at);
+        system.createEffect('jointThunderEffect', p, caster.angle, light);
+      }
       break;
     case SkillEffect.TWISTING_SLASH:
       system.createEffect('skillWheel1', at, caster.angle, light, 0, caster);
@@ -483,4 +550,17 @@ function multiShotRings(system: EffectSystem, caster: EffectOwner): void {
   for (let i = 0; i < 3; i++) system.createEffect('multiShot1', caster.position, caster.angle, light);
   system.createEffect('multiShot2', front, caster.angle, light);
   system.createEffect('multiShot2', front, caster.angle, light);
+}
+
+/**
+ * ReceiveChainMagic: Chain Lightning's links, one MODEL_CHAIN_LIGHTNING per target: the first
+ * from the caster's hands, the next ones from the target before (SubType = the link's number).
+ */
+export function playChainLightning(system: EffectSystem, caster: EffectOwner, targets: readonly EffectOwner[]): void {
+  let from: EffectOwner = caster;
+  const angle = new THREE.Vector3(-60, 0, caster.angle.z);
+  targets.forEach((target, i) => {
+    if (from !== target && (target.isLive?.() ?? true)) system.createEffect('chainLightning', caster.position, angle, caster.light ?? WHITE, i, from, 0, { target });
+    from = target;
+  });
 }

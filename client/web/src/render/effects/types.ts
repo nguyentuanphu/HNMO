@@ -26,10 +26,16 @@ export interface EffectOwner {
   weaponPosition?(hand: 0 | 1): THREE.Vector3 | null;
   /** The world position of one of its model's bones (b->TransformPosition(o->BoneTransform[bone])). */
   bonePosition?(bone: number): THREE.Vector3 | null;
+  /** A bone's whole world matrix (o->BoneTransform[bone] placed in the world), for models held in a hand. */
+  boneMatrix?(bone: number): THREE.Matrix4 | null;
   /** How many bones its model has (b->NumBones). */
   boneCount?(): number;
   /** The action its model plays (o->CurrentAction), for effects that last while an action plays. */
   currentAction?(): number;
+  /** Where its action is (o->AnimationFrame, in keys), for effects that follow a swing. */
+  animationFrame?(): number;
+  /** An action's PlaySpeed (keys per 25 FPS tick), for effects timed to the caster's actions. */
+  playSpeed?(action: number): number;
   /**
    * Whether it still has a buff that keeps aura joints (Greater Defense's orbiting lights) alive:
    * eBuff_Attack, eBuff_Defense or eBuff_HelpNpc (ShouldKeepAuraJointAlive). Alive while it lives
@@ -81,16 +87,45 @@ export type EffectType =
   | 'flameStrike' // MODEL_EFFECT_FLAME_STRIKE (Effect/FlameStrike.bmd)
   | 'jointThunderEffect' // BITMAP_JOINT_THUNDER as an effect: Gigantic Storm's bolts
   | 'magicCircle' // BITMAP_MAGIC: a magic circle on the ground
-  | 'buffLight'; // BITMAP_LIGHT SubType 1: the Swell Life buff's rising lights
+  | 'buffLight' // BITMAP_LIGHT SubType 1: the Swell Life buff's rising lights
+  | 'aliceDrainLife' // MODEL_ALICE_DRAIN_LIFE: Drain Life (no model)
+  | 'chainLightning' // MODEL_CHAIN_LIGHTNING: one link of Chain Lightning (no model)
+  | 'aliceBuffSkillEffect' | 'aliceBuffSkillEffect2' // Sleep's and Berserker's rings (Effect/elshildring*.bmd)
+  | 'magicZin' // BITMAP_MAGIC_ZIN: Weakness's and Innovation's circles
+  | 'summonerCastingEffect2' | 'summonerCastingEffect22' | 'summonerCastingEffect222' // Effect/Suhwanzin2*.bmd
+  | 'shiny5' // BITMAP_SHINY+6: falling shines
+  | 'pinLight' // BITMAP_PIN_LIGHT: falling pins of light
+  | 'lightningShock' // MODEL_LIGHTNING_SHOCK: Lightning Shock's ball and burst (no model)
+  | 'magic' // BITMAP_MAGIC: circles on the ground
+  | 'damage01Mono' // BITMAP_DAMAGE_01_MONO: a burst on the ground
+  | 'wolfHeadEffect' // MODEL_WOLF_HEAD_EFFECT: Killing Blow's wolf heads (Effect/wolf_head_effect.bmd)
+  | 'sbumb' // BITMAP_SBUMB: Killing Blow's hits on the target
+  | 'downAttackDummyR' | 'downAttackDummyL' // Beast Uppercut's fists (Effect/down_*_punch.bmd)
+  | 'swordEffectMono' // BITMAP_SWORD_EFFECT_MONO: the party buffs' rising blade
+  | 'shockWaveGround1' // MODEL_SHOCKWAVE_GROUND01: their rings on the ground
+  | 'eventCloud' // BITMAP_EVENT_CLOUD: their clouds on the ground
+  | 'windForce' // MODEL_WINDFOCE: their whirl of wind (Effect/wind_foce.bmd)
+  | 'lightRed' // BITMAP_LIGHT_RED: the party buffs' glow
+  | 'dragonKickDummy' // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
+  | 'bladeSkill'; // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
-export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare';
+export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
+  | 'light3' // BITMAP_LIGHT+2: Drain Life's red lights (SubType 7)
+  | 'lightningMega' // BITMAP_LIGHTNING_MEGA1..3: Lightning Shock's sparks
+  | 'magicParticle' // BITMAP_MAGIC as a particle: Lightning Shock's shrinking circle
+  | 'pinLightParticle' // BITMAP_PIN_LIGHT as a particle: Weakness's and Innovation's falling pins
+  | 'shiny5Particle' // BITMAP_SHINY+6 as a particle
+  | 'swordEffectMonoParticle' // BITMAP_SWORD_EFFECT_MONO as a particle
+  | 'sahamuttExplosion' // BITMAP_SUMMON_SAHAMUTT_EXPLOSION: CreateBomb3's explosion
+  | 'sbumb'; // BITMAP_SBUMB: Killing Blow's hits
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;
 
 /** CreateJoint types ported (names as in Data/Effects/JointTypes.json). */
-export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'jointSpark' | 'lightJoint' | 'piercing' | 'flareForceJoint' | 'jointForce' | 'blur';
+export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'jointSpark' | 'lightJoint' | 'piercing' | 'flareForceJoint' | 'jointForce' | 'blur'
+  | 'drainLifeGhost' | 'jointEnergy' | 'pinLightJoint' | 'forcePillar' | 'swordEff';
 
 /** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */
 export type RenderType = 'normal' | 'dark';
@@ -117,6 +152,10 @@ export interface Effect {
   alpha: number;
   renderType: RenderType;
   owner: EffectOwner | null;
+  /** o->Owner->Owner or o->m_sTargetIndex: the character a two-ended effect reaches (Drain Life, Chain Lightning). */
+  target: EffectOwner | null;
+  /** CreateEffect's Scale argument as given (0 when left out); o->Scale is 0.9 then. */
+  callScale: number;
   animationFrame: number;
   /** o->Weapon, o->Kind, o->Skill, o->PKKey, o->Distance: counters some moves keep. */
   counter: number;
@@ -149,6 +188,8 @@ export interface Particle {
   frame: number;
   rotation: number;
   target: EffectOwner | null;
+  /** o->Alpha. */
+  alpha: number;
   live: boolean;
 }
 
