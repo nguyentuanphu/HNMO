@@ -16,7 +16,7 @@ import type { ShopCategory, ShopPackage } from '../game/cashShopScript.js';
 import { drawItem } from './itemIcons.js';
 import { openDocument, prepareDocument, REFERENCE_HEIGHT } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
-import { measureText, nativeTextPx } from './nativeText.js';
+import { fitCentredLines, fitElementLine, measureText, nativeTextPx } from './nativeText.js';
 import { showConfirm, type DialogLine } from './gameDialogs.js';
 
 // The desktop's texts (I18N::Game); the shop's own name is the game's name (gameName.ts).
@@ -71,6 +71,22 @@ export function itemOfCode(code: number): Item | null {
 /** An OK box in the game with a title (CreateOkMessageBoxWithTitle: generic_confirm_dialog.rml). Doesn't block. */
 export async function messageInGame(title: string, text: string): Promise<void> {
   await showConfirm({ title, lines: [text], tag: 'message-dialog' });
+}
+
+/** A cash shop dialog's one-line texts fitted to their boxes after each update (see CashShop.fitNames). */
+function fitDialogLines(doc: RmlDocument, model: RmlModel): void {
+  const update = doc.update;
+  model.__update = () => {
+    update();
+    fitCentredLines(doc.root);
+    // The left-aligned lines (the item's name, price and duration, the description) in their line boxes.
+    for (const span of doc.root.querySelectorAll<HTMLElement>('.sharp-text:not(.sharp-centre):not(.sharp-right)')) {
+      const box = span.parentElement;
+      if (box && box.id !== 'panel' && span.getClientRects().length) fitElementLine(span, box.getBoundingClientRect().right - span.getBoundingClientRect().left);
+    }
+  };
+  doc.update = model.__update; // a resize's redraw fits them too
+  model.__update();
 }
 
 /** DivideStringByPixel: the text broken into lines no wider than `width` screen pixels at the native text size. */
@@ -257,8 +273,25 @@ export class CashShop {
       panel.addEventListener('pointerdown', (event) => event.stopPropagation());
       panel.addEventListener('contextmenu', (event) => event.preventDefault());
     }
+    // After each redraw the long names are fitted to their boxes.
+    const update = this.doc.update;
+    this.model.__update = () => { update(); this.fitNames(); };
+    this.doc.update = this.model.__update;
     this.place();
     this.sync();
+  }
+
+  /**
+   * The one-line texts on their boxes (the package names on their cards, the tabs, the list's headings,
+   * the item names in the storage list): shrunk towards the native minimum and, still too wide, cut with
+   * ".." (fitLine), as the desktop fits its one-line texts. Long package names ("[Normal] eX700 OBT -
+   * Celebration Package") ran off their cards, and "Gift Inventory" off its tab on small screens.
+   */
+  private fitNames(): void {
+    const root = this.doc?.root;
+    if (!root) return;
+    fitCentredLines(root);
+    for (const cell of root.querySelectorAll<HTMLElement>('.igs-row .igs-cell-name')) fitElementLine(cell, cell.clientWidth);
   }
 
   private place(): void {
@@ -481,6 +514,7 @@ export class CashShop {
     Object.assign(this.dialog.root.style, { position: 'fixed', left: '0', top: '0', width: '100%', height: '100%' });
     this.dialog.root.addEventListener('pointerdown', (event) => event.stopPropagation());
     this.placeDialog();
+    fitDialogLines(this.dialog, model);
     this.drawDialogItem(single ? pack.itemCode : options[selected]?.itemCode ?? pack.itemCode);
   }
 
@@ -566,6 +600,7 @@ export class CashShop {
       });
     }
     this.placeDialog();
+    fitDialogLines(this.dialog, model);
     id?.focus();
   }
 
@@ -593,7 +628,7 @@ export class CashShop {
     m.storage_rows = this.storageItems.map((item, i) => ({ name: item.count > 1 ? `${item.name}(${item.count})` : item.name, period: item.period, selected: i === this.selectedRow }));
     m.storage_page = String(this.storagePage);
     m.storage_total_pages = String(this.storageTotalPages);
-    this.doc.update();
+    m.__update?.();
     this.drawPackages(shown);
   }
 

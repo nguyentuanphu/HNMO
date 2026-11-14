@@ -6,7 +6,7 @@
 
 import { watchRoot } from '../i18n.js';
 import { decodeTGA } from '../formats.js';
-import { FONT_FAMILY, fitTextToBoxes, loadThemeFonts, nativeTextPx, runMarquees } from './nativeText.js';
+import { FONT_FAMILY, fitOverflowingLines, fitTextToBoxes, loadThemeFonts, nativeTextPx, runMarquees } from './nativeText.js';
 
 const ROOT = '/data/Interface/RmlUi';
 const THEMES: Record<string, string | null> = { classic: 'legacy', legacy: null, modern: null }; // a theme and the one it inherits from
@@ -617,6 +617,7 @@ export async function openDocument(name: string, model: RmlModel, { parent = doc
       if (root.style.getPropertyValue('--rml-rem') !== rem) root.style.setProperty('--rml-rem', rem);
     }
     fitTextToBoxes(shadow);
+    fitOverflowingLines(shadow);
     if (hasMarquee && runMarquees(shadow)) schedule();
   };
   const schedule = () => { if (!fitPending) { fitPending = true; requestAnimationFrame(fit); } };

@@ -192,6 +192,70 @@ export function runMarquees(root: ParentNode, now = performance.now() / 1000): b
   return scrolling;
 }
 
+/**
+ * A one-line text drawn into a box of `boxPx` screen pixels the way the desktop fits its texts: shrunk
+ * towards the native minimum (FitTextPixelSizeToWidth), and when even that is too wide, cut with ".."
+ * (RmlMarquee's resting state).
+ */
+export function fitLine(text: string, boxPx: number, bold = false, role: FontRole = 'normal'): { text: string; px: number } {
+  const px = nativeTextPxInBox(text, boxPx, bold, role);
+  if (!text || boxPx <= 0 || measureText(text, px, bold) <= boxPx) return { text, px };
+  let fit = 0;
+  for (let end = 1; end <= text.length; end++) {
+    if (measureText(text.slice(0, end) + ELLIPSIS, px, bold) > boxPx) break;
+    fit = end;
+  }
+  return { text: text.slice(0, fit).trimEnd() + ELLIPSIS, px };
+}
+
+interface FittedState { full: string; shown: string }
+const fittedStates = new WeakMap<HTMLElement, FittedState>();
+
+/**
+ * Fits the one-line text of `element` (its only child, a text node the data model writes) into
+ * `boxPx` screen pixels with fitLine: the size goes on the element, the cut text in its text node.
+ * Call after each update of the document: a text the model wrote anew is taken as the full text.
+ */
+export function fitElementLine(element: HTMLElement, boxPx: number): void {
+  const node = element.firstChild;
+  if (!(node instanceof Text) || element.childNodes.length !== 1 || boxPx <= 0) return;
+  let state = fittedStates.get(element);
+  if (!state || node.data !== state.shown) { state = { full: node.data, shown: node.data }; fittedStates.set(element, state); }
+  // The page's text size setting scales the bound sizes (--hnmo-text-scale): fit at the scaled size.
+  const textScale = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hnmo-text-scale')) || 1;
+  const bold = Number(getComputedStyle(element).fontWeight) >= 600;
+  const line = fitLine(state.full, boxPx / textScale, bold);
+  if (node.data !== line.text) node.data = line.text;
+  state.shown = line.text;
+  element.style.fontSize = `calc(${line.px}px * var(--hnmo-text-scale, 1))`;
+}
+
+/** fitElementLine for every centred sharp-text layer under `root`: their box is their parent. */
+export function fitCentredLines(root: ParentNode): void {
+  for (const element of root.querySelectorAll<HTMLElement>('.sharp-text.sharp-centre')) {
+    const box = element.parentElement;
+    if (!box || element.getClientRects().length === 0) continue;
+    fitElementLine(element, box.getBoundingClientRect().width);
+  }
+}
+
+const FITTED_ELSEWHERE = ['sharp-centre', 'sharp-flow', 'marquee', 'native-fit', 'text-fit'];
+
+/**
+ * A one-line sharp-text layer with a width of its own whose text runs past it (a tab's label, a
+ * heading in a narrow box) is fitted with fitElementLine: smaller, then cut with "..", instead of
+ * spilling out of its box or being clipped mid-letter. Runs after each update (ui/rml.ts).
+ */
+export function fitOverflowingLines(root: ParentNode): void {
+  for (const element of root.querySelectorAll<HTMLElement>('.sharp-text')) {
+    if (element.childNodes.length !== 1 || !(element.firstChild instanceof Text)) continue;
+    if (FITTED_ELSEWHERE.some((name) => element.classList.contains(name))) continue;
+    const box = element.clientWidth;
+    if (box <= 0) continue;
+    if (element.scrollWidth > box + 1 || fittedStates.has(element)) fitElementLine(element, box); // counter-scaled: its pixels are the screen's
+  }
+}
+
 /** LineHeightPx: one line of native text in screen pixels (the font's ascent and descent). */
 export function nativeLineHeightPx(role: FontRole = 'normal'): number {
   return Math.round(nativeTextPx(role) * 1.164);
