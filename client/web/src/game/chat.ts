@@ -10,16 +10,33 @@
 //    with Escape; the channel buttons (normal, party ~, guild @, Gens $), whisper block, system
 //    messages on / off, chat log on / off, the frame; the whisper box (a name there whispers the
 //    line; F3 turns it off), the line and whisper histories (Up / Down), one line a second.
+// HNMO additions (game/chatExtras.ts): tabs over the log (All, Whisper, Party, Guild, System) with
+// unread counts; the history of the character kept over a reload; a click on a name opens a menu
+// (whisper, party, trade, add friend, block); blocked players, repeated lines merged ("x3"), the
+// word filter; lines fade 10 seconds after they came while the chat is closed; a bigger input on
+// touch screens.
 
 import { openDocument, type RmlDocument, type RmlModel } from '../ui/rml.js';
 import { hudScale } from '../ui/nativeText.js';
+import { blockedNames, filterWords, isBlocked, loadHistory, saveHistory, setBlocked } from './chatExtras.js';
 
 /** How a message shows: said (in public, to the party, guild, alliance or Gens), whispered, from the game, or from a game master. */
 export type ChatKind = 'chat' | 'whisper' | 'system' | 'error' | 'party' | 'guild' | 'union' | 'gens' | 'gm';
 
 export type ChatSender = (text: string) => void;
 
-interface Message { id: string; text: string; kind: ChatKind }
+interface Message { id: string; text: string; kind: ChatKind; time: number; count: number }
+
+/** The tabs over the log (HNMO): which lines each shows. */
+const TABS: { name: string; kinds: ChatKind[] | null }[] = [
+  { name: 'All', kinds: null },
+  { name: 'Whisper', kinds: ['whisper'] },
+  { name: 'Party', kinds: ['party'] },
+  { name: 'Guild', kinds: ['guild', 'union'] },
+  { name: 'System', kinds: ['system', 'error', 'gm'] },
+];
+const FADE_MS = 10_000;
+const REPEAT_MS = 30_000;
 interface LineEntry { text: string; kind: string; has_id: boolean }
 
 const MAX_LINES = 200; // MAX_NUMBER_OF_LINES
@@ -51,6 +68,10 @@ export interface ChatOptions {
   click?: () => void;
   /** Whether Enter may open the input box now (the desktop keeps it shut in Chaos Castle while its time window shows). */
   canOpen?: () => boolean;
+  /** The hero's name: whose history is kept, and whose lines aren't filtered. */
+  owner?: () => string;
+  /** What the name menu does with a player's name. */
+  nameActions?: { party?: (name: string) => void; trade?: (name: string) => void; addFriend?: (name: string) => void };
 }
 
 export class Chat {
@@ -62,7 +83,12 @@ export class Chat {
   private all: Message[] = [];
   private whispers: Message[] = [];
   private system: Message[] = [];
-  private whispersOnly = false; // F2
+  private tab = 0; // HNMO tabs; F2 flips between All and Whisper as the desktop's whisper-only view
+  private readonly unread = TABS.map(() => 0);
+  private systemHistory: Message[] = [];
+  private tabBar: HTMLElement | null = null;
+  private menu: HTMLElement | null = null;
+  private saveTimer = 0;
   private showingLines = 6;
   private backAlpha = 0.6;
   private chatHistory: string[] = [];
@@ -103,41 +129,79 @@ export class Chat {
     // The pointed line (only a line with a name) and a right click on it (UpdatePointedLine).
     window.addEventListener('pointermove', (event) => this.point(event.clientX, event.clientY), { passive: true });
     window.addEventListener('mousedown', (event) => {
-      if (event.button !== 2 || this.logModel.pointed_index < 0) return;
+      if (this.menu && !event.composedPath().includes(this.menu)) this.closeMenu();
+      if (this.logModel.pointed_index < 0) return;
       const message = this.shown()[this.logModel.pointed_index];
-      if (message?.id) this.setWhisperTarget(message.id);
+      if (!message?.id) return;
+      if (event.button === 2) this.setWhisperTarget(message.id);
+      else if (event.button === 0) { event.preventDefault(); event.stopPropagation(); this.openMenu(message.id, event.clientX, event.clientY); }
     }, true);
+    // Lines fade a while after they came (only while the chat is closed and unframed).
+    setInterval(() => this.applyFade(), 1000);
   }
 
   /** The windows show and the line is sent to `send` (CheckCommand and the public chat). */
   enable(send: ChatSender): void {
     this.send = send;
     this.enabled = true;
+    // The character's lines from before (a reload, the last login), marked as old so they don't fade in.
+    const history = loadHistory(this.options.owner?.() ?? '');
+    const old = (line: { id: string; text: string; kind: string; count: number }): Message => ({ id: line.id, text: line.text, kind: line.kind as ChatKind, time: 0, count: line.count || 1 });
+    this.all = [...history.chat.map(old), ...this.all];
+    this.whispers = this.all.filter((m) => m.kind === 'whisper');
+    this.systemHistory = [...history.system.map(old), ...this.systemHistory];
     void this.build();
   }
 
   /** Adds a line: a said line has the speaker's name, the game's own messages go to the system log. */
   add(text: string, kind: ChatKind = 'chat', sender = ''): void {
     if (!text && !sender) return;
+    const own = !!sender && sender === this.options.owner?.();
+    if (sender && !own && isBlocked(sender)) return; // a blocked player's lines and whispers
+    if (sender && !own) text = filterWords(text);
+    const now = Date.now();
     if ((kind === 'system' || kind === 'error') && !sender) {
       // CSystemLogWindow::AddText
-      this.system.push({ id: '', text, kind });
+      const line: Message = { id: '', text, kind, time: now, count: 1 };
+      this.system.push(line);
       while (this.system.length > SYSTEM_LINES) this.system.shift();
+      this.systemHistory.push(line);
+      while (this.systemHistory.length > MAX_LINES) this.systemHistory.shift();
+      this.countUnread(kind);
+    } else if (this.repeats(sender, text, kind, now)) {
+      // The same line from the same player again: "(x2)" on the last one instead of a new line.
     } else {
       // CChatLogWindow::AddText / ProcessAddText: a long line becomes two.
       const [first, second] = this.separate(sender, text);
       const parts: Message[] = [];
-      if (first) parts.push({ id: sender, text: first, kind });
-      if (second) parts.push({ id: '', text: second, kind });
+      if (first) parts.push({ id: sender, text: first, kind, time: now, count: 1 });
+      if (second) parts.push({ id: '', text: second, kind, time: now, count: 1 });
       for (const part of parts) {
         this.all.push(part);
         if (kind === 'whisper') this.whispers.push(part);
       }
       while (this.all.length > MAX_LINES) this.all.shift();
       while (this.whispers.length > MAX_LINES) this.whispers.shift();
+      this.countUnread(kind);
     }
     this.sync(true);
+    this.scheduleSave();
   }
+
+  /** Blocks or unblocks a player (the name menu, /block, /unblock). */
+  block(name: string, on = true): void {
+    setBlocked(name, on);
+    this.add(on ? `${name} is blocked: you don't see their lines and whispers. /unblock ${name} undoes it.` : `${name} is no longer blocked.`, 'system');
+  }
+
+  /** The tab shown (0 All, 1 Whisper, 2 Party, 3 Guild, 4 System). */
+  setTab(index: number): void {
+    this.tab = Math.max(0, Math.min(TABS.length - 1, index));
+    this.unread[this.tab] = 0;
+    this.sync(true);
+  }
+
+  get currentTab(): number { return this.tab; }
 
   /** Whether incoming whispers are refused (the whisper block button). */
   get blockWhisper(): boolean { return this.inputModel.block_whisper; }
@@ -225,15 +289,20 @@ export class Chat {
     Object.assign(this.measure.style, { position: 'absolute', visibility: 'hidden', whiteSpace: 'nowrap', left: '0', top: '0' });
     this.measure.className = 'chat-measure';
     lines?.append(this.measure);
+    this.buildTabs();
     this.place();
     this.sync(true);
   }
 
   // The roots stand for the 640 x 480 screen, scaled to the window, like the HUD under them.
   private place(): void {
-    const scale = hudScale();
+    const base = hudScale();
+    // Touch screens: the chat bar and the log larger (a finger and the phone's keyboard), as wide as fits.
+    const touch = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+    const large = touch ? Math.min(base * 1.6, window.innerWidth / 290) : base;
     for (const doc of [this.systemLog, this.log, this.input]) {
       if (!doc) continue;
+      const scale = doc === this.systemLog ? base : Math.max(base, large);
       Object.assign(doc.root.style, {
         width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`,
         transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
@@ -246,7 +315,136 @@ export class Chat {
   }
 
   private shown(): Message[] {
-    return this.whispersOnly ? this.whispers : this.all;
+    const kinds = TABS[this.tab].kinds;
+    if (!kinds) return this.all;
+    if (this.tab === 1) return this.whispers;
+    const source = kinds.includes('system') ? [...this.all, ...this.systemHistory].sort((a, b) => a.time - b.time) : this.all;
+    return source.filter((m) => kinds.includes(m.kind));
+  }
+
+  private countUnread(kind: ChatKind): void {
+    TABS.forEach((tab, index) => {
+      if (index !== this.tab && index !== 0 && index !== TABS.length - 1 && tab.kinds?.includes(kind)) this.unread[index]++; // not the game's own messages
+    });
+  }
+
+  // The same player's same line within 30 seconds: the last line counts it ("(x3)").
+  private repeats(sender: string, text: string, kind: ChatKind, now: number): boolean {
+    const last = this.all[this.all.length - 1];
+    if (!last || !sender || last.id !== sender || last.text !== text || last.kind !== kind || now - last.time > REPEAT_MS) return false;
+    last.count++;
+    last.time = now;
+    return true;
+  }
+
+  private scheduleSave(): void {
+    if (this.saveTimer) return;
+    this.saveTimer = window.setTimeout(() => {
+      this.saveTimer = 0;
+      const plain = (m: Message) => ({ id: m.id, text: m.text, kind: m.kind, time: m.time, count: m.count });
+      saveHistory(this.options.owner?.() ?? '', this.all.map(plain), this.systemHistory.map(plain));
+    }, 2000);
+  }
+
+  // Lines older than 10 seconds fade while the chat is closed and unframed (they come back on Enter).
+  private applyFade(): void {
+    const lines = this.log?.$('#lines');
+    if (!lines) return;
+    const showAll = this.open || this.logModel.show_frame || this.tab !== 0;
+    const now = Date.now();
+    const shown = this.shown();
+    [...lines.querySelectorAll<HTMLElement>('.chat-line')].forEach((row, index) => {
+      const message = shown[index];
+      row.classList.toggle('faded', !showAll && !!message && now - message.time > FADE_MS);
+    });
+  }
+
+  // ---------- the tabs and the name menu (HNMO) ----------
+
+  private buildTabs(): void {
+    const panel = this.log?.$('#panel');
+    if (!panel || !this.log) return;
+    const style = document.createElement('style');
+    style.textContent = `
+      .chat-line { transition: opacity .8s; }
+      .chat-line.faded { opacity: 0; }
+      #hnmo_tabs { position: absolute; left: 0; bottom: 100%; margin-bottom: 1px; display: flex; gap: 1px; pointer-events: auto; font-size: .75rem; }
+      #hnmo_tabs[hidden] { display: none; }
+      #hnmo_tabs button { all: unset; cursor: pointer; padding: 1px 6px; background: rgba(0,0,0,.6); color: #c8c8c8; border: 1px solid rgba(160,130,70,.6); border-bottom: 0; border-radius: 3px 3px 0 0; }
+      #hnmo_tabs button.on { color: #ffd986; background: rgba(40,28,10,.85); }
+      #hnmo_tabs button .count { color: #ff8060; margin-left: 3px; }
+    `;
+    this.log.host.shadowRoot?.append(style);
+    const bar = document.createElement('div');
+    bar.id = 'hnmo_tabs';
+    bar.addEventListener('pointerdown', (event) => event.stopPropagation());
+    panel.append(bar);
+    this.tabBar = bar;
+  }
+
+  private syncTabs(): void {
+    const bar = this.tabBar;
+    if (!bar) return;
+    bar.hidden = !(this.open || this.logModel.show_frame || this.tab !== 0);
+    bar.replaceChildren(...TABS.map((tab, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = tab.name;
+      button.className = index === this.tab ? 'on' : '';
+      if (this.unread[index] > 0) {
+        const count = document.createElement('span');
+        count.className = 'count';
+        count.textContent = String(Math.min(this.unread[index], 99));
+        button.append(count);
+      }
+      button.addEventListener('click', () => { this.setTab(index); this.options.click?.(); });
+      return button;
+    }));
+  }
+
+  private openMenu(name: string, x: number, y: number): void {
+    this.closeMenu();
+    const menu = document.createElement('div');
+    menu.className = 'hnmo-chat-menu';
+    Object.assign(menu.style, {
+      position: 'fixed', left: `${x}px`, top: `${y}px`, zIndex: '70', background: 'rgba(12,10,6,.94)', border: '1px solid #8a6d35',
+      borderRadius: '4px', padding: '3px 0', font: '13px "DejaVu Sans", sans-serif', color: '#e8dcc0', minWidth: '130px',
+    });
+    const title = document.createElement('div');
+    title.textContent = name;
+    Object.assign(title.style, { padding: '3px 10px', color: '#ffd986', fontWeight: 'bold' });
+    menu.append(title);
+    const actions = this.options.nameActions ?? {};
+    const own = name === this.options.owner?.();
+    const items: [string, () => void][] = own ? [] : [
+      ['Whisper', () => { this.setWhisperTarget(name); this.openInput(); }],
+      ...(actions.party ? [['Invite to party', () => actions.party!(name)] as [string, () => void]] : []),
+      ...(actions.trade ? [['Trade', () => actions.trade!(name)] as [string, () => void]] : []),
+      ...(actions.addFriend ? [['Add friend', () => actions.addFriend!(name)] as [string, () => void]] : []),
+      [isBlocked(name) ? 'Unblock' : 'Block', () => this.block(name, !isBlocked(name))],
+    ];
+    items.push(['Copy name', () => { void navigator.clipboard?.writeText(name).catch(() => undefined); }]);
+    for (const [label, run] of items) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.textContent = label;
+      Object.assign(item.style, { all: 'unset', display: 'block', padding: '3px 10px', cursor: 'pointer' });
+      item.addEventListener('mouseenter', () => { item.style.background = 'rgba(160,120,50,.35)'; });
+      item.addEventListener('mouseleave', () => { item.style.background = ''; });
+      item.addEventListener('click', () => { this.closeMenu(); this.options.click?.(); run(); });
+      menu.append(item);
+    }
+    menu.addEventListener('pointerdown', (event) => event.stopPropagation());
+    document.body.append(menu);
+    const box = menu.getBoundingClientRect();
+    if (box.bottom > window.innerHeight) menu.style.top = `${Math.max(0, y - box.height)}px`;
+    if (box.right > window.innerWidth) menu.style.left = `${Math.max(0, x - box.width)}px`;
+    this.menu = menu;
+  }
+
+  private closeMenu(): void {
+    this.menu?.remove();
+    this.menu = null;
   }
 
   // Brings the windows up to date; `added` keeps the log at its end when it was there (or unframed).
@@ -258,7 +456,8 @@ export class Chat {
     this.logModel.client_height = client;
     this.logModel.panel_height = client + 3 * 2 + 2 * 2;
     this.logModel.back_alpha = this.backAlpha;
-    this.logModel.lines = this.shown().map((m) => ({ text: m.id ? `${m.id} : ${m.text}` : m.text, kind: m.kind, has_id: !!m.id }));
+    this.unread[this.tab] = 0;
+    this.logModel.lines = this.shown().map((m) => ({ text: (m.id ? `${m.id} : ${m.text}` : m.text) + (m.count > 1 ? `  (x${m.count})` : ''), kind: m.kind, has_id: !!m.id }));
     this.inputModel.show_frame = this.logModel.show_frame;
     this.systemModel.lines = this.system.map((m) => ({ text: m.text, kind: m.kind, has_id: false }));
     this.log.update();
@@ -270,6 +469,8 @@ export class Chat {
     const whisperField = this.input.$<HTMLInputElement>('#whisper_field');
     if (whisperField) whisperField.disabled = !this.inputModel.whisper_send;
     if (lines && (added || follow)) requestAnimationFrame(() => { if (follow) lines.scrollTop = lines.scrollHeight; });
+    this.syncTabs();
+    this.applyFade();
   }
 
   private setFrame(on: boolean): void {
@@ -350,8 +551,7 @@ export class Chat {
     const field = this.focusedField();
     const handled = () => { event.preventDefault(); event.stopImmediatePropagation(); };
     if (event.key === 'F2') {
-      this.whispersOnly = !this.whispersOnly;
-      this.sync(true);
+      this.setTab(this.tab === 1 ? 0 : 1); // the desktop's whisper-only view
       this.options.click?.();
       handled();
       return;
@@ -430,7 +630,13 @@ export class Chat {
     this.lastSent = now;
     const text = (this.input?.$<HTMLInputElement>('#chat_field')?.value ?? '').slice(0, CHAT_MAX);
     const target = (this.input?.$<HTMLInputElement>('#whisper_field')?.value ?? '').trim().slice(0, NAME_MAX);
-    if (text) {
+    const blockCommand = /^\/(block|unblock)\s+(\S+)/i.exec(text.trim());
+    if (blockCommand) {
+      this.block(blockCommand[2].slice(0, NAME_MAX), blockCommand[1].toLowerCase() === 'block');
+    } else if (/^\/blocklist\s*$/i.test(text.trim())) {
+      const names = blockedNames();
+      this.add(names.length ? `Blocked: ${names.join(', ')}` : 'Nobody is blocked.', 'system');
+    } else if (text) {
       const prefixed = text.startsWith('/') ? text : CHANNEL_PREFIX[this.inputModel.input_msg_type] + text;
       if (this.inputModel.whisper_send && target && !text.startsWith('/') && this.whisper) {
         this.whisper(target, prefixed);

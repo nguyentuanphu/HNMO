@@ -14,6 +14,7 @@
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { audioSystem, MAX_VOLUME_LEVEL } from '../audio/audioSystem.js';
 import { setUiScalePercent, typographyScale } from './nativeText.js';
+import { setWordFilter, wordFilterOn } from '../game/chatExtras.js';
 import {
   applyQuality, DEFAULT_QUALITY, FPS_CAPS, isLowSpec, LOW_SPEC, refreshQuality, RENDER_SCALES, VIEW_DISTANCES,
   type QualitySettings, type QualityTarget,
@@ -119,7 +120,7 @@ export class SettingsWindow {
   private opening: Promise<void> | null = null;
   private readonly settings: GameSettings = loadSettings();
   private readonly model: OptionModel;
-  private extras: { lowSpec?: HTMLDivElement; mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[]; textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[] } = { viewOptions: [], textOptions: [] };
+  private extras: { lowSpec?: HTMLDivElement; mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[]; textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[]; wordFilter?: HTMLDivElement } = { viewOptions: [], textOptions: [] };
 
   constructor(private readonly target: QualityTarget) {
     const close = () => this.close();
@@ -324,6 +325,13 @@ export class SettingsWindow {
       uiRow.after(row);
       this.extras = { ...this.extras, textValue: value, textList: list, textOptions: options };
     }
+    const interfaceTab = panels[4];
+    if (interfaceTab) {
+      const filter = checkboxRow('Hide rude words in the chat', () => { setWordFilter(!wordFilterOn()); this.update(); });
+      filter.row.id = 'hnmo_word_filter';
+      interfaceTab.append(filter.row);
+      this.extras.wordFilter = filter.box;
+    }
     if (audio) {
       const mute = checkboxRow('Mute all sound', () => { this.setMuted(!audioSystem().getSettings().muted); this.update(); });
       mute.row.id = 'hnmo_mute';
@@ -361,6 +369,7 @@ export class SettingsWindow {
 
   private refreshExtras(): void {
     const { lowSpec, mute, viewValue, viewList, viewOptions, textValue, textList, textOptions } = this.extras;
+    this.extras.wordFilter?.classList.toggle('checked', wordFilterOn());
     if (textValue) textValue.textContent = TEXT_SIZE_LABELS[this.settings.textSize] ?? '';
     textList?.classList.toggle('hidden', this.model.open_dropdown !== TEXT_SIZE_DROPDOWN);
     textOptions.forEach((option, i) => option.classList.toggle('selected', i === this.settings.textSize));

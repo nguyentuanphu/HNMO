@@ -15,13 +15,15 @@ interface ChatGame {
     shownLines: { chat: string[]; system: string[] };
     add(text: string, kind?: string, sender?: string): void;
     setWhisperTarget(name: string): void;
+    setTab(index: number): void;
+    currentTab: number;
   };
 }
 type Win = Window & { __game: ChatGame; __sent: { name: string; fields: Record<string, unknown> }[] };
 const chat = <T>(page: Page, f: (c: ChatGame['chat']) => T) => page.evaluate(`(${f.toString()})(window.__game.chat)`) as Promise<T>;
 
 test('the chat: input box, log, channels, history, frame, system log, whisper target', async ({ page }) => {
-  test.setTimeout(5 * 60_000);
+  test.setTimeout(9 * 60_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await enterWorld(page, 'test6');
@@ -106,5 +108,62 @@ test('the chat: input box, log, channels, history, frame, system log, whisper ta
   await chat(page, (c) => c.setWhisperTarget(''));
 
   await page.screenshot({ path: 'test-results/chat.png' });
+
+  // HNMO: the same line again within 30 s is counted on the last line; rude words of others are hidden.
+  await chat(page, (c) => { c.add('buy my sword', 'chat', 'Seller'); c.add('buy my sword', 'chat', 'Seller'); c.add('what the fuck', 'chat', 'Rude'); c.add('đm thằng này', 'chat', 'Rude'); });
+  await expect.poll(() => chat(page, (c) => c.shownLines.chat.slice(-3))).toEqual(['Seller : buy my sword  (x2)', 'Rude : what the ****', 'Rude : *** thằng này']);
+  // Blocked players' lines don't show; /unblock lets them through again.
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('/block Rude');
+  await page.keyboard.press('Enter');
+  await chat(page, (c) => c.add('still here', 'chat', 'Rude'));
+  await page.waitForTimeout(300);
+  expect((await chat(page, (c) => c.shownLines.chat)).some((line) => line.includes('still here'))).toBe(false);
+  await page.waitForTimeout(1100);
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('/unblock Rude');
+  await page.keyboard.press('Enter');
+  await chat(page, (c) => c.add('back again', 'chat', 'Rude'));
+  await expect.poll(() => chat(page, (c) => c.shownLines.chat.at(-1))).toBe('Rude : back again');
+
+  // Tabs: the Party tab counts a party line while another tab shows, and shows only party lines.
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.rml-chat_log #hnmo_tabs')).toBeVisible();
+  await chat(page, (c) => c.add('party up', 'party', 'Friend'));
+  await expect(page.locator('.rml-chat_log #hnmo_tabs button', { hasText: 'Party' })).toContainText('1');
+  await page.locator('.rml-chat_log #hnmo_tabs button', { hasText: 'Party' }).click();
+  await expect.poll(() => chat(page, (c) => c.shownLines.chat)).toEqual(['Friend : party up']);
+  await page.locator('.rml-chat_log #hnmo_tabs button', { hasText: 'All' }).click();
+  await page.keyboard.press('Escape');
+
+  // A click on a name opens its menu.
+  const named = page.locator('.rml-chat_log .chat-line', { hasText: 'Friend : party up' });
+  const at = (await named.boundingBox())!;
+  await page.mouse.move(at.x + 8, at.y + at.height / 2);
+  await page.mouse.down();
+  await page.mouse.up();
+  await expect(page.locator('.hnmo-chat-menu')).toContainText('Friend');
+  await expect(page.locator('.hnmo-chat-menu button')).toContainText(['Whisper', 'Invite to party', 'Trade', 'Add friend', 'Block', 'Copy name']);
+  await page.screenshot({ path: 'test-results/chat-menu.png' });
+  await page.mouse.click(5, 300);
+  await expect(page.locator('.hnmo-chat-menu')).toHaveCount(0);
+
+  // Lines fade 10 s after they came while the chat is closed.
+  await expect.poll(() => page.locator('.rml-chat_log .chat-line.faded').count(), { timeout: 30_000 }).toBeGreaterThan(0);
+
+  // After a reload the character's lines are there again.
+  await page.waitForTimeout(2500); // the history is saved a moment after a line
+  await enterWorldAgain(page); // a fresh page load
+  await expect.poll(() => chat(page, (c) => c.shownLines.chat.join('\n')), { timeout: 60_000 }).toContain('Friend : party up');
   await expectNoPageErrors(errors);
 });
+
+async function enterWorldAgain(page: Page): Promise<void> {
+  // Leave, so the server ends the session, then log in again (it refuses an account that is still in).
+  await page.goto('about:blank');
+  await expect(async () => {
+    await page.waitForTimeout(5_000);
+    await enterWorld(page, 'test6');
+  }).toPass({ timeout: 180_000 });
+  await page.waitForFunction(() => !!(window as unknown as Win).__game.chat?.input, null, { timeout: 120_000 });
+}

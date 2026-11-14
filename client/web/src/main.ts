@@ -206,7 +206,18 @@ const ui = {
   mapPicker: $('mapPicker'), mapSelect: $<HTMLSelectElement>('mapSelect'),
 };
 
-const chat = new Chat({ click: () => sounds.click() });
+// A player in view by name (the chat's name menu).
+const playerNamed = (name: string) => [...(state.online?.characters.values() ?? [])].find((c) => c.kind === 'player' && c.name === name) ?? null;
+const notNearby = (name: string) => chat.add(`${name} is not nearby.`, 'system');
+const chat = new Chat({
+  click: () => sounds.click(),
+  owner: () => state.online?.hero.name ?? '',
+  nameActions: {
+    party: (name) => { const p = playerNamed(name); if (p) state.party?.invite(p); else notNearby(name); },
+    trade: (name) => { const p = playerNamed(name); if (p) state.trade?.requestTrade(p.id); else notNearby(name); },
+    addFriend: (name) => state.social?.messenger.addFriend(name),
+  },
+});
 
 const renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: true });
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
