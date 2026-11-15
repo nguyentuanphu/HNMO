@@ -141,3 +141,28 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   The server logs "HNMO license: …" and "this computer's id" at startup. sign-license.sh is never packaged.
 - Website work (PR #1, branch codex/bilingual-server-website) isn't in main yet: don't deploy main's GameLogic
   next to the website branch's admin panel on the test server (type load error). Publish one branch fully.
+
+## Learned 2026-11-15
+
+- **modern-web-guidance** (Google Chrome's guides, installed in `.agents/skills/modern-web-guidance`,
+  linked from `.claude/skills`; Apache-2.0, its LICENSE kept there): use it for the website, the
+  account / top-up pages and the admin panel (forms, accessibility, page speed, phone layout, the
+  installable app). Run its searches with `DISABLE_TELEMETRY=1` (the owner's data stays private).
+  Not for the game's own windows: those copy the desktop client 1:1. Update: `npx skills update`.
+- **Slow container:** the HUD and chat appear ~25 s after entering the world while builds or other
+  agents run; tests wait for `__game.chat.input` / `__game.hud.doc` instead of fixed sleeps.
+  "ERR_INSUFFICIENT_RESOURCES" in a test = reload + goto at once; leave with `about:blank`, then log in
+  again in a `toPass` loop (the server refuses an account still logged in).
+- **Test server restart:** stop `HNMO.Startup`, the old web (`./HNMO` in HNMO-clip/web) and PostgreSQL
+  (`su hnmo -c "/usr/lib/postgresql/16/bin/pg_ctl -D /home/hnmo/HNMO-clip/save/database stop -m fast"`)
+  before a full publish, or the publish fails on locked files / port 8080 is taken.
+- **Early packets:** packets that arrive while the map loads are buffered (`earlyPackets` in main.ts);
+  a handler set up later must replay them (the offline whispers came in then and were lost).
+- **Window scale:** use `uiScale()` / `hudScale()` / `dockTop()` from `ui/nativeText.ts` (the desktop's
+  CappedUniformScale with the UI size option), never `innerHeight / 480`.
+- **Synthetic keys:** the game reads `event.code` for the number keys (`Digit1`): a dispatched
+  KeyboardEvent needs `code` too.
+- **Flaky server tests on GitHub:** timing tests must wait for the full end state (e.g. a respawned
+  monster is alive before it's back on the map).
+- **Owner choices:** every coin reward is set in the admin panel; decisions in a pop-up; the cash shop
+  plan (idea 8) waits for the owner's answer.
