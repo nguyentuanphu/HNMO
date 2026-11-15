@@ -7,6 +7,7 @@
 
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 internal sealed class LauncherOptions
 {
@@ -38,6 +39,12 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
     private Process? _server;
     private bool _databaseStarted;
+    private int _stopped;
+    private PosixSignalRegistration? _closeWindow;
+
+    // The game server's process of the last start (id and start time), so a server left running by a
+    // window that was closed hard can be found and stopped at the next start.
+    private string ServerPidFile => Path.Combine(this.Full(options.SavePath), "server.pid");
 
     private string Full(string path) => Path.GetFullPath(Path.Combine(contentRoot, path));
 
@@ -100,24 +107,109 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             return Task.CompletedTask;
         }
 
+        // Closing the window (Windows) or the terminal (SIGHUP) ends this program at once, without the
+        // usual shutdown: stop the game server and the database right here, or they stay behind.
+        this._closeWindow = PosixSignalRegistration.Create(PosixSignal.SIGHUP, _ => this.StopNow());
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => this.StopNow();
+
         // Start in the background, so the web part answers right away and shows the game while the server comes up.
         _ = Task.Run(() => this.LaunchAsync(cancellationToken), CancellationToken.None);
         return Task.CompletedTask;
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        if (this._server is { HasExited: false })
+        this.StopNow();
+        return Task.CompletedTask;
+    }
+
+    // Stops the game server and the database (once; also from the window-close handler, which has only
+    // a few seconds).
+    private void StopNow()
+    {
+        if (Interlocked.Exchange(ref this._stopped, 1) == 1)
         {
-            logger.LogInformation("Stopping the game server...");
-            this._server.Kill(entireProcessTree: true);
-            await this._server.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        try
+        {
+            if (this._server is { HasExited: false })
+            {
+                logger.LogInformation("Stopping the game server...");
+                this._server.Kill(entireProcessTree: true);
+                this._server.WaitForExit(5000);
+            }
+
+            File.Delete(this.ServerPidFile);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogWarning(ex, "The game server didn't stop cleanly.");
         }
 
         if (this._databaseStarted)
         {
             logger.LogInformation("Stopping the database...");
-            await RunAsync(this.PostgresTool("pg_ctl"), ["stop", "-D", this.DatabaseDirectory, "-m", "fast", "-w"], cancellationToken).ConfigureAwait(false);
+            this.StopDatabase("fast");
+        }
+
+        this._closeWindow?.Dispose();
+    }
+
+    private void StopDatabase(string mode)
+    {
+        try
+        {
+            using var process = Process.Start(new ProcessStartInfo(this.PostgresTool("pg_ctl"), ["stop", "-D", this.DatabaseDirectory, "-m", mode, "-w", "-t", "10"])
+            {
+                UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true,
+            });
+            process?.WaitForExit(10_000);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogWarning(ex, "The database didn't stop cleanly.");
+        }
+    }
+
+    // A game server of this folder that's still running from an earlier start (its window was closed
+    // hard, or the computer slept): stopped, so this start can go on.
+    private async Task StopLeftoverServerAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!File.Exists(this.ServerPidFile))
+            {
+                return;
+            }
+
+            var parts = (await File.ReadAllTextAsync(this.ServerPidFile, cancellationToken).ConfigureAwait(false)).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            File.Delete(this.ServerPidFile);
+            if (parts.Length < 2 || !int.TryParse(parts[0], out var id) || !long.TryParse(parts[1], out var started))
+            {
+                return;
+            }
+
+            using var process = Process.GetProcessById(id);
+            // The start time as another process reads it can differ by a little (rounding): a few seconds' slack.
+            if (process.HasExited || Math.Abs(process.StartTime.ToUniversalTime().Ticks - started) > TimeSpan.TicksPerSecond * 5)
+            {
+                return; // the id belongs to another program now
+            }
+
+            logger.LogWarning("The game server of an earlier start is still running (process {Id}); stopping it.", id);
+            process.Kill(entireProcessTree: true);
+            await process.WaitForExitAsync(cancellationToken).WaitAsync(TimeSpan.FromSeconds(15), cancellationToken).ConfigureAwait(false);
+            for (var i = 0; i < 15 && await IsPortOpenAsync(options.ConnectServerPort, cancellationToken).ConfigureAwait(false); i++)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or IOException or UnauthorizedAccessException or TimeoutException or System.ComponentModel.Win32Exception)
+        {
+            // Not running any more, or not ours: the port check below says what's left.
+            logger.LogInformation("No game server left from an earlier start ({Reason}).", ex.Message);
         }
     }
 
@@ -126,9 +218,12 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         try
         {
             Directory.CreateDirectory(this.LogDirectory);
+            await this.StopLeftoverServerAsync(cancellationToken).ConfigureAwait(false);
             if (await IsPortOpenAsync(options.ConnectServerPort, cancellationToken).ConfigureAwait(false))
             {
-                throw new InvalidOperationException($"Another game server is already running (port {options.ConnectServerPort} is in use). Close it and start HNMO again.");
+                throw new InvalidOperationException(
+                    $"Another program uses port {options.ConnectServerPort} (another HNMO folder, or a game server started by hand). "
+                    + "Close it (Task Manager: \".NET Host\" / \"dotnet\" / \"HNMO\"), or restart the computer, and start HNMO again.");
             }
 
             await this.StartDatabaseAsync(cancellationToken).ConfigureAwait(false);
@@ -162,6 +257,14 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             }
         }
 
+        if (File.Exists(Path.Combine(this.DatabaseDirectory, "postmaster.pid")) && await this.DatabaseRunningAsync(cancellationToken).ConfigureAwait(false))
+        {
+            // Still running from an earlier start whose window was closed hard: use it.
+            logger.LogInformation("The database is still running from an earlier start; using it.");
+            this._databaseStarted = true;
+            return;
+        }
+
         logger.LogInformation("Starting the database on port {Port}...", options.DatabasePort);
         var logFile = Path.Combine(this.LogDirectory, "database.log");
         // Only reachable from this computer.
@@ -173,6 +276,19 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         }
         await RunAsync(this.PostgresTool("pg_ctl"), ["start", "-D", this.DatabaseDirectory, "-l", logFile, "-o", settings, "-w", "-t", ((int)DatabaseStartTimeout.TotalSeconds).ToString()], cancellationToken).ConfigureAwait(false);
         this._databaseStarted = true;
+    }
+
+    private async Task<bool> DatabaseRunningAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await RunAsync(this.PostgresTool("pg_ctl"), ["status", "-D", this.DatabaseDirectory], cancellationToken).ConfigureAwait(false);
+            return true; // exit code 0: running
+        }
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
     }
 
     private void StartServer()
@@ -201,6 +317,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
         var log = new StreamWriter(Path.Combine(this.LogDirectory, "server.log"), append: true) { AutoFlush = true };
         this._server = Process.Start(start) ?? throw new InvalidOperationException("The game server didn't start.");
+        File.WriteAllText(this.ServerPidFile, $"{this._server.Id} {this._server.StartTime.ToUniversalTime().Ticks}");
         this._server.OutputDataReceived += (_, e) => { if (e.Data is not null) { lock (log) { log.WriteLine(e.Data); } } };
         this._server.ErrorDataReceived += (_, e) => { if (e.Data is not null) { lock (log) { log.WriteLine(e.Data); } } };
         this._server.BeginOutputReadLine();
