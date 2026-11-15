@@ -144,7 +144,11 @@ export const MAX_DYNAMIC_LIGHTS = 32;
 export interface TerrainLightCall { x: number; y: number; r: number; g: number; b: number; range: number }
 
 /** Sets the frame's effect lights on the ground (PrimaryTerrainLight = the static light plus these). */
+/** This frame's effect lights (AddTerrainLight), which also light the models standing in them (RequestTerrainLight). */
+let frameLights: readonly TerrainLightCall[] = [];
+
 export function setTerrainLights(mesh: TerrainMesh, lights: readonly TerrainLightCall[]): void {
+  frameLights = lights;
   const uniforms = mesh.material.uniforms;
   const at = uniforms.dynamicLightAt.value as THREE.Vector3[];
   const color = uniforms.dynamicLightColor.value as THREE.Vector3[];
@@ -261,6 +265,32 @@ export function sampleHeight(heights: Float32Array, x: number, y: number): numbe
   const top = h(xi, yi) * (1 - tx) + h(xi + 1, yi) * tx;
   const bottom = h(xi, yi + 1) * (1 - tx) + h(xi + 1, yi + 1) * tx;
   return top * (1 - ty) + bottom * ty;
+}
+
+/**
+ * RequestTerrainLight for a model (a character, a pet): the ground's light under it with the effects' lights of this
+ * frame added as AddTerrainLight adds them to the terrain light ((range - distance) / range of their colour, in cells),
+ * each channel kept within 0 and 1.
+ */
+export function sampleModelLight(light: Float32Array, x: number, y: number, out: THREE.Color): THREE.Color {
+  sampleLight(light, x, y, out);
+  if (frameLights.length === 0) return out;
+  const cx = x / TERRAIN_SCALE, cy = y / TERRAIN_SCALE;
+  let lit = false;
+  for (const add of frameLights) {
+    const range = Math.max(1, add.range);
+    const falloff = (range - Math.hypot(cx - add.x / TERRAIN_SCALE, cy - add.y / TERRAIN_SCALE)) / range;
+    if (falloff <= 0) continue;
+    out.r += add.r * falloff;
+    out.g += add.g * falloff;
+    out.b += add.b * falloff;
+    lit = true;
+  }
+  if (!lit) return out;
+  out.r = Math.min(1, Math.max(0, out.r));
+  out.g = Math.min(1, Math.max(0, out.g));
+  out.b = Math.min(1, Math.max(0, out.b));
+  return out;
 }
 
 export function sampleLight(light: Float32Array, x: number, y: number, out: THREE.Color): THREE.Color {

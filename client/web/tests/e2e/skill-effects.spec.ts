@@ -384,3 +384,25 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   await expect.poll(() => game(page, (g) => (g.effects.census()['effect:shiny5'] ?? 0) + (g.effects.census()['effect:pinLight'] ?? 0)), { timeout: 10_000 }).toBe(0);
   expect(errors).toEqual([]);
 });
+
+// The effects' light reaches the models standing in it (AddTerrainLight on the terrain light that RequestTerrainLight
+// gives a character): a red light laid at the hero every tick reddens the hero's body light.
+test('effect light reaches the characters in it', async ({ page }) => {
+  if (groups && !groups.includes('light')) test.skip();
+  test.setTimeout(3 * 60_000);
+  await enterWorld(page, 'test400');
+  await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
+  type Lit = { light: { r: number; g: number; b: number }; position: { x: number; y: number } };
+  type LightGame = { online: { hero: Lit }; effects: { schedule(task: (tick: number) => boolean): void; groundLight(at: { x: number; y: number }, r: number, g: number, b: number, range: number): void } };
+  const before = await page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return { r: l.r, g: l.g, b: l.b }; });
+  await page.evaluate(() => {
+    const g = (window as unknown as { __game: LightGame }).__game;
+    let ticks = 0;
+    g.effects.schedule(() => { g.effects.groundLight(g.online.hero.position, 1, -1, -1, 3); return ++ticks < 150; });
+  });
+  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return l.r - l.g; }), { timeout: 10_000 })
+    .toBeGreaterThan(before.r - before.g + 0.3);
+  // When the light ends the body takes the ground's own light again.
+  await expect.poll(() => page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return Math.abs(l.r - l.g); }), { timeout: 20_000 })
+    .toBeLessThan(Math.abs(before.r - before.g) + 0.05);
+});

@@ -12,7 +12,7 @@
 
 import * as THREE from 'three';
 import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, fetchBytes, AnimatedModel } from '../bmd.js';
-import { sampleLight } from '../terrain.js';
+import { sampleModelLight } from '../terrain.js';
 import { itemModel } from './items.js';
 import { PlayerActions as A } from './combatLook.js';
 import { createAngle, createAngle2D, moveHumming, rotateByAngle, turnAngle2 } from '../render/effects/core.js';
@@ -295,7 +295,7 @@ export abstract class Companion {
     this.group.visible = this.visible;
     if (!this.visible) return;
     this.model.pose(this.action, this.frame);
-    this.model.setLight(sampleLight(light, this.position.x, this.position.y, this.light), this.time / 1000);
+    this.model.setLight(sampleModelLight(light, this.position.x, this.position.y, this.light), this.time / 1000);
     keepEffectTask();
   }
 

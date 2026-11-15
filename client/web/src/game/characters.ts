@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from '../formats.js';
 import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, isHiddenTexture, sharedGeometries, AnimatedModel } from '../bmd.js';
 import { meshDraws, type ItemPlace, type MeshDraw } from './itemLooks.js';
-import { sampleHeight, sampleLight } from '../terrain.js';
+import { sampleHeight, sampleModelLight } from '../terrain.js';
 import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
 import { itemDefinition, itemModel, partModel, ItemGroup } from './items.js';
 import { addItemGlow, setCloaked, setItemGlowState } from './itemGlow.js';
@@ -548,7 +548,7 @@ export class Character {
     this.model.pose(this.action, this.time);
     if (this.looksDirty) this.applyItemLooks();
     this.clock += dt;
-    const light = this.bodyTint ? this.light.copy(this.bodyTint) : this.fullBright ? this.light.setRGB(1, 1, 1) : sampleLight(world.light, x, y, this.light);
+    const light = this.bodyTint ? this.light.copy(this.bodyTint) : this.fullBright ? this.light.setRGB(1, 1, 1) : sampleModelLight(world.light, x, y, this.light);
     this.model.setLight(light, this.clock);
     // Players carry their weapons on the back in a safe zone (AreWeaponsOnBack), never in Blood Castle and Chaos
     // Castle; a monster model shows no weapons there at all (only the player model has a back for them).
