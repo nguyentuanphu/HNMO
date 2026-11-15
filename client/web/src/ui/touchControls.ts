@@ -5,7 +5,7 @@
 // character, the mini map, the move list, the party, auto play, the chat). More for phones: a fight
 // button (the current skill, else an attack, at the nearest monster), the skill keys 1-5 and the
 // potion keys Q W E R as buttons, a "more" button with the other windows (command, friends, guild,
-// quests, cash shop, Gens, community, a screenshot to share), full screen in landscape, and a hint to turn a phone held upright.
+// quests, cash shop, Gens, community, top races, a screenshot to share), full screen in landscape, and a hint to turn a phone held upright.
 
 const LONG_PRESS_MS = 500;
 /** How far a finger may move and still be a press, in pixels. */
@@ -35,6 +35,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: 'N', title: 'World bosses', key: 'n' },
   { label: 'Y', title: 'New-player guide', key: 'y' },
   { label: 'K', title: 'Community', key: 'k' },
+  { label: '🏆', title: 'Top races', key: '', event: 'hnmo-top-races-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];

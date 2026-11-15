@@ -1,0 +1,105 @@
+<rml>
+<head>
+	<title>HNMO Top races</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's top races window (no desktop window): the game's message box frame (window_shell) with
+		   the running races, the player's rank, the top 10, the prizes, the races to come, the past winners
+		   and the prizes waiting for room in the bag. */
+		#panel {
+			top: 50dp;
+			left: 50%;
+			margin-left: -195dp;
+			transform: none;
+			width: 390dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 16dp 20dp 16dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.tr-scroll {
+			display: block;
+			max-height: 330dp;
+			overflow-y: auto;
+			pointer-events: auto;
+			padding-right: 4dp;
+		}
+		.tr-row {
+			display: block;
+			margin-bottom: 7dp;
+			padding: 4dp 5dp 5dp 5dp;
+			border: 1dp #5a4a30;
+			background-color: rgba(0, 0, 0, 0.35);
+		}
+				.tr-name { display: block; color: token(accent-gold); line-height: 1.25em; }
+		.tr-map { color: token(text-muted); font-size: 0.85rem; }
+		.tr-line { display: block; line-height: 1.3em; white-space: normal; color: token(text-input); font-size: 0.9rem; }
+		.tr-line.muted { color: token(text-muted); font-size: 0.85rem; }
+		.tr-top { display: block; font-size: 0.85rem; color: token(text-primary); line-height: 1.25em; }
+		.tr-head { display: block; color: token(accent-gold); margin: 6dp 0 3dp 0; }
+		.tr-note { display: block; margin: 2dp 0 6dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.tr-buttons { display: flex; flex-direction: row; justify-content: center; margin-top: 6dp; }
+		@spritesheet tr-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			tr-btn-idle:   0px  0px 64px 29px;
+			tr-btn-hover:  0px 29px 64px 29px;
+			tr-btn-active: 0px 58px 64px 29px;
+		}
+		.tr-btn {
+			position: static;
+			width: 62dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 0 3dp;
+			font-size: 0.9rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(tr-btn-idle);
+		}
+		.tr-btn:hover { decorator: image(tr-btn-hover); }
+		.tr-btn:active { decorator: image(tr-btn-active); }
+		.tr-btn.claim { color: #ffe9a8; }
+		.tr-prize { display: block; font-size: 0.85rem; color: #ffe9a8; line-height: 1.25em; white-space: normal; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_top_races">
+	<div class="tr-note" data-if="loading">{{loading_label}}</div>
+	<div class="tr-scroll" data-if="loading == false">
+		<div class="tr-note" data-if="rows.length == 0">{{empty_label}}</div>
+		<div class="tr-row" data-for="r : rows" data-attr-data-race="r.id">
+			<span class="tr-name" data-no-i18n="">{{r.title}}</span>
+			<span class="tr-line muted" data-no-i18n="">{{r.about}}</span>
+			<span class="tr-line tr-time" data-no-i18n="">{{r.time}}</span>
+			<span class="tr-line muted" data-no-i18n="">{{r.when}}</span>
+			<span class="tr-line tr-mine" data-no-i18n="">{{r.mine}}</span>
+			<span class="tr-top" data-for="t : r.top" data-no-i18n="">{{t.line}}</span>
+			<span class="tr-prize" data-for="p : r.prizes" data-no-i18n="">{{p.line}}</span>
+		</div>
+		<span class="tr-head" data-if="has_upcoming">{{upcoming_head}}</span>
+		<span class="tr-line tr-upcoming" data-for="u : upcoming" data-no-i18n="">{{u.line}}</span>
+		<span class="tr-head" data-if="has_history">{{history_head}}</span>
+		<span class="tr-line tr-history" data-for="h : history" data-no-i18n="">{{h.line}}</span>
+		<span class="tr-head" data-if="has_owed">{{owed_head}}</span>
+		<span class="tr-line tr-owed" data-for="o : owed" data-no-i18n="">{{o.line}}</span>
+		<div class="tr-buttons" data-if="has_owed"><div class="btn tr-btn claim tr-claim" data-event-click="tr_claim">{{claim_label}}</div></div>
+		<span class="tr-note">{{hint_text}}</span>
+	</div>
+	<div class="tr-buttons">
+		<div class="btn tr-btn tr-close" data-event-click="tr_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

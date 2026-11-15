@@ -41,6 +41,7 @@ import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
+import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { Screenshots } from './ui/screenshot.js';
 import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
@@ -173,6 +174,7 @@ export interface GameState {
   worldBosses?: WorldBossWindow;
   guildLevels?: GuildLevelsWindow;
   community?: CommunityWindow;
+  topRaces?: TopRacesWindow;
   screenshots?: Screenshots;
   onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
@@ -1396,6 +1398,22 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'k' && !event.ctrlKey && !event.altKey && !event.metaKey && !itemWindows.bag.isOpen) { event.preventDefault(); community.toggle(); }
   });
+  // HNMO's top races (F9, a key the desktop doesn't use; also the touch "more" menu): the running races, the player's
+  // rank, the top 10, the prizes, the time left, the past winners; starts, ends and prizes are told in the chat.
+  const topRaces = new TopRacesWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+  });
+  state.topRaces = topRaces;
+  connection.onPacket((bytes) => { topRaces.handle(bytes); });
+  for (const bytes of earlyPackets) topRaces.handle(bytes);
+  topRaces.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); topRaces.toggle(); }
+  });
+  window.addEventListener('hnmo-top-races-open', () => topRaces.toggle());
   // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
   // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
   const onboarding = new OnboardingWindow({

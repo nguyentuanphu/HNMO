@@ -490,3 +490,12 @@ footer {
 .community-event p { margin: 4px 0 0; font-size: 13px; }
 #social-links[hidden] { display: none; }
 #social-links a { color: var(--gold); }
+
+/* Top races section: a card per running race with its table and prizes. */
+.race-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.race-grid > * { min-width: 0; }
+.race-card h4 { margin: 0 0 4px; }
+.race-card h5 { margin: 10px 0 4px; font-size: 13px; }
+.race-card p { margin: 4px 0; font-size: 13px; overflow-wrap: anywhere; }
+.race-time { color: var(--gold); }
+#races-upcoming-panel[hidden] { display: none; }

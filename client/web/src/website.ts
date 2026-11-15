@@ -118,6 +118,51 @@ const copy = {
     communityUpcoming: "Starts",
     communityEnded: "Over",
     communityUntil: "until",
+    racesNav: "Top races",
+    racesTitle: "Top races",
+    racesHint: "Race the other players by day, week or month: resets, levels, boss hunting, events and more, some per class. The best ranks win coins and items, paid once when a race ends. In the game: the top races window (F9).",
+    racesRunning: "Running now",
+    racesNone: "No top race is running right now.",
+    racesUpcoming: "Coming races",
+    racesHistory: "Past winners",
+    racesNoHistory: "No race has finished yet.",
+    racesOffline: "The top races are unavailable: the server didn't answer.",
+    racesOff: "Top races are switched off on this server.",
+    racesEnds: "Ends in %s",
+    racesEndsAt: "%s Sydney time (%s your time)",
+    racesStarts: "Starts %s Sydney time (%s your time)",
+    racesPrizes: "Prizes",
+    racesMinimum: "At least %s for a prize.",
+    racesNobody: "Nobody yet.",
+    racesNobodyTook: "nobody took part",
+    racesRank: "Rank %d",
+    racesRanks: "Ranks %d-%d",
+    racesPlayer: "Player",
+    racesValue: "Value",
+    racesAll: "all classes",
+    racesOnly: "only %s",
+    racesPerClass: "a table per class",
+    racesGuilds: "guilds (every member gets the prize)",
+    racesDaily: "daily",
+    racesWeekly: "weekly",
+    racesMonthly: "monthly",
+    racesCustom: "special dates",
+    racesKindResetsGained: "Resets done",
+    racesKindLevelsGained: "Levels gained",
+    racesKindLevelReached: "Highest level reached",
+    racesKindBossHuntPoints: "Boss-hunt points",
+    racesKindPkKills: "Players defeated (PK)",
+    racesKindEventWins: "Event wins",
+    racesKindGuildPoints: "Guild points",
+    racesKindMonsterKills: "Monsters defeated",
+    racesKindOnlineMinutes: "Minutes in the game",
+    racesClass0: "Dark Wizard",
+    racesClass1: "Dark Knight",
+    racesClass2: "Fairy Elf",
+    racesClass3: "Magic Gladiator",
+    racesClass4: "Dark Lord",
+    racesClass5: "Summoner",
+    racesClass6: "Rage Fighter",
     bossesNoEntries: "No entries yet.",
     bossesRankBossHunt: "Boss hunt",
     bossesRankBloodCastle: "Blood Castle",
@@ -370,6 +415,51 @@ const copy = {
     communityUpcoming: "Bắt đầu",
     communityEnded: "Đã kết thúc",
     communityUntil: "đến",
+    racesNav: "Đua top",
+    racesTitle: "Đua top",
+    racesHint: "Đua với người chơi khác theo ngày, tuần hoặc tháng: reset, cấp, săn boss, sự kiện và nhiều hơn nữa, có cuộc đua theo từng lớp. Các hạng cao nhất nhận xu và vật phẩm, trả một lần khi cuộc đua kết thúc. Trong trò chơi: cửa sổ đua top (F9).",
+    racesRunning: "Đang diễn ra",
+    racesNone: "Hiện không có cuộc đua top nào.",
+    racesUpcoming: "Cuộc đua sắp tới",
+    racesHistory: "Người thắng trước đây",
+    racesNoHistory: "Chưa có cuộc đua nào kết thúc.",
+    racesOffline: "Mục đua top tạm thời không có: máy chủ không trả lời.",
+    racesOff: "Đua top đang tắt trên máy chủ này.",
+    racesEnds: "Kết thúc sau %s",
+    racesEndsAt: "%s giờ Sydney (%s giờ của bạn)",
+    racesStarts: "Bắt đầu %s giờ Sydney (%s giờ của bạn)",
+    racesPrizes: "Phần thưởng",
+    racesMinimum: "Cần ít nhất %s để nhận thưởng.",
+    racesNobody: "Chưa có ai.",
+    racesNobodyTook: "không có ai tham gia",
+    racesRank: "Hạng %d",
+    racesRanks: "Hạng %d-%d",
+    racesPlayer: "Người chơi",
+    racesValue: "Giá trị",
+    racesAll: "mọi lớp nhân vật",
+    racesOnly: "chỉ %s",
+    racesPerClass: "mỗi lớp một bảng",
+    racesGuilds: "bang hội (mọi thành viên đều nhận thưởng)",
+    racesDaily: "hằng ngày",
+    racesWeekly: "hằng tuần",
+    racesMonthly: "hằng tháng",
+    racesCustom: "ngày đặc biệt",
+    racesKindResetsGained: "Số lần reset",
+    racesKindLevelsGained: "Số cấp tăng",
+    racesKindLevelReached: "Cấp cao nhất đạt được",
+    racesKindBossHuntPoints: "Điểm săn boss",
+    racesKindPkKills: "Số lần hạ người chơi (PK)",
+    racesKindEventWins: "Số lần thắng sự kiện",
+    racesKindGuildPoints: "Điểm bang hội",
+    racesKindMonsterKills: "Số quái bị hạ",
+    racesKindOnlineMinutes: "Số phút trong trò chơi",
+    racesClass0: "Phù Thủy",
+    racesClass1: "Chiến Binh",
+    racesClass2: "Tiên Nữ",
+    racesClass3: "Đấu Sĩ",
+    racesClass4: "Chúa Tể",
+    racesClass5: "Thuật Sĩ",
+    racesClass6: "Thiết Binh",
     bossesNoEntries: "Chưa có ai.",
     bossesRankBossHunt: "Săn boss",
     bossesRankBloodCastle: "Huyết Lâu",
@@ -1510,3 +1600,133 @@ void refreshCommunity();
 setInterval(() => {
   if (!document.hidden) void refreshCommunity();
 }, 2 * 60000);
+
+// ---------- top races (read from the server, /website/top-races) ----------
+
+type RaceKind = "ResetsGained" | "LevelsGained" | "LevelReached" | "BossHuntPoints" | "PkKills" | "EventWins" | "GuildPoints" | "MonsterKills" | "OnlineMinutes";
+interface PublicRacePrize { from: number; to: number; coins: number; coinType: string; zen: number; items: PublicReward["items"] }
+interface PublicRace { id: string; titleEn: string; titleVi: string; kind: RaceKind; event: string; scope: string; cls: number; period: string; minimum: number; prizes: PublicRacePrize[] }
+interface PublicRaceLine { rank: number; name: string; value: number; cls: number }
+interface PublicTopRaces {
+  enabled: boolean; now?: number;
+  races?: { race: PublicRace; start: number; end: number; tables: { cls: number; lines: PublicRaceLine[] }[] }[];
+  upcoming?: { race: PublicRace; start: number; end: number }[];
+  history?: { raceId: string; titleEn: string; titleVi: string; kind: RaceKind; periodKey: string; start: number; end: number; tables: { cls: number; lines: PublicRaceLine[] }[] }[];
+}
+let topRaces: PublicTopRaces | null = null;
+let topRacesSkew = 0;
+
+const RACE_CLASSES = ["racesClass0", "racesClass1", "racesClass2", "racesClass3", "racesClass4", "racesClass5", "racesClass6"] as const;
+
+function raceTitle(race: { titleEn: string; titleVi: string }): string {
+  return (language === "vi" ? race.titleVi : race.titleEn) || race.titleEn;
+}
+
+function raceClass(cls: number): string {
+  const key = RACE_CLASSES[cls];
+  return key ? t(key) : "";
+}
+
+function raceValue(kind: RaceKind, value: number): string {
+  const n = value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  if (kind === "LevelReached") return language === "vi" ? `cấp ${n}` : `level ${n}`;
+  return n;
+}
+
+function raceAbout(race: PublicRace): string {
+  const period = race.period === "Daily" ? t("racesDaily") : race.period === "Weekly" ? t("racesWeekly") : race.period === "Monthly" ? t("racesMonthly") : t("racesCustom");
+  const scope = race.kind === "GuildPoints" ? t("racesGuilds") : race.scope === "OneClass" ? t("racesOnly").replace("%s", raceClass(race.cls)) : race.scope === "PerClass" ? t("racesPerClass") : t("racesAll");
+  return `${t(`racesKind${race.kind}` as CopyKey)} · ${period} · ${scope}`;
+}
+
+function raceCountdown(at: number): string {
+  const minutes = Math.max(0, Math.ceil((at - (Date.now() + topRacesSkew)) / 60000));
+  const days = Math.floor(minutes / 1440);
+  const hours = Math.floor((minutes % 1440) / 60);
+  return days > 0 ? `${days} d ${hours} h` : `${hours} h ${String(minutes % 60).padStart(2, "0")} min`;
+}
+
+function raceTable(kind: RaceKind, lines: PublicRaceLine[]): HTMLElement {
+  if (lines.length === 0) return node("p", t("racesNobody"), "muted");
+  const table = document.createElement("table");
+  table.className = "table";
+  const head = document.createElement("tr");
+  for (const label of ["#", t("racesPlayer"), t("racesValue")]) head.append(node("th", label));
+  table.append(head);
+  for (const line of lines) {
+    const row = document.createElement("tr");
+    row.append(node("td", String(line.rank)), node("td", line.name), node("td", raceValue(kind, line.value)));
+    table.append(row);
+  }
+  const wrap = node("div", "", "table-wrap");
+  wrap.append(table);
+  return wrap;
+}
+
+function renderTopRaces(): void {
+  const data = topRaces;
+  element("races-notice").textContent = !data ? t("racesOffline") : !data.enabled ? t("racesOff") : "";
+  const on = !!data?.enabled;
+  const running = clear("races-running");
+  for (const entry of on ? data?.races ?? [] : []) {
+    const race = entry.race;
+    const box = node("article", "", "panel race-card");
+    box.dataset.race = race.id;
+    box.append(node("h4", raceTitle(race)));
+    box.append(node("p", raceAbout(race), "muted"));
+    box.append(node("p", `${t("racesEnds").replace("%s", raceCountdown(entry.end))} · ${t("racesEndsAt").replace("%s", bossClock(entry.end, "Australia/Sydney")).replace("%s", bossClock(entry.end))}`, "race-time"));
+    for (const table of entry.tables) {
+      if (table.cls >= 0 && race.scope === "PerClass") box.append(node("h5", raceClass(table.cls)));
+      box.append(raceTable(race.kind, table.lines));
+    }
+    if (entry.tables.length === 0) box.append(node("p", t("racesNobody"), "muted"));
+    const prizes = node("ul", "", "boss-news race-prizes");
+    for (const prize of race.prizes) {
+      const ranks = prize.to > prize.from ? t("racesRanks").replace("%d", String(prize.from)).replace("%d", String(prize.to)) : t("racesRank").replace("%d", String(prize.from));
+      prizes.append(node("li", `${ranks}: ${rewardLine({ zen: prize.zen, coins: prize.coins, coinType: prize.coinType, items: prize.items })}`));
+    }
+    if (race.minimum > 1) prizes.append(node("li", t("racesMinimum").replace("%s", raceValue(race.kind, race.minimum)), "muted"));
+    if (race.prizes.length > 0) {
+      box.append(node("h5", t("racesPrizes")));
+      box.append(prizes);
+    }
+    running.append(box);
+  }
+  if (on && !data?.races?.length) running.append(node("p", t("racesNone"), "muted"));
+  const upcoming = clear("races-upcoming");
+  for (const entry of on ? data?.upcoming ?? [] : []) {
+    upcoming.append(node("li", `${raceTitle(entry.race)} · ${raceAbout(entry.race)} · ${t("racesStarts").replace("%s", bossClock(entry.start, "Australia/Sydney")).replace("%s", bossClock(entry.start))}`));
+  }
+  element("races-upcoming-panel").hidden = !on || !data?.upcoming?.length;
+  const history = clear("races-history");
+  for (const result of on ? data?.history ?? [] : []) {
+    const winners = result.tables.map((table) => {
+      const first = table.lines[0];
+      if (!first) return "";
+      return `${table.cls >= 0 ? `${raceClass(table.cls)}: ` : ""}${first.name} (${raceValue(result.kind, first.value)})`;
+    }).filter((w) => w.length > 0);
+    history.append(node("li", `${bossClock(result.end, "Australia/Sydney")} — ${raceTitle(result)}: ${winners.length > 0 ? winners.join(", ") : t("racesNobodyTook")}`));
+  }
+  if (on && !data?.history?.length) history.append(node("li", t("racesNoHistory"), "muted"));
+}
+
+async function refreshTopRaces(): Promise<void> {
+  try {
+    const response = await fetch("/website/top-races", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicTopRaces;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid top races");
+    topRaces = data;
+    if (typeof data.now === "number") topRacesSkew = data.now - Date.now();
+  } catch {
+    topRaces = null;
+  }
+  renderTopRaces();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderTopRaces());
+element("refresh").addEventListener("click", () => void refreshTopRaces());
+void refreshTopRaces();
+setInterval(() => {
+  if (!document.hidden) void refreshTopRaces();
+}, 60000);
