@@ -10,6 +10,28 @@ using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
+/// The weekly rankings.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter<WeeklyCategory>))]
+public enum WeeklyCategory
+{
+    /// <summary>The boss-hunt points.</summary>
+    BossHunt,
+
+    /// <summary>The Blood Castle points.</summary>
+    BloodCastle,
+
+    /// <summary>The Devil Square points.</summary>
+    DevilSquare,
+
+    /// <summary>The Chaos Castle points.</summary>
+    ChaosCastle,
+
+    /// <summary>The castle siege winners.</summary>
+    CastleSiege,
+}
+
+/// <summary>
 /// How the spawn times of a world boss are set.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter<WorldBossScheduleKind>))]
@@ -351,26 +373,4 @@ public class WorldBossesConfiguration
             },
         ];
     }
-}
-
-/// <summary>
-/// The weekly rankings.
-/// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter<WeeklyCategory>))]
-public enum WeeklyCategory
-{
-    /// <summary>The boss-hunt points.</summary>
-    BossHunt,
-
-    /// <summary>The Blood Castle points.</summary>
-    BloodCastle,
-
-    /// <summary>The Devil Square points.</summary>
-    DevilSquare,
-
-    /// <summary>The Chaos Castle points.</summary>
-    ChaosCastle,
-
-    /// <summary>The castle siege winners.</summary>
-    CastleSiege,
 }
