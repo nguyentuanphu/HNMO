@@ -25,6 +25,12 @@ export class DarkSideGhosts {
   /** How many copies are drawn now (for tests). */
   get shown(): number { return this.copies.filter((copy) => copy.group.visible).length; }
 
+  /** How many copies are made (for tests). */
+  get made(): number { return this.copies.length; }
+
+  /** Makes the copies for the hero's look ahead of the dash (when Dark Side is cast). */
+  prepare(hero: Character): void { this.ensure(hero); }
+
   private ensure(hero: Character): void {
     const key = JSON.stringify([hero.classIndex, hero.equipment ?? {}]);
     if (key === this.lookKey || this.loading) return;

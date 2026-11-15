@@ -340,21 +340,26 @@ export class Combat {
   // (CMonkSystem::IsConsecutiveAtt / SendAttackPacket); Beast Uppercut's effects at its stamp's key 2.
   private updateRageHits(hits: RageHits): void {
     const hero = this.hero;
-    if (hero.dead || hero.oneShot?.action !== hits.action) { this.rageHits = null; return; }
-    const frame = hero.time;
+    if (hero.dead) { this.rageHits = null; return; }
+    // A slow frame can carry the action past a hit key and to its end between two updates (the desktop looks every
+    // tick): the keys it passed still count once the action is over.
+    const playing = hero.oneShot?.action === hits.action;
+    if (!playing) this.rageHits = null;
+    const frame = playing ? hero.time : Infinity;
     if (!hits.effectDone && isBeastUppercut(hits.skill) && frame >= 2) {
       hits.effectDone = true;
       this.events.onSkill?.(hero, hits.skill, hits.target, { ...hits.target.cell });
     }
     const [first, second] = hits.frames;
-    let send = false;
-    if (frame >= first && frame < second && hits.state !== 1) { hits.state = 1; send = true; }
-    else if (frame >= second && hits.state !== 2) { hits.state = 2; send = true; }
-    if (!send) return;
+    let sends = 0;
+    if (hits.state === 0 && frame >= first) { hits.state = 1; sends++; }
+    if (hits.state === 1 && frame >= second && second < 9999) { hits.state = 2; sends++; }
     const target = hits.target;
-    if (target.dead || !this.online.characters.has(target.id)) return;
-    if (!(hits.state === 2 && hits.action === PlayerActions.SKILL_GIANTSWING)) hero.faceTo(target.cell);
-    if (this.sendInstantMove(target)) this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: hits.skill, TargetId: target.id });
+    if (!sends || !this.online.characters.has(target.id)) return; // SendAttackPacket: at a target the hero still sees
+    for (let i = 0; i < sends; i++) {
+      if (!(hits.state === 2 && hits.action === PlayerActions.SKILL_GIANTSWING)) hero.faceTo(target.cell);
+      if (this.sendInstantMove(target)) this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: hits.skill, TargetId: target.id });
+    }
   }
 
   private characterById(id: number): Character | null {

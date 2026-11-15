@@ -156,7 +156,7 @@ export interface GameState {
   skills?: SkillList;
   combat?: Combat;
   /** Dark Side's dash state and how many of its copies are drawn (for tests). */
-  darkSide?: () => { dash: DarkSideDash | null; ghosts: number };
+  darkSide?: () => { dash: DarkSideDash | null; ghosts: number; made: number };
   overlay?: CombatOverlay;
   ground?: GroundItems;
   projectiles?: ProjectileLayer;
@@ -981,7 +981,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     }
     return darkSide;
   };
-  state.darkSide = () => ({ dash: darkSide, ghosts: darkSideGhosts.shown });
+  state.darkSide = () => ({ dash: darkSide, ghosts: darkSideGhosts.shown, made: darkSideGhosts.made });
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => {
       overlay.addNumbers(() => Combat.anchorOf(target, 0), texts);
@@ -1039,6 +1039,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         const dash = heroDarkSide();
         dash.mainTarget = target ? ownerFromCharacter(target) : null;
         dash.clearDummies();
+        darkSideGhosts.prepare(online.hero);
       }
       if (isNewSkill(skill)) { playNewSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null); return; }
       playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
@@ -1064,6 +1065,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       const dash = heroDarkSide();
       dash.attackTime = 1; // ReceiveStraightAttack: sc->AttackTime = 1
       dash.mainTarget = target ? ownerFromCharacter(target) : null;
+      darkSideGhosts.prepare(online.hero);
     },
     onSkillHit: (caster, castSkill, target) => {
       playSkillHit(effects, masterSkillToBaseSkill(castSkill), ownerFromCharacter(caster), ownerFromCharacter(target));
