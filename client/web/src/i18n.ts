@@ -17,8 +17,9 @@ export interface LanguageInfo { code: Language; name: string }
 const STORAGE_KEY = 'hnmo.language';
 const ATTRIBUTES = ['title', 'placeholder', 'aria-label'] as const;
 /** Elements whose text is never translated: what players type and say. */
-const SKIP = '#chatLog, #chatInput, input, textarea, script, style, [data-no-i18n]';
+const SKIP = '#chatLog, #chatInput, input, textarea, kbd, code, pre, script, style, [data-no-i18n], [data-game-name]';
 const MAX_CACHE = 8000;
+const MAX_TRANSLATED_TEXT_LENGTH = 4000;
 
 interface LanguageFile { texts: Record<string, string> }
 interface Pattern { regex: RegExp; template: string }
@@ -49,7 +50,7 @@ export function onLanguageChange(listener: (language: Language) => void): () => 
 export function translate(english: string): string | null {
   if (language === 'en') return null;
   const key = english.trim();
-  if (!key || key.length > 400 || !/[A-Za-z]/.test(key)) return null;
+  if (!key || key.length > MAX_TRANSLATED_TEXT_LENGTH || !/[A-Za-z]/.test(key)) return null;
   const cached = cache.get(key);
   if (cached !== undefined) return cached;
   let result = texts.get(key) ?? null;

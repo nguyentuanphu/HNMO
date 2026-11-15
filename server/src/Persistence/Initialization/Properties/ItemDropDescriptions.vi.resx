@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="BoxOfLuckMoney" xml:space="preserve"><value>Hộp May Mắn - Tiền</value></data>
+  <data name="RingOfWarrior80Money" xml:space="preserve"><value>Nhẫn Chiến Binh 80 - Tiền</value></data>
+  <data name="RingOfWarrior80" xml:space="preserve"><value>Nhẫn chiến binh 80</value></data>
+  <data name="RingOfWarrior40Money" xml:space="preserve"><value>Nhẫn Chiến Binh 40 - Tiền</value></data>
+  <data name="RingOfWarrior40" xml:space="preserve"><value>Nhẫn chiến binh 40</value></data>
+  <data name="HeartOfDarkLordMoney" xml:space="preserve"><value>Trái tim của Chúa tể - Tiền</value></data>
+  <data name="HeartOfDarkLord" xml:space="preserve"><value>Trái tim Chúa tể</value></data>
+  <data name="BoxOfKundunPlus5Money" xml:space="preserve"><value>Hộp Kundun+5 - Tiền</value></data>
+  <data name="BoxOfKundunPlus5" xml:space="preserve"><value>Hộp Kundun+5</value></data>
+  <data name="BoxOfKundunPlus4Money" xml:space="preserve"><value>Hộp Kundun+4 - Tiền</value></data>
+  <data name="BoxOfKundunPlus4" xml:space="preserve"><value>Hộp Kundun+4</value></data>
+  <data name="BoxOfKundunPlus3Money" xml:space="preserve"><value>Hộp Kundun+3 - Tiền</value></data>
+  <data name="BoxOfKundunPlus3" xml:space="preserve"><value>Hộp Kundun+3</value></data>
+  <data name="BoxOfKundunPlus2Money" xml:space="preserve"><value>Hộp Kundun+2 - Tiền</value></data>
+  <data name="BoxOfKundunPlus2" xml:space="preserve"><value>Hộp Kundun+2</value></data>
+  <data name="BoxOfKundunPlus1Money" xml:space="preserve"><value>Hộp Kundun+1 - Tiền</value></data>
+  <data name="BoxOfKundunPlus1" xml:space="preserve"><value>Hộp Kundun+1</value></data>
+  <data name="BoxOfHeavenMoney" xml:space="preserve"><value>Hộp Thiên Đường - Tiền</value></data>
+  <data name="BoxOfHeaven" xml:space="preserve"><value>Hộp của Vua</value></data>
+  <data name="GoldMedalMoney" xml:space="preserve"><value>Huy Chương Vàng - Tiền</value></data>
+  <data name="GoldMedal" xml:space="preserve"><value>Huy chương vàng</value></data>
+  <data name="SilverMedalMoney" xml:space="preserve"><value>Huy Chương Bạc - Tiền</value></data>
+  <data name="SilverMedal" xml:space="preserve"><value>Huy chương bạc</value></data>
+  <data name="HeartOfLoveItemsPlus7ToPlus9Money" xml:space="preserve"><value>Trái Tim Tình Yêu (Vật phẩm +7 đến +9) - Tiền</value></data>
+  <data name="HeartOfLoveItemsPlus7ToPlus9" xml:space="preserve"><value>Trái Tim Tình Yêu (Vật phẩm +7 đến +9)</value></data>
+  <data name="HeartOfLoveJewelsEtc" xml:space="preserve"><value>Trái tim tình yêu (Đồ trang sức, v.v.)</value></data>
+  <data name="FirecrackerItemsPlus7ToPlus9Money" xml:space="preserve"><value>Pháo (Vật phẩm +7 đến +9) - Tiền</value></data>
+  <data name="FirecrackerItemsPlus7ToPlus9" xml:space="preserve"><value>Pháo (Vật phẩm +7 đến +9)</value></data>
+  <data name="FirecrackerJewelsEtc" xml:space="preserve"><value>Pháo (Đồ trang sức, v.v.)</value></data>
+  <data name="StarOfTheSacredBirth" xml:space="preserve"><value>Ngôi sao của sự ra đời thiêng liêng</value></data>
+  <data name="FirecrackerDropEffect" xml:space="preserve"><value>Pháo - Hiệu ứng thả</value></data>
+  <data name="ChristmasFirecrackerDropEffect" xml:space="preserve"><value>Pháo Giáng Sinh - Hiệu Ứng Thả</value></data>
+  <data name="ChristmasStarDropEffect" xml:space="preserve"><value>Ngôi Sao Giáng Sinh - Hiệu Ứng Thả Giọt</value></data>
+  <data name="BlueRibbonBoxMoney" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Tiền</value></data>
+  <data name="BlueRibbonBoxExcellentItems" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="BlueRibbonBoxNormalItems" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Vật Phẩm Thông Thường</value></data>
+  <data name="GreenRibbonBoxMoney" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Tiền</value></data>
+  <data name="GreenRibbonBoxExcellentItems" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="GreenRibbonBoxNormalItems" xml:space="preserve"><value>Hộp Ruy Băng Xanh - Vật Phẩm Thông Thường</value></data>
+  <data name="RedRibbonBoxMoney" xml:space="preserve"><value>Hộp Ruy Băng Đỏ - Tiền</value></data>
+  <data name="DeepBlueCandyBoxMoney" xml:space="preserve"><value>Hộp Kẹo Xanh Đậm - Tiền</value></data>
+  <data name="BlueChocolateBoxExcellentItems" xml:space="preserve"><value>Hộp Sôcôla Xanh - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="BlueChocolateBoxMoney" xml:space="preserve"><value>Hộp Socola Xanh - Tiền</value></data>
+  <data name="VermilionCandyBoxMoney" xml:space="preserve"><value>Hộp Kẹo Son - Tiền</value></data>
+  <data name="VermilionCandyBoxExcellentItems" xml:space="preserve"><value>Hộp Kẹo Vermilion - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="VermilionCandyBoxNormalItems" xml:space="preserve"><value>Hộp Kẹo Son - Vật Phẩm Thường</value></data>
+  <data name="RedChocolateBoxMoney" xml:space="preserve"><value>Hộp Socola Đỏ - Tiền</value></data>
+  <data name="RedChocolateBoxExcellentItems" xml:space="preserve"><value>Hộp Sô Cô La Đỏ - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="RedChocolateBoxNormalItems" xml:space="preserve"><value>Hộp Socola Đỏ - Vật Phẩm Thông Thường</value></data>
+  <data name="LightPurpleCandyBoxMoney" xml:space="preserve"><value>Hộp Kẹo Tím Nhạt - Tiền</value></data>
+  <data name="LightPurpleCandyBoxExcellentItems" xml:space="preserve"><value>Hộp Kẹo Tím Nhạt - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="LightPurpleCandyBoxNormalItems" xml:space="preserve"><value>Hộp Kẹo Tím Nhạt - Vật Phẩm Thông Thường</value></data>
+  <data name="PinkChocolateBoxMoney" xml:space="preserve"><value>Hộp Socola Hồng - Tiền</value></data>
+  <data name="PinkChocolateBoxExcellentItems" xml:space="preserve"><value>Hộp Socola Hồng - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="PinkChocolateBoxNormalItems" xml:space="preserve"><value>Hộp Socola Hồng - Vật Phẩm Thông Thường</value></data>
+  <data name="ShiningJewelleryCaseJewels" xml:space="preserve"><value>Hộp đựng trang sức Shining - Jewels</value></data>
+  <data name="ShiningJewelleryCaseMoney" xml:space="preserve"><value>Hộp đựng trang sức sáng ngời - Tiền</value></data>
+  <data name="ElegantJewelleryCaseJewels" xml:space="preserve"><value>Hộp đựng trang sức thanh lịch - Jewels</value></data>
+  <data name="ElegantJewelleryCaseMoney" xml:space="preserve"><value>Hộp đựng trang sức thanh lịch - Tiền</value></data>
+  <data name="SteelJewelleryCaseJewels" xml:space="preserve"><value>Hộp đựng trang sức bằng thép - Jewels</value></data>
+  <data name="SteelJewelleryCaseMoney" xml:space="preserve"><value>Hộp đựng trang sức bằng thép - Tiền</value></data>
+  <data name="OldJewelleryCaseJewels" xml:space="preserve"><value>Hộp Đựng Trang Sức Cũ - Jewels</value></data>
+  <data name="OldJewelleryCaseMoney" xml:space="preserve"><value>Hộp Đựng Trang Sức Cũ - Tiền</value></data>
+  <data name="GoldenBoxExcellentItems" xml:space="preserve"><value>Hộp Vàng - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="GoldenBoxJewels" xml:space="preserve"><value>Hộp Vàng - Trang Sức</value></data>
+  <data name="GoldenBoxMoney" xml:space="preserve"><value>Hộp Vàng - Tiền</value></data>
+  <data name="SilverBoxExcellentItems" xml:space="preserve"><value>Hộp Bạc - Vật Phẩm Tuyệt Vời</value></data>
+  <data name="SilverBoxJewels" xml:space="preserve"><value>Hộp Bạc - Trang Sức</value></data>
+  <data name="SilverBoxMoney" xml:space="preserve"><value>Hộp Bạc - Tiền</value></data>
+</root>

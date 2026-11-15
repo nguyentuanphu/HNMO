@@ -206,4 +206,7 @@ hoặc sau tường lửa) và bạn muốn dùng nó trong máy tính hoặc m�
   <data name="ItemRequirementFormulaLevelBasisSummary" xml:space="preserve">
     <value>{0}: {1} + gốc × (cấp yêu cầu, hoặc cấp rơi + cấp × {2}) × {3} / 100</value>
   </data>
+  <data name="Excellent" xml:space="preserve"><value>Đồ hoàn hảo</value></data>
+  <data name="SocketAbbreviation" xml:space="preserve"><value>S</value></data>
+  <data name="ChatServerSummary" xml:space="preserve"><value>[ChatServerDefinition ServerID={0}, Mô tả={1}]</value></data>
 </root>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HenryN Mu Online Account</title>
+  <title>{game}</title>
   <style>
     [hidden] { display: none !important; }
     :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; --ok: #7cc98a; }
@@ -63,11 +63,12 @@
     .safety-facts { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   </style>
 </head>
-<body>
+<body data-page-label="Account">
   <main>
     <header>
-      <h1 data-game-name>HenryN Mu Online</h1>
+      <h1 data-game-name></h1>
       <a href="/">Play the game →</a>
+      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
     </header>
 
     <section class="panel notice" id="setupPanel" hidden>
@@ -108,7 +109,7 @@
       </form>
     </div>
 
-    <section class="panel" id="gift" aria-labelledby="giftTitle">
+    <section class="panel" id="gift" data-no-i18n aria-labelledby="giftTitle">
       <div class="gift-head">
         <h2 id="giftTitle" data-gt="title">Gift code</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-gift-lang="en">EN</button> <button type="button" data-gift-lang="vi">VI</button></div>
@@ -128,7 +129,7 @@
       <p class="message" id="giftMessage" role="status" aria-live="polite"></p>
     </section>
 
-    <section class="panel" id="resets" aria-labelledby="resetsTitle">
+    <section class="panel" id="resets" data-no-i18n aria-labelledby="resetsTitle">
       <div class="gift-head">
         <h2 id="resetsTitle" data-rt="title">Resets and stats</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-reset-lang="en">EN</button> <button type="button" data-reset-lang="vi">VI</button></div>
@@ -143,7 +144,7 @@
       <p class="message" id="resetsMessage" role="status" aria-live="polite"></p>
       <div class="reset-cards" id="resetCards"></div>
     </section>
-    <section class="panel" id="safety" aria-labelledby="safetyTitle">
+    <section class="panel" id="safety" data-no-i18n aria-labelledby="safetyTitle">
       <div class="gift-head">
         <h2 id="safetyTitle" data-st="title">Account safety</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-safety-lang="en">EN</button> <button type="button" data-safety-lang="vi">VI</button></div>
@@ -785,25 +786,6 @@
     });
     applyLanguage();
   </script>
-  <script>
-    // The game's name from the admin panel (the "Game name" plug-in), else the default above.
-    fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
-      const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
-      if (d && d.links) {
-        const labels = { zalo: 'Zalo', discord: 'Discord', facebook: 'Facebook' };
-        for (const box of document.querySelectorAll('[data-community-links]')) {
-          const found = Object.entries(d.links).filter(([kind, url]) => labels[kind] && typeof url === 'string' && url.startsWith('https://'));
-          if (!found.length) continue;
-          box.hidden = false;
-          box.replaceChildren(document.createTextNode(box.dataset.communityLinks || 'Contact: '), ...found.map(([kind, url]) => {
-            const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = labels[kind]; a.style.marginRight = '10px'; return a;
-          }));
-        }
-      }
-      if (!name) return;
-      document.title = document.title.replace('HenryN Mu Online', name);
-      for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = (e.dataset.gameName || '{game}').replaceAll('{game}', name);
-    }).catch(() => {});
-  </script>
+  <script type="module" src="/js/siteLanguage.js"></script>
 </body>
 </html>

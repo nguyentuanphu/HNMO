@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="OpenSourceClientNetworkEncryptionFactoryPlugIn_Name" xml:space="preserve"><value>Mã hóa mạng - Phần 6 Tập 3, Máy khách nguồn mở</value></data>
+  <data name="OpenSourceClientNetworkEncryptionFactoryPlugIn_Description" xml:space="preserve"><value>Một plugin cung cấp bộ mã hóa và giải mã mạng cho ứng dụng khách trò chơi nguồn mở tiếng Anh của phần 6 tập 3, phiên bản 2.04d</value></data>
+  <data name="PreSeason6NetworkEncryptionFactoryPlugIn_Name" xml:space="preserve"><value>Mã hóa mạng - Trước Phần 6</value></data>
+  <data name="PreSeason6NetworkEncryptionFactoryPlugIn_Description" xml:space="preserve"><value>Một plugin cung cấp bộ mã hóa và giải mã mạng cho ứng dụng khách trò chơi trước phần 6.</value></data>
+  <data name="Season6Episode3NetworkEncryptionFactoryPlugIn_Name" xml:space="preserve"><value>Mã Hóa Mạng - Phần 6 Tập 3, 1.04d, ENG</value></data>
+  <data name="Season6Episode3NetworkEncryptionFactoryPlugIn_Description" xml:space="preserve"><value>Một plugin cung cấp bộ mã hóa và giải mã mạng cho ứng dụng khách trò chơi tiếng Anh của phần 6 tập 3, phiên bản 1.04d</value></data>
+  <data name="Version075NetworkEncryptionFactoryPlugIn_Name" xml:space="preserve"><value>Mã hóa mạng - 0,75</value></data>
+  <data name="Version075NetworkEncryptionFactoryPlugIn_Description" xml:space="preserve"><value>Một plugin cung cấp bộ mã hóa và giải mã mạng cho máy khách trò chơi phiên bản 0.75 (phiên bản máy chủ 0.65)</value></data>
+</root>

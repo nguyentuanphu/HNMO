@@ -423,4 +423,8 @@
   <data name="PlayerShopCurrenciesConfiguration_MaximumCoinAmount_Description" xml:space="preserve">
     <value>Số coin tài khoản tối đa của một mức giá.</value>
   </data>
+  <data name="DoppelgangerPathArea_X1_Caption" xml:space="preserve"><value>X1</value></data>
+  <data name="DoppelgangerPathArea_Y1_Caption" xml:space="preserve"><value>Y1</value></data>
+  <data name="DoppelgangerPathArea_X2_Caption" xml:space="preserve"><value>X2</value></data>
+  <data name="DoppelgangerPathArea_Y2_Caption" xml:space="preserve"><value>Y2</value></data>
 </root>
