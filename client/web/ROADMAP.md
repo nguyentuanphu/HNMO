@@ -179,8 +179,14 @@ the coins history shows every grant.
    extra for the master). State in `save/world-bosses.json` (no database change). Still to check on a server running
    this code: a real kill with several players and a week's payout (the rules are unit-tested; the web parts are tested
    with fed packets).
-5. ⏳ **Onboarding** (idea 3): a guided first half hour (talk to the NPCs, walk, fight, first potion,
-   first skill, first party, first event) with a starter kit, shown in the web game; skippable.
+5. ✅ **Onboarding** (idea 3), built 2026-11-15 (Sydney): a guided first half hour for new characters (talk to a merchant,
+   defeat monsters, a potion, levels, stat points, a skill, the missions window, a party, the cash shop; walk to a spot and
+   enter a map as examples), every step checked by the server with its own reward and a final reward, optional steps,
+   skippable (with a confirmation); a starter kit per new character or per account (items with options and class items,
+   zen, coins, stat points, an EXP buff), each piece on/off; bag-full rewards wait. All in the admin panel (*Onboarding and
+   starter kit*), the guide panel (Y) with an arrow and chat notices in the web game, and a New players section on the
+   website. State in `save/onboarding.json` (no database change). Still to check on a server running this code: a new
+   character's whole guide (the rules are unit-tested; the web parts are tested with fed packets).
 6. ⏳ **Guilds** (idea 6): guild levels from the members' play, small guild buffs, a weekly guild ladder,
    the castle siege results and the guild ladder on the website.
 7. ⏳ **Community** (idea 7): one-time coins for linking Discord or Zalo and joining the group, coins
