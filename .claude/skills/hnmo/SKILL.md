@@ -168,8 +168,9 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   Chromium can't store downloads. Remove merged worktrees and old package folders in the scratchpad.
 - **Plug-in settings saved by the admin panel** use `$id` / `$values` markers; read them with
   `PlugInSettings.ReadActiveAsync` (drops them). A plug-in with no saved row is active with its defaults.
-- **Owner choices:** every coin reward is set in the admin panel; decisions in a pop-up; the cash shop
-  plan (idea 8) waits for the owner's answer.
+- **Owner choices:** every coin reward is set in the admin panel; decisions in a pop-up. The cash shop
+  stays as it is: fairness comes from every coin also being earnable by playing (answered 2026-11-15).
+  Sign-up: the normal website registration stays; Google sign-in is optional, never required.
 
 ## Missions (2026-11-15)
 - HNMO's own client/server messages live in the F5 group (`ChatCommandGroupHandlerPlugIn.GroupKey`): Discord 02-07,

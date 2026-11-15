@@ -180,8 +180,10 @@ the coins history shows every grant.
 7. ⏳ **Community** (idea 7): one-time coins for linking Discord or Zalo and joining the group, coins
    for community events, automatic posts of rare drops and boss kills (Discord), a share button for
    screenshots.
-8. ⏳ **A fair cash shop** (idea 8): cosmetics, convenience and a season pass instead of power items; a
-   review of the catalog with the owner first (which items are "power").
+8. ✅ **Cash shop: decided by the owner (2026-11-15)** — the shop stays as it is; what makes it fair is that
+   every coin can also be earned by playing (bosses, drops, events, missions, online time, milestones,
+   invites, the login calendar, rankings, community), each source set in the admin panel. No items are
+   taken out of the shop.
 
 ## 13. What the popular Vietnamese servers offer (the owner asked on 2026-11-15, Sydney time)
 
