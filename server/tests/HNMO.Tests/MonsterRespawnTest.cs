@@ -36,8 +36,9 @@ public class MonsterRespawnTest
         await monster.ReflectDamageAsync(killer, 1_000_000).ConfigureAwait(false);
         Assert.That(monster.IsAlive, Is.False);
 
+        // A respawning monster is alive a moment before it's back on the map: wait for both.
         var deadline = DateTime.UtcNow.AddSeconds(10);
-        while (!monster.IsAlive && DateTime.UtcNow < deadline)
+        while (!(monster.IsAlive && monster.CurrentMap.GetNpcsInRange(SpawnPoint, 1).Contains(monster)) && DateTime.UtcNow < deadline)
         {
             await Task.Delay(50).ConfigureAwait(false);
         }
