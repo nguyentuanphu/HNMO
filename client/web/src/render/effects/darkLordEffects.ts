@@ -18,7 +18,7 @@
 import * as THREE from 'three';
 import { createAngle, createAngle2D, randInt, rotateByAngle, turnAngle2 } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, PREWARM_LOADS } from './extraEffects.js';
 import type { Effect, EffectOwner, Joint } from './types.js';
 import { computeBoneMatrices, loadModel, loadTexture } from '../../bmd.js';
 import type { BMDModel } from '../../formats.js';
@@ -589,6 +589,9 @@ function shadowBody(): Promise<void> {
     .catch(() => { /* no shards */ });
   return shadowLoad;
 }
+
+// Loaded when the effects are warmed (EffectSystem.prewarm), so the first cancel finds it.
+PREWARM_LOADS.push(shadowBody);
 
 /** b->SpawnMeshEffects(0, MODEL_SKIN_SHELL, sub): one shard in eight of mesh 0's corners, on the target's body. */
 function skinShells(system: EffectSystem, target: EffectOwner, sub: number): void {

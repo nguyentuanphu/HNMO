@@ -25,7 +25,7 @@ import {
 import type { BitmapName } from './core.js';
 import { QuadBatches, applyBlend } from './quadBatch.js';
 import type { Blend, HeightAt } from './quadBatch.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES, PREWARM_LOADS } from './extraEffects.js';
 import type {
   Effect, EffectOwner, EffectType, Joint, JointBlend, JointType, Particle, ParticleType, Sprite, SpriteType, Tail,
 } from './types.js';
@@ -1367,6 +1367,7 @@ export class EffectSystem {
    */
   async prewarm(warm: (object: THREE.Object3D) => Promise<void>, stillWanted: () => boolean = () => true): Promise<number> {
     await this.ready;
+    await Promise.all(PREWARM_LOADS.map((load) => load()));
     const files = new Map<string, [string, string, number, Effect['renderType']]>();
     const add = (type: EffectType, file: [string, string]): void => {
       const blend = PREWARM_BLEND_MESH[type] ?? -1;
@@ -1378,7 +1379,7 @@ export class EffectSystem {
     await preloadEffectTextures(Object.keys(BITMAPS) as BitmapName[]);
     const batches = new THREE.Group();
     for (const name of Object.keys(BITMAPS) as BitmapName[]) {
-      for (const blend of ['glow', 'alpha', 'subtract'] as Blend[]) {
+      for (const blend of (name === 'advSmoke2' ? ['blend3'] : ['glow', 'alpha', 'subtract']) as Blend[]) {
         const mesh = this.quads.prepare(name, blend);
         if (mesh) batches.add(new THREE.Mesh(PREWARM_QUAD, mesh.material));
       }

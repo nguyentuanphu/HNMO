@@ -46,3 +46,6 @@ export interface ExtraParticle {
 export const EXTRA_EFFECTS: Partial<Record<EffectType, ExtraEffect>> = {};
 export const EXTRA_JOINTS: Partial<Record<JointType, ExtraJoint>> = {};
 export const EXTRA_PARTICLES: Partial<Record<ParticleType, ExtraParticle>> = {};
+
+/** Loads the effect types need before their first use (run by EffectSystem.prewarm). */
+export const PREWARM_LOADS: (() => Promise<void>)[] = [];
