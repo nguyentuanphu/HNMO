@@ -44,6 +44,8 @@ const WIZARD: Case[] = [
   { skill: 6, name: 'teleport', expect: ['effect:spark3', 'particle:spark3'], shotAt: 150 },
   { skill: 38, name: 'decay', expect: ['effect:fireModel', 'joint:smokeTrail'], shotAt: 1000, area: true },
   { skill: 40, name: 'nova', expect: ['joint:jointSpirit'], shotAt: 750 },
+  // Players only: the swell stands on the hero.
+  { skill: 233, name: 'expansion-of-wizardry', expect: ['effect:swellOfMagicPower', 'effect:shockWave', 'effect:twlight', 'effect:arrowsre6', 'joint:twoLineGhost'], shotAt: 520, model: 'swellOfMagicPower', warm: [['Effect', 'magic_powerup.bmd'], ['Effect', 'arrowsre06.bmd']] },
   { skill: 13, name: 'cometfall', expect: ['effect:skillBlast', 'joint:jointEnergy', 'particle:shiny4', 'particle:explosion', 'effect:stone1'], shotAt: 560, area: true, model: 'skillBlast', warm: [['Skill', 'Blast01.bmd']] },
   // Last: its lights circle the hero while the buff lasts (here, until the page closes).
   { skill: 16, name: 'soul-barrier', expect: ['joint:spearSkill'], shotAt: 1200 },
@@ -92,6 +94,7 @@ const LORD: Case[] = [
   { skill: 62, name: 'earthshake', expect: ['effect:darkHorseSkill', 'effect:shockWave', 'effect:skillFuryStrike', 'effect:earthQuake1'], shotAt: 1040, action: 87, warm: [['Skill', 'GroundStone.bmd'], ['Skill', 'GroundStone2.bmd']] },
   // Released at key 3 of PLAYER_ATTACK_STRIKE: the burning trail flies at the target.
   { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
+  { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
   { skill: 67, name: 'stun', expect: ['joint:flash'], shotAt: 680 },
   { skill: 68, name: 'cancel-stun', expect: ['joint:flash'], shotAt: 700, other: true },
   { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },
@@ -103,6 +106,7 @@ const SUMMONER: Case[] = [
   { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy'], shotAt: 1000 },
   // Its links come with the server's ChainLightningHitInfo, fed to the game here.
   { skill: 215, name: 'chain-lightning', expect: ['effect:chainLightning', 'joint:jointThunder', 'particle:light'], shotAt: 200, chain: true },
+  { skill: 45, name: 'lance', expect: ['effect:skillJavelin', 'particle:poundingBall'], shotAt: 1000, model: 'skillJavelin', warm: [['Skill', 'Javelin.bmd']] },
   { skill: 230, name: 'lightning-shock', expect: ['effect:lightningShock', 'particle:lightningMega', 'effect:magic', 'effect:damage01Mono'], shotAt: 240 },
   { skill: 219, name: 'sleep', expect: ['effect:aliceBuffSkillEffect', 'effect:aliceBuffSkillEffect2', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
   { skill: 218, name: 'berserker', expect: ['effect:aliceBuffSkillEffect', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },

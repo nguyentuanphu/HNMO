@@ -489,6 +489,18 @@ export class EffectSystem {
           o.scale = scale * (randInt(64) + 64) * 0.01;
           return true;
         }
+        if (o.subType === 7 || o.subType === 8) { // flames that rise, turn and shrink (Fire Scream's)
+          o.lifeTime = 33;
+          o.scale = -randInt(20) / 100 + o.scale;
+          o.rotation = randInt(360) - 180;
+          o.startPosition.x = o.position.x;
+          o.position.x += (randInt(2) / 2) * o.scale;
+          o.gravity = (randInt(100) / 100 + 1.8) * o.scale;
+          const side = randInt(10) >= 3 ? (randInt(20) / 10 - 1) * o.scale : 0;
+          o.velocity.set(0, side, 0);
+          o.position.y += o.position.x - o.startPosition.x;
+          return true;
+        }
         return false;
       case 'light': // BITMAP_LIGHT
         if (o.subType === 4) { // on a bone of its owner (the Swell Life buff); the scale is the bone
@@ -611,6 +623,13 @@ export class EffectSystem {
         break;
       case 'flame':
         if (o.lifeTime <= 0) o.live = false;
+        if (o.subType === 7 || o.subType === 8) {
+          o.rotation += o.startPosition.x < o.position.x ? 2 : -2;
+          o.position.z += o.subType === 8 ? o.gravity / 2 : o.gravity;
+          o.scale -= o.gravity / 95;
+          if (o.scale <= 0) o.live = false;
+          o.light.multiplyScalar(1 / 1.007);
+        }
         break;
       case 'light':
         // SubType 4 rises from its owner's bone; 5 and 6 drift, shrink and fade.

@@ -125,6 +125,11 @@ export type EffectType =
   | 'blowOfDestruction' // MODEL_BLOW_OF_DESTRUCTION: Strike of Destruction (no model)
   | 'nightWater1' // MODEL_NIGHTWATER_01: its water splashes (Effect/nightwater01.bmd)
   | 'knightPlancrackA' | 'knightPlancrackB' // its ground cracks (Effect/knight_plancrack_a/b.bmd)
+  | 'darkScream' | 'darkScreamFire' // MODEL_DARK_SCREAM(_FIRE): Fire Scream's claws (Skill/darkfirescrem02/01.bmd)
+  | 'skillJavelin' // MODEL_SKILL_JAVELIN: Lance (Skill/Javelin.bmd)
+  | 'swellOfMagicPower' // MODEL_SWELL_OF_MAGICPOWER: Expansion of Wizardry (Effect/magic_powerup.bmd)
+  | 'arrowsre6' // MODEL_ARROWSRE06: its hand flashes (Effect/arrowsre06.bmd)
+  | 'twlight' // BITMAP_TWLIGHT: its twilight ring
   | 'raklionBossCrackEffect'; // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
@@ -140,6 +145,7 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'fire2' // BITMAP_FIRE+1: Fire Burst's trails' fire
   | 'smokeLine1' // BITMAP_SMOKELINE1: the smoke lines rising from Increase Attack's fists
   | 'shiny4' // BITMAP_SHINY+4 (ring.jpg): Cometfall's ring where a comet lands
+  | 'poundingBall' // BITMAP_POUNDING_BALL: Lance's trail
   | 'waterfall5' | 'waterfall3'; // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
 
 /** CreateSprite types: the bitmap drawn. */

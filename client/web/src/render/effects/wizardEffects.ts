@@ -84,3 +84,81 @@ export function cometfall(system: EffectSystem, caster: EffectOwner, cell: { x: 
   for (let i = 0; i < 2; i++) system.createEffect('skillBlast', position, caster.angle, caster.light ?? WHITE, 0, caster);
 }
 
+
+// ---------------------------------------------------------------------------
+// Expansion of Wizardry (AT_SKILL_EXPANSION_OF_WIZARDRY): MODEL_SWELL_OF_MAGICPOWER (45 ticks) stands on the
+// wizard: rings of light (BITMAP_SHOCK_WAVE 14, BITMAP_TWLIGHT 3) at its 45th, 35th and 25th tick, purple streaks
+// (BITMAP_2LINE_GHOST 1) while it is young, flashes at both hands (MODEL_ARROWSRE06 1) at the start and lights on
+// every bone in its last twenty ticks. Players only.
+// ---------------------------------------------------------------------------
+
+/** The player model's hands (Bip01 R Hand, Bip01 L Hand). */
+const HANDS = [28, 37] as const;
+
+EXTRA_EFFECTS.swellOfMagicPower = {
+  model: ['Effect', 'magic_powerup.bmd'],
+  create: (o) => {
+    if (o.subType !== 0 || !o.owner) return false;
+    o.blendMesh = 0; // mesh 0 glows; the body light is 0.7 0.4 0.9 (RenderObject)
+    o.light.set(0.7, 0.4, 0.9);
+    return true;
+  },
+  move: (o, system) => {
+    const owner = o.owner;
+    if (!live(owner)) return true;
+    o.position.copy(owner.position);
+    o.direction.set(0, 0, 0);
+    const tick = Math.trunc(o.lifeTime);
+    if (tick === 45 || tick === 35 || tick === 25) {
+      const ring = new THREE.Vector3(0.4, 0.3, 0.9);
+      system.createEffect('shockWave', o.position, o.angle, ring, 14, owner, 5);
+      system.createEffect('shockWave', o.position, o.angle, ring, 14, owner, 5);
+      system.createEffect('twlight', o.position, o.angle, ring, 3, owner, 6);
+    }
+    if (o.lifeTime <= 20) {
+      const light = new THREE.Vector3(0.7, 0.3, 0.9).multiplyScalar(o.lifeTime * 0.05);
+      const bones = owner.boneCount?.() ?? 0;
+      for (let i = 0; i < bones; i++) {
+        const p = owner.bonePosition?.(i);
+        if (p) system.createSprite('light', p, 1.5, light, owner);
+      }
+      o.blendMeshLight *= 0.86;
+    }
+    if (tick === 45) {
+      for (const bone of HANDS) {
+        const p = owner.bonePosition?.(bone) ?? owner.position;
+        system.createEffect('arrowsre6', p, o.angle, new THREE.Vector3(0.2, 0.2, 0.9), 1, owner, 0, { pkKey: bone });
+      }
+    }
+    if (o.lifeTime >= 30) {
+      for (let i = 0; i < 2; i++) system.createJoint('twoLineGhost', o.position, o.position, o.angle, 1, o.self, 20 + randInt(10), 0, 0, new THREE.Vector3(0.3, 0.2, 0.9));
+    }
+    return true;
+  },
+};
+
+// MODEL_ARROWSRE06 SubType 1 (the catalogue: LifeTime 40): a flash on a hand's bone that swells for 25 ticks, then
+// shrinks, with a light; drawn with its glowing mesh in its light, which fades in the last ten ticks.
+EXTRA_EFFECTS.arrowsre6 = {
+  model: ['Effect', 'arrowsre06.bmd'],
+  create: (o) => {
+    if (o.subType !== 1 || !o.owner) return false;
+    o.blendMesh = 0;
+    return true;
+  },
+  move: (o, system) => {
+    const owner = o.owner;
+    if (live(owner)) o.position.copy(owner.bonePosition?.(o.pkKey) ?? owner.position);
+    o.scale *= o.lifeTime >= 15 ? 1.05 : 0.95;
+    system.createSprite('light', o.position, o.scale, o.light, owner);
+    if (o.lifeTime <= 10) o.blendMeshLight *= 0.8;
+    o.direction.set(0, 0, 0);
+    return true;
+  },
+};
+
+/** ReceiveMagic AT_SKILL_EXPANSION_OF_WIZARDRY: the swell on the wizard (players only). */
+export function expansionOfWizardry(system: EffectSystem, caster: EffectOwner): void {
+  if ((caster.boneCount?.() ?? 0) === 0) return;
+  system.createEffect('swellOfMagicPower', caster.position, caster.angle, new THREE.Vector3(0.3, 0.2, 0.9), 0, caster);
+}

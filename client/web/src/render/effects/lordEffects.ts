@@ -71,6 +71,16 @@ EXTRA_EFFECTS.swordForce = {
 EXTRA_JOINTS.jointForce = {
   init: (o) => {
     if (o.subType === 2 || o.subType === 4) return jointForceRayInit(o);
+    if (o.subType === 7) { // Fire Scream's inferno ribbon along the ground
+      o.velocity = 10;
+      o.direction.set(3.5, 0, 1);
+      o.maxTails = 13;
+      o.numTails = -1;
+      o.counter = 5;
+      o.texture = 'inferno';
+      o.lifeTime = 20;
+      return true;
+    }
     if (o.subType !== 0) return false;
     o.lifeTime = 20;
     o.createTails = false;
@@ -86,6 +96,14 @@ EXTRA_JOINTS.jointForce = {
   move: (o, system) => {
     if (o.subType === 2 || o.subType === 4) {
       jointForceRayMove(o, system);
+      return;
+    }
+    if (o.subType === 7) {
+      o.velocity += o.direction.z;
+      o.direction.z += o.lifeTime < 20 ? 0.5 : o.direction.x;
+      if (o.numTails >= o.maxTails - 1) o.createTails = false;
+      if (o.lifeTime < o.counter) o.light.multiplyScalar(1 / 1.3);
+      o.position.z = system.heightAt(o.position.x, o.position.y) + 3;
       return;
     }
     const p = new THREE.Vector3(0, -145, 0);

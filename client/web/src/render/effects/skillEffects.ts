@@ -17,14 +17,14 @@ import * as THREE from 'three';
 import { createAngle2D, randInt } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
-import { summonerCurse } from './summonerEffects.js';
+import { lance, summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
-import { LordAction, chaoticDiseier, earthshake, electricSpike, siegeSkill } from './darkLordEffects.js';
+import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, siegeSkill } from './darkLordEffects.js';
 import { spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
 import { playBuffLook } from './buffLooks.js';
-import { cometfall } from './wizardEffects.js';
+import { cometfall, expansionOfWizardry } from './wizardEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -92,6 +92,9 @@ export const SkillEffect = {
   COMETFALL: 13,
   STRIKE_OF_DESTRUCTION: 232,
   MANA_RAYS: 73,
+  FIRE_SCREAM: 78,
+  EXPANSION_OF_WIZARDRY: 233,
+  LANCE: 45,
   STUN: 67,
   CANCEL_STUN: 68,
   SWELL_MANA: 69,
@@ -184,6 +187,10 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
   }
   if (skill === SkillEffect.INFINITY_ARROW) { // ReceiveMagic: the quiver's light and rings at once
     system.createEffect('infinityArrow', caster.position, caster.angle, caster.light ?? WHITE, 0, caster);
+    return true;
+  }
+  if (skill === SkillEffect.EXPANSION_OF_WIZARDRY) { // ReceiveMagic: the swell at once, no attack follows
+    expansionOfWizardry(system, caster);
     return true;
   }
   if (skill === SkillEffect.MULTI_SHOT) {
@@ -459,6 +466,9 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
     case SkillEffect.FIRE_BURST:
       fireBurst(system, caster, target);
       break;
+    case SkillEffect.LANCE: // AT_SKILL_JAVELIN
+      lance(system, caster, target);
+      break;
     case SkillEffect.MANA_RAYS: // AT_SKILL_DEATH_CANNON
       manaRays(system, caster);
       break;
@@ -578,6 +588,9 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.STRIKE_OF_DESTRUCTION: // the blow aimed at the struck tile (c->SkillX, SkillY)
       strikeOfDestruction(system, caster, options.cell, null);
+      break;
+    case SkillEffect.FIRE_SCREAM: // three burning claws race ahead (before the target check)
+      fireScream(system, caster);
       break;
     case SkillEffect.COMETFALL: // AT_SKILL_BLAST: two comets fall on the tile
       if (options.cell) cometfall(system, caster, options.cell);

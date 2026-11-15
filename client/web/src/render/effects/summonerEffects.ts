@@ -621,3 +621,80 @@ export function summonerCurse(system: EffectSystem, at: THREE.Vector3, angle: TH
   system.createEffect('pinLight', at, angle, light, 0, null, 1);
 }
 
+
+// ---------------------------------------------------------------------------
+// Lance (AT_SKILL_JAVELIN): three lances (MODEL_SKILL_JAVELIN SubTypes 0-2) spin out over the caster, each turned
+// aside by up to 90 degrees, then home in on the target 150 over its feet, dropping pounding balls.
+// Followed: MoveCharacter's release AT_SKILL_JAVELIN (ZzzCharacter.cpp); CreateEffect MODEL_SKILL_JAVELIN (the owner
+// is the target; MoveEffect leaves its move to it) (ZzzEffect.cpp); Move_MODEL_SKILL_JAVELIN (MoveHandlers.cpp);
+// RenderObject (body light 1 0.6 0.3, then a bright chrome pass) (ZzzObject.cpp); BITMAP_POUNDING_BALL SubType 1
+// (ZzzEffectParticle.cpp).
+// ---------------------------------------------------------------------------
+
+EXTRA_EFFECTS.skillJavelin = {
+  model: ['Skill', 'Javelin.bmd'],
+  create: (o) => {
+    const target = o.owner;
+    if (!target) return false;
+    o.lifeTime = 35;
+    o.gravity = 2;
+    o.velocity = 10;
+    o.scale = 1.2;
+    o.direction.set(0, -5, 0);
+    o.headAngle.copy(o.angle);
+    o.startPosition.copy(target.position);
+    o.position.z += 150;
+    const turn = randInt(80) + 10;
+    o.headAngle.z += o.subType * turn - turn;
+    o.light.set(1, 0.6, 0.3); // its body light
+    return true;
+  },
+  move: (o, system) => {
+    if (o.owner) o.startPosition.copy(o.owner.position).setZ(o.owner.position.z + 150);
+    o.scale += 0.015;
+    if (o.lifeTime < 25) {
+      if (o.lifeTime < 20) {
+        const distance = moveHumming(o.position, o.headAngle, o.startPosition, o.velocity);
+        if (distance < 100) {
+          o.position.copy(o.startPosition);
+          o.scale += 0.04;
+          if (Math.trunc(o.lifeTime) % 3 === 0) system.createParticle('poundingBall', o.position, o.angle, o.light, 1);
+        } else {
+          system.createParticle('poundingBall', o.position, o.angle, o.light, 1);
+        }
+      }
+      o.velocity += 1.5;
+      o.position.add(rotateByAngle(o.direction, o.headAngle));
+      o.gravity = randInt(30) + 30;
+      if (o.direction.y > -50) o.direction.y -= 8;
+    } else {
+      o.gravity += 10;
+      o.position.add(rotateByAngle(o.direction, o.headAngle));
+    }
+    o.angle.z += o.gravity;
+    o.blendMeshLight = o.lifeTime / 10;
+    o.alpha = o.blendMeshLight;
+    return false; // MoveEffect has no shared move for it
+  },
+};
+
+// BITMAP_POUNDING_BALL SubType 1: a grey ball drifting off (its move case never runs: the desktop tests SubType 0
+// and 1 at once).
+EXTRA_PARTICLES.poundingBall = {
+  texture: 'poundingBall',
+  init: (o) => {
+    if (o.subType !== 1) return false;
+    o.lifeTime = 15;
+    o.velocity.set(0, -(randInt(16) + 32) * 0.1, 0);
+    o.scale = (randInt(128) + 128) * 0.01;
+    o.rotation = randInt(360);
+    o.light.set(0.5, 0.5, 0.5);
+    return true;
+  },
+  move: () => undefined,
+};
+
+/** Lance's release: three lances from the caster at the target. */
+export function lance(system: EffectSystem, caster: EffectOwner, target: EffectOwner): void {
+  for (let sub = 0; sub < 3; sub++) system.createEffect('skillJavelin', caster.position, caster.angle, caster.light ?? WHITE, sub, target);
+}

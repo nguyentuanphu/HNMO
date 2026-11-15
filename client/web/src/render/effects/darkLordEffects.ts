@@ -16,7 +16,7 @@
 //                                                                          Render/Effects/ZzzEffectJoint.cpp
 
 import * as THREE from 'three';
-import { randInt, rotateByAngle } from './core.js';
+import { createAngle, createAngle2D, randInt, rotateByAngle, turnAngle2 } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
 import type { Effect, EffectOwner, Joint } from './types.js';
@@ -285,12 +285,23 @@ EXTRA_EFFECTS.darkHorseSkill = {
 // BITMAP_SHOCK_WAVE SubType 0: a ring on the ground 20 cells wide that shrinks by one a tick.
 EXTRA_EFFECTS.shockWave = {
   create: (o) => {
+    if (o.subType === 14) { // Expansion of Wizardry's ring around the wizard (the call's scale): it fades in and out
+      o.lifeTime = 30;
+      o.alpha = 0;
+      o.pkKey = 0;
+      o.startPosition.copy(o.light); // EyeRight: the full colour
+      return o.owner !== null;
+    }
     if (o.subType !== 0) return false;
     o.lifeTime = 30;
     o.scale = 20;
     return true;
   },
   move: (o) => {
+    if (o.subType === 14) {
+      twilightRing(o, 0.15);
+      return true;
+    }
     o.scale -= 1;
     return true;
   },
@@ -355,6 +366,20 @@ export function chaoticDiseier(system: EffectSystem, caster: EffectOwner, target
 // smoke; subtracted (RENDER_TYPE_ALPHA_BLEND_MINUS).
 EXTRA_JOINTS.twoLineGhost = {
   init: (o, system) => {
+    if (o.subType === 1) { // Expansion of Wizardry's purple streaks: from 300 around, curving in to the wizard
+      o.lifeTime = 25 + randInt(10);
+      o.maxTails = 15;
+      o.velocity = 20 + randInt(10);
+      o.targetPosition.copy(o.position);
+      const around = rotateByAngle(new THREE.Vector3(0, 300, 0), new THREE.Vector3(0, 0, randInt(360)));
+      o.position.x += around.x;
+      o.position.y += around.y;
+      o.position.z = randInt(100) + 200;
+      o.targetPosition.z = o.position.z - (randInt(100) - 100) * (randInt(2) === 0 ? 1 : -1);
+      o.direction.copy(o.targetPosition).sub(o.position);
+      o.angle.z = createAngle2D(o.position, o.targetPosition);
+      return true;
+    }
     if (o.subType !== 0) return false;
     o.blend = 'subtract';
     o.velocity = 40 + randInt(20);
@@ -369,6 +394,14 @@ EXTRA_JOINTS.twoLineGhost = {
     return true;
   },
   move: (o, system) => {
+    if (o.subType === 1) {
+      const heading = createAngle2D(o.position, o.targetPosition);
+      o.angle.z = heading - 65;
+      const distance = Math.hypot(o.position.x - o.targetPosition.x, o.position.y - o.targetPosition.y);
+      if (distance > 60) o.angle.x = turnAngle2(o.angle.x, 360 - createAngle(o.position.z, distance, o.targetPosition.z, 0), 3);
+      else o.angle.z = heading - 90;
+      return;
+    }
     o.angle.z += Math.trunc(o.lifeTime) % 16 <= 7 ? 10 : -10;
     system.createParticle('smoke', o.position, o.angle, o.light, 59, 1);
   },
@@ -572,3 +605,90 @@ export function siegeSkill(system: EffectSystem, skill: number, caster: EffectOw
       break;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Fire Scream (AT_SKILL_FIRE_SCREAM): three burning claws (MODEL_DARK_SCREAM on the ground, MODEL_DARK_SCREAM_FIRE
+// glowing over it) race ahead of the lord, 80 to either side turned 10 degrees out, each with an inferno ribbon
+// (BITMAP_JOINT_FORCE SubType 7) and shedding flames (BITMAP_FLAME SubType 8).
+// Followed: MoveCharacter's release AT_SKILL_FIRE_SCREAM (ZzzCharacter.cpp); CreateEffect's arrow case for
+// MODEL_DARK_SCREAM(_FIRE) (ZzzEffect.cpp); Move_MODEL_DARK_SCREAM_FIRE (MoveHandlers.cpp); RenderObject (the claw
+// plain, the fire RENDER_BRIGHT) (ZzzObject.cpp); BITMAP_JOINT_FORCE SubType 7 (ZzzEffectJoint.cpp); BITMAP_FLAME
+// SubType 8 (ZzzEffectParticle.cpp).
+// ---------------------------------------------------------------------------
+
+function darkScream(file: string, fire: boolean): NonNullable<typeof EXTRA_EFFECTS.darkScream> {
+  return {
+    model: ['Skill', file],
+    create: (o, system) => {
+      o.velocity = 1;
+      o.lifeTime = 19;
+      o.position.add(rotateByAngle(new THREE.Vector3(-10, -60, 135), o.angle));
+      o.scale = 2.3;
+      o.direction.set(0, -35, 0);
+      if (fire) {
+        o.blendMesh = -2; // RENDER_BRIGHT
+        return true;
+      }
+      o.scale = 0.9;
+      o.position.z = system.heightAt(o.position.x, o.position.y) + 3;
+      if (o.subType === 0) system.createJoint('jointForce', o.position, o.position, o.angle, 7, o.self, 150, 40);
+      o.position.z += 20;
+      o.position.add(rotateByAngle(new THREE.Vector3(0, -20, 0), o.angle));
+      return true;
+    },
+    move: (o, system) => {
+      o.scale -= fire ? 0.14 : 0.04;
+      if (o.scale < 0.1) o.scale = 0;
+      o.position.z = system.heightAt(o.position.x, o.position.y) + 3;
+      system.createParticle('flame', o.position, o.angle, o.light, 8, (o.scale - 0.4) * 3.5);
+      return true;
+    },
+  };
+}
+EXTRA_EFFECTS.darkScream = darkScream('darkfirescrem02.bmd', false);
+EXTRA_EFFECTS.darkScreamFire = darkScream('darkfirescrem01.bmd', true);
+
+/** Fire Scream's release: the claws ahead, then 80 to the right turned 10 out, then 80 to the left turned 10 out. */
+export function fireScream(system: EffectSystem, caster: EffectOwner): void {
+  const light = caster.light ?? WHITE;
+  for (const [x, turn] of [[0, 0], [80, 10], [-80, -10]] as const) {
+    const angle = caster.angle.clone();
+    angle.z += turn;
+    const position = rotateByAngle(new THREE.Vector3(x, 0, 0), angle).add(caster.position);
+    system.createEffect('darkScream', position, angle, light, 0, caster);
+    system.createEffect('darkScreamFire', position, angle, light, 0, caster);
+  }
+}
+
+/** BITMAP_SHOCK_WAVE 14 / BITMAP_TWLIGHT 3: follows its owner, shrinks, and its light (EyeRight) rises and falls by tenths. */
+function twilightRing(o: Effect, shrink: number): void {
+  if (o.owner) o.position.copy(o.owner.position);
+  o.scale -= shrink;
+  if (o.lifeTime >= 20) {
+    o.alpha += 0.1;
+    o.pkKey += 1;
+  } else if (o.lifeTime <= 10) {
+    o.pkKey -= 1;
+    o.alpha -= 0.1;
+  }
+  if (o.lifeTime >= 20 || o.lifeTime <= 10) o.light.copy(o.startPosition).multiplyScalar(o.pkKey * 0.1);
+  o.direction.set(0, 0, 0);
+}
+
+// BITMAP_TWLIGHT SubType 3 (the catalogue gives LifeTime 30, Alpha 0): a turning ring of twilight on the ground.
+EXTRA_EFFECTS.twlight = {
+  create: (o) => {
+    if (o.subType !== 3) return false;
+    o.pkKey = 0;
+    o.startPosition.copy(o.light);
+    return o.owner !== null;
+  },
+  move: (o) => {
+    twilightRing(o, 0.15);
+    o.angle.z += 10;
+    return true;
+  },
+  draw: (o, system) => {
+    system.quads.decal('twlight', 'glow', o.position.x, o.position.y, o.scale, o.light, -o.angle.z, (x, y) => system.heightAt(x, y), o.position.z);
+  },
+};
