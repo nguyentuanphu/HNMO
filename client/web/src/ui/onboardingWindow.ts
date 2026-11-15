@@ -204,8 +204,9 @@ export class OnboardingWindow {
 
   private kitItems(items: RewardItem[]): string {
     return items.map((item) => {
-      const stack = item.durability && item.durability > 1 && item.group === 14 ? ` (${item.durability})` : '';
-      return `${this.options.itemName(item.group, item.number)}${item.level > 0 ? ` +${item.level}` : ''}${item.count > 1 ? ` x${item.count}` : ''}${stack}`;
+      // Stacked potions and the like count their pieces: 3 stacks of 3 are "x9".
+      const total = item.count * (item.durability && item.durability > 1 && item.group === 14 ? item.durability : 1);
+      return `${this.options.itemName(item.group, item.number)}${item.level > 0 ? ` +${item.level}` : ''}${total > 1 ? ` x${total}` : ''}`;
     }).join(', ');
   }
 
