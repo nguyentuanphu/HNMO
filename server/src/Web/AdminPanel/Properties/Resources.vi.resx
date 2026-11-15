@@ -3480,4 +3480,214 @@
   <data name="WorldBossesRemove" xml:space="preserve">
     <value>Xóa</value>
   </data>
+  <data name="OnboardingAndStarterKit" xml:space="preserve">
+    <value>Hướng dẫn tân thủ và quà tân thủ</value>
+  </data>
+  <data name="OnboardingPageDescription" xml:space="preserve">
+    <value>Nửa giờ đầu có hướng dẫn cho nhân vật mới (các bước do máy chủ kiểm tra, mỗi bước có phần thưởng, và phần thưởng cuối) cùng quà tân thủ. Người chơi xem hướng dẫn trong bảng của trò chơi web và có thể bỏ qua; trang web hiển thị các bước và quà. Thay đổi đã lưu có hiệu lực ngay.</value>
+  </data>
+  <data name="OnboardingNotInstalled" xml:space="preserve">
+    <value>Plug-in hướng dẫn tân thủ chưa được cài: khởi động máy chủ trò chơi một lần rồi tải lại trang này.</value>
+  </data>
+  <data name="OnboardingGeneral" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="OnboardingActive" xml:space="preserve">
+    <value>Bật hướng dẫn tân thủ và quà tân thủ</value>
+  </data>
+  <data name="OnboardingGuideEnabled" xml:space="preserve">
+    <value>Hiện hướng dẫn cho nhân vật mới</value>
+  </data>
+  <data name="OnboardingNewMaxLevel" xml:space="preserve">
+    <value>Mới tới cấp</value>
+  </data>
+  <data name="OnboardingNewMaxLevelHint" xml:space="preserve">
+    <value>Nhân vật tạo sau khi bật plug-in luôn là nhân vật mới; nhân vật cũ chỉ khi tới cấp này lúc đăng nhập lần đầu (0: chỉ nhân vật mới). Bỏ qua sẽ kết thúc hướng dẫn cho nhân vật đó.</value>
+  </data>
+  <data name="OnboardingFile" xml:space="preserve">
+    <value>Tệp tiến độ</value>
+  </data>
+  <data name="OnboardingSteps" xml:space="preserve">
+    <value>Các bước</value>
+  </data>
+  <data name="OnboardingStepsHint" xml:space="preserve">
+    <value>Theo thứ tự; máy chủ kiểm tra từng bước. NPC 0 là bất kỳ NPC nào (mũi tên chỉ thương nhân gần nhất), bản đồ -1 là mọi bản đồ, nhóm/số vật phẩm -1 là bất kỳ, kỹ năng 0 là bất kỳ kỹ năng nào. Bước không bắt buộc có thể bỏ qua riêng (không có thưởng). Đừng đổi mã của bước người chơi đang làm.</value>
+  </data>
+  <data name="OnboardingOptional" xml:space="preserve">
+    <value>Không bắt buộc</value>
+  </data>
+  <data name="OnboardingKind" xml:space="preserve">
+    <value>Bước</value>
+  </data>
+  <data name="OnboardingTarget" xml:space="preserve">
+    <value>Số lượng / cấp</value>
+  </data>
+  <data name="OnboardingNpc" xml:space="preserve">
+    <value>NPC</value>
+  </data>
+  <data name="OnboardingMap" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="OnboardingSpot" xml:space="preserve">
+    <value>Vị trí (x, y, bán kính)</value>
+  </data>
+  <data name="OnboardingMonster" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="OnboardingItem" xml:space="preserve">
+    <value>Vật phẩm (nhóm, số)</value>
+  </data>
+  <data name="OnboardingSkill" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="OnboardingHints" xml:space="preserve">
+    <value>Gợi ý (tiếng Anh / tiếng Việt)</value>
+  </data>
+  <data name="OnboardingMoveUp" xml:space="preserve">
+    <value>Lên</value>
+  </data>
+  <data name="OnboardingMoveDown" xml:space="preserve">
+    <value>Xuống</value>
+  </data>
+  <data name="OnboardingAddStep" xml:space="preserve">
+    <value>Thêm bước</value>
+  </data>
+  <data name="OnboardingKindTalkToNpc" xml:space="preserve">
+    <value>Nói chuyện với NPC</value>
+  </data>
+  <data name="OnboardingKindEnterMap" xml:space="preserve">
+    <value>Vào một bản đồ</value>
+  </data>
+  <data name="OnboardingKindWalkTo" xml:space="preserve">
+    <value>Đi tới một vị trí</value>
+  </data>
+  <data name="OnboardingKindKillMonsters" xml:space="preserve">
+    <value>Hạ gục quái vật</value>
+  </data>
+  <data name="OnboardingKindUseItem" xml:space="preserve">
+    <value>Dùng vật phẩm (bình thuốc)</value>
+  </data>
+  <data name="OnboardingKindUseSkill" xml:space="preserve">
+    <value>Đánh bằng kỹ năng</value>
+  </data>
+  <data name="OnboardingKindLearnSkill" xml:space="preserve">
+    <value>Học kỹ năng</value>
+  </data>
+  <data name="OnboardingKindReachLevel" xml:space="preserve">
+    <value>Đạt cấp</value>
+  </data>
+  <data name="OnboardingKindJoinParty" xml:space="preserve">
+    <value>Vào tổ đội</value>
+  </data>
+  <data name="OnboardingKindAddStatPoints" xml:space="preserve">
+    <value>Cộng điểm</value>
+  </data>
+  <data name="OnboardingKindOpenCashShop" xml:space="preserve">
+    <value>Mở cửa hàng xu</value>
+  </data>
+  <data name="OnboardingKindOpenMissions" xml:space="preserve">
+    <value>Mở cửa sổ nhiệm vụ</value>
+  </data>
+  <data name="OnboardingFinalReward" xml:space="preserve">
+    <value>Phần thưởng cuối</value>
+  </data>
+  <data name="OnboardingFinalRewardHint" xml:space="preserve">
+    <value>Nhận khi xong mọi bước (bước không bắt buộc đã bỏ qua được tính là xong; bỏ qua cả hướng dẫn thì không có phần thưởng cuối).</value>
+  </data>
+  <data name="OnboardingKit" xml:space="preserve">
+    <value>Quà tân thủ</value>
+  </data>
+  <data name="OnboardingKitHint" xml:space="preserve">
+    <value>Tặng một lần khi nhân vật mới đăng nhập lần đầu (hoặc nhân vật mới đầu tiên của tài khoản). Vật phẩm không vừa túi sẽ chờ tới khi có chỗ; xu nhận ngay. Có thể tắt từng phần.</value>
+  </data>
+  <data name="OnboardingKitEnabled" xml:space="preserve">
+    <value>Tặng quà tân thủ</value>
+  </data>
+  <data name="OnboardingKitPerAccount" xml:space="preserve">
+    <value>Một lần mỗi tài khoản (thay vì mỗi nhân vật)</value>
+  </data>
+  <data name="OnboardingKitItems" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="OnboardingKitAddItem" xml:space="preserve">
+    <value>Thêm vật phẩm</value>
+  </data>
+  <data name="OnboardingKitGroup" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="OnboardingKitNumber" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="OnboardingKitLevel" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="OnboardingKitCount" xml:space="preserve">
+    <value>Số món</value>
+  </data>
+  <data name="OnboardingKitDurability" xml:space="preserve">
+    <value>Độ bền / số lượng chồng</value>
+  </data>
+  <data name="OnboardingKitDurabilityHint" xml:space="preserve">
+    <value>0 là đầy; với bình thuốc và tên là số lượng trong một chồng.</value>
+  </data>
+  <data name="OnboardingKitSkill" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="OnboardingKitLuck" xml:space="preserve">
+    <value>May mắn</value>
+  </data>
+  <data name="OnboardingKitOption" xml:space="preserve">
+    <value>Dòng thêm</value>
+  </data>
+  <data name="OnboardingKitExcellent" xml:space="preserve">
+    <value>Hoàn hảo (bit)</value>
+  </data>
+  <data name="OnboardingKitClass" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="OnboardingKitAllClasses" xml:space="preserve">
+    <value>Mọi lớp</value>
+  </data>
+  <data name="OnboardingKitZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="OnboardingKitCoins" xml:space="preserve">
+    <value>Xu</value>
+  </data>
+  <data name="OnboardingKitPoints" xml:space="preserve">
+    <value>Điểm cộng thêm</value>
+  </data>
+  <data name="OnboardingKitPointsHint" xml:space="preserve">
+    <value>Tặng khi tạo nhân vật (chỉ nhân vật được tạo khi tùy chọn này bật).</value>
+  </data>
+  <data name="OnboardingKitBuff" xml:space="preserve">
+    <value>Bùa tăng kinh nghiệm tạm thời</value>
+  </data>
+  <data name="OnboardingKitBuffItem" xml:space="preserve">
+    <value>Hiệu ứng của vật phẩm (nhóm, số)</value>
+  </data>
+  <data name="OnboardingKitBuffMinutes" xml:space="preserve">
+    <value>Phút</value>
+  </data>
+  <data name="OnboardingKitBuffHint" xml:space="preserve">
+    <value>Hiệu ứng của một vật phẩm trong dữ liệu trò chơi, mặc định là Ấn Thăng Thiên (13, 43). Hết khi nhân vật thoát.</value>
+  </data>
+  <data name="OnboardingSaved" xml:space="preserve">
+    <value>Đã lưu hướng dẫn tân thủ và quà tân thủ.</value>
+  </data>
+  <data name="OnboardingReload" xml:space="preserve">
+    <value>Tải lại</value>
+  </data>
+  <data name="OnboardingErrorId" xml:space="preserve">
+    <value>"{0}" không phải mã bước hợp lệ (chữ, số, - và _; tối đa 40).</value>
+  </data>
+  <data name="OnboardingErrorDuplicateId" xml:space="preserve">
+    <value>Mã bước "{0}" bị dùng hai lần.</value>
+  </data>
+  <data name="OnboardingErrorTarget" xml:space="preserve">
+    <value>Bước "{0}" cần số lượng hoặc cấp ít nhất là 1.</value>
+  </data>
+  <data name="OnboardingErrorKitItem" xml:space="preserve">
+    <value>Vật phẩm quà tân thủ {0}: nhóm 0-15, số 0-511, cấp 0-15, 1-50 món.</value>
+  </data>
 </root>

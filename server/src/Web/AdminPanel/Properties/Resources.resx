@@ -3449,4 +3449,214 @@
   <data name="WorldBossesRemove" xml:space="preserve">
     <value>Remove</value>
   </data>
+  <data name="OnboardingAndStarterKit" xml:space="preserve">
+    <value>Onboarding and starter kit</value>
+  </data>
+  <data name="OnboardingPageDescription" xml:space="preserve">
+    <value>A guided first half hour for new characters (steps checked by the server, each with a reward, and a final reward) and the starter kit. Players see the guide in the web game's panel and can skip it; the website shows the steps and the kit. Saved changes count at once.</value>
+  </data>
+  <data name="OnboardingNotInstalled" xml:space="preserve">
+    <value>The onboarding plug-in isn't installed yet: start the game server once, then reload this page.</value>
+  </data>
+  <data name="OnboardingGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="OnboardingActive" xml:space="preserve">
+    <value>Onboarding and starter kit on</value>
+  </data>
+  <data name="OnboardingGuideEnabled" xml:space="preserve">
+    <value>Show the guide to new characters</value>
+  </data>
+  <data name="OnboardingNewMaxLevel" xml:space="preserve">
+    <value>New up to level</value>
+  </data>
+  <data name="OnboardingNewMaxLevelHint" xml:space="preserve">
+    <value>Characters created after the plug-in was turned on are always new; older ones only up to this level when they log in first (0: only new ones). Skipping ends the guide for that character.</value>
+  </data>
+  <data name="OnboardingFile" xml:space="preserve">
+    <value>Progress file</value>
+  </data>
+  <data name="OnboardingSteps" xml:space="preserve">
+    <value>Steps</value>
+  </data>
+  <data name="OnboardingStepsHint" xml:space="preserve">
+    <value>In their order; the server checks each one. NPC 0 is any NPC (the arrow shows the nearest merchant), map -1 is every map, item group/number -1 is any, skill 0 is any skill. An optional step can be skipped alone (no reward). Don't change the id of a step players are on.</value>
+  </data>
+  <data name="OnboardingOptional" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="OnboardingKind" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="OnboardingTarget" xml:space="preserve">
+    <value>Count / level</value>
+  </data>
+  <data name="OnboardingNpc" xml:space="preserve">
+    <value>NPC</value>
+  </data>
+  <data name="OnboardingMap" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="OnboardingSpot" xml:space="preserve">
+    <value>Spot (x, y, radius)</value>
+  </data>
+  <data name="OnboardingMonster" xml:space="preserve">
+    <value>Monster</value>
+  </data>
+  <data name="OnboardingItem" xml:space="preserve">
+    <value>Item (group, number)</value>
+  </data>
+  <data name="OnboardingSkill" xml:space="preserve">
+    <value>Skill</value>
+  </data>
+  <data name="OnboardingHints" xml:space="preserve">
+    <value>Hint (English / Vietnamese)</value>
+  </data>
+  <data name="OnboardingMoveUp" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="OnboardingMoveDown" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="OnboardingAddStep" xml:space="preserve">
+    <value>Add a step</value>
+  </data>
+  <data name="OnboardingKindTalkToNpc" xml:space="preserve">
+    <value>Talk to an NPC</value>
+  </data>
+  <data name="OnboardingKindEnterMap" xml:space="preserve">
+    <value>Enter a map</value>
+  </data>
+  <data name="OnboardingKindWalkTo" xml:space="preserve">
+    <value>Walk to a spot</value>
+  </data>
+  <data name="OnboardingKindKillMonsters" xml:space="preserve">
+    <value>Defeat monsters</value>
+  </data>
+  <data name="OnboardingKindUseItem" xml:space="preserve">
+    <value>Use an item (potion)</value>
+  </data>
+  <data name="OnboardingKindUseSkill" xml:space="preserve">
+    <value>Hit with a skill</value>
+  </data>
+  <data name="OnboardingKindLearnSkill" xml:space="preserve">
+    <value>Learn skills</value>
+  </data>
+  <data name="OnboardingKindReachLevel" xml:space="preserve">
+    <value>Reach a level</value>
+  </data>
+  <data name="OnboardingKindJoinParty" xml:space="preserve">
+    <value>Join a party</value>
+  </data>
+  <data name="OnboardingKindAddStatPoints" xml:space="preserve">
+    <value>Add stat points</value>
+  </data>
+  <data name="OnboardingKindOpenCashShop" xml:space="preserve">
+    <value>Open the cash shop</value>
+  </data>
+  <data name="OnboardingKindOpenMissions" xml:space="preserve">
+    <value>Open the missions window</value>
+  </data>
+  <data name="OnboardingFinalReward" xml:space="preserve">
+    <value>Final reward</value>
+  </data>
+  <data name="OnboardingFinalRewardHint" xml:space="preserve">
+    <value>Given when every step is done (skipped optional steps count as done; skipping the whole guide gives no final reward).</value>
+  </data>
+  <data name="OnboardingKit" xml:space="preserve">
+    <value>Starter kit</value>
+  </data>
+  <data name="OnboardingKitHint" xml:space="preserve">
+    <value>Given once at the first login of a new character (or of the account's first new character). Items that don't fit the bag wait until there's room; coins come at once. Each piece can be switched off.</value>
+  </data>
+  <data name="OnboardingKitEnabled" xml:space="preserve">
+    <value>Give the starter kit</value>
+  </data>
+  <data name="OnboardingKitPerAccount" xml:space="preserve">
+    <value>Once per account (instead of per character)</value>
+  </data>
+  <data name="OnboardingKitItems" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="OnboardingKitAddItem" xml:space="preserve">
+    <value>Add an item</value>
+  </data>
+  <data name="OnboardingKitGroup" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="OnboardingKitNumber" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="OnboardingKitLevel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="OnboardingKitCount" xml:space="preserve">
+    <value>Pieces</value>
+  </data>
+  <data name="OnboardingKitDurability" xml:space="preserve">
+    <value>Durability / stack</value>
+  </data>
+  <data name="OnboardingKitDurabilityHint" xml:space="preserve">
+    <value>0 is full; for potions and arrows it's how many are in a stack.</value>
+  </data>
+  <data name="OnboardingKitSkill" xml:space="preserve">
+    <value>Skill</value>
+  </data>
+  <data name="OnboardingKitLuck" xml:space="preserve">
+    <value>Luck</value>
+  </data>
+  <data name="OnboardingKitOption" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="OnboardingKitExcellent" xml:space="preserve">
+    <value>Excellent (bits)</value>
+  </data>
+  <data name="OnboardingKitClass" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="OnboardingKitAllClasses" xml:space="preserve">
+    <value>Every class</value>
+  </data>
+  <data name="OnboardingKitZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="OnboardingKitCoins" xml:space="preserve">
+    <value>Coins</value>
+  </data>
+  <data name="OnboardingKitPoints" xml:space="preserve">
+    <value>Extra stat points</value>
+  </data>
+  <data name="OnboardingKitPointsHint" xml:space="preserve">
+    <value>Given when the character is created (only characters created while this is on).</value>
+  </data>
+  <data name="OnboardingKitBuff" xml:space="preserve">
+    <value>Temporary EXP buff</value>
+  </data>
+  <data name="OnboardingKitBuffItem" xml:space="preserve">
+    <value>Effect of item (group, number)</value>
+  </data>
+  <data name="OnboardingKitBuffMinutes" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
+  <data name="OnboardingKitBuffHint" xml:space="preserve">
+    <value>The effect of an item of the game's data, by default the Seal of Ascension (13, 43). It ends when the character logs out.</value>
+  </data>
+  <data name="OnboardingSaved" xml:space="preserve">
+    <value>The onboarding and starter kit were saved.</value>
+  </data>
+  <data name="OnboardingReload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="OnboardingErrorId" xml:space="preserve">
+    <value>"{0}" isn't a valid step id (letters, digits, - and _; at most 40).</value>
+  </data>
+  <data name="OnboardingErrorDuplicateId" xml:space="preserve">
+    <value>The step id "{0}" is used twice.</value>
+  </data>
+  <data name="OnboardingErrorTarget" xml:space="preserve">
+    <value>The step "{0}" needs a count or level of at least 1.</value>
+  </data>
+  <data name="OnboardingErrorKitItem" xml:space="preserve">
+    <value>Starter kit item {0}: group 0-15, number 0-511, level 0-15, 1-50 pieces.</value>
+  </data>
 </root>

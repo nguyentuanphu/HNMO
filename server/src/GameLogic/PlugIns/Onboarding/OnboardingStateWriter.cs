@@ -110,6 +110,7 @@ public static class OnboardingStateWriter
         var value = new
         {
             V = 1,
+            Enabled = true,
             configuration.GuideEnabled,
             configuration.NewCharacterMaxLevel,
             Steps = configuration.GuideEnabled

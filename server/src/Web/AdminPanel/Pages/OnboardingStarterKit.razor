@@ -1,0 +1,291 @@
+@page "/onboarding-starter-kit"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.Onboarding
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+@using HNMO.Web.AdminPanel.Components.Missions
+
+<PageTitle>HNMO: @Resources.OnboardingAndStarterKit</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.OnboardingAndStarterKit" />
+<h1>@Resources.OnboardingAndStarterKit</h1>
+<p class="text-muted">@Resources.OnboardingPageDescription</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@Resources.OnboardingNotInstalled</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="onboarding-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.OnboardingGeneral</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="onboarding-active" @bind="this._isActive" />
+                <label class="form-check-label" for="onboarding-active">@Resources.OnboardingActive</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="onboarding-guide" @bind="c.GuideEnabled" />
+                <label class="form-check-label" for="onboarding-guide">@Resources.OnboardingGuideEnabled</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <label class="form-label" for="onboarding-level">@Resources.OnboardingNewMaxLevel</label>
+                    <input class="form-control" type="number" min="0" id="onboarding-level" @bind="c.NewCharacterMaxLevel" />
+                </div>
+                <div class="col-sm-5">
+                    <label class="form-label" for="onboarding-file">@Resources.OnboardingFile</label>
+                    <input class="form-control" id="onboarding-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <p class="form-text mb-0">@Resources.OnboardingNewMaxLevelHint</p>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.OnboardingSteps</h2>
+            <p class="form-text">@Resources.OnboardingStepsHint</p>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="onboarding-steps">
+                    <thead>
+                    <tr>
+                        <th>@Resources.MissionsOn</th>
+                        <th>@Resources.MissionsId</th>
+                        <th>@Resources.OnboardingKind</th>
+                        <th>@Resources.OnboardingTarget</th>
+                        <th>@Resources.OnboardingOptional</th>
+                        <th>@Resources.OnboardingNpc / @Resources.OnboardingMonster / @Resources.OnboardingSkill</th>
+                        <th>@Resources.OnboardingMap / @Resources.OnboardingSpot</th>
+                        <th>@Resources.OnboardingItem</th>
+                        <th>@Resources.MissionsTitleEn / @Resources.MissionsTitleVi</th>
+                        <th>@Resources.OnboardingHints</th>
+                        <th>@Resources.MissionsReward</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var row in this._rows)
+                    {
+                        var s = row.Step;
+                        <tr data-step="@s.Id">
+                            <td><input class="form-check-input" type="checkbox" @bind="s.Enabled" aria-label="@Resources.MissionsOn" /></td>
+                            <td><input class="form-control form-control-sm step-id" style="min-width: 7rem" @bind="s.Id" aria-label="@Resources.MissionsId" /></td>
+                            <td>
+                                <select class="form-select form-select-sm step-kind" @bind="s.Kind" aria-label="@Resources.OnboardingKind">
+                                    @foreach (var kind in Enum.GetValues<OnboardingStepKind>())
+                                    {
+                                        <option value="@kind">@KindCaption(kind)</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><input class="form-control form-control-sm step-target" style="width: 6rem" type="number" min="1" @bind="s.Target" disabled="@(!HasCount(s.Kind))" aria-label="@Resources.OnboardingTarget" /></td>
+                            <td><input class="form-check-input step-optional" type="checkbox" @bind="s.Optional" aria-label="@Resources.OnboardingOptional" /></td>
+                            <td>
+                                @if (s.Kind == OnboardingStepKind.TalkToNpc)
+                                {
+                                    <input class="form-control form-control-sm" style="width: 5rem" type="number" min="0" @bind="s.NpcNumber" title="@Resources.OnboardingNpc" aria-label="@Resources.OnboardingNpc" />
+                                }
+                                else if (s.Kind == OnboardingStepKind.KillMonsters)
+                                {
+                                    <input class="form-control form-control-sm" style="width: 5rem" type="number" min="0" @bind="s.MonsterNumber" title="@Resources.OnboardingMonster" aria-label="@Resources.OnboardingMonster" />
+                                }
+                                else if (s.Kind == OnboardingStepKind.UseSkill)
+                                {
+                                    <input class="form-control form-control-sm" style="width: 5rem" type="number" min="0" @bind="s.SkillNumber" title="@Resources.OnboardingSkill" aria-label="@Resources.OnboardingSkill" />
+                                }
+                            </td>
+                            <td>
+                                @if (HasMap(s.Kind))
+                                {
+                                    <div class="d-flex gap-1">
+                                        <input class="form-control form-control-sm" style="width: 4.5rem" type="number" min="-1" @bind="s.MapNumber" title="@Resources.OnboardingMap" aria-label="@Resources.OnboardingMap" />
+                                        @if (s.Kind == OnboardingStepKind.WalkTo)
+                                        {
+                                            <input class="form-control form-control-sm" style="width: 4rem" type="number" min="0" max="255" @bind="s.X" title="x" aria-label="x" />
+                                            <input class="form-control form-control-sm" style="width: 4rem" type="number" min="0" max="255" @bind="s.Y" title="y" aria-label="y" />
+                                            <input class="form-control form-control-sm" style="width: 3.5rem" type="number" min="0" max="50" @bind="s.Radius" title="@Resources.OnboardingSpot" aria-label="@Resources.OnboardingSpot" />
+                                        }
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                @if (s.Kind == OnboardingStepKind.UseItem)
+                                {
+                                    <div class="d-flex gap-1">
+                                        <input class="form-control form-control-sm" style="width: 4rem" type="number" min="-1" max="15" @bind="s.ItemGroup" title="@Resources.OnboardingKitGroup" aria-label="@Resources.OnboardingKitGroup" />
+                                        <input class="form-control form-control-sm" style="width: 4.5rem" type="number" min="-1" max="511" @bind="s.ItemNumber" title="@Resources.OnboardingKitNumber" aria-label="@Resources.OnboardingKitNumber" />
+                                    </div>
+                                }
+                            </td>
+                            <td style="min-width: 13rem">
+                                <input class="form-control form-control-sm mb-1 step-title-en" @bind="s.TitleEn" placeholder="English" aria-label="@Resources.MissionsTitleEn" />
+                                <input class="form-control form-control-sm step-title-vi" @bind="s.TitleVi" placeholder="Tiếng Việt" aria-label="@Resources.MissionsTitleVi" />
+                            </td>
+                            <td style="min-width: 16rem">
+                                <textarea class="form-control form-control-sm mb-1" rows="2" @bind="s.HintEn" placeholder="English" aria-label="@Resources.OnboardingHints"></textarea>
+                                <textarea class="form-control form-control-sm" rows="2" @bind="s.HintVi" placeholder="Tiếng Việt" aria-label="@Resources.OnboardingHints"></textarea>
+                            </td>
+                            <td style="min-width: 16rem">
+                                <RewardEditor Reward="@s.Reward" Row="@row.Reward" />
+                            </td>
+                            <td class="text-nowrap">
+                                <button type="button" class="btn btn-sm btn-outline-secondary step-up" @onclick="() => this.MoveStep(row, -1)" aria-label="@Resources.OnboardingMoveUp">↑</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary step-down" @onclick="() => this.MoveStep(row, 1)" aria-label="@Resources.OnboardingMoveDown">↓</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveStep(row)">@Resources.Remove</button>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="onboarding-add" @onclick="this.AddStep">@Resources.OnboardingAddStep</button>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.OnboardingFinalReward</h2>
+            <p class="form-text">@Resources.OnboardingFinalRewardHint</p>
+            <div id="onboarding-final"><RewardEditor Reward="@c.FinalReward" Row="@this._finalReward" /></div>
+        </div>
+    </section>
+
+    var kit = c.StarterKit;
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.OnboardingKit</h2>
+            <p class="form-text">@Resources.OnboardingKitHint</p>
+            <div class="d-flex flex-wrap gap-4 mb-2">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="kit-enabled" @bind="kit.Enabled" />
+                    <label class="form-check-label" for="kit-enabled">@Resources.OnboardingKitEnabled</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="kit-account" @bind="kit.PerAccount" />
+                    <label class="form-check-label" for="kit-account">@Resources.OnboardingKitPerAccount</label>
+                </div>
+            </div>
+
+            <h3 class="h6 mt-3">@Resources.OnboardingKitItems</h3>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="kit-items-on" @bind="kit.ItemsEnabled" />
+                <label class="form-check-label" for="kit-items-on">@Resources.MissionsOn</label>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="kit-items">
+                    <thead>
+                    <tr>
+                        <th>@Resources.OnboardingKitGroup</th>
+                        <th>@Resources.OnboardingKitNumber</th>
+                        <th>@Resources.OnboardingKitLevel</th>
+                        <th>@Resources.OnboardingKitCount</th>
+                        <th title="@Resources.OnboardingKitDurabilityHint">@Resources.OnboardingKitDurability</th>
+                        <th>@Resources.OnboardingKitSkill</th>
+                        <th>@Resources.OnboardingKitLuck</th>
+                        <th>@Resources.OnboardingKitOption</th>
+                        <th>@Resources.OnboardingKitExcellent</th>
+                        <th>@Resources.OnboardingKitClass</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in this._kitItems)
+                    {
+                        <tr>
+                            <td><input class="form-control form-control-sm kit-group" style="width: 4rem" type="number" min="0" max="15" @bind="item.Group" aria-label="@Resources.OnboardingKitGroup" /></td>
+                            <td><input class="form-control form-control-sm kit-number" style="width: 5rem" type="number" min="0" max="511" @bind="item.Number" aria-label="@Resources.OnboardingKitNumber" /></td>
+                            <td><input class="form-control form-control-sm" style="width: 4rem" type="number" min="0" max="15" @bind="item.Level" aria-label="@Resources.OnboardingKitLevel" /></td>
+                            <td><input class="form-control form-control-sm kit-count" style="width: 4rem" type="number" min="1" max="50" @bind="item.Count" aria-label="@Resources.OnboardingKitCount" /></td>
+                            <td><input class="form-control form-control-sm" style="width: 4.5rem" type="number" min="0" max="255" @bind="item.Durability" title="@Resources.OnboardingKitDurabilityHint" aria-label="@Resources.OnboardingKitDurability" /></td>
+                            <td><input class="form-check-input" type="checkbox" @bind="item.Skill" aria-label="@Resources.OnboardingKitSkill" /></td>
+                            <td><input class="form-check-input" type="checkbox" @bind="item.Luck" aria-label="@Resources.OnboardingKitLuck" /></td>
+                            <td><input class="form-control form-control-sm" style="width: 4rem" type="number" min="0" max="7" @bind="item.OptionLevel" aria-label="@Resources.OnboardingKitOption" /></td>
+                            <td><input class="form-control form-control-sm" style="width: 4.5rem" type="number" min="0" max="63" @bind="item.ExcellentOptions" aria-label="@Resources.OnboardingKitExcellent" /></td>
+                            <td>
+                                <select class="form-select form-select-sm kit-class" @bind="item.ClassNumber" aria-label="@Resources.OnboardingKitClass">
+                                    <option value="-1">@Resources.OnboardingKitAllClasses</option>
+                                    @foreach (var (number, name) in this._classes)
+                                    {
+                                        <option value="@number">@name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveKitItem(item)">@Resources.Remove</button></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="kit-add" @onclick="this.AddKitItem">@Resources.OnboardingKitAddItem</button>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <h3 class="h6">@Resources.OnboardingKitZen</h3>
+                    <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" id="kit-zen-on" @bind="kit.ZenEnabled" />
+                        <label class="form-check-label" for="kit-zen-on">@Resources.MissionsOn</label>
+                    </div>
+                    <input class="form-control" type="number" min="0" id="kit-zen" @bind="kit.Zen" aria-label="@Resources.OnboardingKitZen" />
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">@Resources.OnboardingKitCoins</h3>
+                    <SourceHeader @bind-Enabled="kit.CoinsEnabled" @bind-CoinType="kit.CoinType" Id="kit-coins" />
+                    <input class="form-control" type="number" min="0" id="kit-coins" @bind="kit.Coins" aria-label="@Resources.OnboardingKitCoins" />
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h6">@Resources.OnboardingKitPoints</h3>
+                    <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" id="kit-points-on" @bind="kit.PointsEnabled" />
+                        <label class="form-check-label" for="kit-points-on">@Resources.MissionsOn</label>
+                    </div>
+                    <input class="form-control" type="number" min="0" id="kit-points" @bind="kit.LevelUpPoints" aria-label="@Resources.OnboardingKitPoints" />
+                    <p class="form-text mb-0">@Resources.OnboardingKitPointsHint</p>
+                </div>
+                <div class="col-md-8">
+                    <h3 class="h6">@Resources.OnboardingKitBuff</h3>
+                    <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" id="kit-buff-on" @bind="kit.ExperienceBuff.Enabled" />
+                        <label class="form-check-label" for="kit-buff-on">@Resources.MissionsOn</label>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-sm-6">
+                            <label class="form-label" for="kit-buff-group">@Resources.OnboardingKitBuffItem</label>
+                            <div class="d-flex gap-1">
+                                <input class="form-control" type="number" min="0" max="15" id="kit-buff-group" @bind="kit.ExperienceBuff.ItemGroup" />
+                                <input class="form-control" type="number" min="0" max="511" id="kit-buff-number" @bind="kit.ExperienceBuff.ItemNumber" aria-label="@Resources.OnboardingKitNumber" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label" for="kit-buff-minutes">@Resources.OnboardingKitBuffMinutes</label>
+                            <input class="form-control" type="number" min="1" id="kit-buff-minutes" @bind="kit.ExperienceBuff.Minutes" />
+                        </div>
+                    </div>
+                    <p class="form-text mb-0">@Resources.OnboardingKitBuffHint</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex gap-2 mb-5">
+        <button type="button" class="btn btn-primary" id="onboarding-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.OnboardingReload</button>
+    </div>
+}
