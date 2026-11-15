@@ -145,7 +145,10 @@ EXTRA_JOINTS.jointEnergy = {
       if (target) o.targetPosition.copy(target.position).setZ(target.position.z + 120);
       const before = o.angle.z;
       const distance = moveHumming(o.position, o.angle, o.targetPosition, o.velocity);
-      if (distance <= 35) o.live = false;
+      if (distance <= 35) {
+        o.live = false;
+        system.createParticle('lightning2', o.position, o.angle, o.light, 1);
+      }
       else if (distance <= 70 && Math.abs(before - o.angle.z) > 20 && o.velocity >= 20) o.velocity -= 10;
     }
     system.createSprite('flareRed', o.position, 0.3, WHITE, o.target);

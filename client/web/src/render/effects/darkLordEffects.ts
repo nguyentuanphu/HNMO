@@ -16,10 +16,12 @@
 //                                                                          Render/Effects/ZzzEffectJoint.cpp
 
 import * as THREE from 'three';
-import { createAngle, createAngle2D, randInt, rotateByAngle, turnAngle2 } from './core.js';
+import { createAngle, createAngle2D, moveHumming, randInt, rotateByAngle, turnAngle2 } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, PREWARM_LOADS } from './extraEffects.js';
 import type { Effect, EffectOwner, Joint } from './types.js';
+import { computeBoneMatrices, loadModel, loadTexture } from '../../bmd.js';
+import type { BMDModel } from '../../formats.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 
@@ -77,12 +79,16 @@ EXTRA_JOINTS.flareForceJoint = {
       o.texture = 'jointThunder';
       return true;
     }
-    if (o.subType >= 1 && o.subType <= 4) {
+    if ((o.subType >= 1 && o.subType <= 4) || (o.subType >= 11 && o.subType <= 13)) {
       o.skill = 1;
       o.texture = 'jointThunder';
       o.targetPosition.set(80, 180, 0);
       o.counter = randInt(3) + 2;
-      if (o.subType === 2 || o.subType === 4) o.targetPosition.y = -180;
+      // 11-13: Plasma Storm's bolts over the Fenrir, in the colour of the Fenrir (black, red, blue).
+      if (o.subType === 11) o.light.set(0.7, 1, 0.7);
+      else if (o.subType === 12) o.light.set(1, 0.6, 0.6);
+      else if (o.subType === 13) o.light.set(0.7, 0.7, 1);
+      if (o.subType === 2 || o.subType === 4 || o.subType >= 11) o.targetPosition.y = -180;
       if (o.subType === 3 || o.subType === 4) o.counter = 0;
       o.lifeTime += o.counter;
       const p = rotateByAngle(new THREE.Vector3(0, 0, o.targetPosition.x), o.targetPosition);
@@ -292,6 +298,11 @@ EXTRA_EFFECTS.shockWave = {
       o.startPosition.copy(o.light); // EyeRight: the full colour
       return o.owner !== null;
     }
+    if (o.subType === 4) { // where Starfall's flashes land: a small ring that grows
+      o.lifeTime = 10;
+      o.scale = (randInt(6) + 6) / 10;
+      return true;
+    }
     if (o.subType !== 0) return false;
     o.lifeTime = 30;
     o.scale = 20;
@@ -300,6 +311,10 @@ EXTRA_EFFECTS.shockWave = {
   move: (o) => {
     if (o.subType === 14) {
       twilightRing(o, 0.15);
+      return true;
+    }
+    if (o.subType === 4) {
+      o.scale += 0.3;
       return true;
     }
     o.scale -= 1;
@@ -488,11 +503,26 @@ export function chaoticShine(o: Effect, system: EffectSystem): void {
  * bolts that arc forward from the lord's chest and bounce along the ground (CreateTailAxis on the y axis). */
 EXTRA_JOINTS.flash = {
   init: (o, system) => {
-    if (o.subType === 0 || o.subType === 1) {
+    if (o.subType === 4) { // rides its target (Starfall's arrow) as a blue trail
+      if (!o.target) return false;
+      o.maxTails = 20;
+      o.lifeTime = 30;
+      o.velocity = 0;
+      o.texture = 'flareBlue';
+      o.light.set(1, 1, 1);
+      o.direction.set(0, 0, 0);
+      o.position.copy(o.target.position);
+      o.angle.copy(o.target.angle);
+      return true;
+    }
+    if (o.subType <= 3) {
+      if (o.subType <= 1) void shadowBody();
       o.maxTails = 10;
       o.lifeTime = 40;
-      o.velocity = 70;
-      o.counter = 150; // MultiUse: how far under the ground it may go
+      o.velocity = o.subType >= 2 ? 30 : 70;
+      o.counter = o.subType >= 2 ? 300 : 150; // MultiUse: how far under the ground it may go
+      if (o.subType === 2) o.texture = 'flareForce';
+      else if (o.subType === 3) o.texture = 'flareBlue';
       o.pkKey = 0;
       o.angle.set(90, 0, 0);
       o.createTails = false;
@@ -529,28 +559,52 @@ EXTRA_JOINTS.flash = {
       o.direction.y += randInt(5) - 2;
       o.direction.z -= 10;
       o.position.add(rotateByAngle(o.direction, o.angle));
-      o.scale = o.counter - o.lifeTime < 10 ? 100 : 40;
+      if (o.counter - o.lifeTime < 10) {
+        // The burst where the bolt leaves the lord (BITMAP_EXPLOTION+1).
+        system.createParticle('explosion2', o.startPosition, o.angle, o.light, 0, 3);
+        o.scale = 100;
+      } else {
+        o.scale = 40;
+      }
       const height = system.heightAt(o.position.x, o.position.y);
       if (o.position.z <= height) {
+        // Where it touches the ground: a short bolt rises and smoke puffs up.
+        system.createJoint('jointThunder', o.position, o.position, o.angle, 4, null, 60);
         if (o.direction.z <= 0) o.direction.z = Math.sin(o.velocity) * 20;
         o.position.z = height + 5;
+        system.createParticle('advSmoke2', o.position.clone().setZ(o.position.z + 30), o.angle, o.light, 2, 3);
       }
       layTailAxisY(o);
       if (o.lifeTime < o.counter / 2) o.light.multiplyScalar(1 / 1.3);
       return;
     }
-    // SubTypes 0 and 1: the common move along the angle, then again along the head (each 10 faster first).
+    if (o.subType === 4) {
+      if (!o.target || !(o.target.isLive?.() ?? true)) {
+        o.live = false;
+        return;
+      }
+      o.position.copy(o.target.position);
+      if (o.lifeTime < 15) o.light.multiplyScalar(1 / 1.3);
+      return;
+    }
+    // SubTypes 0 to 3: the common move along the angle, then again along the head (each 10 faster first).
+    if (o.subType === 2) o.angle.z += randInt(10) + 10;
     o.velocity += 10;
     if (o.pkKey === 0 && o.numTails < o.maxTails) system.layTail(o, o.angle);
     o.velocity += 10;
     o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), flashHeads.get(o) ?? o.angle));
     const floor = system.heightAt(o.position.x, o.position.y) - o.counter;
     if (o.position.z < floor) {
+      // The first touch: shards of skin fly off the target (SpawnMeshEffects(0, MODEL_SKIN_SHELL, SubType)); Starfall's
+      // flashes leave a ring.
+      if (o.pkKey === 0 && o.subType <= 1 && o.target) skinShells(system, o.target, o.subType);
+      if (o.pkKey === 0 && o.subType >= 2) system.createEffect('shockWave', o.position, o.angle, new THREE.Vector3(0.3, 0.8, 1), 4);
       o.position.z = floor;
       o.pkKey = 1; // no more tails (m_bCreateTails = false)
       o.light.multiplyScalar(1 / 1.2);
     }
-    system.createSprite('flare', o.position, 1, o.light, null, randInt(360));
+    if (o.subType <= 1) system.createSprite('flare', o.position, 1, o.light, null, randInt(360));
+    else system.createSprite('shiny3', o.position, 1.6, new THREE.Vector3(0, 1, 1), null, randInt(360));
   },
   draw: (o, system) => {
     if (o.subType !== 6) return false;
@@ -566,6 +620,180 @@ EXTRA_JOINTS.flash = {
   },
 };
 const flashHeads = new WeakMap<Joint, THREE.Vector3>();
+
+// MODEL_FENRIR_SKILL_THUNDER (Plasma Storm): a bolt from over the Fenrir's head that zigzags to its target, rebuilt
+// every tick; 0-3 thunder, 4-7 flashes, by the Fenrir's colour (black, red, blue, gold).
+const FENRIR_LIGHTS: [number, number, number][] = [
+  [0.7, 1, 0.7], [1, 0.6, 0.6], [0.7, 0.7, 1], [0.9, 0.9, 0.3], [0.1, 0.8, 0.1], [1, 0.3, 0.2], [0.2, 0.3, 1], [0.8, 0.8, 0.1],
+];
+EXTRA_JOINTS.fenrirSkillThunder = {
+  init: (o) => {
+    const light = FENRIR_LIGHTS[o.subType];
+    if (!light) return false;
+    o.maxTails = 50;
+    o.velocity = 50;
+    o.lifeTime = 20;
+    o.texture = o.subType <= 3 ? 'jointThunder' : 'flash';
+    o.light.set(...light);
+    return true;
+  },
+  move: (o, system) => {
+    for (let j = 0; j < o.maxTails; j++) {
+      if (o.target) o.targetPosition.copy(o.target.position).setZ(o.target.position.z + 80);
+      const distance = moveHumming(o.position, o.angle, o.targetPosition, 50);
+      o.direction.x = (randInt(1024) - 512) / o.scale;
+      o.direction.z = (randInt(1024) - 512) / o.scale;
+      const angle = o.angle.clone().add(o.direction);
+      system.layTail(o, angle);
+      if (distance < o.velocity * 1.5) break;
+      if (o.scale >= 50) {
+        const l = (randInt(4) + 4) * 0.04;
+        system.groundLight(o.position, l * 0.4, l * 0.4, l * 0.4, 2);
+      }
+      o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), angle));
+    }
+  },
+};
+
+/**
+ * Plasma Storm's release (on a Fenrir): two pairs of bolts from 130 over the Fenrir's head to the target, and six
+ * flickering bolts over it. `fenrir`: 0 black, 1 red (the plain horn), 2 blue, 3 gold.
+ */
+export function plasmaStorm(system: EffectSystem, caster: EffectOwner, target: EffectOwner, fenrir = 1): void {
+  const head = (): THREE.Vector3 => rotateByAngle(new THREE.Vector3(0, -140, 130), caster.angle).add(caster.position);
+  for (let j = 0; j < 2; j++) {
+    const angle = new THREE.Vector3(randInt(360), 0, randInt(360));
+    system.createJoint('fenrirSkillThunder', head(), target.position, angle, fenrir, target, 100);
+    system.createJoint('fenrirSkillThunder', head(), target.position, angle, 3 + fenrir, target, 80);
+  }
+  for (let k = 0; k < 6; k++) {
+    const p = rotateByAngle(new THREE.Vector3(0, 10 + randInt(40) - 20, 130), caster.angle).add(caster.position);
+    system.createJoint('flareForceJoint', p, p, new THREE.Vector3(randInt(360), 0, randInt(360)), 11 + fenrir, null, 60);
+  }
+}
+
+// MODEL_ARROW_IMPACT (Starfall): a glowing arrow over the elf that tips back and flies off with a blue trail; as it
+// ends, two flashes fall from 1200 over the target (its owner).
+EXTRA_EFFECTS.arrowImpact = {
+  model: ['Skill', 'ArrowImpact.bmd'],
+  create: (o, system) => {
+    const caster = o.target;
+    if (!o.owner || !caster) return false;
+    o.velocity = 1;
+    o.lifeTime = 20;
+    o.scale = 1.8;
+    o.blendMesh = -2;
+    o.direction.set(0, -30, 0);
+    o.light.set(0.3, 0.8, 1);
+    o.position.copy(caster.position).add(rotateByAngle(new THREE.Vector3(-10, -80, 200), caster.angle));
+    o.angle.copy(caster.angle);
+    o.angle.x = -30;
+    system.createJoint('flash', o.position, o.position, o.angle, 4, o.self, 40, 50);
+    return true;
+  },
+  move: (o, system) => {
+    o.angle.x -= 5;
+    o.direction.y -= 8;
+    if (o.lifeTime < 2 && o.subType === 0 && o.owner) {
+      o.angle.x = 90;
+      o.subType = 1;
+      const p = o.owner.position.clone();
+      p.x += randInt(100) - 50;
+      p.y += randInt(100) - 50;
+      p.z += 1200;
+      system.createJoint('flash', p, p, o.angle, 2, o.self, 50);
+      system.createJoint('flash', p, p, o.angle, 3, o.self, 50);
+    } else if (o.subType === 1) {
+      o.live = false;
+    }
+    return true;
+  },
+};
+
+/** Starfall's release: the arrow from the elf, falling on the target. */
+export function starfall(system: EffectSystem, caster: EffectOwner, target: EffectOwner): void {
+  system.createEffect('arrowImpact', caster.position, caster.angle, caster.light ?? WHITE, 0, target, 0, { target: caster });
+}
+
+// MODEL_SHADOW_BODY (Player/Shadow01.bmd) at its first key: the body the cancels' skin shards come off.
+let shadow: { model: BMDModel; bones: THREE.Matrix4[] } | null = null;
+let shadowLoad: Promise<void> | null = null;
+function shadowBody(): Promise<void> {
+  shadowLoad ??= loadModel('Player', 'Shadow01.bmd').then((model) => { shadow = { model, bones: computeBoneMatrices(model, 0, 0) }; })
+    .catch(() => { /* no shards */ });
+  return shadowLoad;
+}
+
+// Loaded when the effects are warmed (EffectSystem.prewarm), so the first cancel finds it.
+PREWARM_LOADS.push(shadowBody);
+
+/** b->SpawnMeshEffects(0, MODEL_SKIN_SHELL, sub): one shard in eight of mesh 0's corners, on the target's body. */
+function skinShells(system: EffectSystem, target: EffectOwner, sub: number): void {
+  const mesh = shadow?.model.meshes[0];
+  if (!shadow || !mesh) return;
+  const turn = new THREE.Vector3(0, 0, target.angle.z);
+  const zero = new THREE.Vector3();
+  const white = new THREE.Vector3(1, 1, 1);
+  for (const triangle of mesh.triangles) {
+    for (let k = 0; k < triangle.corners; k++) {
+      if (randInt(8) !== 0) continue;
+      const vertex = mesh.vertices[triangle.vertex[k]];
+      if (!vertex) continue;
+      const p = new THREE.Vector3(...vertex.position).applyMatrix4(shadow.bones[vertex.node] ?? new THREE.Matrix4());
+      system.createEffect('skinShell', rotateByAngle(p, turn).add(target.position), zero, white, sub);
+    }
+  }
+}
+
+// MODEL_SKIN_SHELL: a shard thrown up and out that tumbles, bounces on the ground and fades; drawn in the
+// BITMAP_CHROME texture, grey (0) or glowing blue (1).
+let chrome: THREE.Texture | null = null;
+EXTRA_EFFECTS.skinShell = {
+  model: ['Skill', 'SkinShell.bmd'],
+  create: (o) => {
+    if (o.subType !== 0 && o.subType !== 1) return false;
+    void loadTexture('Effect', 'Chrome01.jpg').then((map) => { chrome = map; });
+    o.position.z += 50;
+    o.lifeTime = randInt(16) + 32;
+    o.scale = (randInt(3) + 3) * 0.1;
+    o.alpha = 0.5;
+    o.direction.copy(rotateByAngle(new THREE.Vector3(0, (randInt(128) + 32) * 0.1, 0), new THREE.Vector3(0, 0, randInt(360))));
+    o.gravity = randInt(5) + 2 + randInt(5);
+    o.angle.set(randInt(360), randInt(360), randInt(360));
+    if (o.subType === 0) o.light.set(0.5, 0.5, 0.5);
+    else {
+      o.light.set(0.1, 0.5, 1);
+      o.blendMesh = -2; // RENDER_BRIGHT
+      o.blendMeshLight = 1;
+    }
+    return true;
+  },
+  move: (o, system) => {
+    // Every copy of the shard model draws in the chrome texture (only this effect uses it).
+    if (o.model && chrome && o.model.parts[0]?.mesh.material.map?.image !== chrome.image) {
+      for (const part of o.model.parts) {
+        part.mesh.material.map = chrome;
+        part.mesh.material.needsUpdate = true;
+      }
+    }
+    o.position.add(o.direction);
+    o.direction.multiplyScalar(0.9);
+    o.position.z += o.gravity;
+    o.direction.multiplyScalar(1.1);
+    o.gravity -= 3;
+    const height = system.heightAt(o.position.x, o.position.y);
+    if (o.position.z < height) {
+      o.position.z = height;
+      o.gravity = -o.gravity * 0.2;
+      o.lifeTime -= 5;
+      o.angle.x -= o.scale * 128;
+    } else {
+      o.angle.x -= o.scale * 16;
+    }
+    o.alpha = o.lifeTime / 10;
+    return true;
+  },
+};
 
 /** CreateTailAxis(o, AngleMatrix(o->Angle), 1): a new tail whose second pair of corners lies along y. */
 function layTailAxisY(o: Joint): void {
@@ -634,6 +862,7 @@ function darkScream(file: string, fire: boolean): NonNullable<typeof EXTRA_EFFEC
       if (o.subType === 0) system.createJoint('jointForce', o.position, o.position, o.angle, 7, o.self, 150, 40);
       o.position.z += 20;
       o.position.add(rotateByAngle(new THREE.Vector3(0, -20, 0), o.angle));
+      system.createParticle('blueBlur', o.position, o.angle, new THREE.Vector3(0, 1, 0), 1, 1);
       return true;
     },
     move: (o, system) => {

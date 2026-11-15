@@ -473,6 +473,13 @@ function jointForceRayMove(o: Joint, system: EffectSystem): void {
 // BITMAP_FLARE_BLUE joint SubType 6: a short white flare that spirals out (BITMAP_FLARE's SubType 4 move).
 EXTRA_JOINTS.flareBlueJoint = {
   init: (o) => {
+    if (o.subType === 19) { // Summon's flares: wait 600 over the circle, then fall into it
+      o.maxTails = 20;
+      o.direction.z = -(randInt(20) + 35);
+      o.lifeTime = 25 + randInt(50);
+      o.light.set(1, 1, 1);
+      return true;
+    }
     if (o.subType !== 6) return false;
     o.lifeTime = 15;
     o.maxTails = 15;
@@ -481,6 +488,15 @@ EXTRA_JOINTS.flareBlueJoint = {
     return true;
   },
   move: (o) => {
+    if (o.subType === 19) {
+      if (o.lifeTime <= 25) {
+        o.direction.z -= 5;
+        o.position.x = o.targetPosition.x;
+        o.position.y = o.targetPosition.y;
+        o.position.z += o.direction.z;
+      }
+      return;
+    }
     const count = (o.direction.x + o.lifeTime) * 0.1;
     const vx = -Math.cos(count) * Math.max(o.lifeTime + 40, 10) * 0.65;
     const vy = Math.sin(count) * Math.max(o.lifeTime + 40, 10) * 0.65;

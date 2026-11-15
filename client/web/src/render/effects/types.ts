@@ -132,7 +132,16 @@ export type EffectType =
   | 'twlight' // BITMAP_TWLIGHT: its twilight ring
   | 'swellOfMagicPowerBuffEffect' // MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF: its buff's lasting lights
   | 'summon' // MODEL_SUMMON: Recovery's circle (Skill/nightmaresum.bmd)
-  | 'raklionBossCrackEffect'; // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
+  | 'raklionBossCrackEffect' // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
+  | 'impact' // BITMAP_IMPACT: Recovery's glow before another caster (sprites only)
+  | 'flare' // BITMAP_FLARE as an effect: SubType 3, Recovery's lights on the healed one's bones
+  | 'arrowImpact' // MODEL_ARROW_IMPACT: Starfall's arrow (Skill/ArrowImpact.bmd)
+  | 'orora' // BITMAP_ORORA: the Berserker buff's auras at the hands (each makes its particle, renewed)
+  | 'sparks' // BITMAP_SPARK+2: the Berserker buff's sparks at the hands (now and then)
+  | 'lightMarks' // BITMAP_LIGHT_MARKS: the Berserker buff's marks on fourteen bones
+  | 'fireCursedLich' // BITMAP_FIRE_CURSEDLICH SubType 2: the Flame Strike debuff's fire on the body
+  | 'shotgun' // BITMAP_SHOTGUN: Fire Breath, the Dinorant's burst of fire (no model)
+  | 'skinShell'; // MODEL_SKIN_SHELL: the cancels' shards of skin flying off the target (Skill/SkinShell.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
@@ -149,7 +158,14 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'shiny4' // BITMAP_SHINY+4 (ring.jpg): Cometfall's ring where a comet lands
   | 'poundingBall' // BITMAP_POUNDING_BALL: Lance's trail
   | 'twintailWater' // BITMAP_TWINTAIL_WATER: the Sleep debuff's bubbles
-  | 'waterfall5' | 'waterfall3'; // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
+  | 'waterfall5' | 'waterfall3' // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
+  | 'explosion2' // BITMAP_EXPLOTION+1 (DinoE.jpg): Stun's bolts' sparks, Fire Breath's fire
+  | 'lightning2' // BITMAP_LIGHTNING+1 SubType 1: a green glow on the ground where Drain Life's trails arrive
+  | 'fireHik1' | 'fireCursedLich' | 'fireHik3' // BITMAP_FIRE_HIK1 / _CURSEDLICH / _HIK3: rising flames
+  | 'orora' // BITMAP_ORORA: an aura turning on a hand bone, growing and fading
+  | 'sparks' // BITMAP_SPARK+2: a burst of sparks on a hand bone (four frames)
+  | 'blueBlur' // BITMAP_BLUE_BLUR: SubType 1 (drawn with BITMAP_POUNDING_BALL), Fire Scream's rising blur
+  | 'advSmoke2'; // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;
@@ -159,6 +175,8 @@ export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointS
   | 'drainLifeGhost' | 'jointEnergy' | 'pinLightJoint' | 'forcePillar' | 'swordEff'
   | 'twoLineGhost' // BITMAP_2LINE_GHOST: Chaotic Diseier's ghost trails
   | 'flareBlueJoint' // BITMAP_FLARE_BLUE as a joint: Mana Rays' flares
+  | 'fenrirSkillThunder' // MODEL_FENRIR_SKILL_THUNDER: Plasma Storm's bolts
+  | 'groundWind' // BITMAP_GROUND_WIND: Dragon Slasher's wind along the kick
   | 'flash'; // BITMAP_FLASH: Stun's bolts, the cancels' falling flashes
 
 /** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */

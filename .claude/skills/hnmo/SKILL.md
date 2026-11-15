@@ -252,3 +252,15 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   Sprite sizes match the desktop (texture width x scale; the desktop shrinks upscaled "MUX" textures back to their
   original size, the game data has none), so a very bright effect (Spiral Slash) is the desktop's own look.
   The test's `other: true` aims a skill at another character (cancels skip the caster).
+- Third pass (2026-11-15): shared particles in `sharedParticles.ts` (BITMAP_EXPLOTION+1, ADV_SMOKE+1, BLUE_BLUR, LIGHTNING+1,
+  the rising HIK flames and the Flame Strike debuff), the Berserker look in `berserkerEffects.ts`; Starfall, Plasma Storm and
+  the cancels' skin shards in `darkLordEffects.ts`, Fire Breath in `elfEffects.ts`. Loads an effect needs before its first use
+  (a model's bones, not drawn) go in `PREWARM_LOADS` (extraEffects.ts), run by `EffectSystem.prewarm`: the first cast of a
+  test found the shadow body not loaded yet. A hidden effect model that must still animate (its bones lead something):
+  `alwaysModel: true` (the shared tail only advances `animationFrame` when the model exists). `playSkillEffect` now gets
+  `casterIsHero` and `fenrirColor` from main.ts.
+- Item glow (`game/itemGlow.ts`): pass materials are shared per (mode, texture, colour, kind) and moved on the world's clock
+  (`performance.now()`), never per character; icons get their own copies (`itemIcons.ts` changes their blending). Debuffs and
+  the cloak: `Character.setItemLooks` (main.ts's buffs.onChange) → `setItemGlowState` / `setCloaked`. +15 decorations are
+  `Attachment`s with slot `ornament` (PartModels.json). `tests/e2e/item-glow.spec.ts` builds a row of players with
+  `createPlayerCharacter` and puts them in `online.characters` (ids 0x7e00+) so the game updates and draws them.

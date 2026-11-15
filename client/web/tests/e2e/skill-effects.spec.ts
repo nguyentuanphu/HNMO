@@ -61,7 +61,7 @@ const KNIGHT: Case[] = [
   { skill: 22, name: 'cyclone', expect: ['particle:spark', 'particle:spark3'], shotAt: 650 },
   // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
   { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
-  { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
+  { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5', 'particle:smoke'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
   { skill: 44, name: 'crescent-moon-slash', expect: ['joint:jointSpark', 'particle:fire', 'effect:swordForce', 'joint:jointForce'], shotAt: 600, action: 137 },
 ];
 
@@ -70,7 +70,11 @@ const ELF: Case[] = [
   { skill: 235, name: 'multi-shot', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'effect:bladeSkill'], shotAt: 200, model: 'bladeSkill', warm: [['Effect', 'bladetonedo.bmd']] },
   { skill: 77, name: 'infinity-arrow', expect: ['effect:infinityArrow', 'effect:infinityArrow1', 'effect:infinityArrow4'], shotAt: 300 },
   { skill: 30, name: 'summon', expect: ['effect:magicGround2', 'joint:jointHealing'], shotAt: 800 },
-  { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
+  // Starfall: the glowing arrow over the elf, then two flashes falling on the target and their rings.
+  { skill: 46, name: 'starfall', expect: ['effect:arrowImpact', 'joint:flash', 'effect:shockWave'], shotAt: 760, other: true, model: 'arrowImpact', warm: [['Skill', 'ArrowImpact.bmd']] },
+  // Fire Breath (on a Dinorant): sparks, flames either side flying ahead, the burst at its end.
+  { skill: 49, name: 'fire-breath', expect: ['effect:shotgun', 'joint:jointSpark', 'particle:fire3', 'particle:explosion2'], shotAt: 680 },
+  { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight', 'effect:flare', 'particle:light'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
 ];
 
 const GLADIATOR: Case[] = [
@@ -80,6 +84,8 @@ const GLADIATOR: Case[] = [
   // The flame follows the gladiator's swing (PLAYER_SKILL_FLAMESTRIKE), played by the hero here.
   // Released at key 3 of PLAYER_ATTACK_DEATH_CANNON, played by the hero here.
   { skill: 73, name: 'mana-rays', expect: ['joint:jointForce', 'joint:flareBlueJoint'], shotAt: 640, action: 138 },
+  // The Flame Strike debuff (eDeBuff_FlameStrikeDamage = 83): flames rising from the body's bones.
+  { skill: 56, name: 'flame-strike-debuff', expect: ['effect:fireCursedLich', 'particle:fireHik1', 'particle:fireCursedLich', 'particle:fireHik3'], shotAt: 400, buffs: [83] },
   { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
 ];
 
@@ -95,16 +101,21 @@ const LORD: Case[] = [
   { skill: 62, name: 'earthshake', expect: ['effect:darkHorseSkill', 'effect:shockWave', 'effect:skillFuryStrike', 'effect:earthQuake1'], shotAt: 1040, action: 87, warm: [['Skill', 'GroundStone.bmd'], ['Skill', 'GroundStone2.bmd']] },
   // Released at key 3 of PLAYER_ATTACK_STRIKE: the burning trail flies at the target.
   { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
-  { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
-  { skill: 67, name: 'stun', expect: ['joint:flash'], shotAt: 680 },
-  { skill: 68, name: 'cancel-stun', expect: ['joint:flash'], shotAt: 700, other: true },
+  { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame', 'particle:blueBlur'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
+  // Plasma Storm (on a Fenrir): bolts from over the Fenrir's head to the target, and flickering bolts over it (those
+  // only for a black, red or blue Fenrir: the desktop has none for gold, which the test hero may ride).
+  { skill: 76, name: 'plasma-storm', expect: ['joint:fenrirSkillThunder'], shotAt: 640, other: true },
+  { skill: 67, name: 'stun', expect: ['joint:flash', 'particle:explosion2', 'joint:jointThunder', 'particle:advSmoke2'], shotAt: 680 },
+  // The Stun debuff on the hero (eDeBuff_Stun = 61): three lights circling up over the head.
+  { skill: 67, name: 'stun-debuff', expect: ['joint:spearSkill'], shotAt: 600, buffs: [61] },
+  { skill: 68, name: 'cancel-stun', expect: ['joint:flash', 'effect:skinShell'], shotAt: 900, other: true, warm: [['Skill', 'SkinShell.bmd']] },
   { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },
-  { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
+  { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight', 'particle:flareBlue', 'joint:flareBlueJoint'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
   { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },
 ];
 
 const SUMMONER: Case[] = [
-  { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy'], shotAt: 1000 },
+  { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy', 'particle:lightning2'], shotAt: 1000 },
   // Its links come with the server's ChainLightningHitInfo, fed to the game here.
   { skill: 215, name: 'chain-lightning', expect: ['effect:chainLightning', 'joint:jointThunder', 'particle:light'], shotAt: 200, chain: true },
   // Damage Reflection's cast, then its buff (eBuff_Thorns = 71): thorns of light rise from the hero while it lasts.
@@ -117,6 +128,8 @@ const SUMMONER: Case[] = [
   { skill: 45, name: 'lance', expect: ['effect:skillJavelin', 'particle:poundingBall'], shotAt: 1000, model: 'skillJavelin', warm: [['Skill', 'Javelin.bmd']] },
   { skill: 230, name: 'lightning-shock', expect: ['effect:lightningShock', 'particle:lightningMega', 'effect:magic', 'effect:damage01Mono'], shotAt: 240 },
   { skill: 219, name: 'sleep', expect: ['effect:aliceBuffSkillEffect', 'effect:aliceBuffSkillEffect2', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
+  // The Berserker buff (eBuff_Berserker = 81): auras turning at the hands, sparks, red marks on the body.
+  { skill: 218, name: 'berserker-buff', expect: ['effect:orora', 'particle:orora', 'effect:sparks', 'effect:lightMarks', 'sprite:lightMarks'], shotAt: 1200, buffs: [81], lasting: ['effect:orora', 'effect:sparks'] },
   { skill: 218, name: 'berserker', expect: ['effect:aliceBuffSkillEffect', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
   { skill: 221, name: 'weakness', expect: ['effect:magicZin', 'effect:summonerCastingEffect2', 'effect:shiny5', 'particle:pinLightParticle'], shotAt: 1100 },
   { skill: 222, name: 'innovation', expect: ['effect:magicZin', 'effect:summonerCastingEffect222', 'particle:shiny5Particle'], shotAt: 1100 },
@@ -125,8 +138,10 @@ const SUMMONER: Case[] = [
 const FIGHTER: Case[] = [
   { skill: 260, name: 'killing-blow', expect: ['effect:wolfHeadEffect', 'effect:sbumb', 'particle:sbumb', 'joint:pinLightJoint'], shotAt: 240 },
   { skill: 261, name: 'beast-uppercut', expect: ['effect:downAttackDummyR', 'effect:downAttackDummyL', 'joint:forcePillar', 'particle:sahamuttExplosion'], shotAt: 520 },
-  // Its timing follows the fighter's kick (PLAYER_SKILL_DRAGONKICK), played by the hero here.
-  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega'], shotAt: 400, action: 252 },
+  // Its timing follows the fighter's kick (PLAYER_SKILL_DRAGONKICK), played by the hero here. The energy and sparks at
+  // the target (particle:energy, spark3) need the kick to pass key 5 with a monster targeted: not asserted (the test
+  // server's monsters and the hero's mount make that uncertain).
+  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega', 'joint:groundWind'], shotAt: 680, action: 252 },
   { skill: 266, name: 'increase-attack', expect: ['effect:swordEffectMono', 'particle:swordEffectMonoParticle', 'effect:shockWaveGround1', 'effect:eventCloud', 'effect:windForce', 'effect:magic'], shotAt: 400 },
   { skill: 267, name: 'increase-health', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:eventCloud'], shotAt: 400 },
   { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },
@@ -185,6 +200,8 @@ function cast(page: Page, skill: number, area: boolean, chain = false, action?: 
     }
     // Without a monster close by, a targeted skill is aimed at the hero itself.
     g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
+    // The cast may play its own action (a Fenrir rider's): the case's action is played after it.
+    if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
     return best !== null;
   }, { skill, area, chain, action, other });
 }
@@ -289,7 +306,7 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   await enterWorld(page, 'test400');
   await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
   await goHunting(page);
-  type Tinted = { id: number; kind: string; dead: boolean; cell: { x: number; y: number }; bodyTint: { r: number; g: number; b: number } | null };
+  type Tinted = { id: number; kind: string; dead: boolean; cell: { x: number; y: number }; bodyTint: { r: number; g: number; b: number } | null; bodyGlow: unknown[] | null };
   const setDebuffs = (list: number[]) => page.evaluate((list) => {
     const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { hero: { cell: { x: number; y: number } }; characters: Map<number, Tinted> } } }).__game;
     const hero = g.online.hero;
@@ -301,7 +318,7 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
     }
     if (!best) return null;
     g.buffs.replace(best.id, list);
-    return { id: best.id, tint: best.bodyTint ? [best.bodyTint.r, best.bodyTint.g, best.bodyTint.b] : null };
+    return { id: best.id, tint: best.bodyTint ? [best.bodyTint.r, best.bodyTint.g, best.bodyTint.b] : null, glow: best.bodyGlow?.length ?? 0 };
   }, list);
   const poisoned = await setDebuffs([55]);
   expect(poisoned, 'a monster close by').not.toBeNull();
@@ -310,6 +327,7 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-poison.png` });
   const frozen = await setDebuffs([56]);
   expect(frozen!.tint).toEqual([0.3, 0.5, 1]); // eDeBuff_Freeze
+  expect(frozen!.glow, 'a frozen body is drawn again, glowing').toBeGreaterThan(0);
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-freeze.png` });
   await setDebuffs([57]); // eDeBuff_Harden: two ice shells stay on the monster while it lasts
   await expect.poll(() => game(page, (g) => g.effects.census()['effect:ice'] ?? 0), { timeout: 10_000 }).toBe(2);

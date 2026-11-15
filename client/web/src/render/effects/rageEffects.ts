@@ -22,6 +22,8 @@ import { angleEuler, createAngle2D, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner } from './types.js';
+import { computeBoneMatrices, loadModel } from '../../bmd.js';
+import type { BMDModel } from '../../formats.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 
@@ -493,12 +495,15 @@ function partyBuff(system: EffectSystem, o: EffectOwner, kind: 0 | 1 | 2): void 
 // MODEL_DRAGON_KICK_DUMMY: lives while the kick plays; from its sixth key the target crackles.
 EXTRA_EFFECTS.dragonKickDummy = {
   model: ['Effect', 'dragon_kick_dummy.bmd'],
+  alwaysModel: true, // hidden, but it animates: its bones lead the wind
   create: (o) => {
     const owner = o.owner;
     if (!owner) return false;
     o.lifeTime = 200;
     o.velocity = (owner.playSpeed?.(RageAction.DRAGONKICK) ?? 0.3) * 2;
     o.hiddenMesh = -2; // only its bones guide the wind; the desktop draws nothing of it
+    kickDummies.set(o.self, o);
+    void kickDummyModel();
     return true;
   },
   move: (o, system) => {
@@ -508,6 +513,15 @@ EXTRA_EFFECTS.dragonKickDummy = {
       o.live = false;
       return false;
     }
+    // AnimationFrame in (4, 5): the web's frames can step over that window between ticks, so the window is taken as
+    // crossed when it overlaps the frames since the last tick (o->Distance keeps the last frame).
+    const before = o.distance;
+    o.distance = frame;
+    if (frame > 4 && before < 5 && frame !== before) {
+      // The wind along the kick: a trail per tenth of a key, each following the dummy's second bone that much later.
+      const count = Math.round(o.velocity * 10);
+      for (let i = 0; i < count; i++) system.createJoint('groundWind', o.position, o.position, o.angle, i, o.self, 150);
+    }
     const target = o.target;
     if (target && frame > 5) {
       const fade = Math.sin(system.time * 0.002) * 0.2;
@@ -515,8 +529,11 @@ EXTRA_EFFECTS.dragonKickDummy = {
         const p = target.position.clone().setZ(target.position.z + 30);
         const scale = (randInt(40) + 50) * 0.01 * 1.5 * o.scale * 1.8;
         for (let i = 0; i < 4; i++) {
+          system.createParticle('energy', p, o.angle, o.light, 7, scale);
           system.createParticle('lightningMega', p, o.angle, o.light, 0, scale * 0.9);
-          system.createParticle('spark3', p, o.angle, o.light, 1, 1 + fade * 0.05);
+          system.createParticle('spark3', p, o.angle, o.light, 3, 1 + fade * 0.05);
+          system.createParticle('spark3', p, o.angle, o.light, 8, 1 + fade * 0.05);
+          if (i % 2) system.createParticle('spark', p, o.angle, o.light, 13);
           if (i % 2) p.set(p.x + randInt(40) + 20, p.y + randInt(30) + 10, p.z + randInt(30) + 25);
           else p.set(p.x - randInt(20) - 10, p.y + randInt(30) - 10, p.z + randInt(30) + 30);
         }
@@ -526,6 +543,45 @@ EXTRA_EFFECTS.dragonKickDummy = {
     o.position.copy(owner.position);
     if (frame > 8) o.lifeTime = 150;
     return true;
+  },
+};
+
+// MODEL_DRAGON_KICK_DUMMY's own model: its bones lead the wind (Effect/dragon_kick_dummy.bmd).
+const kickDummies = new WeakMap<EffectOwner, Effect>();
+let kickModel: BMDModel | null = null;
+let kickLoad: Promise<void> | null = null;
+function kickDummyModel(): Promise<void> {
+  kickLoad ??= loadModel('Effect', 'dragon_kick_dummy.bmd').then((model) => { kickModel = model; }).catch(() => { /* no wind */ });
+  return kickLoad;
+}
+
+/** TransformByObjectBone on the dummy posed at `frame`: the bone in the world. */
+function kickDummyBone(o: Effect, bone: number, frame: number): THREE.Vector3 | null {
+  if (!kickModel) return null;
+  const matrix = computeBoneMatrices(kickModel, 0, frame)[bone];
+  if (!matrix) return null;
+  return new THREE.Vector3().applyMatrix4(matrix).multiplyScalar(o.scale).applyEuler(angleEuler(o.angle, euler)).add(o.position);
+}
+
+// BITMAP_GROUND_WIND: a wind trail on the dummy's second bone, SubType tenths of a key behind it, 20 up, fading.
+EXTRA_JOINTS.groundWind = {
+  init: (o) => {
+    o.faces = 2; // RENDER_FACE_TWO
+    o.lifeTime = 10;
+    o.maxTails = 8;
+    o.light.set(0.7, 0.7, 1);
+    return o.target !== null && kickDummies.has(o.target);
+  },
+  move: (o) => {
+    const dummy = o.target ? kickDummies.get(o.target) : undefined;
+    if (!dummy || !dummy.live) {
+      o.live = false;
+      return;
+    }
+    const p = kickDummyBone(dummy, 2, dummy.animationFrame + o.subType * 0.1);
+    if (p) o.position.copy(p);
+    o.position.z += 20;
+    o.light.multiplyScalar(0.7);
   },
 };
 
