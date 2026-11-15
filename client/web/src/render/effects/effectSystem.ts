@@ -65,7 +65,7 @@ const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
   smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1', flareBlueJoint: 'flareBlue', flash: 'flash',
   twoLineGhost: 'twoLineGhost', drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
-  groundWind: 'groundWind',
+  groundWind: 'groundWind', fenrirSkillThunder: 'jointThunder',
 };
 
 export interface EffectSystemOptions {

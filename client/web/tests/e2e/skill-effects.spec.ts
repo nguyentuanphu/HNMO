@@ -102,6 +102,8 @@ const LORD: Case[] = [
   // Released at key 3 of PLAYER_ATTACK_STRIKE: the burning trail flies at the target.
   { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
   { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame', 'particle:blueBlur'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
+  // Plasma Storm (on a Fenrir): bolts from over the Fenrir's head to the target, flickering bolts over it.
+  { skill: 76, name: 'plasma-storm', expect: ['joint:fenrirSkillThunder', 'joint:flareForceJoint'], shotAt: 300, other: true },
   { skill: 67, name: 'stun', expect: ['joint:flash', 'particle:explosion2', 'joint:jointThunder', 'particle:advSmoke2'], shotAt: 680 },
   // The Stun debuff on the hero (eDeBuff_Stun = 61): three lights circling up over the head.
   { skill: 67, name: 'stun-debuff', expect: ['joint:spearSkill'], shotAt: 600, buffs: [61] },

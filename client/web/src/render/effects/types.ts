@@ -175,6 +175,7 @@ export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointS
   | 'drainLifeGhost' | 'jointEnergy' | 'pinLightJoint' | 'forcePillar' | 'swordEff'
   | 'twoLineGhost' // BITMAP_2LINE_GHOST: Chaotic Diseier's ghost trails
   | 'flareBlueJoint' // BITMAP_FLARE_BLUE as a joint: Mana Rays' flares
+  | 'fenrirSkillThunder' // MODEL_FENRIR_SKILL_THUNDER: Plasma Storm's bolts
   | 'groundWind' // BITMAP_GROUND_WIND: Dragon Slasher's wind along the kick
   | 'flash'; // BITMAP_FLASH: Stun's bolts, the cancels' falling flashes
 

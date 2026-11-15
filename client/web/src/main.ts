@@ -900,6 +900,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
         bowNumbers: { rightHand: hands.right?.number, leftHand: hands.left?.number },
         cell,
+        casterIsHero: caster === online.hero,
+        // GetFenrirType: the horn's look (helperVariant 1 black, 2 blue, 3 gold; else red).
+        fenrirColor: [1, 0, 2, 3][caster.equipment?.pet?.variant ?? 0] ?? 1,
       });
     },
     onChainLightning: (caster, _skill, targets) => playChainLightning(effects, ownerFromCharacter(caster), targets.map(ownerFromCharacter)),

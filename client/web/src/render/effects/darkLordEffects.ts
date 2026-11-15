@@ -16,7 +16,7 @@
 //                                                                          Render/Effects/ZzzEffectJoint.cpp
 
 import * as THREE from 'three';
-import { createAngle, createAngle2D, randInt, rotateByAngle, turnAngle2 } from './core.js';
+import { createAngle, createAngle2D, moveHumming, randInt, rotateByAngle, turnAngle2 } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, PREWARM_LOADS } from './extraEffects.js';
 import type { Effect, EffectOwner, Joint } from './types.js';
@@ -79,12 +79,16 @@ EXTRA_JOINTS.flareForceJoint = {
       o.texture = 'jointThunder';
       return true;
     }
-    if (o.subType >= 1 && o.subType <= 4) {
+    if ((o.subType >= 1 && o.subType <= 4) || (o.subType >= 11 && o.subType <= 13)) {
       o.skill = 1;
       o.texture = 'jointThunder';
       o.targetPosition.set(80, 180, 0);
       o.counter = randInt(3) + 2;
-      if (o.subType === 2 || o.subType === 4) o.targetPosition.y = -180;
+      // 11-13: Plasma Storm's bolts over the Fenrir, in the colour of the Fenrir (black, red, blue).
+      if (o.subType === 11) o.light.set(0.7, 1, 0.7);
+      else if (o.subType === 12) o.light.set(1, 0.6, 0.6);
+      else if (o.subType === 13) o.light.set(0.7, 0.7, 1);
+      if (o.subType === 2 || o.subType === 4 || o.subType >= 11) o.targetPosition.y = -180;
       if (o.subType === 3 || o.subType === 4) o.counter = 0;
       o.lifeTime += o.counter;
       const p = rotateByAngle(new THREE.Vector3(0, 0, o.targetPosition.x), o.targetPosition);
@@ -616,6 +620,57 @@ EXTRA_JOINTS.flash = {
   },
 };
 const flashHeads = new WeakMap<Joint, THREE.Vector3>();
+
+// MODEL_FENRIR_SKILL_THUNDER (Plasma Storm): a bolt from over the Fenrir's head that zigzags to its target, rebuilt
+// every tick; 0-3 thunder, 4-7 flashes, by the Fenrir's colour (black, red, blue, gold).
+const FENRIR_LIGHTS: [number, number, number][] = [
+  [0.7, 1, 0.7], [1, 0.6, 0.6], [0.7, 0.7, 1], [0.9, 0.9, 0.3], [0.1, 0.8, 0.1], [1, 0.3, 0.2], [0.2, 0.3, 1], [0.8, 0.8, 0.1],
+];
+EXTRA_JOINTS.fenrirSkillThunder = {
+  init: (o) => {
+    const light = FENRIR_LIGHTS[o.subType];
+    if (!light) return false;
+    o.maxTails = 50;
+    o.velocity = 50;
+    o.lifeTime = 20;
+    o.texture = o.subType <= 3 ? 'jointThunder' : 'flash';
+    o.light.set(...light);
+    return true;
+  },
+  move: (o, system) => {
+    for (let j = 0; j < o.maxTails; j++) {
+      if (o.target) o.targetPosition.copy(o.target.position).setZ(o.target.position.z + 80);
+      const distance = moveHumming(o.position, o.angle, o.targetPosition, 50);
+      o.direction.x = (randInt(1024) - 512) / o.scale;
+      o.direction.z = (randInt(1024) - 512) / o.scale;
+      const angle = o.angle.clone().add(o.direction);
+      system.layTail(o, angle);
+      if (distance < o.velocity * 1.5) break;
+      if (o.scale >= 50) {
+        const l = (randInt(4) + 4) * 0.04;
+        system.groundLight(o.position, l * 0.4, l * 0.4, l * 0.4, 2);
+      }
+      o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), angle));
+    }
+  },
+};
+
+/**
+ * Plasma Storm's release (on a Fenrir): two pairs of bolts from 130 over the Fenrir's head to the target, and six
+ * flickering bolts over it. `fenrir`: 0 black, 1 red (the plain horn), 2 blue, 3 gold.
+ */
+export function plasmaStorm(system: EffectSystem, caster: EffectOwner, target: EffectOwner, fenrir = 1): void {
+  const head = (): THREE.Vector3 => rotateByAngle(new THREE.Vector3(0, -140, 130), caster.angle).add(caster.position);
+  for (let j = 0; j < 2; j++) {
+    const angle = new THREE.Vector3(randInt(360), 0, randInt(360));
+    system.createJoint('fenrirSkillThunder', head(), target.position, angle, fenrir, target, 100);
+    system.createJoint('fenrirSkillThunder', head(), target.position, angle, 3 + fenrir, target, 80);
+  }
+  for (let k = 0; k < 6; k++) {
+    const p = rotateByAngle(new THREE.Vector3(0, 10 + randInt(40) - 20, 130), caster.angle).add(caster.position);
+    system.createJoint('flareForceJoint', p, p, new THREE.Vector3(randInt(360), 0, randInt(360)), 11 + fenrir, null, 60);
+  }
+}
 
 // MODEL_ARROW_IMPACT (Starfall): a glowing arrow over the elf that tips back and flies off with a blue trail; as it
 // ends, two flashes fall from 1200 over the target (its owner).

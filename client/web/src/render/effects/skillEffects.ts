@@ -21,7 +21,7 @@ import { lance, summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
-import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, siegeSkill, starfall } from './darkLordEffects.js';
+import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, plasmaStorm, siegeSkill, starfall } from './darkLordEffects.js';
 import { recovery, spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
 import { playBuffLook } from './buffLooks.js';
 import { cometfall, expansionOfWizardry } from './wizardEffects.js';
@@ -65,6 +65,7 @@ export const SkillEffect = {
   ICE_ARROW: 51,
   STARFALL: 46, // AT_SKILL_DEEPIMPACT
   FIRE_BREATH: 49, // AT_SKILL_RIDER (on a Dinorant)
+  PLASMA_STORM: 76, // AT_SKILL_PLASMA_STORM_FENRIR
   PENETRATION: 52,
   FIRE_SLASH: 55,
   POWER_SLASH: 56,
@@ -168,6 +169,8 @@ export interface SkillEffectOptions {
   cell?: { x: number; y: number } | null;
   /** The caster is the hero (Chaotic Diseier's burst at the selected target is the hero's own). */
   casterIsHero?: boolean;
+  /** The caster's Fenrir (GetFenrirType): 0 black, 1 red, 2 blue, 3 gold; red when left out. */
+  fenrirColor?: number;
 }
 
 /** The key the caster's action is at, when it plays one of `actions`; else a count from the ticks so far. */
@@ -430,6 +433,9 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
     case SkillEffect.PENETRATION:
     case SkillEffect.ICE_ARROW:
       options.shootArrow?.(0, target); // CreateArrows: one arrow
+      break;
+    case SkillEffect.PLASMA_STORM: // bolts from over the Fenrir's head to the target
+      if (target !== caster) plasmaStorm(system, caster, target, options.fenrirColor ?? 1);
       break;
     case SkillEffect.STARFALL: // CreateArrows: MODEL_ARROW_IMPACT instead of an arrow
       if (target !== caster) starfall(system, caster, target);
