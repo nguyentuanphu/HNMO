@@ -5858,6 +5858,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoGuildsRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the guild window.
+    /// Causes reaction on server side: The server sends the HnmoGuildsState message, and from then on sends it again when something changes, e.g. the guild reached a level or a ladder reward was given.
+    /// </remarks>
+    public static async ValueTask SendHnmoGuildsRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGuildsRequestRef.Length;
+            var packet = new HnmoGuildsRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGuildsAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's guild levels panel, e.g. to take the ladder rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoGuildsState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoGuildsActionAsync(this IConnection? connection, HnmoGuildsAction.HnmoGuildsActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGuildsActionRef.GetRequiredSize(argument);
+            var packet = new HnmoGuildsActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

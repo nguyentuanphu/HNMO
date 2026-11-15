@@ -2724,4 +2724,22 @@
   <data name="HnmoOnboardingViewPlugIn_Description" xml:space="preserve">
     <value>Gửi hướng dẫn tân thủ của HNMO (C2 F5 0F) tới máy khách đã yêu cầu một lần (trò chơi web).</value>
   </data>
+  <data name="HnmoGuildsViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị cấp bang hội HNMO</value>
+  </data>
+  <data name="HnmoGuildsViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái cấp bang hội (cấp, kinh nghiệm, hạng tuần, hiệu ứng, phần thưởng) tới trò chơi trên web.</value>
+  </data>
+  <data name="HnmoGuildsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Yêu cầu cấp bang hội HNMO</value>
+  </data>
+  <data name="HnmoGuildsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Trả lời trò chơi trên web khi nó hỏi cấp bang hội.</value>
+  </data>
+  <data name="HnmoGuildsActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Thao tác cấp bang hội HNMO</value>
+  </data>
+  <data name="HnmoGuildsActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các nút của bảng cấp bang hội: nhận phần thưởng bảng xếp hạng đang chờ chỗ trong túi.</value>
+  </data>
 </root>

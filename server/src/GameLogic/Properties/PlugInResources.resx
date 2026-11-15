@@ -2137,4 +2137,10 @@
   <data name="OnboardingPlugIn_Description" xml:space="preserve">
     <value>A guided first half hour for new characters: steps (talk to an NPC, walk somewhere, defeat monsters, use a potion or a skill, reach a level, join a party, add stat points, open the cash shop or the missions window), each checked by the server and with a reward, a final reward, and a starter kit (items, zen, coins, stat points, an EXP buff) given once per new character or account. Players see it in the web game's guide panel and can skip it. Edit it on the page Onboarding and starter kit (game menu). The progress is kept in a file in the save folder.</value>
   </data>
+  <data name="GuildsPlugIn_Name" xml:space="preserve">
+    <value>HNMO: guild levels and ladder</value>
+  </data>
+  <data name="GuildsPlugIn_Description" xml:space="preserve">
+    <value>Guild experience from the members' play (monsters, events, world bosses, missions, time in the game, the castle siege) with a daily cap per member, guild levels with small buffs for the online members (bonus experience, zen drops, defense), and a weekly guild ladder (Monday 00:00 Sydney time) whose top guilds' members get coins, zen or items once. Set on the page "Guilds: levels and ladder". The state is kept in a file in the save folder.</value>
+  </data>
 </root>

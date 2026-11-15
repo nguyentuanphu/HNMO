@@ -4532,6 +4532,55 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>11</SubCode>
+      <Name>HnmoGuildsRequest</Name>
+      <Caption>Request HNMO guild levels</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world, or the player opens the guild window.</SentWhen>
+      <CausedReaction>The server sends the HnmoGuildsState message, and from then on sends it again when something changes, e.g. the guild reached a level or a ladder reward was given.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>13</SubCode>
+      <Name>HnmoGuildsAction</Name>
+      <Caption>HNMO guild levels action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's guild levels panel, e.g. to take the ladder rewards which waited for room in the bag.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoGuildsState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoGuildsActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>Not used yet; empty.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoGuildsActionType</Name>
+          <Description>The action of the guild levels panel.</Description>
+          <Values>
+            <EnumValue>
+              <Name>ClaimRewards</Name>
+              <Description>Take the guild ladder rewards which wait for room in the bag.</Description>
+              <Value>1</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

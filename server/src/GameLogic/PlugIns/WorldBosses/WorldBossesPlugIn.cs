@@ -622,6 +622,18 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             }).ConfigureAwait(false);
         }
 
+        if (gameContext is not null && HNMO.GameLogic.PlugIns.Guilds.GuildsPlugIn.Get(gameContext) is { } guilds)
+        {
+            try
+            {
+                await guilds.WorldBossKilledAsync(gameContext, record).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                gameContext.LoggerFactory.CreateLogger<WorldBossesPlugIn>().LogWarning(ex, "World bosses: the guild experience of the kill wasn't added.");
+            }
+        }
+
         foreach (var characterId in outcome.Rewards.Keys)
         {
             if (await FindPlayerAsync(characterId).ConfigureAwait(false) is { } player)

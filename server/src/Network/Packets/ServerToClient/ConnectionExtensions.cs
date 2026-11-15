@@ -7236,6 +7236,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoGuildsState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the guild, its level and experience, this week's ladder points and rank, the member's part, the buff, the ladder's top guilds and rewards, the waiting rewards, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's guild levels (HnmoGuildsRequest) or did an action there, and when something changed for a client which requested them before (the guild reached a level or won the castle siege, a ladder reward was given).
+    /// Causes reaction on client side: The guild window shows the guild's level, experience, ladder rank and buff; a notice in the chat tells about the event in it (e.g. a level-up or a reward).
+    /// </remarks>
+    public static async ValueTask SendHnmoGuildsStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGuildsStateRef.GetRequiredSize(json);
+            var packet = new HnmoGuildsStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

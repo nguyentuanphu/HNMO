@@ -368,6 +368,7 @@
   * [C2 F5 09 - HnmoMissionsState (by server)](C2-F5-09-HnmoMissionsState_by-server.md)
   * [C2 F5 0C - HnmoWorldBossesState (by server)](C2-F5-0C-HnmoWorldBossesState_by-server.md)
   * [C2 F5 0F - HnmoOnboardingState (by server)](C2-F5-0F-HnmoOnboardingState_by-server.md)
+  * [C2 F5 12 - HnmoGuildsState (by server)](C2-F5-12-HnmoGuildsState_by-server.md)
   * [C1 F6 00 - QuestEventLimitResult (by server)](C1-F6-00-QuestEventLimitResult_by-server.md)
   * [C1 F6 03 - QuestEventResponse (by server)](C1-F6-03-QuestEventResponse_by-server.md)
   * [C1 F6 04 - QuestStartedByItem (by server)](C1-F6-04-QuestStartedByItem_by-server.md)

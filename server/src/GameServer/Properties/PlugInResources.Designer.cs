@@ -8162,5 +8162,58 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoOnboardingViewPlugIn_Description", resourceCulture);
             }
         }
+            /// <summary>
+        ///   Looks up a localized string for HnmoGuildsViewPlugIn_Name.
+        /// </summary>
+        public static string HnmoGuildsViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoGuildsViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string for HnmoGuildsViewPlugIn_Description.
+        /// </summary>
+        public static string HnmoGuildsViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoGuildsViewPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string for HnmoGuildsRequestHandlerPlugIn_Name.
+        /// </summary>
+        public static string HnmoGuildsRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoGuildsRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string for HnmoGuildsRequestHandlerPlugIn_Description.
+        /// </summary>
+        public static string HnmoGuildsRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoGuildsRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string for HnmoGuildsActionHandlerPlugIn_Name.
+        /// </summary>
+        public static string HnmoGuildsActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoGuildsActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string for HnmoGuildsActionHandlerPlugIn_Description.
+        /// </summary>
+        public static string HnmoGuildsActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoGuildsActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

@@ -2307,4 +2307,10 @@
   <data name="OnboardingPlugIn_Description" xml:space="preserve">
     <value>Nửa giờ đầu có hướng dẫn cho nhân vật mới: các bước (nói chuyện với NPC, đi tới một nơi, hạ quái, dùng bình thuốc hoặc kỹ năng, đạt cấp, vào tổ đội, cộng điểm, mở cửa hàng xu hoặc cửa sổ nhiệm vụ), mỗi bước do máy chủ kiểm tra và có phần thưởng, phần thưởng cuối, và quà tân thủ (vật phẩm, Zen, xu, điểm cộng, bùa tăng kinh nghiệm) tặng một lần cho mỗi nhân vật hoặc tài khoản mới. Người chơi xem trong bảng hướng dẫn của trò chơi web và có thể bỏ qua. Chỉnh sửa ở trang Hướng dẫn tân thủ và quà tân thủ (menu trò chơi). Tiến độ được lưu trong một tệp ở thư mục save.</value>
   </data>
+  <data name="GuildsPlugIn_Name" xml:space="preserve">
+    <value>HNMO: cấp bang hội và bảng xếp hạng</value>
+  </data>
+  <data name="GuildsPlugIn_Description" xml:space="preserve">
+    <value>Kinh nghiệm bang hội từ việc chơi của các thành viên (quái vật, sự kiện, boss thế giới, nhiệm vụ, thời gian trong trò chơi, công thành) với giới hạn mỗi ngày cho từng thành viên, cấp bang hội với hiệu ứng nhỏ cho thành viên đang chơi (thêm kinh nghiệm, zen rơi, phòng thủ), và bảng xếp hạng bang hội hằng tuần (00:00 thứ Hai giờ Sydney) trả xu, zen hoặc vật phẩm một lần cho thành viên các bang hội đứng đầu. Cài đặt ở trang "Bang hội: cấp và bảng xếp hạng". Dữ liệu được giữ trong một tệp trong thư mục lưu.</value>
+  </data>
 </root>

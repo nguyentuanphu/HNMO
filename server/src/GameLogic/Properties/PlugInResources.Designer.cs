@@ -5822,5 +5822,22 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("OnboardingPlugIn_Description", resourceCulture);
             }
         }
+            /// <summary>
+        ///   Looks up a localized string for GuildsPlugIn_Name.
+        /// </summary>
+        public static string GuildsPlugIn_Name {
+            get {
+                return ResourceManager.GetString("GuildsPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string for GuildsPlugIn_Description.
+        /// </summary>
+        public static string GuildsPlugIn_Description {
+            get {
+                return ResourceManager.GetString("GuildsPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

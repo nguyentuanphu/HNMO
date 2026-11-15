@@ -2825,4 +2825,22 @@
   <data name="HnmoOnboardingViewPlugIn_Description" xml:space="preserve">
     <value>Sends HNMO's new-player guide (C2 F5 0F) to a client which asked for it once (the web game).</value>
   </data>
+  <data name="HnmoGuildsViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO guild levels view</value>
+  </data>
+  <data name="HnmoGuildsViewPlugIn_Description" xml:space="preserve">
+    <value>Sends the guild levels state (level, experience, ladder rank, buff, rewards) to the web game.</value>
+  </data>
+  <data name="HnmoGuildsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO guild levels request</value>
+  </data>
+  <data name="HnmoGuildsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Answers the web game when it asks for the guild levels.</value>
+  </data>
+  <data name="HnmoGuildsActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO guild levels action</value>
+  </data>
+  <data name="HnmoGuildsActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the buttons of the guild levels panel: taking the ladder rewards which waited for room in the bag.</value>
+  </data>
 </root>

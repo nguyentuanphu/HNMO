@@ -122,6 +122,10 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
             {
                 engine.Unclaim(characterId, missionId, now);
             }
+            else if (HNMO.GameLogic.PlugIns.Guilds.GuildsPlugIn.Get(player.GameContext) is { } guilds)
+            {
+                await guilds.AddForPlayerAsync(player, HNMO.GameLogic.PlugIns.Guilds.GuildXpSource.Mission).ConfigureAwait(false);
+            }
 
             this.Save();
         }
