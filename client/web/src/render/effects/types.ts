@@ -111,6 +111,7 @@ export type EffectType =
   | 'eventCloud' // BITMAP_EVENT_CLOUD: their clouds on the ground
   | 'windForce' // MODEL_WINDFOCE: their whirl of wind (Effect/wind_foce.bmd)
   | 'lightRed' // BITMAP_LIGHT_RED: the party buffs' glow
+  | 'chromeEnergy2' // BITMAP_CHROME_ENERGY2: Gigantic Storm's flashes on the ground
   | 'flareForce' // BITMAP_FLARE_FORCE: Electric Spike's beam and bolts, the Critical Damage buff's sparks (joints only)
   | 'darkHorseSkill' // UpdateDarkHorseSkill: Earthshake's stomp (no model)
   | 'shockWave' // BITMAP_SHOCK_WAVE: a shrinking ring on the ground

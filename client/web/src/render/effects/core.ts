@@ -128,6 +128,7 @@ export const BITMAPS = {
   lightRed: 'flare01_red.jpg', // BITMAP_LIGHT_RED
   smokeLine1: 'smokelines01.jpg', // BITMAP_SMOKELINE1
   firecracker: 'Fire04.jpg', // BITMAP_FIRECRACKER
+  chromeEnergy2: 'energy02.jpg', // BITMAP_CHROME_ENERGY2
   shockWave: 'ShockWave.jpg', // BITMAP_SHOCK_WAVE
   twoLineGhost: '2line_gost.jpg', // BITMAP_2LINE_GHOST (Data/Skill)
   lava: 'Lava.jpg', // BITMAP_LAVA

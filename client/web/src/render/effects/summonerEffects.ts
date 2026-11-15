@@ -417,9 +417,30 @@ EXTRA_EFFECTS.lightningShock = {
       }
       return true;
     }
+    if (o.subType === 2) return o.owner !== null; // the debuff's crackle on the struck (eDeBuff_LightningShockDamage)
     return false;
   },
   move: (o, system) => {
+    if (o.subType === 2) {
+      const owner = o.owner;
+      if (!owner || !(owner.isLive?.() ?? true) || !(owner.hasBuff?.(85) ?? true)) {
+        o.live = false;
+        return false;
+      }
+      o.lifeTime = 100;
+      o.position.copy(owner.position);
+      const bones = owner.boneCount?.() ?? 0;
+      for (let i = 0; i < bones; i++) {
+        const p = owner.bonePosition?.(i);
+        if (!p) continue;
+        if (randInt(60) === 0) system.createParticle('light', p, new THREE.Vector3(), new THREE.Vector3(0.8, 0, 0), 5, 5 + (randInt(20) - 10) * 0.1);
+        if (randInt(5) === 0) system.createParticle('lightningMega', p, new THREE.Vector3(), new THREE.Vector3(1, 0.8, 0.4), 0, (randInt(70) + 22) * 0.01);
+      }
+      const red = new THREE.Vector3(1, 0, 0);
+      system.createParticle('smoke', o.position, o.angle, red, 58);
+      if (randInt(4) === 0) system.createParticle('smoke', o.position, o.angle, red, 54, 2.8);
+      return true;
+    }
     const megaAround = (light: THREE.Vector3, flare: THREE.Vector3 | null): void => {
       for (let i = 0; i < 11; i++) {
         const scale = (randInt(80) + 32) * 0.01;
@@ -472,6 +493,12 @@ EXTRA_EFFECTS.lightningShock = {
       p.z = system.heightAt(p.x, p.y) + 20;
       system.createParticle('lightningMega', p, o.angle, red, 0, (randInt(60) + 22) * 0.01);
     }
+    // Red smoke from the ground, a rising column now and then, and a stone thrown up every tick.
+    const ground = o.position.clone();
+    ground.z = system.heightAt(ground.x, ground.y) + 10;
+    for (let i = 0; i < 2; i++) system.createParticle('smoke', ground, o.angle, red, 58);
+    if (randInt(2) === 0) system.createParticle('smoke', ground, o.angle, red, 54, 2.8);
+    system.createEffect(randInt(2) ? 'stone2' : 'stone1', ground, o.angle, red, 13, o.self);
     return true;
   },
 };

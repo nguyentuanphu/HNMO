@@ -18,7 +18,7 @@ import { RageBuff } from './rageEffects.js';
 export const Buff = {
   ATTACK: 1, DEFENSE: 2, WIZ_DEFENSE: 4, ADD_CRITICAL_DAMAGE: CRITICAL_DAMAGE_BUFF, LIFE: 8, CLOAKING: 18,
   POISON: 55, FREEZE: 56, HARDEN: 57, STUN: 61, ATTACK_DOWN: 76, DEFENSE_DOWN: 77,
-  GIGANTIC_STORM_DAMAGE: 84, BLOW_OF_DESTRUCTION: 86,
+  GIGANTIC_STORM_DAMAGE: 84, LIGHTNING_SHOCK_DAMAGE: 85, BLOW_OF_DESTRUCTION: 86,
   ATT_UP: RageBuff.ATT_UP, HP_UP: RageBuff.HP_UP, DEF_UP: RageBuff.DEF_UP,
 } as const;
 
@@ -90,6 +90,9 @@ export function playBuffLook(system: EffectSystem, buff: number, owner: EffectOw
     }
     case Buff.GIGANTIC_STORM_DAMAGE:
       if (on) system.createEffect('jointThunderEffect', owner.position, owner.angle, owner.light ?? WHITE, 0, owner);
+      return true;
+    case Buff.LIGHTNING_SHOCK_DAMAGE:
+      if (on) system.createEffect('lightningShock', owner.position, owner.angle, owner.light ?? WHITE, 2, owner);
       return true;
     case Buff.BLOW_OF_DESTRUCTION:
       if (on) system.createEffect('ice', owner.position, owner.angle, owner.light ?? WHITE, 0, owner);

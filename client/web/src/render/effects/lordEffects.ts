@@ -7,7 +7,7 @@
 //                                                                                ZzzEffectJoint.cpp
 //   EffectTypes.json: MODEL_PIERCING2 (its creation values)
 //   CreateEffect / Move_MODEL_EFFECT_FLAME_STRIKE and its draw in RenderEffects (the blurs not yet);
-//   CreateEffect / Move_BITMAP_JOINT_THUNDER (Gigantic Storm; its stones, smoke and chrome not yet)
+//   CreateEffect / Move_BITMAP_JOINT_THUNDER (Gigantic Storm: bolts, circles, smoke 54, stones 13, BITMAP_CHROME_ENERGY2)
 //   CreateEffect / Move_MODEL_PIER_PART (0, 1), MODEL_DARKLORD_SKILL; MoveCharacter's release for
 //   AT_SKILL_FIREBURST and AT_SKILL_ADD_CRITICAL (the trails' BITMAP_FIRE+1 not yet)
 
@@ -214,7 +214,37 @@ EXTRA_EFFECTS.jointThunderEffect = {
     if (randInt(2) === 0) system.createJoint('jointThunder', from, to, o.angle, 16, null, scale);
     const light = new THREE.Vector3(0.45, 0.45, 0.7);
     if (o.lifeTime > 10 && randInt(2) === 0) system.createEffect('magicGround2', to, o.angle, light, 11, o.self);
+    // Smoke rising, stones thrown up and an energy flash on the ground (its "chrome").
+    if (randInt(4) === 0) system.createParticle('smoke', to, o.angle, light, 54, 2.8);
+    if (randInt(4) === 0) system.createEffect(randInt(2) ? 'stone2' : 'stone1', o.position, o.angle, light, 13);
+    if (o.lifeTime > 5 && randInt(5) === 0) system.createEffect('chromeEnergy2', to, o.angle, new THREE.Vector3(0.15, 0.15, 0.4), 0);
+    // On a character (the debuff's bolt): blue lights on its bones now and then.
+    const owner = o.owner;
+    const bones = owner?.boneCount?.() ?? 0;
+    if (owner && bones > 0 && randInt(5) === 0) {
+      for (let i = 0; i < bones; i++) {
+        if (bones > 100 && randInt(bones) > bones / 10) continue;
+        if (bones > 50 && randInt(bones) > bones / 5) continue;
+        if (bones > 20 && randInt(bones) > bones / 2) continue;
+        const position = owner.bonePosition?.(i);
+        if (position) system.createParticle('light', position, new THREE.Vector3(), new THREE.Vector3(0.2, 0.2, 0.8), 5, 3 + (randInt(20) - 10) * 0.1);
+      }
+    }
     return true;
+  },
+};
+
+// BITMAP_CHROME_ENERGY2 (the catalogue gives LifeTime 30 and a size of 1.5 cells): a flash on the ground that fades
+// over its last ten ticks.
+EXTRA_EFFECTS.chromeEnergy2 = {
+  create: (o) => o.subType === 0,
+  move: (o) => {
+    if (o.lifeTime < 10) o.light.multiplyScalar(0.8);
+    return true;
+  },
+  draw: (o, system) => {
+    const size = o.startPosition.x > 0 ? o.startPosition.x : 1.5;
+    system.quads.decal('chromeEnergy2', 'glow', o.position.x, o.position.y, size, o.light, 0, (x, y) => system.heightAt(x, y), o.position.z);
   },
 };
 

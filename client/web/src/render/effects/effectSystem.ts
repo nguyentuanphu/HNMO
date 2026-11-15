@@ -13,7 +13,7 @@
 //   CreateSprite, DescribeSprite                                         zzzeffectsprite.cpp
 //   CreateJoint, CreateTail, FollowTail, MoveJoint, DescribeJoint,
 //   UpdateDrawnJointEffects                                              ZzzEffectJoint.cpp
-// Terrain light (AddTerrainLight) and the camera shake (SetEarthQuakeAt) are not drawn.
+// AddTerrainLight (the effects lighting the ground, terrain.ts) and SetEarthQuakeAt (the camera shake, main.ts) are ported.
 
 import * as THREE from 'three';
 import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, AnimatedModel } from '../../bmd.js';
@@ -435,6 +435,21 @@ export class EffectSystem {
           o.angle.x = randInt(90) - 45;
           o.angle.z = randInt(360);
           o.velocity.set(0, -(randInt(8) + 40), 0);
+        } else if (o.subType === 58) { // Lightning Shock's red smoke (its colour fades out)
+          o.lifeTime = 50;
+          o.scale = (randInt(32) + 80) * 0.01;
+          o.position.x += randInt(64) - 32;
+          o.position.y += randInt(64) - 32;
+          o.position.z += randInt(64) + 32;
+          o.angle.x = randInt(90) - 45;
+          o.angle.z = randInt(360);
+          o.velocity.set(0, -(randInt(8) + 40), 0);
+          o.startPosition.copy(o.light);
+        } else if (o.subType === 54) { // Gigantic Storm's rising smoke
+          o.lifeTime = Math.trunc(o.scale * 8);
+          o.scale += randInt(50) * 0.01;
+          o.rotation = randInt(360);
+          o.gravity = (randInt(30) + 50) * 0.05;
         } else if (o.subType === 59) { // Chaotic Diseier's ghosts' dark smoke
           o.lifeTime = 40;
           o.scale = (randInt(64) + 64) * 0.01;
@@ -560,6 +575,16 @@ export class EffectSystem {
           o.light.set(luminosity * 0.5, luminosity, luminosity * 0.8);
           o.velocity.multiplyScalar(0.4);
           o.scale += 0.05;
+        } else if (o.subType === 58) {
+          o.light.copy(o.startPosition).multiplyScalar(o.lifeTime / 50);
+          o.velocity.multiplyScalar(0.4);
+          o.scale += 0.05;
+        } else if (o.subType === 54) {
+          o.light.multiplyScalar(1 / 1.02);
+          if (o.light.x <= 0.05) o.live = false;
+          o.gravity -= 0.05;
+          o.position.z += (o.scale + o.gravity) * 1.5;
+          o.scale += o.scale / 100;
         } else if (o.subType === 59) {
           o.light.setScalar(o.lifeTime / 40 * 0.9);
           o.scale += 0.09;
@@ -1119,6 +1144,16 @@ export class EffectSystem {
         if (o.type === 'bone1') o.position.z += 150;
         else if (o.type === 'bone2') o.position.z += 100;
         if ((o.type === 'bone1' || o.type === 'bone2') && o.subType !== 0) return false;
+        if ((o.type === 'stone1' || o.type === 'stone2') && o.subType === 13) { // Gigantic Storm's thrown stones
+          o.direction.set(0, 0, 0);
+          o.lifeTime = randInt(16) + 20;
+          o.scale = (randInt(13) + 3) * 0.08 * (o.callScale > 0 ? o.callScale : 1);
+          o.gravity = randInt(3) + 3;
+          o.angle.z = randInt(360);
+          rotateByAngle(new THREE.Vector3(0, (randInt(128) + 64) * 0.1, 0), o.angle, o.headAngle);
+          o.headAngle.z += 15;
+          return true;
+        }
         if (o.subType !== 0 && o.subType !== 1 && o.subType !== 2 && o.subType !== 10) return false;
         // The MODEL_ICE_SMALL branch they share: no push for SubType 1.
         const p1 = new THREE.Vector3(0, o.subType === 1 ? 0 : (randInt(256) + 64) * 0.1, 0);
@@ -1476,6 +1511,22 @@ export class EffectSystem {
   // Move_MODEL_ICE_SMALL (also the stones): bouncing and smoking or burning; SubType 1 stones
   // float up, SubType 2 ones spin up (Twister).
   private moveIceSmall(o: Effect): void {
+    if (o.subType === 13) { // thrown up, tumbling, sliding and fading on the ground
+      o.headAngle.z -= o.gravity;
+      o.position.add(o.headAngle);
+      o.angle.x += 0.5 * o.lifeTime;
+      o.angle.y += 0.5 * o.lifeTime;
+      const height = this.heightAt(o.position.x, o.position.y);
+      if (o.position.z + o.direction.z <= height) {
+        o.position.z = height;
+        o.headAngle.x *= 0.6;
+        o.headAngle.y *= 0.6;
+        o.headAngle.z += o.lifeTime;
+        if (o.headAngle.z < 0.5) o.headAngle.z = 0;
+        o.alpha -= 0.1;
+      }
+      return;
+    }
     if (o.subType === 0 || o.subType === 10) o.position.add(o.direction);
     else o.position.add(rotateByAngle(o.direction, o.angle));
     o.direction.multiplyScalar(0.9);
