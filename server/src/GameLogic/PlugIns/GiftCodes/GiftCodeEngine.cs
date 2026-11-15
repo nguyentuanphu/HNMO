@@ -171,7 +171,7 @@ public sealed class GiftCodeEngine
         var attempts = 0;
         while (result.Count < count)
         {
-            if (++attempts > count * 100 + 1000)
+            if (++attempts > (count * 100) + 1000)
             {
                 throw new InvalidOperationException("Not enough unique codes could be made; use more letters.");
             }
