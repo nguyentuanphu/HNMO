@@ -84,6 +84,7 @@ const LORD: Case[] = [
   { skill: 65, name: 'electric-spike', expect: ['joint:flareForceJoint'], shotAt: 900, action: 152 },
   // The dark horse's stomp (shock waves, the strike's cracks at its 19th tick, the stones while keys 8-9.5 play).
   { skill: 62, name: 'earthshake', expect: ['effect:darkHorseSkill', 'effect:shockWave', 'effect:skillFuryStrike', 'effect:earthQuake1'], shotAt: 1040, action: 87, warm: [['Skill', 'GroundStone.bmd'], ['Skill', 'GroundStone2.bmd']] },
+  { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
   { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },
 ];
 
@@ -220,7 +221,10 @@ for (const [group, cases] of Object.entries(CASES)) {
       const seen = new Set(await page.evaluate(() => [...((window as unknown as { __game: { effects: { __seen?: Set<string> } } }).__game.effects.__seen ?? [])]));
       for (const key of c.expect) expect(seen, `${c.name} makes ${key}`).toContain(key);
       // Everything it made ends (Soul Barrier's lights last while the buff does).
-      if (c.name !== 'soul-barrier') {
+      if (c.lasting) {
+        // The summoning circle stays its ten seconds: end it before the next case.
+        await expect.poll(() => game(page, (g) => g.effects.counts().effects + g.effects.counts().joints), { timeout: 30_000 }).toBe(0);
+      } else if (c.name !== 'soul-barrier') {
         await expect.poll(() => game(page, (g) => g.effects.counts().effects + g.effects.counts().joints), { timeout: 20_000 }).toBe(0);
       }
     }

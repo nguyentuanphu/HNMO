@@ -1203,6 +1203,9 @@ export class EffectSystem {
         if (o.subType === 1) {
           o.scale = 1;
           o.hiddenMesh = -2;
+        } else if (o.subType === 2 || o.subType === 3) { // Summon's (party teleport) circle: 250 ticks; 3: 30
+          o.lifeTime = o.subType === 2 ? 250 : 30;
+          o.scale = 1;
         } else if (o.subType !== 0) {
           return false;
         }
@@ -1600,6 +1603,8 @@ export class EffectSystem {
   // Move_MODEL_CIRCLE: Hellfire's circle (0) fades; Nova's hidden ring (1) sends out its lights.
   private moveCircle(o: Effect): void {
     o.blendMeshLight = o.lifeTime * 0.1;
+    if (o.subType === 2) o.blendMeshLight = o.lifeTime > 240 ? (250 - o.lifeTime) * 0.1 : o.lifeTime * 0.1;
+    else if (o.subType === 3) o.blendMeshLight = o.lifeTime > 10 ? (30 - o.lifeTime) * 0.1 : o.lifeTime * 0.1;
     if (o.subType !== 1) return;
     const skillCount = 0; // m_bySkillCount: the charge the server reports
     if (o.lifeTime <= 44 - skillCount) return;
@@ -1616,6 +1621,12 @@ export class EffectSystem {
 
   // Move_MODEL_CIRCLE_LIGHT (SubType 0): the light rises and falls, scrolls, and stones float up.
   private moveCircleLight(o: Effect, luminosity: number): void {
+    if (o.subType === 3) { // Summon's light (its blue flares aren't ported)
+      o.blendMeshLight = Math.min(0.5, o.lifeTime >= 240 ? (250 - o.lifeTime) * 0.1 : o.lifeTime * 0.1);
+      o.blendMeshTexCoordU = -o.lifeTime * 0.01;
+      this.groundLight(o.position, o.blendMeshLight, o.blendMeshLight, o.blendMeshLight, 4);
+      return;
+    }
     this.groundLight(o.position, luminosity, luminosity * 0.8, luminosity * 0.2, 4);
     o.blendMeshLight = o.lifeTime >= 30 ? (40 - o.lifeTime) * 0.1 : o.lifeTime * 0.1;
     o.blendMeshTexCoordU = -o.lifeTime * 0.01;

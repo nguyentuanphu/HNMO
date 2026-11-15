@@ -87,6 +87,7 @@ export const SkillEffect = {
   ELECTRIC_SPIKE: 65,
   CHAOTIC_DISEIER: 238,
   CRESCENT_MOON_SLASH: 44,
+  PARTY_TELEPORT: 63,
 } as const;
 
 /** PLAYER_ATTACK_RUSH: Crescent Moon Slash's and Charge's rush. */
@@ -493,6 +494,10 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.ELECTRIC_SPIKE:
       electricSpike(system, caster);
+      break;
+    case SkillEffect.PARTY_TELEPORT: // the lord's Summon: a circle and its light for the ten seconds of the call
+      system.createEffect('circle', at, caster.angle, light, 2, caster);
+      system.createEffect('circleLight', at, caster.angle, light, 3);
       break;
     case SkillEffect.CRESCENT_MOON_SLASH: // AT_SKILL_RUSH: the sword's force sweeps ahead
       system.createEffect('swordForce', at, caster.angle, light, 0, caster);
