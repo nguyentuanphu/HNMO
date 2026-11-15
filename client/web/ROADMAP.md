@@ -196,9 +196,17 @@ the coins history shows every grant.
    web game, and a Guilds section on the website (ladder, last week's winners, guilds by level, castle siege results).
    State in `save/guilds.json` (no database change). Still to check on a server running this code: a week's payout
    and a real level-up with several members (the rules are unit-tested; the web parts are tested with fed packets).
-7. ⏳ **Community** (idea 7): one-time coins for linking Discord or Zalo and joining the group, coins
-   for community events, automatic posts of rare drops and boss kills (Discord), a share button for
-   screenshots.
+7. ✅ **Community** (idea 7), built 2026-11-16 (Sydney): one-time coins for linking the account to Discord (the Discord
+   bot's /link with a code from the game; once per account and per Discord user) and for joining the Zalo group (a claim
+   code posted in the group that the admin approves in the admin panel: Zalo has no open bot API for groups), community
+   events (a code word entered once per account while the event runs, or listed winners paid once; coins, zen, items;
+   Sydney dates), automatic posts to Discord and the website's recent highlights (rare drops with a filter, world boss
+   kills, guild level-ups and ladder winners, castle siege winners; each kind on/off with English and Vietnamese texts),
+   Print Screen screenshots like the desktop's and a share panel (caption with the game's name, Web Share or download).
+   All in the admin panel (*Community*), the community window (K) in the web game and a Community section on the
+   website. State in `save/community.json` (no database change). Still to check on a server running this code: a real
+   Discord link with the bot and a real post on Discord (the rules are unit-tested; the web parts are tested with fed
+   packets); top-race winner posts come with the top races (section 13.1).
 8. ✅ **Cash shop: decided by the owner (2026-11-15)** — the shop stays as it is; what makes it fair is that
    every coin can also be earned by playing (bosses, drops, events, missions, online time, milestones,
    invites, the login calendar, rankings, community), each source set in the admin panel. No items are

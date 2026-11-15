@@ -316,3 +316,20 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Tests can feed an HNMO JSON state without importing /js modules: build the C2 F5 xx bytes in Node (escape non-ASCII as
   \uXXXX like the server does) and call `__game.connection.dispatch` (see `tests/e2e/guilds.spec.ts`).
 - The worktree can borrow the main checkout's `client/web/node_modules` with a symlink (same lock file; saves disk).
+
+## Community (2026-11-16)
+- `GameLogic/PlugIns/Community`: `CommunityEngine` (pure, `CommunityEngineTest`: Discord coins once per account and Discord
+  user, Zalo claims approved by the admin, event codes once per account, winners once each, Sydney wall-clock dates with
+  DST, drop filter, post texts, highlights), `CommunityStore` (`save/community.json`, `CommunityStore.Open` shared per file,
+  the admin page writes Zalo decisions into it), `CommunityPlugIn` (pays approved Zalo claims, records winners and pays coins
+  on a 1-minute tick on the lowest server id; `PostAsync` → highlights + `CommunityHighlightEvent` for Discord). World bosses
+  and guilds call `CommunityPlugIn.Get(context)` for their posts; `GameEventPublisherPlugIn` leaves drop posts to it when
+  its rare drops go to Discord.
+- Discord linking reuses `AccountLinkService` (the bot's /link); the web window asks for a code with the Discord packets
+  (F5 04 → F5 05). Zalo: claim code `Z-XXXXXX`, admin approves (no bot API for Zalo groups).
+- F5 codes now: ... guilds 11-13, community 14 (request), 15 (state JSON), 16 (action). Next free: 17.
+- Admin page `/community`; website `/website/community` (section `#social`); web window K (not while the inventory is
+  open: K is the inventory extension there, as on the desktop), `ui/communityWindow.ts`; screenshots `ui/screenshot.ts`
+  (Print Screen like the desktop: `Screen(MM_DD-HH_MM)-NNNN.jpg`; share panel via the `hnmo-share-open` window event).
+- A WebGL picture without preserveDrawingBuffer is read by rendering and copying in the same task (`capture` in main.ts).
+- vi.json: add keys as single lines after `"texts": {` (re-serializing the file rewrites all 2800 lines).
