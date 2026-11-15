@@ -163,11 +163,12 @@ public sealed class WebsiteAccountSafetyController(
             }
             else
             {
-                result = await WritePinAsync(persistence, configuration, loginServer, this.Contexts(), account.LoginName, clear ? string.Empty : AccountSafetyEngine.HashPin(newPin!), cancellationToken).ConfigureAwait(false);
+                var stored = clear ? string.Empty : AccountSafetyEngine.HashPin(newPin!);
+                result = await WritePinAsync(persistence, configuration, loginServer, this.Contexts(), account.LoginName, stored, cancellationToken).ConfigureAwait(false);
                 if (result == "ok")
                 {
                     engine.PinChanged(account.LoginName, DateTime.UtcNow);
-                    account.VaultPassword = clear ? string.Empty : "set";
+                    account.VaultPassword = stored;
                     logger.LogInformation("Account safety: {Login} {Action} the second password on the website.", account.LoginName, clear ? "cleared" : "set");
                 }
             }
