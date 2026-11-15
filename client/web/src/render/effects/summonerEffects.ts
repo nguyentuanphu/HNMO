@@ -21,6 +21,7 @@ import * as THREE from 'three';
 import { randInt, rotateByAngle, moveHumming } from './core.js';
 import type { BitmapName } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
+import { chaoticShine } from './darkLordEffects.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner } from './types.js';
 
@@ -324,9 +325,13 @@ function fallingLights(type: 'shiny5Particle' | 'pinLightParticle'): NonNullable
     create: (o) => {
       if (type === 'pinLightParticle') o.lifeTime = 40;
       o.scale = o.callScale > 0 ? o.callScale : o.scale;
-      return o.subType === 0;
+      return o.subType === 0 || (type === 'shiny5Particle' && o.subType === 3 && o.owner !== null);
     },
     move: (o, system) => {
+      if (o.subType === 3) { // Chaotic Diseier's dark shines (darkLordEffects.ts)
+        chaoticShine(o, system);
+        return true;
+      }
       const p = new THREE.Vector3(o.position.x + randInt(500) - 250, o.position.y + randInt(500) - 250, o.position.z - randInt(100) + 150);
       system.createParticle(type, p, o.angle, o.light, 0, o.scale);
       return true;

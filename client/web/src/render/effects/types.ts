@@ -107,6 +107,12 @@ export type EffectType =
   | 'eventCloud' // BITMAP_EVENT_CLOUD: their clouds on the ground
   | 'windForce' // MODEL_WINDFOCE: their whirl of wind (Effect/wind_foce.bmd)
   | 'lightRed' // BITMAP_LIGHT_RED: the party buffs' glow
+  | 'flareForce' // BITMAP_FLARE_FORCE: Electric Spike's beam and bolts, the Critical Damage buff's sparks (joints only)
+  | 'darkHorseSkill' // UpdateDarkHorseSkill: Earthshake's stomp (no model)
+  | 'shockWave' // BITMAP_SHOCK_WAVE: a shrinking ring on the ground
+  | 'groundStone' | 'groundStone2' // MODEL_GROUND_STONE(2): Earthshake's slabs (Skill/GroundStone*.bmd)
+  | 'desair' // MODEL_DESAIR: Chaotic Diseier's winged shadows (Skill/desair.bmd)
+  | 'feather' // MODEL_FEATHER: their feathers (Skill/darkwing_hetachi.bmd)
   | 'windForceMirror' // MODEL_WINDFOCE_MIRROR: Increase Defense's passing wind (Effect/wind_foce_mirror.bmd)
   | 'dragonKickDummy' // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
   | 'bladeSkill'; // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
@@ -128,7 +134,8 @@ export type SpriteType = BitmapName;
 
 /** CreateJoint types ported (names as in Data/Effects/JointTypes.json). */
 export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'jointSpark' | 'lightJoint' | 'piercing' | 'flareForceJoint' | 'jointForce' | 'blur'
-  | 'drainLifeGhost' | 'jointEnergy' | 'pinLightJoint' | 'forcePillar' | 'swordEff';
+  | 'drainLifeGhost' | 'jointEnergy' | 'pinLightJoint' | 'forcePillar' | 'swordEff'
+  | 'twoLineGhost'; // BITMAP_2LINE_GHOST: Chaotic Diseier's ghost trails
 
 /** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */
 export type RenderType = 'normal' | 'dark';
@@ -170,6 +177,8 @@ export interface Effect {
   model: AnimatedModel | null;
   /** A model the effect draws besides its own (the caster's weapon for Twisting Slash). */
   extra: THREE.Object3D | null;
+  /** The joint it rides (m_sTargetIndex as a joint index: MODEL_DESAIR on Chaotic Diseier's ghosts). */
+  joint: Joint | null;
   /** This effect as an owner other effects can follow. */
   self: EffectOwner;
   live: boolean;

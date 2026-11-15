@@ -127,6 +127,9 @@ export const BITMAPS = {
   eventCloud: 'clouds2.jpg', // BITMAP_EVENT_CLOUD
   lightRed: 'flare01_red.jpg', // BITMAP_LIGHT_RED
   smokeLine1: 'smokelines01.jpg', // BITMAP_SMOKELINE1
+  firecracker: 'Fire04.jpg', // BITMAP_FIRECRACKER
+  shockWave: 'ShockWave.jpg', // BITMAP_SHOCK_WAVE
+  twoLineGhost: '2line_gost.jpg', // BITMAP_2LINE_GHOST (Data/Skill)
   lava: 'Lava.jpg', // BITMAP_LAVA
   swordEff: '!SwordEff.jpg', // BITMAP_SWORDEFF
   forcePillar: 'force_Pillar.jpg', // BITMAP_FORCEPILLAR
@@ -160,7 +163,7 @@ function imageSize(image: unknown): { width: number; height: number } {
 export function effectTexture(name: BitmapName): EffectTexture | null | undefined {
   if (!effectTextureLoads.has(name)) {
     const file = BITMAPS[name];
-    effectTextureLoads.set(name, loadTexture('Effect', file).then((texture) => {
+    effectTextureLoads.set(name, loadTexture(['Effect', 'Skill'], file).then((texture) => {
       const loaded = texture ? { texture, ...imageSize(texture.image), opaque: !file.toLowerCase().endsWith('.tga') } : null;
       effectTextures.set(name, loaded);
       return loaded;

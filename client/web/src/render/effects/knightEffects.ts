@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { angleEuler, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
-import type { Effect, EffectType } from './types.js';
+import type { Effect, EffectOwner, EffectType, Joint } from './types.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 const ITEM_GROUP_SPEAR = 3;
@@ -362,9 +362,14 @@ EXTRA_JOINTS.flare = {
       o.direction.set(randInt(360), speed * Math.sin(-o.angle.z * Math.PI / 180), speed * Math.cos(-o.angle.z * Math.PI / 180));
       return true;
     }
+    if (o.subType === 23) return spiralSlashInit(o);
     return false;
   },
-  move: (o) => {
+  move: (o, system) => {
+    if (o.subType === 23) {
+      spiralSlashMove(o, system);
+      return;
+    }
     if (o.subType === 2) {
       if (o.lifeTime <= 25) {
         o.direction.z += 5;
@@ -389,6 +394,63 @@ EXTRA_JOINTS.flare = {
     o.position.set(vx * Math.sin(turn) + o.targetPosition.x, vx * Math.cos(turn) + o.targetPosition.y, vy + o.targetPosition.z);
   },
 };
+
+// BITMAP_FLARE SubType 23 (Spiral Slash): five white blades curl out of the knight (PKKey 0-4 their way: up or down
+// on either side, or ahead), each after a few ticks' delay, then hold; a big flame burns at each blade's head.
+const SPIRAL_SPEED = 200;
+function spiralSlashInit(o: Joint): boolean {
+  o.lifeTime = 20 + (4 - o.pkKey);
+  o.maxTails = 15;
+  o.numTails = -1;
+  o.direction.set(1, 5, 1);
+  o.createTails = false;
+  o.counter = o.pkKey; // MultiUse
+  spiralHead.set(o, o.angle.clone());
+  const head = spiralHead.get(o)!;
+  switch (o.counter) {
+    case 0: head.z += 90; o.position.z += 200; break;
+    case 1: head.z += 90; o.position.z += 10; break;
+    case 2: head.z -= 90; o.position.z += 200; break;
+    case 3: head.z -= 90; o.position.z += 10; break;
+    case 4: head.z += 180; o.position.z += 100; break;
+    default: return false;
+  }
+  o.startPosition.copy(o.position);
+  return true;
+}
+const spiralHead = new WeakMap<Joint, THREE.Vector3>();
+
+function spiralSlashMove(o: Joint, system: EffectSystem): void {
+  const head = spiralHead.get(o);
+  if (!head) return;
+  if (o.lifeTime < 20) {
+    if (o.lifeTime < 8) {
+      system.layTail(o, head); // FollowTail: the trail closes in on its head
+    } else {
+      for (let i = 0; i < o.direction.z; i++) {
+        o.direction.y = Math.min(15, o.direction.y + 1.5);
+        switch (o.counter) {
+          case 0: head.x += 3; head.z -= o.direction.y; break;
+          case 1: head.x -= 3; head.z -= o.direction.y; break;
+          case 2: head.x += 3; head.z += o.direction.y; break;
+          case 3: head.x -= 3; head.z += o.direction.y; break;
+          case 4: head.z -= o.direction.y; break;
+        }
+        o.position.copy(rotateByAngle(new THREE.Vector3(0, -SPIRAL_SPEED, 0), head).add(o.startPosition));
+        system.layTail(o, head);
+        if (o.numTails >= o.maxTails - 1) break;
+      }
+      o.direction.z += 4;
+    }
+  }
+  if (o.lifeTime < 10) o.light.multiplyScalar(1 / 1.2);
+  system.createSprite('flame', o.position, o.scale + (20 - o.lifeTime) / 5, o.light, null, randInt(360));
+}
+
+/** AttackStage AT_SKILL_SPIRAL_SLASH: two blades as the swing passes key 2.3-2.6, three more after key 5 (then the release). */
+export function spiralSlashBlades(system: EffectSystem, caster: EffectOwner, keys: readonly number[]): void {
+  for (const key of keys) system.createJoint('flare', caster.position, caster.position, caster.angle, 23, null, 40, 0, key);
+}
 
 // BITMAP_JOINT_SPARK SubType 0: a short white spark streak.
 EXTRA_JOINTS.jointSpark = {

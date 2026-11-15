@@ -64,7 +64,7 @@ const PARTICLE_TEXTURES: Partial<Record<ParticleType, BitmapName>> = {
 const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
   smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1',
-  drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
+  twoLineGhost: 'twoLineGhost', drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
 };
 
 export interface EffectSystemOptions {
@@ -102,6 +102,10 @@ export interface CreateEffectExtra {
   skillIndex?: number;
   /** The character the effect reaches besides its owner (o->Owner->Owner, m_sTargetIndex). */
   target?: EffectOwner | null;
+  /** CreateEffect's Skill argument (o->Kind). */
+  kind?: number;
+  /** m_sTargetIndex as a joint: the joint an effect rides (MODEL_DESAIR on Chaotic Diseier's ghosts). */
+  joint?: Joint | null;
 }
 
 const modelLoads = new Map<string, Promise<BMDModel | null>>();
@@ -431,6 +435,11 @@ export class EffectSystem {
           o.angle.x = randInt(90) - 45;
           o.angle.z = randInt(360);
           o.velocity.set(0, -(randInt(8) + 40), 0);
+        } else if (o.subType === 59) { // Chaotic Diseier's ghosts' dark smoke
+          o.lifeTime = 40;
+          o.scale = (randInt(64) + 64) * 0.01;
+          o.rotation = randInt(360);
+          o.gravity = (randInt(32) + 60) * 0.1;
         } else if (o.subType === 11) {
           o.lifeTime = 50;
           o.position.x += randInt(64) - 32;
@@ -551,6 +560,9 @@ export class EffectSystem {
           o.light.set(luminosity * 0.5, luminosity, luminosity * 0.8);
           o.velocity.multiplyScalar(0.4);
           o.scale += 0.05;
+        } else if (o.subType === 59) {
+          o.light.setScalar(o.lifeTime / 40 * 0.9);
+          o.scale += 0.09;
         } else if (o.subType === 3) {
           const luminosity = o.lifeTime / 8;
           o.light.set(luminosity * 0.8, luminosity * 0.8, luminosity);
@@ -789,6 +801,20 @@ export class EffectSystem {
     return [corner(-half, 0), corner(half, 0), corner(0, -half), corner(0, half)];
   }
 
+  /** CreateTail with a bone's matrix (its rotation lays the tail's corners) instead of the joint's angle. */
+  layTailMatrix(o: Joint, matrix: THREE.Matrix4): void {
+    o.numTails = Math.min(o.numTails + 1, o.maxTails - 1);
+    for (let j = o.numTails - 1; j >= 0; j--) o.tails[j + 1] = o.tails[j];
+    const half = o.scale * 0.5;
+    const corner = (x: number, z: number): THREE.Vector3 => new THREE.Vector3(x, 0, z).transformDirection(matrix).multiplyScalar(Math.abs(x) + Math.abs(z)).add(o.position);
+    o.tails[0] = [corner(-half, 0), corner(half, 0), corner(0, -half), corner(0, half)];
+  }
+
+  /** The joints of a type (for an effect that rides one). */
+  jointsOf(type: JointType): readonly Joint[] {
+    return this.joints.filter((joint) => joint.type === type);
+  }
+
   /** CreateTail, for the registered joint types that lay several tails a tick. */
   layTail(o: Joint, angle: THREE.Vector3): void {
     this.createTail(o, angle);
@@ -805,7 +831,7 @@ export class EffectSystem {
     // The common move along -y of the joint's angle; the tail is laid with this matrix.
     const matrixAngle = o.angle.clone();
     // (BITMAP_LIGHT and the spear flares place themselves.)
-    if (o.velocity !== 0 && o.type !== 'lightJoint' && o.type !== 'piercing' && o.type !== 'jointForce') o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), o.angle));
+    if (o.velocity !== 0 && o.type !== 'lightJoint' && o.type !== 'piercing' && o.type !== 'jointForce' && o.type !== 'flareForceJoint') o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), o.angle));
     switch (o.type) {
       case 'jointThunder': this.moveThunder(o); break;
       case 'jointHealing': this.moveHealing(o); break;
@@ -949,6 +975,7 @@ export class EffectSystem {
 
   // DescribeJoint: face one (the z corners) and face two (the x corners); thunder scrolls.
   private drawJoint(o: Joint): void {
+    if (EXTRA_JOINTS[o.type]?.draw?.(o, this)) return;
     const scroll = (Math.floor(this.worldTime) % 1000) * 0.001;
     const thunder = o.type === 'jointThunder';
     const blend: JointBlend = o.blend;
@@ -1011,8 +1038,8 @@ export class EffectSystem {
       headAngle: new THREE.Vector3(), direction: new THREE.Vector3(), light: newVector(light), scale: scale <= 0 ? 0.9 : scale,
       lifeTime: 0, gravity: 0, velocity: 0.3, blendMesh: -1, blendMeshLight: 1, blendMeshTexCoordU: 0, blendMeshTexCoordV: 0,
       hiddenMesh: -1, alpha: 1, renderType: 'normal', owner, target: extra.target ?? null, callScale: scale, animationFrame: 0,
-      counter: 0, kind: 0, skill: extra.skillIndex ?? 0, pkKey: extra.pkKey ?? -1, distance: 0,
-      model: null, extra: null, self: null as unknown as EffectOwner, live: true,
+      counter: 0, kind: extra.kind ?? 0, skill: extra.skillIndex ?? 0, pkKey: extra.pkKey ?? -1, distance: 0,
+      model: null, extra: null, joint: extra.joint ?? null, self: null as unknown as EffectOwner, live: true,
     };
     o.self = { position: o.position, angle: o.angle, light: o.light, isLive: () => o.live };
     const known = EXTRA_EFFECTS[type];

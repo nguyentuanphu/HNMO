@@ -21,6 +21,8 @@ import { summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
+import { LordAction, chaoticDiseier, earthshake, electricSpike } from './darkLordEffects.js';
+import { spiralSlashBlades } from './knightEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -79,7 +81,18 @@ export const SkillEffect = {
   CRITICAL_DAMAGE: 64,
   FLAME_STRIKE: 236,
   GIGANTIC_STORM: 237,
+  SPIRAL_SLASH: 57,
+  EARTHSHAKE: 62,
+  ELECTRIC_SPIKE: 65,
+  CHAOTIC_DISEIER: 238,
 } as const;
+
+/** PLAYER_ATTACK_ONE_FLASH: Spiral Slash's swing. */
+const ONE_FLASH_ACTION = 136;
+/** Without the skill's action playing, the timings count this many keys a tick. */
+const FALLBACK_KEYS_PER_TICK = 0.3;
+/** A skill that waits for its action's key releases after this many ticks at most. */
+const RELEASE_WAIT_TICKS = 40;
 
 /** PLAYER_SKILL_HELL_BEGIN and PLAYER_SKILL_HELL_START: Nova's charge and release actions. */
 const NOVA_CHARGE_ACTIONS: readonly number[] = [72, 73];
@@ -122,6 +135,15 @@ export interface SkillEffectOptions {
   bowNumbers?: { rightHand?: number; leftHand?: number };
   /** The tile an area skill was cast at (c->SkillX, c->SkillY). */
   cell?: { x: number; y: number } | null;
+  /** The caster is the hero (Chaotic Diseier's burst at the selected target is the hero's own). */
+  casterIsHero?: boolean;
+}
+
+/** The key the caster's action is at, when it plays one of `actions`; else a count from the ticks so far. */
+function actionKey(caster: EffectOwner, actions: readonly number[], ticks: number): number {
+  const action = caster.currentAction?.();
+  if (action !== undefined && actions.includes(action)) return caster.animationFrame?.() ?? ticks * FALLBACK_KEYS_PER_TICK;
+  return ticks * (caster.playSpeed?.(actions[0]) ?? FALLBACK_KEYS_PER_TICK);
 }
 
 /** Starts a skill's effects at its cast; returns false for a skill whose effects aren't ported. */
@@ -155,12 +177,23 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
   const rage = rageCreateEffect(system, skill, caster, target);
   if (rage && RAGE_BUFFS.includes(skill)) return true; // no attack follows a party buff
   if (skill === SkillEffect.CHAIN_LIGHTNING) return true; // its links come with ChainLightningHitInfo (playChainLightning)
+  if (skill === SkillEffect.CHAOTIC_DISEIER) chaoticDiseier(system, caster, target, options.casterIsHero ?? false); // ReceiveMagic
+  if (skill === SkillEffect.EARTHSHAKE) earthshake(system, caster); // the dark horse's stomp starts with the lord's action
   if (skill === SkillEffect.COMBO) { // ReceiveMagic: the combo's burst at once
     system.createEffect('combo', caster.position, caster.angle, caster.light ?? WHITE);
     return true;
   }
   let attackTime = 1;
+  let ticks = 0;
   system.schedule(() => {
+    ticks++;
+    if (skill === SkillEffect.SPIRAL_SLASH || skill === SkillEffect.ELECTRIC_SPIKE) {
+      attackTime = keyedStage(system, skill, caster, attackTime, ticks);
+      attackTime += 1;
+      if (attackTime < ATTACK_LIMIT_TIME) return true;
+      release(system, skill, caster, target, options);
+      return false;
+    }
     attackTime = attackStage(system, skill, caster, attackTime, target);
     attackEffect(system, skill, caster, target);
     if (skill === SkillEffect.POWER_SLASH) attackTime = ATTACK_LIMIT_TIME;
@@ -219,6 +252,27 @@ function attackStage(system: EffectSystem, skill: number, caster: EffectOwner, a
   for (let i = 0; i < 5; i++) {
     system.createEffect('magic2', caster.position, angle, caster.light ?? WHITE, 2, caster);
     angle.z += 20;
+  }
+  return attackTime;
+}
+
+// AttackStage's cases timed by the caster's action keys: Spiral Slash's blades (two as the swing passes key 2.3-2.6,
+// three more and the release after key 5) and Electric Spike's release at key 5.5 of PLAYER_SKILL_FLASH.
+const spiralFirstBlades = new WeakSet<EffectOwner>();
+function keyedStage(system: EffectSystem, skill: number, caster: EffectOwner, attackTime: number, ticks: number): number {
+  if (skill === SkillEffect.ELECTRIC_SPIKE) {
+    const key = actionKey(caster, [LordAction.SKILL_FLASH, LordAction.RIDE_ATTACK_FLASH, LordAction.FENRIR_ATTACK_DARKLORD_FLASH], ticks);
+    return key >= 5.5 || ticks >= RELEASE_WAIT_TICKS ? ATTACK_LIMIT_TIME : 10;
+  }
+  const key = actionKey(caster, [ONE_FLASH_ACTION], ticks);
+  if (key > 5 || ticks >= RELEASE_WAIT_TICKS) {
+    spiralSlashBlades(system, caster, [0, 1, 4]);
+    spiralFirstBlades.delete(caster);
+    return ATTACK_LIMIT_TIME;
+  }
+  if (key > 2.3 && !spiralFirstBlades.has(caster)) { // once, as the swing passes key 2.3-2.6
+    spiralFirstBlades.add(caster);
+    spiralSlashBlades(system, caster, [2, 3]);
   }
   return attackTime;
 }
@@ -418,6 +472,9 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.CRITICAL_DAMAGE:
       criticalDamage(system, caster);
+      break;
+    case SkillEffect.ELECTRIC_SPIKE:
+      electricSpike(system, caster);
       break;
     case SkillEffect.GIGANTIC_STORM: // five storms 200 around the gladiator
       for (let i = 0; i < 5; i++) {

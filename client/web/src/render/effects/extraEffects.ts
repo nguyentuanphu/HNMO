@@ -26,6 +26,8 @@ export interface ExtraEffect {
 export interface ExtraJoint {
   init(o: Joint, system: EffectSystem): boolean;
   move(o: Joint, system: EffectSystem): void;
+  /** Its own draw (DescribeJoint's special faces); true when it drew itself. */
+  draw?(o: Joint, system: EffectSystem): boolean;
 }
 
 export interface ExtraParticle {
