@@ -4544,4 +4544,7 @@
   <data name="GiftCodesErrorGone" xml:space="preserve">
     <value>The code was deleted meanwhile.</value>
   </data>
+  <data name="ResetsRelifePage" xml:space="preserve">
+    <value>Resets and relife</value>
+  </data>
 </root>
