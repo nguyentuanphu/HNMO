@@ -39,7 +39,26 @@ function packet(value: unknown): number[] {
 }
 
 async function feed(page: Page, value: unknown): Promise<void> {
-  await page.evaluate((bytes) => (window as unknown as Win).__game.connection.dispatch(new Uint8Array(bytes)), packet(value));
+  await page.evaluate((bytes) => {
+    const w = window as unknown as Win & { __feeding?: boolean };
+    w.__feeding = true;
+    try { w.__game.connection.dispatch(new Uint8Array(bytes)); } finally { w.__feeding = false; }
+  }, packet(value));
+}
+
+/** From now on the guild panel takes only the states this test feeds (a server with the guild levels also sends its own). */
+async function onlyFedStates(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const w = window as unknown as Win & { __feeding?: boolean; __game: { guildLevels?: { handle(bytes: Uint8Array): boolean } } };
+    const panel = w.__game.guildLevels;
+    if (!panel) return;
+    const handle = panel.handle.bind(panel);
+    panel.handle = (bytes: Uint8Array) => {
+      const guildState = bytes[0] === 0xc2 && bytes[3] === 0xf5 && bytes[4] === 0x12;
+      if (guildState && !w.__feeding) return true;
+      return handle(bytes);
+    };
+  });
 }
 
 const sent = (page: Page) => page.evaluate(() => (window as unknown as Win).__sent.filter((s) => s.name.startsWith('HnmoGuilds')));
@@ -66,7 +85,13 @@ test('in the game: the guild levels panel with G, the buff strip, the chat notic
       const connection = w.__game?.connection;
       if (!connection || (connection as unknown as { __wrapped?: boolean }).__wrapped) return;
       const send = connection.send.bind(connection);
-      connection.send = (group, name, fields) => { w.__sent.push({ name, fields: { ...(fields ?? {}) } }); send(group, name, fields); };
+      // After the first guild request, later ones are only recorded: against a server with the guild levels, its
+      // real answers would replace the states this test feeds.
+      connection.send = (group, name, fields) => {
+        const again = name === 'HnmoGuildsRequest' && w.__sent.some((s) => s.name === name);
+        w.__sent.push({ name, fields: { ...(fields ?? {}) } });
+        if (!again) send(group, name, fields);
+      };
       (connection as unknown as { __wrapped?: boolean }).__wrapped = true;
       clearInterval(timer);
     }, 5);
@@ -74,6 +99,7 @@ test('in the game: the guild levels panel with G, the buff strip, the chat notic
   await enterWorld(page, 'test6');
   await expect.poll(() => sent(page).then((list) => list.some((s) => s.name === 'HnmoGuildsRequest')), { timeout: 60_000 }).toBe(true);
   await page.waitForFunction(() => !!(window as unknown as Win).__game.chat, null, { timeout: 120_000 });
+  await onlyFedStates(page);
 
   // A level-up: told in the chat (the server's guild notice didn't), the buff is on the strip.
   await feed(page, STATE({ type: 'levelup', level: 3, inGame: false }));
@@ -89,6 +115,8 @@ test('in the game: the guild levels panel with G, the buff strip, the chat notic
   const panel = page.locator('.rml-hnmo_guild_levels');
   await expect(page.locator('.rml-guild_info')).toHaveCount(1, { timeout: 90_000 });
   await expect(panel).toHaveCount(1, { timeout: 90_000 });
+  // The server's answer to the first request (this test character's real guild, or none) may have come in: feed again.
+  await feed(page, STATE());
   await expect(panel.locator('.gl-level-text')).toHaveText('Level 3');
   await expect(panel.locator('.gl-xp')).toHaveText('Guild XP: 6,500 / 12,000 (level 4)');
   await expect(panel.locator('.gl-rank')).toContainText('This week: 1,800 points, rank 2.');
