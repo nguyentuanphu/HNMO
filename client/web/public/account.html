@@ -33,6 +33,21 @@
     .gift-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     .langs button { padding: 3px 8px; font-size: 12px; background: transparent; color: var(--gold); }
     .langs button[aria-pressed="true"] { background: var(--gold); color: #1a1408; }
+    .reset-cards { display: grid; gap: 12px; }
+    .reset-card { background: #151a26; border: 1px solid #2c3446; border-radius: 8px; padding: 14px; display: grid; gap: 8px; }
+    .reset-card h3 { margin: 0; font-size: 16px; color: var(--gold); }
+    .reset-card .facts { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
+    .reset-card .facts strong { color: var(--text); font-variant-numeric: tabular-nums; }
+    .reset-card .buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .reset-card .buttons button.secondary { background: transparent; color: var(--gold); }
+    .reset-card .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+    .reset-card .stats label { font-size: 12px; }
+    .reset-card .stats input { width: 100%; box-sizing: border-box; }
+    .reset-card .switch { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); }
+    .reset-card .switch input { width: 18px; height: 18px; }
+    .reset-card .busy { color: var(--error); font-size: 13px; }
+    .reset-card .needs { font-size: 13px; color: var(--muted); }
+    button:disabled { opacity: .5; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -98,6 +113,22 @@
         <button type="submit" data-gt="use">Use the code</button>
       </form>
       <p class="message" id="giftMessage" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel" id="resets" aria-labelledby="resetsTitle">
+      <div class="gift-head">
+        <h2 id="resetsTitle" data-rt="title">Resets and stats</h2>
+        <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-reset-lang="en">EN</button> <button type="button" data-reset-lang="vi">VI</button></div>
+      </div>
+      <p data-rt="intro">Reset or relife your characters, add or clear stat points and switch the delegated reset (the server resets your character while it's offline leveling). Changes need the account out of the game (and not offline leveling). Days are Sydney days.</p>
+      <p class="message error" id="resetsOff" data-rt="off" hidden>The reset system is switched off on this server.</p>
+      <form id="resetsLogin" class="panel" style="padding:0;border:0;background:none">
+        <label><span data-rt="account">Account name</span> <input id="resetsAccount" name="loginName" required maxlength="10" autocomplete="username"></label>
+        <label><span data-rt="password">Password</span> <input id="resetsPassword" name="password" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button type="submit" data-rt="login">Show my characters</button>
+      </form>
+      <p class="message" id="resetsMessage" role="status" aria-live="polite"></p>
+      <div class="reset-cards" id="resetCards"></div>
     </section>
   </main>
   <script type="module">
@@ -267,6 +298,227 @@
     // Whether the website may enter codes (and the plug-in is on).
     fetch('/website/gift-codes', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
       if (d && (d.enabled === false || d.website === false)) { $('giftOff').hidden = false; $('giftLogin').hidden = true; }
+    }).catch(() => {});
+    applyLanguage();
+  </script>
+  <script type="module">
+    // The resets panel (English and Vietnamese): the account's name and password are checked by the game server through
+    // this site's bridge with each request; it lists the characters with their resets, relifes and today's limits and
+    // does a reset, relife, stat change or the delegated reset switch (changes only while the account is offline).
+    const TEXT = {
+      en: {
+        title: 'Resets and stats', account: 'Account name', password: 'Password', login: 'Show my characters',
+        intro: 'Reset or relife your characters, add or clear stat points and switch the delegated reset (the server resets your character while it\'s offline leveling). Changes need the account out of the game (and not offline leveling). Days are Sydney days.',
+        off: 'The reset system is switched off on this server.', loginWrong: 'Wrong account name or password.', noCharacters: 'This account has no character yet: create one in the game first.',
+        server: 'The game server didn\'t answer. Try again later.', busyRequests: 'Too many requests from your address. Wait a minute.', setup: 'The account page isn\'t set up yet (host: see README.txt).',
+        level: 'Level', resets: 'Resets', relifes: 'Relifes', today: 'Today', month: 'This month', freePoints: 'Free points', zen: 'Zen', vip: 'VIP',
+        noLimit: 'no limit', nextReset: 'Next reset: level %level, %cost.', nextRelife: 'Relife: %needed resets, level %level, %cost.', free: 'free',
+        reset: 'Reset', relife: 'Relife', addPoints: 'Add points', clearStats: 'Clear stats', clearCost: 'Clear stats (%cost)',
+        delegated: 'Delegated reset while offline leveling (/autoreset)', delegatedToday: 'today %today', waiting: 'waiting: %reason',
+        online: 'This account is in the game: leave the game to make changes here.', offlineLeveling: 'This account is offline leveling: stop it (log in) to make changes here; the delegated reset can be switched.',
+        confirmReset: 'Reset %name now? Level %level, %cost.', confirmRelife: 'Relife %name now? The resets go back to %resets.', confirmClear: 'Clear the stats of %name (%cost)?',
+        str: 'Strength', agi: 'Agility', vit: 'Vitality', ene: 'Energy', cmd: 'Command',
+        OkReset: '%name was reset: reset %resets.', OkRelife: '%name did relife %relifes: resets now %resets.', OkStats: 'The points were added to %name.', OkClear: 'The stats of %name were cleared: %points free points.',
+        OkOn: 'The delegated reset of %name is on.', OkOff: 'The delegated reset of %name is off.',
+        Off: 'Resets are switched off.', NoTier: 'There is no reset tier for this reset count.', MaximumResets: '%name has the most resets (%max).', LevelTooLow: 'This needs level %level.',
+        DailyLimit: 'No more resets today (%today/%limit). Come back tomorrow.', DelegatedDailyLimit: 'No more delegated resets today.', NotEnoughZen: 'Not enough zen in the bag: it costs %cost.',
+        NotEnoughCoins: 'Not enough coins: it costs %cost.', NotEnoughItems: 'Items missing in the bag: %items.', RelifeOff: 'Relifes are switched off.', ResetsTooLow: 'A relife needs %needed resets.',
+        MaximumRelifes: '%name has the most relifes (%max).', RelifeDailyLimit: 'No more relifes today.', Online: 'The account is in the game or offline leveling: leave the game first.',
+        NotAllowed: 'The website may not do this on this server.', NotEnoughPoints: 'Not enough free points.', NothingToAdd: 'Enter the points to add.', StatMaximum: 'A stat would go over its maximum.',
+        NothingToClear: 'There is nothing to clear.', Failed: 'The change wasn\'t saved. Try again.',
+      },
+      vi: {
+        title: 'Reset và điểm', account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Xem nhân vật của tôi',
+        intro: 'Reset hoặc relife nhân vật, cộng hoặc tẩy điểm và bật/tắt ủy thác reset (máy chủ tự reset khi nhân vật treo máy offline). Thay đổi cần tài khoản đã thoát game (và không treo máy). Ngày tính theo giờ Sydney.',
+        off: 'Hệ thống reset đang tắt trên máy chủ này.', loginWrong: 'Sai tên tài khoản hoặc mật khẩu.', noCharacters: 'Tài khoản này chưa có nhân vật: hãy tạo nhân vật trong game trước.',
+        server: 'Máy chủ game không trả lời. Hãy thử lại sau.', busyRequests: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy chờ một phút.', setup: 'Trang tài khoản chưa được cài đặt (chủ server: xem README.txt).',
+        level: 'Cấp', resets: 'Reset', relifes: 'Relife', today: 'Hôm nay', month: 'Tháng này', freePoints: 'Điểm tự do', zen: 'Zen', vip: 'VIP',
+        noLimit: 'không giới hạn', nextReset: 'Reset tiếp theo: cấp %level, %cost.', nextRelife: 'Relife: %needed lần reset, cấp %level, %cost.', free: 'miễn phí',
+        reset: 'Reset', relife: 'Relife', addPoints: 'Cộng điểm', clearStats: 'Tẩy điểm', clearCost: 'Tẩy điểm (%cost)',
+        delegated: 'Ủy thác reset khi treo máy offline (/uythac)', delegatedToday: 'hôm nay %today', waiting: 'đang chờ: %reason',
+        online: 'Tài khoản này đang trong game: hãy thoát game để thay đổi ở đây.', offlineLeveling: 'Tài khoản này đang treo máy offline: hãy dừng (đăng nhập) để thay đổi ở đây; vẫn bật/tắt được ủy thác reset.',
+        confirmReset: 'Reset %name ngay? Cấp %level, %cost.', confirmRelife: 'Relife %name ngay? Số reset sẽ còn %resets.', confirmClear: 'Tẩy điểm của %name (%cost)?',
+        str: 'Sức mạnh', agi: 'Nhanh nhẹn', vit: 'Thể lực', ene: 'Năng lượng', cmd: 'Mệnh lệnh',
+        OkReset: '%name đã reset: lần reset %resets.', OkRelife: '%name đã relife lần %relifes: số reset còn %resets.', OkStats: 'Đã cộng điểm cho %name.', OkClear: 'Đã tẩy điểm của %name: %points điểm tự do.',
+        OkOn: 'Đã bật ủy thác reset cho %name.', OkOff: 'Đã tắt ủy thác reset cho %name.',
+        Off: 'Hệ thống reset đang tắt.', NoTier: 'Không có mức reset cho số lần reset này.', MaximumResets: '%name đã đạt số lần reset tối đa (%max).', LevelTooLow: 'Cần cấp %level.',
+        DailyLimit: 'Hôm nay đã hết lượt reset (%today/%limit). Hãy quay lại vào ngày mai.', DelegatedDailyLimit: 'Hôm nay đã hết lượt ủy thác reset.', NotEnoughZen: 'Không đủ zen trong túi: cần %cost.',
+        NotEnoughCoins: 'Không đủ coin: cần %cost.', NotEnoughItems: 'Thiếu vật phẩm trong túi: %items.', RelifeOff: 'Relife đang tắt.', ResetsTooLow: 'Relife cần %needed lần reset.',
+        MaximumRelifes: '%name đã đạt số relife tối đa (%max).', RelifeDailyLimit: 'Hôm nay đã hết lượt relife.', Online: 'Tài khoản đang trong game hoặc treo máy: hãy thoát game trước.',
+        NotAllowed: 'Website không được làm việc này trên máy chủ này.', NotEnoughPoints: 'Không đủ điểm tự do.', NothingToAdd: 'Hãy nhập số điểm muốn cộng.', StatMaximum: 'Một chỉ số sẽ vượt mức tối đa.',
+        NothingToClear: 'Không có gì để tẩy.', Failed: 'Thay đổi chưa được lưu. Hãy thử lại.',
+      },
+    };
+    const $ = (id) => document.getElementById(id);
+    let lang = 'en';
+    try { const saved = localStorage.getItem('hnmo.language'); lang = saved === 'vi' || saved === 'en' ? saved : (navigator.language || '').toLowerCase().startsWith('vi') ? 'vi' : 'en'; } catch {}
+    const t = (key) => TEXT[lang][key] ?? TEXT.en[key] ?? key;
+    const n = (value) => Number(value ?? 0).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-AU');
+    const fill = (text, values) => text.replace(/%(\w+)/g, (all, key) => (key in values ? String(values[key]) : all));
+    const coin = (type) => type === 'WCoinC' ? 'W Coin (C)' : type === 'WCoinP' ? 'W Coin (P)' : 'Goblin Points';
+    let login = null;
+    let account = null;
+    let last = null;
+    const say = (text, ok) => { $('resetsMessage').textContent = text; $('resetsMessage').className = `message ${ok ? 'ok' : 'error'}`; };
+    function itemsText(plan) { return (plan?.items ?? []).map((i) => `${i.name || `${i.group}/${i.number}`}${i.level > 0 ? ` +${i.level}` : ''} x${i.count}`).join(', '); }
+    function cost(plan) {
+      const parts = [];
+      if (plan?.zen > 0) parts.push(`${n(plan.zen)} zen`);
+      for (const c of plan?.coins ?? []) parts.push(`${n(c.amount)} ${coin(c.type)}`);
+      const items = itemsText(plan);
+      if (items) parts.push(items);
+      return parts.length ? parts.join(' + ') : t('free');
+    }
+    function resultText(result, action, character, plan) {
+      const state = character?.state ?? {};
+      const p = plan ?? (action === 'relife' ? state.relife : state.next) ?? {};
+      const values = { name: state.name ?? '', resets: state.resets ?? 0, relifes: state.relifes ?? 0, points: character?.freePoints ?? 0, level: p.level ?? 0,
+        cost: cost(p), items: itemsText(p), needed: p.resetsNeeded ?? 0, max: p.maximum ?? 0, today: action === 'relife' ? state.todayRelifes : state.today, limit: action === 'relife' ? state.relifeDailyLimit : state.dailyLimit };
+      if (result === 'Ok') {
+        const key = { reset: 'OkReset', relife: 'OkRelife', 'add-stats': 'OkStats', 'clear-stats': 'OkClear', 'delegated-on': 'OkOn', 'delegated-off': 'OkOff' }[action] ?? 'OkReset';
+        return fill(t(key), values);
+      }
+      return fill(t(result), values);
+    }
+    function errorText(status, body) {
+      if (status === 401) return t('loginWrong');
+      if (status === 403) { $('resetsOff').hidden = false; return t('off'); }
+      if (status === 429) return t('busyRequests');
+      if (status === 503 && body.error === 'setup') return t('setup');
+      return t('server');
+    }
+    async function post(url, body) {
+      const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
+      const data = await response.json().catch(() => ({}));
+      return { status: response.status, ok: response.ok, data };
+    }
+    function fact(label, value) {
+      const span = document.createElement('span');
+      span.append(`${label}: `);
+      const strong = document.createElement('strong');
+      strong.textContent = value;
+      span.append(strong);
+      return span;
+    }
+    function button(text, onClick, secondary, disabled) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = text; b.disabled = !!disabled;
+      if (secondary) b.className = 'secondary';
+      b.addEventListener('click', onClick);
+      return b;
+    }
+    function card(character) {
+      const state = character.state;
+      const options = account.options;
+      const box = document.createElement('article');
+      box.className = 'reset-card';
+      box.dataset.character = state.name;
+      const head = document.createElement('h3');
+      head.textContent = `${state.name}${character.className ? ` · ${character.className}` : ''}${state.vip ? ` · ${t('vip')}` : ''}`;
+      box.append(head);
+      const facts = document.createElement('div');
+      facts.className = 'facts';
+      facts.append(fact(t('level'), n(state.level)), fact(t('resets'), n(state.resets)), fact(t('relifes'), n(state.relifes)),
+        fact(t('today'), state.dailyLimit > 0 ? `${state.today}/${state.dailyLimit}` : `${state.today} (${t('noLimit')})`), fact(t('month'), n(state.month)),
+        fact(t('freePoints'), n(character.freePoints)), fact(t('zen'), n(character.zen)));
+      box.append(facts);
+      if (character.busy) {
+        const busy = document.createElement('p');
+        busy.className = 'busy';
+        busy.textContent = character.busy === 'offlineLeveling' ? t('offlineLeveling') : t('online');
+        box.append(busy);
+      }
+      const needs = document.createElement('p');
+      needs.className = 'needs';
+      needs.textContent = fill(t('nextReset'), { level: state.next.level, cost: cost(state.next) })
+        + (state.relife ? ' ' + fill(t('nextRelife'), { needed: state.relife.resetsNeeded ?? 0, level: state.relife.level, cost: cost(state.relife) }) : '');
+      box.append(needs);
+      const blocked = !!character.busy;
+      const buttons = document.createElement('div');
+      buttons.className = 'buttons';
+      if (options.allowReset) buttons.append(button(t('reset'), () => act(state.name, 'reset'), false, blocked || state.next.result !== 'Ok'));
+      if (options.allowRelife && state.relife) buttons.append(button(t('relife'), () => act(state.name, 'relife'), true, blocked || state.relife.result !== 'Ok'));
+      if (options.allowClearStats) {
+        const clearCost = cost({ zen: options.clearStatsZen, coins: options.clearStatsCoins > 0 ? [{ type: options.clearStatsCoinType, amount: options.clearStatsCoins }] : [] });
+        buttons.append(button(fill(t('clearCost'), { cost: clearCost }), () => act(state.name, 'clear-stats'), true, blocked));
+      }
+      box.append(buttons);
+      if (options.allowAddStats && Object.keys(character.stats ?? {}).length) {
+        const stats = document.createElement('div');
+        stats.className = 'stats';
+        for (const [key, value] of Object.entries(character.stats)) {
+          const label = document.createElement('label');
+          label.append(`${t(key)} (${n(value)})`);
+          const input = document.createElement('input');
+          input.type = 'number'; input.min = '0'; input.max = String(character.freePoints); input.value = '0'; input.dataset.stat = key; input.disabled = blocked || character.freePoints <= 0;
+          label.append(input);
+          stats.append(label);
+        }
+        box.append(stats);
+        const add = button(t('addPoints'), () => {
+          const points = {};
+          for (const input of box.querySelectorAll('input[data-stat]')) points[input.dataset.stat] = Math.max(0, Math.floor(Number(input.value) || 0));
+          act(state.name, 'add-stats', points);
+        }, false, blocked || character.freePoints <= 0);
+        add.dataset.action = 'add-stats';
+        box.append(add);
+      }
+      if (options.allowDelegated) {
+        const label = document.createElement('label');
+        label.className = 'switch';
+        const input = document.createElement('input');
+        input.type = 'checkbox'; input.checked = !!state.delegated.on; input.dataset.action = 'delegated';
+        input.addEventListener('change', () => act(state.name, input.checked ? 'delegated-on' : 'delegated-off'));
+        label.append(input, `${t('delegated')} · ${fill(t('delegatedToday'), { today: state.delegated.today })}${state.delegated.blocked ? ' · ' + fill(t('waiting'), { reason: fill(t(state.delegated.blocked), { level: state.next.level, cost: cost(state.next), items: itemsText(state.next), today: state.today, limit: state.dailyLimit, name: state.name, max: state.next.maximum }) }) : ''}`);
+        box.append(label);
+      }
+      return box;
+    }
+    function render() {
+      const cards = $('resetCards');
+      cards.replaceChildren(...(account?.characters ?? []).map(card));
+    }
+    async function act(name, action, points = {}) {
+      if (!login) return;
+      const character = account.characters.find((c) => c.state.name === name);
+      const state = character?.state;
+      if (action === 'reset' && state && !confirm(fill(t('confirmReset'), { name, level: state.next.level, cost: cost(state.next) }))) return;
+      if (action === 'relife' && state?.relife && !confirm(fill(t('confirmRelife'), { name, resets: state.relife.resetsAfter }))) return;
+      if (action === 'clear-stats' && !confirm(fill(t('confirmClear'), { name, cost: cost({ zen: account.options.clearStatsZen, coins: account.options.clearStatsCoins > 0 ? [{ type: account.options.clearStatsCoinType, amount: account.options.clearStatsCoins }] : [] }) }))) return;
+      try {
+        const answer = await post('/portal/resets/action', { ...login, character: name, action, ...points });
+        if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
+        const updated = answer.data.character;
+        if (updated) account.characters = account.characters.map((c) => (c.state.name === name ? updated : c));
+        last = { text: () => resultText(answer.data.result, action, updated ?? character, answer.data.plan), ok: answer.data.result === 'Ok' };
+        say(last.text(), last.ok);
+        render();
+      } catch { last = { text: () => t('server'), ok: false }; say(t('server'), false); }
+    }
+    function applyLanguage() {
+      for (const element of document.querySelectorAll('#resets [data-rt]')) element.textContent = t(element.dataset.rt);
+      for (const b of document.querySelectorAll('[data-reset-lang]')) b.setAttribute('aria-pressed', String(b.dataset.resetLang === lang));
+      if (last) say(last.text(), last.ok);
+      if (account) render();
+    }
+    for (const b of document.querySelectorAll('[data-reset-lang]')) {
+      b.addEventListener('click', () => { lang = b.dataset.resetLang; try { localStorage.setItem('hnmo.language', lang); } catch {} applyLanguage(); });
+    }
+    $('resetsLogin').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const credentials = { loginName: $('resetsAccount').value.trim(), password: $('resetsPassword').value };
+      try {
+        const answer = await post('/portal/resets/account', credentials);
+        if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
+        if (!answer.data.characters?.length) { last = { text: () => t('noCharacters'), ok: false }; say(t('noCharacters'), false); return; }
+        login = credentials;
+        account = answer.data;
+        last = null; say('', true);
+        render();
+      } catch { last = { text: () => t('server'), ok: false }; say(t('server'), false); }
+    });
+    fetch('/website/resets', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+      if (d && d.enabled === false) { $('resetsOff').hidden = false; $('resetsLogin').hidden = true; }
     }).catch(() => {});
     applyLanguage();
   </script>
