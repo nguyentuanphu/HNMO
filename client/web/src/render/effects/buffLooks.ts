@@ -90,6 +90,15 @@ export function playBuffLook(system: EffectSystem, buff: number, owner: EffectOw
       }
       return true;
     }
+    case Buff.HARDEN: // two ice shells, the second turned round (they fade by themselves when it ends)
+      if (on) {
+        system.deleteEffect('ice', owner, 1);
+        system.createEffect('ice', owner.position, owner.angle, owner.light ?? WHITE, 1, owner);
+        const turned = owner.angle.clone();
+        turned.z += 180;
+        system.createEffect('ice', owner.position, turned, owner.light ?? WHITE, 2, owner);
+      }
+      return true;
     case Buff.THORNS: // Damage Reflection: thorns of light rise from the body while it lasts
       if (!on) system.deleteJoint('flare', owner, 43);
       else if (!system.searchJoint('flare', owner, 43)) system.createJoint('flare', owner.position, owner.position, owner.angle, 43, owner, 50, 0, 0, new THREE.Vector3(0.9, 0.6, 0.1));

@@ -311,6 +311,12 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   const frozen = await setDebuffs([56]);
   expect(frozen!.tint).toEqual([0.3, 0.5, 1]); // eDeBuff_Freeze
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-freeze.png` });
+  await setDebuffs([57]); // eDeBuff_Harden: two ice shells stay on the monster while it lasts
+  await expect.poll(() => game(page, (g) => g.effects.census()['effect:ice'] ?? 0), { timeout: 10_000 }).toBe(2);
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: `${SHOTS_DIR}/buffs-harden.png` });
+  await setDebuffs([]);
+  await expect.poll(() => game(page, (g) => g.effects.census()['effect:ice'] ?? 0), { timeout: 10_000 }).toBe(0);
   await setDebuffs([76]); // eDeBuff_AttackDown (Weakness)
   await expect.poll(() => game(page, (g) => g.effects.census()['effect:shiny5'] ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
   await expect.poll(() => game(page, (g) => g.effects.census()['particle:shiny5Particle'] ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);

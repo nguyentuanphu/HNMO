@@ -1199,6 +1199,22 @@ export class EffectSystem {
         return true;
       }
       case 'ice':
+        if ((o.subType === 1 || o.subType === 2) && o.owner) { // Harden's ice shell around the character
+          o.lifeTime = 20;
+          o.scale = 0.8;
+          o.angle.x = -20;
+          o.blendMesh = 0;
+          o.blendMeshLight = 0.5;
+          o.gravity = 5;
+          o.headAngle.set(0, 0, randInt(360));
+          for (let i = 0; i < 3; i++) {
+            const position = new THREE.Vector3(o.position.x + randInt(64) - 32, o.position.y + randInt(64) - 32, o.position.z + randInt(128) + 32);
+            this.createParticle('smoke', position, o.angle, o.light);
+          }
+          this.groundLight(o.position, 0.4, 0.3, 0.2, 2);
+          o.startPosition.copy(o.position);
+          return true;
+        }
         if (o.subType !== 0) return false;
         o.lifeTime = 50;
         o.scale = 0.8;
@@ -1595,6 +1611,24 @@ export class EffectSystem {
 
   // MODEL_ICE SubType 0: the crystal grows, then smokes and fades.
   private moveIce(o: Effect, luminosity: number): void {
+    if (o.subType === 1 || o.subType === 2) {
+      // While its owner is hardened it stays (its animation held at key 4); then it fades. (The desktop also hides it
+      // while the owner walks, and SubType 1 sheds sparkles of BITMAP_FIRE+2 SubType 10: not on the web.)
+      const owner = o.owner;
+      if (!owner || !(owner.isLive?.() ?? true)) {
+        o.live = false;
+        return;
+      }
+      if (owner.hasBuff?.(57) ?? false) {
+        o.position.copy(owner.position);
+        o.animationFrame = Math.min(o.animationFrame, 4);
+        o.lifeTime = 10;
+      } else {
+        o.alpha -= 0.05;
+      }
+      o.direction.set(0, 0, 0);
+      return;
+    }
     this.groundLight(o.position, -luminosity * 0.4, -luminosity * 0.3, -luminosity * 0.2, 2);
     if (o.animationFrame < 5) return;
     o.velocity = 0;
