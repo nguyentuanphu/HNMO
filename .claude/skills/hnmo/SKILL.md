@@ -245,3 +245,10 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   main.ts's `buffs.onChange` for players and monsters. Tests set buffs with `__game.buffs.replace(id, [...])`.
 - Skills timed by an action's keys read `caster.currentAction()` / `animationFrame()`; the test plays the action
   with `hero.playOnce(action)` (case `action`), else the timing counts the action's play speed per tick.
+- Second pass (2026-11-15): wizardEffects.ts (Cometfall, Expansion of Wizardry and its buff), the rest went into the class
+  modules. An effect type whose name is in Data/Effects/EffectTypes.json gets that row's creation values before its
+  `create` hook: name new types exactly as the catalogue does (e.g. `arrowsre6`, `twlight`, `knightPlancrackB`), or the
+  life time stays 0 and it never shows. Skills released at an action's key go in skillEffects.ts's KEYED_RELEASES.
+  Sprite sizes match the desktop (texture width x scale; the desktop shrinks upscaled "MUX" textures back to their
+  original size, the game data has none), so a very bright effect (Spiral Slash) is the desktop's own look.
+  The test's `other: true` aims a skill at another character (cancels skip the caster).
