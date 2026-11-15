@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const backgrounds: Record<string, string> = {
   classic: 'rgb(16, 18, 15)', azure: 'rgb(9, 22, 38)', ember: 'rgb(33, 16, 13)',
-  jade: 'rgb(8, 29, 24)', violet: 'rgb(23, 15, 39)', parchment: 'rgb(243, 235, 216)',
+  jade: 'rgb(234, 242, 231)', violet: 'rgb(23, 15, 39)', parchment: 'rgb(243, 235, 216)',
 };
 
 for (const width of [375, 820, 1280]) {

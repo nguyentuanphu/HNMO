@@ -173,11 +173,11 @@ Classic preserves the current appearance. Five alternatives are available:
 
 | Theme | Appearance |
 |---|---|
-| Azure | Blue, rounded panels and sans-serif headings |
-| Ember | Warm copper, square panels and accented section headings |
-| Jade | Green, rounded panels and a centered hero |
-| Violet | Purple, serif headings and softly shadowed panels |
-| Parchment | Light paper, ink text and a quiet background image |
+| Azure | Blue command center with a fixed desktop navigation rail and compact cards |
+| Ember | Copper cinematic poster, oversized uppercase headings and full-height artwork |
+| Jade | Light garden journal, organic framing and a centered serif hero |
+| Violet | Night arcade with a geometric grid, offset hero and monospaced headings |
+| Parchment | Newspaper masthead, editorial columns and a sepia illustration |
 
 Choose Classic to restore the original appearance. If public settings cannot
 be loaded, the homepage keeps Classic. The configured game name and language
