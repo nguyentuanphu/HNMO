@@ -323,7 +323,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
 11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.
 
-## Owner requests (2026-11-16, Sydney time) — waiting for the go-ahead on the proposal
+## Owner requests (2026-11-16, Sydney time) — approved, build on Thursday 2026-11-19 from 13:00 (first)
 - Log in on the website first; the game then opens at the server choice without asking for the password again.
 - Top-up lives on the home page and in the account page, not on the game's login box.
 - The game's login box keeps only the guide link (no "create one", "top up", test accounts line).
@@ -331,3 +331,13 @@ section 12 (the cash shop) still waits for the owner's answers.
 - The admin panel explains itself: a hint on hover for every button/field and a "How to use this page" button on
   every page (EN+VI), starting with the API keys page.
 - The owner hit "This account is already logged in" for test5 on their own computer: the stuck-login follow-up is urgent.
+- Approved proposal: website login -> "Play now" opens the game at the server choice with a one-time ticket
+  (about a minute) instead of the password; the game without a web login goes to the website's login; the
+  desktop client keeps its password login; the admin panel stays on its own address, no link from the website.
+- The player's account page (after the web login) has everything a player needs, EN+VI:
+  overview (characters with level/resets/map, online or not), coins balance + history + top-up, VIP (buy with
+  coins, time left), gift codes, missions/daily rewards and login calendar, resets, account safety (second
+  password, item locks, vault PIN, login history), change password and e-mail, invite-a-friend link,
+  community links (Discord/Zalo), play now / download, log out. Today it has only: setup, create account,
+  coins, gift code, resets and stats, account safety.
+- Give the owner the guide for testing HNMO with their own Claude API key again with the Thursday report.
