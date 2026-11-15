@@ -22,7 +22,9 @@ import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
-import { setUpSettings } from './ui/settingsWindow.js';
+import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
+import { PerfRecorder } from './game/perfRecorder.js';
+import { PerfReportWindow } from './ui/perfReportWindow.js';
 import { frameDue } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
@@ -181,6 +183,8 @@ export interface GameState {
   social?: Social;
   duelAndGens?: DuelAndGens;
   fieldEvents?: FieldEvents;
+  /** The performance report window (HNMO extra). */
+  perfReport?: PerfReportWindow;
 }
 
 declare global {
@@ -237,6 +241,27 @@ const state: GameState = { world: null, hero: null, online: null, mapNumber: nul
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
+
+// HNMO extra: the performance report (Settings, or Ctrl+Shift+P): what the frames cost on the player's computer.
+let settingsWindow: SettingsWindow | null = null;
+const perfRecorder = new PerfRecorder({
+  renderer, canvas: ui.canvas,
+  scene: () => {
+    const counts = { players: 0, monsters: 0, npcs: 0 };
+    for (const c of state.online?.characters.values() ?? []) {
+      if (c.kind === 'player') counts.players++; else if (c.kind === 'monster') counts.monsters++; else counts.npcs++;
+    }
+    const fx = state.effects?.counts();
+    return {
+      map: state.mapNumber, characters: state.online?.characters.size ?? 0, ...counts,
+      effects: fx?.effects ?? 0, particles: fx?.particles ?? 0, joints: fx?.joints ?? 0, sprites: fx?.sprites ?? 0,
+      labels: ui.labels.childElementCount, chatLines: state.chat?.entries.length ?? 0,
+    };
+  },
+  settings: () => ({ ...(settingsWindow?.current ?? {}), language: currentLanguage() }),
+});
+const perfWindow = new PerfReportWindow(perfRecorder, { click: () => sounds.click(), beforeRecord: () => settingsWindow?.close() });
+state.perfReport = perfWindow;
 
 // The loading line; once something has finished loading (progress 1) it goes away after a few
 // seconds, so nothing but the game's own interface stays on screen.
@@ -550,16 +575,22 @@ function frame(now: number): void {
   const dt = Math.min((now - last) / 1000, MAX_FRAME_SECONDS);
   last = now;
   frames++; fpsTime += dt;
-  if (fpsTime >= 1) { ui.fps.textContent = `${frames} fps`; frames = 0; fpsTime = 0; }
+  if (fpsTime >= 1) { ui.fps.textContent = `${Math.round(frames / fpsTime)} fps`; frames = 0; fpsTime = 0; }
+  // The performance report measures the frame's parts while it records (game/perfRecorder.ts).
+  const rec = perfRecorder.recording ? perfRecorder : null;
+  rec?.beginFrame();
   if (state.hero) {
     state.hero.update(dt, state.world!);
     state.online?.update(dt);
+    rec?.lap('characters');
     state.combat?.update();
     if (state.ground && state.world) state.ground.update(state.world);
+    rec?.lap('combat');
     state.deaths?.update(dt);
     state.projectiles?.update(dt);
     state.effects?.update(dt);
     keepSparkles?.();
+    rec?.lap('effects');
     state.autoPlay?.update();
     mapBanner.update(dt);
     if (state.online && state.hero && state.world) {
@@ -574,13 +605,18 @@ function frame(now: number): void {
     state.miniMap?.update();
     state.gates?.update();
     state.hud?.updateCooldowns();
-    ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
+    const position = `${state.hero.cell.x}, ${state.hero.cell.y}`;
+    if (position !== shownPosition) { ui.position.textContent = position; shownPosition = position; }
+    rec?.lap('interface');
     updateCamera();
     updateLabels();
+    rec?.lap('camera');
   }
   renderer.render(scene, camera);
+  if (rec) { rec.lap('render'); rec.endFrame(now); }
   requestAnimationFrame(frame);
 }
+let shownPosition = '';
 
 // ---------- login screens ----------
 
@@ -1417,7 +1453,7 @@ function initLogin() {
 resize();
 initLogin();
 setUpGuide();
-setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root });
+settingsWindow = setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root }, { performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); } });
 // The login theme (it starts with the first click or key: browsers hold sound back until then).
 sounds.audio.playMusic(loginMusic(false));
 // The sound button: everything on or off, kept in the browser.
