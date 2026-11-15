@@ -7320,6 +7320,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoGiftCodesState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the waiting rewards, the account's last codes, and the event which caused it, if any (the result, the reward, the tries left).</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's gift codes (HnmoGiftCodesRequest) or did an action there, and when something changed for a client which requested them before (a code entered with the chat command, waiting rewards given).
+    /// Causes reaction on client side: The gift code window shows the result of the entered code, the rewards waiting for room in the bag and the account's last codes; a notice in the chat tells about the event in it.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftCodesStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftCodesStateRef.GetRequiredSize(json);
+            var packet = new HnmoGiftCodesStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

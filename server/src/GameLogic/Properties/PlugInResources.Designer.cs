@@ -5874,5 +5874,41 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("TopRacesPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: gift codes.
+        /// </summary>
+        public static string GiftCodesPlugIn_Name {
+            get {
+                return ResourceManager.GetString("GiftCodesPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gift codes made in the admin panel (rewards, uses, once per account or character, dates, level/reset/class limits, batches of single-use codes), entered with /code in the game, in the gift code window or on the website's account page. Set them in the admin panel's Gift codes page..
+        /// </summary>
+        public static string GiftCodesPlugIn_Description {
+            get {
+                return ResourceManager.GetString("GiftCodesPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat command: /code (gift codes).
+        /// </summary>
+        public static string GiftCodeChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("GiftCodeChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enters a gift code: /code CODE..
+        /// </summary>
+        public static string GiftCodeChatCommandPlugIn_Description {
+            get {
+                return ResourceManager.GetString("GiftCodeChatCommandPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

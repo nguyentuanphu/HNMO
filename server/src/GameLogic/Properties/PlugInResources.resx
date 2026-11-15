@@ -2155,4 +2155,16 @@
   <data name="TopRacesPlugIn_Description" xml:space="preserve">
     <value>Top races by day, week, month or between two dates (resets, levels, boss-hunt points, PK kills, event wins, guild points, monsters, time in the game; all classes, one class or per class), with prizes paid once at the end. Set it in the admin panel's Top races page.</value>
   </data>
+  <data name="GiftCodesPlugIn_Name" xml:space="preserve">
+    <value>HNMO: gift codes</value>
+  </data>
+  <data name="GiftCodesPlugIn_Description" xml:space="preserve">
+    <value>Gift codes made in the admin panel (rewards, uses, once per account or character, dates, level/reset/class limits, batches of single-use codes), entered with /code in the game, in the gift code window or on the website's account page. Set them in the admin panel's Gift codes page.</value>
+  </data>
+  <data name="GiftCodeChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Chat command: /code (gift codes)</value>
+  </data>
+  <data name="GiftCodeChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Enters a gift code: /code CODE.</value>
+  </data>
 </root>

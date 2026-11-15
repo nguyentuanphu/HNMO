@@ -6023,6 +6023,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoGiftCodesRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the gift code window.
+    /// Causes reaction on server side: The server sends the HnmoGiftCodesState message, and from then on sends it again when something changes, e.g. a code was entered with the chat command or waiting rewards were given.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftCodesRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftCodesRequestRef.Length;
+            var packet = new HnmoGiftCodesRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftCodesAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The code for Redeem; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's gift code window: enter a code, or take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoGiftCodesState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftCodesActionAsync(this IConnection? connection, HnmoGiftCodesAction.HnmoGiftCodesActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftCodesActionRef.GetRequiredSize(argument);
+            var packet = new HnmoGiftCodesActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

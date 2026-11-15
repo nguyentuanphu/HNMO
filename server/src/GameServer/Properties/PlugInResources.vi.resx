@@ -2778,4 +2778,22 @@
   <data name="HnmoTopRacesActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Xử lý các nút của cửa sổ đua top HNMO (nhận phần thưởng đang chờ).</value>
   </data>
+  <data name="HnmoGiftCodesViewPlugIn_Name" xml:space="preserve">
+    <value>Giao diện gift code HNMO</value>
+  </data>
+  <data name="HnmoGiftCodesViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái gift code (kết quả, phần thưởng đang chờ, mã đã dùng) tới game web.</value>
+  </data>
+  <data name="HnmoGiftCodesRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu gift code HNMO</value>
+  </data>
+  <data name="HnmoGiftCodesRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Trả lời yêu cầu trạng thái gift code của game web.</value>
+  </data>
+  <data name="HnmoGiftCodesActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý thao tác gift code HNMO</value>
+  </data>
+  <data name="HnmoGiftCodesActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các nút của cửa sổ gift code: nhập mã, nhận phần thưởng đang chờ.</value>
+  </data>
 </root>

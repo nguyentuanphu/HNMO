@@ -8322,5 +8322,59 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoTopRacesActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO gift codes view.
+        /// </summary>
+        public static string HnmoGiftCodesViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoGiftCodesViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends the gift code state (results, waiting rewards, last codes) to the web game..
+        /// </summary>
+        public static string HnmoGiftCodesViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoGiftCodesViewPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO gift codes request handler.
+        /// </summary>
+        public static string HnmoGiftCodesRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoGiftCodesRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Answers the web game's request of the gift code state..
+        /// </summary>
+        public static string HnmoGiftCodesRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoGiftCodesRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO gift codes action handler.
+        /// </summary>
+        public static string HnmoGiftCodesActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoGiftCodesActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the buttons of the gift code window: enter a code, take the waiting rewards..
+        /// </summary>
+        public static string HnmoGiftCodesActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoGiftCodesActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

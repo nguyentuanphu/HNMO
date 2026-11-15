@@ -4694,6 +4694,60 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>1A</SubCode>
+      <Name>HnmoGiftCodesRequest</Name>
+      <Caption>Request HNMO gift codes</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world, or the player opens the gift code window.</SentWhen>
+      <CausedReaction>The server sends the HnmoGiftCodesState message, and from then on sends it again when something changes, e.g. a code was entered with the chat command or waiting rewards were given.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>1C</SubCode>
+      <Name>HnmoGiftCodesAction</Name>
+      <Caption>HNMO gift codes action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's gift code window: enter a code, or take the rewards which waited for room in the bag.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoGiftCodesState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoGiftCodesActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>The code for Redeem; empty otherwise.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoGiftCodesActionType</Name>
+          <Description>The action of the gift code window.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Redeem</Name>
+              <Description>Enter the gift code of the argument.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimRewards</Name>
+              <Description>Take the gift code rewards which wait for room in the bag.</Description>
+              <Value>2</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

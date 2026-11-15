@@ -2879,4 +2879,22 @@
   <data name="HnmoTopRacesActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Handles the buttons of HNMO's top races window (take the waiting prizes).</value>
   </data>
+  <data name="HnmoGiftCodesViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO gift codes view</value>
+  </data>
+  <data name="HnmoGiftCodesViewPlugIn_Description" xml:space="preserve">
+    <value>Sends the gift code state (results, waiting rewards, last codes) to the web game.</value>
+  </data>
+  <data name="HnmoGiftCodesRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO gift codes request handler</value>
+  </data>
+  <data name="HnmoGiftCodesRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Answers the web game's request of the gift code state.</value>
+  </data>
+  <data name="HnmoGiftCodesActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO gift codes action handler</value>
+  </data>
+  <data name="HnmoGiftCodesActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the buttons of the gift code window: enter a code, take the waiting rewards.</value>
+  </data>
 </root>

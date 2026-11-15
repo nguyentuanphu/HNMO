@@ -2325,4 +2325,16 @@
   <data name="TopRacesPlugIn_Description" xml:space="preserve">
     <value>Đua top theo ngày, tuần, tháng hoặc giữa hai ngày (reset, cấp, điểm săn boss, hạ người chơi, thắng sự kiện, điểm bang hội, quái, thời gian chơi; mọi lớp, một lớp hoặc theo lớp), phần thưởng trả một lần khi kết thúc. Cài đặt ở trang Đua top của bảng quản trị.</value>
   </data>
+  <data name="GiftCodesPlugIn_Name" xml:space="preserve">
+    <value>HNMO: gift code</value>
+  </data>
+  <data name="GiftCodesPlugIn_Description" xml:space="preserve">
+    <value>Gift code tạo trong trang quản trị (phần thưởng, số lượt, một lần mỗi tài khoản hoặc nhân vật, ngày giờ, giới hạn cấp/reset/lớp, lô mã dùng một lần), nhập bằng /code trong game, trong cửa sổ Gift code hoặc trên trang tài khoản của website. Cài đặt ở trang Gift code của trang quản trị.</value>
+  </data>
+  <data name="GiftCodeChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat: /code (gift code)</value>
+  </data>
+  <data name="GiftCodeChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Nhập gift code: /code MÃ.</value>
+  </data>
 </root>
