@@ -264,6 +264,17 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   the cloak: `Character.setItemLooks` (main.ts's buffs.onChange) → `setItemGlowState` / `setCloaked`. +15 decorations are
   `Attachment`s with slot `ornament` (PartModels.json). `tests/e2e/item-glow.spec.ts` builds a row of players with
   `createPlayerCharacter` and puts them in `online.characters` (ids 0x7e00+) so the game updates and draws them.
+- Fourth pass (2026-11-15): `rageStrikeEffects.ts` (Chain Drive, Dragon Roar; Dragon Roar's volcanoes come per struck target
+  through Combat's `onSkillHit` → `playSkillHit`, the hero's own SkillAnimation included), `summonerSummons.ts` (casting
+  circles, Requiem, Pollution; `castSummon` from playSkillEffect with `summonBookLevel`), `objectBlurs.ts` (CreateObjectBlur,
+  `system.objectBlurs`, census key `blur:object`). An ExtraEffect can draw its meshes in another texture (`skin`, `skins`
+  for the prewarm), paint each mesh (`paint`: colour, visibility, scroll, blending — never a change that rebuilds a
+  program) and name the BlendMesh its creation sets (`prewarmBlendMesh`, so the prewarm builds the pooled copy it uses).
+  Owners can pose at another key (`bonePositionAt`, `boneMatrixAt`) for trails laid between ticks. Effects timed by
+  an action's keys need the test's `actionSpeed` (the action played slowly and held): the test machine's few frames
+  a second step over the keys otherwise. `sampleModelLight` (terrain.ts) adds the frame's effect lights to a model's
+  light. Item looks: `MeshDraw.lightAt` / `scrollAt` move on the world's clock, `reflection` draws via
+  `itemGlow.reflectionMaterial`. The server sends no Dark Side target list (C1 4B) or fighter attack (4A).
 
 ## Performance (2026-11-15)
 - The owner's lag can't be seen on the headless SwiftShader machine: ask for a **performance report** (Options,
