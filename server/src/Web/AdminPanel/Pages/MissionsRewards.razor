@@ -1,0 +1,208 @@
+@page "/missions-rewards"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.Missions
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+@using HNMO.Web.AdminPanel.Components.Missions
+
+<PageTitle>HNMO: @Resources.MissionsAndRewards</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.MissionsAndRewards" />
+<h1>@Resources.MissionsAndRewards</h1>
+<p class="text-muted">@Resources.MissionsPageDescription</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@Resources.MissionsNotInstalled</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="missions-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.MissionsGeneral</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="missions-active" @bind="this._isActive" />
+                <label class="form-check-label" for="missions-active">@Resources.MissionsActive</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <label class="form-label" for="missions-tz">@Resources.MissionsTimeZone</label>
+                    <input class="form-control" id="missions-tz" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="missions-hour">@Resources.MissionsResetHour</label>
+                    <input class="form-control" type="number" min="0" max="23" id="missions-hour" @bind="c.ResetHour" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="missions-cap">@Resources.MissionsEarnedDailyCap</label>
+                    <input class="form-control" type="number" min="0" id="missions-cap" @bind="c.EarnedDailyCap" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="missions-file">@Resources.MissionsFile</label>
+                    <input class="form-control" id="missions-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <p class="form-text mb-0">@Resources.MissionsGeneralHint</p>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.MissionsList</h2>
+            <p class="form-text">@Resources.MissionsListHint</p>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="missions-table">
+                    <thead>
+                    <tr>
+                        <th>@Resources.MissionsOn</th>
+                        <th>@Resources.MissionsId</th>
+                        <th>@Resources.MissionsPeriod</th>
+                        <th>@Resources.MissionsKind</th>
+                        <th>@Resources.MissionsTarget</th>
+                        <th title="@Resources.MissionsMonsterHint">@Resources.MissionsMonster</th>
+                        <th title="@Resources.MissionsMapHint">@Resources.MissionsMap</th>
+                        <th>@Resources.MissionsEvent</th>
+                        <th>@Resources.MissionsTitleEn / @Resources.MissionsTitleVi</th>
+                        <th>@Resources.MissionsReward</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var row in this._rows)
+                    {
+                        var m = row.Mission;
+                        <tr>
+                            <td><input class="form-check-input" type="checkbox" @bind="m.Enabled" aria-label="@Resources.MissionsOn" /></td>
+                            <td><input class="form-control form-control-sm" style="min-width: 7rem" @bind="m.Id" aria-label="@Resources.MissionsId" /></td>
+                            <td>
+                                <select class="form-select form-select-sm" @bind="m.Period" aria-label="@Resources.MissionsPeriod">
+                                    <option value="@MissionPeriod.Daily">@Resources.MissionsDaily</option>
+                                    <option value="@MissionPeriod.Weekly">@Resources.MissionsWeekly</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm" @bind="m.Kind" aria-label="@Resources.MissionsKind">
+                                    @foreach (var kind in Enum.GetValues<MissionKind>())
+                                    {
+                                        <option value="@kind">@KindCaption(kind)</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><input class="form-control form-control-sm" style="width: 7rem" type="number" min="1" @bind="m.Target" aria-label="@Resources.MissionsTarget" /></td>
+                            <td><input class="form-control form-control-sm" style="width: 5rem" type="number" min="0" @bind="m.MonsterNumber" disabled="@(m.Kind != MissionKind.KillMonsters)" aria-label="@Resources.MissionsMonster" /></td>
+                            <td><input class="form-control form-control-sm" style="width: 5rem" type="number" min="-1" @bind="m.MapNumber" disabled="@(m.Kind != MissionKind.KillMonsters)" aria-label="@Resources.MissionsMap" /></td>
+                            <td>
+                                <select class="form-select form-select-sm" @bind="m.EventType" disabled="@(m.Kind is not (MissionKind.FinishEvent or MissionKind.WinEvent))" aria-label="@Resources.MissionsEvent">
+                                    @foreach (var type in Enum.GetValues<MissionEventType>())
+                                    {
+                                        <option value="@type">@EventCaption(type)</option>
+                                    }
+                                </select>
+                            </td>
+                            <td style="min-width: 14rem">
+                                <input class="form-control form-control-sm mb-1" @bind="m.TitleEn" placeholder="English" aria-label="@Resources.MissionsTitleEn" />
+                                <input class="form-control form-control-sm" @bind="m.TitleVi" placeholder="Tiếng Việt" aria-label="@Resources.MissionsTitleVi" />
+                            </td>
+                            <td style="min-width: 16rem">
+                                <RewardEditor Reward="@m.Reward" Row="@row.Reward" />
+                            </td>
+                            <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveMission(row)">@Resources.Remove</button></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="missions-add" @onclick="this.AddMission">@Resources.MissionsAdd</button>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.MissionsStreak</h2>
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <label class="form-label" for="streak-required">@Resources.MissionsStreakRequired</label>
+                    <input class="form-control" type="number" min="0" id="streak-required" @bind="c.StreakMissionsRequired" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="streak-day">@Resources.MissionsStreakBonusDay</label>
+                    <input class="form-control" type="number" min="2" id="streak-day" @bind="c.StreakBonusDay" />
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label">@Resources.MissionsStreakBonus</label>
+                    <RewardEditor Reward="@c.StreakBonus" Row="@this._streakReward" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="h4 mt-4">@Resources.MissionsEarnedCoins</h2>
+    <p class="text-muted">@Resources.MissionsEarnedCoinsHint</p>
+    <div class="row g-3 mb-3">
+        <div class="col-lg-6">
+            <section class="card h-100"><div class="card-body">
+                <h3 class="h6">@Resources.MissionsOnlineTime</h3>
+                <SourceHeader @bind-Enabled="c.OnlineTime.Enabled" @bind-CoinType="c.OnlineTime.CoinType" Id="online" />
+                <div class="row g-2">
+                    <div class="col-6"><label class="form-label" for="online-hour">@Resources.MissionsCoinsPerHour</label><input class="form-control" type="number" min="0" id="online-hour" @bind="c.OnlineTime.CoinsPerHour" /></div>
+                    <div class="col-6"><label class="form-label" for="online-cap">@Resources.MissionsOnlineCap</label><input class="form-control" type="number" min="0" id="online-cap" @bind="c.OnlineTime.DailyCap" /></div>
+                </div>
+                <div class="form-check mt-2"><input class="form-check-input" type="checkbox" id="online-half" @bind="c.OnlineTime.AutoPlayCountsHalf" /><label class="form-check-label" for="online-half">@Resources.MissionsAutoPlayHalf</label></div>
+            </div></section>
+        </div>
+        <div class="col-lg-6">
+            <section class="card h-100"><div class="card-body">
+                <h3 class="h6">@Resources.MissionsMilestones</h3>
+                <SourceHeader @bind-Enabled="c.Milestones.Enabled" @bind-CoinType="c.Milestones.CoinType" Id="milestones" />
+                <label class="form-label" for="milestone-levels">@Resources.MissionsMilestoneLevels</label>
+                <input class="form-control" id="milestone-levels" @bind="this._milestoneLevels" />
+                <label class="form-label mt-2" for="milestone-reset">@Resources.MissionsCoinsPerReset</label>
+                <input class="form-control" type="number" min="0" id="milestone-reset" @bind="c.Milestones.CoinsPerReset" />
+            </div></section>
+        </div>
+        <div class="col-lg-6">
+            <section class="card h-100"><div class="card-body">
+                <h3 class="h6">@Resources.MissionsInvite</h3>
+                <SourceHeader @bind-Enabled="c.Invite.Enabled" @bind-CoinType="c.Invite.CoinType" Id="invite" />
+                <div class="row g-2">
+                    <div class="col-4"><label class="form-label" for="invite-level">@Resources.MissionsInviteLevel</label><input class="form-control" type="number" min="1" id="invite-level" @bind="c.Invite.RequiredLevel" /></div>
+                    <div class="col-4"><label class="form-label" for="invite-inviter">@Resources.MissionsInviterCoins</label><input class="form-control" type="number" min="0" id="invite-inviter" @bind="c.Invite.InviterCoins" /></div>
+                    <div class="col-4"><label class="form-label" for="invite-invited">@Resources.MissionsInvitedCoins</label><input class="form-control" type="number" min="0" id="invite-invited" @bind="c.Invite.InvitedCoins" /></div>
+                </div>
+                <div class="form-check mt-2"><input class="form-check-input" type="checkbox" id="invite-address" @bind="c.Invite.RefuseSameAddress" /><label class="form-check-label" for="invite-address">@Resources.MissionsInviteSameAddress</label></div>
+            </div></section>
+        </div>
+        <div class="col-lg-6">
+            <section class="card h-100"><div class="card-body">
+                <h3 class="h6">@Resources.MissionsCalendar</h3>
+                <SourceHeader @bind-Enabled="c.LoginCalendar.Enabled" @bind-CoinType="c.LoginCalendar.CoinType" Id="calendar" />
+                <label class="form-label" for="calendar-default">@Resources.MissionsCalendarDefault</label>
+                <input class="form-control" type="number" min="0" id="calendar-default" @bind="c.LoginCalendar.DefaultCoins" />
+                <label class="form-label mt-2" for="calendar-days">@Resources.MissionsCalendarDays</label>
+                <input class="form-control" id="calendar-days" @bind="this._calendarDays" />
+            </div></section>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-5">
+        <button type="button" class="btn btn-primary" id="missions-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.MissionsReload</button>
+    </div>
+}

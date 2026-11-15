@@ -2670,4 +2670,22 @@
   <data name="ShowItemCraftingPreviewExtendedPlugIn_Description" xml:space="preserve">
     <value>Bản cài đặt mở rộng của IShowItemCraftingPreviewPlugIn, chuyển mọi thứ đến game client bằng các gói dữ liệu riêng.</value>
   </data>
+  <data name="HnmoMissionsViewPlugIn_Name" xml:space="preserve">
+    <value>Giao diện nhiệm vụ HNMO</value>
+  </data>
+  <data name="HnmoMissionsViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái nhiệm vụ và xu kiếm được của HNMO đến trò chơi (cửa sổ nhiệm vụ của trò chơi web).</value>
+  </data>
+  <data name="HnmoMissionsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu nhiệm vụ HNMO</value>
+  </data>
+  <data name="HnmoMissionsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu của cửa sổ nhiệm vụ: máy chủ gửi nhiệm vụ, chuỗi ngày, lịch đăng nhập và xu kiếm được.</value>
+  </data>
+  <data name="HnmoMissionsActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý thao tác nhiệm vụ HNMO</value>
+  </data>
+  <data name="HnmoMissionsActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các nút của cửa sổ nhiệm vụ: nhận thưởng, thưởng chuỗi ngày, ngày của lịch đăng nhập và nhập mã mời.</value>
+  </data>
 </root>

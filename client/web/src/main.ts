@@ -33,6 +33,7 @@ import { AutoPlay } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
+import { MissionsWindow } from './ui/missionsWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
 import { MoveWindow } from './ui/moveWindow.js';
@@ -154,6 +155,7 @@ export interface GameState {
   autoPlay?: AutoPlay;
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
+  missions?: MissionsWindow;
   buffs?: BuffTracker;
   party?: Party;
   trade?: Trade;
@@ -1081,6 +1083,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   });
   state.autoPlayExtras = autoPlayExtras;
   const extrasPanel = new AutoPlayExtrasPanel(autoPlayExtras);
+  // HNMO's missions window (J): daily and weekly missions, the streak, the login calendar, earned coins.
+  const missions = new MissionsWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+  });
+  state.missions = missions;
+  connection.onPacket((bytes) => { missions.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'j' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); missions.toggle(); }
+  });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }

@@ -8017,5 +8017,54 @@ namespace HNMO.GameServer.Properties {
 
         /// <summary>Gets the localized PingHandlerPlugIn_Description text.</summary>
         public static string PingHandlerPlugIn_Description => ResourceManager.GetString("PingHandlerPlugIn_Description", resourceCulture)!;
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO missions view.
+        /// </summary>
+        public static string HnmoMissionsViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoMissionsViewPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Sends the state of HNMO's missions and earned coins to the game client (the web game's missions wind....
+        /// </summary>
+        public static string HnmoMissionsViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoMissionsViewPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO missions request handler.
+        /// </summary>
+        public static string HnmoMissionsRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoMissionsRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the request of the missions window: the server sends the missions, the streak, the login cal....
+        /// </summary>
+        public static string HnmoMissionsRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoMissionsRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO missions action handler.
+        /// </summary>
+        public static string HnmoMissionsActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoMissionsActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the buttons of the missions window: claiming rewards, the streak bonus, the login calendar d....
+        /// </summary>
+        public static string HnmoMissionsActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoMissionsActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

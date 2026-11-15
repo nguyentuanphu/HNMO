@@ -461,3 +461,10 @@ footer {
 .event-list > * { min-width: 0; }
 
 .upcoming .slot > span, .upcoming .slot > small { display: block; }
+
+/* Missions (read-only list of today's daily and this week's weekly missions) */
+.mission-period { margin: 18px 0 8px; font: 18px "Noto Serif", serif; color: var(--gold); }
+.mission-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.mission { border: 1px solid var(--line); padding: 14px 16px; background: linear-gradient(135deg, #20241a, #141711); min-width: 0; }
+.mission h4 { margin: 0 0 6px; font-size: 15px; }
+.mission p { margin: 0; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }

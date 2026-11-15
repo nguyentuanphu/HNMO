@@ -12727,6 +12727,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>09</SubCode>
+      <Name>HnmoMissionsState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requested HNMO's missions (HnmoMissionsRequest) or did an action there, and when something changed for a client which requested them before (a mission was finished, earned coins were given).</SentWhen>
+      <CausedReaction>The missions window shows the state; a notice in the chat tells about the event in it (e.g. a finished mission or the result of a claim).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The state as JSON, in plain ASCII (other characters are escaped): the daily and weekly missions with their progress and rewards, the streak, the login calendar, the online time coins, the earned coins of the day and the invite code, and the event which caused it, if any.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>

@@ -166,3 +166,12 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   monster is alive before it's back on the map).
 - **Owner choices:** every coin reward is set in the admin panel; decisions in a pop-up; the cash shop
   plan (idea 8) waits for the owner's answer.
+
+## Missions (2026-11-15)
+- HNMO's own client/server messages live in the F5 group (`ChatCommandGroupHandlerPlugIn.GroupKey`): Discord 02-07,
+  missions 08 (request), 09 (state as ASCII JSON, C2), 0A (action). Unasked updates only go to a client which asked once.
+- Missions and earned coins: `GameLogic/PlugIns/Missions` (engine is pure and unit-tested; the store is
+  `save/missions.json`); coins are cash shop coin grants with a reference (`MissionCoinGranter`). Admin page
+  `/missions-rewards`; website `/website/missions`.
+- A web window can be tested without a game server: import `/js/ui/<window>.js`, construct it with fake callbacks
+  and feed it packets built with `write()` from `/js/net/packets.js` (see `tests/e2e/missions.spec.ts`).

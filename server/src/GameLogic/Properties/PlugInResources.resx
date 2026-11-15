@@ -2119,4 +2119,10 @@
   <data name="ChatSpamGuardConfiguration_LineSeconds_Name" xml:space="preserve">
     <value>Line time (seconds)</value>
   </data>
+  <data name="MissionsPlugIn_Name" xml:space="preserve">
+    <value>HNMO: missions and earned coins</value>
+  </data>
+  <data name="MissionsPlugIn_Description" xml:space="preserve">
+    <value>Daily and weekly missions (kills, events, chaos machine mixes, zen, levels, online minutes) with rewards the players claim in the web game's missions window (J), a daily streak with a bonus, and earned coins: online time, level milestones and resets, invites and a monthly login calendar, under a daily cap per account. Edit it on the page Missions and rewards (game menu). The progress is kept in a file in the save folder.</value>
+  </data>
 </root>

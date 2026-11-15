@@ -31,6 +31,7 @@ const MORE: { label: string; title: string; key: string }[] = [
   { label: 'T', title: 'Quests', key: 't' },
   { label: 'X', title: 'Cash shop', key: 'x' },
   { label: 'B', title: 'Gens', key: 'b' },
+  { label: 'J', title: 'Missions', key: 'j' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
 const POTION_KEYS = ['q', 'w', 'e', 'r'];

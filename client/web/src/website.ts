@@ -3,6 +3,26 @@ import { loadGameName, showCommunityLinks } from "./gameName.js";
 type Language = "en" | "vi";
 const copy = {
   en: {
+    missionsNav: "Missions",
+    missionsTitle: "Today's missions",
+    missionsHint: "Finish them in the game and claim the rewards in the missions window (J). Daily missions start again every day, weekly ones on Monday.",
+    missionsDaily: "Daily",
+    missionsWeekly: "Weekly",
+    missionsReset: "New daily missions in",
+    missionsOffline: "The missions are unavailable: the server didn't answer.",
+    missionsNone: "No missions right now.",
+    missionsReward: "Reward",
+    missionsStreak: "Finish the daily missions several days in a row: every %d days pays a bonus (%s).",
+    missionsCap: "Earned coins (online time, level milestones, invites, login calendar): at most %d a day per account.",
+    phoneNav: "Phone",
+    phoneTitle: "Play on your phone",
+    phoneIntro: "The game runs in the phone's browser and installs to the home screen like an app; nothing to download.",
+    phoneOpen: "Open the game",
+    phoneOpenText: "On the phone, open this site's address in Chrome (Android) or Safari (iPhone) and tap Play.",
+    phoneInstall: "Add it to the home screen",
+    phoneInstallText: "Android, Chrome: menu ⋮, then \"Add to Home screen\" or \"Install app\". iPhone, Safari: the share button, then \"Add to Home Screen\". It then opens full screen from its icon.",
+    phoneControls: "Play sideways",
+    phoneControlsText: "Turn the phone sideways. Tap to walk, the ⚔ button fights the nearest monster, the 1–5 and Q W E R buttons use skills and potions, ⋯ opens the other windows (guild, friends, quests, missions, cash shop) and ⛶ goes full screen.",
     scheduleNav: "Schedule",
     levels: "levels",
     levelRange: "Character level",
@@ -118,6 +138,26 @@ const copy = {
       "Event schedules and global rankings are not supplied by this feed.",
   },
   vi: {
+    missionsNav: "Nhiệm vụ",
+    missionsTitle: "Nhiệm vụ hôm nay",
+    missionsHint: "Hoàn thành trong trò chơi và nhận thưởng trong cửa sổ nhiệm vụ (J). Nhiệm vụ hằng ngày bắt đầu lại mỗi ngày, nhiệm vụ hằng tuần vào thứ Hai.",
+    missionsDaily: "Hằng ngày",
+    missionsWeekly: "Hằng tuần",
+    missionsReset: "Nhiệm vụ ngày mới sau",
+    missionsOffline: "Không xem được nhiệm vụ: máy chủ không trả lời.",
+    missionsNone: "Hiện chưa có nhiệm vụ nào.",
+    missionsReward: "Phần thưởng",
+    missionsStreak: "Hoàn thành nhiệm vụ ngày nhiều ngày liên tục: mỗi %d ngày được thưởng thêm (%s).",
+    missionsCap: "Xu kiếm được (thời gian trực tuyến, mốc cấp độ, mời bạn, lịch đăng nhập): tối đa %d mỗi ngày cho mỗi tài khoản.",
+    phoneNav: "Điện thoại",
+    phoneTitle: "Chơi trên điện thoại",
+    phoneIntro: "Trò chơi chạy trong trình duyệt của điện thoại và cài lên màn hình chính như một ứng dụng; không cần tải gì.",
+    phoneOpen: "Mở trò chơi",
+    phoneOpenText: "Trên điện thoại, mở địa chỉ trang này bằng Chrome (Android) hoặc Safari (iPhone) rồi bấm Chơi.",
+    phoneInstall: "Thêm vào màn hình chính",
+    phoneInstallText: "Android, Chrome: menu ⋮, rồi \"Thêm vào màn hình chính\" hoặc \"Cài đặt ứng dụng\". iPhone, Safari: nút chia sẻ, rồi \"Thêm vào MH chính\". Sau đó mở toàn màn hình từ biểu tượng.",
+    phoneControls: "Chơi màn hình ngang",
+    phoneControlsText: "Xoay ngang điện thoại. Chạm để đi, nút ⚔ đánh quái vật gần nhất, các nút 1–5 và Q W E R dùng kỹ năng và bình thuốc, ⋯ mở các cửa sổ khác (bang hội, bạn bè, nhiệm vụ, cửa hàng) và ⛶ để toàn màn hình.",
     scheduleNav: "Lịch sự kiện",
     levels: "cấp",
     levelRange: "Cấp nhân vật",
@@ -777,3 +817,66 @@ void refreshDetails();
 setInterval(() => {
   if (!document.hidden) void refreshDetails();
 }, 60000);
+
+// ---------- missions (read from the server, /website/missions) ----------
+
+interface PublicReward { zen: number; coins: number; coinType: string; items: { group: number; number: number; level: number; count: number; name?: string | null }[] }
+interface PublicMission { id: string; period: "daily" | "weekly"; kind: string; titleEn: string; titleVi: string; target: number; reward: PublicReward }
+interface PublicMissions { missions: PublicMission[]; nextDaily?: number; streak?: { bonusDay: number; bonus: PublicReward }; earnedDailyCap?: number }
+let missions: PublicMissions | null = null;
+
+function coinLabel(type: string): string {
+  return type === "GoblinPoints" ? "Goblin Points" : type === "WCoinP" ? "W Coin (P)" : "W Coin (C)";
+}
+
+function rewardLine(reward: PublicReward): string {
+  const parts: string[] = [];
+  const format = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  if (reward.zen > 0) parts.push(`${format(reward.zen)} Zen`);
+  if (reward.coins > 0) parts.push(`${format(reward.coins)} ${coinLabel(reward.coinType)}`);
+  for (const item of reward.items) parts.push(`${item.name ? localized(item.name) : `${item.group}/${item.number}`}${item.level > 0 ? ` +${item.level}` : ""} x${item.count}`);
+  return parts.join(" · ");
+}
+
+function renderMissions(): void {
+  element("missions-notice").textContent = missions ? "" : t("missionsOffline");
+  for (const period of ["daily", "weekly"] as const) {
+    const target = clear(`missions-${period}`);
+    const list = missions?.missions.filter((mission) => mission.period === period) ?? [];
+    if (missions && !list.length) target.append(node("p", t("missionsNone"), "muted"));
+    for (const mission of list) {
+      const card = node("article", "", "mission");
+      card.dataset.mission = mission.id;
+      const reward = rewardLine(mission.reward);
+      card.append(node("h4", (language === "vi" ? mission.titleVi : mission.titleEn) || mission.titleEn));
+      if (reward) card.append(node("p", `${t("missionsReward")}: ${reward}`));
+      target.append(card);
+    }
+  }
+  const minutes = missions?.nextDaily ? Math.max(0, Math.ceil((missions.nextDaily - Date.now()) / 60000)) : null;
+  element("missions-reset").textContent = minutes === null ? "" : `${t("missionsReset")} ${Math.floor(minutes / 60)} h ${minutes % 60} min`;
+  const extra: string[] = [];
+  if (missions?.streak) extra.push(t("missionsStreak").replace("%d", String(missions.streak.bonusDay)).replace("%s", rewardLine(missions.streak.bonus)));
+  if (missions?.earnedDailyCap) extra.push(t("missionsCap").replace("%d", String(missions.earnedDailyCap)));
+  element("missions-extra").textContent = extra.join(" ");
+}
+
+async function refreshMissions(): Promise<void> {
+  try {
+    const response = await fetch("/website/missions", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicMissions;
+    if (typeof data !== "object" || data === null || !Array.isArray(data.missions)) throw new Error("Invalid missions");
+    missions = data;
+  } catch {
+    missions = null;
+  }
+  renderMissions();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderMissions());
+element("refresh").addEventListener("click", () => void refreshMissions());
+void refreshMissions();
+setInterval(() => {
+  if (!document.hidden) void refreshMissions();
+}, 5 * 60000);

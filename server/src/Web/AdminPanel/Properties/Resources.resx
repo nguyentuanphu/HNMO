@@ -2972,4 +2972,220 @@
   <data name="ChatLogKindNotice" xml:space="preserve">
     <value>Notice</value>
   </data>
+  <data name="MissionsAndRewards" xml:space="preserve">
+    <value>Missions and rewards</value>
+  </data>
+  <data name="MissionsPageDescription" xml:space="preserve">
+    <value>The daily and weekly missions, the daily streak and every source of earned coins. Players see them in the web game's missions window (J) and on the website. Changes count at once in the running game.</value>
+  </data>
+  <data name="MissionsNotInstalled" xml:space="preserve">
+    <value>The missions plug-in isn't installed yet: start the game server once, then open this page again.</value>
+  </data>
+  <data name="MissionsGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="MissionsActive" xml:space="preserve">
+    <value>Missions and earned coins are on</value>
+  </data>
+  <data name="MissionsTimeZone" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="MissionsResetHour" xml:space="preserve">
+    <value>Reset hour</value>
+  </data>
+  <data name="MissionsEarnedDailyCap" xml:space="preserve">
+    <value>Earned coins per account and day (cap)</value>
+  </data>
+  <data name="MissionsFile" xml:space="preserve">
+    <value>Progress file</value>
+  </data>
+  <data name="MissionsGeneralHint" xml:space="preserve">
+    <value>Daily missions start again every day at the reset hour (Sydney time by default), weekly ones on Monday at that hour. The cap counts the online time, milestones, invites and the login calendar; one-time rewards over the cap wait for the next day. Mission rewards don't count against it.</value>
+  </data>
+  <data name="MissionsList" xml:space="preserve">
+    <value>Missions</value>
+  </data>
+  <data name="MissionsListHint" xml:space="preserve">
+    <value>The id keeps the players' progress: don't change it for a running mission. Items: "group number level count", several separated by ";" (e.g. "14 13 0 1" is a Jewel of Bless).</value>
+  </data>
+  <data name="MissionsOn" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="MissionsId" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="MissionsPeriod" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="MissionsDaily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="MissionsWeekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="MissionsKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="MissionsTarget" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="MissionsMonster" xml:space="preserve">
+    <value>Monster</value>
+  </data>
+  <data name="MissionsMonsterHint" xml:space="preserve">
+    <value>Monster number which counts; 0 counts every monster.</value>
+  </data>
+  <data name="MissionsMap" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="MissionsMapHint" xml:space="preserve">
+    <value>Map number where kills count; -1 counts every map.</value>
+  </data>
+  <data name="MissionsEvent" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="MissionsTitleEn" xml:space="preserve">
+    <value>Title (English)</value>
+  </data>
+  <data name="MissionsTitleVi" xml:space="preserve">
+    <value>Title (Vietnamese)</value>
+  </data>
+  <data name="MissionsReward" xml:space="preserve">
+    <value>Reward (zen, coins, coin type, items)</value>
+  </data>
+  <data name="MissionsAdd" xml:space="preserve">
+    <value>Add a mission</value>
+  </data>
+  <data name="MissionsKindKill" xml:space="preserve">
+    <value>Kill monsters</value>
+  </data>
+  <data name="MissionsKindFinishEvent" xml:space="preserve">
+    <value>Take part in an event to the end</value>
+  </data>
+  <data name="MissionsKindWinEvent" xml:space="preserve">
+    <value>Win an event</value>
+  </data>
+  <data name="MissionsKindMix" xml:space="preserve">
+    <value>Successful chaos machine mixes</value>
+  </data>
+  <data name="MissionsKindZen" xml:space="preserve">
+    <value>Pick up zen</value>
+  </data>
+  <data name="MissionsKindLevel" xml:space="preserve">
+    <value>Gain levels</value>
+  </data>
+  <data name="MissionsKindMinutes" xml:space="preserve">
+    <value>Minutes in the game</value>
+  </data>
+  <data name="MissionsEventAny" xml:space="preserve">
+    <value>Any event</value>
+  </data>
+  <data name="MissionsEventBloodCastle" xml:space="preserve">
+    <value>Blood Castle</value>
+  </data>
+  <data name="MissionsEventDevilSquare" xml:space="preserve">
+    <value>Devil Square</value>
+  </data>
+  <data name="MissionsEventChaosCastle" xml:space="preserve">
+    <value>Chaos Castle</value>
+  </data>
+  <data name="MissionsZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="MissionsCoins" xml:space="preserve">
+    <value>Coins</value>
+  </data>
+  <data name="MissionsItems" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="MissionsItemsHint" xml:space="preserve">
+    <value>group number level count; ... (e.g. 14 13 0 1)</value>
+  </data>
+  <data name="MissionsStreak" xml:space="preserve">
+    <value>Daily streak</value>
+  </data>
+  <data name="MissionsStreakRequired" xml:space="preserve">
+    <value>Daily missions for a streak day (0 = all)</value>
+  </data>
+  <data name="MissionsStreakBonusDay" xml:space="preserve">
+    <value>Bonus every … days</value>
+  </data>
+  <data name="MissionsStreakBonus" xml:space="preserve">
+    <value>Streak bonus</value>
+  </data>
+  <data name="MissionsEarnedCoins" xml:space="preserve">
+    <value>Earned coins</value>
+  </data>
+  <data name="MissionsEarnedCoinsHint" xml:space="preserve">
+    <value>Each source has its own switch and coin type: earned coins are Goblin Points by default, apart from the paid W Coin. Every grant is in the account's coins history with its reason.</value>
+  </data>
+  <data name="MissionsOnlineTime" xml:space="preserve">
+    <value>Online time</value>
+  </data>
+  <data name="MissionsCoinsPerHour" xml:space="preserve">
+    <value>Coins per full hour</value>
+  </data>
+  <data name="MissionsOnlineCap" xml:space="preserve">
+    <value>At most per day</value>
+  </data>
+  <data name="MissionsAutoPlayHalf" xml:space="preserve">
+    <value>Time with auto play counts half</value>
+  </data>
+  <data name="MissionsMilestones" xml:space="preserve">
+    <value>Level milestones and resets (once per character)</value>
+  </data>
+  <data name="MissionsMilestoneLevels" xml:space="preserve">
+    <value>Levels and coins (level:coins, …)</value>
+  </data>
+  <data name="MissionsCoinsPerReset" xml:space="preserve">
+    <value>Coins per reset</value>
+  </data>
+  <data name="MissionsInvite" xml:space="preserve">
+    <value>Invite a friend</value>
+  </data>
+  <data name="MissionsInviteLevel" xml:space="preserve">
+    <value>Friend's level</value>
+  </data>
+  <data name="MissionsInviterCoins" xml:space="preserve">
+    <value>Coins for the inviter</value>
+  </data>
+  <data name="MissionsInvitedCoins" xml:space="preserve">
+    <value>Coins for the friend</value>
+  </data>
+  <data name="MissionsInviteSameAddress" xml:space="preserve">
+    <value>No reward for the same network address (only known for desktop players; the web game's players come through the relay)</value>
+  </data>
+  <data name="MissionsCalendar" xml:space="preserve">
+    <value>Monthly login calendar</value>
+  </data>
+  <data name="MissionsCalendarDefault" xml:space="preserve">
+    <value>Coins of an ordinary day</value>
+  </data>
+  <data name="MissionsCalendarDays" xml:space="preserve">
+    <value>Bigger days (day:coins, …)</value>
+  </data>
+  <data name="MissionsReload" xml:space="preserve">
+    <value>Discard changes</value>
+  </data>
+  <data name="MissionsSaved" xml:space="preserve">
+    <value>The missions and rewards were saved.</value>
+  </data>
+  <data name="MissionsErrorId" xml:space="preserve">
+    <value>"{0}" isn't a valid id (letters, digits, - and _; at most 40).</value>
+  </data>
+  <data name="MissionsErrorDuplicateId" xml:space="preserve">
+    <value>The id "{0}" is used twice.</value>
+  </data>
+  <data name="MissionsErrorTarget" xml:space="preserve">
+    <value>The target of "{0}" must be at least 1.</value>
+  </data>
+  <data name="MissionsErrorItems" xml:space="preserve">
+    <value>The items of "{0}" aren't valid (group number level count; …).</value>
+  </data>
+  <data name="MissionsErrorLevels" xml:space="preserve">
+    <value>The milestone levels aren't valid (level:coins, …).</value>
+  </data>
+  <data name="MissionsErrorDays" xml:space="preserve">
+    <value>The calendar days aren't valid (day:coins, … with days 1 to 31).</value>
+  </data>
 </root>

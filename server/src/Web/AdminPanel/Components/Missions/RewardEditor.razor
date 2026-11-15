@@ -1,0 +1,28 @@
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.Missions
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Pages
+@using HNMO.Web.AdminPanel.Services
+
+@* The fields of a reward: zen, coins with their type, and the items as text ("group number level count; ..."). *@
+<div class="d-flex flex-wrap gap-1 align-items-center">
+    <input class="form-control form-control-sm" style="width: 7rem" type="number" min="0" @bind="this.Reward.Zen" title="@Resources.MissionsZen" placeholder="@Resources.MissionsZen" aria-label="@Resources.MissionsZen" />
+    <input class="form-control form-control-sm" style="width: 5rem" type="number" min="0" @bind="this.Reward.Coins" title="@Resources.MissionsCoins" placeholder="@Resources.MissionsCoins" aria-label="@Resources.MissionsCoins" />
+    <select class="form-select form-select-sm" style="width: auto" @bind="this.Reward.CoinType" aria-label="@Resources.CashShopCoinType">
+        @foreach (var coinType in Enum.GetValues<CashShopCoinType>())
+        {
+            <option value="@coinType">@CashShopCoinCaption.Get(coinType)</option>
+        }
+    </select>
+    <input class="form-control form-control-sm" style="min-width: 10rem" @bind="this.Row.ItemsText" title="@Resources.MissionsItemsHint" placeholder="@Resources.MissionsItems" aria-label="@Resources.MissionsItems" />
+</div>
+
+@code {
+    /// <summary>Gets or sets the reward.</summary>
+    [Parameter]
+    public MissionReward Reward { get; set; } = new();
+
+    /// <summary>Gets or sets the text form of its items.</summary>
+    [Parameter]
+    public MissionRewardText Row { get; set; } = new();
+}

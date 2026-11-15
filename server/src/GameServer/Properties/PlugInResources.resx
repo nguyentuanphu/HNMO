@@ -2771,4 +2771,22 @@
   <data name="ShowItemCraftingPreviewExtendedPlugIn_Description" xml:space="preserve">
     <value>The extended implementation of the IShowItemCraftingPreviewPlugIn which is forwarding everything to the game client with specific data packets.</value>
   </data>
+  <data name="HnmoMissionsViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO missions view</value>
+  </data>
+  <data name="HnmoMissionsViewPlugIn_Description" xml:space="preserve">
+    <value>Sends the state of HNMO's missions and earned coins to the game client (the web game's missions window).</value>
+  </data>
+  <data name="HnmoMissionsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO missions request handler</value>
+  </data>
+  <data name="HnmoMissionsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the request of the missions window: the server sends the missions, the streak, the login calendar and the earned coins.</value>
+  </data>
+  <data name="HnmoMissionsActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO missions action handler</value>
+  </data>
+  <data name="HnmoMissionsActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the buttons of the missions window: claiming rewards, the streak bonus, the login calendar day and entering an invite code.</value>
+  </data>
 </root>

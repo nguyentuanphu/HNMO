@@ -4360,6 +4360,70 @@
       <CausedReaction>The server removes the link and sends an updated DiscordIntegrationInfo message.</CausedReaction>
       <Fields />
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>08</SubCode>
+      <Name>HnmoMissionsRequest</Name>
+      <Caption>Request HNMO missions</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player opens HNMO's missions window.</SentWhen>
+      <CausedReaction>The server sends the HnmoMissionsState message, and from then on sends it again when something changes, e.g. a mission is finished.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>0A</SubCode>
+      <Name>HnmoMissionsAction</Name>
+      <Caption>HNMO missions action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's missions window: claim the reward of a mission, the streak bonus or the login calendar day, or enter who invited the account.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoMissionsState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoMissionsActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>The mission id for ClaimMission; the invite code or a character name of the inviting account for EnterInvite; empty otherwise.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoMissionsActionType</Name>
+          <Description>The action of the missions window.</Description>
+          <Values>
+            <EnumValue>
+              <Name>ClaimMission</Name>
+              <Description>Claim the reward of a finished mission.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimStreak</Name>
+              <Description>Claim the bonus of the daily streak.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimCalendar</Name>
+              <Description>Claim today's day of the login calendar.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>EnterInvite</Name>
+              <Description>Enter who invited the account.</Description>
+              <Value>4</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

@@ -5773,5 +5773,22 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("ChatSpamGuardConfiguration_LineSeconds_Name", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: missions and earned coins.
+        /// </summary>
+        public static string MissionsPlugIn_Name {
+            get {
+                return ResourceManager.GetString("MissionsPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Daily and weekly missions (kills, events, chaos machine mixes, zen, levels, online minutes) with rew....
+        /// </summary>
+        public static string MissionsPlugIn_Description {
+            get {
+                return ResourceManager.GetString("MissionsPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }
