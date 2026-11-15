@@ -55,8 +55,50 @@ jobs:
           name: HNMO
           path: HNMO.zip
           retention-days: 14
+
+  # A real Windows computer unzips HNMO.zip, double-clicks "Start HNMO.bat" (cmd) and checks that the
+  # game (8080) and the admin panel (8095) answer, so a folder that doesn't start on Windows is noticed.
+  windows-start:
+    needs: package
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO
+      - name: Unzip
+        shell: pwsh
+        run: Expand-Archive -Path HNMO.zip -DestinationPath C:\hnmo-test -Force
+      - name: Start HNMO.bat and wait for the game
+        shell: pwsh
+        run: |
+          $folder = "C:\hnmo-test\HNMO"
+          $log = "C:\hnmo-test\start.log"
+          $p = Start-Process -FilePath "cmd.exe" -ArgumentList "/c", "`"$folder\Start HNMO.bat`" > `"$log`" 2>&1" -WorkingDirectory $folder -PassThru
+          $deadline = (Get-Date).AddMinutes(20)
+          $game = $false; $admin = $false
+          while ((Get-Date) -lt $deadline -and -not ($game -and $admin)) {
+            Start-Sleep -Seconds 10
+            try { $game = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:8080/index.html).StatusCode -eq 200 } catch { }
+            try { $admin = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:8095/ -MaximumRedirection 0 -SkipHttpErrorCheck).StatusCode -lt 500 } catch { }
+            if ($p.HasExited) { break }
+          }
+          Write-Host "game: $game, admin panel: $admin, start window still running: $(-not $p.HasExited)"
+          Get-Content $log -Tail 80 -ErrorAction SilentlyContinue
+          if (-not ($game -and $admin)) { throw "HNMO didn't start on Windows" }
+          Get-Process | Where-Object { $_.Path -like "$folder*" } | Stop-Process -Force -ErrorAction SilentlyContinue
+
+  # Published only when it started on Windows.
+  release:
+    needs: [package, windows-start]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HNMO
       - name: Publish HNMO.zip as the latest release
-        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

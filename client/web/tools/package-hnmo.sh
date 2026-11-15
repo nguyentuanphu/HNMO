@@ -176,6 +176,8 @@ notice() { printf '=============================================================
 } > "$OUT/licenses/THIRD-PARTY-NOTICES.txt"
 cp "$WEB/tools/hnmo/README.txt" "$OUT/README.txt"
 cp "$WEB/tools/hnmo/start-hnmo.sh" "$WEB/tools/hnmo/Start HNMO.bat" "$OUT/"
+# Windows reads batch files reliably only with Windows line endings (CRLF), whatever the checkout has.
+sed -i 's/\r*$/\r/' "$OUT/Start HNMO.bat"
 chmod +x "$OUT/start-hnmo.sh"
 
 # HNMO ownership watermark. The marker locations are documented in the (unshipped)
