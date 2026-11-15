@@ -16,6 +16,11 @@ export function setUpGuide(): void {
   // The login screen links to it too.
   document.getElementById('loginGuide')?.addEventListener('click', (event) => { event.preventDefault(); toggle(); });
   close.addEventListener('click', hide);
+  // HNMO's new-player guide panel (ui/onboardingWindow.ts) opens from here too, once the game runs.
+  document.getElementById('guideOnboarding')?.addEventListener('click', () => {
+    hide();
+    window.dispatchEvent(new Event('hnmo-onboarding-open'));
+  });
   overlay.addEventListener('click', (event) => { if (event.target === overlay) hide(); });
   window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !overlay.hidden) hide(); });
   // Keys pressed while the guide is open stay in the guide.

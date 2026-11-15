@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight } from './terrain.js';
 import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
-import { createPlayerCharacter, setPlayerAnimationSpeeds } from './game/characters.js';
+import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
@@ -35,6 +35,7 @@ import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
+import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
 import { MoveWindow } from './ui/moveWindow.js';
@@ -158,6 +159,7 @@ export interface GameState {
   autoPlayExtras?: AutoPlayExtras;
   missions?: MissionsWindow;
   worldBosses?: WorldBossWindow;
+  onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
   party?: Party;
   trade?: Trade;
@@ -1111,6 +1113,34 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
   });
+  // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
+  // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
+  const onboarding = new OnboardingWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+    mapName: (map) => mapName(map),
+    mapNumber: () => state.mapNumber,
+    confirm: (text) => confirmInGame(text),
+    direction: (x, y) => {
+      const hero = online.hero, world = state.world;
+      if (!hero || !world) return null;
+      const rect = ui.canvas.getBoundingClientRect();
+      const from = toScene(hero.position.x, hero.position.y, sampleHeight(world.heights, hero.position.x, hero.position.y)).project(camera);
+      const tx = cellCenter(x), ty = cellCenter(y);
+      const to = toScene(tx, ty, sampleHeight(world.heights, tx, ty)).project(camera);
+      const dx = (to.x - from.x) * rect.width, dy = (to.y - from.y) * rect.height;
+      return { angle: Math.atan2(dx, dy), steps: Math.max(Math.abs(x - hero.cell.x), Math.abs(y - hero.cell.y)) };
+    },
+  });
+  state.onboarding = onboarding;
+  connection.onPacket((bytes) => { onboarding.handle(bytes); });
+  onboarding.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'y' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); onboarding.toggle(); }
+  });
+  window.addEventListener('hnmo-onboarding-open', () => onboarding.open());
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key === 'Home') { event.preventDefault(); autoPlay.toggle(); }
