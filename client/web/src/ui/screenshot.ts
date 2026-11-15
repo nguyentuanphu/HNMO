@@ -144,6 +144,8 @@ export class Screenshots {
 
   close(): void {
     this.panel.classList.remove('open');
+    // The game's hotkeys work again at once (the panel keeps its keys to itself while a button in it has the focus).
+    if (document.activeElement instanceof HTMLElement && this.panel.contains(document.activeElement)) document.activeElement.blur();
   }
 
   private button(className: string, run: () => void): HTMLButtonElement {
