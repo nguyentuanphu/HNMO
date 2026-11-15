@@ -7,7 +7,7 @@ import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, isHidd
 import { meshDraws, type ItemPlace, type MeshDraw } from './itemLooks.js';
 import { sampleHeight, sampleLight } from '../terrain.js';
 import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
-import { itemDefinition, itemModel, ItemGroup } from './items.js';
+import { itemDefinition, itemModel, partModel, ItemGroup } from './items.js';
 import { addItemGlow, setCloaked, setItemGlowState } from './itemGlow.js';
 import { createCompanions, isDarkRaven } from './pets.js';
 import type { Companion, CompanionOwner } from './pets.js';
@@ -15,7 +15,7 @@ import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAtta
 import type { BMDModel, Vec3 } from '../formats.js';
 import type { GeometryPart } from '../bmd.js';
 import type { DescribeOptions, MonsterLook, MonsterSetupData } from './monsterData.js';
-import type { AppearanceItem, EquipmentAppearance, ItemGlowData } from './items.js';
+import type { AppearanceItem, EquipmentAppearance, EquipmentSlotName, ItemGlowData, ItemModelSource } from './items.js';
 
 /** A terrain cell. */
 export interface Cell {
@@ -174,7 +174,11 @@ async function drawMaterial(textureDir: string[], textureName: string, draw: Mes
  */
 export async function createItemModel(item: AppearanceItem, place: ItemPlace = 'worn'): Promise<AnimatedModel | null> {
   const source = itemModel(item.group, item.number);
-  if (!source) return null;
+  return source ? createSourceModel(source, item, place) : null;
+}
+
+/** A model of the catalog (an item's or a part model's) drawn as its look says, with the item's glow. */
+async function createSourceModel(source: ItemModelSource, item: AppearanceItem, place: ItemPlace): Promise<AnimatedModel> {
   const model = await loadModel(source.dir, source.fileName);
   // Worn by a character it shares its model's geometry, skinned on the GPU; a window or the ground poses its own.
   const skinned = place === 'worn';
@@ -212,7 +216,7 @@ export async function createItemModel(item: AppearanceItem, place: ItemPlace = '
 }
 
 /** The equipment slots drawn as models of their own, hanging from a bone. */
-export type AttachmentSlot = 'rightHand' | 'leftHand' | 'wings';
+export type AttachmentSlot = 'rightHand' | 'leftHand' | 'wings' | 'ornament';
 
 export class Attachment {
   model: AnimatedModel;
@@ -229,20 +233,21 @@ export class Attachment {
   private readonly animated: boolean;
   private posed = false;
 
-  constructor({ model, item, slot, bone }: { model: AnimatedModel; item: AppearanceItem; slot: AttachmentSlot; bone?: number }) {
+  constructor({ model, item, slot, bone, placement }: { model: AnimatedModel; item: AppearanceItem; slot: AttachmentSlot; bone?: number; placement?: THREE.Matrix4 }) {
     this.model = model;
     this.item = item;
     this.slot = slot;
     this.bone = bone ?? (slot === 'leftHand' ? Bone.LEFT_HAND : Bone.RIGHT_HAND);
     this.animated = slot === 'wings' && (model.skeleton.actions[0]?.numKeys ?? 1) > 1;
-    this.ammunition = slot !== 'wings' && (itemDefinition(item.group, item.number)?.tags?.includes('ammunition') ?? false);
+    this.ammunition = slot !== 'wings' && slot !== 'ornament' && (itemDefinition(item.group, item.number)?.tags?.includes('ammunition') ?? false);
     this.model.group.matrixAutoUpdate = false;
-    this.backMatrix = slot === 'wings' ? null : backPlacement(item, slot === 'rightHand');
+    this.backMatrix = slot === 'wings' ? null : slot === 'ornament' ? placement ?? new THREE.Matrix4() : backPlacement(item, slot === 'rightHand');
   }
 
   place(boneMatrices: THREE.Matrix4[], onBack: boolean, time: number): void {
     const matrix = this.model.group.matrix;
     if (this.slot === 'wings') matrix.copy(boneMatrices[Bone.BACK]);
+    else if (this.slot === 'ornament') matrix.multiplyMatrices(boneMatrices[this.bone] ?? IDENTITY, this.backMatrix!); // set for ornaments
     else if (onBack) matrix.multiplyMatrices(boneMatrices[Bone.BACK], this.backMatrix!); // set for all but wings
     else matrix.copy(boneMatrices[this.bone] ?? IDENTITY);
     this.model.group.matrixWorldNeedsUpdate = true;
@@ -504,8 +509,10 @@ export class Character {
     const backs = this.classIndex !== null;
     for (const attachment of this.attachments) {
       // Only the player model has a back; a monster model shows its weapons in its hands, outside a safe zone.
-      const onBack = this.weaponsOnBack || attachment.ammunition;
-      const shown = attachment.slot === 'wings' || backs || !onBack;
+      const ornament = attachment.slot === 'ornament';
+      const onBack = !ornament && (this.weaponsOnBack || attachment.ammunition);
+      // The +15 armour's decorations: not in Chaos Castle (DrawsNextGradeObjects).
+      const shown = ornament ? !((mapNumber >= 18 && mapNumber <= 23) || mapNumber === 53) : attachment.slot === 'wings' || backs || !onBack;
       attachment.model.group.visible = shown;
       if (!shown) continue;
       attachment.place(this.model.matrices, onBack, this.clock);
@@ -554,10 +561,38 @@ export interface PlayerCharacterOptions {
   kind?: string;
 }
 
+// The decorations of +15 armour (ForEachNextGradeObject): per slot the part models and the bones they hang from,
+// placed as PlaceLinkedPart places MODEL_15GRADE_ARMOR_OBJ_* (angles in degrees, then the translation).
+const GRADE15_ORNAMENTS: Partial<Record<EquipmentSlotName, [string, number, Vec3, Vec3][]>> = {
+  helm: [['grade15Head', 20, [180, -90, 0], [28, 20, 0]]],
+  armor: [['grade15BodyLeft', 35, [0, -90, 0], [5, -20, 0]], ['grade15BodyRight', 26, [0, -90, 0], [5, -20, 0]]],
+  pants: [['grade15PantLeft', 3, [0, 90, 180], [25, 5, -5]], ['grade15PantRight', 10, [0, 90, 180], [25, 5, 5]]],
+  gloves: [['grade15ArmLeft', 36, [0, -90, 0], [30, 0, 20]], ['grade15ArmRight', 27, [0, -90, 0], [30, 0, -20]]],
+  boots: [['grade15BootLeft', 4, [0, 90, 180], [20, 15, -10]], ['grade15BootRight', 11, [0, 90, 180], [20, 15, 10]]],
+};
+
+/** The decorations a player's +15 armour pieces wear (drawn without a level of their own, in their render style). */
+async function createOrnaments(equipment?: EquipmentAppearance | null): Promise<Attachment[]> {
+  const made: Promise<Attachment | null>[] = [];
+  for (const [slot, ornaments] of Object.entries(GRADE15_ORNAMENTS) as [EquipmentSlotName, [string, number, Vec3, Vec3][]][]) {
+    const item = equipment?.[slot];
+    if (!item || (item.glowLevel ?? 0) !== 15) continue;
+    for (const [name, bone, angles, translation] of ornaments) {
+      const source = partModel(name);
+      if (!source) continue;
+      made.push(createSourceModel(source, { group: -1, number: -1, glowLevel: 0 }, 'worn')
+        .then((model) => new Attachment({ model, item, slot: 'ornament', bone, placement: angleMatrix(angles, translation) }))
+        .catch(() => null));
+    }
+  }
+  return (await Promise.all(made)).filter((attachment): attachment is Attachment => attachment !== null);
+}
+
 export async function createPlayerCharacter({ id, name, bodySet, equipment, kind = 'player' }: PlayerCharacterOptions): Promise<Character> {
-  const [model, attachments, companions] = await Promise.all([
-    createPlayerModel(bodySet, equipment), createAttachments(equipment), kind === 'player' ? createCompanions(equipment) : Promise.resolve([]),
+  const [model, held, ornaments, companions] = await Promise.all([
+    createPlayerModel(bodySet, equipment), createAttachments(equipment), createOrnaments(equipment), kind === 'player' ? createCompanions(equipment) : Promise.resolve([]),
   ]);
+  const attachments = [...held, ...ornaments];
   const character = new Character({
     id, name, kind, model,
     actions: { stop: PlayerAction.STOP, walk: PlayerAction.WALK },

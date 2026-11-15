@@ -83,6 +83,24 @@ test('items glow by level, excellent and ancient, worn and as icons', async ({ p
   await expect.poll(() => page.evaluate(() => (window as unknown as { __game: { effects: { census(): Record<string, number> } } }).__game.effects.census()['sprite:flareRed'] ?? 0), { timeout: 20_000 }).toBeGreaterThan(0);
   await page.waitForTimeout(3_000); // textures in, a few frames drawn
   await page.screenshot({ path: `${SHOTS_DIR}/worn.png` });
+  // The +15 armour wears its nine decorations (ForEachNextGradeObject); a closer look.
+  const ornaments = await page.evaluate(() => {
+    type Char = { attachments: { slot: string }[]; cell: { x: number; y: number }; group: { visible: boolean }; placeAt(x: number, y: number): void };
+    const g = (window as unknown as { __game: { online: { characters: Map<number, Char>; hero: Char }; view: { distance: number } } }).__game;
+    g.view.distance *= 0.45;
+    const plus15 = g.online.characters.get(0x7e05)!;
+    plus15.placeAt(g.online.hero.cell.x, g.online.hero.cell.y);
+    g.online.hero.group.visible = false;
+    return plus15.attachments.filter((a) => a.slot === 'ornament').length;
+  });
+  expect(ornaments).toBe(9);
+  await page.waitForTimeout(2_000);
+  await page.screenshot({ path: `${SHOTS_DIR}/worn-close.png` });
+  await page.evaluate(() => {
+    const g = (window as unknown as { __game: { view: { distance: number }; online: { hero: { group: { visible: boolean } } } } }).__game;
+    g.view.distance /= 0.45;
+    g.online.hero.group.visible = true;
+  });
 
   // A debuff takes the +15's level glow away (its excellent / ancient glow stays); the cloak leaves a chrome shell.
   const state = await page.evaluate(() => {

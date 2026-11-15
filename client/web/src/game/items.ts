@@ -141,6 +141,13 @@ export interface ItemCatalog {
 export interface ItemChoice { group: number; number: number; name: string }
 
 let catalog: ItemCatalog | null = null;
+/** The part models (Data/Items/Models/PartModels.json): the +15 armour's decorations, by name. */
+let partModels = new Map<string, ItemModelSource>();
+
+/** A part model by name ("grade15Head"), once the catalog is loaded. */
+export function partModel(name: string): ItemModelSource | null {
+  return partModels.get(name) ?? null;
+}
 
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
@@ -162,6 +169,13 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
     ...GROUP_FILES.map((name) => fetchJson<ItemModelsFile>(`/data/Items/Models/${name}.json`)),
   ]);
   const items = await Promise.all(GROUP_FILES.map((name) => fetchJson<ItemDefinitionsFile>(`/data/Items/${name}.json`)));
+  const parts = await fetchJson<{ partModels?: (ModelFileData & { name: string; renderStyle?: string })[] }>('/data/Items/Models/PartModels.json')
+    .catch(() => ({ partModels: [] }));
+  partModels = new Map((parts.partModels ?? []).filter((part) => part.file).map((part) => [part.name, {
+    ...splitPath(part.file!), // the filter keeps parts with a file
+    textureDir: part.textureFolders?.length ? part.textureFolders : ['Item'],
+    look: { renderStyle: part.renderStyle }, glow: {}, inventory: null, ground: null,
+  }]));
   const sharedByName = new Map(shared.models.map((model) => [model.name, model]));
   const models = new Map<string, ItemModelSource>();
   const names = new Map<string, string>();
