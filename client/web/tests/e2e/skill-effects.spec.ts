@@ -70,7 +70,7 @@ const ELF: Case[] = [
   { skill: 235, name: 'multi-shot', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'effect:bladeSkill'], shotAt: 200, model: 'bladeSkill', warm: [['Effect', 'bladetonedo.bmd']] },
   { skill: 77, name: 'infinity-arrow', expect: ['effect:infinityArrow', 'effect:infinityArrow1', 'effect:infinityArrow4'], shotAt: 300 },
   { skill: 30, name: 'summon', expect: ['effect:magicGround2', 'joint:jointHealing'], shotAt: 800 },
-  { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
+  { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight', 'effect:flare', 'particle:light'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
 ];
 
 const GLADIATOR: Case[] = [
@@ -95,7 +95,7 @@ const LORD: Case[] = [
   { skill: 62, name: 'earthshake', expect: ['effect:darkHorseSkill', 'effect:shockWave', 'effect:skillFuryStrike', 'effect:earthQuake1'], shotAt: 1040, action: 87, warm: [['Skill', 'GroundStone.bmd'], ['Skill', 'GroundStone2.bmd']] },
   // Released at key 3 of PLAYER_ATTACK_STRIKE: the burning trail flies at the target.
   { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
-  { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
+  { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame', 'particle:blueBlur'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
   { skill: 67, name: 'stun', expect: ['joint:flash', 'particle:explosion2', 'joint:jointThunder', 'particle:advSmoke2'], shotAt: 680 },
   { skill: 68, name: 'cancel-stun', expect: ['joint:flash', 'effect:skinShell'], shotAt: 900, other: true, warm: [['Skill', 'SkinShell.bmd']] },
   { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },

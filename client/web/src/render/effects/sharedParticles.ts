@@ -52,3 +52,25 @@ EXTRA_PARTICLES.advSmoke2 = {
     system.quads.billboard(o.texture, blend, o.position, width, height, o.light, o.rotation);
   },
 };
+
+// BITMAP_BLUE_BLUR SubType 1: drawn with BITMAP_POUNDING_BALL, 45 under where it is made; it rises, grows and fades.
+EXTRA_PARTICLES.blueBlur = {
+  texture: 'poundingBall',
+  init: (o) => {
+    if (o.subType !== 1) return false;
+    o.lifeTime = 30;
+    o.scale = (randInt(64) + 64) * 0.01;
+    o.rotation = randInt(360);
+    o.gravity = (randInt(32) + 60) * 0.1;
+    o.position.z -= 45;
+    return true;
+  },
+  move: (o) => {
+    o.light.setScalar(o.lifeTime / 20);
+    o.scale += 0.19;
+    o.position.z += 5;
+  },
+  draw: (o, system, width, height, blend) => {
+    system.quads.billboard(o.texture, blend, o.position, width, height, o.light, o.rotation);
+  },
+};

@@ -133,6 +133,8 @@ export type EffectType =
   | 'swellOfMagicPowerBuffEffect' // MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF: its buff's lasting lights
   | 'summon' // MODEL_SUMMON: Recovery's circle (Skill/nightmaresum.bmd)
   | 'raklionBossCrackEffect' // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
+  | 'impact' // BITMAP_IMPACT: Recovery's glow before another caster (sprites only)
+  | 'flare' // BITMAP_FLARE as an effect: SubType 3, Recovery's lights on the healed one's bones
   | 'skinShell'; // MODEL_SKIN_SHELL: the cancels' shards of skin flying off the target (Skill/SkinShell.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
@@ -152,6 +154,7 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'twintailWater' // BITMAP_TWINTAIL_WATER: the Sleep debuff's bubbles
   | 'waterfall5' | 'waterfall3' // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
   | 'explosion2' // BITMAP_EXPLOTION+1 (DinoE.jpg): Stun's bolts' sparks, Fire Breath's fire
+  | 'blueBlur' // BITMAP_BLUE_BLUR: SubType 1 (drawn with BITMAP_POUNDING_BALL), Fire Scream's rising blur
   | 'advSmoke2'; // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
 
 /** CreateSprite types: the bitmap drawn. */

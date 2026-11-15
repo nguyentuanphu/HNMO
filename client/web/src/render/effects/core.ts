@@ -146,6 +146,9 @@ export const BITMAPS = {
   waterfall5: 'WATERFALL5.jpg', // BITMAP_WATERFALL_5
   explosion2: 'DinoE.jpg', // BITMAP_EXPLOTION+1
   advSmoke2: 'fi02.tga', // BITMAP_ADV_SMOKE+1
+  impact: 'Impack03.jpg', // BITMAP_IMPACT
+  orora: 'hikorora.jpg', // BITMAP_ORORA
+  lightMarks: 'lightmarks.jpg', // BITMAP_LIGHT_MARKS
 } as const;
 
 export type BitmapName = keyof typeof BITMAPS;

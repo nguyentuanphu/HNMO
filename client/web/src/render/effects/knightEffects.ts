@@ -760,13 +760,65 @@ function recoveryLightMove(o: Joint, system: EffectSystem): void {
 }
 
 /** Recovery's arrival (ReceiveMagic AT_SKILL_RECOVER): the lights, the nightmare circle and three twilight rings. */
-export function recovery(system: EffectSystem, target: EffectOwner): void {
+export function recovery(system: EffectSystem, target: EffectOwner, otherCaster: EffectOwner | null = null): void {
+  // Another player's cast: a glow before the caster (BITMAP_IMPACT); the hero's own shows none.
+  if (otherCaster) {
+    const p = rotateByAngle(new THREE.Vector3(0, -220, 130), otherCaster.angle).add(otherCaster.position);
+    system.createEffect('impact', p, otherCaster.angle, new THREE.Vector3(0.7, 0.6, 0), 0, otherCaster);
+  }
   const position = target.position.clone();
   for (let i = 0; i < 19; i++) system.createJoint('flare', position, position, target.angle, 47, target, 40, 0, 2);
   const light = new THREE.Vector3(0.3, 0.2, 0.1);
   system.createEffect('summon', position, target.angle, light, 0);
   for (let sub = 0; sub < 3; sub++) system.createEffect('twlight', position, target.angle, light, sub);
+  // Two lights on random bones of the healed one (BITMAP_FLARE 3).
+  const bones = target.boneCount?.() ?? 0;
+  for (let i = 0; i < 2 && bones > 0; i++) {
+    const p = target.bonePosition?.(randInt(bones));
+    if (p) system.createEffect('flare', p, target.angle, light, 3);
+  }
 }
+
+// BITMAP_FLARE SubType 3: stays where it was made, an orange light particle every tick (60 ticks).
+EXTRA_EFFECTS.flare = {
+  create: (o) => o.subType === 3,
+  move: (o, system) => {
+    system.createParticle('light', o.position, o.angle, new THREE.Vector3(0.9, 0.4, 0.1), 5, 3.5 + (randInt(20) - 10) * 0.1);
+    return true;
+  },
+};
+
+// BITMAP_IMPACT: a glow 130 over a point before its owner that swells to 2.4 and back, fading in its last 40 ticks:
+// the impact and a turning shine, with one or two turning auroras once it is large.
+EXTRA_EFFECTS.impact = {
+  create: (o) => o.owner !== null,
+  move: (o, system) => {
+    const owner = o.owner;
+    if (!owner) return false;
+    let shown: number;
+    if (o.scale < 2) {
+      o.scale += 0.1;
+      shown = o.scale;
+    } else {
+      if (o.scale < 2.4) o.scale += 0.02;
+      else o.scale = 2;
+      shown = o.scale >= 2.2 ? 2.2 - (o.scale - 2.2) : o.scale;
+    }
+    if (o.lifeTime <= 40) {
+      o.alpha -= 0.1;
+      o.blendMeshLight -= 0.1;
+    }
+    const light = o.light.clone().multiplyScalar(Math.max(0, o.alpha));
+    o.position.copy(rotateByAngle(new THREE.Vector3(-10, -30, 0), owner.angle).add(owner.position));
+    o.position.z += 130;
+    const turn = -system.time * 0.08;
+    system.createSprite('impact', o.position, shown, light, o.self);
+    system.createSprite('shiny2', o.position, shown, light, o.self, turn);
+    if (o.scale > 1) system.createSprite('orora', o.position, shown, light, o.self, turn);
+    if (o.scale > 2) system.createSprite('orora', o.position, shown, light, o.self, -turn);
+    return true;
+  },
+};
 
 // MODEL_SUMMON SubType 0 (Skill/nightmaresum.bmd): a circle that turns slowly, brightening for 30 ticks, then fading;
 // both meshes in its light, the second bright.

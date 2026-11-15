@@ -728,6 +728,7 @@ function darkScream(file: string, fire: boolean): NonNullable<typeof EXTRA_EFFEC
       if (o.subType === 0) system.createJoint('jointForce', o.position, o.position, o.angle, 7, o.self, 150, 40);
       o.position.z += 20;
       o.position.add(rotateByAngle(new THREE.Vector3(0, -20, 0), o.angle));
+      system.createParticle('blueBlur', o.position, o.angle, new THREE.Vector3(0, 1, 0), 1, 1);
       return true;
     },
     move: (o, system) => {

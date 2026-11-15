@@ -193,7 +193,7 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
     return true;
   }
   if (skill === SkillEffect.RECOVERY) { // ReceiveMagic AT_SKILL_RECOVER: at the healed target at once
-    recovery(system, target ?? caster);
+    recovery(system, target ?? caster, options.casterIsHero ? null : caster);
     return true;
   }
   if (skill === SkillEffect.EXPANSION_OF_WIZARDRY) { // ReceiveMagic: the swell at once, no attack follows
