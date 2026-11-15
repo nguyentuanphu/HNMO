@@ -226,7 +226,7 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Dev viewer / audit without a server: `src/dev/monsterViewer.ts` (`auditAll`, `showRow`), used by
   `tests/e2e/monster-looks.spec.ts` (needs only the bridge: `dotnet bin/Release/net10.0/HNMO.dll --contentRoot <bridge>
   --urls http://127.0.0.1:8088`). Its in-game part: `IN_GAME=1 LOCAL_JS=$PWD/public/js BASE_URL=http://127.0.0.1:8080`
-  (routes this checkout's client into the running HNMO folder). A dev bridge's relay could not log in to the local test
-  server ("The server closed the connection"): use LOCAL_JS against 8080 instead.
+  (routes this checkout's client into the running HNMO folder's page), or the dev bridge's own relay with BASE_URL 8088.
+  "The server closed the connection" at login = no game server running (check `ps aux | grep HNMO.Startup`).
 - To compare GL calls with an older build: `git archive <commit> client/web/src client/web/tsconfig.json`, `tsc --outDir`,
   route `/js/**` to it, count calls with a `WebGL2RenderingContext.prototype` wrapper.

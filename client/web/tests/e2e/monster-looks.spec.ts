@@ -176,6 +176,15 @@ test('in the game: the dungeon skeletons are skeletons with their weapons', asyn
   test.skip(!process.env.IN_GAME, 'needs a game server (IN_GAME=1)');
   test.setTimeout(6 * 60_000);
   const { enterWorld } = await import('./helpers.js');
+  // LOCAL_JS: this checkout's built client in place of the server's (e.g. against an HNMO folder of an older build).
+  const localJs = process.env.LOCAL_JS;
+  if (localJs) {
+    const { readFileSync, existsSync } = await import('node:fs');
+    await page.route('**/js/**', (route) => {
+      const file = `${localJs}/${new URL(route.request().url()).pathname.replace(/^\/js\//, '')}`;
+      return existsSync(file) ? route.fulfill({ contentType: 'text/javascript', body: readFileSync(file) }) : route.continue();
+    });
+  }
   await enterWorld(page, process.env.IN_GAME_ACCOUNT ?? 'test2');
   await page.evaluate('window.__game.online.say("/move dungeon")');
   const skeleton = () => page.evaluate(`(() => {
