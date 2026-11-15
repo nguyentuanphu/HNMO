@@ -6,6 +6,7 @@ namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
 using HNMO.GameLogic;
+using HNMO.GameLogic.PlayerActions.Skills;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.World;
 using HNMO.Network.Packets.ClientToServer;
@@ -36,7 +37,7 @@ internal class RageSkillAttackHandlerPlugIn : IPacketHandlerPlugIn
 
         var target = player.GetObject(targetId) as IAttackable;
         if (player.SkillList is null || player.SkillList.GetSkill(message.SkillId) is not { } skill
-                                     || target is null || !target.IsInRange(player.Position, skill.Skill!.Range))
+                                     || target is null || !RageSkillAttackAction.IsTargetInReach(player.Position, target.Position, skill.Skill!.Range))
         {
             return;
         }

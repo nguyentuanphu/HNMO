@@ -18,7 +18,26 @@ public class RageSkillAttackAction
     /// </summary>
     public const int MaximumTargetsPerAttack = 5;
 
+    /// <summary>
+    /// How many cells beyond the skill's range an explicit target may stand, as for the targeted skills: the client
+    /// casts from up to 1.2 times the range (GetSkillDistance * 1.2), and Dark Side from anywhere, and positions can
+    /// be a step out of sync.
+    /// </summary>
+    public const int RangeTolerance = 2;
+
     private const int HitsPerTarget = 2;
+
+    /// <summary>
+    /// Determines whether an explicit target of a rage fighter skill is in reach.
+    /// </summary>
+    /// <param name="player">The position of the player.</param>
+    /// <param name="target">The position of the target.</param>
+    /// <param name="range">The range of the skill.</param>
+    /// <returns><c>true</c>, if the target is within the range plus <see cref="RangeTolerance"/>.</returns>
+    public static bool IsTargetInReach(Point player, Point target, int range)
+    {
+        return player.EuclideanDistanceTo(target) <= range + RangeTolerance;
+    }
 
     /// <summary>
     /// Selects the targets of a rage attack: the explicit target first, then the
@@ -62,7 +81,7 @@ public class RageSkillAttackAction
 
         var explicitTarget = player.GetObject(explicitTargetId) as IAttackable;
         if (player.SkillList is null || player.SkillList.GetSkill(skillId) is not { Skill: { } usedSkill } skill
-                                     || (explicitTarget is not null && !explicitTarget.IsInRange(player.Position, usedSkill.Range)))
+                                     || (explicitTarget is not null && !IsTargetInReach(player.Position, explicitTarget.Position, usedSkill.Range)))
         {
             return;
         }
