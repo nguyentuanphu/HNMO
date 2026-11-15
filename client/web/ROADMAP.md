@@ -182,3 +182,34 @@ the coins history shows every grant.
    screenshots.
 8. ⏳ **A fair cash shop** (idea 8): cosmetics, convenience and a season pass instead of power items; a
    review of the catalog with the owner first (which items are "power").
+
+## 13. What the popular Vietnamese servers offer (the owner asked on 2026-11-15, Sydney time)
+
+Looked at what the well-known Vietnamese servers advertise (feature pages, server listings, a big
+licensed mobile release). Each item: every number and switch in the admin panel (English and
+Vietnamese), and shown on the website. Done after section 12's items 4-7, in this order; item 8 of
+section 12 (the cash shop) still waits for the owner's answers.
+
+1. ⏳ **Top races ("đua top")** — the most advertised feature: races by day, week and month (resets, level,
+   boss-hunt points, PK kills, event wins, guild points, per class), each with its own prizes (coins, items),
+   start/end dates and rules. Live tables and past winners on the website; a notice in the game when a race
+   starts and ends. Boss-hunt points come from section 12's world bosses (points per boss, not by power).
+2. ⏳ **Gift codes**: the admin creates codes (rewards, number of uses, one per account or per character,
+   start/end, level/reset limits); players enter them on the website or in the game (/code).
+3. ⏳ **Reset system with options**: reset tiers (level needed, zen/coins cost, points kept or given, a
+   daily limit per tier), VIP reset at a lower level, relife (grand reset) after N resets, and "ủy thác
+   reset": the server resets the character during offline leveling. Reset and stat points (add / clear)
+   also on the website. Reset ranking per month.
+4. ⏳ **Account safety on the website**: a second password for the vault and for trading, item lock, login
+   history (time, address, game/website), trade history; the admin panel sets which are required.
+5. ⏳ **Top-up milestones ("thưởng mốc nạp")**: rewards at total top-up steps, shown on the account page;
+   QR bank transfer on the top-up page (the bank top-up exists).
+6. ⏳ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
+   player's time), its map and its drops, on the website and in the game (i). Extra invasions on a
+   schedule (golden monsters, white wizard, rabbits, snowmen, "find the GM").
+7. ⏳ **Daily lucky number**: pick a number on the website or in the game, a draw at a set time, coins or
+   jewels for the winners; prizes and odds in the admin panel.
+8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
+   together, divorce rules; the couples list on the website.
+9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
+   admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
