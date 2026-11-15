@@ -90,9 +90,11 @@ function gameServerUp(): Promise<boolean> {
 async function answerPin(page: Page, pin: string): Promise<void> {
   const box = page.locator('.confirm-dialog.hnmo-safety-pin');
   await expect(box).toHaveCount(1, { timeout: 30_000 });
-  await box.locator('.social-dialog-input').fill(pin);
+  const input = box.locator('.social-dialog-input');
+  await input.fill(pin);
   await box.locator('#gcd_btn_primary').click();
-  await expect(box).toHaveCount(0);
+  // Closed, or the next box of the flow (another PIN box, with an empty field) took its place.
+  await expect.poll(async () => (await box.count()) === 0 || (await input.inputValue().catch(() => '')) === '').toBe(true);
 }
 
 test('in the game: the second password box, locked items and the vault lock as on the desktop', async ({ page }) => {
@@ -144,7 +146,8 @@ test('in the game: the second password box, locked items and the vault lock as o
   const safety = () => page.evaluate(() => { const s = (window as unknown as Win).__game.accountSafety!; return { protected: s.vaultProtected, needsPin: s.vaultNeedsPin }; });
   await expect.poll(safety).toEqual({ protected: true, needsPin: true });
   const model = () => page.evaluate(() => { const m = (window as unknown as Win).__game.itemWindows!.vault.model; return { title: m.title, locked: m.storage_locked }; });
-  await page.evaluate(() => (window as unknown as { __game: { itemWindows: { refresh(): void } } }).__game.itemWindows.refresh());
+  // The window syncs its model when it draws (the vault isn't open here).
+  await page.evaluate(() => (window as unknown as { __game: { itemWindows: { vault: { updateModel(): void } } } }).__game.itemWindows.vault.updateModel());
   await expect.poll(model).toEqual({ title: 'Storage (Close)', locked: true });
   expect(await page.evaluate(() => (window as unknown as Win).__game.itemWindows!.vault.onItemClick?.(0, {}))).toBe(true);
   await answerPin(page, '5555');
