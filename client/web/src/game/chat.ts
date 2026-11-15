@@ -17,7 +17,7 @@
 // touch screens.
 
 import { openDocument, type RmlDocument, type RmlModel } from '../ui/rml.js';
-import { hudScale } from '../ui/nativeText.js';
+import { hudScale, nativeTextPx } from '../ui/nativeText.js';
 import { blockedNames, filterWords, isBlocked, loadHistory, saveHistory, setBlocked } from './chatExtras.js';
 
 /** How a message shows: said (in public, to the party, guild, alliance or Gens), whispered, from the game, or from a game master. */
@@ -58,8 +58,10 @@ interface InputModel extends RmlModel {
 }
 interface LogModel extends RmlModel {
   lines: LineEntry[]; panel_height: number; client_height: number; back_alpha: number; show_frame: boolean; pointed_index: number;
+  /** The lines' text size in the document's pixels (the native text size over the window's scale). */
+  text_px: number;
 }
-interface SystemModel extends RmlModel { lines: LineEntry[]; back_alpha: number }
+interface SystemModel extends RmlModel { lines: LineEntry[]; back_alpha: number; text_px: number }
 
 export interface ChatOptions {
   /** Where the windows go. */
@@ -122,8 +124,8 @@ export class Chat {
       chat_size_step: () => { this.sizeStep(); click(); },
       chat_alpha_step: () => { this.backAlpha += 0.2; if (this.backAlpha > 0.9) this.backAlpha = 0.2; this.sync(); click(); },
     };
-    this.logModel = { lines: [], panel_height: 0, client_height: 0, back_alpha: this.backAlpha, show_frame: false, pointed_index: -1 };
-    this.systemModel = { lines: [], back_alpha: 0.6 };
+    this.logModel = { lines: [], panel_height: 0, client_height: 0, back_alpha: this.backAlpha, show_frame: false, pointed_index: -1, text_px: 11 };
+    this.systemModel = { lines: [], back_alpha: 0.6, text_px: 11 };
     window.addEventListener('keydown', (event) => this.onKey(event), true);
     window.addEventListener('resize', () => this.place());
     // The pointed line (only a line with a name) and a right click on it (UpdatePointedLine).
@@ -172,10 +174,18 @@ export class Chat {
       // The same line from the same player again: "(x2)" on the last one instead of a new line.
     } else {
       // CChatLogWindow::AddText / ProcessAddText: a long line becomes two.
-      const [first, second] = this.separate(sender, text);
+      // HNMO: a part still too long for the window is split again (the desktop's lines are never that long).
       const parts: Message[] = [];
+      const [first, firstRest] = this.separate(sender, text);
+      let rest = firstRest;
       if (first) parts.push({ id: sender, text: first, kind, time: now, count: 1 });
-      if (second) parts.push({ id: '', text: second, kind, time: now, count: 1 });
+      while (rest && parts.length < 8) {
+        const [line, more] = this.separate('', rest);
+        if (!line) { parts.push({ id: '', text: rest, kind, time: now, count: 1 }); rest = ''; break; }
+        parts.push({ id: '', text: line, kind, time: now, count: 1 });
+        rest = more;
+      }
+      if (rest && parts.length >= 8) parts.push({ id: '', text: rest, kind, time: now, count: 1 });
       for (const part of parts) {
         this.all.push(part);
         if (kind === 'whisper') this.whispers.push(part);
@@ -266,6 +276,11 @@ export class Chat {
     const lines = this.log.$('#lines');
     if (lines) { lines.setAttribute('data-no-i18n', ''); lines.style.overflowY = 'auto'; }
     this.systemLog.$('#panel')?.setAttribute('data-no-i18n', '');
+    // HNMO: a system line longer than the window (the server's own long messages) wraps inside the
+    // window's width (CLIENT_WIDTH, 273) instead of running across the screen.
+    const wrapStyle = document.createElement('style');
+    wrapStyle.textContent = '.syslog-line { white-space: normal; height: auto; max-width: 273px; } .syslog-line .syslog-text { display: block; }';
+    this.systemLog.host.shadowRoot?.append(wrapStyle);
     // The buttons' hints (data-hint) as the browser's tooltips.
     for (const button of this.input.root.querySelectorAll<HTMLElement>('.cib-btn')) {
       const hint = button.getAttribute('data-hint');
@@ -308,10 +323,20 @@ export class Chat {
         transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none',
       });
       doc.setScale(scale);
-      // A chat line is the text's height, the next one a row (15) below (SyncNativeLineGeometry).
+      // The lines are the native text size (NativeTextPx: 11 to 16 screen pixels, growing slower than the
+      // windows), not the window's scale: the document is scaled, so the size is given over the scale.
+      const textPx = Math.round(nativeTextPx() / scale * 100) / 100;
+      if (doc === this.log) this.logModel.text_px = textPx;
+      if (doc === this.systemLog) this.systemModel.text_px = textPx;
+      // A chat line is the text's height, the next one a row (15) below (SyncNativeLineGeometry); the system
+      // log's row is the text's height and a fifth (CSystemLogWindow::SyncNativeGeometry).
       doc.root.style.setProperty('--line-px', '1.25em');
-      doc.root.style.setProperty('--row-px', `${ROW}px`);
+      doc.root.style.setProperty('--row-px', doc === this.systemLog ? '1.5em' : `${ROW}px`);
     }
+    // The measuring line is a chat line's size (SeparateText measures in the line's font).
+    if (this.measure) this.measure.style.fontSize = `calc(${this.logModel.text_px}px * var(--hnmo-text-scale, 1))`;
+    this.log?.update();
+    this.systemLog?.update();
   }
 
   private shown(): Message[] {
