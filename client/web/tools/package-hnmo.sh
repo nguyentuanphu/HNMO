@@ -41,7 +41,11 @@ if [ "$RUNTIME" = portable ]; then
   rm -f "$OUT/server/HNMO.Startup" "$OUT/server/HNMO.Startup.exe" "$OUT/web/HNMO" "$OUT/web/HNMO.exe"
   # Debug symbols and the code documentation (HNMO.*.xml) aren't needed to run.
   find "$OUT/server" "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "HNMO.*.xml" \) -delete
-  ASPNET_VERSION="${HNMO_RUNTIME_VERSION:-$(dotnet --list-runtimes | awk '/Microsoft.AspNetCore.App/{v=$2} END{print v}')}"
+  # The newest installed runtime of the version HNMO is built for (net10.0 -> 10.x), not simply the
+  # newest one: a newer major version (11) doesn't run it.
+  NET_MAJOR="$(sed -n 's#.*<TargetFramework>net\([0-9]*\)\..*#\1#p' "$WEB/bridge/HNMO.Web.csproj" | head -1)"
+  ASPNET_VERSION="${HNMO_RUNTIME_VERSION:-$(dotnet --list-runtimes | awk -v major="$NET_MAJOR" '$1 == "Microsoft.AspNetCore.App" && index($2, major ".") == 1 {v=$2} END{print v}')}"
+  if [ -z "$ASPNET_VERSION" ]; then echo "No .NET $NET_MAJOR runtime installed here (dotnet --list-runtimes)" >&2; exit 1; fi
   echo "Adding the .NET runtime $ASPNET_VERSION for Windows, Linux and macOS"
   for rid in win-x64 linux-x64 osx-arm64 osx-x64; do
     ext=$([ "$rid" = win-x64 ] && echo zip || echo tar.gz)
