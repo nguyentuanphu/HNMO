@@ -372,3 +372,17 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - F5 codes now: ... gift codes 1A-1C, resets 1D (request), 1E (state JSON), 1F (action). Next free: 20.
 - Admin page `/resets-relife` uses an inline `T(en, vi)` helper instead of 100+ resource keys (only the page name is a resource).
 - A Playwright check of a Vietnamese chat notice: re-feed inside `expect(...).toPass()` (vi.json loads after the click).
+
+## Account safety (2026-11-16)
+- `GameLogic/PlugIns/AccountSafety`: `AccountSafetyEngine` (pure, `AccountSafetyTest`: PINs, wrong-try lockout, item locks with the
+  unlock wait, login/trade history), `AccountSafetyStore` (`save/account-safety.json`, `Open` shared per file), `AccountSafetyPlugIn`
+  (sessions in a ConditionalWeakTable; `RefuseAsync(player, SafetyAction)`, `RefuseLockedItemAsync`, `RefuseDropOrSaleAsync` are called
+  from MoveItemAction, SellItemToNpcAction, BuyRequestAction, TradeRequest/TradeButtonAction, ItemCraftAction, the store-open handler).
+- The second password IS `Account.VaultPassword` (the desktop's 4-digit vault PIN), now a BCrypt hash ("$2..."); plain old PINs still
+  match (`AccountSafetyEngine.PinMatches`). Never send an unasked VaultProtectionInformation 12 to the desktop: it then moves its
+  backed-up item, which may not exist. Website/admin PIN changes write the live `player.Account` when the account is in a game of
+  this process (`WebsiteAccountSafetyController.WritePinAsync`), else the DB under a login server reservation.
+- Real web player addresses: the bridge's relay writes a `PROXY TCP4 …` line first (`Network/ProxyHeader.cs`), the `Listener` reads it
+  only from loopback (100 ms wait). Against a server without this code run the bridge with `--Relay:SendClientAddress=false`.
+- F5 codes now: ... resets 1D-1F, account safety 20 (request), 21 (state JSON), 22 (action). Next free: 23.
+- In-memory persistence shares entity objects between contexts: don't set a fake value on an entity "just for the answer".

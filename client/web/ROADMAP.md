@@ -255,8 +255,20 @@ section 12 (the cash shop) still waits for the owner's answers.
    reset with the NPC and a delegated reset during real offline leveling (the rules, the admin page and the website API
    are unit-tested; the web parts are tested with fed packets and answered requests). Not done: VIP days as a gift code
    or cash shop reward (the admin page gives VIP days; the account editor's attribute grants too).
-4. ⏳ **Account safety on the website**: a second password for the vault and for trading, item lock, login
-   history (time, address, game/website), trade history; the admin panel sets which are required.
+4. ✅ **Account safety on the website**, built 2026-11-16 (Sydney): the second password is the game's vault PIN (4
+   digits, kept hashed): set, changed (with the old one) and cleared on the account page, or at the vault in the game; the
+   admin panel's *Account safety* page chooses what needs it (the vault, trades, the personal store, dropping or selling
+   valuable items), how long it stays entered, the wrong tries and the lockout, and resets it for an account. It's entered
+   once per session: the vault's lock (now also in the web game, as on the desktop), `/unlock 1234`, or the web game's box
+   when the server asks. Item lock (account page, `/lockitem`, `/unlockitem`, Alt + right click in the web game): locked
+   items can't be traded, sold, dropped, put in a personal store or mixed; an unlock needs the second password and waits
+   (24 h by default). Login history (Sydney and local time, the address partly hidden on the website and whole in the
+   admin panel, game or website, success or failure; kept 30 days) on the account page, and a notice in the game when the
+   last login came from another address (the web bridge now tells the game server the player's real address). Trade
+   history (items and zen, with whom, personal store sales too): the last 20 on the account page, all in the admin panel.
+   State in `save/account-safety.json` (no database change; the PIN stays in the account's vault password). Still to check
+   on a server running this code: a real trade, store sale and login from two addresses (the rules, the admin page and the
+   website API are unit-tested; the web parts are tested with fed packets and answered requests).
 5. ⏳ **Top-up milestones ("thưởng mốc nạp")**: rewards at total top-up steps, shown on the account page;
    QR bank transfer on the top-up page (the bank top-up exists).
 6. ⏳ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
