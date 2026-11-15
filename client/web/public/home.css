@@ -499,3 +499,8 @@ footer {
 .race-card p { margin: 4px 0; font-size: 13px; overflow-wrap: anywhere; }
 .race-time { color: var(--gold); }
 #races-upcoming-panel[hidden] { display: none; }
+
+/* Gift codes section: a card per public code. */
+.gift-card h4 { margin: 0 0 4px; font-family: ui-monospace, monospace; letter-spacing: .06em; color: var(--gold); overflow-wrap: anywhere; }
+.gift-card p { margin: 4px 0; font-size: 13px; overflow-wrap: anywhere; }
+#gift-account[hidden] { display: none; }

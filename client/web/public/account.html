@@ -29,6 +29,10 @@
     .coin strong { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
     .coin span { font-size: 12px; color: var(--muted); }
     .notice { border-color: rgba(201, 162, 74, .5); }
+    select { background: #151a26; color: var(--text); border: 1px solid #2c3446; border-radius: 6px; padding: 8px 10px; font: inherit; }
+    .gift-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .langs button { padding: 3px 8px; font-size: 12px; background: transparent; color: var(--gold); }
+    .langs button[aria-pressed="true"] { background: var(--gold); color: #1a1408; }
   </style>
 </head>
 <body>
@@ -75,6 +79,26 @@
         <p class="message" id="coinsMessage" role="status"></p>
       </form>
     </div>
+
+    <section class="panel" id="gift" aria-labelledby="giftTitle">
+      <div class="gift-head">
+        <h2 id="giftTitle" data-gt="title">Gift code</h2>
+        <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-gift-lang="en">EN</button> <button type="button" data-gift-lang="vi">VI</button></div>
+      </div>
+      <p data-gt="intro">Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it's in the game). In the game you can also type /code CODE.</p>
+      <p class="message error" id="giftOff" data-gt="off" hidden>Gift codes can't be entered on the website on this server: use /code CODE in the game.</p>
+      <form id="giftLogin" class="panel" style="padding:0;border:0;background:none">
+        <label><span data-gt="account">Account name</span> <input id="giftAccount" name="loginName" required maxlength="10" autocomplete="username"></label>
+        <label><span data-gt="password">Password</span> <input id="giftPassword" name="password" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button type="submit" data-gt="login">Show my characters</button>
+      </form>
+      <form id="giftForm" class="panel" style="padding:0;border:0;background:none" hidden>
+        <label><span data-gt="character">Character (gets the zen and items)</span> <select id="giftCharacter" required></select></label>
+        <label><span data-gt="code">Gift code</span> <input id="giftCode" name="code" required maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+        <button type="submit" data-gt="use">Use the code</button>
+      </form>
+      <p class="message" id="giftMessage" role="status" aria-live="polite"></p>
+    </section>
   </main>
   <script type="module">
     const $ = (id) => document.getElementById(id);
@@ -127,6 +151,124 @@
         show($('coinsMessage'), waiting ? `Includes ${waiting} new coins, which arrive in your account when you open the cash shop in the game.` : '', true);
       } catch (error) { $('coins').hidden = true; show($('coinsMessage'), error.message, false); }
     });
+  </script>
+  <script type="module">
+    // The gift code panel (English and Vietnamese): the account's name and password are checked by the game server
+    // through this site's bridge, which lists the characters; the code is then entered for the chosen character.
+    const TEXT = {
+      en: {
+        title: 'Gift code', account: 'Account name', password: 'Password', login: 'Show my characters',
+        character: 'Character (gets the zen and items)', code: 'Gift code', use: 'Use the code',
+        intro: 'Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
+        off: 'Gift codes can\'t be entered on the website on this server: use /code CODE in the game.',
+        loginWrong: 'Wrong account name or password.', noCharacters: 'This account has no character yet: create one in the game first.',
+        server: 'The game server didn\'t answer. Try again later.', busy: 'Too many requests from your address. Wait a minute.', setup: 'The account page isn\'t set up yet (host: see README.txt).',
+        chooseCharacter: 'Choose the character.', level: 'level', resets: 'resets',
+        Ok: 'Gift code %code accepted for %character: %reward.', Invalid: 'That gift code doesn\'t exist (%tries tries left).',
+        TooManyTries: 'Too many wrong codes. Try again after %retry (Sydney time).', Disabled: 'This gift code is switched off.',
+        NotStarted: 'This gift code works from %start (Sydney time).', Ended: 'This gift code has expired.', UsedUp: 'This gift code has been used up.',
+        AlreadyUsedAccount: 'Your account already used this gift code.', AlreadyUsedCharacter: 'This character already used this gift code.',
+        BatchCodeUsed: 'This gift code was already used.', LevelTooLow: 'This gift code needs level %min.', LevelTooHigh: 'This gift code is for level %max or lower.',
+        ResetsTooLow: 'This gift code needs %min resets.', ResetsTooHigh: 'This gift code is for characters with %max resets or fewer.', WrongClass: 'This gift code is not for this character\'s class.',
+      },
+      vi: {
+        title: 'Gift code', account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Xem nhân vật của tôi',
+        character: 'Nhân vật (nhận zen và vật phẩm)', code: 'Gift code', use: 'Dùng mã',
+        intro: 'Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
+        off: 'Máy chủ này không cho nhập gift code trên website: hãy dùng /code MÃ trong game.',
+        loginWrong: 'Sai tên tài khoản hoặc mật khẩu.', noCharacters: 'Tài khoản này chưa có nhân vật: hãy tạo nhân vật trong game trước.',
+        server: 'Máy chủ game không trả lời. Hãy thử lại sau.', busy: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy chờ một phút.', setup: 'Trang tài khoản chưa được cài đặt (chủ server: xem README.txt).',
+        chooseCharacter: 'Hãy chọn nhân vật.', level: 'cấp', resets: 'reset',
+        Ok: 'Đã nhận gift code %code cho %character: %reward.', Invalid: 'Gift code không đúng (còn %tries lần thử).',
+        TooManyTries: 'Bạn đã nhập sai quá nhiều lần. Hãy thử lại sau %retry (giờ Sydney).', Disabled: 'Gift code này đang tạm khóa.',
+        NotStarted: 'Gift code này dùng được từ %start (giờ Sydney).', Ended: 'Gift code này đã hết hạn.', UsedUp: 'Gift code này đã hết lượt dùng.',
+        AlreadyUsedAccount: 'Tài khoản của bạn đã dùng gift code này rồi.', AlreadyUsedCharacter: 'Nhân vật này đã dùng gift code này rồi.',
+        BatchCodeUsed: 'Gift code này đã được dùng.', LevelTooLow: 'Gift code này cần cấp %min.', LevelTooHigh: 'Gift code này dành cho cấp %max trở xuống.',
+        ResetsTooLow: 'Gift code này cần %min lần reset.', ResetsTooHigh: 'Gift code này dành cho nhân vật có tối đa %max lần reset.', WrongClass: 'Gift code này không dành cho lớp của nhân vật này.',
+      },
+    };
+    const $ = (id) => document.getElementById(id);
+    let lang = 'en';
+    try { const saved = localStorage.getItem('hnmo.language'); lang = saved === 'vi' || saved === 'en' ? saved : (navigator.language || '').toLowerCase().startsWith('vi') ? 'vi' : 'en'; } catch {}
+    const t = (key) => TEXT[lang][key] ?? TEXT.en[key] ?? key;
+    let login = null;
+    let last = null;
+    const say = (text, ok) => { $('giftMessage').textContent = text; $('giftMessage').className = `message ${ok ? 'ok' : 'error'}`; };
+    const sydney = (ms) => new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-AU', { timeZone: 'Australia/Sydney', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).format(ms);
+    const coin = (type) => type === 'WCoinC' ? 'W Coin (C)' : type === 'WCoinP' ? 'W Coin (P)' : 'Goblin Points';
+    function rewardText(reward) {
+      const n = (v) => v.toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-AU');
+      const parts = [];
+      if (reward.coins > 0) parts.push(`${n(reward.coins)} ${coin(reward.coinType)}`);
+      if (reward.zen > 0) parts.push(`${n(reward.zen)} zen`);
+      for (const item of reward.items ?? []) parts.push(`${item.name || `${item.group}/${item.number}`}${item.level > 0 ? ` +${item.level}` : ''} x${item.count}`);
+      return parts.join(' + ');
+    }
+    function resultText(answer) {
+      const d = answer.details ?? {};
+      const minMax = answer.result.startsWith('Level') ? [d.minLevel, d.maxLevel] : [d.minResets, d.maxResets];
+      return t(answer.result)
+        .replace('%code', answer.code ?? '').replace('%character', answer.character ?? '').replace('%reward', answer.reward ? rewardText(answer.reward) : '')
+        .replace('%tries', String(answer.triesLeft ?? 0)).replace('%retry', answer.retryAt ? sydney(answer.retryAt) : '-')
+        .replace('%start', d.start ? sydney(d.start) : '-').replace('%min', String(minMax[0] ?? '')).replace('%max', String(minMax[1] ?? ''));
+    }
+    function errorText(status, body) {
+      if (status === 401) return t('loginWrong');
+      if (status === 403) { $('giftOff').hidden = false; return t('off'); }
+      if (status === 429) return t('busy');
+      if (status === 503 && body.error === 'setup') return t('setup');
+      return t('server');
+    }
+    function applyLanguage() {
+      for (const element of document.querySelectorAll('#gift [data-gt]')) element.textContent = t(element.dataset.gt);
+      for (const button of document.querySelectorAll('[data-gift-lang]')) button.setAttribute('aria-pressed', String(button.dataset.giftLang === lang));
+      if (last) say(last.text(), last.ok);
+      for (const option of $('giftCharacter').options) option.textContent = option.dataset.name + ` (${t('level')} ${option.dataset.level}, ${t('resets')} ${option.dataset.resets})`;
+    }
+    for (const button of document.querySelectorAll('[data-gift-lang]')) {
+      button.addEventListener('click', () => { lang = button.dataset.giftLang; try { localStorage.setItem('hnmo.language', lang); } catch {} applyLanguage(); });
+    }
+    async function post(url, body) {
+      const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
+      const data = await response.json().catch(() => ({}));
+      return { status: response.status, ok: response.ok, data };
+    }
+    $('giftLogin').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const credentials = { loginName: $('giftAccount').value.trim(), password: $('giftPassword').value };
+      try {
+        const answer = await post('/portal/gift-codes/characters', credentials);
+        if (!answer.ok) { const key = errorText(answer.status, answer.data); last = { text: () => errorText(answer.status, answer.data), ok: false }; say(key, false); return; }
+        const characters = answer.data.characters ?? [];
+        if (!characters.length) { last = { text: () => t('noCharacters'), ok: false }; say(t('noCharacters'), false); return; }
+        login = credentials;
+        $('giftCharacter').replaceChildren(...characters.map((c) => {
+          const option = document.createElement('option');
+          option.value = c.name; option.dataset.name = c.name; option.dataset.level = String(c.level); option.dataset.resets = String(c.resets);
+          return option;
+        }));
+        $('giftForm').hidden = false;
+        last = null; say('', true);
+        applyLanguage();
+        $('giftCode').focus();
+      } catch { last = { text: () => t('server'), ok: false }; say(t('server'), false); }
+    });
+    $('giftForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!login) return;
+      try {
+        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim() });
+        if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
+        last = { text: () => resultText(answer.data), ok: answer.data.result === 'Ok' };
+        say(last.text(), last.ok);
+        if (answer.data.result === 'Ok') $('giftCode').value = '';
+      } catch { last = { text: () => t('server'), ok: false }; say(t('server'), false); }
+    });
+    // Whether the website may enter codes (and the plug-in is on).
+    fetch('/website/gift-codes', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+      if (d && (d.enabled === false || d.website === false)) { $('giftOff').hidden = false; $('giftLogin').hidden = true; }
+    }).catch(() => {});
+    applyLanguage();
   </script>
   <script>
     // The game's name from the admin panel (the "Game name" plug-in), else the default above.

@@ -163,6 +163,20 @@ const copy = {
     racesClass4: "Dark Lord",
     racesClass5: "Summoner",
     racesClass6: "Rage Fighter",
+    giftNav: "Gift codes",
+    giftTitle: "Gift codes",
+    giftHint: "Gift codes give coins, zen and items. Enter one in the game with /code CODE in the chat or in the gift code window (community window K, or the touch \"more\" menu), or on the account page with your account name and password. Each code has its own rules: dates (Sydney time), uses, once per account or per character, levels or classes.",
+    giftAccountLink: "Enter a code on the account page",
+    giftNone: "No public gift code right now: watch the community posts.",
+    giftOffline: "The gift codes are unavailable: the server didn't answer.",
+    giftOff: "Gift codes are switched off on this server.",
+    giftUntil: "until %s Sydney time (%s your time)",
+    giftFrom: "from %s Sydney time (%s your time)",
+    giftLeft: "%s uses left",
+    giftPerAccount: "once per account",
+    giftPerCharacter: "once per character",
+    giftLevels: "level %s",
+    giftNoWebsite: "On this server, codes are entered in the game only.",
     bossesNoEntries: "No entries yet.",
     bossesRankBossHunt: "Boss hunt",
     bossesRankBloodCastle: "Blood Castle",
@@ -460,6 +474,20 @@ const copy = {
     racesClass4: "Chúa Tể",
     racesClass5: "Thuật Sĩ",
     racesClass6: "Thiết Binh",
+    giftNav: "Gift code",
+    giftTitle: "Gift code",
+    giftHint: "Gift code tặng coin, zen và vật phẩm. Nhập trong game bằng /code MÃ trong khung chat hoặc trong cửa sổ Gift code (cửa sổ cộng đồng K, hoặc menu \"thêm\" trên màn hình cảm ứng), hoặc trên trang tài khoản với tên tài khoản và mật khẩu. Mỗi mã có điều kiện riêng: thời gian (giờ Sydney), số lượt, một lần mỗi tài khoản hoặc mỗi nhân vật, cấp hoặc lớp nhân vật.",
+    giftAccountLink: "Nhập mã trên trang tài khoản",
+    giftNone: "Hiện chưa có gift code công khai: hãy theo dõi bài đăng cộng đồng.",
+    giftOffline: "Mục gift code tạm thời không có: máy chủ không trả lời.",
+    giftOff: "Gift code đang tắt trên máy chủ này.",
+    giftUntil: "đến %s giờ Sydney (%s giờ của bạn)",
+    giftFrom: "từ %s giờ Sydney (%s giờ của bạn)",
+    giftLeft: "còn %s lượt",
+    giftPerAccount: "một lần mỗi tài khoản",
+    giftPerCharacter: "một lần mỗi nhân vật",
+    giftLevels: "cấp %s",
+    giftNoWebsite: "Trên máy chủ này, mã chỉ nhập được trong game.",
     bossesNoEntries: "Chưa có ai.",
     bossesRankBossHunt: "Săn boss",
     bossesRankBloodCastle: "Huyết Lâu",
@@ -1730,3 +1758,57 @@ void refreshTopRaces();
 setInterval(() => {
   if (!document.hidden) void refreshTopRaces();
 }, 60000);
+
+// ---------- gift codes (the public codes, /website/gift-codes) ----------
+
+interface PublicGiftCode {
+  code: string; note: string; reward: PublicReward; usesLeft?: number;
+  rules: { limit: string; start?: number; end?: number; minLevel: number; maxLevel: number; minResets: number; maxResets: number; classes: number[] };
+}
+interface PublicGiftCodes { enabled: boolean; website?: boolean; codes?: PublicGiftCode[] }
+let giftCodes: PublicGiftCodes | null = null;
+
+function renderGiftCodes(): void {
+  const data = giftCodes;
+  element("gift-notice").textContent = !data ? t("giftOffline") : !data.enabled ? t("giftOff") : data.website === false ? t("giftNoWebsite") : "";
+  element("gift-account").hidden = !data?.enabled || data.website === false;
+  const list = clear("gift-codes");
+  const format = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  for (const code of data?.enabled ? data.codes ?? [] : []) {
+    const box = node("article", "", "panel gift-card");
+    box.dataset.code = code.code;
+    box.append(node("h4", code.code, "gift-code"));
+    if (code.note) box.append(node("p", code.note, "muted"));
+    box.append(node("p", rewardLine(code.reward), "gift-reward"));
+    const r = code.rules;
+    const rules: string[] = [r.limit === "OncePerCharacter" ? t("giftPerCharacter") : t("giftPerAccount")];
+    if (r.minLevel > 0 || r.maxLevel > 0) rules.push(t("giftLevels").replace("%s", `${r.minLevel > 0 ? r.minLevel : 1}-${r.maxLevel > 0 ? r.maxLevel : "∞"}`));
+    if (r.classes.length > 0) rules.push(r.classes.map((c) => raceClass(c)).join(", "));
+    if (typeof code.usesLeft === "number") rules.push(t("giftLeft").replace("%s", format(code.usesLeft)));
+    if (r.start && r.start > Date.now()) rules.push(t("giftFrom").replace("%s", bossClock(r.start, "Australia/Sydney")).replace("%s", bossClock(r.start)));
+    if (r.end) rules.push(t("giftUntil").replace("%s", bossClock(r.end, "Australia/Sydney")).replace("%s", bossClock(r.end)));
+    box.append(node("p", rules.join(" · "), "muted gift-rules"));
+    list.append(box);
+  }
+  if (data?.enabled && !data.codes?.length) list.append(node("p", t("giftNone"), "muted"));
+}
+
+async function refreshGiftCodes(): Promise<void> {
+  try {
+    const response = await fetch("/website/gift-codes", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicGiftCodes;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid gift codes");
+    giftCodes = data;
+  } catch {
+    giftCodes = null;
+  }
+  renderGiftCodes();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderGiftCodes());
+element("refresh").addEventListener("click", () => void refreshGiftCodes());
+void refreshGiftCodes();
+setInterval(() => {
+  if (!document.hidden) void refreshGiftCodes();
+}, 120000);

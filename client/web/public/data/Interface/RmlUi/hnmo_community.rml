@@ -113,6 +113,7 @@
 		<span class="cm-note">{{hint_text}}</span>
 	</div>
 	<div class="cm-buttons">
+		<div class="btn cm-btn go cm-gift" data-event-click="cm_gift">{{gift_label}}</div>
 		<div class="btn cm-btn cm-share" data-event-click="cm_share">{{share_label}}</div>
 		<div class="btn cm-btn cm-close" data-event-click="cm_close">{{close_label}}</div>
 	</div>

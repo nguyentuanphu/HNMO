@@ -42,6 +42,7 @@ import { WorldBossWindow } from './ui/worldBossWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
+import { GiftCodesWindow } from './ui/giftCodesWindow.js';
 import { Screenshots } from './ui/screenshot.js';
 import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
@@ -175,6 +176,7 @@ export interface GameState {
   guildLevels?: GuildLevelsWindow;
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
+  giftCodes?: GiftCodesWindow;
   screenshots?: Screenshots;
   onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
@@ -1414,6 +1416,19 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); topRaces.toggle(); }
   });
   window.addEventListener('hnmo-top-races-open', () => topRaces.toggle());
+  // HNMO's gift codes: a window (the community window's button, the touch "more" menu, /code without a code) with a field
+  // for a code, the result, the rewards waiting for room in the bag and the account's last codes. /code CODE goes to the
+  // server's chat command, which answers in the chat.
+  const giftCodes = new GiftCodesWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+  });
+  state.giftCodes = giftCodes;
+  connection.onPacket((bytes) => { giftCodes.handle(bytes); });
+  for (const bytes of earlyPackets) giftCodes.handle(bytes);
+  giftCodes.start();
+  window.addEventListener('hnmo-gift-codes-open', () => giftCodes.open());
   // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
   // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
   const onboarding = new OnboardingWindow({
@@ -1593,6 +1608,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   });
   chat.enable((text) => {
     const command = text.trim().toLowerCase();
+    if (command === '/code') { state.giftCodes?.open(); return; }
     if (command === '/party' || command === '/pt') { party.command(online.hero, online.characters.values(), character.name); return; }
     if (state.personalShop?.command(text, () => facingPlayer(online.hero, online.characters.values()))) return;
     if (command === '/trade') {

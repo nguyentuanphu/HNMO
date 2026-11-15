@@ -54,9 +54,9 @@ interface CommunityModel extends RmlModel {
   has_code_events: boolean; code_input: string; code_placeholder: string;
   owed_head: string; owed: { line: string }[]; has_owed: boolean;
   loading_label: string; link_label: string; take_label: string; claim_label: string; enter_label: string;
-  open_discord_label: string; open_zalo_label: string; share_label: string; close_label: string; hint_text: string;
+  open_discord_label: string; open_zalo_label: string; share_label: string; gift_label: string; close_label: string; hint_text: string;
   cm_link: () => void; cm_discord: () => void; cm_zalo: () => void; cm_code: () => void; cm_claim: () => void;
-  cm_open_discord: () => void; cm_open_zalo: () => void; cm_share: () => void; cm_close: () => void;
+  cm_open_discord: () => void; cm_open_zalo: () => void; cm_share: () => void; cm_gift: () => void; cm_close: () => void;
 }
 
 const ACTION = { ClaimDiscord: 1, ClaimZalo: 2, EnterCode: 3, ClaimRewards: 4 } as const;
@@ -94,7 +94,7 @@ export class CommunityWindow {
       events_head: '', no_events_label: '', events: [], has_code_events: false, code_input: '', code_placeholder: '',
       owed_head: '', owed: [], has_owed: false,
       loading_label: '', link_label: '', take_label: '', claim_label: '', enter_label: '', open_discord_label: '', open_zalo_label: '',
-      share_label: '', close_label: '', hint_text: '',
+      share_label: '', gift_label: '', close_label: '', hint_text: '',
       cm_link: () => this.options.send('DiscordLinkCodeRequest', {}),
       cm_discord: () => this.action(ACTION.ClaimDiscord, ''),
       cm_zalo: () => this.action(ACTION.ClaimZalo, this.typed('.cm-zalo-input', this.model.zalo_input)),
@@ -106,6 +106,8 @@ export class CommunityWindow {
       cm_open_discord: () => openLink(communityLinks().discord),
       cm_open_zalo: () => openLink(communityLinks().zalo),
       cm_share: () => this.options.share?.(),
+      // HNMO's gift code window (ui/giftCodesWindow.ts).
+      cm_gift: () => window.dispatchEvent(new Event('hnmo-gift-codes-open')),
       cm_close: () => this.close(),
     };
     window.addEventListener('resize', () => this.place());
@@ -283,6 +285,7 @@ export class CommunityWindow {
     m.open_discord_label = tr('Open Discord');
     m.open_zalo_label = tr('Open Zalo');
     m.share_label = tr('Screenshot');
+    m.gift_label = tr('Gift code');
     m.close_label = tr('Close');
     m.zalo_placeholder = tr('Your name in Zalo');
     m.code_placeholder = tr('Event code');
