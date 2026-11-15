@@ -48,6 +48,17 @@
     .reset-card .busy { color: var(--error); font-size: 13px; }
     .reset-card .needs { font-size: 13px; color: var(--muted); }
     button:disabled { opacity: .5; cursor: not-allowed; }
+    .safety-box { background: #151a26; border: 1px solid #2c3446; border-radius: 8px; padding: 14px; display: grid; gap: 8px; }
+    .safety-box h3 { margin: 0; font-size: 16px; color: var(--gold); }
+    .safety-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+    .safety-row label { min-width: 110px; flex: 1; }
+    .safety-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .safety-table th, .safety-table td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #2c3446; vertical-align: top; }
+    .safety-table th { color: var(--muted); font-weight: 600; }
+    .safety-table td.fail { color: var(--error); }
+    .safety-table button { padding: 3px 8px; font-size: 12px; }
+    .safety-scroll { overflow-x: auto; }
+    .safety-facts { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   </style>
 </head>
 <body>
@@ -129,6 +140,48 @@
       </form>
       <p class="message" id="resetsMessage" role="status" aria-live="polite"></p>
       <div class="reset-cards" id="resetCards"></div>
+    </section>
+    <section class="panel" id="safety" aria-labelledby="safetyTitle">
+      <div class="gift-head">
+        <h2 id="safetyTitle" data-st="title">Account safety</h2>
+        <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-safety-lang="en">EN</button> <button type="button" data-safety-lang="vi">VI</button></div>
+      </div>
+      <p data-st="intro">A second password (4 digits, the game's vault PIN) protects your vault, trades and store; lock your best items so they can't be traded, sold, dropped or mixed; see where your account logged in and what it traded. Times are Sydney time (your own time in brackets).</p>
+      <p class="message error" id="safetyOff" data-st="off" hidden>Account safety is switched off on this server.</p>
+      <form id="safetyLogin" class="panel" style="padding:0;border:0;background:none">
+        <label><span data-st="account">Account name</span> <input id="safetyAccount" name="loginName" required maxlength="10" autocomplete="username"></label>
+        <label><span data-st="password">Password</span> <input id="safetyPassword" name="password" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button type="submit" data-st="login">Show my account safety</button>
+      </form>
+      <p class="message" id="safetyMessage" role="status" aria-live="polite"></p>
+      <div id="safetyContent" hidden>
+        <div class="safety-box" id="safetyPinBox">
+          <h3 data-st="pinTitle">Second password</h3>
+          <p id="safetyPinState"></p>
+          <ul class="safety-facts" id="safetyRules"></ul>
+          <form id="safetyPinForm" class="safety-row">
+            <label id="safetyOldLabel"><span data-st="oldPin">Current second password</span> <input id="safetyOldPin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off"></label>
+            <label><span data-st="newPin">New second password (4 digits)</span> <input id="safetyNewPin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off"></label>
+            <label><span data-st="repeatPin">Repeat it</span> <input id="safetyRepeatPin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off"></label>
+            <button type="submit" id="safetyPinSave" data-st="savePin">Save</button>
+            <button type="button" id="safetyPinClear" class="secondary" data-st="clearPin" style="background:transparent;color:var(--gold)">Clear</button>
+          </form>
+        </div>
+        <div class="safety-box" id="safetyItemsBox">
+          <h3 data-st="itemsTitle">Item lock</h3>
+          <p id="safetyItemsNote"></p>
+          <label style="max-width:220px"><span data-st="unlockPin">Second password for unlocks</span> <input id="safetyUnlockPin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off"></label>
+          <div class="safety-scroll"><table class="safety-table" id="safetyItems"></table></div>
+        </div>
+        <div class="safety-box">
+          <h3 data-st="loginsTitle">Logins</h3>
+          <div class="safety-scroll"><table class="safety-table" id="safetyLogins"></table></div>
+        </div>
+        <div class="safety-box">
+          <h3 data-st="tradesTitle">Trades</h3>
+          <div class="safety-scroll"><table class="safety-table" id="safetyTrades"></table></div>
+        </div>
+      </div>
     </section>
   </main>
   <script type="module">
@@ -520,6 +573,214 @@
     fetch('/website/resets', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
       if (d && d.enabled === false) { $('resetsOff').hidden = false; $('resetsLogin').hidden = true; }
     }).catch(() => {});
+    applyLanguage();
+  </script>
+  <script type="module">
+    // The account safety panel (English and Vietnamese): the account's name and password go with each request through
+    // this site's bridge, which adds the visitor's address for the login history. It shows the second password (set,
+    // change, clear), the items with their locks (lock; unlock with the second password, after the wait), the logins
+    // (addresses partly hidden) and the trades.
+    const TEXT = {
+      en: {
+        title: 'Account safety', account: 'Account name', password: 'Password', login: 'Show my account safety',
+        intro: 'A second password (4 digits, the game\'s vault PIN) protects your vault, trades and store; lock your best items so they can\'t be traded, sold, dropped or mixed; see where your account logged in and what it traded. Times are Sydney time (your own time in brackets).',
+        off: 'Account safety is switched off on this server.', pinTitle: 'Second password', oldPin: 'Current second password', newPin: 'New second password (4 digits)',
+        repeatPin: 'Repeat it', savePin: 'Save', clearPin: 'Clear', itemsTitle: 'Item lock', unlockPin: 'Second password for unlocks', loginsTitle: 'Logins', tradesTitle: 'Trades',
+        hasPin: 'Your account has a second password%changed.', noPin: 'Your account has no second password yet.', changed: ' (changed %at)',
+        lockedOut: 'Too many wrong second passwords: try again after %at.', online: 'You are in the game now: changes reach it at once.',
+        ruleVault: 'Needed to take things out of the vault.', ruleTrade: 'Needed to trade.', ruleStore: 'Needed to open your personal store.',
+        ruleValuable: 'Needed to drop or sell valuable items (excellent, ancient, +%level and above).', ruleOnce: 'In the game enter it once per session: the vault\'s lock, /unlock 1234 or the prompt. %tries wrong tries lock it for %minutes minutes.',
+        noPinChange: 'The second password can only be changed in the game here (the vault\'s lock).',
+        itemsNote: 'Locked items can\'t be traded, sold, dropped, put in a store or mixed. An unlock needs your second password and takes %wait. In the game: /lockitem CELL, /unlockitem CELL PIN.',
+        itemsOff: 'The item lock is switched off on this server.', atOnce: 'no time (at once)', hours: '%n hours',
+        item: 'Item', where: 'Where', state: 'State', time: 'Time', address: 'Address', source: 'From', result: 'Result', what: 'What', with: 'With', gave: 'Gave', got: 'Got',
+        equipped: 'worn', bag: 'bag', extension: 'bag extension', store: 'store', vault: 'vault', lockedState: 'locked', unlocksAt: 'unlocks %at', free: 'not locked',
+        lock: 'Lock', unlock: 'Unlock', cancelUnlock: 'Keep locked', game: 'game', website: 'website', success: 'success', failure: 'wrong password',
+        trade: 'trade', 'store-sale': 'sold in my store', 'store-buy': 'bought in a store', none: 'Nothing yet.', noItems: 'No items.',
+        pinMismatch: 'The two new second passwords differ.', pinFormat: 'A second password is 4 digits.', confirmClear: 'Clear your second password?',
+        ok: 'Saved.', okClear: 'Your second password was cleared.', wrong: 'The current second password is wrong.', lockedOutShort: 'Too many wrong second passwords: wait a while.',
+        invalid: 'A second password is 4 digits.', noPinClear: 'There is no second password to clear.', notAllowed: 'Changing it on the website is switched off.',
+        missing: 'The account wasn\'t found.', Locked: '%name is locked.', AlreadyLocked: '%name is locked already.', UnlockCancelled: 'The unlock of %name was cancelled.',
+        UnlockStarted: '%name unlocks at %at.', UnlockWaiting: '%name already waits for its unlock.', Unlocked: '%name is unlocked.', NotLocked: '%name isn\'t locked.',
+        TooMany: 'You locked the most items you may.', Off: 'The item lock is switched off.', noItem: 'That item isn\'t on your account any more.', needPin: 'Enter your second password for the unlock.',
+        loginWrong: 'The account name or password is wrong.', busyRequests: 'Too many requests: wait a minute.', setup: 'The website isn\'t set up yet (API key).', server: 'The server didn\'t answer. Try again later.',
+      },
+      vi: {
+        title: 'Bảo vệ tài khoản', account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Xem bảo vệ tài khoản',
+        intro: 'Mật khẩu cấp 2 (4 chữ số, mã PIN hòm đồ trong game) bảo vệ hòm đồ, giao dịch và cửa hàng; khóa các vật phẩm quý để không thể giao dịch, bán, vứt hay ép; xem tài khoản đã đăng nhập từ đâu và đã giao dịch gì. Thời gian theo giờ Sydney (giờ của bạn trong ngoặc).',
+        off: 'Máy chủ này đang tắt bảo vệ tài khoản.', pinTitle: 'Mật khẩu cấp 2', oldPin: 'Mật khẩu cấp 2 hiện tại', newPin: 'Mật khẩu cấp 2 mới (4 chữ số)',
+        repeatPin: 'Nhập lại', savePin: 'Lưu', clearPin: 'Xóa', itemsTitle: 'Khóa vật phẩm', unlockPin: 'Mật khẩu cấp 2 để mở khóa', loginsTitle: 'Đăng nhập', tradesTitle: 'Giao dịch',
+        hasPin: 'Tài khoản của bạn đã có mật khẩu cấp 2%changed.', noPin: 'Tài khoản của bạn chưa có mật khẩu cấp 2.', changed: ' (đổi lúc %at)',
+        lockedOut: 'Nhập sai mật khẩu cấp 2 quá nhiều lần: hãy thử lại sau %at.', online: 'Bạn đang trong game: thay đổi có hiệu lực ngay.',
+        ruleVault: 'Cần để lấy đồ ra khỏi hòm đồ.', ruleTrade: 'Cần để giao dịch.', ruleStore: 'Cần để mở cửa hàng cá nhân.',
+        ruleValuable: 'Cần để vứt hoặc bán vật phẩm quý (hoàn hảo, thần, từ +%level).', ruleOnce: 'Trong game nhập một lần mỗi phiên: ổ khóa hòm đồ, /unlock 1234 hoặc hộp nhập. Sai %tries lần sẽ bị khóa %minutes phút.',
+        noPinChange: 'Ở máy chủ này chỉ đổi mật khẩu cấp 2 trong game (ổ khóa hòm đồ).',
+        itemsNote: 'Vật phẩm bị khóa không thể giao dịch, bán, vứt, bày bán hay ép. Mở khóa cần mật khẩu cấp 2 và mất %wait. Trong game: /lockitem Ô, /unlockitem Ô PIN.',
+        itemsOff: 'Máy chủ này đang tắt khóa vật phẩm.', atOnce: 'không cần chờ (ngay)', hours: '%n giờ',
+        item: 'Vật phẩm', where: 'Nơi', state: 'Trạng thái', time: 'Thời gian', address: 'Địa chỉ', source: 'Từ', result: 'Kết quả', what: 'Loại', with: 'Với', gave: 'Đã đưa', got: 'Đã nhận',
+        equipped: 'đang mặc', bag: 'túi đồ', extension: 'túi mở rộng', store: 'cửa hàng', vault: 'hòm đồ', lockedState: 'đã khóa', unlocksAt: 'mở khóa lúc %at', free: 'không khóa',
+        lock: 'Khóa', unlock: 'Mở khóa', cancelUnlock: 'Giữ khóa', game: 'game', website: 'trang web', success: 'thành công', failure: 'sai mật khẩu',
+        trade: 'giao dịch', 'store-sale': 'bán ở cửa hàng của tôi', 'store-buy': 'mua ở cửa hàng', none: 'Chưa có gì.', noItems: 'Không có vật phẩm.',
+        pinMismatch: 'Hai mật khẩu cấp 2 mới không giống nhau.', pinFormat: 'Mật khẩu cấp 2 gồm 4 chữ số.', confirmClear: 'Xóa mật khẩu cấp 2 của bạn?',
+        ok: 'Đã lưu.', okClear: 'Đã xóa mật khẩu cấp 2.', wrong: 'Mật khẩu cấp 2 hiện tại không đúng.', lockedOutShort: 'Nhập sai mật khẩu cấp 2 quá nhiều lần: hãy chờ một lúc.',
+        invalid: 'Mật khẩu cấp 2 gồm 4 chữ số.', noPinClear: 'Không có mật khẩu cấp 2 để xóa.', notAllowed: 'Máy chủ này không cho đổi trên trang web.',
+        missing: 'Không tìm thấy tài khoản.', Locked: 'Đã khóa %name.', AlreadyLocked: '%name đã bị khóa rồi.', UnlockCancelled: 'Đã hủy mở khóa %name.',
+        UnlockStarted: '%name sẽ mở khóa lúc %at.', UnlockWaiting: '%name đang chờ mở khóa.', Unlocked: 'Đã mở khóa %name.', NotLocked: '%name không bị khóa.',
+        TooMany: 'Bạn đã khóa tối đa số vật phẩm.', Off: 'Khóa vật phẩm đang tắt.', noItem: 'Vật phẩm này không còn trong tài khoản.', needPin: 'Hãy nhập mật khẩu cấp 2 để mở khóa.',
+        loginWrong: 'Sai tên tài khoản hoặc mật khẩu.', busyRequests: 'Quá nhiều yêu cầu: hãy chờ một phút.', setup: 'Trang web chưa được cài đặt (API key).', server: 'Máy chủ không trả lời. Hãy thử lại sau.',
+      },
+    };
+    const $ = (id) => document.getElementById(id);
+    let lang = 'en';
+    try { const saved = localStorage.getItem('hnmo.language'); lang = saved === 'vi' || saved === 'en' ? saved : (navigator.language || '').toLowerCase().startsWith('vi') ? 'vi' : 'en'; } catch {}
+    const t = (key) => TEXT[lang][key] ?? TEXT.en[key] ?? key;
+    const fill = (text, values) => text.replace(/%(\w+)/g, (all, key) => (key in values ? String(values[key]) : all));
+    const n = (value) => Number(value ?? 0).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-AU');
+    const format = (ms, timeZone) => new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-AU', { timeZone, weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).format(ms);
+    function when(iso) {
+      if (!iso) return '-';
+      const ms = Date.parse(iso);
+      const sydney = format(ms, 'Australia/Sydney');
+      const local = format(ms, undefined);
+      return local === sydney ? sydney : `${sydney} (${local})`;
+    }
+    let login = null;
+    let state = null;
+    let last = null;
+    const say = (text, ok) => { $('safetyMessage').textContent = text; $('safetyMessage').className = `message ${ok ? 'ok' : 'error'}`; };
+    function errorText(status, body) {
+      if (status === 401) return t('loginWrong');
+      if (status === 403) { $('safetyOff').hidden = false; return t('off'); }
+      if (status === 429) return t('busyRequests');
+      if (status === 503 && body.error === 'setup') return t('setup');
+      return t('server');
+    }
+    async function post(url, body) {
+      const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
+      const data = await response.json().catch(() => ({}));
+      return { status: response.status, ok: response.ok, data };
+    }
+    function cell(text, className) { const td = document.createElement('td'); td.textContent = text; if (className) td.className = className; return td; }
+    function head(...names) { const tr = document.createElement('tr'); for (const name of names) { const th = document.createElement('th'); th.textContent = t(name); tr.append(th); } return tr; }
+    function emptyRow(columns, key) { const tr = document.createElement('tr'); const td = cell(t(key)); td.colSpan = columns; tr.append(td); return tr; }
+    function render() {
+      if (!state) return;
+      $('safetyContent').hidden = false;
+      const o = state.options;
+      $('safetyPinState').textContent = (state.hasPin ? fill(t('hasPin'), { changed: state.pinChangedAt ? fill(t('changed'), { at: when(state.pinChangedAt) }) : '' }) : t('noPin'))
+        + (state.lockedOutUntil ? ' ' + fill(t('lockedOut'), { at: when(state.lockedOutUntil) }) : '') + (state.online ? ' ' + t('online') : '');
+      const rules = [];
+      if (o.vault) rules.push(t('ruleVault'));
+      if (o.trade) rules.push(t('ruleTrade'));
+      if (o.store) rules.push(t('ruleStore'));
+      if (o.valuable) rules.push(fill(t('ruleValuable'), { level: o.valuableLevel }));
+      rules.push(fill(t('ruleOnce'), { tries: o.maxTries, minutes: o.lockoutMinutes }));
+      if (!o.pinChange) rules.push(t('noPinChange'));
+      $('safetyRules').replaceChildren(...rules.map((text) => { const li = document.createElement('li'); li.textContent = text; return li; }));
+      $('safetyPinForm').hidden = !o.pinChange;
+      $('safetyOldLabel').hidden = !state.hasPin;
+      $('safetyPinClear').hidden = !state.hasPin;
+      const wait = o.waitHours > 0 ? fill(t('hours'), { n: o.waitHours }) : t('atOnce');
+      $('safetyItemsNote').textContent = o.itemLock ? fill(t('itemsNote'), { wait }) : t('itemsOff');
+      $('safetyUnlockPin').parentElement.hidden = !o.itemLock || !state.hasPin;
+      const items = $('safetyItems');
+      items.replaceChildren(head('item', 'where', 'state', ''));
+      if (!state.items.length) items.append(emptyRow(4, 'noItems'));
+      for (const item of state.items) {
+        const tr = document.createElement('tr');
+        tr.className = 'safety-item'; tr.dataset.id = item.id; tr.dataset.locked = String(item.locked);
+        tr.append(cell(item.name), cell(item.place === 'vault' ? t('vault') : `${item.character} · ${t(item.place)}`),
+          cell(item.locked ? (item.unlockAt ? fill(t('unlocksAt'), { at: when(item.unlockAt) }) : t('lockedState')) : t('free')));
+        const td = document.createElement('td');
+        if (o.itemLock || item.locked) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = !item.locked ? t('lock') : item.unlockAt ? t('cancelUnlock') : t('unlock');
+          b.dataset.action = !item.locked || item.unlockAt ? 'lock' : 'unlock';
+          b.addEventListener('click', () => itemAction(item, b.dataset.action === 'unlock'));
+          td.append(b);
+        }
+        tr.append(td);
+        items.append(tr);
+      }
+      const logins = $('safetyLogins');
+      logins.replaceChildren(head('time', 'address', 'source', 'result'));
+      if (!state.logins.length) logins.append(emptyRow(4, 'none'));
+      for (const entry of state.logins) {
+        const tr = document.createElement('tr');
+        tr.className = 'safety-login';
+        tr.append(cell(when(entry.at)), cell(entry.address), cell(t(entry.source)), cell(entry.success ? t('success') : t('failure'), entry.success ? '' : 'fail'));
+        logins.append(tr);
+      }
+      const trades = $('safetyTrades');
+      trades.replaceChildren(head('time', 'what', 'with', 'gave', 'got'));
+      if (!state.trades.length) trades.append(emptyRow(5, 'none'));
+      for (const trade of state.trades) {
+        const tr = document.createElement('tr');
+        tr.className = 'safety-trade';
+        const gave = [...trade.gave, ...(trade.zenGave > 0 ? [`${n(trade.zenGave)} zen`] : [])].join(', ') || '-';
+        const got = [...trade.got, ...(trade.zenGot > 0 ? [`${n(trade.zenGot)} zen`] : [])].join(', ') || '-';
+        tr.append(cell(when(trade.at)), cell(t(trade.kind)), cell(`${trade.character} → ${trade.partner}`), cell(gave), cell(got));
+        trades.append(tr);
+      }
+    }
+    function resultText(result, values) {
+      return fill(t({ ok: 'ok', lockedOut: 'lockedOutShort', noPin: 'noPinClear' }[result] ?? result), values);
+    }
+    async function call(url, body, okKey, values = {}) {
+      try {
+        const answer = await post(url, { ...login, ...body });
+        if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return null; }
+        state = answer.data;
+        const result = state.result;
+        const good = ['ok', 'Locked', 'UnlockStarted', 'Unlocked', 'UnlockCancelled'].includes(result);
+        const v = { ...values, at: when(state.until) };
+        last = { text: () => (result === 'ok' && okKey ? t(okKey) : resultText(result, v)), ok: good };
+        say(last.text(), good);
+        render();
+        return state;
+      } catch { last = { text: () => t('server'), ok: false }; say(t('server'), false); return null; }
+    }
+    async function itemAction(item, unlock) {
+      if (!login) return;
+      const pin = $('safetyUnlockPin').value.trim();
+      if (unlock && state.hasPin && !/^[0-9]{4}$/.test(pin)) { last = { text: () => t('needPin'), ok: false }; say(t('needPin'), false); $('safetyUnlockPin').focus(); return; }
+      await call('/portal/safety/item', { itemId: item.id, unlock, pin: unlock ? pin : '' }, null, { name: item.name });
+    }
+    $('safetyPinForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const newPin = $('safetyNewPin').value.trim();
+      if (!/^[0-9]{4}$/.test(newPin)) { last = { text: () => t('pinFormat'), ok: false }; say(t('pinFormat'), false); return; }
+      if (newPin !== $('safetyRepeatPin').value.trim()) { last = { text: () => t('pinMismatch'), ok: false }; say(t('pinMismatch'), false); return; }
+      if (await call('/portal/safety/pin', { oldPin: $('safetyOldPin').value.trim(), newPin }, 'ok')) {
+        for (const id of ['safetyOldPin', 'safetyNewPin', 'safetyRepeatPin']) $(id).value = '';
+      }
+    });
+    $('safetyPinClear').addEventListener('click', async () => {
+      if (!login || !confirm(t('confirmClear'))) return;
+      if (await call('/portal/safety/pin', { oldPin: $('safetyOldPin').value.trim(), newPin: '' }, 'okClear')) $('safetyOldPin').value = '';
+    });
+    function applyLanguage() {
+      for (const element of document.querySelectorAll('#safety [data-st]')) element.textContent = t(element.dataset.st);
+      for (const b of document.querySelectorAll('[data-safety-lang]')) b.setAttribute('aria-pressed', String(b.dataset.safetyLang === lang));
+      if (last) say(last.text(), last.ok);
+      render();
+    }
+    for (const b of document.querySelectorAll('[data-safety-lang]')) {
+      b.addEventListener('click', () => { lang = b.dataset.safetyLang; try { localStorage.setItem('hnmo.language', lang); } catch {} applyLanguage(); });
+    }
+    $('safetyLogin').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const credentials = { loginName: $('safetyAccount').value.trim(), password: $('safetyPassword').value };
+      try {
+        const answer = await post('/portal/safety/account', credentials);
+        if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
+        login = credentials;
+        state = answer.data;
+        last = null; say('', true);
+        render();
+      } catch { last = { text: () => t('server'), ok: false }; say(t('server'), false); }
+    });
     applyLanguage();
   </script>
   <script>
