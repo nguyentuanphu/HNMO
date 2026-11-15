@@ -1,0 +1,120 @@
+<rml>
+<head>
+	<title>HNMO Community</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's community window (no desktop window): the game's message box frame (window_shell) with the one-time
+		   coins for Discord and Zalo, the community events with their code field, the waiting rewards and the screenshot
+		   button. */
+		#panel {
+			top: 50dp;
+			left: 50%;
+			margin-left: -150dp;
+			transform: none;
+			width: 300dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 14dp 18dp 14dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.cm-scroll { display: block; max-height: 360dp; overflow-y: auto; pointer-events: auto; padding-right: 4dp; }
+		.cm-head { display: block; color: token(accent-gold); margin: 6dp 0 2dp 0; }
+		.cm-line { display: block; line-height: 1.3em; white-space: normal; color: token(text-input); font-size: 0.9rem; }
+		.cm-line.muted { color: token(text-muted); font-size: 0.85rem; }
+		.cm-line.done { color: #9fe39a; }
+		.cm-code { display: block; text-align: center; color: #ffe9a8; font-size: 1.15rem; line-height: 1.5em; }
+		.cm-event { display: block; margin: 3dp 0; padding: 3dp 4dp; border: 1dp #4a3c26; background-color: #15110b; }
+		.cm-event-title { display: block; color: #ffe9a8; line-height: 1.3em; }
+		.cm-note { display: block; margin: 2dp 0 4dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.cm-field { display: flex; flex-direction: row; align-items: center; margin-top: 3dp; pointer-events: auto; }
+		.cm-field input { flex: 1 1 auto; height: 16dp; padding: 0 3dp; margin-right: 6dp; }
+		.cm-buttons { display: flex; flex-direction: row; justify-content: center; flex-wrap: wrap; margin-top: 4dp; }
+		@spritesheet cm-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			cm-btn-idle:   0px  0px 64px 29px;
+			cm-btn-hover:  0px 29px 64px 29px;
+			cm-btn-active: 0px 58px 64px 29px;
+		}
+		.cm-btn {
+			position: static;
+			width: 76dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 2dp 3dp;
+			font-size: 0.85rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(cm-btn-idle);
+		}
+		.cm-btn:hover { decorator: image(cm-btn-hover); }
+		.cm-btn:active { decorator: image(cm-btn-active); }
+		.cm-btn.go { color: #ffe9a8; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_community">
+	<div class="cm-note" data-if="loading">{{loading_label}}</div>
+	<div class="cm-scroll" data-if="loading == false">
+		<span class="cm-line muted" data-if="off">{{off_label}}</span>
+
+		<div data-if="discord_on">
+			<span class="cm-head">{{discord_head}}</span>
+			<span class="cm-line cm-discord-text" data-class-done="discord_done" data-no-i18n="">{{discord_text}}</span>
+			<span class="cm-code cm-discord-code" data-if="discord_code != ''" data-no-i18n="">{{discord_code}}</span>
+			<div class="cm-buttons">
+				<div class="btn cm-btn go cm-discord-link" data-if="can_link" data-event-click="cm_link">{{link_label}}</div>
+				<div class="btn cm-btn go cm-discord-claim" data-if="can_claim_discord" data-event-click="cm_discord">{{take_label}}</div>
+				<div class="btn cm-btn cm-discord-open" data-if="has_discord_url" data-event-click="cm_open_discord">{{open_discord_label}}</div>
+			</div>
+		</div>
+
+		<div data-if="zalo_on">
+			<span class="cm-head">{{zalo_head}}</span>
+			<span class="cm-line cm-zalo-text" data-class-done="zalo_done" data-no-i18n="">{{zalo_text}}</span>
+			<span class="cm-code cm-zalo-code" data-if="zalo_code != ''" data-no-i18n="">{{zalo_code}}</span>
+			<div class="cm-field" data-if="can_zalo">
+				<input type="text" class="text-field cm-zalo-input" maxlength="40" data-value="zalo_input" data-attr-placeholder="zalo_placeholder"/>
+				<div class="btn cm-btn go cm-zalo-send" data-event-click="cm_zalo">{{claim_label}}</div>
+			</div>
+			<div class="cm-buttons" data-if="has_zalo_url">
+				<div class="btn cm-btn cm-zalo-open" data-event-click="cm_open_zalo">{{open_zalo_label}}</div>
+			</div>
+		</div>
+
+		<span class="cm-head">{{events_head}}</span>
+		<span class="cm-line muted cm-no-events" data-if="events.length == 0">{{no_events_label}}</span>
+		<div class="cm-event" data-for="e : events">
+			<span class="cm-event-title" data-no-i18n="">{{e.title}}</span>
+			<span class="cm-line muted" data-if="e.description != ''" data-no-i18n="">{{e.description}}</span>
+			<span class="cm-line" data-no-i18n="">{{e.when}}</span>
+			<span class="cm-line" data-class-done="e.done" data-no-i18n="">{{e.status}}</span>
+		</div>
+		<div class="cm-field" data-if="has_code_events">
+			<input type="text" class="text-field cm-code-input" maxlength="40" data-value="code_input" data-attr-placeholder="code_placeholder"/>
+			<div class="btn cm-btn go cm-code-send" data-event-click="cm_code">{{enter_label}}</div>
+		</div>
+
+		<span class="cm-head" data-if="has_owed">{{owed_head}}</span>
+		<span class="cm-line" data-for="o : owed" data-no-i18n="">{{o.line}}</span>
+		<div class="cm-buttons" data-if="has_owed"><div class="btn cm-btn go cm-claim" data-event-click="cm_claim">{{take_label}}</div></div>
+		<span class="cm-note">{{hint_text}}</span>
+	</div>
+	<div class="cm-buttons">
+		<div class="btn cm-btn cm-share" data-event-click="cm_share">{{share_label}}</div>
+		<div class="btn cm-btn cm-close" data-event-click="cm_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

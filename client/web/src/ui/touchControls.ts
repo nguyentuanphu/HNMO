@@ -5,7 +5,7 @@
 // character, the mini map, the move list, the party, auto play, the chat). More for phones: a fight
 // button (the current skill, else an attack, at the nearest monster), the skill keys 1-5 and the
 // potion keys Q W E R as buttons, a "more" button with the other windows (command, friends, guild,
-// quests, cash shop, Gens), full screen in landscape, and a hint to turn a phone held upright.
+// quests, cash shop, Gens, community, a screenshot to share), full screen in landscape, and a hint to turn a phone held upright.
 
 const LONG_PRESS_MS = 500;
 /** How far a finger may move and still be a press, in pixels. */
@@ -24,7 +24,7 @@ export interface TouchActions {
 }
 
 /** The windows behind the "more" button. */
-const MORE: { label: string; title: string; key: string }[] = [
+const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: 'D', title: 'Command window', key: 'd' },
   { label: 'F', title: 'Friends', key: 'f' },
   { label: 'G', title: 'Guild', key: 'g' },
@@ -34,6 +34,8 @@ const MORE: { label: string; title: string; key: string }[] = [
   { label: 'J', title: 'Missions', key: 'j' },
   { label: 'N', title: 'World bosses', key: 'n' },
   { label: 'Y', title: 'New-player guide', key: 'y' },
+  { label: 'K', title: 'Community', key: 'k' },
+  { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
 const POTION_KEYS = ['q', 'w', 'e', 'r'];
@@ -121,7 +123,7 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   // The "more" button and its windows; full screen.
   const more = document.createElement('div');
   more.id = 'touchMore';
-  for (const entry of MORE) more.append(button(entry.label, entry.title, () => { more.classList.remove('open'); key(entry.key); }));
+  for (const entry of MORE) more.append(button(entry.label, entry.title, () => { more.classList.remove('open'); if (entry.event) window.dispatchEvent(new Event(entry.event)); else key(entry.key); }));
   // Item names on the ground (the desktop's held Alt): a toggle on a touch screen.
   let names = false;
   const namesButton = button('Alt', 'Item names on the ground (Alt)', () => {

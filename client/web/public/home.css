@@ -482,3 +482,11 @@ footer {
 .boss-rankings { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .boss-rankings > * { min-width: 0; }
 .boss-rankings h4 { margin: 0 0 6px; font-size: 14px; }
+
+/* Community section: the links, the events, the recent highlights. */
+#social-links { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 8px 0 14px; }
+#social-links .community-link { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line, rgba(255,255,255,.2)); text-decoration: none; }
+.community-event { margin-bottom: 10px; overflow-wrap: anywhere; }
+.community-event p { margin: 4px 0 0; font-size: 13px; }
+#social-links[hidden] { display: none; }
+#social-links a { color: var(--gold); }

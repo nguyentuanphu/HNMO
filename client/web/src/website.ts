@@ -98,6 +98,26 @@ const copy = {
     guildsSourceMission: "a mission",
     guildsSourceOnlineTime: "per %d minutes in the game",
     guildsSourceCastleSiege: "the castle siege won",
+    communityNav: "Community",
+    communityTitle: "Join the community",
+    communityHint: "Chat with other players, hear about events first and get free coins: once for linking your account to our Discord, once for joining our Zalo group. Community events give rewards for a code word or to the winners.",
+    communityJoin: "Join us:",
+    communityCoins: "How to get the coins",
+    communityEvents: "Community events",
+    communityHighlights: "Recent highlights",
+    communityNoEvents: "No community events right now.",
+    communityNoHighlights: "Nothing to show yet: rare drops, world boss kills and guild news appear here.",
+    communityOffline: "The community section is unavailable: the server didn't answer.",
+    communityOff: "Community rewards are switched off on this server.",
+    communityDiscordHow: "Discord: join our server, open the community window (K) in the game, get a link code and type /link CODE in Discord. You get %s once.",
+    communityZaloHow: "Zalo: join our group, claim in the community window (K) and post the code you get in the group. The admin approves it and you get %s once.",
+    communityCodeHow: "Enter the event's code in the community window (K), once per account.",
+    communityWinnersHow: "Winners",
+    communityReward: "Reward",
+    communityOpen: "Running",
+    communityUpcoming: "Starts",
+    communityEnded: "Over",
+    communityUntil: "until",
     bossesNoEntries: "No entries yet.",
     bossesRankBossHunt: "Boss hunt",
     bossesRankBloodCastle: "Blood Castle",
@@ -330,6 +350,26 @@ const copy = {
     guildsSourceMission: "một nhiệm vụ",
     guildsSourceOnlineTime: "mỗi %d phút trong trò chơi",
     guildsSourceCastleSiege: "thắng công thành",
+    communityNav: "Cộng đồng",
+    communityTitle: "Tham gia cộng đồng",
+    communityHint: "Trò chuyện với người chơi khác, biết sự kiện sớm nhất và nhận xu miễn phí: một lần khi liên kết tài khoản với Discord, một lần khi tham gia nhóm Zalo. Sự kiện cộng đồng tặng thưởng cho người nhập mã hoặc người thắng.",
+    communityJoin: "Tham gia:",
+    communityCoins: "Cách nhận xu",
+    communityEvents: "Sự kiện cộng đồng",
+    communityHighlights: "Nổi bật gần đây",
+    communityNoEvents: "Hiện không có sự kiện cộng đồng nào.",
+    communityNoHighlights: "Chưa có gì: đồ hiếm, boss thế giới và tin bang hội sẽ hiện ở đây.",
+    communityOffline: "Mục cộng đồng tạm thời không có: máy chủ không trả lời.",
+    communityOff: "Phần thưởng cộng đồng đang tắt trên máy chủ này.",
+    communityDiscordHow: "Discord: tham gia máy chủ, mở cửa sổ cộng đồng (K) trong trò chơi, lấy mã liên kết rồi gõ /link MÃ trong Discord. Bạn nhận %s một lần.",
+    communityZaloHow: "Zalo: tham gia nhóm, yêu cầu trong cửa sổ cộng đồng (K) và đăng mã nhận được vào nhóm. Quản trị viên duyệt và bạn nhận %s một lần.",
+    communityCodeHow: "Nhập mã sự kiện trong cửa sổ cộng đồng (K), một lần mỗi tài khoản.",
+    communityWinnersHow: "Người thắng",
+    communityReward: "Phần thưởng",
+    communityOpen: "Đang diễn ra",
+    communityUpcoming: "Bắt đầu",
+    communityEnded: "Đã kết thúc",
+    communityUntil: "đến",
     bossesNoEntries: "Chưa có ai.",
     bossesRankBossHunt: "Săn boss",
     bossesRankBloodCastle: "Huyết Lâu",
@@ -657,6 +697,7 @@ function renderMaps(): void {
 function render(): void {
   document.documentElement.lang = language;
   element("community").dataset.communityLinks = t("contact");
+  element("social-links").dataset.communityLinks = t("communityJoin");
   showCommunityLinks();
   for (const item of document.querySelectorAll<HTMLElement>("[data-t]"))
     item.textContent = t(item.dataset.t as CopyKey);
@@ -1407,3 +1448,65 @@ void refreshGuilds();
 setInterval(() => {
   if (!document.hidden) void refreshGuilds();
 }, 5 * 60000);
+
+// ---------- community (read from the server, /website/community) ----------
+
+interface PublicCommunity {
+  enabled: boolean; now?: number;
+  discord?: { on: boolean; coins: number; coinType: string };
+  zalo?: { on: boolean; coins: number; coinType: string };
+  events?: { id: string; titleEn: string; titleVi: string; descriptionEn: string; descriptionVi: string; start?: number | null; end?: number | null; phase: string; hasCode: boolean; winners: string[]; reward: PublicReward }[];
+  highlights?: { at: number; kind: string; textEn: string; textVi: string }[];
+}
+let community: PublicCommunity | null = null;
+
+function renderCommunity(): void {
+  const format = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  const data = community;
+  element("social-notice").textContent = !data ? t("communityOffline") : !data.enabled ? t("communityOff") : "";
+  const on = !!data?.enabled;
+  const coins = clear("social-coins");
+  if (on && data?.discord?.on) coins.append(node("li", t("communityDiscordHow").replace("%s", `${format(data.discord.coins)} ${coinLabel(data.discord.coinType)}`)));
+  if (on && data?.zalo?.on) coins.append(node("li", t("communityZaloHow").replace("%s", `${format(data.zalo.coins)} ${coinLabel(data.zalo.coinType)}`)));
+  if (on && (data?.events ?? []).some((e) => e.hasCode)) coins.append(node("li", t("communityCodeHow")));
+  const events = clear("social-events");
+  for (const event of on ? data?.events ?? [] : []) {
+    const box = node("div", "", "community-event");
+    box.append(node("strong", (language === "vi" ? event.titleVi : event.titleEn) || event.titleEn || event.titleVi));
+    const description = (language === "vi" ? event.descriptionVi : event.descriptionEn) || event.descriptionEn;
+    if (description) box.append(node("p", description, "muted"));
+    const span = event.phase === "Upcoming" && event.start ? `${t("communityUpcoming")} ${bossClock(event.start, "Australia/Sydney")}`
+      : event.phase === "Ended" ? t("communityEnded")
+        : `${t("communityOpen")}${event.end ? ` ${t("communityUntil")} ${bossClock(event.end, "Australia/Sydney")}` : ""}`;
+    const reward = rewardLine(event.reward);
+    box.append(node("p", [span, reward ? `${t("communityReward")}: ${reward}` : ""].filter((p) => p).join(" · ")));
+    if (event.winners.length) box.append(node("p", `${t("communityWinnersHow")}: ${event.winners.join(", ")}`, "muted"));
+    events.append(box);
+  }
+  if (on && !data?.events?.length) events.append(node("p", t("communityNoEvents"), "muted"));
+  const highlights = clear("social-highlights");
+  for (const item of on ? data?.highlights ?? [] : []) {
+    highlights.append(node("li", `${bossClock(item.at, "Australia/Sydney")} — ${(language === "vi" ? item.textVi : item.textEn) || item.textEn}`));
+  }
+  if (on && !data?.highlights?.length) highlights.append(node("li", t("communityNoHighlights"), "muted"));
+}
+
+async function refreshCommunity(): Promise<void> {
+  try {
+    const response = await fetch("/website/community", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicCommunity;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid community");
+    community = data;
+  } catch {
+    community = null;
+  }
+  renderCommunity();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderCommunity());
+element("refresh").addEventListener("click", () => void refreshCommunity());
+void refreshCommunity();
+setInterval(() => {
+  if (!document.hidden) void refreshCommunity();
+}, 2 * 60000);

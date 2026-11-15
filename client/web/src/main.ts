@@ -40,6 +40,8 @@ import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
+import { CommunityWindow } from './ui/communityWindow.js';
+import { Screenshots } from './ui/screenshot.js';
 import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
@@ -170,6 +172,8 @@ export interface GameState {
   missions?: MissionsWindow;
   worldBosses?: WorldBossWindow;
   guildLevels?: GuildLevelsWindow;
+  community?: CommunityWindow;
+  screenshots?: Screenshots;
   onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
   party?: Party;
@@ -703,6 +707,8 @@ function step(dt: number, rec: PerfRecorder | null): void {
   rec?.lap('render');
 }
 let shownPosition = '';
+/** The character named in screenshots' captions. */
+let screenshotHero = '';
 
 // ---------- login screens ----------
 
@@ -1358,6 +1364,38 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   connection.onPacket((bytes) => { guildLevels.handle(bytes); });
   for (const bytes of earlyPackets) guildLevels.handle(bytes);
   guildLevels.start();
+  // Screenshots (Print Screen, as the desktop) and HNMO's share panel; the community window (K, when the inventory
+  // isn't open): the Discord and Zalo coins, community events and their codes.
+  screenshotHero = character.name;
+  const screenshots = state.screenshots ?? new Screenshots({
+    capture: () => {
+      renderer.render(scene, camera);
+      const source = renderer.domElement;
+      const copy = document.createElement('canvas');
+      copy.width = source.width;
+      copy.height = source.height;
+      copy.getContext('2d')?.drawImage(source, 0, 0);
+      return copy;
+    },
+    message: (text) => state.chat?.add(text, 'system'),
+    where: () => ({ character: screenshotHero, map: state.mapNumber !== null ? mapName(state.mapNumber) : '' }),
+  });
+  if (!state.screenshots) onLanguageChange(() => screenshots.texts());
+  state.screenshots = screenshots;
+  const community = new CommunityWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+    share: () => screenshots.open(),
+  });
+  state.community = community;
+  connection.onPacket((bytes) => { community.handle(bytes); });
+  for (const bytes of earlyPackets) community.handle(bytes);
+  community.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'k' && !event.ctrlKey && !event.altKey && !event.metaKey && !itemWindows.bag.isOpen) { event.preventDefault(); community.toggle(); }
+  });
   // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
   // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
   const onboarding = new OnboardingWindow({
