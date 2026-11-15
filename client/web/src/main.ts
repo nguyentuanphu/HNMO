@@ -44,6 +44,7 @@ import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
 import { Resets } from './game/resets.js';
+import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
 import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
@@ -179,6 +180,7 @@ export interface GameState {
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
   resets?: Resets;
+  accountSafety?: AccountSafety;
   screenshots?: Screenshots;
   onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
@@ -1442,6 +1444,36 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   connection.onPacket((bytes) => { resets.handle(bytes); });
   for (const bytes of earlyPackets) resets.handle(bytes);
   resets.start();
+  // HNMO's account safety and the vault's lock (as the desktop's CStorageInventory): the lock button sets or removes the
+  // vault PIN (the second password), a locked vault asks it before an item leaves it, the server asks for it when a trade
+  // or the store needs it; locked items get a tooltip line; Alt + right click locks an item or asks its unlock.
+  const accountSafety = new AccountSafety({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => { void confirmInGame(text, true); },
+    changed: () => itemWindows.refresh(),
+  });
+  state.accountSafety = accountSafety;
+  itemWindows.vault.isProtected = () => accountSafety.vaultProtected;
+  itemWindows.vault.titleText = (locked) => `${safetyText('Storage')} (${safetyText(locked ? 'Close' : 'Open')})`;
+  itemWindows.vault.model.storage_lock_click = () => { void accountSafety.lockButton(); };
+  itemWindows.vault.model.lock_tooltip = safetyText('Warehouse Lock/Unlock');
+  itemWindows.vault.onItemClick = () => {
+    if (!accountSafety.vaultNeedsPin) return false;
+    void accountSafety.verifyVaultPin();
+    return true;
+  };
+  const takeZen = itemWindows.vault.model.storage_take_click;
+  itemWindows.vault.model.storage_take_click = () => {
+    if (accountSafety.vaultNeedsPin) void accountSafety.verifyVaultPin();
+    else takeZen();
+  };
+  itemWindows.extraTooltipLines = (storage, slot) => accountSafety.tooltipLines(storage, slot);
+  for (const window of [itemWindows.bag, itemWindows.vault]) {
+    window.onAltRightClick = (slot) => { void accountSafety.toggleLock(window.storageKind, slot); return true; };
+  }
+  connection.onPacket((bytes) => { accountSafety.handle(bytes); });
+  for (const bytes of earlyPackets) accountSafety.handle(bytes);
+  accountSafety.start();
   // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
   // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
   const onboarding = new OnboardingWindow({

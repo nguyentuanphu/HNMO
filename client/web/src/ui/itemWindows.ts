@@ -9,7 +9,7 @@ import { BAG, VAULT, SHOP, SHOP_STORAGE, TRADE, Equipment, Inventory, NpcWindow,
 import type { Item, ItemGrid } from '../game/inventory.js';
 import { itemName } from '../game/items.js';
 import { ItemTooltipView, type ScreenBox } from './itemTooltipView.js';
-import type { TooltipCharacter } from '../game/itemTooltip.js';
+import type { TooltipCharacter, TooltipLine } from '../game/itemTooltip.js';
 import { isHighValue, isSellingBan } from '../game/itemUse.js';
 import { nativeTextPx, uiScale, dockTop } from './nativeText.js';
 
@@ -174,6 +174,8 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   onRightClick?: (slot: number, item: Item) => void;
   /** A right click on an item, before onRightClick: true when handled (the open trade takes bag items). */
   interceptRightClick?: (slot: number, item: Item) => boolean;
+  /** Alt + right click on an item (HNMO: the item lock): true when handled. */
+  onAltRightClick?: (slot: number, item: Item) => boolean;
 
   constructor({ inventory, picked, documentName, grid, storage, model }: {
     inventory: Inventory; picked: PickedItem; documentName: string; grid: ItemGrid; storage: number; model: M;
@@ -331,6 +333,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const equipment = this.equipmentSlotAt(point);
     const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
     const item = slot === null ? undefined : this.items.get(slot);
+    if (slot !== null && item && event.altKey && this.onAltRightClick?.(slot, item)) return;
     if (slot !== null && item && !this.interceptRightClick?.(slot, item)) this.onRightClick?.(slot, item);
   }
 
@@ -489,9 +492,19 @@ export class VaultWindow extends ItemWindow<VaultModel> {
     super({ inventory, picked, documentName: 'storage', grid: VAULT, storage: Storage.VAULT, model });
   }
 
+  /** Whether the vault has a PIN (CStorageInventory::m_bLock); set by the account safety. */
+  isProtected: () => boolean = () => false;
+  /** The texts of the title (the desktop's Storage, Open and Close), translated by the owner. */
+  titleText: (locked: boolean) => string = (locked) => `Storage (${locked ? 'Close' : 'Open'})`;
+
   override updateModel(): void {
     this.model.zen_text = formatGold(this.inventory.vaultMoney);
     this.model.zen_tier = goldTier(this.inventory.vaultMoney);
+    // SyncRmlModel: "Storage (Open/Close)", red while locked, and the lock icon closed.
+    const locked = this.isProtected();
+    this.model.title = this.titleText(locked);
+    this.model.title_locked = locked;
+    this.model.storage_locked = locked;
   }
 }
 
@@ -788,6 +801,8 @@ export class ItemWindows {
   repairMode = false;
   /** A line for the chat (the shop's refusals). */
   message: (text: string) => void = () => undefined;
+  /** HNMO's extra tooltip lines of an item at a storage's slot (the account safety's lock). */
+  extraTooltipLines: (storage: number, slot: number) => TooltipLine[] = () => [];
 
   constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null }: {
     inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
@@ -863,7 +878,7 @@ export class ItemWindows {
     // The hovered item's tooltip, unless an item is on the cursor (CInventoryCtrl only shows it then).
     itemWindow.onHover = (item) => {
       const box = item && !this.picked.source && itemWindow.hoverSlot !== null ? itemWindow.screenBoxOf(itemWindow.hoverSlot) : null;
-      if (item && box) void this.tooltip.show(item, box);
+      if (item && box) void this.tooltip.show(item, box, this.extraTooltipLines(itemWindow.storageKind, itemWindow.hoverSlot ?? -1));
       else this.tooltip.hide();
     };
   }

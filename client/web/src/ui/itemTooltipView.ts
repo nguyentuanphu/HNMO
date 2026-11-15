@@ -59,11 +59,11 @@ export class ItemTooltipView {
     return this.opening;
   }
 
-  async show(item: Item, box: ScreenBox): Promise<void> {
+  async show(item: Item, box: ScreenBox, extra: TooltipLine[] = []): Promise<void> {
     this.shownFor = item;
     await Promise.all([this.document(), loadTooltipData()]);
     if (this.shownFor !== item) return;
-    await this.showLines(tooltipLines(item, this.character()), box, item);
+    await this.showLines([...tooltipLines(item, this.character()), ...extra], box, item);
   }
 
   /** Shows any tooltip lines (the skill tooltip too), centred on the box: below it, or above without room

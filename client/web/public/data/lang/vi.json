@@ -2,6 +2,12 @@
 "language": "vi",
 "name": "Tiếng Việt",
 "texts": {
+"Second password": "Mật khẩu cấp 2",
+"Locked (account safety)": "Đã khóa (bảo vệ tài khoản)",
+"Unlocks at %s (Sydney time)": "Mở khóa lúc %s (giờ Sydney)",
+"Enter your account password.": "Hãy nhập mật khẩu tài khoản.",
+"The item lock isn't on for this server.": "Máy chủ này chưa bật khóa vật phẩm.",
+"Unlock the item": "Mở khóa vật phẩm",
 "Reset %d done (VIP). Today: %s resets.": "Đã reset lần %d (VIP). Hôm nay: %s lần reset.",
 "Reset %d done. Today: %s resets.": "Đã reset lần %d. Hôm nay: %s lần reset.",
 "Relife %d done. Resets now: %d.": "Đã relife lần %d. Số reset hiện tại: %d.",
