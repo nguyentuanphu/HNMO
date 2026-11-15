@@ -243,6 +243,22 @@ public class GameEventPublisherPlugInTest
     }
 
     /// <summary>
+    /// Tests that the publisher leaves the drops to HNMO's community when it posts them to Discord (no post twice).
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task DropIsLeftToTheCommunityPostsAsync()
+    {
+        var (plugIn, monster, killer) = await this.CreateDropSetupAsync(true).ConfigureAwait(false);
+        Assert.That(HNMO.GameLogic.PlugIns.Community.CommunityPlugIn.PostsDropsToDiscord(killer.GameContext), Is.True);
+        var item = CreateItem(isExcellent: true);
+
+        await plugIn.MonsterItemDroppedAsync(monster, killer, new DroppedItem(item, monster.Position, monster.CurrentMap, null, null)).ConfigureAwait(false);
+
+        this._eventPublisher.Verify(p => p.GameEventAsync(It.IsAny<MonsterItemDroppedEvent>()), Times.Never);
+    }
+
+    /// <summary>
     /// Tests that a normal item which got dropped by a monster isn't published.
     /// </summary>
     [Test]
@@ -365,9 +381,15 @@ public class GameEventPublisherPlugInTest
         return item;
     }
 
-    private async ValueTask<(GameEventPublisherPlugIn PlugIn, Monster Monster, Player Killer)> CreateDropSetupAsync()
+    private async ValueTask<(GameEventPublisherPlugIn PlugIn, Monster Monster, Player Killer)> CreateDropSetupAsync(bool communityPostsDrops = false)
     {
         var gameContext = this.CreateGameServerContext();
+        if (!communityPostsDrops)
+        {
+            // HNMO's community posts the rare drops to Discord by default; these tests check the publisher's own posts.
+            gameContext.PlugInManager.DeactivatePlugIn<HNMO.GameLogic.PlugIns.Community.CommunityPlugIn>();
+        }
+
         var killer = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
         var map = await gameContext.GetMapAsync(0).ConfigureAwait(false);
         // A unique id, because the attributes of monster definitions are cached by their id.
