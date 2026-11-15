@@ -137,6 +137,9 @@ export const BITMAPS = {
   flareRed: 'flareRed.jpg', // BITMAP_FLARE_RED
   sahamuttExplosion: 'loungexflow.jpg', // BITMAP_SUMMON_SAHAMUTT_EXPLOSION
   shiny4: 'ring.jpg', // BITMAP_SHINY+4
+  hole: 'Hole.jpg', // BITMAP_HOLE
+  flash: 'Flashing.jpg', // BITMAP_FLASH
+  inferno: 'Inferno.jpg', // BITMAP_INFERNO
   waterfall3: 'WATERFALL3.jpg', // BITMAP_WATERFALL_3
   waterfall5: 'WATERFALL5.jpg', // BITMAP_WATERFALL_5
 } as const;

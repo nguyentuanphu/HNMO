@@ -148,7 +148,9 @@ export type SpriteType = BitmapName;
 /** CreateJoint types ported (names as in Data/Effects/JointTypes.json). */
 export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointSpirit' | 'smokeTrail' | 'flare' | 'jointSpark' | 'lightJoint' | 'piercing' | 'flareForceJoint' | 'jointForce' | 'blur'
   | 'drainLifeGhost' | 'jointEnergy' | 'pinLightJoint' | 'forcePillar' | 'swordEff'
-  | 'twoLineGhost'; // BITMAP_2LINE_GHOST: Chaotic Diseier's ghost trails
+  | 'twoLineGhost' // BITMAP_2LINE_GHOST: Chaotic Diseier's ghost trails
+  | 'flareBlueJoint' // BITMAP_FLARE_BLUE as a joint: Mana Rays' flares
+  | 'flash'; // BITMAP_FLASH: Stun's bolts, the cancels' falling flashes
 
 /** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */
 export type RenderType = 'normal' | 'dark';

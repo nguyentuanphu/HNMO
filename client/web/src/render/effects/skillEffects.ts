@@ -19,9 +19,9 @@ import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
 import { summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
-import { criticalDamage, fireBurst } from './lordEffects.js';
+import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
-import { LordAction, chaoticDiseier, earthshake, electricSpike } from './darkLordEffects.js';
+import { LordAction, chaoticDiseier, earthshake, electricSpike, siegeSkill } from './darkLordEffects.js';
 import { spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
 import { playBuffLook } from './buffLooks.js';
 import { cometfall } from './wizardEffects.js';
@@ -91,6 +91,13 @@ export const SkillEffect = {
   PARTY_TELEPORT: 63,
   COMETFALL: 13,
   STRIKE_OF_DESTRUCTION: 232,
+  MANA_RAYS: 73,
+  STUN: 67,
+  CANCEL_STUN: 68,
+  SWELL_MANA: 69,
+  INVISIBILITY: 70,
+  CANCEL_INVISIBILITY: 71,
+  FIRE_BLAST: 74,
 } as const;
 
 /** PLAYER_ATTACK_RUSH: Crescent Moon Slash's and Charge's rush. */
@@ -108,6 +115,13 @@ const NOVA_CHARGE_ACTIONS: readonly number[] = [72, 73];
 const NOVA_BONES = 40;
 const TERRAIN_SCALE = 100;
 
+/** AttackStage's cases released at a key of the caster's action: Mana Rays (PLAYER_ATTACK_DEATH_CANNON) and Fire Blast
+ * (PLAYER_ATTACK_STRIKE, mounted PLAYER_ATTACK_RIDE_STRIKE / PLAYER_FENRIR_ATTACK_DARKLORD_STRIKE), both at key 3. */
+const KEYED_RELEASES: Partial<Record<number, { actions: readonly number[]; key: number }>> = {
+  73: { actions: [138], key: 3 },
+  74: { actions: [80, 82, 92], key: 3 },
+};
+
 /** g_iLimitAttackTime: the release comes when AttackTime (1 at the cast) reaches it. */
 export const ATTACK_LIMIT_TIME = 15;
 /** Seconds from the cast to the release (14 ticks). */
@@ -117,7 +131,8 @@ const WHITE = new THREE.Vector3(1, 1, 1);
 /** The fighter's party buffs. */
 const RAGE_BUFFS: readonly number[] = [RageSkill.ATT_UP, RageSkill.HP_UP, RageSkill.DEF_UP];
 /** The skills whose AttackStage case sets AttackTime to 15 on the first tick: they release at once. */
-const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK, SkillEffect.FLAME_STRIKE, SkillEffect.STRIKE_OF_DESTRUCTION];
+const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK, SkillEffect.FLAME_STRIKE, SkillEffect.STRIKE_OF_DESTRUCTION,
+  SkillEffect.INVISIBILITY, SkillEffect.CANCEL_STUN, SkillEffect.CANCEL_INVISIBILITY];
 const SWORD_SKILLS: readonly number[] = [SkillEffect.FALLING_SLASH, SkillEffect.LUNGE, SkillEffect.UPPERCUT, SkillEffect.CYCLONE, SkillEffect.SLASH];
 /** AttackEffect: a monster's lightning starts this far down its weapon bone; without a bone the start is over the feet. */
 const LIGHTNING_FALLBACK_HEIGHT = 130;
@@ -195,6 +210,12 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
   let ticks = 0;
   system.schedule(() => {
     ticks++;
+    const keyed = KEYED_RELEASES[skill];
+    if (keyed) { // AttackStage: the release when the skill's action reaches its key (at most RELEASE_WAIT_TICKS)
+      if (actionKey(caster, keyed.actions, ticks) < keyed.key && ticks < RELEASE_WAIT_TICKS) return true;
+      release(system, skill, caster, target, options);
+      return false;
+    }
     if (skill === SkillEffect.SPIRAL_SLASH || skill === SkillEffect.ELECTRIC_SPIKE) {
       attackTime = keyedStage(system, skill, caster, attackTime, ticks);
       attackTime += 1;
@@ -362,6 +383,7 @@ function attackEffect(system: EffectSystem, skill: number, caster: EffectOwner, 
 
 function release(system: EffectSystem, skill: number, caster: EffectOwner, target: EffectOwner | null, options: SkillEffectOptions): void {
   releaseAtCaster(system, skill, caster, options);
+  if (skill >= SkillEffect.STUN && skill <= SkillEffect.CANCEL_INVISIBILITY) siegeSkill(system, skill, caster, target);
   if (!target) {
     // TargetCharacter == -1: only a bow skill shoots (Triple Shot's fan).
     if (skill === SkillEffect.TRIPLE_SHOT) shootFan(options);
@@ -436,6 +458,12 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
       break;
     case SkillEffect.FIRE_BURST:
       fireBurst(system, caster, target);
+      break;
+    case SkillEffect.MANA_RAYS: // AT_SKILL_DEATH_CANNON
+      manaRays(system, caster);
+      break;
+    case SkillEffect.FIRE_BLAST: // AT_SKILL_SPACE_SPLIT: the burning trail flies at the target
+      system.createEffect('pierPart', caster.position, caster.angle, light, 2, target);
       break;
     case SkillEffect.DRAIN_LIFE: // the caster's Owner is the target (pSourceObj->Owner)
       system.createEffect('aliceDrainLife', caster.position, caster.angle, light, 0, caster, 0, { target });

@@ -63,7 +63,7 @@ const PARTICLE_TEXTURES: Partial<Record<ParticleType, BitmapName>> = {
 };
 const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
-  smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1',
+  smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1', flareBlueJoint: 'flareBlue', flash: 'flash',
   twoLineGhost: 'twoLineGhost', drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
 };
 
@@ -762,6 +762,7 @@ export class EffectSystem {
             o.maxTails = 6;
             return true;
           case 2:
+          case 21: // Swell Mana's lights
             o.blend = 'glow';
             o.faces = 2;
             o.velocity = 50;
@@ -861,7 +862,7 @@ export class EffectSystem {
     // The common move along -y of the joint's angle; the tail is laid with this matrix.
     const matrixAngle = o.angle.clone();
     // (BITMAP_LIGHT and the spear flares place themselves.)
-    if (o.velocity !== 0 && o.type !== 'lightJoint' && o.type !== 'piercing' && o.type !== 'jointForce' && o.type !== 'flareForceJoint') o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), o.angle));
+    if (o.velocity !== 0 && o.type !== 'lightJoint' && o.type !== 'piercing' && !(o.type === 'jointForce' && o.subType === 0) && o.type !== 'flareForceJoint' && !(o.type === 'flash' && o.subType === 6)) o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), o.angle));
     switch (o.type) {
       case 'jointThunder': this.moveThunder(o); break;
       case 'jointHealing': this.moveHealing(o); break;
@@ -989,6 +990,7 @@ export class EffectSystem {
     }
     let light = new THREE.Vector3();
     if (o.subType === 2) light.set(1, 0.5, 0.1);
+    else if (o.subType === 21) light.set(0.1, 0.5, 1);
     else if (o.skill === 0) light.set(0.3, 0.3, 1);
     else light.set(0.5, 0.5, 0.5);
     if (o.lifeTime < 10) {
@@ -1013,7 +1015,7 @@ export class EffectSystem {
       if (o.type === 'smokeTrail' && j < 1) continue;
       const current = o.tails[j], next = o.tails[j + 1];
       if (!current || !next) continue;
-      if (o.type === 'jointForce') {
+      if (o.type === 'jointForce' && o.subType === 0) {
         // BITMAP_JOINT_FORCE SubType 0: the x corners only, fading along the arc.
         const u1 = (o.numTails - j) / (o.maxTails - 1), u2 = (o.numTails - (j + 1)) / (o.maxTails - 1);
         const luminosity = (o.maxTails - j) / o.maxTails * 2 * o.light.x;
@@ -1131,11 +1133,11 @@ export class EffectSystem {
         return o.subType === 0 || o.subType === 2;
       case 'magicGround2':
         o.lifeTime = 20;
-        if (o.subType === 4) { // Swell Life's circle
+        if (o.subType === 4 || o.subType === 10) { // Swell Life's and Swell Mana's circles
           o.lifeTime = 40;
           o.scale = (randInt(50) + 50) / 100 * 4;
         }
-        return (o.subType >= 1 && o.subType <= 4) || o.subType === 11 || o.subType === 12;
+        return (o.subType >= 1 && o.subType <= 4) || o.subType === 10 || o.subType === 11 || o.subType === 12;
       case 'bone1':
       case 'bone2':
       case 'stone1':
@@ -1232,6 +1234,15 @@ export class EffectSystem {
           o.distance = o.pkKey;
           o.scale = o.pkKey / 100;
           o.pkKey = -1;
+          o.blendMeshLight = 0.1;
+        } else if (o.subType === 6) { // Fire Blast's burns along its trail
+          o.lifeTime = 5;
+          o.hiddenMesh = o.skill;
+          o.skill = 0;
+          o.distance = o.pkKey;
+          o.scale = o.pkKey / 100;
+          o.pkKey = -1;
+          o.velocity = 0.1;
           o.blendMeshLight = 0.1;
         } else {
           return false;
@@ -1369,6 +1380,12 @@ export class EffectSystem {
         case 'circle': this.moveCircle(o); break;
         case 'circleLight': this.moveCircleLight(o, luminosity); break;
         case 'skillInferno':
+          if (o.subType === 6) {
+            o.scale += 0.01;
+            o.blendMeshLight = o.lifeTime / 5 * 0.1;
+            this.groundLight(o.position, luminosity * 0.8, luminosity * 0.3, luminosity * 0.1, 2);
+            break;
+          }
           if (o.subType === 2) o.scale += 0.04;
           o.blendMeshLight = o.lifeTime / 20;
           if (o.subType === 0) this.groundLight(o.position, -luminosity * 0.5, -luminosity * 0.5, -luminosity * 0.5, 5); // it darkens the ground
@@ -1719,7 +1736,7 @@ export class EffectSystem {
     let luminosity = 1;
     if (o.lifeTime < 5) luminosity -= (5 - o.lifeTime) * 0.2;
     let scale = (20 - o.lifeTime) * 0.15;
-    if (o.subType === 4) {
+    if (o.subType === 4 || o.subType === 10) {
       scale = o.scale;
       if (luminosity === 1) luminosity = Math.sin((60 - o.lifeTime) * 0.05) + 0.5;
     }
@@ -1727,6 +1744,7 @@ export class EffectSystem {
     const light = o.subType === 2 ? new THREE.Vector3(0.4, 1, 0.6)
       : o.subType === 3 ? new THREE.Vector3(1, 0.6, 0.4)
       : o.subType === 4 ? new THREE.Vector3(1, 0.5, 0.1)
+      : o.subType === 10 ? new THREE.Vector3(0.1, 0.5, 1)
       : o.subType === 11 || o.subType === 12 ? o.light.clone() : new THREE.Vector3(0.4, 0.6, 1);
     light.multiplyScalar(luminosity);
     this.quads.decal('magicGround2', o.subType === 12 ? 'subtract' : 'glow', o.position.x, o.position.y, scale, light, -o.angle.z,

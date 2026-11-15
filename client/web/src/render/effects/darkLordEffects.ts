@@ -12,7 +12,7 @@
 //   Move_MODEL_GROUND_STONE, _BITMAP_SHOCK_WAVE                            Render/Effects/Behaviors/MoveHandlers.cpp
 //   MoveDesair (MODEL_DESAIR)                                              Render/Effects/Behaviors/EffectBehaviors.cpp
 //   RenderObject: MODEL_DESAIR and MODEL_FEATHER 2, 3 drawn RENDER_DARK    Engine/Object/ZzzObject.cpp
-//   CreateJoint / MoveJoint / DescribeJoint: BITMAP_FLARE_FORCE (0-7), BITMAP_2LINE_GHOST (0)
+//   CreateJoint / MoveJoint / DescribeJoint: BITMAP_FLARE_FORCE (0-7), BITMAP_2LINE_GHOST (0), BITMAP_FLASH (0, 1, 6, 7)
 //                                                                          Render/Effects/ZzzEffectJoint.cpp
 
 import * as THREE from 'three';
@@ -442,4 +442,133 @@ export function chaoticShine(o: Effect, system: EffectSystem): void {
   const at = bone ?? owner.position.clone().setZ(owner.position.z + 100);
   const position = rotateByAngle(new THREE.Vector3(0, -20, 0), owner.angle).add(at);
   system.createSprite('shiny5', position, 2, o.light, o.self, 0, 1);
+}
+
+// ---------------------------------------------------------------------------
+// Stun, Cancel Stun, Swell Mana, Invisibility, Cancel Invisibility (the Castle Siege skills).
+// Followed: MoveCharacter's release AT_SKILL_STUN, _REMOVAL_STUN, _MANA, _INVISIBLE, _REMOVAL_INVISIBLE
+// (Engine/Object/ZzzCharacter.cpp); CreateJoint / MoveJoint / DescribeJoint BITMAP_FLASH (0, 1, 6, 7)
+// (Render/Effects/ZzzEffectJoint.cpp).
+// ---------------------------------------------------------------------------
+
+/** BITMAP_FLASH (Flashing.jpg): 0 and 1 fall from 1200 over a target and flare where they land; 7 opens three 6s,
+ * bolts that arc forward from the lord's chest and bounce along the ground (CreateTailAxis on the y axis). */
+EXTRA_JOINTS.flash = {
+  init: (o, system) => {
+    if (o.subType === 0 || o.subType === 1) {
+      o.maxTails = 10;
+      o.lifeTime = 40;
+      o.velocity = 70;
+      o.counter = 150; // MultiUse: how far under the ground it may go
+      o.pkKey = 0;
+      o.angle.set(90, 0, 0);
+      o.createTails = false;
+      flashHeads.set(o, o.angle.clone());
+      return true;
+    }
+    if (o.subType === 6) {
+      o.maxTails = 30;
+      o.lifeTime = 25;
+      o.counter = 25; // Weapon
+      o.velocity = (70 + randInt(3)) * Math.PI / 180;
+      o.light.set(0.8, 0.8, 1);
+      o.direction.set(0, -(40 + randInt(4)), Math.sin(o.velocity) * 10);
+      o.position.y -= 20;
+      o.position.z += 130;
+      o.startPosition.copy(o.position);
+      o.createTails = false;
+      o.numTails = -1;
+      layTailAxisY(o);
+      o.numTails = 0;
+      return true;
+    }
+    if (o.subType === 7) {
+      for (let i = 0; i < 3; i++) {
+        const p = rotateByAngle(new THREE.Vector3((i - 1) * 100, -50, 0), o.angle).add(o.position);
+        system.createJoint('flash', p, p, o.angle, 6, null, 40);
+      }
+      return false; // LifeTime 0: the opener itself ends at once
+    }
+    return false;
+  },
+  move: (o, system) => {
+    if (o.subType === 6) {
+      o.direction.y += randInt(5) - 2;
+      o.direction.z -= 10;
+      o.position.add(rotateByAngle(o.direction, o.angle));
+      o.scale = o.counter - o.lifeTime < 10 ? 100 : 40;
+      const height = system.heightAt(o.position.x, o.position.y);
+      if (o.position.z <= height) {
+        if (o.direction.z <= 0) o.direction.z = Math.sin(o.velocity) * 20;
+        o.position.z = height + 5;
+      }
+      layTailAxisY(o);
+      if (o.lifeTime < o.counter / 2) o.light.multiplyScalar(1 / 1.3);
+      return;
+    }
+    // SubTypes 0 and 1: the common move along the angle, then again along the head (each 10 faster first).
+    o.velocity += 10;
+    if (o.pkKey === 0 && o.numTails < o.maxTails) system.layTail(o, o.angle);
+    o.velocity += 10;
+    o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), flashHeads.get(o) ?? o.angle));
+    const floor = system.heightAt(o.position.x, o.position.y) - o.counter;
+    if (o.position.z < floor) {
+      o.position.z = floor;
+      o.pkKey = 1; // no more tails (m_bCreateTails = false)
+      o.light.multiplyScalar(1 / 1.2);
+    }
+    system.createSprite('flare', o.position, 1, o.light, null, randInt(360));
+  },
+  draw: (o, system) => {
+    if (o.subType !== 6) return false;
+    // m_byReverseUV 3: the texture runs from the head (1) to the end of the trail (0).
+    for (let j = 0; j < o.numTails; j++) {
+      const current = o.tails[j], next = o.tails[j + 1];
+      if (!current || !next) continue;
+      const l1 = 1 - j / (o.maxTails - 1), l2 = 1 - (j + 1) / (o.maxTails - 1);
+      system.quads.quad(o.texture, 'glow', [current[2], current[3], next[3], next[2]], [l1, l1, l2, l2], [1, 0, 0, 1], o.light);
+      system.quads.quad(o.texture, 'glow', [current[0], current[1], next[1], next[0]], [l1, l1, l2, l2], [0, 1, 1, 0], o.light);
+    }
+    return true;
+  },
+};
+const flashHeads = new WeakMap<Joint, THREE.Vector3>();
+
+/** CreateTailAxis(o, AngleMatrix(o->Angle), 1): a new tail whose second pair of corners lies along y. */
+function layTailAxisY(o: Joint): void {
+  o.numTails = Math.min(o.numTails + 1, o.maxTails - 1);
+  for (let j = o.numTails - 1; j >= 0; j--) o.tails[j + 1] = o.tails[j];
+  const half = o.scale * 0.5;
+  const corner = (x: number, y: number): THREE.Vector3 => rotateByAngle(new THREE.Vector3(x, y, 0), o.angle).add(o.position);
+  o.tails[0] = [corner(-half, 0), corner(half, 0), corner(0, -half), corner(0, half)];
+}
+
+/** The lord's Castle Siege skills at their release: Stun's bolts, the cancels' falling flashes, Swell Mana's lights. */
+export function siegeSkill(system: EffectSystem, skill: number, caster: EffectOwner, target: EffectOwner | null): void {
+  switch (skill) {
+    case 67: // AT_SKILL_STUN
+      system.createJoint('flash', caster.position, caster.position, caster.angle, 7, null);
+      break;
+    case 68: // AT_SKILL_REMOVAL_STUN
+    case 71: // AT_SKILL_REMOVAL_INVISIBLE
+      if (target && target !== caster) {
+        const position = target.position.clone().setZ(target.position.z + 1200);
+        system.createJoint('flash', position, position, target.angle, skill === 68 ? 0 : 1, target, 120);
+      }
+      break;
+    case 69: // AT_SKILL_MANA: 36 blue lights fly out and a blue circle glows on the ground
+      for (let i = 0; i < 36; i++) {
+        const angle = new THREE.Vector3(-10, 0, i * 10);
+        const position = caster.position.clone().setZ(caster.position.z + 100);
+        system.createJoint('jointSpirit', position, position, angle, 21, caster, 60);
+        if (i % 20 === 0) system.createEffect('magicGround2', caster.position, angle, caster.light ?? WHITE, 10, caster);
+      }
+      break;
+    case 70: // AT_SKILL_INVISIBLE: the target's Greater Defense lights end (its circle, SubType 6, draws no decal)
+      if (target) {
+        system.deleteJoint('spearSkill', target, 4);
+        system.deleteJoint('spearSkill', target, 9);
+      }
+      break;
+  }
 }

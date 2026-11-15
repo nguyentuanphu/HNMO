@@ -15,7 +15,7 @@ import * as THREE from 'three';
 import { moveHumming, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
-import type { Effect, EffectOwner } from './types.js';
+import type { Effect, EffectOwner, Joint } from './types.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 /** The bone Fire Slash's gathering sits on (BoneTransform[33], the right hand). */
@@ -70,6 +70,7 @@ EXTRA_EFFECTS.swordForce = {
 // crackling; drawn as one ribbon that fades along its length.
 EXTRA_JOINTS.jointForce = {
   init: (o) => {
+    if (o.subType === 2 || o.subType === 4) return jointForceRayInit(o);
     if (o.subType !== 0) return false;
     o.lifeTime = 20;
     o.createTails = false;
@@ -83,6 +84,10 @@ EXTRA_JOINTS.jointForce = {
     return true;
   },
   move: (o, system) => {
+    if (o.subType === 2 || o.subType === 4) {
+      jointForceRayMove(o, system);
+      return;
+    }
     const p = new THREE.Vector3(0, -145, 0);
     for (let j = 0; j < 8; j++) {
       if (o.numTails >= o.maxTails - 1) break;
@@ -327,6 +332,7 @@ EXTRA_EFFECTS.pierPart = {
       o.angle.set(0, 0, o.angle.z);
       return o.owner !== null;
     }
+    if (o.subType === 2) return pierPartBlastCreate(o);
     if (o.subType === 1) {
       o.lifeTime = o.skill; // the flame's life time (o->Owner->LifeTime)
       o.hiddenMesh = 0;
@@ -353,6 +359,8 @@ EXTRA_EFFECTS.pierPart = {
         system.createEffect('pierPart', o.position, o.angle, o.light, 1, o.self, 0, { skillIndex: o.lifeTime });
       }
       o.gravity += 0.1;
+    } else if (o.subType === 2) {
+      pierPartBlastMove(o, system);
     } else if (o.lifeTime < 5) {
       o.alpha *= 1 / 1.3;
     }
@@ -400,4 +408,95 @@ export function criticalDamage(system: EffectSystem, caster: EffectOwner): void 
     const at = caster.weaponPosition?.(hand);
     if (at) system.createEffect('darkLordSkill', at, caster.angle, light, hand);
   }
+}
+
+// BITMAP_JOINT_FORCE SubTypes 2 (Fire Blast's burning trail, BITMAP_INFERNO) and 4 (Mana Rays, BITMAP_HOLE): a ribbon
+// shot forward ever faster; 4 sheds blue flare trails and lights along its head, 2 burns the ground where it starts.
+// Followed: CreateJoint / MoveJoint BITMAP_JOINT_FORCE (2-6), BITMAP_FLARE_BLUE (6) (ZzzEffectJoint.cpp).
+const rayHeads = new WeakMap<Joint, THREE.Vector3>();
+function jointForceRayInit(o: Joint): boolean {
+  o.lifeTime = 20;
+  o.velocity = 8;
+  o.direction.set(3.5, 0, 1);
+  o.maxTails = 12;
+  o.numTails = -1;
+  o.counter = 5; // MultiUse
+  if (o.subType === 4) {
+    o.maxTails = 13;
+    o.texture = 'hole';
+    o.direction.set(15.5, 0, 3);
+    o.counter = 10;
+  } else {
+    o.position.z += 10;
+    o.texture = 'inferno';
+    o.lifeTime = 15;
+    o.direction.set(5, 0, 5);
+  }
+  rayHeads.set(o, new THREE.Vector3(0, 0, o.angle.z));
+  o.startPosition.copy(o.position);
+  return true;
+}
+
+function jointForceRayMove(o: Joint, system: EffectSystem): void {
+  o.velocity += o.direction.z;
+  o.direction.z += o.lifeTime < 15 ? 0.5 : o.direction.x;
+  if (o.subType !== 4 && o.numTails >= o.maxTails - 1) o.createTails = false;
+  if (o.lifeTime < o.counter) o.light.multiplyScalar(1 / 1.3);
+  if (Math.trunc(o.lifeTime) % 5 === 0 && o.subType === 2) {
+    system.createEffect('skillInferno', o.startPosition, rayHeads.get(o) ?? o.angle, o.light, 6, null, 0, { pkKey: 20, skillIndex: 0 });
+  } else if (o.subType === 4) {
+    const light = new THREE.Vector3(0.1, 0.6, 1);
+    system.createJoint('flareBlueJoint', o.position, o.position, o.angle, 6, null, 30);
+    system.createSprite('light', o.position, 1.6, light);
+    system.createSprite('shiny2', o.position, 1.5, light, null, system.time * 0.1);
+  }
+}
+
+// BITMAP_FLARE_BLUE joint SubType 6: a short white flare that spirals out (BITMAP_FLARE's SubType 4 move).
+EXTRA_JOINTS.flareBlueJoint = {
+  init: (o) => {
+    if (o.subType !== 6) return false;
+    o.lifeTime = 15;
+    o.maxTails = 15;
+    o.light.set(1, 1, 1);
+    o.direction.set(randInt(360), -2 * Math.sin(-o.angle.z * Math.PI / 180), -2 * Math.cos(-o.angle.z * Math.PI / 180));
+    return true;
+  },
+  move: (o) => {
+    const count = (o.direction.x + o.lifeTime) * 0.1;
+    const vx = -Math.cos(count) * Math.max(o.lifeTime + 40, 10) * 0.65;
+    const vy = Math.sin(count) * Math.max(o.lifeTime + 40, 10) * 0.65;
+    o.targetPosition.x += o.direction.y;
+    o.targetPosition.y += o.direction.z;
+    const turn = (90 - o.angle.z) * Math.PI / 180;
+    o.position.set(vx * Math.sin(turn) + o.targetPosition.x, vx * Math.cos(turn) + o.targetPosition.y, vy + o.targetPosition.z);
+  },
+};
+
+/** Mana Rays' release (MoveCharacter AT_SKILL_DEATH_CANNON): the ray leaves 130 over the gladiator along its facing. */
+export function manaRays(system: EffectSystem, caster: EffectOwner): void {
+  const position = caster.position.clone().setZ(caster.position.z + 130);
+  system.createJoint('jointForce', position, position, new THREE.Vector3(0, 0, caster.angle.z), 4, null, 40);
+}
+
+// MODEL_PIER_PART SubType 2 (Fire Blast): an unseen head flies at the target ever faster, laying a burning trail
+// (BITMAP_JOINT_FORCE SubType 2) every third tick.
+export function pierPartBlastCreate(o: Effect): boolean {
+  o.lifeTime = 20;
+  o.velocity = 50;
+  o.hiddenMesh = -2;
+  o.position.z -= 20;
+  o.direction.set(0, -40, 0);
+  o.headAngle.copy(o.angle);
+  o.angle.set(0, 0, o.angle.z);
+  return o.owner !== null;
+}
+
+export function pierPartBlastMove(o: Effect, system: EffectSystem): void {
+  const owner = o.owner;
+  if (!owner) return;
+  moveHumming(o.position, o.angle, owner.position, o.velocity);
+  o.velocity += 2.4;
+  o.position.add(rotateByAngle(o.direction, o.angle));
+  if (Math.trunc(o.lifeTime) % 3 === 0) system.createJoint('jointForce', o.position, o.position, new THREE.Vector3(-90, 0, o.angle.z), 2, null, 150);
 }

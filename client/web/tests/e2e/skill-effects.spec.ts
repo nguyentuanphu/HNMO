@@ -18,6 +18,8 @@ type Win = Window & { __game: EffectsGame };
 /** A skill, the objects its effect must make (census keys), and when to take its picture (ms after the cast). */
 interface Case {
   skill: number; name: string; expect: string[]; shotAt: number; area?: boolean; chain?: boolean; action?: number;
+  /** Aimed at another character (a monster, else the nearest NPC or player), never at the hero itself. */
+  other?: boolean;
   /** An effect type whose model the picture waits for (a slow first load on the test machine). */
   model?: string;
   /** Models (directory, file) loaded with their textures before the cast. */
@@ -73,6 +75,8 @@ const GLADIATOR: Case[] = [
   { skill: 56, name: 'power-slash', expect: ['effect:magic2'], shotAt: 250 },
   { skill: 237, name: 'gigantic-storm', expect: ['effect:jointThunderEffect', 'joint:jointThunder', 'effect:magicGround2'], shotAt: 800 },
   // The flame follows the gladiator's swing (PLAYER_SKILL_FLAMESTRIKE), played by the hero here.
+  // Released at key 3 of PLAYER_ATTACK_DEATH_CANNON, played by the hero here.
+  { skill: 73, name: 'mana-rays', expect: ['joint:jointForce', 'joint:flareBlueJoint'], shotAt: 640, action: 138 },
   { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
 ];
 
@@ -86,6 +90,11 @@ const LORD: Case[] = [
   { skill: 65, name: 'electric-spike', expect: ['joint:flareForceJoint'], shotAt: 900, action: 152 },
   // The dark horse's stomp (shock waves, the strike's cracks at its 19th tick, the stones while keys 8-9.5 play).
   { skill: 62, name: 'earthshake', expect: ['effect:darkHorseSkill', 'effect:shockWave', 'effect:skillFuryStrike', 'effect:earthQuake1'], shotAt: 1040, action: 87, warm: [['Skill', 'GroundStone.bmd'], ['Skill', 'GroundStone2.bmd']] },
+  // Released at key 3 of PLAYER_ATTACK_STRIKE: the burning trail flies at the target.
+  { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
+  { skill: 67, name: 'stun', expect: ['joint:flash'], shotAt: 680 },
+  { skill: 68, name: 'cancel-stun', expect: ['joint:flash'], shotAt: 700, other: true },
+  { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },
   { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
   { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },
 ];
@@ -130,8 +139,8 @@ async function goHunting(page: Page): Promise<void> {
 }
 
 /** Plays the skill as the server shows it: the hero casts at the nearest monster (or a tile ahead). */
-function cast(page: Page, skill: number, area: boolean, chain = false, action?: number): Promise<boolean> {
-  return page.evaluate(({ skill, area, chain, action }) => {
+function cast(page: Page, skill: number, area: boolean, chain = false, action?: number, other = false): Promise<boolean> {
+  return page.evaluate(({ skill, area, chain, action, other }) => {
     const g = (window as unknown as Win).__game;
     const hero = g.online.hero;
     if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
@@ -155,10 +164,17 @@ function cast(page: Page, skill: number, area: boolean, chain = false, action?: 
       g.connection.dispatch(new Uint8Array(packet));
       return best !== null;
     }
+    if (other && !best) {
+      for (const c of g.online.characters.values()) {
+        if (c === hero || c.dead) continue;
+        const d = Math.hypot(c.cell.x - hero.cell.x, c.cell.y - hero.cell.y);
+        if (!best || d < bestDistance) { best = c; bestDistance = d; }
+      }
+    }
     // Without a monster close by, a targeted skill is aimed at the hero itself.
     g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
     return best !== null;
-  }, { skill, area, chain, action });
+  }, { skill, area, chain, action, other });
 }
 
 const groups = process.env.SKILL_GROUPS?.split(',');
@@ -209,7 +225,7 @@ for (const [group, cases] of Object.entries(CASES)) {
         };
       }, Math.max(1, Math.round(c.shotAt / 40)));
       if (c.buffs) await page.evaluate((list) => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, list); }, c.buffs);
-      await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action);
+      await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action, c.other ?? false);
       await page.waitForFunction(() => (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen === true, null, { timeout: 30_000 });
       if (c.model) {
         await page.waitForFunction((type) => (window as unknown as { __game: { effects: { effects: { type: string; model: unknown }[] } } }).__game.effects.effects
