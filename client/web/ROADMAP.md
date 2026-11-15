@@ -309,3 +309,16 @@ section 12 (the cash shop) still waits for the owner's answers.
   "already logged in" with no open connection until the server restarted; not reproduced since - watch for it.
 - Server tests on GitHub: a different admin-panel test fails on each run since 2026-11-16 (map controller disposal,
   bUnit render after disposal, map groups, packet order); they pass locally. Make them independent of timing.
+
+## Owner decisions (2026-11-16, Sydney time) — to build
+1. Phoenix Shot: the web game sends it to the server (an area skill with real damage). Note the difference from the desktop in PARITY.md.
+2. Guild buff tooltips: English and Vietnamese for every guild buff.
+3. Guild ladder rewards: paid to everyone who is a member at payout time, offline members included.
+4. Zalo coins: credited only after an admin approves (an approval list in the admin panel).
+5. Screenshots: the player chooses in the settings (3D view only, or with the interface).
+6. K key: like the desktop, only while the bag is closed.
+7. Top races: F9 opens them.
+8. Gift codes: keep as they are, plus an admin-set limit per network address / device (one use per address or device per code).
+9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
+10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
+11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.

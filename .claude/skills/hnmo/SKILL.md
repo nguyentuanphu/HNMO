@@ -386,3 +386,10 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   only from loopback (100 ms wait). Against a server without this code run the bridge with `--Relay:SendClientAddress=false`.
 - F5 codes now: ... resets 1D-1F, account safety 20 (request), 21 (state JSON), 22 (action). Next free: 23.
 - In-memory persistence shares entity objects between contexts: don't set a fake value on an entity "just for the answer".
+
+## Owner decisions of 2026-11-16 (Sydney)
+See ROADMAP.md "Owner decisions (2026-11-16)": Phoenix Shot sent to the server; guild buff tooltips EN+VI;
+guild ladder rewards to members at payout; Zalo coins need admin approval; screenshots: player chooses
+(3D only or with the interface); K only with the bag closed; F9 opens top races; gift codes also limited
+per address/device; resets in place (admin switch); reset tiers 350/380/400, 20/10/5 per day, editable;
+VIP bought with coins, admin can grant, players manage it on the website's account page.
