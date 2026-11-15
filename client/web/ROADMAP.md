@@ -213,3 +213,20 @@ section 12 (the cash shop) still waits for the owner's answers.
    together, divorce rules; the couples list on the website.
 9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
    admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
+10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take
+    them out in the game or on the website; which jewels, limits and fees in the admin panel. Also clearing
+    master skill points (with item 3's stat clearing).
+11. ⏳ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
+    the cap for everyone rises N levels a day; with resets, a daily reset limit does the same job. Shown on
+    the website (today's cap).
+12. ⏳ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony, wing 2,
+    the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
+    killed, N players at a level). Stages, dates and conditions in the admin panel; the timeline on the website.
+13. ⏳ **Combining leftovers**: chaos machine recipes the admin panel can add (e.g. 2 boxes of the same level +
+    1 Jewel of Life + 1 Jewel of Creation -> a box one level higher, with a top box level per season stage),
+    and an exchange NPC for surplus materials. Recipes shown in the game and on the website.
+14. ⏳ **Mount chain**: golden bosses drop mount materials, duplicate mounts are material for the next step
+    (horn -> wolf -> golden wolf/horse -> higher steps); a mount collection page on the website. Kept to looks
+    and modest PvE strength.
+15. ⏳ **Party options**: a party password (join without an invite) and auto party for hunting spots. A party of
+    10 needs a new party window in the web and desktop clients (they show 5); later, if wanted.
