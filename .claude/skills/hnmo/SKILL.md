@@ -180,3 +180,19 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   `/missions-rewards`; website `/website/missions`.
 - A web window can be tested without a game server: import `/js/ui/<window>.js`, construct it with fake callbacks
   and feed it packets built with `write()` from `/js/net/packets.js` (see `tests/e2e/missions.spec.ts`).
+
+## World bosses (2026-11-15)
+- `GameLogic/PlugIns/WorldBosses`: `WorldBossSchedule` (wall-clock Sydney times; a time missing on the DST day moves
+  to the first valid minute, a repeated one counts once), `WorldBossEngine` (pure: plan, damage, kill, tiers, weekly
+  rankings, pay-once), `WorldBossStore` (`save/world-bosses.json`, one shared instance per file in the process via
+  `WorldBossStore.Open`, so the admin panel and website read the live state), `WorldBossesPlugIn` (spawns like the
+  invasions, hosts each boss on the lowest game server id of the process unless set). Tests `WorldBossEngineTest`.
+- F5 codes now: Discord 02-07, missions 08-0A, world bosses 0B (request; the web game sends it on entering the world),
+  0C (state JSON), 0D (take waiting rewards). Next free: 0E.
+- Discord posts go through `IGameServerContext.EventPublisher` with a `GameEvent` record (`WorldBossAnnouncedEvent`) and
+  a case in `DiscordMessageFormatter`; nothing is posted when the bridge isn't configured.
+- `MissionCoinGranter.GrantAsync(..., grantedBy)` names the source in the coins history ("HNMO world bosses").
+- Admin page `/world-bosses-rankings` (spawn now uses `IList<IManageableServer>` → `IGameServerContextProvider.Context`);
+  website `/website/world-bosses`; web window N (`ui/worldBossWindow.ts`). An RML `data-if` hides with display:none,
+  so Playwright checks `toBeHidden()`, not `toHaveCount(0)`.
+- Website copy keys must exist in both `copy.en` and `copy.vi` (website.ts), or tsc fails; a literal % in them is "%", not "%%".

@@ -2125,4 +2125,10 @@
   <data name="MissionsPlugIn_Description" xml:space="preserve">
     <value>Daily and weekly missions (kills, events, chaos machine mixes, zen, levels, online minutes) with rewards the players claim in the web game's missions window (J), a daily streak with a bonus, and earned coins: online time, level milestones and resets, invites and a monthly login calendar, under a daily cap per account. Edit it on the page Missions and rewards (game menu). The progress is kept in a file in the save folder.</value>
   </data>
+  <data name="WorldBossesPlugIn_Name" xml:space="preserve">
+    <value>HNMO: world bosses and weekly rankings</value>
+  </data>
+  <data name="WorldBossesPlugIn_Description" xml:space="preserve">
+    <value>World bosses on a schedule, announced in the game, on Discord and on the website, with rewards by damage, boss-hunt points and weekly ranking coins (boss hunt, Blood Castle, Devil Square, Chaos Castle, castle siege). Set on the page "World bosses and rankings".</value>
+  </data>
 </root>

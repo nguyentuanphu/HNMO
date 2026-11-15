@@ -2688,4 +2688,22 @@
   <data name="HnmoMissionsActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Xử lý các nút của cửa sổ nhiệm vụ: nhận thưởng, thưởng chuỗi ngày, ngày của lịch đăng nhập và nhập mã mời.</value>
   </data>
+  <data name="HnmoWorldBossesViewPlugIn_Name" xml:space="preserve">
+    <value>Giao diện boss thế giới HNMO</value>
+  </data>
+  <data name="HnmoWorldBossesViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái boss thế giới (thông báo, thời gian còn lại, hạng sát thương, phần thưởng) đến trò chơi trên web.</value>
+  </data>
+  <data name="HnmoWorldBossesRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Yêu cầu boss thế giới HNMO</value>
+  </data>
+  <data name="HnmoWorldBossesRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Trả lời trò chơi trên web khi nó hỏi về boss thế giới.</value>
+  </data>
+  <data name="HnmoWorldBossesActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Thao tác boss thế giới HNMO</value>
+  </data>
+  <data name="HnmoWorldBossesActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các nút của cửa sổ boss thế giới: nhận phần thưởng đang chờ chỗ trống trong túi.</value>
+  </data>
 </root>

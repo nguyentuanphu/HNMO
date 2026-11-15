@@ -468,3 +468,17 @@ footer {
 .mission { border: 1px solid var(--line); padding: 14px 16px; background: linear-gradient(135deg, #20241a, #141711); min-width: 0; }
 .mission h4 { margin: 0 0 6px; font-size: 15px; }
 .mission p { margin: 0; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+
+/* World bosses (next spawns, rewards, last kills, weekly rankings) */
+.boss-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.boss { border: 1px solid var(--line); padding: 14px 16px; background: linear-gradient(135deg, #261c14, #14110d); min-width: 0; }
+.boss.alive { border-color: var(--gold); }
+.boss h4 { margin: 0 0 4px; font-size: 16px; }
+.boss p, .boss li { margin: 0 0 4px; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.boss .boss-when { color: var(--gold); font-size: 14px; }
+.boss ul, .boss ol { margin: 4px 0 6px; padding-left: 18px; }
+.boss-news { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+.boss-news li { margin-bottom: 4px; overflow-wrap: anywhere; }
+.boss-rankings { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.boss-rankings > * { min-width: 0; }
+.boss-rankings h4 { margin: 0 0 6px; font-size: 14px; }

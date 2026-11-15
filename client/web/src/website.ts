@@ -14,6 +14,47 @@ const copy = {
     missionsReward: "Reward",
     missionsStreak: "Finish the daily missions several days in a row: every %d days pays a bonus (%s).",
     missionsCap: "Earned coins (online time, level milestones, invites, login calendar): at most %d a day per account.",
+    bossesNav: "World bosses",
+    bossesTitle: "World bosses",
+    bossesHint: "Strong bosses appear on a schedule (Sydney time; your own time in brackets). Everyone who deals damage shares the rewards by rank: the top 3, the top 10, everyone with enough damage, and the last hit. No damage, no reward. Kills give boss-hunt points for the weekly ranking.",
+    bossesOffline: "The world bosses are unavailable: the server didn't answer.",
+    bossesNone: "No world bosses right now.",
+    bossesOff: "World bosses are switched off on this server.",
+    bossesNext: "Next spawn",
+    bossesIn: "in",
+    bossesYourTime: "Your time",
+    bossesAt: "At",
+    bossesAlive: "On the map now — leaves in",
+    bossesMap: "Map",
+    bossesTimes: "Every day at",
+    bossesEvery: "Every %d hours from",
+    bossesDays: "On",
+    bossesRewardTop1: "Rank 1",
+    bossesRewardTop2: "Rank 2",
+    bossesRewardTop3: "Rank 3",
+    bossesRewardTop10: "Ranks 4–10",
+    bossesRewardParticipation: "Everyone with at least %s% of the damage",
+    bossesRewardLastHit: "Last hit",
+    bossesLastKill: "Last kill",
+    bossesLeft: "left without being killed",
+    bossesLastHit: "last hit",
+    bossesNews: "Announcements",
+    bossesWeek: "This week's rankings",
+    bossesWeekEnds: "The week ends in",
+    bossesLastWeek: "Last week's winners",
+    bossesNoEntries: "No entries yet.",
+    bossesRankBossHunt: "Boss hunt",
+    bossesRankBloodCastle: "Blood Castle",
+    bossesRankDevilSquare: "Devil Square",
+    bossesRankChaosCastle: "Chaos Castle",
+    bossesCastleSiege: "Castle siege winners",
+    bossesCastleSiegeText: "Every member of the guild that wins the castle siege gets %d coins at the end of the week.",
+    bossesPrizes: "Weekly prizes (top 10)",
+    bossesRank: "Rank",
+    bossesName: "Character",
+    bossesDamage: "Damage",
+    bossesPoints: "Points",
+    bossesCoins: "Coins",
     phoneNav: "Phone",
     phoneTitle: "Play on your phone",
     phoneIntro: "The game runs in the phone's browser and installs to the home screen like an app; nothing to download.",
@@ -149,6 +190,47 @@ const copy = {
     missionsReward: "Phần thưởng",
     missionsStreak: "Hoàn thành nhiệm vụ ngày nhiều ngày liên tục: mỗi %d ngày được thưởng thêm (%s).",
     missionsCap: "Xu kiếm được (thời gian trực tuyến, mốc cấp độ, mời bạn, lịch đăng nhập): tối đa %d mỗi ngày cho mỗi tài khoản.",
+    bossesNav: "Boss thế giới",
+    bossesTitle: "Boss thế giới",
+    bossesHint: "Các boss mạnh xuất hiện theo lịch (giờ Sydney; giờ của bạn trong ngoặc). Mọi người gây sát thương đều được chia thưởng theo hạng: top 3, top 10, người đủ sát thương và đòn cuối. Không gây sát thương thì không có thưởng. Hạ boss được điểm săn boss cho bảng xếp hạng tuần.",
+    bossesOffline: "Không xem được boss thế giới: máy chủ không trả lời.",
+    bossesNone: "Hiện chưa có boss thế giới nào.",
+    bossesOff: "Boss thế giới đang tắt trên máy chủ này.",
+    bossesNext: "Lần xuất hiện tới",
+    bossesIn: "sau",
+    bossesYourTime: "Giờ của bạn",
+    bossesAt: "Lúc",
+    bossesAlive: "Đang ở trên bản đồ — rời đi sau",
+    bossesMap: "Bản đồ",
+    bossesTimes: "Mỗi ngày lúc",
+    bossesEvery: "Mỗi %d giờ từ",
+    bossesDays: "Vào",
+    bossesRewardTop1: "Hạng 1",
+    bossesRewardTop2: "Hạng 2",
+    bossesRewardTop3: "Hạng 3",
+    bossesRewardTop10: "Hạng 4–10",
+    bossesRewardParticipation: "Mọi người có ít nhất %s% sát thương",
+    bossesRewardLastHit: "Đòn cuối",
+    bossesLastKill: "Lần hạ gần nhất",
+    bossesLeft: "đã rời đi mà không bị hạ",
+    bossesLastHit: "đòn cuối",
+    bossesNews: "Thông báo",
+    bossesWeek: "Xếp hạng tuần này",
+    bossesWeekEnds: "Tuần kết thúc sau",
+    bossesLastWeek: "Người thắng tuần trước",
+    bossesNoEntries: "Chưa có ai.",
+    bossesRankBossHunt: "Săn boss",
+    bossesRankBloodCastle: "Huyết Lâu",
+    bossesRankDevilSquare: "Quảng Trường Quỷ",
+    bossesRankChaosCastle: "Hỗn Nguyên Lâu",
+    bossesCastleSiege: "Đội thắng công thành",
+    bossesCastleSiegeText: "Mỗi thành viên của bang thắng công thành nhận %d xu vào cuối tuần.",
+    bossesPrizes: "Giải thưởng tuần (top 10)",
+    bossesRank: "Hạng",
+    bossesName: "Nhân vật",
+    bossesDamage: "Sát thương",
+    bossesPoints: "Điểm",
+    bossesCoins: "Xu",
     phoneNav: "Điện thoại",
     phoneTitle: "Chơi trên điện thoại",
     phoneIntro: "Trò chơi chạy trong trình duyệt của điện thoại và cài lên màn hình chính như một ứng dụng; không cần tải gì.",
@@ -880,3 +962,155 @@ void refreshMissions();
 setInterval(() => {
   if (!document.hidden) void refreshMissions();
 }, 5 * 60000);
+
+// ---------- world bosses (read from the server, /website/world-bosses) ----------
+
+interface BossTop { rank: number; name: string; damage: number; share: number }
+interface BossKill { bossId: string; nameEn: string; nameVi: string; endedAt: number; killed: boolean; lastHit?: string | null; fighters: number; top: BossTop[] }
+interface PublicBoss {
+  id: string; nameEn: string; nameVi: string; map: number; mapName?: string | null; schedule: "every" | "fixed"; everyHours: number;
+  times: string; days: string[]; nextSpawn?: number | null; despawnMinutes: number;
+  alive?: { x: number; y: number; spawnedAt: number; despawnAt: number; fighters: number } | null;
+  rewards: { top1: PublicReward; top2: PublicReward; top3: PublicReward; top10: PublicReward; participation: PublicReward; lastHit: PublicReward; participationMinimumPercent: number };
+  lastKill?: BossKill | null;
+}
+interface RankLine { rank: number; name: string; points: number; coins?: number; coinType?: string }
+interface PublicBosses {
+  off?: boolean; now: number; bosses: PublicBoss[];
+  announcements?: { at: number; phase: string; textEn: string; textVi: string }[];
+  week?: { ends: number; rankings: Record<string, RankLine[]>; castleSiegeGuild?: string | null };
+  prizes?: Record<string, { enabled: boolean; coinType: string; ranks: { rank: number; coins: number }[] }>;
+  castleSiege?: { enabled: boolean; coinType: string; coinsPerMember: number };
+  lastWeek?: { week: string; winners: Record<string, RankLine[]>; castleSiegeGuild?: string | null } | null;
+}
+let bosses: PublicBosses | null = null;
+let bossesSkew = 0;
+const RANKING_KEYS: [string, CopyKey][] = [["BossHunt", "bossesRankBossHunt"], ["BloodCastle", "bossesRankBloodCastle"], ["DevilSquare", "bossesRankDevilSquare"], ["ChaosCastle", "bossesRankChaosCastle"]];
+
+function bossName(boss: { nameEn: string; nameVi: string }): string {
+  return (language === "vi" ? boss.nameVi : boss.nameEn) || boss.nameEn;
+}
+
+/** "Sat 20:00" in Sydney or the visitor's own time zone. */
+function bossClock(at: number, timeZone?: string): string {
+  return new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hour12: false, ...(timeZone ? { timeZone } : {}) }).format(at);
+}
+
+function bossCountdown(at: number): string {
+  const seconds = Math.max(0, Math.round((at - (Date.now() + bossesSkew)) / 1000));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  return hours > 0 ? `${hours} h ${String(minutes).padStart(2, "0")} min` : `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+function dayName(day: string): string {
+  const index = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(day);
+  if (index < 0) return day;
+  // 2026-11-15 was a Sunday.
+  return new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { weekday: "short", timeZone: "UTC" }).format(Date.UTC(2026, 10, 15 + index));
+}
+
+function rankList(lines: RankLine[], withCoins: boolean): HTMLElement {
+  const list = document.createElement("ol");
+  if (!lines.length) return node("p", t("bossesNoEntries"), "muted");
+  const format = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  for (const line of lines) {
+    const coins = withCoins && line.coins ? ` · ${format(line.coins)} ${coinLabel(line.coinType ?? "GoblinPoints")}` : "";
+    list.append(node("li", `${line.name} — ${format(line.points)} ${t("bossesPoints").toLowerCase()}${coins}`));
+  }
+  return list;
+}
+
+function renderBosses(): void {
+  const data = bosses;
+  element("bosses-notice").textContent = data ? (data.off ? t("bossesOff") : "") : t("bossesOffline");
+  const list = clear("bosses-list");
+  if (data && !data.off && !data.bosses.length) list.append(node("p", t("bossesNone"), "muted"));
+  const format = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  for (const boss of data?.bosses ?? []) {
+    const card = node("article", "", boss.alive ? "boss alive" : "boss");
+    card.dataset.boss = boss.id;
+    card.append(node("h4", bossName(boss)));
+    card.append(node("p", `${t("bossesMap")}: ${boss.mapName ? localized(boss.mapName) : boss.map}`));
+    if (boss.alive) {
+      card.append(node("p", `${t("bossesAlive")} ${bossCountdown(boss.alive.despawnAt)} (${boss.alive.x}, ${boss.alive.y})`, "boss-when"));
+    } else if (boss.nextSpawn) {
+      const when = node("p", `${t("bossesNext")}: ${bossClock(boss.nextSpawn, "Australia/Sydney")} (Sydney) · ${t("bossesIn")} ${bossCountdown(boss.nextSpawn)}`, "boss-when");
+      when.dataset.next = String(boss.nextSpawn);
+      card.append(when);
+      card.append(node("p", `${t("bossesYourTime")}: ${bossClock(boss.nextSpawn)}`));
+    }
+    const schedule = boss.schedule === "every" ? `${t("bossesEvery").replace("%d", String(boss.everyHours))} ${boss.times.split(",")[0]}` : `${t(boss.days.length ? "bossesAt" : "bossesTimes")} ${boss.times}`;
+    card.append(node("p", boss.days.length ? `${schedule} · ${t("bossesDays")} ${boss.days.map(dayName).join(", ")}` : schedule));
+    const rewards = document.createElement("ul");
+    const tiers: [CopyKey, PublicReward][] = [["bossesRewardTop1", boss.rewards.top1], ["bossesRewardTop2", boss.rewards.top2], ["bossesRewardTop3", boss.rewards.top3], ["bossesRewardTop10", boss.rewards.top10], ["bossesRewardParticipation", boss.rewards.participation], ["bossesRewardLastHit", boss.rewards.lastHit]];
+    for (const [key, reward] of tiers) {
+      const line = rewardLine(reward);
+      if (line) rewards.append(node("li", `${t(key).replace("%s", String(boss.rewards.participationMinimumPercent))}: ${line}`));
+    }
+    card.append(rewards);
+    const kill = boss.lastKill;
+    if (kill) {
+      const head = kill.killed
+        ? `${t("bossesLastKill")}: ${bossClock(kill.endedAt, "Australia/Sydney")} (Sydney)${kill.lastHit ? ` · ${t("bossesLastHit")}: ${kill.lastHit}` : ""}`
+        : `${t("bossesLastKill")}: ${bossClock(kill.endedAt, "Australia/Sydney")} (Sydney) · ${t("bossesLeft")}`;
+      card.append(node("p", head));
+      const top = document.createElement("ol");
+      top.className = "boss-top";
+      for (const line of kill.top) top.append(node("li", `${line.name} — ${format(line.damage)} (${line.share}%)`));
+      if (kill.top.length) card.append(top);
+    }
+    list.append(card);
+  }
+
+  const news = clear("bosses-news");
+  for (const item of data?.announcements ?? []) news.append(node("li", `${bossClock(item.at, "Australia/Sydney")} — ${(language === "vi" ? item.textVi : item.textEn) || item.textEn}`));
+
+  element("bosses-week-ends").textContent = data?.week ? `${t("bossesWeekEnds")} ${bossCountdown(data.week.ends)}` : "";
+  for (const [target, rankings, withCoins] of [["bosses-week", data?.week?.rankings, false], ["bosses-last-week", data?.lastWeek?.winners, true]] as const) {
+    const box = clear(target);
+    if (!data || data.off) continue;
+    for (const [key, label] of RANKING_KEYS) {
+      const prize = data.prizes?.[key];
+      if (prize && !prize.enabled && !withCoins) continue;
+      const column = node("div", "", "boss-ranking");
+      column.dataset.ranking = key;
+      column.append(node("h4", t(label)));
+      column.append(rankList(rankings?.[key] ?? [], withCoins));
+      if (!withCoins && prize?.enabled && prize.ranks.length) {
+        column.append(node("p", `${t("bossesPrizes")}: ${prize.ranks.map((r) => `${r.rank}. ${format(r.coins)}`).join(", ")} ${coinLabel(prize.coinType)}`, "muted"));
+      }
+      box.append(column);
+    }
+  }
+  const siege: string[] = [];
+  if (data?.castleSiege?.enabled) siege.push(`${t("bossesCastleSiege")}: ${t("bossesCastleSiegeText").replace("%d", format(data.castleSiege.coinsPerMember))}`);
+  if (data?.week?.castleSiegeGuild) siege.push(`${t("bossesWeek")}: ${data.week.castleSiegeGuild}`);
+  if (data?.lastWeek?.castleSiegeGuild) siege.push(`${t("bossesLastWeek")}: ${data.lastWeek.castleSiegeGuild}`);
+  element("bosses-siege").textContent = siege.join(" · ");
+}
+
+async function refreshBosses(): Promise<void> {
+  try {
+    const response = await fetch("/website/world-bosses", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicBosses;
+    if (typeof data !== "object" || data === null || !Array.isArray(data.bosses)) throw new Error("Invalid world bosses");
+    bosses = data;
+    bossesSkew = typeof data.now === "number" ? data.now - Date.now() : 0;
+  } catch {
+    bosses = null;
+  }
+  renderBosses();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderBosses());
+element("refresh").addEventListener("click", () => void refreshBosses());
+void refreshBosses();
+setInterval(() => {
+  if (!document.hidden) void refreshBosses();
+}, 60000);
+// The countdowns.
+setInterval(() => {
+  if (!document.hidden && bosses) renderBosses();
+}, 1000);

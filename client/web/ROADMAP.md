@@ -167,12 +167,18 @@ the coins history shows every grant.
    Still to check on a server running this code: a whole day of play (the in-game browser test feeds the packets,
    the server rules are unit-tested); web players' addresses are the relay's, so the same-address check only
    works for desktop players.
-4. ⏳ **World bosses** (idea 5): a boss every N hours on a chosen map, announced in the game, on
-   Discord and on the website; rewards by damage dealt, a small reward for everyone who joined;
-   configured in the admin panel.
-   With it, **weekly ranking rewards** in coins: the top 10 of each event (Blood Castle, Devil
-   Square, Chaos Castle) and the castle siege's winning guild; boss coins only for players who did
-   damage. Bosses, drops and events give coins (the owner's choice).
+4. ✅ **World bosses** (idea 5), built 2026-11-15 (Sydney): bosses on a schedule (every N hours or fixed Sydney times,
+   days of the week) on a chosen map (spots or a random walkable spot of an area), announced before, at the spawn and at
+   the kill in the game, on Discord (when the bridge is set up) and on the website; damage per player or party; rewards
+   (zen, items, coins with a coin type) for rank 1, 2, 3, 4-10, everyone with at least X % (or X damage) and the last
+   hit; no damage, no reward; rewards that don't fit the bag wait, coins come at once. A spawn-now button and the recent
+   kills with damage tables in the admin panel (*World bosses and rankings*); a World bosses section on the website; a
+   line on the screen, chat notices and a window (N) in the web game. With it, the **weekly ranking rewards** in coins
+   (paid once per week with unique references): the top 10 of boss-hunt points, Blood Castle, Devil Square, Chaos
+   Castle (points for being in it at the end and for winning) and the castle siege's winning guild (coins per member,
+   extra for the master). State in `save/world-bosses.json` (no database change). Still to check on a server running
+   this code: a real kill with several players and a week's payout (the rules are unit-tested; the web parts are tested
+   with fed packets).
 5. ⏳ **Onboarding** (idea 3): a guided first half hour (talk to the NPCs, walk, fight, first potion,
    first skill, first party, first event) with a starter kit, shown in the web game; skippable.
 6. ⏳ **Guilds** (idea 6): guild levels from the members' play, small guild buffs, a weekly guild ladder,
@@ -196,6 +202,10 @@ section 12 (the cash shop) still waits for the owner's answers.
    boss-hunt points, PK kills, event wins, guild points, per class), each with its own prizes (coins, items),
    start/end dates and rules. Live tables and past winners on the website; a notice in the game when a race
    starts and ends. Boss-hunt points come from section 12's world bosses (points per boss, not by power).
+   Partly there (2026-11-15): the boss-hunt points (each boss's points shared by damage) and **weekly** races with
+   coin prizes for the top 10 of boss hunt, Blood Castle, Devil Square, Chaos Castle and the castle siege winners,
+   with this week's tables and last week's winners on the website. Still to do: daily and monthly races, the other
+   race kinds (resets, level, PK, guild points, per class), item prizes and start/end dates.
 2. ⏳ **Gift codes**: the admin creates codes (rewards, number of uses, one per account or per character,
    start/end, level/reset limits); players enter them on the website or in the game (/code).
 3. ⏳ **Reset system with options**: reset tiers (level needed, zen/coins cost, points kept or given, a

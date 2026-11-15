@@ -3219,4 +3219,265 @@
   <data name="MissionsErrorDays" xml:space="preserve">
     <value>Ngày của lịch không hợp lệ (ngày:xu, … với ngày từ 1 đến 31).</value>
   </data>
+  <data name="WorldBossesAndRankings" xml:space="preserve">
+    <value>Boss thế giới và xếp hạng</value>
+  </data>
+  <data name="WorldBossesPageDescription" xml:space="preserve">
+    <value>Boss thế giới theo lịch (giờ Sydney), thông báo, phần thưởng theo sát thương, điểm săn boss và xu xếp hạng tuần. Lưu là áp dụng ngay cho trò chơi đang chạy.</value>
+  </data>
+  <data name="WorldBossesNotInstalled" xml:space="preserve">
+    <value>Plug-in boss thế giới chưa có trong cấu hình trò chơi này; hãy chạy máy chủ trò chơi một lần.</value>
+  </data>
+  <data name="WorldBossesGeneral" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="WorldBossesActive" xml:space="preserve">
+    <value>Bật boss thế giới và xếp hạng tuần</value>
+  </data>
+  <data name="WorldBossesTimeZone" xml:space="preserve">
+    <value>Múi giờ</value>
+  </data>
+  <data name="WorldBossesAnnounceInGame" xml:space="preserve">
+    <value>Thông báo trong trò chơi (thông báo vàng)</value>
+  </data>
+  <data name="WorldBossesAnnounceOnDiscord" xml:space="preserve">
+    <value>Thông báo trên Discord (khi đã cài cầu nối Discord)</value>
+  </data>
+  <data name="WorldBossesFile" xml:space="preserve">
+    <value>Tệp trạng thái</value>
+  </data>
+  <data name="WorldBossesList" xml:space="preserve">
+    <value>Danh sách boss</value>
+  </data>
+  <data name="WorldBossesListHint" xml:space="preserve">
+    <value>Mỗi boss xuất hiện trên bản đồ vào giờ đã đặt (giờ Sydney), ở lại trong số phút đã đặt và thưởng theo sát thương. Văn bản có thể dùng {boss}, {map}, {minutes}, {x}, {y}, {killer} và {top}. Vật phẩm: "nhóm số cấp số_lượng; ...".</value>
+  </data>
+  <data name="WorldBossesAdd" xml:space="preserve">
+    <value>Thêm boss</value>
+  </data>
+  <data name="WorldBossesId" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="WorldBossesNameEn" xml:space="preserve">
+    <value>Tên (tiếng Anh)</value>
+  </data>
+  <data name="WorldBossesNameVi" xml:space="preserve">
+    <value>Tên (tiếng Việt)</value>
+  </data>
+  <data name="WorldBossesMonster" xml:space="preserve">
+    <value>Số quái vật</value>
+  </data>
+  <data name="WorldBossesMap" xml:space="preserve">
+    <value>Số bản đồ</value>
+  </data>
+  <data name="WorldBossesServer" xml:space="preserve">
+    <value>Máy chủ trò chơi (-1: máy đầu tiên)</value>
+  </data>
+  <data name="WorldBossesSpots" xml:space="preserve">
+    <value>Điểm xuất hiện "x,y; x,y" (trống: ngẫu nhiên trong vùng)</value>
+  </data>
+  <data name="WorldBossesArea" xml:space="preserve">
+    <value>Vùng x1 y1 x2 y2</value>
+  </data>
+  <data name="WorldBossesSchedule" xml:space="preserve">
+    <value>Lịch</value>
+  </data>
+  <data name="WorldBossesEveryHours" xml:space="preserve">
+    <value>Mỗi N giờ</value>
+  </data>
+  <data name="WorldBossesFixedTimes" xml:space="preserve">
+    <value>Giờ cố định</value>
+  </data>
+  <data name="WorldBossesHours" xml:space="preserve">
+    <value>Số giờ</value>
+  </data>
+  <data name="WorldBossesStartTime" xml:space="preserve">
+    <value>Giờ đầu tiên (HH:mm)</value>
+  </data>
+  <data name="WorldBossesTimes" xml:space="preserve">
+    <value>Các giờ "HH:mm, HH:mm"</value>
+  </data>
+  <data name="WorldBossesDays" xml:space="preserve">
+    <value>Ngày (không chọn: mỗi ngày)</value>
+  </data>
+  <data name="WorldBossesAnnounceBefore" xml:space="preserve">
+    <value>Thông báo trước (phút)</value>
+  </data>
+  <data name="WorldBossesDespawn" xml:space="preserve">
+    <value>Rời đi sau (phút)</value>
+  </data>
+  <data name="WorldBossesRankBy" xml:space="preserve">
+    <value>Xếp hạng theo</value>
+  </data>
+  <data name="WorldBossesRankByPlayer" xml:space="preserve">
+    <value>Người chơi</value>
+  </data>
+  <data name="WorldBossesRankByParty" xml:space="preserve">
+    <value>Tổ đội</value>
+  </data>
+  <data name="WorldBossesHuntPoints" xml:space="preserve">
+    <value>Điểm săn boss mỗi lần hạ</value>
+  </data>
+  <data name="WorldBossesTexts" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="WorldBossesSoon" xml:space="preserve">
+    <value>Trước khi xuất hiện</value>
+  </data>
+  <data name="WorldBossesSpawn" xml:space="preserve">
+    <value>Khi xuất hiện</value>
+  </data>
+  <data name="WorldBossesKill" xml:space="preserve">
+    <value>Khi bị hạ</value>
+  </data>
+  <data name="WorldBossesEscape" xml:space="preserve">
+    <value>Khi rời đi</value>
+  </data>
+  <data name="WorldBossesRewards" xml:space="preserve">
+    <value>Phần thưởng theo sát thương (người không gây sát thương không nhận gì)</value>
+  </data>
+  <data name="WorldBossesTop1" xml:space="preserve">
+    <value>Hạng 1</value>
+  </data>
+  <data name="WorldBossesTop2" xml:space="preserve">
+    <value>Hạng 2</value>
+  </data>
+  <data name="WorldBossesTop3" xml:space="preserve">
+    <value>Hạng 3</value>
+  </data>
+  <data name="WorldBossesTop10" xml:space="preserve">
+    <value>Hạng 4 đến 10</value>
+  </data>
+  <data name="WorldBossesParticipation" xml:space="preserve">
+    <value>Tham gia</value>
+  </data>
+  <data name="WorldBossesLastHit" xml:space="preserve">
+    <value>Đòn cuối</value>
+  </data>
+  <data name="WorldBossesMinPercent" xml:space="preserve">
+    <value>Tham gia: ít nhất % tổng sát thương</value>
+  </data>
+  <data name="WorldBossesMinDamage" xml:space="preserve">
+    <value>hoặc ít nhất sát thương này (0: tắt)</value>
+  </data>
+  <data name="WorldBossesTopAlso" xml:space="preserve">
+    <value>Top 10 cũng nhận thưởng tham gia</value>
+  </data>
+  <data name="WorldBossesNext" xml:space="preserve">
+    <value>Lần xuất hiện tiếp theo</value>
+  </data>
+  <data name="WorldBossesAliveNow" xml:space="preserve">
+    <value>Đang ở trên bản đồ, rời đi lúc {0}</value>
+  </data>
+  <data name="WorldBossesSpawnNow" xml:space="preserve">
+    <value>Cho xuất hiện ngay</value>
+  </data>
+  <data name="WorldBossesSpawnNowHint" xml:space="preserve">
+    <value>Cho boss xuất hiện với cài đặt đã lưu (hãy lưu thay đổi trước).</value>
+  </data>
+  <data name="WorldBossesSpawned" xml:space="preserve">
+    <value>{0} đã xuất hiện.</value>
+  </data>
+  <data name="WorldBossesSpawnAlive" xml:space="preserve">
+    <value>{0} đã ở trên bản đồ rồi.</value>
+  </data>
+  <data name="WorldBossesSpawnNoServer" xml:space="preserve">
+    <value>Không có máy chủ trò chơi nào đang chạy giữ {0} (hoặc plug-in đang tắt, hoặc boss chưa được lưu).</value>
+  </data>
+  <data name="WorldBossesSpawnFailed" xml:space="preserve">
+    <value>{0} không xuất hiện được: hãy kiểm tra số quái vật và số bản đồ (xem nhật ký).</value>
+  </data>
+  <data name="WorldBossesRankings" xml:space="preserve">
+    <value>Xếp hạng tuần</value>
+  </data>
+  <data name="WorldBossesRankingsHint" xml:space="preserve">
+    <value>Một tuần tính từ 00:00 thứ Hai (giờ Sydney) đến Chủ nhật. Khi tuần kết thúc, top 10 mỗi bảng nhận xu một lần (mỗi lần trả có mã riêng nên không bao giờ trả hai lần). Hạng: "hạng:xu, ..." cho hạng 1 đến 10.</value>
+  </data>
+  <data name="WorldBossesBossHunt" xml:space="preserve">
+    <value>Săn boss (điểm từ việc hạ boss thế giới)</value>
+  </data>
+  <data name="WorldBossesBloodCastle" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="WorldBossesDevilSquare" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="WorldBossesChaosCastle" xml:space="preserve">
+    <value>Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="WorldBossesRanks" xml:space="preserve">
+    <value>Xu theo hạng</value>
+  </data>
+  <data name="WorldBossesPointsFinish" xml:space="preserve">
+    <value>Điểm khi ở lại đến cuối</value>
+  </data>
+  <data name="WorldBossesPointsWin" xml:space="preserve">
+    <value>Điểm khi chiến thắng</value>
+  </data>
+  <data name="WorldBossesCastleSiege" xml:space="preserve">
+    <value>Đội thắng công thành</value>
+  </data>
+  <data name="WorldBossesCoinsPerMember" xml:space="preserve">
+    <value>Xu cho mỗi thành viên bang thắng</value>
+  </data>
+  <data name="WorldBossesMasterBonus" xml:space="preserve">
+    <value>Xu thêm cho bang chủ</value>
+  </data>
+  <data name="WorldBossesKills" xml:space="preserve">
+    <value>Các lần hạ gần đây</value>
+  </data>
+  <data name="WorldBossesNoKills" xml:space="preserve">
+    <value>Chưa có boss thế giới nào bị hạ.</value>
+  </data>
+  <data name="WorldBossesKilled" xml:space="preserve">
+    <value>bị hạ</value>
+  </data>
+  <data name="WorldBossesEscaped" xml:space="preserve">
+    <value>đã rời đi</value>
+  </data>
+  <data name="WorldBossesRank" xml:space="preserve">
+    <value>Hạng</value>
+  </data>
+  <data name="WorldBossesCharacter" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="WorldBossesDamage" xml:space="preserve">
+    <value>Sát thương</value>
+  </data>
+  <data name="WorldBossesShare" xml:space="preserve">
+    <value>Tỷ lệ</value>
+  </data>
+  <data name="WorldBossesPoints" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="WorldBossesTiers" xml:space="preserve">
+    <value>Phần thưởng</value>
+  </data>
+  <data name="WorldBossesSaved" xml:space="preserve">
+    <value>Đã lưu boss thế giới.</value>
+  </data>
+  <data name="WorldBossesErrorId" xml:space="preserve">
+    <value>Mã boss "{0}" không hợp lệ (chữ, số, - và _, tối đa 40).</value>
+  </data>
+  <data name="WorldBossesErrorDuplicateId" xml:space="preserve">
+    <value>Mã boss "{0}" bị dùng hai lần.</value>
+  </data>
+  <data name="WorldBossesErrorTimes" xml:space="preserve">
+    <value>Giờ của "{0}" không hợp lệ (HH:mm, HH:mm).</value>
+  </data>
+  <data name="WorldBossesErrorSpots" xml:space="preserve">
+    <value>Điểm xuất hiện của "{0}" không hợp lệ (x,y; x,y từ 0 đến 255).</value>
+  </data>
+  <data name="WorldBossesErrorItems" xml:space="preserve">
+    <value>Vật phẩm thưởng của "{0}" không hợp lệ (nhóm số cấp số_lượng; ...).</value>
+  </data>
+  <data name="WorldBossesErrorRanks" xml:space="preserve">
+    <value>Xu theo hạng của "{0}" không hợp lệ (hạng:xu, ... với hạng 1 đến 10).</value>
+  </data>
+  <data name="WorldBossesReload" xml:space="preserve">
+    <value>Tải lại</value>
+  </data>
+  <data name="WorldBossesRemove" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
 </root>

@@ -12744,6 +12744,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>0C</SubCode>
+      <Name>HnmoWorldBossesState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requested HNMO's world bosses (HnmoWorldBossesRequest) or did an action there, and when something changed for a client which requested them before (a boss was announced, appeared, was hit, killed or left; rewards were given).</SentWhen>
+      <CausedReaction>The world boss window and the line on the screen show the state; a notice in the chat tells about the event in it (e.g. an announcement or a reward).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The state as JSON, in plain ASCII (other characters are escaped): the bosses with their next spawn, the alive ones with their time left and damage table, the player's damage and rank, the waiting rewards, the boss-hunt points, and the event which caused it, if any.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>

@@ -63,6 +63,8 @@ public sealed class DiscordMessageFormatter
         this._getGuildName = getGuildName;
     }
 
+    private bool IsVietnamese => this._culture.TwoLetterISOLanguageName == "vi";
+
     /// <summary>
     /// Formats the game event as Discord message.
     /// </summary>
@@ -114,6 +116,11 @@ public sealed class DiscordMessageFormatter
                     this.Translate(e.CharacterClassName),
                     e.Level),
                 MilestoneColor)),
+            WorldBossAnnouncedEvent e => (DiscordChannelCategory.Events, this.CreateEmbed(
+                e,
+                Escape(this.IsVietnamese ? e.BossNameVi : e.BossNameEn),
+                Escape(this.IsVietnamese ? e.TextVi : e.TextEn) + (e.Phase is "soon" ? $" ({RelativeTime(e.AtUtc)})" : string.Empty),
+                e.Phase is "kill" ? BossKillColor : EventColor)),
             GlobalNoticeEvent e => (DiscordChannelCategory.Notices, this.CreateEmbed(
                 e,
                 this.Format(nameof(Resources.GlobalNotice_Title)),

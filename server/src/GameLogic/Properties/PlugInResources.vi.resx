@@ -2295,4 +2295,10 @@
   <data name="MissionsPlugIn_Description" xml:space="preserve">
     <value>Nhiệm vụ hằng ngày và hằng tuần (hạ quái, sự kiện, pha chế ở máy Chaos, Zen, cấp độ, phút trực tuyến) với phần thưởng người chơi nhận trong cửa sổ nhiệm vụ của trò chơi web (J), chuỗi ngày liên tục có thưởng thêm, và xu kiếm được: thời gian trực tuyến, mốc cấp độ và reset, mời bạn và lịch đăng nhập hằng tháng, có giới hạn mỗi ngày cho mỗi tài khoản. Chỉnh sửa ở trang Nhiệm vụ và phần thưởng (menu trò chơi). Tiến độ được lưu trong một tệp ở thư mục save.</value>
   </data>
+  <data name="WorldBossesPlugIn_Name" xml:space="preserve">
+    <value>HNMO: boss thế giới và bảng xếp hạng tuần</value>
+  </data>
+  <data name="WorldBossesPlugIn_Description" xml:space="preserve">
+    <value>Boss thế giới theo lịch, được thông báo trong trò chơi, trên Discord và trên trang web, thưởng theo sát thương, điểm săn boss và xu xếp hạng tuần (săn boss, Huyết Lâu, Quảng Trường Quỷ, Hỗn Nguyên Lâu, công thành). Cài đặt ở trang "Boss thế giới và xếp hạng".</value>
+  </data>
 </root>

@@ -2789,4 +2789,22 @@
   <data name="HnmoMissionsActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Handles the buttons of the missions window: claiming rewards, the streak bonus, the login calendar day and entering an invite code.</value>
   </data>
+  <data name="HnmoWorldBossesViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO world bosses view</value>
+  </data>
+  <data name="HnmoWorldBossesViewPlugIn_Description" xml:space="preserve">
+    <value>Sends the state of the world bosses (announcements, time left, damage ranks, rewards) to the web game.</value>
+  </data>
+  <data name="HnmoWorldBossesRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO world bosses request</value>
+  </data>
+  <data name="HnmoWorldBossesRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Answers the web game when it asks for the world bosses.</value>
+  </data>
+  <data name="HnmoWorldBossesActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO world bosses action</value>
+  </data>
+  <data name="HnmoWorldBossesActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the buttons of the world boss window: taking the rewards which waited for room in the bag.</value>
+  </data>
 </root>

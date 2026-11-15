@@ -4424,6 +4424,55 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>0B</SubCode>
+      <Name>HnmoWorldBossesRequest</Name>
+      <Caption>Request HNMO world bosses</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world, or the player opens HNMO's world boss window.</SentWhen>
+      <CausedReaction>The server sends the HnmoWorldBossesState message, and from then on sends it again when something changes, e.g. a boss is announced, appears, is hit or killed.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>0D</SubCode>
+      <Name>HnmoWorldBossesAction</Name>
+      <Caption>HNMO world bosses action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's world boss window, e.g. to take the rewards which waited for room in the bag.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoWorldBossesState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoWorldBossesActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>Not used yet; empty.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoWorldBossesActionType</Name>
+          <Description>The action of the world boss window.</Description>
+          <Values>
+            <EnumValue>
+              <Name>ClaimRewards</Name>
+              <Description>Take the world boss rewards which wait for room in the bag.</Description>
+              <Value>1</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

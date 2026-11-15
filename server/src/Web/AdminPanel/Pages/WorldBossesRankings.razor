@@ -1,0 +1,250 @@
+@page "/world-bosses-rankings"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.WorldBosses
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+@using HNMO.Web.AdminPanel.Components.Missions
+
+<PageTitle>HNMO: @Resources.WorldBossesAndRankings</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.WorldBossesAndRankings" />
+<h1>@Resources.WorldBossesAndRankings</h1>
+<p class="text-muted">@Resources.WorldBossesPageDescription</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@Resources.WorldBossesNotInstalled</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="wb-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.WorldBossesGeneral</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="wb-active" @bind="this._isActive" />
+                <label class="form-check-label" for="wb-active">@Resources.WorldBossesActive</label>
+            </div>
+            <div class="row g-2 align-items-end">
+                <div class="col-sm-3">
+                    <label class="form-label" for="wb-tz">@Resources.WorldBossesTimeZone</label>
+                    <input class="form-control" id="wb-tz" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-5">
+                    <label class="form-label" for="wb-file">@Resources.WorldBossesFile</label>
+                    <input class="form-control" id="wb-file" @bind="c.FileName" />
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-check"><input class="form-check-input" type="checkbox" id="wb-ingame" @bind="c.AnnounceInGame" /><label class="form-check-label" for="wb-ingame">@Resources.WorldBossesAnnounceInGame</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" id="wb-discord" @bind="c.AnnounceOnDiscord" /><label class="form-check-label" for="wb-discord">@Resources.WorldBossesAnnounceOnDiscord</label></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="h4 mt-4">@Resources.WorldBossesList</h2>
+    <p class="text-muted">@Resources.WorldBossesListHint</p>
+    <div id="wb-bosses">
+    @for (var index = 0; index < this._rows.Count; index++)
+    {
+        var row = this._rows[index];
+        var b = row.Boss;
+        var p = $"wb-{index}";
+        <section class="card mb-3 wb-boss" data-boss="@b.Id">
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                    <div class="form-check form-switch me-2">
+                        <input class="form-check-input" type="checkbox" id="@($"{p}-on")" @bind="b.Enabled" />
+                        <label class="form-check-label" for="@($"{p}-on")">@Resources.MissionsOn</label>
+                    </div>
+                    <h3 class="h6 mb-0 flex-grow-1">@(string.IsNullOrWhiteSpace(b.NameEn) ? b.Id : b.NameEn)</h3>
+                    <span class="text-muted small wb-next">@Resources.WorldBossesNext: @this.NextSpawnText(b)</span>
+                    <button type="button" class="btn btn-sm btn-outline-success wb-spawn" title="@Resources.WorldBossesSpawnNowHint" @onclick="() => this.SpawnNowAsync(b)">@Resources.WorldBossesSpawnNow</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveBoss(row)">@Resources.WorldBossesRemove</button>
+                </div>
+                <div class="row g-2">
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-id")">@Resources.WorldBossesId</label><input class="form-control form-control-sm wb-id" id="@($"{p}-id")" @bind="b.Id" /></div>
+                    <div class="col-sm-3"><label class="form-label" for="@($"{p}-en")">@Resources.WorldBossesNameEn</label><input class="form-control form-control-sm" id="@($"{p}-en")" @bind="b.NameEn" /></div>
+                    <div class="col-sm-3"><label class="form-label" for="@($"{p}-vi")">@Resources.WorldBossesNameVi</label><input class="form-control form-control-sm" id="@($"{p}-vi")" @bind="b.NameVi" /></div>
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-monster")">@Resources.WorldBossesMonster</label><input class="form-control form-control-sm" type="number" min="0" id="@($"{p}-monster")" @bind="b.MonsterNumber" /></div>
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-map")">@Resources.WorldBossesMap</label><input class="form-control form-control-sm" type="number" min="0" max="255" id="@($"{p}-map")" @bind="b.MapNumber" /></div>
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-server")">@Resources.WorldBossesServer</label><input class="form-control form-control-sm" type="number" min="-1" id="@($"{p}-server")" @bind="b.GameServerId" /></div>
+                    <div class="col-sm-4"><label class="form-label" for="@($"{p}-spots")">@Resources.WorldBossesSpots</label><input class="form-control form-control-sm" id="@($"{p}-spots")" @bind="b.SpawnSpots" /></div>
+                    <div class="col-sm-6">
+                        <label class="form-label">@Resources.WorldBossesArea</label>
+                        <div class="d-flex gap-1">
+                            <input class="form-control form-control-sm" type="number" min="0" max="255" @bind="b.AreaX1" aria-label="x1" />
+                            <input class="form-control form-control-sm" type="number" min="0" max="255" @bind="b.AreaY1" aria-label="y1" />
+                            <input class="form-control form-control-sm" type="number" min="0" max="255" @bind="b.AreaX2" aria-label="x2" />
+                            <input class="form-control form-control-sm" type="number" min="0" max="255" @bind="b.AreaY2" aria-label="y2" />
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="h6 mt-3">@Resources.WorldBossesSchedule</h4>
+                <div class="row g-2 align-items-end">
+                    <div class="col-sm-2">
+                        <select class="form-select form-select-sm" id="@($"{p}-kind")" @bind="b.ScheduleKind" aria-label="@Resources.WorldBossesSchedule">
+                            <option value="@WorldBossScheduleKind.EveryHours">@Resources.WorldBossesEveryHours</option>
+                            <option value="@WorldBossScheduleKind.FixedTimes">@Resources.WorldBossesFixedTimes</option>
+                        </select>
+                    </div>
+                    @if (b.ScheduleKind == WorldBossScheduleKind.EveryHours)
+                    {
+                        <div class="col-sm-2"><label class="form-label" for="@($"{p}-every")">@Resources.WorldBossesHours</label><input class="form-control form-control-sm" type="number" min="1" max="24" id="@($"{p}-every")" @bind="b.EveryHours" /></div>
+                        <div class="col-sm-2"><label class="form-label" for="@($"{p}-start")">@Resources.WorldBossesStartTime</label><input class="form-control form-control-sm" id="@($"{p}-start")" @bind="b.StartTime" /></div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-4"><label class="form-label" for="@($"{p}-times")">@Resources.WorldBossesTimes</label><input class="form-control form-control-sm wb-times" id="@($"{p}-times")" @bind="b.FixedTimes" /></div>
+                    }
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-before")">@Resources.WorldBossesAnnounceBefore</label><input class="form-control form-control-sm" type="number" min="0" id="@($"{p}-before")" @bind="b.AnnounceMinutesBefore" /></div>
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-despawn")">@Resources.WorldBossesDespawn</label><input class="form-control form-control-sm" type="number" min="1" id="@($"{p}-despawn")" @bind="b.DespawnMinutes" /></div>
+                    <div class="col-12">
+                        <span class="form-label me-2">@Resources.WorldBossesDays</span>
+                        @foreach (var day in Week)
+                        {
+                            var dayId = $"{p}-day-{(int)day}";
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="@dayId" checked="@b.Days.Contains(day)" @onchange="e => this.ToggleDay(b, day, e.Value is true)" />
+                                <label class="form-check-label" for="@dayId">@DayCaption(day)</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <h4 class="h6 mt-3">@Resources.WorldBossesTexts</h4>
+                <div class="row g-2">
+                    <div class="col-md-6"><label class="form-label">@Resources.WorldBossesSoon</label><input class="form-control form-control-sm mb-1" @bind="b.SoonTextEn" placeholder="English" aria-label="@Resources.WorldBossesSoon" /><input class="form-control form-control-sm" @bind="b.SoonTextVi" placeholder="Tiếng Việt" aria-label="@Resources.WorldBossesSoon" /></div>
+                    <div class="col-md-6"><label class="form-label">@Resources.WorldBossesSpawn</label><input class="form-control form-control-sm mb-1" @bind="b.SpawnTextEn" placeholder="English" aria-label="@Resources.WorldBossesSpawn" /><input class="form-control form-control-sm" @bind="b.SpawnTextVi" placeholder="Tiếng Việt" aria-label="@Resources.WorldBossesSpawn" /></div>
+                    <div class="col-md-6"><label class="form-label">@Resources.WorldBossesKill</label><input class="form-control form-control-sm mb-1" @bind="b.KillTextEn" placeholder="English" aria-label="@Resources.WorldBossesKill" /><input class="form-control form-control-sm" @bind="b.KillTextVi" placeholder="Tiếng Việt" aria-label="@Resources.WorldBossesKill" /></div>
+                    <div class="col-md-6"><label class="form-label">@Resources.WorldBossesEscape</label><input class="form-control form-control-sm mb-1" @bind="b.EscapeTextEn" placeholder="English" aria-label="@Resources.WorldBossesEscape" /><input class="form-control form-control-sm" @bind="b.EscapeTextVi" placeholder="Tiếng Việt" aria-label="@Resources.WorldBossesEscape" /></div>
+                </div>
+
+                <h4 class="h6 mt-3">@Resources.WorldBossesRewards</h4>
+                <div class="row g-2 align-items-end mb-2">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="@($"{p}-rankby")">@Resources.WorldBossesRankBy</label>
+                        <select class="form-select form-select-sm" id="@($"{p}-rankby")" @bind="b.RankBy">
+                            <option value="@WorldBossRankBy.Player">@Resources.WorldBossesRankByPlayer</option>
+                            <option value="@WorldBossRankBy.Party">@Resources.WorldBossesRankByParty</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-points")">@Resources.WorldBossesHuntPoints</label><input class="form-control form-control-sm" type="number" min="0" id="@($"{p}-points")" @bind="b.HuntPoints" /></div>
+                    <div class="col-sm-3"><label class="form-label" for="@($"{p}-minpct")">@Resources.WorldBossesMinPercent</label><input class="form-control form-control-sm" type="number" min="0" max="100" step="0.1" id="@($"{p}-minpct")" @bind="b.ParticipationMinimumPercent" /></div>
+                    <div class="col-sm-2"><label class="form-label" for="@($"{p}-mindmg")">@Resources.WorldBossesMinDamage</label><input class="form-control form-control-sm" type="number" min="0" id="@($"{p}-mindmg")" @bind="b.ParticipationMinimumDamage" /></div>
+                    <div class="col-sm-3"><div class="form-check"><input class="form-check-input" type="checkbox" id="@($"{p}-topalso")" @bind="b.TopAlsoGetParticipation" /><label class="form-check-label" for="@($"{p}-topalso")">@Resources.WorldBossesTopAlso</label></div></div>
+                </div>
+                <table class="table table-sm align-middle mb-0">
+                    <tbody>
+                    @for (var t = 0; t < Tiers.Length; t++)
+                    {
+                        var tier = Tiers[t];
+                        <tr data-tier="@tier">
+                            <th scope="row" style="width: 10rem">@TierCaption(tier)</th>
+                            <td><RewardEditor Reward="@WorldBossEngine.RewardOf(b, tier)" Row="@row.Rewards[t]" /></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+    </div>
+    <button type="button" class="btn btn-outline-primary btn-sm mb-4" id="wb-add" @onclick="this.AddBoss">@Resources.WorldBossesAdd</button>
+
+    <h2 class="h4 mt-2">@Resources.WorldBossesRankings</h2>
+    <p class="text-muted">@Resources.WorldBossesRankingsHint</p>
+    <div class="row g-3 mb-3">
+        @foreach (var category in RankedCategories)
+        {
+            var ranking = c.Ranking(category)!;
+            var id = $"rank-{category.ToString().ToLowerInvariant()}";
+            <div class="col-lg-6">
+                <section class="card h-100"><div class="card-body">
+                    <h3 class="h6">@CategoryCaption(category)</h3>
+                    <SourceHeader @bind-Enabled="ranking.Enabled" @bind-CoinType="ranking.CoinType" Id="@id" />
+                    <label class="form-label" for="@($"{id}-ranks")">@Resources.WorldBossesRanks</label>
+                    <input class="form-control" id="@($"{id}-ranks")" value="@this._ranks[category]" @onchange="e => this._ranks[category] = e.Value?.ToString() ?? string.Empty" />
+                    @if (category != WeeklyCategory.BossHunt)
+                    {
+                        <div class="row g-2 mt-1">
+                            <div class="col-6"><label class="form-label" for="@($"{id}-finish")">@Resources.WorldBossesPointsFinish</label><input class="form-control" type="number" min="0" id="@($"{id}-finish")" @bind="ranking.PointsFinish" /></div>
+                            <div class="col-6"><label class="form-label" for="@($"{id}-win")">@Resources.WorldBossesPointsWin</label><input class="form-control" type="number" min="0" id="@($"{id}-win")" @bind="ranking.PointsWin" /></div>
+                        </div>
+                    }
+                </div></section>
+            </div>
+        }
+        <div class="col-lg-6">
+            <section class="card h-100"><div class="card-body">
+                <h3 class="h6">@Resources.WorldBossesCastleSiege</h3>
+                <SourceHeader @bind-Enabled="c.CastleSiege.Enabled" @bind-CoinType="c.CastleSiege.CoinType" Id="rank-castlesiege" />
+                <div class="row g-2">
+                    <div class="col-6"><label class="form-label" for="rank-castlesiege-coins">@Resources.WorldBossesCoinsPerMember</label><input class="form-control" type="number" min="0" id="rank-castlesiege-coins" @bind="c.CastleSiege.CoinsPerMember" /></div>
+                    <div class="col-6"><label class="form-label" for="rank-castlesiege-master">@Resources.WorldBossesMasterBonus</label><input class="form-control" type="number" min="0" id="rank-castlesiege-master" @bind="c.CastleSiege.GuildMasterBonus" /></div>
+                </div>
+            </div></section>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-4">
+        <button type="button" class="btn btn-primary" id="wb-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.WorldBossesReload</button>
+    </div>
+
+    <h2 class="h4">@Resources.WorldBossesKills</h2>
+    <div id="wb-kills" class="mb-5">
+        @if (this._kills.Count == 0)
+        {
+            <p class="text-muted">@Resources.WorldBossesNoKills</p>
+        }
+        @foreach (var kill in this._kills)
+        {
+            <details class="card mb-2 wb-kill" open="@(kill == this._kills[0])">
+                <summary class="card-header">
+                    <strong>@(string.IsNullOrWhiteSpace(kill.NameEn) ? kill.BossId : kill.NameEn)</strong>
+                    — @(kill.Killed ? Resources.WorldBossesKilled : Resources.WorldBossesEscaped) @this.SydneyTime(kill.EndedAtUtc)
+                    @if (kill.LastHit is { } lastHit)
+                    {
+                        <span> · @Resources.WorldBossesLastHit: @lastHit</span>
+                    }
+                </summary>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>@Resources.WorldBossesRank</th><th>@Resources.WorldBossesCharacter</th><th class="text-end">@Resources.WorldBossesDamage</th><th class="text-end">@Resources.WorldBossesShare</th><th class="text-end">@Resources.WorldBossesPoints</th><th>@Resources.WorldBossesTiers</th></tr></thead>
+                        <tbody>
+                        @foreach (var line in kill.Lines)
+                        {
+                            <tr>
+                                <td>@line.Rank</td>
+                                <td>@line.Name@(line.Party is { } party ? $" ({party})" : string.Empty)</td>
+                                <td class="text-end">@line.Damage.ToString("N0")</td>
+                                <td class="text-end">@line.Share.ToString("0.##")%</td>
+                                <td class="text-end">@line.Points</td>
+                                <td>@string.Join(", ", line.Tiers.Select(TierCaption))</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        }
+    </div>
+}

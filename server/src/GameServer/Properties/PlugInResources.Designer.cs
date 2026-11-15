@@ -8066,5 +8066,53 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoMissionsActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO world bosses view.
+        /// </summary>
+        public static string HnmoWorldBossesViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoWorldBossesViewPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Sends the state of the world bosses (announcements, time left, damage ranks, rewards) to the web gam.
+        /// </summary>
+        public static string HnmoWorldBossesViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoWorldBossesViewPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO world bosses request.
+        /// </summary>
+        public static string HnmoWorldBossesRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoWorldBossesRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Answers the web game when it asks for the world bosses..
+        /// </summary>
+        public static string HnmoWorldBossesRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoWorldBossesRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO world bosses action.
+        /// </summary>
+        public static string HnmoWorldBossesActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoWorldBossesActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the buttons of the world boss window: taking the rewards which waited for room in the bag..
+        /// </summary>
+        public static string HnmoWorldBossesActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoWorldBossesActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

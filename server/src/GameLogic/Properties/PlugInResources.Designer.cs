@@ -5790,5 +5790,21 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("MissionsPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: world bosses and weekly rankings.
+        /// </summary>
+        public static string WorldBossesPlugIn_Name {
+            get {
+                return ResourceManager.GetString("WorldBossesPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to World bosses on a schedule, announced in the game, on Discord and on the website, with rewards by da.
+        /// </summary>
+        public static string WorldBossesPlugIn_Description {
+            get {
+                return ResourceManager.GetString("WorldBossesPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }
