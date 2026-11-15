@@ -12702,5 +12702,689 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("TopRacesErrorRanks", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gift codes.
+        /// </summary>
+        public static string GiftCodesPage {
+            get {
+                return ResourceManager.GetString("GiftCodesPage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Codes players enter in the game (/code CODE or the gift code window) or on the website's account page. Coins go to the account at once; zen and items go to the character's bag and wait when it's full. Times are Sydney time. The codes are kept in the save folder's gift codes file and work at once..
+        /// </summary>
+        public static string GiftCodesPageDescription {
+            get {
+                return ResourceManager.GetString("GiftCodesPageDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The gift codes plug-in isn't registered yet: start the game server once..
+        /// </summary>
+        public static string GiftCodesNotInstalled {
+            get {
+                return ResourceManager.GetString("GiftCodesNotInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string GiftCodesSettings {
+            get {
+                return ResourceManager.GetString("GiftCodesSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gift codes are on.
+        /// </summary>
+        public static string GiftCodesActive {
+            get {
+                return ResourceManager.GetString("GiftCodesActive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Players can enter codes on the website's account page.
+        /// </summary>
+        public static string GiftCodesAllowWebsite {
+            get {
+                return ResourceManager.GetString("GiftCodesAllowWebsite", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The website's home page shows the codes marked public.
+        /// </summary>
+        public static string GiftCodesShowPublic {
+            get {
+                return ResourceManager.GetString("GiftCodesShowPublic", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong codes allowed.
+        /// </summary>
+        public static string GiftCodesWrongTries {
+            get {
+                return ResourceManager.GetString("GiftCodesWrongTries", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Per (minutes).
+        /// </summary>
+        public static string GiftCodesWrongTriesWindow {
+            get {
+                return ResourceManager.GetString("GiftCodesWrongTriesWindow", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Log lines kept.
+        /// </summary>
+        public static string GiftCodesLogKept {
+            get {
+                return ResourceManager.GetString("GiftCodesLogKept", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to File (codes, uses, log, waiting rewards).
+        /// </summary>
+        public static string GiftCodesFile {
+            get {
+                return ResourceManager.GetString("GiftCodesFile", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to An account which enters too many wrong codes waits until the oldest wrong try is older than the window (protection against guessing)..
+        /// </summary>
+        public static string GiftCodesSettingsHint {
+            get {
+                return ResourceManager.GetString("GiftCodesSettingsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The gift code settings were saved..
+        /// </summary>
+        public static string GiftCodesSaved {
+            get {
+                return ResourceManager.GetString("GiftCodesSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to New code.
+        /// </summary>
+        public static string GiftCodesNewCode {
+            get {
+                return ResourceManager.GetString("GiftCodesNewCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to New batch of single-use codes.
+        /// </summary>
+        public static string GiftCodesNewBatch {
+            get {
+                return ResourceManager.GetString("GiftCodesNewBatch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit {0}.
+        /// </summary>
+        public static string GiftCodesEditCode {
+            get {
+                return ResourceManager.GetString("GiftCodesEditCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string GiftCodesCode {
+            get {
+                return ResourceManager.GetString("GiftCodesCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Prefix.
+        /// </summary>
+        public static string GiftCodesPrefix {
+            get {
+                return ResourceManager.GetString("GiftCodesPrefix", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Number of codes.
+        /// </summary>
+        public static string GiftCodesBatchCount {
+            get {
+                return ResourceManager.GetString("GiftCodesBatchCount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Random letters.
+        /// </summary>
+        public static string GiftCodesBatchLength {
+            get {
+                return ResourceManager.GetString("GiftCodesBatchLength", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Note (shown with a public code).
+        /// </summary>
+        public static string GiftCodesNote {
+            get {
+                return ResourceManager.GetString("GiftCodesNote", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Public.
+        /// </summary>
+        public static string GiftCodesPublic {
+            get {
+                return ResourceManager.GetString("GiftCodesPublic", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reward.
+        /// </summary>
+        public static string GiftCodesReward {
+            get {
+                return ResourceManager.GetString("GiftCodesReward", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Group.
+        /// </summary>
+        public static string GiftCodesItemGroup {
+            get {
+                return ResourceManager.GetString("GiftCodesItemGroup", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Number.
+        /// </summary>
+        public static string GiftCodesItemNumber {
+            get {
+                return ResourceManager.GetString("GiftCodesItemNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string GiftCodesItemLevel {
+            get {
+                return ResourceManager.GetString("GiftCodesItemLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string GiftCodesItemCount {
+            get {
+                return ResourceManager.GetString("GiftCodesItemCount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Durability.
+        /// </summary>
+        public static string GiftCodesItemDurability {
+            get {
+                return ResourceManager.GetString("GiftCodesItemDurability", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Skill.
+        /// </summary>
+        public static string GiftCodesItemSkill {
+            get {
+                return ResourceManager.GetString("GiftCodesItemSkill", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Luck.
+        /// </summary>
+        public static string GiftCodesItemLuck {
+            get {
+                return ResourceManager.GetString("GiftCodesItemLuck", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Option.
+        /// </summary>
+        public static string GiftCodesItemOption {
+            get {
+                return ResourceManager.GetString("GiftCodesItemOption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Excellent bits.
+        /// </summary>
+        public static string GiftCodesItemExcellent {
+            get {
+                return ResourceManager.GetString("GiftCodesItemExcellent", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add an item.
+        /// </summary>
+        public static string GiftCodesAddItem {
+            get {
+                return ResourceManager.GetString("GiftCodesAddItem", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Items by group and number (e.g. 14 13 is a Jewel of Bless). Durability 0 is full (for potions the stack size). Options an item can't have are left out. Excellent bits: 1, 2, 4, 8, 16, 32 added up..
+        /// </summary>
+        public static string GiftCodesItemsHint {
+            get {
+                return ResourceManager.GetString("GiftCodesItemsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Rules.
+        /// </summary>
+        public static string GiftCodesRules {
+            get {
+                return ResourceManager.GetString("GiftCodesRules", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Uses in total (0 = no limit).
+        /// </summary>
+        public static string GiftCodesMaxUses {
+            get {
+                return ResourceManager.GetString("GiftCodesMaxUses", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Who can use it.
+        /// </summary>
+        public static string GiftCodesLimit {
+            get {
+                return ResourceManager.GetString("GiftCodesLimit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Once per account.
+        /// </summary>
+        public static string GiftCodesOncePerAccount {
+            get {
+                return ResourceManager.GetString("GiftCodesOncePerAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Once per character.
+        /// </summary>
+        public static string GiftCodesOncePerCharacter {
+            get {
+                return ResourceManager.GetString("GiftCodesOncePerCharacter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start (Sydney time, empty = now).
+        /// </summary>
+        public static string GiftCodesStart {
+            get {
+                return ResourceManager.GetString("GiftCodesStart", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to End (Sydney time, empty = never).
+        /// </summary>
+        public static string GiftCodesEnd {
+            get {
+                return ResourceManager.GetString("GiftCodesEnd", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Lowest level.
+        /// </summary>
+        public static string GiftCodesMinLevel {
+            get {
+                return ResourceManager.GetString("GiftCodesMinLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Highest level.
+        /// </summary>
+        public static string GiftCodesMaxLevel {
+            get {
+                return ResourceManager.GetString("GiftCodesMaxLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Fewest resets.
+        /// </summary>
+        public static string GiftCodesMinResets {
+            get {
+                return ResourceManager.GetString("GiftCodesMinResets", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Most resets.
+        /// </summary>
+        public static string GiftCodesMaxResets {
+            get {
+                return ResourceManager.GetString("GiftCodesMaxResets", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to 0 is no limit; most resets -1 is no limit (0 = characters which never reset). A batch's limits cover all its codes together. Dates: yyyy-MM-dd HH:mm..
+        /// </summary>
+        public static string GiftCodesRulesHint {
+            get {
+                return ResourceManager.GetString("GiftCodesRulesHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Classes (none = all):.
+        /// </summary>
+        public static string GiftCodesClasses {
+            get {
+                return ResourceManager.GetString("GiftCodesClasses", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Make the codes.
+        /// </summary>
+        public static string GiftCodesMakeBatch {
+            get {
+                return ResourceManager.GetString("GiftCodesMakeBatch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Codes.
+        /// </summary>
+        public static string GiftCodesCodes {
+            get {
+                return ResourceManager.GetString("GiftCodesCodes", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No gift codes yet..
+        /// </summary>
+        public static string GiftCodesNone {
+            get {
+                return ResourceManager.GetString("GiftCodesNone", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Uses.
+        /// </summary>
+        public static string GiftCodesUses {
+            get {
+                return ResourceManager.GetString("GiftCodesUses", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to When.
+        /// </summary>
+        public static string GiftCodesDates {
+            get {
+                return ResourceManager.GetString("GiftCodesDates", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Always.
+        /// </summary>
+        public static string GiftCodesAlways {
+            get {
+                return ResourceManager.GetString("GiftCodesAlways", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to level.
+        /// </summary>
+        public static string GiftCodesLevel {
+            get {
+                return ResourceManager.GetString("GiftCodesLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to resets.
+        /// </summary>
+        public static string GiftCodesResets {
+            get {
+                return ResourceManager.GetString("GiftCodesResets", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Really delete?.
+        /// </summary>
+        public static string GiftCodesReallyDelete {
+            get {
+                return ResourceManager.GetString("GiftCodesReallyDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Download {0}.
+        /// </summary>
+        public static string GiftCodesDownloadCsv {
+            get {
+                return ResourceManager.GetString("GiftCodesDownloadCsv", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The gift code {0} was saved..
+        /// </summary>
+        public static string GiftCodesCodeSaved {
+            get {
+                return ResourceManager.GetString("GiftCodesCodeSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Redemptions.
+        /// </summary>
+        public static string GiftCodesLog {
+            get {
+                return ResourceManager.GetString("GiftCodesLog", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Filter by code, account or character.
+        /// </summary>
+        public static string GiftCodesLogFilter {
+            get {
+                return ResourceManager.GetString("GiftCodesLogFilter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No code was entered yet..
+        /// </summary>
+        public static string GiftCodesNoLog {
+            get {
+                return ResourceManager.GetString("GiftCodesNoLog", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to When (Sydney).
+        /// </summary>
+        public static string GiftCodesWhen {
+            get {
+                return ResourceManager.GetString("GiftCodesWhen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string GiftCodesAccount {
+            get {
+                return ResourceManager.GetString("GiftCodesAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Character.
+        /// </summary>
+        public static string GiftCodesCharacter {
+            get {
+                return ResourceManager.GetString("GiftCodesCharacter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Where.
+        /// </summary>
+        public static string GiftCodesSource {
+            get {
+                return ResourceManager.GetString("GiftCodesSource", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Game.
+        /// </summary>
+        public static string GiftCodesSourceGame {
+            get {
+                return ResourceManager.GetString("GiftCodesSourceGame", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string GiftCodesSourceWebsite {
+            get {
+                return ResourceManager.GetString("GiftCodesSourceWebsite", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A code needs 3 to 32 letters A-Z, digits, '-' or '_'..
+        /// </summary>
+        public static string GiftCodesErrorCode {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The code {0} exists already..
+        /// </summary>
+        public static string GiftCodesErrorDuplicate {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorDuplicate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A prefix has at most 12 letters A-Z, digits, '-' or '_'..
+        /// </summary>
+        public static string GiftCodesErrorPrefix {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorPrefix", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A batch has 1 to {0} codes..
+        /// </summary>
+        public static string GiftCodesErrorCount {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorCount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The dates need the form yyyy-MM-dd HH:mm, and the end must be after the start..
+        /// </summary>
+        public static string GiftCodesErrorDates {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorDates", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The item {0} {1} has a value out of range..
+        /// </summary>
+        public static string GiftCodesErrorItem {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorItem", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The reward is empty: give coins, zen or an item..
+        /// </summary>
+        public static string GiftCodesErrorReward {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorReward", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A highest value is lower than the lowest one..
+        /// </summary>
+        public static string GiftCodesErrorLimits {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorLimits", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The code was deleted meanwhile..
+        /// </summary>
+        public static string GiftCodesErrorGone {
+            get {
+                return ResourceManager.GetString("GiftCodesErrorGone", resourceCulture);
+            }
+        }
     }
 }

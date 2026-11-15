@@ -1,0 +1,353 @@
+@page "/gift-codes"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.GiftCodes
+@using HNMO.GameLogic.PlugIns.TopRaces
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+<PageTitle>HNMO: @Resources.GiftCodesPage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.GiftCodesPage" />
+<h1>@Resources.GiftCodesPage</h1>
+<p class="text-muted">@Resources.GiftCodesPageDescription</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@Resources.GiftCodesNotInstalled</div>
+}
+else
+{
+    <section class="card mb-3" id="gift-codes-settings">
+        <div class="card-body">
+            <h2 class="h5">@Resources.GiftCodesSettings</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="gift-codes-active" @bind="this._isActive" />
+                <label class="form-check-label" for="gift-codes-active">@Resources.GiftCodesActive</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="gift-codes-website" @bind="c.AllowWebsite" />
+                <label class="form-check-label" for="gift-codes-website">@Resources.GiftCodesAllowWebsite</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="gift-codes-public" @bind="c.ShowPublicCodes" />
+                <label class="form-check-label" for="gift-codes-public">@Resources.GiftCodesShowPublic</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2">
+                    <label class="form-label" for="gift-codes-tries">@Resources.GiftCodesWrongTries</label>
+                    <input class="form-control" type="number" min="1" max="1000" id="gift-codes-tries" @bind="c.WrongTriesLimit" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="gift-codes-window">@Resources.GiftCodesWrongTriesWindow</label>
+                    <input class="form-control" type="number" min="1" max="10080" id="gift-codes-window" @bind="c.WrongTriesWindowMinutes" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="gift-codes-log">@Resources.GiftCodesLogKept</label>
+                    <input class="form-control" type="number" min="10" max="100000" id="gift-codes-log" @bind="c.LogKept" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="gift-codes-zone">@Resources.TopRacesTimeZone</label>
+                    <input class="form-control" id="gift-codes-zone" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="gift-codes-file">@Resources.GiftCodesFile</label>
+                    <input class="form-control" id="gift-codes-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <p class="form-text">@Resources.GiftCodesSettingsHint</p>
+            <button type="button" class="btn btn-primary" id="gift-codes-save-settings" disabled="@this._isSaving" @onclick="this.SaveSettingsAsync">@Resources.Save</button>
+        </div>
+    </section>
+
+    @if (this._csv is { } csv)
+    {
+        <div class="alert alert-success" role="status" id="gift-codes-csv">
+            <a class="btn btn-sm btn-success" href="@csv.Href" download="@csv.FileName" id="gift-codes-csv-link">@string.Format(Resources.GiftCodesDownloadCsv, csv.FileName)</a>
+            <button type="button" class="btn btn-sm btn-link" @onclick="() => this._csv = null">@Resources.Close</button>
+        </div>
+    }
+
+    @if (this._draft is { } draft)
+    {
+        var d = draft.Code;
+        <section class="card mb-3 border-primary" id="gift-code-editor">
+            <div class="card-body">
+                <h2 class="h5">@(draft.IsNew ? (draft.IsBatch ? Resources.GiftCodesNewBatch : Resources.GiftCodesNewCode) : string.Format(Resources.GiftCodesEditCode, d.DisplayCode))</h2>
+                @if (this._errors.Count > 0)
+                {
+                    <div class="alert alert-danger" role="alert" id="gift-codes-errors">
+                        <ul class="mb-0">
+                            @foreach (var error in this._errors)
+                            {
+                                <li>@error</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="row g-2">
+                    @if (!draft.IsBatch)
+                    {
+                        <div class="col-sm-3">
+                            <label class="form-label" for="gift-code-text">@Resources.GiftCodesCode</label>
+                            <input class="form-control" id="gift-code-text" maxlength="32" @bind="d.Code" />
+                        </div>
+                    }
+                    else if (draft.IsNew)
+                    {
+                        <div class="col-sm-2">
+                            <label class="form-label" for="gift-code-prefix">@Resources.GiftCodesPrefix</label>
+                            <input class="form-control" id="gift-code-prefix" maxlength="12" @bind="draft.Prefix" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label" for="gift-code-count">@Resources.GiftCodesBatchCount</label>
+                            <input class="form-control" type="number" min="1" max="@MaximumBatch" id="gift-code-count" @bind="draft.Count" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label" for="gift-code-length">@Resources.GiftCodesBatchLength</label>
+                            <input class="form-control" type="number" min="4" max="16" id="gift-code-length" @bind="draft.Length" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-3">
+                            <span class="form-label d-block">@Resources.GiftCodesCode</span>
+                            <span>@d.DisplayCode</span>
+                        </div>
+                    }
+                    <div class="col-sm-5">
+                        <label class="form-label" for="gift-code-note">@Resources.GiftCodesNote</label>
+                        <input class="form-control" id="gift-code-note" maxlength="120" @bind="d.Note" />
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-3 mt-2">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="gift-code-enabled" @bind="d.Enabled" />
+                        <label class="form-check-label" for="gift-code-enabled">@Resources.MissionsOn</label>
+                    </div>
+                    @if (!draft.IsBatch)
+                    {
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="gift-code-public" @bind="d.Public" />
+                            <label class="form-check-label" for="gift-code-public">@Resources.GiftCodesPublic</label>
+                        </div>
+                    }
+                </div>
+
+                <h3 class="h6 mt-3">@Resources.GiftCodesReward</h3>
+                <div class="row g-2">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-coins">@Resources.TopRacesCoins</label>
+                        <input class="form-control" type="number" min="0" id="gift-code-coins" @bind="d.Reward.Coins" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="gift-code-coin-type">@Resources.CashShopCoinType</label>
+                        <select class="form-select" id="gift-code-coin-type" @bind="d.Reward.CoinType">
+                            @foreach (var coinType in Enum.GetValues<CashShopCoinType>())
+                            {
+                                <option value="@coinType">@CashShopCoinCaption.Get(coinType)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-zen">@Resources.TopRacesZen</label>
+                        <input class="form-control" type="number" min="0" id="gift-code-zen" @bind="d.Reward.Zen" />
+                    </div>
+                </div>
+                <div class="table-responsive mt-2">
+                    <table class="table table-sm align-middle" id="gift-code-items">
+                        <thead>
+                        <tr>
+                            <th>@Resources.GiftCodesItemGroup</th>
+                            <th>@Resources.GiftCodesItemNumber</th>
+                            <th>@Resources.GiftCodesItemLevel</th>
+                            <th>@Resources.GiftCodesItemCount</th>
+                            <th>@Resources.GiftCodesItemDurability</th>
+                            <th>@Resources.GiftCodesItemSkill</th>
+                            <th>@Resources.GiftCodesItemLuck</th>
+                            <th>@Resources.GiftCodesItemOption</th>
+                            <th>@Resources.GiftCodesItemExcellent</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in d.Reward.Items)
+                        {
+                            <tr class="gift-code-item">
+                                <td><input class="form-control form-control-sm item-group" style="width: 4.5rem" type="number" min="0" max="15" @bind="item.Group" aria-label="@Resources.GiftCodesItemGroup" /></td>
+                                <td><input class="form-control form-control-sm item-number" style="width: 5rem" type="number" min="0" max="511" @bind="item.Number" aria-label="@Resources.GiftCodesItemNumber" /></td>
+                                <td><input class="form-control form-control-sm item-level" style="width: 4.5rem" type="number" min="0" max="15" @bind="item.Level" aria-label="@Resources.GiftCodesItemLevel" /></td>
+                                <td><input class="form-control form-control-sm item-count" style="width: 4.5rem" type="number" min="1" max="50" @bind="item.Count" aria-label="@Resources.GiftCodesItemCount" /></td>
+                                <td><input class="form-control form-control-sm item-durability" style="width: 4.5rem" type="number" min="0" max="255" @bind="item.Durability" aria-label="@Resources.GiftCodesItemDurability" /></td>
+                                <td><input class="form-check-input item-skill" type="checkbox" @bind="item.Skill" aria-label="@Resources.GiftCodesItemSkill" /></td>
+                                <td><input class="form-check-input item-luck" type="checkbox" @bind="item.Luck" aria-label="@Resources.GiftCodesItemLuck" /></td>
+                                <td><input class="form-control form-control-sm item-option" style="width: 4.5rem" type="number" min="0" max="7" @bind="item.OptionLevel" aria-label="@Resources.GiftCodesItemOption" /></td>
+                                <td><input class="form-control form-control-sm item-excellent" style="width: 4.5rem" type="number" min="0" max="63" @bind="item.ExcellentOptions" aria-label="@Resources.GiftCodesItemExcellent" /></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger item-remove" @onclick="() => d.Reward.Items.Remove(item)">@Resources.Remove</button></td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-outline-primary btn-sm" id="gift-code-add-item" @onclick="() => d.Reward.Items.Add(new GiftCodeItem { Group = 14, Number = 13, Count = 1 })">@Resources.GiftCodesAddItem</button>
+                <p class="form-text">@Resources.GiftCodesItemsHint</p>
+
+                <h3 class="h6 mt-3">@Resources.GiftCodesRules</h3>
+                <div class="row g-2">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-uses">@Resources.GiftCodesMaxUses</label>
+                        <input class="form-control" type="number" min="0" id="gift-code-uses" @bind="d.MaxUses" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="gift-code-limit">@Resources.GiftCodesLimit</label>
+                        <select class="form-select" id="gift-code-limit" @bind="d.Limit">
+                            <option value="@GiftCodeLimit.OncePerAccount">@Resources.GiftCodesOncePerAccount</option>
+                            <option value="@GiftCodeLimit.OncePerCharacter">@Resources.GiftCodesOncePerCharacter</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="gift-code-start">@Resources.GiftCodesStart</label>
+                        <input class="form-control" id="gift-code-start" placeholder="2026-12-24 18:00" @bind="d.Start" />
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="form-label" for="gift-code-end">@Resources.GiftCodesEnd</label>
+                        <input class="form-control" id="gift-code-end" placeholder="2027-01-01 00:00" @bind="d.End" />
+                    </div>
+                </div>
+                <div class="row g-2 mt-1">
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-min-level">@Resources.GiftCodesMinLevel</label>
+                        <input class="form-control" type="number" min="0" id="gift-code-min-level" @bind="d.MinLevel" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-max-level">@Resources.GiftCodesMaxLevel</label>
+                        <input class="form-control" type="number" min="0" id="gift-code-max-level" @bind="d.MaxLevel" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-min-resets">@Resources.GiftCodesMinResets</label>
+                        <input class="form-control" type="number" min="0" id="gift-code-min-resets" @bind="d.MinResets" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="form-label" for="gift-code-max-resets">@Resources.GiftCodesMaxResets</label>
+                        <input class="form-control" type="number" min="-1" id="gift-code-max-resets" @bind="d.MaxResets" />
+                    </div>
+                </div>
+                <p class="form-text">@Resources.GiftCodesRulesHint</p>
+                <div class="d-flex flex-wrap gap-3" id="gift-code-classes">
+                    <span>@Resources.GiftCodesClasses</span>
+                    @foreach (var cls in Enum.GetValues<TopRaceClass>())
+                    {
+                        var value = cls;
+                        <div class="form-check">
+                            <input class="form-check-input gift-code-class" type="checkbox" id="gift-code-class-@((int)value)" data-class="@value" checked="@d.Classes.Contains(value)" @onchange="e => this.ToggleClass(value, e.Value is true)" />
+                            <label class="form-check-label" for="gift-code-class-@((int)value)">@ClassCaption(value)</label>
+                        </div>
+                    }
+                </div>
+
+                <div class="mt-3 d-flex gap-2">
+                    <button type="button" class="btn btn-primary" id="gift-code-save" @onclick="this.SaveCode">@(draft.IsNew && draft.IsBatch ? Resources.GiftCodesMakeBatch : Resources.Save)</button>
+                    <button type="button" class="btn btn-outline-secondary" id="gift-code-cancel" @onclick="this.CancelEdit">@Resources.Cancel</button>
+                </div>
+            </div>
+        </section>
+    }
+    else
+    {
+        <div class="mb-3 d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary" id="gift-codes-new" @onclick="() => this.NewCode(false)">@Resources.GiftCodesNewCode</button>
+            <button type="button" class="btn btn-outline-primary" id="gift-codes-new-batch" @onclick="() => this.NewCode(true)">@Resources.GiftCodesNewBatch</button>
+        </div>
+    }
+
+    <section class="mb-3">
+        <h2 class="h5">@Resources.GiftCodesCodes</h2>
+        @{ var codes = this.Codes(); }
+        @if (codes.Count == 0)
+        {
+            <p class="text-muted" id="gift-codes-none">@Resources.GiftCodesNone</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="gift-codes-list">
+                    <thead>
+                    <tr>
+                        <th>@Resources.GiftCodesCode</th>
+                        <th>@Resources.GiftCodesNote</th>
+                        <th>@Resources.GiftCodesReward</th>
+                        <th>@Resources.GiftCodesUses</th>
+                        <th>@Resources.GiftCodesRules</th>
+                        <th>@Resources.GiftCodesDates</th>
+                        <th>@Resources.MissionsOn</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var code in codes)
+                    {
+                        var row = code;
+                        <tr class="gift-code-row" data-code="@(row.IsBatch ? row.BatchPrefix : row.Code)" data-id="@row.Id">
+                            <td><code>@row.DisplayCode</code>@if (row.Public) { <span class="badge bg-info ms-1">@Resources.GiftCodesPublic</span> }</td>
+                            <td>@row.Note</td>
+                            <td>@RewardText(row.Reward)</td>
+                            <td class="gift-code-uses">@this.UsesText(row)</td>
+                            <td>@this.LimitText(row)</td>
+                            <td>@this.DatesText(row)</td>
+                            <td><input class="form-check-input gift-code-enabled" type="checkbox" checked="@row.Enabled" @onchange="e => this.SetEnabled(row, e.Value is true)" aria-label="@Resources.MissionsOn" /></td>
+                            <td class="text-nowrap">
+                                <button type="button" class="btn btn-sm btn-outline-primary gift-code-edit" @onclick="() => this.Edit(row)">@Resources.Edit</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary gift-code-csv" @onclick="() => this.PrepareCsv(row)">CSV</button>
+                                <button type="button" class="btn btn-sm @(this._confirmDelete == row.Id ? "btn-danger" : "btn-outline-danger") gift-code-delete" @onclick="() => this.Delete(row)">@(this._confirmDelete == row.Id ? Resources.GiftCodesReallyDelete : Resources.Delete)</button>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section class="mb-3">
+        <h2 class="h5">@Resources.GiftCodesLog</h2>
+        <input class="form-control mb-2" style="max-width: 20rem" id="gift-codes-log-filter" placeholder="@Resources.GiftCodesLogFilter" @bind="this._logFilter" @bind:event="oninput" />
+        @{ var log = this.Log(); }
+        @if (log.Count == 0)
+        {
+            <p class="text-muted" id="gift-codes-no-log">@Resources.GiftCodesNoLog</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-sm" id="gift-codes-log">
+                    <thead>
+                    <tr>
+                        <th>@Resources.GiftCodesWhen</th>
+                        <th>@Resources.GiftCodesCode</th>
+                        <th>@Resources.GiftCodesAccount</th>
+                        <th>@Resources.GiftCodesCharacter</th>
+                        <th>@Resources.GiftCodesSource</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var entry in log)
+                    {
+                        <tr class="gift-code-log-row">
+                            <td>@this.Sydney(entry.AtUtc)</td>
+                            <td><code>@entry.Code</code></td>
+                            <td>@entry.Login</td>
+                            <td>@entry.CharacterName</td>
+                            <td>@(entry.Source == "website" ? Resources.GiftCodesSourceWebsite : Resources.GiftCodesSourceGame)</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+}

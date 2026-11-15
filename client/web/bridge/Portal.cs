@@ -47,6 +47,8 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
         app.MapGet("/website/settings", (Func<HttpContext, Task<IResult>>)portal.WebsiteSettingsAsync);
         app.MapPost("/portal/google", portal.GoogleAsync).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/gift-codes/characters", (Func<HttpContext, Task<IResult>>)(context => portal.GiftCodesAsync(context, "characters"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/gift-codes/redeem", (Func<HttpContext, Task<IResult>>)(context => portal.GiftCodesAsync(context, "redeem"))).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
@@ -316,6 +318,48 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         {
             logger.LogWarning("Google's token check failed: {Message}", error.Message);
             return null;
+        }
+    }
+
+    // Gift codes on the account page: the account's name and password are checked by the game server (with the key
+    // this computer keeps), which lists the characters or enters the code. Only the fields it needs are passed on.
+    private async Task<IResult> GiftCodesAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, string?>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, string?>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) => (body?.GetValueOrDefault(name) ?? string.Empty) is var value && value.Length <= maximum ? value : string.Empty;
+        object request = action == "redeem"
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40) }
+            : new { loginName = Field("loginName", 10), password = Field("password", 20) };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Gift codes on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
         }
     }
 }

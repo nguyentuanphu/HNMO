@@ -4347,4 +4347,232 @@
   <data name="TopRacesErrorRanks" xml:space="preserve">
     <value>Cuộc đua "{0}": hạng {1}-{2} bị trùng hoặc ngoài khoảng 1-100.</value>
   </data>
+  <data name="GiftCodesPage" xml:space="preserve">
+    <value>Gift code</value>
+  </data>
+  <data name="GiftCodesPageDescription" xml:space="preserve">
+    <value>Mã người chơi nhập trong game (/code MÃ hoặc cửa sổ Gift code) hoặc trên trang tài khoản của website. Coin vào tài khoản ngay; zen và vật phẩm vào túi đồ của nhân vật và chờ khi túi đầy. Thời gian theo giờ Sydney. Mã được lưu trong tệp gift code của thư mục save và có hiệu lực ngay.</value>
+  </data>
+  <data name="GiftCodesNotInstalled" xml:space="preserve">
+    <value>Plug-in gift code chưa được đăng ký: hãy khởi động máy chủ game một lần.</value>
+  </data>
+  <data name="GiftCodesSettings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+  <data name="GiftCodesActive" xml:space="preserve">
+    <value>Bật gift code</value>
+  </data>
+  <data name="GiftCodesAllowWebsite" xml:space="preserve">
+    <value>Người chơi có thể nhập mã trên trang tài khoản của website</value>
+  </data>
+  <data name="GiftCodesShowPublic" xml:space="preserve">
+    <value>Trang chủ website hiển thị các mã được đánh dấu công khai</value>
+  </data>
+  <data name="GiftCodesWrongTries" xml:space="preserve">
+    <value>Số lần nhập sai cho phép</value>
+  </data>
+  <data name="GiftCodesWrongTriesWindow" xml:space="preserve">
+    <value>Trong (phút)</value>
+  </data>
+  <data name="GiftCodesLogKept" xml:space="preserve">
+    <value>Số dòng nhật ký giữ lại</value>
+  </data>
+  <data name="GiftCodesFile" xml:space="preserve">
+    <value>Tệp (mã, lượt dùng, nhật ký, phần thưởng chờ)</value>
+  </data>
+  <data name="GiftCodesSettingsHint" xml:space="preserve">
+    <value>Tài khoản nhập sai quá nhiều lần phải chờ đến khi lần sai cũ nhất ra khỏi khoảng thời gian (chống dò mã).</value>
+  </data>
+  <data name="GiftCodesSaved" xml:space="preserve">
+    <value>Đã lưu cài đặt gift code.</value>
+  </data>
+  <data name="GiftCodesNewCode" xml:space="preserve">
+    <value>Mã mới</value>
+  </data>
+  <data name="GiftCodesNewBatch" xml:space="preserve">
+    <value>Lô mã mới (mỗi mã dùng một lần)</value>
+  </data>
+  <data name="GiftCodesEditCode" xml:space="preserve">
+    <value>Sửa {0}</value>
+  </data>
+  <data name="GiftCodesCode" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="GiftCodesPrefix" xml:space="preserve">
+    <value>Tiền tố</value>
+  </data>
+  <data name="GiftCodesBatchCount" xml:space="preserve">
+    <value>Số lượng mã</value>
+  </data>
+  <data name="GiftCodesBatchLength" xml:space="preserve">
+    <value>Số ký tự ngẫu nhiên</value>
+  </data>
+  <data name="GiftCodesNote" xml:space="preserve">
+    <value>Ghi chú (hiện cùng mã công khai)</value>
+  </data>
+  <data name="GiftCodesPublic" xml:space="preserve">
+    <value>Công khai</value>
+  </data>
+  <data name="GiftCodesReward" xml:space="preserve">
+    <value>Phần thưởng</value>
+  </data>
+  <data name="GiftCodesItemGroup" xml:space="preserve">
+    <value>Nhóm</value>
+  </data>
+  <data name="GiftCodesItemNumber" xml:space="preserve">
+    <value>Số</value>
+  </data>
+  <data name="GiftCodesItemLevel" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="GiftCodesItemCount" xml:space="preserve">
+    <value>Số lượng</value>
+  </data>
+  <data name="GiftCodesItemDurability" xml:space="preserve">
+    <value>Độ bền</value>
+  </data>
+  <data name="GiftCodesItemSkill" xml:space="preserve">
+    <value>Kỹ năng</value>
+  </data>
+  <data name="GiftCodesItemLuck" xml:space="preserve">
+    <value>May mắn</value>
+  </data>
+  <data name="GiftCodesItemOption" xml:space="preserve">
+    <value>Dòng phụ</value>
+  </data>
+  <data name="GiftCodesItemExcellent" xml:space="preserve">
+    <value>Bit hoàn hảo</value>
+  </data>
+  <data name="GiftCodesAddItem" xml:space="preserve">
+    <value>Thêm vật phẩm</value>
+  </data>
+  <data name="GiftCodesItemsHint" xml:space="preserve">
+    <value>Vật phẩm theo nhóm và số (ví dụ 14 13 là Ngọc Ước Nguyện). Độ bền 0 là đầy (với bình thuốc là số lượng trong chồng). Dòng mà vật phẩm không thể có sẽ bị bỏ qua. Bit hoàn hảo: cộng 1, 2, 4, 8, 16, 32.</value>
+  </data>
+  <data name="GiftCodesRules" xml:space="preserve">
+    <value>Điều kiện</value>
+  </data>
+  <data name="GiftCodesMaxUses" xml:space="preserve">
+    <value>Tổng lượt dùng (0 = không giới hạn)</value>
+  </data>
+  <data name="GiftCodesLimit" xml:space="preserve">
+    <value>Ai được dùng</value>
+  </data>
+  <data name="GiftCodesOncePerAccount" xml:space="preserve">
+    <value>Một lần mỗi tài khoản</value>
+  </data>
+  <data name="GiftCodesOncePerCharacter" xml:space="preserve">
+    <value>Một lần mỗi nhân vật</value>
+  </data>
+  <data name="GiftCodesStart" xml:space="preserve">
+    <value>Bắt đầu (giờ Sydney, để trống = ngay)</value>
+  </data>
+  <data name="GiftCodesEnd" xml:space="preserve">
+    <value>Kết thúc (giờ Sydney, để trống = không hết hạn)</value>
+  </data>
+  <data name="GiftCodesMinLevel" xml:space="preserve">
+    <value>Cấp thấp nhất</value>
+  </data>
+  <data name="GiftCodesMaxLevel" xml:space="preserve">
+    <value>Cấp cao nhất</value>
+  </data>
+  <data name="GiftCodesMinResets" xml:space="preserve">
+    <value>Reset ít nhất</value>
+  </data>
+  <data name="GiftCodesMaxResets" xml:space="preserve">
+    <value>Reset nhiều nhất</value>
+  </data>
+  <data name="GiftCodesRulesHint" xml:space="preserve">
+    <value>0 là không giới hạn; reset nhiều nhất -1 là không giới hạn (0 = nhân vật chưa reset). Giới hạn của một lô áp dụng chung cho mọi mã trong lô. Ngày: yyyy-MM-dd HH:mm.</value>
+  </data>
+  <data name="GiftCodesClasses" xml:space="preserve">
+    <value>Lớp nhân vật (không chọn = tất cả):</value>
+  </data>
+  <data name="GiftCodesMakeBatch" xml:space="preserve">
+    <value>Tạo mã</value>
+  </data>
+  <data name="GiftCodesCodes" xml:space="preserve">
+    <value>Danh sách mã</value>
+  </data>
+  <data name="GiftCodesNone" xml:space="preserve">
+    <value>Chưa có gift code nào.</value>
+  </data>
+  <data name="GiftCodesUses" xml:space="preserve">
+    <value>Đã dùng</value>
+  </data>
+  <data name="GiftCodesDates" xml:space="preserve">
+    <value>Thời gian</value>
+  </data>
+  <data name="GiftCodesAlways" xml:space="preserve">
+    <value>Luôn luôn</value>
+  </data>
+  <data name="GiftCodesLevel" xml:space="preserve">
+    <value>cấp</value>
+  </data>
+  <data name="GiftCodesResets" xml:space="preserve">
+    <value>reset</value>
+  </data>
+  <data name="GiftCodesReallyDelete" xml:space="preserve">
+    <value>Xóa thật?</value>
+  </data>
+  <data name="GiftCodesDownloadCsv" xml:space="preserve">
+    <value>Tải {0}</value>
+  </data>
+  <data name="GiftCodesCodeSaved" xml:space="preserve">
+    <value>Đã lưu gift code {0}.</value>
+  </data>
+  <data name="GiftCodesLog" xml:space="preserve">
+    <value>Lịch sử nhập mã</value>
+  </data>
+  <data name="GiftCodesLogFilter" xml:space="preserve">
+    <value>Lọc theo mã, tài khoản hoặc nhân vật</value>
+  </data>
+  <data name="GiftCodesNoLog" xml:space="preserve">
+    <value>Chưa có ai nhập mã.</value>
+  </data>
+  <data name="GiftCodesWhen" xml:space="preserve">
+    <value>Lúc (giờ Sydney)</value>
+  </data>
+  <data name="GiftCodesAccount" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="GiftCodesCharacter" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="GiftCodesSource" xml:space="preserve">
+    <value>Nơi nhập</value>
+  </data>
+  <data name="GiftCodesSourceGame" xml:space="preserve">
+    <value>Trong game</value>
+  </data>
+  <data name="GiftCodesSourceWebsite" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="GiftCodesErrorCode" xml:space="preserve">
+    <value>Mã cần 3 đến 32 ký tự gồm chữ A-Z, số, '-' hoặc '_'.</value>
+  </data>
+  <data name="GiftCodesErrorDuplicate" xml:space="preserve">
+    <value>Mã {0} đã tồn tại.</value>
+  </data>
+  <data name="GiftCodesErrorPrefix" xml:space="preserve">
+    <value>Tiền tố tối đa 12 ký tự gồm chữ A-Z, số, '-' hoặc '_'.</value>
+  </data>
+  <data name="GiftCodesErrorCount" xml:space="preserve">
+    <value>Một lô có từ 1 đến {0} mã.</value>
+  </data>
+  <data name="GiftCodesErrorDates" xml:space="preserve">
+    <value>Ngày cần dạng yyyy-MM-dd HH:mm và kết thúc phải sau bắt đầu.</value>
+  </data>
+  <data name="GiftCodesErrorItem" xml:space="preserve">
+    <value>Vật phẩm {0} {1} có giá trị ngoài phạm vi.</value>
+  </data>
+  <data name="GiftCodesErrorReward" xml:space="preserve">
+    <value>Phần thưởng trống: hãy thêm coin, zen hoặc vật phẩm.</value>
+  </data>
+  <data name="GiftCodesErrorLimits" xml:space="preserve">
+    <value>Giá trị cao nhất đang thấp hơn giá trị thấp nhất.</value>
+  </data>
+  <data name="GiftCodesErrorGone" xml:space="preserve">
+    <value>Mã đã bị xóa trong lúc sửa.</value>
+  </data>
 </root>

@@ -96,6 +96,7 @@ public partial class ConfigNavMenu
             new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
             new(Resources.CommunityPage, "community", "oi-chat"),
             new(Resources.TopRacesPage, "top-races", "oi-badge"),
+            new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
             new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),

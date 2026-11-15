@@ -4316,4 +4316,232 @@
   <data name="TopRacesErrorRanks" xml:space="preserve">
     <value>The race "{0}": the ranks {1}-{2} overlap or are outside 1-100.</value>
   </data>
+  <data name="GiftCodesPage" xml:space="preserve">
+    <value>Gift codes</value>
+  </data>
+  <data name="GiftCodesPageDescription" xml:space="preserve">
+    <value>Codes players enter in the game (/code CODE or the gift code window) or on the website's account page. Coins go to the account at once; zen and items go to the character's bag and wait when it's full. Times are Sydney time. The codes are kept in the save folder's gift codes file and work at once.</value>
+  </data>
+  <data name="GiftCodesNotInstalled" xml:space="preserve">
+    <value>The gift codes plug-in isn't registered yet: start the game server once.</value>
+  </data>
+  <data name="GiftCodesSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="GiftCodesActive" xml:space="preserve">
+    <value>Gift codes are on</value>
+  </data>
+  <data name="GiftCodesAllowWebsite" xml:space="preserve">
+    <value>Players can enter codes on the website's account page</value>
+  </data>
+  <data name="GiftCodesShowPublic" xml:space="preserve">
+    <value>The website's home page shows the codes marked public</value>
+  </data>
+  <data name="GiftCodesWrongTries" xml:space="preserve">
+    <value>Wrong codes allowed</value>
+  </data>
+  <data name="GiftCodesWrongTriesWindow" xml:space="preserve">
+    <value>Per (minutes)</value>
+  </data>
+  <data name="GiftCodesLogKept" xml:space="preserve">
+    <value>Log lines kept</value>
+  </data>
+  <data name="GiftCodesFile" xml:space="preserve">
+    <value>File (codes, uses, log, waiting rewards)</value>
+  </data>
+  <data name="GiftCodesSettingsHint" xml:space="preserve">
+    <value>An account which enters too many wrong codes waits until the oldest wrong try is older than the window (protection against guessing).</value>
+  </data>
+  <data name="GiftCodesSaved" xml:space="preserve">
+    <value>The gift code settings were saved.</value>
+  </data>
+  <data name="GiftCodesNewCode" xml:space="preserve">
+    <value>New code</value>
+  </data>
+  <data name="GiftCodesNewBatch" xml:space="preserve">
+    <value>New batch of single-use codes</value>
+  </data>
+  <data name="GiftCodesEditCode" xml:space="preserve">
+    <value>Edit {0}</value>
+  </data>
+  <data name="GiftCodesCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="GiftCodesPrefix" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="GiftCodesBatchCount" xml:space="preserve">
+    <value>Number of codes</value>
+  </data>
+  <data name="GiftCodesBatchLength" xml:space="preserve">
+    <value>Random letters</value>
+  </data>
+  <data name="GiftCodesNote" xml:space="preserve">
+    <value>Note (shown with a public code)</value>
+  </data>
+  <data name="GiftCodesPublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="GiftCodesReward" xml:space="preserve">
+    <value>Reward</value>
+  </data>
+  <data name="GiftCodesItemGroup" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="GiftCodesItemNumber" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="GiftCodesItemLevel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="GiftCodesItemCount" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="GiftCodesItemDurability" xml:space="preserve">
+    <value>Durability</value>
+  </data>
+  <data name="GiftCodesItemSkill" xml:space="preserve">
+    <value>Skill</value>
+  </data>
+  <data name="GiftCodesItemLuck" xml:space="preserve">
+    <value>Luck</value>
+  </data>
+  <data name="GiftCodesItemOption" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="GiftCodesItemExcellent" xml:space="preserve">
+    <value>Excellent bits</value>
+  </data>
+  <data name="GiftCodesAddItem" xml:space="preserve">
+    <value>Add an item</value>
+  </data>
+  <data name="GiftCodesItemsHint" xml:space="preserve">
+    <value>Items by group and number (e.g. 14 13 is a Jewel of Bless). Durability 0 is full (for potions the stack size). Options an item can't have are left out. Excellent bits: 1, 2, 4, 8, 16, 32 added up.</value>
+  </data>
+  <data name="GiftCodesRules" xml:space="preserve">
+    <value>Rules</value>
+  </data>
+  <data name="GiftCodesMaxUses" xml:space="preserve">
+    <value>Uses in total (0 = no limit)</value>
+  </data>
+  <data name="GiftCodesLimit" xml:space="preserve">
+    <value>Who can use it</value>
+  </data>
+  <data name="GiftCodesOncePerAccount" xml:space="preserve">
+    <value>Once per account</value>
+  </data>
+  <data name="GiftCodesOncePerCharacter" xml:space="preserve">
+    <value>Once per character</value>
+  </data>
+  <data name="GiftCodesStart" xml:space="preserve">
+    <value>Start (Sydney time, empty = now)</value>
+  </data>
+  <data name="GiftCodesEnd" xml:space="preserve">
+    <value>End (Sydney time, empty = never)</value>
+  </data>
+  <data name="GiftCodesMinLevel" xml:space="preserve">
+    <value>Lowest level</value>
+  </data>
+  <data name="GiftCodesMaxLevel" xml:space="preserve">
+    <value>Highest level</value>
+  </data>
+  <data name="GiftCodesMinResets" xml:space="preserve">
+    <value>Fewest resets</value>
+  </data>
+  <data name="GiftCodesMaxResets" xml:space="preserve">
+    <value>Most resets</value>
+  </data>
+  <data name="GiftCodesRulesHint" xml:space="preserve">
+    <value>0 is no limit; most resets -1 is no limit (0 = characters which never reset). A batch's limits cover all its codes together. Dates: yyyy-MM-dd HH:mm.</value>
+  </data>
+  <data name="GiftCodesClasses" xml:space="preserve">
+    <value>Classes (none = all):</value>
+  </data>
+  <data name="GiftCodesMakeBatch" xml:space="preserve">
+    <value>Make the codes</value>
+  </data>
+  <data name="GiftCodesCodes" xml:space="preserve">
+    <value>Codes</value>
+  </data>
+  <data name="GiftCodesNone" xml:space="preserve">
+    <value>No gift codes yet.</value>
+  </data>
+  <data name="GiftCodesUses" xml:space="preserve">
+    <value>Uses</value>
+  </data>
+  <data name="GiftCodesDates" xml:space="preserve">
+    <value>When</value>
+  </data>
+  <data name="GiftCodesAlways" xml:space="preserve">
+    <value>Always</value>
+  </data>
+  <data name="GiftCodesLevel" xml:space="preserve">
+    <value>level</value>
+  </data>
+  <data name="GiftCodesResets" xml:space="preserve">
+    <value>resets</value>
+  </data>
+  <data name="GiftCodesReallyDelete" xml:space="preserve">
+    <value>Really delete?</value>
+  </data>
+  <data name="GiftCodesDownloadCsv" xml:space="preserve">
+    <value>Download {0}</value>
+  </data>
+  <data name="GiftCodesCodeSaved" xml:space="preserve">
+    <value>The gift code {0} was saved.</value>
+  </data>
+  <data name="GiftCodesLog" xml:space="preserve">
+    <value>Redemptions</value>
+  </data>
+  <data name="GiftCodesLogFilter" xml:space="preserve">
+    <value>Filter by code, account or character</value>
+  </data>
+  <data name="GiftCodesNoLog" xml:space="preserve">
+    <value>No code was entered yet.</value>
+  </data>
+  <data name="GiftCodesWhen" xml:space="preserve">
+    <value>When (Sydney)</value>
+  </data>
+  <data name="GiftCodesAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="GiftCodesCharacter" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="GiftCodesSource" xml:space="preserve">
+    <value>Where</value>
+  </data>
+  <data name="GiftCodesSourceGame" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="GiftCodesSourceWebsite" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="GiftCodesErrorCode" xml:space="preserve">
+    <value>A code needs 3 to 32 letters A-Z, digits, '-' or '_'.</value>
+  </data>
+  <data name="GiftCodesErrorDuplicate" xml:space="preserve">
+    <value>The code {0} exists already.</value>
+  </data>
+  <data name="GiftCodesErrorPrefix" xml:space="preserve">
+    <value>A prefix has at most 12 letters A-Z, digits, '-' or '_'.</value>
+  </data>
+  <data name="GiftCodesErrorCount" xml:space="preserve">
+    <value>A batch has 1 to {0} codes.</value>
+  </data>
+  <data name="GiftCodesErrorDates" xml:space="preserve">
+    <value>The dates need the form yyyy-MM-dd HH:mm, and the end must be after the start.</value>
+  </data>
+  <data name="GiftCodesErrorItem" xml:space="preserve">
+    <value>The item {0} {1} has a value out of range.</value>
+  </data>
+  <data name="GiftCodesErrorReward" xml:space="preserve">
+    <value>The reward is empty: give coins, zen or an item.</value>
+  </data>
+  <data name="GiftCodesErrorLimits" xml:space="preserve">
+    <value>A highest value is lower than the lowest one.</value>
+  </data>
+  <data name="GiftCodesErrorGone" xml:space="preserve">
+    <value>The code was deleted meanwhile.</value>
+  </data>
 </root>
