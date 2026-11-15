@@ -169,3 +169,32 @@ test.describe('monster looks', () => {
     }
   });
 });
+
+// In the game against a running server (IN_GAME=1, account test2): the dungeon's skeletons come with the server's
+// monster packets and are drawn as above. Only looks are read; the hero moves to the dungeon and back to Lorencia.
+test('in the game: the dungeon skeletons are skeletons with their weapons', async ({ page }) => {
+  test.skip(!process.env.IN_GAME, 'needs a game server (IN_GAME=1)');
+  test.setTimeout(6 * 60_000);
+  const { enterWorld } = await import('./helpers.js');
+  await enterWorld(page, process.env.IN_GAME_ACCOUNT ?? 'test2');
+  await page.evaluate('window.__game.online.say("/move dungeon")');
+  const skeleton = () => page.evaluate(`(() => {
+    for (const c of window.__game.online.characters.values()) {
+      if (c.monsterNumber >= 14 && c.monsterNumber <= 16 && !c.dead) {
+        return { number: c.monsterNumber, skin: c.look?.player?.skin?.fileName ?? null, shaped: c.playerShaped,
+          attachments: c.attachments.map((a) => a.slot + ' ' + a.item.group + ',' + a.item.number), visible: c.group.visible && !!c.group.parent };
+      }
+    }
+    return null;
+  })()`) as Promise<{ number: number; skin: string | null; shaped: boolean; attachments: string[]; visible: boolean } | null>;
+  await expect.poll(skeleton, { timeout: 120_000, intervals: [2_000] }).not.toBeNull();
+  const found = (await skeleton())!;
+  expect(found.shaped).toBe(true);
+  expect(found.skin).toBe(`Skeleton0${found.number - 13}.bmd`);
+  const expected: Record<number, string[]> = { 14: ['rightHand 0,6', 'leftHand 6,4'], 15: ['leftHand 4,2'], 16: ['rightHand 1,3', 'leftHand 6,6'] };
+  expect(found.attachments).toEqual(expected[found.number]);
+  mkdirSync(SHOTS_DIR, { recursive: true });
+  await page.screenshot({ path: `${SHOTS_DIR}/in-game-dungeon.png` });
+  await page.evaluate('window.__game.online.say("/move lorencia")');
+  await page.waitForTimeout(3_000);
+});

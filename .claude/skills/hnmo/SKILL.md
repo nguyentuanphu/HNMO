@@ -211,3 +211,22 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   (i) guide's button (`hnmo-onboarding-open` window event). In a game test, an RML window can take a minute to appear while the
   map loads: wait up to 90 s.
 - vi.json keeps its texts under `"texts"`; add keys there (not at the top level).
+
+## Monster looks (2026-11-15)
+- `game/monsterData.ts` `describeMonster(number, { map })` is the web's Setup::Create: a number's own values over its
+  monster's (null clears), map variants by the server map, random variants, model list or other-area models
+  (HellGate, ball, cannon trap, `mapObject N`), "none". `createMonsterCharacter({ id, type, map })` builds it; pass the map.
+- Player-shaped monsters: the skin (`subType` 244-246 Skeleton01-03; other skins only for players) or worn items, nothing on
+  an empty slot (no default body); class index from `class` (default Dark Wizard). Combat treats `character.playerShaped`
+  as a player for attacks, flinches and death; skeletons (`skeletonShape`) burst into bones.
+- Characters and worn items draw with shared GPU-skinned geometry (`bmd.ts` `sharedGeometries`, `AnimatedModel({ skinned })`,
+  `overlay()` for glow passes; `itemGlow`'s shader has the skinning chunks). Call `character.release()` when one leaves.
+  Window/ground item models keep CPU posing (icons need posed bounds).
+- `game/prewarm.ts`: `online.prepare` warms each new character; the map's monsters are pre-warmed after a map change.
+- Dev viewer / audit without a server: `src/dev/monsterViewer.ts` (`auditAll`, `showRow`), used by
+  `tests/e2e/monster-looks.spec.ts` (needs only the bridge: `dotnet bin/Release/net10.0/HNMO.dll --contentRoot <bridge>
+  --urls http://127.0.0.1:8088`). Its in-game part: `IN_GAME=1 LOCAL_JS=$PWD/public/js BASE_URL=http://127.0.0.1:8080`
+  (routes this checkout's client into the running HNMO folder). A dev bridge's relay could not log in to the local test
+  server ("The server closed the connection"): use LOCAL_JS against 8080 instead.
+- To compare GL calls with an older build: `git archive <commit> client/web/src client/web/tsconfig.json`, `tsc --outDir`,
+  route `/js/**` to it, count calls with a `WebGL2RenderingContext.prototype` wrapper.
