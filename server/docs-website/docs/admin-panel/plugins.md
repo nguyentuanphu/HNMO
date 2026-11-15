@@ -161,3 +161,24 @@ for these jewels, so a server owner can use any value between 0 and 1.
 
 Implementing a plugin is documented next to the code, in the
 [HNMO.PlugIns readme](https://github.com/nguyentuanphu/HNMO/blob/master/src/PlugIns/Readme.md).
+
+## Public website themes
+
+Open **Configuration → Plugins → Website → Configuration** and choose **Website
+theme**. Save the configuration and reload the public homepage (`/home.html`).
+The choice is stored on the server and applies to all visitors; it does not
+change the admin panel or the in-game interface.
+
+Classic preserves the current appearance. Five alternatives are available:
+
+| Theme | Appearance |
+|---|---|
+| Azure | Blue, rounded panels and sans-serif headings |
+| Ember | Warm copper, square panels and accented section headings |
+| Jade | Green, rounded panels and a centered hero |
+| Violet | Purple, serif headings and softly shadowed panels |
+| Parchment | Light paper, ink text and a quiet background image |
+
+Choose Classic to restore the original appearance. If public settings cannot
+be loaded, the homepage keeps Classic. The configured game name and language
+controls work with every theme.

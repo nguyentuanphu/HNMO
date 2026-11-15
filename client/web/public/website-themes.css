@@ -1,0 +1,51 @@
+/* Classic remains the default. Each alternative sets its palette and presentation. */
+:root[data-website-theme="azure"] {
+  --bg: #091626; --panel: #10253b; --gold: #7bd8fa; --text: #edf6ff; --muted: #afc5db; --line: #345570;
+  --theme-radius: 18px; --theme-title: "Be Vietnam Pro", sans-serif;
+}
+:root[data-website-theme="ember"] {
+  --bg: #21100d; --panel: #321b16; --gold: #ffb17a; --text: #fff0e6; --muted: #d4b0a2; --line: #754439;
+  --theme-radius: 0; --theme-title: "Noto Serif", serif;
+}
+:root[data-website-theme="jade"] {
+  --bg: #081d18; --panel: #103329; --gold: #8fe0b5; --text: #e9fff2; --muted: #a9ccbb; --line: #356650;
+  --theme-radius: 24px; --theme-title: "Be Vietnam Pro", sans-serif;
+}
+:root[data-website-theme="violet"] {
+  --bg: #170f27; --panel: #291c40; --gold: #d8b0ff; --text: #f7efff; --muted: #c8b5de; --line: #644880;
+  --theme-radius: 10px; --theme-title: "Noto Serif", serif;
+}
+:root[data-website-theme="parchment"] {
+  color-scheme: light;
+  --bg: #f3ebd8; --panel: #fff8e9; --gold: #795015; --text: #302819; --muted: #655844; --line: #b8a782;
+  --theme-radius: 3px; --theme-title: "Noto Serif", serif;
+}
+html[data-website-theme]:not([data-website-theme="classic"]) header,
+html[data-website-theme]:not([data-website-theme="classic"]) .secondary {
+  background: var(--panel);
+}
+html[data-website-theme]:not([data-website-theme="classic"]) .hero-art {
+  background: linear-gradient(90deg, var(--bg), transparent), linear-gradient(0deg, var(--bg), transparent), url("/images/realm.jpg") center right/cover;
+  opacity: .35;
+}
+html[data-website-theme]:not([data-website-theme="classic"]) .intro { color: var(--text); }
+html[data-website-theme]:not([data-website-theme="classic"]) .primary { color: var(--bg); }
+html[data-website-theme]:not([data-website-theme="classic"]) .hero-footer { border-color: var(--line); }
+html[data-website-theme]:not([data-website-theme="classic"]) :is(.panel, .event, .mission, .boss, .upcoming .slot, .stats) {
+  background: var(--panel);
+  border-radius: var(--theme-radius);
+}
+html[data-website-theme]:not([data-website-theme="classic"]) :is(h1, h2, h3) { font-family: var(--theme-title); }
+html[data-website-theme]:not([data-website-theme="classic"]) :is(button, .primary, .secondary) { border-radius: var(--theme-radius); }
+html[data-website-theme="ember"] .section-head { border-left: 4px solid var(--gold); padding-left: 18px; }
+html[data-website-theme="jade"] .hero-content { text-align: center; margin-inline: auto; }
+html[data-website-theme="jade"] .intro { margin-inline: auto; }
+html[data-website-theme="jade"] .actions { justify-content: center; }
+html[data-website-theme="violet"] .panel { box-shadow: 0 8px 24px #0004; }
+html[data-website-theme="parchment"] .hero-art { opacity: .12; }
+html[data-website-theme="parchment"] .crest { transform: none; }
+/* Keep every navigation link reachable as labels change language. */
+header { height: auto; min-height: 90px; flex-wrap: wrap; padding-block: 18px; }
+nav { flex-wrap: wrap; justify-content: center; min-width: 0; }
+@media (min-width: 851px) { nav { flex: 1 1 600px; } }
+@media (max-width: 850px) { nav { justify-content: flex-start; } }
