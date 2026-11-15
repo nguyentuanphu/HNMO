@@ -24,6 +24,7 @@ import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js'
 import type { Effect, EffectOwner } from './types.js';
 import { computeBoneMatrices, loadModel } from '../../bmd.js';
 import type { BMDModel } from '../../formats.js';
+import { chainDrive, dragonRoar } from './rageStrikeEffects.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 
@@ -278,6 +279,11 @@ EXTRA_EFFECTS.swordEffectMono = {
   },
   move: (o, system) => {
     if (Math.trunc(o.lifeTime) % 3 !== 0) system.createParticle('swordEffectMonoParticle', o.position, o.angle, o.light, 0, o.scale, o.self);
+    // At its 14th tick from the end a shock wave swells up from the blade, in the buff's colour.
+    if (Math.trunc(o.lifeTime) === 14 && o.owner) {
+      const light = o.subType === 1 ? new THREE.Vector3(0.7, 0.5, 1) : o.subType === 2 ? new THREE.Vector3(1, 0.12, 0) : new THREE.Vector3(0.4, 0.4, 1);
+      system.createEffect('shockWave1', o.position, o.angle, light, 2, o.owner, 1);
+    }
     return true;
   },
 };
@@ -312,6 +318,11 @@ EXTRA_PARTICLES.swordEffectMonoParticle = {
 // MODEL_SHOCKWAVE_GROUND01 (Effect/shockwave_ground01.bmd): a ring on the ground that widens.
 EXTRA_EFFECTS.shockWaveGround1 = {
   model: ['Effect', 'shockwave_ground01.bmd'],
+  prewarmBlendMesh: -2,
+  // RenderMesh(0): SubType 1 (Dragon Roar's ring) in Kwave2's texture.
+  skin: (o) => (o.subType === 1 ? 'Kwave2.jpg' : undefined),
+  skins: ['Kwave2.jpg'],
+  paint: (_o, meshIndex, _material, mesh) => { if (meshIndex !== 0) mesh.visible = false; },
   create: (o) => {
     bright(o, 6);
     return true;
@@ -437,16 +448,30 @@ EXTRA_PARTICLES.smokeLine1 = {
 // BITMAP_LIGHT_RED: the party buffs' glow. SubType 0 (Increase Health) lies under the fighter
 // while a party buff lasts, breathing; 1 and 2 only keep the buff's other looks going.
 EXTRA_EFFECTS.lightRed = {
-  create: (o) => {
+  create: (o, system) => {
     o.lifeTime = o.subType === 1 ? 50 : 9999;
     o.velocity = 0;
     o.scale = 1.5;
     o.light.set(1, 1, 1);
+    if (o.subType === 3 || o.subType === 4) {
+      // Dragon Roar's red glow under a volcano (3) and at its crack (4): the ground reddens at once.
+      o.scale = o.callScale;
+      o.lifeTime = o.subType === 4 ? 50 : 100;
+      const l = randInt(5) * 0.01;
+      system.groundLight(o.position, l + 1, l + 0.2, l + 0.2, o.subType === 4 ? 4 : 2);
+      return o.owner !== null;
+    }
     return o.subType <= 2 && o.owner !== null;
   },
   move: (o, system) => {
     const owner = o.owner;
-    const buffed = live(owner) && [RageBuff.ATT_UP, RageBuff.HP_UP, RageBuff.DEF_UP].some((b) => owner.hasBuff?.(b) ?? true);
+    if (o.subType === 3 || o.subType === 4) {
+      const l = randInt(5) * 0.1;
+      system.groundLight(o.position, l + 0.4, l, l, o.subType === 4 ? 3 : 2);
+      return true;
+    }
+    // An effect's glow (no buffs: MODEL_DRAGON_LOWER_DUMMY's SubType 1) ends at once, as g_isCharacterBuff is false for it.
+    const buffed = live(owner) && [RageBuff.ATT_UP, RageBuff.HP_UP, RageBuff.DEF_UP].some((b) => owner.hasBuff?.(b) ?? owner.bonePosition !== undefined);
     if (buffed) o.lifeTime = 10;
     else o.lifeTime = 0;
     if (!buffed || !owner) return true;
@@ -463,6 +488,14 @@ EXTRA_EFFECTS.lightRed = {
   },
   draw: (o, system) => {
     const owner = o.owner;
+    if ((o.subType === 3 || o.subType === 4) && owner) {
+      const at = o.subType === 3 ? owner.position : o.position;
+      const light = new THREE.Vector3(1, 1, 1).multiplyScalar(o.lifeTime * 0.01);
+      for (let i = 0; i < (o.subType === 4 ? 2 : 1); i++) {
+        system.quads.decal('lightRed', 'glow', at.x, at.y, o.scale, light, o.angle.x, (x, y) => system.heightAt(x, y), at.z);
+      }
+      return;
+    }
     if (o.subType !== 0 || !owner) return;
     const light = new THREE.Vector3(1, 1, 1).multiplyScalar((Math.sin(system.time * 0.0005) + 1) * 0.25 + 0.2);
     for (let i = 0; i < 2; i++) {
@@ -607,6 +640,8 @@ export const RageSkill = {
   DARK_SIDE: 263,
   PHOENIX_SHOT: 270,
   CHARGE: 269,
+  CHAIN_DRIVE: 262,
+  DRAGON_ROAR: 264,
 } as const;
 
 /** CMonkSystem::RageCreateEffect (and ReceiveMagic's buff glows) for a fighter's cast. */
@@ -633,10 +668,16 @@ export function rageCreateEffect(system: EffectSystem, skill: number, caster: Ef
     }
     case RageSkill.DARK_SIDE:
       // A red cloud, a burning circle and a whirl of wind as the fighter vanishes (its dash afterimages, CDummyUnit
-      // and DarksideRendering, are not drawn on the web).
+      // and DarksideRendering, follow the server's Dark Side target list, which the server never sends).
       system.createEffect('eventCloud', caster.position, caster.angle, new THREE.Vector3(1, 0.6, 0.6), 1, caster, 1);
       system.createEffect('magic', caster.position, caster.angle, new THREE.Vector3(1, 0.4, 0), 14);
       system.createEffect('windForce', caster.position, caster.angle, new THREE.Vector3(1, 0.5, 0.2), 2, caster, 1);
+      return true;
+    case RageSkill.CHAIN_DRIVE:
+      chainDrive(system, caster, target);
+      return true;
+    case RageSkill.DRAGON_ROAR:
+      dragonRoar(system, caster, target);
       return true;
     case RageSkill.CHARGE: // AT_SKILL_OCCUPY: the rings in front as the fighter rushes
       ringsAhead(system, caster, caster.angle);

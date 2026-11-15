@@ -3,6 +3,7 @@
 // CreateEffect / CreateJoint case, its move and its draw; the entries register themselves from
 // their own modules (knightEffects.ts, ...), imported by index.ts.
 
+import type * as THREE from 'three';
 import type { EffectSystem } from './effectSystem.js';
 import type { BitmapName } from './core.js';
 import type { Blend } from './quadBatch.js';
@@ -13,6 +14,17 @@ export interface ExtraEffect {
   model?: [string, string];
   /** Load the model even while HiddenMesh is -2 (the effect shows parts of it later). */
   alwaysModel?: boolean;
+  /**
+   * The texture its meshes draw with instead of their own (RenderMesh's / RenderBody's texture argument, a file in the
+   * model texture folders), chosen once at its creation; its copies are pooled apart from the plain ones.
+   */
+  skin?(o: Effect): string | undefined;
+  /** The BlendMesh its creation gives the model (-2 for RENDER_BRIGHT), so the prewarm builds the copy it will use. */
+  prewarmBlendMesh?: number;
+  /** Every skin `skin` can choose, so the prewarm builds those copies too. */
+  skins?: readonly string[];
+  /** After the shared placement, each mesh's own light, visibility or scroll (the RenderMesh calls of its draw). */
+  paint?(o: Effect, meshIndex: number, material: THREE.MeshBasicMaterial, mesh: THREE.Object3D, system: EffectSystem): void;
   /** The CreateEffect case; false when the SubType isn't ported. */
   create(o: Effect, system: EffectSystem): boolean;
   /** The move; false skips the shared tail (animation and MoveParticle), as the desktop's `return`s. */

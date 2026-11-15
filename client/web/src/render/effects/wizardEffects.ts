@@ -67,11 +67,16 @@ EXTRA_EFFECTS.skillBlast = {
 EXTRA_PARTICLES.shiny4 = {
   texture: 'shiny4',
   init: (o) => {
-    if (o.subType !== 0) return false;
-    o.lifeTime = 20;
+    if (o.subType !== 0 && o.subType !== 2) return false;
+    o.lifeTime = o.subType === 2 ? 8 : 20; // SubType 2: Chain Drive's rings at the target
     return true;
   },
   move: (o) => {
+    if (o.subType === 2) {
+      o.scale *= 1.1;
+      o.light.multiplyScalar(0.9);
+      return;
+    }
     o.scale = Math.sin(o.lifeTime * 10 * Math.PI / 180) * 3 + 2;
     o.light.setScalar(o.lifeTime / 5);
   },

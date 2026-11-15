@@ -600,9 +600,28 @@ EXTRA_EFFECTS.blowOfDestruction = {
       o.scale = 5;
       return true;
     }
+    if (o.subType === 2) { // Dragon Roar: the crack opens from the fighter toward the target
+      o.lifeTime = 50;
+      o.startPosition.copy(o.target?.position ?? o.position);
+      o.scale = 0.5;
+      return o.owner !== null;
+    }
     return false;
   },
   move: (o, system) => {
+    if (o.subType === 2) {
+      system.setEarthQuakeAt(o.position, o.lifeTime <= 35 && o.lifeTime >= 15 ? (randInt(8) - 4) * 0.1 : 0);
+      if (Math.trunc(o.lifeTime) === 30) {
+        const toward = o.startPosition.clone().sub(o.position);
+        if (toward.lengthSq() > 0) toward.normalize();
+        const p = o.position.clone().addScaledVector(toward, 55);
+        const angle = (o.owner?.angle ?? o.angle).clone();
+        angle.z += randInt(40) + 140;
+        system.createEffect('dragonLowerDummy', p, angle, new THREE.Vector3(1, 1, 1), 0, o.self, 0.8);
+        system.createEffect('lightRed', p, angle, new THREE.Vector3(1, 1, 1), 4, o.self, 3);
+      }
+      return true;
+    }
     if (o.lifeTime > 24) return true;
     if (o.subType === 0) {
       system.setEarthQuakeAt(o.position, o.lifeTime >= 15 ? (randInt(8) - 4) * 0.1 : 0);
@@ -643,7 +662,7 @@ EXTRA_EFFECTS.blowOfDestruction = {
     return true;
   },
   sprites: (o, system) => {
-    if (o.lifeTime > 24) return;
+    if (o.lifeTime > 24 || o.subType === 2) return;
     if (o.subType === 0) {
       const position = o.position.clone().setZ(o.position.z + 65);
       system.createSprite('swordEffectMono', position, randInt(10) * 0.011 + 3, new THREE.Vector3(0.5, 0.5, 1));
@@ -653,7 +672,7 @@ EXTRA_EFFECTS.blowOfDestruction = {
     }
   },
   draw: (o, system) => {
-    if (o.lifeTime > 24) return;
+    if (o.lifeTime > 24 || o.subType === 2) return;
     system.quads.decal('flareBlue', 'glow', o.position.x, o.position.y, o.subType === 0 ? 4 : 6, o.light, -o.angle.z,
       (x, y) => system.heightAt(x, y), o.position.z);
   },

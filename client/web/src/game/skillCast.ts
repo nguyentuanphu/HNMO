@@ -942,8 +942,9 @@ function areaAnimationAction(skill: number, classIndex: number, ctx: SkillAnimat
       return A.SKILL_GIGANTICSTORM;
     case S.LIGHTNING_SHOCK:
       return A.SKILL_LIGHTNING_SHOCK;
-    case 264: // AT_SKILL_DRAGON_ROAR: the Rage Fighter's own animation (not ported).
-      return null;
+    case 264: // AT_SKILL_DRAGON_ROAR (and _STR): SetRageSkillAni, PLAYER_SKILL_DRAGONLORE (its effects follow it).
+    case 560:
+      return A.SKILL_DRAGONLORE;
     default:
       // Every other area skill: SetPlayerMagic.
       return magicAction(classIndex, ctx);
@@ -1041,6 +1042,9 @@ function targetedAnimationAction(skill: number, classIndex: number, ctx: SkillAn
       return A.SKILL_SWELL_OF_MP;
     case 269: // AT_SKILL_OCCUPY
       return A.ATTACK_RUSH;
+    case 262: // AT_SKILL_CHAIN_DRIVE (and _STR): the desktop sets PLAYER_SKILL_GIANTSWING from the fighter's own
+    case 558: // attack packet, which the server doesn't send; its SkillAnimation plays it here (its effects follow it).
+      return others(A.SKILL_GIANTSWING);
     default:
       // Teleport, Teleport Ally, the elf summons' and Infinity Arrow's effects, the
       // Rage Fighter's skills...: no action change here.

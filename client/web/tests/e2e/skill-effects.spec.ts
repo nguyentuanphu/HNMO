@@ -10,7 +10,7 @@ interface Fighter { id: number; kind: string; dead: boolean; cell: { x: number; 
 interface EffectsGame {
   online: { characters: Map<number, Fighter>; hero: Fighter & { isWalking: boolean }; playerId: number; walkTo(cell: { x: number; y: number }): boolean; say(text: string): void };
   connection: { dispatch(bytes: Uint8Array): void };
-  combat: { events: { onSkill(caster: unknown, skill: number, target: unknown, cell: { x: number; y: number } | null): void } };
+  combat: { events: { onSkill(caster: unknown, skill: number, target: unknown, cell: { x: number; y: number } | null): void; onSkillHit(caster: unknown, skill: number, target: unknown): void } };
   effects: { ready: Promise<void>; counts(): { effects: number; particles: number; joints: number; sprites: number }; census(): Record<string, number> };
 }
 type Win = Window & { __game: EffectsGame };
@@ -28,6 +28,11 @@ interface Case {
   buffs?: number[];
   /** Effects that may still live after the case (they last while a buff does): left out of the count. */
   lasting?: string[];
+  /** The action's keys a second (played slowly, held against the monsters' hits, so the few frames a second of the
+   * test machine don't step over the keys the effect is timed by). */
+  actionSpeed?: number;
+  /** The server also shows the target struck (SkillAnimation at it: ReceiveMagic's effects at the target). */
+  hit?: boolean;
 }
 
 const WIZARD: Case[] = [
@@ -149,6 +154,14 @@ const FIGHTER: Case[] = [
   { skill: 266, name: 'increase-attack-buff', expect: ['effect:lightRed', 'particle:smokeLine1'], shotAt: 1600, buffs: [129] },
   { skill: 269, name: 'charge', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'joint:jointSpark'], shotAt: 240, action: 137 },
   { skill: 263, name: 'dark-side', expect: ['effect:eventCloud', 'effect:magic', 'effect:windForce'], shotAt: 300 },
+  // Chain Drive follows the giant swing (PLAYER_SKILL_GIANTSWING), played by the hero here: the fist's trail, the first
+  // blow's wave and wolf heads at key 6, the second wave and spinning waves at key 11.
+  { skill: 262, name: 'chain-drive', expect: ['effect:swordEffect', 'joint:swordEff', 'effect:shockWave1', 'effect:wolfHeadEffect2', 'effect:shockWave2', 'effect:shockWaveSpin1'], shotAt: 1500, action: 249, actionSpeed: 8,
+    warm: [['Effect', 'shockwave01.bmd'], ['Effect', 'shockwave02.bmd'], ['Effect', 'shockwave_spin01.bmd'], ['Effect', 'wolf_head_effect2.bmd']] },
+  // Dragon Roar follows PLAYER_SKILL_DRAGONLORE, played by the hero here: the burning fists, the red wave and ring, the
+  // column of fire, the crack toward the target; the struck target (shown by the server) gets a volcano and burns.
+  { skill: 264, name: 'dragon-roar', expect: ['effect:lava', 'joint:lavaJoint', 'effect:shockWave1', 'effect:shockWaveGround1', 'effect:blowOfDestruction', 'effect:dragonLowerDummy', 'effect:volcanoOfMonk', 'effect:volcanoOfMonkCore', 'effect:volcanoStone', 'effect:targetMonsterEffect', 'effect:lightRed', 'particle:fireHik1'], shotAt: 1500, action: 253, actionSpeed: 5, hit: true, model: 'dragonLowerDummy',
+    warm: [['Effect', 'knight_plancrack_dragon.bmd'], ['Effect', 'volcano_of_monk.bmd'], ['Effect', 'volcano_stone.bmd'], ['Effect', 'shockwave_ground01.bmd']] },
 ];
 
 const CASES: Record<string, Case[]> = { wizard: WIZARD, knight: KNIGHT, elf: ELF, gladiator: GLADIATOR, lord: LORD, summoner: SUMMONER, fighter: FIGHTER };
@@ -166,11 +179,20 @@ async function goHunting(page: Page): Promise<void> {
 }
 
 /** Plays the skill as the server shows it: the hero casts at the nearest monster (or a tile ahead). */
-function cast(page: Page, skill: number, area: boolean, chain = false, action?: number, other = false): Promise<boolean> {
-  return page.evaluate(({ skill, area, chain, action, other }) => {
+function cast(page: Page, skill: number, area: boolean, chain = false, action?: number, other = false, hit = false, actionSpeed?: number): Promise<boolean> {
+  return page.evaluate(({ skill, area, chain, action, other, hit, actionSpeed }) => {
     const g = (window as unknown as Win).__game;
     const hero = g.online.hero;
-    if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
+    const play = (): void => {
+      if (action === undefined) return;
+      const actor = hero as unknown as { playOnce(action: number, keysPerSecond?: number): void; __held?: boolean };
+      if (actionSpeed === undefined) { actor.playOnce(action); return; }
+      const playOnce = Object.getPrototypeOf(actor).playOnce as (this: unknown, a: number, k?: number) => void;
+      playOnce.call(actor, action, actionSpeed);
+      actor.playOnce = () => { /* held for the test */ };
+      setTimeout(() => { delete (actor as { playOnce?: unknown }).playOnce; }, 15 / actionSpeed * 1000 + 1000);
+    };
+    play();
     let best: Fighter | null = null, bestDistance = 8;
     for (const c of g.online.characters.values()) {
       if (c.kind !== 'monster' || c.dead) continue;
@@ -201,9 +223,10 @@ function cast(page: Page, skill: number, area: boolean, chain = false, action?: 
     // Without a monster close by, a targeted skill is aimed at the hero itself.
     g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
     // The cast may play its own action (a Fenrir rider's): the case's action is played after it.
-    if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
+    if (actionSpeed === undefined) play();
+    if (hit) g.combat.events.onSkillHit(hero, skill, best ?? hero);
     return best !== null;
-  }, { skill, area, chain, action, other });
+  }, { skill, area, chain, action, other, hit, actionSpeed });
 }
 
 const groups = process.env.SKILL_GROUPS?.split(',');
@@ -254,7 +277,7 @@ for (const [group, cases] of Object.entries(CASES)) {
         };
       }, Math.max(1, Math.round(c.shotAt / 40)));
       if (c.buffs) await page.evaluate((list) => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, list); }, c.buffs);
-      await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action, c.other ?? false);
+      await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action, c.other ?? false, c.hit ?? false, c.actionSpeed);
       await page.waitForFunction(() => (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen === true, null, { timeout: 30_000 });
       if (c.model) {
         await page.waitForFunction((type) => (window as unknown as { __game: { effects: { effects: { type: string; model: unknown }[] } } }).__game.effects.effects

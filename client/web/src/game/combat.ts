@@ -70,6 +70,8 @@ export interface CombatEvents {
   onHeroAttacked?: (attacker: Character) => void;
   /** Someone cast a skill (SkillAnimation / AreaSkillAnimation, and the hero's own cast): for its effects. */
   onSkill?: (caster: Character, skill: number, target: Character | null, cell: { x: number; y: number } | null) => void;
+  /** A struck target the server showed with SkillAnimation (the hero's casts too), for ReceiveMagic's effects at it. */
+  onSkillHit?: (caster: Character, skill: number, target: Character) => void;
   /** Chain Lightning jumped from the caster through these targets (ChainLightningHitInfo, ReceiveChainMagic). */
   onChainLightning?: (caster: Character, skill: number, targets: Character[]) => void;
 }
@@ -83,6 +85,9 @@ function mountOf(pet: Pick<Item, 'group' | 'number'> | null | undefined): Mount 
   if (pet.number === 3) return 'dinorant';
   return 'none';
 }
+
+/** AT_SKILL_DRAGON_ROAR and its strengthened skill: their SkillAnimation names a struck target, not a cast. */
+const TARGET_HIT_SKILLS: readonly number[] = [264, 560];
 
 const hand = (item: Pick<Item, 'group' | 'number'> | null | undefined): HandItem | null => (item ? { group: item.group, number: item.number } : null);
 
@@ -386,6 +391,11 @@ export class Combat {
     const caster = this.characterById(packet.PlayerId & ID_MASK);
     if (!caster || caster.dead) return;
     const target = this.characterById(packet.TargetId & ID_MASK);
+    if (target && TARGET_HIT_SKILLS.includes(packet.SkillId)) {
+      // ReceiveMagic AT_SKILL_DRAGON_ROAR: only the struck target's effects (the cast came with AreaSkillAnimation).
+      this.events.onSkillHit?.(caster, packet.SkillId, target);
+      return;
+    }
     if (caster !== this.hero) {
       if (target && target !== caster) caster.faceTo(target.cell);
       const action = caster.kind === 'player' ? skillAnimationAction(packet.SkillId, caster.classIndex ?? 0, { own: false, via: 'targeted' }) : null;

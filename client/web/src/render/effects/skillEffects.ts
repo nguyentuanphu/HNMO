@@ -19,6 +19,7 @@ import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
 import { lance, summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
+import { dragonRoarHit } from './rageStrikeEffects.js';
 import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
 import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, plasmaStorm, siegeSkill, starfall } from './darkLordEffects.js';
@@ -251,6 +252,15 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
     return false;
   });
   return true;
+}
+
+/** ReceiveMagic's effects at one struck target (Dragon Roar's volcanoes and burning). */
+export function playSkillHit(system: EffectSystem, skill: number, _caster: EffectOwner, target: EffectOwner): boolean {
+  if (skill === RageSkill.DRAGON_ROAR) {
+    dragonRoarHit(system, target);
+    return true;
+  }
+  return false;
 }
 
 export function isPortedSkill(skill: number): boolean {

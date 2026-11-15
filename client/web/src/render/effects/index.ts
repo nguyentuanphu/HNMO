@@ -36,6 +36,7 @@ import './elfEffects.js'; // and the elves'
 import './lordEffects.js'; // and the gladiators' and lords'
 import './summonerEffects.js'; // and the summoners'
 import './rageEffects.js'; // and the rage fighters'
+import './rageStrikeEffects.js'; // Chain Drive, Dragon Roar
 import './wizardEffects.js'; // Cometfall, Expansion of Wizardry
 import './sharedParticles.js';
 import './berserkerEffects.js'; // the Berserker buff's auras, sparks and marks // particles the third pass's skills share
@@ -43,7 +44,7 @@ import './darkLordEffects.js'; // the lord's Electric Spike, Earthshake, Chaotic
 export { EffectSystem } from './effectSystem.js';
 export type { EffectSystemOptions, TickTask, EffectLayer } from './effectSystem.js';
 export { WeaponTrails } from './weaponTrails.js';
-export { playSkillEffect, playBuffEffect, playChainLightning, isPortedSkill, tripleShotAngles, createSpark, SkillEffect, BuffEffect, ATTACK_LIMIT_TIME, SKILL_RELEASE_DELAY_SECONDS } from './skillEffects.js';
+export { playSkillEffect, playSkillHit, playBuffEffect, playChainLightning, isPortedSkill, tripleShotAngles, createSpark, SkillEffect, BuffEffect, ATTACK_LIMIT_TIME, SKILL_RELEASE_DELAY_SECONDS } from './skillEffects.js';
 export type { SkillEffectOptions } from './skillEffects.js';
 export { debuffTint, playBuffLook, Buff } from './buffLooks.js';
 export { ownerFromCharacter, PLAYER_WEAPON_BONES } from './characterOwner.js';

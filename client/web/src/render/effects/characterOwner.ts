@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import type { Character } from '../../game/characters.js';
 import { TICKS_PER_SECOND } from './core.js';
+import { computeBoneMatrices } from '../../bmd.js';
 import type { EffectOwner } from './types.js';
 
 /** c->Weapon[0].LinkBone and c->Weapon[1].LinkBone of the player model (ZzzCharacter.cpp). */
@@ -44,6 +45,7 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
     isLive: () => !character.dead && character.group.visible && character.group.parent !== null,
     weaponPosition: (hand) => bonePosition(character, bones[hand]),
     bonePosition: (bone) => bonePosition(character, bone),
+    bonePositionAt: (bone, frame) => bonePositionAt(character, bone, frame),
     boneMatrix: (bone) => {
       const matrix = character.model.matrices[bone];
       if (!matrix) return null;
@@ -72,6 +74,32 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
 /** b->TransformPosition(o->BoneTransform[bone], 0): a bone's world position. */
 function bonePosition(character: Character, bone: number): THREE.Vector3 | null {
   const matrix = character.model.matrices[bone];
+  if (!matrix) return null;
+  character.group.updateMatrix();
+  return new THREE.Vector3().applyMatrix4(matrix).applyMatrix4(character.group.matrix);
+}
+
+/** The poses bonePositionAt computed, by key, for the character's current action and key (a few per tick at most). */
+interface PoseCache { action: number; time: number; poses: Map<number, THREE.Matrix4[]> }
+const poseCaches = new WeakMap<Character, PoseCache>();
+const POSE_CACHE_LIMIT = 16;
+
+/** A bone's world position with the character's current action posed at `frame` instead of where it is. */
+function bonePositionAt(character: Character, bone: number, frame: number): THREE.Vector3 | null {
+  const action = character.oneShot?.action ?? character.action;
+  let cache = poseCaches.get(character);
+  if (!cache || cache.action !== action || cache.time !== character.time) {
+    cache = { action, time: character.time, poses: cache?.poses ?? new Map() };
+    cache.poses.clear();
+    poseCaches.set(character, cache);
+  }
+  let pose = cache.poses.get(frame);
+  if (!pose) {
+    if (cache.poses.size >= POSE_CACHE_LIMIT) cache.poses.clear();
+    pose = computeBoneMatrices(character.model.skeleton, action, Math.max(0, frame));
+    cache.poses.set(frame, pose);
+  }
+  const matrix = pose[bone];
   if (!matrix) return null;
   character.group.updateMatrix();
   return new THREE.Vector3().applyMatrix4(matrix).applyMatrix4(character.group.matrix);

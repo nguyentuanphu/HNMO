@@ -26,6 +26,11 @@ export interface EffectOwner {
   weaponPosition?(hand: 0 | 1): THREE.Vector3 | null;
   /** The world position of one of its model's bones (b->TransformPosition(o->BoneTransform[bone])). */
   bonePosition?(bone: number): THREE.Vector3 | null;
+  /**
+   * A bone's world position with its action posed at another key (Animation at AnimationFrame - n, then
+   * TransformByObjectBone): the trails laid between two ticks' poses (BITMAP_LAVA).
+   */
+  bonePositionAt?(bone: number, frame: number): THREE.Vector3 | null;
   /** A bone's whole world matrix (o->BoneTransform[bone] placed in the world), for models held in a hand. */
   boneMatrix?(bone: number): THREE.Matrix4 | null;
   /** How many bones its model has (b->NumBones). */
@@ -141,7 +146,20 @@ export type EffectType =
   | 'lightMarks' // BITMAP_LIGHT_MARKS: the Berserker buff's marks on fourteen bones
   | 'fireCursedLich' // BITMAP_FIRE_CURSEDLICH SubType 2: the Flame Strike debuff's fire on the body
   | 'shotgun' // BITMAP_SHOTGUN: Fire Breath, the Dinorant's burst of fire (no model)
-  | 'skinShell'; // MODEL_SKIN_SHELL: the cancels' shards of skin flying off the target (Skill/SkinShell.bmd)
+  | 'skinShell' // MODEL_SKIN_SHELL: the cancels' shards of skin flying off the target (Skill/SkinShell.bmd)
+  | 'swordEffect' // BITMAP_SWORDEFF: Chain Drive's timing (no model): the fist's trail, the two blows' waves and heads
+  | 'shockWave1' // MODEL_SHOCKWAVE01: a shock wave ring (Effect/shockwave01.bmd)
+  | 'shockWave2' // MODEL_SHOCKWAVE02: Chain Drive's second wave (Effect/shockwave02.bmd)
+  | 'shockWaveSpin1' // MODEL_SHOCKWAVE_SPIN01: its spinning waves (Effect/shockwave_spin01.bmd)
+  | 'wolfHeadEffect2' // MODEL_WOLF_HEAD_EFFECT2: its wolf heads (Effect/wolf_head_effect2.bmd)
+  | 'damage1' // BITMAP_DAMAGE1: its hits on the target (no model)
+  | 'ring' // BITMAP_SHINY+4 as an effect: rings swelling at the target (no model)
+  | 'lava' // BITMAP_LAVA: Dragon Roar's timing (no model): the burning fists' trails, the wave, the column of fire
+  | 'dragonLowerDummy' // MODEL_DRAGON_LOWER_DUMMY: Dragon Roar's crack (Effect/knight_plancrack_dragon.bmd)
+  | 'volcanoOfMonk' // MODEL_VOLCANO_OF_MONK: the volcanoes at the struck (Effect/volcano_of_monk.bmd)
+  | 'volcanoOfMonkCore' // its glowing core (the same model's first mesh in volcano_core.jpg; the web's own record)
+  | 'volcanoStone' // MODEL_VOLCANO_STONE: their burning stones (Effect/volcano_stone.bmd)
+  | 'targetMonsterEffect'; // MODEL_TARGETMON_EFFECT: the struck burning (no model)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
@@ -165,7 +183,8 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'orora' // BITMAP_ORORA: an aura turning on a hand bone, growing and fading
   | 'sparks' // BITMAP_SPARK+2: a burst of sparks on a hand bone (four frames)
   | 'blueBlur' // BITMAP_BLUE_BLUR: SubType 1 (drawn with BITMAP_POUNDING_BALL), Fire Scream's rising blur
-  | 'advSmoke2'; // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
+  | 'advSmoke2' // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
+  | 'damage1'; // BITMAP_DAMAGE1: Chain Drive's hits, swelling and flaring
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;
@@ -177,7 +196,8 @@ export type JointType = 'jointThunder' | 'jointHealing' | 'spearSkill' | 'jointS
   | 'flareBlueJoint' // BITMAP_FLARE_BLUE as a joint: Mana Rays' flares
   | 'fenrirSkillThunder' // MODEL_FENRIR_SKILL_THUNDER: Plasma Storm's bolts
   | 'groundWind' // BITMAP_GROUND_WIND: Dragon Slasher's wind along the kick
-  | 'flash'; // BITMAP_FLASH: Stun's bolts, the cancels' falling flashes
+  | 'flash' // BITMAP_FLASH: Stun's bolts, the cancels' falling flashes
+  | 'lavaJoint'; // BITMAP_LAVA as a joint: Dragon Roar's burning trails on the fists
 
 /** The desktop's model render types the ported effects use: normal, or RENDER_DARK (subtracted). */
 export type RenderType = 'normal' | 'dark';

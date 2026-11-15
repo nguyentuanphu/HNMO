@@ -26,6 +26,7 @@ import type { BitmapName } from './core.js';
 import { QuadBatches, applyBlend } from './quadBatch.js';
 import type { Blend, HeightAt } from './quadBatch.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES, PREWARM_LOADS } from './extraEffects.js';
+import type { ExtraEffect } from './extraEffects.js';
 import type {
   Effect, EffectOwner, EffectType, Joint, JointBlend, JointType, Particle, ParticleType, Sprite, SpriteType, Tail,
 } from './types.js';
@@ -65,7 +66,7 @@ const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
   smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1', flareBlueJoint: 'flareBlue', flash: 'flash',
   twoLineGhost: 'twoLineGhost', drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
-  groundWind: 'groundWind', fenrirSkillThunder: 'jointThunder',
+  groundWind: 'groundWind', fenrirSkillThunder: 'jointThunder', lavaJoint: 'lava',
 };
 
 export interface EffectSystemOptions {
@@ -134,18 +135,18 @@ const PREWARM_BLEND_MESH: Partial<Record<EffectType, number>> = {
 };
 const PREWARM_QUAD = new THREE.PlaneGeometry(1, 1);
 
-function modelPoolKey(dir: string, file: string, blendMesh: number, renderType: Effect['renderType']): string {
-  return `${dir}/${file}|${blendMesh}|${renderType}`;
+function modelPoolKey(dir: string, file: string, blendMesh: number, renderType: Effect['renderType'], skin?: string): string {
+  return `${dir}/${file}|${blendMesh}|${renderType}${skin ? `|${skin}` : ''}`;
 }
 
 /** One copy of an effect model with its own materials (their colour, opacity and texture scroll are the effect's). */
-async function buildEffectModel(dir: string, file: string, blendMesh: number, renderType: Effect['renderType']): Promise<AnimatedModel | null> {
+async function buildEffectModel(dir: string, file: string, blendMesh: number, renderType: Effect['renderType'], skin?: string): Promise<AnimatedModel | null> {
   const model = await loadEffectModel(dir, file);
   if (!model) return null;
   const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
   const materials = await Promise.all(parts.map(async (part) => {
     const blend = blendMesh <= -2 || model.meshes[part.meshIndex]?.texture === blendMesh;
-    const material = await createMaterial(MODEL_TEXTURE_DIRS, part.textureName, { glow: blend });
+    const material = await createMaterial(MODEL_TEXTURE_DIRS, skin ?? part.textureName, { glow: blend });
     if (blend && material.map) {
       // Its own texture object, so the scroll (BlendMeshTexCoordU) is this copy's. It shares the image and the
       // GPU texture with every other copy (a version, not needsUpdate, which would upload the image again).
@@ -366,7 +367,8 @@ export class EffectSystem {
         return o.subType === 0 || o.subType === 1 || o.subType === 7;
       case 'spark': {
         o.scale = (randInt(4) + 4) * 0.1;
-        if (o.subType !== 0 && o.subType !== 2 && o.subType !== 13) return false;
+        if (o.subType !== 0 && o.subType !== 2 && o.subType !== 12 && o.subType !== 13) return false;
+        if (o.subType === 12) o.scale += scale; // Dragon Roar's falling sparks: the call's scale on top
         o.lifeTime = randInt(16) + 24;
         o.angle.z = randInt(360);
         o.gravity = randInt(16) + 6;
@@ -1390,9 +1392,10 @@ export class EffectSystem {
   }
 
   private async attachModel(o: Effect, dir: string, file: string): Promise<void> {
-    const key = modelPoolKey(dir, file, o.blendMesh, o.renderType);
+    const skin = EXTRA_EFFECTS[o.type]?.skin?.(o);
+    const key = modelPoolKey(dir, file, o.blendMesh, o.renderType, skin);
     const pooled = modelPool.get(key)?.pop();
-    const animated = pooled ?? await buildEffectModel(dir, file, o.blendMesh, o.renderType);
+    const animated = pooled ?? await buildEffectModel(dir, file, o.blendMesh, o.renderType, skin);
     if (!animated) return;
     if (!o.live) {
       releaseEffectModel(key, animated);
@@ -1412,13 +1415,17 @@ export class EffectSystem {
   async prewarm(warm: (object: THREE.Object3D) => Promise<void>, stillWanted: () => boolean = () => true): Promise<number> {
     await this.ready;
     await Promise.all(PREWARM_LOADS.map((load) => load()));
-    const files = new Map<string, [string, string, number, Effect['renderType']]>();
-    const add = (type: EffectType, file: [string, string]): void => {
-      const blend = PREWARM_BLEND_MESH[type] ?? -1;
-      files.set(modelPoolKey(file[0], file[1], blend, 'normal'), [file[0], file[1], blend, 'normal']);
+    const files = new Map<string, [string, string, number, Effect['renderType'], string | undefined]>();
+    const add = (type: EffectType, file: [string, string], skin?: string): void => {
+      const blend = PREWARM_BLEND_MESH[type] ?? EXTRA_EFFECTS[type]?.prewarmBlendMesh ?? -1;
+      files.set(modelPoolKey(file[0], file[1], blend, 'normal', skin), [file[0], file[1], blend, 'normal', skin]);
     };
     for (const [type, file] of Object.entries(EFFECT_MODELS) as [EffectType, [string, string]][]) add(type, file);
-    for (const [type, extra] of Object.entries(EXTRA_EFFECTS) as [EffectType, { model?: [string, string] }][]) if (extra.model) add(type, extra.model);
+    for (const [type, extra] of Object.entries(EXTRA_EFFECTS) as [EffectType, ExtraEffect][]) {
+      if (!extra.model) continue;
+      add(type, extra.model);
+      for (const skin of extra.skins ?? []) add(type, extra.model, skin);
+    }
     // The quads' batches (one material per bitmap and blend) and their textures.
     await preloadEffectTextures(Object.keys(BITMAPS) as BitmapName[]);
     const batches = new THREE.Group();
@@ -1431,10 +1438,10 @@ export class EffectSystem {
     if (!stillWanted()) return 0;
     await warm(batches);
     let count = 0;
-    for (const [key, [dir, file, blend, renderType]] of files) {
+    for (const [key, [dir, file, blend, renderType, skin]] of files) {
       if (!stillWanted()) break;
       if ((modelPool.get(key)?.length ?? 0) > 0) continue;
-      const animated = await buildEffectModel(dir, file, blend, renderType);
+      const animated = await buildEffectModel(dir, file, blend, renderType, skin);
       if (!animated) continue;
       await warm(animated.group);
       releaseEffectModel(key, animated);
@@ -1858,6 +1865,7 @@ export class EffectSystem {
     angleEuler(o.angle, model.group.rotation);
     model.group.scale.setScalar(o.scale);
     model.pose(0, o.animationFrame);
+    const paint = EXTRA_EFFECTS[o.type]?.paint;
     for (const part of model.parts) {
       const material = part.mesh.material;
       part.mesh.visible = o.hiddenMesh !== part.meshIndex;
@@ -1871,6 +1879,7 @@ export class EffectSystem {
         material.color.setRGB(o.light.x, o.light.y, o.light.z);
       }
       material.opacity = Math.max(0, Math.min(1, o.alpha));
+      paint?.(o, part.meshIndex, material, part.mesh, this);
     }
   }
 

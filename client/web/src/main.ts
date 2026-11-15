@@ -73,7 +73,7 @@ import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, init
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { keepNextGradeSparkles } from './render/effects/nextGrade.js';
-import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect, playChainLightning, debuffTint, Buff } from './render/effects/index.js';
+import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playSkillHit, playBuffEffect, playChainLightning, debuffTint, Buff } from './render/effects/index.js';
 import { DarkRaven, helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -1016,6 +1016,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         // GetFenrirType: the horn's look (helperVariant 1 black, 2 blue, 3 gold; else red).
         fenrirColor: [1, 0, 2, 3][caster.equipment?.pet?.variant ?? 0] ?? 1,
       });
+    },
+    onSkillHit: (caster, castSkill, target) => {
+      playSkillHit(effects, masterSkillToBaseSkill(castSkill), ownerFromCharacter(caster), ownerFromCharacter(target));
     },
     onChainLightning: (caster, _skill, targets) => playChainLightning(effects, ownerFromCharacter(caster), targets.map(ownerFromCharacter)),
     onHeroDied: () => chat.add('You died.', 'system'),

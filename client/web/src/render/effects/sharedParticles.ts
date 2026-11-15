@@ -93,14 +93,15 @@ EXTRA_PARTICLES.lightning2 = {
 };
 
 /**
- * BITMAP_FIRE_HIK1 (SubType 0), _CURSEDLICH (4) and _HIK3 (0): a flame that rises fast, turning, fading in to its
- * colour and out again in its last ticks while it shrinks.
+ * BITMAP_FIRE_HIK1 (SubTypes 0, 5 and 6), _CURSEDLICH (4 and 9) and _HIK3 (0 and 6): a flame that rises fast, turning,
+ * fading in to its colour and out again in its last ticks while it shrinks. The straight SubTypes (6, 9: Dragon Roar's
+ * volcanoes) don't turn and rise 2.2 times as fast.
  */
-function risingFlame(texture: 'fireHik1' | 'fireCursedLich' | 'fireHik3', subType: number, life: number, fadeAt: number, shrink: number): NonNullable<typeof EXTRA_PARTICLES.fireHik1> {
+function risingFlame(texture: 'fireHik1' | 'fireCursedLich' | 'fireHik3', subTypes: readonly number[], straight: number, life: number, fadeAt: number, shrink: number): NonNullable<typeof EXTRA_PARTICLES.fireHik1> {
   return {
     texture,
     init: (o, scale) => {
-      if (o.subType !== subType) return false;
+      if (!subTypes.includes(o.subType)) return false;
       o.lifeTime = randInt(5) + life;
       o.scale = (randInt(72) + 72) * 0.01 * scale;
       o.rotation = randInt(360);
@@ -120,15 +121,19 @@ function risingFlame(texture: 'fireHik1' | 'fireCursedLich' | 'fireHik3', subTyp
       else o.live = false;
       o.position.z += o.gravity;
       o.rotation += 3;
+      if (o.subType === straight) {
+        o.rotation = 0;
+        o.position.z += o.gravity * 1.2;
+      }
     },
     draw: (o, system, width, height, blend) => {
       system.quads.billboard(o.texture, blend, o.position, width, height, o.light, o.rotation);
     },
   };
 }
-EXTRA_PARTICLES.fireHik1 = risingFlame('fireHik1', 0, 27, 15, 5);
-EXTRA_PARTICLES.fireCursedLich = risingFlame('fireCursedLich', 4, 12, 10, 6);
-EXTRA_PARTICLES.fireHik3 = risingFlame('fireHik3', 0, 17, 10, 7);
+EXTRA_PARTICLES.fireHik1 = risingFlame('fireHik1', [0, 5, 6], 6, 27, 15, 5);
+EXTRA_PARTICLES.fireCursedLich = risingFlame('fireCursedLich', [4, 9], 9, 12, 10, 6);
+EXTRA_PARTICLES.fireHik3 = risingFlame('fireHik3', [0, 6], 6, 17, 10, 7);
 
 // BITMAP_FIRE_CURSEDLICH SubType 2 (the catalogue gives 20 ticks): the Flame Strike debuff; every tick eight flames and
 // orange lights on random bones of its owner.
