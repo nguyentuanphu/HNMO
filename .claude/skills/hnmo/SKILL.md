@@ -230,3 +230,18 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   "The server closed the connection" at login = no game server running (check `ps aux | grep HNMO.Startup`).
 - To compare GL calls with an older build: `git archive <commit> client/web/src client/web/tsconfig.json`, `tsc --outDir`,
   route `/js/**` to it, count calls with a `WebGL2RenderingContext.prototype` wrapper.
+
+## Skill effects (2026-11-15)
+- Effect models come from a pool (`modelPool` in `render/effects/effectSystem.ts`): built once, reused per cast. A
+  pooled model's scrolling texture is a clone that shares the GPU texture: bump `version`, never set `needsUpdate`
+  (that re-uploads the image). `EffectSystem.prewarm(warm)` builds one of each effect model and every bitmap batch
+  a few seconds after entering the world (main.ts).
+- `effects.groundLight / addTerrainLight` = AddTerrainLight (the terrain shader adds the tick's lights, at most 32);
+  `effects.setEarthQuakeAt` = the camera shake (main.ts's updateCamera pitches the camera by `effects.earthQuake`).
+- An EXTRA_EFFECTS `move` must not count `lifeTime` down itself: the shared tail does (a double countdown halves it).
+- Joints can draw themselves (`ExtraJoint.draw`), lay tails with a bone matrix (`layTailMatrix`); effects can ride a
+  joint (`extra.joint`) and carry CreateEffect's Skill argument (`extra.kind`, o->Kind).
+- Buff looks: `render/effects/buffLooks.ts` (`debuffTint` → `Character.bodyTint`, `playBuffLook`), reached from
+  main.ts's `buffs.onChange` for players and monsters. Tests set buffs with `__game.buffs.replace(id, [...])`.
+- Skills timed by an action's keys read `caster.currentAction()` / `animationFrame()`; the test plays the action
+  with `hero.playOnce(action)` (case `action`), else the timing counts the action's play speed per tick.
