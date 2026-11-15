@@ -12,7 +12,7 @@
 //                                                                           Render/Effects/Behaviors/MoveHandlers.cpp
 //   RenderObject (MODEL_ALICE_BUFFSKILL_EFFECT: RENDER_BRIGHT, SubType 1 RENDER_DARK)
 //                                                                           Engine/Object/ZzzObject.cpp
-//   CreateJoint / MoveJoint: BITMAP_DRAIN_LIFE_GHOST (0), BITMAP_JOINT_ENERGY (45)
+//   CreateJoint / MoveJoint: BITMAP_DRAIN_LIFE_GHOST (0), BITMAP_JOINT_ENERGY (5, 45)
 //                                                                           Render/Effects/ZzzEffectJoint.cpp
 //   CreateParticle / MoveParticles / DescribeParticle: BITMAP_LIGHT+2 (6, 7), BITMAP_LIGHTNING_MEGA1..3 (0),
 //   BITMAP_MAGIC (0), BITMAP_PIN_LIGHT (0), BITMAP_SHINY+6 (0)               Render/Effects/ZzzEffectParticle.cpp
@@ -118,6 +118,12 @@ EXTRA_JOINTS.drainLifeGhost = {
 // then flies to the Summoner's chest and ends there.
 EXTRA_JOINTS.jointEnergy = {
   init: (o) => {
+    if (o.subType === 5) { // a trail behind its target (Cometfall's comet, its EyeLeft): endless while it lives
+      o.lifeTime = Number.MAX_SAFE_INTEGER;
+      o.maxTails = 10;
+      o.velocity = 0;
+      return o.target !== null;
+    }
     if (o.subType !== 45) return false;
     o.lifeTime = 120;
     o.maxTails = 8;
@@ -125,6 +131,11 @@ EXTRA_JOINTS.jointEnergy = {
     return true;
   },
   move: (o, system) => {
+    if (o.subType === 5) {
+      if (!live(o.target)) o.live = false;
+      else o.position.copy(o.target.position);
+      return;
+    }
     if (o.lifeTime >= 100) {
       o.angle.z += 10;
       o.position.z += 6;

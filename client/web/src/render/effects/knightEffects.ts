@@ -13,7 +13,7 @@
 import * as THREE from 'three';
 import { angleEuler, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner, EffectType, Joint } from './types.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
@@ -514,3 +514,171 @@ EXTRA_EFFECTS.buffLight = {
     return false;
   },
 };
+
+// ---------------------------------------------------------------------------
+// Strike of Destruction (AT_SKILL_STRIKE_OF_DESTRUCTION): MODEL_BLOW_OF_DESTRUCTION SubType 0 in front of the knight
+// and SubType 1 at the struck tile. At their 23rd tick the ground cracks (MODEL_KNIGHT_PLANCRACK_A at the knight,
+// a line of MODEL_KNIGHT_PLANCRACK_B out to the tile, the great crack and stones at the tile) under blue water
+// splashes (MODEL_NIGHTWATER_01); the tile throws up spray for ten ticks and the camera shakes.
+// Followed: CreateEffect MODEL_BLOW_OF_DESTRUCTION (0, 1), MODEL_NIGHTWATER_01, MODEL_KNIGHT_PLANCRACK_A (0),
+// MODEL_RAKLION_BOSS_CRACKEFFECT (0); UpdateDrawnEffectSprites and RenderEffects (its sprites and decals)
+// (ZzzEffect.cpp); Move_MODEL_BLOW_OF_DESTRUCTION, _NIGHTWATER_01, _KNIGHT_PLANCRACK_A/B, _RAKLION_BOSS_CRACKEFFECT
+// (Behaviors/MoveHandlers.cpp); RenderObject (the cracks and water RENDER_BRIGHT at their alpha, the cracks'
+// glowing mesh 1 scrolling) (Engine/Object/ZzzObject.cpp); BITMAP_WATERFALL_5 / _3 SubType 8 (ZzzEffectParticle.cpp).
+// ---------------------------------------------------------------------------
+
+const BLOW_BLUE = new THREE.Vector3(0.3, 0.3, 1);
+
+EXTRA_EFFECTS.blowOfDestruction = {
+  create: (o, system) => {
+    if (o.subType === 0) {
+      const owner = o.owner;
+      if (!owner) return false;
+      o.lifeTime = 40;
+      o.position.add(rotateByAngle(new THREE.Vector3(-20, -100, 0), owner.angle));
+      o.startPosition.copy(o.light); // the call's light is the struck tile
+      o.light.set(1.2, 1.2, 1.2);
+      system.createEffect('blowOfDestruction', o.startPosition, o.angle, o.light, 1, owner);
+      return true;
+    }
+    if (o.subType === 1) {
+      o.lifeTime = 40;
+      o.light.set(1.2, 1.2, 1.2);
+      o.position.z = 150;
+      o.scale = 5;
+      return true;
+    }
+    return false;
+  },
+  move: (o, system) => {
+    if (o.lifeTime > 24) return true;
+    if (o.subType === 0) {
+      system.setEarthQuakeAt(o.position, o.lifeTime >= 15 ? (randInt(8) - 4) * 0.1 : 0);
+      if (Math.trunc(o.lifeTime) === 23) {
+        system.createEffect('nightWater1', o.position, o.angle, BLOW_BLUE, 0, o.self);
+        system.createEffect('nightWater1', o.position, o.angle, BLOW_BLUE, 0, o.self);
+        system.createEffect('knightPlancrackA', o.position, o.angle, BLOW_BLUE, 0, o.self, 1.2);
+        const toTile = o.startPosition.clone().sub(o.position);
+        const count = Math.trunc(toTile.length() / 100) + 1;
+        toTile.normalize();
+        for (let i = 0; i < count; i++) {
+          const position = o.position.clone().addScaledVector(toTile, 55 * i);
+          const angle = (o.owner?.angle ?? o.angle).clone();
+          angle.z += (i % 2 === 0 ? 1 : -1) * (randInt(20) + 10);
+          system.createEffect('knightPlancrackB', position, angle, BLOW_BLUE, 0, o.self, 1);
+        }
+      }
+    } else {
+      if (o.lifeTime >= 15) {
+        for (let i = 0; i < 15; i++) {
+          const position = o.position.clone().add(new THREE.Vector3(randInt(300) - 150, randInt(300) - 150, randInt(300) - 150));
+          system.createParticle(randInt(2) === 0 ? 'waterfall5' : 'waterfall3', position, o.angle, new THREE.Vector3(0.5, 0.5, 1), 8, 1.6 + randInt(10) * 0.1);
+        }
+      }
+      if (Math.trunc(o.lifeTime) === 23) {
+        system.createEffect('nightWater1', o.position, o.angle, BLOW_BLUE, 0, o.self, 2);
+        system.createEffect('nightWater1', o.position, o.angle, BLOW_BLUE, 0, o.self, 1);
+        system.createEffect('raklionBossCrackEffect', o.position, o.angle, BLOW_BLUE, 0, o.self, 0.2);
+        const stones = 5 + randInt(3);
+        for (let i = 0; i < stones; i++) {
+          const p = rotateByAngle(new THREE.Vector3(0, randInt(150), 0), new THREE.Vector3(0, 0, randInt(360))).add(o.position);
+          system.createEffect(randInt(2) ? 'stone2' : 'stone1', p, o.angle, o.light, 13);
+        }
+      }
+    }
+    o.light.multiplyScalar(1 / 1.05);
+    return true;
+  },
+  sprites: (o, system) => {
+    if (o.lifeTime > 24) return;
+    if (o.subType === 0) {
+      const position = o.position.clone().setZ(o.position.z + 65);
+      system.createSprite('swordEffectMono', position, randInt(10) * 0.011 + 3, new THREE.Vector3(0.5, 0.5, 1));
+    } else {
+      const position = o.position.clone().setZ(o.position.z + 100);
+      system.createSprite('light', position, o.scale, new THREE.Vector3(o.light.x * 0.5, o.light.y * 0.5, o.light.z));
+    }
+  },
+  draw: (o, system) => {
+    if (o.lifeTime > 24) return;
+    system.quads.decal('flareBlue', 'glow', o.position.x, o.position.y, o.subType === 0 ? 4 : 6, o.light, -o.angle.z,
+      (x, y) => system.heightAt(x, y), o.position.z);
+  },
+};
+
+/** A model drawn RENDER_BRIGHT at its alpha (BodyLight = Light * Alpha), fading by `fade` a tick. */
+function fadingBright(model: [string, string], life: number, fade: (o: Effect) => void, place?: (o: Effect) => void): NonNullable<typeof EXTRA_EFFECTS.nightWater1> {
+  return {
+    model,
+    create: (o) => {
+      o.lifeTime = life;
+      o.alpha = 1;
+      o.angle.z = randInt(360);
+      o.blendMesh = -2;
+      o.velocity = 0.3;
+      place?.(o);
+      return true;
+    },
+    move: (o) => {
+      fade(o);
+      o.direction.set(0, 0, 0);
+      return true;
+    },
+  };
+}
+EXTRA_EFFECTS.nightWater1 = fadingBright(['Effect', 'nightwater01.bmd'], 25, (o) => { o.alpha -= 0.04; },
+  (o) => { o.scale = o.callScale > 0 ? o.callScale : 0.9; });
+EXTRA_EFFECTS.knightPlancrackA = fadingBright(['Effect', 'knight_plancrack_a.bmd'], 25, (o) => { o.alpha -= 0.04; },
+  (o) => { o.scale = o.callScale + randInt(10) * 0.05; o.position.z += 10; });
+// The catalogue gives its life time (25) and lifts it 15 and turns it 90; the angle it's given stays (no random turn).
+EXTRA_EFFECTS.knightPlancrackB = {
+  model: ['Effect', 'knight_plancrack_b.bmd'],
+  create: (o) => {
+    o.alpha = 1;
+    o.blendMesh = -2;
+    o.velocity = 0.3;
+    o.scale = o.callScale > 0 ? o.callScale : 0.9;
+    return true;
+  },
+  move: (o) => {
+    o.alpha -= 0.04;
+    o.direction.set(0, 0, 0);
+    return true;
+  },
+};
+EXTRA_EFFECTS.raklionBossCrackEffect = fadingBright(['Effect', 'knight_plancrack_grand.bmd'], 40, (o) => { o.alpha -= 0.03; },
+  (o) => { o.scale = o.callScale + 1; o.position.z += 30; });
+
+// BITMAP_WATERFALL_5 / _3 SubType 8: spray thrown up that grows, falls back and fades.
+function waterSpray(texture: 'waterfall5' | 'waterfall3'): NonNullable<typeof EXTRA_PARTICLES.waterfall5> {
+  return {
+    texture,
+    init: (o, scale) => {
+      if (o.subType !== 8) return false;
+      o.lifeTime = 30;
+      if (texture === 'waterfall5') {
+        o.velocity.z = randInt(3) + 1;
+        o.scale = (randInt(5) + 5) * 0.05 + scale;
+      } else {
+        o.velocity.z = randInt(5) + 5;
+        o.scale = (randInt(10) + 10) * 0.05;
+      }
+      return true;
+    },
+    move: (o) => {
+      o.scale += 0.05;
+      o.velocity.z -= 0.6;
+      o.light.multiplyScalar(1 / 1.1);
+    },
+  };
+}
+EXTRA_PARTICLES.waterfall5 = waterSpray('waterfall5');
+EXTRA_PARTICLES.waterfall3 = waterSpray('waterfall3');
+
+/** Strike of Destruction's release: the knight's blow aimed at the struck tile (its light carries the tile's centre). */
+export function strikeOfDestruction(system: EffectSystem, caster: EffectOwner, cell: { x: number; y: number } | null | undefined, target: EffectOwner | null): void {
+  const tile = cell ? new THREE.Vector3((cell.x + 0.5) * 100, (cell.y + 0.5) * 100, caster.position.z)
+    : target ? new THREE.Vector3(target.position.x, target.position.y, caster.position.z) : null;
+  if (!tile) return;
+  system.createEffect('blowOfDestruction', caster.position, caster.angle, tile, 0, caster);
+}

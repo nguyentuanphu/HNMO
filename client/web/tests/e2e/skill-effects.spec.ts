@@ -42,6 +42,7 @@ const WIZARD: Case[] = [
   { skill: 6, name: 'teleport', expect: ['effect:spark3', 'particle:spark3'], shotAt: 150 },
   { skill: 38, name: 'decay', expect: ['effect:fireModel', 'joint:smokeTrail'], shotAt: 1000, area: true },
   { skill: 40, name: 'nova', expect: ['joint:jointSpirit'], shotAt: 750 },
+  { skill: 13, name: 'cometfall', expect: ['effect:skillBlast', 'joint:jointEnergy', 'particle:shiny4', 'particle:explosion', 'effect:stone1'], shotAt: 560, area: true, model: 'skillBlast', warm: [['Skill', 'Blast01.bmd']] },
   // Last: its lights circle the hero while the buff lasts (here, until the page closes).
   { skill: 16, name: 'soul-barrier', expect: ['joint:spearSkill'], shotAt: 1200 },
 ];
@@ -56,6 +57,7 @@ const KNIGHT: Case[] = [
   { skill: 22, name: 'cyclone', expect: ['particle:spark', 'particle:spark3'], shotAt: 650 },
   // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
   { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
+  { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
   { skill: 44, name: 'crescent-moon-slash', expect: ['joint:jointSpark', 'particle:fire', 'effect:swordForce', 'joint:jointForce'], shotAt: 600, action: 137 },
 ];
 

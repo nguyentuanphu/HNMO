@@ -120,7 +120,12 @@ export type EffectType =
   | 'feather' // MODEL_FEATHER: their feathers (Skill/darkwing_hetachi.bmd)
   | 'windForceMirror' // MODEL_WINDFOCE_MIRROR: Increase Defense's passing wind (Effect/wind_foce_mirror.bmd)
   | 'dragonKickDummy' // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
-  | 'bladeSkill'; // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
+  | 'bladeSkill' // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
+  | 'skillBlast' // MODEL_SKILL_BLAST: Cometfall's comets (Skill/Blast01.bmd)
+  | 'blowOfDestruction' // MODEL_BLOW_OF_DESTRUCTION: Strike of Destruction (no model)
+  | 'nightWater1' // MODEL_NIGHTWATER_01: its water splashes (Effect/nightwater01.bmd)
+  | 'knightPlancrackA' | 'knightPlancrackB' // its ground cracks (Effect/knight_plancrack_a/b.bmd)
+  | 'raklionBossCrackEffect'; // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
@@ -133,7 +138,9 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'sahamuttExplosion' // BITMAP_SUMMON_SAHAMUTT_EXPLOSION: CreateBomb3's explosion
   | 'sbumb' // BITMAP_SBUMB: Killing Blow's hits
   | 'fire2' // BITMAP_FIRE+1: Fire Burst's trails' fire
-  | 'smokeLine1'; // BITMAP_SMOKELINE1: the smoke lines rising from Increase Attack's fists
+  | 'smokeLine1' // BITMAP_SMOKELINE1: the smoke lines rising from Increase Attack's fists
+  | 'shiny4' // BITMAP_SHINY+4 (ring.jpg): Cometfall's ring where a comet lands
+  | 'waterfall5' | 'waterfall3'; // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;

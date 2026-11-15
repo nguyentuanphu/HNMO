@@ -22,8 +22,9 @@ import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
 import { LordAction, chaoticDiseier, earthshake, electricSpike } from './darkLordEffects.js';
-import { spiralSlashBlades } from './knightEffects.js';
+import { spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
 import { playBuffLook } from './buffLooks.js';
+import { cometfall } from './wizardEffects.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -88,6 +89,8 @@ export const SkillEffect = {
   CHAOTIC_DISEIER: 238,
   CRESCENT_MOON_SLASH: 44,
   PARTY_TELEPORT: 63,
+  COMETFALL: 13,
+  STRIKE_OF_DESTRUCTION: 232,
 } as const;
 
 /** PLAYER_ATTACK_RUSH: Crescent Moon Slash's and Charge's rush. */
@@ -114,7 +117,7 @@ const WHITE = new THREE.Vector3(1, 1, 1);
 /** The fighter's party buffs. */
 const RAGE_BUFFS: readonly number[] = [RageSkill.ATT_UP, RageSkill.HP_UP, RageSkill.DEF_UP];
 /** The skills whose AttackStage case sets AttackTime to 15 on the first tick: they release at once. */
-const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK, SkillEffect.FLAME_STRIKE];
+const IMMEDIATE_SKILLS: readonly number[] = [SkillEffect.LIGHTNING_SHOCK, SkillEffect.FLAME_STRIKE, SkillEffect.STRIKE_OF_DESTRUCTION];
 const SWORD_SKILLS: readonly number[] = [SkillEffect.FALLING_SLASH, SkillEffect.LUNGE, SkillEffect.UPPERCUT, SkillEffect.CYCLONE, SkillEffect.SLASH];
 /** AttackEffect: a monster's lightning starts this far down its weapon bone; without a bone the start is over the feet. */
 const LIGHTNING_FALLBACK_HEIGHT = 130;
@@ -544,6 +547,12 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
     }
     case SkillEffect.FLAME:
       if (options.cell) system.createEffect('flame', cellPosition(system, options.cell), caster.angle, light, 0, caster);
+      break;
+    case SkillEffect.STRIKE_OF_DESTRUCTION: // the blow aimed at the struck tile (c->SkillX, SkillY)
+      strikeOfDestruction(system, caster, options.cell, null);
+      break;
+    case SkillEffect.COMETFALL: // AT_SKILL_BLAST: two comets fall on the tile
+      if (options.cell) cometfall(system, caster, options.cell);
       break;
     case SkillEffect.DECAY:
       if (!options.cell) break;
