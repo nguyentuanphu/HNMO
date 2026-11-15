@@ -9,12 +9,12 @@
 //   CreateEffect / Move_MODEL_EFFECT_FLAME_STRIKE and its draw in RenderEffects (the blurs not yet);
 //   CreateEffect / Move_BITMAP_JOINT_THUNDER (Gigantic Storm: bolts, circles, smoke 54, stones 13, BITMAP_CHROME_ENERGY2)
 //   CreateEffect / Move_MODEL_PIER_PART (0, 1), MODEL_DARKLORD_SKILL; MoveCharacter's release for
-//   AT_SKILL_FIREBURST and AT_SKILL_ADD_CRITICAL (the trails' BITMAP_FIRE+1 not yet)
+//   AT_SKILL_FIREBURST and AT_SKILL_ADD_CRITICAL (the trails' BITMAP_FIRE+1, two ticks each)
 
 import * as THREE from 'three';
 import { moveHumming, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
-import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
+import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner } from './types.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
@@ -234,6 +234,16 @@ EXTRA_EFFECTS.jointThunderEffect = {
   },
 };
 
+// BITMAP_FIRE+1 SubType 0 (Fire Burst's trails): two ticks where it was made, glowing.
+EXTRA_PARTICLES.fire2 = {
+  texture: 'fire2',
+  init: (o) => {
+    o.lifeTime = 2;
+    return o.subType === 0;
+  },
+  move: () => undefined,
+};
+
 // BITMAP_CHROME_ENERGY2 (the catalogue gives LifeTime 30 and a size of 1.5 cells): a flash on the ground that fades
 // over its last ten ticks.
 EXTRA_EFFECTS.chromeEnergy2 = {
@@ -303,7 +313,7 @@ EXTRA_EFFECTS.flameStrike = {
 
 EXTRA_EFFECTS.pierPart = {
   model: ['Skill', 'PierPart.bmd'],
-  create: (o) => {
+  create: (o, system) => {
     if (o.subType === 0) {
       o.lifeTime = 20;
       o.gravity = 2;
@@ -322,6 +332,8 @@ EXTRA_EFFECTS.pierPart = {
       o.hiddenMesh = 0;
       o.scale = 0.5;
       o.alpha = (20 - o.lifeTime) / 5;
+      // BITMAP_FIRE+1 SubType 0: CreateParticle has no case for it, so it keeps the common two ticks, unmoving.
+      system.createParticle('fire2', o.position, o.angle, o.light, 0, 1, o.self);
       o.direction.set(0, 0, 0);
       return true;
     }

@@ -132,6 +132,7 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'swordEffectMonoParticle' // BITMAP_SWORD_EFFECT_MONO as a particle
   | 'sahamuttExplosion' // BITMAP_SUMMON_SAHAMUTT_EXPLOSION: CreateBomb3's explosion
   | 'sbumb' // BITMAP_SBUMB: Killing Blow's hits
+  | 'fire2' // BITMAP_FIRE+1: Fire Burst's trails' fire
   | 'smokeLine1'; // BITMAP_SMOKELINE1: the smoke lines rising from Increase Attack's fists
 
 /** CreateSprite types: the bitmap drawn. */
