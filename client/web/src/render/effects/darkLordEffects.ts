@@ -278,9 +278,7 @@ EXTRA_EFFECTS.darkHorseSkill = {
       system.createEffect('skillFuryStrike', o.position, o.angle, owner.light ?? WHITE, 0, owner, 0, { kind: 2 });
       o.counter = -3;
     }
-    o.lifeTime -= 1;
-    if (o.lifeTime <= 0) o.live = false;
-    return false;
+    return false; // the shared tail counts the life time down
   },
 };
 

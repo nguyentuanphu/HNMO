@@ -22,6 +22,10 @@ interface Case {
   model?: string;
   /** Models (directory, file) loaded with their textures before the cast. */
   warm?: [string, string][];
+  /** Buffs (eBuffState) the hero has from just before the cast until the picture's effects have ended. */
+  buffs?: number[];
+  /** Effects that may still live after the case (they last while a buff does): left out of the count. */
+  lasting?: string[];
 }
 
 const WIZARD: Case[] = [
@@ -50,6 +54,8 @@ const KNIGHT: Case[] = [
   { skill: 48, name: 'swell-life', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 600 },
   { skill: 59, name: 'combo', expect: ['effect:combo', 'joint:lightJoint'], shotAt: 250 },
   { skill: 22, name: 'cyclone', expect: ['particle:spark', 'particle:spark3'], shotAt: 650 },
+  // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
+  { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
 ];
 
 const ELF: Case[] = [
@@ -71,6 +77,13 @@ const LORD: Case[] = [
   { skill: 66, name: 'force-wave', expect: ['effect:waves', 'effect:piercing2', 'joint:piercing'], shotAt: 680 },
   { skill: 61, name: 'fire-burst', expect: ['effect:pierPart', 'effect:darkLordSkill'], shotAt: 680, model: 'pierPart', warm: [['Skill', 'PierPart.bmd'], ['Skill', 'DarkLordSkill.bmd']] },
   { skill: 64, name: 'critical-damage', expect: ['effect:darkLordSkill'], shotAt: 620, model: 'darkLordSkill', warm: [['Skill', 'DarkLordSkill.bmd']] },
+  // The buff's sparks spiral out of the held weapons every 1.2 s while it lasts (eBuff_AddCriticalDamage = 5).
+  { skill: 64, name: 'critical-damage-buff', expect: ['joint:flareForceJoint', 'sprite:flare'], shotAt: 1400, buffs: [5] },
+  // Released at key 5.5 of PLAYER_SKILL_FLASH, played by the hero here.
+  { skill: 65, name: 'electric-spike', expect: ['joint:flareForceJoint'], shotAt: 900, action: 152 },
+  // The dark horse's stomp (shock waves, the strike's cracks at its 19th tick, the stones while keys 8-9.5 play).
+  { skill: 62, name: 'earthshake', expect: ['effect:darkHorseSkill', 'effect:shockWave', 'effect:skillFuryStrike', 'effect:earthQuake1'], shotAt: 1040, action: 87, warm: [['Skill', 'GroundStone.bmd'], ['Skill', 'GroundStone2.bmd']] },
+  { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },
 ];
 
 const SUMMONER: Case[] = [
@@ -92,6 +105,9 @@ const FIGHTER: Case[] = [
   { skill: 266, name: 'increase-attack', expect: ['effect:swordEffectMono', 'particle:swordEffectMonoParticle', 'effect:shockWaveGround1', 'effect:eventCloud', 'effect:windForce', 'effect:magic'], shotAt: 400 },
   { skill: 267, name: 'increase-health', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:eventCloud'], shotAt: 400 },
   { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },
+  // While Increase Attack lasts (eBuff_Att_up_Ourforces = 129) red smoke lines rise from the fists.
+  { skill: 266, name: 'increase-attack-buff', expect: ['effect:lightRed', 'particle:smokeLine1'], shotAt: 1600, buffs: [129] },
+  { skill: 263, name: 'dark-side', expect: ['effect:eventCloud', 'effect:magic', 'effect:windForce'], shotAt: 300 },
 ];
 
 const CASES: Record<string, Case[]> = { wizard: WIZARD, knight: KNIGHT, elf: ELF, gladiator: GLADIATOR, lord: LORD, summoner: SUMMONER, fighter: FIGHTER };
@@ -187,6 +203,7 @@ for (const [group, cases] of Object.entries(CASES)) {
           if (++this.__ticks! === freezeAt) this.__frozen = true;
         };
       }, Math.max(1, Math.round(c.shotAt / 40)));
+      if (c.buffs) await page.evaluate((list) => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, list); }, c.buffs);
       await cast(page, c.skill, c.area ?? false, c.chain ?? false, c.action);
       await page.waitForFunction(() => (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen === true, null, { timeout: 30_000 });
       if (c.model) {
@@ -197,6 +214,7 @@ for (const [group, cases] of Object.entries(CASES)) {
       await page.screenshot({ path: `${SHOTS_DIR}/${group}-${c.name}.png` });
       await page.evaluate(() => { (window as unknown as { __game: { effects: { __frozen?: boolean } } }).__game.effects.__frozen = false; });
       await page.waitForTimeout(3_000);
+      if (c.buffs) await page.evaluate(() => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, []); });
       const seen = new Set(await page.evaluate(() => [...((window as unknown as { __game: { effects: { __seen?: Set<string> } } }).__game.effects.__seen ?? [])]));
       for (const key of c.expect) expect(seen, `${c.name} makes ${key}`).toContain(key);
       // Everything it made ends (Soul Barrier's lights last while the buff does).
@@ -223,3 +241,47 @@ for (const [group, cases] of Object.entries(CASES)) {
     expect(errors).toEqual([]);
   });
 }
+
+// The buffs' and debuffs' looks on a character (InsertBuffPhysicalEffect, the body colours of RenderObject): the
+// nearest monster is poisoned, then frozen, then weakened, as the server's magic-effect state would show it.
+test('debuffs colour a monster and weakness leaves its lights', async ({ page }) => {
+  if (groups && !groups.includes('buffs')) test.skip();
+  test.setTimeout(5 * 60_000);
+  mkdirSync(SHOTS_DIR, { recursive: true });
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await enterWorld(page, 'test400');
+  await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
+  await goHunting(page);
+  type Tinted = { id: number; kind: string; dead: boolean; cell: { x: number; y: number }; bodyTint: { r: number; g: number; b: number } | null };
+  const setDebuffs = (list: number[]) => page.evaluate((list) => {
+    const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { hero: { cell: { x: number; y: number } }; characters: Map<number, Tinted> } } }).__game;
+    const hero = g.online.hero;
+    let best: Tinted | null = null, bestDistance = 12;
+    for (const c of g.online.characters.values()) {
+      if (c.kind !== 'monster' || c.dead) continue;
+      const d = Math.hypot(c.cell.x - hero.cell.x, c.cell.y - hero.cell.y);
+      if (d < bestDistance) { best = c; bestDistance = d; }
+    }
+    if (!best) return null;
+    g.buffs.replace(best.id, list);
+    return { id: best.id, tint: best.bodyTint ? [best.bodyTint.r, best.bodyTint.g, best.bodyTint.b] : null };
+  }, list);
+  const poisoned = await setDebuffs([55]);
+  expect(poisoned, 'a monster close by').not.toBeNull();
+  expect(poisoned!.tint).toEqual([0.3, 1, 0.5]); // eDeBuff_Poison
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: `${SHOTS_DIR}/buffs-poison.png` });
+  const frozen = await setDebuffs([56]);
+  expect(frozen!.tint).toEqual([0.3, 0.5, 1]); // eDeBuff_Freeze
+  await page.screenshot({ path: `${SHOTS_DIR}/buffs-freeze.png` });
+  await setDebuffs([76]); // eDeBuff_AttackDown (Weakness)
+  await expect.poll(() => game(page, (g) => g.effects.census()['effect:shiny5'] ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
+  await expect.poll(() => game(page, (g) => g.effects.census()['particle:shiny5Particle'] ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: `${SHOTS_DIR}/buffs-weakness.png` });
+  const cleared = await setDebuffs([]);
+  expect(cleared!.tint).toBeNull();
+  await expect.poll(() => game(page, (g) => (g.effects.census()['effect:shiny5'] ?? 0) + (g.effects.census()['effect:pinLight'] ?? 0)), { timeout: 10_000 }).toBe(0);
+  expect(errors).toEqual([]);
+});
