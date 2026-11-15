@@ -341,3 +341,17 @@ section 12 (the cash shop) still waits for the owner's answers.
   community links (Discord/Zalo), play now / download, log out. Today it has only: setup, create account,
   coins, gift code, resets and stats, account safety.
 - Give the owner the guide for testing HNMO with their own Claude API key again with the Thursday report.
+
+## The owner's performance reports (2026-11-16 09:55–09:58 Sydney; RTX 3060 Ti, 16 threads, Chrome 157, 1953x1289 at 1.2x)
+Four 15 s reports (Lorencia with and without monsters, Devias, Noria/map 7): 60 fps steady, every frame 16.4–17 ms,
+no long tasks, no slow frames, the game's own work 2.1–2.5 ms a frame (render 1.4–1.8 ms). So the browser draws
+smoothly: the jerkiness the owner sees is in the MOVEMENT, not the frame rate. Suspects to check first:
+- Character.advance (game/characters.ts): the angle snaps at once to each next cell (no turning over time), so
+  grid zig-zag paths jerk; compare the desktop's turning.
+- Monsters walk cell by cell from the server: when a step ends before the next packet arrives, the path is empty
+  for a moment -> the stop animation and a pause, then walk again (stop/walk flicker). Keep walking / blend.
+- A new path whose start isn't the current position makes the model jump; check how online moves set the path.
+- Heap sawtooth ~25 MB every ~2 s (allocations per frame, e.g. `new THREE.Vector2` in advance): no frame drops
+  now, but worth removing.
+Next step: record per-frame positions/angles/actions of the hero and the nearest monsters (add to the perf report)
+and compare with the desktop's movement.
