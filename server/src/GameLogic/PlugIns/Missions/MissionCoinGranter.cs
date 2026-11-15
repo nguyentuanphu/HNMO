@@ -23,8 +23,9 @@ public static class MissionCoinGranter
     /// </summary>
     /// <param name="gameContext">The game context.</param>
     /// <param name="grant">The grant.</param>
+    /// <param name="grantedBy">The name in the coins history's "granted by" column; <see cref="GrantedBy"/> by default.</param>
     /// <returns><c>true</c>, if it was given now; <c>false</c>, if its reference was given already or the account doesn't exist.</returns>
-    public static async ValueTask<bool> GrantAsync(IGameContext gameContext, CoinGrant grant)
+    public static async ValueTask<bool> GrantAsync(IGameContext gameContext, CoinGrant grant, string? grantedBy = null)
     {
         if (grant.Amount <= 0 || !Enum.IsDefined(grant.CoinType))
         {
@@ -49,7 +50,7 @@ public static class MissionCoinGranter
             entry.Amount = grant.Amount;
             entry.Reason = grant.Reason;
             entry.Reference = grant.Reference;
-            entry.GrantedBy = GrantedBy;
+            entry.GrantedBy = grantedBy ?? GrantedBy;
             entry.CreatedAt = DateTime.UtcNow;
             try
             {

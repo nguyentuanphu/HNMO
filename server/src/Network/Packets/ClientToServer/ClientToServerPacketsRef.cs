@@ -17933,6 +17933,185 @@ public readonly ref struct HnmoMissionsActionRef
 
 
 /// <summary>
+/// Is sent by the client when: The web game entered the world, or the player opens HNMO's world boss window.
+/// Causes reaction on server side: The server sends the HnmoWorldBossesState message, and from then on sends it again when something changes, e.g. a boss is announced, appears, is hit or killed.
+/// </summary>
+public readonly ref struct HnmoWorldBossesRequestRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoWorldBossesRequestRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoWorldBossesRequestRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoWorldBossesRequestRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoWorldBossesRequestRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x0B;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 4;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoWorldBossesRequest"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoWorldBossesRequestRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoWorldBossesRequest"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoWorldBossesRequestRef packet) => packet._data; 
+}
+
+
+/// <summary>
+/// Is sent by the client when: The player clicks a button of HNMO's world boss window, e.g. to take the rewards which waited for room in the bag.
+/// Causes reaction on server side: The server does it and sends the HnmoWorldBossesState message with the result.
+/// </summary>
+public readonly ref struct HnmoWorldBossesActionRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoWorldBossesActionRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoWorldBossesActionRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoWorldBossesActionRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoWorldBossesActionRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x0D;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the action.
+    /// </summary>
+    public HnmoWorldBossesAction.HnmoWorldBossesActionType Action
+    {
+        get => (HnmoWorldBossesAction.HnmoWorldBossesActionType)this._data[4];
+        set => this._data[4] = (byte)value;
+    }
+
+    /// <summary>
+    /// Gets or sets not used yet; empty.
+    /// </summary>
+    public string Argument
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoWorldBossesAction"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoWorldBossesActionRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoWorldBossesAction"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoWorldBossesActionRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Argument' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Argument' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
 /// Is sent by the client when: The player wants to rename a character in the character selection.
 /// Causes reaction on server side: The server renames the character and answers with CharacterRenameResult (F3 16).
 /// </summary>

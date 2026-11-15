@@ -5748,6 +5748,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoWorldBossesRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens HNMO's world boss window.
+    /// Causes reaction on server side: The server sends the HnmoWorldBossesState message, and from then on sends it again when something changes, e.g. a boss is announced, appears, is hit or killed.
+    /// </remarks>
+    public static async ValueTask SendHnmoWorldBossesRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoWorldBossesRequestRef.Length;
+            var packet = new HnmoWorldBossesRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoWorldBossesAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's world boss window, e.g. to take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoWorldBossesState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoWorldBossesActionAsync(this IConnection? connection, HnmoWorldBossesAction.HnmoWorldBossesActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoWorldBossesActionRef.GetRequiredSize(argument);
+            var packet = new HnmoWorldBossesActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

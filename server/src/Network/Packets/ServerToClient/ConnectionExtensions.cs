@@ -7180,6 +7180,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoWorldBossesState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the bosses with their next spawn, the alive ones with their time left and damage table, the player's damage and rank, the waiting rewards, the boss-hunt points, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's world bosses (HnmoWorldBossesRequest) or did an action there, and when something changed for a client which requested them before (a boss was announced, appeared, was hit, killed or left; rewards were given).
+    /// Causes reaction on client side: The world boss window and the line on the screen show the state; a notice in the chat tells about the event in it (e.g. an announcement or a reward).
+    /// </remarks>
+    public static async ValueTask SendHnmoWorldBossesStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoWorldBossesStateRef.GetRequiredSize(json);
+            var packet = new HnmoWorldBossesStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
