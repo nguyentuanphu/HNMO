@@ -8,12 +8,12 @@ import { meshDraws, type ItemPlace, type MeshDraw } from './itemLooks.js';
 import { sampleHeight, sampleModelLight } from '../terrain.js';
 import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
 import { itemDefinition, itemModel, partModel, ItemGroup } from './items.js';
-import { addItemGlow, setCloaked, setItemGlowState } from './itemGlow.js';
+import { addItemGlow, reflectionMaterial, setCloaked, setItemGlowState, updateReflections } from './itemGlow.js';
 import { createCompanions, isDarkRaven } from './pets.js';
 import type { Companion, CompanionOwner } from './pets.js';
 import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
 import type { BMDModel, Vec3 } from '../formats.js';
-import type { GeometryPart } from '../bmd.js';
+import type { GeometryPart, ModelPart } from '../bmd.js';
 import type { DescribeOptions, MonsterLook, MonsterSetupData } from './monsterData.js';
 import type { AppearanceItem, EquipmentAppearance, EquipmentSlotName, ItemGlowData, ItemModelSource } from './items.js';
 
@@ -193,24 +193,70 @@ async function createSourceModel(source: ItemModelSource, item: AppearanceItem, 
   if (place !== 'worn') {
     for (const part of parts) if (/^(ski|hair)/.test(part.textureName) || /^level/i.test(part.textureName)) draws[part.meshIndex] = [];
   }
-  const materials = await Promise.all(parts.map((part) => {
+  // A mesh whose first drawing is a reflection is drawn only by its passes.
+  const base = (part: { meshIndex: number }): MeshDraw | undefined => {
     const first = draws[part.meshIndex]?.[0];
+    return first && !first.reflection ? first : undefined;
+  };
+  const materials = await Promise.all(parts.map((part) => {
+    const first = base(part);
     return first ? drawMaterial(source.textureDir, part.textureName, first) : Promise.resolve(hidden());
   }));
   const animated = new AnimatedModel(model, parts, materials, { skinned });
+  /** The drawings whose light or scroll moves with the clock, and what they move. */
+  const moving: { material: THREE.MeshBasicMaterial; draw: MeshDraw; part: ModelPart | null }[] = [];
+  const keepMoving = (material: THREE.MeshBasicMaterial, draw: MeshDraw, part: ModelPart | null): void => {
+    if (!draw.lightAt && !draw.scrollAt) return;
+    if (draw.scrollAt && material.map) {
+      // Its own texture object for its scroll, sharing the image and the GPU texture (a version, not an upload).
+      const map = material.map.clone();
+      map.wrapS = map.wrapT = THREE.RepeatWrapping;
+      map.version = Math.max(1, material.map.version);
+      material.map = map;
+    }
+    moving.push({ material, draw, part });
+  };
   for (const part of animated.parts) {
-    const first = draws[part.meshIndex]?.[0];
+    const first = base(part);
     if (first && !first.additive && first.light.some((channel) => channel !== 1)) part.tint = new THREE.Color(...first.light);
+    if (first) keepMoving(part.mesh.material, first, first.additive ? null : part);
   }
   const extra: THREE.Mesh[] = [];
   for (const part of animated.parts) {
-    for (const draw of (draws[part.meshIndex] ?? []).slice(1)) {
+    const all = draws[part.meshIndex] ?? [];
+    for (const draw of all.slice(base(part) ? 1 : 0)) {
+      if (draw.reflection) {
+        const material = await reflectionMaterial(draw.reflection.motion, draw.reflection.texture, draw.light, place === 'inventory');
+        if (material) extra.push(animated.overlay(part.geometry, material));
+        continue;
+      }
       const material = await drawMaterial(source.textureDir, part.textureName, draw);
       if (!draw.additive) material.color.setRGB(...draw.light);
+      keepMoving(material, draw, null);
       extra.push(animated.overlay(part.geometry, material));
     }
   }
-  if (extra.length) animated.addGlow({ meshes: extra, update: () => { /* still */ } });
+  if (extra.length || moving.length) {
+    animated.addGlow({
+      meshes: extra,
+      update: () => {
+        updateReflections();
+        if (!moving.length) return;
+        const ms = performance.now();
+        for (const { material, draw, part } of moving) {
+          if (draw.lightAt) {
+            const light = draw.lightAt(ms);
+            if (part?.tint) part.tint.setRGB(light[0], light[1], light[2]);
+            else if (!part) material.color.setRGB(light[0], light[1], light[2]);
+          }
+          if (draw.scrollAt && material.map) {
+            const [u, v] = draw.scrollAt(ms);
+            material.map.offset.set(u, v);
+          }
+        }
+      },
+    });
+  }
   await addItemGlow(animated, animated.parts, source.glow, item, place);
   return animated;
 }

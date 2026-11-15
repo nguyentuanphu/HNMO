@@ -293,6 +293,35 @@ export async function addItemGlow(model: AnimatedModel, parts: ModelPart[], glow
   model.addGlow({ meshes, update: () => updateShared(worldSeconds()) });
 }
 
+const lookTextures = new Map<string, Promise<THREE.Texture | null>>();
+
+/**
+ * A reflection layer of an item's look (Data/Effects/RenderStyles.json "reflection"): a chrome pass in its motion
+ * (MotionFlag: slowDrift RENDER_CHROME, swirl RENDER_CHROME4, stillShine RENDER_METAL...), with the layer's own texture
+ * ("Effect/bab2.jpg") or the motion's, glowing in the layer's light. Shared like the level's passes.
+ */
+export async function reflectionMaterial(motion: string, texture: string | undefined, light: readonly [number, number, number], icon: boolean): Promise<THREE.Material | null> {
+  const mode = MOTION_MODE[motion] ?? Mode.CHROME;
+  let map: THREE.Texture | null;
+  if (texture) {
+    let load = lookTextures.get(texture);
+    if (!load) {
+      const slash = texture.lastIndexOf('/');
+      load = loadTexture(texture.slice(0, slash), texture.slice(slash + 1));
+      lookTextures.set(texture, load);
+    }
+    map = await load;
+  } else {
+    map = await chromeTexture(mode);
+  }
+  return map ? passMaterial(mode, map, new THREE.Color(light[0], light[1], light[2]), 'still', icon) : null;
+}
+
+/** Keeps a look's chrome passes moving with the world's clock (their model's glow update). */
+export function updateReflections(): void {
+  updateShared(worldSeconds());
+}
+
 const chromeTextures = new Map<Mode, Promise<THREE.Texture | null>>();
 /** A chrome pass's texture (Data/Effect), loaded once. */
 function chromeTexture(mode: Mode): Promise<THREE.Texture | null> {

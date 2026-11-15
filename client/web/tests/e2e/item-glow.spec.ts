@@ -164,3 +164,54 @@ test('items glow by level, excellent and ancient, worn and as icons', async ({ p
   });
   expect(errors).toEqual([]);
 });
+
+// The moving parts of item looks (Data/Effects/RenderStyles.json): the Dark Reign Blade's textures scroll on the
+// world's clock and the Divine Sword of the Archangel draws its reflection (stillShine) as a chrome pass.
+test('item looks move: scrolling textures and reflection layers', async ({ page }) => {
+  test.setTimeout(5 * 60_000);
+  mkdirSync(SHOTS_DIR, { recursive: true });
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await enterWorld(page, 'test400');
+  await page.evaluate(() => (window as unknown as { __game: { online: { say(t: string): void } } }).__game.online.say('/move lorencia'));
+  await page.waitForTimeout(8_000);
+  type TextureMap = { offset: { x: number; y: number } } | null;
+  type Mesh = { material: { map?: TextureMap; uniforms?: unknown } };
+  type Char = { id: number; holdWeapons: boolean; angle: number; group: unknown; attachments: { slot: string; model: { glows: { meshes: Mesh[] }[] } }[]; placeAt(x: number, y: number): void; release(): void };
+  const built = await page.evaluate(async () => {
+    type G = { online: { hero: { cell: { x: number; y: number }; group: { parent: { add(o: unknown): void } } }; characters: Map<number, unknown> };
+      debug: { createPlayerCharacter(o: { id: number; name: string; bodySet: number; equipment: Record<string, unknown> }): Promise<Char> } };
+    const g = (window as unknown as { __game: G }).__game;
+    const hero = g.online.hero;
+    const out: { overlays: number; chrome: number }[] = [];
+    for (const [i, number] of [21, 19].entries()) {
+      const c = await g.debug.createPlayerCharacter({ id: 0x7e40 + i, name: `look${number}`, bodySet: 2, equipment: { rightHand: { group: 0, number, glowLevel: 0 } } });
+      c.holdWeapons = true;
+      c.placeAt(hero.cell.x - 1 + i * 2, hero.cell.y + 2);
+      c.angle = 0;
+      hero.group.parent.add(c.group);
+      g.online.characters.set(c.id, c);
+      const meshes = (c.attachments.find((a) => a.slot === 'rightHand')?.model.glows ?? []).flatMap((glow) => glow.meshes);
+      out.push({ overlays: meshes.length, chrome: meshes.filter((m) => m.material.uniforms !== undefined).length });
+    }
+    return out;
+  });
+  expect(built[0].overlays, 'the Dark Reign Blade draws its scrolling layers over its meshes').toBeGreaterThan(0);
+  expect(built[1].chrome, 'the Divine Sword draws its reflection as a chrome pass').toBeGreaterThan(0);
+  const offsets = () => page.evaluate(() => {
+    const g = (window as unknown as { __game: { online: { characters: Map<number, Char> } } }).__game;
+    const blade = g.online.characters.get(0x7e40)!;
+    return (blade.attachments.find((a) => a.slot === 'rightHand')?.model.glows ?? []).flatMap((glow) => glow.meshes)
+      .map((m) => (m.material.map ? m.material.map.offset.x + m.material.map.offset.y : 0));
+  });
+  const first = await offsets();
+  await page.waitForTimeout(1_500);
+  const later = await offsets();
+  expect(later.some((value, i) => Math.abs(value - first[i]) > 0.01), 'the textures scroll').toBe(true);
+  await page.screenshot({ path: `${SHOTS_DIR}/looks-moving.png` });
+  await page.evaluate(() => {
+    const g = (window as unknown as { __game: { online: { characters: Map<number, Char & { group: { parent: { remove(o: unknown): void } | null } }> } } }).__game;
+    for (const id of [0x7e40, 0x7e41]) { const c = g.online.characters.get(id); if (c) { c.group.parent?.remove(c.group); c.release(); g.online.characters.delete(id); } }
+  });
+  expect(errors).toEqual([]);
+});
