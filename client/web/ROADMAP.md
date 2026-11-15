@@ -248,3 +248,10 @@ section 12 (the cash shop) still waits for the owner's answers.
     and modest PvE strength.
 15. ⏳ **Party options**: a party password (join without an invite) and auto party for hunting spots. A party of
     10 needs a new party window in the web and desktop clients (they show 5); later, if wanted.
+
+## Follow-ups noted overnight (2026-11-16, Sydney)
+- rage-fighter.spec.ts: the "Ignore Defense makes effect:windForce" check fails on repeated runs against the same
+  test character (likely the buff is still active from the previous run, so it isn't re-applied); make the test
+  remove or wait out the buff first. The Dark Side dash check passed live but once failed at 5 fps (timing).
+- Phoenix Shot: the desktop casts it and sends nothing (the server supports it as an area skill). Kept 1:1 for now;
+  ask the owner whether HNMO should send it.
