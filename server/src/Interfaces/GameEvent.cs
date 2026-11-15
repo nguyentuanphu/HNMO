@@ -34,4 +34,5 @@ using System.Text.Json.Serialization;
 [JsonDerivedType(typeof(LetterReceivedEvent), nameof(LetterReceivedEvent))]
 [JsonDerivedType(typeof(PlayerEnteredGameEvent), nameof(PlayerEnteredGameEvent))]
 [JsonDerivedType(typeof(WorldBossAnnouncedEvent), nameof(WorldBossAnnouncedEvent))]
+[JsonDerivedType(typeof(CommunityHighlightEvent), nameof(CommunityHighlightEvent))]
 public abstract record GameEvent(byte ServerId, DateTime TimestampUtc);

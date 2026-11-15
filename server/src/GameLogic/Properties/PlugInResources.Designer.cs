@@ -5839,5 +5839,22 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("GuildsPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: community.
+        /// </summary>
+        public static string CommunityPlugIn_Name {
+            get {
+                return ResourceManager.GetString("CommunityPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to One-time coins for linking Discord and joining the Zalo group, community events with codes or winners, and automatic posts (rare drops, world bosses, guilds, castle siege) to Discord and the website. .
+        /// </summary>
+        public static string CommunityPlugIn_Description {
+            get {
+                return ResourceManager.GetString("CommunityPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

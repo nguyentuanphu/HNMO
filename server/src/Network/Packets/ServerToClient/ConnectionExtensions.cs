@@ -7264,6 +7264,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoCommunityState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the Discord and Zalo rewards and the player's state of them, the community events, the waiting rewards, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's community state (HnmoCommunityRequest) or did an action there, and when something changed for a client which requested it before (community coins, an event reward, an approved Zalo claim).
+    /// Causes reaction on client side: The community window shows the one-time rewards, the community events and the waiting rewards; a notice in the chat tells about the event in it.
+    /// </remarks>
+    public static async ValueTask SendHnmoCommunityStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCommunityStateRef.GetRequiredSize(json);
+            var packet = new HnmoCommunityStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

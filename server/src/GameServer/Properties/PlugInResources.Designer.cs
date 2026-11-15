@@ -8215,5 +8215,58 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoGuildsActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO community view.
+        /// </summary>
+        public static string HnmoCommunityViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoCommunityViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends HNMO's community state (Discord and Zalo coins, community events, waiting rewards) to the web game..
+        /// </summary>
+        public static string HnmoCommunityViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoCommunityViewPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO community request handler.
+        /// </summary>
+        public static string HnmoCommunityRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoCommunityRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the web game's request of HNMO's community state..
+        /// </summary>
+        public static string HnmoCommunityRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoCommunityRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO community action handler.
+        /// </summary>
+        public static string HnmoCommunityActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoCommunityActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the buttons of HNMO's community window: the Discord and Zalo coins, event codes and waiting rewards..
+        /// </summary>
+        public static string HnmoCommunityActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoCommunityActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

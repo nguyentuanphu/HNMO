@@ -4581,6 +4581,70 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>14</SubCode>
+      <Name>HnmoCommunityRequest</Name>
+      <Caption>Request HNMO community state</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world, or the player opens the community window.</SentWhen>
+      <CausedReaction>The server sends the HnmoCommunityState message, and from then on sends it again when something changes, e.g. community coins or an event reward were given.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>16</SubCode>
+      <Name>HnmoCommunityAction</Name>
+      <Caption>HNMO community action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's community window: take the Discord coins, claim the Zalo coins, enter an event's code or take the waiting rewards.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoCommunityState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoCommunityActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>The event's code (EnterCode), the player's name in Zalo (ClaimZalo, may be empty); empty otherwise.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoCommunityActionType</Name>
+          <Description>The action of the community window.</Description>
+          <Values>
+            <EnumValue>
+              <Name>ClaimDiscord</Name>
+              <Description>Take the one-time coins for linking the account to Discord.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimZalo</Name>
+              <Description>Claim the one-time coins for joining the Zalo group; the admin approves the claim.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>EnterCode</Name>
+              <Description>Enter a community event's code.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimRewards</Name>
+              <Description>Take the event rewards which wait for room in the bag.</Description>
+              <Value>4</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

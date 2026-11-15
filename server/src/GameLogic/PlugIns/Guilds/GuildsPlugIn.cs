@@ -417,7 +417,7 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
     /// <summary>
     /// Gives the reward's zen and items to the character, all or nothing.
     /// </summary>
-    private static async ValueTask<bool> GiveGoodsAsync(Player player, MissionReward reward)
+    internal static async ValueTask<bool> GiveGoodsAsync(Player player, MissionReward reward)
     {
         if (player.Inventory is not { } inventory)
         {
@@ -586,6 +586,11 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
         gameContext.LoggerFactory.CreateLogger<GuildsPlugIn>().LogInformation("Guilds: {Guild} reached level {Level}.", key.Name, level);
         var announce = this.GetEngine().Configuration.AnnounceInGame;
         var now = DateTime.UtcNow;
+        if (HNMO.GameLogic.PlugIns.Community.CommunityPlugIn.Get(gameContext) is { } community)
+        {
+            await community.GuildLevelUpAsync(gameContext, key.Name, level).ConfigureAwait(false);
+        }
+
         await this.ForEachMemberAsync(key, async player =>
         {
             if (announce)
@@ -675,6 +680,13 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
 
             engine.MarkPaid(week);
             logger.LogInformation("Guilds: the guild ladder of the week of {Week} was paid.", week.Week);
+            if (HNMO.GameLogic.PlugIns.Community.CommunityPlugIn.Get(gameContext) is { } community)
+            {
+                foreach (var line in week.Lines.OrderBy(l => l.Rank))
+                {
+                    await community.GuildLadderWinnerAsync(gameContext, line.Name, line.Rank, line.Xp).ConfigureAwait(false);
+                }
+            }
         }
     }
 

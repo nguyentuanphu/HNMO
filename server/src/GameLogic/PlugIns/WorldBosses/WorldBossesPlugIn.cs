@@ -622,6 +622,18 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             }).ConfigureAwait(false);
         }
 
+        if (gameContext is not null && HNMO.GameLogic.PlugIns.Community.CommunityPlugIn.Get(gameContext) is { } community)
+        {
+            try
+            {
+                await community.WorldBossKilledAsync(gameContext, record).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                gameContext.LoggerFactory.CreateLogger<WorldBossesPlugIn>().LogWarning(ex, "World bosses: the community post of the kill wasn't made.");
+            }
+        }
+
         if (gameContext is not null && HNMO.GameLogic.PlugIns.Guilds.GuildsPlugIn.Get(gameContext) is { } guilds)
         {
             try

@@ -2313,4 +2313,10 @@
   <data name="GuildsPlugIn_Description" xml:space="preserve">
     <value>Kinh nghiệm bang hội từ việc chơi của các thành viên (quái vật, sự kiện, boss thế giới, nhiệm vụ, thời gian trong trò chơi, công thành) với giới hạn mỗi ngày cho từng thành viên, cấp bang hội với hiệu ứng nhỏ cho thành viên đang chơi (thêm kinh nghiệm, zen rơi, phòng thủ), và bảng xếp hạng bang hội hằng tuần (00:00 thứ Hai giờ Sydney) trả xu, zen hoặc vật phẩm một lần cho thành viên các bang hội đứng đầu. Cài đặt ở trang "Bang hội: cấp và bảng xếp hạng". Dữ liệu được giữ trong một tệp trong thư mục lưu.</value>
   </data>
+  <data name="CommunityPlugIn_Name" xml:space="preserve">
+    <value>HNMO: cộng đồng</value>
+  </data>
+  <data name="CommunityPlugIn_Description" xml:space="preserve">
+    <value>Xu một lần khi liên kết Discord và tham gia nhóm Zalo, sự kiện cộng đồng với mã hoặc danh sách người thắng, và bài đăng tự động (đồ hiếm, boss thế giới, bang hội, công thành) lên Discord và trang web. Cài đặt ở trang Cộng đồng của bảng quản trị.</value>
+  </data>
 </root>

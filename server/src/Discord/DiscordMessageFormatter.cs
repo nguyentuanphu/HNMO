@@ -121,6 +121,11 @@ public sealed class DiscordMessageFormatter
                 Escape(this.IsVietnamese ? e.BossNameVi : e.BossNameEn),
                 Escape(this.IsVietnamese ? e.TextVi : e.TextEn) + (e.Phase is "soon" ? $" ({RelativeTime(e.AtUtc)})" : string.Empty),
                 e.Phase is "kill" ? BossKillColor : EventColor)),
+            CommunityHighlightEvent e => (DiscordChannelCategory.WorldNews, this.CreateEmbed(
+                e,
+                this.Format(nameof(Resources.CommunityHighlight_Title)),
+                Escape(this.IsVietnamese ? e.TextVi : e.TextEn),
+                e.Kind is "RareDrop" ? ItemDropColor : e.Kind is "WorldBossKill" ? BossKillColor : MilestoneColor)),
             GlobalNoticeEvent e => (DiscordChannelCategory.Notices, this.CreateEmbed(
                 e,
                 this.Format(nameof(Resources.GlobalNotice_Title)),

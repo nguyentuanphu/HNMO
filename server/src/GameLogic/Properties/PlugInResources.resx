@@ -2143,4 +2143,10 @@
   <data name="GuildsPlugIn_Description" xml:space="preserve">
     <value>Guild experience from the members' play (monsters, events, world bosses, missions, time in the game, the castle siege) with a daily cap per member, guild levels with small buffs for the online members (bonus experience, zen drops, defense), and a weekly guild ladder (Monday 00:00 Sydney time) whose top guilds' members get coins, zen or items once. Set on the page "Guilds: levels and ladder". The state is kept in a file in the save folder.</value>
   </data>
+  <data name="CommunityPlugIn_Name" xml:space="preserve">
+    <value>HNMO: community</value>
+  </data>
+  <data name="CommunityPlugIn_Description" xml:space="preserve">
+    <value>One-time coins for linking Discord and joining the Zalo group, community events with codes or winners, and automatic posts (rare drops, world bosses, guilds, castle siege) to Discord and the website. Set it in the admin panel's Community page.</value>
+  </data>
 </root>

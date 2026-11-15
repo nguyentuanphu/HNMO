@@ -2742,4 +2742,22 @@
   <data name="HnmoGuildsActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Xử lý các nút của bảng cấp bang hội: nhận phần thưởng bảng xếp hạng đang chờ chỗ trong túi.</value>
   </data>
+  <data name="HnmoCommunityViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị cộng đồng HNMO</value>
+  </data>
+  <data name="HnmoCommunityViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái cộng đồng HNMO (xu Discord và Zalo, sự kiện cộng đồng, phần thưởng đang chờ) tới trò chơi trên web.</value>
+  </data>
+  <data name="HnmoCommunityRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu cộng đồng HNMO</value>
+  </data>
+  <data name="HnmoCommunityRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu trạng thái cộng đồng HNMO của trò chơi trên web.</value>
+  </data>
+  <data name="HnmoCommunityActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý thao tác cộng đồng HNMO</value>
+  </data>
+  <data name="HnmoCommunityActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các nút của cửa sổ cộng đồng HNMO: xu Discord và Zalo, mã sự kiện và phần thưởng đang chờ.</value>
+  </data>
 </root>

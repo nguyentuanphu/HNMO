@@ -516,4 +516,7 @@
   <data name="Bind_AlreadyBound" xml:space="preserve">
     <value>The chat of {0} is already bound to {1}. Use /guildchat unbind in that channel first.</value>
   </data>
+  <data name="CommunityHighlight_Title" xml:space="preserve">
+    <value>Highlight</value>
+  </data>
 </root>

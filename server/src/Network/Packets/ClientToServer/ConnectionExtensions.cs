@@ -5913,6 +5913,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoCommunityRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the community window.
+    /// Causes reaction on server side: The server sends the HnmoCommunityState message, and from then on sends it again when something changes, e.g. community coins or an event reward were given.
+    /// </remarks>
+    public static async ValueTask SendHnmoCommunityRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCommunityRequestRef.Length;
+            var packet = new HnmoCommunityRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCommunityAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The event's code (EnterCode), the player's name in Zalo (ClaimZalo, may be empty); empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's community window: take the Discord coins, claim the Zalo coins, enter an event's code or take the waiting rewards.
+    /// Causes reaction on server side: The server does it and sends the HnmoCommunityState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoCommunityActionAsync(this IConnection? connection, HnmoCommunityAction.HnmoCommunityActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCommunityActionRef.GetRequiredSize(argument);
+            var packet = new HnmoCommunityActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

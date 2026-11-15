@@ -1310,5 +1310,13 @@ namespace HNMO.Discord.Properties {
                 return ResourceManager.GetString("Test_Title", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Highlight.
+        /// </summary>
+        public static string CommunityHighlight_Title {
+            get {
+                return ResourceManager.GetString("CommunityHighlight_Title", resourceCulture);
+            }
+        }
     }
 }

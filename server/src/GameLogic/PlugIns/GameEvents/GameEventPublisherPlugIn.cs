@@ -158,8 +158,10 @@ public class GameEventPublisherPlugIn
         // This is called for every dropped item, so the cheap checks come first.
         if (this.Configuration is not { } configuration
             || !(configuration.PublishExcellentItemDrops || configuration.PublishAncientItemDrops)
-            || killer.GameContext is not IGameServerContext context)
+            || killer.GameContext is not IGameServerContext context
+            || HNMO.GameLogic.PlugIns.Community.CommunityPlugIn.PostsDropsToDiscord(context))
         {
+            // When HNMO's community posts the rare drops to Discord, it does it with its own filter (no post twice).
             return ValueTask.CompletedTask;
         }
 

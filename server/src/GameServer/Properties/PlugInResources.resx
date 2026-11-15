@@ -2843,4 +2843,22 @@
   <data name="HnmoGuildsActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Handles the buttons of the guild levels panel: taking the ladder rewards which waited for room in the bag.</value>
   </data>
+  <data name="HnmoCommunityViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO community view</value>
+  </data>
+  <data name="HnmoCommunityViewPlugIn_Description" xml:space="preserve">
+    <value>Sends HNMO's community state (Discord and Zalo coins, community events, waiting rewards) to the web game.</value>
+  </data>
+  <data name="HnmoCommunityRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO community request handler</value>
+  </data>
+  <data name="HnmoCommunityRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the web game's request of HNMO's community state.</value>
+  </data>
+  <data name="HnmoCommunityActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO community action handler</value>
+  </data>
+  <data name="HnmoCommunityActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the buttons of HNMO's community window: the Discord and Zalo coins, event codes and waiting rewards.</value>
+  </data>
 </root>
