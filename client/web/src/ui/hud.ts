@@ -16,9 +16,23 @@ export interface HudSkills {
   list: SkillList;
   usable: (skill: number) => boolean;
   hasPet: () => boolean;
-  /** Shows the tooltip of a list index's skill over the box (null hides it). */
-  tooltip?: (index: number | null, box: DOMRect | null) => void;
+  /**
+   * Shows the tooltip of a list index's skill (null hides it): centred on `anchor.x`, its bottom at `anchor.y`
+   * (screen pixels; the box ends `anchor.belowPerLine` per line below it, as the native box did).
+   */
+  tooltip?: (index: number | null, anchor: SkillTooltipAnchor | null) => void;
 }
+
+export interface SkillTooltipAnchor { x: number; y: number }
+
+// CSkillList::QueueTooltip's anchors, in the HUD's reference units: the tooltip is centred 10 right of a
+// hotkey slot's left edge (15 in the expanded list), 10 above the slot; the current skill's 32x38 hit box
+// sits 7 left of and 6 above its 20x28 icon (the element the web hovers).
+const SLOT_TOOLTIP_OFFSET_X = 10;
+const GRID_TOOLTIP_OFFSET_X = 15;
+const TOOLTIP_GAP_ABOVE = 10;
+const CURRENT_SKILL_BOX_INSET_X = 7;
+const CURRENT_SKILL_BOX_INSET_Y = 6;
 
 /** The master level's experience: the total, where the level starts and where the next one does. */
 export interface MasterExperience { experience: number; start: number; next: number }
@@ -96,14 +110,14 @@ export class Hud {
       item_hotkey_rightclick: noop, // the right button is told apart in open()
       // The skill bar (CSkillList's OnHotkeySlotClick, OnCurrentSkillClick, OnGridCellClick, …).
       skill_hotkey_click: (slot: number) => this.skillSlotClick(slot),
-      skill_hotkey_hover: (slot: number) => this.skillTooltip(this.slotIndex(slot)),
+      skill_hotkey_hover: (slot: number) => this.skillTooltip(this.slotIndex(slot), this.doc?.$(`#skill_slot_${slot}`) ?? null, 'slot'),
       skill_unhover: () => { this.hoveredSkill = -1; this.skills?.tooltip?.(null, null); },
       skill_current_click: () => { this.model.skill_grid_open = !this.model.skill_grid_open; this.refreshSkills(); },
-      skill_current_hover: () => { if (this.skills && this.skills.list.count > 0) this.skillTooltip(this.skills.list.current); },
+      skill_current_hover: () => { if (this.skills && this.skills.list.count > 0) this.skillTooltip(this.skills.list.current, this.doc?.$('#current_skill_slot') ?? null, 'current'); },
       skill_grid_click: (index: number) => this.pickSkill(index),
-      skill_grid_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index); },
+      skill_grid_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index, this.hoveredElement, 'grid'); },
       skill_pet_click: (index: number) => this.pickSkill(index),
-      skill_pet_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index); },
+      skill_pet_hover: (index: number) => { this.hoveredSkill = index; this.skillTooltip(index, this.hoveredElement, 'grid'); },
     };
     stats.onChange(() => this.refresh());
     window.addEventListener('resize', () => this.place());
@@ -247,10 +261,15 @@ export class Hud {
     return hotkey < 0 ? -1 : this.skills.list.hotkeys[hotkey];
   }
 
-  // QueueTooltip: the hovered skill's tooltip above its slot.
-  private skillTooltip(index: number): void {
-    if (!this.skills?.tooltip || index < 0) return;
-    this.skills.tooltip(index, this.hoveredElement?.getBoundingClientRect() ?? null);
+  // QueueTooltip: the hovered skill's tooltip above its slot, anchored as the desktop anchors it.
+  private skillTooltip(index: number, element: Element | null, kind: 'slot' | 'current' | 'grid'): void {
+    if (!this.skills?.tooltip || index < 0 || !element) return;
+    const box = element.getBoundingClientRect();
+    const unit = hudScale();
+    const anchor: SkillTooltipAnchor = kind === 'current'
+      ? { x: box.left + (SLOT_TOOLTIP_OFFSET_X - CURRENT_SKILL_BOX_INSET_X) * unit, y: box.top - (CURRENT_SKILL_BOX_INSET_Y + TOOLTIP_GAP_ABOVE) * unit }
+      : { x: box.left + (kind === 'grid' ? GRID_TOOLTIP_OFFSET_X : SLOT_TOOLTIP_OFFSET_X) * unit, y: box.top - TOOLTIP_GAP_ABOVE * unit };
+    this.skills.tooltip(index, anchor);
   }
 
   // OnHotkeySlotClick: the slot's skill becomes the current one.

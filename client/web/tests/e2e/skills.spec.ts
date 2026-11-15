@@ -24,6 +24,17 @@ test('skill list, skill popup, hotkeys', async ({ page }) => {
   await hud.locator('#current_skill_slot').hover();
   const tooltip = page.locator('.rml-tooltip');
   await expect(tooltip).toContainText('Mana:');
+  // Where the desktop puts it (CSkillList::QueueTooltip, MainFrameWindow's Tooltip::Show): centred 3 HUD units
+  // right of the icon's left edge, its bottom 16 units above the icon less a tenth of a line per line, inside the window.
+  const slot = (await hud.locator('#current_skill_slot').boundingBox())!;
+  const unit = slot.width / 20; // the current skill's icon is 20 units wide
+  await expect.poll(async () => {
+    const panel = await tooltip.locator('#tooltip_panel').boundingBox();
+    if (!panel) return 'no panel';
+    const centre = panel.x + panel.width / 2, bottom = panel.y + panel.height;
+    const wantX = Math.min(Math.max(slot.x + 3 * unit, panel.width / 2), 1280 - panel.width / 2);
+    return Math.abs(centre - wantX) <= 2 && bottom <= slot.y - 6 * unit && bottom >= slot.y - 18 * unit ? 'placed' : `centre ${centre} (${wantX}), bottom ${bottom} (slot top ${slot.y})`;
+  }).toBe('placed');
   await page.screenshot({ path: 'test-results/skill-tooltip.png' });
   await page.mouse.move(640, 200);
   await expect(tooltip).not.toContainText('Mana:');

@@ -1332,11 +1332,11 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       strength: stats.strength, agility: stats.agility,
     }, (item) => itemDefinition(item.group, item.number)?.weaponKind),
     hasPet: () => false, // the Dark Lord's raven comes with the pets
-    tooltip: (index, box) => {
+    tooltip: (index, anchor) => {
       const view = itemWindows.tooltip;
-      if (index === null || !box) { view.hide(); return; }
+      if (index === null || !anchor) { view.hide(); return; }
       const skill = index >= 120 && index < 124 ? index : skills.skillAt(index);
-      void view.showLines(skillTooltipLines(skill, stats, character.classIndex), { left: box.left, top: box.top, width: box.width, height: box.height }, { index }, { above: true });
+      void view.showLines(skillTooltipLines(skill, stats, character.classIndex), { left: anchor.x, top: anchor.y, width: 0, height: 0 }, { index }, { anchor });
     },
   });
   stats.onChange(() => hud.refreshSkills());

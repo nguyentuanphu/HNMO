@@ -68,7 +68,7 @@ export class ItemTooltipView {
 
   /** Shows any tooltip lines (the skill tooltip too), centred on the box: below it, or above without room
    * or when asked (the skill bar's tooltips sit above their slot). */
-  async showLines(lines: TooltipLine[], box: ScreenBox, owner: object = lines, { above = false } = {}): Promise<void> {
+  async showLines(lines: TooltipLine[], box: ScreenBox, owner: object = lines, { above = false, anchor }: { above?: boolean; anchor?: { x: number; y: number } } = {}): Promise<void> {
     this.shownFor = owner;
     const doc = await this.document();
     if (this.shownFor !== owner) return;
@@ -90,6 +90,17 @@ export class ItemTooltipView {
     doc.update();
     // Place it once its size is known: centred on the item, below it or, without room, above.
     const size = panel.getBoundingClientRect();
+    if (anchor) {
+      // The skill tooltips (MainFrameWindow's Tooltip::Show, AboveLeft, centred): centred on the anchor,
+      // growing upward from it; the native box ended a little below its anchor (NativeBoxBottomBelowAnchor:
+      // a tenth of a line per line, and a pixel); kept inside the window.
+      const rows = lines.filter((line) => !line.spacer).length, spacers = lines.length - rows;
+      const bottom = anchor.y + (rows * 0.1 + spacers * 0.05) * nativeLineHeightPx() + 1;
+      this.model.pos_x = Math.round(Math.max(0, Math.min(anchor.x - size.width / 2, window.innerWidth - size.width)));
+      this.model.pos_y = Math.round(Math.max(0, Math.min(bottom - size.height, window.innerHeight - size.height)));
+      doc.update();
+      return;
+    }
     const centre = box.left + box.width / 2;
     const below = box.top + box.height;
     const top = !above && below + size.height <= window.innerHeight ? below : Math.max(0, box.top - size.height);
