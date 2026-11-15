@@ -617,6 +617,8 @@ export async function createMonsterCharacter({ id, type, ...place }: MonsterSpaw
     return await buildMonsterCharacter(id, look);
   } catch (error) {
     if (look.unknown || look.model === 'player') throw error;
+    // A map object the map's folder lacks is not drawn on the desktop either (no model in its slot).
+    if (look.model.startsWith('mapObject ')) return buildMonsterCharacter(id, { ...look, body: null });
     console.warn(`Monster ${type}: model ${look.model} not drawn (${(error as Error).message}); the unknown monsters' look instead`);
     look = describeMonster(type, { ...place, unknownReason: 'missingFile' });
     return buildMonsterCharacter(id, look);
@@ -674,6 +676,8 @@ async function buildMonsterCharacter(id: number, look: MonsterLook): Promise<Cha
   if (setup.heightOffset !== undefined) character.heightOffset = setup.heightOffset;
   if (setup.height !== undefined) character.fixedHeight = setup.height;
   if (setup.positionOffset) character.bodyOffset.set(setup.positionOffset[0], setup.positionOffset[1]);
+  // A tile offset: the body stands that many tiles beside the server's tile (the Smelting NPC).
+  if (setup.tileOffset) character.bodyOffset.add(new THREE.Vector2(setup.tileOffset[0] * TERRAIN_SCALE, setup.tileOffset[1] * TERRAIN_SCALE));
   if (setup.startAction !== undefined) { character.action = setup.startAction; character.startAction = setup.startAction; }
   if (setup.startFrame !== undefined) character.time = setup.startFrame;
   if (setup.facing !== undefined) character.fixedAngle = setup.facing * DEGREES;

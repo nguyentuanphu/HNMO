@@ -302,7 +302,8 @@ function attacksOnMap(entry: NumberEntry, place: MonsterPlace): MonsterAttacksDa
  */
 const OTHER_AREA_MODELS: Record<string, ModelEntry> = {
   MODEL_WARCRAFT: { slot: 'MODEL_WARCRAFT', file: 'Data/Skill/HellGate.bmd', textureFolders: ['Skill'], animations: { stop1: 0.15 } },
-  MODEL_BALL: { slot: 'MODEL_BALL', file: 'Data/Skill/Ball01.bmd', textureFolders: ['Skill'], animations: { stop1: 0.5 } },
+  // Its texture (wwe.jpg) is in Item: the desktop finds it there once an item loaded it.
+  MODEL_BALL: { slot: 'MODEL_BALL', file: 'Data/Skill/Ball01.bmd', textureFolders: ['Skill', 'Item'], animations: { stop1: 0.5 } },
   MODEL_TRAP_CANON: { slot: 'MODEL_TRAP_CANON', file: 'Data/NPC/c_mon.bmd', textureFolders: ['NPC'] },
 };
 /** "none": no body, no sounds (the Imperial Guardian's traps); a monster slot whose model the map's own code draws (Maya). */

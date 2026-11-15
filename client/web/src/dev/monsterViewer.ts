@@ -18,7 +18,7 @@ import type { MonsterLook } from '../game/monsterData.js';
  */
 export const SUPPORTED_SETUP_FIELDS: readonly string[] = [
   'scale', 'subType', 'lookLevel', 'class', 'classStep', 'equipment', 'glowMesh', 'glowLight', 'hiddenMesh', 'alphaTarget', 'light',
-  'startAction', 'startFrame', 'heightOffset', 'height', 'positionOffset', 'facing', 'live', 'noBloodPool', 'deathEffect', 'spawnEffects',
+  'startAction', 'startFrame', 'heightOffset', 'height', 'positionOffset', 'tileOffset', 'facing', 'live', 'noBloodPool', 'deathEffect', 'spawnEffects',
 ];
 
 export interface MonsterAuditRow {
