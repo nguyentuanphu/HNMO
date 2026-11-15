@@ -1,19 +1,18 @@
-// The web client: log in through the relay and play on the HNMO server, or explore
-// Lorencia offline. Left-click walks, right-drag turns the camera, the wheel zooms.
+// The web client: log in through the relay and play on the HNMO server. Left-click walks, right-drag turns the camera, the wheel zooms.
 
 import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, type Language } from './i18n.js';
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight, setTerrainLights } from './terrain.js';
-import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
+import { loadWorldData, createWorld, mapName } from './world.js';
 import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
 import { playSpawnEffects } from './game/spawnEffects.js';
 import { prewarmMapMonsters, warmObject, type Warmer } from './game/prewarm.js';
-import { itemDefinition, itemName, loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
+import { itemDefinition, itemName, loadItemCatalog } from './game/items.js';
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { eventOfMap } from './game/events.js';
@@ -80,7 +79,7 @@ import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterW
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
-import type { AppearanceItem, EquipmentAppearance, EquipmentSlotName, ItemChoice } from './game/items.js';
+import type { EquipmentAppearance, EquipmentSlotName } from './game/items.js';
 import type { CharacterListEntry } from './net/session.js';
 import type { Connection } from './net/connection.js';
 import { read } from './net/packets.js';
@@ -195,7 +194,6 @@ interface LoginSettings { relay: string; host: string; port: string; username: s
 
 THREE.ColorManagement.enabled = false;
 
-const OFFLINE_START = { map: 0, x: 133, y: 126 };
 const FOG = { color: new THREE.Color(0x0a0d14), near: 2600, far: 4200 };
 const CAMERA = { distance: 1250, minDistance: 500, maxDistance: 2600, pitch: 48 * Math.PI / 180, yaw: -45 * Math.PI / 180 };
 const LABEL_RANGE_CELLS = 18;
@@ -207,11 +205,7 @@ const $ = <E extends HTMLElement = HTMLElement>(id: string): E => document.getEl
 const ui = {
   canvas: $<HTMLCanvasElement>('view'), status: $('status'), bar: $('bar'), position: $('position'), fps: $('fps'),
   login: $('login'), loginForm: $<HTMLFormElement>('loginForm'), loginError: $('loginError'), servers: $('servers'), characters: $('characters'),
-  offline: $<HTMLButtonElement>('offline'), hud: $('hud'), heroName: $('heroName'), labels: $('labels'), wardrobe: $('wardrobe'), bodySet: $<HTMLSelectElement>('bodySet'),
-  armorSet: $<HTMLSelectElement>('armorSet'), rightHand: $<HTMLSelectElement>('rightHand'), leftHand: $<HTMLSelectElement>('leftHand'), wings: $<HTMLSelectElement>('wings'),
-  previousSet: $<HTMLButtonElement>('previousSet'), nextSet: $<HTMLButtonElement>('nextSet'),
-  holdWeapons: $<HTMLInputElement>('holdWeapons'), itemLevel: $<HTMLSelectElement>('itemLevel'), excellent: $<HTMLInputElement>('excellent'), ancient: $<HTMLInputElement>('ancient'),
-  mapPicker: $('mapPicker'), mapSelect: $<HTMLSelectElement>('mapSelect'),
+  hud: $('hud'), heroName: $('heroName'), labels: $('labels'),
 };
 
 // A player in view by name (the chat's name menu).
@@ -302,7 +296,6 @@ async function placeHero({ id, name, bodySet, equipment, x, y }: {
   const hero = await createPlayerCharacter({ id, name, bodySet, equipment });
   if (state.hero) root.remove(state.hero.group);
   state.hero = hero;
-  hero.holdWeapons = !state.online && ui.holdWeapons.checked;
   hero.placeAt(x, y);
   root.add(hero.group);
   ui.heroName.textContent = name;
@@ -1354,119 +1347,6 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }
 
-// ---------- wardrobe (offline) ----------
-
-const NOTHING = '';
-
-function fillSelect(select: HTMLSelectElement, items: ItemChoice[], { none = true } = {}): void {
-  select.replaceChildren();
-  if (none) select.append(new Option('Nothing', NOTHING));
-  for (const item of items) select.append(new Option(`${item.name}`, `${item.group}:${item.number}`));
-}
-
-function selectedItem(select: HTMLSelectElement): { group: number; number: number } | null {
-  if (select.value === NOTHING) return null;
-  const [group, number] = select.value.split(':').map(Number);
-  return { group, number };
-}
-
-// An armour set is the same item number in the helm, armour, pants, gloves and boots groups.
-function armorSetEquipment(number: number | null): EquipmentAppearance {
-  if (number === null) return {};
-  const slots: EquipmentSlotName[] = ['helm', 'armor', 'pants', 'gloves', 'boots'];
-  const equipment: EquipmentAppearance = {};
-  ARMOR_GROUPS.forEach((group, index) => {
-    if (itemsWithModels(group).some((item) => item.number === number)) equipment[slots[index]] = { group, number };
-  });
-  return equipment;
-}
-
-// The level and options every worn item gets, as the appearance bytes would carry them.
-function wardrobeEquipment(): EquipmentAppearance {
-  const armor = selectedItem(ui.armorSet);
-  const options = { glowLevel: Number(ui.itemLevel.value), excellent: ui.excellent.checked, ancient: ui.ancient.checked };
-  const withOptions = (item: AppearanceItem | null | undefined): AppearanceItem | null => (item ? { ...item, ...options } : null);
-  const equipment: EquipmentAppearance = {
-    ...armorSetEquipment(armor ? armor.number : null),
-    rightHand: selectedItem(ui.rightHand),
-    leftHand: selectedItem(ui.leftHand),
-    wings: selectedItem(ui.wings),
-  };
-  return Object.fromEntries(Object.entries(equipment).map(([slot, item]) => [slot, withOptions(item)]));
-}
-
-const WING_NAME = /wing|cape|cloak|mantle/i;
-
-function initWardrobe() {
-  fillSelect(ui.armorSet, itemsWithModels(ItemGroup.ARMOR).map((item) => ({ ...item, name: item.name.replace(/ Armor$/, '') })));
-  fillSelect(ui.rightHand, WEAPON_GROUPS.flatMap((group) => itemsWithModels(group)));
-  fillSelect(ui.leftHand, [ItemGroup.SHIELD, ...WEAPON_GROUPS].flatMap((group) => itemsWithModels(group)));
-  fillSelect(ui.wings, itemsWithModels(ItemGroup.WING).filter((item) => WING_NAME.test(item.name)));
-  ui.armorSet.selectedIndex = 1;
-  ui.rightHand.selectedIndex = 1;
-  ui.leftHand.value = `${ItemGroup.SHIELD}:0`;
-  ui.wings.selectedIndex = 1;
-  const redress = async () => {
-    if (state.online || !state.hero) return;
-    const { x, y } = state.hero.cell;
-    await placeHero({ id: 0, name: 'Offline', bodySet: Number(ui.bodySet.value), equipment: wardrobeEquipment(), x, y });
-  };
-  for (let level = 0; level <= 15; level++) ui.itemLevel.append(new Option(`+${level}`, String(level)));
-  for (const select of [ui.bodySet, ui.armorSet, ui.rightHand, ui.leftHand, ui.wings, ui.itemLevel, ui.excellent, ui.ancient]) select.addEventListener('change', redress);
-  ui.holdWeapons.addEventListener('change', () => { if (state.hero) state.hero.holdWeapons = ui.holdWeapons.checked; });
-  const step = (delta: number) => {
-    const count = ui.armorSet.options.length;
-    ui.armorSet.selectedIndex = (ui.armorSet.selectedIndex + delta + count) % count;
-    redress();
-  };
-  ui.previousSet.addEventListener('click', () => step(-1));
-  ui.nextSet.addEventListener('click', () => step(1));
-}
-
-// Where to stand on a map without a server: the walkable cell nearest the middle,
-// preferring a safe zone (towns are safe zones).
-function offlineStartCell(world: WorldData): { x: number; y: number } {
-  const center = TERRAIN_SIZE / 2;
-  let best: { x: number; y: number; score: number } | null = null;
-  for (let y = 0; y < TERRAIN_SIZE; y++) {
-    for (let x = 0; x < TERRAIN_SIZE; x++) {
-      const flags = world.flags[y * TERRAIN_SIZE + x];
-      if (flags & (TerrainFlag.NOMOVE | TerrainFlag.NOGROUND)) continue;
-      const score = Math.hypot(x - center, y - center) - (flags & TerrainFlag.SAFEZONE ? 1000 : 0);
-      if (!best || score < best.score) best = { x, y, score };
-    }
-  }
-  return best ?? { x: center, y: center };
-}
-
-function initMapPicker() {
-  for (const map of KNOWN_MAPS) ui.mapSelect.append(new Option(mapName(map), String(map)));
-  ui.mapSelect.value = String(OFFLINE_START.map);
-  ui.mapPicker.hidden = false;
-  ui.mapSelect.addEventListener('change', async () => {
-    const map = Number(ui.mapSelect.value);
-    try {
-      await loadMap(map);
-      const cell = map === OFFLINE_START.map ? OFFLINE_START : offlineStartCell(state.world!);
-      state.hero!.placeAt(cell.x, cell.y);
-      setStatus(`Offline: ${mapName(map)}. Left-click to walk, right-drag to turn, wheel to zoom.`, 1);
-    } catch (error) {
-      setStatus(`${mapName(map)} couldn't be loaded: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  });
-}
-
-async function playOffline() {
-  ui.login.hidden = true;
-  await Promise.all([loadItemCatalog(), loadGlowColors()]);
-  initWardrobe();
-  await loadMap(OFFLINE_START.map);
-  await placeHero({ id: 0, name: 'Offline', bodySet: Number(ui.bodySet.value), equipment: wardrobeEquipment(), x: OFFLINE_START.x, y: OFFLINE_START.y });
-  ui.wardrobe.hidden = false;
-  initMapPicker();
-  setStatus('Offline: Lorencia without a server. Left-click to walk, right-drag to turn, wheel to zoom.', 1);
-}
-
 function startGame(play: () => Promise<void>): void {
   ui.loginError.hidden = true;
   ui.loginForm.querySelector('fieldset')!.disabled = true;
@@ -1501,9 +1381,6 @@ function initLogin() {
     saveSettings(remembered);
     startGame(() => playOnline(form));
   });
-  ui.offline.addEventListener('click', () => startGame(playOffline));
-  const autostart = new URLSearchParams(location.search).get('offline');
-  if (autostart !== null) startGame(playOffline);
 }
 
 resize();

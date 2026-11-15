@@ -65,12 +65,6 @@
     #guide .onboarding { position: absolute; right: 80px; top: 10px; padding: 4px 10px; }
     .map-picker { position: fixed; right: 12px; top: 12px; display: flex; gap: 8px; align-items: center; }
     .map-picker label { color: var(--muted); font-size: 12px; }
-    .wardrobe { position: fixed; right: 12px; top: 56px; width: min(260px, calc(100vw - 24px)); display: grid; gap: 4px; padding: 12px; }
-    .wardrobe label { color: var(--muted); font-size: 12px; margin-top: 4px; }
-    .wardrobe select { width: 100%; }
-    .wardrobe .check { display: flex; gap: 6px; align-items: center; color: var(--text); }
-    .wardrobe .buttons { margin-top: 8px; }
-    .wardrobe .buttons button { flex: 1; }
   </style>
   <script type="importmap">
     { "imports": { "three": "/vendor/three/build/three.module.js" } }
@@ -91,23 +85,6 @@
     <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
     <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
   </div>
-  <div class="chip wardrobe" id="wardrobe" hidden>
-    <strong>Wardrobe</strong>
-    <label for="bodySet">Class</label>
-    <select id="bodySet">
-      <option value="1">Dark Wizard</option><option value="2" selected>Dark Knight</option><option value="3">Fairy Elf</option>
-      <option value="4">Magic Gladiator</option><option value="5">Dark Lord</option><option value="6">Summoner</option><option value="7">Rage Fighter</option>
-    </select>
-    <label for="armorSet">Armour set</label><select id="armorSet"></select>
-    <label for="rightHand">Right hand</label><select id="rightHand"></select>
-    <label for="leftHand">Left hand</label><select id="leftHand"></select>
-    <label for="wings">Wings</label><select id="wings"></select>
-    <label for="itemLevel">Item level</label><select id="itemLevel"></select>
-    <label class="check"><input type="checkbox" id="excellent"> Excellent</label>
-    <label class="check"><input type="checkbox" id="ancient"> Ancient</label>
-    <label class="check"><input type="checkbox" id="holdWeapons"> Hold weapons in town</label>
-    <div class="buttons"><button type="button" id="previousSet">◀ Set</button><button type="button" id="nextSet">Set ▶</button></div>
-  </div>
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">
       <h1 data-game-name>HenryN Mu Online</h1>
@@ -125,7 +102,6 @@
         <div class="row"><label>Language / Ngôn ngữ</label><span class="language-picker" id="loginLanguage" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span></div>
         <div class="buttons">
           <button class="primary" type="submit">Connect</button>
-          <button type="button" id="offline">Explore offline</button>
         </div>
       </fieldset>
       <p id="loginError" role="alert" hidden></p>
@@ -135,8 +111,7 @@
       <p class="hint">No account yet? <a href="/account.html" style="color:var(--gold)">Create one</a> (free coins included). <a href="/topup.html" style="color:var(--gold)">Top up coins</a>. Test accounts: test300 / test300. New here? <a href="#" id="loginGuide" style="color:var(--gold)">Read the guide</a>.</p>
     </form>
   </div>
-  <div class="chip map-picker" id="mapPicker" hidden><label for="mapSelect">Map</label><select id="mapSelect"></select></div>
-  <div id="loading" class="chip"><div id="status">Log in to the server, or explore offline.</div><div id="track"><div id="bar"></div></div></div>
+  <div id="loading" class="chip"><div id="status">Log in to play.</div><div id="track"><div id="bar"></div></div></div>
   <script type="module" src="/js/main.js"></script>
 </body>
 </html>
