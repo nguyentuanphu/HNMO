@@ -164,6 +164,10 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   KeyboardEvent needs `code` too.
 - **Flaky server tests on GitHub:** timing tests must wait for the full end state (e.g. a respawned
   monster is alive before it's back on the map).
+- **ERR_INSUFFICIENT_RESOURCES / "Failed to fetch" in browser tests = the disk is full** (`df -h /`):
+  Chromium can't store downloads. Remove merged worktrees and old package folders in the scratchpad.
+- **Plug-in settings saved by the admin panel** use `$id` / `$values` markers; read them with
+  `PlugInSettings.ReadActiveAsync` (drops them). A plug-in with no saved row is active with its defaults.
 - **Owner choices:** every coin reward is set in the admin panel; decisions in a pop-up; the cash shop
   plan (idea 8) waits for the owner's answer.
 

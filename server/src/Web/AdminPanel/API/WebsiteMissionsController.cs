@@ -30,7 +30,7 @@ public sealed class WebsiteMissionsController(
     {
         this.Response.Headers.CacheControl = "no-store";
         var cancellationToken = this.HttpContext.RequestAborted;
-        var configuration = await PlugInSettings.ReadActiveAsync<MissionsConfiguration>(persistence, typeof(MissionsPlugIn), cancellationToken).ConfigureAwait(false);
+        var configuration = await PlugInSettings.ReadActiveAsync<MissionsConfiguration>(persistence, typeof(MissionsPlugIn), () => new MissionsConfiguration(), cancellationToken).ConfigureAwait(false);
         if (configuration is null)
         {
             return this.Content("{\"missions\":[]}", "application/json");

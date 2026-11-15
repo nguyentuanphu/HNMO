@@ -5,6 +5,7 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Text.Json.Serialization;
 using HNMO.Persistence;
@@ -30,7 +31,21 @@ internal static class PlugInSettings
     /// <param name="plugInType">The plug-in type.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The configuration of an active plug-in, or <c>null</c>.</returns>
-    public static async Task<T?> ReadActiveAsync<T>(IPersistenceContextProvider contextProvider, Type plugInType, CancellationToken cancellationToken)
+    public static Task<T?> ReadActiveAsync<T>(IPersistenceContextProvider contextProvider, Type plugInType, CancellationToken cancellationToken)
+        where T : class
+        => ReadActiveAsync<T>(contextProvider, plugInType, null, cancellationToken);
+
+    /// <summary>
+    /// Reads the saved settings of an active plug-in; when it's active but its settings were never saved,
+    /// <paramref name="defaults"/> gives what the plug-in itself uses then.
+    /// </summary>
+    /// <typeparam name="T">The settings type.</typeparam>
+    /// <param name="contextProvider">The persistence context provider.</param>
+    /// <param name="plugInType">The plug-in type.</param>
+    /// <param name="defaults">The settings of an active plug-in without saved settings, or null for none.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The settings, or null when the plug-in is off.</returns>
+    public static async Task<T?> ReadActiveAsync<T>(IPersistenceContextProvider contextProvider, Type plugInType, Func<T>? defaults, CancellationToken cancellationToken)
         where T : class
     {
         try
@@ -38,16 +53,63 @@ internal static class PlugInSettings
             using var context = contextProvider.CreateNewTypedContext(typeof(PlugInConfiguration), false);
             var configurations = await context.GetAsync<PlugInConfiguration>(cancellationToken).ConfigureAwait(false);
             var configuration = configurations.FirstOrDefault(c => c.TypeId == plugInType.GUID);
-            if (configuration is not { IsActive: true } || string.IsNullOrWhiteSpace(configuration.CustomConfiguration))
+            if (configuration is null)
+            {
+                // A plug-in without a saved row is active (plug-ins are active when registered).
+                return defaults?.Invoke();
+            }
+
+            if (!configuration.IsActive)
             {
                 return null;
             }
 
-            return JsonSerializer.Deserialize<T>(configuration.CustomConfiguration, Options);
+            if (string.IsNullOrWhiteSpace(configuration.CustomConfiguration))
+            {
+                return defaults?.Invoke();
+            }
+
+            return JsonSerializer.Deserialize<T>(WithoutReferences(JsonNode.Parse(configuration.CustomConfiguration)), Options);
         }
         catch (Exception ex) when (ex is JsonException or InvalidOperationException or NotSupportedException)
         {
             return null;
+        }
+    }
+
+    /// <summary>
+    /// Drops the reference markers the admin panel's editor saves ("$id", "$ref", and lists as "$values"),
+    /// so the plain settings can be read.
+    /// </summary>
+    private static JsonNode? WithoutReferences(JsonNode? node)
+    {
+        switch (node)
+        {
+            case JsonObject obj when obj["$values"] is JsonArray values:
+                return WithoutReferences(values.DeepClone());
+            case JsonObject obj:
+                var result = new JsonObject();
+                foreach (var (key, value) in obj)
+                {
+                    if (key is "$id" or "$ref")
+                    {
+                        continue;
+                    }
+
+                    result[key] = WithoutReferences(value?.DeepClone());
+                }
+
+                return result;
+            case JsonArray array:
+                var list = new JsonArray();
+                foreach (var item in array)
+                {
+                    list.Add(WithoutReferences(item?.DeepClone()));
+                }
+
+                return list;
+            default:
+                return node;
         }
     }
 }

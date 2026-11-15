@@ -175,10 +175,12 @@ test('in the game, J opens the missions window and the touch menu has it', async
     };
   });
   const window = page.locator('.rml-hnmo_missions');
+  // One press: a second press while the window is still loading would close it again.
   await expect(async () => {
-    if (!(await window.count())) await page.keyboard.press('j');
-    await expect(window).toHaveCount(1, { timeout: 5_000 });
-  }).toPass({ timeout: 60_000 });
+    const open = await page.evaluate(() => !!(window as unknown as { __game: { missions?: { isOpen: boolean } } }).__game.missions?.isOpen);
+    if (!open) await page.keyboard.press('j');
+    await expect(window).toHaveCount(1, { timeout: 20_000 });
+  }).toPass({ timeout: 90_000 });
   await expect.poll(() => sent(page).then((list) => list.some((s) => s.name === 'HnmoMissionsRequest'))).toBe(true);
   // Without a server answer (an older server), the state comes through the game's connection like the server's.
   if (!(await window.locator('.mi-row').count())) await feed(page, board());
