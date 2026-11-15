@@ -357,3 +357,18 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   `GetAccountByLoginNameAsync(login, password)`). The account page has no login session: the name and password go with each call.
 - Web window `ui/giftCodesWindow.ts` (no hotkey: `/code` alone, community window button, touch menu 🎁). An e2e test that must not
   send test codes to the shared server records `HnmoGiftCodesAction` without forwarding it.
+
+## Resets (2026-11-16)
+- `GameLogic/PlugIns/ResetOptions`: `ResetEngine` (pure, `ResetEngineTest`: tiers, VIP, relife, Sydney daily limits, delegated
+  limits, monthly ranking), `ResetStore` (`save/resets.json`, `ResetStore.Open` shared per file), `ResetApplier` (puts a plan into a
+  character: in the game via the attribute system, on the website via the DB entities), `ResetOptionsPlugIn` (active by default;
+  `ResetCharacterAction` hands over to it, so the old NPC and `/reset` follow the tiers; bots keep `BotResetHandler`). Delegated
+  resets run on a tick over `OfflinePlayerManager.OfflinePlayers`.
+- Relifes live in the store, not in a character attribute. VIP = `Stats.IsVip` from account attributes / `AccountAttributeGrant`s.
+- Website changes to a character: refuse when the login server's snapshot has the account, when any game context's
+  `OfflinePlayerManager.IsActive(login)` (offline leveling logs the account off the login server!), then
+  `ILoginServer.TryReserveAccountAsync` around the save (`WebsiteResetsController`).
+- Top races: call `TopRacesPlugIn.ObserveCharacter` before and after a change made outside the observed game players.
+- F5 codes now: ... gift codes 1A-1C, resets 1D (request), 1E (state JSON), 1F (action). Next free: 20.
+- Admin page `/resets-relife` uses an inline `T(en, vi)` helper instead of 100+ resource keys (only the page name is a resource).
+- A Playwright check of a Vietnamese chat notice: re-feed inside `expect(...).toPass()` (vi.json loads after the click).
