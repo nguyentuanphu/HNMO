@@ -4547,4 +4547,7 @@
   <data name="ResetsRelifePage" xml:space="preserve">
     <value>Resets and relife</value>
   </data>
+  <data name="AccountSafetyPage" xml:space="preserve">
+    <value>Account safety</value>
+  </data>
 </root>

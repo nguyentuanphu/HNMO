@@ -98,6 +98,7 @@ public partial class ConfigNavMenu
             new(Resources.TopRacesPage, "top-races", "oi-badge"),
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),
+            new(Resources.AccountSafetyPage, "account-safety", "oi-lock-locked"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
             new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),

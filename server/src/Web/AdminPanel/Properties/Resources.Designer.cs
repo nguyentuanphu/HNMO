@@ -13395,5 +13395,14 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("ResetsRelifePage", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Account safety.
+        /// </summary>
+        public static string AccountSafetyPage {
+            get {
+                return ResourceManager.GetString("AccountSafetyPage", resourceCulture);
+            }
+        }
     }
 }

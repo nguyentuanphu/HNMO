@@ -1,0 +1,212 @@
+@page "/account-safety"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.AccountSafety
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+<PageTitle>HNMO: @Resources.AccountSafetyPage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.AccountSafetyPage" />
+<h1>@Resources.AccountSafetyPage</h1>
+<p class="text-muted">@T("The second password is the account's vault PIN (4 digits). When an account has one, the actions switched on here need it once per session: the game's vault lock, /unlock 1234, or the web game's prompt. Players set it on the account page or at the vault. Locked items can't be traded, sold, dropped, put in a personal store or mixed; an unlock needs the second password and waits. Times are Sydney time. Players: /unlock PIN, /lockitem CELL, /lockitem list, /unlockitem CELL PIN.", "Mật khẩu cấp 2 là mã PIN hòm đồ của tài khoản (4 chữ số). Khi tài khoản có mật khẩu này, các thao tác được bật ở đây cần nhập một lần mỗi phiên: ổ khóa hòm đồ trong game, /unlock 1234 hoặc hộp nhập của web game. Người chơi đặt mật khẩu trên trang tài khoản hoặc ở hòm đồ. Vật phẩm bị khóa không thể giao dịch, bán, vứt, bày bán hay ép; mở khóa cần mật khẩu cấp 2 và phải chờ. Thời gian theo giờ Sydney. Người chơi: /unlock PIN, /lockitem Ô, /lockitem list, /unlockitem Ô PIN.")</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status" id="safety-not-installed">@T("The account safety plug-in isn't installed yet: start the game server once.", "Plug-in bảo vệ tài khoản chưa được cài: hãy khởi động máy chủ game một lần.")</div>
+}
+else
+{
+    <section class="card mb-3" id="safety-pin">
+        <div class="card-body">
+            <h2 class="h5">@T("Second password", "Mật khẩu cấp 2")</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="safety-active" @bind="this._isActive" />
+                <label class="form-check-label" for="safety-active">@T("On", "Bật")</label>
+            </div>
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="safety-vault" @bind="c.RequireForVault" />
+                <label class="form-check-label" for="safety-vault">@T("Needed to take things out of the vault", "Cần để lấy đồ ra khỏi hòm đồ")</label>
+            </div>
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="safety-trade" @bind="c.RequireForTrade" />
+                <label class="form-check-label" for="safety-trade">@T("Needed to trade", "Cần để giao dịch")</label>
+            </div>
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="safety-store" @bind="c.RequireForPersonalStore" />
+                <label class="form-check-label" for="safety-store">@T("Needed to open the personal store", "Cần để mở cửa hàng cá nhân")</label>
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="safety-valuable" @bind="c.RequireForValuableItems" />
+                <label class="form-check-label" for="safety-valuable">@T("Needed to drop or sell valuable items (excellent, ancient, or of the level below)", "Cần để vứt hoặc bán vật phẩm quý (hoàn hảo, thần, hoặc từ cấp bên dưới)")</label>
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="safety-web-pin" @bind="c.AllowWebsitePinChange" />
+                <label class="form-check-label" for="safety-web-pin">@T("Players can set, change and clear it on the account page", "Người chơi có thể đặt, đổi và xóa trên trang tài khoản")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-valuable-level">@T("Valuable from level", "Quý từ cấp")</label>
+                    <input class="form-control" type="number" min="0" max="15" id="safety-valuable-level" @bind="c.ValuableMinimumLevel" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-unlocked-minutes">@T("Valid for minutes (0: the session)", "Hiệu lực (phút, 0: cả phiên)")</label>
+                    <input class="form-control" type="number" min="0" max="1440" id="safety-unlocked-minutes" @bind="c.UnlockedMinutes" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-tries">@T("Wrong tries", "Số lần nhập sai")</label>
+                    <input class="form-control" type="number" min="1" max="100" id="safety-tries" @bind="c.MaxWrongTries" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-lockout">@T("Lockout (minutes)", "Khóa nhập (phút)")</label>
+                    <input class="form-control" type="number" min="1" id="safety-lockout" @bind="c.LockoutMinutes" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="safety-items">
+        <div class="card-body">
+            <h2 class="h5">@T("Item lock", "Khóa vật phẩm")</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="safety-item-lock" @bind="c.ItemLockEnabled" />
+                <label class="form-check-label" for="safety-item-lock">@T("Players can lock items", "Người chơi có thể khóa vật phẩm")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-wait">@T("Unlock wait (hours, 0: at once)", "Chờ mở khóa (giờ, 0: ngay)")</label>
+                    <input class="form-control" type="number" min="0" max="720" id="safety-wait" @bind="c.UnlockWaitHours" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-max-locks">@T("Most locked items", "Số vật phẩm khóa tối đa")</label>
+                    <input class="form-control" type="number" min="1" max="1000" id="safety-max-locks" @bind="c.MaxLockedItems" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="safety-history">
+        <div class="card-body">
+            <h2 class="h5">@T("History", "Lịch sử")</h2>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="safety-notify" @bind="c.NotifyNewAddress" />
+                <label class="form-check-label" for="safety-notify">@T("Tell the player in the game when the last login came from another address", "Báo trong game khi lần đăng nhập trước đến từ địa chỉ khác")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-login-days">@T("Logins kept (days)", "Giữ lịch sử đăng nhập (ngày)")</label>
+                    <input class="form-control" type="number" min="1" id="safety-login-days" @bind="c.LoginHistoryDays" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-logins-shown">@T("Logins on the website", "Số lần đăng nhập trên web")</label>
+                    <input class="form-control" type="number" min="1" max="500" id="safety-logins-shown" @bind="c.LoginsShown" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-trade-days">@T("Trades kept (days)", "Giữ lịch sử giao dịch (ngày)")</label>
+                    <input class="form-control" type="number" min="1" id="safety-trade-days" @bind="c.TradeHistoryDays" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="safety-trades-shown">@T("Trades on the website", "Số giao dịch trên web")</label>
+                    <input class="form-control" type="number" min="1" max="500" id="safety-trades-shown" @bind="c.TradesShown" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <p>
+        <button class="btn btn-primary" id="safety-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@T("Save", "Lưu")</button>
+    </p>
+
+    <section class="card mb-3" id="safety-account">
+        <div class="card-body">
+            <h2 class="h5">@T("An account", "Một tài khoản")</h2>
+            <div class="input-group mb-2" style="max-width: 30rem;">
+                <input class="form-control" id="safety-account-name" list="safety-known" placeholder="@T("Account name", "Tên tài khoản")" @bind="this._account" />
+                <button class="btn btn-outline-primary" id="safety-account-show" @onclick="this.ShowAccountAsync">@T("Show", "Xem")</button>
+            </div>
+            <datalist id="safety-known">
+                @foreach (var known in this._engine?.KnownAccounts(null, 300) ?? Array.Empty<string>())
+                {
+                    <option value="@known"></option>
+                }
+            </datalist>
+            @if (this._message is { } message)
+            {
+                <div class="alert alert-info" role="status" id="safety-message">@message</div>
+            }
+
+            @if (this._shownAccount is { } login && this._engine is { } engine)
+            {
+                var now = DateTime.UtcNow;
+                <p id="safety-account-pin">
+                    @T("Second password:", "Mật khẩu cấp 2:")
+                    <strong>@(this._hasPin switch { true => T("set", "đã đặt"), false => T("none", "chưa có"), _ => "?" })</strong>
+                    @if (engine.PinChangedAt(login) is { } changed)
+                    {
+                        <span class="text-muted"> (@T("changed", "đổi lúc") @this.Sydney(changed))</span>
+                    }
+                    <button class="btn btn-sm btn-outline-danger ms-2" id="safety-reset-pin" disabled="@(this._isSaving || this._hasPin != true)" @onclick="this.ResetPinAsync">@T("Reset the second password", "Xóa mật khẩu cấp 2")</button>
+                    @if (engine.LockedOutUntil(login, now) is { } until)
+                    {
+                        <span class="ms-2 text-danger">@T("Locked out until", "Bị khóa nhập đến") @this.Sydney(until)</span>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" id="safety-clear-lockout" @onclick="this.ClearLockout">@T("Clear", "Gỡ")</button>
+                    }
+                </p>
+
+                <h3 class="h6">@T("Locked items", "Vật phẩm bị khóa")</h3>
+                <table class="table table-sm" id="safety-locks">
+                    <thead><tr><th>@T("Item", "Vật phẩm")</th><th>@T("Character", "Nhân vật")</th><th>@T("Locked", "Khóa lúc")</th><th>@T("Unlocks", "Mở khóa lúc")</th><th></th></tr></thead>
+                    <tbody>
+                        @foreach (var itemLock in engine.Locks(login, now))
+                        {
+                            <tr class="safety-lock">
+                                <td>@itemLock.Description</td>
+                                <td>@(itemLock.Character.Length == 0 ? T("vault", "hòm đồ") : itemLock.Character)</td>
+                                <td>@this.Sydney(itemLock.LockedAtUtc)</td>
+                                <td>@(itemLock.UnlockAtUtc is { } at ? this.Sydney(at) : "-")</td>
+                                <td><button class="btn btn-sm btn-outline-secondary safety-unlock" @onclick="() => this.RemoveLock(itemLock.ItemId)">@T("Unlock now", "Mở khóa ngay")</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <h3 class="h6">@T("Logins", "Đăng nhập")</h3>
+                <table class="table table-sm" id="safety-logins">
+                    <thead><tr><th>@T("Time (Sydney)", "Thời gian (Sydney)")</th><th>@T("Address", "Địa chỉ")</th><th>@T("Where", "Nơi")</th><th>@T("Result", "Kết quả")</th></tr></thead>
+                    <tbody>
+                        @foreach (var entry in engine.Logins(login, 500))
+                        {
+                            <tr class="safety-login @(entry.Success ? string.Empty : "table-warning")">
+                                <td>@this.Sydney(entry.AtUtc)</td>
+                                <td>@(entry.Address.Length == 0 ? "?" : entry.Address)</td>
+                                <td>@Source(entry.Source)</td>
+                                <td>@(entry.Success ? T("success", "thành công") : T("wrong password", "sai mật khẩu"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <h3 class="h6">@T("Trades", "Giao dịch")</h3>
+                <table class="table table-sm" id="safety-trades">
+                    <thead><tr><th>@T("Time (Sydney)", "Thời gian (Sydney)")</th><th>@T("What", "Loại")</th><th>@T("Character", "Nhân vật")</th><th>@T("With", "Với")</th><th>@T("Gave", "Đã đưa")</th><th>@T("Got", "Đã nhận")</th></tr></thead>
+                    <tbody>
+                        @foreach (var trade in engine.Trades(login, 1000))
+                        {
+                            <tr class="safety-trade">
+                                <td>@this.Sydney(trade.AtUtc)</td>
+                                <td>@Kind(trade.Kind)</td>
+                                <td>@trade.Character</td>
+                                <td>@trade.Partner (@trade.PartnerLogin)</td>
+                                <td>@string.Join(", ", trade.Gave.Concat(trade.ZenGave > 0 ? [$"{trade.ZenGave:N0} zen"] : Array.Empty<string>()))</td>
+                                <td>@string.Join(", ", trade.Got.Concat(trade.ZenGot > 0 ? [$"{trade.ZenGot:N0} zen"] : Array.Empty<string>()))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </section>
+}
