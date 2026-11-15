@@ -30,7 +30,7 @@ export const Buff = {
  */
 export function debuffTint(has: (buff: number) => boolean, player: boolean): [number, number, number] | null {
   if (player) {
-    if (has(Buff.CLOAKING)) return null; // drawn see-through in chrome instead (not on the web)
+    if (has(Buff.CLOAKING)) return null; // drawn see-through in chrome instead (itemGlow.ts setCloaked)
     if (has(Buff.POISON) && has(Buff.FREEZE)) return [0.3, 1, 1];
     if (has(Buff.BLOW_OF_DESTRUCTION)) return [0.3, 1, 1];
     if (has(Buff.POISON)) return [0.3, 1, 0.5];

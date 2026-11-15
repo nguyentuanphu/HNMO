@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight, setTerrainLights } from './terrain.js';
 import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
-import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter } from './game/characters.js';
+import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter, createItemModel } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
@@ -17,7 +17,7 @@ import { itemDefinition, itemName, loadItemCatalog, itemsWithModels, ItemGroup, 
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { eventOfMap } from './game/events.js';
-import { loadGlowColors } from './game/itemGlow.js';
+import { loadGlowColors, prewarmItemGlow } from './game/itemGlow.js';
 import { BAG, Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
@@ -70,7 +70,8 @@ import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
-import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect, playChainLightning, debuffTint } from './render/effects/index.js';
+import { keepNextGradeSparkles } from './render/effects/nextGrade.js';
+import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect, playChainLightning, debuffTint, Buff } from './render/effects/index.js';
 import { DarkRaven, helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -331,6 +332,9 @@ function warmCharacterModels(): void {
 // character from CharacterMachine->Equipment): put on again when that changes.
 const EQUIPMENT_OF_SLOT: EquipmentSlotName[] = ['rightHand', 'leftHand', 'helm', 'armor', 'pants', 'gloves', 'boots', 'wings', 'pet'];
 let wornSignature: string | null = null;
+/** Keeps the +15 weapons' sparkles ticking (set once the effect system exists). */
+let keepSparkles: (() => void) | null = null;
+
 async function wearInventory(character: CharacterListEntry): Promise<void> {
   const equipment: EquipmentAppearance = {};
   EQUIPMENT_OF_SLOT.forEach((name, slot) => {
@@ -562,6 +566,7 @@ function frame(now: number): void {
     state.deaths?.update(dt);
     state.projectiles?.update(dt);
     state.effects?.update(dt);
+    keepSparkles?.();
     state.autoPlay?.update();
     mapBanner.update(dt);
     if (state.online && state.hero && state.world) {
@@ -792,6 +797,11 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.effects = effects;
   // The effect models, textures and programs are made ready in the background, so the first cast of a skill doesn't stall.
   setTimeout(() => { void effects.prewarm((object) => warmObject(warmer, object)); }, 3_000);
+  // The items' glow passes (levels, shines, excellent, ancient, the cloak's chrome) likewise, on a sword.
+  setTimeout(() => {
+    void prewarmItemGlow((level, excellent, ancient, place) => createItemModel({ group: 0, number: 0, glowLevel: level, excellent, ancient }, place),
+      (object) => warmObject(warmer, object));
+  }, 6_000);
   setCompanionEffects(effects); // pets' and mounts' glows
   // The weapon trails of swinging players (CreateWeaponBlur).
   const weaponTrails = new WeaponTrails(() => [online.hero, ...online.characters.values()]);
@@ -804,6 +814,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   };
   // What appears with a monster (its setup's spawnEffects).
   online.onAdded = (who) => { if (who.look?.setup.spawnEffects) void playSpawnEffects(effects, who, ownerFromCharacter(who)); };
+  // The +15 weapons' sparkles in the hands of every player shown (not in Chaos Castle).
+  keepSparkles = () => keepNextGradeSparkles(effects, function* () {
+    for (const who of [online.hero, ...online.characters.values()]) {
+      if (who !== online.hero && who.kind !== 'player') continue;
+      const weapons = who.attachments.filter((a) => (a.slot === 'rightHand' || a.slot === 'leftHand') && (a.item.glowLevel ?? 0) >= 15)
+        .map((a) => ({ hand: a.slot === 'rightHand' ? 0 as const : 1 as const, level: a.item.glowLevel ?? 0, bow: a.item.group === 4 }));
+      if (weapons.length) yield { owner: ownerFromCharacter(who), weapons };
+    }
+  }, () => { const map = state.mapNumber ?? -1; return !((map >= 18 && map <= 23) || map === 53); });
   // The buffs' looks (InsertBuffPhysicalEffect / ClearBuffLogicalEffect): Soul Barrier's lights.
   const knownBuffs = new Map<number, number[]>();
   buffs.onChange((id) => {
@@ -815,6 +834,12 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     // The body's colour while a debuff lasts (poisoned, frozen, stunned...).
     const tint = debuffTint((buff) => now.includes(buff), player);
     who.bodyTint = tint ? new THREE.Color(tint[0], tint[1], tint[2]) : null;
+    // Debuffed, the items lose their level's glow; hardened or cloaked also their excellent / ancient glow; cloaked
+    // the character is a chrome shell (RenderPartObjectEffect, players' parts).
+    const has = (buff: number) => now.includes(buff);
+    who.setItemLooks({
+      debuffed: player && tint !== null, hardened: player && has(Buff.HARDEN), cloaked: player && has(Buff.CLOAKING),
+    });
     for (const buff of now) if (!before.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), true, player);
     for (const buff of before) if (!now.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), false, player);
   });

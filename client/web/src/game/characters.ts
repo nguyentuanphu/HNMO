@@ -8,7 +8,7 @@ import { meshDraws, type ItemPlace, type MeshDraw } from './itemLooks.js';
 import { sampleHeight, sampleLight } from '../terrain.js';
 import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
 import { itemDefinition, itemModel, ItemGroup } from './items.js';
-import { addItemGlow } from './itemGlow.js';
+import { addItemGlow, setCloaked, setItemGlowState } from './itemGlow.js';
 import { createCompanions, isDarkRaven } from './pets.js';
 import type { Companion, CompanionOwner } from './pets.js';
 import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
@@ -207,7 +207,7 @@ export async function createItemModel(item: AppearanceItem, place: ItemPlace = '
     }
   }
   if (extra.length) animated.addGlow({ meshes: extra, update: () => { /* still */ } });
-  await addItemGlow(animated, animated.parts, source.glow, item);
+  await addItemGlow(animated, animated.parts, source.glow, item, place);
   return animated;
 }
 
@@ -387,6 +387,28 @@ export class Character {
     for (const attachment of this.attachments) this.model.group.remove(attachment.model.group);
     this.attachments = attachments;
     for (const attachment of attachments) this.model.group.add(attachment.model.group);
+    this.looksDirty = true;
+  }
+
+  /** What its buffs do to how its items are drawn (RenderPartObjectEffect): see itemGlow.ts setItemGlowState / setCloaked. */
+  itemLooks = { debuffed: false, hardened: false, cloaked: false };
+  private looksDirty = false;
+
+  setItemLooks(looks: { debuffed: boolean; hardened: boolean; cloaked: boolean }): void {
+    const now = this.itemLooks;
+    if (now.debuffed === looks.debuffed && now.hardened === looks.hardened && now.cloaked === looks.cloaked) return;
+    this.itemLooks = { ...looks };
+    this.looksDirty = true;
+  }
+
+  private applyItemLooks(): void {
+    this.looksDirty = false;
+    const { debuffed, hardened, cloaked } = this.itemLooks;
+    for (const model of [this.model, ...this.attachments.map((attachment) => attachment.model)]) {
+      if (!cloaked) void setCloaked(model, false);
+      setItemGlowState(model, { debuffed: debuffed || cloaked, hardened: hardened || cloaked });
+      if (cloaked) void setCloaked(model, true);
+    }
   }
 
   get group(): THREE.Group { return this.model.group; }
@@ -470,6 +492,7 @@ export class Character {
     this.group.position.set(x, y, this.fixedHeight ?? sampleHeight(world.heights, x, y) + this.heightOffset);
     this.group.rotation.set(0, 0, this.angle);
     this.model.pose(this.action, this.time);
+    if (this.looksDirty) this.applyItemLooks();
     this.clock += dt;
     const light = this.bodyTint ? this.light.copy(this.bodyTint) : this.fullBright ? this.light.setRGB(1, 1, 1) : sampleLight(world.light, x, y, this.light);
     this.model.setLight(light, this.clock);

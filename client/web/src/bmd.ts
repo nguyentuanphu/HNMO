@@ -370,6 +370,8 @@ export class AnimatedModel {
   parts: ModelPart[];
   glows: ModelGlow[];
   lightFactor: LightFactor | null;
+  /** Drawn in the light it is given, without its parts' level light (a debuff colours the body). */
+  plainLight = false;
   /** The GPU skeleton of a skinned model (null: its vertices are posed on the CPU). */
   private gpuSkeleton: MatrixSkeleton | null;
 
@@ -427,7 +429,7 @@ export class AnimatedModel {
       if (part.mesh.material.blending === THREE.AdditiveBlending) continue;
       part.mesh.material.color.copy(color);
       if (part.tint) part.mesh.material.color.multiply(part.tint);
-      const factor = part.lightFactor?.(seconds);
+      const factor = this.plainLight ? null : part.lightFactor?.(seconds);
       if (factor) part.mesh.material.color.multiply(factor);
     }
     for (const glow of this.glows) glow.update(seconds);
