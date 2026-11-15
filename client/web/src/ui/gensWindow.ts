@@ -12,6 +12,7 @@ import { divideStringByPixel, textWidth } from '../game/questData.js';
 import { GENS_DUPRIAN, GENS_VANERT, GensText, gensMarkCell, gensTitle, type Gens } from '../game/gens.js';
 import type { Character } from '../game/characters.js';
 import { FONT_FAMILY, fitTextPx, nativeTextPx, uiScale, dockTop } from './nativeText.js';
+import { cachedRect } from './layoutCache.js';
 
 const PANEL_WIDTH = 190;
 const TEXT_PX = 12;
@@ -174,7 +175,7 @@ export class GensMarks {
   /** The player whose box is under the pointer (the main view's picking of characters). */
   private pick(event: PointerEvent): Character | null {
     const { camera, canvas } = this.options;
-    const rect = canvas.getBoundingClientRect();
+    const rect = cachedRect(canvas);
     let best: { character: Character; distance: number } | null = null;
     for (const character of this.options.players()) {
       if (character.kind !== 'player' || character.dead) continue;
@@ -204,7 +205,7 @@ export class GensMarks {
     const character = this.hovered;
     if (!character || !character.group.parent || this.options.hidden?.()) { this.tag.style.display = 'none'; return; }
     const { camera, canvas } = this.options;
-    const rect = canvas.getBoundingClientRect();
+    const rect = cachedRect(canvas);
     this.box.setFromObject(character.group);
     const head = new THREE.Vector3((this.box.min.x + this.box.max.x) / 2, this.box.max.y, (this.box.min.z + this.box.max.z) / 2).project(camera);
     const scale = uiScale();

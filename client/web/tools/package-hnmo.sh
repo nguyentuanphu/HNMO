@@ -85,8 +85,10 @@ cp -r "$WEB/node_modules/three/build" "$OUT/web/vendor/three/build"
 # unbundled public/js). three stays external (resolved by the page's import map), and
 # the Data files stay separate. The individual modules are then dropped from the folder.
 echo "Bundling the web client (esbuild)"
+# The game keeps its function names (no identifier minifying), so the performance report's profile
+# (Settings, "Performance report") names the functions that take the time.
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
-  --bundle --minify --format=esm --external:three \
+  --bundle --minify-whitespace --minify-syntax --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
 # The website (home.html) has its own script: bundled the same way.
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \

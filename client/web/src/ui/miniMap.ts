@@ -7,6 +7,7 @@
 import { loadImage, openDocument, prepareDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { loadMiniMapData, type MiniMapMarker } from '../game/miniMapData.js';
 import { FONT_FAMILY, nativeTextPx, typographyScale } from './nativeText.js';
+import { cachedRect } from './layoutCache.js';
 
 // ---------- MiniMapLayout (the pure geometry of the desktop's mini map) ----------
 
@@ -330,7 +331,7 @@ export class MiniMap {
   private hudBand(): number[] {
     const strip = document.querySelector('.rml-main_frame')?.shadowRoot?.querySelector('#hud_strip');
     if (!strip) return [];
-    const rect = strip.getBoundingClientRect();
+    const rect = cachedRect(strip);
     if (rect.width <= 0 || rect.height <= 0) return [];
     return [Math.round(rect.left), Math.round(rect.top), Math.round(rect.right), Math.round(rect.bottom)];
   }

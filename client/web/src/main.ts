@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight, setTerrainLights } from './terrain.js';
 import { loadWorldData, createWorld, mapName } from './world.js';
-import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter, createItemModel } from './game/characters.js';
+import { createPlayerCharacter, createMonsterCharacter, setPlayerAnimationSpeeds, cellCenter, createItemModel } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
@@ -16,14 +16,17 @@ import { itemDefinition, itemName, loadItemCatalog } from './game/items.js';
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
 import { eventOfMap } from './game/events.js';
-import { loadGlowColors, prewarmItemGlow } from './game/itemGlow.js';
+import { glowMaterialCount, loadGlowColors, prewarmItemGlow } from './game/itemGlow.js';
+import { drawItem } from './ui/itemIcons.js';
 import { BAG, Inventory } from './game/inventory.js';
 import { ItemWindows } from './ui/itemWindows.js';
 import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
-import { setUpSettings } from './ui/settingsWindow.js';
-import { frameDue } from './render/quality.js';
+import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
+import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
+import { PerfReportWindow } from './ui/perfReportWindow.js';
+import { applyPixelRatio, frameDue } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
@@ -181,6 +184,25 @@ export interface GameState {
   social?: Social;
   duelAndGens?: DuelAndGens;
   fieldEvents?: FieldEvents;
+  /** The performance report window (HNMO extra). */
+  perfReport?: PerfReportWindow;
+  /** What tests and the console reach in the dev build and the packaged bundle alike. */
+  debug?: GameDebug;
+}
+
+export interface GameDebug {
+  renderer: THREE.WebGLRenderer;
+  createPlayerCharacter: typeof createPlayerCharacter;
+  createMonsterCharacter: typeof createMonsterCharacter;
+  drawItem: typeof drawItem;
+  glowMaterialCount: typeof glowMaterialCount;
+  /**
+   * Runs `count` frames of the game's work back to back (each `dt` seconds of play, drawn unless `draw` is
+   * false) and returns the average milliseconds of each part of the frame (the frame loop's parts).
+   */
+  benchFrames(count: number, options?: { dt?: number; draw?: boolean }): Record<string, number>;
+  /** Turns the culling of characters out of view on or off (to compare). */
+  setCulling(on: boolean): void;
 }
 
 declare global {
@@ -224,7 +246,7 @@ const chat = new Chat({
 
 const renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: true });
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // then render/quality.ts's applyPixelRatio
 const scene = new THREE.Scene();
 scene.background = FOG.color;
 const camera = new THREE.PerspectiveCamera(35, 1, 10, 9000);
@@ -237,6 +259,48 @@ const state: GameState = { world: null, hero: null, online: null, mapNumber: nul
 state.cooldowns = skillCooldowns;
 state.chat = chat;
 window.__game = state; // for automated tests and debugging from the console
+
+// HNMO extra: the performance report (Settings, or Ctrl+Shift+P): what the frames cost on the player's computer.
+let settingsWindow: SettingsWindow | null = null;
+const perfRecorder = new PerfRecorder({
+  renderer, canvas: ui.canvas,
+  scene: () => {
+    const counts = { players: 0, monsters: 0, npcs: 0 };
+    for (const c of state.online?.characters.values() ?? []) {
+      if (c.kind === 'player') counts.players++; else if (c.kind === 'monster') counts.monsters++; else counts.npcs++;
+    }
+    const fx = state.effects?.counts();
+    return {
+      map: state.mapNumber, characters: state.online?.characters.size ?? 0, ...counts,
+      effects: fx?.effects ?? 0, particles: fx?.particles ?? 0, joints: fx?.joints ?? 0, sprites: fx?.sprites ?? 0,
+      labels: ui.labels.childElementCount, chatLines: state.chat?.entries.length ?? 0,
+    };
+  },
+  settings: () => ({ ...(settingsWindow?.current ?? {}), language: currentLanguage() }),
+});
+state.debug = {
+  renderer, createPlayerCharacter, createMonsterCharacter, drawItem, glowMaterialCount,
+  setCulling: (on) => { cullingOn = on; },
+  benchFrames: (count, { dt = 1 / 60, draw = true } = {}) => {
+    const sums = new Float64Array(FRAME_SECTIONS.length);
+    const render = renderer.render.bind(renderer);
+    if (!draw) renderer.render = () => undefined;
+    try {
+      for (let i = 0; i < count; i++) {
+        step(dt, perfRecorder);
+        perfRecorder.lastSections.forEach((ms, k) => { sums[k] += ms; });
+      }
+    } finally {
+      renderer.render = render;
+    }
+    const out: Record<string, number> = {};
+    FRAME_SECTIONS.forEach((name, k) => { out[name] = Math.round(sums[k] / count * 1000) / 1000; });
+    out.total = Math.round(sums.reduce((a, b) => a + b, 0) / count * 1000) / 1000;
+    return out;
+  },
+};
+const perfWindow = new PerfReportWindow(perfRecorder, { click: () => sounds.click(), beforeRecord: () => settingsWindow?.close() });
+state.perfReport = perfWindow;
 
 // The loading line; once something has finished loading (progress 1) it goes away after a few
 // seconds, so nothing but the game's own interface stays on screen.
@@ -255,10 +319,21 @@ function setStatus(text: string, progress?: number): void {
 function resize() {
   const { clientWidth: width, clientHeight: height } = ui.canvas.parentElement!;
   renderer.setSize(width, height, false);
+  applyPixelRatio(); // the pixel budget follows the window's size (render/quality.ts)
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
 }
 window.addEventListener('resize', resize);
+
+// The canvas's place on the page, read once per window size: reading it in the frame loop after the
+// HUD's writes would make the browser lay the page out again every frame.
+let canvasBox: DOMRect | null = null;
+function canvasRect(): DOMRect {
+  canvasBox ??= ui.canvas.getBoundingClientRect();
+  return canvasBox;
+}
+window.addEventListener('resize', () => { canvasBox = null; });
+document.addEventListener('fullscreenchange', () => { canvasBox = null; });
 
 const toScene = (x: number, y: number, z: number): THREE.Vector3 => new THREE.Vector3(x, z, -y);
 
@@ -377,7 +452,7 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
 function pickCell(event: MouseEvent): { x: number; y: number } | null {
-  const rect = ui.canvas.getBoundingClientRect();
+  const rect = canvasRect();
   pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
   raycaster.setFromCamera(pointer, camera);
   const hit = raycaster.intersectObject(state.world!.terrain, false)[0];
@@ -391,7 +466,7 @@ ui.canvas.addEventListener('contextmenu', (event) => event.preventDefault());
 const npcBox = new THREE.Box3();
 function pickCharacter(event: MouseEvent, kinds: string[]): Character | null {
   if (!state.online) return null;
-  const rect = ui.canvas.getBoundingClientRect();
+  const rect = canvasRect();
   let best: { character: Character; distance: number } | null = null;
   for (const character of state.online.characters.values()) {
     if (!kinds.includes(character.kind) || character.dead) continue;
@@ -507,12 +582,14 @@ let labelPointer: MouseEvent | null = null;
 ui.canvas.addEventListener('pointermove', (event) => { labelPointer = event; }, { passive: true });
 ui.canvas.addEventListener('pointerleave', () => { labelPointer = null; });
 
+const labelsShown = new Set<Character>();
 function updateLabels(): void {
-  const visible = new Set<Character>();
+  const visible = labelsShown;
+  visible.clear();
   const hero = state.hero, world = state.world;
   const pointed = labelPointer && eventOfMap(state.mapNumber ?? null) !== 'chaosCastle' ? pickCharacter(labelPointer, ['npc']) : null;
   if (state.online && hero && world) {
-    const rect = ui.canvas.getBoundingClientRect();
+    const rect = canvasRect();
     for (const character of state.online.characters.values()) {
       // A pointed player's name box (with its Gens mark and guild line) is the Gens marks' (ui/gensWindow.ts).
       if ((character !== pointed || character.kind === 'player') && character.kind !== 'kalimaGate') continue; // a Kalima gate keeps its name box
@@ -542,6 +619,27 @@ function updateLabels(): void {
 
 // ---------- frame loop ----------
 
+// Characters out of the camera's view are not posed or drawn (Character.culled): the view of the last
+// frame, in the map's coordinates, against a sphere around each one (wide enough for wings, mounts and
+// big monsters; a scaled monster's grows with it).
+const cullFrustum = new THREE.Frustum();
+const cullMatrix = new THREE.Matrix4();
+const cullSphere = new THREE.Sphere();
+const CULL_RADIUS = 450;
+let cullingOn = true;
+function cullCharacters(online: OnlineWorld): void {
+  cullMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse).multiply(root.matrixWorld);
+  cullFrustum.setFromProjectionMatrix(cullMatrix);
+  for (const character of online.characters.values()) {
+    const group = character.group;
+    if (group.parent !== root || !cullingOn) { character.culled = false; continue; }
+    cullSphere.center.copy(group.position);
+    cullSphere.center.z += 120 * group.scale.z;
+    cullSphere.radius = CULL_RADIUS * Math.max(1, group.scale.x);
+    character.culled = !cullFrustum.intersectsSphere(cullSphere);
+  }
+}
+
 let last = performance.now();
 let frames = 0, fpsTime = 0;
 
@@ -550,16 +648,30 @@ function frame(now: number): void {
   const dt = Math.min((now - last) / 1000, MAX_FRAME_SECONDS);
   last = now;
   frames++; fpsTime += dt;
-  if (fpsTime >= 1) { ui.fps.textContent = `${frames} fps`; frames = 0; fpsTime = 0; }
+  if (fpsTime >= 1) { ui.fps.textContent = `${Math.round(frames / fpsTime)} fps`; frames = 0; fpsTime = 0; }
+  // The performance report measures the frame's parts while it records (game/perfRecorder.ts).
+  const rec = perfRecorder.recording ? perfRecorder : null;
+  step(dt, rec);
+  if (rec) rec.endFrame(now);
+  requestAnimationFrame(frame);
+}
+
+/** One frame's work: the world moves on by `dt` seconds and is drawn. */
+function step(dt: number, rec: PerfRecorder | null): void {
+  rec?.beginFrame();
   if (state.hero) {
     state.hero.update(dt, state.world!);
+    if (state.online) cullCharacters(state.online);
     state.online?.update(dt);
+    rec?.lap('characters');
     state.combat?.update();
     if (state.ground && state.world) state.ground.update(state.world);
+    rec?.lap('combat');
     state.deaths?.update(dt);
     state.projectiles?.update(dt);
     state.effects?.update(dt);
     keepSparkles?.();
+    rec?.lap('effects');
     state.autoPlay?.update();
     mapBanner.update(dt);
     if (state.online && state.hero && state.world) {
@@ -574,13 +686,17 @@ function frame(now: number): void {
     state.miniMap?.update();
     state.gates?.update();
     state.hud?.updateCooldowns();
-    ui.position.textContent = `${state.hero.cell.x}, ${state.hero.cell.y}`;
+    const position = `${state.hero.cell.x}, ${state.hero.cell.y}`;
+    if (position !== shownPosition) { ui.position.textContent = position; shownPosition = position; }
+    rec?.lap('interface');
     updateCamera();
     updateLabels();
+    rec?.lap('camera');
   }
   renderer.render(scene, camera);
-  requestAnimationFrame(frame);
+  rec?.lap('render');
 }
+let shownPosition = '';
 
 // ---------- login screens ----------
 
@@ -1187,7 +1303,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     direction: (x, y) => {
       const hero = online.hero, world = state.world;
       if (!hero || !world) return null;
-      const rect = ui.canvas.getBoundingClientRect();
+      const rect = canvasRect();
       const from = toScene(hero.position.x, hero.position.y, sampleHeight(world.heights, hero.position.x, hero.position.y)).project(camera);
       const tx = cellCenter(x), ty = cellCenter(y);
       const to = toScene(tx, ty, sampleHeight(world.heights, tx, ty)).project(camera);
@@ -1216,11 +1332,11 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       strength: stats.strength, agility: stats.agility,
     }, (item) => itemDefinition(item.group, item.number)?.weaponKind),
     hasPet: () => false, // the Dark Lord's raven comes with the pets
-    tooltip: (index, box) => {
+    tooltip: (index, anchor) => {
       const view = itemWindows.tooltip;
-      if (index === null || !box) { view.hide(); return; }
+      if (index === null || !anchor) { view.hide(); return; }
       const skill = index >= 120 && index < 124 ? index : skills.skillAt(index);
-      void view.showLines(skillTooltipLines(skill, stats, character.classIndex), { left: box.left, top: box.top, width: box.width, height: box.height }, { index }, { above: true });
+      void view.showLines(skillTooltipLines(skill, stats, character.classIndex), { left: anchor.x, top: anchor.y, width: 0, height: 0 }, { index }, { anchor });
     },
   });
   stats.onChange(() => hud.refreshSkills());
@@ -1417,7 +1533,7 @@ function initLogin() {
 resize();
 initLogin();
 setUpGuide();
-setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root });
+settingsWindow = setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root }, { performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); } });
 // The login theme (it starts with the first click or key: browsers hold sound back until then).
 sounds.audio.playMusic(loginMusic(false));
 // The sound button: everything on or off, kept in the browser.

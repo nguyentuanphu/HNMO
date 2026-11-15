@@ -173,6 +173,22 @@ app.MapGet("/topup/info", (HttpContext context) => ForwardTopUpAsync(context, "i
 app.MapPost("/topup/casso", (HttpContext context) => ForwardTopUpAsync(context, "casso")).RequireRateLimiting("per-visitor");
 app.MapPost("/topup/sepay", (HttpContext context) => ForwardTopUpAsync(context, "sepay")).RequireRateLimiting("per-visitor");
 
+// The game page lets the performance report (Settings, "Performance report") sample the page's own
+// scripts with the JS Self-Profiling API, which a page may only do when its response allows it.
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.Equals("/index.html", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Response.OnStarting(() =>
+        {
+            context.Response.Headers["Document-Policy"] = "js-profiling";
+            return Task.CompletedTask;
+        });
+    }
+
+    await next(context).ConfigureAwait(false);
+});
+
 // The web client and its libraries, then the game's data files.
 app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });
 app.UseStaticFiles(new StaticFileOptions { FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(webRoot) });

@@ -1,0 +1,85 @@
+<rml>
+<head>
+	<title>HNMO Performance report</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's performance report (no desktop window): the game's message box frame (window_shell) with what
+		   the recorder measured in about 15 seconds of play, and buttons to download it or record again. */
+		#panel {
+			top: 40dp;
+			left: 50%;
+			margin-left: -210dp;
+			transform: none;
+			width: 420dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 16dp 20dp 16dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.pr-scroll {
+			display: block;
+			max-height: 330dp;
+			overflow-y: auto;
+			pointer-events: auto;
+			padding-right: 4dp;
+		}
+		.pr-head { display: block; color: token(accent-gold); margin: 6dp 0 2dp 0; }
+		.pr-line { display: block; line-height: 1.3em; white-space: normal; color: token(text-input); font-size: 0.85rem; }
+		.pr-line.muted { color: token(text-muted); }
+		.pr-line.bad { color: #ff9a7a; }
+		.pr-note { display: block; margin: 4dp 0 6dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.pr-bar { display: block; height: 6dp; margin: 4dp 0; background-color: rgba(0, 0, 0, 0.5); border: 1dp #5a4a30; }
+		.pr-fill { display: block; height: 6dp; background-color: #c8a050; }
+		.pr-buttons { display: flex; flex-direction: row; justify-content: center; margin-top: 6dp; }
+		@spritesheet pr-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			pr-btn-idle:   0px  0px 64px 29px;
+			pr-btn-hover:  0px 29px 64px 29px;
+			pr-btn-active: 0px 58px 64px 29px;
+		}
+		.pr-btn {
+			position: static;
+			width: 62dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 0 3dp;
+			font-size: 0.9rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(pr-btn-idle);
+		}
+		.pr-btn:hover { decorator: image(pr-btn-hover); }
+		.pr-btn:active { decorator: image(pr-btn-active); }
+		.pr-btn.wide { width: 120dp; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_perf_report">
+	<span class="pr-note">{{intro}}</span>
+	<div class="pr-bar" data-if="recording"><div class="pr-fill" data-style-width="progress_width"></div></div>
+	<div class="pr-scroll" data-if="has_report">
+		<div data-for="s : sections">
+			<span class="pr-head">{{s.head}}</span>
+			<span class="pr-line" data-for="l : s.lines" data-class-bad="l.bad" data-class-muted="l.muted" data-no-i18n="">{{l.text}}</span>
+		</div>
+	</div>
+	<div class="pr-buttons">
+		<div class="btn pr-btn wide pr-record" data-if="recording == false" data-event-click="pr_record">{{record_label}}</div>
+		<div class="btn pr-btn wide pr-download" data-if="has_report" data-event-click="pr_download">{{download_label}}</div>
+		<div class="btn pr-btn pr-close" data-event-click="pr_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

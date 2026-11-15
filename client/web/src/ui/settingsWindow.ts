@@ -89,6 +89,9 @@ const EXTRA_CSS = `
 #panel { pointer-events: auto; }
 .option-row, .option-tab-btn, .option-close-btn, .option-dropdown-option, .option-dropdown-value, .level-gauge-hit { pointer-events: auto; }
 .hnmo-left-out { display: none !important; }
+/* The performance report's button: the window's own dropdown box look. */
+.hnmo-perf-button { pointer-events: auto; cursor: pointer; padding: 0.15rem 0.8rem; border: 1px solid #8a6a30; background: rgba(0, 0, 0, 0.45); color: #ffe9a8; }
+.hnmo-perf-button:hover { background: rgba(80, 60, 20, 0.6); }
 /* The UI size list (8 sizes) opens upward: it stays below the tabs and scrolls. */
 .option-opens-up .option-dropdown-list { max-height: 7.5em; overflow-y: auto; pointer-events: auto; }
 `;
@@ -115,6 +118,12 @@ function checkboxRow(label: string, onClick: () => void): { row: HTMLDivElement;
   return { row, box };
 }
 
+/** What the window's HNMO buttons start (main.ts). */
+export interface SettingsActions {
+  /** The "Performance report" button (ui/perfReportWindow.ts). */
+  performanceReport?: () => void;
+}
+
 export class SettingsWindow {
   private doc: RmlDocument | null = null;
   private opening: Promise<void> | null = null;
@@ -122,7 +131,7 @@ export class SettingsWindow {
   private readonly model: OptionModel;
   private extras: { lowSpec?: HTMLDivElement; mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[]; textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[]; wordFilter?: HTMLDivElement } = { viewOptions: [], textOptions: [] };
 
-  constructor(private readonly target: QualityTarget) {
+  constructor(private readonly target: QualityTarget, private readonly actions: SettingsActions = {}) {
     const close = () => this.close();
     this.model = {
       has_title: false, title: 'Options', positioned: false, root_x: 0, root_y: 0,
@@ -315,6 +324,22 @@ export class SettingsWindow {
       row.append(label, dropdown);
       const first = graphics.querySelector(':scope > .option-section');
       if (first) first.after(lowSpec.row, row); else graphics.prepend(lowSpec.row, row);
+      // The performance report (Ctrl+Shift+P too): records 15 seconds and shows what the frames cost.
+      if (this.actions.performanceReport) {
+        const report = document.createElement('div');
+        report.className = 'option-row hnmo-extra';
+        report.id = 'hnmo_perf_report';
+        const reportLabel = document.createElement('span');
+        reportLabel.className = 'option-row-label';
+        reportLabel.textContent = 'Performance report';
+        const button = document.createElement('div');
+        button.className = 'hnmo-perf-button';
+        button.textContent = 'Record';
+        button.title = 'Ctrl+Shift+P';
+        button.addEventListener('click', () => this.actions.performanceReport?.());
+        report.append(reportLabel, button);
+        graphics.append(report);
+      }
       this.extras = { ...this.extras, lowSpec: lowSpec.box, viewValue: value, viewList: list, viewOptions: options };
     }
     const display = panels[0];
@@ -414,6 +439,6 @@ export class SettingsWindow {
 }
 
 /** Makes the settings window and applies the saved settings (main.ts calls this once). */
-export function setUpSettings(target: QualityTarget): SettingsWindow {
-  return new SettingsWindow(target);
+export function setUpSettings(target: QualityTarget, actions: SettingsActions = {}): SettingsWindow {
+  return new SettingsWindow(target, actions);
 }
