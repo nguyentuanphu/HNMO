@@ -784,6 +784,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   // Skill effects (the desktop's effect system): played when anyone casts.
   const effects = new EffectSystem(root, { camera, heightAt });
   state.effects = effects;
+  // The effect models, textures and programs are made ready in the background, so the first cast of a skill doesn't stall.
+  setTimeout(() => { void effects.prewarm((object) => warmObject(warmer, object)); }, 3_000);
   setCompanionEffects(effects); // pets' and mounts' glows
   // The weapon trails of swinging players (CreateWeaponBlur).
   const weaponTrails = new WeaponTrails(() => [online.hero, ...online.characters.values()]);

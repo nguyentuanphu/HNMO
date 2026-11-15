@@ -75,21 +75,31 @@ export class QuadBatches {
     this.up.setFromMatrixColumn(camera.matrixWorld, 1).applyQuaternion(toRoot).normalize();
   }
 
-  /** Uploads the quads collected since beginFrame. */
+  /** Uploads the quads collected since beginFrame (only the used part of each buffer; nothing for an idle batch). */
   endFrame(): void {
     for (const batch of this.batches.values()) {
       const quads = batch.positions.length / 12;
+      batch.mesh.visible = quads > 0;
+      if (quads === 0) continue;
       if (quads > batch.capacity) this.grow(batch, quads);
       const geometry = batch.mesh.geometry;
-      (geometry.getAttribute('position').array as Float32Array).set(batch.positions);
-      (geometry.getAttribute('uv').array as Float32Array).set(batch.uvs);
-      (geometry.getAttribute('color').array as Float32Array).set(batch.colors);
-      geometry.getAttribute('position').needsUpdate = true;
-      geometry.getAttribute('uv').needsUpdate = true;
-      geometry.getAttribute('color').needsUpdate = true;
+      const upload = (name: string, values: number[]): void => {
+        const attribute = geometry.getAttribute(name) as THREE.BufferAttribute;
+        (attribute.array as Float32Array).set(values);
+        attribute.clearUpdateRanges();
+        attribute.addUpdateRange(0, values.length);
+        attribute.needsUpdate = true;
+      };
+      upload('position', batch.positions);
+      upload('uv', batch.uvs);
+      upload('color', batch.colors);
       geometry.setDrawRange(0, quads * 6);
-      batch.mesh.visible = quads > 0;
     }
+  }
+
+  /** Makes the batch of each bitmap and blend now (its material and buffers), so the first effect that draws one doesn't. */
+  prepare(bitmap: BitmapName, blend: Blend): THREE.Mesh | null {
+    return this.batch(bitmap, blend)?.mesh ?? null;
   }
 
   /** The texture's size in pixels, or null while it loads. */

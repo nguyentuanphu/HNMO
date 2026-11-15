@@ -20,7 +20,7 @@ import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, Animat
 import type { BMDModel } from '../../formats.js';
 import { EffectCatalogue } from './catalogue.js';
 import {
-  TICK_SECONDS, randInt, rotateByAngle, angleEuler, moveHumming, magicScrewAt, preloadEffectTextures,
+  TICK_SECONDS, randInt, rotateByAngle, angleEuler, moveHumming, magicScrewAt, preloadEffectTextures, BITMAPS,
 } from './core.js';
 import type { BitmapName } from './core.js';
 import { QuadBatches, applyBlend } from './quadBatch.js';
@@ -107,6 +107,61 @@ function loadEffectModel(dir: string, file: string): Promise<BMDModel | null> {
     modelLoads.set(key, load);
   }
   return load;
+}
+
+/** The effect models kept for reuse (by file, blend mesh and render type): built once, shown again and again. */
+const modelPool = new Map<string, AnimatedModel[]>();
+/** At most this many idle copies of one model are kept. */
+const MODEL_POOL_LIMIT = 24;
+/** The blend mesh the types' creation gives their model, for prewarming the right materials (the default is -1). */
+const PREWARM_BLEND_MESH: Partial<Record<EffectType, number>> = {
+  fireModel: 1, magic2: 0, iceSmall: 0, ice: 0, storm: 0, circle: 0, skillInferno: -2, blizzardModel: -2, laser: 0,
+};
+const PREWARM_QUAD = new THREE.PlaneGeometry(1, 1);
+
+function modelPoolKey(dir: string, file: string, blendMesh: number, renderType: Effect['renderType']): string {
+  return `${dir}/${file}|${blendMesh}|${renderType}`;
+}
+
+/** One copy of an effect model with its own materials (their colour, opacity and texture scroll are the effect's). */
+async function buildEffectModel(dir: string, file: string, blendMesh: number, renderType: Effect['renderType']): Promise<AnimatedModel | null> {
+  const model = await loadEffectModel(dir, file);
+  if (!model) return null;
+  const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
+  const materials = await Promise.all(parts.map(async (part) => {
+    const blend = blendMesh <= -2 || model.meshes[part.meshIndex]?.texture === blendMesh;
+    const material = await createMaterial(MODEL_TEXTURE_DIRS, part.textureName, { glow: blend });
+    if (blend && material.map) {
+      // Its own texture object, so the scroll (BlendMeshTexCoordU) is this copy's. It shares the image and the
+      // GPU texture with every other copy (a version, not needsUpdate, which would upload the image again).
+      const map = material.map.clone();
+      map.wrapS = THREE.RepeatWrapping;
+      map.wrapT = THREE.RepeatWrapping;
+      map.version = Math.max(1, material.map.version);
+      material.map = map;
+    }
+    if (blend && renderType === 'dark') applyBlend(material, 'subtract');
+    material.userData.blend = blend;
+    material.transparent = true;
+    return material;
+  }));
+  return new AnimatedModel(model, parts, materials);
+}
+
+/** An effect is done with its model: it goes back to the pool (or is freed when the pool is full). */
+function releaseEffectModel(key: string, model: AnimatedModel): void {
+  model.group.removeFromParent();
+  model.group.matrixAutoUpdate = true; // an effect that hung it on a bone placed it by its matrix
+  const pool = modelPool.get(key) ?? [];
+  if (pool.length < MODEL_POOL_LIMIT) {
+    pool.push(model);
+    modelPool.set(key, pool);
+    return;
+  }
+  for (const part of model.parts) {
+    part.geometry.dispose();
+    part.mesh.material.dispose();
+  }
 }
 
 function newVector(v?: THREE.Vector3): THREE.Vector3 {
@@ -1101,34 +1156,56 @@ export class EffectSystem {
   }
 
   private async attachModel(o: Effect, dir: string, file: string): Promise<void> {
-    const model = await loadEffectModel(dir, file);
-    if (!model || !o.live) return;
-    const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
-    const materials = await Promise.all(parts.map(async (part) => {
-      const blend = o.blendMesh <= -2 || model.meshes[part.meshIndex]?.texture === o.blendMesh;
-      const material = await createMaterial(MODEL_TEXTURE_DIRS, part.textureName, { glow: blend });
-      if (blend && material.map) {
-        // Its own copy of the texture, so the scroll (BlendMeshTexCoordU) is this effect's.
-        material.map = material.map.clone();
-        material.map.wrapS = THREE.RepeatWrapping;
-        material.map.wrapT = THREE.RepeatWrapping;
-        material.map.needsUpdate = true;
-        material.userData.ownMap = true;
-      }
-      if (blend && o.renderType === 'dark') applyBlend(material, 'subtract');
-      material.userData.blend = blend;
-      material.transparent = true;
-      return material;
-    }));
+    const key = modelPoolKey(dir, file, o.blendMesh, o.renderType);
+    const pooled = modelPool.get(key)?.pop();
+    const animated = pooled ?? await buildEffectModel(dir, file, o.blendMesh, o.renderType);
+    if (!animated) return;
     if (!o.live) {
-      for (const material of materials) material.dispose();
-      for (const part of parts) part.geometry.dispose();
+      releaseEffectModel(key, animated);
       return;
     }
-    const animated = new AnimatedModel(model, parts, materials);
+    animated.group.userData.poolKey = key;
     o.model = animated;
     this.root.add(animated.group);
     this.placeModel(o);
+  }
+
+  /**
+   * Builds one copy of each effect model now (its geometry, materials and textures) and hands it to `warm` (the
+   * renderer uploads the textures and compiles the programs off screen), then keeps it for the first effect that
+   * shows it. Effect models are reused from then on, so no cast uploads a texture or links a program.
+   */
+  async prewarm(warm: (object: THREE.Object3D) => Promise<void>, stillWanted: () => boolean = () => true): Promise<number> {
+    await this.ready;
+    const files = new Map<string, [string, string, number, Effect['renderType']]>();
+    const add = (type: EffectType, file: [string, string]): void => {
+      const blend = PREWARM_BLEND_MESH[type] ?? -1;
+      files.set(modelPoolKey(file[0], file[1], blend, 'normal'), [file[0], file[1], blend, 'normal']);
+    };
+    for (const [type, file] of Object.entries(EFFECT_MODELS) as [EffectType, [string, string]][]) add(type, file);
+    for (const [type, extra] of Object.entries(EXTRA_EFFECTS) as [EffectType, { model?: [string, string] }][]) if (extra.model) add(type, extra.model);
+    // The quads' batches (one material per bitmap and blend) and their textures.
+    await preloadEffectTextures(Object.keys(BITMAPS) as BitmapName[]);
+    const batches = new THREE.Group();
+    for (const name of Object.keys(BITMAPS) as BitmapName[]) {
+      for (const blend of ['glow', 'alpha', 'subtract'] as Blend[]) {
+        const mesh = this.quads.prepare(name, blend);
+        if (mesh) batches.add(new THREE.Mesh(PREWARM_QUAD, mesh.material));
+      }
+    }
+    if (!stillWanted()) return 0;
+    await warm(batches);
+    let count = 0;
+    for (const [key, [dir, file, blend, renderType]] of files) {
+      if (!stillWanted()) break;
+      if ((modelPool.get(key)?.length ?? 0) > 0) continue;
+      const animated = await buildEffectModel(dir, file, blend, renderType);
+      if (!animated) continue;
+      await warm(animated.group);
+      releaseEffectModel(key, animated);
+      count++;
+    }
+    return count;
   }
 
   private destroyEffect(o: Effect): void {
@@ -1139,14 +1216,9 @@ export class EffectSystem {
     }
     const model = o.model;
     if (!model) return;
-    model.group.removeFromParent();
-    for (const part of model.parts) {
-      part.geometry.dispose();
-      const material = part.mesh.material;
-      if (material.userData.ownMap === true) material.map?.dispose();
-      material.dispose();
-    }
     o.model = null;
+    const key = model.group.userData.poolKey as string | undefined;
+    if (key) releaseEffectModel(key, model);
   }
 
   private moveEffect(o: Effect): void {
