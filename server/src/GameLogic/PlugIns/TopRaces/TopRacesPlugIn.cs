@@ -56,6 +56,31 @@ public class TopRacesPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
     public static TopRacesPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<TopRacesPlugIn>().FirstOrDefault();
 
+    /// <summary>
+    /// Counts a character's level and resets at once (a reset, relife or delegated reset done by the reset options, also
+    /// for characters which aren't in the game): the levels and resets gained since it was last seen go to the races,
+    /// a relife (fewer resets) only remembers the new count. Call it before and after the change.
+    /// </summary>
+    /// <param name="gameContext">A game context of this process, if any (else one the plug-in ran on).</param>
+    /// <param name="characterId">The character's id.</param>
+    /// <param name="name">The character's name.</param>
+    /// <param name="login">The account's login name.</param>
+    /// <param name="classNumber">The character class number.</param>
+    /// <param name="level">The level.</param>
+    /// <param name="resets">The resets.</param>
+    public static void ObserveCharacter(IGameContext? gameContext, string characterId, string name, string login, int classNumber, int level, int resets)
+    {
+        var plugIn = (gameContext is null ? null : Get(gameContext))
+            ?? Contexts.Values.Distinct().Select(Get).FirstOrDefault(p => p is not null);
+        if (plugIn is null || string.IsNullOrEmpty(characterId) || string.IsNullOrEmpty(login))
+        {
+            return;
+        }
+
+        plugIn.GetEngine().Observe(new TopRaceParticipant(characterId, name, login, TopRaceEngine.ClassOf(classNumber)), level, resets, DateTime.UtcNow);
+        plugIn.Save();
+    }
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => new TopRacesConfiguration();
 

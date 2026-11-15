@@ -43,6 +43,7 @@ import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
+import { Resets } from './game/resets.js';
 import { Screenshots } from './ui/screenshot.js';
 import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
@@ -177,6 +178,7 @@ export interface GameState {
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
+  resets?: Resets;
   screenshots?: Screenshots;
   onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
@@ -1429,6 +1431,17 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   for (const bytes of earlyPackets) giftCodes.handle(bytes);
   giftCodes.start();
   window.addEventListener('hnmo-gift-codes-open', () => giftCodes.open());
+  // HNMO's reset options (/reset, /reset info, /relife, /autoreset): the server answers in the chat; the reset state keeps the
+  // character window's reset count right and adds a notice with today's count after a reset, a relife or delegated resets.
+  const resets = new Resets({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    setResets: (count) => stats.setResets(count),
+  });
+  state.resets = resets;
+  connection.onPacket((bytes) => { resets.handle(bytes); });
+  for (const bytes of earlyPackets) resets.handle(bytes);
+  resets.start();
   // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
   // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
   const onboarding = new OnboardingWindow({

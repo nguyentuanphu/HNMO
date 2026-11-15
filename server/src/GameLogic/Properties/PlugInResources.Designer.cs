@@ -5910,5 +5910,68 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("GiftCodeChatCommandPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: reset system with options.
+        /// </summary>
+        public static string ResetOptionsPlugIn_Name {
+            get {
+                return ResourceManager.GetString("ResetOptionsPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reset tiers (level, zen, coins, items, points kept or given, daily limits), VIP resets, relife (grand reset) and the delegated reset during offline leveling, also on the website; a monthly reset ranking. While it's on, the reset NPC and /reset follow it. Set it in the admin panel's Resets and relife page..
+        /// </summary>
+        public static string ResetOptionsPlugIn_Description {
+            get {
+                return ResourceManager.GetString("ResetOptionsPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: /relife chat command.
+        /// </summary>
+        public static string RelifeChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("RelifeChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The relife (grand reset) of the reset options: /relife (or /relife info)..
+        /// </summary>
+        public static string RelifeChatCommandPlugIn_Description {
+            get {
+                return ResourceManager.GetString("RelifeChatCommandPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: /autoreset chat command.
+        /// </summary>
+        public static string DelegatedResetChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("DelegatedResetChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Switches the delegated reset on or off: /autoreset on|off (the server resets the character while it's offline leveling)..
+        /// </summary>
+        public static string DelegatedResetChatCommandPlugIn_Description {
+            get {
+                return ResourceManager.GetString("DelegatedResetChatCommandPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: /uythac chat command.
+        /// </summary>
+        public static string DelegatedResetViChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("DelegatedResetViChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
     }
 }

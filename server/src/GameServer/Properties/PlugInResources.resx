@@ -2897,4 +2897,22 @@
   <data name="HnmoGiftCodesActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Handles the buttons of the gift code window: enter a code, take the waiting rewards.</value>
   </data>
+  <data name="HnmoResetsViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO resets view</value>
+  </data>
+  <data name="HnmoResetsViewPlugIn_Description" xml:space="preserve">
+    <value>Sends HNMO's reset state (resets, relifes, today's limits, the delegated reset) to the web game.</value>
+  </data>
+  <data name="HnmoResetsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO resets request handler</value>
+  </data>
+  <data name="HnmoResetsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the web game's request of HNMO's reset state.</value>
+  </data>
+  <data name="HnmoResetsActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO resets action handler</value>
+  </data>
+  <data name="HnmoResetsActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the web game's reset actions: reset, relife, the next reset's needs, the delegated reset switch.</value>
+  </data>
 </root>

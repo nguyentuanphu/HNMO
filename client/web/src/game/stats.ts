@@ -67,6 +67,13 @@ export class CharacterStats implements StatValues {
     for (const listener of this.listeners) listener(change, detail);
   }
 
+  /** The reset count after a reset or relife without going back to the character selection (HNMO's reset state). */
+  setResets(resets: number): void {
+    if (!Number.isFinite(resets) || resets < 0 || resets === this.resets) return;
+    this.resets = resets;
+    this.changed('stats');
+  }
+
   /** Level-up points a reward gave (the class change quests' LegacyQuestReward). */
   addLevelUpPoints(points: number): void {
     this.levelUpPoints += points;

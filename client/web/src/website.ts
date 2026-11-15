@@ -177,6 +177,29 @@ const copy = {
     giftPerCharacter: "once per character",
     giftLevels: "level %s",
     giftNoWebsite: "On this server, codes are entered in the game only.",
+    resetsNav: "Resets",
+    resetsTitle: "Reset ranking and relife",
+    resetsHint: "Resets done this month (Sydney time) and the relifes (grand resets). Reset with the reset NPC or /reset, see what the next one needs with /reset info, do a relife with /relife, or let the server reset your character while it's offline leveling with /autoreset on. You can also reset, add or clear stat points and switch the delegated reset on the account page.",
+    resetsAccountLink: "Reset on the account page",
+    resetsMonth: "This month (%s)",
+    resetsPrevious: "Last month (%s)",
+    resetsRelifes: "Relifes",
+    resetsRules: "Reset tiers",
+    resetsNone: "No resets yet.",
+    resetsNoRelifes: "No relifes yet.",
+    resetsOffline: "The reset ranking is unavailable: the server didn't answer.",
+    resetsOff: "The reset system is switched off on this server.",
+    resetsCount: "Resets",
+    resetsRelifeCount: "Relife",
+    resetsTierRange: "Resets %s",
+    resetsTierLine: "level %s · %s · %s points (%s) · %s a day",
+    resetsModeTotal: "total",
+    resetsModeAdd: "added",
+    resetsModeKeep: "kept",
+    resetsNoLimit: "no limit",
+    resetsFree: "free",
+    resetsVipLine: "VIP: %s levels lower, %s% off zen, %s% off coins, %s more resets a day.",
+    resetsRelifeLine: "Relife after %s resets at level %s: %s; keeps %s% of the resets, +%s permanent points per relife, at most %s.",
     bossesNoEntries: "No entries yet.",
     bossesRankBossHunt: "Boss hunt",
     bossesRankBloodCastle: "Blood Castle",
@@ -488,6 +511,29 @@ const copy = {
     giftPerCharacter: "một lần mỗi nhân vật",
     giftLevels: "cấp %s",
     giftNoWebsite: "Trên máy chủ này, mã chỉ nhập được trong game.",
+    resetsNav: "Reset",
+    resetsTitle: "Xếp hạng reset và relife",
+    resetsHint: "Số lần reset trong tháng (giờ Sydney) và relife (đại reset). Reset ở NPC reset hoặc bằng /reset, xem điều kiện lần tiếp theo bằng /reset info, relife bằng /relife, hoặc để máy chủ tự reset khi treo máy offline bằng /uythac on. Bạn cũng có thể reset, cộng hoặc tẩy điểm và bật/tắt ủy thác reset trên trang tài khoản.",
+    resetsAccountLink: "Reset trên trang tài khoản",
+    resetsMonth: "Tháng này (%s)",
+    resetsPrevious: "Tháng trước (%s)",
+    resetsRelifes: "Relife",
+    resetsRules: "Các mức reset",
+    resetsNone: "Chưa có lần reset nào.",
+    resetsNoRelifes: "Chưa có relife nào.",
+    resetsOffline: "Bảng xếp hạng reset tạm thời không có: máy chủ không trả lời.",
+    resetsOff: "Hệ thống reset đang tắt trên máy chủ này.",
+    resetsCount: "Reset",
+    resetsRelifeCount: "Relife",
+    resetsTierRange: "Reset %s",
+    resetsTierLine: "cấp %s · %s · %s điểm (%s) · %s mỗi ngày",
+    resetsModeTotal: "tổng",
+    resetsModeAdd: "cộng thêm",
+    resetsModeKeep: "giữ nguyên",
+    resetsNoLimit: "không giới hạn",
+    resetsFree: "miễn phí",
+    resetsVipLine: "VIP: giảm %s cấp, giảm %s% zen, giảm %s% coin, thêm %s lần reset mỗi ngày.",
+    resetsRelifeLine: "Relife sau %s lần reset ở cấp %s: %s; giữ %s% số reset, +%s điểm vĩnh viễn mỗi relife, tối đa %s.",
     bossesNoEntries: "Chưa có ai.",
     bossesRankBossHunt: "Săn boss",
     bossesRankBloodCastle: "Huyết Lâu",
@@ -1811,4 +1857,80 @@ element("refresh").addEventListener("click", () => void refreshGiftCodes());
 void refreshGiftCodes();
 setInterval(() => {
   if (!document.hidden) void refreshGiftCodes();
+}, 120000);
+
+// ---------- resets (the month's reset ranking, relifes and the tiers, /website/resets) ----------
+
+interface PublicResetEntry { rank: number; name: string; cls: number; value: number; resets: number; relifes: number }
+interface PublicResetTier { from: number; to: number; level: number; zen: number; zenTimesReset: boolean; coins: number; coinType: string; points: number; mode: "Total" | "Add" | "Keep"; dailyLimit: number }
+interface PublicResets {
+  enabled: boolean; month?: string; previousMonth?: string;
+  monthly?: PublicResetEntry[]; previous?: PublicResetEntry[]; relifes?: PublicResetEntry[];
+  rules?: {
+    tiers: PublicResetTier[];
+    vip?: { levelReduction: number; zenDiscount: number; coinsDiscount: number; extraDaily: number };
+    relife?: { resetsNeeded: number; level: number; zen: number; coins: number; coinType: string; keepPercent: number; pointsPerRelife: number; maximum: number };
+  };
+}
+let resetsData: PublicResets | null = null;
+
+function fill(text: string, ...values: (string | number)[]): string {
+  let index = 0;
+  return text.replace(/%s/g, () => String(values[index++] ?? ""));
+}
+
+function resetCost(zen: number, coins: number, coinType: string, timesReset = false): string {
+  const n = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  const parts: string[] = [];
+  if (zen > 0) parts.push(`${n(zen)} zen${timesReset ? " × n" : ""}`);
+  if (coins > 0) parts.push(`${n(coins)} ${coinType === "WCoinC" ? "W Coin (C)" : coinType === "WCoinP" ? "W Coin (P)" : "Goblin Points"}`);
+  return parts.length ? parts.join(" + ") : t("resetsFree");
+}
+
+function renderResets(): void {
+  const data = resetsData;
+  element("resets-notice").textContent = !data ? t("resetsOffline") : !data.enabled ? t("resetsOff") : "";
+  element("resets-account").hidden = !data?.enabled;
+  const on = !!data?.enabled;
+  element("resets-month-title").textContent = fill(t("resetsMonth"), data?.month ?? "");
+  element("resets-previous-title").textContent = fill(t("resetsPrevious"), data?.previousMonth ?? "");
+  const rows = (entries: PublicResetEntry[] | undefined) => (on ? entries ?? [] : []).map((e) => [e.rank, e.name, raceClass(Math.floor(e.cls / 4)), e.value]);
+  const headers: [string, boolean][] = [[t("rank"), false], [t("character"), false], [t("className"), false], [t("resetsCount"), true]];
+  table("resets-monthly", headers, rows(data?.monthly), t("resetsNone"));
+  table("resets-previous", headers, rows(data?.previous), t("resetsNone"));
+  table("resets-relifes", [[t("rank"), false], [t("character"), false], [t("className"), false], [t("resetsRelifeCount"), true], [t("resets"), true]],
+    (on ? data?.relifes ?? [] : []).map((e) => [e.rank, e.name, raceClass(Math.floor(e.cls / 4)), e.value, e.resets]), t("resetsNoRelifes"));
+  const rules = clear("resets-rules");
+  if (!on || !data?.rules) return;
+  for (const tier of data.rules.tiers) {
+    const mode = tier.mode === "Add" ? t("resetsModeAdd") : tier.mode === "Keep" ? t("resetsModeKeep") : t("resetsModeTotal");
+    const range = tier.to >= 0 ? `${tier.from + 1}-${tier.to + 1}` : `${tier.from + 1}+`;
+    const item = node("li", "");
+    item.append(node("strong", fill(t("resetsTierRange"), range)), document.createTextNode(": " + fill(t("resetsTierLine"), tier.level, resetCost(tier.zen, tier.coins, tier.coinType, tier.zenTimesReset), tier.points, mode, tier.dailyLimit > 0 ? tier.dailyLimit : t("resetsNoLimit"))));
+    rules.append(item);
+  }
+  const vip = data.rules.vip;
+  if (vip) rules.append(node("li", fill(t("resetsVipLine"), vip.levelReduction, vip.zenDiscount, vip.coinsDiscount, vip.extraDaily)));
+  const relife = data.rules.relife;
+  if (relife) rules.append(node("li", fill(t("resetsRelifeLine"), relife.resetsNeeded, relife.level, resetCost(relife.zen, relife.coins, relife.coinType), relife.keepPercent, relife.pointsPerRelife, relife.maximum > 0 ? relife.maximum : t("resetsNoLimit"))));
+}
+
+async function refreshResets(): Promise<void> {
+  try {
+    const response = await fetch("/website/resets", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicResets;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid resets");
+    resetsData = data;
+  } catch {
+    resetsData = null;
+  }
+  renderResets();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderResets());
+element("refresh").addEventListener("click", () => void refreshResets());
+void refreshResets();
+setInterval(() => {
+  if (!document.hidden) void refreshResets();
 }, 120000);

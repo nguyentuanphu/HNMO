@@ -8376,5 +8376,59 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoGiftCodesActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO resets view.
+        /// </summary>
+        public static string HnmoResetsViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoResetsViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends HNMO's reset state (resets, relifes, today's limits, the delegated reset) to the web game..
+        /// </summary>
+        public static string HnmoResetsViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoResetsViewPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO resets request handler.
+        /// </summary>
+        public static string HnmoResetsRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoResetsRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the web game's request of HNMO's reset state..
+        /// </summary>
+        public static string HnmoResetsRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoResetsRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO resets action handler.
+        /// </summary>
+        public static string HnmoResetsActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoResetsActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the web game's reset actions: reset, relife, the next reset's needs, the delegated reset switch..
+        /// </summary>
+        public static string HnmoResetsActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoResetsActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

@@ -239,10 +239,22 @@ section 12 (the cash shop) still waits for the owner's answers.
    reference, zen and items wait for room in the bag. Public codes on the website's home page. State in
    `save/gift-codes.json` (no database change). Still to check on a server running this code: a real redemption end to end
    (the rules, the admin page and the website API are unit-tested; the web parts are tested with fed packets).
-3. ⏳ **Reset system with options**: reset tiers (level needed, zen/coins cost, points kept or given, a
-   daily limit per tier), VIP reset at a lower level, relife (grand reset) after N resets, and "ủy thác
-   reset": the server resets the character during offline leveling. Reset and stat points (add / clear)
-   also on the website. Reset ranking per month.
+3. ✅ **Reset system with options**, built 2026-11-16 (Sydney): the admin panel's *Resets and relife* page: reset tiers by
+   reset count (level needed, level after, zen (× the reset number if set), coins with coin type, items, points per reset
+   given as a total, added or none, stats cleared or kept, resets per Sydney day); VIP accounts (the account's "Is VIP"
+   value, also given for N days from the page) reset at a lower level, with discounts, extra daily resets and points;
+   relife (grand reset) after N resets with its own level, costs, items, a kept share of the resets, permanent bonus
+   points per relife, a maximum and a daily limit; delegated reset ("ủy thác reset", `/autoreset on` or `/uythac on`, or
+   the website): while offline leveling the server resets the character at the level, within the limits, paying the
+   costs plus an extra fee, keeping its build and hunting spot, with a log. The existing reset NPC and `/reset` follow
+   these rules (`/reset info`, `/relife`). Website: the account page resets, relifes, adds and clears stat points and
+   switches the delegated reset (only while the account is offline; account name and password through the bridge), and
+   the home page shows this and last month's reset ranking, the relife ranking and the rules. The web game tells resets,
+   relifes and the delegated resets in the chat and keeps the character window's reset count right. Top races see the
+   resets at once. State in `save/resets.json` (no database change). Still to check on a server running this code: a
+   reset with the NPC and a delegated reset during real offline leveling (the rules, the admin page and the website API
+   are unit-tested; the web parts are tested with fed packets and answered requests). Not done: VIP days as a gift code
+   or cash shop reward (the admin page gives VIP days; the account editor's attribute grants too).
 4. ⏳ **Account safety on the website**: a second password for the vault and for trading, item lock, login
    history (time, address, game/website), trade history; the admin panel sets which are required.
 5. ⏳ **Top-up milestones ("thưởng mốc nạp")**: rewards at total top-up steps, shown on the account page;

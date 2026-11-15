@@ -13386,5 +13386,14 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("GiftCodesErrorGone", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Resets and relife.
+        /// </summary>
+        public static string ResetsRelifePage {
+            get {
+                return ResourceManager.GetString("ResetsRelifePage", resourceCulture);
+            }
+        }
     }
 }

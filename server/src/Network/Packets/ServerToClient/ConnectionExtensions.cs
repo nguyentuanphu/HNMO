@@ -7348,6 +7348,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoResetsState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): resets, relifes, today's resets and limits, the delegated reset, the next reset and relife with their needs and costs, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's resets (HnmoResetsRequest) or did an action there, and when something changed for a client which requested them before (a reset with the NPC or a chat command, a relife, delegated resets done while away).
+    /// Causes reaction on client side: The web game updates the character's resets and relifes and shows a notice in the chat about the event in it.
+    /// </remarks>
+    public static async ValueTask SendHnmoResetsStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoResetsStateRef.GetRequiredSize(json);
+            var packet = new HnmoResetsStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

@@ -1,0 +1,378 @@
+@page "/resets-relife"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.ResetOptions
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+<PageTitle>HNMO: @Resources.ResetsRelifePage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ResetsRelifePage" />
+<h1>@Resources.ResetsRelifePage</h1>
+<p class="text-muted">@T("Reset tiers, VIP resets, relife (grand reset), the delegated reset during offline leveling and what the website's account page may do. While this is on, the reset NPC and /reset follow these rules. Days and months are Sydney time. Players: /reset, /reset info, /relife, /autoreset on|off (/uythac).", "Các mức reset, reset VIP, relife (đại reset), ủy thác reset khi treo máy offline và những gì trang tài khoản trên website được làm. Khi bật, NPC reset và /reset làm theo các quy tắc này. Ngày và tháng theo giờ Sydney. Người chơi: /reset, /reset info, /relife, /autoreset on|off (/uythac).")</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status" id="resets-not-installed">@T("The reset options plug-in isn't installed yet: start the game server once.", "Plug-in reset chưa được cài: hãy khởi động máy chủ game một lần.")</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="resets-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3" id="resets-general">
+        <div class="card-body">
+            <h2 class="h5">@T("General", "Chung")</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="resets-active" @bind="this._isActive" />
+                <label class="form-check-label" for="resets-active">@T("On (the reset NPC and /reset use these rules)", "Bật (NPC reset và /reset dùng các quy tắc này)")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-max">@T("Most resets (0: no limit)", "Reset tối đa (0: không giới hạn)")</label>
+                    <input class="form-control" type="number" min="0" id="resets-max" @bind="c.MaximumResets" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-day-hour">@T("New day at (hour)", "Ngày mới lúc (giờ)")</label>
+                    <input class="form-control" type="number" min="0" max="23" id="resets-day-hour" @bind="c.DayStartHour" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-ranking">@T("Ranking size", "Số hạng trong bảng xếp hạng")</label>
+                    <input class="form-control" type="number" min="5" max="500" id="resets-ranking" @bind="c.RankingSize" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-log-kept">@T("Log lines kept", "Số dòng nhật ký giữ lại")</label>
+                    <input class="form-control" type="number" min="10" id="resets-log-kept" @bind="c.LogKept" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-zone">@T("Time zone", "Múi giờ")</label>
+                    <input class="form-control" id="resets-zone" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-file">@T("State file", "Tệp trạng thái")</label>
+                    <input class="form-control" id="resets-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" id="resets-move-home" @bind="c.MoveHome" />
+                <label class="form-check-label" for="resets-move-home">@T("A reset moves the character to its home town", "Reset đưa nhân vật về thành chính")</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="resets-log-out" @bind="c.LogOut" />
+                <label class="form-check-label" for="resets-log-out">@T("A reset in the game goes back to the character selection", "Reset trong game quay về màn hình chọn nhân vật")</label>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="resets-tiers">
+        <div class="card-body">
+            <h2 class="h5">@T("Reset tiers", "Các mức reset")</h2>
+            <p class="form-text">@T("For each range of resets (the count before the reset; -1 = no end): the level needed, the level after, the costs, the points and what the reset does with them (Total: free points = the points of every reset done + the relife bonus; Add: added to the free points; Keep: none), whether the stats go back to the start, and the resets a day (0 = no limit). Items: group:number:level:count, separated by ;, e.g. 14:13:0:1 for one Jewel of Bless.", "Với mỗi khoảng reset (số lần trước khi reset; -1 = không giới hạn): cấp cần, cấp sau reset, chi phí, điểm và cách xử lý điểm (Total: điểm tự do = điểm của mọi lần reset + thưởng relife; Add: cộng thêm vào điểm tự do; Keep: không cho điểm), có trả chỉ số về ban đầu không, và số lần reset mỗi ngày (0 = không giới hạn). Vật phẩm: nhóm:số:cấp:số lượng, cách nhau bằng ;, ví dụ 14:13:0:1 là một Ngọc Ước Nguyện.")</p>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="resets-tier-table">
+                    <thead>
+                        <tr>
+                            <th>@T("From", "Từ")</th>
+                            <th>@T("To", "Đến")</th>
+                            <th>@T("Level", "Cấp")</th>
+                            <th>@T("Level after", "Cấp sau")</th>
+                            <th>Zen</th>
+                            <th>@T("Zen × reset no.", "Zen × lần reset")</th>
+                            <th>Coins</th>
+                            <th>@T("Coin type", "Loại coin")</th>
+                            <th>@T("Points", "Điểm")</th>
+                            <th>@T("Points mode", "Cách cho điểm")</th>
+                            <th>@T("Clear stats", "Xóa chỉ số")</th>
+                            <th>@T("A day", "Mỗi ngày")</th>
+                            <th>@T("Items", "Vật phẩm")</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var index = 0; index < this._tiers.Count; index++)
+                        {
+                            var row = this._tiers[index];
+                            var i = index;
+                            <tr class="resets-tier">
+                                <td><input class="form-control form-control-sm tier-from" type="number" min="0" style="width:6em" @bind="row.Tier.FromResets" /></td>
+                                <td><input class="form-control form-control-sm tier-to" type="number" min="-1" style="width:6em" @bind="row.Tier.ToResets" /></td>
+                                <td><input class="form-control form-control-sm tier-level" type="number" min="1" style="width:6em" @bind="row.Tier.RequiredLevel" /></td>
+                                <td><input class="form-control form-control-sm tier-level-after" type="number" min="1" style="width:6em" @bind="row.Tier.LevelAfterReset" /></td>
+                                <td><input class="form-control form-control-sm tier-zen" type="number" min="0" style="width:9em" @bind="row.Tier.Zen" /></td>
+                                <td><input class="form-check-input tier-zen-times" type="checkbox" @bind="row.Tier.ZenTimesResetNumber" /></td>
+                                <td><input class="form-control form-control-sm tier-coins" type="number" min="0" style="width:6em" @bind="row.Tier.Coins" /></td>
+                                <td>
+                                    <select class="form-select form-select-sm tier-coin-type" @bind="row.Tier.CoinType">
+                                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                                        {
+                                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input class="form-control form-control-sm tier-points" type="number" min="0" style="width:7em" @bind="row.Tier.Points" /></td>
+                                <td>
+                                    <select class="form-select form-select-sm tier-mode" @bind="row.Tier.PointsMode">
+                                        @foreach (var mode in Enum.GetValues<ResetPointsMode>())
+                                        {
+                                            <option value="@mode">@ModeCaption(mode)</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input class="form-check-input tier-clear" type="checkbox" @bind="row.Tier.ClearStats" /></td>
+                                <td><input class="form-control form-control-sm tier-daily" type="number" min="0" style="width:5em" @bind="row.Tier.DailyLimit" /></td>
+                                <td><input class="form-control form-control-sm tier-items" style="width:10em" @bind="row.ItemsText" placeholder="14:13:0:1" /></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger tier-remove" @onclick="() => this._tiers.RemoveAt(i)">@T("Remove", "Xóa")</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="resets-add-tier" @onclick="this.AddTier">@T("Add a tier", "Thêm mức")</button>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="resets-vip">
+        <div class="card-body">
+            <h2 class="h5">VIP</h2>
+            <p class="form-text">@T("VIP is the account's \"Is VIP\" value: from its attributes or a grant until a date (see below, or the account editor).", "VIP là giá trị \"Is VIP\" của tài khoản: từ thuộc tính hoặc một lần cấp có hạn (xem bên dưới, hoặc trang sửa tài khoản).")</p>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="resets-vip-on" @bind="c.Vip.Enabled" />
+                <label class="form-check-label" for="resets-vip-on">@T("VIP advantages on", "Bật ưu đãi VIP")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-min">@T("Lowest VIP value", "Giá trị VIP tối thiểu")</label><input class="form-control" type="number" min="1" id="resets-vip-min" @bind="c.Vip.MinimumVipLevel" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-level">@T("Levels lower", "Giảm cấp")</label><input class="form-control" type="number" min="0" id="resets-vip-level" @bind="c.Vip.LevelReduction" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-zen">@T("Zen discount %", "Giảm zen %")</label><input class="form-control" type="number" min="0" max="100" id="resets-vip-zen" @bind="c.Vip.ZenDiscountPercent" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-coins">@T("Coins discount %", "Giảm coin %")</label><input class="form-control" type="number" min="0" max="100" id="resets-vip-coins" @bind="c.Vip.CoinsDiscountPercent" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-daily">@T("Extra resets a day", "Thêm lượt reset/ngày")</label><input class="form-control" type="number" min="0" id="resets-vip-daily" @bind="c.Vip.ExtraDailyResets" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-points">@T("Extra points %", "Thêm điểm %")</label><input class="form-control" type="number" min="0" id="resets-vip-points" @bind="c.Vip.ExtraPointsPercent" /></div>
+            </div>
+            <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" id="resets-vip-relife" @bind="c.Vip.AppliesToRelife" />
+                <label class="form-check-label" for="resets-vip-relife">@T("The relife gets the lower level and discounts too", "Relife cũng được giảm cấp và giảm giá")</label>
+            </div>
+            <h3 class="h6 mt-3">@T("Give VIP", "Cấp VIP")</h3>
+            <div class="row g-2 align-items-end">
+                <div class="col-sm-3"><label class="form-label" for="resets-vip-account">@T("Account", "Tài khoản")</label><input class="form-control" id="resets-vip-account" @bind="this._vipAccount" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-value">@T("VIP value", "Giá trị VIP")</label><input class="form-control" type="number" min="1" id="resets-vip-value" @bind="this._vipValue" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-vip-days">@T("Days", "Số ngày")</label><input class="form-control" type="number" min="1" id="resets-vip-days" @bind="this._vipDays" /></div>
+                <div class="col-sm-3"><button type="button" class="btn btn-outline-primary" id="resets-vip-give" disabled="@this._isSaving" @onclick="this.GiveVipAsync">@T("Give VIP (account offline)", "Cấp VIP (tài khoản đang offline)")</button></div>
+            </div>
+            @if (this._vipMessage is { } vipMessage)
+            {
+                <p class="form-text mb-0" id="resets-vip-message" role="status">@vipMessage</p>
+            }
+        </div>
+    </section>
+
+    <section class="card mb-3" id="resets-relife">
+        <div class="card-body">
+            <h2 class="h5">@T("Relife (grand reset)", "Relife (đại reset)")</h2>
+            <p class="form-text">@T("After enough resets the character can do a relife: the resets go back to 0 (or keep a share), the stats are cleared and the free points become the kept resets' points plus the bonus of every relife, which counts in every later reset too. Shown in the website's rankings.", "Sau đủ số lần reset nhân vật có thể relife: số reset về 0 (hoặc giữ một phần), chỉ số bị xóa và điểm tự do là điểm của các lần reset được giữ cộng thưởng của mỗi lần relife, thưởng này được tính vào mọi lần reset sau. Hiển thị trong bảng xếp hạng trên website.")</p>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="resets-relife-on" @bind="c.Relife.Enabled" />
+                <label class="form-check-label" for="resets-relife-on">@T("Relife on", "Bật relife")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-resets">@T("Resets needed", "Số reset cần")</label><input class="form-control" type="number" min="1" id="resets-relife-resets" @bind="c.Relife.ResetsNeeded" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-level">@T("Level needed", "Cấp cần")</label><input class="form-control" type="number" min="1" id="resets-relife-level" @bind="c.Relife.RequiredLevel" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-level-after">@T("Level after", "Cấp sau")</label><input class="form-control" type="number" min="1" id="resets-relife-level-after" @bind="c.Relife.LevelAfterRelife" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-zen">Zen</label><input class="form-control" type="number" min="0" id="resets-relife-zen" @bind="c.Relife.Zen" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-coins">Coins</label><input class="form-control" type="number" min="0" id="resets-relife-coins" @bind="c.Relife.Coins" /></div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-relife-coin-type">@T("Coin type", "Loại coin")</label>
+                    <select class="form-select" id="resets-relife-coin-type" @bind="c.Relife.CoinType">
+                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-keep">@T("Resets kept %", "Giữ lại % reset")</label><input class="form-control" type="number" min="0" max="100" id="resets-relife-keep" @bind="c.Relife.KeepResetsPercent" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-points">@T("Bonus points per relife", "Điểm thưởng mỗi relife")</label><input class="form-control" type="number" min="0" id="resets-relife-points" @bind="c.Relife.PointsPerRelife" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-max">@T("Most relifes (0: no limit)", "Relife tối đa (0: không giới hạn)")</label><input class="form-control" type="number" min="0" id="resets-relife-max" @bind="c.Relife.MaximumRelifes" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-relife-daily">@T("Relifes a day", "Relife mỗi ngày")</label><input class="form-control" type="number" min="0" id="resets-relife-daily" @bind="c.Relife.DailyLimit" /></div>
+                <div class="col-sm-4"><label class="form-label" for="resets-relife-items">@T("Items", "Vật phẩm")</label><input class="form-control" id="resets-relife-items" @bind="this._relifeItems" placeholder="14:22:0:1" /></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="resets-delegated">
+        <div class="card-body">
+            <h2 class="h5">@T("Delegated reset (ủy thác reset)", "Ủy thác reset")</h2>
+            <p class="form-text">@T("Players switch it on with /autoreset on (/uythac on) or on the website. While their character is offline leveling (/offlevel), the server resets it when it reaches the level, within the limits and paying the costs, and it goes on leveling where it is.", "Người chơi bật bằng /autoreset on (/uythac on) hoặc trên website. Khi nhân vật treo máy offline (/offlevel), máy chủ sẽ reset khi đủ cấp, trong giới hạn và trả chi phí, rồi nhân vật tiếp tục cày tại chỗ.")</p>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="resets-delegated-on" @bind="c.Delegated.Enabled" />
+                <label class="form-check-label" for="resets-delegated-on">@T("Delegated reset on", "Bật ủy thác reset")</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-2"><label class="form-label" for="resets-delegated-zen">@T("Extra zen", "Zen thêm")</label><input class="form-control" type="number" min="0" id="resets-delegated-zen" @bind="c.Delegated.ExtraZen" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-delegated-coins">@T("Extra coins", "Coin thêm")</label><input class="form-control" type="number" min="0" id="resets-delegated-coins" @bind="c.Delegated.ExtraCoins" /></div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-delegated-coin-type">@T("Coin type", "Loại coin")</label>
+                    <select class="form-select" id="resets-delegated-coin-type" @bind="c.Delegated.ExtraCoinType">
+                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2"><label class="form-label" for="resets-delegated-daily">@T("A day (0: tier's limit)", "Mỗi ngày (0: theo mức)")</label><input class="form-control" type="number" min="0" id="resets-delegated-daily" @bind="c.Delegated.DailyLimit" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-delegated-check">@T("Check every (s)", "Kiểm tra mỗi (giây)")</label><input class="form-control" type="number" min="5" id="resets-delegated-check" @bind="c.Delegated.CheckSeconds" /></div>
+            </div>
+            <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" id="resets-delegated-build" @bind="c.Delegated.KeepBuild" />
+                <label class="form-check-label" for="resets-delegated-build">@T("Keep the build (cleared stats get the points back in the same shares)", "Giữ cách cộng điểm (chỉ số bị xóa được cộng lại theo cùng tỉ lệ)")</label>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="resets-website">
+        <div class="card-body">
+            <h2 class="h5">@T("Website account page", "Trang tài khoản trên website")</h2>
+            <p class="form-text">@T("Players log in with their account name and password. Changes need the account offline (not in the game, not offline leveling).", "Người chơi đăng nhập bằng tên tài khoản và mật khẩu. Thay đổi cần tài khoản offline (không trong game, không treo máy).")</p>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-reset" @bind="c.Website.AllowReset" /><label class="form-check-label" for="resets-web-reset">@T("Reset", "Reset")</label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-relife" @bind="c.Website.AllowRelife" /><label class="form-check-label" for="resets-web-relife">Relife</label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-add" @bind="c.Website.AllowAddStats" /><label class="form-check-label" for="resets-web-add">@T("Add stat points", "Cộng điểm")</label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-clear" @bind="c.Website.AllowClearStats" /><label class="form-check-label" for="resets-web-clear">@T("Clear stats (the points come back)", "Tẩy điểm (điểm được trả lại)")</label></div>
+            <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="resets-web-delegated" @bind="c.Website.AllowDelegatedSwitch" /><label class="form-check-label" for="resets-web-delegated">@T("Delegated reset switch", "Bật/tắt ủy thác reset")</label></div>
+            <div class="row g-2">
+                <div class="col-sm-2"><label class="form-label" for="resets-web-clear-zen">@T("Clearing costs zen", "Tẩy điểm tốn zen")</label><input class="form-control" type="number" min="0" id="resets-web-clear-zen" @bind="c.Website.ClearStatsZen" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-web-clear-coins">@T("Clearing costs coins", "Tẩy điểm tốn coin")</label><input class="form-control" type="number" min="0" id="resets-web-clear-coins" @bind="c.Website.ClearStatsCoins" /></div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-web-clear-type">@T("Coin type", "Loại coin")</label>
+                    <select class="form-select" id="resets-web-clear-type" @bind="c.Website.ClearStatsCoinType">
+                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mb-4">
+        <button type="button" class="btn btn-primary" id="resets-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+    </div>
+
+    <section class="card mb-3" id="resets-rankings">
+        <div class="card-body">
+            <h2 class="h5">@T("Rankings", "Bảng xếp hạng")</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="h6">@T("Resets this month", "Reset tháng này") (@this.MonthKey())</h3>
+                    @{ var monthly = this.Monthly(); }
+                    @if (monthly.Count == 0)
+                    {
+                        <p class="text-muted" id="resets-monthly-none">@T("No resets this month yet.", "Chưa có lần reset nào trong tháng.")</p>
+                    }
+                    else
+                    {
+                        <ol id="resets-monthly">
+                            @foreach (var entry in monthly)
+                            {
+                                <li>@entry.Name: @entry.Value</li>
+                            }
+                        </ol>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <h3 class="h6">Relife</h3>
+                    @{ var relifes = this.Relifes(); }
+                    @if (relifes.Count == 0)
+                    {
+                        <p class="text-muted" id="resets-relifes-none">@T("No relifes yet.", "Chưa có relife nào.")</p>
+                    }
+                    else
+                    {
+                        <ol id="resets-relifes">
+                            @foreach (var entry in relifes)
+                            {
+                                <li>@entry.Name: @entry.Value relife, @entry.Resets reset</li>
+                            }
+                        </ol>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="resets-log-section">
+        <div class="card-body">
+            <h2 class="h5">@T("Log", "Nhật ký")</h2>
+            <div class="row g-2 mb-2">
+                <div class="col-sm-4"><input class="form-control" id="resets-log-filter" placeholder="@T("Character or account", "Nhân vật hoặc tài khoản")" @bind="this._logFilter" @bind:event="oninput" /></div>
+                <div class="col-sm-3">
+                    <select class="form-select" id="resets-log-source" @bind="this._logSource">
+                        <option value="">@T("All", "Tất cả")</option>
+                        @foreach (var source in Enum.GetValues<ResetSource>())
+                        {
+                            <option value="@source">@SourceCaption(source)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            @{ var log = this.Log(); }
+            @if (log.Count == 0)
+            {
+                <p class="text-muted" id="resets-log-none">@T("Nothing yet.", "Chưa có gì.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm" id="resets-log">
+                        <thead>
+                            <tr><th>@T("When (Sydney)", "Lúc (giờ Sydney)")</th><th>@T("Character", "Nhân vật")</th><th>@T("Account", "Tài khoản")</th><th>@T("What", "Loại")</th><th>@T("Where", "Ở đâu")</th><th>Reset</th><th>Relife</th><th>Zen</th><th>Coins</th><th>VIP</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in log)
+                            {
+                                <tr>
+                                    <td>@this.Sydney(entry.AtUtc)</td>
+                                    <td>@entry.Name</td>
+                                    <td>@entry.Login</td>
+                                    <td>@entry.Kind</td>
+                                    <td>@SourceCaption(entry.Source)</td>
+                                    <td>@entry.ResetsAfter</td>
+                                    <td>@entry.RelifesAfter</td>
+                                    <td>@entry.Zen.ToString("N0")</td>
+                                    <td>@entry.CoinsText</td>
+                                    <td>@(entry.Vip ? "✓" : string.Empty)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            <h3 class="h6 mt-3">@T("Delegated reset switched on", "Đang bật ủy thác reset")</h3>
+            @{ var delegated = this.Delegated(); }
+            @if (delegated.Count == 0)
+            {
+                <p class="text-muted mb-0" id="resets-delegated-none">@T("Nobody.", "Không có ai.")</p>
+            }
+            else
+            {
+                <ul id="resets-delegated-list" class="mb-0">
+                    @foreach (var (name, login, blocked) in delegated)
+                    {
+                        <li>@name (@login)@(blocked.Length > 0 ? $" — {T("waiting", "đang chờ")}: {blocked}" : string.Empty)</li>
+                    }
+                </ul>
+            }
+        </div>
+    </section>
+}

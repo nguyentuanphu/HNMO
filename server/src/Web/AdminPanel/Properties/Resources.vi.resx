@@ -4575,4 +4575,7 @@
   <data name="GiftCodesErrorGone" xml:space="preserve">
     <value>Mã đã bị xóa trong lúc sửa.</value>
   </data>
+  <data name="ResetsRelifePage" xml:space="preserve">
+    <value>Reset và relife</value>
+  </data>
 </root>

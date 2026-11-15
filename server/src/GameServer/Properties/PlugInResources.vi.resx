@@ -2796,4 +2796,22 @@
   <data name="HnmoGiftCodesActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Xử lý các nút của cửa sổ gift code: nhập mã, nhận phần thưởng đang chờ.</value>
   </data>
+  <data name="HnmoResetsViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị reset HNMO</value>
+  </data>
+  <data name="HnmoResetsViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái reset HNMO (reset, relife, giới hạn hôm nay, ủy thác reset) đến game web.</value>
+  </data>
+  <data name="HnmoResetsRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý yêu cầu reset HNMO</value>
+  </data>
+  <data name="HnmoResetsRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu trạng thái reset HNMO của game web.</value>
+  </data>
+  <data name="HnmoResetsActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý thao tác reset HNMO</value>
+  </data>
+  <data name="HnmoResetsActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý thao tác reset của game web: reset, relife, điều kiện reset tiếp theo, bật/tắt ủy thác reset.</value>
+  </data>
 </root>

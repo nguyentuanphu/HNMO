@@ -2,6 +2,10 @@
 "language": "vi",
 "name": "Tiếng Việt",
 "texts": {
+"Reset %d done (VIP). Today: %s resets.": "Đã reset lần %d (VIP). Hôm nay: %s lần reset.",
+"Reset %d done. Today: %s resets.": "Đã reset lần %d. Hôm nay: %s lần reset.",
+"Relife %d done. Resets now: %d.": "Đã relife lần %d. Số reset hiện tại: %d.",
+"Delegated reset: %d resets while you were offline leveling. Resets now: %d, today: %s.": "Ủy thác reset: %d lần reset khi bạn treo máy. Số reset hiện tại: %d, hôm nay: %s.",
 "Gift code": "Gift code",
 "Use code": "Nhập mã",
 "Your last codes": "Mã bạn đã dùng gần đây",

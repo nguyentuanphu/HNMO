@@ -49,6 +49,8 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/google", portal.GoogleAsync).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-codes/characters", (Func<HttpContext, Task<IResult>>)(context => portal.GiftCodesAsync(context, "characters"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-codes/redeem", (Func<HttpContext, Task<IResult>>)(context => portal.GiftCodesAsync(context, "redeem"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/resets/account", (Func<HttpContext, Task<IResult>>)(context => portal.ResetsAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/resets/action", (Func<HttpContext, Task<IResult>>)(context => portal.ResetsAsync(context, "action"))).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
@@ -355,6 +357,56 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             }
 
             logger.LogWarning("Gift codes on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    // Resets on the account page: the account's name and password are checked by the game server (with the key this
+    // computer keeps), which lists the characters with their resets or does a reset, relife, stat change or the delegated
+    // reset switch (changes only while the account is offline). Only the fields it needs are passed on.
+    private async Task<IResult> ResetsAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+        int Points(string name) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.Number } element && element.TryGetInt32(out var value) ? Math.Clamp(value, 0, 1_000_000) : 0;
+        object request = action == "action"
+            ? new
+            {
+                loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), action = Field("action", 20),
+                str = Points("str"), agi = Points("agi"), vit = Points("vit"), ene = Points("ene"), cmd = Points("cmd"),
+            }
+            : new { loginName = Field("loginName", 10), password = Field("password", 20) };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/resets/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Resets on the website failed: {Status}", response.StatusCode);
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
         catch (HttpRequestException)

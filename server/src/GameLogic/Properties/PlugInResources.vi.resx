@@ -2337,4 +2337,25 @@
   <data name="GiftCodeChatCommandPlugIn_Description" xml:space="preserve">
     <value>Nhập gift code: /code MÃ.</value>
   </data>
+  <data name="ResetOptionsPlugIn_Name" xml:space="preserve">
+    <value>HNMO: hệ thống reset tùy chọn</value>
+  </data>
+  <data name="ResetOptionsPlugIn_Description" xml:space="preserve">
+    <value>Các mức reset (cấp, zen, coin, vật phẩm, giữ hoặc cộng điểm, giới hạn mỗi ngày), reset VIP, relife (đại reset) và ủy thác reset khi treo máy offline, cả trên website; bảng xếp hạng reset theo tháng. Khi bật, NPC reset và /reset làm theo các quy tắc này. Cài đặt trong trang Reset và relife của bảng quản trị.</value>
+  </data>
+  <data name="RelifeChatCommandPlugIn_Name" xml:space="preserve">
+    <value>HNMO: lệnh chat /relife</value>
+  </data>
+  <data name="RelifeChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Relife (đại reset) của hệ thống reset: /relife (hoặc /relife info).</value>
+  </data>
+  <data name="DelegatedResetChatCommandPlugIn_Name" xml:space="preserve">
+    <value>HNMO: lệnh chat /autoreset</value>
+  </data>
+  <data name="DelegatedResetChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Bật hoặc tắt ủy thác reset: /autoreset on|off (máy chủ tự reset nhân vật khi treo máy offline).</value>
+  </data>
+  <data name="DelegatedResetViChatCommandPlugIn_Name" xml:space="preserve">
+    <value>HNMO: lệnh chat /uythac</value>
+  </data>
 </root>
