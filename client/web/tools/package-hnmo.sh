@@ -88,10 +88,26 @@ echo "Bundling the web client (esbuild)"
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/main.js" \
   --bundle --minify --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/main.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' -delete
+# The website (home.html) has its own script: bundled the same way.
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \
+  --bundle --minify --format=esm --external:three \
+  --outfile="$OUT/web/wwwroot/js/website.min.js" --log-level=warning
+find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' ! -name 'website.min.js' -delete
 find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
-# Point the packaged page at the bundle (dev index.html is untouched).
+# Point the packaged pages at the bundles (dev pages are untouched).
 sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
+sed -i 's#src="/js/website.js"#src="/js/website.min.js"#' "$OUT/web/wwwroot/home.html"
+# Every script a page loads must be in the folder (a missing one leaves the page empty).
+missing=0
+for page in "$OUT/web/wwwroot"/*.html; do
+  for src in $(grep -o '<script[^>]*src="/[^"]*"' "$page" | sed 's#.*src="/\([^"]*\)"#\1#'); do
+    if [ ! -f "$OUT/web/wwwroot/$src" ] && [ ! -f "$OUT/web/$src" ]; then
+      echo "Missing script for $(basename "$page"): /$src" >&2
+      missing=1
+    fi
+  done
+done
+[ "$missing" = 0 ] || { echo "The packaged pages need scripts that aren't in the folder." >&2; exit 1; }
 
 # The save game database: bundled, or one installed on the computer
 POSTGRES_BIN_IN_FOLDER="../postgres/bin"
