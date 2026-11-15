@@ -16,7 +16,7 @@ export interface LanguageInfo { code: Language; name: string }
 
 const STORAGE_KEY = 'hnmo.language';
 const ATTRIBUTES = ['title', 'placeholder', 'aria-label'] as const;
-/** Elements whose text is never translated: what players type and say. */
+/** Preserve player content, configured names, and literal key/code labels. */
 const SKIP = '#chatLog, #chatInput, input, textarea, kbd, code, pre, script, style, [data-no-i18n], [data-game-name]';
 const MAX_CACHE = 8000;
 const MAX_TRANSLATED_TEXT_LENGTH = 4000;
