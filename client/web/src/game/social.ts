@@ -39,6 +39,8 @@ export interface SocialOptions {
   closeDocked: () => void;
   /** A docked window opened or closed: the inventory moves next to it. */
   dockedChanged: (open: boolean) => void;
+  /** The guild window opened or closed (HNMO's guild levels panel goes with it). */
+  guildWindowToggled?: (open: boolean) => void;
 }
 
 export interface Social { guild: Guild; messenger: Messenger; guildWindow: GuildInfoWindow; guildMakeWindow: GuildMakeWindow; friendWindow: FriendWindow; whisperTo(name: string): void }
@@ -73,6 +75,7 @@ export function setupSocial(options: SocialOptions): Social {
   const guildWindow: GuildInfoWindow = new GuildInfoWindow({
     ...docked, guild, heroName, heroId, onMessage: say,
     onOpen: () => { options.closeDocked(); guildMakeWindow.close(); },
+    onToggle: (open: boolean) => { options.dockedChanged(open); options.guildWindowToggled?.(open); },
     hero: () => { const h = options.hero(); return { level: h.level, leadership: h.leadership, darkLord: h.classIndex === 4 }; },
   });
   const guildMakeWindow: GuildMakeWindow = new GuildMakeWindow({ ...docked, guild, onOpen: () => { options.closeDocked(); guildWindow.close(); } });

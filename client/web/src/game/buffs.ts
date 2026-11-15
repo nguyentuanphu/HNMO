@@ -38,8 +38,16 @@ export async function loadBuffData(): Promise<void> {
   for (const buff of file.buffs) if (buff.family) familyOf.set(buff.number, lowest.get(buff.family)!);
 }
 
+/** HNMO's own buffs whose text comes from the server (e.g. the guild buff); they wear a game buff's icon. */
+const hnmoBuffs = new Map<number, BuffDefinition>();
+
+/** Sets (or with null removes) an HNMO buff's definition. */
+export function setHnmoBuff(number: number, definition: BuffDefinition | null): void {
+  if (definition) hnmoBuffs.set(number, definition); else hnmoBuffs.delete(number);
+}
+
 export function buffDefinition(number: number): BuffDefinition | null {
-  return definitions?.get(number) ?? null;
+  return hnmoBuffs.get(number) ?? definitions?.get(number) ?? null;
 }
 
 // BuffDatabase::PickShownOnStrip: shown unless hidden, and of a family only its highest tier.

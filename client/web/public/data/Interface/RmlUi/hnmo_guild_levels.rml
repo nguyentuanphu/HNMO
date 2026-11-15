@@ -1,0 +1,95 @@
+<rml>
+<head>
+	<title>HNMO Guild levels</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's guild levels panel (no desktop window): the game's message box frame (window_shell), shown next to
+		   the guild window (G) with the guild's level, its experience, this week's ladder rank and the buff. */
+		#panel {
+			top: 60dp;
+			left: 50%;
+			margin-left: -130dp;
+			transform: none;
+			width: 260dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 14dp 18dp 14dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.gl-scroll { display: block; max-height: 330dp; overflow-y: auto; pointer-events: auto; padding-right: 4dp; }
+		.gl-name { display: block; color: token(accent-gold); text-align: center; line-height: 1.3em; }
+		.gl-level { display: block; text-align: center; font-size: 1.1rem; color: #ffe9a8; line-height: 1.4em; }
+		.gl-bar { display: block; position: relative; height: 8dp; margin: 3dp 0 2dp 0; background-color: #1d1810; border: 1dp #4a3c26; }
+		.gl-fill { display: block; position: absolute; left: 0; top: 0; bottom: 0; background-color: #c89a3c; }
+		.gl-line { display: block; line-height: 1.3em; white-space: normal; color: token(text-input); font-size: 0.9rem; }
+		.gl-line.muted { color: token(text-muted); font-size: 0.85rem; }
+		.gl-line.buff { color: #9fd0ff; }
+		.gl-head { display: block; color: token(accent-gold); margin: 6dp 0 2dp 0; }
+		.gl-row { display: block; font-size: 0.85rem; line-height: 1.25em; color: token(text-primary); }
+		.gl-row.mine { color: #ffe9a8; }
+		.gl-note { display: block; margin: 2dp 0 4dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.gl-buttons { display: flex; flex-direction: row; justify-content: center; margin-top: 6dp; }
+		@spritesheet gl-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			gl-btn-idle:   0px  0px 64px 29px;
+			gl-btn-hover:  0px 29px 64px 29px;
+			gl-btn-active: 0px 58px 64px 29px;
+		}
+		.gl-btn {
+			position: static;
+			width: 62dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 0 3dp;
+			font-size: 0.9rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(gl-btn-idle);
+		}
+		.gl-btn:hover { decorator: image(gl-btn-hover); }
+		.gl-btn:active { decorator: image(gl-btn-active); }
+		.gl-btn.claim { color: #ffe9a8; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_guild_levels">
+	<div class="gl-note" data-if="loading">{{loading_label}}</div>
+	<div class="gl-scroll" data-if="loading == false">
+		<div class="gl-note gl-none" data-if="in_guild == false">{{none_label}}</div>
+		<div data-if="in_guild">
+			<span class="gl-name" data-no-i18n="">{{guild_name}}</span>
+			<span class="gl-level gl-level-text" data-no-i18n="">{{level_text}}</span>
+			<div class="gl-bar"><div class="gl-fill" data-style-width="bar_width"></div></div>
+			<span class="gl-line gl-xp" data-no-i18n="">{{xp_text}}</span>
+			<span class="gl-line gl-rank" data-no-i18n="">{{rank_text}}</span>
+			<span class="gl-line muted gl-mine" data-no-i18n="">{{mine_text}}</span>
+			<span class="gl-head">{{buff_head}}</span>
+			<span class="gl-line buff gl-buff" data-no-i18n="">{{buff_text}}</span>
+			<span class="gl-line muted gl-next" data-if="next_text != ''" data-no-i18n="">{{next_text}}</span>
+		</div>
+		<span class="gl-head" data-if="ladder.length > 0">{{ladder_head}}</span>
+		<span class="gl-row" data-for="l : ladder" data-class-mine="l.mine" data-no-i18n="">{{l.line}}</span>
+		<span class="gl-line muted" data-if="rewards_text != ''" data-no-i18n="">{{rewards_text}}</span>
+		<span class="gl-head" data-if="has_owed">{{owed_head}}</span>
+		<span class="gl-line" data-for="o : owed" data-no-i18n="">{{o.line}}</span>
+		<div class="gl-buttons" data-if="has_owed"><div class="btn gl-btn claim gl-claim" data-event-click="gl_claim">{{claim_label}}</div></div>
+		<span class="gl-note">{{hint_text}}</span>
+	</div>
+	<div class="gl-buttons">
+		<div class="btn gl-btn gl-close" data-event-click="gl_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

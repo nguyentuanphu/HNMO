@@ -61,6 +61,43 @@ const copy = {
     bossesWeek: "This week's rankings",
     bossesWeekEnds: "The week ends in",
     bossesLastWeek: "Last week's winners",
+    guildsNav: "Guilds",
+    guildsTitle: "Guild levels and the weekly ladder",
+    guildsHint: "Members raise their guild's level by playing: monsters, events, world bosses, missions, time in the game and the castle siege. Each level gives the online members a small buff. Every Monday at 00:00 (Sydney time) the top guilds of the week get rewards for every member.",
+    guildsOffline: "The guilds are unavailable: the server didn't answer.",
+    guildsOff: "Guild levels are switched off on this server.",
+    guildsLadder: "This week's ladder",
+    guildsLastWeek: "Last week's winners",
+    guildsWeekOf: "Week of",
+    guildsAll: "Guilds by level",
+    guildsSieges: "Castle siege results",
+    guildsNoSieges: "No castle siege was won yet.",
+    guildsLevels: "Levels and buffs",
+    guildsGuild: "Guild",
+    guildsLevel: "Level",
+    guildsPoints: "Points",
+    guildsXp: "Guild XP",
+    guildsMembers: "Members",
+    guildsCoins: "Coins each",
+    guildsBuff: "Buff",
+    guildsNone: "No guild has points yet.",
+    guildsNoBuff: "none",
+    guildsExp: "EXP",
+    guildsZen: "zen from monsters",
+    guildsDefense: "defense",
+    guildsRewards: "Monday rewards for every member",
+    guildsMaster: "the guild master gets %d more",
+    guildsSources: "Guild XP",
+    guildsCap: "up to %d a day per member",
+    guildsWeekEnds: "The week ends in",
+    guildsSourceMonsterKill: "a monster",
+    guildsSourceEventFinish: "an event finished",
+    guildsSourceEventWin: "an event won",
+    guildsSourceWorldBossKill: "a world boss kill",
+    guildsSourceWorldBossDamage: "per % of a world boss's damage",
+    guildsSourceMission: "a mission",
+    guildsSourceOnlineTime: "per %d minutes in the game",
+    guildsSourceCastleSiege: "the castle siege won",
     bossesNoEntries: "No entries yet.",
     bossesRankBossHunt: "Boss hunt",
     bossesRankBloodCastle: "Blood Castle",
@@ -256,6 +293,43 @@ const copy = {
     bossesWeek: "Xếp hạng tuần này",
     bossesWeekEnds: "Tuần kết thúc sau",
     bossesLastWeek: "Người thắng tuần trước",
+    guildsNav: "Bang hội",
+    guildsTitle: "Cấp bang hội và bảng xếp hạng tuần",
+    guildsHint: "Thành viên nâng cấp bang hội bằng cách chơi: quái vật, sự kiện, boss thế giới, nhiệm vụ, thời gian trong trò chơi và công thành. Mỗi cấp cho thành viên đang chơi một hiệu ứng nhỏ. Mỗi thứ Hai lúc 00:00 (giờ Sydney) các bang đứng đầu tuần nhận thưởng cho mọi thành viên.",
+    guildsOffline: "Không xem được bang hội: máy chủ không trả lời.",
+    guildsOff: "Cấp bang hội đang tắt trên máy chủ này.",
+    guildsLadder: "Bảng xếp hạng tuần này",
+    guildsLastWeek: "Bang thắng tuần trước",
+    guildsWeekOf: "Tuần từ",
+    guildsAll: "Bang hội theo cấp",
+    guildsSieges: "Kết quả công thành",
+    guildsNoSieges: "Chưa có bang nào thắng công thành.",
+    guildsLevels: "Cấp và hiệu ứng",
+    guildsGuild: "Bang hội",
+    guildsLevel: "Cấp",
+    guildsPoints: "Điểm",
+    guildsXp: "KN bang hội",
+    guildsMembers: "Thành viên",
+    guildsCoins: "Xu mỗi người",
+    guildsBuff: "Hiệu ứng",
+    guildsNone: "Chưa có bang nào có điểm.",
+    guildsNoBuff: "không có",
+    guildsExp: "KN",
+    guildsZen: "zen từ quái vật",
+    guildsDefense: "phòng thủ",
+    guildsRewards: "Thưởng thứ Hai cho mỗi thành viên",
+    guildsMaster: "bang chủ được thêm %d",
+    guildsSources: "KN bang hội",
+    guildsCap: "tối đa %d mỗi ngày cho mỗi thành viên",
+    guildsWeekEnds: "Tuần kết thúc sau",
+    guildsSourceMonsterKill: "một quái vật",
+    guildsSourceEventFinish: "hoàn thành một sự kiện",
+    guildsSourceEventWin: "thắng một sự kiện",
+    guildsSourceWorldBossKill: "hạ một boss thế giới",
+    guildsSourceWorldBossDamage: "mỗi % sát thương lên boss thế giới",
+    guildsSourceMission: "một nhiệm vụ",
+    guildsSourceOnlineTime: "mỗi %d phút trong trò chơi",
+    guildsSourceCastleSiege: "thắng công thành",
     bossesNoEntries: "Chưa có ai.",
     bossesRankBossHunt: "Săn boss",
     bossesRankBloodCastle: "Huyết Lâu",
@@ -1244,3 +1318,92 @@ setInterval(() => {
 setInterval(() => {
   if (!document.hidden && bosses) renderBosses();
 }, 1000);
+
+// ---------- guilds (read from the server, /website/guilds) ----------
+
+interface GuildBonus { level: number; xp: number; exp: number; zen: number; defense: number }
+interface PublicGuilds {
+  enabled: boolean; now?: number; weekEnds?: number; dailyCap?: number; buffsEnabled?: boolean; buffNameEn?: string; buffNameVi?: string;
+  levels?: GuildBonus[]; sources?: { source: string; xp: number }[]; onlineMinutes?: number; siegeLadderBonus?: number;
+  ladderOn?: boolean; ladderMinimumXp?: number;
+  rewards?: { from: number; to: number; coins: number; masterBonus: number; coinType: string; zen: number; items: PublicReward["items"] }[];
+  ladder?: { rank: number; name: string; xp: number; level: number; members?: number | null }[];
+  lastWeek?: { week: string; lines: { rank: number; name: string; xp: number; coins: number; coinType: string; paid: number }[] } | null;
+  guilds?: { name: string; level: number; xp: number; members?: number | null }[];
+  sieges?: { at: number; name: string }[];
+}
+let guilds: PublicGuilds | null = null;
+
+const GUILD_SOURCES: Record<string, Parameters<typeof t>[0]> = {
+  MonsterKill: "guildsSourceMonsterKill", EventFinish: "guildsSourceEventFinish", EventWin: "guildsSourceEventWin",
+  WorldBossKill: "guildsSourceWorldBossKill", WorldBossDamage: "guildsSourceWorldBossDamage", Mission: "guildsSourceMission",
+  OnlineTime: "guildsSourceOnlineTime", CastleSiege: "guildsSourceCastleSiege",
+};
+
+function guildBonus(level: GuildBonus): string {
+  const parts: string[] = [];
+  if (level.exp > 0) parts.push(`+${level.exp}% ${t("guildsExp")}`);
+  if (level.zen > 0) parts.push(`+${level.zen}% ${t("guildsZen")}`);
+  if (level.defense > 0) parts.push(`+${level.defense} ${t("guildsDefense")}`);
+  return parts.length ? parts.join(" · ") : t("guildsNoBuff");
+}
+
+function renderGuilds(): void {
+  const format = (value: number) => value.toLocaleString(language === "vi" ? "vi-VN" : "en-AU");
+  const data = guilds;
+  const notice = element("guilds-notice");
+  notice.textContent = !data ? t("guildsOffline") : !data.enabled ? t("guildsOff") : "";
+  const on = !!data?.enabled;
+  const members = (count?: number | null) => (count === null || count === undefined ? "—" : format(count));
+  element("guilds-week-ends").textContent = on && data?.weekEnds ? `${t("guildsWeekEnds")} ${bossCountdown(data.weekEnds)}` : "";
+  table("guilds-ladder", [["#", false], [t("guildsGuild"), false], [t("guildsLevel"), true], [t("guildsMembers"), true], [t("guildsPoints"), true]],
+    on ? (data?.ladder ?? []).map((l) => [l.rank, l.name, l.level, members(l.members), format(l.xp)]) : [], on ? t("guildsNone") : "");
+  const rewards = on && data?.ladderOn ? data.rewards ?? [] : [];
+  element("guilds-rewards").textContent = rewards.length
+    ? `${t("guildsRewards")}: ${rewards.map((r) => {
+      const ranks = r.from === r.to ? `#${r.from}` : `#${r.from}–${r.to}`;
+      const prize = rewardLine({ zen: r.zen, coins: r.coins, coinType: r.coinType, items: r.items });
+      return `${ranks} ${prize}${r.masterBonus > 0 ? ` (${t("guildsMaster").replace("%d", format(r.masterBonus))})` : ""}`;
+    }).join(" · ")}`
+    : "";
+  const last = on ? data?.lastWeek : null;
+  element("guilds-last-week-of").textContent = last ? `${t("guildsWeekOf")} ${last.week}` : "";
+  table("guilds-last-week", [["#", false], [t("guildsGuild"), false], [t("guildsPoints"), true], [t("guildsCoins"), true]],
+    (last?.lines ?? []).map((l) => [l.rank, l.name, format(l.xp), l.coins > 0 ? `${format(l.coins)} ${coinLabel(l.coinType)}` : "—"]), on ? t("noRanking") : "");
+  table("guilds-all", [["#", false], [t("guildsGuild"), false], [t("guildsLevel"), true], [t("guildsMembers"), true], [t("guildsXp"), true]],
+    on ? (data?.guilds ?? []).map((g, index) => [index + 1, g.name, g.level, members(g.members), format(g.xp)]) : [], on ? t("guildsNone") : "");
+  const sieges = clear("guilds-sieges");
+  if (on) {
+    for (const siege of data?.sieges ?? []) sieges.append(node("li", `${bossClock(siege.at, "Australia/Sydney")} — ${siege.name}`));
+    if (!data?.sieges?.length) sieges.append(node("li", t("guildsNoSieges"), "muted"));
+  }
+  table("guilds-levels", [[t("guildsLevel"), false], [t("guildsXp"), true], [t("guildsBuff"), false]],
+    on ? (data?.levels ?? []).map((l) => [l.level, format(l.xp), data?.buffsEnabled === false ? t("guildsNoBuff") : guildBonus(l)]) : [], "");
+  const sources = on ? (data?.sources ?? []).map((s) => {
+    const label = GUILD_SOURCES[s.source] ? t(GUILD_SOURCES[s.source]).replace("%d", String(data?.onlineMinutes ?? 10)) : s.source;
+    return `${label} +${format(s.xp)}`;
+  }) : [];
+  element("guilds-sources").textContent = sources.length
+    ? `${t("guildsSources")}: ${sources.join(" · ")}${data?.dailyCap ? ` (${t("guildsCap").replace("%d", format(data.dailyCap))})` : ""}`
+    : "";
+}
+
+async function refreshGuilds(): Promise<void> {
+  try {
+    const response = await fetch("/website/guilds", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicGuilds;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid guilds");
+    guilds = data;
+  } catch {
+    guilds = null;
+  }
+  renderGuilds();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderGuilds());
+element("refresh").addEventListener("click", () => void refreshGuilds());
+void refreshGuilds();
+setInterval(() => {
+  if (!document.hidden) void refreshGuilds();
+}, 5 * 60000);

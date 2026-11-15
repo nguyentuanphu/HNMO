@@ -5,6 +5,7 @@ import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
 import { buffDefinition, buffStripOrder } from '../game/buffs.js';
 import type { TooltipLine } from '../game/itemTooltip.js';
 import { hudScale } from './nativeText.js';
+import { currentLanguage } from '../i18n.js';
 
 interface StripModel extends RmlModel {
   buffs: { decorator: string }[];
@@ -88,8 +89,9 @@ export class BuffStrip {
     const definition = buff === undefined ? null : buffDefinition(buff);
     if (!definition) { this.actions.tooltip(null, null); return; }
     const line = (text: string, color: string, bold = false): TooltipLine => ({ text, color, bold, background: null, spacer: false });
-    const lines = [line(definition.displayName?.en ?? definition.name, 'blue', true)];
-    for (const text of (definition.description?.en ?? '').split('\n')) if (text) lines.push(line(text, 'white'));
+    const language = currentLanguage();
+    const lines = [line(definition.displayName?.[language] ?? definition.displayName?.en ?? definition.name, 'blue', true)];
+    for (const text of (definition.description?.[language] ?? definition.description?.en ?? '').split('\n')) if (text) lines.push(line(text, 'white'));
     // g_BuffStringTime: the time left, in purple.
     const left = this.actions.secondsLeft(buff);
     if (left !== null) {

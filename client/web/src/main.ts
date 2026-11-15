@@ -39,6 +39,7 @@ import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
+import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { OnboardingWindow } from './ui/onboardingWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
@@ -168,6 +169,7 @@ export interface GameState {
   autoPlayExtras?: AutoPlayExtras;
   missions?: MissionsWindow;
   worldBosses?: WorldBossWindow;
+  guildLevels?: GuildLevelsWindow;
   onboarding?: OnboardingWindow;
   buffs?: BuffTracker;
   party?: Party;
@@ -1163,7 +1165,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   const hud = state.hud;
   // The buff strip: the hero's buffs; hover for what they do, right-click to cancel a skill's buff.
   const buffStrip = new BuffStrip({
-    active: () => buffs.of(playerId),
+    active: () => [...buffs.of(playerId), ...(state.guildLevels?.activeBuffs() ?? [])],
     secondsLeft: (buff) => buffs.secondsLeft(buff),
     tooltip: (lines, box) => {
       if (!lines || !box) { itemWindows.tooltip.hide(); return; }
@@ -1344,6 +1346,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
   });
+  // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
+  // the buff (also on the buff strip); level-ups and ladder rewards are told in the chat.
+  const guildLevels = new GuildLevelsWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+    buffsChanged: () => buffStrip.refresh(),
+  });
+  state.guildLevels = guildLevels;
+  connection.onPacket((bytes) => { guildLevels.handle(bytes); });
+  for (const bytes of earlyPackets) guildLevels.handle(bytes);
+  guildLevels.start();
   // HNMO's new-player guide (Y): the current step, where to go (an arrow on the screen), the rewards; it opens by itself
   // for a character whose guide runs. The (i) guide and the touch "more" menu open it too.
   const onboarding = new OnboardingWindow({
@@ -1534,7 +1548,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     online.say(text);
   });
   // Guild, friends, letters and whispers (game/social.ts): G, F, /guild, the guild master NPC.
-  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); } });
+  state.social = setupSocial({ connection, chat, heroName: character.name, earlyPackets, click: () => sounds.click(), heroCharacter: () => online.hero, players: () => online.characters.values(), hero: () => ({ level: stats.level, leadership: stats.leadership, classIndex: character.classIndex }), closeDocked: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, dockedChanged: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); }, guildWindowToggled: (open) => { if (open) state.guildLevels?.open(); else state.guildLevels?.close(); } });
   // Duels (/DuelChallenge, the score window, Doorkeeper Titus) and Gens (the stewards, B); ui/duelAndGens.ts.
   state.duelAndGens = setUpDuelAndGens({ connection, heroName: character.name, hero: () => online.hero, players: () => online.characters.values(), level: () => stats.level, mapNumber: () => state.mapNumber, chat, buffs, quests, camera, canvas: ui.canvas, click: () => sounds.click(), sound: (id) => sounds.audio.play(id), duelBlocked: () => !!state.chaosMachine?.isOpen || itemWindows.vault.isOpen, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, earlyPackets });
   // Kalima's gates, Crywolf's HUD and altars, the castle siege's windows (ui/fieldEventWindows.ts).
