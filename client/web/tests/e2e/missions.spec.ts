@@ -189,3 +189,47 @@ test('in the game, J opens the missions window and the touch menu has it', async
   await expect(page.locator('#touchMore button[title="Missions"]')).toHaveCount(1);
   await expectNoPageErrors(errors);
 });
+
+// The website's Missions section (read-only, from /website/missions) and the "Play on your phone" part.
+const PUBLIC_MISSIONS = {
+  day: '2026-11-15', week: '2026-11-09', nextDaily: Date.now() + 3 * 3600_000, nextWeekly: Date.now() + 40 * 3600_000, resetHour: 0, timeZone: 'Australia/Sydney',
+  missions: [
+    { id: 'daily-kill', period: 'daily', kind: 'KillMonsters', titleEn: 'Defeat 300 monsters', titleVi: 'Hạ gục 300 quái vật', target: 300, reward: { zen: 500000, coins: 10, coinType: 'GoblinPoints', items: [] } },
+    { id: 'weekly-win', period: 'weekly', kind: 'WinEvent', titleEn: 'Win an event', titleVi: 'Chiến thắng một sự kiện', target: 1, reward: { zen: 0, coins: 40, coinType: 'GoblinPoints', items: [{ group: 12, number: 15, level: 0, count: 1, name: 'Jewel of Chaos' }] } },
+  ],
+  streak: { bonusDay: 7, bonus: { zen: 0, coins: 50, coinType: 'GoblinPoints', items: [] } },
+  earnedDailyCap: 300,
+};
+
+test('the website shows the missions and how to play on a phone, in both languages', async ({ page }) => {
+  let available = true;
+  await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: 'Test realm', links: {} } }));
+  await page.route('**/website/data', (route) => route.fulfill({ status: 503 }));
+  await page.route('**/website/details', (route) => route.fulfill({ status: 503 }));
+  await page.route('**/website/missions', (route) => (available ? route.fulfill({ json: PUBLIC_MISSIONS }) : route.fulfill({ status: 503 })));
+  await page.goto('/home.html');
+  await page.locator('#en').click();
+  const section = page.locator('#missions');
+  await expect(section.locator('#missions-daily .mission')).toHaveCount(1);
+  await expect(section.locator('#missions-daily')).toContainText('Defeat 300 monsters');
+  await expect(section.locator('#missions-daily')).toContainText('500,000 Zen · 10 Goblin Points');
+  await expect(section.locator('#missions-weekly')).toContainText('Jewel of Chaos x1');
+  await expect(section.locator('#missions-reset')).toContainText(/New daily missions in [23] h/);
+  await expect(section.locator('#missions-extra')).toContainText('every 7 days pays a bonus');
+  await expect(page.locator('#phone h2')).toHaveText('Play on your phone');
+  await expect(page.locator('#phone')).toContainText('Add to Home screen');
+  await section.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: 'test-results/website-missions.png' });
+
+  await page.locator('#vi').click();
+  await expect(section.locator('h2')).toHaveText('Nhiệm vụ hôm nay');
+  await expect(section.locator('#missions-daily')).toContainText('Hạ gục 300 quái vật');
+  await expect(section.locator('#missions-weekly')).toContainText('Chiến thắng một sự kiện');
+  await expect(page.locator('#phone h2')).toHaveText('Chơi trên điện thoại');
+
+  // Without the server, nothing old is shown.
+  available = false;
+  await page.locator('#refresh').click();
+  await expect(section.locator('#missions-notice')).toHaveText('Không xem được nhiệm vụ: máy chủ không trả lời.');
+  await expect(section.locator('.mission')).toHaveCount(0);
+});

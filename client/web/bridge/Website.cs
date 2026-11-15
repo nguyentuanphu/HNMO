@@ -5,6 +5,7 @@ internal static class Website
     {
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
+        Forward(app, "/website/missions", "api/website/missions", options, clients);
     }
 
     private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)

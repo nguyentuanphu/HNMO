@@ -18,10 +18,12 @@
       <nav>
         <a href="#realm" data-t="realm"></a
         ><a href="#schedule" data-t="scheduleNav"></a
+        ><a href="#missions" data-t="missionsNav"></a
         ><a href="#rankings" data-t="rankingsNav"></a
         ><a href="#events" data-t="events"></a
         ><a href="#world" data-t="world"></a
         ><a href="#account" data-t="accountNav"></a
+        ><a href="#phone" data-t="phoneNav"></a
         ><a href="#start" data-t="start"></a>
       </nav>
       <div class="languages">
@@ -86,6 +88,22 @@
         </div>
         <p class="muted" id="details-notice" role="status"></p>
         <div id="upcoming" class="upcoming"></div>
+      </section>
+      <section id="missions">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span data-t="missionsNav"></span></p>
+            <h2 data-t="missionsTitle"></h2>
+          </div>
+          <span class="muted" id="missions-reset"></span>
+        </div>
+        <p class="muted" data-t="missionsHint"></p>
+        <p class="muted" id="missions-notice" role="status"></p>
+        <h3 class="mission-period" data-t="missionsDaily"></h3>
+        <div id="missions-daily" class="mission-list"></div>
+        <h3 class="mission-period" data-t="missionsWeekly"></h3>
+        <div id="missions-weekly" class="mission-list"></div>
+        <p class="muted" id="missions-extra"></p>
       </section>
       <section id="rankings">
         <div class="section-head">
@@ -180,6 +198,29 @@
               <a class="primary" href="/index.html" data-t="play"></a>
             </form>
             <p class="form-message" id="google-message" role="status"></p>
+          </article>
+        </div>
+      </section>
+      <section id="phone" class="start">
+        <p class="eyebrow" data-t="phoneNav"></p>
+        <h2 data-t="phoneTitle"></h2>
+        <p class="muted" data-t="phoneIntro"></p>
+        <div class="steps">
+          <article>
+            <b>01</b>
+            <h3 data-t="phoneOpen"></h3>
+            <p data-t="phoneOpenText"></p>
+            <a href="/index.html" data-t="play"></a>
+          </article>
+          <article>
+            <b>02</b>
+            <h3 data-t="phoneInstall"></h3>
+            <p data-t="phoneInstallText"></p>
+          </article>
+          <article>
+            <b>03</b>
+            <h3 data-t="phoneControls"></h3>
+            <p data-t="phoneControlsText"></p>
           </article>
         </div>
       </section>
