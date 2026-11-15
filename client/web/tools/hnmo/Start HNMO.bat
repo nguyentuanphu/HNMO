@@ -2,11 +2,12 @@
 rem Starts HNMO: the save game database, the game server with its admin panel,
 rem and the game, which opens in your browser. Close this window to stop everything.
 rem The window stays open whatever happens, so a problem can be read (and reported).
-if not defined HNMO_WINDOW (
-  set "HNMO_WINDOW=1"
-  cmd /k ""%~f0" %*"
-  exit /b
-)
+rem No blocks in brackets: a folder like "HNMO (1)" would end them early.
+if defined HNMO_WINDOW goto :start
+set "HNMO_WINDOW=1"
+cmd /k call "%~f0" %*
+exit /b
+:start
 title HNMO - close this window to stop the game
 cd /d "%~dp0"
 if not exist "web\HNMO.dll" if not exist "web\HNMO.exe" goto :notunzipped

@@ -68,15 +68,15 @@ jobs:
           name: HNMO
       - name: Unzip
         shell: pwsh
-        run: Expand-Archive -Path HNMO.zip -DestinationPath C:\hnmo-test -Force
+        run: Expand-Archive -Path HNMO.zip -DestinationPath "C:\hnmo test (1)" -Force
       - name: Start HNMO.bat and wait for the game
         shell: pwsh
         run: |
-          $folder = "C:\hnmo-test\HNMO"
-          $log = "C:\hnmo-test\start.log"
-          # HNMO_WINDOW: run in this window (no second window that waits for keys); /s with the outer
-          # quotes keeps cmd from eating the quotes around the paths.
-          $env:HNMO_WINDOW = "1"
+          # A folder with a space and brackets, like a second download ("HNMO (1)"); the start file
+          # runs the same way as a double-click (it opens its own window with cmd /k). /s with the
+          # outer quotes keeps cmd from eating the quotes around the paths.
+          $folder = "C:\hnmo test (1)\HNMO"
+          $log = "C:\hnmo test (1)\start.log"
           $p = Start-Process -FilePath "cmd.exe" -ArgumentList "/d /s /c `"`"$folder\Start HNMO.bat`" > `"$log`" 2>&1`"" -WorkingDirectory $folder -PassThru
           $deadline = (Get-Date).AddMinutes(20)
           $game = $false; $admin = $false
