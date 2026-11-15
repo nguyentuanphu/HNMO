@@ -15,6 +15,8 @@ export interface EffectOwner {
   readonly position: THREE.Vector3;
   /** Its angles in degrees; z is the facing (0 faces -y, as the desktop's o->Angle[2]). */
   readonly angle: THREE.Vector3;
+  /** o->StartPosition, where the shock waves of Dark Side's dash read the fighter's own place. */
+  readonly startPosition?: THREE.Vector3;
   /** Its light (o->Light), the colour some effects take from their maker. White when left out. */
   readonly light?: THREE.Vector3;
   /** Whether it is alive and shown (o->Live && o->Visible). Effects that track it end when it isn't. */
@@ -194,7 +196,8 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'sparks' // BITMAP_SPARK+2: a burst of sparks on a hand bone (four frames)
   | 'blueBlur' // BITMAP_BLUE_BLUR: SubType 1 (drawn with BITMAP_POUNDING_BALL), Fire Scream's rising blur
   | 'advSmoke2' // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
-  | 'damage1'; // BITMAP_DAMAGE1: Chain Drive's hits, swelling and flaring
+  | 'damage1' // BITMAP_DAMAGE1: Chain Drive's hits, swelling and flaring
+  | 'damage2'; // BITMAP_DAMAGE2: Dark Side's strikes
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;

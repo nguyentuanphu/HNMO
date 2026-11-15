@@ -667,8 +667,8 @@ export function rageCreateEffect(system: EffectSystem, skill: number, caster: Ef
       return true;
     }
     case RageSkill.DARK_SIDE:
-      // A red cloud, a burning circle and a whirl of wind as the fighter vanishes (its dash afterimages, CDummyUnit
-      // and DarksideRendering, follow the server's Dark Side target list, which the server never sends).
+      // A red cloud, a burning circle and a whirl of wind as the fighter vanishes (its dash and afterimages, CDummyUnit
+      // and DarksideRendering, follow the server's Dark Side target list: darkSideDash.ts).
       system.createEffect('eventCloud', caster.position, caster.angle, new THREE.Vector3(1, 0.6, 0.6), 1, caster, 1);
       system.createEffect('magic', caster.position, caster.angle, new THREE.Vector3(1, 0.4, 0), 14);
       system.createEffect('windForce', caster.position, caster.angle, new THREE.Vector3(1, 0.5, 0.2), 2, caster, 1);

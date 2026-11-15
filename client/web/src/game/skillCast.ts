@@ -3,13 +3,15 @@
 // (GameLogic/Combat/SkillExecution.cpp), the per-class executors AttackElf,
 // AttackKnight, AttackWizard and AttackCommon (GameLogic/Combat/ClassAttack.cpp) and
 // SkillWarrior, CastWarriorSkill, UseSkillWarrior, UseSkillWizard, UseSkillElf,
-// UseSkillSummon and SkillElf (GameLogic/Combat/SkillCast.cpp). The receive side
+// UseSkillSummon, SkillElf, AttackRagefighter and UseSkillRagefighter
+// (GameLogic/Combat/SkillCast.cpp, with CMonkSystem's checks). The receive side
 // follows ReceiveMagic (SkillAnimation, C3 19) and ReceiveMagicContinue
 // (AreaSkillAnimation, C3 1E) in Network/Server/WSclient.cpp. Each case names the
 // desktop function or branch it comes from.
 //
-// Only the base (non-master) skills are covered; the master variants (_STR,
-// _MASTERY, numbers 300 and up) and the Rage Fighter's skills return null.
+// Only the base (non-master) skills are covered, except the Rage Fighter's, whose
+// executor names its master variants (_STR, _MASTERY) itself; the other classes'
+// master variants (numbers 300 and up) return null.
 
 import {
   CharacterClass,
@@ -114,6 +116,29 @@ export const SkillId = {
   FLAME_STRIKE: 236,
   GIGANTIC_STORM: 237,
   CHAOTIC_DISEIER: 238,
+  // The Rage Fighter's (the desktop's names: Dragon Kick is the server's Dragon Slasher, Occupy its Charge,
+  // ATT_UP / HP_UP / DEF_UP_OURFORCES its Ignore Defense / Increase Health / Increase Block).
+  KILLING_BLOW: 260,
+  BEAST_UPPERCUT: 261,
+  CHAIN_DRIVE: 262,
+  DARK_SIDE: 263,
+  DRAGON_ROAR: 264,
+  DRAGON_KICK: 265,
+  ATT_UP_OURFORCES: 266,
+  HP_UP_OURFORCES: 267,
+  DEF_UP_OURFORCES: 268,
+  OCCUPY: 269,
+  PHOENIX_SHOT: 270,
+  KILLING_BLOW_STR: 551,
+  BEAST_UPPERCUT_STR: 552,
+  KILLING_BLOW_MASTERY: 554,
+  BEAST_UPPERCUT_MASTERY: 555,
+  CHAIN_DRIVE_STR: 558,
+  DARK_SIDE_STR: 559,
+  DRAGON_ROAR_STR: 560,
+  DEF_UP_OURFORCES_STR: 569,
+  DEF_UP_OURFORCES_MASTERY: 572,
+  HP_UP_OURFORCES_STR: 573,
 } as const;
 
 const S = SkillId;
@@ -136,7 +161,19 @@ export type SkillSpecial =
   /** AT_SKILL_NOVA_BEGIN: TargetedSkill(58, own key) when the skill key goes down; Nova (40) follows on release. */
   | 'novaBegin'
   /** AT_SKILL_NOVA: TargetedSkill(40, selected key, else own key) on release; not throttled. */
-  | 'nova';
+  | 'nova'
+  /**
+   * The Rage Fighter's Beast Uppercut, Chain Drive and Dragon Kick: RageAttackRequest (C3 4A) at the target, then a
+   * TargetedSkill at the target each time the action reaches one of `hitFrames` (CMonkSystem::SendAttackPacket).
+   */
+  | 'rageAttack'
+  /**
+   * Dark Side: RageAttackRangeRequest (C1 4B) and RageAttackRequest (C3 4A); the server's target list (C1 4B) then
+   * drives the dash (CMonkSystem::SetDarksideTargetIndex), or a TargetedSkill at the hero when it names nobody.
+   */
+  | 'darkSide'
+  /** Phoenix Shot: AttackRagefighter walks into its range, but UseSkillRagefighter has no case for it and sends nothing. */
+  | 'phoenixShot';
 
 export interface SkillCastPlan {
   /** What the hero sends when casting. */
@@ -167,6 +204,12 @@ export interface SkillCastPlan {
   fromWeapon: boolean;
   /** Not a TargetedSkill / AreaSkill cast (packet is then 'targeted' for Nova, 'none' for the teleports). */
   special: SkillSpecial | null;
+  /** 'rageAttack' only: the action keys at which a TargetedSkill follows (CMonkSystem::InitConsecutiveState). */
+  hitFrames: readonly [number, number] | null;
+  /** Each request at the target goes with an InstantMoveRequest to the tile before it (SEND_POSITION_TO_SERVER). */
+  instantMove: boolean;
+  /** Cast without walking into a range (AttackRagefighter's Dark Side and party buffs go straight to UseSkillRagefighter). */
+  ignoresRange: boolean;
   /** The desktop function the plan follows. */
   source: string;
 }
@@ -407,8 +450,8 @@ export function skillKeepsAutoAttack(skill: number, classIndex: number): boolean
   ) {
     return false;
   }
-  // AT_SKILL_ATT_UP_OURFORCES..AT_SKILL_DEF_UP_OURFORCES (266..268).
-  if (skill >= 266 && skill <= 268) return false;
+  // AT_SKILL_ATT_UP_OURFORCES..AT_SKILL_DEF_UP_OURFORCES (266..268) and their master variants.
+  if (RAGE_BUFFS.includes(skill)) return false;
   return true;
 }
 
@@ -464,6 +507,9 @@ function make(skill: number, classIndex: number, p: PlanParts): SkillCastPlan {
     equipmentOk: true,
     fromWeapon: false,
     special: null,
+    hitFrames: null,
+    instantMove: false,
+    ignoresRange: false,
     ...p,
   };
 }
@@ -511,7 +557,7 @@ export function skillCastPlan(
   }
 
   if (classIndex === C.ELF) return elfPlan(skill, classIndex, ctx, g, plan);
-  if (classIndex === C.RAGE_FIGHTER) return null; // AttackRagefighter: not ported.
+  if (classIndex === C.RAGE_FIGHTER) return rageFighterPlan(skill, ctx, g, plan);
 
   if (runsKnight(classIndex)) {
     const knight = knightPlan(skill, classIndex, ctx, g, plan);
@@ -573,6 +619,96 @@ function elfPlan(
     default:
       return null;
   }
+}
+
+// ---------------------------------------------------------------------------
+// The Rage Fighter (AttackRagefighter, UseSkillRagefighter, CMonkSystem).
+// ---------------------------------------------------------------------------
+
+/** The party buffs and their master variants: TargetedSkill at the hero, no auto attack after them. */
+export const RAGE_BUFFS: readonly number[] = [
+  S.ATT_UP_OURFORCES, S.HP_UP_OURFORCES, S.HP_UP_OURFORCES_STR, S.DEF_UP_OURFORCES, S.DEF_UP_OURFORCES_STR, S.DEF_UP_OURFORCES_MASTERY,
+];
+const KILLING_BLOWS: readonly number[] = [S.KILLING_BLOW, S.KILLING_BLOW_STR, S.KILLING_BLOW_MASTERY];
+const BEAST_UPPERCUTS: readonly number[] = [S.BEAST_UPPERCUT, S.BEAST_UPPERCUT_STR, S.BEAST_UPPERCUT_MASTERY];
+const CHAIN_DRIVES: readonly number[] = [S.CHAIN_DRIVE, S.CHAIN_DRIVE_STR];
+const DARK_SIDES: readonly number[] = [S.DARK_SIDE, S.DARK_SIDE_STR];
+const DRAGON_ROARS: readonly number[] = [S.DRAGON_ROAR, S.DRAGON_ROAR_STR];
+/** AttackRagefighter's first case: at a selected live target, walking up to GetSkillDistance * 1.2. */
+const RAGE_TARGET_SKILLS: readonly number[] = [
+  ...KILLING_BLOWS, ...BEAST_UPPERCUTS, ...CHAIN_DRIVES, S.DRAGON_KICK, ...DRAGON_ROARS, S.OCCUPY, S.PHOENIX_SHOT,
+];
+/** CMonkSystem::IsRideNotUseSkill: not while a horn mount (Uniria, Dinorant, Fenrir) is worn. */
+const RAGE_NOT_RIDING: readonly number[] = [...KILLING_BLOWS, ...BEAST_UPPERCUTS, ...CHAIN_DRIVES, S.DRAGON_KICK, S.OCCUPY];
+/** CMonkSystem::IsSwordformGlovesUseSkill: only with sword-form gloves in either hand. */
+const RAGE_GLOVE_SKILLS: readonly number[] = [S.CHAIN_DRIVE, ...DRAGON_ROARS, S.DRAGON_KICK];
+
+/** The skills whose 4A (ReceiveStraightAttack) plays the action half way (CMonkSystem::IsRageHalfwaySkillAni). */
+export function isRageHalfwaySkill(skill: number): boolean {
+  return BEAST_UPPERCUTS.includes(skill) || CHAIN_DRIVES.includes(skill) || skill === S.DRAGON_KICK;
+}
+export const isDarkSide = (skill: number): boolean => DARK_SIDES.includes(skill);
+export const isKillingBlow = (skill: number): boolean => KILLING_BLOWS.includes(skill);
+export const isBeastUppercut = (skill: number): boolean => BEAST_UPPERCUTS.includes(skill);
+
+/** CMonkSystem::SetRageSkillAni: the action a Rage Fighter skill plays (null: none). */
+export function rageSkillAction(skill: number): number | null {
+  if (KILLING_BLOWS.includes(skill)) return A.SKILL_THRUST;
+  if (BEAST_UPPERCUTS.includes(skill)) return A.SKILL_STAMP;
+  if (CHAIN_DRIVES.includes(skill)) return A.SKILL_GIANTSWING;
+  if (DARK_SIDES.includes(skill)) return A.SKILL_DARKSIDE_READY;
+  if (DRAGON_ROARS.includes(skill)) return A.SKILL_DRAGONLORE;
+  if (skill === S.DRAGON_KICK) return A.SKILL_DRAGONKICK;
+  return null;
+}
+
+/** CMonkSystem::IsSwordformGlovesItemType: Sacred Glove, Storm Hard Glove, Piercing Blade Glove, Phoenix Soul Star. */
+export function isSwordformGloves(item: Pick<HandItem, 'group' | 'number'> | null | undefined): boolean {
+  return !!item && item.group === 0 && item.number >= 32 && item.number <= 35;
+}
+
+function rageFighterPlan(skill: number, ctx: SkillCastContext, g: Gear, plan: (p: PlanParts) => SkillCastPlan): SkillCastPlan | null {
+  if (skill === S.PLASMA_STORM_FENRIR) return plasmaStorm(C.RAGE_FIGHTER, ctx, g, plan, 'AttackRagefighter AT_SKILL_PLASMA_STORM_FENRIR');
+  const hornMount = g.mount === 'uniria' || g.mount === 'dinorant' || g.mount === 'fenrir';
+  const gloves = isSwordformGloves(ctx.rightHand) || isSwordformGloves(ctx.leftHand);
+  const equipmentOk = !(hornMount && RAGE_NOT_RIDING.includes(skill)) && (!RAGE_GLOVE_SKILLS.includes(skill) || gloves);
+  const atTarget = { needsTarget: true, equipmentOk, heroAction: rageSkillAction(skill) };
+  if (KILLING_BLOWS.includes(skill) || skill === S.OCCUPY) {
+    // SendRequestMagic at the target with an instant move before it; Occupy's rush comes with ReceiveMagic.
+    return plan({ packet: 'targeted', ...atTarget, instantMove: true, source: 'UseSkillRagefighter AT_SKILL_KILLING_BLOW / AT_SKILL_OCCUPY' });
+  }
+  if (BEAST_UPPERCUTS.includes(skill)) {
+    return plan({ packet: 'targeted', ...atTarget, special: 'rageAttack', hitFrames: [3, 7], instantMove: true, source: 'UseSkillRagefighter AT_SKILL_BEAST_UPPERCUT' });
+  }
+  if (CHAIN_DRIVES.includes(skill)) {
+    return plan({ packet: 'targeted', ...atTarget, special: 'rageAttack', hitFrames: [3, 12], instantMove: true, source: 'UseSkillRagefighter AT_SKILL_CHAIN_DRIVE' });
+  }
+  if (skill === S.DRAGON_KICK) {
+    // InitConsecutiveState(3.0f): no second key (9999).
+    return plan({ packet: 'targeted', ...atTarget, special: 'rageAttack', hitFrames: [3, 9999], instantMove: true, source: 'UseSkillRagefighter AT_SKILL_DRAGON_KICK' });
+  }
+  if (DRAGON_ROARS.includes(skill)) {
+    // SendRequestMagicContinue at the hero's tile, Rotation = angle / 360 * 255, the target's key.
+    return plan({ packet: 'area', ...atTarget, areaAt: 'self', rotationScale: 255, source: 'UseSkillRagefighter AT_SKILL_DRAGON_ROAR' });
+  }
+  if (skill === S.PHOENIX_SHOT) {
+    return plan({ packet: 'none', ...atTarget, special: 'phoenixShot', source: 'AttackRagefighter AT_SKILL_PHOENIX_SHOT (UseSkillRagefighter sends nothing)' });
+  }
+  if (DARK_SIDES.includes(skill)) {
+    return plan({ packet: 'targeted', heroAction: A.SKILL_DARKSIDE_READY, special: 'darkSide', ignoresRange: true, source: 'UseSkillRagefighter AT_SKILL_DARKSIDE' });
+  }
+  if (RAGE_BUFFS.includes(skill)) {
+    // SendRequestMagic(skill, HeroKey) and one of the two buff actions at random (rand_fps_check(2)).
+    const rand = ctx.rand ?? Math.random;
+    const action = Math.floor(rand() * 2) % 2 === 0 ? A.SKILL_ATT_UP_OURFORCES : A.SKILL_HP_UP_OURFORCES;
+    return plan({ packet: 'targeted', targetSelf: true, friendly: true, heroAction: action, ignoresRange: true, source: 'UseSkillRagefighter AT_SKILL_*_OURFORCES' });
+  }
+  return null;
+}
+
+/** Whether a skill is one AttackRagefighter casts at a target up to GetSkillDistance * 1.2. */
+export function isRageTargetSkill(skill: number): boolean {
+  return RAGE_TARGET_SKILLS.includes(skill);
 }
 
 function plasmaStorm(classIndex: number, ctx: SkillCastContext, g: Gear, plan: (p: PlanParts) => SkillCastPlan, source: string): SkillCastPlan {
@@ -840,7 +976,7 @@ export function skillRange(
   options: { darkHorse?: boolean; bloodCastle?: boolean } = {},
 ): number {
   const distance = distanceFromData + (options.darkHorse ? 2 : 0);
-  if (CAST_WARRIOR_RANGE_SKILLS.includes(skill)) {
+  if (CAST_WARRIOR_RANGE_SKILLS.includes(skill) || RAGE_TARGET_SKILLS.includes(skill)) {
     if (options.bloodCastle && skill >= S.FALLING_SLASH && skill <= S.SLASH) return 1.8;
     return distance * 1.2;
   }
@@ -855,7 +991,7 @@ export function skillRange(
 function shownVia(skill: number): 'targeted' | 'area' {
   // The cast plan does not depend on the class for the packet kind, except for skills
   // a class cannot cast; try the classes that can.
-  for (const cls of [C.DARK_WIZARD, C.DARK_KNIGHT, C.ELF, C.MAGIC_GLADIATOR, C.DARK_LORD, C.SUMMONER]) {
+  for (const cls of [C.DARK_WIZARD, C.DARK_KNIGHT, C.ELF, C.MAGIC_GLADIATOR, C.DARK_LORD, C.SUMMONER, C.RAGE_FIGHTER]) {
     const plan = skillCastPlan(skill, cls, {});
     if (plan) return plan.packet === 'area' ? 'area' : 'targeted';
   }
@@ -1042,12 +1178,13 @@ function targetedAnimationAction(skill: number, classIndex: number, ctx: SkillAn
       return A.SKILL_SWELL_OF_MP;
     case 269: // AT_SKILL_OCCUPY
       return A.ATTACK_RUSH;
-    case 262: // AT_SKILL_CHAIN_DRIVE (and _STR): the desktop sets PLAYER_SKILL_GIANTSWING from the fighter's own
-    case 558: // attack packet, which the server doesn't send; its SkillAnimation plays it here (its effects follow it).
-      return others(A.SKILL_GIANTSWING);
+    case S.KILLING_BLOW: // SetRageSkillAni: the thrust, for the hero too.
+    case S.KILLING_BLOW_STR:
+    case S.KILLING_BLOW_MASTERY:
+      return A.SKILL_THRUST;
     default:
       // Teleport, Teleport Ally, the elf summons' and Infinity Arrow's effects, the
-      // Rage Fighter's skills...: no action change here.
+      // Rage Fighter's other skills (their actions come with the cast or with RageAttack, C3 4A)...: no action change here.
       return null;
   }
 }

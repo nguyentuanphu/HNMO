@@ -14,11 +14,14 @@ import type { Character } from './characters.js';
 import type { OnlineWorld } from './online.js';
 import type { Inventory, Item } from './inventory.js';
 import {
-  attackRange, damageTexts, deathAction, hitPlaysShock, killDamageText, monsterAnimationReaction, monsterShockAction,
+  attackRange, CharacterClass, PlayerActions, damageTexts, deathAction, hitPlaysShock, killDamageText, monsterAnimationReaction, monsterShockAction,
   monsterAttackAction, newMonsterAttackState, playerAnimationReaction, isFemaleClass, playerAttackAction, playerShockAction, ServerAnimation,
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
-import { areaSkillRotation, isPartyMemberSkill, skillCastPlan, skillAnimationAction, skillRange, type SkillCastContext, type SkillCastPlan } from './skillCast.js';
+import {
+  areaSkillRotation, isBeastUppercut, isDarkSide, isKillingBlow, isPartyMemberSkill, isRageHalfwaySkill, rageSkillAction, RAGE_BUFFS,
+  skillCastPlan, skillAnimationAction, skillRange, SkillId, type SkillCastContext, type SkillCastPlan,
+} from './skillCast.js';
 import { itemDefinition } from './items.js';
 import { skillCooldowns, skillInfo } from './skills.js';
 
@@ -74,7 +77,17 @@ export interface CombatEvents {
   onSkillHit?: (caster: Character, skill: number, target: Character) => void;
   /** Chain Lightning jumped from the caster through these targets (ChainLightningHitInfo, ReceiveChainMagic). */
   onChainLightning?: (caster: Character, skill: number, targets: Character[]) => void;
+  /**
+   * Dark Side's target list came (RageAttackRangeResponse, C1 4B): the hero's dash goes through these ids (10000 marks
+   * an empty slot). Returns whether it names anyone; nobody: the hero sends the skill at itself.
+   */
+  onDarkSideTargets?: (skill: number, ids: number[]) => boolean;
+  /** The server showed a fighter's attack (RageAttack, C3 4A): Dark Side's dash starts its count then (AttackTime = 1). */
+  onRageAttack?: (caster: Character, skill: number, target: Character | null) => void;
 }
+
+/** The hits a Rage Fighter skill sends as its action plays (CMonkSystem::InitConsecutiveState / IsConsecutiveAtt). */
+interface RageHits { skill: number; target: Character; action: number; frames: readonly [number, number]; state: 0 | 1 | 2; effectDone: boolean }
 
 // The pets that change how the hero attacks (inventory slot 8): Horn of Fenrir, Dark Horse, Uniria, Dinorant.
 function mountOf(pet: Pick<Item, 'group' | 'number'> | null | undefined): Mount {
@@ -112,6 +125,8 @@ export class Combat {
   private pendingSkill: PendingSkill | null = null;
   /** The skill auto attack repeats (the desktop's Attacking = 2 after a cast). */
   private repeatSkill: PendingSkill | null = null;
+  /** The Rage Fighter's skill whose hits follow its action (Beast Uppercut, Chain Drive, Dragon Kick). */
+  private rageHits: RageHits | null = null;
   skills: SkillSource | null = null;
 
   constructor(
@@ -164,7 +179,7 @@ export class Combat {
     const skill = skillNumber ?? this.skills?.current() ?? null;
     if (skill === null || this.hero.dead) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    if (!plan || plan.packet === 'none') return false;
+    if (!plan || (plan.packet === 'none' && plan.special !== 'phoenixShot')) return false;
     if (target && target.dead) target = null;
     if (plan.needsTarget && !target) return false;
     this.pendingSkill = { skill, plan, target, cell: cell ?? (target ? { ...target.cell } : null) };
@@ -176,7 +191,7 @@ export class Combat {
   /** Whether the hero has a way to cast a skill now (a cast plan for its class and equipment). */
   castable(skill: number): boolean {
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    return plan !== null && plan.packet !== 'none';
+    return plan !== null && (plan.packet !== 'none' || plan.special === 'phoenixShot');
   }
 
   /** Whether a skill is about to be cast (walking into its range or waiting for the last swing). */
@@ -203,6 +218,7 @@ export class Combat {
   }
 
   update(): void {
+    if (this.rageHits) this.updateRageHits(this.rageHits);
     if (this.pendingSkill) { this.updateSkill(this.pendingSkill); return; }
     const target = this.target;
     if (!target) return;
@@ -241,7 +257,7 @@ export class Combat {
     const data = skillInfo(skill);
     const range = skillRange(skill, data?.distance ?? 0);
     const aim = target && target !== this.hero ? target.cell : pending.cell;
-    if (aim && range > 0 && target !== this.hero) {
+    if (aim && range > 0 && target !== this.hero && !plan.ignoresRange) {
       const distance = Math.hypot(aim.x - this.hero.cell.x, aim.y - this.hero.cell.y);
       if (distance > range) {
         if (!this.hero.isWalking) {
@@ -255,16 +271,36 @@ export class Combat {
     // CheckMana: mana and AG first (out of mana the desktop drinks a mana potion instead).
     if (this.skills && data && data.mana > this.skills.mana()) { this.skills.outOfMana?.(); this.pendingSkill = null; return; }
     if (this.skills && data && data.ability > this.skills.ability()) { this.pendingSkill = null; return; }
-    // CheckSkillDelay: not while the skill cools down; casting starts its delay.
-    if (data && !skillCooldowns.tryStart(skill, data.delay)) { this.pendingSkill = null; return; }
+    const rage = this.classIndex === CharacterClass.RAGE_FIGHTER;
+    // CheckSkillDelay: not while the skill cools down; casting starts its delay. AttackRagefighter leaves the check out
+    // (only its Plasma Storm calls it).
+    if (data && (!rage || skill === SkillId.PLASMA_STORM_FENRIR) && !skillCooldowns.tryStart(skill, data.delay)) { this.pendingSkill = null; return; }
+    if (rage && !plan.equipmentOk) { this.pendingSkill = null; return; } // UseSkillRagefighter's ring, mount and glove checks
     if (aim) this.hero.faceTo(aim);
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
-    if (plan.packet === 'targeted') {
+    if (plan.special === 'phoenixShot') {
+      // UseSkillRagefighter: the hero stops; nothing is sent and nothing plays.
+      this.pendingSkill = null;
+      this.repeatSkill = null;
+      return;
+    }
+    if (plan.special === 'rageAttack' && target && target !== this.hero) {
+      this.connection.send('ClientToServer', 'RageAttackRequest', { SkillId: skill, TargetId: target.id });
+      this.rageHits = { skill, target, action: plan.heroAction ?? -1, frames: plan.hitFrames ?? [3, 9999], state: 0, effectDone: false };
+      // Beast Uppercut's effects come when its stamp reaches key 2 (UseSkillRagePosition); the others' at once.
+      if (!isBeastUppercut(skill)) { this.rageHits.effectDone = true; this.events.onSkill?.(this.hero, skill, target, aim); }
+    } else if (plan.special === 'darkSide') {
+      const id = target && target !== this.hero ? target.id : 0;
+      this.connection.send('ClientToServer', 'RageAttackRangeRequest', { SkillId: skill, TargetId: id });
+      this.connection.send('ClientToServer', 'RageAttackRequest', { SkillId: skill, TargetId: id });
+      this.events.onSkill?.(this.hero, skill, target, aim);
+    } else if (plan.packet === 'targeted') {
       // A heal or buff at another player goes to that player (AttackElf / AttackWizard with a selected party member).
       const atMember = target && target !== this.hero && target.kind === 'player' && plan.friendly && isPartyMemberSkill(this.classIndex, skill);
       const id = atMember ? target.id : plan.targetSelf || !target || target === this.hero ? this.online.playerId : target.id;
       this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: skill, TargetId: id });
+      if (plan.instantMove && target && target !== this.hero) this.sendInstantMove(target, skill === SkillId.OCCUPY);
     } else if (plan.packet === 'area') {
       // AreaSkill: at the hero's own tile or the target's, with the selected character when the skill names one.
       const at = plan.areaAt === 'self' ? this.hero.cell : aim;
@@ -273,10 +309,52 @@ export class Combat {
         this.connection.send('ClientToServer', 'AreaSkill', { SkillId: skill, TargetX: at.x, TargetY: at.y, Rotation: areaSkillRotation(degrees, plan.rotationScale), ExtraTargetId: extra, AnimationCounter: 0 });
       }
     }
-    this.events.onSkill?.(this.hero, skill, target, aim);
+    if (plan.special !== 'rageAttack' && plan.special !== 'darkSide') this.events.onSkill?.(this.hero, skill, target, aim);
     this.pendingSkill = null;
     // Auto attack keeps casting at a monster for attack skills (Attacking = 2).
     this.repeatSkill = plan.keepAutoAttack && target && target !== this.hero && !plan.friendly ? pending : null;
+  }
+
+  /**
+   * SendInstantMoveRequest to the tile one cell before the target on the way to it, unless the target's tile is a
+   * wall (UseSkillRagefighter, CMonkSystem::SendAttackPacket); Occupy looks one tile further along the facing.
+   * Returns false where the target's tile is a wall (the hit is then not sent either).
+   */
+  private sendInstantMove(target: Character, occupy = false): boolean {
+    const from = this.hero.position, to = target.position;
+    let tx = Math.trunc(to.x / TERRAIN_SCALE), ty = Math.trunc(to.y / TERRAIN_SCALE);
+    if (occupy) {
+      const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
+      const [dx, dy] = ([[0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1], [1, 0], [1, 1]] as const)[Math.abs(Math.trunc(degrees / 45)) % 8];
+      tx += dx; ty += dy;
+    }
+    const flags = this.online.world.flags[(ty & 0xff) * TERRAIN_SIZE + (tx & 0xff)] ?? 0;
+    if ((flags & TerrainFlag.NOMOVE) !== 0 || (flags & TerrainFlag.NOGROUND) !== 0) return false;
+    const step = new THREE.Vector2().subVectors(to, from).normalize().multiplyScalar(TERRAIN_SCALE);
+    const at = new THREE.Vector2().subVectors(to, step);
+    this.connection.send('ClientToServer', 'InstantMoveRequest', { TargetX: Math.trunc(at.x / TERRAIN_SCALE) & 0xff, TargetY: Math.trunc(at.y / TERRAIN_SCALE) & 0xff });
+    return true;
+  }
+
+  // UseSkillRagePosition: while the skill's action plays, a TargetedSkill at the target when it reaches each hit key
+  // (CMonkSystem::IsConsecutiveAtt / SendAttackPacket); Beast Uppercut's effects at its stamp's key 2.
+  private updateRageHits(hits: RageHits): void {
+    const hero = this.hero;
+    if (hero.dead || hero.oneShot?.action !== hits.action) { this.rageHits = null; return; }
+    const frame = hero.time;
+    if (!hits.effectDone && isBeastUppercut(hits.skill) && frame >= 2) {
+      hits.effectDone = true;
+      this.events.onSkill?.(hero, hits.skill, hits.target, { ...hits.target.cell });
+    }
+    const [first, second] = hits.frames;
+    let send = false;
+    if (frame >= first && frame < second && hits.state !== 1) { hits.state = 1; send = true; }
+    else if (frame >= second && hits.state !== 2) { hits.state = 2; send = true; }
+    if (!send) return;
+    const target = hits.target;
+    if (target.dead || !this.online.characters.has(target.id)) return;
+    if (!(hits.state === 2 && hits.action === PlayerActions.SKILL_GIANTSWING)) hero.faceTo(target.cell);
+    if (this.sendInstantMove(target)) this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: hits.skill, TargetId: target.id });
   }
 
   private characterById(id: number): Character | null {
@@ -296,6 +374,8 @@ export class Combat {
       else if (bytes[0] === 0xc1 && code === 0xf3 && bytes[3] === 0x04) this.respawn(read<RespawnPacket>('ServerToClient', 'RespawnAfterDeathExtended', bytes));
       else if (bytes[0] === 0xc3 && code === 0x19 && bytes.length >= 9) this.skillAnimation(read<SkillAnimationPacket>('ServerToClient', 'SkillAnimation', bytes));
       else if (bytes[0] === 0xc3 && code === 0x1e && bytes.length >= 10) this.areaSkillAnimation(read<AreaSkillAnimationPacket>('ServerToClient', 'AreaSkillAnimation', bytes));
+      else if (code === 0x4a && bytes.length >= 9) this.rageAttack(bytes);
+      else if (bytes[0] === 0xc1 && code === 0x4b && bytes.length >= 16) this.darkSideTargets(bytes);
       else if (bytes[0] === 0xc1 && code === 0xbf && bytes[3] === 0x0a && bytes.length >= 10) this.chainLightning(read<ChainLightningPacket>('ServerToClient', 'ChainLightningHitInfo', bytes));
     } catch (error) {
       console.warn('Combat packet not handled:', error);
@@ -396,10 +476,26 @@ export class Combat {
       this.events.onSkillHit?.(caster, packet.SkillId, target);
       return;
     }
-    if (caster !== this.hero) {
+    if (caster === this.hero) {
+      // ReceiveMagic for the hero: the party buffs tell the others which buff action it plays (SendRequestAction with
+      // AT_RAGEBUFF_1 / _2); Occupy's rush and Killing Blow's thrust play here (SetAction, kept when already playing).
+      if (RAGE_BUFFS.includes(packet.SkillId)) {
+        const degrees = ((caster.angle * 180) / Math.PI + 360) % 360;
+        const rotation = Math.trunc((degrees + 22.5) / 360 * 8 + 1) % 8;
+        const buff1 = caster.oneShot?.action === PlayerActions.SKILL_ATT_UP_OURFORCES;
+        this.connection.send('ClientToServer', 'AnimationRequest', { Rotation: rotation, AnimationNumber: buff1 ? ServerAnimation.RAGEBUFF_1 : ServerAnimation.RAGEBUFF_2 });
+      } else if (packet.SkillId === SkillId.OCCUPY || isKillingBlow(packet.SkillId)) {
+        const action = packet.SkillId === SkillId.OCCUPY ? PlayerActions.ATTACK_RUSH : PlayerActions.SKILL_THRUST;
+        if (caster.oneShot?.action !== action) caster.playOnce(action);
+      }
+      return;
+    }
+    {
       if (target && target !== caster) caster.faceTo(target.cell);
       const action = caster.kind === 'player' ? skillAnimationAction(packet.SkillId, caster.classIndex ?? 0, { own: false, via: 'targeted' }) : null;
       if (action !== null) caster.playOnce(action);
+      // Others' Beast Uppercut and Dark Side make their effects with RageAttack (C3 4A), not here.
+      if (caster.kind === 'player' && (isBeastUppercut(packet.SkillId) || isDarkSide(packet.SkillId))) return;
       this.events.onSkill?.(caster, packet.SkillId, target, target ? { ...target.cell } : null);
     }
   }
@@ -412,6 +508,38 @@ export class Combat {
     const action = caster.kind === 'player' ? skillAnimationAction(packet.SkillId, caster.classIndex ?? 0, { own: false, via: 'area' }) : null;
     if (action !== null) caster.playOnce(action);
     this.events.onSkill?.(caster, packet.SkillId, null, cell);
+  }
+
+  // RageAttack (C3 4A, ReceiveStraightAttack): skill, source and target (the high bit: success), big-endian. Beast
+  // Uppercut, Chain Drive and Dragon Kick play their action half way (others' Beast Uppercut makes its effects here);
+  // Dark Side readies (others' make its effects here).
+  private rageAttack(bytes: Uint8Array): void {
+    const skill = (bytes[3] << 8) | bytes[4];
+    const caster = this.characterById(((bytes[5] << 8) | bytes[6]) & ID_MASK);
+    const target = this.characterById(((bytes[7] << 8) | bytes[8]) & ID_MASK);
+    if (!caster || caster.dead || (!target && !isDarkSide(skill))) return;
+    const other = caster !== this.hero;
+    if (other && target && target.group.visible) caster.faceTo(target.cell);
+    const action = rageSkillAction(skill);
+    if (isRageHalfwaySkill(skill)) {
+      if (other && action !== null && caster.oneShot?.action !== action) caster.playOnce(action);
+      if (other && isBeastUppercut(skill)) this.events.onSkill?.(caster, skill, target, target ? { ...target.cell } : null);
+    } else if (isDarkSide(skill)) {
+      if (other) this.events.onSkill?.(caster, skill, target, target ? { ...target.cell } : null);
+      if (action !== null && caster.oneShot?.action !== action) caster.playOnce(action);
+    }
+    this.events.onRageAttack?.(caster, skill, target);
+  }
+
+  // RageAttackRangeResponse (C1 4B, ReceiveDarkside): the skill and five target ids, little-endian, 10000 for none.
+  private darkSideTargets(bytes: Uint8Array): void {
+    const skill = bytes[4] | (bytes[5] << 8);
+    if (!isDarkSide(skill)) return;
+    const ids: number[] = [];
+    for (let i = 0; i < 5; i++) ids.push(bytes[6 + i * 2] | (bytes[7 + i * 2] << 8));
+    const named = this.events.onDarkSideTargets?.(skill, ids) ?? ids.some((id) => id !== 10000);
+    // SetDarksideTargetIndex: nobody named: the skill at the hero.
+    if (!named) this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: skill, TargetId: this.online.playerId });
   }
 
   // ChainLightningHitInfo (ReceiveChainMagic): the links of a Chain Lightning, for everyone's caster.
@@ -448,6 +576,7 @@ export class Combat {
   }
 
   dispose(): void {
+    this.rageHits = null;
     this.stop();
   }
 }

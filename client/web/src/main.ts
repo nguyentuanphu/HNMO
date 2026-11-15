@@ -73,6 +73,8 @@ import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, init
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
 import { keepNextGradeSparkles } from './render/effects/nextGrade.js';
+import { DarkSideDash } from './render/effects/darkSideDash.js';
+import { DarkSideGhosts } from './game/darkSideGhosts.js';
 import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playSkillHit, playBuffEffect, playChainLightning, debuffTint, Buff } from './render/effects/index.js';
 import { DarkRaven, helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
 import { Combat } from './game/combat.js';
@@ -153,6 +155,8 @@ export interface GameState {
   hotkeys?: ItemHotkeys;
   skills?: SkillList;
   combat?: Combat;
+  /** Dark Side's dash state and how many of its copies are drawn (for tests). */
+  darkSide?: () => { dash: DarkSideDash | null; ghosts: number };
   overlay?: CombatOverlay;
   ground?: GroundItems;
   projectiles?: ProjectileLayer;
@@ -955,6 +959,29 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     for (const buff of now) if (!before.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), true, player);
     for (const buff of before) if (!now.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), false, player);
   });
+  // Dark Side's dash (the desktop keeps one, the hero's): its state ticks with the effects, its copies are drawn here.
+  const darkSideGhosts = new DarkSideGhosts(root);
+  let darkSide: DarkSideDash | null = null;
+  let darkSideTicking = false;
+  const heroDarkSide = (): DarkSideDash => {
+    const owner = ownerFromCharacter(online.hero);
+    if (!darkSide || darkSide.caster !== owner) darkSide = new DarkSideDash(effects, owner);
+    if (!darkSideTicking) {
+      darkSideTicking = true;
+      effects.schedule(() => {
+        const dash = heroDarkSide();
+        dash.tick();
+        if (dash.drawing) online.hero.angle = 45 * (Math.PI / 180); // readying turns the fighter (UpdateDrawnCharacterEffects)
+        darkSideGhosts.show(online.hero, dash.placements);
+        if (dash.drawing || dash.attackTime > 0) return true;
+        darkSideGhosts.hide();
+        darkSideTicking = false;
+        return false;
+      });
+    }
+    return darkSide;
+  };
+  state.darkSide = () => ({ dash: darkSide, ghosts: darkSideGhosts.shown });
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => {
       overlay.addNumbers(() => Combat.anchorOf(target, 0), texts);
@@ -1007,6 +1034,12 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         ? { right: inventory.items.get(0), left: inventory.items.get(1) }
         : { right: caster.equipment?.rightHand ?? undefined, left: caster.equipment?.leftHand ?? undefined };
       const kinds = arrowKindsForWeapons(hands.right ? { group: hands.right.group, number: hands.right.number } : null, hands.left ? { group: hands.left.group, number: hands.left.number } : null);
+      if (caster === online.hero && (castSkill === 263 || castSkill === 559)) {
+        // UseSkillRagefighter: m_sTargetIndex is the selected target (or none); RageCreateEffect starts the afterimages anew.
+        const dash = heroDarkSide();
+        dash.mainTarget = target ? ownerFromCharacter(target) : null;
+        dash.clearDummies();
+      }
       if (isNewSkill(skill)) { playNewSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null); return; }
       playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
         shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
@@ -1017,6 +1050,20 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         // GetFenrirType: the horn's look (helperVariant 1 black, 2 blue, 3 gold; else red).
         fenrirColor: [1, 0, 2, 3][caster.equipment?.pet?.variant ?? 0] ?? 1,
       });
+    },
+    onDarkSideTargets: (_skill, ids) => {
+      const named = heroDarkSide().setTargets(ids, (id) => {
+        const found = id === online.playerId ? online.hero : online.characters.get(id & 0x7fff);
+        return found ? ownerFromCharacter(found) : null;
+      });
+      if (named) sounds.play('SOUND_RAGESKILL_DARKSIDE_ATTACK');
+      return named;
+    },
+    onRageAttack: (caster, castSkill, target) => {
+      if (caster !== online.hero || (castSkill !== 263 && castSkill !== 559)) return;
+      const dash = heroDarkSide();
+      dash.attackTime = 1; // ReceiveStraightAttack: sc->AttackTime = 1
+      dash.mainTarget = target ? ownerFromCharacter(target) : null;
     },
     onSkillHit: (caster, castSkill, target) => {
       playSkillHit(effects, masterSkillToBaseSkill(castSkill), ownerFromCharacter(caster), ownerFromCharacter(target));

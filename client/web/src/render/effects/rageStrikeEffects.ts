@@ -32,6 +32,8 @@ const WHITE = new THREE.Vector3(1, 1, 1);
 
 /** PLAYER_SKILL_GIANTSWING (Chain Drive), PLAYER_SKILL_DRAGONLORE (Dragon Roar). */
 export const StrikeAction = { GIANTSWING: 249, DRAGONLORE: 253 } as const;
+/** PLAYER_SKILL_DARKSIDE_READY: Dark Side's dashing shock wave takes twice its speed. */
+const DARKSIDE_READY_ACTION = 250;
 /** The keys per tick the timings take when the caster's action isn't known (the actions' PlaySpeed). */
 const FALLBACK_SPEED = 0.4;
 
@@ -141,7 +143,8 @@ function shockWave1Brightness(subType: number): number {
 }
 
 // MODEL_SHOCKWAVE01: SubType 0 (Chain Drive's first blow) drifts back and rises as it widens; 1 (Dragon Roar) and 2 (the
-// party buffs' blade) swell up and away; 3 to 5 belong to Dark Side's dash (not drawn on the web: the server sends no dash).
+// party buffs' blade) swell up and away; 3 (the dashing copy) and 4 (an afterimage) are Dark Side's dash: they rush back
+// from where they were made along the dash, 3 becoming 5 (fading) on its first tick, 4 once it has brightened past 0.6.
 EXTRA_EFFECTS.shockWave1 = {
   model: ['Effect', 'shockwave01.bmd'],
   prewarmBlendMesh: -2,
@@ -149,9 +152,25 @@ EXTRA_EFFECTS.shockWave1 = {
   skins: ['Damage2.jpg'],
   paint: firstMeshOnly,
   create: (o, system) => {
-    if (!o.owner || o.subType > 2) return false;
+    if (!o.owner || o.subType > 4) return false;
     o.scale = o.callScale;
-    if (o.subType === 1) {
+    if (o.subType === 3 || o.subType === 4) {
+      // Back along the dash: from the owner's StartPosition (the fighter's own place) to where it is made.
+      const start = o.owner.startPosition ?? o.owner.position;
+      const here = new THREE.Vector3(o.position.x, o.position.y, system.heightAt(o.position.x, o.position.y));
+      const from = new THREE.Vector3(start.x, start.y, system.heightAt(start.x, start.y));
+      const direction = here.sub(from).normalize();
+      o.startPosition.copy(direction).multiplyScalar(30);
+      if (o.subType === 3) {
+        o.velocity = speedOf(o.owner, DARKSIDE_READY_ACTION) * 2;
+        o.lifeTime = 5 / o.velocity;
+        o.position.addScaledVector(o.startPosition, 5);
+      } else {
+        o.velocity = 0.6;
+        o.lifeTime = 12;
+        o.position.addScaledVector(direction, 150);
+      }
+    } else if (o.subType === 1) {
       o.velocity = speedOf(o.owner, StrikeAction.DRAGONLORE);
       o.lifeTime = 5 / o.velocity;
     } else if (o.subType === 2) {
@@ -172,6 +191,13 @@ EXTRA_EFFECTS.shockWave1 = {
       o.position.z *= 1.19;
       o.light.multiplyScalar(0.45);
       if (o.light.x < 0.001) o.light.set(0, 0, 0);
+    } else if (o.subType >= 3) {
+      o.scale *= 1.15;
+      o.startPosition.multiplyScalar(o.subType === 3 ? 0.99 : 1.04);
+      o.position.sub(o.startPosition);
+      o.light.multiplyScalar(o.subType === 3 ? 0.7 : o.subType === 4 ? 1.5 : 0.5);
+      if (o.subType !== 5 && o.light.x > 0.6) o.subType = 5;
+      o.position.z = o.subType === 3 ? 180 + o.scale * 80 : 160 + o.scale * 10;
     } else {
       o.scale += 0.2;
       o.startPosition.multiplyScalar(0.99);
@@ -318,6 +344,23 @@ EXTRA_PARTICLES.damage1 = {
   move: (o) => {
     o.scale *= 1.2;
     o.light.multiplyScalar(0.8 * 2);
+  },
+};
+
+// BITMAP_DAMAGE2 as a particle (Dark Side's strikes): 15 ticks, 80-99 over where it is made, swelling 1.2 times a
+// tick as its light falls to 0.55; drawn at 1.4 times its light (kept in the light from the start).
+EXTRA_PARTICLES.damage2 = {
+  texture: 'damage2',
+  init: (o, scale) => {
+    o.lifeTime = 15;
+    o.scale = scale * 0.9 + (randInt(2) + 2) * 0.1;
+    o.position.z += 80 + randInt(20);
+    o.light.multiplyScalar(1.4);
+    return true;
+  },
+  move: (o) => {
+    o.scale *= 1.2;
+    o.light.multiplyScalar(0.55);
   },
 };
 
