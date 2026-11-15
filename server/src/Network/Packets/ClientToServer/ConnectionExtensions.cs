@@ -5693,6 +5693,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMissionsRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens HNMO's missions window.
+    /// Causes reaction on server side: The server sends the HnmoMissionsState message, and from then on sends it again when something changes, e.g. a mission is finished.
+    /// </remarks>
+    public static async ValueTask SendHnmoMissionsRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMissionsRequestRef.Length;
+            var packet = new HnmoMissionsRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMissionsAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">The mission id for ClaimMission; the invite code or a character name of the inviting account for EnterInvite; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's missions window: claim the reward of a mission, the streak bonus or the login calendar day, or enter who invited the account.
+    /// Causes reaction on server side: The server does it and sends the HnmoMissionsState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoMissionsActionAsync(this IConnection? connection, HnmoMissionsAction.HnmoMissionsActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMissionsActionRef.GetRequiredSize(argument);
+            var packet = new HnmoMissionsActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

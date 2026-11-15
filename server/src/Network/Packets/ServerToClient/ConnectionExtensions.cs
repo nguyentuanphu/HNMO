@@ -7152,6 +7152,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMissionsState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the daily and weekly missions with their progress and rewards, the streak, the login calendar, the online time coins, the earned coins of the day and the invite code, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's missions (HnmoMissionsRequest) or did an action there, and when something changed for a client which requested them before (a mission was finished, earned coins were given).
+    /// Causes reaction on client side: The missions window shows the state; a notice in the chat tells about the event in it (e.g. a finished mission or the result of a claim).
+    /// </remarks>
+    public static async ValueTask SendHnmoMissionsStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMissionsStateRef.GetRequiredSize(json);
+            var packet = new HnmoMissionsStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

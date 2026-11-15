@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.Items;
 
 using System.Collections.Concurrent;
 using HNMO.DataModel.Configuration.ItemCrafting;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views.NPC;
 
 /// <summary>
@@ -42,6 +43,11 @@ public class ItemCraftAction
         catch
         {
             result = (CraftingResult.LackingMixItems, null);
+        }
+
+        if (player.GameContext.PlugInManager.GetPlugInPoint<IItemCraftedPlugIn>() is { } craftedPlugIns)
+        {
+            await craftedPlugIns.ItemCraftedAsync(player, result.Item1).ConfigureAwait(false);
         }
 
         var itemList = player.TemporaryStorage?.Items.ToList() ?? new List<Item>();

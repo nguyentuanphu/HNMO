@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Configuration.Quests;
 using HNMO.GameLogic.Offline;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.Interfaces;
@@ -241,6 +242,16 @@ public class PickupItemAction
 
     private static async ValueTask<bool> TryPickupMoneyAsync(Player player, DroppedMoney droppedMoney)
     {
-        return CanPickup(player, droppedMoney) && await droppedMoney.TryPickUpByAsync(player).ConfigureAwait(false);
+        if (!CanPickup(player, droppedMoney) || !await droppedMoney.TryPickUpByAsync(player).ConfigureAwait(false))
+        {
+            return false;
+        }
+
+        if (player.GameContext.PlugInManager.GetPlugInPoint<IMoneyPickedUpPlugIn>() is { } plugIns)
+        {
+            await plugIns.MoneyPickedUpAsync(player, droppedMoney.Amount).ConfigureAwait(false);
+        }
+
+        return true;
     }
 }
