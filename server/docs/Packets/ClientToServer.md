@@ -199,6 +199,8 @@
   * [C1 F5 13 - HnmoGuildsAction (by client)](C1-F5-13-HnmoGuildsAction_by-client.md)
   * [C1 F5 14 - HnmoCommunityRequest (by client)](C1-F5-14-HnmoCommunityRequest_by-client.md)
   * [C1 F5 16 - HnmoCommunityAction (by client)](C1-F5-16-HnmoCommunityAction_by-client.md)
+  * [C1 F5 17 - HnmoTopRacesRequest (by client)](C1-F5-17-HnmoTopRacesRequest_by-client.md)
+  * [C1 F5 19 - HnmoTopRacesAction (by client)](C1-F5-19-HnmoTopRacesAction_by-client.md)
   * [C1 F6 0A - QuestSelectRequest (by client)](C1-F6-0A-QuestSelectRequest_by-client.md)
   * [C1 F6 0B - QuestProceedRequest (by client)](C1-F6-0B-QuestProceedRequest_by-client.md)
   * [C1 F6 0D - QuestCompletionRequest (by client)](C1-F6-0D-QuestCompletionRequest_by-client.md)

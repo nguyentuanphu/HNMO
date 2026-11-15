@@ -5968,6 +5968,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTopRacesRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens the top races window.
+    /// Causes reaction on server side: The server sends the HnmoTopRacesState message, and from then on sends it again when something changes, e.g. a race started or ended or a prize was given.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopRacesRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopRacesRequestRef.Length;
+            var packet = new HnmoTopRacesRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTopRacesAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's top races window, e.g. to take the prizes which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoTopRacesState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopRacesActionAsync(this IConnection? connection, HnmoTopRacesAction.HnmoTopRacesActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopRacesActionRef.GetRequiredSize(argument);
+            var packet = new HnmoTopRacesActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

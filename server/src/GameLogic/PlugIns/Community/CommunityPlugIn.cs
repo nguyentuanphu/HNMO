@@ -260,6 +260,43 @@ public class CommunityPlugIn : IPeriodicTaskPlugIn, IMonsterItemDroppedPlugIn, I
         this.PostAsync(gameContext, CommunityPostKind.GuildLevelUp, new Dictionary<string, string> { ["guild"] = guildName, ["level"] = level.ToString(CultureInfo.InvariantCulture) });
 
     /// <summary>
+    /// Posts a top race's start (called by the top races).
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <param name="titleEn">The English title.</param>
+    /// <param name="titleVi">The Vietnamese title.</param>
+    /// <param name="endEn">The end, in English.</param>
+    /// <param name="endVi">The end, in Vietnamese.</param>
+    /// <returns>The task.</returns>
+    public ValueTask TopRaceStartedAsync(IGameContext gameContext, string titleEn, string titleVi, string endEn, string endVi) =>
+        this.PostAsync(
+            gameContext,
+            CommunityPostKind.TopRaceStarted,
+            new Dictionary<string, string> { ["race"] = titleEn, ["end"] = endEn },
+            new Dictionary<string, string> { ["race"] = titleVi, ["end"] = endVi });
+
+    /// <summary>
+    /// Posts a top race winner (called by the top races, for the top ranks of each table).
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <param name="titleEn">The English title.</param>
+    /// <param name="titleVi">The Vietnamese title.</param>
+    /// <param name="name">The winner's name.</param>
+    /// <param name="rank">The rank.</param>
+    /// <param name="valueEn">The value, in English.</param>
+    /// <param name="valueVi">The value, in Vietnamese.</param>
+    /// <returns>The task.</returns>
+    public ValueTask TopRaceWinnerAsync(IGameContext gameContext, string titleEn, string titleVi, string name, int rank, string valueEn, string valueVi)
+    {
+        var r = rank.ToString(CultureInfo.InvariantCulture);
+        return this.PostAsync(
+            gameContext,
+            CommunityPostKind.TopRaceWinner,
+            new Dictionary<string, string> { ["race"] = titleEn, ["player"] = name, ["rank"] = r, ["value"] = valueEn },
+            new Dictionary<string, string> { ["race"] = titleVi, ["player"] = name, ["rank"] = r, ["value"] = valueVi });
+    }
+
+    /// <summary>
     /// Posts a weekly guild ladder winner (called by the guilds, for the top ranks).
     /// </summary>
     /// <param name="gameContext">The game context.</param>

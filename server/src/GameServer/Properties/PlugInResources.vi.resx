@@ -2760,4 +2760,22 @@
   <data name="HnmoCommunityActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Xử lý các nút của cửa sổ cộng đồng HNMO: xu Discord và Zalo, mã sự kiện và phần thưởng đang chờ.</value>
   </data>
+  <data name="HnmoTopRacesViewPlugIn_Name" xml:space="preserve">
+    <value>Hiển thị đua top HNMO</value>
+  </data>
+  <data name="HnmoTopRacesViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái đua top HNMO tới trò chơi trên web.</value>
+  </data>
+  <data name="HnmoTopRacesRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>Yêu cầu đua top HNMO</value>
+  </data>
+  <data name="HnmoTopRacesRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý yêu cầu trạng thái đua top HNMO.</value>
+  </data>
+  <data name="HnmoTopRacesActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>Thao tác đua top HNMO</value>
+  </data>
+  <data name="HnmoTopRacesActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý các nút của cửa sổ đua top HNMO (nhận phần thưởng đang chờ).</value>
+  </data>
 </root>

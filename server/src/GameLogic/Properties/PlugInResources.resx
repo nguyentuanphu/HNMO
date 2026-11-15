@@ -2149,4 +2149,10 @@
   <data name="CommunityPlugIn_Description" xml:space="preserve">
     <value>One-time coins for linking Discord and joining the Zalo group, community events with codes or winners, and automatic posts (rare drops, world bosses, guilds, castle siege) to Discord and the website. Set it in the admin panel's Community page.</value>
   </data>
+  <data name="TopRacesPlugIn_Name" xml:space="preserve">
+    <value>HNMO: top races</value>
+  </data>
+  <data name="TopRacesPlugIn_Description" xml:space="preserve">
+    <value>Top races by day, week, month or between two dates (resets, levels, boss-hunt points, PK kills, event wins, guild points, monsters, time in the game; all classes, one class or per class), with prizes paid once at the end. Set it in the admin panel's Top races page.</value>
+  </data>
 </root>

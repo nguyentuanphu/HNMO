@@ -4070,4 +4070,10 @@
   <data name="CommunitySaved" xml:space="preserve">
     <value>The community settings were saved.</value>
   </data>
+  <data name="CommunityKindTopRaceStarted" xml:space="preserve">
+    <value>Top race started</value>
+  </data>
+  <data name="CommunityKindTopRaceWinner" xml:space="preserve">
+    <value>Top race winners</value>
+  </data>
 </root>

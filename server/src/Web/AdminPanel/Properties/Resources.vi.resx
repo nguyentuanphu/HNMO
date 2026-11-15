@@ -4101,4 +4101,10 @@
   <data name="CommunitySaved" xml:space="preserve">
     <value>Đã lưu cài đặt cộng đồng.</value>
   </data>
+  <data name="CommunityKindTopRaceStarted" xml:space="preserve">
+    <value>Đua top bắt đầu</value>
+  </data>
+  <data name="CommunityKindTopRaceWinner" xml:space="preserve">
+    <value>Người thắng đua top</value>
+  </data>
 </root>

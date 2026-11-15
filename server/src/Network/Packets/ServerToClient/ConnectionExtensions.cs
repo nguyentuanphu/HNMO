@@ -7292,6 +7292,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTopRacesState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the running and coming races with their prizes, the player's rank and value, the tables, the past winners, the waiting prizes, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's top races (HnmoTopRacesRequest) or did an action there, and when something changed for a client which requested them before (a race started or ended, a prize was given).
+    /// Causes reaction on client side: The top races window shows the running races with the player's rank and the top 10, the prizes, the time left, the past winners and the waiting prizes; a notice in the chat tells about the event in it.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopRacesStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopRacesStateRef.GetRequiredSize(json);
+            var packet = new HnmoTopRacesStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

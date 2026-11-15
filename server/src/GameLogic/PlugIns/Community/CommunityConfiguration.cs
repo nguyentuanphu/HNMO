@@ -27,6 +27,12 @@ public enum CommunityPostKind
 
     /// <summary>A guild won the castle siege.</summary>
     CastleSiegeWinner,
+
+    /// <summary>A top race started.</summary>
+    TopRaceStarted,
+
+    /// <summary>A top race's winners.</summary>
+    TopRaceWinner,
 }
 
 /// <summary>
@@ -208,6 +214,24 @@ public class CommunityConfiguration
         TextVi = "Bang hội {guild} đã chiến thắng công thành chiến!",
     };
 
+    /// <summary>Gets or sets the posts of a top race's start.</summary>
+    public CommunityPostSetting TopRaceStarted { get; set; } = new()
+    {
+        TextEn = "The top race \"{race}\" has started! It ends {end} (Sydney time).",
+        TextVi = "Đua top \"{race}\" đã bắt đầu! Kết thúc lúc {end} (giờ Sydney).",
+    };
+
+    /// <summary>Gets or sets the posts of a top race's winners.</summary>
+    public CommunityPostSetting TopRaceWinner { get; set; } = new()
+    {
+        TextEn = "Top race \"{race}\": {player} is rank {rank} with {value}!",
+        TextVi = "Đua top \"{race}\": {player} đạt hạng {rank} với {value}!",
+    };
+
+    /// <summary>Gets or sets how many ranks of each top race table are posted (from the top).</summary>
+    [Range(1, 10)]
+    public int TopRaceRanksPosted { get; set; } = 3;
+
     /// <summary>Gets or sets how many ladder ranks are posted (from the top).</summary>
     [Range(1, 10)]
     public int LadderRanksPosted { get; set; } = 3;
@@ -229,6 +253,8 @@ public class CommunityConfiguration
         CommunityPostKind.WorldBossKill => this.WorldBossKill,
         CommunityPostKind.GuildLevelUp => this.GuildLevelUp,
         CommunityPostKind.GuildLadderWinner => this.GuildLadderWinner,
+        CommunityPostKind.TopRaceStarted => this.TopRaceStarted,
+        CommunityPostKind.TopRaceWinner => this.TopRaceWinner,
         _ => this.CastleSiegeWinner,
     };
 

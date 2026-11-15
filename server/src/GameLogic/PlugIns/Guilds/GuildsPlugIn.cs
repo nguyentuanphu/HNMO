@@ -171,6 +171,7 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
         }
 
         var result = engine.AddXp(key.GuildId, key.Name, characterId, player.SelectedCharacter!.Name, source, xp, DateTime.UtcNow);
+        HNMO.GameLogic.PlugIns.TopRaces.TopRacesPlugIn.Get(player.GameContext)?.GuildPointsEarned(key.GuildId, key.Name, result.Granted);
         if (result.LeveledUp)
         {
             await this.LevelUpAsync(player.GameContext, key, result.NewLevel).ConfigureAwait(false);
@@ -213,6 +214,7 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
                 names.TryGetValue(membership.GuildId, out var guildName);
                 var key = new GuildKey(membership.GuildId, guildName ?? string.Empty);
                 var result = engine.AddXp(key.GuildId, guildName, membership.CharacterId.ToString(), line.Name, GuildXpSource.WorldBossKill, xp, DateTime.UtcNow);
+                HNMO.GameLogic.PlugIns.TopRaces.TopRacesPlugIn.Get(gameContext)?.GuildPointsEarned(key.GuildId, guildName, result.Granted);
                 if (result.LeveledUp)
                 {
                     await this.LevelUpAsync(gameContext, key, result.NewLevel).ConfigureAwait(false);
@@ -332,6 +334,7 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
 
         var key = new GuildKey(guildId, name ?? string.Empty);
         var result = this.GetEngine().RecordCastleSiege(guildId, name, DateTime.UtcNow);
+        HNMO.GameLogic.PlugIns.TopRaces.TopRacesPlugIn.Get(gameContext)?.GuildPointsEarned(guildId, name, result.Granted);
         this.Save();
         await this.ForEachMemberAsync(key, player => this.SendStateAsync(player, false, new GuildStateEvent("siege")).AsTask()).ConfigureAwait(false);
         if (result.LeveledUp)

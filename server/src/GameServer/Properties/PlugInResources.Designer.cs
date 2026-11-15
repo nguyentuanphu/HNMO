@@ -8268,5 +8268,59 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoCommunityActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO top races view.
+        /// </summary>
+        public static string HnmoTopRacesViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoTopRacesViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends HNMO's top races state to the web game..
+        /// </summary>
+        public static string HnmoTopRacesViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoTopRacesViewPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO top races request.
+        /// </summary>
+        public static string HnmoTopRacesRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoTopRacesRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the request of HNMO's top races state..
+        /// </summary>
+        public static string HnmoTopRacesRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoTopRacesRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO top races action.
+        /// </summary>
+        public static string HnmoTopRacesActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoTopRacesActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the buttons of HNMO's top races window (take the waiting prizes)..
+        /// </summary>
+        public static string HnmoTopRacesActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoTopRacesActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

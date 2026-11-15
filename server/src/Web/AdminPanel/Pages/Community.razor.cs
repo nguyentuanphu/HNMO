@@ -160,6 +160,8 @@ public partial class Community : ComponentBase
         CommunityPostKind.WorldBossKill => Resources.CommunityKindWorldBoss,
         CommunityPostKind.GuildLevelUp => Resources.CommunityKindGuildLevel,
         CommunityPostKind.GuildLadderWinner => Resources.CommunityKindGuildLadder,
+        CommunityPostKind.TopRaceStarted => Resources.CommunityKindTopRaceStarted,
+        CommunityPostKind.TopRaceWinner => Resources.CommunityKindTopRaceWinner,
         _ => Resources.CommunityKindCastleSiege,
     };
 

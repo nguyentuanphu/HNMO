@@ -634,6 +634,18 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             }
         }
 
+        if (gameContext is not null && HNMO.GameLogic.PlugIns.TopRaces.TopRacesPlugIn.Get(gameContext) is { } topRaces)
+        {
+            try
+            {
+                await topRaces.WorldBossKilledAsync(gameContext, record).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                gameContext.LoggerFactory.CreateLogger<WorldBossesPlugIn>().LogWarning(ex, "World bosses: the top races' boss-hunt points of the kill weren't counted.");
+            }
+        }
+
         if (gameContext is not null && HNMO.GameLogic.PlugIns.Guilds.GuildsPlugIn.Get(gameContext) is { } guilds)
         {
             try

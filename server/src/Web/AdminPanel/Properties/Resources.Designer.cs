@@ -11964,5 +11964,23 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("CommunitySaved", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Top race started.
+        /// </summary>
+        public static string CommunityKindTopRaceStarted {
+            get {
+                return ResourceManager.GetString("CommunityKindTopRaceStarted", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Top race winners.
+        /// </summary>
+        public static string CommunityKindTopRaceWinner {
+            get {
+                return ResourceManager.GetString("CommunityKindTopRaceWinner", resourceCulture);
+            }
+        }
     }
 }

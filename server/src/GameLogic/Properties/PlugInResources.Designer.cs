@@ -5856,5 +5856,23 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("CommunityPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: top races.
+        /// </summary>
+        public static string TopRacesPlugIn_Name {
+            get {
+                return ResourceManager.GetString("TopRacesPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Top races by day, week, month or between two dates (resets, levels, boss-hunt points, PK kills, event wins, guild points, monsters, time in the game; all classes, one class or per class), with prizes paid once at the end. Set it in the admin panel's Top races page..
+        /// </summary>
+        public static string TopRacesPlugIn_Description {
+            get {
+                return ResourceManager.GetString("TopRacesPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

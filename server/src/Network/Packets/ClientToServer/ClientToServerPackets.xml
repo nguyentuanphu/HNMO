@@ -4645,6 +4645,55 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>17</SubCode>
+      <Name>HnmoTopRacesRequest</Name>
+      <Caption>Request HNMO top races</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world, or the player opens the top races window.</SentWhen>
+      <CausedReaction>The server sends the HnmoTopRacesState message, and from then on sends it again when something changes, e.g. a race started or ended or a prize was given.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>19</SubCode>
+      <Name>HnmoTopRacesAction</Name>
+      <Caption>HNMO top races action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's top races window, e.g. to take the prizes which waited for room in the bag.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoTopRacesState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoTopRacesActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>Not used yet; empty.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoTopRacesActionType</Name>
+          <Description>The action of the top races window.</Description>
+          <Values>
+            <EnumValue>
+              <Name>ClaimRewards</Name>
+              <Description>Take the top race prizes which wait for room in the bag.</Description>
+              <Value>1</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>
