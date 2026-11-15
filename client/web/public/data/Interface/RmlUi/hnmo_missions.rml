@@ -1,0 +1,152 @@
+<rml>
+<head>
+	<title>HNMO Missions</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's missions window (no desktop window): the game's message box frame (window_shell) with
+		   three tabs -- the daily missions, the weekly missions and the earned coins (streak, login
+		   calendar, online time, invite) -- and the menu buttons of the other HNMO windows. */
+		#panel {
+			top: 50dp;
+			left: 50%;
+			margin-left: -175dp;
+			transform: none;
+			width: 350dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 16dp 20dp 16dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.mi-tabs { display: flex; flex-direction: row; justify-content: center; margin-bottom: 6dp; pointer-events: auto; }
+		.mi-tab { color: token(text-muted); }
+		.mi-tab.selected { color: token(accent-gold); }
+		.mi-scroll {
+			display: block;
+			max-height: 300dp;
+			overflow-y: auto;
+			pointer-events: auto;
+			padding-right: 4dp;
+		}
+		.mi-row {
+			display: block;
+			position: relative;
+			margin-bottom: 7dp;
+			padding: 4dp 5dp 5dp 5dp;
+			border: 1dp #5a4a30;
+			background-color: rgba(0, 0, 0, 0.35);
+		}
+		.mi-row.done { border-color: #a08040; }
+		.mi-title { display: block; color: token(text-input); line-height: 1.25em; white-space: normal; padding-right: 66dp; }
+		.mi-reward { display: block; font-size: 0.85rem; color: token(text-muted); line-height: 1.2em; padding-right: 66dp; white-space: normal; }
+		.mi-bar { display: block; position: relative; height: 7dp; margin-top: 4dp; margin-right: 66dp; background-color: #1d1810; border: 1dp #4a3c26; }
+		.mi-fill { display: block; position: absolute; left: 0; top: 0; bottom: 0; background-color: #c89a3c; }
+		.mi-row.done .mi-fill { background-color: #e8c060; }
+		.mi-count { display: block; font-size: 0.85rem; color: token(text-primary); margin-top: 1dp; }
+		.mi-side { position: absolute; right: 4dp; top: 50%; margin-top: -14dp; width: 62dp; text-align: center; }
+		.mi-state { display: block; font-size: 0.85rem; line-height: 28dp; color: token(text-muted); }
+		.mi-state.claimed { color: #8fc070; }
+		.mi-note { display: block; margin: 2dp 0 6dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.mi-head { display: block; color: token(accent-gold); margin: 6dp 0 3dp 0; }
+		.mi-line { display: block; line-height: 1.3em; white-space: normal; color: token(text-input); }
+		.mi-days { display: flex; flex-direction: row; flex-wrap: wrap; margin: 3dp 0 4dp 0; }
+		.mi-day {
+			width: 40dp;
+			height: 30dp;
+			margin: 0 2dp 2dp 0;
+			text-align: center;
+			border: 1dp #4a3c26;
+			background-color: rgba(0, 0, 0, 0.35);
+			font-size: 0.8rem;
+			line-height: 14dp;
+			color: token(text-muted);
+		}
+		.mi-day.big { border-color: #a08040; color: token(text-input); }
+		.mi-day.claimed { background-color: rgba(120, 150, 70, 0.45); color: #e8f0d0; }
+		.mi-day.next { border-color: #e8c060; color: token(accent-gold); }
+		.mi-invite { display: flex; flex-direction: row; align-items: center; margin-top: 3dp; pointer-events: auto; }
+		.mi-invite input { flex: 1 1 auto; height: 16dp; padding: 0 3dp; margin-right: 6dp; }
+		.mi-buttons { display: flex; flex-direction: row; justify-content: center; margin-top: 6dp; }
+		@spritesheet mi-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			mi-btn-idle:   0px  0px 64px 29px;
+			mi-btn-hover:  0px 29px 64px 29px;
+			mi-btn-active: 0px 58px 64px 29px;
+		}
+		.mi-btn {
+			position: static;
+			width: 62dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 0 3dp;
+			font-size: 0.9rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(mi-btn-idle);
+		}
+		.mi-btn:hover { decorator: image(mi-btn-hover); }
+		.mi-btn:active { decorator: image(mi-btn-active); }
+		.mi-btn.claim { color: #ffe9a8; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_missions">
+	<div class="mi-tabs">
+		<div class="btn mi-btn mi-tab" data-class-selected="tab == 'daily'" data-event-click="mi_tab('daily')">{{daily_label}}</div>
+		<div class="btn mi-btn mi-tab" data-class-selected="tab == 'weekly'" data-event-click="mi_tab('weekly')">{{weekly_label}}</div>
+		<div class="btn mi-btn mi-tab" data-class-selected="tab == 'coins'" data-event-click="mi_tab('coins')">{{coins_label}}</div>
+	</div>
+	<div class="mi-note" data-if="loading">{{loading_label}}</div>
+	<div class="mi-scroll" data-if="tab != 'coins' &amp;&amp; loading == false">
+		<div class="mi-note" data-if="rows.length == 0">{{empty_label}}</div>
+		<div class="mi-row" data-for="r : rows" data-class-done="r.done" data-attr-data-mission="r.id">
+			<span class="mi-title" data-no-i18n="">{{r.title}}</span>
+			<span class="mi-reward">{{r.reward}}</span>
+			<div class="mi-bar"><div class="mi-fill" data-style-width="r.width"></div></div>
+			<span class="mi-count">{{r.count}}</span>
+			<div class="mi-side">
+				<div class="btn mi-btn claim" data-if="r.claimable" data-event-click="mi_claim(r.id)">{{claim_label}}</div>
+				<span class="mi-state" data-if="r.claimable == false" data-class-claimed="r.claimed">{{r.state}}</span>
+			</div>
+		</div>
+		<div class="mi-note">{{reset_text}}</div>
+	</div>
+	<div class="mi-scroll" data-if="tab == 'coins' &amp;&amp; loading == false">
+		<span class="mi-head">{{streak_head}}</span>
+		<span class="mi-line">{{streak_text}}</span>
+		<div class="mi-buttons" data-if="streak_claimable"><div class="btn mi-btn claim mi-streak-claim" data-event-click="mi_streak">{{claim_label}}</div></div>
+		<span class="mi-head" data-if="calendar_on">{{calendar_head}}</span>
+		<span class="mi-line" data-if="calendar_on">{{calendar_text}}</span>
+		<div class="mi-days" data-if="calendar_on">
+			<div class="mi-day" data-for="d : days" data-class-claimed="d.claimed" data-class-next="d.next" data-class-big="d.big">{{d.label}}<br/>{{d.coins}}</div>
+		</div>
+		<div class="mi-buttons" data-if="calendar_on &amp;&amp; calendar_claimable"><div class="btn mi-btn claim mi-calendar-claim" data-event-click="mi_calendar">{{claim_label}}</div></div>
+		<span class="mi-head">{{earned_head}}</span>
+		<span class="mi-line" data-if="online_on">{{online_text}}</span>
+		<span class="mi-line">{{earned_text}}</span>
+		<span class="mi-line" data-if="milestones_on">{{milestones_text}}</span>
+		<span class="mi-head" data-if="invite_on">{{invite_head}}</span>
+		<span class="mi-line" data-if="invite_on">{{invite_text}}</span>
+		<span class="mi-line" data-if="invite_on" data-no-i18n="">{{invite_code}}</span>
+		<div class="mi-invite" data-if="invite_on &amp;&amp; can_invite">
+			<input type="text" class="text-field mi-invite-input" maxlength="10" data-value="invite_input" data-attr-placeholder="invite_placeholder"/>
+			<div class="btn mi-btn mi-invite-send" data-event-click="mi_invite">{{invite_button}}</div>
+		</div>
+	</div>
+	<div class="mi-buttons">
+		<div class="btn mi-btn mi-close" data-event-click="mi_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>
