@@ -825,10 +825,11 @@ export function siegeSkill(system: EffectSystem, skill: number, caster: EffectOw
         if (i % 20 === 0) system.createEffect('magicGround2', caster.position, angle, caster.light ?? WHITE, 10, caster);
       }
       break;
-    case 70: // AT_SKILL_INVISIBLE: the target's Greater Defense lights end (its circle, SubType 6, draws no decal)
+    case 70: // AT_SKILL_INVISIBLE: the target's Greater Defense lights end; lights and rings on the target (BITMAP_MAGIC+1 6)
       if (target) {
         system.deleteJoint('spearSkill', target, 4);
         system.deleteJoint('spearSkill', target, 9);
+        system.createEffect('magicGround2', target.position, target.angle, target.light ?? WHITE, 6, target);
       }
       break;
   }

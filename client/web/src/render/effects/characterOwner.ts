@@ -75,6 +75,7 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
       .filter((attachment) => (attachment.slot === 'rightHand' || attachment.slot === 'leftHand') && !attachment.ammunition && attachment.item.group !== ITEM_GROUP_SHIELD)
       .map((attachment) => ({ bone: attachment.slot === 'rightHand' ? bones[0] : bones[1], bow: attachment.item.group === ITEM_GROUP_BOW })),
     weaponsOnBack: () => character.weaponsOnBack,
+    playerModel: character.kind === 'player' || character.playerShaped === true,
     hasAura: options.hasAura,
     hasBuff: options.hasBuff,
   };

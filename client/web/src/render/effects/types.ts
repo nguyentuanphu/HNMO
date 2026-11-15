@@ -55,6 +55,8 @@ export interface EffectOwner {
   weapon?(): { model: THREE.Object3D; group: number } | null;
   /** The weapons in its hands (not arrows, bolts or a shield): their bones, and whether each is a bow. */
   heldWeapons?(): { bone: number; bow: boolean }[];
+  /** Whether it is drawn with the player model (MODEL_PLAYER: players and player-shaped monsters). */
+  readonly playerModel?: boolean;
   /** Whether its weapons hang on its back (a safe zone): the held weapons' effects don't show then. */
   weaponsOnBack?(): boolean;
 }

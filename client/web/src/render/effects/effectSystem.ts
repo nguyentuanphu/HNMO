@@ -539,7 +539,11 @@ export class EffectSystem {
           o.scale = 2;
         } else if (o.subType === 5) o.lifeTime = 50;
         else if (o.subType === 6) o.lifeTime = 2;
-        else return false;
+        else if (o.subType === 8) { // Invisibility's lights: rising, shrinking, orange
+          o.lifeTime = randInt(10) + 10;
+          o.gravity = randInt(10) + 10;
+          o.scale = (randInt(50) + 50) / 100 * scale;
+        } else return false;
         return true;
       case 'flareBlue':
         if (o.subType !== 0) return false;
@@ -695,6 +699,15 @@ export class EffectSystem {
           o.scale -= (randInt(400) + 400) / 10000;
           o.position.z += o.gravity;
           o.light.multiplyScalar(1 / 1.35);
+          break;
+        }
+        if (o.subType === 8) {
+          o.position.x += (randInt(2001) - 1000) * 0.0004 * 0.5;
+          o.position.y += (randInt(2001) - 1000) * 0.0004 * 0.5;
+          o.position.z += 5 * 0.5;
+          o.scale -= 0.05;
+          o.light.set(o.scale, 0.5 * o.scale, 0.3 * o.scale);
+          if (o.scale <= 0.1) o.live = false;
           break;
         }
         if (o.subType === 6) {
@@ -1274,6 +1287,15 @@ export class EffectSystem {
         if (o.subType === 4 || o.subType === 10) { // Swell Life's and Swell Mana's circles
           o.lifeTime = 40;
           o.scale = (randInt(50) + 50) / 100 * 4;
+        } else if (o.subType === 6) { // Invisibility on its target: lights all over the body, a ring every 25 ticks
+          o.lifeTime = 60;
+          o.scale = (randInt(50) + 50) / 100 * 4;
+          o.startPosition.copy(o.position);
+          return o.owner !== null;
+        } else if (o.subType === 7) { // its ring, turning with the target
+          o.lifeTime = 40;
+          o.angle.z = randInt(360);
+          return o.owner !== null;
         }
         return (o.subType >= 1 && o.subType <= 4) || o.subType === 10 || o.subType === 11 || o.subType === 12;
       case 'bone1':
@@ -1523,6 +1545,11 @@ export class EffectSystem {
         case 'magic2': this.moveMagic2(o, luminosity); break;
         case 'magicGround2': // the subtypes that make no healing trails (MoveEffect's BITMAP_MAGIC+1)
           if (o.subType >= 1 && ![4, 6, 7, 8, 9, 10, 11, 12, 13].includes(o.subType)) this.createHealing(o);
+          if (o.subType === 6) this.moveInvisibility(o);
+          else if (o.subType === 7 && o.owner) {
+            o.position.copy(o.owner.position);
+            o.angle.z += 10;
+          }
           break;
         case 'bone1':
         case 'bone2':
@@ -1566,6 +1593,23 @@ export class EffectSystem {
     }
     o.lifeTime -= 1;
     if (o.lifeTime <= 0) o.live = false;
+  }
+
+  // BITMAP_MAGIC+1 SubType 6: as many orange lights as ticks are left rise from random bones of the target, and a ring
+  // starts every 25 ticks. (The desktop also fades the target out, LifeTime / 80, until the cloak's shell shows; the
+  // web leaves its body as it is: changing its materials' blending each tick would rebuild their programs.)
+  private moveInvisibility(o: Effect): void {
+    const owner = o.owner;
+    if (!owner) return;
+    const bones = owner.boneCount?.() ?? 0;
+    for (let i = 0; i < o.lifeTime && bones > 0; i++) {
+      const bone = randInt(bones);
+      const matrix = owner.boneMatrix?.(bone);
+      if (!matrix) continue;
+      const p = new THREE.Vector3(-50 + randInt(100), -10 + randInt(20), -10 + randInt(20)).applyMatrix4(matrix);
+      this.createParticle('light', p, owner.angle, WHITE, 8);
+    }
+    if (Math.trunc(o.lifeTime) % 25 === 0) this.createEffect('magicGround2', o.position, o.angle, o.light, 7, owner);
   }
 
   // BITMAP_ENERGY, SubType 0: the ball leaves energy and sparks, and bursts at its target.
@@ -1745,19 +1789,36 @@ export class EffectSystem {
   // MODEL_ICE SubType 0: the crystal grows, then smokes and fades.
   private moveIce(o: Effect, luminosity: number): void {
     if (o.subType === 1 || o.subType === 2) {
-      // While its owner is hardened it stays (its animation held at key 4); then it fades. (The desktop also hides it
-      // while the owner walks, and SubType 1 sheds sparkles of BITMAP_FIRE+2 SubType 10: not on the web.)
+      // While its owner is hardened it stays (its animation held at key 4), hidden while the owner walks or runs; then it
+      // fades. SubType 1 sheds sparkles (BITMAP_FIRE+2 SubType 10) circling the owner.
       const owner = o.owner;
       if (!owner || !(owner.isLive?.() ?? true)) {
         o.live = false;
         return;
       }
       if (owner.hasBuff?.(57) ?? false) {
+        const action = owner.currentAction?.() ?? -1;
+        const moving = owner.playerModel
+          ? (action >= 15 && action <= 37) || action === 74 || action === 75 || action === 259 || action === 260
+          : action === 2;
+        if (moving) {
+          o.animationFrame = 0;
+          o.hiddenMesh = -2;
+        } else {
+          o.hiddenMesh = -1;
+        }
         o.position.copy(owner.position);
         o.animationFrame = Math.min(o.animationFrame, 4);
         o.lifeTime = 10;
       } else {
         o.alpha -= 0.05;
+      }
+      if (o.subType === 1) {
+        o.headAngle.z += 20;
+        o.gravity = Math.sin(this.worldTime * 0.01) * 20 + 30;
+        const p = rotateByAngle(new THREE.Vector3(60, 0, 0), o.headAngle).add(owner.position);
+        p.z += o.gravity;
+        this.createParticle('fire3', p, o.angle, WHITE, 10, 2);
       }
       o.direction.set(0, 0, 0);
       return;
@@ -1931,9 +1992,11 @@ export class EffectSystem {
 
   // BITMAP_MAGIC+1 (DescribeEffectShadow): the circle on the ground grows and fades.
   private drawGroundCircle(o: Effect): void {
+    if (o.subType === 6) return; // its lights only
     let luminosity = 1;
     if (o.lifeTime < 5) luminosity -= (5 - o.lifeTime) * 0.2;
-    let scale = (20 - o.lifeTime) * 0.15;
+    else if (o.subType === 7 && o.lifeTime > 30) luminosity = (40 - o.lifeTime) * 0.1;
+    let scale = o.subType === 7 ? o.lifeTime * 0.07 : (20 - o.lifeTime) * 0.15;
     if (o.subType === 4 || o.subType === 10) {
       scale = o.scale;
       if (luminosity === 1) luminosity = Math.sin((60 - o.lifeTime) * 0.05) + 0.5;
@@ -1943,6 +2006,7 @@ export class EffectSystem {
       : o.subType === 3 ? new THREE.Vector3(1, 0.6, 0.4)
       : o.subType === 4 ? new THREE.Vector3(1, 0.5, 0.1)
       : o.subType === 10 ? new THREE.Vector3(0.1, 0.5, 1)
+      : o.subType === 7 ? new THREE.Vector3(0.9, 0.4, 0.2)
       : o.subType === 11 || o.subType === 12 ? o.light.clone() : new THREE.Vector3(0.4, 0.6, 1);
     light.multiplyScalar(luminosity);
     this.quads.decal('magicGround2', o.subType === 12 ? 'subtract' : 'glow', o.position.x, o.position.y, scale, light, -o.angle.z,

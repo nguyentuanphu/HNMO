@@ -115,6 +115,8 @@ const LORD: Case[] = [
   // The Stun debuff on the hero (eDeBuff_Stun = 61): three lights circling up over the head.
   { skill: 67, name: 'stun-debuff', expect: ['joint:spearSkill'], shotAt: 600, buffs: [61] },
   { skill: 68, name: 'cancel-stun', expect: ['joint:flash', 'effect:skinShell'], shotAt: 900, other: true, warm: [['Skill', 'SkinShell.bmd']] },
+  // Invisibility on its target: lights rising from its bones and rings turning with it (BITMAP_MAGIC+1 6 and 7).
+  { skill: 70, name: 'invisibility', expect: ['effect:magicGround2', 'particle:light'], shotAt: 1200, other: true },
   { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },
   { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight', 'particle:flareBlue', 'joint:flareBlueJoint'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
   { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },
@@ -340,13 +342,18 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   const setDebuffs = (list: number[]) => page.evaluate((list) => {
     const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { hero: { cell: { x: number; y: number } }; characters: Map<number, Tinted> } } }).__game;
     const hero = g.online.hero;
-    let best: Tinted | null = null, bestDistance = 12;
-    for (const c of g.online.characters.values()) {
+    // The same monster each time while it lives (the nearest one moves about).
+    const held = (window as unknown as { __debuffTarget?: number }).__debuffTarget;
+    let best: Tinted | null = held !== undefined ? g.online.characters.get(held) ?? null : null;
+    if (best?.dead) best = null;
+    let bestDistance = 12;
+    for (const c of best ? [] : g.online.characters.values()) {
       if (c.kind !== 'monster' || c.dead) continue;
       const d = Math.hypot(c.cell.x - hero.cell.x, c.cell.y - hero.cell.y);
       if (d < bestDistance) { best = c; bestDistance = d; }
     }
     if (!best) return null;
+    (window as unknown as { __debuffTarget?: number }).__debuffTarget = best.id;
     g.buffs.replace(best.id, list);
     return { id: best.id, tint: best.bodyTint ? [best.bodyTint.r, best.bodyTint.g, best.bodyTint.b] : null, glow: best.bodyGlow?.length ?? 0 };
   }, list);
@@ -361,6 +368,8 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-freeze.png` });
   await setDebuffs([57]); // eDeBuff_Harden: two ice shells stay on the monster while it lasts
   await expect.poll(() => game(page, (g) => g.effects.census()['effect:ice'] ?? 0), { timeout: 10_000 }).toBe(2);
+  // The first shell sheds sparkles circling the hardened one (BITMAP_FIRE+2 SubType 10).
+  await expect.poll(() => game(page, (g) => g.effects.census()['particle:fire3'] ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
   await page.waitForTimeout(800);
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-harden.png` });
   await setDebuffs([]);
