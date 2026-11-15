@@ -132,7 +132,8 @@ export type EffectType =
   | 'twlight' // BITMAP_TWLIGHT: its twilight ring
   | 'swellOfMagicPowerBuffEffect' // MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF: its buff's lasting lights
   | 'summon' // MODEL_SUMMON: Recovery's circle (Skill/nightmaresum.bmd)
-  | 'raklionBossCrackEffect'; // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
+  | 'raklionBossCrackEffect' // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
+  | 'skinShell'; // MODEL_SKIN_SHELL: the cancels' shards of skin flying off the target (Skill/SkinShell.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
@@ -149,7 +150,9 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'shiny4' // BITMAP_SHINY+4 (ring.jpg): Cometfall's ring where a comet lands
   | 'poundingBall' // BITMAP_POUNDING_BALL: Lance's trail
   | 'twintailWater' // BITMAP_TWINTAIL_WATER: the Sleep debuff's bubbles
-  | 'waterfall5' | 'waterfall3'; // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
+  | 'waterfall5' | 'waterfall3' // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
+  | 'explosion2' // BITMAP_EXPLOTION+1 (DinoE.jpg): Stun's bolts' sparks, Fire Breath's fire
+  | 'advSmoke2'; // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;

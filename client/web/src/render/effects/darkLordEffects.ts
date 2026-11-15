@@ -20,6 +20,8 @@ import { createAngle, createAngle2D, randInt, rotateByAngle, turnAngle2 } from '
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS } from './extraEffects.js';
 import type { Effect, EffectOwner, Joint } from './types.js';
+import { computeBoneMatrices, loadModel, loadTexture } from '../../bmd.js';
+import type { BMDModel } from '../../formats.js';
 
 const WHITE = new THREE.Vector3(1, 1, 1);
 
@@ -489,6 +491,7 @@ export function chaoticShine(o: Effect, system: EffectSystem): void {
 EXTRA_JOINTS.flash = {
   init: (o, system) => {
     if (o.subType === 0 || o.subType === 1) {
+      void shadowBody();
       o.maxTails = 10;
       o.lifeTime = 40;
       o.velocity = 70;
@@ -529,11 +532,20 @@ EXTRA_JOINTS.flash = {
       o.direction.y += randInt(5) - 2;
       o.direction.z -= 10;
       o.position.add(rotateByAngle(o.direction, o.angle));
-      o.scale = o.counter - o.lifeTime < 10 ? 100 : 40;
+      if (o.counter - o.lifeTime < 10) {
+        // The burst where the bolt leaves the lord (BITMAP_EXPLOTION+1).
+        system.createParticle('explosion2', o.startPosition, o.angle, o.light, 0, 3);
+        o.scale = 100;
+      } else {
+        o.scale = 40;
+      }
       const height = system.heightAt(o.position.x, o.position.y);
       if (o.position.z <= height) {
+        // Where it touches the ground: a short bolt rises and smoke puffs up.
+        system.createJoint('jointThunder', o.position, o.position, o.angle, 4, null, 60);
         if (o.direction.z <= 0) o.direction.z = Math.sin(o.velocity) * 20;
         o.position.z = height + 5;
+        system.createParticle('advSmoke2', o.position.clone().setZ(o.position.z + 30), o.angle, o.light, 2, 3);
       }
       layTailAxisY(o);
       if (o.lifeTime < o.counter / 2) o.light.multiplyScalar(1 / 1.3);
@@ -546,6 +558,8 @@ EXTRA_JOINTS.flash = {
     o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), flashHeads.get(o) ?? o.angle));
     const floor = system.heightAt(o.position.x, o.position.y) - o.counter;
     if (o.position.z < floor) {
+      // The first touch: shards of skin fly off the target (SpawnMeshEffects(0, MODEL_SKIN_SHELL, SubType)).
+      if (o.pkKey === 0 && o.target) skinShells(system, o.target, o.subType);
       o.position.z = floor;
       o.pkKey = 1; // no more tails (m_bCreateTails = false)
       o.light.multiplyScalar(1 / 1.2);
@@ -566,6 +580,83 @@ EXTRA_JOINTS.flash = {
   },
 };
 const flashHeads = new WeakMap<Joint, THREE.Vector3>();
+
+// MODEL_SHADOW_BODY (Player/Shadow01.bmd) at its first key: the body the cancels' skin shards come off.
+let shadow: { model: BMDModel; bones: THREE.Matrix4[] } | null = null;
+let shadowLoad: Promise<void> | null = null;
+function shadowBody(): Promise<void> {
+  shadowLoad ??= loadModel('Player', 'Shadow01.bmd').then((model) => { shadow = { model, bones: computeBoneMatrices(model, 0, 0) }; })
+    .catch(() => { /* no shards */ });
+  return shadowLoad;
+}
+
+/** b->SpawnMeshEffects(0, MODEL_SKIN_SHELL, sub): one shard in eight of mesh 0's corners, on the target's body. */
+function skinShells(system: EffectSystem, target: EffectOwner, sub: number): void {
+  const mesh = shadow?.model.meshes[0];
+  if (!shadow || !mesh) return;
+  const turn = new THREE.Vector3(0, 0, target.angle.z);
+  const zero = new THREE.Vector3();
+  const white = new THREE.Vector3(1, 1, 1);
+  for (const triangle of mesh.triangles) {
+    for (let k = 0; k < triangle.corners; k++) {
+      if (randInt(8) !== 0) continue;
+      const vertex = mesh.vertices[triangle.vertex[k]];
+      if (!vertex) continue;
+      const p = new THREE.Vector3(...vertex.position).applyMatrix4(shadow.bones[vertex.node] ?? new THREE.Matrix4());
+      system.createEffect('skinShell', rotateByAngle(p, turn).add(target.position), zero, white, sub);
+    }
+  }
+}
+
+// MODEL_SKIN_SHELL: a shard thrown up and out that tumbles, bounces on the ground and fades; drawn in the
+// BITMAP_CHROME texture, grey (0) or glowing blue (1).
+let chrome: THREE.Texture | null = null;
+EXTRA_EFFECTS.skinShell = {
+  model: ['Skill', 'SkinShell.bmd'],
+  create: (o) => {
+    if (o.subType !== 0 && o.subType !== 1) return false;
+    void loadTexture('Effect', 'Chrome01.jpg').then((map) => { chrome = map; });
+    o.position.z += 50;
+    o.lifeTime = randInt(16) + 32;
+    o.scale = (randInt(3) + 3) * 0.1;
+    o.alpha = 0.5;
+    o.direction.copy(rotateByAngle(new THREE.Vector3(0, (randInt(128) + 32) * 0.1, 0), new THREE.Vector3(0, 0, randInt(360))));
+    o.gravity = randInt(5) + 2 + randInt(5);
+    o.angle.set(randInt(360), randInt(360), randInt(360));
+    if (o.subType === 0) o.light.set(0.5, 0.5, 0.5);
+    else {
+      o.light.set(0.1, 0.5, 1);
+      o.blendMesh = -2; // RENDER_BRIGHT
+      o.blendMeshLight = 1;
+    }
+    return true;
+  },
+  move: (o, system) => {
+    // Every copy of the shard model draws in the chrome texture (only this effect uses it).
+    if (o.model && chrome && o.model.parts[0]?.mesh.material.map?.image !== chrome.image) {
+      for (const part of o.model.parts) {
+        part.mesh.material.map = chrome;
+        part.mesh.material.needsUpdate = true;
+      }
+    }
+    o.position.add(o.direction);
+    o.direction.multiplyScalar(0.9);
+    o.position.z += o.gravity;
+    o.direction.multiplyScalar(1.1);
+    o.gravity -= 3;
+    const height = system.heightAt(o.position.x, o.position.y);
+    if (o.position.z < height) {
+      o.position.z = height;
+      o.gravity = -o.gravity * 0.2;
+      o.lifeTime -= 5;
+      o.angle.x -= o.scale * 128;
+    } else {
+      o.angle.x -= o.scale * 16;
+    }
+    o.alpha = o.lifeTime / 10;
+    return true;
+  },
+};
 
 /** CreateTailAxis(o, AngleMatrix(o->Angle), 1): a new tail whose second pair of corners lies along y. */
 function layTailAxisY(o: Joint): void {

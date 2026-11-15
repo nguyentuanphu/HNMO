@@ -144,6 +144,8 @@ export const BITMAPS = {
   inferno: 'Inferno.jpg', // BITMAP_INFERNO
   waterfall3: 'WATERFALL3.jpg', // BITMAP_WATERFALL_3
   waterfall5: 'WATERFALL5.jpg', // BITMAP_WATERFALL_5
+  explosion2: 'DinoE.jpg', // BITMAP_EXPLOTION+1
+  advSmoke2: 'fi02.tga', // BITMAP_ADV_SMOKE+1
 } as const;
 
 export type BitmapName = keyof typeof BITMAPS;

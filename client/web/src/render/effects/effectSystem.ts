@@ -450,6 +450,11 @@ export class EffectSystem {
           o.scale += randInt(50) * 0.01;
           o.rotation = randInt(360);
           o.gravity = (randInt(30) + 50) * 0.05;
+        } else if (o.subType === 55) { // Strike of Destruction's smoke in its spray
+          o.lifeTime = 30;
+          o.scale = scale + (randInt(32) + 48) * 0.01 * scale;
+          o.angle.x = randInt(360);
+          o.rotation = Math.floor(this.worldTime) % 360;
         } else if (o.subType === 59) { // Chaotic Diseier's ghosts' dark smoke
           o.lifeTime = 40;
           o.scale = (randInt(64) + 64) * 0.01;
@@ -597,6 +602,11 @@ export class EffectSystem {
           o.gravity -= 0.05;
           o.position.z += (o.scale + o.gravity) * 1.5;
           o.scale += o.scale / 100;
+        } else if (o.subType === 55) {
+          o.gravity += 0.1;
+          o.position.z += o.gravity;
+          o.scale += 0.05;
+          o.light.multiplyScalar(1 / 1.08);
         } else if (o.subType === 59) {
           o.light.setScalar(o.lifeTime / 40 * 0.9);
           o.scale += 0.09;
@@ -723,6 +733,15 @@ export class EffectSystem {
           o.lifeTime = o.pkKey;
           o.pkKey = -1;
           o.maxTails = o.skill;
+          o.light.set(0.5, 0.5, 1);
+          o.startPosition.copy(o.position);
+          return true;
+        }
+        if (o.subType === 4) { // a bolt where Stun's bolts touch the ground
+          o.velocity = 60;
+          o.lifeTime = 20;
+          o.maxTails = 10;
+          o.direction.set(0, 0, 0);
           o.light.set(0.5, 0.5, 1);
           o.startPosition.copy(o.position);
           return true;
@@ -904,11 +923,19 @@ export class EffectSystem {
       const luminosity = (randInt(4) + 4) * 0.04;
       this.groundLight(o.position, luminosity * 0.1, luminosity * 0.1, luminosity * 0.5, 2);
     }
+    if (o.subType === 4) {
+      o.position.copy(o.targetPosition);
+      this.createSprite('shiny2', o.targetPosition.clone().setZ(o.targetPosition.z + 30), (randInt(8) + 8) * 0.2, o.light, null, randInt(360));
+    }
     for (let j = 0; j < o.maxTails; j++) {
       if (o.target) o.targetPosition.copy(o.target.position).setZ(o.target.position.z + 80);
-      const distance = moveHumming(o.position, o.angle, o.targetPosition, o.subType === 3 ? 25 : 50);
-      o.direction.x = (randInt(1024) - 512) / o.scale;
-      o.direction.z = (randInt(1024) - 512) / o.scale;
+      const goal = o.subType === 4 ? o.targetPosition.clone().setZ(o.targetPosition.z - 300) : o.targetPosition;
+      const distance = moveHumming(o.position, o.angle, goal, o.subType === 3 ? 25 : o.subType === 4 ? -10 : 50);
+      if (o.subType === 4) o.direction.x = randInt(64) - 32;
+      else {
+        o.direction.x = (randInt(1024) - 512) / o.scale;
+        o.direction.z = (randInt(1024) - 512) / o.scale;
+      }
       const angle = o.angle.clone().add(o.direction);
       this.createTail(o, angle);
       if (o.subType === 3) {

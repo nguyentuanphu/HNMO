@@ -61,7 +61,7 @@ const KNIGHT: Case[] = [
   { skill: 22, name: 'cyclone', expect: ['particle:spark', 'particle:spark3'], shotAt: 650 },
   // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
   { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
-  { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
+  { skill: 232, name: 'strike-of-destruction', expect: ['effect:blowOfDestruction', 'effect:nightWater1', 'effect:knightPlancrackA', 'effect:knightPlancrackB', 'effect:raklionBossCrackEffect', 'particle:waterfall5', 'particle:smoke'], shotAt: 840, area: true, model: 'knightPlancrackA', warm: [['Effect', 'nightwater01.bmd'], ['Effect', 'knight_plancrack_a.bmd'], ['Effect', 'knight_plancrack_b.bmd'], ['Effect', 'knight_plancrack_grand.bmd']] },
   { skill: 44, name: 'crescent-moon-slash', expect: ['joint:jointSpark', 'particle:fire', 'effect:swordForce', 'joint:jointForce'], shotAt: 600, action: 137 },
 ];
 
@@ -96,8 +96,8 @@ const LORD: Case[] = [
   // Released at key 3 of PLAYER_ATTACK_STRIKE: the burning trail flies at the target.
   { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
   { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
-  { skill: 67, name: 'stun', expect: ['joint:flash'], shotAt: 680 },
-  { skill: 68, name: 'cancel-stun', expect: ['joint:flash'], shotAt: 700, other: true },
+  { skill: 67, name: 'stun', expect: ['joint:flash', 'particle:explosion2', 'joint:jointThunder', 'particle:advSmoke2'], shotAt: 680 },
+  { skill: 68, name: 'cancel-stun', expect: ['joint:flash', 'effect:skinShell'], shotAt: 900, other: true, warm: [['Skill', 'SkinShell.bmd']] },
   { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },
   { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
   { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },

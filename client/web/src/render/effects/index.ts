@@ -37,6 +37,7 @@ import './lordEffects.js'; // and the gladiators' and lords'
 import './summonerEffects.js'; // and the summoners'
 import './rageEffects.js'; // and the rage fighters'
 import './wizardEffects.js'; // Cometfall, Expansion of Wizardry
+import './sharedParticles.js'; // particles the third pass's skills share
 import './darkLordEffects.js'; // the lord's Electric Spike, Earthshake, Chaotic Diseier, Critical Damage sparks
 export { EffectSystem } from './effectSystem.js';
 export type { EffectSystemOptions, TickTask, EffectLayer } from './effectSystem.js';

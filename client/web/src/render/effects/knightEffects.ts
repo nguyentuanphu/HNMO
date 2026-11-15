@@ -624,6 +624,7 @@ EXTRA_EFFECTS.blowOfDestruction = {
         for (let i = 0; i < 15; i++) {
           const position = o.position.clone().add(new THREE.Vector3(randInt(300) - 150, randInt(300) - 150, randInt(300) - 150));
           system.createParticle(randInt(2) === 0 ? 'waterfall5' : 'waterfall3', position, o.angle, new THREE.Vector3(0.5, 0.5, 1), 8, 1.6 + randInt(10) * 0.1);
+          if (randInt(2) === 0) system.createParticle('smoke', position, o.angle, new THREE.Vector3(1, 1, 1), 55, 1);
         }
       }
       if (Math.trunc(o.lifeTime) === 23) {
