@@ -5806,5 +5806,21 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("WorldBossesPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: new-player guide and starter kit.
+        /// </summary>
+        public static string OnboardingPlugIn_Name {
+            get {
+                return ResourceManager.GetString("OnboardingPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to A guided first half hour for new characters: steps (talk to an NPC, walk somewhere, defeat monsters,....
+        /// </summary>
+        public static string OnboardingPlugIn_Description {
+            get {
+                return ResourceManager.GetString("OnboardingPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

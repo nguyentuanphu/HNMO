@@ -2807,4 +2807,22 @@
   <data name="HnmoWorldBossesActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Handles the buttons of the world boss window: taking the rewards which waited for room in the bag.</value>
   </data>
+  <data name="HnmoOnboardingRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO new-player guide request handler</value>
+  </data>
+  <data name="HnmoOnboardingRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the request of HNMO's new-player guide (F5 0E) and sends the state.</value>
+  </data>
+  <data name="HnmoOnboardingActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO new-player guide action handler</value>
+  </data>
+  <data name="HnmoOnboardingActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles the buttons of HNMO's guide panel (F5 10): skip the guide, skip an optional step, take the waiting rewards.</value>
+  </data>
+  <data name="HnmoOnboardingViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO new-player guide view</value>
+  </data>
+  <data name="HnmoOnboardingViewPlugIn_Description" xml:space="preserve">
+    <value>Sends HNMO's new-player guide (C2 F5 0F) to a client which asked for it once (the web game).</value>
+  </data>
 </root>

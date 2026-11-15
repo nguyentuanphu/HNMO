@@ -193,6 +193,8 @@
   * [C1 F5 0A - HnmoMissionsAction (by client)](C1-F5-0A-HnmoMissionsAction_by-client.md)
   * [C1 F5 0B - HnmoWorldBossesRequest (by client)](C1-F5-0B-HnmoWorldBossesRequest_by-client.md)
   * [C1 F5 0D - HnmoWorldBossesAction (by client)](C1-F5-0D-HnmoWorldBossesAction_by-client.md)
+  * [C1 F5 0E - HnmoOnboardingRequest (by client)](C1-F5-0E-HnmoOnboardingRequest_by-client.md)
+  * [C1 F5 10 - HnmoOnboardingAction (by client)](C1-F5-10-HnmoOnboardingAction_by-client.md)
   * [C1 F6 0A - QuestSelectRequest (by client)](C1-F6-0A-QuestSelectRequest_by-client.md)
   * [C1 F6 0B - QuestProceedRequest (by client)](C1-F6-0B-QuestProceedRequest_by-client.md)
   * [C1 F6 0D - QuestCompletionRequest (by client)](C1-F6-0D-QuestCompletionRequest_by-client.md)

@@ -4473,6 +4473,65 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>0E</SubCode>
+      <Name>HnmoOnboardingRequest</Name>
+      <Caption>Request HNMO new-player guide</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world, or the player opens HNMO's guide panel.</SentWhen>
+      <CausedReaction>The server sends the HnmoOnboardingState message, and from then on sends it again when something changes, e.g. a step is done or a reward is given.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>10</SubCode>
+      <Name>HnmoOnboardingAction</Name>
+      <Caption>HNMO new-player guide action</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player clicks a button of HNMO's guide panel: skip the guide (after a confirmation), skip an optional step, or take the rewards which waited for room in the bag.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoOnboardingState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoOnboardingActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>Not used yet; empty.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoOnboardingActionType</Name>
+          <Description>The action of the guide panel.</Description>
+          <Values>
+            <EnumValue>
+              <Name>SkipGuide</Name>
+              <Description>End the guide for this character; rewards earned before still come.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>SkipStep</Name>
+              <Description>Skip the current step, when it's optional (no reward).</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimRewards</Name>
+              <Description>Take the guide's rewards which wait for room in the bag.</Description>
+              <Value>3</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

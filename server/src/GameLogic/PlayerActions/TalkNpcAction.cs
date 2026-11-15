@@ -50,6 +50,11 @@ public class TalkNpcAction
         }
 
         player.OpenedNpc = npc;
+        if (player.GameContext.PlugInManager.GetPlugInPoint<INpcTalkStartedPlugIn>() is { } talkStarted)
+        {
+            await talkStarted.NpcTalkStartedAsync(player, npc).ConfigureAwait(false);
+        }
+
         if (npcStats.MerchantStore != null && npcStats.MerchantStore.Items.Count > 0)
         {
             await Task.Delay(500).ConfigureAwait(false);

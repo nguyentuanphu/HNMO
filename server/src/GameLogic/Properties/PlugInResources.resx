@@ -2131,4 +2131,10 @@
   <data name="WorldBossesPlugIn_Description" xml:space="preserve">
     <value>World bosses on a schedule, announced in the game, on Discord and on the website, with rewards by damage, boss-hunt points and weekly ranking coins (boss hunt, Blood Castle, Devil Square, Chaos Castle, castle siege). Set on the page "World bosses and rankings".</value>
   </data>
+  <data name="OnboardingPlugIn_Name" xml:space="preserve">
+    <value>HNMO: new-player guide and starter kit</value>
+  </data>
+  <data name="OnboardingPlugIn_Description" xml:space="preserve">
+    <value>A guided first half hour for new characters: steps (talk to an NPC, walk somewhere, defeat monsters, use a potion or a skill, reach a level, join a party, add stat points, open the cash shop or the missions window), each checked by the server and with a reward, a final reward, and a starter kit (items, zen, coins, stat points, an EXP buff) given once per new character or account. Players see it in the web game's guide panel and can skip it. Edit it on the page Onboarding and starter kit (game menu). The progress is kept in a file in the save folder.</value>
+  </data>
 </root>

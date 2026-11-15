@@ -7208,6 +7208,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoOnboardingState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): the status, the steps with their rewards, the current step with its count and where it leads, the waiting rewards, the starter kit when it was just given, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's new-player guide (HnmoOnboardingRequest) or did an action there, and when something changed for a client which requested it before (a step was done or counted, rewards were given).
+    /// Causes reaction on client side: The guide panel shows the state; a notice in the chat tells about the event in it (e.g. a step done, the starter kit, a reward).
+    /// </remarks>
+    public static async ValueTask SendHnmoOnboardingStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoOnboardingStateRef.GetRequiredSize(json);
+            var packet = new HnmoOnboardingStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

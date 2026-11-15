@@ -8114,5 +8114,53 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoWorldBossesActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO new-player guide request handler.
+        /// </summary>
+        public static string HnmoOnboardingRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoOnboardingRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the request of HNMO's new-player guide (F5 0E) and sends the state..
+        /// </summary>
+        public static string HnmoOnboardingRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoOnboardingRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO new-player guide action handler.
+        /// </summary>
+        public static string HnmoOnboardingActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoOnboardingActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Handles the buttons of HNMO's guide panel (F5 10): skip the guide, skip an optional step, take the w....
+        /// </summary>
+        public static string HnmoOnboardingActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoOnboardingActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO new-player guide view.
+        /// </summary>
+        public static string HnmoOnboardingViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoOnboardingViewPlugIn_Name", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Sends HNMO's new-player guide (C2 F5 0F) to a client which asked for it once (the web game)..
+        /// </summary>
+        public static string HnmoOnboardingViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoOnboardingViewPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }
