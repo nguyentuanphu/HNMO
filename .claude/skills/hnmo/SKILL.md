@@ -333,3 +333,15 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   (Print Screen like the desktop: `Screen(MM_DD-HH_MM)-NNNN.jpg`; share panel via the `hnmo-share-open` window event).
 - A WebGL picture without preserveDrawingBuffer is read by rendering and copying in the same task (`capture` in main.ts).
 - vi.json: add keys as single lines after `"texts": {` (re-serializing the file rewrites all 2800 lines).
+
+## Top races (2026-11-16)
+- `GameLogic/PlugIns/TopRaces`: `TopRaceEngine` (pure, `TopRaceEngineTest`: periods with Sydney DST, custom wall-clock dates (a
+  skipped time moves to the first valid minute, a repeated one is the first), values, ties to whoever got there first,
+  per-class tables (class = character class number / 4), the end with prizes paid once, owed prizes, history),
+  `TopRaceStore` (`save/top-races.json`, `TopRaceStore.Open` shared per file), `TopRacesPlugIn` (1-minute tick: online
+  minutes, level/resets observed; starts, ends and payouts on the lowest server id). World bosses call
+  `TopRacesPlugIn.Get(ctx)?.WorldBossKilledAsync`, guilds `GuildPointsEarned`; community posts `TopRaceStarted` / `TopRaceWinner`.
+- F5 codes now: ... community 14-16, top races 17 (request), 18 (state JSON), 19 (action). Next free: 1A.
+- Admin page `/top-races` (its live standings use a copy of the configuration: an unsaved edit must not end a race);
+  website `/website/top-races` (section `#races`); web window **F9** (`ui/topRacesWindow.ts`): every letter key is taken by the
+  desktop or HNMO (desktop leaves N, O, Y free; HNMO uses N, O (options), Y), F9 is free on the desktop and in browsers.

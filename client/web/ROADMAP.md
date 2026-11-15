@@ -219,14 +219,17 @@ licensed mobile release). Each item: every number and switch in the admin panel 
 Vietnamese), and shown on the website. Done after section 12's items 4-7, in this order; item 8 of
 section 12 (the cash shop) still waits for the owner's answers.
 
-1. ⏳ **Top races ("đua top")** — the most advertised feature: races by day, week and month (resets, level,
-   boss-hunt points, PK kills, event wins, guild points, per class), each with its own prizes (coins, items),
-   start/end dates and rules. Live tables and past winners on the website; a notice in the game when a race
-   starts and ends. Boss-hunt points come from section 12's world bosses (points per boss, not by power).
-   Partly there (2026-11-15): the boss-hunt points (each boss's points shared by damage) and **weekly** races with
-   coin prizes for the top 10 of boss hunt, Blood Castle, Devil Square, Chaos Castle and the castle siege winners,
-   with this week's tables and last week's winners on the website. Still to do: daily and monthly races, the other
-   race kinds (resets, level, PK, guild points, per class), item prizes and start/end dates.
+1. ✅ **Top races ("đua top")**, built 2026-11-16 (Sydney): races set in the admin panel (*Top races*): resets done, levels
+   gained, highest level reached, boss-hunt points, PK kills, event wins (Blood Castle, Devil Square, Chaos Castle or any),
+   guild points (guilds; every member gets the prize), monsters, time in the game; all classes, one class or a table per
+   class; daily, weekly (Monday), monthly or between two Sydney dates (daylight saving handled); a minimum and prizes per
+   rank range (coins with coin type, zen, items), paid once at the end with unique references, zen and items waiting for
+   room in the bag. Live tables, coming races and past winners in the admin panel, on the website (Top races section) and
+   in the web game's top races window (F9); a golden notice in the game and community posts (Discord, website highlights)
+   when a race starts and ends. Defaults: weekly resets, weekly boss hunt, monthly levels per class, daily monsters,
+   weekly event wins, a weekly PK race (off). State in `save/top-races.json` (no database change). The weekly ranking
+   rewards of the world bosses (section 12.4) stay as they are. Still to check on a server running this code: a whole
+   race's end and payout with real players (the rules are unit-tested; the web parts are tested with fed packets).
 2. ⏳ **Gift codes**: the admin creates codes (rewards, number of uses, one per account or per character,
    start/end, level/reset limits); players enter them on the website or in the game (/code).
 3. ⏳ **Reset system with options**: reset tiers (level needed, zen/coins cost, points kept or given, a
