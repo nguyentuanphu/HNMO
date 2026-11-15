@@ -289,3 +289,13 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   (effects and arrows read `group.visible`), only its children are hidden.
 - In a crowd (60 characters) the CPU cost is mostly three.js's draw calls (~8 µs each in headless); fewer meshes per
   character is the next big win.
+
+## Rage Fighter casting (2026-11-15)
+- `testgm2`'s second character (`testgm2Rf`) is a Rage Fighter with every skill (pick it with
+  `#characters .choice:has-text("testgm2Rf")`). It rides a Fenrir, which blocks the close skills as on the desktop;
+  `tests/e2e/rage-fighter.spec.ts` takes the horn off on the client side only (`inventory.items.delete(8)`) and reloads.
+- The server already handles the fighter attack (C3 4A, `RageSkillAttackHandlerPlugIn`) and Dark Side's target list
+  (C1 4B, `RageSkillAttackRequestHandlerPlugIn` → `RageSkillAttackAction` → `ShowRageAttackRangePlugIn`); the 4B
+  response is 16 bytes (the desktop struct is unpacked: the skill at offset 4), ids little endian, 10000 = none.
+- Headless Chromium runs a few frames a second: an action can pass its hit keys between two updates (combat.ts counts
+  passed keys at the action's end), and Dark Side's dash is tested by wrapping `effects.step` to watch every tick.
