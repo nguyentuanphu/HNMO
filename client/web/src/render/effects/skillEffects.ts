@@ -64,6 +64,7 @@ export const SkillEffect = {
   SWELL_LIFE: 48,
   ICE_ARROW: 51,
   STARFALL: 46, // AT_SKILL_DEEPIMPACT
+  FIRE_BREATH: 49, // AT_SKILL_RIDER (on a Dinorant)
   PENETRATION: 52,
   FIRE_SLASH: 55,
   POWER_SLASH: 56,
@@ -614,6 +615,9 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.FIRE_SCREAM: // three burning claws race ahead (before the target check)
       fireScream(system, caster);
+      break;
+    case SkillEffect.FIRE_BREATH: // the Dinorant breathes fire ahead
+      system.createEffect('shotgun', caster.position, caster.angle, light, 0, caster);
       break;
     case SkillEffect.COMETFALL: // AT_SKILL_BLAST: two comets fall on the tile
       if (options.cell) cometfall(system, caster, options.cell);

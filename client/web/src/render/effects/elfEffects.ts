@@ -180,3 +180,38 @@ export function multiShotArrows(system: EffectSystem, shoot: (angleOffsetDegrees
     return lifeTime > 0;
   });
 }
+
+// BITMAP_SHOTGUN (Fire Breath): from 20 ahead of and 50 over the rider it flies ahead (30 a tick) for ten ticks,
+// two flames either side every tick, forty sparks at its start and a burst of fire at its end.
+EXTRA_EFFECTS.shotgun = {
+  create: (o, system) => {
+    const start = o.position.clone();
+    o.lifeTime = 10;
+    o.velocity = 1;
+    o.direction.set(0, -30, 0);
+    o.position.add(rotateByAngle(new THREE.Vector3(0, -20, 50), o.angle));
+    for (const offset of [new THREE.Vector3(-20, -20, 60), new THREE.Vector3(30, -20, 60)]) {
+      const p = rotateByAngle(offset, o.angle).add(start);
+      const angle = o.angle.clone();
+      for (let i = 0; i < 20; i++) {
+        angle.x = o.angle.x + randInt(20) + 5;
+        angle.y += i * 18;
+        system.createJoint('jointSpark', p, p, angle, 1);
+      }
+    }
+    return true;
+  },
+  move: (o, system, luminosity) => {
+    system.groundLight(o.position, luminosity * 0.5, luminosity * 0.5, luminosity * 0.8, 2);
+    const white = new THREE.Vector3(1, 1, 1);
+    const side = o.angle.clone();
+    side.z += 90;
+    o.scale = ((15 - o.lifeTime) / 20) * (randInt(3) + 2);
+    for (const y of [20, -20]) {
+      const p = rotateByAngle(new THREE.Vector3(0, y, 0), side).add(o.position);
+      system.createParticle('fire3', p, o.angle, white, 10, o.scale);
+    }
+    if (Math.trunc(o.lifeTime) === 1) system.createBomb2(o.position);
+    return true;
+  },
+};

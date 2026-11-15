@@ -417,6 +417,10 @@ export class EffectSystem {
         } else if (o.subType === 2 || o.subType === 3) { // the inner switch's default
           o.velocity.set(0, -(randInt(32) - 16) * 0.1, 0);
           o.rotation = randInt(360);
+        } else if (o.subType === 10) { // Fire Breath's two flames
+          o.velocity.set(0, -(randInt(16) + 32) * 0.1, 0);
+          o.rotation = randInt(360);
+          o.scale = scale;
         } else {
           return false;
         }
@@ -1607,6 +1611,14 @@ export class EffectSystem {
       position.z += 120;
       this.createJoint('jointHealing', position, at, angle, 8, owner, 10);
     }
+  }
+
+  /** CreateBomb2: twenty sparks thrown up 30 over the point and a burst of fire there (Exp false). */
+  createBomb2(p: THREE.Vector3): void {
+    const position = p.clone().setZ(p.z + 30);
+    const white = new THREE.Vector3(1, 1, 1);
+    for (let j = 0; j < 20; j++) this.createParticle('spark', position, new THREE.Vector3(randInt(60) + 60 + 90, 0, randInt(30)), white, 2);
+    this.createParticle('explosion2', position, new THREE.Vector3(), white, 0, 4);
   }
 
   /** CreateBomb: a burst of sparks and an explosion 80 over the point (SubType 0's). */

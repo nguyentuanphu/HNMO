@@ -72,6 +72,8 @@ const ELF: Case[] = [
   { skill: 30, name: 'summon', expect: ['effect:magicGround2', 'joint:jointHealing'], shotAt: 800 },
   // Starfall: the glowing arrow over the elf, then two flashes falling on the target and their rings.
   { skill: 46, name: 'starfall', expect: ['effect:arrowImpact', 'joint:flash', 'effect:shockWave'], shotAt: 400, other: true, model: 'arrowImpact', warm: [['Skill', 'ArrowImpact.bmd']] },
+  // Fire Breath (on a Dinorant): sparks, flames either side flying ahead, the burst at its end.
+  { skill: 49, name: 'fire-breath', expect: ['effect:shotgun', 'joint:jointSpark', 'particle:fire3', 'particle:explosion2'], shotAt: 240 },
   { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight', 'effect:flare', 'particle:light'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
 ];
 

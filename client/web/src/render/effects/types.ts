@@ -140,6 +140,7 @@ export type EffectType =
   | 'sparks' // BITMAP_SPARK+2: the Berserker buff's sparks at the hands (now and then)
   | 'lightMarks' // BITMAP_LIGHT_MARKS: the Berserker buff's marks on fourteen bones
   | 'fireCursedLich' // BITMAP_FIRE_CURSEDLICH SubType 2: the Flame Strike debuff's fire on the body
+  | 'shotgun' // BITMAP_SHOTGUN: Fire Breath, the Dinorant's burst of fire (no model)
   | 'skinShell'; // MODEL_SKIN_SHELL: the cancels' shards of skin flying off the target (Skill/SkinShell.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */

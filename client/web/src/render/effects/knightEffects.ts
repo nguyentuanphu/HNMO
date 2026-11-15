@@ -503,13 +503,14 @@ export function spiralSlashBlades(system: EffectSystem, caster: EffectOwner, key
   for (const key of keys) system.createJoint('flare', caster.position, caster.position, caster.angle, 23, null, 40, 0, key);
 }
 
-// BITMAP_JOINT_SPARK SubType 0: a short white spark streak.
+// BITMAP_JOINT_SPARK SubTypes 0 and 1: a short white spark streak.
 EXTRA_JOINTS.jointSpark = {
   init: (o) => {
-    if (o.subType !== 0) return false;
+    if (o.subType !== 0 && o.subType !== 1) return false;
     o.scale = 2;
-    o.velocity = randInt(20) + 6;
-    o.lifeTime = randInt(8) + 8;
+    // SubType 1 (Fire Breath's): faster and shorter.
+    o.velocity = o.subType === 1 ? randInt(20) + 16 : randInt(20) + 6;
+    o.lifeTime = o.subType === 1 ? randInt(4) + 4 : randInt(8) + 8;
     o.maxTails = 2;
     o.light.set(1, 1, 1);
     return true;
