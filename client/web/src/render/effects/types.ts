@@ -154,6 +154,7 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'twintailWater' // BITMAP_TWINTAIL_WATER: the Sleep debuff's bubbles
   | 'waterfall5' | 'waterfall3' // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
   | 'explosion2' // BITMAP_EXPLOTION+1 (DinoE.jpg): Stun's bolts' sparks, Fire Breath's fire
+  | 'lightning2' // BITMAP_LIGHTNING+1 SubType 1: a green glow on the ground where Drain Life's trails arrive
   | 'blueBlur' // BITMAP_BLUE_BLUR: SubType 1 (drawn with BITMAP_POUNDING_BALL), Fire Scream's rising blur
   | 'advSmoke2'; // BITMAP_ADV_SMOKE+1: Stun's bolts' smoke on the ground
 

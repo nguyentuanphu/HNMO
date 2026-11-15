@@ -104,7 +104,7 @@ const LORD: Case[] = [
 ];
 
 const SUMMONER: Case[] = [
-  { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy'], shotAt: 1000 },
+  { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy', 'particle:lightning2'], shotAt: 1000 },
   // Its links come with the server's ChainLightningHitInfo, fed to the game here.
   { skill: 215, name: 'chain-lightning', expect: ['effect:chainLightning', 'joint:jointThunder', 'particle:light'], shotAt: 200, chain: true },
   // Damage Reflection's cast, then its buff (eBuff_Thorns = 71): thorns of light rise from the hero while it lasts.

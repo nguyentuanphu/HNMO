@@ -74,3 +74,19 @@ EXTRA_PARTICLES.blueBlur = {
     system.quads.billboard(o.texture, blend, o.position, width, height, o.light, o.rotation);
   },
 };
+
+// BITMAP_LIGHTNING+1 SubType 1: no sprite (scale 0), only a green glow on the ground fading over ten ticks.
+EXTRA_PARTICLES.lightning2 = {
+  texture: 'lightning2',
+  init: (o) => {
+    if (o.subType !== 1) return false;
+    o.lifeTime = 10;
+    o.scale = 0;
+    return true;
+  },
+  move: (o, system) => {
+    const l = Math.max(0, o.lifeTime) / 10;
+    system.groundLight(o.position, l * 0.5, l, l * 0.8, 3);
+  },
+  draw: () => { /* scale 0: nothing drawn */ },
+};
