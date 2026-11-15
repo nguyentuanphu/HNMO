@@ -304,3 +304,6 @@ section 12 (the cash shop) still waits for the owner's answers.
   remove or wait out the buff first. The Dark Side dash check passed live but once failed at 5 fps (timing).
 - Phoenix Shot: the desktop casts it and sends nothing (the server supports it as an area skill). Kept 1:1 for now;
   ask the owner whether HNMO should send it.
+- Live specs share test accounts (account-safety and missions-live both use test5): run them with --workers=1,
+  or the second login is refused ("already logged in"). Once, after such a parallel run, test5 stayed
+  "already logged in" with no open connection until the server restarted; not reproduced since - watch for it.
