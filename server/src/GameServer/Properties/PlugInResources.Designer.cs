@@ -8430,5 +8430,59 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoResetsActionHandlerPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: account safety request (F5 20).
+        /// </summary>
+        public static string HnmoAccountSafetyRequestHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoAccountSafetyRequestHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends HNMO's account safety state to the web game which asked for it..
+        /// </summary>
+        public static string HnmoAccountSafetyRequestHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoAccountSafetyRequestHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: account safety action (F5 22).
+        /// </summary>
+        public static string HnmoAccountSafetyActionHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoAccountSafetyActionHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enters the second password, locks an item or asks an item's unlock for the web game..
+        /// </summary>
+        public static string HnmoAccountSafetyActionHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoAccountSafetyActionHandlerPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: account safety state (F5 21).
+        /// </summary>
+        public static string HnmoAccountSafetyViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoAccountSafetyViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends the account safety state (second password, required actions, locked items) to the web game which asked for it once..
+        /// </summary>
+        public static string HnmoAccountSafetyViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoAccountSafetyViewPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

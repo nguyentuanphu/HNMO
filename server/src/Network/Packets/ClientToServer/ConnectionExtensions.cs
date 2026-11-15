@@ -6131,6 +6131,65 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoAccountSafetyRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world.
+    /// Causes reaction on server side: The server sends the HnmoAccountSafetyState message, and from then on sends it again when something changes, e.g. an action needs the second password, an item was locked or unlocked, or a locked item moved.
+    /// </remarks>
+    public static async ValueTask SendHnmoAccountSafetyRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoAccountSafetyRequestRef.Length;
+            var packet = new HnmoAccountSafetyRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoAccountSafetyAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="vault">Whether the slot is in the vault (else the inventory).</param>
+    /// <param name="slot">The item's slot.</param>
+    /// <param name="pin">The second password (0-9999); 0xFFFF when none was entered.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player enters the second password in the web game, or locks or unlocks an item.
+    /// Causes reaction on server side: The server does it, answers in the chat and sends the HnmoAccountSafetyState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoAccountSafetyActionAsync(this IConnection? connection, HnmoAccountSafetyAction.HnmoAccountSafetyActionType @action, bool @vault, byte @slot, ushort @pin)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoAccountSafetyActionRef.Length;
+            var packet = new HnmoAccountSafetyActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Vault = @vault;
+            packet.Slot = @slot;
+            packet.Pin = @pin;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

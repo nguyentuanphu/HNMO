@@ -2358,4 +2358,28 @@
   <data name="DelegatedResetViChatCommandPlugIn_Name" xml:space="preserve">
     <value>HNMO: lệnh chat /uythac</value>
   </data>
+  <data name="AccountSafetyPlugIn_Name" xml:space="preserve">
+    <value>HNMO: bảo vệ tài khoản</value>
+  </data>
+  <data name="AccountSafetyPlugIn_Description" xml:space="preserve">
+    <value>Mật khẩu cấp 2 (mã PIN hòm đồ) cho hòm đồ, giao dịch, cửa hàng cá nhân và vật phẩm quý, có giới hạn nhập sai; khóa vật phẩm có thời gian chờ mở khóa; lịch sử đăng nhập và giao dịch; thông báo khi lần đăng nhập trước đến từ địa chỉ khác.</value>
+  </data>
+  <data name="UnlockChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat: /unlock (mật khẩu cấp 2)</value>
+  </data>
+  <data name="UnlockChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Nhập mật khẩu cấp 2 (mã PIN hòm đồ): /unlock 1234.</value>
+  </data>
+  <data name="LockItemChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat: /lockitem (khóa vật phẩm)</value>
+  </data>
+  <data name="LockItemChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Khóa một vật phẩm trong túi: /lockitem Ô (1-64, theo từng hàng), hoặc /lockitem list.</value>
+  </data>
+  <data name="UnlockItemChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Lệnh chat: /unlockitem (khóa vật phẩm)</value>
+  </data>
+  <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Yêu cầu mở khóa một vật phẩm trong túi bằng mật khẩu cấp 2: /unlockitem Ô PIN.</value>
+  </data>
 </root>

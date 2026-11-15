@@ -2814,4 +2814,22 @@
   <data name="HnmoResetsActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Xử lý thao tác reset của game web: reset, relife, điều kiện reset tiếp theo, bật/tắt ủy thác reset.</value>
   </data>
+  <data name="HnmoAccountSafetyRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO: yêu cầu bảo vệ tài khoản (F5 20)</value>
+  </data>
+  <data name="HnmoAccountSafetyRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái bảo vệ tài khoản của HNMO cho web game đã yêu cầu.</value>
+  </data>
+  <data name="HnmoAccountSafetyActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO: thao tác bảo vệ tài khoản (F5 22)</value>
+  </data>
+  <data name="HnmoAccountSafetyActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Nhập mật khẩu cấp 2, khóa vật phẩm hoặc yêu cầu mở khóa vật phẩm cho web game.</value>
+  </data>
+  <data name="HnmoAccountSafetyViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: trạng thái bảo vệ tài khoản (F5 21)</value>
+  </data>
+  <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi trạng thái bảo vệ tài khoản (mật khẩu cấp 2, thao tác cần mật khẩu, vật phẩm bị khóa) cho web game đã yêu cầu.</value>
+  </data>
 </root>

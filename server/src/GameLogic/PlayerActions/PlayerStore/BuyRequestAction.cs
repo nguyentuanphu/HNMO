@@ -68,6 +68,13 @@ public class BuyRequestAction
             return;
         }
 
+        if (PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety
+            && await safety.RefuseLockedItemAsync(requestedPlayer, item).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ItemBlock, null)).ConfigureAwait(false);
+            return;
+        }
+
         if (price.Kind != ShopPriceKind.Zen && !player.SupportsShopCurrencies())
         {
             // The client can't show such items, so it should never request them.
@@ -162,6 +169,12 @@ public class BuyRequestAction
             itemSold = true;
 
             player.GameContext.PlugInManager.GetPlugInPoint<IItemSoldToOtherPlayerPlugIn>()?.ItemSold(requestedPlayer, item, player);
+            PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext)?.RecordStoreSale(
+                requestedPlayer,
+                player,
+                item,
+                price.Kind == ShopPriceKind.Zen ? price.Amount : 0,
+                price.Kind == ShopPriceKind.Zen ? null : $"{price.Amount} {player.GetCurrencyName(price)}");
         }
 
         if (itemSold)

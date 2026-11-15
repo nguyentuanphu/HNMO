@@ -7376,6 +7376,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoAccountSafetyState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON, in plain ASCII (other characters are escaped): whether the account has a second password and entered it, which actions need it, the lockout, the locked items by slot, and the event which caused it, if any.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested HNMO's account safety (HnmoAccountSafetyRequest) or did an action there, and when something changed for a client which requested it before (an action needs the second password, an item was locked or unlocked, a locked item moved).
+    /// Causes reaction on client side: The web game asks for the second password when an action needs it, marks the locked items and updates the vault's lock.
+    /// </remarks>
+    public static async ValueTask SendHnmoAccountSafetyStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoAccountSafetyStateRef.GetRequiredSize(json);
+            var packet = new HnmoAccountSafetyStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

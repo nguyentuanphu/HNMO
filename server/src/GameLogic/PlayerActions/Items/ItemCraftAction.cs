@@ -33,6 +33,19 @@ public class ItemCraftAction
             return;
         }
 
+        // HNMO's account safety: locked items aren't mixed.
+        if (PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety)
+        {
+            foreach (var item in player.TemporaryStorage?.Items.ToList() ?? new List<Item>())
+            {
+                if (await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
+                {
+                    await player.InvokeViewPlugInAsync<IShowItemCraftingResultPlugIn>(p => p.ShowResultAsync(CraftingResult.IncorrectMixItems, null)).ConfigureAwait(false);
+                    return;
+                }
+            }
+        }
+
         var craftingHandler = this.GetCraftingHandler(crafting);
 
         (CraftingResult, Item?) result;

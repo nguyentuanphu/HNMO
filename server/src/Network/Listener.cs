@@ -94,10 +94,10 @@ public class Listener
         return this._encryptorCreator?.Invoke(writer);
     }
 
-    private IConnection CreateConnection(Socket clientSocket)
+    private IConnection CreateConnection(Socket clientSocket, EndPoint? remoteEndPoint)
     {
         var socketConnection = SocketConnection.Create(clientSocket);
-        return new Connection(socketConnection, this.CreateDecryptor(socketConnection.Input), this.CreateEncryptor(socketConnection.Output), this._loggerFactory.CreateLogger<Connection>());
+        return new Connection(socketConnection, this.CreateDecryptor(socketConnection.Input), this.CreateEncryptor(socketConnection.Output), this._loggerFactory.CreateLogger<Connection>(), remoteEndPoint);
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Exceptions are catched.")]
@@ -148,7 +148,10 @@ public class Listener
             if (cancel is null || !cancel.Cancel)
             {
                 socket.NoDelay = true; // todo: option?
-                var connection = this.CreateConnection(socket);
+
+                // HNMO's web bridge tells the browser's address first (only trusted from this computer).
+                var relayed = await ProxyHeader.TryReadAsync(socket).ConfigureAwait(false);
+                var connection = this.CreateConnection(socket, relayed);
 
                 if (this.ClientAccepted is { } clientAccepted)
                 {

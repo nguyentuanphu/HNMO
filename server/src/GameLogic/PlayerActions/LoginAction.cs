@@ -37,6 +37,7 @@ public class LoginAction
         var state = await this.AuthenticateAsync(player, username, password).ConfigureAwait(false);
         if (state is null)
         {
+            PlugIns.AccountSafety.AccountSafetyPlugIn.RecordFailedLogin(player, username);
             if (LoginAttemptGuard.RecordFailure(username, address))
             {
                 player.Logger.LogWarning("Logins of [{Username}] (address {Address}) locked for {Minutes} minutes after too many wrong passwords.", username, address, LoginAttemptGuard.LockTime.TotalMinutes);

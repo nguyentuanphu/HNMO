@@ -31,6 +31,15 @@ internal class PlayerShopOpenPacketHandlerPlugIn : ISubPacketHandlerPlugIn
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
         PlayerShopOpen message = packet;
-        await this._openStoreAction.OpenStoreAsync(player, message.StoreName).ConfigureAwait(false);
+        var storeName = message.StoreName;
+
+        // HNMO's account safety: opening the store may need the second password.
+        if (GameLogic.PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety
+            && await safety.RefuseAsync(player, GameLogic.PlugIns.AccountSafety.SafetyAction.PersonalStore).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        await this._openStoreAction.OpenStoreAsync(player, storeName).ConfigureAwait(false);
     }
 }

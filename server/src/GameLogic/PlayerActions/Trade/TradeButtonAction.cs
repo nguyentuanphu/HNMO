@@ -80,6 +80,8 @@ public class TradeButtonAction : BaseTradeAction
         using var itemContext = trader.GameContext.PersistenceContextProvider.CreateNewTradeContext();
         var traderItems = trader.TemporaryStorage!.Items.ToList();
         var tradePartnerItems = tradingPartner.TemporaryStorage!.Items.ToList();
+        var traderMoney = trader.TradingMoney;
+        var partnerMoney = tradingPartner.TradingMoney;
 
         // Checked here, and not only when an item is moved into the trade: the temporary storage
         // is shared with other windows (e.g. the chaos machine), so it may already contain items.
@@ -128,6 +130,7 @@ public class TradeButtonAction : BaseTradeAction
             this.ResetTradeState(trader);
             this.CallPlugIn(traderItems, trader, tradingPartner);
             this.CallPlugIn(tradePartnerItems, tradingPartner, trader);
+            PlugIns.AccountSafety.AccountSafetyPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
             FinishedTrades.Add(1);
             return TradeResult.Success;
         }
@@ -161,6 +164,18 @@ public class TradeButtonAction : BaseTradeAction
 
     private async ValueTask<bool> CheckItemsAreTradableAsync(ITrader trader, IEnumerable<Item> items)
     {
+        // HNMO's account safety: a locked item can't be traded (it may have been locked after it went into the trade).
+        if (trader is Player player && PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety)
+        {
+            foreach (var item in items)
+            {
+                if (await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
+            }
+        }
+
         var notTradable = items.FirstOrDefault(item => item.Definition is { IsTradable: false });
         if (notTradable is null)
         {

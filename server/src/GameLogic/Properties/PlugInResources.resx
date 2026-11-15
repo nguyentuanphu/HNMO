@@ -2188,4 +2188,28 @@
   <data name="DelegatedResetViChatCommandPlugIn_Name" xml:space="preserve">
     <value>HNMO: /uythac chat command</value>
   </data>
+  <data name="AccountSafetyPlugIn_Name" xml:space="preserve">
+    <value>HNMO: account safety</value>
+  </data>
+  <data name="AccountSafetyPlugIn_Description" xml:space="preserve">
+    <value>The second password (vault PIN) for the vault, trades, the personal store and valuable items, with wrong-try limits; item locks with an unlock wait; the login and trade history; a notice when the last login came from another address.</value>
+  </data>
+  <data name="UnlockChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Chat command: /unlock (second password)</value>
+  </data>
+  <data name="UnlockChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Enters the second password (the vault PIN): /unlock 1234.</value>
+  </data>
+  <data name="LockItemChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Chat command: /lockitem (item lock)</value>
+  </data>
+  <data name="LockItemChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Locks a bag item: /lockitem CELL (1-64, row by row), or /lockitem list.</value>
+  </data>
+  <data name="UnlockItemChatCommandPlugIn_Name" xml:space="preserve">
+    <value>Chat command: /unlockitem (item lock)</value>
+  </data>
+  <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Asks the unlock of a bag item with the second password: /unlockitem CELL PIN.</value>
+  </data>
 </root>

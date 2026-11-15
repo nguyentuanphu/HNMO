@@ -4812,6 +4812,78 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>20</SubCode>
+      <Name>HnmoAccountSafetyRequest</Name>
+      <Caption>Request HNMO account safety</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world.</SentWhen>
+      <CausedReaction>The server sends the HnmoAccountSafetyState message, and from then on sends it again when something changes, e.g. an action needs the second password, an item was locked or unlocked, or a locked item moved.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>22</SubCode>
+      <Name>HnmoAccountSafetyAction</Name>
+      <Caption>HNMO account safety action</Caption>
+      <Length>10</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player enters the second password in the web game, or locks or unlocks an item.</SentWhen>
+      <CausedReaction>The server does it, answers in the chat and sends the HnmoAccountSafetyState message with the result.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoAccountSafetyActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Boolean</Type>
+          <Name>Vault</Name>
+          <Description>Whether the slot is in the vault (else the inventory).</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>The item's slot.</Description>
+        </Field>
+        <Field>
+          <Index>8</Index>
+          <Type>ShortLittleEndian</Type>
+          <Name>Pin</Name>
+          <Description>The second password (0-9999); 0xFFFF when none was entered.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoAccountSafetyActionType</Name>
+          <Description>The action of the account safety.</Description>
+          <Values>
+            <EnumValue>
+              <Name>EnterPin</Name>
+              <Description>Enter the second password.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>LockItem</Name>
+              <Description>Lock the item at the slot.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>UnlockItem</Name>
+              <Description>Ask the unlock of the item at the slot, with the second password.</Description>
+              <Value>3</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

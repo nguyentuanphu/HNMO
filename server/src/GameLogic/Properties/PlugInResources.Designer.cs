@@ -5973,5 +5973,77 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("DelegatedResetViChatCommandPlugIn_Name", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: account safety.
+        /// </summary>
+        public static string AccountSafetyPlugIn_Name {
+            get {
+                return ResourceManager.GetString("AccountSafetyPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The second password (vault PIN) for the vault, trades, the personal store and valuable items, with wrong-try limits; item locks with an unlock wait; the login and trade history; a notice when the last login came from another address..
+        /// </summary>
+        public static string AccountSafetyPlugIn_Description {
+            get {
+                return ResourceManager.GetString("AccountSafetyPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat command: /unlock (second password).
+        /// </summary>
+        public static string UnlockChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("UnlockChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enters the second password (the vault PIN): /unlock 1234..
+        /// </summary>
+        public static string UnlockChatCommandPlugIn_Description {
+            get {
+                return ResourceManager.GetString("UnlockChatCommandPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat command: /lockitem (item lock).
+        /// </summary>
+        public static string LockItemChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("LockItemChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Locks a bag item: /lockitem CELL (1-64, row by row), or /lockitem list..
+        /// </summary>
+        public static string LockItemChatCommandPlugIn_Description {
+            get {
+                return ResourceManager.GetString("LockItemChatCommandPlugIn_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chat command: /unlockitem (item lock).
+        /// </summary>
+        public static string UnlockItemChatCommandPlugIn_Name {
+            get {
+                return ResourceManager.GetString("UnlockItemChatCommandPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Asks the unlock of a bag item with the second password: /unlockitem CELL PIN..
+        /// </summary>
+        public static string UnlockItemChatCommandPlugIn_Description {
+            get {
+                return ResourceManager.GetString("UnlockItemChatCommandPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

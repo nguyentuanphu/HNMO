@@ -64,6 +64,12 @@ public class SellItemToNpcAction
             return false;
         }
 
+        if (PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety && await safety.RefuseDropOrSaleAsync(player, item).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemSoldToNpcPlugIn>(p => p.ItemSoldToNpcAsync(false)).ConfigureAwait(false);
+            return false;
+        }
+
         return await this.SellItemAsync(player, item).ConfigureAwait(false);
     }
 

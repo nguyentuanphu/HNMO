@@ -25,6 +25,27 @@ public class TradeRequestAction
             return false;
         }
 
+        // HNMO's account safety: both traders need their second password (when the admin requires it).
+        if (PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety)
+        {
+            if (player is Player requester && await safety.RefuseAsync(requester, PlugIns.AccountSafety.SafetyAction.Trade).ConfigureAwait(false))
+            {
+                return false;
+            }
+
+            if (partner is Player requested && await safety.RefuseAsync(requested, PlugIns.AccountSafety.SafetyAction.Trade).ConfigureAwait(false))
+            {
+                if (player is Player requesterPlayer)
+                {
+                    await requesterPlayer.ShowBlueMessageAsync(requesterPlayer.Culture.TwoLetterISOLanguageName == "vi"
+                        ? $"{partner.Name} cần nhập mật khẩu cấp 2 trước khi giao dịch."
+                        : $"{partner.Name} has to enter their second password before trading.").ConfigureAwait(false);
+                }
+
+                return false;
+            }
+        }
+
         if (player.ViewPlugIns.GetPlugIn<IShowTradeRequestPlugIn>() is null || partner.ViewPlugIns.GetPlugIn<IShowTradeRequestAnswerPlugIn>() is null)
         {
             return false;

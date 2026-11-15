@@ -2915,4 +2915,22 @@
   <data name="HnmoResetsActionHandlerPlugIn_Description" xml:space="preserve">
     <value>Handles the web game's reset actions: reset, relife, the next reset's needs, the delegated reset switch.</value>
   </data>
+  <data name="HnmoAccountSafetyRequestHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO: account safety request (F5 20)</value>
+  </data>
+  <data name="HnmoAccountSafetyRequestHandlerPlugIn_Description" xml:space="preserve">
+    <value>Sends HNMO's account safety state to the web game which asked for it.</value>
+  </data>
+  <data name="HnmoAccountSafetyActionHandlerPlugIn_Name" xml:space="preserve">
+    <value>HNMO: account safety action (F5 22)</value>
+  </data>
+  <data name="HnmoAccountSafetyActionHandlerPlugIn_Description" xml:space="preserve">
+    <value>Enters the second password, locks an item or asks an item's unlock for the web game.</value>
+  </data>
+  <data name="HnmoAccountSafetyViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: account safety state (F5 21)</value>
+  </data>
+  <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
+    <value>Sends the account safety state (second password, required actions, locked items) to the web game which asked for it once.</value>
+  </data>
 </root>

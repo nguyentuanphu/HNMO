@@ -67,12 +67,26 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
     /// <param name="encryptionPipe">The encryption pipe.</param>
     /// <param name="logger">The logger.</param>
     public Connection(IDuplexPipe duplexPipe, IPipelinedDecryptor? decryptionPipe, IPipelinedEncryptor? encryptionPipe, ILogger<Connection> logger)
+        : this(duplexPipe, decryptionPipe, encryptionPipe, logger, null)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Connection" /> class with the address of the other side as a
+    /// relay told it (see <see cref="ProxyHeader"/>).
+    /// </summary>
+    /// <param name="duplexPipe">The duplex pipe of the (socket) connection.</param>
+    /// <param name="decryptionPipe">The decryption pipe.</param>
+    /// <param name="encryptionPipe">The encryption pipe.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="remoteEndPoint">The address of the other side; <c>null</c> takes the socket's.</param>
+    public Connection(IDuplexPipe duplexPipe, IPipelinedDecryptor? decryptionPipe, IPipelinedEncryptor? encryptionPipe, ILogger<Connection> logger, EndPoint? remoteEndPoint)
     {
         this._duplexPipe = duplexPipe;
         this._encryptionPipe = encryptionPipe;
         this._logger = logger;
         this.Source = decryptionPipe?.Reader ?? this._duplexPipe!.Input;
-        this._remoteEndPoint = this.SocketConnection?.Socket.RemoteEndPoint ?? new IPEndPoint(IPAddress.Any, 0);
+        this._remoteEndPoint = remoteEndPoint ?? this.SocketConnection?.Socket.RemoteEndPoint ?? new IPEndPoint(IPAddress.Any, 0);
         this.LocalEndPoint = this.SocketConnection?.Socket.LocalEndPoint;
         this.OutputLock = new();
     }

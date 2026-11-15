@@ -49,6 +49,8 @@ var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["H
 var allowedHosts = app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
 var allowLoopback = app.Configuration.GetValue("Relay:AllowLoopback", true);
 var connectTimeout = TimeSpan.FromSeconds(app.Configuration.GetValue("Relay:ConnectTimeoutSeconds", 10));
+// Tells a game server on this computer the browser's address first (a "PROXY" line), for the login history.
+var sendClientAddress = app.Configuration.GetValue("Relay:SendClientAddress", true);
 const int MaximumPacketSize = 0xFFFF;
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
@@ -254,7 +256,8 @@ app.Map("/relay", async context =>
     }
 
     using var socket = await context.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
-    await RelayAsync(socket, endPoint, encrypted, context.RequestAborted).ConfigureAwait(false);
+    var browser = context.Connection.RemoteIpAddress is { } remoteAddress ? new IPEndPoint(remoteAddress, context.Connection.RemotePort) : null;
+    await RelayAsync(socket, endPoint, encrypted, browser, context.RequestAborted).ConfigureAwait(false);
 });
 
 app.Run();
@@ -272,7 +275,7 @@ async Task<IPEndPoint?> ResolveAllowedAsync(string host, int port)
     return address is null ? null : new IPEndPoint(address, port);
 }
 
-async Task RelayAsync(WebSocket socket, IPEndPoint endPoint, bool encrypted, CancellationToken cancellationToken)
+async Task RelayAsync(WebSocket socket, IPEndPoint endPoint, bool encrypted, IPEndPoint? browser, CancellationToken cancellationToken)
 {
     SocketConnection pipe;
     try
@@ -286,6 +289,11 @@ async Task RelayAsync(WebSocket socket, IPEndPoint endPoint, bool encrypted, Can
         app.Logger.LogInformation("Couldn't connect to {EndPoint}: {Message}", endPoint, ex.Message);
         await CloseQuietlyAsync(socket, WebSocketCloseStatus.EndpointUnavailable, "connect failed").ConfigureAwait(false);
         return;
+    }
+
+    if (sendClientAddress && browser is not null && IPAddress.IsLoopback(endPoint.Address))
+    {
+        await pipe.Output.WriteAsync(ProxyHeader.Line(browser, endPoint), cancellationToken).ConfigureAwait(false);
     }
 
     var encryptor = encrypted ? new PipelinedXor32Encryptor(new PipelinedSimpleModulusEncryptor(pipe.Output, PipelinedSimpleModulusEncryptor.DefaultClientKey).Writer) : null;

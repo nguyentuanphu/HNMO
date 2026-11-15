@@ -19,7 +19,15 @@ public class UnlockVaultAction
     public async ValueTask UnlockVaultAsync(Player player, string pin)
     {
         VaultLockChangeResult result;
-        if (player.Account?.VaultPassword == pin)
+        if (PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety)
+        {
+            // HNMO's account safety: the vault PIN is the second password, with its wrong-try limits.
+            var check = await safety.EnterPinAsync(player, PlugIns.AccountSafety.AccountSafetyEngine.PinOf(int.TryParse(pin, out var number) ? number : -1), false).ConfigureAwait(false);
+            result = check.Result is PlugIns.AccountSafety.PinCheckResult.Ok or PlugIns.AccountSafety.PinCheckResult.NoPin
+                ? VaultLockChangeResult.Unlocked
+                : VaultLockChangeResult.UnlockFailedByWrongPin;
+        }
+        else if (PlugIns.AccountSafety.AccountSafetyEngine.PinMatches(player.Account?.VaultPassword, pin))
         {
             player.IsVaultLocked = false;
             result = VaultLockChangeResult.Unlocked;

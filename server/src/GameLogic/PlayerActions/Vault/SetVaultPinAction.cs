@@ -27,7 +27,11 @@ public class SetVaultPinAction
 
         if (BCrypt.Net.BCrypt.Verify(accountPassword, player.Account.PasswordHash))
         {
-            player.Account.VaultPassword = newPin;
+            // HNMO's account safety: the PIN is kept hashed; setting it counts as entered.
+            player.Account.VaultPassword = int.TryParse(newPin, out var number) && PlugIns.AccountSafety.AccountSafetyEngine.PinOf(number) is { } normalized
+                ? PlugIns.AccountSafety.AccountSafetyEngine.HashPin(normalized)
+                : newPin;
+            PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext)?.PinSetInGame(player);
             await player.InvokeViewPlugInAsync<IShowVaultLockChangeResponse>(p => p.ShowResponseAsync(VaultLockChangeResult.Unlocked)).ConfigureAwait(false);
         }
         else

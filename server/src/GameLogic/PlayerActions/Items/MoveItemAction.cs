@@ -70,6 +70,16 @@ public class MoveItemAction
             return;
         }
 
+        // HNMO's account safety: a locked item stays out of trades, stores and mixes; taking things out of the
+        // vault may need the second password.
+        if (fromStorage != toStorage && PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety
+            && ((toStorage is not (Storages.Inventory or Storages.Vault) && await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
+                || (fromStorage == Storages.Vault && !player.IsVaultLocked && await safety.RefuseAsync(player, PlugIns.AccountSafety.SafetyAction.Vault).ConfigureAwait(false))))
+        {
+            await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(item)).ConfigureAwait(false);
+            return;
+        }
+
         var toStorageInfo = this.GetStorageInfo(player, toStorage);
         var toItemStorage = toStorageInfo?.Storage;
 
