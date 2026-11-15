@@ -22,6 +22,10 @@ START
 
   Windows may warn "Windows protected your PC" (the files aren't signed):
   click "More info" and "Run anyway".
+  Windows 11 "Smart App Control blocked a file": Windows marks everything that came from
+  the internet. Before unzipping: right-click HNMO.zip, Properties, tick "Unblock", OK,
+  then Extract All again. Already unzipped: open PowerShell in the HNMO folder and run
+    Get-ChildItem -Recurse | Unblock-File
 
 SAVE GAME
   Progress is saved in the "save" folder: accounts, characters, items, guilds, coins.

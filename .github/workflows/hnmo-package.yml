@@ -113,4 +113,4 @@ jobs:
           gh release delete hnmo-latest --cleanup-tag --yes || true
           gh release create hnmo-latest HNMO.zip HNMO-windows.zip --target "$GITHUB_SHA" --latest \
             --title "HNMO" \
-            --notes "The newest HNMO folder, for Windows, Ubuntu and macOS. Unzip HNMO.zip. Windows: double-click Start HNMO.bat. Ubuntu: install PostgreSQL 16 (sudo apt install postgresql-16), then run ./start-hnmo.sh. macOS: install PostgreSQL 16 (brew install postgresql@16, or Postgres.app), then run ./start-hnmo.sh (the first time: xattr -dr com.apple.quarantine HNMO). Guide: friends/README.md"
+            --notes "The newest HNMO folder, for Windows, Ubuntu and macOS. Unzip HNMO.zip. Windows: before unzipping, right-click HNMO.zip, Properties, tick Unblock (Smart App Control), then Extract All and double-click Start HNMO.bat. Ubuntu: install PostgreSQL 16 (sudo apt install postgresql-16), then run ./start-hnmo.sh. macOS: install PostgreSQL 16 (brew install postgresql@16, or Postgres.app), then run ./start-hnmo.sh (the first time: xattr -dr com.apple.quarantine HNMO). Guide: friends/README.md"
