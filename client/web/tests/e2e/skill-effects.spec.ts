@@ -138,7 +138,7 @@ const FIGHTER: Case[] = [
   { skill: 260, name: 'killing-blow', expect: ['effect:wolfHeadEffect', 'effect:sbumb', 'particle:sbumb', 'joint:pinLightJoint'], shotAt: 240 },
   { skill: 261, name: 'beast-uppercut', expect: ['effect:downAttackDummyR', 'effect:downAttackDummyL', 'joint:forcePillar', 'particle:sahamuttExplosion'], shotAt: 520 },
   // Its timing follows the fighter's kick (PLAYER_SKILL_DRAGONKICK), played by the hero here.
-  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega', 'joint:groundWind', 'particle:energy', 'particle:spark3'], shotAt: 400, action: 252 },
+  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega', 'joint:groundWind', 'particle:energy', 'particle:spark3'], shotAt: 680, action: 252 },
   { skill: 266, name: 'increase-attack', expect: ['effect:swordEffectMono', 'particle:swordEffectMonoParticle', 'effect:shockWaveGround1', 'effect:eventCloud', 'effect:windForce', 'effect:magic'], shotAt: 400 },
   { skill: 267, name: 'increase-health', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:eventCloud'], shotAt: 400 },
   { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },
@@ -197,6 +197,8 @@ function cast(page: Page, skill: number, area: boolean, chain = false, action?: 
     }
     // Without a monster close by, a targeted skill is aimed at the hero itself.
     g.combat.events.onSkill(hero, skill, area ? null : best ?? hero, cell);
+    // The cast may play its own action (a Fenrir rider's): the case's action is played after it.
+    if (action !== undefined) (hero as unknown as { playOnce(action: number): void }).playOnce(action);
     return best !== null;
   }, { skill, area, chain, action, other });
 }

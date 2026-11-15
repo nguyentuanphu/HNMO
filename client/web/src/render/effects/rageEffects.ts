@@ -513,7 +513,11 @@ EXTRA_EFFECTS.dragonKickDummy = {
       o.live = false;
       return false;
     }
-    if (frame > 4 && frame < 5) {
+    // AnimationFrame in (4, 5): the web's frames can step over that window between ticks, so the window is taken as
+    // crossed when it overlaps the frames since the last tick (o->Distance keeps the last frame).
+    const before = o.distance;
+    o.distance = frame;
+    if (frame > 4 && before < 5 && frame !== before) {
       // The wind along the kick: a trail per tenth of a key, each following the dummy's second bone that much later.
       const count = Math.round(o.velocity * 10);
       for (let i = 0; i < count; i++) system.createJoint('groundWind', o.position, o.position, o.angle, i, o.self, 150);
