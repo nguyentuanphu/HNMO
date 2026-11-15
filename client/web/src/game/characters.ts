@@ -3,18 +3,18 @@
 
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from '../formats.js';
-import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, isHiddenTexture, AnimatedModel } from '../bmd.js';
+import { loadModel, buildGeometries, computeBoneMatrices, createMaterial, isHiddenTexture, sharedGeometries, AnimatedModel } from '../bmd.js';
 import { meshDraws, type ItemPlace, type MeshDraw } from './itemLooks.js';
 import { sampleHeight, sampleLight } from '../terrain.js';
-import { describeMonster, MonsterAction } from './monsterData.js';
-import { itemModel, ItemGroup } from './items.js';
+import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
+import { itemDefinition, itemModel, ItemGroup } from './items.js';
 import { addItemGlow } from './itemGlow.js';
 import { createCompanions, isDarkRaven } from './pets.js';
 import type { Companion, CompanionOwner } from './pets.js';
 import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
-import type { Vec3 } from '../formats.js';
+import type { BMDModel, Vec3 } from '../formats.js';
 import type { GeometryPart } from '../bmd.js';
-import type { ModelMonster } from './monsterData.js';
+import type { DescribeOptions, MonsterLook, MonsterSetupData } from './monsterData.js';
 import type { AppearanceItem, EquipmentAppearance, ItemGlowData } from './items.js';
 
 /** A terrain cell. */
@@ -50,6 +50,8 @@ export function setPlayerAnimationSpeeds(attackSpeed: number, magicSpeed: number
   playerSpeeds.magicSpeed = magicSpeed;
 }
 const BODY_PARTS = ['Helm', 'Armor', 'Pant', 'Glove', 'Boot'] as const;
+const PLAYER_SKELETON = { dir: 'Player', fileName: 'player.bmd' } as const;
+const NO_BODY: BMDModel = { name: 'none', meshes: [], actions: [], bones: [] };
 export const WALK_CELLS_PER_SECOND = 3.3;
 const DEGREES = Math.PI / 180;
 const ROTATION_STEP_DEGREES = 45;
@@ -68,46 +70,64 @@ const BODY_PART_SLOTS = { Helm: 'helm', Armor: 'armor', Pant: 'pants', Glove: 'g
 type BodyPart = keyof typeof BODY_PART_SLOTS;
 
 /** Where a body part's model comes from, and the worn item when it's an item's. */
-interface BodyPartSource {
+export interface BodyPartSource {
   dir: string;
   fileName: string;
   textureDir: string | string[];
   item?: AppearanceItem;
   glow?: ItemGlowData;
+  /** A texture name that replaces the file's, by mesh (Models.json textureNames). */
+  textureNames?: Record<number, string>;
+}
+
+/** An item's model as a body part, or null when the item list has no model for it. */
+export function itemBodySource(item: AppearanceItem | null | undefined): BodyPartSource | null {
+  const model = item ? itemModel(item.group, item.number) : null;
+  return item && model ? { dir: model.dir, fileName: model.fileName, textureDir: model.textureDir, item, glow: model.glow } : null;
 }
 
 function bodyPartSource(part: BodyPart, bodySet: number, equipment: EquipmentAppearance | null | undefined): BodyPartSource {
-  const item = equipment?.[BODY_PART_SLOTS[part]];
-  const model = item ? itemModel(item.group, item.number) : null;
-  if (item && model) return { dir: model.dir, fileName: model.fileName, textureDir: model.textureDir, item, glow: model.glow };
-  return { dir: 'Player', fileName: `${part}Class${String(bodySet).padStart(2, '0')}.bmd`, textureDir: 'Player' };
+  return itemBodySource(equipment?.[BODY_PART_SLOTS[part]])
+    ?? { dir: 'Player', fileName: `${part}Class${String(bodySet).padStart(2, '0')}.bmd`, textureDir: 'Player' };
 }
 
-export async function createPlayerModel(bodySet: number, equipment?: EquipmentAppearance | null): Promise<AnimatedModel> {
-  const skeleton = await loadModel('Player', 'player.bmd');
-  const pose = computeBoneMatrices(skeleton, PlayerAction.STOP, 0);
-  const sources = BODY_PARTS.map((part) => bodyPartSource(part, bodySet, equipment));
-  const loaded = await Promise.all(sources.map(async (source): Promise<{ geometries: GeometryPart[]; materials: THREE.MeshBasicMaterial[] }> => {
+/**
+ * A model made of body parts that follow one skeleton (the player's Player.bmd, or a monster's own model):
+ * each part's meshes posed by the skeleton's bones, each worn item glowing by its own level and options.
+ * `skeletonParts` draws the skeleton file's own meshes too (a monster model with parts, the merchants).
+ */
+export async function createBodyModel(skeletonFile: { dir: string; fileName: string }, sources: BodyPartSource[], startAction = 0,
+  skeletonParts?: BodyPartSource): Promise<AnimatedModel> {
+  const skeleton = await loadModel(skeletonFile.dir, skeletonFile.fileName);
+  const all = skeletonParts ? [skeletonParts, ...sources] : sources;
+  const loaded = await Promise.all(all.map(async (source): Promise<{ geometries: GeometryPart[]; materials: THREE.MeshBasicMaterial[] }> => {
     try {
-      const model = await loadModel(source.dir, source.fileName);
-      const geometries = buildGeometries(model, pose);
-      const materials = await Promise.all(geometries.map((geometry) => createMaterial(source.textureDir, geometry.textureName)));
+      const model = source === skeletonParts ? skeleton : await loadModel(source.dir, source.fileName);
+      const geometries = sharedGeometries(model);
+      const materials = await Promise.all(geometries.map((geometry) =>
+        createMaterial(source.textureDir, source.textureNames?.[geometry.meshIndex] ?? geometry.textureName)));
       return { geometries, materials };
     } catch (error) {
+      if (source === skeletonParts) throw error; // the body itself is missing
       console.warn(`Body part ${source.dir}/${source.fileName} missing`, (error as Error).message);
       return { geometries: [], materials: [] };
     }
   }));
-  const animated = new AnimatedModel(skeleton, loaded.flatMap((part) => part.geometries), loaded.flatMap((part) => part.materials));
+  const animated = new AnimatedModel(skeleton, loaded.flatMap((part) => part.geometries), loaded.flatMap((part) => part.materials), { skinned: true });
+  animated.pose(startAction, 0);
   // Each worn item glows by its own level and options, on its own meshes.
   let first = 0;
   await Promise.all(loaded.map((part, index) => {
     const parts = animated.parts.slice(first, first + part.geometries.length);
     first += part.geometries.length;
-    const source = sources[index];
+    const source = all[index];
     return source.item ? addItemGlow(animated, parts, source.glow, source.item) : null;
   }));
   return animated;
+}
+
+export async function createPlayerModel(bodySet: number, equipment?: EquipmentAppearance | null): Promise<AnimatedModel> {
+  return createBodyModel(PLAYER_SKELETON, BODY_PARTS.map((part) => bodyPartSource(part, bodySet, equipment)), PlayerAction.STOP);
 }
 
 // ---------- weapons and wings ----------
@@ -156,7 +176,9 @@ export async function createItemModel(item: AppearanceItem, place: ItemPlace = '
   const source = itemModel(item.group, item.number);
   if (!source) return null;
   const model = await loadModel(source.dir, source.fileName);
-  const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
+  // Worn by a character it shares its model's geometry, skinned on the GPU; a window or the ground poses its own.
+  const skinned = place === 'worn';
+  const parts = skinned ? sharedGeometries(model) : buildGeometries(model, computeBoneMatrices(model, 0, 0));
   const draws = meshDraws({ ...source.look, level: item.glowLevel ?? 0 }, {
     meshTextures: model.meshes.map((mesh) => mesh.texture),
     hiddenByTexture: (mesh) => isHiddenTexture(model.meshes[mesh]?.textureName ?? ''),
@@ -171,7 +193,7 @@ export async function createItemModel(item: AppearanceItem, place: ItemPlace = '
     const first = draws[part.meshIndex]?.[0];
     return first ? drawMaterial(source.textureDir, part.textureName, first) : Promise.resolve(hidden());
   }));
-  const animated = new AnimatedModel(model, parts, materials);
+  const animated = new AnimatedModel(model, parts, materials, { skinned });
   for (const part of animated.parts) {
     const first = draws[part.meshIndex]?.[0];
     if (first && !first.additive && first.light.some((channel) => channel !== 1)) part.tint = new THREE.Color(...first.light);
@@ -181,9 +203,7 @@ export async function createItemModel(item: AppearanceItem, place: ItemPlace = '
     for (const draw of (draws[part.meshIndex] ?? []).slice(1)) {
       const material = await drawMaterial(source.textureDir, part.textureName, draw);
       if (!draw.additive) material.color.setRGB(...draw.light);
-      const mesh = new THREE.Mesh(part.geometry, material);
-      mesh.frustumCulled = false;
-      extra.push(mesh);
+      extra.push(animated.overlay(part.geometry, material));
     }
   }
   if (extra.length) animated.addGlow({ meshes: extra, update: () => { /* still */ } });
@@ -201,10 +221,21 @@ export class Attachment {
   /** Where a weapon sits on the back; null for wings. */
   backMatrix: THREE.Matrix4 | null;
 
-  constructor({ model, item, slot }: { model: AnimatedModel; item: AppearanceItem; slot: AttachmentSlot }) {
+  /** The bone a held weapon hangs from (a monster model's linkBones); the player's hands without one. */
+  bone: number;
+  /** Arrows and bolts: never in a hand, always on the back (DrawsHeldWeapon, DrawsWeaponOnBack). */
+  readonly ammunition: boolean;
+  /** Whether it plays an animation (wings flap); a still part is posed once. */
+  private readonly animated: boolean;
+  private posed = false;
+
+  constructor({ model, item, slot, bone }: { model: AnimatedModel; item: AppearanceItem; slot: AttachmentSlot; bone?: number }) {
     this.model = model;
     this.item = item;
     this.slot = slot;
+    this.bone = bone ?? (slot === 'leftHand' ? Bone.LEFT_HAND : Bone.RIGHT_HAND);
+    this.animated = slot === 'wings' && (model.skeleton.actions[0]?.numKeys ?? 1) > 1;
+    this.ammunition = slot !== 'wings' && (itemDefinition(item.group, item.number)?.tags?.includes('ammunition') ?? false);
     this.model.group.matrixAutoUpdate = false;
     this.backMatrix = slot === 'wings' ? null : backPlacement(item, slot === 'rightHand');
   }
@@ -213,33 +244,32 @@ export class Attachment {
     const matrix = this.model.group.matrix;
     if (this.slot === 'wings') matrix.copy(boneMatrices[Bone.BACK]);
     else if (onBack) matrix.multiplyMatrices(boneMatrices[Bone.BACK], this.backMatrix!); // set for all but wings
-    else matrix.copy(boneMatrices[this.slot === 'rightHand' ? Bone.RIGHT_HAND : Bone.LEFT_HAND]);
+    else matrix.copy(boneMatrices[this.bone] ?? IDENTITY);
     this.model.group.matrixWorldNeedsUpdate = true;
-    this.model.pose(0, this.slot === 'wings' ? time * WING_KEYS_PER_SECOND : 0);
+    // A weapon is drawn at its first key: its vertices only need posing once.
+    if (this.animated || !this.posed) this.model.pose(0, this.slot === 'wings' ? time * WING_KEYS_PER_SECOND : 0);
+    this.posed = true;
   }
 }
 
-export async function createAttachments(equipment?: EquipmentAppearance | null): Promise<Attachment[]> {
+const IDENTITY = new THREE.Matrix4();
+
+/** The models hanging from bones: the weapons in the hands (`linkBones`: right, left; the player's without) and the wings. */
+export async function createAttachments(equipment?: EquipmentAppearance | null, linkBones?: [number, number]): Promise<Attachment[]> {
   // The Dark Raven in a hand flies next to its owner instead (pets.ts).
   const slots = (['rightHand', 'leftHand', 'wings'] as const).filter((slot) => equipment?.[slot] && !isDarkRaven(equipment[slot]));
   const attachments = await Promise.all(slots.map(async (slot) => {
     const item = equipment![slot]!; // the filter keeps the worn slots
     try {
       const model = await createItemModel(item);
-      return model ? new Attachment({ model, item, slot }) : null;
+      const bone = slot === 'wings' || !linkBones ? undefined : linkBones[slot === 'rightHand' ? 0 : 1];
+      return model ? new Attachment({ model, item, slot, bone }) : null;
     } catch (error) {
       console.warn(`Item ${item.group},${item.number} not drawn`, (error as Error).message);
       return null;
     }
   }));
   return attachments.filter((attachment): attachment is Attachment => Boolean(attachment));
-}
-
-async function createMonsterModel(description: ModelMonster): Promise<AnimatedModel> {
-  const model = await loadModel(description.dir, description.fileName);
-  const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
-  const materials = await Promise.all(parts.map((part) => createMaterial(description.textureDir, part.textureName)));
-  return new AnimatedModel(model, parts, materials);
 }
 
 export interface CharacterOptions {
@@ -294,6 +324,25 @@ export class Character {
   attacks: MonsterAttacksData | null = null;
   /** A player's class (0 Dark Wizard … 6 Rage Fighter): with its weapons it picks how it stands and walks. */
   classIndex: number | null = null;
+  /** A monster or NPC of the player model (o->Type == MODEL_PLAYER): it stands, walks, attacks and is hit as a player. */
+  playerShaped = false;
+  /** A player-shaped skeleton (SubType MODEL_SKELETON1-3): it sounds as a monster and bursts into bones when it dies. */
+  skeletonShape = false;
+  /** The model slot a monster is drawn with (its map or random variant's), for its sound set. */
+  monsterModel: string | null = null;
+  /** How a monster appeared (describeMonster). */
+  look: MonsterLook | null = null;
+  /** Drawn without the scene's light (setup "light": false). */
+  fullBright = false;
+  /** Stands this high above the ground (setup "heightOffset"), or at this height whatever the ground ("height"). */
+  heightOffset = 0;
+  fixedHeight: number | null = null;
+  /** Its body beside its tile, in world units (setup "positionOffset"). */
+  bodyOffset = new THREE.Vector2();
+  /** Faces this way whatever the server sends (setup "facing"), in radians. */
+  fixedAngle: number | null = null;
+  /** The animation it stands in (setup "startAction"), else its stop action. */
+  startAction: number | null = null;
 
   constructor({ id, name, model, kind, scale = 1, actions, keysPerSecond }: CharacterOptions) {
     this.id = id;
@@ -340,11 +389,18 @@ export class Character {
 
   get group(): THREE.Group { return this.model.group; }
 
+  /** It left the map for good: its GPU skeletons go back to their pool (the shared geometry and textures stay). */
+  release(): void {
+    this.model.release();
+    for (const attachment of this.attachments) attachment.model.release();
+  }
+
   placeAt(x: number, y: number, rotation?: number): void {
     this.cell = { x, y };
     this.position.set(cellCenter(x), cellCenter(y));
     this.path = [];
     if (rotation !== undefined) this.angle = angleFromRotation(rotation);
+    if (this.fixedAngle !== null) this.angle = this.fixedAngle;
   }
 
   walk(cells: Cell[]): void {
@@ -383,7 +439,7 @@ export class Character {
   // How it stands or walks: a player by its class, weapons, wings and the safe zone (the desktop's
   // SetPlayerStop / SetPlayerWalk); others always with their stop and walk actions.
   private stanceAction(world: CharacterWorld): number {
-    if (this.classIndex === null || !this.equipment) return this.isWalking ? this.actions.walk : this.actions.stop;
+    if (this.classIndex === null || !this.equipment) return this.isWalking ? this.actions.walk : this.startAction ?? this.actions.stop;
     const hand = (item: AppearanceItem | null | undefined) => (item ? { group: item.group, number: item.number } : null);
     const input = {
       classIndex: this.classIndex, rightHand: hand(this.equipment.rightHand), leftHand: hand(this.equipment.leftHand),
@@ -408,17 +464,26 @@ export class Character {
       if (action !== this.action) { this.action = action; this.time = 0; }
       this.time += dt * (this.keysPerSecond(action) ?? 6);
     }
-    const { x, y } = this.position;
-    this.group.position.set(x, y, sampleHeight(world.heights, x, y));
+    const x = this.position.x + this.bodyOffset.x, y = this.position.y + this.bodyOffset.y;
+    this.group.position.set(x, y, this.fixedHeight ?? sampleHeight(world.heights, x, y) + this.heightOffset);
     this.group.rotation.set(0, 0, this.angle);
     this.model.pose(this.action, this.time);
     this.clock += dt;
-    const light = sampleLight(world.light, x, y, this.light);
+    const light = this.fullBright ? this.light.setRGB(1, 1, 1) : sampleLight(world.light, x, y, this.light);
     this.model.setLight(light, this.clock);
-    // Players carry their weapons on the back in a safe zone (AreWeaponsOnBack).
-    this.weaponsOnBack = !this.holdWeapons && (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0;
+    // Players carry their weapons on the back in a safe zone (AreWeaponsOnBack), never in Blood Castle and Chaos
+    // Castle; a monster model shows no weapons there at all (only the player model has a back for them).
+    const mapNumber = world.mapNumber ?? -1;
+    const castle = (mapNumber >= 11 && mapNumber <= 23) || mapNumber === 52 || mapNumber === 53;
+    this.weaponsOnBack = !this.holdWeapons && !castle && (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0;
+    const backs = this.classIndex !== null;
     for (const attachment of this.attachments) {
-      attachment.place(this.model.matrices, this.weaponsOnBack, this.clock);
+      // Only the player model has a back; a monster model shows its weapons in its hands, outside a safe zone.
+      const onBack = this.weaponsOnBack || attachment.ammunition;
+      const shown = attachment.slot === 'wings' || backs || !onBack;
+      attachment.model.group.visible = shown;
+      if (!shown) continue;
+      attachment.place(this.model.matrices, onBack, this.clock);
       attachment.model.setLight(light, this.clock);
     }
     if (this.companions.length) this.updateCompanions(dt, world);
@@ -480,27 +545,141 @@ export async function createPlayerCharacter({ id, name, bodySet, equipment, kind
   return character;
 }
 
-const DEFAULT_NPC_BODY_SET = 2;
+/** Where a monster appears (its map variants), and the draw of its random look. */
+export interface MonsterSpawnOptions extends DescribeOptions {
+  id: number;
+  type: number;
+}
 
-export async function createMonsterCharacter({ id, type }: { id: number; type: number }): Promise<Character> {
-  const description = describeMonster(type);
-  if (description.usesPlayerModel) {
-    const character = await createPlayerCharacter({ id, name: description.name, bodySet: DEFAULT_NPC_BODY_SET, kind: description.kind });
-    character.group.scale.setScalar(description.scale);
-    character.monsterNumber = type;
-    character.attacks = description.attacks;
-    return character;
+// The setup fields that change how the model is drawn (DressCharacter): the glowing mesh (BlendMesh, its light),
+// the hidden mesh (-2: none drawn), how see-through it is and whether it takes the scene's light.
+function applyDrawSetup(model: AnimatedModel, setup: MonsterSetupData, ownMeshes: number): void {
+  const own = model.parts.slice(0, ownMeshes);
+  if (setup.hiddenMesh !== undefined) {
+    for (const part of own) if (setup.hiddenMesh === -2 || part.meshIndex === setup.hiddenMesh) part.mesh.visible = false;
   }
-  const monster = new Character({
-    id,
-    name: description.name,
-    kind: description.kind,
-    model: await createMonsterModel(description),
-    scale: description.scale,
-    actions: { stop: MonsterAction.STOP, walk: MonsterAction.WALK },
-    keysPerSecond: (action: number) => description.keysPerSecond[action],
-  });
-  monster.monsterNumber = type;
-  monster.attacks = description.attacks;
-  return monster;
+  if (setup.glowMesh !== undefined) {
+    const light = setup.glowLight ?? 1;
+    for (const part of own) {
+      if (part.meshIndex !== setup.glowMesh) continue;
+      Object.assign(part.mesh.material, { blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, alphaTest: 0 });
+      part.mesh.material.color.setScalar(light);
+    }
+  }
+  if (setup.alphaTarget !== undefined && setup.alphaTarget < 1) {
+    model.group.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const material = object.material as THREE.Material;
+      material.transparent = true;
+      material.opacity = setup.alphaTarget!; // checked above
+      material.depthWrite = false;
+    });
+  }
+}
+
+// The body sources of a player-shaped monster: its skin (a skeleton) alone, or its body parts, each the worn item's
+// model or a body that is no item. A part it wears nothing on is not drawn (CreateCharacterPointer: Type -1).
+function playerShapedSources(look: MonsterLook): BodyPartSource[] {
+  const skin = look.player?.skin;
+  if (skin) return [{ dir: skin.dir, fileName: skin.fileName, textureDir: skin.textureDir }];
+  const sources: BodyPartSource[] = [];
+  for (const slot of BODY_PART_SLOT_NAMES) {
+    const source = itemBodySource(look.equipment[slot]) ?? (look.bodyParts[slot] ? { ...look.bodyParts[slot]! } : null); // checked
+    if (source) sources.push(source);
+  }
+  return sources;
+}
+
+// The body parts a monster model wears over its own meshes (the merchants' heads and clothes).
+function modelPartSources(look: MonsterLook): BodyPartSource[] {
+  const sources: BodyPartSource[] = [];
+  for (const slot of BODY_PART_SLOT_NAMES) {
+    const source = itemBodySource(look.equipment[slot]) ?? (look.bodyParts[slot] ? { ...look.bodyParts[slot]! } : null); // checked
+    if (source) sources.push(source);
+  }
+  return sources;
+}
+
+/** The skin's render tier as an item glow (the Lorencia skeleton NPC's RenderPartObject with c->Level). */
+async function addSkinGlow(model: AnimatedModel, level: number): Promise<void> {
+  if (level > 0) await addItemGlow(model, model.parts, {}, { group: -1, number: -1, glowLevel: level });
+}
+
+/**
+ * A monster or NPC as the desktop makes it when it appears (Setup::Create): its model on the map (or a random
+ * variant's), its setup, and what it wears. A player-shaped one is the player model with its skin or body parts,
+ * weapons, wings and helper, standing, walking and attacking as a player; any other its own model with the
+ * weapons on the model's link bones. A model whose file is missing has the unknown monsters' look.
+ */
+export async function createMonsterCharacter({ id, type, ...place }: MonsterSpawnOptions): Promise<Character> {
+  let look = describeMonster(type, place);
+  try {
+    return await buildMonsterCharacter(id, look);
+  } catch (error) {
+    if (look.unknown || look.model === 'player') throw error;
+    console.warn(`Monster ${type}: model ${look.model} not drawn (${(error as Error).message}); the unknown monsters' look instead`);
+    look = describeMonster(type, { ...place, unknownReason: 'missingFile' });
+    return buildMonsterCharacter(id, look);
+  }
+}
+
+async function buildMonsterCharacter(id: number, look: MonsterLook): Promise<Character> {
+  const { setup } = look;
+  let character: Character;
+  if (look.player) {
+    const player = look.player;
+    const equipment = look.equipment;
+    const startAction = setup.startAction ?? PlayerAction.STOP;
+    const [model, attachments, companions] = await Promise.all([
+      createBodyModel(PLAYER_SKELETON, playerShapedSources(look), startAction), createAttachments(equipment), createCompanions(equipment),
+    ]);
+    await addSkinGlow(model, player.skinLevel);
+    character = new Character({
+      id, name: look.name, kind: look.kind, model,
+      actions: { stop: PlayerAction.STOP, walk: PlayerAction.WALK },
+      keysPerSecond: (action: number) => playerActionSpeed(action, { ...playerSpeeds, classIndex: player.classIndex }),
+    });
+    character.setAttachments(attachments);
+    character.setCompanions(companions);
+    character.classIndex = player.classIndex;
+    character.equipment = equipment;
+    character.playerShaped = true;
+    character.skeletonShape = isSkeletonSkin(setup.subType);
+    applyDrawSetup(model, setup, model.parts.length);
+  } else if (!look.body) {
+    // No body (model "none", or one the map's own code draws): nothing to see, as on the desktop.
+    const model = new AnimatedModel(NO_BODY, [], [], { skinned: true });
+    character = new Character({ id, name: look.name, kind: look.kind, model, actions: { stop: 0, walk: 0 }, keysPerSecond: () => 0 });
+  } else {
+    const body = look.body;
+    const extra = modelPartSources(look);
+    const own: BodyPartSource = { dir: body.dir, fileName: body.fileName, textureDir: body.textureDir, textureNames: body.textureNames };
+    const [model, attachments] = await Promise.all([
+      createBodyModel(body, extra, setup.startAction ?? MonsterAction.STOP, own), createAttachments(look.equipment, body.linkBones),
+    ]);
+    applyDrawSetup(model, setup, model.skeleton.meshes.length); // the model's own meshes come first
+    character = new Character({
+      id, name: look.name, kind: look.kind, model,
+      actions: { stop: MonsterAction.STOP, walk: MonsterAction.WALK },
+      keysPerSecond: (action: number) => body.keysPerSecond[action] ?? 0,
+    });
+    character.setAttachments(attachments.filter((attachment) => attachment.slot !== 'wings'));
+  }
+  character.group.scale.setScalar(look.scale);
+  character.monsterNumber = look.number;
+  character.monsterModel = look.model;
+  character.attacks = look.attacks;
+  character.look = look;
+  if (setup.light === false) character.fullBright = true;
+  if (setup.heightOffset !== undefined) character.heightOffset = setup.heightOffset;
+  if (setup.height !== undefined) character.fixedHeight = setup.height;
+  if (setup.positionOffset) character.bodyOffset.set(setup.positionOffset[0], setup.positionOffset[1]);
+  if (setup.startAction !== undefined) { character.action = setup.startAction; character.startAction = setup.startAction; }
+  if (setup.startFrame !== undefined) character.time = setup.startFrame;
+  if (setup.facing !== undefined) character.fixedAngle = setup.facing * DEGREES;
+  // The Lorencia skeleton NPC faces east there, the Devias one north (AnimationCharacter).
+  if (look.player && look.kind === 'npc' && isSkeletonSkin(setup.subType) && (look.place.map === 0 || look.place.map === 2)) {
+    character.fixedAngle = look.place.map === 0 ? 90 * DEGREES : 0;
+  }
+  return character;
 }

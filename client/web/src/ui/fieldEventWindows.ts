@@ -189,7 +189,7 @@ export function setUpFieldEvents(options: FieldEventsOptions): FieldEvents {
       for (const summon of packet) {
         const id = summon.Id & 0x7fff, type = summon.TypeNumber;
         void online.spawn(id, async () => {
-          const character = await createMonsterCharacter({ id, type });
+          const character = await createMonsterCharacter({ id, type, map: online.world.mapNumber });
           character.name = summonName(type, character.name, summon.OwnerCharacterName);
           if (isKalimaGate(type)) {
             // Not a target (the desktop's summons are players to the mouse): walking into it passes it.

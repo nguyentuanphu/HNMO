@@ -42,6 +42,8 @@ const EFFECT_MODELS: Partial<Record<EffectType, [string, string]>> = {
   magic2: ['Skill', 'Magic02.bmd'],
   stone1: ['Skill', 'Stone01.bmd'],
   stone2: ['Skill', 'Stone02.bmd'],
+  bone1: ['Skill', 'Bone01.bmd'],
+  bone2: ['Skill', 'Bone02.bmd'],
   ice: ['Skill', 'Ice01.bmd'],
   iceSmall: ['Skill', 'Ice02.bmd'],
   poison: ['Skill', 'Poison01.bmd'],
@@ -975,8 +977,14 @@ export class EffectSystem {
           o.scale = (randInt(50) + 50) / 100 * 4;
         }
         return (o.subType >= 1 && o.subType <= 4) || o.subType === 11 || o.subType === 12;
+      case 'bone1':
+      case 'bone2':
       case 'stone1':
       case 'stone2': {
+        // The bones start above the body (bone1 150, bone2 100), then fly as the stones.
+        if (o.type === 'bone1') o.position.z += 150;
+        else if (o.type === 'bone2') o.position.z += 100;
+        if ((o.type === 'bone1' || o.type === 'bone2') && o.subType !== 0) return false;
         if (o.subType !== 0 && o.subType !== 1 && o.subType !== 2 && o.subType !== 10) return false;
         // The MODEL_ICE_SMALL branch they share: no push for SubType 1.
         const p1 = new THREE.Vector3(0, o.subType === 1 ? 0 : (randInt(256) + 64) * 0.1, 0);
@@ -1156,6 +1164,8 @@ export class EffectSystem {
         case 'magicGround2': // the subtypes that make no healing trails (MoveEffect's BITMAP_MAGIC+1)
           if (o.subType >= 1 && ![4, 6, 7, 8, 9, 10, 11, 12, 13].includes(o.subType)) this.createHealing(o);
           break;
+        case 'bone1':
+        case 'bone2':
         case 'stone1':
         case 'stone2':
         case 'iceSmall': this.moveIceSmall(o); break;

@@ -16,7 +16,7 @@ import type { Connection } from '../net/connection.js';
 import { decodeItem, type Item } from './inventory.js';
 import { itemName } from './items.js';
 import { itemNameText } from './itemTooltip.js';
-import { describeMonster } from './monsterData.js';
+import { monsterName as monsterNameOf } from './monsterData.js';
 import { buffDefinition } from './buffs.js';
 import { skillInfo } from './skills.js';
 import { LEGACY_DIALOGS } from './legacyQuestDialog.generated.js';
@@ -99,7 +99,7 @@ export const questNumber = (index: number) => index & 0xffff;
 const questIndexOf = (group: number, number: number) => ((group << 16) | number) >>> 0;
 
 export function monsterName(number: number): string {
-  try { return describeMonster(number).name; } catch { return `Monster ${number}`; }
+  return monsterNameOf(number);
 }
 
 function itemText(item: Item | null): string {

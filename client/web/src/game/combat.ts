@@ -15,7 +15,7 @@ import type { OnlineWorld } from './online.js';
 import type { Inventory, Item } from './inventory.js';
 import {
   attackRange, damageTexts, deathAction, hitPlaysShock, killDamageText, monsterAnimationReaction, monsterShockAction,
-  monsterAttackAction, newMonsterAttackState, playerAnimationReaction, playerAttackAction, playerShockAction, ServerAnimation,
+  monsterAttackAction, newMonsterAttackState, playerAnimationReaction, isFemaleClass, playerAttackAction, playerShockAction, ServerAnimation,
   type AttackLookInput, type DamageText, type HandItem, type MonsterAttackState, type Mount,
 } from './combatLook.js';
 import { areaSkillRotation, isPartyMemberSkill, skillCastPlan, skillAnimationAction, skillRange, type SkillCastContext, type SkillCastPlan } from './skillCast.js';
@@ -75,7 +75,7 @@ export interface CombatEvents {
 }
 
 // The pets that change how the hero attacks (inventory slot 8): Horn of Fenrir, Dark Horse, Uniria, Dinorant.
-function mountOf(pet: Item | undefined): Mount {
+function mountOf(pet: Pick<Item, 'group' | 'number'> | null | undefined): Mount {
   if (!pet || pet.group !== 13) return 'none';
   if (pet.number === 37) return 'fenrir';
   if (pet.number === 4) return 'darkHorse';
@@ -84,11 +84,24 @@ function mountOf(pet: Item | undefined): Mount {
   return 'none';
 }
 
-const hand = (item: Item | undefined): HandItem | null => (item ? { group: item.group, number: item.number } : null);
+const hand = (item: Pick<Item, 'group' | 'number'> | null | undefined): HandItem | null => (item ? { group: item.group, number: item.number } : null);
+
+/** What decides a player-shaped monster's swing (SetPlayerAttack reads its class, weapons, helper and wings). */
+function shapedLook(character: Character, flags: ArrayLike<number>): AttackLookInput {
+  const equipment = character.equipment ?? {};
+  const classIndex = character.classIndex ?? 0;
+  return {
+    classIndex, rightHand: hand(equipment.rightHand), leftHand: hand(equipment.leftHand), mount: mountOf(equipment.pet),
+    wings: Boolean(equipment.wings), female: isFemaleClass(classIndex),
+    safeZone: (flags[character.cell.y * TERRAIN_SIZE + character.cell.x] & TerrainFlag.SAFEZONE) !== 0,
+  };
+}
 
 export class Combat {
   target: Character | null = null;
   private swing = 0;
+  /** Each player-shaped monster's own swing count (c->SwordCount). */
+  private readonly shapedSwings = new Map<number, number>();
   private readonly monsterStates = new Map<number, MonsterAttackState>();
   private readonly stop: () => void;
   private pendingSkill: PendingSkill | null = null;
@@ -298,8 +311,8 @@ export class Combat {
     }));
     if (hitPlaysShock({ hitShock, toHero }) && !target.dead) {
       const damage = packet.HealthDamage + packet.ShieldDamage;
-      const action = target.kind === 'player' || toHero
-        ? playerShockAction(toHero ? this.lookInput() : { classIndex: 0, rightHand: null, leftHand: null, mount: 'none' }, damage, target.action)
+      const action = target.kind === 'player' || toHero || target.playerShaped
+        ? playerShockAction(toHero ? this.lookInput() : target.playerShaped ? shapedLook(target, this.online.world.flags) : { classIndex: 0, rightHand: null, leftHand: null, mount: 'none' }, damage, target.action)
         : monsterShockAction(damage, target.action);
       if (action !== null && !target.isPlayingOnce) target.playOnce(action);
     }
@@ -312,7 +325,7 @@ export class Combat {
     target.dead = true;
     target.path = [];
     target.healthStatus = 0;
-    target.playOnce(deathAction(target.kind === 'player' || target === this.hero), undefined, true);
+    target.playOnce(deathAction(target.kind === 'player' || target === this.hero || target.playerShaped), undefined, true);
     this.events.onKilled?.(target);
     if (target === this.hero) {
       this.cancel();
@@ -330,6 +343,9 @@ export class Combat {
     let reaction;
     if (actor.kind === 'player') {
       reaction = playerAnimationReaction(packet.Animation, { classIndex: 0, rightHand: null, leftHand: null, mount: 'none', safeZone: false }, this.swing);
+    } else if (actor.playerShaped) {
+      // A player-shaped monster plays a player attack chosen from its equipment; its "attacks" do nothing.
+      reaction = playerAnimationReaction(packet.Animation, shapedLook(actor, this.online.world.flags), this.nextShapedSwing(actor));
     } else {
       let state = this.monsterStates.get(actor.id);
       if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
@@ -344,6 +360,12 @@ export class Combat {
     else if (reaction.kind === 'stop') actor.oneShot = null;
   }
 
+  private nextShapedSwing(actor: Character): number {
+    const count = this.shapedSwings.get(actor.id) ?? 0;
+    this.shapedSwings.set(actor.id, count + 1);
+    return count;
+  }
+
   // A monster's own skill (MonsterSkillAnimation): the attack its data names for that skill.
   private monsterSkill(packet: MonsterSkillPacket): void {
     const actor = this.characterById(packet.AttackerId & ID_MASK);
@@ -354,7 +376,7 @@ export class Combat {
     if (!state) { state = newMonsterAttackState(); this.monsterStates.set(actor.id, state); }
     state.monsterSkill = packet.SkillNumber;
     if (victim === this.hero) this.events.onHeroAttacked?.(actor);
-    const action = monsterAttackAction(actor.attacks, state);
+    const action = actor.playerShaped ? playerAttackAction(shapedLook(actor, this.online.world.flags), this.nextShapedSwing(actor)) : monsterAttackAction(actor.attacks, state);
     if (action !== null && action >= 0) actor.playOnce(action);
   }
 

@@ -97,6 +97,10 @@ export class OnlineWorld {
   onTalk?: (npc: Character) => void;
   /** Asked before talking to an NPC: true when it handled the talk itself (an event's own NPCs). */
   interceptTalk?: (npc: Character) => boolean;
+  /** A character came into view and was added to the map (its spawn effects). */
+  onAdded?: (character: Character) => void;
+  /** Gets a new character ready to draw (uploads, programs) before it is added to the map. */
+  prepare?: (character: Character) => Promise<void>;
   /** Also asked before TalkToNpcRequest: true when the click was handled otherwise (a Crywolf altar's contract). */
   beforeTalk?: (npc: Character) => boolean;
 
@@ -138,11 +142,15 @@ export class OnlineWorld {
     this.pending.add(id);
     try {
       const character = await create();
-      if (!this.pending.has(id)) return; // went out of view while loading
+      if (this.pending.has(id) && this.prepare) await this.prepare(character).catch(() => undefined);
+      if (!this.pending.has(id)) { character.release(); return; } // went out of view while loading
+      if (character.look?.setup.live === false) { character.release(); return; } // dropped at spawn (setup "live": false)
       character.placeAt(placement.x, placement.y, placement.rotation);
       if (placement.targetX !== placement.x || placement.targetY !== placement.y) character.walkStraightTo(placement.targetX, placement.targetY);
       this.characters.set(id, character);
+      character.update(0, this.world); // placed and posed before its first frame
       this.root.add(character.group);
+      this.onAdded?.(character);
       this.onChange?.();
     } catch (error) {
       console.warn(`Couldn't show object ${id}:`, (error as Error).message);
@@ -154,7 +162,7 @@ export class OnlineWorld {
   addNpcs(packet: AddNpcsPacket): void {
     for (const npc of packet.NPCs) {
       const id = npc.Id & ID_MASK;
-      this.spawn(id, () => createMonsterCharacter({ id, type: npc.TypeNumber }), {
+      this.spawn(id, () => createMonsterCharacter({ id, type: npc.TypeNumber, map: this.world.mapNumber }), {
         x: npc.CurrentPositionX, y: npc.CurrentPositionY, targetX: npc.TargetPositionX, targetY: npc.TargetPositionY, rotation: npc.Rotation,
       });
     }
@@ -182,6 +190,7 @@ export class OnlineWorld {
       if (!character) continue;
       this.root.remove(character.group);
       this.characters.delete(id);
+      character.release();
     }
     this.onChange?.();
   }
@@ -210,7 +219,7 @@ export class OnlineWorld {
   }
 
   clearCharacters(): void {
-    for (const [id, character] of this.characters) { this.root.remove(character.group); this.onEffects?.(id, null); }
+    for (const [id, character] of this.characters) { this.root.remove(character.group); this.onEffects?.(id, null); character.release(); }
     this.characters.clear();
     this.pending.clear();
     this.onChange?.();

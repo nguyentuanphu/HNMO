@@ -58,14 +58,22 @@ export function levelLightFactor(level: number): LightFactor | null {
   return () => factor.setRGB(dim, dim, dim);
 }
 
+// Skinned on the GPU when drawn over a skinned model's part (the skinning chunks do nothing otherwise).
 const vertexShader = /* glsl */ `
+  #include <common>
+  #include <skinning_pars_vertex>
   uniform int mode;
   uniform float wave;
   uniform float wave2;
   uniform vec2 chromeLight;
   varying vec2 vUv;
   void main() {
-    vec3 n = normalize(mat3(modelMatrix) * normal);
+    vec3 objectNormal = vec3(normal);
+    #include <skinbase_vertex>
+    #include <skinnormal_vertex>
+    vec3 transformed = vec3(position);
+    #include <skinning_vertex>
+    vec3 n = normalize(mat3(modelMatrix) * objectNormal);
     n = vec3(n.x, -n.z, n.y); // back to the game's axes: x east, y north, z up
     if (mode == 1) vUv = vec2(n.z * 0.5 + wave, n.y * 0.5 + wave * 2.0);
     else if (mode == 2) vUv = vec2((n.z + n.x) * 0.8 + wave2 * 2.0, n.y + n.x + wave2 * 3.0);
@@ -76,7 +84,7 @@ const vertexShader = /* glsl */ `
     }
     else if (mode == 9) vUv = vec2(n.z * 0.5 + 0.2, n.y * 0.5 + 0.5);
     else vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
   }
 `;
 
@@ -148,7 +156,7 @@ export async function addItemGlow(model: AnimatedModel, parts: ModelPart[], glow
     for (const part of parts.filter((p) => filter(p.meshIndex) && p.mesh.material.visible)) {
       const material = passMaterial(mode, map, tint === 'shine' ? shineColor : glowColor);
       materials.push({ material, kind: 'level' });
-      meshes.push(new THREE.Mesh(part.geometry, material));
+      meshes.push(model.overlay(part.geometry, material));
     }
   }
 
@@ -158,7 +166,7 @@ export async function addItemGlow(model: AnimatedModel, parts: ModelPart[], glow
     for (const part of parts.filter((p) => (only === undefined || p.meshIndex === only) && p.mesh.material.map)) {
       const material = passMaterial(Mode.MESH, part.mesh.material.map!, new THREE.Color()); // the filter keeps parts with a map
       materials.push({ material, kind: 'excellent' });
-      meshes.push(new THREE.Mesh(part.geometry, material));
+      meshes.push(model.overlay(part.geometry, material));
     }
   } else if (ancient) {
     const map = await loadTexture('Effect', MODE_TEXTURE[Mode.CHROME3]);
@@ -166,7 +174,7 @@ export async function addItemGlow(model: AnimatedModel, parts: ModelPart[], glow
       for (const part of parts.filter((p) => onShine(p.meshIndex) && p.mesh.material.visible)) {
         const material = passMaterial(Mode.CHROME3, map, color(glow.ancientColor, 'azure'));
         materials.push({ material, kind: 'ancient' });
-        meshes.push(new THREE.Mesh(part.geometry, material));
+        meshes.push(model.overlay(part.geometry, material));
       }
     }
   }

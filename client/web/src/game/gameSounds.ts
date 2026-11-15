@@ -78,11 +78,16 @@ export class GameSounds {
     this.audio.play(sound, { anchored: true });
   }
 
-  /** A monster's moment (stand, walk, attack, hit, death), from its sound set. */
+  /** A sound by its SOUND_ id, at the character (PlayBuffer with an object). */
+  play(sound: string): void {
+    this.audio.play(sound, { anchored: true });
+  }
+
+  /** A monster's moment (stand, walk, attack, hit, death), from its sound set (a random variant's for its model). */
   monster(monster: Character, situation: MonsterSoundSituation, hero: Character | null): void {
     if (monster.monsterNumber === null) return;
     const heroDistance = hero ? Math.hypot(hero.position.x - monster.position.x, hero.position.y - monster.position.y) : undefined;
-    for (const play of monsterSoundPlays(monster.monsterNumber, { ...situation, heroDistance })) {
+    for (const play of monsterSoundPlays(monster.monsterNumber, { model: monster.monsterModel ?? undefined, ...situation, heroDistance })) {
       this.audio.play(play.file, { channels: play.channels, anchored: play.atMonster });
     }
   }

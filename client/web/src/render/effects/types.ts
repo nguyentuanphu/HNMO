@@ -55,6 +55,7 @@ export type EffectType =
   | 'magic2' // MODEL_MAGIC2: Power Wave's wave, Power Slash's blades (Skill/Magic02.bmd)
   | 'magicGround2' // BITMAP_MAGIC+1: the healing / buff circle on the ground
   | 'stone1' | 'stone2' // MODEL_STONE1/2: debris
+  | 'bone1' | 'bone2' // MODEL_BONE1/2: a skeleton's bones when it dies (SetPlayerDie)
   | 'ice' // MODEL_ICE: Ice's crystal (Skill/Ice01.bmd)
   | 'iceSmall' // MODEL_ICE_SMALL: its shards (Skill/Ice02.bmd)
   | 'poison' // MODEL_POISON: Poison's cloud (Skill/Poison01.bmd)

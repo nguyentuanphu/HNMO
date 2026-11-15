@@ -281,6 +281,86 @@ export function buildGeometries(model: BMDModel, boneMatrices: THREE.Matrix4[]):
   });
 }
 
+// ---------- shared, GPU-skinned geometry ----------
+
+/**
+ * Each mesh of a model as one geometry with its corners in their bone's space and the bone as the skin index: drawn
+ * skinned on the GPU, so every character of the model shares it (one upload per model file, kept while the page lives:
+ * never disposed when a character leaves).
+ */
+const sharedGeometryCache = new WeakMap<BMDModel, GeometryPart[]>();
+
+export function sharedGeometries(model: BMDModel): GeometryPart[] {
+  let parts = sharedGeometryCache.get(model);
+  if (!parts) {
+    parts = model.meshes.map((mesh, meshIndex) => {
+      const skin = expandMesh(mesh);
+      const count = skin.nodes.length;
+      const skinIndex = new Uint16Array(count * 4);
+      const skinWeight = new Float32Array(count * 4);
+      for (let i = 0; i < count; i++) {
+        skinIndex[i * 4] = Math.max(0, skin.nodes[i]);
+        skinWeight[i * 4] = 1;
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(skin.local, 3));
+      geometry.setAttribute('normal', new THREE.BufferAttribute(skin.localNormals, 3));
+      geometry.setAttribute('uv', new THREE.BufferAttribute(skin.uvs, 2));
+      geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(skinIndex, 4));
+      geometry.setAttribute('skinWeight', new THREE.BufferAttribute(skinWeight, 4));
+      geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1e6); // never culled, never raycast
+      return { geometry, skin, textureName: mesh.textureName, meshIndex };
+    });
+    sharedGeometryCache.set(model, parts);
+  }
+  return parts;
+}
+
+/**
+ * The bones of one character for the skinning shader: its model's matrices (computeBoneMatrices, model space) as
+ * they are, without three.js bone objects. Released skeletons are kept by size and given to the next character, so
+ * a character that comes into view again makes no new bone texture.
+ */
+class MatrixSkeleton extends THREE.Skeleton {
+  source: THREE.Matrix4[] = [];
+  version = 0;
+  private copied = -1;
+
+  constructor(count: number) {
+    super(Array.from({ length: count }, () => new THREE.Bone()));
+  }
+
+  override update(): void {
+    if (this.copied === this.version) return;
+    this.copied = this.version;
+    for (let i = 0; i < this.source.length; i++) this.source[i].toArray(this.boneMatrices, i * 16);
+    if (this.boneTexture) this.boneTexture.needsUpdate = true;
+  }
+}
+
+const skeletonPool = new Map<number, MatrixSkeleton[]>();
+const IDENTITY_BIND = new THREE.Matrix4();
+
+function takeSkeleton(count: number, source: THREE.Matrix4[]): MatrixSkeleton {
+  const skeleton = skeletonPool.get(count)?.pop() ?? new MatrixSkeleton(count);
+  skeleton.source = source;
+  skeleton.version++;
+  return skeleton;
+}
+
+function skinnedMesh(geometry: THREE.BufferGeometry, material: THREE.Material, skeleton: MatrixSkeleton): THREE.SkinnedMesh {
+  const mesh = new THREE.SkinnedMesh(geometry, material);
+  mesh.bindMode = THREE.DetachedBindMode;
+  mesh.bind(skeleton, IDENTITY_BIND);
+  mesh.frustumCulled = false;
+  return mesh;
+}
+
+export interface AnimatedModelOptions {
+  /** Draw with the model's shared geometries, skinned on the GPU (the parts must come from sharedGeometries). */
+  skinned?: boolean;
+}
+
 // An animated model whose meshes follow a skeleton (its own, or a shared one such as Player.bmd).
 // Glow passes are extra meshes on the same geometry (see game/itemGlow.js).
 export class AnimatedModel {
@@ -290,24 +370,40 @@ export class AnimatedModel {
   parts: ModelPart[];
   glows: ModelGlow[];
   lightFactor: LightFactor | null;
+  /** The GPU skeleton of a skinned model (null: its vertices are posed on the CPU). */
+  private gpuSkeleton: MatrixSkeleton | null;
 
-  constructor(skeleton: BMDModel, parts: GeometryPart[], materials: THREE.MeshBasicMaterial[]) {
+  constructor(skeleton: BMDModel, parts: GeometryPart[], materials: THREE.MeshBasicMaterial[], { skinned = false }: AnimatedModelOptions = {}) {
     this.skeleton = skeleton;
     this.group = new THREE.Group();
     this.matrices = computeBoneMatrices(skeleton, 0, 0);
     this.parts = [];
     this.glows = [];
     this.lightFactor = null; // a function of time giving the light multiplier of the item level
+    this.gpuSkeleton = skinned ? takeSkeleton(Math.max(1, skeleton.bones.length), this.matrices) : null;
     parts.forEach((part, index) => {
-      const mesh = new THREE.Mesh(part.geometry, materials[index]);
-      mesh.frustumCulled = false;
+      const mesh = this.overlay(part.geometry, materials[index]) as THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
       this.group.add(mesh);
       this.parts.push({ ...part, mesh });
     });
   }
 
+  /** Whether its meshes are skinned on the GPU with shared geometry. */
+  get skinned(): boolean { return this.gpuSkeleton !== null; }
+
+  /** A mesh drawn over a part's geometry that follows the model's bones (a glow pass, a look's second drawing). */
+  overlay(geometry: THREE.BufferGeometry, material: THREE.Material): THREE.Mesh {
+    const mesh = this.gpuSkeleton ? skinnedMesh(geometry, material, this.gpuSkeleton) : new THREE.Mesh(geometry, material);
+    mesh.frustumCulled = false;
+    return mesh;
+  }
+
   pose(actionIndex: number, time: number): void {
     computeBoneMatrices(this.skeleton, actionIndex, time, this.matrices);
+    if (this.gpuSkeleton) {
+      this.gpuSkeleton.version++;
+      return;
+    }
     const withNormals = this.glows.length > 0;
     for (const part of this.parts) {
       const attribute = part.geometry.getAttribute('position');
@@ -335,5 +431,19 @@ export class AnimatedModel {
       if (factor) part.mesh.material.color.multiply(factor);
     }
     for (const glow of this.glows) glow.update(seconds);
+  }
+
+  /**
+   * The model left the scene for good: its GPU skeleton goes back to the pool. The shared geometry and the cached
+   * textures stay (the next character of the model draws with them).
+   */
+  release(): void {
+    const skeleton = this.gpuSkeleton;
+    if (!skeleton) return;
+    this.gpuSkeleton = null;
+    skeleton.source = [];
+    const pool = skeletonPool.get(skeleton.bones.length) ?? [];
+    pool.push(skeleton);
+    skeletonPool.set(skeleton.bones.length, pool);
   }
 }

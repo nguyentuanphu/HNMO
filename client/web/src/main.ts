@@ -11,6 +11,8 @@ import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter } from './g
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
 import { loadMonsterCatalog } from './game/monsterData.js';
+import { playSpawnEffects } from './game/spawnEffects.js';
+import { prewarmMapMonsters, warmObject, type Warmer } from './game/prewarm.js';
 import { itemDefinition, itemName, loadItemCatalog, itemsWithModels, ItemGroup, ARMOR_GROUPS, WEAPON_GROUPS } from './game/items.js';
 import { OnlineWorld } from './game/online.js';
 import { Chat } from './game/chat.js';
@@ -231,6 +233,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const scene = new THREE.Scene();
 scene.background = FOG.color;
 const camera = new THREE.PerspectiveCamera(35, 1, 10, 9000);
+const warmer: Warmer = { renderer, camera, scene };
 const root = new THREE.Group(); // game coordinates: x east, y north, z up
 root.rotation.x = -Math.PI / 2;
 scene.add(root);
@@ -722,11 +725,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       await loadMap(map);
       state.online!.world = state.world!;
       state.hero!.placeAt(x, y);
+      void prewarmMapMonsters(warmer, map, () => state.mapNumber === map);
       chat.add(`Welcome to ${mapName(map)}.`, 'system');
       setStatus(`${mapName(map)}. Enter opens the chat; /move <map> warps.`, 1);
     },
   });
   const online = state.online;
+  // A monster or player is drawn first with its textures uploaded and programs ready (no stall the frame it shows).
+  online.prepare = (character) => warmObject(warmer, character.group);
+  if (state.mapNumber !== null) { const map = state.mapNumber; void prewarmMapMonsters(warmer, map, () => state.mapNumber === map); }
   // Players coming into view bring their buffs; leaving it forgets them.
   online.onEffects = (id, effects) => { if (effects) buffs.replace(id, effects); else buffs.forget(id); };
   const itemWindows = state.itemWindows;
@@ -787,6 +794,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     const has = (buff: number) => buffs.has(who === online.hero ? online.playerId : who.id, buff);
     return effectOwnerOf(who, { hasAura: () => [1, 2, 3].some(has), hasBuff: has });
   };
+  // What appears with a monster (its setup's spawnEffects).
+  online.onAdded = (who) => { if (who.look?.setup.spawnEffects) void playSpawnEffects(effects, who, ownerFromCharacter(who)); };
   // The buffs' looks (InsertBuffPhysicalEffect / ClearBuffLogicalEffect): Soul Barrier's lights.
   const knownBuffs = new Map<number, number[]>();
   buffs.onChange((id) => {
@@ -802,13 +811,20 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       overlay.addNumbers(() => Combat.anchorOf(target, 0), texts);
       if (target.dead) return;
       if (target.kind === 'player' || target === online.hero) sounds.playerHurt(target === online.hero ? character.classIndex : target.classIndex ?? 0, false);
-      else if (target.kind === 'monster') sounds.monster(target, { moment: 'hit', animation: 'shock' }, online.hero);
+      else {
+        // SetPlayerShock: a player-shaped monster screams as a player, a skeleton rattles; the set plays for all.
+        if (target.skeletonShape) sounds.play('SOUND_BONE1');
+        else if (target.playerShaped) sounds.playerHurt(target.classIndex ?? 0, false);
+        sounds.monster(target, { moment: 'hit', animation: 'shock' }, online.hero);
+      }
     },
     onMessage: (text) => chat.add(text, 'system'),
     onTargetChanged: (target) => overlay.showTarget(target),
     // Arrows leave the bow a moment into the swing (CreateArrow); archers among the monsters shoot theirs.
     onSwing: (actor, target, look) => {
-      if (actor.kind === 'monster') sounds.monster(actor, { moment: 'attack', animation: 'attack1' }, online.hero);
+      if (actor.skeletonShape) sounds.play(Math.random() < 0.5 ? 'SOUND_BRANDISH_SWORD01' : 'SOUND_BRANDISH_SWORD02');
+      else if (actor.playerShaped) sounds.swing(actor.equipment?.rightHand ?? null, actor.equipment?.leftHand ?? null);
+      if (actor.kind === 'monster' || actor.playerShaped) sounds.monster(actor, { moment: 'attack', animation: 'attack1' }, online.hero);
       else if (look) sounds.swing(look.rightHand, look.leftHand);
       else sounds.swing(actor.equipment?.rightHand ?? null, actor.equipment?.leftHand ?? null);
       const hand = (item: { group: number; number: number } | null | undefined) => (item ? { group: item.group, number: item.number } : null);
@@ -820,8 +836,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     },
     onKilled: (dead) => {
       deaths.died(dead, dead.kind === 'player' ? null : dead.monsterNumber);
-      if (dead.kind === 'monster') sounds.monster(dead, { moment: 'death', animation: 'die' }, online.hero);
-      else sounds.playerHurt(dead === online.hero ? character.classIndex : dead.classIndex ?? 0, true);
+      if (dead.kind === 'player' || dead === online.hero) sounds.playerHurt(dead === online.hero ? character.classIndex : dead.classIndex ?? 0, true);
+      else {
+        // SetPlayerDie: a skeleton (and the Death Cow) bursts into bones; another player-shaped one screams.
+        if (dead.skeletonShape || dead.monsterModel === 'MONSTER_MODEL_DEATH_COW') {
+          dead.group.visible = false;
+          const at = dead.group.position.clone();
+          effects.createEffect('bone1', at, new THREE.Vector3(0, 0, THREE.MathUtils.radToDeg(dead.angle)), new THREE.Vector3(dead.light.r, dead.light.g, dead.light.b));
+          for (let j = 0; j < 10; j++) effects.createEffect('bone2', at, new THREE.Vector3(0, 0, THREE.MathUtils.radToDeg(dead.angle)), new THREE.Vector3(dead.light.r, dead.light.g, dead.light.b));
+          sounds.play('SOUND_BONE2');
+        } else if (dead.playerShaped) sounds.playerHurt(dead.classIndex ?? 0, true);
+        sounds.monster(dead, { moment: 'death', animation: 'die' }, online.hero);
+      }
     },
     onHeroAttacked: (attacker) => state.autoPlay?.attackedBy(attacker),
     onSkill: (caster, castSkill, target, cell) => {

@@ -12,7 +12,7 @@
 import { loadItemCatalog, itemDefinition } from './items.js';
 import type { ItemDefinition, LocalizedText } from './items.js';
 import type { Item } from './inventory.js';
-import { loadMonsterCatalog } from './monsterData.js';
+import { loadMonsterCatalog, localName } from './monsterData.js';
 import type { MonsterCatalog } from './monsterData.js';
 import { buxConvert } from '../formats.js';
 import { hellasTooltipLines } from './kalima.js';
@@ -1149,7 +1149,8 @@ function placeholderValue(name: string, definition: TooltipDefinition | null, co
   if (gameData) {
     // The skill list isn't loaded in the web client: such a line shows as written from there on.
     if (gameData[1] !== 'monsterName') return undefined;
-    return loaded().monsters?.byNumber.get(Number(gameData[2]))?.name?.en;
+    const monster = loaded().monsters?.byNumber.get(Number(gameData[2]));
+    return monster ? localName(monster.name) : undefined;
   }
   const levelValues = definition?.levelValues?.[name];
   if (levelValues) {
