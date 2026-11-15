@@ -170,7 +170,7 @@ test.describe('monster looks', () => {
   });
 });
 
-// In the game against a running server (IN_GAME=1, account test2): the dungeon's skeletons come with the server's
+// In the game against a running server (IN_GAME=1, account test300: the Dungeon needs level 30): the dungeon's skeletons come with the server's
 // monster packets and are drawn as above. Only looks are read; the hero moves to the dungeon and back to Lorencia.
 test('in the game: the dungeon skeletons are skeletons with their weapons', async ({ page }) => {
   test.skip(!process.env.IN_GAME, 'needs a game server (IN_GAME=1)');
@@ -185,7 +185,7 @@ test('in the game: the dungeon skeletons are skeletons with their weapons', asyn
       return existsSync(file) ? route.fulfill({ contentType: 'text/javascript', body: readFileSync(file) }) : route.continue();
     });
   }
-  await enterWorld(page, process.env.IN_GAME_ACCOUNT ?? 'test2');
+  await enterWorld(page, process.env.IN_GAME_ACCOUNT ?? 'test300');
   await page.evaluate('window.__game.online.say("/move dungeon")');
   const skeleton = () => page.evaluate(`(() => {
     for (const c of window.__game.online.characters.values()) {
