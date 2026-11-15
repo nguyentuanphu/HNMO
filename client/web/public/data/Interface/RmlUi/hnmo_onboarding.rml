@@ -1,0 +1,99 @@
+<rml>
+<head>
+	<title>HNMO New-player guide</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's new-player guide (no desktop window): a small panel in the game's message box frame (window_shell) on
+		   the right side with the current step, its hint, the count, the reward, where to go, the other steps and the
+		   buttons to skip or to take the rewards which waited for room in the bag. */
+		#panel {
+			top: 96dp;
+			left: auto;
+			right: 8dp;
+			margin-left: 0;
+			transform: none;
+			width: 250dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 18dp 12dp 16dp 12dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.ob-scroll { display: block; max-height: 290dp; overflow-y: auto; pointer-events: auto; padding-right: 3dp; }
+		.ob-head { display: block; color: token(text-muted); font-size: 0.85rem; margin-bottom: 2dp; }
+		.ob-title { display: block; color: token(accent-gold); line-height: 1.25em; white-space: normal; }
+		.ob-hint { display: block; color: token(text-input); font-size: 0.9rem; line-height: 1.3em; white-space: normal; margin-top: 2dp; }
+		.ob-where { display: block; color: #9fd0ff; font-size: 0.85rem; line-height: 1.25em; white-space: normal; margin-top: 3dp; }
+		.ob-bar { display: block; position: relative; height: 7dp; margin-top: 5dp; background-color: #1d1810; border: 1dp #4a3c26; }
+		.ob-fill { display: block; position: absolute; left: 0; top: 0; bottom: 0; background-color: #c89a3c; }
+		.ob-count { display: block; font-size: 0.85rem; color: token(text-primary); margin-top: 1dp; }
+		.ob-reward { display: block; font-size: 0.85rem; color: token(text-muted); line-height: 1.2em; white-space: normal; margin-top: 2dp; }
+		.ob-sub { display: block; color: token(accent-gold); margin: 7dp 0 2dp 0; font-size: 0.9rem; }
+		.ob-step { display: block; font-size: 0.8rem; line-height: 1.3em; color: token(text-muted); white-space: normal; }
+		.ob-step.done { color: #8fc070; }
+		.ob-step.current { color: token(text-input); }
+		.ob-line { display: block; font-size: 0.85rem; line-height: 1.3em; white-space: normal; color: token(text-input); }
+		.ob-note { display: block; margin: 4dp 0 2dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.ob-buttons { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; margin-top: 6dp; }
+		@spritesheet ob-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			ob-btn-idle:   0px  0px 64px 29px;
+			ob-btn-hover:  0px 29px 64px 29px;
+			ob-btn-active: 0px 58px 64px 29px;
+		}
+		.ob-btn {
+			position: static;
+			width: 70dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 0 2dp 3dp 2dp;
+			font-size: 0.85rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(ob-btn-idle);
+		}
+		.ob-btn:hover { decorator: image(ob-btn-hover); }
+		.ob-btn:active { decorator: image(ob-btn-active); }
+		.ob-btn.claim { color: #ffe9a8; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_onboarding">
+	<div class="ob-note" data-if="loading">{{loading_label}}</div>
+	<div class="ob-scroll" data-if="loading == false">
+		<div data-if="running">
+			<span class="ob-head">{{step_head}}</span>
+			<span class="ob-title ob-current-title" data-no-i18n="">{{step_title}}</span>
+			<span class="ob-hint" data-no-i18n="">{{step_hint}}</span>
+			<span class="ob-where" data-if="where_text != ''" data-no-i18n="">{{where_text}}</span>
+			<div class="ob-bar"><div class="ob-fill" data-style-width="width"></div></div>
+			<span class="ob-count">{{count_text}}</span>
+			<span class="ob-reward">{{reward_text}}</span>
+		</div>
+		<span class="ob-line ob-status" data-if="running == false">{{status_text}}</span>
+		<span class="ob-sub" data-if="has_owed">{{owed_head}}</span>
+		<span class="ob-line" data-for="o : owed" data-no-i18n="">{{o.line}}</span>
+		<div class="ob-buttons" data-if="has_owed"><div class="btn ob-btn claim ob-claim" data-event-click="ob_claim">{{claim_label}}</div></div>
+		<span class="ob-sub" data-if="steps.length > 0">{{steps_head}}</span>
+		<span class="ob-step" data-for="s : steps" data-class-done="s.done" data-class-current="s.current" data-attr-data-step="s.id" data-no-i18n="">{{s.line}}</span>
+		<span class="ob-reward" data-if="final_text != ''">{{final_text}}</span>
+	</div>
+	<div class="ob-buttons">
+		<div class="btn ob-btn ob-skip-step" data-if="can_skip_step" data-event-click="ob_skip_step">{{skip_step_label}}</div>
+		<div class="btn ob-btn ob-skip" data-if="running" data-event-click="ob_skip">{{skip_label}}</div>
+		<div class="btn ob-btn ob-close" data-event-click="ob_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

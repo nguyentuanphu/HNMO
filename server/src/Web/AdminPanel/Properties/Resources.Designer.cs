@@ -10233,5 +10233,565 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("WorldBossesRemove", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Onboarding and starter kit.
+        /// </summary>
+        public static string OnboardingAndStarterKit {
+            get {
+                return ResourceManager.GetString("OnboardingAndStarterKit", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to A guided first half hour for new characters (steps checked by the server, each with a reward, and a ....
+        /// </summary>
+        public static string OnboardingPageDescription {
+            get {
+                return ResourceManager.GetString("OnboardingPageDescription", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The onboarding plug-in isn't installed yet: start the game server once, then reload this page..
+        /// </summary>
+        public static string OnboardingNotInstalled {
+            get {
+                return ResourceManager.GetString("OnboardingNotInstalled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string OnboardingGeneral {
+            get {
+                return ResourceManager.GetString("OnboardingGeneral", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Onboarding and starter kit on.
+        /// </summary>
+        public static string OnboardingActive {
+            get {
+                return ResourceManager.GetString("OnboardingActive", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Show the guide to new characters.
+        /// </summary>
+        public static string OnboardingGuideEnabled {
+            get {
+                return ResourceManager.GetString("OnboardingGuideEnabled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to New up to level.
+        /// </summary>
+        public static string OnboardingNewMaxLevel {
+            get {
+                return ResourceManager.GetString("OnboardingNewMaxLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Characters created after the plug-in was turned on are always new; older ones only up to this level ....
+        /// </summary>
+        public static string OnboardingNewMaxLevelHint {
+            get {
+                return ResourceManager.GetString("OnboardingNewMaxLevelHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Progress file.
+        /// </summary>
+        public static string OnboardingFile {
+            get {
+                return ResourceManager.GetString("OnboardingFile", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Steps.
+        /// </summary>
+        public static string OnboardingSteps {
+            get {
+                return ResourceManager.GetString("OnboardingSteps", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to In their order; the server checks each one. NPC 0 is any NPC (the arrow shows the nearest merchant),....
+        /// </summary>
+        public static string OnboardingStepsHint {
+            get {
+                return ResourceManager.GetString("OnboardingStepsHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Optional.
+        /// </summary>
+        public static string OnboardingOptional {
+            get {
+                return ResourceManager.GetString("OnboardingOptional", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Step.
+        /// </summary>
+        public static string OnboardingKind {
+            get {
+                return ResourceManager.GetString("OnboardingKind", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Count / level.
+        /// </summary>
+        public static string OnboardingTarget {
+            get {
+                return ResourceManager.GetString("OnboardingTarget", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to NPC.
+        /// </summary>
+        public static string OnboardingNpc {
+            get {
+                return ResourceManager.GetString("OnboardingNpc", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string OnboardingMap {
+            get {
+                return ResourceManager.GetString("OnboardingMap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Spot (x, y, radius).
+        /// </summary>
+        public static string OnboardingSpot {
+            get {
+                return ResourceManager.GetString("OnboardingSpot", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Monster.
+        /// </summary>
+        public static string OnboardingMonster {
+            get {
+                return ResourceManager.GetString("OnboardingMonster", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Item (group, number).
+        /// </summary>
+        public static string OnboardingItem {
+            get {
+                return ResourceManager.GetString("OnboardingItem", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Skill.
+        /// </summary>
+        public static string OnboardingSkill {
+            get {
+                return ResourceManager.GetString("OnboardingSkill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Hint (English / Vietnamese).
+        /// </summary>
+        public static string OnboardingHints {
+            get {
+                return ResourceManager.GetString("OnboardingHints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Up.
+        /// </summary>
+        public static string OnboardingMoveUp {
+            get {
+                return ResourceManager.GetString("OnboardingMoveUp", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Down.
+        /// </summary>
+        public static string OnboardingMoveDown {
+            get {
+                return ResourceManager.GetString("OnboardingMoveDown", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add a step.
+        /// </summary>
+        public static string OnboardingAddStep {
+            get {
+                return ResourceManager.GetString("OnboardingAddStep", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Talk to an NPC.
+        /// </summary>
+        public static string OnboardingKindTalkToNpc {
+            get {
+                return ResourceManager.GetString("OnboardingKindTalkToNpc", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a map.
+        /// </summary>
+        public static string OnboardingKindEnterMap {
+            get {
+                return ResourceManager.GetString("OnboardingKindEnterMap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Walk to a spot.
+        /// </summary>
+        public static string OnboardingKindWalkTo {
+            get {
+                return ResourceManager.GetString("OnboardingKindWalkTo", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Defeat monsters.
+        /// </summary>
+        public static string OnboardingKindKillMonsters {
+            get {
+                return ResourceManager.GetString("OnboardingKindKillMonsters", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Use an item (potion).
+        /// </summary>
+        public static string OnboardingKindUseItem {
+            get {
+                return ResourceManager.GetString("OnboardingKindUseItem", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Hit with a skill.
+        /// </summary>
+        public static string OnboardingKindUseSkill {
+            get {
+                return ResourceManager.GetString("OnboardingKindUseSkill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Learn skills.
+        /// </summary>
+        public static string OnboardingKindLearnSkill {
+            get {
+                return ResourceManager.GetString("OnboardingKindLearnSkill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Reach a level.
+        /// </summary>
+        public static string OnboardingKindReachLevel {
+            get {
+                return ResourceManager.GetString("OnboardingKindReachLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Join a party.
+        /// </summary>
+        public static string OnboardingKindJoinParty {
+            get {
+                return ResourceManager.GetString("OnboardingKindJoinParty", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add stat points.
+        /// </summary>
+        public static string OnboardingKindAddStatPoints {
+            get {
+                return ResourceManager.GetString("OnboardingKindAddStatPoints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Open the cash shop.
+        /// </summary>
+        public static string OnboardingKindOpenCashShop {
+            get {
+                return ResourceManager.GetString("OnboardingKindOpenCashShop", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Open the missions window.
+        /// </summary>
+        public static string OnboardingKindOpenMissions {
+            get {
+                return ResourceManager.GetString("OnboardingKindOpenMissions", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Final reward.
+        /// </summary>
+        public static string OnboardingFinalReward {
+            get {
+                return ResourceManager.GetString("OnboardingFinalReward", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Given when every step is done (skipped optional steps count as done; skipping the whole guide gives ....
+        /// </summary>
+        public static string OnboardingFinalRewardHint {
+            get {
+                return ResourceManager.GetString("OnboardingFinalRewardHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Starter kit.
+        /// </summary>
+        public static string OnboardingKit {
+            get {
+                return ResourceManager.GetString("OnboardingKit", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Given once at the first login of a new character (or of the account's first new character). Items th....
+        /// </summary>
+        public static string OnboardingKitHint {
+            get {
+                return ResourceManager.GetString("OnboardingKitHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Give the starter kit.
+        /// </summary>
+        public static string OnboardingKitEnabled {
+            get {
+                return ResourceManager.GetString("OnboardingKitEnabled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Once per account (instead of per character).
+        /// </summary>
+        public static string OnboardingKitPerAccount {
+            get {
+                return ResourceManager.GetString("OnboardingKitPerAccount", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string OnboardingKitItems {
+            get {
+                return ResourceManager.GetString("OnboardingKitItems", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add an item.
+        /// </summary>
+        public static string OnboardingKitAddItem {
+            get {
+                return ResourceManager.GetString("OnboardingKitAddItem", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Group.
+        /// </summary>
+        public static string OnboardingKitGroup {
+            get {
+                return ResourceManager.GetString("OnboardingKitGroup", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Number.
+        /// </summary>
+        public static string OnboardingKitNumber {
+            get {
+                return ResourceManager.GetString("OnboardingKitNumber", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string OnboardingKitLevel {
+            get {
+                return ResourceManager.GetString("OnboardingKitLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Pieces.
+        /// </summary>
+        public static string OnboardingKitCount {
+            get {
+                return ResourceManager.GetString("OnboardingKitCount", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Durability / stack.
+        /// </summary>
+        public static string OnboardingKitDurability {
+            get {
+                return ResourceManager.GetString("OnboardingKitDurability", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to 0 is full; for potions and arrows it's how many are in a stack..
+        /// </summary>
+        public static string OnboardingKitDurabilityHint {
+            get {
+                return ResourceManager.GetString("OnboardingKitDurabilityHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Skill.
+        /// </summary>
+        public static string OnboardingKitSkill {
+            get {
+                return ResourceManager.GetString("OnboardingKitSkill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Luck.
+        /// </summary>
+        public static string OnboardingKitLuck {
+            get {
+                return ResourceManager.GetString("OnboardingKitLuck", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Option.
+        /// </summary>
+        public static string OnboardingKitOption {
+            get {
+                return ResourceManager.GetString("OnboardingKitOption", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Excellent (bits).
+        /// </summary>
+        public static string OnboardingKitExcellent {
+            get {
+                return ResourceManager.GetString("OnboardingKitExcellent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Class.
+        /// </summary>
+        public static string OnboardingKitClass {
+            get {
+                return ResourceManager.GetString("OnboardingKitClass", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Every class.
+        /// </summary>
+        public static string OnboardingKitAllClasses {
+            get {
+                return ResourceManager.GetString("OnboardingKitAllClasses", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Zen.
+        /// </summary>
+        public static string OnboardingKitZen {
+            get {
+                return ResourceManager.GetString("OnboardingKitZen", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins.
+        /// </summary>
+        public static string OnboardingKitCoins {
+            get {
+                return ResourceManager.GetString("OnboardingKitCoins", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Extra stat points.
+        /// </summary>
+        public static string OnboardingKitPoints {
+            get {
+                return ResourceManager.GetString("OnboardingKitPoints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Given when the character is created (only characters created while this is on)..
+        /// </summary>
+        public static string OnboardingKitPointsHint {
+            get {
+                return ResourceManager.GetString("OnboardingKitPointsHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Temporary EXP buff.
+        /// </summary>
+        public static string OnboardingKitBuff {
+            get {
+                return ResourceManager.GetString("OnboardingKitBuff", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Effect of item (group, number).
+        /// </summary>
+        public static string OnboardingKitBuffItem {
+            get {
+                return ResourceManager.GetString("OnboardingKitBuffItem", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Minutes.
+        /// </summary>
+        public static string OnboardingKitBuffMinutes {
+            get {
+                return ResourceManager.GetString("OnboardingKitBuffMinutes", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The effect of an item of the game's data, by default the Seal of Ascension (13, 43). It ends when th....
+        /// </summary>
+        public static string OnboardingKitBuffHint {
+            get {
+                return ResourceManager.GetString("OnboardingKitBuffHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The onboarding and starter kit were saved..
+        /// </summary>
+        public static string OnboardingSaved {
+            get {
+                return ResourceManager.GetString("OnboardingSaved", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Reload.
+        /// </summary>
+        public static string OnboardingReload {
+            get {
+                return ResourceManager.GetString("OnboardingReload", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to "{0}" isn't a valid step id (letters, digits, - and _; at most 40)..
+        /// </summary>
+        public static string OnboardingErrorId {
+            get {
+                return ResourceManager.GetString("OnboardingErrorId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The step id "{0}" is used twice..
+        /// </summary>
+        public static string OnboardingErrorDuplicateId {
+            get {
+                return ResourceManager.GetString("OnboardingErrorDuplicateId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The step "{0}" needs a count or level of at least 1..
+        /// </summary>
+        public static string OnboardingErrorTarget {
+            get {
+                return ResourceManager.GetString("OnboardingErrorTarget", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Starter kit item {0}: group 0-15, number 0-511, level 0-15, 1-50 pieces..
+        /// </summary>
+        public static string OnboardingErrorKitItem {
+            get {
+                return ResourceManager.GetString("OnboardingErrorKitItem", resourceCulture);
+            }
+        }
     }
 }

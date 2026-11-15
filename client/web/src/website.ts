@@ -14,6 +14,25 @@ const copy = {
     missionsReward: "Reward",
     missionsStreak: "Finish the daily missions several days in a row: every %d days pays a bonus (%s).",
     missionsCap: "Earned coins (online time, level milestones, invites, login calendar): at most %d a day per account.",
+    newNav: "New players",
+    newTitle: "Your first half hour",
+    newHint: "New characters get a starter kit at their first login and a guide in the game (Y): every step pays a reward, and finishing them all pays a final one. You can skip it at any time.",
+    newKit: "Starter kit",
+    newKitPerAccount: "Once per account, for its first new character.",
+    newKitPerCharacter: "For every new character.",
+    newKitAll: "Every class",
+    newKitPoints: "%d extra stat points",
+    newKitBuff: "%s for %d minutes",
+    newKitBuffPlain: "An EXP buff for %d minutes",
+    newSkill: "skill",
+    newLuck: "luck",
+    newStack: "stacks of %d",
+    newSteps: "Guide steps",
+    newOptional: "optional",
+    newFinal: "When every step is done",
+    newOffline: "The new-player guide is unavailable: the server didn't answer.",
+    newOff: "The new-player guide and starter kit are switched off on this server.",
+    newLevel: "Characters up to level %d count as new too.",
     bossesNav: "World bosses",
     bossesTitle: "World bosses",
     bossesHint: "Strong bosses appear on a schedule (Sydney time; your own time in brackets). Everyone who deals damage shares the rewards by rank: the top 3, the top 10, everyone with enough damage, and the last hit. No damage, no reward. Kills give boss-hunt points for the weekly ranking.",
@@ -190,6 +209,25 @@ const copy = {
     missionsReward: "Phần thưởng",
     missionsStreak: "Hoàn thành nhiệm vụ ngày nhiều ngày liên tục: mỗi %d ngày được thưởng thêm (%s).",
     missionsCap: "Xu kiếm được (thời gian trực tuyến, mốc cấp độ, mời bạn, lịch đăng nhập): tối đa %d mỗi ngày cho mỗi tài khoản.",
+    newNav: "Bắt đầu chơi",
+    newTitle: "Nửa giờ đầu tiên",
+    newHint: "Nhân vật mới nhận quà tân thủ khi đăng nhập lần đầu và có hướng dẫn trong trò chơi (Y): mỗi bước có phần thưởng, xong hết được thêm phần thưởng cuối. Bạn có thể bỏ qua bất cứ lúc nào.",
+    newKit: "Quà tân thủ",
+    newKitPerAccount: "Một lần mỗi tài khoản, cho nhân vật mới đầu tiên.",
+    newKitPerCharacter: "Cho mỗi nhân vật mới.",
+    newKitAll: "Mọi lớp",
+    newKitPoints: "%d điểm cộng thêm",
+    newKitBuff: "%s trong %d phút",
+    newKitBuffPlain: "Bùa tăng kinh nghiệm trong %d phút",
+    newSkill: "kỹ năng",
+    newLuck: "may mắn",
+    newStack: "chồng %d",
+    newSteps: "Các bước hướng dẫn",
+    newOptional: "không bắt buộc",
+    newFinal: "Khi xong mọi bước",
+    newOffline: "Không xem được hướng dẫn tân thủ: máy chủ không trả lời.",
+    newOff: "Máy chủ này đang tắt hướng dẫn tân thủ và quà tân thủ.",
+    newLevel: "Nhân vật tới cấp %d cũng được tính là mới.",
     bossesNav: "Boss thế giới",
     bossesTitle: "Boss thế giới",
     bossesHint: "Các boss mạnh xuất hiện theo lịch (giờ Sydney; giờ của bạn trong ngoặc). Mọi người gây sát thương đều được chia thưởng theo hạng: top 3, top 10, người đủ sát thương và đòn cuối. Không gây sát thương thì không có thưởng. Hạ boss được điểm săn boss cho bảng xếp hạng tuần.",
@@ -961,6 +999,98 @@ element("refresh").addEventListener("click", () => void refreshMissions());
 void refreshMissions();
 setInterval(() => {
   if (!document.hidden) void refreshMissions();
+}, 5 * 60000);
+
+// ---------- new players (read from the server, /website/onboarding) ----------
+
+interface PublicKitItem { group: number; number: number; level: number; count: number; durability: number; skill: boolean; luck: boolean; optionLevel: number; excellent: number; classNumber: number; className?: string | null; name?: string | null }
+interface PublicStep { id: string; kind: string; titleEn: string; titleVi: string; hintEn: string; hintVi: string; target: number; optional: boolean; reward: PublicReward }
+interface PublicOnboarding {
+  enabled: boolean; guideEnabled?: boolean; newCharacterMaxLevel?: number; steps?: PublicStep[] | null; final?: PublicReward | null;
+  kit?: { perAccount: boolean; zen: number; coins: number; coinType: string; points: number; buffMinutes: number; buffName?: string | null; items: PublicKitItem[] } | null;
+}
+let onboarding: PublicOnboarding | null = null;
+
+function kitItemLine(item: PublicKitItem): string {
+  const extras: string[] = [];
+  if (item.skill) extras.push(t("newSkill"));
+  if (item.luck) extras.push(t("newLuck"));
+  if (item.optionLevel > 0) extras.push(`+${item.optionLevel * 4}`);
+  if (item.group === 14 && item.durability > 1) extras.push(t("newStack").replace("%d", String(item.durability)));
+  const name = item.name ? localized(item.name) : `${item.group}/${item.number}`;
+  return `${name}${item.level > 0 ? ` +${item.level}` : ""}${item.count > 1 ? ` x${item.count}` : ""}${extras.length ? ` (${extras.join(", ")})` : ""}`;
+}
+
+function renderOnboarding(): void {
+  const notice = element("newplayers-notice");
+  const kitTarget = clear("newplayers-kit");
+  const stepsTarget = clear("newplayers-steps");
+  element("newplayers-extra").textContent = "";
+  if (!onboarding) { notice.textContent = t("newOffline"); return; }
+  if (!onboarding.enabled || (!onboarding.kit && !onboarding.steps)) { notice.textContent = t("newOff"); return; }
+  notice.textContent = "";
+  const kit = onboarding.kit;
+  if (kit) {
+    const card = node("article", "", "mission newplayers-kit");
+    card.append(node("h4", t("newKit")));
+    card.append(node("p", kit.perAccount ? t("newKitPerAccount") : t("newKitPerCharacter")));
+    const groups = new Map<string, PublicKitItem[]>();
+    for (const item of kit.items) {
+      const key = item.classNumber < 0 ? t("newKitAll") : localized(item.className ?? `#${item.classNumber}`);
+      groups.set(key, [...(groups.get(key) ?? []), item]);
+    }
+    for (const [label, items] of groups) {
+      const line = node("p", `${label}: ${items.map(kitItemLine).join(" · ")}`);
+      line.dataset.kitClass = label;
+      card.append(line);
+    }
+    const extra = rewardLine({ zen: kit.zen, coins: kit.coins, coinType: kit.coinType, items: [] });
+    if (extra) card.append(node("p", extra));
+    if (kit.points > 0) card.append(node("p", t("newKitPoints").replace("%d", String(kit.points))));
+    if (kit.buffMinutes > 0) {
+      card.append(node("p", kit.buffName
+        ? t("newKitBuff").replace("%s", localized(kit.buffName)).replace("%d", String(kit.buffMinutes))
+        : t("newKitBuffPlain").replace("%d", String(kit.buffMinutes))));
+    }
+    kitTarget.append(card);
+  }
+  const steps = onboarding.steps ?? [];
+  element("newplayers-steps-head").hidden = steps.length === 0;
+  steps.forEach((step, index) => {
+    const card = node("article", "", "mission");
+    card.dataset.step = step.id;
+    card.append(node("h4", `${index + 1}. ${(language === "vi" ? step.titleVi : step.titleEn) || step.titleEn}${step.optional ? ` (${t("newOptional")})` : ""}`));
+    const hint = (language === "vi" ? step.hintVi : step.hintEn) || step.hintEn;
+    if (hint) card.append(node("p", hint));
+    const reward = rewardLine(step.reward);
+    if (reward) card.append(node("p", `${t("missionsReward")}: ${reward}`));
+    stepsTarget.append(card);
+  });
+  const extra: string[] = [];
+  const final = onboarding.final ? rewardLine(onboarding.final) : "";
+  if (steps.length && final) extra.push(`${t("newFinal")}: ${final}.`);
+  if (onboarding.newCharacterMaxLevel) extra.push(t("newLevel").replace("%d", String(onboarding.newCharacterMaxLevel)));
+  element("newplayers-extra").textContent = extra.join(" ");
+}
+
+async function refreshOnboarding(): Promise<void> {
+  try {
+    const response = await fetch("/website/onboarding", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicOnboarding;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid onboarding");
+    onboarding = data;
+  } catch {
+    onboarding = null;
+  }
+  renderOnboarding();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderOnboarding());
+element("refresh").addEventListener("click", () => void refreshOnboarding());
+void refreshOnboarding();
+setInterval(() => {
+  if (!document.hidden) void refreshOnboarding();
 }, 5 * 60000);
 
 // ---------- world bosses (read from the server, /website/world-bosses) ----------

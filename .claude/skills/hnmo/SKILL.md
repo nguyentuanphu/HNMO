@@ -196,3 +196,18 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   website `/website/world-bosses`; web window N (`ui/worldBossWindow.ts`). An RML `data-if` hides with display:none,
   so Playwright checks `toBeHidden()`, not `toHaveCount(0)`.
 - Website copy keys must exist in both `copy.en` and `copy.vi` (website.ts), or tsc fails; a literal % in them is "%", not "%%".
+
+## Onboarding (2026-11-15)
+- `GameLogic/PlugIns/Onboarding`: `OnboardingEngine` (pure, `OnboardingEngineTest`: new characters, ordered steps counted by
+  events or checked by looking (`OnboardingFacts`, every second), optional steps, skip, final reward, starter kit per character
+  or account), `OnboardingStore` (`save/onboarding.json`, `OnboardingStore.Open` shared per file; its `ActivatedAtUtc` decides
+  "created after the plug-in was turned on"), `OnboardingPlugIn` (rewards wait as owed entries; coins granted at once by
+  `MissionCoinGranter` with "HNMO onboarding"; kit items built with `GameMasterItemFactory`, so options work).
+- `INpcTalkStartedPlugIn` (new plug-in point, called by `TalkNpcAction` for every NPC): `IPlayerTalkToNpcPlugIn` only fires for
+  NPCs without a window. The missions request handler tells the guide that the missions window was opened.
+- F5 codes now: Discord 02-07, missions 08-0A, world bosses 0B-0D, onboarding 0E (request), 0F (state JSON), 10 (action).
+  Next free: 11.
+- Admin page `/onboarding-starter-kit`; website `/website/onboarding`; web panel Y (`ui/onboardingWindow.ts`), also opened by the
+  (i) guide's button (`hnmo-onboarding-open` window event). In a game test, an RML window can take a minute to appear while the
+  map loads: wait up to 90 s.
+- vi.json keeps its texts under `"texts"`; add keys there (not at the top level).

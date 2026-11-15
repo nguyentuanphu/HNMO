@@ -5803,6 +5803,61 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoOnboardingRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world, or the player opens HNMO's guide panel.
+    /// Causes reaction on server side: The server sends the HnmoOnboardingState message, and from then on sends it again when something changes, e.g. a step is done or a reward is given.
+    /// </remarks>
+    public static async ValueTask SendHnmoOnboardingRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoOnboardingRequestRef.Length;
+            var packet = new HnmoOnboardingRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoOnboardingAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Not used yet; empty.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player clicks a button of HNMO's guide panel: skip the guide (after a confirmation), skip an optional step, or take the rewards which waited for room in the bag.
+    /// Causes reaction on server side: The server does it and sends the HnmoOnboardingState message with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoOnboardingActionAsync(this IConnection? connection, HnmoOnboardingAction.HnmoOnboardingActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoOnboardingActionRef.GetRequiredSize(argument);
+            var packet = new HnmoOnboardingActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

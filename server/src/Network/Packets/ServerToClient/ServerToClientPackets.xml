@@ -12761,6 +12761,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>0F</SubCode>
+      <Name>HnmoOnboardingState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requested HNMO's new-player guide (HnmoOnboardingRequest) or did an action there, and when something changed for a client which requested it before (a step was done or counted, rewards were given).</SentWhen>
+      <CausedReaction>The guide panel shows the state; a notice in the chat tells about the event in it (e.g. a step done, the starter kit, a reward).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The state as JSON, in plain ASCII (other characters are escaped): the status, the steps with their rewards, the current step with its count and where it leads, the waiting rewards, the starter kit when it was just given, and the event which caused it, if any.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>

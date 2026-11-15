@@ -7,6 +7,7 @@ namespace HNMO.GameServer.MessageHandler;
 using System.Runtime.InteropServices;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.Missions;
+using HNMO.GameLogic.PlugIns.Onboarding;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
@@ -36,5 +37,11 @@ internal class HnmoMissionsRequestHandlerPlugIn : ISubPacketHandlerPlugIn
         }
 
         await missions.SendBoardAsync(player, true).ConfigureAwait(false);
+
+        // The missions window was opened (it asks then): a step of the new-player guide.
+        if (OnboardingPlugIn.Get(player.GameContext) is { } onboarding)
+        {
+            await onboarding.MissionsOpenedAsync(player).ConfigureAwait(false);
+        }
     }
 }

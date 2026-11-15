@@ -2301,4 +2301,10 @@
   <data name="WorldBossesPlugIn_Description" xml:space="preserve">
     <value>Boss thế giới theo lịch, được thông báo trong trò chơi, trên Discord và trên trang web, thưởng theo sát thương, điểm săn boss và xu xếp hạng tuần (săn boss, Huyết Lâu, Quảng Trường Quỷ, Hỗn Nguyên Lâu, công thành). Cài đặt ở trang "Boss thế giới và xếp hạng".</value>
   </data>
+  <data name="OnboardingPlugIn_Name" xml:space="preserve">
+    <value>HNMO: hướng dẫn tân thủ và quà tân thủ</value>
+  </data>
+  <data name="OnboardingPlugIn_Description" xml:space="preserve">
+    <value>Nửa giờ đầu có hướng dẫn cho nhân vật mới: các bước (nói chuyện với NPC, đi tới một nơi, hạ quái, dùng bình thuốc hoặc kỹ năng, đạt cấp, vào tổ đội, cộng điểm, mở cửa hàng xu hoặc cửa sổ nhiệm vụ), mỗi bước do máy chủ kiểm tra và có phần thưởng, phần thưởng cuối, và quà tân thủ (vật phẩm, Zen, xu, điểm cộng, bùa tăng kinh nghiệm) tặng một lần cho mỗi nhân vật hoặc tài khoản mới. Người chơi xem trong bảng hướng dẫn của trò chơi web và có thể bỏ qua. Chỉnh sửa ở trang Hướng dẫn tân thủ và quà tân thủ (menu trò chơi). Tiến độ được lưu trong một tệp ở thư mục save.</value>
+  </data>
 </root>
