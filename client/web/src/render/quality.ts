@@ -34,13 +34,14 @@ export interface QualityTarget {
 
 /** The highest pixel ratio the game draws at (main.ts: Math.min(devicePixelRatio, 2)). */
 const MAX_PIXEL_RATIO = 2;
+/** The most pixels the 3D world is drawn at, at the 100 % render scale (2560 x 1440). */
+export const MAX_DRAWN_PIXELS = 2560 * 1440;
 /** The far plane stays this much beyond the fog's end. */
 const FAR_PAST_FOG = 1.25;
 
 let current: QualitySettings = { ...DEFAULT_QUALITY };
 let target: QualityTarget | null = null;
 let baseFar: number | null = null;
-let lastShown = 0;
 
 export function isLowSpec(settings: QualitySettings): boolean {
   return settings.renderScale === LOW_SPEC.renderScale && settings.fpsCap === LOW_SPEC.fpsCap
@@ -51,9 +52,24 @@ export function isLowSpec(settings: QualitySettings): boolean {
 export function applyQuality(to: QualityTarget, settings: QualitySettings): void {
   target = to;
   current = { ...settings };
-  const ratio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO) * settings.renderScale;
-  if (to.renderer.getPixelRatio() !== ratio) to.renderer.setPixelRatio(ratio);
+  applyPixelRatio();
   refreshQuality();
+}
+
+/**
+ * The renderer's pixel ratio: the screen's (at most 2) times the render scale, kept within a pixel budget
+ * (2560 x 1440 at 100 %): a very large window or a high-density screen draws the 3D world at that many
+ * pixels and the browser stretches it, while the interface (HTML over the canvas) stays sharp. main.ts
+ * calls this again when the window changes size.
+ */
+export function applyPixelRatio(): void {
+  if (!target) return;
+  const canvas = target.renderer.domElement;
+  const width = canvas.clientWidth || window.innerWidth, height = canvas.clientHeight || window.innerHeight;
+  const screenRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+  const budgetRatio = Math.sqrt(MAX_DRAWN_PIXELS / Math.max(1, width * height));
+  const ratio = Math.round(Math.min(screenRatio, budgetRatio) * current.renderScale * 1000) / 1000;
+  if (target.renderer.getPixelRatio() !== ratio) target.renderer.setPixelRatio(ratio);
 }
 
 /** Puts the view distance and effects switch on what was added since (new map, effect system). */
@@ -82,13 +98,30 @@ export function refreshQuality(): void {
 
 /**
  * The frame cap: the frame loop calls this with requestAnimationFrame's time and draws only when
- * it returns true (otherwise it just asks for the next frame).
+ * it returns true (otherwise it just asks for the next frame). Frames are paced by rAF's own
+ * timestamps (never setTimeout) on a whole number of screen refreshes: the cap's interval rounded
+ * to the nearest count of refreshes, so every drawn frame stays on screen equally long. A 60 FPS cap
+ * draws every refresh of a 60 Hz screen and every second refresh of a 120 / 144 Hz one (60 / 72 FPS);
+ * a "N ms since the last frame" test instead alternates 2 and 3 refreshes there, which judders.
  */
 export function frameDue(now: number): boolean {
+  const delta = now - lastSeen;
+  lastSeen = now;
+  // The screen's refresh interval: the average rAF step, leaving out steps that missed a refresh
+  // (a much shorter step means a faster screen: the average follows it at once).
+  if (delta > 0.5 && delta < 100) {
+    if (delta < refreshMs * 0.7) refreshMs = delta;
+    else if (delta < refreshMs * 1.4) refreshMs += (delta - refreshMs) * 0.05;
+    else if (++slowSteps > 30) { refreshMs = delta; slowSteps = 0; } // a slower screen (or the game is slower than it)
+    if (delta < refreshMs * 1.4) slowSteps = 0;
+  }
   if (current.fpsCap <= 0) return true;
-  const interval = 1000 / current.fpsCap;
-  // A little slack, so a 60 Hz screen still shows 30 frames at a cap of 30.
-  if (now - lastShown < interval - 2) return false;
-  lastShown = now;
-  return true;
+  const refreshes = Math.max(1, Math.round(1000 / current.fpsCap / refreshMs));
+  if (refreshes === 1 || now < lastDrawn || now - lastDrawn >= (refreshes - 0.5) * refreshMs) { lastDrawn = now; return true; }
+  return false;
 }
+
+let lastSeen = 0;
+let lastDrawn = 0;
+let slowSteps = 0;
+let refreshMs = 1000 / 60;

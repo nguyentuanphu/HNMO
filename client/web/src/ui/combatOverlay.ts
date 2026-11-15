@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import {  } from './rml.js';
 import { damageTextMotion, DAMAGE_TEXT_LIFETIME_SECONDS, type DamageText } from '../game/combatLook.js';
 import { uiScale } from './nativeText.js';
+import { cachedRect } from './layoutCache.js';
 
 
 const BAR = { steps: 20, span: 80, border: 2, gap: 1, height: 5, nameTop: 2, barTop: 15 };
@@ -21,6 +22,7 @@ export class CombatOverlay {
   private readonly bar: HTMLDivElement;
   private readonly segments: HTMLDivElement[] = [];
   private readonly numbers: { element: HTMLDivElement; anchor: () => THREE.Vector3; text: DamageText; age: number }[] = [];
+  private readonly point = new THREE.Vector3();
 
   // root: the scene node the anchors are given in (the world's root, in the game's units, z up).
   constructor(private readonly camera: THREE.Camera, private readonly canvas: HTMLCanvasElement, private readonly root3d: THREE.Object3D, parent: HTMLElement = document.body) {
@@ -79,8 +81,8 @@ export class CombatOverlay {
   }
 
   update(dt: number): void {
-    const rect = this.canvas.getBoundingClientRect();
-    const point = new THREE.Vector3();
+    const rect = cachedRect(this.canvas);
+    const point = this.point;
     for (let i = this.numbers.length - 1; i >= 0; i--) {
       const number = this.numbers[i];
       number.age += dt;

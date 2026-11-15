@@ -33,9 +33,10 @@ function buildRow(page: Page, firstId: number, row: number): Promise<number[]> {
     };
     type G = { online: { hero: Char & { cell: { x: number; y: number }; group: { parent: { add(o: unknown): void } } }; characters: Map<number, Char> } };
     const g = (window as unknown as { __game: G }).__game;
-    const { createPlayerCharacter } = await import('/js/game/characters.js' as string) as {
+    // window.__game.debug: the same in the dev build (modules) and the packaged bundle.
+    const { createPlayerCharacter } = (window as unknown as { __game: { debug: {
       createPlayerCharacter(o: { id: number; name: string; bodySet: number; equipment: Record<string, unknown> }): Promise<Char>;
-    };
+    } } }).__game.debug;
     const hero = g.online.hero;
     const counts: number[] = [];
     for (let i = 0; i < variants.length; i++) {
@@ -55,7 +56,7 @@ function buildRow(page: Page, firstId: number, row: number): Promise<number[]> {
   }, { variants: VARIANTS, sword: SWORD, armor: ARMOR, firstId, row });
 }
 
-const materialCount = (page: Page) => page.evaluate(async () => (await import('/js/game/itemGlow.js' as string) as { glowMaterialCount(): number }).glowMaterialCount());
+const materialCount = (page: Page) => page.evaluate(() => (window as unknown as { __game: { debug: { glowMaterialCount(): number } } }).__game.debug.glowMaterialCount());
 
 test('items glow by level, excellent and ancient, worn and as icons', async ({ page }) => {
   test.setTimeout(10 * 60_000);
@@ -134,7 +135,7 @@ test('items glow by level, excellent and ancient, worn and as icons', async ({ p
 
   // The same items as window icons, and the Jewel of Harmony (shines below +3).
   const drawn = await page.evaluate(async ({ variants, sword }) => {
-    const { drawItem } = await import('/js/ui/itemIcons.js' as string) as { drawItem(c: HTMLCanvasElement, item: unknown, o?: unknown): Promise<boolean> };
+    const { drawItem } = (window as unknown as { __game: { debug: { drawItem(c: HTMLCanvasElement, item: unknown, o?: unknown): Promise<boolean> } } }).__game.debug;
     const strip = document.createElement('div');
     strip.id = 'glow-icons';
     Object.assign(strip.style, { position: 'fixed', left: '0', top: '0', zIndex: '99999', background: '#202020', display: 'flex', gap: '4px', padding: '4px' });

@@ -351,16 +351,19 @@ const expressionCache = new Map<string, Expression>();
 // RmlUi data expressions are close to JavaScript: names, literals, + - * / == != < > && || ! ?:,
 // and "| transform" pipes, which are left out here (a single |, not ||).
 function evaluate(expression: string, scope: Scope): unknown {
-  const source = expression.replace(/(?<!\|)\|(?!\|)\s*[\w]+(\([^)]*\))?/g, '').trim();
-  if (!expressionCache.has(source)) {
+  // Cached by the expression as written: the bindings run every update, so no string work per call.
+  let compiled = expressionCache.get(expression);
+  if (!compiled) {
+    const source = expression.replace(/(?<!\|)\|(?!\|)\s*[\w]+(\([^)]*\))?/g, '').trim();
     try {
-      expressionCache.set(source, new Function('scope', `with (scope) { return (${source}); }`) as Expression);
+      compiled = new Function('scope', `with (scope) { return (${source}); }`) as Expression;
     } catch {
-      expressionCache.set(source, () => undefined);
+      compiled = () => undefined;
     }
+    expressionCache.set(expression, compiled);
   }
   try {
-    return expressionCache.get(source)!(scope);
+    return compiled(scope);
   } catch {
     return undefined;
   }
@@ -435,9 +438,9 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
     updaters.push(() => syncGameImage(element));
   }
   const ifExpr = element.getAttribute('data-if');
-  if (ifExpr) updaters.push((scope) => { element.style.display = evaluate(ifExpr, scope) ? '' : 'none'; });
+  if (ifExpr) updaters.push((scope) => { const v = evaluate(ifExpr, scope) ? '' : 'none'; if (element.style.display !== v) element.style.display = v; });
   const visibleExpr = element.getAttribute('data-visible');
-  if (visibleExpr) updaters.push((scope) => { element.style.visibility = evaluate(visibleExpr, scope) ? '' : 'hidden'; });
+  if (visibleExpr) updaters.push((scope) => { const v = evaluate(visibleExpr, scope) ? '' : 'hidden'; if (element.style.visibility !== v) element.style.visibility = v; });
 
   for (const attribute of [...element.attributes]) {
     const { name, value } = attribute;
@@ -479,7 +482,8 @@ function bindTree(node: Node, model: RmlModel, locals: Locals, updaters: Updater
         // A bound length in dp (e.g. the chat log's "130dp") is a reference pixel, as in the stylesheets.
         const text = v === undefined || v === null ? '' : String(v).replace(/(\d)dp\b/g, '$1px');
         // Bound text sizes follow the HNMO text size setting (--hnmo-text-scale, ui/settingsWindow.ts).
-        element.style.setProperty(property, property === 'font-size' && text ? `calc(${text} * var(--hnmo-text-scale, 1))` : text);
+        const css = property === 'font-size' && text ? `calc(${text} * var(--hnmo-text-scale, 1))` : text;
+        if (element.style.getPropertyValue(property) !== css) element.style.setProperty(property, css);
       });
     } else if (name.startsWith('data-event-')) {
       const eventName = name.slice('data-event-'.length);

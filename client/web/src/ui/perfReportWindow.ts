@@ -39,6 +39,7 @@ export function summarize(report: PerfReport): Section[] {
       line(tr('%s frames per second on average; a frame takes %s ms (half of them under %s ms).', String(f.averageFps), String(f.averageMs), String(f.medianMs))),
       line(tr('Slow frames: %s over 25 ms, %s over 50 ms, %s over 100 ms; the slowest %s ms.', String(f.over25ms), String(f.over50ms), String(f.over100ms), String(f.maxMs)), f.over50ms > 0),
       line(tr('The screen refreshes every %s ms; the game missed %s refreshes.', String(f.refreshMs), String(f.missedRefreshes)), f.missedRefreshes > f.count / 20),
+      ...(f.slowFrames > 0 ? [line(tr('%s frames missed a refresh; in %s of them the game\'s own work took under half the frame (the time went to the browser, the graphics driver or other programs).', String(f.slowFrames), String(f.slowOutsideGame)), false, true)] : []),
       line(tr('The game itself takes %s ms of a frame: %s.', String(f.gameAverageMs),
         FRAME_SECTIONS.map((s) => `${tr(SECTION_NAMES[s])} ${f.sectionsAverageMs[s] ?? 0}`).join(', ')), false, true),
     ],

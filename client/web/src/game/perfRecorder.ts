@@ -68,6 +68,10 @@ export interface PerfReport {
     /** Frames the screen showed again because the game was not ready (each long frame's extra refreshes). */
     missedRefreshes: number;
     over25ms: number; over50ms: number; over100ms: number;
+    /** Frames that missed a refresh, and of them those where the game's own work took under half the frame
+     *  (the time went elsewhere: the browser, the graphics driver, other programs, garbage collection). */
+    slowFrames: number;
+    slowOutsideGame: number;
     /** The game's own time per frame, on average, by part (ms). */
     sectionsAverageMs: Partial<Record<FrameSection, number>>;
     /** The frame loop's whole time on average (ms) and the share of the frame interval it takes. */
@@ -195,6 +199,9 @@ export class PerfRecorder {
     this.sectionStart = now;
   }
 
+  /** The parts of the last measured frame, in FRAME_SECTIONS' order (ms). */
+  get lastSections(): Float32Array { return this.pending; }
+
   /** A presented frame: its requestAnimationFrame timestamp (the frame loop draws in it). */
   endFrame(now: number): void {
     if (!this.active) return;
@@ -312,8 +319,13 @@ export class PerfRecorder {
     const sum = times.reduce((a, b) => a + b, 0);
     // The refresh interval: the median of the shorter half of the frames (vsync's step).
     const refreshMs = Math.max(1, percentile(sorted, 0.25));
-    let missed = 0;
-    for (const ms of times) missed += Math.max(0, Math.round(ms / refreshMs) - 1);
+    let missed = 0, slowFrames = 0, slowOutsideGame = 0;
+    times.forEach((ms, i) => {
+      missed += Math.max(0, Math.round(ms / refreshMs) - 1);
+      if (ms < refreshMs * 1.5) return;
+      slowFrames++;
+      if (this.frameSections[i].reduce((a, b) => a + b, 0) < ms / 2) slowOutsideGame++;
+    });
     const sectionsSum = new Float64Array(FRAME_SECTIONS.length);
     for (const s of this.frameSections) for (let i = 0; i < s.length; i++) sectionsSum[i] += s[i];
     const sectionsAverageMs: Partial<Record<FrameSection, number>> = {};
@@ -363,7 +375,7 @@ export class PerfRecorder {
         medianMs: round(percentile(sorted, 0.5)), p90Ms: round(percentile(sorted, 0.9)), p95Ms: round(percentile(sorted, 0.95)),
         p99Ms: round(percentile(sorted, 0.99)), maxMs: round(sorted[count - 1] ?? 0), refreshMs: round(refreshMs), missedRefreshes: missed,
         over25ms: times.filter((t) => t > 25).length, over50ms: times.filter((t) => t > 50).length, over100ms: times.filter((t) => t > 100).length,
-        sectionsAverageMs, gameAverageMs,
+        slowFrames, slowOutsideGame, sectionsAverageMs, gameAverageMs,
       },
       worstFrames: worst,
       frameTimesMs: times.map((t) => round(t, 1)),

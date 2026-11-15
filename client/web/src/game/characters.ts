@@ -311,6 +311,12 @@ export class Character {
   name: string;
   kind: string;
   model: AnimatedModel;
+  /**
+   * Out of the camera's view this frame (main.ts cullCharacters): its body and items are not posed or drawn
+   * (it still walks, turns and keeps its clock, so it shows right as soon as it comes into view).
+   */
+  culled = false;
+  private readonly culledChildren: THREE.Object3D[] = [];
   actions: CharacterActions;
   keysPerSecond: (action: number) => number;
   /** Where it stands, in world units. */
@@ -525,6 +531,20 @@ export class Character {
     const x = this.position.x + this.bodyOffset.x, y = this.position.y + this.bodyOffset.y;
     this.group.position.set(x, y, this.fixedHeight ?? sampleHeight(world.heights, x, y) + this.heightOffset);
     this.group.rotation.set(0, 0, this.angle);
+    if (this.culled) {
+      // Its drawings are put away (the group itself stays visible: the effects and arrows read that as
+      // "in the world") and come back as they were when it is in view again.
+      for (const child of this.group.children) {
+        if (child.visible) { child.visible = false; this.culledChildren.push(child); }
+      }
+      this.clock += dt;
+      if (this.companions.length) this.updateCompanions(dt, world);
+      return;
+    }
+    if (this.culledChildren.length) {
+      for (const child of this.culledChildren) if (child.parent === this.group) child.visible = true;
+      this.culledChildren.length = 0;
+    }
     this.model.pose(this.action, this.time);
     if (this.looksDirty) this.applyItemLooks();
     this.clock += dt;

@@ -2763,6 +2763,7 @@
 "Memory %s MB → %s MB, %s garbage collections (%s MB freed).": "Bộ nhớ %s MB → %s MB, %s lần dọn rác (giải phóng %s MB).",
 "Recording for %s seconds: keep playing as usual.": "Đang ghi trong %s giây: cứ chơi như bình thường.",
 "Download the report and send the file to the game's owner.": "Tải báo cáo về và gửi tệp cho chủ game.",
-"Records %s seconds of play: how long each frame takes and what takes the time.": "Ghi %s giây chơi: mỗi khung hình mất bao lâu và cái gì tốn thời gian."
+"Records %s seconds of play: how long each frame takes and what takes the time.": "Ghi %s giây chơi: mỗi khung hình mất bao lâu và cái gì tốn thời gian.",
+"%s frames missed a refresh; in %s of them the game's own work took under half the frame (the time went to the browser, the graphics driver or other programs).": "%s khung hình lỡ lần làm mới; trong %s khung đó phần việc của game chưa tới nửa khung (thời gian thuộc về trình duyệt, trình điều khiển đồ họa hoặc chương trình khác)."
 }
 }
