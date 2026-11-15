@@ -86,6 +86,10 @@ export const BITMAPS = {
   energy: 'Thunder01.jpg', // BITMAP_ENERGY
   spark: 'Spark02.jpg', // BITMAP_SPARK
   spark3: 'Spark03.jpg', // BITMAP_SPARK+1
+  sparkBurst: 'Spark.jpg', // BITMAP_SPARK+2
+  fireHik1: 'firehik01.jpg', // BITMAP_FIRE_HIK1
+  fireCursedLich: 'firehik02.jpg', // BITMAP_FIRE_CURSEDLICH
+  fireHik3: 'firehik03.jpg', // BITMAP_FIRE_HIK3
   fire: 'Fire01.jpg', // BITMAP_FIRE
   smoke: 'smoke01.jpg', // BITMAP_SMOKE
   blood2: 'blood.tga', // BITMAP_BLOOD+1
@@ -101,6 +105,7 @@ export const BITMAPS = {
   fire2: 'Fire02.jpg', // BITMAP_FIRE+1
   fire3: 'Fire03.jpg', // BITMAP_FIRE+2
   shiny1: 'Shiny01.jpg', // BITMAP_SHINY
+  shiny3: 'Shiny03.jpg', // BITMAP_SHINY+2
   flare: 'Flare.jpg', // BITMAP_FLARE
   flareForce: 'NSkill.jpg', // BITMAP_FLARE_FORCE
   magicGround1: 'Magic_Ground1.jpg', // BITMAP_MAGIC
@@ -147,6 +152,7 @@ export const BITMAPS = {
   explosion2: 'DinoE.jpg', // BITMAP_EXPLOTION+1
   advSmoke2: 'fi02.tga', // BITMAP_ADV_SMOKE+1
   lightning2: 'lightning2.jpg', // BITMAP_LIGHTNING+1
+  groundWind: 'ground_wind.jpg', // BITMAP_GROUND_WIND
   impact: 'Impack03.jpg', // BITMAP_IMPACT
   orora: 'hikorora.jpg', // BITMAP_ORORA
   lightMarks: 'lightmarks.jpg', // BITMAP_LIGHT_MARKS

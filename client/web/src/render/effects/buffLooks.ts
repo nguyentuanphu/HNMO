@@ -14,13 +14,14 @@ import type { EffectSystem } from './effectSystem.js';
 import type { EffectOwner } from './types.js';
 import { CRITICAL_DAMAGE_BUFF, criticalDamageSparks } from './darkLordEffects.js';
 import { RageBuff } from './rageEffects.js';
+import { berserkerLook } from './berserkerEffects.js';
 
 /** The eBuffState numbers the looks read. */
 export const Buff = {
   ATTACK: 1, DEFENSE: 2, WIZ_DEFENSE: 4, ADD_CRITICAL_DAMAGE: CRITICAL_DAMAGE_BUFF, LIFE: 8, CLOAKING: 18,
   POISON: 55, FREEZE: 56, HARDEN: 57, STUN: 61, ATTACK_DOWN: 76, DEFENSE_DOWN: 77,
-  THORNS: 71, SLEEP: 72, BLIND: 73, SWELL_OF_MAGIC_POWER: 82,
-  GIGANTIC_STORM_DAMAGE: 84, LIGHTNING_SHOCK_DAMAGE: 85, BLOW_OF_DESTRUCTION: 86,
+  THORNS: 71, SLEEP: 72, BLIND: 73, BERSERKER: 81, SWELL_OF_MAGIC_POWER: 82,
+  FLAME_STRIKE_DAMAGE: 83, GIGANTIC_STORM_DAMAGE: 84, LIGHTNING_SHOCK_DAMAGE: 85, BLOW_OF_DESTRUCTION: 86,
   ATT_UP: RageBuff.ATT_UP, HP_UP: RageBuff.HP_UP, DEF_UP: RageBuff.DEF_UP,
 } as const;
 
@@ -90,6 +91,18 @@ export function playBuffLook(system: EffectSystem, buff: number, owner: EffectOw
       }
       return true;
     }
+    case Buff.BERSERKER: // turning auras and sparks at the hands, red marks on the body
+      berserkerLook(system, owner, on);
+      return true;
+    case Buff.STUN: // three lights circling up over the stunned one's head (MODEL_SPEARSKILL 8)
+      if (on) {
+        const p = owner.position.clone();
+        for (const turn of [90, 180, 270]) {
+          system.createJoint('spearSkill', p, p, new THREE.Vector3(0, 0, turn), 8, owner, 30);
+          p.z -= 10;
+        }
+      }
+      return true;
     case Buff.HARDEN: // two ice shells, the second turned round (they fade by themselves when it ends)
       if (on) {
         system.deleteEffect('ice', owner, 1);
@@ -117,6 +130,9 @@ export function playBuffLook(system: EffectSystem, buff: number, owner: EffectOw
       else if ((owner.boneCount?.() ?? 0) > 0 && !(owner.hasBuff?.(Buff.CLOAKING) ?? false) && !system.searchEffect('swellOfMagicPowerBuffEffect', owner, 0)) {
         system.createEffect('swellOfMagicPowerBuffEffect', owner.position, owner.angle, new THREE.Vector3(0.7, 0.2, 0.9), 0, owner);
       }
+      return true;
+    case Buff.FLAME_STRIKE_DAMAGE: // flames and lights on the body for 20 ticks
+      if (on) system.createEffect('fireCursedLich', owner.position, owner.angle, owner.light ?? WHITE, 2, owner);
       return true;
     case Buff.GIGANTIC_STORM_DAMAGE:
       if (on) system.createEffect('jointThunderEffect', owner.position, owner.angle, owner.light ?? WHITE, 0, owner);

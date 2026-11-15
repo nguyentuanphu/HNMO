@@ -21,7 +21,7 @@ import { lance, summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
-import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, siegeSkill } from './darkLordEffects.js';
+import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, siegeSkill, starfall } from './darkLordEffects.js';
 import { recovery, spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
 import { playBuffLook } from './buffLooks.js';
 import { cometfall, expansionOfWizardry } from './wizardEffects.js';
@@ -63,6 +63,7 @@ export const SkillEffect = {
   IMPALE: 47,
   SWELL_LIFE: 48,
   ICE_ARROW: 51,
+  STARFALL: 46, // AT_SKILL_DEEPIMPACT
   PENETRATION: 52,
   FIRE_SLASH: 55,
   POWER_SLASH: 56,
@@ -428,6 +429,9 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
     case SkillEffect.PENETRATION:
     case SkillEffect.ICE_ARROW:
       options.shootArrow?.(0, target); // CreateArrows: one arrow
+      break;
+    case SkillEffect.STARFALL: // CreateArrows: MODEL_ARROW_IMPACT instead of an arrow
+      if (target !== caster) starfall(system, caster, target);
       break;
     case SkillEffect.HEALING:
       system.createEffect('magicGround2', to, target.angle, target.light ?? WHITE, 1, target);

@@ -294,6 +294,11 @@ EXTRA_EFFECTS.shockWave = {
       o.startPosition.copy(o.light); // EyeRight: the full colour
       return o.owner !== null;
     }
+    if (o.subType === 4) { // where Starfall's flashes land: a small ring that grows
+      o.lifeTime = 10;
+      o.scale = (randInt(6) + 6) / 10;
+      return true;
+    }
     if (o.subType !== 0) return false;
     o.lifeTime = 30;
     o.scale = 20;
@@ -302,6 +307,10 @@ EXTRA_EFFECTS.shockWave = {
   move: (o) => {
     if (o.subType === 14) {
       twilightRing(o, 0.15);
+      return true;
+    }
+    if (o.subType === 4) {
+      o.scale += 0.3;
       return true;
     }
     o.scale -= 1;
@@ -490,12 +499,26 @@ export function chaoticShine(o: Effect, system: EffectSystem): void {
  * bolts that arc forward from the lord's chest and bounce along the ground (CreateTailAxis on the y axis). */
 EXTRA_JOINTS.flash = {
   init: (o, system) => {
-    if (o.subType === 0 || o.subType === 1) {
-      void shadowBody();
+    if (o.subType === 4) { // rides its target (Starfall's arrow) as a blue trail
+      if (!o.target) return false;
+      o.maxTails = 20;
+      o.lifeTime = 30;
+      o.velocity = 0;
+      o.texture = 'flareBlue';
+      o.light.set(1, 1, 1);
+      o.direction.set(0, 0, 0);
+      o.position.copy(o.target.position);
+      o.angle.copy(o.target.angle);
+      return true;
+    }
+    if (o.subType <= 3) {
+      if (o.subType <= 1) void shadowBody();
       o.maxTails = 10;
       o.lifeTime = 40;
-      o.velocity = 70;
-      o.counter = 150; // MultiUse: how far under the ground it may go
+      o.velocity = o.subType >= 2 ? 30 : 70;
+      o.counter = o.subType >= 2 ? 300 : 150; // MultiUse: how far under the ground it may go
+      if (o.subType === 2) o.texture = 'flareForce';
+      else if (o.subType === 3) o.texture = 'flareBlue';
       o.pkKey = 0;
       o.angle.set(90, 0, 0);
       o.createTails = false;
@@ -551,20 +574,33 @@ EXTRA_JOINTS.flash = {
       if (o.lifeTime < o.counter / 2) o.light.multiplyScalar(1 / 1.3);
       return;
     }
-    // SubTypes 0 and 1: the common move along the angle, then again along the head (each 10 faster first).
+    if (o.subType === 4) {
+      if (!o.target || !(o.target.isLive?.() ?? true)) {
+        o.live = false;
+        return;
+      }
+      o.position.copy(o.target.position);
+      if (o.lifeTime < 15) o.light.multiplyScalar(1 / 1.3);
+      return;
+    }
+    // SubTypes 0 to 3: the common move along the angle, then again along the head (each 10 faster first).
+    if (o.subType === 2) o.angle.z += randInt(10) + 10;
     o.velocity += 10;
     if (o.pkKey === 0 && o.numTails < o.maxTails) system.layTail(o, o.angle);
     o.velocity += 10;
     o.position.add(rotateByAngle(new THREE.Vector3(0, -o.velocity, 0), flashHeads.get(o) ?? o.angle));
     const floor = system.heightAt(o.position.x, o.position.y) - o.counter;
     if (o.position.z < floor) {
-      // The first touch: shards of skin fly off the target (SpawnMeshEffects(0, MODEL_SKIN_SHELL, SubType)).
-      if (o.pkKey === 0 && o.target) skinShells(system, o.target, o.subType);
+      // The first touch: shards of skin fly off the target (SpawnMeshEffects(0, MODEL_SKIN_SHELL, SubType)); Starfall's
+      // flashes leave a ring.
+      if (o.pkKey === 0 && o.subType <= 1 && o.target) skinShells(system, o.target, o.subType);
+      if (o.pkKey === 0 && o.subType >= 2) system.createEffect('shockWave', o.position, o.angle, new THREE.Vector3(0.3, 0.8, 1), 4);
       o.position.z = floor;
       o.pkKey = 1; // no more tails (m_bCreateTails = false)
       o.light.multiplyScalar(1 / 1.2);
     }
-    system.createSprite('flare', o.position, 1, o.light, null, randInt(360));
+    if (o.subType <= 1) system.createSprite('flare', o.position, 1, o.light, null, randInt(360));
+    else system.createSprite('shiny3', o.position, 1.6, new THREE.Vector3(0, 1, 1), null, randInt(360));
   },
   draw: (o, system) => {
     if (o.subType !== 6) return false;
@@ -580,6 +616,49 @@ EXTRA_JOINTS.flash = {
   },
 };
 const flashHeads = new WeakMap<Joint, THREE.Vector3>();
+
+// MODEL_ARROW_IMPACT (Starfall): a glowing arrow over the elf that tips back and flies off with a blue trail; as it
+// ends, two flashes fall from 1200 over the target (its owner).
+EXTRA_EFFECTS.arrowImpact = {
+  model: ['Skill', 'ArrowImpact.bmd'],
+  create: (o, system) => {
+    const caster = o.target;
+    if (!o.owner || !caster) return false;
+    o.velocity = 1;
+    o.lifeTime = 20;
+    o.scale = 1.8;
+    o.blendMesh = -2;
+    o.direction.set(0, -30, 0);
+    o.light.set(0.3, 0.8, 1);
+    o.position.copy(caster.position).add(rotateByAngle(new THREE.Vector3(-10, -80, 200), caster.angle));
+    o.angle.copy(caster.angle);
+    o.angle.x = -30;
+    system.createJoint('flash', o.position, o.position, o.angle, 4, o.self, 40, 50);
+    return true;
+  },
+  move: (o, system) => {
+    o.angle.x -= 5;
+    o.direction.y -= 8;
+    if (o.lifeTime < 2 && o.subType === 0 && o.owner) {
+      o.angle.x = 90;
+      o.subType = 1;
+      const p = o.owner.position.clone();
+      p.x += randInt(100) - 50;
+      p.y += randInt(100) - 50;
+      p.z += 1200;
+      system.createJoint('flash', p, p, o.angle, 2, o.self, 50);
+      system.createJoint('flash', p, p, o.angle, 3, o.self, 50);
+    } else if (o.subType === 1) {
+      o.live = false;
+    }
+    return true;
+  },
+};
+
+/** Starfall's release: the arrow from the elf, falling on the target. */
+export function starfall(system: EffectSystem, caster: EffectOwner, target: EffectOwner): void {
+  system.createEffect('arrowImpact', caster.position, caster.angle, caster.light ?? WHITE, 0, target, 0, { target: caster });
+}
 
 // MODEL_SHADOW_BODY (Player/Shadow01.bmd) at its first key: the body the cancels' skin shards come off.
 let shadow: { model: BMDModel; bones: THREE.Matrix4[] } | null = null;

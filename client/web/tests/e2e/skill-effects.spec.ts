@@ -70,6 +70,8 @@ const ELF: Case[] = [
   { skill: 235, name: 'multi-shot', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'effect:bladeSkill'], shotAt: 200, model: 'bladeSkill', warm: [['Effect', 'bladetonedo.bmd']] },
   { skill: 77, name: 'infinity-arrow', expect: ['effect:infinityArrow', 'effect:infinityArrow1', 'effect:infinityArrow4'], shotAt: 300 },
   { skill: 30, name: 'summon', expect: ['effect:magicGround2', 'joint:jointHealing'], shotAt: 800 },
+  // Starfall: the glowing arrow over the elf, then two flashes falling on the target and their rings.
+  { skill: 46, name: 'starfall', expect: ['effect:arrowImpact', 'joint:flash', 'effect:shockWave'], shotAt: 400, other: true, model: 'arrowImpact', warm: [['Skill', 'ArrowImpact.bmd']] },
   { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight', 'effect:flare', 'particle:light'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
 ];
 
@@ -80,6 +82,8 @@ const GLADIATOR: Case[] = [
   // The flame follows the gladiator's swing (PLAYER_SKILL_FLAMESTRIKE), played by the hero here.
   // Released at key 3 of PLAYER_ATTACK_DEATH_CANNON, played by the hero here.
   { skill: 73, name: 'mana-rays', expect: ['joint:jointForce', 'joint:flareBlueJoint'], shotAt: 640, action: 138 },
+  // The Flame Strike debuff (eDeBuff_FlameStrikeDamage = 83): flames rising from the body's bones.
+  { skill: 56, name: 'flame-strike-debuff', expect: ['effect:fireCursedLich', 'particle:fireHik1', 'particle:fireCursedLich', 'particle:fireHik3'], shotAt: 400, buffs: [83] },
   { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
 ];
 
@@ -97,9 +101,11 @@ const LORD: Case[] = [
   { skill: 74, name: 'fire-blast', expect: ['effect:pierPart', 'joint:jointForce', 'effect:skillInferno'], shotAt: 680, action: 80 },
   { skill: 78, name: 'fire-scream', expect: ['effect:darkScream', 'effect:darkScreamFire', 'joint:jointForce', 'particle:flame', 'particle:blueBlur'], shotAt: 640, model: 'darkScream', warm: [['Skill', 'darkfirescrem01.bmd'], ['Skill', 'darkfirescrem02.bmd']] },
   { skill: 67, name: 'stun', expect: ['joint:flash', 'particle:explosion2', 'joint:jointThunder', 'particle:advSmoke2'], shotAt: 680 },
+  // The Stun debuff on the hero (eDeBuff_Stun = 61): three lights circling up over the head.
+  { skill: 67, name: 'stun-debuff', expect: ['joint:spearSkill'], shotAt: 600, buffs: [61] },
   { skill: 68, name: 'cancel-stun', expect: ['joint:flash', 'effect:skinShell'], shotAt: 900, other: true, warm: [['Skill', 'SkinShell.bmd']] },
   { skill: 69, name: 'swell-mana', expect: ['joint:jointSpirit', 'effect:magicGround2'], shotAt: 680 },
-  { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
+  { skill: 63, name: 'summon', expect: ['effect:circle', 'effect:circleLight', 'particle:flareBlue', 'joint:flareBlueJoint'], shotAt: 900, lasting: ['effect:circle', 'effect:circleLight'] },
   { skill: 238, name: 'chaotic-diseier', expect: ['effect:shiny5', 'joint:twoLineGhost', 'particle:smoke', 'effect:desair'], shotAt: 900, model: 'desair', warm: [['Skill', 'desair.bmd'], ['Skill', 'darkwing_hetachi.bmd']] },
 ];
 
@@ -117,6 +123,8 @@ const SUMMONER: Case[] = [
   { skill: 45, name: 'lance', expect: ['effect:skillJavelin', 'particle:poundingBall'], shotAt: 1000, model: 'skillJavelin', warm: [['Skill', 'Javelin.bmd']] },
   { skill: 230, name: 'lightning-shock', expect: ['effect:lightningShock', 'particle:lightningMega', 'effect:magic', 'effect:damage01Mono'], shotAt: 240 },
   { skill: 219, name: 'sleep', expect: ['effect:aliceBuffSkillEffect', 'effect:aliceBuffSkillEffect2', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
+  // The Berserker buff (eBuff_Berserker = 81): auras turning at the hands, sparks, red marks on the body.
+  { skill: 218, name: 'berserker-buff', expect: ['effect:orora', 'particle:orora', 'effect:sparks', 'effect:lightMarks', 'sprite:lightMarks'], shotAt: 1200, buffs: [81], lasting: ['effect:orora', 'effect:sparks'] },
   { skill: 218, name: 'berserker', expect: ['effect:aliceBuffSkillEffect', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
   { skill: 221, name: 'weakness', expect: ['effect:magicZin', 'effect:summonerCastingEffect2', 'effect:shiny5', 'particle:pinLightParticle'], shotAt: 1100 },
   { skill: 222, name: 'innovation', expect: ['effect:magicZin', 'effect:summonerCastingEffect222', 'particle:shiny5Particle'], shotAt: 1100 },
@@ -126,7 +134,7 @@ const FIGHTER: Case[] = [
   { skill: 260, name: 'killing-blow', expect: ['effect:wolfHeadEffect', 'effect:sbumb', 'particle:sbumb', 'joint:pinLightJoint'], shotAt: 240 },
   { skill: 261, name: 'beast-uppercut', expect: ['effect:downAttackDummyR', 'effect:downAttackDummyL', 'joint:forcePillar', 'particle:sahamuttExplosion'], shotAt: 520 },
   // Its timing follows the fighter's kick (PLAYER_SKILL_DRAGONKICK), played by the hero here.
-  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega'], shotAt: 400, action: 252 },
+  { skill: 265, name: 'dragon-slasher', expect: ['effect:dragonKickDummy', 'effect:multiShot1', 'particle:lightningMega', 'joint:groundWind', 'particle:energy', 'particle:spark3'], shotAt: 400, action: 252 },
   { skill: 266, name: 'increase-attack', expect: ['effect:swordEffectMono', 'particle:swordEffectMonoParticle', 'effect:shockWaveGround1', 'effect:eventCloud', 'effect:windForce', 'effect:magic'], shotAt: 400 },
   { skill: 267, name: 'increase-health', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:eventCloud'], shotAt: 400 },
   { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },

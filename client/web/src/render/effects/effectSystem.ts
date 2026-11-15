@@ -65,6 +65,7 @@ const JOINT_TEXTURES: Record<JointType, BitmapName> = {
   jointThunder: 'jointThunder', jointHealing: 'jointHealing', spearSkill: 'flareBlue', jointSpirit: 'jointSpirit',
   smokeTrail: 'flare', flare: 'flare', jointSpark: 'spark1', lightJoint: 'light', piercing: 'piercing', flareForceJoint: 'flareForce', jointForce: 'jointForce', blur: 'blur1', flareBlueJoint: 'flareBlue', flash: 'flash',
   twoLineGhost: 'twoLineGhost', drainLifeGhost: 'drainLifeGhost', jointEnergy: 'jointEnergy', pinLightJoint: 'pinLight', forcePillar: 'forcePillar', swordEff: 'swordEff',
+  groundWind: 'groundWind',
 };
 
 export interface EffectSystemOptions {
@@ -361,11 +362,11 @@ export class EffectSystem {
         if (o.subType === 1) {
           o.lifeTime = 10;
           o.light.set(0.5, 0.5, 0.5);
-        }
-        return o.subType === 0 || o.subType === 1;
+        } else if (o.subType === 7) o.lifeTime = 5; // Dragon Slasher's energy at the target
+        return o.subType === 0 || o.subType === 1 || o.subType === 7;
       case 'spark': {
         o.scale = (randInt(4) + 4) * 0.1;
-        if (o.subType !== 0 && o.subType !== 2) return false;
+        if (o.subType !== 0 && o.subType !== 2 && o.subType !== 13) return false;
         o.lifeTime = randInt(16) + 24;
         o.angle.z = randInt(360);
         o.gravity = randInt(16) + 6;
@@ -373,6 +374,10 @@ export class EffectSystem {
         if (o.subType === 2) {
           o.scale *= 2;
           p.multiplyScalar(3);
+        } else if (o.subType === 13) { // larger, drawn with BITMAP_SPARK+1 (Dragon Slasher)
+          o.scale *= 1.6;
+          p.multiplyScalar(1.5);
+          o.texture = 'spark3';
         }
         rotateByAngle(p, o.angle, o.velocity);
         return true;
@@ -387,7 +392,9 @@ export class EffectSystem {
           o.angle.set(0, 0, 0);
           o.velocity.copy(o.target.position).sub(o.position).divideScalar(10);
         }
-        return o.subType === 0 || o.subType === 1 || o.subType === 2;
+        else if (o.subType === 3) o.lifeTime = 5; // Dragon Slasher's flashes
+        else if (o.subType === 8) o.lifeTime = 10;
+        return o.subType === 0 || o.subType === 1 || o.subType === 2 || o.subType === 3 || o.subType === 8;
       case 'fire':
       case 'fire3':
         o.lifeTime = 24;
@@ -518,6 +525,11 @@ export class EffectSystem {
         else return false;
         return true;
       case 'flareBlue':
+        if (o.subType !== 0) return false;
+        o.lifeTime = 30 + randInt(10); // Summon's rising flares
+        o.light.set(1, 1, 1);
+        o.velocity.set(0, 0, randInt(100) / 50);
+        return true;
       case 'flare':
         return false;
       default:
@@ -561,6 +573,10 @@ export class EffectSystem {
           o.scale += 0.05;
           o.position.copy(o.startPosition).add(o.velocity);
           o.startPosition.copy(o.position);
+          break;
+        }
+        if (o.subType === 3) {
+          o.scale *= 0.8;
           break;
         }
         o.scale -= o.subType === 1 ? 2 : 0.5;
@@ -621,6 +637,11 @@ export class EffectSystem {
           o.scale += 0.05;
           o.position.z -= 1;
         }
+        break;
+      case 'flareBlue': // SubType 0: rises ever faster (at most 8 a tick), small; gone in its last five ticks
+        o.scale = 0.2;
+        o.velocity.z = Math.min(8, o.velocity.z + 0.4);
+        if (o.lifeTime < 5) o.light.set(0, 0, 0);
         break;
       case 'blood2':
         o.frame = Math.trunc((12 - o.lifeTime) / 3);
@@ -772,6 +793,18 @@ export class EffectSystem {
         return o.subType >= 1 && o.subType <= 3;
       case 'spearSkill':
         if (!o.target) return false;
+        if (o.subType === 8) { // the Stun debuff's three lights circling up over the head (RENDER_FACE_ONE)
+          o.faces = 1;
+          o.lifeTime = 40;
+          o.maxTails = 30;
+          o.createTails = false;
+          o.light.set(0.5, 0.5, 0.5);
+          o.texture = 'light';
+          o.direction.set(0, -40, 0);
+          o.startPosition.copy(o.targetPosition);
+          o.position.copy(o.startPosition).add(rotateByAngle(o.direction, o.angle));
+          return true;
+        }
         if (o.subType !== 2) o.targetPosition.copy(o.target.position);
         if (o.subType === 0) {
           o.light.set(1, 1, 1);
@@ -981,6 +1014,13 @@ export class EffectSystem {
   // lives (4 while its aura buff lasts); SubType 2 is Death Stab's gust flying in to the sword.
   private moveSpearSkill(o: Joint): boolean {
     const target = o.target;
+    if (o.subType === 8) {
+      o.angle.z += 25;
+      o.position.copy(o.startPosition).add(rotateByAngle(o.direction, o.angle));
+      this.createTail(o, o.angle);
+      o.startPosition.z += 15;
+      return true;
+    }
     if (o.subType === 2) {
       if (!target || !ownerLive(target)) { o.target = null; return true; }
       o.scale = o.lifeTime * 3;
@@ -1719,9 +1759,19 @@ export class EffectSystem {
 
   // Move_MODEL_CIRCLE_LIGHT (SubType 0): the light rises and falls, scrolls, and stones float up.
   private moveCircleLight(o: Effect, luminosity: number): void {
-    if (o.subType === 3) { // Summon's light (its blue flares aren't ported)
+    if (o.subType === 3) { // Summon's light: blue flares rise in it and fall from 600 over it
       o.blendMeshLight = Math.min(0.5, o.lifeTime >= 240 ? (250 - o.lifeTime) * 0.1 : o.lifeTime * 0.1);
       o.blendMeshTexCoordU = -o.lifeTime * 0.01;
+      if (o.lifeTime > 30 && randInt(2) === 0) {
+        const angle = new THREE.Vector3(0, 0, randInt(360));
+        const position = rotateByAngle(new THREE.Vector3(0, randInt(200), 0), angle).add(o.position);
+        this.createParticle('flareBlue', position, o.angle, o.light, 0);
+        if (o.lifeTime > 40) {
+          position.z += 600;
+          angle.z = 45;
+          this.createJoint('flareBlueJoint', position, position, angle, 19, null, 40);
+        }
+      }
       this.groundLight(o.position, o.blendMeshLight, o.blendMeshLight, o.blendMeshLight, 4);
       return;
     }
