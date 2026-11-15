@@ -376,6 +376,62 @@ EXTRA_EFFECTS.windForce = {
   },
 };
 
+// MODEL_WINDFOCE_MIRROR (the catalogue gives LifeTime 50 and the call's scale): turns with the clock, grows to 1.5 and
+// fades, following the fighter while Increase Defense lasts; drawn bright at six times its light.
+EXTRA_EFFECTS.windForceMirror = {
+  model: ['Effect', 'wind_foce_mirror.bmd'],
+  create: (o) => {
+    bright(o, 6);
+    return o.owner !== null;
+  },
+  move: (o, system) => {
+    const owner = o.owner;
+    if (!live(owner) || !(owner.hasBuff?.(RageBuff.DEF_UP) ?? true)) {
+      o.live = false;
+      return false;
+    }
+    o.angle.z = Math.trunc(system.time) * 0.4;
+    o.scale = Math.min(1.5, o.scale * 1.015);
+    o.light.multiplyScalar(0.9);
+    o.position.copy(owner.position);
+    return true;
+  },
+};
+
+// BITMAP_SMOKELINE1, SubTypes 0 and 5 (5 moves with its owner): a line of smoke that fades in, grows, rises and fades.
+EXTRA_PARTICLES.smokeLine1 = {
+  texture: 'smokeLine1',
+  init: (o, scale) => {
+    if (o.subType !== 0 && o.subType !== 5) return false;
+    o.lifeTime = 35;
+    o.scale = (randInt(96) + 96) * 0.01 * scale;
+    o.rotation = randInt(360);
+    o.gravity = (randInt(16) + 12) * 0.1;
+    o.alpha = 0;
+    o.turningForce.copy(o.light);
+    o.light.set(0, 0, 0);
+    if (o.subType === 5) {
+      if (!o.target) return false;
+      o.startPosition.copy(o.target.position);
+    }
+    return true;
+  },
+  move: (o) => {
+    if (o.lifeTime < 10) o.alpha -= 0.1;
+    else if (o.alpha < 0.7) o.alpha += (randInt(5) + 2) * 0.1;
+    else o.alpha = 0.7;
+    if (o.alpha < 0.1) o.live = false;
+    o.light.copy(o.turningForce).multiplyScalar(o.alpha);
+    o.scale += (randInt(3) + 6) * 0.01;
+    o.position.z += o.gravity;
+    if (o.subType === 5 && o.target) {
+      o.position.sub(o.startPosition);
+      o.startPosition.copy(o.target.position);
+      o.position.add(o.startPosition);
+    }
+  },
+};
+
 // BITMAP_LIGHT_RED: the party buffs' glow. SubType 0 (Increase Health) lies under the fighter
 // while a party buff lasts, breathing; 1 and 2 only keep the buff's other looks going.
 EXTRA_EFFECTS.lightRed = {
@@ -386,11 +442,21 @@ EXTRA_EFFECTS.lightRed = {
     o.light.set(1, 1, 1);
     return o.subType <= 2 && o.owner !== null;
   },
-  move: (o) => {
+  move: (o, system) => {
     const owner = o.owner;
     const buffed = live(owner) && [RageBuff.ATT_UP, RageBuff.HP_UP, RageBuff.DEF_UP].some((b) => owner.hasBuff?.(b) ?? true);
     if (buffed) o.lifeTime = 10;
     else o.lifeTime = 0;
+    if (!buffed || !owner) return true;
+    // Increase Defense: now and then a wind passes over the fighter (MODEL_WINDFOCE_MIRROR, one at a time).
+    if ((owner.hasBuff?.(RageBuff.DEF_UP) ?? false) && randInt(70) === 7 && !system.searchEffect('windForceMirror', owner)) {
+      system.createEffect('windForceMirror', owner.position, o.angle, new THREE.Vector3(0.6, 0.6, 1), 0, owner, 1);
+    }
+    // Increase Attack: red smoke lines rise from the fists (bones 26 and 35) every tick.
+    if (owner.hasBuff?.(RageBuff.ATT_UP) ?? false) {
+      const hand = owner.bonePosition?.(randInt(2) === 0 ? 26 : 35);
+      if (hand) system.createParticle('smokeLine1', hand, o.angle, new THREE.Vector3(1, 0.12, 0), 5, 0.005, owner);
+    }
     return true;
   },
   draw: (o, system) => {

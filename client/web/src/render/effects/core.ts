@@ -126,6 +126,7 @@ export const BITMAPS = {
   swordEffectMono: 'SwordEff_mono.jpg', // BITMAP_SWORD_EFFECT_MONO
   eventCloud: 'clouds2.jpg', // BITMAP_EVENT_CLOUD
   lightRed: 'flare01_red.jpg', // BITMAP_LIGHT_RED
+  smokeLine1: 'smokelines01.jpg', // BITMAP_SMOKELINE1
   lava: 'Lava.jpg', // BITMAP_LAVA
   swordEff: '!SwordEff.jpg', // BITMAP_SWORDEFF
   forcePillar: 'force_Pillar.jpg', // BITMAP_FORCEPILLAR

@@ -107,6 +107,7 @@ export type EffectType =
   | 'eventCloud' // BITMAP_EVENT_CLOUD: their clouds on the ground
   | 'windForce' // MODEL_WINDFOCE: their whirl of wind (Effect/wind_foce.bmd)
   | 'lightRed' // BITMAP_LIGHT_RED: the party buffs' glow
+  | 'windForceMirror' // MODEL_WINDFOCE_MIRROR: Increase Defense's passing wind (Effect/wind_foce_mirror.bmd)
   | 'dragonKickDummy' // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
   | 'bladeSkill'; // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
 
@@ -119,7 +120,8 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'shiny5Particle' // BITMAP_SHINY+6 as a particle
   | 'swordEffectMonoParticle' // BITMAP_SWORD_EFFECT_MONO as a particle
   | 'sahamuttExplosion' // BITMAP_SUMMON_SAHAMUTT_EXPLOSION: CreateBomb3's explosion
-  | 'sbumb'; // BITMAP_SBUMB: Killing Blow's hits
+  | 'sbumb' // BITMAP_SBUMB: Killing Blow's hits
+  | 'smokeLine1'; // BITMAP_SMOKELINE1: the smoke lines rising from Increase Attack's fists
 
 /** CreateSprite types: the bitmap drawn. */
 export type SpriteType = BitmapName;

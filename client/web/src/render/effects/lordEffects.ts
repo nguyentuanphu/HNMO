@@ -57,6 +57,7 @@ EXTRA_EFFECTS.swordForce = {
     return o.subType === 0;
   },
   move: (o, system) => {
+    system.groundLight(o.position, 1, 0.8, 0.6, 1);
     if (o.lifeTime === 30) {
       const position = o.position.clone().setZ(o.position.z + 100);
       system.createJoint('jointForce', position, position, o.headAngle, 0, o.owner, 150);
@@ -153,7 +154,8 @@ EXTRA_EFFECTS.waves = {
 EXTRA_EFFECTS.piercing2 = {
   model: ['Skill', 'm_Piercing.bmd'],
   create: () => true,
-  move: (o: Effect, system: EffectSystem) => {
+  move: (o: Effect, system: EffectSystem, luminosity: number) => {
+    system.groundLight(o.position, luminosity * 0.6, luminosity * 0.8, luminosity * 0.8, 2);
     o.direction.y = Math.min(0, o.direction.y + 12);
     if (o.lifeTime > (o.subType === 0 ? 5 : 1)) {
       o.blendMeshLight *= 1 / 1.6;

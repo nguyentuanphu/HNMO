@@ -72,7 +72,17 @@ export interface EffectSystemOptions {
   camera?: THREE.Camera;
   /** Ground height (RequestTerrainHeight). Without it the ground is z = 0. */
   heightAt?: HeightAt;
+  /** Where the hero stands, for the camera shake's distance (SetEarthQuakeAt). */
+  heroPosition?: () => { x: number; y: number } | null;
 }
+
+/** AddTerrainLight: a light an effect lays on the ground this tick (world x, y; colour; range in cells). */
+export interface TerrainLight { x: number; y: number; r: number; g: number; b: number; range: number }
+
+/** SetEarthQuakeAt: the shake reaches the hero within 12 cells, weaker with the distance. */
+const SHAKE_RADIUS = 1200;
+/** At most this many terrain lights are kept a tick (the frame's dynamic lights). */
+const MAX_TERRAIN_LIGHTS = 64;
 
 /** Something the system runs once per tick until it returns false (a skill's timeline). */
 export type TickTask = (tick: number) => boolean;
@@ -198,6 +208,10 @@ export class EffectSystem {
   private effectIndex = 0;
   /** WorldTime: milliseconds, advanced 40 per tick. */
   private worldTime = 0;
+  /** This tick's terrain lights (PrimaryTerrainLight's dynamic part), rebuilt every tick. */
+  readonly terrainLights: TerrainLight[] = [];
+  /** EarthQuake: the camera's extra pitch in degrees, set by the effects and damped to a fifth each tick. */
+  earthQuake = 0;
   /** Resolves when the catalogue and the textures are loaded. */
   readonly ready: Promise<void>;
 
@@ -225,6 +239,29 @@ export class EffectSystem {
   /** RequestTerrainHeight, or 0 without a terrain. */
   heightAt(x: number, y: number): number {
     return this.options.heightAt?.(x, y) ?? 0;
+  }
+
+  /** AddTerrainLight: the effect lights the ground around (x, y) with `light`, fading out over `range` cells. */
+  addTerrainLight(x: number, y: number, light: THREE.Vector3, range: number): void {
+    if (this.terrainLights.length >= MAX_TERRAIN_LIGHTS) return;
+    if (light.x === 0 && light.y === 0 && light.z === 0) return;
+    this.terrainLights.push({ x, y, r: light.x, g: light.y, b: light.z, range });
+  }
+
+  /** AddTerrainLight with a colour given as numbers (no vector made). */
+  groundLight(at: THREE.Vector3, r: number, g: number, b: number, range: number): void {
+    if (this.terrainLights.length >= MAX_TERRAIN_LIGHTS || (r === 0 && g === 0 && b === 0)) return;
+    this.terrainLights.push({ x: at.x, y: at.y, r, g, b, range });
+  }
+
+  /** SetEarthQuakeAt: shakes the camera when the hero is within 12 cells of the source. */
+  setEarthQuakeAt(source: THREE.Vector3, magnitude: number): boolean {
+    const hero = this.options.heroPosition?.();
+    if (!hero) return false;
+    const distance = Math.hypot(source.x - hero.x, source.y - hero.y);
+    if (distance >= SHAKE_RADIUS) return false;
+    this.earthQuake = magnitude * (1 - distance / SHAKE_RADIUS);
+    return true;
   }
 
   /** WorldTime in milliseconds. */
@@ -533,6 +570,7 @@ export class EffectSystem {
         break;
       case 'explosion':
         o.frame = Math.trunc((20 - o.lifeTime) / 2);
+        if (o.subType !== 1) this.groundLight(o.position, o.lifeTime / 20 * 0.5, o.lifeTime / 20 * 0.3, o.lifeTime / 20 * 0.1, 4);
         break;
       case 'flame':
         if (o.lifeTime <= 0) o.live = false;
@@ -735,6 +773,11 @@ export class EffectSystem {
     }
   }
 
+  /** SearchEffect: whether an effect of the type made for the owner still lives. */
+  searchEffect(type: EffectType, owner: EffectOwner): boolean {
+    return this.effects.some((effect) => effect.live && effect.type === type && effect.owner === owner);
+  }
+
   /** SearchJoint. */
   searchJoint(type: JointType, target: EffectOwner, subType = -1): boolean {
     return this.joints.some((joint) => joint.live && joint.type === type && joint.target === target && (subType === -1 || joint.subType === subType));
@@ -781,6 +824,10 @@ export class EffectSystem {
 
   // BITMAP_JOINT_THUNDER, SubType 0: rebuilt each move as a jittered path homing in on the target.
   private moveThunder(o: Joint): void {
+    if (o.scale >= 50 && o.subType === 0) {
+      const luminosity = (randInt(4) + 4) * 0.04;
+      this.groundLight(o.position, luminosity * 0.1, luminosity * 0.1, luminosity * 0.5, 2);
+    }
     for (let j = 0; j < o.maxTails; j++) {
       if (o.target) o.targetPosition.copy(o.target.position).setZ(o.target.position.z + 80);
       const distance = moveHumming(o.position, o.angle, o.targetPosition, o.subType === 3 ? 25 : 50);
@@ -1230,7 +1277,7 @@ export class EffectSystem {
       tail = known.move(o, this, luminosity);
     } else {
       switch (o.type) {
-        case 'energy': this.moveEnergy(o); break;
+        case 'energy': this.moveEnergy(o, luminosity); break;
         case 'fireModel': this.moveFire(o, luminosity); break;
         case 'magic2': this.moveMagic2(o, luminosity); break;
         case 'magicGround2': // the subtypes that make no healing trails (MoveEffect's BITMAP_MAGIC+1)
@@ -1241,18 +1288,20 @@ export class EffectSystem {
         case 'stone1':
         case 'stone2':
         case 'iceSmall': this.moveIceSmall(o); break;
-        case 'ice': this.moveIce(o); break;
+        case 'ice': this.moveIce(o, luminosity); break;
         case 'poison':
           o.blendMeshLight = o.lifeTime * 0.1;
           o.alpha = o.lifeTime * 0.1;
+          this.groundLight(o.position, luminosity * 0.3, luminosity, luminosity * 0.6, 2);
           break;
-        case 'flame': this.moveFlame(o); break;
-        case 'storm': this.moveStorm(o); break;
+        case 'flame': this.moveFlame(o, luminosity); break;
+        case 'storm': this.moveStorm(o, luminosity); break;
         case 'circle': this.moveCircle(o); break;
-        case 'circleLight': this.moveCircleLight(o); break;
+        case 'circleLight': this.moveCircleLight(o, luminosity); break;
         case 'skillInferno':
           if (o.subType === 2) o.scale += 0.04;
           o.blendMeshLight = o.lifeTime / 20;
+          if (o.subType === 0) this.groundLight(o.position, -luminosity * 0.5, -luminosity * 0.5, -luminosity * 0.5, 5); // it darkens the ground
           break;
         case 'blizzardModel': this.moveBlizzard(o); break;
         case 'spark3': this.moveTeleportSparks(o); break;
@@ -1273,12 +1322,13 @@ export class EffectSystem {
   }
 
   // BITMAP_ENERGY, SubType 0: the ball leaves energy and sparks, and bursts at its target.
-  private moveEnergy(o: Effect): void {
+  private moveEnergy(o: Effect, _luminosity: number): void {
     if (o.subType !== 0) return;
     const luminosity = o.lifeTime * 0.2;
     const light = new THREE.Vector3(luminosity, luminosity, luminosity);
     this.createParticle('energy', o.position, o.angle, light);
     this.createParticle('spark3', o.position, o.angle, light, 0, 4);
+    this.groundLight(o.position, luminosity * 0.2, luminosity * 0.4, luminosity, 2);
     if (this.checkTargetRange(o)) this.createParticle('spark3', o.position, o.angle, WHITE, 1, 6);
   }
 
@@ -1319,6 +1369,7 @@ export class EffectSystem {
     const light = o.subType === 6
       ? new THREE.Vector3(luminosity * 0.1, luminosity, 0)
       : new THREE.Vector3(luminosity, luminosity * 0.1, 0);
+    this.groundLight(o.position, light.x, light.y, light.z, 2);
     if (o.subType === 6) {
       for (let j = 0; j < 2; j++) this.createParticle('fire', new THREE.Vector3(o.position.x + randInt(50) - 25, o.position.y, o.position.z), o.angle, light, 5);
     } else {
@@ -1336,6 +1387,7 @@ export class EffectSystem {
     o.blendMeshTexCoordU = -o.lifeTime * 0.2;
     for (let j = 0; j < 4; j++) this.createParticle('smoke', o.position, o.angle, o.light, 3);
     const light = new THREE.Vector3(luminosity * 0.3, luminosity * 0.6, luminosity);
+    this.groundLight(o.position, light.x, light.y, light.z, 3);
     if (o.subType !== 2) return;
     o.hiddenMesh = 0;
     this.createParticle('smoke', o.position, o.angle, light, 11, (randInt(32) + 80) * 0.015);
@@ -1420,7 +1472,8 @@ export class EffectSystem {
   }
 
   // MODEL_ICE SubType 0: the crystal grows, then smokes and fades.
-  private moveIce(o: Effect): void {
+  private moveIce(o: Effect, luminosity: number): void {
+    this.groundLight(o.position, -luminosity * 0.4, -luminosity * 0.3, -luminosity * 0.2, 2);
     if (o.animationFrame < 5) return;
     o.velocity = 0;
     if (randInt(2) === 0) {
@@ -1433,7 +1486,8 @@ export class EffectSystem {
 
   // Move_BITMAP_FLAME: SubType 0 (Flame on the ground) burns with six flames and throws stones;
   // SubType 5 (at a target) burns with one.
-  private moveFlame(o: Effect): void {
+  private moveFlame(o: Effect, luminosity: number): void {
+    if (o.subType === 0 || o.subType === 5) this.groundLight(o.position, luminosity, luminosity * 0.4, 0, 3);
     if (o.subType === 0) {
       for (let j = 0; j < 6; j++) {
         const position = new THREE.Vector3(randInt(50) - 25, randInt(50) - 25, 0).add(o.position);
@@ -1448,7 +1502,7 @@ export class EffectSystem {
 
   // Move_MODEL_STORM SubType 0 (Twister): the funnel fades and scrolls, smoke and lightning hit
   // it from above, stones spin up from the ground.
-  private moveStorm(o: Effect): void {
+  private moveStorm(o: Effect, luminosity: number): void {
     o.blendMeshLight = o.lifeTime * 0.1;
     o.blendMeshTexCoordU = -o.lifeTime * 0.1;
     this.createParticle('smoke', o.position, o.angle, o.light, 3);
@@ -1457,6 +1511,7 @@ export class EffectSystem {
     if (randInt(2) === 0) this.createJoint('jointThunder', new THREE.Vector3(o.position.x + 200, o.position.y, o.position.z + 700), o.position, angle, 0, o.self, 10);
     o.position.z = this.heightAt(o.position.x, o.position.y);
     if (randInt(4) === 0) this.createEffect(randInt(2) ? 'stone2' : 'stone1', o.position, o.angle, o.light, 2);
+    this.groundLight(o.position, -luminosity * 0.4, -luminosity * 0.3, -luminosity * 0.2, 5);
   }
 
   // Move_MODEL_CIRCLE: Hellfire's circle (0) fades; Nova's hidden ring (1) sends out its lights.
@@ -1477,7 +1532,8 @@ export class EffectSystem {
   }
 
   // Move_MODEL_CIRCLE_LIGHT (SubType 0): the light rises and falls, scrolls, and stones float up.
-  private moveCircleLight(o: Effect): void {
+  private moveCircleLight(o: Effect, luminosity: number): void {
+    this.groundLight(o.position, luminosity, luminosity * 0.8, luminosity * 0.2, 4);
     o.blendMeshLight = o.lifeTime >= 30 ? (40 - o.lifeTime) * 0.1 : o.lifeTime * 0.1;
     o.blendMeshTexCoordU = -o.lifeTime * 0.01;
     if (randInt(4) === 0) {
@@ -1603,6 +1659,8 @@ export class EffectSystem {
     this.tick++;
     this.worldTime += TICK_SECONDS * 1000;
     this.sprites = []; // ClearSprites
+    this.terrainLights.length = 0; // InitTerrainLight
+    this.earthQuake *= 0.2; // InitializeSceneFrame
     this.tasks = this.tasks.filter((task) => task(this.tick));
     for (let i = 0; i < this.effects.length; i++) {
       const effect = this.effects[i];

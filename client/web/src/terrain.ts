@@ -137,6 +137,26 @@ function buildGeometry(heights: Float32Array): THREE.BufferGeometry {
   return geometry;
 }
 
+/** At most this many effect lights reach the ground in one frame (the strongest are kept). */
+export const MAX_DYNAMIC_LIGHTS = 32;
+
+/** A light an effect adds to the ground this frame (AddTerrainLight): world position, colour, range in cells. */
+export interface TerrainLightCall { x: number; y: number; r: number; g: number; b: number; range: number }
+
+/** Sets the frame's effect lights on the ground (PrimaryTerrainLight = the static light plus these). */
+export function setTerrainLights(mesh: TerrainMesh, lights: readonly TerrainLightCall[]): void {
+  const uniforms = mesh.material.uniforms;
+  const at = uniforms.dynamicLightAt.value as THREE.Vector3[];
+  const color = uniforms.dynamicLightColor.value as THREE.Vector3[];
+  const count = Math.min(lights.length, MAX_DYNAMIC_LIGHTS);
+  for (let i = 0; i < count; i++) {
+    const light = lights[i];
+    at[i].set(light.x / TERRAIN_SCALE, light.y / TERRAIN_SCALE, Math.max(1, light.range));
+    color[i].set(light.r, light.g, light.b);
+  }
+  uniforms.dynamicLightCount.value = count;
+}
+
 const vertexShader = /* glsl */ `
   attribute vec2 cell;
   varying vec2 vCell;
@@ -156,6 +176,9 @@ const fragmentShader = /* glsl */ `
   uniform sampler2D alphaMap;
   uniform sampler2D lightMap;
   uniform float tileScale[${MAX_TILES}];
+  uniform vec3 dynamicLightAt[${MAX_DYNAMIC_LIGHTS}];
+  uniform vec3 dynamicLightColor[${MAX_DYNAMIC_LIGHTS}];
+  uniform int dynamicLightCount;
   uniform float brightness;
   uniform vec3 fogColor;
   uniform float fogNear;
@@ -181,7 +204,15 @@ const fragmentShader = /* glsl */ `
       float alpha = texture2D(alphaMap, vertexUv).r;
       color = mix(color, tileColor(min(layer2, ${MAX_TILES - 1}.0), vCell), alpha);
     }
-    color *= texture2D(lightMap, vertexUv).rgb * brightness;
+    vec3 light = texture2D(lightMap, vertexUv).rgb;
+    // AddTerrainLight: the effects' lights, (range - distance) / range of their colour, in cells.
+    for (int i = 0; i < ${MAX_DYNAMIC_LIGHTS}; i++) {
+      if (i >= dynamicLightCount) break;
+      vec3 at = dynamicLightAt[i];
+      float falloff = (at.z - distance(vCell, at.xy)) / at.z;
+      if (falloff > 0.0) light += dynamicLightColor[i] * falloff;
+    }
+    color *= clamp(light, 0.0, 1.0) * brightness;
     float fog = smoothstep(fogNear, fogFar, vDepth);
     gl_FragColor = vec4(mix(color, fogColor, fog), 1.0);
     #include <colorspace_fragment>
@@ -206,6 +237,9 @@ export async function createTerrain({ worldDir, heights, mapping, light, fog }: 
       alphaMap: { value: byteTexture(mapping.alpha, true) },
       lightMap: { value: lightTexture(light) },
       tileScale: { value: Array.from(scales) },
+      dynamicLightAt: { value: Array.from({ length: MAX_DYNAMIC_LIGHTS }, () => new THREE.Vector3()) },
+      dynamicLightColor: { value: Array.from({ length: MAX_DYNAMIC_LIGHTS }, () => new THREE.Vector3()) },
+      dynamicLightCount: { value: 0 },
       brightness: { value: 1.0 },
       fogColor: { value: fog.color },
       fogNear: { value: fog.near },

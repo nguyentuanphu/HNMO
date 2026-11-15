@@ -81,7 +81,7 @@ EXTRA_EFFECTS.skillWheel2 = {
     o.position.copy(rotateByAngle(p, o.angle).add(owner.position));
     o.angle.z -= 18;
     system.createParticle('smoke', o.position, o.angle, o.light, 3);
-    void luminosity;
+    system.groundLight(o.position, luminosity * 0.3, luminosity * 0.3, luminosity * 0.3, 3);
     for (let j = 0; j < 4; j++) {
       const angle = new THREE.Vector3(randInt(60) + 60 - 90, 0, randInt(30) + 90).add(o.angle);
       const position = o.position.clone();
@@ -231,8 +231,9 @@ for (let n = 1; n <= 8; n++) {
       if (crack.blend) o.blendMesh = 0;
       return true;
     },
-    move: (o, system) => {
+    move: (o, system, luminosity) => {
       crack.glow(o);
+      if (n === 2 || n === 5 || n === 8) system.groundLight(o.position, luminosity, 0, 0, 1); // the red glow of the cracks
       // The glowing cracks (2, 5) send up stones while they glow; +2 ends at once if it grew too big.
       if (n === 2 && o.scale > 50) o.lifeTime = 0;
       if ((n === 2 || n === 5) && o.lifeTime < (n === 2 ? 10 : 30) && o.lifeTime >= 5 && crack.stones && randInt(crack.stones) === 0) {
@@ -252,7 +253,8 @@ for (let n = 1; n <= 8; n++) {
 EXTRA_EFFECTS.wave = {
   model: ['Skill', 'flashing.bmd'],
   create: () => true,
-  move: (o) => {
+  move: (o, system, luminosity) => {
+    system.groundLight(o.position, -luminosity * 0.5, -luminosity * 0.5, -luminosity * 0.5, 5); // the flash darkens the ground
     if (o.scale > 2) {
       o.scale += 0.1;
       o.position.x -= 1;

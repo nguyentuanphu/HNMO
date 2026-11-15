@@ -5,7 +5,7 @@ import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, sa
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
-import { sampleHeight } from './terrain.js';
+import { sampleHeight, setTerrainLights } from './terrain.js';
 import { loadWorldData, createWorld, mapName, KNOWN_MAPS } from './world.js';
 import { createPlayerCharacter, setPlayerAnimationSpeeds, cellCenter } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
@@ -368,6 +368,12 @@ function updateCamera(): void {
   const horizontal = Math.cos(CAMERA.pitch) * view.distance;
   camera.position.copy(toScene(x + Math.sin(view.yaw) * horizontal, y - Math.cos(view.yaw) * horizontal, z + Math.sin(CAMERA.pitch) * view.distance));
   camera.lookAt(toScene(x, y, z + 100));
+  // The effects' camera shake (EarthQuake, added to the camera's pitch) and their light on the ground.
+  const effects = state.effects;
+  if (effects) {
+    if (effects.earthQuake !== 0) camera.rotateX(effects.earthQuake * Math.PI / 180);
+    setTerrainLights(state.world!.terrain, effects.terrainLights);
+  }
 }
 
 const raycaster = new THREE.Raycaster();
@@ -782,7 +788,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.projectiles = projectiles;
   state.deaths = deaths;
   // Skill effects (the desktop's effect system): played when anyone casts.
-  const effects = new EffectSystem(root, { camera, heightAt });
+  const effects = new EffectSystem(root, { camera, heightAt, heroPosition: () => (state.hero ? state.hero.position : null) });
   state.effects = effects;
   // The effect models, textures and programs are made ready in the background, so the first cast of a skill doesn't stall.
   setTimeout(() => { void effects.prewarm((object) => warmObject(warmer, object)); }, 3_000);
