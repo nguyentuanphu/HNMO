@@ -325,9 +325,27 @@ function fallingLights(type: 'shiny5Particle' | 'pinLightParticle'): NonNullable
     create: (o) => {
       if (type === 'pinLightParticle') o.lifeTime = 40;
       o.scale = o.callScale > 0 ? o.callScale : o.scale;
-      return o.subType === 0 || (type === 'shiny5Particle' && o.subType === 3 && o.owner !== null);
+      if (o.subType === 1 || o.subType === 2) o.lifeTime = 100;
+      return o.subType === 0 || ((o.subType === 1 || o.subType === 2) && o.owner !== null) || (type === 'shiny5Particle' && o.subType === 3 && o.owner !== null);
     },
     move: (o, system) => {
+      if (o.subType === 1 || o.subType === 2) { // on a debuffed owner: from a random bone, every other tick
+        const owner = o.owner;
+        const debuff = o.subType === 1 ? 76 : 77; // eDeBuff_AttackDown / _DefenseDown (ClearBuffPhysicalEffect ends them)
+        if (!owner || !(owner.isLive?.() ?? true) || !(owner.hasBuff?.(debuff) ?? true)) {
+          o.live = false;
+          return false;
+        }
+        o.lifeTime = 100;
+        const bones = owner.boneCount?.() ?? 0;
+        const matrix = bones > 0 ? owner.boneMatrix?.(randInt(bones)) : null;
+        if (matrix && randInt(2) === 0) {
+          const p = new THREE.Vector3(0, 0, 100).applyMatrix4(matrix);
+          p.z -= 20;
+          system.createParticle(type, p, o.angle, o.light, 0, o.scale);
+        }
+        return true;
+      }
       if (o.subType === 3) { // Chaotic Diseier's dark shines (darkLordEffects.ts)
         chaoticShine(o, system);
         return true;

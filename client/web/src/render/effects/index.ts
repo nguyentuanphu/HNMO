@@ -42,6 +42,7 @@ export type { EffectSystemOptions, TickTask, EffectLayer } from './effectSystem.
 export { WeaponTrails } from './weaponTrails.js';
 export { playSkillEffect, playBuffEffect, playChainLightning, isPortedSkill, tripleShotAngles, createSpark, SkillEffect, BuffEffect, ATTACK_LIMIT_TIME, SKILL_RELEASE_DELAY_SECONDS } from './skillEffects.js';
 export type { SkillEffectOptions } from './skillEffects.js';
+export { debuffTint, playBuffLook, Buff } from './buffLooks.js';
 export { ownerFromCharacter, PLAYER_WEAPON_BONES } from './characterOwner.js';
 export type { CharacterOwnerOptions } from './characterOwner.js';
 export { TICKS_PER_SECOND, TICK_SECONDS, BITMAPS } from './core.js';

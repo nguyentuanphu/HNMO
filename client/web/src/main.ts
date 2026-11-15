@@ -70,7 +70,7 @@ import { loginMusic } from './audio/index.js';
 import { AUTO_PLAY_DATA_LENGTH, decodeAutoPlayConfig, encodeAutoPlayConfig, initialAutoPlayConfig, type AutoPlayConfig } from './game/autoPlayConfig.js';
 import { AutoPlaySettingsWindow } from './ui/autoPlayWindows.js';
 import { maxDurability, repairCost } from './game/itemValue.js';
-import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect, playChainLightning } from './render/effects/index.js';
+import { EffectSystem, WeaponTrails, ownerFromCharacter as effectOwnerOf, playSkillEffect, playBuffEffect, playChainLightning, debuffTint } from './render/effects/index.js';
 import { DarkRaven, helperVariant, setCompanionEffects, setZenCollector } from './game/pets.js';
 import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
@@ -810,9 +810,13 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     const who = id === online.playerId ? online.hero : online.characters.get(id);
     const now = buffs.of(id), before = knownBuffs.get(id) ?? [];
     knownBuffs.set(id, [...now]);
-    if (!who || who.kind !== 'player') return;
-    for (const buff of now) if (!before.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), true);
-    for (const buff of before) if (!now.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), false);
+    if (!who) return;
+    const player = who.kind === 'player' || who === online.hero;
+    // The body's colour while a debuff lasts (poisoned, frozen, stunned...).
+    const tint = debuffTint((buff) => now.includes(buff), player);
+    who.bodyTint = tint ? new THREE.Color(tint[0], tint[1], tint[2]) : null;
+    for (const buff of now) if (!before.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), true, player);
+    for (const buff of before) if (!now.includes(buff)) playBuffEffect(effects, buff, ownerFromCharacter(who), false, player);
   });
   state.combat = new Combat(connection, online, inventory, character.classIndex, {
     onDamage: (target, texts) => {

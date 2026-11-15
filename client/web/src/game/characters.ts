@@ -334,6 +334,8 @@ export class Character {
   look: MonsterLook | null = null;
   /** Drawn without the scene's light (setup "light": false). */
   fullBright = false;
+  /** A debuff's body colour (poisoned green, frozen blue...), drawn instead of the ground's light (b->BodyLight). */
+  bodyTint: THREE.Color | null = null;
   /** Stands this high above the ground (setup "heightOffset"), or at this height whatever the ground ("height"). */
   heightOffset = 0;
   fixedHeight: number | null = null;
@@ -469,7 +471,7 @@ export class Character {
     this.group.rotation.set(0, 0, this.angle);
     this.model.pose(this.action, this.time);
     this.clock += dt;
-    const light = this.fullBright ? this.light.setRGB(1, 1, 1) : sampleLight(world.light, x, y, this.light);
+    const light = this.bodyTint ? this.light.copy(this.bodyTint) : this.fullBright ? this.light.setRGB(1, 1, 1) : sampleLight(world.light, x, y, this.light);
     this.model.setLight(light, this.clock);
     // Players carry their weapons on the back in a safe zone (AreWeaponsOnBack), never in Blood Castle and Chaos
     // Castle; a monster model shows no weapons there at all (only the player model has a back for them).

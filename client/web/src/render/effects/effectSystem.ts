@@ -786,8 +786,13 @@ export class EffectSystem {
   }
 
   /** SearchEffect: whether an effect of the type made for the owner still lives. */
-  searchEffect(type: EffectType, owner: EffectOwner): boolean {
-    return this.effects.some((effect) => effect.live && effect.type === type && effect.owner === owner);
+  searchEffect(type: EffectType, owner: EffectOwner, subType = -1): boolean {
+    return this.effects.some((effect) => effect.live && effect.type === type && effect.owner === owner && (subType === -1 || effect.subType === subType));
+  }
+
+  /** DeleteEffect: ends the effects of a type made for an owner (any SubType with -1). */
+  deleteEffect(type: EffectType, owner: EffectOwner, subType = -1): void {
+    for (const effect of this.effects) if (effect.type === type && effect.owner === owner && (subType === -1 || effect.subType === subType)) effect.live = false;
   }
 
   /** SearchJoint. */

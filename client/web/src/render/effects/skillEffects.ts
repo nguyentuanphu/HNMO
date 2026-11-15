@@ -23,6 +23,7 @@ import { criticalDamage, fireBurst } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
 import { LordAction, chaoticDiseier, earthshake, electricSpike } from './darkLordEffects.js';
 import { spiralSlashBlades } from './knightEffects.js';
+import { playBuffLook } from './buffLooks.js';
 
 /** The skill numbers (AT_SKILL_* in Core/Globals/_enum.h) whose effects are ported. */
 export const SkillEffect = {
@@ -583,9 +584,11 @@ export const BuffEffect = {
  * A buff's look when it comes on or goes off a player (InsertBuffPhysicalEffect and
  * ClearBuffLogicalEffect in Network/Server/WSclient.cpp).
  */
-export function playBuffEffect(system: EffectSystem, buff: number, owner: EffectOwner, on: boolean): void {
+export function playBuffEffect(system: EffectSystem, buff: number, owner: EffectOwner, on: boolean, player = true): void {
+  if (playBuffLook(system, buff, owner, on)) return;
   switch (buff) {
     case BuffEffect.WIZ_DEFENSE: // Soul Barrier: five lights circle the player
+      if (!player) break;
       system.deleteJoint('spearSkill', owner, 0);
       if (on) for (let j = 0; j < 5; j++) system.createJoint('spearSkill', owner.position, owner.position, owner.angle, 0, owner, 50);
       break;
@@ -593,7 +596,8 @@ export function playBuffEffect(system: EffectSystem, buff: number, owner: Effect
       if (!on) system.deleteJoint('spearSkill', owner, 4);
       break;
     case BuffEffect.LIFE: // Swell Life: lights rise from the upper body while it lasts
-      if (on) system.createEffect('buffLight', owner.position, owner.angle, owner.light ?? WHITE, 1, owner);
+      if (!on) system.deleteEffect('buffLight', owner, 1);
+      else system.createEffect('buffLight', owner.position, owner.angle, owner.light ?? WHITE, 1, owner);
       break;
   }
 }

@@ -46,6 +46,10 @@ export interface EffectOwner {
   hasBuff?(buff: number): boolean;
   /** Its right hand weapon's model and item group, for the effects that draw it (Twisting Slash's wheel, Rageful Blow). */
   weapon?(): { model: THREE.Object3D; group: number } | null;
+  /** The weapons in its hands (not arrows, bolts or a shield): their bones, and whether each is a bow. */
+  heldWeapons?(): { bone: number; bow: boolean }[];
+  /** Whether its weapons hang on its back (a safe zone): the held weapons' effects don't show then. */
+  weaponsOnBack?(): boolean;
 }
 
 /** CreateEffect types ported (names as in Data/Effects/EffectTypes.json). */

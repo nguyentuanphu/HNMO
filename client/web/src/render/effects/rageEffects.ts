@@ -548,6 +548,8 @@ export const RageSkill = {
   ATT_UP: 266,
   HP_UP: 267,
   DEF_UP: 268,
+  DARK_SIDE: 263,
+  PHOENIX_SHOT: 270,
 } as const;
 
 /** CMonkSystem::RageCreateEffect (and ReceiveMagic's buff glows) for a fighter's cast. */
@@ -572,6 +574,17 @@ export function rageCreateEffect(system: EffectSystem, skill: number, caster: Ef
       ringsAhead(system, caster, angle);
       return true;
     }
+    case RageSkill.DARK_SIDE:
+      // A red cloud, a burning circle and a whirl of wind as the fighter vanishes (its dash afterimages, CDummyUnit
+      // and DarksideRendering, are not drawn on the web).
+      system.createEffect('eventCloud', caster.position, caster.angle, new THREE.Vector3(1, 0.6, 0.6), 1, caster, 1);
+      system.createEffect('magic', caster.position, caster.angle, new THREE.Vector3(1, 0.4, 0), 14);
+      system.createEffect('windForce', caster.position, caster.angle, new THREE.Vector3(1, 0.5, 0.2), 2, caster, 1);
+      return true;
+    case RageSkill.PHOENIX_SHOT:
+      // MODEL_PHOENIX_SHOT at the target: CreateEffect has no case for it, so it gets no life time and ends the tick
+      // it is made; the desktop shows nothing for it.
+      return true;
     case RageSkill.ATT_UP:
     case RageSkill.HP_UP:
     case RageSkill.DEF_UP: {

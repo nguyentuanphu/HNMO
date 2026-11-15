@@ -9,6 +9,8 @@ import type { EffectOwner } from './types.js';
 /** c->Weapon[0].LinkBone and c->Weapon[1].LinkBone of the player model (ZzzCharacter.cpp). */
 export const PLAYER_WEAPON_BONES: readonly [number, number] = [33, 42];
 const RADIANS_TO_DEGREES = 180 / Math.PI;
+const ITEM_GROUP_BOW = 4;
+const ITEM_GROUP_SHIELD = 6;
 
 export interface CharacterOwnerOptions {
   /** The bones the weapons hang on; the player model's by default. */
@@ -56,6 +58,10 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
       const held = character.attachments.find((attachment) => attachment.slot === 'rightHand');
       return held ? { model: held.model.group, group: held.item.group } : null;
     },
+    heldWeapons: () => character.attachments
+      .filter((attachment) => (attachment.slot === 'rightHand' || attachment.slot === 'leftHand') && !attachment.ammunition && attachment.item.group !== ITEM_GROUP_SHIELD)
+      .map((attachment) => ({ bone: attachment.slot === 'rightHand' ? bones[0] : bones[1], bow: attachment.item.group === ITEM_GROUP_BOW })),
+    weaponsOnBack: () => character.weaponsOnBack,
     hasAura: options.hasAura,
     hasBuff: options.hasBuff,
   };
