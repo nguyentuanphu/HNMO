@@ -64,6 +64,7 @@ public sealed class MissionsRewardsPageTests
 
         this._context = new BunitContext();
         this._context.JSInterop.Mode = JSRuntimeMode.Loose;
+        this._context.Services.AddSingleton<IPersistenceContextProvider>(provider);
         this._context.Services.AddSingleton(source.Object);
         this._context.Services.AddSingleton(writes);
         this._context.Services.AddSingleton(Mock.Of<IToastService>());

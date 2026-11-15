@@ -11,6 +11,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.Missions;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
@@ -34,6 +35,9 @@ public partial class MissionsRewards : ComponentBase
 
     [Inject]
     private IDataSource<GameConfiguration> GameConfigurationSource { get; set; } = null!;
+
+    [Inject]
+    private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
 
     [Inject]
     private PluginWriteOperations PluginOperations { get; set; } = null!;
@@ -159,17 +163,17 @@ public partial class MissionsRewards : ComponentBase
         this._errors.Clear();
         try
         {
-            await this.GameConfigurationSource.InvalidateAsync().ConfigureAwait(true);
-            var gameConfiguration = await this.GameConfigurationSource.GetOwnerAsync().ConfigureAwait(true);
-            var stored = gameConfiguration.PlugInConfigurations.FirstOrDefault(p => p.TypeId == typeof(MissionsPlugIn).GUID);
-            if (stored is null)
+            // Straight from the database: the panel's cached game configuration can miss the row the game
+            // server added when it first started.
+            var (exists, isActive, saved) = await PlugInSettings.ReadStoredAsync<MissionsConfiguration>(this.PersistenceContextProvider, typeof(MissionsPlugIn), default).ConfigureAwait(true);
+            if (!exists)
             {
                 this._configuration = null;
                 return;
             }
 
-            this._isActive = stored.IsActive;
-            var configuration = stored.GetConfiguration<MissionsConfiguration>(null) ?? new MissionsConfiguration();
+            this._isActive = isActive;
+            var configuration = saved ?? new MissionsConfiguration();
 
             // A copy, so that an unsaved edit doesn't change the cached configuration.
             configuration = JsonSerializer.Deserialize<MissionsConfiguration>(JsonSerializer.Serialize(configuration)) ?? new MissionsConfiguration();
@@ -231,8 +235,8 @@ public partial class MissionsRewards : ComponentBase
                 await this.PluginOperations.ReplaceFromPanelAsync(id, configuration, json, true, token, default).ConfigureAwait(true);
             }
 
-            var gameConfiguration = await this.GameConfigurationSource.GetOwnerAsync().ConfigureAwait(true);
-            if (gameConfiguration.PlugInConfigurations.FirstOrDefault(p => p.TypeId == id)?.IsActive is { } active && active != this._isActive)
+            var (_, active, _) = await PlugInSettings.ReadStoredAsync<MissionsConfiguration>(this.PersistenceContextProvider, typeof(MissionsPlugIn), default).ConfigureAwait(true);
+            if (active != this._isActive)
             {
                 var activePreview = await this.PluginOperations.SetActiveAsync(id, this._isActive, false, null, default).ConfigureAwait(true);
                 if (activePreview["confirmationToken"]?.GetValue<string>() is { } activeToken)

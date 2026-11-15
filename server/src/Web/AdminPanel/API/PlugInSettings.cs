@@ -78,6 +78,32 @@ internal static class PlugInSettings
     }
 
     /// <summary>
+    /// Reads a plug-in's row straight from the database (not the admin panel's cached configuration, which
+    /// can miss a row the game server added after the panel loaded it).
+    /// </summary>
+    /// <typeparam name="T">The settings type.</typeparam>
+    /// <param name="contextProvider">The persistence context provider.</param>
+    /// <param name="plugInType">The plug-in type.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Whether the row exists, whether it's active, and its settings (null when none were saved).</returns>
+    public static async Task<(bool Exists, bool IsActive, T? Settings)> ReadStoredAsync<T>(IPersistenceContextProvider contextProvider, Type plugInType, CancellationToken cancellationToken)
+        where T : class
+    {
+        using var context = contextProvider.CreateNewTypedContext(typeof(PlugInConfiguration), false);
+        var configurations = await context.GetAsync<PlugInConfiguration>(cancellationToken).ConfigureAwait(false);
+        var configuration = configurations.FirstOrDefault(c => c.TypeId == plugInType.GUID);
+        if (configuration is null)
+        {
+            return (false, false, null);
+        }
+
+        var settings = string.IsNullOrWhiteSpace(configuration.CustomConfiguration)
+            ? null
+            : JsonSerializer.Deserialize<T>(WithoutReferences(JsonNode.Parse(configuration.CustomConfiguration)), Options);
+        return (true, configuration.IsActive, settings);
+    }
+
+    /// <summary>
     /// Drops the reference markers the admin panel's editor saves ("$id", "$ref", and lists as "$values"),
     /// so the plain settings can be read.
     /// </summary>
