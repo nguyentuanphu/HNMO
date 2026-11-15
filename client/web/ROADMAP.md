@@ -150,19 +150,23 @@ daily and per-account caps, and the schedules; changes apply without a restart w
 the coins history shows every grant.
 
 1. ✅ **Phones** (idea 4): fight button, skill and potion buttons, "more" windows, full screen in
-   landscape, the turn hint, the home screen manifest. Still to do: a "Play on your phone" part on
-   the website.
+   landscape, the turn hint, the home screen manifest, and the website's "Play on your phone" part.
 2. 🔄 **Chat on the server** (with the map monster multiplier): offline whispers, the GMs' chat log
    with mute, the spam guard, the Discord check. (Agent running.)
-3. ⏳ **Daily and weekly missions** (idea 2): a mission board (e.g. kill 300 monsters in a map, win an
-   event, use the chaos machine), rewards (zen, jewels, coins), a daily streak (day 7 pays more);
-   configured in the admin panel; a window in the web game; the website shows them. With them, the
-   **earned coins** (the owner agreed on 2026-11-15): Goblin Points for online time (a few per hour,
-   capped per day, auto play counts half), one-time rewards at level 100/200/300/400 and per reset,
-   invite a friend (paid when the friend reaches level 150), a monthly login calendar (bigger rewards
-   on days 7, 14 and 28). Earned coins (Goblin Points) stay apart from paid coins (W Coin); a daily cap
-   on earned coins per account, rewards per account, every grant in the coins history; all amounts in
-   the admin panel.
+3. ✅ **Daily and weekly missions** (idea 2), built 2026-11-15/16 (Sydney): the mission board (kill N monsters,
+   optionally of a monster and/or on a map; take part in or win Blood Castle, Devil Square, Chaos Castle; successful
+   chaos machine mixes; zen picked up; levels; minutes in the game), rewards (zen, items, coins) claimed in the web
+   game's missions window (J) with a full bag keeping them claimable, a daily streak (bonus on day 7, a missed day
+   starts over), all set in the admin panel (*Missions and rewards*), and a Missions section on the website. With
+   them, the **earned coins** (Goblin Points by default, each source on/off with its coin type and amounts): online
+   time (per full hour, auto play half, capped per day), one-time rewards at level 100/200/300/400 and per reset (per
+   character), invite a friend (code or character name, paid at level 150; same known address refused), a monthly
+   login calendar (bigger on days 7, 14, 28), a daily cap of 300 earned coins per account (one-time rewards over it
+   come on later days), every grant in the coins history. Progress per character, earned coins per account, in
+   `save/missions.json` (no database change). The phones' "Play on your phone" part of the website is done too.
+   Still to check on a server running this code: a whole day of play (the in-game browser test feeds the packets,
+   the server rules are unit-tested); web players' addresses are the relay's, so the same-address check only
+   works for desktop players.
 4. ⏳ **World bosses** (idea 5): a boss every N hours on a chosen map, announced in the game, on
    Discord and on the website; rewards by damage dealt, a small reward for everyone who joined;
    configured in the admin panel.
