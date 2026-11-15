@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlugIns.Missions;
 
+using System.Collections.Concurrent;
 using System.IO;
 using System.Runtime.InteropServices;
 using HNMO.GameLogic.Attributes;
@@ -32,7 +33,7 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
     private static readonly object StoreLock = new();
     private static MissionStore? _store;
 
-    private readonly Dictionary<Player, DateTime> _lastTick = new();
+    private readonly ConcurrentDictionary<Player, DateTime> _lastTick = new();
     private DateTime _nextTickUtc = DateTime.UtcNow + TickInterval;
     private (MissionsConfiguration Configuration, MissionEngine Engine)? _engine;
 
@@ -244,7 +245,7 @@ public class MissionsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, I
         var players = await gameContext.GetPlayersAsync().ConfigureAwait(false);
         foreach (var gone in this._lastTick.Keys.Except(players).ToList())
         {
-            this._lastTick.Remove(gone);
+            this._lastTick.TryRemove(gone, out _);
         }
 
         foreach (var player in players)
