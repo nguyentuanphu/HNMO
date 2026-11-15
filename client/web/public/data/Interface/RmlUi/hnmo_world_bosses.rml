@@ -1,0 +1,100 @@
+<rml>
+<head>
+	<title>HNMO World bosses</title>
+	<link type="text/rcss" href="base.rcss"/>
+	<link type="text/template" href="window_shell.rml"/>
+	<style>
+		/* HNMO's world boss window (no desktop window): the game's message box frame (window_shell) with
+		   every world boss, its next spawn or its fight, the waiting rewards and the boss-hunt points. */
+		#panel {
+			top: 50dp;
+			left: 50%;
+			margin-left: -175dp;
+			transform: none;
+			width: 350dp;
+			height: auto;
+			font-family: "token(font-body)";
+			font-size: 1rem;
+			color: token(text-primary);
+		}
+		#panel .window-shell-content {
+			position: relative;
+			top: auto;
+			bottom: auto;
+			left: auto;
+			right: auto;
+			margin: 20dp 16dp 20dp 16dp;
+			z-index: 1;
+			align-items: stretch;
+		}
+		#panel .window-shell-content.has-title { margin-top: 0; }
+		#panel .window-shell-header-title { color: token(accent-gold); }
+		.wb-scroll {
+			display: block;
+			max-height: 300dp;
+			overflow-y: auto;
+			pointer-events: auto;
+			padding-right: 4dp;
+		}
+		.wb-row {
+			display: block;
+			margin-bottom: 7dp;
+			padding: 4dp 5dp 5dp 5dp;
+			border: 1dp #5a4a30;
+			background-color: rgba(0, 0, 0, 0.35);
+		}
+		.wb-row.alive { border-color: #e8c060; }
+		.wb-name { display: block; color: token(accent-gold); line-height: 1.25em; }
+		.wb-map { color: token(text-muted); font-size: 0.85rem; }
+		.wb-line { display: block; line-height: 1.3em; white-space: normal; color: token(text-input); font-size: 0.9rem; }
+		.wb-line.muted { color: token(text-muted); font-size: 0.85rem; }
+		.wb-top { display: block; font-size: 0.85rem; color: token(text-primary); line-height: 1.25em; }
+		.wb-head { display: block; color: token(accent-gold); margin: 6dp 0 3dp 0; }
+		.wb-note { display: block; margin: 2dp 0 6dp 0; font-size: 0.85rem; line-height: 1.25em; text-align: center; color: token(text-muted); white-space: normal; }
+		.wb-buttons { display: flex; flex-direction: row; justify-content: center; margin-top: 6dp; }
+		@spritesheet wb-btn-sheet
+		{
+			src: "../newui_btn_empty_small.tga"; /* Data/Interface */
+			wb-btn-idle:   0px  0px 64px 29px;
+			wb-btn-hover:  0px 29px 64px 29px;
+			wb-btn-active: 0px 58px 64px 29px;
+		}
+		.wb-btn {
+			position: static;
+			width: 62dp;
+			height: 28dp;
+			line-height: 28dp;
+			margin: 0 3dp;
+			font-size: 0.9rem;
+			pointer-events: auto;
+			cursor: pointer;
+			decorator: image(wb-btn-idle);
+		}
+		.wb-btn:hover { decorator: image(wb-btn-hover); }
+		.wb-btn:active { decorator: image(wb-btn-active); }
+		.wb-btn.claim { color: #ffe9a8; }
+	.wb-btn.claim { color: #ffe9a8; }
+	</style>
+</head>
+<body template="window_shell" data-model="hnmo_world_bosses">
+	<div class="wb-note" data-if="loading">{{loading_label}}</div>
+	<div class="wb-scroll" data-if="loading == false">
+		<div class="wb-note" data-if="rows.length == 0">{{empty_label}}</div>
+		<div class="wb-row" data-for="r : rows" data-class-alive="r.alive" data-attr-data-boss="r.id">
+			<span class="wb-name" data-no-i18n="">{{r.name}} <span class="wb-map">{{r.map}}</span></span>
+			<span class="wb-line" data-no-i18n="">{{r.status}}</span>
+			<span class="wb-line muted" data-if="r.when != ''" data-no-i18n="">{{r.when}}</span>
+			<span class="wb-line" data-if="r.mine != ''" data-no-i18n="">{{r.mine}}</span>
+			<span class="wb-top" data-for="t : r.top" data-no-i18n="">{{t.line}}</span>
+		</div>
+		<span class="wb-head" data-if="has_owed">{{owed_head}}</span>
+		<span class="wb-line" data-for="o : owed" data-no-i18n="">{{o.line}}</span>
+		<div class="wb-buttons" data-if="has_owed"><div class="btn wb-btn claim wb-claim" data-event-click="wb_claim">{{claim_label}}</div></div>
+		<span class="wb-line" data-no-i18n="">{{points_text}}</span>
+		<span class="wb-note">{{hint_text}}</span>
+	</div>
+	<div class="wb-buttons">
+		<div class="btn wb-btn wb-close" data-event-click="wb_close">{{close_label}}</div>
+	</div>
+</body>
+</rml>

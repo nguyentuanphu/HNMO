@@ -34,6 +34,7 @@ import { AutoPlayBar } from './ui/autoPlayBar.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
+import { WorldBossWindow } from './ui/worldBossWindow.js';
 import { BuffTracker, loadBuffData } from './game/buffs.js';
 import { BuffStrip } from './ui/buffStrip.js';
 import { MoveWindow } from './ui/moveWindow.js';
@@ -156,6 +157,7 @@ export interface GameState {
   autoPlayBar?: AutoPlayBar;
   autoPlayExtras?: AutoPlayExtras;
   missions?: MissionsWindow;
+  worldBosses?: WorldBossWindow;
   buffs?: BuffTracker;
   party?: Party;
   trade?: Trade;
@@ -1094,6 +1096,20 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'j' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); missions.toggle(); }
+  });
+  // HNMO's world bosses (N): the line on the screen while a boss is alive, the window, the announcements in the chat.
+  const worldBosses = new WorldBossWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    itemName: (group, number) => itemName(group, number),
+    mapName: (map) => mapName(map),
+  });
+  state.worldBosses = worldBosses;
+  connection.onPacket((bytes) => { worldBosses.handle(bytes); });
+  worldBosses.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
   });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
