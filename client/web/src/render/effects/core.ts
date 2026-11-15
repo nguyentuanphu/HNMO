@@ -157,6 +157,7 @@ export const BITMAPS = {
   orora: 'hikorora.jpg', // BITMAP_ORORA
   lightMarks: 'lightmarks.jpg', // BITMAP_LIGHT_MARKS
   damage1: 'Damage1.jpg', // BITMAP_DAMAGE1
+  cloud: 'clouds.jpg', // BITMAP_CLOUD
 } as const;
 
 export type BitmapName = keyof typeof BITMAPS;

@@ -45,7 +45,18 @@ export function ownerFromCharacter(character: Character, options: CharacterOwner
     isLive: () => !character.dead && character.group.visible && character.group.parent !== null,
     weaponPosition: (hand) => bonePosition(character, bones[hand]),
     bonePosition: (bone) => bonePosition(character, bone),
-    bonePositionAt: (bone, frame) => bonePositionAt(character, bone, frame),
+    bonePositionAt: (bone, frame) => {
+      const matrix = poseAt(character, frame)[bone];
+      if (!matrix) return null;
+      character.group.updateMatrix();
+      return new THREE.Vector3().applyMatrix4(matrix).applyMatrix4(character.group.matrix);
+    },
+    boneMatrixAt: (bone, frame) => {
+      const matrix = poseAt(character, frame)[bone];
+      if (!matrix) return null;
+      character.group.updateMatrix();
+      return character.group.matrix.clone().multiply(matrix);
+    },
     boneMatrix: (bone) => {
       const matrix = character.model.matrices[bone];
       if (!matrix) return null;
@@ -84,8 +95,8 @@ interface PoseCache { action: number; time: number; poses: Map<number, THREE.Mat
 const poseCaches = new WeakMap<Character, PoseCache>();
 const POSE_CACHE_LIMIT = 16;
 
-/** A bone's world position with the character's current action posed at `frame` instead of where it is. */
-function bonePositionAt(character: Character, bone: number, frame: number): THREE.Vector3 | null {
+/** The character's current action posed at `frame` (its model's bone matrices), cached for this pose. */
+function poseAt(character: Character, frame: number): THREE.Matrix4[] {
   const action = character.oneShot?.action ?? character.action;
   let cache = poseCaches.get(character);
   if (!cache || cache.action !== action || cache.time !== character.time) {
@@ -99,8 +110,5 @@ function bonePositionAt(character: Character, bone: number, frame: number): THRE
     pose = computeBoneMatrices(character.model.skeleton, action, Math.max(0, frame));
     cache.poses.set(frame, pose);
   }
-  const matrix = pose[bone];
-  if (!matrix) return null;
-  character.group.updateMatrix();
-  return new THREE.Vector3().applyMatrix4(matrix).applyMatrix4(character.group.matrix);
+  return pose;
 }

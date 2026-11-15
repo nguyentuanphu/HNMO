@@ -24,7 +24,8 @@ interface CreateRow {
   direction?: JsonVector;
   startPosition?: JsonVector;
   offset?: { lifeTime?: number; position?: JsonVector; angle?: JsonVector; startPosition?: JsonVector };
-  copy?: { direction?: string; startPosition?: string; scale?: string };
+  copy?: { direction?: string; startPosition?: string; scale?: string; headTargetAngle?: string };
+  skill?: number;
   variants?: CreateRow[];
 }
 
@@ -110,6 +111,7 @@ function applyValues(row: CreateRow, o: Effect): void {
   if (row.blendMesh !== undefined) o.blendMesh = row.blendMesh;
   if (row.blendMeshLight !== undefined) o.blendMeshLight = row.blendMeshLight;
   if (row.alpha !== undefined) o.alpha = row.alpha;
+  if (row.skill !== undefined) o.skill = row.skill;
   if (row.light) o.light.set(row.light[0], row.light[1], row.light[2]);
   setVector(o.position, row.position);
   setVector(o.angle, row.angle);
@@ -133,6 +135,7 @@ function applyCopies(row: CreateRow, o: Effect, call: CreateCall): void {
     else if (copy.startPosition === 'light') o.startPosition.copy(o.light);
     else if (copy.startPosition === 'callPosition') o.startPosition.copy(call.position);
     if (copy.scale === 'callScale') o.scale = call.scale;
+    if (copy.headTargetAngle === 'callLight') o.headTargetAngle.copy(call.light);
   }
   addVector(o.startPosition, row.offset?.startPosition);
 }

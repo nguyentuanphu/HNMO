@@ -31,6 +31,8 @@ export interface EffectOwner {
    * TransformByObjectBone): the trails laid between two ticks' poses (BITMAP_LAVA).
    */
   bonePositionAt?(bone: number, frame: number): THREE.Vector3 | null;
+  /** A bone's whole world matrix with its action posed at another key (the blurs sampled between ticks). */
+  boneMatrixAt?(bone: number, frame: number): THREE.Matrix4 | null;
   /** A bone's whole world matrix (o->BoneTransform[bone] placed in the world), for models held in a hand. */
   boneMatrix?(bone: number): THREE.Matrix4 | null;
   /** How many bones its model has (b->NumBones). */
@@ -159,7 +161,13 @@ export type EffectType =
   | 'volcanoOfMonk' // MODEL_VOLCANO_OF_MONK: the volcanoes at the struck (Effect/volcano_of_monk.bmd)
   | 'volcanoOfMonkCore' // its glowing core (the same model's first mesh in volcano_core.jpg; the web's own record)
   | 'volcanoStone' // MODEL_VOLCANO_STONE: their burning stones (Effect/volcano_stone.bmd)
-  | 'targetMonsterEffect'; // MODEL_TARGETMON_EFFECT: the struck burning (no model)
+  | 'targetMonsterEffect' // MODEL_TARGETMON_EFFECT: the struck burning (no model)
+  | 'summonerCastingEffect1' | 'summonerCastingEffect11' | 'summonerCastingEffect111' | 'summonerCastingEffect4' // Effect/Suhwanzin*.bmd
+  | 'summonerSummonNeil' // MODEL_SUMMONER_SUMMON_NEIL: Requiem's creature (Skill/summon_neil.bmd)
+  | 'summonerSummonNeilKnife1' | 'summonerSummonNeilKnife2' | 'summonerSummonNeilKnife3' // its knives (Skill/nelleff_nife0N.bmd)
+  | 'summonerSummonNeilGround1' | 'summonerSummonNeilGround2' | 'summonerSummonNeilGround3' // their marks (Skill/nell_nifegrund0N.bmd)
+  | 'summonerSummonLagul' // MODEL_SUMMONER_SUMMON_LAGUL: Pollution (Skill/summon_lagul.bmd)
+  | 'cloud'; // BITMAP_CLOUD: a cloud on the ground
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */
 export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 'smoke' | 'blood2' | 'explosion' | 'flame' | 'light' | 'flareBlue' | 'flare'
@@ -209,6 +217,8 @@ export interface Effect {
   startPosition: THREE.Vector3;
   angle: THREE.Vector3;
   headAngle: THREE.Vector3;
+  /** o->HeadTargetAngle: a point some effects head for (the summons' target). */
+  headTargetAngle: THREE.Vector3;
   direction: THREE.Vector3;
   light: THREE.Vector3;
   scale: number;

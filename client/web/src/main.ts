@@ -1013,6 +1013,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         bowNumbers: { rightHand: hands.right?.number, leftHand: hands.left?.number },
         cell,
         casterIsHero: caster === online.hero,
+        summonBookLevel: caster === online.hero ? inventory.items.get(1)?.level ?? 0 : caster.equipment?.leftHand?.glowLevel ?? 0,
         // GetFenrirType: the horn's look (helperVariant 1 black, 2 blue, 3 gold; else red).
         fenrirColor: [1, 0, 2, 3][caster.equipment?.pet?.variant ?? 0] ?? 1,
       });

@@ -26,6 +26,7 @@ import type { BitmapName } from './core.js';
 import { QuadBatches, applyBlend } from './quadBatch.js';
 import type { Blend, HeightAt } from './quadBatch.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES, PREWARM_LOADS } from './extraEffects.js';
+import { ObjectBlurs } from './objectBlurs.js';
 import type { ExtraEffect } from './extraEffects.js';
 import type {
   Effect, EffectOwner, EffectType, Joint, JointBlend, JointType, Particle, ParticleType, Sprite, SpriteType, Tail,
@@ -220,6 +221,8 @@ export class EffectSystem {
   earthQuake = 0;
   /** Resolves when the catalogue and the textures are loaded. */
   readonly ready: Promise<void>;
+  /** The effects' object blurs (CreateObjectBlur), drawn with them. */
+  readonly objectBlurs = new ObjectBlurs();
 
   /** Adds the effects to `parent` (the scene's world-space root: x, y ground, z up). */
   constructor(parent: THREE.Object3D, options: EffectSystemOptions = {}) {
@@ -228,6 +231,7 @@ export class EffectSystem {
     this.root.name = 'effects';
     parent.add(this.root);
     this.quads = new QuadBatches(this.root);
+    this.layers.push(this.objectBlurs);
     this.ready = Promise.all([
       EffectCatalogue.load().then((catalogue) => {
         this.catalogue = catalogue;
@@ -305,6 +309,7 @@ export class EffectSystem {
     this.joints = [];
     this.sprites = [];
     this.tasks = [];
+    this.objectBlurs.clear();
   }
 
   dispose(): void {
@@ -326,6 +331,7 @@ export class EffectSystem {
     for (const o of this.joints) add(`joint:${o.type}`);
     for (const o of this.particles) add(`particle:${o.type}`);
     for (const o of this.sprites) add(`sprite:${o.type}`);
+    if (this.objectBlurs.count > 0) out['blur:object'] = this.objectBlurs.count;
     return out;
   }
 
@@ -463,6 +469,11 @@ export class EffectSystem {
           o.scale += randInt(50) * 0.01;
           o.rotation = randInt(360);
           o.gravity = (randInt(30) + 50) * 0.05;
+        } else if (o.subType === 57) { // Pollution's purple smoke over the tile
+          o.lifeTime = 32;
+          o.scale = scale + (randInt(32) + 48) * 0.01 * scale;
+          o.angle.x = randInt(360);
+          o.rotation = Math.floor(this.worldTime) % 360;
         } else if (o.subType === 55) { // Strike of Destruction's smoke in its spray
           o.lifeTime = 30;
           o.scale = scale + (randInt(32) + 48) * 0.01 * scale;
@@ -624,6 +635,12 @@ export class EffectSystem {
           o.gravity -= 0.05;
           o.position.z += (o.scale + o.gravity) * 1.5;
           o.scale += o.scale / 100;
+        } else if (o.subType === 57) {
+          const luminosity = o.lifeTime / 32;
+          o.light.set(luminosity * 0.5, luminosity * 0.1, luminosity * 0.8);
+          o.gravity += 0.1;
+          o.position.z += o.gravity;
+          o.scale += 0.05;
         } else if (o.subType === 55) {
           o.gravity += 0.1;
           o.position.z += o.gravity;
@@ -833,6 +850,19 @@ export class EffectSystem {
       case 'jointSpirit':
         o.blend = 'subtract';
         switch (o.subType) {
+          case 24: { // Pollution: a dark trail flying about the tile, carrying a Lagul head (only the larger ones)
+            o.blend = 'glow';
+            o.faces = 2;
+            o.velocity = 10;
+            o.lifeTime = 160;
+            o.maxTails = 40;
+            o.light.set(0, 0, 0);
+            o.position.x += randInt(300) - 150;
+            o.position.y += randInt(300) - 150;
+            const scale = o.scale / 70;
+            if (scale >= 0.9) this.createEffect('summonerSummonLagul', o.position, o.angle, new THREE.Vector3(0, 0, 0.1), 1, null, scale, { joint: o });
+            return true;
+          }
           case 0:
             o.velocity = 70;
             o.lifeTime = 49;
@@ -1056,6 +1086,22 @@ export class EffectSystem {
   // BITMAP_JOINT_SPIRIT: SubType 0 (Evil Spirit) wanders towards its target with a dark head
   // (MODEL_LASER) on the big ones; 2, 6 and 7 fly out as lights (Swell Life, Nova).
   private moveSpirit(o: Joint): void {
+    if (o.subType === 24) { // Pollution's spirits weave above the tile, fading in and out; their head follows them
+      if (!o.target || !ownerLive(o.target)) {
+        o.live = false;
+        return;
+      }
+      moveHumming(o.position, o.angle, o.targetPosition.clone().setZ(o.targetPosition.z + 80), 5);
+      o.direction.x += (randInt(32) - 16) * 0.2;
+      o.direction.z += (randInt(32) - 16) * 0.8;
+      o.angle.x += o.direction.x;
+      o.angle.z += o.direction.z;
+      o.direction.x *= 0.6;
+      o.direction.z *= 0.8;
+      const l = o.lifeTime < 30 ? o.lifeTime / 30 : o.lifeTime > 144 ? (160 - o.lifeTime) / 15 : 1;
+      o.light.set(0.7 * l, 0.7 * l, 0.9 * l);
+      return;
+    }
     if (o.subType === 0) {
       if (o.scale === 80) this.createEffect('laser', o.position, o.angle, o.light);
       if (o.target) o.targetPosition.copy(o.target.position).setZ(o.target.position.z + 80);
@@ -1159,7 +1205,7 @@ export class EffectSystem {
     // The common initialisation.
     const o: Effect = {
       type, subType, position: newVector(position), startPosition: new THREE.Vector3(), angle: newVector(angle),
-      headAngle: new THREE.Vector3(), direction: new THREE.Vector3(), light: newVector(light), scale: scale <= 0 ? 0.9 : scale,
+      headAngle: new THREE.Vector3(), headTargetAngle: new THREE.Vector3(), direction: new THREE.Vector3(), light: newVector(light), scale: scale <= 0 ? 0.9 : scale,
       lifeTime: 0, gravity: 0, velocity: 0.3, blendMesh: -1, blendMeshLight: 1, blendMeshTexCoordU: 0, blendMeshTexCoordV: 0,
       hiddenMesh: -1, alpha: 1, renderType: 'normal', owner, target: extra.target ?? null, callScale: scale, animationFrame: 0,
       counter: 0, kind: extra.kind ?? 0, skill: extra.skillIndex ?? 0, pkKey: extra.pkKey ?? -1, distance: 0,

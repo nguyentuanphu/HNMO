@@ -13,6 +13,7 @@
 
 import * as THREE from 'three';
 import { moveHumming, randInt, rotateByAngle } from './core.js';
+import { computeBoneMatrices } from '../../bmd.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner, Joint } from './types.js';
@@ -289,6 +290,45 @@ EXTRA_EFFECTS.chromeEnergy2 = {
 /** PLAYER_SKILL_FLAMESTRIKE. */
 const FLAME_STRIKE_ACTION = 184;
 const flameMatrix = new THREE.Matrix4();
+const flameBones: THREE.Matrix4[] = [];
+const flameHand = new THREE.Matrix4();
+const blurStart = new THREE.Vector3();
+const blurEnd = new THREE.Vector3();
+
+/**
+ * The flame's blurs while the swing's keys 5 to 13 play: ten poses over the tick, the edges from bone 9 to 6 (twice, in
+ * motion_blur_r) and from 8 to 5 (in Lava), the flame posed with the hand as the swing was then.
+ */
+function flameStrikeBlurs(o: Effect, owner: EffectOwner, system: EffectSystem): void {
+  const skeleton = o.model?.skeleton;
+  if (!skeleton || !owner.boneMatrixAt) return;
+  if (flameBones.length !== skeleton.bones.length) {
+    flameBones.length = 0;
+    for (let i = 0; i < skeleton.bones.length; i++) flameBones.push(new THREE.Matrix4());
+  }
+  const ownerSpeed = owner.playSpeed?.(FLAME_STRIKE_ACTION) ?? 0.3;
+  let ownerFrame = o.animationFrame - ownerSpeed;
+  let flameFrame = o.animationFrame - o.velocity;
+  for (let i = 0; i < 10; i++) {
+    if (ownerFrame >= 5 && ownerFrame <= 13) {
+      const hand = owner.boneMatrixAt(HAND_BONE, Math.max(0, ownerFrame));
+      if (hand) {
+        computeBoneMatrices(skeleton, 0, Math.max(0, flameFrame), flameBones);
+        flameHand.copy(hand).multiply(flameMatrix.makeScale(o.scale, o.scale, o.scale));
+        const at = (bone: number, out: THREE.Vector3): THREE.Vector3 => out.set(0, 0, 0).applyMatrix4(flameBones[bone]).applyMatrix4(flameHand);
+        at(9, blurStart);
+        at(6, blurEnd);
+        system.objectBlurs.add(o, blurStart, blurEnd, WHITE, 2, false, 1);
+        system.objectBlurs.add(o, blurStart, blurEnd, WHITE, 2, false, 2);
+        at(8, blurStart);
+        at(5, blurEnd);
+        system.objectBlurs.add(o, blurStart, blurEnd, WHITE, 5, false, 3);
+      }
+    }
+    ownerFrame += ownerSpeed / 10;
+    flameFrame += o.velocity / 10;
+  }
+}
 
 EXTRA_EFFECTS.flameStrike = {
   model: ['Effect', 'FlameStrike.bmd'],
@@ -304,6 +344,7 @@ EXTRA_EFFECTS.flameStrike = {
   move: (o, system) => {
     const owner = o.owner;
     if ((o.lifeTime < 20 && o.alpha < 0.1) || !owner) {
+      system.objectBlurs.remove(o); // EffectDestructor: RemoveObjectBlurs 1, 2, 3
       o.live = false;
       return false;
     }
@@ -312,7 +353,10 @@ EXTRA_EFFECTS.flameStrike = {
     o.blendMeshLight = o.alpha;
     const frame = owner.animationFrame?.() ?? 0;
     if (frame > 13 || o.kind === 1) o.kind = 1;
-    else if (owner.currentAction?.() === FLAME_STRIKE_ACTION) o.animationFrame = frame;
+    else if (owner.currentAction?.() === FLAME_STRIKE_ACTION) {
+      o.animationFrame = frame;
+      flameStrikeBlurs(o, owner, system);
+    }
     // The flame's second mesh scrolls through four rows of its texture.
     o.blendMeshTexCoordV = Math.trunc((Math.trunc(system.time * 0.05) % 16) / 4) * 0.25;
     return true;

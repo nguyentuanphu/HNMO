@@ -37,6 +37,7 @@ import './lordEffects.js'; // and the gladiators' and lords'
 import './summonerEffects.js'; // and the summoners'
 import './rageEffects.js'; // and the rage fighters'
 import './rageStrikeEffects.js'; // Chain Drive, Dragon Roar
+import './summonerSummons.js'; // the Summoner's casting circles, Requiem and Pollution
 import './wizardEffects.js'; // Cometfall, Expansion of Wizardry
 import './sharedParticles.js';
 import './berserkerEffects.js'; // the Berserker buff's auras, sparks and marks // particles the third pass's skills share

@@ -20,6 +20,7 @@ import type { EffectOwner } from './types.js';
 import { lance, summonerCurse } from './summonerEffects.js';
 import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { dragonRoarHit } from './rageStrikeEffects.js';
+import { SummonSkill, castSummon } from './summonerSummons.js';
 import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
 import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, plasmaStorm, siegeSkill, starfall } from './darkLordEffects.js';
@@ -170,6 +171,8 @@ export interface SkillEffectOptions {
   cell?: { x: number; y: number } | null;
   /** The caster is the hero (Chaotic Diseier's burst at the selected target is the hero's own). */
   casterIsHero?: boolean;
+  /** The level of the book in the Summoner's left hand (Requiem's and Pollution's size). */
+  summonBookLevel?: number;
   /** The caster's Fenrir (GetFenrirType): 0 black, 1 red, 2 blue, 3 gold; red when left out. */
   fenrirColor?: number;
 }
@@ -185,6 +188,10 @@ function actionKey(caster: EffectOwner, actions: readonly number[], ticks: numbe
 export function playSkillEffect(system: EffectSystem, skill: number, caster: EffectOwner, target: EffectOwner | null,
   options: SkillEffectOptions = {}): boolean {
   if (!isPortedSkill(skill)) return false;
+  if (skill === SummonSkill.REQUIEM || skill === SummonSkill.POLLUTION) { // CastSummonSkill: no attack follows
+    const cell = options.cell ?? { x: Math.floor(caster.position.x / TERRAIN_SCALE), y: Math.floor(caster.position.y / TERRAIN_SCALE) };
+    return castSummon(system, skill, caster, cell, options.summonBookLevel ?? 0);
+  }
   // Effects made when the cast arrives (ReceiveMagic), not at the release.
   if (skill === SkillEffect.TELEPORT) {
     system.createEffect('spark3', caster.position, caster.angle, caster.light ?? WHITE);
@@ -264,7 +271,8 @@ export function playSkillHit(system: EffectSystem, skill: number, _caster: Effec
 }
 
 export function isPortedSkill(skill: number): boolean {
-  return (Object.values(SkillEffect) as number[]).includes(skill) || (Object.values(RageSkill) as number[]).includes(skill) || isSummon(skill);
+  return (Object.values(SkillEffect) as number[]).includes(skill) || (Object.values(RageSkill) as number[]).includes(skill) || isSummon(skill)
+    || skill === SummonSkill.REQUIEM || skill === SummonSkill.POLLUTION;
 }
 
 function isSummon(skill: number): boolean {

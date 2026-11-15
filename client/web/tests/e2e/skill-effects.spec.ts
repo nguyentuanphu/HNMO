@@ -91,7 +91,8 @@ const GLADIATOR: Case[] = [
   { skill: 73, name: 'mana-rays', expect: ['joint:jointForce', 'joint:flareBlueJoint'], shotAt: 640, action: 138 },
   // The Flame Strike debuff (eDeBuff_FlameStrikeDamage = 83): flames rising from the body's bones.
   { skill: 56, name: 'flame-strike-debuff', expect: ['effect:fireCursedLich', 'particle:fireHik1', 'particle:fireCursedLich', 'particle:fireHik3'], shotAt: 400, buffs: [83] },
-  { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike'], shotAt: 400, action: 184, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
+  // The burning blade and its blurs (CreateObjectBlur: two in motion_blur_r, one in Lava) while keys 5 to 13 play.
+  { skill: 236, name: 'flame-strike', expect: ['effect:flameStrike', 'blur:object'], shotAt: 720, action: 184, actionSpeed: 10, model: 'flameStrike', warm: [['Effect', 'FlameStrike.bmd']] },
 ];
 
 const LORD: Case[] = [
@@ -137,6 +138,12 @@ const SUMMONER: Case[] = [
   { skill: 218, name: 'berserker-buff', expect: ['effect:orora', 'particle:orora', 'effect:sparks', 'effect:lightMarks', 'sprite:lightMarks'], shotAt: 1200, buffs: [81], lasting: ['effect:orora', 'effect:sparks'] },
   { skill: 218, name: 'berserker', expect: ['effect:aliceBuffSkillEffect', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },
   { skill: 221, name: 'weakness', expect: ['effect:magicZin', 'effect:summonerCastingEffect2', 'effect:shiny5', 'particle:pinLightParticle'], shotAt: 1100 },
+  // Requiem: the casting circles, Neil rising before the Summoner with its blade's blur, the knives and their marks at the tile.
+  { skill: 224, name: 'requiem', expect: ['effect:magic', 'effect:summonerCastingEffect1', 'effect:summonerCastingEffect4', 'effect:summonerCastingEffect2', 'effect:summonerSummonNeil', 'effect:summonerSummonNeilKnife1', 'effect:summonerSummonNeilGround1', 'blur:object', 'sprite:light'], shotAt: 1300, area: true, model: 'summonerSummonNeil',
+    warm: [['Skill', 'summon_neil.bmd'], ['Skill', 'nelleff_nife01.bmd'], ['Skill', 'nell_nifegrund01.bmd'], ['Effect', 'Suhwanzin1.bmd'], ['Effect', 'Suhwanzin4.bmd']] },
+  // Pollution: the poison's smoke, clouds and drops over the tile, Lagul's head riding a spirit's trail with its blue trails.
+  { skill: 225, name: 'pollution', expect: ['effect:summonerSummonLagul', 'joint:jointSpirit', 'joint:jointEnergy', 'effect:cloud', 'particle:smoke', 'particle:twintailWater'], shotAt: 1600, area: true, model: 'summonerSummonLagul',
+    warm: [['Skill', 'summon_lagul.bmd']] },
   { skill: 222, name: 'innovation', expect: ['effect:magicZin', 'effect:summonerCastingEffect222', 'particle:shiny5Particle'], shotAt: 1100 },
 ];
 

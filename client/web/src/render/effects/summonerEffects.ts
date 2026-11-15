@@ -22,6 +22,7 @@ import { randInt, rotateByAngle, moveHumming } from './core.js';
 import type { BitmapName } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { chaoticShine } from './darkLordEffects.js';
+import { lagulTrailBone } from './summonerSummons.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner } from './types.js';
 
@@ -124,6 +125,13 @@ EXTRA_JOINTS.jointEnergy = {
       o.velocity = 0;
       return o.target !== null;
     }
+    if (o.subType >= 48 && o.subType <= 53) { // Pollution's Lagul heads: a short blue trail on a bone while it lives
+      o.lifeTime = Number.MAX_SAFE_INTEGER;
+      o.maxTails = 3;
+      o.velocity = 0;
+      o.light.set(0.5, 0.5, 0.9);
+      return o.target !== null;
+    }
     if (o.subType !== 45) return false;
     o.lifeTime = 120;
     o.maxTails = 8;
@@ -134,6 +142,13 @@ EXTRA_JOINTS.jointEnergy = {
     if (o.subType === 5) {
       if (!live(o.target)) o.live = false;
       else o.position.copy(o.target.position);
+      return;
+    }
+    if (o.subType >= 48 && o.subType <= 53) {
+      const bone = lagulTrailBone(o.subType);
+      const at = o.target && bone !== undefined ? o.target.bonePosition?.(bone) : null;
+      if (!live(o.target) || !at) o.live = false;
+      else o.position.copy(at);
       return;
     }
     if (o.lifeTime >= 100) {
@@ -320,16 +335,23 @@ EXTRA_EFFECTS.aliceBuffSkillEffect = {
 EXTRA_PARTICLES.twintailWater = {
   texture: 'twintailWater',
   init: (o) => {
-    if (o.subType !== 2) return false;
-    o.lifeTime = 60 + randInt(10);
-    o.scale = (randInt(32) + 50) * 0.02;
-    o.position.add(new THREE.Vector3(randInt(40) - 20, randInt(40) - 20, randInt(40)));
+    if (o.subType === 1) { // Pollution's drops
+      o.lifeTime = 20 + randInt(10);
+      o.scale = (randInt(32) + 50) * 0.01;
+      o.position.add(new THREE.Vector3(randInt(80) - 40, randInt(80) - 40, randInt(80)));
+    } else if (o.subType === 2) {
+      o.lifeTime = 60 + randInt(10);
+      o.scale = (randInt(32) + 50) * 0.02;
+      o.position.add(new THREE.Vector3(randInt(40) - 20, randInt(40) - 20, randInt(40)));
+    } else {
+      return false;
+    }
     o.angle.set(randInt(360), o.angle.y, randInt(360));
     o.gravity = (randInt(10) + 20) * 0.1;
     return true;
   },
   move: (o) => {
-    o.scale -= 0.026;
+    o.scale -= o.subType === 1 ? 0.013 : 0.026;
     o.position.z += o.gravity;
     o.alpha -= 0.05;
     o.light.multiplyScalar(1 / 1.02);
@@ -611,7 +633,7 @@ EXTRA_PARTICLES.magicParticle = {
 };
 
 // BITMAP_MAGIC on the ground: SubType 12 (Lightning Shock's five circles) spreads as it fades;
-// 13 and 14 (the Rage Fighter's buffs, Dark Side) grow and fade.
+// 13 and 14 (the Rage Fighter's buffs, Dark Side) grow and fade; 9 and 10 lie under a summon's casting.
 EXTRA_EFFECTS.magic = {
   create: (o) => {
     o.lifeTime = 20;
@@ -625,9 +647,31 @@ EXTRA_EFFECTS.magic = {
       o.scale = 1;
       return true;
     }
+    if (o.subType === 9) { // a summon's casting: two impact rings turning
+      o.lifeTime = 40;
+      o.scale = 2.4;
+      o.headAngle.set(0, 0, 0);
+      return true;
+    }
+    if (o.subType === 10) { // and its dark circle (subtracted lights, fewer as it ends)
+      o.lifeTime = 44;
+      o.scale = 12;
+      o.alpha = 0;
+      return true;
+    }
     return false;
   },
   move: (o) => {
+    if (o.subType === 9 || o.subType === 10) {
+      if (o.lifeTime < 20) o.alpha -= o.subType === 9 ? 0.05 : 0.03;
+      else if (o.alpha < 1) o.alpha += 0.05;
+      if (o.subType === 9) {
+        o.headAngle.x += 4;
+        o.headAngle.y -= 8;
+        o.headAngle.z += 4;
+      }
+      return true;
+    }
     if (o.subType === 12) {
       o.alpha = Math.max(0, o.alpha - 0.05);
       o.scale += o.alpha;
@@ -642,6 +686,18 @@ EXTRA_EFFECTS.magic = {
   },
   draw: (o, system) => {
     const height = (x: number, y: number): number => system.heightAt(x, y);
+    if (o.subType === 9) {
+      const light = o.light.clone().multiplyScalar(Math.max(0, o.alpha));
+      system.quads.decal('summonImpact', 'glow', o.position.x, o.position.y, o.scale, light, o.headAngle.y, height, o.position.z);
+      system.quads.decal('summonImpact', 'glow', o.position.x, o.position.y, o.scale * 1.2, light, o.headAngle.z, height, o.position.z);
+      return;
+    }
+    if (o.subType === 10) {
+      const light = o.light.clone().multiplyScalar(Math.max(0, o.alpha));
+      const count = o.lifeTime < 3 ? 1 : o.lifeTime < 6 ? 2 : o.lifeTime < 9 ? 3 : o.lifeTime < 12 ? 4 : 5;
+      for (let i = 0; i < count; i++) system.quads.decal('light', 'subtract', o.position.x, o.position.y, o.scale, light, -o.angle.z, height, o.position.z);
+      return;
+    }
     // Twice, as the desktop does.
     for (let i = 0; i < 2; i++) system.quads.decal('magicGround1', 'glow', o.position.x, o.position.y, o.scale, o.light, -o.angle.z, height, o.position.z);
   },
