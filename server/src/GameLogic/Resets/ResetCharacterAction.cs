@@ -36,6 +36,13 @@ public class ResetCharacterAction
     /// </summary>
     public async ValueTask ResetCharacterAsync()
     {
+        if (HNMO.GameLogic.PlugIns.ResetOptions.ResetOptionsPlugIn.Get(this._player.GameContext) is { } options)
+        {
+            // HNMO's reset options are on: their tiers, VIP advantages and daily limits count.
+            await options.ResetAsync(this._player, this._npc).ConfigureAwait(false);
+            return;
+        }
+
         var resetFeature = this._player.GameContext.FeaturePlugIns.GetPlugIn<ResetFeaturePlugIn>();
         if (resetFeature is null)
         {

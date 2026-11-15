@@ -4748,6 +4748,70 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>1D</SubCode>
+      <Name>HnmoResetsRequest</Name>
+      <Caption>Request HNMO resets</Caption>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game entered the world.</SentWhen>
+      <CausedReaction>The server sends the HnmoResetsState message, and from then on sends it again when something changes, e.g. a reset with the NPC or the chat command, a relife, or delegated resets done while the player was away.</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>1F</SubCode>
+      <Name>HnmoResetsAction</Name>
+      <Caption>HNMO resets action</Caption>
+      <Length>5</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player asks the web game for a reset, a relife, the next reset's needs, or switches the delegated reset.</SentWhen>
+      <CausedReaction>The server does it and sends the HnmoResetsState message with the result (and a chat message).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoResetsActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoResetsActionType</Name>
+          <Description>The action of the reset options.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Reset</Name>
+              <Description>Reset the character.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Relife</Name>
+              <Description>Do the relife (grand reset).</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>DelegatedOn</Name>
+              <Description>Switch the delegated reset on.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>DelegatedOff</Name>
+              <Description>Switch the delegated reset off.</Description>
+              <Value>4</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Info</Name>
+              <Description>Tell what the next reset and relife need.</Description>
+              <Value>5</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

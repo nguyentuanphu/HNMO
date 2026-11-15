@@ -6078,6 +6078,59 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoResetsRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game entered the world.
+    /// Causes reaction on server side: The server sends the HnmoResetsState message, and from then on sends it again when something changes, e.g. a reset with the NPC or the chat command, a relife, or delegated resets done while the player was away.
+    /// </remarks>
+    public static async ValueTask SendHnmoResetsRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoResetsRequestRef.Length;
+            var packet = new HnmoResetsRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoResetsAction" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player asks the web game for a reset, a relife, the next reset's needs, or switches the delegated reset.
+    /// Causes reaction on server side: The server does it and sends the HnmoResetsState message with the result (and a chat message).
+    /// </remarks>
+    public static async ValueTask SendHnmoResetsActionAsync(this IConnection? connection, HnmoResetsAction.HnmoResetsActionType @action)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoResetsActionRef.Length;
+            var packet = new HnmoResetsActionRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

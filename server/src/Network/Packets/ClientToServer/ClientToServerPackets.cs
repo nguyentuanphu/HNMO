@@ -19336,6 +19336,200 @@ public readonly struct HnmoGiftCodesAction
 
 
 /// <summary>
+/// Is sent by the client when: The web game entered the world.
+/// Causes reaction on server side: The server sends the HnmoResetsState message, and from then on sends it again when something changes, e.g. a reset with the NPC or the chat command, a relife, or delegated resets done while the player was away.
+/// </summary>
+public readonly struct HnmoResetsRequest
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoResetsRequest"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoResetsRequest(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoResetsRequest"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoResetsRequest(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x1D;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 4;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoResetsRequest"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoResetsRequest(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoResetsRequest"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoResetsRequest packet) => packet._data; 
+}
+
+
+/// <summary>
+/// Is sent by the client when: The player asks the web game for a reset, a relife, the next reset's needs, or switches the delegated reset.
+/// Causes reaction on server side: The server does it and sends the HnmoResetsState message with the result (and a chat message).
+/// </summary>
+public readonly struct HnmoResetsAction
+{
+    /// <summary>
+    /// The action of the reset options.
+    /// </summary>
+    public enum HnmoResetsActionType
+    {
+        /// <summary>
+        /// Reset the character.
+        /// </summary>
+            Reset = 1,
+
+        /// <summary>
+        /// Do the relife (grand reset).
+        /// </summary>
+            Relife = 2,
+
+        /// <summary>
+        /// Switch the delegated reset on.
+        /// </summary>
+            DelegatedOn = 3,
+
+        /// <summary>
+        /// Switch the delegated reset off.
+        /// </summary>
+            DelegatedOff = 4,
+
+        /// <summary>
+        /// Tell what the next reset and relife need.
+        /// </summary>
+            Info = 5,
+    }
+
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoResetsAction"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoResetsAction(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoResetsAction"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoResetsAction(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x1F;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 5;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the action.
+    /// </summary>
+    public HnmoResetsAction.HnmoResetsActionType Action
+    {
+        get => (HnmoResetsActionType)this._data.Span[4];
+        set => this._data.Span[4] = (byte)value;
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoResetsAction"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoResetsAction(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoResetsAction"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoResetsAction packet) => packet._data; 
+}
+
+
+/// <summary>
 /// Is sent by the client when: The player wants to rename a character in the character selection.
 /// Causes reaction on server side: The server renames the character and answers with CharacterRenameResult (F3 16).
 /// </summary>

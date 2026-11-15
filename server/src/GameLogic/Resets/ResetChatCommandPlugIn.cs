@@ -29,6 +29,14 @@ public class ResetChatCommandPlugIn : IChatCommandPlugIn
     /// <inheritdoc />
     public async ValueTask HandleCommandAsync(Player player, string command)
     {
+        var argument = command.Length > Command.Length ? command[Command.Length..].Trim().ToLowerInvariant() : string.Empty;
+        if (argument is "info" or "?" && HNMO.GameLogic.PlugIns.ResetOptions.ResetOptionsPlugIn.Get(player.GameContext) is { } options)
+        {
+            // HNMO's reset options: what the next reset and relife need, today's limits and the delegated reset.
+            await options.InfoAsync(player).ConfigureAwait(false);
+            return;
+        }
+
         var resetAction = new ResetCharacterAction(player);
         await resetAction.ResetCharacterAsync().ConfigureAwait(false);
     }

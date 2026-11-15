@@ -2167,4 +2167,25 @@
   <data name="GiftCodeChatCommandPlugIn_Description" xml:space="preserve">
     <value>Enters a gift code: /code CODE.</value>
   </data>
+  <data name="ResetOptionsPlugIn_Name" xml:space="preserve">
+    <value>HNMO: reset system with options</value>
+  </data>
+  <data name="ResetOptionsPlugIn_Description" xml:space="preserve">
+    <value>Reset tiers (level, zen, coins, items, points kept or given, daily limits), VIP resets, relife (grand reset) and the delegated reset during offline leveling, also on the website; a monthly reset ranking. While it's on, the reset NPC and /reset follow it. Set it in the admin panel's Resets and relife page.</value>
+  </data>
+  <data name="RelifeChatCommandPlugIn_Name" xml:space="preserve">
+    <value>HNMO: /relife chat command</value>
+  </data>
+  <data name="RelifeChatCommandPlugIn_Description" xml:space="preserve">
+    <value>The relife (grand reset) of the reset options: /relife (or /relife info).</value>
+  </data>
+  <data name="DelegatedResetChatCommandPlugIn_Name" xml:space="preserve">
+    <value>HNMO: /autoreset chat command</value>
+  </data>
+  <data name="DelegatedResetChatCommandPlugIn_Description" xml:space="preserve">
+    <value>Switches the delegated reset on or off: /autoreset on|off (the server resets the character while it's offline leveling).</value>
+  </data>
+  <data name="DelegatedResetViChatCommandPlugIn_Name" xml:space="preserve">
+    <value>HNMO: /uythac chat command</value>
+  </data>
 </root>
