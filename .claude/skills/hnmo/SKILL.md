@@ -264,3 +264,17 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   the cloak: `Character.setItemLooks` (main.ts's buffs.onChange) → `setItemGlowState` / `setCloaked`. +15 decorations are
   `Attachment`s with slot `ornament` (PartModels.json). `tests/e2e/item-glow.spec.ts` builds a row of players with
   `createPlayerCharacter` and puts them in `online.characters` (ids 0x7e00+) so the game updates and draws them.
+
+## Performance (2026-11-15)
+- The owner's lag can't be seen on the headless SwiftShader machine: ask for a **performance report** (Options,
+  Graphics, "Performance report", or Ctrl+Shift+P; 15 s; "Download" saves `hnmo-performance-*.json`). Its
+  `frames.slowOutsideGame` says whether slow frames were the game's own work or the browser / driver / other programs;
+  `profile.topSelf` names the functions (the package bundle keeps names: esbuild without identifier minifying).
+- `__game.debug` (dev build and bundle alike): `renderer`, `createPlayerCharacter`, `createMonsterCharacter`, `drawItem`,
+  `glowMaterialCount`, `benchFrames(n, { draw })` (the frame loop's parts in ms, back to back: the CPU cost without
+  SwiftShader's frame rate), `setCulling(on)`. Tests should use it instead of `import('/js/...')`, which fails on the bundle.
+- Per-frame code must not read layout after writes: use `ui/layoutCache.ts` `cachedRect()` for boxes that only move on
+  resize. Characters out of view are culled (`Character.culled`, main.ts `cullCharacters`): their group stays visible
+  (effects and arrows read `group.visible`), only its children are hidden.
+- In a crowd (60 characters) the CPU cost is mostly three.js's draw calls (~8 µs each in headless); fewer meshes per
+  character is the next big win.
