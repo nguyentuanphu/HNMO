@@ -51,7 +51,9 @@
     .safety-box { background: #151a26; border: 1px solid #2c3446; border-radius: 8px; padding: 14px; display: grid; gap: 8px; }
     .safety-box h3 { margin: 0; font-size: 16px; color: var(--gold); }
     .safety-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
-    .safety-row label { min-width: 110px; flex: 1; }
+    .safety-row label { flex: 1 1 150px; }
+    .safety-row input { width: 100%; box-sizing: border-box; }
+    #safetyContent:not([hidden]) { display: grid; gap: 12px; }
     .safety-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .safety-table th, .safety-table td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #2c3446; vertical-align: top; }
     .safety-table th { color: var(--muted); font-weight: 600; }
