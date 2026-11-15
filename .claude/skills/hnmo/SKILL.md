@@ -345,3 +345,15 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
 - Admin page `/top-races` (its live standings use a copy of the configuration: an unsaved edit must not end a race);
   website `/website/top-races` (section `#races`); web window **F9** (`ui/topRacesWindow.ts`): every letter key is taken by the
   desktop or HNMO (desktop leaves N, O, Y free; HNMO uses N, O (options), Y), F9 is free on the desktop and in browsers.
+
+## Gift codes (2026-11-16)
+- `GameLogic/PlugIns/GiftCodes`: `GiftCodeEngine` (pure, `GiftCodeEngineTest`), `GiftCodeStore` (`save/gift-codes.json`, shared per
+  file with `GiftCodeStore.Open`; the codes themselves live there, not in the plug-in settings, so the admin page edits the store and
+  calls `CodesChanged()`), `GiftCodesPlugIn` (20 s tick: pending coins on the lowest server id, waiting goods for online players),
+  `GiftCodeRewards` (coin grants without a game context, goods with options). Chat command `/code` (`GiftCodeChatCommandPlugIn`).
+- F5 codes now: ... top races 17-19, gift codes 1A (request), 1B (state JSON), 1C (action: 1 redeem, 2 take). Next free: 1D.
+- Admin page `/gift-codes` (CSV as a data: link); website `GET /website/gift-codes` (public codes) and the account page's
+  `POST /portal/gift-codes/characters|redeem` (bridge `Portal.cs`, API key; the admin API checks the account's password with
+  `GetAccountByLoginNameAsync(login, password)`). The account page has no login session: the name and password go with each call.
+- Web window `ui/giftCodesWindow.ts` (no hotkey: `/code` alone, community window button, touch menu 🎁). An e2e test that must not
+  send test codes to the shared server records `HnmoGiftCodesAction` without forwarding it.

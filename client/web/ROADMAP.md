@@ -230,8 +230,15 @@ section 12 (the cash shop) still waits for the owner's answers.
    weekly event wins, a weekly PK race (off). State in `save/top-races.json` (no database change). The weekly ranking
    rewards of the world bosses (section 12.4) stay as they are. Still to check on a server running this code: a whole
    race's end and payout with real players (the rules are unit-tested; the web parts are tested with fed packets).
-2. ⏳ **Gift codes**: the admin creates codes (rewards, number of uses, one per account or per character,
-   start/end, level/reset limits); players enter them on the website or in the game (/code).
+2. ✅ **Gift codes**, built 2026-11-16 (Sydney): the admin panel's *Gift codes* page makes codes or batches of random
+   single-use codes (CSV download) with a reward (coins with coin type, zen, items with level and options), uses in total,
+   once per account or per character, Sydney start/end (daylight saving handled), level/reset/class limits, on/off, public,
+   a note; it shows the uses and the redemption log. Players enter them in the game (`/code CODE`, or the gift code window:
+   `/code` alone, the community window's button, the touch "more" menu) or on the account page (account name and password,
+   a character). Case doesn't matter; wrong codes are limited per account (5 per hour by default); coins are paid once by
+   reference, zen and items wait for room in the bag. Public codes on the website's home page. State in
+   `save/gift-codes.json` (no database change). Still to check on a server running this code: a real redemption end to end
+   (the rules, the admin page and the website API are unit-tested; the web parts are tested with fed packets).
 3. ⏳ **Reset system with options**: reset tiers (level needed, zen/coins cost, points kept or given, a
    daily limit per tier), VIP reset at a lower level, relife (grand reset) after N resets, and "ủy thác
    reset": the server resets the character during offline leveling. Reset and stat points (add / clear)
