@@ -95,6 +95,8 @@ export const SkillEffect = {
   FIRE_SCREAM: 78,
   EXPANSION_OF_WIZARDRY: 233,
   RECOVERY: 234,
+  DAMAGE_REFLECTION: 217,
+  BLIND: 220,
   LANCE: 45,
   STUN: 67,
   CANCEL_STUN: 68,
@@ -487,6 +489,18 @@ function release(system: EffectSystem, skill: number, caster: EffectOwner, targe
       system.createEffect('magicGround2', caster.position, caster.angle, new THREE.Vector3(0.7, 0.3, 0.8), 11, caster);
       system.createEffect('aliceBuffSkillEffect', to, target.angle, new THREE.Vector3(0.8, 0.3, 0.9), 0, target);
       system.createEffect('aliceBuffSkillEffect2', to, target.angle, new THREE.Vector3(0.8, 0.3, 0.9), 0, target);
+      break;
+    case SkillEffect.DAMAGE_REFLECTION: { // AT_SKILL_ALICE_THORNS: the circle at the summoner, the rings on the target
+      const amber = new THREE.Vector3(0.8, 0.5, 0.2);
+      system.createEffect('magicGround2', caster.position, caster.angle, amber, 11, caster);
+      system.createEffect('aliceBuffSkillEffect', to, target.angle, amber, 2, target);
+      system.createEffect('aliceBuffSkillEffect2', to, target.angle, amber, 2, target);
+      break;
+    }
+    case SkillEffect.BLIND: // AT_SKILL_ALICE_BLIND: a dark circle at the summoner, white rings on the target
+      system.createEffect('magicGround2', caster.position, caster.angle, WHITE, 12, caster);
+      system.createEffect('aliceBuffSkillEffect', to, target.angle, WHITE, 1, target);
+      system.createEffect('aliceBuffSkillEffect2', to, target.angle, WHITE, 1, target);
       break;
     case SkillEffect.FLAME:
       if (options.cell) break; // the area cast burns at its tile (releaseAtCaster)

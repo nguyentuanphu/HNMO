@@ -275,7 +275,64 @@ function buffRing(clockwise: boolean): NonNullable<typeof EXTRA_EFFECTS.aliceBuf
     },
   };
 }
-EXTRA_EFFECTS.aliceBuffSkillEffect = buffRing(true);
+const ringOf = buffRing(true);
+// SubTypes 3 (Blind: red lights fall from random bones) and 4 (Sleep: water bubbles rise from them) draw no ring and
+// last while the debuff does (the catalogue's LifeTime 100, kept there).
+EXTRA_EFFECTS.aliceBuffSkillEffect = {
+  ...ringOf,
+  alwaysModel: false,
+  create: (o, system) => {
+    if (o.subType === 3 || o.subType === 4) {
+      o.hiddenMesh = -2;
+      return o.owner !== null;
+    }
+    return ringOf.create(o, system);
+  },
+  move: (o, system, luminosity) => {
+    if (o.subType !== 3 && o.subType !== 4) return ringOf.move(o, system, luminosity);
+    const owner = o.owner;
+    if (!live(owner)) {
+      o.live = false;
+      return true;
+    }
+    o.lifeTime = 100;
+    o.direction.set(0, 0, 0);
+    const bones = owner.boneCount?.() ?? 0;
+    const bone = (): THREE.Vector3 | null => (bones > 0 ? owner.bonePosition?.(randInt(bones)) ?? null : null);
+    const at = bone();
+    if (!at) return true;
+    if (o.subType === 3) {
+      system.createParticle('light3', at, o.angle, o.light, 6, o.scale);
+      const second = bone();
+      if (second) system.createParticle('light3', second, o.angle, o.light, 6, o.scale);
+    } else if (randInt(2) === 0) {
+      at.z -= 20;
+      system.createParticle('twintailWater', at, o.angle, o.light, 2);
+    }
+    return true;
+  },
+};
+
+// BITMAP_TWINTAIL_WATER SubType 2 (effect/water.jpg): a bubble that rises, shrinks and fades.
+EXTRA_PARTICLES.twintailWater = {
+  texture: 'twintailWater',
+  init: (o) => {
+    if (o.subType !== 2) return false;
+    o.lifeTime = 60 + randInt(10);
+    o.scale = (randInt(32) + 50) * 0.02;
+    o.position.add(new THREE.Vector3(randInt(40) - 20, randInt(40) - 20, randInt(40)));
+    o.angle.set(randInt(360), o.angle.y, randInt(360));
+    o.gravity = (randInt(10) + 20) * 0.1;
+    return true;
+  },
+  move: (o) => {
+    o.scale -= 0.026;
+    o.position.z += o.gravity;
+    o.alpha -= 0.05;
+    o.light.multiplyScalar(1 / 1.02);
+  },
+  blend: () => 'glow',
+};
 EXTRA_EFFECTS.aliceBuffSkillEffect2 = buffRing(false);
 
 // ---------------------------------------------------------------------------

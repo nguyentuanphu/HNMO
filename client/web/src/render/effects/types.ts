@@ -130,6 +130,7 @@ export type EffectType =
   | 'swellOfMagicPower' // MODEL_SWELL_OF_MAGICPOWER: Expansion of Wizardry (Effect/magic_powerup.bmd)
   | 'arrowsre6' // MODEL_ARROWSRE06: its hand flashes (Effect/arrowsre06.bmd)
   | 'twlight' // BITMAP_TWLIGHT: its twilight ring
+  | 'swellOfMagicPowerBuffEffect' // MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF: its buff's lasting lights
   | 'summon' // MODEL_SUMMON: Recovery's circle (Skill/nightmaresum.bmd)
   | 'raklionBossCrackEffect'; // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
 
@@ -147,6 +148,7 @@ export type ParticleType = 'energy' | 'spark' | 'spark3' | 'fire' | 'fire3' | 's
   | 'smokeLine1' // BITMAP_SMOKELINE1: the smoke lines rising from Increase Attack's fists
   | 'shiny4' // BITMAP_SHINY+4 (ring.jpg): Cometfall's ring where a comet lands
   | 'poundingBall' // BITMAP_POUNDING_BALL: Lance's trail
+  | 'twintailWater' // BITMAP_TWINTAIL_WATER: the Sleep debuff's bubbles
   | 'waterfall5' | 'waterfall3'; // BITMAP_WATERFALL_5 / _3: Strike of Destruction's spray
 
 /** CreateSprite types: the bitmap drawn. */

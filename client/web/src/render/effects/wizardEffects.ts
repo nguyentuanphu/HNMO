@@ -162,3 +162,40 @@ export function expansionOfWizardry(system: EffectSystem, caster: EffectOwner): 
   if ((caster.boneCount?.() ?? 0) === 0) return;
   system.createEffect('swellOfMagicPower', caster.position, caster.angle, new THREE.Vector3(0.3, 0.2, 0.9), 0, caster);
 }
+
+// MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF SubType 0: while the buff lasts, a pulsing purple light on every bone and, every
+// six seconds, flashes at both hands. Only its sprites show.
+EXTRA_EFFECTS.swellOfMagicPowerBuffEffect = {
+  create: (o, system) => {
+    if (o.subType !== 0 || !o.owner) return false;
+    o.lifeTime = 999;
+    o.counter = system.time; // Timer
+    return true;
+  },
+  move: (o, system) => {
+    const owner = o.owner;
+    if (!live(owner)) {
+      o.live = false;
+      return true;
+    }
+    o.position.copy(owner.position);
+    o.direction.set(0, 0, 0);
+    if (system.time - o.counter >= 6000) {
+      for (const bone of HANDS) system.createEffect('arrowsre6', o.position, o.angle, new THREE.Vector3(0.2, 0.2, 0.9), 1, owner, 0, { pkKey: bone });
+      o.counter = system.time;
+    }
+    o.lifeTime = 999;
+    return true;
+  },
+  sprites: (o, system) => {
+    const owner = o.owner;
+    if (!live(owner)) return;
+    const lumi = (Math.abs(Math.sin(system.time * 0.001)) + 0.2) * 0.5;
+    const light = new THREE.Vector3(lumi * 0.7, lumi * 0.3, lumi * 0.9);
+    const bones = owner.boneCount?.() ?? 0;
+    for (let i = 0; i < bones; i++) {
+      const p = owner.bonePosition?.(i);
+      if (p) system.createSprite('light', p, 1.8, light, owner);
+    }
+  },
+};

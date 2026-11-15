@@ -138,6 +138,7 @@ export const BITMAPS = {
   sahamuttExplosion: 'loungexflow.jpg', // BITMAP_SUMMON_SAHAMUTT_EXPLOSION
   shiny4: 'ring.jpg', // BITMAP_SHINY+4
   hole: 'Hole.jpg', // BITMAP_HOLE
+  twintailWater: 'water.jpg', // BITMAP_TWINTAIL_WATER
   twlight: 'twlighthik01.jpg', // BITMAP_TWLIGHT (Data/Skill)
   flash: 'Flashing.jpg', // BITMAP_FLASH
   inferno: 'Inferno.jpg', // BITMAP_INFERNO

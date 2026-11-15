@@ -107,6 +107,13 @@ const SUMMONER: Case[] = [
   { skill: 214, name: 'drain-life', expect: ['effect:aliceDrainLife', 'particle:light3', 'joint:drainLifeGhost', 'joint:jointEnergy'], shotAt: 1000 },
   // Its links come with the server's ChainLightningHitInfo, fed to the game here.
   { skill: 215, name: 'chain-lightning', expect: ['effect:chainLightning', 'joint:jointThunder', 'particle:light'], shotAt: 200, chain: true },
+  // Damage Reflection's cast, then its buff (eBuff_Thorns = 71): thorns of light rise from the hero while it lasts.
+  { skill: 217, name: 'damage-reflection', expect: ['effect:magicGround2', 'effect:aliceBuffSkillEffect', 'joint:flare'], shotAt: 900, buffs: [71] },
+  // Blind's cast, then the debuff's look (eDeBuff_Blind = 73) and Sleep's (eDeBuff_Sleep = 72) on the hero.
+  { skill: 220, name: 'blind', expect: ['effect:magicGround2', 'effect:aliceBuffSkillEffect', 'particle:light3'], shotAt: 900, buffs: [73] },
+  { skill: 219, name: 'sleep-debuff', expect: ['effect:aliceBuffSkillEffect', 'particle:twintailWater'], shotAt: 1200, buffs: [72] },
+  // Expansion of Wizardry's buff (eBuff_SwellOfMagicPower = 82): purple lights on every bone while it lasts.
+  { skill: 233, name: 'expansion-buff', expect: ['effect:swellOfMagicPowerBuffEffect', 'sprite:light'], shotAt: 1400, buffs: [82] },
   { skill: 45, name: 'lance', expect: ['effect:skillJavelin', 'particle:poundingBall'], shotAt: 1000, model: 'skillJavelin', warm: [['Skill', 'Javelin.bmd']] },
   { skill: 230, name: 'lightning-shock', expect: ['effect:lightningShock', 'particle:lightningMega', 'effect:magic', 'effect:damage01Mono'], shotAt: 240 },
   { skill: 219, name: 'sleep', expect: ['effect:aliceBuffSkillEffect', 'effect:aliceBuffSkillEffect2', 'effect:magicGround2', 'joint:jointHealing'], shotAt: 1000 },

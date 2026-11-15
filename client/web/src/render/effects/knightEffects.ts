@@ -363,6 +363,18 @@ EXTRA_JOINTS.flare = {
       return true;
     }
     if (o.subType === 23) return spiralSlashInit(o);
+    if (o.subType === 43) { // the Thorns buff's emitter: no trail of its own
+      o.lifeTime = 100;
+      o.maxTails = 1;
+      o.createTails = false;
+      return o.target !== null;
+    }
+    if (o.subType === 44) { // a thorn of light rising from the body
+      o.lifeTime = 15;
+      o.maxTails = 30;
+      o.direction.z = randInt(2) + 2;
+      return o.target !== null;
+    }
     if (o.subType === 47) { // Recovery's lights: they swirl in around the target and close on it
       o.light.set(0.7, 0.7, 1);
       o.counter = randInt(10); // MultiUse
@@ -381,6 +393,32 @@ EXTRA_JOINTS.flare = {
     }
     if (o.subType === 47) {
       recoveryLightMove(o, system);
+      return;
+    }
+    if (o.subType === 43) {
+      const target = o.target;
+      if (!target || !(target.isLive?.() ?? true)) {
+        o.live = false;
+        return;
+      }
+      o.lifeTime = 100; // while the buff lasts
+      if (randInt(3) === 0) {
+        o.position.copy(target.position).add(new THREE.Vector3(randInt(60) - 30, randInt(60) - 30, 30));
+        system.createJoint('flare', o.position, o.position, o.angle, 44, target, o.scale, 0, 0, o.light);
+      }
+      return;
+    }
+    if (o.subType === 44) {
+      if (!(o.target?.isLive?.() ?? true)) {
+        o.live = false;
+        return;
+      }
+      o.direction.z += 1;
+      o.position.set(o.targetPosition.x, o.targetPosition.y, o.position.z + o.direction.z);
+      o.light.multiplyScalar(1 / 1.05);
+      system.createSprite('pinLight', o.position, 1.5, o.light);
+      system.createSprite('pinLight', o.position, 0.5, o.light);
+      if (o.position.z >= 400) o.live = false;
       return;
     }
     if (o.subType === 2) {

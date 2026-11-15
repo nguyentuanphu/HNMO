@@ -6,7 +6,8 @@
 //                                                                          Engine/Object/ZzzObject.cpp
 //   RenderObject's monster body colours (poison, freeze, Blow of Destruction)  Engine/Object/ZzzObject.cpp
 //   InsertBuffPhysicalEffect / ClearBuffPhysicalEffect                     Network/Server/WSclient.cpp
-//   UpdateHeldWeaponEffects (eBuff_AddCriticalDamage)                      Engine/Object/ZzzCharacter.cpp
+//   UpdateHeldWeaponEffects (eBuff_AddCriticalDamage); the buff effects kept per character (eBuff_Thorns,
+//   eDeBuff_Blind, eDeBuff_Sleep, eBuff_SwellOfMagicPower)                 Engine/Object/ZzzCharacter.cpp
 
 import * as THREE from 'three';
 import type { EffectSystem } from './effectSystem.js';
@@ -18,6 +19,7 @@ import { RageBuff } from './rageEffects.js';
 export const Buff = {
   ATTACK: 1, DEFENSE: 2, WIZ_DEFENSE: 4, ADD_CRITICAL_DAMAGE: CRITICAL_DAMAGE_BUFF, LIFE: 8, CLOAKING: 18,
   POISON: 55, FREEZE: 56, HARDEN: 57, STUN: 61, ATTACK_DOWN: 76, DEFENSE_DOWN: 77,
+  THORNS: 71, SLEEP: 72, BLIND: 73, SWELL_OF_MAGIC_POWER: 82,
   GIGANTIC_STORM_DAMAGE: 84, LIGHTNING_SHOCK_DAMAGE: 85, BLOW_OF_DESTRUCTION: 86,
   ATT_UP: RageBuff.ATT_UP, HP_UP: RageBuff.HP_UP, DEF_UP: RageBuff.DEF_UP,
 } as const;
@@ -88,6 +90,25 @@ export function playBuffLook(system: EffectSystem, buff: number, owner: EffectOw
       }
       return true;
     }
+    case Buff.THORNS: // Damage Reflection: thorns of light rise from the body while it lasts
+      if (!on) system.deleteJoint('flare', owner, 43);
+      else if (!system.searchJoint('flare', owner, 43)) system.createJoint('flare', owner.position, owner.position, owner.angle, 43, owner, 50, 0, 0, new THREE.Vector3(0.9, 0.6, 0.1));
+      return true;
+    case Buff.BLIND:
+    case Buff.SLEEP: {
+      const sub = buff === Buff.BLIND ? 3 : 4;
+      if (!on) system.deleteEffect('aliceBuffSkillEffect', owner, sub);
+      else if (!system.searchEffect('aliceBuffSkillEffect', owner, sub)) {
+        system.createEffect('aliceBuffSkillEffect', owner.position, owner.angle, buff === Buff.BLIND ? WHITE : new THREE.Vector3(0.7, 0.1, 0.9), sub, owner);
+      }
+      return true;
+    }
+    case Buff.SWELL_OF_MAGIC_POWER: // Expansion of Wizardry's lasting look (players only, not while cloaked)
+      if (!on) system.deleteEffect('swellOfMagicPowerBuffEffect', owner, 0);
+      else if ((owner.boneCount?.() ?? 0) > 0 && !(owner.hasBuff?.(Buff.CLOAKING) ?? false) && !system.searchEffect('swellOfMagicPowerBuffEffect', owner, 0)) {
+        system.createEffect('swellOfMagicPowerBuffEffect', owner.position, owner.angle, new THREE.Vector3(0.7, 0.2, 0.9), 0, owner);
+      }
+      return true;
     case Buff.GIGANTIC_STORM_DAMAGE:
       if (on) system.createEffect('jointThunderEffect', owner.position, owner.angle, owner.light ?? WHITE, 0, owner);
       return true;
