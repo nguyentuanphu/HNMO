@@ -9,7 +9,7 @@ interface Fighter { id: number; kind: string; dead: boolean; cell: { x: number; 
 interface RageGame {
   online: {
     characters: Map<number, Fighter>; playerId: number;
-    hero: { cell: { x: number; y: number }; isWalking: boolean; isPlayingOnce: boolean; oneShot: { action: number } | null; dead: boolean; angle: number };
+    hero: { cell: { x: number; y: number }; isWalking: boolean; isPlayingOnce: boolean; oneShot: { action: number; keysPerSecond?: number; hold?: boolean } | null; time?: number; dead: boolean; angle: number };
     walkTo(cell: { x: number; y: number }): boolean; say(text: string): void;
   };
   combat: { cast(target: unknown, cell: { x: number; y: number } | null, skill?: number): boolean; casting: boolean; cancel(): void };

@@ -307,3 +307,5 @@ section 12 (the cash shop) still waits for the owner's answers.
 - Live specs share test accounts (account-safety and missions-live both use test5): run them with --workers=1,
   or the second login is refused ("already logged in"). Once, after such a parallel run, test5 stayed
   "already logged in" with no open connection until the server restarted; not reproduced since - watch for it.
+- Server tests on GitHub: a different admin-panel test fails on each run since 2026-11-16 (map controller disposal,
+  bUnit render after disposal, map groups, packet order); they pass locally. Make them independent of timing.
