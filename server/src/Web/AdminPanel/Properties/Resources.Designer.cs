@@ -9537,5 +9537,701 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("MissionsErrorDays", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to World bosses and rankings.
+        /// </summary>
+        public static string WorldBossesAndRankings {
+            get {
+                return ResourceManager.GetString("WorldBossesAndRankings", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to World bosses on a schedule (Sydney time), their announcements, rewards by damage, boss-hunt points a.
+        /// </summary>
+        public static string WorldBossesPageDescription {
+            get {
+                return ResourceManager.GetString("WorldBossesPageDescription", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The world bosses plug-in isn't installed in this game configuration yet; start the game server once..
+        /// </summary>
+        public static string WorldBossesNotInstalled {
+            get {
+                return ResourceManager.GetString("WorldBossesNotInstalled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string WorldBossesGeneral {
+            get {
+                return ResourceManager.GetString("WorldBossesGeneral", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to World bosses and weekly rankings on.
+        /// </summary>
+        public static string WorldBossesActive {
+            get {
+                return ResourceManager.GetString("WorldBossesActive", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Time zone.
+        /// </summary>
+        public static string WorldBossesTimeZone {
+            get {
+                return ResourceManager.GetString("WorldBossesTimeZone", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Announce in the game (golden notice).
+        /// </summary>
+        public static string WorldBossesAnnounceInGame {
+            get {
+                return ResourceManager.GetString("WorldBossesAnnounceInGame", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Announce on Discord (when the Discord bridge is set up).
+        /// </summary>
+        public static string WorldBossesAnnounceOnDiscord {
+            get {
+                return ResourceManager.GetString("WorldBossesAnnounceOnDiscord", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to State file.
+        /// </summary>
+        public static string WorldBossesFile {
+            get {
+                return ResourceManager.GetString("WorldBossesFile", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Bosses.
+        /// </summary>
+        public static string WorldBossesList {
+            get {
+                return ResourceManager.GetString("WorldBossesList", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Each boss appears on its map at its times (Sydney), stays for the despawn minutes and pays by damage.
+        /// </summary>
+        public static string WorldBossesListHint {
+            get {
+                return ResourceManager.GetString("WorldBossesListHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add a boss.
+        /// </summary>
+        public static string WorldBossesAdd {
+            get {
+                return ResourceManager.GetString("WorldBossesAdd", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string WorldBossesId {
+            get {
+                return ResourceManager.GetString("WorldBossesId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Name (English).
+        /// </summary>
+        public static string WorldBossesNameEn {
+            get {
+                return ResourceManager.GetString("WorldBossesNameEn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Name (Vietnamese).
+        /// </summary>
+        public static string WorldBossesNameVi {
+            get {
+                return ResourceManager.GetString("WorldBossesNameVi", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Monster number.
+        /// </summary>
+        public static string WorldBossesMonster {
+            get {
+                return ResourceManager.GetString("WorldBossesMonster", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Map number.
+        /// </summary>
+        public static string WorldBossesMap {
+            get {
+                return ResourceManager.GetString("WorldBossesMap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Game server (-1: the first).
+        /// </summary>
+        public static string WorldBossesServer {
+            get {
+                return ResourceManager.GetString("WorldBossesServer", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Spawn spots "x,y; x,y" (empty: random in the area).
+        /// </summary>
+        public static string WorldBossesSpots {
+            get {
+                return ResourceManager.GetString("WorldBossesSpots", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Area x1 y1 x2 y2.
+        /// </summary>
+        public static string WorldBossesArea {
+            get {
+                return ResourceManager.GetString("WorldBossesArea", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule.
+        /// </summary>
+        public static string WorldBossesSchedule {
+            get {
+                return ResourceManager.GetString("WorldBossesSchedule", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Every N hours.
+        /// </summary>
+        public static string WorldBossesEveryHours {
+            get {
+                return ResourceManager.GetString("WorldBossesEveryHours", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed times.
+        /// </summary>
+        public static string WorldBossesFixedTimes {
+            get {
+                return ResourceManager.GetString("WorldBossesFixedTimes", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Hours.
+        /// </summary>
+        public static string WorldBossesHours {
+            get {
+                return ResourceManager.GetString("WorldBossesHours", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to First time (HH:mm).
+        /// </summary>
+        public static string WorldBossesStartTime {
+            get {
+                return ResourceManager.GetString("WorldBossesStartTime", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Times "HH:mm, HH:mm".
+        /// </summary>
+        public static string WorldBossesTimes {
+            get {
+                return ResourceManager.GetString("WorldBossesTimes", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Days (none: every day).
+        /// </summary>
+        public static string WorldBossesDays {
+            get {
+                return ResourceManager.GetString("WorldBossesDays", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Announce minutes before.
+        /// </summary>
+        public static string WorldBossesAnnounceBefore {
+            get {
+                return ResourceManager.GetString("WorldBossesAnnounceBefore", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Leaves after (minutes).
+        /// </summary>
+        public static string WorldBossesDespawn {
+            get {
+                return ResourceManager.GetString("WorldBossesDespawn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rank by.
+        /// </summary>
+        public static string WorldBossesRankBy {
+            get {
+                return ResourceManager.GetString("WorldBossesRankBy", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Player.
+        /// </summary>
+        public static string WorldBossesRankByPlayer {
+            get {
+                return ResourceManager.GetString("WorldBossesRankByPlayer", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Party.
+        /// </summary>
+        public static string WorldBossesRankByParty {
+            get {
+                return ResourceManager.GetString("WorldBossesRankByParty", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Boss-hunt points of a kill.
+        /// </summary>
+        public static string WorldBossesHuntPoints {
+            get {
+                return ResourceManager.GetString("WorldBossesHuntPoints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Announcements.
+        /// </summary>
+        public static string WorldBossesTexts {
+            get {
+                return ResourceManager.GetString("WorldBossesTexts", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Before the spawn.
+        /// </summary>
+        public static string WorldBossesSoon {
+            get {
+                return ResourceManager.GetString("WorldBossesSoon", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to At the spawn.
+        /// </summary>
+        public static string WorldBossesSpawn {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to At the kill.
+        /// </summary>
+        public static string WorldBossesKill {
+            get {
+                return ResourceManager.GetString("WorldBossesKill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to When it leaves.
+        /// </summary>
+        public static string WorldBossesEscape {
+            get {
+                return ResourceManager.GetString("WorldBossesEscape", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rewards by damage (players without damage get nothing).
+        /// </summary>
+        public static string WorldBossesRewards {
+            get {
+                return ResourceManager.GetString("WorldBossesRewards", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rank 1.
+        /// </summary>
+        public static string WorldBossesTop1 {
+            get {
+                return ResourceManager.GetString("WorldBossesTop1", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rank 2.
+        /// </summary>
+        public static string WorldBossesTop2 {
+            get {
+                return ResourceManager.GetString("WorldBossesTop2", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rank 3.
+        /// </summary>
+        public static string WorldBossesTop3 {
+            get {
+                return ResourceManager.GetString("WorldBossesTop3", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Ranks 4 to 10.
+        /// </summary>
+        public static string WorldBossesTop10 {
+            get {
+                return ResourceManager.GetString("WorldBossesTop10", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Participation.
+        /// </summary>
+        public static string WorldBossesParticipation {
+            get {
+                return ResourceManager.GetString("WorldBossesParticipation", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Last hit.
+        /// </summary>
+        public static string WorldBossesLastHit {
+            get {
+                return ResourceManager.GetString("WorldBossesLastHit", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Participation: at least % of all damage.
+        /// </summary>
+        public static string WorldBossesMinPercent {
+            get {
+                return ResourceManager.GetString("WorldBossesMinPercent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to or at least this damage (0: off).
+        /// </summary>
+        public static string WorldBossesMinDamage {
+            get {
+                return ResourceManager.GetString("WorldBossesMinDamage", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The top 10 get the participation reward too.
+        /// </summary>
+        public static string WorldBossesTopAlso {
+            get {
+                return ResourceManager.GetString("WorldBossesTopAlso", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Next spawn.
+        /// </summary>
+        public static string WorldBossesNext {
+            get {
+                return ResourceManager.GetString("WorldBossesNext", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to On the map now, leaves at {0}.
+        /// </summary>
+        public static string WorldBossesAliveNow {
+            get {
+                return ResourceManager.GetString("WorldBossesAliveNow", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Spawn now.
+        /// </summary>
+        public static string WorldBossesSpawnNow {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawnNow", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Spawns the boss with the saved settings (save your changes first)..
+        /// </summary>
+        public static string WorldBossesSpawnNowHint {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawnNowHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to {0} appeared..
+        /// </summary>
+        public static string WorldBossesSpawned {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawned", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is on a map already..
+        /// </summary>
+        public static string WorldBossesSpawnAlive {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawnAlive", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to No running game server hosts {0} (or the plug-in is off, or the boss isn't saved yet)..
+        /// </summary>
+        public static string WorldBossesSpawnNoServer {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawnNoServer", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to {0} couldn't appear: check the monster and map numbers (see the log)..
+        /// </summary>
+        public static string WorldBossesSpawnFailed {
+            get {
+                return ResourceManager.GetString("WorldBossesSpawnFailed", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Weekly rankings.
+        /// </summary>
+        public static string WorldBossesRankings {
+            get {
+                return ResourceManager.GetString("WorldBossesRankings", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to A week runs from Monday 00:00 (Sydney) to Sunday. When it ends, the top 10 of each ranking get coins.
+        /// </summary>
+        public static string WorldBossesRankingsHint {
+            get {
+                return ResourceManager.GetString("WorldBossesRankingsHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Boss hunt (points from world boss kills).
+        /// </summary>
+        public static string WorldBossesBossHunt {
+            get {
+                return ResourceManager.GetString("WorldBossesBossHunt", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Blood Castle.
+        /// </summary>
+        public static string WorldBossesBloodCastle {
+            get {
+                return ResourceManager.GetString("WorldBossesBloodCastle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Devil Square.
+        /// </summary>
+        public static string WorldBossesDevilSquare {
+            get {
+                return ResourceManager.GetString("WorldBossesDevilSquare", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Chaos Castle.
+        /// </summary>
+        public static string WorldBossesChaosCastle {
+            get {
+                return ResourceManager.GetString("WorldBossesChaosCastle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins by rank.
+        /// </summary>
+        public static string WorldBossesRanks {
+            get {
+                return ResourceManager.GetString("WorldBossesRanks", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Points for being in it at the end.
+        /// </summary>
+        public static string WorldBossesPointsFinish {
+            get {
+                return ResourceManager.GetString("WorldBossesPointsFinish", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Points for the win.
+        /// </summary>
+        public static string WorldBossesPointsWin {
+            get {
+                return ResourceManager.GetString("WorldBossesPointsWin", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Castle siege winners.
+        /// </summary>
+        public static string WorldBossesCastleSiege {
+            get {
+                return ResourceManager.GetString("WorldBossesCastleSiege", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins per member of the winning guild.
+        /// </summary>
+        public static string WorldBossesCoinsPerMember {
+            get {
+                return ResourceManager.GetString("WorldBossesCoinsPerMember", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Extra coins of the guild master.
+        /// </summary>
+        public static string WorldBossesMasterBonus {
+            get {
+                return ResourceManager.GetString("WorldBossesMasterBonus", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Recent kills.
+        /// </summary>
+        public static string WorldBossesKills {
+            get {
+                return ResourceManager.GetString("WorldBossesKills", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to No world boss was killed yet..
+        /// </summary>
+        public static string WorldBossesNoKills {
+            get {
+                return ResourceManager.GetString("WorldBossesNoKills", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to killed.
+        /// </summary>
+        public static string WorldBossesKilled {
+            get {
+                return ResourceManager.GetString("WorldBossesKilled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to left.
+        /// </summary>
+        public static string WorldBossesEscaped {
+            get {
+                return ResourceManager.GetString("WorldBossesEscaped", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rank.
+        /// </summary>
+        public static string WorldBossesRank {
+            get {
+                return ResourceManager.GetString("WorldBossesRank", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Character.
+        /// </summary>
+        public static string WorldBossesCharacter {
+            get {
+                return ResourceManager.GetString("WorldBossesCharacter", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Damage.
+        /// </summary>
+        public static string WorldBossesDamage {
+            get {
+                return ResourceManager.GetString("WorldBossesDamage", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Share.
+        /// </summary>
+        public static string WorldBossesShare {
+            get {
+                return ResourceManager.GetString("WorldBossesShare", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string WorldBossesPoints {
+            get {
+                return ResourceManager.GetString("WorldBossesPoints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Rewards.
+        /// </summary>
+        public static string WorldBossesTiers {
+            get {
+                return ResourceManager.GetString("WorldBossesTiers", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The world bosses were saved..
+        /// </summary>
+        public static string WorldBossesSaved {
+            get {
+                return ResourceManager.GetString("WorldBossesSaved", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The boss id "{0}" isn't valid (letters, numbers, - and _, up to 40)..
+        /// </summary>
+        public static string WorldBossesErrorId {
+            get {
+                return ResourceManager.GetString("WorldBossesErrorId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The boss id "{0}" is used twice..
+        /// </summary>
+        public static string WorldBossesErrorDuplicateId {
+            get {
+                return ResourceManager.GetString("WorldBossesErrorDuplicateId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The times of "{0}" aren't valid (HH:mm, HH:mm)..
+        /// </summary>
+        public static string WorldBossesErrorTimes {
+            get {
+                return ResourceManager.GetString("WorldBossesErrorTimes", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The spawn spots of "{0}" aren't valid (x,y; x,y with 0 to 255)..
+        /// </summary>
+        public static string WorldBossesErrorSpots {
+            get {
+                return ResourceManager.GetString("WorldBossesErrorSpots", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The reward items of "{0}" aren't valid (group number level count; ...)..
+        /// </summary>
+        public static string WorldBossesErrorItems {
+            get {
+                return ResourceManager.GetString("WorldBossesErrorItems", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The coins by rank of "{0}" aren't valid (rank:coins, ... with ranks 1 to 10)..
+        /// </summary>
+        public static string WorldBossesErrorRanks {
+            get {
+                return ResourceManager.GetString("WorldBossesErrorRanks", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Reload.
+        /// </summary>
+        public static string WorldBossesReload {
+            get {
+                return ResourceManager.GetString("WorldBossesReload", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string WorldBossesRemove {
+            get {
+                return ResourceManager.GetString("WorldBossesRemove", resourceCulture);
+            }
+        }
     }
 }

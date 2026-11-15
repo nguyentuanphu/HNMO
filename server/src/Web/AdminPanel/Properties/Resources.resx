@@ -3188,4 +3188,265 @@
   <data name="MissionsErrorDays" xml:space="preserve">
     <value>The calendar days aren't valid (day:coins, … with days 1 to 31).</value>
   </data>
+  <data name="WorldBossesAndRankings" xml:space="preserve">
+    <value>World bosses and rankings</value>
+  </data>
+  <data name="WorldBossesPageDescription" xml:space="preserve">
+    <value>World bosses on a schedule (Sydney time), their announcements, rewards by damage, boss-hunt points and the weekly ranking coins. Saving applies at once to the running game.</value>
+  </data>
+  <data name="WorldBossesNotInstalled" xml:space="preserve">
+    <value>The world bosses plug-in isn't installed in this game configuration yet; start the game server once.</value>
+  </data>
+  <data name="WorldBossesGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="WorldBossesActive" xml:space="preserve">
+    <value>World bosses and weekly rankings on</value>
+  </data>
+  <data name="WorldBossesTimeZone" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="WorldBossesAnnounceInGame" xml:space="preserve">
+    <value>Announce in the game (golden notice)</value>
+  </data>
+  <data name="WorldBossesAnnounceOnDiscord" xml:space="preserve">
+    <value>Announce on Discord (when the Discord bridge is set up)</value>
+  </data>
+  <data name="WorldBossesFile" xml:space="preserve">
+    <value>State file</value>
+  </data>
+  <data name="WorldBossesList" xml:space="preserve">
+    <value>Bosses</value>
+  </data>
+  <data name="WorldBossesListHint" xml:space="preserve">
+    <value>Each boss appears on its map at its times (Sydney), stays for the despawn minutes and pays by damage. Texts may use {boss}, {map}, {minutes}, {x}, {y}, {killer} and {top}. Items: "group number level count; ...".</value>
+  </data>
+  <data name="WorldBossesAdd" xml:space="preserve">
+    <value>Add a boss</value>
+  </data>
+  <data name="WorldBossesId" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="WorldBossesNameEn" xml:space="preserve">
+    <value>Name (English)</value>
+  </data>
+  <data name="WorldBossesNameVi" xml:space="preserve">
+    <value>Name (Vietnamese)</value>
+  </data>
+  <data name="WorldBossesMonster" xml:space="preserve">
+    <value>Monster number</value>
+  </data>
+  <data name="WorldBossesMap" xml:space="preserve">
+    <value>Map number</value>
+  </data>
+  <data name="WorldBossesServer" xml:space="preserve">
+    <value>Game server (-1: the first)</value>
+  </data>
+  <data name="WorldBossesSpots" xml:space="preserve">
+    <value>Spawn spots "x,y; x,y" (empty: random in the area)</value>
+  </data>
+  <data name="WorldBossesArea" xml:space="preserve">
+    <value>Area x1 y1 x2 y2</value>
+  </data>
+  <data name="WorldBossesSchedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="WorldBossesEveryHours" xml:space="preserve">
+    <value>Every N hours</value>
+  </data>
+  <data name="WorldBossesFixedTimes" xml:space="preserve">
+    <value>Fixed times</value>
+  </data>
+  <data name="WorldBossesHours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="WorldBossesStartTime" xml:space="preserve">
+    <value>First time (HH:mm)</value>
+  </data>
+  <data name="WorldBossesTimes" xml:space="preserve">
+    <value>Times "HH:mm, HH:mm"</value>
+  </data>
+  <data name="WorldBossesDays" xml:space="preserve">
+    <value>Days (none: every day)</value>
+  </data>
+  <data name="WorldBossesAnnounceBefore" xml:space="preserve">
+    <value>Announce minutes before</value>
+  </data>
+  <data name="WorldBossesDespawn" xml:space="preserve">
+    <value>Leaves after (minutes)</value>
+  </data>
+  <data name="WorldBossesRankBy" xml:space="preserve">
+    <value>Rank by</value>
+  </data>
+  <data name="WorldBossesRankByPlayer" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="WorldBossesRankByParty" xml:space="preserve">
+    <value>Party</value>
+  </data>
+  <data name="WorldBossesHuntPoints" xml:space="preserve">
+    <value>Boss-hunt points of a kill</value>
+  </data>
+  <data name="WorldBossesTexts" xml:space="preserve">
+    <value>Announcements</value>
+  </data>
+  <data name="WorldBossesSoon" xml:space="preserve">
+    <value>Before the spawn</value>
+  </data>
+  <data name="WorldBossesSpawn" xml:space="preserve">
+    <value>At the spawn</value>
+  </data>
+  <data name="WorldBossesKill" xml:space="preserve">
+    <value>At the kill</value>
+  </data>
+  <data name="WorldBossesEscape" xml:space="preserve">
+    <value>When it leaves</value>
+  </data>
+  <data name="WorldBossesRewards" xml:space="preserve">
+    <value>Rewards by damage (players without damage get nothing)</value>
+  </data>
+  <data name="WorldBossesTop1" xml:space="preserve">
+    <value>Rank 1</value>
+  </data>
+  <data name="WorldBossesTop2" xml:space="preserve">
+    <value>Rank 2</value>
+  </data>
+  <data name="WorldBossesTop3" xml:space="preserve">
+    <value>Rank 3</value>
+  </data>
+  <data name="WorldBossesTop10" xml:space="preserve">
+    <value>Ranks 4 to 10</value>
+  </data>
+  <data name="WorldBossesParticipation" xml:space="preserve">
+    <value>Participation</value>
+  </data>
+  <data name="WorldBossesLastHit" xml:space="preserve">
+    <value>Last hit</value>
+  </data>
+  <data name="WorldBossesMinPercent" xml:space="preserve">
+    <value>Participation: at least % of all damage</value>
+  </data>
+  <data name="WorldBossesMinDamage" xml:space="preserve">
+    <value>or at least this damage (0: off)</value>
+  </data>
+  <data name="WorldBossesTopAlso" xml:space="preserve">
+    <value>The top 10 get the participation reward too</value>
+  </data>
+  <data name="WorldBossesNext" xml:space="preserve">
+    <value>Next spawn</value>
+  </data>
+  <data name="WorldBossesAliveNow" xml:space="preserve">
+    <value>On the map now, leaves at {0}</value>
+  </data>
+  <data name="WorldBossesSpawnNow" xml:space="preserve">
+    <value>Spawn now</value>
+  </data>
+  <data name="WorldBossesSpawnNowHint" xml:space="preserve">
+    <value>Spawns the boss with the saved settings (save your changes first).</value>
+  </data>
+  <data name="WorldBossesSpawned" xml:space="preserve">
+    <value>{0} appeared.</value>
+  </data>
+  <data name="WorldBossesSpawnAlive" xml:space="preserve">
+    <value>{0} is on a map already.</value>
+  </data>
+  <data name="WorldBossesSpawnNoServer" xml:space="preserve">
+    <value>No running game server hosts {0} (or the plug-in is off, or the boss isn't saved yet).</value>
+  </data>
+  <data name="WorldBossesSpawnFailed" xml:space="preserve">
+    <value>{0} couldn't appear: check the monster and map numbers (see the log).</value>
+  </data>
+  <data name="WorldBossesRankings" xml:space="preserve">
+    <value>Weekly rankings</value>
+  </data>
+  <data name="WorldBossesRankingsHint" xml:space="preserve">
+    <value>A week runs from Monday 00:00 (Sydney) to Sunday. When it ends, the top 10 of each ranking get coins once (each grant has its own reference, so nothing is paid twice). Ranks: "rank:coins, ..." for ranks 1 to 10.</value>
+  </data>
+  <data name="WorldBossesBossHunt" xml:space="preserve">
+    <value>Boss hunt (points from world boss kills)</value>
+  </data>
+  <data name="WorldBossesBloodCastle" xml:space="preserve">
+    <value>Blood Castle</value>
+  </data>
+  <data name="WorldBossesDevilSquare" xml:space="preserve">
+    <value>Devil Square</value>
+  </data>
+  <data name="WorldBossesChaosCastle" xml:space="preserve">
+    <value>Chaos Castle</value>
+  </data>
+  <data name="WorldBossesRanks" xml:space="preserve">
+    <value>Coins by rank</value>
+  </data>
+  <data name="WorldBossesPointsFinish" xml:space="preserve">
+    <value>Points for being in it at the end</value>
+  </data>
+  <data name="WorldBossesPointsWin" xml:space="preserve">
+    <value>Points for the win</value>
+  </data>
+  <data name="WorldBossesCastleSiege" xml:space="preserve">
+    <value>Castle siege winners</value>
+  </data>
+  <data name="WorldBossesCoinsPerMember" xml:space="preserve">
+    <value>Coins per member of the winning guild</value>
+  </data>
+  <data name="WorldBossesMasterBonus" xml:space="preserve">
+    <value>Extra coins of the guild master</value>
+  </data>
+  <data name="WorldBossesKills" xml:space="preserve">
+    <value>Recent kills</value>
+  </data>
+  <data name="WorldBossesNoKills" xml:space="preserve">
+    <value>No world boss was killed yet.</value>
+  </data>
+  <data name="WorldBossesKilled" xml:space="preserve">
+    <value>killed</value>
+  </data>
+  <data name="WorldBossesEscaped" xml:space="preserve">
+    <value>left</value>
+  </data>
+  <data name="WorldBossesRank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="WorldBossesCharacter" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="WorldBossesDamage" xml:space="preserve">
+    <value>Damage</value>
+  </data>
+  <data name="WorldBossesShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="WorldBossesPoints" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="WorldBossesTiers" xml:space="preserve">
+    <value>Rewards</value>
+  </data>
+  <data name="WorldBossesSaved" xml:space="preserve">
+    <value>The world bosses were saved.</value>
+  </data>
+  <data name="WorldBossesErrorId" xml:space="preserve">
+    <value>The boss id "{0}" isn't valid (letters, numbers, - and _, up to 40).</value>
+  </data>
+  <data name="WorldBossesErrorDuplicateId" xml:space="preserve">
+    <value>The boss id "{0}" is used twice.</value>
+  </data>
+  <data name="WorldBossesErrorTimes" xml:space="preserve">
+    <value>The times of "{0}" aren't valid (HH:mm, HH:mm).</value>
+  </data>
+  <data name="WorldBossesErrorSpots" xml:space="preserve">
+    <value>The spawn spots of "{0}" aren't valid (x,y; x,y with 0 to 255).</value>
+  </data>
+  <data name="WorldBossesErrorItems" xml:space="preserve">
+    <value>The reward items of "{0}" aren't valid (group number level count; ...).</value>
+  </data>
+  <data name="WorldBossesErrorRanks" xml:space="preserve">
+    <value>The coins by rank of "{0}" aren't valid (rank:coins, ... with ranks 1 to 10).</value>
+  </data>
+  <data name="WorldBossesReload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="WorldBossesRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
 </root>

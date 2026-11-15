@@ -91,6 +91,7 @@ public partial class ConfigNavMenu
             GridEntry<CashShopConfiguration>("oi-dollar"),
             new(Resources.ContentActivation, "content-activation", "oi-circle-check"),
             new(Resources.MissionsAndRewards, "missions-rewards", "oi-star"),
+            new(Resources.WorldBossesAndRankings, "world-bosses-rankings", "oi-bolt"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
             new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),
