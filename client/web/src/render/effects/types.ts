@@ -130,6 +130,7 @@ export type EffectType =
   | 'swellOfMagicPower' // MODEL_SWELL_OF_MAGICPOWER: Expansion of Wizardry (Effect/magic_powerup.bmd)
   | 'arrowsre6' // MODEL_ARROWSRE06: its hand flashes (Effect/arrowsre06.bmd)
   | 'twlight' // BITMAP_TWLIGHT: its twilight ring
+  | 'summon' // MODEL_SUMMON: Recovery's circle (Skill/nightmaresum.bmd)
   | 'raklionBossCrackEffect'; // MODEL_RAKLION_BOSS_CRACKEFFECT: its great crack (Effect/knight_plancrack_grand.bmd)
 
 /** CreateParticle types ported (names as in Data/Effects/ParticleTypes.json, or the texture's file). */

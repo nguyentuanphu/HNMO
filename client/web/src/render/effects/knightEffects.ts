@@ -11,7 +11,7 @@
 //   EffectTypes.json: MODEL_WAVE, MODEL_TAIL, MODEL_SPEAR (their creation values)
 
 import * as THREE from 'three';
-import { angleEuler, randInt, rotateByAngle } from './core.js';
+import { angleEuler, magicScrewAt, randInt, rotateByAngle } from './core.js';
 import type { EffectSystem } from './effectSystem.js';
 import { EXTRA_EFFECTS, EXTRA_JOINTS, EXTRA_PARTICLES } from './extraEffects.js';
 import type { Effect, EffectOwner, EffectType, Joint } from './types.js';
@@ -363,11 +363,24 @@ EXTRA_JOINTS.flare = {
       return true;
     }
     if (o.subType === 23) return spiralSlashInit(o);
+    if (o.subType === 47) { // Recovery's lights: they swirl in around the target and close on it
+      o.light.set(0.7, 0.7, 1);
+      o.counter = randInt(10); // MultiUse
+      o.lifeTime = 30 + o.counter;
+      o.maxTails = 15;
+      o.direction.x = randInt(3000);
+      o.scale = 30;
+      return o.target !== null;
+    }
     return false;
   },
   move: (o, system) => {
     if (o.subType === 23) {
       spiralSlashMove(o, system);
+      return;
+    }
+    if (o.subType === 47) {
+      recoveryLightMove(o, system);
       return;
     }
     if (o.subType === 2) {
@@ -682,3 +695,54 @@ export function strikeOfDestruction(system: EffectSystem, caster: EffectOwner, c
   if (!tile) return;
   system.createEffect('blowOfDestruction', caster.position, caster.angle, tile, 0, caster);
 }
+
+// BITMAP_FLARE SubType 47 (Recovery): on a screw path that tightens from 150 around the target to its chest, 100 up.
+// Followed: CreateJoint / MoveJoint BITMAP_FLARE (47) (ZzzEffectJoint.cpp).
+function recoveryLightMove(o: Joint, system: EffectSystem): void {
+  const target = o.target;
+  if (!target) {
+    o.live = false;
+    return;
+  }
+  const clock = system.time / 40;
+  const frame = (o.index % 2 ? clock : -clock) + o.index * 53731;
+  const dir = magicScrewAt(frame, 1);
+  const life = o.lifeTime * 40 / 30;
+  let along = life < 10 ? life * 7 : life + 60;
+  along = along / (30 + o.counter) * 30;
+  const circle = Math.min(Math.max(0, 40 - life) * 15, 150);
+  const around = o.targetPosition.clone().addScaledVector(dir, circle);
+  const axes = ['x', 'y', 'z'] as const;
+  axes.forEach((axis, k) => {
+    const last = (100 - along) * (target.position[axis] + 25 * Math.cos((o.index * 51231 + k * 3711 + frame / 10) * 0.01));
+    o.position[axis] = (along * around[axis] + last) * 0.01;
+  });
+  o.position.z += 100;
+}
+
+/** Recovery's arrival (ReceiveMagic AT_SKILL_RECOVER): the lights, the nightmare circle and three twilight rings. */
+export function recovery(system: EffectSystem, target: EffectOwner): void {
+  const position = target.position.clone();
+  for (let i = 0; i < 19; i++) system.createJoint('flare', position, position, target.angle, 47, target, 40, 0, 2);
+  const light = new THREE.Vector3(0.3, 0.2, 0.1);
+  system.createEffect('summon', position, target.angle, light, 0);
+  for (let sub = 0; sub < 3; sub++) system.createEffect('twlight', position, target.angle, light, sub);
+}
+
+// MODEL_SUMMON SubType 0 (Skill/nightmaresum.bmd): a circle that turns slowly, brightening for 30 ticks, then fading;
+// both meshes in its light, the second bright.
+EXTRA_EFFECTS.summon = {
+  model: ['Skill', 'nightmaresum.bmd'],
+  create: (o) => {
+    o.lifeTime = 60;
+    o.blendMesh = -2;
+    o.scale = o.subType === 0 ? 0.7 : 1.2;
+    o.angle.z += randInt(360);
+    return true;
+  },
+  move: (o) => {
+    o.light.multiplyScalar(o.lifeTime >= 30 ? 1.03 : 1 / 1.08);
+    o.angle.z += 1;
+    return true;
+  },
+};

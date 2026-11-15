@@ -70,6 +70,7 @@ const ELF: Case[] = [
   { skill: 235, name: 'multi-shot', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'effect:bladeSkill'], shotAt: 200, model: 'bladeSkill', warm: [['Effect', 'bladetonedo.bmd']] },
   { skill: 77, name: 'infinity-arrow', expect: ['effect:infinityArrow', 'effect:infinityArrow1', 'effect:infinityArrow4'], shotAt: 300 },
   { skill: 30, name: 'summon', expect: ['effect:magicGround2', 'joint:jointHealing'], shotAt: 800 },
+  { skill: 234, name: 'recovery', expect: ['joint:flare', 'effect:summon', 'effect:twlight'], shotAt: 800, model: 'summon', warm: [['Skill', 'nightmaresum.bmd']] },
 ];
 
 const GLADIATOR: Case[] = [

@@ -22,7 +22,7 @@ import { RageSkill, rageCreateEffect } from './rageEffects.js';
 import { criticalDamage, fireBurst, manaRays } from './lordEffects.js';
 import { multiShotArrows } from './elfEffects.js';
 import { LordAction, chaoticDiseier, earthshake, electricSpike, fireScream, siegeSkill } from './darkLordEffects.js';
-import { spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
+import { recovery, spiralSlashBlades, strikeOfDestruction } from './knightEffects.js';
 import { playBuffLook } from './buffLooks.js';
 import { cometfall, expansionOfWizardry } from './wizardEffects.js';
 
@@ -94,6 +94,7 @@ export const SkillEffect = {
   MANA_RAYS: 73,
   FIRE_SCREAM: 78,
   EXPANSION_OF_WIZARDRY: 233,
+  RECOVERY: 234,
   LANCE: 45,
   STUN: 67,
   CANCEL_STUN: 68,
@@ -187,6 +188,10 @@ export function playSkillEffect(system: EffectSystem, skill: number, caster: Eff
   }
   if (skill === SkillEffect.INFINITY_ARROW) { // ReceiveMagic: the quiver's light and rings at once
     system.createEffect('infinityArrow', caster.position, caster.angle, caster.light ?? WHITE, 0, caster);
+    return true;
+  }
+  if (skill === SkillEffect.RECOVERY) { // ReceiveMagic AT_SKILL_RECOVER: at the healed target at once
+    recovery(system, target ?? caster);
     return true;
   }
   if (skill === SkillEffect.EXPANSION_OF_WIZARDRY) { // ReceiveMagic: the swell at once, no attack follows

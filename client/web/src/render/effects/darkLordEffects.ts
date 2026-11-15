@@ -676,14 +676,22 @@ function twilightRing(o: Effect, shrink: number): void {
 }
 
 // BITMAP_TWLIGHT SubType 3 (the catalogue gives LifeTime 30, Alpha 0): a turning ring of twilight on the ground.
+// SubTypes 0-2 (the catalogue: LifeTime 80, Scale 8; Recovery's rings) shrink and turn 10, 5 or 15 a tick.
 EXTRA_EFFECTS.twlight = {
   create: (o) => {
+    if (o.subType <= 2) return true;
     if (o.subType !== 3) return false;
     o.pkKey = 0;
     o.startPosition.copy(o.light);
     return o.owner !== null;
   },
   move: (o) => {
+    if (o.subType <= 2) {
+      o.scale -= 0.1;
+      o.angle.z += [10, 5, 15][o.subType];
+      o.direction.set(0, 0, 0);
+      return true;
+    }
     twilightRing(o, 0.15);
     o.angle.z += 10;
     return true;
