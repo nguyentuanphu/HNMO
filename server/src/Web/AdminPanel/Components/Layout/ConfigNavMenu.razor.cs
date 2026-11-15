@@ -90,6 +90,7 @@ public partial class ConfigNavMenu
             GridEntry<CastleSiegeConfiguration>("oi-shield"),
             GridEntry<CashShopConfiguration>("oi-dollar"),
             new(Resources.ContentActivation, "content-activation", "oi-circle-check"),
+            new(Resources.MissionsAndRewards, "missions-rewards", "oi-star"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
             new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),

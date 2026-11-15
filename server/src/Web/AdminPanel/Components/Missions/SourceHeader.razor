@@ -1,0 +1,46 @@
+@using HNMO.DataModel.Configuration
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+@* The on/off switch and the coin type of an earned-coin source. *@
+<div class="d-flex flex-wrap gap-3 align-items-center mb-2">
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="@($"{this.Id}-enabled")" checked="@this.Enabled" @onchange="this.OnEnabledAsync" />
+        <label class="form-check-label" for="@($"{this.Id}-enabled")">@Resources.MissionsOn</label>
+    </div>
+    <div class="d-flex gap-1 align-items-center">
+        <label class="form-label mb-0" for="@($"{this.Id}-coin")">@Resources.CashShopCoinType</label>
+        <select class="form-select form-select-sm" style="width: auto" id="@($"{this.Id}-coin")" value="@this.CoinType" @onchange="this.OnCoinTypeAsync">
+            @foreach (var coinType in Enum.GetValues<CashShopCoinType>())
+            {
+                <option value="@coinType">@CashShopCoinCaption.Get(coinType)</option>
+            }
+        </select>
+    </div>
+</div>
+
+@code {
+    /// <summary>Gets or sets the id prefix of the fields.</summary>
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets a value indicating whether the source is on.</summary>
+    [Parameter]
+    public bool Enabled { get; set; }
+
+    /// <summary>Gets or sets the callback of <see cref="Enabled"/>.</summary>
+    [Parameter]
+    public EventCallback<bool> EnabledChanged { get; set; }
+
+    /// <summary>Gets or sets the coin type.</summary>
+    [Parameter]
+    public CashShopCoinType CoinType { get; set; }
+
+    /// <summary>Gets or sets the callback of <see cref="CoinType"/>.</summary>
+    [Parameter]
+    public EventCallback<CashShopCoinType> CoinTypeChanged { get; set; }
+
+    private Task OnEnabledAsync(ChangeEventArgs e) => this.EnabledChanged.InvokeAsync(e.Value is true || (e.Value is string s && bool.TryParse(s, out var b) && b));
+
+    private Task OnCoinTypeAsync(ChangeEventArgs e) => Enum.TryParse<CashShopCoinType>(e.Value?.ToString(), out var type) ? this.CoinTypeChanged.InvokeAsync(type) : Task.CompletedTask;
+}

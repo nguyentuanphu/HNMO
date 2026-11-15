@@ -8960,5 +8960,582 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("ChatLogKindNotice", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Missions and rewards.
+        /// </summary>
+        public static string MissionsAndRewards {
+            get {
+                return ResourceManager.GetString("MissionsAndRewards", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The daily and weekly missions, the daily streak and every source of earned coins. Players see them i....
+        /// </summary>
+        public static string MissionsPageDescription {
+            get {
+                return ResourceManager.GetString("MissionsPageDescription", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The missions plug-in isn't installed yet: start the game server once, then open this page again..
+        /// </summary>
+        public static string MissionsNotInstalled {
+            get {
+                return ResourceManager.GetString("MissionsNotInstalled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string MissionsGeneral {
+            get {
+                return ResourceManager.GetString("MissionsGeneral", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Missions and earned coins are on.
+        /// </summary>
+        public static string MissionsActive {
+            get {
+                return ResourceManager.GetString("MissionsActive", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Time zone.
+        /// </summary>
+        public static string MissionsTimeZone {
+            get {
+                return ResourceManager.GetString("MissionsTimeZone", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Reset hour.
+        /// </summary>
+        public static string MissionsResetHour {
+            get {
+                return ResourceManager.GetString("MissionsResetHour", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Earned coins per account and day (cap).
+        /// </summary>
+        public static string MissionsEarnedDailyCap {
+            get {
+                return ResourceManager.GetString("MissionsEarnedDailyCap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Progress file.
+        /// </summary>
+        public static string MissionsFile {
+            get {
+                return ResourceManager.GetString("MissionsFile", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Daily missions start again every day at the reset hour (Sydney time by default), weekly ones on Mond....
+        /// </summary>
+        public static string MissionsGeneralHint {
+            get {
+                return ResourceManager.GetString("MissionsGeneralHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Missions.
+        /// </summary>
+        public static string MissionsList {
+            get {
+                return ResourceManager.GetString("MissionsList", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The id keeps the players' progress: don't change it for a running mission. Items: "group number leve....
+        /// </summary>
+        public static string MissionsListHint {
+            get {
+                return ResourceManager.GetString("MissionsListHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to On.
+        /// </summary>
+        public static string MissionsOn {
+            get {
+                return ResourceManager.GetString("MissionsOn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string MissionsId {
+            get {
+                return ResourceManager.GetString("MissionsId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Period.
+        /// </summary>
+        public static string MissionsPeriod {
+            get {
+                return ResourceManager.GetString("MissionsPeriod", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Daily.
+        /// </summary>
+        public static string MissionsDaily {
+            get {
+                return ResourceManager.GetString("MissionsDaily", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Weekly.
+        /// </summary>
+        public static string MissionsWeekly {
+            get {
+                return ResourceManager.GetString("MissionsWeekly", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string MissionsKind {
+            get {
+                return ResourceManager.GetString("MissionsKind", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Target.
+        /// </summary>
+        public static string MissionsTarget {
+            get {
+                return ResourceManager.GetString("MissionsTarget", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Monster.
+        /// </summary>
+        public static string MissionsMonster {
+            get {
+                return ResourceManager.GetString("MissionsMonster", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Monster number which counts; 0 counts every monster..
+        /// </summary>
+        public static string MissionsMonsterHint {
+            get {
+                return ResourceManager.GetString("MissionsMonsterHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string MissionsMap {
+            get {
+                return ResourceManager.GetString("MissionsMap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Map number where kills count; -1 counts every map..
+        /// </summary>
+        public static string MissionsMapHint {
+            get {
+                return ResourceManager.GetString("MissionsMapHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Event.
+        /// </summary>
+        public static string MissionsEvent {
+            get {
+                return ResourceManager.GetString("MissionsEvent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Title (English).
+        /// </summary>
+        public static string MissionsTitleEn {
+            get {
+                return ResourceManager.GetString("MissionsTitleEn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Title (Vietnamese).
+        /// </summary>
+        public static string MissionsTitleVi {
+            get {
+                return ResourceManager.GetString("MissionsTitleVi", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Reward (zen, coins, coin type, items).
+        /// </summary>
+        public static string MissionsReward {
+            get {
+                return ResourceManager.GetString("MissionsReward", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add a mission.
+        /// </summary>
+        public static string MissionsAdd {
+            get {
+                return ResourceManager.GetString("MissionsAdd", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Kill monsters.
+        /// </summary>
+        public static string MissionsKindKill {
+            get {
+                return ResourceManager.GetString("MissionsKindKill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Take part in an event to the end.
+        /// </summary>
+        public static string MissionsKindFinishEvent {
+            get {
+                return ResourceManager.GetString("MissionsKindFinishEvent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Win an event.
+        /// </summary>
+        public static string MissionsKindWinEvent {
+            get {
+                return ResourceManager.GetString("MissionsKindWinEvent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Successful chaos machine mixes.
+        /// </summary>
+        public static string MissionsKindMix {
+            get {
+                return ResourceManager.GetString("MissionsKindMix", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Pick up zen.
+        /// </summary>
+        public static string MissionsKindZen {
+            get {
+                return ResourceManager.GetString("MissionsKindZen", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Gain levels.
+        /// </summary>
+        public static string MissionsKindLevel {
+            get {
+                return ResourceManager.GetString("MissionsKindLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Minutes in the game.
+        /// </summary>
+        public static string MissionsKindMinutes {
+            get {
+                return ResourceManager.GetString("MissionsKindMinutes", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Any event.
+        /// </summary>
+        public static string MissionsEventAny {
+            get {
+                return ResourceManager.GetString("MissionsEventAny", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Blood Castle.
+        /// </summary>
+        public static string MissionsEventBloodCastle {
+            get {
+                return ResourceManager.GetString("MissionsEventBloodCastle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Devil Square.
+        /// </summary>
+        public static string MissionsEventDevilSquare {
+            get {
+                return ResourceManager.GetString("MissionsEventDevilSquare", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Chaos Castle.
+        /// </summary>
+        public static string MissionsEventChaosCastle {
+            get {
+                return ResourceManager.GetString("MissionsEventChaosCastle", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Zen.
+        /// </summary>
+        public static string MissionsZen {
+            get {
+                return ResourceManager.GetString("MissionsZen", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins.
+        /// </summary>
+        public static string MissionsCoins {
+            get {
+                return ResourceManager.GetString("MissionsCoins", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string MissionsItems {
+            get {
+                return ResourceManager.GetString("MissionsItems", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to group number level count; ... (e.g. 14 13 0 1).
+        /// </summary>
+        public static string MissionsItemsHint {
+            get {
+                return ResourceManager.GetString("MissionsItemsHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Daily streak.
+        /// </summary>
+        public static string MissionsStreak {
+            get {
+                return ResourceManager.GetString("MissionsStreak", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Daily missions for a streak day (0 = all).
+        /// </summary>
+        public static string MissionsStreakRequired {
+            get {
+                return ResourceManager.GetString("MissionsStreakRequired", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Bonus every … days.
+        /// </summary>
+        public static string MissionsStreakBonusDay {
+            get {
+                return ResourceManager.GetString("MissionsStreakBonusDay", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Streak bonus.
+        /// </summary>
+        public static string MissionsStreakBonus {
+            get {
+                return ResourceManager.GetString("MissionsStreakBonus", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Earned coins.
+        /// </summary>
+        public static string MissionsEarnedCoins {
+            get {
+                return ResourceManager.GetString("MissionsEarnedCoins", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Each source has its own switch and coin type: earned coins are Goblin Points by default, apart from ....
+        /// </summary>
+        public static string MissionsEarnedCoinsHint {
+            get {
+                return ResourceManager.GetString("MissionsEarnedCoinsHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Online time.
+        /// </summary>
+        public static string MissionsOnlineTime {
+            get {
+                return ResourceManager.GetString("MissionsOnlineTime", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins per full hour.
+        /// </summary>
+        public static string MissionsCoinsPerHour {
+            get {
+                return ResourceManager.GetString("MissionsCoinsPerHour", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to At most per day.
+        /// </summary>
+        public static string MissionsOnlineCap {
+            get {
+                return ResourceManager.GetString("MissionsOnlineCap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Time with auto play counts half.
+        /// </summary>
+        public static string MissionsAutoPlayHalf {
+            get {
+                return ResourceManager.GetString("MissionsAutoPlayHalf", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Level milestones and resets (once per character).
+        /// </summary>
+        public static string MissionsMilestones {
+            get {
+                return ResourceManager.GetString("MissionsMilestones", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Levels and coins (level:coins, …).
+        /// </summary>
+        public static string MissionsMilestoneLevels {
+            get {
+                return ResourceManager.GetString("MissionsMilestoneLevels", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins per reset.
+        /// </summary>
+        public static string MissionsCoinsPerReset {
+            get {
+                return ResourceManager.GetString("MissionsCoinsPerReset", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Invite a friend.
+        /// </summary>
+        public static string MissionsInvite {
+            get {
+                return ResourceManager.GetString("MissionsInvite", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Friend's level.
+        /// </summary>
+        public static string MissionsInviteLevel {
+            get {
+                return ResourceManager.GetString("MissionsInviteLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins for the inviter.
+        /// </summary>
+        public static string MissionsInviterCoins {
+            get {
+                return ResourceManager.GetString("MissionsInviterCoins", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins for the friend.
+        /// </summary>
+        public static string MissionsInvitedCoins {
+            get {
+                return ResourceManager.GetString("MissionsInvitedCoins", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to No reward for the same network address (only known for desktop players; the web game's players come ....
+        /// </summary>
+        public static string MissionsInviteSameAddress {
+            get {
+                return ResourceManager.GetString("MissionsInviteSameAddress", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly login calendar.
+        /// </summary>
+        public static string MissionsCalendar {
+            get {
+                return ResourceManager.GetString("MissionsCalendar", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins of an ordinary day.
+        /// </summary>
+        public static string MissionsCalendarDefault {
+            get {
+                return ResourceManager.GetString("MissionsCalendarDefault", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Bigger days (day:coins, …).
+        /// </summary>
+        public static string MissionsCalendarDays {
+            get {
+                return ResourceManager.GetString("MissionsCalendarDays", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Discard changes.
+        /// </summary>
+        public static string MissionsReload {
+            get {
+                return ResourceManager.GetString("MissionsReload", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The missions and rewards were saved..
+        /// </summary>
+        public static string MissionsSaved {
+            get {
+                return ResourceManager.GetString("MissionsSaved", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to "{0}" isn't a valid id (letters, digits, - and _; at most 40)..
+        /// </summary>
+        public static string MissionsErrorId {
+            get {
+                return ResourceManager.GetString("MissionsErrorId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The id "{0}" is used twice..
+        /// </summary>
+        public static string MissionsErrorDuplicateId {
+            get {
+                return ResourceManager.GetString("MissionsErrorDuplicateId", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The target of "{0}" must be at least 1..
+        /// </summary>
+        public static string MissionsErrorTarget {
+            get {
+                return ResourceManager.GetString("MissionsErrorTarget", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The items of "{0}" aren't valid (group number level count; …)..
+        /// </summary>
+        public static string MissionsErrorItems {
+            get {
+                return ResourceManager.GetString("MissionsErrorItems", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The milestone levels aren't valid (level:coins, …)..
+        /// </summary>
+        public static string MissionsErrorLevels {
+            get {
+                return ResourceManager.GetString("MissionsErrorLevels", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The calendar days aren't valid (day:coins, … with days 1 to 31)..
+        /// </summary>
+        public static string MissionsErrorDays {
+            get {
+                return ResourceManager.GetString("MissionsErrorDays", resourceCulture);
+            }
+        }
     }
 }

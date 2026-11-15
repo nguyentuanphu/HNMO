@@ -3003,4 +3003,220 @@
   <data name="ChatLogKindNotice" xml:space="preserve">
     <value>Thông báo</value>
   </data>
+  <data name="MissionsAndRewards" xml:space="preserve">
+    <value>Nhiệm vụ và phần thưởng</value>
+  </data>
+  <data name="MissionsPageDescription" xml:space="preserve">
+    <value>Nhiệm vụ hằng ngày, hằng tuần, chuỗi ngày liên tục và mọi nguồn xu kiếm được. Người chơi xem chúng trong cửa sổ nhiệm vụ của trò chơi web (J) và trên trang web. Thay đổi có hiệu lực ngay trong trò chơi đang chạy.</value>
+  </data>
+  <data name="MissionsNotInstalled" xml:space="preserve">
+    <value>Plugin nhiệm vụ chưa được cài đặt: hãy khởi động máy chủ trò chơi một lần rồi mở lại trang này.</value>
+  </data>
+  <data name="MissionsGeneral" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="MissionsActive" xml:space="preserve">
+    <value>Bật nhiệm vụ và xu kiếm được</value>
+  </data>
+  <data name="MissionsTimeZone" xml:space="preserve">
+    <value>Múi giờ</value>
+  </data>
+  <data name="MissionsResetHour" xml:space="preserve">
+    <value>Giờ đặt lại</value>
+  </data>
+  <data name="MissionsEarnedDailyCap" xml:space="preserve">
+    <value>Giới hạn xu kiếm được mỗi tài khoản mỗi ngày</value>
+  </data>
+  <data name="MissionsFile" xml:space="preserve">
+    <value>Tệp tiến độ</value>
+  </data>
+  <data name="MissionsGeneralHint" xml:space="preserve">
+    <value>Nhiệm vụ hằng ngày bắt đầu lại mỗi ngày vào giờ đặt lại (mặc định theo giờ Sydney), nhiệm vụ hằng tuần vào thứ Hai lúc đó. Giới hạn tính thời gian trực tuyến, mốc cấp độ, lời mời và lịch đăng nhập; phần thưởng một lần vượt giới hạn sẽ chờ đến ngày hôm sau. Phần thưởng nhiệm vụ không bị tính vào giới hạn.</value>
+  </data>
+  <data name="MissionsList" xml:space="preserve">
+    <value>Nhiệm vụ</value>
+  </data>
+  <data name="MissionsListHint" xml:space="preserve">
+    <value>Mã (id) giữ tiến độ của người chơi: đừng đổi mã của nhiệm vụ đang chạy. Vật phẩm: "nhóm số cấp số_lượng", nhiều vật phẩm cách nhau bằng ";" (ví dụ "14 13 0 1" là Ngọc Ước Nguyện).</value>
+  </data>
+  <data name="MissionsOn" xml:space="preserve">
+    <value>Bật</value>
+  </data>
+  <data name="MissionsId" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="MissionsPeriod" xml:space="preserve">
+    <value>Chu kỳ</value>
+  </data>
+  <data name="MissionsDaily" xml:space="preserve">
+    <value>Hằng ngày</value>
+  </data>
+  <data name="MissionsWeekly" xml:space="preserve">
+    <value>Hằng tuần</value>
+  </data>
+  <data name="MissionsKind" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="MissionsTarget" xml:space="preserve">
+    <value>Mục tiêu</value>
+  </data>
+  <data name="MissionsMonster" xml:space="preserve">
+    <value>Quái vật</value>
+  </data>
+  <data name="MissionsMonsterHint" xml:space="preserve">
+    <value>Số hiệu quái vật được tính; 0 là mọi quái vật.</value>
+  </data>
+  <data name="MissionsMap" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="MissionsMapHint" xml:space="preserve">
+    <value>Số hiệu bản đồ được tính; -1 là mọi bản đồ.</value>
+  </data>
+  <data name="MissionsEvent" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="MissionsTitleEn" xml:space="preserve">
+    <value>Tên (tiếng Anh)</value>
+  </data>
+  <data name="MissionsTitleVi" xml:space="preserve">
+    <value>Tên (tiếng Việt)</value>
+  </data>
+  <data name="MissionsReward" xml:space="preserve">
+    <value>Phần thưởng (Zen, xu, loại xu, vật phẩm)</value>
+  </data>
+  <data name="MissionsAdd" xml:space="preserve">
+    <value>Thêm nhiệm vụ</value>
+  </data>
+  <data name="MissionsKindKill" xml:space="preserve">
+    <value>Hạ quái vật</value>
+  </data>
+  <data name="MissionsKindFinishEvent" xml:space="preserve">
+    <value>Tham gia sự kiện đến cuối</value>
+  </data>
+  <data name="MissionsKindWinEvent" xml:space="preserve">
+    <value>Chiến thắng sự kiện</value>
+  </data>
+  <data name="MissionsKindMix" xml:space="preserve">
+    <value>Pha chế thành công ở máy Chaos</value>
+  </data>
+  <data name="MissionsKindZen" xml:space="preserve">
+    <value>Nhặt Zen</value>
+  </data>
+  <data name="MissionsKindLevel" xml:space="preserve">
+    <value>Lên cấp</value>
+  </data>
+  <data name="MissionsKindMinutes" xml:space="preserve">
+    <value>Số phút trong trò chơi</value>
+  </data>
+  <data name="MissionsEventAny" xml:space="preserve">
+    <value>Mọi sự kiện</value>
+  </data>
+  <data name="MissionsEventBloodCastle" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="MissionsEventDevilSquare" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="MissionsEventChaosCastle" xml:space="preserve">
+    <value>Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="MissionsZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="MissionsCoins" xml:space="preserve">
+    <value>Xu</value>
+  </data>
+  <data name="MissionsItems" xml:space="preserve">
+    <value>Vật phẩm</value>
+  </data>
+  <data name="MissionsItemsHint" xml:space="preserve">
+    <value>nhóm số cấp số_lượng; ... (ví dụ 14 13 0 1)</value>
+  </data>
+  <data name="MissionsStreak" xml:space="preserve">
+    <value>Chuỗi ngày liên tục</value>
+  </data>
+  <data name="MissionsStreakRequired" xml:space="preserve">
+    <value>Số nhiệm vụ ngày cho một ngày chuỗi (0 = tất cả)</value>
+  </data>
+  <data name="MissionsStreakBonusDay" xml:space="preserve">
+    <value>Thưởng mỗi … ngày</value>
+  </data>
+  <data name="MissionsStreakBonus" xml:space="preserve">
+    <value>Thưởng chuỗi ngày</value>
+  </data>
+  <data name="MissionsEarnedCoins" xml:space="preserve">
+    <value>Xu kiếm được</value>
+  </data>
+  <data name="MissionsEarnedCoinsHint" xml:space="preserve">
+    <value>Mỗi nguồn có công tắc và loại xu riêng: xu kiếm được mặc định là Goblin Points, tách biệt với W Coin trả phí. Mọi lần cộng xu đều nằm trong lịch sử xu của tài khoản kèm lý do.</value>
+  </data>
+  <data name="MissionsOnlineTime" xml:space="preserve">
+    <value>Thời gian trực tuyến</value>
+  </data>
+  <data name="MissionsCoinsPerHour" xml:space="preserve">
+    <value>Xu mỗi giờ trọn vẹn</value>
+  </data>
+  <data name="MissionsOnlineCap" xml:space="preserve">
+    <value>Tối đa mỗi ngày</value>
+  </data>
+  <data name="MissionsAutoPlayHalf" xml:space="preserve">
+    <value>Thời gian tự động chơi tính một nửa</value>
+  </data>
+  <data name="MissionsMilestones" xml:space="preserve">
+    <value>Mốc cấp độ và reset (một lần mỗi nhân vật)</value>
+  </data>
+  <data name="MissionsMilestoneLevels" xml:space="preserve">
+    <value>Cấp và xu (cấp:xu, …)</value>
+  </data>
+  <data name="MissionsCoinsPerReset" xml:space="preserve">
+    <value>Xu mỗi lần reset</value>
+  </data>
+  <data name="MissionsInvite" xml:space="preserve">
+    <value>Mời bạn bè</value>
+  </data>
+  <data name="MissionsInviteLevel" xml:space="preserve">
+    <value>Cấp của bạn</value>
+  </data>
+  <data name="MissionsInviterCoins" xml:space="preserve">
+    <value>Xu cho người mời</value>
+  </data>
+  <data name="MissionsInvitedCoins" xml:space="preserve">
+    <value>Xu cho người được mời</value>
+  </data>
+  <data name="MissionsInviteSameAddress" xml:space="preserve">
+    <value>Không thưởng khi cùng địa chỉ mạng (chỉ biết được với người chơi bản máy tính; người chơi web đi qua cầu nối)</value>
+  </data>
+  <data name="MissionsCalendar" xml:space="preserve">
+    <value>Lịch đăng nhập hằng tháng</value>
+  </data>
+  <data name="MissionsCalendarDefault" xml:space="preserve">
+    <value>Xu của một ngày thường</value>
+  </data>
+  <data name="MissionsCalendarDays" xml:space="preserve">
+    <value>Ngày thưởng lớn (ngày:xu, …)</value>
+  </data>
+  <data name="MissionsReload" xml:space="preserve">
+    <value>Hủy thay đổi</value>
+  </data>
+  <data name="MissionsSaved" xml:space="preserve">
+    <value>Đã lưu nhiệm vụ và phần thưởng.</value>
+  </data>
+  <data name="MissionsErrorId" xml:space="preserve">
+    <value>"{0}" không phải mã hợp lệ (chữ, số, - và _; tối đa 40).</value>
+  </data>
+  <data name="MissionsErrorDuplicateId" xml:space="preserve">
+    <value>Mã "{0}" bị dùng hai lần.</value>
+  </data>
+  <data name="MissionsErrorTarget" xml:space="preserve">
+    <value>Mục tiêu của "{0}" phải ít nhất là 1.</value>
+  </data>
+  <data name="MissionsErrorItems" xml:space="preserve">
+    <value>Vật phẩm của "{0}" không hợp lệ (nhóm số cấp số_lượng; …).</value>
+  </data>
+  <data name="MissionsErrorLevels" xml:space="preserve">
+    <value>Mốc cấp độ không hợp lệ (cấp:xu, …).</value>
+  </data>
+  <data name="MissionsErrorDays" xml:space="preserve">
+    <value>Ngày của lịch không hợp lệ (ngày:xu, … với ngày từ 1 đến 31).</value>
+  </data>
 </root>
