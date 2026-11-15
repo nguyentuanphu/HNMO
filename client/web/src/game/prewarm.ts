@@ -32,7 +32,20 @@ export async function warmObject({ renderer, camera, scene }: Warmer, object: TH
   });
   object.updateMatrixWorld(true);
   await renderer.compileAsync(object, camera, scene);
+  // One draw into a 1x1 target uploads its buffers and bone texture, so the first frame on screen only draws.
+  if (!object.parent) {
+    target ??= new THREE.WebGLRenderTarget(1, 1);
+    const previous = renderer.getRenderTarget();
+    offscreen.add(object);
+    renderer.setRenderTarget(target);
+    renderer.render(offscreen, camera);
+    renderer.setRenderTarget(previous);
+    offscreen.remove(object);
+  }
 }
+
+let target: THREE.WebGLRenderTarget | null = null;
+const offscreen = new THREE.Scene();
 
 /**
  * Builds one character of each look the map's monsters and NPCs appear with (Monsters.json "maps"), off screen, and
