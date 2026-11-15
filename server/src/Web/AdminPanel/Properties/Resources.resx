@@ -4076,4 +4076,244 @@
   <data name="CommunityKindTopRaceWinner" xml:space="preserve">
     <value>Top race winners</value>
   </data>
+  <data name="TopRacesPage" xml:space="preserve">
+    <value>Top races</value>
+  </data>
+  <data name="TopRacesPageDescription" xml:space="preserve">
+    <value>Races by day, week, month or between two dates (Sydney time) with prizes for the best ranks, paid once when a race ends. Coins go to the account at once; zen and items wait in the game until the bag has room. Saving applies at once.</value>
+  </data>
+  <data name="TopRacesNotInstalled" xml:space="preserve">
+    <value>The top races plug-in isn't installed yet: start the game server once, then reload this page.</value>
+  </data>
+  <data name="TopRacesGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="TopRacesActive" xml:space="preserve">
+    <value>Top races are on</value>
+  </data>
+  <data name="TopRacesAnnounceInGame" xml:space="preserve">
+    <value>Announce the start and end of each race to everyone in the game (a golden notice)</value>
+  </data>
+  <data name="TopRacesAnnounceOnCommunity" xml:space="preserve">
+    <value>Post the start and the winners through the community (Discord and the website's highlights; each post kind is set on the Community page)</value>
+  </data>
+  <data name="TopRacesTimeZone" xml:space="preserve">
+    <value>Time zone (IANA name)</value>
+  </data>
+  <data name="TopRacesHistoryKept" xml:space="preserve">
+    <value>Finished races kept</value>
+  </data>
+  <data name="TopRacesFile" xml:space="preserve">
+    <value>State file</value>
+  </data>
+  <data name="TopRacesStartTextEn" xml:space="preserve">
+    <value>Start notice (English)</value>
+  </data>
+  <data name="TopRacesStartTextVi" xml:space="preserve">
+    <value>Start notice (Vietnamese)</value>
+  </data>
+  <data name="TopRacesEndTextEn" xml:space="preserve">
+    <value>End notice (English)</value>
+  </data>
+  <data name="TopRacesEndTextVi" xml:space="preserve">
+    <value>End notice (Vietnamese)</value>
+  </data>
+  <data name="TopRacesTextsHint" xml:space="preserve">
+    <value>Placeholders: {race}, {end} (start notice); {race}, {winner}, {value} (end notice).</value>
+  </data>
+  <data name="TopRacesRaces" xml:space="preserve">
+    <value>Races</value>
+  </data>
+  <data name="TopRacesRacesHint" xml:space="preserve">
+    <value>A race counts only while it runs and is on. The id keeps the standings: don't change it while a race runs. Turning a race off or removing it ends it without prizes.</value>
+  </data>
+  <data name="TopRacesId" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="TopRacesTitleEn" xml:space="preserve">
+    <value>Title (English)</value>
+  </data>
+  <data name="TopRacesTitleVi" xml:space="preserve">
+    <value>Title (Vietnamese)</value>
+  </data>
+  <data name="TopRacesKind" xml:space="preserve">
+    <value>Counts</value>
+  </data>
+  <data name="TopRacesKindResetsGained" xml:space="preserve">
+    <value>Resets done</value>
+  </data>
+  <data name="TopRacesKindLevelsGained" xml:space="preserve">
+    <value>Levels gained</value>
+  </data>
+  <data name="TopRacesKindLevelReached" xml:space="preserve">
+    <value>Highest level reached</value>
+  </data>
+  <data name="TopRacesKindBossHuntPoints" xml:space="preserve">
+    <value>Boss-hunt points</value>
+  </data>
+  <data name="TopRacesKindPkKills" xml:space="preserve">
+    <value>Players defeated (PK)</value>
+  </data>
+  <data name="TopRacesKindEventWins" xml:space="preserve">
+    <value>Event wins</value>
+  </data>
+  <data name="TopRacesKindGuildPoints" xml:space="preserve">
+    <value>Guild points (guilds)</value>
+  </data>
+  <data name="TopRacesKindMonsterKills" xml:space="preserve">
+    <value>Monsters defeated</value>
+  </data>
+  <data name="TopRacesKindOnlineMinutes" xml:space="preserve">
+    <value>Minutes in the game</value>
+  </data>
+  <data name="TopRacesEvent" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="TopRacesEventAny" xml:space="preserve">
+    <value>Any (Blood Castle, Devil Square, Chaos Castle)</value>
+  </data>
+  <data name="TopRacesEventBloodCastle" xml:space="preserve">
+    <value>Blood Castle</value>
+  </data>
+  <data name="TopRacesEventDevilSquare" xml:space="preserve">
+    <value>Devil Square</value>
+  </data>
+  <data name="TopRacesEventChaosCastle" xml:space="preserve">
+    <value>Chaos Castle</value>
+  </data>
+  <data name="TopRacesScope" xml:space="preserve">
+    <value>Classes</value>
+  </data>
+  <data name="TopRacesScopeAll" xml:space="preserve">
+    <value>All classes, one table</value>
+  </data>
+  <data name="TopRacesScopeOneClass" xml:space="preserve">
+    <value>One class only</value>
+  </data>
+  <data name="TopRacesScopePerClass" xml:space="preserve">
+    <value>A table per class</value>
+  </data>
+  <data name="TopRacesClass" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="TopRacesClassDarkWizard" xml:space="preserve">
+    <value>Dark Wizard</value>
+  </data>
+  <data name="TopRacesClassDarkKnight" xml:space="preserve">
+    <value>Dark Knight</value>
+  </data>
+  <data name="TopRacesClassFairyElf" xml:space="preserve">
+    <value>Fairy Elf</value>
+  </data>
+  <data name="TopRacesClassMagicGladiator" xml:space="preserve">
+    <value>Magic Gladiator</value>
+  </data>
+  <data name="TopRacesClassDarkLord" xml:space="preserve">
+    <value>Dark Lord</value>
+  </data>
+  <data name="TopRacesClassSummoner" xml:space="preserve">
+    <value>Summoner</value>
+  </data>
+  <data name="TopRacesClassRageFighter" xml:space="preserve">
+    <value>Rage Fighter</value>
+  </data>
+  <data name="TopRacesPeriod" xml:space="preserve">
+    <value>When</value>
+  </data>
+  <data name="TopRacesPeriodDaily" xml:space="preserve">
+    <value>Every day</value>
+  </data>
+  <data name="TopRacesPeriodWeekly" xml:space="preserve">
+    <value>Every week (Monday)</value>
+  </data>
+  <data name="TopRacesPeriodMonthly" xml:space="preserve">
+    <value>Every month</value>
+  </data>
+  <data name="TopRacesPeriodCustom" xml:space="preserve">
+    <value>Between two dates</value>
+  </data>
+  <data name="TopRacesStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="TopRacesEnd" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="TopRacesCustomHint" xml:space="preserve">
+    <value>Dates as yyyy-MM-dd HH:mm on the Sydney clock (daylight saving included); a time in the skipped hour starts at 03:00.</value>
+  </data>
+  <data name="TopRacesGuildHint" xml:space="preserve">
+    <value>A guild race ranks guilds by the guild experience they earn during the race; every member gets the prize.</value>
+  </data>
+  <data name="TopRacesMinimum" xml:space="preserve">
+    <value>Minimum for a prize</value>
+  </data>
+  <data name="TopRacesCoins" xml:space="preserve">
+    <value>Coins</value>
+  </data>
+  <data name="TopRacesZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="TopRacesAddPrize" xml:space="preserve">
+    <value>Add prize</value>
+  </data>
+  <data name="TopRacesAddRace" xml:space="preserve">
+    <value>Add race</value>
+  </data>
+  <data name="TopRacesSaved" xml:space="preserve">
+    <value>The top races were saved.</value>
+  </data>
+  <data name="TopRacesStandings" xml:space="preserve">
+    <value>Live standings</value>
+  </data>
+  <data name="TopRacesNoneRunning" xml:space="preserve">
+    <value>No race is running.</value>
+  </data>
+  <data name="TopRacesEnds" xml:space="preserve">
+    <value>ends {0} (Sydney)</value>
+  </data>
+  <data name="TopRacesNobodyYet" xml:space="preserve">
+    <value>Nobody yet.</value>
+  </data>
+  <data name="TopRacesNobody" xml:space="preserve">
+    <value>Nobody took part.</value>
+  </data>
+  <data name="TopRacesName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="TopRacesValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="TopRacesPrize" xml:space="preserve">
+    <value>Prize</value>
+  </data>
+  <data name="TopRacesUpcoming" xml:space="preserve">
+    <value>Coming races</value>
+  </data>
+  <data name="TopRacesHistory" xml:space="preserve">
+    <value>Past winners</value>
+  </data>
+  <data name="TopRacesNoHistory" xml:space="preserve">
+    <value>No race has finished yet.</value>
+  </data>
+  <data name="TopRacesPaid" xml:space="preserve">
+    <value>paid</value>
+  </data>
+  <data name="TopRacesNotPaid" xml:space="preserve">
+    <value>being paid</value>
+  </data>
+  <data name="TopRacesErrorId" xml:space="preserve">
+    <value>The race id "{0}" may only have letters, digits, - and _ (at most 40).</value>
+  </data>
+  <data name="TopRacesErrorDuplicateId" xml:space="preserve">
+    <value>The race id "{0}" is used twice.</value>
+  </data>
+  <data name="TopRacesErrorTitle" xml:space="preserve">
+    <value>The race "{0}" needs an English title.</value>
+  </data>
+  <data name="TopRacesErrorDates" xml:space="preserve">
+    <value>The race "{0}" needs a valid start and an end after it (yyyy-MM-dd HH:mm).</value>
+  </data>
+  <data name="TopRacesErrorRanks" xml:space="preserve">
+    <value>The race "{0}": the ranks {1}-{2} overlap or are outside 1-100.</value>
+  </data>
 </root>

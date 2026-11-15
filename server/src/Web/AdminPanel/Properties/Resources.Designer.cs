@@ -11982,5 +11982,725 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("CommunityKindTopRaceWinner", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Top races.
+        /// </summary>
+        public static string TopRacesPage {
+            get {
+                return ResourceManager.GetString("TopRacesPage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Races by day, week, month or between two dates (Sydney time) with prizes for the best ranks, paid once when a race ends. Coins go to the account at once; zen and items wait in the game until the bag has room. Saving applies at once..
+        /// </summary>
+        public static string TopRacesPageDescription {
+            get {
+                return ResourceManager.GetString("TopRacesPageDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The top races plug-in isn't installed yet: start the game server once, then reload this page..
+        /// </summary>
+        public static string TopRacesNotInstalled {
+            get {
+                return ResourceManager.GetString("TopRacesNotInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string TopRacesGeneral {
+            get {
+                return ResourceManager.GetString("TopRacesGeneral", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Top races are on.
+        /// </summary>
+        public static string TopRacesActive {
+            get {
+                return ResourceManager.GetString("TopRacesActive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Announce the start and end of each race to everyone in the game (a golden notice).
+        /// </summary>
+        public static string TopRacesAnnounceInGame {
+            get {
+                return ResourceManager.GetString("TopRacesAnnounceInGame", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Post the start and the winners through the community (Discord and the website's highlights; each post kind is set on the Community page).
+        /// </summary>
+        public static string TopRacesAnnounceOnCommunity {
+            get {
+                return ResourceManager.GetString("TopRacesAnnounceOnCommunity", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Time zone (IANA name).
+        /// </summary>
+        public static string TopRacesTimeZone {
+            get {
+                return ResourceManager.GetString("TopRacesTimeZone", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Finished races kept.
+        /// </summary>
+        public static string TopRacesHistoryKept {
+            get {
+                return ResourceManager.GetString("TopRacesHistoryKept", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to State file.
+        /// </summary>
+        public static string TopRacesFile {
+            get {
+                return ResourceManager.GetString("TopRacesFile", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start notice (English).
+        /// </summary>
+        public static string TopRacesStartTextEn {
+            get {
+                return ResourceManager.GetString("TopRacesStartTextEn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start notice (Vietnamese).
+        /// </summary>
+        public static string TopRacesStartTextVi {
+            get {
+                return ResourceManager.GetString("TopRacesStartTextVi", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to End notice (English).
+        /// </summary>
+        public static string TopRacesEndTextEn {
+            get {
+                return ResourceManager.GetString("TopRacesEndTextEn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to End notice (Vietnamese).
+        /// </summary>
+        public static string TopRacesEndTextVi {
+            get {
+                return ResourceManager.GetString("TopRacesEndTextVi", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Placeholders: {race}, {end} (start notice); {race}, {winner}, {value} (end notice)..
+        /// </summary>
+        public static string TopRacesTextsHint {
+            get {
+                return ResourceManager.GetString("TopRacesTextsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Races.
+        /// </summary>
+        public static string TopRacesRaces {
+            get {
+                return ResourceManager.GetString("TopRacesRaces", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A race counts only while it runs and is on. The id keeps the standings: don't change it while a race runs. Turning a race off or removing it ends it without prizes..
+        /// </summary>
+        public static string TopRacesRacesHint {
+            get {
+                return ResourceManager.GetString("TopRacesRacesHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string TopRacesId {
+            get {
+                return ResourceManager.GetString("TopRacesId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Title (English).
+        /// </summary>
+        public static string TopRacesTitleEn {
+            get {
+                return ResourceManager.GetString("TopRacesTitleEn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Title (Vietnamese).
+        /// </summary>
+        public static string TopRacesTitleVi {
+            get {
+                return ResourceManager.GetString("TopRacesTitleVi", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Counts.
+        /// </summary>
+        public static string TopRacesKind {
+            get {
+                return ResourceManager.GetString("TopRacesKind", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Resets done.
+        /// </summary>
+        public static string TopRacesKindResetsGained {
+            get {
+                return ResourceManager.GetString("TopRacesKindResetsGained", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Levels gained.
+        /// </summary>
+        public static string TopRacesKindLevelsGained {
+            get {
+                return ResourceManager.GetString("TopRacesKindLevelsGained", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Highest level reached.
+        /// </summary>
+        public static string TopRacesKindLevelReached {
+            get {
+                return ResourceManager.GetString("TopRacesKindLevelReached", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Boss-hunt points.
+        /// </summary>
+        public static string TopRacesKindBossHuntPoints {
+            get {
+                return ResourceManager.GetString("TopRacesKindBossHuntPoints", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Players defeated (PK).
+        /// </summary>
+        public static string TopRacesKindPkKills {
+            get {
+                return ResourceManager.GetString("TopRacesKindPkKills", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Event wins.
+        /// </summary>
+        public static string TopRacesKindEventWins {
+            get {
+                return ResourceManager.GetString("TopRacesKindEventWins", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Guild points (guilds).
+        /// </summary>
+        public static string TopRacesKindGuildPoints {
+            get {
+                return ResourceManager.GetString("TopRacesKindGuildPoints", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Monsters defeated.
+        /// </summary>
+        public static string TopRacesKindMonsterKills {
+            get {
+                return ResourceManager.GetString("TopRacesKindMonsterKills", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minutes in the game.
+        /// </summary>
+        public static string TopRacesKindOnlineMinutes {
+            get {
+                return ResourceManager.GetString("TopRacesKindOnlineMinutes", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Event.
+        /// </summary>
+        public static string TopRacesEvent {
+            get {
+                return ResourceManager.GetString("TopRacesEvent", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Any (Blood Castle, Devil Square, Chaos Castle).
+        /// </summary>
+        public static string TopRacesEventAny {
+            get {
+                return ResourceManager.GetString("TopRacesEventAny", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Blood Castle.
+        /// </summary>
+        public static string TopRacesEventBloodCastle {
+            get {
+                return ResourceManager.GetString("TopRacesEventBloodCastle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Devil Square.
+        /// </summary>
+        public static string TopRacesEventDevilSquare {
+            get {
+                return ResourceManager.GetString("TopRacesEventDevilSquare", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Chaos Castle.
+        /// </summary>
+        public static string TopRacesEventChaosCastle {
+            get {
+                return ResourceManager.GetString("TopRacesEventChaosCastle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Classes.
+        /// </summary>
+        public static string TopRacesScope {
+            get {
+                return ResourceManager.GetString("TopRacesScope", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to All classes, one table.
+        /// </summary>
+        public static string TopRacesScopeAll {
+            get {
+                return ResourceManager.GetString("TopRacesScopeAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to One class only.
+        /// </summary>
+        public static string TopRacesScopeOneClass {
+            get {
+                return ResourceManager.GetString("TopRacesScopeOneClass", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A table per class.
+        /// </summary>
+        public static string TopRacesScopePerClass {
+            get {
+                return ResourceManager.GetString("TopRacesScopePerClass", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Class.
+        /// </summary>
+        public static string TopRacesClass {
+            get {
+                return ResourceManager.GetString("TopRacesClass", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Dark Wizard.
+        /// </summary>
+        public static string TopRacesClassDarkWizard {
+            get {
+                return ResourceManager.GetString("TopRacesClassDarkWizard", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Dark Knight.
+        /// </summary>
+        public static string TopRacesClassDarkKnight {
+            get {
+                return ResourceManager.GetString("TopRacesClassDarkKnight", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Fairy Elf.
+        /// </summary>
+        public static string TopRacesClassFairyElf {
+            get {
+                return ResourceManager.GetString("TopRacesClassFairyElf", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Magic Gladiator.
+        /// </summary>
+        public static string TopRacesClassMagicGladiator {
+            get {
+                return ResourceManager.GetString("TopRacesClassMagicGladiator", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Dark Lord.
+        /// </summary>
+        public static string TopRacesClassDarkLord {
+            get {
+                return ResourceManager.GetString("TopRacesClassDarkLord", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Summoner.
+        /// </summary>
+        public static string TopRacesClassSummoner {
+            get {
+                return ResourceManager.GetString("TopRacesClassSummoner", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Rage Fighter.
+        /// </summary>
+        public static string TopRacesClassRageFighter {
+            get {
+                return ResourceManager.GetString("TopRacesClassRageFighter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to When.
+        /// </summary>
+        public static string TopRacesPeriod {
+            get {
+                return ResourceManager.GetString("TopRacesPeriod", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Every day.
+        /// </summary>
+        public static string TopRacesPeriodDaily {
+            get {
+                return ResourceManager.GetString("TopRacesPeriodDaily", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Every week (Monday).
+        /// </summary>
+        public static string TopRacesPeriodWeekly {
+            get {
+                return ResourceManager.GetString("TopRacesPeriodWeekly", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Every month.
+        /// </summary>
+        public static string TopRacesPeriodMonthly {
+            get {
+                return ResourceManager.GetString("TopRacesPeriodMonthly", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Between two dates.
+        /// </summary>
+        public static string TopRacesPeriodCustom {
+            get {
+                return ResourceManager.GetString("TopRacesPeriodCustom", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string TopRacesStart {
+            get {
+                return ResourceManager.GetString("TopRacesStart", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        public static string TopRacesEnd {
+            get {
+                return ResourceManager.GetString("TopRacesEnd", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Dates as yyyy-MM-dd HH:mm on the Sydney clock (daylight saving included); a time in the skipped hour starts at 03:00..
+        /// </summary>
+        public static string TopRacesCustomHint {
+            get {
+                return ResourceManager.GetString("TopRacesCustomHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A guild race ranks guilds by the guild experience they earn during the race; every member gets the prize..
+        /// </summary>
+        public static string TopRacesGuildHint {
+            get {
+                return ResourceManager.GetString("TopRacesGuildHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum for a prize.
+        /// </summary>
+        public static string TopRacesMinimum {
+            get {
+                return ResourceManager.GetString("TopRacesMinimum", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Coins.
+        /// </summary>
+        public static string TopRacesCoins {
+            get {
+                return ResourceManager.GetString("TopRacesCoins", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Zen.
+        /// </summary>
+        public static string TopRacesZen {
+            get {
+                return ResourceManager.GetString("TopRacesZen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add prize.
+        /// </summary>
+        public static string TopRacesAddPrize {
+            get {
+                return ResourceManager.GetString("TopRacesAddPrize", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add race.
+        /// </summary>
+        public static string TopRacesAddRace {
+            get {
+                return ResourceManager.GetString("TopRacesAddRace", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The top races were saved..
+        /// </summary>
+        public static string TopRacesSaved {
+            get {
+                return ResourceManager.GetString("TopRacesSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Live standings.
+        /// </summary>
+        public static string TopRacesStandings {
+            get {
+                return ResourceManager.GetString("TopRacesStandings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No race is running..
+        /// </summary>
+        public static string TopRacesNoneRunning {
+            get {
+                return ResourceManager.GetString("TopRacesNoneRunning", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ends {0} (Sydney).
+        /// </summary>
+        public static string TopRacesEnds {
+            get {
+                return ResourceManager.GetString("TopRacesEnds", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Nobody yet..
+        /// </summary>
+        public static string TopRacesNobodyYet {
+            get {
+                return ResourceManager.GetString("TopRacesNobodyYet", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Nobody took part..
+        /// </summary>
+        public static string TopRacesNobody {
+            get {
+                return ResourceManager.GetString("TopRacesNobody", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string TopRacesName {
+            get {
+                return ResourceManager.GetString("TopRacesName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string TopRacesValue {
+            get {
+                return ResourceManager.GetString("TopRacesValue", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Prize.
+        /// </summary>
+        public static string TopRacesPrize {
+            get {
+                return ResourceManager.GetString("TopRacesPrize", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Coming races.
+        /// </summary>
+        public static string TopRacesUpcoming {
+            get {
+                return ResourceManager.GetString("TopRacesUpcoming", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Past winners.
+        /// </summary>
+        public static string TopRacesHistory {
+            get {
+                return ResourceManager.GetString("TopRacesHistory", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No race has finished yet..
+        /// </summary>
+        public static string TopRacesNoHistory {
+            get {
+                return ResourceManager.GetString("TopRacesNoHistory", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to paid.
+        /// </summary>
+        public static string TopRacesPaid {
+            get {
+                return ResourceManager.GetString("TopRacesPaid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to being paid.
+        /// </summary>
+        public static string TopRacesNotPaid {
+            get {
+                return ResourceManager.GetString("TopRacesNotPaid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The race id "{0}" may only have letters, digits, - and _ (at most 40)..
+        /// </summary>
+        public static string TopRacesErrorId {
+            get {
+                return ResourceManager.GetString("TopRacesErrorId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The race id "{0}" is used twice..
+        /// </summary>
+        public static string TopRacesErrorDuplicateId {
+            get {
+                return ResourceManager.GetString("TopRacesErrorDuplicateId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The race "{0}" needs an English title..
+        /// </summary>
+        public static string TopRacesErrorTitle {
+            get {
+                return ResourceManager.GetString("TopRacesErrorTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The race "{0}" needs a valid start and an end after it (yyyy-MM-dd HH:mm)..
+        /// </summary>
+        public static string TopRacesErrorDates {
+            get {
+                return ResourceManager.GetString("TopRacesErrorDates", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The race "{0}": the ranks {1}-{2} overlap or are outside 1-100..
+        /// </summary>
+        public static string TopRacesErrorRanks {
+            get {
+                return ResourceManager.GetString("TopRacesErrorRanks", resourceCulture);
+            }
+        }
     }
 }

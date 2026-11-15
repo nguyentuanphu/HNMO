@@ -95,6 +95,7 @@ public partial class ConfigNavMenu
             new(Resources.OnboardingAndStarterKit, "onboarding-starter-kit", "oi-flag"),
             new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
             new(Resources.CommunityPage, "community", "oi-chat"),
+            new(Resources.TopRacesPage, "top-races", "oi-badge"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
             new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),

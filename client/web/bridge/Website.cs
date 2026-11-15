@@ -10,6 +10,7 @@ internal static class Website
         Forward(app, "/website/onboarding", "api/website/onboarding", options, clients);
         Forward(app, "/website/guilds", "api/website/guilds", options, clients);
         Forward(app, "/website/community", "api/website/community", options, clients);
+        Forward(app, "/website/top-races", "api/website/top-races", options, clients);
     }
 
     private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)

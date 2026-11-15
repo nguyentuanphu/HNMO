@@ -1,0 +1,346 @@
+@page "/top-races"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.TopRaces
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+<PageTitle>HNMO: @Resources.TopRacesPage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.TopRacesPage" />
+<h1>@Resources.TopRacesPage</h1>
+<p class="text-muted">@Resources.TopRacesPageDescription</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@Resources.TopRacesNotInstalled</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="top-races-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.TopRacesGeneral</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="top-races-active" @bind="this._isActive" />
+                <label class="form-check-label" for="top-races-active">@Resources.TopRacesActive</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="top-races-in-game" @bind="c.AnnounceInGame" />
+                <label class="form-check-label" for="top-races-in-game">@Resources.TopRacesAnnounceInGame</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="top-races-community" @bind="c.AnnounceOnCommunity" />
+                <label class="form-check-label" for="top-races-community">@Resources.TopRacesAnnounceOnCommunity</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <label class="form-label" for="top-races-zone">@Resources.TopRacesTimeZone</label>
+                    <input class="form-control" id="top-races-zone" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="top-races-history">@Resources.TopRacesHistoryKept</label>
+                    <input class="form-control" type="number" min="1" max="500" id="top-races-history" @bind="c.HistoryKept" />
+                </div>
+                <div class="col-sm-5">
+                    <label class="form-label" for="top-races-file">@Resources.TopRacesFile</label>
+                    <input class="form-control" id="top-races-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <div class="row g-2 mt-1">
+                <div class="col-md-6">
+                    <label class="form-label" for="top-races-start-en">@Resources.TopRacesStartTextEn</label>
+                    <input class="form-control" id="top-races-start-en" @bind="c.StartTextEn" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="top-races-start-vi">@Resources.TopRacesStartTextVi</label>
+                    <input class="form-control" id="top-races-start-vi" @bind="c.StartTextVi" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="top-races-end-en">@Resources.TopRacesEndTextEn</label>
+                    <input class="form-control" id="top-races-end-en" @bind="c.EndTextEn" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="top-races-end-vi">@Resources.TopRacesEndTextVi</label>
+                    <input class="form-control" id="top-races-end-vi" @bind="c.EndTextVi" />
+                </div>
+            </div>
+            <p class="form-text mb-0">@Resources.TopRacesTextsHint</p>
+        </div>
+    </section>
+
+    <section class="mb-3" id="top-races-list">
+        <h2 class="h5">@Resources.TopRacesRaces</h2>
+        <p class="form-text">@Resources.TopRacesRacesHint</p>
+        @foreach (var row in this._races)
+        {
+            var r = row.Race;
+            <div class="card mb-3 top-race" data-race="@r.Id">
+                <div class="card-body">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-2">
+                            <label class="form-label">@Resources.TopRacesId</label>
+                            <input class="form-control form-control-sm race-id" @bind="r.Id" aria-label="@Resources.TopRacesId" />
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input race-enabled" type="checkbox" @bind="r.Enabled" aria-label="@Resources.MissionsOn" />
+                                <label class="form-check-label">@Resources.MissionsOn</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">@Resources.TopRacesTitleEn</label>
+                            <input class="form-control form-control-sm race-title-en" @bind="r.TitleEn" aria-label="@Resources.TopRacesTitleEn" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">@Resources.TopRacesTitleVi</label>
+                            <input class="form-control form-control-sm race-title-vi" @bind="r.TitleVi" aria-label="@Resources.TopRacesTitleVi" />
+                        </div>
+                        <div class="col-sm-1 text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger race-remove" @onclick="() => this.RemoveRace(row)">@Resources.Remove</button>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-1">
+                        <div class="col-sm-3">
+                            <label class="form-label">@Resources.TopRacesKind</label>
+                            <select class="form-select form-select-sm race-kind" @bind="r.Kind" aria-label="@Resources.TopRacesKind">
+                                @foreach (var kind in Enum.GetValues<TopRaceKind>())
+                                {
+                                    <option value="@kind">@KindCaption(kind)</option>
+                                }
+                            </select>
+                        </div>
+                        @if (r.Kind == TopRaceKind.EventWins)
+                        {
+                            <div class="col-sm-2">
+                                <label class="form-label">@Resources.TopRacesEvent</label>
+                                <select class="form-select form-select-sm race-event" @bind="r.Event" aria-label="@Resources.TopRacesEvent">
+                                    @foreach (var ev in Enum.GetValues<TopRaceEvent>())
+                                    {
+                                        <option value="@ev">@EventCaption(ev)</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                        @if (!r.IsGuildRace)
+                        {
+                            <div class="col-sm-2">
+                                <label class="form-label">@Resources.TopRacesScope</label>
+                                <select class="form-select form-select-sm race-scope" @bind="r.Scope" aria-label="@Resources.TopRacesScope">
+                                    @foreach (var scope in Enum.GetValues<TopRaceScope>())
+                                    {
+                                        <option value="@scope">@ScopeCaption(scope)</option>
+                                    }
+                                </select>
+                            </div>
+                            @if (r.Scope == TopRaceScope.OneClass)
+                            {
+                                <div class="col-sm-2">
+                                    <label class="form-label">@Resources.TopRacesClass</label>
+                                    <select class="form-select form-select-sm race-class" @bind="r.Class" aria-label="@Resources.TopRacesClass">
+                                        @foreach (var cls in Enum.GetValues<TopRaceClass>())
+                                        {
+                                            <option value="@cls">@ClassCaption(cls)</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                        }
+                        <div class="col-sm-2">
+                            <label class="form-label">@Resources.TopRacesPeriod</label>
+                            <select class="form-select form-select-sm race-period" @bind="r.Period" aria-label="@Resources.TopRacesPeriod">
+                                @foreach (var period in Enum.GetValues<TopRacePeriod>())
+                                {
+                                    <option value="@period">@PeriodCaption(period)</option>
+                                }
+                            </select>
+                        </div>
+                        @if (r.Period == TopRacePeriod.Custom)
+                        {
+                            <div class="col-sm-2">
+                                <label class="form-label">@Resources.TopRacesStart</label>
+                                <input class="form-control form-control-sm race-start" @bind="r.Start" placeholder="2026-12-01 20:00" aria-label="@Resources.TopRacesStart" />
+                            </div>
+                            <div class="col-sm-2">
+                                <label class="form-label">@Resources.TopRacesEnd</label>
+                                <input class="form-control form-control-sm race-end" @bind="r.End" placeholder="2026-12-08 20:00" aria-label="@Resources.TopRacesEnd" />
+                            </div>
+                        }
+                        <div class="col-sm-2">
+                            <label class="form-label">@Resources.TopRacesMinimum</label>
+                            <input class="form-control form-control-sm race-minimum" type="number" min="1" @bind="r.Minimum" aria-label="@Resources.TopRacesMinimum" />
+                        </div>
+                    </div>
+                    @if (r.Period == TopRacePeriod.Custom)
+                    {
+                        <p class="form-text mb-0">@Resources.TopRacesCustomHint</p>
+                    }
+                    @if (r.IsGuildRace)
+                    {
+                        <p class="form-text mb-0">@Resources.TopRacesGuildHint</p>
+                    }
+                    <div class="table-responsive mt-2">
+                        <table class="table table-sm align-middle race-prizes">
+                            <thead>
+                            <tr>
+                                <th>@Resources.GuildsRankFrom</th>
+                                <th>@Resources.GuildsRankTo</th>
+                                <th>@Resources.TopRacesCoins</th>
+                                <th>@Resources.CashShopCoinType</th>
+                                <th>@Resources.TopRacesZen</th>
+                                <th>@Resources.MissionsItems</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var prize in row.Prizes)
+                            {
+                                var p = prize.Prize;
+                                <tr data-rank="@p.RankFrom">
+                                    <td><input class="form-control form-control-sm prize-from" style="width: 5rem" type="number" min="1" @bind="p.RankFrom" aria-label="@Resources.GuildsRankFrom" /></td>
+                                    <td><input class="form-control form-control-sm prize-to" style="width: 5rem" type="number" min="1" @bind="p.RankTo" aria-label="@Resources.GuildsRankTo" /></td>
+                                    <td><input class="form-control form-control-sm prize-coins" style="width: 7rem" type="number" min="0" @bind="p.Coins" aria-label="@Resources.TopRacesCoins" /></td>
+                                    <td>
+                                        <select class="form-select form-select-sm prize-coin-type" style="width: auto" @bind="p.CoinType" aria-label="@Resources.CashShopCoinType">
+                                            @foreach (var coinType in Enum.GetValues<CashShopCoinType>())
+                                            {
+                                                <option value="@coinType">@CashShopCoinCaption.Get(coinType)</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td><input class="form-control form-control-sm prize-zen" style="width: 8rem" type="number" min="0" @bind="p.Zen" aria-label="@Resources.TopRacesZen" /></td>
+                                    <td><input class="form-control form-control-sm prize-items" style="min-width: 10rem" @bind="prize.Items.ItemsText" placeholder="14 13 0 1" title="@Resources.MissionsItemsHint" aria-label="@Resources.MissionsItems" /></td>
+                                    <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => row.Prizes.Remove(prize)">@Resources.Remove</button></td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm prize-add" @onclick="() => AddPrize(row)">@Resources.TopRacesAddPrize</button>
+                </div>
+            </div>
+        }
+        <button type="button" class="btn btn-outline-primary btn-sm" id="top-races-add" @onclick="this.AddRace">@Resources.TopRacesAddRace</button>
+    </section>
+
+    <div class="d-flex gap-2 mb-4">
+        <button type="button" class="btn btn-primary" id="top-races-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
+    </div>
+
+    @if (this._engine is { } engine)
+    {
+        var now = DateTime.UtcNow;
+        var running = engine.Running(now);
+        var upcoming = engine.Upcoming(now);
+        var history = engine.History(now);
+        <section class="card mb-3">
+            <div class="card-body">
+                <h2 class="h5">@Resources.TopRacesStandings</h2>
+                @if (running.Count == 0)
+                {
+                    <p class="text-muted" id="top-races-none-running">@Resources.TopRacesNoneRunning</p>
+                }
+                @foreach (var (race, run) in running)
+                {
+                    <div class="mb-3 top-race-standings" data-race="@race.Id">
+                        <h3 class="h6">@this.Title(race.TitleEn, race.TitleViOrEn) <small class="text-muted">@KindCaption(race.Kind) · @string.Format(Resources.TopRacesEnds, Sydney(run.EndUtc, engine))</small></h3>
+                        @foreach (var table in TopRaceEngine.TableClasses(race))
+                        {
+                            var lines = engine.Standings(race, run, table);
+                            if (lines.Count == 0 && table >= 0 && race.Scope == TopRaceScope.PerClass)
+                            {
+                                continue;
+                            }
+
+                            @if (table >= 0)
+                            {
+                                <div class="small fw-semibold">@ClassCaption((TopRaceClass)table)</div>
+                            }
+
+                            @if (lines.Count == 0)
+                            {
+                                <p class="text-muted small mb-1">@Resources.TopRacesNobodyYet</p>
+                            }
+                            else
+                            {
+                                <table class="table table-sm" style="max-width: 32rem">
+                                    <thead><tr><th>#</th><th>@Resources.TopRacesName</th><th>@Resources.TopRacesValue</th></tr></thead>
+                                    <tbody>
+                                    @foreach (var line in lines)
+                                    {
+                                        <tr><td>@line.Rank</td><td>@line.Entry.Name</td><td>@line.Entry.Value.ToString("N0")</td></tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            }
+                        }
+                    </div>
+                }
+
+                @if (upcoming.Count > 0)
+                {
+                    <h3 class="h6 mt-3">@Resources.TopRacesUpcoming</h3>
+                    <ul id="top-races-upcoming">
+                        @foreach (var (race, window) in upcoming)
+                        {
+                            <li>@this.Title(race.TitleEn, race.TitleViOrEn): @Sydney(window.StartUtc, engine) – @Sydney(window.EndUtc, engine)</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </section>
+
+        <section class="card mb-3">
+            <div class="card-body">
+                <h2 class="h5">@Resources.TopRacesHistory</h2>
+                @if (history.Count == 0)
+                {
+                    <p class="text-muted" id="top-races-no-history">@Resources.TopRacesNoHistory</p>
+                }
+                @foreach (var result in history)
+                {
+                    <div class="mb-3 top-race-result" data-race="@result.RaceId">
+                        <h3 class="h6">@this.Title(result.TitleEn, result.TitleVi) <small class="text-muted">@Sydney(result.StartUtc, engine) – @Sydney(result.EndUtc, engine) · @(result.Paid ? Resources.TopRacesPaid : Resources.TopRacesNotPaid)</small></h3>
+                        @if (result.Tables.Count == 0)
+                        {
+                            <p class="text-muted small mb-1">@Resources.TopRacesNobody</p>
+                        }
+                        @foreach (var table in result.Tables)
+                        {
+                            @if (table.Class >= 0)
+                            {
+                                <div class="small fw-semibold">@ClassCaption((TopRaceClass)table.Class)</div>
+                            }
+
+                            <table class="table table-sm" style="max-width: 40rem">
+                                <thead><tr><th>#</th><th>@Resources.TopRacesName</th><th>@Resources.TopRacesValue</th><th>@Resources.TopRacesPrize</th></tr></thead>
+                                <tbody>
+                                @foreach (var line in table.Lines.Take(TopRaceEngine.KeptRanks))
+                                {
+                                    <tr><td>@line.Rank</td><td>@line.Name</td><td>@line.Value.ToString("N0")</td><td>@PrizeText(line)</td></tr>
+                                }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+    }
+}

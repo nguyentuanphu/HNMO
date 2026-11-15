@@ -4107,4 +4107,244 @@
   <data name="CommunityKindTopRaceWinner" xml:space="preserve">
     <value>Người thắng đua top</value>
   </data>
+  <data name="TopRacesPage" xml:space="preserve">
+    <value>Đua top</value>
+  </data>
+  <data name="TopRacesPageDescription" xml:space="preserve">
+    <value>Các cuộc đua theo ngày, tuần, tháng hoặc giữa hai ngày (giờ Sydney) với phần thưởng cho các hạng cao nhất, trả một lần khi cuộc đua kết thúc. Xu vào tài khoản ngay; zen và vật phẩm chờ trong trò chơi đến khi túi còn chỗ. Lưu là áp dụng ngay.</value>
+  </data>
+  <data name="TopRacesNotInstalled" xml:space="preserve">
+    <value>Plug-in đua top chưa được cài: hãy chạy máy chủ trò chơi một lần rồi tải lại trang này.</value>
+  </data>
+  <data name="TopRacesGeneral" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="TopRacesActive" xml:space="preserve">
+    <value>Bật đua top</value>
+  </data>
+  <data name="TopRacesAnnounceInGame" xml:space="preserve">
+    <value>Thông báo bắt đầu và kết thúc mỗi cuộc đua cho mọi người trong trò chơi (thông báo vàng)</value>
+  </data>
+  <data name="TopRacesAnnounceOnCommunity" xml:space="preserve">
+    <value>Đăng thông báo bắt đầu và người thắng qua cộng đồng (Discord và tin nổi bật trên trang web; từng loại bài đăng được chỉnh ở trang Cộng đồng)</value>
+  </data>
+  <data name="TopRacesTimeZone" xml:space="preserve">
+    <value>Múi giờ (tên IANA)</value>
+  </data>
+  <data name="TopRacesHistoryKept" xml:space="preserve">
+    <value>Số cuộc đua đã kết thúc được giữ</value>
+  </data>
+  <data name="TopRacesFile" xml:space="preserve">
+    <value>Tệp trạng thái</value>
+  </data>
+  <data name="TopRacesStartTextEn" xml:space="preserve">
+    <value>Thông báo bắt đầu (tiếng Anh)</value>
+  </data>
+  <data name="TopRacesStartTextVi" xml:space="preserve">
+    <value>Thông báo bắt đầu (tiếng Việt)</value>
+  </data>
+  <data name="TopRacesEndTextEn" xml:space="preserve">
+    <value>Thông báo kết thúc (tiếng Anh)</value>
+  </data>
+  <data name="TopRacesEndTextVi" xml:space="preserve">
+    <value>Thông báo kết thúc (tiếng Việt)</value>
+  </data>
+  <data name="TopRacesTextsHint" xml:space="preserve">
+    <value>Biến: {race}, {end} (thông báo bắt đầu); {race}, {winner}, {value} (thông báo kết thúc).</value>
+  </data>
+  <data name="TopRacesRaces" xml:space="preserve">
+    <value>Các cuộc đua</value>
+  </data>
+  <data name="TopRacesRacesHint" xml:space="preserve">
+    <value>Cuộc đua chỉ tính khi đang diễn ra và đang bật. Mã giữ bảng xếp hạng: đừng đổi khi cuộc đua đang chạy. Tắt hoặc xoá cuộc đua sẽ kết thúc nó mà không có thưởng.</value>
+  </data>
+  <data name="TopRacesId" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="TopRacesTitleEn" xml:space="preserve">
+    <value>Tên (tiếng Anh)</value>
+  </data>
+  <data name="TopRacesTitleVi" xml:space="preserve">
+    <value>Tên (tiếng Việt)</value>
+  </data>
+  <data name="TopRacesKind" xml:space="preserve">
+    <value>Tính theo</value>
+  </data>
+  <data name="TopRacesKindResetsGained" xml:space="preserve">
+    <value>Số lần reset</value>
+  </data>
+  <data name="TopRacesKindLevelsGained" xml:space="preserve">
+    <value>Số cấp tăng</value>
+  </data>
+  <data name="TopRacesKindLevelReached" xml:space="preserve">
+    <value>Cấp cao nhất đạt được</value>
+  </data>
+  <data name="TopRacesKindBossHuntPoints" xml:space="preserve">
+    <value>Điểm săn boss</value>
+  </data>
+  <data name="TopRacesKindPkKills" xml:space="preserve">
+    <value>Số lần hạ người chơi (PK)</value>
+  </data>
+  <data name="TopRacesKindEventWins" xml:space="preserve">
+    <value>Số lần thắng sự kiện</value>
+  </data>
+  <data name="TopRacesKindGuildPoints" xml:space="preserve">
+    <value>Điểm bang hội (bang hội)</value>
+  </data>
+  <data name="TopRacesKindMonsterKills" xml:space="preserve">
+    <value>Số quái bị hạ</value>
+  </data>
+  <data name="TopRacesKindOnlineMinutes" xml:space="preserve">
+    <value>Số phút trong trò chơi</value>
+  </data>
+  <data name="TopRacesEvent" xml:space="preserve">
+    <value>Sự kiện</value>
+  </data>
+  <data name="TopRacesEventAny" xml:space="preserve">
+    <value>Bất kỳ (Huyết Lâu, Quảng Trường Quỷ, Hỗn Nguyên Lâu)</value>
+  </data>
+  <data name="TopRacesEventBloodCastle" xml:space="preserve">
+    <value>Huyết Lâu</value>
+  </data>
+  <data name="TopRacesEventDevilSquare" xml:space="preserve">
+    <value>Quảng Trường Quỷ</value>
+  </data>
+  <data name="TopRacesEventChaosCastle" xml:space="preserve">
+    <value>Hỗn Nguyên Lâu</value>
+  </data>
+  <data name="TopRacesScope" xml:space="preserve">
+    <value>Lớp nhân vật</value>
+  </data>
+  <data name="TopRacesScopeAll" xml:space="preserve">
+    <value>Mọi lớp, một bảng</value>
+  </data>
+  <data name="TopRacesScopeOneClass" xml:space="preserve">
+    <value>Chỉ một lớp</value>
+  </data>
+  <data name="TopRacesScopePerClass" xml:space="preserve">
+    <value>Mỗi lớp một bảng</value>
+  </data>
+  <data name="TopRacesClass" xml:space="preserve">
+    <value>Lớp</value>
+  </data>
+  <data name="TopRacesClassDarkWizard" xml:space="preserve">
+    <value>Phù Thủy</value>
+  </data>
+  <data name="TopRacesClassDarkKnight" xml:space="preserve">
+    <value>Chiến Binh</value>
+  </data>
+  <data name="TopRacesClassFairyElf" xml:space="preserve">
+    <value>Tiên Nữ</value>
+  </data>
+  <data name="TopRacesClassMagicGladiator" xml:space="preserve">
+    <value>Đấu Sĩ</value>
+  </data>
+  <data name="TopRacesClassDarkLord" xml:space="preserve">
+    <value>Chúa Tể</value>
+  </data>
+  <data name="TopRacesClassSummoner" xml:space="preserve">
+    <value>Thuật Sĩ</value>
+  </data>
+  <data name="TopRacesClassRageFighter" xml:space="preserve">
+    <value>Thiết Binh</value>
+  </data>
+  <data name="TopRacesPeriod" xml:space="preserve">
+    <value>Thời gian</value>
+  </data>
+  <data name="TopRacesPeriodDaily" xml:space="preserve">
+    <value>Hằng ngày</value>
+  </data>
+  <data name="TopRacesPeriodWeekly" xml:space="preserve">
+    <value>Hằng tuần (thứ Hai)</value>
+  </data>
+  <data name="TopRacesPeriodMonthly" xml:space="preserve">
+    <value>Hằng tháng</value>
+  </data>
+  <data name="TopRacesPeriodCustom" xml:space="preserve">
+    <value>Giữa hai ngày</value>
+  </data>
+  <data name="TopRacesStart" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="TopRacesEnd" xml:space="preserve">
+    <value>Kết thúc</value>
+  </data>
+  <data name="TopRacesCustomHint" xml:space="preserve">
+    <value>Ngày theo dạng yyyy-MM-dd HH:mm theo giờ Sydney (đã tính giờ mùa hè); giờ rơi vào giờ bị bỏ qua sẽ bắt đầu lúc 03:00.</value>
+  </data>
+  <data name="TopRacesGuildHint" xml:space="preserve">
+    <value>Đua bang hội xếp hạng bang theo kinh nghiệm bang kiếm được trong cuộc đua; mọi thành viên đều nhận thưởng.</value>
+  </data>
+  <data name="TopRacesMinimum" xml:space="preserve">
+    <value>Tối thiểu để nhận thưởng</value>
+  </data>
+  <data name="TopRacesCoins" xml:space="preserve">
+    <value>Xu</value>
+  </data>
+  <data name="TopRacesZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="TopRacesAddPrize" xml:space="preserve">
+    <value>Thêm phần thưởng</value>
+  </data>
+  <data name="TopRacesAddRace" xml:space="preserve">
+    <value>Thêm cuộc đua</value>
+  </data>
+  <data name="TopRacesSaved" xml:space="preserve">
+    <value>Đã lưu đua top.</value>
+  </data>
+  <data name="TopRacesStandings" xml:space="preserve">
+    <value>Bảng xếp hạng trực tiếp</value>
+  </data>
+  <data name="TopRacesNoneRunning" xml:space="preserve">
+    <value>Không có cuộc đua nào đang diễn ra.</value>
+  </data>
+  <data name="TopRacesEnds" xml:space="preserve">
+    <value>kết thúc {0} (giờ Sydney)</value>
+  </data>
+  <data name="TopRacesNobodyYet" xml:space="preserve">
+    <value>Chưa có ai.</value>
+  </data>
+  <data name="TopRacesNobody" xml:space="preserve">
+    <value>Không có ai tham gia.</value>
+  </data>
+  <data name="TopRacesName" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="TopRacesValue" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="TopRacesPrize" xml:space="preserve">
+    <value>Phần thưởng</value>
+  </data>
+  <data name="TopRacesUpcoming" xml:space="preserve">
+    <value>Cuộc đua sắp tới</value>
+  </data>
+  <data name="TopRacesHistory" xml:space="preserve">
+    <value>Người thắng trước đây</value>
+  </data>
+  <data name="TopRacesNoHistory" xml:space="preserve">
+    <value>Chưa có cuộc đua nào kết thúc.</value>
+  </data>
+  <data name="TopRacesPaid" xml:space="preserve">
+    <value>đã trả</value>
+  </data>
+  <data name="TopRacesNotPaid" xml:space="preserve">
+    <value>đang trả</value>
+  </data>
+  <data name="TopRacesErrorId" xml:space="preserve">
+    <value>Mã cuộc đua "{0}" chỉ được có chữ, số, - và _ (tối đa 40).</value>
+  </data>
+  <data name="TopRacesErrorDuplicateId" xml:space="preserve">
+    <value>Mã cuộc đua "{0}" bị dùng hai lần.</value>
+  </data>
+  <data name="TopRacesErrorTitle" xml:space="preserve">
+    <value>Cuộc đua "{0}" cần tên tiếng Anh.</value>
+  </data>
+  <data name="TopRacesErrorDates" xml:space="preserve">
+    <value>Cuộc đua "{0}" cần ngày bắt đầu hợp lệ và ngày kết thúc sau đó (yyyy-MM-dd HH:mm).</value>
+  </data>
+  <data name="TopRacesErrorRanks" xml:space="preserve">
+    <value>Cuộc đua "{0}": hạng {1}-{2} bị trùng hoặc ngoài khoảng 1-100.</value>
+  </data>
 </root>
