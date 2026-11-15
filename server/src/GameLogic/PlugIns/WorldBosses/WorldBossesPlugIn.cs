@@ -734,7 +734,8 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
         var textVi = WorldBossEngine.Fill(string.IsNullOrWhiteSpace(vi) ? en : vi, string.IsNullOrWhiteSpace(boss.NameVi) ? boss.NameEn : boss.NameVi, MapName(gameContext, boss.MapNumber, vietnamese), values);
         this.GetEngine().AddAnnouncement(new WorldBossAnnouncement { AtUtc = DateTime.UtcNow, BossId = boss.Id, Phase = phase, TextEn = textEn, TextVi = textVi });
 
-        var boardEvent = new WorldBossBoardEvent(phase, BossId: boss.Id, TextEn: textEn, TextVi: textVi);
+        // InGame: the golden notice already shows the text; the web game then adds no chat line of its own.
+        var boardEvent = new WorldBossBoardEvent(phase, BossId: boss.Id, TextEn: textEn, TextVi: textVi, InGame: configuration.AnnounceInGame);
         await ForEachPlayerAsync(async player =>
         {
             try

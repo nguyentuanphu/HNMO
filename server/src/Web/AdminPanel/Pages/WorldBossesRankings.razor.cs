@@ -17,6 +17,7 @@ using HNMO.GameLogic.PlugIns.WorldBosses;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
@@ -48,6 +49,9 @@ public partial class WorldBossesRankings : ComponentBase
 
     [Inject]
     private IDataSource<GameConfiguration> GameConfigurationSource { get; set; } = null!;
+
+    [Inject]
+    private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
 
     [Inject]
     private PluginWriteOperations PluginOperations { get; set; } = null!;
@@ -220,17 +224,17 @@ public partial class WorldBossesRankings : ComponentBase
         this._errors.Clear();
         try
         {
-            await this.GameConfigurationSource.InvalidateAsync().ConfigureAwait(true);
-            var gameConfiguration = await this.GameConfigurationSource.GetOwnerAsync().ConfigureAwait(true);
-            var stored = gameConfiguration.PlugInConfigurations.FirstOrDefault(p => p.TypeId == typeof(WorldBossesPlugIn).GUID);
-            if (stored is null)
+            // Straight from the database: the panel's cached game configuration can miss the row the game
+            // server added when it first started.
+            var (exists, isActive, saved) = await PlugInSettings.ReadStoredAsync<WorldBossesConfiguration>(this.PersistenceContextProvider, typeof(WorldBossesPlugIn), default).ConfigureAwait(true);
+            if (!exists)
             {
                 this._configuration = null;
                 return;
             }
 
-            this._isActive = stored.IsActive;
-            var configuration = stored.GetConfiguration<WorldBossesConfiguration>(null) ?? new WorldBossesConfiguration();
+            this._isActive = isActive;
+            var configuration = saved ?? new WorldBossesConfiguration();
 
             // A copy, so that an unsaved edit doesn't change the cached configuration.
             configuration = JsonSerializer.Deserialize<WorldBossesConfiguration>(JsonSerializer.Serialize(configuration)) ?? new WorldBossesConfiguration();
@@ -352,8 +356,8 @@ public partial class WorldBossesRankings : ComponentBase
                 await this.PluginOperations.ReplaceFromPanelAsync(id, configuration, json, true, token, default).ConfigureAwait(true);
             }
 
-            var gameConfiguration = await this.GameConfigurationSource.GetOwnerAsync().ConfigureAwait(true);
-            if (gameConfiguration.PlugInConfigurations.FirstOrDefault(p => p.TypeId == id)?.IsActive is { } active && active != this._isActive)
+            var (_, active, _) = await PlugInSettings.ReadStoredAsync<WorldBossesConfiguration>(this.PersistenceContextProvider, typeof(WorldBossesPlugIn), default).ConfigureAwait(true);
+            if (active != this._isActive)
             {
                 var activePreview = await this.PluginOperations.SetActiveAsync(id, this._isActive, false, null, default).ConfigureAwait(true);
                 if (activePreview["confirmationToken"]?.GetValue<string>() is { } activeToken)

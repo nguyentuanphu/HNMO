@@ -17,7 +17,7 @@ using HNMO.GameLogic.PlugIns.Missions;
 /// <param name="TextEn">The English text of an announcement.</param>
 /// <param name="TextVi">The Vietnamese text of an announcement.</param>
 /// <param name="Count">The rewards given.</param>
-public sealed record WorldBossBoardEvent(string Type, string? Result = null, string? BossId = null, string? TextEn = null, string? TextVi = null, int Count = 0);
+public sealed record WorldBossBoardEvent(string Type, string? Result = null, string? BossId = null, string? TextEn = null, string? TextVi = null, int Count = 0, bool InGame = false);
 
 /// <summary>
 /// Writes the world bosses as JSON: the state of a character for the game client (HnmoWorldBossesState), and the

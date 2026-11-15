@@ -26,7 +26,7 @@ export interface WorldBossBoard {
   v: number; now: number; bosses: BossState[];
   owed: { bossEn: string; bossVi: string; tier: string; reward: Reward }[];
   huntPoints: number; huntRank: number; weekEnds: number;
-  event?: { type: string; result?: string; bossId?: string; textEn?: string; textVi?: string; count?: number };
+  event?: { type: string; result?: string; bossId?: string; textEn?: string; textVi?: string; count?: number; inGame?: boolean };
 }
 
 export interface WorldBossWindowOptions {
@@ -198,6 +198,8 @@ export class WorldBossWindow {
     const say = this.options.message;
     switch (event.type) {
       case 'soon': case 'spawn': case 'kill': case 'escape': {
+        // The server's golden notice (in the player's language) already put it in the chat.
+        if (event.inGame) break;
         const text = (currentLanguage() === 'vi' ? event.textVi : event.textEn) || event.textEn;
         if (text) say(`[${tr('World boss')}] ${text}`);
         break;
