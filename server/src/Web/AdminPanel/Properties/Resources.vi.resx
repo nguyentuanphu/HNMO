@@ -3690,4 +3690,187 @@
   <data name="OnboardingErrorKitItem" xml:space="preserve">
     <value>Vật phẩm quà tân thủ {0}: nhóm 0-15, số 0-511, cấp 0-15, 1-50 món.</value>
   </data>
+  <data name="GuildsLevelsAndLadder" xml:space="preserve">
+    <value>Bang hội: cấp và bảng xếp hạng</value>
+  </data>
+  <data name="GuildsPageDescription" xml:space="preserve">
+    <value>Kinh nghiệm bang hội từ việc chơi của các thành viên, các cấp bang hội với hiệu ứng nhỏ cho thành viên đang chơi, và bảng xếp hạng bang hội hằng tuần (00:00 thứ Hai giờ Sydney) với phần thưởng cho thành viên các bang hội đứng đầu. Thay đổi có hiệu lực ngay trong trò chơi đang chạy.</value>
+  </data>
+  <data name="GuildsNotInstalled" xml:space="preserve">
+    <value>Plug-in cấp bang hội chưa có trong cơ sở dữ liệu. Hãy khởi động máy chủ trò chơi một lần rồi mở lại trang này.</value>
+  </data>
+  <data name="GuildsGeneral" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="GuildsActive" xml:space="preserve">
+    <value>Bật cấp bang hội và bảng xếp hạng</value>
+  </data>
+  <data name="GuildsAnnounceInGame" xml:space="preserve">
+    <value>Báo lên cấp cho thành viên đang chơi (thông báo bang hội)</value>
+  </data>
+  <data name="GuildsDailyCap" xml:space="preserve">
+    <value>Giới hạn mỗi ngày cho mỗi thành viên (KN bang hội)</value>
+  </data>
+  <data name="GuildsDailyCapHint" xml:space="preserve">
+    <value>Kinh nghiệm bang hội một nhân vật có thể kiếm cho bang mỗi ngày (ngày theo giờ Sydney); 0 là không giới hạn. Công thành không tính vào giới hạn này.</value>
+  </data>
+  <data name="GuildsTimeZone" xml:space="preserve">
+    <value>Múi giờ</value>
+  </data>
+  <data name="GuildsFile" xml:space="preserve">
+    <value>Tệp dữ liệu</value>
+  </data>
+  <data name="GuildsSources" xml:space="preserve">
+    <value>Nguồn kinh nghiệm bang hội</value>
+  </data>
+  <data name="GuildsSourcesHint" xml:space="preserve">
+    <value>Những việc thành viên làm để bang hội nhận kinh nghiệm, và bao nhiêu mỗi lần. Bot và luyện cấp ngoại tuyến không được tính.</value>
+  </data>
+  <data name="GuildsSource" xml:space="preserve">
+    <value>Nguồn</value>
+  </data>
+  <data name="GuildsXp" xml:space="preserve">
+    <value>KN bang hội</value>
+  </data>
+  <data name="GuildsSourceMonsterKill" xml:space="preserve">
+    <value>Hạ một quái vật</value>
+  </data>
+  <data name="GuildsSourceEventFinish" xml:space="preserve">
+    <value>Có mặt ở Huyết Lâu, Quảng Trường Quỷ hoặc Hỗn Nguyên Lâu khi kết thúc</value>
+  </data>
+  <data name="GuildsSourceEventWin" xml:space="preserve">
+    <value>Thắng một trong các sự kiện đó (thêm)</value>
+  </data>
+  <data name="GuildsSourceWorldBossKill" xml:space="preserve">
+    <value>Tham gia hạ boss thế giới</value>
+  </data>
+  <data name="GuildsSourceWorldBossDamage" xml:space="preserve">
+    <value>Mỗi phần trăm sát thương lên boss thế giới</value>
+  </data>
+  <data name="GuildsSourceMission" xml:space="preserve">
+    <value>Hoàn thành một nhiệm vụ ngày hoặc tuần</value>
+  </data>
+  <data name="GuildsSourceOnlineTime" xml:space="preserve">
+    <value>Thời gian trong trò chơi (theo số phút bên dưới)</value>
+  </data>
+  <data name="GuildsSourceCastleSiege" xml:space="preserve">
+    <value>Thắng công thành (cả bang)</value>
+  </data>
+  <data name="GuildsOnlineMinutes" xml:space="preserve">
+    <value>Số phút trong trò chơi cho mỗi lần nhận</value>
+  </data>
+  <data name="GuildsSiegeLadderBonus" xml:space="preserve">
+    <value>Điểm xếp hạng thêm cho bang thắng công thành</value>
+  </data>
+  <data name="GuildsLevels" xml:space="preserve">
+    <value>Cấp và hiệu ứng</value>
+  </data>
+  <data name="GuildsLevelsHint" xml:space="preserve">
+    <value>Mỗi cấp cần tổng kinh nghiệm bang hội; hiệu ứng của cấp được trao cho thành viên đang chơi (mỗi phút, mất vài phút sau khi rời bang). Cấp 1 cần 0.</value>
+  </data>
+  <data name="GuildsBuffsEnabled" xml:space="preserve">
+    <value>Bật hiệu ứng bang hội</value>
+  </data>
+  <data name="GuildsBuffNameEn" xml:space="preserve">
+    <value>Tên hiệu ứng (tiếng Anh)</value>
+  </data>
+  <data name="GuildsBuffNameVi" xml:space="preserve">
+    <value>Tên hiệu ứng (tiếng Việt)</value>
+  </data>
+  <data name="GuildsLevel" xml:space="preserve">
+    <value>Cấp</value>
+  </data>
+  <data name="GuildsLevelXp" xml:space="preserve">
+    <value>KN bang hội cần (tổng)</value>
+  </data>
+  <data name="GuildsExperiencePercent" xml:space="preserve">
+    <value>+ KN %</value>
+  </data>
+  <data name="GuildsZenPercent" xml:space="preserve">
+    <value>+ zen rơi %</value>
+  </data>
+  <data name="GuildsDefense" xml:space="preserve">
+    <value>+ phòng thủ</value>
+  </data>
+  <data name="GuildsAddLevel" xml:space="preserve">
+    <value>Thêm cấp</value>
+  </data>
+  <data name="GuildsLadder" xml:space="preserve">
+    <value>Bảng xếp hạng bang hội hằng tuần</value>
+  </data>
+  <data name="GuildsLadderHint" xml:space="preserve">
+    <value>Điểm của các bang trong tuần (kinh nghiệm bang hội cộng điểm thưởng công thành). Lúc 00:00 thứ Hai giờ Sydney, tuần đã xong được trả một lần: xu vào tài khoản của mọi thành viên ngay (thêm cho bang chủ), zen và vật phẩm khi túi còn chỗ.</value>
+  </data>
+  <data name="GuildsLadderEnabled" xml:space="preserve">
+    <value>Bật thưởng bảng xếp hạng</value>
+  </data>
+  <data name="GuildsLadderMinimumXp" xml:space="preserve">
+    <value>Điểm bang cần để nhận thưởng</value>
+  </data>
+  <data name="GuildsRankFrom" xml:space="preserve">
+    <value>Từ hạng</value>
+  </data>
+  <data name="GuildsRankTo" xml:space="preserve">
+    <value>Đến hạng</value>
+  </data>
+  <data name="GuildsCoinsPerMember" xml:space="preserve">
+    <value>Xu mỗi thành viên</value>
+  </data>
+  <data name="GuildsMasterBonus" xml:space="preserve">
+    <value>Xu thêm cho bang chủ</value>
+  </data>
+  <data name="GuildsZenPerMember" xml:space="preserve">
+    <value>Zen mỗi thành viên</value>
+  </data>
+  <data name="GuildsAddReward" xml:space="preserve">
+    <value>Thêm hạng</value>
+  </data>
+  <data name="GuildsSaved" xml:space="preserve">
+    <value>Đã lưu cài đặt bang hội.</value>
+  </data>
+  <data name="GuildsReload" xml:space="preserve">
+    <value>Tải lại</value>
+  </data>
+  <data name="GuildsThisWeek" xml:space="preserve">
+    <value>Bảng xếp hạng tuần này</value>
+  </data>
+  <data name="GuildsWeekEnds" xml:space="preserve">
+    <value>Tuần kết thúc lúc {0} (giờ Sydney).</value>
+  </data>
+  <data name="GuildsNoPoints" xml:space="preserve">
+    <value>Chưa có bang nào có điểm trong tuần này.</value>
+  </data>
+  <data name="GuildsGuild" xml:space="preserve">
+    <value>Bang hội</value>
+  </data>
+  <data name="GuildsPoints" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="GuildsLastWeek" xml:space="preserve">
+    <value>Bang thắng tuần trước</value>
+  </data>
+  <data name="GuildsNoLastWeek" xml:space="preserve">
+    <value>Chưa có tuần nào kết thúc.</value>
+  </data>
+  <data name="GuildsWeekOf" xml:space="preserve">
+    <value>Tuần từ {0}</value>
+  </data>
+  <data name="GuildsPaidMembers" xml:space="preserve">
+    <value>Thành viên đã nhận</value>
+  </data>
+  <data name="GuildsSieges" xml:space="preserve">
+    <value>Kết quả công thành</value>
+  </data>
+  <data name="GuildsNoSieges" xml:space="preserve">
+    <value>Chưa có bang nào thắng công thành.</value>
+  </data>
+  <data name="GuildsErrorLevels" xml:space="preserve">
+    <value>Các cấp cần có cấp 1 với 0 KN bang hội, và mỗi cấp cao hơn cần nhiều KN hơn cấp trước.</value>
+  </data>
+  <data name="GuildsErrorDuplicateLevel" xml:space="preserve">
+    <value>Cấp {0} bị trùng.</value>
+  </data>
+  <data name="GuildsErrorRanks" xml:space="preserve">
+    <value>Hạng {0} đến {1} không hợp lệ (1 đến 100) hoặc trùng với phần thưởng khác.</value>
+  </data>
 </root>

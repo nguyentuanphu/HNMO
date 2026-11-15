@@ -3659,4 +3659,187 @@
   <data name="OnboardingErrorKitItem" xml:space="preserve">
     <value>Starter kit item {0}: group 0-15, number 0-511, level 0-15, 1-50 pieces.</value>
   </data>
+  <data name="GuildsLevelsAndLadder" xml:space="preserve">
+    <value>Guilds: levels and ladder</value>
+  </data>
+  <data name="GuildsPageDescription" xml:space="preserve">
+    <value>Guild experience from the members' play, the guild levels with their small buffs for the online members, and the weekly guild ladder (Monday 00:00 Sydney time) with its rewards for the members of the top guilds. Changes apply to the running game at once.</value>
+  </data>
+  <data name="GuildsNotInstalled" xml:space="preserve">
+    <value>The guild levels plug-in isn't in the database yet. Start the game server once, then open this page again.</value>
+  </data>
+  <data name="GuildsGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="GuildsActive" xml:space="preserve">
+    <value>Guild levels and ladder on</value>
+  </data>
+  <data name="GuildsAnnounceInGame" xml:space="preserve">
+    <value>Tell a level-up to the guild's online members (guild notice)</value>
+  </data>
+  <data name="GuildsDailyCap" xml:space="preserve">
+    <value>Daily cap per member (guild XP)</value>
+  </data>
+  <data name="GuildsDailyCapHint" xml:space="preserve">
+    <value>The guild experience one character can earn for the guild per day (Sydney day); 0 means no cap. The castle siege isn't counted against it.</value>
+  </data>
+  <data name="GuildsTimeZone" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="GuildsFile" xml:space="preserve">
+    <value>State file</value>
+  </data>
+  <data name="GuildsSources" xml:space="preserve">
+    <value>Guild experience sources</value>
+  </data>
+  <data name="GuildsSourcesHint" xml:space="preserve">
+    <value>What the members do that gives their guild experience, and how much each time. Bots and offline leveling don't count.</value>
+  </data>
+  <data name="GuildsSource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="GuildsXp" xml:space="preserve">
+    <value>Guild XP</value>
+  </data>
+  <data name="GuildsSourceMonsterKill" xml:space="preserve">
+    <value>A monster defeated</value>
+  </data>
+  <data name="GuildsSourceEventFinish" xml:space="preserve">
+    <value>In Blood Castle, Devil Square or Chaos Castle at its end</value>
+  </data>
+  <data name="GuildsSourceEventWin" xml:space="preserve">
+    <value>Winning one of these events (extra)</value>
+  </data>
+  <data name="GuildsSourceWorldBossKill" xml:space="preserve">
+    <value>Taking part in a world boss kill</value>
+  </data>
+  <data name="GuildsSourceWorldBossDamage" xml:space="preserve">
+    <value>Per percent of a world boss's damage</value>
+  </data>
+  <data name="GuildsSourceMission" xml:space="preserve">
+    <value>A daily or weekly mission finished</value>
+  </data>
+  <data name="GuildsSourceOnlineTime" xml:space="preserve">
+    <value>Time in the game (per the minutes below)</value>
+  </data>
+  <data name="GuildsSourceCastleSiege" xml:space="preserve">
+    <value>Winning the castle siege (the guild)</value>
+  </data>
+  <data name="GuildsOnlineMinutes" xml:space="preserve">
+    <value>Minutes in the game per grant</value>
+  </data>
+  <data name="GuildsSiegeLadderBonus" xml:space="preserve">
+    <value>Castle siege winner's extra ladder points</value>
+  </data>
+  <data name="GuildsLevels" xml:space="preserve">
+    <value>Levels and buffs</value>
+  </data>
+  <data name="GuildsLevelsHint" xml:space="preserve">
+    <value>Each level needs the guild experience in total; its buff goes to the guild's online members (every minute, gone a few minutes after leaving the guild). Level 1 needs 0.</value>
+  </data>
+  <data name="GuildsBuffsEnabled" xml:space="preserve">
+    <value>Guild buffs on</value>
+  </data>
+  <data name="GuildsBuffNameEn" xml:space="preserve">
+    <value>Buff name (English)</value>
+  </data>
+  <data name="GuildsBuffNameVi" xml:space="preserve">
+    <value>Buff name (Vietnamese)</value>
+  </data>
+  <data name="GuildsLevel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="GuildsLevelXp" xml:space="preserve">
+    <value>Guild XP needed (total)</value>
+  </data>
+  <data name="GuildsExperiencePercent" xml:space="preserve">
+    <value>+ EXP %</value>
+  </data>
+  <data name="GuildsZenPercent" xml:space="preserve">
+    <value>+ zen drop %</value>
+  </data>
+  <data name="GuildsDefense" xml:space="preserve">
+    <value>+ defense</value>
+  </data>
+  <data name="GuildsAddLevel" xml:space="preserve">
+    <value>Add a level</value>
+  </data>
+  <data name="GuildsLadder" xml:space="preserve">
+    <value>Weekly guild ladder</value>
+  </data>
+  <data name="GuildsLadderHint" xml:space="preserve">
+    <value>The guilds' points of the week (their guild experience plus the castle siege bonus). On Monday 00:00 Sydney time the finished week is paid once: coins at once to every member's account (extra for the master), zen and items when there's room in the bag.</value>
+  </data>
+  <data name="GuildsLadderEnabled" xml:space="preserve">
+    <value>Ladder rewards on</value>
+  </data>
+  <data name="GuildsLadderMinimumXp" xml:space="preserve">
+    <value>Points a guild needs for a reward</value>
+  </data>
+  <data name="GuildsRankFrom" xml:space="preserve">
+    <value>From rank</value>
+  </data>
+  <data name="GuildsRankTo" xml:space="preserve">
+    <value>To rank</value>
+  </data>
+  <data name="GuildsCoinsPerMember" xml:space="preserve">
+    <value>Coins per member</value>
+  </data>
+  <data name="GuildsMasterBonus" xml:space="preserve">
+    <value>Guild master's extra coins</value>
+  </data>
+  <data name="GuildsZenPerMember" xml:space="preserve">
+    <value>Zen per member</value>
+  </data>
+  <data name="GuildsAddReward" xml:space="preserve">
+    <value>Add ranks</value>
+  </data>
+  <data name="GuildsSaved" xml:space="preserve">
+    <value>The guild settings were saved.</value>
+  </data>
+  <data name="GuildsReload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="GuildsThisWeek" xml:space="preserve">
+    <value>This week's ladder</value>
+  </data>
+  <data name="GuildsWeekEnds" xml:space="preserve">
+    <value>The week ends on {0} (Sydney time).</value>
+  </data>
+  <data name="GuildsNoPoints" xml:space="preserve">
+    <value>No guild has points this week yet.</value>
+  </data>
+  <data name="GuildsGuild" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="GuildsPoints" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="GuildsLastWeek" xml:space="preserve">
+    <value>Last week's winners</value>
+  </data>
+  <data name="GuildsNoLastWeek" xml:space="preserve">
+    <value>No finished week yet.</value>
+  </data>
+  <data name="GuildsWeekOf" xml:space="preserve">
+    <value>Week of {0}</value>
+  </data>
+  <data name="GuildsPaidMembers" xml:space="preserve">
+    <value>Members paid</value>
+  </data>
+  <data name="GuildsSieges" xml:space="preserve">
+    <value>Castle siege results</value>
+  </data>
+  <data name="GuildsNoSieges" xml:space="preserve">
+    <value>No castle siege was won yet.</value>
+  </data>
+  <data name="GuildsErrorLevels" xml:space="preserve">
+    <value>The levels need level 1 at 0 guild XP, and each higher level more guild XP than the one before.</value>
+  </data>
+  <data name="GuildsErrorDuplicateLevel" xml:space="preserve">
+    <value>Level {0} is there twice.</value>
+  </data>
+  <data name="GuildsErrorRanks" xml:space="preserve">
+    <value>The ranks {0} to {1} aren't valid (1 to 100) or overlap another reward.</value>
+  </data>
 </root>

@@ -10793,5 +10793,493 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("OnboardingErrorKitItem", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Guilds: levels and ladder.
+        /// </summary>
+        public static string GuildsLevelsAndLadder {
+            get {
+                return ResourceManager.GetString("GuildsLevelsAndLadder", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild experience from the members' play, the guild levels wi.
+        /// </summary>
+        public static string GuildsPageDescription {
+            get {
+                return ResourceManager.GetString("GuildsPageDescription", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The guild levels plug-in isn't in the database yet. Start th.
+        /// </summary>
+        public static string GuildsNotInstalled {
+            get {
+                return ResourceManager.GetString("GuildsNotInstalled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string GuildsGeneral {
+            get {
+                return ResourceManager.GetString("GuildsGeneral", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild levels and ladder on.
+        /// </summary>
+        public static string GuildsActive {
+            get {
+                return ResourceManager.GetString("GuildsActive", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Tell a level-up to the guild's online members (guild notice).
+        /// </summary>
+        public static string GuildsAnnounceInGame {
+            get {
+                return ResourceManager.GetString("GuildsAnnounceInGame", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Daily cap per member (guild XP).
+        /// </summary>
+        public static string GuildsDailyCap {
+            get {
+                return ResourceManager.GetString("GuildsDailyCap", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The guild experience one character can earn for the guild pe.
+        /// </summary>
+        public static string GuildsDailyCapHint {
+            get {
+                return ResourceManager.GetString("GuildsDailyCapHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Time zone.
+        /// </summary>
+        public static string GuildsTimeZone {
+            get {
+                return ResourceManager.GetString("GuildsTimeZone", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to State file.
+        /// </summary>
+        public static string GuildsFile {
+            get {
+                return ResourceManager.GetString("GuildsFile", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild experience sources.
+        /// </summary>
+        public static string GuildsSources {
+            get {
+                return ResourceManager.GetString("GuildsSources", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to What the members do that gives their guild experience, and h.
+        /// </summary>
+        public static string GuildsSourcesHint {
+            get {
+                return ResourceManager.GetString("GuildsSourcesHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        public static string GuildsSource {
+            get {
+                return ResourceManager.GetString("GuildsSource", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild XP.
+        /// </summary>
+        public static string GuildsXp {
+            get {
+                return ResourceManager.GetString("GuildsXp", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to A monster defeated.
+        /// </summary>
+        public static string GuildsSourceMonsterKill {
+            get {
+                return ResourceManager.GetString("GuildsSourceMonsterKill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to In Blood Castle, Devil Square or Chaos Castle at its end.
+        /// </summary>
+        public static string GuildsSourceEventFinish {
+            get {
+                return ResourceManager.GetString("GuildsSourceEventFinish", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Winning one of these events (extra).
+        /// </summary>
+        public static string GuildsSourceEventWin {
+            get {
+                return ResourceManager.GetString("GuildsSourceEventWin", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Taking part in a world boss kill.
+        /// </summary>
+        public static string GuildsSourceWorldBossKill {
+            get {
+                return ResourceManager.GetString("GuildsSourceWorldBossKill", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Per percent of a world boss's damage.
+        /// </summary>
+        public static string GuildsSourceWorldBossDamage {
+            get {
+                return ResourceManager.GetString("GuildsSourceWorldBossDamage", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to A daily or weekly mission finished.
+        /// </summary>
+        public static string GuildsSourceMission {
+            get {
+                return ResourceManager.GetString("GuildsSourceMission", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Time in the game (per the minutes below).
+        /// </summary>
+        public static string GuildsSourceOnlineTime {
+            get {
+                return ResourceManager.GetString("GuildsSourceOnlineTime", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Winning the castle siege (the guild).
+        /// </summary>
+        public static string GuildsSourceCastleSiege {
+            get {
+                return ResourceManager.GetString("GuildsSourceCastleSiege", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Minutes in the game per grant.
+        /// </summary>
+        public static string GuildsOnlineMinutes {
+            get {
+                return ResourceManager.GetString("GuildsOnlineMinutes", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Castle siege winner's extra ladder points.
+        /// </summary>
+        public static string GuildsSiegeLadderBonus {
+            get {
+                return ResourceManager.GetString("GuildsSiegeLadderBonus", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Levels and buffs.
+        /// </summary>
+        public static string GuildsLevels {
+            get {
+                return ResourceManager.GetString("GuildsLevels", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Each level needs the guild experience in total; its buff goe.
+        /// </summary>
+        public static string GuildsLevelsHint {
+            get {
+                return ResourceManager.GetString("GuildsLevelsHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild buffs on.
+        /// </summary>
+        public static string GuildsBuffsEnabled {
+            get {
+                return ResourceManager.GetString("GuildsBuffsEnabled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Buff name (English).
+        /// </summary>
+        public static string GuildsBuffNameEn {
+            get {
+                return ResourceManager.GetString("GuildsBuffNameEn", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Buff name (Vietnamese).
+        /// </summary>
+        public static string GuildsBuffNameVi {
+            get {
+                return ResourceManager.GetString("GuildsBuffNameVi", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string GuildsLevel {
+            get {
+                return ResourceManager.GetString("GuildsLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild XP needed (total).
+        /// </summary>
+        public static string GuildsLevelXp {
+            get {
+                return ResourceManager.GetString("GuildsLevelXp", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to + EXP %.
+        /// </summary>
+        public static string GuildsExperiencePercent {
+            get {
+                return ResourceManager.GetString("GuildsExperiencePercent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to + zen drop %.
+        /// </summary>
+        public static string GuildsZenPercent {
+            get {
+                return ResourceManager.GetString("GuildsZenPercent", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to + defense.
+        /// </summary>
+        public static string GuildsDefense {
+            get {
+                return ResourceManager.GetString("GuildsDefense", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add a level.
+        /// </summary>
+        public static string GuildsAddLevel {
+            get {
+                return ResourceManager.GetString("GuildsAddLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Weekly guild ladder.
+        /// </summary>
+        public static string GuildsLadder {
+            get {
+                return ResourceManager.GetString("GuildsLadder", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The guilds' points of the week (their guild experience plus .
+        /// </summary>
+        public static string GuildsLadderHint {
+            get {
+                return ResourceManager.GetString("GuildsLadderHint", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Ladder rewards on.
+        /// </summary>
+        public static string GuildsLadderEnabled {
+            get {
+                return ResourceManager.GetString("GuildsLadderEnabled", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Points a guild needs for a reward.
+        /// </summary>
+        public static string GuildsLadderMinimumXp {
+            get {
+                return ResourceManager.GetString("GuildsLadderMinimumXp", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to From rank.
+        /// </summary>
+        public static string GuildsRankFrom {
+            get {
+                return ResourceManager.GetString("GuildsRankFrom", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to To rank.
+        /// </summary>
+        public static string GuildsRankTo {
+            get {
+                return ResourceManager.GetString("GuildsRankTo", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Coins per member.
+        /// </summary>
+        public static string GuildsCoinsPerMember {
+            get {
+                return ResourceManager.GetString("GuildsCoinsPerMember", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild master's extra coins.
+        /// </summary>
+        public static string GuildsMasterBonus {
+            get {
+                return ResourceManager.GetString("GuildsMasterBonus", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Zen per member.
+        /// </summary>
+        public static string GuildsZenPerMember {
+            get {
+                return ResourceManager.GetString("GuildsZenPerMember", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Add ranks.
+        /// </summary>
+        public static string GuildsAddReward {
+            get {
+                return ResourceManager.GetString("GuildsAddReward", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The guild settings were saved..
+        /// </summary>
+        public static string GuildsSaved {
+            get {
+                return ResourceManager.GetString("GuildsSaved", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Reload.
+        /// </summary>
+        public static string GuildsReload {
+            get {
+                return ResourceManager.GetString("GuildsReload", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to This week's ladder.
+        /// </summary>
+        public static string GuildsThisWeek {
+            get {
+                return ResourceManager.GetString("GuildsThisWeek", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The week ends on {0} (Sydney time)..
+        /// </summary>
+        public static string GuildsWeekEnds {
+            get {
+                return ResourceManager.GetString("GuildsWeekEnds", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to No guild has points this week yet..
+        /// </summary>
+        public static string GuildsNoPoints {
+            get {
+                return ResourceManager.GetString("GuildsNoPoints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Guild.
+        /// </summary>
+        public static string GuildsGuild {
+            get {
+                return ResourceManager.GetString("GuildsGuild", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string GuildsPoints {
+            get {
+                return ResourceManager.GetString("GuildsPoints", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Last week's winners.
+        /// </summary>
+        public static string GuildsLastWeek {
+            get {
+                return ResourceManager.GetString("GuildsLastWeek", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to No finished week yet..
+        /// </summary>
+        public static string GuildsNoLastWeek {
+            get {
+                return ResourceManager.GetString("GuildsNoLastWeek", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Week of {0}.
+        /// </summary>
+        public static string GuildsWeekOf {
+            get {
+                return ResourceManager.GetString("GuildsWeekOf", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Members paid.
+        /// </summary>
+        public static string GuildsPaidMembers {
+            get {
+                return ResourceManager.GetString("GuildsPaidMembers", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Castle siege results.
+        /// </summary>
+        public static string GuildsSieges {
+            get {
+                return ResourceManager.GetString("GuildsSieges", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to No castle siege was won yet..
+        /// </summary>
+        public static string GuildsNoSieges {
+            get {
+                return ResourceManager.GetString("GuildsNoSieges", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The levels need level 1 at 0 guild XP, and each higher level.
+        /// </summary>
+        public static string GuildsErrorLevels {
+            get {
+                return ResourceManager.GetString("GuildsErrorLevels", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Level {0} is there twice..
+        /// </summary>
+        public static string GuildsErrorDuplicateLevel {
+            get {
+                return ResourceManager.GetString("GuildsErrorDuplicateLevel", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to The ranks {0} to {1} aren't valid (1 to 100) or overlap anot.
+        /// </summary>
+        public static string GuildsErrorRanks {
+            get {
+                return ResourceManager.GetString("GuildsErrorRanks", resourceCulture);
+            }
+        }
     }
 }
