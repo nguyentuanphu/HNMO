@@ -837,6 +837,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     // Debuffed, the items lose their level's glow; hardened or cloaked also their excellent / ancient glow; cloaked
     // the character is a chrome shell (RenderPartObjectEffect, players' parts).
     const has = (buff: number) => now.includes(buff);
+    // A frozen monster (or one under Blow of Destruction) is drawn a second time, glowing in its colour.
+    const glowing = !player && tint !== null && (has(Buff.FREEZE) || has(Buff.BLOW_OF_DESTRUCTION));
+    who.setBodyGlow(glowing ? new THREE.Color(...(has(Buff.FREEZE) ? tint : [0.3, 0.5, 1] as const)) : null);
     who.setItemLooks({
       debuffed: player && tint !== null, hardened: player && has(Buff.HARDEN), cloaked: player && has(Buff.CLOAKING),
     });

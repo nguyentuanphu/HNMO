@@ -301,7 +301,7 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   await enterWorld(page, 'test400');
   await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
   await goHunting(page);
-  type Tinted = { id: number; kind: string; dead: boolean; cell: { x: number; y: number }; bodyTint: { r: number; g: number; b: number } | null };
+  type Tinted = { id: number; kind: string; dead: boolean; cell: { x: number; y: number }; bodyTint: { r: number; g: number; b: number } | null; bodyGlow: unknown[] | null };
   const setDebuffs = (list: number[]) => page.evaluate((list) => {
     const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { hero: { cell: { x: number; y: number } }; characters: Map<number, Tinted> } } }).__game;
     const hero = g.online.hero;
@@ -313,7 +313,7 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
     }
     if (!best) return null;
     g.buffs.replace(best.id, list);
-    return { id: best.id, tint: best.bodyTint ? [best.bodyTint.r, best.bodyTint.g, best.bodyTint.b] : null };
+    return { id: best.id, tint: best.bodyTint ? [best.bodyTint.r, best.bodyTint.g, best.bodyTint.b] : null, glow: best.bodyGlow?.length ?? 0 };
   }, list);
   const poisoned = await setDebuffs([55]);
   expect(poisoned, 'a monster close by').not.toBeNull();
@@ -322,6 +322,7 @@ test('debuffs colour a monster and weakness leaves its lights', async ({ page })
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-poison.png` });
   const frozen = await setDebuffs([56]);
   expect(frozen!.tint).toEqual([0.3, 0.5, 1]); // eDeBuff_Freeze
+  expect(frozen!.glow, 'a frozen body is drawn again, glowing').toBeGreaterThan(0);
   await page.screenshot({ path: `${SHOTS_DIR}/buffs-freeze.png` });
   await setDebuffs([57]); // eDeBuff_Harden: two ice shells stay on the monster while it lasts
   await expect.poll(() => game(page, (g) => g.effects.census()['effect:ice'] ?? 0), { timeout: 10_000 }).toBe(2);

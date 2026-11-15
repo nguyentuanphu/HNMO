@@ -294,6 +294,18 @@ function mountOfPet(pet: AppearanceItem | null | undefined): Mount {
   return ({ 37: 'fenrir', 4: 'darkHorse', 2: 'uniria', 3: 'dinorant' } as Record<number, Mount>)[pet.number] ?? 'none';
 }
 
+// The additive second drawings of frozen bodies, one material per texture and colour.
+const bodyGlowMaterials = new Map<string, THREE.MeshBasicMaterial>();
+function bodyGlowMaterial(map: THREE.Texture, color: THREE.Color): THREE.MeshBasicMaterial {
+  const key = `${map.uuid}|${color.getHexString()}`;
+  let material = bodyGlowMaterials.get(key);
+  if (!material) {
+    material = new THREE.MeshBasicMaterial({ map, color, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, depthFunc: THREE.LessEqualDepth });
+    bodyGlowMaterials.set(key, material);
+  }
+  return material;
+}
+
 export class Character {
   id: number;
   name: string;
@@ -404,6 +416,23 @@ export class Character {
     if (now.debuffed === looks.debuffed && now.hardened === looks.hardened && now.cloaked === looks.cloaked) return;
     this.itemLooks = { ...looks };
     this.looksDirty = true;
+  }
+
+  private bodyGlow: THREE.Mesh[] | null = null;
+
+  /**
+   * A frozen (or Blow of Destruction) monster's second drawing (RenderObject): its body again, every mesh added in the
+   * body's colour (BlendMesh -2). null: none.
+   */
+  setBodyGlow(color: THREE.Color | null): void {
+    if (this.bodyGlow) for (const mesh of this.bodyGlow) mesh.removeFromParent();
+    this.bodyGlow = null;
+    if (!color) return;
+    this.bodyGlow = this.model.parts.filter((part) => part.mesh.material.visible && part.mesh.material.map).map((part) => {
+      const mesh = this.model.overlay(part.geometry, bodyGlowMaterial(part.mesh.material.map!, color)); // the filter keeps parts with a map
+      this.model.group.add(mesh);
+      return mesh;
+    });
   }
 
   private applyItemLooks(): void {
