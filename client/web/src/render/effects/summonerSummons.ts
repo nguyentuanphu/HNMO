@@ -155,7 +155,7 @@ EXTRA_EFFECTS.summonerSummonNeil = {
   // Meshes 0 and 2 bright at their alpha while it fades in (below 0.7), then textured; its blade (1) red, bright.
   paint: (o, meshIndex, material) => {
     if (meshIndex === 1) meshLook(material, true, RED, o.alpha);
-    else meshLook(material, o.alpha < 0.7, meshIndex === 0 || meshIndex === 2 ? o.light : o.light, o.alpha);
+    else meshLook(material, o.alpha < 0.7, o.light, o.alpha);
   },
 };
 
