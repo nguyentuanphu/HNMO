@@ -783,6 +783,48 @@
   <data name="ApiKeysDescription" xml:space="preserve">
     <value>Ứng dụng bên ngoài như trình khởi chạy game hay website tự xác thực với API công khai tại /api bằng một trong các khóa này. Hãy cho mỗi ứng dụng một khóa riêng để có thể thu hồi từng khóa.</value>
   </data>
+  <data name="ApiKeysHelpButtons" xml:space="preserve">
+    <value>Bật cho phép dùng lại khóa. Tắt tạm ngừng khóa cho đến khi bạn bật lại. Xóa gỡ bỏ khóa vĩnh viễn. Đổi cho phép giới hạn những việc trợ lý tự động được làm khi dùng khóa; khóa và vai trò đã chọn vẫn giữ nguyên.</value>
+  </data>
+  <data name="ApiKeysHelpCreate" xml:space="preserve">
+    <value>Bấm Tạo khóa API, đặt tên để dễ nhận biết và chỉ cấp quyền mà chương trình cần. Sao chép ngay khi khóa hiện ra: bạn chỉ được xem toàn bộ khóa một lần.</value>
+  </data>
+  <data name="ApiKeysHelpSafety" xml:space="preserve">
+    <value>Không đăng khóa công khai hoặc để lộ khóa trong ảnh chụp màn hình. Xóa khóa không còn dùng; nếu khóa bị lộ, hãy xóa và tạo khóa mới để thay thế.</value>
+  </data>
+  <data name="ApiKeysHelpTitle" xml:space="preserve">
+    <value>Hướng dẫn sử dụng trang này</value>
+  </data>
+  <data name="ApiKeysHelpWhat" xml:space="preserve">
+    <value>Khóa API giống như mật khẩu dành riêng cho một chương trình, chẳng hạn trang tài khoản trên website, bot Discord hoặc dịch vụ nạp tiền/thanh toán. Nhờ khóa này, chương trình có thể kết nối với máy chủ mà bạn không phải đưa mật khẩu quản trị cho nó.</value>
+  </data>
+  <data name="ApiKeysHelpWhen" xml:space="preserve">
+    <value>Bạn chỉ cần khóa khi chương trình đó chạy trên máy khác hoặc phần cài đặt yêu cầu nhập khóa. Nếu mọi thành phần trong thư mục HNMO đều chạy trên cùng một máy, thường bạn không cần tạo khóa.</value>
+  </data>
+  <data name="ApiKeysHintChange" xml:space="preserve">
+    <value>Giới hạn những việc trợ lý tự động được làm với khóa này mà không đổi vai trò hay giá trị khóa.</value>
+  </data>
+  <data name="ApiKeysHintClose" xml:space="preserve">
+    <value>Đóng phần hiển thị sau khi đã sao chép vì bạn không thể xem lại toàn bộ khóa.</value>
+  </data>
+  <data name="ApiKeysHintCopy" xml:space="preserve">
+    <value>Sao chép toàn bộ khóa để dán vào chương trình cần dùng.</value>
+  </data>
+  <data name="ApiKeysHintCreate" xml:space="preserve">
+    <value>Tạo khóa riêng và chọn quyền cho chương trình sẽ sử dụng khóa.</value>
+  </data>
+  <data name="ApiKeysHintDelete" xml:space="preserve">
+    <value>Xóa vĩnh viễn khóa này để chương trình không thể tiếp tục dùng khóa đó kết nối.</value>
+  </data>
+  <data name="ApiKeysHintDisable" xml:space="preserve">
+    <value>Tạm ngừng cho phép kết nối bằng khóa này mà không xóa khóa.</value>
+  </data>
+  <data name="ApiKeysHintEnable" xml:space="preserve">
+    <value>Cho phép chương trình kết nối lại bằng khóa này.</value>
+  </data>
+  <data name="ApiKeysHintHelp" xml:space="preserve">
+    <value>Mở hoặc ẩn hướng dẫn sử dụng trang này.</value>
+  </data>
   <data name="ApiKeyName" xml:space="preserve">
     <value>Ứng dụng</value>
   </data>

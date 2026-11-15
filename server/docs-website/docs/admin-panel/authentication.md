@@ -163,6 +163,14 @@ that.
 
 ### Creating a key
 
+**English:** On the API keys page, **How to use this page** opens or hides a
+plain-language guide to keys, when they are needed, creation, actions and safe
+handling. Hover over a button for a short explanation of its action.
+
+**Tiếng Việt:** Trên trang Khóa API, bấm **Hướng dẫn sử dụng trang này** để mở
+hoặc ẩn hướng dẫn về khóa, khi nào cần dùng, cách tạo, các thao tác và cách giữ
+khóa an toàn. Đưa chuột lên nút để xem giải thích ngắn về thao tác đó.
+
 Open **API keys** in the navigation — it's next to *Users* and needs the
 administrator role. Click **Create API key**, give the application a name and
 pick its role.
