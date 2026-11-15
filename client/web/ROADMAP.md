@@ -322,3 +322,12 @@ section 12 (the cash shop) still waits for the owner's answers.
 9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
 11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.
+
+## Owner requests (2026-11-16, Sydney time) — waiting for the go-ahead on the proposal
+- Log in on the website first; the game then opens at the server choice without asking for the password again.
+- Top-up lives on the home page and in the account page, not on the game's login box.
+- The game's login box keeps only the guide link (no "create one", "top up", test accounts line).
+- Player sign-in/registration and the admin sign-in are separate.
+- The admin panel explains itself: a hint on hover for every button/field and a "How to use this page" button on
+  every page (EN+VI), starting with the API keys page.
+- The owner hit "This account is already logged in" for test5 on their own computer: the stuck-login follow-up is urgent.
