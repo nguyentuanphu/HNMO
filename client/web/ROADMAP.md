@@ -187,8 +187,15 @@ the coins history shows every grant.
    starter kit*), the guide panel (Y) with an arrow and chat notices in the web game, and a New players section on the
    website. State in `save/onboarding.json` (no database change). Still to check on a server running this code: a new
    character's whole guide (the rules are unit-tested; the web parts are tested with fed packets).
-6. ⏳ **Guilds** (idea 6): guild levels from the members' play, small guild buffs, a weekly guild ladder,
-   the castle siege results and the guild ladder on the website.
+6. ✅ **Guilds** (idea 6), built 2026-11-16 (Sydney): guild experience from the members' play (monsters, events
+   finished and won, world boss kills and damage, missions, time in the game, the castle siege), each source on/off with
+   its amount and a daily cap per member; 10 guild levels (editable) with small buffs for the online members (+EXP %,
+   +zen drop %, +defense) shown on the web game's buff strip; a weekly guild ladder (Monday 00:00 Sydney) whose top
+   guilds' members get coins (extra for the master), zen or items once, with the castle siege winner's ladder bonus.
+   All in the admin panel (*Guilds: levels and ladder*), a panel next to the guild window (G) and chat notices in the
+   web game, and a Guilds section on the website (ladder, last week's winners, guilds by level, castle siege results).
+   State in `save/guilds.json` (no database change). Still to check on a server running this code: a week's payout
+   and a real level-up with several members (the rules are unit-tested; the web parts are tested with fed packets).
 7. ⏳ **Community** (idea 7): one-time coins for linking Discord or Zalo and joining the group, coins
    for community events, automatic posts of rare drops and boss kills (Discord), a share button for
    screenshots.

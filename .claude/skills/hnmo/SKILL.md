@@ -299,3 +299,20 @@ description: How the HNMO owner works and how to work on HNMO (server, web game,
   response is 16 bytes (the desktop struct is unpacked: the skill at offset 4), ids little endian, 10000 = none.
 - Headless Chromium runs a few frames a second: an action can pass its hit keys between two updates (combat.ts counts
   passed keys at the action's end), and Dark Side's dash is tested by wrapping `effects.step` to watch every tick.
+
+## Guilds (2026-11-16)
+- `GameLogic/PlugIns/Guilds`: `GuildEngine` (pure, `GuildEngineTest`: XP with a daily cap per member, levels, buffs, the weekly
+  ladder with Sydney weeks incl. DST, pay-once references `hnmo-guild-week:{week}:{guild}:{member}`), `GuildStore`
+  (`save/guilds.json`, `GuildStore.Open` shared per file), `GuildsPlugIn` (monster kills, mini games, castle siege, a 1-minute tick
+  for online time, buffs and the Monday payout; missions and world bosses call `GuildsPlugIn.Get(context)` directly).
+- A player's persistent guild: `player.GuildStatus.GuildId` (uint) → `IGameServerContext.GuildServer.GetPersistentGuildIdAsync`;
+  an offline character's: `CreateNewGuildContext().GetGuildMembershipAsync(name)`.
+- Server-only buffs: a `MagicEffect` with an in-memory `MagicEffectDefinition` numbered 200+ (`MagicEffectsList` sends nothing
+  for those; guild buff = 240) and `ConstantElement`s (`BonusExperienceRate` AddRaw, `MoneyAmountRate` Multiplicate,
+  `DefenseFinal` AddFinal). The web shows HNMO buffs on the strip with `setHnmoBuff` (game/buffs.ts; guild buff = 190).
+- F5 codes now: ... onboarding 0E-10, guilds 11 (request), 12 (state JSON), 13 (take waiting rewards). Next free: 14.
+- Admin page `/guilds-levels-ladder`; website `/website/guilds`; web panel opens with the guild window (G)
+  (`ui/guildLevelsWindow.ts`, `SocialOptions.guildWindowToggled`).
+- Tests can feed an HNMO JSON state without importing /js modules: build the C2 F5 xx bytes in Node (escape non-ASCII as
+  \uXXXX like the server does) and call `__game.connection.dispatch` (see `tests/e2e/guilds.spec.ts`).
+- The worktree can borrow the main checkout's `client/web/node_modules` with a symlink (same lock file; saves disk).
