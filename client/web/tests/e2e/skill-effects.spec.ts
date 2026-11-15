@@ -56,6 +56,7 @@ const KNIGHT: Case[] = [
   { skill: 22, name: 'cyclone', expect: ['particle:spark', 'particle:spark3'], shotAt: 650 },
   // Its blades follow the swing's keys (PLAYER_ATTACK_ONE_FLASH), played by the hero here.
   { skill: 57, name: 'spiral-slash', expect: ['joint:flare'], shotAt: 520, action: 136 },
+  { skill: 44, name: 'crescent-moon-slash', expect: ['joint:jointSpark', 'particle:fire', 'effect:swordForce', 'joint:jointForce'], shotAt: 600, action: 137 },
 ];
 
 const ELF: Case[] = [
@@ -107,6 +108,7 @@ const FIGHTER: Case[] = [
   { skill: 268, name: 'increase-defense', expect: ['effect:swordEffectMono', 'effect:windForce', 'effect:shockWaveGround1'], shotAt: 400 },
   // While Increase Attack lasts (eBuff_Att_up_Ourforces = 129) red smoke lines rise from the fists.
   { skill: 266, name: 'increase-attack-buff', expect: ['effect:lightRed', 'particle:smokeLine1'], shotAt: 1600, buffs: [129] },
+  { skill: 269, name: 'charge', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'joint:jointSpark'], shotAt: 240, action: 137 },
   { skill: 263, name: 'dark-side', expect: ['effect:eventCloud', 'effect:magic', 'effect:windForce'], shotAt: 300 },
 ];
 

@@ -86,8 +86,11 @@ export const SkillEffect = {
   EARTHSHAKE: 62,
   ELECTRIC_SPIKE: 65,
   CHAOTIC_DISEIER: 238,
+  CRESCENT_MOON_SLASH: 44,
 } as const;
 
+/** PLAYER_ATTACK_RUSH: Crescent Moon Slash's and Charge's rush. */
+const RUSH_ACTION = 137;
 /** PLAYER_ATTACK_ONE_FLASH: Spiral Slash's swing. */
 const ONE_FLASH_ACTION = 136;
 /** Without the skill's action playing, the timings count this many keys a tick. */
@@ -232,6 +235,20 @@ function attackStage(system: EffectSystem, skill: number, caster: EffectOwner, a
     return attackTime;
   }
   if (skill === SkillEffect.SWELL_LIFE && attackTime > 9) return ATTACK_LIMIT_TIME; // PLAYER_SKILL_VITALITY
+  if (skill === SkillEffect.CRESCENT_MOON_SLASH || skill === RageSkill.CHARGE) {
+    // AT_SKILL_RUSH / AT_SKILL_OCCUPY: sparks and fire burst at the feet every tick of the rush (the Charge's fire,
+    // BITMAP_FIRE SubType 18, isn't ported); the release after key 5.
+    const position = caster.position.clone();
+    position.x += randInt(30) - 15;
+    position.y += randInt(30) - 15;
+    position.z += 20;
+    for (let i = 0; i < 4; i++) {
+      const angle = new THREE.Vector3(randInt(60) + 60 + 90, 0, caster.angle.z);
+      system.createJoint('jointSpark', position, position, angle);
+      if (skill === SkillEffect.CRESCENT_MOON_SLASH) system.createParticle('fire', position, angle, caster.light ?? WHITE, 2, 1.5);
+    }
+    return actionKey(caster, [RUSH_ACTION], attackTime) > 5 ? ATTACK_LIMIT_TIME : attackTime;
+  }
   if (IMMEDIATE_SKILLS.includes(skill)) return ATTACK_LIMIT_TIME; // AttackStage sets AttackTime to 15 at once
   if (skill === SkillEffect.FIRE_SLASH) {
     // The charge at the hand on the first two ticks; the sweep when the swing reaches its third
@@ -476,6 +493,9 @@ function releaseAtCaster(system: EffectSystem, skill: number, caster: EffectOwne
       break;
     case SkillEffect.ELECTRIC_SPIKE:
       electricSpike(system, caster);
+      break;
+    case SkillEffect.CRESCENT_MOON_SLASH: // AT_SKILL_RUSH: the sword's force sweeps ahead
+      system.createEffect('swordForce', at, caster.angle, light, 0, caster);
       break;
     case SkillEffect.GIGANTIC_STORM: // five storms 200 around the gladiator
       for (let i = 0; i < 5; i++) {
