@@ -57,6 +57,7 @@ const CSS = `
 #touchBar button { min-width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid rgba(255,220,150,.45);
   background: rgba(20,16,10,.72); color: #f3e2bd; font: 600 14px system-ui, sans-serif; touch-action: manipulation; }
 #touchBar button:active { background: rgba(80,60,30,.9); }
+#touchBar button.on { background: rgba(140,100,40,.95); border-color: #ffd98a; }
 #touchBar.shown { display: flex; }
 #touchMore { position: fixed; right: 62px; top: 50%; transform: translateY(-50%); z-index: 40; display: none; flex-direction: column; gap: 6px; }
 #touchMore.open { display: flex; }
@@ -121,7 +122,14 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   const more = document.createElement('div');
   more.id = 'touchMore';
   for (const entry of MORE) more.append(button(entry.label, entry.title, () => { more.classList.remove('open'); key(entry.key); }));
-  bar.append(button('⋯', 'More', () => more.classList.toggle('open')), button('⛶', 'Full screen', fullScreenLandscape));
+  // Item names on the ground (the desktop's held Alt): a toggle on a touch screen.
+  let names = false;
+  const namesButton = button('Alt', 'Item names on the ground (Alt)', () => {
+    names = !names;
+    namesButton.classList.toggle('on', names);
+    window.dispatchEvent(new KeyboardEvent(names ? 'keydown' : 'keyup', { key: 'Alt', bubbles: true }));
+  });
+  bar.append(namesButton, button('⋯', 'More', () => more.classList.toggle('open')), button('⛶', 'Full screen', fullScreenLandscape));
   // The fight button, the skill keys and the potion keys.
   const fight = document.createElement('div');
   fight.id = 'touchFight';
