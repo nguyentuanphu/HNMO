@@ -105,7 +105,7 @@ public static class CommunityStateWriter
             TimeZone = configuration.TimeZone,
             Discord = new { On = configuration.Discord.Enabled && configuration.Discord.Coins > 0, configuration.Discord.Coins, configuration.Discord.CoinType },
             Zalo = new { On = configuration.Zalo.Enabled && configuration.Zalo.Coins > 0, configuration.Zalo.Coins, configuration.Zalo.CoinType },
-            Events = engine.Events(nowUtc).Where(e => e.Definition.ShowOnWebsite && (e.Phase != CommunityEventPhase.Ended || engine.ToUtc(e.Definition.End) is { } end && nowUtc - end < TimeSpan.FromDays(7)))
+            Events = engine.Events(nowUtc).Where(e => e.Definition.ShowOnWebsite && (e.Phase != CommunityEventPhase.Ended || (engine.ToUtc(e.Definition.End) is { } end && nowUtc - end < TimeSpan.FromDays(7))))
                 .Select(e => new
                 {
                     e.Definition.Id,

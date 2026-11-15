@@ -3873,4 +3873,232 @@
   <data name="GuildsErrorRanks" xml:space="preserve">
     <value>Hạng {0} đến {1} không hợp lệ (1 đến 100) hoặc trùng với phần thưởng khác.</value>
   </data>
+  <data name="CommunityPage" xml:space="preserve">
+    <value>Cộng đồng</value>
+  </data>
+  <data name="CommunityPageDescription" xml:space="preserve">
+    <value>Xu khi liên kết Discord và tham gia nhóm Zalo, sự kiện cộng đồng với mã hoặc danh sách người thắng, và bài đăng tự động lên Discord và mục nổi bật của trang web. Giờ theo giờ Sydney.</value>
+  </data>
+  <data name="CommunityNotInstalled" xml:space="preserve">
+    <value>Plug-in cộng đồng chưa có trong cơ sở dữ liệu: hãy khởi động máy chủ trò chơi một lần rồi mở lại trang này.</value>
+  </data>
+  <data name="CommunityGeneral" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="CommunityActive" xml:space="preserve">
+    <value>Bật phần thưởng và bài đăng cộng đồng</value>
+  </data>
+  <data name="CommunityLinksHint" xml:space="preserve">
+    <value>Liên kết Discord và Zalo mà người chơi thấy được đặt trong Plugins, "Tên trò chơi". Bot Discord (trang cài đặt Discord) liên kết tài khoản bằng /link.</value>
+  </data>
+  <data name="CommunityOneTime" xml:space="preserve">
+    <value>Xu một lần</value>
+  </data>
+  <data name="CommunityOneTimeHint" xml:space="preserve">
+    <value>Discord: người chơi nhận mã trong cửa sổ cộng đồng (K) và gõ /link MÃ trong máy chủ Discord của bạn; bot chỉ trả lời thành viên, nên liên kết chứng tỏ họ đã tham gia. Xu được nhận một lần mỗi tài khoản và mỗi người dùng Discord. Zalo không có API bot mở cho nhóm: người chơi nhận mã yêu cầu trong trò chơi, đăng mã vào nhóm Zalo (hoặc gửi cho bạn), và bạn duyệt yêu cầu bên dưới.</value>
+  </data>
+  <data name="CommunityReward" xml:space="preserve">
+    <value>Phần thưởng</value>
+  </data>
+  <data name="CommunityCoins" xml:space="preserve">
+    <value>Xu</value>
+  </data>
+  <data name="CommunityDiscordReward" xml:space="preserve">
+    <value>Liên kết tài khoản với Discord</value>
+  </data>
+  <data name="CommunityZaloReward" xml:space="preserve">
+    <value>Tham gia nhóm Zalo</value>
+  </data>
+  <data name="CommunityZaloClaims" xml:space="preserve">
+    <value>Yêu cầu Zalo đang chờ</value>
+  </data>
+  <data name="CommunityZaloClaimsHint" xml:space="preserve">
+    <value>Kiểm tra mã đã được một thành viên đăng trong nhóm Zalo rồi duyệt. Máy chủ trò chơi trả xu trong vòng một phút.</value>
+  </data>
+  <data name="CommunityNoZaloClaims" xml:space="preserve">
+    <value>Không có yêu cầu nào đang chờ.</value>
+  </data>
+  <data name="CommunityLogin" xml:space="preserve">
+    <value>Tài khoản</value>
+  </data>
+  <data name="CommunityCharacter" xml:space="preserve">
+    <value>Nhân vật</value>
+  </data>
+  <data name="CommunityZaloName" xml:space="preserve">
+    <value>Tên trên Zalo</value>
+  </data>
+  <data name="CommunityCode" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="CommunityRequested" xml:space="preserve">
+    <value>Thời gian yêu cầu</value>
+  </data>
+  <data name="CommunityApprove" xml:space="preserve">
+    <value>Duyệt</value>
+  </data>
+  <data name="CommunityReject" xml:space="preserve">
+    <value>Từ chối</value>
+  </data>
+  <data name="CommunityApprovedWaiting" xml:space="preserve">
+    <value>đã duyệt, đang trả xu</value>
+  </data>
+  <data name="CommunityApprovedPaid" xml:space="preserve">
+    <value>đã duyệt, đã trả xu</value>
+  </data>
+  <data name="CommunityRejected" xml:space="preserve">
+    <value>đã từ chối</value>
+  </data>
+  <data name="CommunityZaloApproved" xml:space="preserve">
+    <value>Yêu cầu Zalo của {0} đã được duyệt.</value>
+  </data>
+  <data name="CommunityZaloRejected" xml:space="preserve">
+    <value>Yêu cầu Zalo của {0} đã bị từ chối.</value>
+  </data>
+  <data name="CommunityEvents" xml:space="preserve">
+    <value>Sự kiện cộng đồng</value>
+  </data>
+  <data name="CommunityEventsHint" xml:space="preserve">
+    <value>Người chơi nhập mã trong cửa sổ cộng đồng (K) khi sự kiện diễn ra (một lần mỗi tài khoản), hoặc bạn liệt kê các nhân vật thắng: họ được trả thưởng khi sự kiện bắt đầu (mỗi người một lần). Xu được nhận ngay; zen và vật phẩm chờ khi túi còn chỗ. Ngày dạng "2026-11-20 18:00" (giờ Sydney); để trống là không giới hạn.</value>
+  </data>
+  <data name="CommunityEventId" xml:space="preserve">
+    <value>Mã định danh</value>
+  </data>
+  <data name="CommunityTitleEn" xml:space="preserve">
+    <value>Tiêu đề (tiếng Anh)</value>
+  </data>
+  <data name="CommunityTitleVi" xml:space="preserve">
+    <value>Tiêu đề (tiếng Việt)</value>
+  </data>
+  <data name="CommunityShowOnWebsite" xml:space="preserve">
+    <value>Hiển thị trên trang web</value>
+  </data>
+  <data name="CommunityDescriptionEn" xml:space="preserve">
+    <value>Mô tả (tiếng Anh)</value>
+  </data>
+  <data name="CommunityDescriptionVi" xml:space="preserve">
+    <value>Mô tả (tiếng Việt)</value>
+  </data>
+  <data name="CommunityStart" xml:space="preserve">
+    <value>Bắt đầu (giờ Sydney)</value>
+  </data>
+  <data name="CommunityEnd" xml:space="preserve">
+    <value>Kết thúc (giờ Sydney)</value>
+  </data>
+  <data name="CommunityWinners" xml:space="preserve">
+    <value>Người thắng (nhân vật)</value>
+  </data>
+  <data name="CommunityZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="CommunityEntries" xml:space="preserve">
+    <value>{0} đã nhập mã, {1} người thắng đã ghi nhận</value>
+  </data>
+  <data name="CommunityAddEvent" xml:space="preserve">
+    <value>Thêm sự kiện</value>
+  </data>
+  <data name="CommunityPosts" xml:space="preserve">
+    <value>Bài đăng tự động</value>
+  </data>
+  <data name="CommunityPostsHint" xml:space="preserve">
+    <value>Mỗi loại có thể đăng lên Discord (khi đã cài cầu nối Discord) và mục nổi bật của trang web. Boss thế giới và công thành đã có bài đăng Discord riêng nên mặc định chỉ lên trang web. Khi đồ hiếm được đăng lên Discord ở đây, bài đăng đồ rơi riêng của trình phát sự kiện trò chơi sẽ bị bỏ qua.</value>
+  </data>
+  <data name="CommunityKind" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="CommunityWebsite" xml:space="preserve">
+    <value>Trang web</value>
+  </data>
+  <data name="CommunityTextEn" xml:space="preserve">
+    <value>Nội dung (tiếng Anh)</value>
+  </data>
+  <data name="CommunityTextVi" xml:space="preserve">
+    <value>Nội dung (tiếng Việt)</value>
+  </data>
+  <data name="CommunityPlaceholders" xml:space="preserve">
+    <value>Biến: {player}, {item}, {monster}, {map} (đồ rơi); {boss}, {player} (sát thương cao nhất), {map} (boss thế giới); {guild}, {level}, {rank}, {points} (bang hội, công thành).</value>
+  </data>
+  <data name="CommunityRareDrops" xml:space="preserve">
+    <value>Đồ rơi nào là hiếm</value>
+  </data>
+  <data name="CommunityExcellent" xml:space="preserve">
+    <value>Hoàn hảo</value>
+  </data>
+  <data name="CommunityAncient" xml:space="preserve">
+    <value>Thần</value>
+  </data>
+  <data name="CommunityMinimumLevel" xml:space="preserve">
+    <value>Từ cấp vật phẩm (0: tắt)</value>
+  </data>
+  <data name="CommunityDropItems" xml:space="preserve">
+    <value>Luôn các vật phẩm này (nhóm số)</value>
+  </data>
+  <data name="CommunityDropMaps" xml:space="preserve">
+    <value>Chỉ trên bản đồ (trống: tất cả)</value>
+  </data>
+  <data name="CommunityDropCooldown" xml:space="preserve">
+    <value>Số giây giữa hai bài của một người chơi</value>
+  </data>
+  <data name="CommunityDropsHint" xml:space="preserve">
+    <value>Vật phẩm dạng "14 13; 14 14" (Ngọc Ước Nguyện, Ngọc Tâm Linh); bản đồ dạng "0, 7" (Lorencia, Atlans).</value>
+  </data>
+  <data name="CommunityLadderRanks" xml:space="preserve">
+    <value>Số hạng bảng xếp hạng bang hội được đăng</value>
+  </data>
+  <data name="CommunityHighlightsShown" xml:space="preserve">
+    <value>Số mục nổi bật trên trang web</value>
+  </data>
+  <data name="CommunityHighlights" xml:space="preserve">
+    <value>Nổi bật gần đây</value>
+  </data>
+  <data name="CommunityNoHighlights" xml:space="preserve">
+    <value>Chưa có bài đăng nào.</value>
+  </data>
+  <data name="CommunityErrorId" xml:space="preserve">
+    <value>Mã định danh sự kiện "{0}" phải gồm 1-40 chữ cái, chữ số, - hoặc _.</value>
+  </data>
+  <data name="CommunityErrorDuplicateId" xml:space="preserve">
+    <value>Mã định danh sự kiện "{0}" bị dùng hai lần.</value>
+  </data>
+  <data name="CommunityErrorDates" xml:space="preserve">
+    <value>Ngày của sự kiện "{0}" không hợp lệ ("2026-11-20 18:00", kết thúc sau bắt đầu).</value>
+  </data>
+  <data name="CommunityErrorCode" xml:space="preserve">
+    <value>Mã của sự kiện "{0}" cần có chữ cái hoặc chữ số.</value>
+  </data>
+  <data name="CommunityErrorDuplicateCode" xml:space="preserve">
+    <value>Mã của sự kiện "{0}" đã được sự kiện khác dùng.</value>
+  </data>
+  <data name="CommunityErrorDropItem" xml:space="preserve">
+    <value>"{0}" không phải là vật phẩm (nhóm số).</value>
+  </data>
+  <data name="CommunityErrorMap" xml:space="preserve">
+    <value>"{0}" không phải là số bản đồ.</value>
+  </data>
+  <data name="CommunityKindRareDrop" xml:space="preserve">
+    <value>Đồ hiếm rơi</value>
+  </data>
+  <data name="CommunityKindWorldBoss" xml:space="preserve">
+    <value>Hạ boss thế giới</value>
+  </data>
+  <data name="CommunityKindGuildLevel" xml:space="preserve">
+    <value>Bang hội lên cấp</value>
+  </data>
+  <data name="CommunityKindGuildLadder" xml:space="preserve">
+    <value>Bang hội thắng bảng xếp hạng tuần</value>
+  </data>
+  <data name="CommunityKindCastleSiege" xml:space="preserve">
+    <value>Thắng công thành</value>
+  </data>
+  <data name="CommunityPhaseUpcoming" xml:space="preserve">
+    <value>Sắp diễn ra</value>
+  </data>
+  <data name="CommunityPhaseOpen" xml:space="preserve">
+    <value>Đang diễn ra</value>
+  </data>
+  <data name="CommunityPhaseEnded" xml:space="preserve">
+    <value>Đã kết thúc</value>
+  </data>
+  <data name="CommunitySaved" xml:space="preserve">
+    <value>Đã lưu cài đặt cộng đồng.</value>
+  </data>
 </root>

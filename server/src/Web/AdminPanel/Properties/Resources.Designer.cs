@@ -11281,5 +11281,688 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("GuildsErrorRanks", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Community.
+        /// </summary>
+        public static string CommunityPage {
+            get {
+                return ResourceManager.GetString("CommunityPage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Coins for linking Discord and joining the Zalo group, community events with a code word or a list of winners, and automatic posts to Discord and the website's recent highlights. Times are Sydney times.
+        /// </summary>
+        public static string CommunityPageDescription {
+            get {
+                return ResourceManager.GetString("CommunityPageDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The community plug-in isn't in the database yet: start the game server once, then open this page again..
+        /// </summary>
+        public static string CommunityNotInstalled {
+            get {
+                return ResourceManager.GetString("CommunityNotInstalled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string CommunityGeneral {
+            get {
+                return ResourceManager.GetString("CommunityGeneral", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Community rewards and posts are on.
+        /// </summary>
+        public static string CommunityActive {
+            get {
+                return ResourceManager.GetString("CommunityActive", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Discord and Zalo links players see are set in Plugins, "Game name". The Discord bot (Discord setup page) links accounts with /link..
+        /// </summary>
+        public static string CommunityLinksHint {
+            get {
+                return ResourceManager.GetString("CommunityLinksHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to One-time coins.
+        /// </summary>
+        public static string CommunityOneTime {
+            get {
+                return ResourceManager.GetString("CommunityOneTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Discord: the player gets a code in the game's community window (K) and types /link CODE in your Discord server; the bot only answers members, so a link proves they joined. The coins come once per acco.
+        /// </summary>
+        public static string CommunityOneTimeHint {
+            get {
+                return ResourceManager.GetString("CommunityOneTimeHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reward.
+        /// </summary>
+        public static string CommunityReward {
+            get {
+                return ResourceManager.GetString("CommunityReward", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Coins.
+        /// </summary>
+        public static string CommunityCoins {
+            get {
+                return ResourceManager.GetString("CommunityCoins", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Link the account to Discord.
+        /// </summary>
+        public static string CommunityDiscordReward {
+            get {
+                return ResourceManager.GetString("CommunityDiscordReward", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Join the Zalo group.
+        /// </summary>
+        public static string CommunityZaloReward {
+            get {
+                return ResourceManager.GetString("CommunityZaloReward", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Zalo claims waiting.
+        /// </summary>
+        public static string CommunityZaloClaims {
+            get {
+                return ResourceManager.GetString("CommunityZaloClaims", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Check that the code was posted in the Zalo group by a member, then approve. The game server pays the coins within a minute..
+        /// </summary>
+        public static string CommunityZaloClaimsHint {
+            get {
+                return ResourceManager.GetString("CommunityZaloClaimsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No claims are waiting..
+        /// </summary>
+        public static string CommunityNoZaloClaims {
+            get {
+                return ResourceManager.GetString("CommunityNoZaloClaims", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string CommunityLogin {
+            get {
+                return ResourceManager.GetString("CommunityLogin", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Character.
+        /// </summary>
+        public static string CommunityCharacter {
+            get {
+                return ResourceManager.GetString("CommunityCharacter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Name in Zalo.
+        /// </summary>
+        public static string CommunityZaloName {
+            get {
+                return ResourceManager.GetString("CommunityZaloName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string CommunityCode {
+            get {
+                return ResourceManager.GetString("CommunityCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Asked at.
+        /// </summary>
+        public static string CommunityRequested {
+            get {
+                return ResourceManager.GetString("CommunityRequested", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Approve.
+        /// </summary>
+        public static string CommunityApprove {
+            get {
+                return ResourceManager.GetString("CommunityApprove", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reject.
+        /// </summary>
+        public static string CommunityReject {
+            get {
+                return ResourceManager.GetString("CommunityReject", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to approved, coins being paid.
+        /// </summary>
+        public static string CommunityApprovedWaiting {
+            get {
+                return ResourceManager.GetString("CommunityApprovedWaiting", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to approved, coins paid.
+        /// </summary>
+        public static string CommunityApprovedPaid {
+            get {
+                return ResourceManager.GetString("CommunityApprovedPaid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to rejected.
+        /// </summary>
+        public static string CommunityRejected {
+            get {
+                return ResourceManager.GetString("CommunityRejected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Zalo claim of {0} was approved..
+        /// </summary>
+        public static string CommunityZaloApproved {
+            get {
+                return ResourceManager.GetString("CommunityZaloApproved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The Zalo claim of {0} was rejected..
+        /// </summary>
+        public static string CommunityZaloRejected {
+            get {
+                return ResourceManager.GetString("CommunityZaloRejected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Community events.
+        /// </summary>
+        public static string CommunityEvents {
+            get {
+                return ResourceManager.GetString("CommunityEvents", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Players enter the code word in the community window (K) while the event runs (once per account), or you list the winning characters: they're paid once the event started (each once). Coins come at once.
+        /// </summary>
+        public static string CommunityEventsHint {
+            get {
+                return ResourceManager.GetString("CommunityEventsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string CommunityEventId {
+            get {
+                return ResourceManager.GetString("CommunityEventId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Title (English).
+        /// </summary>
+        public static string CommunityTitleEn {
+            get {
+                return ResourceManager.GetString("CommunityTitleEn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Title (Vietnamese).
+        /// </summary>
+        public static string CommunityTitleVi {
+            get {
+                return ResourceManager.GetString("CommunityTitleVi", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show on the website.
+        /// </summary>
+        public static string CommunityShowOnWebsite {
+            get {
+                return ResourceManager.GetString("CommunityShowOnWebsite", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Description (English).
+        /// </summary>
+        public static string CommunityDescriptionEn {
+            get {
+                return ResourceManager.GetString("CommunityDescriptionEn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Description (Vietnamese).
+        /// </summary>
+        public static string CommunityDescriptionVi {
+            get {
+                return ResourceManager.GetString("CommunityDescriptionVi", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start (Sydney).
+        /// </summary>
+        public static string CommunityStart {
+            get {
+                return ResourceManager.GetString("CommunityStart", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to End (Sydney).
+        /// </summary>
+        public static string CommunityEnd {
+            get {
+                return ResourceManager.GetString("CommunityEnd", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Winners (characters).
+        /// </summary>
+        public static string CommunityWinners {
+            get {
+                return ResourceManager.GetString("CommunityWinners", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Zen.
+        /// </summary>
+        public static string CommunityZen {
+            get {
+                return ResourceManager.GetString("CommunityZen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} entered the code, {1} winners recorded.
+        /// </summary>
+        public static string CommunityEntries {
+            get {
+                return ResourceManager.GetString("CommunityEntries", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add an event.
+        /// </summary>
+        public static string CommunityAddEvent {
+            get {
+                return ResourceManager.GetString("CommunityAddEvent", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic posts.
+        /// </summary>
+        public static string CommunityPosts {
+            get {
+                return ResourceManager.GetString("CommunityPosts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Each kind can go to Discord (when the Discord bridge is set up) and to the website's recent highlights. World boss kills and the castle siege already have their own Discord posts, so they go to the we.
+        /// </summary>
+        public static string CommunityPostsHint {
+            get {
+                return ResourceManager.GetString("CommunityPostsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string CommunityKind {
+            get {
+                return ResourceManager.GetString("CommunityKind", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string CommunityWebsite {
+            get {
+                return ResourceManager.GetString("CommunityWebsite", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Text (English).
+        /// </summary>
+        public static string CommunityTextEn {
+            get {
+                return ResourceManager.GetString("CommunityTextEn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Text (Vietnamese).
+        /// </summary>
+        public static string CommunityTextVi {
+            get {
+                return ResourceManager.GetString("CommunityTextVi", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Placeholders: {player}, {item}, {monster}, {map} (drops); {boss}, {player} (top damage), {map} (world bosses); {guild}, {level}, {rank}, {points} (guilds, castle siege)..
+        /// </summary>
+        public static string CommunityPlaceholders {
+            get {
+                return ResourceManager.GetString("CommunityPlaceholders", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Which drops are rare.
+        /// </summary>
+        public static string CommunityRareDrops {
+            get {
+                return ResourceManager.GetString("CommunityRareDrops", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Excellent.
+        /// </summary>
+        public static string CommunityExcellent {
+            get {
+                return ResourceManager.GetString("CommunityExcellent", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ancient.
+        /// </summary>
+        public static string CommunityAncient {
+            get {
+                return ResourceManager.GetString("CommunityAncient", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to From item level (0: off).
+        /// </summary>
+        public static string CommunityMinimumLevel {
+            get {
+                return ResourceManager.GetString("CommunityMinimumLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Always these items (group number).
+        /// </summary>
+        public static string CommunityDropItems {
+            get {
+                return ResourceManager.GetString("CommunityDropItems", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Only on maps (empty: all).
+        /// </summary>
+        public static string CommunityDropMaps {
+            get {
+                return ResourceManager.GetString("CommunityDropMaps", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Seconds between a player's posts.
+        /// </summary>
+        public static string CommunityDropCooldown {
+            get {
+                return ResourceManager.GetString("CommunityDropCooldown", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Items as "14 13; 14 14" (Jewel of Bless, Jewel of Soul); maps as "0, 7" (Lorencia, Atlans)..
+        /// </summary>
+        public static string CommunityDropsHint {
+            get {
+                return ResourceManager.GetString("CommunityDropsHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Guild ladder ranks posted.
+        /// </summary>
+        public static string CommunityLadderRanks {
+            get {
+                return ResourceManager.GetString("CommunityLadderRanks", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Highlights on the website.
+        /// </summary>
+        public static string CommunityHighlightsShown {
+            get {
+                return ResourceManager.GetString("CommunityHighlightsShown", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Recent highlights.
+        /// </summary>
+        public static string CommunityHighlights {
+            get {
+                return ResourceManager.GetString("CommunityHighlights", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing was posted yet..
+        /// </summary>
+        public static string CommunityNoHighlights {
+            get {
+                return ResourceManager.GetString("CommunityNoHighlights", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The event id "{0}" must be 1-40 letters, digits, - or _..
+        /// </summary>
+        public static string CommunityErrorId {
+            get {
+                return ResourceManager.GetString("CommunityErrorId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The event id "{0}" is used twice..
+        /// </summary>
+        public static string CommunityErrorDuplicateId {
+            get {
+                return ResourceManager.GetString("CommunityErrorDuplicateId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The dates of the event "{0}" aren't valid ("2026-11-20 18:00", the end after the start)..
+        /// </summary>
+        public static string CommunityErrorDates {
+            get {
+                return ResourceManager.GetString("CommunityErrorDates", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The code of the event "{0}" needs letters or digits..
+        /// </summary>
+        public static string CommunityErrorCode {
+            get {
+                return ResourceManager.GetString("CommunityErrorCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The code of the event "{0}" is used by another event..
+        /// </summary>
+        public static string CommunityErrorDuplicateCode {
+            get {
+                return ResourceManager.GetString("CommunityErrorDuplicateCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to "{0}" isn't an item (group number)..
+        /// </summary>
+        public static string CommunityErrorDropItem {
+            get {
+                return ResourceManager.GetString("CommunityErrorDropItem", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to "{0}" isn't a map number..
+        /// </summary>
+        public static string CommunityErrorMap {
+            get {
+                return ResourceManager.GetString("CommunityErrorMap", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Rare drops.
+        /// </summary>
+        public static string CommunityKindRareDrop {
+            get {
+                return ResourceManager.GetString("CommunityKindRareDrop", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to World boss kills.
+        /// </summary>
+        public static string CommunityKindWorldBoss {
+            get {
+                return ResourceManager.GetString("CommunityKindWorldBoss", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Guild level-ups.
+        /// </summary>
+        public static string CommunityKindGuildLevel {
+            get {
+                return ResourceManager.GetString("CommunityKindGuildLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Guild ladder winners.
+        /// </summary>
+        public static string CommunityKindGuildLadder {
+            get {
+                return ResourceManager.GetString("CommunityKindGuildLadder", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Castle siege winners.
+        /// </summary>
+        public static string CommunityKindCastleSiege {
+            get {
+                return ResourceManager.GetString("CommunityKindCastleSiege", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Starts later.
+        /// </summary>
+        public static string CommunityPhaseUpcoming {
+            get {
+                return ResourceManager.GetString("CommunityPhaseUpcoming", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        public static string CommunityPhaseOpen {
+            get {
+                return ResourceManager.GetString("CommunityPhaseOpen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Over.
+        /// </summary>
+        public static string CommunityPhaseEnded {
+            get {
+                return ResourceManager.GetString("CommunityPhaseEnded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The community settings were saved..
+        /// </summary>
+        public static string CommunitySaved {
+            get {
+                return ResourceManager.GetString("CommunitySaved", resourceCulture);
+            }
+        }
     }
 }

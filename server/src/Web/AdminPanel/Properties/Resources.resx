@@ -3842,4 +3842,232 @@
   <data name="GuildsErrorRanks" xml:space="preserve">
     <value>The ranks {0} to {1} aren't valid (1 to 100) or overlap another reward.</value>
   </data>
+  <data name="CommunityPage" xml:space="preserve">
+    <value>Community</value>
+  </data>
+  <data name="CommunityPageDescription" xml:space="preserve">
+    <value>Coins for linking Discord and joining the Zalo group, community events with a code word or a list of winners, and automatic posts to Discord and the website's recent highlights. Times are Sydney times.</value>
+  </data>
+  <data name="CommunityNotInstalled" xml:space="preserve">
+    <value>The community plug-in isn't in the database yet: start the game server once, then open this page again.</value>
+  </data>
+  <data name="CommunityGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="CommunityActive" xml:space="preserve">
+    <value>Community rewards and posts are on</value>
+  </data>
+  <data name="CommunityLinksHint" xml:space="preserve">
+    <value>The Discord and Zalo links players see are set in Plugins, "Game name". The Discord bot (Discord setup page) links accounts with /link.</value>
+  </data>
+  <data name="CommunityOneTime" xml:space="preserve">
+    <value>One-time coins</value>
+  </data>
+  <data name="CommunityOneTimeHint" xml:space="preserve">
+    <value>Discord: the player gets a code in the game's community window (K) and types /link CODE in your Discord server; the bot only answers members, so a link proves they joined. The coins come once per account and once per Discord user. Zalo has no open bot API for groups: the player gets a claim code in the game, posts it in the Zalo group (or sends it to you), and you approve the claim below.</value>
+  </data>
+  <data name="CommunityReward" xml:space="preserve">
+    <value>Reward</value>
+  </data>
+  <data name="CommunityCoins" xml:space="preserve">
+    <value>Coins</value>
+  </data>
+  <data name="CommunityDiscordReward" xml:space="preserve">
+    <value>Link the account to Discord</value>
+  </data>
+  <data name="CommunityZaloReward" xml:space="preserve">
+    <value>Join the Zalo group</value>
+  </data>
+  <data name="CommunityZaloClaims" xml:space="preserve">
+    <value>Zalo claims waiting</value>
+  </data>
+  <data name="CommunityZaloClaimsHint" xml:space="preserve">
+    <value>Check that the code was posted in the Zalo group by a member, then approve. The game server pays the coins within a minute.</value>
+  </data>
+  <data name="CommunityNoZaloClaims" xml:space="preserve">
+    <value>No claims are waiting.</value>
+  </data>
+  <data name="CommunityLogin" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="CommunityCharacter" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="CommunityZaloName" xml:space="preserve">
+    <value>Name in Zalo</value>
+  </data>
+  <data name="CommunityCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CommunityRequested" xml:space="preserve">
+    <value>Asked at</value>
+  </data>
+  <data name="CommunityApprove" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="CommunityReject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="CommunityApprovedWaiting" xml:space="preserve">
+    <value>approved, coins being paid</value>
+  </data>
+  <data name="CommunityApprovedPaid" xml:space="preserve">
+    <value>approved, coins paid</value>
+  </data>
+  <data name="CommunityRejected" xml:space="preserve">
+    <value>rejected</value>
+  </data>
+  <data name="CommunityZaloApproved" xml:space="preserve">
+    <value>The Zalo claim of {0} was approved.</value>
+  </data>
+  <data name="CommunityZaloRejected" xml:space="preserve">
+    <value>The Zalo claim of {0} was rejected.</value>
+  </data>
+  <data name="CommunityEvents" xml:space="preserve">
+    <value>Community events</value>
+  </data>
+  <data name="CommunityEventsHint" xml:space="preserve">
+    <value>Players enter the code word in the community window (K) while the event runs (once per account), or you list the winning characters: they're paid once the event started (each once). Coins come at once; zen and items wait for room in the bag. Dates as "2026-11-20 18:00" (Sydney time); empty means no limit.</value>
+  </data>
+  <data name="CommunityEventId" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="CommunityTitleEn" xml:space="preserve">
+    <value>Title (English)</value>
+  </data>
+  <data name="CommunityTitleVi" xml:space="preserve">
+    <value>Title (Vietnamese)</value>
+  </data>
+  <data name="CommunityShowOnWebsite" xml:space="preserve">
+    <value>Show on the website</value>
+  </data>
+  <data name="CommunityDescriptionEn" xml:space="preserve">
+    <value>Description (English)</value>
+  </data>
+  <data name="CommunityDescriptionVi" xml:space="preserve">
+    <value>Description (Vietnamese)</value>
+  </data>
+  <data name="CommunityStart" xml:space="preserve">
+    <value>Start (Sydney)</value>
+  </data>
+  <data name="CommunityEnd" xml:space="preserve">
+    <value>End (Sydney)</value>
+  </data>
+  <data name="CommunityWinners" xml:space="preserve">
+    <value>Winners (characters)</value>
+  </data>
+  <data name="CommunityZen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="CommunityEntries" xml:space="preserve">
+    <value>{0} entered the code, {1} winners recorded</value>
+  </data>
+  <data name="CommunityAddEvent" xml:space="preserve">
+    <value>Add an event</value>
+  </data>
+  <data name="CommunityPosts" xml:space="preserve">
+    <value>Automatic posts</value>
+  </data>
+  <data name="CommunityPostsHint" xml:space="preserve">
+    <value>Each kind can go to Discord (when the Discord bridge is set up) and to the website's recent highlights. World boss kills and the castle siege already have their own Discord posts, so they go to the website only by default. When rare drops go to Discord here, the game events publisher's own drop posts are left out.</value>
+  </data>
+  <data name="CommunityKind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="CommunityWebsite" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="CommunityTextEn" xml:space="preserve">
+    <value>Text (English)</value>
+  </data>
+  <data name="CommunityTextVi" xml:space="preserve">
+    <value>Text (Vietnamese)</value>
+  </data>
+  <data name="CommunityPlaceholders" xml:space="preserve">
+    <value>Placeholders: {player}, {item}, {monster}, {map} (drops); {boss}, {player} (top damage), {map} (world bosses); {guild}, {level}, {rank}, {points} (guilds, castle siege).</value>
+  </data>
+  <data name="CommunityRareDrops" xml:space="preserve">
+    <value>Which drops are rare</value>
+  </data>
+  <data name="CommunityExcellent" xml:space="preserve">
+    <value>Excellent</value>
+  </data>
+  <data name="CommunityAncient" xml:space="preserve">
+    <value>Ancient</value>
+  </data>
+  <data name="CommunityMinimumLevel" xml:space="preserve">
+    <value>From item level (0: off)</value>
+  </data>
+  <data name="CommunityDropItems" xml:space="preserve">
+    <value>Always these items (group number)</value>
+  </data>
+  <data name="CommunityDropMaps" xml:space="preserve">
+    <value>Only on maps (empty: all)</value>
+  </data>
+  <data name="CommunityDropCooldown" xml:space="preserve">
+    <value>Seconds between a player's posts</value>
+  </data>
+  <data name="CommunityDropsHint" xml:space="preserve">
+    <value>Items as "14 13; 14 14" (Jewel of Bless, Jewel of Soul); maps as "0, 7" (Lorencia, Atlans).</value>
+  </data>
+  <data name="CommunityLadderRanks" xml:space="preserve">
+    <value>Guild ladder ranks posted</value>
+  </data>
+  <data name="CommunityHighlightsShown" xml:space="preserve">
+    <value>Highlights on the website</value>
+  </data>
+  <data name="CommunityHighlights" xml:space="preserve">
+    <value>Recent highlights</value>
+  </data>
+  <data name="CommunityNoHighlights" xml:space="preserve">
+    <value>Nothing was posted yet.</value>
+  </data>
+  <data name="CommunityErrorId" xml:space="preserve">
+    <value>The event id "{0}" must be 1-40 letters, digits, - or _.</value>
+  </data>
+  <data name="CommunityErrorDuplicateId" xml:space="preserve">
+    <value>The event id "{0}" is used twice.</value>
+  </data>
+  <data name="CommunityErrorDates" xml:space="preserve">
+    <value>The dates of the event "{0}" aren't valid ("2026-11-20 18:00", the end after the start).</value>
+  </data>
+  <data name="CommunityErrorCode" xml:space="preserve">
+    <value>The code of the event "{0}" needs letters or digits.</value>
+  </data>
+  <data name="CommunityErrorDuplicateCode" xml:space="preserve">
+    <value>The code of the event "{0}" is used by another event.</value>
+  </data>
+  <data name="CommunityErrorDropItem" xml:space="preserve">
+    <value>"{0}" isn't an item (group number).</value>
+  </data>
+  <data name="CommunityErrorMap" xml:space="preserve">
+    <value>"{0}" isn't a map number.</value>
+  </data>
+  <data name="CommunityKindRareDrop" xml:space="preserve">
+    <value>Rare drops</value>
+  </data>
+  <data name="CommunityKindWorldBoss" xml:space="preserve">
+    <value>World boss kills</value>
+  </data>
+  <data name="CommunityKindGuildLevel" xml:space="preserve">
+    <value>Guild level-ups</value>
+  </data>
+  <data name="CommunityKindGuildLadder" xml:space="preserve">
+    <value>Guild ladder winners</value>
+  </data>
+  <data name="CommunityKindCastleSiege" xml:space="preserve">
+    <value>Castle siege winners</value>
+  </data>
+  <data name="CommunityPhaseUpcoming" xml:space="preserve">
+    <value>Starts later</value>
+  </data>
+  <data name="CommunityPhaseOpen" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="CommunityPhaseEnded" xml:space="preserve">
+    <value>Over</value>
+  </data>
+  <data name="CommunitySaved" xml:space="preserve">
+    <value>The community settings were saved.</value>
+  </data>
 </root>

@@ -1,0 +1,342 @@
+@page "/community"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.Community
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+<PageTitle>HNMO: @Resources.CommunityPage</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.CommunityPage" />
+<h1>@Resources.CommunityPage</h1>
+<p class="text-muted">@Resources.CommunityPageDescription</p>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@Resources.CommunityNotInstalled</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="community-errors">
+            <ul class="mb-0">
+                @foreach (var error in this._errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.CommunityGeneral</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="community-active" @bind="this._isActive" />
+                <label class="form-check-label" for="community-active">@Resources.CommunityActive</label>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <label class="form-label" for="community-zone">@Resources.GuildsTimeZone</label>
+                    <input class="form-control" id="community-zone" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-5">
+                    <label class="form-label" for="community-file">@Resources.GuildsFile</label>
+                    <input class="form-control" id="community-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <p class="form-text mb-0">@Resources.CommunityLinksHint</p>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.CommunityOneTime</h2>
+            <p class="form-text">@Resources.CommunityOneTimeHint</p>
+            <table class="table table-sm align-middle" id="community-rewards" style="max-width: 44rem">
+                <thead>
+                <tr>
+                    <th>@Resources.MissionsOn</th>
+                    <th>@Resources.CommunityReward</th>
+                    <th>@Resources.CommunityCoins</th>
+                    <th>@Resources.CashShopCoinType</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var (key, caption, reward) in new[] { ("discord", Resources.CommunityDiscordReward, c.Discord), ("zalo", Resources.CommunityZaloReward, c.Zalo) })
+                {
+                    <tr data-reward="@key">
+                        <td><input class="form-check-input reward-on" type="checkbox" @bind="reward.Enabled" aria-label="@Resources.MissionsOn" /></td>
+                        <td>@caption</td>
+                        <td><input class="form-control form-control-sm reward-coins" style="width: 7rem" type="number" min="0" @bind="reward.Coins" aria-label="@Resources.CommunityCoins" /></td>
+                        <td>
+                            <select class="form-select form-select-sm reward-coin-type" style="width: auto" @bind="reward.CoinType" aria-label="@Resources.CashShopCoinType">
+                                @foreach (var coinType in Enum.GetValues<CashShopCoinType>())
+                                {
+                                    <option value="@coinType">@CashShopCoinCaption.Get(coinType)</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <h3 class="h6 mt-3">@Resources.CommunityZaloClaims</h3>
+            <p class="form-text">@Resources.CommunityZaloClaimsHint</p>
+            @if (this._engine is { } claimsEngine)
+            {
+                var pending = claimsEngine.PendingZalo();
+                @if (pending.Count == 0)
+                {
+                    <p class="text-muted" id="community-zalo-empty">@Resources.CommunityNoZaloClaims</p>
+                }
+                else
+                {
+                    <table class="table table-sm align-middle" id="community-zalo" style="max-width: 60rem">
+                        <thead><tr><th>@Resources.CommunityLogin</th><th>@Resources.CommunityCharacter</th><th>@Resources.CommunityZaloName</th><th>@Resources.CommunityCode</th><th>@Resources.CommunityRequested</th><th></th></tr></thead>
+                        <tbody>
+                        @foreach (var claim in pending)
+                        {
+                            <tr data-login="@claim.Login">
+                                <td>@claim.Login</td>
+                                <td>@claim.ZaloCharacter</td>
+                                <td>@claim.ZaloName</td>
+                                <td><code>@claim.ZaloCode</code></td>
+                                <td>@this.Local(claim.ZaloRequestedAtUtc)</td>
+                                <td class="text-nowrap">
+                                    <button type="button" class="btn btn-sm btn-success zalo-approve" @onclick="() => this.DecideZalo(claim.Login, true)">@Resources.CommunityApprove</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger zalo-reject" @onclick="() => this.DecideZalo(claim.Login, false)">@Resources.CommunityReject</button>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+
+                var decided = claimsEngine.DecidedZalo(10);
+                @if (decided.Count > 0)
+                {
+                    <ul class="small" id="community-zalo-decided">
+                        @foreach (var claim in decided)
+                        {
+                            <li>@this.Local(claim.ZaloDecidedAtUtc): @claim.Login (@claim.ZaloName) — @(claim.ZaloStatus == ZaloClaimStatus.Approved ? (claim.ZaloPaidAtUtc is null ? Resources.CommunityApprovedWaiting : Resources.CommunityApprovedPaid) : Resources.CommunityRejected)</li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.CommunityEvents</h2>
+            <p class="form-text">@Resources.CommunityEventsHint</p>
+            @foreach (var row in this._events)
+            {
+                var e = row.Definition;
+                <fieldset class="border rounded p-2 mb-2 community-event" data-event="@e.Id">
+                    <div class="row g-2">
+                        <div class="col-sm-2">
+                            <label class="form-label small">@Resources.CommunityEventId</label>
+                            <input class="form-control form-control-sm event-id" @bind="e.Id" />
+                        </div>
+                        <div class="col-sm-1 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input event-on" type="checkbox" @bind="e.Enabled" id="@($"event-on-{row.Key}")" />
+                                <label class="form-check-label small" for="@($"event-on-{row.Key}")">@Resources.MissionsOn</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small">@Resources.CommunityTitleEn</label>
+                            <input class="form-control form-control-sm event-title-en" @bind="e.TitleEn" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small">@Resources.CommunityTitleVi</label>
+                            <input class="form-control form-control-sm event-title-vi" @bind="e.TitleVi" />
+                        </div>
+                        <div class="col-sm-3 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input event-website" type="checkbox" @bind="e.ShowOnWebsite" id="@($"event-web-{row.Key}")" />
+                                <label class="form-check-label small" for="@($"event-web-{row.Key}")">@Resources.CommunityShowOnWebsite</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small">@Resources.CommunityDescriptionEn</label>
+                            <textarea class="form-control form-control-sm event-description-en" rows="2" @bind="e.DescriptionEn"></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small">@Resources.CommunityDescriptionVi</label>
+                            <textarea class="form-control form-control-sm event-description-vi" rows="2" @bind="e.DescriptionVi"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small">@Resources.CommunityStart</label>
+                            <input class="form-control form-control-sm event-start" placeholder="2026-11-20 18:00" @bind="e.Start" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small">@Resources.CommunityEnd</label>
+                            <input class="form-control form-control-sm event-end" placeholder="2026-11-27 23:59" @bind="e.End" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small">@Resources.CommunityCode</label>
+                            <input class="form-control form-control-sm event-code" @bind="e.Code" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label small">@Resources.CommunityWinners</label>
+                            <input class="form-control form-control-sm event-winners" placeholder="Ann, Bob" @bind="row.WinnersText" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small">@Resources.CommunityCoins</label>
+                            <input class="form-control form-control-sm event-coins" type="number" min="0" @bind="e.Reward.Coins" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small">@Resources.CashShopCoinType</label>
+                            <select class="form-select form-select-sm event-coin-type" @bind="e.Reward.CoinType">
+                                @foreach (var coinType in Enum.GetValues<CashShopCoinType>())
+                                {
+                                    <option value="@coinType">@CashShopCoinCaption.Get(coinType)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="form-label small">@Resources.CommunityZen</label>
+                            <input class="form-control form-control-sm event-zen" type="number" min="0" @bind="e.Reward.Zen" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label small">@Resources.MissionsItems</label>
+                            <input class="form-control form-control-sm event-items" placeholder="14 13 0 1" title="@Resources.MissionsItemsHint" @bind="row.ItemsText" />
+                        </div>
+                        <div class="col-sm-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveEvent(row)">@Resources.Remove</button>
+                        </div>
+                    </div>
+                    @if (this._engine is { } eventEngine && !string.IsNullOrWhiteSpace(e.Id))
+                    {
+                        var entries = eventEngine.EntriesOf(e.Id);
+                        <p class="form-text mb-0 event-status">
+                            @this.PhaseCaption(eventEngine, e) · @string.Format(Resources.CommunityEntries, entries.Count(x => !x.Winner), entries.Count(x => x.Winner))
+                            @if (entries.Count > 0)
+                            {
+                                <span> — @string.Join(", ", entries.Take(20).Select(x => x.Character))</span>
+                            }
+                        </p>
+                    }
+                </fieldset>
+            }
+            <button type="button" class="btn btn-outline-primary btn-sm" id="community-add-event" @onclick="this.AddEvent">@Resources.CommunityAddEvent</button>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@Resources.CommunityPosts</h2>
+            <p class="form-text">@Resources.CommunityPostsHint</p>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="community-posts">
+                    <thead>
+                    <tr>
+                        <th>@Resources.MissionsOn</th>
+                        <th>@Resources.CommunityKind</th>
+                        <th>Discord</th>
+                        <th>@Resources.CommunityWebsite</th>
+                        <th>@Resources.CommunityTextEn</th>
+                        <th>@Resources.CommunityTextVi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var kind in Enum.GetValues<CommunityPostKind>())
+                    {
+                        var post = c.Post(kind);
+                        <tr data-kind="@kind">
+                            <td><input class="form-check-input post-on" type="checkbox" @bind="post.Enabled" aria-label="@Resources.MissionsOn" /></td>
+                            <td>@KindCaption(kind)</td>
+                            <td><input class="form-check-input post-discord" type="checkbox" @bind="post.ToDiscord" aria-label="Discord" /></td>
+                            <td><input class="form-check-input post-website" type="checkbox" @bind="post.ToWebsite" aria-label="@Resources.CommunityWebsite" /></td>
+                            <td><input class="form-control form-control-sm post-text-en" style="min-width: 16rem" @bind="post.TextEn" aria-label="@Resources.CommunityTextEn" /></td>
+                            <td><input class="form-control form-control-sm post-text-vi" style="min-width: 16rem" @bind="post.TextVi" aria-label="@Resources.CommunityTextVi" /></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <p class="form-text">@Resources.CommunityPlaceholders</p>
+
+            <h3 class="h6 mt-3">@Resources.CommunityRareDrops</h3>
+            <div class="row g-2 align-items-end">
+                <div class="col-sm-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="community-drops-excellent" @bind="c.Drops.Excellent" />
+                        <label class="form-check-label" for="community-drops-excellent">@Resources.CommunityExcellent</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="community-drops-ancient" @bind="c.Drops.Ancient" />
+                        <label class="form-check-label" for="community-drops-ancient">@Resources.CommunityAncient</label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="community-drops-level">@Resources.CommunityMinimumLevel</label>
+                    <input class="form-control" type="number" min="0" max="15" id="community-drops-level" @bind="c.Drops.MinimumLevel" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="community-drops-items">@Resources.CommunityDropItems</label>
+                    <input class="form-control" id="community-drops-items" placeholder="14 13; 14 14" @bind="this._dropItemsText" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="community-drops-maps">@Resources.CommunityDropMaps</label>
+                    <input class="form-control" id="community-drops-maps" placeholder="0, 7" @bind="this._dropMapsText" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="community-drops-cooldown">@Resources.CommunityDropCooldown</label>
+                    <input class="form-control" type="number" min="0" id="community-drops-cooldown" @bind="c.DropCooldownSeconds" />
+                </div>
+            </div>
+            <p class="form-text">@Resources.CommunityDropsHint</p>
+            <div class="row g-2">
+                <div class="col-sm-3">
+                    <label class="form-label" for="community-ladder-ranks">@Resources.CommunityLadderRanks</label>
+                    <input class="form-control" type="number" min="1" max="10" id="community-ladder-ranks" @bind="c.LadderRanksPosted" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="community-highlights-shown">@Resources.CommunityHighlightsShown</label>
+                    <input class="form-control" type="number" min="1" max="100" id="community-highlights-shown" @bind="c.HighlightsShown" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex gap-2 mb-4">
+        <button type="button" class="btn btn-primary" id="community-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
+    </div>
+
+    @if (this._engine is { } engine)
+    {
+        var highlights = engine.Highlights(30);
+        <section class="card mb-3">
+            <div class="card-body">
+                <h2 class="h5">@Resources.CommunityHighlights</h2>
+                @if (highlights.Count == 0)
+                {
+                    <p class="text-muted" id="community-highlights-empty">@Resources.CommunityNoHighlights</p>
+                }
+                else
+                {
+                    <ul id="community-highlights">
+                        @foreach (var h in highlights)
+                        {
+                            <li>
+                                @this.Local(h.AtUtc) · @KindCaption(h.Kind): @(this.IsVietnamese ? h.TextVi : h.TextEn)
+                                <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-1 highlight-remove" @onclick="() => this.RemoveHighlight(h)">@Resources.Remove</button>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </section>
+    }
+}
