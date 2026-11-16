@@ -248,13 +248,25 @@ else
             <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-relife" @bind="c.Website.AllowRelife" /><label class="form-check-label" for="resets-web-relife">Relife</label></div>
             <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-add" @bind="c.Website.AllowAddStats" /><label class="form-check-label" for="resets-web-add">@T("Add stat points", "Cộng điểm")</label></div>
             <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-clear" @bind="c.Website.AllowClearStats" /><label class="form-check-label" for="resets-web-clear">@T("Clear stats (the points come back)", "Tẩy điểm (điểm được trả lại)")</label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-clear-master" @bind="c.Website.AllowClearMasterSkills" /><label class="form-check-label" for="resets-web-clear-master">@T("Clear master skill points (points come back)", "Tẩy điểm master (trả lại điểm master)")</label></div>
             <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="resets-web-delegated" @bind="c.Website.AllowDelegatedSwitch" /><label class="form-check-label" for="resets-web-delegated">@T("Delegated reset switch", "Bật/tắt ủy thác reset")</label></div>
-            <div class="row g-2">
+            <div class="row g-2 mb-2">
                 <div class="col-sm-2"><label class="form-label" for="resets-web-clear-zen">@T("Clearing costs zen", "Tẩy điểm tốn zen")</label><input class="form-control" type="number" min="0" id="resets-web-clear-zen" @bind="c.Website.ClearStatsZen" /></div>
                 <div class="col-sm-2"><label class="form-label" for="resets-web-clear-coins">@T("Clearing costs coins", "Tẩy điểm tốn coin")</label><input class="form-control" type="number" min="0" id="resets-web-clear-coins" @bind="c.Website.ClearStatsCoins" /></div>
                 <div class="col-sm-2">
                     <label class="form-label" for="resets-web-clear-type">@T("Coin type", "Loại coin")</label>
                     <select class="form-select" id="resets-web-clear-type" @bind="c.Website.ClearStatsCoinType">
+                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2"><label class="form-label" for="resets-web-clear-mzen">@T("Clear master zen", "Tẩy master (Zen)")</label><input class="form-control" type="number" min="0" id="resets-web-clear-mzen" @bind="c.Website.ClearMasterSkillsZen" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-web-clear-mcoins">@T("Clear master coins", "Tẩy master (Coin)")</label><input class="form-control" type="number" min="0" id="resets-web-clear-mcoins" @bind="c.Website.ClearMasterSkillsCoins" /></div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-web-clear-mtype">@T("Master coin type", "Loại coin master")</label>
+                    <select class="form-select" id="resets-web-clear-mtype" @bind="c.Website.ClearMasterSkillsCoinType">
                         @foreach (var type in Enum.GetValues<CashShopCoinType>())
                         {
                             <option value="@type">@CashShopCoinCaption.Get(type)</option>

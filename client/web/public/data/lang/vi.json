@@ -2929,6 +2929,14 @@
 "Your part this week: %s": "Phần của bạn tuần này: %s",
 "Your part this week: %s · today %s / %s": "Phần của bạn tuần này: %s · hôm nay %s / %s",
 "level %d": "cấp %d",
-"zen and items": "zen và vật phẩm"
+"zen and items": "zen và vật phẩm",
+"Texture quality": "Chất lượng vân bề mặt",
+"Compressed (faster)": "Nén (nhanh hơn)",
+"Original": "Gốc",
+"Performance mode (Alt+P)": "Chế độ mượt (Alt+P)",
+"Hide other players (Alt+O)": "Ẩn người chơi khác (Alt+O)",
+"Hide wings and pets (Alt+W)": "Ẩn cánh và thú cưng (Alt+W)",
+"Fewer skill and item effects (Alt+E)": "Giảm hiệu ứng kỹ năng và vật phẩm (Alt+E)",
+"Hides other players, wings, pets, and heavy effects for crowded events (Alt+P)": "Ẩn người chơi khác, cánh, thú cưng và giảm hiệu ứng khi sự kiện đông người (Alt+P)"
 }
 }
