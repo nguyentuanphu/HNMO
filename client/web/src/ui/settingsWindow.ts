@@ -30,6 +30,10 @@ const TEXT_SIZE_DROPDOWN = 101;
 const VIEW_DISTANCE_LABELS = ['Near', 'Medium', 'Far'];
 /** The HNMO view distance dropdown's id among the window's dropdowns (the desktop's go up to 8). */
 const VIEW_DISTANCE_DROPDOWN = 100;
+const TEXTURE_QUALITY_DROPDOWN = 102;
+export type TextureQuality = 'compressed' | 'original';
+const TEXTURE_QUALITY_VALUES: readonly TextureQuality[] = ['compressed', 'original'];
+const TEXTURE_QUALITY_LABELS = ['Compressed (faster)', 'Original'];
 /** How often new maps and the effect system get the view distance / effects switch. */
 const REFRESH_MS = 1000;
 
@@ -40,9 +44,16 @@ export interface GameSettings {
   /** The UI size in percent (UI_SIZES). */
   uiSize: number;
   showFps: boolean;
+  textureQuality: TextureQuality;
 }
 
-const DEFAULT_SETTINGS: GameSettings = { quality: { ...DEFAULT_QUALITY }, textSize: 1, uiSize: 100, showFps: true };
+const DEFAULT_SETTINGS: GameSettings = {
+  quality: { ...DEFAULT_QUALITY },
+  textSize: 1,
+  uiSize: 100,
+  showFps: true,
+  textureQuality: 'compressed',
+};
 
 function pick<T>(list: readonly T[], value: unknown, fallback: T): T {
   return list.includes(value as T) ? value as T : fallback;
@@ -53,7 +64,13 @@ export function loadSettings(): GameSettings {
   try {
     const text = localStorage.getItem(STORAGE_KEY);
     if (text === null) return settings;
-    const saved = JSON.parse(text) as { quality?: Partial<Record<keyof QualitySettings, unknown>>; textSize?: unknown; uiSize?: unknown; showFps?: unknown };
+    const saved = JSON.parse(text) as {
+      quality?: Partial<Record<keyof QualitySettings, unknown>>;
+      textSize?: unknown;
+      uiSize?: unknown;
+      showFps?: unknown;
+      textureQuality?: unknown;
+    };
     const q = saved.quality ?? {};
     settings.quality = {
       renderScale: pick(RENDER_SCALES, q.renderScale, DEFAULT_QUALITY.renderScale),
@@ -64,10 +81,16 @@ export function loadSettings(): GameSettings {
     settings.textSize = pick([0, 1, 2], saved.textSize, 1);
     settings.uiSize = pick(UI_SIZES, saved.uiSize, 100);
     if (typeof saved.showFps === 'boolean') settings.showFps = saved.showFps;
+    settings.textureQuality = pick(TEXTURE_QUALITY_VALUES, saved.textureQuality, 'compressed');
   } catch {
     /* storage unavailable or damaged: defaults */
   }
   return settings;
+}
+
+/** Returns the active texture quality setting ('compressed' or 'original'). */
+export function getTextureQuality(): TextureQuality {
+  return loadSettings().textureQuality;
 }
 
 function saveSettings(settings: GameSettings): void {
@@ -122,6 +145,8 @@ function checkboxRow(label: string, onClick: () => void): { row: HTMLDivElement;
 export interface SettingsActions {
   /** The "Performance report" button (ui/perfReportWindow.ts). */
   performanceReport?: () => void;
+  /** Called when the player changes texture quality (compressed vs original). */
+  textureQualityChanged?: (quality: TextureQuality) => void;
 }
 
 export class SettingsWindow {
@@ -129,7 +154,20 @@ export class SettingsWindow {
   private opening: Promise<void> | null = null;
   private readonly settings: GameSettings = loadSettings();
   private readonly model: OptionModel;
-  private extras: { lowSpec?: HTMLDivElement; mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[]; textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[]; wordFilter?: HTMLDivElement } = { viewOptions: [], textOptions: [] };
+  private extras: {
+    lowSpec?: HTMLDivElement;
+    mute?: HTMLDivElement;
+    viewValue?: HTMLDivElement;
+    viewList?: HTMLDivElement;
+    viewOptions: HTMLDivElement[];
+    texValue?: HTMLDivElement;
+    texList?: HTMLDivElement;
+    texOptions: HTMLDivElement[];
+    textValue?: HTMLDivElement;
+    textList?: HTMLDivElement;
+    textOptions: HTMLDivElement[];
+    wordFilter?: HTMLDivElement;
+  } = { viewOptions: [], texOptions: [], textOptions: [] };
 
   constructor(private readonly target: QualityTarget, private readonly actions: SettingsActions = {}) {
     const close = () => this.close();
@@ -244,6 +282,11 @@ export class SettingsWindow {
     else if (id === 5 && index >= 0 && index < UI_SIZES.length) { this.settings.uiSize = UI_SIZES[index]; this.applyPage(); saveSettings(this.settings); window.dispatchEvent(new Event('resize')); }
     else if (id === TEXT_SIZE_DROPDOWN && index >= 0 && index < TEXT_SCALES.length) { this.settings.textSize = index; this.applyPage(); saveSettings(this.settings); }
     else if (id === VIEW_DISTANCE_DROPDOWN && index >= 0 && index < VIEW_DISTANCES.length) this.setQuality({ viewDistance: VIEW_DISTANCES[index] });
+    else if (id === TEXTURE_QUALITY_DROPDOWN && index >= 0 && index < TEXTURE_QUALITY_VALUES.length) {
+      this.settings.textureQuality = TEXTURE_QUALITY_VALUES[index];
+      saveSettings(this.settings);
+      this.actions.textureQualityChanged?.(this.settings.textureQuality);
+    }
   }
 
   private setQuality(change: Partial<QualitySettings>): void {
@@ -324,6 +367,9 @@ export class SettingsWindow {
       row.append(label, dropdown);
       const first = graphics.querySelector(':scope > .option-section');
       if (first) first.after(lowSpec.row, row); else graphics.prepend(lowSpec.row, row);
+      const tex = this.dropdownRow('Texture quality', TEXTURE_QUALITY_DROPDOWN, TEXTURE_QUALITY_LABELS);
+      tex.row.id = 'hnmo_texture_quality';
+      row.after(tex.row);
       // The performance report (Ctrl+Shift+P too): records 15 seconds and shows what the frames cost.
       if (this.actions.performanceReport) {
         const report = document.createElement('div');
@@ -340,7 +386,16 @@ export class SettingsWindow {
         report.append(reportLabel, button);
         graphics.append(report);
       }
-      this.extras = { ...this.extras, lowSpec: lowSpec.box, viewValue: value, viewList: list, viewOptions: options };
+      this.extras = {
+        ...this.extras,
+        lowSpec: lowSpec.box,
+        viewValue: value,
+        viewList: list,
+        viewOptions: options,
+        texValue: tex.value,
+        texList: tex.list,
+        texOptions: tex.options,
+      };
     }
     const display = panels[0];
     const uiRow = doc.root.querySelector('[data-event-click="option_toggle_dropdown(5)"]')?.closest('.option-row');
@@ -393,7 +448,7 @@ export class SettingsWindow {
   }
 
   private refreshExtras(): void {
-    const { lowSpec, mute, viewValue, viewList, viewOptions, textValue, textList, textOptions } = this.extras;
+    const { lowSpec, mute, viewValue, viewList, viewOptions, texValue, texList, texOptions, textValue, textList, textOptions } = this.extras;
     this.extras.wordFilter?.classList.toggle('checked', wordFilterOn());
     if (textValue) textValue.textContent = TEXT_SIZE_LABELS[this.settings.textSize] ?? '';
     textList?.classList.toggle('hidden', this.model.open_dropdown !== TEXT_SIZE_DROPDOWN);
@@ -405,6 +460,10 @@ export class SettingsWindow {
     if (viewValue) viewValue.textContent = VIEW_DISTANCE_LABELS[index] ?? '';
     viewList?.classList.toggle('hidden', this.model.open_dropdown !== VIEW_DISTANCE_DROPDOWN);
     viewOptions.forEach((option, i) => option.classList.toggle('selected', i === index));
+    const texIndex = TEXTURE_QUALITY_VALUES.indexOf(this.settings.textureQuality);
+    if (texValue) texValue.textContent = TEXTURE_QUALITY_LABELS[texIndex] ?? '';
+    texList?.classList.toggle('hidden', this.model.open_dropdown !== TEXTURE_QUALITY_DROPDOWN);
+    texOptions.forEach((option, i) => option.classList.toggle('selected', i === texIndex));
   }
 
   // The volume bars: press or drag along a bar, or turn the wheel over it (COptionWindow::RmlGaugeEvent:
