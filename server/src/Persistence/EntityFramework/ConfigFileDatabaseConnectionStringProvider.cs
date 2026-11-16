@@ -147,9 +147,14 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
             Host = hostSettings.DatabaseHost,
             Port = hostSettings.DatabasePort,
             Database = hostSettings.DatabaseName,
-            Username = hostSettings.DatabaseUser,
-            Password = hostSettings.DatabasePassword,
         };
+        if (string.IsNullOrEmpty(builder.Username)
+            || string.Equals(builder.Username, "postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            builder.Username = hostSettings.DatabaseUser;
+            builder.Password = hostSettings.DatabasePassword;
+        }
+
         setting.ConnectionString = builder.ToString();
     }
 
