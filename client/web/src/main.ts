@@ -27,7 +27,7 @@ import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
-import { applyPixelRatio, frameDue } from './render/quality.js';
+import { applyPixelRatio, frameDue, performanceFlags } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
@@ -211,6 +211,8 @@ export interface GameState {
 
 export interface GameDebug {
   renderer: THREE.WebGLRenderer;
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
   createPlayerCharacter: typeof createPlayerCharacter;
   createMonsterCharacter: typeof createMonsterCharacter;
   drawItem: typeof drawItem;
@@ -301,7 +303,7 @@ const perfRecorder = new PerfRecorder({
 });
 const movementRecorder = new MovementRecorder();
 state.debug = {
-  renderer, createPlayerCharacter, createMonsterCharacter, drawItem, glowMaterialCount,
+  renderer, scene, camera, createPlayerCharacter, createMonsterCharacter, drawItem, glowMaterialCount,
   movementRecorder,
   setCulling: (on) => { cullingOn = on; },
   benchFrames: (count, { dt = 1 / 60, draw = true } = {}) => {
@@ -651,9 +653,15 @@ const cullSphere = new THREE.Sphere();
 const CULL_RADIUS = 450;
 let cullingOn = true;
 function cullCharacters(online: OnlineWorld): void {
+  const perf = performanceFlags();
   cullMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse).multiply(root.matrixWorld);
   cullFrustum.setFromProjectionMatrix(cullMatrix);
   for (const character of online.characters.values()) {
+    if (perf.hideOtherPlayers && character.kind === 'player') {
+      character.culled = true;
+      for (const companion of character.companions) companion.group.visible = false;
+      continue;
+    }
     const group = character.group;
     if (group.parent !== root || !cullingOn) { character.culled = false; continue; }
     cullSphere.center.copy(group.position);
@@ -939,7 +947,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   }, 6_000);
   setCompanionEffects(effects); // pets' and mounts' glows
   // The weapon trails of swinging players (CreateWeaponBlur).
-  const weaponTrails = new WeaponTrails(() => [online.hero, ...online.characters.values()]);
+  const weaponTrails = new WeaponTrails(() => (performanceFlags().reducedEffects ? [] : [online.hero, ...online.characters.values()]));
   effects.addLayer(weaponTrails);
   state.weaponTrails = weaponTrails;
   // A character as the effects see it; its aura joints live while it has eBuff_Attack, _Defense or _HelpNpc.
@@ -951,6 +959,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   online.onAdded = (who) => { if (who.look?.setup.spawnEffects) void playSpawnEffects(effects, who, ownerFromCharacter(who)); };
   // The +15 weapons' sparkles in the hands of every player shown (not in Chaos Castle).
   keepSparkles = () => keepNextGradeSparkles(effects, function* () {
+    if (performanceFlags().reducedEffects) return;
     for (const who of [online.hero, ...online.characters.values()]) {
       if (who !== online.hero && who.kind !== 'player') continue;
       const weapons = who.attachments.filter((a) => (a.slot === 'rightHand' || a.slot === 'leftHand') && (a.item.glowLevel ?? 0) >= 15)
@@ -1063,6 +1072,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         dash.clearDummies();
         darkSideGhosts.prepare(online.hero);
       }
+      const perf = performanceFlags();
+      if (caster !== online.hero && caster.kind === 'player' && (perf.hideOtherPlayers || perf.reducedEffects)) return;
       if (isNewSkill(skill)) { playNewSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null); return; }
       playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
         shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
@@ -1090,9 +1101,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       darkSideGhosts.prepare(online.hero);
     },
     onSkillHit: (caster, castSkill, target) => {
+      const perf = performanceFlags();
+      if (caster !== online.hero && caster.kind === 'player' && (perf.hideOtherPlayers || perf.reducedEffects)) return;
       playSkillHit(effects, masterSkillToBaseSkill(castSkill), ownerFromCharacter(caster), ownerFromCharacter(target));
     },
-    onChainLightning: (caster, _skill, targets) => playChainLightning(effects, ownerFromCharacter(caster), targets.map(ownerFromCharacter)),
+    onChainLightning: (caster, _skill, targets) => {
+      const perf = performanceFlags();
+      if (caster !== online.hero && caster.kind === 'player' && (perf.hideOtherPlayers || perf.reducedEffects)) return;
+      playChainLightning(effects, ownerFromCharacter(caster), targets.map(ownerFromCharacter));
+    },
     onHeroDied: () => chat.add('You died.', 'system'),
     onRespawn: async (map, x, y) => {
       if (map !== state.mapNumber) { await loadMap(map); online.world = state.world!; }
