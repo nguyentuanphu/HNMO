@@ -128,6 +128,12 @@ public class ConnectServerContainer : ServerContainerBase, IEnumerable<IConnectS
 
     private IConnectServer InitializeConnectServer(ConnectServerDefinition connectServerDefinition)
     {
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(AppContext.BaseDirectory));
+        if (hostSettings is { ConnectServerPort: > 0 } && hostSettings.ConnectServerPort != 44406 && connectServerDefinition.ClientListenerPort == 44406)
+        {
+            connectServerDefinition.ClientListenerPort = hostSettings.ConnectServerPort;
+        }
+
         var connectServer = this._connectServerFactory.CreateConnectServer(connectServerDefinition);
         this._servers.Add(connectServer);
         this._connectServers.Add(connectServer);

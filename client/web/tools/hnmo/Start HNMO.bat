@@ -11,7 +11,7 @@ exit /b
 title HNMO - close this window to stop the game
 cd /d "%~dp0"
 if not exist "web\HNMO.dll" if not exist "web\HNMO.exe" goto :notunzipped
-if not exist "Data\Monsters" goto :nodata
+if not exist "Data\Monsters" if not exist "Data\packs" goto :nodata
 cd web
 if exist "..\runtime\win-x64\dotnet.exe" goto :portable
 HNMO.exe

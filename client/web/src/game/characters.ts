@@ -9,6 +9,7 @@ import { sampleHeight, sampleModelLight } from '../terrain.js';
 import { BODY_PART_SLOTS as BODY_PART_SLOT_NAMES, describeMonster, isSkeletonSkin, MonsterAction } from './monsterData.js';
 import { itemDefinition, itemModel, partModel, ItemGroup } from './items.js';
 import { addItemGlow, reflectionMaterial, setCloaked, setItemGlowState, updateReflections } from './itemGlow.js';
+import { performanceFlags } from '../render/quality.js';
 import { createCompanions, isDarkRaven } from './pets.js';
 import type { Companion, CompanionOwner } from './pets.js';
 import { playerActionSpeed, playerStopAction, playerWalkAction, type MonsterAttacksData, type Mount } from './combatLook.js';
@@ -477,6 +478,7 @@ export class Character {
   /** What its buffs do to how its items are drawn (RenderPartObjectEffect): see itemGlow.ts setItemGlowState / setCloaked. */
   itemLooks = { debuffed: false, hardened: false, cloaked: false };
   private looksDirty = false;
+  private lastReducedEffects = false;
 
   setItemLooks(looks: { debuffed: boolean; hardened: boolean; cloaked: boolean }): void {
     const now = this.itemLooks;
@@ -505,9 +507,11 @@ export class Character {
   private applyItemLooks(): void {
     this.looksDirty = false;
     const { debuffed, hardened, cloaked } = this.itemLooks;
+    const reduced = performanceFlags().reducedEffects;
+    this.lastReducedEffects = reduced;
     for (const model of [this.model, ...this.attachments.map((attachment) => attachment.model)]) {
       if (!cloaked) void setCloaked(model, false);
-      setItemGlowState(model, { debuffed: debuffed || cloaked, hardened: hardened || cloaked });
+      setItemGlowState(model, { debuffed: debuffed || cloaked || reduced, hardened: hardened || cloaked || reduced });
       if (cloaked) void setCloaked(model, true);
     }
   }
@@ -621,6 +625,8 @@ export class Character {
       for (const child of this.culledChildren) if (child.parent === this.group) child.visible = true;
       this.culledChildren.length = 0;
     }
+    const perf = performanceFlags();
+    if (perf.reducedEffects !== this.lastReducedEffects) this.looksDirty = true;
     this.model.pose(this.action, this.time);
     if (this.looksDirty) this.applyItemLooks();
     this.clock += dt;
@@ -633,17 +639,28 @@ export class Character {
     this.weaponsOnBack = !this.holdWeapons && !castle && (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0;
     const backs = this.classIndex !== null;
     for (const attachment of this.attachments) {
+      if (perf.hideWingsPets && attachment.slot === 'wings') {
+        attachment.model.group.visible = false;
+        continue;
+      }
       // Only the player model has a back; a monster model shows its weapons in its hands, outside a safe zone.
       const ornament = attachment.slot === 'ornament';
       const onBack = !ornament && (this.weaponsOnBack || attachment.ammunition);
       // The +15 armour's decorations: not in Chaos Castle (DrawsNextGradeObjects).
-      const shown = ornament ? !((mapNumber >= 18 && mapNumber <= 23) || mapNumber === 53) : attachment.slot === 'wings' || backs || !onBack;
+      const shown = ornament ? !(perf.reducedEffects || (mapNumber >= 18 && mapNumber <= 23) || mapNumber === 53) : attachment.slot === 'wings' || backs || !onBack;
       attachment.model.group.visible = shown;
       if (!shown) continue;
       attachment.place(this.model.matrices, onBack, this.clock);
       attachment.model.setLight(light, this.clock);
     }
-    if (this.companions.length) this.updateCompanions(dt, world);
+    if (this.companions.length) {
+      if (perf.hideWingsPets) {
+        for (const companion of this.companions) companion.group.visible = false;
+      } else {
+        for (const companion of this.companions) companion.group.visible = true;
+        this.updateCompanions(dt, world);
+      }
+    }
   }
 
   private updateCompanions(dt: number, world: CharacterWorld): void {

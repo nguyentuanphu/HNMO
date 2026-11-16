@@ -1,0 +1,169 @@
+@page "/jewel-bank"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.JewelBank
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+
+<PageTitle>HNMO: @L("Jewel bank & clear master", "Ngân hàng ngọc & tẩy master")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Jewel bank", "Ngân hàng ngọc")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Jewel bank & master skill clearing", "Ngân hàng ngọc & tẩy điểm master")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<p class="text-muted">@L("Configure account-wide jewel storage limits, withdrawal/deposit Zen fees, allowed jewels, and master skill point reset fees.", "Cấu hình giới hạn lưu trữ ngọc theo tài khoản, phí gửi/rút Zen, các loại ngọc cho phép và phí tẩy điểm kỹ năng master.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="jewel-bank-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Enable the plug-in when ready (OFF by default). Players press F7 in-game to deposit or withdraw jewels.", "Bật plug-in khi sẵn sàng (mặc định TẮT). Người chơi bấm F7 trong game để gửi hoặc rút ngọc.")</li>
+            <li>@L("Withdrawals on the website queue items for automatic delivery when the player next enters the world (or presses F7).", "Khi rút ngọc trên website, hệ thống tự động giao vào túi khi vào game (hoặc bấm F7).")</li>
+            <li>@L("Clearing master skill points refunds spent points back to MasterLevelUpPoints, both via F7 / /clearmaster and offline via Resets & relife.", "Tẩy điểm master hoàn trả toàn bộ điểm đã cộng qua phím F7 / lệnh /clearmaster hoặc ngoại tuyến trên website.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Jewel Bank configuration is unavailable.", "Không tìm thấy cấu hình Ngân hàng ngọc.")</div>
+}
+else
+{
+    <section class="card mb-3" id="jb-settings">
+        <div class="card-body">
+            <h2 class="h5">@L("General & master clear settings", "Cài đặt chung & tẩy điểm master")</h2>
+            <div class="form-check form-switch mb-2" title="@L("Turn Jewel Bank on or off across game and website.", "Bật/tắt Ngân hàng ngọc.")">
+                <input class="form-check-input" type="checkbox" id="jb-active" @bind="this._isActive" />
+                <label class="form-check-label" for="jb-active">@L("Enable Jewel Bank", "Bật Ngân hàng ngọc")</label>
+            </div>
+            <div class="form-check form-switch mb-2" title="@L("Allow players to check balances, withdraw jewels, and clear master skills on the website.", "Cho phép rút ngọc và tẩy master trên website.")">
+                <input class="form-check-input" type="checkbox" id="jb-website" @bind="c.AllowWebsite" />
+                <label class="form-check-label" for="jb-website">@L("Allow website withdrawals & clear master", "Cho phép thao tác trên website")</label>
+            </div>
+            <div class="form-check form-switch mb-2" title="@L("Require players to stand inside a town safe zone in-game.", "Yêu cầu đứng trong vùng an toàn khi gửi/rút ngọc.")">
+                <input class="form-check-input" type="checkbox" id="jb-safezone" @bind="c.SafeZoneOnly" />
+                <label class="form-check-label" for="jb-safezone">@L("Require safe zone in-game", "Yêu cầu vùng an toàn trong game")</label>
+            </div>
+            <div class="form-check form-switch mb-3" title="@L("Allow clearing spent master skill points back to MasterLevelUpPoints.", "Cho phép tẩy và hoàn lại điểm master.")">
+                <input class="form-check-input" type="checkbox" id="jb-clearmaster" @bind="c.AllowClearMasterSkills" />
+                <label class="form-check-label" for="jb-clearmaster">@L("Allow clearing master skill points", "Cho phép tẩy điểm kỹ năng master")</label>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-sm-2" title="@L("Flat Zen charged on deposit.", "Phí Zen khi gửi ngọc.")">
+                    <label class="form-label" for="jb-depfee">@L("Deposit Zen fee", "Phí gửi (Zen)")</label>
+                    <input class="form-control" type="number" min="0" id="jb-depfee" @bind="c.DepositZenFee" />
+                </div>
+                <div class="col-sm-2" title="@L("Flat Zen charged on withdrawal.", "Phí Zen khi rút ngọc.")">
+                    <label class="form-label" for="jb-wdfee">@L("Withdraw Zen fee", "Phí rút (Zen)")</label>
+                    <input class="form-control" type="number" min="0" id="jb-wdfee" @bind="c.WithdrawZenFee" />
+                </div>
+                <div class="col-sm-2" title="@L("Zen fee to clear master skill tree.", "Phí Zen để tẩy bảng master.")">
+                    <label class="form-label" for="jb-mzen">@L("Clear master (Zen)", "Phí tẩy master (Zen)")</label>
+                    <input class="form-control" type="number" min="0" id="jb-mzen" @bind="c.ClearMasterZen" />
+                </div>
+                <div class="col-sm-2" title="@L("Coin cost to clear master skill tree.", "Phí Coin để tẩy bảng master.")">
+                    <label class="form-label" for="jb-mcoins">@L("Clear master (Coins)", "Phí tẩy master (Coin)")</label>
+                    <input class="form-control" type="number" min="0" id="jb-mcoins" @bind="c.ClearMasterCoins" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="jb-mtype">@L("Coin type", "Loại coin")</label>
+                    <select class="form-select" id="jb-mtype" @bind="c.ClearMasterCoinType">
+                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="jb-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="jb-file" @bind="c.FileName" />
+                </div>
+            </div>
+
+            <h3 class="h6 mt-3">@L("Supported jewels", "Danh sách ngọc hỗ trợ")</h3>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>@L("Enabled", "Bật")</th>
+                            <th>@L("Key", "Mã")</th>
+                            <th>@L("English name", "Tên tiếng Anh")</th>
+                            <th>@L("Vietnamese name", "Tên tiếng Việt")</th>
+                            <th>@L("Group", "Nhóm")</th>
+                            <th>@L("Number", "Số hiệu")</th>
+                            <th>@L("Max/account", "Tối đa/TK")</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var j in c.Jewels)
+                        {
+                            <tr>
+                                <td><input class="form-check-input" type="checkbox" @bind="j.Enabled" /></td>
+                                <td><input class="form-control form-control-sm" style="width: 100px" @bind="j.Key" /></td>
+                                <td><input class="form-control form-control-sm" @bind="j.NameEn" /></td>
+                                <td><input class="form-control form-control-sm" @bind="j.NameVi" /></td>
+                                <td><input class="form-control form-control-sm" type="number" style="width: 70px" @bind="j.Group" /></td>
+                                <td><input class="form-control form-control-sm" type="number" style="width: 80px" @bind="j.Number" /></td>
+                                <td><input class="form-control form-control-sm" type="number" style="width: 100px" @bind="j.MaxCapacity" /></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Jewels.Remove(j)">×</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddJewel">@L("+ Add jewel", "+ Thêm ngọc")</button>
+                <button type="button" class="btn btn-primary" id="jb-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="jb-log">
+        <div class="card-body">
+            <h2 class="h5">@L("Recent Jewel Bank activity (Sydney time)", "Nhật ký Ngân hàng ngọc (giờ Sydney)")</h2>
+            @if (this._log.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No activity recorded yet.", "Chưa có giao dịch nào.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>@L("Time (Sydney)", "Thời gian")</th>
+                                <th>@L("Account", "Tài khoản")</th>
+                                <th>@L("Action", "Thao tác")</th>
+                                <th>@L("Detail", "Chi tiết")</th>
+                                <th>@L("Amount", "Số lượng")</th>
+                                <th>@L("Source", "Nguồn")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in this._log)
+                            {
+                                <tr>
+                                    <td>@SydneyTime(entry.AtUtc)</td>
+                                    <td>@entry.LoginName</td>
+                                    <td>@entry.Action</td>
+                                    <td>@entry.Detail</td>
+                                    <td>@entry.Amount</td>
+                                    <td>@entry.Source</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}
