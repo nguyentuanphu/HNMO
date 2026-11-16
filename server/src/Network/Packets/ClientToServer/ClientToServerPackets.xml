@@ -5114,6 +5114,83 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>38</SubCode>
+      <Name>HnmoMarketCommand</Name>
+      <Caption>HNMO item market command</Caption>
+      <Length>59</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.</SentWhen>
+      <CausedReaction>The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoMarketActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>Inventory slot when listing an item.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>Byte</Type>
+          <Name>Currency</Name>
+          <Description>0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.</Description>
+        </Field>
+        <Field>
+          <Index>7</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Price</Name>
+          <Description>Asking price in the selected currency.</Description>
+        </Field>
+        <Field>
+          <Index>11</Index>
+          <Type>String</Type>
+          <Name>ListingId</Name>
+          <Length>48</Length>
+          <Description>Target listing identifier when buying or canceling.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoMarketActionType</Name>
+          <Description>Item market command action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request market listings and personal escrow items/payouts.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>List</Name>
+              <Description>Escrow and list a bag item.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Buy</Name>
+              <Description>Atomically purchase a listing.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Cancel</Name>
+              <Description>Cancel your own listing and return item to escrow claim.</Description>
+              <Value>4</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Claim</Name>
+              <Description>Claim bought/returned items into bag and collect pending Zen payouts.</Description>
+              <Value>5</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

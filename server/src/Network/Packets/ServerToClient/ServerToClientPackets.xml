@@ -12948,6 +12948,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>39</SubCode>
+      <Name>HnmoMarketState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After any Item Market action or when listings/payouts change.</SentWhen>
+      <CausedReaction>The web game updates the Item Market window (F6) and posts transaction notices.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON containing active listings, listable bag items, waiting deliveries/payouts, currency rules, and fee percent.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>

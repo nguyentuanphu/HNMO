@@ -340,6 +340,16 @@ const copy = {
     downloadText:
       "One download for Windows, Ubuntu and macOS. Unzip it and run Start HNMO.bat (Windows) or start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Download HNMO →",
+    marketNav: "Item Market",
+    marketTitle: "Escrow Item Market",
+    marketHint: "Safe player-to-player escrow market in-game (F6 or NPC 547 Julia) and on the website. Bought items arrive in your escrow mailbox in-game.",
+    marketOffline: "Item Market data is unavailable: the server didn't answer.",
+    marketOff: "Item Market is turned off on this server.",
+    marketNone: "No items listed right now.",
+    marketItem: "Item",
+    marketSeller: "Seller",
+    marketPrice: "Price",
+    marketExpires: "Expires (Sydney)",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -703,6 +713,16 @@ const copy = {
     downloadText:
       "Một bản tải cho Windows, Ubuntu và macOS. Giải nén rồi chạy Start HNMO.bat (Windows) hoặc start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Tải HNMO →",
+    marketNav: "Chợ vật phẩm",
+    marketTitle: "Chợ vật phẩm an toàn",
+    marketHint: "Mua bán vật phẩm qua kho giữ đồ trong game (phím F6 hoặc NPC 547 Julia) và trên website. Đồ đã mua sẽ được chuyển vào Kho chợ trong game.",
+    marketOffline: "Không xem được Chợ vật phẩm: máy chủ không trả lời.",
+    marketOff: "Chợ vật phẩm đang tắt trên máy chủ này.",
+    marketNone: "Hiện chưa có vật phẩm nào được rao bán.",
+    marketItem: "Vật phẩm",
+    marketSeller: "Người bán",
+    marketPrice: "Giá",
+    marketExpires: "Hết hạn (Sydney)",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -2340,4 +2360,65 @@ element("refresh").addEventListener("click", () => void refreshMarriage());
 void refreshMarriage();
 setInterval(() => {
   if (!document.hidden) void refreshMarriage();
+}, 120000);
+
+interface PublicMarketListing {
+  id: string;
+  sellerName: string;
+  currency: string;
+  price: number;
+  expiresAt: number;
+  item: { NameEn: string; NameVi: string; Level: number };
+}
+interface PublicMarket {
+  v: number;
+  enabled: boolean;
+  listings?: PublicMarketListing[];
+}
+let marketData: PublicMarket | null = null;
+
+function renderMarket(): void {
+  const notice = element("market-notice");
+  const data = marketData;
+  const vi = language === "vi";
+  if (data === null) notice.textContent = t("marketOffline");
+  else if (!data.enabled) notice.textContent = t("marketOff");
+  else notice.textContent = "";
+  const listings = data && data.enabled ? data.listings ?? [] : [];
+  const fmt = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
+  const rows = listings.map((l) => {
+    const nm = (vi ? l.item.NameVi : l.item.NameEn) || l.item.NameEn;
+    return [
+      l.item.Level > 0 ? `${nm} +${l.item.Level}` : nm,
+      l.sellerName,
+      `${l.price.toLocaleString()} ${l.currency}`,
+      fmt.format(l.expiresAt),
+    ];
+  });
+  table("market-table", [
+    [t("marketItem"), false],
+    [t("marketSeller"), false],
+    [t("marketPrice"), true],
+    [t("marketExpires"), false],
+  ], rows, t("marketNone"));
+}
+
+async function refreshMarket(): Promise<void> {
+  try {
+    const response = await fetch("/website/market", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicMarket;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid market");
+    marketData = data;
+  } catch {
+    marketData = null;
+  }
+  renderMarket();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderMarket());
+element("refresh").addEventListener("click", () => void refreshMarket());
+void refreshMarket();
+setInterval(() => {
+  if (!document.hidden) void refreshMarket();
 }, 120000);
