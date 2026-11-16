@@ -16,6 +16,7 @@ using System.Buffers;
 using System.Net;
 using System.Net.WebSockets;
 using Microsoft.Extensions.Logging.Abstractions;
+using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.Network.SimpleModulus;
 using HNMO.Network.Xor;
@@ -44,9 +45,48 @@ if (args.Length >= 3 && args[0] == "--pack")
 
 var builder = WebApplication.CreateBuilder(args);
 var launcherOptions = builder.Configuration.GetSection("Launcher").Get<LauncherOptions>() ?? new LauncherOptions();
-builder.Services.AddHostedService(services => new GameLauncher(launcherOptions, builder.Environment.ContentRootPath, services.GetRequiredService<ILogger<GameLauncher>>()));
-builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
 var portalOptions = builder.Configuration.GetSection("Portal").Get<PortalOptions>() ?? new PortalOptions();
+
+var bridgeRoot = builder.Environment.ContentRootPath;
+var configuredSaveDir = Path.GetFullPath(Path.Combine(bridgeRoot, launcherOptions.SavePath));
+var settingsFileEnv = Environment.GetEnvironmentVariable(HostSettingsStore.EnvironmentVariableName);
+var settingsPath = !string.IsNullOrWhiteSpace(settingsFileEnv)
+    ? Path.GetFullPath(settingsFileEnv)
+    : Path.Combine(configuredSaveDir, HostSettingsStore.FileName);
+HostSettings? hostSettings = null;
+if (launcherOptions.Enabled || Directory.Exists(configuredSaveDir) || File.Exists(settingsPath))
+{
+    var legacyAppSettings = Path.Combine(bridgeRoot, "appsettings.json");
+    var legacyConnectionXml = Path.GetFullPath(Path.Combine(bridgeRoot, launcherOptions.ServerPath, "ConnectionSettings.xml"));
+    hostSettings = HostSettingsStore.LoadOrMigrate(settingsPath, legacyAppSettings, legacyConnectionXml);
+
+    launcherOptions.SettingsFilePath = settingsPath;
+    launcherOptions.Enabled = hostSettings.LauncherEnabled;
+    launcherOptions.PostgresPath = hostSettings.PostgresPath;
+    launcherOptions.SavePath = hostSettings.SavePath;
+    launcherOptions.DatabasePort = hostSettings.DatabasePort;
+    launcherOptions.DatabasePassword = hostSettings.DatabasePassword;
+    launcherOptions.ServerPath = hostSettings.ServerPath;
+    launcherOptions.ServerProgram = hostSettings.ServerProgram;
+    launcherOptions.AdminUrl = $"http://127.0.0.1:{hostSettings.AdminPort}";
+    launcherOptions.ConnectServerPort = hostSettings.ConnectServerPort;
+    launcherOptions.OpenBrowserUrl = hostSettings.OpenBrowserUrl;
+    portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
+
+    var hasCliUrls = args.Any(a => a.StartsWith("--urls", StringComparison.OrdinalIgnoreCase));
+    var hasEnvUrls = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"));
+    if (!hasCliUrls && !hasEnvUrls && !string.IsNullOrWhiteSpace(hostSettings.WebUrls))
+    {
+        builder.WebHost.UseUrls(hostSettings.WebUrls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+    }
+}
+
+builder.Services.AddHostedService(services => new GameLauncher(
+    launcherOptions,
+    builder.Environment.ContentRootPath,
+    services.GetRequiredService<IHostApplicationLifetime>(),
+    services.GetRequiredService<ILogger<GameLauncher>>()));
+builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
 builder.Services.AddHttpClient();
 builder.Services.AddHttpForwarder();
 // Request rates per visitor address for the account and payment endpoints (VisitorLimits.cs covers the game connections).
@@ -64,13 +104,13 @@ builder.Services.AddRateLimiter(limiter =>
 });
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
-var webRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:WebRoot"] ?? "../public"));
-var gameFiles = new GameFiles(Path.Combine(contentRoot, app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"), app.Logger);
+var webRoot = Path.GetFullPath(Path.Combine(contentRoot, hostSettings?.WebRoot ?? app.Configuration["HNMO:WebRoot"] ?? "../public"));
+var gameFiles = new GameFiles(Path.Combine(contentRoot, hostSettings?.DataPath ?? app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"), app.Logger);
 app.Lifetime.ApplicationStopping.Register(gameFiles.Dispose);
-var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
-var allowedHosts = app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
-var allowLoopback = app.Configuration.GetValue("Relay:AllowLoopback", true);
-var connectTimeout = TimeSpan.FromSeconds(app.Configuration.GetValue("Relay:ConnectTimeoutSeconds", 10));
+var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, hostSettings?.VendorPath ?? app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
+var allowedHosts = hostSettings?.RelayAllowedHosts ?? app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
+var allowLoopback = hostSettings?.RelayAllowLoopback ?? app.Configuration.GetValue("Relay:AllowLoopback", true);
+var connectTimeout = TimeSpan.FromSeconds(hostSettings?.RelayConnectTimeoutSeconds ?? app.Configuration.GetValue("Relay:ConnectTimeoutSeconds", 10));
 // Tells a game server on this computer the browser's address first (a "PROXY" line), for the login history.
 var sendClientAddress = app.Configuration.GetValue("Relay:SendClientAddress", true);
 const int MaximumPacketSize = 0xFFFF;
