@@ -355,3 +355,14 @@ smoothly: the jerkiness the owner sees is in the MOVEMENT, not the frame rate. S
   now, but worth removing.
 Next step: record per-frame positions/angles/actions of the hero and the nearest monsters (add to the perf report)
 and compare with the desktop's movement.
+
+## Other AIs' pull requests to review (snapshot 2026-11-16, Sydney)
+- #2 chatgpt-login-hint (login box keeps only the guide link) -> main.
+- #3 chatgpt-website-themes (five homepage themes chosen in the admin panel) -> main, draft; CI server tests failed (flaky web tests).
+- #4 chatgpt-vietnamese (3,560 server resource translations, 8,053 web dictionary entries, shared language choice) -> BASE #3; machine-assisted, needs editorial review.
+- #5 chatgpt-apikeys-help (API keys page help + hover hints, 14 EN/VI keys, 4 bUnit tests) -> main.
+- #6 chatgpt-buffs-vi (Vietnamese for all 158 buffs + 7 skill buffs, durations, native dialogs) -> main; check buff 64 and 130 wording.
+- #7 antigravity-flaky-web-tests (the 4 flaky HNMO.Web.Tests + NavMenu disposal fix) -> main. The CI failures on #3/#4/#5 are the tests #7 fixes: merge #7 first, then re-run CI on the others.
+- #8 chatgpt-editor-vi (Vietnamese for the native editor, 2,021 entries + 142 English keys) -> main, draft.
+- Coming: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-phoenix-shot.
+Merge order: #7, then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
