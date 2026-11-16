@@ -313,11 +313,11 @@ section 12 (the cash shop) still waits for the owner's answers.
 ## Owner decisions (2026-11-16, Sydney time) — to build
 1. Phoenix Shot: the web game sends it to the server (an area skill with real damage). Note the difference from the desktop in PARITY.md.
 2. Guild buff tooltips: English and Vietnamese for every guild buff.
-3. Guild ladder rewards: paid to everyone who is a member at payout time, offline members included.
-4. Zalo coins: credited only after an admin approves (an approval list in the admin panel).
+3. Guild ladder rewards: (already built, checked 2026-11-16) paid to everyone who is a member at payout time, offline members included.
+4. Zalo coins: (already built, checked 2026-11-16) credited only after an admin approves (an approval list in the admin panel).
 5. Screenshots: the player chooses in the settings (3D view only, or with the interface).
-6. K key: like the desktop, only while the bag is closed.
-7. Top races: F9 opens them.
+6. K key: (already built, checked 2026-11-16) like the desktop, only while the bag is closed.
+7. Top races: (already built, checked 2026-11-16) F9 opens them.
 8. Gift codes: keep as they are, plus an admin-set limit per network address / device (one use per address or device per code).
 9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
@@ -364,5 +364,6 @@ and compare with the desktop's movement.
 - #6 chatgpt-buffs-vi (Vietnamese for all 158 buffs + 7 skill buffs, durations, native dialogs) -> main; check buff 64 and 130 wording.
 - #7 antigravity-flaky-web-tests (the 4 flaky HNMO.Web.Tests + NavMenu disposal fix) -> main. The CI failures on #3/#4/#5 are the tests #7 fixes: merge #7 first, then re-run CI on the others.
 - #8 chatgpt-editor-vi (Vietnamese for the native editor, 2,021 entries + 142 English keys) -> main, draft.
-- Coming: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-phoenix-shot.
+- #9 chatgpt-phoenix-shot (Phoenix Shot sent as AreaSkill 270 at the hero's tile with the target as extra target; 5 files) -> main; live damage not yet checked.
+- Coming: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merge order: #7, then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
