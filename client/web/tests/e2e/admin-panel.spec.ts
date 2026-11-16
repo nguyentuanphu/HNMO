@@ -14,7 +14,7 @@ function watchErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
-    if (message.type() === 'error' && !/favicon/i.test(message.text())) errors.push(message.text());
+    if (message.type() === 'error' && !/favicon/i.test(message.text())) errors.push(`${message.text()} (${message.location().url})`);
   });
   return errors;
 }
