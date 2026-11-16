@@ -16718,6 +16718,23 @@
       <CausedReaction>The 1.04d client does not read any payload of this packet.</CausedReaction>
       <Fields />
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3D</SubCode>
+      <Name>HnmoCatchupCapState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent on entering the world, when today's cap increases, or upon HnmoCatchupCapRequest.</SentWhen>
+      <CausedReaction>Updates today's Catch-up Level/Reset Cap notice in the web client.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing today's level cap, daily reset cap, first achiever, and next Sydney day reset countdown.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>
