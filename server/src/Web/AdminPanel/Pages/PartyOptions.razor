@@ -1,0 +1,102 @@
+@page "/party-options"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.PartyOptions
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Party options", "Tổ đội & Bãi săn")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Party options", "Tổ đội & Bãi săn")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Party options", "Tổ đội & Bãi săn")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<p class="text-muted">@L("Configure /partypass party-by-password join and the Auto-Party hunting spot finder shown alongside the P Party window.", "Cấu hình tính năng vào nhóm bằng mật khẩu (/partypass) và Tự động tìm nhóm bãi săn trong bảng P.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="party-options-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Feature is OFF by default. Enable to activate /partypass PASS and the hunting spot panel in P.", "Mặc định TẮT. Khi bật, người chơi có thể dùng /partypass và tìm bãi săn trong bảng Tổ đội (P).")</li>
+            <li>@L("Password parties let friends join directly without an invite when party size < 5.", "Mật khẩu nhóm giúp bạn bè tự động vào thẳng nhóm khi chưa đủ 5 người.")</li>
+            <li>@L("Open spot listings (without raw passwords) are also shown publicly on home.html#party-spots.", "Danh sách nhóm mở bãi săn (không lộ mật khẩu) hiển thị công khai tại trang chủ.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Party options configuration unavailable.", "Không tải được cấu hình Tổ đội.")</div>
+}
+else
+{
+    <section class="card mb-3" id="po-settings">
+        <div class="card-body">
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="po-active" @bind="this._isActive" />
+                <label class="form-check-label" for="po-active">@L("Enable Party Options (/partypass & Auto-Party spots)", "Bật Tổ đội nhanh (/partypass & Tự vào bãi săn)")</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="po-pass" @bind="c.AllowPasswordJoin" />
+                <label class="form-check-label" for="po-pass">@L("Allow /partypass password join", "Cho phép vào nhóm qua /partypass")</label>
+            </div>
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="po-spot" @bind="c.AllowAutoSpotParty" />
+                <label class="form-check-label" for="po-spot">@L("Allow Auto-Party hunting spot listings", "Cho phép đăng tin tìm nhóm bãi săn")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="po-len" title="@L("Maximum characters allowed for a party password", "Độ dài tối đa của mật khẩu nhóm")">@L("Max password length", "Độ dài mật khẩu")</label>
+                    <input class="form-control" id="po-len" type="number" min="2" max="24" @bind="c.MaxPasswordLength" />
+                </div>
+                <div class="col-sm-5">
+                    <label class="form-label" for="po-spots" title="@L("Comma-separated preset hunting spot labels", "Danh sách bãi săn gợi ý, ngăn cách bởi dấu phẩy")">@L("Preset hunting spots", "Bãi săn gợi ý")</label>
+                    <input class="form-control" id="po-spots" @bind="this._spotsText" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="po-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="po-file" @bind="c.FileName" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="po-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        </div>
+    </section>
+
+    <section class="card" id="po-ads">
+        <div class="card-body">
+            <h2 class="h5">@L("Live advertised spot parties", "Các nhóm bãi săn đang mở")</h2>
+            @if (this._ads.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No active spot party listings yet.", "Chưa có nhóm bãi săn nào đang đăng tuyển.")</p>
+            }
+            else
+            {
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>@L("Leader", "Trưởng nhóm")</th>
+                            <th>@L("Spot / Map", "Bãi săn / Bản đồ")</th>
+                            <th>@L("Members", "Thành viên")</th>
+                            <th>@L("Password", "Mật khẩu")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ad in this._ads)
+                        {
+                            <tr>
+                                <td>@ad.LeaderName</td>
+                                <td>@ad.SpotName (@ad.MapName)</td>
+                                <td>@ad.MemberCount/@ad.MaxSize</td>
+                                <td>@(ad.HasPassword ? L("Yes", "Có") : L("Open", "Mở"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </section>
+}

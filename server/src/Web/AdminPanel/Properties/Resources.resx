@@ -4550,4 +4550,49 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Account safety</value>
   </data>
+  <data name="HostSettingsPage" xml:space="preserve">
+    <value>Host settings</value>
+  </data>
+  <data name="HostSettingsHelpTitle" xml:space="preserve">
+    <value>How to use this page</value>
+  </data>
+  <data name="HostSettingsHelpBody" xml:space="preserve">
+    <value>All host configuration is stored in one file (save/hnmo-settings.json). Changes are validated before saving. Port, URL, path, and database connection changes take effect after clicking Restart HNMO.</value>
+  </data>
+  <data name="HostSettingsRestartNote" xml:space="preserve">
+    <value>Changes to ports, URLs, paths, or database connection require a restart to take effect.</value>
+  </data>
+  <data name="HostSettingsPortsSection" xml:space="preserve">
+    <value>Ports and public address</value>
+  </data>
+  <data name="HostSettingsBridgeSection" xml:space="preserve">
+    <value>Web bridge and launcher</value>
+  </data>
+  <data name="HostSettingsDatabaseSection" xml:space="preserve">
+    <value>Database connection</value>
+  </data>
+  <data name="HostSettingsLicenseSection" xml:space="preserve">
+    <value>Player license</value>
+  </data>
+  <data name="HostSettingsSaveButton" xml:space="preserve">
+    <value>Save settings</value>
+  </data>
+  <data name="HostSettingsRestartButton" xml:space="preserve">
+    <value>Restart HNMO</value>
+  </data>
+  <data name="HostSettingsRestartConfirm" xml:space="preserve">
+    <value>Players will be disconnected cleanly and progress saved before restarting. Continue?</value>
+  </data>
+  <data name="HostSettingsSaved" xml:space="preserve">
+    <value>Host settings saved.</value>
+  </data>
+  <data name="HostSettingsRestarting" xml:space="preserve">
+    <value>HNMO is saving and restarting...</value>
+  </data>
+  <data name="HostSettingsRestartUnsupported" xml:space="preserve">
+    <value>Restart is only available when started through the HNMO launcher.</value>
+  </data>
+  <data name="HostSettingsPasswordMasked" xml:space="preserve">
+    <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
+  </data>
 </root>

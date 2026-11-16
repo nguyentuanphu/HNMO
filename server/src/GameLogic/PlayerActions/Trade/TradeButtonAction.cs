@@ -131,6 +131,7 @@ public class TradeButtonAction : BaseTradeAction
             this.CallPlugIn(traderItems, trader, tradingPartner);
             this.CallPlugIn(tradePartnerItems, tradingPartner, trader);
             PlugIns.AccountSafety.AccountSafetyPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
             FinishedTrades.Add(1);
             return TradeResult.Success;
         }
