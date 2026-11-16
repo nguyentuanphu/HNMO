@@ -53,6 +53,7 @@ import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
 import { CatchupBanner } from './ui/catchupBanner.js';
 import { SeasonPlanWindow } from './ui/seasonPlanWindow.js';
+import { LeftoversWindow } from './ui/leftoversWindow.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -196,6 +197,7 @@ export interface GameState {
   giftCodes?: GiftCodesWindow;
   catchupCap?: CatchupBanner;
   seasonPlan?: SeasonPlanWindow;
+  leftovers?: LeftoversWindow;
   resets?: Resets;
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
@@ -1396,6 +1398,14 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key === 'F8' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); seasonPlan.toggle(); }
   });
   window.addEventListener('hnmo-season-plan-open', () => { seasonPlan.open(); });
+  const leftovers = new LeftoversWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.leftovers = leftovers;
+  connection.onPacket((bytes) => { leftovers.handle(bytes); });
+  window.addEventListener('hnmo-leftovers-open', () => { leftovers.open(); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F10' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); leftovers.toggle(); }
+  });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }

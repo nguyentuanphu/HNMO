@@ -21,6 +21,7 @@ internal static class Website
         Forward(app, "/website/jewel-bank", "api/website/jewel-bank", options, clients);
         Forward(app, "/website/catchup", "api/website/catchup", options, clients);
         Forward(app, "/website/season-plan", "api/website/season-plan", options, clients);
+        Forward(app, "/website/leftovers", "api/website/leftovers", options, clients);
     }
 
     private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)
