@@ -4887,7 +4887,7 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
-      <SubCode>23</SubCode>
+      <SubCode>24</SubCode>
       <Name>HnmoTicketLogin</Name>
       <Caption>HNMO web ticket login</Caption>
       <Length>52</Length>
@@ -4910,6 +4910,53 @@
           <Description>The one-time login ticket issued on the website.</Description>
         </Field>
       </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>30</SubCode>
+      <Name>HnmoTopUpMilestonesCommand</Name>
+      <Caption>HNMO top-up milestones command</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game enters the world, opens the top-up milestones window, claims a milestone step, or takes waiting rewards.</SentWhen>
+      <CausedReaction>The server performs the action and replies with HnmoTopUpMilestonesState.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoTopUpMilestonesActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>Milestone step id when Claim; empty otherwise.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoTopUpMilestonesActionType</Name>
+          <Description>The action for HNMO top-up milestones.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request the current top-up milestones state.</Description>
+              <Value>0</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Claim</Name>
+              <Description>Claim the milestone step identified by Argument.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>TakeOwed</Name>
+              <Description>Take rewards waiting for bag space.</Description>
+              <Value>2</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
     </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>

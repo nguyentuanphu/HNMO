@@ -56,6 +56,8 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/safety/account", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/safety/pin", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "pin"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/safety/item", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "item"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/topup-milestones/account", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardTopUpMilestonesAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/topup-milestones/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardTopUpMilestonesAsync(context, "claim"))).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
@@ -572,6 +574,45 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             }
 
             logger.LogWarning("Account safety on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private Task<IResult> ForwardTopUpMilestonesAsync(HttpContext context, string action) =>
+        this.ForwardSignedJsonAsync(context, $"api/website/topup-milestones/{action}", "Top-up milestones");
+
+    private async Task<IResult> ForwardSignedJsonAsync(HttpContext context, string apiPath, string label)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        JsonElement body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<JsonElement>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, apiPath, body), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("{Feature} on the website failed: {Status}", label, response.StatusCode);
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
         catch (HttpRequestException)
