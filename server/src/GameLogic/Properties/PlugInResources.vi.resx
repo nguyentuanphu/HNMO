@@ -2214,6 +2214,18 @@
   <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
     <value>Client id của một OAuth client Google Cloud (loại: Web application, với địa chỉ website của bạn là JavaScript origin được phép). Để trống: không có "Đăng nhập bằng Google".</value>
   </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>Game web: yêu cầu đăng nhập trên website</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>Khi bật, game web ẩn khung nhập mật khẩu riêng và người chơi đăng nhập trên website trước (rồi bấm Chơi ngay).</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vé đăng nhập web</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý vé đăng nhập dùng một lần được cấp từ website.</value>
+  </data>
   <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
     <value>Đền Ảo Ảnh</value>
   </data>

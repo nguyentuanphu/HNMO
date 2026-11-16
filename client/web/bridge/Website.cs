@@ -6,13 +6,24 @@ internal static class Website
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
         Forward(app, "/website/missions", "api/website/missions", options, clients);
+        Forward(app, "/website/timetable", "api/website/timetable", options, clients);
         Forward(app, "/website/world-bosses", "api/website/world-bosses", options, clients);
         Forward(app, "/website/onboarding", "api/website/onboarding", options, clients);
         Forward(app, "/website/guilds", "api/website/guilds", options, clients);
         Forward(app, "/website/community", "api/website/community", options, clients);
         Forward(app, "/website/top-races", "api/website/top-races", options, clients);
         Forward(app, "/website/gift-codes", "api/website/gift-codes", options, clients);
+        Forward(app, "/website/lucky-number", "api/website/lucky-number", options, clients);
+        Forward(app, "/website/marriage", "api/website/marriage", options, clients);
         Forward(app, "/website/resets", "api/website/resets", options, clients);
+        Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
+        Forward(app, "/website/market", "api/website/market", options, clients);
+        Forward(app, "/website/jewel-bank", "api/website/jewel-bank", options, clients);
+        Forward(app, "/website/catchup", "api/website/catchup", options, clients);
+        Forward(app, "/website/season-plan", "api/website/season-plan", options, clients);
+        Forward(app, "/website/leftovers", "api/website/leftovers", options, clients);
+        Forward(app, "/website/mounts", "api/website/mounts", options, clients);
+        Forward(app, "/website/party-spots", "api/website/party-spots", options, clients);
     }
 
     private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)

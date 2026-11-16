@@ -33556,6 +33556,471 @@ public readonly ref struct HnmoAccountSafetyStateRef
 
 
 /// <summary>
+/// Is sent by the server when: After HnmoTopUpMilestonesCommand or when a top-up changes the account's milestone progress.
+/// Causes reaction on client side: The client renders the top-up milestones window and shows any notice.
+/// </summary>
+public readonly ref struct HnmoTopUpMilestonesStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoTopUpMilestonesStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoTopUpMilestonesStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoTopUpMilestonesStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoTopUpMilestonesStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x31;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the state as JSON in plain ASCII: enabled, totalVnd, steps, owed rewards, and optional result message.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoTopUpMilestonesState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoTopUpMilestonesStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoTopUpMilestonesState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoTopUpMilestonesStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: After the client requested the HNMO event and boss timetable (HnmoTimetableCommand).
+/// Causes reaction on client side: The web game updates the Event and Boss Timetable window with Sydney and local times, maps, and drops.
+/// </summary>
+public readonly ref struct HnmoTimetableStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoTimetableStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoTimetableStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoTimetableStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoTimetableStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x33;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the timetable state as JSON, in plain ASCII (other characters are escaped): every event, invasion and boss with category, English and Vietnamese names, map names, drops, next start time in UTC, and Sydney wall-clock schedule.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoTimetableState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoTimetableStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoTimetableState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoTimetableStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: After the client requests the Daily Lucky Number state, picks a number, claims owed rewards, or when the daily draw runs.
+/// Causes reaction on client side: The web game updates the Daily Lucky Number window (L) and posts draw/win chat notices.
+/// </summary>
+public readonly ref struct HnmoLuckyNumberStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoLuckyNumberStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoLuckyNumberStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoLuckyNumberStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoLuckyNumberStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x35;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON containing round date, next draw UTC timestamp, number range, odds, prizes, account picks, owed rewards, recent draw results, and event status.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoLuckyNumberState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoLuckyNumberStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoLuckyNumberState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoLuckyNumberStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: After any marriage command or when marital/proposal/couple bonus status changes.
+/// Causes reaction on client side: The web game updates the Marriage window (Shift+M) and displays ceremony/proposal notices.
+/// </summary>
+public readonly ref struct HnmoMarriageStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMarriageStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoMarriageStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMarriageStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoMarriageStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x37;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON containing marital state, couple title, party bonus status, ceremony location, divorce rules, and public couples summary.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoMarriageState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoMarriageStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoMarriageState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoMarriageStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: After any Item Market action or when listings/payouts change.
+/// Causes reaction on client side: The web game updates the Item Market window (F6) and posts transaction notices.
+/// </summary>
+public readonly ref struct HnmoMarketStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMarketStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoMarketStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMarketStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoMarketStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x39;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON containing active listings, listable bag items, waiting deliveries/payouts, currency rules, and fee percent.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoMarketState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoMarketStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoMarketState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoMarketStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
 /// Is sent by the server when: A message was written outside of the game, e.g. in a Discord channel which is bound to the chat of a guild, an alliance or the world chat. It's only sent to clients which requested the DiscordIntegrationInfo before; other clients get it as normal chat message, with a prefix in front of the sender.
 /// Causes reaction on client side: The client shows the message in the chat of its scope, marked with its source, so that it can't be mistaken for a message of a character.
 /// </summary>
@@ -45187,4 +45652,655 @@ public readonly ref struct ActiveQuestListReadyRef
     /// <param name="packet">The packet as struct.</param>
     /// <returns>The packet as byte span.</returns>
     public static implicit operator Span<byte>(ActiveQuestListReadyRef packet) => packet._data; 
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent after entering the world or processing HnmoJewelBankCommand.
+/// Causes reaction on client side: Updates the web client's Jewel Bank window.
+/// </summary>
+public readonly ref struct HnmoJewelBankStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoJewelBankStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoJewelBankStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoJewelBankStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoJewelBankStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x3B;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload containing enabled state, jewel rules, stored balances, bag jewels, and master skill summary.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoJewelBankState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoJewelBankStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoJewelBankState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoJewelBankStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent on entering the world, when today's cap increases, or upon HnmoCatchupCapRequest.
+/// Causes reaction on client side: Updates today's Catch-up Level/Reset Cap notice in the web client.
+/// </summary>
+public readonly ref struct HnmoCatchupCapStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoCatchupCapStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoCatchupCapStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoCatchupCapStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoCatchupCapStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x3D;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload containing today's level cap, daily reset cap, first achiever, and next Sydney day reset countdown.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoCatchupCapState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoCatchupCapStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoCatchupCapState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoCatchupCapStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent after entering the world, when a new season stage unlocks, or upon HnmoSeasonPlanRequest.
+/// Causes reaction on client side: Updates the web client's Season Plan (F8) timeline.
+/// </summary>
+public readonly ref struct HnmoSeasonPlanStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoSeasonPlanStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoSeasonPlanStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoSeasonPlanStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoSeasonPlanStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x3F;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload containing active stage, unlocked feature gates, and all stage conditions/dates.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoSeasonPlanState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoSeasonPlanStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoSeasonPlanState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoSeasonPlanStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent when entering the world, talking to the exchange NPC, or after HnmoLeftoversCommand.
+/// Causes reaction on client side: Updates the web client's Combining Leftovers and Exchange NPC window (F10).
+/// </summary>
+public readonly ref struct HnmoLeftoversStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoLeftoversStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoLeftoversStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoLeftoversStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoLeftoversStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x41;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload containing recipes, exchange offers, bag counts, and season box cap.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoLeftoversState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoLeftoversStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoLeftoversState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoLeftoversStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent when entering the world, defeating a golden boss, or after HnmoMountChainCommand.
+/// Causes reaction on client side: Updates the web client's Mount Chain window (Shift+U).
+/// </summary>
+public readonly ref struct HnmoMountChainStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMountChainStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoMountChainStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMountChainStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoMountChainStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x43;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload describing mount chain tiers, shards, duplicate bag mounts, and unlocked collection.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoMountChainState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoMountChainStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoMountChainState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoMountChainStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent after HnmoPartyOptionsCommand or when opening the Party window options drawer.
+/// Causes reaction on client side: Updates the web client's Party password and Auto-party spot finder drawer.
+/// </summary>
+public readonly ref struct HnmoPartyOptionsStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoPartyOptionsStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoPartyOptionsStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoPartyOptionsStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoPartyOptionsStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x45;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload listing active party advertisement state and open hunting spot parties.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoPartyOptionsState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoPartyOptionsStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoPartyOptionsState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoPartyOptionsStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
+
+
+/// <summary>
+/// Is sent by the server when: Sent after HnmoRankingCommand or /rank to deliver in-game player, online, guild, and event rankings and add-stats status.
+/// Causes reaction on client side: Updates the web client's Player Rankings window.
+/// </summary>
+public readonly ref struct HnmoRankingStateRef
+{
+    private readonly Span<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoRankingStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoRankingStateRef(Span<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoRankingStateRef"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoRankingStateRef(Span<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x47;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCodeRef Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload containing ranked characters, online leaders, guilds, mini-game events, player rank summary, and bulk add-stats status.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Span of bytes to a <see cref="HnmoRankingState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoRankingStateRef(Span<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoRankingState"/> to a Span of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Span<byte>(HnmoRankingStateRef packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
 }

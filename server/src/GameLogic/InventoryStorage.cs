@@ -6,6 +6,7 @@ namespace HNMO.GameLogic;
 
 using HNMO.DataModel;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns.Talismans;
 using HNMO.GameLogic.Views.World;
 using HNMO.PlugIns;
 using static HNMO.DataModel.InventoryConstants;
@@ -113,6 +114,8 @@ public class InventoryStorage : Storage, IInventoryStorage
             {
                 await this.RaiseEquippedItemsChangedAsync(convertedItem ?? item, true).ConfigureAwait(false);
             }
+
+            await TalismanPlugIn.RefreshAsync(this._player).ConfigureAwait(false);
         }
 
         return success;
@@ -127,6 +130,8 @@ public class InventoryStorage : Storage, IInventoryStorage
         {
             await this.RaiseEquippedItemsChangedAsync(item, false).ConfigureAwait(false);
         }
+
+        await TalismanPlugIn.RefreshAsync(this._player).ConfigureAwait(false);
     }
 
     /// <summary>
