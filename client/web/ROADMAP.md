@@ -485,7 +485,7 @@ New ideas worth adopting (proposed order):
 14.3 Combat limits: a maximum damage cap per hit, PvP damage reduction %, castle siege damage reduction %.
 14.4 Chaos machine success rates per recipe in the admin panel (and shown to players), with a server-wide multiplier.
 14.5 Multi-vault: extra vaults per account (number set by the admin; extra vaults for VIP or bought with coins).
-14.6 Buffer NPC: gives a set of buffs to players under a level (helps new players); buffs and level in the admin panel.
+14.6 Buffer NPC: gives a set of buffs to players under a level (helps new players); buffs and level in the admin panel. — Done (`BufferNpcPlugIn`, `BufferNpcEngine`, `/buffer-npc` EN/VI admin page; OFF by default).
 14.7 Event rewards editor: what each mini game (blood castle, devil square, chaos castle, illusion temple, ...) gives,
      per level of the event.
 14.8 Maintenance tools page: find inactive/empty accounts, find duplicated items (same serial/GUID in two places),
