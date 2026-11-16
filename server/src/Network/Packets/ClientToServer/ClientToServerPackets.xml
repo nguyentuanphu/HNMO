@@ -4884,6 +4884,75 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>36</SubCode>
+      <Name>HnmoMarriageCommand</Name>
+      <Caption>HNMO marriage command</Caption>
+      <Length>53</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player opens the Marriage window (Shift+M), proposes, accepts/declines, edits couple title, warps to spouse, or divorces.</SentWhen>
+      <CausedReaction>The server validates the ceremony/marriage action and sends HnmoMarriageState (F5 37).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoMarriageActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Length>48</Length>
+          <Description>Partner character name or custom couple title.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoMarriageActionType</Name>
+          <Description>Marriage action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request marriage state.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Propose</Name>
+              <Description>Propose marriage to Argument character name.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Accept</Name>
+              <Description>Accept pending marriage proposal and hold ceremony at Devias Church.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Decline</Name>
+              <Description>Decline pending proposal.</Description>
+              <Value>4</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Divorce</Name>
+              <Description>Divorce current spouse according to server rules.</Description>
+              <Value>5</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>SetTitle</Name>
+              <Description>Set custom couple title.</Description>
+              <Value>6</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>TeleportToSpouse</Name>
+              <Description>Teleport to online spouse.</Description>
+              <Value>7</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

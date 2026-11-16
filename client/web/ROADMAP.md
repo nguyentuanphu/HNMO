@@ -276,8 +276,7 @@ section 12 (the cash shop) still waits for the owner's answers.
    schedule (golden monsters, white wizard, rabbits, snowmen, "find the GM").
 7. ⏳ **Daily lucky number**: pick a number on the website or in the game, a draw at a set time, coins or
    jewels for the winners; prizes and odds in the admin panel.
-8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
-   together, divorce rules; the couples list on the website.
+8. ✅ **Marriage**: proposal and Devias Church ceremony (`Shift+M` or `/marry`), custom couple title, party EXP &amp; defense hunting bonus (`MarriagePlugIn`, OFF by default), spouse warp, divorce fees &amp; cooldowns (`MarriageEngine`), persisted in `save/hnmo-state.json` under `marriage`, public couples list on `home.html` (`/website/marriage`), and admin page `/marriage`. Unit-tested (`MarriageEngineTest`, `MarriageControllerTests`) and Playwright-tested (`marriage.spec.ts`).
 9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
    admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
 10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take
