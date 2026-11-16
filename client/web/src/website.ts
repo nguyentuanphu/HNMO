@@ -231,6 +231,21 @@ const copy = {
     showAll: "Show all",
     showLess: "Show fewer",
     scheduleTitle: "Starting in the next 24 hours.",
+    ttAll: "All",
+    ttEvents: "Events",
+    ttInvasions: "Invasions",
+    ttBosses: "Bosses",
+    ttColName: "Event / Boss",
+    ttColSydney: "Next (Sydney)",
+    ttColLocal: "Your time",
+    ttColCountdown: "Status",
+    ttColMap: "Map",
+    ttColDrops: "Drops",
+    ttColSchedule: "Daily (Sydney)",
+    ttActive: "Active now",
+    ttNone: "No scheduled entries in this category.",
+    ttOffline: "Full timetable is unavailable while this server is offline or the feature is disabled.",
+    ttGmWinners: "Recent Find the GM winners",
     rankingsNav: "Rankings",
     rankingsTitle: "The realm's best.",
     topCharacters: "Top characters",
@@ -565,6 +580,21 @@ const copy = {
     showAll: "Xem tất cả",
     showLess: "Thu gọn",
     scheduleTitle: "Bắt đầu trong 24 giờ tới.",
+    ttAll: "Tất cả",
+    ttEvents: "Sự kiện",
+    ttInvasions: "Xâm lăng",
+    ttBosses: "Boss",
+    ttColName: "Sự kiện / Boss",
+    ttColSydney: "Giờ tới (Sydney)",
+    ttColLocal: "Giờ máy bạn",
+    ttColCountdown: "Trạng thái",
+    ttColMap: "Bản đồ",
+    ttColDrops: "Vật phẩm rơi",
+    ttColSchedule: "Hàng ngày (Sydney)",
+    ttActive: "Đang diễn ra",
+    ttNone: "Không có mục nào trong danh mục này.",
+    ttOffline: "Chưa tải được bảng lịch đầy đủ hoặc tính năng đang tắt.",
+    ttGmWinners: "Người thắng Truy tìm GM gần đây",
     rankingsNav: "Xếp hạng",
     rankingsTitle: "Những người mạnh nhất.",
     topCharacters: "Nhân vật hàng đầu",
@@ -1934,3 +1964,141 @@ void refreshResets();
 setInterval(() => {
   if (!document.hidden) void refreshResets();
 }, 120000);
+
+// ---------- full event, invasion & boss timetable (/website/timetable) ----------
+
+interface PublicTimetableEntry {
+  id: string;
+  category: "event" | "invasion" | "boss" | "custom";
+  nameEn: string;
+  nameVi: string;
+  mapsEn: string;
+  mapsVi: string;
+  dropsEn: string;
+  dropsVi: string;
+  schedule: string;
+  durationMin: number;
+  active: boolean;
+  nextStart: number | null;
+  endsAt: number | null;
+}
+
+interface PublicTimetable {
+  v: number;
+  off?: boolean;
+  now: number;
+  timeZone: string;
+  entries: PublicTimetableEntry[];
+  findGmWinners?: { name: string; map: string; coins: number; coinType: string; zen: number; at: number }[];
+}
+
+let timetableData: PublicTimetable | null = null;
+let timetableFilter: "all" | "event" | "invasion" | "boss" = "all";
+
+function formatSydneyOrLocal(atMs: number | null, timeZone?: string): string {
+  if (!atMs) return "—";
+  return new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", {
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    ...(timeZone ? { timeZone } : {}),
+  }).format(atMs);
+}
+
+function renderTimetable(): void {
+  const filters = clear("timetable-filters");
+  const filterDefs: ["all" | "event" | "invasion" | "boss", string][] = [
+    ["all", t("ttAll")],
+    ["event", t("ttEvents")],
+    ["invasion", t("ttInvasions")],
+    ["boss", t("ttBosses")],
+  ];
+  for (const [key, label] of filterDefs) {
+    const btn = node("button", label, key === timetableFilter ? "btn" : "btn muted") as HTMLButtonElement;
+    btn.type = "button";
+    btn.addEventListener("click", () => {
+      timetableFilter = key;
+      renderTimetable();
+    });
+    filters.append(btn);
+  }
+
+  const notice = element("timetable-notice");
+  const gmEl = element("timetable-gm-winners");
+  if (!timetableData || timetableData.off) {
+    notice.textContent = timetableData?.off ? t("ttOffline") : "";
+    table("timetable-table", [], [], timetableData ? "" : t("ttOffline"));
+    gmEl.textContent = "";
+    return;
+  }
+
+  notice.textContent = "";
+  const tz = timetableData.timeZone || "Australia/Sydney";
+  const rows = timetableData.entries
+    .filter((entry) => timetableFilter === "all" || entry.category === timetableFilter)
+    .map((entry) => {
+      const name = language === "vi" ? entry.nameVi : entry.nameEn;
+      const map = language === "vi" ? entry.mapsVi : entry.mapsEn;
+      const drops = language === "vi" ? entry.dropsVi : entry.dropsEn;
+      const status = entry.active
+        ? t("ttActive")
+        : entry.nextStart
+          ? (() => {
+              const sec = Math.max(0, Math.round((entry.nextStart - Date.now()) / 1000));
+              const h = Math.floor(sec / 3600);
+              const m = Math.floor((sec % 3600) / 60);
+              return h > 0 ? `${h}h ${m}m` : `${m}m`;
+            })()
+          : "—";
+      return [
+        name,
+        formatSydneyOrLocal(entry.nextStart, tz),
+        formatSydneyOrLocal(entry.nextStart),
+        status,
+        map || "—",
+        drops || "—",
+        entry.schedule || "—",
+      ];
+    });
+
+  table(
+    "timetable-table",
+    [
+      [t("ttColName"), false],
+      [t("ttColSydney"), false],
+      [t("ttColLocal"), false],
+      [t("ttColCountdown"), false],
+      [t("ttColMap"), false],
+      [t("ttColDrops"), false],
+      [t("ttColSchedule"), false],
+    ],
+    rows,
+    t("ttNone"),
+  );
+
+  const winners = timetableData.findGmWinners ?? [];
+  gmEl.textContent = winners.length
+    ? `${t("ttGmWinners")}: ` + winners.slice(0, 5).map((w) => `${w.name} (${w.map})`).join(", ")
+    : "";
+}
+
+async function refreshTimetable(): Promise<void> {
+  try {
+    const response = await fetch("/website/timetable", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicTimetable;
+    if (typeof data !== "object" || data === null || !Array.isArray(data.entries)) throw new Error("Invalid timetable");
+    timetableData = data;
+  } catch {
+    timetableData = null;
+  }
+  renderTimetable();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderTimetable());
+element("refresh").addEventListener("click", () => void refreshTimetable());
+void refreshTimetable();
+setInterval(() => {
+  if (!document.hidden) void refreshTimetable();
+}, 60000);

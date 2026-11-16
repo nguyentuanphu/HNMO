@@ -1,0 +1,259 @@
+@page "/timetable"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Event & Boss Timetable", "Lịch sự kiện & Boss")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Event & Boss Timetable", "Lịch sự kiện & Boss")" />
+
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Event & Boss Timetable", "Lịch sự kiện & Boss")</h1>
+    <button type="button"
+            class="btn btn-sm btn-outline-info rounded-circle"
+            title="@L("Show or hide setup instructions", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+            @onclick="() => this._showHelp = !this._showHelp">
+        ?
+    </button>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn trang này"):</strong>
+        @L(
+            "Enable the timetable so players see every event, invasion and world boss with its next Sydney/local start time, map and drops on the website and in the web game (H key or (i) guide). Below you can also turn on extra scheduled invasions (Golden monsters, White Wizard, Rabbits, Snowmen, Find the GM) and edit their daily times.",
+            "Bật lịch để người chơi xem toàn bộ sự kiện, xâm lăng và boss với giờ bắt đầu (Sydney và giờ máy), bản đồ, vật phẩm rơi trên website và trong game (phím H hoặc nút (i)). Bên dưới bạn cũng có thể bật thêm các xâm lăng theo lịch (Quái Vàng, Phù Thủy Trắng, Thỏ Ngọc, Người Tuyết, Truy tìm GM) và sửa khung giờ chạy.")
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@L("Timetable settings", "Cài đặt bảng lịch")</h2>
+
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="timetable-active" @bind="this._isActive" />
+                <label class="form-check-label" for="timetable-active" title="@L("Master switch for the Timetable feature (OFF by default).", "Công tắc bật/tắt tính năng Bảng lịch (mặc định TẮT).")">
+                    @L("Enable Event & Boss Timetable", "Bật Bảng lịch sự kiện & Boss")
+                </label>
+            </div>
+
+            <div class="row g-2 mb-2">
+                <div class="col-md-4">
+                    <label class="form-label" for="timetable-tz">@L("Schedule time zone", "Múi giờ lịch trình")</label>
+                    <input class="form-control" id="timetable-tz" @bind="this._configuration.TimeZoneId"
+                           title="@L("Default Australia/Sydney so daily HH:mm times stay accurate with daylight saving.", "Mặc định Australia/Sydney để giờ hàng ngày luôn đúng.")" />
+                </div>
+                <div class="col-md-8 d-flex align-items-end gap-3 flex-wrap pb-1">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="tt-show-events" @bind="this._configuration.ShowMiniGames" />
+                        <label class="form-check-label" for="tt-show-events">@L("Include mini-games (BC/DS/CC/IT/Kanturu)", "Hiện sự kiện (BC/DS/CC/IT/Kanturu)")</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="tt-show-invasions" @bind="this._configuration.ShowInvasions" />
+                        <label class="form-check-label" for="tt-show-invasions">@L("Include invasions", "Hiện xâm lăng")</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="tt-show-bosses" @bind="this._configuration.ShowWorldBosses" />
+                        <label class="form-check-label" for="tt-show-bosses">@L("Include world bosses", "Hiện Boss thế giới")</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveTimetableAsync">
+                    @L("Save timetable settings", "Lưu cài đặt bảng lịch")
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@L("Scheduled invasions & Find the GM", "Xâm lăng theo lịch & Truy tìm GM")</h2>
+            <p class="text-muted small">
+                @L("Toggle each invasion on or off and enter comma-separated HH:mm times (24-hour format).",
+                   "Bật/tắt từng loại xâm lăng và nhập các mốc giờ HH:mm cách nhau bằng dấu phẩy.")
+            </p>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>@L("Event", "Sự kiện")</th>
+                            <th>@L("Enabled", "Bật")</th>
+                            <th>@L("Times (HH:mm)", "Giờ chạy (HH:mm)")</th>
+                            <th>@L("Duration (min)", "Thời lượng (phút)")</th>
+                            <th>@L("Save", "Lưu")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in this._invasions)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@L(row.NameEn, row.NameVi)</strong>
+                                    @if (row.IsFindGm && this._findGmConfig is not null)
+                                    {
+                                        <div class="row g-2 mt-1">
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-0">@L("Coins", "Xu")</label>
+                                                <input class="form-control form-control-sm" type="number" min="0" style="width:90px" @bind="this._findGmConfig.RewardCoins" />
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-0">@L("Coin type", "Loại xu")</label>
+                                                <select class="form-select form-select-sm" @bind="this._findGmConfig.RewardCoinType">
+                                                    @foreach (var t in Enum.GetValues<CashShopCoinType>())
+                                                    {
+                                                        <option value="@t">@t</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-0">@L("Zen", "Zen")</label>
+                                                <input class="form-control form-control-sm" type="number" min="0" style="width:110px" @bind="this._findGmConfig.RewardZen" />
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-label small mb-0">@L("Winners", "Số giải")</label>
+                                                <input class="form-control form-control-sm" type="number" min="1" max="20" style="width:70px" @bind="this._findGmConfig.MaxWinners" />
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <input class="form-check-input" type="checkbox" @bind="row.IsActive" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" @bind="row.TimesText" placeholder="00:30, 04:30, 08:30" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" type="number" min="1" max="180" style="width:90px" @bind="row.DurationMinutes" />
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" disabled="@this._isSaving" @onclick="() => this.SaveInvasionAsync(row)">
+                                        @L("Save", "Lưu")
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("Custom timetable entries / overrides", "Mục lịch tùy chỉnh")</h2>
+                <button class="btn btn-sm btn-outline-secondary" @onclick="this.AddCustomEntry">
+                    + @L("Add custom entry", "Thêm mục")
+                </button>
+            </div>
+
+            @if (this._configuration.CustomEntries.Count == 0)
+            {
+                <p class="text-muted small mb-0">@L("No custom entries yet.", "Chưa có mục tùy chỉnh.")</p>
+            }
+            else
+            {
+                @foreach (var entry in this._configuration.CustomEntries)
+                {
+                    <div class="border rounded p-2 mb-2">
+                        <div class="row g-2">
+                            <div class="col-md-2">
+                                <label class="form-label small">@L("ID / Key", "Mã")</label>
+                                <input class="form-control form-control-sm" @bind="entry.Id" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small">@L("Category", "Loại")</label>
+                                <select class="form-select form-select-sm" @bind="entry.Category">
+                                    <option value="custom">@L("Custom", "Tùy chỉnh")</option>
+                                    <option value="event">@L("Event", "Sự kiện")</option>
+                                    <option value="invasion">@L("Invasion", "Xâm lăng")</option>
+                                    <option value="boss">@L("Boss", "Boss")</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">@L("English name", "Tên tiếng Anh")</label>
+                                <input class="form-control form-control-sm" @bind="entry.NameEn" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">@L("Vietnamese name", "Tên tiếng Việt")</label>
+                                <input class="form-control form-control-sm" @bind="entry.NameVi" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">@L("Maps (EN)", "Bản đồ (EN)")</label>
+                                <input class="form-control form-control-sm" @bind="entry.MapsEn" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">@L("Maps (VI)", "Bản đồ (VI)")</label>
+                                <input class="form-control form-control-sm" @bind="entry.MapsVi" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">@L("Drops (EN)", "Rơi đồ (EN)")</label>
+                                <input class="form-control form-control-sm" @bind="entry.DropsEn" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">@L("Drops (VI)", "Rơi đồ (VI)")</label>
+                                <input class="form-control form-control-sm" @bind="entry.DropsVi" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">@L("Times (Sydney HH:mm)", "Giờ Sydney (HH:mm)")</label>
+                                <input class="form-control form-control-sm" @bind="entry.ScheduleTimes" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small">@L("Duration (min)", "Phút")</label>
+                                <input class="form-control form-control-sm" type="number" min="1" max="720" @bind="entry.DurationMinutes" />
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" @bind="entry.Enabled" />
+                                    <label class="form-check-label small">@L("Visible", "Hiển thị")</label>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => this._configuration.CustomEntries.Remove(entry)">
+                                    @L("Remove", "Xóa")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-body">
+            <h2 class="h5">@L("Upcoming preview (Sydney time)", "Xem trước lịch sắp tới (giờ Sydney)")</h2>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>@L("Name", "Tên")</th>
+                            <th>@L("Next spawn (Sydney)", "Lần tới (Sydney)")</th>
+                            <th>@L("Map", "Bản đồ")</th>
+                            <th>@L("Drops", "Vật phẩm rơi")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in this._preview)
+                        {
+                            <tr>
+                                <td>@L(item.NameEn, item.NameVi)</td>
+                                <td>@(item.IsActive ? L("Active now", "Đang diễn ra") : this.FormatSydney(item.NextStartUtc))</td>
+                                <td>@L(item.MapsEn, item.MapsVi)</td>
+                                <td>@L(item.DropsEn, item.DropsVi)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+}

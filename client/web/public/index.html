@@ -71,6 +71,7 @@
     #guide iframe { width: 100%; height: 100%; border: 0; display: block; }
     #guide .close { position: absolute; right: 10px; top: 10px; padding: 4px 10px; }
     #guide .onboarding { position: absolute; right: 80px; top: 10px; padding: 4px 10px; }
+    #guide .timetable { position: absolute; right: 205px; top: 10px; padding: 4px 10px; }
     .map-picker { position: fixed; right: 12px; top: 12px; display: flex; gap: 8px; align-items: center; }
     .map-picker label { color: var(--muted); font-size: 12px; }
   </style>
@@ -82,7 +83,7 @@
   <div id="stage"><canvas id="view"></canvas></div>
   <div id="labels"></div>
   <div id="guide" hidden role="dialog" aria-label="Guide" data-game-name="{game} guide" data-game-name-attr="aria-label">
-    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
+    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="timetable" id="guideTimetable" title="Event and boss timetable (H)">Timetable (H)</button><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
   </div>
   <div class="hud" id="hud" hidden>
     <span class="chip" id="heroName">-</span>

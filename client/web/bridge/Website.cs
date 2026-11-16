@@ -6,6 +6,7 @@ internal static class Website
         Forward(app, "/website/data", "api/website", options, clients);
         Forward(app, "/website/details", "api/website/details", options, clients);
         Forward(app, "/website/missions", "api/website/missions", options, clients);
+        Forward(app, "/website/timetable", "api/website/timetable", options, clients);
         Forward(app, "/website/world-bosses", "api/website/world-bosses", options, clients);
         Forward(app, "/website/onboarding", "api/website/onboarding", options, clients);
         Forward(app, "/website/guilds", "api/website/guilds", options, clients);

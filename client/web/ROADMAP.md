@@ -271,9 +271,8 @@ section 12 (the cash shop) still waits for the owner's answers.
    website API are unit-tested; the web parts are tested with fed packets and answered requests).
 5. ⏳ **Top-up milestones ("thưởng mốc nạp")**: rewards at total top-up steps, shown on the account page;
    QR bank transfer on the top-up page (the bank top-up exists).
-6. ⏳ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
-   player's time), its map and its drops, on the website and in the game (i). Extra invasions on a
-   schedule (golden monsters, white wizard, rabbits, snowmen, "find the GM").
+6. ✅ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
+   player's time), its map and its drops, on the website (`/website/timetable` under Schedule) and in the game (<kbd>H</kbd>, touch ⋯ menu, and `(i)` guide). Extra scheduled invasions on a schedule: golden monsters, red dragon, white wizard, Lunar rabbits (`RabbitInvasionPlugIn`), snowmen (`SnowmanInvasionPlugIn`), and Find the GM (`FindTheGmInvasionPlugIn`, coins/zen to the first finder(s), recorded in `save/hnmo-state.json` under `timetable`). Admin page `/timetable` toggles features and edits daily Sydney times and rewards. Unit-tested (`TimetableEngineTest`, `TimetableControllerTests`) and Playwright-tested (`timetable.spec.ts`).
 7. ⏳ **Daily lucky number**: pick a number on the website or in the game, a draw at a set time, coins or
    jewels for the winners; prizes and odds in the admin panel.
 8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
