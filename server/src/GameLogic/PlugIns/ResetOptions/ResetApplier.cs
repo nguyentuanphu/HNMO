@@ -8,6 +8,7 @@ using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
+using HNMO.Persistence;
 
 /// <summary>
 /// Puts a reset or relife plan into a character: the reset count, the level, the stats and the free points. The same
@@ -162,6 +163,42 @@ public static class ResetApplier
 
         character.LevelUpPoints = (int)Math.Min(character.LevelUpPoints + back, int.MaxValue);
         return (int)Math.Min(back, int.MaxValue);
+    }
+
+    /// <summary>
+    /// Counts how many master skill points a character has invested across all learned master skills.
+    /// </summary>
+    /// <param name="character">The character.</param>
+    /// <returns>Total invested master points.</returns>
+    public static int CountSpentMasterPoints(Character character) =>
+        character.LearnedSkills
+            .Where(s => s.Skill?.MasterDefinition is not null)
+            .Sum(s => Math.Max(0, (int)s.Level));
+
+    /// <summary>
+    /// Clears all learned master skills of an offline character and refunds the points to
+    /// <see cref="Character.MasterLevelUpPoints"/>.
+    /// </summary>
+    /// <param name="character">The offline character.</param>
+    /// <param name="context">The persistence context used to delete removed skill rows.</param>
+    /// <returns>Refunded master skill points.</returns>
+    public static async ValueTask<int> ClearMasterSkillsOfflineAsync(Character character, IContext context)
+    {
+        var entries = character.LearnedSkills.Where(s => s.Skill?.MasterDefinition is not null).ToList();
+        if (entries.Count == 0)
+        {
+            return 0;
+        }
+
+        var refunded = entries.Sum(e => Math.Max(0, (int)e.Level));
+        foreach (var entry in entries)
+        {
+            character.LearnedSkills.Remove(entry);
+            await context.DeleteAsync(entry).ConfigureAwait(false);
+        }
+
+        character.MasterLevelUpPoints = (int)Math.Min((long)character.MasterLevelUpPoints + refunded, int.MaxValue);
+        return refunded;
     }
 
     /// <summary>

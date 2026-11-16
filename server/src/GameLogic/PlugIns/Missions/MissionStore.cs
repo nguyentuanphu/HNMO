@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlugIns.Missions;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 
 /// <summary>
 /// The progress of a mission in its current period.
@@ -142,9 +143,15 @@ public sealed class MissionStoreData
 /// </summary>
 public sealed class MissionStore
 {
+    private const string FeatureCharacters = "missions.char";
+    private const string FeatureAccounts = "missions.account";
+    private const string SectionKey = "missions";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<MissionCharacterState> _charSync = new();
+    private readonly HnmoFeatureRowSync<MissionAccountState> _accountSync = new();
     private bool _changed;
 
     /// <summary>
@@ -153,7 +160,8 @@ public sealed class MissionStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public MissionStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -161,10 +169,13 @@ public sealed class MissionStore
     public object Lock { get; } = new();
 
     /// <summary>Gets the file, if any.</summary>
-    public string? FilePath => this._filePath;
+    public string? FilePath => this._stateStore?.FilePath;
 
     /// <summary>Gets the data.</summary>
     public MissionStoreData Data { get; }
+
+    /// <summary>Gets the row backend backing per-account/per-character mission state.</summary>
+    public IHnmoPlayerStateRowBackend RowBackend => this._rowBackend;
 
     /// <summary>
     /// Gets the state of a character, created when it's new.
@@ -177,6 +188,7 @@ public sealed class MissionStore
         {
             state = new MissionCharacterState();
             this.Data.Characters[characterId] = state;
+            this._charSync.MarkDirty(characterId);
             this._changed = true;
         }
 
@@ -194,6 +206,7 @@ public sealed class MissionStore
         {
             state = new MissionAccountState();
             this.Data.Accounts[loginName] = state;
+            this._accountSync.MarkDirty(loginName);
             this._changed = true;
         }
 
@@ -209,67 +222,62 @@ public sealed class MissionStore
         this.Data.Accounts.FirstOrDefault(a => string.Equals(a.Value.InviteCode, code, StringComparison.OrdinalIgnoreCase)).Key;
 
     /// <summary>Marks the data as changed.</summary>
-    public void Changed() => this._changed = true;
+    public void Changed()
+    {
+        this._charSync.MarkFullScanPending();
+        this._accountSync.MarkFullScanPending();
+        this._changed = true;
+    }
+
+    /// <summary>Marks one account dirty for O(1) individual row persistence.</summary>
+    /// <param name="loginName">Account login key.</param>
+    public void MarkAccountDirty(string loginName)
+    {
+        this._accountSync.MarkDirty(loginName);
+        this._changed = true;
+    }
+
+    /// <summary>Marks one character dirty for O(1) individual row persistence.</summary>
+    /// <param name="characterId">Character ID key.</param>
+    public void MarkCharacterDirty(string characterId)
+    {
+        this._charSync.MarkDirty(characterId);
+        this._changed = true;
+    }
 
     /// <summary>
     /// Saves the data when it changed. The caller holds <see cref="Lock"/>.
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
         }
 
-        try
-        {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
-            this._changed = false;
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // It's saved with the next change.
-        }
+        this._charSync.SaveChanges(this._rowBackend, FeatureCharacters, this.Data.Characters, JsonOptions, useDirtySetOnly: true);
+        this._accountSync.SaveChanges(this._rowBackend, FeatureAccounts, this.Data.Accounts, JsonOptions, useDirtySetOnly: true);
+        this._changed = false;
     }
 
     private MissionStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new MissionStoreData();
         }
 
-        try
+        var data = this._stateStore.ReadSection<MissionStoreData>(SectionKey, JsonOptions) ?? new MissionStoreData();
+        data.Characters = new Dictionary<string, MissionCharacterState>(data.Characters, StringComparer.Ordinal);
+        data.Accounts = new Dictionary<string, MissionAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
+        var migratedChars = this._charSync.LoadOrMigrate(this._rowBackend, FeatureCharacters, data.Characters, JsonOptions);
+        var migratedAccs = this._accountSync.LoadOrMigrate(this._rowBackend, FeatureAccounts, data.Accounts, JsonOptions);
+        if (migratedChars || migratedAccs)
         {
-            var data = JsonSerializer.Deserialize<MissionStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new MissionStoreData();
-
-            // The dictionaries are read with the default comparer; put them back into the intended ones.
-            data.Characters = new Dictionary<string, MissionCharacterState>(data.Characters, StringComparer.Ordinal);
-            data.Accounts = new Dictionary<string, MissionAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
-            return data;
+            this._stateStore.RemoveSection(SectionKey);
         }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            // A broken file is kept aside, so nothing is lost silently.
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
 
-            return new MissionStoreData();
-        }
+        return data;
     }
 }
