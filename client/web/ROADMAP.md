@@ -386,7 +386,17 @@ and compare with the desktop's movement.
 - #20 antigravity-ktx2 (4,038 textures 253 MB -> 54 MB, KTX2Loader, per-file fallback, Texture quality setting) -> base #15.
 - Merge order for Antigravity: #13 (renumbered to F5 24), #14, #15, #17, #18, #19, #20.
 - Packet numbers from 2026-11-16: ChatGPT uses F5 25-2F, Antigravity F5 30-4F (no more clashes).
-- Coming: chatgpt rebases + account page + admin help everywhere + VIP; antigravity ROADMAP 13 items 5-15.
+- Antigravity, ROADMAP 13 (based on #19): #22 top-up milestones + VietQR, #23 timetable + invasions, #24 lucky number,
+  #25 marriage, #28 item market, #31 jewel bank + master point clearing, #32 catch-up cap, #35 season plan,
+  #36 leftover recipes + exchange NPC, #37 mount chain, #38 party options.
+- Antigravity, queued parts: #40 player state in PostgreSQL, #41 rolling logs + backups + disk monitor, #42 load test
+  (1,000 accounts), #43 performance mode, #44 LeaderboardsPageTests fix, #45 activity log, #46 maintenance tools,
+  #47 economy dashboard, #48 map rules + happy hours + combat limits, #49 chaos rates + multi-vault + event rewards,
+  #50 worlds.
+- Antigravity's merge order: #15 -> #17 -> #18 -> #19 -> #40, then #13 (F5 24), #14, #20, #22-#38, #41-#50; after
+  merging, add menu entries for its self-contained admin pages and mount its account-page sections.
+- Coming: Antigravity builds an integration branch of all its PRs (antigravity-integration) and fixes what breaks,
+  then ROADMAP 14 leftovers; ChatGPT: rebases, account page, admin help, VIP, VIP servers, admin redesign, admin tools.
 - Earlier: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
 Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
@@ -604,3 +614,12 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      managing several worlds (start/stop, rates, events, players per world); one website and one account system with
      the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
      opening date); optional one-off character transfer between worlds; later a cross-world event server.
+
+## Owner decision 2026-11-16 (Sydney): web only for now
+The desktop client is dropped for now (maybe later): HNMO ships and is played through the web game only. New HNMO
+features get web windows only; no desktop work (no desktop launcher 14.14, no desktop server-list/VIP marks; PR #8,
+the native editor's Vietnamese, is low priority). The web game still copies the desktop client's behaviour for the
+classic game (the parity rule stays: the desktop code is the reference).
+Work moved from ChatGPT to Antigravity (ChatGPT is slower): admin tools 14.18 gift box/mail, 14.16 ban manager,
+14.15 character tools, 14.17 GM manager + in-game GM commands (14.11), 14.20 news manager. ChatGPT keeps: updating
+its PRs, account page, admin help on every page, VIP, VIP servers, admin panel redesign + guide split.
