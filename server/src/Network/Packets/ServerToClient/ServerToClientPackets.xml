@@ -16922,6 +16922,23 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>49</SubCode>
+      <Name>HnmoCustomRanksState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world, when active titles change, or after HnmoCustomRanksCommand.</SentWhen>
+      <CausedReaction>Updates the web client's custom title badges (nameplates and chat) and /title selector.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload listing rank tiers, the hero's unlocked and equipped rank, and online players' active titles.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

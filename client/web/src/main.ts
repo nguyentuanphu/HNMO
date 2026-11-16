@@ -74,7 +74,8 @@ import { PartyWindow } from './ui/partyWindow.js';
 import { PartyOptionsWindow } from './ui/partyOptionsWindow.js';
 import { CommandWindow } from './ui/commandWindow.js';
 import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
-import { setupSocial, decorateLabel, type Social } from './game/social.js';
+import { setupSocial, decorateLabel, setCustomRankLookup, type Social } from './game/social.js';
+import { createCustomRanks, type CustomRanksManager } from './game/customRanks.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
@@ -196,6 +197,7 @@ export interface GameState {
   market?: MarketWindow;
   jewelBank?: JewelBankWindow;
   guildLevels?: GuildLevelsWindow;
+  customRanks?: CustomRanksManager;
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
@@ -287,6 +289,7 @@ const notNearby = (name: string) => chat.add(`${name} is not nearby.`, 'system')
 const chat = new Chat({
   click: () => sounds.click(),
   owner: () => state.online?.hero.name ?? '',
+  titlePrefix: (name) => state.customRanks?.chatPrefix(name) ?? null,
   nameActions: {
     party: (name) => { const p = playerNamed(name); if (p) state.party?.invite(p); else notNearby(name); },
     trade: (name) => { const p = playerNamed(name); if (p) state.trade?.requestTrade(p.id); else notNearby(name); },
@@ -1565,6 +1568,12 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   connection.onPacket((bytes) => { guildLevels.handle(bytes); });
   for (const bytes of earlyPackets) guildLevels.handle(bytes);
   guildLevels.start();
+  const customRanks = createCustomRanks(connection);
+  state.customRanks = customRanks;
+  setCustomRankLookup((name) => customRanks.nameplateBadge(name));
+  connection.onPacket((bytes) => { customRanks.handle(bytes); });
+  for (const bytes of earlyPackets) customRanks.handle(bytes);
+  customRanks.start();
   // Screenshots (Print Screen, as the desktop) and HNMO's share panel; the community window (K, when the inventory
   // isn't open): the Discord and Zalo coins, community events and their codes.
   screenshotHero = character.name;

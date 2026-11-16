@@ -6718,4 +6718,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCustomRanksCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = SelectRank (empty RankId restores automatic highest rank).</param>
+    /// <param name="rankId">The rank tier identifier to equip, or empty for automatic highest tier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request custom rank definitions and active player titles, or to equip/reset a player's displayed title.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoCustomRanksState (F5 49).
+    /// </remarks>
+    public static async ValueTask SendHnmoCustomRanksCommandAsync(this IConnection? connection, byte @action, string @rankId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCustomRanksCommandRef.GetRequiredSize(rankId);
+            var packet = new HnmoCustomRanksCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.RankId = @rankId;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

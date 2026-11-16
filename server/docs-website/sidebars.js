@@ -52,6 +52,7 @@ const sidebars = {
         "admin-panel/off-trade",
         "admin-panel/rankings-settings",
         "admin-panel/talismans",
+        "admin-panel/custom-ranks",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",

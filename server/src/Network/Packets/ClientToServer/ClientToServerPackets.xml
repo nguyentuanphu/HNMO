@@ -5432,6 +5432,29 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>48</SubCode>
+      <Name>HnmoCustomRanksCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request custom rank definitions and active player titles, or to equip/reset a player's displayed title.</SentWhen>
+      <CausedReaction>The server processes the command and replies with HnmoCustomRanksState (F5 49).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = SelectRank (empty RankId restores automatic highest rank).</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>RankId</Name>
+          <Description>The rank tier identifier to equip, or empty for automatic highest tier.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>
