@@ -10725,4 +10725,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoPartyOptionsState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload listing active party advertisement state and open hunting spot parties.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoPartyOptionsCommand or when opening the Party window options drawer.
+    /// Causes reaction on client side: Updates the web client's Party password and Auto-party spot finder drawer.
+    /// </remarks>
+    public static async ValueTask SendHnmoPartyOptionsStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoPartyOptionsStateRef.GetRequiredSize(json);
+            var packet = new HnmoPartyOptionsStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

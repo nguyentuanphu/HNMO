@@ -4976,6 +4976,29 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>44</SubCode>
+      <Name>HnmoPartyOptionsCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request party options, advertise a hunting spot party/password, or auto-join a spot/password party.</SentWhen>
+      <CausedReaction>The server processes the request and replies with HnmoPartyOptionsState (F5 45).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = AdvertiseSpotOrPass, 2 = JoinByPassword, 3 = JoinSpot, 4 = StopAdvertising.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Payload</Name>
+          <Description>JSON string containing password, spot, leader, minLevel, maxLevel.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>
