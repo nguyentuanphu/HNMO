@@ -377,8 +377,16 @@ and compare with the desktop's movement.
   undo/redo, save summary; /merchants/legacy kept; 87 EN/VI keys appended) -> main. Price override not done (needs model
   change). Recheck icons together with #15's packed item icons.
 - As of 2026-11-16 16:17 #2, #3, #5, #6, #8, #9, #12 conflict with main: ChatGPT is rebasing its own branches.
-- Coming (2026-11-16): antigravity host settings -> installer app -> one save file -> KTX2 (one PR each, based on #15);
-  chatgpt rebases + account page + admin help everywhere + VIP.
+- #17 antigravity-host-settings (HostSettingsStore, /host-settings page, restart service) -> base #15.
+- #18 antigravity-installer-app (/control page + /api/control, Inno Setup, .dmg, .deb/AppImage scripts) -> base #15.
+  The workflow change (.github/workflows/hnmo-package.yml) was NOT pushed (its token lacks workflow scope): add it
+  from the main session when merging.
+- #19 antigravity-one-save-file (HnmoStateStore: save/hnmo-state.json, atomic writes, .bak recovery, migrates the 10
+  old files to save/old/) -> base #15. New plug-ins must use HnmoStateStore once it's merged (ChatGPT's VIP too).
+- #20 antigravity-ktx2 (4,038 textures 253 MB -> 54 MB, KTX2Loader, per-file fallback, Texture quality setting) -> base #15.
+- Merge order for Antigravity: #13 (renumbered to F5 24), #14, #15, #17, #18, #19, #20.
+- Packet numbers from 2026-11-16: ChatGPT uses F5 25-2F, Antigravity F5 30-4F (no more clashes).
+- Coming: chatgpt rebases + account page + admin help everywhere + VIP; antigravity ROADMAP 13 items 5-15.
 - Earlier: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
 Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
