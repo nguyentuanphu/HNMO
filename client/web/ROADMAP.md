@@ -666,6 +666,9 @@ Players trade on trust today ("send money and hope"). HNMO stands in the middle,
 ## 17. Mobile app and phone play (owner asked 2026-11-16; a second Antigravity, branches antigravity2-*)
 Reference: a mobile game of the same genre (iOS/Android apps playing on the same servers as its Windows client,
 touch-first; read from its store listing and release notes; ideas only). The web game on phones isn't good enough yet.
+17.0 Owner decision 2026-11-16: web app ONLY: no Android/iOS store apps and no desktop client for now. The phone
+     features go into the web game (browser and "Add to Home Screen"); the store-app part of 17.1 and Apple sign-in in
+     17.7 are dropped.
 17.1 Installable app: the web game as a proper PWA (manifest exists; add a service worker caching the shell and the
      data packs, offline "can't connect" page, install prompt, full screen, orientation lock, safe areas/notch), then
      store apps that wrap the same web game (Android: Trusted Web Activity or Capacitor; iOS: Capacitor/WKWebView),
