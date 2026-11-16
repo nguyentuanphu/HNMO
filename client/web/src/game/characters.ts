@@ -352,6 +352,20 @@ function bodyGlowMaterial(map: THREE.Texture, color: THREE.Color): THREE.MeshBas
   return material;
 }
 
+const TWO_PI = Math.PI * 2;
+// Smoothly turns toward the target angle per frame (matching desktop MovePath's fractional turn
+// without snapping at 45-degree grid corners; capped per frame so slow frames still turn smoothly).
+function turnAngleTowards(current: number, target: number, dt: number): number {
+  let delta = (target - current) % TWO_PI;
+  if (delta > Math.PI) delta -= TWO_PI;
+  else if (delta < -Math.PI) delta += TWO_PI;
+  if (Math.abs(delta) < 1e-4) return target;
+  const factor = Math.min(0.35, 1 - Math.pow(0.5, dt * 25));
+  return current + delta * factor;
+}
+
+const WALK_GRACE_SECONDS = 0.25;
+
 export class Character {
   id: number;
   name: string;
@@ -370,6 +384,7 @@ export class Character {
   cell: Cell;
   /** The cells still to walk. */
   path: Cell[];
+  private walkGrace = 0;
   angle: number;
   action: number;
   time: number;
@@ -509,17 +524,30 @@ export class Character {
     this.cell = { x, y };
     this.position.set(cellCenter(x), cellCenter(y));
     this.path = [];
+    this.walkGrace = 0;
     if (rotation !== undefined) this.angle = angleFromRotation(rotation);
     if (this.fixedAngle !== null) this.angle = this.fixedAngle;
   }
 
   walk(cells: Cell[]): void {
-    this.path = cells.slice();
+    const path = cells.slice();
+    // Skip a leading cell that is already behind the character's current position relative to
+    // the next cell, so a mid-walk redirect never steps backwards.
+    if (path.length > 1) {
+      const tx0 = cellCenter(path[0].x), ty0 = cellCenter(path[0].y);
+      const tx1 = cellCenter(path[1].x), ty1 = cellCenter(path[1].y);
+      if ((tx0 - this.position.x) * (tx1 - tx0) + (ty0 - this.position.y) * (ty1 - ty0) < 0) {
+        path.shift();
+      }
+    }
+    this.path = path;
+    if (this.path.length > 0) this.walkGrace = WALK_GRACE_SECONDS;
   }
 
   // Walks straight to a cell, used for others whose exact steps we don't simulate.
   walkStraightTo(x: number, y: number): void {
     this.path = [{ x, y }];
+    this.walkGrace = WALK_GRACE_SECONDS;
   }
 
   get isWalking(): boolean { return this.path.length > 0; }
@@ -533,6 +561,7 @@ export class Character {
 
   // Plays an animation once, then goes back to standing or walking; hold keeps its last key (death).
   playOnce(action: number, keysPerSecond?: number, hold = false): void {
+    this.walkGrace = 0;
     this.oneShot = { action, keysPerSecond: keysPerSecond ?? this.keysPerSecond(action) ?? 6, hold };
     this.action = action;
     this.time = 0;
@@ -549,14 +578,15 @@ export class Character {
   // How it stands or walks: a player by its class, weapons, wings and the safe zone (the desktop's
   // SetPlayerStop / SetPlayerWalk); others always with their stop and walk actions.
   private stanceAction(world: CharacterWorld): number {
-    if (this.classIndex === null || !this.equipment) return this.isWalking ? this.actions.walk : this.startAction ?? this.actions.stop;
+    const walking = this.isWalking || this.walkGrace > 0;
+    if (this.classIndex === null || !this.equipment) return walking ? this.actions.walk : this.startAction ?? this.actions.stop;
     const hand = (item: AppearanceItem | null | undefined) => (item ? { group: item.group, number: item.number } : null);
     const input = {
       classIndex: this.classIndex, rightHand: hand(this.equipment.rightHand), leftHand: hand(this.equipment.leftHand),
       mount: mountOfPet(this.equipment.pet), wings: Boolean(this.equipment.wings),
       safeZone: (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0,
     };
-    const action = this.isWalking ? playerWalkAction(input) : playerStopAction(input);
+    const action = walking ? playerWalkAction(input) : playerStopAction(input);
     return action >= 0 ? action : this.action;
   }
 
@@ -627,20 +657,31 @@ export class Character {
   }
 
   advance(dt: number): void {
+    if (this.path.length > 0) {
+      this.walkGrace = WALK_GRACE_SECONDS;
+    } else if (this.walkGrace > 0) {
+      this.walkGrace = Math.max(0, this.walkGrace - dt);
+    }
+
     let budget = WALK_CELLS_PER_SECOND * TERRAIN_SCALE * dt;
     while (budget > 0 && this.path.length) {
       const next = this.path[0];
-      const target = new THREE.Vector2(cellCenter(next.x), cellCenter(next.y));
-      const delta = target.clone().sub(this.position);
-      const distance = delta.length();
-      if (distance > 1) this.angle = Math.atan2(delta.x, -delta.y); // CreateAngle (Engine/AI/AngleMath.cpp)
+      const tx = cellCenter(next.x), ty = cellCenter(next.y);
+      const dx = tx - this.position.x, dy = ty - this.position.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance > 1) {
+        const targetAngle = Math.atan2(dx, -dy); // CreateAngle (Engine/AI/AngleMath.cpp)
+        this.angle = turnAngleTowards(this.angle, targetAngle, dt);
+      }
       if (distance <= budget) {
-        this.position.copy(target);
+        this.position.set(tx, ty);
         this.cell = { x: next.x, y: next.y };
         this.path.shift();
         budget -= distance;
       } else {
-        this.position.add(delta.multiplyScalar(budget / distance));
+        const step = budget / distance;
+        this.position.x += dx * step;
+        this.position.y += dy * step;
         budget = 0;
       }
     }
