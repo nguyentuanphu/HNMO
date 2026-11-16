@@ -6,6 +6,7 @@ namespace HNMO.GameLogic;
 
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views.Character;
 using HNMO.GameLogic.Views.World;
 using Nito.AsyncEx;
@@ -144,7 +145,7 @@ internal sealed class PlayerExperience
 
         var currentLevel = (short)attributes[Stats.Level];
         var isMaxLevel = currentLevel == this._player.GameContext.Configuration.MaximumLevel;
-        isMasterExperience = characterClass.IsMasterClass && isMaxLevel;
+        isMasterExperience = characterClass.IsMasterClass && isMaxLevel && SeasonPlanPlugIn.IsFeatureUnlocked(this._player.GameContext, SeasonFeatureGate.MasterLevels);
         return true;
     }
 

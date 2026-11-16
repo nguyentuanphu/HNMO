@@ -286,9 +286,9 @@ section 12 (the cash shop) still waits for the owner's answers.
 11. ⏳ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
     the cap for everyone rises N levels a day; with resets, a daily reset limit does the same job. Shown on
     the website (today's cap).
-12. ⏳ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony, wing 2,
-    the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
-    killed, N players at a level). Stages, dates and conditions in the admin panel; the timeline on the website.
+12. ✅ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony,
+    wing 2, the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
+    killed, N players at a level). Stages, dates and conditions in the admin panel (`/season-plan`); the timeline on the website (`#season-plan`) and in-game (`F8`).
 13. ⏳ **Combining leftovers**: chaos machine recipes the admin panel can add (e.g. 2 boxes of the same level +
     1 Jewel of Life + 1 Jewel of Creation -> a box one level higher, with a top box level per season stage),
     and an exchange NPC for surplus materials. Recipes shown in the game and on the website.

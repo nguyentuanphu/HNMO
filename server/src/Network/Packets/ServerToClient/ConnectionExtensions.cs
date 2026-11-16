@@ -10725,4 +10725,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonPlanState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing active stage, unlocked feature gates, and all stage conditions/dates.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after entering the world, when a new season stage unlocks, or upon HnmoSeasonPlanRequest.
+    /// Causes reaction on client side: Updates the web client's Season Plan (F8) timeline.
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonPlanStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonPlanStateRef.GetRequiredSize(json);
+            var packet = new HnmoSeasonPlanStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

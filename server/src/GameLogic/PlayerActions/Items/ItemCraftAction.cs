@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlayerActions.Items;
 using System.Collections.Concurrent;
 using HNMO.DataModel.Configuration.ItemCrafting;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views.NPC;
 
 /// <summary>
@@ -47,6 +48,15 @@ public class ItemCraftAction
         }
 
         var craftingHandler = this.GetCraftingHandler(crafting);
+
+        if (RequiredSeasonGate(craftingHandler, crafting) is { } gate
+            && !SeasonPlanPlugIn.IsFeatureUnlocked(player.GameContext, gate))
+        {
+            await player.InvokeViewPlugInAsync<IShowItemCraftingResultPlugIn>(p => p.ShowResultAsync(CraftingResult.IncorrectMixItems, null)).ConfigureAwait(false);
+            var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+            await player.ShowBlueMessageAsync(isVi ? "Tính năng ép đồ này chưa mở khóa ở giai đoạn mùa giải hiện tại." : $"That Chaos mix ({gate}) is locked until its Season stage opens.").ConfigureAwait(false);
+            return;
+        }
 
         (CraftingResult, Item?) result;
         try
@@ -185,5 +195,41 @@ public class ItemCraftAction
         }
 
         throw new ArgumentException("No simple crafting settings or item crafting handler name specified.", nameof(crafting));
+    }
+
+    private static SeasonFeatureGate? RequiredSeasonGate(IItemCraftingHandler handler, ItemCrafting crafting)
+    {
+        var typeName = handler.GetType().Name;
+        if (typeName.Contains("SecondWings", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Wing2;
+        }
+
+        if (typeName.Contains("ThirdWings", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Wing3;
+        }
+
+        if (typeName.Contains("Fenrir", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Fenrir;
+        }
+
+        if (typeName.Contains("GuardianOption", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Items380;
+        }
+
+        if (typeName.Contains("RefineStone", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Harmony;
+        }
+
+        if (crafting.SimpleCraftingSettings?.RequiredItems.Any(r => r.Reference != 0 && r.MinimumItemLevel >= 9 && r.MaximumItemLevel <= 14) == true)
+        {
+            return SeasonFeatureGate.ItemPlus10To15;
+        }
+
+        return null;
     }
 }
