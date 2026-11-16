@@ -12880,6 +12880,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>33</SubCode>
+      <Name>HnmoTimetableState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requested the HNMO event and boss timetable (HnmoTimetableCommand).</SentWhen>
+      <CausedReaction>The web game updates the Event and Boss Timetable window with Sydney and local times, maps, and drops.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The timetable state as JSON, in plain ASCII (other characters are escaped): every event, invasion and boss with category, English and Vietnamese names, map names, drops, next start time in UTC, and Sydney wall-clock schedule.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>
