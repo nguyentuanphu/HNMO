@@ -2382,4 +2382,9 @@
   <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
     <value>Yêu cầu mở khóa một vật phẩm trong túi bằng mật khẩu cấp 2: /unlockitem Ô PIN.</value>
   </data>
+  <data name="InvasionSpawnConfiguration_Y_Caption" xml:space="preserve"><value>Y</value></data>
+  <data name="InvasionSpawnConfiguration_X_Caption" xml:space="preserve"><value>X</value></data>
+  <data name="GameNameConfiguration_ZaloLink_Caption" xml:space="preserve"><value>Zalo</value></data>
+  <data name="GameNameConfiguration_DiscordLink_Caption" xml:space="preserve"><value>Discord</value></data>
+  <data name="GameNameConfiguration_FacebookLink_Caption" xml:space="preserve"><value>Facebook</value></data>
 </root>

@@ -3489,4 +3489,65 @@
   <data name="CashShopConfiguration_TypeCaptionPlural" xml:space="preserve">
     <value>Cửa hàng</value>
   </data>
+  <data name="GameVersion_Version029_Caption" xml:space="preserve"><value>0.29</value></data>
+  <data name="GameVersion_Version034_Caption" xml:space="preserve"><value>0.34</value></data>
+  <data name="GameVersion_Version043_Caption" xml:space="preserve"><value>0.43</value></data>
+  <data name="GameVersion_Version045_Caption" xml:space="preserve"><value>0.45</value></data>
+  <data name="GameVersion_Version048_Caption" xml:space="preserve"><value>0.48</value></data>
+  <data name="GameVersion_Version060_Caption" xml:space="preserve"><value>0.60</value></data>
+  <data name="GameVersion_Version064_Caption" xml:space="preserve"><value>0.64</value></data>
+  <data name="GameVersion_Version066_Caption" xml:space="preserve"><value>0.66</value></data>
+  <data name="GameVersion_Version068_Caption" xml:space="preserve"><value>0.68</value></data>
+  <data name="GameVersion_Version075_Caption" xml:space="preserve"><value>0.75</value></data>
+  <data name="GameVersion_Version084_Caption" xml:space="preserve"><value>0.84</value></data>
+  <data name="GameVersion_Version089c_Caption" xml:space="preserve"><value>0.89c</value></data>
+  <data name="GameVersion_Version094b_Caption" xml:space="preserve"><value>0.94b</value></data>
+  <data name="GameVersion_Version095d_Caption" xml:space="preserve"><value>0.95d</value></data>
+  <data name="GameVersion_Version095k_Caption" xml:space="preserve"><value>0.95k</value></data>
+  <data name="GameVersion_Version096y_Caption" xml:space="preserve"><value>0.96y</value></data>
+  <data name="GameVersion_Version097d_Caption" xml:space="preserve"><value>0.97d</value></data>
+  <data name="GameVersion_Version097p_Caption" xml:space="preserve"><value>0.97p</value></data>
+  <data name="GameVersion_Version097r_Caption" xml:space="preserve"><value>0.97r</value></data>
+  <data name="GameVersion_Version098r_Caption" xml:space="preserve"><value>0.98r</value></data>
+  <data name="GameVersion_Version099_Caption" xml:space="preserve"><value>0.99</value></data>
+  <data name="GameVersion_Version099GPlus_Caption" xml:space="preserve"><value>0.99G+</value></data>
+  <data name="GameVersion_Version100s_Caption" xml:space="preserve"><value>1.00s</value></data>
+  <data name="GameVersion_Season1_Caption" xml:space="preserve"><value>Phần 1</value></data>
+  <data name="GameVersion_Season2_Caption" xml:space="preserve"><value>Phần 2</value></data>
+  <data name="GameVersion_Season3Episode1_Caption" xml:space="preserve"><value>Phần 3 Tập 1</value></data>
+  <data name="GameVersion_Season3Episode2_Caption" xml:space="preserve"><value>Phần 3 Tập 2</value></data>
+  <data name="GameVersion_Season4Episode1_Caption" xml:space="preserve"><value>Phần 4 Tập 1</value></data>
+  <data name="GameVersion_Season4Episode2_Caption" xml:space="preserve"><value>Phần 4 Tập 2</value></data>
+  <data name="GameVersion_Season5Episode1_Caption" xml:space="preserve"><value>Phần 5 Tập 1</value></data>
+  <data name="GameVersion_Season5Episode2_Caption" xml:space="preserve"><value>Phần 5 Tập 2</value></data>
+  <data name="GameVersion_Season5Episode3_Caption" xml:space="preserve"><value>Phần 5 Tập 3</value></data>
+  <data name="GameVersion_Season5Episode4_Caption" xml:space="preserve"><value>Phần 5 Tập 4</value></data>
+  <data name="GameVersion_Season6Episode1_Caption" xml:space="preserve"><value>Phần 6 Tập 1</value></data>
+  <data name="GameVersion_Season6Episode2_Caption" xml:space="preserve"><value>Phần 6 Tập 2</value></data>
+  <data name="GameVersion_Season6Episode3_Caption" xml:space="preserve"><value>Phần 6 Tập 3</value></data>
+  <data name="Gate_X1_Caption" xml:space="preserve"><value>X1</value></data>
+  <data name="Gate_Y1_Caption" xml:space="preserve"><value>Y1</value></data>
+  <data name="Gate_X2_Caption" xml:space="preserve"><value>X2</value></data>
+  <data name="Gate_Y2_Caption" xml:space="preserve"><value>Y2</value></data>
+  <data name="MonsterDefinition_this[]_Caption" xml:space="preserve"><value>cái này[]</value></data>
+  <data name="MonsterSpawnArea_X1_Caption" xml:space="preserve"><value>X1</value></data>
+  <data name="MonsterSpawnArea_Y1_Caption" xml:space="preserve"><value>Y1</value></data>
+  <data name="MonsterSpawnArea_X2_Caption" xml:space="preserve"><value>X2</value></data>
+  <data name="MonsterSpawnArea_Y2_Caption" xml:space="preserve"><value>Y2</value></data>
+  <data name="Rectangle_X1_Caption" xml:space="preserve"><value>X1</value></data>
+  <data name="Rectangle_Y1_Caption" xml:space="preserve"><value>Y1</value></data>
+  <data name="Rectangle_X2_Caption" xml:space="preserve"><value>X2</value></data>
+  <data name="Rectangle_Y2_Caption" xml:space="preserve"><value>Y2</value></data>
+  <data name="Resources_SystemConfiguration_AutoStart_Description_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Tự động khởi động_Mô tả</value></data>
+  <data name="Resources_SystemConfiguration_AutoStart_Name_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Auto Start_Name</value></data>
+  <data name="Resources_SystemConfiguration_AutoUpdateSchema_Description_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Lược đồ cập nhật tự động_Mô tả</value></data>
+  <data name="Resources_SystemConfiguration_AutoUpdateSchema_Name_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Lược đồ cập nhật tự động_Name</value></data>
+  <data name="Resources_SystemConfiguration_Description_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Mô tả</value></data>
+  <data name="Resources_SystemConfiguration_IpResolver_Description_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Trình giải quyết IP_Mô tả</value></data>
+  <data name="Resources_SystemConfiguration_IpResolver_Name_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Ip Resolver_Name</value></data>
+  <data name="Resources_SystemConfiguration_IpResolverParameter_Description_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Thông số trình phân giải Ip_Mô tả</value></data>
+  <data name="Resources_SystemConfiguration_IpResolverParameter_Name_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Thông số trình phân giải Ip_Name</value></data>
+  <data name="Resources_SystemConfiguration_Name_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Name</value></data>
+  <data name="Resources_SystemConfiguration_ReadConsoleInput_Description_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Đầu vào bảng điều khiển đọc_Mô tả</value></data>
+  <data name="Resources_SystemConfiguration_ReadConsoleInput_Name_Caption" xml:space="preserve"><value>Cấu hình hệ thống_Đầu vào bảng điều khiển đọc_Name</value></data>
 </root>

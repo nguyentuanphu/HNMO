@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="SelupanPoison" xml:space="preserve"><value>Thuốc độc Selupan</value></data>
+  <data name="SelupanIceStorm" xml:space="preserve"><value>Bão băng Selupan</value></data>
+  <data name="SelupanIceStrike" xml:space="preserve"><value>Cuộc tấn công băng Selupan</value></data>
+  <data name="SelupanFall" xml:space="preserve"><value>Thác Selupan</value></data>
+  <data name="Ice" xml:space="preserve"><value>Băng</value></data>
+  <data name="Lightning" xml:space="preserve"><value>Sét</value></data>
+  <data name="EnergyBall" xml:space="preserve"><value>Quả cầu năng lượng</value></data>
+  <data name="TripleShot" xml:space="preserve"><value>Bắn ba lần</value></data>
+  <data name="Slash" xml:space="preserve"><value>Chém</value></data>
+  <data name="SummonGoblin" xml:space="preserve"><value>Triệu hồi yêu tinh</value></data>
+  <data name="GreaterDamage" xml:space="preserve"><value>Thiệt hại lớn hơn</value></data>
+  <data name="GreaterDefense" xml:space="preserve"><value>Phòng thủ lớn hơn</value></data>
+  <data name="Heal" xml:space="preserve"><value>chữa lành</value></data>
+  <data name="FlameOfEvilMonster" xml:space="preserve"><value>Ngọn lửa của Ác ma (Quái vật)</value></data>
+  <data name="Poison" xml:space="preserve"><value>Độc</value></data>
+  <data name="Meteorite" xml:space="preserve"><value>thiên thạch</value></data>
+  <data name="PowerWave" xml:space="preserve"><value>Sóng điện</value></data>
+  <data name="Cyclone" xml:space="preserve"><value>Lốc xoáy</value></data>
+  <data name="FallingSlash" xml:space="preserve"><value>Chém rơi</value></data>
+  <data name="Lunge" xml:space="preserve"><value>lao tới</value></data>
+  <data name="Twister" xml:space="preserve"><value>Twister</value></data>
+  <data name="Flame" xml:space="preserve"><value>Ngọn lửa</value></data>
+  <data name="Teleport" xml:space="preserve"><value>Dịch chuyển</value></data>
+  <data name="FireBall" xml:space="preserve"><value>Quả cầu lửa</value></data>
+  <data name="Uppercut" xml:space="preserve"><value>Uppercut</value></data>
+  <data name="Defense" xml:space="preserve"><value>Phòng thủ</value></data>
+  <data name="AquaBeam" xml:space="preserve"><value>tia nước</value></data>
+  <data name="Hellfire" xml:space="preserve"><value>lửa địa ngục</value></data>
+  <data name="EvilSpirit" xml:space="preserve"><value>Ác ma</value></data>
+  <data name="SummonBali" xml:space="preserve"><value>Triệu tập Bali</value></data>
+  <data name="SummonDarkKnight" xml:space="preserve"><value>Triệu hồi Chiến binh</value></data>
+  <data name="SummonEliteYeti" xml:space="preserve"><value>Triệu tập tinh anh Yeti</value></data>
+  <data name="SummonAssassin" xml:space="preserve"><value>Triệu hồi sát thủ</value></data>
+  <data name="SummonStoneGolem" xml:space="preserve"><value>Golem đá triệu hồi</value></data>
+  <data name="FireBreath" xml:space="preserve"><value>Hơi thở lửa</value></data>
+  <data name="Inferno" xml:space="preserve"><value>địa ngục</value></data>
+  <data name="Cometfall" xml:space="preserve"><value>Sao chổi rơi</value></data>
+  <data name="TwistingSlash" xml:space="preserve"><value>Chém xoắn</value></data>
+  <data name="Impale" xml:space="preserve"><value>đâm xiên</value></data>
+  <data name="GenericMonsterSkill" xml:space="preserve"><value>Kỹ năng quái vật chung</value></data>
+  <data name="ForceWave" xml:space="preserve"><value>Hỏa âm</value></data>
+  <data name="DeathStab" xml:space="preserve"><value>Cú đâm tử thần</value></data>
+  <data name="RagefulBlow" xml:space="preserve"><value>Cơn thịnh nộ</value></data>
+  <data name="StrikeOfDestruction" xml:space="preserve"><value>Cuộc tấn công hủy diệt</value></data>
+  <data name="InfinityArrow" xml:space="preserve"><value>Mũi tên vô cực</value></data>
+  <data name="PlasmaStorm" xml:space="preserve"><value>Bão plasma</value></data>
+  <data name="PowerSlash" xml:space="preserve"><value>Chém sức mạnh</value></data>
+  <data name="DrainLife" xml:space="preserve"><value>Rút Sinh mệnh</value></data>
+  <data name="Earthshake" xml:space="preserve"><value>Động đất</value></data>
+  <data name="Decay" xml:space="preserve"><value>phân hủy</value></data>
+  <data name="IceStorm" xml:space="preserve"><value>Bão băng</value></data>
+  <data name="LightningShock" xml:space="preserve"><value>Sốc sét</value></data>
+  <data name="MultiShot" xml:space="preserve"><value>Bắn nhiều phát</value></data>
+  <data name="DoppelgangerSelfExplosion" xml:space="preserve"><value>Doppelganger tự nổ</value></data>
+  <data name="KillingBlow" xml:space="preserve"><value>đòn giết chết</value></data>
+  <data name="BeastUppercut" xml:space="preserve"><value>Quái vật cắt trên</value></data>
+  <data name="Pollution" xml:space="preserve"><value>Ô nhiễm</value></data>
+  <data name="Requiem" xml:space="preserve"><value>cầu nguyện</value></data>
+  <data name="Explosion" xml:space="preserve"><value>Vụ nổ</value></data>
+  <data name="PhoenixShot" xml:space="preserve"><value>Bắn Phượng Hoàng</value></data>
+  <data name="IncreaseBlock" xml:space="preserve"><value>Tăng khối</value></data>
+  <data name="IncreaseHealth" xml:space="preserve"><value>Tăng sức khỏe</value></data>
+  <data name="IgnoreDefense" xml:space="preserve"><value>Bỏ qua phòng thủ</value></data>
+  <data name="DragonSlasher" xml:space="preserve"><value>Máy chém rồng</value></data>
+  <data name="DragonRoar" xml:space="preserve"><value>Tiếng rồng gầm</value></data>
+  <data name="DarkSide" xml:space="preserve"><value>Mặt tối</value></data>
+  <data name="ChainDrive" xml:space="preserve"><value>Ổ đĩa xích</value></data>
+  <data name="GiganticStorm" xml:space="preserve"><value>cơn bão khổng lồ</value></data>
+  <data name="ExpansionOfWizardry" xml:space="preserve"><value>Mở rộng pháp thuật</value></data>
+  <data name="Innovation" xml:space="preserve"><value>Đổi mới</value></data>
+  <data name="Weakness" xml:space="preserve"><value>Điểm yếu</value></data>
+  <data name="Sleep" xml:space="preserve"><value>buon ngu</value></data>
+  <data name="Berserker" xml:space="preserve"><value>Kẻ điên cuồng</value></data>
+  <data name="DamageReflection" xml:space="preserve"><value>Phản sát thương</value></data>
+  <data name="ChainLightning" xml:space="preserve"><value>Chuỗi tia sét</value></data>
+  <data name="Nova" xml:space="preserve"><value>Nova</value></data>
+  <data name="SoulBarrier" xml:space="preserve"><value>Rào cản linh hồn</value></data>
+  <data name="TeleportAlly" xml:space="preserve"><value>Dịch chuyển đồng minh</value></data>
+  <data name="ChaoticDiseier" xml:space="preserve"><value>Diseier hỗn loạn</value></data>
+  <data name="FireScream" xml:space="preserve"><value>Tiếng thét lửa</value></data>
+  <data name="ElectricSpike" xml:space="preserve"><value>Spike điện</value></data>
+  <data name="IncreaseCriticalDamage" xml:space="preserve"><value>Tăng sát thương chí mạng</value></data>
+  <data name="Summon" xml:space="preserve"><value>Lệnh triệu hồi</value></data>
+  <data name="FireBurst" xml:space="preserve"><value>vụ nổ lửa</value></data>
+  <data name="FlameStrike" xml:space="preserve"><value>Ngọn lửa tấn công</value></data>
+  <data name="Recovery" xml:space="preserve"><value>Phục hồi</value></data>
+  <data name="IceArrow" xml:space="preserve"><value>Mũi tên băng</value></data>
+  <data name="Penetration" xml:space="preserve"><value>thâm nhập</value></data>
+  <data name="FireSlash" xml:space="preserve"><value>Chém lửa</value></data>
+  <data name="SwellLife" xml:space="preserve"><value>cuộc sống sưng lên</value></data>
+  <data name="RecoverManaMonsterKills" xml:space="preserve"><value>Phục hồi Mana tiêu diệt quái vật</value></data>
+  <data name="RecoverHPFromMonsterKills" xml:space="preserve"><value>Phục hồi HP từ việc tiêu diệt quái vật</value></data>
+  <data name="IncreaseMinimumAttackPower" xml:space="preserve"><value>Tăng sức tấn công tối thiểu</value></data>
+  <data name="RecoverSDFromMonsterKills" xml:space="preserve"><value>Khôi phục SD từ Monster Kills</value></data>
+  <data name="DecreaseMana" xml:space="preserve"><value>Giảm năng lượng</value></data>
+  <data name="IncreasePvPAttackRate" xml:space="preserve"><value>Tăng tỷ lệ tấn công PvP</value></data>
+  <data name="IncreaseMaximumMana" xml:space="preserve"><value>Tăng mana tối đa</value></data>
+  <data name="IncreaseMaximumHP" xml:space="preserve"><value>Tăng HP tối đa</value></data>
+  <data name="IncreaseAttackSuccessRate" xml:space="preserve"><value>Tăng tỷ lệ tấn công thành công</value></data>
+  <data name="IncreaseDefenseSuccessRate" xml:space="preserve"><value>Tăng tỷ lệ phòng thủ thành công</value></data>
+  <data name="IncreasesDefense" xml:space="preserve"><value>tăng phòng thủ</value></data>
+  <data name="DurabilityReduction3" xml:space="preserve"><value>Giảm độ bền(3)</value></data>
+  <data name="DurabilityReduction2" xml:space="preserve"><value>Giảm độ bền (2)</value></data>
+  <data name="DurabilityReduction1" xml:space="preserve"><value>Giảm độ bền (1)</value></data>
+  <data name="IncreaseIceResistance" xml:space="preserve"><value>Tăng khả năng kháng băng</value></data>
+  <data name="IncreaseLightningResistance" xml:space="preserve"><value>Tăng khả năng chống sét</value></data>
+  <data name="IncreasePoisonResistance" xml:space="preserve"><value>Tăng khả năng kháng độc</value></data>
+  <data name="IncreasesAGRecoveryRate" xml:space="preserve"><value>Tăng tỷ lệ phục hồi AG</value></data>
+  <data name="IncreaseHPRecoveryRate" xml:space="preserve"><value>Tăng tốc độ hồi phục HP</value></data>
+  <data name="IncreaseManaRecoveryRate" xml:space="preserve"><value>Tăng tốc độ hồi phục mana</value></data>
+  <data name="IncreaseSDRecoveryRate" xml:space="preserve"><value>Tăng tốc độ phục hồi SD</value></data>
+  <data name="IncreaseMaximumSD" xml:space="preserve"><value>Tăng SD tối đa</value></data>
+  <data name="IncreasePvPDefenseRate" xml:space="preserve"><value>Tăng tỷ lệ phòng thủ PvP</value></data>
+  <data name="StaminaIncreaseStrengthener" xml:space="preserve"><value>Thuốc tăng cường sức chịu đựng</value></data>
+  <data name="DefSuccessRateIncMastery" xml:space="preserve"><value>DefSuccessRate IncMastery</value></data>
+  <data name="DefSuccessRateIncPowUp" xml:space="preserve"><value>Def SuccessRate IncPowUp</value></data>
+  <data name="EquippedWeaponMastery" xml:space="preserve"><value>Làm chủ vũ khí được trang bị</value></data>
+  <data name="EquippedWeaponStrengthener" xml:space="preserve"><value>Bộ tăng cường vũ khí được trang bị</value></data>
+  <data name="DragonRoarStrengthener" xml:space="preserve"><value>Thuốc tăng cường tiếng gầm rồng</value></data>
+  <data name="DarkSideStrengthener" xml:space="preserve"><value>Tăng cường mặt tối</value></data>
+  <data name="ChainDriveStrengthener" xml:space="preserve"><value>Bộ tăng cường truyền động xích</value></data>
+  <data name="WeaponMastery" xml:space="preserve"><value>Làm chủ vũ khí</value></data>
+  <data name="BeastUppercutMastery" xml:space="preserve"><value>Thành thạo kiểu Uppercut của Beast</value></data>
+  <data name="BeastUppercutStrengthener" xml:space="preserve"><value>Bộ tăng cường sức mạnh của Beast Uppercut</value></data>
+  <data name="KillingBlowMastery" xml:space="preserve"><value>Làm chủ đòn giết chết</value></data>
+  <data name="KillingBlowStrengthener" xml:space="preserve"><value>Tăng cường sức mạnh đòn đánh</value></data>
+  <data name="PetDurabilityStr" xml:space="preserve"><value>Độ bền của thú cưng</value></data>
+  <data name="DarkSpiritStr3" xml:space="preserve"><value>Tinh Linh Bóng Tối (3)</value></data>
+  <data name="DarkSpiritStr2" xml:space="preserve"><value>Tinh Linh Bóng Tối (2)</value></data>
+  <data name="DarkSpiritStr" xml:space="preserve"><value>Tinh thần bóng tối</value></data>
+  <data name="CommandAttackInc" xml:space="preserve"><value>Lệnh tấn công Inc</value></data>
+  <data name="ShieldMastery" xml:space="preserve"><value>Làm chủ khiên</value></data>
+  <data name="ShieldStrengthener" xml:space="preserve"><value>Tăng cường lá chắn</value></data>
+  <data name="ScepterMastery" xml:space="preserve"><value>Làm chủ quyền trượng</value></data>
+  <data name="ScepterStrengthener" xml:space="preserve"><value>Cường hóa quyền trượng</value></data>
+  <data name="UseScepterPetStr" xml:space="preserve"><value>Sử dụng Scepter : Pet Str</value></data>
+  <data name="FireScreamStren" xml:space="preserve"><value>Tiếng thét lửa</value></data>
+  <data name="CritDMGIncPowUp3" xml:space="preserve"><value>Crit DMG Inc PowUp (3)</value></data>
+  <data name="CritDMGIncPowUp2" xml:space="preserve"><value>Crit DMG Inc PowUp (2)</value></data>
+  <data name="CriticalDMGIncPowUp" xml:space="preserve"><value>Quan trọng DMG Inc PowUp</value></data>
+  <data name="EarthshakeMastery" xml:space="preserve"><value>Làm chủ động đất</value></data>
+  <data name="EarthshakeStreng" xml:space="preserve"><value>Sức mạnh động đất</value></data>
+  <data name="DarkHorseStreng1" xml:space="preserve"><value>Sức mạnh của ngựa đen (1)</value></data>
+  <data name="FireBurstMastery" xml:space="preserve"><value>Làm chủ kỹ năng bùng nổ lửa</value></data>
+  <data name="FireBurstStreng" xml:space="preserve"><value>Lửa bùng nổ mạnh mẽ</value></data>
+  <data name="ForceWaveStreng" xml:space="preserve"><value>Lực sóng mạnh</value></data>
+  <data name="Force" xml:space="preserve"><value>Ép</value></data>
+  <data name="BloodAttackStrengthen" xml:space="preserve"><value>Tăng cường tấn công máu</value></data>
+  <data name="IceStrengthener" xml:space="preserve"><value>tăng cường băng</value></data>
+  <data name="MagicMastery" xml:space="preserve"><value>Thông thạo phép thuật</value></data>
+  <data name="EvilSpiritStrengthen" xml:space="preserve"><value>Tinh thần ác tăng cường</value></data>
+  <data name="InfernoStrengthener" xml:space="preserve"><value>Tăng cường địa ngục</value></data>
+  <data name="FlameStrengthener" xml:space="preserve"><value>Chất tăng cường ngọn lửa</value></data>
+  <data name="PowerSlashStreng" xml:space="preserve"><value>Sức mạnh chém mạnh</value></data>
+  <data name="TwistingSlashStren" xml:space="preserve"><value>Xoắn Chém</value></data>
+  <data name="BlastStrengthener" xml:space="preserve"><value>Tăng cường vụ nổ</value></data>
+  <data name="LightningStrengthener" xml:space="preserve"><value>Tăng cường sét</value></data>
+  <data name="CycloneStrengthener" xml:space="preserve"><value>Chất tăng cường lốc xoáy</value></data>
+  <data name="MinimumWizCurseInc" xml:space="preserve"><value>Công ty Wiz/Curse tối thiểu</value></data>
+  <data name="BerserkerProficiency" xml:space="preserve"><value>Sự thành thạo của Berserker</value></data>
+  <data name="BerserkerStrengthener" xml:space="preserve"><value>Thuốc cường hóa Berserker</value></data>
+  <data name="OtherWorldTomeMastery" xml:space="preserve"><value>Làm chủ sách thế giới khác</value></data>
+  <data name="OtherWorldTomeStreng" xml:space="preserve"><value>Thế giới khác Tome Streng</value></data>
+  <data name="StickMastery" xml:space="preserve"><value>Làm chủ gậy</value></data>
+  <data name="StickStrengthener" xml:space="preserve"><value>Chất tăng cường dính</value></data>
+  <data name="DrainLifeStrengthener" xml:space="preserve"><value>Tăng cường sức sống</value></data>
+  <data name="LightningShockStr" xml:space="preserve"><value>sốc sét</value></data>
+  <data name="ChainLightningStr" xml:space="preserve"><value>Chuỗi sét</value></data>
+  <data name="SleepStrengthener" xml:space="preserve"><value>Tăng cường giấc ngủ</value></data>
+  <data name="LightningTomeMastery" xml:space="preserve"><value>Làm chủ cuốn sách sét</value></data>
+  <data name="LightningTomeStren" xml:space="preserve"><value>Lightning Tome Stren</value></data>
+  <data name="WindTomeMastery" xml:space="preserve"><value>Làm chủ sách gió</value></data>
+  <data name="WindTomeStrengthener" xml:space="preserve"><value>Bộ tăng cường gió Tome</value></data>
+  <data name="FireTomeMastery" xml:space="preserve"><value>Làm chủ cuốn sách lửa</value></data>
+  <data name="FireTomeStrengthener" xml:space="preserve"><value>Bộ tăng cường cuốn sách lửa</value></data>
+  <data name="MinimumAttPowerInc" xml:space="preserve"><value>Att Power Inc tối thiểu</value></data>
+  <data name="InfinityArrowStr" xml:space="preserve"><value>Mũi tên vô cực</value></data>
+  <data name="CrossbowMastery" xml:space="preserve"><value>Làm chủ nỏ</value></data>
+  <data name="CrossbowStrengthener" xml:space="preserve"><value>Bộ tăng cường nỏ</value></data>
+  <data name="BowMastery" xml:space="preserve"><value>Làm chủ cung tên</value></data>
+  <data name="BowStrengthener" xml:space="preserve"><value>Dụng cụ tăng cường cung</value></data>
+  <data name="IceArrowStrengthener" xml:space="preserve"><value>Tăng cường mũi tên băng</value></data>
+  <data name="DefenseIncreaseMastery" xml:space="preserve"><value>Tăng khả năng phòng thủ</value></data>
+  <data name="DefenseIncreaseStr" xml:space="preserve"><value>Tăng sức phòng thủ</value></data>
+  <data name="AttackIncreaseMastery" xml:space="preserve"><value>Tấn công tăng khả năng thông thạo</value></data>
+  <data name="AttackIncreaseStr" xml:space="preserve"><value>Tấn công tăng sức mạnh</value></data>
+  <data name="SummonedMonsterStr2" xml:space="preserve"><value>Quái vật được triệu hồi (2)</value></data>
+  <data name="TripleShotMastery" xml:space="preserve"><value>Thành thạo cú đánh ba lần</value></data>
+  <data name="TripleShotStrengthener" xml:space="preserve"><value>Tăng cường sức mạnh ba lần</value></data>
+  <data name="PenetrationStrengthener" xml:space="preserve"><value>Tăng cường thâm nhập</value></data>
+  <data name="SummonedMonsterStr1" xml:space="preserve"><value>Quái vật được triệu hồi (1)</value></data>
+  <data name="HealStrengthener" xml:space="preserve"><value>tăng cường chữa lành</value></data>
+  <data name="MinimumWizardryInc" xml:space="preserve"><value>Công ty thuật sĩ tối thiểu</value></data>
+  <data name="SoulBarrierProficie" xml:space="preserve"><value>Thành thạo rào cản linh hồn</value></data>
+  <data name="SoulBarrierStrength" xml:space="preserve"><value>Sức mạnh rào cản linh hồn</value></data>
+  <data name="TwoHandedStaffMast" xml:space="preserve"><value>Cột nhân viên hai tay</value></data>
+  <data name="TwoHandedStaffStren" xml:space="preserve"><value>Staff Stren hai tay</value></data>
+  <data name="OneHandedStaffMast" xml:space="preserve"><value>Cột nhân viên một tay</value></data>
+  <data name="OneHandedStaffStren" xml:space="preserve"><value>Staff Stren một tay</value></data>
+  <data name="HellfireStrengthener" xml:space="preserve"><value>Tăng cường lửa địa ngục</value></data>
+  <data name="DecayStrengthener" xml:space="preserve"><value>Chất tăng cường phân rã</value></data>
+  <data name="PoisonStrengthener" xml:space="preserve"><value>Thuốc tăng cường chất độc</value></data>
+  <data name="EvilSpiritStreng" xml:space="preserve"><value>Sức mạnh linh hồn ác quỷ</value></data>
+  <data name="ExpansionOfWizMas" xml:space="preserve"><value>Sự mở rộng của Wiz Mas</value></data>
+  <data name="ExpansionOfWizStreng" xml:space="preserve"><value>Sự mở rộng của Wiz Streng</value></data>
+  <data name="SwellLifeStrengt" xml:space="preserve"><value>Sức sống mãnh liệt</value></data>
+  <data name="SpearMastery" xml:space="preserve"><value>Thông Thạo Thương</value></data>
+  <data name="SpearStrengthener" xml:space="preserve"><value>Tăng cường giáo</value></data>
+  <data name="MaceMastery" xml:space="preserve"><value>Làm Chủ Chùy</value></data>
+  <data name="MaceStrengthener" xml:space="preserve"><value>Thuốc tăng cường sức mạnh của Mace</value></data>
+  <data name="OneHandedSwordMast" xml:space="preserve"><value>Cột kiếm một tay</value></data>
+  <data name="OneHandedSwordStren" xml:space="preserve"><value>Kiếm một tay</value></data>
+  <data name="TwoHandedSwordMast" xml:space="preserve"><value>Cột kiếm hai tay</value></data>
+  <data name="TwoHandedSwordStren" xml:space="preserve"><value>Kiếm hai tay</value></data>
+  <data name="MaximumManaIncrease" xml:space="preserve"><value>Tăng mana tối đa</value></data>
+  <data name="MaximumLifeIncrease" xml:space="preserve"><value>Tăng tuổi thọ tối đa</value></data>
+  <data name="StrikeOfDestrStr" xml:space="preserve"><value>Cuộc tấn công của Destr Str</value></data>
+  <data name="DeathStabStrengthener" xml:space="preserve"><value>Thuốc tăng cường sức mạnh cho cái chết</value></data>
+  <data name="RagefulBlowMastery" xml:space="preserve"><value>Làm chủ đòn cuồng nộ</value></data>
+  <data name="RagefulBlowStreng" xml:space="preserve"><value>Cơn thịnh nộ mạnh mẽ</value></data>
+  <data name="TwistingSlashMastery" xml:space="preserve"><value>Làm chủ đòn chém xoắn</value></data>
+  <data name="TwistingSlashStreng" xml:space="preserve"><value>Sức mạnh chém xoắn</value></data>
+  <data name="LungeStrengthener" xml:space="preserve"><value>Tăng cường phổi</value></data>
+  <data name="FallingSlashStreng" xml:space="preserve"><value>Sức mạnh chém rơi</value></data>
+  <data name="SlashStrengthener" xml:space="preserve"><value>Tăng cường chém</value></data>
+  <data name="AttackSuccRateInc" xml:space="preserve"><value>Tấn công Succ Rate Inc</value></data>
+  <data name="PvPAttackRate" xml:space="preserve"><value>Tỷ lệ tấn công PvP</value></data>
+  <data name="MonsterAttackManaInc" xml:space="preserve"><value>Quái vật tấn công Mana Inc</value></data>
+  <data name="MonsterAttackLifeInc" xml:space="preserve"><value>Monster Attack Life Inc</value></data>
+  <data name="MinimumAttackPowerInc" xml:space="preserve"><value>Sức mạnh tấn công tối thiểu Inc</value></data>
+  <data name="SwellLifeProficiency" xml:space="preserve"><value>Sự thành thạo cuộc sống</value></data>
+  <data name="MonsterAttackSDInc" xml:space="preserve"><value>Quái vật tấn công SD Inc</value></data>
+  <data name="ManaReduction" xml:space="preserve"><value>Giảm mana</value></data>
+  <data name="DefenseSuccessRateInc" xml:space="preserve"><value>Tỷ lệ thành công quốc phòng Inc</value></data>
+  <data name="DefenseIncrease" xml:space="preserve"><value>Tăng phòng thủ</value></data>
+  <data name="DurabilityReduction3Name" xml:space="preserve"><value>Giảm độ bền (3)</value></data>
+  <data name="IceResistanceIncrease" xml:space="preserve"><value>Tăng khả năng chống băng</value></data>
+  <data name="LightningResistanceInc" xml:space="preserve"><value>Công ty chống sét</value></data>
+  <data name="PoisonResistanceInc" xml:space="preserve"><value>Công ty kháng độc</value></data>
+  <data name="AutomaticAGRecInc" xml:space="preserve"><value>AG Rec Inc tự động</value></data>
+  <data name="AutomaticHPRecInc" xml:space="preserve"><value>HP Rec Inc tự động</value></data>
+  <data name="AutomaticManaRecInc" xml:space="preserve"><value>Công ty Mana Rec tự động</value></data>
+  <data name="SDRecoverySpeedInc" xml:space="preserve"><value>Tốc độ phục hồi SD Inc</value></data>
+  <data name="MaximumSDIncrease" xml:space="preserve"><value>Tăng SD tối đa</value></data>
+  <data name="PvPDefenceRateInc" xml:space="preserve"><value>Tỷ lệ phòng thủ PvP Inc</value></data>
+  <data name="Charge" xml:space="preserve"><value>Tính phí</value></data>
+  <data name="ShieldBurn" xml:space="preserve"><value>Khiên đốt</value></data>
+  <data name="SpellOfPursuit" xml:space="preserve"><value>Phép thuật truy đuổi</value></data>
+  <data name="SpellOfRestriction" xml:space="preserve"><value>Phép thuật hạn chế</value></data>
+  <data name="SpellOfProtection" xml:space="preserve"><value>Phép thuật bảo vệ</value></data>
+  <data name="PotionOfSoul" xml:space="preserve"><value>Thuốc linh hồn</value></data>
+  <data name="PotionOfBless" xml:space="preserve"><value>Thuốc ban phước</value></data>
+  <data name="PhysicalAttackImmunity" xml:space="preserve"><value>Miễn dịch tấn công vật lý</value></data>
+  <data name="MagicAttackImmunity" xml:space="preserve"><value>Miễn dịch tấn công phép thuật</value></data>
+  <data name="SummonMonster" xml:space="preserve"><value>Triệu hồi quái</value></data>
+  <data name="FireBlast" xml:space="preserve"><value>Vụ nổ lửa</value></data>
+  <data name="ManaRays" xml:space="preserve"><value>Tia Mana</value></data>
+  <data name="AbolishMagic" xml:space="preserve"><value>Bãi bỏ phép thuật</value></data>
+  <data name="CancelInvisibility" xml:space="preserve"><value>Hủy bỏ tàng hình</value></data>
+  <data name="Invisibility" xml:space="preserve"><value>Tàng hình</value></data>
+  <data name="SwellMana" xml:space="preserve"><value>Sưng Mana</value></data>
+  <data name="CancelStun" xml:space="preserve"><value>Hủy bỏ choáng</value></data>
+  <data name="Stun" xml:space="preserve"><value>Choáng</value></data>
+  <data name="SpiralSlash" xml:space="preserve"><value>Chém xoắn ốc</value></data>
+  <data name="Starfall" xml:space="preserve"><value>Sao rơi</value></data>
+  <data name="Lance" xml:space="preserve"><value>cây thương</value></data>
+  <data name="CrescentMoonSlash" xml:space="preserve"><value>Chém Trăng Lưỡi Liềm</value></data>
+  <data name="NovaStart" xml:space="preserve"><value>Nova (Bắt đầu)</value></data>
+  <data name="SummonSoldier" xml:space="preserve"><value>triệu tập người lính</value></data>
+  <data name="EarthSplitter" xml:space="preserve"><value>Bộ chia đất</value></data>
+  <data name="BloodSlash" xml:space="preserve"><value>Chém máu</value></data>
+  <data name="IronGuard" xml:space="preserve"><value>Bảo vệ sắt</value></data>
+  <data name="KnightCharge" xml:space="preserve"><value>Tính phí</value></data>
+  <data name="IceDragon" xml:space="preserve"><value>Rồng băng</value></data>
+  <data name="MeteorRain" xml:space="preserve"><value>Mưa sao băng</value></data>
+  <data name="ThunderCage" xml:space="preserve"><value>Lồng Sấm</value></data>
+  <data name="ManaShield" xml:space="preserve"><value>Khiên mana</value></data>
+  <data name="PhoenixArrow" xml:space="preserve"><value>mũi tên phượng hoàng</value></data>
+  <data name="FrostArrowRain" xml:space="preserve"><value>Mưa mũi tên băng giá</value></data>
+  <data name="ForestBlessing" xml:space="preserve"><value>Phước lành rừng</value></data>
+  <data name="SpiritWolf" xml:space="preserve"><value>Sói thần</value></data>
+  <data name="ChainLightningBlade" xml:space="preserve"><value>Lưỡi kiếm tia sét</value></data>
+  <data name="FlameWhirl" xml:space="preserve"><value>Ngọn lửa xoáy</value></data>
+  <data name="TwinPower" xml:space="preserve"><value>Sức mạnh đôi</value></data>
+  <data name="HeavenSword" xml:space="preserve"><value>Thiên Kiếm</value></data>
+  <data name="ShadowRavens" xml:space="preserve"><value>Quạ bóng tối</value></data>
+  <data name="WarCommand" xml:space="preserve"><value>Bộ chỉ huy chiến tranh</value></data>
+  <data name="EarthStomp" xml:space="preserve"><value>dậm đất</value></data>
+  <data name="RoyalBeam" xml:space="preserve"><value>tia hoàng gia</value></data>
+  <data name="PoisonSoul" xml:space="preserve"><value>Linh hồn độc</value></data>
+  <data name="LittleDemon" xml:space="preserve"><value>Tiểu quỷ</value></data>
+  <data name="WeakeningCurse" xml:space="preserve"><value>Lời nguyền suy yếu</value></data>
+  <data name="SoulDrain" xml:space="preserve"><value>Hút hồn</value></data>
+  <data name="DragonFist" xml:space="preserve"><value>nắm đấm rồng</value></data>
+  <data name="WhirlKicks" xml:space="preserve"><value>cú đá xoáy</value></data>
+  <data name="IronBody" xml:space="preserve"><value>Thân sắt</value></data>
+  <data name="QuakeFist" xml:space="preserve"><value>Trận động đất</value></data>
+</root>

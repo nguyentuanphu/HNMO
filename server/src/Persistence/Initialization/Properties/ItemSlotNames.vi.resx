@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Pet" xml:space="preserve"><value>Thú nuôi</value></data>
+  <data name="LeftHand" xml:space="preserve"><value>Tay trái</value></data>
+  <data name="RightHand" xml:space="preserve"><value>Tay phải</value></data>
+  <data name="Boots" xml:space="preserve"><value>Bốt</value></data>
+  <data name="Gloves" xml:space="preserve"><value>Găng tay</value></data>
+  <data name="Pants" xml:space="preserve"><value>quần</value></data>
+  <data name="Armor" xml:space="preserve"><value>Giáp</value></data>
+  <data name="Helm" xml:space="preserve"><value>mũ bảo hiểm</value></data>
+  <data name="LeftOrRightHand" xml:space="preserve"><value>Tay trái hoặc tay phải</value></data>
+  <data name="Ring" xml:space="preserve"><value>Nhẫn</value></data>
+  <data name="Pendant" xml:space="preserve"><value>mặt dây chuyền</value></data>
+  <data name="Wings" xml:space="preserve"><value>Cánh</value></data>
+</root>

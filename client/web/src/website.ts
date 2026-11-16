@@ -715,7 +715,8 @@ interface Snapshot {
 }
 let language: Language = "en";
 try {
-  language = localStorage.getItem("website-language") === "vi" ? "vi" : "en";
+  const saved = localStorage.getItem("hnmo.language") ?? localStorage.getItem("website-language");
+  language = saved === "vi" ? "vi" : "en";
 } catch {
   /* Storage is optional. */
 }
@@ -933,6 +934,7 @@ for (const lang of ["en", "vi"] as const)
     language = lang;
     try {
       localStorage.setItem("website-language", lang);
+      localStorage.setItem("hnmo.language", lang);
     } catch {
       /* Optional storage. */
     }

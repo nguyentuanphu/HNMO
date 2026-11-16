@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Arrows" xml:space="preserve"><value>Mũi tên</value></data>
+  <data name="Bolts" xml:space="preserve"><value>Bu lông</value></data>
+  <data name="JewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành</value></data>
+  <data name="JewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn</value></data>
+  <data name="JewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn</value></data>
+  <data name="JewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống</value></data>
+  <data name="JewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo</value></data>
+  <data name="JewelOfGuardian" xml:space="preserve"><value>Viên ngọc bảo vệ</value></data>
+  <data name="GemstoneHarmonyAndRefineStones" xml:space="preserve"><value>Đá quý, Đá quý hài hòa và Đá tinh luyện</value></data>
+  <data name="PackedJewelOfBless" xml:space="preserve"><value>Viên ngọc phước lành được đóng gói</value></data>
+  <data name="PackedJewelOfSoul" xml:space="preserve"><value>Viên ngọc tâm hồn được đóng gói</value></data>
+  <data name="PackedJewelOfChaos" xml:space="preserve"><value>Viên ngọc hỗn loạn được đóng gói</value></data>
+  <data name="PackedJewelOfLife" xml:space="preserve"><value>Viên ngọc cuộc sống được đóng gói</value></data>
+  <data name="PackedJewelOfCreation" xml:space="preserve"><value>Viên ngọc sáng tạo được đóng gói</value></data>
+  <data name="PackedJewelOfGuardian" xml:space="preserve"><value>Viên ngọc đóng gói của người giám hộ</value></data>
+  <data name="PackedGemstoneHarmonyAndRefineStones" xml:space="preserve"><value>Đá quý đóng gói, Viên ngọc hài hòa và Đá tinh luyện</value></data>
+  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="LochsFeather" xml:space="preserve"><value>Lông của Loch</value></data>
+  <data name="LargeHealingAndManaPotion" xml:space="preserve"><value>Thuốc hồi máu và mana lớn</value></data>
+  <data name="SiegePotion" xml:space="preserve"><value>Thuốc công thành</value></data>
+  <data name="OrderGuardianLifeStone" xml:space="preserve"><value>Lệnh (Người bảo vệ/Đá sự sống)</value></data>
+  <data name="ContractSummon" xml:space="preserve"><value>Hợp đồng (Triệu hồi)</value></data>
+  <data name="SplinterOfArmor" xml:space="preserve"><value>Mảnh giáp</value></data>
+  <data name="BlessOfGuardian" xml:space="preserve"><value>Phước lành của người giám hộ</value></data>
+  <data name="ClawOfBeast" xml:space="preserve"><value>Móng vuốt quái thú</value></data>
+  <data name="FragmentOfHorn" xml:space="preserve"><value>Mảnh sừng</value></data>
+  <data name="BrokenHorn" xml:space="preserve"><value>Sừng gãy</value></data>
+  <data name="HornOfFenrir" xml:space="preserve"><value>Sừng Fenrir</value></data>
+  <data name="SmallShieldPotion" xml:space="preserve"><value>Thuốc khiên nhỏ</value></data>
+  <data name="ShieldPotion" xml:space="preserve"><value>Thuốc khiên</value></data>
+  <data name="LargeShieldPotion" xml:space="preserve"><value>Thuốc khiên lớn</value></data>
+  <data name="SmallComplexPotion" xml:space="preserve"><value>Thuốc phức tạp nhỏ</value></data>
+  <data name="ComplexPotion" xml:space="preserve"><value>Thuốc phức hợp</value></data>
+  <data name="LargeComplexPotion" xml:space="preserve"><value>Thuốc phức hợp lớn</value></data>
+  <data name="HornOfDinorant" xml:space="preserve"><value>Sừng khủng long</value></data>
+  <data name="DevilsEye" xml:space="preserve"><value>Mắt quỷ</value></data>
+  <data name="DevilsKey" xml:space="preserve"><value>Chìa khóa của quỷ</value></data>
+  <data name="DevilsInvitation" xml:space="preserve"><value>Lời mời của quỷ</value></data>
+  <data name="RemedyOfLove" xml:space="preserve"><value>Phương thuốc tình yêu</value></data>
+  <data name="Rena" xml:space="preserve"><value>Rena</value></data>
+  <data name="Ale" xml:space="preserve"><value>bia</value></data>
+  <data name="InvisibilityCloak" xml:space="preserve"><value>Áo choàng tàng hình</value></data>
+  <data name="ScrollOfArchangel" xml:space="preserve"><value>Cuộn tổng lãnh thiên thần</value></data>
+  <data name="BloodBone" xml:space="preserve"><value>xương máu</value></data>
+  <data name="IllusionTempleTickets" xml:space="preserve"><value>Vé vào chùa ảo ảnh</value></data>
+  <data name="FlameAndFeatherOfCondor" xml:space="preserve"><value>Ngọn lửa và lông vũ của Condor</value></data>
+  <data name="ArmorOfGuardsman" xml:space="preserve"><value>Giáp vệ binh</value></data>
+  <data name="WizardsRing" xml:space="preserve"><value>Chiếc nhẫn phù thủy</value></data>
+  <data name="Spirit" xml:space="preserve"><value>tinh thần</value></data>
+  <data name="LostMap" xml:space="preserve"><value>Bản đồ bị mất</value></data>
+  <data name="SymbolOfKundun" xml:space="preserve"><value>Biểu tượng của Kundun</value></data>
+  <data name="HalloweenItems" xml:space="preserve"><value>Vật phẩm Halloween</value></data>
+  <data name="GemOfSecret" xml:space="preserve"><value>Viên ngọc bí mật</value></data>
+  <data name="ImperialGuardianItems" xml:space="preserve"><value>Vật phẩm bảo vệ hoàng gia</value></data>
+  <data name="ChristmasStarAndFirecracker" xml:space="preserve"><value>Ngôi sao Giáng sinh và Pháo</value></data>
+  <data name="CherryBlossomItems" xml:space="preserve"><value>Mặt hàng hoa anh đào</value></data>
+  <data name="FixedValue" xml:space="preserve"><value>Giá trị cố định</value></data>
+  <data name="Potions" xml:space="preserve"><value>Thuốc độc</value></data>
+  <data name="ValueBased" xml:space="preserve"><value>Dựa trên giá trị</value></data>
+  <data name="Accessories" xml:space="preserve"><value>Phụ kiện</value></data>
+  <data name="DarkRaven" xml:space="preserve"><value>Quạ Tinh</value></data>
+  <data name="DarkHorse" xml:space="preserve"><value>Dark Horse</value></data>
+  <data name="OneHandedWeaponsAndShields" xml:space="preserve"><value>Vũ khí và khiên một tay</value></data>
+  <data name="OneHandedWeaponsWithSkillWithoutValue" xml:space="preserve"><value>Vũ khí một tay với kỹ năng không có giá trị</value></data>
+  <data name="EquipmentWithSkillWithoutValue" xml:space="preserve"><value>Trang bị có kỹ năng không có giá trị</value></data>
+</root>
