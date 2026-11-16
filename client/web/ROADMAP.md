@@ -405,3 +405,35 @@ models .bmd 198 MB). Target: about 50 files and roughly half the size.
    web bridge's appsettings, the database connection, the license; saved to ONE settings file the start scripts and
    the bridge read; a "Restart HNMO" button applies changes that need a restart. Check every plug-in has an admin
    page (list any that don't) and that nothing needs a hand-edited file.
+
+## One app to install and run (owner asked 2026-11-16)
+Today: unzip, then Start HNMO.bat / start-hnmo.sh (the web bridge's GameLauncher starts PostgreSQL and the server).
+Plan:
+- ONE app per system: Windows HNMO.exe (installer: Setup.exe with Start-menu/desktop icons and uninstall),
+  macOS HNMO.app in a .dmg, Linux an AppImage (+ a .deb). Double-click -> the HNMO Control page opens in the browser
+  (part of the admin panel, this computer only): Start / Stop / Restart the game, the status of the database, game
+  server, web game and admin panel, live log, open the game, open the admin panel, "start HNMO when this computer
+  starts", "install as a service" for a VPS (Windows service / systemd), check for updates, backup now / restore.
+  A tray icon (Windows/macOS) while it runs. The .bat/.sh stay as a fallback.
+- The first start runs a setup wizard on that page: admin password, game name, public address, ports (from the
+  Host settings plan), language.
+- Honest limits: without a paid code-signing certificate Windows SmartScreen warns once ("More info -> Run anyway"),
+  and macOS needs an Apple developer account ($99/year) to notarise, else right-click -> Open the first time.
+- Tests: the windows-start CI job installs and starts it; add macOS and Linux jobs.
+
+## Shops in the admin panel (owner asked 2026-11-16)
+Today: Admin -> Merchants lists the NPC shops by name; Edit shows the shop's grid; "create item" adds an empty item
+and its kind is picked in the item editor; drag to place. Works, but slow with thousands of items.
+New design (the "Shop editor"):
+- Shop list: NPC name, map and position, number of items, a small preview of the grid; search; "copy shop to...".
+- Two panes: LEFT the catalogue of ALL items (icons, virtual scrolling so thousands stay fast), with a search box
+  (name in English or Vietnamese, or group:number), filters (category: swords/axes/.../jewels/potions/scrolls/wings,
+  class, required level range, "only items not in this shop"), and sort; RIGHT the shop's 8x15 grid as in the game.
+- Add by click (placed in the first free spot), by drag, or multi-select + "Add selected"; "Add whole category";
+  "Auto-arrange" (largest items first, no gaps); a capacity bar (cells used / 120).
+- Per item: level, skill, luck, option, excellent options, durability, and the price (computed as in the game,
+  with an optional fixed price override and a shop-wide price multiplier).
+- Undo/redo, "discard changes", save shows exactly what changed; changes reach players without a restart.
+- Import/export a shop as a file; a change log (who changed what, Sydney time).
+- EN+VI, hover hints and a "How to use this page" button. bUnit tests + a browser test.
+Same picker for every place items are chosen (gift codes, missions, rewards, drops, cash shop catalogue).
