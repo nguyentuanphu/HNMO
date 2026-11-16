@@ -393,3 +393,7 @@ guild ladder rewards to members at payout; Zalo coins need admin approval; scree
 (3D only or with the interface); K only with the bag closed; F9 opens top races; gift codes also limited
 per address/device; resets in place (admin switch); reset tiers 350/380/400, 20/10/5 per day, editable;
 VIP bought with coins, admin can grant, players manage it on the website's account page.
+
+## Web only for now (owner, 2026-11-16)
+The desktop client is dropped for now: HNMO is played through the web game. New features get web windows only.
+The desktop code stays the reference for how the classic game behaves (parity rule unchanged).
