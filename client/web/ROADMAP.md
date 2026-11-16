@@ -591,3 +591,12 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      managing several worlds (start/stop, rates, events, players per world); one website and one account system with
      the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
      opening date); optional one-off character transfer between worlds; later a cross-world event server.
+
+## Owner decision 2026-11-16 (Sydney): web only for now
+The desktop client is dropped for now (maybe later): HNMO ships and is played through the web game only. New HNMO
+features get web windows only; no desktop work (no desktop launcher 14.14, no desktop server-list/VIP marks; PR #8,
+the native editor's Vietnamese, is low priority). The web game still copies the desktop client's behaviour for the
+classic game (the parity rule stays: the desktop code is the reference).
+Work moved from ChatGPT to Antigravity (ChatGPT is slower): admin tools 14.18 gift box/mail, 14.16 ban manager,
+14.15 character tools, 14.17 GM manager + in-game GM commands (14.11), 14.20 news manager. ChatGPT keeps: updating
+its PRs, account page, admin help on every page, VIP, VIP servers, admin panel redesign + guide split.
