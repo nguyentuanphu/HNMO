@@ -7404,6 +7404,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTopUpMilestonesState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The state as JSON in plain ASCII: enabled, totalVnd, steps, owed rewards, and optional result message.</param>
+    /// <remarks>
+    /// Is sent by the server when: After HnmoTopUpMilestonesCommand or when a top-up changes the account's milestone progress.
+    /// Causes reaction on client side: The client renders the top-up milestones window and shows any notice.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopUpMilestonesStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopUpMilestonesStateRef.GetRequiredSize(json);
+            var packet = new HnmoTopUpMilestonesStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

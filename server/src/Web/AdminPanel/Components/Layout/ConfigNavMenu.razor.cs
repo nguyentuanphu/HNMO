@@ -97,6 +97,7 @@ public partial class ConfigNavMenu
             new(Resources.CommunityPage, "community", "oi-chat"),
             new(Resources.TopRacesPage, "top-races", "oi-badge"),
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
+            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Thưởng mốc nạp" : "Top-up milestones", "topup-milestones", "oi-dollar"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),
             new(Resources.AccountSafetyPage, "account-safety", "oi-lock-locked"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),

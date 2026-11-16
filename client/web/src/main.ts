@@ -36,6 +36,7 @@ import { CharacterWindow } from './ui/characterWindow.js';
 import { setupMasterLevel } from './ui/masterLevelWindow.js';
 import { AutoPlay } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
+import { TopUpMilestonesWindow } from './ui/topUpMilestonesWindow.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
@@ -203,6 +204,7 @@ export interface GameState {
   social?: Social;
   duelAndGens?: DuelAndGens;
   fieldEvents?: FieldEvents;
+  topUpMilestones?: TopUpMilestonesWindow;
   /** The performance report window (HNMO extra). */
   perfReport?: PerfReportWindow;
   /** What tests and the console reach in the dev build and the packaged bundle alike. */
@@ -1439,6 +1441,22 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   for (const bytes of earlyPackets) giftCodes.handle(bytes);
   giftCodes.start();
   window.addEventListener('hnmo-gift-codes-open', () => giftCodes.open());
+  // HNMO's top-up milestones ("thưởng mốc nạp", U key): cumulative VND rewards claimed once per step.
+  const topUpMilestones = new TopUpMilestonesWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.topUpMilestones = topUpMilestones;
+  connection.onPacket((bytes) => { topUpMilestones.handlePacket(bytes); });
+  for (const bytes of earlyPackets) topUpMilestones.handlePacket(bytes);
+  topUpMilestones.requestState();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'u' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      topUpMilestones.toggle();
+    }
+  });
   // HNMO's reset options (/reset, /reset info, /relife, /autoreset): the server answers in the chat; the reset state keeps the
   // character window's reset count right and adds a notice with today's count after a reset, a relife or delegated resets.
   const resets = new Resets({

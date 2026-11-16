@@ -12880,6 +12880,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>31</SubCode>
+      <Name>HnmoTopUpMilestonesState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After HnmoTopUpMilestonesCommand or when a top-up changes the account's milestone progress.</SentWhen>
+      <CausedReaction>The client renders the top-up milestones window and shows any notice.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The state as JSON in plain ASCII: enabled, totalVnd, steps, owed rewards, and optional result message.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>
