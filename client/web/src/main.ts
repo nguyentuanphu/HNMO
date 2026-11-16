@@ -1929,7 +1929,7 @@ function initLogin() {
   updateWebsiteLoginButtonLanguage();
   onLanguageChange(() => updateWebsiteLoginButtonLanguage());
 
-  const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(800) })
+  const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(3000) })
     .then((r) => (r.ok ? (r.json() as Promise<{ requireWebsiteLogin?: boolean; connectServerPort?: number }>) : null))
     .catch(() => null);
 

@@ -229,19 +229,21 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     {
         try
         {
-            using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), cancellationToken).ConfigureAwait(false);
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            timeoutCts.CancelAfter(TimeSpan.FromMilliseconds(500));
+            using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), timeoutCts.Token).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
                 return (null, false);
             }
 
-            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
+            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeoutCts.Token).ConfigureAwait(false));
             var root = document.RootElement;
             var googleClientId = root.TryGetProperty("googleClientId", out var value) && value.GetString() is { Length: > 0 } id ? id : null;
             var requireWebsiteLogin = root.TryGetProperty("requireWebsiteLogin", out var req) && req.ValueKind == JsonValueKind.True;
             return (googleClientId, requireWebsiteLogin);
         }
-        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException)
+        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException || (error is OperationCanceledException && !cancellationToken.IsCancellationRequested))
         {
             return (null, false);
         }

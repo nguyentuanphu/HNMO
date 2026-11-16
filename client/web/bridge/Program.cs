@@ -109,6 +109,10 @@ if (launcherOptions.Enabled || File.Exists(settingsPath))
 }
 
 portalOptions.ConnectServerPort = launcherOptions.ConnectServerPort;
+if (HasArg("--Launcher:AdminUrl") && !HasArg("--Portal:ApiBaseUrl"))
+{
+    portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
+}
 
 builder.Services.AddSingleton(services => new GameLauncher(
     launcherOptions,
