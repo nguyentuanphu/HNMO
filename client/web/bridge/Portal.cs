@@ -198,12 +198,28 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         return Results.Json(new { saved = true });
     }
 
-    // What the website's pages may know (the Google client id); the admin path never leaves the server.
+    // Only public settings are forwarded; the admin path never leaves the server.
     private async Task<IResult> WebsiteSettingsAsync(HttpContext context)
     {
-        var clientId = await this.GoogleClientIdAsync(context.RequestAborted).ConfigureAwait(false);
         context.Response.Headers.CacheControl = "no-cache";
-        return Results.Json(new { googleClientId = clientId ?? string.Empty });
+        try
+        {
+            using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), context.RequestAborted).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false));
+                var root = document.RootElement;
+                var clientId = root.TryGetProperty("googleClientId", out var id) ? id.GetString() : null;
+                var theme = root.TryGetProperty("theme", out var appearance) ? appearance.GetString() : null;
+                return Results.Json(new { googleClientId = clientId ?? string.Empty, theme = theme ?? "classic" });
+            }
+        }
+        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            // The website remains usable with the default appearance and no Google sign-in.
+        }
+
+        return Results.Json(new { googleClientId = string.Empty, theme = "classic" });
     }
 
     private async Task<string?> GoogleClientIdAsync(CancellationToken cancellationToken)
