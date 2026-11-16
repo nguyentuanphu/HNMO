@@ -6190,6 +6190,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTopUpMilestonesCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Milestone step id when Claim; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens the top-up milestones window, claims a milestone step, or takes waiting rewards.
+    /// Causes reaction on server side: The server performs the action and replies with HnmoTopUpMilestonesState.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopUpMilestonesCommandAsync(this IConnection? connection, HnmoTopUpMilestonesCommand.HnmoTopUpMilestonesActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopUpMilestonesCommandRef.GetRequiredSize(argument);
+            var packet = new HnmoTopUpMilestonesCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

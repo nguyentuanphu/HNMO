@@ -1934,3 +1934,80 @@ void refreshResets();
 setInterval(() => {
   if (!document.hidden) void refreshResets();
 }, 120000);
+
+// ---------- top-up milestones (public tiers on home page, /website/topup-milestones) ----------
+
+interface PublicMilestoneItem {
+  group: number;
+  number: number;
+  level: number;
+  quantity: number;
+  name?: string;
+}
+
+interface PublicMilestoneStep {
+  id: string;
+  thresholdVnd: number;
+  titleEn: string;
+  titleVi: string;
+  coinType: string;
+  coins: number;
+  zen: number;
+  items: PublicMilestoneItem[];
+}
+
+interface PublicTopUpMilestones {
+  enabled: boolean;
+  steps?: PublicMilestoneStep[];
+}
+
+let publicMilestones: PublicTopUpMilestones | null = null;
+
+function renderPublicMilestones(): void {
+  const section = document.getElementById("topup-milestones-section");
+  if (!section) return;
+  const data = publicMilestones;
+  if (!data?.enabled || !data.steps?.length) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  const vi = document.documentElement.lang === "vi";
+  element("topup-milestones-heading").textContent = vi ? "Thưởng mốc nạp" : "Top-up milestones";
+  element("topup-milestones-notice").textContent = vi
+    ? "Nhận thưởng một lần mỗi mốc khi tổng tiền nạp tích lũy đạt ngưỡng."
+    : "Claim each milestone reward once when cumulative confirmed top-ups pass the threshold.";
+  const list = clear("topup-milestones-list");
+  for (const step of data.steps) {
+    const card = document.createElement("article");
+    card.className = "panel";
+    const h3 = document.createElement("h3");
+    h3.textContent = `${step.thresholdVnd.toLocaleString(vi ? "vi-VN" : "en-AU")} VND — ${vi && step.titleVi ? step.titleVi : step.titleEn}`;
+    const rewards: string[] = [];
+    if (step.coins > 0) rewards.push(`${step.coins.toLocaleString(vi ? "vi-VN" : "en-AU")} ${step.coinType}`);
+    if (step.zen > 0) rewards.push(`${step.zen.toLocaleString(vi ? "vi-VN" : "en-AU")} Zen`);
+    for (const item of step.items) {
+      rewards.push(`${item.name ?? `Item ${item.group}:${item.number}`}${item.level > 0 ? ` +${item.level}` : ""} ×${item.quantity}`);
+    }
+    const p = document.createElement("p");
+    p.textContent = rewards.join(" · ");
+    card.append(h3, p);
+    list.append(card);
+  }
+}
+
+async function refreshPublicMilestones(): Promise<void> {
+  try {
+    const response = await fetch("/website/topup-milestones", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    publicMilestones = (await response.json()) as PublicTopUpMilestones;
+  } catch {
+    publicMilestones = null;
+  }
+  renderPublicMilestones();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderPublicMilestones());
+element("refresh").addEventListener("click", () => void refreshPublicMilestones());
+void refreshPublicMilestones();
+

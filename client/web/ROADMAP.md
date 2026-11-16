@@ -269,8 +269,14 @@ section 12 (the cash shop) still waits for the owner's answers.
    State in `save/account-safety.json` (no database change; the PIN stays in the account's vault password). Still to check
    on a server running this code: a real trade, store sale and login from two addresses (the rules, the admin page and the
    website API are unit-tested; the web parts are tested with fed packets and answered requests).
-5. ⏳ **Top-up milestones ("thưởng mốc nạp")**: rewards at total top-up steps, shown on the account page;
-   QR bank transfer on the top-up page (the bank top-up exists).
+5. ✅ **Top-up milestones ("thưởng mốc nạp")**, built 2026-11-16 (Sydney): cumulative VND top-up steps
+   (admin panel *Top-up milestones* `/topup-milestones`, OFF by default), each step claimed once per account
+   (coins with coin type via `MissionCoinGranter`, zen, items waiting in owed bag queue). `BankTopUpService`
+   and the admin panel's manual confirmation record VND totals idempotently by bank reference into `save/hnmo-state.json`
+   (`topUpMilestones` section). Web game window (`U` key, touch "more" menu; packets `F5 30`/`F5 31`), home page
+   section (`/website/topup-milestones`), self-contained `topUpMilestonesWidget.ts` (`/portal/topup-milestones/*`)
+   for the account page, and local NAPAS 247 VietQR SVG generation (`vietqr.ts`, no external `img.vietqr.io` calls)
+   on `topup.html`. Still to check on a live server: full webhook-to-claim run with real bag items.
 6. ⏳ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
    player's time), its map and its drops, on the website and in the game (i). Extra invasions on a
    schedule (golden monsters, white wizard, rabbits, snowmen, "find the GM").
