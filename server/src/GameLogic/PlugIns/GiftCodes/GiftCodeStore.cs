@@ -117,10 +117,11 @@ public sealed class GiftCodeStoreData
 /// </summary>
 public sealed class GiftCodeStore
 {
+    private const string SectionKey = "giftCodes";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, GiftCodeStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
     private bool _changed;
 
     /// <summary>
@@ -129,7 +130,7 @@ public sealed class GiftCodeStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public GiftCodeStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this.Data = this.Load();
     }
 
@@ -168,7 +169,7 @@ public sealed class GiftCodeStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
@@ -176,15 +177,7 @@ public sealed class GiftCodeStore
 
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -195,33 +188,17 @@ public sealed class GiftCodeStore
 
     private GiftCodeStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new GiftCodeStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<GiftCodeStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new GiftCodeStoreData();
-            data.Uses = new Dictionary<string, int>(data.Uses, StringComparer.Ordinal);
-            data.Claims = data.Claims.ToDictionary(p => p.Key, p => new HashSet<string>(p.Value, StringComparer.Ordinal), StringComparer.Ordinal);
-            data.UsedBatchCodes = new Dictionary<string, string>(data.UsedBatchCodes, StringComparer.Ordinal);
-            data.Owed = new Dictionary<string, List<GiftCodeOwedReward>>(data.Owed, StringComparer.Ordinal);
-            data.WrongTries = new Dictionary<string, List<DateTime>>(data.WrongTries, StringComparer.Ordinal);
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
-
-            return new GiftCodeStoreData();
-        }
+        var data = this._stateStore.ReadSection<GiftCodeStoreData>(SectionKey, JsonOptions) ?? new GiftCodeStoreData();
+        data.Uses = new Dictionary<string, int>(data.Uses, StringComparer.Ordinal);
+        data.Claims = data.Claims.ToDictionary(p => p.Key, p => new HashSet<string>(p.Value, StringComparer.Ordinal), StringComparer.Ordinal);
+        data.UsedBatchCodes = new Dictionary<string, string>(data.UsedBatchCodes, StringComparer.Ordinal);
+        data.Owed = new Dictionary<string, List<GiftCodeOwedReward>>(data.Owed, StringComparer.Ordinal);
+        data.WrongTries = new Dictionary<string, List<DateTime>>(data.WrongTries, StringComparer.Ordinal);
+        return data;
     }
 }

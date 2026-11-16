@@ -39,11 +39,12 @@ public enum OfflineWhisperStoreResult
 /// </summary>
 public sealed class OfflineWhisperStore
 {
+    private const string SectionKey = "offlineWhispers";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
     private readonly object _lock = new();
     private readonly Dictionary<string, List<OfflineWhisper>> _whispers = new(StringComparer.OrdinalIgnoreCase);
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OfflineWhisperStore"/> class.
@@ -51,7 +52,7 @@ public sealed class OfflineWhisperStore
     /// <param name="filePath">The file which keeps the whispers over restarts; <c>null</c> keeps them in memory only.</param>
     public OfflineWhisperStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this.Load();
     }
 
@@ -68,7 +69,7 @@ public sealed class OfflineWhisperStore
     /// <summary>
     /// Gets the file which keeps the whispers, if any.
     /// </summary>
-    public string? FilePath => this._filePath;
+    public string? FilePath => this._stateStore?.FilePath;
 
     /// <summary>
     /// Gets the number of waiting whispers of a receiver.
@@ -151,48 +152,34 @@ public sealed class OfflineWhisperStore
 
     private void Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return;
         }
 
-        try
+        var whispers = this._stateStore.ReadSection<List<OfflineWhisper>>(SectionKey, JsonOptions) ?? [];
+        foreach (var whisper in whispers.Where(w => !string.IsNullOrEmpty(w.Receiver)))
         {
-            var whispers = JsonSerializer.Deserialize<List<OfflineWhisper>>(File.ReadAllText(this._filePath), JsonOptions) ?? [];
-            foreach (var whisper in whispers.Where(w => !string.IsNullOrEmpty(w.Receiver)))
+            if (!this._whispers.TryGetValue(whisper.Receiver, out var list))
             {
-                if (!this._whispers.TryGetValue(whisper.Receiver, out var list))
-                {
-                    list = new List<OfflineWhisper>();
-                    this._whispers[whisper.Receiver] = list;
-                }
-
-                list.Add(whisper);
+                list = new List<OfflineWhisper>();
+                this._whispers[whisper.Receiver] = list;
             }
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            // A broken file loses its whispers, but doesn't stop the server.
+
+            list.Add(whisper);
         }
     }
 
     private void Save()
     {
-        if (this._filePath is null)
+        if (this._stateStore is null)
         {
             return;
         }
 
         try
         {
-            if (Path.GetDirectoryName(this._filePath) is { Length: > 0 } directory)
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this._whispers.Values.SelectMany(l => l).ToList(), JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this._whispers.Values.SelectMany(l => l).ToList(), JsonOptions);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
