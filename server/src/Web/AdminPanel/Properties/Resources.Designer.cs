@@ -13404,5 +13404,50 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("AccountSafetyPage", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string similar to Host settings.</summary>
+        public static string HostSettingsPage => ResourceManager.GetString("HostSettingsPage", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to How to use this page.</summary>
+        public static string HostSettingsHelpTitle => ResourceManager.GetString("HostSettingsHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Help body.</summary>
+        public static string HostSettingsHelpBody => ResourceManager.GetString("HostSettingsHelpBody", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart note.</summary>
+        public static string HostSettingsRestartNote => ResourceManager.GetString("HostSettingsRestartNote", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Ports and public address.</summary>
+        public static string HostSettingsPortsSection => ResourceManager.GetString("HostSettingsPortsSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Web bridge and launcher.</summary>
+        public static string HostSettingsBridgeSection => ResourceManager.GetString("HostSettingsBridgeSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Database connection.</summary>
+        public static string HostSettingsDatabaseSection => ResourceManager.GetString("HostSettingsDatabaseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Player license.</summary>
+        public static string HostSettingsLicenseSection => ResourceManager.GetString("HostSettingsLicenseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Save settings.</summary>
+        public static string HostSettingsSaveButton => ResourceManager.GetString("HostSettingsSaveButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart HNMO.</summary>
+        public static string HostSettingsRestartButton => ResourceManager.GetString("HostSettingsRestartButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart confirm.</summary>
+        public static string HostSettingsRestartConfirm => ResourceManager.GetString("HostSettingsRestartConfirm", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Host settings saved.</summary>
+        public static string HostSettingsSaved => ResourceManager.GetString("HostSettingsSaved", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to HNMO is saving and restarting...</summary>
+        public static string HostSettingsRestarting => ResourceManager.GetString("HostSettingsRestarting", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart unsupported.</summary>
+        public static string HostSettingsRestartUnsupported => ResourceManager.GetString("HostSettingsRestartUnsupported", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Password masked hint.</summary>
+        public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
     }
 }
