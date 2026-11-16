@@ -379,3 +379,29 @@ minified into main.min.js / website.min.js. Not done (the packaged folder still 
 - the web bridge: ~370 files -> PublishSingleFile like the server.
 - save/database: ~2,000 PostgreSQL files (created at first start; can't be packed).
 - The source repository (33,500 files: 14,900 of them client/src/bin/Data) stays as files for git.
+
+## Lighter and fewer files: the plan (owner asked 2026-11-16; approved direction, build after the PR merges)
+Today's packaged folder: ~25,000 files. Game data 738 MB in 13,900 files (textures .ozj 276 MB + .ozt 184 MB,
+models .bmd 198 MB). Target: about 50 files and roughly half the size.
+1. Game data packs: per map one pack (its terrain, objects, monsters' and NPCs' models) + a few shared packs
+   (interface, player, items, effects, skills, sounds). Each pack = one file with an index (name -> offset, size).
+   The bridge serves a pack (HTTP range requests and long cache headers); the browser fetches what it needs,
+   caches whole packs in Cache Storage, so a second visit loads from disk. Only the packs of the current map and the
+   shared ones load at the start (faster first load). The builder (package-hnmo.sh) makes the packs; the source repo
+   keeps the loose files.
+2. Lighter textures: convert textures to GPU-compressed KTX2 (Basis Universal) for the web game: about 4-6x smaller
+   on the graphics card and smaller downloads, faster loading, less stutter when a new map/monster appears. Keep a
+   fallback to the original for any texture that looks wrong; compare screenshots before/after.
+3. Leave out what the web game never loads (desktop-only files): the builder lists the files the web client really
+   requests (from a full walk of every map in the tests) and drops the rest from the web download. The desktop
+   client gets its own download with the full folder.
+4. Admin panel files: drop the precompressed .br/.gz copies (the server compresses on the fly) and pack the item
+   editor's ~2,700 icons into one sprite sheet: 8,300 files -> about 100.
+5. The web bridge as ONE executable (PublishSingleFile), like the server; no .xml/.pdb anywhere.
+6. Save files: the plug-ins' save/*.json (guilds, missions, top races, ...) into one save/hnmo-state.json (or the
+   database), written safely (write to a temp file, then rename), so a backup is the database + one file.
+7. All configuration in the admin panel: a "Host settings" page (EN+VI, with help) for what still lives in files:
+   ports (web 8080, admin 8095, connect 44406, database 55432), public address/domain, relay options, paths, the
+   web bridge's appsettings, the database connection, the license; saved to ONE settings file the start scripts and
+   the bridge read; a "Restart HNMO" button applies changes that need a restart. Check every plug-in has an admin
+   page (list any that don't) and that nothing needs a hand-edited file.
