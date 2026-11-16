@@ -58,6 +58,18 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
     }
 
     /// <summary>
+    /// Enables PostgreSQL-backed per-account and per-character row persistence for HNMO feature stores.
+    /// </summary>
+    public void EnableHnmoRowPersistence()
+    {
+        var connectionString = ConnectionConfigurator.GetConnectionString<EntityDataContext>();
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            HnmoPlayerStateRowStoreRegistry.ConfigurePostgresFactory(_ => new PostgresHnmoPlayerStateRowBackend(connectionString));
+        }
+    }
+
+    /// <summary>
     /// Applies all pending updates to the database schema.
     /// </summary>
     public async Task ApplyAllPendingUpdatesAsync()

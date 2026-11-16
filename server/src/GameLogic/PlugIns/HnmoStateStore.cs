@@ -168,6 +168,21 @@ public sealed class HnmoStateStore
         }
     }
 
+    /// <summary>
+    /// Removes a section cleanly and flushes the state file when it was present.
+    /// </summary>
+    /// <param name="sectionKey">The section key.</param>
+    public void RemoveSection(string sectionKey)
+    {
+        lock (this._lock)
+        {
+            if (this._sections.Remove(sectionKey))
+            {
+                this.SaveLocked();
+            }
+        }
+    }
+
     private void LoadAndMigrate()
     {
         lock (this._lock)

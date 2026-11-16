@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.GameLogic.PlugIns.Missions;
+using HNMO.Persistence;
 
 /// <summary>
 /// The state of a Zalo claim.
@@ -156,11 +157,18 @@ public sealed class CommunityStoreData
 /// </summary>
 public sealed class CommunityStore
 {
+    private const string FeatureAccounts = "community.account";
+    private const string FeatureEntries = "community.entry";
+    private const string FeatureOwed = "community.owed";
     private const string SectionKey = "community";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, CommunityStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<CommunityAccountState> _accSync = new();
+    private readonly HnmoFeatureRowSync<CommunityEventEntry> _entrySync = new();
+    private readonly HnmoFeatureRowSync<List<CommunityOwedReward>> _owedSync = new();
     private bool _changed;
 
     /// <summary>
@@ -170,6 +178,7 @@ public sealed class CommunityStore
     public CommunityStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -204,9 +213,21 @@ public sealed class CommunityStore
             return;
         }
 
+        this._accSync.SaveChanges(this._rowBackend, FeatureAccounts, this.Data.Accounts, JsonOptions, useDirtySetOnly: true);
+        this._entrySync.SaveChanges(this._rowBackend, FeatureEntries, this.Data.Entries, JsonOptions, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
+            this._stateStore.WriteSection(
+                SectionKey,
+                new CommunityStoreData
+                {
+                    PaidDiscordUsers = this.Data.PaidDiscordUsers,
+                    CodeAccounts = this.Data.CodeAccounts,
+                    Highlights = this.Data.Highlights,
+                },
+                JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -228,6 +249,23 @@ public sealed class CommunityStore
         data.Entries = new Dictionary<string, CommunityEventEntry>(data.Entries, StringComparer.Ordinal);
         data.CodeAccounts = new Dictionary<string, string>(data.CodeAccounts, StringComparer.Ordinal);
         data.Owed = new Dictionary<string, List<CommunityOwedReward>>(data.Owed, StringComparer.Ordinal);
+
+        var m1 = this._accSync.LoadOrMigrate(this._rowBackend, FeatureAccounts, data.Accounts, JsonOptions);
+        var m2 = this._entrySync.LoadOrMigrate(this._rowBackend, FeatureEntries, data.Entries, JsonOptions);
+        var m3 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(
+                SectionKey,
+                new CommunityStoreData
+                {
+                    PaidDiscordUsers = data.PaidDiscordUsers,
+                    CodeAccounts = data.CodeAccounts,
+                    Highlights = data.Highlights,
+                },
+                JsonOptions);
+        }
+
         return data;
     }
 }

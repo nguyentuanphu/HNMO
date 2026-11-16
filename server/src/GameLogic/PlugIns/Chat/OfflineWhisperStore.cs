@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.Chat;
 
 using System.IO;
 using System.Text.Json;
+using HNMO.Persistence;
 
 /// <summary>
 /// A whisper to a character which wasn't in the game.
@@ -39,12 +40,15 @@ public enum OfflineWhisperStoreResult
 /// </summary>
 public sealed class OfflineWhisperStore
 {
+    private const string FeatureQueue = "offlineWhispers.queue";
     private const string SectionKey = "offlineWhispers";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
     private readonly object _lock = new();
     private readonly Dictionary<string, List<OfflineWhisper>> _whispers = new(StringComparer.OrdinalIgnoreCase);
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<List<OfflineWhisper>> _sync = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OfflineWhisperStore"/> class.
@@ -53,6 +57,7 @@ public sealed class OfflineWhisperStore
     public OfflineWhisperStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Load();
     }
 
@@ -158,15 +163,25 @@ public sealed class OfflineWhisperStore
         }
 
         var whispers = this._stateStore.ReadSection<List<OfflineWhisper>>(SectionKey, JsonOptions) ?? [];
-        foreach (var whisper in whispers.Where(w => !string.IsNullOrEmpty(w.Receiver)))
+        foreach (var w in whispers)
         {
-            if (!this._whispers.TryGetValue(whisper.Receiver, out var list))
+            if (!this._whispers.TryGetValue(w.Receiver, out var list))
             {
-                list = new List<OfflineWhisper>();
-                this._whispers[whisper.Receiver] = list;
+                list = [];
+                this._whispers[w.Receiver] = list;
             }
 
-            list.Add(whisper);
+            list.Add(w);
+        }
+
+        if (this._sync.LoadOrMigrate(
+            this._rowBackend,
+            FeatureQueue,
+            this._whispers,
+            JsonOptions,
+            (_, l) => l.Count > 0 ? l.Max(w => w.SentUtc) + this.MaximumAge : null))
+        {
+            this._stateStore.RemoveSection(SectionKey);
         }
     }
 
@@ -177,13 +192,11 @@ public sealed class OfflineWhisperStore
             return;
         }
 
-        try
-        {
-            this._stateStore.WriteSection(SectionKey, this._whispers.Values.SelectMany(l => l).ToList(), JsonOptions);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // The whispers stay in memory; they're written again with the next change.
-        }
+        this._sync.SaveChanges(
+            this._rowBackend,
+            FeatureQueue,
+            this._whispers,
+            JsonOptions,
+            (_, l) => l.Count > 0 ? l.Max(w => w.SentUtc) + this.MaximumAge : null);
     }
 }

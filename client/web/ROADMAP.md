@@ -430,8 +430,10 @@ models .bmd 198 MB). Target: about 50 files and roughly half the size.
 4. Admin panel files: drop the precompressed .br/.gz copies (the server compresses on the fly) and pack the item
    editor's ~2,700 icons into one sprite sheet: 8,300 files -> about 100.
 5. The web bridge as ONE executable (PublishSingleFile), like the server; no .xml/.pdb anywhere.
-6. Save files: the plug-ins' save/*.json (guilds, missions, top races, ...) into one save/hnmo-state.json (or the
-   database), written safely (write to a temp file, then rename), so a backup is the database + one file.
+6. Save files: the plug-ins' save/*.json (guilds, missions, top races, ...) into one save/hnmo-state.json (and
+   per-account/per-character/per-guild rows stored individually in PostgreSQL `hnmo.player_feature_state` with
+   automatic migration + `ArchiveFinishedDataAfterDays` archival on `/state-retention`), written safely (write to a temp
+   file, then rename), so a backup is the database + one compact file.
 7. All configuration in the admin panel: a "Host settings" page (EN+VI, with help) for what still lives in files:
    ports (web 8080, admin 8095, connect 44406, database 55432), public address/domain, relay options, paths, the
    web bridge's appsettings, the database connection, the license; saved to ONE settings file the start scripts and
