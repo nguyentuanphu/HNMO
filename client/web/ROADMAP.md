@@ -302,8 +302,8 @@ section 12 (the cash shop) still waits for the owner's answers.
 - rage-fighter.spec.ts: the "Ignore Defense makes effect:windForce" check fails on repeated runs against the same
   test character (likely the buff is still active from the previous run, so it isn't re-applied); make the test
   remove or wait out the buff first. The Dark Side dash check passed live but once failed at 5 fps (timing).
-- Phoenix Shot: the desktop casts it and sends nothing (the server supports it as an area skill). Kept 1:1 for now;
-  ask the owner whether HNMO should send it.
+- Phoenix Shot: ✅ HNMO sends an area skill at cast-action start by the owner decision (2026-11-16),
+  unlike the desktop. Packet regression checks cover range, resources and repeat; live damage remains to verify.
 - Live specs share test accounts (account-safety and missions-live both use test5): run them with --workers=1,
   or the second login is refused ("already logged in"). Once, after such a parallel run, test5 stayed
   "already logged in" with no open connection until the server restarted; not reproduced since - watch for it.
@@ -311,7 +311,7 @@ section 12 (the cash shop) still waits for the owner's answers.
   bUnit render after disposal, map groups, packet order); they pass locally. Make them independent of timing.
 
 ## Owner decisions (2026-11-16, Sydney time) — to build
-1. Phoenix Shot: the web game sends it to the server (an area skill with real damage). Note the difference from the desktop in PARITY.md.
+1. ✅ Phoenix Shot: HNMO sends AreaSkill at cast-action start after walking into range (owner decision 2026-11-16), unlike the desktop. PARITY.md records the difference; live damage verification remains.
 2. Guild buff tooltips: English and Vietnamese for every guild buff.
 3. Guild ladder rewards: (already built, checked 2026-11-16) paid to everyone who is a member at payout time, offline members included.
 4. Zalo coins: (already built, checked 2026-11-16) credited only after an admin approves (an approval list in the admin panel).
