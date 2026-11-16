@@ -10,6 +10,7 @@ complexity and effort). Complexity 0 means we wont implement it.
 
 | Feature                     | Packet code       | Progress | Complexity | Note                                          |
 |-----------------------------|-------------------|----------|------------|-----------------------------------------------|
+| HNMO device-aware gift code | 0xF5 0x23 | 100% | 2 | Optional network/device limits; legacy gift-code requests remain supported. |
 | *Public chat*               | 0x00              | 100%     | 5          |                                               |
 | *Whisper chat*              | 0x02              | 100%     | 5          |                                               |
 | Client Checksum             | 0x03              | 0%       | 0          | Don't need - no security benefit              |

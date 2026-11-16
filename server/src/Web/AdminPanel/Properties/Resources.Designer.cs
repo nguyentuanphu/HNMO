@@ -13531,5 +13531,68 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
 
+        /// <summary>
+        ///   Looks up a localized string similar to One use per network address.
+        /// </summary>
+        public static string GiftCodesOncePerNetwork {
+            get {
+                return ResourceManager.GetString("GiftCodesOncePerNetwork", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to One use per device.
+        /// </summary>
+        public static string GiftCodesOncePerDevice {
+            get {
+                return ResourceManager.GetString("GiftCodesOncePerDevice", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Accounts sharing an internet address can claim this code only once in total..
+        /// </summary>
+        public static string GiftCodesNetworkHint {
+            get {
+                return ResourceManager.GetString("GiftCodesNetworkHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Accounts using the same browser device id can claim once. Older clients without an id are not checked by device..
+        /// </summary>
+        public static string GiftCodesDeviceHint {
+            get {
+                return ResourceManager.GetString("GiftCodesDeviceHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Networks.
+        /// </summary>
+        public static string GiftCodesNetworks {
+            get {
+                return ResourceManager.GetString("GiftCodesNetworks", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Devices.
+        /// </summary>
+        public static string GiftCodesDevices {
+            get {
+                return ResourceManager.GetString("GiftCodesDevices", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Distinct known addresses or devices recorded since this feature was installed; older claims are not included..
+        /// </summary>
+        public static string GiftCodesIdentityCountHint {
+            get {
+                return ResourceManager.GetString("GiftCodesIdentityCountHint", resourceCulture);
+            }
+        }
+
     }
 }

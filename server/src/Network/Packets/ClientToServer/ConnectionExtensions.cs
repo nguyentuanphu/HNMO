@@ -6023,6 +6023,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoGiftCodeRedeemExtended" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="giftCode">The gift code.</param>
+    /// <param name="deviceId">The device id.</param>
+    /// <remarks>
+    /// Is sent by the client when: A web player enters a gift code, including the persistent browser device UUID.
+    /// Causes reaction on server side: The server checks the account, network and optional device limits and sends HnmoGiftCodesState with the result.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftCodeRedeemExtendedAsync(this IConnection? connection, string @giftCode, string @deviceId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftCodeRedeemExtendedRef.Length;
+            var packet = new HnmoGiftCodeRedeemExtendedRef(connection.Output.GetSpan(length)[..length]);
+            packet.GiftCode = @giftCode;
+            packet.DeviceId = @deviceId;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoGiftCodesRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

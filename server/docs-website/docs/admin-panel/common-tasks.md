@@ -115,3 +115,49 @@ See [Connect a game client](../getting-started/game-client.md#disconnects-after-
 
 For a throwaway test server, `-demo` starts the server with in-memory data which
 is recreated at each start and never persisted.
+
+## Limit gift-code claims by network or browser device
+
+On **Gift codes**, edit a code and enable **One use per network address** and/or
+**One use per device**. Both are off by default. The rules apply across game and
+website claims, and across codes in the same batch. Accounts sharing an internet
+address (for example a household or a gaming café) share the network allowance.
+The two count columns include known identities recorded since this feature was
+installed, even while limits are off; older redemptions cannot be backfilled.
+
+The browser keeps a random device UUID on the same site for the game and account
+page. Clearing storage or using another browser resets it. Older desktop clients
+without an id are not device-limited; their connection address is still checked.
+These limits deter repeated claims but cannot identify a unique person.
+
+Only salted SHA-256 claims are saved, alongside a random secret in the existing
+gift-code save file. Back up that file intact: deleting the secret or claims loses
+identity history. The website bridge sets its own client-address header from the
+TCP peer. The API accepts this header only from a loopback peer, consistent with
+the game PROXY-line trust boundary. Keep `Relay:SendClientAddress` enabled for
+game connections. Do not expose a local relay that passes
+untrusted address headers through. A bridge on another computer is not trusted
+by this implementation; the API uses its observed peer address instead. A front
+proxy must preserve a trustworthy peer topology before deployment.
+
+### Tiếng Việt
+
+Trong **Gift code**, sửa mã rồi bật **Mỗi địa chỉ mạng chỉ được nhận một lần**
+và/hoặc **Mỗi thiết bị chỉ được nhận một lần**. Mặc định cả hai đều tắt. Giới hạn
+dùng chung cho game, website và các mã trong cùng lô. Những tài khoản dùng chung
+mạng (như gia đình hoặc quán net) sẽ dùng chung hạn mức mạng. Hai cột thống kê chỉ
+tính các danh tính đã ghi nhận từ khi cài tính năng, kể cả khi giới hạn tắt; không
+thể bổ sung danh tính cho các lượt nhận cũ.
+
+Trình duyệt lưu một mã thiết bị ngẫu nhiên, dùng chung cho game và trang tài khoản
+trên cùng website. Xóa dữ liệu hoặc đổi trình duyệt sẽ đổi mã. Máy khách cũ không
+có mã thiết bị không bị giới hạn theo thiết bị nhưng vẫn bị kiểm tra địa chỉ mạng.
+Đây là biện pháp hạn chế nhận lặp, không phải cách xác định chính xác từng người.
+
+Tệp lưu gift code chỉ giữ dữ liệu băm SHA-256 có khóa bí mật ngẫu nhiên; không lưu
+địa chỉ mạng hoặc mã thiết bị thô. Hãy sao lưu nguyên tệp: xóa khóa hoặc dữ liệu
+băm sẽ làm mất lịch sử danh tính. Bridge tự lấy địa chỉ từ kết nối và API chỉ tin
+header này khi kết nối đến từ máy cục bộ. Bridge đặt ở máy khác chưa được tin cậy;
+API sẽ dùng địa chỉ kết nối quan sát được. Giữ `Relay:SendClientAddress` bật cho
+kết nối game. Cần kiểm tra cấu hình proxy thực tế
+trước khi triển khai và không chuyển tiếp header địa chỉ do người dùng tự gửi.

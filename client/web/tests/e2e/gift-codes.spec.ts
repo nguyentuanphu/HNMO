@@ -59,7 +59,7 @@ async function onlyFedStates(page: Page): Promise<void> {
   });
 }
 
-const sent = (page: Page) => page.evaluate(() => (window as unknown as Win).__sent.filter((s) => s.name.startsWith('HnmoGiftCodes')));
+const sent = (page: Page) => page.evaluate(() => (window as unknown as Win).__sent.filter((s) => s.name.startsWith('HnmoGiftCode')));
 const chat = (page: Page) => page.evaluate(() => ((window as unknown as Win).__game.chat?.entries ?? []).map((e) => e.text));
 
 function gameServerUp(): Promise<boolean> {
@@ -85,7 +85,7 @@ test('in the game: the gift code window, /code, the results in the chat, waiting
       // The gift code actions are only recorded: the shared test server must not get test codes. Later requests too:
       // a server with the gift codes would answer them with its own states.
       connection.send = (group, name, fields) => {
-        const recordOnly = name === 'HnmoGiftCodesAction' || (name === 'HnmoGiftCodesRequest' && w.__sent.some((s) => s.name === name));
+        const recordOnly = (name === 'HnmoGiftCodesAction' || name === 'HnmoGiftCodeRedeemExtended') || (name === 'HnmoGiftCodesRequest' && w.__sent.some((s) => s.name === name));
         w.__sent.push({ name, fields: { ...(fields ?? {}) } });
         if (!recordOnly) send(group, name, fields);
       };
@@ -117,7 +117,7 @@ test('in the game: the gift code window, /code, the results in the chat, waiting
   await input.click();
   await input.fill('xmas2026');
   await input.press('Enter');
-  await expect.poll(() => sent(page).then((list) => list.find((s) => s.name === 'HnmoGiftCodesAction')?.fields)).toEqual({ Action: 1, Argument: 'xmas2026' });
+  await expect.poll(() => sent(page).then((list) => list.find((s) => s.name === 'HnmoGiftCodeRedeemExtended')?.fields)).toEqual({ GiftCode: 'xmas2026', DeviceId: expect.any(String) });
 
   // The answer: accepted with a full bag; the window and the chat tell it, the waiting rewards show with Take.
   await feed(page, STATE({ type: 'redeem', result: 'Ok', code: 'XMAS2026', reward: { coins: 250, coinType: 'GoblinPoints', zen: 50000, items: [{ group: 14, number: 13, level: 0, count: 2, name: 'Jewel of Bless' }] }, waiting: true, triesLeft: 5 }, true));
@@ -232,7 +232,7 @@ test('the website: the public codes on the home page and a code entered on the a
   await page.fill('#giftCode', 'welcome2026');
   await gift.locator('#giftForm button').click();
   await expect(page.locator('#giftMessage')).toHaveText('Gift code WELCOME2026 accepted for test7Elf: 100 Goblin Points + 20,000 zen + Jewel of Bless x1.');
-  expect(calls.at(-1)).toEqual({ url: 'redeem', body: { loginName: 'test7', password: 'test7', character: 'test7Elf', code: 'welcome2026' } });
+  expect(calls.at(-1)).toEqual({ url: 'redeem', body: { loginName: 'test7', password: 'test7', character: 'test7Elf', code: 'welcome2026', deviceId: expect.any(String) } });
   await gift.scrollIntoViewIfNeeded();
   await page.screenshot({ path: 'test-results/gift-codes-account.png' });
 

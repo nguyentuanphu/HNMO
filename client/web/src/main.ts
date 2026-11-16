@@ -1659,7 +1659,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   });
   chat.enable((text) => {
     const command = text.trim().toLowerCase();
-    if (command === '/code') { state.giftCodes?.open(); return; }
+    if (state.giftCodes?.command(text)) return;
     if (command === '/party' || command === '/pt') { party.command(online.hero, online.characters.values(), character.name); return; }
     if (state.personalShop?.command(text, () => facingPlayer(online.hero, online.characters.values()))) return;
     if (command === '/trade') {

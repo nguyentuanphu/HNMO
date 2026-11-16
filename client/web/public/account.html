@@ -239,13 +239,15 @@
     });
   </script>
   <script type="module">
+    import { deviceId } from '/js/deviceId.js';
+    import { giftCodeIdentityText } from '/js/giftCodeIdentity.js';
     // The gift code panel (English and Vietnamese): the account's name and password are checked by the game server
     // through this site's bridge, which lists the characters; the code is then entered for the chosen character.
     const TEXT = {
       en: {
         title: 'Gift code', account: 'Account name', password: 'Password', login: 'Show my characters',
         character: 'Character (gets the zen and items)', code: 'Gift code', use: 'Use the code',
-        intro: 'Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
+        intro: 'A code may allow one claim per network or browser device. People sharing Wi-Fi may share this limit. Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
         off: 'Gift codes can\'t be entered on the website on this server: use /code CODE in the game.',
         loginWrong: 'Wrong account name or password.', noCharacters: 'This account has no character yet: create one in the game first.',
         server: 'The game server didn\'t answer. Try again later.', busy: 'Too many requests from your address. Wait a minute.', setup: 'The account page isn\'t set up yet (host: see README.txt).',
@@ -260,7 +262,7 @@
       vi: {
         title: 'Gift code', account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Xem nhân vật của tôi',
         character: 'Nhân vật (nhận zen và vật phẩm)', code: 'Gift code', use: 'Dùng mã',
-        intro: 'Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
+        intro: 'Gift code có thể giới hạn một lần nhận cho mỗi mạng hoặc thiết bị trình duyệt. Người dùng chung Wi-Fi có thể dùng chung hạn mức này. Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
         off: 'Máy chủ này không cho nhập gift code trên website: hãy dùng /code MÃ trong game.',
         loginWrong: 'Sai tên tài khoản hoặc mật khẩu.', noCharacters: 'Tài khoản này chưa có nhân vật: hãy tạo nhân vật trong game trước.',
         server: 'Máy chủ game không trả lời. Hãy thử lại sau.', busy: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy chờ một phút.', setup: 'Trang tài khoản chưa được cài đặt (chủ server: xem README.txt).',
@@ -291,6 +293,8 @@
       return parts.join(' + ');
     }
     function resultText(answer) {
+      const identityText = giftCodeIdentityText(answer.result, lang);
+      if (identityText) return identityText;
       const d = answer.details ?? {};
       const minMax = answer.result.startsWith('Level') ? [d.minLevel, d.maxLevel] : [d.minResets, d.maxResets];
       return t(answer.result)
@@ -343,7 +347,7 @@
       event.preventDefault();
       if (!login) return;
       try {
-        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim() });
+        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim(), deviceId: deviceId() });
         if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
         last = { text: () => resultText(answer.data), ok: answer.data.result === 'Ok' };
         say(last.text(), last.ok);

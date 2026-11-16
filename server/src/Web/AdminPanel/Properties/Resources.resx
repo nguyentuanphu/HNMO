@@ -4592,4 +4592,11 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Account safety</value>
   </data>
+  <data name="GiftCodesOncePerNetwork" xml:space="preserve"><value>One use per network address</value></data>
+  <data name="GiftCodesOncePerDevice" xml:space="preserve"><value>One use per device</value></data>
+  <data name="GiftCodesNetworkHint" xml:space="preserve"><value>Accounts sharing an internet address can claim this code only once in total.</value></data>
+  <data name="GiftCodesDeviceHint" xml:space="preserve"><value>Accounts using the same browser device id can claim once. Older clients without an id are not checked by device.</value></data>
+  <data name="GiftCodesNetworks" xml:space="preserve"><value>Networks</value></data>
+  <data name="GiftCodesDevices" xml:space="preserve"><value>Devices</value></data>
+  <data name="GiftCodesIdentityCountHint" xml:space="preserve"><value>Distinct known addresses or devices recorded since this feature was installed; older claims are not included.</value></data>
 </root>

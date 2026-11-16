@@ -102,7 +102,7 @@ public sealed class WebsiteGiftCodesController(
             return this.BadRequest(new { error = "character" });
         }
 
-        var who = new GiftCodeRedeemer(account.LoginName, character.Id.ToString(), character.Name, Level(character), Resets(character), character.CharacterClass?.Number ?? 0);
+        var who = new GiftCodeRedeemer(account.LoginName, character.Id.ToString(), character.Name, Level(character), Resets(character), character.CharacterClass?.Number ?? 0, WebsiteGiftCodeAddress.Read(this.HttpContext), request.DeviceId);
         var outcome = engine.Redeem(request.Code, who, DateTime.UtcNow, "website");
         if (outcome.Result == GiftCodeResult.Ok)
         {
@@ -195,4 +195,5 @@ public sealed record GiftCodeAccountRequest(string? LoginName, string? Password)
 /// <param name="Password">The password.</param>
 /// <param name="Character">The character which gets the zen and items.</param>
 /// <param name="Code">The code.</param>
-public sealed record GiftCodeRedeemRequest(string? LoginName, string? Password, string? Character, string? Code);
+/// <param name="DeviceId">The optional browser UUID; legacy clients leave it unknown.</param>
+public sealed record GiftCodeRedeemRequest(string? LoginName, string? Password, string? Character, string? Code, string? DeviceId = null);
