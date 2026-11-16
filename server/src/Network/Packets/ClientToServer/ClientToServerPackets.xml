@@ -5409,6 +5409,29 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>46</SubCode>
+      <Name>HnmoRankingCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request the in-game player, guild, online, and event rankings or submit a bulk stat-point distribution.</SentWhen>
+      <CausedReaction>The server processes the command and replies with HnmoRankingState (F5 47).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestRankings, 1 = BulkAddStats.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Payload</Name>
+          <Description>Optional category filter or JSON stat allocation map (str, agi, vit, ene, cmd).</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

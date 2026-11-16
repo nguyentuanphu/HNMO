@@ -385,6 +385,7 @@
   * [C2 F5 41 - HnmoLeftoversState (by server)](C2-F5-41-HnmoLeftoversState_by-server.md)
   * [C2 F5 43 - HnmoMountChainState (by server)](C2-F5-43-HnmoMountChainState_by-server.md)
   * [C2 F5 45 - HnmoPartyOptionsState (by server)](C2-F5-45-HnmoPartyOptionsState_by-server.md)
+  * [C2 F5 47 - HnmoRankingState (by server)](C2-F5-47-HnmoRankingState_by-server.md)
   * [C1 F6 00 - QuestEventLimitResult (by server)](C1-F6-00-QuestEventLimitResult_by-server.md)
   * [C1 F6 03 - QuestEventResponse (by server)](C1-F6-03-QuestEventResponse_by-server.md)
   * [C1 F6 04 - QuestStartedByItem (by server)](C1-F6-04-QuestStartedByItem_by-server.md)

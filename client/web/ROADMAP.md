@@ -496,7 +496,7 @@ New ideas worth adopting (proposed order):
 14.11 GM shop and GM tools in the game for the admin's GM characters (spawn event, announce, move player, check
      inventory), each logged.
 14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins. — Done (`OfflineTradePlugIn`, `/offtrade`, `OfflinePlayer.InitializeOffTradeAsync`, `Off-trade` shop button, `/off-trade` EN/VI admin page; OFF by default).
-14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing).
+14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing). — Done (`PlayerRankingPlugIn`, packets `F5 46`/`F5 47`, `/rank`, `RankingWindow` (`Shift+R`), `AddStatsWindow` (`Shift+A` + `C` dock button), `/rankings-settings` EN/VI admin page).
 14.14 For the desktop client only: a launcher with auto-update, file checks (CRC) and connection through the launcher.
 Its tools, compared (ideas only):
 - Server management toolkit (account, character, item, skill, guild, marriage, ranking-faction, GM editors; ban,

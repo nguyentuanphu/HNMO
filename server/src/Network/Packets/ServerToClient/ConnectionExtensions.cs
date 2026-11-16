@@ -11033,4 +11033,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoRankingState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing ranked characters, online leaders, guilds, mini-game events, player rank summary, and bulk add-stats status.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoRankingCommand or /rank to deliver in-game player, online, guild, and event rankings and add-stats status.
+    /// Causes reaction on client side: Updates the web client's Player Rankings window.
+    /// </remarks>
+    public static async ValueTask SendHnmoRankingStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoRankingStateRef.GetRequiredSize(json);
+            var packet = new HnmoRankingStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

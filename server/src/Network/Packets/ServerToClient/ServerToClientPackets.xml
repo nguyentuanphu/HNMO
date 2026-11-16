@@ -16905,6 +16905,23 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>47</SubCode>
+      <Name>HnmoRankingState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoRankingCommand or /rank to deliver in-game player, online, guild, and event rankings and add-stats status.</SentWhen>
+      <CausedReaction>Updates the web client's Player Rankings window.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing ranked characters, online leaders, guilds, mini-game events, player rank summary, and bulk add-stats status.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

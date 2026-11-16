@@ -46,6 +46,8 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: '📅', title: 'Season plan', key: '', event: 'hnmo-season-plan-open' },
   { label: '♻️', title: 'Combining leftovers & exchange', key: '', event: 'hnmo-leftovers-open' },
   { label: '🐴', title: 'Mount chain collection', key: '', event: 'hnmo-mount-chain-open' },
+  { label: '📊', title: 'Player rankings', key: '', event: 'hnmo-ranking-open' },
+  { label: '➕', title: 'Add stats (bulk)', key: '', event: 'hnmo-add-stats-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
