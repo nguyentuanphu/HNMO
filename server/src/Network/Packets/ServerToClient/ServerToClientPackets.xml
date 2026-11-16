@@ -16718,6 +16718,23 @@
       <CausedReaction>The 1.04d client does not read any payload of this packet.</CausedReaction>
       <Fields />
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>41</SubCode>
+      <Name>HnmoLeftoversState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world, talking to the exchange NPC, or after HnmoLeftoversCommand.</SentWhen>
+      <CausedReaction>Updates the web client's Combining Leftovers and Exchange NPC window (F10).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing recipes, exchange offers, bag counts, and season box cap.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

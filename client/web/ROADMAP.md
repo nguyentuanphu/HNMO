@@ -289,9 +289,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 12. ⏳ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony, wing 2,
     the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
     killed, N players at a level). Stages, dates and conditions in the admin panel; the timeline on the website.
-13. ⏳ **Combining leftovers**: chaos machine recipes the admin panel can add (e.g. 2 boxes of the same level +
-    1 Jewel of Life + 1 Jewel of Creation -> a box one level higher, with a top box level per season stage),
-    and an exchange NPC for surplus materials. Recipes shown in the game and on the website.
+13. ✅ **Combining leftovers**: `CombiningLeftoversPlugIn` (`F10` / Exchange NPC `546`, packets `F5 40`/`F5 41`), admin-configurable bag upgrade recipes (e.g. `2 × Box +2 + JoL + JoC -> Box +3`) gated by the active Season Plan `MaxBoxLevel`, plus surplus material exchange offers granting Goblin Points/Zen/items (owed when the bag is full), public website recipes & exchange list (`home.html#leftovers`, `/website/leftovers`), and admin `/leftovers`.
 14. ⏳ **Mount chain**: golden bosses drop mount materials, duplicate mounts are material for the next step
     (horn -> wolf -> golden wolf/horse -> higher steps); a mount collection page on the website. Kept to looks
     and modest PvE strength.

@@ -333,6 +333,18 @@ const copy = {
     all: "Server",
     mapsRate: "Map experience",
     nameFallback: "Unnamed",
+    leftoversNav: "Leftovers & Exchange",
+    leftoversTitle: "Combining leftovers & surplus exchange",
+    leftoversRecipesTitle: "Upgrade recipes (F10)",
+    leftoversOffersTitle: "Surplus material exchange",
+    leftoversEmpty: "Combining leftovers & surplus exchange is not enabled yet.",
+    leftoversCapNote: "Season box upgrade cap: +%s (in-game F10 or NPC %s)",
+    leftoversRecipeCol: "Recipe",
+    leftoversInputsCol: "Required items",
+    leftoversRateCol: "Rate / Zen",
+    leftoversOfferCol: "Offer",
+    leftoversNeedCol: "Surplus item",
+    leftoversRewardCol: "Reward",
     noSchedule:
       "Event schedules and global rankings are not supplied by this feed.",
   },
@@ -669,6 +681,18 @@ const copy = {
     nameFallback: "Chưa có tên",
     noSchedule:
       "Nguồn dữ liệu này chưa cung cấp lịch mở sự kiện và bảng xếp hạng toàn máy chủ.",
+    leftoversNav: "Đổi đồ dư",
+    leftoversTitle: "Nâng cấp đồ dư & Đổi nguyên liệu",
+    leftoversRecipesTitle: "Công thức nâng hộp (F10)",
+    leftoversOffersTitle: "Gói đổi nguyên liệu dư",
+    leftoversEmpty: "Tính năng Đổi đồ dư & Nâng hộp hiện đang tắt.",
+    leftoversCapNote: "Giới hạn nâng hộp mùa hiện tại: +%s (mở F10 hoặc NPC %s)",
+    leftoversRecipeCol: "Công thức",
+    leftoversInputsCol: "Nguyên liệu cần",
+    leftoversRateCol: "Tỉ lệ / Zen",
+    leftoversOfferCol: "Gói đổi",
+    leftoversNeedCol: "Vật phẩm dư",
+    leftoversRewardCol: "Phần thưởng",
   },
 };
 type CopyKey = keyof typeof copy.en;
@@ -1928,9 +1952,98 @@ async function refreshResets(): Promise<void> {
   renderResets();
 }
 
-for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderResets());
-element("refresh").addEventListener("click", () => void refreshResets());
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => {
+  renderResets();
+  renderLeftovers();
+});
+element("refresh").addEventListener("click", () => {
+  void refreshResets();
+  void refreshLeftovers();
+});
 void refreshResets();
+void refreshLeftovers();
 setInterval(() => {
-  if (!document.hidden) void refreshResets();
+  if (!document.hidden) {
+    void refreshResets();
+    void refreshLeftovers();
+  }
 }, 120000);
+
+interface PublicLeftoversRecipe {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  enabled: boolean;
+  successRatePercent: number;
+  zenCost: number;
+  inputs: { nameEn: string; nameVi: string; count: number }[];
+}
+
+interface PublicLeftoversOffer {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  enabled: boolean;
+  inputCount: number;
+  rewardCoins: number;
+  rewardZen: number;
+  rewardItemCount: number;
+}
+
+interface PublicLeftovers {
+  enabled: boolean;
+  exchangeNpcNumber?: number;
+  effectiveMaxBoxLevel?: number;
+  recipes?: PublicLeftoversRecipe[];
+  offers?: PublicLeftoversOffer[];
+}
+
+let leftoversData: PublicLeftovers | null = null;
+
+function renderLeftovers(): void {
+  const on = Boolean(leftoversData?.enabled);
+  const body = element("leftovers-body");
+  const empty = element("leftovers-empty");
+  const note = element("leftovers-note");
+  body.hidden = !on;
+  empty.hidden = on;
+  empty.textContent = on ? "" : t("leftoversEmpty");
+  note.textContent = on
+    ? fill(t("leftoversCapNote"), leftoversData?.effectiveMaxBoxLevel ?? 5, leftoversData?.exchangeNpcNumber ?? 0)
+    : "";
+  if (!on) return;
+  const isVi = language === "vi";
+  table(
+    "leftovers-recipes",
+    [[t("leftoversRecipeCol"), false], [t("leftoversInputsCol"), false], [t("leftoversRateCol"), true]],
+    (leftoversData?.recipes ?? []).filter((r) => r.enabled).map((r) => [
+      isVi ? r.nameVi : r.nameEn,
+      r.inputs.map((i) => `${i.count}x ${isVi ? i.nameVi : i.nameEn}`).join(", "),
+      `${r.successRatePercent}% · ${r.zenCost.toLocaleString()} Zen`,
+    ]),
+    t("empty"),
+  );
+  table(
+    "leftovers-offers",
+    [[t("leftoversOfferCol"), false], [t("leftoversNeedCol"), true], [t("leftoversRewardCol"), true]],
+    (leftoversData?.offers ?? []).filter((o) => o.enabled).map((o) => [
+      isVi ? o.nameVi : o.nameEn,
+      String(o.inputCount),
+      `${o.rewardCoins > 0 ? `${o.rewardCoins} Coins ` : ""}${o.rewardZen > 0 ? `${o.rewardZen.toLocaleString()} Zen` : ""}`.trim() || "Reward",
+    ]),
+    t("empty"),
+  );
+}
+
+async function refreshLeftovers(): Promise<void> {
+  try {
+    const response = await fetch("/website/leftovers", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicLeftovers;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid leftovers");
+    leftoversData = data;
+  } catch {
+    leftoversData = null;
+  }
+  renderLeftovers();
+}
