@@ -45192,7 +45192,7 @@ public readonly ref struct ActiveQuestListReadyRef
 
 /// <summary>
 /// Is sent by the server when: Sent when entering the world, talking to the exchange NPC, or after HnmoLeftoversCommand.
-/// Causes reaction on client side: Updates the web client's Combining Leftovers & Exchange NPC window (F10).
+/// Causes reaction on client side: Updates the web client's Combining Leftovers and Exchange NPC window (F10).
 /// </summary>
 public readonly ref struct HnmoLeftoversStateRef
 {

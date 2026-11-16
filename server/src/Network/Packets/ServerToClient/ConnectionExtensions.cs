@@ -10734,7 +10734,7 @@ public static class ConnectionExtensions
     /// <param name="json">Plain-ASCII JSON payload containing recipes, exchange offers, bag counts, and season box cap.</param>
     /// <remarks>
     /// Is sent by the server when: Sent when entering the world, talking to the exchange NPC, or after HnmoLeftoversCommand.
-    /// Causes reaction on client side: Updates the web client's Combining Leftovers & Exchange NPC window (F10).
+    /// Causes reaction on client side: Updates the web client's Combining Leftovers and Exchange NPC window (F10).
     /// </remarks>
     public static async ValueTask SendHnmoLeftoversStateAsync(this IConnection? connection, string @json)
     {

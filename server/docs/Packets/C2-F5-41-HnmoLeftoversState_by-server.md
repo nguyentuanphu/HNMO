@@ -6,7 +6,7 @@ Sent when entering the world, talking to the exchange NPC, or after HnmoLeftover
 
 ## Causes the following actions on the client side
 
-Updates the web client's Combining Leftovers & Exchange NPC window (F10).
+Updates the web client's Combining Leftovers and Exchange NPC window (F10).
 
 ## Structure
 
