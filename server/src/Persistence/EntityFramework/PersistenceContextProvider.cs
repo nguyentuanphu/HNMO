@@ -57,6 +57,10 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
         }
     }
 
+    /// <summary>Gets the PostgreSQL connection string for maintenance operations (if configured).</summary>
+    /// <returns>Connection string or null.</returns>
+    public static string? ResolveConnectionString() => ConnectionConfigurator.GetConnectionString<EntityDataContext>();
+
     /// <summary>
     /// Enables PostgreSQL-backed per-account and per-character row persistence for HNMO feature stores.
     /// </summary>

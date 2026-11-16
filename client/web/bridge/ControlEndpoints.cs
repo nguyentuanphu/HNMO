@@ -25,6 +25,7 @@ internal static class ControlEndpoints
     public static void Map(
         WebApplication app,
         GameLauncher? launcher,
+        ControlMaintenanceService? maintenance,
         LauncherOptions options,
         string contentRoot,
         string webRoot,
@@ -70,7 +71,9 @@ internal static class ControlEndpoints
             var dbUp = await ProbeTcpAsync("127.0.0.1", options.DatabasePort, ctx.RequestAborted).ConfigureAwait(false);
             var gameUp = await ProbeTcpAsync("127.0.0.1", options.ConnectServerPort, ctx.RequestAborted).ConfigureAwait(false);
             var adminUp = await ProbeHttpAsync(http, options.AdminUrl, ctx.RequestAborted).ConfigureAwait(false);
+            var settings = MaintenanceSettings.Load(saveDir);
             var backups = ControlOperations.ListBackups(saveDir);
+            var disk = ControlOperations.GetDiskUsage(saveDir, settings.LowDiskWarningMb);
 
             return Results.Ok(new
             {
@@ -85,6 +88,11 @@ internal static class ControlEndpoints
                 autoStartEnabled = IsAutoStartEnabled(),
                 serviceInstalled = IsServiceInstalled(),
                 backups,
+                backupTotalBytes = backups.Sum(b => b.SizeBytes),
+                disk,
+                maintenanceSettings = settings,
+                lastAutoBackupSydney = maintenance?.LastAutoBackupSydney,
+                lastVacuumSydney = maintenance?.LastVacuumSydney,
                 adminUrl = options.AdminUrl,
                 gameUrl = options.OpenBrowserUrl ?? $"http://localhost:{options.WebPort}/",
                 os = OperatingSystem.IsWindows() ? "windows" : OperatingSystem.IsMacOS() ? "macos" : "linux",
@@ -154,9 +162,82 @@ internal static class ControlEndpoints
             }
 
             var logDir = Path.Combine(saveDir, "logs");
-            var serverLines = ControlOperations.ReadTailLines(Path.Combine(logDir, "server.log"), 100);
-            var dbLines = ControlOperations.ReadTailLines(Path.Combine(logDir, "database.log"), 40);
-            return Results.Ok(new { server = serverLines, database = dbLines });
+            var file = ctx.Request.Query["file"].ToString();
+            var q = ctx.Request.Query["q"].ToString();
+            var maxLines = int.TryParse(ctx.Request.Query["lines"].ToString(), out var parsed) ? parsed : 200;
+            var files = RollingLogWriter.ListLogFiles(logDir);
+            if (!string.IsNullOrWhiteSpace(file) || !string.IsNullOrWhiteSpace(q))
+            {
+                var matched = RollingLogWriter.SearchLines(logDir, string.IsNullOrWhiteSpace(file) ? "all" : file, q, maxLines);
+                return Results.Ok(new { files, lines = matched, server = Array.Empty<string>(), database = Array.Empty<string>() });
+            }
+
+            var serverLines = ControlOperations.ReadTailLines(Path.Combine(logDir, "server.log"), 120);
+            var dbLines = ControlOperations.ReadTailLines(Path.Combine(logDir, "database.log"), 60);
+            return Results.Ok(new { files, lines = serverLines.Concat(dbLines).ToArray(), server = serverLines, database = dbLines });
+        });
+
+        app.MapGet("/api/control/logs/download", (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            var fileName = ctx.Request.Query["file"].ToString();
+            if (string.IsNullOrWhiteSpace(fileName) || fileName.Contains('/') || fileName.Contains('\\') || fileName.Contains("..", StringComparison.Ordinal))
+            {
+                return Results.BadRequest(new { message = "Invalid log file name." });
+            }
+
+            var path = Path.Combine(saveDir, "logs", fileName);
+            if (!File.Exists(path))
+            {
+                return Results.NotFound(new { message = "Log file not found." });
+            }
+
+            var contentType = fileName.EndsWith(".gz", StringComparison.OrdinalIgnoreCase) ? "application/gzip" : "text/plain; charset=utf-8";
+            return Results.File(path, contentType, fileName);
+        });
+
+        app.MapGet("/api/control/maintenance-settings", (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            return Results.Ok(MaintenanceSettings.Load(saveDir));
+        });
+
+        app.MapPost("/api/control/maintenance-settings", (HttpContext ctx, MaintenanceSettings req) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            MaintenanceSettings.Save(saveDir, req);
+            launcher?.RotateLogsIfNeeded();
+            var cfg = MaintenanceSettings.Load(saveDir);
+            ControlOperations.ApplyBackupRetention(saveDir, cfg.BackupKeepDaily, cfg.BackupKeepWeekly, cfg.BackupKeepMonthly);
+            return Results.Ok(cfg);
+        });
+
+        app.MapPost("/api/control/vacuum", async (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            if (maintenance is null)
+            {
+                return Results.BadRequest(new { message = "Maintenance service is unavailable." });
+            }
+
+            var result = await maintenance.RunMaintenanceCycleAsync(forceBackup: false, forceVacuum: true, ctx.RequestAborted).ConfigureAwait(false);
+            return Results.Ok(result);
         });
 
         app.MapPost("/api/control/autostart", (HttpContext ctx, ControlAutoStartRequest req) =>
@@ -221,8 +302,10 @@ internal static class ControlEndpoints
                     }
                 }
 
+                var cfg = MaintenanceSettings.Load(saveDir);
                 var backup = ControlOperations.CreateBackupZip(saveDir, File.Exists(dumpPath) ? dumpPath : null);
-                return Results.Ok(backup);
+                var summary = ControlOperations.ApplyBackupRetention(saveDir, cfg.BackupKeepDaily, cfg.BackupKeepWeekly, cfg.BackupKeepMonthly);
+                return Results.Ok(new { backup, summary });
             }
             catch (Exception ex)
             {
@@ -253,12 +336,24 @@ internal static class ControlEndpoints
                 }
 
                 var sqlPath = ControlOperations.RestoreBackupZip(saveDir, req.FileName);
+                var dbRestored = false;
                 if (sqlPath is not null && File.Exists(sqlPath))
                 {
-                    File.Delete(sqlPath);
+                    try
+                    {
+                        if (launcher is not null && options.Enabled)
+                        {
+                            await launcher.RestoreDatabaseSqlAsync(sqlPath, ctx.RequestAborted).ConfigureAwait(false);
+                            dbRestored = true;
+                        }
+                    }
+                    finally
+                    {
+                        File.Delete(sqlPath);
+                    }
                 }
 
-                return Results.Ok(new { ok = true, message = "Backup restored. Start HNMO to use the restored save." });
+                return Results.Ok(new { ok = true, dbRestored, message = dbRestored ? "Backup and database restored. Start HNMO to play." : "Save files restored. Start HNMO to use the restored save." });
             }
             catch (Exception ex)
             {
@@ -372,7 +467,7 @@ internal static class ControlEndpoints
         }
     }
 
-    private static async Task RunPgDumpAsync(string pgDumpPath, int port, string password, string outFile, CancellationToken cancellationToken)
+    internal static async Task RunPgDumpAsync(string pgDumpPath, int port, string password, string outFile, CancellationToken cancellationToken)
     {
         var psi = new ProcessStartInfo(pgDumpPath)
         {
