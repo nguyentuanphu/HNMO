@@ -885,10 +885,13 @@ internal sealed class Program : IDisposable
 
                 foreach (var gs in await portContext.GetAsync<GameServerDefinition>().ConfigureAwait(false))
                 {
-                    gs.NetworkPort += portOffset;
+                    foreach (var ep in gs.Endpoints)
+                    {
+                        ep.NetworkPort += portOffset;
+                    }
                 }
 
-                foreach (var ep in await portContext.GetAsync<ChatServerEndpoint>().ConfigureAwait(false))
+                foreach (var ep in await portContext.GetAsync<HNMO.DataModel.Configuration.ChatServerEndpoint>().ConfigureAwait(false))
                 {
                     ep.NetworkPort += portOffset;
                 }
