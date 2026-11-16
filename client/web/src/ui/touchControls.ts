@@ -45,6 +45,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: '💎', title: 'Jewel bank', key: '', event: 'hnmo-jewel-bank-open' },
   { label: '📅', title: 'Season plan', key: '', event: 'hnmo-season-plan-open' },
   { label: '♻️', title: 'Combining leftovers & exchange', key: '', event: 'hnmo-leftovers-open' },
+  { label: '🐴', title: 'Mount chain collection', key: '', event: 'hnmo-mount-chain-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];

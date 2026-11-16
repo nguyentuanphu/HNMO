@@ -104,6 +104,7 @@ public partial class ConfigNavMenu
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Giới hạn đuổi kịp" : "Catch-up cap", "catchup", "oi-graph"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Lộ trình mùa giải" : "Season plan", "season-plan", "oi-calendar"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Đổi đồ dư & Nâng hộp" : "Combining leftovers", "leftovers", "oi-reload"),
+            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Chuỗi thú cưỡi" : "Mount chain", "mounts", "oi-badge"),
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Thưởng mốc nạp" : "Top-up milestones", "topup-milestones", "oi-dollar"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),

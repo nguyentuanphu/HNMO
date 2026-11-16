@@ -54,6 +54,7 @@ import { GiftCodesWindow } from './ui/giftCodesWindow.js';
 import { CatchupBanner } from './ui/catchupBanner.js';
 import { SeasonPlanWindow } from './ui/seasonPlanWindow.js';
 import { LeftoversWindow } from './ui/leftoversWindow.js';
+import { MountChainWindow } from './ui/mountChainWindow.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -198,6 +199,7 @@ export interface GameState {
   catchupCap?: CatchupBanner;
   seasonPlan?: SeasonPlanWindow;
   leftovers?: LeftoversWindow;
+  mountChain?: MountChainWindow;
   resets?: Resets;
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
@@ -1405,6 +1407,14 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
     if (event.key === 'F10' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); leftovers.toggle(); }
+  });
+  const mountChain = new MountChainWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.mountChain = mountChain;
+  connection.onPacket((bytes) => { mountChain.handle(bytes); });
+  window.addEventListener('hnmo-mount-chain-open', () => { mountChain.open(); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if ((event.key === 'U' || event.key === 'u') && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); mountChain.toggle(); }
   });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;

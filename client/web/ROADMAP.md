@@ -293,9 +293,7 @@ section 12 (the cash shop) still waits for the owner's answers.
     wing 2, the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
     killed, N players at a level). Stages, dates and conditions in the admin panel (`/season-plan`); the timeline on the website (`#season-plan`) and in-game (`F8`).
 13. ✅ **Combining leftovers**: `CombiningLeftoversPlugIn` (`F10` / Exchange NPC `546`, packets `F5 40`/`F5 41`), admin-configurable bag upgrade recipes (e.g. `2 × Box +2 + JoL + JoC -> Box +3`) gated by the active Season Plan `MaxBoxLevel`, plus surplus material exchange offers granting Goblin Points/Zen/items (owed when the bag is full), public website recipes & exchange list (`home.html#leftovers`, `/website/leftovers`), and admin `/leftovers`.
-14. ⏳ **Mount chain**: golden bosses drop mount materials, duplicate mounts are material for the next step
-    (horn -> wolf -> golden wolf/horse -> higher steps); a mount collection page on the website. Kept to looks
-    and modest PvE strength.
+14. ✅ **Mount chain**: `MountChainPlugIn` (`Shift+U`, packets `F5 42`/`F5 43`), Golden Boss kills drop Mount Shards, duplicate bag mounts upgrade to the next step (`Uniria -> Dinorant -> Fenrir -> Golden Fenrir -> Royal Steed`) or salvage into shards, unlocked collection grants modest PvE bonuses (`DefenseFinal`, `BonusExperienceRate`, `MoneyAmountRate`) persisted in `HnmoStateStore`, standalone `mountWidget.ts`, public `home.html#mounts` (`/website/mounts`), and admin `/mounts`.
 15. ⏳ **Party options**: a party password (join without an invite) and auto party for hunting spots. A party of
     10 needs a new party window in the web and desktop clients (they show 5); later, if wanted.
 

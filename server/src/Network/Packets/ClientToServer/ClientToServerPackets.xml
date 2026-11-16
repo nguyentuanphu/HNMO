@@ -5363,6 +5363,29 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>42</SubCode>
+      <Name>HnmoMountChainCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open the Mount Chain collection (Shift+U), craft/upgrade a mount step, or claim/summon a collected mount.</SentWhen>
+      <CausedReaction>The server processes the mount chain action and sends HnmoMountChainState (F5 43).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = CraftOrUpgrade, 2 = SummonUnlocked.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Id</Name>
+          <Description>Target mount tier or recipe identifier.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

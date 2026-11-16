@@ -387,6 +387,14 @@ const copy = {
     leftoversOfferCol: "Offer",
     leftoversNeedCol: "Surplus item",
     leftoversRewardCol: "Reward",
+    mountsNav: "Mount chain",
+    mountsTitle: "Mount chain & collection",
+    mountsEmpty: "Mount chain is not enabled yet.",
+    mountsNote: "Golden Bosses drop +%s Shards (%s% chance) · %s collector accounts (in-game Shift+U)",
+    mountsTierCol: "Mount",
+    mountsReqCol: "Recipe / Material",
+    mountsBonusCol: "PvE Bonus",
+    mountsOwnersCol: "Collectors",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -797,6 +805,14 @@ const copy = {
     leftoversOfferCol: "Gói đổi",
     leftoversNeedCol: "Vật phẩm dư",
     leftoversRewardCol: "Phần thưởng",
+    mountsNav: "Thú cưỡi",
+    mountsTitle: "Chuỗi thú cưỡi & Bộ sưu tập",
+    mountsEmpty: "Tính năng Chuỗi thú cưỡi hiện đang tắt.",
+    mountsNote: "Boss Hoàng Kim rơi +%s Mảnh (%s%) · %s tài khoản đã sưu tầm (mở Shift+U)",
+    mountsTierCol: "Thú cưỡi",
+    mountsReqCol: "Nguyên liệu nâng cấp",
+    mountsBonusCol: "Hiệu ứng PvE",
+    mountsOwnersCol: "Số chủ sở hữu",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -2737,4 +2753,72 @@ element("refresh").addEventListener("click", () => void refreshLeftovers());
 void refreshLeftovers();
 setInterval(() => {
   if (!document.hidden) void refreshLeftovers();
+}, 120000);
+
+interface PublicMountTierRow {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  shardsRequired: number;
+  previousTierId: string;
+  previousMountsRequired: number;
+  pveDefenseBonus: number;
+  bonusExpPercent: number;
+  collectorsCount: number;
+}
+
+interface PublicMounts {
+  enabled: boolean;
+  goldenDropChancePercent?: number;
+  shardsPerGoldenBoss?: number;
+  totalCollectors?: number;
+  tiers?: PublicMountTierRow[];
+}
+
+let mountsData: PublicMounts | null = null;
+
+function renderMounts(): void {
+  const on = Boolean(mountsData?.enabled);
+  const body = element("mounts-body");
+  const empty = element("mounts-empty");
+  const note = element("mounts-note");
+  body.hidden = !on;
+  empty.hidden = on;
+  empty.textContent = on ? "" : t("mountsEmpty");
+  note.textContent = on
+    ? fill(t("mountsNote"), mountsData?.shardsPerGoldenBoss ?? 2, mountsData?.goldenDropChancePercent ?? 100, mountsData?.totalCollectors ?? 0)
+    : "";
+  if (!on) return;
+  const isVi = language === "vi";
+  table(
+    "mounts-table",
+    [[t("mountsTierCol"), false], [t("mountsReqCol"), false], [t("mountsBonusCol"), false], [t("mountsOwnersCol"), true]],
+    (mountsData?.tiers ?? []).map((tier) => [
+      isVi ? tier.nameVi : tier.nameEn,
+      `${tier.shardsRequired} Shards${tier.previousTierId && tier.previousMountsRequired > 0 ? ` + ${tier.previousMountsRequired}x ${tier.previousTierId}` : ""}`,
+      `+${tier.pveDefenseBonus} Def · +${tier.bonusExpPercent}% EXP`,
+      tier.collectorsCount,
+    ]),
+    t("empty"),
+  );
+}
+
+async function refreshMounts(): Promise<void> {
+  try {
+    const response = await fetch("/website/mounts", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicMounts;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid mounts");
+    mountsData = data;
+  } catch {
+    mountsData = null;
+  }
+  renderMounts();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderMounts());
+element("refresh").addEventListener("click", () => void refreshMounts());
+void refreshMounts();
+setInterval(() => {
+  if (!document.hidden) void refreshMounts();
 }, 120000);
