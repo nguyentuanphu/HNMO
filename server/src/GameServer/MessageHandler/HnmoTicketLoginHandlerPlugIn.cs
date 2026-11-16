@@ -49,9 +49,9 @@ internal class HnmoTicketLoginHandlerPlugIn : ISubPacketHandlerPlugIn
         }
 
         await this._loginAction.LoginWithTicketAsync(player, username, ticket).ConfigureAwait(false);
-        if (player is RemotePlayer remotePlayer)
+        if (player is RemotePlayer remotePlayer && remotePlayer.ClientVersion == default)
         {
-            remotePlayer.ClientVersion = new ClientVersion(106, 3, ClientLanguage.Invariant);
+            remotePlayer.ClientVersion = ClientVersionResolver.DefaultVersion;
         }
     }
 }
