@@ -662,3 +662,28 @@ Players trade on trust today ("send money and hope"). HNMO stands in the middle,
 16.3 Safety rules: new accounts can't use escrow for N days; a holding period before items received through escrow can
      be traded again (stops stolen-account dumping); the item's origin shown from the activity log; admin can freeze a
      contract; fee income reported on the economy dashboard.
+
+## 17. Mobile app and phone play (owner asked 2026-11-16; a second Antigravity, branches antigravity2-*)
+Reference: a mobile game of the same genre (iOS/Android apps playing on the same servers as its Windows client,
+touch-first; read from its store listing and release notes; ideas only). The web game on phones isn't good enough yet.
+17.1 Installable app: the web game as a proper PWA (manifest exists; add a service worker caching the shell and the
+     data packs, offline "can't connect" page, install prompt, full screen, orientation lock, safe areas/notch), then
+     store apps that wrap the same web game (Android: Trusted Web Activity or Capacitor; iOS: Capacitor/WKWebView),
+     same servers and accounts on every device; app icons/splash from the game's name and images.
+17.2 Touch-first HUD: a Modern layout for phones and the Classic layout; resizable and movable HUD parts (saved per
+     device); big touch targets; a virtual joystick or tap-to-move, skill buttons with cooldown rings, target cycling,
+     auto-attack toggle, quick potion buttons; landscape and portrait; tablets.
+17.3 Chat on phones: resizable chat, swipe to scroll, long-press to select/copy, five chat macro buttons (editable),
+     block and report a player (report goes to the admin's activity/ban tools).
+17.4 Phone screens for every window: inventory, vault, shop, trade, party (a party sheet), guild, mail/gift box,
+     missions, settings; one-hand friendly, no tiny buttons, no hover-only actions (long-press shows tooltips).
+17.5 Map on phones: pinch-to-zoom and drag on the big map, party members' markers, tap a spot to walk there.
+17.6 Battery and performance: battery saver (lower fps and resolution when idle/auto-play; "wake on death" restores
+     full speed and vibrates when the character dies), a 120 fps option on 120 Hz screens, a smoother frame rate in
+     crowds (with the performance mode), keep the screen awake while auto-play runs (Wake Lock).
+17.7 Sign-in: saved multi-account sign-in on the device, sign in with Google (exists) and Apple (needs an Apple
+     developer account), the website login ticket (#13) inside the app.
+17.8 Quality-of-life seen there (check what HNMO lacks): a helper toggle key and settings key, an "active invasions"
+     tracker window (link with the timetable #23), a repair-mode key, a hold-target mode for PvP, a PK countdown icon,
+     a setting to stop hitting own guild/alliance, party-list buffing, party leader change, a jewel-upgrade
+     confirmation, a PvP log on the website, per-map music, item lock command (exists as account safety).
