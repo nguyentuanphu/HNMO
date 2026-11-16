@@ -12,7 +12,7 @@ using Nito.AsyncEx;
 /// </summary>
 public class LoginServer : ILoginServer
 {
-    private readonly Dictionary<string, byte> _connectedAccounts = new();
+    private readonly Dictionary<string, byte> _connectedAccounts = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly Dictionary<string, Reservation> _reservations = new(StringComparer.OrdinalIgnoreCase);
 

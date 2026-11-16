@@ -293,7 +293,15 @@ async Task RelayAsync(WebSocket socket, IPEndPoint endPoint, bool encrypted, IPE
 
     if (sendClientAddress && browser is not null && IPAddress.IsLoopback(endPoint.Address))
     {
-        await pipe.Output.WriteAsync(ProxyHeader.Line(browser, endPoint), cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await pipe.Output.WriteAsync(ProxyHeader.Line(browser, endPoint), cancellationToken).ConfigureAwait(false);
+        }
+        catch
+        {
+            pipe.Dispose();
+            throw;
+        }
     }
 
     var encryptor = encrypted ? new PipelinedXor32Encryptor(new PipelinedSimpleModulusEncryptor(pipe.Output, PipelinedSimpleModulusEncryptor.DefaultClientKey).Writer) : null;

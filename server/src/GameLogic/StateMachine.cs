@@ -90,17 +90,25 @@ public class StateMachine
     public async ValueTask<StateChangeContext> TryBeginAdvanceToAsync(State nextState)
     {
         var lockRelease = await this._asyncLock.LockAsync().ConfigureAwait(false);
-        var context = new StateChangeContext(lockRelease, async () =>
+        try
         {
-            var previousState = this.CurrentState;
-            this.CurrentState = nextState;
-            await this.OnStateChangedAsync(previousState, nextState).ConfigureAwait(false);
-        })
-        {
-            Allowed = (this.CurrentState.PossibleTransitions?.Contains(nextState) ?? false) && await this.OnStateChangingAsync(nextState).ConfigureAwait(false),
-        };
+            var context = new StateChangeContext(lockRelease, async () =>
+            {
+                var previousState = this.CurrentState;
+                this.CurrentState = nextState;
+                await this.OnStateChangedAsync(previousState, nextState).ConfigureAwait(false);
+            })
+            {
+                Allowed = (this.CurrentState.PossibleTransitions?.Contains(nextState) ?? false) && await this.OnStateChangingAsync(nextState).ConfigureAwait(false),
+            };
 
-        return context;
+            return context;
+        }
+        catch
+        {
+            lockRelease.Dispose();
+            throw;
+        }
     }
 
     /// <summary>

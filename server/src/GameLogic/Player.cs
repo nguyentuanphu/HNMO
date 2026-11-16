@@ -684,6 +684,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     }
 
     /// <summary>
+    /// Gets the login name with which this player is currently registered at the login server, if any.
+    /// </summary>
+    internal string? LoginServerRegistration => Volatile.Read(ref this._loginServerRegistration);
+
+    /// <summary>
     /// Remembers that the login server accepted the login of this player with the specified login name.
     /// </summary>
     /// <remarks>
@@ -1084,8 +1089,32 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// </summary>
     public async ValueTask DisconnectAsync()
     {
-        await this.CloseTradeIfNeededAsync().ConfigureAwait(false);
-        if (await this.PlayerState.TryAdvanceToAsync(GameLogic.PlayerState.Disconnected).ConfigureAwait(false))
+        try
+        {
+            await this.CloseTradeIfNeededAsync().ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Error while closing trade during disconnect of player {Player}; continuing disconnect.", this);
+        }
+
+        var advancedToDisconnected = false;
+        Exception? stateChangeException = null;
+        try
+        {
+            advancedToDisconnected = await this.PlayerState.TryAdvanceToAsync(GameLogic.PlayerState.Disconnected).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            // StateChanged runs after CurrentState was already set to Disconnected. If a subscriber
+            // throws, we must still run teardown and PlayerDisconnected, otherwise the player leaks
+            // its login-server registration and stays in the game context forever.
+            stateChangeException = ex;
+            advancedToDisconnected = this.PlayerState.CurrentState == GameLogic.PlayerState.Disconnected;
+            this.Logger.LogError(ex, "Error in StateChanged while disconnecting player {Player}; continuing the teardown.", this);
+        }
+
+        if (advancedToDisconnected)
         {
             try
             {
@@ -1145,6 +1174,10 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             {
                 await this.PlayerState.TryAdvanceToAsync(GameLogic.PlayerState.Finished).ConfigureAwait(false);
             }
+        }
+        else if (stateChangeException is not null)
+        {
+            System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw(stateChangeException);
         }
     }
 
@@ -1568,6 +1601,21 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         {
             // Must not abort the rest of the disposal - the remaining resources have to be released.
             this.Logger.LogError(ex, "Error while removing player {Player} from the game context during disposal.", this);
+        }
+
+        // Last line of defense: if the player is disposed without PlayerDisconnected having released
+        // its login-server registration, release it once here so the account cannot stay stuck.
+        if (this.ReleaseLoginServerRegistration() is { } loginName
+            && this.GameContext is IGameServerContext gameServerContext)
+        {
+            try
+            {
+                await gameServerContext.LoginServer.LogOffAsync(loginName, gameServerContext.Id).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Error while logging off [{Username}] during disposal of player {Player}.", loginName, this);
+            }
         }
 
         await this._muHelperLazy.DisposeIfCreatedAsync().ConfigureAwait(false);
