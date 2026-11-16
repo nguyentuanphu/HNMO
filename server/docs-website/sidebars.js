@@ -51,6 +51,7 @@ const sidebars = {
         "admin-panel/banned-words",
         "admin-panel/off-trade",
         "admin-panel/rankings-settings",
+        "admin-panel/talismans",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",
