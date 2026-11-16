@@ -803,12 +803,56 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
   });
 }
 
+async function fetchWorldLabels(): Promise<Map<number, string>> {
+  const labels = new Map<number, string>();
+  try {
+    const response = await fetch('/website/data', {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(1200),
+    });
+    if (!response.ok) return labels;
+    const raw: unknown = await response.json();
+    if (typeof raw !== 'object' || raw === null || !('worlds' in raw) || !Array.isArray(raw.worlds)) {
+      return labels;
+    }
+    for (const world of raw.worlds as unknown[]) {
+      if (typeof world !== 'object' || world === null) continue;
+      const entry = world as { nameEn?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+      const name = typeof entry.nameEn === 'string' ? entry.nameEn : '';
+      const status = entry.isOpen === false && typeof entry.openingDateSydney === 'string' && entry.openingDateSydney
+        ? `Opens ${entry.openingDateSydney}`
+        : '';
+      const serverList = Array.isArray(entry.servers) ? (entry.servers as unknown[]) : [];
+      for (const srv of serverList) {
+        if (typeof srv === 'object' && srv !== null && 'id' in srv && typeof (srv as { id: unknown }).id === 'number') {
+          const id = (srv as { id: number }).id;
+          const full = status ? `${name} (${status})` : name;
+          if (full) labels.set(id, full);
+        }
+      }
+    }
+  } catch {
+    /* Optional grouped world metadata when offline or standalone relay. */
+  }
+  return labels;
+}
+
 async function playOnline(settings: LoginSettings): Promise<void> {
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
-  const servers = await fetchServerList(settings.relay, connectServer);
+  const [servers, worldLabels] = await Promise.all([
+    fetchServerList(settings.relay, connectServer),
+    fetchWorldLabels(),
+  ]);
   if (!servers.length) throw new Error('The connect server lists no game servers.');
-  const server = servers.length === 1 ? servers[0] : await chooseFrom(ui.servers, servers, (s) => `Server ${s.id + 1}<small>${s.load}% load</small>`);
+  const server = servers.length === 1
+    ? servers[0]
+    : await chooseFrom(ui.servers, servers, (s) => {
+        const prefix = worldLabels.get(s.id);
+        return prefix
+          ? `${prefix} — Server ${s.id + 1}<small>${s.load}% load</small>`
+          : `Server ${s.id + 1}<small>${s.load}% load</small>`;
+      });
   ui.servers.hidden = true;
   const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
