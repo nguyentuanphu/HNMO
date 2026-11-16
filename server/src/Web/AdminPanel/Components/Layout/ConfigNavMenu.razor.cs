@@ -96,6 +96,7 @@ public partial class ConfigNavMenu
             new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
             new(Resources.CommunityPage, "community", "oi-chat"),
             new(Resources.TopRacesPage, "top-races", "oi-badge"),
+            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Con số may mắn" : "Daily Lucky Number", "lucky-number", "oi-random"),
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),
             new(Resources.AccountSafetyPage, "account-safety", "oi-lock-locked"),

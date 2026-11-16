@@ -32,6 +32,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: 'X', title: 'Cash shop', key: 'x' },
   { label: 'B', title: 'Gens', key: 'b' },
   { label: 'J', title: 'Missions', key: 'j' },
+  { label: 'L', title: 'Lucky number', key: 'l' },
   { label: 'N', title: 'World bosses', key: 'n' },
   { label: 'Y', title: 'New-player guide', key: 'y' },
   { label: 'K', title: 'Community', key: 'k' },

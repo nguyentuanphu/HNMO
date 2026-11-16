@@ -19741,6 +19741,122 @@ public readonly struct HnmoAccountSafetyAction
 
 
 /// <summary>
+/// Is sent by the client when: The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.
+/// Causes reaction on server side: The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).
+/// </summary>
+public readonly struct HnmoLuckyNumberCommand
+{
+    /// <summary>
+    /// Daily lucky number action.
+    /// </summary>
+    public enum HnmoLuckyNumberActionType
+    {
+        /// <summary>
+        /// Request current lucky number state.
+        /// </summary>
+            Request = 1,
+
+        /// <summary>
+        /// Pick a lucky number for the active round.
+        /// </summary>
+            Pick = 2,
+
+        /// <summary>
+        /// Claim jewels waiting for bag space.
+        /// </summary>
+            ClaimOwed = 3,
+    }
+
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoLuckyNumberCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoLuckyNumberCommand(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoLuckyNumberCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoLuckyNumberCommand(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x34;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 9;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the action.
+    /// </summary>
+    public HnmoLuckyNumberCommand.HnmoLuckyNumberActionType Action
+    {
+        get => (HnmoLuckyNumberActionType)this._data.Span[4];
+        set => this._data.Span[4] = (byte)value;
+    }
+
+    /// <summary>
+    /// Gets or sets the picked lucky number when Action is Pick.
+    /// </summary>
+    public uint Number
+    {
+        get => ReadUInt32LittleEndian(this._data.Span[5..]);
+        set => WriteUInt32LittleEndian(this._data.Span[5..], value);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoLuckyNumberCommand"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoLuckyNumberCommand(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoLuckyNumberCommand"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoLuckyNumberCommand packet) => packet._data; 
+}
+
+
+/// <summary>
 /// Is sent by the client when: The player wants to rename a character in the character selection.
 /// Causes reaction on server side: The server renames the character and answers with CharacterRenameResult (F3 16).
 /// </summary>

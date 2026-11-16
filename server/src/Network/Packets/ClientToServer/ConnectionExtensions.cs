@@ -6190,6 +6190,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoLuckyNumberCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="number">The picked lucky number when Action is Pick.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.
+    /// Causes reaction on server side: The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).
+    /// </remarks>
+    public static async ValueTask SendHnmoLuckyNumberCommandAsync(this IConnection? connection, HnmoLuckyNumberCommand.HnmoLuckyNumberActionType @action, uint @number)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLuckyNumberCommandRef.Length;
+            var packet = new HnmoLuckyNumberCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Number = @number;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
