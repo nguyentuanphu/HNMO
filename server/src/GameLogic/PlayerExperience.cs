@@ -6,6 +6,7 @@ namespace HNMO.GameLogic;
 
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.GameLogic.Views.Character;
 using HNMO.GameLogic.Views.World;
 using Nito.AsyncEx;
@@ -143,8 +144,8 @@ internal sealed class PlayerExperience
         }
 
         var currentLevel = (short)attributes[Stats.Level];
-        var isMaxLevel = currentLevel == this._player.GameContext.Configuration.MaximumLevel;
-        isMasterExperience = characterClass.IsMasterClass && isMaxLevel;
+        var isMaxLevel = currentLevel >= CatchupCapPlugIn.GetEffectiveMaximumLevel(this._player.GameContext);
+        isMasterExperience = characterClass.IsMasterClass && currentLevel >= this._player.GameContext.Configuration.MaximumLevel;
         return true;
     }
 
@@ -200,7 +201,7 @@ internal sealed class PlayerExperience
         var remainingExperience = experience;
         while (remainingExperience > 0)
         {
-            if (player.Attributes![Stats.Level] >= player.GameContext.Configuration.MaximumLevel)
+            if (player.Attributes![Stats.Level] >= CatchupCapPlugIn.GetEffectiveMaximumLevel(player.GameContext))
             {
                 await player.InvokeViewPlugInAsync<IAddExperiencePlugIn>(p => p.AddExperienceAsync(0, killedObject, ExperienceType.MaxLevelReached)).ConfigureAwait(false);
                 return;
@@ -237,7 +238,7 @@ internal sealed class PlayerExperience
 
             remainingExperience -= (int)gainedExperience;
             if (remainingExperience <= 0
-                || player.Attributes[Stats.Level] >= player.GameContext.Configuration.MaximumLevel
+                || player.Attributes[Stats.Level] >= CatchupCapPlugIn.GetEffectiveMaximumLevel(player.GameContext)
                 || player.GameContext.Configuration.PreventExperienceOverflow)
             {
                 return;

@@ -358,6 +358,16 @@ const copy = {
     jbNone: "No jewels configured.",
     jbJewel: "Jewel",
     jbCap: "Account Limit",
+    cuNav: "Today's Cap",
+    cuTitle: "Catch-up Level & Reset Cap",
+    cuHint: "Server-wide daily progression limit so late starters can catch up. Updates in Sydney time.",
+    cuOffline: "Catch-up cap status is unavailable.",
+    cuOff: "Catch-up cap is turned off on this server.",
+    cuLevelCap: "Today's level cap: Lv.%s / %s",
+    cuResetCap: "Today's daily reset limit: %s",
+    cuUnlockedBy: "Unlocked by %s (+%s/day in Sydney time).",
+    cuWaiting: "Starts rising +%s/day once the first player reaches Lv.%s.",
+    cuNextRise: "Next Sydney day rise: %s",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -739,6 +749,16 @@ const copy = {
     jbNone: "Chưa cấu hình loại ngọc nào.",
     jbJewel: "Loại ngọc",
     jbCap: "Giới hạn/Tài khoản",
+    cuNav: "Giới hạn ngày",
+    cuTitle: "Giới hạn cấp & Reset đuổi kịp",
+    cuHint: "Giới hạn tiến độ theo ngày giúp người chơi mới dễ dàng đuổi kịp. Tự động tăng theo giờ Sydney.",
+    cuOffline: "Không xem được giới hạn đuổi kịp.",
+    cuOff: "Tính năng giới hạn đuổi kịp đang tắt trên máy chủ này.",
+    cuLevelCap: "Giới hạn cấp hôm nay: Cấp %s / %s",
+    cuResetCap: "Giới hạn reset hôm nay: %s lần",
+    cuUnlockedBy: "Mở khóa bởi %s (+%s/ngày theo giờ Sydney).",
+    cuWaiting: "Bắt đầu tăng +%s/ngày khi có người đầu tiên chạm cấp %s.",
+    cuNextRise: "Lần tăng tiếp theo (Sydney): %s",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -2474,4 +2494,59 @@ async function refreshJewelBank(): Promise<void> {
 void refreshJewelBank();
 setInterval(() => {
   if (!document.hidden) void refreshJewelBank();
+}, 120000);
+
+interface PublicCatchup {
+  v: number;
+  enabled: boolean;
+  nextDayAt?: number;
+  levelCap?: { enabled: boolean; todayCap: number; initialCap: number; hardMax: number; perDay: number; triggered: boolean; firstPlayer: string };
+  resetCap?: { enabled: boolean; todayDailyLimit: number; perDay: number; hardMax: number; triggered: boolean; firstPlayer: string };
+}
+let catchupData: PublicCatchup | null = null;
+
+function renderCatchup(): void {
+  const notice = element("catchup-notice");
+  const cards = clear("catchup-cards");
+  const data = catchupData;
+  if (data === null) { notice.textContent = t("cuOffline"); return; }
+  if (!data.enabled) { notice.textContent = t("cuOff"); return; }
+  notice.textContent = "";
+
+  const fmt = new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
+  if (data.levelCap?.enabled) {
+    const l = data.levelCap;
+    const card = node("article", "panel");
+    card.append(node("h3", fill(t("cuLevelCap"), l.todayCap, l.hardMax)));
+    card.append(node("p", l.triggered ? fill(t("cuUnlockedBy"), l.firstPlayer, l.perDay) : fill(t("cuWaiting"), l.perDay, l.initialCap)));
+    if (data.nextDayAt) card.append(node("p", fill(t("cuNextRise"), fmt.format(data.nextDayAt))));
+    cards.append(card);
+  }
+
+  if (data.resetCap?.enabled) {
+    const r = data.resetCap;
+    const card = node("article", "panel");
+    card.append(node("h3", fill(t("cuResetCap"), r.todayDailyLimit)));
+    cards.append(card);
+  }
+}
+
+async function refreshCatchup(): Promise<void> {
+  try {
+    const response = await fetch("/website/catchup", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicCatchup;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid catchup");
+    catchupData = data;
+  } catch {
+    catchupData = null;
+  }
+  renderCatchup();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderCatchup());
+element("refresh").addEventListener("click", () => void refreshCatchup());
+void refreshCatchup();
+setInterval(() => {
+  if (!document.hidden) void refreshCatchup();
 }, 120000);

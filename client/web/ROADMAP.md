@@ -286,9 +286,9 @@ section 12 (the cash shop) still waits for the owner's answers.
    a market fee, allowed currencies, banned items (`group:number`), and full audit log in admin panel (`/market`).
 10. ✅ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, Harmony, Guardian, custom) as numbers on the
     account (`F7`), take them out in the game or on the website (`/jewel-bank` admin config for limits/fees), and clear/refund master skill points (`F7`, `/clearmaster`, and website Resets &amp; relife).
-11. ⏳ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
-    the cap for everyone rises N levels a day; with resets, a daily reset limit does the same job. Shown on
-    the website (today's cap).
+11. ✅ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
+    the cap for everyone rises N levels a day (Sydney time); with resets, a daily reset limit does the same job. Shown on
+    the website (`#catchup` today's cap) and configured in `/catchup`.
 12. ⏳ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony, wing 2,
     the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
     killed, N players at a level). Stages, dates and conditions in the admin panel; the timeline on the website.

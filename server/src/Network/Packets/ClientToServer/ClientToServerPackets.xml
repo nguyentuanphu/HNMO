@@ -5318,6 +5318,17 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3C</SubCode>
+      <Name>HnmoCatchupCapRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to query today's Catch-up Level and Reset Cap state.</SentWhen>
+      <CausedReaction>The server responds with HnmoCatchupCapState (F5 3D).</CausedReaction>
+      <Fields />
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

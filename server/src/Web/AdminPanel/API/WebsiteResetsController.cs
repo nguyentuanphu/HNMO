@@ -15,6 +15,7 @@ using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.Offline;
+using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.GameLogic.PlugIns.ResetOptions;
 using HNMO.GameLogic.PlugIns.TopRaces;
@@ -416,7 +417,10 @@ public sealed class WebsiteResetsController(
     {
         var subject = SubjectOf(account, character);
         var now = DateTime.UtcNow;
-        var plan = relife ? engine.PlanRelife(subject, now) : engine.PlanReset(subject, now, ResetSource.Website);
+        var catchupCfg = await PlugInSettings.ReadActiveAsync<CatchupCapConfiguration>(persistence, typeof(CatchupCapPlugIn), () => new CatchupCapConfiguration(), default).ConfigureAwait(false);
+        var catchupEngine = catchupCfg is null ? null : new CatchupCapEngine(catchupCfg, CatchupCapStore.Open(catchupCfg.FileName), enabled: true);
+        int? dailyCap = catchupEngine is { } ce && ce.GetSnapshot(now) is { ResetCapEnabled: true } cs ? cs.TodayDailyResetCap : null;
+        var plan = relife ? engine.PlanRelife(subject, now) : engine.PlanReset(subject, now, ResetSource.Website, dailyCap);
         if (plan.Result != ResetResult.Ok)
         {
             return (plan.Result.ToString(), ResetStateWriter.Plan(plan, names));
