@@ -21,6 +21,27 @@ using HNMO.Network.SimpleModulus;
 using HNMO.Network.Xor;
 using Pipelines.Sockets.Unofficial;
 
+if (args.Length >= 3 && args[0] == "--pack-icons")
+{
+    DataPackArchive.BuildItemIconsZip(args[1], args[2]);
+    return;
+}
+
+if (args.Length >= 3 && args[0] == "--pack")
+{
+    string? allowlist = null;
+    for (var i = 3; i < args.Length - 1; i++)
+    {
+        if (args[i] == "--allowlist")
+        {
+            allowlist = args[i + 1];
+        }
+    }
+
+    DataPackArchive.BuildPacks(args[1], args[2], allowlist);
+    return;
+}
+
 var builder = WebApplication.CreateBuilder(args);
 var launcherOptions = builder.Configuration.GetSection("Launcher").Get<LauncherOptions>() ?? new LauncherOptions();
 builder.Services.AddHostedService(services => new GameLauncher(launcherOptions, builder.Environment.ContentRootPath, services.GetRequiredService<ILogger<GameLauncher>>()));
@@ -44,7 +65,8 @@ builder.Services.AddRateLimiter(limiter =>
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
 var webRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:WebRoot"] ?? "../public"));
-var gameFiles = new GameFiles(Path.Combine(contentRoot, app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"));
+var gameFiles = new GameFiles(Path.Combine(contentRoot, app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"), app.Logger);
+app.Lifetime.ApplicationStopping.Register(gameFiles.Dispose);
 var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
 var allowedHosts = app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
 var allowLoopback = app.Configuration.GetValue("Relay:AllowLoopback", true);
@@ -221,7 +243,11 @@ app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 });
 Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
-app.Logger.LogInformation("Web client: {WebRoot}. Game data: {DataRoot}.", webRoot, gameFiles.Root);
+app.Logger.LogInformation(
+    "Web client: {WebRoot}. Game data: {DataRoot} ({Mode}).",
+    webRoot,
+    gameFiles.Root,
+    gameFiles.UsingPacks ? $"{gameFiles.PackCount} packs, {gameFiles.PackedEntryCount} entries" : "loose files");
 
 app.Map("/relay", async context =>
 {
