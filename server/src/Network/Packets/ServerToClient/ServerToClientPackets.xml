@@ -16888,6 +16888,23 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>45</SubCode>
+      <Name>HnmoPartyOptionsState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoPartyOptionsCommand or when opening the Party window options drawer.</SentWhen>
+      <CausedReaction>Updates the web client's Party password and Auto-party spot finder drawer.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload listing active party advertisement state and open hunting spot parties.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

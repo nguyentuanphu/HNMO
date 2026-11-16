@@ -395,6 +395,17 @@ const copy = {
     mountsReqCol: "Recipe / Material",
     mountsBonusCol: "PvE Bonus",
     mountsOwnersCol: "Collectors",
+    partySpotsNav: "Auto-Party spots",
+    partySpotsTitle: "Auto-Party hunting spots & /partypass",
+    partySpotsEmpty: "Party Options (/partypass & Auto-Party) is not enabled yet.",
+    partySpotsNote: "Type /partypass PASS or press P in-game to join open spot parties (%s preset spots)",
+    partySpotsLeaderCol: "Leader",
+    partySpotsSpotCol: "Hunting spot",
+    partySpotsMembersCol: "Members",
+    partySpotsModeCol: "Access",
+    partySpotsOpen: "Auto-join",
+    partySpotsLocked: "Password (/partypass)",
+    partySpotsNone: "No hunting spot parties recruiting right now.",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -813,6 +824,17 @@ const copy = {
     mountsReqCol: "Nguyên liệu nâng cấp",
     mountsBonusCol: "Hiệu ứng PvE",
     mountsOwnersCol: "Số chủ sở hữu",
+    partySpotsNav: "Nhóm bãi săn",
+    partySpotsTitle: "Tự động tìm nhóm & /partypass",
+    partySpotsEmpty: "Tính năng Tổ đội nhanh hiện đang tắt.",
+    partySpotsNote: "Gõ /partypass MATKHAU hoặc nhấn P trong game để tìm bãi (%s bãi gợi ý)",
+    partySpotsLeaderCol: "Trưởng nhóm",
+    partySpotsSpotCol: "Bãi săn",
+    partySpotsMembersCol: "Thành viên",
+    partySpotsModeCol: "Vào nhóm",
+    partySpotsOpen: "Tự động vào",
+    partySpotsLocked: "Mật khẩu (/partypass)",
+    partySpotsNone: "Hiện chưa có nhóm nào đang tuyển ở bãi săn.",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -2821,4 +2843,64 @@ element("refresh").addEventListener("click", () => void refreshMounts());
 void refreshMounts();
 setInterval(() => {
   if (!document.hidden) void refreshMounts();
+}, 120000);
+
+interface PublicPartyAd {
+  leaderName: string;
+  mapName: string;
+  spotName: string;
+  hasPassword: boolean;
+  memberCount: number;
+  maxSize: number;
+}
+
+interface PublicPartySpots {
+  enabled: boolean;
+  huntingSpots?: string[];
+  ads?: PublicPartyAd[];
+}
+
+let partySpotsData: PublicPartySpots | null = null;
+
+function renderPartySpots(): void {
+  const on = Boolean(partySpotsData?.enabled);
+  const body = element("party-spots-body");
+  const empty = element("party-spots-empty");
+  const note = element("party-spots-note");
+  body.hidden = !on;
+  empty.hidden = on;
+  empty.textContent = on ? "" : t("partySpotsEmpty");
+  note.textContent = on ? fill(t("partySpotsNote"), (partySpotsData?.huntingSpots ?? []).length) : "";
+  if (!on) return;
+  table(
+    "party-spots-table",
+    [[t("partySpotsLeaderCol"), false], [t("partySpotsSpotCol"), false], [t("partySpotsMembersCol"), true], [t("partySpotsModeCol"), false]],
+    (partySpotsData?.ads ?? []).map((ad) => [
+      ad.leaderName,
+      `${ad.spotName} (${ad.mapName})`,
+      `${ad.memberCount}/${ad.maxSize}`,
+      ad.hasPassword ? t("partySpotsLocked") : t("partySpotsOpen"),
+    ]),
+    t("partySpotsNone"),
+  );
+}
+
+async function refreshPartySpots(): Promise<void> {
+  try {
+    const response = await fetch("/website/party-spots", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicPartySpots;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid party spots");
+    partySpotsData = data;
+  } catch {
+    partySpotsData = null;
+  }
+  renderPartySpots();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderPartySpots());
+element("refresh").addEventListener("click", () => void refreshPartySpots());
+void refreshPartySpots();
+setInterval(() => {
+  if (!document.hidden) void refreshPartySpots();
 }, 120000);
