@@ -5329,6 +5329,17 @@
       <CausedReaction>The server responds with HnmoCatchupCapState (F5 3D).</CausedReaction>
       <Fields />
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3E</SubCode>
+      <Name>HnmoSeasonPlanRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open or refresh the Season Plan timeline (F8).</SentWhen>
+      <CausedReaction>The server replies with HnmoSeasonPlanState (F5 3F).</CausedReaction>
+      <Fields />
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

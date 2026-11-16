@@ -43,6 +43,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: '💍', title: 'Marriage', key: '', event: 'hnmo-marriage-open' },
   { label: '🏪', title: 'Item market', key: '', event: 'hnmo-market-open' },
   { label: '💎', title: 'Jewel bank', key: '', event: 'hnmo-jewel-bank-open' },
+  { label: '📅', title: 'Season plan', key: '', event: 'hnmo-season-plan-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
