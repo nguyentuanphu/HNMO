@@ -10725,4 +10725,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoJewelBankState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing enabled state, jewel rules, stored balances, bag jewels, and master skill summary.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after entering the world or processing HnmoJewelBankCommand.
+    /// Causes reaction on client side: Updates the web client's Jewel Bank window.
+    /// </remarks>
+    public static async ValueTask SendHnmoJewelBankStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoJewelBankStateRef.GetRequiredSize(json);
+            var packet = new HnmoJewelBankStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

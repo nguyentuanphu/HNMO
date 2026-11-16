@@ -4393,4 +4393,20 @@ public class PacketStructureTests
         Assert.That(4 + 16, Is.LessThanOrEqualTo(expectedLength), 
             "Field 'Data' exceeds packet boundary");
     }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoJewelBankCommand.
+    /// </summary>
+    [Test]
+    public void HnmoJewelBankCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoJewelBankCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 10;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
 }

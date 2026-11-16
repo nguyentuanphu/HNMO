@@ -106,6 +106,7 @@ public sealed class WebsiteResetsController(
             "relife" => options.AllowRelife && engine.Configuration.Relife.Enabled,
             "add-stats" => options.AllowAddStats,
             "clear-stats" => options.AllowClearStats,
+            "clear-master" => options.AllowClearMasterSkills,
             "delegated-on" or "delegated-off" => options.AllowDelegatedSwitch && engine.Configuration.Delegated.Enabled,
             _ => (bool?)null,
         };
@@ -180,6 +181,7 @@ public sealed class WebsiteResetsController(
                 {
                     "reset" or "relife" => await this.ResetAsync(engine, context, account, character, action == "relife", names).ConfigureAwait(false),
                     "add-stats" => (AddStats(character, request, (a, v) => Set(context, character, a, v)), null),
+                    "clear-master" => (await ClearMasterPaidAsync(engine.Configuration.Website, context, account, character).ConfigureAwait(false), null),
                     _ => (ClearStatsPaid(engine.Configuration.Website, context, account, character), null),
                 };
                 if (result == nameof(ResetResult.Ok) && !await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
@@ -271,6 +273,10 @@ public sealed class WebsiteResetsController(
         clearStatsZen = configuration.Website.ClearStatsZen,
         clearStatsCoins = configuration.Website.ClearStatsCoins,
         clearStatsCoinType = configuration.Website.ClearStatsCoinType,
+        allowClearMasterSkills = configuration.Website.AllowClearMasterSkills,
+        clearMasterSkillsZen = configuration.Website.ClearMasterSkillsZen,
+        clearMasterSkillsCoins = configuration.Website.ClearMasterSkillsCoins,
+        clearMasterSkillsCoinType = configuration.Website.ClearMasterSkillsCoinType,
         allowDelegated = configuration.Website.AllowDelegatedSwitch && configuration.Delegated.Enabled,
     };
 
@@ -279,6 +285,8 @@ public sealed class WebsiteResetsController(
         cls = character.CharacterClass?.Number ?? 0,
         className = character.CharacterClass?.Name.ValueInNeutralLanguage ?? string.Empty,
         freePoints = character.LevelUpPoints,
+        masterFreePoints = character.MasterLevelUpPoints,
+        masterSpentPoints = ResetApplier.CountSpentMasterPoints(character),
         zen = character.Inventory?.Money ?? 0,
         stats = ResetApplier.IncreasableStats(character).Where(s => ResetApplier.StatKey(s.Attribute!) is not null)
             .ToDictionary(s => ResetApplier.StatKey(s.Attribute!)!, s => (int)Get(character, s.Attribute!)),
@@ -349,6 +357,39 @@ public sealed class WebsiteResetsController(
         }
 
         ResetApplier.ClearStats(character, a => Get(character, a), (a, v) => Set(context, character, a, v));
+        return nameof(ResetResult.Ok);
+    }
+
+    private static async Task<string> ClearMasterPaidAsync(WebsiteResetOptions options, IContext context, Account account, Character character)
+    {
+        if (ResetApplier.CountSpentMasterPoints(character) <= 0)
+        {
+            return "NothingToClear";
+        }
+
+        var zen = Math.Max(0, options.ClearMasterSkillsZen);
+        if ((character.Inventory?.Money ?? 0) < zen)
+        {
+            return nameof(ResetResult.NotEnoughZen);
+        }
+
+        var plan = new ResetPlan();
+        if (options.ClearMasterSkillsCoins > 0)
+        {
+            plan.Coins.Add(new ResetCoinCost(options.ClearMasterSkillsCoinType, options.ClearMasterSkillsCoins));
+        }
+
+        if (!ResetApplier.TryTakeCoins(account, plan))
+        {
+            return nameof(ResetResult.NotEnoughCoins);
+        }
+
+        if (zen > 0)
+        {
+            character.Inventory!.Money -= zen;
+        }
+
+        await ResetApplier.ClearMasterSkillsOfflineAsync(character, context).ConfigureAwait(false);
         return nameof(ResetResult.Ok);
     }
 
