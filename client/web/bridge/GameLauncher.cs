@@ -33,6 +33,8 @@ internal sealed class LauncherOptions
     public string? OpenBrowserUrl { get; set; } = "http://localhost:8080/";
 
     public string? SettingsFilePath { get; set; }
+
+    public int WebPort { get; set; } = 8080;
 }
 
 internal sealed class GameLauncher(LauncherOptions options, string contentRoot, IHostApplicationLifetime lifetime, ILogger<GameLauncher> logger) : IHostedService
@@ -40,10 +42,19 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
     private static readonly TimeSpan DatabaseStartTimeout = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan ServerStartTimeout = TimeSpan.FromMinutes(10);
 
+    private readonly SemaphoreSlim _lifecycleLock = new(1, 1);
     private Process? _server;
     private bool _databaseStarted;
     private int _stopped;
     private PosixSignalRegistration? _closeWindow;
+
+    public bool IsLaunching { get; private set; }
+
+    public string? LastError { get; private set; }
+
+    public string SaveFullPath => this.Full(options.SavePath);
+
+    public string PostgresToolPath(string name) => this.PostgresTool(name);
 
     // The game server's process of the last start (id and start time), so a server left running by a
     // window that was closed hard can be found and stopped at the next start.
@@ -115,9 +126,47 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         this._closeWindow = PosixSignalRegistration.Create(PosixSignal.SIGHUP, _ => this.StopNow());
         AppDomain.CurrentDomain.ProcessExit += (_, _) => this.StopNow();
 
-        // Start in the background, so the web part answers right away and shows the game while the server comes up.
+        // Start in the background, so the web part answers right away and shows the game/control page while the server comes up.
         _ = Task.Run(() => this.LaunchAsync(cancellationToken), CancellationToken.None);
         return Task.CompletedTask;
+    }
+
+    public async Task StartGameAsync(CancellationToken cancellationToken = default)
+    {
+        await this._lifecycleLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (this._server is { HasExited: false })
+            {
+                return;
+            }
+
+            Interlocked.Exchange(ref this._stopped, 0);
+            await this.LaunchAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            this._lifecycleLock.Release();
+        }
+    }
+
+    public async Task StopGameAsync(CancellationToken cancellationToken = default)
+    {
+        await this._lifecycleLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            this.StopNow();
+        }
+        finally
+        {
+            this._lifecycleLock.Release();
+        }
+    }
+
+    public async Task RestartGameAsync(CancellationToken cancellationToken = default)
+    {
+        await this.StopGameAsync(cancellationToken).ConfigureAwait(false);
+        await this.StartGameAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -220,6 +269,8 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
     {
         try
         {
+            this.IsLaunching = true;
+            this.LastError = null;
             Directory.CreateDirectory(this.LogDirectory);
             await this.StopLeftoverServerAsync(cancellationToken).ConfigureAwait(false);
             if (await IsPortOpenAsync(options.ConnectServerPort, cancellationToken).ConfigureAwait(false))
@@ -233,12 +284,18 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             this.StartServer();
             logger.LogInformation("The game server is starting. The first start sets up the save game and takes a few minutes.");
             await WaitForPortAsync(options.ConnectServerPort, ServerStartTimeout, cancellationToken).ConfigureAwait(false);
-            logger.LogInformation("HNMO is ready. Play: {Play}  Admin panel: {Admin} (this computer only)", options.OpenBrowserUrl, options.AdminUrl);
-            OpenBrowser(options.OpenBrowserUrl);
+            logger.LogInformation("HNMO is ready. Play: {Play}  Control: http://localhost:{WebPort}/control  Admin panel: {Admin} (this computer only)", options.OpenBrowserUrl, options.WebPort, options.AdminUrl);
+            var controlUrl = $"http://localhost:{options.WebPort}/control";
+            OpenBrowser(File.Exists(Path.Combine(this.SaveFullPath, "setup-complete.json")) ? options.OpenBrowserUrl : controlUrl);
         }
         catch (Exception ex)
         {
+            this.LastError = ex.Message;
             logger.LogError(ex, "HNMO couldn't start. See the logs in {LogDirectory}.", this.LogDirectory);
+        }
+        finally
+        {
+            this.IsLaunching = false;
         }
     }
 
