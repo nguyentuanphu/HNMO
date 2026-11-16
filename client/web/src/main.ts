@@ -1929,15 +1929,30 @@ function initLogin() {
   updateWebsiteLoginButtonLanguage();
   onLanguageChange(() => updateWebsiteLoginButtonLanguage());
 
-  void fetch('/website/settings', { cache: 'no-cache' })
-    .then((r) => (r.ok ? r.json() : null))
-    .then((d: { requireWebsiteLogin?: boolean } | null) => {
-      if (d?.requireWebsiteLogin) {
-        const fieldset = ui.loginForm.querySelector('fieldset');
-        if (fieldset) fieldset.hidden = true;
+  const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(800) })
+    .then((r) => (r.ok ? (r.json() as Promise<{ requireWebsiteLogin?: boolean; connectServerPort?: number }>) : null))
+    .catch(() => null);
+
+  void websiteSettingsPromise.then((d) => {
+    if (d?.requireWebsiteLogin) {
+      const fieldset = ui.loginForm.querySelector('fieldset');
+      if (fieldset) fieldset.hidden = true;
+    }
+    if (d?.connectServerPort && d.connectServerPort > 0 && !saved.port) {
+      const portInput = ui.loginForm.elements.namedItem('port') as HTMLInputElement | null;
+      if (portInput && portInput.value === '44406') portInput.value = String(d.connectServerPort);
+    }
+  });
+
+  const resolveConnectPort = async (form: LoginSettings): Promise<LoginSettings> => {
+    if (!saved.port && form.port === '44406') {
+      const d = await websiteSettingsPromise;
+      if (d?.connectServerPort && d.connectServerPort > 0) {
+        return { ...form, port: String(d.connectServerPort) };
       }
-    })
-    .catch(() => {});
+    }
+    return form;
+  };
 
   const pendingTicket = readTicketFromHash();
   if (pendingTicket) {
@@ -1950,7 +1965,7 @@ function initLogin() {
     };
     const usernameInput = ui.loginForm.elements.namedItem('username') as HTMLInputElement | null;
     if (usernameInput && form.username) usernameInput.value = form.username;
-    startGame(() => playOnline(form, pendingTicket.ticket));
+    startGame(async () => playOnline(await resolveConnectPort(form), pendingTicket.ticket));
   }
 
   ui.loginForm.addEventListener('submit', (event) => {
@@ -1961,7 +1976,7 @@ function initLogin() {
     const form: LoginSettings = { username: field('username'), password: field('password'), host: field('host'), port: field('port'), relay: field('relay') };
     const { password, ...remembered } = form;
     saveSettings(remembered);
-    startGame(() => playOnline(form));
+    startGame(async () => playOnline(await resolveConnectPort(form)));
   });
 }
 

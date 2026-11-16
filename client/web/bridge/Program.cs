@@ -108,6 +108,8 @@ if (launcherOptions.Enabled || File.Exists(settingsPath))
     }
 }
 
+portalOptions.ConnectServerPort = launcherOptions.ConnectServerPort;
+
 builder.Services.AddSingleton(services => new GameLauncher(
     launcherOptions,
     builder.Environment.ContentRootPath,

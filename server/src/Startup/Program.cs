@@ -874,6 +874,27 @@ internal sealed class Program : IDisposable
             contextProvider = inMemoryProvider;
             await this.InitializeDataAsync(version, loggerFactory, contextProvider).ConfigureAwait(false);
             inMemoryProvider.ChangePublisher = changePublisher;
+
+            if (int.TryParse(Environment.GetEnvironmentVariable("HNMO_PORT_OFFSET"), out var portOffset) && portOffset != 0)
+            {
+                using var portContext = contextProvider.CreateNewConfigurationContext();
+                foreach (var cs in await portContext.GetAsync<ConnectServerDefinition>().ConfigureAwait(false))
+                {
+                    cs.ClientListenerPort += portOffset;
+                }
+
+                foreach (var gs in await portContext.GetAsync<GameServerDefinition>().ConfigureAwait(false))
+                {
+                    gs.NetworkPort += portOffset;
+                }
+
+                foreach (var ep in await portContext.GetAsync<ChatServerEndpoint>().ConfigureAwait(false))
+                {
+                    ep.NetworkPort += portOffset;
+                }
+
+                await portContext.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
         else
         {

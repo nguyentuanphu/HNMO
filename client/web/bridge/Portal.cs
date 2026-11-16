@@ -20,6 +20,8 @@ internal sealed class PortalOptions
 
     public int RegistrationsPerHourPerAddress { get; set; } = 5;
 
+    public int ConnectServerPort { get; set; } = 44406;
+
     /// <summary>Google's token check; replaceable for tests.</summary>
     public string GoogleTokenInfoUrl { get; set; } = "https://oauth2.googleapis.com/tokeninfo";
 }
@@ -215,7 +217,12 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     {
         var (clientId, requireWebsiteLogin) = await this.PublicSettingsAsync(context.RequestAborted).ConfigureAwait(false);
         context.Response.Headers.CacheControl = "no-cache";
-        return Results.Json(new { googleClientId = clientId ?? string.Empty, requireWebsiteLogin });
+        return Results.Json(new
+        {
+            googleClientId = clientId ?? string.Empty,
+            requireWebsiteLogin,
+            connectServerPort = options.ConnectServerPort > 0 ? options.ConnectServerPort : 44406,
+        });
     }
 
     private async Task<(string? GoogleClientId, bool RequireWebsiteLogin)> PublicSettingsAsync(CancellationToken cancellationToken)
