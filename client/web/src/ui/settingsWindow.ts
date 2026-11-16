@@ -16,9 +16,10 @@ import { audioSystem, MAX_VOLUME_LEVEL } from '../audio/audioSystem.js';
 import { setUiScalePercent, typographyScale } from './nativeText.js';
 import { setWordFilter, wordFilterOn } from '../game/chatExtras.js';
 import {
-  applyQuality, DEFAULT_QUALITY, FPS_CAPS, isLowSpec, LOW_SPEC, refreshQuality, RENDER_SCALES, VIEW_DISTANCES,
-  type QualitySettings, type QualityTarget,
+  applyQuality, DEFAULT_QUALITY, FPS_CAPS, isLowSpec, isPerformanceMode, LOW_SPEC, PERFORMANCE_MODE, refreshQuality,
+  RENDER_SCALES, VIEW_DISTANCES, type QualitySettings, type QualityTarget,
 } from '../render/quality.js';
+import { currentLanguage } from '../i18n.js';
 
 const STORAGE_KEY = 'hnmo.settings';
 export const TEXT_SCALES = [0.85, 1, 1.2];
@@ -77,6 +78,9 @@ export function loadSettings(): GameSettings {
       fpsCap: pick(FPS_CAPS, q.fpsCap, DEFAULT_QUALITY.fpsCap),
       viewDistance: pick(VIEW_DISTANCES, q.viewDistance, DEFAULT_QUALITY.viewDistance),
       effects: typeof q.effects === 'boolean' ? q.effects : DEFAULT_QUALITY.effects,
+      hideOtherPlayers: typeof q.hideOtherPlayers === 'boolean' ? q.hideOtherPlayers : DEFAULT_QUALITY.hideOtherPlayers,
+      hideWingsPets: typeof q.hideWingsPets === 'boolean' ? q.hideWingsPets : DEFAULT_QUALITY.hideWingsPets,
+      reducedEffects: typeof q.reducedEffects === 'boolean' ? q.reducedEffects : DEFAULT_QUALITY.reducedEffects,
     };
     settings.textSize = pick([0, 1, 2], saved.textSize, 1);
     settings.uiSize = pick(UI_SIZES, saved.uiSize, 100);
@@ -155,19 +159,13 @@ export class SettingsWindow {
   private readonly settings: GameSettings = loadSettings();
   private readonly model: OptionModel;
   private extras: {
-    lowSpec?: HTMLDivElement;
-    mute?: HTMLDivElement;
-    viewValue?: HTMLDivElement;
-    viewList?: HTMLDivElement;
-    viewOptions: HTMLDivElement[];
-    texValue?: HTMLDivElement;
-    texList?: HTMLDivElement;
-    texOptions: HTMLDivElement[];
-    textValue?: HTMLDivElement;
-    textList?: HTMLDivElement;
-    textOptions: HTMLDivElement[];
-    wordFilter?: HTMLDivElement;
+    lowSpec?: HTMLDivElement; perfMode?: HTMLDivElement; hidePlayers?: HTMLDivElement; hideWingsPets?: HTMLDivElement; reducedEffects?: HTMLDivElement;
+    mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[];
+    texValue?: HTMLDivElement; texList?: HTMLDivElement; texOptions: HTMLDivElement[];
+    textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[]; wordFilter?: HTMLDivElement;
   } = { viewOptions: [], texOptions: [], textOptions: [] };
+  private toastEl: HTMLDivElement | null = null;
+  private toastTimer = 0;
 
   constructor(private readonly target: QualityTarget, private readonly actions: SettingsActions = {}) {
     const close = () => this.close();
@@ -204,7 +202,34 @@ export class SettingsWindow {
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.doc) { this.close(); return; }
       if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-      if (event.key.toLowerCase() === 'o' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void this.toggle(); }
+      const key = event.key.toLowerCase();
+      if (key === 'o' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); void this.toggle(); return; }
+      if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (key === 'p') {
+        event.preventDefault();
+        const enable = !isPerformanceMode(this.settings.quality);
+        this.setQuality(enable ? { ...PERFORMANCE_MODE } : { hideOtherPlayers: false, hideWingsPets: false, reducedEffects: false, viewDistance: 1 });
+        this.update();
+        this.showPerfToast('Performance mode', 'Chế độ mượt', enable);
+      } else if (key === 'o') {
+        event.preventDefault();
+        const enable = !this.settings.quality.hideOtherPlayers;
+        this.setQuality({ hideOtherPlayers: enable });
+        this.update();
+        this.showPerfToast('Hide other players', 'Ẩn người chơi khác', enable);
+      } else if (key === 'w') {
+        event.preventDefault();
+        const enable = !this.settings.quality.hideWingsPets;
+        this.setQuality({ hideWingsPets: enable });
+        this.update();
+        this.showPerfToast('Hide wings & pets', 'Ẩn cánh và thú cưng', enable);
+      } else if (key === 'e') {
+        event.preventDefault();
+        const enable = !this.settings.quality.reducedEffects;
+        this.setQuality({ reducedEffects: enable });
+        this.update();
+        this.showPerfToast('Fewer skill & item effects', 'Giảm hiệu ứng kỹ năng & vật phẩm', enable);
+      }
     });
     window.addEventListener('resize', () => this.place());
     document.addEventListener('fullscreenchange', () => this.update());
@@ -289,6 +314,29 @@ export class SettingsWindow {
     }
   }
 
+  setPerformanceOption(change: Partial<QualitySettings>): void {
+    this.setQuality(change);
+    this.update();
+  }
+
+  private showPerfToast(en: string, vi: string, on: boolean): void {
+    if (!this.toastEl) {
+      this.toastEl = document.createElement('div');
+      this.toastEl.id = 'hnmo-perf-toast';
+      Object.assign(this.toastEl.style, {
+        position: 'fixed', top: '48px', left: '50%', transform: 'translateX(-50%)', zIndex: '95',
+        padding: '6px 14px', borderRadius: '6px', background: 'rgba(12, 18, 28, 0.88)', border: '1px solid #8a6a30',
+        color: '#ffe9a8', fontSize: '13px', pointerEvents: 'none', transition: 'opacity 0.2s',
+      });
+      document.body.append(this.toastEl);
+    }
+    const isVi = currentLanguage() === 'vi';
+    this.toastEl.textContent = `${isVi ? vi : en}: ${on ? (isVi ? 'BẬT' : 'ON') : (isVi ? 'TẮT' : 'OFF')}`;
+    this.toastEl.style.opacity = '1';
+    window.clearTimeout(this.toastTimer);
+    this.toastTimer = window.setTimeout(() => { if (this.toastEl) this.toastEl.style.opacity = '0'; }, 2200);
+  }
+
   private setQuality(change: Partial<QualitySettings>): void {
     this.settings.quality = { ...this.settings.quality, ...change };
     applyQuality(this.target, this.settings.quality);
@@ -341,6 +389,27 @@ export class SettingsWindow {
         this.update();
       });
       lowSpec.row.id = 'hnmo_low_spec';
+      const perfMode = checkboxRow('Performance mode (Alt+P)', () => {
+        this.setQuality(isPerformanceMode(this.settings.quality) ? { hideOtherPlayers: false, hideWingsPets: false, reducedEffects: false, viewDistance: 1 } : { ...PERFORMANCE_MODE });
+        this.update();
+      });
+      perfMode.row.id = 'hnmo_perf_mode';
+      perfMode.row.title = 'Hides other players, wings, pets, and heavy effects for crowded events (Alt+P)';
+      const hidePlayers = checkboxRow('Hide other players (Alt+O)', () => {
+        this.setQuality({ hideOtherPlayers: !this.settings.quality.hideOtherPlayers });
+        this.update();
+      });
+      hidePlayers.row.id = 'hnmo_hide_players';
+      const hideWingsPets = checkboxRow('Hide wings and pets (Alt+W)', () => {
+        this.setQuality({ hideWingsPets: !this.settings.quality.hideWingsPets });
+        this.update();
+      });
+      hideWingsPets.row.id = 'hnmo_hide_wings_pets';
+      const reducedEffects = checkboxRow('Fewer skill and item effects (Alt+E)', () => {
+        this.setQuality({ reducedEffects: !this.settings.quality.reducedEffects });
+        this.update();
+      });
+      reducedEffects.row.id = 'hnmo_reduced_effects';
       // View distance: a dropdown like the window's own.
       const row = document.createElement('div');
       row.className = 'option-row option-select-row hnmo-extra';
@@ -366,7 +435,8 @@ export class SettingsWindow {
       dropdown.append(value, list);
       row.append(label, dropdown);
       const first = graphics.querySelector(':scope > .option-section');
-      if (first) first.after(lowSpec.row, row); else graphics.prepend(lowSpec.row, row);
+      if (first) first.after(lowSpec.row, perfMode.row, hidePlayers.row, hideWingsPets.row, reducedEffects.row, row);
+      else graphics.prepend(lowSpec.row, perfMode.row, hidePlayers.row, hideWingsPets.row, reducedEffects.row, row);
       const tex = this.dropdownRow('Texture quality', TEXTURE_QUALITY_DROPDOWN, TEXTURE_QUALITY_LABELS);
       tex.row.id = 'hnmo_texture_quality';
       row.after(tex.row);
@@ -388,13 +458,10 @@ export class SettingsWindow {
       }
       this.extras = {
         ...this.extras,
-        lowSpec: lowSpec.box,
-        viewValue: value,
-        viewList: list,
-        viewOptions: options,
-        texValue: tex.value,
-        texList: tex.list,
-        texOptions: tex.options,
+        lowSpec: lowSpec.box, perfMode: perfMode.box, hidePlayers: hidePlayers.box,
+        hideWingsPets: hideWingsPets.box, reducedEffects: reducedEffects.box,
+        viewValue: value, viewList: list, viewOptions: options,
+        texValue: tex.value, texList: tex.list, texOptions: tex.options,
       };
     }
     const display = panels[0];
@@ -455,6 +522,10 @@ export class SettingsWindow {
     textOptions.forEach((option, i) => option.classList.toggle('selected', i === this.settings.textSize));
     const q = this.settings.quality;
     lowSpec?.classList.toggle('checked', isLowSpec(q));
+    this.extras.perfMode?.classList.toggle('checked', isPerformanceMode(q));
+    this.extras.hidePlayers?.classList.toggle('checked', q.hideOtherPlayers);
+    this.extras.hideWingsPets?.classList.toggle('checked', q.hideWingsPets);
+    this.extras.reducedEffects?.classList.toggle('checked', q.reducedEffects);
     mute?.classList.toggle('checked', audioSystem().getSettings().muted);
     const index = VIEW_DISTANCES.indexOf(q.viewDistance);
     if (viewValue) viewValue.textContent = VIEW_DISTANCE_LABELS[index] ?? '';
