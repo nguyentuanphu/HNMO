@@ -17,9 +17,13 @@ using HNMO.Web.Shared.Services;
 /// </summary>
 public partial class NavMenu : IDisposable
 {
+    private bool _isDisposed;
+
     private bool _collapseNavMenu = true;
 
-    private bool _isLoadingConfig = false;
+    private bool _isLoadingConfig = true;
+
+    private int _isLoadingConfigInProgress;
 
     private bool _onlyShowSetup;
 
@@ -85,6 +89,7 @@ public partial class NavMenu : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
+        this._isDisposed = true;
         this.SetupService.DatabaseInitialized -= this.OnDatabaseInitializedAsync;
         this.UpdateService.UpdatesInstalled -= this.OnUpdatesInstalledAsync;
         this.NavigationManager.LocationChanged -= this.OnLocationChanged;
@@ -121,58 +126,106 @@ public partial class NavMenu : IDisposable
 
     private async Task LoadGameConfigurationAsync()
     {
-        if (this.GameConfigurationId is not null || this._isLoadingConfig)
+        if (this.GameConfigurationId is not null
+            || this._isDisposed
+            || Interlocked.CompareExchange(ref this._isLoadingConfigInProgress, 1, 0) != 0)
         {
             return;
         }
 
-        this._isLoadingConfig = true;
-        await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
+        if (!this._isLoadingConfig)
+        {
+            await this.RenderIfAliveAsync(() => this._isLoadingConfig = true).ConfigureAwait(false);
+        }
 
+        Guid? gameConfigurationId = null;
         try
         {
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            if (!await this.PersistenceContextProvider.CanConnectToDatabaseAsync(cts.Token).ConfigureAwait(true)
-                || !await this.PersistenceContextProvider.DatabaseExistsAsync(cts.Token).ConfigureAwait(true))
+            if (await this.PersistenceContextProvider.CanConnectToDatabaseAsync(cts.Token).ConfigureAwait(true)
+                && await this.PersistenceContextProvider.DatabaseExistsAsync(cts.Token).ConfigureAwait(true))
             {
-                return;
+                using var context = this.PersistenceContextProvider.CreateNewConfigurationContext();
+                gameConfigurationId = await context.GetDefaultGameConfigurationIdAsync(cts.Token).ConfigureAwait(true);
             }
-
-            using var context = this.PersistenceContextProvider.CreateNewConfigurationContext();
-            this.GameConfigurationId = await context.GetDefaultGameConfigurationIdAsync(cts.Token).ConfigureAwait(true);
         }
         catch
         {
-            this.GameConfigurationId = null;
+            gameConfigurationId = null;
         }
         finally
         {
-            this._onlyShowSetup = this.GameConfigurationId is null;
-            this._isLoadingConfig = false;
-            await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
+            Interlocked.Exchange(ref this._isLoadingConfigInProgress, 0);
+            await this.RenderIfAliveAsync(() =>
+            {
+                this.GameConfigurationId = gameConfigurationId;
+                this._onlyShowSetup = gameConfigurationId is null;
+                this._isLoadingConfig = false;
+            }).ConfigureAwait(false);
         }
     }
 
     private async Task CheckForUpdatesAsync()
     {
+        if (this._isDisposed)
+        {
+            return;
+        }
+
+        var availableUpdates = 0;
         try
         {
-            if (this.GameConfigurationId is null)
+            if (this.GameConfigurationId is not null)
             {
-                this._availableConfigUpdates = 0;
-                return;
+                var updates = await this.UpdateService.DetermineAvailableUpdatesAsync().ConfigureAwait(false);
+                availableUpdates = updates.Count;
             }
-
-            var updates = await this.UpdateService.DetermineAvailableUpdatesAsync().ConfigureAwait(false);
-            this._availableConfigUpdates = updates.Count;
         }
         catch
         {
-            this._availableConfigUpdates = 0;
+            availableUpdates = 0;
         }
         finally
         {
-            await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(true);
+            await this.RenderIfAliveAsync(() => this._availableConfigUpdates = availableUpdates).ConfigureAwait(true);
+        }
+    }
+
+    /// <summary>
+    /// Applies a state change and renders the menu on the dispatcher, unless the menu or the
+    /// services of its connection have already been disposed.
+    /// </summary>
+    /// <remarks>
+    /// The background loading can finish after the browser tab was closed; creating new child
+    /// components in that render would resolve services from the disposed provider.
+    /// </remarks>
+    /// <param name="update">The state change to apply before rendering.</param>
+    private async Task RenderIfAliveAsync(Action update)
+    {
+        if (this._isDisposed)
+        {
+            return;
+        }
+
+        try
+        {
+            await this.InvokeAsync(() =>
+            {
+                if (this._isDisposed)
+                {
+                    return;
+                }
+
+                // A disposed service provider means that the connection is gone; rendering new
+                // child components (e.g. NavLink or ConfigNavMenu) would fail on service injection.
+                _ = this.ServiceProvider.GetService(typeof(NavigationManager));
+                update();
+                this.StateHasChanged();
+            }).ConfigureAwait(false);
+        }
+        catch (ObjectDisposedException)
+        {
+            // The connection was closed while the background loading was running.
         }
     }
 

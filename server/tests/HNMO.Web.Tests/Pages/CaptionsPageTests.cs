@@ -172,16 +172,19 @@ public class CaptionsPageTests
         await this.CreateConfigurationAsync(designation).ConfigureAwait(false);
         var cut = this._context.Render<Captions>();
         cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain(Resources.CaptionsReviewTitle)));
-        cut.FindAll("button").Single(b => b.TextContent.Trim() == Resources.SelectNone).Click();
 
-        cut.FindAll("select")[0].Change("zh-CN");
-        cut.FindAll("select")[1].Change(nameof(CaptionChangeKind.Customized));
+        // The background check for linkable captions may still be busy in the dispatcher of the
+        // renderer when the review table is shown. Events are queued behind it then, so they are awaited.
+        await cut.FindAll("button").Single(b => b.TextContent.Trim() == Resources.SelectNone).ClickAsync().ConfigureAwait(false);
+
+        await cut.FindAll("select")[0].ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "zh-CN" }).ConfigureAwait(false);
+        await cut.FindAll("select")[1].ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = nameof(CaptionChangeKind.Customized) }).ConfigureAwait(false);
         Assert.That(cut.FindAll("tbody tr"), Has.Count.EqualTo(1));
-        cut.FindAll("button").Single(b => b.TextContent.Trim() == Resources.SelectAll).Click();
+        await cut.FindAll("button").Single(b => b.TextContent.Trim() == Resources.SelectAll).ClickAsync().ConfigureAwait(false);
         Assert.That(cut.Find("tbody input").HasAttribute("checked"), Is.True);
 
-        cut.FindAll("select")[0].Change(string.Empty);
-        cut.FindAll("select")[1].Change(string.Empty);
+        await cut.FindAll("select")[0].ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = string.Empty }).ConfigureAwait(false);
+        await cut.FindAll("select")[1].ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = string.Empty }).ConfigureAwait(false);
         Assert.That(cut.FindAll("tbody input[checked]"), Has.Count.EqualTo(1));
         using (var context = this._persistenceContextProvider.CreateNewContext())
         {
@@ -189,7 +192,7 @@ public class CaptionsPageTests
             Assert.That(monster.Designation.GetOwnTranslation(CultureInfo.GetCultureInfo("zh-CN")), Is.EqualTo("Custom Chinese"));
         }
 
-        cut.FindAll("button").Single(b => b.TextContent.Trim() == Resources.ApplySelectedChanges).Click();
+        await cut.FindAll("button").Single(b => b.TextContent.Trim() == Resources.ApplySelectedChanges).ClickAsync().ConfigureAwait(false);
         cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain(string.Format(Resources.AppliedCaptionChanges, 1))));
         using var savedContext = this._persistenceContextProvider.CreateNewContext();
         var savedMonster = (await savedContext.GetAsync<GameConfiguration>().ConfigureAwait(false)).Single().Monsters.Single();

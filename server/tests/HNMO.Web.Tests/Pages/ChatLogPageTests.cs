@@ -73,8 +73,9 @@ public sealed class ChatLogPageTests
     /// <summary>
     /// The lines show newest first with Sydney time, and the search filters by sender or text.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void ShowsLinesNewestFirstAndSearches()
+    public async Task ShowsLinesNewestFirstAndSearches()
     {
         this._context.AddAdministratorAuthorization();
         var page = this.Render();
@@ -84,11 +85,11 @@ public sealed class ChatLogPageTests
         Assert.That(rows[2].Children[0].TextContent, Is.EqualTo("2026-11-14 12:00:00"), "11 a.m. summer time in Sydney is UTC+11.");
         Assert.That(rows[1].Children[4].TextContent, Is.EqualTo("Whisper → Alice"));
 
-        page.Find("[data-testid=chat-log-search]").Input("PSST");
+        await page.Find("[data-testid=chat-log-search]").InputAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "PSST" }).ConfigureAwait(false);
         rows = page.FindAll("[data-testid=chat-log-table] tbody tr");
         Assert.That(rows.Select(r => r.Children[3].TextContent), Is.EqualTo(new[] { "Bob" }));
 
-        page.Find("[data-testid=chat-log-search]").Input("alice");
+        await page.Find("[data-testid=chat-log-search]").InputAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "alice" }).ConfigureAwait(false);
         Assert.That(page.FindAll("[data-testid=chat-log-table] tbody tr").Select(r => r.Children[3].TextContent), Is.EqualTo(new[] { "Bob", "Alice" }));
     }
 

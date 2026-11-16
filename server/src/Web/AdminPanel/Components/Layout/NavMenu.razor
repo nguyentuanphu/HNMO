@@ -14,19 +14,20 @@
     <!-- Hiding it programmatically is not a good idea here, because we want to hide it based on the width of the device/window. -->
     <div class="nav-scrollable @NavMenuCssClass">
         <ul class="nav flex-column">
-            @if (this._isLoadingConfig)
+            @* A single NavLink is kept across the loading and setup states so that finishing the
+               background loading after the connection's services were disposed does not instantiate a new component. *@
+            @if (this._isLoadingConfig || this._onlyShowSetup)
             {
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="() => NavigationHistory.Clear()">
-                        <span class="oi oi-clock" aria-hidden="true"></span> @Resources.Loading
-                    </NavLink>
-                </li>
-            }
-            else if (this._onlyShowSetup)
-            {
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="setup" @onclick="() => NavigationHistory.Clear()">
-                        <span class="oi oi-cog" aria-hidden="true"></span> @Resources.Setup
+                    <NavLink class="nav-link" href="@(this._isLoadingConfig ? string.Empty : "setup")" Match="@(this._isLoadingConfig ? NavLinkMatch.All : NavLinkMatch.Prefix)" @onclick="() => NavigationHistory.Clear()">
+                        @if (this._isLoadingConfig)
+                        {
+                            <span class="oi oi-clock" aria-hidden="true"></span> @Resources.Loading
+                        }
+                        else
+                        {
+                            <span class="oi oi-cog" aria-hidden="true"></span> @Resources.Setup
+                        }
                     </NavLink>
                 </li>
             }
