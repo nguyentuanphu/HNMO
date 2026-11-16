@@ -6328,4 +6328,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLeftoversCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = RequestState, 2 = CombineRecipe, 3 = ExchangeOffer.</param>
+    /// <param name="id">Target recipe or exchange offer identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open Combining Leftovers / Exchange NPC (F10), run a combine recipe, or exchange surplus materials.
+    /// Causes reaction on server side: The server performs the recipe/exchange and sends HnmoLeftoversState (F5 41).
+    /// </remarks>
+    public static async ValueTask SendHnmoLeftoversCommandAsync(this IConnection? connection, byte @action, string @id)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLeftoversCommandRef.GetRequiredSize(id);
+            var packet = new HnmoLeftoversCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Id = @id;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
