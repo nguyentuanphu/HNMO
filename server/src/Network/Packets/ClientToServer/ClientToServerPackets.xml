@@ -4884,6 +4884,33 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>23</SubCode>
+      <Name>HnmoTicketLogin</Name>
+      <Caption>HNMO web ticket login</Caption>
+      <Length>52</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game connects with a one-time login ticket issued on the website.</SentWhen>
+      <CausedReaction>The server redeems the ticket once and logs the player in without a password.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>String</Type>
+          <Length>10</Length>
+          <Name>Username</Name>
+          <Description>The account login name.</Description>
+        </Field>
+        <Field>
+          <Index>14</Index>
+          <Type>String</Type>
+          <Length>38</Length>
+          <Name>Ticket</Name>
+          <Description>The one-time login ticket issued on the website.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>
