@@ -355,7 +355,7 @@ public sealed partial class GameServer : IGameServer, IDisposable, IAsyncDisposa
         }
 
         var players = await this._gameContext.GetPlayersAsync().ConfigureAwait(false);
-        var player = players.FirstOrDefault(p => p.Account?.LoginName == accountName);
+        var player = players.FirstOrDefault(p => string.Equals(p.Account?.LoginName, accountName, StringComparison.OrdinalIgnoreCase));
         if (player != null)
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.DisconnectedByAdmin)).ConfigureAwait(false);
@@ -399,7 +399,7 @@ public sealed partial class GameServer : IGameServer, IDisposable, IAsyncDisposa
     public async ValueTask PlayerAlreadyLoggedInAsync(byte serverId, string loginName)
     {
         var players = await this._gameContext.GetPlayersAsync().ConfigureAwait(false);
-        var affectedPlayer = players.FirstOrDefault(p => p.Account?.LoginName == loginName);
+        var affectedPlayer = players.FirstOrDefault(p => string.Equals(p.Account?.LoginName, loginName, StringComparison.OrdinalIgnoreCase));
 
         if (affectedPlayer is not null)
         {
@@ -597,20 +597,18 @@ public sealed partial class GameServer : IGameServer, IDisposable, IAsyncDisposa
     private async ValueTask OnPlayerConnectedAsync(PlayerConnectedEventArgs e)
     {
         var player = e.ConntectedPlayer;
+        player.PlayerDisconnected += this.OnPlayerDisconnectedAsync;
         this._observationHandler?.Watch(player);
         await this._gameContext.AddPlayerAsync(player).ConfigureAwait(false);
         await player.InvokeViewPlugInAsync<IShowLoginWindowPlugIn>(p => p.ShowLoginWindowAsync()).ConfigureAwait(false);
         await player.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
-        e.ConntectedPlayer.PlayerDisconnected += this.OnPlayerDisconnectedAsync;
     }
 
     private async ValueTask OnPlayerDisconnectedAsync(Player remotePlayer)
     {
-        if (!remotePlayer.IsTemplatePlayer)
-        {
-            await this.SetOfflineAtLoginServerAsync(remotePlayer).ConfigureAwait(false);
-        }
-
+        // ReleaseLoginServerRegistration() is atomic and returns null when no registration is held,
+        // so always calling it ensures even edge cases (e.g. an offline-template handover) are freed.
+        await this.SetOfflineAtLoginServerAsync(remotePlayer).ConfigureAwait(false);
         await remotePlayer.DisposeAsync().ConfigureAwait(false);
     }
 
