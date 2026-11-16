@@ -795,6 +795,34 @@ internal sealed class Program : IDisposable
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)
     {
         var contextProvider = new PersistenceContextProvider(loggerFactory, changeListener);
+        if (PersistenceContextProvider.ResolveConnectionString() is { } dbConn && !string.IsNullOrWhiteSpace(dbConn))
+        {
+            PostgresDbLogRetentionStore.RegisterExporter(dbConn);
+            HNMO.GameLogic.PlugIns.Chat.ChatLog.PersistentSink = entry =>
+            {
+                _ = Task.Run(() =>
+                {
+                    try
+                    {
+                        PostgresDbLogRetentionStore.AppendChatLine(
+                            dbConn,
+                            entry.TimeUtc,
+                            entry.ServerId,
+                            entry.MapName,
+                            entry.Sender,
+                            entry.AccountId,
+                            (int)entry.Kind,
+                            entry.Receiver,
+                            entry.Text);
+                    }
+                    catch
+                    {
+                        // Avoid disrupting game chat if DB is busy or offline.
+                    }
+                });
+            };
+        }
+
         if (reinit || !await contextProvider.DatabaseExistsAsync().ConfigureAwait(false))
         {
             // The database can be provisioned externally (e.g. by a Kubernetes operator,

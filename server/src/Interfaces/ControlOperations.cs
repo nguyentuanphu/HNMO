@@ -264,6 +264,166 @@ public static class ControlOperations
         return lines.ToArray();
     }
 
+    /// <summary>
+    /// Enforces daily/weekly/monthly retention across <c>save/backups/*.zip</c> (keeping the newest backup per
+    /// calendar day, ISO week, and month up to the configured limits) and returns the remaining total size.
+    /// </summary>
+    /// <param name="saveDirectory">The <c>save/</c> directory.</param>
+    /// <param name="keepDaily">Daily backups to keep (default 7).</param>
+    /// <param name="keepWeekly">Weekly backups to keep (default 4).</param>
+    /// <param name="keepMonthly">Monthly backups to keep (default 3).</param>
+    /// <returns>Summary of kept and removed archives.</returns>
+    public static BackupRetentionSummary ApplyBackupRetention(
+        string saveDirectory,
+        int keepDaily = 7,
+        int keepWeekly = 4,
+        int keepMonthly = 3)
+    {
+        var backupsDir = Path.Combine(saveDirectory, "backups");
+        if (!Directory.Exists(backupsDir))
+        {
+            return new BackupRetentionSummary(0, 0, 0);
+        }
+
+        var files = Directory.GetFiles(backupsDir, "*.zip", SearchOption.TopDirectoryOnly)
+            .Select(p => new FileInfo(p))
+            .OrderByDescending(f => f.LastWriteTimeUtc)
+            .ToList();
+        if (files.Count == 0)
+        {
+            return new BackupRetentionSummary(0, 0, 0);
+        }
+
+        var tz = GetSydneyTimeZone();
+        var keep = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var seenDays = new HashSet<DateOnly>();
+        var seenWeeks = new HashSet<(int Year, int Week)>();
+        var seenMonths = new HashSet<(int Year, int Month)>();
+        var keptDays = 0;
+        var keptWeeks = 0;
+        var keptMonths = 0;
+
+        foreach (var file in files)
+        {
+            var local = TimeZoneInfo.ConvertTime(new DateTimeOffset(file.LastWriteTimeUtc, TimeSpan.Zero), tz).DateTime;
+            var day = DateOnly.FromDateTime(local);
+            var week = (System.Globalization.ISOWeek.GetYear(local), System.Globalization.ISOWeek.GetWeekOfYear(local));
+            var month = (local.Year, local.Month);
+
+            var isNewDay = seenDays.Add(day);
+            var isNewWeek = seenWeeks.Add(week);
+            var isNewMonth = seenMonths.Add(month);
+
+            var selected = false;
+            if (isNewDay && keptDays < Math.Max(1, keepDaily))
+            {
+                keptDays++;
+                selected = true;
+            }
+
+            if (isNewWeek && keptWeeks < keepWeekly)
+            {
+                keptWeeks++;
+                selected = true;
+            }
+
+            if (isNewMonth && keptMonths < keepMonthly)
+            {
+                keptMonths++;
+                selected = true;
+            }
+
+            if (selected)
+            {
+                keep.Add(file.FullName);
+            }
+        }
+
+        var removed = 0;
+        long totalBytes = 0;
+        foreach (var file in files)
+        {
+            if (!keep.Contains(file.FullName))
+            {
+                try
+                {
+                    file.Delete();
+                    removed++;
+                }
+                catch (IOException)
+                {
+                    totalBytes += file.Length;
+                }
+            }
+            else
+            {
+                totalBytes += file.Length;
+            }
+        }
+
+        return new BackupRetentionSummary(keep.Count, totalBytes, removed);
+    }
+
+    /// <summary>Computes drive free space and save/logs/backups/database sizes.</summary>
+    /// <param name="saveDirectory">The <c>save/</c> directory.</param>
+    /// <param name="lowDiskWarningMb">Threshold (MB) below which <see cref="DiskUsageReport.IsLowDisk"/> is true.</param>
+    /// <returns>Disk usage report.</returns>
+    public static DiskUsageReport GetDiskUsage(string saveDirectory, int lowDiskWarningMb = 2048)
+    {
+        var fullSave = Path.GetFullPath(saveDirectory);
+        var root = Path.GetPathRoot(fullSave) ?? fullSave;
+        long totalDrive = 0;
+        long freeDrive = 0;
+        try
+        {
+            var drive = new DriveInfo(root);
+            if (drive.IsReady)
+            {
+                totalDrive = drive.TotalSize;
+                freeDrive = drive.AvailableFreeSpace;
+            }
+        }
+        catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException)
+        {
+        }
+
+        var saveBytes = SumDirectoryBytes(fullSave);
+        var logsBytes = SumDirectoryBytes(Path.Combine(fullSave, "logs"));
+        var backupsBytes = SumDirectoryBytes(Path.Combine(fullSave, "backups"));
+        var databaseBytes = SumDirectoryBytes(Path.Combine(fullSave, "database"));
+        var thresholdBytes = Math.Max(1L, lowDiskWarningMb) * 1024L * 1024L;
+        var isLow = totalDrive > 0 && (freeDrive < thresholdBytes || (freeDrive * 20L) < totalDrive);
+        return new DiskUsageReport(root, totalDrive, freeDrive, saveBytes, logsBytes, backupsBytes, databaseBytes, lowDiskWarningMb, isLow);
+    }
+
+    private static long SumDirectoryBytes(string path)
+    {
+        if (!Directory.Exists(path))
+        {
+            return 0;
+        }
+
+        long sum = 0;
+        try
+        {
+            foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    sum += new FileInfo(file).Length;
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
+        catch (IOException)
+        {
+        }
+
+        return sum;
+    }
+
     private static TimeZoneInfo GetSydneyTimeZone()
     {
         try

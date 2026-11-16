@@ -95,15 +95,43 @@
       </div>
     </section>
 
+    <section class="card" id="diskCard">
+      <h2 data-i18n="diskTitle">Disk Usage &amp; Database Maintenance</h2>
+      <div id="diskWarning" class="msg err" style="display:none"></div>
+      <div id="diskSummary" style="color:var(--muted);font-size:0.9rem;margin-bottom:10px"></div>
+      <div class="row">
+        <button type="button" id="btnVacuum" data-i18n="btnVacuum">Run PostgreSQL VACUUM ANALYZE</button>
+        <span id="maintStatus" style="color:var(--muted);font-size:0.85rem"></span>
+      </div>
+    </section>
+
     <section class="card">
       <h2 data-i18n="backupTitle">Backup &amp; Restore (Sydney time)</h2>
       <div class="row" style="margin-bottom:10px">
         <button type="button" id="btnBackup" class="primary" data-i18n="btnBackup">Backup now</button>
+        <span id="backupTotals" style="color:var(--muted);font-size:0.85rem"></span>
       </div>
       <table>
         <thead><tr><th data-i18n="colFile">File</th><th data-i18n="colTime">Created (Sydney)</th><th data-i18n="colSize">Size</th><th></th></tr></thead>
         <tbody id="backupRows"></tbody>
       </table>
+    </section>
+
+    <section class="card" id="retentionCard">
+      <h2 data-i18n="retentionTitle">Log &amp; Backup Retention Settings</h2>
+      <div class="grid2">
+        <div><label data-i18n="lblMaxLogDays" title="Days to keep rotated .log.gz files">Log retention (days)</label><input id="cfgMaxLogDays" type="number" min="1" max="3650" value="14" /></div>
+        <div><label data-i18n="lblMaxLogMb" title="Maximum total size of save/logs folder">Max logs folder (MB)</label><input id="cfgMaxLogMb" type="number" min="10" max="100000" value="200" /></div>
+        <div><label data-i18n="lblDbDays" title="Days before DB chat/audit logs are exported & purged">DB log retention (days)</label><input id="cfgDbDays" type="number" min="1" max="3650" value="90" /></div>
+        <div><label data-i18n="lblLowDiskMb" title="Warn when free disk space drops below MB">Low disk warning (MB)</label><input id="cfgLowDiskMb" type="number" min="64" max="1000000" value="2048" /></div>
+        <div><label data-i18n="lblKeepDaily">Daily backups kept</label><input id="cfgKeepDaily" type="number" min="1" max="365" value="7" /></div>
+        <div><label data-i18n="lblKeepWeekly">Weekly backups kept</label><input id="cfgKeepWeekly" type="number" min="0" max="104" value="4" /></div>
+        <div><label data-i18n="lblKeepMonthly">Monthly backups kept</label><input id="cfgKeepMonthly" type="number" min="0" max="120" value="3" /></div>
+        <div><label data-i18n="lblVacuumHours">Vacuum interval (hours)</label><input id="cfgVacuumHours" type="number" min="1" max="720" value="24" /></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" id="btnSaveMaint" class="primary" data-i18n="btnSaveMaint">Save retention settings</button>
+      </div>
     </section>
 
     <section class="card">
@@ -115,7 +143,13 @@
     </section>
 
     <section class="card">
-      <h2 data-i18n="logsTitle">Live log</h2>
+      <h2 data-i18n="logsTitle">Logs (View / Search / Download)</h2>
+      <div class="row" style="margin-bottom:10px">
+        <select id="logFileSelect" style="max-width:260px"><option value="all">All logs</option></select>
+        <input id="logSearch" type="text" placeholder="Search logs..." style="max-width:260px" />
+        <button type="button" id="btnLogSearch" data-i18n="btnSearchLogs">Search</button>
+        <button type="button" id="btnLogDownload" data-i18n="btnDownloadLog">Download</button>
+      </div>
       <pre id="logOutput"></pre>
     </section>
   </div>
@@ -144,13 +178,27 @@
         btnOpenAdmin: 'Open admin panel',
         systemTitle: 'Startup & Service (VPS)',
         backupTitle: 'Backup & Restore (Sydney time)',
+        diskTitle: 'Disk Usage & Database Maintenance',
+        btnVacuum: 'Run PostgreSQL VACUUM ANALYZE',
+        retentionTitle: 'Log & Backup Retention Settings',
+        lblMaxLogDays: 'Log retention (days)',
+        lblMaxLogMb: 'Max logs folder (MB)',
+        lblDbDays: 'DB log retention (days)',
+        lblLowDiskMb: 'Low disk warning (MB)',
+        lblKeepDaily: 'Daily backups kept',
+        lblKeepWeekly: 'Weekly backups kept',
+        lblKeepMonthly: 'Monthly backups kept',
+        lblVacuumHours: 'Vacuum interval (hours)',
+        btnSaveMaint: 'Save retention settings',
         btnBackup: 'Backup now',
         colFile: 'File',
         colTime: 'Created (Sydney)',
         colSize: 'Size',
         updatesTitle: 'Updates',
         btnCheckUpdates: 'Check for updates',
-        logsTitle: 'Live log',
+        logsTitle: 'Logs (View / Search / Download)',
+        btnSearchLogs: 'Search',
+        btnDownloadLog: 'Download',
       },
       vi: {
         title: 'Bảng điều khiển HNMO',
@@ -174,13 +222,27 @@
         btnOpenAdmin: 'Mở trang quản trị',
         systemTitle: 'Khởi động & Dịch vụ (VPS)',
         backupTitle: 'Sao lưu & Khôi phục (giờ Sydney)',
+        diskTitle: 'Dung lượng ổ đĩa & Bảo trì CSDL',
+        btnVacuum: 'Chạy PostgreSQL VACUUM ANALYZE',
+        retentionTitle: 'Cài đặt Lưu trữ Nhật ký & Sao lưu',
+        lblMaxLogDays: 'Giữ nhật ký (ngày)',
+        lblMaxLogMb: 'Giới hạn thư mục log (MB)',
+        lblDbDays: 'Giữ log chat/audit CSDL (ngày)',
+        lblLowDiskMb: 'Cảnh báo đầy đĩa (MB)',
+        lblKeepDaily: 'Số bản sao lưu hằng ngày',
+        lblKeepWeekly: 'Số bản sao lưu hằng tuần',
+        lblKeepMonthly: 'Số bản sao lưu hằng tháng',
+        lblVacuumHours: 'Chu kỳ Vacuum (giờ)',
+        btnSaveMaint: 'Lưu cài đặt lưu trữ',
         btnBackup: 'Sao lưu ngay',
         colFile: 'Tệp',
         colTime: 'Thời gian (Sydney)',
         colSize: 'Dung lượng',
         updatesTitle: 'Cập nhật',
         btnCheckUpdates: 'Kiểm tra cập nhật',
-        logsTitle: 'Nhật ký trực tiếp',
+        logsTitle: 'Nhật ký (Xem / Tìm / Tải xuống)',
+        btnSearchLogs: 'Tìm kiếm',
+        btnDownloadLog: 'Tải xuống',
       }
     };
 
@@ -234,6 +296,39 @@
           ? (lang === 'vi' ? 'Gỡ bỏ dịch vụ hệ thống' : 'Remove system service')
           : (lang === 'vi' ? 'Cài làm dịch vụ hệ thống' : 'Install as a service');
 
+        const fmtMb = (b) => `${(Number(b || 0) / (1024 * 1024)).toFixed(1)} MB`;
+        const fmtGb = (b) => `${(Number(b || 0) / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+        if (s.disk) {
+          document.getElementById('diskSummary').textContent = lang === 'vi'
+            ? `Ổ đĩa (${s.disk.driveRoot}): Trống ${fmtGb(s.disk.freeDriveBytes)} / ${fmtGb(s.disk.totalDriveBytes)} | save/: ${fmtMb(s.disk.saveBytes)} (logs: ${fmtMb(s.disk.logsBytes)}, backups: ${fmtMb(s.disk.backupsBytes)}, db: ${fmtMb(s.disk.databaseBytes)})`
+            : `Drive (${s.disk.driveRoot}): Free ${fmtGb(s.disk.freeDriveBytes)} / ${fmtGb(s.disk.totalDriveBytes)} | save/: ${fmtMb(s.disk.saveBytes)} (logs: ${fmtMb(s.disk.logsBytes)}, backups: ${fmtMb(s.disk.backupsBytes)}, db: ${fmtMb(s.disk.databaseBytes)})`;
+          const warn = document.getElementById('diskWarning');
+          warn.style.display = s.disk.isLowDisk ? 'block' : 'none';
+          warn.textContent = lang === 'vi'
+            ? `Cảnh báo: Dung lượng ổ đĩa trống thấp (< ${s.disk.lowDiskWarningMb} MB)!`
+            : `Warning: Low free disk space (< ${s.disk.lowDiskWarningMb} MB)!`;
+        }
+
+        document.getElementById('maintStatus').textContent = [
+          s.lastAutoBackupSydney ? `${lang === 'vi' ? 'Sao lưu tự động gần nhất' : 'Last auto backup'}: ${s.lastAutoBackupSydney}` : null,
+          s.lastVacuumSydney ? `VACUUM: ${s.lastVacuumSydney}` : null,
+        ].filter(Boolean).join(' · ');
+
+        if (s.maintenanceSettings && document.activeElement?.closest('#retentionCard') === null) {
+          const ms = s.maintenanceSettings;
+          document.getElementById('cfgMaxLogDays').value = ms.maxLogDays;
+          document.getElementById('cfgMaxLogMb').value = ms.maxLogTotalMb;
+          document.getElementById('cfgDbDays').value = ms.dbLogRetentionDays;
+          document.getElementById('cfgLowDiskMb').value = ms.lowDiskWarningMb;
+          document.getElementById('cfgKeepDaily').value = ms.backupKeepDaily;
+          document.getElementById('cfgKeepWeekly').value = ms.backupKeepWeekly;
+          document.getElementById('cfgKeepMonthly').value = ms.backupKeepMonthly;
+          document.getElementById('cfgVacuumHours').value = ms.vacuumIntervalHours;
+        }
+
+        document.getElementById('backupTotals').textContent =
+          `${(s.backups || []).length} archives · ${fmtMb(s.backupTotalBytes)} (7 daily / 4 weekly / 3 monthly)`;
+
         const tbody = document.getElementById('backupRows');
         tbody.innerHTML = '';
         for (const b of s.backups || []) {
@@ -252,19 +347,50 @@
           };
         });
 
-        const logs = await api('/api/control/logs');
-        document.getElementById('logOutput').textContent = [...(logs.server || []), ...(logs.database || [])].join('\n');
+        await refreshLogs();
       } catch (e) {
         showMsg(e.message, true);
       }
     }
 
+    async function refreshLogs() {
+      const sel = document.getElementById('logFileSelect');
+      const file = sel.value || 'all';
+      const q = document.getElementById('logSearch').value || '';
+      const logs = await api(`/api/control/logs?file=${encodeURIComponent(file)}&q=${encodeURIComponent(q)}&lines=200`);
+      if (logs.files) {
+        const current = sel.value || 'all';
+        sel.innerHTML = `<option value="all">${lang === 'vi' ? 'Tất cả nhật ký' : 'All logs'}</option>` +
+          logs.files.map((f) => `<option value="${f.fileName}">${f.fileName} (${Math.max(1, Math.round(f.sizeBytes / 1024))} KB)</option>`).join('');
+        sel.value = [...sel.options].some((o) => o.value === current) ? current : 'all';
+      }
+      document.getElementById('logOutput').textContent = (logs.lines || [...(logs.server || []), ...(logs.database || [])]).join('\n');
+    }
+
+    document.getElementById('btnLogSearch').onclick = () => refreshLogs().catch((e) => showMsg(e.message, true));
+    document.getElementById('logFileSelect').onchange = () => refreshLogs().catch((e) => showMsg(e.message, true));
+    document.getElementById('btnLogDownload').onclick = () => {
+      const file = document.getElementById('logFileSelect').value;
+      const target = (!file || file === 'all') ? 'server.log' : file;
+      window.location.href = `/api/control/logs/download?file=${encodeURIComponent(target)}`;
+    };
+    document.getElementById('btnVacuum').onclick = () => api('/api/control/vacuum', 'POST').then(() => { showMsg('VACUUM ANALYZE complete.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnSaveMaint').onclick = () => api('/api/control/maintenance-settings', 'POST', {
+      maxLogDays: Number(document.getElementById('cfgMaxLogDays').value),
+      maxLogTotalMb: Number(document.getElementById('cfgMaxLogMb').value),
+      dbLogRetentionDays: Number(document.getElementById('cfgDbDays').value),
+      lowDiskWarningMb: Number(document.getElementById('cfgLowDiskMb').value),
+      backupKeepDaily: Number(document.getElementById('cfgKeepDaily').value),
+      backupKeepWeekly: Number(document.getElementById('cfgKeepWeekly').value),
+      backupKeepMonthly: Number(document.getElementById('cfgKeepMonthly').value),
+      vacuumIntervalHours: Number(document.getElementById('cfgVacuumHours').value),
+    }).then(() => { showMsg(lang === 'vi' ? 'Đã lưu cài đặt lưu trữ.' : 'Retention settings saved.'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnStart').onclick = () => api('/api/control/start', 'POST').then(() => { showMsg('Starting...'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnStop').onclick = () => api('/api/control/stop', 'POST').then(() => { showMsg('Stopped.'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnRestart').onclick = () => api('/api/control/restart', 'POST').then(() => { showMsg('Restarting...'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnAutoStart').onclick = () => api('/api/control/autostart', 'POST', { enabled: !(currentStatus && currentStatus.autoStartEnabled) }).then(refresh).catch((e) => showMsg(e.message, true));
     document.getElementById('btnService').onclick = () => api('/api/control/service', 'POST', { action: (currentStatus && currentStatus.serviceInstalled) ? 'remove' : 'install' }).then(refresh).catch((e) => showMsg(e.message, true));
-    document.getElementById('btnBackup').onclick = () => api('/api/control/backup', 'POST').then((b) => { showMsg(`Backup created: ${b.fileName}`); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnBackup').onclick = () => api('/api/control/backup', 'POST').then((res) => { const b = res.backup || res; showMsg(`Backup created: ${b.fileName}`); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnUpdates').onclick = async () => {
       try {
         const u = await api('/api/control/updates');

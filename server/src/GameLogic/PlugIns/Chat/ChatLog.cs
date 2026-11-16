@@ -43,6 +43,9 @@ public sealed class ChatLog
         this.Capacity = capacity;
     }
 
+    /// <summary>Gets or sets optional persistent sink invoked whenever a line is added to <see cref="Shared"/>.</summary>
+    public static Action<ChatLogEntry>? PersistentSink { get; set; }
+
     /// <summary>
     /// Gets the chat log of this process.
     /// </summary>
@@ -79,6 +82,11 @@ public sealed class ChatLog
             while (this._entries.Count > Math.Max(1, this.Capacity))
             {
                 this._entries.Dequeue();
+            }
+
+            if (ReferenceEquals(this, Shared))
+            {
+                PersistentSink?.Invoke(entry);
             }
 
             return entry;
