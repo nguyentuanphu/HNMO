@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/account-safety"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -8,6 +9,8 @@
 <PageTitle>HNMO: @Resources.AccountSafetyPage</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.AccountSafetyPage" />
 <h1>@Resources.AccountSafetyPage</h1>
+<PageHelp Text="@HelpResources.PageHelpTextAccountSafety" />
+
 <p class="text-muted">@T("The second password is the account's vault PIN (4 digits). When an account has one, the actions switched on here need it once per session: the game's vault lock, /unlock 1234, or the web game's prompt. Players set it on the account page or at the vault. Locked items can't be traded, sold, dropped, put in a personal store or mixed; an unlock needs the second password and waits. Times are Sydney time. Players: /unlock PIN, /lockitem CELL, /lockitem list, /unlockitem CELL PIN.", "Mật khẩu cấp 2 là mã PIN hòm đồ của tài khoản (4 chữ số). Khi tài khoản có mật khẩu này, các thao tác được bật ở đây cần nhập một lần mỗi phiên: ổ khóa hòm đồ trong game, /unlock 1234 hoặc hộp nhập của web game. Người chơi đặt mật khẩu trên trang tài khoản hoặc ở hòm đồ. Vật phẩm bị khóa không thể giao dịch, bán, vứt, bày bán hay ép; mở khóa cần mật khẩu cấp 2 và phải chờ. Thời gian theo giờ Sydney. Người chơi: /unlock PIN, /lockitem Ô, /lockitem list, /unlockitem Ô PIN.")</p>
 
 @if (this._isLoading)
@@ -117,7 +120,7 @@ else
     </section>
 
     <p>
-        <button class="btn btn-primary" id="safety-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@T("Save", "Lưu")</button>
+        <button title="@HelpResources.PageHelpHintSave" class="btn btn-primary" id="safety-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@T("Save", "Lưu")</button>
     </p>
 
     <section class="card mb-3" id="safety-account">
@@ -125,7 +128,7 @@ else
             <h2 class="h5">@T("An account", "Một tài khoản")</h2>
             <div class="input-group mb-2" style="max-width: 30rem;">
                 <input class="form-control" id="safety-account-name" list="safety-known" placeholder="@T("Account name", "Tên tài khoản")" @bind="this._account" />
-                <button class="btn btn-outline-primary" id="safety-account-show" @onclick="this.ShowAccountAsync">@T("Show", "Xem")</button>
+                <button title="@HelpResources.PageHelpHintRefresh" class="btn btn-outline-primary" id="safety-account-show" @onclick="this.ShowAccountAsync">@T("Show", "Xem")</button>
             </div>
             <datalist id="safety-known">
                 @foreach (var known in this._engine?.KnownAccounts(null, 300) ?? Array.Empty<string>())
@@ -148,11 +151,11 @@ else
                     {
                         <span class="text-muted"> (@T("changed", "đổi lúc") @this.Sydney(changed))</span>
                     }
-                    <button class="btn btn-sm btn-outline-danger ms-2" id="safety-reset-pin" disabled="@(this._isSaving || this._hasPin != true)" @onclick="this.ResetPinAsync">@T("Reset the second password", "Xóa mật khẩu cấp 2")</button>
+                    <button title="@HelpResources.PageHelpHintReset" class="btn btn-sm btn-outline-danger ms-2" id="safety-reset-pin" disabled="@(this._isSaving || this._hasPin != true)" @onclick="this.ResetPinAsync">@T("Reset the second password", "Xóa mật khẩu cấp 2")</button>
                     @if (engine.LockedOutUntil(login, now) is { } until)
                     {
                         <span class="ms-2 text-danger">@T("Locked out until", "Bị khóa nhập đến") @this.Sydney(until)</span>
-                        <button class="btn btn-sm btn-outline-secondary ms-2" id="safety-clear-lockout" @onclick="this.ClearLockout">@T("Clear", "Gỡ")</button>
+                        <button title="@HelpResources.PageHelpHintClear" class="btn btn-sm btn-outline-secondary ms-2" id="safety-clear-lockout" @onclick="this.ClearLockout">@T("Clear", "Gỡ")</button>
                     }
                 </p>
 
@@ -167,7 +170,7 @@ else
                                 <td>@(itemLock.Character.Length == 0 ? T("vault", "hòm đồ") : itemLock.Character)</td>
                                 <td>@this.Sydney(itemLock.LockedAtUtc)</td>
                                 <td>@(itemLock.UnlockAtUtc is { } at ? this.Sydney(at) : "-")</td>
-                                <td><button class="btn btn-sm btn-outline-secondary safety-unlock" @onclick="() => this.RemoveLock(itemLock.ItemId)">@T("Unlock now", "Mở khóa ngay")</button></td>
+                                <td><button title="@HelpResources.PageHelpHintDelete" class="btn btn-sm btn-outline-secondary safety-unlock" @onclick="() => this.RemoveLock(itemLock.ItemId)">@T("Unlock now", "Mở khóa ngay")</button></td>
                             </tr>
                         }
                     </tbody>

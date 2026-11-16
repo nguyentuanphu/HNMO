@@ -1,9 +1,12 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/login"
 @layout HNMO.Web.AdminPanel.Components.Layout.LoginLayout
 @attribute [AllowAnonymous]
 @using HNMO.Web.AdminPanel.Properties
 
 <PageTitle>HNMO: @Resources.Login</PageTitle>
+<PageHelp Text="@HelpResources.PageHelpTextLogin" />
+
 
 <div class="card shadow-sm">
     <div class="card-body">
@@ -28,7 +31,7 @@
                 {
                     <div class="alert alert-danger py-2" role="alert">@passwordError</div>
                 }
-                <button type="submit" class="btn btn-primary w-100" disabled="@this._isBusy">@Resources.SignIn</button>
+                <button title="@HelpResources.PageHelpHintSignIn" type="submit" class="btn btn-primary w-100" disabled="@this._isBusy">@Resources.SignIn</button>
             </EditForm>
         }
         else
@@ -47,12 +50,12 @@
                 {
                     <div class="alert alert-danger py-2" role="alert">@codeError</div>
                 }
-                <button type="submit" class="btn btn-primary w-100 mb-2" disabled="@this._isBusy">@Resources.Verify</button>
+                <button title="@HelpResources.PageHelpHintVerify" type="submit" class="btn btn-primary w-100 mb-2" disabled="@this._isBusy">@Resources.Verify</button>
             </EditForm>
-            <button type="button" class="btn btn-link btn-sm p-0" @onclick="@this.ToggleRecoveryCode">
+            <button title="@HelpResources.PageHelpHintExpand" type="button" class="btn btn-link btn-sm p-0" @onclick="@this.ToggleRecoveryCode">
                 @(this._twoFactorInput.UseRecoveryCode ? Resources.UseAuthenticatorCode : Resources.UseRecoveryCode)
             </button>
-            <button type="button" class="btn btn-link btn-sm p-0 float-end" @onclick="@this.BackToPasswordStep">@Resources.Back</button>
+            <button title="@HelpResources.PageHelpHintPrevious" type="button" class="btn btn-link btn-sm p-0 float-end" @onclick="@this.BackToPasswordStep">@Resources.Back</button>
         }
     </div>
 </div>

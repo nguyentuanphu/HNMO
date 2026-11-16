@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/leaderboards"
 
 @using HNMO.DataModel.Configuration
@@ -7,6 +8,8 @@
 <PageTitle>HNMO: @Resources.Leaderboards</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Leaderboards" />
 <h1>@Resources.Leaderboards</h1>
+<PageHelp Text="@HelpResources.PageHelpTextLeaderboards" />
+
 
 <p class="text-muted">@Resources.LeaderboardsDescription</p>
 
@@ -26,7 +29,7 @@ else
                 @foreach (var miniGameType in this.MiniGameTypes)
                 {
                     <li class="nav-item">
-                        <button type="button" class="nav-link @(miniGameType == this._selectedType ? "active" : string.Empty)" @onclick="() => this.SelectTypeAsync(miniGameType)">
+                        <button title="@HelpResources.PageHelpHintSelect" type="button" class="nav-link @(miniGameType == this._selectedType ? "active" : string.Empty)" @onclick="() => this.SelectTypeAsync(miniGameType)">
                             @(Resources.ResourceManager.GetString($"LeaderboardMiniGame_{miniGameType}", Resources.Culture) ?? CaptionHelper.SeparateWords(miniGameType.ToString()))
                         </button>
                     </li>

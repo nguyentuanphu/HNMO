@@ -1,4 +1,5 @@
-﻿@using HNMO.Web.AdminPanel.Properties
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@using HNMO.Web.AdminPanel.Properties
 @using HNMO.Web.Shared.Services
 @using Microsoft.Extensions.Options
 
@@ -89,7 +90,7 @@
                 <div class="alert alert-warning" role="alert">
                     <h2 class="h5">@Resources.TwoFactorRequiredTitle</h2>
                     <p class="mb-2">@Resources.TwoFactorRequiredDescription</p>
-                    <a class="btn btn-primary btn-sm" href="account/security">@Resources.SetUpAuthenticator</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary btn-sm" href="account/security">@Resources.SetUpAuthenticator</a>
                 </div>
             }
             else

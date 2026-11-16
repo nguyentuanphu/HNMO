@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/guild/{GuildId:guid}"
 @using HNMO.DataModel
 @using HNMO.Web.Shared.Models;
@@ -8,18 +9,20 @@
     <PageTitle>HNMO: @Resources.Guild</PageTitle>
     <Breadcrumb IsFirstFromRoot="false" Caption="@Resources.Guild" />
     <div class="alert alert-warning" role="alert">@Resources.GuildNotFound</div>
-    <NavLink href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
+    <NavLink title="@HelpResources.PageHelpHintNavigate" href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
 }
 else if (this._guild is { } guild)
 {
     <PageTitle>HNMO: @guild.Name</PageTitle>
     <Breadcrumb IsFirstFromRoot="false" Caption="@guild.Name" />
     <div class="d-flex flex-row align-items-center gap-3">
-        <NavLink href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
+        <NavLink title="@HelpResources.PageHelpHintNavigate" href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
         <GuildLogo Logo="@guild.Logo" Size="32" class="border rounded-1" />
         <h1 class="mb-0">@guild.Name</h1>
+<PageHelp Text="@HelpResources.PageHelpTextGuild" />
+
         <AuthorizeView Policy="@AdminPolicies.Administrator">
-            <NavLink href="@($"edit-config/{typeof(HNMO.DataModel.Entities.Guild).FullName}/{this.GuildId}")" class="btn btn-outline-primary ms-auto">
+            <NavLink title="@HelpResources.PageHelpHintNavigate" href="@($"edit-config/{typeof(HNMO.DataModel.Entities.Guild).FullName}/{this.GuildId}")" class="btn btn-outline-primary ms-auto">
                 <span class="oi oi-pencil" aria-hidden="true"></span> @Resources.GuildEditData
             </NavLink>
         </AuthorizeView>

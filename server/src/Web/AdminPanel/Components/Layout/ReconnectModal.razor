@@ -1,4 +1,5 @@
-﻿@using HNMO.Web.AdminPanel.Properties
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@using HNMO.Web.AdminPanel.Properties
 
 <script type="module" src="@Assets[$"_content/{typeof(ReconnectModal).Assembly.GetName().Name}/Components/Layout/ReconnectModal.razor.js"]"></script>
 
@@ -17,13 +18,13 @@
         <p class="components-reconnect-failed-visible">
             @Resources.ReconnectFailed
         </p>
-        <button id="components-reconnect-button" class="components-reconnect-failed-visible">
+        <button title="@HelpResources.PageHelpHintReconnect" id="components-reconnect-button" class="components-reconnect-failed-visible">
             @Resources.ReconnectRetry
         </button>
         <p class="components-pause-visible">
             @Resources.ReconnectPaused
         </p>
-        <button id="components-resume-button" class="components-pause-visible">
+        <button title="@HelpResources.PageHelpHintReconnect" id="components-resume-button" class="components-pause-visible">
             @Resources.ReconnectResume
         </button>
         <p class="components-resume-failed-visible">

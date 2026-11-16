@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/resets-relife"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @Resources.ResetsRelifePage</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ResetsRelifePage" />
 <h1>@Resources.ResetsRelifePage</h1>
+<PageHelp Text="@HelpResources.PageHelpTextResetsRelife" />
+
 <p class="text-muted">@T("Reset tiers, VIP resets, relife (grand reset), the delegated reset during offline leveling and what the website's account page may do. While this is on, the reset NPC and /reset follow these rules. Days and months are Sydney time. Players: /reset, /reset info, /relife, /autoreset on|off (/uythac).", "Các mức reset, reset VIP, relife (đại reset), ủy thác reset khi treo máy offline và những gì trang tài khoản trên website được làm. Khi bật, NPC reset và /reset làm theo các quy tắc này. Ngày và tháng theo giờ Sydney. Người chơi: /reset, /reset info, /relife, /autoreset on|off (/uythac).")</p>
 
 @if (this._isLoading)
@@ -134,13 +137,13 @@ else
                                 <td><input class="form-check-input tier-clear" type="checkbox" @bind="row.Tier.ClearStats" /></td>
                                 <td><input class="form-control form-control-sm tier-daily" type="number" min="0" style="width:5em" @bind="row.Tier.DailyLimit" /></td>
                                 <td><input class="form-control form-control-sm tier-items" style="width:10em" @bind="row.ItemsText" placeholder="14:13:0:1" /></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger tier-remove" @onclick="() => this._tiers.RemoveAt(i)">@T("Remove", "Xóa")</button></td>
+                                <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger tier-remove" @onclick="() => this._tiers.RemoveAt(i)">@T("Remove", "Xóa")</button></td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="resets-add-tier" @onclick="this.AddTier">@T("Add a tier", "Thêm mức")</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-outline-secondary" id="resets-add-tier" @onclick="this.AddTier">@T("Add a tier", "Thêm mức")</button>
         </div>
     </section>
 
@@ -169,7 +172,7 @@ else
                 <div class="col-sm-3"><label class="form-label" for="resets-vip-account">@T("Account", "Tài khoản")</label><input class="form-control" id="resets-vip-account" @bind="this._vipAccount" /></div>
                 <div class="col-sm-2"><label class="form-label" for="resets-vip-value">@T("VIP value", "Giá trị VIP")</label><input class="form-control" type="number" min="1" id="resets-vip-value" @bind="this._vipValue" /></div>
                 <div class="col-sm-2"><label class="form-label" for="resets-vip-days">@T("Days", "Số ngày")</label><input class="form-control" type="number" min="1" id="resets-vip-days" @bind="this._vipDays" /></div>
-                <div class="col-sm-3"><button type="button" class="btn btn-outline-primary" id="resets-vip-give" disabled="@this._isSaving" @onclick="this.GiveVipAsync">@T("Give VIP (account offline)", "Cấp VIP (tài khoản đang offline)")</button></div>
+                <div class="col-sm-3"><button title="@HelpResources.PageHelpHintGrant" type="button" class="btn btn-outline-primary" id="resets-vip-give" disabled="@this._isSaving" @onclick="this.GiveVipAsync">@T("Give VIP (account offline)", "Cấp VIP (tài khoản đang offline)")</button></div>
             </div>
             @if (this._vipMessage is { } vipMessage)
             {
@@ -266,7 +269,7 @@ else
     </section>
 
     <div class="mb-4">
-        <button type="button" class="btn btn-primary" id="resets-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="resets-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
     </div>
 
     <section class="card mb-3" id="resets-rankings">

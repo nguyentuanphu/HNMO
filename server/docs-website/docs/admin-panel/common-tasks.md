@@ -115,3 +115,24 @@ See [Connect a game client](../getting-started/game-client.md#disconnects-after-
 
 For a throwaway test server, `-demo` starts the server with in-memory data which
 is recreated at each start and never persisted.
+
+### Page help / Hướng dẫn trên từng trang
+
+Use **How to use this page** (the question-mark button) to show the purpose of the
+page, the settings to change and what to leave alone. Open it again to hide it.
+Hover over an action button for its hint. Read the page's explanation before changing
+advanced values. The merchant editor and the separate API-key help keep their own
+instructions; host/control and new feature pages are maintained on their own branches.
+
+Chọn **Cách dùng trang này** (nút dấu hỏi) để xem mục đích của trang, các cài đặt nên
+chỉnh và những mục cần giữ nguyên. Chọn lại để ẩn hướng dẫn. Di chuột lên nút thao tác
+để xem chú thích. Hãy đọc hướng dẫn trước khi đổi giá trị nâng cao. Trang cửa hàng và
+hướng dẫn API key có phần riêng; trang host, điều khiển và các tính năng mới được cập
+nhật trên nhánh riêng.
+
+For a new admin page, append its English and Vietnamese help resource and matching
+Designer property, then add `<PageHelp Text="@Resources.YourPageHelpText" />` near the
+heading. The component supplies the localized button, hover hint, disclosure state,
+question-mark icon and unique accessible target. Supply plain text explaining the
+page's purpose, what the host should change and what should stay unchanged. It does
+not save anything or change permissions. Keep action hints specific to the action.

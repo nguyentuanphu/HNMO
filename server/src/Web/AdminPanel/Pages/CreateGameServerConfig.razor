@@ -1,4 +1,5 @@
-﻿@page "/create-game-server"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/create-game-server"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
 @using HNMO.Web.AdminPanel.Properties
@@ -8,6 +9,8 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb Caption="@title"/>
 <h1>@title</h1>
+<PageHelp Text="@HelpResources.PageHelpTextCreateGameServerConfig" />
+
 
 
 @if (this._viewModel is null)

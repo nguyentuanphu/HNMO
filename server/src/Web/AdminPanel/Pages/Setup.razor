@@ -1,9 +1,12 @@
-﻿@page "/setup"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/setup"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 @using HNMO.Persistence
 @using HNMO.Web.AdminPanel.Properties
 
 <PageTitle>HNMO: @Resources.Setup</PageTitle>
+<PageHelp Text="@HelpResources.PageHelpTextSetup" />
+
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Setup"/>
 
 @if (this._updateErrorMessage is { } updateErrorMessage)
@@ -19,18 +22,18 @@ else if (!this.SetupService.CanConnectToDatabase)
 {
     <p>@Resources.DatabaseStatus: <span class="badge bg-danger">@Resources.CantConnectToTheDatabaseProbablyNotCreatedYet</span></p>
 
-    <button class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
+    <button title="@HelpResources.PageHelpHintCreate" class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
 }
 else if (!this.SetupService.IsInstalled)
 {
     <p>@Resources.DatabaseStatus: <span class="badge bg-warning text-dark">@Resources.NotCreated</span></p>
 
-    <button class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
+    <button title="@HelpResources.PageHelpHintCreate" class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
 }
 else if (this.SetupService.IsUpdateRequired)
 {
     <p>@Resources.DatabaseStatus: <span class="badge bg-warning text-dark">@Resources.UpdateRequired</span></p>
-    <button class="btn btn-primary" @onclick="this.OnUpdateClickAsync">@Resources.Update</button>
+    <button title="@HelpResources.PageHelpHintUpdate" class="btn btn-primary" @onclick="this.OnUpdateClickAsync">@Resources.Update</button>
 }
 else if (this._dataState == DataInitializationState.NotInitialized)
 {
@@ -41,7 +44,7 @@ else if (this._dataState == DataInitializationState.NotInitialized)
   <p>@Resources.DatabaseStatus: <span class="badge bg-success">@Resources.UpToDate</span></p>
   <p>@Resources.InitializedGameVersion: <span class="badge bg-warning text-dark">@Resources.NoInitializedDataFound</span></p>
 
-  <button class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
+  <button title="@HelpResources.PageHelpHintCreate" class="btn btn-primary" @onclick="this.OnInstallClick">@Resources.Create</button>
 }
 else
 {
@@ -55,7 +58,7 @@ else
     <p>@Resources.InitializedGameVersion: <span class="badge bg-warning text-dark">@Resources.NoInitializedDataFound</span></p>
   }
 
-  <button class="btn btn-warning" @onclick="this.OnReInstallClickAsync">@Resources.ReInstall</button>
+  <button title="@HelpResources.PageHelpHintReinstall" class="btn btn-warning" @onclick="this.OnReInstallClickAsync">@Resources.ReInstall</button>
 }
 
 
@@ -68,7 +71,7 @@ else
     {
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button" type="button"
+          <button title="@HelpResources.PageHelpHintExpand" class="accordion-button" type="button"
                             @onclick="() => this._showSnapshotBackup = !this._showSnapshotBackup"
                   data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
             @Resources.DatabaseSnapshot
@@ -77,7 +80,7 @@ else
         <div id="collapseOne" class="accordion-collapse collapse @(this._showSnapshotBackup ? "show" : "")" aria-labelledby="headingOne" data-bs-parent="#backupAccordion">
           <div class="accordion-body">
             <p class="text-muted">@Resources.DatabaseSnapshotDescription</p>
-            <a href="admin/backup/snapshot" class="btn btn-secondary">@Resources.ExportSnapshot</a>
+            <a title="@HelpResources.PageHelpHintNavigate" href="admin/backup/snapshot" class="btn btn-secondary">@Resources.ExportSnapshot</a>
             <p class="text-muted mt-2">@Resources.SelectZipFileToRestoreSnapshot</p>
             <Microsoft.AspNetCore.Components.Forms.InputFile OnChange="this.OnSnapshotFileChangeAsync" accept=".zip" class="form-control mb-2" disabled="@this._isImporting"/>
           </div>
@@ -86,7 +89,7 @@ else
     }
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
-        <button class="accordion-button collapsed"
+        <button title="@HelpResources.PageHelpHintNavigate" class="accordion-button collapsed"
         type="button"
                         @onclick="() => this._showJsonBackup = !this._showJsonBackup"
         data-bs-toggle="collapse" 
@@ -103,7 +106,7 @@ else
             <input class="form-check-input" type="checkbox" id="includeAccounts" checked="@this._includeAccounts" @onchange="@(args => this._includeAccounts = args.Value is true)"/>
             <label class="form-check-label" for="includeAccounts">@Resources.IncludeAccounts</label>
           </div>
-          <a href="@($"admin/backup?includeAccounts={(this._includeAccounts ? "true" : "false")}")" class="btn btn-secondary">@Resources.ExportJsonBackup</a>
+          <a title="@HelpResources.PageHelpHintNavigate" href="@($"admin/backup?includeAccounts={(this._includeAccounts ? "true" : "false")}")" class="btn btn-secondary">@Resources.ExportJsonBackup</a>
           <hr/>
           <h5>@Resources.ImportJsonBackup</h5>
           @if (this._isImporting)

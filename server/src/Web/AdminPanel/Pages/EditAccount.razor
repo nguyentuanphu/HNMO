@@ -1,10 +1,11 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @inherits EditBase
 
 @using HNMO.DataModel.Entities
 @using HNMO.Web.AdminPanel.Components.Layout
 @using HNMO.Web.Shared.Components.ItemEdit
 
-<EditShell Model="@this.Model" ModelType="@this.Type" PersistenceContext="@this.PersistenceContext" IsOwningContext="@this.IsOwningContext" DownloadMarkup="@this.DownloadMarkup" EditorsMarkup="@this.GetEditorsMarkup()">
+<EditShell HelpText="@HelpResources.PageHelpTextEditAccount" Model="@this.Model" ModelType="@this.Type" PersistenceContext="@this.PersistenceContext" IsOwningContext="@this.IsOwningContext" DownloadMarkup="@this.DownloadMarkup" EditorsMarkup="@this.GetEditorsMarkup()">
     @if (this.Type == typeof(Item))
     {
         <ItemEdit Item="@((Item)this.Model!)" OnValidSubmit="this.SaveChangesAsync" />

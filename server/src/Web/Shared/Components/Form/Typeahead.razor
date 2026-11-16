@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @typeparam TItem
 @typeparam TValue
 
@@ -27,7 +28,7 @@
                             {
                                 @GetItemText(item)
                             }
-                            <button type="button" class="typeahead-multi-value-remove" @onclick="() => RemoveValueAsync(val)" @onclick:stopPropagation="true">&times;</button>
+                            <button title="@HelpResources.PageHelpHintDelete" type="button" class="typeahead-multi-value-remove" @onclick="() => RemoveValueAsync(val)" @onclick:stopPropagation="true">&times;</button>
                         </div>
                     }
                 }
@@ -104,7 +105,7 @@
                 foreach (var item in _suggestions)
                 {
                     var currentIndex = index++;
-                    <button type="button" 
+                    <button title="@HelpResources.PageHelpHintSelect" type="button"
                             class="dropdown-item typeahead-result @(currentIndex == _focusedIndex ? "active" : "")"
                             @onmousedown="() => SelectResultAsync(item)"
                             @onmousedown:preventDefault="true">

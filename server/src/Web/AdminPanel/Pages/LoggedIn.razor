@@ -1,4 +1,5 @@
-﻿@page "/logged-in"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/logged-in"
 @using HNMO.DataModel
 @using HNMO.DataModel.Entities
 @using HNMO.Network.Analyzer
@@ -16,10 +17,12 @@
 <PageTitle>HNMO: @Resources.OnlineAccounts</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.OnlineAccounts"/>
 <h1>@Resources.OnlineAccounts</h1>
+<PageHelp Text="@HelpResources.PageHelpTextLoggedIn" />
+
 
 <ul class="nav nav-tabs" role="tablist">
   <li class="nav-item" role="presentation">
-    <button type="button" role="tab" id="tab-players" aria-controls="panel-players" aria-selected="@(this._activeTab == Tab.Players ? "true" : "false")"
+    <button title="@HelpResources.PageHelpHintNavigate" type="button" role="tab" id="tab-players" aria-controls="panel-players" aria-selected="@(this._activeTab == Tab.Players ? "true" : "false")"
             class="nav-link @(this._activeTab == Tab.Players ? "active" : null)"
             @onclick="() => this._activeTab = Tab.Players">
       @Resources.Players
@@ -28,7 +31,7 @@
   @if (this._showOfflevel)
   {
     <li class="nav-item" role="presentation">
-      <button type="button" role="tab" id="tab-offlevel" aria-controls="panel-offlevel" aria-selected="@(this._activeTab == Tab.Offlevel ? "true" : "false")"
+      <button title="@HelpResources.PageHelpHintNavigate" type="button" role="tab" id="tab-offlevel" aria-controls="panel-offlevel" aria-selected="@(this._activeTab == Tab.Offlevel ? "true" : "false")"
               class="nav-link @(this._activeTab == Tab.Offlevel ? "active" : null)"
               @onclick="() => this._activeTab = Tab.Offlevel">
         @Resources.OffLevelPlayers
@@ -38,7 +41,7 @@
   @if (this._showBots)
   {
     <li class="nav-item" role="presentation">
-      <button type="button" role="tab" id="tab-bots" aria-controls="panel-bots" aria-selected="@(this._activeTab == Tab.Bots ? "true" : "false")"
+      <button title="@HelpResources.PageHelpHintNavigate" type="button" role="tab" id="tab-bots" aria-controls="panel-bots" aria-selected="@(this._activeTab == Tab.Bots ? "true" : "false")"
               class="nav-link @(this._activeTab == Tab.Bots ? "active" : null)"
               @onclick="() => this._activeTab = Tab.Bots">
         @Resources.BotPlayers
@@ -67,7 +70,7 @@
           <td><GuildLink GuildId="@item.GuildId" GuildName="@item.GuildName" EmptyText="@Resources.EmptyValue" /></td>
           <td><PartyBadge PartyMaster="@item.PartyMaster" PartySize="@item.PartySize" /></td>
           <td>
-            <button class="btn btn-warning btn-sm" type="button" @onclick="() => this.SetAccountOfflineAsync(item)">
+            <button title="@HelpResources.PageHelpHintStop" class="btn btn-warning btn-sm" type="button" @onclick="() => this.SetAccountOfflineAsync(item)">
               <span class="oi oi-bolt" aria-hidden="true" /> @Resources.Disconnect
             </button>
             @if (this.IsNetworkAnalyzerAvailable)
@@ -104,7 +107,7 @@
           <td>@item.StartedAt.ToString("yyyy-MM-dd HH:mm:ss") UTC</td>
           <td>
             <AuthorizeView Policy="@AdminPolicies.Operator">
-              <button class="btn btn-warning btn-sm" type="button" @onclick="() => this.StopOfflinePlayerAsync(item)">
+              <button title="@HelpResources.PageHelpHintStop" class="btn btn-warning btn-sm" type="button" @onclick="() => this.StopOfflinePlayerAsync(item)">
                 <span class="oi oi-media-stop" aria-hidden="true" /> @Resources.Stop
               </button>
             </AuthorizeView>

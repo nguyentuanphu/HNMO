@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/guilds-levels-ladder"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @Resources.GuildsLevelsAndLadder</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.GuildsLevelsAndLadder" />
 <h1>@Resources.GuildsLevelsAndLadder</h1>
+<PageHelp Text="@HelpResources.PageHelpTextGuildsLevelsLadder" />
+
 <p class="text-muted">@Resources.GuildsPageDescription</p>
 
 @if (this._isLoading)
@@ -137,12 +140,12 @@ else
                         <td><input class="form-control form-control-sm level-exp" style="width: 6rem" type="number" min="0" step="0.5" @bind="level.ExperiencePercent" aria-label="@Resources.GuildsExperiencePercent" /></td>
                         <td><input class="form-control form-control-sm level-zen" style="width: 6rem" type="number" min="0" step="0.5" @bind="level.ZenPercent" aria-label="@Resources.GuildsZenPercent" /></td>
                         <td><input class="form-control form-control-sm level-defense" style="width: 6rem" type="number" min="0" @bind="level.Defense" aria-label="@Resources.GuildsDefense" /></td>
-                        <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveLevel(level)">@Resources.Remove</button></td>
+                        <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveLevel(level)">@Resources.Remove</button></td>
                     </tr>
                 }
                 </tbody>
             </table>
-            <button type="button" class="btn btn-outline-primary btn-sm" id="guilds-add-level" @onclick="this.AddLevel">@Resources.GuildsAddLevel</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm" id="guilds-add-level" @onclick="this.AddLevel">@Resources.GuildsAddLevel</button>
         </div>
     </section>
 
@@ -193,19 +196,19 @@ else
                             </td>
                             <td><input class="form-control form-control-sm reward-zen" style="width: 8rem" type="number" min="0" @bind="r.ZenPerMember" aria-label="@Resources.GuildsZenPerMember" /></td>
                             <td><input class="form-control form-control-sm reward-items" style="min-width: 10rem" @bind="row.Items.ItemsText" placeholder="14 13 0 1" title="@Resources.MissionsItemsHint" aria-label="@Resources.MissionsItems" /></td>
-                            <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveReward(row)">@Resources.Remove</button></td>
+                            <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveReward(row)">@Resources.Remove</button></td>
                         </tr>
                     }
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm" id="guilds-add-reward" @onclick="this.AddReward">@Resources.GuildsAddReward</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm" id="guilds-add-reward" @onclick="this.AddReward">@Resources.GuildsAddReward</button>
         </div>
     </section>
 
     <div class="d-flex gap-2 mb-4">
-        <button type="button" class="btn btn-primary" id="guilds-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
+        <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="guilds-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
     </div>
 
     @if (this._engine is { } engine)

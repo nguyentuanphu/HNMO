@@ -680,4 +680,26 @@ Level: {2} - {3}</value>
   <data name="MonsterAmountSaveMapFirst" xml:space="preserve">
     <value>Save or undo the changes of the map first.</value>
   </data>
+  <data name="PageHelpHintClear" xml:space="preserve"><value>Clear the value, selection or state named by this control.</value></data>
+  <data name="PageHelpHintPassword" xml:space="preserve"><value>Open or confirm the password change for the selected account.</value></data>
+  <data name="PageHelpHintSearch" xml:space="preserve"><value>Find entries matching the current search or filter.</value></data>
+  <data name="PageHelpHintRefresh" xml:space="preserve"><value>Read the latest available data from the server again.</value></data>
+  <data name="PageHelpHintZoomStatus" xml:space="preserve"><value>This value shows the current map zoom percentage.</value></data>
+  <data name="PageHelpHintSelect" xml:space="preserve"><value>Choose this entry for the current action.</value></data>
+  <data name="PageHelpHintFirst" xml:space="preserve"><value>Show the first page of entries.</value></data>
+  <data name="PageHelpHintLast" xml:space="preserve"><value>Show the last page of entries.</value></data>
+  <data name="PageHelpHintReset" xml:space="preserve"><value>Reset the selected state as described in this page's help.</value></data>
+  <data name="PageHelpHintExpand" xml:space="preserve"><value>Show or hide additional details for this entry.</value></data>
+  <data name="PageHelpHintConfirm" xml:space="preserve"><value>Confirm and carry out the action described above.</value></data>
+  <data name="PageHelpHintCancel" xml:space="preserve"><value>Cancel this editing step without applying its unsaved changes.</value></data>
+  <data name="PageHelpHintNext" xml:space="preserve"><value>Show the next page of entries.</value></data>
+  <data name="PageHelpHintZoomIn" xml:space="preserve"><value>Enlarge the map view without changing map data.</value></data>
+  <data name="PageHelpHintNavigate" xml:space="preserve"><value>Open the selected page or view.</value></data>
+  <data name="PageHelpHintZoomOut" xml:space="preserve"><value>Reduce the map view without changing map data.</value></data>
+  <data name="PageHelpHintDelete" xml:space="preserve"><value>Remove the selected entry after checking that it is the correct one.</value></data>
+  <data name="PageHelpHintPrevious" xml:space="preserve"><value>Show the previous page of entries.</value></data>
+  <data name="PageHelpHintCopy" xml:space="preserve"><value>Copy the selected text or entry for reuse.</value></data>
+  <data name="PageHelpHintStatus" xml:space="preserve"><value>This disabled control shows status and does not perform an action.</value></data>
+  <data name="PageHelpHintSave" xml:space="preserve"><value>Save the changes currently shown in this editor.</value></data>
+  <data name="PageHelpHintCreate" xml:space="preserve"><value>Start creating a new entry on this page.</value></data>
 </root>

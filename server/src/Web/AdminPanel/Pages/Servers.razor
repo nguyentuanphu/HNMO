@@ -1,4 +1,5 @@
-﻿@page "/servers"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/servers"
 
 @using System.ComponentModel
 @using Microsoft.Extensions.DependencyInjection
@@ -10,6 +11,8 @@
 <PageTitle>HNMO: @Resources.Servers</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Servers"/>
 <h1>@Resources.Servers</h1>
+<PageHelp Text="@HelpResources.PageHelpTextServers" />
+
 
 @if (_servers == null)
 {
@@ -49,10 +52,10 @@ else
     <tr>
       <td></td>
       <td>
-        <NavLink class="btn btn-primary me-1" href="create-game-server">
+        <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary me-1" href="create-game-server">
           <span class="oi oi-plus"></span> @Resources.GameServer
         </NavLink>
-        <NavLink class="btn btn-primary" href="create-connect-server">
+        <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary" href="create-connect-server">
             <span class="oi oi-plus"></span> @Resources.ConnectServer
         </NavLink>
       </td>
@@ -63,14 +66,14 @@ else
         {
           @if (this._isRestarting)
           {
-            <button type="button" class="btn btn-warning btn-sm" disabled="disabled">
+            <button title="@HelpResources.PageHelpHintStatus" type="button" class="btn btn-warning btn-sm" disabled="disabled">
               <div class="spinner-border text-secondary" role="status">
               </div>
             </button>
           }
           else
           {
-            <button type="button" class="btn btn-warning btn-sm" @onclick="this.OnReloadAndRestartClickAsync">
+            <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-warning btn-sm" @onclick="this.OnReloadAndRestartClickAsync">
               <span class="oi oi-reload"></span>
               @Resources.ReloadConfigurationAndRestartAllGameServers
             </button>

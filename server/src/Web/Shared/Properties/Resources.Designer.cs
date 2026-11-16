@@ -1198,5 +1198,204 @@ namespace HNMO.Web.Shared.Properties {
                 return ResourceManager.GetString("MonsterAmountSaveMapFirst", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Clear the value, selection or state named by this control..
+        /// </summary>
+        public static string PageHelpHintClear {
+            get {
+                return ResourceManager.GetString("PageHelpHintClear", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open or confirm the password change for the selected account..
+        /// </summary>
+        public static string PageHelpHintPassword {
+            get {
+                return ResourceManager.GetString("PageHelpHintPassword", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Find entries matching the current search or filter..
+        /// </summary>
+        public static string PageHelpHintSearch {
+            get {
+                return ResourceManager.GetString("PageHelpHintSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Read the latest available data from the server again..
+        /// </summary>
+        public static string PageHelpHintRefresh {
+            get {
+                return ResourceManager.GetString("PageHelpHintRefresh", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This value shows the current map zoom percentage..
+        /// </summary>
+        public static string PageHelpHintZoomStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose this entry for the current action..
+        /// </summary>
+        public static string PageHelpHintSelect {
+            get {
+                return ResourceManager.GetString("PageHelpHintSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the first page of entries..
+        /// </summary>
+        public static string PageHelpHintFirst {
+            get {
+                return ResourceManager.GetString("PageHelpHintFirst", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the last page of entries..
+        /// </summary>
+        public static string PageHelpHintLast {
+            get {
+                return ResourceManager.GetString("PageHelpHintLast", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reset the selected state as described in this page's help..
+        /// </summary>
+        public static string PageHelpHintReset {
+            get {
+                return ResourceManager.GetString("PageHelpHintReset", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show or hide additional details for this entry..
+        /// </summary>
+        public static string PageHelpHintExpand {
+            get {
+                return ResourceManager.GetString("PageHelpHintExpand", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm and carry out the action described above..
+        /// </summary>
+        public static string PageHelpHintConfirm {
+            get {
+                return ResourceManager.GetString("PageHelpHintConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel this editing step without applying its unsaved changes..
+        /// </summary>
+        public static string PageHelpHintCancel {
+            get {
+                return ResourceManager.GetString("PageHelpHintCancel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the next page of entries..
+        /// </summary>
+        public static string PageHelpHintNext {
+            get {
+                return ResourceManager.GetString("PageHelpHintNext", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enlarge the map view without changing map data..
+        /// </summary>
+        public static string PageHelpHintZoomIn {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected page or view..
+        /// </summary>
+        public static string PageHelpHintNavigate {
+            get {
+                return ResourceManager.GetString("PageHelpHintNavigate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reduce the map view without changing map data..
+        /// </summary>
+        public static string PageHelpHintZoomOut {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomOut", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the selected entry after checking that it is the correct one..
+        /// </summary>
+        public static string PageHelpHintDelete {
+            get {
+                return ResourceManager.GetString("PageHelpHintDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the previous page of entries..
+        /// </summary>
+        public static string PageHelpHintPrevious {
+            get {
+                return ResourceManager.GetString("PageHelpHintPrevious", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy the selected text or entry for reuse..
+        /// </summary>
+        public static string PageHelpHintCopy {
+            get {
+                return ResourceManager.GetString("PageHelpHintCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This disabled control shows status and does not perform an action..
+        /// </summary>
+        public static string PageHelpHintStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Save the changes currently shown in this editor..
+        /// </summary>
+        public static string PageHelpHintSave {
+            get {
+                return ResourceManager.GetString("PageHelpHintSave", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start creating a new entry on this page..
+        /// </summary>
+        public static string PageHelpHintCreate {
+            get {
+                return ResourceManager.GetString("PageHelpHintCreate", resourceCulture);
+            }
+        }
+
     }
 }
