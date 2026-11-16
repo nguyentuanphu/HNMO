@@ -100,6 +100,7 @@ public partial class ConfigNavMenu
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Con số may mắn" : "Daily Lucky Number", "lucky-number", "oi-random"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Kết hôn" : "Marriage", "marriage", "oi-heart"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Chợ vật phẩm" : "Item market", "market", "oi-basket"),
+            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Ngân hàng ngọc" : "Jewel bank", "jewel-bank", "oi-box"),
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Thưởng mốc nạp" : "Top-up milestones", "topup-milestones", "oi-dollar"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),

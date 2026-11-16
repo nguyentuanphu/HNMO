@@ -16803,6 +16803,23 @@
       <CausedReaction>The 1.04d client does not read any payload of this packet.</CausedReaction>
       <Fields />
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3B</SubCode>
+      <Name>HnmoJewelBankState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after entering the world or processing HnmoJewelBankCommand.</SentWhen>
+      <CausedReaction>Updates the web client's Jewel Bank window.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing enabled state, jewel rules, stored balances, bag jewels, and master skill summary.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

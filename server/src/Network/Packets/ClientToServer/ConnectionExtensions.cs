@@ -6448,4 +6448,38 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoJewelBankCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = Request state, 2 = Deposit single bag slot, 3 = Deposit all jewels, 4 = Withdraw jewel, 5 = Clear master skill points.</param>
+    /// <param name="slot">Bag slot index when depositing a single slot.</param>
+    /// <param name="amount">Withdrawal quantity.</param>
+    /// <param name="key">Jewel key (e.g. bless, soul, life, creation, chaos, harmony, guardian).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoJewelBankState (F5 3B).
+    /// </remarks>
+    public static async ValueTask SendHnmoJewelBankCommandAsync(this IConnection? connection, byte @action, byte @slot, uint @amount, string @key)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoJewelBankCommandRef.GetRequiredSize(key);
+            var packet = new HnmoJewelBankCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+            packet.Amount = @amount;
+            packet.Key = @key;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

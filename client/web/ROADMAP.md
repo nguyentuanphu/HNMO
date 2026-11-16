@@ -284,9 +284,8 @@ section 12 (the cash shop) still waits for the owner's answers.
 8. ✅ **Marriage**: proposal and Devias Church ceremony (`Shift+M` or `/marry`), custom couple title, party EXP &amp; defense hunting bonus (`MarriagePlugIn`, OFF by default), spouse warp, divorce fees &amp; cooldowns (`MarriageEngine`), persisted in `save/hnmo-state.json` under `marriage`, public couples list on `home.html` (`/website/marriage`), and admin page `/marriage`. Unit-tested (`MarriageEngineTest`, `MarriageControllerTests`) and Playwright-tested (`marriage.spec.ts`).
 9. ✅ **Item market**: players list items for zen or coins (`F6`, Julia NPC #547, and web), with atomic escrow,
    a market fee, allowed currencies, banned items (`group:number`), and full audit log in admin panel (`/market`).
-10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take
-    them out in the game or on the website; which jewels, limits and fees in the admin panel. Also clearing
-    master skill points (with item 3's stat clearing).
+10. ✅ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, Harmony, Guardian, custom) as numbers on the
+    account (`F7`), take them out in the game or on the website (`/jewel-bank` admin config for limits/fees), and clear/refund master skill points (`F7`, `/clearmaster`, and website Resets &amp; relife).
 11. ⏳ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
     the cap for everyone rises N levels a day; with resets, a daily reset limit does the same job. Shown on
     the website (today's cap).

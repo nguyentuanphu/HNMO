@@ -5283,6 +5283,41 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3A</SubCode>
+      <Name>HnmoJewelBankCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.</SentWhen>
+      <CausedReaction>The server performs the action and responds with HnmoJewelBankState (F5 3B).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>1 = Request state, 2 = Deposit single bag slot, 3 = Deposit all jewels, 4 = Withdraw jewel, 5 = Clear master skill points.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>Bag slot index when depositing a single slot.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Amount</Name>
+          <Description>Withdrawal quantity.</Description>
+        </Field>
+        <Field>
+          <Index>10</Index>
+          <Type>String</Type>
+          <Name>Key</Name>
+          <Description>Jewel key (e.g. bless, soul, life, creation, chaos, harmony, guardian).</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>
