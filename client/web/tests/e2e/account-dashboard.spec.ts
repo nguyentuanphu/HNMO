@@ -1,0 +1,116 @@
+import { expect, test, type Page } from '@playwright/test';
+
+const labels = {
+  en: ['Overview', 'Coins', 'VIP', 'Rewards', 'Resets', 'Security', 'Community'],
+  vi: ['Tổng quan', 'Coin', 'VIP', 'Phần thưởng', 'Reset', 'Bảo mật', 'Cộng đồng'],
+};
+
+async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
+  await page.addInitScript(lang => localStorage.setItem('hnmo.language', lang), language);
+  await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO account fixture', links: { discord: 'https://discord.com/invite/hnmo', zalo: 'https://zalo.me/12345' } } }));
+  await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
+  await page.route('**/website/settings', route => route.fulfill({ json: {} }));
+  for (const feature of ['gift-codes', 'resets', 'account-safety']) {
+    await page.route(`**/website/${feature}`, route => route.fulfill({ json: { enabled: false } }));
+  }
+  await page.route('**/portal/account/overview', async route => {
+    const body = route.request().postDataJSON() as { loginName: string; password: string; page: number };
+    expect(body.loginName).toBe('ann'); expect(body.password).toBe('account-secret');
+    await route.fulfill({ json: {
+      loginName: 'ann', accountOnline: true, balances: { wCoinC: 150, wCoinP: 20, goblinPoints: 30 }, vipLevel: 0,
+      characters: [{ name: '<AnnKnight>', className: 'Knight', classNameVi: 'Chiến binh', level: 300, resets: 2, map: 0 }],
+      history: [{ id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false }],
+      page: body.page, hasMore: body.page === 0,
+    } });
+  });
+}
+
+async function signIn(page: Page): Promise<void> {
+  await page.goto('/account.html');
+  await page.locator('#accountUser').fill('ann');
+  await page.locator('#accountSecret').fill('account-secret');
+  await page.locator('#accountSignInButton').click();
+  await expect(page.locator('#accountLoginPanel')).toBeHidden();
+}
+
+async function section(page: Page, width: number, index: number, language: 'en' | 'vi'): Promise<void> {
+  if (width <= 600) await page.locator('#accountSectionSelect').selectOption({ label: labels[language][index] });
+  else await page.locator('#accountNav').getByRole('button', { name: labels[language][index], exact: true }).click();
+}
+
+for (const width of [375, 820, 1280]) {
+  for (const language of ['en', 'vi'] as const) {
+    test(`account dashboard sections, history and logout (${language}, ${width}px)`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await mockAccount(page, language); await signIn(page);
+      await expect(page.locator('#account-overview')).toContainText('<AnnKnight>');
+      await expect(page.locator('#account-overview')).toContainText('300');
+      await expect(page.locator('#account-overview')).toContainText(language === 'vi' ? 'Chiến binh' : 'Knight');
+      await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '/index.html');
+      await expect(page.locator('#account-overview a[href="/home.html#start"]')).toBeVisible();
+      await expect(page.locator('#account-overview annknight')).toHaveCount(0);
+      await page.locator('#accountHelpButton').click();
+      await expect(page.locator('#accountHelp')).toBeVisible();
+      await expect(page.locator('#accountHelp')).toContainText(language === 'en' ? 'Sydney' : 'Sydney');
+      for (let index = 0; index < labels[language].length; index++) {
+        await section(page, width, index, language);
+        const id = ['overview', 'coins', 'vip', 'rewards', 'resets', 'security', 'community'][index];
+        await expect(page.locator(`#account-${id}`)).toBeVisible();
+        await expect(page.locator('#accountPanels > [data-account-panel]:visible')).toHaveCount(1);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      }
+      await expect(page.locator('#account-community a[href="https://discord.com/invite/hnmo"]')).toBeVisible();
+      await section(page, width, 1, language);
+      // 14:30 UTC is 01:30 on the following Sydney day in November.
+      await expect(page.locator('#account-coins')).toContainText('01:30');
+      await expect(page.locator('#account-coins')).toContainText('Quest reward');
+      await page.locator('#account-coins').getByRole('button', { name: language === 'en' ? 'Next' : 'Trang sau', exact: true }).click();
+      await expect(page.locator('#account-coins')).toContainText('Earlier reward');
+      await expect(page.locator('#account-coins').getByRole('button', { name: language === 'en' ? 'Next' : 'Trang sau', exact: true })).toBeDisabled();
+      expect(await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }))).not.toContain('account-secret');
+      await expect(page.locator('#accountSecret')).toHaveValue('');
+      for (const button of await page.locator('#accountToolbar button:visible, #account-coins button:visible').all()) await expect(button).toHaveAttribute('title', /.+/);
+      await page.screenshot({ path: `test-results/account-${language}-${width}.png`, fullPage: true });
+      await page.locator('#accountLogout').click();
+      await expect(page.locator('#accountLoginPanel')).toBeVisible();
+      await expect(page.locator('#accountSecret')).toHaveValue('');
+      await expect(page.locator('#accountPanels')).not.toContainText('<AnnKnight>');
+    });
+  }
+}
+
+test('a rejected login exposes no account data', async ({ page }) => {
+  await mockAccount(page, 'en');
+  let release: () => void = () => { throw new Error('No pending account request.'); };
+  let arrived: () => void = () => {};
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  const received = new Promise<void>(resolve => { arrived = resolve; });
+  await page.route('**/portal/account/overview', async route => {
+    arrived(); await pending;
+    await route.fulfill({ status: 401, json: { error: 'login' } });
+  });
+  await page.goto('/account.html');
+  await page.locator('#accountUser').fill('ann'); await page.locator('#accountSecret').fill('wrong');
+  await page.locator('#accountSignInButton').click();
+  await received;
+  await expect(page.locator('#accountNav')).toBeHidden();
+  await expect(page.locator('#accountToolbar')).toBeHidden();
+  release();
+  await expect(page.locator('#accountMessage')).toContainText('incorrect');
+  await expect(page.locator('#accountLoginPanel')).toBeVisible();
+  await expect(page.locator('#accountToolbar')).toBeHidden();
+  await expect(page.locator('#accountPanels')).not.toContainText('<AnnKnight>');
+});
+
+test('another feature can register a bilingual account section without editing the page', async ({ page }) => {
+  await mockAccount(page, 'en'); await signIn(page);
+  await page.evaluate(async path => {
+    const registry = await import(path) as { registerAccountSection(section: { id: string; label: { en: string; vi: string }; element: HTMLElement }): () => void };
+    const element = document.createElement('section'); element.id = 'extension-fixture'; element.textContent = 'Extension fixture content';
+    registry.registerAccountSection({ id: 'extension-fixture', label: { en: 'Extra rewards', vi: 'Quà bổ sung' }, element });
+  }, '/js/accountSections.js');
+  await page.locator('#accountNav').getByRole('button', { name: 'Extra rewards' }).click();
+  await expect(page.locator('#extension-fixture')).toBeVisible();
+  await page.locator('#accountToolbar [data-account-language="vi"]').click();
+  await expect(page.locator('#accountNav').getByRole('button', { name: 'Quà bổ sung' })).toHaveAttribute('aria-current', 'true');
+});

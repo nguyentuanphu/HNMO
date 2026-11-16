@@ -581,3 +581,23 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      managing several worlds (start/stop, rates, events, players per world); one website and one account system with
      the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
      opening date); optional one-off character transfer between worlds; later a cross-world event server.
+
+
+## Player account dashboard — foundation (2026-11-16)
+Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,
+password-authenticated saved character/coin snapshots, the latest 1,000 coin grants paged
+20 at a time with Sydney dates, existing gift/reset/safety forms, community links, and
+logout that clears module memory. New sections register through accountSections.ts;
+Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are
+kept together without changing the dictionaries from #4/#6.
+Remaining before the complete account-page request is done: personal missions/daily
+claims/calendar, password-change action, referral progress/rewards, per-character live
+status and last-seen history, a complete purchase/spend ledger, and VIP buying/extensions
+in the VIP part. Confirmed e-mail changes require a mail-confirmation service.
+
+Đã có phần nền trang tài khoản: đăng nhập trong bộ nhớ thẻ, menu thích ứng màn hình,
+xem nhân vật/số dư đã lưu, phân trang lịch sử nhận coin theo giờ Sydney, gift code,
+reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. Tính năng khác có thể đăng ký
+mục riêng. Còn thiếu nhận quà/nhiệm vụ/điểm danh cá nhân, đổi mật khẩu, mời bạn, trạng thái
+trực tuyến từng nhân vật, lịch sử chi tiêu đầy đủ và mua/gia hạn VIP. Đổi email có xác nhận
+cần dịch vụ gửi thư xác nhận.

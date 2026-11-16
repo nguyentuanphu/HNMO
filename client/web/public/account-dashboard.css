@@ -1,0 +1,29 @@
+.account-panel { min-width: 0; }
+#accountPanels { display: grid; gap: 20px; min-width: 0; }
+#accountDashboard { min-width: 0; }
+#accountDashboard.authenticated { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; }
+#accountToolbar { grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+#accountNav { display: grid; align-content: start; gap: 6px; }
+#accountNav button { text-align: left; background: transparent; color: var(--gold); overflow-wrap: anywhere; }
+#accountNav button[aria-current="true"] { background: var(--gold); color: #1a1408; }
+#accountSectionSelect { display: none; max-width: 100%; }
+#accountHelp { flex-basis: 100%; padding: 16px; border: 1px solid var(--gold); border-radius: 8px; }
+.account-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.account-balances { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin: 0; }
+.account-balances > div { border: 1px solid var(--line); padding: 12px; border-radius: 8px; }
+.account-balances dd { margin: 0; font-size: 24px; font-variant-numeric: tabular-nums; }
+.account-scroll { overflow-x: auto; max-width: 100%; }
+.account-scroll table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.account-scroll th, .account-scroll td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.account-panel .panel { padding: 0; border: 0; background: transparent; }
+#accountMessage { color: var(--error); overflow-wrap: anywhere; }
+body:has(#accountDashboard.authenticated) main { max-width: 1100px; }
+@media (max-width: 600px) {
+  #accountDashboard.authenticated { grid-template-columns: minmax(0, 1fr); }
+  #accountNav { display: none; }
+  #accountDashboard.authenticated #accountSectionSelect { display: block; }
+  #accountSignIn input { min-width: 0; max-width: 100%; box-sizing: border-box; }
+  #accountDashboard .panel { padding: 14px; }
+  #accountDashboard .panel .panel { padding: 0; }
+  main > .grid { grid-template-columns: minmax(0, 1fr); }
+}

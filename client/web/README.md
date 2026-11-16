@@ -129,3 +129,23 @@ to this repository's latest release.
 
 Tests: `tests/e2e/website.spec.ts` and `website-details.spec.ts` use fixtures (routed responses);
 `tests/e2e/website-live.spec.ts` checks a real server (`LIVE_SERVER=1 BASE_URL=…`).
+
+
+### Extending the player account page
+
+The account dashboard owns authentication and navigation. Feature modules import
+`registerAccountSection` from `src/accountSections.ts` and supply a unique stable id,
+English/Vietnamese labels and an `HTMLElement`. The optional async `open(context)`
+receives the current language and `context.request<T>('/portal/your-feature', body)`.
+This helper adds the current player's credentials in memory and permits only same-origin
+portal paths; the server endpoint must still authenticate and authorize every request.
+Render player/configuration strings through `textContent`, never HTML. Keep opening a
+section read-only; use explicit buttons for claims/purchases. A registration returns a
+removal callback; the feature owns disposing its element and listeners. Navigation updates
+when sections are registered or removed. No edits to the account page's navigation are
+needed. Load the feature module from the account page or its bootstrap module.
+
+The dashboard deliberately leaves `#accountPlaySlot` for the login-ticket feature.
+It currently contains only the normal game login link. Do not duplicate ticket creation.
+New dashboard texts live in `src/accountPageTexts.ts` as paired English/Vietnamese texts;
+this avoids rewriting translation dictionaries being changed on other branches.

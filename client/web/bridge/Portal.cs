@@ -42,6 +42,7 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         // Handlers that take only the HttpContext are cast to Func<..., Task<IResult>>, so their answer is sent:
         // as a plain RequestDelegate the result would be dropped (ASP0016).
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
+        app.MapPost("/portal/account/overview", (Func<HttpContext, Task<IResult>>)portal.AccountOverviewAsync).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/register", portal.RegisterAsync).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
@@ -57,6 +58,47 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
+
+    private async Task<IResult> AccountOverviewAsync(HttpContext context)
+    {
+        context.Response.Headers.CacheControl = "no-store";
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) => body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } value
+            && value.GetString() is { } text && text.Length <= maximum ? text : string.Empty;
+        var page = body?.GetValueOrDefault("page") is { ValueKind: JsonValueKind.Number } number && number.TryGetInt32(out var requestedPage) ? requestedPage : 0;
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, "api/website/account/overview", new
+            {
+                loginName = Field("loginName", 10), password = Field("password", 20), page,
+            }), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
 
     private HttpRequestMessage ApiRequest(HttpMethod method, string path, object? body = null, string? apiKey = null)
     {
