@@ -7404,6 +7404,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMarriageState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON containing marital state, couple title, party bonus status, ceremony location, divorce rules, and public couples summary.</param>
+    /// <remarks>
+    /// Is sent by the server when: After any marriage command or when marital/proposal/couple bonus status changes.
+    /// Causes reaction on client side: The web game updates the Marriage window (Shift+M) and displays ceremony/proposal notices.
+    /// </remarks>
+    public static async ValueTask SendHnmoMarriageStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarriageStateRef.GetRequiredSize(json);
+            var packet = new HnmoMarriageStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

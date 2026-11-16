@@ -4301,6 +4301,28 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoMarriageCommand.
+    /// </summary>
+    [Test]
+    public void HnmoMarriageCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 53;
+        var actualLength = HnmoMarriageCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Argument' boundary
+        Assert.That(5 + 48, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Argument' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for CharacterRenameRequest.
     /// </summary>
     [Test]
