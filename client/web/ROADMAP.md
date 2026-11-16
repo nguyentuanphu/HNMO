@@ -563,3 +563,14 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      - favourites and recently used pages; breadcrumbs; "related pages" at the bottom of each page;
      - "Basic / Advanced" view: everyday settings shown, rarely used ones folded away;
      - every page: the "How to use this page" help (ChatGPT's admin-help job) linking to the Admin guide article.
+15.6 VIP servers (owner asked 2026-11-16). Today: all game servers (Server 0, 1, 2 on the test host) share ONE
+     database; characters belong to the account, not to a server, so the same characters log in to any server
+     (one server at a time). Per server today: an EXP rate multiplier, PvP on/off, a player limit, and join
+     requirements (account attributes, also time-limited grants): a server can require e.g. a "VIP" attribute and
+     refuses others with "subscription over" / "no subscription". Edited only in the generic server config editor.
+     To do (with ChatGPT's VIP job): buying/granting VIP gives the account the time-limited attribute that VIP
+     servers require (one source of truth); a "Servers" admin page in plain words (name, VIP only yes/no, EXP and
+     drop/zen multipliers, PvP, player limit, which events run there); the server list in the web game and the
+     desktop client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
+     account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
+     timetables per server.
