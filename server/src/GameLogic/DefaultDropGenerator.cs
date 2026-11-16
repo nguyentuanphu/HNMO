@@ -100,6 +100,47 @@ public class DefaultDropGenerator : IDropGenerator
             money = moneyResult;
         }
 
+        var (mapItemMult, mapZenMult) = PlugIns.GameplayRules.MapRulesPlugIn.GetDropModifiers(player);
+        var (_, bonusItemMult, bonusZenMult) = PlugIns.GameplayRules.BonusEventsPlugIn.GetDropModifiers(player, DateTime.UtcNow);
+        var totalZenMult = mapZenMult * bonusZenMult;
+        if (money > 0 && Math.Abs(totalZenMult - 1.0) > 0.0001)
+        {
+            money = (uint)Math.Max(1, Math.Round(money * totalZenMult));
+        }
+
+        var totalItemMult = mapItemMult * bonusItemMult;
+        if (totalItemMult > 1.0001)
+        {
+            var extraRolls = (int)Math.Floor(totalItemMult - 1.0);
+            var fractionalChance = totalItemMult - 1.0 - extraRolls;
+            if (fractionalChance > 0 && this._randomizer.NextRandomBool(fractionalChance))
+            {
+                extraRolls++;
+            }
+
+            for (var r = 0; r < extraRolls; r++)
+            {
+                var (extraItems, extraMoney) = this.GenerateDrops(monster, gainedExperience);
+                if (extraItems is { Count: > 0 })
+                {
+                    droppedItems ??= new List<Item>(extraItems.Count);
+                    foreach (var extra in extraItems)
+                    {
+                        droppedItems.Add(extra);
+                    }
+                }
+
+                if (extraMoney > 0)
+                {
+                    money += (uint)Math.Max(1, Math.Round(extraMoney * totalZenMult));
+                }
+            }
+        }
+        else if (totalItemMult < 0.9999 && droppedItems is { Count: > 0 })
+        {
+            droppedItems = droppedItems.Where(_ => this._randomizer.NextRandomBool(totalItemMult)).ToList();
+        }
+
         this._guaranteedDropGroups.Clear();
         this._chanceDropGroups.Clear();
         return (droppedItems ?? Enumerable.Empty<Item>(), money > 0 ? money : null);
