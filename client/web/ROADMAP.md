@@ -459,3 +459,30 @@ New design (the "Shop editor"):
 - Import/export a shop as a file; a change log (who changed what, Sydney time).
 - EN+VI, hover hints and a "How to use this page" button. bUnit tests + a browser test.
 Same picker for every place items are chosen (gift codes, missions, rewards, drops, cash shop catalogue).
+
+## 14. Ideas from a commercial server package the owner used (checked 2026-11-16, Sydney)
+Ideas only: none of its code, files, tools or data are copied (it's licensed software). Compared with HNMO today.
+Already in HNMO or planned: VIP (ChatGPT), cash shop with coins, offline leveling and auto play, invasions, world
+bosses, scheduled announcements, max connections per IP, speed-hack checks, drops editor, audit history, chat log,
+marriage / auto party / lucky number / jewel bank (Antigravity, section 13), host dashboard (/control, #18).
+New ideas worth adopting (proposed order):
+14.1 Per-map rules in the admin panel: PvP on/off, PK penalty, EXP bonus %, item drop %, zen drop % per map.
+14.2 Bonus events ("happy hours"): scheduled EXP/drop/zen bonuses per map and time window (Sydney), announced in chat
+     and shown in the event timetable (13.6).
+14.3 Combat limits: a maximum damage cap per hit, PvP damage reduction %, castle siege damage reduction %.
+14.4 Chaos machine success rates per recipe in the admin panel (and shown to players), with a server-wide multiplier.
+14.5 Multi-vault: extra vaults per account (number set by the admin; extra vaults for VIP or bought with coins).
+14.6 Buffer NPC: gives a set of buffs to players under a level (helps new players); buffs and level in the admin panel.
+14.7 Event rewards editor: what each mini game (blood castle, devil square, chaos castle, illusion temple, ...) gives,
+     per level of the event.
+14.8 Maintenance tools page: find inactive/empty accounts, find duplicated items (same serial/GUID in two places),
+     experience fixer, backup/restore (with #18), all with a dry-run preview and an audit entry.
+14.9 Player activity log viewer: trades, drops/pickups of valuable items, chaos mixes, shop buys/sells, item market
+     (13.9), filterable by account/character/item and time (Sydney), for resolving disputes and spotting duping.
+14.10 Banned words filter for chat and names (EN/VI lists, admin-editable).
+14.11 GM shop and GM tools in the game for the admin's GM characters (spawn event, announce, move player, check
+     inventory), each logged.
+14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins.
+14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing).
+14.14 For the desktop client only: a launcher with auto-update, file checks (CRC) and connection through the launcher.
+Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
