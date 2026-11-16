@@ -192,6 +192,10 @@ if [ "$WITH_DATA" = 1 ]; then
   ALLOWLIST_FILE="$(mktemp)"
   echo "Building web Data allowlist and packing Data/packs"
   node "$WEB/tools/build-allowlist.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  if [ "${HNMO_SKIP_KTX2:-0}" != 1 ]; then
+    echo "Converting 3D textures to KTX2 (UASTC/ETC1S with mipmaps)"
+    node "$WEB/tools/convert-textures-ktx2.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  fi
   dotnet run --project "$WEB/bridge/HNMO.Web.csproj" -c Release -p:HnmoServerSource="$SERVER_SOURCE" -- \
     --pack "$OUT/Data" "$OUT/Data/packs" --allowlist "$ALLOWLIST_FILE"
   rm -f "$ALLOWLIST_FILE"

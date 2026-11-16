@@ -322,6 +322,7 @@ internal sealed class DataPackArchive : IDisposable
         "audio/ogg" => 5,
         "audio/wav" => 6,
         "audio/mpeg" => 7,
+        "image/ktx2" => 8,
         _ => 0,
     };
 
@@ -334,11 +335,13 @@ internal sealed class DataPackArchive : IDisposable
         5 => "audio/ogg",
         6 => "audio/wav",
         7 => "audio/mpeg",
+        8 => "image/ktx2",
         _ => Path.GetExtension(origPath).ToLowerInvariant() switch
         {
             ".opus" => "audio/ogg",
             ".wav" => "audio/wav",
             ".mp3" => "audio/mpeg",
+            ".ktx2" => "image/ktx2",
             _ => "application/octet-stream",
         },
     };

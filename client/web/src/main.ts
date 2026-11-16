@@ -24,6 +24,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
+import { setKtx2Renderer, clearTextureCache } from './bmd.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
@@ -266,6 +267,7 @@ const chat = new Chat({
 });
 
 const renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: true });
+setKtx2Renderer(renderer);
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // then render/quality.ts's applyPixelRatio
 const scene = new THREE.Scene();
@@ -1723,7 +1725,13 @@ function initLogin() {
 resize();
 initLogin();
 setUpGuide();
-settingsWindow = setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root }, { performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); } });
+settingsWindow = setUpSettings(
+  { renderer, scene, camera, effects: () => state.effects?.root },
+  {
+    performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); },
+    textureQualityChanged: () => { clearTextureCache(); },
+  },
+);
 // The login theme (it starts with the first click or key: browsers hold sound back until then).
 sounds.audio.playMusic(loginMusic(false));
 // The sound button: everything on or off, kept in the browser.

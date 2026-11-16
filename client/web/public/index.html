@@ -75,7 +75,12 @@
     .map-picker label { color: var(--muted); font-size: 12px; }
   </style>
   <script type="importmap">
-    { "imports": { "three": "/vendor/three/build/three.module.js" } }
+    {
+      "imports": {
+        "three": "/vendor/three/build/three.module.js",
+        "three/examples/jsm/loaders/KTX2Loader.js": "/vendor/three/examples/jsm/loaders/KTX2Loader.js"
+      }
+    }
   </script>
 </head>
 <body>
