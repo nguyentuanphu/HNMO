@@ -57,6 +57,7 @@ import { LeftoversWindow } from './ui/leftoversWindow.js';
 import { MountChainWindow } from './ui/mountChainWindow.js';
 import { RankingWindow } from './ui/rankingWindow.js';
 import { AddStatsWindow } from './ui/addStatsWindow.js';
+import { TeleportNpcWindow } from './ui/teleportNpcWindow.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -198,6 +199,7 @@ export interface GameState {
   jewelBank?: JewelBankWindow;
   guildLevels?: GuildLevelsWindow;
   customRanks?: CustomRanksManager;
+  teleportNpc?: TeleportNpcWindow;
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
@@ -1574,6 +1576,9 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   connection.onPacket((bytes) => { customRanks.handle(bytes); });
   for (const bytes of earlyPackets) customRanks.handle(bytes);
   customRanks.start();
+  const teleportNpc = new TeleportNpcWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.teleportNpc = teleportNpc;
+  connection.onPacket((bytes) => { teleportNpc.handle(bytes); });
   // Screenshots (Print Screen, as the desktop) and HNMO's share panel; the community window (K, when the inventory
   // isn't open): the Discord and Zalo coins, community events and their codes.
   screenshotHero = character.name;

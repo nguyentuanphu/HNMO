@@ -49131,6 +49131,99 @@ public readonly struct HnmoCustomRanksState
     /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
     public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
 }
+
+
+/// <summary>
+/// Is sent by the server when: Sent when talking to a Teleport NPC or after HnmoTeleportNpcCommand.
+/// Causes reaction on client side: Opens or updates the Teleport NPC map-warp menu in the web client.
+/// </summary>
+public readonly struct HnmoTeleportNpcState
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoTeleportNpcState"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoTeleportNpcState(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoTeleportNpcState"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoTeleportNpcState(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (ushort)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC2;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x4B;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C2HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets plain-ASCII JSON payload containing Teleport NPC destinations, requirements, Zen fees, and warp result status.
+    /// </summary>
+    public string Json
+    {
+        get => this._data.Span.ExtractString(5, this._data.Length - 5, System.Text.Encoding.UTF8);
+        set => this._data.Slice(5).Span.WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoTeleportNpcState"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoTeleportNpcState(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoTeleportNpcState"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoTeleportNpcState packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 5;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Json' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 5;
+}
     /// <summary>
     /// Describes the gens type.
     /// </summary>

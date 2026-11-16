@@ -544,7 +544,7 @@ More of its tools and plugins (checked 2026-11-16; ideas only):
   14.27 Talismans/figurines: special items that give a buff or bonus while carried in the bag (admin-defined),
         and consumable items that give extra stat points up to a cap (admin-defined). — Done (`TalismanPlugIn`, `TalismanEngine`, `TalismanStore`, wired into `InventoryStorage` + `ItemConsumeAction`, `/talismans` EN/VI admin page; OFF by default).
   14.28 Custom ranks/titles: titles by level, resets, VIP or achievements, shown by the name, admin-defined. — Done (`CustomRanksPlugIn`, `CustomRankEngine`, `CustomRankStore`, packets `F5 48`/`F5 49`, `/title` command, nameplate & chat prefixes, `/custom-ranks` EN/VI admin page; OFF by default).
-  14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined).
+  14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined). — Done (`TeleportNpcPlugIn`, `TeleportNpcEngine`, `F5 4A`/`F5 4B` packets, `ui/teleportNpcWindow.ts`, `/teleport-npc` EN/VI admin page; OFF by default).
   14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck).
 Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
 

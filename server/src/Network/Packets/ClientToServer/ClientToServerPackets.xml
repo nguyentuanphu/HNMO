@@ -5455,6 +5455,29 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>4A</SubCode>
+      <Name>HnmoTeleportNpcCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request the Teleport NPC destination list or warp to a selected destination.</SentWhen>
+      <CausedReaction>The server validates requirements and Zen fee, warps the character if eligible, and replies with HnmoTeleportNpcState (F5 4B).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestMenu, 1 = WarpToDestination.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>DestinationId</Name>
+          <Description>Target destination identifier from HnmoTeleportNpcState.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

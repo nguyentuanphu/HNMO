@@ -53,6 +53,7 @@ const sidebars = {
         "admin-panel/rankings-settings",
         "admin-panel/talismans",
         "admin-panel/custom-ranks",
+        "admin-panel/teleport-npc",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",
