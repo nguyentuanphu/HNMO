@@ -54,6 +54,9 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/safety/account", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/safety/pin", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "pin"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/safety/item", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "item"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/market/account", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/market/buy", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "buy"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/market/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
@@ -462,6 +465,47 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             }
 
             logger.LogWarning("Account safety on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> MarketAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+        object request = action == "account"
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20) }
+            : new { loginName = Field("loginName", 10), password = Field("password", 20), listingId = Field("listingId", 40) };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/market/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Item market on the website failed: {Status}", response.StatusCode);
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
         catch (HttpRequestException)

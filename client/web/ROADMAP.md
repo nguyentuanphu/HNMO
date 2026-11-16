@@ -278,8 +278,8 @@ section 12 (the cash shop) still waits for the owner's answers.
    jewels for the winners; prizes and odds in the admin panel.
 8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
    together, divorce rules; the couples list on the website.
-9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
-   admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
+9. ✅ **Item market**: players list items for zen or coins (`F6`, Julia NPC #547, and web), with atomic escrow,
+   a market fee, allowed currencies, banned items (`group:number`), and full audit log in admin panel (`/market`).
 10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take
     them out in the game or on the website; which jewels, limits and fees in the admin panel. Also clearing
     master skill points (with item 3's stat clearing).

@@ -19741,6 +19741,159 @@ public readonly struct HnmoAccountSafetyAction
 
 
 /// <summary>
+/// Is sent by the client when: The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.
+/// Causes reaction on server side: The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).
+/// </summary>
+public readonly struct HnmoMarketCommand
+{
+    /// <summary>
+    /// Item market command action.
+    /// </summary>
+    public enum HnmoMarketActionType
+    {
+        /// <summary>
+        /// Request market listings and personal escrow items/payouts.
+        /// </summary>
+            Request = 1,
+
+        /// <summary>
+        /// Escrow and list a bag item.
+        /// </summary>
+            List = 2,
+
+        /// <summary>
+        /// Atomically purchase a listing.
+        /// </summary>
+            Buy = 3,
+
+        /// <summary>
+        /// Cancel your own listing and return item to escrow claim.
+        /// </summary>
+            Cancel = 4,
+
+        /// <summary>
+        /// Claim bought/returned items into bag and collect pending Zen payouts.
+        /// </summary>
+            Claim = 5,
+    }
+
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMarketCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoMarketCommand(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoMarketCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoMarketCommand(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x38;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 59;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the action.
+    /// </summary>
+    public HnmoMarketCommand.HnmoMarketActionType Action
+    {
+        get => (HnmoMarketActionType)this._data.Span[4];
+        set => this._data.Span[4] = (byte)value;
+    }
+
+    /// <summary>
+    /// Gets or sets inventory slot when listing an item.
+    /// </summary>
+    public byte Slot
+    {
+        get => this._data.Span[5];
+        set => this._data.Span[5] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets 0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.
+    /// </summary>
+    public byte Currency
+    {
+        get => this._data.Span[6];
+        set => this._data.Span[6] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets asking price in the selected currency.
+    /// </summary>
+    public uint Price
+    {
+        get => ReadUInt32LittleEndian(this._data.Span[7..]);
+        set => WriteUInt32LittleEndian(this._data.Span[7..], value);
+    }
+
+    /// <summary>
+    /// Gets or sets target listing identifier when buying or canceling.
+    /// </summary>
+    public string ListingId
+    {
+        get => this._data.Span.ExtractString(11, 48, System.Text.Encoding.UTF8);
+        set => this._data.Slice(11, 48).Span.WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoMarketCommand"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoMarketCommand(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoMarketCommand"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoMarketCommand packet) => packet._data; 
+}
+
+
+/// <summary>
 /// Is sent by the client when: The player wants to rename a character in the character selection.
 /// Causes reaction on server side: The server renames the character and answers with CharacterRenameResult (F3 16).
 /// </summary>
