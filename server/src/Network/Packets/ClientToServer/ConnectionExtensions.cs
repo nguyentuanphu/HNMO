@@ -6328,4 +6328,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoPartyOptionsCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = AdvertiseSpotOrPass, 2 = JoinByPassword, 3 = JoinSpot, 4 = StopAdvertising.</param>
+    /// <param name="payload">JSON string containing password, spot, leader, minLevel, maxLevel.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request party options, advertise a hunting spot party/password, or auto-join a spot/password party.
+    /// Causes reaction on server side: The server processes the request and replies with HnmoPartyOptionsState (F5 45).
+    /// </remarks>
+    public static async ValueTask SendHnmoPartyOptionsCommandAsync(this IConnection? connection, byte @action, string @payload)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoPartyOptionsCommandRef.GetRequiredSize(payload);
+            var packet = new HnmoPartyOptionsCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Payload = @payload;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

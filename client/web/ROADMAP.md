@@ -295,8 +295,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 14. ⏳ **Mount chain**: golden bosses drop mount materials, duplicate mounts are material for the next step
     (horn -> wolf -> golden wolf/horse -> higher steps); a mount collection page on the website. Kept to looks
     and modest PvE strength.
-15. ⏳ **Party options**: a party password (join without an invite) and auto party for hunting spots. A party of
-    10 needs a new party window in the web and desktop clients (they show 5); later, if wanted.
+15. ✅ **Party options**: `PartyOptionsPlugIn` (`/partypass` chat command + `Auto-Party & Password` drawer docked with the 5-member `P` Party window via packets `F5 44`/`F5 45`), letting players set/join parties by password without an invite or click to auto-join advertised hunting spot parties; public spot table at `home.html#party-spots` (`/website/party-spots`, passwords hidden) and admin `/party-options` (kept 5-player party size).
 
 ## Follow-ups noted overnight (2026-11-16, Sydney)
 - rage-fighter.spec.ts: the "Ignore Defense makes effect:windForce" check fails on repeated runs against the same

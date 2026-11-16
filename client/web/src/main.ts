@@ -58,6 +58,7 @@ import { GameSounds } from './game/gameSounds.js';
 import { Party, facingPlayer } from './game/party.js';
 import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
+import { PartyOptionsWindow } from './ui/partyOptionsWindow.js';
 import { CommandWindow } from './ui/commandWindow.js';
 import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
 import { setupSocial, decorateLabel, type Social } from './game/social.js';
@@ -197,6 +198,7 @@ export interface GameState {
   view?: { yaw: number; distance: number };
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
+  partyOptions?: PartyOptionsWindow;
   commandWindow?: CommandWindow;
   events?: EventSystem;
   instanceEvents?: InstanceEventSystem;
@@ -1583,12 +1585,16 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.party = party;
   // A party kept while the hero was away comes back with its list on entering (the server's auto rejoin).
   earlyPackets.forEach((bytes) => party.handle(bytes));
+  const partyOptions = new PartyOptionsWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.partyOptions = partyOptions;
+  connection.onPacket((bytes) => { partyOptions.handle(bytes); });
+  window.addEventListener('hnmo-party-options-open', () => { partyOptions.open(); });
   // The party window (P): docked at the right; opening it closes the inventory and the character window.
   const partyWindow = new PartyWindow({
     connection, party, heroName: character.name, mapName,
     click: () => sounds.click(),
     onOpen: () => { itemWindows.closeAll(); characterWindow.close(); },
-    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); partyOptions.setPartyWindowOpen(open); },
   });
   state.partyWindow = partyWindow;
   window.addEventListener('keydown', (event) => {
