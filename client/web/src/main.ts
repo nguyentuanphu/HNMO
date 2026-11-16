@@ -1708,6 +1708,27 @@ function initLogin() {
     const input = ui.loginForm.elements.namedItem(key) as HTMLInputElement | null;
     if (input) input.value = String(value);
   }
+  const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(800) })
+    .then((r) => (r.ok ? (r.json() as Promise<{ connectServerPort?: number }>) : null))
+    .catch(() => null);
+
+  void websiteSettingsPromise.then((d) => {
+    if (d?.connectServerPort && d.connectServerPort > 0 && !saved.port) {
+      const portInput = ui.loginForm.elements.namedItem('port') as HTMLInputElement | null;
+      if (portInput && portInput.value === '44406') portInput.value = String(d.connectServerPort);
+    }
+  });
+
+  const resolveConnectPort = async (form: LoginSettings): Promise<LoginSettings> => {
+    if (!saved.port && form.port === '44406') {
+      const d = await websiteSettingsPromise;
+      if (d?.connectServerPort && d.connectServerPort > 0) {
+        return { ...form, port: String(d.connectServerPort) };
+      }
+    }
+    return form;
+  };
+
   ui.loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
     // The form's text inputs, by name.
@@ -1716,7 +1737,7 @@ function initLogin() {
     const form: LoginSettings = { username: field('username'), password: field('password'), host: field('host'), port: field('port'), relay: field('relay') };
     const { password, ...remembered } = form;
     saveSettings(remembered);
-    startGame(() => playOnline(form));
+    startGame(async () => playOnline(await resolveConnectPort(form)));
   });
 }
 
