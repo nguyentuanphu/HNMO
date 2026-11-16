@@ -373,7 +373,12 @@ and compare with the desktop's movement.
 - #15 antigravity-data-packs (HPK1 packs served by the bridge with ETag/immutable/304/206, web allowlist, item icons in one
   zip, no .br/.gz copies, single-file bridge): Windows package 25,000 files -> 194; Data 14,891 files / 1,066 MB -> 48
   packs / 738 MB. To check on merge: ffmpeg Opus packaging, macOS/Linux packages, admin panel icons live.
-- Coming (2026-11-16): chatgpt-shop-editor; antigravity-installer-app (+ host settings, one save file, KTX2).
+- #16 chatgpt-shop-editor (new /merchants with catalogue picker, 8x15 grid, first-fit, drag, bulk add, auto-arrange,
+  undo/redo, save summary; /merchants/legacy kept; 87 EN/VI keys appended) -> main. Price override not done (needs model
+  change). Recheck icons together with #15's packed item icons.
+- As of 2026-11-16 16:17 #2, #3, #5, #6, #8, #9, #12 conflict with main: ChatGPT is rebasing its own branches.
+- Coming (2026-11-16): antigravity host settings -> installer app -> one save file -> KTX2 (one PR each, based on #15);
+  chatgpt rebases + account page + admin help everywhere + VIP.
 - Earlier: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
 Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
