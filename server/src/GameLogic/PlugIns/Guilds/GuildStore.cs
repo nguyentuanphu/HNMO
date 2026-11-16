@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.GameLogic.PlugIns.Missions;
+using HNMO.Persistence;
 
 /// <summary>
 /// The experience and level of a guild.
@@ -153,10 +154,18 @@ public sealed class GuildStoreData
 /// </summary>
 public sealed class GuildStore
 {
+    private const string FeatureGuilds = "guilds.guild";
+    private const string FeatureToday = "guilds.today";
+    private const string FeatureOwed = "guilds.owed";
+    private const string SectionKey = "guilds";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, GuildStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<GuildProgress> _guildSync = new();
+    private readonly HnmoFeatureRowSync<int> _todaySync = new();
+    private readonly HnmoFeatureRowSync<List<GuildOwedReward>> _owedSync = new();
     private bool _changed;
 
     /// <summary>
@@ -165,7 +174,8 @@ public sealed class GuildStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public GuildStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -194,23 +204,20 @@ public sealed class GuildStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
         }
 
+        var guildMap = this.Data.Guilds.ToDictionary(p => p.Key.ToString(), p => p.Value, StringComparer.Ordinal);
+        this._guildSync.SaveChanges(this._rowBackend, FeatureGuilds, guildMap, JsonOptions, useDirtySetOnly: true);
+        this._todaySync.SaveChanges(this._rowBackend, FeatureToday, this.Data.Today, JsonOptions, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(this.Data), JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -219,37 +226,46 @@ public sealed class GuildStore
         }
     }
 
+    private GuildStoreData BuildServerOnlyData(GuildStoreData src) => new()
+    {
+        DayKey = src.DayKey,
+        WeekKey = src.WeekKey,
+        LastWeek = src.LastWeek,
+        PendingWeeks = src.PendingWeeks,
+        PaidWeeks = src.PaidWeeks,
+        Sieges = src.Sieges,
+    };
+
     private GuildStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new GuildStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<GuildStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new GuildStoreData();
-            data.Today = new Dictionary<string, int>(data.Today, StringComparer.Ordinal);
-            data.Owed = new Dictionary<string, List<GuildOwedReward>>(data.Owed, StringComparer.Ordinal);
-            foreach (var guild in data.Guilds.Values)
-            {
-                guild.WeekMembers = new Dictionary<string, long>(guild.WeekMembers, StringComparer.Ordinal);
-            }
+        var data = this._stateStore.ReadSection<GuildStoreData>(SectionKey, JsonOptions) ?? new GuildStoreData();
+        data.Today = new Dictionary<string, int>(data.Today, StringComparer.Ordinal);
+        data.Owed = new Dictionary<string, List<GuildOwedReward>>(data.Owed, StringComparer.Ordinal);
 
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
+        var guildStrMap = data.Guilds.ToDictionary(p => p.Key.ToString(), p => p.Value, StringComparer.Ordinal);
+        var m1 = this._guildSync.LoadOrMigrate(this._rowBackend, FeatureGuilds, guildStrMap, JsonOptions);
+        var m2 = this._todaySync.LoadOrMigrate(this._rowBackend, FeatureToday, data.Today, JsonOptions);
+        var m3 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
 
-            return new GuildStoreData();
+        data.Guilds = guildStrMap
+            .Select(kv => (Ok: Guid.TryParse(kv.Key, out var g), Id: g, kv.Value))
+            .Where(x => x.Ok)
+            .ToDictionary(x => x.Id, x => x.Value);
+        foreach (var guild in data.Guilds.Values)
+        {
+            guild.WeekMembers = new Dictionary<string, long>(guild.WeekMembers, StringComparer.Ordinal);
         }
+
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(data), JsonOptions);
+        }
+
+        return data;
     }
 }

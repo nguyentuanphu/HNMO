@@ -73,4 +73,34 @@ internal static class InvasionMonsters
     /// The Destructive Ogre Archer monster.
     /// </summary>
     public const ushort DestructiveOgreArcher = 137;
+
+    /// <summary>
+    /// The Strange Rabbit monster.
+    /// </summary>
+    public const ushort StrangeRabbit = 418;
+
+    /// <summary>
+    /// The Hideous Rabbit monster.
+    /// </summary>
+    public const ushort HideousRabbit = 420;
+
+    /// <summary>
+    /// The Snowman NPC/monster.
+    /// </summary>
+    public const ushort Snowman = 467;
+
+    /// <summary>
+    /// The Cursed Santa monster.
+    /// </summary>
+    public const ushort CursedSanta = 476;
+
+    /// <summary>
+    /// The Transformed Snowman monster.
+    /// </summary>
+    public const ushort TransformedSnowman = 477;
+
+    /// <summary>
+    /// The GameMaster NPC used by the Find the GM event.
+    /// </summary>
+    public const ushort GameMaster = 378;
 }
