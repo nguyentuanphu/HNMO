@@ -366,7 +366,11 @@ and compare with the desktop's movement.
 - #8 chatgpt-editor-vi (Vietnamese for the native editor, 2,021 entries + 142 English keys) -> main, draft.
 - #9 chatgpt-phoenix-shot (Phoenix Shot sent as AreaSkill 270 at the hero's tile with the target as extra target; 5 files) -> main; live damage not yet checked.
 - #12 chatgpt-giftcode-limit (one claim per network / per browser device, salted hashes only, new packet F5 23) -> main; next free F5 packet is 24; live redemption through the bridge not yet checked.
-- Coming (2026-11-16): antigravity-web-login-ticket, antigravity-rage-fighter-test, chatgpt-shop-editor.
+- #13 antigravity-web-login-ticket (website "Play now" with a one-time ticket, RequireWebsiteLogin setting) -> main.
+  CONFLICT: #13 also uses F5 23 (HnmoTicketLogin), like #12 (HnmoGiftCodeRedeemExtended). When merging, keep #12 on F5 23
+  and move #13 to F5 24 (XML, regenerate C#/web packets, docs, tests). Next free after that: F5 25.
+- #14 antigravity-rage-fighter-test (deterministic effect sampling; passed 3 runs live) -> main.
+- Coming (2026-11-16): chatgpt-shop-editor, antigravity-data-packs.
 - Earlier: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
 Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
