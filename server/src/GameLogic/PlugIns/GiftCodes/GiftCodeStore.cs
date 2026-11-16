@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 
 /// <summary>
 /// A redemption of a gift code (the admin panel's log).
@@ -117,11 +118,18 @@ public sealed class GiftCodeStoreData
 /// </summary>
 public sealed class GiftCodeStore
 {
+    private const string FeatureClaims = "giftCodes.claims";
+    private const string FeatureOwed = "giftCodes.owed";
+    private const string FeatureWrongTries = "giftCodes.wrongTries";
     private const string SectionKey = "giftCodes";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, GiftCodeStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<HashSet<string>> _claimsSync = new();
+    private readonly HnmoFeatureRowSync<List<GiftCodeOwedReward>> _owedSync = new();
+    private readonly HnmoFeatureRowSync<List<DateTime>> _wrongTriesSync = new();
     private bool _changed;
 
     /// <summary>
@@ -131,6 +139,7 @@ public sealed class GiftCodeStore
     public GiftCodeStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -175,9 +184,19 @@ public sealed class GiftCodeStore
             return;
         }
 
+        DateTime? ClaimExpiry(string codeId, HashSet<string> _)
+        {
+            var def = this.Data.Codes.FirstOrDefault(c => string.Equals(c.Id, codeId, StringComparison.Ordinal));
+            return ParseEndUtc(def?.End);
+        }
+
+        this._claimsSync.SaveChanges(this._rowBackend, FeatureClaims, this.Data.Claims, JsonOptions, ClaimExpiry, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+        this._wrongTriesSync.SaveChanges(this._rowBackend, FeatureWrongTries, this.Data.WrongTries, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(), JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -185,6 +204,28 @@ public sealed class GiftCodeStore
             // It's saved with the next change.
         }
     }
+
+    private static DateTime? ParseEndUtc(string? endText)
+    {
+        if (string.IsNullOrWhiteSpace(endText)
+            || HNMO.GameLogic.PlugIns.TopRaces.TopRaceEngine.ParseLocal(endText) is not { } local)
+        {
+            return null;
+        }
+
+        return HNMO.GameLogic.PlugIns.TopRaces.TopRaceEngine.LocalToUtc(
+            local,
+            new HNMO.GameLogic.PlugIns.Missions.MissionClock("Australia/Sydney", 0).TimeZone);
+    }
+
+    private GiftCodeStoreData BuildServerOnlyData() => new()
+    {
+        Codes = this.Data.Codes,
+        Uses = this.Data.Uses,
+        UsedBatchCodes = this.Data.UsedBatchCodes,
+        Log = this.Data.Log,
+        PendingCoins = this.Data.PendingCoins,
+    };
 
     private GiftCodeStoreData Load()
     {
@@ -199,6 +240,32 @@ public sealed class GiftCodeStore
         data.UsedBatchCodes = new Dictionary<string, string>(data.UsedBatchCodes, StringComparer.Ordinal);
         data.Owed = new Dictionary<string, List<GiftCodeOwedReward>>(data.Owed, StringComparer.Ordinal);
         data.WrongTries = new Dictionary<string, List<DateTime>>(data.WrongTries, StringComparer.Ordinal);
+
+        DateTime? ClaimExpiry(string codeId, HashSet<string> _)
+        {
+            var def = data.Codes.FirstOrDefault(c => string.Equals(c.Id, codeId, StringComparison.Ordinal));
+            return ParseEndUtc(def?.End);
+        }
+
+        var m1 = this._claimsSync.LoadOrMigrate(this._rowBackend, FeatureClaims, data.Claims, JsonOptions, ClaimExpiry);
+        var m2 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+        var m3 = this._wrongTriesSync.LoadOrMigrate(this._rowBackend, FeatureWrongTries, data.WrongTries, JsonOptions);
+        data.Claims = new Dictionary<string, HashSet<string>>(data.Claims, StringComparer.Ordinal);
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(
+                SectionKey,
+                new GiftCodeStoreData
+                {
+                    Codes = data.Codes,
+                    Uses = data.Uses,
+                    UsedBatchCodes = data.UsedBatchCodes,
+                    Log = data.Log,
+                    PendingCoins = data.PendingCoins,
+                },
+                JsonOptions);
+        }
+
         return data;
     }
 }

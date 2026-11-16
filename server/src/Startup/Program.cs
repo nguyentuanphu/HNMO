@@ -795,6 +795,7 @@ internal sealed class Program : IDisposable
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)
     {
         var contextProvider = new PersistenceContextProvider(loggerFactory, changeListener);
+        contextProvider.EnableHnmoRowPersistence();
         if (reinit || !await contextProvider.DatabaseExistsAsync().ConfigureAwait(false))
         {
             // The database can be provisioned externally (e.g. by a Kubernetes operator,

@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
@@ -214,11 +215,18 @@ public sealed class TopRaceStoreData
 /// </summary>
 public sealed class TopRaceStore
 {
+    private const string FeatureRuns = "topRaces.run";
+    private const string FeatureSeen = "topRaces.seen";
+    private const string FeatureOwed = "topRaces.owed";
     private const string SectionKey = "topRaces";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, TopRaceStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<TopRaceRun> _runsSync = new();
+    private readonly HnmoFeatureRowSync<TopRaceSeen> _seenSync = new();
+    private readonly HnmoFeatureRowSync<List<TopRaceOwedReward>> _owedSync = new();
     private bool _changed;
 
     /// <summary>
@@ -228,6 +236,7 @@ public sealed class TopRaceStore
     public TopRaceStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -262,9 +271,16 @@ public sealed class TopRaceStore
             return;
         }
 
+        static DateTime? RunExpiry(string _, TopRaceRun run) =>
+            run.EndUtc == DateTime.MinValue || run.EndUtc == DateTime.MaxValue ? null : run.EndUtc;
+
+        this._runsSync.SaveChanges(this._rowBackend, FeatureRuns, this.Data.Runs, JsonOptions, RunExpiry, useDirtySetOnly: true);
+        this._seenSync.SaveChanges(this._rowBackend, FeatureSeen, this.Data.Seen, JsonOptions, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
+            this._stateStore.WriteSection(SectionKey, new TopRaceStoreData { History = this.Data.History }, JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -284,9 +300,21 @@ public sealed class TopRaceStore
         data.Runs = new Dictionary<string, TopRaceRun>(data.Runs, StringComparer.Ordinal);
         data.Seen = new Dictionary<string, TopRaceSeen>(data.Seen, StringComparer.Ordinal);
         data.Owed = new Dictionary<string, List<TopRaceOwedReward>>(data.Owed, StringComparer.Ordinal);
+
+        static DateTime? RunExpiry(string _, TopRaceRun run) =>
+            run.EndUtc == DateTime.MinValue || run.EndUtc == DateTime.MaxValue ? null : run.EndUtc;
+        var m1 = this._runsSync.LoadOrMigrate(this._rowBackend, FeatureRuns, data.Runs, JsonOptions, RunExpiry);
+        var m2 = this._seenSync.LoadOrMigrate(this._rowBackend, FeatureSeen, data.Seen, JsonOptions);
+        var m3 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+
         foreach (var run in data.Runs.Values)
         {
             run.Entries = new Dictionary<string, TopRaceEntry>(run.Entries, StringComparer.Ordinal);
+        }
+
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(SectionKey, new TopRaceStoreData { History = data.History }, JsonOptions);
         }
 
         return data;

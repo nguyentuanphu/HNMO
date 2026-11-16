@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlugIns.ResetOptions;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
+using HNMO.Persistence;
 
 /// <summary>
 /// What the reset options remember of a character.
@@ -119,11 +120,14 @@ public sealed class ResetStoreData
 /// </summary>
 public sealed class ResetStore
 {
+    private const string FeatureCharacters = "resets.char";
     private const string SectionKey = "resets";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, ResetStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<ResetCharacterRecord> _charSync = new();
     private bool _changed;
 
     /// <summary>
@@ -133,6 +137,7 @@ public sealed class ResetStore
     public ResetStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -167,10 +172,24 @@ public sealed class ResetStore
             return;
         }
 
+        this._charSync.SaveChanges(this._rowBackend, FeatureCharacters, this.Data.Characters, JsonOptions, useDirtySetOnly: true);
+        this.WriteServerSection();
+        this._changed = false;
+    }
+
+    private void WriteServerSection()
+    {
+        if (this._stateStore is null)
+        {
+            return;
+        }
+
         try
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
-            this._changed = false;
+            this._stateStore.WriteSection(
+                SectionKey,
+                new ResetStoreData { Months = this.Data.Months, Log = this.Data.Log },
+                JsonOptions);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -188,6 +207,11 @@ public sealed class ResetStore
         var data = this._stateStore.ReadSection<ResetStoreData>(SectionKey, JsonOptions) ?? new ResetStoreData();
         data.Characters = new Dictionary<string, ResetCharacterRecord>(data.Characters, StringComparer.Ordinal);
         data.Months = data.Months.ToDictionary(p => p.Key, p => new Dictionary<string, int>(p.Value, StringComparer.Ordinal), StringComparer.Ordinal);
+        if (this._charSync.LoadOrMigrate(this._rowBackend, FeatureCharacters, data.Characters, JsonOptions))
+        {
+            this._stateStore.WriteSection(SectionKey, new ResetStoreData { Months = data.Months, Log = data.Log }, JsonOptions);
+        }
+
         return data;
     }
 }
