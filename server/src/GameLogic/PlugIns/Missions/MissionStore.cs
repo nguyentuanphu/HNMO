@@ -142,9 +142,10 @@ public sealed class MissionStoreData
 /// </summary>
 public sealed class MissionStore
 {
+    private const string SectionKey = "missions";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
     private bool _changed;
 
     /// <summary>
@@ -153,7 +154,7 @@ public sealed class MissionStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public MissionStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this.Data = this.Load();
     }
 
@@ -161,7 +162,7 @@ public sealed class MissionStore
     public object Lock { get; } = new();
 
     /// <summary>Gets the file, if any.</summary>
-    public string? FilePath => this._filePath;
+    public string? FilePath => this._stateStore?.FilePath;
 
     /// <summary>Gets the data.</summary>
     public MissionStoreData Data { get; }
@@ -216,7 +217,7 @@ public sealed class MissionStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
@@ -224,15 +225,7 @@ public sealed class MissionStore
 
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -243,33 +236,16 @@ public sealed class MissionStore
 
     private MissionStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new MissionStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<MissionStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new MissionStoreData();
+        var data = this._stateStore.ReadSection<MissionStoreData>(SectionKey, JsonOptions) ?? new MissionStoreData();
 
-            // The dictionaries are read with the default comparer; put them back into the intended ones.
-            data.Characters = new Dictionary<string, MissionCharacterState>(data.Characters, StringComparer.Ordinal);
-            data.Accounts = new Dictionary<string, MissionAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            // A broken file is kept aside, so nothing is lost silently.
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
-
-            return new MissionStoreData();
-        }
+        // The dictionaries are read with the default comparer; put them back into the intended ones.
+        data.Characters = new Dictionary<string, MissionCharacterState>(data.Characters, StringComparer.Ordinal);
+        data.Accounts = new Dictionary<string, MissionAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
+        return data;
     }
 }

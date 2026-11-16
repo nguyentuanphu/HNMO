@@ -119,10 +119,11 @@ public sealed class AccountSafetyStoreData
 /// </summary>
 public sealed class AccountSafetyStore
 {
+    private const string SectionKey = "accountSafety";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, AccountSafetyStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
     private bool _changed;
 
     /// <summary>
@@ -131,7 +132,7 @@ public sealed class AccountSafetyStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public AccountSafetyStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this.Data = this.Load();
     }
 
@@ -160,7 +161,7 @@ public sealed class AccountSafetyStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
@@ -168,15 +169,7 @@ public sealed class AccountSafetyStore
 
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -187,29 +180,13 @@ public sealed class AccountSafetyStore
 
     private AccountSafetyStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new AccountSafetyStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<AccountSafetyStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new AccountSafetyStoreData();
-            data.Accounts = new Dictionary<string, SafetyAccountRecord>(data.Accounts, StringComparer.Ordinal);
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
-
-            return new AccountSafetyStoreData();
-        }
+        var data = this._stateStore.ReadSection<AccountSafetyStoreData>(SectionKey, JsonOptions) ?? new AccountSafetyStoreData();
+        data.Accounts = new Dictionary<string, SafetyAccountRecord>(data.Accounts, StringComparer.Ordinal);
+        return data;
     }
 }

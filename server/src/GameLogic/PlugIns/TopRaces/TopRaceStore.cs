@@ -214,10 +214,11 @@ public sealed class TopRaceStoreData
 /// </summary>
 public sealed class TopRaceStore
 {
+    private const string SectionKey = "topRaces";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, TopRaceStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
     private bool _changed;
 
     /// <summary>
@@ -226,7 +227,7 @@ public sealed class TopRaceStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public TopRaceStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this.Data = this.Load();
     }
 
@@ -255,7 +256,7 @@ public sealed class TopRaceStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
@@ -263,15 +264,7 @@ public sealed class TopRaceStore
 
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -282,36 +275,20 @@ public sealed class TopRaceStore
 
     private TopRaceStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new TopRaceStoreData();
         }
 
-        try
+        var data = this._stateStore.ReadSection<TopRaceStoreData>(SectionKey, JsonOptions) ?? new TopRaceStoreData();
+        data.Runs = new Dictionary<string, TopRaceRun>(data.Runs, StringComparer.Ordinal);
+        data.Seen = new Dictionary<string, TopRaceSeen>(data.Seen, StringComparer.Ordinal);
+        data.Owed = new Dictionary<string, List<TopRaceOwedReward>>(data.Owed, StringComparer.Ordinal);
+        foreach (var run in data.Runs.Values)
         {
-            var data = JsonSerializer.Deserialize<TopRaceStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new TopRaceStoreData();
-            data.Runs = new Dictionary<string, TopRaceRun>(data.Runs, StringComparer.Ordinal);
-            data.Seen = new Dictionary<string, TopRaceSeen>(data.Seen, StringComparer.Ordinal);
-            data.Owed = new Dictionary<string, List<TopRaceOwedReward>>(data.Owed, StringComparer.Ordinal);
-            foreach (var run in data.Runs.Values)
-            {
-                run.Entries = new Dictionary<string, TopRaceEntry>(run.Entries, StringComparer.Ordinal);
-            }
-
-            return data;
+            run.Entries = new Dictionary<string, TopRaceEntry>(run.Entries, StringComparer.Ordinal);
         }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
 
-            return new TopRaceStoreData();
-        }
+        return data;
     }
 }

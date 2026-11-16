@@ -156,10 +156,11 @@ public sealed class CommunityStoreData
 /// </summary>
 public sealed class CommunityStore
 {
+    private const string SectionKey = "community";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, CommunityStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
     private bool _changed;
 
     /// <summary>
@@ -168,7 +169,7 @@ public sealed class CommunityStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public CommunityStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this.Data = this.Load();
     }
 
@@ -197,7 +198,7 @@ public sealed class CommunityStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
@@ -205,15 +206,7 @@ public sealed class CommunityStore
 
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -224,33 +217,17 @@ public sealed class CommunityStore
 
     private CommunityStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new CommunityStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<CommunityStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new CommunityStoreData();
-            data.Accounts = new Dictionary<string, CommunityAccountState>(data.Accounts, StringComparer.Ordinal);
-            data.PaidDiscordUsers = new Dictionary<string, string>(data.PaidDiscordUsers, StringComparer.Ordinal);
-            data.Entries = new Dictionary<string, CommunityEventEntry>(data.Entries, StringComparer.Ordinal);
-            data.CodeAccounts = new Dictionary<string, string>(data.CodeAccounts, StringComparer.Ordinal);
-            data.Owed = new Dictionary<string, List<CommunityOwedReward>>(data.Owed, StringComparer.Ordinal);
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
-
-            return new CommunityStoreData();
-        }
+        var data = this._stateStore.ReadSection<CommunityStoreData>(SectionKey, JsonOptions) ?? new CommunityStoreData();
+        data.Accounts = new Dictionary<string, CommunityAccountState>(data.Accounts, StringComparer.Ordinal);
+        data.PaidDiscordUsers = new Dictionary<string, string>(data.PaidDiscordUsers, StringComparer.Ordinal);
+        data.Entries = new Dictionary<string, CommunityEventEntry>(data.Entries, StringComparer.Ordinal);
+        data.CodeAccounts = new Dictionary<string, string>(data.CodeAccounts, StringComparer.Ordinal);
+        data.Owed = new Dictionary<string, List<CommunityOwedReward>>(data.Owed, StringComparer.Ordinal);
+        return data;
     }
 }
