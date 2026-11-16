@@ -574,3 +574,10 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      desktop client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
      account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
      timetables per server.
+15.7 Worlds (separate databases; owner asked 2026-11-16). Uses: a test world, new seasons (fresh start while the
+     old world keeps running), low-rate vs high-rate worlds, a PvP tournament world with ready-made characters,
+     region/language worlds, later a cross-world event server. Today: a second HNMO install with its own database
+     works (ports via Host settings #17) but is fully separate (own admin panel and website). To do: one admin panel
+     managing several worlds (start/stop, rates, events, players per world); one website and one account system with
+     the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
+     opening date); optional one-off character transfer between worlds; later a cross-world event server.
