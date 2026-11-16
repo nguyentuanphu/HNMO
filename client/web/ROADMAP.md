@@ -443,3 +443,21 @@ New design (the "Shop editor"):
 - Import/export a shop as a file; a change log (who changed what, Sydney time).
 - EN+VI, hover hints and a "How to use this page" button. bUnit tests + a browser test.
 Same picker for every place items are chosen (gift codes, missions, rewards, drops, cash shop catalogue).
+
+## VIP implementation checkpoint — rules only (2026-11-16)
+chatgpt-vip starts from antigravity-one-save-file because #19 was not merged at creation.
+Added opt-in bilingual level/offer configuration, pure purchase quotes, confirmed-receipt
+bookkeeping/replay checks, extension/expiry rules, grant/remove audit records, Sydney-day
+bonus bookkeeping and the vip section of HnmoStateStore. No separate save file or new
+packet number is introduced. This is NOT a working gameplay VIP feature and this owner
+decision is not marked done.
+Remaining: authenticated wallet/debit and recovery journal, registered plug-in, timed
+account-attribute projection with the same expiry, actual XP/zen and supported benefits,
+admin page/authorization/audit operations, website section, in-game window and free hotkey,
+expiry/start notices, chat mark and the required UI/integration tests. New packets may
+use only F5 25–2F. VIP-server UI/rates are queued separately under ROADMAP 15.6.
+
+Đã có phần quy tắc VIP và mục lưu trong tệp trạng thái dùng chung; cấu hình mặc định tắt.
+Chưa có mua VIP thực tế, trừ coin, áp dụng quyền lợi hoặc giao diện. Cần hoàn thiện giao
+dịch và khôi phục, plug-in, chỉ số tài khoản cùng hạn dùng, trang quản trị, website,
+cửa sổ game, thông báo và kiểm thử tích hợp trước khi đánh dấu hoàn tất.

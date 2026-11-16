@@ -147,3 +147,12 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Item looks: item effects (`ItemEffects.json`: glowing mesh, glow strength, hidden mesh) and render styles (`RenderStyles.json`: texture layers with their meshes, glow blending, textures, light, place and level conditions) | 🟡 | `game/itemLooks.ts`: the glowing mesh by texture index (every mesh for "all", `noneBlendMeshes` matter only for reflection passes), glow layers drawn additively, other textures (lucky items' inventory textures), lights, skin and hair hidden in windows and on the ground; additive drawings stay see-through on icons, so no black squares (the catalogue check in `visual-check.spec.ts`). Not yet: the reflection (chrome) layers, scrolling textures and pulsing values (their middle is used), the flat colour layer |
 | Texture folders: first folder that has the texture | ✅ | |
 | GLB models (`Data/Models/ModelFiles.json`) | ⬜ | |
+
+VIP is an owner-requested HNMO extension. The current branch adds only server-side rule
+and unified-state groundwork; no web/desktop gameplay behavior or packet has changed.
+Paid VIP, UI and applied benefits are still unimplemented, so this does not claim parity
+or a playable VIP feature.
+
+VIP là tính năng mở rộng được chủ HNMO yêu cầu. Hiện chỉ có nền quy tắc phía máy chủ và
+lưu trạng thái dùng chung; chưa thay đổi cách chơi hoặc gói tin của web/desktop. Chưa có
+mua VIP, giao diện hoặc áp dụng quyền lợi thực tế.
