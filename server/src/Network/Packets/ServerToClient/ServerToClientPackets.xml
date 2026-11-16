@@ -12914,6 +12914,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>35</SubCode>
+      <Name>HnmoLuckyNumberState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requests the Daily Lucky Number state, picks a number, claims owed rewards, or when the daily draw runs.</SentWhen>
+      <CausedReaction>The web game updates the Daily Lucky Number window (L) and posts draw/win chat notices.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON containing round date, next draw UTC timestamp, number range, odds, prizes, account picks, owed rewards, recent draw results, and event status.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>

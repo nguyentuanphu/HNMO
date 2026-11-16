@@ -246,6 +246,13 @@ const copy = {
     ttNone: "No scheduled entries in this category.",
     ttOffline: "Full timetable is unavailable while this server is offline or the feature is disabled.",
     ttGmWinners: "Recent Find the GM winners",
+    luckyNav: "Lucky number",
+    luckyTitle: "Daily lucky number.",
+    luckyOffline: "Daily lucky number is currently turned off or unavailable.",
+    luckyDate: "Date",
+    luckyWinning: "Winning #",
+    luckyWinners: "Winners",
+    luckyNone: "No draws recorded yet.",
     rankingsNav: "Rankings",
     rankingsTitle: "The realm's best.",
     topCharacters: "Top characters",
@@ -595,6 +602,13 @@ const copy = {
     ttNone: "Không có mục nào trong danh mục này.",
     ttOffline: "Chưa tải được bảng lịch đầy đủ hoặc tính năng đang tắt.",
     ttGmWinners: "Người thắng Truy tìm GM gần đây",
+    luckyNav: "Con số may mắn",
+    luckyTitle: "Quay số may mắn hàng ngày.",
+    luckyOffline: "Tính năng Con số may mắn hiện đang tắt hoặc máy chủ chưa trả lời.",
+    luckyDate: "Ngày",
+    luckyWinning: "Số trúng",
+    luckyWinners: "Người trúng",
+    luckyNone: "Chưa có kỳ quay nào.",
     rankingsNav: "Xếp hạng",
     rankingsTitle: "Những người mạnh nhất.",
     topCharacters: "Nhân vật hàng đầu",
@@ -2191,4 +2205,70 @@ element("refresh").addEventListener("click", () => void refreshTimetable());
 void refreshTimetable();
 setInterval(() => {
   if (!document.hidden) void refreshTimetable();
+}, 60000);
+
+// ---------- daily lucky number (public draws on home page, /website/lucky-number) ----------
+
+interface PublicLuckyNumber {
+  enabled: boolean;
+  roundKey: string;
+  nextDrawAt: number;
+  timeZone: string;
+  minNumber: number;
+  maxNumber: number;
+  odds: { exactPercent: number; lastDigitPercent: number };
+  prizes: {
+    exact: { coins: number; coinType: string; jewelCount: number; jewelName: string };
+    lastDigit: { enabled: boolean; coins: number; coinType: string; jewelCount: number; jewelName: string };
+  };
+  recentDraws: { dateKey: string; winningNumber: number; winners: { name: string; number: number; tier: string }[] }[];
+}
+
+let luckyData: PublicLuckyNumber | null = null;
+
+function renderLuckyNumber(): void {
+  const notice = element("lucky-notice");
+  const summary = element("lucky-summary");
+  const drawTime = element("lucky-draw-time");
+  if (!luckyData || !luckyData.enabled) {
+    notice.textContent = t("luckyOffline");
+    summary.textContent = "";
+    drawTime.textContent = "";
+    table("lucky-draws", [], [], "");
+    return;
+  }
+
+  notice.textContent = "";
+  const exactPrize = `${luckyData.prizes.exact.coins} ${luckyData.prizes.exact.coinType}` +
+    (luckyData.prizes.exact.jewelCount > 0 ? ` + ${luckyData.prizes.exact.jewelCount}x ${luckyData.prizes.exact.jewelName}` : "");
+  drawTime.textContent = `${luckyData.roundKey} · Sydney ${new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: luckyData.timeZone || "Australia/Sydney" }).format(luckyData.nextDrawAt)}`;
+  summary.textContent = `${luckyData.minNumber}–${luckyData.maxNumber} · ${luckyData.odds.exactPercent}% exact · ${exactPrize}`;
+  table(
+    "lucky-draws",
+    [[t("luckyDate"), false], [t("luckyWinning"), true], [t("luckyWinners"), false]],
+    luckyData.recentDraws.map((d) => [
+      d.dateKey,
+      `#${String(d.winningNumber).padStart(2, "0")}`,
+      d.winners.length ? d.winners.map((w) => `${w.name} (#${String(w.number).padStart(2, "0")})`).join(", ") : "—",
+    ]),
+    t("luckyNone"),
+  );
+}
+
+async function refreshLuckyNumber(): Promise<void> {
+  try {
+    const response = await fetch("/website/lucky-number", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    luckyData = (await response.json()) as PublicLuckyNumber;
+  } catch {
+    luckyData = null;
+  }
+  renderLuckyNumber();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderLuckyNumber());
+element("refresh").addEventListener("click", () => void refreshLuckyNumber());
+void refreshLuckyNumber();
+setInterval(() => {
+  if (!document.hidden) void refreshLuckyNumber();
 }, 60000);

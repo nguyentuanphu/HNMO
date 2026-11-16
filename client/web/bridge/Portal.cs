@@ -58,6 +58,8 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/safety/item", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "item"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/topup-milestones/account", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardTopUpMilestonesAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/topup-milestones/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardTopUpMilestonesAsync(context, "claim"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/lucky-number/account", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardLuckyNumberAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/lucky-number/pick", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardLuckyNumberAsync(context, "pick"))).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
@@ -613,6 +615,49 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             }
 
             logger.LogWarning("{Feature} on the website failed: {Status}", label, response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> ForwardLuckyNumberAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Str(string key, int max) =>
+            body?.GetValueOrDefault(key) is { ValueKind: JsonValueKind.String } el && el.GetString() is { } s && s.Length <= max ? s : string.Empty;
+        var number = body?.GetValueOrDefault("number") is { ValueKind: JsonValueKind.Number } numEl && numEl.TryGetInt32(out var n) ? n : 0;
+        object payload = action == "pick"
+            ? new { loginName = Str("loginName", 10), password = Str("password", 20), number }
+            : new { loginName = Str("loginName", 10), password = Str("password", 20) };
+
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/lucky-number/{action}", payload), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Lucky number portal call {Action} failed: {Status}", action, response.StatusCode);
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
         catch (HttpRequestException)

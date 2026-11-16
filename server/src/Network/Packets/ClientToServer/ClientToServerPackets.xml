@@ -4997,6 +4997,54 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>34</SubCode>
+      <Name>HnmoLuckyNumberCommand</Name>
+      <Caption>HNMO daily lucky number command</Caption>
+      <Length>9</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.</SentWhen>
+      <CausedReaction>The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoLuckyNumberActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Number</Name>
+          <Description>The picked lucky number when Action is Pick.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoLuckyNumberActionType</Name>
+          <Description>Daily lucky number action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request current lucky number state.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Pick</Name>
+              <Description>Pick a lucky number for the active round.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimOwed</Name>
+              <Description>Claim jewels waiting for bag space.</Description>
+              <Value>3</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

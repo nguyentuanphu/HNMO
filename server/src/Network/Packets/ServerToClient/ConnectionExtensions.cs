@@ -7460,6 +7460,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoLuckyNumberState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON containing round date, next draw UTC timestamp, number range, odds, prizes, account picks, owed rewards, recent draw results, and event status.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requests the Daily Lucky Number state, picks a number, claims owed rewards, or when the daily draw runs.
+    /// Causes reaction on client side: The web game updates the Daily Lucky Number window (L) and posts draw/win chat notices.
+    /// </remarks>
+    public static async ValueTask SendHnmoLuckyNumberStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLuckyNumberStateRef.GetRequiredSize(json);
+            var packet = new HnmoLuckyNumberStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
