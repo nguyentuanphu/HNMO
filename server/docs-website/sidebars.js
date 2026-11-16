@@ -47,6 +47,7 @@ const sidebars = {
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",
+        "admin-panel/activity-log",
         "admin-panel/chat-commands",
         "admin-panel/map-editor",
         "admin-panel/live-map",
