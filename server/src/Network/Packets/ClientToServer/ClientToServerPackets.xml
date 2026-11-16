@@ -4884,6 +4884,313 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>24</SubCode>
+      <Name>HnmoTicketLogin</Name>
+      <Caption>HNMO web ticket login</Caption>
+      <Length>52</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game connects with a one-time login ticket issued on the website.</SentWhen>
+      <CausedReaction>The server redeems the ticket once and logs the player in without a password.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>String</Type>
+          <Length>10</Length>
+          <Name>Username</Name>
+          <Description>The account login name.</Description>
+        </Field>
+        <Field>
+          <Index>14</Index>
+          <Type>String</Type>
+          <Length>38</Length>
+          <Name>Ticket</Name>
+          <Description>The one-time login ticket issued on the website.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>30</SubCode>
+      <Name>HnmoTopUpMilestonesCommand</Name>
+      <Caption>HNMO top-up milestones command</Caption>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game enters the world, opens the top-up milestones window, claims a milestone step, or takes waiting rewards.</SentWhen>
+      <CausedReaction>The server performs the action and replies with HnmoTopUpMilestonesState.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoTopUpMilestonesActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Description>Milestone step id when Claim; empty otherwise.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoTopUpMilestonesActionType</Name>
+          <Description>The action for HNMO top-up milestones.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request the current top-up milestones state.</Description>
+              <Value>0</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Claim</Name>
+              <Description>Claim the milestone step identified by Argument.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>TakeOwed</Name>
+              <Description>Take rewards waiting for bag space.</Description>
+              <Value>2</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>32</SubCode>
+      <Name>HnmoTimetableCommand</Name>
+      <Caption>HNMO event and boss timetable command</Caption>
+      <Length>69</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game enters the world or opens the Event and Boss Timetable window.</SentWhen>
+      <CausedReaction>The server replies with HnmoTimetableState (F5 33).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoTimetableActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Length>64</Length>
+          <Description>Optional filter or payload string.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoTimetableActionType</Name>
+          <Description>Timetable action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request the full event, invasion and boss timetable.</Description>
+              <Value>1</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>34</SubCode>
+      <Name>HnmoLuckyNumberCommand</Name>
+      <Caption>HNMO daily lucky number command</Caption>
+      <Length>9</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.</SentWhen>
+      <CausedReaction>The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoLuckyNumberActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Number</Name>
+          <Description>The picked lucky number when Action is Pick.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoLuckyNumberActionType</Name>
+          <Description>Daily lucky number action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request current lucky number state.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Pick</Name>
+              <Description>Pick a lucky number for the active round.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>ClaimOwed</Name>
+              <Description>Claim jewels waiting for bag space.</Description>
+              <Value>3</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>36</SubCode>
+      <Name>HnmoMarriageCommand</Name>
+      <Caption>HNMO marriage command</Caption>
+      <Length>53</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player opens the Marriage window (Shift+M), proposes, accepts/declines, edits couple title, warps to spouse, or divorces.</SentWhen>
+      <CausedReaction>The server validates the ceremony/marriage action and sends HnmoMarriageState (F5 37).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoMarriageActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Length>48</Length>
+          <Description>Partner character name or custom couple title.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoMarriageActionType</Name>
+          <Description>Marriage action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request marriage state.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Propose</Name>
+              <Description>Propose marriage to Argument character name.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Accept</Name>
+              <Description>Accept pending marriage proposal and hold ceremony at Devias Church.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Decline</Name>
+              <Description>Decline pending proposal.</Description>
+              <Value>4</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Divorce</Name>
+              <Description>Divorce current spouse according to server rules.</Description>
+              <Value>5</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>SetTitle</Name>
+              <Description>Set custom couple title.</Description>
+              <Value>6</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>TeleportToSpouse</Name>
+              <Description>Teleport to online spouse.</Description>
+              <Value>7</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>38</SubCode>
+      <Name>HnmoMarketCommand</Name>
+      <Caption>HNMO item market command</Caption>
+      <Length>59</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.</SentWhen>
+      <CausedReaction>The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoMarketActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>Inventory slot when listing an item.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>Byte</Type>
+          <Name>Currency</Name>
+          <Description>0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.</Description>
+        </Field>
+        <Field>
+          <Index>7</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Price</Name>
+          <Description>Asking price in the selected currency.</Description>
+        </Field>
+        <Field>
+          <Index>11</Index>
+          <Type>String</Type>
+          <Name>ListingId</Name>
+          <Length>48</Length>
+          <Description>Target listing identifier when buying or canceling.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoMarketActionType</Name>
+          <Description>Item market command action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request market listings and personal escrow items/payouts.</Description>
+              <Value>1</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>List</Name>
+              <Description>Escrow and list a bag item.</Description>
+              <Value>2</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Buy</Name>
+              <Description>Atomically purchase a listing.</Description>
+              <Value>3</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Cancel</Name>
+              <Description>Cancel your own listing and return item to escrow claim.</Description>
+              <Value>4</Value>
+            </EnumValue>
+            <EnumValue>
+              <Name>Claim</Name>
+              <Description>Claim bought/returned items into bag and collect pending Zen payouts.</Description>
+              <Value>5</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>
@@ -4973,6 +5280,178 @@
           <Type>Binary</Type>
           <Name>Data</Name>
           <Length>16</Length>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3A</SubCode>
+      <Name>HnmoJewelBankCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.</SentWhen>
+      <CausedReaction>The server performs the action and responds with HnmoJewelBankState (F5 3B).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>1 = Request state, 2 = Deposit single bag slot, 3 = Deposit all jewels, 4 = Withdraw jewel, 5 = Clear master skill points.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>Bag slot index when depositing a single slot.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>IntegerLittleEndian</Type>
+          <Name>Amount</Name>
+          <Description>Withdrawal quantity.</Description>
+        </Field>
+        <Field>
+          <Index>10</Index>
+          <Type>String</Type>
+          <Name>Key</Name>
+          <Description>Jewel key (e.g. bless, soul, life, creation, chaos, harmony, guardian).</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3C</SubCode>
+      <Name>HnmoCatchupCapRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to query today's Catch-up Level and Reset Cap state.</SentWhen>
+      <CausedReaction>The server responds with HnmoCatchupCapState (F5 3D).</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3E</SubCode>
+      <Name>HnmoSeasonPlanRequest</Name>
+      <Length>4</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open or refresh the Season Plan timeline (F8).</SentWhen>
+      <CausedReaction>The server replies with HnmoSeasonPlanState (F5 3F).</CausedReaction>
+      <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>40</SubCode>
+      <Name>HnmoLeftoversCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open Combining Leftovers / Exchange NPC (F10), run a combine recipe, or exchange surplus materials.</SentWhen>
+      <CausedReaction>The server performs the recipe/exchange and sends HnmoLeftoversState (F5 41).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>1 = RequestState, 2 = CombineRecipe, 3 = ExchangeOffer.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Id</Name>
+          <Description>Target recipe or exchange offer identifier.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>42</SubCode>
+      <Name>HnmoMountChainCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to open the Mount Chain collection (Shift+U), craft/upgrade a mount step, or claim/summon a collected mount.</SentWhen>
+      <CausedReaction>The server processes the mount chain action and sends HnmoMountChainState (F5 43).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = CraftOrUpgrade, 2 = SummonUnlocked.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Id</Name>
+          <Description>Target mount tier or recipe identifier.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>44</SubCode>
+      <Name>HnmoPartyOptionsCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request party options, advertise a hunting spot party/password, or auto-join a spot/password party.</SentWhen>
+      <CausedReaction>The server processes the request and replies with HnmoPartyOptionsState (F5 45).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = AdvertiseSpotOrPass, 2 = JoinByPassword, 3 = JoinSpot, 4 = StopAdvertising.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Payload</Name>
+          <Description>JSON string containing password, spot, leader, minLevel, maxLevel.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>46</SubCode>
+      <Name>HnmoRankingCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request the in-game player, guild, online, and event rankings or submit a bulk stat-point distribution.</SentWhen>
+      <CausedReaction>The server processes the command and replies with HnmoRankingState (F5 47).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestRankings, 1 = BulkAddStats.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Payload</Name>
+          <Description>Optional category filter or JSON stat allocation map (str, agi, vit, ene, cmd).</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>48</SubCode>
+      <Name>HnmoCustomRanksCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request custom rank definitions and active player titles, or to equip/reset a player's displayed title.</SentWhen>
+      <CausedReaction>The server processes the command and replies with HnmoCustomRanksState (F5 49).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = SelectRank (empty RankId restores automatic highest rank).</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>RankId</Name>
+          <Description>The rank tier identifier to equip, or empty for automatic highest tier.</Description>
         </Field>
       </Fields>
     </Packet>

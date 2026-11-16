@@ -126,3 +126,11 @@ the project's issue tracker, the useful parts are:
 * the log around the time of the problem — download the file rather than
   copying a screenshot of it,
 * what you did in the client or panel right before it happened.
+
+
+## Host log rotation, database retention, and backups
+
+- **Launcher log rotation**: `save/logs/server.log` and `save/logs/database.log` rotate daily (Sydney date) and at `MaxLogFileMb` (default `10` MB) into compressed `.log.gz` files, enforcing configurable day (`MaxLogDays`, default `14`) and total folder size (`MaxLogTotalMb`, default `200`) limits.
+- **View, search, download**: On `/control`, choose a file or *All logs*, filter across both active logs and `.log.gz` archives, and download any log file.
+- **Database chat & audit log retention** (`/db-log-retention`): Configure `DbLogRetentionDays` (default `90`). Expired chat and admin audit rows are exported to compressed `save/archives/db-logs-*.json.gz` files and verified before deletion.
+- **Automated GFS backups & disk monitor** (`/control`): Daily backups keep `7` daily, `4` weekly, and `3` monthly archives, display combined size, run scheduled PostgreSQL `VACUUM ANALYZE`, restore PostgreSQL dumps via `psql`, and warn when free disk falls below `LowDiskWarningMb`.

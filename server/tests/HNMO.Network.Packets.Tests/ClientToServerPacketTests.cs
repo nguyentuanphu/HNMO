@@ -4301,6 +4301,144 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoTicketLogin.
+    /// </summary>
+    [Test]
+    public void HnmoTicketLogin_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 52;
+        var actualLength = HnmoTicketLoginRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Username' boundary
+        Assert.That(4 + 10, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Username' exceeds packet boundary");
+        
+        // Validate field 'Ticket' boundary
+        Assert.That(14 + 38, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Ticket' exceeds packet boundary");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoTopUpMilestonesCommand.
+    /// </summary>
+    [Test]
+    public void HnmoTopUpMilestonesCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoTopUpMilestonesCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoTimetableCommand.
+    /// </summary>
+    [Test]
+    public void HnmoTimetableCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 69;
+        var actualLength = HnmoTimetableCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Argument' boundary
+        Assert.That(5 + 64, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Argument' exceeds packet boundary");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoLuckyNumberCommand.
+    /// </summary>
+    [Test]
+    public void HnmoLuckyNumberCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 9;
+        var actualLength = HnmoLuckyNumberCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Number' boundary
+        Assert.That(5 + 4, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Number' exceeds packet boundary");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoMarriageCommand.
+    /// </summary>
+    [Test]
+    public void HnmoMarriageCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 53;
+        var actualLength = HnmoMarriageCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Argument' boundary
+        Assert.That(5 + 48, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Argument' exceeds packet boundary");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoMarketCommand.
+    /// </summary>
+    [Test]
+    public void HnmoMarketCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 59;
+        var actualLength = HnmoMarketCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Slot' boundary
+        Assert.That(5 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Slot' exceeds packet boundary");
+        
+        // Validate field 'Currency' boundary
+        Assert.That(6 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Currency' exceeds packet boundary");
+        
+        // Validate field 'Price' boundary
+        Assert.That(7 + 4, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Price' exceeds packet boundary");
+        
+        // Validate field 'ListingId' boundary
+        Assert.That(11 + 48, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'ListingId' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for CharacterRenameRequest.
     /// </summary>
     [Test]
@@ -4392,5 +4530,129 @@ public class PacketStructureTests
         // Validate field 'Data' boundary
         Assert.That(4 + 16, Is.LessThanOrEqualTo(expectedLength), 
             "Field 'Data' exceeds packet boundary");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoJewelBankCommand.
+    /// </summary>
+    [Test]
+    public void HnmoJewelBankCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoJewelBankCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 10;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoCatchupCapRequest.
+    /// </summary>
+    [Test]
+    public void HnmoCatchupCapRequest_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 4;
+        var actualLength = HnmoCatchupCapRequestRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoSeasonPlanRequest.
+    /// </summary>
+    [Test]
+    public void HnmoSeasonPlanRequest_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 4;
+        var actualLength = HnmoSeasonPlanRequestRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoLeftoversCommand.
+    /// </summary>
+    [Test]
+    public void HnmoLeftoversCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoLeftoversCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoMountChainCommand.
+    /// </summary>
+    [Test]
+    public void HnmoMountChainCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoMountChainCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoPartyOptionsCommand.
+    /// </summary>
+    [Test]
+    public void HnmoPartyOptionsCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoPartyOptionsCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoRankingCommand.
+    /// </summary>
+    [Test]
+    public void HnmoRankingCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoRankingCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoCustomRanksCommand.
+    /// </summary>
+    [Test]
+    public void HnmoCustomRanksCommand_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoCustomRanksCommandRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
     }
 }

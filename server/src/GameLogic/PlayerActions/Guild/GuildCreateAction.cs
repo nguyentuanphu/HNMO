@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.Guild;
 
 using System.ComponentModel;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views.Guild;
 
 /// <summary>
@@ -32,6 +33,12 @@ public class GuildCreateAction
         {
             // The client doesn't send an empty name; a crafted packet does. The protocol knows no better result.
             creator.Logger.LogWarning("Account {account} requested a guild with an empty name.", creator.Account?.LoginName);
+            await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await BannedWordsPlugIn.IsGuildNameAllowedAsync(creator, guildName).ConfigureAwait(false))
+        {
             await creator.InvokeViewPlugInAsync<IShowGuildCreateResultPlugIn>(p => p.ShowGuildCreateResultAsync(GuildCreateErrorDetail.GuildAlreadyExist)).ConfigureAwait(false);
             return;
         }
