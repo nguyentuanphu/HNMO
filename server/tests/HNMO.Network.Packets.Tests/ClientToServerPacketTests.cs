@@ -4301,6 +4301,28 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoTicketLogin.
+    /// </summary>
+    [Test]
+    public void HnmoTicketLogin_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 52;
+        var actualLength = HnmoTicketLoginRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Username' boundary
+        Assert.That(4 + 10, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Username' exceeds packet boundary");
+        
+        // Validate field 'Ticket' boundary
+        Assert.That(14 + 38, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Ticket' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for CharacterRenameRequest.
     /// </summary>
     [Test]

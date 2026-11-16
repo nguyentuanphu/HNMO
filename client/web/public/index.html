@@ -44,6 +44,8 @@
     .buttons { display: flex; gap: 8px; }
     button { font: inherit; border-radius: 6px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line); background: #1b2131; color: var(--text); }
     button.primary { background: var(--gold); color: #1a1408; border-color: var(--gold); font-weight: 600; flex: 1; }
+    a.website-login { display: block; text-align: center; text-decoration: none; font: inherit; border-radius: 6px; padding: 9px 14px; background: var(--gold); color: #1a1408; border: 1px solid var(--gold); font-weight: 600; }
+    a.website-login:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
     button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
     .choices { display: grid; gap: 6px; }
     .choice { text-align: left; display: flex; justify-content: space-between; gap: 8px; }
@@ -96,6 +98,7 @@
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">
       <h1 data-game-name>HenryN Mu Online</h1>
+      <a class="website-login" id="websiteLoginButton" href="/account.html#play">Log in on the website</a>
       <fieldset>
         <div class="row"><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
         <div class="row"><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>

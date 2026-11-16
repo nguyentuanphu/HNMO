@@ -89,7 +89,7 @@ import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
-import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
+import { fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
@@ -803,7 +803,9 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
   });
 }
 
-async function playOnline(settings: LoginSettings): Promise<void> {
+async function playOnline(settings: LoginSettings, ticket?: string): Promise<void> {
+  state.connection?.close();
+  state.connection = undefined;
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
   const servers = await fetchServerList(settings.relay, connectServer);
@@ -812,7 +814,9 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   ui.servers.hidden = true;
   const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
-  const connection = await login(settings.relay, address, settings.username, settings.password);
+  const connection = ticket
+    ? await loginWithTicket(settings.relay, address, settings.username, ticket)
+    : await login(settings.relay, address, settings.username, settings.password);
   state.connection = connection; // tests feed recorded packets through it (dispatch)
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
@@ -1692,6 +1696,8 @@ function startGame(play: () => Promise<void>): void {
     ui.hud.hidden = false;
     window.__viewerReady = true;
   }).catch((error) => {
+    state.connection?.close();
+    state.connection = undefined;
     console.error(error);
     ui.login.hidden = false;
     ui.servers.hidden = ui.characters.hidden = true;
@@ -1700,14 +1706,59 @@ function startGame(play: () => Promise<void>): void {
   });
 }
 
+function readTicketFromHash(): { account: string; ticket: string } | null {
+  const hash = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
+  if (!hash) return null;
+  const params = new URLSearchParams(hash);
+  const ticket = params.get('ticket')?.trim() ?? '';
+  const account = params.get('account')?.trim() ?? '';
+  if (!ticket) return null;
+  // Remove the one-time ticket from the address bar right away so it doesn't linger in history.
+  history.replaceState(null, '', location.pathname + location.search);
+  return { account, ticket };
+}
+
+function updateWebsiteLoginButtonLanguage(): void {
+  const button = document.getElementById('websiteLoginButton');
+  if (button) button.textContent = currentLanguage() === 'vi' ? 'Đăng nhập trên trang web' : 'Log in on the website';
+}
+
 function initLogin() {
   const saved = loadSettings();
   // HNMO.Web serves the page and the relay from the same address.
   const defaults = { relay: `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/relay`, host: '127.0.0.1', port: 44406, username: '' };
-  for (const [key, value] of Object.entries({ ...defaults, ...saved })) {
+  const initial = { ...defaults, ...saved };
+  for (const [key, value] of Object.entries(initial)) {
     const input = ui.loginForm.elements.namedItem(key) as HTMLInputElement | null;
     if (input) input.value = String(value);
   }
+  updateWebsiteLoginButtonLanguage();
+  onLanguageChange(() => updateWebsiteLoginButtonLanguage());
+
+  void fetch('/website/settings', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d: { requireWebsiteLogin?: boolean } | null) => {
+      if (d?.requireWebsiteLogin) {
+        const fieldset = ui.loginForm.querySelector('fieldset');
+        if (fieldset) fieldset.hidden = true;
+      }
+    })
+    .catch(() => {});
+
+  const pendingTicket = readTicketFromHash();
+  if (pendingTicket) {
+    const form: LoginSettings = {
+      username: pendingTicket.account || String(initial.username ?? ''),
+      password: '',
+      host: String(initial.host),
+      port: String(initial.port),
+      relay: String(initial.relay),
+    };
+    const usernameInput = ui.loginForm.elements.namedItem('username') as HTMLInputElement | null;
+    if (usernameInput && form.username) usernameInput.value = form.username;
+    startGame(() => playOnline(form, pendingTicket.ticket));
+  }
+
   ui.loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
     // The form's text inputs, by name.
