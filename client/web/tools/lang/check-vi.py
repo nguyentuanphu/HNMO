@@ -46,9 +46,18 @@ def check_resources():
     return total, errors
 
 
+def unique_object(pairs):
+    values = {}
+    for key, value in pairs:
+        if key in values:
+            raise ValueError(f'Duplicate dictionary key: {key!r}')
+        values[key] = value
+    return values
+
+
 def check_game_dictionary():
-    data = json.loads((WEB / 'public/data/lang/vi.json').read_text(encoding='utf-8'))['texts']
-    overrides = json.loads((WEB / 'tools/lang/vi-overrides.json').read_text(encoding='utf-8'))
+    data = json.loads((WEB / 'public/data/lang/vi.json').read_text(encoding='utf-8'), object_pairs_hook=unique_object)['texts']
+    overrides = json.loads((WEB / 'tools/lang/vi-overrides.json').read_text(encoding='utf-8'), object_pairs_hook=unique_object)
     errors = []
     for english, vietnamese in data.items():
         if not vietnamese.strip():
