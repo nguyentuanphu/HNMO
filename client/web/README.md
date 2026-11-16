@@ -149,3 +149,17 @@ The dashboard deliberately leaves `#accountPlaySlot` for the login-ticket featur
 It currently contains only the normal game login link. Do not duplicate ticket creation.
 New dashboard texts live in `src/accountPageTexts.ts` as paired English/Vietnamese texts;
 this avoids rewriting translation dictionaries being changed on other branches.
+
+Players can change their password in **Security** after leaving the game. Enter the
+new password twice (3–20 printable ASCII characters, matching account registration).
+Saving signs the player out of the account page; sign in again with the new password.
+The bridge keeps the operator API key on the server. The account endpoint verifies
+the current password, reserves the offline account against game logins, verifies the
+password again, and saves a BCrypt hash. Neither passwords nor hashes are logged or
+returned. The page stores only a success notice across the reload, never credentials.
+
+Người chơi có thể đổi mật khẩu trong **Bảo mật** sau khi thoát game. Nhập mật khẩu mới
+hai lần, gồm 3–20 ký tự thông thường trên bàn phím tiếng Anh, không có dấu. Sau khi lưu,
+trang tài khoản đăng xuất; hãy đăng nhập lại bằng mật khẩu mới. Máy chủ xác thực mật
+khẩu hiện tại và giữ chỗ tài khoản để tránh đăng nhập game trong lúc đổi. Trang không
+lưu mật khẩu vào bộ nhớ trình duyệt.

@@ -16,6 +16,7 @@ using HNMO.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 /// <summary>Account isolation, bounded history and safe snapshots for the player dashboard.</summary>
@@ -24,6 +25,8 @@ public class WebsiteAccountControllerTests
 {
     private WebsiteAccountController _controller = null!;
     private Account _account = null!;
+
+    private Mock<ILoginServer> _login = null!;
 
     /// <summary>Creates two accounts whose grants must never be mixed.</summary>
     /// <returns>The setup task.</returns>
@@ -62,9 +65,10 @@ public class WebsiteAccountControllerTests
         await players.SaveChangesAsync().ConfigureAwait(false);
         var source = new Mock<IDataSource<GameConfiguration>>();
         source.Setup(s => s.GetOwnerAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(configuration);
-        var login = new Mock<ILoginServer>();
-        login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte> { ["ann"] = 0 });
-        this._controller = new WebsiteAccountController(provider, source.Object, login.Object)
+        this._login = new Mock<ILoginServer>();
+        this._login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte> { ["ann"] = 0 });
+        this._login.Setup(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
+        this._controller = new WebsiteAccountController(provider, source.Object, this._login.Object, NullLogger<WebsiteAccountController>.Instance)
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
         };
@@ -118,6 +122,78 @@ public class WebsiteAccountControllerTests
         var policy = typeof(WebsiteAccountController).GetCustomAttributes(typeof(AuthorizeAttribute), false).Cast<AuthorizeAttribute>().Single();
         Assert.That(policy.Policy, Is.EqualTo(AdminPolicies.AuthenticatedOperator));
         Assert.That(policy.AuthenticationSchemes, Is.EqualTo(ApiKeyAuthenticationDefaults.ApiSchemes));
+    }
+
+    /// <summary>A valid password change hashes the replacement, exposes no secrets and releases its reservation.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ChangesPasswordAndReleasesReservationAsync()
+    {
+        var result = await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false);
+        Assert.That(result, Is.InstanceOf<OkObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("replacement", this._account.PasswordHash), Is.True);
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.False);
+        var response = JsonSerializer.Serialize(((OkObjectResult)result).Value);
+        Assert.That(response, Does.Not.Contain("secret").And.Not.Contain("replacement").And.Not.Contain(this._account.PasswordHash));
+        Assert.That(this._controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("no-store"));
+        this._login.Verify(s => s.ReleaseAccountReservationAsync("ann", It.IsAny<int>()), Times.Once);
+    }
+
+    /// <summary>A live or already reserved account cannot have its saved password overwritten.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RefusesPasswordChangeWhenAccountIsOnlineAsync()
+    {
+        this._login.Setup(s => s.TryReserveAccountAsync("ann", It.IsAny<int>())).ReturnsAsync(false);
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<ConflictObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.ReleaseAccountReservationAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
+
+    /// <summary>Wrong, missing, banned and automated accounts cannot enter the password-change reservation.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RejectsUnauthorizedPasswordChangesAsync()
+    {
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "wrong", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(await this._controller.ChangePasswordAsync(new("missing", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(await this._controller.ChangePasswordAsync(new(null, null, "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        this._account.State = AccountState.Banned;
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        this._account.State = AccountState.Normal;
+        this._account.IsBot = true;
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
+
+    /// <summary>Authentication is checked again after reservation, rejecting credentials invalidated by a competing change.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RejectsCredentialsChangedBeforeReservationAsync()
+    {
+        this._login.Setup(s => s.TryReserveAccountAsync("ann", It.IsAny<int>()))
+            .Callback(() => this._account.PasswordHash = BCrypt.Net.BCrypt.HashPassword("other-change", 4))
+            .ReturnsAsync(true);
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", "replacement")).ConfigureAwait(false), Is.InstanceOf<UnauthorizedObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("other-change", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.ReleaseAccountReservationAsync("ann", It.IsAny<int>()), Times.Once);
+    }
+
+    /// <summary>Invalid replacement values cannot mutate or reserve an account.</summary>
+    /// <param name="password">An invalid new password.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase("ab")]
+    [TestCase("abcdefghijklmnopqrstu")]
+    [TestCase("mật-khẩu")]
+    [TestCase("line\nbreak")]
+    public async Task RejectsInvalidNewPasswordsAsync(string? password)
+    {
+        Assert.That(await this._controller.ChangePasswordAsync(new("ann", "secret", password)).ConfigureAwait(false), Is.InstanceOf<BadRequestObjectResult>());
+        Assert.That(BCrypt.Net.BCrypt.Verify("secret", this._account.PasswordHash), Is.True);
+        this._login.Verify(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
     }
 
     private async ValueTask<JsonElement> ReadAsync(int page)

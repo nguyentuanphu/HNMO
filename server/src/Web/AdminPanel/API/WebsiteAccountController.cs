@@ -5,6 +5,8 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
@@ -13,22 +15,26 @@ using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
-/// Reads the player's own saved data through the trusted website bridge. Both an operator API key and the
+/// Reads and updates the player's own account through the trusted website bridge. Both an operator API key and the
 /// player's password are required; knowing another account's name does not authorize reading it.
 /// </summary>
 /// <param name="persistence">The account persistence provider.</param>
 /// <param name="configurations">The game configuration source.</param>
-/// <param name="loginServer">The authoritative account online snapshot.</param>
+/// <param name="loginServer">The authoritative online state and account reservations.</param>
+/// <param name="logger">The security-event logger, which never receives passwords.</param>
 [ApiController]
 [Route("api/website/account")]
 [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Policy = AdminPolicies.AuthenticatedOperator)]
 public sealed class WebsiteAccountController(
     IPersistenceContextProvider persistence,
     IDataSource<GameConfiguration> configurations,
-    ILoginServer loginServer) : ControllerBase
+    ILoginServer loginServer,
+    ILogger<WebsiteAccountController> logger) : ControllerBase
 {
     private const int PageSize = 20;
     private const int MaximumHistory = 1000;
@@ -90,5 +96,69 @@ public sealed class WebsiteAccountController(
             page = request.Page,
             hasMore = offset + PageSize < MaximumHistory && grants.Count > offset + PageSize,
         });
+    }
+
+    /// <summary>Changes an offline account's password while reserving it against concurrent game logins.</summary>
+    /// <param name="request">The current credentials and the new password.</param>
+    /// <returns>A secret-free success or refusal code for the bilingual website.</returns>
+    [HttpPost("password")]
+    public async ValueTask<IActionResult> ChangePasswordAsync([FromBody] WebsitePasswordChangeRequest request)
+    {
+        this.Response.Headers.CacheControl = "no-store";
+        if (string.IsNullOrWhiteSpace(request.LoginName) || request.LoginName.Length > 10
+            || string.IsNullOrEmpty(request.Password) || request.Password.Length > 20)
+        {
+            return this.Unauthorized(new { error = "login" });
+        }
+
+        if (request.NewPassword is not { Length: >= 3 and <= 20 } nextPassword || nextPassword.Any(c => c is < ' ' or > '~'))
+        {
+            return this.BadRequest(new { error = "password" });
+        }
+
+        var cancellationToken = this.HttpContext.RequestAborted;
+        var configuration = await configurations.GetOwnerAsync(Guid.Empty, cancellationToken).ConfigureAwait(false);
+        using var authentication = persistence.CreateNewPlayerContext(configuration);
+        var account = await authentication.GetAccountByLoginNameAsync(request.LoginName.Trim(), request.Password, cancellationToken).ConfigureAwait(false);
+        if (account is null || account.IsBot || account.State is AccountState.Banned or AccountState.TemporarilyBanned)
+        {
+            return this.Unauthorized(new { error = "login" });
+        }
+
+        var reservation = RandomNumberGenerator.GetInt32(byte.MaxValue + 1, int.MaxValue);
+        if (!await loginServer.TryReserveAccountAsync(account.LoginName, reservation).ConfigureAwait(false))
+        {
+            return this.Conflict(new { error = "online" });
+        }
+
+        try
+        {
+            return await this.WritePasswordAsync(configuration, account.LoginName, request.Password, nextPassword, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            await loginServer.ReleaseAccountReservationAsync(account.LoginName, reservation).ConfigureAwait(false);
+        }
+    }
+
+    private async ValueTask<IActionResult> WritePasswordAsync(GameConfiguration configuration, string loginName, string password, string nextPassword, CancellationToken cancellationToken)
+    {
+        using var context = persistence.CreateNewPlayerContext(configuration);
+
+        // Re-read and authenticate under the reservation: an earlier password change must invalidate old credentials.
+        var account = await context.GetAccountByLoginNameAsync(loginName, password, cancellationToken).ConfigureAwait(false);
+        if (account is null || account.IsBot || account.State is AccountState.Banned or AccountState.TemporarilyBanned)
+        {
+            return this.Unauthorized(new { error = "login" });
+        }
+
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(nextPassword);
+        if (!await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
+        {
+            return this.StatusCode(StatusCodes.Status500InternalServerError, new { error = "server" });
+        }
+
+        logger.LogInformation("The account {LoginName} changed its password on the website.", account.LoginName);
+        return this.Ok(new { changed = true });
     }
 }

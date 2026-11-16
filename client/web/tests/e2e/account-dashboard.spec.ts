@@ -38,6 +38,54 @@ async function section(page: Page, width: number, index: number, language: 'en' 
   else await page.locator('#accountNav').getByRole('button', { name: labels[language][index], exact: true }).click();
 }
 
+
+async function checkPasswordChange(page: Page, width: number, language: 'en' | 'vi'): Promise<void> {
+  await signIn(page);
+  await section(page, width, 5, language);
+  const passwordForm = page.locator('#accountPasswordChange');
+  await expect(passwordForm).toBeVisible();
+  const savePassword = passwordForm.getByRole('button', { name: language === 'en' ? 'Change password' : 'Đổi mật khẩu', exact: true });
+  await expect(savePassword).toHaveAttribute('title', /.+/);
+  for (const input of await passwordForm.locator('input').all()) {
+    await expect(input).toHaveAttribute('type', 'password');
+    await expect(input).toHaveAttribute('title', /.+/);
+  }
+  let passwordRequests = 0;
+  await page.route('**/portal/account/password', async route => {
+    const body = route.request().postDataJSON() as { loginName: string; password: string; newPassword: string };
+    expect(body).toEqual({ loginName: 'ann', password: 'account-secret', newPassword: 'replacement-123' });
+    passwordRequests++;
+    await route.fulfill(passwordRequests === 1 ? { status: 409, json: { error: 'online' } } : { json: { changed: true } });
+  });
+  await passwordForm.locator('#accountNewPassword').fill('mật-khẩu');
+  await passwordForm.locator('#accountConfirmPassword').fill('mật-khẩu');
+  await savePassword.click();
+  await expect(page.locator('#accountMessage')).toHaveText(language === 'en'
+    ? 'Use 3–20 letters, numbers, spaces or symbols from an English keyboard.'
+    : 'Mật khẩu cần có 3–20 ký tự gồm chữ, số, dấu cách hoặc ký hiệu trên bàn phím tiếng Anh.');
+  expect(passwordRequests).toBe(0);
+  await passwordForm.locator('#accountNewPassword').fill('replacement-123');
+  await passwordForm.locator('#accountConfirmPassword').fill('different');
+  await savePassword.click();
+  await expect(page.locator('#accountMessage')).toHaveText(language === 'en' ? 'The two new passwords do not match.' : 'Hai lần nhập mật khẩu mới không khớp.');
+  expect(passwordRequests).toBe(0);
+  await passwordForm.locator('#accountConfirmPassword').fill('replacement-123');
+  await savePassword.click();
+  await expect(page.locator('#accountMessage')).toHaveText(language === 'en'
+    ? 'Log out of the game, then try changing your password again.'
+    : 'Hãy thoát game rồi thử đổi mật khẩu lại.');
+  await expect(page.locator('#accountLoginPanel')).toBeHidden();
+  await savePassword.click();
+  await expect(page.locator('#accountLoginPanel')).toBeVisible();
+  await expect(page.locator('#accountMessage')).toHaveText(language === 'en'
+    ? 'Your password was changed. Sign in with your new password.'
+    : 'Đã đổi mật khẩu. Hãy đăng nhập bằng mật khẩu mới.');
+  expect(passwordRequests).toBe(2);
+  const storage = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }));
+  expect(storage).not.toContain('account-secret');
+  expect(storage).not.toContain('replacement-123');
+}
+
 for (const width of [375, 820, 1280]) {
   for (const language of ['en', 'vi'] as const) {
     test(`account dashboard sections, history and logout (${language}, ${width}px)`, async ({ page }) => {
@@ -47,7 +95,7 @@ for (const width of [375, 820, 1280]) {
       await expect(page.locator('#account-overview')).toContainText('300');
       await expect(page.locator('#account-overview')).toContainText(language === 'vi' ? 'Chiến binh' : 'Knight');
       await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '/index.html');
-      await expect(page.locator('#account-overview a[href="/home.html#start"]')).toBeVisible();
+      await expect(page.locator('#account-overview a[href="/topup.html"]')).toBeVisible();
       await expect(page.locator('#account-overview annknight')).toHaveCount(0);
       await page.locator('#accountHelpButton').click();
       await expect(page.locator('#accountHelp')).toBeVisible();
@@ -75,6 +123,8 @@ for (const width of [375, 820, 1280]) {
       await expect(page.locator('#accountLoginPanel')).toBeVisible();
       await expect(page.locator('#accountSecret')).toHaveValue('');
       await expect(page.locator('#accountPanels')).not.toContainText('<AnnKnight>');
+
+      await checkPasswordChange(page, width, language);
     });
   }
 }

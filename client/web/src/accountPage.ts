@@ -1,6 +1,7 @@
 import { communityLinks, gameName, loadGameName } from './gameName.js';
 import { accountSections, onAccountSectionsChanged, registerAccountSection, type AccountSectionContext } from './accountSections.js';
 import { accountPageTexts, type AccountTextKey } from './accountPageTexts.js';
+import { mountAccountPasswordForm } from './accountPassword.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -80,14 +81,19 @@ async function request<T>(path: string, body: Readonly<Record<string, unknown>> 
     headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, ...credentials }),
   });
   if (!response.ok) {
+    if (path === '/portal/account/password' && response.status === 409) throw new AccountRequestError('passwordOnline');
+    if (path === '/portal/account/password' && response.status === 400) throw new AccountRequestError('passwordInvalid');
     throw new AccountRequestError(response.status === 401 ? 'loginError' : response.status === 429 ? 'rateError' : response.status === 503 ? 'setupError' : 'serverError');
   }
   return await response.json() as T;
 }
 
 function showError(error: unknown): void {
+  showMessage(error instanceof AccountRequestError ? error.key : 'serverError');
+}
+
+function showMessage(key: AccountTextKey): void {
   const message = element('accountMessage');
-  const key = error instanceof AccountRequestError ? error.key : 'serverError';
   message.dataset.at = key;
   message.textContent = t(key);
 }
@@ -126,7 +132,7 @@ function renderOverview(): void {
   const quick = node('div'); quick.className = 'account-actions';
   // #13 owns the one-time Play now ticket. This slot contains only the ordinary game link until it lands.
   const play = link('play', 'playHint', '/index.html'); play.id = 'accountPlaySlot'; play.dataset.accountPlaySlot = '';
-  quick.append(play, link('download', 'downloadHint', '/home.html#start'), link('topup', 'topupHint', '/topup.html'));
+  quick.append(play, link('topup', 'topupHint', '/topup.html'));
   root.append(quick, node('h3', t('characters')));
   root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map')],
     snapshot.characters.map(c => [c.name, (language === 'vi' ? c.classNameVi || c.className : c.className) || t('unknown'), String(c.level), String(c.resets), c.map === null ? t('unknown') : String(c.map)])) : node('p', t('noCharacters')));
@@ -176,6 +182,7 @@ function translate(): void {
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
   renderOverview(); renderCoins(); renderCommunity(); renderNavigation();
   const vip = element('account-vip-level'); vip.textContent = String(snapshot?.vipLevel ?? 0);
+  element('accountPasswordChange').hidden = !snapshot;
 }
 
 function renderNavigation(): void {
@@ -233,7 +240,8 @@ function mount(): void {
   element('account-vip').lastElementChild!.id = 'account-vip-level';
   panel('rewards', 'rewards', 'rewardsNote').append(element('gift'));
   panel('resets', 'resets').append(element('resets'));
-  panel('security', 'security', 'securityNote').append(element('safety'));
+  const security = panel('security', 'security', 'securityNote'); security.append(element('safety'));
+  mountAccountPasswordForm(security, { text: t, request, message: showMessage, error: showError, changed: passwordChanged });
   panel('community', 'community');
   onAccountSectionsChanged(() => { renderNavigation(); });
   element<HTMLSelectElement>('accountSectionSelect').addEventListener('change', event => { void openSection((event.target as HTMLSelectElement).value); });
@@ -242,11 +250,7 @@ function mount(): void {
     element('accountHelpButton').setAttribute('aria-expanded', String(!help.hidden));
   });
   element('accountRefresh').addEventListener('click', () => { void refresh(snapshot?.page ?? 0); });
-  element('accountLogout').addEventListener('click', () => {
-    credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();
-    // Reload clears credentials retained by the existing gift/reset/safety modules as well.
-    location.reload();
-  });
+  element('accountLogout').addEventListener('click', logOut);
   for (const entry of document.querySelectorAll<HTMLElement>('[data-account-language]')) entry.addEventListener('click', () => {
     language = entry.dataset.accountLanguage === 'vi' ? 'vi' : 'en';
     try { localStorage.setItem('hnmo.language', language); } catch { /* Storage is optional. */ }
@@ -267,6 +271,23 @@ function mount(): void {
     void openSection('overview');
   });
   translate();
+  try {
+    const notice = sessionStorage.getItem('hnmo.account.notice');
+    sessionStorage.removeItem('hnmo.account.notice');
+    if (notice === 'passwordChanged') showMessage('passwordChanged');
+  } catch { /* The sign-in form still works when storage is unavailable. */ }
+}
+
+function logOut(): void {
+  credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();
+  // Reload clears credentials retained by the existing gift/reset/safety modules as well.
+  location.reload();
+}
+
+function passwordChanged(): void {
+  // Only the translated notice key survives the reload, never credentials or account data.
+  try { sessionStorage.setItem('hnmo.account.notice', 'passwordChanged'); } catch { /* Storage is optional. */ }
+  logOut();
 }
 
 mount();
