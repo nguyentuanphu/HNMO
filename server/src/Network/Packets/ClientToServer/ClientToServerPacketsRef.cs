@@ -19408,7 +19408,7 @@ public readonly ref struct HnmoTicketLoginRef
     /// Gets the operation sub-code of this data packet.
     /// The <see cref="Code" /> is used as a grouping key.
     /// </summary>
-    public static byte SubCode => 0x23;
+    public static byte SubCode => 0x24;
 
     /// <summary>
     /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.

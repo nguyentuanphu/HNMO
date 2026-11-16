@@ -4887,7 +4887,7 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
-      <SubCode>23</SubCode>
+      <SubCode>24</SubCode>
       <Name>HnmoTicketLogin</Name>
       <Caption>HNMO web ticket login</Caption>
       <Length>52</Length>

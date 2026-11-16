@@ -207,7 +207,7 @@
   * [C1 F5 1F - HnmoResetsAction (by client)](C1-F5-1F-HnmoResetsAction_by-client.md)
   * [C1 F5 20 - HnmoAccountSafetyRequest (by client)](C1-F5-20-HnmoAccountSafetyRequest_by-client.md)
   * [C1 F5 22 - HnmoAccountSafetyAction (by client)](C1-F5-22-HnmoAccountSafetyAction_by-client.md)
-  * [C1 F5 23 - HnmoTicketLogin (by client)](C1-F5-23-HnmoTicketLogin_by-client.md)
+  * [C1 F5 24 - HnmoTicketLogin (by client)](C1-F5-24-HnmoTicketLogin_by-client.md)
   * [C1 F6 0A - QuestSelectRequest (by client)](C1-F6-0A-QuestSelectRequest_by-client.md)
   * [C1 F6 0B - QuestProceedRequest (by client)](C1-F6-0B-QuestProceedRequest_by-client.md)
   * [C1 F6 0D - QuestCompletionRequest (by client)](C1-F6-0D-QuestCompletionRequest_by-client.md)
