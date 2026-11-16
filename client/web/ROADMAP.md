@@ -542,7 +542,7 @@ More of its tools and plugins (checked 2026-11-16; ideas only):
   14.26 Performance mode in the web game's settings (EN/VI): hide other players, hide wings and pets, fewer skill
         and item effects, with hotkeys, for crowded events (helps low-end PCs and phones).
   14.27 Talismans/figurines: special items that give a buff or bonus while carried in the bag (admin-defined),
-        and consumable items that give extra stat points up to a cap (admin-defined).
+        and consumable items that give extra stat points up to a cap (admin-defined). — Done (`TalismanPlugIn`, `TalismanEngine`, `TalismanStore`, wired into `InventoryStorage` + `ItemConsumeAction`, `/talismans` EN/VI admin page; OFF by default).
   14.28 Custom ranks/titles: titles by level, resets, VIP or achievements, shown by the name, admin-defined.
   14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined).
   14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck).

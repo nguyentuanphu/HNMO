@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlayerActions.ItemConsumeActions;
 using System.ComponentModel;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.SeasonPlan;
+using HNMO.GameLogic.PlugIns.Talismans;
 using HNMO.GameLogic.Views.Inventory;
 
 /// <summary>
@@ -38,6 +39,28 @@ public class ItemConsumeAction
             await player.InvokeViewPlugInAsync<IRequestedItemConsumptionFailedPlugIn>(p => p.RequestedItemConsumptionFailedAsync()).ConfigureAwait(false);
             var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
             await player.ShowBlueMessageAsync(isVi ? "Đá Tạo Hóa hiện chưa mở ở giai đoạn mùa giải này." : "Harmony & Refining Stones are locked until their Season stage opens.").ConfigureAwait(false);
+            return;
+        }
+
+        var (talismanHandled, talismanSucceeded) = await TalismanPlugIn.TryConsumeStatItemAsync(player, item).ConfigureAwait(false);
+        if (talismanHandled)
+        {
+            if (!talismanSucceeded)
+            {
+                await player.InvokeViewPlugInAsync<IRequestedItemConsumptionFailedPlugIn>(p => p.RequestedItemConsumptionFailedAsync()).ConfigureAwait(false);
+                return;
+            }
+
+            if (item.Durability == 0)
+            {
+                await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+            }
+            else
+            {
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, true)).ConfigureAwait(false);
+            }
+
+            player.GameContext.PlugInManager.GetPlugInPoint<IItemConsumedPlugIn>()?.ItemConsumed(player, item, player.Inventory!.GetItem(inventoryTargetSlot));
             return;
         }
 
