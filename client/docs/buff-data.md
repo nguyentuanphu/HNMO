@@ -59,3 +59,17 @@ editor's Data Checks (area **Buffs**,
 - A right-click on the strengthened Infinity Arrow and Expansion of Wizardry
   (buffs 143, 138, 139) cancelled nothing: the code knew only the first tier's
   skill.
+
+## Vietnamese tooltips
+
+All 158 definitions include Vietnamese names and descriptions. For the 30
+entries without an English description, the Vietnamese description cautiously
+explains the existing name; it adds no numerical claims or new mechanics.
+The original languages and gameplay fields are preserved. Skill names familiar
+to players may remain in English with a Vietnamese explanation underneath.
+HNMO's seven web skill buffs (180–186) also include Vietnamese tooltip text.
+
+Run `node client/web/tools/check-buffs-vi.mjs` from the repository root to check
+that every buff has both Vietnamese fields and that its numbers, percentages
+and formatting placeholders match the English. The optional first argument
+selects another buff JSON file for checking.

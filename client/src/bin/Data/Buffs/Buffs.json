@@ -17,6 +17,7 @@
         "ru": "Усиление атаки",
         "tl": "Dagdag na Lakas ng Pag-atake",
         "uk": "Посилення атаки",
+        "vi": "Tăng tấn công",
         "zh-CN": "攻击力提升",
         "zh-TW": "攻擊力提升"
       },
@@ -31,6 +32,7 @@
         "ru": "Сила атаки увеличивается.",
         "tl": "Tumataas ang lakas ng pag-atake.",
         "uk": "Сила атаки збільшується.",
+        "vi": "Tăng tấn công.",
         "zh-CN": "攻击力提高。",
         "zh-TW": "攻擊力提高。"
       }
@@ -51,6 +53,7 @@
         "ru": "Усиление защиты",
         "tl": "Dagdag na Depensa",
         "uk": "Посилення захисту",
+        "vi": "Tăng phòng thủ",
         "zh-CN": "防御力提升",
         "zh-TW": "防禦力提升"
       },
@@ -65,6 +68,7 @@
         "ru": "Защита увеличивается.",
         "tl": "Tumataas ang depensa.",
         "uk": "Захист збільшується.",
+        "vi": "Tăng phòng thủ.",
         "zh-CN": "防御力提高。",
         "zh-TW": "防禦力提高。"
       }
@@ -85,6 +89,7 @@
         "ru": "Эффект Теневого Фантома",
         "tl": "Epekto ng Shadow Phantom",
         "uk": "Ефект Тіньового Фантома",
+        "vi": "Hỗ trợ của Shadow Phantom",
         "zh-CN": "影之幻象效果",
         "zh-TW": "暗影幻象效果"
       },
@@ -99,6 +104,7 @@
         "ru": "Сила атаки и защита увеличиваются.",
         "tl": "Tumataas ang lakas ng pag-atake at depensa.",
         "uk": "Сила атаки та захист збільшуються.",
+        "vi": "Tăng tấn công và phòng thủ.",
         "zh-CN": "攻击力与防御力提高。",
         "zh-TW": "攻擊力與防禦力提高。"
       }
@@ -116,6 +122,7 @@
         "pt": "Barreira da alma",
         "ru": "Барьер души",
         "uk": "Бар'єр душі",
+        "vi": "Soul Barrier",
         "zh-CN": "守护之魂",
         "zh-TW": "靈魂屏障"
       },
@@ -130,6 +137,7 @@
         "ru": "Мана поглощает урон.",
         "tl": "Sinisipsip ng mana ang pinsala.",
         "uk": "Мана поглинає шкоду.",
+        "vi": "Dùng Mana để hấp thụ sát thương.",
         "zh-CN": "以魔法值吸收伤害。",
         "zh-TW": "以法力吸收傷害。"
       }
@@ -150,6 +158,7 @@
         "ru": "Увеличение критического урона",
         "tl": "Dagdag na Kritikal na Pinsala",
         "uk": "Збільшення критичної шкоди",
+        "vi": "Tăng sát thương chí mạng",
         "zh-CN": "幸运一击伤害提升",
         "zh-TW": "暴擊傷害提升"
       },
@@ -164,6 +173,7 @@
         "ru": "Критический урон увеличивается.",
         "tl": "Tumataas ang kritikal na pinsala.",
         "uk": "Критична шкода збільшується.",
+        "vi": "Tăng sát thương chí mạng.",
         "zh-CN": "幸运一击伤害提高。",
         "zh-TW": "暴擊傷害提高。"
       },
@@ -182,6 +192,7 @@
         "pt": "Flecha do Infinito",
         "ru": "Бесконечная стрела",
         "uk": "Нескінченна стріла",
+        "vi": "Infinity Arrow",
         "zh-CN": "无影箭",
         "zh-TW": "無限箭矢"
       },
@@ -196,6 +207,7 @@
         "ru": "Стрелы не расходуются.",
         "tl": "Hindi nauubos ang mga palaso.",
         "uk": "Стріли не витрачаються.",
+        "vi": "Không tiêu hao tên khi bắn.",
         "zh-CN": "不消耗箭矢。",
         "zh-TW": "不消耗箭矢。"
       },
@@ -207,6 +219,9 @@
       "name": "agRecoverySpeedIncrease",
       "kind": "buff",
       "group": 7,
+      "description": {
+        "vi": "Hiệu ứng tăng tốc độ hồi AG."
+      },
       "displayName": {
         "en": "AG recovery speed increase",
         "de": "AG-Regeneration erhöht",
@@ -218,6 +233,7 @@
         "ru": "Ускорение восстановления AG",
         "tl": "Dagdag na bilis ng pagbawi ng AG",
         "uk": "Прискорення відновлення AG",
+        "vi": "Tăng tốc độ hồi AG",
         "zh-CN": "AG恢复速度提升",
         "zh-TW": "AG恢復速度提升"
       }
@@ -235,6 +251,7 @@
         "pt": "Expandir vida",
         "ru": "Прилив жизни",
         "uk": "Приплив життя",
+        "vi": "Swell Life",
         "zh-CN": "生命之光",
         "zh-TW": "生命之光"
       },
@@ -249,6 +266,7 @@
         "ru": "Макс. жизнь увеличивается.",
         "tl": "Tumataas ang max na buhay.",
         "uk": "Макс. життя збільшується.",
+        "vi": "Tăng máu tối đa.",
         "zh-CN": "最大生命值提高。",
         "zh-TW": "最大生命提高。"
       },
@@ -267,6 +285,7 @@
         "pt": "Expandir mana",
         "ru": "Прилив маны",
         "uk": "Приплив мани",
+        "vi": "Swell Mana",
         "zh-CN": "魔法值增幅",
         "zh-TW": "法力增幅"
       },
@@ -281,6 +300,7 @@
         "ru": "Макс. мана увеличивается.",
         "tl": "Tumataas ang max na mana.",
         "uk": "Макс. мана збільшується.",
+        "vi": "Tăng Mana tối đa.",
         "zh-CN": "最大魔法值提高。",
         "zh-TW": "最大法力提高。"
       }
@@ -300,6 +320,7 @@
         "pt": "Poção da bênção",
         "ru": "Зелье благословения",
         "uk": "Зілля благословення",
+        "vi": "Thuốc Bless",
         "zh-CN": "祝福药水",
         "zh-TW": "祝福藥水"
       },
@@ -314,6 +335,7 @@
         "ru": "Сила атаки +20%",
         "tl": "Lakas ng pag-atake +20%",
         "uk": "Сила атаки +20%",
+        "vi": "Tấn công +20%",
         "zh-CN": "攻击力 +20%",
         "zh-TW": "攻擊力 +20%"
       }
@@ -333,6 +355,7 @@
         "pt": "Poção da alma",
         "ru": "Зелье души",
         "uk": "Зілля душі",
+        "vi": "Thuốc Soul",
         "zh-CN": "灵魂药水",
         "zh-TW": "靈魂藥水"
       },
@@ -347,6 +370,7 @@
         "ru": "Скорость восстановления AG +8\nСопротивление молнии и льду увеличено\nСкорость атаки +20",
         "tl": "Bilis ng pagbawi ng AG +8\nTumataas ang resistensya sa kidlat at yelo\nBilis ng pag-atake +20",
         "uk": "Швидкість відновлення AG +8\nОпір блискавці та льоду збільшено\nШвидкість атаки +20",
+        "vi": "Tốc độ hồi AG +8\nTăng kháng sét và băng\nTốc độ tấn công +20",
         "zh-CN": "AG恢复速度 +8\n雷、冰抗性提高\n攻击速度 +20",
         "zh-TW": "AG恢復速度 +8\n雷、冰抗性提高\n攻擊速度 +20"
       }
@@ -356,6 +380,9 @@
       "name": "abolishMagic",
       "kind": "buff",
       "group": 12,
+      "description": {
+        "vi": "Hiệu ứng Abolish Magic (Hóa giải ma thuật)."
+      },
       "displayName": {
         "en": "Abolish Magic",
         "de": "Magie aufheben",
@@ -366,6 +393,7 @@
         "pt": "Abolir magia",
         "ru": "Отмена магии",
         "uk": "Скасування магії",
+        "vi": "Hóa giải ma thuật",
         "zh-CN": "魔法消除",
         "zh-TW": "魔法消除"
       }
@@ -375,6 +403,9 @@
       "name": "gateOpenCloseStatus",
       "kind": "buff",
       "group": 13,
+      "description": {
+        "vi": "Trạng thái đóng/mở cổng."
+      },
       "displayName": {
         "en": "Gate Open/Close Status",
         "de": "Torstatus offen/geschlossen",
@@ -386,6 +417,7 @@
         "ru": "Состояние ворот (открыты/закрыты)",
         "tl": "Status ng Gate (Bukas/Sarado)",
         "uk": "Стан воріт (відкриті/закриті)",
+        "vi": "Trạng thái đóng/mở cổng",
         "zh-CN": "城门开关状态",
         "zh-TW": "城門開關狀態"
       }
@@ -405,6 +437,7 @@
         "pt": "Torre de vigia",
         "ru": "Сторожевая башня",
         "uk": "Сторожова вежа",
+        "vi": "Tháp canh",
         "zh-CN": "瞭望塔",
         "zh-TW": "瞭望塔"
       },
@@ -419,6 +452,7 @@
         "ru": "Наблюдает за замком.",
         "tl": "Binabantayan ang kastilyo.",
         "uk": "Стежить за замком.",
+        "vi": "Canh giữ lâu đài.",
         "zh-CN": "正在监视城堡。",
         "zh-TW": "正在監視城堡。"
       }
@@ -439,6 +473,7 @@
         "ru": "Осаждающая гильдия 1",
         "tl": "Guild ng Paglusob 1",
         "uk": "Гільдія облоги 1",
+        "vi": "Bang hội công thành 1",
         "zh-CN": "攻城战盟1",
         "zh-TW": "攻城公會1"
       },
@@ -453,6 +488,7 @@
         "ru": "Штурмует замок",
         "tl": "Sinasalakay ang kastilyo",
         "uk": "Штурмує замок",
+        "vi": "Đang tấn công lâu đài",
         "zh-CN": "正在攻城",
         "zh-TW": "正在攻城"
       }
@@ -473,6 +509,7 @@
         "ru": "Осаждающая гильдия 2",
         "tl": "Guild ng Paglusob 2",
         "uk": "Гільдія облоги 2",
+        "vi": "Bang hội công thành 2",
         "zh-CN": "攻城战盟2",
         "zh-TW": "攻城公會2"
       },
@@ -487,6 +524,7 @@
         "ru": "Штурмует замок",
         "tl": "Sinasalakay ang kastilyo",
         "uk": "Штурмує замок",
+        "vi": "Đang tấn công lâu đài",
         "zh-CN": "正在攻城",
         "zh-TW": "正在攻城"
       }
@@ -507,6 +545,7 @@
         "ru": "Осаждающая гильдия 3",
         "tl": "Guild ng Paglusob 3",
         "uk": "Гільдія облоги 3",
+        "vi": "Bang hội công thành 3",
         "zh-CN": "攻城战盟3",
         "zh-TW": "攻城公會3"
       },
@@ -521,6 +560,7 @@
         "ru": "Штурмует замок",
         "tl": "Sinasalakay ang kastilyo",
         "uk": "Штурмує замок",
+        "vi": "Đang tấn công lâu đài",
         "zh-CN": "正在攻城",
         "zh-TW": "正在攻城"
       }
@@ -540,6 +580,7 @@
         "pt": "Invisibilidade",
         "ru": "Невидимость",
         "uk": "Невидимість",
+        "vi": "Tàng hình",
         "zh-CN": "隐身",
         "zh-TW": "隱身"
       },
@@ -554,6 +595,7 @@
         "ru": "Невидим",
         "tl": "Hindi nakikita",
         "uk": "Невидимий",
+        "vi": "Đang tàng hình",
         "zh-CN": "隐身中",
         "zh-TW": "隱身中"
       }
@@ -563,6 +605,9 @@
       "name": "darkRodBattleSkill",
       "kind": "buff",
       "group": 16,
+      "description": {
+        "vi": "Hiệu ứng kỹ năng Dark Rod Battle Skill."
+      },
       "displayName": {
         "en": "Dark Rod Battle Skill",
         "de": "Kampffähigkeit des Dunkelstabs",
@@ -574,6 +619,7 @@
         "ru": "Боевой навык тёмного жезла",
         "tl": "Battle Skill ng Dark Rod",
         "uk": "Бойова навичка темного жезла",
+        "vi": "Kỹ năng chiến đấu Dark Rod",
         "zh-CN": "暗黑权杖战斗技能",
         "zh-TW": "黑暗權杖戰鬥技能"
       }
@@ -583,6 +629,9 @@
       "name": "crownRegistrationStatus",
       "kind": "buff",
       "group": 17,
+      "description": {
+        "vi": "Trạng thái đăng ký vương miện."
+      },
       "displayName": {
         "en": "Crown Registration Status",
         "de": "Kronenregistrierung",
@@ -594,6 +643,7 @@
         "ru": "Регистрация у короны",
         "tl": "Status ng Crown Registration",
         "uk": "Реєстрація біля корони",
+        "vi": "Trạng thái đăng ký vương miện",
         "zh-CN": "王冠刻印登记状态",
         "zh-TW": "王冠登記狀態"
       }
@@ -603,6 +653,9 @@
       "name": "altarOfWolfContractEnabled",
       "kind": "buff",
       "group": 18,
+      "description": {
+        "vi": "Trạng thái cho phép lập khế ước tại Tế đàn Sói."
+      },
       "displayName": {
         "en": "Altar of Wolf contract enabled",
         "de": "Vertrag am Wolfsaltar aktiviert",
@@ -614,6 +667,7 @@
         "ru": "Контракт с алтарём волка доступен",
         "tl": "Aktibo ang kontrata sa Altar of Wolf",
         "uk": "Контракт із вівтарем вовка доступний",
+        "vi": "Tế đàn Sói: cho phép khế ước",
         "zh-CN": "狼之祭坛 可签订契约",
         "zh-TW": "狼之祭壇 可簽訂契約"
       }
@@ -623,6 +677,9 @@
       "name": "altarOfWolfContractDisabled",
       "kind": "buff",
       "group": 18,
+      "description": {
+        "vi": "Trạng thái không cho phép lập khế ước tại Tế đàn Sói."
+      },
       "displayName": {
         "en": "Altar of Wolf contract disabled",
         "de": "Vertrag am Wolfsaltar deaktiviert",
@@ -634,6 +691,7 @@
         "ru": "Контракт с алтарём волка недоступен",
         "tl": "Hindi aktibo ang kontrata sa Altar of Wolf",
         "uk": "Контракт із вівтарем вовка недоступний",
+        "vi": "Tế đàn Sói: khóa khế ước",
         "zh-CN": "狼之祭坛 无法签订契约",
         "zh-TW": "狼之祭壇 無法簽訂契約"
       }
@@ -643,6 +701,9 @@
       "name": "altarOfWolfContractStatus",
       "kind": "buff",
       "group": 18,
+      "description": {
+        "vi": "Trạng thái khế ước tại Tế đàn Sói."
+      },
       "displayName": {
         "en": "Altar of Wolf contract Status",
         "de": "Vertragsstatus am Wolfsaltar",
@@ -654,6 +715,7 @@
         "ru": "Состояние контракта с алтарём волка",
         "tl": "Status ng kontrata sa Altar of Wolf",
         "uk": "Стан контракту з вівтарем вовка",
+        "vi": "Trạng thái khế ước Tế đàn Sói",
         "zh-CN": "狼之祭坛 契约状态",
         "zh-TW": "狼之祭壇 契約狀態"
       }
@@ -663,6 +725,9 @@
       "name": "altarOfWolfContractAttempt",
       "kind": "buff",
       "group": 18,
+      "description": {
+        "vi": "Trạng thái đang thử lập khế ước tại Tế đàn Sói."
+      },
       "displayName": {
         "en": "Altar of Wolf contract attempt",
         "de": "Vertragsversuch am Wolfsaltar",
@@ -674,6 +739,7 @@
         "ru": "Попытка контракта с алтарём волка",
         "tl": "Pagtatangka ng kontrata sa Altar of Wolf",
         "uk": "Спроба контракту з вівтарем вовка",
+        "vi": "Đang lập khế ước Tế đàn Sói",
         "zh-CN": "狼之祭坛 尝试签订契约",
         "zh-TW": "狼之祭壇 嘗試簽訂契約"
       }
@@ -683,6 +749,9 @@
       "name": "altarOfWolfBesiegementStatus",
       "kind": "buff",
       "group": 18,
+      "description": {
+        "vi": "Trạng thái công phá Tế đàn Sói."
+      },
       "displayName": {
         "en": "Altar of Wolf besiegement Status",
         "de": "Belagerungsstatus am Wolfsaltar",
@@ -694,6 +763,7 @@
         "ru": "Осада алтаря волка",
         "tl": "Status ng paglusob sa Altar of Wolf",
         "uk": "Облога вівтаря вовка",
+        "vi": "Trạng thái công phá Tế đàn Sói",
         "zh-CN": "狼之祭坛 占领状态",
         "zh-TW": "狼之祭壇 佔領狀態"
       }
@@ -703,6 +773,9 @@
       "name": "altarOfWolfHeroContractStatus",
       "kind": "buff",
       "group": 18,
+      "description": {
+        "vi": "Trạng thái khế ước anh hùng tại Tế đàn Sói."
+      },
       "displayName": {
         "en": "Altar of Wolf hero contract Status",
         "de": "Heldenvertrag am Wolfsaltar",
@@ -714,6 +787,7 @@
         "ru": "Контракт героя с алтарём волка",
         "tl": "Status ng kontrata ng bayani sa Altar of Wolf",
         "uk": "Контракт героя з вівтарем вовка",
+        "vi": "Khế ước anh hùng Tế đàn Sói",
         "zh-CN": "狼之祭坛 英雄契约状态",
         "zh-TW": "狼之祭壇 英雄契約狀態"
       }
@@ -723,6 +797,9 @@
       "name": "cryWolfNpcTransparency",
       "kind": "buff",
       "group": 19,
+      "description": {
+        "vi": "Trạng thái hiển thị trong suốt của NPC Cry Wolf."
+      },
       "displayName": {
         "en": "Cry Wolf NPC transparency",
         "de": "Crywolf-NPC unsichtbar",
@@ -734,6 +811,7 @@
         "ru": "Прозрачность NPC Криволка",
         "tl": "Hindi nakikitang NPC ng Crywolf",
         "uk": "Прозорість NPC Crywolf",
+        "vi": "NPC Cry Wolf: trong suốt",
         "zh-CN": "狼魂NPC透明化",
         "zh-TW": "冷狼NPC透明化"
       }
@@ -743,7 +821,11 @@
       "name": "gm",
       "kind": "buff",
       "group": 20,
+      "description": {
+        "vi": "Trạng thái quản trị viên trong game."
+      },
       "displayName": {
+        "vi": "GM",
         "en": "GM"
       }
     },
@@ -762,6 +844,7 @@
         "pt": "Selo da Ascensão",
         "ru": "Печать восхождения",
         "uk": "Печатка сходження",
+        "vi": "Bùa thăng cấp",
         "zh-CN": "晋升印章",
         "zh-TW": "晉升印章"
       },
@@ -776,6 +859,7 @@
         "ru": "Прирост опыта 150%",
         "tl": "Nakukuhang EXP 150%",
         "uk": "Збільшення досвіду 150%",
+        "vi": "Kinh nghiệm nhận được 150%",
         "zh-CN": "经验值获得 150%",
         "zh-TW": "經驗值獲得 150%"
       },
@@ -799,6 +883,7 @@
         "pt": "Selo da riqueza",
         "ru": "Печать богатства",
         "uk": "Печатка багатства",
+        "vi": "Bùa thịnh vượng",
         "zh-CN": "财富印章",
         "zh-TW": "財富印章"
       },
@@ -813,6 +898,7 @@
         "ru": "Прирост опыта 150%\nВыпадение предметов 200%",
         "tl": "Nakukuhang EXP 150%\nNakukuhang item 200%",
         "uk": "Збільшення досвіду 150%\nВипадіння предметів 200%",
+        "vi": "Kinh nghiệm nhận được 150%\nTỉ lệ nhận vật phẩm 200%",
         "zh-CN": "经验值获得 150%\n物品获得 200%",
         "zh-TW": "經驗值獲得 150%\n物品獲得 200%"
       },
@@ -836,6 +922,7 @@
         "pt": "Selo do sustento",
         "ru": "Печать сохранения",
         "uk": "Печатка збереження",
+        "vi": "Bùa khóa kinh nghiệm",
         "zh-CN": "维持印章",
         "zh-TW": "維持印章"
       },
@@ -850,6 +937,7 @@
         "ru": "Опыт не начисляется",
         "tl": "Walang nakukuhang EXP",
         "uk": "Досвід не нараховується",
+        "vi": "Không nhận kinh nghiệm",
         "zh-CN": "不获得经验值",
         "zh-TW": "不獲得經驗值"
       },
@@ -863,6 +951,9 @@
       "name": "templeSpellOfQuickness",
       "kind": "buff",
       "group": 22,
+      "description": {
+        "vi": "Hiệu ứng Spell of Quickness (Phép tăng tốc) trong Temple."
+      },
       "displayName": {
         "en": "Temple - Spell of Quickness",
         "de": "Tempel - Zauber der Schnelligkeit",
@@ -873,6 +964,7 @@
         "pt": "Templo - Magia de rapidez",
         "ru": "Храм — Заклинание быстроты",
         "uk": "Храм — Закляття швидкості",
+        "vi": "Temple: phép tăng tốc",
         "zh-CN": "神殿 - 迅捷咒语",
         "zh-TW": "神殿 - 迅捷咒語"
       }
@@ -882,6 +974,9 @@
       "name": "templeSpellOfSublimation",
       "kind": "buff",
       "group": 22,
+      "description": {
+        "vi": "Hiệu ứng Spell of Sublimation (Phép thăng hoa) trong Temple."
+      },
       "displayName": {
         "en": "Temple - Spell of Sublimation",
         "de": "Tempel - Zauber der Sublimation",
@@ -892,6 +987,7 @@
         "pt": "Templo - Magia da sublimação",
         "ru": "Храм — Заклинание возвышения",
         "uk": "Храм — Закляття піднесення",
+        "vi": "Temple: phép thăng hoa",
         "zh-CN": "神殿 - 升华咒语",
         "zh-TW": "神殿 - 昇華咒語"
       }
@@ -911,6 +1007,7 @@
         "pt": "Magia de proteção",
         "ru": "Заклинание защиты",
         "uk": "Закляття захисту",
+        "vi": "Phép bảo hộ",
         "zh-CN": "守护咒语",
         "zh-TW": "守護咒語"
       },
@@ -925,6 +1022,7 @@
         "ru": "Поглощает 100% урона.",
         "tl": "Sinisipsip ang 100% ng pinsala.",
         "uk": "Поглинає 100% шкоди.",
+        "vi": "Hấp thụ 100% sát thương.",
         "zh-CN": "吸收 100% 的伤害。",
         "zh-TW": "吸收 100% 的傷害。"
       }
@@ -944,6 +1042,7 @@
         "pt": "Bênçãos do Jack O'Lantern",
         "ru": "Благословение Джека О'Лантерна",
         "uk": "Благословення Джека О'Лантерна",
+        "vi": "Lời chúc của Jack O'Lantern",
         "zh-CN": "杰克灯笼的祝福",
         "zh-TW": "傑克燈籠的祝福"
       },
@@ -958,6 +1057,7 @@
         "ru": "Скорость атаки +10",
         "tl": "Bilis ng pag-atake +10",
         "uk": "Швидкість атаки +10",
+        "vi": "Tốc độ tấn công +10",
         "zh-CN": "攻击速度 +10",
         "zh-TW": "攻擊速度 +10"
       },
@@ -981,6 +1081,7 @@
         "pt": "Ira do Jack O'Lantern",
         "ru": "Ярость Джека О'Лантерна",
         "uk": "Лють Джека О'Лантерна",
+        "vi": "Cơn giận của Jack O'Lantern",
         "zh-CN": "杰克灯笼之怒",
         "zh-TW": "傑克燈籠之怒"
       },
@@ -995,6 +1096,7 @@
         "ru": "Сила атаки +25",
         "tl": "Lakas ng pag-atake +25",
         "uk": "Сила атаки +25",
+        "vi": "Tấn công +25",
         "zh-CN": "攻击力 +25",
         "zh-TW": "攻擊力 +25"
       },
@@ -1018,6 +1120,7 @@
         "pt": "Grito do Jack O'Lantern",
         "ru": "Крик Джека О'Лантерна",
         "uk": "Крик Джека О'Лантерна",
+        "vi": "Tiếng khóc của Jack O'Lantern",
         "zh-CN": "杰克灯笼的尖叫",
         "zh-TW": "傑克燈籠的尖叫"
       },
@@ -1032,6 +1135,7 @@
         "ru": "Защита +100",
         "tl": "Depensa +100",
         "uk": "Захист +100",
+        "vi": "Phòng thủ +100",
         "zh-CN": "防御力 +100",
         "zh-TW": "防禦力 +100"
       },
@@ -1055,6 +1159,7 @@
         "pt": "Comida do Jack O'Lantern",
         "ru": "Еда Джека О'Лантерна",
         "uk": "Їжа Джека О'Лантерна",
+        "vi": "Thức ăn của Jack O'Lantern",
         "zh-CN": "杰克灯笼的食物",
         "zh-TW": "傑克燈籠的食物"
       },
@@ -1069,6 +1174,7 @@
         "ru": "Макс. жизнь +500",
         "tl": "Max na buhay +500",
         "uk": "Макс. життя +500",
+        "vi": "Máu tối đa +500",
         "zh-CN": "最大生命值 +500",
         "zh-TW": "最大生命 +500"
       },
@@ -1092,6 +1198,7 @@
         "pt": "Bebida do Jack O'Lantern",
         "ru": "Напиток Джека О'Лантерна",
         "uk": "Напій Джека О'Лантерна",
+        "vi": "Đồ uống của Jack O'Lantern",
         "zh-CN": "杰克灯笼的饮料",
         "zh-TW": "傑克燈籠的飲料"
       },
@@ -1106,6 +1213,7 @@
         "ru": "Макс. мана +500",
         "tl": "Max na mana +500",
         "uk": "Макс. мана +500",
+        "vi": "Mana tối đa +500",
         "zh-CN": "最大魔法值 +500",
         "zh-TW": "最大法力 +500"
       },
@@ -1129,6 +1237,7 @@
         "pt": "Selo da Ascensão",
         "ru": "Печать восхождения",
         "uk": "Печатка сходження",
+        "vi": "Bùa thăng cấp",
         "zh-CN": "晋升印章",
         "zh-TW": "晉升印章"
       },
@@ -1143,6 +1252,7 @@
         "ru": "Прирост опыта 150%",
         "tl": "Nakukuhang EXP 150%",
         "uk": "Збільшення досвіду 150%",
+        "vi": "Kinh nghiệm nhận được 150%",
         "zh-CN": "经验值获得 150%",
         "zh-TW": "經驗值獲得 150%"
       },
@@ -1166,6 +1276,7 @@
         "pt": "Selo da riqueza",
         "ru": "Печать богатства",
         "uk": "Печатка багатства",
+        "vi": "Bùa thịnh vượng",
         "zh-CN": "财富印章",
         "zh-TW": "財富印章"
       },
@@ -1180,6 +1291,7 @@
         "ru": "Прирост опыта 200%\nВыпадение предметов 150%",
         "tl": "Nakukuhang EXP 200%\nNakukuhang item 150%",
         "uk": "Збільшення досвіду 200%\nВипадіння предметів 150%",
+        "vi": "Kinh nghiệm nhận được 200%\nTỉ lệ nhận vật phẩm 150%",
         "zh-CN": "经验值获得 200%\n物品获得 150%",
         "zh-TW": "經驗值獲得 200%\n物品獲得 150%"
       },
@@ -1203,6 +1315,7 @@
         "pt": "Selo do sustento",
         "ru": "Печать сохранения",
         "uk": "Печатка збереження",
+        "vi": "Bùa khóa kinh nghiệm",
         "zh-CN": "维持印章",
         "zh-TW": "維持印章"
       },
@@ -1217,6 +1330,7 @@
         "ru": "Опыт не начисляется",
         "tl": "Walang nakukuhang EXP",
         "uk": "Досвід не нараховується",
+        "vi": "Không nhận kinh nghiệm",
         "zh-CN": "不获得经验值",
         "zh-TW": "不獲得經驗值"
       },
@@ -1240,6 +1354,7 @@
         "pt": "Selo da mobilidade",
         "ru": "Печать перемещения",
         "uk": "Печатка пересування",
+        "vi": "Bùa di chuyển",
         "zh-CN": "移动印章",
         "zh-TW": "移動印章"
       },
@@ -1254,6 +1369,7 @@
         "ru": "Перемещение доступно",
         "tl": "Aktibo ang mobility",
         "uk": "Пересування доступне",
+        "vi": "Cho phép di chuyển",
         "zh-CN": "可使用移动功能",
         "zh-TW": "可使用移動功能"
       },
@@ -1277,6 +1393,7 @@
         "pt": "Pergaminho da rapidez",
         "ru": "Свиток быстроты",
         "uk": "Сувій швидкості",
+        "vi": "Sách tăng tốc",
         "zh-CN": "迅捷卷轴",
         "zh-TW": "迅捷捲軸"
       },
@@ -1291,6 +1408,7 @@
         "ru": "Скорость атаки +15",
         "tl": "Bilis ng pag-atake +15",
         "uk": "Швидкість атаки +15",
+        "vi": "Tốc độ tấn công +15",
         "zh-CN": "攻击速度 +15",
         "zh-TW": "攻擊速度 +15"
       },
@@ -1314,6 +1432,7 @@
         "pt": "Pergaminho da defesa",
         "ru": "Свиток защиты",
         "uk": "Сувій захисту",
+        "vi": "Sách phòng thủ",
         "zh-CN": "防御卷轴",
         "zh-TW": "防禦捲軸"
       },
@@ -1328,6 +1447,7 @@
         "ru": "Защита +60",
         "tl": "Depensa +60",
         "uk": "Захист +60",
+        "vi": "Phòng thủ +60",
         "zh-CN": "防御力 +60",
         "zh-TW": "防禦力 +60"
       },
@@ -1351,6 +1471,7 @@
         "pt": "Pergaminho da ira",
         "ru": "Свиток гнева",
         "uk": "Сувій гніву",
+        "vi": "Sách phẫn nộ",
         "zh-CN": "愤怒卷轴",
         "zh-TW": "憤怒捲軸"
       },
@@ -1365,6 +1486,7 @@
         "ru": "Сила атаки +30",
         "tl": "Lakas ng pag-atake +30",
         "uk": "Сила атаки +30",
+        "vi": "Tấn công +30",
         "zh-CN": "攻击力 +30",
         "zh-TW": "攻擊力 +30"
       },
@@ -1388,6 +1510,7 @@
         "pt": "Pergaminho do poder de magia",
         "ru": "Свиток волшебства",
         "uk": "Сувій магії",
+        "vi": "Sách ma lực",
         "zh-CN": "魔力卷轴",
         "zh-TW": "魔力捲軸"
       },
@@ -1401,6 +1524,7 @@
         "pt": "Aumento do poder de magia +30",
         "ru": "Волшебство +30",
         "uk": "Магія +30",
+        "vi": "Ma lực +30",
         "zh-CN": "魔力 +30",
         "zh-TW": "魔力 +30"
       },
@@ -1424,6 +1548,7 @@
         "pt": "Pergaminho de vida",
         "ru": "Свиток здоровья",
         "uk": "Сувій здоров'я",
+        "vi": "Sách sinh lực",
         "zh-CN": "生命卷轴",
         "zh-TW": "生命捲軸"
       },
@@ -1432,6 +1557,7 @@
         "es": "Incremento HP +200",
         "ja": "生命力 +200",
         "pt": "Aumento de +200 em HP",
+        "vi": "Máu +200",
         "zh-CN": "生命值 +200",
         "zh-TW": "生命值 +200"
       },
@@ -1455,6 +1581,7 @@
         "pt": "Pergaminho de mana",
         "ru": "Свиток маны",
         "uk": "Сувій мани",
+        "vi": "Sách Mana",
         "zh-CN": "魔法卷轴",
         "zh-TW": "法力捲軸"
       },
@@ -1465,6 +1592,7 @@
         "pt": "Aumento de +300 na mana",
         "ru": "Мана +300",
         "uk": "Мана +300",
+        "vi": "Mana +300",
         "zh-CN": "魔法值 +300",
         "zh-TW": "法力 +300"
       },
@@ -1488,6 +1616,7 @@
         "pt": "Elixir de força",
         "ru": "Эликсир силы",
         "uk": "Еліксир сили",
+        "vi": "Thuốc sức mạnh",
         "zh-CN": "力量秘药",
         "zh-TW": "力量秘藥"
       },
@@ -1502,6 +1631,7 @@
         "ru": "Сила +50",
         "tl": "Lakas +50",
         "uk": "Сила +50",
+        "vi": "Sức mạnh +50",
         "zh-CN": "力量 +50",
         "zh-TW": "力量 +50"
       },
@@ -1525,6 +1655,7 @@
         "pt": "Elixir de agilidade",
         "ru": "Эликсир ловкости",
         "uk": "Еліксир спритності",
+        "vi": "Thuốc nhanh nhẹn",
         "zh-CN": "敏捷秘药",
         "zh-TW": "敏捷秘藥"
       },
@@ -1538,6 +1669,7 @@
         "pt": "Atributo da agilidade +50",
         "ru": "Ловкость +50",
         "uk": "Спритність +50",
+        "vi": "Nhanh nhẹn +50",
         "zh-CN": "敏捷 +50",
         "zh-TW": "敏捷 +50"
       },
@@ -1561,6 +1693,7 @@
         "pt": "Elixir de vida",
         "ru": "Эликсир здоровья",
         "uk": "Еліксир здоров'я",
+        "vi": "Thuốc thể lực",
         "zh-CN": "体力秘药",
         "zh-TW": "活力秘藥"
       },
@@ -1575,6 +1708,7 @@
         "ru": "Жизненная сила +50",
         "tl": "Kasiglahan +50",
         "uk": "Життєздатність +50",
+        "vi": "Thể lực +50",
         "zh-CN": "体力 +50",
         "zh-TW": "活力 +50"
       },
@@ -1598,6 +1732,7 @@
         "pt": "Elixir de energia",
         "ru": "Эликсир энергии",
         "uk": "Еліксир енергії",
+        "vi": "Thuốc năng lượng",
         "zh-CN": "智力秘药",
         "zh-TW": "能量秘藥"
       },
@@ -1612,6 +1747,7 @@
         "ru": "Энергия +50",
         "tl": "Enerhiya +50",
         "uk": "Енергія +50",
+        "vi": "Năng lượng +50",
         "zh-CN": "智力 +50",
         "zh-TW": "能量 +50"
       },
@@ -1635,6 +1771,7 @@
         "pt": "Elixir de controle",
         "ru": "Эликсир контроля",
         "uk": "Еліксир контролю",
+        "vi": "Thuốc mệnh lệnh",
         "zh-CN": "统率秘药",
         "zh-TW": "統率秘藥"
       },
@@ -1649,6 +1786,7 @@
         "ru": "Командование +50",
         "tl": "Utos +50",
         "uk": "Командування +50",
+        "vi": "Mệnh lệnh +50",
         "zh-CN": "统率 +50",
         "zh-TW": "統率 +50"
       },
@@ -1673,6 +1811,7 @@
         "ru": "Яд",
         "tl": "Lason",
         "uk": "Отрута",
+        "vi": "Trúng độc",
         "zh-CN": "中毒",
         "zh-TW": "中毒"
       },
@@ -1687,6 +1826,7 @@
         "ru": "Отравлен",
         "tl": "Nalason",
         "uk": "Отруєний",
+        "vi": "Đang trúng độc",
         "zh-CN": "中毒状态",
         "zh-TW": "中毒狀態"
       }
@@ -1707,6 +1847,7 @@
         "ru": "Лед",
         "tl": "Yelo",
         "uk": "Лід",
+        "vi": "Băng giá",
         "zh-CN": "冰",
         "zh-TW": "冰"
       },
@@ -1721,6 +1862,7 @@
         "ru": "Скорость передвижения снижается.",
         "tl": "Bumababa ang bilis ng paggalaw.",
         "uk": "Швидкість пересування знижується.",
+        "vi": "Giảm tốc độ di chuyển.",
         "zh-CN": "移动速度降低。",
         "zh-TW": "移動速度降低。"
       }
@@ -1738,6 +1880,7 @@
         "pt": "Flecha congelada",
         "ru": "Ледяная стрела",
         "uk": "Крижана стріла",
+        "vi": "Iced Arrow",
         "zh-CN": "冰封箭",
         "zh-TW": "冰封箭"
       },
@@ -1752,6 +1895,7 @@
         "ru": "Нельзя двигаться",
         "tl": "Hindi makagalaw",
         "uk": "Неможливо рухатися",
+        "vi": "Không thể di chuyển",
         "zh-CN": "无法移动",
         "zh-TW": "無法移動"
       }
@@ -1772,6 +1916,7 @@
         "ru": "Снижение защиты",
         "tl": "Bawas sa depensa",
         "uk": "Зниження захисту",
+        "vi": "Giảm phòng thủ",
         "zh-CN": "防御力降低",
         "zh-TW": "防禦力降低"
       },
@@ -1786,6 +1931,7 @@
         "ru": "Защита снижена на 10%.",
         "tl": "Bumababa ang depensa nang 10%.",
         "uk": "Захист знижено на 10%.",
+        "vi": "Giảm phòng thủ 10%.",
         "zh-CN": "防御力降低 10%。",
         "zh-TW": "防禦力降低 10%。"
       }
@@ -1795,6 +1941,9 @@
       "name": "attackPowerReduction",
       "kind": "debuff",
       "group": 31,
+      "description": {
+        "vi": "Hiệu ứng giảm tấn công."
+      },
       "displayName": {
         "en": "Attack power reduction",
         "de": "Angriffskraft verringert",
@@ -1806,6 +1955,7 @@
         "ru": "Снижение силы атаки",
         "tl": "Bawas sa lakas ng pag-atake",
         "uk": "Зниження сили атаки",
+        "vi": "Giảm tấn công",
         "zh-CN": "攻击力降低",
         "zh-TW": "攻擊力降低"
       }
@@ -1815,6 +1965,9 @@
       "name": "wizardryIncreaseReduction",
       "kind": "debuff",
       "group": 32,
+      "description": {
+        "vi": "Hiệu ứng giảm mức tăng ma lực."
+      },
       "displayName": {
         "en": "Wizardry increase reduction",
         "de": "Zaubereibonus verringert",
@@ -1826,6 +1979,7 @@
         "ru": "Снижение волшебства",
         "tl": "Bawas sa dagdag na wizardry",
         "uk": "Зниження магії",
+        "vi": "Giảm mức tăng ma lực",
         "zh-CN": "魔力增幅降低",
         "zh-TW": "魔力增幅降低"
       }
@@ -1845,6 +1999,7 @@
         "pt": "Atordoamento",
         "ru": "Оглушение",
         "uk": "Оглушення",
+        "vi": "Choáng",
         "zh-CN": "眩晕",
         "zh-TW": "暈眩"
       },
@@ -1859,6 +2014,7 @@
         "ru": "Нельзя двигаться",
         "tl": "Hindi makagalaw",
         "uk": "Неможливо рухатися",
+        "vi": "Không thể di chuyển",
         "zh-CN": "无法移动",
         "zh-TW": "無法移動"
       }
@@ -1868,6 +2024,9 @@
       "name": "magicDefense",
       "kind": "debuff",
       "group": 34,
+      "description": {
+        "vi": "Hiệu ứng phòng thủ phép."
+      },
       "displayName": {
         "en": "Magic Defense",
         "de": "Magische Verteidigung",
@@ -1878,6 +2037,7 @@
         "pt": "Defesa contra magia",
         "ru": "Магическая защита",
         "uk": "Магічний захист",
+        "vi": "Phòng thủ phép",
         "zh-CN": "魔法防御",
         "zh-TW": "魔法防禦"
       }
@@ -1887,6 +2047,9 @@
       "name": "monsterMagicAttackResistance",
       "kind": "debuff",
       "group": 35,
+      "description": {
+        "vi": "Hiệu ứng kháng đòn phép của quái."
+      },
       "displayName": {
         "en": "Monster Magic Attack Resistance",
         "de": "Resistenz gegen magische Monsterangriffe",
@@ -1898,6 +2061,7 @@
         "ru": "Сопротивление магическим атакам монстров",
         "tl": "Resistensya sa Magic Attack ng Halimaw",
         "uk": "Опір магічним атакам монстрів",
+        "vi": "Kháng đòn phép của quái",
         "zh-CN": "怪物魔法攻击抗性",
         "zh-TW": "怪物魔法攻擊抗性"
       }
@@ -1907,6 +2071,9 @@
       "name": "monsterChemistryAttackResistance",
       "kind": "debuff",
       "group": 36,
+      "description": {
+        "vi": "Hiệu ứng kháng đòn hóa học của quái."
+      },
       "displayName": {
         "en": "Monster Chemistry Attack Resistance",
         "de": "Resistenz gegen chemische Monsterangriffe",
@@ -1918,6 +2085,7 @@
         "ru": "Сопротивление химическим атакам монстров",
         "tl": "Resistensya sa Chemistry Attack ng Halimaw",
         "uk": "Опір хімічним атакам монстрів",
+        "vi": "Kháng đòn hóa học của quái",
         "zh-CN": "怪物化学攻击抗性",
         "zh-TW": "怪物化學攻擊抗性"
       }
@@ -1937,6 +2105,7 @@
         "pt": "Magia de restrição",
         "ru": "Заклинание сковывания",
         "uk": "Закляття скування",
+        "vi": "Phép trói chân",
         "zh-CN": "束缚咒语",
         "zh-TW": "束縛咒語"
       },
@@ -1951,6 +2120,7 @@
         "ru": "Нельзя двигаться",
         "tl": "Hindi makagalaw",
         "uk": "Неможливо рухатися",
+        "vi": "Không thể di chuyển",
         "zh-CN": "无法移动",
         "zh-TW": "無法移動"
       }
@@ -1960,6 +2130,9 @@
       "name": "cryWolfProtection1",
       "kind": "buff",
       "group": 38,
+      "description": {
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
+      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -1971,6 +2144,7 @@
         "ru": "Божественная защита Криволка",
         "tl": "Status ng Divine Protection ng Crywolf",
         "uk": "Божественний захист Crywolf",
+        "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
       }
@@ -1980,6 +2154,9 @@
       "name": "cryWolfProtection2",
       "kind": "buff",
       "group": 38,
+      "description": {
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
+      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -1991,6 +2168,7 @@
         "ru": "Божественная защита Криволка",
         "tl": "Status ng Divine Protection ng Crywolf",
         "uk": "Божественний захист Crywolf",
+        "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
       }
@@ -2000,6 +2178,9 @@
       "name": "cryWolfProtection3",
       "kind": "buff",
       "group": 38,
+      "description": {
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
+      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2011,6 +2192,7 @@
         "ru": "Божественная защита Криволка",
         "tl": "Status ng Divine Protection ng Crywolf",
         "uk": "Божественний захист Crywolf",
+        "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
       }
@@ -2020,6 +2202,9 @@
       "name": "cryWolfProtection4",
       "kind": "buff",
       "group": 38,
+      "description": {
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
+      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2031,6 +2216,7 @@
         "ru": "Божественная защита Криволка",
         "tl": "Status ng Divine Protection ng Crywolf",
         "uk": "Божественний захист Crywolf",
+        "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
       }
@@ -2040,6 +2226,9 @@
       "name": "cryWolfProtection5",
       "kind": "buff",
       "group": 38,
+      "description": {
+        "vi": "Trạng thái Thần hộ mệnh trong Cry Wolf."
+      },
       "displayName": {
         "en": "Cry Wolf Divine Protection Status",
         "de": "Göttlicher Schutz von Crywolf",
@@ -2051,6 +2240,7 @@
         "ru": "Божественная защита Криволка",
         "tl": "Status ng Divine Protection ng Crywolf",
         "uk": "Божественний захист Crywolf",
+        "vi": "Cry Wolf: Thần hộ mệnh",
         "zh-CN": "狼魂加护状态",
         "zh-TW": "冷狼加護狀態"
       }
@@ -2068,6 +2258,7 @@
         "pt": "Reflexo de dano",
         "ru": "Отражение урона",
         "uk": "Відбиття шкоди",
+        "vi": "Phản sát thương",
         "zh-CN": "伤害反射",
         "zh-TW": "傷害反射"
       },
@@ -2082,6 +2273,7 @@
         "ru": "Отражает часть урона.",
         "tl": "Ibinabalik ang bahagi ng pinsala.",
         "uk": "Відбиває частину шкоди.",
+        "vi": "Phản lại một phần sát thương.",
         "zh-CN": "反射部分伤害。",
         "zh-TW": "反射部分傷害。"
       }
@@ -2099,6 +2291,7 @@
         "pt": "Dormir",
         "ru": "Сон",
         "uk": "Сон",
+        "vi": "Ngủ",
         "zh-CN": "催眠",
         "zh-TW": "催眠"
       },
@@ -2113,6 +2306,7 @@
         "ru": "Ненадолго усыплён",
         "tl": "Nakatulog nang sandali",
         "uk": "Ненадовго приспаний",
+        "vi": "Rơi vào giấc ngủ trong thời gian ngắn",
         "zh-CN": "短时间内陷入睡眠",
         "zh-TW": "短時間內陷入睡眠"
       }
@@ -2130,6 +2324,7 @@
         "pt": "Cegar",
         "ru": "Слепота",
         "uk": "Сліпота",
+        "vi": "Mù",
         "zh-CN": "致盲",
         "zh-TW": "致盲"
       },
@@ -2144,6 +2339,7 @@
         "ru": "Меньше обзор и ниже шанс попадания.",
         "tl": "Mas maikling tanaw at mas mababang success rate ng pag-atake.",
         "uk": "Менший огляд і нижчий шанс влучання.",
+        "vi": "Giảm tầm nhìn và tỉ lệ tấn công thành công.",
         "zh-CN": "视野缩小，攻击成功率降低。",
         "zh-TW": "視野縮小，攻擊成功率降低。"
       },
@@ -2161,6 +2357,7 @@
         "pt": "Réquiem",
         "ru": "Реквием",
         "uk": "Реквієм",
+        "vi": "Requiem",
         "zh-CN": "安魂曲",
         "zh-TW": "安魂曲"
       },
@@ -2175,6 +2372,7 @@
         "ru": "Атака Нейла, призванного призывателем",
         "tl": "Atake ng ipinatawag na si Neil",
         "uk": "Атака Нейла, викликаного призивачем",
+        "vi": "Đòn tấn công của linh thú Neil do Summoner triệu hồi",
         "zh-CN": "召唤兽尼尔的攻击",
         "zh-TW": "召喚獸尼爾的攻擊"
       }
@@ -2192,6 +2390,7 @@
         "pt": "Explosão",
         "ru": "Взрыв",
         "uk": "Вибух",
+        "vi": "Explosion",
         "zh-CN": "爆炸",
         "zh-TW": "爆炸"
       },
@@ -2206,6 +2405,7 @@
         "ru": "Атака Шамута, призванного призывателем",
         "tl": "Atake ng ipinatawag na si Shamut",
         "uk": "Атака Шамута, викликаного призивачем",
+        "vi": "Đòn tấn công của linh thú Shamut do Summoner triệu hồi",
         "zh-CN": "召唤兽沙穆特的攻击",
         "zh-TW": "召喚獸沙穆特的攻擊"
       }
@@ -2223,6 +2423,7 @@
         "pt": "Fraqueza",
         "ru": "Слабость",
         "uk": "Слабкість",
+        "vi": "Weakness",
         "zh-CN": "虚弱术",
         "zh-TW": "虛弱術"
       },
@@ -2237,6 +2438,7 @@
         "ru": "Сила атаки снижается.",
         "tl": "Bumababa ang lakas ng pag-atake.",
         "uk": "Сила атаки знижується.",
+        "vi": "Giảm tấn công.",
         "zh-CN": "攻击力降低。",
         "zh-TW": "攻擊力降低。"
       }
@@ -2254,6 +2456,7 @@
         "pt": "Inovação",
         "ru": "Инновация",
         "uk": "Інновація",
+        "vi": "Innovation",
         "zh-CN": "革新术",
         "zh-TW": "革新術"
       },
@@ -2268,6 +2471,7 @@
         "ru": "Защита снижается.",
         "tl": "Bumababa ang depensa.",
         "uk": "Захист знижується.",
+        "vi": "Giảm phòng thủ.",
         "zh-CN": "防御力降低。",
         "zh-TW": "防禦力降低。"
       }
@@ -2287,6 +2491,7 @@
         "pt": "Vinho de flor de cereja",
         "ru": "Вино цветущей вишни",
         "uk": "Вино сакури",
+        "vi": "Rượu hoa anh đào",
         "zh-CN": "樱花酒",
         "zh-TW": "櫻花酒"
       },
@@ -2301,6 +2506,7 @@
         "ru": "Макс. мана +700",
         "tl": "Max na mana +700",
         "uk": "Макс. мана +700",
+        "vi": "Mana tối đa +700",
         "zh-CN": "最大魔法值 +700",
         "zh-TW": "最大法力 +700"
       },
@@ -2324,6 +2530,7 @@
         "pt": "Bolo de arroz com flor de cereja",
         "ru": "Рисовый пирожок цветущей вишни",
         "uk": "Рисовий пиріжок сакури",
+        "vi": "Bánh gạo hoa anh đào",
         "zh-CN": "樱花年糕",
         "zh-TW": "櫻花年糕"
       },
@@ -2338,6 +2545,7 @@
         "ru": "Макс. жизнь +700",
         "tl": "Max na buhay +700",
         "uk": "Макс. життя +700",
+        "vi": "Máu tối đa +700",
         "zh-CN": "最大生命值 +700",
         "zh-TW": "最大生命 +700"
       },
@@ -2361,6 +2569,7 @@
         "pt": "Pétala de flor de cereja",
         "ru": "Лепесток цветущей вишни",
         "uk": "Пелюстка сакури",
+        "vi": "Cánh hoa anh đào",
         "zh-CN": "樱花花瓣",
         "zh-TW": "櫻花花瓣"
       },
@@ -2375,6 +2584,7 @@
         "ru": "Сила атаки +40",
         "tl": "Lakas ng pag-atake +40",
         "uk": "Сила атаки +40",
+        "vi": "Tấn công +40",
         "zh-CN": "攻击力 +40",
         "zh-TW": "攻擊力 +40"
       },
@@ -2394,6 +2604,7 @@
         "ja": "バーサーカー",
         "ru": "Берсерк",
         "uk": "Берсерк",
+        "vi": "Berserker",
         "zh-CN": "狂暴术",
         "zh-TW": "狂暴術"
       },
@@ -2408,6 +2619,7 @@
         "ru": "Проклятие, волшебство, сила атаки и макс. мана увеличиваются.\nЗащита и макс. жизнь снижаются.",
         "tl": "Tumataas ang curse, wizardry, lakas ng pag-atake at max na mana.\nBumababa ang depensa at max na buhay.",
         "uk": "Прокляття, магія, сила атаки та макс. мана збільшуються.\nЗахист і макс. життя знижуються.",
+        "vi": "Tăng sức mạnh nguyền rủa, ma lực, tấn công và Mana tối đa.\nGiảm phòng thủ và máu tối đa.",
         "zh-CN": "诅咒力、魔力、攻击力与最大魔法值提高。\n防御力与最大生命值降低。",
         "zh-TW": "詛咒、魔力、攻擊力與最大法力提高。\n防禦力與最大生命降低。"
       }
@@ -2425,6 +2637,7 @@
         "pt": "Expansão de magia",
         "ru": "Расширение волшебства",
         "uk": "Розширення магії",
+        "vi": "Expansion of Wizardry",
         "zh-CN": "魔力扩张",
         "zh-TW": "魔力擴張"
       },
@@ -2439,6 +2652,7 @@
         "ru": "Мин. волшебство увеличивается.",
         "tl": "Tumataas ang minimum na wizardry.",
         "uk": "Мін. магія збільшується.",
+        "vi": "Tăng ma lực tối thiểu.",
         "zh-CN": "最小魔力提高。",
         "zh-TW": "最小魔力提高。"
       },
@@ -2450,6 +2664,9 @@
       "name": "flameStrike",
       "kind": "debuff",
       "group": 46,
+      "description": {
+        "vi": "Hiệu ứng kỹ năng Flame Strike (Hỏa kích)."
+      },
       "displayName": {
         "en": "Flame Strike",
         "es": "Ataque con Llamas",
@@ -2458,6 +2675,7 @@
         "pt": "Ataque de chama",
         "ru": "Огненный удар",
         "uk": "Вогняний удар",
+        "vi": "Flame Strike",
         "zh-CN": "火焰打击",
         "zh-TW": "火焰打擊"
       },
@@ -2468,6 +2686,9 @@
       "name": "giganticStorm",
       "kind": "debuff",
       "group": 47,
+      "description": {
+        "vi": "Hiệu ứng kỹ năng Gigantic Storm (Bão tố)."
+      },
       "displayName": {
         "en": "Gigantic Storm",
         "es": "Tormenta Gigantesca",
@@ -2476,6 +2697,7 @@
         "pt": "Tempestade gigante",
         "ru": "Гигантский шторм",
         "uk": "Гігантський шторм",
+        "vi": "Gigantic Storm",
         "zh-CN": "巨型风暴",
         "zh-TW": "巨型風暴"
       },
@@ -2486,6 +2708,9 @@
       "name": "lightningShock",
       "kind": "debuff",
       "group": 48,
+      "description": {
+        "vi": "Hiệu ứng kỹ năng Lightning Shock (Sét giật)."
+      },
       "displayName": {
         "en": "Lightning Shock",
         "es": "Descarga de Relámpagos",
@@ -2494,6 +2719,7 @@
         "pt": "Choque de relâmpago",
         "ru": "Удар молнии",
         "uk": "Удар блискавки",
+        "vi": "Lightning Shock",
         "zh-CN": "闪电冲击",
         "zh-TW": "閃電衝擊"
       },
@@ -2515,6 +2741,7 @@
         "ru": "Холод",
         "tl": "Lamig",
         "uk": "Холод",
+        "vi": "Lạnh cóng",
         "zh-CN": "寒冷",
         "zh-TW": "寒冷"
       },
@@ -2529,6 +2756,7 @@
         "ru": "Холод снижает скорость передвижения.",
         "tl": "Pinabababa ng lamig ang bilis ng paggalaw.",
         "uk": "Холод знижує швидкість пересування.",
+        "vi": "Lạnh cóng làm giảm tốc độ di chuyển.",
         "zh-CN": "寒冷使移动速度降低。",
         "zh-TW": "寒冷使移動速度降低。"
       }
@@ -2548,6 +2776,7 @@
         "pt": "Selo da cura",
         "ru": "Печать исцеления",
         "uk": "Печатка зцілення",
+        "vi": "Bùa hồi máu",
         "zh-CN": "治愈印章",
         "zh-TW": "治癒印章"
       },
@@ -2562,6 +2791,7 @@
         "ru": "Прирост опыта 150%\nАвтовосстановление 5% жизни",
         "tl": "Nakukuhang EXP 150%\nAwtomatikong bumabawi ng 5% na buhay",
         "uk": "Збільшення досвіду 150%\nАвтовідновлення 5% життя",
+        "vi": "Kinh nghiệm nhận được 150%\nTự động hồi 5% máu",
         "zh-CN": "经验值获得 150%\n自动恢复 5% 生命值",
         "zh-TW": "經驗值獲得 150%\n自動恢復 5% 生命"
       },
@@ -2585,6 +2815,7 @@
         "pt": "Selo da divindade",
         "ru": "Печать божественности",
         "uk": "Печатка божественності",
+        "vi": "Bùa thần thánh",
         "zh-CN": "神圣印章",
         "zh-TW": "神聖印章"
       },
@@ -2599,6 +2830,7 @@
         "ru": "Выпадение предметов 150%\nАвтовосстановление 5% маны",
         "tl": "Nakukuhang item 150%\nAwtomatikong bumabawi ng 5% na mana",
         "uk": "Випадіння предметів 150%\nАвтовідновлення 5% мани",
+        "vi": "Tỉ lệ nhận vật phẩm 150%\nTự động hồi 5% Mana",
         "zh-CN": "物品获得 150%\n自动恢复 5% 魔法值",
         "zh-TW": "物品獲得 150%\n自動恢復 5% 法力"
       },
@@ -2622,6 +2854,7 @@
         "pt": "Pergaminho da batalha",
         "ru": "Свиток битвы",
         "uk": "Сувій битви",
+        "vi": "Sách chiến đấu",
         "zh-CN": "战斗卷轴",
         "zh-TW": "戰鬥捲軸"
       },
@@ -2635,6 +2868,7 @@
         "pt": "Aumento do dano crítico em 20%",
         "ru": "Шанс критического урона +20%",
         "uk": "Шанс критичної шкоди +20%",
+        "vi": "Tỉ lệ chí mạng +20%",
         "zh-CN": "幸运一击伤害几率 +20%",
         "zh-TW": "暴擊傷害率 +20%"
       },
@@ -2658,6 +2892,7 @@
         "pt": "Pergaminho da força",
         "ru": "Свиток силы",
         "uk": "Сувій сили",
+        "vi": "Sách sức mạnh",
         "zh-CN": "力量卷轴",
         "zh-TW": "力量捲軸"
       },
@@ -2671,6 +2906,7 @@
         "pt": "Aumento do dano excelente em 20%",
         "ru": "Шанс отличного урона +20%",
         "uk": "Шанс відмінної шкоди +20%",
+        "vi": "Tỉ lệ sát thương hoàn hảo +20%",
         "zh-CN": "卓越一击伤害几率 +20%",
         "zh-TW": "卓越傷害率 +20%"
       },
@@ -2695,6 +2931,7 @@
         "ru": "Рождественское благословение",
         "tl": "Pagpapala ng Pasko",
         "uk": "Різдвяне благословення",
+        "vi": "Phước lành Giáng Sinh",
         "zh-CN": "圣诞祝福",
         "zh-TW": "聖誕祝福"
       },
@@ -2709,6 +2946,7 @@
         "ru": "Сила атаки и защита увеличиваются.",
         "tl": "Tumataas ang lakas ng pag-atake at depensa.",
         "uk": "Сила атаки та захист збільшуються.",
+        "vi": "Tăng tấn công và phòng thủ.",
         "zh-CN": "攻击力与防御力提高。",
         "zh-TW": "攻擊力與防禦力提高。"
       }
@@ -2729,6 +2967,7 @@
         "ru": "Исцеление Санты",
         "tl": "Paggaling ni Santa",
         "uk": "Зцілення Діда Мороза",
+        "vi": "Quà hồi máu của Santa",
         "zh-CN": "圣诞老人的治愈",
         "zh-TW": "聖誕老人的治癒"
       },
@@ -2743,6 +2982,7 @@
         "ru": "Макс. жизнь +500",
         "tl": "Max na buhay +500",
         "uk": "Макс. життя +500",
+        "vi": "Máu tối đa +500",
         "zh-CN": "最大生命值 +500",
         "zh-TW": "最大生命 +500"
       }
@@ -2763,6 +3003,7 @@
         "ru": "Защита Санты",
         "tl": "Proteksyon ni Santa",
         "uk": "Захист Діда Мороза",
+        "vi": "Bảo hộ của Santa",
         "zh-CN": "圣诞老人的守护",
         "zh-TW": "聖誕老人的守護"
       },
@@ -2777,6 +3018,7 @@
         "ru": "Макс. мана +500",
         "tl": "Max na mana +500",
         "uk": "Макс. мана +500",
+        "vi": "Mana tối đa +500",
         "zh-CN": "最大魔法值 +500",
         "zh-TW": "最大法力 +500"
       }
@@ -2797,6 +3039,7 @@
         "ru": "Усиление Санты",
         "tl": "Lakas ni Santa",
         "uk": "Посилення Діда Мороза",
+        "vi": "Sức mạnh của Santa",
         "zh-CN": "圣诞老人的强化",
         "zh-TW": "聖誕老人的強化"
       },
@@ -2811,6 +3054,7 @@
         "ru": "Сила атаки +30",
         "tl": "Lakas ng pag-atake +30",
         "uk": "Сила атаки +30",
+        "vi": "Tấn công +30",
         "zh-CN": "攻击力 +30",
         "zh-TW": "攻擊力 +30"
       }
@@ -2831,6 +3075,7 @@
         "ru": "Оборона Санты",
         "tl": "Depensa ni Santa",
         "uk": "Оборона Діда Мороза",
+        "vi": "Phòng thủ của Santa",
         "zh-CN": "圣诞老人的防御",
         "zh-TW": "聖誕老人的防禦"
       },
@@ -2845,6 +3090,7 @@
         "ru": "Защита +100",
         "tl": "Depensa +100",
         "uk": "Захист +100",
+        "vi": "Phòng thủ +100",
         "zh-CN": "防御力 +100",
         "zh-TW": "防禦力 +100"
       }
@@ -2865,6 +3111,7 @@
         "ru": "Быстрота Санты",
         "tl": "Bilis ni Santa",
         "uk": "Швидкість Діда Мороза",
+        "vi": "Tăng tốc của Santa",
         "zh-CN": "圣诞老人的迅捷",
         "zh-TW": "聖誕老人的迅捷"
       },
@@ -2879,6 +3126,7 @@
         "ru": "Скорость атаки +15",
         "tl": "Bilis ng pag-atake +15",
         "uk": "Швидкість атаки +15",
+        "vi": "Tốc độ tấn công +15",
         "zh-CN": "攻击速度 +15",
         "zh-TW": "攻擊速度 +15"
       }
@@ -2899,6 +3147,7 @@
         "ru": "Удача Санты",
         "tl": "Suwerte ni Santa",
         "uk": "Удача Діда Мороза",
+        "vi": "May mắn của Santa",
         "zh-CN": "圣诞老人的幸运",
         "zh-TW": "聖誕老人的幸運"
       },
@@ -2913,6 +3162,7 @@
         "ru": "Скорость восстановления AG +10",
         "tl": "Bilis ng pagbawi ng AG +10",
         "uk": "Швидкість відновлення AG +10",
+        "vi": "Tốc độ hồi AG +10",
         "zh-CN": "AG恢复速度 +10",
         "zh-TW": "AG恢復速度 +10"
       }
@@ -2933,6 +3183,7 @@
         "ru": "Наблюдение",
         "tl": "Panoorin",
         "uk": "Спостереження",
+        "vi": "Xem đấu",
         "zh-CN": "观战",
         "zh-TW": "觀戰"
       },
@@ -2947,6 +3198,7 @@
         "ru": "Можно войти на арену и смотреть дуэль.",
         "tl": "Maaari kang pumasok sa arena at manood ng duel.",
         "uk": "Можна зайти на арену й дивитися дуель.",
+        "vi": "Có thể vào đấu trường để xem trận đấu tay đôi.",
         "zh-CN": "可进入竞技场观看决斗。",
         "zh-TW": "可進入競技場觀看決鬥。"
       }
@@ -2966,6 +3218,7 @@
         "pt": "Talismã do guardião",
         "ru": "Талисман стража",
         "uk": "Талісман охоронця",
+        "vi": "Bùa hộ mệnh",
         "zh-CN": "守护符",
         "zh-TW": "守護符"
       },
@@ -2980,6 +3233,7 @@
         "ru": "Нет штрафа за смерть.",
         "tl": "Walang parusa sa pagkamatay.",
         "uk": "Без штрафу за смерть.",
+        "vi": "Không bị phạt khi chết.",
         "zh-CN": "死亡时不受惩罚。",
         "zh-TW": "死亡時不受懲罰。"
       },
@@ -3003,6 +3257,7 @@
         "pt": "Talismã de proteção de item",
         "ru": "Талисман защиты предметов",
         "uk": "Талісман захисту предметів",
+        "vi": "Bùa bảo vệ trang bị",
         "zh-CN": "物品保护符",
         "zh-TW": "物品保護符"
       },
@@ -3017,6 +3272,7 @@
         "ru": "Предметы не теряют прочность.",
         "tl": "Hindi nababawasan ang tibay ng mga item.",
         "uk": "Предмети не втрачають міцність.",
+        "vi": "Trang bị được giữ nguyên độ bền.",
         "zh-CN": "物品耐久度不会降低。",
         "zh-TW": "物品耐久度不會降低。"
       },
@@ -3040,6 +3296,7 @@
         "pt": "Selo Mestre da ascensão",
         "ru": "Печать восхождения мастера",
         "uk": "Печатка сходження майстра",
+        "vi": "Bùa thăng cấp Master",
         "zh-CN": "大师晋升印章",
         "zh-TW": "大師晉升印章"
       },
@@ -3054,6 +3311,7 @@
         "ru": "Прирост опыта 150%",
         "tl": "Nakukuhang EXP 150%",
         "uk": "Збільшення досвіду 150%",
+        "vi": "Tăng kinh nghiệm nhận được 150%",
         "zh-CN": "经验值获得 150%",
         "zh-TW": "經驗值獲得 150%"
       },
@@ -3077,6 +3335,7 @@
         "pt": "Selo Mestre da riqueza",
         "ru": "Печать богатства мастера",
         "uk": "Печатка багатства майстра",
+        "vi": "Bùa thịnh vượng Master",
         "zh-CN": "大师财富印章",
         "zh-TW": "大師財富印章"
       },
@@ -3091,6 +3350,7 @@
         "ru": "Прирост опыта 200%\nВыпадение предметов 150%",
         "tl": "Nakukuhang EXP 200%\nNakukuhang item 150%",
         "uk": "Збільшення досвіду 200%\nВипадіння предметів 150%",
+        "vi": "Tăng kinh nghiệm nhận được 200%\nTăng tỉ lệ nhận vật phẩm 150%",
         "zh-CN": "经验值获得 200%\n物品获得 150%",
         "zh-TW": "經驗值獲得 200%\n物品獲得 150%"
       },
@@ -3114,6 +3374,7 @@
         "pt": "Honra do Gladiador",
         "ru": "Честь гладиатора",
         "uk": "Честь гладіатора",
+        "vi": "Vinh quang đấu sĩ",
         "zh-CN": "角斗士的荣誉",
         "zh-TW": "角鬥士的榮譽"
       },
@@ -3128,6 +3389,7 @@
         "ru": "Опыт +20%\nВыше шанс выпадения редких предметов\nТолько в Вулкане",
         "tl": "EXP +20%\nMas mataas na drop rate ng rare item\nSa Vulcanus lamang",
         "uk": "Досвід +20%\nВищий шанс випадіння рідкісних предметів\nЛише у Вулкані",
+        "vi": "Kinh nghiệm +20%\nTăng tỉ lệ rơi vật phẩm hiếm\nChỉ có hiệu lực ở Vulcanus",
         "zh-CN": "经验值 +20%\n稀有物品掉落率提高\n仅限武尔坎努斯",
         "zh-TW": "經驗值 +20%\n稀有物品掉落率提高\n僅限武爾坎努斯"
       },
@@ -3151,6 +3413,7 @@
         "pt": "Selo da força",
         "ru": "Печать силы",
         "uk": "Печатка сили",
+        "vi": "Bùa sức mạnh",
         "zh-CN": "力量印章",
         "zh-TW": "力量印章"
       },
@@ -3165,6 +3428,7 @@
         "ru": "Повышает точность атаки и уровень защиты.",
         "tl": "Pinapataas ang rate ng pag-atake at rate ng depensa.",
         "uk": "Підвищує точність атаки та рівень захисту.",
+        "vi": "Tăng tỉ lệ tấn công và tỉ lệ phòng thủ.",
         "zh-CN": "攻击率与防御率提高。",
         "zh-TW": "攻擊率與防禦率提高。"
       },
@@ -3178,6 +3442,9 @@
       "name": "ascension",
       "kind": "buff",
       "group": 54,
+      "description": {
+        "vi": "Hiệu ứng Ascension (Thăng hoa)."
+      },
       "displayName": {
         "en": "Ascension",
         "de": "Aufstieg",
@@ -3188,6 +3455,7 @@
         "pt": "Ascensão",
         "ru": "Восхождение",
         "uk": "Сходження",
+        "vi": "Thăng hoa",
         "zh-CN": "晋升",
         "zh-TW": "晉升"
       }
@@ -3208,6 +3476,7 @@
         "ru": "Штраф за PK",
         "tl": "Parusa sa PK",
         "uk": "Штраф за PK",
+        "vi": "Phạt PK",
         "zh-CN": "PK惩罚",
         "zh-TW": "PK懲罰"
       },
@@ -3222,6 +3491,7 @@
         "ru": "Окно управления варпом заблокировано на пять минут.",
         "tl": "Naka-lock ang Warp Command Window nang limang minuto.",
         "uk": "Вікно команд Warp заблоковано на п'ять хвилин.",
+        "vi": "Khóa cửa sổ lệnh dịch chuyển trong năm phút.",
         "zh-CN": "传送指令窗口锁定五分钟。",
         "zh-TW": "傳送指令視窗鎖定五分鐘。"
       }
@@ -3242,6 +3512,7 @@
         "ru": "Вы устали.",
         "tl": "Pagod ka na.",
         "uk": "Ви втомилися.",
+        "vi": "Mệt mỏi",
         "zh-CN": "你感到疲劳。",
         "zh-TW": "你感到疲勞。"
       },
@@ -3256,6 +3527,7 @@
         "ru": "Прирост опыта 50%\nВыпадение предметов 50%",
         "tl": "Nakukuhang EXP 50%\nItem Drop Rate 50%",
         "uk": "Збільшення досвіду 50%\nВипадіння предметів 50%",
+        "vi": "Kinh nghiệm nhận được 50%\nTỉ lệ rơi vật phẩm 50%",
         "zh-CN": "经验值获得 50%\n物品掉落率 50%",
         "zh-TW": "經驗值獲得 50%\n物品掉落率 50%"
       }
@@ -3276,6 +3548,7 @@
         "ru": "Вы измотаны.",
         "tl": "Ubos na ang lakas mo.",
         "uk": "Ви виснажені.",
+        "vi": "Kiệt sức",
         "zh-CN": "你已精疲力竭。",
         "zh-TW": "你已筋疲力盡。"
       },
@@ -3290,6 +3563,7 @@
         "ru": "Прирост опыта 50%\nВыпадение предметов 0%",
         "tl": "Nakukuhang EXP 50%\nItem Drop Rate 0%",
         "uk": "Збільшення досвіду 50%\nВипадіння предметів 0%",
+        "vi": "Kinh nghiệm nhận được 50%\nTỉ lệ rơi vật phẩm 0%",
         "zh-CN": "经验值获得 50%\n物品掉落率 0%",
         "zh-TW": "經驗值獲得 50%\n物品掉落率 0%"
       }
@@ -3309,6 +3583,7 @@
         "pt": "Item de bônus de EXP do grupo",
         "ru": "Бонус опыта группы",
         "uk": "Бонус досвіду групи",
+        "vi": "Vật phẩm tăng kinh nghiệm tổ đội",
         "zh-CN": "队伍经验值加成道具",
         "zh-TW": "隊伍經驗值加成道具"
       },
@@ -3323,6 +3598,7 @@
         "ru": "До 170% прироста опыта в зависимости от числа членов группы.",
         "tl": "Hanggang 170% EXP, depende sa dami ng miyembro ng party.",
         "uk": "До 170% досвіду залежно від кількості учасників групи.",
+        "vi": "Nhận tối đa 170% kinh nghiệm, tùy số thành viên trong tổ đội.",
         "zh-CN": "根据队伍人数，经验值获得最高可达 170%。",
         "zh-TW": "依隊伍人數，經驗值獲得最高可達 170%。"
       },
@@ -3346,6 +3622,7 @@
         "pt": "Aura de aumento de AG máx",
         "ru": "Аура увеличения макс. AG",
         "uk": "Аура збільшення макс. AG",
+        "vi": "Hào quang tăng AG tối đa",
         "zh-CN": "最大AG提升光环",
         "zh-TW": "最大AG提升光環"
       },
@@ -3360,6 +3637,7 @@
         "ru": "Увеличивает макс. AG.",
         "tl": "Pinapataas ang iyong max AG.",
         "uk": "Збільшує макс. AG.",
+        "vi": "Tăng AG tối đa.",
         "zh-CN": "提高最大AG。",
         "zh-TW": "提高最大AG。"
       },
@@ -3383,6 +3661,7 @@
         "pt": "Aura de aumento de SD máx",
         "ru": "Аура увеличения макс. SD",
         "uk": "Аура збільшення макс. SD",
+        "vi": "Hào quang tăng SD tối đa",
         "zh-CN": "最大SD提升光环",
         "zh-TW": "最大SD提升光環"
       },
@@ -3397,6 +3676,7 @@
         "ru": "Увеличивает макс. SD.",
         "tl": "Pinapataas ang iyong max SD.",
         "uk": "Збільшує макс. SD.",
+        "vi": "Tăng SD tối đa.",
         "zh-CN": "提高最大SD。",
         "zh-TW": "提高最大SD。"
       },
@@ -3420,6 +3700,7 @@
         "pt": "Vitalidade mínima",
         "ru": "Минимальная выносливость",
         "uk": "Мінімальна витривалість",
+        "vi": "Sức bền tối thiểu",
         "zh-CN": "最低活力",
         "zh-TW": "最低活力"
       },
@@ -3434,6 +3715,7 @@
         "ru": "Прирост опыта 100%\nВыпадение предметов 100%\nВыносливость временно не уменьшается.",
         "tl": "Nakukuhang EXP 100%\nItem Drop Rate 100%\nPansamantalang hindi bababa ang stamina.",
         "uk": "Збільшення досвіду 100%\nВипадіння предметів 100%\nВитривалість тимчасово не зменшується.",
+        "vi": "Kinh nghiệm nhận được 100%\nTỉ lệ rơi vật phẩm 100%\nSức bền không giảm trong một khoảng thời gian.",
         "zh-CN": "经验值获得 100%\n物品掉落率 100%\n一段时间内精力不会减少。",
         "zh-TW": "經驗值獲得 100%\n物品掉落率 100%\n體力暫時不會減少。"
       },
@@ -3457,6 +3739,7 @@
         "pt": "Vitalidade baixa",
         "ru": "Низкая выносливость",
         "uk": "Низька витривалість",
+        "vi": "Sức bền thấp",
         "zh-CN": "低级活力",
         "zh-TW": "低活力"
       },
@@ -3471,6 +3754,7 @@
         "ru": "Прирост опыта 100%\nВыпадение предметов 100%\nВыносливость временно не уменьшается.",
         "tl": "Nakukuhang EXP 100%\nItem Drop Rate 100%\nPansamantalang hindi bababa ang stamina.",
         "uk": "Збільшення досвіду 100%\nВипадіння предметів 100%\nВитривалість тимчасово не зменшується.",
+        "vi": "Kinh nghiệm nhận được 100%\nTỉ lệ rơi vật phẩm 100%\nSức bền không giảm trong một khoảng thời gian.",
         "zh-CN": "经验值获得 100%\n物品掉落率 100%\n一段时间内精力不会减少。",
         "zh-TW": "經驗值獲得 100%\n物品掉落率 100%\n體力暫時不會減少。"
       },
@@ -3494,6 +3778,7 @@
         "pt": "Vitalidade média",
         "ru": "Средняя выносливость",
         "uk": "Середня витривалість",
+        "vi": "Sức bền trung bình",
         "zh-CN": "中级活力",
         "zh-TW": "中等活力"
       },
@@ -3508,6 +3793,7 @@
         "ru": "Прирост опыта 100%\nВыпадение предметов 100%\nВыносливость временно не уменьшается.",
         "tl": "Nakukuhang EXP 100%\nItem Drop Rate 100%\nPansamantalang hindi bababa ang stamina.",
         "uk": "Збільшення досвіду 100%\nВипадіння предметів 100%\nВитривалість тимчасово не зменшується.",
+        "vi": "Kinh nghiệm nhận được 100%\nTỉ lệ rơi vật phẩm 100%\nSức bền không giảm trong một khoảng thời gian.",
         "zh-CN": "经验值获得 100%\n物品掉落率 100%\n一段时间内精力不会减少。",
         "zh-TW": "經驗值獲得 100%\n物品掉落率 100%\n體力暫時不會減少。"
       },
@@ -3531,6 +3817,7 @@
         "pt": "Vitalidade alta",
         "ru": "Высокая выносливость",
         "uk": "Висока витривалість",
+        "vi": "Sức bền cao",
         "zh-CN": "高级活力",
         "zh-TW": "高活力"
       },
@@ -3545,6 +3832,7 @@
         "ru": "Прирост опыта 100%\nВыпадение предметов 100%\nВыносливость временно не уменьшается.",
         "tl": "Nakukuhang EXP 100%\nItem Drop Rate 100%\nPansamantalang hindi bababa ang stamina.",
         "uk": "Збільшення досвіду 100%\nВипадіння предметів 100%\nВитривалість тимчасово не зменшується.",
+        "vi": "Kinh nghiệm nhận được 100%\nTỉ lệ rơi vật phẩm 100%\nSức bền không giảm trong một khoảng thời gian.",
         "zh-CN": "经验值获得 100%\n物品掉落率 100%\n一段时间内精力不会减少。",
         "zh-TW": "經驗值獲得 100%\n物品掉落率 100%\n體力暫時不會減少。"
       },
@@ -3568,6 +3856,7 @@
         "pt": "Selo da riqueza",
         "ru": "Печать богатства",
         "uk": "Печатка багатства",
+        "vi": "Bùa thịnh vượng",
         "zh-CN": "财富印章",
         "zh-TW": "財富印章"
       },
@@ -3582,6 +3871,7 @@
         "ru": "Выпадение предметов 150%",
         "tl": "Item Drop Rate 150%",
         "uk": "Випадіння предметів 150%",
+        "vi": "Tỉ lệ rơi vật phẩm 150%",
         "zh-CN": "物品掉落率 150%",
         "zh-TW": "物品掉落率 150%"
       },
@@ -3606,6 +3896,7 @@
         "ru": "Наказание за запрещённые программы",
         "tl": "Parusa sa Paggamit ng Ilegal na Software",
         "uk": "Покарання за заборонені програми",
+        "vi": "Phạt sử dụng phần mềm trái phép",
         "zh-CN": "使用非法程序惩罚",
         "zh-TW": "使用非法程式懲罰"
       },
@@ -3620,6 +3911,7 @@
         "ru": "Прирост опыта 50%\nВыпадение предметов 0%",
         "tl": "Nakukuhang EXP 50%\nItem Drop Rate 0%",
         "uk": "Збільшення досвіду 50%\nВипадіння предметів 0%",
+        "vi": "Kinh nghiệm nhận được 50%\nTỉ lệ rơi vật phẩm 0%",
         "zh-CN": "经验值获得 50%\n物品掉落率 0%",
         "zh-TW": "經驗值獲得 50%\n物品掉落率 0%"
       },
@@ -3640,6 +3932,7 @@
         "pt": "Pergaminho da cura",
         "ru": "Свиток исцеления",
         "uk": "Сувій зцілення",
+        "vi": "Sách hồi máu",
         "zh-CN": "治愈卷轴",
         "zh-TW": "治癒捲軸"
       },
@@ -3654,6 +3947,7 @@
         "ru": "Восстановление HP +3%\nHP +100",
         "tl": "Regenerasyon ng HP +3%\nHP +100",
         "uk": "Відновлення HP +3%\nHP +100",
+        "vi": "Hồi máu +3%\nMáu +100",
         "zh-CN": "生命值恢复 +3%\n生命值 +100",
         "zh-TW": "生命值恢復 +3%\n生命值 +100"
       },
@@ -3678,6 +3972,7 @@
         "ru": "Игнорирование защиты",
         "tl": "Balewalain ang Depensa ng Kalaban",
         "uk": "Ігнорування захисту",
+        "vi": "Bỏ qua phòng thủ đối phương",
         "zh-CN": "无视防御",
         "zh-TW": "無視防禦"
       },
@@ -3692,6 +3987,7 @@
         "ru": "Повышает шанс нанести урон, игнорируя защиту врага.",
         "tl": "Pinapataas ang tsansang balewalain ang depensa ng kalaban at magdulot ng pinsala.",
         "uk": "Підвищує шанс завдати шкоди, ігноруючи захист ворога.",
+        "vi": "Tăng cơ hội bỏ qua phòng thủ của đối phương để gây sát thương.",
         "zh-CN": "提高无视敌人防御力造成伤害的几率。",
         "zh-TW": "提高無視敵人防禦力造成傷害的機率。"
       }
@@ -3711,6 +4007,7 @@
         "pt": "Aumento de Vida",
         "ru": "Увеличение здоровья",
         "uk": "Збільшення здоров'я",
+        "vi": "Tăng thể lực",
         "zh-CN": "体力提升",
         "zh-TW": "活力提升"
       },
@@ -3725,6 +4022,7 @@
         "ru": "Повышает показатель здоровья.",
         "tl": "Pinapataas ang Kasiglahan.",
         "uk": "Підвищує показник здоров'я.",
+        "vi": "Tăng chỉ số thể lực.",
         "zh-CN": "提高体力属性。",
         "zh-TW": "提高活力屬性。"
       }
@@ -3745,6 +4043,7 @@
         "ru": "Повышение уровня защиты",
         "tl": "Dagdag na Rate ng Depensa",
         "uk": "Підвищення рівня захисту",
+        "vi": "Tăng tỉ lệ phòng thủ",
         "zh-CN": "防御率提升",
         "zh-TW": "防禦率提升"
       },
@@ -3759,6 +4058,7 @@
         "ru": "Повышает макс. уровень защиты.",
         "tl": "Pinapataas ang max na rate ng depensa.",
         "uk": "Підвищує макс. рівень захисту.",
+        "vi": "Tăng tỉ lệ phòng thủ tối đa.",
         "zh-CN": "提高最大防御率。",
         "zh-TW": "提高最大防禦率。"
       }
@@ -3779,6 +4079,7 @@
         "ru": "Снижение шанса защиты",
         "tl": "Bawas sa rate ng tagumpay sa pagtatanggol",
         "uk": "Зниження шансу захисту",
+        "vi": "Giảm tỉ lệ phòng thủ thành công",
         "zh-CN": "防御成功率降低",
         "zh-TW": "防禦成功率降低"
       },
@@ -3793,6 +4094,7 @@
         "ru": "Снижает шанс успешной защиты.",
         "tl": "Binabawasan ang rate ng tagumpay sa pagtatanggol.",
         "uk": "Знижує шанс успішного захисту.",
+        "vi": "Giảm tỉ lệ phòng thủ thành công.",
         "zh-CN": "降低防御成功率。",
         "zh-TW": "降低防禦成功率。"
       }
@@ -3812,6 +4114,7 @@
         "pt": "Invencibilidade",
         "ru": "Неуязвимость",
         "uk": "Невразливість",
+        "vi": "Bất tử",
         "zh-CN": "无敌",
         "zh-TW": "無敵"
       },
@@ -3826,6 +4129,7 @@
         "ru": "Неуязвим",
         "tl": "Hindi tinatablan",
         "uk": "Невразливий",
+        "vi": "Đang bất tử",
         "zh-CN": "无敌状态",
         "zh-TW": "無敵狀態"
       }
@@ -3843,6 +4147,7 @@
         "pt": "Defesa de ferro",
         "ru": "Железная защита",
         "uk": "Залізний захист",
+        "vi": "Iron Defense",
         "zh-CN": "钢铁防御",
         "zh-TW": "鋼鐵防禦"
       },
@@ -3857,6 +4162,7 @@
         "ru": "Значительно повышает защиту и HP.",
         "tl": "Malaking dagdag sa depensa at HP.",
         "uk": "Значно підвищує захист і HP.",
+        "vi": "Tăng mạnh phòng thủ và máu.",
         "zh-CN": "大幅提高防御力与生命值。",
         "zh-TW": "大幅提高防禦力與生命值。"
       },
@@ -3875,6 +4181,7 @@
         "pt": "Expandir vida",
         "ru": "Прилив жизни",
         "uk": "Приплив життя",
+        "vi": "Swell Life",
         "zh-CN": "生命之光",
         "zh-TW": "生命之光"
       },
@@ -3889,6 +4196,7 @@
         "ru": "Повышает макс. жизнь и ману.",
         "tl": "Pinapataas ang max na buhay at mana.",
         "uk": "Підвищує макс. життя та ману.",
+        "vi": "Tăng máu và Mana tối đa.",
         "zh-CN": "提高最大生命值与魔法值。",
         "zh-TW": "提高最大生命與法力。"
       },
@@ -3908,6 +4216,7 @@
         "pt": "Expandir vida",
         "ru": "Прилив жизни",
         "uk": "Приплив життя",
+        "vi": "Swell Life",
         "zh-CN": "生命之光",
         "zh-TW": "生命之光"
       },
@@ -3922,6 +4231,7 @@
         "ru": "Повышает макс. жизнь, ману и AG.",
         "tl": "Pinapataas ang max na buhay, mana at AG.",
         "uk": "Підвищує макс. життя, ману та AG.",
+        "vi": "Tăng máu, Mana và AG tối đa.",
         "zh-CN": "提高最大生命值、魔法值与AG。",
         "zh-TW": "提高最大生命、法力與AG。"
       },
@@ -3944,6 +4254,7 @@
         "ru": "Кровотечение",
         "tl": "Pagdurugo",
         "uk": "Кровотеча",
+        "vi": "Chảy máu",
         "zh-CN": "流血",
         "zh-TW": "流血"
       },
@@ -3958,6 +4269,7 @@
         "ru": "Потеря HP каждую секунду.",
         "tl": "Nababawasan ng HP bawat segundo.",
         "uk": "Втрата HP щосекунди.",
+        "vi": "Mất máu mỗi giây.",
         "zh-CN": "每秒损失生命值。",
         "zh-TW": "每秒損失生命值。"
       }
@@ -3975,6 +4287,7 @@
         "pt": "Expansão de magia",
         "ru": "Расширение волшебства",
         "uk": "Розширення магії",
+        "vi": "Expansion of Wizardry",
         "zh-CN": "魔力扩张",
         "zh-TW": "魔力擴張"
       },
@@ -3989,6 +4302,7 @@
         "ru": "Повышает мин. и макс. волшебство.",
         "tl": "Pinapataas ang min at max na wizardry.",
         "uk": "Підвищує мін. і макс. магію.",
+        "vi": "Tăng ma lực tối thiểu và ma lực tối đa.",
         "zh-CN": "提高最小魔力与最大魔力。",
         "zh-TW": "提高最小魔力與最大魔力。"
       },
@@ -4009,6 +4323,7 @@
         "pt": "Expansão de magia",
         "ru": "Расширение волшебства",
         "uk": "Розширення магії",
+        "vi": "Expansion of Wizardry",
         "zh-CN": "魔力扩张",
         "zh-TW": "魔力擴張"
       },
@@ -4023,6 +4338,7 @@
         "ru": "Повышает мин. и макс. волшебство\nи шанс критического урона.",
         "tl": "Pinapataas ang min at max na wizardry\nat ang critical damage rate.",
         "uk": "Підвищує мін. і макс. магію\nта шанс критичної шкоди.",
+        "vi": "Tăng ma lực tối thiểu, ma lực tối đa\nvà tỉ lệ chí mạng.",
         "zh-CN": "提高最小与最大魔力\n以及幸运一击伤害几率。",
         "zh-TW": "提高最小與最大魔力\n以及暴擊傷害率。"
       },
@@ -4043,6 +4359,7 @@
         "pt": "Barreira da alma",
         "ru": "Барьер души",
         "uk": "Бар'єр душі",
+        "vi": "Soul Barrier",
         "zh-CN": "守护之魂",
         "zh-TW": "靈魂屏障"
       },
@@ -4057,6 +4374,7 @@
         "ru": "Поглощает урон за счёт маны\nи повышает макс. ману.",
         "tl": "Gumagamit ng mana para sipsipin ang pinsala\nat pinapataas ang max na mana.",
         "uk": "Поглинає шкоду за рахунок мани\nта підвищує макс. ману.",
+        "vi": "Dùng Mana để hấp thụ sát thương\nvà tăng Mana tối đa.",
         "zh-CN": "以魔法值吸收伤害，\n并提高最大魔法值。",
         "zh-TW": "以法力吸收傷害，\n並提高最大法力。"
       }
@@ -4077,6 +4395,7 @@
         "ru": "Снижение скорости атаки",
         "tl": "Bawas sa bilis ng pag-atake",
         "uk": "Зниження швидкості атаки",
+        "vi": "Giảm tốc độ tấn công",
         "zh-CN": "攻击速度降低",
         "zh-TW": "攻擊速度降低"
       },
@@ -4091,6 +4410,7 @@
         "ru": "Снижает скорость атаки.",
         "tl": "Binabawasan ang bilis ng pag-atake.",
         "uk": "Знижує швидкість атаки.",
+        "vi": "Giảm tốc độ tấn công.",
         "zh-CN": "降低攻击速度。",
         "zh-TW": "降低攻擊速度。"
       }
@@ -4108,6 +4428,7 @@
         "pt": "Abençoar",
         "ru": "Благословение",
         "uk": "Благословення",
+        "vi": "Bless",
         "zh-CN": "祝福",
         "zh-TW": "祝福"
       },
@@ -4122,6 +4443,7 @@
         "ru": "Повышает все характеристики.",
         "tl": "Pinapataas ang lahat ng stat.",
         "uk": "Підвищує всі характеристики.",
+        "vi": "Tăng mọi chỉ số.",
         "zh-CN": "提高所有属性。",
         "zh-TW": "提高所有屬性。"
       },
@@ -4140,6 +4462,7 @@
         "pt": "Flecha do Infinito",
         "ru": "Бесконечная стрела",
         "uk": "Нескінченна стріла",
+        "vi": "Infinity Arrow",
         "zh-CN": "无影箭",
         "zh-TW": "無限箭矢"
       },
@@ -4154,6 +4477,7 @@
         "ru": "Стрелы не расходуются\nи наносят больше урона.",
         "tl": "Hindi nauubos ang mga palaso\nat mas malakas ang pinsala.",
         "uk": "Стріли не витрачаються\nі завдають більше шкоди.",
+        "vi": "Không tiêu hao tên khi bắn\nvà tăng sát thương gây ra.",
         "zh-CN": "不消耗箭矢，\n且伤害提高。",
         "zh-TW": "不消耗箭矢，\n且傷害提高。"
       },
@@ -4174,6 +4498,7 @@
         "pt": "Cegar",
         "ru": "Слепота",
         "uk": "Сліпота",
+        "vi": "Mù",
         "zh-CN": "致盲",
         "zh-TW": "致盲"
       },
@@ -4188,6 +4513,7 @@
         "ru": "Вы ослеплены.\nСнижает шанс попадания.",
         "tl": "Nabulag ka.\nBumababa ang success rate ng pag-atake.",
         "uk": "Ви осліплені.\nЗнижує шанс влучання.",
+        "vi": "Đang bị mù.\nGiảm tỉ lệ tấn công thành công.",
         "zh-CN": "你被致盲了。\n攻击成功率降低。",
         "zh-TW": "你被致盲了。\n攻擊成功率降低。"
       },
@@ -4207,6 +4533,7 @@
         "pt": "Vampírico",
         "ru": "Вампиризм",
         "uk": "Вампіризм",
+        "vi": "Hút máu",
         "zh-CN": "吸血",
         "zh-TW": "吸血"
       },
@@ -4221,6 +4548,7 @@
         "ru": "Каждую секунду HP высасывается и переходит к цели.",
         "tl": "Sinisipsip ang HP bawat segundo at inililipat sa target.",
         "uk": "Щосекунди HP висмоктується й переходить до цілі.",
+        "vi": "Máu bị hút mỗi giây và chuyển sang mục tiêu.",
         "zh-CN": "每秒生命值被吸取并转移给对方。",
         "zh-TW": "每秒生命值被吸取並轉移給對方。"
       }
@@ -4240,6 +4568,7 @@
         "pt": "Congelar",
         "ru": "Заморозка",
         "uk": "Заморожування",
+        "vi": "Đóng băng",
         "zh-CN": "冰冻",
         "zh-TW": "冰凍"
       },
@@ -4254,6 +4583,7 @@
         "ru": "Заморожен: нельзя двигаться.",
         "tl": "Nagyelo: hindi makagalaw.",
         "uk": "Заморожено: неможливо рухатися.",
+        "vi": "Bị đóng băng: không thể di chuyển.",
         "zh-CN": "冰冻：无法移动。",
         "zh-TW": "冰凍：無法移動。"
       }
@@ -4263,6 +4593,9 @@
       "name": "earthBinds",
       "kind": "debuff",
       "group": 91,
+      "description": {
+        "vi": "Hiệu ứng kỹ năng Earth Binds (Trói đất)."
+      },
       "displayName": {
         "en": "Earth Binds",
         "es": "Ataduras de Tierra",
@@ -4271,6 +4604,7 @@
         "pt": "Laços da Terra",
         "ru": "Оковы земли",
         "uk": "Пута землі",
+        "vi": "Earth Binds",
         "zh-CN": "大地束缚",
         "zh-TW": "大地束縛"
       }
@@ -4291,6 +4625,7 @@
         "ru": "Увеличение критического урона",
         "tl": "Dagdag na Kritikal na Pinsala",
         "uk": "Збільшення критичної шкоди",
+        "vi": "Tăng sát thương chí mạng",
         "zh-CN": "幸运一击伤害提升",
         "zh-TW": "暴擊傷害提升"
       },
@@ -4305,6 +4640,7 @@
         "ru": "Повышает критический урон и шанс критического урона.",
         "tl": "Pinapataas ang critical damage at critical damage rate.",
         "uk": "Підвищує критичну шкоду та шанс критичної шкоди.",
+        "vi": "Tăng sát thương chí mạng và tỉ lệ chí mạng.",
         "zh-CN": "提高幸运一击伤害与幸运一击伤害几率。",
         "zh-TW": "提高暴擊傷害與暴擊傷害率。"
       },
@@ -4327,6 +4663,7 @@
         "ru": "Увеличение критического урона",
         "tl": "Dagdag na Kritikal na Pinsala",
         "uk": "Збільшення критичної шкоди",
+        "vi": "Tăng sát thương chí mạng",
         "zh-CN": "幸运一击伤害提升",
         "zh-TW": "暴擊傷害提升"
       },
@@ -4341,6 +4678,7 @@
         "ru": "Повышает критический урон, шанс критического урона\nи шанс отличного урона.",
         "tl": "Pinapataas ang critical damage, critical damage rate\nat excellent damage rate.",
         "uk": "Підвищує критичну шкоду, шанс критичної шкоди\nта шанс відмінної шкоди.",
+        "vi": "Tăng sát thương chí mạng, tỉ lệ chí mạng\nvà tỉ lệ sát thương hoàn hảo.",
         "zh-CN": "提高幸运一击伤害、幸运一击伤害几率\n以及卓越一击伤害几率。",
         "zh-TW": "提高暴擊傷害、暴擊傷害率\n以及卓越傷害率。"
       },
@@ -4358,6 +4696,7 @@
         "ja": "バーサーカー",
         "ru": "Берсерк",
         "uk": "Берсерк",
+        "vi": "Berserker",
         "zh-CN": "狂暴术",
         "zh-TW": "狂暴術"
       },
@@ -4372,6 +4711,7 @@
         "ru": "Проклятие, волшебство, сила атаки и макс. мана увеличиваются.\nЗащита и макс. жизнь снижаются.",
         "tl": "Tumataas ang curse, wizardry, lakas ng pag-atake at max na mana.\nBumababa ang depensa at max na buhay.",
         "uk": "Прокляття, магія, сила атаки та макс. мана збільшуються.\nЗахист і макс. життя знижуються.",
+        "vi": "Tăng sức mạnh nguyền rủa, ma lực, tấn công và Mana tối đa.\nGiảm phòng thủ và máu tối đa.",
         "zh-CN": "诅咒力、魔力、攻击力与最大魔法值提高。\n防御力与最大生命值降低。",
         "zh-TW": "詛咒、魔力、攻擊力與最大法力提高。\n防禦力與最大生命降低。"
       }
@@ -4387,6 +4727,7 @@
         "ja": "バーサーカー",
         "ru": "Берсерк",
         "uk": "Берсерк",
+        "vi": "Berserker",
         "zh-CN": "狂暴术",
         "zh-TW": "狂暴術"
       },
@@ -4401,6 +4742,7 @@
         "ru": "Проклятие, волшебство, сила атаки и макс. мана увеличиваются.\nЗащита и макс. жизнь снижаются.",
         "tl": "Tumataas ang curse, wizardry, lakas ng pag-atake at max na mana.\nBumababa ang depensa at max na buhay.",
         "uk": "Прокляття, магія, сила атаки та макс. мана збільшуються.\nЗахист і макс. життя знижуються.",
+        "vi": "Tăng sức mạnh nguyền rủa, ma lực, tấn công và Mana tối đa.\nGiảm phòng thủ và máu tối đa.",
         "zh-CN": "诅咒力、魔力、攻击力与最大魔法值提高。\n防御力与最大生命值降低。",
         "zh-TW": "詛咒、魔力、攻擊力與最大法力提高。\n防禦力與最大生命降低。"
       }
@@ -4416,6 +4758,7 @@
         "ja": "バーサーカー",
         "ru": "Берсерк",
         "uk": "Берсерк",
+        "vi": "Berserker",
         "zh-CN": "狂暴术",
         "zh-TW": "狂暴術"
       },
@@ -4430,6 +4773,7 @@
         "ru": "Проклятие, волшебство, сила атаки и макс. мана увеличиваются.\nЗащита и макс. жизнь снижаются.",
         "tl": "Tumataas ang curse, wizardry, lakas ng pag-atake at max na mana.\nBumababa ang depensa at max na buhay.",
         "uk": "Прокляття, магія, сила атаки та макс. мана збільшуються.\nЗахист і макс. життя знижуються.",
+        "vi": "Tăng sức mạnh nguyền rủa, ma lực, tấn công và Mana tối đa.\nGiảm phòng thủ và máu tối đa.",
         "zh-CN": "诅咒力、魔力、攻击力与最大魔法值提高。\n防御力与最大生命值降低。",
         "zh-TW": "詛咒、魔力、攻擊力與最大法力提高。\n防禦力與最大生命降低。"
       }
@@ -4450,6 +4794,7 @@
         "ru": "Повышение шанса защиты",
         "tl": "Dagdag na Rate ng Tagumpay sa Pagtatanggol",
         "uk": "Підвищення шансу захисту",
+        "vi": "Tăng tỉ lệ phòng thủ thành công",
         "zh-CN": "防御成功率提升",
         "zh-TW": "防禦成功率提升"
       },
@@ -4464,6 +4809,7 @@
         "ru": "Повышает шанс успешной защиты.",
         "tl": "Pinapataas ang rate ng tagumpay sa pagtatanggol.",
         "uk": "Підвищує шанс успішного захисту.",
+        "vi": "Tăng tỉ lệ phòng thủ thành công.",
         "zh-CN": "提高防御成功率。",
         "zh-TW": "提高防禦成功率。"
       }
@@ -4484,6 +4830,7 @@
         "ru": "Повышение шанса защиты",
         "tl": "Dagdag na Rate ng Tagumpay sa Pagtatanggol",
         "uk": "Підвищення шансу захисту",
+        "vi": "Tăng tỉ lệ phòng thủ thành công",
         "zh-CN": "防御成功率提升",
         "zh-TW": "防禦成功率提升"
       },
@@ -4498,6 +4845,7 @@
         "ru": "Повышает макс. защиту и шанс успешной защиты.",
         "tl": "Pinapataas ang max na depensa at rate ng tagumpay sa pagtatanggol.",
         "uk": "Підвищує макс. захист і шанс успішного захисту.",
+        "vi": "Tăng phòng thủ tối đa và tỉ lệ phòng thủ thành công.",
         "zh-CN": "提高最大防御力与防御成功率。",
         "zh-TW": "提高最大防禦力與防禦成功率。"
       }
@@ -4518,6 +4866,7 @@
         "ru": "Увеличение HP",
         "tl": "Dagdag na HP",
         "uk": "Збільшення HP",
+        "vi": "Tăng máu",
         "zh-CN": "生命值提升",
         "zh-TW": "生命值提升"
       },
@@ -4532,6 +4881,7 @@
         "ru": "Повышает HP.",
         "tl": "Pinapataas ang HP.",
         "uk": "Підвищує HP.",
+        "vi": "Tăng máu.",
         "zh-CN": "提高生命值。",
         "zh-TW": "提高生命值。"
       }
@@ -4552,6 +4902,7 @@
         "ru": "Игнорирование защиты",
         "tl": "Balewalain ang Depensa ng Kalaban",
         "uk": "Ігнорування захисту",
+        "vi": "Bỏ qua phòng thủ đối phương",
         "zh-CN": "无视防御",
         "zh-TW": "無視防禦"
       },
@@ -4566,6 +4917,7 @@
         "ru": "Повышает шанс игнорировать защиту врага.\nПри успехе враг может получить «Пробитие брони».",
         "tl": "Mas mataas na tsansang balewalain ang depensa ng kalaban.\nKapag nagtagumpay, maaaring tamaan ang kalaban ng Penetrate Armor.",
         "uk": "Підвищує шанс ігнорувати захист ворога.\nУ разі успіху ворог може отримати «Пробиття броні».",
+        "vi": "Tăng cơ hội bỏ qua phòng thủ đối phương.\nKhi thành công, đối phương có thể bị Penetrate Armor (Xuyên giáp).",
         "zh-CN": "提高无视敌人防御的几率。\n成功时，敌人可能受到穿透护甲效果。",
         "zh-TW": "提高無視敵人防禦的機率。\n成功時，敵人可能受到穿透護甲效果。"
       }
@@ -4586,6 +4938,7 @@
         "ru": "Огонь",
         "tl": "Apoy",
         "uk": "Вогонь",
+        "vi": "Bỏng lửa",
         "zh-CN": "火焰",
         "zh-TW": "火焰"
       },
@@ -4600,6 +4953,7 @@
         "ru": "Потеря HP каждую секунду от огня.",
         "tl": "Nababawasan ng HP bawat segundo dahil sa apoy.",
         "uk": "Втрата HP щосекунди від вогню.",
+        "vi": "Mất máu mỗi giây do bỏng lửa.",
         "zh-CN": "每秒因火焰损失生命值。",
         "zh-TW": "每秒因火焰損失生命值。"
       }
@@ -4618,6 +4972,7 @@
         "pt": "Gelo",
         "ru": "Мороз",
         "uk": "Мороз",
+        "vi": "Tê cóng",
         "zh-CN": "冰霜",
         "zh-TW": "冰霜"
       },
@@ -4632,6 +4987,7 @@
         "ru": "Потеря HP каждую секунду от мороза.",
         "tl": "Nababawasan ng HP bawat segundo dahil sa frost.",
         "uk": "Втрата HP щосекунди від морозу.",
+        "vi": "Mất máu mỗi giây do tê cóng.",
         "zh-CN": "每秒因冰霜损失生命值。",
         "zh-TW": "每秒因冰霜損失生命值。"
       }
@@ -4652,6 +5008,7 @@
         "ru": "Яд",
         "tl": "Lason",
         "uk": "Отрута",
+        "vi": "Trúng độc",
         "zh-CN": "中毒",
         "zh-TW": "中毒"
       },
@@ -4666,6 +5023,7 @@
         "ru": "Потеря HP каждую секунду от яда.",
         "tl": "Nababawasan ng HP bawat segundo dahil sa lason.",
         "uk": "Втрата HP щосекунди від отрути.",
+        "vi": "Mất máu mỗi giây do trúng độc.",
         "zh-CN": "每秒因中毒损失生命值。",
         "zh-TW": "每秒因中毒損失生命值。"
       },
@@ -4687,6 +5045,7 @@
         "ru": "Яд",
         "tl": "Lason",
         "uk": "Отрута",
+        "vi": "Trúng độc",
         "zh-CN": "中毒",
         "zh-TW": "中毒"
       },
@@ -4701,6 +5060,7 @@
         "ru": "Потеря HP каждую секунду от яда.",
         "tl": "Nababawasan ng HP bawat segundo dahil sa lason.",
         "uk": "Втрата HP щосекунди від отрути.",
+        "vi": "Mất máu mỗi giây do trúng độc.",
         "zh-CN": "每秒因中毒损失生命值。",
         "zh-TW": "每秒因中毒損失生命值。"
       },
@@ -4720,6 +5080,7 @@
         "pt": "Abençoar",
         "ru": "Благословение",
         "uk": "Благословення",
+        "vi": "Bless",
         "zh-CN": "祝福",
         "zh-TW": "祝福"
       },
@@ -4734,6 +5095,7 @@
         "ru": "Повышает все характеристики.",
         "tl": "Pinapataas ang lahat ng stat.",
         "uk": "Підвищує всі характеристики.",
+        "vi": "Tăng mọi chỉ số.",
         "zh-CN": "提高所有属性。",
         "zh-TW": "提高所有屬性。"
       },
@@ -4753,6 +5115,7 @@
         "pt": "Fraqueza",
         "ru": "Ослабление",
         "uk": "Ослаблення",
+        "vi": "Weaken",
         "zh-CN": "虚弱",
         "zh-TW": "虛弱"
       },
@@ -4767,6 +5130,7 @@
         "ru": "Снижает точность атаки.",
         "tl": "Binabawasan ang rate ng pag-atake.",
         "uk": "Знижує точність атаки.",
+        "vi": "Giảm tỉ lệ tấn công.",
         "zh-CN": "降低攻击率。",
         "zh-TW": "降低攻擊率。"
       }
@@ -4784,6 +5148,7 @@
         "pt": "Inovação",
         "ru": "Инновация",
         "uk": "Інновація",
+        "vi": "Innovate",
         "zh-CN": "革新",
         "zh-TW": "革新"
       },
@@ -4798,6 +5163,7 @@
         "ru": "Снижает уровень защиты.",
         "tl": "Binabawasan ang rate ng depensa.",
         "uk": "Знижує рівень захисту.",
+        "vi": "Giảm tỉ lệ phòng thủ.",
         "zh-CN": "降低防御率。",
         "zh-TW": "降低防禦率。"
       }
@@ -4818,6 +5184,7 @@
         "ru": "Снижение уровня защиты",
         "tl": "Bawas sa Rate ng Depensa",
         "uk": "Зниження рівня захисту",
+        "vi": "Giảm tỉ lệ phòng thủ",
         "zh-CN": "防御率降低",
         "zh-TW": "防禦率降低"
       },
@@ -4832,6 +5199,7 @@
         "ru": "Снижает уровень защиты.",
         "tl": "Binabawasan ang rate ng depensa.",
         "uk": "Знижує рівень захисту.",
+        "vi": "Giảm tỉ lệ phòng thủ.",
         "zh-CN": "降低防御率。",
         "zh-TW": "降低防禦率。"
       }
@@ -4849,6 +5217,7 @@
         "pt": "Defesa de ferro",
         "ru": "Железная защита",
         "uk": "Залізний захист",
+        "vi": "Iron Defense",
         "zh-CN": "钢铁防御",
         "zh-TW": "鋼鐵防禦"
       },
@@ -4863,6 +5232,7 @@
         "ru": "Значительно повышает уровень защиты и HP.",
         "tl": "Malaking dagdag sa rate ng depensa at HP.",
         "uk": "Значно підвищує рівень захисту та HP.",
+        "vi": "Tăng mạnh tỉ lệ phòng thủ và máu.",
         "zh-CN": "大幅提高防御率与生命值。",
         "zh-TW": "大幅提高防禦率與生命值。"
       },
@@ -4882,6 +5252,7 @@
         "pt": "Uivo de sangue",
         "ru": "Кровавый вой",
         "uk": "Криваве виття",
+        "vi": "Blood Howl",
         "zh-CN": "血之嚎叫",
         "zh-TW": "血之嚎叫"
       },
@@ -4896,6 +5267,7 @@
         "ru": "Потеря HP каждую секунду.",
         "tl": "Nababawasan ng HP bawat segundo.",
         "uk": "Втрата HP щосекунди.",
+        "vi": "Mất máu mỗi giây.",
         "zh-CN": "每秒损失生命值。",
         "zh-TW": "每秒損失生命值。"
       },
@@ -4914,6 +5286,7 @@
         "pt": "Uivo de sangue",
         "ru": "Кровавый вой",
         "uk": "Криваве виття",
+        "vi": "Blood Howl",
         "zh-CN": "血之嚎叫",
         "zh-TW": "血之嚎叫"
       },
@@ -4928,6 +5301,7 @@
         "ru": "Потеря HP каждую секунду.",
         "tl": "Nababawasan ng HP bawat segundo.",
         "uk": "Втрата HP щосекунди.",
+        "vi": "Mất máu mỗi giây.",
         "zh-CN": "每秒损失生命值。",
         "zh-TW": "每秒損失生命值。"
       },
@@ -4949,6 +5323,7 @@
         "pt": "Penetrar armadura",
         "ru": "Пробитие брони",
         "uk": "Пробиття броні",
+        "vi": "Penetrate Armor",
         "zh-CN": "穿透护甲",
         "zh-TW": "穿透護甲"
       },
@@ -4963,6 +5338,7 @@
         "ru": "Снижает защиту и шанс успешной защиты.",
         "tl": "Binabawasan ang depensa at rate ng tagumpay sa pagtatanggol.",
         "uk": "Знижує захист і шанс успішного захисту.",
+        "vi": "Giảm phòng thủ và tỉ lệ phòng thủ thành công.",
         "zh-CN": "降低防御力与防御成功率。",
         "zh-TW": "降低防禦力與防禦成功率。"
       }
