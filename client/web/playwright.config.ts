@@ -13,7 +13,7 @@ export default defineConfig({
     baseURL: process.env.BASE_URL ?? 'http://127.0.0.1:8081',
     viewport: { width: 1280, height: 720 },
     screenshot: 'only-on-failure',
-    trace: 'off',
+    trace: process.env.CI ? 'on-first-retry' : 'off',
     launchOptions: {
       // WebGL without a graphics card
       args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-proxy-server'],
