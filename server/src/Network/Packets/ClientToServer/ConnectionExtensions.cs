@@ -6328,4 +6328,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMountChainCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = CraftOrUpgrade, 2 = SummonUnlocked.</param>
+    /// <param name="id">Target mount tier or recipe identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Mount Chain collection (Shift+U), craft/upgrade a mount step, or claim/summon a collected mount.
+    /// Causes reaction on server side: The server processes the mount chain action and sends HnmoMountChainState (F5 43).
+    /// </remarks>
+    public static async ValueTask SendHnmoMountChainCommandAsync(this IConnection? connection, byte @action, string @id)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMountChainCommandRef.GetRequiredSize(id);
+            var packet = new HnmoMountChainCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Id = @id;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
