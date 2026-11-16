@@ -139,6 +139,27 @@ public class SetupPageTests
     }
 
     /// <summary>
+    /// Database snapshots are optional: demo hosts still render the setup page and JSON backup controls.
+    /// </summary>
+    /// <param name="hasSnapshotService">Whether the host provides database snapshots.</param>
+    [TestCase(false)]
+    [TestCase(true)]
+    public void SnapshotControlsFollowHostAvailability(bool hasSnapshotService)
+    {
+        if (!hasSnapshotService)
+        {
+            var registration = this._context.Services.Single(service => service.ServiceType == typeof(IDatabaseSnapshotService));
+            this._context.Services.Remove(registration);
+        }
+
+        var cut = this._context.Render<Setup>();
+
+        cut.WaitForAssertion(() => Assert.That(cut.Markup, Does.Contain(Resources.JsonBackup)));
+        Assert.That(cut.FindAll("a[href='admin/backup/snapshot']"), Has.Count.EqualTo(hasSnapshotService ? 1 : 0));
+        Assert.That(cut.FindAll("a[href^='admin/backup?']"), Has.Count.EqualTo(1));
+    }
+
+    /// <summary>
     /// A data initialization which fails on demand.
     /// </summary>
     [Guid("5D1E7C2B-3F4A-4E8B-9C6D-7A2B1E0F3C59")]
