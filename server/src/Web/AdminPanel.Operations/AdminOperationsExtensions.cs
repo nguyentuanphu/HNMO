@@ -55,6 +55,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<BankTopUpService>();
         services.AddScoped<CastleSiegeManagementService>();
         services.AddScoped<MaintenanceToolsOperations>();
+        services.AddScoped<EconomyDashboardOperations>();
         return services;
     }
 }
