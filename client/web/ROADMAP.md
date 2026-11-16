@@ -270,7 +270,6 @@ section 12 (the cash shop) still waits for the owner's answers.
    State in `save/account-safety.json` (no database change; the PIN stays in the account's vault password). Still to check
    on a server running this code: a real trade, store sale and login from two addresses (the rules, the admin page and the
    website API are unit-tested; the web parts are tested with fed packets and answered requests).
-<<<<<<< HEAD
 5. ✅ **Top-up milestones ("thưởng mốc nạp")**, built 2026-11-16 (Sydney): cumulative VND top-up steps
    (admin panel *Top-up milestones* `/topup-milestones`, OFF by default), each step claimed once per account
    (coins with coin type via `MissionCoinGranter`, zen, items waiting in owed bag queue). `BankTopUpService`
@@ -282,8 +281,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 6. ✅ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
    player's time), its map and its drops, on the website (`/website/timetable` under Schedule) and in the game (<kbd>H</kbd>, touch ⋯ menu, and `(i)` guide). Extra scheduled invasions on a schedule: golden monsters, red dragon, white wizard, Lunar rabbits (`RabbitInvasionPlugIn`), snowmen (`SnowmanInvasionPlugIn`), and Find the GM (`FindTheGmInvasionPlugIn`, coins/zen to the first finder(s), recorded in `save/hnmo-state.json` under `timetable`). Admin page `/timetable` toggles features and edits daily Sydney times and rewards. Unit-tested (`TimetableEngineTest`, `TimetableControllerTests`) and Playwright-tested (`timetable.spec.ts`).
 7. ✅ **Daily lucky number**: pick a number on the website (`/portal/lucky-number/*` + self-contained `luckyNumberWidget.ts`) or in the game (<kbd>L</kbd>), a daily draw at a set Sydney time (`LuckyNumberPlugIn`, OFF by default), coins via `MissionCoinGranter` and jewels via `GiftCodeRewards` (queued when full) for winners; prizes and odds configurable in the admin panel (`/lucky-number`); public draw results on `home.html` (`/website/lucky-number`). Persisted in `save/hnmo-state.json` under `luckyNumber`. Unit-tested (`LuckyNumberEngineTest`, `LuckyNumberControllerTests`) and Playwright-tested (`lucky-number.spec.ts`).
-8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
-   together, divorce rules; the couples list on the website.
+8. ✅ **Marriage**: proposal and Devias Church ceremony (`Shift+M` or `/marry`), custom couple title, party EXP &amp; defense hunting bonus (`MarriagePlugIn`, OFF by default), spouse warp, divorce fees &amp; cooldowns (`MarriageEngine`), persisted in `save/hnmo-state.json` under `marriage`, public couples list on `home.html` (`/website/marriage`), and admin page `/marriage`. Unit-tested (`MarriageEngineTest`, `MarriageControllerTests`) and Playwright-tested (`marriage.spec.ts`).
 9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
    admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
 10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take

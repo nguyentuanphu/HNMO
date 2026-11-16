@@ -12931,6 +12931,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>37</SubCode>
+      <Name>HnmoMarriageState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After any marriage command or when marital/proposal/couple bonus status changes.</SentWhen>
+      <CausedReaction>The web game updates the Marriage window (Shift+M) and displays ceremony/proposal notices.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON containing marital state, couple title, party bonus status, ceremony location, divorce rules, and public couples summary.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>

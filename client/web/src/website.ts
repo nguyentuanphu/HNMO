@@ -253,6 +253,14 @@ const copy = {
     luckyWinning: "Winning #",
     luckyWinners: "Winners",
     luckyNone: "No draws recorded yet.",
+    marriageNav: "Marriage",
+    marriageTitle: "Married couples in the realm.",
+    marriageOffline: "Marriage is currently turned off or unavailable.",
+    marriagePair: "Couple",
+    marriageCoupleTitle: "Title",
+    marriageDate: "Married (Sydney)",
+    marriageDays: "Days",
+    marriageNone: "No married couples yet.",
     rankingsNav: "Rankings",
     rankingsTitle: "The realm's best.",
     topCharacters: "Top characters",
@@ -609,6 +617,14 @@ const copy = {
     luckyWinning: "Số trúng",
     luckyWinners: "Người trúng",
     luckyNone: "Chưa có kỳ quay nào.",
+    marriageNav: "Kết hôn",
+    marriageTitle: "Các cặp đôi trong lục địa.",
+    marriageOffline: "Tính năng Kết hôn hiện đang tắt hoặc máy chủ chưa trả lời.",
+    marriagePair: "Cặp đôi",
+    marriageCoupleTitle: "Danh hiệu",
+    marriageDate: "Ngày cưới (Sydney)",
+    marriageDays: "Số ngày",
+    marriageNone: "Chưa có cặp đôi nào kết hôn.",
     rankingsNav: "Xếp hạng",
     rankingsTitle: "Những người mạnh nhất.",
     topCharacters: "Nhân vật hàng đầu",
@@ -2272,3 +2288,56 @@ void refreshLuckyNumber();
 setInterval(() => {
   if (!document.hidden) void refreshLuckyNumber();
 }, 60000);
+
+// ---------- marriage couples registry (public, /website/marriage) ----------
+
+interface PublicMarriage {
+  enabled: boolean;
+  rules: { minLevel: number; partyExpBonusPercent: number; partyDefenseBonus: number; ceremonyZenCost: number };
+  couples: { partnerA: string; partnerB: string; title: string; marriedAt: number; days: number }[];
+}
+
+let marriageData: PublicMarriage | null = null;
+
+function renderMarriage(): void {
+  const notice = element("marriage-notice");
+  const rulesEl = element("marriage-rules");
+  if (!marriageData || !marriageData.enabled) {
+    notice.textContent = t("marriageOffline");
+    rulesEl.textContent = "";
+    table("marriage-couples", [], [], "");
+    return;
+  }
+
+  notice.textContent = "";
+  rulesEl.textContent = `Lv ${marriageData.rules.minLevel}+ · +${marriageData.rules.partyExpBonusPercent}% EXP · +${marriageData.rules.partyDefenseBonus} Def`;
+  table(
+    "marriage-couples",
+    [[t("marriagePair"), false], [t("marriageCoupleTitle"), false], [t("marriageDate"), false], [t("marriageDays"), true]],
+    marriageData.couples.map((c) => [
+      `${c.partnerA} ♥ ${c.partnerB}`,
+      c.title || "—",
+      new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { dateStyle: "medium", timeZone: "Australia/Sydney" }).format(c.marriedAt),
+      c.days,
+    ]),
+    t("marriageNone"),
+  );
+}
+
+async function refreshMarriage(): Promise<void> {
+  try {
+    const response = await fetch("/website/marriage", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    marriageData = (await response.json()) as PublicMarriage;
+  } catch {
+    marriageData = null;
+  }
+  renderMarriage();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderMarriage());
+element("refresh").addEventListener("click", () => void refreshMarriage());
+void refreshMarriage();
+setInterval(() => {
+  if (!document.hidden) void refreshMarriage();
+}, 120000);

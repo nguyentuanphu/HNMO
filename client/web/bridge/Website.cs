@@ -14,6 +14,7 @@ internal static class Website
         Forward(app, "/website/top-races", "api/website/top-races", options, clients);
         Forward(app, "/website/gift-codes", "api/website/gift-codes", options, clients);
         Forward(app, "/website/lucky-number", "api/website/lucky-number", options, clients);
+        Forward(app, "/website/marriage", "api/website/marriage", options, clients);
         Forward(app, "/website/resets", "api/website/resets", options, clients);
         Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
     }
