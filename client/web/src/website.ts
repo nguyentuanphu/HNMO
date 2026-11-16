@@ -290,6 +290,9 @@ const copy = {
     source: "Direct from the game server",
     realmTitle: "Know your realm.",
     server: "Server",
+    worldOpenNow: "Open",
+    worldOpensAt: "Opens",
+    worldLockedNotice: "World opens at %s (Sydney time).",
     truth:
       "Rates and rules reflect the running server. No estimated statistics.",
     eventsTitle: "Events",
@@ -624,6 +627,9 @@ const copy = {
     source: "Dữ liệu trực tiếp từ máy chủ trò chơi",
     realmTitle: "Tìm hiểu máy chủ.",
     server: "Máy chủ",
+    worldOpenNow: "Đang mở",
+    worldOpensAt: "Mở lúc",
+    worldLockedNotice: "Thế giới mở cửa lúc %s (giờ Sydney).",
     truth:
       "Tỷ lệ và quy tắc lấy từ máy chủ đang chạy. Không dùng số liệu ước tính.",
     eventsTitle: "Sự kiện",
@@ -708,8 +714,32 @@ interface Realm {
   maps: GameMap[];
   events: GameEvent[];
 }
+interface WorldServerEntry {
+  id: number;
+  players: number;
+  capacity: number;
+  isRunning: boolean;
+}
+interface WorldGroup {
+  worldId: string;
+  nameEn: string;
+  nameVi: string;
+  isRunning: boolean;
+  isOpen: boolean;
+  openingDateUtc: string | null;
+  openingDateSydney: string;
+  experienceMultiplier: number;
+  dropMultiplier: number;
+  zenMultiplier: number;
+  eventPresetEn: string;
+  eventPresetVi: string;
+  totalPlayers: number;
+  totalCapacity: number;
+  servers: WorldServerEntry[];
+}
 interface Snapshot {
   updatedAt: string;
+  worlds?: WorldGroup[];
   servers: Realm[];
 }
 let language: Language = "en";
@@ -870,13 +900,61 @@ function render(): void {
     element(lang).setAttribute("aria-pressed", String(language === lang));
   element("connection").textContent = t(snapshot ? "online" : "offline");
   element("notice").textContent = snapshot ? "" : t("unavailable");
+  const worldsContainer = clear("worlds-group");
   const select = element("server") as HTMLSelectElement;
   select.replaceChildren();
-  for (const realm of snapshot?.servers ?? []) {
-    const option = new Option(`${t("all")} ${realm.id}`, String(realm.id));
-    select.add(option);
+  const worlds = snapshot?.worlds ?? [];
+  if (worlds.length > 0) {
+    for (const world of worlds) {
+      const worldName = language === "vi" ? world.nameVi : world.nameEn;
+      const optgroup = document.createElement("optgroup");
+      optgroup.label = worldName;
+      for (const srv of world.servers) {
+        optgroup.append(new Option(`${worldName} · ${t("all")} ${srv.id}`, String(srv.id)));
+      }
+      select.add(optgroup);
+
+      const card = node("article", "", "world-card");
+      const header = document.createElement("header");
+      const title = document.createElement("strong");
+      title.textContent = worldName;
+      const badge = node(
+        "small",
+        world.isOpen
+          ? `${t("worldOpenNow")} · ${world.totalPlayers}`
+          : `${t("worldOpensAt")} ${world.openingDateSydney}`,
+      );
+      header.append(title, badge);
+      const ratesLine = node(
+        "small",
+        `EXP ×${world.experienceMultiplier} · Drop ×${world.dropMultiplier} · Zen ×${world.zenMultiplier} · ${language === "vi" ? world.eventPresetVi : world.eventPresetEn}`,
+      );
+      const buttons = node("div", "", "world-servers");
+      for (const srv of world.servers) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = `${t("server")} ${srv.id} (${srv.players}/${srv.capacity})`;
+        btn.setAttribute("aria-current", String(String(srv.id) === selected));
+        btn.addEventListener("click", () => {
+          selected = String(srv.id);
+          render();
+        });
+        buttons.append(btn);
+      }
+      card.append(header, ratesLine, buttons);
+      worldsContainer.append(card);
+    }
+  } else {
+    for (const realm of snapshot?.servers ?? []) {
+      const option = new Option(`${t("all")} ${realm.id}`, String(realm.id));
+      select.add(option);
+    }
   }
   select.value = selected;
+  const matchedWorld = worlds.find((w) => w.servers.some((s) => String(s.id) === selected));
+  if (matchedWorld && !matchedWorld.isOpen) {
+    element("notice").textContent = t("worldLockedNotice").replace("%s", matchedWorld.openingDateSydney || matchedWorld.openingDateUtc || "");
+  }
   const realm = current();
   if (!realm) {
     for (const id of ["stats", "event-list", "classes", "maps"]) empty(id);

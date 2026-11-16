@@ -41,6 +41,7 @@ const sidebars = {
         "admin-panel/configuration-updates",
         "admin-panel/configuration-captions",
         "admin-panel/servers",
+        "admin-panel/worlds",
         "admin-panel/accounts",
         "admin-panel/online-accounts",
         "admin-panel/game-configuration",
