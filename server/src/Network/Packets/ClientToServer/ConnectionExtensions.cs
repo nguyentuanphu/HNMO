@@ -6328,4 +6328,29 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCatchupCapRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to query today's Catch-up Level and Reset Cap state.
+    /// Causes reaction on server side: The server responds with HnmoCatchupCapState (F5 3D).
+    /// </remarks>
+    public static async ValueTask SendHnmoCatchupCapRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCatchupCapRequestRef.Length;
+            var packet = new HnmoCatchupCapRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

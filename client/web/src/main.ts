@@ -44,6 +44,7 @@ import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
+import { CatchupBanner } from './ui/catchupBanner.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -180,6 +181,7 @@ export interface GameState {
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
+  catchupCap?: CatchupBanner;
   resets?: Resets;
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
@@ -1362,6 +1364,10 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.worldBosses = worldBosses;
   connection.onPacket((bytes) => { worldBosses.handle(bytes); });
   worldBosses.start();
+  const catchupCap = new CatchupBanner((name, fields) => connection.send('ClientToServer', name, fields));
+  state.catchupCap = catchupCap;
+  connection.onPacket((bytes) => { catchupCap.handle(bytes); });
+  window.addEventListener('hnmo-catchup-open', () => { catchupCap.open(); });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }

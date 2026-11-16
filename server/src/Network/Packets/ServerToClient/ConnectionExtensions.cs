@@ -10725,4 +10725,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCatchupCapState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing today's level cap, daily reset cap, first achiever, and next Sydney day reset countdown.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent on entering the world, when today's cap increases, or upon HnmoCatchupCapRequest.
+    /// Causes reaction on client side: Updates today's Catch-up Level/Reset Cap notice in the web client.
+    /// </remarks>
+    public static async ValueTask SendHnmoCatchupCapStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCatchupCapStateRef.GetRequiredSize(json);
+            var packet = new HnmoCatchupCapStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
