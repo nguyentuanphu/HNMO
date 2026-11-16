@@ -25,6 +25,7 @@ import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
+import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
 import { applyPixelRatio, frameDue } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
@@ -221,6 +222,8 @@ export interface GameDebug {
   benchFrames(count: number, options?: { dt?: number; draw?: boolean }): Record<string, number>;
   /** Turns the culling of characters out of view on or off (to compare). */
   setCulling(on: boolean): void;
+  /** Per-frame movement recorder for the hero and the 5 nearest monsters (off by default). */
+  movementRecorder: MovementRecorder;
 }
 
 declare global {
@@ -296,8 +299,10 @@ const perfRecorder = new PerfRecorder({
   },
   settings: () => ({ ...(settingsWindow?.current ?? {}), language: currentLanguage() }),
 });
+const movementRecorder = new MovementRecorder();
 state.debug = {
   renderer, createPlayerCharacter, createMonsterCharacter, drawItem, glowMaterialCount,
+  movementRecorder,
   setCulling: (on) => { cullingOn = on; },
   benchFrames: (count, { dt = 1 / 60, draw = true } = {}) => {
     const sums = new Float64Array(FRAME_SECTIONS.length);
@@ -681,6 +686,7 @@ function step(dt: number, rec: PerfRecorder | null): void {
     state.hero.update(dt, state.world!);
     if (state.online) cullCharacters(state.online);
     state.online?.update(dt);
+    if (movementRecorder.enabled) movementRecorder.recordFrame(dt, state.hero, state.online?.characters.values());
     rec?.lap('characters');
     state.combat?.update();
     if (state.ground && state.world) state.ground.update(state.world);

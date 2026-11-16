@@ -285,7 +285,8 @@ export class OnlineWorld {
     this.connection.send('ClientToServer', 'WalkRequest', {
       SourceX: start.x, SourceY: start.y, StepCount: path.length, TargetRotation: last, Directions: directions,
     });
-    this.hero.walk(start === this.hero.cell ? path : [start, ...path]);
+    const sameCell = start.x === this.hero.cell.x && start.y === this.hero.cell.y;
+    this.hero.walk(sameCell ? path : [start, ...path]);
     return true;
   }
 
