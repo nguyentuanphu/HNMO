@@ -600,3 +600,31 @@ classic game (the parity rule stays: the desktop code is the reference).
 Work moved from ChatGPT to Antigravity (ChatGPT is slower): admin tools 14.18 gift box/mail, 14.16 ban manager,
 14.15 character tools, 14.17 GM manager + in-game GM commands (14.11), 14.20 news manager. ChatGPT keeps: updating
 its PRs, account page, admin help on every page, VIP, VIP servers, admin panel redesign + guide split.
+
+## 16. Safe trades through an escrow (owner asked 2026-11-16; Antigravity)
+Players trade on trust today ("send money and hope"). HNMO stands in the middle, like a bank guarantee, for a fee.
+16.1 In-game escrow contract (zen, coins, jewels, items; the default):
+     - the seller creates a contract to a named buyer (or open offer): items + asking price (zen / coin type / jewels
+       from the jewel bank), a deadline;
+     - the seller's items move into escrow at once (out of the bag, atomically; can't be used, sold or duplicated);
+     - the buyer sees the exact items with all options (tooltips), and pays: the price moves into escrow;
+     - when both sides are in escrow the server swaps them in one transaction, minus the fee (admin-set %, minimum,
+       maximum, who pays: seller/buyer/split); both get the goods through the owed-rewards approach (full bag safe);
+     - cancel/expiry returns everything to its owner; works when the other side is offline;
+     - second password (account safety) required to create/accept; extra confirmation above a value threshold;
+     - every step in the activity log; trade history and a simple reputation (completed trades) per account.
+     Relation to the existing ones: the classic trade window is already safe when both are online and both confirm;
+     the item market (#28) is for public listings; the escrow contract is for agreed deals between two players
+     (offline, larger, mixed currencies).
+16.2 Real money between players (bank transfers in VND): OFF by default, the host's decision:
+     - recommended way: no real money between players; the buyer tops up coins through the host's official top-up,
+       then buys in an escrow contract with coins; coins can't be cashed out (keeps HNMO out of handling players'
+       money);
+     - optional "host-mediated" mode if the host wants it: the item goes into escrow; the buyer transfers VND to the
+       HOST's bank account with a unique reference (VietQR from #22); the admin confirms the money arrived; the item is
+       released; the host pays the seller minus the fee within N days; a dispute window and an admin dispute page;
+       everything logged. The host must check Vietnamese rules for online games and payment intermediaries before
+       turning it on (warning shown on the admin page).
+16.3 Safety rules: new accounts can't use escrow for N days; a holding period before items received through escrow can
+     be traded again (stops stolen-account dumping); the item's origin shown from the activity log; admin can freeze a
+     contract; fee income reported on the economy dashboard.
