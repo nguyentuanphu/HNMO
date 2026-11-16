@@ -72,6 +72,7 @@ public static class WebApplicationExtensions
         services.AddAdminPanelControllers();
 
         services.AddToasts();
+        services.AddResponseCompression(options => options.EnableForHttps = true);
 
         services.AddMemoryCache();
 
@@ -145,6 +146,7 @@ public static class WebApplicationExtensions
         // Through the public website: the admin path as the path base, closed while no admin user exists.
         app.UseWebsitePrefix();
 
+        app.UseResponseCompression();
         app.UseStaticFiles();
 
         app.UseRouting();
@@ -169,6 +171,7 @@ public static class WebApplicationExtensions
 
         app.MapControllers().RequireAuthorization();
         app.MapAdminPanelAuthEndpoints();
+        app.MapItemIconEndpoints();
 
         AdminPanelEnvironment.IsHostingEmbedded = true;
 
