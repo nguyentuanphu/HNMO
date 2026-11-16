@@ -534,3 +534,32 @@ More of its tools and plugins (checked 2026-11-16; ideas only):
   14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined).
   14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck).
 Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
+
+## 15. Growth with many players, guides, admin panel navigation (owner asked 2026-11-16)
+15.1 Save data at scale: per-player plug-in state (missions, gift code claims, top races, account safety, ...) is
+     JSON today (one file per plug-in, one file after #19), rewritten whole on each save. Fine for tens of players;
+     with hundreds/thousands it grows and every save rewrites it. Move per-account/per-character state into the
+     PostgreSQL database (one row per account/character per feature, updated alone); keep JSON only for small
+     server-wide state. Old finished data (last season's races, expired codes' claims) archived after N days.
+15.2 Logs: the server's own log already rolls daily (4 MB each, 48 kept), but the launcher's save/logs/server.log
+     and database.log grow without limit. Roll them daily and by size, gzip old ones, keep N days and at most N MB
+     in total (admin setting on Host settings), and view/download/search them in the admin panel (/control).
+     Chat log, audit history and the activity log (14.9) live in the database with a retention period (e.g. 90
+     days) and an export before deleting.
+15.3 Backups: daily automatic backup (database + state + settings) compressed, keep 7 daily + 4 weekly + 3 monthly,
+     total size shown, oldest removed; restore tested from /control. PostgreSQL maintenance (vacuum/analyze) on a
+     schedule. Disk usage card on /control with a warning before the disk fills.
+15.4 Guides split: the in-game guide (guide.html, "i") only for players (how to play, features, events, keys, the
+     account page). Everything for hosts/admins (setup, settings, Tailscale, API keys, approvals, coins) moves to an
+     Admin guide inside the admin panel (EN/VI), with how-to recipes ("run a weekend EXP event", "compensate
+     players", "add items to a shop", "ban a cheater", "back up and restore").
+15.5 Admin panel navigation for many features:
+     - a Home dashboard: server status, players online, today's sign-ups/top-ups, alerts (pending approvals,
+       crash, disk), a setup checklist for new hosts;
+     - the menu grouped by task: Players, Economy & shop, Events & rewards, World & monsters, Items, Community &
+       website, Server & host, Tools & logs; every page in exactly one group, with an icon and one-line description;
+     - search everywhere (Ctrl+K command palette): pages, individual settings (the existing configuration search
+       index), players/characters/accounts, items, guide articles, in EN and VI, showing where each result lives;
+     - favourites and recently used pages; breadcrumbs; "related pages" at the bottom of each page;
+     - "Basic / Advanced" view: everyday settings shown, rarely used ones folded away;
+     - every page: the "How to use this page" help (ChatGPT's admin-help job) linking to the Admin guide article.
