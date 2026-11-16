@@ -492,7 +492,7 @@ New ideas worth adopting (proposed order):
      experience fixer, backup/restore (with #18), all with a dry-run preview and an audit entry.
 14.9 Player activity log viewer: trades, drops/pickups of valuable items, chaos mixes, shop buys/sells, item market
      (13.9), filterable by account/character/item and time (Sydney), for resolving disputes and spotting duping.
-14.10 Banned words filter for chat and names (EN/VI lists, admin-editable).
+14.10 Banned words filter for chat and names (EN/VI lists, admin-editable). — Done (`BannedWordsPlugIn`, `BannedWordsEngine`, wired into chat + character/guild creation, `/banned-words` EN/VI admin page; OFF by default).
 14.11 GM shop and GM tools in the game for the admin's GM characters (spawn event, announce, move player, check
      inventory), each logged.
 14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins.
