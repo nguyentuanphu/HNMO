@@ -485,4 +485,31 @@ New ideas worth adopting (proposed order):
 14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins.
 14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing).
 14.14 For the desktop client only: a launcher with auto-update, file checks (CRC) and connection through the launcher.
+Its tools, compared (ideas only):
+- Server management toolkit (account, character, item, skill, guild, marriage, ranking-faction, GM editors; ban,
+  castle siege, VIP managers; buffs manager; character location editor; gift storage editor; database cleanup).
+  HNMO has: accounts and characters through the generic editor, inventory/vault item editor, skills, guilds, castle
+  siege, the shop editor (#16), drops editor, chat log, audit history, log files.
+  New for HNMO:
+  14.15 Character tools page: move a stuck character to a town (location fix), reset a character's position, give or
+        remove buffs, change class/level/stats/zen with a reason, all logged.
+  14.16 Ban manager: ban/mute an account or character for a time with a reason, unban, list of bans, ban by
+        network address/device fingerprint (with #12's salted hashes), shown to the player in EN/VI.
+  14.17 GM manager: which characters are GMs and what each may do (announce, move, spawn, inspect), logged.
+  14.18 Gift box / mail: send items, zen or coins to one player, a list, or everyone (with a message, EN/VI); the
+        player takes them from a "gift box" window in the game or the account page (uses the owed-rewards store).
+- Client data toolkit (item list, monster list, glow colors, tooltips, server list, news, CRC check, stats calculator).
+  New for HNMO:
+  14.19 Item definitions in the admin panel that also feed the web game's item data (name EN/VI, size, level,
+        requirements, glow color, tooltip text), so adding or changing an item needs no file editing; the desktop
+        client's data is exported from the same source.
+  14.20 News manager: news posts (EN/VI) written in the admin panel, shown on the website home page and in the game.
+  14.21 Stats/build calculator on the website: pick class, level, stats and items, see damage, defense, speed, as the
+        server computes them.
+- Player companion ("dashboard"): character info, event and boss alerts, death alerts. New for HNMO:
+  14.22 Event alerts: players opt in (website or game) to browser notifications for chosen events/bosses (web push,
+        no app needed), plus a Discord channel post (exists in Community).
+- Launcher (auto-update, design, languages, register in the launcher): see 14.14 (desktop only).
+- Crash/stability monitor: HNMO's /control page (#18) shows status and logs; add crash detection with automatic
+  restart and a notice to the admin (14.23).
 Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
