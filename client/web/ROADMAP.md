@@ -512,4 +512,25 @@ Its tools, compared (ideas only):
 - Launcher (auto-update, design, languages, register in the launcher): see 14.14 (desktop only).
 - Crash/stability monitor: HNMO's /control page (#18) shows status and logs; add crash detection with automatic
   restart and a notice to the admin (14.23).
+More of its tools and plugins (checked 2026-11-16; ideas only):
+- 3D world editor (terrain height, light colour, ground layers, safe/PvP attributes, objects with position/scale/
+  rotation/light, minimap and monster spawns, export for server and client). HNMO has a 2D spawn map editor
+  (/map-editor) and a terrain attribute editor (/terrain-editor). New:
+  14.24 A 3D world editor in the admin panel built on the web game's own renderer (three.js): see the map as players
+        do, paint safe/PvP areas, move/add objects, set lights, place monster spawns and gates, regenerate the
+        minimap; saves to the server's map data and to the web game's map data (packs from #15) together.
+- Economy analyzer (collects item/zen/jewel totals over time; flags accounts holding unusual amounts as possible
+  dupers; configurable). New:
+  14.25 Economy dashboard in the admin panel: daily totals of zen, coins and each jewel/valuable item across all
+        accounts (inventory, vault, jewel bank, market), charts over time, top holders, sudden jumps flagged
+        (possible duping), drop and sink rates per day, so drop rates can be tuned; links to 14.9's activity log.
+- Plugins (paid add-ons there). HNMO already has: daily rewards (missions/calendar), starter kit (onboarding),
+  VIP (ChatGPT), item bank (13.10 jewel bank). New:
+  14.26 Performance mode in the web game's settings (EN/VI): hide other players, hide wings and pets, fewer skill
+        and item effects, with hotkeys, for crowded events (helps low-end PCs and phones).
+  14.27 Talismans/figurines: special items that give a buff or bonus while carried in the bag (admin-defined),
+        and consumable items that give extra stat points up to a cap (admin-defined).
+  14.28 Custom ranks/titles: titles by level, resets, VIP or achievements, shown by the name, admin-defined.
+  14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined).
+  14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck).
 Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
