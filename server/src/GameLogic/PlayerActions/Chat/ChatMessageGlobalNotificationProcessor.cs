@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.Chat;
 
 using System.ComponentModel;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views;
 
 /// <summary>
@@ -29,7 +30,13 @@ public class ChatMessageGlobalNotificationProcessor : IChatMessageProcessor
             return;
         }
 
-        await sender.GameContext.SendGlobalNotificationAsync(content.Message).ConfigureAwait(false);
-        await sender.NotifyChatMessageSentAsync(content.Message, ChatMessageType.GlobalNotification).ConfigureAwait(false);
+        var (allowed, filteredMessage) = await BannedWordsPlugIn.FilterChatAsync(sender, content.Message).ConfigureAwait(false);
+        if (!allowed)
+        {
+            return;
+        }
+
+        await sender.GameContext.SendGlobalNotificationAsync(filteredMessage).ConfigureAwait(false);
+        await sender.NotifyChatMessageSentAsync(filteredMessage, ChatMessageType.GlobalNotification).ConfigureAwait(false);
     }
 }
