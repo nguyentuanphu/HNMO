@@ -1,0 +1,10 @@
+.shop-workspace { min-width: 0; }
+.shop-panes { display: grid; grid-template-columns: minmax(300px, 420px) minmax(400px, 1fr); gap: 1.5rem; align-items: start; }
+.shop-catalogue { padding: 1rem; border: 1px solid var(--bs-border-color, #ddd); border-radius: .5rem; background: var(--bs-body-bg, white); }
+.shop-grid-pane { min-width: 0; }
+.grid-and-details { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; }
+.shop-grid-scroll { overflow-x: auto; max-width: 100%; }
+.shop-details { flex: 1 1 240px; min-width: 220px; max-width: 420px; }
+.shop-details ::deep .lookup-field { max-width: 100%; }
+fieldset[disabled] ::deep .mu-item-selector { pointer-events: none; }
+@media (max-width: 1100px) { .shop-panes { grid-template-columns: minmax(0, 1fr); } }

@@ -1198,5 +1198,264 @@ namespace HNMO.Web.Shared.Properties {
                 return ResourceManager.GetString("MonsterAmountSaveMapFirst", resourceCulture);
             }
         }
+        /// <summary>Looks up a localized string similar to Item catalogue.</summary>
+        public static string ItemPickerTitle {
+            get {
+                return ResourceManager.GetString("ItemPickerTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Search names or group:number.</summary>
+        public static string ItemPickerSearch {
+            get {
+                return ResourceManager.GetString("ItemPickerSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Search English or Vietnamese names, or an exact group:number.</summary>
+        public static string ItemPickerSearchHint {
+            get {
+                return ResourceManager.GetString("ItemPickerSearchHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Category.</summary>
+        public static string ItemPickerCategory {
+            get {
+                return ResourceManager.GetString("ItemPickerCategory", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to All.</summary>
+        public static string ItemPickerAll {
+            get {
+                return ResourceManager.GetString("ItemPickerAll", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Class.</summary>
+        public static string ItemPickerClass {
+            get {
+                return ResourceManager.GetString("ItemPickerClass", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Minimum required level.</summary>
+        public static string ItemPickerMinimum {
+            get {
+                return ResourceManager.GetString("ItemPickerMinimum", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Maximum required level.</summary>
+        public static string ItemPickerMaximum {
+            get {
+                return ResourceManager.GetString("ItemPickerMaximum", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Only items not in this shop.</summary>
+        public static string ItemPickerMissing {
+            get {
+                return ResourceManager.GetString("ItemPickerMissing", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Sort by.</summary>
+        public static string ItemPickerSort {
+            get {
+                return ResourceManager.GetString("ItemPickerSort", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Name.</summary>
+        public static string ItemPickerName {
+            get {
+                return ResourceManager.GetString("ItemPickerName", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Group:number.</summary>
+        public static string ItemPickerGroup {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Required level.</summary>
+        public static string ItemPickerLevel {
+            get {
+                return ResourceManager.GetString("ItemPickerLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Select {0}.</summary>
+        public static string ItemPickerSelect {
+            get {
+                return ResourceManager.GetString("ItemPickerSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Add {0} to the first free space.</summary>
+        public static string ItemPickerAdd {
+            get {
+                return ResourceManager.GetString("ItemPickerAdd", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Drag this item into the shop grid.</summary>
+        public static string ItemPickerDrag {
+            get {
+                return ResourceManager.GetString("ItemPickerDrag", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to {0} matching · {1} selected.</summary>
+        public static string ItemPickerMatches {
+            get {
+                return ResourceManager.GetString("ItemPickerMatches", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to No matching items.</summary>
+        public static string ItemPickerEmpty {
+            get {
+                return ResourceManager.GetString("ItemPickerEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Clear selection.</summary>
+        public static string ItemPickerClearSelection {
+            get {
+                return ResourceManager.GetString("ItemPickerClearSelection", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Filter base item requirements; items without a class restriction are included for every class.</summary>
+        public static string ItemPickerFilterHint {
+            get {
+                return ResourceManager.GetString("ItemPickerFilterHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Inactive definition.</summary>
+        public static string ItemPickerInactive {
+            get {
+                return ResourceManager.GetString("ItemPickerInactive", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Swords.</summary>
+        public static string ItemPickerGroup0 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup0", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Axes.</summary>
+        public static string ItemPickerGroup1 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup1", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Maces.</summary>
+        public static string ItemPickerGroup2 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup2", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Spears.</summary>
+        public static string ItemPickerGroup3 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup3", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Bows and crossbows.</summary>
+        public static string ItemPickerGroup4 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup4", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Staffs.</summary>
+        public static string ItemPickerGroup5 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup5", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Shields.</summary>
+        public static string ItemPickerGroup6 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup6", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Helms.</summary>
+        public static string ItemPickerGroup7 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup7", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Armor.</summary>
+        public static string ItemPickerGroup8 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup8", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Pants.</summary>
+        public static string ItemPickerGroup9 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup9", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Gloves.</summary>
+        public static string ItemPickerGroup10 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup10", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Boots.</summary>
+        public static string ItemPickerGroup11 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup11", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Wings and related items.</summary>
+        public static string ItemPickerGroup12 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup12", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Accessories and miscellaneous.</summary>
+        public static string ItemPickerGroup13 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup13", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Jewels, potions and consumables.</summary>
+        public static string ItemPickerGroup14 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup14", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Scrolls and orbs.</summary>
+        public static string ItemPickerGroup15 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup15", resourceCulture);
+            }
+        }
+
     }
 }

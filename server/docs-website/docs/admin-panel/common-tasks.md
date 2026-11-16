@@ -115,3 +115,64 @@ See [Connect a game client](../getting-started/game-client.md#disconnects-after-
 
 For a throwaway test server, `-demo` starts the server with in-memory data which
 is recreated at each start and never persisted.
+
+## Edit an NPC shop
+
+Open **Merchants** for the new shop editor. Search by NPC, map or coordinates,
+then choose **Edit shop**. The old editor remains available through the link
+next to the title. **How to use this page** explains the controls.
+
+Search the catalogue by English or Vietnamese name, or `group:number`. Filter
+by item group, character class and base required level; check **Only items not
+in this shop** to avoid duplicates. The catalogue uses virtual scrolling.
+Click an item for the first free position, drag it to a position, or tick several
+and choose **Add selected**. **Add whole category** respects the active filters
+and asks you to confirm how many items fit. Items that cannot fit are reported.
+
+Select a grid item to edit its properties and view the server's base buying
+price. Player taxes and price plugins can change the final amount. **Auto-arrange**
+tries largest items first; if packing fails, the original layout is retained.
+The grid is 8 × 15 cells. **Undo**, **Redo**, **Clear shop**, **Discard changes**
+and copying from another merchant affect only the local draft until you save.
+Undo history keeps the latest 100 steps.
+
+**Save changes** asks you to confirm the added, removed, moved and updated counts.
+It uses the existing configuration save path and logs the administrator and
+counts. If another change conflicts, reload before editing again. Verify the
+updated stock with a player on your running server. Fixed price overrides and
+a shop multiplier are not implemented; NPC pricing needs additional server
+model and purchase-rule changes.
+
+Screenshots below use isolated sample data, not a live player database.
+
+![Shop list / Danh sách cửa hàng](assets/shop-editor-list.png)
+
+![Shop workspace / Trình sửa cửa hàng](assets/shop-editor-workspace.png)
+
+### Chỉnh sửa cửa hàng NPC
+
+Mở **Thương nhân** để dùng trình sửa cửa hàng mới. Tìm theo NPC, bản đồ hoặc
+tọa độ, rồi chọn **Sửa cửa hàng**. Liên kết cạnh tiêu đề vẫn mở được trình sửa
+cũ. Nút **Hướng dẫn sử dụng trang này** giải thích các thao tác.
+
+Tìm vật phẩm bằng tên tiếng Anh, tiếng Việt hoặc `nhóm:số`. Lọc theo nhóm,
+lớp nhân vật và cấp yêu cầu cơ bản; bật bộ lọc chỉ hiện vật phẩm chưa có trong
+cửa hàng nếu muốn tránh thêm trùng. Danh mục chỉ hiển thị những hàng đang xem
+để cuộn nhanh. Bấm vật phẩm để đặt vào chỗ trống đầu tiên, kéo đến vị trí mong
+muốn, hoặc đánh dấu nhiều vật phẩm rồi chọn thêm các mục đã chọn. Thêm cả nhóm
+vẫn áp dụng các bộ lọc hiện tại và yêu cầu xác nhận số vật phẩm đặt vừa.
+Các vật phẩm không đủ chỗ sẽ được thông báo rõ.
+
+Chọn vật phẩm trong ô cửa hàng để sửa thuộc tính và xem giá mua cơ bản do máy
+chủ tính. Thuế và phần mở rộng tính giá có thể làm thay đổi giá cuối cùng.
+Tự sắp xếp thử đặt vật phẩm lớn trước; nếu không xếp hết được, bố cục cũ được
+giữ nguyên. Cửa hàng có 8 × 15 ô. Hoàn tác, làm lại, xóa cửa hàng, bỏ thay đổi
+và sao chép từ cửa hàng khác chỉ tác động đến bản nháp cho đến khi lưu.
+Lịch sử hoàn tác giữ tối đa 100 bước gần nhất.
+
+Khi lưu, kiểm tra số vật phẩm được thêm, xóa, di chuyển và chỉnh sửa trong hộp
+xác nhận. Thay đổi được lưu theo cơ chế cấu hình hiện có; nhật ký ghi quản trị
+viên và số lượng thay đổi. Nếu có xung đột, hãy tải lại trước khi sửa tiếp.
+Kiểm tra hàng hóa mới bằng tài khoản người chơi trên máy chủ đang chạy. Chưa
+hỗ trợ giá cố định riêng hoặc hệ số giá cả cửa hàng; các tính năng này cần
+bổ sung mô hình dữ liệu và quy tắc mua hàng của máy chủ.
