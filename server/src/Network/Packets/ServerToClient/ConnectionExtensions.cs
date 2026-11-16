@@ -7432,6 +7432,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTimetableState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">The timetable state as JSON, in plain ASCII (other characters are escaped): every event, invasion and boss with category, English and Vietnamese names, map names, drops, next start time in UTC, and Sydney wall-clock schedule.</param>
+    /// <remarks>
+    /// Is sent by the server when: After the client requested the HNMO event and boss timetable (HnmoTimetableCommand).
+    /// Causes reaction on client side: The web game updates the Event and Boss Timetable window with Sydney and local times, maps, and drops.
+    /// </remarks>
+    public static async ValueTask SendHnmoTimetableStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTimetableStateRef.GetRequiredSize(json);
+            var packet = new HnmoTimetableStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

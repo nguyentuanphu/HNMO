@@ -6250,6 +6250,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTimetableCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Optional filter or payload string.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world or opens the Event and Boss Timetable window.
+    /// Causes reaction on server side: The server replies with HnmoTimetableState (F5 33).
+    /// </remarks>
+    public static async ValueTask SendHnmoTimetableCommandAsync(this IConnection? connection, HnmoTimetableCommand.HnmoTimetableActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTimetableCommandRef.Length;
+            var packet = new HnmoTimetableCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

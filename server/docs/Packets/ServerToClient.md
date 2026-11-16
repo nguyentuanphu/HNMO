@@ -375,6 +375,7 @@
   * [C2 F5 1E - HnmoResetsState (by server)](C2-F5-1E-HnmoResetsState_by-server.md)
   * [C2 F5 21 - HnmoAccountSafetyState (by server)](C2-F5-21-HnmoAccountSafetyState_by-server.md)
   * [C2 F5 31 - HnmoTopUpMilestonesState (by server)](C2-F5-31-HnmoTopUpMilestonesState_by-server.md)
+  * [C2 F5 33 - HnmoTimetableState (by server)](C2-F5-33-HnmoTimetableState_by-server.md)
   * [C1 F6 00 - QuestEventLimitResult (by server)](C1-F6-00-QuestEventLimitResult_by-server.md)
   * [C1 F6 03 - QuestEventResponse (by server)](C1-F6-03-QuestEventResponse_by-server.md)
   * [C1 F6 04 - QuestStartedByItem (by server)](C1-F6-04-QuestStartedByItem_by-server.md)

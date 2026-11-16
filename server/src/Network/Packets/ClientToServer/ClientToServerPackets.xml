@@ -4958,6 +4958,45 @@
         </Enum>
       </Enums>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>32</SubCode>
+      <Name>HnmoTimetableCommand</Name>
+      <Caption>HNMO event and boss timetable command</Caption>
+      <Length>69</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The web game enters the world or opens the Event and Boss Timetable window.</SentWhen>
+      <CausedReaction>The server replies with HnmoTimetableState (F5 33).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Enum</Type>
+          <TypeName>HnmoTimetableActionType</TypeName>
+          <Name>Action</Name>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Argument</Name>
+          <Length>64</Length>
+          <Description>Optional filter or payload string.</Description>
+        </Field>
+      </Fields>
+      <Enums>
+        <Enum>
+          <Name>HnmoTimetableActionType</Name>
+          <Description>Timetable action.</Description>
+          <Values>
+            <EnumValue>
+              <Name>Request</Name>
+              <Description>Request the full event, invasion and boss timetable.</Description>
+              <Value>1</Value>
+            </EnumValue>
+          </Values>
+        </Enum>
+      </Enums>
+    </Packet>
   <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F3</Code>

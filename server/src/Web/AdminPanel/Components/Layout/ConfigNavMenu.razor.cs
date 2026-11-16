@@ -96,6 +96,7 @@ public partial class ConfigNavMenu
             new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
             new(Resources.CommunityPage, "community", "oi-chat"),
             new(Resources.TopRacesPage, "top-races", "oi-badge"),
+            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Lịch sự kiện & Boss" : "Event & Boss Timetable", "timetable", "oi-calendar"),
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Thưởng mốc nạp" : "Top-up milestones", "topup-milestones", "oi-dollar"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),

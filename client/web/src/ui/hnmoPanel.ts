@@ -8,7 +8,7 @@ const CSS = `
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(560px, 94vw);
+  width: min(640px, 94vw);
   max-height: 82vh;
   display: flex;
   flex-direction: column;
