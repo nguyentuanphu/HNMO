@@ -250,7 +250,7 @@ void MuSoundEditorUI::RenderEventRules(const std::vector<Data::Sounds::SoundEven
             ImGui::PushID(static_cast<int>(index));
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
-            ImGui::Text("%zu", index + 1);
+            ImGui::Text(I18N::Editor::Zu, index + 1);
             if (fields.worlds)
             {
                 ImGui::TableNextColumn();

@@ -24,16 +24,16 @@ bool CSkillEditorPopups::RenderSimplePopup(const char* popupId, const char* mess
 void CSkillEditorPopups::RenderPopups()
 {
     // Save popups
-    RenderSimplePopup("Save Success", I18N::Editor::SkillsSavedSuccessfully);
-    RenderSimplePopup("Save Failed", I18N::Editor::FailedToSaveSkills);
+    RenderSimplePopup(I18N::Editor::PopupSaveSuccess, I18N::Editor::SkillsSavedSuccessfully);
+    RenderSimplePopup(I18N::Editor::PopupSaveFailed, I18N::Editor::FailedToSaveSkills);
 
     // Legacy Export popups
-    RenderSimplePopup("Export S6E3 Success", I18N::Editor::ExportedAsLegacyFormatSuccessfully);
-    RenderSimplePopup("Export S6E3 Failed", I18N::Editor::FailedToExportAsLegacyFormat);
+    RenderSimplePopup(I18N::Editor::PopupExportS6E3Success, I18N::Editor::ExportedAsLegacyFormatSuccessfully);
+    RenderSimplePopup(I18N::Editor::PopupExportS6E3Failed, I18N::Editor::FailedToExportAsLegacyFormat);
 
     // CSV Export popups
-    RenderSimplePopup("Export CSV Success", I18N::Editor::SkillsExportedAsCSVSuccessfully);
-    RenderSimplePopup("Export CSV Failed", I18N::Editor::FailedToExportSkillAttributesAsCSV);
+    RenderSimplePopup(I18N::Editor::PopupExportCSVSuccess, I18N::Editor::SkillsExportedAsCSVSuccessfully);
+    RenderSimplePopup(I18N::Editor::PopupExportCSVFailed, I18N::Editor::FailedToExportSkillAttributesAsCSV);
 }
 
 #endif // _EDITOR

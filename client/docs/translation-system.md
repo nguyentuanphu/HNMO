@@ -681,3 +681,27 @@ data files, two commits are the headlines:
 The leftover binary `text.bmd` / `NPCDialogue.bmd` / per-language
 `Dialog_*.bmd` files are pure data; nothing in the C++ source loads them
 anymore.
+
+## Vietnamese editor interface
+
+Choose **Tiếng Việt** in the editor's language menu. Editor controls, field
+metadata, popup captions and map import messages use the Vietnamese catalogs.
+The locale menu reads the generated locale list automatically; the editor's
+font ranges already include Vietnamese characters. Resource keys, filenames,
+technical identifiers and formatting arguments retain their original meaning.
+
+The catalogs include every key in `Editor.en.resx` and `Metadata.en.resx`.
+Run `python3 client/tools/check-editor-vi.py` to check coverage, hidden widget
+IDs, numbers and formatting placeholders. Build the resource generator using
+its normal `--wide-groups Game,Dialog --item-text-groups Game,Dialog` options.
+Missing entries were drafted with translation assistance, then checked against
+existing Vietnamese terminology and corrected for technical terms and numeric
+formatting. Complete editorial review and a live editor walkthrough are still
+needed; coverage alone does not certify wording or layout.
+
+The standalone runtime check is
+`tools/ResxGen/tests/editor-locale-smoke.cpp`. Compile it as C++20 together with
+the generated `All.cpp`, `Editor.cpp`, `Metadata.cpp`, `Game.cpp` and
+`Dialog.cpp`, using the generated directory as an include path. It checks
+Vietnamese locale selection, captions, formatted import status and restoration
+of English without needing to start the editor.
