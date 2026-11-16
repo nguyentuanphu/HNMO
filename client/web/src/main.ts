@@ -55,6 +55,8 @@ import { CatchupBanner } from './ui/catchupBanner.js';
 import { SeasonPlanWindow } from './ui/seasonPlanWindow.js';
 import { LeftoversWindow } from './ui/leftoversWindow.js';
 import { MountChainWindow } from './ui/mountChainWindow.js';
+import { RankingWindow } from './ui/rankingWindow.js';
+import { AddStatsWindow } from './ui/addStatsWindow.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -201,6 +203,8 @@ export interface GameState {
   seasonPlan?: SeasonPlanWindow;
   leftovers?: LeftoversWindow;
   mountChain?: MountChainWindow;
+  ranking?: RankingWindow;
+  addStats?: AddStatsWindow;
   resets?: Resets;
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
@@ -1260,7 +1264,12 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
     onQuest: () => quests.toggleMyQuest(),
-    onToggle: (open) => { if (open) state.partyWindow?.close(); itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    onToggle: (open) => {
+      if (open) state.partyWindow?.close();
+      state.addStats?.setCharacterWindowOpen(open);
+      itemWindows.dockedRight = open ? 1 : 0;
+      itemWindows.placeAll();
+    },
   });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
@@ -1781,6 +1790,33 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   state.partyOptions = partyOptions;
   connection.onPacket((bytes) => { partyOptions.handle(bytes); });
   window.addEventListener('hnmo-party-options-open', () => { partyOptions.open(); });
+  // HNMO's bulk Add Stats window (Shift+A) & Player Rankings panel (Shift+R / /rank).
+  const addStats = new AddStatsWindow(
+    stats,
+    character.classIndex,
+    (name, fields) => connection.send('ClientToServer', name, fields),
+    (text) => chat.add(text, 'system'),
+  );
+  state.addStats = addStats;
+  const ranking = new RankingWindow(
+    (name, fields) => connection.send('ClientToServer', name, fields),
+    () => addStats.open(),
+  );
+  state.ranking = ranking;
+  connection.onPacket((bytes) => { ranking.handle(bytes); });
+  for (const bytes of earlyPackets) ranking.handle(bytes);
+  window.addEventListener('hnmo-ranking-open', () => { ranking.open(); });
+  window.addEventListener('hnmo-add-stats-open', () => { addStats.open(); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'r' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      ranking.toggle();
+    } else if (event.key.toLowerCase() === 'a' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      addStats.toggle();
+    }
+  });
   // The party window (P): docked at the right; opening it closes the inventory and the character window.
   const partyWindow = new PartyWindow({
     connection, party, heroName: character.name, mapName,

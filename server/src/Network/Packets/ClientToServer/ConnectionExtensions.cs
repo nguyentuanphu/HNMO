@@ -6688,4 +6688,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoRankingCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestRankings, 1 = BulkAddStats.</param>
+    /// <param name="payload">Optional category filter or JSON stat allocation map (str, agi, vit, ene, cmd).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the in-game player, guild, online, and event rankings or submit a bulk stat-point distribution.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoRankingState (F5 47).
+    /// </remarks>
+    public static async ValueTask SendHnmoRankingCommandAsync(this IConnection? connection, byte @action, string @payload)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoRankingCommandRef.GetRequiredSize(payload);
+            var packet = new HnmoRankingCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Payload = @payload;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

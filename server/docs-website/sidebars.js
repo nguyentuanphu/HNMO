@@ -50,6 +50,7 @@ const sidebars = {
         "admin-panel/buffer-npc",
         "admin-panel/banned-words",
         "admin-panel/off-trade",
+        "admin-panel/rankings-settings",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",
