@@ -49,6 +49,7 @@ const sidebars = {
         "admin-panel/vault-chaos-rewards",
         "admin-panel/buffer-npc",
         "admin-panel/banned-words",
+        "admin-panel/off-trade",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",

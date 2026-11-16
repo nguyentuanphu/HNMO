@@ -28,48 +28,27 @@ public sealed class OfflinePlayerManager
     /// <param name="realPlayer">The real player who typed the command.</param>
     /// <param name="loginName">The pre-validated account login name.</param>
     /// <returns><c>true</c> if the offline session was started successfully.</returns>
-    public async ValueTask<bool> StartAsync(Player realPlayer, string loginName)
-    {
-        var characterName = realPlayer.SelectedCharacter?.Name;
+    public ValueTask<bool> StartAsync(Player realPlayer, string loginName) =>
+        this.StartSessionAsync(
+            realPlayer,
+            loginName,
+            () => this.TryChargeInitialZenCost(realPlayer),
+            (sentinel, characterName) => sentinel.InitializeAsync(loginName, characterName));
 
-        if (string.IsNullOrEmpty(characterName))
-        {
-            return false;
-        }
-
-        var sentinel = new OfflinePlayer(realPlayer.GameContext);
-
-        // Atomically claim the slot to prevent racing during initialization.
-        if (!this._activePlayers.TryAdd(loginName, sentinel))
-        {
-            await sentinel.DisposeAsync().ConfigureAwait(false);
-            return false;
-        }
-
-        if (!this.TryChargeInitialZenCost(realPlayer))
-        {
-            await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
-            return false;
-        }
-
-        try
-        {
-            await this.TransitionToOfflineAsync(realPlayer).ConfigureAwait(false);
-
-            if (!await sentinel.InitializeAsync(loginName, characterName).ConfigureAwait(false))
-            {
-                await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
-                return false;
-            }
-
-            return true;
-        }
-        catch
-        {
-            await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
-            throw;
-        }
-    }
+    /// <summary>
+    /// Starts an offline shop (<c>/offtrade</c>) session without MU Helper combat AI or MU Helper Zen fee.
+    /// </summary>
+    /// <param name="realPlayer">The real player starting <c>/offtrade</c>.</param>
+    /// <param name="loginName">The pre-validated account login name.</param>
+    /// <param name="maxDurationHours">Maximum duration in hours (<c>0</c> = unlimited).</param>
+    /// <param name="stopWhenSoldOut">Whether to stop the session when the last store item sells.</param>
+    /// <returns><c>true</c> if the offline trade session was started successfully.</returns>
+    public ValueTask<bool> StartOffTradeAsync(Player realPlayer, string loginName, int maxDurationHours, bool stopWhenSoldOut) =>
+        this.StartSessionAsync(
+            realPlayer,
+            loginName,
+            null,
+            (sentinel, characterName) => sentinel.InitializeOffTradeAsync(loginName, characterName, maxDurationHours, stopWhenSoldOut));
 
     /// <summary>
     /// Stops and removes the offline session for the given account if one exists.
@@ -125,6 +104,53 @@ public sealed class OfflinePlayerManager
     /// </remarks>
     internal bool TryAdd(string loginName, OfflinePlayer offlinePlayer)
         => this._activePlayers.TryAdd(loginName, offlinePlayer);
+
+    private async ValueTask<bool> StartSessionAsync(
+        Player realPlayer,
+        string loginName,
+        Func<bool>? chargeFee,
+        Func<OfflinePlayer, string, ValueTask<bool>> initializer)
+    {
+        var characterName = realPlayer.SelectedCharacter?.Name;
+
+        if (string.IsNullOrEmpty(characterName))
+        {
+            return false;
+        }
+
+        var sentinel = new OfflinePlayer(realPlayer.GameContext);
+
+        // Atomically claim the slot to prevent racing during initialization.
+        if (!this._activePlayers.TryAdd(loginName, sentinel))
+        {
+            await sentinel.DisposeAsync().ConfigureAwait(false);
+            return false;
+        }
+
+        if (chargeFee is not null && !chargeFee())
+        {
+            await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
+            return false;
+        }
+
+        try
+        {
+            await this.TransitionToOfflineAsync(realPlayer).ConfigureAwait(false);
+
+            if (!await initializer(sentinel, characterName).ConfigureAwait(false))
+            {
+                await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
+                return false;
+            }
+
+            return true;
+        }
+        catch
+        {
+            await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
+            throw;
+        }
+    }
 
     private async ValueTask TransitionToOfflineAsync(Player realPlayer)
     {

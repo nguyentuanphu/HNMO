@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlayerActions.PlayerStore;
 
+using HNMO.GameLogic.Offline;
 using HNMO.GameLogic.PlayerShopCurrencies;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views;
@@ -185,7 +186,8 @@ public class BuyRequestAction
 
         if (itemSold)
         {
-            if (requestedPlayer.ShopStorage.Items.Any())
+            var hasRemaining = requestedPlayer.ShopStorage.Items.Any();
+            if (hasRemaining)
             {
                 // this update may be sent to other players as well which are currently looking at the store
                 await player.InvokeViewPlugInAsync<Views.PlayerShop.IShowShopItemListPlugIn>(p => p.ShowShopItemListAsync(requestedPlayer, true)).ConfigureAwait(false);
@@ -193,6 +195,18 @@ public class BuyRequestAction
             else
             {
                 await this._closeStoreAction.CloseStoreAsync(requestedPlayer).ConfigureAwait(false);
+            }
+
+            if (requestedPlayer is OfflinePlayer { IsOffTrade: true } offTrader)
+            {
+                if (!hasRemaining && offTrader.OffTradeStopWhenSoldOut && offTrader.AccountLoginName is { } offLogin)
+                {
+                    await requestedPlayer.GameContext.OfflinePlayerManager.StopAsync(offLogin).ConfigureAwait(false);
+                }
+                else
+                {
+                    offTrader.MarkOffTradePendingSave();
+                }
             }
         }
     }
