@@ -40,6 +40,7 @@ import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
+import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
@@ -176,6 +177,7 @@ export interface GameState {
   autoPlayExtras?: AutoPlayExtras;
   missions?: MissionsWindow;
   worldBosses?: WorldBossWindow;
+  luckyNumber?: LuckyNumberWindow;
   guildLevels?: GuildLevelsWindow;
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
@@ -1365,6 +1367,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
+  });
+  // HNMO's daily lucky number (L): pick a number, view draw odds/prizes and claim waiting jewels.
+  const luckyNumber = new LuckyNumberWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.luckyNumber = luckyNumber;
+  connection.onPacket((bytes) => { luckyNumber.handle(bytes); });
+  luckyNumber.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'l' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); luckyNumber.toggle(); }
   });
   // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
   // the buff (also on the buff strip); level-ups and ladder rewards are told in the chat.

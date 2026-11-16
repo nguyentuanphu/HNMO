@@ -274,8 +274,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 6. ⏳ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
    player's time), its map and its drops, on the website and in the game (i). Extra invasions on a
    schedule (golden monsters, white wizard, rabbits, snowmen, "find the GM").
-7. ⏳ **Daily lucky number**: pick a number on the website or in the game, a draw at a set time, coins or
-   jewels for the winners; prizes and odds in the admin panel.
+7. ✅ **Daily lucky number**: pick a number on the website (`/portal/lucky-number/*` + self-contained `luckyNumberWidget.ts`) or in the game (<kbd>L</kbd>), a daily draw at a set Sydney time (`LuckyNumberPlugIn`, OFF by default), coins via `MissionCoinGranter` and jewels via `GiftCodeRewards` (queued when full) for winners; prizes and odds configurable in the admin panel (`/lucky-number`); public draw results on `home.html` (`/website/lucky-number`). Persisted in `save/hnmo-state.json` under `luckyNumber`. Unit-tested (`LuckyNumberEngineTest`, `LuckyNumberControllerTests`) and Playwright-tested (`lucky-number.spec.ts`).
 8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
    together, divorce rules; the couples list on the website.
 9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
