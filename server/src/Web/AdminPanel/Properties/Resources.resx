@@ -4599,4 +4599,54 @@
   <data name="GiftCodesNetworks" xml:space="preserve"><value>Networks</value></data>
   <data name="GiftCodesDevices" xml:space="preserve"><value>Devices</value></data>
   <data name="GiftCodesIdentityCountHint" xml:space="preserve"><value>Distinct known addresses or devices recorded since this feature was installed; older claims are not included.</value></data>
+  <data name="ShopEditorTitle" xml:space="preserve"><value>NPC shop editor</value></data>
+  <data name="ShopEditorLegacy" xml:space="preserve"><value>Open the old shop editor</value></data>
+  <data name="ShopEditorHelpTitle" xml:space="preserve"><value>How to use this page</value></data>
+  <data name="ShopEditorHelp" xml:space="preserve"><value>Choose a merchant, then search the catalogue on the left. Click a name for the first fitting space, drag an item to a cell, or select several and add them together. Category additions use the active filters and show how many fit before confirmation. Click a shop item to edit its properties. Auto-arrange packs larger rectangles first; if it cannot fit everything, your layout stays unchanged. Undo and redo cover the last 100 edits. Discard returns to the saved shop. Save confirms added, removed, moved and updated counts. Prices shown are the standard base prices; taxes and purchase plug-ins can change the amount paid. Existing players may need to reopen a shop to see a saved layout.</value></data>
+  <data name="ShopEditorSearch" xml:space="preserve"><value>Search merchants, maps or coordinates</value></data>
+  <data name="ShopEditorNpc" xml:space="preserve"><value>Merchant NPC</value></data>
+  <data name="ShopEditorLocation" xml:space="preserve"><value>Map and spawn position</value></data>
+  <data name="ShopEditorNoSpawn" xml:space="preserve"><value>No configured spawn</value></data>
+  <data name="ShopEditorCount" xml:space="preserve"><value>Items</value></data>
+  <data name="ShopEditorPreview" xml:space="preserve"><value>Shop preview</value></data>
+  <data name="ShopEditorEdit" xml:space="preserve"><value>Edit shop</value></data>
+  <data name="ShopEditorCopy" xml:space="preserve"><value>Copy this shop to…</value></data>
+  <data name="ShopEditorCopyHint" xml:space="preserve"><value>Choose another merchant; the copied draft is not saved until you confirm Save.</value></data>
+  <data name="ShopEditorCopyTarget" xml:space="preserve"><value>Choose a destination merchant</value></data>
+  <data name="ShopEditorCopyConfirm" xml:space="preserve"><value>Replace the draft for {0} with {1} items from {2}? Nothing is saved yet.</value></data>
+  <data name="ShopEditorBack" xml:space="preserve"><value>Back to shops</value></data>
+  <data name="ShopEditorAddSelected" xml:space="preserve"><value>Add selected</value></data>
+  <data name="ShopEditorAddCategory" xml:space="preserve"><value>Add whole category</value></data>
+  <data name="ShopEditorCategoryHint" xml:space="preserve"><value>Choose a category first; add all matching entries using the current filters.</value></data>
+  <data name="ShopEditorBulkConfirm" xml:space="preserve"><value>{0} matching items: {1} fit, {2} do not. Add the items that fit?</value></data>
+  <data name="ShopEditorAdded" xml:space="preserve"><value>Added {0}; {1} did not fit.</value></data>
+  <data name="ShopEditorDoesNotFit" xml:space="preserve"><value>This item does not fit here. Free space or choose another position.</value></data>
+  <data name="ShopEditorArrange" xml:space="preserve"><value>Auto-arrange</value></data>
+  <data name="ShopEditorArrangeHint" xml:space="preserve"><value>Repack larger items first, keeping all properties; an unsuccessful packing changes nothing.</value></data>
+  <data name="ShopEditorArrangeFailed" xml:space="preserve"><value>These items could not all be repacked. The layout was left unchanged.</value></data>
+  <data name="ShopEditorClear" xml:space="preserve"><value>Clear shop</value></data>
+  <data name="ShopEditorClearConfirm" xml:space="preserve"><value>Remove all {0} items from this draft? You can undo before saving.</value></data>
+  <data name="ShopEditorUndo" xml:space="preserve"><value>Undo</value></data>
+  <data name="ShopEditorRedo" xml:space="preserve"><value>Redo</value></data>
+  <data name="ShopEditorDiscard" xml:space="preserve"><value>Discard changes</value></data>
+  <data name="ShopEditorDiscardHint" xml:space="preserve"><value>Restore the saved shop and clear local undo history.</value></data>
+  <data name="ShopEditorSave" xml:space="preserve"><value>Save shop</value></data>
+  <data name="ShopEditorSummary" xml:space="preserve"><value>Added {0} · removed {1} · moved {2} · updated {3}</value></data>
+  <data name="ShopEditorSaveConfirm" xml:space="preserve"><value>Save this shop? {0}</value></data>
+  <data name="ShopEditorSaved" xml:space="preserve"><value>Shop saved. {0}</value></data>
+  <data name="ShopEditorSaveFailed" xml:space="preserve"><value>The save could not be confirmed. Reload the shop before retrying; check the server log.</value></data>
+  <data name="ShopEditorConflict" xml:space="preserve"><value>The shop or configuration changed elsewhere. Reload it before saving.</value></data>
+  <data name="ShopEditorInvalid" xml:space="preserve"><value>The draft contains overlaps, items outside the grid or invalid properties. Fix them or undo before saving.</value></data>
+  <data name="ShopEditorCapacity" xml:space="preserve"><value>{0} / {1} cells used</value></data>
+  <data name="ShopEditorDetails" xml:space="preserve"><value>Selected item</value></data>
+  <data name="ShopEditorSelectHint" xml:space="preserve"><value>Click an item in the grid to edit its level, options and durability.</value></data>
+  <data name="ShopEditorPrice" xml:space="preserve"><value>Base purchase price: {0:N0} Zen</value></data>
+  <data name="ShopEditorPriceHint" xml:space="preserve"><value>Uses the server ItemPriceCalculator; tax and player-specific purchase plug-ins are not included.</value></data>
+  <data name="ShopEditorPriceUnavailable" xml:space="preserve"><value>Price unavailable for this item definition.</value></data>
+  <data name="ShopEditorDelete" xml:space="preserve"><value>Remove selected item</value></data>
+  <data name="ShopEditorUnsaved" xml:space="preserve"><value>Discard this unsaved shop draft?</value></data>
+  <data name="ShopEditorLoadingFailed" xml:space="preserve"><value>Shop data could not be loaded. Check the server log and reload.</value></data>
+  <data name="ShopEditorReload" xml:space="preserve"><value>Reload saved shop</value></data>
+  <data name="ShopEditorEmpty" xml:space="preserve"><value>No matching merchants.</value></data>
+  <data name="ShopEditorPending" xml:space="preserve"><value>Saving the shop. Wait before leaving this page.</value></data>
 </root>

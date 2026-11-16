@@ -1,4 +1,4 @@
-﻿@page "/merchants"
+﻿@page "/merchants/legacy"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
 @using HNMO.Web.AdminPanel.Properties
@@ -10,6 +10,7 @@
 <Breadcrumb IsFirstFromRoot="true" Caption=@Resources.Merchants/>
 
 <h1>@Resources.Merchants</h1>
+<a href="merchants" title="@Resources.ShopEditorTitle">@Resources.ShopEditorTitle</a>
 
 
 @if (this.ViewModels is null)

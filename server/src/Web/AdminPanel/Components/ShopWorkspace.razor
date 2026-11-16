@@ -1,0 +1,50 @@
+@using HNMO.Web.ItemEditor
+@using HNMO.Web.AdminPanel.Operations
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.Shared.Components.ItemPicker
+@using HNMO.Web.Shared.Components.Shops
+
+<fieldset disabled="@this.Busy" class="shop-workspace">
+    <div class="shop-panes">
+        <div class="shop-catalogue">
+            <ItemPicker @ref="this._picker" Definitions="this.Definitions" Classes="this.Classes" Stocked="this.Stocked" Add="this.AddAsync" DragStarted="this.DragDefinition" DragEnded="this.EndDrag" Changed="this.NotifyAsync" />
+            <div class="d-flex gap-2 mt-3 flex-wrap">
+                <button type="button" class="btn btn-primary shop-add-selected" disabled="@(this._picker?.Selected.Count is not > 0)" @onclick="this.AddSelectedAsync" title="@Resources.ShopEditorAddSelected">@Resources.ShopEditorAddSelected</button>
+                <button type="button" class="btn btn-outline-primary shop-add-category" disabled="@(this._picker?.Filter.Category is not >= 0)" @onclick="this.AddCategoryAsync" title="@Resources.ShopEditorCategoryHint">@Resources.ShopEditorAddCategory</button>
+            </div>
+        </div>
+        <div class="shop-grid-pane">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <button type="button" class="btn btn-outline-secondary shop-undo" disabled="@(!this.Draft.CanUndo)" @onclick="this.UndoAsync" title="@Resources.ShopEditorUndo">@Resources.ShopEditorUndo</button>
+                <button type="button" class="btn btn-outline-secondary shop-redo" disabled="@(!this.Draft.CanRedo)" @onclick="this.RedoAsync" title="@Resources.ShopEditorRedo">@Resources.ShopEditorRedo</button>
+                <button type="button" class="btn btn-outline-primary shop-arrange" @onclick="this.ArrangeAsync" title="@Resources.ShopEditorArrangeHint">@Resources.ShopEditorArrange</button>
+                <button type="button" class="btn btn-outline-danger shop-clear" @onclick="this.ClearAsync" title="@Resources.ShopEditorClear">@Resources.ShopEditorClear</button>
+            </div>
+            <div class="shop-capacity mb-2">@string.Format(Resources.ShopEditorCapacity, this.CellsUsed, HNMO.DataModel.InventoryConstants.WarehouseSize)</div>
+            <progress class="w-100 mb-3" value="@Math.Min(this.CellsUsed, HNMO.DataModel.InventoryConstants.WarehouseSize)" max="@HNMO.DataModel.InventoryConstants.WarehouseSize" title="@string.Format(Resources.ShopEditorCapacity, this.CellsUsed, HNMO.DataModel.InventoryConstants.WarehouseSize)"></progress>
+            @if (this._message.Length > 0) { <div role="status" class="alert @(this._error ? "alert-warning" : "alert-info") shop-feedback">@this._message</div> }
+            @if (!this.Draft.IsValid()) { <div role="alert" class="alert alert-danger">@Resources.ShopEditorInvalid</div> }
+            <div class="grid-and-details">
+                <div class="shop-grid-scroll">
+                    <EditForm Model="this.Draft.Storage">
+                        <MuItemStorage Value="this.Draft.Storage" ValueExpression="() => this.Draft.Storage" StorageType="StorageType.Merchant"
+                            SelectedItem="this._selected" SelectedItemChanged="this.SelectAsync" DraggedItem="this._dragged"
+                            DraggedColumnOffset="this._columnOffset" DraggedRowOffset="this._rowOffset" OnDragStarted="this.DragItem" OnDragEnded="this.EndDrag" OnItemDropped="this.DropAsync" OnDelete="this.DeleteAsync" />
+                    </EditForm>
+                </div>
+                <div class="shop-details">
+                    <h2 class="h5">@Resources.ShopEditorDetails</h2>
+                    @if (this._selected is { } item)
+                    {
+                        <p class="shop-price" title="@Resources.ShopEditorPriceHint">@this.PriceText(item)</p>
+                        <CascadingValue TValue="HNMO.Persistence.IContext" Value="this._draftContext">
+                            <HNMO.Web.Shared.Components.ItemEdit.ItemEdit @key="item" Item="item" ItemChanged="this.EditedAsync" />
+                        </CascadingValue>
+                        <button type="button" class="btn btn-outline-danger shop-delete" @onclick="this.DeleteAsync" title="@Resources.ShopEditorDelete">@Resources.ShopEditorDelete</button>
+                    }
+                    else { <p class="text-muted">@Resources.ShopEditorSelectHint</p> }
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>

@@ -13594,5 +13594,455 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
 
+        /// <summary>
+        ///   Looks up a localized string similar to NPC shop editor.
+        /// </summary>
+        public static string ShopEditorTitle {
+            get {
+                return ResourceManager.GetString("ShopEditorTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open the old shop editor.
+        /// </summary>
+        public static string ShopEditorLegacy {
+            get {
+                return ResourceManager.GetString("ShopEditorLegacy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How to use this page.
+        /// </summary>
+        public static string ShopEditorHelpTitle {
+            get {
+                return ResourceManager.GetString("ShopEditorHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a merchant, then search the catalogue on the left. Click a name for the first fitting space, drag an item to a cell, or select several and add them together. Category additions use the active filters and show how many fit before confirmation. Click a shop item to edit its properties. Auto-arrange packs larger rectangles first; if it cannot fit everything, your layout stays unchanged. Undo and redo cover the last 100 edits. Discard returns to the saved shop. Save confirms added, removed, moved and updated counts. Prices shown are the standard base prices; taxes and purchase plug-ins can change the amount paid. Existing players may need to reopen a shop to see a saved layout..
+        /// </summary>
+        public static string ShopEditorHelp {
+            get {
+                return ResourceManager.GetString("ShopEditorHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Search merchants, maps or coordinates.
+        /// </summary>
+        public static string ShopEditorSearch {
+            get {
+                return ResourceManager.GetString("ShopEditorSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Merchant NPC.
+        /// </summary>
+        public static string ShopEditorNpc {
+            get {
+                return ResourceManager.GetString("ShopEditorNpc", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Map and spawn position.
+        /// </summary>
+        public static string ShopEditorLocation {
+            get {
+                return ResourceManager.GetString("ShopEditorLocation", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No configured spawn.
+        /// </summary>
+        public static string ShopEditorNoSpawn {
+            get {
+                return ResourceManager.GetString("ShopEditorNoSpawn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string ShopEditorCount {
+            get {
+                return ResourceManager.GetString("ShopEditorCount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Shop preview.
+        /// </summary>
+        public static string ShopEditorPreview {
+            get {
+                return ResourceManager.GetString("ShopEditorPreview", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit shop.
+        /// </summary>
+        public static string ShopEditorEdit {
+            get {
+                return ResourceManager.GetString("ShopEditorEdit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy this shop to….
+        /// </summary>
+        public static string ShopEditorCopy {
+            get {
+                return ResourceManager.GetString("ShopEditorCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose another merchant; the copied draft is not saved until you confirm Save..
+        /// </summary>
+        public static string ShopEditorCopyHint {
+            get {
+                return ResourceManager.GetString("ShopEditorCopyHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a destination merchant.
+        /// </summary>
+        public static string ShopEditorCopyTarget {
+            get {
+                return ResourceManager.GetString("ShopEditorCopyTarget", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Replace the draft for {0} with {1} items from {2}? Nothing is saved yet..
+        /// </summary>
+        public static string ShopEditorCopyConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorCopyConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Back to shops.
+        /// </summary>
+        public static string ShopEditorBack {
+            get {
+                return ResourceManager.GetString("ShopEditorBack", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add selected.
+        /// </summary>
+        public static string ShopEditorAddSelected {
+            get {
+                return ResourceManager.GetString("ShopEditorAddSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add whole category.
+        /// </summary>
+        public static string ShopEditorAddCategory {
+            get {
+                return ResourceManager.GetString("ShopEditorAddCategory", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a category first; add all matching entries using the current filters..
+        /// </summary>
+        public static string ShopEditorCategoryHint {
+            get {
+                return ResourceManager.GetString("ShopEditorCategoryHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} matching items: {1} fit, {2} do not. Add the items that fit?.
+        /// </summary>
+        public static string ShopEditorBulkConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorBulkConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Added {0}; {1} did not fit..
+        /// </summary>
+        public static string ShopEditorAdded {
+            get {
+                return ResourceManager.GetString("ShopEditorAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This item does not fit here. Free space or choose another position..
+        /// </summary>
+        public static string ShopEditorDoesNotFit {
+            get {
+                return ResourceManager.GetString("ShopEditorDoesNotFit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-arrange.
+        /// </summary>
+        public static string ShopEditorArrange {
+            get {
+                return ResourceManager.GetString("ShopEditorArrange", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Repack larger items first, keeping all properties; an unsuccessful packing changes nothing..
+        /// </summary>
+        public static string ShopEditorArrangeHint {
+            get {
+                return ResourceManager.GetString("ShopEditorArrangeHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to These items could not all be repacked. The layout was left unchanged..
+        /// </summary>
+        public static string ShopEditorArrangeFailed {
+            get {
+                return ResourceManager.GetString("ShopEditorArrangeFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Clear shop.
+        /// </summary>
+        public static string ShopEditorClear {
+            get {
+                return ResourceManager.GetString("ShopEditorClear", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove all {0} items from this draft? You can undo before saving..
+        /// </summary>
+        public static string ShopEditorClearConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorClearConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Undo.
+        /// </summary>
+        public static string ShopEditorUndo {
+            get {
+                return ResourceManager.GetString("ShopEditorUndo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Redo.
+        /// </summary>
+        public static string ShopEditorRedo {
+            get {
+                return ResourceManager.GetString("ShopEditorRedo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Discard changes.
+        /// </summary>
+        public static string ShopEditorDiscard {
+            get {
+                return ResourceManager.GetString("ShopEditorDiscard", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Restore the saved shop and clear local undo history..
+        /// </summary>
+        public static string ShopEditorDiscardHint {
+            get {
+                return ResourceManager.GetString("ShopEditorDiscardHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Save shop.
+        /// </summary>
+        public static string ShopEditorSave {
+            get {
+                return ResourceManager.GetString("ShopEditorSave", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Added {0} · removed {1} · moved {2} · updated {3}.
+        /// </summary>
+        public static string ShopEditorSummary {
+            get {
+                return ResourceManager.GetString("ShopEditorSummary", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Save this shop? {0}.
+        /// </summary>
+        public static string ShopEditorSaveConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorSaveConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Shop saved. {0}.
+        /// </summary>
+        public static string ShopEditorSaved {
+            get {
+                return ResourceManager.GetString("ShopEditorSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The save could not be confirmed. Reload the shop before retrying; check the server log..
+        /// </summary>
+        public static string ShopEditorSaveFailed {
+            get {
+                return ResourceManager.GetString("ShopEditorSaveFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The shop or configuration changed elsewhere. Reload it before saving..
+        /// </summary>
+        public static string ShopEditorConflict {
+            get {
+                return ResourceManager.GetString("ShopEditorConflict", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The draft contains overlaps, items outside the grid or invalid properties. Fix them or undo before saving..
+        /// </summary>
+        public static string ShopEditorInvalid {
+            get {
+                return ResourceManager.GetString("ShopEditorInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} / {1} cells used.
+        /// </summary>
+        public static string ShopEditorCapacity {
+            get {
+                return ResourceManager.GetString("ShopEditorCapacity", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Selected item.
+        /// </summary>
+        public static string ShopEditorDetails {
+            get {
+                return ResourceManager.GetString("ShopEditorDetails", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Click an item in the grid to edit its level, options and durability..
+        /// </summary>
+        public static string ShopEditorSelectHint {
+            get {
+                return ResourceManager.GetString("ShopEditorSelectHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Base purchase price: {0:N0} Zen.
+        /// </summary>
+        public static string ShopEditorPrice {
+            get {
+                return ResourceManager.GetString("ShopEditorPrice", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Uses the server ItemPriceCalculator; tax and player-specific purchase plug-ins are not included..
+        /// </summary>
+        public static string ShopEditorPriceHint {
+            get {
+                return ResourceManager.GetString("ShopEditorPriceHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Price unavailable for this item definition..
+        /// </summary>
+        public static string ShopEditorPriceUnavailable {
+            get {
+                return ResourceManager.GetString("ShopEditorPriceUnavailable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove selected item.
+        /// </summary>
+        public static string ShopEditorDelete {
+            get {
+                return ResourceManager.GetString("ShopEditorDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Discard this unsaved shop draft?.
+        /// </summary>
+        public static string ShopEditorUnsaved {
+            get {
+                return ResourceManager.GetString("ShopEditorUnsaved", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Shop data could not be loaded. Check the server log and reload..
+        /// </summary>
+        public static string ShopEditorLoadingFailed {
+            get {
+                return ResourceManager.GetString("ShopEditorLoadingFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reload saved shop.
+        /// </summary>
+        public static string ShopEditorReload {
+            get {
+                return ResourceManager.GetString("ShopEditorReload", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No matching merchants..
+        /// </summary>
+        public static string ShopEditorEmpty {
+            get {
+                return ResourceManager.GetString("ShopEditorEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Saving the shop. Wait before leaving this page..
+        /// </summary>
+        public static string ShopEditorPending {
+            get {
+                return ResourceManager.GetString("ShopEditorPending", resourceCulture);
+            }
+        }
+
     }
 }
