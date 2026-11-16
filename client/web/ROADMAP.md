@@ -366,4 +366,16 @@ and compare with the desktop's movement.
 - #8 chatgpt-editor-vi (Vietnamese for the native editor, 2,021 entries + 142 English keys) -> main, draft.
 - #9 chatgpt-phoenix-shot (Phoenix Shot sent as AreaSkill 270 at the hero's tile with the target as extra target; 5 files) -> main; live damage not yet checked.
 - Coming: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
-Merge order: #7, then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
+Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
+Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
+
+## Fewer files (the owner asked earlier; status 2026-11-16)
+Done: the packaged server is ONE executable (PublishSingleFile) instead of ~80 DLLs; the web game's code is bundled and
+minified into main.min.js / website.min.js. Not done (the packaged folder still has ~25,000 files):
+- client Data: ~13,900 files (738 MB) the browser loads one by one -> pack into a few archive files (by folder) with an
+  index, served by the bridge (byte ranges) and unpacked in the browser; the desktop client keeps its folder.
+- server/wwwroot: ~8,300 files, 8,150 of them the item editor's static files (each with .br and .gz copies) -> drop the
+  precompressed copies (the server compresses on the fly) or pack the item icons into one sprite/archive.
+- the web bridge: ~370 files -> PublishSingleFile like the server.
+- save/database: ~2,000 PostgreSQL files (created at first start; can't be packed).
+- The source repository (33,500 files: 14,900 of them client/src/bin/Data) stays as files for git.
