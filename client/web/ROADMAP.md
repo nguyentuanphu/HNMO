@@ -625,6 +625,23 @@ Players trade on trust today ("send money and hope"). HNMO stands in the middle,
        released; the host pays the seller minus the fee within N days; a dispute window and an admin dispute page;
        everything logged. The host must check Vietnamese rules for online games and payment intermediaries before
        turning it on (warning shown on the admin page).
+16.4 Real money paid directly between players (owner asked 2026-11-16; preferred over 16.2's host-mediated mode,
+     because the host never holds players' money). The game can't see bank transfers, so it guards the ITEM side and
+     records the evidence for the money side:
+     - the seller creates a "real-money contract": item(s) into escrow, a price in VND, the seller's bank details
+       (shown to the buyer only after the buyer accepts), optionally a seller bond in coins;
+     - the buyer accepts: the item is reserved for them for a payment window (e.g. 30 min); the game shows a VietQR
+       for the SELLER's account with a unique reference code (HNMO-XXXX) as the transfer note;
+     - the buyer transfers in their bank app, presses "I've paid" and may attach a receipt image;
+     - the seller presses "Money received": the item is delivered to the buyer at once;
+       optional automatic confirmation: the seller links a bank notification service (webhook on incoming transfers
+       with the reference code), then no manual click is needed;
+     - no confirmation within N hours -> dispute: both sides see the case, the admin compares the receipt, the
+       reference code and the seller's answer, and either releases the item to the buyer or returns it to the seller;
+       the side that lied loses the bond, reputation and can be banned;
+     - the seller can never keep both: the item stays locked until confirmed, cancelled before payment, or decided.
+     Limits: the game can't force a refund of money; the admin decides disputes on evidence. OFF by default; the host
+     decides if real-money trading is allowed at all (same warning as 16.2).
 16.3 Safety rules: new accounts can't use escrow for N days; a holding period before items received through escrow can
      be traded again (stops stolen-account dumping); the item's origin shown from the activity log; admin can freeze a
      contract; fee income reported on the economy dashboard.
