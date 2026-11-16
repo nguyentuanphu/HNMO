@@ -4195,6 +4195,28 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoGiftCodeRedeemExtended.
+    /// </summary>
+    [Test]
+    public void HnmoGiftCodeRedeemExtended_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 72;
+        var actualLength = HnmoGiftCodeRedeemExtendedRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'GiftCode' boundary
+        Assert.That(4 + 32, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'GiftCode' exceeds packet boundary");
+        
+        // Validate field 'DeviceId' boundary
+        Assert.That(36 + 36, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'DeviceId' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for HnmoGiftCodesRequest.
     /// </summary>
     [Test]

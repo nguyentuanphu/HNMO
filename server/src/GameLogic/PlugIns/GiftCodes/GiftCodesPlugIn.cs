@@ -88,6 +88,12 @@ public class GiftCodesPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn, I
                 return vietnamese ? "Gift code này đã hết hạn." : "This gift code has expired.";
             case GiftCodeResult.UsedUp:
                 return vietnamese ? "Gift code này đã hết lượt dùng." : "This gift code has been used up.";
+            case GiftCodeResult.AlreadyUsedNetwork:
+                return vietnamese ? "Gift code này đã được dùng từ mạng này." : "This code was already used from this network.";
+            case GiftCodeResult.AlreadyUsedDevice:
+                return vietnamese ? "Gift code này đã được dùng trên thiết bị này." : "This code was already used on this device.";
+            case GiftCodeResult.NetworkAddressUnknown:
+                return vietnamese ? "Chưa xác định được địa chỉ mạng. Hãy kết nối lại rồi thử lại." : "Your network address is unavailable. Reconnect and try again.";
             case GiftCodeResult.AlreadyUsedAccount:
                 return vietnamese ? "Tài khoản của bạn đã dùng gift code này rồi." : "Your account already used this gift code.";
             case GiftCodeResult.AlreadyUsedCharacter:
@@ -196,8 +202,9 @@ public class GiftCodesPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn, I
     /// <param name="player">The player.</param>
     /// <param name="text">The code.</param>
     /// <param name="fromWindow">Whether it came from the gift code window (else the chat command, which answers in the chat).</param>
+    /// <param name="deviceId">The optional browser device id; legacy clients and chat commands leave it unknown.</param>
     /// <returns>The outcome; <c>null</c>, if the player can't enter codes.</returns>
-    public async ValueTask<GiftCodeOutcome?> RedeemAsync(Player player, string text, bool fromWindow)
+    public async ValueTask<GiftCodeOutcome?> RedeemAsync(Player player, string text, bool fromWindow, string? deviceId = null)
     {
         if (RedeemerOf(player) is not { } who)
         {
@@ -205,7 +212,7 @@ public class GiftCodesPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn, I
         }
 
         var engine = this.GetEngine();
-        var outcome = engine.Redeem(text, who, DateTime.UtcNow, "game");
+        var outcome = engine.Redeem(text, who with { NetworkAddress = (player as IHasIpAddress)?.IpAddress, DeviceId = deviceId }, DateTime.UtcNow, "game");
         if (outcome.Result == GiftCodeResult.Ok)
         {
             player.Logger.LogInformation("Gift codes: {Player} used {Code} ({Reference}).", player, outcome.Entry?.Code, outcome.Entry?.Reference);

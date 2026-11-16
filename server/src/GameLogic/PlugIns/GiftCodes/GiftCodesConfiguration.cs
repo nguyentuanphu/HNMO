@@ -125,6 +125,12 @@ public class GiftCodeDefinition
     /// <summary>Gets or sets who can use it once.</summary>
     public GiftCodeLimit Limit { get; set; } = GiftCodeLimit.OncePerAccount;
 
+    /// <summary>Gets or sets a value indicating whether this code may be used once per network address.</summary>
+    public bool OncePerNetwork { get; set; }
+
+    /// <summary>Gets or sets a value indicating whether this code may be used once per known browser device.</summary>
+    public bool OncePerDevice { get; set; }
+
     /// <summary>Gets or sets the start, "yyyy-MM-dd HH:mm" on the wall clock of the time zone (Sydney); empty is no start.</summary>
     public string Start { get; set; } = string.Empty;
 

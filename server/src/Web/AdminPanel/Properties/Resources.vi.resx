@@ -4581,4 +4581,11 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Bảo vệ tài khoản</value>
   </data>
+  <data name="GiftCodesOncePerNetwork" xml:space="preserve"><value>Mỗi địa chỉ mạng chỉ được nhận một lần</value></data>
+  <data name="GiftCodesOncePerDevice" xml:space="preserve"><value>Mỗi thiết bị chỉ được nhận một lần</value></data>
+  <data name="GiftCodesNetworkHint" xml:space="preserve"><value>Các tài khoản dùng chung địa chỉ mạng chỉ được nhận gift code này một lần tổng cộng.</value></data>
+  <data name="GiftCodesDeviceHint" xml:space="preserve"><value>Các tài khoản dùng chung mã thiết bị của trình duyệt chỉ được nhận một lần. Máy khách cũ không có mã này sẽ không bị giới hạn theo thiết bị.</value></data>
+  <data name="GiftCodesNetworks" xml:space="preserve"><value>Địa chỉ mạng</value></data>
+  <data name="GiftCodesDevices" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="GiftCodesIdentityCountHint" xml:space="preserve"><value>Số địa chỉ mạng hoặc thiết bị đã ghi nhận từ khi cài tính năng này; không tính các lượt nhận cũ.</value></data>
 </root>

@@ -219,6 +219,14 @@ else
                         <input class="form-control" id="gift-code-end" placeholder="2027-01-01 00:00" @bind="d.End" />
                     </div>
                 </div>
+                <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="gift-code-network" @bind="d.OncePerNetwork" title="@Resources.GiftCodesNetworkHint" />
+                    <label class="form-check-label" for="gift-code-network" title="@Resources.GiftCodesNetworkHint">@Resources.GiftCodesOncePerNetwork</label>
+                </div>
+                <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="gift-code-device" @bind="d.OncePerDevice" title="@Resources.GiftCodesDeviceHint" />
+                    <label class="form-check-label" for="gift-code-device" title="@Resources.GiftCodesDeviceHint">@Resources.GiftCodesOncePerDevice</label>
+                </div>
                 <div class="row g-2 mt-1">
                     <div class="col-sm-2">
                         <label class="form-label" for="gift-code-min-level">@Resources.GiftCodesMinLevel</label>
@@ -282,6 +290,8 @@ else
                         <th>@Resources.GiftCodesNote</th>
                         <th>@Resources.GiftCodesReward</th>
                         <th>@Resources.GiftCodesUses</th>
+                        <th title="@Resources.GiftCodesIdentityCountHint">@Resources.GiftCodesNetworks</th>
+                        <th title="@Resources.GiftCodesIdentityCountHint">@Resources.GiftCodesDevices</th>
                         <th>@Resources.GiftCodesRules</th>
                         <th>@Resources.GiftCodesDates</th>
                         <th>@Resources.MissionsOn</th>
@@ -297,6 +307,8 @@ else
                             <td>@row.Note</td>
                             <td>@RewardText(row.Reward)</td>
                             <td class="gift-code-uses">@this.UsesText(row)</td>
+                            <td class="gift-code-networks">@(this._engine?.IdentityUsesOf(row.Id).Networks ?? 0)</td>
+                            <td class="gift-code-devices">@(this._engine?.IdentityUsesOf(row.Id).Devices ?? 0)</td>
                             <td>@this.LimitText(row)</td>
                             <td>@this.DatesText(row)</td>
                             <td><input class="form-check-input gift-code-enabled" type="checkbox" checked="@row.Enabled" @onchange="e => this.SetEnabled(row, e.Value is true)" aria-label="@Resources.MissionsOn" /></td>

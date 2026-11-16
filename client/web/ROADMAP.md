@@ -318,7 +318,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 5. Screenshots: the player chooses in the settings (3D view only, or with the interface).
 6. K key: (already built, checked 2026-11-16) like the desktop, only while the bag is closed.
 7. Top races: (already built, checked 2026-11-16) F9 opens them.
-8. Gift codes: keep as they are, plus an admin-set limit per network address / device (one use per address or device per code).
+8. ✅ Gift codes: optional per-code network/device limits, salted identity claims and counts, shared browser device ids, and bilingual refusals. Legacy clients without a device id retain network checks. Live deployment verification remains.
 9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
 11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.

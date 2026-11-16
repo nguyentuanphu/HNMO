@@ -347,11 +347,14 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
 
         string Field(string name, int maximum) => (body?.GetValueOrDefault(name) ?? string.Empty) is var value && value.Length <= maximum ? value : string.Empty;
         object request = action == "redeem"
-            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40) }
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40), deviceId = Field("deviceId", 36) }
             : new { loginName = Field("loginName", 10), password = Field("password", 20) };
         try
         {
-            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            using var proxyRequest = this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request);
+            // Replace, rather than copy, any browser-supplied forwarding headers.
+            proxyRequest.Headers.TryAddWithoutValidation("X-HNMO-Client-Address", context.Connection.RemoteIpAddress?.ToString());
+            using var response = await http.SendAsync(proxyRequest, context.RequestAborted).ConfigureAwait(false);
             var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
             if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
             {

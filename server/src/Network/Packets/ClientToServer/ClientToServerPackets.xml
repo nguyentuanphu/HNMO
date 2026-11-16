@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <PacketDefinitions xmlns="https://github.com/nguyentuanphu/HNMO/PacketDefinitions">
   <Description>This file contains all packet definitions for packets which are sent from game client to the game server.</Description>
   <Structures>
@@ -4693,6 +4693,21 @@
           </Values>
         </Enum>
       </Enums>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>23</SubCode>
+      <Name>HnmoGiftCodeRedeemExtended</Name>
+      <Caption>HNMO gift code redemption with a device</Caption>
+      <Length>72</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>A web player enters a gift code, including the persistent browser device UUID.</SentWhen>
+      <CausedReaction>The server checks the account, network and optional device limits and sends HnmoGiftCodesState with the result.</CausedReaction>
+      <Fields>
+        <Field><Index>4</Index><Type>String</Type><Name>GiftCode</Name><Length>32</Length></Field>
+        <Field><Index>36</Index><Type>String</Type><Name>DeviceId</Name><Length>36</Length></Field>
+      </Fields>
     </Packet>
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
