@@ -292,9 +292,7 @@ section 12 (the cash shop) still waits for the owner's answers.
 13. ⏳ **Combining leftovers**: chaos machine recipes the admin panel can add (e.g. 2 boxes of the same level +
     1 Jewel of Life + 1 Jewel of Creation -> a box one level higher, with a top box level per season stage),
     and an exchange NPC for surplus materials. Recipes shown in the game and on the website.
-14. ⏳ **Mount chain**: golden bosses drop mount materials, duplicate mounts are material for the next step
-    (horn -> wolf -> golden wolf/horse -> higher steps); a mount collection page on the website. Kept to looks
-    and modest PvE strength.
+14. ✅ **Mount chain**: `MountChainPlugIn` (`Shift+U`, packets `F5 42`/`F5 43`), Golden Boss kills drop Mount Shards, duplicate bag mounts upgrade to the next step (`Uniria -> Dinorant -> Fenrir -> Golden Fenrir -> Royal Steed`) or salvage into shards, unlocked collection grants modest PvE bonuses (`DefenseFinal`, `BonusExperienceRate`, `MoneyAmountRate`) persisted in `HnmoStateStore`, standalone `mountWidget.ts`, public `home.html#mounts` (`/website/mounts`), and admin `/mounts`.
 15. ⏳ **Party options**: a party password (join without an invite) and auto party for hunting spots. A party of
     10 needs a new party window in the web and desktop clients (they show 5); later, if wanted.
 

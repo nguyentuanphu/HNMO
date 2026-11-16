@@ -10725,4 +10725,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMountChainState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload describing mount chain tiers, shards, duplicate bag mounts, and unlocked collection.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world, defeating a golden boss, or after HnmoMountChainCommand.
+    /// Causes reaction on client side: Updates the web client's Mount Chain window (Shift+U).
+    /// </remarks>
+    public static async ValueTask SendHnmoMountChainStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMountChainStateRef.GetRequiredSize(json);
+            var packet = new HnmoMountChainStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

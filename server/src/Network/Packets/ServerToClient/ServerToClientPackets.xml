@@ -16718,6 +16718,23 @@
       <CausedReaction>The 1.04d client does not read any payload of this packet.</CausedReaction>
       <Fields />
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>43</SubCode>
+      <Name>HnmoMountChainState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world, defeating a golden boss, or after HnmoMountChainCommand.</SentWhen>
+      <CausedReaction>Updates the web client's Mount Chain window (Shift+U).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload describing mount chain tiers, shards, duplicate bag mounts, and unlocked collection.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>
