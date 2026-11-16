@@ -58,7 +58,50 @@ public class LoginAction
             return;
         }
 
-        var (success, account) = await this.TryEstablishSessionAsync(player, username).ConfigureAwait(false);
+        var (success, account) = await this.TryEstablishSessionAsync(player, username, validateAccountStateAfterLoad: false).ConfigureAwait(false);
+        await this.CompleteLoginAsync(player, username, success, account).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Logs in the specified player using a one-time website login ticket.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="username">The username.</param>
+    /// <param name="ticket">The one-time login ticket.</param>
+    /// <param name="ticketStore">Optional ticket store (defaults to <see cref="WebLoginTicketStore.Shared"/>).</param>
+    public async ValueTask LoginWithTicketAsync(Player player, string username, string ticket, WebLoginTicketStore? ticketStore = null)
+    {
+        using var loggerScope = player.Logger.BeginScope(this.GetType());
+
+        var address = (player as IHasIpAddress)?.IpAddress;
+        if (LoginAttemptGuard.IsLocked(username, address))
+        {
+            player.Logger.LogWarning("Ticket login of [{Username}] refused: too many wrong attempts recently.", username);
+            await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.ConnectionClosed3Fails)).ConfigureAwait(false);
+            return;
+        }
+
+        if (!(ticketStore ?? WebLoginTicketStore.Shared).TryRedeem(username, ticket))
+        {
+            player.Logger.LogInformation("Invalid, expired, or already used login ticket for [{Username}].", username);
+            PlugIns.AccountSafety.AccountSafetyPlugIn.RecordFailedLogin(player, username);
+            if (LoginAttemptGuard.RecordFailure(username, address))
+            {
+                player.Logger.LogWarning("Logins of [{Username}] (address {Address}) locked for {Minutes} minutes after too many failed attempts.", username, address, LoginAttemptGuard.LockTime.TotalMinutes);
+            }
+
+            await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.InvalidPassword)).ConfigureAwait(false);
+            return;
+        }
+
+        LoginAttemptGuard.RecordSuccess(username);
+
+        var (success, account) = await this.TryEstablishSessionAsync(player, username, validateAccountStateAfterLoad: true).ConfigureAwait(false);
+        await this.CompleteLoginAsync(player, username, success, account).ConfigureAwait(false);
+    }
+
+    private async ValueTask CompleteLoginAsync(Player player, string username, bool success, Account? account)
+    {
         if (success && account is { })
         {
             if (player.PlayerState.CurrentState.IsDisconnectedOrFinished())
@@ -194,7 +237,7 @@ public class LoginAction
         return true;
     }
 
-    private async ValueTask<(bool Success, Account? Account)> TryEstablishSessionAsync(Player player, string username)
+    private async ValueTask<(bool Success, Account? Account)> TryEstablishSessionAsync(Player player, string username, bool validateAccountStateAfterLoad)
     {
         // Kept until the state change of the context below is done, see IGameContext.TryReserveLoginPlace.
         IDisposable? reservedPlace = null;
@@ -308,6 +351,14 @@ public class LoginAction
             if (!await this.CheckJoinRequirementsAsync(player, loadedAccount, gameServerContext).ConfigureAwait(false))
             {
                 await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
+                return (false, null);
+            }
+
+            if (validateAccountStateAfterLoad
+                && !await this.ValidateAccountStateAsync(player, loadedAccount.State).ConfigureAwait(false))
+            {
+                await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
+                context.Allowed = false;
                 return (false, null);
             }
 

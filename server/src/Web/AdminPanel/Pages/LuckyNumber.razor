@@ -1,0 +1,190 @@
+@page "/lucky-number"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Daily Lucky Number", "Con số may mắn")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Daily Lucky Number", "Con số may mắn")" />
+
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Daily Lucky Number", "Con số may mắn")</h1>
+    <button type="button"
+            class="btn btn-sm btn-outline-info rounded-circle"
+            title="@L("Show or hide setup instructions", "Hiện hoặc ẩn hướng dẫn")"
+            @onclick="() => this._showHelp = !this._showHelp">
+        ?
+    </button>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn"):</strong>
+        @L(
+            "Configure the daily lucky number draw: range, draw time (Sydney time), daily pick limit, coins and jewel prizes, and winning odds. Players pick in the game (L key) or on the website; winning coins arrive immediately and jewels wait until claimed in-game if bags are full.",
+            "Cấu hình quay số may mắn hàng ngày: khoảng số, giờ quay (giờ Sydney), số lượt chọn mỗi ngày, phần thưởng xu/ngọc và tỷ lệ trúng. Người chơi chọn số trong game (phím L) hoặc trên website; xu được cộng ngay và ngọc chờ nhận trong game nếu túi đồ đầy.")
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@L("Rules & Odds", "Luật chơi & Tỷ lệ trúng")</h2>
+
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="lucky-active" @bind="this._isActive" />
+                <label class="form-check-label" for="lucky-active" title="@L("Master toggle (OFF by default).", "Công tắc bật/tắt (mặc định TẮT).")">
+                    @L("Enable Daily Lucky Number", "Bật Con số may mắn")
+                </label>
+            </div>
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="lucky-web" @bind="this._configuration.AllowWebsite" />
+                <label class="form-check-label" for="lucky-web">@L("Allow picks on the website", "Cho phép chọn số trên website")</label>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Daily draw time in Sydney time (HH:mm).", "Giờ quay số mỗi ngày theo giờ Sydney (HH:mm).")">@L("Draw time (Sydney)", "Giờ quay (Sydney)")</label>
+                    <input class="form-control" @bind="this._configuration.DrawTime" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Min number", "Số nhỏ nhất")</label>
+                    <input class="form-control" type="number" min="0" max="9998" @bind="this._configuration.MinNumber" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Max number", "Số lớn nhất")</label>
+                    <input class="form-control" type="number" min="1" max="9999" @bind="this._configuration.MaxNumber" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Picks / day", "Lượt / ngày")</label>
+                    <input class="form-control" type="number" min="1" max="20" @bind="this._configuration.MaxPicksPerAccountPerDay" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Zen cost", "Phí Zen")</label>
+                    <input class="form-control" type="number" min="0" @bind="this._configuration.EntryCostZen" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Exact odds", "Tỷ lệ đúng")</label>
+                    <input class="form-control" readonly value="@($"{this.ExactOddsPercent()}%")" />
+                </div>
+            </div>
+
+            <h3 class="h6">@L("Exact Match Prize", "Giải Đặc biệt (trùng chính xác)")</h3>
+            <div class="row g-2 mb-3">
+                <div class="col-md-2">
+                    <label class="form-label">@L("Coins", "Xu")</label>
+                    <input class="form-control" type="number" min="0" @bind="this._configuration.ExactMatchCoins" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@L("Coin type", "Loại xu")</label>
+                    <select class="form-select" @bind="this._configuration.ExactMatchCoinType">
+                        @foreach (var t in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@t">@t</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Jewel group", "Nhóm ngọc")</label>
+                    <input class="form-control" type="number" min="0" max="15" @bind="this._configuration.ExactMatchJewelGroup" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Jewel number", "Mã ngọc")</label>
+                    <input class="form-control" type="number" min="0" max="511" @bind="this._configuration.ExactMatchJewelNumber" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Jewel count", "Số lượng ngọc")</label>
+                    <input class="form-control" type="number" min="0" max="50" @bind="this._configuration.ExactMatchJewelCount" />
+                </div>
+            </div>
+
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="lucky-lastdigit" @bind="this._configuration.EnableLastDigitPrize" />
+                <label class="form-check-label" for="lucky-lastdigit">
+                    @L("Enable last-digit consolation prize", "Bật giải khuyến khích (trùng số cuối)") (@($"{this.LastDigitOddsPercent()}%"))
+                </label>
+            </div>
+            @if (this._configuration.EnableLastDigitPrize)
+            {
+                <div class="row g-2 mb-3">
+                    <div class="col-md-2">
+                        <label class="form-label">@L("Coins", "Xu")</label>
+                        <input class="form-control" type="number" min="0" @bind="this._configuration.LastDigitCoins" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">@L("Coin type", "Loại xu")</label>
+                        <select class="form-select" @bind="this._configuration.LastDigitCoinType">
+                            @foreach (var t in Enum.GetValues<CashShopCoinType>())
+                            {
+                                <option value="@t">@t</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">@L("Jewel group", "Nhóm ngọc")</label>
+                        <input class="form-control" type="number" min="0" max="15" @bind="this._configuration.LastDigitJewelGroup" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">@L("Jewel number", "Mã ngọc")</label>
+                        <input class="form-control" type="number" min="0" max="511" @bind="this._configuration.LastDigitJewelNumber" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">@L("Jewel count", "Số lượng ngọc")</label>
+                        <input class="form-control" type="number" min="0" max="50" @bind="this._configuration.LastDigitJewelCount" />
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                    @L("Save settings", "Lưu cài đặt")
+                </button>
+                <button class="btn btn-outline-warning" disabled="@(!this._isActive || this._isSaving)" @onclick="this.DrawNowAsync">
+                    @L("Draw now", "Quay số ngay")
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-body">
+            <h2 class="h5">@L("Recent Rounds & Winners", "Các kỳ quay & Người trúng giải gần đây")</h2>
+            @if (this._rounds.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No rounds recorded yet.", "Chưa có dữ liệu kỳ quay.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>@L("Round Date (Sydney)", "Ngày quay (Sydney)")</th>
+                                <th>@L("Picks", "Lượt chọn")</th>
+                                <th>@L("Winning Number", "Số trúng")</th>
+                                <th>@L("Winners", "Người thắng")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in this._rounds)
+                            {
+                                <tr>
+                                    <td>@r.DateKey</td>
+                                    <td>@r.Picks.Count</td>
+                                    <td>@(r.DrawnNumber.HasValue ? r.DrawnNumber.Value.ToString("00") : L("Pending", "Chờ quay"))</td>
+                                    <td>@(r.Winners.Count == 0 ? "—" : string.Join(", ", r.Winners.Select(w => $"{w.CharacterName} (#{w.Number:00}, {w.Tier})")))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}
