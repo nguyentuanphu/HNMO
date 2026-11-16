@@ -45,6 +45,7 @@ const sidebars = {
         "admin-panel/online-accounts",
         "admin-panel/game-configuration",
         "admin-panel/gameplay-rules",
+        "admin-panel/vault-chaos-rewards",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",

@@ -164,7 +164,13 @@ public class ItemCraftAction
     private IItemCraftingHandler GetCraftingHandler(ItemCrafting crafting)
     {
         // This action may be shared between players, e.g. by the message handlers, so the cache must be thread-safe.
-        return this._craftingHandlerCache.GetOrAdd(crafting, this.CreateCraftingHandler);
+        var handler = this._craftingHandlerCache.GetOrAdd(crafting, this.CreateCraftingHandler);
+        if (handler is BaseItemCraftingHandler baseHandler)
+        {
+            baseHandler.CraftingNumber = crafting.Number;
+        }
+
+        return handler;
     }
 
     private IItemCraftingHandler CreateCraftingHandler(ItemCrafting crafting)

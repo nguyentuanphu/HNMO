@@ -56,6 +56,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<CastleSiegeManagementService>();
         services.AddScoped<MaintenanceToolsOperations>();
         services.AddScoped<EconomyDashboardOperations>();
+        services.AddScoped<EventRewardsOperations>();
         return services;
     }
 }
