@@ -55,6 +55,7 @@ const sidebars = {
         "admin-panel/custom-ranks",
         "admin-panel/teleport-npc",
         "admin-panel/fixed-options",
+        "admin-panel/event-alerts",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",

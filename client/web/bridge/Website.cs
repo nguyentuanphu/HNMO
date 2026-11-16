@@ -24,6 +24,33 @@ internal static class Website
         Forward(app, "/website/leftovers", "api/website/leftovers", options, clients);
         Forward(app, "/website/mounts", "api/website/mounts", options, clients);
         Forward(app, "/website/party-spots", "api/website/party-spots", options, clients);
+        Forward(app, "/website/event-alerts", "api/website/event-alerts", options, clients);
+        ForwardPost(app, "/website/event-alerts/subscribe", "api/website/event-alerts/subscribe", options, clients);
+        ForwardPost(app, "/website/event-alerts/unsubscribe", "api/website/event-alerts/unsubscribe", options, clients);
+    }
+
+    private static void ForwardPost(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)
+    {
+        app.MapPost(route, async (HttpContext context) =>
+        {
+            context.Response.Headers.CacheControl = "no-store";
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
+            timeout.CancelAfter(TimeSpan.FromSeconds(10));
+            try
+            {
+                using var reader = new StreamReader(context.Request.Body);
+                var body = await reader.ReadToEndAsync(timeout.Token).ConfigureAwait(false);
+                var target = new Uri(new Uri(options.ApiBaseUrl), apiPath);
+                using var content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+                using var response = await clients.CreateClient().PostAsync(target, content, timeout.Token).ConfigureAwait(false);
+                var reply = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+                return Results.Content(reply, "application/json", statusCode: (int)response.StatusCode);
+            }
+            catch (Exception error) when (error is HttpRequestException or OperationCanceledException)
+            {
+                return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+            }
+        });
     }
 
     private static void Forward(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)

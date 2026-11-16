@@ -42,6 +42,7 @@ export interface TimetableStatePayload {
 
 export interface TimetableWindowOptions {
   send: (name: string, fields: PacketValues) => void;
+  onOpenAlerts?: () => void;
 }
 
 const ACTION_REQUEST = 1;
@@ -208,9 +209,16 @@ export class TimetableWindow {
       });
       tabs.append(btn);
     }
+    if (this.options.onOpenAlerts) {
+      const alertsBtn = el('button', L('Browser Alerts', 'Thông Báo'), 'hnmo-btn');
+      alertsBtn.type = 'button';
+      alertsBtn.style.marginLeft = 'auto';
+      alertsBtn.addEventListener('click', () => this.options.onOpenAlerts?.());
+      tabs.append(alertsBtn);
+    }
     const refreshBtn = el('button', L('Refresh', 'Làm mới'), 'hnmo-btn');
     refreshBtn.type = 'button';
-    refreshBtn.style.marginLeft = 'auto';
+    if (!this.options.onOpenAlerts) refreshBtn.style.marginLeft = 'auto';
     refreshBtn.addEventListener('click', () => this.request());
     tabs.append(refreshBtn);
     body.append(tabs);

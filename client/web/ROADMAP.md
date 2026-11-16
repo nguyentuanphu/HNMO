@@ -521,7 +521,7 @@ Its tools, compared (ideas only):
         server computes them.
 - Player companion ("dashboard"): character info, event and boss alerts, death alerts. New for HNMO:
   14.22 Event alerts: players opt in (website or game) to browser notifications for chosen events/bosses (web push,
-        no app needed), plus a Discord channel post (exists in Community).
+        no app needed), plus a Discord channel post (exists in Community). — Done (`EventAlertsPlugIn`, pure .NET RFC 8291/8292 `WebPushCrypto` with host-generated VAPID P-256 keys, Discord webhook channel post, `/sw-alerts.js` + `eventAlertsWidget.ts` in Timetable + website `/website/event-alerts*`, `/event-alerts` EN/VI admin page; OFF by default).
 - Launcher (auto-update, design, languages, register in the launcher): see 14.14 (desktop only).
 - Crash/stability monitor: HNMO's /control page (#18) shows status and logs; add crash detection with automatic
   restart and a notice to the admin (14.23).

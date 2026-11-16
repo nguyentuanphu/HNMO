@@ -43,6 +43,7 @@ import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
 import { TimetableWindow } from './ui/timetableWindow.js';
+import { EventAlertsWindow } from './ui/eventAlertsWidget.js';
 import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
@@ -1498,9 +1499,12 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
   });
   // HNMO's event & boss timetable (H): every event, invasion and world boss with Sydney/local times, maps and drops.
+  const eventAlerts = new EventAlertsWindow();
   const timetable = new TimetableWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
+    onOpenAlerts: () => eventAlerts.open(),
   });
+  window.addEventListener('hnmo-event-alerts-open', () => eventAlerts.open());
   state.timetable = timetable;
   connection.onPacket((bytes) => { timetable.handle(bytes); });
   timetable.start();
