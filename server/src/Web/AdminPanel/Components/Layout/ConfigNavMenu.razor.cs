@@ -99,6 +99,7 @@ public partial class ConfigNavMenu
             new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
             new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),
             new(Resources.AccountSafetyPage, "account-safety", "oi-lock-locked"),
+            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Chợ vật phẩm" : "Item market", "market", "oi-basket"),
             new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
             new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),

@@ -6190,6 +6190,42 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMarketCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="slot">Inventory slot when listing an item.</param>
+    /// <param name="currency">0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.</param>
+    /// <param name="price">Asking price in the selected currency.</param>
+    /// <param name="listingId">Target listing identifier when buying or canceling.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.
+    /// Causes reaction on server side: The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).
+    /// </remarks>
+    public static async ValueTask SendHnmoMarketCommandAsync(this IConnection? connection, HnmoMarketCommand.HnmoMarketActionType @action, byte @slot, byte @currency, uint @price, string @listingId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarketCommandRef.Length;
+            var packet = new HnmoMarketCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+            packet.Currency = @currency;
+            packet.Price = @price;
+            packet.ListingId = @listingId;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

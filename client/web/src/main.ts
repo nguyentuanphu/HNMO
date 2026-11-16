@@ -44,6 +44,7 @@ import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
+import { MarketWindow } from './ui/marketWindow.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -180,6 +181,7 @@ export interface GameState {
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
+  market?: MarketWindow;
   resets?: Resets;
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
@@ -1366,6 +1368,18 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
   });
+  // HNMO's item market (F6, or NPC 547 Market Julia): escrow listings for Zen or CashShop coins.
+  const market = new MarketWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.market = market;
+  connection.onPacket((bytes) => { market.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F6' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
+  });
+  window.addEventListener('hnmo-market-open', () => { market.open(); });
   // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
   // the buff (also on the buff strip); level-ups and ladder rewards are told in the chat.
   const guildLevels = new GuildLevelsWindow({

@@ -4301,6 +4301,40 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoMarketCommand.
+    /// </summary>
+    [Test]
+    public void HnmoMarketCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 59;
+        var actualLength = HnmoMarketCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Slot' boundary
+        Assert.That(5 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Slot' exceeds packet boundary");
+        
+        // Validate field 'Currency' boundary
+        Assert.That(6 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Currency' exceeds packet boundary");
+        
+        // Validate field 'Price' boundary
+        Assert.That(7 + 4, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Price' exceeds packet boundary");
+        
+        // Validate field 'ListingId' boundary
+        Assert.That(11 + 48, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'ListingId' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for CharacterRenameRequest.
     /// </summary>
     [Test]

@@ -7404,6 +7404,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoMarketState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON containing active listings, listable bag items, waiting deliveries/payouts, currency rules, and fee percent.</param>
+    /// <remarks>
+    /// Is sent by the server when: After any Item Market action or when listings/payouts change.
+    /// Causes reaction on client side: The web game updates the Item Market window (F6) and posts transaction notices.
+    /// </remarks>
+    public static async ValueTask SendHnmoMarketStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarketStateRef.GetRequiredSize(json);
+            var packet = new HnmoMarketStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="ExternalChatMessage" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
