@@ -1,0 +1,41 @@
+name: Editor localization
+
+# Validate the HNMO editor catalogs without requiring a graphical editor build.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'client/src/Localization/**'
+      - 'client/src/MuEditor/**'
+      - 'client/tools/ResxGen/**'
+      - 'client/tools/check-editor-vi.py'
+      - '.github/workflows/editor-localization.yml'
+
+jobs:
+  catalogs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Check Vietnamese coverage and placeholders
+        run: python3 client/tools/check-editor-vi.py
+      - name: Build the resource generator
+        run: dotnet build client/tools/ResxGen/ResxGen.csproj -c Release -warnaserror
+      - name: Generate the editor catalogs
+        run: >-
+          dotnet run --project client/tools/ResxGen/ResxGen.csproj -c Release --no-build --
+          --input client/src/Localization --output "$RUNNER_TEMP/hnmo-editor-i18n"
+          --wide-groups Game,Dialog --item-text-groups Game,Dialog
+      - name: Compile and exercise locale switching
+        run: |
+          g++ -std=c++20 -O0 -I "$RUNNER_TEMP/hnmo-editor-i18n" \
+            client/tools/ResxGen/tests/editor-locale-smoke.cpp \
+            "$RUNNER_TEMP/hnmo-editor-i18n/All.cpp" \
+            "$RUNNER_TEMP/hnmo-editor-i18n/Editor.cpp" \
+            "$RUNNER_TEMP/hnmo-editor-i18n/Metadata.cpp" \
+            "$RUNNER_TEMP/hnmo-editor-i18n/Game.cpp" \
+            "$RUNNER_TEMP/hnmo-editor-i18n/Dialog.cpp" \
+            -o "$RUNNER_TEMP/hnmo-editor-locale-smoke"
+          "$RUNNER_TEMP/hnmo-editor-locale-smoke"

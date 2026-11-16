@@ -37,15 +37,15 @@ void CItemEditorActions::RenderSaveButton()
         case Data::Items::ItemDataSaveResult::Saved:
             g_MuEditorConsoleUI.LogEditor("Items saved to " + Data::Items::GetItemDataDirectory().string());
             LogMissingItemNames();
-            ImGui::OpenPopup("Save Success");
+            ImGui::OpenPopup(I18N::Editor::PopupSaveSuccess);
             break;
         case Data::Items::ItemDataSaveResult::InvalidData:
             g_MuEditorConsoleUI.LogEditor(I18N::Editor::ItemDataHasFatalProblems);
-            ImGui::OpenPopup("Save Failed");
+            ImGui::OpenPopup(I18N::Editor::PopupSaveFailed);
             break;
         case Data::Items::ItemDataSaveResult::WriteFailed:
             g_MuEditorConsoleUI.LogEditor(I18N::Editor::ItemDataCouldNotBeWritten);
-            ImGui::OpenPopup("Save Write Failed");
+            ImGui::OpenPopup(I18N::Editor::PopupSaveWriteFailed);
             break;
         }
     }
@@ -70,7 +70,7 @@ bool CItemEditorActions::RenderImportBmdButton()
     if (Data::Items::HasFatal(result.issues))
     {
         g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToImportItemsFromBmd);
-        ImGui::OpenPopup("Import Bmd Failed");
+        ImGui::OpenPopup(I18N::Editor::PopupImportBmdFailed);
         return false;
     }
 
@@ -78,7 +78,7 @@ bool CItemEditorActions::RenderImportBmdButton()
     KeepHeldItemShapes(held);
     // The imported items replace all items: no step before them can be undone.
     g_ItemEdits.GetHistory().Clear();
-    ImGui::OpenPopup("Import Bmd Success");
+    ImGui::OpenPopup(I18N::Editor::PopupImportBmdSuccess);
     return true;
 }
 
@@ -126,12 +126,12 @@ void CItemEditorActions::RenderExportBmdButton()
     if (exported)
     {
         g_MuEditorConsoleUI.LogEditor(I18N::Editor::ItemsExportedAsBmd);
-        ImGui::OpenPopup("Export Bmd Success");
+        ImGui::OpenPopup(I18N::Editor::PopupExportBmdSuccess);
     }
     else
     {
         g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToExportItemsAsBmd);
-        ImGui::OpenPopup("Export Bmd Failed");
+        ImGui::OpenPopup(I18N::Editor::PopupExportBmdFailed);
     }
 }
 
@@ -216,7 +216,7 @@ void CItemEditorActions::RenderExportS6E3Button()
                 g_MuEditorConsoleUI.LogEditor(notes);
             }
             g_MuEditorConsoleUI.LogEditor("Exported items as S6E3 legacy format: " + filename_str);
-            ImGui::OpenPopup("Export S6E3 Success");
+            ImGui::OpenPopup(I18N::Editor::PopupExportS6E3Success);
         }
         else
         {
@@ -225,7 +225,7 @@ void CItemEditorActions::RenderExportS6E3Button()
                 g_MuEditorConsoleUI.LogEditor(problems);
             }
             g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToExportAsS6E3Format);
-            ImGui::OpenPopup("Export S6E3 Failed");
+            ImGui::OpenPopup(I18N::Editor::PopupExportS6E3Failed);
         }
     }
 
@@ -247,12 +247,12 @@ void CItemEditorActions::RenderExportCSVButton()
             std::string filename_str =
                 "Item_" + std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + "_export.csv";
             g_MuEditorConsoleUI.LogEditor("Exported items as CSV: " + filename_str);
-            ImGui::OpenPopup("Export CSV Success");
+            ImGui::OpenPopup(I18N::Editor::PopupExportCSVSuccess);
         }
         else
         {
             g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToExportAsCSV);
-            ImGui::OpenPopup("Export CSV Failed");
+            ImGui::OpenPopup(I18N::Editor::PopupExportCSVFailed);
         }
     }
 
