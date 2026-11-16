@@ -41,19 +41,22 @@ public class NavMenuTests
         context.Services.Dispose();
 
         // Toggling the menu renders it again, without resolving services in the test itself.
-        Assert.DoesNotThrow(() => menu.Find("button.navbar-toggler").Click());
+        // The click is awaited, because the render may be queued behind the background loading.
+        Assert.DoesNotThrowAsync(() => menu.Find("button.navbar-toggler").ClickAsync());
+        Assert.That(menu.Find("button.navbar-toggler").GetAttribute("aria-expanded"), Is.EqualTo("true"));
     }
 
     /// <summary>
     /// Tests that the system and inspect pages are grouped into collapsible groups,
     /// which are collapsed at first and expand with a click on their header.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void SystemAndInspectPagesAreGrouped()
+    public async Task SystemAndInspectPagesAreGrouped()
     {
         using var context = CreateContext(AdminPolicies.Administrator);
         var menu = context.Render<NavMenu>();
-        menu.WaitForState(() => menu.FindAll("a.nav-link[href='setup']").Count == 1);
+        menu.WaitForState(() => menu.FindAll("a.nav-link[href='setup']").Count == 1, TimeSpan.FromSeconds(30));
 
         var groups = menu.FindAll("li.dropdown");
         var system = groups[0];
@@ -63,14 +66,44 @@ public class NavMenuTests
         Assert.That(inspect.QuerySelectorAll("a[href='network-analyzer']"), Has.Length.EqualTo(1));
         Assert.That(menu.FindAll("li.dropdown > div.show"), Is.Empty);
 
-        menu.FindAll("li.dropdown > a.dropdown-toggle")[0].Click();
+        // The clicks are awaited, because they may be queued behind the end of the background loading.
+        await menu.FindAll("li.dropdown > a.dropdown-toggle")[0].ClickAsync().ConfigureAwait(false);
 
         Assert.That(menu.FindAll("li.dropdown")[0].ClassList, Does.Contain("expanded"));
         Assert.That(menu.FindAll("li.dropdown > div.show"), Has.Count.EqualTo(1));
 
-        menu.FindAll("li.dropdown > a.dropdown-toggle")[1].Click();
+        await menu.FindAll("li.dropdown > a.dropdown-toggle")[1].ClickAsync().ConfigureAwait(false);
 
         Assert.That(menu.FindAll("li.dropdown > div.show"), Has.Count.EqualTo(2));
+    }
+
+    /// <summary>
+    /// Tests that the menu does not throw when its background loading finishes after the
+    /// services of the connection were disposed.
+    /// </summary>
+    /// <returns>The async task.</returns>
+    [Test]
+    public async Task BackgroundLoadingAfterServicesAreDisposedDoesNotThrowAsync()
+    {
+        var canConnect = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var canConnectStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        using var context = CreateContext(AdminPolicies.Administrator);
+        Mock.Get(context.Services.GetRequiredService<IMigratableDatabaseContextProvider>())
+            .Setup(p => p.CanConnectToDatabaseAsync(It.IsAny<CancellationToken>()))
+            .Returns(() =>
+            {
+                canConnectStarted.TrySetResult();
+                return canConnect.Task;
+            });
+
+        var menu = context.Render<NavMenu>();
+        Assert.That(await Task.WhenAny(canConnectStarted.Task, Task.Delay(TimeSpan.FromSeconds(30))).ConfigureAwait(false), Is.SameAs(canConnectStarted.Task));
+
+        context.Services.Dispose();
+        canConnect.SetResult(false);
+
+        // Toggling the menu runs on the same dispatcher after the background loading finished.
+        Assert.DoesNotThrowAsync(() => menu.Find("button.navbar-toggler").ClickAsync());
     }
 
     private static BunitContext CreateContext(params string[] policies)

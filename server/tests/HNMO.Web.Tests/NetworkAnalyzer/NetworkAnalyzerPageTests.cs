@@ -75,14 +75,15 @@ public class NetworkAnalyzerPageTests
     /// <summary>
     /// Tests if the selection of a connection starts its capture.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void SelectingAConnectionStartsItsCapture()
+    public async Task SelectingAConnectionStartsItsCapture()
     {
         var connection = new TestConnectionInfo { CharacterName = "TestCharacter" };
         using var context = CreateContext(new TestCaptureService(connection));
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
 
         Assert.That(connection.Sinks, Has.Count.EqualTo(1), "The capture should be registered at the connection.");
         Assert.That(component.Markup, Does.Contain("No packets captured yet"));
@@ -143,8 +144,9 @@ public class NetworkAnalyzerPageTests
     /// Tests if the note about a missing connection disappears when another connection is
     /// selected.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void NoteAboutAMissingConnectionDisappearsOnSelection()
+    public async Task NoteAboutAMissingConnectionDisappearsOnSelection()
     {
         var connection = new TestConnectionInfo(serverId: 3) { CharacterName = "TestCharacter" };
         using var context = CreateContext(new TestCaptureService(connection));
@@ -152,7 +154,7 @@ public class NetworkAnalyzerPageTests
         var component = context.Render<NetworkAnalyzer>(parameters => parameters
             .Add(page => page.ServerId, 3)
             .Add(page => page.PlayerName, "AnotherCharacter"));
-        component.Find(".list-group-item").Click();
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
 
         Assert.That(component.Markup, Does.Not.Contain("isn't available"));
     }
@@ -161,15 +163,19 @@ public class NetworkAnalyzerPageTests
     /// Tests if the packets are shown in chronological order, and that the grid scrolls to
     /// the newest one while the traffic is followed.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void PacketsAreShownInChronologicalOrder()
+    public async Task PacketsAreShownInChronologicalOrder()
     {
         var connection = new TestConnectionInfo { CharacterName = "TestCharacter" };
         var service = new TestCaptureService(connection);
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
+
+        // The refresh timer of the page may be busy in the dispatcher of the renderer, then the
+        // click is queued behind it. Awaiting it makes sure that the capture has been started.
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
 
         var capture = (LiveCapturedConnection)service.GetRunningCapture(connection.Id)!;
         capture.PacketCaptured(new byte[] { 0xC1, 0x04, 0xF1, 0x01 }, false);
@@ -179,14 +185,14 @@ public class NetworkAnalyzerPageTests
         // default, so it takes the new packets automatically.
         component.WaitForState(
             () => component.FindComponent<PacketGrid>().Instance.Packets.Count == 2,
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(30));
 
         var grid = component.FindComponent<PacketGrid>().Instance;
         Assert.That(grid.Packets[0].PacketData, Is.EqualTo("C1 04 F1 01"), "The oldest packet comes first.");
         Assert.That(grid.Packets[1].PacketData, Is.EqualTo("C1 04 F1 02"), "The newest packet comes last.");
         Assert.That(grid.AutoScroll, Is.True, "The traffic is followed by default.");
 
-        component.Find("button[title*='newest packet']").Click();
+        await component.Find("button[title*='newest packet']").ClickAsync().ConfigureAwait(false);
 
         Assert.That(component.FindComponent<PacketGrid>().Instance.AutoScroll, Is.False);
     }
@@ -204,8 +210,8 @@ public class NetworkAnalyzerPageTests
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
-        component.Find("button[title*='newest packet']").Click(); // stop following
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
+        await component.Find("button[title*='newest packet']").ClickAsync().ConfigureAwait(false); // stop following
 
         var capture = (LiveCapturedConnection)service.GetRunningCapture(connection.Id)!;
         var renderCount = component.RenderCount;
@@ -215,10 +221,10 @@ public class NetworkAnalyzerPageTests
         Assert.That(component.FindComponent<PacketGrid>().Instance.Packets, Is.Empty, "A view which doesn't follow should not take the new packet.");
         Assert.That(component.RenderCount, Is.EqualTo(renderCount), "Such a view should not be rendered again, it would just flicker.");
 
-        component.Find("button[title*='newest packet']").Click(); // follow again
+        await component.Find("button[title*='newest packet']").ClickAsync().ConfigureAwait(false); // follow again
         component.WaitForState(
             () => component.FindComponent<PacketGrid>().Instance.Packets.Count == 1,
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(30));
     }
 
     /// <summary>
@@ -234,7 +240,7 @@ public class NetworkAnalyzerPageTests
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
 
         // The javascript of the grid reports the scrolling of the user like this.
         var grid = component.FindComponent<PacketGrid>().Instance;
@@ -249,7 +255,7 @@ public class NetworkAnalyzerPageTests
         await component.InvokeAsync(() => grid.SetAtBottomAsync(true)).ConfigureAwait(false);
         component.WaitForState(
             () => component.FindComponent<PacketGrid>().Instance.Packets.Count == 1,
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(30));
         Assert.That(component.FindComponent<PacketGrid>().Instance.AutoScroll, Is.True, "Scrolling back to the bottom should follow the traffic again.");
     }
 
@@ -257,19 +263,20 @@ public class NetworkAnalyzerPageTests
     /// Tests if the view follows the traffic again after it has been cleared - there is
     /// nothing left to look at, so it would just stay empty otherwise.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void ClearingTheViewFollowsTheTrafficAgain()
+    public async Task ClearingTheViewFollowsTheTrafficAgain()
     {
         var connection = new TestConnectionInfo { CharacterName = "TestCharacter" };
         var service = new TestCaptureService(connection);
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
-        component.Find("button[title*='newest packet']").Click(); // stop following
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
+        await component.Find("button[title*='newest packet']").ClickAsync().ConfigureAwait(false); // stop following
         Assert.That(component.FindComponent<PacketGrid>().Instance.AutoScroll, Is.False);
 
-        component.FindAll("button").First(button => button.TextContent.Contains("Clear")).Click();
+        await component.FindAll("button").First(button => button.TextContent.Contains("Clear")).ClickAsync().ConfigureAwait(false);
 
         Assert.That(component.FindComponent<PacketGrid>().Instance.AutoScroll, Is.True);
     }
@@ -287,7 +294,7 @@ public class NetworkAnalyzerPageTests
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
 
         var renderCount = component.RenderCount;
         await Task.Delay(1000).ConfigureAwait(false);
@@ -313,7 +320,7 @@ public class NetworkAnalyzerPageTests
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
 
         var renderCount = component.RenderCount;
         await Task.Delay(TimeSpan.FromSeconds(6.5)).ConfigureAwait(false);
@@ -336,7 +343,7 @@ public class NetworkAnalyzerPageTests
         var component = context.Render<NetworkAnalyzer>();
 
         // The archive is read from the file system, so the list arrives with a later render.
-        component.WaitForState(() => component.Markup.Contains("ObservedAccount"), TimeSpan.FromSeconds(10));
+        component.WaitForState(() => component.Markup.Contains("ObservedAccount"), TimeSpan.FromSeconds(30));
         Assert.That(component.Markup, Does.Contain("Archived sessions"));
     }
 
@@ -352,12 +359,12 @@ public class NetworkAnalyzerPageTests
         using var context = CreateContext(new TestCaptureService(), archive);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.WaitForElement(".archive-list .list-group-item", TimeSpan.FromSeconds(10)).Click();
+        await component.WaitForElement(".archive-list .list-group-item", TimeSpan.FromSeconds(30)).ClickAsync().ConfigureAwait(false);
 
         // The packets of the session are read from its file, which takes a moment.
         component.WaitForState(
             () => component.FindComponents<PacketGrid>().Count > 0 && component.FindComponent<PacketGrid>().Instance.Packets.Count > 0,
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(30));
         var grid = component.FindComponent<PacketGrid>().Instance;
         Assert.That(grid.Packets, Has.Count.EqualTo(1));
         Assert.That(grid.Packets[0].PacketData, Is.EqualTo("C1 04 F1 01"));
@@ -377,28 +384,29 @@ public class NetworkAnalyzerPageTests
         using var context = CreateContext(new TestCaptureService(), archive, modalService);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.WaitForElement(".archive-list .oi-trash", TimeSpan.FromSeconds(10)).Click();
+        await component.WaitForElement(".archive-list .oi-trash", TimeSpan.FromSeconds(30)).ClickAsync().ConfigureAwait(false);
 
         // The deletion is confirmed by the user and applied on the file system, so it takes a
         // moment until the session is gone.
-        component.WaitForState(() => modalService.ShownDialogs.Count == 1, TimeSpan.FromSeconds(10));
-        component.WaitForState(() => component.Markup.Contains("No archived sessions"), TimeSpan.FromSeconds(10));
+        component.WaitForState(() => modalService.ShownDialogs.Count == 1, TimeSpan.FromSeconds(30));
+        component.WaitForState(() => component.Markup.Contains("No archived sessions"), TimeSpan.FromSeconds(30));
         Assert.That(await archive.GetSessionAsync(session.Id).ConfigureAwait(false), Is.Null);
     }
 
     /// <summary>
     /// Tests if the observation of the account of the selected connection can be toggled.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void ObservationOfAnAccountCanBeToggled()
+    public async Task ObservationOfAnAccountCanBeToggled()
     {
         var connection = new TestConnectionInfo { AccountName = "TestAccount", CharacterName = "TestCharacter" };
         var service = new TestCaptureService(connection);
         using var context = CreateContext(service);
 
         var component = context.Render<NetworkAnalyzer>();
-        component.Find(".list-group-item").Click();
-        component.Find("button[title*='Archives the traffic']").Click();
+        await component.Find(".list-group-item").ClickAsync().ConfigureAwait(false);
+        await component.Find("button[title*='Archives the traffic']").ClickAsync().ConfigureAwait(false);
 
         Assert.That(service.ObservationChanges, Is.EqualTo(new[] { (connection.Id, true) }));
         Assert.That(connection.IsObserved, Is.True);

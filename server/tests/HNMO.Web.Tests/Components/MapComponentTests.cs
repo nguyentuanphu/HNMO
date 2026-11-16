@@ -17,7 +17,11 @@ using MapComponent = HNMO.Web.Map.Components.Map;
 [TestFixture]
 public class MapComponentTests
 {
-    private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(5);
+    /// <summary>
+    /// The maximum time to wait for the background work of the component. It's generous,
+    /// because the build agents can be slow; the tests don't wait longer than necessary.
+    /// </summary>
+    private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(30);
 
     private BunitContext _context = null!;
 
@@ -49,6 +53,7 @@ public class MapComponentTests
     public async Task ControllerCreatedAfterDisposalIsDisposedAsync()
     {
         var creation = new TaskCompletionSource<IMapController>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var creationStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var controllerDisposed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var controller = new Mock<IMapController>();
         controller.Setup(c => c.DisposeAsync()).Returns(() =>
@@ -59,12 +64,20 @@ public class MapComponentTests
         var factory = new Mock<IMapFactory>();
         factory.Setup(f => f.GetMapContainerIdentifier(It.IsAny<int>(), It.IsAny<Guid>())).Returns("map_0");
         factory.Setup(f => f.CreateMapAsync(It.IsAny<IObservableGameServer>(), It.IsAny<Guid>()))
-            .Returns(() => new ValueTask<IMapController>(creation.Task));
+            .Returns(() =>
+            {
+                creationStarted.TrySetResult();
+                return new ValueTask<IMapController>(creation.Task);
+            });
         this._context.Services.AddSingleton(factory.Object);
 
         this._context.Render<MapComponent>(parameters => parameters
             .Add(p => p.Server, new Mock<IObservableGameServer>().Object)
             .Add(p => p.MapId, Guid.NewGuid()));
+
+        // The map is created by the lazy controller, which runs its factory on a thread pool
+        // thread. So the creation has not necessarily started yet when the first render returns.
+        Assert.That(await Task.WhenAny(creationStarted.Task, Task.Delay(Timeout)).ConfigureAwait(false), Is.SameAs(creationStarted.Task), "The creation of the map should have been started.");
         factory.Verify(f => f.CreateMapAsync(It.IsAny<IObservableGameServer>(), It.IsAny<Guid>()), Times.Once);
 
         await this._context.DisposeComponentsAsync().ConfigureAwait(false);

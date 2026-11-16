@@ -59,12 +59,13 @@ public class MapMonsterFilterTests
     /// Tests that typing sets the filter of the map with the default mode, "contains", and lists the
     /// matching monsters with their position.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void TypingFiltersAndListsTheMatches()
+    public async Task TypingFiltersAndListsTheMatches()
     {
         var filter = this.RenderFilter();
 
-        filter.Find("input.monster-filter-text").Input("dragon");
+        await filter.Find("input.monster-filter-text").InputAsync(new ChangeEventArgs { Value = "dragon" }).ConfigureAwait(false);
 
         this.AssertLastFilter(MonsterFilterMode.Contains, "dragon");
         var rows = filter.FindAll("tr.monster-filter-match");
@@ -76,14 +77,15 @@ public class MapMonsterFilterTests
     /// Tests that the chosen mode is passed to the map.
     /// </summary>
     /// <param name="mode">The mode.</param>
+    /// <returns>The async task.</returns>
     [TestCase(MonsterFilterMode.StartsWith)]
     [TestCase(MonsterFilterMode.EndsWith)]
-    public void TheModeIsPassedToTheMap(MonsterFilterMode mode)
+    public async Task TheModeIsPassedToTheMap(MonsterFilterMode mode)
     {
         var filter = this.RenderFilter();
 
-        filter.Find("input.monster-filter-text").Input("gold");
-        filter.Find("select.monster-filter-mode").Change(((int)mode).ToString(CultureInfo.InvariantCulture));
+        await filter.Find("input.monster-filter-text").InputAsync(new ChangeEventArgs { Value = "gold" }).ConfigureAwait(false);
+        await filter.Find("select.monster-filter-mode").ChangeAsync(new ChangeEventArgs { Value = ((int)mode).ToString(CultureInfo.InvariantCulture) }).ConfigureAwait(false);
 
         this.AssertLastFilter(mode, "gold");
     }
@@ -91,14 +93,15 @@ public class MapMonsterFilterTests
     /// <summary>
     /// Tests that clicking a matching monster selects it on the map.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void ClickingAMatchSelectsTheMonster()
+    public async Task ClickingAMatchSelectsTheMonster()
     {
         int? selectedId = null;
         var filter = this.RenderFilter(EventCallback.Factory.Create<int>(this, id => selectedId = id));
 
-        filter.Find("input.monster-filter-text").Input("dragon");
-        filter.FindAll("tr.monster-filter-match")[1].Click();
+        await filter.Find("input.monster-filter-text").InputAsync(new ChangeEventArgs { Value = "dragon" }).ConfigureAwait(false);
+        await filter.FindAll("tr.monster-filter-match")[1].ClickAsync().ConfigureAwait(false);
 
         Assert.That(selectedId, Is.EqualTo(1120));
     }
@@ -106,13 +109,14 @@ public class MapMonsterFilterTests
     /// <summary>
     /// Tests that clearing the filter shows all monsters again and empties the list.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void ClearingShowsAllMonstersAgain()
+    public async Task ClearingShowsAllMonstersAgain()
     {
         var filter = this.RenderFilter();
-        filter.Find("input.monster-filter-text").Input("dragon");
+        await filter.Find("input.monster-filter-text").InputAsync(new ChangeEventArgs { Value = "dragon" }).ConfigureAwait(false);
 
-        filter.Find("button.monster-filter-clear").Click();
+        await filter.Find("button.monster-filter-clear").ClickAsync().ConfigureAwait(false);
 
         this.AssertLastFilter(MonsterFilterMode.Contains, string.Empty);
         Assert.That(filter.FindAll("tr.monster-filter-match"), Is.Empty);

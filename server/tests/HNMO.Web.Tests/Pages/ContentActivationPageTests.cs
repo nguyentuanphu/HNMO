@@ -36,7 +36,7 @@ public sealed class ContentActivationPageTests
     /// The tests wait for a state instead of an assertion, because NUnit records a failed assertion
     /// even when bUnit retries it later.
     /// </remarks>
-    private static readonly TimeSpan LoadTimeout = TimeSpan.FromSeconds(10);
+    private static readonly TimeSpan LoadTimeout = TimeSpan.FromSeconds(30);
 
     private BunitContext _context = null!;
     private CultureInfo _previousUiCulture = null!;
@@ -100,38 +100,42 @@ public sealed class ContentActivationPageTests
     /// <summary>
     /// A change of a checkbox is pending until it's saved, then it's saved through the audited operation.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void PendingChangeIsSavedThroughTheOperation()
+    public async Task PendingChangeIsSavedThroughTheOperation()
     {
         var cut = this._context.Render<ContentActivation>();
         cut.WaitForState(() => cut.Markup.Contains("Karutan 1"), LoadTimeout);
 
-        cut.FindAll("tbody tr").Single(row => row.TextContent.Contains("Karutan 1")).QuerySelector("input")!.Change(false);
+        // The data is loaded on another thread, which may still be busy in the dispatcher of the
+        // renderer when the row appears. Events are queued behind it then, so they are awaited.
+        await cut.FindAll("tbody tr").Single(row => row.TextContent.Contains("Karutan 1")).QuerySelector("input")!.ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = false }).ConfigureAwait(false);
         Assert.That(this._karutan.IsActive, Is.True);
 
-        cut.FindAll("button").Single(b => b.TextContent == Resources.SaveChanges).Click();
+        await cut.FindAll("button").Single(b => b.TextContent == Resources.SaveChanges).ClickAsync().ConfigureAwait(false);
 
         cut.WaitForState(() => !this._karutan.IsActive, LoadTimeout);
         Assert.That(this._lorencia.IsActive, Is.True);
         Assert.That(this._modal.ShownDialogs, Has.Count.EqualTo(1));
-        Assert.That(this._audit.ReadAsync(0, 100).AsTask().Result.Items.Single().Operation, Is.EqualTo("content_set_active"));
+        Assert.That((await this._audit.ReadAsync(0, 100).ConfigureAwait(false)).Items.Single().Operation, Is.EqualTo("content_set_active"));
     }
 
     /// <summary>
     /// Restricting to a version is previewed, confirmed and applied by the operation.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void RestrictToGameVersion()
+    public async Task RestrictToGameVersion()
     {
         var cut = this._context.Render<ContentActivation>();
         cut.WaitForState(() => cut.Markup.Contains("Karutan 1"), LoadTimeout);
 
-        cut.Find("select").Change(GameVersion.Season2.ToString());
-        cut.FindAll("button").Single(b => b.TextContent == Resources.RestrictToGameVersion).Click();
+        await cut.Find("select").ChangeAsync(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = GameVersion.Season2.ToString() }).ConfigureAwait(false);
+        await cut.FindAll("button").Single(b => b.TextContent == Resources.RestrictToGameVersion).ClickAsync().ConfigureAwait(false);
 
         cut.WaitForState(() => !this._karutan.IsActive, LoadTimeout);
         Assert.That(this._lorencia.IsActive, Is.True);
-        Assert.That(this._audit.ReadAsync(0, 100).AsTask().Result.Items.Single().Operation, Is.EqualTo("content_restrict_to_version"));
+        Assert.That((await this._audit.ReadAsync(0, 100).ConfigureAwait(false)).Items.Single().Operation, Is.EqualTo("content_restrict_to_version"));
     }
 
     /// <summary>

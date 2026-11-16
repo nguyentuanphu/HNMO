@@ -80,17 +80,20 @@ public class EditItemDropsTests
     /// <summary>
     /// A new map drop group is assigned to all maps, so that it drops without further configuration.
     /// </summary>
+    /// <returns>The async task.</returns>
     [Test]
-    public void AddedMapGroupIsAssignedToAllMaps()
+    public async Task AddedMapGroupIsAssignedToAllMaps()
     {
         var cut = this._context.Render<EditItemDrops>();
 
         cut.WaitForState(
             () => cut.FindAll("button").Any(button => button.TextContent.Contains("Add drop item group")),
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(30));
 
+        // The data is loaded on another thread, which may still be busy in the dispatcher of the
+        // renderer when the button appears. A click is queued behind it then, so it has to be awaited.
         var addButton = cut.FindAll("button").First(button => button.TextContent.Contains("Add drop item group"));
-        addButton.Click();
+        await addButton.ClickAsync().ConfigureAwait(false);
 
         Assert.That(this._map.DropItemGroups, Has.Count.EqualTo(1));
     }
