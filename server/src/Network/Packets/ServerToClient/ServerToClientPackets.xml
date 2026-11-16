@@ -16939,6 +16939,23 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>4B</SubCode>
+      <Name>HnmoTeleportNpcState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when talking to a Teleport NPC or after HnmoTeleportNpcCommand.</SentWhen>
+      <CausedReaction>Opens or updates the Teleport NPC map-warp menu in the web client.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing Teleport NPC destinations, requirements, Zen fees, and warp result status.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

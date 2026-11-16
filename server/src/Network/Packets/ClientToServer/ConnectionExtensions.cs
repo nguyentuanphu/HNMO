@@ -6748,4 +6748,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTeleportNpcCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestMenu, 1 = WarpToDestination.</param>
+    /// <param name="destinationId">Target destination identifier from HnmoTeleportNpcState.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the Teleport NPC destination list or warp to a selected destination.
+    /// Causes reaction on server side: The server validates requirements and Zen fee, warps the character if eligible, and replies with HnmoTeleportNpcState (F5 4B).
+    /// </remarks>
+    public static async ValueTask SendHnmoTeleportNpcCommandAsync(this IConnection? connection, byte @action, string @destinationId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTeleportNpcCommandRef.GetRequiredSize(destinationId);
+            var packet = new HnmoTeleportNpcCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.DestinationId = @destinationId;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

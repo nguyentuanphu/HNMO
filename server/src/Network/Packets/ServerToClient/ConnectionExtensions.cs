@@ -11089,4 +11089,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTeleportNpcState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing Teleport NPC destinations, requirements, Zen fees, and warp result status.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when talking to a Teleport NPC or after HnmoTeleportNpcCommand.
+    /// Causes reaction on client side: Opens or updates the Teleport NPC map-warp menu in the web client.
+    /// </remarks>
+    public static async ValueTask SendHnmoTeleportNpcStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTeleportNpcStateRef.GetRequiredSize(json);
+            var packet = new HnmoTeleportNpcStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
