@@ -37,6 +37,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: 'K', title: 'Community', key: 'k' },
   { label: '🏆', title: 'Top races', key: '', event: 'hnmo-top-races-open' },
   { label: '🎁', title: 'Gift code', key: '', event: 'hnmo-gift-codes-open' },
+  { label: '📅', title: 'Season plan', key: '', event: 'hnmo-season-plan-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];

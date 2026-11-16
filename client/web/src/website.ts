@@ -310,6 +310,13 @@ const copy = {
     downloadText:
       "One download for Windows, Ubuntu and macOS. Unzip it and run Start HNMO.bat (Windows) or start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Download HNMO →",
+    spNav: "Season Plan",
+    spTitle: "Season Progression Timeline",
+    spHint: "Features unlock in stages (+9 cap -> Master -> Harmony -> Wing 2 -> Fenrir -> 380 Items -> Wing 3) when their date arrives or condition is met.",
+    spOffline: "Season Plan timeline is unavailable.",
+    spOff: "Season Plan progressive lock is turned off on this server.",
+    spOpen: "OPEN",
+    spLocked: "LOCKED",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -643,6 +650,13 @@ const copy = {
     downloadText:
       "Một bản tải cho Windows, Ubuntu và macOS. Giải nén rồi chạy Start HNMO.bat (Windows) hoặc start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Tải HNMO →",
+    spNav: "Lộ trình mùa",
+    spTitle: "Lộ trình mở khóa mùa giải",
+    spHint: "Tính năng mở dần theo từng giai đoạn (+9 -> Master -> Harmony -> Cánh C2 -> Sói Tinh -> Đồ 380 -> Cánh C3) theo ngày hoặc điều kiện máy chủ.",
+    spOffline: "Không xem được Lộ trình mùa giải.",
+    spOff: "Lộ trình khóa tính năng đang tắt trên máy chủ này.",
+    spOpen: "ĐÃ MỞ",
+    spLocked: "ĐANG KHÓA",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -1928,9 +1942,73 @@ async function refreshResets(): Promise<void> {
   renderResets();
 }
 
-for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderResets());
-element("refresh").addEventListener("click", () => void refreshResets());
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderResets(); renderSeasonPlan(); });
+element("refresh").addEventListener("click", () => { void refreshResets(); void refreshSeasonPlan(); });
 void refreshResets();
 setInterval(() => {
   if (!document.hidden) void refreshResets();
+}, 120000);
+
+interface PublicSeasonStage {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  descriptionEn: string;
+  descriptionVi: string;
+  unlocked: boolean;
+  unlockAt: number | null;
+  requiredBossId: string;
+  requiredBossKills: number;
+  currentBossKills: number;
+  requiredPlayerLevel: number;
+  requiredPlayersCount: number;
+  currentPlayers: number;
+}
+interface PublicSeasonPlan {
+  v: number;
+  enabled: boolean;
+  stages?: PublicSeasonStage[];
+}
+let spData: PublicSeasonPlan | null = null;
+
+function renderSeasonPlan(): void {
+  const notice = element("sp-notice");
+  const wrap = clear("sp-timeline");
+  const data = spData;
+  const vi = language === "vi";
+  if (data === null) { notice.textContent = t("spOffline"); return; }
+  if (!data.enabled) { notice.textContent = t("spOff"); return; }
+  notice.textContent = "";
+
+  const fmt = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
+  for (const st of data.stages ?? []) {
+    const card = node("article", "panel");
+    const status = st.unlocked ? t("spOpen") : t("spLocked");
+    card.append(node("h3", `${(vi ? st.nameVi : st.nameEn) || st.nameEn} — [${status}]`));
+    card.append(node("p", (vi ? st.descriptionVi : st.descriptionEn) || st.descriptionEn));
+    const parts: string[] = [];
+    if (st.unlockAt) parts.push(`${vi ? "Ngày (Sydney)" : "Date (Sydney)"}: ${fmt.format(st.unlockAt)}`);
+    if (st.requiredBossId) parts.push(`Boss: ${st.requiredBossId} (${st.currentBossKills}/${Math.max(1, st.requiredBossKills)})`);
+    if (st.requiredPlayerLevel > 0 && st.requiredPlayersCount > 0) parts.push(`Lv.${st.requiredPlayerLevel}: ${st.currentPlayers}/${st.requiredPlayersCount}`);
+    if (parts.length > 0) card.append(node("p", parts.join(" • ")));
+    wrap.append(card);
+  }
+}
+
+async function refreshSeasonPlan(): Promise<void> {
+  try {
+    const response = await fetch("/website/season-plan", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicSeasonPlan;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid season plan");
+    spData = data;
+  } catch {
+    spData = null;
+  }
+  renderSeasonPlan();
+}
+
+void refreshSeasonPlan();
+setInterval(() => {
+  if (!document.hidden) void refreshSeasonPlan();
 }, 120000);

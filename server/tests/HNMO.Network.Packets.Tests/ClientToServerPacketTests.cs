@@ -4393,4 +4393,18 @@ public class PacketStructureTests
         Assert.That(4 + 16, Is.LessThanOrEqualTo(expectedLength), 
             "Field 'Data' exceeds packet boundary");
     }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoSeasonPlanRequest.
+    /// </summary>
+    [Test]
+    public void HnmoSeasonPlanRequest_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 4;
+        var actualLength = HnmoSeasonPlanRequestRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+    }
 }

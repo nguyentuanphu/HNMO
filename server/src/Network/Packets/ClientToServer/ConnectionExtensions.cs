@@ -6328,4 +6328,29 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonPlanRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open or refresh the Season Plan timeline (F8).
+    /// Causes reaction on server side: The server replies with HnmoSeasonPlanState (F5 3F).
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonPlanRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonPlanRequestRef.Length;
+            var packet = new HnmoSeasonPlanRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
