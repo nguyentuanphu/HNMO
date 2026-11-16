@@ -48,6 +48,7 @@ const sidebars = {
         "admin-panel/plugins",
         "admin-panel/state-retention",
         "admin-panel/activity-log",
+        "admin-panel/maintenance-tools",
         "admin-panel/chat-commands",
         "admin-panel/map-editor",
         "admin-panel/live-map",
