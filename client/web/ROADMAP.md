@@ -377,8 +377,16 @@ and compare with the desktop's movement.
   undo/redo, save summary; /merchants/legacy kept; 87 EN/VI keys appended) -> main. Price override not done (needs model
   change). Recheck icons together with #15's packed item icons.
 - As of 2026-11-16 16:17 #2, #3, #5, #6, #8, #9, #12 conflict with main: ChatGPT is rebasing its own branches.
-- Coming (2026-11-16): antigravity host settings -> installer app -> one save file -> KTX2 (one PR each, based on #15);
-  chatgpt rebases + account page + admin help everywhere + VIP.
+- #17 antigravity-host-settings (HostSettingsStore, /host-settings page, restart service) -> base #15.
+- #18 antigravity-installer-app (/control page + /api/control, Inno Setup, .dmg, .deb/AppImage scripts) -> base #15.
+  The workflow change (.github/workflows/hnmo-package.yml) was NOT pushed (its token lacks workflow scope): add it
+  from the main session when merging.
+- #19 antigravity-one-save-file (HnmoStateStore: save/hnmo-state.json, atomic writes, .bak recovery, migrates the 10
+  old files to save/old/) -> base #15. New plug-ins must use HnmoStateStore once it's merged (ChatGPT's VIP too).
+- #20 antigravity-ktx2 (4,038 textures 253 MB -> 54 MB, KTX2Loader, per-file fallback, Texture quality setting) -> base #15.
+- Merge order for Antigravity: #13 (renumbered to F5 24), #14, #15, #17, #18, #19, #20.
+- Packet numbers from 2026-11-16: ChatGPT uses F5 25-2F, Antigravity F5 30-4F (no more clashes).
+- Coming: chatgpt rebases + account page + admin help everywhere + VIP; antigravity ROADMAP 13 items 5-15.
 - Earlier: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
 Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
@@ -458,3 +466,141 @@ xác nhận khi lưu và nhật ký quản trị viên. Có hướng dẫn và c
 Còn lại: giá riêng/hệ số giá cần thay đổi quy tắc mua hàng và mô hình dữ liệu;
 chưa có nhập/xuất hoặc trang lịch sử riêng. Cần kiểm tra cập nhật hàng hóa bằng
 người chơi trên máy chủ thật.
+### Original shop plan (remaining design details retained)
+Today: Admin -> Merchants lists the NPC shops by name; Edit shows the shop's grid; "create item" adds an empty item
+and its kind is picked in the item editor; drag to place. Works, but slow with thousands of items.
+New design (the "Shop editor"):
+- Shop list: NPC name, map and position, number of items, a small preview of the grid; search; "copy shop to...".
+- Two panes: LEFT the catalogue of ALL items (icons, virtual scrolling so thousands stay fast), with a search box
+  (name in English or Vietnamese, or group:number), filters (category: swords/axes/.../jewels/potions/scrolls/wings,
+  class, required level range, "only items not in this shop"), and sort; RIGHT the shop's 8x15 grid as in the game.
+- Add by click (placed in the first free spot), by drag, or multi-select + "Add selected"; "Add whole category";
+  "Auto-arrange" (largest items first, no gaps); a capacity bar (cells used / 120).
+- Per item: level, skill, luck, option, excellent options, durability, and the price (computed as in the game,
+  with an optional fixed price override and a shop-wide price multiplier).
+- Undo/redo, "discard changes", save shows exactly what changed; changes reach players without a restart.
+- Import/export a shop as a file; a change log (who changed what, Sydney time).
+- EN+VI, hover hints and a "How to use this page" button. bUnit tests + a browser test.
+Same picker for every place items are chosen (gift codes, missions, rewards, drops, cash shop catalogue).
+
+## 14. Ideas from a commercial server package the owner used (checked 2026-11-16, Sydney)
+Ideas only: none of its code, files, tools or data are copied (it's licensed software). Compared with HNMO today.
+Already in HNMO or planned: VIP (ChatGPT), cash shop with coins, offline leveling and auto play, invasions, world
+bosses, scheduled announcements, max connections per IP, speed-hack checks, drops editor, audit history, chat log,
+marriage / auto party / lucky number / jewel bank (Antigravity, section 13), host dashboard (/control, #18).
+New ideas worth adopting (proposed order):
+14.1 Per-map rules in the admin panel: PvP on/off, PK penalty, EXP bonus %, item drop %, zen drop % per map.
+14.2 Bonus events ("happy hours"): scheduled EXP/drop/zen bonuses per map and time window (Sydney), announced in chat
+     and shown in the event timetable (13.6).
+14.3 Combat limits: a maximum damage cap per hit, PvP damage reduction %, castle siege damage reduction %.
+14.4 Chaos machine success rates per recipe in the admin panel (and shown to players), with a server-wide multiplier.
+14.5 Multi-vault: extra vaults per account (number set by the admin; extra vaults for VIP or bought with coins).
+14.6 Buffer NPC: gives a set of buffs to players under a level (helps new players); buffs and level in the admin panel.
+14.7 Event rewards editor: what each mini game (blood castle, devil square, chaos castle, illusion temple, ...) gives,
+     per level of the event.
+14.8 Maintenance tools page: find inactive/empty accounts, find duplicated items (same serial/GUID in two places),
+     experience fixer, backup/restore (with #18), all with a dry-run preview and an audit entry.
+14.9 Player activity log viewer: trades, drops/pickups of valuable items, chaos mixes, shop buys/sells, item market
+     (13.9), filterable by account/character/item and time (Sydney), for resolving disputes and spotting duping.
+14.10 Banned words filter for chat and names (EN/VI lists, admin-editable).
+14.11 GM shop and GM tools in the game for the admin's GM characters (spawn event, announce, move player, check
+     inventory), each logged.
+14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins.
+14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing).
+14.14 For the desktop client only: a launcher with auto-update, file checks (CRC) and connection through the launcher.
+Its tools, compared (ideas only):
+- Server management toolkit (account, character, item, skill, guild, marriage, ranking-faction, GM editors; ban,
+  castle siege, VIP managers; buffs manager; character location editor; gift storage editor; database cleanup).
+  HNMO has: accounts and characters through the generic editor, inventory/vault item editor, skills, guilds, castle
+  siege, the shop editor (#16), drops editor, chat log, audit history, log files.
+  New for HNMO:
+  14.15 Character tools page: move a stuck character to a town (location fix), reset a character's position, give or
+        remove buffs, change class/level/stats/zen with a reason, all logged.
+  14.16 Ban manager: ban/mute an account or character for a time with a reason, unban, list of bans, ban by
+        network address/device fingerprint (with #12's salted hashes), shown to the player in EN/VI.
+  14.17 GM manager: which characters are GMs and what each may do (announce, move, spawn, inspect), logged.
+  14.18 Gift box / mail: send items, zen or coins to one player, a list, or everyone (with a message, EN/VI); the
+        player takes them from a "gift box" window in the game or the account page (uses the owed-rewards store).
+- Client data toolkit (item list, monster list, glow colors, tooltips, server list, news, CRC check, stats calculator).
+  New for HNMO:
+  14.19 Item definitions in the admin panel that also feed the web game's item data (name EN/VI, size, level,
+        requirements, glow color, tooltip text), so adding or changing an item needs no file editing; the desktop
+        client's data is exported from the same source.
+  14.20 News manager: news posts (EN/VI) written in the admin panel, shown on the website home page and in the game.
+  14.21 Stats/build calculator on the website: pick class, level, stats and items, see damage, defense, speed, as the
+        server computes them.
+- Player companion ("dashboard"): character info, event and boss alerts, death alerts. New for HNMO:
+  14.22 Event alerts: players opt in (website or game) to browser notifications for chosen events/bosses (web push,
+        no app needed), plus a Discord channel post (exists in Community).
+- Launcher (auto-update, design, languages, register in the launcher): see 14.14 (desktop only).
+- Crash/stability monitor: HNMO's /control page (#18) shows status and logs; add crash detection with automatic
+  restart and a notice to the admin (14.23).
+More of its tools and plugins (checked 2026-11-16; ideas only):
+- 3D world editor (terrain height, light colour, ground layers, safe/PvP attributes, objects with position/scale/
+  rotation/light, minimap and monster spawns, export for server and client). HNMO has a 2D spawn map editor
+  (/map-editor) and a terrain attribute editor (/terrain-editor). New:
+  14.24 A 3D world editor in the admin panel built on the web game's own renderer (three.js): see the map as players
+        do, paint safe/PvP areas, move/add objects, set lights, place monster spawns and gates, regenerate the
+        minimap; saves to the server's map data and to the web game's map data (packs from #15) together.
+- Economy analyzer (collects item/zen/jewel totals over time; flags accounts holding unusual amounts as possible
+  dupers; configurable). New:
+  14.25 Economy dashboard in the admin panel: daily totals of zen, coins and each jewel/valuable item across all
+        accounts (inventory, vault, jewel bank, market), charts over time, top holders, sudden jumps flagged
+        (possible duping), drop and sink rates per day, so drop rates can be tuned; links to 14.9's activity log.
+- Plugins (paid add-ons there). HNMO already has: daily rewards (missions/calendar), starter kit (onboarding),
+  VIP (ChatGPT), item bank (13.10 jewel bank). New:
+  14.26 Performance mode in the web game's settings (EN/VI): hide other players, hide wings and pets, fewer skill
+        and item effects, with hotkeys, for crowded events (helps low-end PCs and phones).
+  14.27 Talismans/figurines: special items that give a buff or bonus while carried in the bag (admin-defined),
+        and consumable items that give extra stat points up to a cap (admin-defined).
+  14.28 Custom ranks/titles: titles by level, resets, VIP or achievements, shown by the name, admin-defined.
+  14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined).
+  14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck).
+Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
+
+## 15. Growth with many players, guides, admin panel navigation (owner asked 2026-11-16)
+15.1 Save data at scale: per-player plug-in state (missions, gift code claims, top races, account safety, ...) is
+     JSON today (one file per plug-in, one file after #19), rewritten whole on each save. Fine for tens of players;
+     with hundreds/thousands it grows and every save rewrites it. Move per-account/per-character state into the
+     PostgreSQL database (one row per account/character per feature, updated alone); keep JSON only for small
+     server-wide state. Old finished data (last season's races, expired codes' claims) archived after N days.
+15.2 Logs: the server's own log already rolls daily (4 MB each, 48 kept), but the launcher's save/logs/server.log
+     and database.log grow without limit. Roll them daily and by size, gzip old ones, keep N days and at most N MB
+     in total (admin setting on Host settings), and view/download/search them in the admin panel (/control).
+     Chat log, audit history and the activity log (14.9) live in the database with a retention period (e.g. 90
+     days) and an export before deleting.
+15.3 Backups: daily automatic backup (database + state + settings) compressed, keep 7 daily + 4 weekly + 3 monthly,
+     total size shown, oldest removed; restore tested from /control. PostgreSQL maintenance (vacuum/analyze) on a
+     schedule. Disk usage card on /control with a warning before the disk fills.
+15.4 Guides split: the in-game guide (guide.html, "i") only for players (how to play, features, events, keys, the
+     account page). Everything for hosts/admins (setup, settings, Tailscale, API keys, approvals, coins) moves to an
+     Admin guide inside the admin panel (EN/VI), with how-to recipes ("run a weekend EXP event", "compensate
+     players", "add items to a shop", "ban a cheater", "back up and restore").
+15.5 Admin panel navigation for many features:
+     - a Home dashboard: server status, players online, today's sign-ups/top-ups, alerts (pending approvals,
+       crash, disk), a setup checklist for new hosts;
+     - the menu grouped by task: Players, Economy & shop, Events & rewards, World & monsters, Items, Community &
+       website, Server & host, Tools & logs; every page in exactly one group, with an icon and one-line description;
+     - search everywhere (Ctrl+K command palette): pages, individual settings (the existing configuration search
+       index), players/characters/accounts, items, guide articles, in EN and VI, showing where each result lives;
+     - favourites and recently used pages; breadcrumbs; "related pages" at the bottom of each page;
+     - "Basic / Advanced" view: everyday settings shown, rarely used ones folded away;
+     - every page: the "How to use this page" help (ChatGPT's admin-help job) linking to the Admin guide article.
+15.6 VIP servers (owner asked 2026-11-16). Today: all game servers (Server 0, 1, 2 on the test host) share ONE
+     database; characters belong to the account, not to a server, so the same characters log in to any server
+     (one server at a time). Per server today: an EXP rate multiplier, PvP on/off, a player limit, and join
+     requirements (account attributes, also time-limited grants): a server can require e.g. a "VIP" attribute and
+     refuses others with "subscription over" / "no subscription". Edited only in the generic server config editor.
+     To do (with ChatGPT's VIP job): buying/granting VIP gives the account the time-limited attribute that VIP
+     servers require (one source of truth); a "Servers" admin page in plain words (name, VIP only yes/no, EXP and
+     drop/zen multipliers, PvP, player limit, which events run there); the server list in the web game and the
+     desktop client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
+     account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
+     timetables per server.
+15.7 Worlds (separate databases; owner asked 2026-11-16). Uses: a test world, new seasons (fresh start while the
+     old world keeps running), low-rate vs high-rate worlds, a PvP tournament world with ready-made characters,
+     region/language worlds, later a cross-world event server. Today: a second HNMO install with its own database
+     works (ports via Host settings #17) but is fully separate (own admin panel and website). To do: one admin panel
+     managing several worlds (start/stop, rates, events, players per world); one website and one account system with
+     the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
+     opening date); optional one-off character transfer between worlds; later a cross-world event server.
