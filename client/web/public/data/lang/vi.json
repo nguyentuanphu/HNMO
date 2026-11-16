@@ -2929,6 +2929,9 @@
 "Your part this week: %s": "Phần của bạn tuần này: %s",
 "Your part this week: %s · today %s / %s": "Phần của bạn tuần này: %s · hôm nay %s / %s",
 "level %d": "cấp %d",
-"zen and items": "zen và vật phẩm"
+"zen and items": "zen và vật phẩm",
+"Texture quality": "Chất lượng vân bề mặt",
+"Compressed (faster)": "Nén (nhanh hơn)",
+"Original": "Gốc"
 }
 }

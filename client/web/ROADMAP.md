@@ -106,7 +106,8 @@ contribution, the family mark on the pointed player done; the marks in every pla
 4. Shadows, weather, animated map objects, water, BMD v14 and GLB models.
 5. ✅ Option window (`O` or ⚙, `ui/settingsWindow.ts`): FPS limit, sound and music volume,
    windowed mode, effects off, FPS counter; **(extra)** render scale, text size, mute, view
-   distance and a low-spec mode for slow PCs (`render/quality.ts`).
+   distance, texture quality (`Compressed (faster)` KTX2 via `KTX2Loader` + local `basis_transcoder`
+   with per-file JPEG/TGA fallback, or `Original`), and a low-spec mode for slow PCs (`render/quality.ts`).
 6. ✅ **(extra)** The game's name players see (default "HenryN Mu Online") is set in the admin panel:
    Plugins, "Game name" (`GameNamePlugIn`); the web game reads it through `/game-name.json`
    (`src/gameName.ts`, test `game-name.spec.ts`).
