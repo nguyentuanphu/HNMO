@@ -74,6 +74,8 @@ export interface ChatOptions {
   owner?: () => string;
   /** What the name menu does with a player's name. */
   nameActions?: { party?: (name: string) => void; trade?: (name: string) => void; addFriend?: (name: string) => void };
+  /** Optional custom title prefix inserted before the speaker name in the chat log. */
+  titlePrefix?: (name: string) => string | null;
 }
 
 export class Chat {
@@ -482,7 +484,11 @@ export class Chat {
     this.logModel.panel_height = client + 3 * 2 + 2 * 2;
     this.logModel.back_alpha = this.backAlpha;
     this.unread[this.tab] = 0;
-    this.logModel.lines = this.shown().map((m) => ({ text: (m.id ? `${m.id} : ${m.text}` : m.text) + (m.count > 1 ? `  (x${m.count})` : ''), kind: m.kind, has_id: !!m.id }));
+    this.logModel.lines = this.shown().map((m) => {
+      const prefix = m.id ? (this.options.titlePrefix?.(m.id) ?? null) : null;
+      const speaker = prefix ? `${prefix} ${m.id}` : m.id;
+      return { text: (speaker ? `${speaker} : ${m.text}` : m.text) + (m.count > 1 ? `  (x${m.count})` : ''), kind: m.kind, has_id: !!m.id };
+    });
     this.inputModel.show_frame = this.logModel.show_frame;
     this.systemModel.lines = this.system.map((m) => ({ text: m.text, kind: m.kind, has_id: false }));
     this.log.update();

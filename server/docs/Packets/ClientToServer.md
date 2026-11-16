@@ -220,6 +220,7 @@
   * [C1 F5 42 - HnmoMountChainCommand (by client)](C1-F5-42-HnmoMountChainCommand_by-client.md)
   * [C1 F5 44 - HnmoPartyOptionsCommand (by client)](C1-F5-44-HnmoPartyOptionsCommand_by-client.md)
   * [C1 F5 46 - HnmoRankingCommand (by client)](C1-F5-46-HnmoRankingCommand_by-client.md)
+  * [C1 F5 48 - HnmoCustomRanksCommand (by client)](C1-F5-48-HnmoCustomRanksCommand_by-client.md)
   * [C1 F6 0A - QuestSelectRequest (by client)](C1-F6-0A-QuestSelectRequest_by-client.md)
   * [C1 F6 0B - QuestProceedRequest (by client)](C1-F6-0B-QuestProceedRequest_by-client.md)
   * [C1 F6 0D - QuestCompletionRequest (by client)](C1-F6-0D-QuestCompletionRequest_by-client.md)

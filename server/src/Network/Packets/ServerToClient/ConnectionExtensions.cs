@@ -11061,4 +11061,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCustomRanksState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload listing rank tiers, the hero's unlocked and equipped rank, and online players' active titles.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world, when active titles change, or after HnmoCustomRanksCommand.
+    /// Causes reaction on client side: Updates the web client's custom title badges (nameplates and chat) and /title selector.
+    /// </remarks>
+    public static async ValueTask SendHnmoCustomRanksStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCustomRanksStateRef.GetRequiredSize(json);
+            var packet = new HnmoCustomRanksStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
