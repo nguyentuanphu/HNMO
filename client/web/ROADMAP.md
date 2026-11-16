@@ -642,6 +642,23 @@ Players trade on trust today ("send money and hope"). HNMO stands in the middle,
      - the seller can never keep both: the item stays locked until confirmed, cancelled before payment, or decided.
      Limits: the game can't force a refund of money; the admin decides disputes on evidence. OFF by default; the host
      decides if real-money trading is allowed at all (same warning as 16.2).
+16.5 Owner decisions 2026-11-16: build ALL modes, each with a fee for the host:
+     - 16.2 host-mediated (host holds the VND): fee % of the price (min/max), taken from the seller's payout;
+     - 16.4 direct between players: a service fee in coins/trade credit when the contract is created (seller,
+       buyer or split), plus the optional seller bond;
+     - 16.6 trade credit (new, below): fees on cash-out and per contract.
+16.6 Trade credit: a SEPARATE currency only for real-money trades (not the normal coins, which players can earn by
+     playing: if those could be cashed out, bots would farm money). Rules:
+     - bought only through the host's top-up at a fixed rate (e.g. 1 credit = 1,000 VND, admin-set);
+     - spent only in escrow contracts (16.1) marked "cash sale"; optionally converted one way into normal coins;
+     - cash-out allowed ONLY for credit received as the proceeds of a cash-sale contract (bought credit can't be cashed
+       out, so it can't be used to move money around), after a holding period (e.g. 72 h), minus a fee (% + minimum),
+       to the seller's bank account entered and verified once; limits per day/month; the host pays out (manual list,
+       later a bank API) and marks it paid;
+     - a double-entry ledger: every credit movement with a reason; the total credit in circulation must always equal
+       top-ups minus cash-outs minus fees (checked daily, alarm if not); reports for the host's accounting;
+     - the highest legal risk of all modes (holding players' money and paying it out works like an e-wallet): the host
+       must check the rules before turning it on; off by default.
 16.3 Safety rules: new accounts can't use escrow for N days; a holding period before items received through escrow can
      be traded again (stops stolen-account dumping); the item's origin shown from the activity log; admin can freeze a
      contract; fee income reported on the economy dashboard.
