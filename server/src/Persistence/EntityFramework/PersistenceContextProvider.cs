@@ -57,6 +57,10 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
         }
     }
 
+    /// <summary>Gets the PostgreSQL connection string for maintenance operations (if configured).</summary>
+    /// <returns>Connection string or null.</returns>
+    public static string? ResolveConnectionString() => ConnectionConfigurator.GetConnectionString<EntityDataContext>();
+
     /// <summary>
     /// Applies all pending updates to the database schema.
     /// </summary>
