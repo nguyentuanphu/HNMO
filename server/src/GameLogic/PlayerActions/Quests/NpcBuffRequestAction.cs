@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlayerActions.Quests;
 
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns.BufferNpc;
 using HNMO.GameLogic.Views;
 using HNMO.Interfaces;
 
@@ -20,6 +21,12 @@ public class NpcBuffRequestAction
     /// <param name="player">The player.</param>
     public async ValueTask RequestBuffAsync(Player player)
     {
+        if (BufferNpcPlugIn.Get(player.GameContext) is { } bufferNpc
+            && await bufferNpc.TryHandleBuffRequestAsync(player, player.OpenedNpc).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (player.OpenedNpc?.Definition is not { NpcWindow: NpcWindow.NpcDialog, Buffs: { } buffs } || !buffs.Any())
         {
             return;

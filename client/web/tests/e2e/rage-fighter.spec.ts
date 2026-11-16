@@ -92,11 +92,51 @@ test('the Rage Fighter casts each skill at a monster as the desktop does', async
     { skill: 263, name: 'Dark Side', sends: (b) => b.some((x) => isRange(x, 263)) && b.some((x) => isRage(x, 263)), effects: ['effect:eventCloud'] },
   ];
   const results: string[] = [];
+  await page.evaluate(() => {
+    type Watcher = {
+      step(): void;
+      createEffect: (...args: unknown[]) => unknown;
+      census(): Record<string, number>;
+      __origStep?: () => void;
+      __origCreate?: (...args: unknown[]) => unknown;
+      __seen?: Record<string, number>;
+      __darkTargets?: number;
+      __darkGhosts?: number;
+    };
+    const g = (window as unknown as Win).__game;
+    const e = g.effects as unknown as Watcher;
+    const record = () => {
+      for (const [k, v] of Object.entries(e.census())) e.__seen![k] = Math.max(e.__seen![k] ?? 0, v);
+      const ds = g.darkSide();
+      e.__darkTargets = Math.max(e.__darkTargets ?? 0, ds.dash?.targetCount ?? 0);
+      e.__darkGhosts = Math.max(e.__darkGhosts ?? 0, ds.ghosts);
+    };
+    e.__origStep ??= e.step;
+    e.__origCreate ??= e.createEffect;
+    e.__seen = {};
+    e.__darkTargets = 0;
+    e.__darkGhosts = 0;
+    const origStep = e.__origStep;
+    const origCreate = e.__origCreate;
+    e.createEffect = function (this: Watcher, ...args: unknown[]) {
+      const created = origCreate.apply(this, args);
+      record();
+      return created;
+    };
+    e.step = function (this: Watcher) {
+      origStep.call(this);
+      record();
+    };
+  });
   for (const c of cases) {
     await expect.poll(() => page.evaluate(() => { const h = (window as unknown as Win).__game.online.hero; return !h.isPlayingOnce && !h.isWalking; }), { timeout: 30_000 }).toBe(true);
+    await page.evaluate(() => {
+      const e = (window as unknown as Win).__game.effects as unknown as { __seen: Record<string, number>; __darkTargets: number; __darkGhosts: number };
+      e.__seen = {};
+      e.__darkTargets = 0;
+      e.__darkGhosts = 0;
+    });
     const mark = sent.length;
-    const census: Record<string, number>[] = [];
-    const sampler = setInterval(() => { void page.evaluate(() => (window as unknown as Win).__game.effects.census()).then((x) => census.push(x)).catch(() => undefined); }, 150);
     // The nearest living monster (another player may kill it first: then the next one).
     let target = { id: 0, distance: 0 };
     let roam = 0;
@@ -111,6 +151,16 @@ test('the Rage Fighter casts each skill at a monster as the desktop does', async
       }
       expect(nearest).not.toBeNull();
       target = nearest!;
+      if (c.skill === 263 && target.distance > 5) {
+        await page.evaluate((id) => {
+          const g = (window as unknown as Win).__game;
+          const m = g.online.characters.get(id);
+          if (m) g.online.walkTo(m.cell);
+        }, target.id);
+        await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.online.hero.isWalking), { timeout: 60_000 }).toBe(false);
+        const closer = await nearestMonster(page);
+        if (closer) target = closer;
+      }
       const cast = await page.evaluate(([id, skill]) => { const g = (window as unknown as Win).__game; return g.combat.cast(g.online.characters.get(id), null, skill); }, [target.id, c.skill] as const);
       expect(cast, c.name).toBe(true);
     }).toPass({ timeout: 240_000 });
@@ -118,13 +168,18 @@ test('the Rage Fighter casts each skill at a monster as the desktop does', async
     if (c.skill === 263) {
       // The server's target list (C1 4B, skill little endian at 4) and the dash with its afterimages.
       await expect.poll(() => received.some((b) => b[0] === 0xc1 && b[2] === 0x4b && (b[4] | (b[5] << 8)) === 263), { timeout: 30_000 }).toBe(true);
-      await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.darkSide().dash?.targetCount ?? 0), { timeout: 10_000 }).toBeGreaterThan(0);
-      await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.darkSide().ghosts), { timeout: 10_000, intervals: [50] }).toBeGreaterThan(0);
+      await expect.poll(() => page.evaluate(() => {
+        const e = (window as unknown as Win).__game.effects as unknown as { __darkTargets: number; __darkGhosts: number };
+        return e.__darkTargets > 0 && e.__darkGhosts > 0;
+      }), { timeout: 30_000, message: 'Dark Side targetCount and ghosts' }).toBe(true);
       await page.screenshot({ path: 'test-results/rage-fighter-dark-side.png' });
     }
-    await page.waitForTimeout(1_500);
-    clearInterval(sampler);
-    for (const effect of c.effects) expect(census.some((x) => (x[effect] ?? 0) > 0), `${c.name} makes ${effect}`).toBe(true);
+    if (c.effects.length > 0) {
+      await expect.poll(() => page.evaluate((effects) => {
+        const seen = ((window as unknown as Win).__game.effects as unknown as { __seen: Record<string, number> }).__seen;
+        return effects.every((effect) => (seen[effect] ?? 0) > 0);
+      }, c.effects), { timeout: 15_000, message: `${c.name} makes ${c.effects.join(', ')}` }).toBe(true);
+    }
     console.log(`${c.name}: done`);
     results.push(`${c.name}: ${sent.slice(mark).map((b) => b.slice(0, 3).map((n) => n.toString(16)).join(' ')).join(', ')}`);
     await page.evaluate(() => (window as unknown as Win).__game.combat.cancel());
@@ -146,7 +201,8 @@ test('Dark Side dashes through a fed target list with its afterimages', async ({
   page.on('pageerror', (error) => errors.push(error.message));
   await enterAsFighter(page);
   await page.waitForFunction(() => (window as unknown as Win).__game.combat !== undefined, null, { timeout: 120_000 });
-  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].filter((c) => c.kind !== 'player').length), { timeout: 60_000 }).toBeGreaterThan(0);
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].filter((c) => c.kind !== 'player').length), { timeout: 60_000 }).toBeGreaterThan(1);
   // The ids of two monsters or NPCs near the hero, and the fed packets of a Dark Side from the hero at them.
   const feed = () => page.evaluate(() => {
     const g = (window as unknown as Win).__game;

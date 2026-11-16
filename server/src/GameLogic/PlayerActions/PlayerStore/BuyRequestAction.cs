@@ -175,6 +175,12 @@ public class BuyRequestAction
                 item,
                 price.Kind == ShopPriceKind.Zen ? price.Amount : 0,
                 price.Kind == ShopPriceKind.Zen ? null : $"{price.Amount} {player.GetCurrencyName(price)}");
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordPersonalStore(
+                requestedPlayer,
+                player,
+                item,
+                price.Kind == ShopPriceKind.Zen ? price.Amount : 0,
+                price.Kind == ShopPriceKind.Zen ? null : $"{price.Amount} {player.GetCurrencyName(price)}");
         }
 
         if (itemSold)
