@@ -310,6 +310,14 @@ const copy = {
     downloadText:
       "One download for Windows, Ubuntu and macOS. Unzip it and run Start HNMO.bat (Windows) or start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Download HNMO →",
+    jbNav: "Jewel Bank",
+    jbTitle: "Jewel Bank & Master Skill Clear",
+    jbHint: "Deposit Bless, Soul, Life, Creation, Chaos, and more per account (F7 in-game) and withdraw in-game or on your account page. Clear master skill points via F7, /clearmaster, or Resets.",
+    jbOffline: "Jewel Bank data is unavailable.",
+    jbOff: "Jewel Bank is turned off on this server.",
+    jbNone: "No jewels configured.",
+    jbJewel: "Jewel",
+    jbCap: "Account Limit",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -643,6 +651,14 @@ const copy = {
     downloadText:
       "Một bản tải cho Windows, Ubuntu và macOS. Giải nén rồi chạy Start HNMO.bat (Windows) hoặc start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Tải HNMO →",
+    jbNav: "Ngân hàng ngọc",
+    jbTitle: "Ngân hàng ngọc & Tẩy điểm Master",
+    jbHint: "Gửi Ngọc Ước Nguyện, Tâm Linh, Sinh Mệnh, Sáng Tạo, Hỗn Nguyên theo tài khoản (F7 trong game) và rút bất cứ lúc nào. Hỗ trợ tẩy hoàn điểm Master qua F7, /clearmaster hoặc trang Reset.",
+    jbOffline: "Không xem được Ngân hàng ngọc.",
+    jbOff: "Ngân hàng ngọc đang tắt trên máy chủ này.",
+    jbNone: "Chưa cấu hình loại ngọc nào.",
+    jbJewel: "Loại ngọc",
+    jbCap: "Giới hạn/Tài khoản",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -1928,9 +1944,46 @@ async function refreshResets(): Promise<void> {
   renderResets();
 }
 
-for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderResets());
-element("refresh").addEventListener("click", () => void refreshResets());
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderResets(); renderJewelBank(); });
+element("refresh").addEventListener("click", () => { void refreshResets(); void refreshJewelBank(); });
 void refreshResets();
 setInterval(() => {
   if (!document.hidden) void refreshResets();
+}, 120000);
+
+interface PublicJewelBank {
+  v: number;
+  enabled: boolean;
+  jewels?: { key: string; nameEn: string; nameVi: string; enabled: boolean; maxCapacity: number }[];
+}
+let jbData: PublicJewelBank | null = null;
+
+function renderJewelBank(): void {
+  const notice = element("jb-notice");
+  const data = jbData;
+  const vi = language === "vi";
+  if (data === null) notice.textContent = t("jbOffline");
+  else if (!data.enabled) notice.textContent = t("jbOff");
+  else notice.textContent = "";
+  const list = data && data.enabled ? (data.jewels ?? []).filter((j) => j.enabled) : [];
+  const rows = list.map((j) => [vi ? j.nameVi : j.nameEn, j.maxCapacity.toLocaleString()]);
+  table("jb-table", [[t("jbJewel"), false], [t("jbCap"), true]], rows, t("jbNone"));
+}
+
+async function refreshJewelBank(): Promise<void> {
+  try {
+    const response = await fetch("/website/jewel-bank", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicJewelBank;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid jewel bank");
+    jbData = data;
+  } catch {
+    jbData = null;
+  }
+  renderJewelBank();
+}
+
+void refreshJewelBank();
+setInterval(() => {
+  if (!document.hidden) void refreshJewelBank();
 }, 120000);

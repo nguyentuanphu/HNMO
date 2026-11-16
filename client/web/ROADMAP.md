@@ -280,9 +280,8 @@ section 12 (the cash shop) still waits for the owner's answers.
    together, divorce rules; the couples list on the website.
 9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
    admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
-10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take
-    them out in the game or on the website; which jewels, limits and fees in the admin panel. Also clearing
-    master skill points (with item 3's stat clearing).
+10. ✅ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, Harmony, Guardian, custom) as numbers on the
+    account (`F7`), take them out in the game or on the website (`/jewel-bank` admin config for limits/fees), and clear/refund master skill points (`F7`, `/clearmaster`, and website Resets &amp; relife).
 11. ⏳ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
     the cap for everyone rises N levels a day; with resets, a daily reset limit does the same job. Shown on
     the website (today's cap).
