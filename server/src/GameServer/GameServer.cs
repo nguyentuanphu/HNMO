@@ -85,6 +85,7 @@ public sealed partial class GameServer : IGameServer, IDisposable, IAsyncDisposa
             var dropGenerator = new DefaultDropGenerator(gameConfiguration, Rand.GetRandomizer());
             var mapInitializer = new GameServerMapInitializer(gameServerDefinition, loggerFactory.CreateLogger<GameServerMapInitializer>(), dropGenerator, changeMediator);
             this._gameContext = new GameServerContext(gameServerDefinition, guildServer, eventPublisher, loginServer, friendServer, persistenceContextProvider, mapInitializer, loggerFactory, plugInManager, dropGenerator, changeMediator, mapHostLocator);
+            dropGenerator.GameContext = this._gameContext;
             this._gameContext.GameMapCreated += (_, _) => this.OnPropertyChanged(nameof(this.Context));
             this._gameContext.GameMapRemoved += (_, _) => this.OnPropertyChanged(nameof(this.Context));
             this._gameContext.LoggedInPlayerCountChanged += (_, _) => this.OnPropertyChanged(nameof(this.CurrentConnections));

@@ -6,6 +6,7 @@ namespace HNMO.GameLogic;
 
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns.FixedItemOptions;
 using Nito.AsyncEx;
 
 /// <summary>
@@ -66,6 +67,11 @@ public class DefaultDropGenerator : IDropGenerator
                     o => object.Equals(o.OptionType, ItemOptionTypes.AncientOption)) ?? false))
             .ToList();
     }
+
+    /// <summary>
+    /// Gets or sets the optional game context used to apply post-drop option plug-ins.
+    /// </summary>
+    public IGameContext? GameContext { get; set; }
 
     /// <inheritdoc/>
     public async ValueTask<(IEnumerable<Item> Items, uint? Money)> GenerateItemDropsAsync(MonsterDefinition monster, int gainedExperience, Player player)
@@ -143,13 +149,24 @@ public class DefaultDropGenerator : IDropGenerator
 
         this._guaranteedDropGroups.Clear();
         this._chanceDropGroups.Clear();
+        if (droppedItems is { Count: > 0 })
+        {
+            FixedItemOptionsPlugIn.ApplyToItems(player.GameContext, droppedItems, "drop", map.Number, this._randomizer);
+        }
+
         return (droppedItems ?? Enumerable.Empty<Item>(), money > 0 ? money : null);
     }
 
     /// <inheritdoc/>
     public Item? GenerateItemDrop(DropItemGroup selectedGroup)
     {
-        return this.GenerateItemDrop(selectedGroup, selectedGroup.PossibleItems);
+        var item = this.GenerateItemDrop(selectedGroup, selectedGroup.PossibleItems);
+        if (item is not null)
+        {
+            FixedItemOptionsPlugIn.ApplyToItems(this.GameContext, [item], "box_event", null, this._randomizer);
+        }
+
+        return item;
     }
 
     /// <inheritdoc/>
