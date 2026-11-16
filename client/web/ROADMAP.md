@@ -370,7 +370,10 @@ and compare with the desktop's movement.
   CONFLICT: #13 also uses F5 23 (HnmoTicketLogin), like #12 (HnmoGiftCodeRedeemExtended). When merging, keep #12 on F5 23
   and move #13 to F5 24 (XML, regenerate C#/web packets, docs, tests). Next free after that: F5 25.
 - #14 antigravity-rage-fighter-test (deterministic effect sampling; passed 3 runs live) -> main.
-- Coming (2026-11-16): chatgpt-shop-editor, antigravity-data-packs.
+- #15 antigravity-data-packs (HPK1 packs served by the bridge with ETag/immutable/304/206, web allowlist, item icons in one
+  zip, no .br/.gz copies, single-file bridge): Windows package 25,000 files -> 194; Data 14,891 files / 1,066 MB -> 48
+  packs / 738 MB. To check on merge: ffmpeg Opus packaging, macOS/Linux packages, admin panel icons live.
+- Coming (2026-11-16): chatgpt-shop-editor; antigravity-installer-app (+ host settings, one save file, KTX2).
 - Earlier: antigravity-stuck-login (the "already logged in" leak), antigravity-smooth-movement (jerky movement), chatgpt-giftcode-limit.
 Merged 2026-11-16: #7, #10, #11 (all server tests pass; one more flaky test seen: LeaderboardsPageTests.LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne, passes 5/5 alone).
 Merge order for the rest: then #2, #5, #6, #8, then #3, then #4 retargeted to main (resolve the translation JSON carefully: one "New here?", keep #6's durations and dialogs).
