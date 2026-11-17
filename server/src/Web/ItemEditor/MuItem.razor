@@ -5,7 +5,7 @@
     }
     else
     {
-        <img src=@($"_content/HNMO.Web.ItemEditor/img/items/item_{this.Model.Item.Definition.Group}_{this.Model.Item.Definition.Number}_{this.Model.EffectLevel}{this.Model.OptionSuffix}.png") alt=@this.Model.Item />
+        <img src=@($"item-icons/item_{this.Model.Item.Definition.Group}_{this.Model.Item.Definition.Number}_{this.Model.EffectLevel}{this.Model.OptionSuffix}.png") alt=@this.Model.Item />
         @if (this.Model.Item.IsStackable() && this.Model.Item.Durability > 1)
         {
             <span class="item-amount-label">@this.Model.Item.Durability</span>

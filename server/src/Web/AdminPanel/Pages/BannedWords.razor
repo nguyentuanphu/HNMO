@@ -1,0 +1,202 @@
+@page "/banned-words"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.BannedWords
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("Banned Words Filter", "Bộ lọc từ ngữ bị cấm")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@this.L("Banned Words Filter", "Bộ lọc từ ngữ bị cấm")" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <div class="d-flex align-items-center gap-2">
+        <h1 class="mb-0">@this.L("Banned Words Filter", "Bộ lọc từ ngữ bị cấm")</h1>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.L("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<p class="text-muted">
+    @this.L(
+        "Filter English and Vietnamese profanity or restricted words in game chat (/post, /world, whisper, party, guild) and character or guild names. Disabled until turned on.",
+        "Lọc từ ngữ thô tục hoặc bị cấm bằng tiếng Anh và tiếng Việt trong trò chuyện (/post, /world, mật, nhóm, hội) và tên nhân vật/hội. Mặc định TẮT cho tới khi bật.")
+</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="region" id="banned-words-help">
+        <strong>@this.L("How to use this page:", "Cách sử dụng trang này:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@this.L("Turn on 'Enable Banned Words Filter' to enforce the English and Vietnamese lists on live servers immediately.", "Bật 'Bật bộ lọc từ cấm' để áp dụng ngay danh sách tiếng Anh và tiếng Việt trên máy chủ.")</li>
+            <li>@this.L("Choose 'Censor with ***' to mask bad words inside messages, or 'Block message' to stop the message and warn the player.", "Chọn 'Che bằng ***' để ẩn từ xấu trong câu, hoặc 'Chặn cả tin nhắn' để từ chối gửi và nhắc người chơi.")</li>
+            <li>@this.L("Leave 'Ignore Vietnamese diacritics' OFF to protect everyday words like 'các' or 'lớn'; add any unaccented slang directly to the Vietnamese list.", "Nên TẮT 'Bỏ dấu tiếng Việt' để không nhầm từ thường như 'các' hay 'lớn'; thêm trực tiếp từ lóng không dấu vào danh sách tiếng Việt.")</li>
+            <li>@this.L("Put one word or multi-word phrase per line (or comma-separated). Lines starting with # are ignored.", "Mỗi dòng một từ hoặc cụm từ (hoặc cách nhau bằng dấu phẩy). Dòng bắt đầu bằng # sẽ bị bỏ qua.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@this.L("Banned words configuration is unavailable.", "Không tải được cấu hình bộ lọc từ cấm.")</div>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="form-check form-switch mb-3" title="@this.L("Master toggle for server-side chat and name filtering (OFF by default).", "Công tắc chính bật/tắt lọc trò chuyện và tên trên máy chủ (mặc định TẮT).")">
+                <input class="form-check-input" type="checkbox" id="bw-active" @bind="this._isActive" />
+                <label class="form-check-label fw-semibold" for="bw-active">@this.L("Enable Banned Words Filter", "Bật bộ lọc từ ngữ bị cấm")</label>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label" for="bw-action" title="@this.L("Choose whether matched words in chat are masked with *** or rejected outright.", "Chọn thay từ cấm trong chat bằng *** hay chặn không cho gửi.")">
+                        @this.L("Chat handling", "Xử lý khi chat vi phạm")
+                    </label>
+                    <select class="form-select" id="bw-action" @bind="c.ChatAction">
+                        <option value="@BannedWordChatAction.Censor">@this.L("Censor with ***", "Che bằng ***")</option>
+                        <option value="@BannedWordChatAction.Block">@this.L("Block message & warn player", "Chặn tin nhắn & cảnh báo")</option>
+                    </select>
+                </div>
+                <div class="col-md-8 d-flex flex-wrap align-items-center gap-3 pt-md-4">
+                    <div class="form-check" title="@this.L("Check normal chat, whispers, party/guild/alliance/gens chat, /post and /world.", "Kiểm tra chat thường, thì thầm, nhóm/hội/liên minh/gens, /post và /world.")">
+                        <input class="form-check-input" type="checkbox" id="bw-chat" @bind="c.FilterChat" />
+                        <label class="form-check-label" for="bw-chat">@this.L("Filter chat", "Lọc trò chuyện")</label>
+                    </div>
+                    <div class="form-check" title="@this.L("Reject new character names containing banned words.", "Chặn tên nhân vật mới chứa từ bị cấm.")">
+                        <input class="form-check-input" type="checkbox" id="bw-charnames" @bind="c.FilterCharacterNames" />
+                        <label class="form-check-label" for="bw-charnames">@this.L("Filter character names", "Lọc tên nhân vật")</label>
+                    </div>
+                    <div class="form-check" title="@this.L("Reject new guild names containing banned words.", "Chặn tên hội (Guild) mới chứa từ bị cấm.")">
+                        <input class="form-check-input" type="checkbox" id="bw-guildnames" @bind="c.FilterGuildNames" />
+                        <label class="form-check-label" for="bw-guildnames">@this.L("Filter guild names", "Lọc tên hội (Guild)")</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Strip Vietnamese accents before comparing (may catch everyday words like 'các' or 'lớn').", "Bỏ dấu tiếng Việt khi so khớp (cẩn thận vì có thể nhầm từ bình thường như 'các', 'lớn').")">
+                        <input class="form-check-input" type="checkbox" id="bw-diacritics" @bind="c.IgnoreVietnameseDiacritics" />
+                        <label class="form-check-label" for="bw-diacritics">@this.L("Ignore Vietnamese diacritics", "Bỏ dấu tiếng Việt khi so khớp")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Detect banned words of length 4+ embedded inside character or guild names without spaces.", "Phát hiện từ cấm dài từ 4 ký tự nằm liền trong tên nhân vật hoặc tên hội.")">
+                        <input class="form-check-input" type="checkbox" id="bw-substrings" @bind="c.CheckNameSubstrings" />
+                        <label class="form-check-label" for="bw-substrings">@this.L("Check substrings in names", "Kiểm tra từ con trong tên")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Allow Game Masters to bypass the chat filter for moderation notices.", "Cho phép Game Master bỏ qua bộ lọc khi gửi thông báo.")">
+                        <input class="form-check-input" type="checkbox" id="bw-gm" @bind="c.ExemptGameMasters" />
+                        <label class="form-check-label" for="bw-gm">@this.L("Exempt Game Masters", "Miễn trừ Game Master")</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label mb-0" for="bw-en" title="@this.L("One English word or phrase per line, or comma-separated.", "Mỗi dòng một từ hoặc cụm từ tiếng Anh, hoặc cách nhau bằng dấu phẩy.")">
+                            @this.L("English banned words", "Danh sách từ cấm (Tiếng Anh)")
+                        </label>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ResetEnglishDefaults">
+                            @this.L("Restore defaults", "Khôi phục mặc định")
+                        </button>
+                    </div>
+                    <textarea class="form-control font-monospace" id="bw-en" rows="8" @bind="this._englishWordsText"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label mb-0" for="bw-vi" title="@this.L("One Vietnamese word or phrase per line, or comma-separated.", "Mỗi dòng một từ hoặc cụm từ tiếng Việt, hoặc cách nhau bằng dấu phẩy.")">
+                            @this.L("Vietnamese banned words", "Danh sách từ cấm (Tiếng Việt)")
+                        </label>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ResetVietnameseDefaults">
+                            @this.L("Restore defaults", "Khôi phục mặc định")
+                        </button>
+                    </div>
+                    <textarea class="form-control font-monospace" id="bw-vi" rows="8" @bind="this._vietnameseWordsText"></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mb-3">
+                <button type="button"
+                        class="btn btn-primary"
+                        id="bw-save"
+                        disabled="@this._isSaving"
+                        title="@this.L("Save banned word lists and apply immediately", "Lưu danh sách từ cấm và áp dụng ngay")"
+                        @onclick="this.SaveAsync">
+                    @this.L("Save changes", "Lưu thay đổi")
+                </button>
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        disabled="@this._isSaving"
+                        title="@this.L("Reload saved configuration from database", "Tải lại cấu hình đã lưu")"
+                        @onclick="this.LoadAsync">
+                    @this.L("Reload", "Tải lại")
+                </button>
+            </div>
+
+            <div class="border-top pt-3">
+                <h2 class="h6 mb-2">@this.L("Live filter tester", "Kiểm thử bộ lọc trực tiếp")</h2>
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <input class="form-control"
+                               id="bw-preview-input"
+                               placeholder="@this.L("Type sample chat message or character name...", "Nhập câu chat mẫu hoặc tên nhân vật để thử...")"
+                               @bind="this._previewSample" />
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="bw-preview-name" @bind="this._previewAsName" />
+                            <label class="form-check-label" for="bw-preview-name">@this.L("Test as name", "Thử như tên nhân vật/hội")</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-primary w-100" id="bw-preview-btn" @onclick="this.RunPreview">
+                            @this.L("Test", "Kiểm thử")
+                        </button>
+                    </div>
+                </div>
+                @if (this._previewResult is { } preview)
+                {
+                    <div class="alert @(preview.IsMatched ? "alert-warning" : "alert-success") mt-2 mb-0" role="status" id="bw-preview-result">
+                        @if (preview.IsMatched)
+                        {
+                            <span>
+                                <strong>@this.L("Matched:", "Khớp từ:")</strong> <code>@preview.MatchedTerm</code>
+                                — <strong>@this.L("Output:", "Kết quả:")</strong> <code>@preview.FilteredText</code>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>@this.L("Allowed — no banned words detected.", "Hợp lệ — không phát hiện từ cấm.")</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

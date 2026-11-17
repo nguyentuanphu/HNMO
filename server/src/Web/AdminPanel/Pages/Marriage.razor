@@ -1,0 +1,144 @@
+@page "/marriage"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Marriage", "Kết hôn")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Marriage", "Kết hôn")" />
+
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Marriage System", "Hệ thống Kết hôn")</h1>
+    <button type="button"
+            class="btn btn-sm btn-outline-info rounded-circle"
+            title="@L("Show or hide setup instructions", "Hiện hoặc ẩn hướng dẫn")"
+            @onclick="() => this._showHelp = !this._showHelp">
+        ?
+    </button>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn"):</strong>
+        @L(
+            "Enable Marriage so characters can propose via Shift+M or /marry, hold a ceremony at Devias Church (map #2 around 210, 23), wear a couple title, gain a small party EXP/defense bonus when hunting together, warp to each other, or divorce under configured fees and cooldowns. Active couples appear on the website.",
+            "Bật Kết hôn để người chơi cầu hôn qua Shift+M hoặc /marry, làm lễ tại Nhà thờ Devias (bản đồ #2 quanh 210, 23), đặt danh hiệu phu thê, nhận thêm EXP/phòng thủ khi tổ đội săn quái cùng nhau, dịch chuyển tới nhau hoặc ly hôn theo phí/thời gian chờ. Danh sách cặp đôi hiển thị công khai trên website.")
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    <section class="card mb-3">
+        <div class="card-body">
+            <h2 class="h5">@L("Ceremony, Bonus & Divorce Rules", "Quy tắc Lễ cưới, Buff & Ly hôn")</h2>
+
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="marriage-active" @bind="this._isActive" />
+                <label class="form-check-label" for="marriage-active">@L("Enable Marriage Plug-in", "Bật tính năng Kết hôn")</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="marriage-loc" @bind="this._configuration.RequireCeremonyLocation" />
+                <label class="form-check-label" for="marriage-loc">@L("Require ceremony at Devias Church", "Bắt buộc làm lễ tại Nhà thờ Devias")</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="marriage-title" @bind="this._configuration.AllowCustomTitle" />
+                <label class="form-check-label" for="marriage-title">@L("Allow custom couple titles", "Cho phép đặt danh hiệu phu thê")</label>
+            </div>
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="marriage-warp" @bind="this._configuration.AllowSpouseWarp" />
+                <label class="form-check-label" for="marriage-warp">@L("Allow spouse warp", "Cho phép dịch chuyển tới bạn đời")</label>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-md-2">
+                    <label class="form-label">@L("Min level", "Cấp tối thiểu")</label>
+                    <input class="form-control" type="number" min="1" max="400" @bind="this._configuration.MinimumLevel" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Ceremony map", "Bản đồ lễ")</label>
+                    <input class="form-control" type="number" min="0" max="255" @bind="this._configuration.CeremonyMapNumber" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Ceremony X", "Tọa độ X")</label>
+                    <input class="form-control" type="number" min="0" max="255" @bind="this._configuration.CeremonyX" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Ceremony Y", "Tọa độ Y")</label>
+                    <input class="form-control" type="number" min="0" max="255" @bind="this._configuration.CeremonyY" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Radius", "Bán kính")</label>
+                    <input class="form-control" type="number" min="2" max="60" @bind="this._configuration.CeremonyRadius" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">@L("Ceremony Zen", "Phí lễ (Zen)")</label>
+                    <input class="form-control" type="number" min="0" @bind="this._configuration.CeremonyZenCost" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@L("Party EXP bonus %", "EXP tổ đội phu thê %")</label>
+                    <input class="form-control" type="number" min="0" max="100" @bind="this._configuration.CoupleExpBonusPercent" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@L("Party defense bonus", "Phòng thủ cộng thêm")</label>
+                    <input class="form-control" type="number" min="0" max="500" @bind="this._configuration.CoupleDefenseBonus" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@L("Divorce fee (Zen)", "Phí ly hôn (Zen)")</label>
+                    <input class="form-control" type="number" min="0" @bind="this._configuration.DivorceZenFee" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@L("Remarry cooldown (hours)", "Chờ tái hôn (giờ)")</label>
+                    <input class="form-control" type="number" min="0" max="720" @bind="this._configuration.RemarryCooldownHours" />
+                </div>
+            </div>
+
+            <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                @L("Save settings", "Lưu cài đặt")
+            </button>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-body">
+            <h2 class="h5">@L("Registered Couples", "Danh sách Cặp đôi") (@this._couples.Count)</h2>
+            @if (this._couples.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No married couples yet.", "Chưa có cặp đôi nào kết hôn.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>@L("Partners", "Cặp đôi")</th>
+                                <th>@L("Title", "Danh hiệu")</th>
+                                <th>@L("Married (Sydney)", "Ngày cưới (Sydney)")</th>
+                                <th>@L("Action", "Thao tác")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in this._couples)
+                            {
+                                <tr>
+                                    <td>@c.PartnerAName ♥ @c.PartnerBName</td>
+                                    <td>@(string.IsNullOrWhiteSpace(c.CustomTitle) ? "—" : c.CustomTitle)</td>
+                                    <td>@FormatSydney(c.MarriedAtUtc)</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => this.DissolveCouple(c.PartnerAName)">
+                                            @L("Dissolve", "Hủy hôn")
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}

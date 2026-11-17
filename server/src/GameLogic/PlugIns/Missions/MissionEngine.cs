@@ -245,6 +245,22 @@ public sealed class MissionEngine
     }
 
     /// <summary>
+    /// Counts the claimed daily/weekly missions and level milestones for a character.
+    /// </summary>
+    /// <param name="characterId">The character id.</param>
+    /// <returns>The achievement count.</returns>
+    public int GetAchievementCount(string characterId)
+    {
+        lock (this.Store.Lock)
+        {
+            var state = this.Store.Character(characterId);
+            return state.Daily.Values.Count(p => p.Claimed)
+                + state.Weekly.Values.Count(p => p.Claimed)
+                + state.MilestonesRewarded.Count;
+        }
+    }
+
+    /// <summary>
     /// Gets the streak as it counts now: a missed day shows 0.
     /// </summary>
     /// <param name="characterId">The character id.</param>

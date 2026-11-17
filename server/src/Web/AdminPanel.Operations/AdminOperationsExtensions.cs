@@ -8,6 +8,7 @@ using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using HNMO.Persistence.AdminAuth;
+using HNMO.Persistence.Worlds;
 using HNMO.Web.AdminPanel.Operations.ItemExchange;
 using HNMO.Web.AdminPanel.Services;
 
@@ -49,11 +50,16 @@ public static class AdminOperationsExtensions
         services.AddScoped<CastleSiegeOperations>();
         services.AddScoped<LogOperations>();
         services.AddScoped<AuditReadOperations>();
+        services.TryAddSingleton(_ => new WorldRegistryService(Path.Combine(AppContext.BaseDirectory, "hnmo-worlds.json")));
+        services.AddScoped<WorldsOperations>();
         services.AddScoped<CashShopCoinService>();
         services.AddScoped<CashShopCoinDelivery>();
         services.AddScoped<HnmoSkillService>();
         services.AddScoped<BankTopUpService>();
         services.AddScoped<CastleSiegeManagementService>();
+        services.AddScoped<MaintenanceToolsOperations>();
+        services.AddScoped<EconomyDashboardOperations>();
+        services.AddScoped<EventRewardsOperations>();
         return services;
     }
 }
