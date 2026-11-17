@@ -13449,5 +13449,77 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up a localized string similar to Password masked hint.</summary>
         public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailTitle text.</summary>
+        public static string WebsiteMailTitle => ResourceManager.GetString("WebsiteMailTitle", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHelp text.</summary>
+        public static string WebsiteMailHelp => ResourceManager.GetString("WebsiteMailHelp", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailEnabled text.</summary>
+        public static string WebsiteMailEnabled => ResourceManager.GetString("WebsiteMailEnabled", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailEnabledHint text.</summary>
+        public static string WebsiteMailEnabledHint => ResourceManager.GetString("WebsiteMailEnabledHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHost text.</summary>
+        public static string WebsiteMailHost => ResourceManager.GetString("WebsiteMailHost", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHostHint text.</summary>
+        public static string WebsiteMailHostHint => ResourceManager.GetString("WebsiteMailHostHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPort text.</summary>
+        public static string WebsiteMailPort => ResourceManager.GetString("WebsiteMailPort", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPortHint text.</summary>
+        public static string WebsiteMailPortHint => ResourceManager.GetString("WebsiteMailPortHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailFrom text.</summary>
+        public static string WebsiteMailFrom => ResourceManager.GetString("WebsiteMailFrom", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailFromHint text.</summary>
+        public static string WebsiteMailFromHint => ResourceManager.GetString("WebsiteMailFromHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUser text.</summary>
+        public static string WebsiteMailUser => ResourceManager.GetString("WebsiteMailUser", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUserHint text.</summary>
+        public static string WebsiteMailUserHint => ResourceManager.GetString("WebsiteMailUserHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPassword text.</summary>
+        public static string WebsiteMailPassword => ResourceManager.GetString("WebsiteMailPassword", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPasswordHint text.</summary>
+        public static string WebsiteMailPasswordHint => ResourceManager.GetString("WebsiteMailPasswordHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPasswordSaved text.</summary>
+        public static string WebsiteMailPasswordSaved => ResourceManager.GetString("WebsiteMailPasswordSaved", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailSaveHint text.</summary>
+        public static string WebsiteMailSaveHint => ResourceManager.GetString("WebsiteMailSaveHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailOpenHint text.</summary>
+        public static string WebsiteMailOpenHint => ResourceManager.GetString("WebsiteMailOpenHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailSaved text.</summary>
+        public static string WebsiteMailSaved => ResourceManager.GetString("WebsiteMailSaved", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailInvalid text.</summary>
+        public static string WebsiteMailInvalid => ResourceManager.GetString("WebsiteMailInvalid", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUnavailable text.</summary>
+        public static string WebsiteMailUnavailable => ResourceManager.GetString("WebsiteMailUnavailable", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailConfirmationSubject text.</summary>
+        public static string WebsiteMailConfirmationSubject => ResourceManager.GetString("WebsiteMailConfirmationSubject", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailConfirmationBody text.</summary>
+        public static string WebsiteMailConfirmationBody => ResourceManager.GetString("WebsiteMailConfirmationBody", resourceCulture)!;
+
+        /// <summary>Looks up the localized PageHelpTitle text.</summary>
+        public static string PageHelpTitle => ResourceManager.GetString("PageHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up the localized PageHelpToggleHint text.</summary>
+        public static string PageHelpToggleHint => ResourceManager.GetString("PageHelpToggleHint", resourceCulture)!;
     }
 }

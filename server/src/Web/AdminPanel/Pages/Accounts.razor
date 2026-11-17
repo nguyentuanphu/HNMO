@@ -12,6 +12,9 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@title" />
 <h1>@title</h1>
+<AuthorizeView Policy="@AdminPolicies.Administrator">
+    <NavLink href="email-settings" class="btn btn-outline-secondary mb-3" title="@Resources.WebsiteMailOpenHint">@Resources.WebsiteMailTitle</NavLink>
+</AuthorizeView>
 
 <div class="table-responsive">
     <DataTable TItem=@Account>
