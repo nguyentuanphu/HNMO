@@ -163,3 +163,13 @@ hai lần, gồm 3–20 ký tự thông thường trên bàn phím tiếng Anh, 
 trang tài khoản đăng xuất; hãy đăng nhập lại bằng mật khẩu mới. Máy chủ xác thực mật
 khẩu hiện tại và giữ chỗ tài khoản để tránh đăng nhập game trong lúc đổi. Trang không
 lưu mật khẩu vào bộ nhớ trình duyệt.
+
+The character table checks current presence through the account's game server when
+the player refreshes. A live result must match both the authenticated account and
+the character's persistent identifier. Queries share a five-second deadline. A missing
+or failed server channel shows **Unavailable**, while saved account data remains usable.
+Individual characters' last-seen timestamps are not recorded yet.
+
+Bảng nhân vật kiểm tra trạng thái hiện tại khi người chơi bấm **Làm mới**. Nếu máy chủ
+game không trả lời, trang hiển thị **Chưa kiểm tra được**; dữ liệu tài khoản đã lưu vẫn
+xem được. Chưa có lịch sử lần xuất hiện gần nhất của từng nhân vật.

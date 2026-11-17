@@ -601,15 +601,15 @@ logout that clears module memory. New sections register through accountSections.
 Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are
 kept together without changing the dictionaries from #4/#6.
 Remaining before the complete account-page request is done: personal missions/daily
-claims/calendar, referral progress/rewards, per-character live
-status and last-seen history, a complete purchase/spend ledger, and VIP buying/extensions
+claims/calendar, referral progress/rewards, per-character last-seen history,
+a complete purchase/spend ledger, and VIP buying/extensions
 in the VIP part. Confirmed e-mail changes require a mail-confirmation service.
 
 Đã có phần nền trang tài khoản: đăng nhập trong bộ nhớ thẻ, menu thích ứng màn hình,
 xem nhân vật/số dư đã lưu, phân trang lịch sử nhận coin theo giờ Sydney, gift code,
 reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. Tính năng khác có thể đăng ký
-mục riêng. Còn thiếu nhận quà/nhiệm vụ/điểm danh cá nhân, mời bạn, trạng thái
-trực tuyến từng nhân vật, lịch sử chi tiêu đầy đủ và mua/gia hạn VIP. Đổi email có xác nhận
+mục riêng. Còn thiếu nhận quà/nhiệm vụ/điểm danh cá nhân, mời bạn, lịch sử lần xuất hiện
+gần nhất của từng nhân vật, lịch sử chi tiêu đầy đủ và mua/gia hạn VIP. Đổi email có xác nhận
 cần dịch vụ gửi thư xác nhận.
 
 Password changes (2026-11-17, Sydney): the Security section accepts a matching new
@@ -621,6 +621,14 @@ HNMO is web only; the dashboard's quick links no longer offer a client download.
 từ chối khi tài khoản còn trong game và yêu cầu đăng nhập lại sau khi lưu. Máy chủ xác
 thực lại khi đã giữ chỗ tài khoản rồi mới lưu mã băm. HNMO chỉ chơi trên web; các liên
 kết nhanh của trang tài khoản không còn mục tải phần mềm chơi game.
+
+Character presence (2026-11-17, Sydney): refreshing reads each owned character's current
+online status through the existing game-server read channel. Missing/unresponsive channels
+show unavailable; no last-seen dates are invented. Saved character and coin data remain visible.
+
+Trạng thái nhân vật (17/11/2026, giờ Sydney): khi làm mới, trang kiểm tra từng nhân vật của
+tài khoản qua kênh đọc trạng thái máy chủ game có sẵn. Nếu máy chủ không trả lời, trang ghi
+chưa kiểm tra được; không tự tạo ngày giờ xuất hiện gần nhất. Vẫn xem được nhân vật và số dư đã lưu.
 
 ## Owner decision 2026-11-16 (Sydney): web only for now
 The desktop client is dropped for now (maybe later): HNMO ships and is played through the web game only. New HNMO

@@ -18,7 +18,11 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
     expect(body.loginName).toBe('ann'); expect(body.password).toBe('account-secret');
     await route.fulfill({ json: {
       loginName: 'ann', accountOnline: true, balances: { wCoinC: 150, wCoinP: 20, goblinPoints: 30 }, vipLevel: 0,
-      characters: [{ name: '<AnnKnight>', className: 'Knight', classNameVi: 'Chiến binh', level: 300, resets: 2, map: 0 }],
+      characters: [
+        { name: '<AnnKnight>', className: 'Knight', classNameVi: 'Chiến binh', level: 300, resets: 2, map: 0, online: true },
+        { name: 'AnnMage', className: 'Mage', classNameVi: 'Pháp sư', level: 200, resets: 0, map: 0, online: false },
+        { name: 'AnnArcher', className: 'Archer', classNameVi: 'Cung thủ', level: 100, resets: 0, map: 0, online: null },
+      ],
       history: [{ id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false }],
       page: body.page, hasMore: body.page === 0,
     } });
@@ -94,6 +98,9 @@ for (const width of [375, 820, 1280]) {
       await expect(page.locator('#account-overview')).toContainText('<AnnKnight>');
       await expect(page.locator('#account-overview')).toContainText('300');
       await expect(page.locator('#account-overview')).toContainText(language === 'vi' ? 'Chiến binh' : 'Knight');
+      for (const status of language === 'vi' ? ['Đang trong game', 'Đã thoát game', 'Chưa kiểm tra được'] : ['Online', 'Offline', 'Unavailable']) {
+        await expect(page.locator('#account-overview table')).toContainText(status);
+      }
       await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '/index.html');
       await expect(page.locator('#account-overview a[href="/topup.html"]')).toBeVisible();
       await expect(page.locator('#account-overview annknight')).toHaveCount(0);

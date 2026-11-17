@@ -27,6 +27,8 @@ public class WebsiteAccountControllerTests
     private Account _account = null!;
 
     private Mock<ILoginServer> _login = null!;
+    private Mock<IManageableServer> _server = null!;
+    private IList<IManageableServer> _servers = null!;
 
     /// <summary>Creates two accounts whose grants must never be mixed.</summary>
     /// <returns>The setup task.</returns>
@@ -68,7 +70,14 @@ public class WebsiteAccountControllerTests
         this._login = new Mock<ILoginServer>();
         this._login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte> { ["ann"] = 0 });
         this._login.Setup(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
-        this._controller = new WebsiteAccountController(provider, source.Object, this._login.Object, NullLogger<WebsiteAccountController>.Instance)
+        this._server = new Mock<IManageableServer>();
+        this._server.SetupGet(s => s.Id).Returns(0);
+        this._server.SetupGet(s => s.Type).Returns(ServerType.GameServer);
+        this._server.As<IGameServerAdministration>();
+        this._servers = new List<IManageableServer> { this._server.Object };
+        var servers = new Mock<IServerProvider>();
+        servers.SetupGet(s => s.Servers).Returns(this._servers);
+        this._controller = new WebsiteAccountController(provider, source.Object, this._login.Object, servers.Object, NullLogger<WebsiteAccountController>.Instance)
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
         };
@@ -122,6 +131,55 @@ public class WebsiteAccountControllerTests
         var policy = typeof(WebsiteAccountController).GetCustomAttributes(typeof(AuthorizeAttribute), false).Cast<AuthorizeAttribute>().Single();
         Assert.That(policy.Policy, Is.EqualTo(AdminPolicies.AuthenticatedOperator));
         Assert.That(policy.AuthenticationSchemes, Is.EqualTo(ApiKeyAuthenticationDefaults.ApiSchemes));
+    }
+
+    /// <summary>Live presence requires both the authenticated account and its exact persistent character identity.</summary>
+    /// <param name="sameAccount">Whether the live result belongs to the account.</param>
+    /// <param name="sameCharacter">Whether the live result has the character's identifier.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(true, true)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    public async Task ScopesLivePresenceToOwnCharacterAsync(bool sameAccount, bool sameCharacter)
+    {
+        var character = this._account.Characters.Single();
+        var live = new LivePlayerInfo(sameCharacter ? character.GetId() : Guid.NewGuid(), sameAccount ? "ann" : "bob", character.Name, 0, 1, 2, 300, 0, null, false);
+        this._server.As<IGameServerAdministration>().Setup(s => s.GetPlayerAsync(character.Name, It.IsAny<CancellationToken>())).ReturnsAsync(live);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").ValueKind, Is.EqualTo(sameAccount && sameCharacter ? JsonValueKind.True : JsonValueKind.Null));
+        Assert.That(json.ToString(), Does.Not.Contain("bob"));
+    }
+
+    /// <summary>An account outside the game confirms its characters are offline without live-server queries.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReportsOfflineCharactersWithoutQueryingAServerAsync()
+    {
+        this._login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte>());
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").GetBoolean(), Is.False);
+        this._server.As<IGameServerAdministration>().Verify(s => s.GetPlayerAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    /// <summary>A missing server channel is shown as unknown instead of inventing offline status.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReportsUnknownPresenceWhenTheServerChannelIsMissingAsync()
+    {
+        this._servers.Clear();
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").ValueKind, Is.EqualTo(JsonValueKind.Null));
+    }
+
+    /// <summary>A failed live query leaves saved account data available and marks presence unknown.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task KeepsSavedDataWhenTheLiveServerFailsAsync()
+    {
+        this._server.As<IGameServerAdministration>().Setup(s => s.GetPlayerAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ThrowsAsync(new TimeoutException("unavailable"));
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        Assert.That(json.GetProperty("characters")[0].GetProperty("online").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(json.GetProperty("balances").GetProperty("wCoinC").GetInt32(), Is.EqualTo(150));
     }
 
     /// <summary>A valid password change hashes the replacement, exposes no secrets and releases its reservation.</summary>

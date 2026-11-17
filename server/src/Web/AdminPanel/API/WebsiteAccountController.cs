@@ -26,6 +26,7 @@ using Microsoft.Extensions.Logging;
 /// <param name="persistence">The account persistence provider.</param>
 /// <param name="configurations">The game configuration source.</param>
 /// <param name="loginServer">The authoritative online state and account reservations.</param>
+/// <param name="servers">The read channels of the known game servers.</param>
 /// <param name="logger">The security-event logger, which never receives passwords.</param>
 [ApiController]
 [Route("api/website/account")]
@@ -34,6 +35,7 @@ public sealed class WebsiteAccountController(
     IPersistenceContextProvider persistence,
     IDataSource<GameConfiguration> configurations,
     ILoginServer loginServer,
+    IServerProvider servers,
     ILogger<WebsiteAccountController> logger) : ControllerBase
 {
     private const int PageSize = 20;
@@ -69,6 +71,7 @@ public sealed class WebsiteAccountController(
         var offset = request.Page * PageSize;
         var grants = await context.GetLatestCashShopCoinGrantsAsync(account.GetId(), Math.Min(offset + PageSize + 1, MaximumHistory), cancellationToken).ConfigureAwait(false);
         var online = await loginServer.GetSnapshotAsync().ConfigureAwait(false);
+        var presence = await WebsiteAccountPresence.ReadAsync(account, online, servers, logger, cancellationToken).ConfigureAwait(false);
         return this.Ok(new
         {
             account.LoginName,
@@ -78,6 +81,7 @@ public sealed class WebsiteAccountController(
             characters = account.Characters.OrderBy(c => c.CharacterSlot).Select(c => new
             {
                 c.Name,
+                online = presence[c.GetId()],
                 className = c.CharacterClass?.Name.ValueInNeutralLanguage ?? string.Empty,
                 classNameVi = c.CharacterClass?.Name.GetTranslation(CultureInfo.GetCultureInfo("vi")) ?? string.Empty,
                 level = (int)(c.Attributes.FirstOrDefault(a => a.Definition?.Id == Stats.Level.Id)?.Value ?? 0),

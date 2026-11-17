@@ -9,7 +9,7 @@ interface AccountSnapshot {
   accountOnline: boolean;
   balances: { wCoinC: number; wCoinP: number; goblinPoints: number };
   vipLevel: number;
-  characters: readonly { name: string; className: string; classNameVi?: string; level: number; resets: number; map: number | null }[];
+  characters: readonly { name: string; className: string; classNameVi?: string; level: number; resets: number; map: number | null; online?: boolean | null }[];
   history: readonly { id: string; coinType: string; amount: number; reason: string | null; createdAt: string; pending: boolean }[];
   page: number;
   hasMore: boolean;
@@ -134,8 +134,8 @@ function renderOverview(): void {
   const play = link('play', 'playHint', '/index.html'); play.id = 'accountPlaySlot'; play.dataset.accountPlaySlot = '';
   quick.append(play, link('topup', 'topupHint', '/topup.html'));
   root.append(quick, node('h3', t('characters')));
-  root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map')],
-    snapshot.characters.map(c => [c.name, (language === 'vi' ? c.classNameVi || c.className : c.className) || t('unknown'), String(c.level), String(c.resets), c.map === null ? t('unknown') : String(c.map)])) : node('p', t('noCharacters')));
+  root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map'), t('status')],
+    snapshot.characters.map(c => [c.name, (language === 'vi' ? c.classNameVi || c.className : c.className) || t('unknown'), String(c.level), String(c.resets), c.map === null ? t('unknown') : String(c.map), t(c.online === true ? 'online' : c.online === false ? 'offline' : 'presenceUnknown')])) : node('p', t('noCharacters')));
   root.append(node('p', t('lastSeenNote')), node('p', `VIP: ${snapshot.vipLevel}`));
 }
 
