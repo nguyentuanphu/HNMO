@@ -28,6 +28,8 @@ export interface VipOperation {
 
 export interface VipStateView {
   enabled: boolean;
+  accountKey?: string;
+  legacyLevel?: number | null;
   active: (VipBenefits & { levelId: number; nameEn: string; nameVi: string; untilUtc: string }) | null;
   offers: readonly VipOfferView[];
   pending: VipOperation | null;

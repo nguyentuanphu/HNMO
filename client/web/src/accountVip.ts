@@ -173,7 +173,8 @@ export class AccountVip {
         claim.disabled ||= !this.state.daily.available; this.root.append(claim);
         if (this.state.daily.claimed) this.root.append(this.node('p', this.t('claimed')));
       }
-    } else this.root.append(this.node('p', this.t('none')));
+    } else if ((this.state.legacyLevel ?? 0) > 0) this.root.append(this.node('p', this.t('legacy')));
+    else if (!this.operation) this.root.append(this.node('p', this.t('none')));
     if (this.operation) {
       this.root.append(this.button('retry', 'retryHint', () => { void this.purchase(); })); return;
     }
@@ -191,7 +192,7 @@ export class AccountVip {
       const card = this.node('div'); card.className = 'account-card';
       card.append(this.node('h4', this.name(offer)), this.node('p', this.t('days', offer.days)), this.node('p', this.t('price', offer.price, this.coin(offer.coinType))), this.benefits(offer));
       const review = this.button('choose', 'chooseHint', () => { this.selected = offer; this.render(); });
-      review.disabled ||= this.state.active !== null && this.state.active.levelId !== offer.levelId;
+      review.disabled ||= (this.state.legacyLevel ?? 0) > 0 || (this.state.active !== null && this.state.active.levelId !== offer.levelId);
       card.append(review); this.root.append(card);
     }
   }

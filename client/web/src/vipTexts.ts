@@ -8,6 +8,7 @@ export const vipTexts = {
   unavailable: ['VIP information is unavailable. Try refreshing.', 'Chưa tải được thông tin VIP. Hãy thử làm mới.'],
   off: ['The host has turned off new VIP purchases.', 'Chủ máy chủ đang tắt mua VIP mới.'],
   none: ['You have no active VIP subscription.', 'Bạn chưa có gói VIP còn hiệu lực.'],
+  legacy: ['Your existing VIP status is managed by the host. Ask the host before buying here.', 'Quyền VIP hiện tại do chủ máy chủ quản lý. Hãy liên hệ chủ máy chủ trước khi mua ở đây.'],
   until: ['Valid until {0} (Sydney)', 'Có hiệu lực đến {0} (giờ Sydney)'],
   experience: ['Extra experience: {0}%', 'Kinh nghiệm thêm: {0}%'],
   zen: ['Extra zen from drops: {0}%', 'Zen rơi thêm: {0}%'],
