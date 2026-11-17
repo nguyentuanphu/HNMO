@@ -3,6 +3,7 @@ import { accountSections, onAccountSectionsChanged, registerAccountSection, type
 import { accountPageTexts, type AccountTextKey } from './accountPageTexts.js';
 import { mountAccountPasswordForm } from './accountPassword.js';
 import { AccountIntegrations } from './accountIntegrations.js';
+import { AccountMissions } from './accountMissions.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -25,6 +26,7 @@ let generation = 0;
 let loading = false;
 const loadedLegacy = new Set<string>();
 const integrations = new AccountIntegrations({ getCredentials: () => credentials, getLanguage: () => language }, logOut);
+const missions = new AccountMissions({ language: () => language, request, error: showError });
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -172,7 +174,7 @@ function renderCommunity(): void {
     const anchor = node('a', { discord: 'Discord', zalo: 'Zalo', facebook: 'Facebook' }[kind] ?? kind);
     anchor.href = url; anchor.target = '_blank'; anchor.rel = 'noopener noreferrer'; anchor.title = t('linkHint'); root.append(anchor);
   }
-  root.append(node('h3', t('eventAlerts')), integrations.alerts);
+  root.append(missions.referrals, node('h3', t('eventAlerts')), integrations.alerts);
 }
 
 function translate(): void {
@@ -191,6 +193,7 @@ function translate(): void {
   for (const item of document.querySelectorAll<HTMLElement>('[data-account-language]')) item.setAttribute('aria-pressed', String(item.dataset.accountLanguage === language));
   for (const prefix of ['gift', 'reset', 'safety', 'play']) document.querySelector<HTMLButtonElement>(`[data-${prefix}-lang="${language}"]`)?.click();
   integrations.refreshLanguage();
+  missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
   document.title = `${gameName()} — ${t('account')}`;
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
   renderOverview(); renderCoins(); renderCommunity(); renderNavigation();
@@ -231,6 +234,7 @@ async function openSection(id: string): Promise<void> {
   active = id; renderNavigation(); loadLegacy(id);
   if (credentials && snapshot) {
     try { await integrations.refresh(id); } catch (error) { showError(error); }
+    await missions.open(id);
   }
   const section = accountSections().find(s => s.id === id);
   if (credentials && snapshot && section?.open) {
@@ -254,7 +258,7 @@ function mount(): void {
   panel('overview', 'overview').append(integrations.play); panel('coins', 'coins');
   panel('vip', 'vip', 'vipSoon').append(node('strong'));
   element('account-vip').lastElementChild!.id = 'account-vip-level';
-  panel('rewards', 'rewards', 'rewardsNote').append(element('gift'));
+  panel('rewards', 'rewards', 'rewardsNote').append(missions.rewards, element('gift'));
   panel('resets', 'resets').append(element('resets'));
   const security = panel('security', 'security', 'securityNote'); security.append(element('safety'));
   mountAccountPasswordForm(security, { text: t, request, message: showMessage, error: showError, changed: passwordChanged });
@@ -284,7 +288,8 @@ function mount(): void {
     element('accountLoginPanel').hidden = true; element('accountToolbar').hidden = false;
     element('accountDashboard').classList.add('authenticated');
     element('registerForm').hidden = true; element('coinsForm').hidden = true; element('setupPanel').hidden = true;
-    void openSection('overview');
+    const requested = location.hash.slice(1);
+    void openSection(accountSections().some(s => s.id === requested) ? requested : 'overview');
   });
   translate();
   try {

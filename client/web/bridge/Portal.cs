@@ -46,6 +46,8 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
         app.MapPost("/portal/account/overview", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "overview"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/account/password", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "password"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/missions/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/state", "Account missions"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/missions/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/claim", "Account missions"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/register", portal.RegisterAsync).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);

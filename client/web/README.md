@@ -178,6 +178,27 @@ xem được. Chưa có lịch sử lần xuất hiện gần nhất của từn
 
 The account branch includes `antigravity-integration` (PR #51). Coins mounts its
 existing top-up milestone widget; Community mounts its event-alert subscription widget.
+
+Personal missions, streak rewards, the login calendar and referral progress use the
+same mission engine as the game. The bridge forwards signed account requests to the
+website API, which authenticates the account and stamps its owned character and world
+identifiers. The internal game-server endpoint requires the configured Dapr app token;
+no account password is forwarded through that channel. Boards are projected from a
+deep copy so reading does not roll over or create live state, and only an actually
+saved referral code can be shared. Claims require that exact owned character to be
+connected in the game, recheck its identity under the player persistence lock, and
+delegate to the existing claim/invitation methods. Full bags remain claimable under
+those existing rules. Do not describe this as a new transactional/offline delivery
+system. Multi-process mission-cache coherence and crash-time reward delivery are
+inherited from the existing engine and have not been certified by the website tests.
+
+Nhiệm vụ cá nhân, thưởng chuỗi ngày, lịch điểm danh và tiến trình mời bạn dùng cùng
+bộ quy tắc trong game. Trang xác thực tài khoản và kiểm tra nhân vật thuộc tài khoản;
+máy chủ game kiểm tra lại trước khi thực hiện. Xem tiến trình dùng bản sao, không
+làm mới hay tạo dữ liệu đang chạy. Chỉ chia sẻ mã mời đã thực sự được lưu. Nhận thưởng
+hoặc lưu người mời cần nhân vật đã chọn đang trong game. Nếu túi đầy, phần thưởng
+vẫn có thể nhận lại theo quy tắc hiện có. Chưa xác nhận khả năng đồng bộ bộ nhớ đệm
+nhiệm vụ giữa nhiều tiến trình hoặc xử lý sự cố đúng lúc trao thưởng trên máy chủ thật.
 The widgets use the account's current language and in-memory credentials. Only choosing
 the subscription button requests browser notification permission. No tickets or
 passwords are stored in browser storage.

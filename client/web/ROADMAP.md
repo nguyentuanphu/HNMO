@@ -603,15 +603,18 @@ password-authenticated saved character/coin snapshots, retained coin history pag
 logout that clears module memory. New sections register through accountSections.ts;
 Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are
 kept together without changing the dictionaries from #4/#6.
-Remaining before the complete account-page request is done: personal missions/daily
-claims/calendar, referral progress/rewards, per-character last-seen history,
+Personal missions/daily claims/calendar and referral progress/rewards are connected
+through the existing mission engine. Claims require the selected character in the game;
+offline reads do not mutate live state. Remaining: per-character last-seen history,
 a complete purchase/spend ledger, and VIP buying/extensions
 in the VIP part. Confirmed e-mail changes require a mail-confirmation service.
 
 Đã có phần nền trang tài khoản: đăng nhập trong bộ nhớ thẻ, menu thích ứng màn hình,
 xem nhân vật/số dư đã lưu, phân trang lịch sử nhận coin theo giờ Sydney, gift code,
 reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. Tính năng khác có thể đăng ký
-mục riêng. Còn thiếu nhận quà/nhiệm vụ/điểm danh cá nhân, mời bạn, lịch sử lần xuất hiện
+mục riêng. Đã kết nối nhiệm vụ, nhận quà hằng ngày, điểm danh và tiến trình mời bạn qua
+cùng bộ quy tắc trong game. Nhận thưởng cần nhân vật đã chọn đang trong game;
+xem khi ngoại tuyến không thay đổi dữ liệu đang chạy. Còn thiếu lịch sử lần xuất hiện
 gần nhất của từng nhân vật, lịch sử chi tiêu đầy đủ và mua/gia hạn VIP. Đổi email có xác nhận
 cần dịch vụ gửi thư xác nhận.
 

@@ -1,4 +1,9 @@
 .account-panel { min-width: 0; }
+.account-mission { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.account-calendar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; padding-left: 24px; }
+.account-calendar [data-claimed] { opacity: .7; }
+#account-referrals a { display: block; overflow-wrap: anywhere; }
+#account-referrals input, #account-missions select, #account-referrals select { max-width: 100%; min-width: 0; box-sizing: border-box; }
 #accountPanels { display: grid; gap: 20px; min-width: 0; }
 #accountDashboard { min-width: 0; }
 #accountDashboard.authenticated { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px; }
