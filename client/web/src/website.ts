@@ -305,7 +305,7 @@ const copy = {
     createText: "Register through the game launcher’s account portal.",
     choose: "Choose your path",
     chooseText:
-      "Open the browser client, select your server, and create your character.",
+      "Sign in on the website and click Play now to go straight to server choice, or open the browser client directly.",
     download: "Take the realm with you",
     downloadText:
       "One download for Windows, Ubuntu and macOS. Unzip it and run Start HNMO.bat (Windows) or start-hnmo.sh (Ubuntu, macOS).",
@@ -638,7 +638,7 @@ const copy = {
     create: "Tạo tài khoản",
     createText: "Đăng ký tại trang tài khoản của trình khởi chạy trò chơi.",
     choose: "Chọn con đường của bạn",
-    chooseText: "Mở trò chơi trên trình duyệt, chọn máy chủ và tạo nhân vật.",
+    chooseText: "Đăng nhập trên website và bấm Chơi ngay để vào thẳng phần chọn máy chủ, hoặc mở trò chơi trực tiếp trên trình duyệt.",
     download: "Mang theo thế giới của bạn",
     downloadText:
       "Một bản tải cho Windows, Ubuntu và macOS. Giải nén rồi chạy Start HNMO.bat (Windows) hoặc start-hnmo.sh (Ubuntu, macOS).",
@@ -1073,6 +1073,20 @@ element("google-linked").addEventListener("submit", (event) => {
   const newPassword = (form.elements.namedItem("newPassword") as HTMLInputElement).value;
   if (!newPassword) return;
   void post("/portal/google", { credential: googleCredential, newPassword }).then(showGoogleAnswer);
+});
+
+document.getElementById("google-play")?.addEventListener("click", (event) => {
+  if (!googleCredential) return;
+  event.preventDefault();
+  void post("/portal/google-ticket", { credential: googleCredential }).then((answer) => {
+    const ticket = (answer as { ticket?: string }).ticket;
+    const loginName = answer.loginName;
+    if (ticket && loginName) {
+      location.href = `/index.html#ticket=${encodeURIComponent(ticket)}&account=${encodeURIComponent(loginName)}`;
+    } else if (answer.error) {
+      message("google-message", answer.error, "error");
+    }
+  });
 });
 
 // After the page has loaded: a slow or blocked Google script must not hold up the page.

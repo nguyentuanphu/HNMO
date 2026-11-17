@@ -6190,6 +6190,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTicketLogin" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="username">The account login name.</param>
+    /// <param name="ticket">The one-time login ticket issued on the website.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game connects with a one-time login ticket issued on the website.
+    /// Causes reaction on server side: The server redeems the ticket once and logs the player in without a password.
+    /// </remarks>
+    public static async ValueTask SendHnmoTicketLoginAsync(this IConnection? connection, string @username, string @ticket)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTicketLoginRef.Length;
+            var packet = new HnmoTicketLoginRef(connection.Output.GetSpan(length)[..length]);
+            packet.Username = @username;
+            packet.Ticket = @ticket;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

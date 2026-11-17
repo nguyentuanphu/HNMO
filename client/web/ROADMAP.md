@@ -331,9 +331,12 @@ section 12 (the cash shop) still waits for the owner's answers.
 - The admin panel explains itself: a hint on hover for every button/field and a "How to use this page" button on
   every page (EN+VI), starting with the API keys page.
 - The owner hit "This account is already logged in" for test5 on their own computer: the stuck-login follow-up is urgent.
-- Approved proposal: website login -> "Play now" opens the game at the server choice with a one-time ticket
-  (about a minute) instead of the password; the game without a web login goes to the website's login; the
-  desktop client keeps its password login; the admin panel stays on its own address, no link from the website.
+- Done: website login -> "Play now" opens the game at the server choice with a one-time ticket
+  (60 seconds, 192-bit, single use, hashed in memory, passed in URL fragment `#ticket=...&account=...`
+  and cleared via `history.replaceState`) instead of the password; the game without a web login shows
+  a "Log in on the website" button (and optional `WebsiteConfiguration.RequireWebsiteLogin` admin
+  setting); the desktop client keeps its password login; the admin panel stays on its own address, no
+  link from the website.
 - The player's account page (after the web login) has everything a player needs, EN+VI:
   overview (characters with level/resets/map, online or not), coins balance + history + top-up, VIP (buy with
   coins, time left), gift codes, missions/daily rewards and login calendar, resets, account safety (second
