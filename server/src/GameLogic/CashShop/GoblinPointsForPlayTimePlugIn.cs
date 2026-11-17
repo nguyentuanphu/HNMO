@@ -102,7 +102,9 @@ public class GoblinPointsForPlayTimePlugIn : IPeriodicTaskPlugIn, ISupportCustom
         {
             await player.RunPersistenceExclusiveAsync(() =>
             {
+                var previous = account.GoblinPoints;
                 account.GoblinPoints = (int)Math.Min((long)account.GoblinPoints + points, int.MaxValue);
+                CashShopBalanceReceipt.Record(player.PersistenceContext, account, CashShopCoinType.GoblinPoints, account.GoblinPoints - previous, CashShopBalanceReason.PlayTime);
                 return ValueTask.CompletedTask;
             }).ConfigureAwait(false);
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.GoblinPointsForPlayTime), points).ConfigureAwait(false);

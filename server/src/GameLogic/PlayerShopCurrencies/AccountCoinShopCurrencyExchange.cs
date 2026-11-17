@@ -54,6 +54,8 @@ public sealed class AccountCoinShopCurrencyExchange : IShopCurrencyExchange
         }
 
         buyerAccount.SetCashShopCoins(coinType, buyerBalance - purchase.Price.Amount);
+        var receipt = CashShopBalanceReceipt.Record(purchase.Buyer.PersistenceContext, buyerAccount, coinType, -purchase.Price.Amount,
+            CashShopBalanceReason.PlayerStorePurchase, purchase.Seller.SelectedCharacter?.Name);
         bool saved;
         try
         {
@@ -68,11 +70,16 @@ public sealed class AccountCoinShopCurrencyExchange : IShopCurrencyExchange
         if (!saved)
         {
             buyerAccount.SetCashShopCoins(coinType, buyerBalance);
+            await CashShopBalanceReceipt.RemoveAsync(purchase.Buyer.PersistenceContext, receipt).ConfigureAwait(false);
             return ShopPaymentResult.Failed;
         }
 
         // Read again, because the seller may have received coins in the meantime.
-        sellerAccount.SetCashShopCoins(coinType, (int)Math.Min((long)sellerAccount.GetCashShopCoins(coinType) + purchase.Price.Amount, int.MaxValue));
+        var sellerBefore = sellerAccount.GetCashShopCoins(coinType);
+        var sellerAfter = (int)Math.Min((long)sellerBefore + purchase.Price.Amount, int.MaxValue);
+        sellerAccount.SetCashShopCoins(coinType, sellerAfter);
+        CashShopBalanceReceipt.Record(purchase.Seller.PersistenceContext, sellerAccount, coinType, sellerAfter - sellerBefore,
+            CashShopBalanceReason.PlayerStoreSale, purchase.Buyer.SelectedCharacter?.Name);
         purchase.Buyer.Logger.LogInformation("{buyer} paid {price} {coinType} to {seller} for an item of the player store.", purchase.Buyer, purchase.Price.Amount, coinType, purchase.Seller);
         return ShopPaymentResult.Success;
     }

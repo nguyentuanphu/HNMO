@@ -95,6 +95,7 @@ public sealed class WebsiteAccountController(
                 g.Amount,
                 g.Reason,
                 purchase = CashShopPurchaseReceipt.Read(g.Reason),
+                balanceChange = CashShopBalanceReceipt.Read(g.Reason),
                 createdAt = DateTime.SpecifyKind(g.CreatedAt, DateTimeKind.Utc),
                 pending = g.AppliedAt is null,
             }).ToList(),

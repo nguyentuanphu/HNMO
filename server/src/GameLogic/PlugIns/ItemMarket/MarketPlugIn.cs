@@ -440,9 +440,11 @@ public sealed class MarketPlugIn :
         }
 
         account.SetCashShopCoins(coinType, balance - price);
+        var receipt = CashShopBalanceReceipt.Record(player.PersistenceContext, account, coinType, -price, CashShopBalanceReason.MarketPurchase);
         if (!await player.SaveProgressAsync().ConfigureAwait(false))
         {
             account.SetCashShopCoins(coinType, balance);
+            await CashShopBalanceReceipt.RemoveAsync(player.PersistenceContext, receipt).ConfigureAwait(false);
             return false;
         }
 
