@@ -4,6 +4,7 @@ import { accountPageTexts, type AccountTextKey } from './accountPageTexts.js';
 import { mountAccountPasswordForm } from './accountPassword.js';
 import { AccountIntegrations } from './accountIntegrations.js';
 import { AccountMissions } from './accountMissions.js';
+import { AccountEmail } from './accountEmail.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -27,6 +28,7 @@ let loading = false;
 const loadedLegacy = new Set<string>();
 const integrations = new AccountIntegrations({ getCredentials: () => credentials, getLanguage: () => language }, logOut);
 const missions = new AccountMissions({ language: () => language, request, error: showError });
+const email = new AccountEmail({ text: t, language: () => language, request, message: showMessage, error: showError });
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -85,6 +87,11 @@ async function request<T>(path: string, body: Readonly<Record<string, unknown>> 
     headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, ...credentials }),
   });
   if (!response.ok) {
+    if (path.startsWith('/portal/account/email/')) {
+      const problem: unknown = await response.json().catch(() => null);
+      const messages: Readonly<Record<string, AccountTextKey>> = { online: 'emailOnline', email: 'emailInvalid', code: 'emailCodeInvalid', 'mail-off': 'emailOff', 'mail-wait': 'emailWait', 'mail-send': 'emailSendFailed' };
+      if (problem && typeof problem === 'object' && 'error' in problem && typeof problem.error === 'string' && messages[problem.error]) throw new AccountRequestError(messages[problem.error]);
+    }
     if (path === '/portal/account/password' && response.status === 409) throw new AccountRequestError('passwordOnline');
     if (path === '/portal/account/password' && response.status === 400) throw new AccountRequestError('passwordInvalid');
     throw new AccountRequestError(response.status === 401 ? 'loginError' : response.status === 429 ? 'rateError' : response.status === 503 ? 'setupError' : 'serverError');
@@ -193,6 +200,7 @@ function translate(): void {
   for (const item of document.querySelectorAll<HTMLElement>('[data-account-language]')) item.setAttribute('aria-pressed', String(item.dataset.accountLanguage === language));
   for (const prefix of ['gift', 'reset', 'safety', 'play']) document.querySelector<HTMLButtonElement>(`[data-${prefix}-lang="${language}"]`)?.click();
   integrations.refreshLanguage();
+  email.refreshLanguage(snapshot !== null);
   missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
   document.title = `${gameName()} — ${t('account')}`;
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
@@ -235,6 +243,7 @@ async function openSection(id: string): Promise<void> {
   if (credentials && snapshot) {
     try { await integrations.refresh(id); } catch (error) { showError(error); }
     await missions.open(id);
+    if (id === 'security') { try { await email.open(); } catch (error) { showError(error); } }
   }
   const section = accountSections().find(s => s.id === id);
   if (credentials && snapshot && section?.open) {
@@ -262,6 +271,7 @@ function mount(): void {
   panel('resets', 'resets').append(element('resets'));
   const security = panel('security', 'security', 'securityNote'); security.append(element('safety'));
   mountAccountPasswordForm(security, { text: t, request, message: showMessage, error: showError, changed: passwordChanged });
+  security.append(email.root);
   panel('community', 'community');
   onAccountSectionsChanged(() => { renderNavigation(); });
   element<HTMLSelectElement>('accountSectionSelect').addEventListener('change', event => { void openSection((event.target as HTMLSelectElement).value); });

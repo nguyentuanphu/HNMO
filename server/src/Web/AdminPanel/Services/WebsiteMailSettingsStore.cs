@@ -22,6 +22,12 @@ public sealed class WebsiteMailSettingsStore(HnmoStateStore state, IDataProtecti
     /// <summary>Gets the unified state path used to resolve the existing per-account row backend.</summary>
     public string StatePath => state.FilePath;
 
+    /// <summary>Validates a plain mailbox address without display names or newline injection.</summary>
+    /// <param name="address">The input address.</param>
+    /// <returns>Whether it is a single plain address.</returns>
+    public static bool IsAddress(string address) => address.Length <= 254 && address.Contains('@') && !address.Any(char.IsControl)
+        && MailAddress.TryCreate(address, out var parsed) && parsed.DisplayName.Length == 0 && parsed.Address == address;
+
     /// <summary>Reads a detached form model with no stored credential.</summary>
     /// <returns>The public settings and password-exists flag.</returns>
     public WebsiteMailSettings Read()
@@ -32,12 +38,6 @@ public sealed class WebsiteMailSettingsStore(HnmoStateStore state, IDataProtecti
             return stored with { ProtectedPassword = string.Empty, HasPassword = !string.IsNullOrEmpty(stored.ProtectedPassword) };
         }
     }
-
-    /// <summary>Validates a plain mailbox address without display names or newline injection.</summary>
-    /// <param name="address">The input address.</param>
-    /// <returns>Whether it is a single plain address.</returns>
-    public static bool IsAddress(string address) => address.Length <= 254 && !address.Any(char.IsControl)
-        && MailAddress.TryCreate(address, out var parsed) && parsed.DisplayName.Length == 0 && parsed.Address == address;
 
     /// <summary>Saves validated settings; a blank replacement keeps the previous protected password.</summary>
     /// <param name="settings">The form settings.</param>
@@ -63,8 +63,8 @@ public sealed class WebsiteMailSettingsStore(HnmoStateStore state, IDataProtecti
     }
 
     /// <summary>Creates one disposable SMTP client; remote delivery always requires STARTTLS.</summary>
-    /// <returns>The configured client.</returns>
-    public SmtpClient CreateClient()
+    /// <returns>The configured client and sender address from the same settings snapshot.</returns>
+    public (SmtpClient Client, string From) CreateClient()
     {
         lock (this._gate)
         {
@@ -74,13 +74,10 @@ public sealed class WebsiteMailSettingsStore(HnmoStateStore state, IDataProtecti
                 throw new InvalidOperationException("Email delivery is disabled.");
             }
 
-            var client = new SmtpClient(settings.Host, settings.Port) { EnableSsl = true, UseDefaultCredentials = false };
-            if (settings.UserName.Length > 0)
-            {
-                client.Credentials = new NetworkCredential(settings.UserName, settings.ProtectedPassword.Length == 0 ? string.Empty : this._protector.Unprotect(settings.ProtectedPassword));
-            }
-
-            return client;
+            var credentials = settings.UserName.Length == 0 ? null : new NetworkCredential(settings.UserName,
+                settings.ProtectedPassword.Length == 0 ? string.Empty : this._protector.Unprotect(settings.ProtectedPassword));
+            var client = new SmtpClient(settings.Host, settings.Port) { EnableSsl = true, UseDefaultCredentials = false, Credentials = credentials };
+            return (client, settings.From);
         }
     }
 

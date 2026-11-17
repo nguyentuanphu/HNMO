@@ -18,8 +18,9 @@ public sealed class SmtpWebsiteConfirmationMail(WebsiteMailSettingsStore setting
     public async Task SendAsync(string address, string code, string language, CancellationToken cancellationToken)
     {
         var culture = CultureInfo.GetCultureInfo(language == "vi" ? "vi" : "en");
-        using var client = settings.CreateClient();
-        using var message = new MailMessage(settings.Read().From, address)
+        var submission = settings.CreateClient();
+        using var client = submission.Client;
+        using var message = new MailMessage(submission.From, address)
         {
             Subject = Resources.ResourceManager.GetString(nameof(Resources.WebsiteMailConfirmationSubject), culture)!,
             Body = string.Format(culture, Resources.ResourceManager.GetString(nameof(Resources.WebsiteMailConfirmationBody), culture)!, code),

@@ -4,6 +4,7 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Threading;
 using HNMO.DataModel.Configuration;
@@ -29,9 +30,15 @@ using Microsoft.Extensions.Logging;
 [ApiController]
 [Route("api/website/account/email")]
 [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Policy = AdminPolicies.AuthenticatedOperator)]
-public sealed class WebsiteAccountEmailController(IPersistenceContextProvider persistence, IDataSource<GameConfiguration> configurations,
-    ILoginServer login, WebsiteMailSettingsStore settings, WebsiteEmailChallengeStore challenges, IWebsiteConfirmationMail mail,
-    TimeProvider clock, ILogger<WebsiteAccountEmailController> logger) : ControllerBase
+public sealed class WebsiteAccountEmailController(
+    IPersistenceContextProvider persistence,
+    IDataSource<GameConfiguration> configurations,
+    ILoginServer login,
+    WebsiteMailSettingsStore settings,
+    WebsiteEmailChallengeStore challenges,
+    IWebsiteConfirmationMail mail,
+    TimeProvider clock,
+    ILogger<WebsiteAccountEmailController> logger) : ControllerBase
 {
     /// <summary>Reads the player's own current email and whether confirmations are configured.</summary>
     /// <param name="request">The current credentials.</param>
@@ -50,6 +57,8 @@ public sealed class WebsiteAccountEmailController(IPersistenceContextProvider pe
     /// <returns>A secret-free outcome.</returns>
     [HttpPost("confirm")]
     public ValueTask<IActionResult> ConfirmAsync([FromBody] WebsiteEmailRequest request) => this.HandleAsync(request, "confirm");
+
+    private static bool Allowed([NotNullWhen(true)] Account? account) => account is { IsBot: false } && account.State is not (AccountState.Banned or AccountState.TemporarilyBanned);
 
     private async ValueTask<IActionResult> HandleAsync(WebsiteEmailRequest request, string operation)
     {
@@ -94,8 +103,6 @@ public sealed class WebsiteAccountEmailController(IPersistenceContextProvider pe
             await login.ReleaseAccountReservationAsync(account.LoginName, reservation).ConfigureAwait(false);
         }
     }
-
-    private static bool Allowed(Account? account) => account is { IsBot: false } && account.State is not (AccountState.Banned or AccountState.TemporarilyBanned);
 
     private async ValueTask<IActionResult> ChangeUnderReservationAsync(GameConfiguration configuration, WebsiteEmailRequest request, string operation, CancellationToken cancellationToken)
     {
@@ -160,9 +167,11 @@ public sealed class WebsiteAccountEmailController(IPersistenceContextProvider pe
         challenges.Write(account.GetId(), applying, now);
         if (account.EMail != email)
         {
+            var previous = account.EMail;
             account.EMail = email;
             if (!await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
             {
+                account.EMail = previous;
                 return this.StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = "server" });
             }
         }

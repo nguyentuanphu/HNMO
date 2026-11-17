@@ -14,5 +14,13 @@ namespace HNMO.Web.AdminPanel.Services;
 /// <param name="NextSendAtUtc">The resend deadline, retained on failed delivery.</param>
 /// <param name="Attempts">The number of incorrect confirmations.</param>
 /// <param name="State">Sending, pending, applying, consumed or failed.</param>
-public sealed record WebsiteEmailChallenge(string ProtectedEmail, string CodeHash, string Salt, string PasswordHash, string OldEmailHash,
-    DateTime ExpiresAtUtc, DateTime NextSendAtUtc, int Attempts, string State);
+public sealed record WebsiteEmailChallenge(
+    string ProtectedEmail,
+    string CodeHash,
+    string Salt,
+    string PasswordHash,
+    string OldEmailHash,
+    DateTime ExpiresAtUtc,
+    DateTime NextSendAtUtc,
+    int Attempts,
+    string State);
