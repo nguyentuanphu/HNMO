@@ -1,0 +1,53 @@
+/** Paired texts are kept outside the shared dictionaries so this feature can be reviewed independently. */
+export const vipTexts = {
+  title: ['VIP subscription', 'Gói VIP'],
+  help: ['How to use this page', 'Cách dùng trang này'],
+  helpHint: ['Show or hide the explanation of VIP purchases and daily rewards.', 'Hiện hoặc ẩn hướng dẫn mua VIP và nhận quà hằng ngày.'],
+  helpBody: ['Choose a VIP offer, review its price, then confirm. Coins come from your account. Renewing the same active level adds days to its expiry. A different level needs the host’s help. Benefits end at the displayed expiry; all dates use Sydney time. Retry a pending purchase instead of starting another one.', 'Chọn gói VIP, xem lại giá rồi xác nhận. Coin được trừ từ tài khoản. Gia hạn cùng hạng VIP đang dùng sẽ cộng thêm ngày vào thời hạn còn lại. Muốn đổi hạng, hãy liên hệ chủ máy chủ. Quyền lợi kết thúc đúng hạn hiển thị; mọi ngày giờ đều theo Sydney. Nếu giao dịch đang chờ, hãy thử lại giao dịch đó thay vì mua gói khác.'],
+  loading: ['Loading VIP…', 'Đang tải VIP…'],
+  unavailable: ['VIP information is unavailable. Try refreshing.', 'Chưa tải được thông tin VIP. Hãy thử làm mới.'],
+  off: ['The host has turned off new VIP purchases.', 'Chủ máy chủ đang tắt mua VIP mới.'],
+  none: ['You have no active VIP subscription.', 'Bạn chưa có gói VIP còn hiệu lực.'],
+  until: ['Valid until {0} (Sydney)', 'Có hiệu lực đến {0} (giờ Sydney)'],
+  experience: ['Extra experience: {0}%', 'Kinh nghiệm thêm: {0}%'],
+  zen: ['Extra zen from drops: {0}%', 'Zen rơi thêm: {0}%'],
+  daily: ['Daily bonus: {0} {1}', 'Quà hằng ngày: {0} {1}'],
+  days: ['{0} days', '{0} ngày'],
+  price: ['Price: {0} {1}', 'Giá: {0} {1}'],
+  offers: ['Choose an offer', 'Chọn gói mua'],
+  choose: ['Review purchase', 'Xem lại giao dịch'],
+  chooseHint: ['Review this VIP offer and its price before spending coins.', 'Xem lại gói VIP và giá trước khi tiêu coin.'],
+  confirm: ['Confirm purchase', 'Xác nhận mua'],
+  confirmHint: ['Pay the displayed account coins for this exact VIP offer.', 'Trả số coin hiển thị từ tài khoản để mua đúng gói VIP này.'],
+  cancel: ['Cancel', 'Hủy'],
+  cancelHint: ['Close this review without making a purchase.', 'Đóng phần xem lại mà không mua.'],
+  review: ['Review: {0}, {1} days, {2} {3}.', 'Xem lại: {0}, {1} ngày, {2} {3}.'],
+  retry: ['Retry pending purchase', 'Thử lại giao dịch đang chờ'],
+  retryHint: ['Resume the same purchase identifier; a retry must not charge twice.', 'Tiếp tục đúng mã giao dịch cũ; thử lại không được trừ coin hai lần.'],
+  pending: ['This purchase needs confirmation. Retry it; do not start another purchase.', 'Giao dịch này cần được xác nhận. Hãy thử lại, đừng tạo giao dịch mua khác.'],
+  applied: ['Your VIP purchase is recorded. Check the current level and expiry below.', 'Giao dịch VIP đã được ghi nhận. Hãy xem hạng và thời hạn hiện tại bên dưới.'],
+  insufficient: ['There are not enough coins for this offer.', 'Không đủ coin để mua gói này.'],
+  different: ['Ask the host before changing an active VIP level.', 'Hãy liên hệ chủ máy chủ nếu muốn đổi hạng VIP đang dùng.'],
+  changed: ['The offer has changed. Refresh and review its new price and benefits.', 'Gói VIP đã thay đổi. Hãy làm mới rồi xem lại giá và quyền lợi mới.'],
+  conflict: ['This subscription or purchase needs the host’s review. No new purchase was started.', 'Gói VIP hoặc giao dịch này cần chủ máy chủ kiểm tra. Chưa tạo giao dịch mua mới.'],
+  online: ['Leave the game before buying here, or use the VIP window in the game.', 'Hãy thoát game trước khi mua ở đây, hoặc dùng cửa sổ VIP trong game.'],
+  invalid: ['This VIP offer is unavailable. Refresh the list.', 'Gói VIP này hiện không dùng được. Hãy làm mới danh sách.'],
+  refresh: ['Refresh VIP', 'Làm mới VIP'],
+  refreshHint: ['Read your saved subscription, current offers and pending purchase.', 'Đọc gói VIP đã lưu, các gói đang bán và giao dịch đang chờ.'],
+  claim: ['Collect daily coins', 'Nhận coin hằng ngày'],
+  claimHint: ['Collect the active VIP bonus once for the current Sydney day.', 'Nhận quà VIP còn hiệu lực một lần trong ngày hiện tại theo giờ Sydney.'],
+  claimed: ['Today’s VIP coins have already been collected.', 'Bạn đã nhận coin VIP hôm nay.'],
+  dailyApplied: ['Your daily VIP coins are recorded.', 'Coin VIP hằng ngày đã được ghi nhận.'],
+  dailyNote: ['The daily bonus can be collected once per Sydney calendar day.', 'Quà hằng ngày được nhận một lần mỗi ngày theo lịch Sydney.'],
+  unknownDate: ['Date unavailable', 'Chưa có ngày giờ'],
+  wCoinC: ['W Coin (C)', 'W Coin (C)'],
+  wCoinP: ['W Coin (P)', 'W Coin (P)'],
+  goblin: ['Goblin Points', 'Điểm Goblin'],
+} as const satisfies Readonly<Record<string, readonly [string, string]>>;
+
+export type VipTextKey = keyof typeof vipTexts;
+export function vipText(language: 'en' | 'vi', key: VipTextKey, ...values: readonly (string | number)[]): string {
+  let text: string = vipTexts[key][language === 'vi' ? 1 : 0];
+  values.forEach((value, index) => { text = text.replaceAll(`{${index}}`, String(value)); });
+  return text;
+}
