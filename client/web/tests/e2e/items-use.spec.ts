@@ -76,6 +76,8 @@ test('potions on Q W E R and right-click use in the bag', async ({ page }) => {
 });
 
 test('the (i) button opens the guide', async ({ page }) => {
+  const configuredName = 'HNMO guide check';
+  await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: configuredName } }));
   await page.goto('/index.html');
   await page.click('#loginGuide'); // on the login screen; in the game the (i) button next to the name
   await expect(page.locator('#guide iframe')).toBeVisible();
@@ -83,7 +85,7 @@ test('the (i) button opens the guide', async ({ page }) => {
   await enterWorld(page, 'test300');
   await page.click('#guideButton');
   const guide = page.frameLocator('#guide iframe');
-  await expect(guide.locator('h1')).toHaveText('HNMO Guide');
+  await expect(guide.locator('h1')).toHaveText(`${configuredName} Guide`);
   await expect(guide.locator('#controls')).toBeVisible();
   await page.screenshot({ path: 'test-results/guide.png' });
   await page.keyboard.press('Escape');

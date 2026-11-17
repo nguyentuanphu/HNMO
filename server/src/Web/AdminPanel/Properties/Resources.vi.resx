@@ -4581,4 +4581,54 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Bảo vệ tài khoản</value>
   </data>
+  <data name="ShopEditorTitle" xml:space="preserve"><value>Chỉnh sửa cửa hàng NPC</value></data>
+  <data name="ShopEditorLegacy" xml:space="preserve"><value>Mở trình chỉnh sửa cửa hàng cũ</value></data>
+  <data name="ShopEditorHelpTitle" xml:space="preserve"><value>Hướng dẫn sử dụng trang này</value></data>
+  <data name="ShopEditorHelp" xml:space="preserve"><value>Chọn người bán rồi tìm vật phẩm ở danh mục bên trái. Bấm vào tên để thêm vào chỗ trống vừa đầu tiên, kéo vật phẩm vào ô, hoặc chọn nhiều vật phẩm để thêm cùng lúc. Thêm theo danh mục sẽ dùng các bộ lọc hiện tại và cho biết số vật phẩm vừa chỗ trước khi xác nhận. Bấm vật phẩm trong cửa hàng để sửa thuộc tính. Tự sắp xếp ưu tiên vật phẩm lớn; nếu không xếp hết được thì giữ nguyên bố cục. Hoàn tác và làm lại hỗ trợ 100 thao tác gần nhất. Bỏ thay đổi sẽ khôi phục cửa hàng đã lưu. Khi lưu, trang xác nhận số vật phẩm thêm, xóa, di chuyển và sửa. Giá hiển thị là giá gốc chuẩn; thuế và tiện ích mua hàng có thể thay đổi số tiền phải trả. Người chơi đang mở cửa hàng có thể cần mở lại để thấy bố cục mới.</value></data>
+  <data name="ShopEditorSearch" xml:space="preserve"><value>Tìm người bán, bản đồ hoặc tọa độ</value></data>
+  <data name="ShopEditorNpc" xml:space="preserve"><value>NPC bán hàng</value></data>
+  <data name="ShopEditorLocation" xml:space="preserve"><value>Bản đồ và vị trí xuất hiện</value></data>
+  <data name="ShopEditorNoSpawn" xml:space="preserve"><value>Chưa cấu hình vị trí xuất hiện</value></data>
+  <data name="ShopEditorCount" xml:space="preserve"><value>Vật phẩm</value></data>
+  <data name="ShopEditorPreview" xml:space="preserve"><value>Xem trước cửa hàng</value></data>
+  <data name="ShopEditorEdit" xml:space="preserve"><value>Sửa cửa hàng</value></data>
+  <data name="ShopEditorCopy" xml:space="preserve"><value>Sao chép cửa hàng sang…</value></data>
+  <data name="ShopEditorCopyHint" xml:space="preserve"><value>Chọn người bán khác; bản sao chỉ được lưu khi bạn xác nhận Lưu.</value></data>
+  <data name="ShopEditorCopyTarget" xml:space="preserve"><value>Chọn người bán đích</value></data>
+  <data name="ShopEditorCopyConfirm" xml:space="preserve"><value>Thay bản nháp của {0} bằng {1} vật phẩm từ {2}? Chưa có thay đổi nào được lưu.</value></data>
+  <data name="ShopEditorBack" xml:space="preserve"><value>Về danh sách cửa hàng</value></data>
+  <data name="ShopEditorAddSelected" xml:space="preserve"><value>Thêm vật phẩm đã chọn</value></data>
+  <data name="ShopEditorAddCategory" xml:space="preserve"><value>Thêm cả danh mục</value></data>
+  <data name="ShopEditorCategoryHint" xml:space="preserve"><value>Chọn danh mục trước; thêm mọi kết quả theo các bộ lọc hiện tại.</value></data>
+  <data name="ShopEditorBulkConfirm" xml:space="preserve"><value>Có {0} vật phẩm phù hợp: {1} vừa chỗ, {2} không vừa. Thêm các vật phẩm vừa chỗ?</value></data>
+  <data name="ShopEditorAdded" xml:space="preserve"><value>Đã thêm {0}; có {1} vật phẩm không vừa chỗ.</value></data>
+  <data name="ShopEditorDoesNotFit" xml:space="preserve"><value>Vật phẩm không vừa ở đây. Hãy dọn chỗ trống hoặc chọn vị trí khác.</value></data>
+  <data name="ShopEditorArrange" xml:space="preserve"><value>Tự sắp xếp</value></data>
+  <data name="ShopEditorArrangeHint" xml:space="preserve"><value>Xếp lại vật phẩm lớn trước, giữ nguyên thuộc tính; nếu không xếp hết thì không thay đổi gì.</value></data>
+  <data name="ShopEditorArrangeFailed" xml:space="preserve"><value>Không thể xếp lại toàn bộ vật phẩm. Bố cục được giữ nguyên.</value></data>
+  <data name="ShopEditorClear" xml:space="preserve"><value>Xóa hết vật phẩm</value></data>
+  <data name="ShopEditorClearConfirm" xml:space="preserve"><value>Xóa toàn bộ {0} vật phẩm trong bản nháp? Bạn có thể hoàn tác trước khi lưu.</value></data>
+  <data name="ShopEditorUndo" xml:space="preserve"><value>Hoàn tác</value></data>
+  <data name="ShopEditorRedo" xml:space="preserve"><value>Làm lại</value></data>
+  <data name="ShopEditorDiscard" xml:space="preserve"><value>Bỏ thay đổi</value></data>
+  <data name="ShopEditorDiscardHint" xml:space="preserve"><value>Khôi phục cửa hàng đã lưu và xóa lịch sử hoàn tác cục bộ.</value></data>
+  <data name="ShopEditorSave" xml:space="preserve"><value>Lưu cửa hàng</value></data>
+  <data name="ShopEditorSummary" xml:space="preserve"><value>Thêm {0} · xóa {1} · chuyển {2} · sửa {3}</value></data>
+  <data name="ShopEditorSaveConfirm" xml:space="preserve"><value>Lưu cửa hàng này? {0}</value></data>
+  <data name="ShopEditorSaved" xml:space="preserve"><value>Đã lưu cửa hàng. {0}</value></data>
+  <data name="ShopEditorSaveFailed" xml:space="preserve"><value>Chưa xác nhận được việc lưu. Hãy tải lại cửa hàng trước khi thử lại và kiểm tra nhật ký máy chủ.</value></data>
+  <data name="ShopEditorConflict" xml:space="preserve"><value>Cửa hàng hoặc cấu hình đã được sửa ở nơi khác. Hãy tải lại trước khi lưu.</value></data>
+  <data name="ShopEditorInvalid" xml:space="preserve"><value>Bản nháp có vật phẩm chồng nhau, nằm ngoài lưới hoặc thuộc tính không hợp lệ. Hãy sửa hoặc hoàn tác trước khi lưu.</value></data>
+  <data name="ShopEditorCapacity" xml:space="preserve"><value>Đã dùng {0} / {1} ô</value></data>
+  <data name="ShopEditorDetails" xml:space="preserve"><value>Vật phẩm đang chọn</value></data>
+  <data name="ShopEditorSelectHint" xml:space="preserve"><value>Bấm vật phẩm trong lưới để sửa cấp độ, tùy chọn và độ bền.</value></data>
+  <data name="ShopEditorPrice" xml:space="preserve"><value>Giá mua gốc: {0:N0} Zen</value></data>
+  <data name="ShopEditorPriceHint" xml:space="preserve"><value>Dùng bộ tính giá của máy chủ; chưa gồm thuế và tiện ích mua hàng phụ thuộc người chơi.</value></data>
+  <data name="ShopEditorPriceUnavailable" xml:space="preserve"><value>Chưa tính được giá cho định nghĩa vật phẩm này.</value></data>
+  <data name="ShopEditorDelete" xml:space="preserve"><value>Xóa vật phẩm đang chọn</value></data>
+  <data name="ShopEditorUnsaved" xml:space="preserve"><value>Bỏ bản nháp cửa hàng chưa lưu này?</value></data>
+  <data name="ShopEditorLoadingFailed" xml:space="preserve"><value>Không tải được dữ liệu cửa hàng. Hãy kiểm tra nhật ký máy chủ rồi tải lại.</value></data>
+  <data name="ShopEditorReload" xml:space="preserve"><value>Tải lại cửa hàng đã lưu</value></data>
+  <data name="ShopEditorEmpty" xml:space="preserve"><value>Không có người bán phù hợp.</value></data>
+  <data name="ShopEditorPending" xml:space="preserve"><value>Đang lưu cửa hàng. Hãy chờ trước khi rời trang.</value></data>
 </root>

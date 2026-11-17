@@ -22,6 +22,7 @@ public static class AdminOperationsExtensions
         services.TryAddSingleton(TimeProvider.System);
         services.TryAddSingleton<AdminChangeConfirmation>();
         services.AddScoped<ConfigurationWriteOperations>();
+        services.AddScoped<ShopEditorOperations>();
         services.AddScoped<PluginWriteOperations>();
         services.AddScoped<ContentActivationOperations>();
         services.AddScoped<ConfigurationTaskOperations>();

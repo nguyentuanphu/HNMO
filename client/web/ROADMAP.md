@@ -453,7 +453,30 @@ Plan:
   and macOS needs an Apple developer account ($99/year) to notarise, else right-click -> Open the first time.
 - Tests: the windows-start CI job installs and starts it; add macOS and Linux jobs.
 
-## Shops in the admin panel (owner asked 2026-11-16)
+## Shops in the admin panel (owner asked 2026-11-16) — partly done
+Implemented: default NPC shop list with spawn locations, count, mini grid, search
+and copy-to draft; old editor link; reusable virtualized item catalogue with
+EN/VI names, group:number search, group/class/base-level/missing filters, sorting
+and multi-selection; real 8×15 grid with click/drag/bulk placement, fit feedback,
+capacity, largest-first arrangement, existing property editor and base price.
+Local undo/redo (100 steps), discard, confirmed save summaries, conflict checks
+and administrator save logging use the existing configuration save path. EN/VI
+help and hover hints are included, with bUnit coverage and fixture browser review.
+
+Remaining: fixed price overrides/shop multiplier require NPC purchase-rule and
+model changes; import/export and a dedicated history page are not implemented.
+Largest-first arrangement is a greedy fit, not an optimal packing guarantee.
+Verify stock refresh with a player on a live server after saving. The reusable
+picker is available but other reward/catalogue pages are unchanged.
+
+Đã có: danh sách cửa hàng NPC, vị trí xuất hiện, xem trước, tìm kiếm, sao chép
+bản nháp; danh mục vật phẩm cuộn ảo và bộ lọc; ô hàng 8×15, thêm/kéo/thêm hàng
+loạt, tự sắp xếp, sửa thuộc tính, giá cơ bản, hoàn tác/làm lại, bỏ thay đổi,
+xác nhận khi lưu và nhật ký quản trị viên. Có hướng dẫn và chú thích Anh–Việt.
+Còn lại: giá riêng/hệ số giá cần thay đổi quy tắc mua hàng và mô hình dữ liệu;
+chưa có nhập/xuất hoặc trang lịch sử riêng. Cần kiểm tra cập nhật hàng hóa bằng
+người chơi trên máy chủ thật.
+### Original shop plan (remaining design details retained)
 Today: Admin -> Merchants lists the NPC shops by name; Edit shows the shop's grid; "create item" adds an empty item
 and its kind is picked in the item editor; drag to place. Works, but slow with thousands of items.
 New design (the "Shop editor"):
