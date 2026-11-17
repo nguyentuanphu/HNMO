@@ -23,4 +23,6 @@ public sealed class VipState
 
     /// <summary>Gets or sets the account grant identifiers owned by the last confirmed VIP transaction.</summary>
     public Dictionary<string, List<Guid>> OwnedGrants { get; set; } = [];
+    /// <summary>Gets or sets terminal refusals for intents which never changed the account.</summary>
+    public Dictionary<Guid, VipRuleResult> WalletRefusals { get; set; } = [];
 }

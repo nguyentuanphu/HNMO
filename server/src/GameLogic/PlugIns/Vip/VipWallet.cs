@@ -43,7 +43,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         try
         {
             var proof = JsonSerializer.Deserialize<VipWalletReceipt>(reason);
-            return proof is { Kind: ReceiptKind, Intent: not null, GrantIds.Count: 3 } ? proof : null;
+            return proof is { Kind: ReceiptKind, Intent: { Plan: not null, Membership: not null, PreviousGrantIds: not null }, GrantIds.Count: 3 } && proof.GrantIds.Distinct().Count() == 3 && !proof.GrantIds.Contains(Guid.Empty) ? proof : null;
         }
         catch (JsonException)
         {
@@ -119,6 +119,11 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         VipWalletIntent intent;
         lock (store.SyncRoot)
         {
+            if (store.Data.WalletRefusals.TryGetValue(operationId, out var refusal))
+            {
+                return new("Refused", refusal);
+            }
+
             if (store.Data.WalletIntents.TryGetValue(operationId, out var previous))
             {
                 if (previous.AccountId != account.GetId() || previous.Plan.LevelId != levelId || previous.Plan.Days != days)
@@ -128,7 +133,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
 
                 if (!configuration.Enabled || previous.Plan.QuotedAtUtc > nowUtc || nowUtc - previous.Plan.QuotedAtUtc > TimeSpan.FromMinutes(5))
                 {
-                    return new("Refused", configuration.Enabled ? VipRuleResult.Invalid : VipRuleResult.Disabled);
+                    return this.RefuseIntent(operationId, configuration.Enabled ? VipRuleResult.Invalid : VipRuleResult.Disabled);
                 }
 
                 intent = previous;
@@ -141,7 +146,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                 }
 
                 // An unresolved operation must be recovered before a different request can buy more time.
-                if (store.Data.WalletIntents.Values.Any(value => value.AccountId == account.GetId() && !store.Data.Payments.ContainsKey(value.OperationId)))
+                if (store.Data.WalletIntents.Values.Any(value => value.AccountId == account.GetId() && !store.Data.Payments.ContainsKey(value.OperationId) && !store.Data.WalletRefusals.ContainsKey(value.OperationId)))
                 {
                     return new("Pending");
                 }
@@ -180,14 +185,14 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         var balance = account.GetCashShopCoins(intent.Plan.CoinType);
         if (balance < intent.Plan.Price)
         {
-            return new("Refused", VipRuleResult.InsufficientCoins);
+            return this.RefuseIntent(operationId, VipRuleResult.InsufficientCoins);
         }
 
         var definitions = new[] { Stats.IsVip, Stats.BonusExperienceRate, Stats.MoneyAmountRate }
             .Select(attribute => gameConfiguration.Attributes.SingleOrDefault(value => value.Id == attribute.Id)).ToArray();
         if (definitions.Any(attribute => attribute is null))
         {
-            return new("Refused", VipRuleResult.Invalid);
+            return this.RefuseIntent(operationId, VipRuleResult.Invalid);
         }
 
         var values = new[] { (float)intent.Plan.LevelId, intent.ExperiencePercent / 100f, intent.ZenPercent / 100f };
@@ -260,6 +265,17 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         var active = account.AttributeGrants.Any(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc))
             ? intent.Membership : null;
         return new("Applied", Membership: active);
+    }
+
+    private VipWalletResult RefuseIntent(Guid operationId, VipRuleResult reason)
+    {
+        lock (store.SyncRoot)
+        {
+            store.Data.WalletRefusals[operationId] = reason;
+            store.Save();
+        }
+
+        return new("Refused", reason);
     }
 
     private async ValueTask<bool> TrySaveAsync(Func<ValueTask<bool>> save, Guid operationId)
