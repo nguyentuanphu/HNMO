@@ -9,9 +9,9 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using HNMO.DataModel.Configuration;
+using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
 using HNMO.Persistence;
-using Microsoft.Extensions.Logging;
 
 /// <summary>Commits VIP debit, replay proof and owned timed grants in one existing account save.</summary>
 /// <remarks>
@@ -101,7 +101,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             if (proof is null || proof.Intent.AccountId != account.GetId() || proof.Intent.OperationId != operationId
                 || proof.Intent.Plan.LevelId != levelId || proof.Intent.Plan.Days != days
                 || receipt.AccountId != account.GetId() || receipt.Reference != reference || receipt.AppliedAt is null
-                || proof.Intent.Plan.LoginName != account.LoginName.ToLowerInvariant() || proof.Intent.Plan.Price < 0
+                || proof.Intent.Plan.LoginName != account.LoginName.Trim().ToUpperInvariant() || proof.Intent.Plan.Price < 0
                 || receipt.CoinType != proof.Intent.Plan.CoinType || receipt.Amount != -proof.Intent.Plan.Price)
             {
                 return new("Conflict");
@@ -151,7 +151,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                     return new("Pending");
                 }
 
-                var name = account.LoginName.ToLowerInvariant();
+                var name = account.LoginName.Trim().ToUpperInvariant();
                 var owned = store.Data.OwnedGrants.TryGetValue(name, out var ids) ? ids.ToList() : [];
                 if (account.AttributeGrants.Any(grant => grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc) && !owned.Contains(grant.GetId()))
                     || account.Attributes.Any(attribute => attribute.Definition?.Id == Stats.IsVip.Id && attribute.Value > 0)
@@ -160,14 +160,18 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                     return new("Conflict");
                 }
 
-                var level = configuration.Levels.FirstOrDefault(value => value.Id == levelId);
-                var offer = level?.Offers.FirstOrDefault(value => value.Days == days);
-                var quote = new VipRules(configuration, store).Quote(account.LoginName, levelId, days, offer is null || !Enum.IsDefined(offer.CoinType) ? 0 : account.GetCashShopCoins(offer.CoinType), nowUtc);
-                if (quote.Plan is not { } plan || level is null)
+                var quote = new VipRules(configuration, store).Quote(account.LoginName, levelId, days, long.MaxValue, nowUtc);
+                if (quote.Plan is not { } plan)
                 {
                     return new("Refused", quote.Result);
                 }
 
+                if (account.GetCashShopCoins(plan.CoinType) < plan.Price)
+                {
+                    return new("Refused", VipRuleResult.InsufficientCoins);
+                }
+
+                var level = configuration.Levels.Single(value => value.Id == levelId);
                 if (level.NameEn.Length > 120 || level.NameVi.Length > 120)
                 {
                     return new("Refused", VipRuleResult.Invalid);

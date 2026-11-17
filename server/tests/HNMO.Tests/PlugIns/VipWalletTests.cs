@@ -4,13 +4,17 @@
 
 namespace HNMO.Tests;
 
+using System.Threading;
+using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
+using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
 /// <summary>Checks wallet mutations, durable replay proof and the actual account grants used at login.</summary>
 [TestFixture]
@@ -156,6 +160,37 @@ public class VipWalletTests
         Assert.That((await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
         Assert.That(this._account.WCoinC, Is.EqualTo(1000));
         Assert.That(existing.ValidUntil, Is.EqualTo(Now.AddDays(3)));
+    }
+
+    /// <summary>The actual attribute adapter applies bought bonuses and removes them at the shared expiry.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task PurchasedBenefitsApplyAndExpireInTheAttributeSystemAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var now = Now;
+        var clock = new Mock<TimeProvider>();
+        clock.Setup(value => value.GetUtcNow()).Returns(() => new DateTimeOffset(now));
+        TimerCallback? elapsed = null;
+        object? timerState = null;
+        clock.Setup(value => value.CreateTimer(It.IsAny<TimerCallback>(), It.IsAny<object?>(), It.IsAny<TimeSpan>(), It.IsAny<TimeSpan>()))
+            .Callback<TimerCallback, object?, TimeSpan, TimeSpan>((callback, state, _, _) =>
+            {
+                elapsed = callback;
+                timerState = state;
+            }).Returns(Mock.Of<ITimer>());
+        using var powerUps = new AccountAttributeGrantPowerUps(clock.Object);
+        var attributes = new AttributeSystem([], [], []);
+        powerUps.Apply(this._account, attributes);
+        Assert.That(attributes[Stats.IsVip], Is.EqualTo(1));
+        Assert.That(attributes[Stats.BonusExperienceRate], Is.EqualTo(0.05f));
+        Assert.That(attributes[Stats.MoneyAmountRate], Is.EqualTo(0.05f));
+        now = Now.AddDays(7);
+        Assert.That(elapsed, Is.Not.Null);
+        elapsed!(timerState);
+        Assert.That(attributes[Stats.IsVip], Is.Zero);
+        Assert.That(attributes[Stats.BonusExperienceRate], Is.Zero);
+        Assert.That(attributes[Stats.MoneyAmountRate], Is.Zero);
     }
 
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)

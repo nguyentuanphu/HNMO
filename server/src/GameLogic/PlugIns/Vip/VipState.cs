@@ -18,11 +18,13 @@ public sealed class VipState
 
     /// <summary>Gets or sets subscription-change audit entries.</summary>
     public List<VipAuditEntry> Audit { get; set; } = [];
+
     /// <summary>Gets or sets durable purchase intents, keyed by retry identifier.</summary>
     public Dictionary<Guid, VipWalletIntent> WalletIntents { get; set; } = [];
 
     /// <summary>Gets or sets the account grant identifiers owned by the last confirmed VIP transaction.</summary>
     public Dictionary<string, List<Guid>> OwnedGrants { get; set; } = [];
+
     /// <summary>Gets or sets terminal refusals for intents which never changed the account.</summary>
     public Dictionary<Guid, VipRuleResult> WalletRefusals { get; set; } = [];
 }

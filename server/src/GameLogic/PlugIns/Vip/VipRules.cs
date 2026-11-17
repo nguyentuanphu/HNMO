@@ -243,10 +243,12 @@ public sealed class VipRules(VipConfiguration configuration, VipStateStore store
     }
 
     private static bool ValidConfiguration(VipConfiguration settings) => settings.Levels is { Count: > 0 }
+        && settings.Levels.All(level => level is not null)
         && settings.Levels.Select(level => level.Id).Distinct().Count() == settings.Levels.Count
         && settings.Levels.All(level => level.Id > 0 && !string.IsNullOrWhiteSpace(level.NameEn) && !string.IsNullOrWhiteSpace(level.NameVi)
             && level.ExperiencePercent is >= 0 and <= 10000 && level.ZenPercent is >= 0 and <= 10000 && level.DailyCoins >= 0
             && Enum.IsDefined(level.DailyCoinType) && level.Offers is not null
+            && level.Offers.All(offer => offer is not null)
             && level.Offers.Select(offer => offer.Days).Distinct().Count() == level.Offers.Count
             && level.Offers.All(offer => offer.Days is > 0 and <= 3650 && offer.Price >= 0 && Enum.IsDefined(offer.CoinType)));
 
