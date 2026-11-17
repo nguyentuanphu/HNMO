@@ -11,6 +11,7 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
   await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
   await page.route('**/website/settings', route => route.fulfill({ json: {} }));
   await page.route('**/portal/account/missions/state', route => route.fulfill({ json: { status: 'off', boardJson: null, characterOnline: false } }));
+  await page.route('**/portal/account/vip/state', route => route.fulfill({ json: { enabled: false, active: null, offers: [], pending: null, daily: { available: false, claimed: false } } }));
   await page.route('**/portal/account/email/state', route => route.fulfill({ json: { enabled: false, email: 'old@example.test' } }));
   await page.route('**/portal/login-ticket', async route => {
     expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
@@ -45,6 +46,8 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
       history: [
         { id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'purchase', coinType: 'WCoinC', amount: -10, reason: 'structured receipt', purchase: { nameEn: 'Test package', nameVi: 'Gói thử nghiệm', giftRecipient: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
+        { id: 'vip', coinType: 'WCoinC', amount: -100, reason: null, vipPurchase: { nameEn: 'Bronze', nameVi: 'Đồng', days: 7 }, createdAt: '2026-11-15T14:30:00Z', pending: false },
+        { id: 'vip-daily', coinType: 'GoblinPoints', amount: 10, reason: null, vipDaily: { nameEn: 'Bronze', nameVi: 'Đồng' }, createdAt: '2026-11-15T14:30:00Z', pending: true },
         { id: 'vault', coinType: 'WCoinC', amount: -5, reason: 'structured receipt', balanceChange: { action: 'ExtraVault', otherCharacter: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'store', coinType: 'WCoinP', amount: -3, reason: 'structured receipt', balanceChange: { action: 'PlayerStorePurchase', otherCharacter: '<OtherKnight>' }, createdAt: '2026-11-15T14:30:00Z', pending: false },
       ],
@@ -334,5 +337,48 @@ for (const language of ['en', 'vi'] as const) {
     for (const control of await referral.locator('input, select, button, a').all()) await expect(control).toHaveAttribute('title', /.+/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }))).not.toContain('account-secret');
+  });
+}
+
+for (const language of ['en', 'vi'] as const) {
+  test(`the authenticated account VIP section buys a reviewed offer (${language})`, async ({ page }) => {
+    const width = language === 'vi' ? 375 : 1280;
+    await page.setViewportSize({ width, height: 900 });
+    await mockAccount(page, language);
+    let bought = false;
+    const offer = { levelId: 1, nameEn: 'Bronze', nameVi: 'Đồng', days: 7, price: 100, coinType: 'WCoinC', offerToken: 'a'.repeat(64), experiencePercent: 5, zenPercent: 5, dailyCoins: 10, dailyCoinType: 'GoblinPoints' };
+    const state = () => ({ enabled: true, active: bought ? { ...offer, untilUtc: '2026-11-17T14:30:00Z' } : null, offers: [offer], pending: null, daily: { available: bought, claimed: false } });
+    await page.route('**/portal/account/overview', async route => {
+      expect(route.request().postDataJSON()).toMatchObject({ loginName: 'ann', password: 'account-secret' });
+      await route.fulfill({ json: {
+        loginName: 'ann', accountOnline: false, balances: { wCoinC: bought ? 50 : 150, wCoinP: 20, goblinPoints: 30 }, vipLevel: bought ? 1 : 0,
+        characters: [], history: bought ? [{ id: 'vip', coinType: 'WCoinC', amount: -100, reason: null, vipPurchase: { nameEn: 'Bronze', nameVi: 'Đồng', days: 7 }, createdAt: '2026-11-15T14:30:00Z', pending: false }] : [], page: 0, hasMore: false,
+      } });
+    });
+    await page.route('**/portal/account/vip/state', async route => {
+      expect(route.request().postDataJSON()).toMatchObject({ loginName: 'ann', password: 'account-secret' });
+      await route.fulfill({ json: state() });
+    });
+    await page.route('**/portal/account/vip/purchase', async route => {
+      const body = route.request().postDataJSON() as { loginName: string; password: string; operationId: string; levelId: number; days: number; offerToken: string };
+      expect(body).toMatchObject({ loginName: 'ann', password: 'account-secret', levelId: 1, days: 7, offerToken: offer.offerToken });
+      expect(body.operationId).toMatch(/^[a-f0-9-]{36}$/i);
+      expect(bought).toBe(false); bought = true;
+      await route.fulfill({ json: { ...state(), status: 'Applied' } });
+    });
+    await signIn(page); await section(page, width, 2, language);
+    const vip = page.locator('#accountVip');
+    await expect(vip).toBeVisible();
+    await vip.getByRole('button', { name: language === 'vi' ? 'Xem lại giao dịch' : 'Review purchase', exact: true }).click();
+    expect(bought).toBe(false);
+    await vip.getByRole('button', { name: language === 'vi' ? 'Xác nhận mua' : 'Confirm purchase', exact: true }).click();
+    await expect(vip).toContainText(language === 'vi' ? 'Giao dịch VIP đã được ghi nhận' : 'Your VIP purchase is recorded');
+    await expect(vip).toContainText('18/11/2026');
+    await expect(vip).toContainText('01:30');
+    await section(page, width, 1, language);
+    await expect(page.locator('#account-coins')).toContainText(language === 'vi' ? 'VIP Đồng: 7 ngày' : 'VIP Bronze: 7 days');
+    const storage = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }));
+    expect(storage).not.toContain('account-secret');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 }

@@ -5,6 +5,7 @@ import { mountAccountPasswordForm } from './accountPassword.js';
 import { AccountIntegrations } from './accountIntegrations.js';
 import { AccountMissions } from './accountMissions.js';
 import { AccountEmail } from './accountEmail.js';
+import { AccountVip } from './accountVip.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -29,6 +30,7 @@ const loadedLegacy = new Set<string>();
 const integrations = new AccountIntegrations({ getCredentials: () => credentials, getLanguage: () => language }, logOut);
 const missions = new AccountMissions({ language: () => language, request, error: showError });
 const email = new AccountEmail({ text: t, language: () => language, request, message: showMessage, error: showError });
+const vip = new AccountVip({ language: () => language, accountKey: () => snapshot?.loginName ?? '', request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: showError });
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -208,11 +210,11 @@ function translate(): void {
   for (const prefix of ['gift', 'reset', 'safety', 'play']) document.querySelector<HTMLButtonElement>(`[data-${prefix}-lang="${language}"]`)?.click();
   integrations.refreshLanguage();
   email.refreshLanguage(snapshot !== null);
+  vip.refreshLanguage(snapshot !== null);
   missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
   document.title = `${gameName()} — ${t('account')}`;
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
   renderOverview(); renderCoins(); renderCommunity(); renderNavigation();
-  const vip = element('account-vip-level'); vip.textContent = String(snapshot?.vipLevel ?? 0);
   element('accountPasswordChange').hidden = !snapshot;
 }
 
@@ -251,6 +253,7 @@ async function openSection(id: string): Promise<void> {
     try { await integrations.refresh(id); } catch (error) { showError(error); }
     await missions.open(id);
     if (id === 'security') { try { await email.open(); } catch (error) { showError(error); } }
+    if (id === 'vip') await vip.open();
   }
   const section = accountSections().find(s => s.id === id);
   if (credentials && snapshot && section?.open) {
@@ -272,8 +275,7 @@ async function refresh(page = 0): Promise<boolean> {
 
 function mount(): void {
   panel('overview', 'overview').append(integrations.play); panel('coins', 'coins');
-  panel('vip', 'vip', 'vipSoon').append(node('strong'));
-  element('account-vip').lastElementChild!.id = 'account-vip-level';
+  panel('vip', 'vip').append(vip.root);
   panel('rewards', 'rewards', 'rewardsNote').append(missions.rewards, element('gift'));
   panel('resets', 'resets').append(element('resets'));
   const security = panel('security', 'security', 'securityNote'); security.append(element('safety'));
@@ -317,6 +319,7 @@ function mount(): void {
 }
 
 function logOut(): void {
+  vip.reset();
   credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();
   // Reload clears credentials retained by the existing gift/reset/safety modules as well.
   location.reload();

@@ -46,6 +46,9 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
         app.MapPost("/portal/account/overview", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "overview"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/account/password", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "password"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/state", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/purchase", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/purchase", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/daily", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/daily", "Account VIP"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/account/email/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/state", "Account email"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/account/email/request", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/request", "Account email"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/account/email/confirm", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/confirm", "Account email"))).RequireRateLimiting("per-visitor");
