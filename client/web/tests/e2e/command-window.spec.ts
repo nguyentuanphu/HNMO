@@ -2,7 +2,7 @@
 // right click on a player next to the hero puts the name in the chat's whisper box; Follow armed and a right
 // click makes the hero walk after the player; Escape closes it. Two players: test0 and test1.
 import { test, expect, type Page } from '@playwright/test';
-import { enterWorld, expectNoPageErrors, screenPointOf } from './helpers.js';
+import { dismissOnboarding, enterWorld, expectNoPageErrors, screenPointOf } from './helpers.js';
 
 interface Cell { x: number; y: number }
 interface Player { id: number; kind: string; name: string; cell: Cell }
@@ -26,7 +26,6 @@ test('the command window: buttons, whisper and follow on a right click', async (
     await enterWorld(a, 'test0');
     await enterWorld(b, 'test1');
     for (const page of [a, b]) await game(page, (g) => g.online.say('/move lorencia'));
-    await a.waitForTimeout(10_000);
     const bName = await game(b, (g) => g.hero.name);
     const bOnA = () => a.evaluate((n) => [...(window as unknown as Win).__game.online.characters.values()].find((c) => c.kind === 'player' && c.name === n)?.cell ?? null, bName);
     const aCell = () => game(a, (g) => ({ ...g.online.hero.cell }));
@@ -36,7 +35,7 @@ test('the command window: buttons, whisper and follow on a right click', async (
       await b.evaluate((cell) => (window as unknown as Win).__game.online.walkTo(cell), { x: at.x + 1, y: at.y });
       await expect.poll(async () => { const c = await bOnA(); const h = await aCell(); return !!c && Math.abs(c.x - h.x) <= 2 && Math.abs(c.y - h.y) <= 2; }, { timeout: 20_000 }).toBe(true);
     }).toPass(OPEN);
-    await a.waitForTimeout(3_000); // B's last steps
+    await dismissOnboarding(a);
 
     // D opens it: twelve buttons with the desktop's names.
     await a.keyboard.press('d');
@@ -62,7 +61,8 @@ test('the command window: buttons, whisper and follow on a right click', async (
     await a.mouse.click(point.x, point.y, { button: 'right' });
     await expect.poll(() => game(a, (g) => g.online.followId)).not.toBeNull();
     const start = await aCell();
-    await b.evaluate((cell) => (window as unknown as Win).__game.online.walkTo(cell), { x: start.x + 1, y: start.y + 5 });
+    const target = { x: start.x + 1, y: start.y + 5 };
+    expect(await b.evaluate((cell) => (window as unknown as Win).__game.online.walkTo(cell), target), 'B must have a walkable route before A can follow it').toBe(true);
     await expect.poll(async () => { const h = await aCell(); return Math.abs(h.y - start.y); }, OPEN).toBeGreaterThanOrEqual(3);
 
     // Escape closes the window.
