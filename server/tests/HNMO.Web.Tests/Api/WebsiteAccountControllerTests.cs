@@ -170,6 +170,23 @@ public class WebsiteAccountControllerTests
         Assert.That(row.GetProperty("pending").GetBoolean(), Is.False);
     }
 
+    /// <summary>Already-applied direct balance receipts expose safe metadata without becoming a second payment.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReturnsAppliedBalanceMetadataAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var receipt = CashShopBalanceReceipt.Record(context, this._account, CashShopCoinType.WCoinC, -5, CashShopBalanceReason.PlayerStorePurchase, "<OtherKnight>")!;
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var row = json.GetProperty("history").EnumerateArray().Single(entry => entry.GetProperty("id").GetGuid() == receipt.GetId());
+        Assert.That(row.GetProperty("amount").GetInt32(), Is.EqualTo(-5));
+        Assert.That(row.GetProperty("balanceChange").GetProperty("action").GetString(), Is.EqualTo("PlayerStorePurchase"));
+        Assert.That(row.GetProperty("balanceChange").GetProperty("otherCharacter").GetString(), Is.EqualTo("<OtherKnight>"));
+        Assert.That(row.GetProperty("pending").GetBoolean(), Is.False);
+        Assert.That(this._account.WCoinC, Is.EqualTo(150));
+    }
+
     /// <summary>A valid player password alone cannot bypass the trusted bridge's API-key policy.</summary>
     [Test]
     public void RequiresTrustedBridgeAuthorization()

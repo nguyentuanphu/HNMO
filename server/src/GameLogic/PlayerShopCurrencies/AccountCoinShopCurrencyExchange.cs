@@ -54,8 +54,7 @@ public sealed class AccountCoinShopCurrencyExchange : IShopCurrencyExchange
         }
 
         buyerAccount.SetCashShopCoins(coinType, buyerBalance - purchase.Price.Amount);
-        var receipt = CashShopBalanceReceipt.Record(purchase.Buyer.PersistenceContext, buyerAccount, coinType, -purchase.Price.Amount,
-            CashShopBalanceReason.PlayerStorePurchase, purchase.Seller.SelectedCharacter?.Name);
+        var receipt = CashShopBalanceReceipt.Record(purchase.Buyer.PersistenceContext, buyerAccount, coinType, -purchase.Price.Amount, CashShopBalanceReason.PlayerStorePurchase, purchase.Seller.SelectedCharacter?.Name);
         bool saved;
         try
         {
@@ -78,8 +77,7 @@ public sealed class AccountCoinShopCurrencyExchange : IShopCurrencyExchange
         var sellerBefore = sellerAccount.GetCashShopCoins(coinType);
         var sellerAfter = (int)Math.Min((long)sellerBefore + purchase.Price.Amount, int.MaxValue);
         sellerAccount.SetCashShopCoins(coinType, sellerAfter);
-        CashShopBalanceReceipt.Record(purchase.Seller.PersistenceContext, sellerAccount, coinType, sellerAfter - sellerBefore,
-            CashShopBalanceReason.PlayerStoreSale, purchase.Buyer.SelectedCharacter?.Name);
+        CashShopBalanceReceipt.Record(purchase.Seller.PersistenceContext, sellerAccount, coinType, sellerAfter - sellerBefore, CashShopBalanceReason.PlayerStoreSale, purchase.Buyer.SelectedCharacter?.Name);
         purchase.Buyer.Logger.LogInformation("{buyer} paid {price} {coinType} to {seller} for an item of the player store.", purchase.Buyer, purchase.Price.Amount, coinType, purchase.Seller);
         return ShopPaymentResult.Success;
     }
