@@ -4671,4 +4671,49 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="PageHelpToggleHint" xml:space="preserve">
     <value>Show or hide the purpose, recommended changes and cautions for this page.</value>
   </data>
+  <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
+    <value>Extra vault purchase</value>
+  </data>
+  <data name="AccountCoinHistoryMarketPurchase" xml:space="preserve">
+    <value>Item market purchase</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStorePurchase" xml:space="preserve">
+    <value>Player store purchase from {0}</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStoreSale" xml:space="preserve">
+    <value>Player store sale to {0}</value>
+  </data>
+  <data name="AccountCoinHistoryReset" xml:space="preserve">
+    <value>Reset payment</value>
+  </data>
+  <data name="AccountCoinHistoryRelife" xml:space="preserve">
+    <value>Relife payment</value>
+  </data>
+  <data name="AccountCoinHistoryClearStats" xml:space="preserve">
+    <value>Stat reset payment</value>
+  </data>
+  <data name="AccountCoinHistoryClearMaster" xml:space="preserve">
+    <value>Master skill reset payment</value>
+  </data>
+  <data name="AccountCoinHistoryPlayTime" xml:space="preserve">
+    <value>Play time reward</value>
+  </data>
+  <data name="AccountCoinHistoryCashShop" xml:space="preserve">
+    <value>Cash shop: {0}</value>
+  </data>
+  <data name="AccountCoinHistoryGift" xml:space="preserve">
+    <value>Gift for {0}: {1}</value>
+  </data>
+  <data name="AccountCoinHistoryOtherCharacter" xml:space="preserve">
+    <value>another character</value>
+  </data>
+  <data name="AccountCoinHistoryCreatedAt" xml:space="preserve">
+    <value>Date (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryAppliedAt" xml:space="preserve">
+    <value>Recorded (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
+    <value>Item market sale</value>
+  </data>
 </root>

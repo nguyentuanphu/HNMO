@@ -605,8 +605,10 @@ Play now ticket handling remains owned by #13. English/Vietnamese dashboard text
 kept together without changing the dictionaries from #4/#6.
 Personal missions/daily claims/calendar and referral progress/rewards are connected
 through the existing mission engine. Claims require the selected character in the game;
-offline reads do not mutate live state. Remaining: per-character last-seen history,
-a complete purchase/spend ledger, and VIP buying/extensions
+offline reads do not mutate live state. New direct coin receipts cover vault purchases, market/player-store trades, reset/relife/
+stat/master fees and play-time credits while retaining existing save boundaries.
+Older unrecorded spending cannot be reconstructed. Remaining: per-character last-seen
+history and VIP buying/extensions
 in the VIP part. Confirmed email changes use off-by-default SMTP settings at
 Accounts → Email delivery and the player's Security form. Codes expire after 15 minutes,
 are single-use and password-bound, with one-minute resends and a five-attempt limit.
@@ -617,7 +619,9 @@ reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. T�
 mục riêng. Đã kết nối nhiệm vụ, nhận quà hằng ngày, điểm danh và tiến trình mời bạn qua
 cùng bộ quy tắc trong game. Nhận thưởng cần nhân vật đã chọn đang trong game;
 xem khi ngoại tuyến không thay đổi dữ liệu đang chạy. Còn thiếu lịch sử lần xuất hiện
-gần nhất của từng nhân vật, lịch sử chi tiêu đầy đủ và mua/gia hạn VIP. Đổi email có xác nhận
+gần nhất của từng nhân vật và mua/gia hạn VIP. Đã bổ sung lịch sử thay đổi coin khi mua
+rương, giao dịch chợ/cửa hàng người chơi, reset/relife/tẩy điểm và nhận thưởng thời gian
+chơi theo các điểm lưu hiện có. Không thể khôi phục lịch sử chi tiêu cũ chưa được ghi. Đổi email có xác nhận
 dùng thiết lập SMTP mặc định tắt tại Tài khoản → Gửi email và biểu mẫu Bảo mật của người chơi.
 Mã gắn với mật khẩu hiện tại, có hiệu lực 15 phút, chỉ dùng một lần; lấy mã cách nhau một phút
 và tối đa năm lần nhập sai.

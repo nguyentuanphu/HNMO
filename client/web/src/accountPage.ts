@@ -13,7 +13,7 @@ interface AccountSnapshot {
   balances: { wCoinC: number; wCoinP: number; goblinPoints: number };
   vipLevel: number;
   characters: readonly { name: string; className: string; classNameVi?: string; level: number; resets: number; map: number | null; online?: boolean | null }[];
-  history: readonly { id: string; coinType: string; amount: number; reason: string | null; purchase?: { nameEn: string; nameVi: string; giftRecipient: string | null } | null; createdAt: string; pending: boolean }[];
+  history: readonly { id: string; coinType: string; amount: number; reason: string | null; purchase?: { nameEn: string; nameVi: string; giftRecipient: string | null } | null; balanceChange?: { action: string; otherCharacter: string | null } | null; createdAt: string; pending: boolean }[];
   page: number;
   hasMore: boolean;
 }
@@ -165,6 +165,11 @@ function renderCoins(): void {
 }
 
 function historyReason(entry: AccountSnapshot['history'][number]): string {
+  if (entry.balanceChange) {
+    const keys: Readonly<Record<string, AccountTextKey>> = { ExtraVault: 'coinExtraVault', MarketPurchase: 'coinMarketPurchase', MarketSale: 'coinMarketSale', PlayerStorePurchase: 'coinPlayerStorePurchase', PlayerStoreSale: 'coinPlayerStoreSale', Reset: 'coinReset', Relife: 'coinRelife', ClearStats: 'coinClearStats', ClearMaster: 'coinClearMaster', PlayTime: 'coinPlayTime' };
+    const key = keys[entry.balanceChange.action];
+    if (key) return t(key).replace('{0}', entry.balanceChange.otherCharacter || t('unknown'));
+  }
   if (!entry.purchase) return entry.reason || '—';
   const name = (language === 'vi' ? entry.purchase.nameVi || entry.purchase.nameEn : entry.purchase.nameEn) || t('unknown');
   return entry.purchase.giftRecipient

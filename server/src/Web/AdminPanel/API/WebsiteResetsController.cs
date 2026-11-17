@@ -14,6 +14,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.Offline;
 using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.GameLogic.PlugIns.GiftCodes;
@@ -352,6 +353,8 @@ public sealed class WebsiteResetsController(
             return nameof(ResetResult.NotEnoughCoins);
         }
 
+        ResetCoinHistory.Record(context, account, plan, CashShopBalanceReason.ClearStats);
+
         if (zen > 0)
         {
             character.Inventory!.Money -= zen;
@@ -384,6 +387,8 @@ public sealed class WebsiteResetsController(
         {
             return nameof(ResetResult.NotEnoughCoins);
         }
+
+        ResetCoinHistory.Record(context, account, plan, CashShopBalanceReason.ClearMaster);
 
         if (zen > 0)
         {
@@ -441,6 +446,8 @@ public sealed class WebsiteResetsController(
         {
             return (nameof(ResetResult.NotEnoughCoins), ResetStateWriter.Plan(plan, names));
         }
+
+        ResetCoinHistory.Record(context, account, plan, relife ? CashShopBalanceReason.Relife : CashShopBalanceReason.Reset);
 
         if (plan.Zen > 0)
         {

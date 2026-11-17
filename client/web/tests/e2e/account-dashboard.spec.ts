@@ -45,6 +45,8 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
       history: [
         { id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'purchase', coinType: 'WCoinC', amount: -10, reason: 'structured receipt', purchase: { nameEn: 'Test package', nameVi: 'Gói thử nghiệm', giftRecipient: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
+        { id: 'vault', coinType: 'WCoinC', amount: -5, reason: 'structured receipt', balanceChange: { action: 'ExtraVault', otherCharacter: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
+        { id: 'store', coinType: 'WCoinP', amount: -3, reason: 'structured receipt', balanceChange: { action: 'PlayerStorePurchase', otherCharacter: '<OtherKnight>' }, createdAt: '2026-11-15T14:30:00Z', pending: false },
       ],
       page: body.page, hasMore: body.page === 0,
     } });
@@ -146,6 +148,9 @@ for (const width of [375, 820, 1280]) {
       await section(page, width, 1, language);
       await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Cash shop: Test package' : 'Mua ở cửa hàng: Gói thử nghiệm');
       await expect(page.locator('#account-coins')).toContainText('-10');
+      await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Extra vault purchase' : 'Mua thêm rương');
+      await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Player store purchase from <OtherKnight>' : 'Mua tại cửa hàng của <OtherKnight>');
+      await expect(page.locator('#account-coins otherknight')).toHaveCount(0);
       const claim = page.locator('#topup-milestones-section button');
       await expect(claim).toHaveText(language === 'en' ? 'Claim' : 'Nhận thưởng');
       await expect(claim).toHaveAttribute('title', /.+/);
