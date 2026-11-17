@@ -11,6 +11,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
@@ -39,7 +40,6 @@ public sealed class WebsiteAccountController(
     ILogger<WebsiteAccountController> logger) : ControllerBase
 {
     private const int PageSize = 20;
-    private const int MaximumHistory = 1000;
 
     /// <summary>Reads a password-authenticated account overview without secrets or other accounts' grants.</summary>
     /// <param name="request">The player's credentials and history page.</param>
@@ -48,7 +48,7 @@ public sealed class WebsiteAccountController(
     public async ValueTask<IActionResult> OverviewAsync([FromBody] WebsiteAccountRequest request)
     {
         this.Response.Headers.CacheControl = "no-store";
-        if (request.Page is < 0 or >= MaximumHistory / PageSize)
+        if (request.Page < 0 || request.Page > (int.MaxValue - PageSize) / PageSize)
         {
             return this.BadRequest(new { error = "request" });
         }
@@ -69,7 +69,7 @@ public sealed class WebsiteAccountController(
         }
 
         var offset = request.Page * PageSize;
-        var grants = await context.GetLatestCashShopCoinGrantsAsync(account.GetId(), Math.Min(offset + PageSize + 1, MaximumHistory), cancellationToken).ConfigureAwait(false);
+        var grants = await context.GetCashShopCoinHistoryAsync(account.GetId(), offset, PageSize + 1, cancellationToken).ConfigureAwait(false);
         var online = await loginServer.GetSnapshotAsync().ConfigureAwait(false);
         var presence = await WebsiteAccountPresence.ReadAsync(account, online, servers, logger, cancellationToken).ConfigureAwait(false);
         return this.Ok(new
@@ -88,17 +88,18 @@ public sealed class WebsiteAccountController(
                 resets = (int)(c.Attributes.FirstOrDefault(a => a.Definition?.Id == Stats.Resets.Id)?.Value ?? 0),
                 map = c.CurrentMap?.Number,
             }).ToList(),
-            history = grants.Skip(offset).Take(PageSize).Select(g => new
+            history = grants.Take(PageSize).Select(g => new
             {
                 g.Id,
                 coinType = g.CoinType.ToString(),
                 g.Amount,
                 g.Reason,
+                purchase = CashShopPurchaseReceipt.Read(g.Reason),
                 createdAt = DateTime.SpecifyKind(g.CreatedAt, DateTimeKind.Utc),
                 pending = g.AppliedAt is null,
             }).ToList(),
             page = request.Page,
-            hasMore = offset + PageSize < MaximumHistory && grants.Count > offset + PageSize,
+            hasMore = grants.Count > PageSize,
         });
     }
 

@@ -598,7 +598,7 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
 
 ## Player account dashboard — foundation (2026-11-16)
 Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,
-password-authenticated saved character/coin snapshots, the latest 1,000 coin grants paged
+password-authenticated saved character/coin snapshots, retained coin history paged
 20 at a time with Sydney dates, existing gift/reset/safety forms, community links, and
 logout that clears module memory. New sections register through accountSections.ts;
 Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are

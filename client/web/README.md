@@ -145,8 +145,10 @@ removal callback; the feature owns disposing its element and listeners. Navigati
 when sections are registered or removed. No edits to the account page's navigation are
 needed. Load the feature module from the account page or its bootstrap module.
 
-The dashboard deliberately leaves `#accountPlaySlot` for the login-ticket feature.
-It currently contains only the normal game login link. Do not duplicate ticket creation.
+The Overview mounts the existing login-ticket feature's `#play` section and
+`#playNowButton`. Signing in to the dashboard also signs that existing form in;
+`#accountPlaySlot` links to it. Ticket creation and fragment removal remain owned
+by the existing feature. Signing out there clears the whole account tab.
 New dashboard texts live in `src/accountPageTexts.ts` as paired English/Vietnamese texts;
 this avoids rewriting translation dictionaries being changed on other branches.
 
@@ -173,3 +175,28 @@ Individual characters' last-seen timestamps are not recorded yet.
 Bảng nhân vật kiểm tra trạng thái hiện tại khi người chơi bấm **Làm mới**. Nếu máy chủ
 game không trả lời, trang hiển thị **Chưa kiểm tra được**; dữ liệu tài khoản đã lưu vẫn
 xem được. Chưa có lịch sử lần xuất hiện gần nhất của từng nhân vật.
+
+The account branch includes `antigravity-integration` (PR #51). Coins mounts its
+existing top-up milestone widget; Community mounts its event-alert subscription widget.
+The widgets use the account's current language and in-memory credentials. Only choosing
+the subscription button requests browser notification permission. No tickets or
+passwords are stored in browser storage.
+
+Trang tài khoản dùng phần nền từ PR #51. Mục **Coin** hiển thị và nhận thưởng mốc nạp;
+mục **Cộng đồng** cho phép đăng ký thông báo sự kiện trên trình duyệt. Trình duyệt chỉ
+hỏi quyền thông báo khi bạn chủ động bấm nút đăng ký. Đăng nhập tài khoản một lần là
+có thể dùng nút **Chơi ngay** có sẵn.
+
+Coin history now reads bounded pages directly from persistence, including retained
+entries beyond the previous 1,000-entry ceiling. New cash-shop purchases and gifts save
+an already-applied negative receipt in the same save as the balance and storage changes.
+A failed purchase removes that receipt before any later save. It is never a pending
+grant, so it cannot deduct coins again. Purchase names are saved in English/Vietnamese
+and rendered as text. Purchases made before recording was added cannot be reconstructed.
+Recording the other coin-spending paths remains unfinished.
+
+Lịch sử coin được chia trang trực tiếp từ dữ liệu còn lưu, không còn bị giới hạn ở
+1.000 dòng mới nhất. Các lần mua hoặc tặng trong cửa hàng được ghi cùng lúc với số dư
+và vật phẩm trong kho cửa hàng. Mua thất bại không để lại giao dịch trừ coin; dòng lịch
+sử không trừ coin thêm lần nữa. Những lần mua trước bản cập nhật chưa có dữ liệu để
+hiển thị. Việc ghi lịch sử cho các cách tiêu coin khác vẫn đang được bổ sung.

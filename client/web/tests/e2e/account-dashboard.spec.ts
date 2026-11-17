@@ -10,6 +10,23 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
   await page.route('**/game-name.json', route => route.fulfill({ json: { name: 'HNMO account fixture', links: { discord: 'https://discord.com/invite/hnmo', zalo: 'https://zalo.me/12345' } } }));
   await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
   await page.route('**/website/settings', route => route.fulfill({ json: {} }));
+  await page.route('**/portal/login-ticket', async route => {
+    expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
+    await route.fulfill({ json: { loginName: 'ann', ticket: 'account-ticket-fixture', expiresInSeconds: 60 } });
+  });
+  await page.route('**/website/event-alerts', route => route.fulfill({ json: { off: false, leadTimeMinutes: 5, categories: ['blood_castle'], vapidPublicKey: 'fixture-key' } }));
+  const milestones = {
+    enabled: true, totalVnd: 100_000, nextThresholdVnd: 200_000,
+    steps: [{ id: 'first', thresholdVnd: 100_000, titleEn: 'First reward', titleVi: 'Quà đầu tiên', coinType: 'WCoinC', coins: 10, zen: 0, items: [], reached: true, claimed: false, claimable: true }],
+  };
+  await page.route('**/portal/topup-milestones/account', async route => {
+    expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
+    await route.fulfill({ json: milestones });
+  });
+  await page.route('**/portal/topup-milestones/claim', async route => {
+    expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret', stepId: 'first' });
+    await route.fulfill({ json: { ...milestones, steps: [{ ...milestones.steps[0], claimed: true, claimable: false }] } });
+  });
   for (const feature of ['gift-codes', 'resets', 'account-safety']) {
     await page.route(`**/website/${feature}`, route => route.fulfill({ json: { enabled: false } }));
   }
@@ -23,7 +40,10 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
         { name: 'AnnMage', className: 'Mage', classNameVi: 'Pháp sư', level: 200, resets: 0, map: 0, online: false },
         { name: 'AnnArcher', className: 'Archer', classNameVi: 'Cung thủ', level: 100, resets: 0, map: 0, online: null },
       ],
-      history: [{ id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false }],
+      history: [
+        { id: 'one', coinType: 'WCoinC', amount: body.page === 0 ? 50 : 25, reason: body.page === 0 ? 'Quest reward' : 'Earlier reward', createdAt: '2026-11-15T14:30:00Z', pending: false },
+        { id: 'purchase', coinType: 'WCoinC', amount: -10, reason: 'structured receipt', purchase: { nameEn: 'Test package', nameVi: 'Gói thử nghiệm', giftRecipient: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
+      ],
       page: body.page, hasMore: body.page === 0,
     } });
   });
@@ -101,7 +121,11 @@ for (const width of [375, 820, 1280]) {
       for (const status of language === 'vi' ? ['Đang trong game', 'Đã thoát game', 'Chưa kiểm tra được'] : ['Online', 'Offline', 'Unavailable']) {
         await expect(page.locator('#account-overview table')).toContainText(status);
       }
-      await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '/index.html');
+      await expect(page.locator('#accountPlaySlot')).toHaveAttribute('href', '#play');
+      await expect(page.locator('#playSignedIn')).toBeVisible();
+      await expect(page.locator('#playSignedName')).toHaveText('ann');
+      await expect(page.locator('#playPassword')).toHaveValue('');
+      await expect(page.locator('#playNowButton')).toHaveAttribute('title', /.+/);
       await expect(page.locator('#account-overview a[href="/topup.html"]')).toBeVisible();
       await expect(page.locator('#account-overview annknight')).toHaveCount(0);
       await page.locator('#accountHelpButton').click();
@@ -115,7 +139,17 @@ for (const width of [375, 820, 1280]) {
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       }
       await expect(page.locator('#account-community a[href="https://discord.com/invite/hnmo"]')).toBeVisible();
+      await expect(page.locator('#account-event-alerts button').first()).toHaveText(language === 'en' ? 'Enable Browser Alerts' : 'Bật Thông Báo Trình Duyệt');
+      for (const control of await page.locator('#account-event-alerts button, #account-event-alerts input').all()) await expect(control).toHaveAttribute('title', /.+/);
       await section(page, width, 1, language);
+      await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Cash shop: Test package' : 'Mua ở cửa hàng: Gói thử nghiệm');
+      await expect(page.locator('#account-coins')).toContainText('-10');
+      const claim = page.locator('#topup-milestones-section button');
+      await expect(claim).toHaveText(language === 'en' ? 'Claim' : 'Nhận thưởng');
+      await expect(claim).toHaveAttribute('title', /.+/);
+      await claim.click();
+      await expect(claim).toBeDisabled();
+      await expect(claim).toHaveText(language === 'en' ? 'Claimed' : 'Đã nhận');
       // 14:30 UTC is 01:30 on the following Sydney day in November.
       await expect(page.locator('#account-coins')).toContainText('01:30');
       await expect(page.locator('#account-coins')).toContainText('Quest reward');

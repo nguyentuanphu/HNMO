@@ -2,6 +2,7 @@ import { communityLinks, gameName, loadGameName } from './gameName.js';
 import { accountSections, onAccountSectionsChanged, registerAccountSection, type AccountSectionContext } from './accountSections.js';
 import { accountPageTexts, type AccountTextKey } from './accountPageTexts.js';
 import { mountAccountPasswordForm } from './accountPassword.js';
+import { AccountIntegrations } from './accountIntegrations.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -10,7 +11,7 @@ interface AccountSnapshot {
   balances: { wCoinC: number; wCoinP: number; goblinPoints: number };
   vipLevel: number;
   characters: readonly { name: string; className: string; classNameVi?: string; level: number; resets: number; map: number | null; online?: boolean | null }[];
-  history: readonly { id: string; coinType: string; amount: number; reason: string | null; createdAt: string; pending: boolean }[];
+  history: readonly { id: string; coinType: string; amount: number; reason: string | null; purchase?: { nameEn: string; nameVi: string; giftRecipient: string | null } | null; createdAt: string; pending: boolean }[];
   page: number;
   hasMore: boolean;
 }
@@ -23,6 +24,7 @@ let active = 'overview';
 let generation = 0;
 let loading = false;
 const loadedLegacy = new Set<string>();
+const integrations = new AccountIntegrations({ getCredentials: () => credentials, getLanguage: () => language }, logOut);
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -130,26 +132,35 @@ function renderOverview(): void {
   root.replaceChildren(node('h2', `${t('overview')} — ${snapshot.loginName}`), node('p', t('saved')),
     node('p', t(snapshot.accountOnline ? 'accountOnline' : 'accountOffline')), balances());
   const quick = node('div'); quick.className = 'account-actions';
-  // #13 owns the one-time Play now ticket. This slot contains only the ordinary game link until it lands.
-  const play = link('play', 'playHint', '/index.html'); play.id = 'accountPlaySlot'; play.dataset.accountPlaySlot = '';
+  // The existing ticket feature owns #play and #playNowButton; this link leads to it.
+  const play = link('play', 'playHint', '#play'); play.id = 'accountPlaySlot';
   quick.append(play, link('topup', 'topupHint', '/topup.html'));
   root.append(quick, node('h3', t('characters')));
   root.append(snapshot.characters.length ? table([t('character'), t('className'), t('level'), t('resetCount'), t('map'), t('status')],
     snapshot.characters.map(c => [c.name, (language === 'vi' ? c.classNameVi || c.className : c.className) || t('unknown'), String(c.level), String(c.resets), c.map === null ? t('unknown') : String(c.map), t(c.online === true ? 'online' : c.online === false ? 'offline' : 'presenceUnknown')])) : node('p', t('noCharacters')));
   root.append(node('p', t('lastSeenNote')), node('p', `VIP: ${snapshot.vipLevel}`));
+  root.append(integrations.play);
 }
 
 function renderCoins(): void {
   if (!snapshot) return;
   const root = element('account-coins');
   root.replaceChildren(node('h2', t('coins')), balances(), link('topup', 'topupHint', '/topup.html'), node('h3', t('history')), node('p', t('historyNote')));
-  root.append(snapshot.history.length ? table([t('date'), t('coins'), t('amount'), t('reason'), t('pending')], snapshot.history.map(g =>
-    [sydney(g.createdAt), g.coinType, String(g.amount), g.reason || '—', t(g.pending ? 'pending' : 'applied')])) : node('p', t('noHistory')));
+  root.append(snapshot.history.length ? table([t('date'), t('coins'), t('amount'), t('reason'), t('status')], snapshot.history.map(g =>
+    [sydney(g.createdAt), g.coinType, String(g.amount), historyReason(g), t(g.pending ? 'pending' : 'applied')])) : node('p', t('noHistory')));
   const actions = node('div'); actions.className = 'account-actions';
   const previous = button('previous', 'previousHint', () => { void refresh((snapshot?.page ?? 0) - 1); });
   const next = button('next', 'nextHint', () => { void refresh((snapshot?.page ?? 0) + 1); });
   previous.disabled = loading || snapshot.page === 0; next.disabled = loading || !snapshot.hasMore;
-  actions.append(previous, node('span', String(snapshot.page + 1)), next); root.append(actions);
+  actions.append(previous, node('span', String(snapshot.page + 1)), next); root.append(actions, node('h3', t('milestones')), integrations.milestones);
+}
+
+function historyReason(entry: AccountSnapshot['history'][number]): string {
+  if (!entry.purchase) return entry.reason || '—';
+  const name = (language === 'vi' ? entry.purchase.nameVi || entry.purchase.nameEn : entry.purchase.nameEn) || t('unknown');
+  return entry.purchase.giftRecipient
+    ? t('giftPurchaseReason').replace('{0}', entry.purchase.giftRecipient).replace('{1}', name)
+    : t('purchaseReason').replace('{0}', name);
 }
 
 function renderCommunity(): void {
@@ -161,6 +172,7 @@ function renderCommunity(): void {
     const anchor = node('a', { discord: 'Discord', zalo: 'Zalo', facebook: 'Facebook' }[kind] ?? kind);
     anchor.href = url; anchor.target = '_blank'; anchor.rel = 'noopener noreferrer'; anchor.title = t('linkHint'); root.append(anchor);
   }
+  root.append(node('h3', t('eventAlerts')), integrations.alerts);
 }
 
 function translate(): void {
@@ -177,7 +189,8 @@ function translate(): void {
     }
   }
   for (const item of document.querySelectorAll<HTMLElement>('[data-account-language]')) item.setAttribute('aria-pressed', String(item.dataset.accountLanguage === language));
-  for (const prefix of ['gift', 'reset', 'safety']) document.querySelector<HTMLButtonElement>(`[data-${prefix}-lang="${language}"]`)?.click();
+  for (const prefix of ['gift', 'reset', 'safety', 'play']) document.querySelector<HTMLButtonElement>(`[data-${prefix}-lang="${language}"]`)?.click();
+  integrations.refreshLanguage();
   document.title = `${gameName()} — ${t('account')}`;
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
   renderOverview(); renderCoins(); renderCommunity(); renderNavigation();
@@ -204,7 +217,7 @@ function renderNavigation(): void {
 }
 
 function loadLegacy(id: string): void {
-  const prefix = { rewards: 'gift', resets: 'resets', security: 'safety' }[id];
+  const prefix = { overview: 'play', rewards: 'gift', resets: 'resets', security: 'safety' }[id];
   if (!prefix || !credentials || !snapshot || loadedLegacy.has(prefix)) return;
   const form = element<HTMLFormElement>(`${prefix}Login`);
   if (form.hidden) return;
@@ -216,6 +229,9 @@ function loadLegacy(id: string): void {
 
 async function openSection(id: string): Promise<void> {
   active = id; renderNavigation(); loadLegacy(id);
+  if (credentials && snapshot) {
+    try { await integrations.refresh(id); } catch (error) { showError(error); }
+  }
   const section = accountSections().find(s => s.id === id);
   if (credentials && snapshot && section?.open) {
     const context: AccountSectionContext = { language, request };
@@ -235,7 +251,7 @@ async function refresh(page = 0): Promise<boolean> {
 }
 
 function mount(): void {
-  panel('overview', 'overview'); panel('coins', 'coins');
+  panel('overview', 'overview').append(integrations.play); panel('coins', 'coins');
   panel('vip', 'vip', 'vipSoon').append(node('strong'));
   element('account-vip').lastElementChild!.id = 'account-vip-level';
   panel('rewards', 'rewards', 'rewardsNote').append(element('gift'));

@@ -6,17 +6,23 @@ test('website sign-in -> Play now opens the game with a ticket in fragment and c
   page.on('pageerror', (error) => errors.push(error.message));
 
   await page.route('**/portal/login-ticket', async (route) => {
+    expect(route.request().postDataJSON()).toEqual({ loginName: 'test8', password: 'test8' });
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ loginName: 'test8', ticket: 'fake-one-time-ticket-128bits', expiresInSeconds: 60 }),
     });
   });
+  await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
+  await page.route('**/portal/account/overview', route => route.fulfill({ json: {
+    loginName: 'test8', accountOnline: false, balances: { wCoinC: 0, wCoinP: 0, goblinPoints: 0 },
+    vipLevel: 0, characters: [], history: [], page: 0, hasMore: false,
+  } }));
 
   await page.goto('/account.html#play');
-  await page.fill('#playAccount', 'test8');
-  await page.fill('#playPassword', 'test8');
-  await page.click('#playSignInButton');
+  await page.fill('#accountUser', 'test8');
+  await page.fill('#accountSecret', 'test8');
+  await page.click('#accountSignInButton');
 
   await expect(page.locator('#playSignedIn')).toBeVisible();
   await expect(page.locator('#playSignedName')).toHaveText('test8');

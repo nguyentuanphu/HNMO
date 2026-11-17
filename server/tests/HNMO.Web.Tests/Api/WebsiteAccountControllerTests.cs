@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
+using HNMO.GameLogic.CashShop;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
@@ -25,6 +26,8 @@ public class WebsiteAccountControllerTests
 {
     private WebsiteAccountController _controller = null!;
     private Account _account = null!;
+    private IPersistenceContextProvider _persistence = null!;
+    private GameConfiguration _configuration = null!;
 
     private Mock<ILoginServer> _login = null!;
     private Mock<IManageableServer> _server = null!;
@@ -36,8 +39,10 @@ public class WebsiteAccountControllerTests
     public async Task SetUpAsync()
     {
         var provider = new InMemoryPersistenceContextProvider();
+        this._persistence = provider;
         using var setup = provider.CreateNewContext();
         var configuration = setup.CreateNew<GameConfiguration>();
+        this._configuration = configuration;
         await setup.SaveChangesAsync().ConfigureAwait(false);
         using var players = provider.CreateNewPlayerContext(configuration);
         this._account = players.CreateNew<Account>();
@@ -119,10 +124,51 @@ public class WebsiteAccountControllerTests
     /// <param name="page">An invalid page.</param>
     /// <returns>The test task.</returns>
     [TestCase(-1)]
-    [TestCase(50)]
+    [TestCase(107374182)]
     [TestCase(int.MaxValue)]
     public async Task RejectsUnboundedPagesAsync(int page)
         => Assert.That(await this._controller.OverviewAsync(new("ann", "secret", page)).ConfigureAwait(false), Is.InstanceOf<BadRequestObjectResult>());
+
+    /// <summary>Retained entries beyond the old thousand-entry ceiling remain accessible in bounded pages.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task PagesBeyondOneThousandEntriesAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        for (var index = 0; index < 1000; index++)
+        {
+            var grant = context.CreateNew<CashShopCoinGrant>();
+            grant.AccountId = this._account.GetId();
+            grant.CreatedAt = new DateTime(2026, 11, 17, 0, 0, 0, DateTimeKind.Utc).AddMinutes(index);
+        }
+
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var page = await this.ReadAsync(50).ConfigureAwait(false);
+        Assert.That(page.GetProperty("history").GetArrayLength(), Is.EqualTo(20));
+        Assert.That(page.GetProperty("hasMore").GetBoolean(), Is.True);
+        var last = await this.ReadAsync(51).ConfigureAwait(false);
+        Assert.That(last.GetProperty("history").GetArrayLength(), Is.EqualTo(1));
+        Assert.That(last.GetProperty("history")[0].GetProperty("reason").GetString(), Is.EqualTo("Own reward 0"));
+        Assert.That(last.GetProperty("hasMore").GetBoolean(), Is.False);
+    }
+
+    /// <summary>Purchase metadata is returned as data for bilingual rendering, without changing legacy reasons.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReturnsBilingualPurchaseMetadataAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var package = context.CreateNew<CashShopPackage>();
+        package.Name = new LocalizedString("en=Test package||vi=Gói thử nghiệm");
+        CashShopPurchaseReceipt.Create(context, this._account, package, 10, "AnnMage");
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var row = json.GetProperty("history")[0];
+        Assert.That(row.GetProperty("amount").GetInt32(), Is.EqualTo(-10));
+        Assert.That(row.GetProperty("purchase").GetProperty("nameVi").GetString(), Is.EqualTo("Gói thử nghiệm"));
+        Assert.That(row.GetProperty("purchase").GetProperty("giftRecipient").GetString(), Is.EqualTo("AnnMage"));
+        Assert.That(row.GetProperty("pending").GetBoolean(), Is.False);
+    }
 
     /// <summary>A valid player password alone cannot bypass the trusted bridge's API-key policy.</summary>
     [Test]
