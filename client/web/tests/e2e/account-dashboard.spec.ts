@@ -11,6 +11,7 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
   await page.route('**/portal/status', route => route.fulfill({ json: { ready: true } }));
   await page.route('**/website/settings', route => route.fulfill({ json: {} }));
   await page.route('**/portal/account/missions/state', route => route.fulfill({ json: { status: 'off', boardJson: null, characterOnline: false } }));
+  await page.route('**/portal/account/email/state', route => route.fulfill({ json: { enabled: false, email: 'old@example.test' } }));
   await page.route('**/portal/login-ticket', async route => {
     expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
     await route.fulfill({ json: { loginName: 'ann', ticket: 'account-ticket-fixture', expiresInSeconds: 60 } });
@@ -208,6 +209,56 @@ test('another feature can register a bilingual account section without editing t
 });
 
 for (const language of ['en', 'vi'] as const) {
+  test(`email confirmation uses the new mailbox and keeps secrets out of storage (${language})`, async ({ page }) => {
+    const width = language === 'en' ? 1280 : 375;
+    await page.setViewportSize({ width, height: 900 });
+    await mockAccount(page, language);
+    let currentEmail = 'old@example.test';
+    await page.route('**/portal/account/email/state', async route => {
+      expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret' });
+      await route.fulfill({ json: { enabled: true, email: currentEmail } });
+    });
+    let requests = 0;
+    await page.route('**/portal/account/email/request', async route => {
+      expect(route.request().postDataJSON()).toEqual({ loginName: 'ann', password: 'account-secret', newEmail: 'new@example.test', language });
+      requests++;
+      await route.fulfill(requests === 1 ? { status: 409, json: { error: 'online' } } : { json: { sent: true, expiresAt: '2026-11-17T00:15:00Z' } });
+    });
+    let confirmations = 0;
+    const mailedCode = 'ABCDEF0123456789ABCDEF01';
+    await page.route('**/portal/account/email/confirm', async route => {
+      const body = route.request().postDataJSON() as { loginName: string; password: string; code: string };
+      expect(body).toEqual({ loginName: 'ann', password: 'account-secret', code: confirmations === 0 ? '0'.repeat(24) : mailedCode });
+      confirmations++;
+      if (confirmations === 1) { await route.fulfill({ status: 400, json: { error: 'code' } }); return; }
+      currentEmail = 'new@example.test';
+      await route.fulfill({ json: { changed: true } });
+    });
+    await signIn(page); await section(page, width, 5, language);
+    const email = page.locator('#accountEmailChange');
+    await expect(email).toBeVisible();
+    await expect(email).toContainText('old@example.test');
+    await email.locator('[data-email-action="request"] input').fill('new@example.test');
+    await email.locator('[data-email-action="request"] button').click();
+    await expect(page.locator('#accountMessage')).toContainText(language === 'en' ? 'Leave the game' : 'Hãy thoát game');
+    await email.locator('[data-email-action="request"] button').click();
+    await expect(page.locator('#accountMessage')).toContainText(language === 'en' ? 'Code sent' : 'Đã gửi mã');
+    await expect(email).toContainText('old@example.test');
+    await email.locator('[data-email-action="confirm"] input').fill('0'.repeat(24));
+    await email.locator('[data-email-action="confirm"] button').click();
+    await expect(page.locator('#accountMessage')).toContainText(language === 'en' ? 'incorrect, expired or already used' : 'không đúng, đã hết hạn hoặc đã dùng');
+    await email.locator('[data-email-action="confirm"] input').fill(mailedCode);
+    await email.locator('[data-email-action="confirm"] button').click();
+    await expect(email).toContainText('new@example.test');
+    await expect(page.locator('#accountMessage')).toContainText(language === 'en' ? 'confirmed and saved' : 'Đã xác nhận và lưu');
+    await expect(email.locator('[data-email-action="confirm"] input')).toHaveValue('');
+    for (const control of await email.locator('input, button').all()) await expect(control).toHaveAttribute('title', /.+/);
+    const storage = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }));
+    expect(storage).not.toContain('account-secret'); expect(storage).not.toContain(mailedCode);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(requests).toBe(2); expect(confirmations).toBe(2);
+  });
+
   test(`mission claims, calendar, referrals and offline protection (${language})`, async ({ page }) => {
     const width = language === 'en' ? 1280 : 375;
     await page.setViewportSize({ width, height: 900 });
