@@ -155,6 +155,8 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                 var owned = store.Data.OwnedGrants.TryGetValue(name, out var ids) ? ids.ToList() : [];
                 if (account.AttributeGrants.Any(grant => grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc) && !owned.Contains(grant.GetId()))
                     || account.Attributes.Any(attribute => attribute.Definition?.Id == Stats.IsVip.Id && attribute.Value > 0)
+                    || account.AttributeGrants.Any(grant => owned.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc)
+                        && (!store.Data.Memberships.TryGetValue(name, out var current) || grant.ValidUntil != current.UntilUtc || grant.Value != current.LevelId))
                     || (store.Data.Memberships.TryGetValue(name, out var known) && known.UntilUtc > nowUtc && !account.AttributeGrants.Any(grant => owned.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc))))
                 {
                     return new("Conflict");

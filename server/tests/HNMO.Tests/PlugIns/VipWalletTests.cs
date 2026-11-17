@@ -4,12 +4,15 @@
 
 namespace HNMO.Tests;
 
+using System.IO;
+using System.Text.Json;
 using System.Threading;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
@@ -36,9 +39,10 @@ public class VipWalletTests
         this._provider = new();
         using var setup = this._provider.CreateNewContext();
         this._game = setup.CreateNew<GameConfiguration>();
-        this._game.Attributes.Add(Stats.IsVip);
-        this._game.Attributes.Add(Stats.BonusExperienceRate);
-        this._game.Attributes.Add(Stats.MoneyAmountRate);
+        foreach (var attribute in new[] { Stats.IsVip, Stats.BonusExperienceRate, Stats.MoneyAmountRate })
+        {
+            this._game.Attributes.Add(setup.CreateNew<AttributeDefinition>(attribute.Id, attribute.Designation, attribute.Description));
+        }
         this._context = this._provider.CreateNewPlayerContext(this._game);
         this._account = this._context.CreateNew<Account>();
         this._account.LoginName = "ann";
@@ -50,7 +54,7 @@ public class VipWalletTests
 
     /// <summary>Releases the owned test context.</summary>
     [TearDown]
-    public void TearDown() => this._context.Dispose();
+    public void TearDown() => this._context?.Dispose();
 
     /// <summary>One debit and exactly three timed grants survive repeated requests and a fresh context.</summary>
     /// <returns>The test task.</returns>
@@ -100,7 +104,7 @@ public class VipWalletTests
     public async Task ExtensionKeepsForeignGrantsAndDoesNotStackVipAsync()
     {
         var foreign = this._context.CreateNew<AccountAttributeGrant>();
-        foreign.Attribute = Stats.BonusExperienceRate;
+        foreign.Attribute = this._game.Attributes.Single(attribute => attribute.Id == Stats.BonusExperienceRate.Id);
         foreign.Value = 0.2f;
         this._account.AttributeGrants.Add(foreign);
         await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
@@ -153,7 +157,7 @@ public class VipWalletTests
     public async Task RefusesForeignVipOwnershipAsync()
     {
         var existing = this._context.CreateNew<AccountAttributeGrant>();
-        existing.Attribute = Stats.IsVip;
+        existing.Attribute = this._game.Attributes.Single(attribute => attribute.Id == Stats.IsVip.Id);
         existing.Value = 2;
         existing.ValidUntil = Now.AddDays(3);
         this._account.AttributeGrants.Add(existing);
@@ -191,6 +195,122 @@ public class VipWalletTests
         Assert.That(attributes[Stats.IsVip], Is.Zero);
         Assert.That(attributes[Stats.BonusExperienceRate], Is.Zero);
         Assert.That(attributes[Stats.MoneyAmountRate], Is.Zero);
+    }
+
+    /// <summary>A failed initial journal write cannot debit coins, grant benefits or call the account save.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task JournalMustBeDurableBeforeAnyAccountMutationAsync()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"hnmo-vip-journal-{Guid.NewGuid():N}");
+        var directory = Path.Combine(root, "state");
+        try
+        {
+            Directory.CreateDirectory(root);
+            var store = VipStateStore.Open(new HnmoStateStore(Path.Combine(directory, HnmoStateStore.StateFileName)));
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory, true);
+            }
+
+            File.WriteAllText(directory, "Block journal writes with a file instead of a directory.");
+            var wallet = new VipWallet(this._configuration, store, this._game, NullLogger.Instance);
+            var operation = Guid.NewGuid();
+            var saved = false;
+            Assert.ThrowsAsync<IOException>(async () => await wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, Now, () =>
+            {
+                saved = true;
+                return this._context.SaveChangesAsync();
+            }).ConfigureAwait(false));
+            Assert.That(saved, Is.False);
+            Assert.That(this._account.WCoinC, Is.EqualTo(1000));
+            Assert.That(this._account.AttributeGrants, Is.Empty);
+            Assert.That(await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false), Is.Empty);
+            File.Delete(directory);
+            var result = await wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, Now.AddSeconds(1), () => this._context.SaveChangesAsync()).ConfigureAwait(false);
+            Assert.That(result.Status, Is.EqualTo("Applied"));
+            Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, true);
+            }
+        }
+    }
+
+    /// <summary>Durable account proof recovers after confirmation failure and a disabled or changed host offer.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task CommittedProofRecoversAfterSharedStateWriteFailureAsync()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"hnmo-vip-confirm-{Guid.NewGuid():N}");
+        var directory = Path.Combine(root, "state");
+        var backup = Path.Combine(root, "moved");
+        var path = Path.Combine(directory, HnmoStateStore.StateFileName);
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        try
+        {
+            var store = VipStateStore.Open(new HnmoStateStore(path));
+            var wallet = new VipWallet(this._configuration, store, this._game, NullLogger.Instance);
+            var operation = Guid.NewGuid();
+            var result = await wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, Now, async () =>
+            {
+                var saved = await this._context.SaveChangesAsync().ConfigureAwait(false);
+                Directory.Move(directory, backup);
+                File.WriteAllText(directory, "Block the shared-state confirmation after the account commit.");
+                return saved;
+            }).ConfigureAwait(false);
+            Assert.That(result.Status, Is.EqualTo("Pending"));
+            Assert.That(this._account.WCoinC, Is.EqualTo(900));
+            var persisted = new HnmoStateStore(Path.Combine(backup, HnmoStateStore.StateFileName)).ReadSection<VipState>("vip", options)!;
+            Assert.That(persisted.WalletIntents.ContainsKey(operation), Is.True);
+            Assert.That(persisted.Payments, Is.Empty);
+            File.Delete(directory);
+            Directory.Move(backup, directory);
+            this._configuration.Enabled = false;
+            this._configuration.Levels[0].Offers[0] = new(7, 999, CashShopCoinType.WCoinP);
+            var restarted = new VipWallet(this._configuration, VipStateStore.Open(new HnmoStateStore(path)), this._game, NullLogger.Instance);
+            using var fresh = this._provider.CreateNewPlayerContext(this._game);
+            var account = (await fresh.GetAccountByLoginNameAsync("ann").ConfigureAwait(false))!;
+            var recovered = await restarted.PurchaseAsync(fresh, account, operation, 1, 7, Now.AddMinutes(1), () => throw new InvalidOperationException("A committed proof must not debit or save the account again.")).ConfigureAwait(false);
+            Assert.That(recovered.Status, Is.EqualTo("Applied"));
+            Assert.That(recovered.Membership!.UntilUtc, Is.EqualTo(Now.AddDays(7)));
+            Assert.That(account.WCoinC, Is.EqualTo(900));
+            Assert.That(account.AttributeGrants, Has.Count.EqualTo(3));
+            Assert.That(new HnmoStateStore(path).ReadSection<VipState>("vip", options)!.Payments.ContainsKey(operation), Is.True);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, true);
+            }
+        }
+    }
+
+    /// <summary>Unexpected changes to the owned grant require review instead of overwriting the authoritative entitlement.</summary>
+    /// <param name="changeExpiry">Whether the expiry rather than the level was changed externally.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task RefusesDriftInTheAuthoritativeGrantAsync(bool changeExpiry)
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var grant = this._account.AttributeGrants.Single(value => value.Attribute?.Id == Stats.IsVip.Id);
+        if (changeExpiry)
+        {
+            grant.ValidUntil = Now.AddDays(9);
+        }
+        else
+        {
+            grant.Value = 2;
+        }
+
+        Assert.That((await this.BuyAsync(Guid.NewGuid(), Now.AddMinutes(1)).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
     }
 
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
