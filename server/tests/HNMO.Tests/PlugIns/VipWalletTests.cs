@@ -316,6 +316,57 @@ public class VipWalletTests
         Assert.That(replay.Membership, Is.Null);
     }
 
+    /// <summary>A changed displayed price or benefit requires fresh review before taking any coins.</summary>
+    /// <param name="change">The reviewed term changed by the host.</param>
+    /// <returns>The test task.</returns>
+    [TestCase("price")]
+    [TestCase("experience")]
+    [TestCase("daily")]
+    public async Task ChangedReviewCannotChargeUntilReviewedAgainAsync(string change)
+    {
+        var level = this._configuration.Levels[0];
+        var token = VipOfferToken.Create(this._account.GetId(), level, level.Offers[0], null);
+        switch (change)
+        {
+            case "price": level.Offers[0] = new(7, 120, CashShopCoinType.WCoinC); break;
+            case "experience": level.ExperiencePercent = 10; break;
+            case "daily": level.DailyCoins = 20; break;
+        }
+
+        var operation = Guid.NewGuid();
+        var changed = await this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, Now, () => this._context.SaveChangesAsync(), token).ConfigureAwait(false);
+        Assert.That(changed.Status, Is.EqualTo("PriceChanged"));
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000));
+        Assert.That(this._account.AttributeGrants, Is.Empty);
+        Assert.That(await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false), Is.Empty);
+        var reviewed = VipOfferToken.Create(this._account.GetId(), level, level.Offers[0], null);
+        var accepted = await this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, Now, () => this._context.SaveChangesAsync(), reviewed.ToLowerInvariant()).ConfigureAwait(false);
+        Assert.That(accepted.Status, Is.EqualTo("Applied"));
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000 - level.Offers[0].Price));
+    }
+
+    /// <summary>An old tab cannot buy against a changed expiry, but a paid retry still uses its original version.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReviewVersionTracksTheSubscriptionAndPaidRetryAsync()
+    {
+        var level = this._configuration.Levels[0];
+        var firstToken = VipOfferToken.Create(this._account.GetId(), level, level.Offers[0], null);
+        var first = Guid.NewGuid();
+        await this._wallet.PurchaseAsync(this._context, this._account, first, 1, 7, Now, () => this._context.SaveChangesAsync(), firstToken).ConfigureAwait(false);
+        var second = Guid.NewGuid();
+        var stale = await this._wallet.PurchaseAsync(this._context, this._account, second, 1, 7, Now.AddMinutes(1), () => this._context.SaveChangesAsync(), firstToken).ConfigureAwait(false);
+        Assert.That(stale.Status, Is.EqualTo("PriceChanged"));
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        var nextToken = VipOfferToken.Create(this._account.GetId(), level, level.Offers[0], Now.AddDays(7));
+        var renewed = await this._wallet.PurchaseAsync(this._context, this._account, second, 1, 7, Now.AddMinutes(1), () => this._context.SaveChangesAsync(), nextToken).ConfigureAwait(false);
+        Assert.That(renewed.Membership!.UntilUtc, Is.EqualTo(Now.AddDays(14)));
+        var replay = await this._wallet.PurchaseAsync(this._context, this._account, first, 1, 7, Now.AddMinutes(2), () => this._context.SaveChangesAsync(), firstToken).ConfigureAwait(false);
+        Assert.That(replay.Membership, Is.Null);
+        Assert.That(this._account.WCoinC, Is.EqualTo(800));
+        Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, Now.AddMinutes(2)), Is.EqualTo(1));
+    }
+
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
         => this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, now, () => this._context.SaveChangesAsync());
 }
