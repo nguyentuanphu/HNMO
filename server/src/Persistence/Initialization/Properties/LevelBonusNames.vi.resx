@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="StaffRiseEven" xml:space="preserve"><value>Nhân viên tăng (thậm chí)</value></data>
+  <data name="DamageIncreaseWeapons" xml:space="preserve"><value>Tăng sát thương (Vũ khí)</value></data>
+  <data name="DefenseRateIncreaseShields" xml:space="preserve"><value>Tăng tỷ lệ phòng thủ (Khiên)</value></data>
+  <data name="DefenseIncreaseShields" xml:space="preserve"><value>Tăng phòng thủ (Khiên)</value></data>
+  <data name="RunningMovementSpeed" xml:space="preserve"><value>Tốc độ di chuyển khi chạy</value></data>
+  <data name="DefenseIncreaseArmors" xml:space="preserve"><value>Tăng phòng thủ (Giáp)</value></data>
+  <data name="StaffRiseOdd" xml:space="preserve"><value>Nhân viên tăng (lẻ)</value></data>
+  <data name="TransformationRingSkinsTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Vòng Biến Hình)</value></data>
+  <data name="ElementalResistancesJewelery" xml:space="preserve"><value>Kháng nguyên tố (Trang sức)</value></data>
+  <data name="DamageIncrease1stAnd3rdWings" xml:space="preserve"><value>Tăng sát thương (Cánh thứ 1 và thứ 3)</value></data>
+  <data name="DefenseBonus1stAnd2ndWings" xml:space="preserve"><value>Tiền thưởng phòng thủ (Cánh thứ 1 và thứ 2)</value></data>
+  <data name="WingAbsorb" xml:space="preserve"><value>Cánh hấp thụ</value></data>
+  <data name="DamageIncreasePercentBoltsArrows" xml:space="preserve"><value>% tăng sát thương (Bu lông/Mũi tên)</value></data>
+  <data name="ScepterRiseEven" xml:space="preserve"><value>Vương trượng trỗi dậy (thậm chí)</value></data>
+  <data name="ScepterRiseOdd" xml:space="preserve"><value>Vương trượng trỗi dậy (lẻ)</value></data>
+  <data name="ManaLossAfterHitBoltsArrows" xml:space="preserve"><value>Mất năng lượng sau khi đánh (Bu lông/Mũi tên)</value></data>
+  <data name="DefenseBonus3rdWings" xml:space="preserve"><value>Tiền thưởng phòng thủ (Cánh thứ 3)</value></data>
+  <data name="DamageIncrease2ndWings" xml:space="preserve"><value>Tăng sát thương (Cánh thứ 2)</value></data>
+  <data name="TransformationRingSkinsSkeletonTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Nhẫn Biến Hình Bộ Xương)</value></data>
+  <data name="TransformationRingSkinsPandaTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Nhẫn Biến Hình Gấu Trúc)</value></data>
+  <data name="TransformationRingSkinsSnowmanTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Nhẫn Biến Hình Người Tuyết)</value></data>
+  <data name="TransformationRingSkinsGameMasterTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Vòng Biến Hình Game Master)</value></data>
+  <data name="TransformationRingSkinsChristmasTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Nhẫn Biến Hình Giáng Sinh)</value></data>
+  <data name="TransformationRingSkinsJackOLanternTransformationRing" xml:space="preserve"><value>Da nhẫn biến hình (Nhẫn biến hình Jack O'lantern)</value></data>
+  <data name="TransformationRingSkinsEliteSkeletonTransformationRing" xml:space="preserve"><value>Skins Nhẫn Biến Hình (Vòng Biến Hình Xương Tinh Anh)</value></data>
+  <data name="DeathCowTransformationRingHealthBonus" xml:space="preserve"><value>Phần thưởng sức khỏe của vòng biến hình (Bò chết)</value></data>
+</root>

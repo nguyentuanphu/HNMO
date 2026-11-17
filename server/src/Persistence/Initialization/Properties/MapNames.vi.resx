@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Lorencia" xml:space="preserve"><value>Lorencia</value></data>
+  <data name="Dungeon" xml:space="preserve"><value>ngục tối</value></data>
+  <data name="Devias" xml:space="preserve"><value>Devias</value></data>
+  <data name="Noria" xml:space="preserve"><value>Noria</value></data>
+  <data name="LostTower" xml:space="preserve"><value>Tháp thất lạc</value></data>
+  <data name="Atlans" xml:space="preserve"><value>người Atlan</value></data>
+  <data name="Tarkan" xml:space="preserve"><value>Tarkan</value></data>
+  <data name="DevilSquare1" xml:space="preserve"><value>Quảng trường quỷ 1</value></data>
+  <data name="DevilSquare2" xml:space="preserve"><value>Quảng trường quỷ 2</value></data>
+  <data name="DevilSquare3" xml:space="preserve"><value>Quảng trường quỷ 3</value></data>
+  <data name="DevilSquare4" xml:space="preserve"><value>Quảng trường quỷ 4</value></data>
+  <data name="Icarus" xml:space="preserve"><value>Icarus</value></data>
+  <data name="BloodCastle1" xml:space="preserve"><value>Lâu đài máu 1</value></data>
+  <data name="BloodCastle2" xml:space="preserve"><value>Lâu đài máu 2</value></data>
+  <data name="BloodCastle3" xml:space="preserve"><value>Lâu đài máu 3</value></data>
+  <data name="BloodCastle4" xml:space="preserve"><value>Lâu đài máu 4</value></data>
+  <data name="BloodCastle5" xml:space="preserve"><value>Lâu đài máu 5</value></data>
+  <data name="BloodCastle6" xml:space="preserve"><value>Lâu đài máu 6</value></data>
+  <data name="BloodCastle7" xml:space="preserve"><value>Lâu đài máu 7</value></data>
+  <data name="ChaosCastle1" xml:space="preserve"><value>Lâu đài hỗn loạn 1</value></data>
+  <data name="ChaosCastle2" xml:space="preserve"><value>Lâu đài hỗn loạn 2</value></data>
+  <data name="ChaosCastle3" xml:space="preserve"><value>Lâu đài hỗn loạn 3</value></data>
+  <data name="ChaosCastle4" xml:space="preserve"><value>Lâu đài hỗn loạn 4</value></data>
+  <data name="ChaosCastle5" xml:space="preserve"><value>Lâu đài hỗn loạn 5</value></data>
+  <data name="ChaosCastle6" xml:space="preserve"><value>Lâu đài hỗn loạn 6</value></data>
+  <data name="Kalima1" xml:space="preserve"><value>Kalima 1</value></data>
+  <data name="Kalima2" xml:space="preserve"><value>Kalima 2</value></data>
+  <data name="Kalima3" xml:space="preserve"><value>Kalima 3</value></data>
+  <data name="Kalima4" xml:space="preserve"><value>Kalima 4</value></data>
+  <data name="Kalima5" xml:space="preserve"><value>Kalima 5</value></data>
+  <data name="Kalima6" xml:space="preserve"><value>Kalima 6</value></data>
+  <data name="ValleyOfLoren" xml:space="preserve"><value>Thung lũng Loren</value></data>
+  <data name="LandOfTrials" xml:space="preserve"><value>Land_of_Thử nghiệm</value></data>
+  <data name="DevilSquare5" xml:space="preserve"><value>Quảng trường quỷ 5</value></data>
+  <data name="DevilSquare6" xml:space="preserve"><value>Quảng trường quỷ 6</value></data>
+  <data name="DevilSquare7" xml:space="preserve"><value>Quảng trường quỷ 7</value></data>
+  <data name="Aida" xml:space="preserve"><value>Aida</value></data>
+  <data name="CrywolfFortress" xml:space="preserve"><value>Pháo Đài Sói</value></data>
+  <data name="Kalima7" xml:space="preserve"><value>Kalima 7</value></data>
+  <data name="KanturuI" xml:space="preserve"><value>Kanturu_I</value></data>
+  <data name="KanturuIII" xml:space="preserve"><value>Kanturu_III</value></data>
+  <data name="KanturuEvent" xml:space="preserve"><value>Sự kiện Kanturu</value></data>
+  <data name="BarracksOfBalgass" xml:space="preserve"><value>Doanh trại Balgass</value></data>
+  <data name="BalgassRefuge" xml:space="preserve"><value>Nơi trú ẩn Balgass</value></data>
+  <data name="IllusionTemple1" xml:space="preserve"><value>Ngôi đền ảo ảnh 1</value></data>
+  <data name="IllusionTemple2" xml:space="preserve"><value>Ngôi đền ảo ảnh 2</value></data>
+  <data name="IllusionTemple3" xml:space="preserve"><value>Ngôi đền ảo ảnh 3</value></data>
+  <data name="IllusionTemple4" xml:space="preserve"><value>Ngôi Đền Ảo Ảnh 4</value></data>
+  <data name="IllusionTemple5" xml:space="preserve"><value>Ngôi đền ảo ảnh 5</value></data>
+  <data name="IllusionTemple6" xml:space="preserve"><value>Ngôi đền ảo ảnh 6</value></data>
+  <data name="Elvenland" xml:space="preserve"><value>xứ sở thần tiên</value></data>
+  <data name="BloodCastle8" xml:space="preserve"><value>Lâu đài máu 8</value></data>
+  <data name="ChaosCastle7" xml:space="preserve"><value>Lâu đài hỗn loạn 7</value></data>
+  <data name="SwampOfCalmness" xml:space="preserve"><value>đầm lầy bình tĩnh</value></data>
+  <data name="LaCleon" xml:space="preserve"><value>LaCleon</value></data>
+  <data name="LaCleonBoss" xml:space="preserve"><value>Ông chủ LaCleon</value></data>
+  <data name="Vulcanus" xml:space="preserve"><value>Vulcanus</value></data>
+  <data name="DuelArena" xml:space="preserve"><value>Đấu trường đấu tay đôi</value></data>
+  <data name="Doppelgaenger1" xml:space="preserve"><value>Song Trùng 1</value></data>
+  <data name="Doppelgaenger2" xml:space="preserve"><value>Song Trùng 2</value></data>
+  <data name="Doppelgaenger3" xml:space="preserve"><value>Song Trùng 3</value></data>
+  <data name="Doppelgaenger4" xml:space="preserve"><value>Song Trùng 4</value></data>
+  <data name="FortressOfImperialGuardian1" xml:space="preserve"><value>Pháo đài bảo vệ hoàng gia 1</value></data>
+  <data name="FortressOfImperialGuardian2" xml:space="preserve"><value>Pháo đài bảo vệ hoàng gia 2</value></data>
+  <data name="FortressOfImperialGuardian3" xml:space="preserve"><value>Pháo đài bảo vệ hoàng gia 3</value></data>
+  <data name="FortressOfImperialGuardian4" xml:space="preserve"><value>Pháo đài bảo vệ hoàng gia 4</value></data>
+  <data name="LorenMarket" xml:space="preserve"><value>LorenThị trường</value></data>
+  <data name="Karutan1" xml:space="preserve"><value>Karutan 1</value></data>
+  <data name="Karutan2" xml:space="preserve"><value>Karutan 2</value></data>
+  <data name="Arena" xml:space="preserve"><value>Stadium</value></data>
+  <data name="Exile" xml:space="preserve"><value>Lưu đày</value></data>
+  <data name="SilentMap" xml:space="preserve"><value>Bản đồ im lặng?</value></data>
+  <data name="SantaVillage" xml:space="preserve"><value>Làng ông già Noel</value></data>
+</root>

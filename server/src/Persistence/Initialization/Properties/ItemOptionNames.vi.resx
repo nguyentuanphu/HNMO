@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Level2ndWingOptions" xml:space="preserve"><value>Tùy chọn cánh thứ 2</value></data>
+  <data name="Level3rdWingOptions" xml:space="preserve"><value>Tùy chọn Cánh thứ 3</value></data>
+  <data name="AgnisAncientSet" xml:space="preserve"><value>Agnis (Bộ cổ)</value></data>
+  <data name="AncientBonusOfTotalAgility" xml:space="preserve"><value>Phần thưởng cổ xưa của sự nhanh nhẹn hoàn toàn</value></data>
+  <data name="AncientBonusOfTotalEnergy" xml:space="preserve"><value>Tiền thưởng cổ xưa của tổng năng lượng</value></data>
+  <data name="AncientBonusOfTotalStrength" xml:space="preserve"><value>Phần thưởng cổ xưa của tổng sức mạnh</value></data>
+  <data name="AncientBonusOfTotalVitality" xml:space="preserve"><value>Phần thưởng cổ xưa của tổng sức sống</value></data>
+  <data name="AnonymousAncientSet" xml:space="preserve"><value>Vô Danh (Bộ Cổ)</value></data>
+  <data name="AnubisAncientSet" xml:space="preserve"><value>Anubis (Bộ cổ)</value></data>
+  <data name="ApolloAncientSet" xml:space="preserve"><value>Apollo (Bộ cổ)</value></data>
+  <data name="ArgoAncientSet" xml:space="preserve"><value>Argo (Bộ cổ)</value></data>
+  <data name="AruanAncientSet" xml:space="preserve"><value>Aruan (Bộ cổ)</value></data>
+  <data name="BarnakeAncientSet" xml:space="preserve"><value>Barnake (Bộ cổ)</value></data>
+  <data name="BaseDamageBonusPhysicalAndWizardryMinAndMaxOption" xml:space="preserve"><value>Tùy chọn Phần thưởng sát thương cơ bản (vật lý và phép thuật, tối thiểu và tối đa)</value></data>
+  <data name="BaseDefenseOption" xml:space="preserve"><value>Tùy chọn phòng thủ cơ sở</value></data>
+  <data name="BerserkerAncientSet" xml:space="preserve"><value>Berserker (Bộ Cổ)</value></data>
+  <data name="BroyAncientSet" xml:space="preserve"><value>Broy (Bộ cổ)</value></data>
+  <data name="CapeOfEmperorOptions" xml:space="preserve"><value>Tùy chọn Mũi Hoàng Đế</value></data>
+  <data name="CapeOfFighterOptions" xml:space="preserve"><value>Tùy chọn Cape of Fighter</value></data>
+  <data name="CapeOfLordOptions" xml:space="preserve"><value>Mũi đất của Chúa Tùy chọn</value></data>
+  <data name="CapeOfOverruleOptions" xml:space="preserve"><value>Tùy chọn ghi đè</value></data>
+  <data name="CetoAncientSet" xml:space="preserve"><value>Ceto (Bộ cổ)</value></data>
+  <data name="ChronoAncientSet" xml:space="preserve"><value>Chrono (Bộ Cổ)</value></data>
+  <data name="CloudAncientSet" xml:space="preserve"><value>Đám Mây (Bộ Cổ)</value></data>
+  <data name="CompleteSetBonusLevel10" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (Cấp 10)</value></data>
+  <data name="CompleteSetBonusLevel11" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (Cấp 11)</value></data>
+  <data name="CompleteSetBonusLevel12" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (Cấp 12)</value></data>
+  <data name="CompleteSetBonusLevel13" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (Cấp 13)</value></data>
+  <data name="CompleteSetBonusLevel14" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (Cấp 14)</value></data>
+  <data name="CompleteSetBonusLevel15" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (Cấp 15)</value></data>
+  <data name="CompleteSetBonusAnyLevel" xml:space="preserve"><value>Phần thưởng bộ hoàn chỉnh (bất kỳ cấp độ nào)</value></data>
+  <data name="CurseBaseDamageMinAndMaxOption" xml:space="preserve"><value>Tùy chọn sát thương cơ bản của lời nguyền (tối thiểu và tối đa)</value></data>
+  <data name="DarkHorseOptions" xml:space="preserve"><value>Tùy chọn ngựa đen</value></data>
+  <data name="DefenseRatePvMOption" xml:space="preserve"><value>Tùy chọn tỷ lệ phòng thủ (PvM)</value></data>
+  <data name="DinorantOptions" xml:space="preserve"><value>Tùy chọn Dinorant</value></data>
+  <data name="DrakeAncientSet" xml:space="preserve"><value>Drake (Bộ cổ)</value></data>
+  <data name="EliteSkeletonTransformationRing" xml:space="preserve"><value>Nhẫn biến hình bộ xương tinh anh</value></data>
+  <data name="ElvianAncientSet" xml:space="preserve"><value>Elvian (Bộ cổ)</value></data>
+  <data name="EnisAncientSet" xml:space="preserve"><value>Enis (Bộ cổ)</value></data>
+  <data name="EpleteAncientSet" xml:space="preserve"><value>Eplete (Bộ cổ)</value></data>
+  <data name="EvisAncientSet" xml:space="preserve"><value>Evis (Bộ cổ)</value></data>
+  <data name="ExcellentDefenseOptions" xml:space="preserve"><value>Tùy chọn phòng thủ xuất sắc</value></data>
+  <data name="ExcellentPhysicalAttackOptions" xml:space="preserve"><value>Tùy chọn tấn công vật lý tuyệt vời</value></data>
+  <data name="ExcellentWizardryAttackOptions" xml:space="preserve"><value>Tùy chọn tấn công phù thủy tuyệt vời</value></data>
+  <data name="FaseAncientSet" xml:space="preserve"><value>Fase (Bộ cổ)</value></data>
+  <data name="FenrirOptions" xml:space="preserve"><value>Tùy chọn Fenrir</value></data>
+  <data name="GaiaAncientSet" xml:space="preserve"><value>Gaia (Bộ cổ)</value></data>
+  <data name="GaionAncientSet" xml:space="preserve"><value>Gaion (Bộ cổ)</value></data>
+  <data name="GarudaAncientSet" xml:space="preserve"><value>Garuda (Bộ cổ)</value></data>
+  <data name="GuardianOptionArmor" xml:space="preserve"><value>Tùy chọn người giám hộ (Áo giáp)</value></data>
+  <data name="GuardianOptionBoots" xml:space="preserve"><value>Tùy chọn người giám hộ (Boot)</value></data>
+  <data name="GuardianOptionGloves" xml:space="preserve"><value>Tùy chọn người giám hộ (Găng tay)</value></data>
+  <data name="GuardianOptionHelm" xml:space="preserve"><value>Tùy chọn người giám hộ (Helm)</value></data>
+  <data name="GuardianOptionPants" xml:space="preserve"><value>Tùy chọn người giám hộ (Quần)</value></data>
+  <data name="GuardianOptionWeapon" xml:space="preserve"><value>Tùy chọn người giám hộ (Vũ khí)</value></data>
+  <data name="GywenAncientSet" xml:space="preserve"><value>Gywen (Bộ cổ)</value></data>
+  <data name="HarmonyDefenseOptions" xml:space="preserve"><value>Tùy chọn phòng thủ hài hòa</value></data>
+  <data name="HarmonyPhysicalAttackOptions" xml:space="preserve"><value>Tùy chọn tấn công vật lý hài hòa</value></data>
+  <data name="HarmonyWizardryAttackOptions" xml:space="preserve"><value>Tùy chọn tấn công thuật sĩ hài hòa</value></data>
+  <data name="HealthRecoverForJewelery" xml:space="preserve"><value>Phục hồi sức khỏe cho đồ trang sức</value></data>
+  <data name="HerasAncientSet" xml:space="preserve"><value>Heras (Bộ cổ)</value></data>
+  <data name="HyonAncientSet" xml:space="preserve"><value>Hyon (Bộ cổ)</value></data>
+  <data name="HyperionAncientSet" xml:space="preserve"><value>Hyperion (Bộ Cổ)</value></data>
+  <data name="JeweleryOptionMaximumAbility" xml:space="preserve"><value>Tùy chọn trang sức Khả năng tối đa</value></data>
+  <data name="JeweleryOptionMaximumMana" xml:space="preserve"><value>Tùy chọn trang sức Mana tối đa</value></data>
+  <data name="KantataAncientSet" xml:space="preserve"><value>Kantata (Bộ cổ)</value></data>
+  <data name="KarisAncientSet" xml:space="preserve"><value>Karis (Bộ cổ)</value></data>
+  <data name="Luck" xml:space="preserve"><value>May mắn</value></data>
+  <data name="MinetAncientSet" xml:space="preserve"><value>Minet (Bộ cổ)</value></data>
+  <data name="MistAncientSet" xml:space="preserve"><value>Sương Mù (Bộ Cổ)</value></data>
+  <data name="MurenAncientSet" xml:space="preserve"><value>Muren (Bộ cổ)</value></data>
+  <data name="OdinAncientSet" xml:space="preserve"><value>Odin (Bộ cổ)</value></data>
+  <data name="PhysicalBaseDamageMinAndMaxOption" xml:space="preserve"><value>Tùy chọn sát thương cơ bản vật lý (tối thiểu và tối đa)</value></data>
+  <data name="RaveAncientSet" xml:space="preserve"><value>Rave (Bộ cổ)</value></data>
+  <data name="SemedenAncientSet" xml:space="preserve"><value>Semeden (Bộ cổ)</value></data>
+  <data name="SkeletonTransformationRing" xml:space="preserve"><value>Vòng biến đổi bộ xương</value></data>
+  <data name="SocketBonusOptionsArmors" xml:space="preserve"><value>Tùy chọn phần thưởng ổ cắm (Áo giáp)</value></data>
+  <data name="SocketBonusOptionsPhysical" xml:space="preserve"><value>Tùy chọn tiền thưởng ổ cắm (Vật lý)</value></data>
+  <data name="SocketBonusOptionsWizardry" xml:space="preserve"><value>Tùy chọn phần thưởng ổ cắm (Thuật sĩ)</value></data>
+  <data name="SocketOptionsEarth" xml:space="preserve"><value>Tùy chọn ổ cắm (Trái đất)</value></data>
+  <data name="SocketOptionsFire" xml:space="preserve"><value>Tùy chọn ổ cắm (Lửa)</value></data>
+  <data name="SocketOptionsIce" xml:space="preserve"><value>Tùy chọn ổ cắm (Băng)</value></data>
+  <data name="SocketOptionsLightning" xml:space="preserve"><value>Tùy chọn ổ cắm (Lightning)</value></data>
+  <data name="SocketOptionsWater" xml:space="preserve"><value>Tùy chọn ổ cắm (Nước)</value></data>
+  <data name="SocketOptionsWind" xml:space="preserve"><value>Tùy chọn ổ cắm (Gió)</value></data>
+  <data name="SylionAncientSet" xml:space="preserve"><value>Sylion (Bộ cổ)</value></data>
+  <data name="ViciousAncientSet" xml:space="preserve"><value>Vicious (Bộ cổ trang)</value></data>
+  <data name="WarriorAncientSet" xml:space="preserve"><value>Chiến Binh (Bộ Cổ Đại)</value></data>
+  <data name="WingOfDimensionOptions" xml:space="preserve"><value>Tùy chọn cánh kích thước</value></data>
+  <data name="WingOfEternalOptions" xml:space="preserve"><value>Cánh của những lựa chọn vĩnh cửu</value></data>
+  <data name="WingOfIllusionOptions" xml:space="preserve"><value>Tùy chọn cánh ảo ảnh</value></data>
+  <data name="WingOfRuinOptions" xml:space="preserve"><value>Tùy chọn Wing of Ruin</value></data>
+  <data name="WingOfStormOptions" xml:space="preserve"><value>Tùy chọn Wing of Storm</value></data>
+  <data name="WingsOfCurseOptions" xml:space="preserve"><value>Tùy chọn Wings of Curse</value></data>
+  <data name="WingsOfDarknessOptions" xml:space="preserve"><value>Tùy chọn Wings of Darkness</value></data>
+  <data name="WingsOfDespairOptions" xml:space="preserve"><value>Tùy chọn đôi cánh tuyệt vọng</value></data>
+  <data name="WingsOfDragonOptions" xml:space="preserve"><value>Tùy chọn cánh rồng</value></data>
+  <data name="WingsOfElfOptions" xml:space="preserve"><value>Tùy chọn Wings of Elf</value></data>
+  <data name="WingsOfHeavenOptions" xml:space="preserve"><value>Tùy chọn Wings of Heaven</value></data>
+  <data name="WingsOfSatanOptions" xml:space="preserve"><value>Tùy chọn đôi cánh của Satan</value></data>
+  <data name="WingsOfSoulOptions" xml:space="preserve"><value>Tùy chọn đôi cánh linh hồn</value></data>
+  <data name="WingsOfSpiritsOptions" xml:space="preserve"><value>Tùy chọn Wings of Spirits</value></data>
+  <data name="WizardryBaseDamageMinAndMaxOption" xml:space="preserve"><value>Tùy chọn sát thương cơ bản của thuật sĩ (tối thiểu và tối đa)</value></data>
+  <data name="VegaAncientSet" xml:space="preserve"><value>Vega (Bộ cổ)</value></data>
+  <data name="ChamerAncientSet" xml:space="preserve"><value>Chamer (Bộ cổ)</value></data>
+</root>

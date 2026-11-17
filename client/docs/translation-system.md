@@ -681,3 +681,25 @@ data files, two commits are the headlines:
 The leftover binary `text.bmd` / `NPCDialogue.bmd` / per-language
 `Dialog_*.bmd` files are pure data; nothing in the C++ source loads them
 anymore.
+
+
+## Vietnamese on the public website
+
+The account page and the guide have **English / Tiếng Việt** controls at the top.
+On the account page, changing the language updates registration, coins, gift
+codes, resets and account safety together. The homepage, game and these pages
+remember the same language choice. Account names, passwords and the configured
+game name retain their original text.
+
+Server labels and game-content names use Vietnamese resource files. Empty
+neutral descriptions remain empty; proper names, commands, key bindings and
+technical currency names may be unchanged. The web dictionary and its maintained
+overrides cover interface text and public-page instructions, including long
+guide paragraphs.
+
+Run `python3 client/web/tools/lang/check-vi.py` from the repository root to check
+nonempty server-resource coverage, dictionary/override parity and formatting
+placeholders. This checks coverage and formatting, not Vietnamese fluency.
+New translations in this pass were machine-assisted with existing translations
+as a glossary; full terminology and sentence-by-sentence editorial review remains
+necessary before treating the catalog as final.

@@ -1075,4 +1075,6 @@ Mở rộng hành trang: {18}</value>
   <data name="ChatSpamWarning" xml:space="preserve">
     <value>Vui lòng không spam.</value>
   </data>
+  <data name="ShopCurrencyWCoinC" xml:space="preserve"><value>WCoin (C)</value></data>
+  <data name="ShopCurrencyWCoinP" xml:space="preserve"><value>WCoin (P)</value></data>
 </root>

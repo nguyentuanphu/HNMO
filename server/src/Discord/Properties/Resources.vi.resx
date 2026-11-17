@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Bind_AllianceBound" xml:space="preserve"><value>Kênh này bây giờ bị ràng buộc vào cuộc trò chuyện của liên minh {0}. Các tin nhắn được phản chiếu theo cả hai hướng.</value></data>
+  <data name="Bind_ChannelInUse" xml:space="preserve"><value>Kênh này đã bị ràng buộc với cuộc trò chuyện của bang hội hoặc liên minh khác.</value></data>
+  <data name="Bind_Created" xml:space="preserve"><value>{1} là kênh trò chuyện của {0}. Các thành viên đã liên kết người dùng Discord của họ có thể nhìn thấy nó.</value></data>
+  <data name="Bind_GuildBound" xml:space="preserve"><value>Kênh này hiện được kết nối với cuộc trò chuyện của bang hội {0}. Các tin nhắn được phản chiếu theo cả hai hướng.</value></data>
+  <data name="Bind_HostedServerUnavailable" xml:space="preserve"><value>Máy chủ Discord của trò chơi không khả dụng cho bot.</value></data>
+  <data name="Bind_ManageChannelRequired" xml:space="preserve"><value>Bạn cần có quyền để quản lý kênh này.</value></data>
+  <data name="Bind_ModeNotAllowed" xml:space="preserve"><value>Chủ sở hữu máy chủ không cho phép loại ràng buộc này.</value></data>
+  <data name="Bind_NotAllianceMaster" xml:space="preserve"><value>Chỉ có chủ nhân của liên minh mới có thể ràng buộc cuộc trò chuyện của liên minh.</value></data>
+  <data name="Bind_NotBound" xml:space="preserve"><value>Kênh này không bị ràng buộc vào cuộc trò chuyện về trò chơi.</value></data>
+  <data name="Bind_NotGuildMaster" xml:space="preserve"><value>Chỉ có chủ bang hội mới có thể làm điều này. Chọn nhân vật chủ bang hội của bạn bằng /character.</value></data>
+  <data name="Bind_NotInChannel" xml:space="preserve"><value>Sử dụng lệnh này trong kênh văn bản của máy chủ Discord.</value></data>
+  <data name="Bind_ServerNotAllowed" xml:space="preserve"><value>Chủ sở hữu máy chủ không cho phép liên kết trên máy chủ Discord này.</value></data>
+  <data name="Bind_Title" xml:space="preserve"><value>Trò chuyện bang hội</value></data>
+  <data name="Bind_TooManyMembers" xml:space="preserve"><value>Discord chỉ cho phép thành viên {0} trên mỗi kênh, vì vậy không phải tất cả thành viên được liên kết đều có thể xem kênh.</value></data>
+  <data name="Bind_Unbound" xml:space="preserve"><value>Sự ràng buộc của kênh này đã bị xóa.</value></data>
+  <data name="Bind_UseCreate" xml:space="preserve"><value>Trên máy chủ Discord của trò chơi, thay vào đó hãy sử dụng /guildchat create.</value></data>
+  <data name="BossKilled_Description" xml:space="preserve"><value>**{0}** đã đánh bại **{1}** trong {2}!</value></data>
+  <data name="BossKilled_Title" xml:space="preserve"><value>Boss bị đánh bại</value></data>
+  <data name="CastleSiege_Title" xml:space="preserve"><value>Công thành chiến</value></data>
+  <data name="CastleSiegeEndedWithoutOwner_Description" xml:space="preserve"><value>Trận chiến kết thúc. Không có bang hội nào sở hữu lâu đài.</value></data>
+  <data name="CastleSiegeEndedWithOwner_Description" xml:space="preserve"><value>Trận chiến kết thúc. **{0}** sở hữu lâu đài.</value></data>
+  <data name="CastleSiegeReady_Description" xml:space="preserve"><value>Cuộc chiến giành lâu đài bắt đầu {0}.</value></data>
+  <data name="CastleSiegeRegistration_Description" xml:space="preserve"><value>Việc đăng ký bang hội cho cuộc vây hãm lâu đài được mở cho đến {0}.</value></data>
+  <data name="CastleSiegeStarted_Description" xml:space="preserve"><value>Cuộc chiến giành lâu đài bắt đầu! Nó kết thúc {0}.</value></data>
+  <data name="Character_Level" xml:space="preserve"><value>Cấp độ {0}</value></data>
+  <data name="Character_MasterLevel" xml:space="preserve"><value>Cấp độ chính {0}</value></data>
+  <data name="Character_NotFound" xml:space="preserve"><value>Không có ký tự nào có tên **{0}**.</value></data>
+  <data name="Character_NotOfAccount" xml:space="preserve"><value>Tài khoản của bạn không có nhân vật tên {0}.</value></data>
+  <data name="Character_Offline" xml:space="preserve"><value>Không có trong game</value></data>
+  <data name="Character_OnlineOn" xml:space="preserve"><value>Trực tuyến trên {0}</value></data>
+  <data name="Character_Resets" xml:space="preserve"><value>Đặt lại {0}</value></data>
+  <data name="Character_Selected" xml:space="preserve"><value>Bây giờ bạn xuất hiện dưới dạng **{0}**.</value></data>
+  <data name="Chat_ChatBanned" xml:space="preserve"><value>Trò chuyện của bạn bị cấm.</value></data>
+  <data name="Chat_Empty" xml:space="preserve"><value>Tin nhắn trống rỗng.</value></data>
+  <data name="Chat_Filtered" xml:space="preserve"><value>Tin nhắn không được phép trong trò chơi.</value></data>
+  <data name="Chat_NoCharacter" xml:space="preserve"><value>Trước tiên, hãy chọn một ký tự trong tài khoản của bạn bằng ký tự /.</value></data>
+  <data name="Chat_NotBridged" xml:space="preserve"><value>Kênh này không bị ràng buộc vào cuộc trò chuyện về trò chơi.</value></data>
+  <data name="Chat_NotMember" xml:space="preserve"><value>Nhân vật {0} của bạn không phải là thành viên của bang hội hoặc liên minh của kênh này. Chọn một ký tự khác có ký tự /.</value></data>
+  <data name="Chat_Sent" xml:space="preserve"><value>Tin nhắn được gửi dưới dạng {0}.</value></data>
+  <data name="Chat_Title" xml:space="preserve"><value>Trò chuyện</value></data>
+  <data name="Chat_TooFast" xml:space="preserve"><value>Bạn đang gửi tin nhắn quá nhanh. Xin vui lòng chờ một lát.</value></data>
+  <data name="Command_Announce_Description" xml:space="preserve"><value>Gửi thông báo tới tất cả người chơi trong trò chơi và vào kênh thông báo. Dành cho bậc thầy trò chơi.</value></data>
+  <data name="Command_Announce_TextOption" xml:space="preserve"><value>Văn bản của thông báo.</value></data>
+  <data name="Command_Ban_Description" xml:space="preserve"><value>Cấm tài khoản của một nhân vật đang trực tuyến. Dành cho bậc thầy trò chơi.</value></data>
+  <data name="Command_Character_Description" xml:space="preserve"><value>Chọn ký tự của tài khoản của bạn khi bạn xuất hiện.</value></data>
+  <data name="Command_Character_NameOption" xml:space="preserve"><value>Tên của nhân vật.</value></data>
+  <data name="Command_Events_Description" xml:space="preserve"><value>Hiển thị các sự kiện trong 24 giờ tới.</value></data>
+  <data name="Command_Failed" xml:space="preserve"><value>Xin lỗi, điều đó không hiệu quả. Vui lòng thử lại sau.</value></data>
+  <data name="Command_Guild_Description" xml:space="preserve"><value>Hiển thị thông tin về bang hội.</value></data>
+  <data name="Command_Guild_GuildOption" xml:space="preserve"><value>Tên của hội.</value></data>
+  <data name="Command_GuildChat_Bind_Description" xml:space="preserve"><value>Liên kết kênh này với cuộc trò chuyện của bang hội hoặc liên minh của bạn.</value></data>
+  <data name="Command_GuildChat_Create_Description" xml:space="preserve"><value>Tạo một kênh để trò chuyện với bang hội hoặc liên minh của bạn trên máy chủ Discord của trò chơi.</value></data>
+  <data name="Command_GuildChat_Description" xml:space="preserve"><value>Liên kết cuộc trò chuyện của bang hội hoặc liên minh của bạn với kênh Discord.</value></data>
+  <data name="Command_GuildChat_ScopeAlliance" xml:space="preserve"><value>Liên minh</value></data>
+  <data name="Command_GuildChat_ScopeGuild" xml:space="preserve"><value>Bang hội</value></data>
+  <data name="Command_GuildChat_ScopeOption" xml:space="preserve"><value>Cuộc trò chuyện của bang hội hoặc của liên minh.</value></data>
+  <data name="Command_GuildChat_Unbind_Description" xml:space="preserve"><value>Loại bỏ sự ràng buộc của kênh này với cuộc trò chuyện của trò chơi.</value></data>
+  <data name="Command_Kick_Description" xml:space="preserve"><value>Ngắt kết nối một nhân vật khỏi trò chơi. Dành cho bậc thầy trò chơi.</value></data>
+  <data name="Command_Link_CodeOption" xml:space="preserve"><value>Mã bạn nhận được trong trò chơi bằng liên kết /discord.</value></data>
+  <data name="Command_Link_Description" xml:space="preserve"><value>Liên kết người dùng Discord với tài khoản trò chơi của bạn.</value></data>
+  <data name="Command_Notify_Description" xml:space="preserve"><value>Bật hoặc tắt tin nhắn trực tiếp về tài khoản trò chơi của bạn.</value></data>
+  <data name="Command_Notify_EnabledOption" xml:space="preserve"><value>Bật hoặc tắt.</value></data>
+  <data name="Command_Notify_TypeOption" xml:space="preserve"><value>Các loại tin nhắn trực tiếp.</value></data>
+  <data name="Command_Online_Description" xml:space="preserve"><value>Hiển thị có bao nhiêu người chơi đang trực tuyến.</value></data>
+  <data name="Command_Hnmo_Description" xml:space="preserve"><value>Quản lý việc tích hợp HNMO của máy chủ Discord này.</value></data>
+  <data name="Command_Rank_Description" xml:space="preserve"><value>Hiển thị các nhân vật tốt nhất.</value></data>
+  <data name="Command_Say_Description" xml:space="preserve"><value>Gửi tin nhắn từ kênh này đến cuộc trò chuyện của trò chơi.</value></data>
+  <data name="Command_Say_MessageOption" xml:space="preserve"><value>Tin nhắn.</value></data>
+  <data name="Command_Setup_Description" xml:space="preserve"><value>Tạo các kênh và vai trò còn thiếu của máy chủ Discord này.</value></data>
+  <data name="Command_Unlink_Description" xml:space="preserve"><value>Xóa liên kết đến tài khoản trò chơi của bạn.</value></data>
+  <data name="Command_Who_CharacterOption" xml:space="preserve"><value>Tên của nhân vật.</value></data>
+  <data name="Command_Who_Description" xml:space="preserve"><value>Hiển thị thông tin về một nhân vật.</value></data>
+  <data name="Dm_FriendOnline" xml:space="preserve"><value>Bạn của bạn {0} đang trực tuyến.</value></data>
+  <data name="Dm_LetterReceived" xml:space="preserve"><value>{0} đã nhận được thư từ {1}: {2}</value></data>
+  <data name="Dm_LoginAttempt" xml:space="preserve"><value>Ai đó đã cố đăng nhập vào tài khoản của bạn trên {0} trong khi bạn đang đăng nhập. Nếu đó không phải là bạn, hãy thay đổi mật khẩu của bạn.</value></data>
+  <data name="Event_CastleSiege_Description" xml:space="preserve"><value>Cuộc chiến giành lâu đài trong game. Các bang hội đăng ký nó trong trò chơi.</value></data>
+  <data name="Event_CastleSiege_Name" xml:space="preserve"><value>Công thành chiến</value></data>
+  <data name="Event_Location" xml:space="preserve"><value>trong trò chơi</value></data>
+  <data name="Events_None" xml:space="preserve"><value>Không có sự kiện nào trong 24 giờ tới.</value></data>
+  <data name="Events_Title" xml:space="preserve"><value>Sự kiện sắp tới</value></data>
+  <data name="GlobalNotice_Title" xml:space="preserve"><value>Thông báo</value></data>
+  <data name="Gm_Announced" xml:space="preserve"><value>Thông báo đã được gửi: {0}</value></data>
+  <data name="Gm_AnnouncedPartially" xml:space="preserve"><value>Thông báo được gửi tới {1} của máy chủ trò chơi {2}: {0}</value></data>
+  <data name="Gm_AnnouncementTooLong" xml:space="preserve"><value>Thông báo có thể có tối đa các ký tự {0}.</value></data>
+  <data name="Gm_Banned" xml:space="preserve"><value>Tài khoản của {0} đã bị cấm.</value></data>
+  <data name="Gm_Kicked" xml:space="preserve"><value>{0} đã bị ngắt kết nối.</value></data>
+  <data name="Gm_NotAllowed" xml:space="preserve"><value>Chỉ người quản lý trò chơi mới có thể sử dụng lệnh này. Bạn cần có vai trò GM và nhân vật chủ trò chơi của tài khoản được liên kết của bạn được chọn bằng /character.</value></data>
+  <data name="Gm_NotOnline" xml:space="preserve"><value>{0} không trực tuyến.</value></data>
+  <data name="Gm_Title" xml:space="preserve"><value>Bậc thầy trò chơi</value></data>
+  <data name="Guild_Master" xml:space="preserve"><value>Chủ hội: {0}</value></data>
+  <data name="Guild_Members" xml:space="preserve"><value>Thành viên: {0}</value></data>
+  <data name="Guild_NotFound" xml:space="preserve"><value>Không có bang hội nào có tên **{0}**.</value></data>
+  <data name="Guild_OnlineMembers" xml:space="preserve"><value>Trực tuyến: {0}</value></data>
+  <data name="InvasionEnded_Description" xml:space="preserve"><value>Cuộc xâm lược đã kết thúc.</value></data>
+  <data name="InvasionStarted_Description" xml:space="preserve"><value>Quái vật xâm chiếm {0}!</value></data>
+  <data name="ItemDropped_Description" xml:space="preserve"><value>**{0}** được tìm thấy **{1}** từ {2} trong {3}.</value></data>
+  <data name="ItemDropped_Title" xml:space="preserve"><value>Giọt hiếm</value></data>
+  <data name="ItemQuality_Ancient" xml:space="preserve"><value>Thần</value></data>
+  <data name="ItemQuality_Excellent" xml:space="preserve"><value>Đồ hoàn hảo</value></data>
+  <data name="LevelMilestone_Description" xml:space="preserve"><value>**{0}** ({1}) đã đạt đến cấp độ {2}!</value></data>
+  <data name="LevelMilestone_Title" xml:space="preserve"><value>Cột mốc quan trọng</value></data>
+  <data name="Link_InvalidCode" xml:space="preserve"><value>Mã không hợp lệ hoặc đã hết hạn. Nhận một cái mới trong trò chơi bằng liên kết /discord.</value></data>
+  <data name="Link_Linked" xml:space="preserve"><value>Người dùng Discord của bạn hiện đã được liên kết với tài khoản trò chơi của bạn. Bạn xuất hiện với tên **{0}**; chọn một ký tự khác có /character.</value></data>
+  <data name="Link_NotLinked" xml:space="preserve"><value>Người dùng Discord của bạn không được liên kết với tài khoản trò chơi. Nhận mã trong trò chơi bằng liên kết /discord và nhập mã đó vào đây bằng /link.</value></data>
+  <data name="Link_Title" xml:space="preserve"><value>Tài khoản trò chơi</value></data>
+  <data name="Link_Unlinked" xml:space="preserve"><value>Người dùng Discord của bạn không còn được liên kết với tài khoản trò chơi nữa.</value></data>
+  <data name="MasterLevelMilestone_Description" xml:space="preserve"><value>**{0}** ({1}) đã đạt cấp độ cao nhất {2}!</value></data>
+  <data name="MiniGameEntranceOpened_Description" xml:space="preserve"><value>Lối vào đóng {0}.</value></data>
+  <data name="MiniGameEntranceOpened_Title" xml:space="preserve"><value>{0} mở ra</value></data>
+  <data name="MiniGameWon_Description" xml:space="preserve"><value>**{0}** đã thắng {1}!</value></data>
+  <data name="Notify_Changed" xml:space="preserve"><value>Bạn nhận được tin nhắn trực tiếp về: {0}</value></data>
+  <data name="Notify_None" xml:space="preserve"><value>không có gì</value></data>
+  <data name="Notify_Type_Friend" xml:space="preserve"><value>Bạn bè trực tuyến</value></data>
+  <data name="Notify_Type_Letter" xml:space="preserve"><value>Thư</value></data>
+  <data name="Notify_Type_Login" xml:space="preserve"><value>Số lần đăng nhập</value></data>
+  <data name="Online_ServerLine" xml:space="preserve"><value>{0}: **{1}** / {2}</value></data>
+  <data name="Online_ServerOffline" xml:space="preserve"><value>{0}: ngoại tuyến</value></data>
+  <data name="Online_Title" xml:space="preserve"><value>Người chơi trực tuyến</value></data>
+  <data name="Online_Total" xml:space="preserve"><value>Tổng số: **{0}** người chơi</value></data>
+  <data name="Presence" xml:space="preserve"><value>Người chơi {0} trực tuyến</value></data>
+  <data name="Rank_Empty" xml:space="preserve"><value>Chưa có nhân vật nào.</value></data>
+  <data name="Rank_Title" xml:space="preserve"><value>Xếp hạng</value></data>
+  <data name="ServerFooter" xml:space="preserve"><value>Máy chủ: {0}</value></data>
+  <data name="Setup_AdministratorRequired" xml:space="preserve"><value>Chỉ quản trị viên mới có thể thiết lập máy chủ Discord này.</value></data>
+  <data name="Setup_Adopted" xml:space="preserve"><value>**Đã tồn tại:** {0}</value></data>
+  <data name="Setup_Created" xml:space="preserve"><value>**Đã tạo:** {0}</value></data>
+  <data name="Setup_Failed" xml:space="preserve"><value>**Không thành công:** {0}</value></data>
+  <data name="Setup_FailedHint" xml:space="preserve"><value>Vui lòng kiểm tra xem bot có quyền "Quản lý kênh" và "Quản lý vai trò" hay không và vai trò của nó có cao hơn các vai trò mà nó phải quản lý hay không.</value></data>
+  <data name="Setup_PublicCategories" xml:space="preserve"><value>**Hiển thị với mọi người:** {0}, vì không thể tạo vai trò của họ.</value></data>
+  <data name="Setup_Title" xml:space="preserve"><value>Thiết lập máy chủ Discord</value></data>
+  <data name="StaffAlert_Text" xml:space="preserve"><value>{0} ({1}) đã qua sử dụng /{2} {3}</value></data>
+  <data name="StaffAlert_Title" xml:space="preserve"><value>Lệnh của người quản lý trò chơi</value></data>
+  <data name="Status_NoServers" xml:space="preserve"><value>Không có máy chủ trò chơi đang chạy.</value></data>
+  <data name="Status_Offline" xml:space="preserve"><value>🔴 **{0}**: ngoại tuyến</value></data>
+  <data name="Status_Online" xml:space="preserve"><value>🟢 **{0}**: Người chơi {1} / {2}</value></data>
+  <data name="Status_Title" xml:space="preserve"><value>Trạng thái máy chủ</value></data>
+  <data name="Test_Description" xml:space="preserve"><value>Kênh này nhận thông báo thuộc danh mục {0}. Tin nhắn này đã được gửi từ bảng quản trị để kiểm tra nó.</value></data>
+  <data name="Test_Title" xml:space="preserve"><value>Tin nhắn kiểm tra</value></data>
+  <data name="Setup_PrivateRolesMissing" xml:space="preserve"><value>Các kênh riêng tư đã bị bỏ qua vì thiếu vai trò bắt buộc của chúng.</value></data>
+  <data name="Bind_AlreadyBound" xml:space="preserve"><value>Cuộc trò chuyện của {0} đã được liên kết với {1}. Trước tiên hãy sử dụng /guildchat hủy liên kết trong kênh đó.</value></data>
+  <data name="CommunityHighlight_Title" xml:space="preserve"><value>Đánh dấu</value></data>
+</root>
