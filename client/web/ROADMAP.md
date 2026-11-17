@@ -524,7 +524,7 @@ Its tools, compared (ideas only):
         no app needed), plus a Discord channel post (exists in Community). — Done (`EventAlertsPlugIn`, pure .NET RFC 8291/8292 `WebPushCrypto` with host-generated VAPID P-256 keys, Discord webhook channel post, `/sw-alerts.js` + `eventAlertsWidget.ts` in Timetable + website `/website/event-alerts*`, `/event-alerts` EN/VI admin page; OFF by default).
 - Launcher (auto-update, design, languages, register in the launcher): see 14.14 (desktop only).
 - Crash/stability monitor: HNMO's /control page (#18) shows status and logs; add crash detection with automatic
-  restart and a notice to the admin (14.23).
+  restart and a notice to the admin (14.23). — Done (`CrashWatchPolicy`, `CrashWatchStore`, `GameLauncher` exit watcher with backoff & hourly restart cap, optional Discord webhook notice, `/control` unread crash banner & history table, and Admin Panel `/crash-watch`).
 More of its tools and plugins (checked 2026-11-16; ideas only):
 - 3D world editor (terrain height, light colour, ground layers, safe/PvP attributes, objects with position/scale/
   rotation/light, minimap and monster spawns, export for server and client). HNMO has a 2D spawn map editor

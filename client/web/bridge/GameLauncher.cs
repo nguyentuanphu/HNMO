@@ -6,8 +6,11 @@
 // development the server and database are started separately.
 
 using System.Diagnostics;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Json;
 using HNMO.Interfaces;
 
 internal sealed class LauncherOptions
@@ -41,12 +44,14 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 {
     private static readonly TimeSpan DatabaseStartTimeout = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan ServerStartTimeout = TimeSpan.FromMinutes(10);
+    private static readonly HttpClient CrashWebhookClient = new() { Timeout = TimeSpan.FromSeconds(10) };
 
     private readonly SemaphoreSlim _lifecycleLock = new(1, 1);
     private Process? _server;
     private RollingLogWriter? _serverLogWriter;
     private bool _databaseStarted;
     private int _stopped;
+    private volatile bool _intentionalStop;
     private PosixSignalRegistration? _closeWindow;
 
     public bool IsLaunching { get; private set; }
@@ -189,6 +194,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             }
 
             Interlocked.Exchange(ref this._stopped, 0);
+            this._intentionalStop = false;
             await this.LaunchAsync(cancellationToken).ConfigureAwait(false);
         }
         finally
@@ -226,6 +232,7 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
     // a few seconds).
     private void StopNow()
     {
+        this._intentionalStop = true;
         if (Interlocked.Exchange(ref this._stopped, 1) == 1)
         {
             return;
@@ -452,9 +459,10 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         this._server.BeginOutputReadLine();
         this._server.BeginErrorReadLine();
         this._server.EnableRaisingEvents = true;
-        this._server.Exited += (_, _) =>
+        var startedProc = this._server;
+        startedProc.Exited += (_, _) =>
         {
-            var exitCode = this._server.ExitCode;
+            var exitCode = startedProc.ExitCode;
             if (exitCode == HostSettingsStore.RestartExitCode && Volatile.Read(ref this._stopped) == 0)
             {
                 logger.LogInformation("Restarting HNMO...");
@@ -462,8 +470,77 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
                 return;
             }
 
-            logger.LogWarning("The game server stopped. See {Log}.", Path.Combine(this.LogDirectory, "server.log"));
+            if (this._intentionalStop || Volatile.Read(ref this._stopped) != 0)
+            {
+                return;
+            }
+
+            logger.LogWarning("The game server crashed/stopped unexpectedly (exit code {ExitCode}). See {Log}.", exitCode, Path.Combine(this.LogDirectory, "server.log"));
+            _ = Task.Run(() => this.HandleUnexpectedServerExitAsync(exitCode));
         };
+    }
+
+    private async Task HandleUnexpectedServerExitAsync(int exitCode)
+    {
+        try
+        {
+            var saveDir = this.SaveFullPath;
+            var settings = MaintenanceSettings.Load(saveDir);
+            var existing = CrashWatchStore.ListIncidents(saveDir);
+            var priorTimes = existing.Select(i => i.OccurredAtUtc).ToList();
+            var now = DateTimeOffset.UtcNow;
+            var decision = CrashWatchPolicy.Evaluate(settings, exitCode, intentionalStop: false, priorTimes, now);
+            if (!decision.IsCrash)
+            {
+                return;
+            }
+
+            var tail = ControlOperations.ReadTailLines(Path.Combine(this.LogDirectory, "server.log"), 12);
+            var incident = new CrashIncident
+            {
+                Id = Guid.NewGuid().ToString("N")[..12],
+                OccurredAtUtc = now,
+                OccurredAtSydney = ControlOperations.FormatSydneyTime(now),
+                ExitCode = exitCode,
+                AutoRestarted = decision.ShouldRestart,
+                DelaySeconds = decision.DelaySeconds,
+                SummaryEn = decision.SummaryEn,
+                SummaryVi = decision.SummaryVi,
+                TailExcerpt = string.Join("\n", tail),
+                Acknowledged = false,
+            };
+            CrashWatchStore.RecordIncident(saveDir, incident);
+            this.LastError = decision.SummaryEn;
+
+            if (!string.IsNullOrWhiteSpace(settings.CrashDiscordWebhookUrl)
+                && Uri.TryCreate(settings.CrashDiscordWebhookUrl.Trim(), UriKind.Absolute, out var webhookUri)
+                && string.Equals(webhookUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    var text = $"[HNMO Crash Watch · {incident.OccurredAtSydney} Sydney] {decision.SummaryEn}\n{decision.SummaryVi}";
+                    using var content = new StringContent(JsonSerializer.Serialize(new { content = text }), Encoding.UTF8, "application/json");
+                    await CrashWebhookClient.PostAsync(webhookUri, content).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+                {
+                    logger.LogWarning("Crash watch Discord alert delivery failed ({Reason}).", ex.GetType().Name);
+                }
+            }
+
+            if (decision.ShouldRestart && !this._intentionalStop && Volatile.Read(ref this._stopped) == 0)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(decision.DelaySeconds)).ConfigureAwait(false);
+                if (!this._intentionalStop && Volatile.Read(ref this._stopped) == 0)
+                {
+                    await this.StartGameAsync(CancellationToken.None).ConfigureAwait(false);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Unhandled exception inside crash watch handler.");
+        }
     }
 
     private void RestartSelf()

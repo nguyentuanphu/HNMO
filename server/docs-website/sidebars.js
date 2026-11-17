@@ -56,6 +56,7 @@ const sidebars = {
         "admin-panel/teleport-npc",
         "admin-panel/fixed-options",
         "admin-panel/event-alerts",
+        "admin-panel/crash-watch",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",

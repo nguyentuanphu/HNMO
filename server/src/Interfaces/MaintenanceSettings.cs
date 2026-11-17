@@ -50,6 +50,18 @@ public sealed class MaintenanceSettings
     /// <summary>Gets or sets free disk threshold (MB) below which <c>/control</c> shows a low-disk warning.</summary>
     public int LowDiskWarningMb { get; set; } = 2048;
 
+    /// <summary>Gets or sets a value indicating whether <c>/control</c> automatically restarts the game server after an unexpected crash.</summary>
+    public bool AutoRestartOnCrash { get; set; } = true;
+
+    /// <summary>Gets or sets the maximum automatic restarts allowed within a sliding 60-minute window before stopping to prevent crash loops.</summary>
+    public int MaxCrashRestartsPerHour { get; set; } = 5;
+
+    /// <summary>Gets or sets the base backoff delay (seconds) before restarting after an unexpected crash.</summary>
+    public int CrashRestartDelaySeconds { get; set; } = 3;
+
+    /// <summary>Gets or sets an optional Discord webhook URL notified when an unexpected crash occurs (kept secret on public routes).</summary>
+    public string CrashDiscordWebhookUrl { get; set; } = string.Empty;
+
     /// <summary>Loads maintenance settings from <c>&lt;saveDir&gt;/host-settings.json</c> (preserving any existing keys).</summary>
     /// <param name="saveDirectory">Save folder path.</param>
     /// <returns>Normalized settings.</returns>
@@ -79,6 +91,10 @@ public sealed class MaintenanceSettings
                 result.BackupKeepMonthly = ReadInt(obj, nameof(BackupKeepMonthly), result.BackupKeepMonthly, 0, 120);
                 result.VacuumIntervalHours = ReadInt(obj, nameof(VacuumIntervalHours), result.VacuumIntervalHours, 1, 720);
                 result.LowDiskWarningMb = ReadInt(obj, nameof(LowDiskWarningMb), result.LowDiskWarningMb, 64, 1_000_000);
+                result.AutoRestartOnCrash = ReadBool(obj, nameof(AutoRestartOnCrash), result.AutoRestartOnCrash);
+                result.MaxCrashRestartsPerHour = ReadInt(obj, nameof(MaxCrashRestartsPerHour), result.MaxCrashRestartsPerHour, 1, 60);
+                result.CrashRestartDelaySeconds = ReadInt(obj, nameof(CrashRestartDelaySeconds), result.CrashRestartDelaySeconds, 1, 300);
+                result.CrashDiscordWebhookUrl = ReadString(obj, nameof(CrashDiscordWebhookUrl), result.CrashDiscordWebhookUrl);
             }
         }
         catch (Exception ex) when (ex is IOException or JsonException)
@@ -133,6 +149,19 @@ public sealed class MaintenanceSettings
         this.BackupKeepMonthly = Math.Clamp(this.BackupKeepMonthly, 0, 120);
         this.VacuumIntervalHours = Math.Clamp(this.VacuumIntervalHours, 1, 720);
         this.LowDiskWarningMb = Math.Clamp(this.LowDiskWarningMb, 64, 1_000_000);
+        this.MaxCrashRestartsPerHour = Math.Clamp(this.MaxCrashRestartsPerHour, 1, 60);
+        this.CrashRestartDelaySeconds = Math.Clamp(this.CrashRestartDelaySeconds, 1, 300);
+        this.CrashDiscordWebhookUrl = (this.CrashDiscordWebhookUrl ?? string.Empty).Trim();
+    }
+
+    private static string ReadString(JsonObject obj, string propertyName, string fallback)
+    {
+        if (!TryGetCaseInsensitive(obj, propertyName, out var node) || node is null)
+        {
+            return fallback;
+        }
+
+        return node.AsValue().TryGetValue<string>(out var val) ? (val ?? string.Empty).Trim() : fallback;
     }
 
     private static int ReadInt(JsonObject obj, string propertyName, int fallback, int min, int max)

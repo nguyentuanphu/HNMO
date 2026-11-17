@@ -52,6 +52,15 @@
     </div>
 
     <div id="statusMsg" class="msg"></div>
+    <div id="crashBanner" class="msg err" style="display:none">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div>
+          <strong id="crashBannerTitle"></strong>
+          <div id="crashBannerDetail" style="font-size:0.9rem;margin-top:4px"></div>
+        </div>
+        <button type="button" id="btnAckCrash" data-i18n="btnAckCrash">Acknowledge</button>
+      </div>
+    </div>
 
     <section id="wizardCard" class="card" style="display:none">
       <h2 data-i18n="wizardTitle">First-start setup wizard</h2>
@@ -128,9 +137,20 @@
         <div><label data-i18n="lblKeepWeekly">Weekly backups kept</label><input id="cfgKeepWeekly" type="number" min="0" max="104" value="4" /></div>
         <div><label data-i18n="lblKeepMonthly">Monthly backups kept</label><input id="cfgKeepMonthly" type="number" min="0" max="120" value="3" /></div>
         <div><label data-i18n="lblVacuumHours">Vacuum interval (hours)</label><input id="cfgVacuumHours" type="number" min="1" max="720" value="24" /></div>
+        <div><label data-i18n="lblAutoRestartCrash" title="Automatically restart the game server if it crashes unexpectedly">Auto-restart on crash</label><select id="cfgAutoRestart"><option value="true">ON</option><option value="false">OFF</option></select></div>
+        <div><label data-i18n="lblMaxRestartsHour" title="Maximum auto-restarts in a 60-minute window">Max crash restarts/hour</label><input id="cfgMaxRestarts" type="number" min="1" max="60" value="5" /></div>
+        <div><label data-i18n="lblCrashDelay" title="Base backoff delay before auto-restarting">Crash restart delay (sec)</label><input id="cfgCrashDelay" type="number" min="1" max="300" value="3" /></div>
+        <div><label data-i18n="lblCrashDiscord" title="Optional secret Discord webhook URL alerted when a crash happens">Crash Discord webhook (optional)</label><input id="cfgCrashDiscord" type="password" autocomplete="off" placeholder="https://discord.com/api/webhooks/..." /></div>
       </div>
       <div class="row" style="margin-top:12px">
         <button type="button" id="btnSaveMaint" class="primary" data-i18n="btnSaveMaint">Save retention settings</button>
+      </div>
+      <div style="margin-top:16px">
+        <h3 style="margin:0 0 8px;font-size:0.98rem" data-i18n="crashHistoryTitle">Recent Crash Watch Incidents (Sydney time)</h3>
+        <table>
+          <thead><tr><th data-i18n="colTime">Created (Sydney)</th><th data-i18n="colExit">Exit</th><th data-i18n="colSummary">Summary</th></tr></thead>
+          <tbody id="crashRows"></tbody>
+        </table>
       </div>
     </section>
 
@@ -199,8 +219,24 @@
         logsTitle: 'Logs (View / Search / Download)',
         btnSearchLogs: 'Search',
         btnDownloadLog: 'Download',
+        btnAckCrash: 'Dismiss notice',
+        lblAutoRestartCrash: 'Auto-restart on crash',
+        lblMaxRestartsHour: 'Max crash restarts/hour',
+        lblCrashDelay: 'Crash restart delay (sec)',
+        lblCrashDiscord: 'Crash Discord webhook (optional)',
+        crashHistoryTitle: 'Recent Crash Watch Incidents (Sydney time)',
+        colExit: 'Exit',
+        colSummary: 'Summary',
       },
       vi: {
+        btnAckCrash: 'Đã xem cảnh báo',
+        lblAutoRestartCrash: 'Tự khởi động lại khi sập',
+        lblMaxRestartsHour: 'Số lần khởi động lại/giờ',
+        lblCrashDelay: 'Độ trễ khởi động lại (giây)',
+        lblCrashDiscord: 'Discord webhook báo sập (tùy chọn)',
+        crashHistoryTitle: 'Lịch sử Sự cố Máy chủ gần đây (giờ Sydney)',
+        colExit: 'Mã',
+        colSummary: 'Chi tiết',
         title: 'Bảng điều khiển HNMO',
         helpTitle: 'Cách sử dụng trang này',
         helpBody: 'Trang điều khiển cục bộ này quản lý cơ sở dữ liệu, máy chủ trò chơi, trò chơi web, sao lưu, tự khởi động và cập nhật. Chỉ truy cập được từ máy tính này.',
@@ -324,6 +360,45 @@
           document.getElementById('cfgKeepWeekly').value = ms.backupKeepWeekly;
           document.getElementById('cfgKeepMonthly').value = ms.backupKeepMonthly;
           document.getElementById('cfgVacuumHours').value = ms.vacuumIntervalHours;
+          document.getElementById('cfgAutoRestart').value = String(ms.autoRestartOnCrash !== false);
+          document.getElementById('cfgMaxRestarts').value = ms.maxCrashRestartsPerHour || 5;
+          document.getElementById('cfgCrashDelay').value = ms.crashRestartDelaySeconds || 3;
+          const whEl = document.getElementById('cfgCrashDiscord');
+          whEl.placeholder = s.crashWatch?.hasDiscordWebhook ? '(saved — enter new URL to replace)' : 'https://discord.com/api/webhooks/...';
+        }
+
+        const cw = s.crashWatch || { unacknowledgedCount: 0, incidents: [] };
+        const crashBanner = document.getElementById('crashBanner');
+        if (cw.unacknowledgedCount > 0 && cw.incidents?.length) {
+          const latest = cw.incidents.find((i) => !i.acknowledged) || cw.incidents[0];
+          crashBanner.style.display = 'block';
+          document.getElementById('crashBannerTitle').textContent = lang === 'vi'
+            ? `Cảnh báo sự cố (${cw.unacknowledgedCount} chưa xác nhận) — ${latest.occurredAtSydney} giờ Sydney`
+            : `Crash Watch Alert (${cw.unacknowledgedCount} unacknowledged) — ${latest.occurredAtSydney} Sydney`;
+          document.getElementById('crashBannerDetail').textContent = lang === 'vi' ? latest.summaryVi : latest.summaryEn;
+        } else {
+          crashBanner.style.display = 'none';
+        }
+
+        const crashRows = document.getElementById('crashRows');
+        crashRows.innerHTML = '';
+        if (!cw.incidents || cw.incidents.length === 0) {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 3;
+          td.style.color = 'var(--muted)';
+          td.textContent = lang === 'vi' ? 'Chưa ghi nhận sự cố sập máy chủ nào.' : 'No unexpected server crashes recorded.';
+          tr.appendChild(td);
+          crashRows.appendChild(tr);
+        } else {
+          for (const inc of cw.incidents) {
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td'); td1.textContent = inc.occurredAtSydney || '';
+            const td2 = document.createElement('td'); td2.textContent = String(inc.exitCode);
+            const td3 = document.createElement('td'); td3.textContent = lang === 'vi' ? inc.summaryVi : inc.summaryEn;
+            tr.append(td1, td2, td3);
+            crashRows.appendChild(tr);
+          }
         }
 
         document.getElementById('backupTotals').textContent =
@@ -384,7 +459,12 @@
       backupKeepWeekly: Number(document.getElementById('cfgKeepWeekly').value),
       backupKeepMonthly: Number(document.getElementById('cfgKeepMonthly').value),
       vacuumIntervalHours: Number(document.getElementById('cfgVacuumHours').value),
-    }).then(() => { showMsg(lang === 'vi' ? 'Đã lưu cài đặt lưu trữ.' : 'Retention settings saved.'); refresh(); }).catch((e) => showMsg(e.message, true));
+      autoRestartOnCrash: document.getElementById('cfgAutoRestart').value === 'true',
+      maxCrashRestartsPerHour: Number(document.getElementById('cfgMaxRestarts').value),
+      crashRestartDelaySeconds: Number(document.getElementById('cfgCrashDelay').value),
+      crashDiscordWebhookUrl: document.getElementById('cfgCrashDiscord').value.trim() || (currentStatus?.crashWatch?.hasDiscordWebhook ? '__KEEP__' : ''),
+    }).then(() => { document.getElementById('cfgCrashDiscord').value = ''; showMsg(lang === 'vi' ? 'Đã lưu cài đặt lưu trữ.' : 'Retention settings saved.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnAckCrash').onclick = () => api('/api/control/crash-watch/ack', 'POST').then(() => { showMsg(lang === 'vi' ? 'Đã xác nhận cảnh báo sự cố.' : 'Crash notices acknowledged.'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnStart').onclick = () => api('/api/control/start', 'POST').then(() => { showMsg('Starting...'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnStop').onclick = () => api('/api/control/stop', 'POST').then(() => { showMsg('Stopped.'); refresh(); }).catch((e) => showMsg(e.message, true));
     document.getElementById('btnRestart').onclick = () => api('/api/control/restart', 'POST').then(() => { showMsg('Restarting...'); refresh(); }).catch((e) => showMsg(e.message, true));
