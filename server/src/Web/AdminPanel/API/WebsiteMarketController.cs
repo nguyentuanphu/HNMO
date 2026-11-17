@@ -154,7 +154,7 @@ public sealed class WebsiteMarketController(
             account.LoginName,
             coinType,
             -listing.Price,
-            $"Item Market purchase: {listing.Item.NameEn}",
+            CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketPurchase),
             $"market-buy:{listing.Id}",
             "HNMO Item Market",
             cancellationToken).ConfigureAwait(false);
@@ -178,7 +178,7 @@ public sealed class WebsiteMarketController(
                 listing.SellerLogin,
                 coinType,
                 claim.NetAmount,
-                $"Item Market sale: {listing.Item.NameEn}",
+                CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketSale),
                 $"market:{listing.Id}",
                 "HNMO Item Market",
                 cancellationToken).ConfigureAwait(false);

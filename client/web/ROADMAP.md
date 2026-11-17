@@ -613,6 +613,54 @@ Chưa có mua VIP thực tế, trừ coin, áp dụng quyền lợi hoặc giao 
 dịch và khôi phục, plug-in, chỉ số tài khoản cùng hạn dùng, trang quản trị, website,
 cửa sổ game, thông báo và kiểm thử tích hợp trước khi đánh dấu hoàn tất.
 
+## Player account dashboard — foundation (2026-11-16)
+Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,
+password-authenticated saved character/coin snapshots, retained coin history paged
+20 at a time with Sydney dates, existing gift/reset/safety forms, community links, and
+logout that clears module memory. New sections register through accountSections.ts;
+Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are
+kept together without changing the dictionaries from #4/#6.
+Personal missions/daily claims/calendar and referral progress/rewards are connected
+through the existing mission engine. Claims require the selected character in the game;
+offline reads do not mutate live state. New direct coin receipts cover vault purchases, market/player-store trades, reset/relife/
+stat/master fees and play-time credits while retaining existing save boundaries.
+Older unrecorded spending cannot be reconstructed. Remaining: per-character last-seen
+history and VIP buying/extensions
+in the VIP part. Confirmed email changes use off-by-default SMTP settings at
+Accounts → Email delivery and the player's Security form. Codes expire after 15 minutes,
+are single-use and password-bound, with one-minute resends and a five-attempt limit.
+
+Đã có phần nền trang tài khoản: đăng nhập trong bộ nhớ thẻ, menu thích ứng màn hình,
+xem nhân vật/số dư đã lưu, phân trang lịch sử nhận coin theo giờ Sydney, gift code,
+reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. Tính năng khác có thể đăng ký
+mục riêng. Đã kết nối nhiệm vụ, nhận quà hằng ngày, điểm danh và tiến trình mời bạn qua
+cùng bộ quy tắc trong game. Nhận thưởng cần nhân vật đã chọn đang trong game;
+xem khi ngoại tuyến không thay đổi dữ liệu đang chạy. Còn thiếu lịch sử lần xuất hiện
+gần nhất của từng nhân vật và mua/gia hạn VIP. Đã bổ sung lịch sử thay đổi coin khi mua
+rương, giao dịch chợ/cửa hàng người chơi, reset/relife/tẩy điểm và nhận thưởng thời gian
+chơi theo các điểm lưu hiện có. Không thể khôi phục lịch sử chi tiêu cũ chưa được ghi. Đổi email có xác nhận
+dùng thiết lập SMTP mặc định tắt tại Tài khoản → Gửi email và biểu mẫu Bảo mật của người chơi.
+Mã gắn với mật khẩu hiện tại, có hiệu lực 15 phút, chỉ dùng một lần; lấy mã cách nhau một phút
+và tối đa năm lần nhập sai.
+
+Password changes (2026-11-17, Sydney): the Security section accepts a matching new
+password twice, refuses online accounts, and requires signing in again after saving.
+The server authenticates again under an account reservation before writing the hash.
+HNMO is web only; the dashboard's quick links no longer offer a client download.
+
+Đổi mật khẩu (17/11/2026, giờ Sydney): mục Bảo mật yêu cầu nhập mật khẩu mới hai lần,
+từ chối khi tài khoản còn trong game và yêu cầu đăng nhập lại sau khi lưu. Máy chủ xác
+thực lại khi đã giữ chỗ tài khoản rồi mới lưu mã băm. HNMO chỉ chơi trên web; các liên
+kết nhanh của trang tài khoản không còn mục tải phần mềm chơi game.
+
+Character presence (2026-11-17, Sydney): refreshing reads each owned character's current
+online status through the existing game-server read channel. Missing/unresponsive channels
+show unavailable; no last-seen dates are invented. Saved character and coin data remain visible.
+
+Trạng thái nhân vật (17/11/2026, giờ Sydney): khi làm mới, trang kiểm tra từng nhân vật của
+tài khoản qua kênh đọc trạng thái máy chủ game có sẵn. Nếu máy chủ không trả lời, trang ghi
+chưa kiểm tra được; không tự tạo ngày giờ xuất hiện gần nhất. Vẫn xem được nhân vật và số dư đã lưu.
+
 ## Owner decision 2026-11-16 (Sydney): web only for now
 The desktop client is dropped for now (maybe later): HNMO ships and is played through the web game only. New HNMO
 features get web windows only; no desktop work (no desktop launcher 14.14, no desktop server-list/VIP marks; PR #8,
@@ -711,3 +759,16 @@ touch-first; read from its store listing and release notes; ideas only). The web
      tracker window (link with the timetable #23), a repair-mode key, a hold-target mode for PvP, a PK countdown icon,
      a setting to stop hitting own guild/alliance, party-list buffing, party leader change, a jewel-upgrade
      confirmation, a PvP log on the website, per-map music, item lock command (exists as account safety).
+
+## Status 2026-11-17 (Sydney), read from GitHub
+- Antigravity (out of usage for ~5 days): DONE its integration draft #51 (antigravity-integration, all its PRs merged
+  in order, #13 renumbered to F5 24, 0 clashes, full tests green, Windows playtest docs/playtest-2026-11-17.md) and
+  Phase 2: #52 buffer NPC, #53 banned words, #54 offline trade, #55 rankings + add stats, #56 talismans, #57 titles,
+  #58 teleport NPC, #59 fixed item options, #60 event alerts, #61 crash watch. NOT STARTED: Phase 3 (14.19 item
+  definitions, 14.21 stats calculator, 14.24 3D world editor), escrow (section 16), and the admin tools moved to it.
+- Admin tools 14.18 gift box/mail, 14.16 ban manager, 14.15 character tools, 14.17/14.11 GM manager + in-game GM
+  commands, 14.20 news manager: moved BACK to ChatGPT (2026-11-17) because Antigravity is out for days.
+- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (rules only, not
+  working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
+- Second Antigravity (mobile, section 17): not started.
+- Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
