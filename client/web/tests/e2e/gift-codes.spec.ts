@@ -161,7 +161,9 @@ test('in the game: the gift code window, /code, the results in the chat, waiting
   await expect(community).toHaveCount(1, { timeout: 90_000 });
   await community.locator('.cm-gift').click();
   await expect(panel).toHaveCount(1, { timeout: 90_000 });
-  expect((await sent(page)).filter((s) => s.name === 'HnmoGiftCodesAction')).toHaveLength(2);
+  const actions = await sent(page);
+  expect(actions.filter((s) => s.name === 'HnmoGiftCodesAction')).toHaveLength(1);
+  expect(actions.filter((s) => s.name === 'HnmoGiftCodeRedeemExtended')).toHaveLength(1);
   await page.goto('about:blank');
   await expectNoPageErrors(errors);
 });
