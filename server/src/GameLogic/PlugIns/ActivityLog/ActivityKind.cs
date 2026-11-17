@@ -1,0 +1,35 @@
+// <copyright file="ActivityKind.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.GameLogic.PlugIns.ActivityLog;
+
+/// <summary>
+/// Kinds of player economy and item activity recorded in the HNMO activity log.
+/// </summary>
+public enum ActivityKind
+{
+    /// <summary>Direct player-to-player trade.</summary>
+    Trade = 0,
+
+    /// <summary>Drop of a valuable item onto a map.</summary>
+    Drop = 1,
+
+    /// <summary>Pickup of a valuable item from a map.</summary>
+    Pickup = 2,
+
+    /// <summary>Chaos Machine or item mix attempt/result.</summary>
+    ChaosMix = 3,
+
+    /// <summary>Purchase from an NPC merchant.</summary>
+    NpcBuy = 4,
+
+    /// <summary>Sale to an NPC merchant.</summary>
+    NpcSell = 5,
+
+    /// <summary>Personal player store purchase/sale.</summary>
+    PersonalStore = 6,
+
+    /// <summary>Item Market listing, sale, or purchase (ROADMAP 13.9 hook).</summary>
+    ItemMarket = 7,
+}
