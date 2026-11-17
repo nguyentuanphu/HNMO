@@ -13,7 +13,7 @@ interface AccountSnapshot {
   balances: { wCoinC: number; wCoinP: number; goblinPoints: number };
   vipLevel: number;
   characters: readonly { name: string; className: string; classNameVi?: string; level: number; resets: number; map: number | null; online?: boolean | null }[];
-  history: readonly { id: string; coinType: string; amount: number; reason: string | null; purchase?: { nameEn: string; nameVi: string; giftRecipient: string | null } | null; balanceChange?: { action: string; otherCharacter: string | null } | null; createdAt: string; pending: boolean }[];
+  history: readonly { id: string; coinType: string; amount: number; reason: string | null; purchase?: { nameEn: string; nameVi: string; giftRecipient: string | null } | null; balanceChange?: { action: string; otherCharacter: string | null } | null; vipPurchase?: { nameEn: string; nameVi: string; days: number } | null; vipDaily?: { nameEn: string; nameVi: string } | null; createdAt: string; pending: boolean }[];
   page: number;
   hasMore: boolean;
 }
@@ -165,6 +165,8 @@ function renderCoins(): void {
 }
 
 function historyReason(entry: AccountSnapshot['history'][number]): string {
+  if (entry.vipPurchase) return t('vipPurchaseReason').replace('{0}', language === 'vi' ? entry.vipPurchase.nameVi : entry.vipPurchase.nameEn).replace('{1}', String(entry.vipPurchase.days));
+  if (entry.vipDaily) return t('vipDailyReason').replace('{0}', language === 'vi' ? entry.vipDaily.nameVi : entry.vipDaily.nameEn);
   if (entry.balanceChange) {
     const keys: Readonly<Record<string, AccountTextKey>> = { ExtraVault: 'coinExtraVault', MarketPurchase: 'coinMarketPurchase', MarketSale: 'coinMarketSale', PlayerStorePurchase: 'coinPlayerStorePurchase', PlayerStoreSale: 'coinPlayerStoreSale', Reset: 'coinReset', Relife: 'coinRelife', ClearStats: 'coinClearStats', ClearMaster: 'coinClearMaster', PlayTime: 'coinPlayTime' };
     const key = keys[entry.balanceChange.action];

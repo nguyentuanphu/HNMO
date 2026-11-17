@@ -110,6 +110,8 @@ export const accountPageTexts = {
   setupError: ['The host needs to finish the website connection setup.', 'Chủ máy chủ cần hoàn tất thiết lập kết nối website.'],
   rateError: ['Too many requests. Please try again shortly.', 'Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau ít phút.'],
   busy: ['Loading…', 'Đang tải…'],
+  vipPurchaseReason: ['VIP {0}: {1} days', 'VIP {0}: {1} ngày'],
+  vipDailyReason: ['VIP daily reward: {0}', 'Quà VIP hằng ngày: {0}'],
 } as const;
 
 export type AccountTextKey = keyof typeof accountPageTexts;
