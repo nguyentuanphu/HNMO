@@ -290,7 +290,7 @@ test('learned Phoenix Shot walks into range and sends the exact area cast with r
   });
   await page.route('**/phoenix-shot-check', route => route.fulfill({
     contentType: 'text/html',
-    body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js"}}</script></head><body></body></html>',
+    body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/":"/vendor/three/"}}</script></head><body></body></html>',
   }));
   await page.route('**/vendor/three/build/three.module.js', route => route.fulfill({
     path: new URL('../../node_modules/three/build/three.module.js', import.meta.url).pathname,
