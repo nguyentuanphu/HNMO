@@ -98,7 +98,7 @@ else
                 <td>@CashShopHistoryText.Sydney(grant.CreatedAt)</td>
                 <td>@CashShopCoinCaption.Get(grant.CoinType)</td>
                 <td class="text-end">@grant.Amount.ToString("N0")</td>
-                <td>@CashShopHistoryText.Format(grant)</td>
+                <td>@CashShopHistoryText.Format(grant.Reason)</td>
                 <td>@grant.GrantedBy</td>
                 <td><code>@grant.Reference</code></td>
                 <td>@(grant.AppliedAt is { } applied ? CashShopHistoryText.Sydney(applied) : Resources.CashShopPending)</td>

@@ -5,7 +5,6 @@
 namespace HNMO.Web.AdminPanel.Services;
 
 using System.Globalization;
-using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
 using HNMO.Web.AdminPanel.Properties;
 
@@ -15,12 +14,12 @@ public static class CashShopHistoryText
     private static readonly TimeZoneInfo SydneyZone = TimeZoneInfo.FindSystemTimeZoneById(OperatingSystem.IsWindows() ? "AUS Eastern Standard Time" : "Australia/Sydney");
 
     /// <summary>Localizes known receipts while retaining ordinary host-written reasons.</summary>
-    /// <param name="grant">The history entry.</param>
+    /// <param name="reason">The history entry reason.</param>
     /// <returns>The localized description.</returns>
-    public static string Format(CashShopCoinGrant grant)
+    public static string Format(string? reason)
     {
         var culture = CultureInfo.CurrentUICulture;
-        if (CashShopPurchaseReceipt.Read(grant.Reason) is { } purchase)
+        if (CashShopPurchaseReceipt.Read(reason) is { } purchase)
         {
             var name = culture.TwoLetterISOLanguageName == "vi" ? purchase.NameVi : purchase.NameEn;
             return purchase.GiftRecipient is { Length: > 0 } recipient
@@ -28,9 +27,9 @@ public static class CashShopHistoryText
                 : string.Format(culture, Resources.AccountCoinHistoryCashShop, name);
         }
 
-        if (CashShopBalanceReceipt.Read(grant.Reason) is not { } change)
+        if (CashShopBalanceReceipt.Read(reason) is not { } change)
         {
-            return grant.Reason ?? string.Empty;
+            return reason ?? string.Empty;
         }
 
         var key = $"AccountCoinHistory{change.Action}";

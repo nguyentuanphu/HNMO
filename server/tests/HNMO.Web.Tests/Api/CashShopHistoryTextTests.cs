@@ -36,7 +36,7 @@ public class CashShopHistoryTextTests
             foreach (var reason in Enum.GetValues<CashShopBalanceReason>())
             {
                 var receipt = CashShopBalanceReceipt.Record(context, account, CashShopCoinType.WCoinC, -5, reason, "Other");
-                var label = CashShopHistoryText.Format(receipt!);
+                var label = CashShopHistoryText.Format(receipt!.Reason);
                 Assert.That(label, Is.Not.Empty);
                 Assert.That(label, Does.Not.Contain("account-balance-v1").And.Not.Contain("{0}"));
                 Assert.That(label, Is.Not.EqualTo(reason.ToString()));
@@ -48,7 +48,7 @@ public class CashShopHistoryTextTests
 
             var legacy = context.CreateNew<CashShopCoinGrant>();
             legacy.Reason = "Host-written compensation";
-            Assert.That(CashShopHistoryText.Format(legacy), Is.EqualTo(legacy.Reason));
+            Assert.That(CashShopHistoryText.Format(legacy.Reason), Is.EqualTo(legacy.Reason));
         }
         finally
         {
