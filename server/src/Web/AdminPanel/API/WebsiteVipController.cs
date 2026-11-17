@@ -14,6 +14,7 @@ using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>Own-account VIP operations through the authenticated website bridge; mutations require an offline reservation.</summary>
 /// <param name="persistence">The account persistence provider.</param>
