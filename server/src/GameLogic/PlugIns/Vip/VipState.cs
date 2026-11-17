@@ -27,4 +27,7 @@ public sealed class VipState
 
     /// <summary>Gets or sets terminal refusals for intents which never changed the account.</summary>
     public Dictionary<Guid, VipRuleResult> WalletRefusals { get; set; } = [];
+
+    /// <summary>Gets or sets account-bound database receipt references for rebuilding the shared-state projection.</summary>
+    public Dictionary<string, string> WalletReferences { get; set; } = [];
 }

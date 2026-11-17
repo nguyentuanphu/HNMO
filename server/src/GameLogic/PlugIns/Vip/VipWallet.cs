@@ -91,6 +91,46 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         }
     }
 
+    /// <summary>Reads the paid, active entitlement from account grants and database proof, rebuilding only its file projection.</summary>
+    /// <param name="context">The authenticated account's owned context.</param>
+    /// <param name="account">The authenticated account.</param>
+    /// <param name="nowUtc">The current UTC instant.</param>
+    /// <param name="cancellationToken">Cancellation before reading the account.</param>
+    /// <returns>The active paid proof, or null when it cannot be established; never invents a grant from a file record.</returns>
+    public async ValueTask<VipWalletReceipt?> ReadActiveAsync(IPlayerContext context, Account account, DateTime nowUtc, CancellationToken cancellationToken = default)
+    {
+        if (account.GetId() == Guid.Empty || nowUtc.Kind != DateTimeKind.Utc)
+        {
+            return null;
+        }
+
+        var gate = AccountGates.GetOrAdd(account.GetId(), _ => new(1, 1));
+        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await this.ReadActiveOwnedAsync(context, account, nowUtc).ConfigureAwait(false);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    private static VipWalletReceipt? MatchActiveProof(CashShopCoinGrant row, Account account, HashSet<Guid> activeIds)
+    {
+        var proof = ReadReceipt(row.Reason);
+        if (proof is null || row.AppliedAt is null || row.AccountId != account.GetId() || proof.Intent.AccountId != account.GetId()
+            || proof.Intent.Plan.LoginName != account.LoginName.Trim().ToUpperInvariant() || proof.Intent.Plan.Price < 0
+            || row.Amount != -proof.Intent.Plan.Price || row.CoinType != proof.Intent.Plan.CoinType
+            || row.Reference != $"vip:{proof.Intent.AccountId:N}:{proof.Intent.OperationId:N}")
+        {
+            return null;
+        }
+
+        var vip = account.AttributeGrants.SingleOrDefault(grant => activeIds.Contains(grant.GetId()) && proof.GrantIds.Contains(grant.GetId()));
+        return vip?.ValidUntil == proof.Intent.Membership.UntilUtc && vip.Value == proof.Intent.Plan.LevelId ? proof : null;
+    }
+
     private async ValueTask<VipWalletResult> PurchaseOwnedAsync(IPlayerContext context, Account account, Guid operationId, int levelId, int days, DateTime nowUtc, Func<ValueTask<bool>> save, string? offerToken)
     {
         var tracked = TrackedReceipts.GetOrCreateValue(context);
@@ -122,6 +162,14 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             tracked.Remove(operationId);
             return this.ConfirmProof(account, proof, nowUtc);
         }
+
+        if (tracked.Count > 0)
+        {
+            return new("Pending");
+        }
+
+        // Another host or an older shared-file backup may not know the current database-owned grants.
+        await this.ReadActiveOwnedAsync(context, account, nowUtc).ConfigureAwait(false);
 
         VipWalletIntent intent;
         lock (store.SyncRoot)
@@ -192,6 +240,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                 {
                     return new("PriceChanged");
                 }
+
                 if (account.GetCashShopCoins(plan.CoinType) < plan.Price)
                 {
                     return new("Refused", VipRuleResult.InsufficientCoins);
@@ -261,16 +310,18 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         {
             if (!store.Data.Payments.ContainsKey(intent.OperationId))
             {
-                // A removed grant is never recreated by a replay. Actual account grants own the expiry.
-                var vipGrant = account.AttributeGrants.SingleOrDefault(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id);
-                if (vipGrant?.ValidUntil == intent.Membership.UntilUtc && vipGrant.Value == intent.Plan.LevelId)
-                {
-                    store.Data.Memberships[intent.Plan.LoginName] = intent.Membership;
-                    store.Data.OwnedGrants[intent.Plan.LoginName] = proof.GrantIds.ToList();
-                }
-
                 store.Data.Payments[intent.OperationId] = intent.Plan;
                 store.Data.Audit.Add(new(nowUtc, intent.Plan.LoginName, "purchase", "wallet", intent.OperationId.ToString("N")));
+            }
+
+            // Rebuild a missing file projection only from an actual active account grant and its paid proof.
+            // Expired, removed or superseded receipts never overwrite the current entitlement.
+            var vipGrant = account.AttributeGrants.SingleOrDefault(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id);
+            if (vipGrant?.ValidUntil == intent.Membership.UntilUtc && vipGrant.Value == intent.Plan.LevelId && vipGrant.IsValidAt(nowUtc))
+            {
+                store.Data.Memberships[intent.Plan.LoginName] = intent.Membership;
+                store.Data.OwnedGrants[intent.Plan.LoginName] = proof.GrantIds.ToList();
+                store.Data.WalletReferences[intent.Plan.LoginName] = $"vip:{intent.AccountId:N}:{intent.OperationId:N}";
             }
 
             try
@@ -287,6 +338,71 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         var active = account.AttributeGrants.Any(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc) && grant.ValidUntil == intent.Membership.UntilUtc && grant.Value == intent.Plan.LevelId)
             ? intent.Membership : null;
         return new("Applied", Membership: active);
+    }
+
+    private async ValueTask<VipWalletReceipt?> ReadActiveOwnedAsync(IPlayerContext context, Account account, DateTime nowUtc)
+    {
+        if (TrackedReceipts.TryGetValue(context, out var tracked) && tracked.Count > 0)
+        {
+            return null;
+        }
+
+        var activeIds = account.AttributeGrants.Where(grant => grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc))
+            .Select(grant => grant.GetId()).ToHashSet();
+        if (activeIds.Count == 0)
+        {
+            return null;
+        }
+
+        string? reference;
+        lock (store.SyncRoot)
+        {
+            store.Data.WalletReferences.TryGetValue(account.LoginName.Trim().ToUpperInvariant(), out reference);
+        }
+
+        if (reference is not null && await context.GetCashShopCoinGrantByReferenceAsync(reference).ConfigureAwait(false) is { } cached
+            && MatchActiveProof(cached, account, activeIds) is { } known)
+        {
+            bool current;
+            lock (store.SyncRoot)
+            {
+                var name = known.Intent.Plan.LoginName;
+                current = store.Data.Payments.ContainsKey(known.Intent.OperationId)
+                    && store.Data.Memberships.TryGetValue(name, out var membership) && membership == known.Intent.Membership
+                    && store.Data.OwnedGrants.TryGetValue(name, out var ids) && ids.SequenceEqual(known.GrantIds);
+            }
+
+            if (!current)
+            {
+                this.ConfirmProof(account, known, nowUtc);
+            }
+
+            return known;
+        }
+
+        // Cold reconstruction is bounded. Unknown legacy grants remain intact and cannot authorize a purchase.
+        const int pageSize = 100;
+        for (var page = 0; page < 200; page++)
+        {
+            var rows = await context.GetCashShopCoinHistoryAsync(account.GetId(), page * pageSize, pageSize).ConfigureAwait(false);
+            foreach (var row in rows)
+            {
+                if (MatchActiveProof(row, account, activeIds) is not { } proof)
+                {
+                    continue;
+                }
+
+                this.ConfirmProof(account, proof, nowUtc);
+                return proof;
+            }
+
+            if (rows.Count < pageSize)
+            {
+                break;
+            }
+        }
+
+        return null;
     }
 
     private VipWalletResult RefuseIntent(Guid operationId, VipRuleResult reason)

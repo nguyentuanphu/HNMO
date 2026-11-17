@@ -89,6 +89,7 @@ public class VipWalletTests
         var operation = Guid.NewGuid();
         var failed = await this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, Now, () => throws ? ValueTask.FromException<bool>(new InvalidOperationException("injected save failure")) : ValueTask.FromResult(false)).ConfigureAwait(false);
         Assert.That(failed.Status, Is.EqualTo("Pending"));
+        Assert.That(await this._wallet.ReadActiveAsync(this._context, this._account, Now).ConfigureAwait(false), Is.Null);
         Assert.That(this._account.WCoinC, Is.EqualTo(900));
         Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
         Assert.That((await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false)).Status, Is.EqualTo("Pending"));
@@ -365,6 +366,62 @@ public class VipWalletTests
         Assert.That(replay.Membership, Is.Null);
         Assert.That(this._account.WCoinC, Is.EqualTo(800));
         Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, Now.AddMinutes(2)), Is.EqualTo(1));
+    }
+
+    /// <summary>A different host or an older file projection rebuilds ownership from database proof before renewal.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RebuildsMissingProjectionFromOwnedDatabaseProofAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        using var fresh = this._provider.CreateNewPlayerContext(this._game);
+        var account = (await fresh.GetAccountByLoginNameAsync("ann").ConfigureAwait(false))!;
+        var other = new VipWallet(this._configuration, VipStateStore.CreateInMemory(), this._game, NullLogger.Instance);
+        var active = await other.ReadActiveAsync(fresh, account, Now.AddHours(1)).ConfigureAwait(false);
+        Assert.That(active!.Intent.Membership.UntilUtc, Is.EqualTo(Now.AddDays(7)));
+        var token = VipOfferToken.Create(account.GetId(), this._configuration.Levels[0], this._configuration.Levels[0].Offers[0], Now.AddDays(7));
+        var renewed = await other.PurchaseAsync(fresh, account, Guid.NewGuid(), 1, 7, Now.AddHours(1), () => fresh.SaveChangesAsync(), token).ConfigureAwait(false);
+        Assert.That(renewed.Status, Is.EqualTo("Applied"));
+        Assert.That(renewed.Membership!.UntilUtc, Is.EqualTo(Now.AddDays(14)));
+        Assert.That(account.WCoinC, Is.EqualTo(800));
+        Assert.That(account.GetAccountAttributeValue(Stats.IsVip, Now.AddHours(1)), Is.EqualTo(1));
+    }
+
+    /// <summary>Cold reconstruction pages past older history without treating unrelated grants as proof.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReconstructionReadsBeyondOneThousandReceiptsAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        for (var index = 0; index < 1100; index++)
+        {
+            var row = this._context.CreateNew<CashShopCoinGrant>();
+            row.AccountId = this._account.GetId();
+            row.CreatedAt = Now.AddMinutes(1).AddSeconds(index);
+            row.AppliedAt = row.CreatedAt;
+            row.Reason = "Retained fixture receipt";
+        }
+
+        await this._context.SaveChangesAsync().ConfigureAwait(false);
+        var other = new VipWallet(this._configuration, VipStateStore.CreateInMemory(), this._game, NullLogger.Instance);
+        var proof = await other.ReadActiveAsync(this._context, this._account, Now.AddDays(1)).ConfigureAwait(false);
+        Assert.That(proof, Is.Not.Null);
+        Assert.That(proof!.Intent.Membership.UntilUtc, Is.EqualTo(Now.AddDays(7)));
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+    }
+
+    /// <summary>Neither a saved membership nor a paid receipt can invent removed account grants.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ReadingPaidStatusCannotRecreateRemovedEntitlementsAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        this._account.AttributeGrants.Clear();
+        var proof = await this._wallet.ReadActiveAsync(this._context, this._account, Now.AddHours(1)).ConfigureAwait(false);
+        Assert.That(proof, Is.Null);
+        Assert.That(this._account.AttributeGrants, Is.Empty);
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        Assert.That((await this.BuyAsync(Guid.NewGuid(), Now.AddHours(1)).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
     }
 
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
