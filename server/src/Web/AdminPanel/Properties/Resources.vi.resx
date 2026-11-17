@@ -4680,4 +4680,49 @@
   <data name="ShopEditorReload" xml:space="preserve"><value>Tải lại cửa hàng đã lưu</value></data>
   <data name="ShopEditorEmpty" xml:space="preserve"><value>Không có người bán phù hợp.</value></data>
   <data name="ShopEditorPending" xml:space="preserve"><value>Đang lưu cửa hàng. Hãy chờ trước khi rời trang.</value></data>
+  <data name="HostSettingsPage" xml:space="preserve">
+    <value>Cài đặt máy chủ</value>
+  </data>
+  <data name="HostSettingsHelpTitle" xml:space="preserve">
+    <value>Cách sử dụng trang này</value>
+  </data>
+  <data name="HostSettingsHelpBody" xml:space="preserve">
+    <value>Mọi cài đặt máy chủ được lưu trong một tệp (save/hnmo-settings.json). Các thay đổi được kiểm tra hợp lệ trước khi lưu. Thay đổi về cổng, URL, đường dẫn và kết nối cơ sở dữ liệu sẽ có hiệu lực sau khi bấm Khởi động lại HNMO.</value>
+  </data>
+  <data name="HostSettingsRestartNote" xml:space="preserve">
+    <value>Thay đổi về cổng, URL, đường dẫn hoặc kết nối cơ sở dữ liệu cần khởi động lại để có hiệu lực.</value>
+  </data>
+  <data name="HostSettingsPortsSection" xml:space="preserve">
+    <value>Cổng và địa chỉ công khai</value>
+  </data>
+  <data name="HostSettingsBridgeSection" xml:space="preserve">
+    <value>Cầu nối web và trình khởi chạy</value>
+  </data>
+  <data name="HostSettingsDatabaseSection" xml:space="preserve">
+    <value>Kết nối cơ sở dữ liệu</value>
+  </data>
+  <data name="HostSettingsLicenseSection" xml:space="preserve">
+    <value>Giấy phép người chơi</value>
+  </data>
+  <data name="HostSettingsSaveButton" xml:space="preserve">
+    <value>Lưu cài đặt</value>
+  </data>
+  <data name="HostSettingsRestartButton" xml:space="preserve">
+    <value>Khởi động lại HNMO</value>
+  </data>
+  <data name="HostSettingsRestartConfirm" xml:space="preserve">
+    <value>Người chơi sẽ được ngắt kết nối an toàn và lưu dữ liệu trước khi khởi động lại. Tiếp tục?</value>
+  </data>
+  <data name="HostSettingsSaved" xml:space="preserve">
+    <value>Đã lưu cài đặt máy chủ.</value>
+  </data>
+  <data name="HostSettingsRestarting" xml:space="preserve">
+    <value>HNMO đang lưu dữ liệu và khởi động lại...</value>
+  </data>
+  <data name="HostSettingsRestartUnsupported" xml:space="preserve">
+    <value>Chỉ có thể khởi động lại khi chạy qua trình khởi chạy HNMO.</value>
+  </data>
+  <data name="HostSettingsPasswordMasked" xml:space="preserve">
+    <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
+  </data>
 </root>

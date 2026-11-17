@@ -84,6 +84,25 @@
       </form>
     </section>
 
+    <section class="panel" id="play" aria-labelledby="playTitle">
+      <div class="gift-head">
+        <h2 id="playTitle" data-pt="title">Play in browser</h2>
+        <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-play-lang="en">EN</button> <button type="button" data-play-lang="vi">VI</button></div>
+      </div>
+      <p data-pt="intro">Sign in here once, then click Play now to open the game straight at server selection without typing your password again.</p>
+      <form id="playLogin" class="safety-row">
+        <label><span data-pt="account">Account name</span> <input id="playAccount" name="loginName" required maxlength="10" autocomplete="username"></label>
+        <label><span data-pt="password">Password</span> <input id="playPassword" name="password" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button type="submit" id="playSignInButton" data-pt="login">Sign in</button>
+      </form>
+      <div id="playSignedIn" class="safety-row" hidden>
+        <p style="margin:0;flex:1 1 200px"><span data-pt="signedInAs">Signed in as</span> <strong id="playSignedName"></strong></p>
+        <button type="button" id="playNowButton" data-pt="playNow">Play now</button>
+        <button type="button" id="playSignOutButton" data-pt="signOut" style="background:transparent;color:var(--gold)">Sign out</button>
+      </div>
+      <p class="message" id="playMessage" role="status" aria-live="polite"></p>
+    </section>
+
     <div class="grid">
       <form class="panel" id="registerForm">
         <h2>Create an account</h2>
@@ -791,5 +810,121 @@
     applyLanguage();
   </script>
   <script type="module" src="/js/siteLanguage.js"></script>
+  <script type="module">
+    const PLAY_TEXT = {
+      en: {
+        title: 'Play in browser',
+        intro: 'Sign in here once, then click Play now to open the game straight at server selection without typing your password again.',
+        account: 'Account name', password: 'Password', login: 'Sign in',
+        signedInAs: 'Signed in as', playNow: 'Play now', signOut: 'Sign out',
+        signedInMsg: 'Signed in. Click Play now to enter the game.',
+        loginWrong: 'Wrong account name or password.',
+        blocked: 'This account is blocked.',
+        busy: 'Too many requests from your address. Wait a minute.',
+        setup: 'The account page isn\'t set up yet (host: see README.txt).',
+        server: 'The game server didn\'t answer. Try again later.',
+      },
+      vi: {
+        title: 'Chơi trên trình duyệt',
+        intro: 'Đăng nhập tại đây một lần, rồi bấm Chơi ngay để vào thẳng phần chọn máy chủ mà không cần nhập lại mật khẩu.',
+        account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Đăng nhập',
+        signedInAs: 'Đang đăng nhập:', playNow: 'Chơi ngay', signOut: 'Đăng xuất',
+        signedInMsg: 'Đã đăng nhập. Bấm Chơi ngay để vào game.',
+        loginWrong: 'Sai tên tài khoản hoặc mật khẩu.',
+        blocked: 'Tài khoản này đang bị khóa.',
+        busy: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy đợi một phút.',
+        setup: 'Trang tài khoản chưa được thiết lập (chủ máy: xem README.txt).',
+        server: 'Máy chủ game không trả lời. Hãy thử lại sau.',
+      },
+    };
+    const $ = (id) => document.getElementById(id);
+    let playLang = (() => { try { return localStorage.getItem('hnmo.language') === 'vi' ? 'vi' : 'en'; } catch { return 'en'; } })();
+    const pt = (k) => (PLAY_TEXT[playLang] ?? PLAY_TEXT.en)[k] ?? k;
+    let sessionCreds = null;
+    let lastPlayStatus = null;
+
+    function sayPlay(text, ok) {
+      const el = $('playMessage');
+      el.textContent = text;
+      el.className = text ? `message ${ok ? 'ok' : 'error'}` : 'message';
+    }
+
+    function applyPlayLanguage() {
+      for (const element of document.querySelectorAll('#play [data-pt]')) element.textContent = pt(element.dataset.pt);
+      for (const b of document.querySelectorAll('[data-play-lang]')) b.setAttribute('aria-pressed', String(b.dataset.playLang === playLang));
+      if (lastPlayStatus) sayPlay(pt(lastPlayStatus.key), lastPlayStatus.ok);
+    }
+
+    for (const b of document.querySelectorAll('[data-play-lang]')) {
+      b.addEventListener('click', () => {
+        playLang = b.dataset.playLang;
+        try { localStorage.setItem('hnmo.language', playLang); } catch {}
+        applyPlayLanguage();
+      });
+    }
+
+    async function requestTicket(creds) {
+      const response = await fetch('/portal/login-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(creds),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const key = response.status === 401 ? 'loginWrong'
+          : response.status === 403 ? 'blocked'
+          : response.status === 429 ? 'busy'
+          : data.error === 'setup' ? 'setup'
+          : 'server';
+        throw new Error(key);
+      }
+      return data;
+    }
+
+    $('playLogin').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const creds = { loginName: $('playAccount').value.trim(), password: $('playPassword').value };
+      try {
+        const data = await requestTicket(creds);
+        sessionCreds = { loginName: data.loginName || creds.loginName, password: creds.password };
+        $('playPassword').value = '';
+        $('playSignedName').textContent = sessionCreds.loginName;
+        $('playLogin').hidden = true;
+        $('playSignedIn').hidden = false;
+        lastPlayStatus = { key: 'signedInMsg', ok: true };
+        sayPlay(pt('signedInMsg'), true);
+      } catch (err) {
+        const key = err instanceof Error && PLAY_TEXT.en[err.message] ? err.message : 'server';
+        lastPlayStatus = { key, ok: false };
+        sayPlay(pt(key), false);
+      }
+    });
+
+    $('playNowButton').addEventListener('click', async () => {
+      if (!sessionCreds) return;
+      $('playNowButton').disabled = true;
+      try {
+        const data = await requestTicket(sessionCreds);
+        const ticket = encodeURIComponent(data.ticket);
+        const account = encodeURIComponent(data.loginName || sessionCreds.loginName);
+        location.href = `/index.html#ticket=${ticket}&account=${account}`;
+      } catch (err) {
+        $('playNowButton').disabled = false;
+        const key = err instanceof Error && PLAY_TEXT.en[err.message] ? err.message : 'server';
+        lastPlayStatus = { key, ok: false };
+        sayPlay(pt(key), false);
+      }
+    });
+
+    $('playSignOutButton').addEventListener('click', () => {
+      sessionCreds = null;
+      $('playSignedIn').hidden = true;
+      $('playLogin').hidden = false;
+      lastPlayStatus = null;
+      sayPlay('', true);
+    });
+
+    applyPlayLanguage();
+  </script>
 </body>
 </html>

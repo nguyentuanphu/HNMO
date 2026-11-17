@@ -37,4 +37,11 @@ public class WebsiteConfiguration
     [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_GoogleClientId_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_GoogleClientId_Description), ResourceType = typeof(Properties.PlugInResources))]
     [StringLength(200)]
     public string GoogleClientId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the web game hides its own password form and requires
+    /// players to sign in on the website first.
+    /// </summary>
+    [Display(Name = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Caption), Description = nameof(Properties.PlugInResources.WebsiteConfiguration_RequireWebsiteLogin_Description), ResourceType = typeof(Properties.PlugInResources))]
+    public bool RequireWebsiteLogin { get; set; }
 }

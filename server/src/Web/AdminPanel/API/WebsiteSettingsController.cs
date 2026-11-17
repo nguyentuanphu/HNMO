@@ -38,7 +38,7 @@ public class WebsiteSettingsController : Controller
     {
         this.Response.Headers.CacheControl = "no-cache";
         var config = await this.ReadAsync().ConfigureAwait(false);
-        return this.Json(new { googleClientId = config.GoogleClientId.Trim(), theme = config.Theme.ToString().ToLowerInvariant() });
+        return this.Json(new { googleClientId = config.GoogleClientId.Trim(), theme = config.Theme.ToString().ToLowerInvariant(), requireWebsiteLogin = config.RequireWebsiteLogin });
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class WebsiteSettingsController : Controller
 
         this.Response.Headers.CacheControl = "no-store";
         var config = await this.ReadAsync().ConfigureAwait(false);
-        return this.Json(new { adminPath = config.AdminPath.Trim(), googleClientId = config.GoogleClientId.Trim() });
+        return this.Json(new { adminPath = config.AdminPath.Trim(), googleClientId = config.GoogleClientId.Trim(), requireWebsiteLogin = config.RequireWebsiteLogin });
     }
 
     private async Task<WebsiteConfiguration> ReadAsync() =>

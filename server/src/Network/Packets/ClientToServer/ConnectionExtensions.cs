@@ -6220,6 +6220,192 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoTicketLogin" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="username">The account login name.</param>
+    /// <param name="ticket">The one-time login ticket issued on the website.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game connects with a one-time login ticket issued on the website.
+    /// Causes reaction on server side: The server redeems the ticket once and logs the player in without a password.
+    /// </remarks>
+    public static async ValueTask SendHnmoTicketLoginAsync(this IConnection? connection, string @username, string @ticket)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTicketLoginRef.Length;
+            var packet = new HnmoTicketLoginRef(connection.Output.GetSpan(length)[..length]);
+            packet.Username = @username;
+            packet.Ticket = @ticket;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTopUpMilestonesCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Milestone step id when Claim; empty otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens the top-up milestones window, claims a milestone step, or takes waiting rewards.
+    /// Causes reaction on server side: The server performs the action and replies with HnmoTopUpMilestonesState.
+    /// </remarks>
+    public static async ValueTask SendHnmoTopUpMilestonesCommandAsync(this IConnection? connection, HnmoTopUpMilestonesCommand.HnmoTopUpMilestonesActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTopUpMilestonesCommandRef.GetRequiredSize(argument);
+            var packet = new HnmoTopUpMilestonesCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTimetableCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Optional filter or payload string.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world or opens the Event and Boss Timetable window.
+    /// Causes reaction on server side: The server replies with HnmoTimetableState (F5 33).
+    /// </remarks>
+    public static async ValueTask SendHnmoTimetableCommandAsync(this IConnection? connection, HnmoTimetableCommand.HnmoTimetableActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTimetableCommandRef.Length;
+            var packet = new HnmoTimetableCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLuckyNumberCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="number">The picked lucky number when Action is Pick.</param>
+    /// <remarks>
+    /// Is sent by the client when: The web game enters the world, opens Daily Lucky Number (L), picks a number, or claims waiting prizes.
+    /// Causes reaction on server side: The server updates the player's pick or claims owed rewards and answers with HnmoLuckyNumberState (F5 35).
+    /// </remarks>
+    public static async ValueTask SendHnmoLuckyNumberCommandAsync(this IConnection? connection, HnmoLuckyNumberCommand.HnmoLuckyNumberActionType @action, uint @number)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLuckyNumberCommandRef.Length;
+            var packet = new HnmoLuckyNumberCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Number = @number;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMarriageCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="argument">Partner character name or custom couple title.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Marriage window (Shift+M), proposes, accepts/declines, edits couple title, warps to spouse, or divorces.
+    /// Causes reaction on server side: The server validates the ceremony/marriage action and sends HnmoMarriageState (F5 37).
+    /// </remarks>
+    public static async ValueTask SendHnmoMarriageCommandAsync(this IConnection? connection, HnmoMarriageCommand.HnmoMarriageActionType @action, string @argument)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarriageCommandRef.Length;
+            var packet = new HnmoMarriageCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Argument = @argument;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMarketCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="slot">Inventory slot when listing an item.</param>
+    /// <param name="currency">0=Zen, 1=WCoinC, 2=WCoinP, 3=GoblinPoints.</param>
+    /// <param name="price">Asking price in the selected currency.</param>
+    /// <param name="listingId">Target listing identifier when buying or canceling.</param>
+    /// <remarks>
+    /// Is sent by the client when: The player opens the Item Market (F6 or Julia NPC), lists a bag item, buys or cancels a listing, or claims deliveries/payouts.
+    /// Causes reaction on server side: The server performs the atomic escrow market action and replies with HnmoMarketState (F5 39).
+    /// </remarks>
+    public static async ValueTask SendHnmoMarketCommandAsync(this IConnection? connection, HnmoMarketCommand.HnmoMarketActionType @action, byte @slot, byte @currency, uint @price, string @listingId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMarketCommandRef.Length;
+            var packet = new HnmoMarketCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+            packet.Currency = @currency;
+            packet.Price = @price;
+            packet.ListingId = @listingId;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="CharacterRenameRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
@@ -6353,6 +6539,270 @@ public static class ConnectionExtensions
             var length = GameGuardAuthResponseRef.Length;
             var packet = new GameGuardAuthResponseRef(connection.Output.GetSpan(length)[..length]);
             @data.Span.CopyTo(packet.Data);
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoJewelBankCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = Request state, 2 = Deposit single bag slot, 3 = Deposit all jewels, 4 = Withdraw jewel, 5 = Clear master skill points.</param>
+    /// <param name="slot">Bag slot index when depositing a single slot.</param>
+    /// <param name="amount">Withdrawal quantity.</param>
+    /// <param name="key">Jewel key (e.g. bless, soul, life, creation, chaos, harmony, guardian).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Jewel Bank, deposit or withdraw jewels, or clear master skill points.
+    /// Causes reaction on server side: The server performs the action and responds with HnmoJewelBankState (F5 3B).
+    /// </remarks>
+    public static async ValueTask SendHnmoJewelBankCommandAsync(this IConnection? connection, byte @action, byte @slot, uint @amount, string @key)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoJewelBankCommandRef.GetRequiredSize(key);
+            var packet = new HnmoJewelBankCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Slot = @slot;
+            packet.Amount = @amount;
+            packet.Key = @key;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCatchupCapRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to query today's Catch-up Level and Reset Cap state.
+    /// Causes reaction on server side: The server responds with HnmoCatchupCapState (F5 3D).
+    /// </remarks>
+    public static async ValueTask SendHnmoCatchupCapRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCatchupCapRequestRef.Length;
+            var packet = new HnmoCatchupCapRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoSeasonPlanRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open or refresh the Season Plan timeline (F8).
+    /// Causes reaction on server side: The server replies with HnmoSeasonPlanState (F5 3F).
+    /// </remarks>
+    public static async ValueTask SendHnmoSeasonPlanRequestAsync(this IConnection? connection)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoSeasonPlanRequestRef.Length;
+            var packet = new HnmoSeasonPlanRequestRef(connection.Output.GetSpan(length)[..length]);
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoLeftoversCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">1 = RequestState, 2 = CombineRecipe, 3 = ExchangeOffer.</param>
+    /// <param name="id">Target recipe or exchange offer identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open Combining Leftovers / Exchange NPC (F10), run a combine recipe, or exchange surplus materials.
+    /// Causes reaction on server side: The server performs the recipe/exchange and sends HnmoLeftoversState (F5 41).
+    /// </remarks>
+    public static async ValueTask SendHnmoLeftoversCommandAsync(this IConnection? connection, byte @action, string @id)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoLeftoversCommandRef.GetRequiredSize(id);
+            var packet = new HnmoLeftoversCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Id = @id;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoMountChainCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = CraftOrUpgrade, 2 = SummonUnlocked.</param>
+    /// <param name="id">Target mount tier or recipe identifier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to open the Mount Chain collection (Shift+U), craft/upgrade a mount step, or claim/summon a collected mount.
+    /// Causes reaction on server side: The server processes the mount chain action and sends HnmoMountChainState (F5 43).
+    /// </remarks>
+    public static async ValueTask SendHnmoMountChainCommandAsync(this IConnection? connection, byte @action, string @id)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoMountChainCommandRef.GetRequiredSize(id);
+            var packet = new HnmoMountChainCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Id = @id;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoPartyOptionsCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = AdvertiseSpotOrPass, 2 = JoinByPassword, 3 = JoinSpot, 4 = StopAdvertising.</param>
+    /// <param name="payload">JSON string containing password, spot, leader, minLevel, maxLevel.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request party options, advertise a hunting spot party/password, or auto-join a spot/password party.
+    /// Causes reaction on server side: The server processes the request and replies with HnmoPartyOptionsState (F5 45).
+    /// </remarks>
+    public static async ValueTask SendHnmoPartyOptionsCommandAsync(this IConnection? connection, byte @action, string @payload)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoPartyOptionsCommandRef.GetRequiredSize(payload);
+            var packet = new HnmoPartyOptionsCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Payload = @payload;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoRankingCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestRankings, 1 = BulkAddStats.</param>
+    /// <param name="payload">Optional category filter or JSON stat allocation map (str, agi, vit, ene, cmd).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the in-game player, guild, online, and event rankings or submit a bulk stat-point distribution.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoRankingState (F5 47).
+    /// </remarks>
+    public static async ValueTask SendHnmoRankingCommandAsync(this IConnection? connection, byte @action, string @payload)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoRankingCommandRef.GetRequiredSize(payload);
+            var packet = new HnmoRankingCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Payload = @payload;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoCustomRanksCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = SelectRank (empty RankId restores automatic highest rank).</param>
+    /// <param name="rankId">The rank tier identifier to equip, or empty for automatic highest tier.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request custom rank definitions and active player titles, or to equip/reset a player's displayed title.
+    /// Causes reaction on server side: The server processes the command and replies with HnmoCustomRanksState (F5 49).
+    /// </remarks>
+    public static async ValueTask SendHnmoCustomRanksCommandAsync(this IConnection? connection, byte @action, string @rankId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoCustomRanksCommandRef.GetRequiredSize(rankId);
+            var packet = new HnmoCustomRanksCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.RankId = @rankId;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoTeleportNpcCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestMenu, 1 = WarpToDestination.</param>
+    /// <param name="destinationId">Target destination identifier from HnmoTeleportNpcState.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request the Teleport NPC destination list or warp to a selected destination.
+    /// Causes reaction on server side: The server validates requirements and Zen fee, warps the character if eligible, and replies with HnmoTeleportNpcState (F5 4B).
+    /// </remarks>
+    public static async ValueTask SendHnmoTeleportNpcCommandAsync(this IConnection? connection, byte @action, string @destinationId)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoTeleportNpcCommandRef.GetRequiredSize(destinationId);
+            var packet = new HnmoTeleportNpcCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.DestinationId = @destinationId;
 
             return packet.Header.Length;
         }

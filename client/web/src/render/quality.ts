@@ -15,14 +15,30 @@ export interface QualitySettings {
   viewDistance: number;
   /** Skill effects drawn. */
   effects: boolean;
+  /** Hide other players (models, attachments, labels) in crowded scenes. */
+  hideOtherPlayers: boolean;
+  /** Hide wings and follower pets / companions. */
+  hideWingsPets: boolean;
+  /** Reduce skill trails and item glow/sparkle passes. */
+  reducedEffects: boolean;
 }
 
 export const RENDER_SCALES = [1, 0.75, 0.5];
 export const FPS_CAPS = [24, 30, 60, 120, 144, 0];
 export const VIEW_DISTANCES = [0.6, 0.8, 1];
-export const DEFAULT_QUALITY: QualitySettings = { renderScale: 1, fpsCap: 0, viewDistance: 1, effects: true };
+export const DEFAULT_QUALITY: QualitySettings = {
+  renderScale: 1, fpsCap: 0, viewDistance: 1, effects: true,
+  hideOtherPlayers: false, hideWingsPets: false, reducedEffects: false,
+};
 /** The low-spec mode in one switch. */
-export const LOW_SPEC: QualitySettings = { renderScale: 0.5, fpsCap: 30, viewDistance: 0.6, effects: false };
+export const LOW_SPEC: QualitySettings = {
+  renderScale: 0.5, fpsCap: 30, viewDistance: 0.6, effects: false,
+  hideOtherPlayers: false, hideWingsPets: false, reducedEffects: true,
+};
+/** Crowded-event performance preset: hides other players, wings/pets, and heavy effects without capping FPS. */
+export const PERFORMANCE_MODE: Partial<QualitySettings> = {
+  viewDistance: 0.6, hideOtherPlayers: true, hideWingsPets: true, reducedEffects: true,
+};
 
 export interface QualityTarget {
   renderer: THREE.WebGLRenderer;
@@ -46,6 +62,19 @@ let baseFar: number | null = null;
 export function isLowSpec(settings: QualitySettings): boolean {
   return settings.renderScale === LOW_SPEC.renderScale && settings.fpsCap === LOW_SPEC.fpsCap
     && settings.viewDistance === LOW_SPEC.viewDistance && settings.effects === LOW_SPEC.effects;
+}
+
+export function isPerformanceMode(settings: QualitySettings): boolean {
+  return settings.hideOtherPlayers && settings.hideWingsPets && settings.reducedEffects;
+}
+
+/** Live crowd-performance flags checked per frame by characters, companions, and effects. */
+export function performanceFlags(): { hideOtherPlayers: boolean; hideWingsPets: boolean; reducedEffects: boolean } {
+  return {
+    hideOtherPlayers: current.hideOtherPlayers,
+    hideWingsPets: current.hideWingsPets,
+    reducedEffects: current.reducedEffects,
+  };
 }
 
 /** Applies the settings to the renderer, camera and scene (again after a map loads: refreshQuality). */
