@@ -72,8 +72,27 @@ internal static class ControlEndpoints
             var gameUp = await ProbeTcpAsync("127.0.0.1", options.ConnectServerPort, ctx.RequestAborted).ConfigureAwait(false);
             var adminUp = await ProbeHttpAsync(http, options.AdminUrl, ctx.RequestAborted).ConfigureAwait(false);
             var settings = MaintenanceSettings.Load(saveDir);
+            var safeSettings = new MaintenanceSettings
+            {
+                MaxLogDays = settings.MaxLogDays,
+                MaxLogTotalMb = settings.MaxLogTotalMb,
+                MaxLogFileMb = settings.MaxLogFileMb,
+                DbLogRetentionDays = settings.DbLogRetentionDays,
+                AutoBackupEnabled = settings.AutoBackupEnabled,
+                AutoBackupHourSydney = settings.AutoBackupHourSydney,
+                BackupKeepDaily = settings.BackupKeepDaily,
+                BackupKeepWeekly = settings.BackupKeepWeekly,
+                BackupKeepMonthly = settings.BackupKeepMonthly,
+                VacuumIntervalHours = settings.VacuumIntervalHours,
+                LowDiskWarningMb = settings.LowDiskWarningMb,
+                AutoRestartOnCrash = settings.AutoRestartOnCrash,
+                MaxCrashRestartsPerHour = settings.MaxCrashRestartsPerHour,
+                CrashRestartDelaySeconds = settings.CrashRestartDelaySeconds,
+                CrashDiscordWebhookUrl = string.Empty,
+            };
             var backups = ControlOperations.ListBackups(saveDir);
             var disk = ControlOperations.GetDiskUsage(saveDir, settings.LowDiskWarningMb);
+            var incidents = CrashWatchStore.ListIncidents(saveDir);
 
             return Results.Ok(new
             {
@@ -90,7 +109,16 @@ internal static class ControlEndpoints
                 backups,
                 backupTotalBytes = backups.Sum(b => b.SizeBytes),
                 disk,
-                maintenanceSettings = settings,
+                maintenanceSettings = safeSettings,
+                crashWatch = new
+                {
+                    autoRestartOnCrash = settings.AutoRestartOnCrash,
+                    maxRestartsPerHour = settings.MaxCrashRestartsPerHour,
+                    delaySeconds = settings.CrashRestartDelaySeconds,
+                    hasDiscordWebhook = !string.IsNullOrWhiteSpace(settings.CrashDiscordWebhookUrl),
+                    unacknowledgedCount = incidents.Count(i => !i.Acknowledged),
+                    incidents = incidents.Take(20).ToList(),
+                },
                 lastAutoBackupSydney = maintenance?.LastAutoBackupSydney,
                 lastVacuumSydney = maintenance?.LastVacuumSydney,
                 adminUrl = options.AdminUrl,
@@ -217,11 +245,44 @@ internal static class ControlEndpoints
                 return Forbidden();
             }
 
+            if (string.Equals(req.CrashDiscordWebhookUrl, "__KEEP__", StringComparison.Ordinal))
+            {
+                req.CrashDiscordWebhookUrl = MaintenanceSettings.Load(saveDir).CrashDiscordWebhookUrl;
+            }
+
             MaintenanceSettings.Save(saveDir, req);
             launcher?.RotateLogsIfNeeded();
             var cfg = MaintenanceSettings.Load(saveDir);
             ControlOperations.ApplyBackupRetention(saveDir, cfg.BackupKeepDaily, cfg.BackupKeepWeekly, cfg.BackupKeepMonthly);
-            return Results.Ok(cfg);
+            return Results.Ok(new
+            {
+                cfg.MaxLogDays,
+                cfg.MaxLogTotalMb,
+                cfg.MaxLogFileMb,
+                cfg.DbLogRetentionDays,
+                cfg.AutoBackupEnabled,
+                cfg.AutoBackupHourSydney,
+                cfg.BackupKeepDaily,
+                cfg.BackupKeepWeekly,
+                cfg.BackupKeepMonthly,
+                cfg.VacuumIntervalHours,
+                cfg.LowDiskWarningMb,
+                cfg.AutoRestartOnCrash,
+                cfg.MaxCrashRestartsPerHour,
+                cfg.CrashRestartDelaySeconds,
+                hasDiscordWebhook = !string.IsNullOrWhiteSpace(cfg.CrashDiscordWebhookUrl),
+            });
+        });
+
+        app.MapPost("/api/control/crash-watch/ack", (HttpContext ctx) =>
+        {
+            if (!IsLoopback(ctx))
+            {
+                return Forbidden();
+            }
+
+            var cleared = CrashWatchStore.AcknowledgeAll(saveDir);
+            return Results.Ok(new { ok = true, cleared });
         });
 
         app.MapPost("/api/control/vacuum", async (HttpContext ctx) =>
