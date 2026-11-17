@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.GiftCodes;
 
 using System.Collections.Concurrent;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
 
@@ -86,6 +87,9 @@ public sealed class GiftCodeOwedReward
 /// </summary>
 public sealed class GiftCodeStoreData
 {
+    /// <summary>Gets or sets the random secret used to hash network and device identities; retain it with the claims.</summary>
+    public string IdentitySalt { get; set; } = string.Empty;
+
     /// <summary>Gets or sets the codes.</summary>
     public List<GiftCodeDefinition> Codes { get; set; } = new();
 
@@ -118,7 +122,7 @@ public sealed class GiftCodeStoreData
 public sealed class GiftCodeStore
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
-    private static readonly ConcurrentDictionary<string, GiftCodeStore> Shared = new(StringComparer.Ordinal);
+    private static readonly ConcurrentDictionary<string, Lazy<GiftCodeStore>> Shared = new(StringComparer.Ordinal);
 
     private readonly string? _filePath;
     private bool _changed;
@@ -131,6 +135,12 @@ public sealed class GiftCodeStore
     {
         this._filePath = filePath;
         this.Data = this.Load();
+        if (string.IsNullOrEmpty(this.Data.IdentitySalt))
+        {
+            this.Data.IdentitySalt = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+            this.Changed();
+            this.SaveIfChanged();
+        }
     }
 
     /// <summary>Gets the lock which every access holds.</summary>
@@ -150,7 +160,9 @@ public sealed class GiftCodeStore
     public static GiftCodeStore Open(string? fileName)
     {
         var path = string.IsNullOrWhiteSpace(fileName) ? string.Empty : Path.GetFullPath(fileName.Trim(), AppContext.BaseDirectory);
-        return Shared.GetOrAdd(path, p => new GiftCodeStore(p.Length == 0 ? null : p));
+
+        // GetOrAdd may run competing factories; only the winning lazy value may create and persist a salt.
+        return Shared.GetOrAdd(path, p => new Lazy<GiftCodeStore>(() => new GiftCodeStore(p.Length == 0 ? null : p))).Value;
     }
 
     /// <summary>Marks the data as changed.</summary>

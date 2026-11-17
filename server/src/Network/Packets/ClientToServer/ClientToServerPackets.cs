@@ -19141,6 +19141,101 @@ public readonly struct HnmoTopRacesAction
 
 
 /// <summary>
+/// Is sent by the client when: A web player enters a gift code, including the persistent browser device UUID.
+/// Causes reaction on server side: The server checks the account, network and optional device limits and sends HnmoGiftCodesState with the result.
+/// </summary>
+public readonly struct HnmoGiftCodeRedeemExtended
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoGiftCodeRedeemExtended"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoGiftCodeRedeemExtended(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoGiftCodeRedeemExtended"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoGiftCodeRedeemExtended(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)Math.Min(data.Length, Length);
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x23;
+
+    /// <summary>
+    /// Gets the initial length of this data packet. When the size is dynamic, this value may be bigger than actually needed.
+    /// </summary>
+    public static int Length => 72;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets the gift code.
+    /// </summary>
+    public string GiftCode
+    {
+        get => this._data.Span.ExtractString(4, 32, System.Text.Encoding.UTF8);
+        set => this._data.Slice(4, 32).Span.WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Gets or sets the device id.
+    /// </summary>
+    public string DeviceId
+    {
+        get => this._data.Span.ExtractString(36, 36, System.Text.Encoding.UTF8);
+        set => this._data.Slice(36, 36).Span.WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoGiftCodeRedeemExtended"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoGiftCodeRedeemExtended(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoGiftCodeRedeemExtended"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoGiftCodeRedeemExtended packet) => packet._data; 
+}
+
+
+/// <summary>
 /// Is sent by the client when: The web game entered the world, or the player opens the gift code window.
 /// Causes reaction on server side: The server sends the HnmoGiftCodesState message, and from then on sends it again when something changes, e.g. a code was entered with the chat command or waiting rewards were given.
 /// </summary>
