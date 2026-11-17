@@ -51,6 +51,12 @@ const CSS = `
 `;
 
 let current: Social | null = null;
+let rankLookup: ((name: string) => { text: string; colorHex: string } | null) | null = null;
+
+/** Sets the optional custom rank badge resolver used when decorating overhead player labels. */
+export function setCustomRankLookup(lookup: ((name: string) => { text: string; colorHex: string } | null) | null): void {
+  rankLookup = lookup;
+}
 
 /** Sets the social side up; call once after the chat is enabled. */
 export function setupSocial(options: SocialOptions): Social {
@@ -162,23 +168,38 @@ function markCanvas(mark: GuildMark): HTMLCanvasElement {
   return canvas;
 }
 
-/** Puts a player's guild ("[Name] Members" and the mark) above its name label; called each frame. */
+/** Puts a player's guild ("[Name] Members" and the mark) and custom rank title above its name label; called each frame. */
 export function decorateLabel(character: Character, element: HTMLElement): void {
-  if (!current || character.kind !== 'player') { if (element.textContent !== character.name) element.textContent = character.name; return; }
-  const found = current.guild.guildOf(character.id);
+  if (character.kind !== 'player') { if (element.textContent !== character.name) element.textContent = character.name; return; }
+  const found = current ? current.guild.guildOf(character.id) : null;
   const text = found ? `[${found.mark.name}] ${ROLE_NAMES[found.player.status] ?? ''}`.trim() : '';
   const alliance = found?.mark.allianceName ? `<${found.mark.allianceName}>` : '';
-  // The element may show another player next (the name box over the pointed player): the name is in the key.
-  const key = found ? `${character.name}|${text}|${alliance}|${found.mark.cells.join('')}` : character.name;
+  const rank = rankLookup ? rankLookup(character.name) : null;
+  const rankKey = rank ? `${rank.text}|${rank.colorHex}` : '';
+  // The element may show another player next (the name box over the pointed player): the name and rank are in the key.
+  const key = `${character.name}|${found ? `${text}|${alliance}|${found.mark.cells.join('')}` : ''}|${rankKey}`;
   if (element.dataset.guild === key) return;
   element.dataset.guild = key;
-  if (!found) { element.textContent = character.name; return; }
-  const tag = document.createElement('span');
-  tag.className = 'guild-tag';
-  const words = document.createElement('span');
-  words.textContent = alliance ? `${alliance} ${text}` : text;
-  tag.append(markCanvas(found.mark), words);
-  const name = document.createElement('span');
-  name.textContent = character.name;
-  element.replaceChildren(tag, name);
+  if (!found && !rank) { element.textContent = character.name; return; }
+  const nodes: Node[] = [];
+  if (found) {
+    const tag = document.createElement('span');
+    tag.className = 'guild-tag';
+    const words = document.createElement('span');
+    words.textContent = alliance ? `${alliance} ${text}` : text;
+    tag.append(markCanvas(found.mark), words);
+    nodes.push(tag);
+  }
+  const nameRow = document.createElement('span');
+  if (rank) {
+    const badge = document.createElement('span');
+    badge.className = 'custom-rank-tag';
+    badge.textContent = `${rank.text} `;
+    badge.style.color = rank.colorHex;
+    badge.style.fontWeight = '600';
+    nameRow.append(badge);
+  }
+  nameRow.append(document.createTextNode(character.name));
+  nodes.push(nameRow);
+  element.replaceChildren(...nodes);
 }

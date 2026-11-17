@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.GameLogic.PlugIns.Missions;
+using HNMO.Persistence;
 
 /// <summary>
 /// The experience and level of a guild.
@@ -153,11 +154,18 @@ public sealed class GuildStoreData
 /// </summary>
 public sealed class GuildStore
 {
+    private const string FeatureGuilds = "guilds.guild";
+    private const string FeatureToday = "guilds.today";
+    private const string FeatureOwed = "guilds.owed";
     private const string SectionKey = "guilds";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, GuildStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<GuildProgress> _guildSync = new();
+    private readonly HnmoFeatureRowSync<int> _todaySync = new();
+    private readonly HnmoFeatureRowSync<List<GuildOwedReward>> _owedSync = new();
     private bool _changed;
 
     /// <summary>
@@ -167,6 +175,7 @@ public sealed class GuildStore
     public GuildStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -201,9 +210,14 @@ public sealed class GuildStore
             return;
         }
 
+        var guildMap = this.Data.Guilds.ToDictionary(p => p.Key.ToString(), p => p.Value, StringComparer.Ordinal);
+        this._guildSync.SaveChanges(this._rowBackend, FeatureGuilds, guildMap, JsonOptions, useDirtySetOnly: true);
+        this._todaySync.SaveChanges(this._rowBackend, FeatureToday, this.Data.Today, JsonOptions, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(this.Data), JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -211,6 +225,16 @@ public sealed class GuildStore
             // It's saved with the next change.
         }
     }
+
+    private GuildStoreData BuildServerOnlyData(GuildStoreData src) => new()
+    {
+        DayKey = src.DayKey,
+        WeekKey = src.WeekKey,
+        LastWeek = src.LastWeek,
+        PendingWeeks = src.PendingWeeks,
+        PaidWeeks = src.PaidWeeks,
+        Sieges = src.Sieges,
+    };
 
     private GuildStoreData Load()
     {
@@ -222,9 +246,24 @@ public sealed class GuildStore
         var data = this._stateStore.ReadSection<GuildStoreData>(SectionKey, JsonOptions) ?? new GuildStoreData();
         data.Today = new Dictionary<string, int>(data.Today, StringComparer.Ordinal);
         data.Owed = new Dictionary<string, List<GuildOwedReward>>(data.Owed, StringComparer.Ordinal);
+
+        var guildStrMap = data.Guilds.ToDictionary(p => p.Key.ToString(), p => p.Value, StringComparer.Ordinal);
+        var m1 = this._guildSync.LoadOrMigrate(this._rowBackend, FeatureGuilds, guildStrMap, JsonOptions);
+        var m2 = this._todaySync.LoadOrMigrate(this._rowBackend, FeatureToday, data.Today, JsonOptions);
+        var m3 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+
+        data.Guilds = guildStrMap
+            .Select(kv => (Ok: Guid.TryParse(kv.Key, out var g), Id: g, kv.Value))
+            .Where(x => x.Ok)
+            .ToDictionary(x => x.Id, x => x.Value);
         foreach (var guild in data.Guilds.Values)
         {
             guild.WeekMembers = new Dictionary<string, long>(guild.WeekMembers, StringComparer.Ordinal);
+        }
+
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(data), JsonOptions);
         }
 
         return data;

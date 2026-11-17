@@ -27,6 +27,7 @@ internal sealed class GameFiles : IDisposable
         [".jpg"] = "image/jpeg",
         [".jpeg"] = "image/jpeg",
         [".png"] = "image/png",
+        [".ktx2"] = "image/ktx2",
         [".opus"] = "audio/ogg",
         [".wav"] = "audio/wav",
         [".mp3"] = "audio/mpeg",

@@ -107,9 +107,49 @@ public sealed class HnmoStateStore
             return null;
         }
 
-        return Shared.GetOrAdd(
+        return resolved is null ? null : Shared.GetOrAdd(
             resolved,
             path => new Lazy<HnmoStateStore>(() => new HnmoStateStore(path, legacySectionKey), LazyThreadSafetyMode.ExecutionAndPublication)).Value;
+    }
+
+    /// <summary>
+    /// Resolves a time zone identifier (default Sydney) with cross-platform Windows/IANA fallback.
+    /// </summary>
+    /// <param name="timeZoneId">The requested time zone id.</param>
+    /// <returns>The resolved time zone.</returns>
+    public static TimeZoneInfo ResolveTimeZone(string? timeZoneId)
+    {
+        var candidates = string.IsNullOrWhiteSpace(timeZoneId)
+            ? new[] { "Australia/Sydney", "AUS Eastern Standard Time" }
+            : new[] { timeZoneId.Trim(), "Australia/Sydney", "AUS Eastern Standard Time" };
+
+        foreach (var id in candidates)
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById(id);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+            }
+            catch (InvalidTimeZoneException)
+            {
+            }
+        }
+
+        return TimeZoneInfo.Utc;
+    }
+
+    /// <summary>
+    /// Converts a UTC timestamp into the wall-clock time of <paramref name="zone"/>.
+    /// </summary>
+    /// <param name="utc">The UTC timestamp.</param>
+    /// <param name="zone">The target time zone.</param>
+    /// <returns>The local wall-clock time in <paramref name="zone"/>.</returns>
+    public static DateTime ToTimeZone(DateTime utc, TimeZoneInfo zone)
+    {
+        var normalized = DateTime.SpecifyKind(utc, DateTimeKind.Utc);
+        return TimeZoneInfo.ConvertTimeFromUtc(normalized, zone);
     }
 
     /// <summary>
@@ -165,6 +205,21 @@ public sealed class HnmoStateStore
         lock (this._lock)
         {
             return this._sections.ContainsKey(sectionKey);
+        }
+    }
+
+    /// <summary>
+    /// Removes a section cleanly and flushes the state file when it was present.
+    /// </summary>
+    /// <param name="sectionKey">The section key.</param>
+    public void RemoveSection(string sectionKey)
+    {
+        lock (this._lock)
+        {
+            if (this._sections.Remove(sectionKey))
+            {
+                this.SaveLocked();
+            }
         }
     }
 

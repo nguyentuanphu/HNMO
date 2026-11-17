@@ -111,11 +111,15 @@ echo "Bundling the web client (esbuild)"
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/website.js" \
   --bundle --minify --format=esm --external:three \
   --outfile="$OUT/web/wwwroot/js/website.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' ! -name 'website.min.js' -delete
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/topupPage.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/topupPage.min.js" --log-level=warning
+find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' ! -name 'website.min.js' ! -name 'topupPage.min.js' -delete
 find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
 # Point the packaged pages at the bundles (dev pages are untouched).
 sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
 sed -i 's#src="/js/website.js"#src="/js/website.min.js"#' "$OUT/web/wwwroot/home.html"
+sed -i 's#src="/js/topupPage.js"#src="/js/topupPage.min.js"#' "$OUT/web/wwwroot/topup.html"
 # Every script a page loads must be in the folder (a missing one leaves the page empty).
 missing=0
 for page in "$OUT/web/wwwroot"/*.html; do
@@ -192,6 +196,10 @@ if [ "$WITH_DATA" = 1 ]; then
   ALLOWLIST_FILE="$(mktemp)"
   echo "Building web Data allowlist and packing Data/packs"
   node "$WEB/tools/build-allowlist.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  if [ "${HNMO_SKIP_KTX2:-0}" != 1 ]; then
+    echo "Converting 3D textures to KTX2 (UASTC/ETC1S with mipmaps)"
+    node "$WEB/tools/convert-textures-ktx2.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  fi
   dotnet run --project "$WEB/bridge/HNMO.Web.csproj" -c Release -p:HnmoServerSource="$SERVER_SOURCE" -- \
     --pack "$OUT/Data" "$OUT/Data/packs" --allowlist "$ALLOWLIST_FILE"
   rm -f "$ALLOWLIST_FILE"

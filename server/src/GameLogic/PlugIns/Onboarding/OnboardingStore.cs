@@ -9,6 +9,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 
 /// <summary>
 /// Where a character is in the new-player guide.
@@ -169,11 +170,19 @@ public sealed class OnboardingStoreData
 /// </summary>
 public sealed class OnboardingStore
 {
+    private const string FeatureCharacters = "onboarding.char";
+    private const string FeatureAccounts = "onboarding.account";
+    private const string FeatureOwed = "onboarding.owed";
     private const string SectionKey = "onboarding";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, OnboardingStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<OnboardingCharacterState> _charSync = new();
+    private readonly HnmoFeatureRowSync<OnboardingAccountState> _accSync = new();
+    private readonly HnmoFeatureRowSync<List<OnboardingOwedReward>> _owedSync = new();
+    private DateTime _savedActivatedAtUtc;
     private bool _changed;
 
     /// <summary>
@@ -184,6 +193,7 @@ public sealed class OnboardingStore
     public OnboardingStore(string? filePath = null, DateTime? nowUtc = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
         if (this.Data.ActivatedAtUtc == default)
         {
@@ -226,15 +236,23 @@ public sealed class OnboardingStore
             return;
         }
 
-        try
+        this._charSync.SaveChanges(this._rowBackend, FeatureCharacters, this.Data.Characters, JsonOptions, useDirtySetOnly: true);
+        this._accSync.SaveChanges(this._rowBackend, FeatureAccounts, this.Data.Accounts, JsonOptions, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+        if (this._savedActivatedAtUtc != this.Data.ActivatedAtUtc)
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
-            this._changed = false;
+            try
+            {
+                this._stateStore.WriteSection(SectionKey, new OnboardingStoreData { ActivatedAtUtc = this.Data.ActivatedAtUtc }, JsonOptions);
+                this._savedActivatedAtUtc = this.Data.ActivatedAtUtc;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // Saved with next change.
+            }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // It's saved with the next change.
-        }
+
+        this._changed = false;
     }
 
     private OnboardingStoreData Load()
@@ -245,9 +263,19 @@ public sealed class OnboardingStore
         }
 
         var data = this._stateStore.ReadSection<OnboardingStoreData>(SectionKey, JsonOptions) ?? new OnboardingStoreData();
+        this._savedActivatedAtUtc = data.ActivatedAtUtc;
         data.Characters = new Dictionary<string, OnboardingCharacterState>(data.Characters, StringComparer.Ordinal);
         data.Accounts = new Dictionary<string, OnboardingAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
         data.Owed = new Dictionary<string, List<OnboardingOwedReward>>(data.Owed, StringComparer.Ordinal);
+
+        var m1 = this._charSync.LoadOrMigrate(this._rowBackend, FeatureCharacters, data.Characters, JsonOptions);
+        var m2 = this._accSync.LoadOrMigrate(this._rowBackend, FeatureAccounts, data.Accounts, JsonOptions);
+        var m3 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(SectionKey, new OnboardingStoreData { ActivatedAtUtc = data.ActivatedAtUtc }, JsonOptions);
+        }
+
         return data;
     }
 }

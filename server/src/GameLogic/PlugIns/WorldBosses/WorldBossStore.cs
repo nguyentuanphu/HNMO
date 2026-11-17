@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
@@ -320,11 +321,14 @@ public sealed class WorldBossStoreData
 /// </summary>
 public sealed class WorldBossStore
 {
+    private const string FeatureOwed = "worldBosses.owed";
     private const string SectionKey = "worldBosses";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, WorldBossStore> Shared = new(StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<List<WorldBossOwedReward>> _owedSync = new();
     private bool _changed;
 
     /// <summary>
@@ -334,6 +338,7 @@ public sealed class WorldBossStore
     public WorldBossStore(string? filePath = null)
     {
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -371,9 +376,11 @@ public sealed class WorldBossStore
             return;
         }
 
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            this._stateStore.WriteSection(SectionKey, this.Data, JsonOptions);
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(this.Data), JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -381,6 +388,21 @@ public sealed class WorldBossStore
             // It's saved with the next change.
         }
     }
+
+    private WorldBossStoreData BuildServerOnlyData(WorldBossStoreData src) => new()
+    {
+        Bosses = src.Bosses,
+        Alive = src.Alive,
+        Kills = src.Kills,
+        Announcements = src.Announcements,
+        WeekKey = src.WeekKey,
+        Week = src.Week,
+        CastleSiegeGuildId = src.CastleSiegeGuildId,
+        CastleSiegeGuildName = src.CastleSiegeGuildName,
+        LastWeek = src.LastWeek,
+        PendingWeeks = src.PendingWeeks,
+        PaidWeeks = src.PaidWeeks,
+    };
 
     private WorldBossStoreData Load()
     {
@@ -395,6 +417,11 @@ public sealed class WorldBossStore
         foreach (var alive in data.Alive)
         {
             alive.Damage = new Dictionary<string, WorldBossDamageEntry>(alive.Damage, StringComparer.Ordinal);
+        }
+
+        if (this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions))
+        {
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(data), JsonOptions);
         }
 
         return data;

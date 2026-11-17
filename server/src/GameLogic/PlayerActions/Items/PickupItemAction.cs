@@ -60,6 +60,8 @@ public class PickupItemAction
                         {
                             await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(droppedItem.Item)).ConfigureAwait(false);
                         }
+
+                        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordPickup(player, stackTarget ?? droppedItem.Item, player.CurrentMap?.Definition?.Name.ValueInNeutralLanguage ?? string.Empty);
                     }
                     else
                     {

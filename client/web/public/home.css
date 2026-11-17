@@ -504,3 +504,13 @@ footer {
 .gift-card h4 { margin: 0 0 4px; font-family: ui-monospace, monospace; letter-spacing: .06em; color: var(--gold); overflow-wrap: anywhere; }
 .gift-card p { margin: 4px 0; font-size: 13px; overflow-wrap: anywhere; }
 #gift-account[hidden] { display: none; }
+
+/* Multi-world grouped overview above server stats. */
+.worlds-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.world-card { border: 1px solid var(--line); padding: 14px 16px; background: linear-gradient(135deg, #20241a, #141711); }
+.world-card header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; height: auto; min-height: 0; padding: 0; border: 0; background: none; margin-bottom: 6px; }
+.world-card strong { color: var(--gold); font-size: 15px; }
+.world-card small { color: var(--muted); display: block; font-size: 12px; }
+.world-card .world-servers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.world-card button { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 4px 10px; font-size: 12px; cursor: pointer; }
+.world-card button[aria-current="true"] { border-color: var(--gold); color: var(--gold); }
