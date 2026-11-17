@@ -395,5 +395,7 @@ per address/device; resets in place (admin switch); reset tiers 350/380/400, 20/
 VIP bought with coins, admin can grant, players manage it on the website's account page.
 
 ## Web only for now (owner, 2026-11-16)
+No Android/iOS store apps and no desktop client: everything ships as the web game (phones use the browser or
+"Add to Home Screen"). Don't plan or build native apps or desktop work unless the owner asks again.
 The desktop client is dropped for now: HNMO is played through the web game. New features get web windows only.
 The desktop code stays the reference for how the classic game behaves (parity rule unchanged).
