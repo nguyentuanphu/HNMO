@@ -247,7 +247,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             {
                 // A removed grant is never recreated by a replay. Actual account grants own the expiry.
                 var vipGrant = account.AttributeGrants.SingleOrDefault(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id);
-                if (vipGrant?.ValidUntil == intent.Membership.UntilUtc)
+                if (vipGrant?.ValidUntil == intent.Membership.UntilUtc && vipGrant.Value == intent.Plan.LevelId)
                 {
                     store.Data.Memberships[intent.Plan.LoginName] = intent.Membership;
                     store.Data.OwnedGrants[intent.Plan.LoginName] = proof.GrantIds.ToList();
@@ -268,7 +268,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             }
         }
 
-        var active = account.AttributeGrants.Any(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc))
+        var active = account.AttributeGrants.Any(grant => proof.GrantIds.Contains(grant.GetId()) && grant.Attribute?.Id == Stats.IsVip.Id && grant.IsValidAt(nowUtc) && grant.ValidUntil == intent.Membership.UntilUtc && grant.Value == intent.Plan.LevelId)
             ? intent.Membership : null;
         return new("Applied", Membership: active);
     }

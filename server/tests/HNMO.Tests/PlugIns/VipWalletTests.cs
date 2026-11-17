@@ -297,7 +297,8 @@ public class VipWalletTests
     [TestCase(true)]
     public async Task RefusesDriftInTheAuthoritativeGrantAsync(bool changeExpiry)
     {
-        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var original = Guid.NewGuid();
+        await this.BuyAsync(original, Now).ConfigureAwait(false);
         var grant = this._account.AttributeGrants.Single(value => value.Attribute?.Id == Stats.IsVip.Id);
         if (changeExpiry)
         {
@@ -311,6 +312,8 @@ public class VipWalletTests
         Assert.That((await this.BuyAsync(Guid.NewGuid(), Now.AddMinutes(1)).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
         Assert.That(this._account.WCoinC, Is.EqualTo(900));
         Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
+        var replay = await this.BuyAsync(original, Now.AddMinutes(2)).ConfigureAwait(false);
+        Assert.That(replay.Membership, Is.Null);
     }
 
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
