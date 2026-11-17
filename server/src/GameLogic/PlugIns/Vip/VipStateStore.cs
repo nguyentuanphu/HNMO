@@ -37,6 +37,10 @@ public sealed class VipStateStore
     /// <returns>The shared VIP view of that store.</returns>
     public static VipStateStore Open(HnmoStateStore backend) => Stores.GetOrAdd(backend, value => new VipStateStore(value));
 
+    /// <summary>Opens the vip section in the host's shared save document.</summary>
+    /// <returns>The shared VIP store for this host.</returns>
+    public static VipStateStore OpenHost() => Open(HnmoStateStore.Open(Path.Combine(AppContext.BaseDirectory, "save", HnmoStateStore.StateFileName))!);
+
     /// <summary>Creates isolated in-memory rules state for tests.</summary>
     /// <returns>An in-memory store which writes no file.</returns>
     public static VipStateStore CreateInMemory() => new(null);

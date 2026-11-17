@@ -12,6 +12,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Persistence;
@@ -511,6 +512,40 @@ public class VipWalletTests
         var results = await Task.WhenAll(rewards.ClaimAsync(this._context, this._account, Now).AsTask(), other.ClaimAsync(fresh, account, Now).AsTask()).ConfigureAwait(false);
         Assert.That(results.Select(result => result.Status), Is.EquivalentTo(new[] { "DailyApplied", "AlreadyClaimed" }));
         Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Has.Count.EqualTo(1));
+    }
+
+    /// <summary>A database query returning the same marked entity after a failed save cannot replay its credit or debit.</summary>
+    /// <param name="amount">The pending credit or debit.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(20)]
+    [TestCase(-20)]
+    public async Task PendingCoinRetryDoesNotReplayTrackedChangesAsync(int amount)
+    {
+        var grant = this._context.CreateNew<CashShopCoinGrant>();
+        grant.AccountId = this._account.GetId();
+        grant.CoinType = CashShopCoinType.WCoinC;
+        grant.Amount = amount;
+        var query = new Mock<IPlayerContext>();
+        query.Setup(context => context.GetPendingCashShopCoinGrantsAsync(this._account.GetId(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new[] { grant });
+        Assert.That(await VipPendingCoins.ApplyAsync(query.Object, this._account, Now, () => ValueTask.FromResult(false)).ConfigureAwait(false), Is.False);
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000 + amount));
+        Assert.That(grant.AppliedAt, Is.EqualTo(Now));
+        Assert.That(await VipPendingCoins.ApplyAsync(query.Object, this._account, Now.AddSeconds(1), () => ValueTask.FromResult(true)).ConfigureAwait(false), Is.True);
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000 + amount));
+        Assert.That(grant.AppliedAt, Is.EqualTo(Now));
+    }
+
+    /// <summary>Applying a row from another account cannot change a balance or consume its marker.</summary>
+    [Test]
+    public void PendingCoinApplicationKeepsAccountOwnership()
+    {
+        var grant = this._context.CreateNew<CashShopCoinGrant>();
+        grant.AccountId = Guid.NewGuid();
+        grant.Amount = 20;
+        Assert.That(this._account.TryApplyCashShopCoinGrant(grant, Now), Is.False);
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000));
+        Assert.That(grant.AppliedAt, Is.Null);
     }
 
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
