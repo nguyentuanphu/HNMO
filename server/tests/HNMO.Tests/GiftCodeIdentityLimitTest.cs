@@ -6,7 +6,9 @@ namespace HNMO.Tests;
 
 using System.IO;
 using System.Text.Json;
+using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.GiftCodes;
+using HNMO.Persistence;
 
 /// <summary>Checks cross-account network/device limits and persistence without retaining raw identities.</summary>
 [TestFixture]
@@ -137,12 +139,14 @@ public class GiftCodeIdentityLimitTest
 
             var saved = File.ReadAllText(file);
             Assert.That(saved, Does.Not.Contain(Network).And.Not.Contain(Device));
+            var rows = HnmoPlayerStateRowStoreRegistry.GetBackend(file).LoadAll("giftCodes.claims");
+            Assert.That(string.Join(string.Empty, rows.Select(r => r.PayloadJson)), Does.Not.Contain(Network).And.Not.Contain(Device));
             var reopened = new GiftCodeStore(file);
             Assert.That(reopened.Data.IdentitySalt, Has.Length.EqualTo(64).And.EqualTo(store.Data.IdentitySalt));
             Assert.That(reopened.Data.Claims["gift"], Does.Contain("a:old"));
             reopened.Data.Codes[0].OncePerNetwork = true;
             Assert.That(new GiftCodeEngine(new GiftCodesConfiguration(), reopened).Redeem("GIFT", Who("bob"), Now, "game").Result, Is.EqualTo(GiftCodeResult.AlreadyUsedNetwork));
-            Assert.That(JsonSerializer.Deserialize<GiftCodeStoreData>(saved)!.Uses["gift"], Is.EqualTo(2));
+            Assert.That(new HnmoStateStore(file, "giftCodes").ReadSection<GiftCodeStoreData>("giftCodes", JsonSerializerOptions.Default)!.Uses["gift"], Is.EqualTo(2));
         }
         finally
         {
@@ -177,6 +181,85 @@ public class GiftCodeIdentityLimitTest
         finally
         {
             File.Delete(file);
+        }
+    }
+
+    /// <summary>Legacy and unified file names resolve to one live store even on concurrent first opens.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task UnifiedAndLegacyNamesShareOneStoreAsync()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"hnmo-gift-aliases-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var legacy = Path.Combine(directory, "gift-codes.json");
+            var unified = Path.Combine(directory, HnmoStateStore.StateFileName);
+            var stores = await Task.WhenAll(Enumerable.Range(0, 16).Select(i => Task.Run(() => GiftCodeStore.Open(i % 2 == 0 ? legacy : unified)))).ConfigureAwait(false);
+            Assert.That(stores.All(s => ReferenceEquals(s, stores[0])), Is.True);
+            Assert.That(new HnmoStateStore(unified).ReadSection<GiftCodeStoreData>("giftCodes", JsonSerializerOptions.Default)!.IdentitySalt, Is.EqualTo(stores[0].Data.IdentitySalt));
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
+        }
+    }
+
+    /// <summary>Migrating existing hashed claims preserves their original salt and network refusal after reopening.</summary>
+    [Test]
+    public void MigratesExistingSaltWithHashedClaims()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"hnmo-gift-salt-migration-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var original = Create(true, true);
+            Assert.That(original.Redeem("GIFT", Who("ann"), Now, "game").Result, Is.EqualTo(GiftCodeResult.Ok));
+            var legacy = Path.Combine(directory, "gift-codes.json");
+            File.WriteAllText(legacy, JsonSerializer.Serialize(original.Store.Data));
+            var migrated = new GiftCodeStore(legacy);
+            var reopened = new GiftCodeStore(Path.Combine(directory, HnmoStateStore.StateFileName));
+            Assert.That((migrated.Data.IdentitySalt, reopened.Data.IdentitySalt), Is.EqualTo((original.Store.Data.IdentitySalt, original.Store.Data.IdentitySalt)));
+            Assert.That(new GiftCodeEngine(new GiftCodesConfiguration(), reopened).Redeem("GIFT", Who("bob"), Now, "website").Result, Is.EqualTo(GiftCodeResult.AlreadyUsedNetwork));
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
+        }
+    }
+
+    /// <summary>Existing identity hashes without a salt are refused instead of silently bypassing their limits.</summary>
+    [Test]
+    public void RefusesHashedClaimsWithoutTheirSalt()
+    {
+        var file = Path.Combine(Path.GetTempPath(), $"hnmo-gift-missing-salt-{Guid.NewGuid():N}.json");
+        try
+        {
+            File.WriteAllText(file, "{\"Claims\":{\"gift\":[\"n:old-hash\"]}}");
+            Assert.Throws<InvalidDataException>(() => new GiftCodeStore(file));
+        }
+        finally
+        {
+            File.Delete(file);
+            File.Delete(file + ".bak");
+        }
+    }
+
+    /// <summary>A salt which cannot be persisted must not be used to accept new redemptions.</summary>
+    [Test]
+    public void RefusesAnUnwritableSaltFile()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"hnmo-gift-no-file-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var file = Path.Combine(directory, "blocked.json");
+            Directory.CreateDirectory(file);
+            Assert.Throws<IOException>(() => new GiftCodeStore(file));
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
         }
     }
 
