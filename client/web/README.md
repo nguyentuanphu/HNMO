@@ -214,7 +214,13 @@ an already-applied negative receipt in the same save as the balance and storage 
 A failed purchase removes that receipt before any later save. It is never a pending
 grant, so it cannot deduct coins again. Purchase names are saved in English/Vietnamese
 and rendered as text. Purchases made before recording was added cannot be reconstructed.
-Recording the other coin-spending paths remains unfinished.
+New direct balance changes also record their actual signed delta: extra vaults, item-market
+and player-store purchases/sales, reset/relife/stat/master costs and play-time rewards.
+Receipts are already applied and cannot become a second payment. These small hooks retain
+the existing save and rollback boundaries. In particular, player-store seller credits use
+the seller's normal progress save; this does not add atomic cross-account settlement.
+Admin history localizes these reasons and shows Sydney time. Live PostgreSQL settlement
+and crash recovery in the inherited payment paths have not been certified.
 
 Confirmed email changes are configured at **Accounts → Email delivery** (`/email-settings`).
 Outgoing SMTP is off by default. Configure a verified sender and STARTTLS submission
@@ -246,4 +252,10 @@ Lịch sử coin được chia trang trực tiếp từ dữ liệu còn lưu, k
 1.000 dòng mới nhất. Các lần mua hoặc tặng trong cửa hàng được ghi cùng lúc với số dư
 và vật phẩm trong kho cửa hàng. Mua thất bại không để lại giao dịch trừ coin; dòng lịch
 sử không trừ coin thêm lần nữa. Những lần mua trước bản cập nhật chưa có dữ liệu để
-hiển thị. Việc ghi lịch sử cho các cách tiêu coin khác vẫn đang được bổ sung.
+hiển thị. Các thay đổi số dư từ bản cập nhật này cũng được ghi: mua thêm rương, mua/bán
+ở chợ và cửa hàng người chơi, phí reset/relife/tẩy điểm chỉ số hoặc master, và thưởng
+thời gian chơi. Dòng lịch sử ghi đúng số coin tăng hoặc giảm thực tế, không trừ hay
+cộng lại coin. Các điểm lưu và hoàn tác cũ được giữ nguyên; riêng coin người bán ở
+cửa hàng được lưu theo lần lưu tiến trình thông thường. Chưa xác nhận thanh toán
+trực tiếp trên PostgreSQL hoặc khôi phục sau sự cố của các luồng thanh toán cũ.
+Lịch sử trong admin có tên giao dịch bằng tiếng Việt và thời gian Sydney.

@@ -45,7 +45,7 @@ export const accountPageTexts = {
   topup: ['Top up', 'Nạp coin'],
   topupHint: ['Open payment instructions on the top-up page.', 'Mở hướng dẫn thanh toán trên trang nạp coin.'],
   history: ['Coin history', 'Lịch sử coin'],
-  historyNote: ['All retained coin grants, adjustments and recorded purchases, 20 per page. New cash-shop purchases and gifts are recorded from this update; older purchases were not recorded. Pending grants are not in the saved balance yet.', 'Xem toàn bộ lịch sử coin còn lưu, gồm nhận coin, điều chỉnh và các lần mua đã được ghi, 20 dòng mỗi trang. Các lần mua và tặng trong cửa hàng được ghi từ bản cập nhật này; trước đó chưa có dữ liệu mua. Coin đang chờ chưa được cộng vào số dư đã lưu.'],
+  historyNote: ['All retained coin grants, adjustments and recorded purchases, 20 per page. New purchases, trades, reset fees and play-time rewards are recorded from this update; older unrecorded spending has no entry. Pending grants are not in the saved balance yet.', 'Xem toàn bộ lịch sử coin còn lưu, gồm nhận coin, điều chỉnh và các lần mua đã được ghi, 20 dòng mỗi trang. Các lần mua, giao dịch, phí reset/tẩy điểm và thưởng thời gian chơi được ghi từ bản cập nhật này; chi tiêu cũ chưa được ghi không có dữ liệu. Coin đang chờ chưa được cộng vào số dư đã lưu.'],
   purchaseReason: ['Cash shop: {0}', 'Mua ở cửa hàng: {0}'],
   giftPurchaseReason: ['Gift for {0}: {1}', 'Tặng {0}: {1}'],
   coinExtraVault: ['Extra vault purchase', 'Mua thêm rương'],
