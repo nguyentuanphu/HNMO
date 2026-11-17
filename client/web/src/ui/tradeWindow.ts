@@ -4,6 +4,7 @@
 // inventory (ItemMoveRequestExtended to the trade storage); the partner's come as their own packets.
 // The items a trade brings arrive with the inventory list the server sends after it.
 
+import { translate } from '../i18n.js';
 import { BAG, NpcWindow, Storage, TRADE, decodeItem } from '../game/inventory.js';
 import type { Inventory, Item } from '../game/inventory.js';
 import { itemDefinition } from '../game/items.js';
@@ -345,7 +346,8 @@ export class Trade {
   // The zen button (trade_zen_click, SendRequestMyGoldInput): an amount up to the money plus what's in already.
   async askGold(): Promise<void> {
     const ask = this.options.prompt ?? ((text: string) => Promise.resolve(window.prompt(text, '')));
-    const text = await ask('Enter the amount of Zen you would like to trade.');
+    const question = 'Enter the amount of Zen you would like to trade.';
+    const text = await ask(translate(question) ?? question);
     if (text === null) return;
     const amount = Math.floor(Number(text.replace(/[^0-9]/g, '').slice(0, 8)) || 0);
     if (amount === 0) return;

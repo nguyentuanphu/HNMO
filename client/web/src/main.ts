@@ -1,6 +1,6 @@
 // The web client: log in through the relay and play on the HNMO server. Left-click walks, right-drag turns the camera, the wheel zooms.
 
-import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, type Language } from './i18n.js';
+import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, translate, type Language } from './i18n.js';
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
@@ -1142,7 +1142,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     if (from.storage !== 0 || from.slot < 12) return false;
     const applies = jewelApplies(from.item, target);
     if (!applies) return false;
-    if (applies === 'confirm' && !window.confirm('Would you like to repair Fenrir\'s horn?')) return true;
+    if (applies === 'confirm' && !window.confirm(translate("Would you like to repair Fenrir's horn?") ?? "Would you like to repair Fenrir's horn?")) return true;
     itemUser.use(from.slot, slot);
     return true;
   };
@@ -1192,7 +1192,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       void itemWindows.tooltip.showLines(lines, { left: box.left, top: box.top, width: box.width, height: box.height });
     },
     cancel: (skill, name) => {
-      if (window.confirm(`Do you want to cancel the ${name} skill?`)) connection.send('ClientToServer', 'MagicEffectCancelRequest', { SkillId: skill, PlayerId: playerId });
+      if (window.confirm(translate(`Do you want to cancel the ${name} skill?`) ?? `Do you want to cancel the ${name} skill?`)) connection.send('ClientToServer', 'MagicEffectCancelRequest', { SkillId: skill, PlayerId: playerId });
     },
     skillName: (skill) => skillInfo(skill)?.name ?? `Skill ${skill}`,
   });

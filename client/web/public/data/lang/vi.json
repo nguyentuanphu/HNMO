@@ -2,6 +2,14 @@
 "language": "vi",
 "name": "Tiếng Việt",
 "texts": {
+"Duration period: %d hour %d min %d sec": "Thời gian duy trì: %d giờ %d phút %d giây",
+"Duration period: %d min %d sec": "Thời gian duy trì: %d phút %d giây",
+"Duration period: %d sec": "Thời gian duy trì: %d giây",
+"Do you want to cancel the %s skill?": "Bạn có muốn hủy hiệu ứng kỹ năng %s không?",
+"An expensive item. Check the item, please. Are you sure you want to sell it?": "Vật phẩm này có giá trị cao. Hãy kiểm tra kỹ. Bạn có chắc muốn bán không?",
+"How much zen to deposit?": "Bạn muốn gửi bao nhiêu Zen?",
+"How much zen to withdraw?": "Bạn muốn rút bao nhiêu Zen?",
+
 "Second password": "Mật khẩu cấp 2",
 "Locked (account safety)": "Đã khóa (bảo vệ tài khoản)",
 "Unlocks at %s (Sydney time)": "Mở khóa lúc %s (giờ Sydney)",
