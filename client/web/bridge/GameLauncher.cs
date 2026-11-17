@@ -8,6 +8,7 @@
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using HNMO.Interfaces;
 
 internal sealed class LauncherOptions
 {
@@ -30,9 +31,11 @@ internal sealed class LauncherOptions
     public int ConnectServerPort { get; set; } = 44406;
 
     public string? OpenBrowserUrl { get; set; } = "http://localhost:8080/";
+
+    public string? SettingsFilePath { get; set; }
 }
 
-internal sealed class GameLauncher(LauncherOptions options, string contentRoot, ILogger<GameLauncher> logger) : IHostedService
+internal sealed class GameLauncher(LauncherOptions options, string contentRoot, IHostApplicationLifetime lifetime, ILogger<GameLauncher> logger) : IHostedService
 {
     private static readonly TimeSpan DatabaseStartTimeout = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan ServerStartTimeout = TimeSpan.FromMinutes(10);
@@ -314,6 +317,10 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         };
         start.Environment["ASPNETCORE_URLS"] = options.AdminUrl;
         start.Environment["DB_ADMIN_PW"] = options.DatabasePassword;
+        if (!string.IsNullOrWhiteSpace(options.SettingsFilePath))
+        {
+            start.Environment[HostSettingsStore.EnvironmentVariableName] = options.SettingsFilePath;
+        }
 
         var log = new StreamWriter(Path.Combine(this.LogDirectory, "server.log"), append: true) { AutoFlush = true };
         this._server = Process.Start(start) ?? throw new InvalidOperationException("The game server didn't start.");
@@ -323,7 +330,41 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         this._server.BeginOutputReadLine();
         this._server.BeginErrorReadLine();
         this._server.EnableRaisingEvents = true;
-        this._server.Exited += (_, _) => logger.LogWarning("The game server stopped. See {Log}.", Path.Combine(this.LogDirectory, "server.log"));
+        this._server.Exited += (_, _) =>
+        {
+            var exitCode = this._server.ExitCode;
+            if (exitCode == HostSettingsStore.RestartExitCode && Volatile.Read(ref this._stopped) == 0)
+            {
+                logger.LogInformation("Restarting HNMO...");
+                this.RestartSelf();
+                return;
+            }
+
+            logger.LogWarning("The game server stopped. See {Log}.", Path.Combine(this.LogDirectory, "server.log"));
+        };
+    }
+
+    private void RestartSelf()
+    {
+        this.StopNow();
+        var exe = Environment.ProcessPath;
+        if (!string.IsNullOrEmpty(exe))
+        {
+            var rawArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
+            var psi = new ProcessStartInfo(exe)
+            {
+                WorkingDirectory = contentRoot,
+                UseShellExecute = false,
+            };
+            foreach (var arg in rawArgs)
+            {
+                psi.ArgumentList.Add(arg);
+            }
+
+            Process.Start(psi);
+        }
+
+        lifetime.StopApplication();
     }
 
     private static async Task RunAsync(string program, string[] arguments, CancellationToken cancellationToken)
