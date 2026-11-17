@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HNMO Control</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0f141b; --card: #18202c; --border: #2a3648; --text: #e6edf5; --muted: #93a4bc; --ok: #2ecc71; --down: #e74c3c; --accent: #d4a64a; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
+    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    h1 { margin: 0; font-size: 1.6rem; display: flex; align-items: center; gap: 8px; }
+    .lang-btns button, button { background: #232e3e; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; cursor: pointer; font-size: 0.92rem; }
+    button.primary { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 600; }
+    button.danger { background: #5a1f25; border-color: #8b323b; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .card h2 { margin: 0 0 12px; font-size: 1.08rem; }
+    .help-box { background: #16293d; border: 1px solid #2b4c6f; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: none; }
+    .lights { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .light { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #121822; border-radius: 8px; border: 1px solid var(--border); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--down); flex-shrink: 0; }
+    .dot.on { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+    input, select { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: #0f141b; color: var(--text); }
+    pre { background: #0b0f14; border: 1px solid var(--border); border-radius: 8px; padding: 12px; max-height: 280px; overflow: auto; font-size: 0.8rem; margin: 0; white-space: pre-wrap; }
+    .msg { padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; display: none; background: #1c2d24; border: 1px solid #2e6b48; }
+    .msg.err { background: #3b1c20; border-color: #8b323b; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>
+        <span data-i18n="title">HNMO Control</span>
+        <button type="button" id="helpBtn" title="How to use this page">?</button>
+      </h1>
+      <div class="lang-btns row">
+        <button type="button" id="langEn">EN</button>
+        <button type="button" id="langVi">VI</button>
+      </div>
+    </header>
+
+    <div id="helpBox" class="help-box">
+      <strong data-i18n="helpTitle">How to use this page</strong>
+      <p data-i18n="helpBody">This local control page manages the database, game server, web game, backups, auto-start, and updates. It is only reachable from this computer.</p>
+    </div>
+
+    <div id="statusMsg" class="msg"></div>
+
+    <section id="wizardCard" class="card" style="display:none">
+      <h2 data-i18n="wizardTitle">First-start setup wizard</h2>
+      <div class="grid2">
+        <div><label data-i18n="adminPwLabel">Admin password</label><input id="wizPw" type="password" placeholder="••••••••" /></div>
+        <div><label data-i18n="gameNameLabel">Game name</label><input id="wizName" type="text" value="HNMO" /></div>
+        <div><label data-i18n="pubAddrLabel">Public address</label><input id="wizAddr" type="text" value="localhost" /></div>
+        <div><label data-i18n="langLabel">Language</label><select id="wizLang"><option value="en">English</option><option value="vi">Tiếng Việt</option></select></div>
+        <div><label>Web port</label><input id="wizWeb" type="number" value="8080" /></div>
+        <div><label>Admin port</label><input id="wizAdmin" type="number" value="8095" /></div>
+        <div><label>Connect server port</label><input id="wizConn" type="number" value="44406" /></div>
+        <div><label>Database port</label><input id="wizDb" type="number" value="55432" /></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" id="wizSubmit" class="primary" data-i18n="wizSaveStart">Save and start HNMO</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="statusTitle">Services &amp; Actions</h2>
+      <div class="lights" style="margin-bottom:14px">
+        <div class="light"><span id="dotDb" class="dot"></span><span data-i18n="svcDb">Database</span></div>
+        <div class="light"><span id="dotGame" class="dot"></span><span data-i18n="svcServer">Game server</span></div>
+        <div class="light"><span id="dotWeb" class="dot"></span><span data-i18n="svcWeb">Web game</span></div>
+        <div class="light"><span id="dotAdmin" class="dot"></span><span data-i18n="svcAdmin">Admin panel</span></div>
+      </div>
+      <div class="row">
+        <button type="button" id="btnStart" class="primary" data-i18n="btnStart">Start</button>
+        <button type="button" id="btnStop" class="danger" data-i18n="btnStop">Stop</button>
+        <button type="button" id="btnRestart" data-i18n="btnRestart">Restart</button>
+        <a id="openGame" href="/" target="_blank"><button type="button" data-i18n="btnOpenGame">Open game</button></a>
+        <a id="openAdmin" href="http://127.0.0.1:8095/" target="_blank"><button type="button" data-i18n="btnOpenAdmin">Open admin panel</button></a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="systemTitle">Startup &amp; Service (VPS)</h2>
+      <div class="row">
+        <button type="button" id="btnAutoStart" data-i18n="btnAutoStart">Start HNMO when this computer starts: OFF</button>
+        <button type="button" id="btnService" data-i18n="btnService">Install as a service</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="backupTitle">Backup &amp; Restore (Sydney time)</h2>
+      <div class="row" style="margin-bottom:10px">
+        <button type="button" id="btnBackup" class="primary" data-i18n="btnBackup">Backup now</button>
+      </div>
+      <table>
+        <thead><tr><th data-i18n="colFile">File</th><th data-i18n="colTime">Created (Sydney)</th><th data-i18n="colSize">Size</th><th></th></tr></thead>
+        <tbody id="backupRows"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="updatesTitle">Updates</h2>
+      <div class="row" style="margin-bottom:10px">
+        <button type="button" id="btnUpdates" data-i18n="btnCheckUpdates">Check for updates</button>
+      </div>
+      <div id="updateInfo" style="color:var(--muted);font-size:0.9rem"></div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="logsTitle">Live log</h2>
+      <pre id="logOutput"></pre>
+    </section>
+  </div>
+
+  <script>
+    const i18n = {
+      en: {
+        title: 'HNMO Control',
+        helpTitle: 'How to use this page',
+        helpBody: 'This local control page manages the database, game server, web game, backups, auto-start, and updates. It is only reachable from this computer.',
+        wizardTitle: 'First-start setup wizard',
+        adminPwLabel: 'Admin password',
+        gameNameLabel: 'Game name',
+        pubAddrLabel: 'Public address',
+        langLabel: 'Language',
+        wizSaveStart: 'Save and start HNMO',
+        statusTitle: 'Services & Actions',
+        svcDb: 'Database',
+        svcServer: 'Game server',
+        svcWeb: 'Web game',
+        svcAdmin: 'Admin panel',
+        btnStart: 'Start',
+        btnStop: 'Stop',
+        btnRestart: 'Restart',
+        btnOpenGame: 'Open game',
+        btnOpenAdmin: 'Open admin panel',
+        systemTitle: 'Startup & Service (VPS)',
+        backupTitle: 'Backup & Restore (Sydney time)',
+        btnBackup: 'Backup now',
+        colFile: 'File',
+        colTime: 'Created (Sydney)',
+        colSize: 'Size',
+        updatesTitle: 'Updates',
+        btnCheckUpdates: 'Check for updates',
+        logsTitle: 'Live log',
+      },
+      vi: {
+        title: 'Bảng điều khiển HNMO',
+        helpTitle: 'Cách sử dụng trang này',
+        helpBody: 'Trang điều khiển cục bộ này quản lý cơ sở dữ liệu, máy chủ trò chơi, trò chơi web, sao lưu, tự khởi động và cập nhật. Chỉ truy cập được từ máy tính này.',
+        wizardTitle: 'Trình hướng dẫn cài đặt lần đầu',
+        adminPwLabel: 'Mật khẩu quản trị',
+        gameNameLabel: 'Tên trò chơi',
+        pubAddrLabel: 'Địa chỉ công khai',
+        langLabel: 'Ngôn ngữ',
+        wizSaveStart: 'Lưu và khởi động HNMO',
+        statusTitle: 'Dịch vụ & Thao tác',
+        svcDb: 'Cơ sở dữ liệu',
+        svcServer: 'Máy chủ game',
+        svcWeb: 'Trò chơi web',
+        svcAdmin: 'Trang quản trị',
+        btnStart: 'Khởi động',
+        btnStop: 'Dừng',
+        btnRestart: 'Khởi động lại',
+        btnOpenGame: 'Mở trò chơi',
+        btnOpenAdmin: 'Mở trang quản trị',
+        systemTitle: 'Khởi động & Dịch vụ (VPS)',
+        backupTitle: 'Sao lưu & Khôi phục (giờ Sydney)',
+        btnBackup: 'Sao lưu ngay',
+        colFile: 'Tệp',
+        colTime: 'Thời gian (Sydney)',
+        colSize: 'Dung lượng',
+        updatesTitle: 'Cập nhật',
+        btnCheckUpdates: 'Kiểm tra cập nhật',
+        logsTitle: 'Nhật ký trực tiếp',
+      }
+    };
+
+    let lang = localStorage.getItem('hnmo_lang') || 'en';
+    function applyLang() {
+      const dict = i18n[lang] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+    }
+    document.getElementById('langEn').onclick = () => { lang = 'en'; localStorage.setItem('hnmo_lang', lang); applyLang(); refresh(); };
+    document.getElementById('langVi').onclick = () => { lang = 'vi'; localStorage.setItem('hnmo_lang', lang); applyLang(); refresh(); };
+    document.getElementById('helpBtn').onclick = () => {
+      const box = document.getElementById('helpBox');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    };
+
+    function showMsg(text, err = false) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = text;
+      el.className = err ? 'msg err' : 'msg';
+      el.style.display = 'block';
+    }
+
+    async function api(url, method = 'GET', body = null) {
+      const res = await fetch(url, {
+        method,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+      return data;
+    }
+
+    let currentStatus = null;
+    async function refresh() {
+      try {
+        const s = await api('/api/control/status');
+        currentStatus = s;
+        document.getElementById('dotDb').classList.toggle('on', !!s.database);
+        document.getElementById('dotGame').classList.toggle('on', !!s.gameServer);
+        document.getElementById('dotWeb').classList.toggle('on', !!s.webGame);
+        document.getElementById('dotAdmin').classList.toggle('on', !!s.adminPanel);
+        document.getElementById('openGame').href = s.gameUrl;
+        document.getElementById('openAdmin').href = s.adminUrl;
+        document.getElementById('wizardCard').style.display = s.setupNeeded ? 'block' : 'none';
+        document.getElementById('btnAutoStart').textContent = (lang === 'vi' ? 'Tự khởi động cùng máy tính: ' : 'Start HNMO when this computer starts: ') + (s.autoStartEnabled ? 'ON' : 'OFF');
+        document.getElementById('btnService').textContent = s.serviceInstalled
+          ? (lang === 'vi' ? 'Gỡ bỏ dịch vụ hệ thống' : 'Remove system service')
+          : (lang === 'vi' ? 'Cài làm dịch vụ hệ thống' : 'Install as a service');
+
+        const tbody = document.getElementById('backupRows');
+        tbody.innerHTML = '';
+        for (const b of s.backups || []) {
+          const tr = document.createElement('tr');
+          const kb = Math.max(1, Math.round(b.sizeBytes / 1024));
+          tr.innerHTML = `<td>${b.fileName}</td><td>${b.createdSydney}</td><td>${kb} KB</td><td><button type="button" data-restore="${b.fileName}">${lang === 'vi' ? 'Khôi phục' : 'Restore'}</button></td>`;
+          tbody.appendChild(tr);
+        }
+        tbody.querySelectorAll('button[data-restore]').forEach((btn) => {
+          btn.onclick = async () => {
+            try {
+              const r = await api('/api/control/restore', 'POST', { fileName: btn.getAttribute('data-restore') });
+              showMsg(r.message || 'Restored.');
+              refresh();
+            } catch (e) { showMsg(e.message, true); }
+          };
+        });
+
+        const logs = await api('/api/control/logs');
+        document.getElementById('logOutput').textContent = [...(logs.server || []), ...(logs.database || [])].join('\n');
+      } catch (e) {
+        showMsg(e.message, true);
+      }
+    }
+
+    document.getElementById('btnStart').onclick = () => api('/api/control/start', 'POST').then(() => { showMsg('Starting...'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnStop').onclick = () => api('/api/control/stop', 'POST').then(() => { showMsg('Stopped.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnRestart').onclick = () => api('/api/control/restart', 'POST').then(() => { showMsg('Restarting...'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnAutoStart').onclick = () => api('/api/control/autostart', 'POST', { enabled: !(currentStatus && currentStatus.autoStartEnabled) }).then(refresh).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnService').onclick = () => api('/api/control/service', 'POST', { action: (currentStatus && currentStatus.serviceInstalled) ? 'remove' : 'install' }).then(refresh).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnBackup').onclick = () => api('/api/control/backup', 'POST').then((b) => { showMsg(`Backup created: ${b.fileName}`); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnUpdates').onclick = async () => {
+      try {
+        const u = await api('/api/control/updates');
+        const info = document.getElementById('updateInfo');
+        info.innerHTML = `<strong>${u.latestTag}</strong> (${u.publishedAtSydney}) — ${u.isUpdateAvailable ? 'Update available!' : 'Up to date'} — <a href="${u.downloadUrl}" target="_blank">Download</a><pre style="margin-top:8px">${u.releaseNotes || ''}</pre>`;
+      } catch (e) { showMsg(e.message, true); }
+    };
+    document.getElementById('wizSubmit').onclick = async () => {
+      try {
+        await api('/api/control/setup', 'POST', {
+          adminPassword: document.getElementById('wizPw').value,
+          gameName: document.getElementById('wizName').value,
+          publicAddress: document.getElementById('wizAddr').value,
+          webPort: Number(document.getElementById('wizWeb').value),
+          adminPort: Number(document.getElementById('wizAdmin').value),
+          connectServerPort: Number(document.getElementById('wizConn').value),
+          databasePort: Number(document.getElementById('wizDb').value),
+          language: document.getElementById('wizLang').value,
+        });
+        showMsg('Setup saved. Starting HNMO...');
+        refresh();
+      } catch (e) { showMsg(e.message, true); }
+    };
+
+    applyLang();
+    refresh();
+    setInterval(refresh, 4000);
+  </script>
+</body>
+</html>

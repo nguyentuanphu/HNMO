@@ -67,10 +67,27 @@ else
     -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
     -p:AllowedReferenceRelatedFileExtensions=.no-related-files \
     -o "$OUT/server" -v quiet
-  dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained -o "$OUT/web" -v quiet \
+  dotnet publish "$WEB/bridge/HNMO.Web.csproj" -c Release -r "$RUNTIME" --self-contained \
+    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
     -p:HnmoServerSource="$SERVER_SOURCE" -p:DebugType=none -p:DebugSymbols=false -p:GenerateDocumentationFile=false \
-    -p:AllowedReferenceRelatedFileExtensions=.no-related-files
+    -p:AllowedReferenceRelatedFileExtensions=.no-related-files -o "$OUT/web" -v quiet
   find "$OUT/web" -maxdepth 1 \( -name "*.pdb" -o -name "*.xml" \) -delete
+fi
+
+# Strip any precompressed .br/.gz copies from server/wwwroot and pack ItemEditor icons into items.zip.
+if [ -d "$OUT/server/wwwroot" ]; then
+  SERVER_WWWROOT_BEFORE_FILES="$(find "$OUT/server/wwwroot" -type f | wc -l | tr -d ' ')"
+  SERVER_WWWROOT_BEFORE_MB="$(du -sm "$OUT/server/wwwroot" | awk '{print $1}')"
+  find "$OUT/server/wwwroot" -type f \( -name '*.br' -o -name '*.gz' \) -delete
+  ITEM_ICONS_DIR="$OUT/server/wwwroot/_content/HNMO.Web.ItemEditor/img/items"
+  if [ -d "$ITEM_ICONS_DIR" ]; then
+    echo "Packing ItemEditor icons"
+    dotnet run --project "$WEB/bridge/HNMO.Web.csproj" -c Release -p:HnmoServerSource="$SERVER_SOURCE" -- \
+      --pack-icons "$ITEM_ICONS_DIR" "$OUT/server/wwwroot/_content/HNMO.Web.ItemEditor/img/items.zip"
+    rm -rf "$ITEM_ICONS_DIR"
+  fi
+  SERVER_WWWROOT_AFTER_FILES="$(find "$OUT/server/wwwroot" -type f | wc -l | tr -d ' ')"
+  SERVER_WWWROOT_AFTER_MB="$(du -sm "$OUT/server/wwwroot" | awk '{print $1}')"
 fi
 
 # The web client (TypeScript, built and type-checked here; a type error stops the build) and its library
@@ -169,6 +186,18 @@ if [ "$WITH_DATA" = 1 ]; then
   elif [ "${HNMO_KEEP_WAV:-0}" != 1 ]; then
     echo "WARNING: ffmpeg not found: the sounds stay WAV / MP3 (about 250 MB more)."
   fi
+
+  DATA_BEFORE_FILES="$(find "$OUT/Data" -type f | wc -l | tr -d ' ')"
+  DATA_BEFORE_MB="$(du -sm "$OUT/Data" | awk '{print $1}')"
+  ALLOWLIST_FILE="$(mktemp)"
+  echo "Building web Data allowlist and packing Data/packs"
+  node "$WEB/tools/build-allowlist.mjs" "$OUT/Data" "$ALLOWLIST_FILE"
+  dotnet run --project "$WEB/bridge/HNMO.Web.csproj" -c Release -p:HnmoServerSource="$SERVER_SOURCE" -- \
+    --pack "$OUT/Data" "$OUT/Data/packs" --allowlist "$ALLOWLIST_FILE"
+  rm -f "$ALLOWLIST_FILE"
+  find "$OUT/Data" -mindepth 1 -maxdepth 1 ! -name 'packs' -exec rm -rf {} +
+  DATA_AFTER_FILES="$(find "$OUT/Data" -type f | wc -l | tr -d ' ')"
+  DATA_AFTER_MB="$(du -sm "$OUT/Data" | awk '{print $1}')"
 else
   mkdir -p "$OUT/Data"
 fi
@@ -282,4 +311,25 @@ if [ -n "$LEAKED" ]; then
   exit 1
 fi
 
+echo ""
+echo "Package summary ($OUT):"
+printf '  %-16s %10s %10s\n' "Folder" "Files" "MB"
+for dir in Data server web postgres licenses; do
+  if [ -d "$OUT/$dir" ]; then
+    fcount="$(find "$OUT/$dir" -type f | wc -l | tr -d ' ')"
+    mb="$(du -sm "$OUT/$dir" | awk '{print $1}')"
+    printf '  %-16s %10s %10s\n' "$dir" "$fcount" "${mb} MB"
+  fi
+done
+if [ -n "${DATA_BEFORE_FILES:-}" ]; then
+  printf '  Data before pack: %s files, %s MB -> after pack: %s files, %s MB\n' \
+    "$DATA_BEFORE_FILES" "$DATA_BEFORE_MB" "$DATA_AFTER_FILES" "$DATA_AFTER_MB"
+fi
+if [ -n "${SERVER_WWWROOT_BEFORE_FILES:-}" ]; then
+  printf '  server/wwwroot before: %s files, %s MB -> after: %s files, %s MB\n' \
+    "$SERVER_WWWROOT_BEFORE_FILES" "$SERVER_WWWROOT_BEFORE_MB" "$SERVER_WWWROOT_AFTER_FILES" "$SERVER_WWWROOT_AFTER_MB"
+fi
+TOTAL_FILES="$(find "$OUT" -type f | wc -l | tr -d ' ')"
+TOTAL_MB="$(du -sm "$OUT" | awk '{print $1}')"
+printf '  %-16s %10s %10s\n' "TOTAL" "$TOTAL_FILES" "${TOTAL_MB} MB"
 echo "Done: $OUT"

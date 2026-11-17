@@ -1,0 +1,285 @@
+// <copyright file="ControlOperations.cs" company="HNMO">
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace HNMO.Interfaces;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Text.Json;
+
+/// <summary>
+/// Information about a backup archive in <c>save/backups</c>.
+/// </summary>
+/// <param name="FileName">Archive file name.</param>
+/// <param name="SizeBytes">Archive size in bytes.</param>
+/// <param name="CreatedSydney">Creation timestamp formatted in Sydney time.</param>
+public sealed record BackupInfo(string FileName, long SizeBytes, string CreatedSydney);
+
+/// <summary>
+/// Result of checking GitHub for a newer release.
+/// </summary>
+/// <param name="LatestTag">Latest release tag name.</param>
+/// <param name="PublishedAtSydney">Release timestamp in Sydney time.</param>
+/// <param name="ReleaseNotes">Release notes markdown/text.</param>
+/// <param name="DownloadUrl">HTML or asset download URL.</param>
+/// <param name="IsUpdateAvailable">Whether a newer release appears available.</param>
+public sealed record UpdateCheckResult(
+    string LatestTag,
+    string PublishedAtSydney,
+    string ReleaseNotes,
+    string DownloadUrl,
+    bool IsUpdateAvailable);
+
+/// <summary>
+/// Shared helper operations for the HNMO Control page (backups, Sydney time formatting,
+/// update release parsing, and log tailing).
+/// </summary>
+public static class ControlOperations
+{
+    /// <summary>
+    /// Formats a UTC timestamp in Sydney local time (<c>yyyy-MM-dd HH:mm:ss</c>).
+    /// </summary>
+    /// <param name="utcTime">The UTC timestamp.</param>
+    /// <returns>The formatted Sydney time string.</returns>
+    public static string FormatSydneyTime(DateTimeOffset utcTime)
+    {
+        var tz = GetSydneyTimeZone();
+        var sydney = TimeZoneInfo.ConvertTime(utcTime, tz);
+        return sydney.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+
+    /// <summary>
+    /// Gets a backup file name stamped with current Sydney time (<c>hnmo-backup-yyyyMMdd-HHmmss.zip</c>).
+    /// </summary>
+    /// <param name="utcNow">Optional UTC timestamp override for tests.</param>
+    /// <returns>The backup file name.</returns>
+    public static string CreateBackupFileName(DateTimeOffset? utcNow = null)
+    {
+        var tz = GetSydneyTimeZone();
+        var sydney = TimeZoneInfo.ConvertTime(utcNow ?? DateTimeOffset.UtcNow, tz);
+        return $"hnmo-backup-{sydney:yyyyMMdd-HHmmss}.zip";
+    }
+
+    /// <summary>
+    /// Creates a backup <c>.zip</c> in <c>save/backups</c> containing <c>save/</c> JSON/settings files
+    /// and an optional SQL database dump.
+    /// </summary>
+    /// <param name="saveDirectory">The <c>save/</c> directory.</param>
+    /// <param name="databaseDumpSqlPath">Optional path to a <c>pg_dump</c> SQL file.</param>
+    /// <param name="utcNow">Optional UTC timestamp override for tests.</param>
+    /// <returns>The created backup info.</returns>
+    public static BackupInfo CreateBackupZip(string saveDirectory, string? databaseDumpSqlPath = null, DateTimeOffset? utcNow = null)
+    {
+        var backupsDir = Path.Combine(saveDirectory, "backups");
+        Directory.CreateDirectory(backupsDir);
+        var fileName = CreateBackupFileName(utcNow);
+        var zipPath = Path.Combine(backupsDir, fileName);
+        var tempZip = zipPath + ".tmp";
+        if (File.Exists(tempZip))
+        {
+            File.Delete(tempZip);
+        }
+
+        using (var zip = ZipFile.Open(tempZip, ZipArchiveMode.Create))
+        {
+            if (Directory.Exists(saveDirectory))
+            {
+                foreach (var file in Directory.EnumerateFiles(saveDirectory, "*", SearchOption.AllDirectories))
+                {
+                    var rel = Path.GetRelativePath(saveDirectory, file).Replace('\\', '/');
+                    if (rel.StartsWith("backups/", StringComparison.OrdinalIgnoreCase)
+                        || rel.StartsWith("logs/", StringComparison.OrdinalIgnoreCase)
+                        || rel.StartsWith("database/", StringComparison.OrdinalIgnoreCase)
+                        || rel.EndsWith(".pid", StringComparison.OrdinalIgnoreCase)
+                        || rel.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    zip.CreateEntryFromFile(file, $"save/{rel}", CompressionLevel.Optimal);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(databaseDumpSqlPath) && File.Exists(databaseDumpSqlPath))
+            {
+                zip.CreateEntryFromFile(databaseDumpSqlPath, "database.sql", CompressionLevel.Optimal);
+            }
+        }
+
+        File.Move(tempZip, zipPath, overwrite: true);
+        var info = new FileInfo(zipPath);
+        return new BackupInfo(fileName, info.Length, FormatSydneyTime(utcNow ?? DateTimeOffset.UtcNow));
+    }
+
+    /// <summary>
+    /// Lists backup archives in <c>save/backups</c>, newest first.
+    /// </summary>
+    /// <param name="saveDirectory">The <c>save/</c> directory.</param>
+    /// <returns>The list of backups.</returns>
+    public static IReadOnlyList<BackupInfo> ListBackups(string saveDirectory)
+    {
+        var backupsDir = Path.Combine(saveDirectory, "backups");
+        if (!Directory.Exists(backupsDir))
+        {
+            return Array.Empty<BackupInfo>();
+        }
+
+        return Directory.GetFiles(backupsDir, "*.zip", SearchOption.TopDirectoryOnly)
+            .Select(path => new FileInfo(path))
+            .OrderByDescending(f => f.LastWriteTimeUtc)
+            .Select(f => new BackupInfo(f.Name, f.Length, FormatSydneyTime(new DateTimeOffset(f.LastWriteTimeUtc, TimeSpan.Zero))))
+            .ToArray();
+    }
+
+    /// <summary>
+    /// Restores <c>save/</c> files from a backup archive and returns the path to an extracted
+    /// <c>database.sql</c> file if one was included.
+    /// </summary>
+    /// <param name="saveDirectory">The <c>save/</c> directory.</param>
+    /// <param name="backupFileName">The backup archive file name inside <c>save/backups</c>.</param>
+    /// <returns>Path to extracted <c>database.sql</c>, or <c>null</c> if none.</returns>
+    public static string? RestoreBackupZip(string saveDirectory, string backupFileName)
+    {
+        if (string.IsNullOrWhiteSpace(backupFileName)
+            || backupFileName.Contains('/')
+            || backupFileName.Contains('\\')
+            || backupFileName.Contains("..", StringComparison.Ordinal))
+        {
+            throw new ArgumentException("Invalid backup file name.", nameof(backupFileName));
+        }
+
+        var zipPath = Path.Combine(saveDirectory, "backups", backupFileName);
+        if (!File.Exists(zipPath))
+        {
+            throw new FileNotFoundException("Backup archive not found.", zipPath);
+        }
+
+        string? restoredSqlPath = null;
+        var fullSaveDir = Path.GetFullPath(saveDirectory);
+        using var zip = ZipFile.OpenRead(zipPath);
+        foreach (var entry in zip.Entries)
+        {
+            if (string.IsNullOrEmpty(entry.Name))
+            {
+                continue;
+            }
+
+            if (entry.FullName.Equals("database.sql", StringComparison.OrdinalIgnoreCase))
+            {
+                restoredSqlPath = Path.Combine(fullSaveDir, "restore-database.sql");
+                entry.ExtractToFile(restoredSqlPath, overwrite: true);
+                continue;
+            }
+
+            if (entry.FullName.StartsWith("save/", StringComparison.OrdinalIgnoreCase))
+            {
+                var rel = entry.FullName["save/".Length..];
+                var dest = Path.GetFullPath(Path.Combine(fullSaveDir, rel));
+                if (!dest.StartsWith(fullSaveDir + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var dir = Path.GetDirectoryName(dest);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                entry.ExtractToFile(dest, overwrite: true);
+            }
+        }
+
+        return restoredSqlPath;
+    }
+
+    /// <summary>
+    /// Parses a GitHub Releases API JSON payload and compares it to the local build stamp.
+    /// </summary>
+    /// <param name="releaseJson">Raw JSON from <c>/repos/.../releases/latest</c>.</param>
+    /// <param name="localBuildStamp">Local <c>.hnmo-build</c> stamp, if present.</param>
+    /// <returns>Parsed update check result.</returns>
+    public static UpdateCheckResult ParseGitHubRelease(string releaseJson, string? localBuildStamp)
+    {
+        using var doc = JsonDocument.Parse(releaseJson);
+        var root = doc.RootElement;
+        var tag = root.TryGetProperty("tag_name", out var t) ? (t.GetString() ?? "latest") : "latest";
+        var body = root.TryGetProperty("body", out var b) ? (b.GetString() ?? string.Empty) : string.Empty;
+        var htmlUrl = root.TryGetProperty("html_url", out var u) ? (u.GetString() ?? "https://github.com/nguyentuanphu/HNMO/releases") : "https://github.com/nguyentuanphu/HNMO/releases";
+        var published = string.Empty;
+        var isNewer = false;
+
+        if (root.TryGetProperty("published_at", out var p) && DateTimeOffset.TryParse(p.GetString(), out var publishedUtc))
+        {
+            published = FormatSydneyTime(publishedUtc);
+            if (!string.IsNullOrWhiteSpace(localBuildStamp))
+            {
+                var parts = localBuildStamp.Trim().Split('-');
+                var datePart = parts.LastOrDefault();
+                if (datePart is { Length: 8 } && DateOnly.TryParseExact(datePart, "yyyyMMdd", out var localDate))
+                {
+                    var localUtc = new DateTimeOffset(localDate.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
+                    isNewer = publishedUtc > localUtc.AddDays(1);
+                }
+            }
+            else
+            {
+                isNewer = true;
+            }
+        }
+
+        return new UpdateCheckResult(tag, published, body, htmlUrl, isNewer);
+    }
+
+    /// <summary>
+    /// Reads the last <paramref name="maxLines"/> lines from a log file safely while it is being written.
+    /// </summary>
+    /// <param name="logFilePath">The log file path.</param>
+    /// <param name="maxLines">Maximum number of trailing lines to return.</param>
+    /// <returns>The trailing log lines.</returns>
+    public static IReadOnlyList<string> ReadTailLines(string logFilePath, int maxLines = 120)
+    {
+        if (!File.Exists(logFilePath))
+        {
+            return Array.Empty<string>();
+        }
+
+        var lines = new Queue<string>(maxLines);
+        using var stream = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var reader = new StreamReader(stream);
+        while (reader.ReadLine() is { } line)
+        {
+            if (lines.Count == maxLines)
+            {
+                lines.Dequeue();
+            }
+
+            lines.Enqueue(line);
+        }
+
+        return lines.ToArray();
+    }
+
+    private static TimeZoneInfo GetSydneyTimeZone()
+    {
+        try
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("Australia/Sydney");
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                return TimeZoneInfo.Utc;
+            }
+        }
+    }
+}
