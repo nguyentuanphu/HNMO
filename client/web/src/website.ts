@@ -1,3 +1,4 @@
+import { loadWebsiteSettings } from "./websiteTheme.js";
 import { loadGameName, showCommunityLinks } from "./gameName.js";
 
 type Language = "en" | "vi";
@@ -1024,13 +1025,7 @@ function showGoogleAnswer(answer: PortalAnswer): void {
 }
 
 async function setUpGoogle(): Promise<void> {
-  let clientId = "";
-  try {
-    const response = await fetch("/website/settings", { cache: "no-cache" });
-    if (response.ok) clientId = ((await response.json()) as { googleClientId?: string }).googleClientId ?? "";
-  } catch {
-    /* Without settings there's no Google sign-in. */
-  }
+  const clientId = await loadWebsiteSettings();
   if (!clientId) return;
   const script = document.createElement("script");
   script.src = "https://accounts.google.com/gsi/client";

@@ -58,6 +58,8 @@ test('the Illusion Temple, Doppelganger and Imperial Guardian windows', async ({
   test.setTimeout(15 * 60_000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
+  const configuredName = 'HNMO event check';
+  await page.route('**/game-name.json', (route) => route.fulfill({ json: { name: configuredName } }));
   await enterWorld(page, 'quest2');
   await moveTo(page, 'devias', 2);
 
@@ -143,7 +145,7 @@ test('the Illusion Temple, Doppelganger and Imperial Guardian windows', async ({
     await feed(page, result);
     await expect(page.locator('.rml-cursed_temple_result #panel')).toBeVisible(OPEN);
     await expect(page.locator('.rml-cursed_temple_result #ct_hero_list')).toHaveText('Hero List');
-    expect(await texts(page, '.rml-cursed_temple_result .rows-allied .result-row .result-cell')).toEqual(['HNMO alliance', 'quest2Dl', 'Lord Emperor', '152340', '2']);
+    expect(await texts(page, '.rml-cursed_temple_result .rows-allied .result-row .result-cell')).toEqual([`${configuredName} alliance`, 'quest2Dl', 'Lord Emperor', '152340', '2']);
     expect(await texts(page, '.rml-cursed_temple_result .rows-illusion .result-row .result-cell')).toEqual(['Illusion Sorcery', 'Rival', 'Dark Wizard', '64210', '1']);
     await expect(page.locator('.rml-cursed_temple_result .result-banner.success')).toBeVisible();
     await expect(page.locator('.rml-cursed_temple_system')).toHaveCount(0, OPEN);
