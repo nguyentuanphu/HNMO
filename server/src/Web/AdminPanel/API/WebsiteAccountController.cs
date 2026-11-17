@@ -116,7 +116,10 @@ public sealed class WebsiteAccountController(
             return this.BadRequest(new { error = "password" });
         }
 
-        var cancellationToken = this.HttpContext.RequestAborted;
+        // Keep persistence work well inside the login server's five-minute reservation lease.
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(this.HttpContext.RequestAborted);
+        timeout.CancelAfter(TimeSpan.FromSeconds(30));
+        var cancellationToken = timeout.Token;
         var configuration = await configurations.GetOwnerAsync(Guid.Empty, cancellationToken).ConfigureAwait(false);
         using var authentication = persistence.CreateNewPlayerContext(configuration);
         var account = await authentication.GetAccountByLoginNameAsync(request.LoginName.Trim(), request.Password, cancellationToken).ConfigureAwait(false);
