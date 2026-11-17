@@ -4702,4 +4702,49 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="PageHelpToggleHint" xml:space="preserve">
     <value>Hiện hoặc ẩn mục đích, hướng dẫn chỉnh sửa và lưu ý của trang này.</value>
   </data>
+  <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
+    <value>Mua thêm rương</value>
+  </data>
+  <data name="AccountCoinHistoryMarketPurchase" xml:space="preserve">
+    <value>Mua vật phẩm ở chợ</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStorePurchase" xml:space="preserve">
+    <value>Mua tại cửa hàng của {0}</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStoreSale" xml:space="preserve">
+    <value>Bán tại cửa hàng cho {0}</value>
+  </data>
+  <data name="AccountCoinHistoryReset" xml:space="preserve">
+    <value>Trả phí reset</value>
+  </data>
+  <data name="AccountCoinHistoryRelife" xml:space="preserve">
+    <value>Trả phí relife</value>
+  </data>
+  <data name="AccountCoinHistoryClearStats" xml:space="preserve">
+    <value>Trả phí tẩy điểm chỉ số</value>
+  </data>
+  <data name="AccountCoinHistoryClearMaster" xml:space="preserve">
+    <value>Trả phí tẩy điểm master</value>
+  </data>
+  <data name="AccountCoinHistoryPlayTime" xml:space="preserve">
+    <value>Thưởng thời gian chơi</value>
+  </data>
+  <data name="AccountCoinHistoryCashShop" xml:space="preserve">
+    <value>Mua ở cửa hàng: {0}</value>
+  </data>
+  <data name="AccountCoinHistoryGift" xml:space="preserve">
+    <value>Tặng {0}: {1}</value>
+  </data>
+  <data name="AccountCoinHistoryOtherCharacter" xml:space="preserve">
+    <value>nhân vật khác</value>
+  </data>
+  <data name="AccountCoinHistoryCreatedAt" xml:space="preserve">
+    <value>Thời gian (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryAppliedAt" xml:space="preserve">
+    <value>Đã ghi nhận (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
+    <value>Bán vật phẩm ở chợ</value>
+  </data>
 </root>

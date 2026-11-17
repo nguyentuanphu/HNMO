@@ -40,9 +40,16 @@ public static class CashShopBalanceReceipt
         receipt.CreatedAt = now;
         receipt.AppliedAt = now;
         receipt.Reference = $"balance:{Guid.NewGuid():N}";
-        receipt.Reason = JsonSerializer.Serialize(new CashShopBalanceDetails(Kind, reason.ToString(), otherCharacter));
+        receipt.Reason = Describe(reason, otherCharacter);
         return receipt;
     }
+
+    /// <summary>Describes an existing grant without creating or applying another transaction.</summary>
+    /// <param name="reason">The source action.</param>
+    /// <param name="otherCharacter">The optional public character name.</param>
+    /// <returns>Metadata which both interfaces can localize.</returns>
+    public static string Describe(CashShopBalanceReason reason, string? otherCharacter = null)
+        => JsonSerializer.Serialize(new CashShopBalanceDetails(Kind, reason.ToString(), otherCharacter));
 
     /// <summary>Removes only the receipt when an existing payment path restores its balance.</summary>
     /// <param name="context">The same payment context.</param>
@@ -69,7 +76,8 @@ public static class CashShopBalanceReceipt
         try
         {
             var details = JsonSerializer.Deserialize<CashShopBalanceDetails>(reason);
-            return details?.Kind == Kind && Enum.TryParse<CashShopBalanceReason>(details.Action, out var action) && Enum.IsDefined(action) ? details : null;
+            return details?.Kind == Kind && Enum.TryParse<CashShopBalanceReason>(details.Action, out var action)
+                && Enum.IsDefined(action) && details.Action == action.ToString() ? details : null;
         }
         catch (JsonException)
         {

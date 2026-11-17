@@ -274,7 +274,7 @@ public sealed class MarketPlugIn :
             };
             await MissionCoinGranter.GrantAsync(
                 player.GameContext,
-                new CoinGrant(listing.SellerLogin, coinType, claim.NetAmount, $"Item Market sale: {listing.Item.NameEn}", $"market:{listing.Id}"),
+                new CoinGrant(listing.SellerLogin, coinType, claim.NetAmount, CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketSale), $"market:{listing.Id}"),
                 "HNMO Item Market").ConfigureAwait(false);
         }
 

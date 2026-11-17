@@ -13521,5 +13521,50 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up the localized PageHelpToggleHint text.</summary>
         public static string PageHelpToggleHint => ResourceManager.GetString("PageHelpToggleHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryExtraVault text.</summary>
+        public static string AccountCoinHistoryExtraVault => ResourceManager.GetString("AccountCoinHistoryExtraVault", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryMarketPurchase text.</summary>
+        public static string AccountCoinHistoryMarketPurchase => ResourceManager.GetString("AccountCoinHistoryMarketPurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayerStorePurchase text.</summary>
+        public static string AccountCoinHistoryPlayerStorePurchase => ResourceManager.GetString("AccountCoinHistoryPlayerStorePurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayerStoreSale text.</summary>
+        public static string AccountCoinHistoryPlayerStoreSale => ResourceManager.GetString("AccountCoinHistoryPlayerStoreSale", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryReset text.</summary>
+        public static string AccountCoinHistoryReset => ResourceManager.GetString("AccountCoinHistoryReset", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryRelife text.</summary>
+        public static string AccountCoinHistoryRelife => ResourceManager.GetString("AccountCoinHistoryRelife", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryClearStats text.</summary>
+        public static string AccountCoinHistoryClearStats => ResourceManager.GetString("AccountCoinHistoryClearStats", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryClearMaster text.</summary>
+        public static string AccountCoinHistoryClearMaster => ResourceManager.GetString("AccountCoinHistoryClearMaster", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayTime text.</summary>
+        public static string AccountCoinHistoryPlayTime => ResourceManager.GetString("AccountCoinHistoryPlayTime", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryCashShop text.</summary>
+        public static string AccountCoinHistoryCashShop => ResourceManager.GetString("AccountCoinHistoryCashShop", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryGift text.</summary>
+        public static string AccountCoinHistoryGift => ResourceManager.GetString("AccountCoinHistoryGift", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryOtherCharacter text.</summary>
+        public static string AccountCoinHistoryOtherCharacter => ResourceManager.GetString("AccountCoinHistoryOtherCharacter", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryCreatedAt text.</summary>
+        public static string AccountCoinHistoryCreatedAt => ResourceManager.GetString("AccountCoinHistoryCreatedAt", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryAppliedAt text.</summary>
+        public static string AccountCoinHistoryAppliedAt => ResourceManager.GetString("AccountCoinHistoryAppliedAt", resourceCulture)!;
+
+        /// <summary>Looks up the localized market-sale description.</summary>
+        public static string AccountCoinHistoryMarketSale => ResourceManager.GetString("AccountCoinHistoryMarketSale", resourceCulture)!;
     }
 }

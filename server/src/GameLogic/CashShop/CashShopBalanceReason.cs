@@ -13,6 +13,9 @@ public enum CashShopBalanceReason
     /// <summary>A purchase from the item market.</summary>
     MarketPurchase,
 
+    /// <summary>A payment received from an item-market sale.</summary>
+    MarketSale,
+
     /// <summary>A payment to another character's store.</summary>
     PlayerStorePurchase,
 
