@@ -6,15 +6,16 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.IO;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
-
 using HNMO.Network.PlugIns;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Components;
 using HNMO.Web.AdminPanel.Properties;
+
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The set up page.
@@ -57,10 +58,15 @@ public partial class Setup
     public IBackupService BackupService { get; set; } = null!;
 
     /// <summary>
-    /// Gets or sets the database snapshot service. It's only available for a real database.
+    /// Gets the database snapshot service. It's only available for a real database.
+    /// </summary>
+    public IDatabaseSnapshotService? SnapshotService { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the service provider used to resolve optional database services.
     /// </summary>
     [Inject]
-    public IDatabaseSnapshotService? SnapshotService { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the javascript runtime.
@@ -77,6 +83,7 @@ public partial class Setup
     /// <inheritdoc />
     protected override Task OnInitializedAsync()
     {
+        this.SnapshotService = this.ServiceProvider.GetService<IDatabaseSnapshotService>();
         return this.LoadDataStateAsync();
     }
 
