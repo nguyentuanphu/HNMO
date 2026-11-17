@@ -34,6 +34,13 @@ export async function enterWorld(page: Page, account: string): Promise<void> {
   await page.waitForFunction(() => (window as unknown as { __viewerReady?: boolean }).__viewerReady, null, { timeout: 180_000 });
 }
 
+/** Closes the new-player guide before testing a window which shares its screen position. */
+export async function dismissOnboarding(page: Page): Promise<void> {
+  const guide = page.locator('.rml-hnmo_onboarding');
+  if (await guide.count() > 0) await guide.locator('.ob-close').click();
+  await expect(guide).toHaveCount(0);
+}
+
 export async function openInventory(page: Page): Promise<void> {
   await page.keyboard.press('i');
   await page.waitForFunction(() => document.querySelector('.rml-my_inventory'), null, { timeout: 90_000 });
