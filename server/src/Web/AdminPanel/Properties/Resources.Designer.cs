@@ -13404,5 +13404,132 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("AccountSafetyPage", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enable lets a key connect again. Disable stops it until you enable it again. Delete removes it permanently. Change limits the tasks available to an automated assistant using the key; the key and its role stay the same..
+        /// </summary>
+        public static string ApiKeysHelpButtons {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpButtons", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Click Create API key, give it a name and choose only the access the program needs. Copy the key as soon as it appears: the full key is shown only once..
+        /// </summary>
+        public static string ApiKeysHelpCreate {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpCreate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Never post a key in public or share it in a screenshot. Delete keys you no longer use; if a key is exposed, delete it and create a replacement..
+        /// </summary>
+        public static string ApiKeysHelpSafety {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpSafety", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How to use this page.
+        /// </summary>
+        public static string ApiKeysHelpTitle {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to An API key is like a password for another program, such as the website's account page, a Discord bot or a top-up/payment service. It lets that program talk to this server without giving it your admin password..
+        /// </summary>
+        public static string ApiKeysHelpWhat {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpWhat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to You only need a key when such a program runs on another computer, or when its setup asks for one. If everything in the HNMO folder runs on one computer, you usually do not need to create a key..
+        /// </summary>
+        public static string ApiKeysHelpWhen {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpWhen", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Change the tasks an automated assistant may use with this key, keeping its role and secret unchanged..
+        /// </summary>
+        public static string ApiKeysHintChange {
+            get {
+                return ResourceManager.GetString("ApiKeysHintChange", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Hide this key after copying it, because you cannot show the full key again..
+        /// </summary>
+        public static string ApiKeysHintClose {
+            get {
+                return ResourceManager.GetString("ApiKeysHintClose", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy the full key so you can paste it into the program that needs it..
+        /// </summary>
+        public static string ApiKeysHintCopy {
+            get {
+                return ResourceManager.GetString("ApiKeysHintCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create a separate key and choose the access for the program that will use it..
+        /// </summary>
+        public static string ApiKeysHintCreate {
+            get {
+                return ResourceManager.GetString("ApiKeysHintCreate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Permanently remove this key so the program using it can no longer connect with it..
+        /// </summary>
+        public static string ApiKeysHintDelete {
+            get {
+                return ResourceManager.GetString("ApiKeysHintDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Temporarily stop this key from connecting without deleting it..
+        /// </summary>
+        public static string ApiKeysHintDisable {
+            get {
+                return ResourceManager.GetString("ApiKeysHintDisable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Allow the program to connect with this key again..
+        /// </summary>
+        public static string ApiKeysHintEnable {
+            get {
+                return ResourceManager.GetString("ApiKeysHintEnable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show or hide the instructions for using this page..
+        /// </summary>
+        public static string ApiKeysHintHelp {
+            get {
+                return ResourceManager.GetString("ApiKeysHintHelp", resourceCulture);
+            }
+        }
+
     }
 }

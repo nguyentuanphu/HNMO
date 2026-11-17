@@ -4550,4 +4550,46 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Account safety</value>
   </data>
+  <data name="ApiKeysHelpButtons" xml:space="preserve">
+    <value>Enable lets a key connect again. Disable stops it until you enable it again. Delete removes it permanently. Change limits the tasks available to an automated assistant using the key; the key and its role stay the same.</value>
+  </data>
+  <data name="ApiKeysHelpCreate" xml:space="preserve">
+    <value>Click Create API key, give it a name and choose only the access the program needs. Copy the key as soon as it appears: the full key is shown only once.</value>
+  </data>
+  <data name="ApiKeysHelpSafety" xml:space="preserve">
+    <value>Never post a key in public or share it in a screenshot. Delete keys you no longer use; if a key is exposed, delete it and create a replacement.</value>
+  </data>
+  <data name="ApiKeysHelpTitle" xml:space="preserve">
+    <value>How to use this page</value>
+  </data>
+  <data name="ApiKeysHelpWhat" xml:space="preserve">
+    <value>An API key is like a password for another program, such as the website's account page, a Discord bot or a top-up/payment service. It lets that program talk to this server without giving it your admin password.</value>
+  </data>
+  <data name="ApiKeysHelpWhen" xml:space="preserve">
+    <value>You only need a key when such a program runs on another computer, or when its setup asks for one. If everything in the HNMO folder runs on one computer, you usually do not need to create a key.</value>
+  </data>
+  <data name="ApiKeysHintChange" xml:space="preserve">
+    <value>Change the tasks an automated assistant may use with this key, keeping its role and secret unchanged.</value>
+  </data>
+  <data name="ApiKeysHintClose" xml:space="preserve">
+    <value>Hide this key after copying it, because you cannot show the full key again.</value>
+  </data>
+  <data name="ApiKeysHintCopy" xml:space="preserve">
+    <value>Copy the full key so you can paste it into the program that needs it.</value>
+  </data>
+  <data name="ApiKeysHintCreate" xml:space="preserve">
+    <value>Create a separate key and choose the access for the program that will use it.</value>
+  </data>
+  <data name="ApiKeysHintDelete" xml:space="preserve">
+    <value>Permanently remove this key so the program using it can no longer connect with it.</value>
+  </data>
+  <data name="ApiKeysHintDisable" xml:space="preserve">
+    <value>Temporarily stop this key from connecting without deleting it.</value>
+  </data>
+  <data name="ApiKeysHintEnable" xml:space="preserve">
+    <value>Allow the program to connect with this key again.</value>
+  </data>
+  <data name="ApiKeysHintHelp" xml:space="preserve">
+    <value>Show or hide the instructions for using this page.</value>
+  </data>
 </root>
