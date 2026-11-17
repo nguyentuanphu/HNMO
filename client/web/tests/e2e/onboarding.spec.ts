@@ -13,12 +13,13 @@ interface Panel { handle(bytes: Uint8Array): boolean; open(): void; close(): voi
 type Win = Window & {
   __game: {
     connection: { send(group: string, name: string, fields?: Record<string, unknown>): void; dispatch(bytes: Uint8Array): void };
-    onboarding?: { isOpen: boolean };
+    onboarding?: Pick<Panel, 'isOpen' | 'handle'>;
   };
   __sent: Sent[];
   __chat: string[];
   __confirm: string[];
   __panel: Panel;
+  __feedingGuide?: boolean;
 };
 
 const reward = (zen: number, coins = 0, items: { group: number; number: number; level: number; count: number }[] = []) => ({ zen, coins, coinType: 'GoblinPoints', items });
@@ -50,7 +51,10 @@ async function feed(page: Page, value: unknown): Promise<void> {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const w = window as unknown as Win;
     const bytes = write('ServerToClient', 'HnmoOnboardingState', { Json: json });
-    if (w.__panel) w.__panel.handle(bytes); else w.__game.connection.dispatch(bytes);
+    w.__feedingGuide = true;
+    try {
+      if (w.__panel) w.__panel.handle(bytes); else w.__game.connection.dispatch(bytes);
+    } finally { w.__feedingGuide = false; }
   }, JSON.stringify(value));
 }
 
@@ -166,6 +170,20 @@ test('the guide panel: the step, the arrow, the chat notices and the buttons', a
   await expectNoPageErrors(errors);
 });
 
+// As with the gift-code fixture, recorded states must not be replaced by a live server response.
+async function onlyFedGuideStates(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const w = window as unknown as Win;
+    const panel = w.__game.onboarding;
+    if (!panel) throw new Error('The game has not created its onboarding window.');
+    const handle = panel.handle.bind(panel);
+    panel.handle = (bytes: Uint8Array) => {
+      if (bytes[0] === 0xc2 && bytes[3] === 0xf5 && bytes[4] === 0x0f && !w.__feedingGuide) return true;
+      return handle(bytes);
+    };
+  });
+}
+
 test('in the game, the guide is asked for, Y opens it, and the (i) guide and the touch menu have it', async ({ page }) => {
   test.skip(!(await gameServerUp()), 'No game server runs on 44406.');
   test.setTimeout(6 * 60_000);
@@ -186,6 +204,7 @@ test('in the game, the guide is asked for, Y opens it, and the (i) guide and the
   });
   await enterWorld(page, 'test8');
   await expect.poll(() => sent(page).then((list) => list.some((s) => s.name === 'HnmoOnboardingRequest')), { timeout: 60_000 }).toBe(true);
+  await onlyFedGuideStates(page);
   const panel = page.locator('.rml-hnmo_onboarding');
   // A server without the guide doesn't answer: the state comes through the game's connection, and the panel opens by itself.
   await feed(page, state('talk-merchant', { where: { map: 0, x: 127, y: 86, name: 'Potion Girl Amy' } }));
