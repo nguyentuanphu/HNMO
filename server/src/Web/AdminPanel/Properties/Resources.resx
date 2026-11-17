@@ -4716,4 +4716,10 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
     <value>Item market sale</value>
   </data>
+  <data name="VipCoinHistoryPurchase" xml:space="preserve">
+    <value>VIP {0}: {1} days</value>
+  </data>
+  <data name="VipCoinHistoryDaily" xml:space="preserve">
+    <value>VIP daily reward: {0}</value>
+  </data>
 </root>

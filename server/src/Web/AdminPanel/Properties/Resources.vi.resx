@@ -4747,4 +4747,10 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
     <value>Bán vật phẩm ở chợ</value>
   </data>
+  <data name="VipCoinHistoryPurchase" xml:space="preserve">
+    <value>VIP {0}: {1} ngày</value>
+  </data>
+  <data name="VipCoinHistoryDaily" xml:space="preserve">
+    <value>Quà VIP hằng ngày: {0}</value>
+  </data>
 </root>

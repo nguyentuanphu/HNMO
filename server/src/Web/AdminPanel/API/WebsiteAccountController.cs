@@ -12,6 +12,7 @@ using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
@@ -88,16 +89,23 @@ public sealed class WebsiteAccountController(
                 resets = (int)(c.Attributes.FirstOrDefault(a => a.Definition?.Id == Stats.Resets.Id)?.Value ?? 0),
                 map = c.CurrentMap?.Number,
             }).ToList(),
-            history = grants.Take(PageSize).Select(g => new
+            history = grants.Take(PageSize).Select(g =>
             {
-                g.Id,
-                coinType = g.CoinType.ToString(),
-                g.Amount,
-                g.Reason,
-                purchase = CashShopPurchaseReceipt.Read(g.Reason),
-                balanceChange = CashShopBalanceReceipt.Read(g.Reason),
-                createdAt = DateTime.SpecifyKind(g.CreatedAt, DateTimeKind.Utc),
-                pending = g.AppliedAt is null,
+                var vip = VipWallet.ReadReceipt(g.Reason);
+                var daily = VipDailyCoins.ReadReceipt(g.Reason);
+                return new
+                {
+                    g.Id,
+                    coinType = g.CoinType.ToString(),
+                    g.Amount,
+                    reason = vip is not null || daily is not null ? null : g.Reason,
+                    purchase = CashShopPurchaseReceipt.Read(g.Reason),
+                    balanceChange = CashShopBalanceReceipt.Read(g.Reason),
+                    vipPurchase = vip is null ? null : new { vip.Intent.NameEn, vip.Intent.NameVi, vip.Intent.Plan.Days },
+                    vipDaily = daily is null ? null : new { daily.NameEn, daily.NameVi },
+                    createdAt = DateTime.SpecifyKind(g.CreatedAt, DateTimeKind.Utc),
+                    pending = g.AppliedAt is null,
+                };
             }).ToList(),
             page = request.Page,
             hasMore = grants.Count > PageSize,

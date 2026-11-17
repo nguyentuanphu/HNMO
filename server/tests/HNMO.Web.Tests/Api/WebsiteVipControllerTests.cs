@@ -4,9 +4,11 @@
 
 namespace HNMO.Web.Tests.Api;
 
+using System.Globalization;
 using System.Text.Json;
 using System.Threading;
 using HNMO.AttributeSystem;
+using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
@@ -16,6 +18,8 @@ using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Properties;
+using HNMO.Web.AdminPanel.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -204,6 +208,36 @@ public class WebsiteVipControllerTests
         Assert.That(result.GetProperty("enabled").GetBoolean(), Is.False);
         Assert.That(result.GetProperty("rule").GetString(), Is.EqualTo("Disabled"));
         Assert.That(this._account.WCoinC, Is.EqualTo(1000));
+    }
+
+    /// <summary>Real purchase and daily receipts are presented in the admin's language rather than as implementation JSON.</summary>
+    /// <param name="language">The admin language.</param>
+    /// <returns>The test task.</returns>
+    [TestCase("en")]
+    [TestCase("vi")]
+    [NonParallelizable]
+    public async Task ReceiptHistoryUsesBilingualDescriptionsAsync(string language)
+    {
+        var previous = CultureInfo.CurrentUICulture;
+        var previousResource = Resources.Culture;
+        try
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
+            Resources.Culture = CultureInfo.CurrentUICulture;
+            await this._controller.PurchaseAsync(await this.PurchaseRequestAsync().ConfigureAwait(false)).ConfigureAwait(false);
+            await this._controller.DailyAsync(new("ann", "secret")).ConfigureAwait(false);
+            using var players = this._provider.CreateNewPlayerContext(this._game);
+            var rows = await players.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false);
+            var purchase = rows.Single(row => VipWallet.ReadReceipt(row.Reason) is not null);
+            var daily = rows.Single(row => VipDailyCoins.ReadReceipt(row.Reason) is not null);
+            Assert.That(CashShopHistoryText.Format(purchase.Reason), Is.EqualTo(language == "vi" ? "VIP Đồng: 7 ngày" : "VIP Bronze: 7 days"));
+            Assert.That(CashShopHistoryText.Format(daily.Reason), Is.EqualTo(language == "vi" ? "Quà VIP hằng ngày: Đồng" : "VIP daily reward: Bronze"));
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = previous;
+            Resources.Culture = previousResource;
+        }
     }
 
     private static JsonElement Content(IActionResult result)

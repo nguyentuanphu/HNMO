@@ -9,6 +9,7 @@ using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
@@ -185,6 +186,43 @@ public class WebsiteAccountControllerTests
         Assert.That(row.GetProperty("balanceChange").GetProperty("otherCharacter").GetString(), Is.EqualTo("<OtherKnight>"));
         Assert.That(row.GetProperty("pending").GetBoolean(), Is.False);
         Assert.That(this._account.WCoinC, Is.EqualTo(150));
+    }
+
+    /// <summary>VIP history retains bilingual display data without returning account or internal grant identifiers in its reason.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RedactsVipReceiptInternalsAndKeepsDisplayMetadataAsync()
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var now = DateTime.UtcNow;
+        var plan = new VipPurchasePlan("ANN", 1, 7, 100, CashShopCoinType.WCoinC, now, null, now.AddDays(7));
+        var intent = new VipWalletIntent(this._account.GetId(), Guid.NewGuid(), plan, new("ANN", 1, now, plan.UntilUtc), 5, 5, "Bronze", "Đồng", []);
+        var privateIds = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+        var purchase = context.CreateNew<CashShopCoinGrant>();
+        purchase.AccountId = this._account.GetId();
+        purchase.Amount = -100;
+        purchase.CreatedAt = now;
+        purchase.AppliedAt = now;
+        purchase.Reason = JsonSerializer.Serialize(new VipWalletReceipt("vip-wallet-v1", intent, privateIds.ToList()));
+        var daily = context.CreateNew<CashShopCoinGrant>();
+        daily.AccountId = this._account.GetId();
+        daily.Amount = 10;
+        daily.CreatedAt = now;
+        daily.Reason = JsonSerializer.Serialize(new VipDailyReceipt("vip-daily-v1", this._account.GetId(), "2026-11-18", intent.OperationId, "Bronze", "Đồng"));
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var entries = json.GetProperty("history").EnumerateArray().ToArray();
+        var purchaseRow = entries.Single(row => row.GetProperty("id").GetGuid() == purchase.GetId());
+        var dailyRow = entries.Single(row => row.GetProperty("id").GetGuid() == daily.GetId());
+        Assert.That(purchaseRow.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(purchaseRow.GetProperty("vipPurchase").GetProperty("nameVi").GetString(), Is.EqualTo("Đồng"));
+        Assert.That(purchaseRow.GetProperty("vipPurchase").GetProperty("days").GetInt32(), Is.EqualTo(7));
+        Assert.That(dailyRow.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(dailyRow.GetProperty("vipDaily").GetProperty("nameEn").GetString(), Is.EqualTo("Bronze"));
+        foreach (var id in privateIds.Append(this._account.GetId()).Append(intent.OperationId))
+        {
+            Assert.That(json.GetRawText(), Does.Not.Contain(id.ToString()));
+        }
     }
 
     /// <summary>A valid player password alone cannot bypass the trusted bridge's API-key policy.</summary>

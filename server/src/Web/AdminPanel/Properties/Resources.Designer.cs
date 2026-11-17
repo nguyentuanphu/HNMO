@@ -13566,5 +13566,11 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up the localized market-sale description.</summary>
         public static string AccountCoinHistoryMarketSale => ResourceManager.GetString("AccountCoinHistoryMarketSale", resourceCulture)!;
+
+        /// <summary>Looks up the localized VipCoinHistoryPurchase text.</summary>
+        public static string VipCoinHistoryPurchase => ResourceManager.GetString("VipCoinHistoryPurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized VipCoinHistoryDaily text.</summary>
+        public static string VipCoinHistoryDaily => ResourceManager.GetString("VipCoinHistoryDaily", resourceCulture)!;
     }
 }

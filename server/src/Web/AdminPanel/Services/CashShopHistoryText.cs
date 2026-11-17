@@ -6,6 +6,7 @@ namespace HNMO.Web.AdminPanel.Services;
 
 using System.Globalization;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Web.AdminPanel.Properties;
 
 /// <summary>Formats coin receipt metadata for people, with all history dates in Sydney time.</summary>
@@ -19,6 +20,18 @@ public static class CashShopHistoryText
     public static string Format(string? reason)
     {
         var culture = CultureInfo.CurrentUICulture;
+        if (VipWallet.ReadReceipt(reason) is { } vip)
+        {
+            var name = culture.TwoLetterISOLanguageName == "vi" ? vip.Intent.NameVi : vip.Intent.NameEn;
+            return string.Format(culture, Resources.VipCoinHistoryPurchase, name, vip.Intent.Plan.Days);
+        }
+
+        if (VipDailyCoins.ReadReceipt(reason) is { } daily)
+        {
+            var name = culture.TwoLetterISOLanguageName == "vi" ? daily.NameVi : daily.NameEn;
+            return string.Format(culture, Resources.VipCoinHistoryDaily, name);
+        }
+
         if (CashShopPurchaseReceipt.Read(reason) is { } purchase)
         {
             var name = culture.TwoLetterISOLanguageName == "vi" ? purchase.NameVi : purchase.NameEn;
