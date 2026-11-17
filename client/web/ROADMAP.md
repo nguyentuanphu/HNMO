@@ -716,3 +716,16 @@ touch-first; read from its store listing and release notes; ideas only). The web
      tracker window (link with the timetable #23), a repair-mode key, a hold-target mode for PvP, a PK countdown icon,
      a setting to stop hitting own guild/alliance, party-list buffing, party leader change, a jewel-upgrade
      confirmation, a PvP log on the website, per-map music, item lock command (exists as account safety).
+
+## Status 2026-11-17 (Sydney), read from GitHub
+- Antigravity (out of usage for ~5 days): DONE its integration draft #51 (antigravity-integration, all its PRs merged
+  in order, #13 renumbered to F5 24, 0 clashes, full tests green, Windows playtest docs/playtest-2026-11-17.md) and
+  Phase 2: #52 buffer NPC, #53 banned words, #54 offline trade, #55 rankings + add stats, #56 talismans, #57 titles,
+  #58 teleport NPC, #59 fixed item options, #60 event alerts, #61 crash watch. NOT STARTED: Phase 3 (14.19 item
+  definitions, 14.21 stats calculator, 14.24 3D world editor), escrow (section 16), and the admin tools moved to it.
+- Admin tools 14.18 gift box/mail, 14.16 ban manager, 14.15 character tools, 14.17/14.11 GM manager + in-game GM
+  commands, 14.20 news manager: moved BACK to ChatGPT (2026-11-17) because Antigravity is out for days.
+- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (rules only, not
+  working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
+- Second Antigravity (mobile, section 17): not started.
+- Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
