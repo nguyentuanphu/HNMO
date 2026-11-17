@@ -121,7 +121,7 @@ export class AccountVip {
       const state = await this.options.request<VipStateView>('/portal/account/vip/daily');
       if (generation !== this.generation || !this.authenticated) return;
       this.state = state;
-      if (state.status === 'DailyApplied') this.options.changed();
+      if (state.status === 'DailyApplied' || state.status === 'AlreadyClaimed') this.options.changed();
     } catch (error: unknown) {
       if (generation === this.generation && this.authenticated) this.options.error(error);
     } finally {
@@ -133,6 +133,10 @@ export class AccountVip {
     const status = this.state?.status;
     if (status === 'Applied') return this.t('applied');
     if (status === 'DailyApplied') return this.t('dailyApplied');
+    if (status === 'AlreadyClaimed') return this.t('claimed');
+    if (status === 'DailyPending') return this.t('dailyPending');
+    if (status === 'DailyUnavailable') return this.t('dailyUnavailable');
+    if (status === 'BalanceFull') return this.t('balanceFull');
     if (status === 'Pending' || this.operation) return this.t('pending');
     if (status === 'Online') return this.t('online');
     if (status === 'PriceChanged') return this.t('changed');

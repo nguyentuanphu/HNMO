@@ -69,7 +69,7 @@ for (const language of ['en', 'vi'] as const) {
     expect(requests).toHaveLength(2); expect(requests[1]).toEqual(requests[0]);
     await expect(root).toContainText('18/11/2026'); await expect(root).toContainText('01:30');
     await root.getByRole('button', { name: language === 'vi' ? 'Nhận coin hằng ngày' : 'Collect daily coins', exact: true }).click();
-    await expect(root).toContainText(language === 'vi' ? 'Bạn đã nhận coin VIP hôm nay.' : 'Today’s VIP coins have already been collected.');
+    await expect(root).toContainText(language === 'vi' ? 'Quà coin VIP hôm nay đã được ghi nhận.' : 'Today’s VIP bonus is already recorded.');
     await expect(page.locator('#changes')).toHaveText('2');
     await expect(page.locator('#errors')).toBeEmpty();
     const storage = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } }));

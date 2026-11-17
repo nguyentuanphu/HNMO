@@ -424,6 +424,95 @@ public class VipWalletTests
         Assert.That((await this.BuyAsync(Guid.NewGuid(), Now.AddHours(1)).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
     }
 
+    /// <summary>Daily credits use their purchased terms and cannot be collected twice after renewal or from another host.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task DailyBonusIsOnePendingCreditPerAccountDayAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        this._configuration.Levels[0].DailyCoins = 999;
+        var rewards = new VipDailyCoins(this._provider, this._game, this._wallet, this._store, NullLogger.Instance);
+        var first = await rewards.ClaimAsync(this._context, this._account, Now).ConfigureAwait(false);
+        var second = await rewards.ClaimAsync(this._context, this._account, Now.AddMinutes(1)).ConfigureAwait(false);
+        Assert.That((first.Status, first.Amount, second.Status), Is.EqualTo(("DailyApplied", 10, "AlreadyClaimed")));
+        var pending = await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false);
+        Assert.That(pending.Single().Amount, Is.EqualTo(10));
+        Assert.That(pending.Single().CoinType, Is.EqualTo(CashShopCoinType.GoblinPoints));
+        Assert.That(pending.Single().AppliedAt, Is.Null);
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        Assert.That(this._account.GoblinPoints, Is.Zero);
+        await this.BuyAsync(Guid.NewGuid(), Now.AddMinutes(2)).ConfigureAwait(false);
+        var other = new VipDailyCoins(this._provider, this._game, this._wallet, VipStateStore.CreateInMemory(), NullLogger.Instance);
+        Assert.That((await other.ClaimAsync(this._context, this._account, Now.AddMinutes(3)).ConfigureAwait(false)).Status, Is.EqualTo("AlreadyClaimed"));
+        Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Has.Count.EqualTo(1));
+    }
+
+    /// <summary>Day boundaries follow Sydney midnight and exact expiry cannot authorize another reward.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task DailyBonusUsesSydneyMidnightAndRealExpiryAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var rewards = new VipDailyCoins(this._provider, this._game, this._wallet, this._store, NullLogger.Instance);
+        var beforeMidnight = Now.Date.AddHours(12).AddMinutes(59);
+        Assert.That((await rewards.ClaimAsync(this._context, this._account, beforeMidnight).ConfigureAwait(false)).Status, Is.EqualTo("DailyApplied"));
+        Assert.That((await rewards.ClaimAsync(this._context, this._account, beforeMidnight.AddMinutes(2)).ConfigureAwait(false)).Status, Is.EqualTo("DailyApplied"));
+        var rows = await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false);
+        Assert.That(rows.Select(row => VipDailyCoins.ReadReceipt(row.Reason)!.SydneyDay), Is.EquivalentTo(new[] { "2026-11-17", "2026-11-18" }));
+        Assert.That((await rewards.ClaimAsync(this._context, this._account, Now.AddDays(7)).ConfigureAwait(false)).Status, Is.EqualTo("DailyUnavailable"));
+        Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Has.Count.EqualTo(2));
+    }
+
+    /// <summary>A full coin balance leaves the daily reward available rather than discarding it.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task DailyBonusWaitsForCoinCapacityAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        this._account.GoblinPoints = int.MaxValue;
+        var rewards = new VipDailyCoins(this._provider, this._game, this._wallet, this._store, NullLogger.Instance);
+        Assert.That((await rewards.ClaimAsync(this._context, this._account, Now).ConfigureAwait(false)).Status, Is.EqualTo("BalanceFull"));
+        Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Is.Empty);
+        this._account.GoblinPoints -= 10;
+        Assert.That((await rewards.ClaimAsync(this._context, this._account, Now).ConfigureAwait(false)).Status, Is.EqualTo("DailyApplied"));
+        Assert.That((await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false)).Single().Amount, Is.EqualTo(10));
+    }
+
+    /// <summary>Unconfirmed credit writes do not consume the day and a later healthy request records it once.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task FailedDailyCreditRemainsRetryableAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var failedContext = new Mock<IPlayerContext>();
+        failedContext.Setup(context => context.GetAccountIdByLoginNameAsync("ann", It.IsAny<CancellationToken>())).ReturnsAsync(this._account.GetId());
+        failedContext.Setup(context => context.CreateNew<CashShopCoinGrant>(It.IsAny<object?[]>())).Returns(new HNMO.Persistence.BasicModel.CashShopCoinGrant());
+        failedContext.Setup(context => context.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(false);
+        var failedProvider = new Mock<IPersistenceContextProvider>();
+        failedProvider.Setup(provider => provider.CreateNewPlayerContext(this._game)).Returns(failedContext.Object);
+        var failed = new VipDailyCoins(failedProvider.Object, this._game, this._wallet, this._store, NullLogger.Instance);
+        Assert.That((await failed.ClaimAsync(this._context, this._account, Now).ConfigureAwait(false)).Status, Is.EqualTo("DailyPending"));
+        Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Is.Empty);
+        var healthy = new VipDailyCoins(this._provider, this._game, this._wallet, this._store, NullLogger.Instance);
+        Assert.That((await healthy.ClaimAsync(this._context, this._account, Now).ConfigureAwait(false)).Status, Is.EqualTo("DailyApplied"));
+        Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Has.Count.EqualTo(1));
+    }
+
+    /// <summary>Separate requests serialize per account and the database reference remains one reward.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ConcurrentDailyRequestsKeepOneCreditAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        using var fresh = this._provider.CreateNewPlayerContext(this._game);
+        var account = (await fresh.GetAccountByLoginNameAsync("ann").ConfigureAwait(false))!;
+        var rewards = new VipDailyCoins(this._provider, this._game, this._wallet, this._store, NullLogger.Instance);
+        var other = new VipDailyCoins(this._provider, this._game, this._wallet, VipStateStore.CreateInMemory(), NullLogger.Instance);
+        var results = await Task.WhenAll(rewards.ClaimAsync(this._context, this._account, Now).AsTask(), other.ClaimAsync(fresh, account, Now).AsTask()).ConfigureAwait(false);
+        Assert.That(results.Select(result => result.Status), Is.EquivalentTo(new[] { "DailyApplied", "AlreadyClaimed" }));
+        Assert.That(await this._context.GetPendingCashShopCoinGrantsAsync(this._account.GetId()).ConfigureAwait(false), Has.Count.EqualTo(1));
+    }
+
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
         => this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, now, () => this._context.SaveChangesAsync());
 }
