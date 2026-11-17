@@ -116,7 +116,7 @@ void CMuSkillEditorUI::Render(bool& showEditor)
 
         // Row hover tooltip toggle (opt-in)
         ImGui::SameLine();
-        ImGui::Checkbox("Show tooltip on hover", &m_bShowHoverTooltip);
+        ImGui::Checkbox(I18N::Editor::ShowTooltipOnHover, &m_bShowHoverTooltip);
 
         ImGui::Separator();
 

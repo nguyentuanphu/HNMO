@@ -101,7 +101,7 @@ void CMuEditorUI::RenderToolbarOpen(bool& editorEnabled)
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
 
         // Draw the button (won't be interactive due to NoInputs flag)
-        ImGui::Button("Open Editor");
+        ImGui::Button(I18N::Editor::OpenEditor);
 
         // Get button rect for manual click detection
         ImVec2 buttonMin = ImGui::GetItemRectMin();
@@ -214,7 +214,7 @@ void CMuEditorUI::RenderBar(MuEditor::ToolWindows& windows)
 
 void CMuEditorUI::RenderWindowsMenu(MuEditor::ToolWindows& windows, SDL_Window* osWindow)
 {
-    if (!ImGui::BeginMenu("Windows"))
+    if (!ImGui::BeginMenu(I18N::Editor::Windows))
     {
         return;
     }
@@ -229,19 +229,20 @@ void CMuEditorUI::RenderWindowsMenu(MuEditor::ToolWindows& windows, SDL_Window* 
     ImGui::MenuItem(I18N::Editor::SoundMixerTitle, nullptr, &windows.soundMixer);
     ImGui::MenuItem(I18N::Editor::SoundEditorTitle, nullptr, &windows.soundEditor);
     ImGui::MenuItem(I18N::Editor::ServerList, nullptr, &windows.serverList);
-    ImGui::MenuItem("Skill Editor", nullptr, &windows.skillEditor);
-    ImGui::MenuItem("Dev Editor", nullptr, &windows.devEditor);
-    ImGui::MenuItem("Map Editor", nullptr, &windows.mapEditor);
-    ImGui::MenuItem("Effect Browser", nullptr, &windows.effectBrowser);
-    ImGui::MenuItem("Console", nullptr, &windows.console);
+    ImGui::MenuItem(I18N::Editor::SkillEditor, nullptr, &windows.skillEditor);
+    ImGui::MenuItem(I18N::Editor::DevEditor, nullptr, &windows.devEditor);
+    ImGui::MenuItem(I18N::Editor::MapEditor, nullptr, &windows.mapEditor);
+    ImGui::MenuItem(I18N::Editor::EffectBrowser, nullptr, &windows.effectBrowser);
+    ImGui::MenuItem(I18N::Editor::Console, nullptr, &windows.console);
     ImGui::Separator();
-    if (ImGui::MenuItem("Reset Layout"))
+    if (ImGui::MenuItem(I18N::Editor::ResetLayout))
     {
         m_bResetLayout = true;
     }
     // The window the menu is in full screen (F11 in any of the editor's own
     // windows); not while it is inside the game window.
-    if (ImGui::MenuItem("Fullscreen", "F11", MuEditor::PlatformWindows::IsFullscreen(osWindow), osWindow != nullptr))
+    if (ImGui::MenuItem(I18N::Editor::Fullscreen, "F11", MuEditor::PlatformWindows::IsFullscreen(osWindow),
+                        osWindow != nullptr))
     {
         MuEditor::PlatformWindows::ToggleFullscreen(osWindow);
     }
@@ -287,12 +288,12 @@ void CMuEditorUI::RenderUIScale()
     if (ImGui::Button("-##uiscale"))
         g_MuEditorCore.SetUIScale(g_MuEditorCore.GetUIScale() - UI_SCALE_STEP);
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Smaller editor UI");
+        ImGui::SetTooltip("%s", I18N::Editor::SmallerEditorUI);
     ImGui::Text("%d%%", (int)(g_MuEditorCore.GetUIScale() * 100.0f + 0.5f));
     if (ImGui::Button("+##uiscale"))
         g_MuEditorCore.SetUIScale(g_MuEditorCore.GetUIScale() + UI_SCALE_STEP);
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Bigger editor UI");
+        ImGui::SetTooltip("%s", I18N::Editor::BiggerEditorUI);
 }
 
 void CMuEditorUI::RenderLanguageSelector()
@@ -341,7 +342,7 @@ void CMuEditorUI::RenderCloseButton(bool& editorEnabled)
     ImGui::SameLine(std::max(rightAligned, ImGui::GetCursorPosX()));
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
-    if (ImGui::Button("Close Editor"))
+    if (ImGui::Button(I18N::Editor::CloseEditor))
     {
         editorEnabled = false;
     }

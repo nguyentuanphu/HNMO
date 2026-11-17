@@ -143,7 +143,7 @@ void CSkillEditorActions::RenderSaveButton()
             // Log change details first, then save completion message
             g_MuEditorConsoleUI.LogEditor(changeLog);
             g_MuEditorConsoleUI.LogEditor("=== SAVE COMPLETED ===");
-            ImGui::OpenPopup("Save Success");
+            ImGui::OpenPopup(I18N::Editor::PopupSaveSuccess);
         }
         else
         {
@@ -155,7 +155,7 @@ void CSkillEditorActions::RenderSaveButton()
             else
             {
                 g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToSaveItems);
-                ImGui::OpenPopup("Save Failed");
+                ImGui::OpenPopup(I18N::Editor::PopupSaveFailed);
             }
         }
     }
@@ -179,12 +179,12 @@ void CSkillEditorActions::RenderExportLegacyButton()
                 std::string(g_strSelectedML.begin(), g_strSelectedML.end()) +
                 "_Legacy.bmd";
             g_MuEditorConsoleUI.LogEditor("Exported skills as legacy format (32-byte names): " + filename_str);
-            ImGui::OpenPopup("Export S6E3 Success");
+            ImGui::OpenPopup(I18N::Editor::PopupExportS6E3Success);
         }
         else
         {
             g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToExportAsS6E3Format);
-            ImGui::OpenPopup("Export S6E3 Failed");
+            ImGui::OpenPopup(I18N::Editor::PopupExportS6E3Failed);
         }
     }
 
@@ -206,18 +206,18 @@ void CSkillEditorActions::RenderExportCSVButton()
             std::string filename_str = "Skills_" +
                 std::string(g_strSelectedML.begin(), g_strSelectedML.end()) + ".csv";
             g_MuEditorConsoleUI.LogEditor("Exported skills as CSV: " + filename_str);
-            ImGui::OpenPopup("Export CSV Success");
+            ImGui::OpenPopup(I18N::Editor::PopupExportCSVSuccess);
         }
         else
         {
             g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToExportSkillsAsCSV);
-            ImGui::OpenPopup("Export CSV Failed");
+            ImGui::OpenPopup(I18N::Editor::PopupExportCSVFailed);
         }
     }
 
     if (ImGui::IsItemHovered())
     {
-        ImGui::SetTooltip("Export all skills to CSV format");
+        ImGui::SetTooltip("%s", I18N::Editor::ExportAllSkillsToCSVFormat);
     }
 
     ImGui::PopStyleColor(2);

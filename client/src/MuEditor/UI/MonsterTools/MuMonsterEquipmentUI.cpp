@@ -510,7 +510,8 @@ void MuMonsterEquipmentUI::RenderSlotEditor(std::optional<MonsterItem>& item, Sl
         {
             int look = item->mountLook.empty() ? 0 : 1;
             ImGui::SetNextItemWidth(Width(1.5f));
-            if (ImGui::Combo(I18N::Editor::HorseLook, &look, "normal\0doppelganger\0"))
+            const char* looks[] = {I18N::Editor::HorseLookNormal, I18N::Editor::HorseLookDoppelganger};
+            if (ImGui::Combo(I18N::Editor::HorseLook, &look, looks, IM_ARRAYSIZE(looks)))
             {
                 item->mountLook = look == 0 ? std::string() : std::string("doppelganger");
                 changed = true;
