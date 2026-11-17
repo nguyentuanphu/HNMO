@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.GiftCodes;
 
 using System.Collections.Concurrent;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
@@ -87,6 +88,9 @@ public sealed class GiftCodeOwedReward
 /// </summary>
 public sealed class GiftCodeStoreData
 {
+    /// <summary>Gets or sets the random secret used to hash network and device identities; retain it with the claims.</summary>
+    public string IdentitySalt { get; set; } = string.Empty;
+
     /// <summary>Gets or sets the codes.</summary>
     public List<GiftCodeDefinition> Codes { get; set; } = new();
 
@@ -123,7 +127,7 @@ public sealed class GiftCodeStore
     private const string FeatureWrongTries = "giftCodes.wrongTries";
     private const string SectionKey = "giftCodes";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
-    private static readonly ConcurrentDictionary<string, GiftCodeStore> Shared = new(StringComparer.Ordinal);
+    private static readonly ConcurrentDictionary<string, Lazy<GiftCodeStore>> Shared = new(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
 
     private readonly HnmoStateStore? _stateStore;
     private readonly IHnmoPlayerStateRowBackend _rowBackend;
@@ -141,6 +145,21 @@ public sealed class GiftCodeStore
         this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
         this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
+        if (string.IsNullOrEmpty(this.Data.IdentitySalt))
+        {
+            if (this.Data.Claims.Values.Any(claims => claims.Any(c => c.StartsWith("n:", StringComparison.Ordinal) || c.StartsWith("d:", StringComparison.Ordinal))))
+            {
+                throw new InvalidDataException("Gift-code identity claims cannot be opened without their original salt.");
+            }
+
+            this.Data.IdentitySalt = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+            this.Changed();
+            this.SaveIfChanged();
+            if (this._stateStore is not null && this._changed)
+            {
+                throw new IOException("The gift-code identity salt could not be saved.");
+            }
+        }
     }
 
     /// <summary>Gets the lock which every access holds.</summary>
@@ -159,8 +178,10 @@ public sealed class GiftCodeStore
     /// <returns>The store.</returns>
     public static GiftCodeStore Open(string? fileName)
     {
-        var path = string.IsNullOrWhiteSpace(fileName) ? string.Empty : Path.GetFullPath(fileName.Trim(), AppContext.BaseDirectory);
-        return Shared.GetOrAdd(path, p => new GiftCodeStore(p.Length == 0 ? null : p));
+        var path = string.IsNullOrWhiteSpace(fileName) ? string.Empty : HnmoStateStore.ResolveStateFilePath(Path.GetFullPath(fileName.Trim(), AppContext.BaseDirectory))!;
+
+        // GetOrAdd may run competing factories; only the winning lazy value may create and persist a salt.
+        return Shared.GetOrAdd(path, p => new Lazy<GiftCodeStore>(() => new GiftCodeStore(p.Length == 0 ? null : p))).Value;
     }
 
     /// <summary>Marks the data as changed.</summary>
@@ -220,6 +241,7 @@ public sealed class GiftCodeStore
 
     private GiftCodeStoreData BuildServerOnlyData() => new()
     {
+        IdentitySalt = this.Data.IdentitySalt,
         Codes = this.Data.Codes,
         Uses = this.Data.Uses,
         UsedBatchCodes = this.Data.UsedBatchCodes,
@@ -257,6 +279,7 @@ public sealed class GiftCodeStore
                 SectionKey,
                 new GiftCodeStoreData
                 {
+                    IdentitySalt = data.IdentitySalt,
                     Codes = data.Codes,
                     Uses = data.Uses,
                     UsedBatchCodes = data.UsedBatchCodes,
