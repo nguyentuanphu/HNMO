@@ -4,6 +4,7 @@
 
 namespace HNMO.Web.AdminPanel.Services;
 
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text.Json;
@@ -56,9 +57,27 @@ public sealed class WebsiteMailSettingsStore(HnmoStateStore state, IDataProtecti
 
         lock (this._gate)
         {
-            var cipher = string.IsNullOrEmpty(password) ? this.ReadStored().ProtectedPassword : this._protector.Protect(password);
+            var previous = this.ReadStored();
+            var cipher = string.IsNullOrEmpty(password) ? previous.ProtectedPassword : this._protector.Protect(password);
             var next = settings with { Host = host, From = from, UserName = user, ProtectedPassword = user.Length == 0 ? string.Empty : cipher, HasPassword = false };
-            state.WriteSection(Section, next, JsonSerializerOptions.Default);
+            try
+            {
+                state.WriteSection(Section, next, JsonSerializerOptions.Default);
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+            {
+                // A failed unified flush must not leave new mail settings active in its in-memory section.
+                try
+                {
+                    state.WriteSection(Section, previous, JsonSerializerOptions.Default);
+                }
+                catch (Exception restoreException) when (restoreException is IOException or UnauthorizedAccessException)
+                {
+                    // WriteSection restores the in-memory value before attempting the still-unwritable disk flush.
+                }
+
+                throw;
+            }
         }
     }
 

@@ -29,16 +29,18 @@ public class EmailSettingsPageTests
     public async Task SavesSettingsWithHelpAndHintsAsync(string language)
     {
         var previous = CultureInfo.CurrentUICulture;
+        var previousResourceCulture = Resources.Culture;
         var directory = Directory.CreateTempSubdirectory("hnmo-mail-page-");
         try
         {
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
+            Resources.Culture = CultureInfo.CurrentUICulture;
             await using var context = new BunitContext();
             var store = new WebsiteMailSettingsStore(new HnmoStateStore(Path.Combine(directory.FullName, HnmoStateStore.StateFileName)), DataProtectionProvider.Create(directory));
             context.Services.AddSingleton(store);
             context.ComponentFactories.AddStub<HNMO.Web.Shared.Components.Breadcrumb>();
             var page = context.Render<EmailSettings>();
-            Assert.That(page.Find("h1").TextContent, Is.EqualTo(Resources.WebsiteMailTitle));
+            Assert.That(page.Find("h1").TextContent, Is.EqualTo(language == "vi" ? "Gửi email" : "Email delivery"));
             Assert.That(page.FindAll(".alert-info"), Is.Empty);
             page.Find(".page-help button").Click();
             Assert.That(page.Find(".alert-info").TextContent, Does.Contain("STARTTLS").And.Contain("587"));
@@ -57,6 +59,7 @@ public class EmailSettingsPageTests
         finally
         {
             CultureInfo.CurrentUICulture = previous;
+            Resources.Culture = previousResourceCulture;
             directory.Delete(true);
         }
     }

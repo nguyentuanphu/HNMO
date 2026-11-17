@@ -39,6 +39,19 @@ public class WebsiteMailSettingsTests
         Assert.Throws<InvalidOperationException>(() => this._store.CreateClient());
     }
 
+    /// <summary>A failed atomic file replacement cannot accidentally enable delivery in the cached unified section.</summary>
+    [Test]
+    public void FailedSaveLeavesThePreviousSettingsActive()
+    {
+        var file = Path.Combine(this._directory.FullName, "blocked.json");
+        var state = new HnmoStateStore(file);
+        Directory.CreateDirectory(file);
+        var store = new WebsiteMailSettingsStore(state, DataProtectionProvider.Create(this._directory));
+        Assert.Throws<IOException>(() => store.Save(Settings(), "test-secret"));
+        Assert.That(store.Read().Enabled, Is.False);
+        Assert.That(store.Read().HasPassword, Is.False);
+    }
+
     /// <summary>Only encrypted credentials persist; blank replacements retain them and a new service can decrypt them.</summary>
     [Test]
     public void ProtectsAndRetainsTheSmtpCredential()

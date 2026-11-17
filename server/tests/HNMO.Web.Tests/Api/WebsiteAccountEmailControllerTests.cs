@@ -66,7 +66,7 @@ public class WebsiteAccountEmailControllerTests
         this._login.Setup(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
         this._mail = new Mock<IWebsiteConfirmationMail>();
         this._mail.Setup(s => s.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Callback<string, string, string, CancellationToken>((_, code, _, _) => this._code = code).Returns(Task.CompletedTask);
+            .Callback<string, string, string, CancellationToken>((address, code, language, cancellationToken) => this._code = code).Returns(Task.CompletedTask);
         this._now = new DateTimeOffset(2026, 11, 17, 0, 0, 0, TimeSpan.Zero);
         this._clock = new Mock<TimeProvider>();
         this._clock.Setup(c => c.GetUtcNow()).Returns(() => this._now);

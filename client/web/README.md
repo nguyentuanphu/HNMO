@@ -216,6 +216,32 @@ grant, so it cannot deduct coins again. Purchase names are saved in English/Viet
 and rendered as text. Purchases made before recording was added cannot be reconstructed.
 Recording the other coin-spending paths remains unfinished.
 
+Confirmed email changes are configured at **Accounts → Email delivery** (`/email-settings`).
+Outgoing SMTP is off by default. Configure a verified sender and STARTTLS submission
+(usually port 587); implicit TLS on port 465 is not supported by this sender. A blank
+replacement password keeps the encrypted stored credential. Back up the existing
+data-protection key ring together with the server state. SMTP configuration uses the
+`websiteMail` section of `save/hnmo-state.json`; per-account challenges use the existing
+PostgreSQL feature-row backend. Only a salted hash of the random 24-character code is
+stored, and the new mailbox is protected with the server keys. No game password or
+confirmation code is saved in browser storage or logged.
+
+The player's Security form requests a code and explicitly confirms it after delivery.
+The server reserves the offline account and authenticates again before either mutation.
+Codes expire in fifteen minutes, are bound to the authorizing password/current mailbox,
+permit five incorrect attempts and can be resent after a minute. An `applying` intent
+is persisted before updating the account; a retry can finalize a saved email whose final
+challenge write failed. Consumed codes cannot be replayed. Tests use a fake sender;
+delivery through a real provider has not been certified.
+
+Thiết lập gửi thư tại **Tài khoản → Gửi email** (`/email-settings`); mặc định tính năng
+đang tắt. Dùng địa chỉ gửi đã được xác nhận và cổng STARTTLS (thường là 587). Người chơi
+thoát game, mở Bảo mật, lấy mã gửi đến email mới rồi nhập mã để xác nhận. Mã có hiệu lực
+15 phút, dùng một lần, tối đa năm lần nhập sai; lấy mã mới cách nhau một phút. Mật khẩu
+SMTP và email chờ xác nhận được mã hóa bằng khóa bảo vệ dữ liệu của máy chủ. Hãy sao lưu
+cả khóa này. Không lưu mật khẩu game hoặc mã xác nhận vào bộ nhớ trình duyệt hay nhật ký.
+Các kiểm thử dùng bộ gửi thư giả; chưa xác nhận gửi thành công qua dịch vụ email thật.
+
 Lịch sử coin được chia trang trực tiếp từ dữ liệu còn lưu, không còn bị giới hạn ở
 1.000 dòng mới nhất. Các lần mua hoặc tặng trong cửa hàng được ghi cùng lúc với số dư
 và vật phẩm trong kho cửa hàng. Mua thất bại không để lại giao dịch trừ coin; dòng lịch
