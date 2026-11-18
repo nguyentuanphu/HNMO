@@ -18,6 +18,7 @@ internal static class Website
         Forward(app, "/website/resets", "api/website/resets", options, clients);
         Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
         Forward(app, "/website/market", "api/website/market", options, clients);
+        Forward(app, "/website/escrow", "api/website/escrow", options, clients);
         Forward(app, "/website/jewel-bank", "api/website/jewel-bank", options, clients);
         Forward(app, "/website/catchup", "api/website/catchup", options, clients);
         Forward(app, "/website/season-plan", "api/website/season-plan", options, clients);

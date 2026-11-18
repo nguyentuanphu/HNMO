@@ -218,4 +218,54 @@ else if (this._configuration is { } c)
     {
         <p class="text-muted" id="ed-no-snapshots">@L("No daily economy snapshots recorded yet. Click Capture today's snapshot above.", "Chưa có dữ liệu thống kê kinh tế. Hãy nhấn Chụp thống kê hôm nay ở trên.")</p>
     }
+
+    <section class="card mt-3" id="ed-escrow-fees">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("Escrow contract fee income", "Thu nhập phí hợp đồng ký gửi")</h2>
+                <a class="btn btn-sm btn-outline-secondary" href="/escrow-contracts">@L("Manage escrow", "Quản lý ký gửi")</a>
+            </div>
+            @if (this._escrowFeeTotals.Count == 0)
+            {
+                <p class="text-muted mb-0" id="ed-escrow-fees-empty">@L("No completed escrow fees recorded yet.", "Chưa có phí hợp đồng ký gửi nào được ghi nhận.")</p>
+            }
+            else
+            {
+                <div class="row g-2 mb-2">
+                    @foreach (var row in this._escrowFeeTotals)
+                    {
+                        <div class="col-md-3">
+                            <div class="border rounded p-2">
+                                <div class="small text-muted">@row.Currency (@row.Count)</div>
+                                <div class="fw-bold">@row.TotalFee.ToString("N0", CultureInfo.InvariantCulture)</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0" id="ed-escrow-fees-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Time (Sydney)", "Thời gian (Sydney)")</th>
+                                <th>@L("Contract", "Hợp đồng")</th>
+                                <th>@L("Currency", "Loại tiền")</th>
+                                <th class="text-end">@L("Fee", "Phí")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in this._escrowFeeLedger.Take(10))
+                            {
+                                <tr>
+                                    <td>@entry.TimestampSydney</td>
+                                    <td><code>@entry.ContractId</code></td>
+                                    <td>@entry.Currency</td>
+                                    <td class="text-end">@entry.FeeAmount.ToString("N0", CultureInfo.InvariantCulture)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
 }
