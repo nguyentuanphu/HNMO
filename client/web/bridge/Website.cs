@@ -61,6 +61,7 @@ internal static class Website
         Forward(app, "/website/event-alerts", "api/website/event-alerts", options, clients);
         ForwardPost(app, "/website/event-alerts/subscribe", "api/website/event-alerts/subscribe", options, clients);
         ForwardPost(app, "/website/event-alerts/unsubscribe", "api/website/event-alerts/unsubscribe", options, clients);
+        Forward(app, "/website/news", "api/website/news", options, clients);
         Forward(app, "/website/items", "api/website/items", options, clients);
     }
 

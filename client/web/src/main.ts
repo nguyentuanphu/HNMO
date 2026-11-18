@@ -60,6 +60,7 @@ import { MountChainWindow } from './ui/mountChainWindow.js';
 import { RankingWindow } from './ui/rankingWindow.js';
 import { AddStatsWindow } from './ui/addStatsWindow.js';
 import { TeleportNpcWindow } from './ui/teleportNpcWindow.js';
+import { mountLoginNewsPanel, NewsChatHandler } from './ui/newsPanel.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -1838,6 +1839,9 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   state.ranking = ranking;
   connection.onPacket((bytes) => { ranking.handle(bytes); });
   for (const bytes of earlyPackets) ranking.handle(bytes);
+  const newsChat = new NewsChatHandler((text) => chat.add(text, 'system'));
+  connection.onPacket((bytes) => { newsChat.handle(bytes); });
+  for (const bytes of earlyPackets) newsChat.handle(bytes);
   window.addEventListener('hnmo-ranking-open', () => { ranking.open(); });
   window.addEventListener('hnmo-add-stats-open', () => { addStats.open(); });
   window.addEventListener('keydown', (event) => {
@@ -1998,6 +2002,7 @@ function initLogin() {
   }
   updateWebsiteLoginButtonLanguage();
   onLanguageChange(() => updateWebsiteLoginButtonLanguage());
+  mountLoginNewsPanel(document.getElementById('loginNewsPanel'));
 
   const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(3000) })
     .then((r) => (r.ok ? (r.json() as Promise<{ requireWebsiteLogin?: boolean; connectServerPort?: number }>) : null))

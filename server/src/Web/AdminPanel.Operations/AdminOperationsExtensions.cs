@@ -60,6 +60,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<MaintenanceToolsOperations>();
         services.AddScoped<EconomyDashboardOperations>();
         services.AddScoped<EventRewardsOperations>();
+        services.AddScoped<NewsAdminOperations>();
         return services;
     }
 }
