@@ -9,6 +9,8 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.EntityFrameworkCore;
+using HNMO.Interfaces;
+using Npgsql;
 
 /// <summary>
 /// Implementation of <see cref="IDatabaseConnectionSettingProvider"/> which takes the connection strings out of
@@ -91,6 +93,7 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
             ? AppContext.BaseDirectory
             : Path.GetDirectoryName(new Uri(assemblyLocation).LocalPath)!;
         var configurationFilePath = Path.Combine(baseDirectory, this._fileName);
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(baseDirectory));
         using var xmlReader = XmlReader.Create(File.OpenRead(configurationFilePath), settings);
         var serializer = new XmlSerializer(typeof(ConnectionSettings));
         if (serializer.CanDeserialize(xmlReader))
@@ -111,11 +114,13 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
 
                     if (Type.GetType(setting.ContextTypeName, false, true) is { } contextType)
                     {
+                        ApplyHostSettings(setting, hostSettings);
                         this.ApplyEnvironmentVariables(setting);
                         result.Add(contextType, setting);
                     }
                     else if (setting.ContextTypeName.EndsWith($".{nameof(TypedContext)}") || setting.ContextTypeName.EndsWith($".{nameof(TypedContext)}^1"))
                     {
+                        ApplyHostSettings(setting, hostSettings);
                         this.ApplyEnvironmentVariables(setting);
                         result.Add(typeof(TypedContext), setting);
                     }
@@ -128,6 +133,29 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         }
 
         return result;
+    }
+
+    private static void ApplyHostSettings(ConnectionSetting setting, HostSettings? hostSettings)
+    {
+        if (hostSettings is null || string.IsNullOrWhiteSpace(setting.ConnectionString))
+        {
+            return;
+        }
+
+        var builder = new NpgsqlConnectionStringBuilder(setting.ConnectionString)
+        {
+            Host = hostSettings.DatabaseHost,
+            Port = hostSettings.DatabasePort,
+            Database = hostSettings.DatabaseName,
+        };
+        if (string.IsNullOrEmpty(builder.Username)
+            || string.Equals(builder.Username, "postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            builder.Username = hostSettings.DatabaseUser;
+            builder.Password = hostSettings.DatabasePassword;
+        }
+
+        setting.ConnectionString = builder.ToString();
     }
 
     private void ApplyEnvironmentVariables(ConnectionSetting setting)

@@ -224,7 +224,7 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
 
         this.Logger.LogWarning("Client version changed");
 
-        foreach (var knownPlugIn in this.KnownPlugIns)
+        foreach (var knownPlugIn in this.KnownPlugIns.ToList())
         {
             if (!this._clientVersionProvider.ClientVersion.IsPlugInSuitable(knownPlugIn.GetType()))
             {

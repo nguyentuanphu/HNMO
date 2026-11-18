@@ -22,6 +22,7 @@ import { prepareDocument } from './rml.js';
 import * as THREE from 'three';
 import { nativeTextPx, uiScale } from './nativeText.js';
 import { showConfirm } from './gameDialogs.js';
+import { currentLanguage } from '../i18n.js';
 
 // The desktop's texts (I18N::Game).
 export const SHOP_TEXT = {
@@ -143,6 +144,10 @@ export class MyShopWindow extends ItemWindow<MyShopModel> {
   onPlace?: (from: { storage: number; slot: number; item: Item }, target: number) => boolean;
   /** A right click on a store item: its price. */
   onPriceClick?: (slot: number) => void;
+  /** Starts /offtrade for the open store. */
+  onOffTrade?: () => void;
+  private offTradeBtn: HTMLButtonElement | null = null;
+  private storeOpenState = false;
 
   constructor({ inventory, picked, onClose, onOpen, onCloseStore }: {
     inventory: Inventory; picked: PickedItem; onClose: () => void; onOpen: () => void; onCloseStore: () => void;
@@ -170,6 +175,31 @@ export class MyShopWindow extends ItemWindow<MyShopModel> {
       field.style.pointerEvents = 'auto';
       for (const type of ['keydown', 'keyup', 'keypress'] as const) field.addEventListener(type, (event) => event.stopPropagation());
     }
+    if (!this.offTradeBtn) {
+      const host = this.doc.root.querySelector('.shop-btn')?.parentElement ?? this.doc.root;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.id = 'hnmo_offtrade_btn';
+      btn.className = 'shop-btn';
+      btn.style.cssText = 'position:relative;padding:2px 8px;margin-left:4px;font-size:11px;background:#2b2316;color:#ffd875;border:1px solid #9c7936;border-radius:3px;cursor:pointer;';
+      btn.addEventListener('click', (event) => { event.stopPropagation(); this.onOffTrade?.(); });
+      host.appendChild(btn);
+      this.offTradeBtn = btn;
+    }
+    this.setStoreOpenState(this.storeOpenState);
+  }
+
+  /** Shows or hides the Off-trade button when the shop is open. */
+  setStoreOpenState(open: boolean): void {
+    this.storeOpenState = open;
+    const btn = this.offTradeBtn;
+    if (!btn) return;
+    const vi = currentLanguage() === 'vi';
+    btn.textContent = vi ? 'Treo Offline' : 'Off-trade';
+    btn.title = vi
+      ? 'Treo cửa hàng offline trong thành (/offtrade)'
+      : 'Keep this personal store open while offline (/offtrade)';
+    btn.style.display = open ? '' : 'none';
   }
 
   override boxOf(slot: number, item: Item) {
@@ -391,6 +421,7 @@ export class PersonalShop {
     itemWindows.dock(this.purchase, () => { this.closePurchase(); return true; });
     this.myShop.onPlace = (from, target) => this.place(from, target);
     this.myShop.onPriceClick = (slot) => { void this.changePrice(slot); };
+    this.myShop.onOffTrade = () => { void this.startOffTrade(); };
     this.purchase.onBuy = (slot, item) => { void this.buy(slot, item); };
     // The tooltips show the price (or that it needs one) above the item's lines.
     this.myShop.onHover = (item) => this.tooltip(this.myShop, item, true);
@@ -472,7 +503,21 @@ export class PersonalShop {
     m.open_tooltip = this.isOpen ? SHOP_TEXT.apply : SHOP_TEXT.open;
     m.close_locked = !this.isOpen;
     m.show_still_opening = this.isOpen;
+    this.myShop.setStoreOpenState(this.isOpen);
     this.options.itemWindows.refresh();
+  }
+
+  private async startOffTrade(): Promise<void> {
+    if (!this.isOpen) return;
+    const vi = currentLanguage() === 'vi';
+    const promptText = vi
+      ? 'Bật treo cửa hàng offline (/offtrade)? Nhân vật sẽ ở lại trong thành giữ cửa hàng mở và bạn sẽ thoát khỏi trò chơi.'
+      : 'Start offline trade (/offtrade)? Your character will stay in town with your store open and disconnect this session.';
+    if (!(await this.options.confirm(promptText))) return;
+    this.options.connection.send('ClientToServer', 'PublicChatMessage', {
+      Character: this.options.heroName,
+      Message: '/offtrade',
+    });
   }
 
   private tooltip(window: ItemWindow<ItemWindowModel>, item: Item | null, sale: boolean): void {
