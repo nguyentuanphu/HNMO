@@ -38,6 +38,9 @@ public static class AdminNavCatalog
                 new("account-safety", "players", "oi-lock-locked", "Account Safety", "Bảo mật tài khoản", "Second password (vault PIN), item lock, and login/trade audit.", "Mật khẩu cấp 2, khóa đồ và lịch sử đăng nhập/giao dịch.", true, "accounts", "market", "activity-log"),
                 new("audit", "players", "oi-clipboard", "Admin Audit", "Nhật ký quản trị", "Track every operator and API action recorded by the panel.", "Theo dõi mọi thao tác quản trị đã thực hiện.", false, "activity-log", "api-keys", "users"),
                 new("activity-log", "players", "oi-list", "Activity Log", "Nhật ký hoạt động", "Per-player trades, coins, drops, mixes, and resets timeline.", "Nhật ký giao dịch, coin, rớt đồ, quay đồ và reset.", false, "economy-dashboard", "account-safety", "audit"),
+                new("bans", "players", "oi-ban", "Bans & Mutes", "Khóa & Cấm chat", "Ban accounts/characters/IPs, mute chat, and inspect expiry.", "Khóa tài khoản, nhân vật, IP và cấm chat.", true, "accounts", "anti-cheat", "gm"),
+                new("character-tools", "players", "oi-person", "Character Tools", "Công cụ nhân vật", "Teleport, restore, rename, and adjust character stats safely.", "Dịch chuyển, khôi phục, đổi tên và chỉnh chỉ số nhân vật.", false, "accounts", "gm", "bans"),
+                new("gm", "players", "oi-badge", "GM Manager", "Quản lý GM", "Assign Game Master flags, command scopes, and GM activity.", "Phân quyền Game Master và theo dõi lệnh GM.", false, "accounts", "bans", "chat-commands"),
             ]),
         new(
             "economy",
@@ -51,6 +54,8 @@ public static class AdminNavCatalog
                 new("escrow-contracts", "economy", "oi-briefcase", "Escrow Contracts", "Giao dịch trung gian", "Manage F9 escrow contracts, holds, and dispute resolution.", "Quản lý hợp đồng giao dịch trung gian F9 và tranh chấp.", true, "market", "account-safety", "activity-log"),
                 new("jewel-bank", "economy", "oi-box", "Jewel Bank", "Ngân hàng ngọc", "Configure F7 shared jewel storage, fees, and master skill clears.", "Cấu hình Ngân hàng ngọc F7, phí và tẩy điểm master.", true, "resets-relife", "leftovers", "economy-dashboard"),
                 new("off-trade", "economy", "oi-dollar", "Offline Trade", "Bán hàng offline", "Configure /offtrade Zen or coin personal stores while offline.", "Cấu hình cửa hàng cá nhân /offtrade treo máy offline.", false, "market", "qol-settings", "account-safety"),
+                new("vip", "economy", "oi-star", "VIP Tiers & Coins", "Gói VIP & Xu", "Configure VIP Bronze/Silver/Gold tiers, EXP/drop boosts, and coins.", "Cấu hình gói VIP Đồng/Bạc/Vàng, hệ số EXP/rớt đồ và xu.", true, "servers", "cash-shop-catalog", "topup-milestones"),
+                new("merchants/legacy", "economy", "oi-list", "Merchant Stores (Classic)", "Cửa hàng NPC (Cũ)", "Legacy raw view of NPC merchant definitions and inventories.", "Giao diện quản lý cửa hàng NPC dạng bảng truyền thống.", false, "merchants", "item-definitions", "cash-shop-catalog"),
             ]),
         new(
             "events",
@@ -79,6 +84,8 @@ public static class AdminNavCatalog
                 new("leftovers", "events", "oi-reload", "Combining Leftovers", "Đổi đồ dư & Nâng hộp", "Set box upgrade recipes and surplus item exchange rewards.", "Công thức nâng cấp hộp F10 và gói đổi nguyên liệu dư.", false, "mounts", "jewel-bank", "vault-chaos-rewards"),
                 new("mounts", "events", "oi-badge", "Mount Chain", "Chuỗi thú cưỡi", "Configure Golden Boss shards and Shift+U mount upgrades.", "Rơi mảnh từ Boss Hoàng Kim và nâng cấp thú cưỡi Shift+U.", false, "world-bosses-rankings", "leftovers", "item-definitions"),
                 new("party-options", "events", "oi-link-intact", "Party Options & Spots", "Tổ đội & Bãi săn", "Manage /partypass auto-rejoin and preset P hunting spots.", "Quản lý mật khẩu tổ đội /partypass và danh sách bãi săn.", false, "teleport-npc", "buffer-npc", "qol-settings"),
+                new("gift-box", "events", "oi-inbox", "Gift Box & Mail", "Hòm quà & Thư", "Send in-game item/Zen/coin packages to players' Gift Box.", "Gửi thư kèm vật phẩm, Zen và coin vào Hòm quà người chơi.", true, "gift-codes", "missions-rewards", "accounts"),
+                new("news", "events", "oi-document", "News & Announcements", "Tin tức & Thông báo", "Publish bilingual EN/VI announcements and login panel news.", "Đăng tin tức song ngữ Anh/Việt cho website và màn hình đăng nhập.", true, "community", "event-alerts", "discord"),
             ]),
         new(
             "world",
@@ -138,6 +145,7 @@ public static class AdminNavCatalog
                 new("account/security", "host", "oi-lock-locked", "2FA & Security", "Bảo mật 2 lớp (2FA)", "Set up authenticator two-factor security for your admin login.", "Thiết lập xác thực hai lớp cho tài khoản quản trị.", false, "users", "api-keys", "audit"),
                 new("create-game-server", "host", "oi-plus", "Create Game Server", "Tạo Game Server mới", "Create a new game server instance definition.", "Tạo cấu hình máy chủ trò chơi mới.", false, "servers", "worlds", "setup"),
                 new("create-connect-server", "host", "oi-plus", "Create Connect Server", "Tạo Connect Server mới", "Create a new connect server gateway definition.", "Tạo cấu hình cổng kết nối Connect Server mới.", false, "servers", "create-game-server", "setup"),
+                new("email-settings", "host", "oi-envelope-closed", "Website Email (SMTP)", "Email Website (SMTP)", "Configure encrypted SMTP mail credentials for website verification.", "Cấu hình máy chủ gửi email SMTP mã hóa cho website.", false, "host-settings", "account/security", "users"),
             ]),
     ];
 

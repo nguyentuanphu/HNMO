@@ -370,6 +370,40 @@ public sealed class BanManagerService(IHnmoPlayerStateRowBackend backend)
         }
     }
 
+    /// <summary>Checks whether <paramref name="loginName"/> only has expired timed account ban records and no active account ban at <paramref name="nowUtc"/>.</summary>
+    /// <param name="loginName">Account login name.</param>
+    /// <param name="nowUtc">Current UTC timestamp.</param>
+    /// <returns><c>true</c> if timed account ban records exist and all have expired.</returns>
+    public bool HasExpiredAccountBanOnly(string loginName, DateTime nowUtc) =>
+        this.HasExpiredOnlyBan(BanTargetKind.AccountBan, loginName, nowUtc);
+
+    /// <summary>Checks whether <paramref name="characterName"/> only has expired timed character ban records and no active character ban at <paramref name="nowUtc"/>.</summary>
+    /// <param name="characterName">Character name.</param>
+    /// <param name="nowUtc">Current UTC timestamp.</param>
+    /// <returns><c>true</c> if timed character ban records exist and all have expired.</returns>
+    public bool HasExpiredCharacterBanOnly(string characterName, DateTime nowUtc) =>
+        this.HasExpiredOnlyBan(BanTargetKind.CharacterBan, characterName, nowUtc);
+
+    private bool HasExpiredOnlyBan(BanTargetKind kind, string target, DateTime nowUtc)
+    {
+        if (string.IsNullOrWhiteSpace(target))
+        {
+            return false;
+        }
+
+        var key = NormalizeTargetKey(kind, target);
+        lock (Gates.GetValue(backend, static _ => new()))
+        {
+            var matching = this.LoadAllLocked().Where(r => r.Kind == kind && r.TargetKey == key).ToList();
+            if (matching.Count == 0 || matching.Any(r => r.IsEnforcedAt(nowUtc)))
+            {
+                return false;
+            }
+
+            return matching.Any(r => r.Active && r.ExpiresAtUtc is { } exp && exp <= nowUtc);
+        }
+    }
+
     private static string NormalizeTargetKey(BanTargetKind kind, string target)
     {
         var prefix = kind switch

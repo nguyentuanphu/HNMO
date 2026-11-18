@@ -179,13 +179,24 @@ public sealed class WebsiteResetsController(
                     return this.BadRequest(new { error = "character" });
                 }
 
-                (result, plan) = action switch
+                Action? postSave = null;
+                switch (action)
                 {
-                    "reset" or "relife" => await this.ResetAsync(engine, context, account, character, action == "relife", names).ConfigureAwait(false),
-                    "add-stats" => (AddStats(character, request, (a, v) => Set(context, character, a, v)), null),
-                    "clear-master" => (await ClearMasterPaidAsync(engine.Configuration.Website, context, account, character).ConfigureAwait(false), null),
-                    _ => (ClearStatsPaid(engine.Configuration.Website, context, account, character), null),
-                };
+                    case "reset":
+                    case "relife":
+                        (result, plan, postSave) = await this.ResetAsync(engine, context, account, character, action == "relife", names).ConfigureAwait(false);
+                        break;
+                    case "add-stats":
+                        (result, plan) = (AddStats(character, request, (a, v) => Set(context, character, a, v)), null);
+                        break;
+                    case "clear-master":
+                        (result, plan) = (await ClearMasterPaidAsync(engine.Configuration.Website, context, account, character).ConfigureAwait(false), null);
+                        break;
+                    default:
+                        (result, plan) = (ClearStatsPaid(engine.Configuration.Website, context, account, character), null);
+                        break;
+                }
+
                 if (result == nameof(ResetResult.Ok) && !await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false))
                 {
                     result = "Failed";
@@ -193,6 +204,7 @@ public sealed class WebsiteResetsController(
 
                 if (result == nameof(ResetResult.Ok))
                 {
+                    postSave?.Invoke();
                     logger.LogInformation("Resets: {Login} did {Action} for {Character} on the website.", login, action, character.Name);
                 }
             }
@@ -418,7 +430,7 @@ public sealed class WebsiteResetsController(
         }
     }
 
-    private async Task<(string Result, object? Plan)> ResetAsync(ResetEngine engine, IContext context, Account account, Character character, bool relife, Func<short, short, string?> names)
+    private async Task<(string Result, object? Plan, Action? PostSave)> ResetAsync(ResetEngine engine, IContext context, Account account, Character character, bool relife, Func<short, short, string?> names)
     {
         var subject = SubjectOf(account, character);
         var now = DateTime.UtcNow;
@@ -428,23 +440,23 @@ public sealed class WebsiteResetsController(
         var plan = relife ? engine.PlanRelife(subject, now) : engine.PlanReset(subject, now, ResetSource.Website, dailyCap);
         if (plan.Result != ResetResult.Ok)
         {
-            return (plan.Result.ToString(), ResetStateWriter.Plan(plan, names));
+            return (plan.Result.ToString(), ResetStateWriter.Plan(plan, names), null);
         }
 
         var items = ResetApplier.PickItems(character.Inventory?.Items ?? Enumerable.Empty<Item>(), plan);
         if (items is null)
         {
-            return (nameof(ResetResult.NotEnoughItems), ResetStateWriter.Plan(plan, names));
+            return (nameof(ResetResult.NotEnoughItems), ResetStateWriter.Plan(plan, names), null);
         }
 
         if (plan.Zen > (character.Inventory?.Money ?? 0))
         {
-            return (nameof(ResetResult.NotEnoughZen), ResetStateWriter.Plan(plan, names));
+            return (nameof(ResetResult.NotEnoughZen), ResetStateWriter.Plan(plan, names), null);
         }
 
         if (!ResetApplier.TryTakeCoins(account, plan))
         {
-            return (nameof(ResetResult.NotEnoughCoins), ResetStateWriter.Plan(plan, names));
+            return (nameof(ResetResult.NotEnoughCoins), ResetStateWriter.Plan(plan, names), null);
         }
 
         ResetCoinHistory.Record(context, account, plan, relife ? CashShopBalanceReason.Relife : CashShopBalanceReason.Reset);
@@ -460,7 +472,6 @@ public sealed class WebsiteResetsController(
             await context.DeleteAsync(item).ConfigureAwait(false);
         }
 
-        TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, subject.Level, subject.Resets);
         ResetApplier.Apply(character, plan, false, a => Get(character, a), (a, v) => Set(context, character, a, v));
         if (engine.Configuration.MoveHome && character.CharacterClass?.HomeMap is { } home && home.ExitGates.FirstOrDefault(g => g.IsSpawnGate) is { } gate)
         {
@@ -469,9 +480,12 @@ public sealed class WebsiteResetsController(
             character.PositionY = (byte)((gate.Y1 + gate.Y2) / 2);
         }
 
-        engine.Record(subject, plan, now, ResetSource.Website);
-        TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, plan.LevelAfter, plan.ResetsAfter);
-        return (nameof(ResetResult.Ok), ResetStateWriter.Plan(plan, names));
+        return (nameof(ResetResult.Ok), ResetStateWriter.Plan(plan, names), () =>
+        {
+            TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, subject.Level, subject.Resets);
+            engine.Record(subject, plan, now, ResetSource.Website);
+            TopRacesPlugIn.ObserveCharacter(null, subject.CharacterId, subject.Name, subject.Login, subject.Class, plan.LevelAfter, plan.ResetsAfter);
+        });
     }
 
     private async Task<IActionResult> AnswerAsync(ResetEngine engine, GameConfiguration configuration, string login, string characterName, string result, object? plan, Func<short, short, string?> names, CancellationToken cancellationToken)

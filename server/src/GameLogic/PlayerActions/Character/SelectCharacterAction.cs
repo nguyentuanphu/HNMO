@@ -51,8 +51,10 @@ public class SelectCharacterAction
         }
 
         var now = DateTime.UtcNow;
-        var activeBan = (this._banService ?? BanManagerService.Default).FindActiveCharacterBan(candidate.Name, now);
-        if (activeBan is not null || candidate.CharacterStatus == CharacterStatus.Banned)
+        var banService = this._banService ?? BanManagerService.Default;
+        var activeBan = banService.FindActiveCharacterBan(candidate.Name, now);
+        var persistedBanned = candidate.CharacterStatus == CharacterStatus.Banned && !banService.HasExpiredCharacterBanOnly(candidate.Name, now);
+        if (activeBan is not null || persistedBanned)
         {
             var effective = activeBan ?? new BanRecord(
                 string.Empty,

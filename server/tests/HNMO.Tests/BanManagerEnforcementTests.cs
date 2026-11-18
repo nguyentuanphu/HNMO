@@ -145,6 +145,47 @@ public class BanManagerEnforcementTests
             Times.Once);
     }
 
+    /// <summary>Expired timed character and account bans allow entry even when persisted status still reflects the expired ban.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ExpiredTimedBansAllowLoginAndCharacterSelectionAsync()
+    {
+        var backend = new InMemoryHnmoPlayerStateRowBackend();
+        var service = new BanManagerService(backend);
+        var issuedAt = DateTime.UtcNow.AddHours(-2);
+        var expiredAt = DateTime.UtcNow.AddMinutes(-5);
+        service.Issue(BanTargetKind.AccountBan, "timedacc", "Cooldown", "Tạm khóa", "host", issuedAt, expiredAt);
+        service.Issue(BanTargetKind.CharacterBan, "TimedChar", "Cooldown", "Tạm khóa", "host", issuedAt, expiredAt);
+
+        Assert.That(service.HasExpiredAccountBanOnly("timedacc", DateTime.UtcNow), Is.True);
+        Assert.That(service.HasExpiredAccountBanOnly("manualacc", DateTime.UtcNow), Is.False);
+        Assert.That(service.HasExpiredCharacterBanOnly("TimedChar", DateTime.UtcNow), Is.True);
+
+        var gameContext = GameContextTestHelper.CreateGameContext([]);
+        var templateChar = PlayerTestHelper.CreateCharacter(gameContext);
+        var player = new SelectTestPlayer(gameContext);
+        var account = new HNMO.Persistence.BasicModel.Account { LoginName = "timedacc", State = AccountState.TemporarilyBanned };
+        var character = new HNMO.Persistence.BasicModel.Character
+        {
+            Name = "TimedChar",
+            CharacterStatus = CharacterStatus.Banned,
+            CharacterClass = templateChar.CharacterClass,
+            CurrentMap = templateChar.CurrentMap,
+            Inventory = new HNMO.Persistence.BasicModel.ItemStorage(),
+        };
+        account.Characters.Add(character);
+        player.Account = account;
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false);
+
+        var action = new SelectCharacterAction(service);
+        await action.SelectCharacterAsync(player, "TimedChar").ConfigureAwait(false);
+
+        Assert.That(player.Disconnected, Is.False);
+        Assert.That(player.SelectedCharacter, Is.SameAs(character));
+    }
+
     private static bool HasBanDetails(string json, string expectedEn, string expectedVi)
     {
         using var doc = JsonDocument.Parse(json);

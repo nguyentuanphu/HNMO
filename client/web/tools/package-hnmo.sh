@@ -117,13 +117,35 @@ echo "Bundling the web client (esbuild)"
 "$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/calculator.js" \
   --bundle --minify --format=esm \
   --outfile="$OUT/web/wwwroot/js/calculator.min.js" --log-level=warning
-find "$OUT/web/wwwroot/js" -name '*.js' ! -name 'main.min.js' ! -name 'website.min.js' ! -name 'topupPage.min.js' ! -name 'calculator.min.js' -delete
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/accountPage.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/accountPage.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/siteLanguage.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/siteLanguage.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/deviceId.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/deviceId.min.js" --log-level=warning
+"$WEB/node_modules/.bin/esbuild" "$OUT/web/wwwroot/js/giftCodeIdentity.js" \
+  --bundle --minify --format=esm \
+  --outfile="$OUT/web/wwwroot/js/giftCodeIdentity.min.js" --log-level=warning
+find "$OUT/web/wwwroot/js" -name '*.js' \
+  ! -name 'main.min.js' ! -name 'website.min.js' ! -name 'topupPage.min.js' ! -name 'calculator.min.js' \
+  ! -name 'accountPage.min.js' ! -name 'siteLanguage.min.js' ! -name 'deviceId.min.js' ! -name 'giftCodeIdentity.min.js' \
+  -delete
 find "$OUT/web/wwwroot/js" -mindepth 1 -type d -empty -delete
 # Point the packaged pages at the bundles (dev pages are untouched).
 sed -i 's#src="/js/main.js"#src="/js/main.min.js"#' "$OUT/web/wwwroot/index.html"
 sed -i 's#src="/js/website.js"#src="/js/website.min.js"#' "$OUT/web/wwwroot/home.html"
 sed -i 's#src="/js/topupPage.js"#src="/js/topupPage.min.js"#' "$OUT/web/wwwroot/topup.html"
 sed -i 's#src="/js/calculator.js"#src="/js/calculator.min.js"#' "$OUT/web/wwwroot/calculator.html"
+sed -i \
+  -e 's#src="/js/accountPage.js"#src="/js/accountPage.min.js"#g' \
+  -e 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#g' \
+  -e "s#/js/deviceId.js#/js/deviceId.min.js#g" \
+  -e "s#/js/giftCodeIdentity.js#/js/giftCodeIdentity.min.js#g" \
+  "$OUT/web/wwwroot/account.html"
+sed -i 's#src="/js/siteLanguage.js"#src="/js/siteLanguage.min.js"#' "$OUT/web/wwwroot/guide.html"
 # Every script a page loads must be in the folder (a missing one leaves the page empty).
 missing=0
 for page in "$OUT/web/wwwroot"/*.html; do

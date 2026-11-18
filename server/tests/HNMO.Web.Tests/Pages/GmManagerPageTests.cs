@@ -56,6 +56,7 @@ public sealed class GmManagerPageTests
             cfgSource.Setup(s => s.GetOwnerAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(cfg);
             var login = new Mock<ILoginServer>();
             login.Setup(s => s.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte>());
+            login.Setup(s => s.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
 
             var store = new GmPermissionStore(Path.Combine(tempDir, "gm.json"), Path.Combine(tempDir, "act.json"));
             var ops = new GmManagerOperations(provider, cfgSource.Object, login.Object, AdminOperationTestServices.CreateExecutor(), new AdminWriteSettings { ReadOnly = false })

@@ -35,6 +35,7 @@ using HNMO.Web.Shared.Services;
 using HNMO.Web.Tests.AdminAuth;
 using HNMO.Web.Tests.Mcp;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -297,6 +298,10 @@ public class EveryAdminPageHelpTests
         services.AddScoped<IDataService<BotAccount>>(sp => sp.GetRequiredService<BotAccountService>());
         services.AddSingleton(new LoggingConfigurationService(Path.Combine(Path.GetTempPath(), "hnmo-pagehelp-logging.json")));
         services.AddSingleton(new DiscordConfigurationService(Path.Combine(Path.GetTempPath(), "hnmo-pagehelp-discord.json"), configRoot));
+        services.AddDataProtection();
+        services.AddSingleton(sp => new WebsiteMailSettingsStore(
+            new HNMO.GameLogic.PlugIns.HnmoStateStore(Path.Combine(Path.GetTempPath(), $"hnmo-pagehelp-mail-{Guid.NewGuid():N}.json")),
+            sp.GetRequiredService<IDataProtectionProvider>()));
         services.AddAdminReadOperations();
 
         ui.ComponentFactories.AddStub<HNMO.Web.Shared.Components.Breadcrumb>();

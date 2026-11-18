@@ -262,9 +262,16 @@ public class LoginAction
 
     private async ValueTask<bool> ValidateAccountStateAsync(Player player, AccountState state, string? username = null)
     {
+        var now = DateTime.UtcNow;
         if (state == AccountState.Banned)
         {
-            if (username is not null && this.BanService.FindActiveLoginBlock(username, null, null, DateTime.UtcNow) is { } active)
+            var active = username is null ? null : this.BanService.FindActiveLoginBlock(username, null, null, now);
+            if (active is null && username is not null && this.BanService.HasExpiredAccountBanOnly(username, now))
+            {
+                return true;
+            }
+
+            if (active is not null)
             {
                 await player.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(active))).ConfigureAwait(false);
             }
@@ -275,7 +282,13 @@ public class LoginAction
 
         if (state == AccountState.TemporarilyBanned)
         {
-            if (username is not null && this.BanService.FindActiveLoginBlock(username, null, null, DateTime.UtcNow) is { } active)
+            var active = username is null ? null : this.BanService.FindActiveLoginBlock(username, null, null, now);
+            if (active is null && username is not null && this.BanService.HasExpiredAccountBanOnly(username, now))
+            {
+                return true;
+            }
+
+            if (active is not null)
             {
                 await player.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(active))).ConfigureAwait(false);
             }

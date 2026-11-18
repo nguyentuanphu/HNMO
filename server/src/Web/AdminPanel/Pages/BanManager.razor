@@ -9,9 +9,9 @@
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.BanManagerPageTitle" />
 
 <div class="ban-manager-page">
-    <div class="d-flex align-items-center justify-content-between mb-2">
-        <h1 class="mb-0">@Resources.BanManagerPageTitle</h1>
-        <div class="page-help">
+    <div class="page-help mb-2">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h1 class="mb-0">@Resources.BanManagerPageTitle</h1>
             <button type="button"
                     class="btn btn-sm btn-outline-info"
                     title="@L("Show or hide help for Bans & Mutes", "Hiện hoặc ẩn hướng dẫn")"
@@ -19,14 +19,14 @@
                 @L("How to use this page", "Hướng dẫn")
             </button>
         </div>
-    </div>
 
-    @if (this._showHelp)
-    {
-        <div class="alert alert-info py-2 mb-3" role="note">
-            @Resources.BanManagerPageHelp
-        </div>
-    }
+        @if (this._showHelp)
+        {
+            <div class="alert alert-info py-2 mb-3" role="note">
+                @Resources.BanManagerPageHelp
+            </div>
+        }
+    </div>
 
     @if (!string.IsNullOrWhiteSpace(this._statusMessage))
     {

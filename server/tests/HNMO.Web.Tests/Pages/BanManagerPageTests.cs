@@ -59,6 +59,7 @@ public class BanManagerPageTests
         source.Setup(value => value.GetOwnerAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(this._game);
         var login = new Mock<ILoginServer>();
         login.Setup(v => v.GetSnapshotAsync()).ReturnsAsync(new Dictionary<string, byte>());
+        login.Setup(v => v.TryReserveAccountAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
 
         this._rows = new InMemoryHnmoPlayerStateRowBackend();
         this._activities.Clear();

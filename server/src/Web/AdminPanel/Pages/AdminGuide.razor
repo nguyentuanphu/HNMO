@@ -7,22 +7,24 @@
 <PageTitle>HNMO: @L("Admin guide & recipes", "Cẩm nang quản trị & công thức")</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@L("Admin guide", "Cẩm nang quản trị")" />
 
-<div class="d-flex align-items-center gap-2 mb-2">
-    <h1 class="mb-0">@L("Admin guide & operational recipes", "Cẩm nang quản trị & hướng dẫn nhanh")</h1>
-    <button type="button" class="btn btn-sm btn-outline-info" id="admin-guide-help-toggle" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
-</div>
-<p class="text-muted">@L("Searchable host manual, step-by-step configuration recipes, and links to every management page.", "Tài liệu dành riêng cho quản trị viên kèm tìm kiếm, công thức thao tác nhanh và liên kết trực tiếp.")</p>
-
-@if (this._showHelp)
-{
-    <div class="alert alert-info page-help" role="region" id="admin-guide-help">
-        <strong>@L("Admin Guide tips:", "Mẹo tra cứu nhanh:")</strong>
-        <ul class="mb-0 mt-1">
-            <li>@L("Press Ctrl+K anywhere in AdminPanel to search guide articles alongside pages, players, items, and settings.", "Nhấn Ctrl+K ở bất kỳ đâu để tìm bài hướng dẫn cùng trang, người chơi, vật phẩm và cài đặt.")</li>
-            <li>@L("Recipes walk you through multi-step tasks such as weekend 2x EXP events, compensation batches, or server imports.", "Phần Công thức hướng dẫn từng bước các tác vụ nhiều bước như sự kiện x2 cuối tuần hoặc nhập dữ liệu server.")</li>
-        </ul>
+<div class="page-help mb-2">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <h1 class="mb-0">@L("Admin guide & operational recipes", "Cẩm nang quản trị & hướng dẫn nhanh")</h1>
+        <button type="button" class="btn btn-sm btn-outline-info" id="admin-guide-help-toggle" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
     </div>
-}
+    <p class="text-muted">@L("Searchable host manual, step-by-step configuration recipes, and links to every management page.", "Tài liệu dành riêng cho quản trị viên kèm tìm kiếm, công thức thao tác nhanh và liên kết trực tiếp.")</p>
+
+    @if (this._showHelp)
+    {
+        <div class="alert alert-info" role="region" id="admin-guide-help">
+            <strong>@L("Admin Guide tips:", "Mẹo tra cứu nhanh:")</strong>
+            <ul class="mb-0 mt-1">
+                <li>@L("Press Ctrl+K anywhere in AdminPanel to search guide articles alongside pages, players, items, and settings.", "Nhấn Ctrl+K ở bất kỳ đâu để tìm bài hướng dẫn cùng trang, người chơi, vật phẩm và cài đặt.")</li>
+                <li>@L("Recipes walk you through multi-step tasks such as weekend 2x EXP events, compensation batches, or server imports.", "Phần Công thức hướng dẫn từng bước các tác vụ nhiều bước như sự kiện x2 cuối tuần hoặc nhập dữ liệu server.")</li>
+            </ul>
+        </div>
+    }
+</div>
 
 <div class="input-group mb-3">
     <span class="input-group-text"><span class="oi oi-magnifying-glass" aria-hidden="true"></span></span>
@@ -34,14 +36,14 @@
            @oninput="this.OnQueryInput" />
     @if (!string.IsNullOrEmpty(this._query))
     {
-        <button type="button" class="btn btn-outline-secondary" @onclick="this.ClearQuery">@L("Clear", "Xóa")</button>
+        <button type="button" class="btn btn-outline-secondary" title="@L("Clear the guide search filter", "Xóa từ khóa tìm kiếm")" @onclick="this.ClearQuery">@L("Clear", "Xóa")</button>
     }
 </div>
 
 <div class="d-flex flex-wrap gap-2 mb-3">
-    <button type="button" class="btn btn-sm @(this._filter == "all" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this._filter = "all"'>@L("All", "Tất cả")</button>
-    <button type="button" class="btn btn-sm @(this._filter == "recipes" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this._filter = "recipes"'>@L("Recipes", "Công thức nhanh")</button>
-    <button type="button" class="btn btn-sm @(this._filter == "host" ? "btn-primary" : "btn-outline-secondary")" @onclick='() => this._filter = "host"'>@L("Host reference", "Tài liệu hệ thống")</button>
+    <button type="button" class="btn btn-sm @(this._filter == "all" ? "btn-primary" : "btn-outline-secondary")" title="@L("Show all guide sections", "Hiện toàn bộ mục hướng dẫn")" @onclick='() => this._filter = "all"'>@L("All", "Tất cả")</button>
+    <button type="button" class="btn btn-sm @(this._filter == "recipes" ? "btn-primary" : "btn-outline-secondary")" title="@L("Show step-by-step admin recipes", "Hiện các công thức thao tác nhanh")" @onclick='() => this._filter = "recipes"'>@L("Recipes", "Công thức nhanh")</button>
+    <button type="button" class="btn btn-sm @(this._filter == "host" ? "btn-primary" : "btn-outline-secondary")" title="@L("Show host architecture and reference sections", "Hiện tài liệu tham khảo hệ thống")" @onclick='() => this._filter = "host"'>@L("Host reference", "Tài liệu hệ thống")</button>
 </div>
 
 <div class="row g-3" id="admin-guide-articles">

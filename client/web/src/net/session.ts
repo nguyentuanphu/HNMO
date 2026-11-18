@@ -7,7 +7,6 @@ import type { ServerAddress } from './connection.js';
 import { read } from './packets.js';
 import type { PacketValues } from './packets.js';
 import { PACKETS } from './packets.generated.js';
-import { currentLanguage } from '../i18n.js';
 import { parseAppearance } from '../game/items.js';
 
 // The client identity the desktop client sends (Network/Server/WSclient.cpp: Version, Serial).

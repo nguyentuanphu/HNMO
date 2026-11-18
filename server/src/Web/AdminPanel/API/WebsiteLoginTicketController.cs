@@ -109,8 +109,11 @@ public sealed class WebsiteLoginTicketController(
         var service = banRows is not null ? new BanManagerService(banRows) : BanManagerService.Default;
         var clientIp = this.Request.Headers["X-HNMO-Client-Ip"].FirstOrDefault();
         var deviceId = this.Request.Headers["X-HNMO-Device-Id"].FirstOrDefault();
-        var active = service.FindActiveLoginBlock(loginName, clientIp, deviceId, DateTime.UtcNow);
-        if (active is null && state is not (AccountState.Banned or AccountState.TemporarilyBanned))
+        var now = DateTime.UtcNow;
+        var active = service.FindActiveLoginBlock(loginName, clientIp, deviceId, now);
+        var persistedBlocked = state is AccountState.Banned or AccountState.TemporarilyBanned
+            && !service.HasExpiredAccountBanOnly(loginName, now);
+        if (active is null && !persistedBlocked)
         {
             return null;
         }
@@ -122,13 +125,15 @@ public sealed class WebsiteLoginTicketController(
             loginName,
             state == AccountState.TemporarilyBanned ? "Account is temporarily banned." : "Account is permanently banned.",
             state == AccountState.TemporarilyBanned ? "Tài khoản đang bị tạm khóa." : "Tài khoản đã bị khóa vĩnh viễn.",
-            DateTime.UtcNow,
+            now,
             null,
             "system",
             true);
+        var payload = System.Text.Json.Nodes.JsonNode.Parse(BanManagerService.BuildNoticeJson(effective))!.AsObject();
+        payload["error"] = "blocked";
         return new ContentResult
         {
-            Content = BanManagerService.BuildNoticeJson(effective).Replace("{", "{\"error\":\"blocked\",", StringComparison.Ordinal),
+            Content = payload.ToJsonString(),
             ContentType = "application/json",
             StatusCode = StatusCodes.Status403Forbidden,
         };

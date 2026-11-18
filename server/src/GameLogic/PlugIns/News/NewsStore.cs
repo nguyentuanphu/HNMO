@@ -93,8 +93,14 @@ public sealed class NewsStore
             return DateTime.UtcNow;
         }
 
+        var zone = ResolveSydneyZone();
         var unspecified = DateTime.SpecifyKind(local, DateTimeKind.Unspecified);
-        return TimeZoneInfo.ConvertTimeToUtc(unspecified, ResolveSydneyZone());
+        if (zone.IsInvalidTime(unspecified))
+        {
+            unspecified = unspecified.AddHours(1);
+        }
+
+        return TimeZoneInfo.ConvertTimeToUtc(unspecified, zone);
     }
 
     /// <summary>Sanitizes an optional image URL to prevent script/data URI injection.</summary>

@@ -190,8 +190,25 @@ public sealed class HnmoStateStore
     {
         lock (this._lock)
         {
+            var hadPrevious = this._sections.TryGetValue(sectionKey, out var previous);
             this._sections[sectionKey] = JsonSerializer.SerializeToElement(value, options);
-            this.SaveLocked();
+            try
+            {
+                this.SaveLocked();
+            }
+            catch
+            {
+                if (hadPrevious)
+                {
+                    this._sections[sectionKey] = previous;
+                }
+                else
+                {
+                    this._sections.Remove(sectionKey);
+                }
+
+                throw;
+            }
         }
     }
 
@@ -376,6 +393,11 @@ public sealed class HnmoStateStore
         {
             bytes = "{}"u8.ToArray();
         }
+        if (Directory.Exists(this._filePath))
+        {
+            throw new IOException($"Unified state path '{this._filePath}' is a directory.");
+        }
+
         var tempPath = $"{this._filePath}.{Guid.NewGuid():N}.tmp";
         try
         {

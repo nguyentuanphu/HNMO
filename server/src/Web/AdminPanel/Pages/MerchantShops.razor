@@ -9,12 +9,14 @@
 <PageTitle>HNMO: @Resources.ShopEditorTitle</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ShopEditorTitle" />
 <NavigationLock OnBeforeInternalNavigation="this.BeforeNavigateAsync" ConfirmExternalNavigation="@(this._draft?.Summary.HasChanges is true)" />
-<div class="d-flex gap-3 align-items-center flex-wrap mb-3">
-    <h1 class="mb-0">@Resources.ShopEditorTitle</h1>
-    <button type="button" class="btn btn-outline-primary shop-help" @onclick="() => this._help = !this._help" title="@Resources.ShopEditorHelpTitle" aria-expanded="@this._help" aria-controls="shop-help-box"><span class="oi oi-question-mark" aria-hidden="true"></span> @Resources.ShopEditorHelpTitle</button>
-    <a class="ms-auto" href="merchants/legacy" title="@Resources.ShopEditorLegacy">@Resources.ShopEditorLegacy</a>
+<div class="page-help mb-3">
+    <div class="d-flex gap-3 align-items-center flex-wrap mb-2">
+        <h1 class="mb-0">@Resources.ShopEditorTitle</h1>
+        <button type="button" class="btn btn-outline-primary shop-help" @onclick="() => this._help = !this._help" title="@Resources.ShopEditorHelpTitle" aria-expanded="@this._help" aria-controls="shop-help-box"><span class="oi oi-question-mark" aria-hidden="true"></span> @Resources.ShopEditorHelpTitle</button>
+        <a class="ms-auto" href="merchants/legacy" title="@Resources.ShopEditorLegacy">@Resources.ShopEditorLegacy</a>
+    </div>
+    @if (this._help) { <div id="shop-help-box" class="alert alert-info">@Resources.ShopEditorHelp</div> }
 </div>
-@if (this._help) { <div id="shop-help-box" class="alert alert-info">@Resources.ShopEditorHelp</div> }
 @if (this._notice.Length > 0) { <div role="status" class="alert alert-info shop-notice">@this._notice</div> }
 @if (this._error.Length > 0) { <div role="alert" class="alert alert-danger shop-error">@this._error</div> }
 @if (this._loading) { <p>@Resources.Loading</p> }

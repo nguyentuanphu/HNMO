@@ -36,12 +36,13 @@ public sealed class CharacterToolsOperations(
     AdminWriteSettings settings)
 {
     /// <summary>Gets or sets an optional activity log state store key used by isolated unit tests.</summary>
-    public string? ActivityLogFileName { get; set; }
+    internal string? ActivityLogFileName { get; set; }
 
     /// <summary>Loads a character snapshot plus online status for the Character Tools UI.</summary>
     /// <param name="characterName">The exact character name.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The character snapshot.</returns>
+    [NotExposedToAgents("Admin panel Character Tools UI only.")]
     public async ValueTask<CharacterToolSnapshot> LoadCharacterAsync(string characterName, CancellationToken cancellationToken)
     {
         await executor.RequireAsync(AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
@@ -61,6 +62,7 @@ public sealed class CharacterToolsOperations(
     /// <summary>Loads available town maps, classes, and buff definitions from the active configuration.</summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>Maps, character classes, and buff effects.</returns>
+    [NotExposedToAgents("Admin panel Character Tools UI only.")]
     public async ValueTask<(IReadOnlyList<GameMapDefinition> Towns, IReadOnlyList<CharacterClass> Classes, IReadOnlyList<MagicEffectDefinition> Buffs)> LoadCatalogAsync(CancellationToken cancellationToken)
     {
         await executor.RequireAsync(AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
@@ -86,6 +88,7 @@ public sealed class CharacterToolsOperations(
     /// <param name="reason">The required operator reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A summary JSON payload.</returns>
+    [NotExposedToAgents("Admin panel Character Tools UI only.")]
     public async ValueTask<JsonObject> MoveToTownAsync(string characterName, ushort? targetMapNumber, string reason, CancellationToken cancellationToken)
     {
         await AdminChangeExecution.RequireAsync(executor, settings, AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
@@ -164,6 +167,7 @@ public sealed class CharacterToolsOperations(
     /// <param name="reason">The required operator reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The summary JSON payload.</returns>
+    [NotExposedToAgents("Admin panel Character Tools UI only.")]
     public async ValueTask<JsonObject> ApplyBuffAsync(string characterName, short effectNumber, int durationSeconds, string reason, CancellationToken cancellationToken)
     {
         await AdminChangeExecution.RequireAsync(executor, settings, AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
@@ -223,6 +227,7 @@ public sealed class CharacterToolsOperations(
     /// <param name="reason">The required operator reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The summary JSON payload.</returns>
+    [NotExposedToAgents("Admin panel Character Tools UI only.")]
     public async ValueTask<JsonObject> ClearBuffsAsync(string characterName, string reason, CancellationToken cancellationToken)
     {
         await AdminChangeExecution.RequireAsync(executor, settings, AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
@@ -276,6 +281,7 @@ public sealed class CharacterToolsOperations(
     /// <param name="request">The requested edits and reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The summary JSON payload.</returns>
+    [NotExposedToAgents("Admin panel Character Tools UI only.")]
     public async ValueTask<JsonObject> EditOfflineCharacterAsync(string characterName, CharacterEditRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);

@@ -21,10 +21,12 @@ using HNMO.PlugIns;
 /// <param name="persistence">Persistence context provider.</param>
 /// <param name="servers">Running game servers for live chat broadcast.</param>
 /// <param name="executor">Authorization and audit executor.</param>
+/// <param name="writeSettings">Optional read-only write protection settings.</param>
 public sealed class NewsAdminOperations(
     IPersistenceContextProvider persistence,
     IServerProvider servers,
-    AdminOperationExecutor executor)
+    AdminOperationExecutor executor,
+    AdminWriteSettings? writeSettings = null)
 {
     /// <summary>Loads current <see cref="NewsConfiguration"/> and all saved posts.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -45,13 +47,18 @@ public sealed class NewsAdminOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Saved post and number of game servers notified.</returns>
     [NotExposedToAgents("Admin panel News Manager UI only.")]
-    public ValueTask<(NewsPost Saved, int BroadcastServers)> SavePostAsync(
+    public async ValueTask<(NewsPost Saved, int BroadcastServers)> SavePostAsync(
         NewsPost post,
         string? sydneyPublishLocal,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(post);
-        return executor.ExecuteAsync(
+        if (writeSettings is not null)
+        {
+            await AdminChangeExecution.RequireAsync(executor, writeSettings, AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await executor.ExecuteAsync(
             AdminRoles.Administrator,
             "news.savePost",
             new
@@ -90,7 +97,7 @@ public sealed class NewsAdminOperations(
 
                 return (saved, broadcastServers);
             },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Broadcasts an existing post immediately to all online players.</summary>
@@ -98,9 +105,14 @@ public sealed class NewsAdminOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>True when post existed and broadcast completed, plus server count.</returns>
     [NotExposedToAgents("Admin panel News Manager UI only.")]
-    public ValueTask<(bool Found, int BroadcastServers)> BroadcastPostAsync(string id, CancellationToken cancellationToken)
+    public async ValueTask<(bool Found, int BroadcastServers)> BroadcastPostAsync(string id, CancellationToken cancellationToken)
     {
-        return executor.ExecuteAsync(
+        if (writeSettings is not null)
+        {
+            await AdminChangeExecution.RequireAsync(executor, writeSettings, AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await executor.ExecuteAsync(
             AdminRoles.Administrator,
             "news.broadcastPost",
             new { id },
@@ -117,7 +129,7 @@ public sealed class NewsAdminOperations(
                 return (Found: true, BroadcastServers: count);
             },
             cancellationToken,
-            res => res.Found);
+            res => res.Found).ConfigureAwait(false);
     }
 
     /// <summary>Deletes a news post by id.</summary>
@@ -125,9 +137,14 @@ public sealed class NewsAdminOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns><c>true</c> if deleted.</returns>
     [NotExposedToAgents("Admin panel News Manager UI only.")]
-    public ValueTask<bool> DeletePostAsync(string id, CancellationToken cancellationToken)
+    public async ValueTask<bool> DeletePostAsync(string id, CancellationToken cancellationToken)
     {
-        return executor.ExecuteAsync(
+        if (writeSettings is not null)
+        {
+            await AdminChangeExecution.RequireAsync(executor, writeSettings, AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await executor.ExecuteAsync(
             AdminRoles.Administrator,
             "news.deletePost",
             new { id },
@@ -137,7 +154,7 @@ public sealed class NewsAdminOperations(
                 return NewsStore.Open(cfg.FileName).Delete(id);
             },
             cancellationToken,
-            deleted => deleted);
+            deleted => deleted).ConfigureAwait(false);
     }
 
     private async ValueTask<int> BroadcastToServersAsync(NewsPost post)

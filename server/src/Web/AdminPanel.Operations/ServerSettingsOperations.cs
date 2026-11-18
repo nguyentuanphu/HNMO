@@ -22,10 +22,12 @@ using HNMO.Persistence.AdminAuth;
 /// <param name="persistence">Persistence context provider.</param>
 /// <param name="servers">Running servers registry.</param>
 /// <param name="executor">Authorization and audit executor.</param>
+/// <param name="writeSettings">Optional read-only write protection settings.</param>
 public sealed class ServerSettingsOperations(
     IPersistenceContextProvider persistence,
     IServerProvider servers,
-    AdminOperationExecutor executor)
+    AdminOperationExecutor executor,
+    AdminWriteSettings? writeSettings = null)
 {
     /// <summary>Loads editable settings for all configured game servers.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -68,10 +70,15 @@ public sealed class ServerSettingsOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated persisted snapshot.</returns>
     [NotExposedToAgents("Admin panel Servers page UI only.")]
-    public ValueTask<ServerSettingsModel> SaveAsync(ServerSettingsModel model, CancellationToken cancellationToken)
+    public async ValueTask<ServerSettingsModel> SaveAsync(ServerSettingsModel model, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(model);
-        return executor.ExecuteAsync(
+        if (writeSettings is not null)
+        {
+            await AdminChangeExecution.RequireAsync(executor, writeSettings, AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await executor.ExecuteAsync(
             AdminRoles.Administrator,
             "servers.saveSettings",
             new
@@ -123,7 +130,7 @@ public sealed class ServerSettingsOperations(
                     OnlinePlayers = model.OnlinePlayers,
                 };
             },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
     }
 
     private static async Task ApplyVipRequirementAsync(
@@ -150,19 +157,18 @@ public sealed class ServerSettingsOperations(
 
         var attrs = await context.GetAsync<AttributeDefinition>(cancellationToken).ConfigureAwait(false);
         var vipAttr = attrs.FirstOrDefault(a => a.Id == Stats.IsVip.Id);
-        if (vipAttr is null)
+        GameConfiguration? gc = definition.GameConfiguration;
+        if (gc is null)
         {
             var gameConfigs = await context.GetAsync<GameConfiguration>(cancellationToken).ConfigureAwait(false);
-            var gc = definition.GameConfiguration ?? gameConfigs.FirstOrDefault();
-            if (gc is not null)
-            {
-                vipAttr = gc.Attributes.FirstOrDefault(a => a.Id == Stats.IsVip.Id);
-            }
+            gc = gameConfigs.FirstOrDefault();
         }
 
+        vipAttr ??= gc?.Attributes.FirstOrDefault(a => a.Id == Stats.IsVip.Id);
         if (vipAttr is null)
         {
             vipAttr = context.CreateNew<AttributeDefinition>(Stats.IsVip.Id, Stats.IsVip.Designation, Stats.IsVip.Description);
+            gc?.Attributes.Add(vipAttr);
         }
 
         var req = context.CreateNew<AttributeRequirement>();

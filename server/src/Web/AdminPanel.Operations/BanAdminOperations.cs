@@ -26,6 +26,7 @@ using HNMO.Persistence.AdminAuth;
 /// <param name="clock">Authoritative clock.</param>
 /// <param name="rows">Optional isolated moderation row store (defaults to shared host row store).</param>
 /// <param name="activity">Optional isolated Activity Log callback.</param>
+/// <param name="writeSettings">Optional read-only write protection settings.</param>
 public sealed class BanAdminOperations(
     IPersistenceContextProvider persistence,
     IDataSource<GameConfiguration> configurations,
@@ -33,7 +34,8 @@ public sealed class BanAdminOperations(
     AdminOperationExecutor executor,
     TimeProvider clock,
     IHnmoPlayerStateRowBackend? rows = null,
-    Action<ActivityLogEntry>? activity = null)
+    Action<ActivityLogEntry>? activity = null,
+    AdminWriteSettings? writeSettings = null)
 {
     private readonly IHnmoPlayerStateRowBackend? _injectedRows = rows;
     private IHnmoPlayerStateRowBackend? _rows = rows;
@@ -51,6 +53,7 @@ public sealed class BanAdminOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Matching records and total count.</returns>
     [AdminOperation(AdminRole.Viewer)]
+    [NotExposedToAgents("Admin panel Ban & Mute Manager UI only.")]
     public ValueTask<(IReadOnlyList<BanRecord> Items, int Total)> SearchAsync(
         string? query,
         BanTargetKind? kindFilter,
@@ -75,7 +78,8 @@ public sealed class BanAdminOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The created moderation record.</returns>
     [AdminOperation(AdminRole.Operator, ReadOnly = false)]
-    public ValueTask<BanRecord> IssueAsync(
+    [NotExposedToAgents("Admin panel Ban & Mute Manager UI only.")]
+    public async ValueTask<BanRecord> IssueAsync(
         BanTargetKind kind,
         string target,
         string reasonEn,
@@ -83,7 +87,13 @@ public sealed class BanAdminOperations(
         DateTime? expiresAtUtc,
         string auditReason,
         CancellationToken cancellationToken)
-        => executor.ExecuteAsync(
+    {
+        if (writeSettings is not null)
+        {
+            await AdminChangeExecution.RequireAsync(executor, writeSettings, AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await executor.ExecuteAsync(
             AdminRoles.Operator,
             "moderation_issue",
             new { kind = kind.ToString(), target = kind is BanTargetKind.NetworkBan or BanTargetKind.DeviceBan ? "<hashed>" : target, expiresAtUtc, reason = auditReason },
@@ -113,21 +123,24 @@ public sealed class BanAdminOperations(
                             ?? throw new AdminOperationException($"Account '{canonicalTarget}' not found.", AdminOperationErrorKind.InvalidInput);
                         canonicalTarget = account.LoginName;
 
-                        // Synchronize persisted Account.State / ChatBanUntil safely only if offline.
-                        var snapshot = await login.GetSnapshotAsync().AsTask().WaitAsync(cancellationToken).ConfigureAwait(false);
-                        if (!snapshot.Keys.Contains(account.LoginName, StringComparer.OrdinalIgnoreCase))
-                        {
-                            if (kind == BanTargetKind.AccountBan)
+                        // Synchronize persisted Account.State / ChatBanUntil safely only if offline and reserved.
+                        await TryMutateOfflineAccountAsync(
+                            login,
+                            account.LoginName,
+                            cancellationToken,
+                            async () =>
                             {
-                                account.State = expiresAtUtc.HasValue ? AccountState.TemporarilyBanned : AccountState.Banned;
-                            }
-                            else
-                            {
-                                account.ChatBanUntil = expiresAtUtc ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
-                            }
+                                if (kind == BanTargetKind.AccountBan)
+                                {
+                                    account.State = expiresAtUtc.HasValue ? AccountState.TemporarilyBanned : AccountState.Banned;
+                                }
+                                else
+                                {
+                                    account.ChatBanUntil = expiresAtUtc ?? new DateTime(9999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+                                }
 
-                            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                        }
+                                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                            }).ConfigureAwait(false);
                     }
                     else
                     {
@@ -137,12 +150,15 @@ public sealed class BanAdminOperations(
                         canonicalTarget = character.Name;
                         if (kind == BanTargetKind.CharacterBan && owner is not null)
                         {
-                            var snapshot = await login.GetSnapshotAsync().AsTask().WaitAsync(cancellationToken).ConfigureAwait(false);
-                            if (!snapshot.Keys.Contains(owner.LoginName, StringComparer.OrdinalIgnoreCase))
-                            {
-                                character.CharacterStatus = CharacterStatus.Banned;
-                                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                            }
+                            await TryMutateOfflineAccountAsync(
+                                login,
+                                owner.LoginName,
+                                cancellationToken,
+                                async () =>
+                                {
+                                    character.CharacterStatus = CharacterStatus.Banned;
+                                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                                }).ConfigureAwait(false);
                         }
                     }
                 }
@@ -160,7 +176,8 @@ public sealed class BanAdminOperations(
                 this.RecordActivity(now, created, "issue", auditReason);
                 return created;
             },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
+    }
 
     /// <summary>Lifts an active ban or mute and restores account/character state if offline and no other active ban remains.</summary>
     /// <param name="recordId">The moderation record ID.</param>
@@ -168,8 +185,15 @@ public sealed class BanAdminOperations(
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The updated record.</returns>
     [AdminOperation(AdminRole.Operator, ReadOnly = false)]
-    public ValueTask<BanRecord> LiftAsync(string recordId, string unbanReason, CancellationToken cancellationToken)
-        => executor.ExecuteAsync(
+    [NotExposedToAgents("Admin panel Ban & Mute Manager UI only.")]
+    public async ValueTask<BanRecord> LiftAsync(string recordId, string unbanReason, CancellationToken cancellationToken)
+    {
+        if (writeSettings is not null)
+        {
+            await AdminChangeExecution.RequireAsync(executor, writeSettings, AdminRoles.Operator, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await executor.ExecuteAsync(
             AdminRoles.Operator,
             "moderation_lift",
             new { recordId, reason = unbanReason },
@@ -184,38 +208,88 @@ public sealed class BanAdminOperations(
                 {
                     var cfg = await configurations.GetOwnerAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
                     using var context = persistence.CreateNewPlayerContext(cfg);
-                    var snapshot = await login.GetSnapshotAsync().AsTask().WaitAsync(cancellationToken).ConfigureAwait(false);
                     if (updated.Kind == BanTargetKind.AccountBan
-                        && !this.Service.HasOtherActiveAccountBan(updated.TargetDisplay, now)
-                        && !snapshot.Keys.Contains(updated.TargetDisplay, StringComparer.OrdinalIgnoreCase)
-                        && await context.GetAccountByLoginNameAsync(updated.TargetDisplay, cancellationToken).ConfigureAwait(false) is { } account
-                        && account.State is AccountState.Banned or AccountState.TemporarilyBanned)
+                        && !this.Service.HasOtherActiveAccountBan(updated.TargetDisplay, now))
                     {
-                        account.State = AccountState.Normal;
-                        await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                        await TryMutateOfflineAccountAsync(
+                            login,
+                            updated.TargetDisplay,
+                            cancellationToken,
+                            async () =>
+                            {
+                                if (await context.GetAccountByLoginNameAsync(updated.TargetDisplay, cancellationToken).ConfigureAwait(false) is { } account
+                                    && account.State is AccountState.Banned or AccountState.TemporarilyBanned)
+                                {
+                                    account.State = AccountState.Normal;
+                                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                                }
+                            }).ConfigureAwait(false);
                     }
-                    else if (updated.Kind == BanTargetKind.AccountMute
-                        && !snapshot.Keys.Contains(updated.TargetDisplay, StringComparer.OrdinalIgnoreCase)
-                        && await context.GetAccountByLoginNameAsync(updated.TargetDisplay, cancellationToken).ConfigureAwait(false) is { } mutedAccount)
+                    else if (updated.Kind == BanTargetKind.AccountMute)
                     {
-                        mutedAccount.ChatBanUntil = null;
-                        await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                        await TryMutateOfflineAccountAsync(
+                            login,
+                            updated.TargetDisplay,
+                            cancellationToken,
+                            async () =>
+                            {
+                                if (await context.GetAccountByLoginNameAsync(updated.TargetDisplay, cancellationToken).ConfigureAwait(false) is { } mutedAccount)
+                                {
+                                    mutedAccount.ChatBanUntil = null;
+                                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                                }
+                            }).ConfigureAwait(false);
                     }
                     else if (updated.Kind == BanTargetKind.CharacterBan
                         && await context.GetAccountByCharacterNameAsync(updated.TargetDisplay, cancellationToken).ConfigureAwait(false) is { } owner
                         && owner.Characters.FirstOrDefault(c => c.Name.Equals(updated.TargetDisplay, StringComparison.OrdinalIgnoreCase)) is { } character
-                        && !snapshot.Keys.Contains(owner.LoginName, StringComparer.OrdinalIgnoreCase)
                         && character.CharacterStatus == CharacterStatus.Banned)
                     {
-                        character.CharacterStatus = CharacterStatus.Normal;
-                        await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                        await TryMutateOfflineAccountAsync(
+                            login,
+                            owner.LoginName,
+                            cancellationToken,
+                            async () =>
+                            {
+                                character.CharacterStatus = CharacterStatus.Normal;
+                                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                            }).ConfigureAwait(false);
                     }
                 }
 
                 this.RecordActivity(now, updated, "lift", unbanReason);
                 return updated;
             },
-            cancellationToken);
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    private static async ValueTask TryMutateOfflineAccountAsync(
+        ILoginServer login,
+        string loginName,
+        CancellationToken cancellationToken,
+        Func<Task> mutation)
+    {
+        var snapshot = await login.GetSnapshotAsync().AsTask().WaitAsync(cancellationToken).ConfigureAwait(false);
+        if (snapshot.Keys.Contains(loginName, StringComparer.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        var reservationId = System.Security.Cryptography.RandomNumberGenerator.GetInt32(byte.MaxValue + 1, int.MaxValue);
+        if (!await login.TryReserveAccountAsync(loginName, reservationId).AsTask().WaitAsync(cancellationToken).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        try
+        {
+            await mutation().ConfigureAwait(false);
+        }
+        finally
+        {
+            await login.ReleaseAccountReservationAsync(loginName, reservationId).ConfigureAwait(false);
+        }
+    }
 
     private void RecordActivity(DateTime nowUtc, BanRecord record, string action, string auditReason)
     {

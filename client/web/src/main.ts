@@ -960,38 +960,94 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
   });
 }
 
-async function fetchWorldLabels(): Promise<Map<number, string>> {
-  const labels = new Map<number, string>();
+interface WebsiteServerMeta {
+  worldLabel?: string;
+  description?: string;
+  vipOnly?: boolean;
+  pvpEnabled?: boolean;
+  experienceRate?: number;
+  dropRate?: number;
+  zenRate?: number;
+}
+
+async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
+  const meta = new Map<number, WebsiteServerMeta>();
   try {
     const response = await fetch('/website/data', {
       cache: 'no-store',
       signal: AbortSignal.timeout(1200),
     });
-    if (!response.ok) return labels;
+    if (!response.ok) return meta;
     const raw: unknown = await response.json();
-    if (typeof raw !== 'object' || raw === null || !('worlds' in raw) || !Array.isArray(raw.worlds)) {
-      return labels;
+    if (typeof raw !== 'object' || raw === null) {
+      return meta;
     }
-    for (const world of raw.worlds as unknown[]) {
-      if (typeof world !== 'object' || world === null) continue;
-      const entry = world as { nameEn?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
-      const name = typeof entry.nameEn === 'string' ? entry.nameEn : '';
-      const status = entry.isOpen === false && typeof entry.openingDateSydney === 'string' && entry.openingDateSydney
-        ? `Opens ${entry.openingDateSydney}`
-        : '';
-      const serverList = Array.isArray(entry.servers) ? (entry.servers as unknown[]) : [];
-      for (const srv of serverList) {
-        if (typeof srv === 'object' && srv !== null && 'id' in srv && typeof (srv as { id: unknown }).id === 'number') {
-          const id = (srv as { id: number }).id;
-          const full = status ? `${name} (${status})` : name;
-          if (full) labels.set(id, full);
+
+    const vi = currentLanguage() === 'vi';
+    if ('worlds' in raw && Array.isArray(raw.worlds)) {
+      for (const world of raw.worlds as unknown[]) {
+        if (typeof world !== 'object' || world === null) continue;
+        const entry = world as { nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+        const name = vi
+          ? (typeof entry.nameVi === 'string' && entry.nameVi ? entry.nameVi : typeof entry.nameEn === 'string' ? entry.nameEn : '')
+          : (typeof entry.nameEn === 'string' ? entry.nameEn : '');
+        const status = entry.isOpen === false && typeof entry.openingDateSydney === 'string' && entry.openingDateSydney
+          ? (vi ? `Mở ${entry.openingDateSydney}` : `Opens ${entry.openingDateSydney}`)
+          : '';
+        const serverList = Array.isArray(entry.servers) ? (entry.servers as unknown[]) : [];
+        for (const srv of serverList) {
+          if (typeof srv === 'object' && srv !== null && 'id' in srv && typeof (srv as { id: unknown }).id === 'number') {
+            const id = (srv as { id: number }).id;
+            const full = status ? `${name} (${status})` : name;
+            const existing = meta.get(id) ?? {};
+            if (full) existing.worldLabel = full;
+            meta.set(id, existing);
+          }
         }
       }
     }
+
+    if ('servers' in raw && Array.isArray(raw.servers)) {
+      for (const srv of raw.servers as unknown[]) {
+        if (typeof srv !== 'object' || srv === null) continue;
+        const s = srv as {
+          id?: unknown;
+          description?: unknown;
+          vipOnly?: unknown;
+          pvpEnabled?: unknown;
+          experienceRate?: unknown;
+          dropRate?: unknown;
+          zenRate?: unknown;
+        };
+        if (typeof s.id !== 'number') continue;
+        const existing = meta.get(s.id) ?? {};
+        if (typeof s.description === 'string' && s.description) existing.description = s.description;
+        if (typeof s.vipOnly === 'boolean') existing.vipOnly = s.vipOnly;
+        if (typeof s.pvpEnabled === 'boolean') existing.pvpEnabled = s.pvpEnabled;
+        if (typeof s.experienceRate === 'number') existing.experienceRate = s.experienceRate;
+        if (typeof s.dropRate === 'number') existing.dropRate = s.dropRate;
+        if (typeof s.zenRate === 'number') existing.zenRate = s.zenRate;
+        meta.set(s.id, existing);
+      }
+    }
   } catch {
-    /* Optional grouped world metadata when offline or standalone relay. */
+    /* Optional grouped world & VIP server metadata when offline or standalone relay. */
   }
-  return labels;
+  return meta;
+}
+
+export function describeServerChoice(id: number, load: number, meta?: WebsiteServerMeta, vi = currentLanguage() === 'vi'): string {
+  const baseName = meta?.description ? escapeHtml(meta.description) : (vi ? `Máy chủ ${id + 1}` : `Server ${id + 1}`);
+  const title = meta?.worldLabel ? `${escapeHtml(meta.worldLabel)} — ${baseName}` : baseName;
+  const vipBadge = meta?.vipOnly
+    ? (vi ? ' 🔒 <span style="color:var(--gold);font-weight:700">[Phòng VIP]</span>' : ' 🔒 <span style="color:var(--gold);font-weight:700">[VIP only]</span>')
+    : '';
+  const details: string[] = [`${load}% ${vi ? 'tải' : 'load'}`];
+  if (typeof meta?.experienceRate === 'number') details.push(`EXP ${meta.experienceRate}×`);
+  if (typeof meta?.dropRate === 'number' && meta.dropRate !== 1) details.push(`Drop ${meta.dropRate}×`);
+  if (typeof meta?.zenRate === 'number' && meta.zenRate !== 1) details.push(`Zen ${meta.zenRate}×`);
+  if (meta?.pvpEnabled === false) details.push('Non-PvP');
+  return `${title}${vipBadge}<small>${details.join(' · ')}</small>`;
 }
 
 async function playOnline(settings: LoginSettings, ticket?: string): Promise<void> {
@@ -999,19 +1055,14 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   state.connection = undefined;
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
-  const [servers, worldLabels] = await Promise.all([
+  const [servers, serverMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
-    fetchWorldLabels(),
+    fetchServerMetadata(),
   ]);
   if (!servers.length) throw new Error('The connect server lists no game servers.');
   const server = servers.length === 1
     ? servers[0]
-    : await chooseFrom(ui.servers, servers, (s) => {
-        const prefix = worldLabels.get(s.id);
-        return prefix
-          ? `${prefix} — Server ${s.id + 1}<small>${s.load}% load</small>`
-          : `Server ${s.id + 1}<small>${s.load}% load</small>`;
-      });
+    : await chooseFrom(ui.servers, servers, (s) => describeServerChoice(s.id, s.load, serverMeta.get(s.id)));
   ui.servers.hidden = true;
   const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);

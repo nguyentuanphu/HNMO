@@ -7,24 +7,26 @@
 <PageTitle>HNMO: @L("News manager", "Quản lý tin tức")</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@L("News manager", "Quản lý tin tức")" />
 
-<div class="d-flex align-items-center gap-2 mb-2">
-    <h1 class="mb-0">@L("News & announcements manager", "Quản lý tin tức & thông báo")</h1>
-    <button type="button" class="btn btn-sm btn-outline-info" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
-</div>
-<p class="text-muted">@L("Publish bilingual EN/VI announcements for the website homepage, the login/character screen news panel, and in-game chat notices (Sydney time).", "Đăng thông báo song ngữ Anh/Việt cho trang chủ website, bảng tin màn hình đăng nhập/chọn nhân vật và thông báo chat trong game (giờ Sydney).")</p>
-
-@if (this._showHelp)
-{
-    <div class="alert alert-info page-help" role="region" id="news-help">
-        <strong>@L("How to use News Manager:", "Hướng dẫn Quản lý tin tức:")</strong>
-        <ul class="mb-0 mt-1">
-            <li>@L("Publish time uses Australia/Sydney time. Future timestamps stay hidden on the homepage and login panel until their scheduled time.", "Thời gian đăng dùng múi giờ Australia/Sydney. Bài hẹn giờ tương lai sẽ ẩn trên website và màn hình đăng nhập cho tới giờ đăng.")</li>
-            <li>@L("Pinned posts stay at the top of the website homepage and login screen news list.", "Bài ghim luôn hiển thị trên cùng ở trang chủ và bảng tin màn hình đăng nhập.")</li>
-            <li>@L("Image URL is optional and accepts relative paths (/images/...) or http(s) URLs.", "Ảnh minh họa là tùy chọn, chấp nhận đường dẫn tương đối (/images/...) hoặc URL http(s).")</li>
-            <li>@L("Enable 'Notify online players in chat' to immediately push a notice packet (C2 F5 2A) into online players' chat box.", "Bật 'Thông báo chat cho người chơi đang online' để đẩy ngay thông báo vào khung chat trong game.")</li>
-        </ul>
+<div class="page-help mb-2">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <h1 class="mb-0">@L("News & announcements manager", "Quản lý tin tức & thông báo")</h1>
+        <button type="button" class="btn btn-sm btn-outline-info" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
     </div>
-}
+    <p class="text-muted">@L("Publish bilingual EN/VI announcements for the website homepage, the login/character screen news panel, and in-game chat notices (Sydney time).", "Đăng thông báo song ngữ Anh/Việt cho trang chủ website, bảng tin màn hình đăng nhập/chọn nhân vật và thông báo chat trong game (giờ Sydney).")</p>
+
+    @if (this._showHelp)
+    {
+        <div class="alert alert-info" role="region" id="news-help">
+            <strong>@L("How to use News Manager:", "Hướng dẫn Quản lý tin tức:")</strong>
+            <ul class="mb-0 mt-1">
+                <li>@L("Publish time uses Australia/Sydney time. Future timestamps stay hidden on the homepage and login panel until their scheduled time.", "Thời gian đăng dùng múi giờ Australia/Sydney. Bài hẹn giờ tương lai sẽ ẩn trên website và màn hình đăng nhập cho tới giờ đăng.")</li>
+                <li>@L("Pinned posts stay at the top of the website homepage and login screen news list.", "Bài ghim luôn hiển thị trên cùng ở trang chủ và bảng tin màn hình đăng nhập.")</li>
+                <li>@L("Image URL is optional and accepts relative paths (/images/...) or http(s) URLs.", "Ảnh minh họa là tùy chọn, chấp nhận đường dẫn tương đối (/images/...) hoặc URL http(s).")</li>
+                <li>@L("Enable 'Notify online players in chat' to immediately push a notice packet (C2 F5 2A) into online players' chat box.", "Bật 'Thông báo chat cho người chơi đang online' để đẩy ngay thông báo vào khung chat trong game.")</li>
+            </ul>
+        </div>
+    }
+</div>
 
 @if (this._isLoading)
 {
@@ -73,7 +75,7 @@ else
                     <input class="form-control" type="number" min="1" max="100" id="news-max-posts" @bind="this._configuration.MaxVisiblePosts" />
                 </div>
                 <div class="col-md-3">
-                    <button type="button" class="btn btn-primary" id="news-save-config" disabled="@this._isSaving" @onclick="this.SaveConfigAsync">
+                    <button type="button" class="btn btn-primary" id="news-save-config" title="@L("Save website, login panel, and chat notification settings", "Lưu cài đặt hiển thị và thông báo tin tức")" disabled="@this._isSaving" @onclick="this.SaveConfigAsync">
                         @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save settings", "Lưu cài đặt"))
                     </button>
                 </div>
@@ -127,10 +129,10 @@ else
                 </div>
             </div>
             <div class="d-flex gap-2 mt-3">
-                <button type="button" class="btn btn-success" id="news-save-post" disabled="@this._isSaving" @onclick="this.SavePostAsync">
+                <button type="button" class="btn btn-success" id="news-save-post" title="@L("Save and publish or schedule this announcement", "Lưu và đăng hoặc hẹn giờ bài viết này")" disabled="@this._isSaving" @onclick="this.SavePostAsync">
                     @(string.IsNullOrEmpty(this._editingId) ? L("Publish post", "Đăng bài viết") : L("Save changes", "Lưu thay đổi"))
                 </button>
-                <button type="button" class="btn btn-outline-secondary" id="news-reset-form" disabled="@this._isSaving" @onclick="this.ResetForm">
+                <button type="button" class="btn btn-outline-secondary" id="news-reset-form" title="@L("Clear inputs and start a new announcement", "Xóa biểu mẫu để soạn bài mới")" disabled="@this._isSaving" @onclick="this.ResetForm">
                     @L("New / clear form", "Soạn bài mới")
                 </button>
             </div>

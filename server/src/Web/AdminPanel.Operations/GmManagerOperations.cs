@@ -27,14 +27,15 @@ public sealed class GmManagerOperations(
     AdminWriteSettings settings)
 {
     /// <summary>Gets or sets the store override used in isolated unit tests.</summary>
-    public GmPermissionStore? StoreOverride { get; set; }
+    internal GmPermissionStore? StoreOverride { get; set; }
 
     /// <summary>Gets or sets an optional isolated activity log file name used in tests.</summary>
-    public string? ActivityLogFileName { get; set; }
+    internal string? ActivityLogFileName { get; set; }
 
     /// <summary>Loads current GM assignments, strict listing setting, and recent GM command audit entries.</summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>Assignments, strict flag, and audit entries.</returns>
+    [NotExposedToAgents("Admin panel GM Manager UI only.")]
     public async ValueTask<(IReadOnlyList<GmAssignment> Assignments, bool RequireListed, IReadOnlyList<GmCommandAuditEntry> Audits)> LoadAsync(CancellationToken cancellationToken)
     {
         await executor.RequireAsync(AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
@@ -46,6 +47,7 @@ public sealed class GmManagerOperations(
     /// <param name="reason">The required reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The async task.</returns>
+    [NotExposedToAgents("Admin panel GM Manager UI only.")]
     public async ValueTask SetRequireListedAsync(bool requireListed, string reason, CancellationToken cancellationToken)
     {
         await AdminChangeExecution.RequireAsync(executor, settings, AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
@@ -71,6 +73,7 @@ public sealed class GmManagerOperations(
     /// <param name="reason">The required operator reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The updated assignment.</returns>
+    [NotExposedToAgents("Admin panel GM Manager UI only.")]
     public async ValueTask<GmAssignment> AssignGmAsync(
         string characterName,
         GmPermission permissions,
@@ -96,14 +99,16 @@ public sealed class GmManagerOperations(
             {
                 if (promoteCharacterIfOffline && character.CharacterStatus != CharacterStatus.GameMaster)
                 {
-                    var snapshot = await login.GetSnapshotAsync().ConfigureAwait(false);
-                    if (snapshot.Keys.Any(k => string.Equals(k, account.LoginName, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new AdminOperationException("Character must be offline to change CharacterStatus to GameMaster.", AdminOperationErrorKind.InvalidInput);
-                    }
-
-                    character.CharacterStatus = CharacterStatus.GameMaster;
-                    await AdminChangeExecution.SaveAsync(ctx, cancellationToken).ConfigureAwait(false);
+                    await ExecuteWithOfflineReservationAsync(
+                        login,
+                        account.LoginName,
+                        "Character must be offline to change CharacterStatus to GameMaster.",
+                        cancellationToken,
+                        async () =>
+                        {
+                            character.CharacterStatus = CharacterStatus.GameMaster;
+                            await AdminChangeExecution.SaveAsync(ctx, cancellationToken).ConfigureAwait(false);
+                        }).ConfigureAwait(false);
                 }
 
                 var assignment = new GmAssignment
@@ -128,6 +133,7 @@ public sealed class GmManagerOperations(
     /// <param name="reason">The required operator reason.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>True if an assignment was removed.</returns>
+    [NotExposedToAgents("Admin panel GM Manager UI only.")]
     public async ValueTask<bool> RevokeGmAsync(string characterName, bool demoteCharacterIfOffline, string reason, CancellationToken cancellationToken)
     {
         await AdminChangeExecution.RequireAsync(executor, settings, AdminRoles.Administrator, cancellationToken).ConfigureAwait(false);
@@ -152,14 +158,16 @@ public sealed class GmManagerOperations(
                         var ch = account.Characters.FirstOrDefault(c => string.Equals(c.Name, trimmedName, StringComparison.OrdinalIgnoreCase));
                         if (ch is not null && ch.CharacterStatus == CharacterStatus.GameMaster)
                         {
-                            var snapshot = await login.GetSnapshotAsync().ConfigureAwait(false);
-                            if (snapshot.Keys.Any(k => string.Equals(k, account.LoginName, StringComparison.OrdinalIgnoreCase)))
-                            {
-                                throw new AdminOperationException("Character must be offline to demote CharacterStatus.", AdminOperationErrorKind.InvalidInput);
-                            }
-
-                            ch.CharacterStatus = CharacterStatus.Normal;
-                            await AdminChangeExecution.SaveAsync(ctx, cancellationToken).ConfigureAwait(false);
+                            await ExecuteWithOfflineReservationAsync(
+                                login,
+                                account.LoginName,
+                                "Character must be offline to demote CharacterStatus.",
+                                cancellationToken,
+                                async () =>
+                                {
+                                    ch.CharacterStatus = CharacterStatus.Normal;
+                                    await AdminChangeExecution.SaveAsync(ctx, cancellationToken).ConfigureAwait(false);
+                                }).ConfigureAwait(false);
                         }
                     }
                 }
@@ -169,6 +177,36 @@ public sealed class GmManagerOperations(
                 return removed;
             },
             cancellationToken).ConfigureAwait(false);
+    }
+
+    private static async ValueTask ExecuteWithOfflineReservationAsync(
+        ILoginServer login,
+        string loginName,
+        string onlineErrorMessage,
+        CancellationToken cancellationToken,
+        Func<Task> action)
+    {
+        var snapshot = await login.GetSnapshotAsync().ConfigureAwait(false);
+        if (snapshot.Keys.Any(k => string.Equals(k, loginName, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new AdminOperationException(onlineErrorMessage, AdminOperationErrorKind.InvalidInput);
+        }
+
+        var reservationId = System.Security.Cryptography.RandomNumberGenerator.GetInt32(byte.MaxValue + 1, int.MaxValue);
+        var reserved = await login.TryReserveAccountAsync(loginName, reservationId).AsTask().WaitAsync(cancellationToken).ConfigureAwait(false);
+        if (!reserved)
+        {
+            throw new AdminOperationException(onlineErrorMessage, AdminOperationErrorKind.Conflict);
+        }
+
+        try
+        {
+            await action().ConfigureAwait(false);
+        }
+        finally
+        {
+            await login.ReleaseAccountReservationAsync(loginName, reservationId).ConfigureAwait(false);
+        }
     }
 
     private static string ValidateCharacterName(string characterName)

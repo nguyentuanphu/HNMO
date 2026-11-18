@@ -142,4 +142,12 @@ public class NewsPlugInTests
             }
         }
     }
+
+    /// <summary>Verifies <see cref="NewsStore.ParseSydneyToUtc"/> does not throw on a Sydney DST spring-forward invalid local time.</summary>
+    [Test]
+    public void ParseSydneyToUtcHandlesDstSpringForwardGapSafely()
+    {
+        var utc = NewsStore.ParseSydneyToUtc("2026-10-04T02:30");
+        Assert.That(utc.Kind, Is.EqualTo(DateTimeKind.Utc));
+    }
 }

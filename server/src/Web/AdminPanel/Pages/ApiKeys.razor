@@ -87,16 +87,11 @@ else
                     <td>@HNMO.Web.AdminPanel.Auth.RoleCaption.Get(apiKey.Roles)</td>
                     <td>
                         <code>@apiKey.AllowedToolGroups</code>
-<<<<<<< HEAD
                         <button type="button" class="btn btn-sm btn-secondary" title="@Resources.ApiKeysHintChange" @onclick="@(() => this.OnEditToolGroupsAsync(apiKey))">@HNMO.Web.Shared.Properties.Resources.Change</button>
-=======
-                        <button type="button" class="btn btn-sm btn-secondary" @onclick="@(() => this.OnEditToolGroupsAsync(apiKey))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@HNMO.Web.Shared.Properties.Resources.Change</button>
->>>>>>> origin/chatgpt-admin-help
                     </td>
                     <td>
                         @if (apiKey.IsDisabled)
                         {
-<<<<<<< HEAD
                             <button type="button" class="btn btn-sm btn-success me-1" title="@Resources.ApiKeysHintEnable" @onclick="@(() => this.OnSetDisabledAsync(apiKey, false))">@Resources.Enable</button>
                         }
                         else
@@ -104,15 +99,6 @@ else
                             <button type="button" class="btn btn-sm btn-warning me-1" title="@Resources.ApiKeysHintDisable" @onclick="@(() => this.OnSetDisabledAsync(apiKey, true))">@Resources.Disable</button>
                         }
                         <button type="button" class="btn btn-sm btn-danger" title="@Resources.ApiKeysHintDelete" @onclick="@(() => this.OnDeleteAsync(apiKey))">@Resources.Delete</button>
-=======
-                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="@(() => this.OnSetDisabledAsync(apiKey, false))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEnable">@Resources.Enable</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-sm btn-warning me-1" @onclick="@(() => this.OnSetDisabledAsync(apiKey, true))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">@Resources.Disable</button>
-                        }
-                        <button type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnDeleteAsync(apiKey))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">@Resources.Delete</button>
->>>>>>> origin/chatgpt-admin-help
                     </td>
                 </tr>
             }
@@ -124,10 +110,6 @@ else
             }
             </tbody>
         </table>
-<<<<<<< HEAD
         <button type="button" class="btn btn-sm btn-success" title="@Resources.ApiKeysHintCreate" @onclick="@this.OnCreateNewAsync">@Resources.CreateApiKey</button>
-=======
-        <button type="button" class="btn btn-sm btn-success" @onclick="@this.OnCreateNewAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCreate">@Resources.CreateApiKey</button>
->>>>>>> origin/chatgpt-admin-help
     </div>
 }

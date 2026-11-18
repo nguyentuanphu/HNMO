@@ -272,14 +272,14 @@ public partial class ConfigurationSearch : IDisposable
                 }
             }
 
-            if (this.ServiceProvider.GetService<IPersistenceContextProvider>() is { } persistence)
+            if (this.ServiceProvider.GetService<IPersistenceContextProvider>() is { } persistence
+                && this.ServiceProvider.GetService<IDataSource<GameConfiguration>>() is { } configSource)
             {
-                using var context = persistence.CreateNewContext();
+                var config = await configSource.GetOwnerAsync(Guid.Empty, default).ConfigureAwait(true);
+                using var context = persistence.CreateNewPlayerContext(config);
                 var playerTag = L("Account", "Tài khoản");
-                var accounts = await context.GetAsync<HNMO.DataModel.Entities.Account>().ConfigureAwait(true);
-                foreach (var acc in accounts
-                    .Where(a => a.LoginName.Contains(query, StringComparison.OrdinalIgnoreCase))
-                    .Take(3))
+                var accounts = await context.SearchAccountsAsync(query, 0, 3).ConfigureAwait(true);
+                foreach (var acc in accounts)
                 {
                     this._searchResults.Add(new ConfigurationSearchEntry(
                         $"[{playerTag}] {acc.LoginName}",
