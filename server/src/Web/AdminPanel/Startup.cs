@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using HNMO.DataModel.Entities;
@@ -85,6 +86,7 @@ public class Startup
         services.AddScoped<IChangeNotificationService, ChangeNotificationService>();
         services.AddScoped<AdminUserManagementService>();
         services.AddScoped<CastleSiegeManagementService>();
+        services.TryAddSingleton<WorldEditorDataService>();
         services.AddAdminPanelAuth(this.Configuration);
     }
 

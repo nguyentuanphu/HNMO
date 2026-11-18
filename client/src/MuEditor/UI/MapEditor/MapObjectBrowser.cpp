@@ -2,6 +2,8 @@
 
 #ifdef _EDITOR
 
+#include "I18N/All.h"
+
 #include "MapObjectBrowser.h"
 #include "MapObjectImport.h"
 #include "ObjectThumbnail.h"
@@ -98,20 +100,19 @@ void CMapObjectBrowser::Render(int currentWorld, int* outImportedType)
 
     if (m_worlds.empty())
     {
-        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.6f, 1.0f),
-                           "No Data\\Object* folders found.");
+        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.6f, 1.0f), "%s", I18N::Editor::NoDataObjectFoldersFound);
         return;
     }
 
     if (m_sourceWorld < 0)
         LoadFileList(m_worlds.front());
 
-    ImGui::Text("Import an object model from any map onto this map (World %d).", currentWorld);
+    ImGui::Text(I18N::Editor::ImportAnObjectModelFromAnyMapOntoThisMapWorldD, currentWorld);
 
     // Source map selector.
     ImGui::SetNextItemWidth(160.0f);
     const std::string cur = "Object" + std::to_string(m_sourceWorld);
-    if (ImGui::BeginCombo("Source map", cur.c_str()))
+    if (ImGui::BeginCombo(I18N::Editor::SourceMap, cur.c_str()))
     {
         for (int w : m_worlds)
         {
@@ -125,31 +126,30 @@ void CMapObjectBrowser::Render(int currentWorld, int* outImportedType)
         ImGui::EndCombo();
     }
     ImGui::SameLine();
-    if (ImGui::Button("Rescan"))
+    if (ImGui::Button(I18N::Editor::Rescan))
     {
         ScanSourceWorlds();
         LoadFileList(m_sourceWorld);
     }
 
     ImGui::SetNextItemWidth(200.0f);
-    ImGui::InputTextWithHint("##filter", "filter by name...", m_filter, sizeof(m_filter));
+    ImGui::InputTextWithHint("##filter", I18N::Editor::FilterByName, m_filter, sizeof(m_filter));
 
     // Import button.
     const bool hasSel = (m_selected >= 0 && m_selected < (int)m_files.size());
     ImGui::BeginDisabled(!hasSel);
-    if (ImGui::Button("Use selected on current map") && hasSel)
+    if (ImGui::Button(I18N::Editor::UseSelectedOnCurrentMap) && hasSel)
     {
         const int type = Editor::ObjectImport::UseModelOnCurrentMap(
             currentWorld, m_sourceWorld, m_files[m_selected]);
         if (type >= 0)
         {
             if (outImportedType) *outImportedType = type;
-            m_status = "Imported to model slot " + std::to_string(type) +
-                       " - selected for placing.";
+            m_status = I18N::Format(I18N::Editor::MapImportSelected, {std::to_string(type)});
         }
         else
         {
-            m_status = "Import failed (no free slot or bad file). See console.";
+            m_status = I18N::Editor::MapImportFailed;
         }
     }
     ImGui::EndDisabled();
@@ -157,7 +157,7 @@ void CMapObjectBrowser::Render(int currentWorld, int* outImportedType)
         ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "%s", m_status.c_str());
 
     ImGui::Separator();
-    ImGui::Text("%d models in Object%d", (int)m_files.size(), m_sourceWorld);
+    ImGui::Text(I18N::Editor::DModelsInObjectD, (int)m_files.size(), m_sourceWorld);
 
     // Case-insensitive name filter.
     std::string filterLower;
@@ -240,7 +240,7 @@ void CMapObjectBrowser::Render(int currentWorld, int* outImportedType)
         if (thumbTexPtr != nullptr)
             clicked = ImGui::ImageButton("t", (ImTextureID)(intptr_t)thumbTexPtr, ImVec2(thumb, thumb));
         else if (m_thumbs[i] == THUMB_FAILED)
-            clicked = ImGui::Button("n/a", ImVec2(thumb, thumb));   // no preview available
+            clicked = ImGui::Button(I18N::Editor::NoPreview, ImVec2(thumb, thumb)); // no preview available
         else
             clicked = ImGui::Button("...", ImVec2(thumb, thumb));   // pending
 

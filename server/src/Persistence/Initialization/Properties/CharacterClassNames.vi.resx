@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="DarkWizard" xml:space="preserve"><value>Phù Thủy</value></data>
+  <data name="SoulMaster" xml:space="preserve"><value>Pháp Sư</value></data>
+  <data name="GrandMaster" xml:space="preserve"><value>Thiên Sứ</value></data>
+  <data name="DarkKnight" xml:space="preserve"><value>Chiến Binh</value></data>
+  <data name="BladeKnight" xml:space="preserve"><value>Kỵ Sĩ</value></data>
+  <data name="BladeMaster" xml:space="preserve"><value>Thiên Kiếm</value></data>
+  <data name="FairyElf" xml:space="preserve"><value>Tiên Nữ</value></data>
+  <data name="MuseElf" xml:space="preserve"><value>Thánh Nữ</value></data>
+  <data name="HighElf" xml:space="preserve"><value>Thiên Nữ</value></data>
+  <data name="MagicGladiator" xml:space="preserve"><value>Đấu Sĩ</value></data>
+  <data name="DuelMaster" xml:space="preserve"><value>Bậc thầy đấu tay đôi</value></data>
+  <data name="DarkLord" xml:space="preserve"><value>Chúa Tể</value></data>
+  <data name="LordEmperor" xml:space="preserve"><value>Thiên Vương</value></data>
+  <data name="Summoner" xml:space="preserve"><value>Thuật Sĩ</value></data>
+  <data name="BloodySummoner" xml:space="preserve"><value>Thuật Sư</value></data>
+  <data name="DimensionMaster" xml:space="preserve"><value>Phục Ma</value></data>
+  <data name="RageFighter" xml:space="preserve"><value>Thiết Binh</value></data>
+  <data name="FistMaster" xml:space="preserve"><value>Quyền Vương</value></data>
+</root>

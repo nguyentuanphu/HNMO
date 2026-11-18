@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @* <copyright file="GameServerSelectionField.razor" company="HNMO">
    Licensed under the MIT License. See LICENSE file in the project root for full license information.
    </copyright> *@
@@ -27,8 +28,8 @@
     else
     {
         <div class="d-flex gap-2 mb-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.SelectAll">@Resources.GameServerSelection_SelectAll</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ClearSelection">@Resources.GameServerSelection_Clear</button>
+            <button title="@HelpResources.PageHelpHintSelect" type="button" class="btn btn-sm btn-outline-primary" @onclick="this.SelectAll">@Resources.GameServerSelection_SelectAll</button>
+            <button title="@HelpResources.PageHelpHintClear" type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ClearSelection">@Resources.GameServerSelection_Clear</button>
         </div>
         @foreach (var server in this._servers)
         {

@@ -179,7 +179,7 @@ export class Combat {
     const skill = skillNumber ?? this.skills?.current() ?? null;
     if (skill === null || this.hero.dead) return false;
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    if (!plan || (plan.packet === 'none' && plan.special !== 'phoenixShot')) return false;
+    if (!plan || plan.packet === 'none') return false;
     if (target && target.dead) target = null;
     if (plan.needsTarget && !target) return false;
     this.pendingSkill = { skill, plan, target, cell: cell ?? (target ? { ...target.cell } : null) };
@@ -191,7 +191,7 @@ export class Combat {
   /** Whether the hero has a way to cast a skill now (a cast plan for its class and equipment). */
   castable(skill: number): boolean {
     const plan = skillCastPlan(skill, this.classIndex, this.castContext());
-    return plan !== null && (plan.packet !== 'none' || plan.special === 'phoenixShot');
+    return plan !== null && plan.packet !== 'none';
   }
 
   /** Whether a skill is about to be cast (walking into its range or waiting for the last swing). */
@@ -279,12 +279,6 @@ export class Combat {
     if (aim) this.hero.faceTo(aim);
     if (plan.heroAction !== null) this.hero.playOnce(plan.heroAction);
     const degrees = ((this.hero.angle * 180) / Math.PI + 360) % 360;
-    if (plan.special === 'phoenixShot') {
-      // UseSkillRagefighter: the hero stops; nothing is sent and nothing plays.
-      this.pendingSkill = null;
-      this.repeatSkill = null;
-      return;
-    }
     if (plan.special === 'rageAttack' && target && target !== this.hero) {
       this.connection.send('ClientToServer', 'RageAttackRequest', { SkillId: skill, TargetId: target.id });
       this.rageHits = { skill, target, action: plan.heroAction ?? -1, frames: plan.hitFrames ?? [3, 9999], state: 0, effectDone: false };
@@ -302,17 +296,24 @@ export class Combat {
       this.connection.send('ClientToServer', 'TargetedSkill', { SkillId: skill, TargetId: id });
       if (plan.instantMove && target && target !== this.hero) this.sendInstantMove(target, skill === SkillId.OCCUPY);
     } else if (plan.packet === 'area') {
-      // AreaSkill: at the hero's own tile or the target's, with the selected character when the skill names one.
-      const at = plan.areaAt === 'self' ? this.hero.cell : aim;
-      if (at) {
-        const extra = plan.areaExtraTarget && target && target !== this.hero ? target.id : 0xffff;
-        this.connection.send('ClientToServer', 'AreaSkill', { SkillId: skill, TargetX: at.x, TargetY: at.y, Rotation: areaSkillRotation(degrees, plan.rotationScale), ExtraTargetId: extra, AnimationCounter: 0 });
-      }
+      this.sendAreaSkill(pending, aim, degrees);
     }
     if (plan.special !== 'rageAttack' && plan.special !== 'darkSide') this.events.onSkill?.(this.hero, skill, target, aim);
     this.pendingSkill = null;
     // Auto attack keeps casting at a monster for attack skills (Attacking = 2).
     this.repeatSkill = plan.keepAutoAttack && target && target !== this.hero && !plan.friendly ? pending : null;
+  }
+
+  /** Send the area cast at action start; the server selects and damages its targets. */
+  private sendAreaSkill(pending: PendingSkill, aim: { x: number; y: number } | null, degrees: number): void {
+    const { skill, plan, target } = pending;
+    const at = plan.areaAt === 'self' ? this.hero.cell : aim;
+    if (!at) return;
+    const extra = plan.areaExtraTarget && target && target !== this.hero ? target.id : 0xffff;
+    this.connection.send('ClientToServer', 'AreaSkill', {
+      SkillId: skill, TargetX: at.x, TargetY: at.y, Rotation: areaSkillRotation(degrees, plan.rotationScale),
+      ExtraTargetId: extra, AnimationCounter: 0,
+    });
   }
 
   /**

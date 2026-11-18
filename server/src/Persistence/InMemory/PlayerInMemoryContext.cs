@@ -200,6 +200,21 @@ public class PlayerInMemoryContext : InMemoryContext, IPlayerContext
     }
 
     /// <inheritdoc />
+    public async ValueTask<IReadOnlyList<DataModel.Entities.CashShopCoinGrant>> GetCashShopCoinHistoryAsync(Guid accountId, int offset, int maximumCount, CancellationToken cancellationToken = default)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(offset);
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximumCount, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(maximumCount, 101);
+        var grants = await this.Provider.GetRepository<CashShopCoinGrant>().GetAllAsync(cancellationToken).ConfigureAwait(false);
+        return grants.Where(grant => grant.AccountId == accountId)
+            .OrderByDescending(grant => grant.CreatedAt)
+            .ThenByDescending(grant => grant.Id)
+            .Skip(offset)
+            .Take(maximumCount)
+            .ToList();
+    }
+
+    /// <inheritdoc />
     public async ValueTask<DataModel.Entities.CashShopCoinGrant?> GetCashShopCoinGrantByReferenceAsync(
         string reference,
         CancellationToken cancellationToken = default)

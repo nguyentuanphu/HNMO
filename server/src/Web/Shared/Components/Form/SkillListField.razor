@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @* <copyright file="SkillListField.razor" company="HNMO">
    Licensed under the MIT License. See LICENSE file in the project root for full license information.
    </copyright> *@
@@ -20,7 +21,7 @@
                 <tr>
                     <td>@(entry.Skill?.GetName() ?? Resources.UnknownSkill)</td>
                     <td class="text-end">
-                        <button type="button" class="btn btn-danger" @onclick="@(() => this.OnRemoveSkillClickAsync(entry))">
+                        <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-danger" @onclick="@(() => this.OnRemoveSkillClickAsync(entry))">
                             <span class="oi oi-trash" aria-hidden="true"></span> @Resources.Remove
                         </button>
                     </td>
@@ -30,7 +31,7 @@
             <tfoot>
                 <tr>
                     <td colspan="2" class="border-bottom-0">
-                        <button type="button" class="btn btn-primary" @onclick="@this.OnAddRegularSkillClickAsync">@Resources.AddSkill</button>
+                        <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-primary" @onclick="@this.OnAddRegularSkillClickAsync">@Resources.AddSkill</button>
                     </td>
                 </tr>
             </tfoot>
@@ -44,7 +45,7 @@
         <h5 class="card-header master-skill-tree-header">
             <span>@Resources.MasterSkillTree</span>
             <span class="master-skill-spent-points">@string.Format(Resources.SpentMasterPoints, this.SpentMasterPoints)</span>
-            <button type="button" class="btn btn-danger ms-auto"
+            <button title="@HelpResources.PageHelpHintReset" type="button" class="btn btn-danger ms-auto"
                     disabled="@(!this.MasterSkillEntries.Any())"
                     @onclick="@this.OnResetMasterSkillsClickAsync">
                 <span class="oi oi-reload" aria-hidden="true"></span> @Resources.ResetMasterSkillTree

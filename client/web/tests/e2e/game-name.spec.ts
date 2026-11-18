@@ -21,7 +21,7 @@ test('a name changed in the admin panel replaces the default everywhere', async 
   await expect(page.locator('#guideButton')).toHaveAttribute('aria-label', 'Open the Test Realm guide');
   await page.goto('/guide.html');
   await expect(page.locator('h1')).toHaveText('Test Realm Guide');
-  await expect(page).toHaveTitle('Test Realm Guide');
+  await expect(page).toHaveTitle('Test Realm · Guide');
   await page.goto('/account.html');
   await expect(page.locator('h1')).toHaveText('Test Realm');
   // Nothing a player sees says HNMO any more (the file name "Start HNMO" in the guide is a real file).

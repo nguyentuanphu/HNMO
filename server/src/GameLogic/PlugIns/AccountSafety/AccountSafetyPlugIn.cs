@@ -261,6 +261,33 @@ public class AccountSafetyPlugIn : IPlayerStateChangedPlugIn, IItemDropPlugIn, I
     }
 
     /// <summary>
+    /// Verifies the second password and immediately re-locks protected actions for this session (<c>/lock PIN</c>).
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="pin">The PIN; <c>null</c> when not four digits.</param>
+    /// <returns><see langword="true"/> when locked cleanly.</returns>
+    public async ValueTask<bool> LockPinAsync(Player player, string? pin)
+    {
+        var vietnamese = IsVietnamese(player);
+        var engine = this.GetEngine();
+        var login = player.Account?.LoginName ?? string.Empty;
+        var check = engine.CheckPin(login, player.Account?.VaultPassword, pin, DateTime.UtcNow);
+        Save(engine);
+        if (check.Result != PinCheckResult.Ok)
+        {
+            await player.ShowBlueMessageAsync(this.PinText(check, vietnamese)).ConfigureAwait(false);
+            return false;
+        }
+
+        Sessions.Remove(player);
+        await player.ShowBlueMessageAsync(vietnamese
+            ? "Đã khóa ngay mật khẩu cấp 2: hòm đồ, giao dịch và cửa hàng đã được bảo vệ."
+            : "Second password locked: vault, trades and personal store now require /unlock.").ConfigureAwait(false);
+        await this.SendStateAsync(player, false, new { type = "locked" }).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <summary>
     /// Notes a second password set in the game (the vault's own "set PIN"): it counts as entered.
     /// </summary>
     /// <param name="player">The player.</param>

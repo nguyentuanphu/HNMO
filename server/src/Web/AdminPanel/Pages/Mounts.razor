@@ -1,0 +1,90 @@
+@page "/mounts"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.MountChain
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Mount chain", "Chuỗi thú cưỡi")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Mount chain", "Chuỗi thú cưỡi")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Mount chain", "Chuỗi thú cưỡi")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMounts" />
+<p class="text-muted">@L("Configure progressive mount crafting & duplicate-mount upgrades (Uniria -> Dinorant -> Fenrir -> Golden Fenrir -> Royal Steed), Golden Boss Mount Shard drops, and modest PvE aura bonuses (Shift+U).", "Cấu hình chuỗi nâng cấp thú cưỡi từ Kỳ Lân -> Quái Điểu -> Sói Tinh -> Sói Hoàng Kim -> Chiến Mã, tỷ lệ rơi mảnh từ Boss Hoàng Kim và hiệu ứng PvE nhẹ (Shift+U).")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="mounts-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Feature is OFF by default. Enable to let Golden Boss kills drop Mount Shards and open the Shift+U Mount Chain window.", "Mặc định TẮT. Khi bật, tiêu diệt Boss Hoàng Kim sẽ rơi Mảnh Thú Cưỡi và mở bảng Shift+U.")</li>
+            <li>@L("Duplicate mount items in the bag are used as upgrade material for the next tier or salvaged into shards.", "Thú cưỡi trùng trong túi có thể dùng ép lên bậc tiếp theo hoặc tách thành mảnh.")</li>
+            <li>@L("Aura stats stay modest and PvE-oriented (defense, bonus EXP, Zen drop rate). Account collection is shown on home.html#mounts and the standalone account mountWidget.", "Chỉ số cộng thêm nhẹ nhàng (thủ, %EXP, %Zen) và bộ sưu tập hiển thị trên trang chủ / widget tài khoản.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Mount chain configuration unavailable.", "Không tải được cấu hình Chuỗi thú cưỡi.")</div>
+}
+else
+{
+    <section class="card mb-3" id="mounts-settings">
+        <div class="card-body">
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="mc-active" @bind="this._isActive" />
+                <label class="form-check-label" for="mc-active">@L("Enable Mount Chain", "Bật Chuỗi thú cưỡi")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="mc-chance" title="@L("Chance a Golden Boss kill grants shards", "Tỉ lệ rơi mảnh khi hạ Boss Hoàng Kim")">@L("Golden boss drop %", "Tỉ lệ rơi Boss Vàng %")</label>
+                    <input class="form-control" id="mc-chance" type="number" min="1" max="100" @bind="c.GoldenDropChancePercent" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="mc-shards" title="@L("Shards awarded per Golden Boss kill", "Số mảnh nhận mỗi lần hạ Boss Vàng")">@L("Shards / Golden kill", "Mảnh / Boss Vàng")</label>
+                    <input class="form-control" id="mc-shards" type="number" min="1" max="50" @bind="c.ShardsPerGoldenBoss" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="mc-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="mc-file" @bind="c.FileName" />
+                </div>
+            </div>
+
+            <h2 class="h5">@L("Mount chain tiers", "Các bậc thú cưỡi")</h2>
+            @foreach (var tier in c.Tiers)
+            {
+                <div class="border rounded p-2 mb-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-2"><label class="form-label small">ID</label><input class="form-control form-control-sm" @bind="tier.Id" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Name (EN)", "Tên (EN)")</label><input class="form-control form-control-sm" @bind="tier.NameEn" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Name (VI)", "Tên (VI)")</label><input class="form-control form-control-sm" @bind="tier.NameVi" /></div>
+                        <div class="col-sm-1"><label class="form-label small">@L("Shards", "Mảnh")</label><input class="form-control form-control-sm" type="number" min="0" @bind="tier.ShardsRequired" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Prev tier ID", "Bậc trước")</label><input class="form-control form-control-sm" @bind="tier.PreviousTierId" /></div>
+                        <div class="col-sm-1"><label class="form-label small">@L("Prev qty", "SL cũ")</label><input class="form-control form-control-sm" type="number" min="0" @bind="tier.PreviousMountsRequired" /></div>
+                        <div class="col-sm-1"><label class="form-label small">@L("PvE def", "Thủ PvE")</label><input class="form-control form-control-sm" type="number" min="0" @bind="tier.PveDefenseBonus" /></div>
+                        <div class="col-sm-1 text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Tiers.Remove(tier)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddTier" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add tier", "+ Thêm bậc")</button>
+                <button type="button" class="btn btn-primary" id="mc-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="mounts-summary">
+        <div class="card-body">
+            <h2 class="h5">@L("Live collection summary", "Thống kê bộ sưu tập")</h2>
+            <p class="mb-0">@L($"Accounts with unlocked mounts: {this._collectorsCount}", $"Số tài khoản đã mở khóa thú cưỡi: {this._collectorsCount}")</p>
+        </div>
+    </section>
+}

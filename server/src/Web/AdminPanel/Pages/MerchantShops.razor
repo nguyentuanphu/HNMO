@@ -1,0 +1,76 @@
+@page "/merchants"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using HNMO.Persistence
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Components
+@using HNMO.Web.ItemEditor
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<PageTitle>HNMO: @Resources.ShopEditorTitle</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ShopEditorTitle" />
+<NavigationLock OnBeforeInternalNavigation="this.BeforeNavigateAsync" ConfirmExternalNavigation="@(this._draft?.Summary.HasChanges is true)" />
+<div class="page-help mb-3">
+    <div class="d-flex gap-3 align-items-center flex-wrap mb-2">
+        <h1 class="mb-0">@Resources.ShopEditorTitle</h1>
+        <button type="button" class="btn btn-outline-primary shop-help" @onclick="() => this._help = !this._help" title="@Resources.ShopEditorHelpTitle" aria-expanded="@this._help" aria-controls="shop-help-box"><span class="oi oi-question-mark" aria-hidden="true"></span> @Resources.ShopEditorHelpTitle</button>
+        <a class="ms-auto" href="merchants/legacy" title="@Resources.ShopEditorLegacy">@Resources.ShopEditorLegacy</a>
+    </div>
+    @if (this._help) { <div id="shop-help-box" class="alert alert-info">@Resources.ShopEditorHelp</div> }
+</div>
+@if (this._notice.Length > 0) { <div role="status" class="alert alert-info shop-notice">@this._notice</div> }
+@if (this._error.Length > 0) { <div role="alert" class="alert alert-danger shop-error">@this._error</div> }
+@if (this._loading) { <p>@Resources.Loading</p> }
+else if (this._selected is null)
+{
+    <label class="form-label" for="merchant-search">@Resources.ShopEditorSearch</label>
+    <input id="merchant-search" class="form-control mb-3" @bind="this._search" @bind:event="oninput" @bind:after="this.ResetPageAsync" title="@Resources.ShopEditorSearch" />
+    @if (this._copySource is { } from)
+    {
+        <div class="card card-body mb-3 shop-copy">
+            <label class="form-label" for="shop-copy-target">@Resources.ShopEditorCopyTarget</label>
+            <select id="shop-copy-target" class="form-select" @bind="this._copyTarget" title="@Resources.ShopEditorCopyHint">
+                <option value="@Guid.Empty">@Resources.ShopEditorCopyTarget</option>
+                @foreach (var target in this._rows.Where(r => r.Merchant.GetId() != from.Merchant.GetId())) { <option value="@target.Merchant.GetId()">@target.Name — @target.Locations</option> }
+            </select>
+            <button type="button" class="btn btn-primary mt-2" disabled="@(this._copyTarget == Guid.Empty)" @onclick="this.CopyAsync" title="@Resources.ShopEditorCopyHint">@Resources.ShopEditorCopy</button>
+        </div>
+    }
+    <div class="table-responsive shop-list">
+        <QuickGrid Items="this.FilteredRows" Pagination="this._pagination" Theme="none">
+            <PropertyColumn Property="r => r.Name" Title="@Resources.ShopEditorNpc" Sortable="true" />
+            <PropertyColumn Property="r => r.Locations" Title="@Resources.ShopEditorLocation" />
+            <PropertyColumn Property="r => r.Count" Title="@Resources.ShopEditorCount" Sortable="true" />
+            <TemplateColumn Title="@Resources.ShopEditorPreview" Context="row">
+                <div class="shop-preview" aria-label="@Resources.ShopEditorPreview">
+                    <EditForm Model="row.Merchant">
+                        <MuItemStorage Value="row.Merchant.MerchantStore!" ValueExpression="() => row.Merchant.MerchantStore!" StorageType="StorageType.Merchant" />
+                    </EditForm>
+                </div>
+            </TemplateColumn>
+            <TemplateColumn Context="row">
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="button" class="btn btn-primary shop-open" @onclick="() => this.OpenAsync(row)" title="@Resources.ShopEditorEdit">@Resources.ShopEditorEdit</button>
+                    <button type="button" class="btn btn-outline-secondary shop-copy-start" @onclick="() => this.BeginCopy(row)" title="@Resources.ShopEditorCopyHint">@Resources.ShopEditorCopy</button>
+                </div>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+    @if (!this.FilteredRows.Any()) { <p>@Resources.ShopEditorEmpty</p> }
+    <LocalizedPaginator State="this._pagination" />
+}
+else if (this._draft is { } draft && this._context is { } context)
+{
+    <div class="d-flex gap-3 align-items-center flex-wrap mb-3">
+        <button type="button" class="btn btn-outline-secondary shop-back" disabled="@this._busy" @onclick="this.BackAsync" title="@Resources.ShopEditorBack">@Resources.ShopEditorBack</button>
+        <div><h2 class="h4 mb-0">@this._selected.Name</h2><small>@this._selected.Locations</small></div>
+        <button type="button" class="btn btn-outline-secondary ms-auto shop-reload" disabled="@this._busy" @onclick="this.ReloadAsync" title="@Resources.ShopEditorReload">@Resources.ShopEditorReload</button>
+    </div>
+    <ShopWorkspace @key="draft" Draft="draft" Definitions="this._definitions" Classes="this._classes" LookupContext="context" Busy="this._busy" Changed="this.StateHasChanged" />
+    <div class="shop-save-bar mt-3 p-3 border rounded">
+        <strong class="shop-summary" aria-live="polite">@SummaryText(draft.Summary)</strong>
+        <div class="d-flex gap-2 mt-2">
+            <button type="button" class="btn btn-primary shop-save" disabled="@(this._busy || !draft.Summary.HasChanges || !draft.IsValid())" @onclick="this.SaveAsync" title="@Resources.ShopEditorSave">@Resources.ShopEditorSave</button>
+            <button type="button" class="btn btn-outline-secondary shop-discard" disabled="@(this._busy || !draft.Summary.HasChanges)" @onclick="this.DiscardAsync" title="@Resources.ShopEditorDiscardHint">@Resources.ShopEditorDiscard</button>
+        </div>
+    </div>
+}

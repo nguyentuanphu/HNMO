@@ -52,6 +52,24 @@ public static class CashShopCoinExtensions
         }
     }
 
+    /// <summary>Applies one owned grant once in a tracked context, including a retry after an uncertain save.</summary>
+    /// <param name="account">The owning account.</param>
+    /// <param name="grant">The grant returned by persistence, which may already be marked in its change tracker.</param>
+    /// <param name="nowUtc">The current UTC time.</param>
+    /// <returns>Whether this call applied the balance change; the caller still saves account and marker together.</returns>
+    public static bool TryApplyCashShopCoinGrant(this Account account, CashShopCoinGrant grant, DateTime nowUtc)
+    {
+        if (grant.AppliedAt is not null || grant.AccountId != account.GetId() || !Enum.IsDefined(grant.CoinType))
+        {
+            return false;
+        }
+
+        var balance = (long)account.GetCashShopCoins(grant.CoinType) + grant.Amount;
+        account.SetCashShopCoins(grant.CoinType, (int)Math.Clamp(balance, 0, int.MaxValue));
+        grant.AppliedAt = nowUtc;
+        return true;
+    }
+
     /// <summary>
     /// Applies the pending coin grants to the balances of the account of the player,
     /// and marks them as applied in the same save.
@@ -87,9 +105,11 @@ public static class CashShopCoinExtensions
                     continue;
                 }
 
-                var balance = (long)account.GetCashShopCoins(grant.CoinType) + grant.Amount;
-                account.SetCashShopCoins(grant.CoinType, (int)Math.Clamp(balance, 0, int.MaxValue));
-                grant.AppliedAt = now;
+                if (!account.TryApplyCashShopCoinGrant(grant, now))
+                {
+                    continue;
+                }
+
                 player.Logger.LogInformation(
                     "Applied the grant of {amount} {coinType} to the account of player {player}, reason: {reason}.",
                     grant.Amount,

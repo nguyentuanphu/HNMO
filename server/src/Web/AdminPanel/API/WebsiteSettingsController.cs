@@ -12,7 +12,7 @@ using HNMO.Persistence;
 
 /// <summary>
 /// The website's settings (the "Website" plug-in). The secret admin path only goes to the website on
-/// this computer; visitors only ever get the Google client id, which is public by nature.
+/// this computer; visitors receive only public appearance and sign-in settings.
 /// </summary>
 [Route("api/website/settings")]
 [AllowAnonymous]
@@ -30,7 +30,7 @@ public class WebsiteSettingsController : Controller
     }
 
     /// <summary>
-    /// What the website's pages may know: the Google client id (empty: no Google sign-in).
+    /// What the website's pages may know: the theme and Google client id (empty: no Google sign-in).
     /// </summary>
     /// <returns>The public settings.</returns>
     [HttpGet("public")]
@@ -38,7 +38,7 @@ public class WebsiteSettingsController : Controller
     {
         this.Response.Headers.CacheControl = "no-cache";
         var config = await this.ReadAsync().ConfigureAwait(false);
-        return this.Json(new { googleClientId = config.GoogleClientId.Trim() });
+        return this.Json(new { googleClientId = config.GoogleClientId.Trim(), theme = config.Theme.ToString().ToLowerInvariant(), requireWebsiteLogin = config.RequireWebsiteLogin });
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class WebsiteSettingsController : Controller
 
         this.Response.Headers.CacheControl = "no-store";
         var config = await this.ReadAsync().ConfigureAwait(false);
-        return this.Json(new { adminPath = config.AdminPath.Trim(), googleClientId = config.GoogleClientId.Trim() });
+        return this.Json(new { adminPath = config.AdminPath.Trim(), googleClientId = config.GoogleClientId.Trim(), requireWebsiteLogin = config.RequireWebsiteLogin });
     }
 
     private async Task<WebsiteConfiguration> ReadAsync() =>

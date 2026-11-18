@@ -106,7 +106,8 @@ contribution, the family mark on the pointed player done; the marks in every pla
 4. Shadows, weather, animated map objects, water, BMD v14 and GLB models.
 5. ✅ Option window (`O` or ⚙, `ui/settingsWindow.ts`): FPS limit, sound and music volume,
    windowed mode, effects off, FPS counter; **(extra)** render scale, text size, mute, view
-   distance and a low-spec mode for slow PCs (`render/quality.ts`).
+   distance, texture quality (`Compressed (faster)` KTX2 via `KTX2Loader` + local `basis_transcoder`
+   with per-file JPEG/TGA fallback, or `Original`), and a low-spec mode for slow PCs (`render/quality.ts`).
 6. ✅ **(extra)** The game's name players see (default "HenryN Mu Online") is set in the admin panel:
    Plugins, "Game name" (`GameNamePlugIn`); the web game reads it through `/game-name.json`
    (`src/gameName.ts`, test `game-name.spec.ts`).
@@ -269,41 +270,38 @@ section 12 (the cash shop) still waits for the owner's answers.
    State in `save/account-safety.json` (no database change; the PIN stays in the account's vault password). Still to check
    on a server running this code: a real trade, store sale and login from two addresses (the rules, the admin page and the
    website API are unit-tested; the web parts are tested with fed packets and answered requests).
-5. ⏳ **Top-up milestones ("thưởng mốc nạp")**: rewards at total top-up steps, shown on the account page;
-   QR bank transfer on the top-up page (the bank top-up exists).
-6. ⏳ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
-   player's time), its map and its drops, on the website and in the game (i). Extra invasions on a
-   schedule (golden monsters, white wizard, rabbits, snowmen, "find the GM").
-7. ⏳ **Daily lucky number**: pick a number on the website or in the game, a draw at a set time, coins or
-   jewels for the winners; prizes and odds in the admin panel.
-8. ⏳ **Marriage**: a proposal, a ceremony at an NPC, a couple title, a small couple bonus when hunting
-   together, divorce rules; the couples list on the website.
-9. ⏳ **Item market**: players list items for zen or coins (web and in-game NPC), with a fee; the
-   admin panel sets the fee, the currencies and the banned items. Replaces risky trades between strangers.
-10. ⏳ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, ...) as numbers on the account, take
-    them out in the game or on the website; which jewels, limits and fees in the admin panel. Also clearing
-    master skill points (with item 3's stat clearing).
-11. ⏳ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
-    the cap for everyone rises N levels a day; with resets, a daily reset limit does the same job. Shown on
-    the website (today's cap).
-12. ⏳ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony, wing 2,
-    the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
-    killed, N players at a level). Stages, dates and conditions in the admin panel; the timeline on the website.
-13. ⏳ **Combining leftovers**: chaos machine recipes the admin panel can add (e.g. 2 boxes of the same level +
-    1 Jewel of Life + 1 Jewel of Creation -> a box one level higher, with a top box level per season stage),
-    and an exchange NPC for surplus materials. Recipes shown in the game and on the website.
-14. ⏳ **Mount chain**: golden bosses drop mount materials, duplicate mounts are material for the next step
-    (horn -> wolf -> golden wolf/horse -> higher steps); a mount collection page on the website. Kept to looks
-    and modest PvE strength.
-15. ⏳ **Party options**: a party password (join without an invite) and auto party for hunting spots. A party of
-    10 needs a new party window in the web and desktop clients (they show 5); later, if wanted.
+5. ✅ **Top-up milestones ("thưởng mốc nạp")**, built 2026-11-16 (Sydney): cumulative VND top-up steps
+   (admin panel *Top-up milestones* `/topup-milestones`, OFF by default), each step claimed once per account
+   (coins with coin type via `MissionCoinGranter`, zen, items waiting in owed bag queue). `BankTopUpService`
+   and the admin panel's manual confirmation record VND totals idempotently by bank reference into `save/hnmo-state.json`
+   (`topUpMilestones` section). Web game window (`U` key, touch "more" menu; packets `F5 30`/`F5 31`), home page
+   section (`/website/topup-milestones`), self-contained `topUpMilestonesWidget.ts` (`/portal/topup-milestones/*`)
+   for the account page, and local NAPAS 247 VietQR SVG generation (`vietqr.ts`, no external `img.vietqr.io` calls)
+   on `topup.html`. Still to check on a live server: full webhook-to-claim run with real bag items.
+6. ✅ **Event and boss timetable**: every event, invasion and boss with its next start (Sydney and the
+   player's time), its map and its drops, on the website (`/website/timetable` under Schedule) and in the game (<kbd>H</kbd>, touch ⋯ menu, and `(i)` guide). Extra scheduled invasions on a schedule: golden monsters, red dragon, white wizard, Lunar rabbits (`RabbitInvasionPlugIn`), snowmen (`SnowmanInvasionPlugIn`), and Find the GM (`FindTheGmInvasionPlugIn`, coins/zen to the first finder(s), recorded in `save/hnmo-state.json` under `timetable`). Admin page `/timetable` toggles features and edits daily Sydney times and rewards. Unit-tested (`TimetableEngineTest`, `TimetableControllerTests`) and Playwright-tested (`timetable.spec.ts`).
+7. ✅ **Daily lucky number**: pick a number on the website (`/portal/lucky-number/*` + self-contained `luckyNumberWidget.ts`) or in the game (<kbd>L</kbd>), a daily draw at a set Sydney time (`LuckyNumberPlugIn`, OFF by default), coins via `MissionCoinGranter` and jewels via `GiftCodeRewards` (queued when full) for winners; prizes and odds configurable in the admin panel (`/lucky-number`); public draw results on `home.html` (`/website/lucky-number`). Persisted in `save/hnmo-state.json` under `luckyNumber`. Unit-tested (`LuckyNumberEngineTest`, `LuckyNumberControllerTests`) and Playwright-tested (`lucky-number.spec.ts`).
+8. ✅ **Marriage**: proposal and Devias Church ceremony (`Shift+M` or `/marry`), custom couple title, party EXP &amp; defense hunting bonus (`MarriagePlugIn`, OFF by default), spouse warp, divorce fees &amp; cooldowns (`MarriageEngine`), persisted in `save/hnmo-state.json` under `marriage`, public couples list on `home.html` (`/website/marriage`), and admin page `/marriage`. Unit-tested (`MarriageEngineTest`, `MarriageControllerTests`) and Playwright-tested (`marriage.spec.ts`).
+9. ✅ **Item market**: players list items for zen or coins (`F6`, Julia NPC #547, and web), with atomic escrow,
+   a market fee, allowed currencies, banned items (`group:number`), and full audit log in admin panel (`/market`).
+10. ✅ **Jewel bank**: deposit jewels (Bless, Soul, Life, Creation, Chaos, Harmony, Guardian, custom) as numbers on the
+    account (`F7`), take them out in the game or on the website (`/jewel-bank` admin config for limits/fees), and clear/refund master skill points (`F7`, `/clearmaster`, and website Resets &amp; relife).
+11. ✅ **Catch-up level cap** (a server option, off by default): once the first player reaches the top level,
+    the cap for everyone rises N levels a day (Sydney time); with resets, a daily reset limit does the same job. Shown on
+    the website (`#catchup` today's cap) and configured in `/catchup`.
+12. ✅ **Season plan**: features open in stages (item level cap +9 first, then master levels, harmony,
+    wing 2, the wolf, 380 items, wing 3), each stage opening on a date or when the server has done something (a boss
+    killed, N players at a level). Stages, dates and conditions in the admin panel (`/season-plan`); the timeline on the website (`#season-plan`) and in-game (`F8`).
+13. ✅ **Combining leftovers**: `CombiningLeftoversPlugIn` (`F10` / Exchange NPC `546`, packets `F5 40`/`F5 41`), admin-configurable bag upgrade recipes (e.g. `2 × Box +2 + JoL + JoC -> Box +3`) gated by the active Season Plan `MaxBoxLevel`, plus surplus material exchange offers granting Goblin Points/Zen/items (owed when the bag is full), public website recipes & exchange list (`home.html#leftovers`, `/website/leftovers`), and admin `/leftovers`.
+14. ✅ **Mount chain**: `MountChainPlugIn` (`Shift+U`, packets `F5 42`/`F5 43`), Golden Boss kills drop Mount Shards, duplicate bag mounts upgrade to the next step (`Uniria -> Dinorant -> Fenrir -> Golden Fenrir -> Royal Steed`) or salvage into shards, unlocked collection grants modest PvE bonuses (`DefenseFinal`, `BonusExperienceRate`, `MoneyAmountRate`) persisted in `HnmoStateStore`, standalone `mountWidget.ts`, public `home.html#mounts` (`/website/mounts`), and admin `/mounts`.
+15. ✅ **Party options**: `PartyOptionsPlugIn` (`/partypass` chat command + `Auto-Party & Password` drawer docked with the 5-member `P` Party window via packets `F5 44`/`F5 45`), letting players set/join parties by password without an invite or click to auto-join advertised hunting spot parties; public spot table at `home.html#party-spots` (`/website/party-spots`, passwords hidden) and admin `/party-options` (kept 5-player party size).
 
 ## Follow-ups noted overnight (2026-11-16, Sydney)
 - rage-fighter.spec.ts: the "Ignore Defense makes effect:windForce" check fails on repeated runs against the same
   test character (likely the buff is still active from the previous run, so it isn't re-applied); make the test
   remove or wait out the buff first. The Dark Side dash check passed live but once failed at 5 fps (timing).
-- Phoenix Shot: the desktop casts it and sends nothing (the server supports it as an area skill). Kept 1:1 for now;
-  ask the owner whether HNMO should send it.
+- Phoenix Shot: ✅ HNMO sends an area skill at cast-action start by the owner decision (2026-11-16),
+  unlike the desktop. Packet regression checks cover range, resources and repeat; live damage remains to verify.
 - Live specs share test accounts (account-safety and missions-live both use test5): run them with --workers=1,
   or the second login is refused ("already logged in"). Once, after such a parallel run, test5 stayed
   "already logged in" with no open connection until the server restarted; not reproduced since - watch for it.
@@ -311,17 +309,18 @@ section 12 (the cash shop) still waits for the owner's answers.
   bUnit render after disposal, map groups, packet order); they pass locally. Make them independent of timing.
 
 ## Owner decisions (2026-11-16, Sydney time) — to build
-1. Phoenix Shot: the web game sends it to the server (an area skill with real damage). Note the difference from the desktop in PARITY.md.
+1. ✅ Phoenix Shot: HNMO sends AreaSkill at cast-action start after walking into range (owner decision 2026-11-16), unlike the desktop. PARITY.md records the difference; live damage verification remains.
 2. Guild buff tooltips: English and Vietnamese for every guild buff.
 3. Guild ladder rewards: (already built, checked 2026-11-16) paid to everyone who is a member at payout time, offline members included.
 4. Zalo coins: (already built, checked 2026-11-16) credited only after an admin approves (an approval list in the admin panel).
 5. Screenshots: the player chooses in the settings (3D view only, or with the interface).
 6. K key: (already built, checked 2026-11-16) like the desktop, only while the bag is closed.
 7. Top races: (already built, checked 2026-11-16) F9 opens them.
-8. Gift codes: keep as they are, plus an admin-set limit per network address / device (one use per address or device per code).
+8. ✅ Gift codes: optional per-code network/device limits, salted identity claims and counts, shared browser device ids, and bilingual refusals. Legacy clients without a device id retain network checks. Live deployment verification remains.
 9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
-11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.
+11. **Done — VIP application (2026-11-18):** reviewed coin purchases/renewals in the web game and account page, timed benefits/daily coins/notices, and /vip host settings/grant/remove with reasons and audit. Live PostgreSQL/crash/deployment validation remains unverified; VIP servers are separate under 15.6.
+    **Đã có tính năng VIP:** mua/gia hạn trong game web và trang tài khoản, quyền lợi có hạn/quà ngày/thông báo; quản trị tại /vip với lý do và nhật ký. Chưa chứng nhận triển khai thực tế; máy chủ VIP thuộc mục 15.6.
 
 ## Owner requests (2026-11-16, Sydney time) — approved, build on Thursday 2026-11-19 from 13:00 (first)
 - Log in on the website first; the game then opens at the server choice without asking for the password again.
@@ -331,9 +330,12 @@ section 12 (the cash shop) still waits for the owner's answers.
 - The admin panel explains itself: a hint on hover for every button/field and a "How to use this page" button on
   every page (EN+VI), starting with the API keys page.
 - The owner hit "This account is already logged in" for test5 on their own computer: the stuck-login follow-up is urgent.
-- Approved proposal: website login -> "Play now" opens the game at the server choice with a one-time ticket
-  (about a minute) instead of the password; the game without a web login goes to the website's login; the
-  desktop client keeps its password login; the admin panel stays on its own address, no link from the website.
+- Done: website login -> "Play now" opens the game at the server choice with a one-time ticket
+  (60 seconds, 192-bit, single use, hashed in memory, passed in URL fragment `#ticket=...&account=...`
+  and cleared via `history.replaceState`) instead of the password; the game without a web login shows
+  a "Log in on the website" button (and optional `WebsiteConfiguration.RequireWebsiteLogin` admin
+  setting); the desktop client keeps its password login; the admin panel stays on its own address, no
+  link from the website.
 - The player's account page (after the web login) has everything a player needs, EN+VI:
   overview (characters with level/resets/map, online or not), coins balance + history + top-up, VIP (buy with
   coins, time left), gift codes, missions/daily rewards and login calendar, resets, account safety (second
@@ -430,8 +432,10 @@ models .bmd 198 MB). Target: about 50 files and roughly half the size.
 4. Admin panel files: drop the precompressed .br/.gz copies (the server compresses on the fly) and pack the item
    editor's ~2,700 icons into one sprite sheet: 8,300 files -> about 100.
 5. The web bridge as ONE executable (PublishSingleFile), like the server; no .xml/.pdb anywhere.
-6. Save files: the plug-ins' save/*.json (guilds, missions, top races, ...) into one save/hnmo-state.json (or the
-   database), written safely (write to a temp file, then rename), so a backup is the database + one file.
+6. Save files: the plug-ins' save/*.json (guilds, missions, top races, ...) into one save/hnmo-state.json (and
+   per-account/per-character/per-guild rows stored individually in PostgreSQL `hnmo.player_feature_state` with
+   automatic migration + `ArchiveFinishedDataAfterDays` archival on `/state-retention`), written safely (write to a temp
+   file, then rename), so a backup is the database + one compact file.
 7. All configuration in the admin panel: a "Host settings" page (EN+VI, with help) for what still lives in files:
    ports (web 8080, admin 8095, connect 44406, database 55432), public address/domain, relay options, paths, the
    web bridge's appsettings, the database connection, the license; saved to ONE settings file the start scripts and
@@ -453,7 +457,30 @@ Plan:
   and macOS needs an Apple developer account ($99/year) to notarise, else right-click -> Open the first time.
 - Tests: the windows-start CI job installs and starts it; add macOS and Linux jobs.
 
-## Shops in the admin panel (owner asked 2026-11-16)
+## Shops in the admin panel (owner asked 2026-11-16) — partly done
+Implemented: default NPC shop list with spawn locations, count, mini grid, search
+and copy-to draft; old editor link; reusable virtualized item catalogue with
+EN/VI names, group:number search, group/class/base-level/missing filters, sorting
+and multi-selection; real 8×15 grid with click/drag/bulk placement, fit feedback,
+capacity, largest-first arrangement, existing property editor and base price.
+Local undo/redo (100 steps), discard, confirmed save summaries, conflict checks
+and administrator save logging use the existing configuration save path. EN/VI
+help and hover hints are included, with bUnit coverage and fixture browser review.
+
+Remaining: fixed price overrides/shop multiplier require NPC purchase-rule and
+model changes; import/export and a dedicated history page are not implemented.
+Largest-first arrangement is a greedy fit, not an optimal packing guarantee.
+Verify stock refresh with a player on a live server after saving. The reusable
+picker is available but other reward/catalogue pages are unchanged.
+
+Đã có: danh sách cửa hàng NPC, vị trí xuất hiện, xem trước, tìm kiếm, sao chép
+bản nháp; danh mục vật phẩm cuộn ảo và bộ lọc; ô hàng 8×15, thêm/kéo/thêm hàng
+loạt, tự sắp xếp, sửa thuộc tính, giá cơ bản, hoàn tác/làm lại, bỏ thay đổi,
+xác nhận khi lưu và nhật ký quản trị viên. Có hướng dẫn và chú thích Anh–Việt.
+Còn lại: giá riêng/hệ số giá cần thay đổi quy tắc mua hàng và mô hình dữ liệu;
+chưa có nhập/xuất hoặc trang lịch sử riêng. Cần kiểm tra cập nhật hàng hóa bằng
+người chơi trên máy chủ thật.
+### Original shop plan (remaining design details retained)
 Today: Admin -> Merchants lists the NPC shops by name; Edit shows the shop's grid; "create item" adds an empty item
 and its kind is picked in the item editor; drag to place. Works, but slow with thousands of items.
 New design (the "Shop editor"):
@@ -482,18 +509,18 @@ New ideas worth adopting (proposed order):
 14.3 Combat limits: a maximum damage cap per hit, PvP damage reduction %, castle siege damage reduction %.
 14.4 Chaos machine success rates per recipe in the admin panel (and shown to players), with a server-wide multiplier.
 14.5 Multi-vault: extra vaults per account (number set by the admin; extra vaults for VIP or bought with coins).
-14.6 Buffer NPC: gives a set of buffs to players under a level (helps new players); buffs and level in the admin panel.
+14.6 Buffer NPC: gives a set of buffs to players under a level (helps new players); buffs and level in the admin panel. — Done (`BufferNpcPlugIn`, `BufferNpcEngine`, `/buffer-npc` EN/VI admin page; OFF by default).
 14.7 Event rewards editor: what each mini game (blood castle, devil square, chaos castle, illusion temple, ...) gives,
      per level of the event.
 14.8 Maintenance tools page: find inactive/empty accounts, find duplicated items (same serial/GUID in two places),
      experience fixer, backup/restore (with #18), all with a dry-run preview and an audit entry.
 14.9 Player activity log viewer: trades, drops/pickups of valuable items, chaos mixes, shop buys/sells, item market
      (13.9), filterable by account/character/item and time (Sydney), for resolving disputes and spotting duping.
-14.10 Banned words filter for chat and names (EN/VI lists, admin-editable).
+14.10 Banned words filter for chat and names (EN/VI lists, admin-editable). — Done (`BannedWordsPlugIn`, `BannedWordsEngine`, wired into chat + character/guild creation, `/banned-words` EN/VI admin page; OFF by default).
 14.11 GM shop and GM tools in the game for the admin's GM characters (spawn event, announce, move player, check
      inventory), each logged.
-14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins.
-14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing).
+14.12 Off-trade: a personal shop that stays open while the player is offline, selling for zen or coins. — Done (`OfflineTradePlugIn`, `/offtrade`, `OfflinePlayer.InitializeOffTradeAsync`, `Off-trade` shop button, `/off-trade` EN/VI admin page; OFF by default).
+14.13 A player ranking panel and "add stats" window in the game (the web game has stats; check what's missing). — Done (`PlayerRankingPlugIn`, packets `F5 46`/`F5 47`, `/rank`, `RankingWindow` (`Shift+R`), `AddStatsWindow` (`Shift+A` + `C` dock button), `/rankings-settings` EN/VI admin page).
 14.14 For the desktop client only: a launcher with auto-update, file checks (CRC) and connection through the launcher.
 Its tools, compared (ideas only):
 - Server management toolkit (account, character, item, skill, guild, marriage, ranking-faction, GM editors; ban,
@@ -512,16 +539,16 @@ Its tools, compared (ideas only):
   New for HNMO:
   14.19 Item definitions in the admin panel that also feed the web game's item data (name EN/VI, size, level,
         requirements, glow color, tooltip text), so adding or changing an item needs no file editing; the desktop
-        client's data is exported from the same source.
+        client's data is exported from the same source. — Done (`ItemDefinitionStateStore`, `ItemClientDataSync`, `WebsiteItemsController` `/api/website/items` + `/website/items`, `ItemDefinitionsDownloadController` `.zip` export, `items.ts` / `itemGlow.ts` / `itemTooltip.ts` live override & EN/VI tooltip merge, and `/item-definitions` EN/VI admin page).
   14.20 News manager: news posts (EN/VI) written in the admin panel, shown on the website home page and in the game.
   14.21 Stats/build calculator on the website: pick class, level, stats and items, see damage, defense, speed, as the
         server computes them.
 - Player companion ("dashboard"): character info, event and boss alerts, death alerts. New for HNMO:
   14.22 Event alerts: players opt in (website or game) to browser notifications for chosen events/bosses (web push,
-        no app needed), plus a Discord channel post (exists in Community).
+        no app needed), plus a Discord channel post (exists in Community). — Done (`EventAlertsPlugIn`, pure .NET RFC 8291/8292 `WebPushCrypto` with host-generated VAPID P-256 keys, Discord webhook channel post, `/sw-alerts.js` + `eventAlertsWidget.ts` in Timetable + website `/website/event-alerts*`, `/event-alerts` EN/VI admin page; OFF by default).
 - Launcher (auto-update, design, languages, register in the launcher): see 14.14 (desktop only).
 - Crash/stability monitor: HNMO's /control page (#18) shows status and logs; add crash detection with automatic
-  restart and a notice to the admin (14.23).
+  restart and a notice to the admin (14.23). — Done (`CrashWatchPolicy`, `CrashWatchStore`, `GameLauncher` exit watcher with backoff & hourly restart cap, optional Discord webhook notice, `/control` unread crash banner & history table, and Admin Panel `/crash-watch`).
 More of its tools and plugins (checked 2026-11-16; ideas only):
 - 3D world editor (terrain height, light colour, ground layers, safe/PvP attributes, objects with position/scale/
   rotation/light, minimap and monster spawns, export for server and client). HNMO has a 2D spawn map editor
@@ -539,10 +566,10 @@ More of its tools and plugins (checked 2026-11-16; ideas only):
   14.26 Performance mode in the web game's settings (EN/VI): hide other players, hide wings and pets, fewer skill
         and item effects, with hotkeys, for crowded events (helps low-end PCs and phones).
   14.27 Talismans/figurines: special items that give a buff or bonus while carried in the bag (admin-defined),
-        and consumable items that give extra stat points up to a cap (admin-defined).
-  14.28 Custom ranks/titles: titles by level, resets, VIP or achievements, shown by the name, admin-defined.
-  14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined).
-  14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck).
+        and consumable items that give extra stat points up to a cap (admin-defined). — Done (`TalismanPlugIn`, `TalismanEngine`, `TalismanStore`, wired into `InventoryStorage` + `ItemConsumeAction`, `/talismans` EN/VI admin page; OFF by default).
+  14.28 Custom ranks/titles: titles by level, resets, VIP or achievements, shown by the name, admin-defined. — Done (`CustomRanksPlugIn`, `CustomRankEngine`, `CustomRankStore`, packets `F5 48`/`F5 49`, `/title` command, nameplate & chat prefixes, `/custom-ranks` EN/VI admin page; OFF by default).
+  14.29 Teleport NPC: an NPC that moves players to chosen maps for zen, with level requirements (admin-defined). — Done (`TeleportNpcPlugIn`, `TeleportNpcEngine`, `F5 4A`/`F5 4B` packets, `ui/teleportNpcWindow.ts`, `/teleport-npc` EN/VI admin page; OFF by default).
+  14.30 Fixed item options: let the admin pin options on chosen items (e.g. event weapons always with luck). — Done (`FixedItemOptionsPlugIn`, `FixedItemOptionsEngine`, wired into `DefaultDropGenerator` for drops and event boxes/rewards, `/fixed-options` EN/VI admin page; OFF by default).
 Not adopted: scripting formulas in a scripting language (admin settings instead), custom item slots beyond the data.
 
 ## 15. Growth with many players, guides, admin panel navigation (owner asked 2026-11-16)
@@ -578,10 +605,10 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      (one server at a time). Per server today: an EXP rate multiplier, PvP on/off, a player limit, and join
      requirements (account attributes, also time-limited grants): a server can require e.g. a "VIP" attribute and
      refuses others with "subscription over" / "no subscription". Edited only in the generic server config editor.
-     To do (with ChatGPT's VIP job): buying/granting VIP gives the account the time-limited attribute that VIP
-     servers require (one source of truth); a "Servers" admin page in plain words (name, VIP only yes/no, EXP and
-     drop/zen multipliers, PvP, player limit, which events run there); the server list in the web game and the
-     desktop client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
+     VIP #39 now gives the account the same-expiry VIP attribute grant (one source of truth). Still to do:
+     a "Servers" admin page in plain words (name, VIP only yes/no, EXP and drop/zen multipliers, PvP, player
+     limit, which events run there); the web game server list marks VIP servers (lock icon, "VIP" label, EN/VI)
+     and explains the refusal with a link to the
      account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
      timetables per server.
 15.7 Worlds (separate databases; owner asked 2026-11-16). Uses: a test world, new seasons (fresh start while the
@@ -591,6 +618,76 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      managing several worlds (start/stop, rates, events, players per world); one website and one account system with
      the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
      opening date); optional one-off character transfer between worlds; later a cross-world event server.
+
+## VIP implementation checkpoint — game and account adapters (2026-11-18)
+The VIP branch now includes the required antigravity-integration foundation and account
+page dependency. Paid purchases use a shared VIP intent journal before a single account
+save commits the debit, replay receipt and three same-expiry account grants. The actual
+XP/Zen bonuses refresh in the live game and expire through the existing grant timer.
+Daily coins use one durable pending credit per account/Sydney day, then normal coin
+application. The account page and web game share offer review and stable retry controls;
+the game uses F5 25/F5 26, Alt+U and the mobile More menu. New purchases are off by default.
+Implemented: start/last-day notices, a server-resolved chat mark, and the /vip admin
+settings/grant/remove page with required reasons, confirmation, durable activity audit
+and bUnit/service tests. The existing VIP vault/reset policies use the same timed flag.
+VIP application work is complete; live PostgreSQL/crash/deployment validation remains
+unverified. Per-server rates/list controls are separate under ROADMAP 15.6.
+
+Đã nối phần mua VIP với trang tài khoản và game web: xem lại giá trước khi xác nhận,
+thử lại bằng cùng mã giao dịch, trừ coin một lần và cấp ba quyền lợi cùng hạn dùng.
+Ưu đãi kinh nghiệm/Zen áp dụng ngay trong game; quà coin hằng ngày dùng một khoản
+cộng chờ duy nhất cho mỗi tài khoản/ngày Sydney. Mở bằng Alt+U hoặc menu Thêm.
+Mua mới tắt mặc định. Đã có trang /vip để cấu hình, cấp/gỡ VIP với lý do, xác nhận,
+nhật ký và kiểm thử. Chính sách kho/reset VIP đã có dùng cùng cờ VIP có hạn.
+Chưa kiểm chứng PostgreSQL khi gặp sự cố hoặc triển khai thực tế; máy chủ VIP ở mục 15.6.
+
+## Player account dashboard — foundation (2026-11-16)
+Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,
+password-authenticated saved character/coin snapshots, retained coin history paged
+20 at a time with Sydney dates, existing gift/reset/safety forms, community links, and
+logout that clears module memory. New sections register through accountSections.ts;
+Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are
+kept together without changing the dictionaries from #4/#6.
+Personal missions/daily claims/calendar and referral progress/rewards are connected
+through the existing mission engine. Claims require the selected character in the game;
+offline reads do not mutate live state. New direct coin receipts cover vault purchases, market/player-store trades, reset/relife/
+stat/master fees and play-time credits while retaining existing save boundaries.
+Older unrecorded spending cannot be reconstructed. Remaining: per-character last-seen
+history and VIP buying/extensions
+in the VIP part. Confirmed email changes use off-by-default SMTP settings at
+Accounts → Email delivery and the player's Security form. Codes expire after 15 minutes,
+are single-use and password-bound, with one-minute resends and a five-attempt limit.
+
+Đã có phần nền trang tài khoản: đăng nhập trong bộ nhớ thẻ, menu thích ứng màn hình,
+xem nhân vật/số dư đã lưu, phân trang lịch sử nhận coin theo giờ Sydney, gift code,
+reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. Tính năng khác có thể đăng ký
+mục riêng. Đã kết nối nhiệm vụ, nhận quà hằng ngày, điểm danh và tiến trình mời bạn qua
+cùng bộ quy tắc trong game. Nhận thưởng cần nhân vật đã chọn đang trong game;
+xem khi ngoại tuyến không thay đổi dữ liệu đang chạy. Còn thiếu lịch sử lần xuất hiện
+gần nhất của từng nhân vật và mua/gia hạn VIP. Đã bổ sung lịch sử thay đổi coin khi mua
+rương, giao dịch chợ/cửa hàng người chơi, reset/relife/tẩy điểm và nhận thưởng thời gian
+chơi theo các điểm lưu hiện có. Không thể khôi phục lịch sử chi tiêu cũ chưa được ghi. Đổi email có xác nhận
+dùng thiết lập SMTP mặc định tắt tại Tài khoản → Gửi email và biểu mẫu Bảo mật của người chơi.
+Mã gắn với mật khẩu hiện tại, có hiệu lực 15 phút, chỉ dùng một lần; lấy mã cách nhau một phút
+và tối đa năm lần nhập sai.
+
+Password changes (2026-11-17, Sydney): the Security section accepts a matching new
+password twice, refuses online accounts, and requires signing in again after saving.
+The server authenticates again under an account reservation before writing the hash.
+HNMO is web only; the dashboard's quick links no longer offer a client download.
+
+Đổi mật khẩu (17/11/2026, giờ Sydney): mục Bảo mật yêu cầu nhập mật khẩu mới hai lần,
+từ chối khi tài khoản còn trong game và yêu cầu đăng nhập lại sau khi lưu. Máy chủ xác
+thực lại khi đã giữ chỗ tài khoản rồi mới lưu mã băm. HNMO chỉ chơi trên web; các liên
+kết nhanh của trang tài khoản không còn mục tải phần mềm chơi game.
+
+Character presence (2026-11-17, Sydney): refreshing reads each owned character's current
+online status through the existing game-server read channel. Missing/unresponsive channels
+show unavailable; no last-seen dates are invented. Saved character and coin data remain visible.
+
+Trạng thái nhân vật (17/11/2026, giờ Sydney): khi làm mới, trang kiểm tra từng nhân vật của
+tài khoản qua kênh đọc trạng thái máy chủ game có sẵn. Nếu máy chủ không trả lời, trang ghi
+chưa kiểm tra được; không tự tạo ngày giờ xuất hiện gần nhất. Vẫn xem được nhân vật và số dư đã lưu.
 
 ## Owner decision 2026-11-16 (Sydney): web only for now
 The desktop client is dropped for now (maybe later): HNMO ships and is played through the web game only. New HNMO
@@ -699,8 +796,7 @@ touch-first; read from its store listing and release notes; ideas only). The web
   definitions, 14.21 stats calculator, 14.24 3D world editor), escrow (section 16), and the admin tools moved to it.
 - Admin tools 14.18 gift box/mail, 14.16 ban manager, 14.15 character tools, 14.17/14.11 GM manager + in-game GM
   commands, 14.20 news manager: moved BACK to ChatGPT (2026-11-17) because Antigravity is out for days.
-- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (rules only, not
-  working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
+- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (website/game/admin implemented; live deployment unverified). Its redesign must also add the menu entries for every route in #51's wiring table.
 - Second Antigravity (mobile, section 17): not started.
 - Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
 

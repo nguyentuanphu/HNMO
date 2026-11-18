@@ -297,12 +297,12 @@ function make(system: EffectSystem, step: Step, at: THREE.Vector3, caster: Effec
 }
 
 /** The buffs and debuffs of HNMO's skills (the server's magic effects 180-186), for the buff strip: a name, what it does, and the game buff whose icon it shows. */
-export const NEW_SKILL_BUFFS: { number: number; name: string; kind: 'buff' | 'debuff'; text: string; iconFrom: number }[] = [
-  { number: 180, name: 'Iron Guard', kind: 'buff', text: 'Damage taken decreases by 24%.', iconFrom: 2 },
-  { number: 181, name: 'Mana Shield', kind: 'buff', text: 'Part of the damage taken is paid with mana.', iconFrom: 4 },
-  { number: 182, name: 'Forest Blessing', kind: 'buff', text: 'Life recovers over time.', iconFrom: 8 },
-  { number: 183, name: 'Twin Power', kind: 'buff', text: 'All damage increases by 12%.', iconFrom: 1 },
-  { number: 184, name: 'War Command', kind: 'buff', text: 'Attack and magic speed increase.', iconFrom: 5 },
-  { number: 185, name: 'Iron Body', kind: 'buff', text: 'Defence increases and part of the damage is reflected.', iconFrom: 2 },
-  { number: 186, name: 'Weakening Curse', kind: 'debuff', text: 'Defence decreases by 24%.', iconFrom: 58 },
+export const NEW_SKILL_BUFFS: { number: number; name: string; nameVi: string; kind: 'buff' | 'debuff'; text: string; textVi: string; iconFrom: number }[] = [
+  { number: 180, name: 'Iron Guard', nameVi: 'Phòng hộ thép', kind: 'buff', text: 'Damage taken decreases by 24%.', textVi: 'Giảm sát thương nhận vào 24%.', iconFrom: 2 },
+  { number: 181, name: 'Mana Shield', nameVi: 'Khiên Mana', kind: 'buff', text: 'Part of the damage taken is paid with mana.', textVi: 'Dùng Mana để gánh một phần sát thương nhận vào.', iconFrom: 4 },
+  { number: 182, name: 'Forest Blessing', nameVi: 'Phước lành rừng xanh', kind: 'buff', text: 'Life recovers over time.', textVi: 'Hồi máu theo thời gian.', iconFrom: 8 },
+  { number: 183, name: 'Twin Power', nameVi: 'Sức mạnh song hành', kind: 'buff', text: 'All damage increases by 12%.', textVi: 'Tăng toàn bộ sát thương thêm 12%.', iconFrom: 1 },
+  { number: 184, name: 'War Command', nameVi: 'Mệnh lệnh chiến đấu', kind: 'buff', text: 'Attack and magic speed increase.', textVi: 'Tăng tốc độ tấn công và tốc độ thi triển phép.', iconFrom: 5 },
+  { number: 185, name: 'Iron Body', nameVi: 'Thân thể thép', kind: 'buff', text: 'Defence increases and part of the damage is reflected.', textVi: 'Tăng phòng thủ và phản lại một phần sát thương.', iconFrom: 2 },
+  { number: 186, name: 'Weakening Curse', nameVi: 'Lời nguyền suy yếu', kind: 'debuff', text: 'Defence decreases by 24%.', textVi: 'Giảm phòng thủ 24%.', iconFrom: 58 },
 ];

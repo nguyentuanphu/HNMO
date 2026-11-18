@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="SecretOfTheDarkStone" xml:space="preserve"><value>Bí mật của 'Hòn đá đen tối'</value></data>
+  <data name="GainHeroStatusBloodySummoner" xml:space="preserve"><value>Đạt được trạng thái anh hùng (Blood Thuật sư)</value></data>
+  <data name="GainHeroStatusMuseElf" xml:space="preserve"><value>Đạt được trạng thái anh hùng (Nàng thơ Elf)</value></data>
+  <data name="GainHeroStatusSoulMaster" xml:space="preserve"><value>Đạt trạng thái anh hùng (Pháp sư)</value></data>
+  <data name="GainHeroStatusBladeKnight" xml:space="preserve"><value>Đạt trạng thái anh hùng (Kỵ sĩ)</value></data>
+  <data name="RandomQuest3" xml:space="preserve"><value>Nhiệm vụ ngẫu nhiên (3)</value></data>
+  <data name="RandomQuest2" xml:space="preserve"><value>Nhiệm vụ ngẫu nhiên (2)</value></data>
+  <data name="RandomQuest1" xml:space="preserve"><value>Nhiệm vụ ngẫu nhiên (1)</value></data>
+  <data name="PutTheLostTowerToSleep6Summoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Thuật sư)</value></data>
+  <data name="PutTheLostTowerToSleep6BloodySummoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Thuật sư đẫm máu)</value></data>
+  <data name="PutTheLostTowerToSleep6FairyElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Tiên Tiên)</value></data>
+  <data name="PutTheLostTowerToSleep6MuseElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Nàng thơ yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep6DarkWizard" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Phù thủy)</value></data>
+  <data name="PutTheLostTowerToSleep6SoulMaster" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Pháp sư)</value></data>
+  <data name="PutTheLostTowerToSleep6DarkKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Chiến binh)</value></data>
+  <data name="PutTheLostTowerToSleep6BladeKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (6) (Kỵ sĩ)</value></data>
+  <data name="PutTheLostTowerToSleep5Summoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Thuật sư)</value></data>
+  <data name="PutTheLostTowerToSleep5BloodySummoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Thuật sư đẫm máu)</value></data>
+  <data name="PutTheLostTowerToSleep5FairyElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Tiên tiên)</value></data>
+  <data name="PutTheLostTowerToSleep5MuseElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Nàng thơ yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep5DarkWizard" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Phù thủy)</value></data>
+  <data name="PutTheLostTowerToSleep5SoulMaster" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Pháp sư)</value></data>
+  <data name="PutTheLostTowerToSleep5DarkKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Chiến binh)</value></data>
+  <data name="PutTheLostTowerToSleep5BladeKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (5) (Kỵ sĩ)</value></data>
+  <data name="PutTheLostTowerToSleep4Summoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (4) (Thuật sư)</value></data>
+  <data name="PutTheLostTowerToSleep4BloodySummoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (4) (Thuật sư đẫm máu)</value></data>
+  <data name="PutTheLostTowerToSleep4FairyElf" xml:space="preserve"><value>Put the Lost Tower to Sleep! (4) (Yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep4MuseElf" xml:space="preserve"><value>Put the Lost Tower to Sleep! (4) (Nàng thơ yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep4DarkWizard" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (4) (Phù thủy)</value></data>
+  <data name="PutTheLostTowerToSleep4SoulMaster" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (4) (Pháp sư)</value></data>
+  <data name="PutTheLostTowerToSleep4DarkKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (4) (Chiến binh)</value></data>
+  <data name="PutTheLostTowerToSleep4BladeKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (4) (Kỵ sĩ)</value></data>
+  <data name="PutTheLostTowerToSleep3Summoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (3) (Thuật sư)</value></data>
+  <data name="PutTheLostTowerToSleep3BloodySummoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (3) (Thuật sư đẫm máu)</value></data>
+  <data name="PutTheLostTowerToSleep3FairyElf" xml:space="preserve"><value>Put the Lost Tower to Sleep! (3) (Yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep3MuseElf" xml:space="preserve"><value>Put the Lost Tower to Sleep! (3) (Nàng thơ yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep3DarkWizard" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (3) (Phù thủy)</value></data>
+  <data name="PutTheLostTowerToSleep3SoulMaster" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (3) (Pháp sư)</value></data>
+  <data name="PutTheLostTowerToSleep3DarkKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (3) (Chiến binh)</value></data>
+  <data name="PutTheLostTowerToSleep3BladeKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (3) (Kỵ sĩ)</value></data>
+  <data name="PutTheLostTowerToSleep2Summoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Thuật sư)</value></data>
+  <data name="PutTheLostTowerToSleep2BloodySummoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Thuật sư đẫm máu)</value></data>
+  <data name="PutTheLostTowerToSleep2FairyElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep2MuseElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Nàng thơ yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep2DarkWizard" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Phù thủy)</value></data>
+  <data name="PutTheLostTowerToSleep2SoulMaster" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Pháp sư)</value></data>
+  <data name="PutTheLostTowerToSleep2DarkKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Chiến binh)</value></data>
+  <data name="PutTheLostTowerToSleep2BladeKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (2) (Kỵ sĩ)</value></data>
+  <data name="PutTheLostTowerToSleep1Summoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Thuật sư)</value></data>
+  <data name="PutTheLostTowerToSleep1BloodySummoner" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Thuật sư đẫm máu)</value></data>
+  <data name="PutTheLostTowerToSleep1FairyElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep1MuseElf" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Nàng thơ yêu tinh)</value></data>
+  <data name="PutTheLostTowerToSleep1DarkWizard" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Phù thủy)</value></data>
+  <data name="PutTheLostTowerToSleep1SoulMaster" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Pháp sư)</value></data>
+  <data name="PutTheLostTowerToSleep1DarkKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Chiến binh)</value></data>
+  <data name="PutTheLostTowerToSleep1BladeKnight" xml:space="preserve"><value>Hãy đưa tòa tháp bị mất vào giấc ngủ! (1) (Kỵ sĩ)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4Summoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4BloodySummoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Bloody Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4FairyElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Tiên Tinh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4MuseElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Nàng thơ Elf)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4DarkWizard" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Phù thủy)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4SoulMaster" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Pháp sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4DarkKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Chiến binh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops4BladeKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (4) (Kỵ sĩ)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3Summoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3BloodySummoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Bloody Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3FairyElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Tiên Tinh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3MuseElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Nàng thơ Elf)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3DarkWizard" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Phù thủy)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3SoulMaster" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Pháp sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3DarkKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Chiến binh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops3BladeKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (3) (Kỵ sĩ)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2Summoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2BloodySummoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Bloody Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2FairyElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Tiên Tiên)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2MuseElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Nàng thơ Elf)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2DarkWizard" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Phù thủy)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2SoulMaster" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Pháp sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2DarkKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Chiến binh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops2BladeKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (2) (Kỵ sĩ)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1Summoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1BloodySummoner" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Bloody Thuật sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1FairyElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Tiên Tinh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1MuseElf" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Nàng thơ Elf)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1DarkWizard" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Phù thủy)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1SoulMaster" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Pháp sư)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1DarkKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Chiến binh)</value></data>
+  <data name="TheMissionOfReconnaissanceTroops1BladeKnight" xml:space="preserve"><value>Nhiệm vụ của quân trinh sát (1) (Kỵ sĩ)</value></data>
+  <data name="ConquerTheDungeon6Summoner" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Thuật sư)</value></data>
+  <data name="ConquerTheDungeon6BloodySummoner" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Thuật sư đẫm máu)</value></data>
+  <data name="ConquerTheDungeon6FairyElf" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Tiên Tiên)</value></data>
+  <data name="ConquerTheDungeon6MuseElf" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Nàng thơ yêu tinh)</value></data>
+  <data name="ConquerTheDungeon6DarkWizard" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Phù thủy)</value></data>
+  <data name="ConquerTheDungeon6SoulMaster" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Pháp sư)</value></data>
+  <data name="ConquerTheDungeon6DarkKnight" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Chiến binh)</value></data>
+  <data name="ConquerTheDungeon6BladeKnight" xml:space="preserve"><value>Chinh phục ngục tối! (6) (Kỵ sĩ)</value></data>
+  <data name="ConquerTheDungeon5Summoner" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Thuật sư)</value></data>
+  <data name="ConquerTheDungeon5BloodySummoner" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Thuật sư đẫm máu)</value></data>
+  <data name="ConquerTheDungeon5FairyElf" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Tiên tiên)</value></data>
+  <data name="ConquerTheDungeon5MuseElf" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Nàng thơ yêu tinh)</value></data>
+  <data name="ConquerTheDungeon5DarkWizard" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Phù thủy)</value></data>
+  <data name="ConquerTheDungeon5SoulMaster" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Pháp sư)</value></data>
+  <data name="ConquerTheDungeon5DarkKnight" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Chiến binh)</value></data>
+  <data name="ConquerTheDungeon5BladeKnight" xml:space="preserve"><value>Chinh phục ngục tối! (5) (Kỵ sĩ)</value></data>
+  <data name="ConquerTheDungeon4Summoner" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Thuật sư)</value></data>
+  <data name="ConquerTheDungeon4BloodySummoner" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Thuật sư đẫm máu)</value></data>
+  <data name="ConquerTheDungeon4FairyElf" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Yêu tinh)</value></data>
+  <data name="ConquerTheDungeon4MuseElf" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Nàng thơ yêu tinh)</value></data>
+  <data name="ConquerTheDungeon4DarkWizard" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Phù thủy)</value></data>
+  <data name="ConquerTheDungeon4SoulMaster" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Pháp sư)</value></data>
+  <data name="ConquerTheDungeon4DarkKnight" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Chiến binh)</value></data>
+  <data name="ConquerTheDungeon4BladeKnight" xml:space="preserve"><value>Chinh phục ngục tối! (4) (Kỵ sĩ)</value></data>
+  <data name="ConquerTheDungeon3Summoner" xml:space="preserve"><value>Chinh phục ngục tối! (3) (Thuật sư)</value></data>
+  <data name="ConquerTheDungeon3FairyElf" xml:space="preserve"><value>Chinh phục ngục tối! (3) (Yêu tinh)</value></data>
+  <data name="ConquerTheDungeon3DarkWizard" xml:space="preserve"><value>Chinh phục ngục tối! (3) (Phù thủy)</value></data>
+  <data name="ConquerTheDungeon3DarkKnight" xml:space="preserve"><value>Chinh phục ngục tối! (3) (Chiến binh)</value></data>
+  <data name="ConquerTheDungeon2Summoner" xml:space="preserve"><value>Chinh phục ngục tối! (2) (Thuật sư)</value></data>
+  <data name="ConquerTheDungeon2FairyElf" xml:space="preserve"><value>Chinh phục ngục tối! (2) (Yêu tinh)</value></data>
+  <data name="ConquerTheDungeon2DarkWizard" xml:space="preserve"><value>Chinh phục ngục tối! (2) (Phù thủy)</value></data>
+  <data name="ConquerTheDungeon2DarkKnight" xml:space="preserve"><value>Chinh phục ngục tối! (2) (Chiến binh)</value></data>
+  <data name="ConquerTheDungeon1Summoner" xml:space="preserve"><value>Chinh phục ngục tối! (1) (Thuật sư)</value></data>
+  <data name="ConquerTheDungeon1FairyElf" xml:space="preserve"><value>Chinh phục ngục tối! (1) (Yêu tinh)</value></data>
+  <data name="ConquerTheDungeon1DarkWizard" xml:space="preserve"><value>Chinh phục ngục tối! (1) (Phù thủy)</value></data>
+  <data name="ConquerTheDungeon1DarkKnight" xml:space="preserve"><value>Chinh phục ngục tối! (1) (Chiến binh)</value></data>
+  <data name="TheBeginningOfRequestsDarkKnight" xml:space="preserve"><value>Sự bắt đầu của các yêu cầu (Chiến binh)</value></data>
+  <data name="TheBeginningOfRequestsDarkWizard" xml:space="preserve"><value>Sự bắt đầu của các yêu cầu (Phù thủy)</value></data>
+  <data name="TheBeginningOfRequestsSummoner" xml:space="preserve"><value>Sự bắt đầu của các yêu cầu (Thuật sư)</value></data>
+  <data name="TheBeginningOfRequestsFairyElf" xml:space="preserve"><value>Sự khởi đầu của những yêu cầu (Fairy Elf)</value></data>
+  <data name="RoadToFloatingCastle3RageFighter" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Thiết binh)</value></data>
+  <data name="RoadToFloatingCastle3DarkLord" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Chúa tể)</value></data>
+  <data name="RoadToFloatingCastle3MagicGladiator" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Đấu sĩ)</value></data>
+  <data name="RoadToFloatingCastle3Summoner" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Thuật sư)</value></data>
+  <data name="RoadToFloatingCastle3BloodySummoner" xml:space="preserve"><value>Đường tới Lâu đài bay (3) (Blood Thuật sư)</value></data>
+  <data name="RoadToFloatingCastle3FairyElf" xml:space="preserve"><value>Đường tới Lâu đài bay (3) (Tiên nữ)</value></data>
+  <data name="RoadToFloatingCastle3MuseElf" xml:space="preserve"><value>Đường tới Lâu đài bay (3) (Nàng thơ Elf)</value></data>
+  <data name="RoadToFloatingCastle3DarkKnight" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Chiến binh)</value></data>
+  <data name="RoadToFloatingCastle3BladeKnight" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Kỵ sĩ)</value></data>
+  <data name="RoadToFloatingCastle3DarkWizard" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Phù thủy)</value></data>
+  <data name="RoadToFloatingCastle3SoulMaster" xml:space="preserve"><value>Đường tới Lâu đài nổi (3) (Pháp sư)</value></data>
+  <data name="RoadToFloatingCastle2Summoner" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Thuật sư)</value></data>
+  <data name="RoadToFloatingCastle2BloodySummoner" xml:space="preserve"><value>Đường tới Lâu đài bay (2) (Blood Thuật sư)</value></data>
+  <data name="RoadToFloatingCastle2FairyElf" xml:space="preserve"><value>Đường tới Lâu đài bay (2) (Tiên nữ)</value></data>
+  <data name="RoadToFloatingCastle2MuseElf" xml:space="preserve"><value>Đường tới Lâu đài bay (2) (Nàng thơ Elf)</value></data>
+  <data name="RoadToFloatingCastle2DarkKnight" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Chiến binh)</value></data>
+  <data name="RoadToFloatingCastle2BladeKnight" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Kỵ sĩ)</value></data>
+  <data name="RoadToFloatingCastle2DarkWizard" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Phù thủy)</value></data>
+  <data name="RoadToFloatingCastle2SoulMaster" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Pháp sư)</value></data>
+  <data name="RoadToFloatingCastle2RageFighter" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Thiết binh)</value></data>
+  <data name="RoadToFloatingCastle2DarkLord" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Chúa tể)</value></data>
+  <data name="RoadToFloatingCastle2MagicGladiator" xml:space="preserve"><value>Đường tới Lâu đài nổi (2) (Đấu sĩ)</value></data>
+  <data name="RoadToFloatingCastle1" xml:space="preserve"><value>Đường đến Lâu Đài Nổi (1)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty3" xml:space="preserve"><value>Sự tiến bộ của Đảng Trinh sát (3)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2Summoner" xml:space="preserve"><value>Sự thăng tiến của Nhóm trinh sát (2) (Thuật sư)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2BloodySummoner" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (2) (Bloody Thuật sư)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2FairyElf" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (2) (Yêu tinh)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2MuseElf" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (2) (Nàng thơ Elf)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2DarkKnight" xml:space="preserve"><value>Sự thăng tiến của Nhóm trinh sát (2) (Chiến binh)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2BladeKnight" xml:space="preserve"><value>Sự thăng tiến của Nhóm trinh sát (2) (Kỵ sĩ)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2DarkWizard" xml:space="preserve"><value>Sự thăng tiến của Nhóm trinh sát (2) (Phù thủy)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2SoulMaster" xml:space="preserve"><value>Sự thăng tiến của Nhóm trinh sát (2) (Pháp sư)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2RageFighter" xml:space="preserve"><value>Sự tiến bộ của Nhóm trinh sát (2) (Thiết binh)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2DarkLord" xml:space="preserve"><value>Sự thăng tiến của Nhóm trinh sát (2) (Chúa tể)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty2MagicGladiator" xml:space="preserve"><value>Sự tiến bộ của Nhóm trinh sát (2) (Đấu sĩ)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1RageFighter" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Thiết binh)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1DarkLord" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Chúa tể)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1MagicGladiator" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Đấu sĩ)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1Summoner" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Thuật sư)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1BloodySummoner" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Blood Thuật sư)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1FairyElf" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Yêu tinh)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1MuseElf" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Nàng thơ Elf)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1DarkKnight" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Chiến binh)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1BladeKnight" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Kỵ sĩ)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1DarkWizard" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Phù thủy)</value></data>
+  <data name="AdvancementOfTheReconnaissanceParty1SoulMaster" xml:space="preserve"><value>Sự thăng tiến của Nhóm Trinh sát (1) (Pháp sư)</value></data>
+  <data name="ClearingAPathToIcarusSummoner" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Thuật sư)</value></data>
+  <data name="ClearingAPathToIcarusBloodySummoner" xml:space="preserve"><value>Dọn đường đến Icarus (Thuật sư đẫm máu)</value></data>
+  <data name="ClearingAPathToIcarusFairyElf" xml:space="preserve"><value>Dọn đường đến Icarus (Yêu tinh)</value></data>
+  <data name="ClearingAPathToIcarusMuseElf" xml:space="preserve"><value>Dọn đường đến Icarus (Nàng thơ Elf)</value></data>
+  <data name="ClearingAPathToIcarusDarkKnight" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Chiến binh)</value></data>
+  <data name="ClearingAPathToIcarusBladeKnight" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Kỵ sĩ)</value></data>
+  <data name="ClearingAPathToIcarusDarkWizard" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Phù thủy)</value></data>
+  <data name="ClearingAPathToIcarusSoulMaster" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Pháp sư)</value></data>
+  <data name="ClearingAPathToIcarusRageFighter" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Thiết binh)</value></data>
+  <data name="ClearingAPathToIcarusDarkLord" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Chúa tể)</value></data>
+  <data name="ClearingAPathToIcarusMagicGladiator" xml:space="preserve"><value>Xóa đường dẫn đến Icarus (Đấu sĩ)</value></data>
+  <data name="ContinuingAttacksOnBarriers3Summoner" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Thuật sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers3BloodySummoner" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers3FairyElf" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Fairy Elf)</value></data>
+  <data name="ContinuingAttacksOnBarriers3MuseElf" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingAttacksOnBarriers3DarkKnight" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Chiến binh)</value></data>
+  <data name="ContinuingAttacksOnBarriers3BladeKnight" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Kỵ sĩ)</value></data>
+  <data name="ContinuingAttacksOnBarriers3DarkWizard" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Phù thủy)</value></data>
+  <data name="ContinuingAttacksOnBarriers3SoulMaster" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Pháp sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers3RageFighter" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Thiết binh)</value></data>
+  <data name="ContinuingAttacksOnBarriers3DarkLord" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Chúa tể)</value></data>
+  <data name="ContinuingAttacksOnBarriers3MagicGladiator" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (3) (Đấu sĩ)</value></data>
+  <data name="ContinuingAttacksOnBarriers2Summoner" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Thuật sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers2BloodySummoner" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers2FairyElf" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Fairy Elf)</value></data>
+  <data name="ContinuingAttacksOnBarriers2MuseElf" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingAttacksOnBarriers2DarkKnight" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Chiến binh)</value></data>
+  <data name="ContinuingAttacksOnBarriers2BladeKnight" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Kỵ sĩ)</value></data>
+  <data name="ContinuingAttacksOnBarriers2DarkWizard" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Phù thủy)</value></data>
+  <data name="ContinuingAttacksOnBarriers2SoulMaster" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Pháp sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers2RageFighter" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Thiết binh)</value></data>
+  <data name="ContinuingAttacksOnBarriers2DarkLord" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Chúa tể)</value></data>
+  <data name="ContinuingAttacksOnBarriers2MagicGladiator" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (2) (Đấu sĩ)</value></data>
+  <data name="ContinuingAttacksOnBarriers1Summoner" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Thuật sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers1BloodySummoner" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers1FairyElf" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Fairy Elf)</value></data>
+  <data name="ContinuingAttacksOnBarriers1MuseElf" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingAttacksOnBarriers1DarkKnight" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Chiến binh)</value></data>
+  <data name="ContinuingAttacksOnBarriers1BladeKnight" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Kỵ sĩ)</value></data>
+  <data name="ContinuingAttacksOnBarriers1DarkWizard" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Phù thủy)</value></data>
+  <data name="ContinuingAttacksOnBarriers1SoulMaster" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Pháp sư)</value></data>
+  <data name="ContinuingAttacksOnBarriers1RageFighter" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Thiết binh)</value></data>
+  <data name="ContinuingAttacksOnBarriers1DarkLord" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Chúa tể)</value></data>
+  <data name="ContinuingAttacksOnBarriers1MagicGladiator" xml:space="preserve"><value>Tiếp tục tấn công vào các rào cản (1) (Đấu sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp4Summoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp4BloodySummoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp4FairyElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (4) (Yêu tinh)</value></data>
+  <data name="ContinuingRequestsForHelp4MuseElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (4) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingRequestsForHelp4DarkKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Chiến binh)</value></data>
+  <data name="ContinuingRequestsForHelp4BladeKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Kỵ sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp4DarkWizard" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Phù thủy)</value></data>
+  <data name="ContinuingRequestsForHelp4SoulMaster" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Pháp sư)</value></data>
+  <data name="ContinuingRequestsForHelp4RageFighter" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Thiết binh)</value></data>
+  <data name="ContinuingRequestsForHelp4DarkLord" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Chúa tể)</value></data>
+  <data name="ContinuingRequestsForHelp4MagicGladiator" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (4) (Đấu sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp3Summoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp3BloodySummoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp3FairyElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (3) (Yêu tinh)</value></data>
+  <data name="ContinuingRequestsForHelp3MuseElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (3) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingRequestsForHelp3DarkKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Chiến binh)</value></data>
+  <data name="ContinuingRequestsForHelp3BladeKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Kỵ sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp3DarkWizard" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Phù thủy)</value></data>
+  <data name="ContinuingRequestsForHelp3SoulMaster" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Pháp sư)</value></data>
+  <data name="ContinuingRequestsForHelp3RageFighter" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Thiết binh)</value></data>
+  <data name="ContinuingRequestsForHelp3DarkLord" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Chúa tể)</value></data>
+  <data name="ContinuingRequestsForHelp3MagicGladiator" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (3) (Đấu sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp2Summoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp2BloodySummoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp2FairyElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (2) (Yêu tinh)</value></data>
+  <data name="ContinuingRequestsForHelp2MuseElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (2) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingRequestsForHelp2DarkKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Chiến binh)</value></data>
+  <data name="ContinuingRequestsForHelp2BladeKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Kỵ sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp2DarkWizard" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Phù thủy)</value></data>
+  <data name="ContinuingRequestsForHelp2SoulMaster" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Pháp sư)</value></data>
+  <data name="ContinuingRequestsForHelp2RageFighter" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Thiết binh)</value></data>
+  <data name="ContinuingRequestsForHelp2DarkLord" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Chúa tể)</value></data>
+  <data name="ContinuingRequestsForHelp2MagicGladiator" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (2) (Đấu sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp1Summoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp1BloodySummoner" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Bloody Thuật sư)</value></data>
+  <data name="ContinuingRequestsForHelp1FairyElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (1) (Yêu tinh)</value></data>
+  <data name="ContinuingRequestsForHelp1MuseElf" xml:space="preserve"><value>Tiếp tục yêu cầu giúp đỡ (1) (Nàng thơ Elf)</value></data>
+  <data name="ContinuingRequestsForHelp1DarkKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Chiến binh)</value></data>
+  <data name="ContinuingRequestsForHelp1BladeKnight" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Kỵ sĩ)</value></data>
+  <data name="ContinuingRequestsForHelp1DarkWizard" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Phù thủy)</value></data>
+  <data name="ContinuingRequestsForHelp1SoulMaster" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Pháp sư)</value></data>
+  <data name="ContinuingRequestsForHelp1RageFighter" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Thiết binh)</value></data>
+  <data name="ContinuingRequestsForHelp1DarkLord" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Chúa tể)</value></data>
+  <data name="ContinuingRequestsForHelp1MagicGladiator" xml:space="preserve"><value>Tiếp tục yêu cầu trợ giúp (1) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon6Summoner" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon6BloodySummoner" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Đẫm máu Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon6FairyElf" xml:space="preserve"><value>Tình hình ở ngục tối (6) (Tiên tiên)</value></data>
+  <data name="SituationAtTheDungeon6MuseElf" xml:space="preserve"><value>Tình hình ở ngục tối (6) (Nàng thơ Elf)</value></data>
+  <data name="SituationAtTheDungeon6DarkKnight" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Chiến binh)</value></data>
+  <data name="SituationAtTheDungeon6BladeKnight" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Kỵ sĩ)</value></data>
+  <data name="SituationAtTheDungeon6DarkWizard" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Phù thủy)</value></data>
+  <data name="SituationAtTheDungeon6SoulMaster" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Pháp sư)</value></data>
+  <data name="SituationAtTheDungeon6RageFighter" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Thiết binh)</value></data>
+  <data name="SituationAtTheDungeon6DarkLord" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Chúa tể)</value></data>
+  <data name="SituationAtTheDungeon6MagicGladiator" xml:space="preserve"><value>Tình hình tại ngục tối (6) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon5Summoner" xml:space="preserve"><value>Tình hình tại ngục tối (5) (Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon5FairyElf" xml:space="preserve"><value>Tình hình ở ngục tối (5) (Tiên tiên)</value></data>
+  <data name="SituationAtTheDungeon5DarkKnight" xml:space="preserve"><value>Tình hình tại ngục tối (5) (Chiến binh)</value></data>
+  <data name="SituationAtTheDungeon5DarkWizard" xml:space="preserve"><value>Tình hình tại ngục tối (5) (Phù thủy)</value></data>
+  <data name="SituationAtTheDungeon5RageFighter" xml:space="preserve"><value>Tình hình tại ngục tối (5) (Thiết binh)</value></data>
+  <data name="SituationAtTheDungeon5DarkLord" xml:space="preserve"><value>Tình hình tại ngục tối (5) (Chúa tể)</value></data>
+  <data name="SituationAtTheDungeon5MagicGladiator" xml:space="preserve"><value>Tình hình tại ngục tối (5) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon4Summoner" xml:space="preserve"><value>Tình hình tại ngục tối (4) (Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon4FairyElf" xml:space="preserve"><value>Tình hình ở ngục tối (4) (Tiên tiên)</value></data>
+  <data name="SituationAtTheDungeon4DarkKnight" xml:space="preserve"><value>Tình hình tại ngục tối (4) (Chiến binh)</value></data>
+  <data name="SituationAtTheDungeon4DarkWizard" xml:space="preserve"><value>Tình hình tại ngục tối (4) (Phù thủy)</value></data>
+  <data name="SituationAtTheDungeon4RageFighter" xml:space="preserve"><value>Tình hình tại ngục tối (4) (Thiết binh)</value></data>
+  <data name="SituationAtTheDungeon4DarkLord" xml:space="preserve"><value>Tình hình tại ngục tối (4) (Chúa tể)</value></data>
+  <data name="SituationAtTheDungeon4MagicGladiator" xml:space="preserve"><value>Tình hình tại ngục tối (4) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon3Summoner" xml:space="preserve"><value>Tình hình tại ngục tối (3) (Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon3FairyElf" xml:space="preserve"><value>Tình hình ở ngục tối (3) (Tiên tiên)</value></data>
+  <data name="SituationAtTheDungeon3DarkKnight" xml:space="preserve"><value>Tình hình tại ngục tối (3) (Chiến binh)</value></data>
+  <data name="SituationAtTheDungeon3DarkWizard" xml:space="preserve"><value>Tình hình tại ngục tối (3) (Phù thủy)</value></data>
+  <data name="SituationAtTheDungeon3RageFighter" xml:space="preserve"><value>Tình hình tại ngục tối (3) (Thiết binh)</value></data>
+  <data name="SituationAtTheDungeon3DarkLord" xml:space="preserve"><value>Tình hình tại ngục tối (3) (Chúa tể)</value></data>
+  <data name="SituationAtTheDungeon3MagicGladiator" xml:space="preserve"><value>Tình hình tại ngục tối (3) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon2Summoner" xml:space="preserve"><value>Tình hình tại ngục tối (2) (Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon2FairyElf" xml:space="preserve"><value>Tình hình ở ngục tối (2) (Tiên tiên)</value></data>
+  <data name="SituationAtTheDungeon2DarkKnight" xml:space="preserve"><value>Tình hình tại ngục tối (2) (Chiến binh)</value></data>
+  <data name="SituationAtTheDungeon2DarkWizard" xml:space="preserve"><value>Tình hình tại ngục tối (2) (Phù thủy)</value></data>
+  <data name="SituationAtTheDungeon2RageFighter" xml:space="preserve"><value>Tình hình tại ngục tối (2) (Thiết binh)</value></data>
+  <data name="SituationAtTheDungeon2DarkLord" xml:space="preserve"><value>Tình hình tại ngục tối (2) (Chúa tể)</value></data>
+  <data name="SituationAtTheDungeon2MagicGladiator" xml:space="preserve"><value>Tình hình tại ngục tối (2) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon1RageFighter" xml:space="preserve"><value>Tình hình tại ngục tối (1) (Thiết binh)</value></data>
+  <data name="SituationAtTheDungeon1DarkLord" xml:space="preserve"><value>Tình hình tại ngục tối (1) (Chúa tể)</value></data>
+  <data name="SituationAtTheDungeon1MagicGladiator" xml:space="preserve"><value>Tình hình tại ngục tối (1) (Đấu sĩ)</value></data>
+  <data name="SituationAtTheDungeon1Summoner" xml:space="preserve"><value>Tình hình tại ngục tối (1) (Thuật sư)</value></data>
+  <data name="SituationAtTheDungeon1FairyElf" xml:space="preserve"><value>Tình hình ở ngục tối (1) (Tiên tiên)</value></data>
+  <data name="SituationAtTheDungeon1DarkKnight" xml:space="preserve"><value>Tình hình tại ngục tối (1) (Chiến binh)</value></data>
+  <data name="SituationAtTheDungeon1DarkWizard" xml:space="preserve"><value>Tình hình tại ngục tối (1) (Phù thủy)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeRageFighter" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Thiết binh)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeDarkLord" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Chúa tể)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeMagicGladiator" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Đấu sĩ)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeFairyElf" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Tiên nữ)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeDarkKnight" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Chiến binh)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeDarkWizard" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Phù thủy)</value></data>
+  <data name="AndAskedTheEldersOfTheElbeSummoner" xml:space="preserve"><value>và hỏi các trưởng lão của Elbe! (Thuật sư)</value></data>
+  <data name="DungeonSweepSummoner" xml:space="preserve"><value>Quét ngục tối! (Thuật sư)</value></data>
+  <data name="DungeonSweepFairyElf" xml:space="preserve"><value>Quét ngục tối! (Tiên nữ)</value></data>
+  <data name="DungeonSweepDarkKnight" xml:space="preserve"><value>Quét ngục tối! (Chiến binh)</value></data>
+  <data name="DungeonSweepDarkWizard" xml:space="preserve"><value>Quét ngục tối! (Phù thủy)</value></data>
+  <data name="DungeonSweepRageFighter" xml:space="preserve"><value>Quét ngục tối! (Thiết binh)</value></data>
+  <data name="DungeonSweepDarkLord" xml:space="preserve"><value>Quét ngục tối! (Chúa tể)</value></data>
+  <data name="DungeonSweepMagicGladiator" xml:space="preserve"><value>Quét ngục tối! (Đấu sĩ)</value></data>
+  <data name="InlandSupplyRouteSummoner" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Thuật sư)</value></data>
+  <data name="InlandSupplyRouteFairyElf" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Tiên nữ)</value></data>
+  <data name="InlandSupplyRouteDarkKnight" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Chiến binh)</value></data>
+  <data name="InlandSupplyRouteDarkWizard" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Phù thủy)</value></data>
+  <data name="InlandSupplyRouteRageFighter" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Thiết binh)</value></data>
+  <data name="InlandSupplyRouteDarkLord" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Chúa tể)</value></data>
+  <data name="InlandSupplyRouteMagicGladiator" xml:space="preserve"><value>Tuyến cung cấp nội địa! (Đấu sĩ)</value></data>
+  <data name="AttackOnTheSupplyCorpsSummoner" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Thuật sư)</value></data>
+  <data name="AttackOnTheSupplyCorpsFairyElf" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Tiên nữ)</value></data>
+  <data name="AttackOnTheSupplyCorpsDarkKnight" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Chiến binh)</value></data>
+  <data name="AttackOnTheSupplyCorpsDarkWizard" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Phù thủy)</value></data>
+  <data name="AttackOnTheSupplyCorpsRageFighter" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Thiết binh)</value></data>
+  <data name="AttackOnTheSupplyCorpsDarkLord" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Chúa tể)</value></data>
+  <data name="AttackOnTheSupplyCorpsMagicGladiator" xml:space="preserve"><value>Tấn công vào Quân đoàn Tiếp tế! (Đấu sĩ)</value></data>
+  <data name="MonsterSupplyRouteInDeviasSummoner" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Thuật sư)</value></data>
+  <data name="MonsterSupplyRouteInDeviasFairyElf" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Tiên nữ)</value></data>
+  <data name="MonsterSupplyRouteInDeviasDarkKnight" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Chiến binh)</value></data>
+  <data name="MonsterSupplyRouteInDeviasDarkWizard" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Phù thủy)</value></data>
+  <data name="MonsterSupplyRouteInDeviasRageFighter" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Thiết binh)</value></data>
+  <data name="MonsterSupplyRouteInDeviasDarkLord" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Chúa tể)</value></data>
+  <data name="MonsterSupplyRouteInDeviasMagicGladiator" xml:space="preserve"><value>Con đường cung cấp quái vật ở Devias! (Đấu sĩ)</value></data>
+  <data name="BossOfPredatorTreatmentSummoner" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Thuật sư)</value></data>
+  <data name="BossOfPredatorTreatmentFairyElf" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Tiên nữ)</value></data>
+  <data name="BossOfPredatorTreatmentDarkKnight" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Chiến binh)</value></data>
+  <data name="BossOfPredatorTreatmentDarkWizard" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Phù thủy)</value></data>
+  <data name="BossOfPredatorTreatmentRageFighter" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Thiết binh)</value></data>
+  <data name="BossOfPredatorTreatmentDarkLord" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Chúa tể)</value></data>
+  <data name="BossOfPredatorTreatmentMagicGladiator" xml:space="preserve"><value>Ông chủ điều trị động vật ăn thịt! (Đấu sĩ)</value></data>
+  <data name="DisposeOfTheTownPlunderersSummoner" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Thuật sư)</value></data>
+  <data name="DisposeOfTheTownPlunderersFairyElf" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Tiên nữ)</value></data>
+  <data name="DisposeOfTheTownPlunderersRageFighter" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Thiết binh)</value></data>
+  <data name="DisposeOfTheTownPlunderersDarkLord" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Chúa tể)</value></data>
+  <data name="DisposeOfTheTownPlunderersMagicGladiator" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Đấu sĩ)</value></data>
+  <data name="DisposeOfTheTownPlunderersDarkKnight" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Chiến binh)</value></data>
+  <data name="DisposeOfTheTownPlunderersDarkWizard" xml:space="preserve"><value>Loại bỏ những kẻ cướp bóc thị trấn! (Phù thủy)</value></data>
+  <data name="SpiderHunt" xml:space="preserve"><value>Săn nhện!</value></data>
+  <data name="IntoTheDarknessZone" xml:space="preserve"><value>Vào vùng 'bóng tối'</value></data>
+  <data name="InfiltrateTheBarracksOfBalgass" xml:space="preserve"><value>Xâm nhập doanh trại Balgass</value></data>
+  <data name="EvidenceOfStrength" xml:space="preserve"><value>Bằng chứng về sức mạnh</value></data>
+  <data name="TreasuresOfMUSummoner" xml:space="preserve"><value>Kho báu (Thuật sư)</value></data>
+  <data name="TreasuresOfMUDarkWizard" xml:space="preserve"><value>Kho báu (Phù thủy)</value></data>
+  <data name="TreasuresOfMUFairyElf" xml:space="preserve"><value>Kho báu (Tiên nữ)</value></data>
+  <data name="TreasuresOfMUDarkKnight" xml:space="preserve"><value>Kho báu (Chiến binh)</value></data>
+  <data name="FindTheScrollOfEmperorSummoner" xml:space="preserve"><value>Tìm 'Cuộn giấy của Hoàng đế' (Thuật sư)</value></data>
+  <data name="FindTheScrollOfEmperorDarkWizard" xml:space="preserve"><value>Tìm 'Cuộn giấy của Hoàng đế' (Phù thủy)</value></data>
+  <data name="FindTheScrollOfEmperorFairyElf" xml:space="preserve"><value>Tìm 'Cuộn giấy của Hoàng đế' (Yêu tinh)</value></data>
+  <data name="FindTheScrollOfEmperorDarkKnight" xml:space="preserve"><value>Tìm 'Cuộn giấy của Hoàng đế' (Chiến binh)</value></data>
+  <data name="TrialOfTheDarkKnight" xml:space="preserve"><value>Dùng thử Chiến binh</value></data>
+  <data name="TrialOfTheDarkWizard" xml:space="preserve"><value>Dùng thử Phù thủy</value></data>
+  <data name="TrialOfTheFairyElf" xml:space="preserve"><value>Thử thách của nàng tiên Elf</value></data>
+  <data name="TrialOfTheMagicGladiator" xml:space="preserve"><value>Dùng thử Đấu sĩ</value></data>
+  <data name="TrialOfTheDarkLord" xml:space="preserve"><value>Dùng thử Chúa tể</value></data>
+  <data name="TrialOfTheSummoner" xml:space="preserve"><value>Dùng thử Thuật sư</value></data>
+  <data name="TrialOfTheRageFighter" xml:space="preserve"><value>Dùng thử Thiết binh</value></data>
+</root>

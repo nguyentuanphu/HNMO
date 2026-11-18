@@ -1,0 +1,199 @@
+@page "/news"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.News
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("News manager", "Quản lý tin tức")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("News manager", "Quản lý tin tức")" />
+
+<div class="page-help mb-2">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <h1 class="mb-0">@L("News & announcements manager", "Quản lý tin tức & thông báo")</h1>
+        <button type="button" class="btn btn-sm btn-outline-info" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+    </div>
+    <p class="text-muted">@L("Publish bilingual EN/VI announcements for the website homepage, the login/character screen news panel, and in-game chat notices (Sydney time).", "Đăng thông báo song ngữ Anh/Việt cho trang chủ website, bảng tin màn hình đăng nhập/chọn nhân vật và thông báo chat trong game (giờ Sydney).")</p>
+
+    @if (this._showHelp)
+    {
+        <div class="alert alert-info" role="region" id="news-help">
+            <strong>@L("How to use News Manager:", "Hướng dẫn Quản lý tin tức:")</strong>
+            <ul class="mb-0 mt-1">
+                <li>@L("Publish time uses Australia/Sydney time. Future timestamps stay hidden on the homepage and login panel until their scheduled time.", "Thời gian đăng dùng múi giờ Australia/Sydney. Bài hẹn giờ tương lai sẽ ẩn trên website và màn hình đăng nhập cho tới giờ đăng.")</li>
+                <li>@L("Pinned posts stay at the top of the website homepage and login screen news list.", "Bài ghim luôn hiển thị trên cùng ở trang chủ và bảng tin màn hình đăng nhập.")</li>
+                <li>@L("Image URL is optional and accepts relative paths (/images/...) or http(s) URLs.", "Ảnh minh họa là tùy chọn, chấp nhận đường dẫn tương đối (/images/...) hoặc URL http(s).")</li>
+                <li>@L("Enable 'Notify online players in chat' to immediately push a notice packet (C2 F5 2A) into online players' chat box.", "Bật 'Thông báo chat cho người chơi đang online' để đẩy ngay thông báo vào khung chat trong game.")</li>
+            </ul>
+        </div>
+    }
+</div>
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else
+{
+    <section class="card mb-3" id="news-settings-card">
+        <div class="card-body">
+            <h2 class="h5">@L("Display & notification settings", "Cài đặt hiển thị & thông báo")</h2>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="form-check form-switch" title="@L("Turn the News Manager plug-in on or off.", "Bật hoặc tắt plug-in Tin tức.")">
+                        <input class="form-check-input" type="checkbox" id="news-active" @bind="this._isActive" />
+                        <label class="form-check-label" for="news-active">@L("Enable news system", "Bật hệ thống tin tức")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-switch" title="@L("Expose published posts in /website/news and home.html #news.", "Hiển thị tin tức trên trang chủ website.")">
+                        <input class="form-check-input" type="checkbox" id="news-allow-website" @bind="this._configuration.AllowWebsite" />
+                        <label class="form-check-label" for="news-allow-website">@L("Show on website home", "Hiện trên trang chủ")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-switch" title="@L("Show the collapsible news card on the web game login and character selection screen.", "Hiện bảng tin ở màn hình đăng nhập và chọn nhân vật.")">
+                        <input class="form-check-input" type="checkbox" id="news-login-panel" @bind="this._configuration.ShowLoginPanel" />
+                        <label class="form-check-label" for="news-login-panel">@L("Show on login screen", "Hiện ở màn hình đăng nhập")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-switch" title="@L("Send the latest news notice to chat when a player enters the world.", "Gửi thông báo tin mới nhất vào chat khi người chơi vào game.")">
+                        <input class="form-check-input" type="checkbox" id="news-enter-chat" @bind="this._configuration.ChatNoticeOnEnterWorld" />
+                        <label class="form-check-label" for="news-enter-chat">@L("Chat notice on enter world", "Thông báo chat khi vào game")</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 align-items-end mt-1">
+                <div class="col-md-3">
+                    <div class="form-check form-switch" title="@L("Automatically broadcast to online players whenever a published post is saved.", "Tự động gửi thông báo chat ngay khi đăng bài mới.")">
+                        <input class="form-check-input" type="checkbox" id="news-publish-chat" @bind="this._configuration.ChatNoticeOnPublish" />
+                        <label class="form-check-label" for="news-publish-chat">@L("Broadcast chat on publish", "Gửi chat ngay khi đăng bài")</label>
+                    </div>
+                </div>
+                <div class="col-md-3" title="@L("Maximum number of published posts sent to homepage and login panel (1-100).", "Số bài viết tối đa hiển thị công khai (1-100).")">
+                    <label class="form-label" for="news-max-posts">@L("Max visible posts", "Số bài hiển thị tối đa")</label>
+                    <input class="form-control" type="number" min="1" max="100" id="news-max-posts" @bind="this._configuration.MaxVisiblePosts" />
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary" id="news-save-config" title="@L("Save website, login panel, and chat notification settings", "Lưu cài đặt hiển thị và thông báo tin tức")" disabled="@this._isSaving" @onclick="this.SaveConfigAsync">
+                        @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save settings", "Lưu cài đặt"))
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="news-editor-card">
+        <div class="card-body">
+            <h2 class="h5">
+                @(string.IsNullOrEmpty(this._editingId) ? L("Create announcement", "Tạo bài viết mới") : L("Edit announcement", "Chỉnh sửa bài viết"))
+            </h2>
+            @if (!string.IsNullOrEmpty(this._formError))
+            {
+                <div class="alert alert-danger" role="alert">@this._formError</div>
+            }
+            <div class="row g-3">
+                <div class="col-md-6" title="@L("Headline displayed to English players.", "Tiêu đề hiển thị bằng tiếng Anh.")">
+                    <label class="form-label" for="news-title-en">@L("English title", "Tiêu đề tiếng Anh")</label>
+                    <input class="form-control" id="news-title-en" maxlength="160" @bind="this._titleEn" />
+                </div>
+                <div class="col-md-6" title="@L("Headline displayed to Vietnamese players.", "Tiêu đề hiển thị bằng tiếng Việt.")">
+                    <label class="form-label" for="news-title-vi">@L("Vietnamese title", "Tiêu đề tiếng Việt")</label>
+                    <input class="form-control" id="news-title-vi" maxlength="160" @bind="this._titleVi" />
+                </div>
+                <div class="col-md-6" title="@L("Full post content in English.", "Nội dung đầy đủ bằng tiếng Anh.")">
+                    <label class="form-label" for="news-body-en">@L("English content", "Nội dung tiếng Anh")</label>
+                    <textarea class="form-control" id="news-body-en" rows="4" @bind="this._bodyEn"></textarea>
+                </div>
+                <div class="col-md-6" title="@L("Full post content in Vietnamese.", "Nội dung đầy đủ bằng tiếng Việt.")">
+                    <label class="form-label" for="news-body-vi">@L("Vietnamese content", "Nội dung tiếng Việt")</label>
+                    <textarea class="form-control" id="news-body-vi" rows="4" @bind="this._bodyVi"></textarea>
+                </div>
+                <div class="col-md-4" title="@L("Optional image URL (/images/... or https://...).", "Đường dẫn ảnh tùy chọn (/images/... hoặc https://...).")">
+                    <label class="form-label" for="news-image-url">@L("Image URL (optional)", "Link ảnh (tùy chọn)")</label>
+                    <input class="form-control" id="news-image-url" maxlength="512" placeholder="/images/banner.jpg" @bind="this._imageUrl" />
+                </div>
+                <div class="col-md-4" title="@L("Publish date and time in Australia/Sydney timezone.", "Thời gian đăng bài theo giờ Australia/Sydney.")">
+                    <label class="form-label" for="news-publish-sydney">@L("Publish time (Sydney)", "Giờ đăng (Sydney)")</label>
+                    <input class="form-control" type="datetime-local" id="news-publish-sydney" value="@this._publishSydneyLocal" @onchange="this.OnPublishTimeChanged" />
+                </div>
+                <div class="col-md-4 d-flex flex-column justify-content-end gap-2">
+                    <div class="form-check" title="@L("Pin this announcement above regular posts.", "Ghim bài viết này lên đầu danh sách.")">
+                        <input class="form-check-input" type="checkbox" id="news-pinned" @bind="this._isPinned" />
+                        <label class="form-check-label" for="news-pinned">@L("Pinned post", "Ghim bài viết")</label>
+                    </div>
+                    <div class="form-check" title="@L("Send an in-game chat notice to online players when saving a published post.", "Gửi thông báo vào khung chat trong game khi lưu bài đã tới giờ đăng.")">
+                        <input class="form-check-input" type="checkbox" id="news-notify-chat" @bind="this._notifyInChat" />
+                        <label class="form-check-label" for="news-notify-chat">@L("Notify online players in chat", "Thông báo chat trong game")</label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <button type="button" class="btn btn-success" id="news-save-post" title="@L("Save and publish or schedule this announcement", "Lưu và đăng hoặc hẹn giờ bài viết này")" disabled="@this._isSaving" @onclick="this.SavePostAsync">
+                    @(string.IsNullOrEmpty(this._editingId) ? L("Publish post", "Đăng bài viết") : L("Save changes", "Lưu thay đổi"))
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="news-reset-form" title="@L("Clear inputs and start a new announcement", "Xóa biểu mẫu để soạn bài mới")" disabled="@this._isSaving" @onclick="this.ResetForm">
+                    @L("New / clear form", "Soạn bài mới")
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="news-list-card">
+        <div class="card-body">
+            <h2 class="h5">@L("All posts", "Danh sách bài viết") (@this._posts.Count)</h2>
+            @if (this._posts.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No news posts yet.", "Chưa có bài viết nào.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle" id="news-posts-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Status", "Trạng thái")</th>
+                                <th>@L("Publish time (Sydney)", "Giờ đăng (Sydney)")</th>
+                                <th>@L("EN Title", "Tiêu đề EN")</th>
+                                <th>@L("VI Title", "Tiêu đề VI")</th>
+                                <th>@L("Actions", "Thao tác")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var post in this._posts)
+                            {
+                                var scheduled = post.PublishAtUtc > DateTime.UtcNow;
+                                <tr data-news-id="@post.Id">
+                                    <td>
+                                        @if (post.IsPinned)
+                                        {
+                                            <span class="badge text-bg-warning me-1">@L("Pinned", "Ghim")</span>
+                                        }
+                                        @if (scheduled)
+                                        {
+                                            <span class="badge text-bg-secondary">@L("Scheduled", "Hẹn giờ")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-success">@L("Published", "Đã đăng")</span>
+                                        }
+                                    </td>
+                                    <td><code>@NewsStore.FormatSydney(post.PublishAtUtc)</code></td>
+                                    <td>@post.TitleEn</td>
+                                    <td>@post.TitleVi</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary" title="@L("Edit this post", "Sửa bài viết")" @onclick="() => this.StartEdit(post)">@L("Edit", "Sửa")</button>
+                                            <button type="button" class="btn btn-outline-info" title="@L("Broadcast chat notice to online players", "Gửi thông báo chat cho người đang online")" @onclick="() => this.BroadcastAsync(post.Id)">@L("Notify", "Báo chat")</button>
+                                            <button type="button" class="btn btn-outline-danger" title="@L("Delete this post", "Xóa bài viết")" @onclick="() => this.DeleteAsync(post.Id)">@L("Delete", "Xóa")</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}

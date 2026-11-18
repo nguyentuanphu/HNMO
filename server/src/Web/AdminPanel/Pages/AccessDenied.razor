@@ -1,8 +1,11 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/access-denied"
 @using HNMO.Web.AdminPanel.Properties
 @attribute [AllowAnonymous]
 
 <PageTitle>HNMO: @Resources.AccessDenied</PageTitle>
 <h1>@Resources.AccessDenied</h1>
+<PageHelp Text="@HelpResources.PageHelpTextAccessDenied" />
+
 <p>@Resources.AccessDeniedDescription</p>
-<a class="btn btn-primary" href="">@Resources.Home</a>
+<a title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary" href="">@Resources.Home</a>

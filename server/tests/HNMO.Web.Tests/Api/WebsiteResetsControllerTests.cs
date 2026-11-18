@@ -15,6 +15,7 @@ using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.PlugIns.ResetOptions;
 using HNMO.Interfaces;
 using HNMO.Persistence;
@@ -151,6 +152,35 @@ public class WebsiteResetsControllerTests
         Assert.That((await this.ActAsync("reset").ConfigureAwait(false)).GetProperty("result").GetString(), Is.EqualTo("DailyLimit"));
         var ranking = JsonDocument.Parse(((ContentResult)await this._controller.GetAsync().ConfigureAwait(false)).Content!).RootElement;
         Assert.That(ranking.GetProperty("monthly")[0].GetProperty("name").GetString(), Is.EqualTo("AnnWizard"));
+    }
+
+    /// <summary>Website reset and stat-clearing fees are recorded once in the same account context.</summary>
+    /// <param name="action">The requested website action.</param>
+    /// <param name="cost">The configured fee.</param>
+    /// <param name="reason">The recorded action name.</param>
+    /// <returns>The test task.</returns>
+    [TestCase("reset", 10, "Reset")]
+    [TestCase("clear-stats", 7, "ClearStats")]
+    public async Task RecordsTheActualCoinFeeOnceAsync(string action, int cost, string reason)
+    {
+        var configuration = JsonSerializer.Deserialize<ResetOptionsConfiguration>(this._plugin.CustomConfiguration!)!;
+        configuration.Tiers.Single().Coins = cost;
+        configuration.Tiers.Single().CoinType = CashShopCoinType.WCoinC;
+        configuration.Website.ClearStatsCoins = cost;
+        configuration.Website.ClearStatsCoinType = CashShopCoinType.WCoinC;
+        this._plugin.CustomConfiguration = JsonSerializer.Serialize(configuration);
+        using var players = this._provider.CreateNewPlayerContext(this._configuration);
+        var account = (await players.GetAccountByLoginNameAsync("ann").ConfigureAwait(false))!;
+        account.WCoinC = 100;
+        await players.SaveChangesAsync().ConfigureAwait(false);
+        Assert.That((await this.ActAsync(action).ConfigureAwait(false)).GetProperty("result").GetString(), Is.EqualTo("Ok"));
+        var history = await players.GetCashShopCoinHistoryAsync(account.GetId(), 0, 20).ConfigureAwait(false);
+        Assert.That(history.Single().Amount, Is.EqualTo(-cost));
+        Assert.That(CashShopBalanceReceipt.Read(history.Single().Reason)!.Action, Is.EqualTo(reason));
+        Assert.That(account.WCoinC, Is.EqualTo(100 - cost));
+        Assert.That(await players.GetPendingCashShopCoinGrantsAsync(account.GetId()).ConfigureAwait(false), Is.Empty);
+        Assert.That((await this.ActAsync(action).ConfigureAwait(false)).GetProperty("result").GetString(), Is.Not.EqualTo("Ok"));
+        Assert.That(await players.GetCashShopCoinHistoryAsync(account.GetId(), 0, 20).ConfigureAwait(false), Has.Count.EqualTo(1));
     }
 
     /// <summary>

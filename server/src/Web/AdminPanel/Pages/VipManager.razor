@@ -1,0 +1,97 @@
+@page "/vip"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.Vip
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>@Resources.VipManagerTitle</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.VipManagerTitle" />
+<div class="vip-manager">
+<h1>@Resources.VipManagerTitle</h1>
+<PageHelp Text="@Resources.VipManagerHelp" />
+@if (this._message is { } message) { <p class="alert alert-info" role="status">@message</p> }
+<div class="row g-2 mb-3">
+    <div class="col"><label for="vip-filter">@Resources.VipManagerFilter</label><input id="vip-filter" class="form-control" maxlength="10" title="@Resources.VipManagerFilterHint" @bind="this._filter" /></div>
+    <div class="col-auto align-self-end"><button class="btn btn-secondary" title="@Resources.VipManagerReloadHint" disabled="@this._busy" @onclick="() => this.LoadAsync(false)">@Resources.VipManagerReload</button></div>
+</div>
+@if (this._snapshot is { } snapshot)
+{
+    <div class="table-responsive"><table class="table"><thead><tr><th>@Resources.VipManagerAccount</th><th>@Resources.VipManagerLevel</th><th>@Resources.VipManagerUntil</th><th>@Resources.VipManagerActivity</th></tr></thead><tbody>
+    @foreach (var row in snapshot.Accounts)
+    {
+        <tr><td>@row.LoginName</td><td>@this.Name(row.NameEn, row.NameVi)</td><td>@this.Sydney(row.UntilUtc)</td><td><a href="@($"/activity-log?account={Uri.EscapeDataString(row.LoginName)}")" title="@Resources.VipManagerActivityHint">@Resources.VipManagerActivity</a></td></tr>
+    }
+    </tbody></table></div>
+    @if (snapshot.Accounts.Count == 0) { <p>@Resources.VipManagerNoAccounts</p> }
+    @if (snapshot.HasMore) { <p>@Resources.VipManagerHasMore</p> }
+    <button class="btn btn-secondary me-2" title="@Resources.VipManagerPagerHint" disabled="@(this._busy || this._offset == 0)" @onclick="() => this.PageAsync(-50)">@Resources.VipManagerPrevious</button>
+    <button class="btn btn-secondary" title="@Resources.VipManagerPagerHint" disabled="@(this._busy || !snapshot.HasMore)" @onclick="() => this.PageAsync(50)">@Resources.VipManagerNext</button>
+
+    <hr />
+    <p>@Resources.VipManagerSavedLevels</p>
+    @if (!snapshot.IsActive) { <p>@Resources.VipManagerSaveFirst</p> }
+    <fieldset disabled="@(this._busy || this._change is not null || !snapshot.IsActive)">
+        <div class="row g-2 mb-2">
+            <div class="col"><label for="vip-account">@Resources.VipManagerAccount</label><input id="vip-account" class="form-control" maxlength="10" title="@Resources.VipManagerAccountHint" @bind="this._account" /></div>
+            <div class="col"><label for="vip-level">@Resources.VipManagerLevel</label><select id="vip-level" class="form-select" title="@Resources.VipManagerReviewGrantHint" @bind="this._levelId">@foreach (var level in snapshot.Configuration.Levels) { <option value="@level.Id">@this.Name(level.NameEn, level.NameVi)</option> }</select></div>
+            <div class="col"><label for="vip-days">@Resources.VipManagerDays</label><input id="vip-days" class="form-control" type="number" min="1" max="3650" title="@Resources.VipManagerDaysHint" @bind="this._days" /></div>
+        </div>
+        <label for="vip-reason">@Resources.VipManagerReason</label><textarea id="vip-reason" class="form-control mb-2" maxlength="500" title="@Resources.VipManagerReasonHint" @bind="this._reason"></textarea>
+        <button id="vip-review-grant" class="btn btn-primary me-2" title="@Resources.VipManagerReviewGrantHint" @onclick="() => this.PreviewAsync(false)">@Resources.VipManagerReviewGrant</button>
+        <button id="vip-review-remove" class="btn btn-danger" title="@Resources.VipManagerReviewRemoveHint" @onclick="() => this.PreviewAsync(true)">@Resources.VipManagerReviewRemove</button>
+    </fieldset>
+    @if (this._change is { } change)
+    {
+        <div class="alert alert-warning mt-3" id="vip-review">
+            <p>@this.ReviewText(change)</p><p>@Resources.VipManagerReason: @change.Reason</p>
+            @if (this._currentUntil is { } until) { <p>@string.Format(Resources.VipManagerCurrentUntil, this.Sydney(until))</p> } else { <p>@Resources.VipManagerNoCurrent</p> }
+            @if (this._confirmation is not null)
+            {
+                <button id="vip-confirm" class="btn btn-primary me-2" title="@Resources.VipManagerConfirmHint" disabled="@this._busy" @onclick="this.ConfirmAsync">@Resources.VipManagerConfirm</button>
+                <button class="btn btn-secondary" title="@Resources.VipManagerCancelHint" disabled="@this._busy" @onclick="this.CancelReview">@Resources.VipManagerCancel</button>
+            }
+            else
+            {
+                <button id="vip-retry" class="btn btn-primary" title="@Resources.VipManagerRetryHint" disabled="@this._busy" @onclick="this.RetryAsync">@Resources.VipManagerRetry</button>
+            }
+        </div>
+    }
+
+    <hr /><h2>@Resources.VipManagerSettings</h2>
+    <fieldset disabled="@this._busy">
+    <div class="form-check"><input id="vip-enabled" class="form-check-input" type="checkbox" title="@Resources.VipManagerEnabledHint" @bind="this._configuration.Enabled" /><label class="form-check-label" for="vip-enabled">@Resources.VipManagerEnabled</label></div>
+    <div class="form-check mb-3"><input id="vip-badge" class="form-check-input" type="checkbox" title="@Resources.VipManagerChatBadgeHint" @bind="this._configuration.ShowChatBadge" /><label class="form-check-label" for="vip-badge">@Resources.VipManagerChatBadge</label></div>
+    @foreach (var level in this._configuration.Levels)
+    {
+        <div class="card card-body mb-3">
+            <div class="row g-2">
+                <div class="col"><label>@Resources.VipManagerLevelId<input class="form-control" type="number" min="1" max="1000" title="@Resources.VipManagerLevelIdHint" @bind="level.Id" /></label></div>
+                <div class="col"><label>@Resources.VipManagerNameEn<input class="form-control" maxlength="60" title="@Resources.VipManagerNameHint" @bind="level.NameEn" /></label></div>
+                <div class="col"><label>@Resources.VipManagerNameVi<input class="form-control" maxlength="60" title="@Resources.VipManagerNameHint" @bind="level.NameVi" /></label></div>
+            </div>
+            <div class="row g-2 mt-1">
+                <div class="col"><label>@Resources.VipManagerExperience<input class="form-control" type="number" min="0" max="10000" title="@Resources.VipManagerExperienceHint" @bind="level.ExperiencePercent" /></label></div>
+                <div class="col"><label>@Resources.VipManagerZen<input class="form-control" type="number" min="0" max="10000" title="@Resources.VipManagerZenHint" @bind="level.ZenPercent" /></label></div>
+                <div class="col"><label>@Resources.VipManagerDaily<input class="form-control" type="number" min="0" max="2147483647" title="@Resources.VipManagerDailyHint" @bind="level.DailyCoins" /></label></div>
+                <div class="col"><label>@Resources.VipManagerCurrency<select class="form-select" title="@Resources.VipManagerCurrencyHint" @bind="level.DailyCoinType">@foreach (var coin in Enum.GetValues<CashShopCoinType>()) { <option value="@coin">@this.Coin(coin)</option> }</select></label></div>
+            </div>
+            <h3 class="h6 mt-3">@Resources.VipManagerOffers</h3>
+            @for (var index = 0; index < level.Offers.Count; index++)
+            {
+                var offerIndex = index;
+                var offer = level.Offers[offerIndex];
+                <div class="row g-2 mb-2">
+                    <div class="col"><label>@Resources.VipManagerDays<input class="form-control" type="number" min="1" max="3650" title="@Resources.VipManagerDaysHint" value="@offer.Days" @onchange="e => this.OfferDays(level, offerIndex, e)" /></label></div>
+                    <div class="col"><label>@Resources.VipManagerPrice<input class="form-control" type="number" min="0" max="2147483647" title="@Resources.VipManagerPriceHint" value="@offer.Price" @onchange="e => this.OfferPrice(level, offerIndex, e)" /></label></div>
+                    <div class="col"><label>@Resources.VipManagerCurrency<select class="form-select" title="@Resources.VipManagerCurrencyHint" value="@offer.CoinType" @onchange="e => this.OfferCoin(level, offerIndex, e)">@foreach (var coin in Enum.GetValues<CashShopCoinType>()) { <option value="@coin">@this.Coin(coin)</option> }</select></label></div>
+                    <div class="col-auto align-self-end"><button class="btn btn-outline-danger" title="@Resources.VipManagerRemoveOfferHint" @onclick="() => level.Offers.RemoveAt(offerIndex)">@Resources.VipManagerRemoveOffer</button></div>
+                </div>
+            }
+            <div><button class="btn btn-outline-primary me-2" title="@Resources.VipManagerAddOfferHint" disabled="@(level.Offers.Count >= 4)" @onclick="() => this.AddOffer(level)">@Resources.VipManagerAddOffer</button><button class="btn btn-outline-danger" title="@Resources.VipManagerRemoveLevelHint" @onclick="() => this._configuration.Levels.Remove(level)">@Resources.VipManagerRemoveLevel</button></div>
+        </div>
+    }
+    <button class="btn btn-outline-primary me-2" title="@Resources.VipManagerAddLevelHint" disabled="@(this._configuration.Levels.Count >= 12)" @onclick="this.AddLevel">@Resources.VipManagerAddLevel</button>
+    <button id="vip-save" class="btn btn-primary" title="@Resources.VipManagerSaveHint" @onclick="this.SaveAsync">@Resources.VipManagerSave</button>
+    </fieldset>
+}
+</div>

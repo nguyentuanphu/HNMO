@@ -20,6 +20,8 @@ internal sealed class PortalOptions
 
     public int RegistrationsPerHourPerAddress { get; set; } = 5;
 
+    public int ConnectServerPort { get; set; } = 44406;
+
     /// <summary>Google's token check; replaceable for tests.</summary>
     public string GoogleTokenInfoUrl { get; set; } = "https://oauth2.googleapis.com/tokeninfo";
 }
@@ -42,11 +44,25 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         // Handlers that take only the HttpContext are cast to Func<..., Task<IResult>>, so their answer is sent:
         // as a plain RequestDelegate the result would be dropped (ASP0016).
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
+        app.MapPost("/portal/account/overview", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "overview"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/password", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "password"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/state", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/purchase", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/purchase", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/daily", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/daily", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/email/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/state", "Account email"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/email/request", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/request", "Account email"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/email/confirm", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/confirm", "Account email"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/missions/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/state", "Account missions"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/missions/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/claim", "Account missions"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/gift-box/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/gift-box/state", "Gift box"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/gift-box/collect", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/gift-box/collect", "Gift box"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/register", portal.RegisterAsync).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
         app.MapGet("/website/settings", (Func<HttpContext, Task<IResult>>)portal.WebsiteSettingsAsync);
+        app.MapPost("/portal/login-ticket", (Func<HttpContext, Task<IResult>>)portal.LoginTicketAsync).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/google", portal.GoogleAsync).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/google-ticket", (Func<HttpContext, Task<IResult>>)portal.GoogleTicketAsync).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-codes/characters", (Func<HttpContext, Task<IResult>>)(context => portal.GiftCodesAsync(context, "characters"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-codes/redeem", (Func<HttpContext, Task<IResult>>)(context => portal.GiftCodesAsync(context, "redeem"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/resets/account", (Func<HttpContext, Task<IResult>>)(context => portal.ResetsAsync(context, "account"))).RequireRateLimiting("per-visitor");
@@ -54,9 +70,63 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/safety/account", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/safety/pin", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "pin"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/safety/item", (Func<HttpContext, Task<IResult>>)(context => portal.SafetyAsync(context, "item"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/topup-milestones/account", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardTopUpMilestonesAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/topup-milestones/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardTopUpMilestonesAsync(context, "claim"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/lucky-number/account", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardLuckyNumberAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/lucky-number/pick", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardLuckyNumberAsync(context, "pick"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/market/account", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/market/buy", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "buy"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/market/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/account", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/direct/receipt", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "direct/receipt"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/jewel-bank/account", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/jewel-bank/withdraw", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "withdraw"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/jewel-bank/clear-master", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "clear-master"))).RequireRateLimiting("per-visitor");
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
+
+    private async Task<IResult> AccountAsync(HttpContext context, string action)
+    {
+        context.Response.Headers.CacheControl = "no-store";
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) => body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } value
+            && value.GetString() is { } text && text.Length <= maximum ? text : string.Empty;
+        var page = body?.GetValueOrDefault("page") is { ValueKind: JsonValueKind.Number } number && number.TryGetInt32(out var requestedPage) ? requestedPage : 0;
+        object payload = action == "password"
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20), newPassword = Field("newPassword", 20) }
+            : new { loginName = Field("loginName", 10), password = Field("password", 20), page };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/account/{action}", payload), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.BadRequest or HttpStatusCode.Conflict && text.StartsWith('{'))
+            {
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
 
     private HttpRequestMessage ApiRequest(HttpMethod method, string path, object? body = null, string? apiKey = null)
     {
@@ -198,30 +268,161 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         return Results.Json(new { saved = true });
     }
 
-    // What the website's pages may know (the Google client id); the admin path never leaves the server.
+    // What the website's pages may know (the Google client id and whether website login is required); the admin path never leaves the server.
     private async Task<IResult> WebsiteSettingsAsync(HttpContext context)
     {
-        var clientId = await this.GoogleClientIdAsync(context.RequestAborted).ConfigureAwait(false);
+        var (clientId, requireWebsiteLogin, theme) = await this.PublicSettingsAsync(context.RequestAborted).ConfigureAwait(false);
         context.Response.Headers.CacheControl = "no-cache";
-        return Results.Json(new { googleClientId = clientId ?? string.Empty });
+        return Results.Json(new
+        {
+            googleClientId = clientId ?? string.Empty,
+            requireWebsiteLogin,
+            theme,
+            connectServerPort = options.ConnectServerPort > 0 ? options.ConnectServerPort : 44406,
+        });
     }
 
-    private async Task<string?> GoogleClientIdAsync(CancellationToken cancellationToken)
+    private async Task<(string? GoogleClientId, bool RequireWebsiteLogin, string Theme)> PublicSettingsAsync(CancellationToken cancellationToken)
     {
         try
         {
-            using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), cancellationToken).ConfigureAwait(false);
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            timeoutCts.CancelAfter(TimeSpan.FromMilliseconds(500));
+            using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), timeoutCts.Token).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                return null;
+                return (null, false, "classic");
             }
 
-            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
-            return document.RootElement.TryGetProperty("googleClientId", out var value) && value.GetString() is { Length: > 0 } id ? id : null;
+            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeoutCts.Token).ConfigureAwait(false));
+            var root = document.RootElement;
+            var googleClientId = root.TryGetProperty("googleClientId", out var value) && value.GetString() is { Length: > 0 } id ? id : null;
+            var requireWebsiteLogin = root.TryGetProperty("requireWebsiteLogin", out var req) && req.ValueKind == JsonValueKind.True;
+            var theme = root.TryGetProperty("theme", out var appearance) && appearance.ValueKind == JsonValueKind.String ? appearance.GetString() : null;
+            return (googleClientId, requireWebsiteLogin, theme ?? "classic");
         }
-        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException)
+        catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException || (error is OperationCanceledException && !cancellationToken.IsCancellationRequested))
         {
-            return null;
+            return (null, false, "classic");
+        }
+    }
+
+    private Task<string?> GoogleClientIdAsync(CancellationToken cancellationToken) =>
+        this.PublicSettingsAsync(cancellationToken).ContinueWith(t => t.Result.GoogleClientId, cancellationToken, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+
+    // Issues a short-lived single-use login ticket for a player signed in on the website.
+    private async Task<IResult> LoginTicketAsync(HttpContext context)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+
+        var request = new { loginName = Field("loginName", 10), password = Field("password", 20) };
+        try
+        {
+            using var apiRequest = this.ApiRequest(HttpMethod.Post, "api/website/login-ticket", request);
+            if (context.Connection.RemoteIpAddress?.ToString() is { Length: > 0 } clientIp)
+            {
+                apiRequest.Headers.TryAddWithoutValidation("X-HNMO-Client-Ip", clientIp);
+            }
+
+            if (Field("deviceId", 128) is { Length: > 0 } deviceId)
+            {
+                apiRequest.Headers.TryAddWithoutValidation("X-HNMO-Device-Id", deviceId);
+            }
+
+            using var response = await http.SendAsync(apiRequest, context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                var status = (text.Contains("\"error\":\"blocked\"", StringComparison.Ordinal) && response.StatusCode == HttpStatusCode.OK)
+                    ? (int)HttpStatusCode.Forbidden
+                    : (int)response.StatusCode;
+                return Results.Content(text, "application/json", statusCode: status);
+            }
+
+            logger.LogWarning("Website login ticket failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    // Issues a single-use login ticket for a Google-signed-in account after verifying its Google ID token.
+    private async Task<IResult> GoogleTicketAsync(HttpContext context)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        GoogleSignInRequest? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<GoogleSignInRequest>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        var clientId = await this.GoogleClientIdAsync(context.RequestAborted).ConfigureAwait(false);
+        if (clientId is null)
+        {
+            return Results.Json(new { error = "google" }, statusCode: 503);
+        }
+
+        var email = body is not null ? await this.VerifyGoogleTokenAsync(body.Credential, clientId, context.RequestAborted).ConfigureAwait(false) : null;
+        if (email is null)
+        {
+            return Results.Json(new { error = "login" }, statusCode: 401);
+        }
+
+        using var found = await http.SendAsync(this.ApiRequest(HttpMethod.Get, $"api/accounts/by-email?email={Uri.EscapeDataString(email)}"), context.RequestAborted).ConfigureAwait(false);
+        if (!found.IsSuccessStatusCode)
+        {
+            return Results.Json(new { error = "login" }, statusCode: (int)found.StatusCode);
+        }
+
+        using var document = JsonDocument.Parse(await found.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false));
+        var loginName = document.RootElement.GetProperty("loginName").GetString();
+        if (string.IsNullOrEmpty(loginName))
+        {
+            return Results.Json(new { error = "login" }, statusCode: 404);
+        }
+
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, "api/website/login-ticket/verified", new { loginName }), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Forbidden or HttpStatusCode.NotFound or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
         }
     }
 
@@ -347,11 +548,14 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
 
         string Field(string name, int maximum) => (body?.GetValueOrDefault(name) ?? string.Empty) is var value && value.Length <= maximum ? value : string.Empty;
         object request = action == "redeem"
-            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40) }
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40), deviceId = Field("deviceId", 36) }
             : new { loginName = Field("loginName", 10), password = Field("password", 20) };
         try
         {
-            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            using var proxyRequest = this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request);
+            // Replace, rather than copy, any browser-supplied forwarding headers.
+            proxyRequest.Headers.TryAddWithoutValidation("X-HNMO-Client-Address", context.Connection.RemoteIpAddress?.ToString());
+            using var response = await http.SendAsync(proxyRequest, context.RequestAborted).ConfigureAwait(false);
             var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
             if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
             {
@@ -462,6 +666,228 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             }
 
             logger.LogWarning("Account safety on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private Task<IResult> ForwardTopUpMilestonesAsync(HttpContext context, string action) =>
+        this.ForwardSignedJsonAsync(context, $"api/website/topup-milestones/{action}", "Top-up milestones");
+
+    private async Task<IResult> ForwardSignedJsonAsync(HttpContext context, string apiPath, string label)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        JsonElement body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<JsonElement>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, apiPath, body), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("{Feature} on the website failed: {Status}", label, response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> ForwardLuckyNumberAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Str(string key, int max) =>
+            body?.GetValueOrDefault(key) is { ValueKind: JsonValueKind.String } el && el.GetString() is { } s && s.Length <= max ? s : string.Empty;
+        var number = body?.GetValueOrDefault("number") is { ValueKind: JsonValueKind.Number } numEl && numEl.TryGetInt32(out var n) ? n : 0;
+        object payload = action == "pick"
+            ? new { loginName = Str("loginName", 10), password = Str("password", 20), number }
+            : new { loginName = Str("loginName", 10), password = Str("password", 20) };
+
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/lucky-number/{action}", payload), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Lucky number portal call {Action} failed: {Status}", action, response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> MarketAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+        object request = action == "account"
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20) }
+            : new { loginName = Field("loginName", 10), password = Field("password", 20), listingId = Field("listingId", 40) };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/market/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Item market on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> EscrowAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+        object request = action switch
+        {
+            "account" => new { loginName = Field("loginName", 10), password = Field("password", 20) },
+            "direct/receipt" => new
+            {
+                loginName = Field("loginName", 10),
+                password = Field("password", 20),
+                contractId = Field("contractId", 40),
+                receiptMime = Field("receiptMime", 40),
+                receiptBase64 = Field("receiptBase64", 800_000),
+                note = Field("note", 200),
+            },
+            _ => new { loginName = Field("loginName", 10), password = Field("password", 20), contractId = Field("contractId", 40) },
+        };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/escrow/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Escrow website portal call {Action} failed: {Status}", action, response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> JewelBankAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+        int IntField(string name) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.Number } element && element.TryGetInt32(out var val) ? val : 1;
+
+        object request = action switch
+        {
+            "withdraw" => new { loginName = Field("loginName", 10), password = Field("password", 20), jewelKey = Field("jewelKey", 24), quantity = IntField("quantity") },
+            "clear-master" => new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 20) },
+            _ => new { loginName = Field("loginName", 10), password = Field("password", 20) },
+        };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/jewel-bank/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Jewel Bank on the website failed: {Status}", response.StatusCode);
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
         catch (HttpRequestException)

@@ -1,4 +1,5 @@
-﻿@page "/gameServer/{gameServerId:int}/"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/gameServer/{gameServerId:int}/"
 
 @implements IDisposable
 
@@ -11,6 +12,8 @@
 @if (this._gameServer is not null)
 {
     <PageTitle>HNMO: @Resources.GameServer @this._gameServer.Id</PageTitle>
+<PageHelp Text="@HelpResources.PageHelpTextGameServer" />
+
     <Breadcrumb Caption=@($"{Resources.GameServer} {this._gameServer.Id}") />
     <CascadingValue Value="@_liveMapRoute" Name="LiveMapRoute">
     <CascadingValue Value="@_gameServer">

@@ -171,9 +171,7 @@ export type SkillSpecial =
    * Dark Side: RageAttackRangeRequest (C1 4B) and RageAttackRequest (C3 4A); the server's target list (C1 4B) then
    * drives the dash (CMonkSystem::SetDarksideTargetIndex), or a TargetedSkill at the hero when it names nobody.
    */
-  | 'darkSide'
-  /** Phoenix Shot: AttackRagefighter walks into its range, but UseSkillRagefighter has no case for it and sends nothing. */
-  | 'phoenixShot';
+  | 'darkSide';
 
 export interface SkillCastPlan {
   /** What the hero sends when casting. */
@@ -651,7 +649,7 @@ export const isDarkSide = (skill: number): boolean => DARK_SIDES.includes(skill)
 export const isKillingBlow = (skill: number): boolean => KILLING_BLOWS.includes(skill);
 export const isBeastUppercut = (skill: number): boolean => BEAST_UPPERCUTS.includes(skill);
 
-/** CMonkSystem::SetRageSkillAni: the action a Rage Fighter skill plays (null: none). */
+/** CMonkSystem::SetRageSkillAni, plus the HNMO Phoenix Shot cast action (null: none). */
 export function rageSkillAction(skill: number): number | null {
   if (KILLING_BLOWS.includes(skill)) return A.SKILL_THRUST;
   if (BEAST_UPPERCUTS.includes(skill)) return A.SKILL_STAMP;
@@ -659,6 +657,7 @@ export function rageSkillAction(skill: number): number | null {
   if (DARK_SIDES.includes(skill)) return A.SKILL_DARKSIDE_READY;
   if (DRAGON_ROARS.includes(skill)) return A.SKILL_DRAGONLORE;
   if (skill === S.DRAGON_KICK) return A.SKILL_DRAGONKICK;
+  if (skill === S.PHOENIX_SHOT) return A.SKILL_PHOENIX_SHOT;
   return null;
 }
 
@@ -692,7 +691,8 @@ function rageFighterPlan(skill: number, ctx: SkillCastContext, g: Gear, plan: (p
     return plan({ packet: 'area', ...atTarget, areaAt: 'self', rotationScale: 255, source: 'UseSkillRagefighter AT_SKILL_DRAGON_ROAR' });
   }
   if (skill === S.PHOENIX_SHOT) {
-    return plan({ packet: 'none', ...atTarget, special: 'phoenixShot', source: 'AttackRagefighter AT_SKILL_PHOENIX_SHOT (UseSkillRagefighter sends nothing)' });
+    // Owner decision (2026-11-16): HNMO sends the area cast at action start, like Dragon Roar.
+    return plan({ packet: 'area', ...atTarget, areaAt: 'self', rotationScale: 255, source: 'HNMO Phoenix Shot area cast (owner decision 2026-11-16)' });
   }
   if (DARK_SIDES.includes(skill)) {
     return plan({ packet: 'targeted', heroAction: A.SKILL_DARKSIDE_READY, special: 'darkSide', ignoresRange: true, source: 'UseSkillRagefighter AT_SKILL_DARKSIDE' });

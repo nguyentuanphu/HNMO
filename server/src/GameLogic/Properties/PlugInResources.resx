@@ -2044,6 +2044,18 @@
   <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
     <value>The client id of a Google Cloud OAuth client (type: Web application, with your website address as an authorized JavaScript origin). Empty: no "Sign in with Google".</value>
   </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>Web game: require website login</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>When on, the web game hides its own password form and players sign in on the website first (then click Play now).</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Name" xml:space="preserve">
+    <value>Web login ticket handler</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Description" xml:space="preserve">
+    <value>Handles one-time web login tickets issued on the website.</value>
+  </data>
   <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
     <value>Illusion Temple</value>
   </data>
@@ -2212,4 +2224,8 @@
   <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
     <value>Asks the unlock of a bag item with the second password: /unlockitem CELL PIN.</value>
   </data>
+  <data name="VipPlugIn_Name" xml:space="preserve"><value>VIP memberships</value></data>
+  <data name="VipPlugIn_Description" xml:space="preserve"><value>Optional paid VIP time, experience and zen bonuses, and daily coins. Disabled until the host enables it.</value></data>
+  <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Gift box activity tracking</value></data>
+  <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Records observed player world entry and departure timestamps for gift box recent-player audiences.</value></data>
 </root>

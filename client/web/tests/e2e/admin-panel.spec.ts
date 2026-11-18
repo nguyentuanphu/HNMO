@@ -14,7 +14,7 @@ function watchErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
-    if (message.type() === 'error' && !/favicon/i.test(message.text())) errors.push(message.text());
+    if (message.type() === 'error' && !/favicon/i.test(message.text())) errors.push(`${message.text()} (${message.location().url})`);
   });
   return errors;
 }
@@ -102,8 +102,8 @@ test('every link of the sidebar groups opens a working page', async ({ page }) =
   const failures: string[] = [];
   for (const [caption, href] of links) {
     if (!href || href.startsWith('http') || href.startsWith('/grafana')) continue;
-    await page.goto(href, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(500);
+    const response = await page.goto(href, { waitUntil: 'networkidle' });
+    if (!response?.ok()) failures.push(`${caption} (${href}): HTTP ${response?.status() ?? 'no response'}`);
     const broken = await page.locator('#blazor-error-ui').isVisible();
     // Some pages (map and terrain editors, setup, logs) have no heading but a canvas, form or card.
     const content = page.locator('article.content').locator(':is(h1, h2, h3, h4, canvas, form, table, .card, .alert, select)').first();

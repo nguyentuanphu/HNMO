@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @using HNMO.DataModel.Configuration
 @using HNMO.DataModel.Configuration.Items
 @using HNMO.Persistence
@@ -133,8 +134,8 @@
                                                       Value="@assignedMaps"
                                                       ValueExpression="@(() => assignedMaps)"
                                                       ValueChanged="@(_ => this.OnMapsChanged.InvokeAsync())" />
-                                    <button type="button" class="btn btn-sm btn-outline-secondary me-1" @onclick="() => this.AssignToAllMapsAsync(group)">@Resources.AssignToAllMaps</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="() => this.RemoveFromAllMapsAsync(group)">@Resources.RemoveFromAllMaps</button>
+                                    <button title="@HelpResources.PageHelpHintAssignMaps" type="button" class="btn btn-sm btn-outline-secondary me-1" @onclick="() => this.AssignToAllMapsAsync(group)">@Resources.AssignToAllMaps</button>
+                                    <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-secondary" @onclick="() => this.RemoveFromAllMapsAsync(group)">@Resources.RemoveFromAllMaps</button>
                                 </div>
                             }
                             @if (this.ShowMonsterRestriction && !this.IsItemBoxDrop)

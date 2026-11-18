@@ -9,7 +9,7 @@ using HNMO.GameLogic.PlugIns.PeriodicTasks;
 /// <summary>
 /// Provides ready-to-use default configurations for the built-in invasion types.
 /// </summary>
-internal static class InvasionConfigurationDefaults
+public static class InvasionConfigurationDefaults
 {
     /// <summary>
     /// Gets the default configuration for the Golden Invasion event.
@@ -67,6 +67,42 @@ internal static class InvasionConfigurationDefaults
             new(InvasionMonsters.WhiteWizard, 1, [InvasionMaps.Lorencia, InvasionMaps.Noria, InvasionMaps.Devias], SpawnMapStrategy.RandomMap, announceDeath: true),
             new(InvasionMonsters.DestructiveOgreSoldier, 15, [], SpawnMapStrategy.RandomMap),
             new(InvasionMonsters.DestructiveOgreArcher, 10, [], SpawnMapStrategy.RandomMap),
+        ],
+    };
+
+    /// <summary>
+    /// Gets the default configuration for the Lunar Rabbit Invasion event.
+    /// </summary>
+    public static PeriodicInvasionConfiguration Rabbits => new()
+    {
+        TaskDuration = TimeSpan.FromMinutes(20),
+        PreStartMessageDelay = TimeSpan.FromSeconds(3),
+        StartMessage = "[{mapName}] Lunar Rabbit invasion!",
+        EndMessage = "[{mapName}] Lunar Rabbit invasion has ended.",
+        ForceSingleMap = true,
+        Timetable = PeriodicTaskConfiguration.GenerateTimeSequence(TimeSpan.FromHours(4), new TimeOnly(0, 15)).ToList(),
+        Mobs =
+        [
+            new(InvasionMonsters.StrangeRabbit, 20, [InvasionMaps.Lorencia, InvasionMaps.Noria, InvasionMaps.Devias], SpawnMapStrategy.RandomMap),
+            new(InvasionMonsters.HideousRabbit, 10, [], SpawnMapStrategy.RandomMap, announceDeath: true),
+        ],
+    };
+
+    /// <summary>
+    /// Gets the default configuration for the Snowman Invasion event.
+    /// </summary>
+    public static PeriodicInvasionConfiguration Snowmen => new()
+    {
+        TaskDuration = TimeSpan.FromMinutes(20),
+        PreStartMessageDelay = TimeSpan.FromSeconds(3),
+        StartMessage = "[{mapName}] Snowman invasion!",
+        EndMessage = "[{mapName}] Snowman invasion has ended.",
+        ForceSingleMap = true,
+        Timetable = PeriodicTaskConfiguration.GenerateTimeSequence(TimeSpan.FromHours(4), new TimeOnly(1, 15)).ToList(),
+        Mobs =
+        [
+            new(InvasionMonsters.TransformedSnowman, 15, [InvasionMaps.Devias, InvasionMaps.Lorencia, InvasionMaps.Noria], SpawnMapStrategy.RandomMap),
+            new(InvasionMonsters.CursedSanta, 5, [], SpawnMapStrategy.RandomMap, announceDeath: true),
         ],
     };
 }

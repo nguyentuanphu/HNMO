@@ -1,0 +1,131 @@
+@page "/crash-watch"
+
+<PageTitle>@L("Crash Watch & Auto-Restart", "Giám Sát Sự Cố & Tự Khởi Động")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Crash Watch & Auto-Restart", "Giám Sát Sự Cố & Tự Khởi Động")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextCrashWatch" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("When HNMO runs via /control (Start HNMO), any unexpected exit of the game server process is recorded with its Sydney timestamp, exit code, and trailing server.log lines.", "Khi chạy HNMO qua /control (Start HNMO), mọi lần máy chủ game thoát bất thường sẽ được ghi lại cùng thời gian Sydney, mã thoát và các dòng cuối của server.log.")</li>
+            <li>@L("Auto-restart uses escalating backoff up to the hourly restart limit to avoid crash loops, and optionally notifies a Discord webhook URL.", "Chế độ tự khởi động lại dùng độ trễ tăng dần theo giới hạn mỗi giờ để tránh vòng lặp lỗi, và có thể gửi cảnh báo qua Discord webhook.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._unacknowledgedCount > 0)
+{
+    <div class="alert alert-danger d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3" role="alert">
+        <div>
+            <strong>@L("Unexpected server crash detected!", "Phát hiện sự cố sập máy chủ!")</strong>
+            <span class="ms-2">@this._latestSummary</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-light"
+                title="@L("Dismiss unread crash notice alerts.", "Đánh dấu đã xem các cảnh báo sự cố.")"
+                @onclick="this.AcknowledgeAll">
+            @L("Acknowledge Notice", "Đã Xem Cảnh Báo") (@this._unacknowledgedCount)
+        </button>
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-header fw-semibold">@L("Auto-Restart Policy (/control)", "Chính Sách Tự Khởi Động Lại (/control)")</div>
+    <div class="card-body">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="cwAutoRestart"
+                           @bind="this._settings.AutoRestartOnCrash"
+                           title="@L("Automatically restart the game server after an unexpected crash.", "Tự động khởi động lại máy chủ game khi gặp sự cố đột ngột.")" />
+                    <label class="form-check-label" for="cwAutoRestart">@L("Auto-Restart on Crash", "Tự Khởi Động Lại")</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label mb-1" for="cwMaxHour">@L("Max Restarts / Hour", "Tối Đa / Giờ")</label>
+                <input id="cwMaxHour" type="number" min="1" max="60" class="form-control form-control-sm" @bind="this._settings.MaxCrashRestartsPerHour" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label mb-1" for="cwDelay">@L("Delay (sec)", "Độ Trễ (giây)")</label>
+                <input id="cwDelay" type="number" min="1" max="300" class="form-control form-control-sm" @bind="this._settings.CrashRestartDelaySeconds" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label mb-1" for="cwDiscord">@L("Discord Webhook URL (Optional)", "Discord Webhook (Tùy chọn)")</label>
+                <input id="cwDiscord" type="password" autocomplete="off" class="form-control form-control-sm"
+                       @bind="this._newWebhookUrl"
+                       placeholder="@(this._hasExistingWebhook ? L("(saved — enter to replace)", "(đã lưu — nhập để đổi)") : "https://discord.com/api/webhooks/...")" />
+            </div>
+            <div class="col-md-2 text-md-end">
+                <button type="button" class="btn btn-primary btn-sm"
+                        title="@L("Save Crash Watch settings.", "Lưu cài đặt Giám sát sự cố.")"
+                        @onclick="this.SaveSettings">
+                    @L("Save", "Lưu")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">@L("Recent Crash Incidents", "Lịch Sử Sự Cố Gần Đây") (Sydney Time)</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.Refresh" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh", "Làm mới")</button>
+    </div>
+    @if (this._incidents.Count == 0)
+    {
+        <div class="card-body text-muted small">@L("No unexpected server crashes recorded.", "Chưa ghi nhận sự cố máy chủ nào.")</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>@L("Time (Sydney)", "Thời Gian (Sydney)")</th>
+                        <th>@L("Exit Code", "Mã Thoát")</th>
+                        <th>@L("Auto-Restarted", "Tự Khởi Động")</th>
+                        <th>@L("Summary", "Chi Tiết")</th>
+                        <th>@L("Status", "Trạng Thái")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inc in this._incidents)
+                    {
+                        <tr>
+                            <td>@inc.OccurredAtSydney</td>
+                            <td><code>@inc.ExitCode</code></td>
+                            <td>@(inc.AutoRestarted ? $"{L("Yes", "Có")} ({inc.DelaySeconds}s)" : L("No", "Không"))</td>
+                            <td>
+                                <div>@(this._isVi ? inc.SummaryVi : inc.SummaryEn)</div>
+                                @if (!string.IsNullOrWhiteSpace(inc.TailExcerpt))
+                                {
+                                    <details class="mt-1">
+                                        <summary class="small text-muted">@L("server.log tail", "server.log cuối")</summary>
+                                        <pre class="small bg-dark text-light p-2 rounded mt-1 mb-0">@inc.TailExcerpt</pre>
+                                    </details>
+                                }
+                            </td>
+                            <td>@(inc.Acknowledged ? L("Read", "Đã xem") : L("Unread", "Chưa xem"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

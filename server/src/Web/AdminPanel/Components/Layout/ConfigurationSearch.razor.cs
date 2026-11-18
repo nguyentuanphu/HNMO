@@ -4,9 +4,12 @@
 
 namespace HNMO.Web.AdminPanel.Components.Layout;
 
+using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components;
@@ -41,6 +44,12 @@ public partial class ConfigurationSearch : IDisposable
 
     [Inject]
     private SetupService SetupService { get; set; } = null!;
+
+    [Inject]
+    private IServiceProvider ServiceProvider { get; set; } = null!;
+
+    private static string L(string en, string vi) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
 
     /// <inheritdoc />
     public void Dispose()
@@ -131,7 +140,7 @@ public partial class ConfigurationSearch : IDisposable
     private void OnSearchFocus(FocusEventArgs e)
     {
         this.Logger.LogDebug("Search input focused, event type: {EventType}", e.Type);
-        this.UpdateSearchResults();
+        _ = this.UpdateSearchResultsAsync();
     }
 
     private Task OnSearchInputAsync()
@@ -140,9 +149,9 @@ public partial class ConfigurationSearch : IDisposable
         {
             if (!token.IsCancellationRequested)
             {
-                await this.InvokeAsync(() =>
+                await this.InvokeAsync(async () =>
                 {
-                    this.UpdateSearchResults();
+                    await this.UpdateSearchResultsAsync().ConfigureAwait(true);
                     this.StateHasChanged();
                 }).ConfigureAwait(false);
             }
@@ -185,30 +194,106 @@ public partial class ConfigurationSearch : IDisposable
         await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
     }
 
-    private void UpdateSearchResults()
+    private async Task UpdateSearchResultsAsync()
     {
         this._searchResults.Clear();
-        if (this._searchEntries.Count == 0)
-        {
-            return;
-        }
-
         var normalizedQuery = Normalize(this._searchText);
         if (normalizedQuery.Length < MinimumSearchLength)
         {
             return;
         }
 
-        var queryParts = normalizedQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        var results = this._searchEntries
-            .Select(entry => (Entry: entry, Score: CalculateScore(entry, normalizedQuery, queryParts)))
-            .Where(result => result.Score < int.MaxValue)
-            .OrderBy(result => result.Score)
-            .ThenBy(result => result.Entry.Path, StringComparer.Ordinal)
-            .Take(MaximumResults)
-            .Select(result => result.Entry);
+        // 1. Admin Panel Pages (EN & VI titles + one-line descriptions)
+        var pageTag = L("Page", "Trang");
+        foreach (var page in AdminNavCatalog.Search(normalizedQuery, 5))
+        {
+            var url = string.IsNullOrEmpty(page.Route) ? "/" : page.Route;
+            this._searchResults.Add(new ConfigurationSearchEntry(
+                $"[{pageTag}] {page.LocalizedTitle}",
+                page.LocalizedDescription,
+                url,
+                page.LocalizedTitle,
+                page.LocalizedTitle));
+        }
 
-        this._searchResults.AddRange(results);
+        // 2. Admin Guide & Recipes
+        var guideTag = L("Guide", "Hướng dẫn");
+        foreach (var article in AdminGuideCatalog.Search(normalizedQuery).Take(3))
+        {
+            this._searchResults.Add(new ConfigurationSearchEntry(
+                $"[{guideTag}] {article.LocalizedTitle}",
+                article.LocalizedSummary,
+                $"admin-guide?q={Uri.EscapeDataString(normalizedQuery)}",
+                article.LocalizedTitle,
+                article.LocalizedTitle));
+        }
+
+        // 3. Players & Items (safe optional lookup if DataSource is available in DI)
+        await this.AddOptionalEntityMatchesAsync(normalizedQuery).ConfigureAwait(true);
+
+        // 4. Configuration Properties
+        if (this._searchEntries.Count > 0)
+        {
+            var queryParts = normalizedQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var remaining = Math.Max(4, MaximumResults - this._searchResults.Count);
+            var configResults = this._searchEntries
+                .Select(entry => (Entry: entry, Score: CalculateScore(entry, normalizedQuery, queryParts)))
+                .Where(result => result.Score < int.MaxValue)
+                .OrderBy(result => result.Score)
+                .ThenBy(result => result.Entry.Path, StringComparer.Ordinal)
+                .Take(remaining)
+                .Select(result => result.Entry);
+
+            this._searchResults.AddRange(configResults);
+        }
+    }
+
+    private async Task AddOptionalEntityMatchesAsync(string query)
+    {
+        try
+        {
+            if (this.ServiceProvider.GetService<IDataSource<GameConfiguration>>() is { } source)
+            {
+                var config = await source.GetOwnerAsync(Guid.Empty, default).ConfigureAwait(true);
+                var itemTag = L("Item", "Vật phẩm");
+                foreach (var item in config.Items
+                    .Where(i =>
+                        (i.Name.ValueInNeutralLanguage?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
+                        || (i.Name.Value?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false))
+                    .Take(3))
+                {
+                    var label = item.Name.Value ?? item.Name.ValueInNeutralLanguage ?? $"{item.Group}:{item.Number}";
+                    this._searchResults.Add(new ConfigurationSearchEntry(
+                        $"[{itemTag}] {label}",
+                        $"Group {item.Group} #{item.Number} · /item-definitions",
+                        "item-definitions",
+                        label,
+                        label));
+                }
+            }
+
+            if (this.ServiceProvider.GetService<IPersistenceContextProvider>() is { } persistence
+                && this.ServiceProvider.GetService<IDataSource<GameConfiguration>>() is { } configSource)
+            {
+                var config = await configSource.GetOwnerAsync(Guid.Empty, default).ConfigureAwait(true);
+                using var context = persistence.CreateNewPlayerContext(config);
+                var playerTag = L("Account", "Tài khoản");
+                var accounts = await context.SearchAccountsAsync(query, 0, 3).ConfigureAwait(true);
+                foreach (var acc in accounts)
+                {
+                    this._searchResults.Add(new ConfigurationSearchEntry(
+                        $"[{playerTag}] {acc.LoginName}",
+                        L("Manage account & characters", "Quản lý tài khoản & nhân vật"),
+                        "accounts",
+                        acc.LoginName,
+                        acc.LoginName));
+                }
+            }
+        }
+        catch
+        {
+            // Optional entity quick-search degrades silently during setup or uninitialized DB.
+        }
     }
 
     private void NavigateToResult(ConfigurationSearchEntry entry)

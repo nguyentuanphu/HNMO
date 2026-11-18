@@ -1,4 +1,5 @@
-﻿@typeparam TValue
+﻿@using HelpResources = HNMO.Web.Shared.Properties.Resources
+@typeparam TValue
 
 @inherits InputBase<IList<TValue>>
 
@@ -9,11 +10,11 @@
     {
         @if (this._isCollapsed)
         {
-        <button type="button" class="btn btn-outline-info" @onclick="@this.OnToggleCollapseClick">@string.Format(Resources.ExpandItems, this.Value?.Count)</button>
+        <button title="@HelpResources.PageHelpHintExpand" type="button" class="btn btn-outline-info" @onclick="@this.OnToggleCollapseClick">@string.Format(Resources.ExpandItems, this.Value?.Count)</button>
         }
         else
         {
-        <button type="button" class="btn btn-outline-info" @onclick="@this.OnToggleCollapseClick">@Resources.Collapse</button>
+        <button title="@HelpResources.PageHelpHintExpand" type="button" class="btn btn-outline-info" @onclick="@this.OnToggleCollapseClick">@Resources.Collapse</button>
         }
     }
     </h5>
@@ -36,7 +37,7 @@
                                 </EditForm>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger" @onclick="@(() => OnRemoveClickAsync(index))"><span class="oi oi-trash" aria-hidden="true"></span> @Resources.Remove</button>
+                                <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-danger" @onclick="@(() => OnRemoveClickAsync(index))"><span class="oi oi-trash" aria-hidden="true"></span> @Resources.Remove</button>
                             </td>
                         </tr>
                     }
@@ -45,7 +46,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="2" class="border-bottom-0">
-                            <button type="button" class="btn btn-primary" @onclick="@OnAddClickAsync">@Resources.AddValue</button>
+                            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-primary" @onclick="@OnAddClickAsync">@Resources.AddValue</button>
                         </td>
                     </tr>
                 </tfoot>

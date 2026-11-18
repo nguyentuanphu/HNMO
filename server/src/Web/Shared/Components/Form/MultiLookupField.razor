@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @using System.ComponentModel.DataAnnotations
 @using System.Diagnostics.CodeAnalysis
 @using HNMO.Web.Shared.Services
@@ -20,7 +21,7 @@
                 {
                     <span class="multi-lookup-field__tag">
                         @CaptionFactory(item)
-                        <button type="button" class="multi-lookup-field__tag-remove" @onclick="() => RemoveItem(item)" @onclick:stopPropagation="true">&times;</button>
+                        <button title="@HelpResources.PageHelpHintDelete" type="button" class="multi-lookup-field__tag-remove" @onclick="() => RemoveItem(item)" @onclick:stopPropagation="true">&times;</button>
                     </span>
                 }
             }

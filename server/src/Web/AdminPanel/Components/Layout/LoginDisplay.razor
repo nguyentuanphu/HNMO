@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @using HNMO.Web.AdminPanel.Properties
 
 <AuthorizeView>
@@ -9,7 +10,7 @@
                         @onclick="@this.OpenAccountSecurity">
                     <span class="oi oi-person" aria-hidden="true"></span> @context.User.Identity.Name
                 </button>
-                <button type="button" class="btn btn-outline-secondary" @onclick="@this.LogoutAsync">
+                <button title="@HelpResources.PageHelpHintSignOut" type="button" class="btn btn-outline-secondary" @onclick="@this.LogoutAsync">
                     <span class="oi oi-account-logout" aria-hidden="true"></span> @Resources.Logout
                 </button>
             </div>

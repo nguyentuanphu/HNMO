@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="RightRoot" xml:space="preserve"><value>Gốc phải</value></data>
+  <data name="MiddleRoot" xml:space="preserve"><value>Gốc giữa</value></data>
+  <data name="LeftCommonSkills" xml:space="preserve"><value>Trái (Kỹ năng chung)</value></data>
+</root>

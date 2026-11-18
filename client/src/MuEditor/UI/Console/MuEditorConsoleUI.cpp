@@ -2,6 +2,8 @@
 
 #ifdef _EDITOR
 
+#include "I18N/All.h"
+
 #include "MuEditorConsoleUI.h"
 
 #include "imgui.h"
@@ -320,15 +322,15 @@ void CMuEditorConsoleUI::Render(bool* open)
         ImGui::BeginChild("EditorConsole", ImVec2(split_width - 5, 0), true);
 
         // Fixed header - not scrollable
-        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.8f, 1.0f), "Editor Console");
+        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.8f, 1.0f), "%s", I18N::Editor::EditorConsole);
         ImGui::SameLine();
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 20);
-        if (ImGui::SmallButton("Copy"))
+        if (ImGui::SmallButton(I18N::Editor::Copy))
         {
             ImGui::SetClipboardText(m_strEditorConsole.c_str());
         }
         ImGui::SameLine();
-        if (ImGui::SmallButton("Clear"))
+        if (ImGui::SmallButton(I18N::Editor::Clear))
         {
             ClearEditorLog();
         }
@@ -348,15 +350,15 @@ void CMuEditorConsoleUI::Render(bool* open)
         ImGui::BeginChild("GameConsole", ImVec2(0, 0), true);
 
         // Fixed header - not scrollable
-        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.8f, 1.0f), "Game Console");
+        ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.8f, 1.0f), "%s", I18N::Editor::GameConsole);
         ImGui::SameLine();
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 20);
-        if (ImGui::SmallButton("Copy##Game"))
+        if (ImGui::SmallButton(I18N::Editor::CopyGame))
         {
             ImGui::SetClipboardText(m_strGameConsole.c_str());
         }
         ImGui::SameLine();
-        if (ImGui::SmallButton("Clear##Game"))
+        if (ImGui::SmallButton(I18N::Editor::ClearGame))
         {
             ClearGameLog();
         }
@@ -372,7 +374,7 @@ void CMuEditorConsoleUI::Render(bool* open)
 
         // Show log file path at bottom
         ImGui::Separator();
-        ImGui::Text("Log file: %s", m_strLogFilePath.c_str());
+        ImGui::Text(I18N::Editor::LogFileS, m_strLogFilePath.c_str());
     }
     ImGui::End();
     ImGui::PopStyleColor();

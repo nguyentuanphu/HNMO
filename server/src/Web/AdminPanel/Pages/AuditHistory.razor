@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/audit"
 @using System.Text.Json.Nodes
 @using Microsoft.AspNetCore.Authorization
@@ -10,6 +11,8 @@
 @inject IStringLocalizer<Resources> Text
 
 <PageTitle>@Text["AuditHistory"]</PageTitle>
+<PageHelp Text="@HelpResources.PageHelpTextAuditHistory" />
+
 <h3>@Text["AuditHistory"]</h3>
 <p>@Text["AuditPendingExplanation"]</p>
 @if (this._unavailable)
@@ -34,8 +37,8 @@ else if (this._page is { } page)
         }
         </tbody>
     </table>
-    <button class="btn btn-secondary" disabled="@(this._offset == 0)" @onclick="this.PreviousAsync">@Text["AuditPrevious"]</button>
-    <button class="btn btn-secondary" disabled="@(this._offset + 50 >= page["total"]!.GetValue<int>())" @onclick="this.NextAsync">@Text["AuditNext"]</button>
+    <button title="@HelpResources.PageHelpHintPrevious" class="btn btn-secondary" disabled="@(this._offset == 0)" @onclick="this.PreviousAsync">@Text["AuditPrevious"]</button>
+    <button title="@HelpResources.PageHelpHintNext" class="btn btn-secondary" disabled="@(this._offset + 50 >= page["total"]!.GetValue<int>())" @onclick="this.NextAsync">@Text["AuditNext"]</button>
 }
 
 @code {

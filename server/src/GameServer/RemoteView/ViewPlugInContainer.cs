@@ -105,7 +105,7 @@ internal sealed class ViewPlugInContainer : CustomPlugInContainerBase<IViewPlugI
     private void OnClientVersionChanged(object? sender, EventArgs e)
     {
         this.Client = this._player.ClientVersion;
-        foreach (var activePlugIn in this.ActivePlugIns)
+        foreach (var activePlugIn in this.ActivePlugIns.ToList())
         {
             if (!this.Client.IsPlugInSuitable(activePlugIn.GetType()))
             {

@@ -1,0 +1,58 @@
+@using System.Globalization
+@using HNMO.DataModel.Configuration
+@using HNMO.DataModel.Configuration.Items
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+<section class="item-picker" aria-label="@Resources.ItemPickerTitle">
+    <h2 class="h5">@Resources.ItemPickerTitle</h2>
+    <label class="form-label" for="@this._id">@Resources.ItemPickerSearch</label>
+    <input id="@this._id" class="form-control picker-search" @bind="this.Filter.Search" @bind:event="oninput" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerSearchHint" />
+    <div class="row g-2 my-1">
+        <div class="col-sm-6">
+            <label class="form-label">@Resources.ItemPickerCategory
+                <select class="form-select picker-category" @bind="this.Filter.Category" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerCategory">
+                    <option value="-1">@Resources.ItemPickerAll</option>
+                    @for (var group = 0; group < 16; group++) { <option value="@group">@GroupName(group)</option> }
+                </select>
+            </label>
+        </div>
+        <div class="col-sm-6">
+            <label class="form-label">@Resources.ItemPickerClass
+                <select class="form-select picker-class" @bind="this.Filter.ClassNumber" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerFilterHint">
+                    <option value="-1">@Resources.ItemPickerAll</option>
+                    @foreach (var cls in this.Classes.OrderBy(c => c.Number)) { <option value="@cls.Number">@cls.Name</option> }
+                </select>
+            </label>
+        </div>
+        <div class="col-sm-6"><label class="form-label">@Resources.ItemPickerMinimum<input class="form-control picker-min" type="number" min="0" max="1000" @bind="this.Filter.MinimumLevel" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerFilterHint" /></label></div>
+        <div class="col-sm-6"><label class="form-label">@Resources.ItemPickerMaximum<input class="form-control picker-max" type="number" min="0" max="1000" @bind="this.Filter.MaximumLevel" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerFilterHint" /></label></div>
+    </div>
+    @if (this.ShopMode)
+    {
+    <label class="form-check"><input class="form-check-input picker-missing" type="checkbox" @bind="this.Filter.OnlyMissing" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerMissing" />@Resources.ItemPickerMissing</label>
+    }
+    <label class="form-label">@Resources.ItemPickerSort
+        <select class="form-select picker-sort" @bind="this.Filter.Sort" @bind:after="this.FilterChangedAsync" title="@Resources.ItemPickerSort">
+            <option value="name">@Resources.ItemPickerName</option><option value="group">@Resources.ItemPickerGroup</option><option value="level">@Resources.ItemPickerLevel</option>
+        </select>
+    </label>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <small class="picker-count">@string.Format(Resources.ItemPickerMatches, this._matches.Count, this._selected.Count)</small>
+        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ClearAsync" title="@Resources.ItemPickerClearSelection">@Resources.ItemPickerClearSelection</button>
+    </div>
+    <div class="picker-scroll" tabindex="0">
+        <Virtualize Items="this._matches" Context="entry" ItemSize="76" OverscanCount="4">
+            <div class="picker-entry" @key="entry" data-item="@($"{entry.Group}:{entry.Number}")" draggable="@(this.ShopMode ? "true" : "false")" @ondragstart="() => this.ShopMode ? this.DragStarted.InvokeAsync(entry) : Task.CompletedTask" @ondragend="() => this.DragEnded.InvokeAsync()" title="@(this.ShopMode ? Resources.ItemPickerDrag : Resources.ItemPickerGiftChoose)">
+                <input class="form-check-input" type="checkbox" checked="@this._selected.Contains(entry)" @onchange="e => this.SelectAsync(entry, e.Value is true)" title="@string.Format(Resources.ItemPickerSelect, entry.Name.ValueInNeutralLanguage)" aria-label="@string.Format(Resources.ItemPickerSelect, entry.Name.ValueInNeutralLanguage)" />
+                <button type="button" class="picker-add" @onclick="() => this.Add.InvokeAsync(entry)" title="@string.Format(this.ShopMode ? Resources.ItemPickerAdd : Resources.ItemPickerGiftAdd, entry.Name.ValueInNeutralLanguage)">
+                    <img loading="lazy" src="@($"_content/HNMO.Web.ItemEditor/img/items/item_{entry.Group}_{entry.Number}_0.png")" alt="" />
+                    <span><strong>@entry.Name.ValueInNeutralLanguage</strong>
+                        @if (ItemCatalogueFilter.VietnameseName(entry) is { Length: > 0 } vi) { <small>@vi</small> }
+                        <small>@(entry.Group):@(entry.Number) · @Resources.ItemPickerLevel @ItemCatalogueFilter.RequiredLevel(entry) @if (!entry.IsActive) { <span class="text-warning">@Resources.ItemPickerInactive</span> }</small>
+                    </span>
+                </button>
+            </div>
+        </Virtualize>
+        @if (this._matches.Count == 0) { <p class="p-3">@Resources.ItemPickerEmpty</p> }
+    </div>
+</section>

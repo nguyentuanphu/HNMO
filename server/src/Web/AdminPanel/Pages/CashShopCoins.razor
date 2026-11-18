@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/accounts/{LoginName}/cash-shop"
 @attribute [Authorize(Policy = AdminPolicies.CashShop)]
 
@@ -13,6 +14,8 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb Caption="@title" />
 <h1>@title</h1>
+<PageHelp Text="@HelpResources.PageHelpTextCashShopCoins" />
+
 
 <p class="text-muted">@Resources.CashShopCoinsDescription</p>
 
@@ -72,7 +75,7 @@ else
             <InputText id="reason" class="form-control" @bind-Value="this._input.Reason" />
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary" disabled="@this._isGranting">@Resources.CashShopApply</button>
+            <button title="@HelpResources.PageHelpHintSave" type="submit" class="btn btn-primary" disabled="@this._isGranting">@Resources.CashShopApply</button>
         </div>
         <ValidationSummary />
     </EditForm>
@@ -82,26 +85,26 @@ else
     <table class="table table-striped table-sm">
         <thead>
         <tr>
-            <th>@Resources.Timestamp</th>
+            <th>@Resources.AccountCoinHistoryCreatedAt</th>
             <th>@Resources.CashShopCoinType</th>
             <th class="text-end">@Resources.CashShopAmount</th>
             <th>@Resources.Description</th>
             <th>@Resources.CashShopGrantedBy</th>
             <th>@Resources.CashShopReference</th>
-            <th>@Resources.CashShopAppliedAt</th>
+            <th>@Resources.AccountCoinHistoryAppliedAt</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var grant in summary.Grants)
         {
             <tr>
-                <td>@grant.CreatedAt.ToLocalTime()</td>
+                <td>@CashShopHistoryText.Sydney(grant.CreatedAt)</td>
                 <td>@CashShopCoinCaption.Get(grant.CoinType)</td>
                 <td class="text-end">@grant.Amount.ToString("N0")</td>
-                <td>@grant.Reason</td>
+                <td>@CashShopHistoryText.Format(grant.Reason)</td>
                 <td>@grant.GrantedBy</td>
                 <td><code>@grant.Reference</code></td>
-                <td>@(grant.AppliedAt?.ToLocalTime().ToString() ?? Resources.CashShopPending)</td>
+                <td>@(grant.AppliedAt is { } applied ? CashShopHistoryText.Sydney(applied) : Resources.CashShopPending)</td>
             </tr>
         }
         @if (summary.Grants.Count == 0)

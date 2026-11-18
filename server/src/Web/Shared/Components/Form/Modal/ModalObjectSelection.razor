@@ -1,4 +1,5 @@
-﻿@typeparam TItem
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
+@typeparam TItem
 
 @using HNMO.Web.Shared.Components.Modal
 
@@ -8,7 +9,7 @@
   </CascadingValue>
 
   <div class="form-actions">
-    <button type="submit" @onclick="@SubmitAsync" class="btn btn-primary">@Resources.OK</button>
-    <button type="button" @onclick="@CancelAsync" class="btn btn-secondary">@Resources.Cancel</button>
+    <button title="@HelpResources.PageHelpHintSelect" type="submit" @onclick="@SubmitAsync" class="btn btn-primary">@Resources.OK</button>
+    <button title="@HelpResources.PageHelpHintCancel" type="button" @onclick="@CancelAsync" class="btn btn-secondary">@Resources.Cancel</button>
   </div>
 </EditForm>

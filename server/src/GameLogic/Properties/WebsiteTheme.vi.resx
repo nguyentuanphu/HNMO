@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>Giao diện website</value></data>
+  <data name="Description" xml:space="preserve"><value>Chọn giao diện cho website công khai. Lưu rồi tải lại website.</value></data>
+  <data name="Classic" xml:space="preserve"><value>Cổ điển</value></data>
+  <data name="Azure" xml:space="preserve"><value>Biển xanh</value></data>
+  <data name="Ember" xml:space="preserve"><value>Lửa hồng</value></data>
+  <data name="Jade" xml:space="preserve"><value>Ngọc bích</value></data>
+  <data name="Violet" xml:space="preserve"><value>Tím huyền</value></data>
+  <data name="Parchment" xml:space="preserve"><value>Giấy cổ</value></data>
+</root>
