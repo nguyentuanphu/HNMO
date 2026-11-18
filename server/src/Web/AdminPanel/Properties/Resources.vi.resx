@@ -4626,4 +4626,13 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
   </data>
+  <data name="NavBanManager" xml:space="preserve">
+    <value>Khóa &amp; Cấm chat</value>
+  </data>
+  <data name="BanManagerPageTitle" xml:space="preserve">
+    <value>Quản lý Khóa &amp; Cấm chat</value>
+  </data>
+  <data name="BanManagerPageHelp" xml:space="preserve">
+    <value>Áp dụng hoặc gỡ lệnh khóa tài khoản, khóa nhân vật, cấm chat có thời hạn hoặc vĩnh viễn, cùng khóa mạng/thiết bị bằng mã băm có muối. Người chơi sẽ thấy rõ lý do và thời hạn theo giờ Sydney khi đăng nhập, chọn nhân vật hoặc trò chuyện.</value>
+  </data>
 </root>

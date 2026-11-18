@@ -13449,5 +13449,14 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up a localized string similar to Password masked hint.</summary>
         public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Bans &amp; Mutes.</summary>
+        public static string NavBanManager => ResourceManager.GetString("NavBanManager", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Bans &amp; Mutes Manager.</summary>
+        public static string BanManagerPageTitle => ResourceManager.GetString("BanManagerPageTitle", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Ban manager help text.</summary>
+        public static string BanManagerPageHelp => ResourceManager.GetString("BanManagerPageHelp", resourceCulture)!;
     }
 }

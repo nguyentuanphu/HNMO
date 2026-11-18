@@ -8484,5 +8484,23 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoAccountSafetyViewPlugIn_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HNMO: ban and mute notice (F5 29).
+        /// </summary>
+        public static string HnmoBanNoticeViewPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoBanNoticeViewPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sends structured bilingual ban or mute reason and Sydney expiry time to the game client..
+        /// </summary>
+        public static string HnmoBanNoticeViewPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoBanNoticeViewPlugIn_Description", resourceCulture);
+            }
+        }
     }
 }

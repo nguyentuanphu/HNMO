@@ -2832,4 +2832,10 @@
   <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
     <value>Gửi trạng thái bảo vệ tài khoản (mật khẩu cấp 2, thao tác cần mật khẩu, vật phẩm bị khóa) cho web game đã yêu cầu.</value>
   </data>
+  <data name="HnmoBanNoticeViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: thông báo khóa / cấm chat (F5 29)</value>
+  </data>
+  <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi lý do khóa tài khoản, nhân vật hoặc cấm chat cùng thời hạn theo giờ Sydney tới client.</value>
+  </data>
 </root>
