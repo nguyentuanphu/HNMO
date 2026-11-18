@@ -515,7 +515,7 @@ Its tools, compared (ideas only):
   New for HNMO:
   14.19 Item definitions in the admin panel that also feed the web game's item data (name EN/VI, size, level,
         requirements, glow color, tooltip text), so adding or changing an item needs no file editing; the desktop
-        client's data is exported from the same source.
+        client's data is exported from the same source. — Done (`ItemDefinitionStateStore`, `ItemClientDataSync`, `WebsiteItemsController` `/api/website/items` + `/website/items`, `ItemDefinitionsDownloadController` `.zip` export, `items.ts` / `itemGlow.ts` / `itemTooltip.ts` live override & EN/VI tooltip merge, and `/item-definitions` EN/VI admin page).
   14.20 News manager: news posts (EN/VI) written in the admin panel, shown on the website home page and in the game.
   14.21 Stats/build calculator on the website: pick class, level, stats and items, see damage, defense, speed, as the
         server computes them.
