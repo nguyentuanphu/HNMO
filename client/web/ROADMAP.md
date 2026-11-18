@@ -703,3 +703,16 @@ touch-first; read from its store listing and release notes; ideas only). The web
   working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
 - Second Antigravity (mobile, section 17): not started.
 - Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
+
+## 18. Running on a Linux VPS (owner asked 2026-11-18)
+Advice given: 4 GB RAM / 2 vCPU / 60 GB NVMe is enough to launch (~50-100 online); 8 GB / 4 vCPU when busier. For
+Australian and Vietnamese players host in Singapore (AU ~90-110 ms, VN ~30-50 ms); North America is 150-300 ms.
+To build (Antigravity, 2026-11-18): a deployment kit for a fresh Debian 12 / Ubuntu VPS: one install script (user,
+packages, HNMO Linux package, systemd services with restart, PostgreSQL tuned for small RAM), a reverse proxy with
+automatic HTTPS for the game/website domain (admin panel never public: SSH tunnel or IP allow-list), firewall,
+fail2ban, automatic security updates, off-site backup copy (e.g. to S3-compatible storage), update script with
+rollback, and a step-by-step guide (EN/VI) for the owner.
+
+Antigravity's long job from 2026-11-18, in order: refresh its integration branch (#51) with main + #62; the VPS
+deployment kit (18); escrow trades (16, PR 1-4); Phase 3 (14.19 item definitions, 14.21 stats calculator, 14.24 3D
+world editor); mobile (17) only if the second Antigravity hasn't started it.
