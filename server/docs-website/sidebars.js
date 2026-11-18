@@ -57,6 +57,7 @@ const sidebars = {
         "admin-panel/fixed-options",
         "admin-panel/event-alerts",
         "admin-panel/crash-watch",
+        "admin-panel/item-definitions",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",
