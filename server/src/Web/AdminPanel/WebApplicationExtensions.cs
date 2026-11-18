@@ -82,6 +82,7 @@ public static class WebApplicationExtensions
         services.AddScoped<IModalService>(sp => sp.GetRequiredService<ModalService>());
         services.AddScoped<ILookupController, PersistentObjectsLookupController>();
         services.AddScoped<CreationPanelService>();
+        services.AddScoped<AdminNavigationPreferences>();
 
         services.AddAdminPanelAuth(builder.Configuration);
 

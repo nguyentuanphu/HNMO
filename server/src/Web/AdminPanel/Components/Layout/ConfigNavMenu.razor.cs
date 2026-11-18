@@ -16,7 +16,7 @@ using HNMO.DataModel.Configuration.Quests;
 using HNMO.Web.AdminPanel.Properties;
 
 /// <summary>
-/// The menu part with the game configuration, grouped by topic, so that every kind of game data has a direct link.
+/// Generic data-model grid and root configuration editors grouped by topic under Advanced mode.
 /// </summary>
 public partial class ConfigNavMenu
 {
@@ -73,15 +73,10 @@ public partial class ConfigNavMenu
             new(Resources.WarpList, Grid<WarpInfo>(), "oi-transfer"),
             new(Resources.MiniGames, Grid<MiniGameDefinition>(), "oi-timer"),
             GridEntry<QuestDefinition>("oi-book"),
-            new(Resources.MapEditor, "map-editor", "oi-globe"),
-            new(Resources.TerrainEditor, "terrain-editor", "oi-brush"),
         ]),
         new("economy", Resources.NavShopsAndDrops, "oi-cart",
         [
-            new(Resources.MerchantStores, "merchants/", "oi-cart"),
-            new(Resources.CashShopCatalog, "cash-shop-catalog", "oi-credit-card"),
             new(Resources.DropItemGroups, Grid<DropItemGroup>(), "oi-random"),
-            new(Resources.ItemDrops, "edit-item-drops", "oi-data-transfer-download"),
         ]),
         new("rules", Resources.NavRulesAndEvents, "oi-shield",
         [
@@ -89,31 +84,6 @@ public partial class ConfigNavMenu
             GridEntry<DuelConfiguration>("oi-target"),
             GridEntry<CastleSiegeConfiguration>("oi-shield"),
             GridEntry<CashShopConfiguration>("oi-dollar"),
-            new(Resources.ContentActivation, "content-activation", "oi-circle-check"),
-            new(Resources.MissionsAndRewards, "missions-rewards", "oi-star"),
-            new(Resources.WorldBossesAndRankings, "world-bosses-rankings", "oi-bolt"),
-            new(Resources.OnboardingAndStarterKit, "onboarding-starter-kit", "oi-flag"),
-            new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
-            new(Resources.CommunityPage, "community", "oi-chat"),
-            new(Resources.NewsManager, "news", "oi-document"),
-            new(Resources.TopRacesPage, "top-races", "oi-badge"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Lịch sự kiện & Boss" : "Event & Boss Timetable", "timetable", "oi-calendar"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Con số may mắn" : "Daily Lucky Number", "lucky-number", "oi-random"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Kết hôn" : "Marriage", "marriage", "oi-heart"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Chợ vật phẩm" : "Item market", "market", "oi-basket"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Ngân hàng ngọc" : "Jewel bank", "jewel-bank", "oi-box"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Giới hạn đuổi kịp" : "Catch-up cap", "catchup", "oi-graph"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Lộ trình mùa giải" : "Season plan", "season-plan", "oi-calendar"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Đổi đồ dư & Nâng hộp" : "Combining leftovers", "leftovers", "oi-reload"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Chuỗi thú cưỡi" : "Mount chain", "mounts", "oi-badge"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Tổ đội & Bãi săn" : "Party options", "party-options", "oi-people"),
-            new(Resources.GiftCodesPage, "gift-codes", "oi-tag"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Thưởng mốc nạp" : "Top-up milestones", "topup-milestones", "oi-dollar"),
-            new(Resources.ResetsRelifePage, "resets-relife", "oi-loop-circular"),
-            new(Resources.AccountSafetyPage, "account-safety", "oi-lock-locked"),
-            new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Lưu trữ & Dọn dữ liệu" : "Player state & archival", "state-retention", "oi-layers"),
-            new(Resources.Plugins, "plugins", "oi-puzzle-piece"),
-            new(Resources.ChatCommands, "chat-commands", "oi-terminal"),
         ]),
         new("advanced", Resources.NavAdvanced, "oi-cog",
         [

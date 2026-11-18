@@ -1,3 +1,4 @@
+@using System.Globalization
 @using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @using HNMO.Web.AdminPanel.Properties
 
@@ -7,16 +8,18 @@
             <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
         </span>
         <input type="search"
+               id="admin-global-search-input"
                class="form-control configuration-search__input"
-               placeholder="@($"{Resources.Search}...")"
+               placeholder="@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? "Tìm trang, cài đặt, người chơi, vật phẩm, hướng dẫn (Ctrl+K)..." : "Search pages, settings, players, items, guide (Ctrl+K)...")"
                @bind-value="this._searchText"
                @bind-value:event="oninput"
-                               @bind-value:after="this.OnSearchInputAsync"
-               title="@Resources.Search"
+               @bind-value:after="this.OnSearchInputAsync"
+               title="@($"{Resources.Search} (Ctrl+K)")"
                @onfocus="this.OnSearchFocus"
                @onblur="this.OnSearchBlurAsync"
                @onkeydown="this.OnSearchKeyDownAsync"
                autocomplete="off" />
+        <span class="input-group-text small text-muted d-none d-md-inline">Ctrl+K</span>
         @if (this._isLoading)
         {
             <span class="input-group-text">
