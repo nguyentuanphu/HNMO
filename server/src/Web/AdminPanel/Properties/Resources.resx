@@ -4694,4 +4694,222 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
   </data>
+  <data name="WebsiteMailTitle" xml:space="preserve">
+    <value>Email delivery</value>
+  </data>
+  <data name="WebsiteMailHelp" xml:space="preserve">
+    <value>Leave this off until you have an outgoing email service. Enter its SMTP server, submission port (usually 587), sender address, user name and password, then save. Delivery uses STARTTLS; port 465 with implicit TLS is not supported. Players request a code from Account → Security, receive it at their new email address and confirm it there within 15 minutes. They must leave the game first. Keep the server data-protection keys with your backups; they protect the saved SMTP password.</value>
+  </data>
+  <data name="WebsiteMailEnabled" xml:space="preserve">
+    <value>Allow confirmation emails</value>
+  </data>
+  <data name="WebsiteMailEnabledHint" xml:space="preserve">
+    <value>Allow players to verify a new email address through the configured mail service.</value>
+  </data>
+  <data name="WebsiteMailHost" xml:space="preserve">
+    <value>SMTP server</value>
+  </data>
+  <data name="WebsiteMailHostHint" xml:space="preserve">
+    <value>Enter the server address supplied by your email provider, without a port or URL prefix.</value>
+  </data>
+  <data name="WebsiteMailPort" xml:space="preserve">
+    <value>Submission port</value>
+  </data>
+  <data name="WebsiteMailPortHint" xml:space="preserve">
+    <value>Use the STARTTLS submission port from your provider, usually 587.</value>
+  </data>
+  <data name="WebsiteMailFrom" xml:space="preserve">
+    <value>Sender email address</value>
+  </data>
+  <data name="WebsiteMailFromHint" xml:space="preserve">
+    <value>Enter the verified address your provider allows you to send from.</value>
+  </data>
+  <data name="WebsiteMailUser" xml:space="preserve">
+    <value>SMTP user name</value>
+  </data>
+  <data name="WebsiteMailUserHint" xml:space="preserve">
+    <value>Enter the mail service login; leave blank only if your relay does not require authentication.</value>
+  </data>
+  <data name="WebsiteMailPassword" xml:space="preserve">
+    <value>New SMTP password</value>
+  </data>
+  <data name="WebsiteMailPasswordHint" xml:space="preserve">
+    <value>Leave blank to keep the stored password; clearing the user name removes the stored credential.</value>
+  </data>
+  <data name="WebsiteMailPasswordSaved" xml:space="preserve">
+    <value>A password is stored; it is never shown here.</value>
+  </data>
+  <data name="WebsiteMailSaveHint" xml:space="preserve">
+    <value>Validate and save outgoing email settings; no email is sent by this button.</value>
+  </data>
+  <data name="WebsiteMailOpenHint" xml:space="preserve">
+    <value>Configure the mail service used to confirm account email changes.</value>
+  </data>
+  <data name="WebsiteMailSaved" xml:space="preserve">
+    <value>Email settings saved.</value>
+  </data>
+  <data name="WebsiteMailInvalid" xml:space="preserve">
+    <value>Check the SMTP server, port and sender address.</value>
+  </data>
+  <data name="WebsiteMailUnavailable" xml:space="preserve">
+    <value>The settings could not be read or saved. Check the server state file and data-protection keys.</value>
+  </data>
+  <data name="WebsiteMailConfirmationSubject" xml:space="preserve">
+    <value>Confirm your new email address</value>
+  </data>
+  <data name="WebsiteMailConfirmationBody" xml:space="preserve">
+    <value>Your email confirmation code is:
+
+{0}
+
+On your account page, open Security and paste this code to confirm your new email address. It expires after 15 minutes and can be used once. Never send your game password to anyone. If you did not request this change, ignore this message.</value>
+  </data>
+  <data name="PageHelpTitle" xml:space="preserve">
+    <value>How to use this page</value>
+  </data>
+  <data name="PageHelpToggleHint" xml:space="preserve">
+    <value>Show or hide the purpose, recommended changes and cautions for this page.</value>
+  </data>
+  <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
+    <value>Extra vault purchase</value>
+  </data>
+  <data name="AccountCoinHistoryMarketPurchase" xml:space="preserve">
+    <value>Item market purchase</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStorePurchase" xml:space="preserve">
+    <value>Player store purchase from {0}</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStoreSale" xml:space="preserve">
+    <value>Player store sale to {0}</value>
+  </data>
+  <data name="AccountCoinHistoryReset" xml:space="preserve">
+    <value>Reset payment</value>
+  </data>
+  <data name="AccountCoinHistoryRelife" xml:space="preserve">
+    <value>Relife payment</value>
+  </data>
+  <data name="AccountCoinHistoryClearStats" xml:space="preserve">
+    <value>Stat reset payment</value>
+  </data>
+  <data name="AccountCoinHistoryClearMaster" xml:space="preserve">
+    <value>Master skill reset payment</value>
+  </data>
+  <data name="AccountCoinHistoryPlayTime" xml:space="preserve">
+    <value>Play time reward</value>
+  </data>
+  <data name="AccountCoinHistoryCashShop" xml:space="preserve">
+    <value>Cash shop: {0}</value>
+  </data>
+  <data name="AccountCoinHistoryGift" xml:space="preserve">
+    <value>Gift for {0}: {1}</value>
+  </data>
+  <data name="AccountCoinHistoryOtherCharacter" xml:space="preserve">
+    <value>another character</value>
+  </data>
+  <data name="AccountCoinHistoryCreatedAt" xml:space="preserve">
+    <value>Date (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryAppliedAt" xml:space="preserve">
+    <value>Recorded (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
+    <value>Item market sale</value>
+  </data>
+  <data name="VipCoinHistoryPurchase" xml:space="preserve">
+    <value>VIP {0}: {1} days</value>
+  </data>
+  <data name="VipCoinHistoryDaily" xml:space="preserve">
+    <value>VIP daily reward: {0}</value>
+  </data>
+  <data name="VipCoinHistoryRemoved" xml:space="preserve"><value>VIP removed by the host</value></data>
+  <data name="VipActivityAdministration" xml:space="preserve"><value>Administration</value></data>
+  <data name="VipManagerTitle" xml:space="preserve"><value>VIP memberships</value></data>
+  <data name="VipManagerHelp" xml:space="preserve"><value>Save the levels and prices before granting a level. Purchases start turned off. Turning purchases off keeps existing paid VIP time and benefits. A grant is free and adds days to the same active level; remove the current VIP first to change levels. Players must leave the game before a host change. Enter an exact account login and a reason, review, then confirm. Retry an unconfirmed change with the same operation. Only this VIP plug-in’s proved grants are removed; unrelated or legacy VIP needs separate review. The list checks known subscriptions against account proof. After restoring the index, search an exact login to rebuild its entry. Dates use Sydney time.</value></data>
+  <data name="VipManagerAccount" xml:space="preserve"><value>Account login</value></data>
+  <data name="VipManagerAccountHint" xml:space="preserve"><value>Enter the exact game account login, including its letter case.</value></data>
+  <data name="VipManagerLevel" xml:space="preserve"><value>VIP level</value></data>
+  <data name="VipManagerDays" xml:space="preserve"><value>Days to add</value></data>
+  <data name="VipManagerDaysHint" xml:space="preserve"><value>Add 1 to 3650 days; an active subscription of the same level is extended.</value></data>
+  <data name="VipManagerReason" xml:space="preserve"><value>Reason</value></data>
+  <data name="VipManagerReasonHint" xml:space="preserve"><value>Explain this host change in 1 to 500 characters; it is kept in the staff audit.</value></data>
+  <data name="VipManagerReviewGrant" xml:space="preserve"><value>Review free grant</value></data>
+  <data name="VipManagerReviewGrantHint" xml:space="preserve"><value>Review this account, level and free VIP time before granting it.</value></data>
+  <data name="VipManagerReviewRemove" xml:space="preserve"><value>Review removal</value></data>
+  <data name="VipManagerReviewRemoveHint" xml:space="preserve"><value>Review removal of this plug-in’s current VIP grants; no coins are refunded or charged.</value></data>
+  <data name="VipManagerConfirm" xml:space="preserve"><value>Confirm change</value></data>
+  <data name="VipManagerConfirmHint" xml:space="preserve"><value>Apply this reviewed change once, with the recorded reason.</value></data>
+  <data name="VipManagerCancel" xml:space="preserve"><value>Cancel review</value></data>
+  <data name="VipManagerCancelHint" xml:space="preserve"><value>Close this review without changing the account.</value></data>
+  <data name="VipManagerRetry" xml:space="preserve"><value>Check pending change</value></data>
+  <data name="VipManagerRetryHint" xml:space="preserve"><value>Review the same pending operation again; keep its original identifier to avoid adding time twice.</value></data>
+  <data name="VipManagerReload" xml:space="preserve"><value>Refresh accounts</value></data>
+  <data name="VipManagerReloadHint" xml:space="preserve"><value>Check current saved VIP status without discarding unsaved price edits.</value></data>
+  <data name="VipManagerFilter" xml:space="preserve"><value>Find an exact account</value></data>
+  <data name="VipManagerFilterHint" xml:space="preserve"><value>Leave empty for the known VIP list, or enter an exact case-sensitive login.</value></data>
+  <data name="VipManagerNext" xml:space="preserve"><value>Next accounts</value></data>
+  <data name="VipManagerPrevious" xml:space="preserve"><value>Previous accounts</value></data>
+  <data name="VipManagerPagerHint" xml:space="preserve"><value>Show another page of at most fifty known subscriptions.</value></data>
+  <data name="VipManagerSettings" xml:space="preserve"><value>Levels and prices</value></data>
+  <data name="VipManagerEnabled" xml:space="preserve"><value>Allow new VIP purchases</value></data>
+  <data name="VipManagerEnabledHint" xml:space="preserve"><value>Allow players to buy configured offers; turning this off does not revoke existing paid time.</value></data>
+  <data name="VipManagerChatBadge" xml:space="preserve"><value>Show VIP in chat</value></data>
+  <data name="VipManagerChatBadgeHint" xml:space="preserve"><value>Mark chat by active VIP characters resolved on this game server.</value></data>
+  <data name="VipManagerNameEn" xml:space="preserve"><value>English name</value></data>
+  <data name="VipManagerNameVi" xml:space="preserve"><value>Vietnamese name</value></data>
+  <data name="VipManagerNameHint" xml:space="preserve"><value>Use a short player-facing name, at most sixty characters.</value></data>
+  <data name="VipManagerLevelId" xml:space="preserve"><value>Stable level number</value></data>
+  <data name="VipManagerLevelIdHint" xml:space="preserve"><value>Keep this positive number unchanged while accounts use the level.</value></data>
+  <data name="VipManagerExperience" xml:space="preserve"><value>Extra XP (%)</value></data>
+  <data name="VipManagerExperienceHint" xml:space="preserve"><value>Five means five percent extra experience while the VIP grant is active.</value></data>
+  <data name="VipManagerZen" xml:space="preserve"><value>Extra Zen (%)</value></data>
+  <data name="VipManagerZenHint" xml:space="preserve"><value>Five means five percent extra Zen from the supported money-rate bonus.</value></data>
+  <data name="VipManagerDaily" xml:space="preserve"><value>Daily coins</value></data>
+  <data name="VipManagerDailyHint" xml:space="preserve"><value>Coins claimable once per account per Sydney day; zero means no daily coins.</value></data>
+  <data name="VipManagerCurrency" xml:space="preserve"><value>Coin type</value></data>
+  <data name="VipManagerCurrencyHint" xml:space="preserve"><value>Choose which account coin balance this price or daily bonus uses.</value></data>
+  <data name="VipManagerOffers" xml:space="preserve"><value>Purchase durations</value></data>
+  <data name="VipManagerPrice" xml:space="preserve"><value>Price in coins</value></data>
+  <data name="VipManagerPriceHint" xml:space="preserve"><value>Charge this many coins for the duration; zero is a free offer.</value></data>
+  <data name="VipManagerAddLevel" xml:space="preserve"><value>Add level</value></data>
+  <data name="VipManagerAddLevelHint" xml:space="preserve"><value>Add a new bilingual VIP level; at most twelve levels are supported by this editor.</value></data>
+  <data name="VipManagerRemoveLevel" xml:space="preserve"><value>Remove level from sale</value></data>
+  <data name="VipManagerRemoveLevelHint" xml:space="preserve"><value>Remove this offer configuration; existing paid benefits keep their saved expiry and values.</value></data>
+  <data name="VipManagerAddOffer" xml:space="preserve"><value>Add duration</value></data>
+  <data name="VipManagerAddOfferHint" xml:space="preserve"><value>Add a priced duration; at most four durations per level.</value></data>
+  <data name="VipManagerRemoveOffer" xml:space="preserve"><value>Remove duration</value></data>
+  <data name="VipManagerRemoveOfferHint" xml:space="preserve"><value>Remove this duration from new purchases without changing existing subscriptions.</value></data>
+  <data name="VipManagerSave" xml:space="preserve"><value>Save VIP settings</value></data>
+  <data name="VipManagerSaveHint" xml:space="preserve"><value>Save these bilingual levels, prices and benefits through the existing plug-in configuration system.</value></data>
+  <data name="VipManagerInvalid" xml:space="preserve"><value>Check names, unique positive level numbers, durations, coin amounts and reason. Use at most twelve levels, four durations per level and sixty-character names.</value></data>
+  <data name="VipManagerSaved" xml:space="preserve"><value>VIP settings saved.</value></data>
+  <data name="VipManagerUnavailable" xml:space="preserve"><value>The change could not be confirmed. Check the current account and retry the same pending operation.</value></data>
+  <data name="VipManagerPending" xml:space="preserve"><value>The result is pending. Use Check pending change; do not start another grant.</value></data>
+  <data name="VipManagerAppliedGrant" xml:space="preserve"><value>VIP time was granted without spending coins.</value></data>
+  <data name="VipManagerAppliedRemove" xml:space="preserve"><value>This plug-in’s VIP interval was removed.</value></data>
+  <data name="VipManagerOnline" xml:space="preserve"><value>The account is in the game. Ask the player to leave, then check this same change again.</value></data>
+  <data name="VipManagerConflict" xml:space="preserve"><value>This entitlement or offer needs review. Refresh the account; legacy VIP or another level must not be overwritten.</value></data>
+  <data name="VipManagerNoAccounts" xml:space="preserve"><value>No proved active subscription on this page. Search an exact login to check or recover its index entry.</value></data>
+  <data name="VipManagerHasMore" xml:space="preserve"><value>More known subscriptions are available on the next page.</value></data>
+  <data name="VipManagerUntil" xml:space="preserve"><value>Valid until (Sydney)</value></data>
+  <data name="VipManagerReviewGrantText" xml:space="preserve"><value>Grant {0} days of level {1} to {2}, free of coin cost.</value></data>
+  <data name="VipManagerReviewRemoveText" xml:space="preserve"><value>Remove the current proved VIP interval from {0}.</value></data>
+  <data name="VipManagerCurrentUntil" xml:space="preserve"><value>Current expiry: {0} (Sydney).</value></data>
+  <data name="VipManagerNoCurrent" xml:space="preserve"><value>No current proved VIP interval.</value></data>
+  <data name="VipManagerNewName" xml:space="preserve"><value>New VIP</value></data>
+  <data name="VipManagerCoinC" xml:space="preserve"><value>W Coin (C)</value></data>
+  <data name="VipManagerCoinP" xml:space="preserve"><value>W Coin (P)</value></data>
+  <data name="VipManagerGoblin" xml:space="preserve"><value>Goblin Points</value></data>
+  <data name="VipManagerSavedLevels" xml:space="preserve"><value>Grants use the last saved benefits, not unsaved edits below.</value></data>
+  <data name="VipManagerActivity" xml:space="preserve"><value>Activity log</value></data>
+  <data name="VipManagerActivityHint" xml:space="preserve"><value>Open this account’s attributed staff and activity records.</value></data>
+  <data name="VipManagerOpenHint" xml:space="preserve"><value>Configure VIP and review host grants or removals.</value></data>
+  <data name="VipAuditGrant" xml:space="preserve"><value>grant</value></data>
+  <data name="VipAuditRemove" xml:space="preserve"><value>removal</value></data>
+  <data name="VipAuditRequested" xml:space="preserve"><value>requested</value></data>
+  <data name="VipAuditApplied" xml:space="preserve"><value>applied</value></data>
+  <data name="VipAuditPending" xml:space="preserve"><value>pending confirmation</value></data>
+  <data name="VipAuditConflict" xml:space="preserve"><value>needs review</value></data>
+  <data name="VipAuditRefused" xml:space="preserve"><value>refused</value></data>
+  <data name="VipAuditDetails" xml:space="preserve"><value>VIP {0}: {1}. Host: {2}. Reason: {3}. Operation: {4}.</value></data>
+  <data name="VipManagerSaveFirst" xml:space="preserve"><value>Save VIP settings first to enable the plug-in, then grant time. New purchases can stay off.</value></data>
 </root>

@@ -339,6 +339,7 @@ public sealed class JewelBankPlugIn :
             }
 
             player.Account.SetCashShopCoins(coinType, balance - coins);
+            CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, coinType, -coins, CashShopBalanceReason.ClearMaster);
         }
 
         if (zen > 0)

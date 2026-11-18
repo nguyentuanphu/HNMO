@@ -86,6 +86,7 @@ public partial class ActivityLog : ComponentBase
         ActivityKind.NpcSell => L("NPC sell", "Bán NPC"),
         ActivityKind.PersonalStore => L("Personal store", "Cửa hàng cá nhân"),
         ActivityKind.ItemMarket => L("Item market", "Chợ đồ"),
+        ActivityKind.Administration => HNMO.Web.AdminPanel.Properties.Resources.VipActivityAdministration,
         _ => kind.ToString(),
     };
 

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{game}</title>
+  <link rel="stylesheet" href="/account-dashboard.css">
   <style>
     [hidden] { display: none !important; }
     :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; --ok: #7cc98a; }
@@ -71,6 +72,34 @@
       <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
     </header>
 
+    <section class="panel" id="accountLoginPanel" data-no-i18n>
+      <h2 data-at="signIn">Sign in to my account</h2>
+      <div class="account-actions" role="group" aria-label="English / Tiếng Việt">
+        <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
+        <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
+      </div>
+      <p data-at="privacy">This page does not save your password in browser storage. Log out when using a shared computer.</p>
+      <form id="accountSignIn" class="panel" style="padding:0;border:0;background:none">
+        <label><span data-at="accountName">Account name</span><input id="accountUser" required maxlength="10" autocomplete="username"></label>
+        <label><span data-at="password">Password</span><input id="accountSecret" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button id="accountSignInButton" type="submit" data-at="signIn" data-at-title="signInHint">Sign in to my account</button>
+      </form>
+    </section>
+    <div id="accountDashboard" data-no-i18n>
+      <div id="accountToolbar" hidden>
+        <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
+        <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
+        <button type="button" id="accountHelpButton" aria-expanded="false" aria-controls="accountHelp" data-at="helpTitle" data-at-title="helpHint">How to use this page</button>
+        <button type="button" id="accountRefresh" data-at="refresh" data-at-title="refreshHint">Refresh</button>
+        <button type="button" id="accountLogout" data-at="logout" data-at-title="logoutHint">Log out</button>
+        <div id="accountHelp" role="note" data-at="help" hidden></div>
+      </div>
+      <p id="accountMessage" role="status" aria-live="polite"></p>
+      <nav id="accountNav" aria-label="Account sections / Các mục tài khoản" hidden></nav>
+      <select id="accountSectionSelect" aria-label="Account sections / Các mục tài khoản"></select>
+      <div id="accountPanels"></div>
+    </div>
+
     <section class="panel notice" id="setupPanel" hidden>
       <h2>Finish the setup (host only)</h2>
       <p>Registration needs a key for the game server, once:</p>
@@ -114,7 +143,7 @@
         <p class="message" id="registerMessage" role="status"></p>
       </form>
 
-      <form class="panel" id="coinsForm">
+      <form class="panel" id="coinsForm" hidden>
         <h2>My coins</h2>
         <p>Spend them in the game's cash shop. The host can give more in the admin panel, and playing earns Goblin Points.</p>
         <label>Account name <input id="coinsAccount" name="account" required maxlength="10"></label>
@@ -926,5 +955,6 @@
 
     applyPlayLanguage();
   </script>
+  <script type="module" src="/js/accountPage.js"></script>
 </body>
 </html>

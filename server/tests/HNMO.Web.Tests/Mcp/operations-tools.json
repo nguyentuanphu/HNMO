@@ -2277,5 +2277,30 @@
       "openWorldHint": false,
       "readOnlyHint": false
     }
+  },
+  {
+    "Name": "vip_list",
+    "InputSchema": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "description": "Optional exact account login, at most ten characters. Leave empty for the known subscription index.",
+          "type": "string",
+          "default": ""
+        },
+        "offset": {
+          "description": "Number of indexed subscriptions to skip; zero for the first page.",
+          "type": "integer",
+          "default": 0
+        }
+      }
+    },
+    "Annotations": {
+      "title": null,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true
+    }
   }
 ]

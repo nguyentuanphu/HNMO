@@ -1,0 +1,13 @@
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<div class="mb-3 page-help">
+    <button type="button" class="btn btn-outline-info btn-sm" title="@Resources.PageHelpToggleHint"
+            aria-expanded="@this._expanded.ToString().ToLowerInvariant()" aria-controls="@this._id"
+            @onclick="() => this._expanded = !this._expanded">
+        <span class="oi oi-question-mark" aria-hidden="true"></span> @Resources.PageHelpTitle
+    </button>
+    @if (this._expanded)
+    {
+        <div id="@this._id" class="alert alert-info mt-2 mb-0" role="note">@this.Text</div>
+    }
+</div>

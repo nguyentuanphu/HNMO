@@ -48,6 +48,7 @@ import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
+import { VipWindow } from './ui/vipWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
@@ -198,6 +199,7 @@ export interface GameState {
   marriage?: MarriageWindow;
   market?: MarketWindow;
   jewelBank?: JewelBankWindow;
+  vip?: VipWindow;
   guildLevels?: GuildLevelsWindow;
   customRanks?: CustomRanksManager;
   teleportNpc?: TeleportNpcWindow;
@@ -1550,6 +1552,15 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key === 'F6' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
   });
   window.addEventListener('hnmo-market-open', () => { market.open(); });
+  // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
+  const vip = new VipWindow({ send: (name, fields) => connection.send('ClientToServer', name, fields), message: (text) => chat.add(text, 'system') });
+  state.vip = vip;
+  connection.onPacket((bytes) => { vip.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'u' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); vip.toggle(); }
+  });
+  window.addEventListener('hnmo-vip-open', () => { vip.open(); });
   // HNMO's Jewel Bank & master skill clear (F7).
   const jewelBank = new JewelBankWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
@@ -1931,7 +1942,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   hideLoadingScreen();
-  connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
+  connection.onClose = () => { vip.reset(); vip.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
   warmCharacterModels();
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }

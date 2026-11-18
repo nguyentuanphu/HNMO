@@ -5493,6 +5493,19 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>25</SubCode>
+      <Name>HnmoVipRequest</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The signed-in player opens the VIP window, confirms an offer or claims daily coins.</SentWhen>
+      <CausedReaction>The server validates the session and sends HnmoVipState without accepting client prices or account identity.</CausedReaction>
+      <Fields>
+        <Field><Index>4</Index><Type>IntegerLittleEndian</Type><Name>RequestId</Name><Description>A nonzero request correlation identifier; not an authentication token.</Description></Field>
+        <Field><Index>8</Index><Type>String</Type><Name>Json</Name><Description>ASCII JSON with action, optional operationId, levelId, days and offerToken; at most 247 bytes.</Description></Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>
