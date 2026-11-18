@@ -13,6 +13,7 @@ using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
+using HNMO.Web.AdminPanel.Components;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Pages;
 using HNMO.Web.Shared.Components;
@@ -118,6 +119,7 @@ public class VipServersPageTests
             ctx.JSInterop.Mode = JSRuntimeMode.Loose;
             ctx.Services.AddSingleton<IPersistenceContextProvider>(provider);
             ctx.Services.AddSingleton(serverProvider.Object);
+            ctx.Services.AddSingleton(Mock.Of<IGameServerInstanceManager>());
             ctx.Services.AddSingleton(ops);
             ctx.Services.AddSingleton(Mock.Of<IToastService>());
             ctx.ComponentFactories.AddStub<Breadcrumb>();
