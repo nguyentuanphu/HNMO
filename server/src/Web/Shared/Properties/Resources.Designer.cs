@@ -1198,5 +1198,276 @@ namespace HNMO.Web.Shared.Properties {
                 return ResourceManager.GetString("MonsterAmountSaveMapFirst", resourceCulture);
             }
         }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerTitle {
+            get {
+                return ResourceManager.GetString("ItemPickerTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerSearch {
+            get {
+                return ResourceManager.GetString("ItemPickerSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerSearchHint {
+            get {
+                return ResourceManager.GetString("ItemPickerSearchHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerCategory {
+            get {
+                return ResourceManager.GetString("ItemPickerCategory", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerAll {
+            get {
+                return ResourceManager.GetString("ItemPickerAll", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerClass {
+            get {
+                return ResourceManager.GetString("ItemPickerClass", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerMinimum {
+            get {
+                return ResourceManager.GetString("ItemPickerMinimum", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerMaximum {
+            get {
+                return ResourceManager.GetString("ItemPickerMaximum", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerMissing {
+            get {
+                return ResourceManager.GetString("ItemPickerMissing", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerSort {
+            get {
+                return ResourceManager.GetString("ItemPickerSort", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerName {
+            get {
+                return ResourceManager.GetString("ItemPickerName", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerLevel {
+            get {
+                return ResourceManager.GetString("ItemPickerLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerSelect {
+            get {
+                return ResourceManager.GetString("ItemPickerSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerAdd {
+            get {
+                return ResourceManager.GetString("ItemPickerAdd", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerDrag {
+            get {
+                return ResourceManager.GetString("ItemPickerDrag", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerMatches {
+            get {
+                return ResourceManager.GetString("ItemPickerMatches", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerEmpty {
+            get {
+                return ResourceManager.GetString("ItemPickerEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerClearSelection {
+            get {
+                return ResourceManager.GetString("ItemPickerClearSelection", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerFilterHint {
+            get {
+                return ResourceManager.GetString("ItemPickerFilterHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerInactive {
+            get {
+                return ResourceManager.GetString("ItemPickerInactive", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup0 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup0", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup1 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup1", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup2 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup2", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup3 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup3", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup4 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup4", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup5 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup5", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup6 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup6", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup7 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup7", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup8 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup8", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup9 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup9", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup10 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup10", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup11 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup11", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup12 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup12", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup13 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup13", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup14 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup14", resourceCulture);
+            }
+        }
+
+        /// <summary>Gets the localized item catalogue text.</summary>
+        public static string ItemPickerGroup15 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup15", resourceCulture);
+            }
+        }
+        /// <summary>Gets the localized gift item selection hint.</summary>
+        public static string ItemPickerGiftChoose {
+            get {
+                return ResourceManager.GetString("ItemPickerGiftChoose", resourceCulture);
+            }
+        }
+        /// <summary>Gets the localized gift item selection hint.</summary>
+        public static string ItemPickerGiftAdd {
+            get {
+                return ResourceManager.GetString("ItemPickerGiftAdd", resourceCulture);
+            }
+        }
     }
 }
