@@ -63,6 +63,20 @@ public sealed class GameServerAdministrationController(IGameServer server, Admin
     public ValueTask<GameServerAdminResult> SetLevelAsync(GameServerAdministrationRequest request)
         => deliveries.RunAsync(nameof(this.SetLevelAsync), request, () => this.Resolve(request).SetLevelAsync(request.CharacterName, request.CharacterId, request.Level, request.Master, CancellationToken.None));
 
+    /// <summary>Applies a timed buff to a live character.</summary>
+    /// <param name="request">The request arguments.</param>
+    /// <returns>The confirmed result.</returns>
+    [HttpPost(nameof(IGameServerAdministration.ApplyBuffAsync))]
+    public ValueTask<GameServerAdminResult> ApplyBuffAsync(GameServerAdministrationRequest request)
+        => deliveries.RunAsync(nameof(this.ApplyBuffAsync), request, () => this.Resolve(request).ApplyBuffAsync(request.CharacterName, request.CharacterId, request.EffectNumber, request.DurationSeconds, CancellationToken.None));
+
+    /// <summary>Clears timed buffs from a live character.</summary>
+    /// <param name="request">The request arguments.</param>
+    /// <returns>The confirmed result.</returns>
+    [HttpPost(nameof(IGameServerAdministration.ClearBuffsAsync))]
+    public ValueTask<GameServerAdminResult> ClearBuffsAsync(GameServerAdministrationRequest request)
+        => deliveries.RunAsync(nameof(this.ClearBuffsAsync), request, () => this.Resolve(request).ClearBuffsAsync(request.CharacterName, request.CharacterId, CancellationToken.None));
+
     /// <summary>Reads the live event schedule.</summary>
     /// <param name="request">The request arguments.</param>
     /// <param name="cancellationToken">The cancellation token.</param>

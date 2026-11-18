@@ -4595,4 +4595,10 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
   </data>
+  <data name="CharacterTools" xml:space="preserve">
+    <value>Character tools</value>
+  </data>
+  <data name="PageHelpTextCharacterTools" xml:space="preserve">
+    <value>Look up any character to move them out of a stuck spot to a safe town, apply or clear live buffs, or adjust offline level, stats, Zen, and class. Every change requires an audit reason, and unsafe level/stat/Zen/class edits are refused while the character is online.</value>
+  </data>
 </root>

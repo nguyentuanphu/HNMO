@@ -32,4 +32,7 @@ public enum ActivityKind
 
     /// <summary>Item Market listing, sale, or purchase (ROADMAP 13.9 hook).</summary>
     ItemMarket = 7,
+
+    /// <summary>Administrative moderation or character tool action.</summary>
+    Administration = 8,
 }
