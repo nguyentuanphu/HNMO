@@ -164,6 +164,14 @@ public sealed class EscrowContractsPlugIn :
         return engine;
     }
 
+    /// <summary>Gets the Direct P2P VND rule engine sharing the same atomic store.</summary>
+    /// <returns>Active <see cref="EscrowDirectVndEngine"/>.</returns>
+    public EscrowDirectVndEngine GetDirectEngine()
+    {
+        var core = this.GetEngine();
+        return new EscrowDirectVndEngine(core.Configuration, core.Store);
+    }
+
     /// <inheritdoc />
     public void ForceStart() => this._lastExpireUtc = DateTime.MinValue;
 
@@ -184,7 +192,8 @@ public sealed class EscrowContractsPlugIn :
 
         this._lastExpireUtc = now;
         var expired = this.GetEngine().ExpireDueContracts(now);
-        if (expired > 0)
+        var directChanged = this.GetDirectEngine().ProcessTimeouts(now);
+        if (expired > 0 || directChanged > 0)
         {
             ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
             {
@@ -192,8 +201,8 @@ public sealed class EscrowContractsPlugIn :
                 TimestampUtc = now,
                 Kind = ActivityKind.Trade,
                 Account = "SYSTEM",
-                ItemSummary = $"Expired {expired} escrow contract(s)",
-                Details = "Auto-expired unaccepted contracts returned goods to owed rewards.",
+                ItemSummary = $"Expired/updated {expired + directChanged} escrow contract(s)",
+                Details = "Auto-expired contracts returned goods or auto-escalated unpaid confirmations.",
             });
         }
 
@@ -286,6 +295,7 @@ public sealed class EscrowContractsPlugIn :
             {
                 case 0: // RequestState
                     this.GetEngine().ExpireDueContracts(DateTime.UtcNow);
+                    this.GetDirectEngine().ProcessTimeouts(DateTime.UtcNow);
                     await this.SendStateAsync(player, requested: true, prefillTarget: targetPrefill).ConfigureAwait(false);
                     break;
                 case 1: // CreateContract
@@ -299,6 +309,24 @@ public sealed class EscrowContractsPlugIn :
                     break;
                 case 4: // ClaimOwed
                     await this.ClaimOwedAsync(player, silentWhenEmpty: false).ConfigureAwait(false);
+                    break;
+                case 5: // CreateDirectVnd
+                    await this.CreateDirectVndFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 6: // ReserveDirectVnd
+                    await this.ReserveDirectVndFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 7: // ExtendDirectVnd
+                    await this.ExtendDirectVndFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 8: // BuyerMarkPaid
+                    await this.BuyerMarkPaidFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 9: // SellerConfirmPaid
+                    await this.SellerConfirmPaidFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 10: // OpenDispute
+                    await this.OpenDisputeFromPlayerAsync(player, root).ConfigureAwait(false);
                     break;
                 default:
                     await this.SendStateAsync(player, requested: true).ConfigureAwait(false);
@@ -363,22 +391,37 @@ public sealed class EscrowContractsPlugIn :
             highValueZen = cfg.HighValueThresholdZen,
             highValueJewels = cfg.HighValueThresholdJewels,
             cooldownHours = cfg.PostEscrowTradeCooldownHours,
+            directVndEnabled = EscrowDirectVndEngine.IsCompliantAndEnabled(cfg),
+            directVndPaymentWindowMinutes = cfg.DirectVndPaymentWindowMinutes,
+            directVndExtendMinutes = cfg.DirectVndExtendMinutes,
+            directVndServiceFeeCurrency = cfg.DirectVndServiceFeeCurrency.ToString(),
+            directVndServiceFeeCoins = cfg.DirectVndServiceFeeCoins,
+            directVndServiceFeePercent = cfg.DirectVndServiceFeePercent,
+            directVndFeePayer = cfg.DirectVndFeePayer.ToString(),
+            directVndMaxSellerBondCoins = cfg.DirectVndMaxSellerBondCoins,
+            directVndMaxReceiptBytes = cfg.DirectVndMaxReceiptBytes,
             reputation = data.Reputations.TryGetValue(login, out var rep) ? rep : new EscrowReputationEntry { LoginName = login },
             bagItems,
             jewelBalances,
             openContracts = data.Contracts
-                .Where(c => c.Status is EscrowContractStatus.Open or EscrowContractStatus.Frozen)
+                .Where(c => c.Status is EscrowContractStatus.Open or EscrowContractStatus.Frozen or EscrowContractStatus.ReservedForPayment or EscrowContractStatus.BuyerMarkedPaid or EscrowContractStatus.Disputed)
                 .Where(c => string.IsNullOrWhiteSpace(c.TargetBuyer)
                     || string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.TargetBuyer, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.TargetBuyer, charName, StringComparison.OrdinalIgnoreCase))
+                .Where(c => c.Status is EscrowContractStatus.Open or EscrowContractStatus.Frozen
+                    || string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .Take(100)
+                .Select(c => EscrowDirectVndEngine.ProjectForViewer(c, login))
                 .ToList(),
             historyContracts = data.Contracts
-                .Where(c => c.Status is not EscrowContractStatus.Open and not EscrowContractStatus.Frozen)
+                .Where(c => c.Status is not EscrowContractStatus.Open and not EscrowContractStatus.Frozen and not EscrowContractStatus.ReservedForPayment and not EscrowContractStatus.BuyerMarkedPaid and not EscrowContractStatus.Disputed)
                 .Where(c => string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .Take(50)
+                .Select(c => EscrowDirectVndEngine.ProjectForViewer(c, login))
                 .ToList(),
             owedDeliveries = data.OwedDeliveries
                 .Where(o => string.Equals(o.RecipientLogin, login, StringComparison.OrdinalIgnoreCase))
@@ -423,6 +466,27 @@ public sealed class EscrowContractsPlugIn :
         return true;
     }
 
+    private static void RefundAccountCoins(Player player, CashShopCoinType coinType, int amount)
+    {
+        if (player.Account is not { } account || amount <= 0)
+        {
+            return;
+        }
+
+        switch (coinType)
+        {
+            case CashShopCoinType.WCoinC:
+                account.WCoinC += amount;
+                break;
+            case CashShopCoinType.WCoinP:
+                account.WCoinP += amount;
+                break;
+            case CashShopCoinType.GoblinPoints:
+                account.GoblinPoints += amount;
+                break;
+        }
+    }
+
     private static CashShopCoinType MapCoinType(EscrowCurrency currency) => currency switch
     {
         EscrowCurrency.WCoinP => CashShopCoinType.WCoinP,
@@ -461,6 +525,17 @@ public sealed class EscrowContractsPlugIn :
         "AlreadyClosed" => ("Contract has already been accepted or closed.", "Hợp đồng đã có người nhận hoặc đã đóng."),
         "WrongBuyer" => ("This private contract is reserved for a different buyer.", "Hợp đồng riêng này chỉ dành cho người mua được chỉ định."),
         "OwnContract" => ("You cannot accept your own contract.", "Bạn không thể tự nhận hợp đồng của chính mình."),
+        "DirectVndDisabledOrUnacknowledged" => ("Direct P2P VND contracts are disabled or missing admin legal acknowledgement.", "Hợp đồng VND trực tiếp đang tắt hoặc chưa được xác nhận pháp lý."),
+        "InvalidVndPrice" => ("Direct VND price must be at least 1,000 VND.", "Giá VND trực tiếp phải tối thiểu 1.000 VNĐ."),
+        "MissingBankDetails" => ("Seller bank BIN, account number, and holder name are required.", "Cần nhập đủ mã BIN ngân hàng, số tài khoản và tên chủ TK."),
+        "InvalidSellerBond" => ($"Seller security bond must be between 0 and {cfg.DirectVndMaxSellerBondCoins}.", $"Tiền cọc người bán phải từ 0 đến {cfg.DirectVndMaxSellerBondCoins}."),
+        "NotReserved" => ("Contract is not currently reserved for payment.", "Hợp đồng hiện không ở trạng thái chờ chuyển khoản."),
+        "AlreadyExtended" => ("Payment window can only be extended once.", "Thời gian thanh toán chỉ được gia hạn 1 lần."),
+        "PaymentWindowExpired" => ("Payment window has already expired.", "Thời gian chuyển khoản đã hết hạn."),
+        "InvalidReceiptImage" => ("Receipt must be a valid PNG, JPG, or WEBP image within size limit.", "Ảnh biên lai phải là PNG/JPG/WEBP hợp lệ trong giới hạn dung lượng."),
+        "NotSeller" => ("Only the seller can confirm receipt of funds.", "Chỉ người bán mới có quyền xác nhận đã nhận tiền."),
+        "InvalidState" => ("Operation is not valid in the contract's current status.", "Thao tác không hợp lệ với trạng thái hợp đồng hiện tại."),
+        "NotParticipant" => ("Only the seller or accepted buyer may dispute this contract.", "Chỉ người bán hoặc người mua mới có thể mở tranh chấp."),
         _ => ($"Escrow action failed ({err}).", $"Thao tác ký gửi thất bại ({err})."),
     };
 
@@ -473,7 +548,13 @@ public sealed class EscrowContractsPlugIn :
     private static bool ReadBool(JsonElement el, string name) =>
         el.TryGetProperty(name, out var prop) && (prop.ValueKind == JsonValueKind.True || (prop.ValueKind == JsonValueKind.String && bool.TryParse(prop.GetString(), out var b) && b));
 
-    private async ValueTask CreateContractFromPlayerAsync(Player player, JsonElement? root)
+    private ValueTask CreateContractFromPlayerAsync(Player player, JsonElement? root) =>
+        this.CreateContractCoreAsync(player, root, directVnd: false);
+
+    private ValueTask CreateDirectVndFromPlayerAsync(Player player, JsonElement? root) =>
+        this.CreateContractCoreAsync(player, root, directVnd: true);
+
+    private async ValueTask CreateContractCoreAsync(Player player, JsonElement? root, bool directVnd)
     {
         if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login || player.SelectedCharacter?.Name is not { Length: > 0 } charName)
         {
@@ -483,6 +564,12 @@ public sealed class EscrowContractsPlugIn :
         var engine = this.GetEngine();
         var cfg = engine.Configuration;
         var now = DateTime.UtcNow;
+
+        if (directVnd && !EscrowDirectVndEngine.IsCompliantAndEnabled(cfg))
+        {
+            await this.SendStateAsync(player, true, "Direct P2P VND mode is disabled.", "Hợp đồng VND trực tiếp hiện đang tắt.", true).ConfigureAwait(false);
+            return;
+        }
 
         if (!EscrowEngine.MeetsAccountAgeRequirement(cfg, player.Account.RegistrationDate, now))
         {
@@ -552,21 +639,33 @@ public sealed class EscrowContractsPlugIn :
             pickedItems.Add((item, BuildItemSnapshot(item, login, cfg.ActivityLogFileName)));
         }
 
-        // Pre-validate goods balance BEFORE mutating inventory/JewelBank/Zen!
         if (escrowedZen > 0 && player.Money < escrowedZen)
         {
             await this.SendStateAsync(player, true, "Insufficient Zen in inventory.", "Không đủ Zen trong túi đồ.", true).ConfigureAwait(false);
             return;
         }
 
-        // Validate rules & insert contract cleanly.
         if (pickedItems.Count == 0 && escrowedZen <= 0 && jewelsList.Count == 0)
         {
             await this.SendStateAsync(player, true, "Select at least one item, Zen, or Jewel Bank balance to place in escrow.", "Hãy chọn ít nhất 1 vật phẩm, Zen hoặc Ngọc để ký gửi.", true).ConfigureAwait(false);
             return;
         }
 
-        // Deduct JewelBank jewels atomically first (reversible if contract fails).
+        var sellerCoinDebit = 0;
+        var sellerBond = 0L;
+        var coinType = MapCoinType(cfg.DirectVndServiceFeeCurrency);
+        if (directVnd)
+        {
+            sellerBond = Math.Max(0, ReadLong(json, "sellerBondCoins"));
+            var fee = EscrowDirectVndEngine.ComputeServiceFeeCoins(cfg, priceAmount);
+            sellerCoinDebit = (int)Math.Min(int.MaxValue, sellerBond + fee.SellerFeePaid);
+            if (!TryDebitAccountCoins(player, coinType, sellerCoinDebit))
+            {
+                await this.SendStateAsync(player, true, $"Insufficient {cfg.DirectVndServiceFeeCurrency} for bond/service fee ({sellerCoinDebit} needed).", $"Không đủ {cfg.DirectVndServiceFeeCurrency} cho tiền cọc/phí dịch vụ (cần {sellerCoinDebit}).", true).ConfigureAwait(false);
+                return;
+            }
+        }
+
         var jewelStore = JewelBankStore.Open(cfg.JewelBankFileName);
         if (jewelsList.Count > 0)
         {
@@ -594,27 +693,47 @@ public sealed class EscrowContractsPlugIn :
             });
             if (!okJewels)
             {
+                RefundAccountCoins(player, coinType, sellerCoinDebit);
                 await this.SendStateAsync(player, true, "Not enough jewels in your Jewel Bank.", "Không đủ ngọc trong Ngân Hàng Ngọc.", true).ConfigureAwait(false);
                 return;
             }
         }
 
-        var (err, created) = engine.CreateContract(
-            login,
-            charName,
-            targetBuyer,
-            pickedItems.Select(p => p.Snapshot).ToList(),
-            escrowedZen,
-            jewelsList,
-            priceCurrency,
-            priceAmount,
-            deadlineHours,
-            confirmHighValue,
-            now);
+        var snapshots = pickedItems.Select(p => p.Snapshot).ToList();
+        var (err, created) = directVnd
+            ? this.GetDirectEngine().CreateDirectVndContract(
+                login,
+                charName,
+                targetBuyer,
+                snapshots,
+                escrowedZen,
+                jewelsList,
+                priceAmount,
+                ReadString(json, "bankBin"),
+                ReadString(json, "bankName"),
+                ReadString(json, "bankAccountNumber"),
+                ReadString(json, "bankAccountName"),
+                sellerBond,
+                ReadString(json, "webhookSecret"),
+                deadlineHours,
+                confirmHighValue,
+                now)
+            : engine.CreateContract(
+                login,
+                charName,
+                targetBuyer,
+                snapshots,
+                escrowedZen,
+                jewelsList,
+                priceCurrency,
+                priceAmount,
+                deadlineHours,
+                confirmHighValue,
+                now);
 
         if (err != "Ok" || created is null)
         {
-            // Rollback JewelBank deduction cleanly!
+            RefundAccountCoins(player, coinType, sellerCoinDebit);
             if (jewelsList.Count > 0)
             {
                 RefundJewelsToBank(jewelStore, login, jewelsList);
@@ -625,7 +744,6 @@ public sealed class EscrowContractsPlugIn :
             return;
         }
 
-        // Now deduct Zen & remove items atomically from seller's bag.
         if (escrowedZen > 0)
         {
             player.TryRemoveMoney((int)Math.Min(int.MaxValue, escrowedZen));
@@ -650,10 +768,168 @@ public sealed class EscrowContractsPlugIn :
             PartnerAccount = targetBuyer,
             ItemSummary = string.Join(", ", pickedItems.Select(x => x.Snapshot.NameEn)),
             ZenDelta = -escrowedZen,
-            Details = $"Created escrow {created.ContractId}: price {priceAmount} {priceCurrency}",
+            Details = directVnd
+                ? $"Created Direct VND escrow {created.ContractId}: price {priceAmount:N0} VND (ref {created.DirectVnd?.PaymentReference})"
+                : $"Created escrow {created.ContractId}: price {priceAmount} {priceCurrency}",
         });
 
         await this.SendStateAsync(player, true, $"Created escrow contract {created.ContractId}.", $"Đã tạo hợp đồng ký gửi {created.ContractId}.").ConfigureAwait(false);
+    }
+
+    private async ValueTask ReserveDirectVndFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login || player.SelectedCharacter?.Name is not { Length: > 0 } charName)
+        {
+            return;
+        }
+
+        var direct = this.GetDirectEngine();
+        var cfg = this.GetEngine().Configuration;
+        var now = DateTime.UtcNow;
+
+        if (!EscrowEngine.MeetsAccountAgeRequirement(cfg, player.Account.RegistrationDate, now))
+        {
+            await this.SendStateAsync(player, true, $"Accounts must be at least {cfg.MinAccountAgeDays} day(s) old to use escrow.", $"Tài khoản phải đủ {cfg.MinAccountAgeDays} ngày tuổi mới được ký gửi.", true).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await this.VerifySecondPasswordAsync(player, cfg, ReadString(json, "pin")).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        var contractId = ReadString(json, "contractId");
+        var coinType = MapCoinType(cfg.DirectVndServiceFeeCurrency);
+        var (err, reserved) = direct.ReserveForPayment(
+            login,
+            charName,
+            contractId,
+            now,
+            fee => TryDebitAccountCoins(player, coinType, (int)Math.Min(int.MaxValue, fee)));
+
+        if (err != "Ok" || reserved is null)
+        {
+            var (en, vi) = err == "PaymentFailed"
+                ? ($"Insufficient {cfg.DirectVndServiceFeeCurrency} for service fee.", $"Không đủ {cfg.DirectVndServiceFeeCurrency} trả phí dịch vụ.")
+                : TranslateError(err, cfg);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+        {
+            Id = $"esc-dvres-{Guid.NewGuid():N}",
+            TimestampUtc = now,
+            Kind = ActivityKind.Trade,
+            Account = login,
+            Character = charName,
+            PartnerAccount = reserved.SellerLogin,
+            Details = $"Reserved Direct VND {reserved.ContractId} ({reserved.DirectVnd?.PaymentReference}) until {reserved.DirectVnd?.PaymentDeadlineSydney}",
+        });
+
+        await this.SendStateAsync(player, true, $"Reserved {reserved.ContractId}. Transfer {reserved.PriceAmount:N0} VND with ref {reserved.DirectVnd?.PaymentReference}.", $"Đã giữ hợp đồng {reserved.ContractId}. Chuyển {reserved.PriceAmount:N0} VNĐ kèm nội dung {reserved.DirectVnd?.PaymentReference}.").ConfigureAwait(false);
+    }
+
+    private async ValueTask ExtendDirectVndFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var (err, updated) = this.GetDirectEngine().ExtendPaymentWindowOnce(login, ReadString(json, "contractId"), DateTime.UtcNow);
+        if (err != "Ok" || updated is null)
+        {
+            var (en, vi) = TranslateError(err, this.GetEngine().Configuration);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        await this.SendStateAsync(player, true, $"Extended deadline to {updated.DirectVnd?.PaymentDeadlineSydney}.", $"Đã gia hạn thanh toán tới {updated.DirectVnd?.PaymentDeadlineSydney}.").ConfigureAwait(false);
+    }
+
+    private async ValueTask BuyerMarkPaidFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var (err, updated) = this.GetDirectEngine().MarkBuyerPaid(
+            login,
+            ReadString(json, "contractId"),
+            ReadString(json, "receiptMime"),
+            ReadString(json, "receiptBase64"),
+            ReadString(json, "note"),
+            DateTime.UtcNow);
+        if (err != "Ok" || updated is null)
+        {
+            var (en, vi) = TranslateError(err, this.GetEngine().Configuration);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        await this.SendStateAsync(player, true, $"Marked {updated.ContractId} paid. Waiting for seller confirmation.", $"Đã báo chuyển khoản cho {updated.ContractId}. Đang chờ người bán xác nhận.").ConfigureAwait(false);
+    }
+
+    private async ValueTask SellerConfirmPaidFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        var (err, completed) = this.GetDirectEngine().SellerConfirmMoneyReceived(login, ReadString(json, "contractId"), now);
+        if (err != "Ok" || completed is null)
+        {
+            var (en, vi) = TranslateError(err, this.GetEngine().Configuration);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+        {
+            Id = $"esc-dvok-{Guid.NewGuid():N}",
+            TimestampUtc = now,
+            Kind = ActivityKind.Trade,
+            Account = completed.SellerLogin,
+            Character = completed.SellerCharacter,
+            PartnerAccount = completed.AcceptedByLogin,
+            Details = $"Seller confirmed VND payment on {completed.ContractId} ({completed.PriceAmount:N0} VND).",
+        });
+
+        await this.ClaimOwedAsync(player, silentWhenEmpty: true).ConfigureAwait(false);
+        await this.SendStateAsync(player, true, $"Confirmed payment on {completed.ContractId}; goods delivered to buyer.", $"Đã xác nhận nhận tiền {completed.ContractId}; đã giao hàng cho người mua.").ConfigureAwait(false);
+    }
+
+    private async ValueTask OpenDisputeFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        var (err, disputed) = this.GetDirectEngine().OpenDispute(login, ReadString(json, "contractId"), ReadString(json, "reason"), now);
+        if (err != "Ok" || disputed is null)
+        {
+            var (en, vi) = TranslateError(err, this.GetEngine().Configuration);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+        {
+            Id = $"esc-disp-{Guid.NewGuid():N}",
+            TimestampUtc = now,
+            Kind = ActivityKind.Trade,
+            Account = login,
+            PartnerAccount = string.Equals(login, disputed.SellerLogin, StringComparison.OrdinalIgnoreCase) ? disputed.AcceptedByLogin : disputed.SellerLogin,
+            Details = $"Opened dispute on {disputed.ContractId}: {disputed.DirectVnd?.DisputeReason}",
+        });
+
+        await this.SendStateAsync(player, true, $"Dispute opened on {disputed.ContractId}. Admin will review.", $"Đã mở tranh chấp cho {disputed.ContractId}. QTV sẽ xem xét.").ConfigureAwait(false);
     }
 
     private async ValueTask AcceptContractFromPlayerAsync(Player player, JsonElement? root)
@@ -873,6 +1149,14 @@ public sealed class EscrowContractsPlugIn :
                 && !await GiftCodes.GiftCodeRewards.GiveGoodsAsync(player, giftReward).ConfigureAwait(false))
             {
                 continue;
+            }
+
+            if (delivery.Coins > 0)
+            {
+                await MissionCoinGranter.GrantAsync(
+                    player.GameContext,
+                    new CoinGrant(login, MapCoinType(delivery.CoinCurrency), (int)Math.Min(int.MaxValue, delivery.Coins), delivery.ReasonEn, $"escrow-owed:{delivery.DeliveryId}"),
+                    GrantedBy).ConfigureAwait(false);
             }
 
             engine.RemoveOwedDelivery(delivery.DeliveryId);

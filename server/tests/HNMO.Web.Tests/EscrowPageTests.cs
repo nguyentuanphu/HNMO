@@ -26,9 +26,14 @@ public class EscrowPageTests
 
         var cfg = new EscrowConfiguration();
         Assert.That(cfg.Enabled, Is.False);
+        Assert.That(cfg.DirectVndEnabled, Is.False);
+        Assert.That(cfg.DirectVndComplianceAcknowledged, Is.False);
         Assert.That(cfg.RequireSecondPassword, Is.True);
         Assert.That(cfg.BannedItems, Is.Not.Empty);
         Assert.That(cfg.AllowedCurrencies, Does.Contain(EscrowCurrency.WCoinC));
         Assert.That(cfg.AllowedCurrencies, Does.Contain(EscrowCurrency.Zen));
+
+        var webhookMethod = typeof(HNMO.Web.AdminPanel.API.WebsiteEscrowController).GetMethod("DirectWebhookAsync");
+        Assert.That(webhookMethod, Is.Not.Null);
     }
 }

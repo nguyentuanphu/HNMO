@@ -86,4 +86,7 @@ public sealed class EscrowContract
 
     /// <summary>Gets or sets admin freeze/cancel reason.</summary>
     public string AdminReason { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets Direct P2P VND real-money settlement details when <see cref="Mode"/> is <c>DirectVnd</c>.</summary>
+    public EscrowDirectVndDetails? DirectVnd { get; set; }
 }

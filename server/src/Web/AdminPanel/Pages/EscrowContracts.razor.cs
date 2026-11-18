@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HNMO.DataModel.Configuration;
+using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.ActivityLog;
 using HNMO.GameLogic.PlugIns.Escrow;
@@ -32,12 +34,16 @@ public partial class EscrowContracts : ComponentBase
     private List<EscrowReputationEntry> _reputations = [];
     private string _bannedItemsText = string.Empty;
     private string _adminReason = string.Empty;
+    private bool _banLosingAccount;
     private bool _isLoading = true;
     private bool _isSaving;
     private bool _showHelp;
 
     [Inject]
     private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
+
+    [Inject]
+    private IDataSource<GameConfiguration> GameConfigurationSource { get; set; } = null!;
 
     [Inject]
     private IServerProvider ServerProvider { get; set; } = null!;
@@ -134,6 +140,15 @@ public partial class EscrowContracts : ComponentBase
         this._isSaving = true;
         try
         {
+            if (cfg.DirectVndEnabled && !cfg.DirectVndComplianceAcknowledged)
+            {
+                cfg.DirectVndEnabled = false;
+                this.ToastService.ShowError(L(
+                    "Please tick 'I understand' under the Vietnamese law notice before enabling Direct P2P VND.",
+                    "Vui lòng đánh dấu 'Tôi hiểu' tại cảnh báo pháp lý Việt Nam trước khi bật VND P2P trực tiếp."));
+                return;
+            }
+
             cfg.BannedItems = this._bannedItemsText
                 .Split([',', '\n', '\r', ';'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                 .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -210,5 +225,47 @@ public partial class EscrowContracts : ComponentBase
         {
             this.ToastService.ShowError(L($"Cannot cancel ({err}).", $"Không thể hủy ({err})."));
         }
+    }
+
+    private async Task ResolveDisputeAsync(string contractId, bool awardToBuyer)
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var engine = this.ResolveEngine();
+        var direct = new EscrowDirectVndEngine(cfg, engine.Store);
+        var note = string.IsNullOrWhiteSpace(this._adminReason)
+            ? (awardToBuyer ? "Evidence accepted for buyer" : "Returned to seller")
+            : this._adminReason.Trim();
+        var (err, _, loser) = direct.ResolveDispute(contractId, awardToBuyer, note, DateTime.UtcNow);
+        if (err != "Ok")
+        {
+            this.ToastService.ShowError(L($"Cannot resolve dispute ({err}).", $"Không thể xử lý tranh chấp ({err})."));
+            return;
+        }
+
+        if (this._banLosingAccount && !string.IsNullOrWhiteSpace(loser))
+        {
+            var gameCfg = await this.GameConfigurationSource.GetOwnerAsync(Guid.Empty, default).ConfigureAwait(true);
+            using var ctx = this.PersistenceContextProvider.CreateNewPlayerContext(gameCfg);
+            if (await ctx.GetAccountByLoginNameAsync(loser, default).ConfigureAwait(true) is { } acc)
+            {
+                acc.State = AccountState.Banned;
+                await ctx.SaveChangesAsync(default).ConfigureAwait(true);
+            }
+        }
+
+        ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+        {
+            Id = $"esc-res-{Guid.NewGuid():N}",
+            TimestampUtc = DateTime.UtcNow,
+            Kind = ActivityKind.Trade,
+            Account = "ADMIN",
+            PartnerAccount = loser,
+            Details = $"Resolved dispute {contractId} (awardToBuyer={awardToBuyer}, banLoser={this._banLosingAccount}): {note}",
+        });
+
+        this.ToastService.ShowSuccess(awardToBuyer
+            ? L("Dispute resolved for buyer (seller bond forfeited).", "Đã xử lý giao hàng cho người mua (tịch thu cọc người bán).")
+            : L("Dispute resolved for seller (goods & bond returned).", "Đã hoàn hàng & cọc cho người bán."));
+        await this.LoadAsync().ConfigureAwait(true);
     }
 }

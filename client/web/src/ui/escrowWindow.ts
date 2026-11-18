@@ -3,7 +3,27 @@
 
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
+import { buildVietQrPayload, renderVietQrSvgDataUrl } from '../vietqr.js';
 import { createHnmoPanel, type HnmoPanel } from './hnmoPanel.js';
+
+export interface EscrowDirectVndDto {
+  bankBin: string;
+  bankName: string;
+  bankAccountNumber: string;
+  bankAccountName: string;
+  paymentReference: string;
+  webhookSecret?: string;
+  webhookVerified?: boolean;
+  sellerBondCurrency?: number | string;
+  sellerBondCoins: number;
+  serviceFeeCoins: number;
+  paymentDeadlineSydney?: string;
+  extendedOnce?: boolean;
+  buyerNote?: string;
+  receiptMime?: string;
+  receiptBase64?: string;
+  disputeReason?: string;
+}
 
 export interface EscrowItemDto {
   group: number;
@@ -46,6 +66,7 @@ export interface EscrowContractDto {
   netSellerProceeds: number;
   frozenByAdmin: boolean;
   adminReason: string;
+  directVnd?: EscrowDirectVndDto | null;
 }
 
 export interface EscrowBagItemDto {
@@ -89,6 +110,15 @@ export interface EscrowStatePayload {
   highValueZen: number;
   highValueJewels: number;
   cooldownHours: number;
+  directVndEnabled?: boolean;
+  directVndPaymentWindowMinutes?: number;
+  directVndExtendMinutes?: number;
+  directVndServiceFeeCurrency?: string;
+  directVndServiceFeeCoins?: number;
+  directVndServiceFeePercent?: number;
+  directVndFeePayer?: string;
+  directVndMaxSellerBondCoins?: number;
+  directVndMaxReceiptBytes?: number;
   reputation: EscrowReputationDto;
   bagItems: EscrowBagItemDto[];
   jewelBalances: Record<string, number>;
@@ -113,7 +143,21 @@ const CURRENCY_BY_INDEX = [
   'JewelBless', 'JewelSoul', 'JewelChaos', 'JewelCreation', 'JewelLife',
 ] as const;
 
-const STATUS_BY_INDEX = ['Open', 'Completed', 'Cancelled', 'Expired', 'Frozen'] as const;
+const STATUS_BY_INDEX = [
+  'Open', 'Completed', 'Cancelled', 'Expired', 'Frozen',
+  'ReservedForPayment', 'BuyerMarkedPaid', 'Disputed',
+] as const;
+
+const BANK_PRESETS: ReadonlyArray<{ bin: string; name: string }> = [
+  { bin: '970436', name: 'Vietcombank' },
+  { bin: '970407', name: 'Techcombank' },
+  { bin: '970422', name: 'MB Bank' },
+  { bin: '970416', name: 'ACB' },
+  { bin: '970418', name: 'BIDV' },
+  { bin: '970415', name: 'VietinBank' },
+  { bin: '970432', name: 'VPBank' },
+  { bin: '970423', name: 'TPBank' },
+];
 
 export function currencyLabel(raw: number | string): string {
   if (typeof raw === 'number') return CURRENCY_BY_INDEX[raw] ?? String(raw);
@@ -186,6 +230,16 @@ export class EscrowWindow {
   private pinInput = '';
   private confirmHighValue = false;
   private filterText = '';
+  private createMode: 'InGame' | 'DirectVnd' = 'InGame';
+  private bankBin = '970436';
+  private bankName = 'Vietcombank';
+  private bankAccountNumber = '';
+  private bankAccountName = '';
+  private sellerBondInput = '0';
+  private webhookSecretInput = '';
+  private disputeReasonInput = '';
+  private pendingReceiptMime = '';
+  private pendingReceiptBase64 = '';
 
   constructor(private readonly options: EscrowWindowOptions) {
     this.panel = createHnmoPanel('hnmo-escrow-panel', this.t('Escrow Contracts (F9)', 'Hợp đồng Ký gửi (F9)'));
@@ -427,7 +481,8 @@ export class EscrowWindow {
       const card = document.createElement('div');
       card.style.cssText = 'border:1px solid #3f3828;border-radius:6px;padding:8px 10px;margin-bottom:8px;background:#121622;';
       const st = statusLabel(c.status);
-      const cur = currencyLabel(c.priceCurrency);
+      const isDirect = c.mode === 'DirectVnd' && !!c.directVnd;
+      const cur = isDirect ? 'VND' : currencyLabel(c.priceCurrency);
       const goodsParts: string[] = [];
       for (const it of c.items) {
         const nm = `${this.t(it.nameEn, it.nameVi)} +${it.level}${it.luck ? ' Luck' : ''}${it.skill ? ' Skill' : ''}`;
@@ -440,10 +495,12 @@ export class EscrowWindow {
       header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;';
       const title = document.createElement('strong');
       title.style.color = '#f1cf7a';
-      title.textContent = `${c.contractId} • ${c.sellerCharacter}${c.targetBuyer ? ` -> ${c.targetBuyer}` : ''} [${st}]`;
+      title.textContent = `${c.contractId}${isDirect ? ' [P2P VND]' : ''} • ${c.sellerCharacter}${c.targetBuyer ? ` -> ${c.targetBuyer}` : ''} [${st}]`;
       const exp = document.createElement('span');
       exp.style.cssText = 'font-size:11px;color:#9ca3af;';
-      exp.textContent = c.expiresAtSydney;
+      exp.textContent = isDirect && c.directVnd?.paymentDeadlineSydney
+        ? `${this.t('Pay by', 'Hạn CK')}: ${c.directVnd.paymentDeadlineSydney}`
+        : c.expiresAtSydney;
       header.append(title, exp);
 
       const goods = document.createElement('div');
@@ -453,16 +510,134 @@ export class EscrowWindow {
         goods.title = c.items.map((i) => `${this.t(i.nameEn, i.nameVi)}: ${i.originSummary}`).join('\n');
       }
 
+      card.append(header, goods);
+
+      if (isDirect && c.directVnd && st !== 'Open') {
+        const dv = c.directVnd;
+        const payBox = document.createElement('div');
+        payBox.style.cssText = 'display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0;padding:6px 8px;border:1px dashed #6b5528;border-radius:5px;background:#171820;font-size:12px;';
+        if (dv.bankBin && dv.bankAccountNumber && st === 'ReservedForPayment') {
+          const qrPayload = buildVietQrPayload({
+            bin: dv.bankBin,
+            account: dv.bankAccountNumber,
+            accountName: dv.bankAccountName,
+            amount: c.priceAmount,
+            message: dv.paymentReference,
+          });
+          const img = document.createElement('img');
+          img.src = renderVietQrSvgDataUrl(qrPayload);
+          img.alt = 'VietQR';
+          img.style.cssText = 'width:110px;height:110px;border-radius:4px;background:#fff;padding:4px;';
+          payBox.append(img);
+        }
+        const infoDiv = document.createElement('div');
+        infoDiv.style.cssText = 'display:grid;gap:2px;';
+        if (dv.bankAccountNumber) {
+          const bLine = document.createElement('div');
+          bLine.textContent = `${dv.bankName} (${dv.bankBin}): ${dv.bankAccountNumber} — ${dv.bankAccountName}`;
+          infoDiv.append(bLine);
+        }
+        const rLine = document.createElement('div');
+        rLine.textContent = `${this.t('Transfer Ref', 'Nội dung CK')}: ${dv.paymentReference || 'Locked until accepted'}${dv.sellerBondCoins > 0 ? ` | ${this.t('Seller Bond', 'Cọc')}: ${dv.sellerBondCoins}` : ''}`;
+        infoDiv.append(rLine);
+        if (dv.receiptBase64 && dv.receiptMime) {
+          const rImg = document.createElement('img');
+          rImg.src = `data:${dv.receiptMime};base64,${dv.receiptBase64}`;
+          rImg.alt = 'Receipt';
+          rImg.style.cssText = 'max-height:90px;max-width:160px;border-radius:4px;border:1px solid #555;margin-top:4px;';
+          infoDiv.append(rImg);
+        }
+        payBox.append(infoDiv);
+        card.append(payBox);
+      }
+
       const footer = document.createElement('div');
       footer.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;';
       const price = document.createElement('span');
       price.style.cssText = 'font-size:12px;color:#b7f5d0;';
-      price.textContent = `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} ${cur} | ${this.t('Buyer pays', 'Người mua trả')}: ${c.buyerTotalDebit.toLocaleString()} ${cur} (${this.t('fee', 'phí')} ${c.feeAmount.toLocaleString()})`;
+      price.textContent = isDirect
+        ? `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} VND | ${this.t('Service Fee', 'Phí DV')}: ${c.buyerTotalDebit} ${currencyLabel(c.priceCurrency)}${(c.directVnd?.sellerBondCoins ?? 0) > 0 ? ` | ${this.t('Bond', 'Cọc')}: ${c.directVnd?.sellerBondCoins}` : ''}`
+        : `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} ${cur} | ${this.t('Buyer pays', 'Người mua trả')}: ${c.buyerTotalDebit.toLocaleString()} ${cur} (${this.t('fee', 'phí')} ${c.feeAmount.toLocaleString()})`;
 
       const btns = document.createElement('div');
-      btns.style.cssText = 'display:flex;gap:6px;';
+      btns.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;align-items:center;';
       const isMine = c.sellerLogin.toLowerCase() === s.accountLogin.toLowerCase();
-      if (isMine) {
+      if (isDirect) {
+        if (isMine && st === 'Open') {
+          const cancelBtn = document.createElement('button');
+          cancelBtn.type = 'button';
+          cancelBtn.textContent = this.t('Cancel Contract', 'Hủy hợp đồng');
+          cancelBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #b44;background:#441818;color:#ffd0d0;cursor:pointer;font:inherit;';
+          cancelBtn.addEventListener('click', () => this.sendAction(3, { contractId: c.contractId }));
+          btns.append(cancelBtn);
+        } else if (!isMine && st === 'Open') {
+          const resBtn = document.createElement('button');
+          resBtn.type = 'button';
+          resBtn.textContent = this.t('Accept & Show Seller VietQR', 'Nhận & Xem VietQR người bán');
+          resBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #358856;background:#194d2f;color:#e6fff0;cursor:pointer;font:inherit;font-weight:600;';
+          resBtn.addEventListener('click', () => this.sendAction(6, { contractId: c.contractId, pin: this.pinInput }));
+          btns.append(resBtn);
+        } else if (!isMine && st === 'ReservedForPayment') {
+          const extBtn = document.createElement('button');
+          extBtn.type = 'button';
+          extBtn.disabled = !!c.directVnd?.extendedOnce;
+          extBtn.textContent = this.t('Extend Once', 'Gia hạn 1 lần');
+          extBtn.style.cssText = 'padding:4px 8px;border-radius:4px;border:1px solid #888;background:#1b2030;color:#fff;cursor:pointer;font:inherit;';
+          extBtn.addEventListener('click', () => this.sendAction(7, { contractId: c.contractId }));
+
+          const fileInp = document.createElement('input');
+          fileInp.type = 'file';
+          fileInp.accept = 'image/png,image/jpeg,image/webp';
+          fileInp.title = this.t('Optional transfer receipt image (PNG/JPG/WEBP)', 'Ảnh biên lai chuyển khoản (tùy chọn)');
+          fileInp.style.cssText = 'max-width:155px;font-size:11px;';
+          fileInp.addEventListener('change', () => {
+            const file = fileInp.files?.[0];
+            if (!file) return;
+            const maxBytes = s.directVndMaxReceiptBytes ?? 524288;
+            if (file.size > maxBytes) {
+              this.options.message(this.t('Receipt image exceeds size limit.', 'Ảnh biên lai vượt quá dung lượng cho phép.'));
+              fileInp.value = '';
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+              const res = typeof reader.result === 'string' ? reader.result : '';
+              this.pendingReceiptMime = file.type;
+              this.pendingReceiptBase64 = res;
+            };
+            reader.readAsDataURL(file);
+          });
+
+          const paidBtn = document.createElement('button');
+          paidBtn.type = 'button';
+          paidBtn.textContent = this.t("I've Paid", 'Tôi đã chuyển khoản');
+          paidBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #358856;background:#194d2f;color:#e6fff0;cursor:pointer;font:inherit;font-weight:600;';
+          paidBtn.addEventListener('click', () => {
+            this.sendAction(8, {
+              contractId: c.contractId,
+              receiptMime: this.pendingReceiptMime,
+              receiptBase64: this.pendingReceiptBase64,
+            });
+          });
+          btns.append(extBtn, fileInp, paidBtn);
+        } else if (isMine && (st === 'ReservedForPayment' || st === 'BuyerMarkedPaid')) {
+          const confirmBtn = document.createElement('button');
+          confirmBtn.type = 'button';
+          confirmBtn.textContent = this.t('Money Received — Release', 'Đã nhận tiền — Giao đồ');
+          confirmBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #358856;background:#194d2f;color:#e6fff0;cursor:pointer;font:inherit;font-weight:600;';
+          confirmBtn.addEventListener('click', () => this.sendAction(9, { contractId: c.contractId }));
+          btns.append(confirmBtn);
+        }
+
+        if (st === 'ReservedForPayment' || st === 'BuyerMarkedPaid') {
+          const dispBtn = document.createElement('button');
+          dispBtn.type = 'button';
+          dispBtn.textContent = this.t('Dispute', 'Tranh chấp');
+          dispBtn.style.cssText = 'padding:4px 8px;border-radius:4px;border:1px solid #c97a2b;background:#3a2410;color:#ffe1b3;cursor:pointer;font:inherit;';
+          dispBtn.addEventListener('click', () => this.sendAction(10, { contractId: c.contractId, reason: this.disputeReasonInput || 'Participant dispute' }));
+          btns.append(dispBtn);
+        }
+      } else if (isMine) {
         const cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
         cancelBtn.textContent = this.t('Cancel Contract', 'Hủy hợp đồng');
@@ -489,7 +664,7 @@ export class EscrowWindow {
       }
 
       footer.append(price, btns);
-      card.append(header, goods, footer);
+      card.append(footer);
       root.append(card);
     }
   }
@@ -497,6 +672,26 @@ export class EscrowWindow {
   private renderCreateTab(root: HTMLElement, s: EscrowStatePayload): void {
     const form = document.createElement('div');
     form.style.cssText = 'display:grid;gap:8px;';
+
+    if (s.directVndEnabled) {
+      const modeRow = document.createElement('div');
+      modeRow.style.cssText = 'display:flex;gap:8px;align-items:center;';
+      const mBtn = (mode: 'InGame' | 'DirectVnd', en: string, vi: string) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = this.t(en, vi);
+        b.style.cssText = `padding:3px 10px;border-radius:4px;border:1px solid #6b5528;cursor:pointer;font:inherit;background:${this.createMode === mode ? '#8a6a30' : '#181c2b'};color:${this.createMode === mode ? '#111' : '#fff'};font-weight:${this.createMode === mode ? '700' : '400'};`;
+        b.addEventListener('click', () => { this.createMode = mode; this.render(); });
+        return b;
+      };
+      modeRow.append(
+        mBtn('InGame', 'In-Game Currencies', 'Tiền tệ trong game'),
+        mBtn('DirectVnd', 'Direct P2P (VND VietQR)', 'Bán VND trực tiếp (VietQR)'),
+      );
+      form.append(modeRow);
+    } else {
+      this.createMode = 'InGame';
+    }
 
     const bagHeader = document.createElement('div');
     bagHeader.style.cssText = 'font-size:12px;font-weight:600;color:#f1cf7a;';
@@ -575,29 +770,48 @@ export class EscrowWindow {
     const row3 = document.createElement('div');
     row3.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end;';
 
-    const curWrap = document.createElement('div');
-    const cLbl = document.createElement('div');
-    cLbl.style.cssText = 'font-size:11px;color:#ccc;margin-bottom:2px;';
-    cLbl.textContent = this.t('Asking Currency', 'Loại tiền yêu cầu');
-    const cSel = document.createElement('select');
-    cSel.style.cssText = 'width:100%;padding:5px;border-radius:4px;border:1px solid #444;background:#10131e;color:#fff;';
-    for (const c of s.allowedCurrencies ?? ['WCoinC', 'Zen']) {
-      const opt = document.createElement('option');
-      opt.value = c;
-      opt.textContent = c;
-      opt.selected = this.priceCurrency === c;
-      cSel.append(opt);
-    }
-    cSel.addEventListener('change', () => { this.priceCurrency = cSel.value; this.render(); });
-    curWrap.append(cLbl, cSel);
+    if (this.createMode === 'DirectVnd') {
+      const vndWrap = this.labeledInput(
+        this.t('Asking Price (VND)', 'Giá bán (VNĐ)'),
+        this.priceAmountInput,
+        'number',
+        (v) => { this.priceAmountInput = v; },
+        this.t('VND transferred directly by buyer to your bank account', 'Số tiền VNĐ người mua chuyển trực tiếp cho bạn'),
+      );
+      const bondWrap = this.labeledInput(
+        this.t(`Seller Bond (${s.directVndServiceFeeCurrency ?? 'WCoinC'})`, `Cọc người bán (${s.directVndServiceFeeCurrency ?? 'WCoinC'})`),
+        this.sellerBondInput,
+        'number',
+        (v) => { this.sellerBondInput = v; },
+        this.t('Optional coin bond forfeited if buyer wins dispute', 'Tiền cọc tự chọn (mất nếu thua tranh chấp)'),
+      );
+      row3.append(vndWrap, bondWrap);
+    } else {
+      const curWrap = document.createElement('div');
+      const cLbl = document.createElement('div');
+      cLbl.style.cssText = 'font-size:11px;color:#ccc;margin-bottom:2px;';
+      cLbl.textContent = this.t('Asking Currency', 'Loại tiền yêu cầu');
+      const cSel = document.createElement('select');
+      cSel.style.cssText = 'width:100%;padding:5px;border-radius:4px;border:1px solid #444;background:#10131e;color:#fff;';
+      for (const c of s.allowedCurrencies ?? ['WCoinC', 'Zen']) {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        opt.selected = this.priceCurrency === c;
+        cSel.append(opt);
+      }
+      cSel.addEventListener('change', () => { this.priceCurrency = cSel.value; this.render(); });
+      curWrap.append(cLbl, cSel);
 
-    const amtWrap = this.labeledInput(
-      this.t('Asking Amount', 'Số tiền yêu cầu'),
-      this.priceAmountInput,
-      'number',
-      (v) => { this.priceAmountInput = v; },
-      this.t('Contract price paid by buyer', 'Giá người mua cần trả'),
-    );
+      const amtWrap = this.labeledInput(
+        this.t('Asking Amount', 'Số tiền yêu cầu'),
+        this.priceAmountInput,
+        'number',
+        (v) => { this.priceAmountInput = v; },
+        this.t('Contract price paid by buyer', 'Giá người mua cần trả'),
+      );
+      row3.append(curWrap, amtWrap);
+    }
 
     const dlWrap = this.labeledInput(
       this.t('Deadline (hours)', 'Hạn hợp đồng (giờ)'),
@@ -607,7 +821,7 @@ export class EscrowWindow {
       this.t('Hours before unaccepted contract auto-returns', 'Số giờ tự hoàn hàng nếu chưa có người nhận'),
     );
 
-    row3.append(curWrap, amtWrap, dlWrap);
+    row3.append(dlWrap);
 
     if (s.requiresPin) {
       const pinWrap = this.labeledInput(
@@ -620,6 +834,53 @@ export class EscrowWindow {
       row3.append(pinWrap);
     }
     form.append(row3);
+
+    if (this.createMode === 'DirectVnd') {
+      const bankRow = document.createElement('div');
+      bankRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end;padding:6px;border:1px solid #353024;border-radius:5px;';
+      const bankSelWrap = document.createElement('div');
+      const bLbl = document.createElement('div');
+      bLbl.style.cssText = 'font-size:11px;color:#ccc;margin-bottom:2px;';
+      bLbl.textContent = this.t('Seller Bank (hidden until accepted)', 'Ngân hàng (ẩn tới khi chốt)');
+      const bSel = document.createElement('select');
+      bSel.style.cssText = 'width:100%;padding:5px;border-radius:4px;border:1px solid #444;background:#10131e;color:#fff;';
+      for (const b of BANK_PRESETS) {
+        const opt = document.createElement('option');
+        opt.value = b.bin;
+        opt.textContent = `${b.name} (${b.bin})`;
+        opt.selected = this.bankBin === b.bin;
+        bSel.append(opt);
+      }
+      bSel.addEventListener('change', () => {
+        this.bankBin = bSel.value;
+        this.bankName = BANK_PRESETS.find((x) => x.bin === bSel.value)?.name ?? 'Bank';
+      });
+      bankSelWrap.append(bLbl, bSel);
+
+      const acctWrap = this.labeledInput(
+        this.t('Account Number', 'Số tài khoản'),
+        this.bankAccountNumber,
+        'text',
+        (v) => { this.bankAccountNumber = v; },
+        this.t('Hidden from buyer until they accept the contract', 'Chỉ hiện cho người mua sau khi họ nhấn nhận hợp đồng'),
+      );
+      const nameWrap = this.labeledInput(
+        this.t('Account Holder', 'Tên chủ TK'),
+        this.bankAccountName,
+        'text',
+        (v) => { this.bankAccountName = v; },
+        this.t('Bank account holder name', 'Tên chủ tài khoản ngân hàng'),
+      );
+      const whWrap = this.labeledInput(
+        this.t('Webhook Secret (optional)', 'Khóa Webhook HMAC (tùy chọn)'),
+        this.webhookSecretInput,
+        'password',
+        (v) => { this.webhookSecretInput = v; },
+        this.t('Optional HMAC-SHA256 secret for automatic confirmation webhook', 'Khóa bí mật HMAC để tự động nhả đồ qua webhook'),
+      );
+      bankRow.append(bankSelWrap, acctWrap, nameWrap, whWrap);
+      form.append(bankRow);
+    }
 
     const feePreview = computeEscrowFee(
       Math.max(0, Number.parseInt(this.priceAmountInput || '0', 10) || 0),
@@ -652,6 +913,26 @@ export class EscrowWindow {
     submit.title = this.t('Move selected goods atomically into escrow', 'Chuyển đồ vào trạng thái ký gửi nguyên tử');
     submit.style.cssText = 'padding:6px 14px;border-radius:5px;border:1px solid #c9a24a;background:#8a6a30;color:#111;font-weight:700;cursor:pointer;font:inherit;';
     submit.addEventListener('click', () => {
+      if (this.createMode === 'DirectVnd') {
+        this.sendAction(5, {
+          slots: [...this.selectedSlots],
+          escrowedZen: Math.max(0, Number.parseInt(this.escrowedZenInput || '0', 10) || 0),
+          escrowedJewelKey: this.escrowedJewelKey,
+          escrowedJewelQty: Math.max(0, Number.parseInt(this.escrowedJewelQtyInput || '0', 10) || 0),
+          targetBuyer: this.targetPrefill.trim(),
+          priceAmount: Math.max(0, Number.parseInt(this.priceAmountInput || '0', 10) || 0),
+          deadlineHours: Math.max(1, Number.parseInt(this.deadlineHoursInput || '24', 10) || 24),
+          confirmHighValue: this.confirmHighValue,
+          pin: this.pinInput,
+          bankBin: this.bankBin,
+          bankName: this.bankName,
+          bankAccountNumber: this.bankAccountNumber.trim(),
+          bankAccountName: this.bankAccountName.trim(),
+          sellerBondCoins: Math.max(0, Number.parseInt(this.sellerBondInput || '0', 10) || 0),
+          webhookSecret: this.webhookSecretInput,
+        });
+        return;
+      }
       this.sendAction(1, {
         slots: [...this.selectedSlots],
         escrowedZen: Math.max(0, Number.parseInt(this.escrowedZenInput || '0', 10) || 0),

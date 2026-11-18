@@ -23,4 +23,13 @@ public enum EscrowContractStatus
 
     /// <summary>Frozen by admin review.</summary>
     Frozen = 4,
+
+    /// <summary>Direct/host VND contract reserved by a buyer for bank transfer.</summary>
+    ReservedForPayment = 5,
+
+    /// <summary>Buyer marked transfer sent and awaits seller/host confirmation.</summary>
+    BuyerMarkedPaid = 6,
+
+    /// <summary>Disputed transaction awaiting admin evidence review.</summary>
+    Disputed = 7,
 }
