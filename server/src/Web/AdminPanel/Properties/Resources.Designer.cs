@@ -13575,5 +13575,8 @@ namespace HNMO.Web.AdminPanel.Properties {
         /// <summary>Gets the localized description of a host VIP removal.</summary>
         public static string VipCoinHistoryRemoved => ResourceManager.GetString("VipCoinHistoryRemoved", resourceCulture)!;
 
+        /// <summary>Gets the localized administration activity category.</summary>
+        public static string VipActivityAdministration => ResourceManager.GetString("VipActivityAdministration", resourceCulture)!;
+
     }
 }

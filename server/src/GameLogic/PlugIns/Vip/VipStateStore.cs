@@ -45,6 +45,28 @@ public sealed class VipStateStore
     /// <returns>An in-memory store which writes no file.</returns>
     public static VipStateStore CreateInMemory() => new(null);
 
+    /// <summary>Copies known active account identifiers for a host list; callers must verify their database proof.</summary>
+    /// <param name="nowUtc">The current UTC instant.</param>
+    /// <returns>A bounded-source index ordered by canonical login; identifiers preserve case-sensitive account lookup.</returns>
+    public IReadOnlyList<Guid> KnownAccountIds(DateTime nowUtc)
+    {
+        lock (this.SyncRoot)
+        {
+            var accounts = new List<Guid>();
+            foreach (var membership in this.Data.Memberships.Values.Where(value => value.UntilUtc > nowUtc).OrderBy(value => value.LoginName, StringComparer.Ordinal))
+            {
+                if (this.Data.WalletReferences.TryGetValue(membership.LoginName, out var reference)
+                    && reference.Split(':') is ["vip", var account, var operation]
+                    && Guid.TryParseExact(account, "N", out var id) && Guid.TryParseExact(operation, "N", out _))
+                {
+                    accounts.Add(id);
+                }
+            }
+
+            return accounts.Distinct().ToArray();
+        }
+    }
+
     /// <summary>Atomically writes the VIP section while retaining all other sections.</summary>
     internal void Save() => this._backend?.WriteSection(SectionName, this.Data, JsonOptions);
 }
