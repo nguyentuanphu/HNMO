@@ -1,6 +1,6 @@
 // The web client: log in through the relay and play on the HNMO server. Left-click walks, right-drag turns the camera, the wheel zooms.
 
-import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, type Language } from './i18n.js';
+import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, savedLanguage, setLanguage, translate, type Language } from './i18n.js';
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
@@ -49,6 +49,7 @@ import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
+import { VipWindow } from './ui/vipWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
@@ -201,6 +202,7 @@ export interface GameState {
   market?: MarketWindow;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
+  vip?: VipWindow;
   guildLevels?: GuildLevelsWindow;
   customRanks?: CustomRanksManager;
   teleportNpc?: TeleportNpcWindow;
@@ -1351,7 +1353,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (from.storage !== 0 || from.slot < 12) return false;
     const applies = jewelApplies(from.item, target);
     if (!applies) return false;
-    if (applies === 'confirm' && !window.confirm('Would you like to repair Fenrir\'s horn?')) return true;
+    if (applies === 'confirm' && !window.confirm(translate("Would you like to repair Fenrir's horn?") ?? "Would you like to repair Fenrir's horn?")) return true;
     itemUser.use(from.slot, slot);
     return true;
   };
@@ -1406,7 +1408,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
       void itemWindows.tooltip.showLines(lines, { left: box.left, top: box.top, width: box.width, height: box.height });
     },
     cancel: (skill, name) => {
-      if (window.confirm(`Do you want to cancel the ${name} skill?`)) connection.send('ClientToServer', 'MagicEffectCancelRequest', { SkillId: skill, PlayerId: playerId });
+      if (window.confirm(translate(`Do you want to cancel the ${name} skill?`) ?? `Do you want to cancel the ${name} skill?`)) connection.send('ClientToServer', 'MagicEffectCancelRequest', { SkillId: skill, PlayerId: playerId });
     },
     skillName: (skill) => skillInfo(skill)?.name ?? `Skill ${skill}`,
   });
@@ -1673,6 +1675,15 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
   });
   window.addEventListener('hnmo-escrow-open', () => { escrow.open(); });
+  // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
+  const vip = new VipWindow({ send: (name, fields) => connection.send('ClientToServer', name, fields), message: (text) => chat.add(text, 'system') });
+  state.vip = vip;
+  connection.onPacket((bytes) => { vip.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'u' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); vip.toggle(); }
+  });
+  window.addEventListener('hnmo-vip-open', () => { vip.open(); });
   // HNMO's Jewel Bank & master skill clear (F7).
   const jewelBank = new JewelBankWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
@@ -2035,7 +2046,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   });
   chat.enable((text) => {
     const command = text.trim().toLowerCase();
-    if (command === '/code') { state.giftCodes?.open(); return; }
+    if (state.giftCodes?.command(text)) return;
     if (command === '/party' || command === '/pt') { party.command(online.hero, online.characters.values(), character.name); return; }
     if (state.personalShop?.command(text, () => facingPlayer(online.hero, online.characters.values()))) return;
     if (command === '/trade') {
@@ -2147,7 +2158,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   state.mobileHud.setInWorld(true);
   earlyPackets.forEach((bytes) => online.handle(bytes));
   hideLoadingScreen();
-  connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
+  connection.onClose = () => { vip.reset(); vip.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
   warmCharacterModels();
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }

@@ -31,7 +31,7 @@ export async function loadBuffData(): Promise<void> {
   definitions = new Map(file.buffs.map((buff) => [buff.number, buff]));
   // HNMO's own skills' buffs (not in the game's list).
   for (const b of NEW_SKILL_BUFFS) {
-    definitions.set(b.number, { number: b.number, name: b.name, kind: b.kind, displayName: { en: b.name }, description: { en: b.text }, iconFrom: b.iconFrom });
+    definitions.set(b.number, { number: b.number, name: b.name, kind: b.kind, displayName: { en: b.name, vi: b.nameVi }, description: { en: b.text, vi: b.textVi }, iconFrom: b.iconFrom });
   }
   const lowest = new Map<string, number>();
   for (const buff of file.buffs) if (buff.family) lowest.set(buff.family, Math.min(lowest.get(buff.family) ?? Infinity, buff.number));

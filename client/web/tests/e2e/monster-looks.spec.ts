@@ -34,7 +34,7 @@ async function openViewer(page: Page): Promise<void> {
   // A page of the web game's origin with three.js mapped, as the game's own page has it.
   await page.route(`**${VIEWER_PAGE}`, (route) => route.fulfill({
     contentType: 'text/html',
-    body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js"}}</script></head>'
+    body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/":"/vendor/three/"}}</script></head>'
       + '<body style="margin:0;background:#000"><canvas id="c" width="1280" height="720"></canvas></body></html>',
   }));
   await page.addInitScript(() => {

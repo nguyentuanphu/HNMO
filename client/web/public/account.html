@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HenryN Mu Online Account</title>
+  <title>{game}</title>
+  <link rel="stylesheet" href="/account-dashboard.css">
   <style>
     [hidden] { display: none !important; }
     :root { --panel: rgba(10, 12, 20, .86); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --error: #ef7a6c; --ok: #7cc98a; }
@@ -63,12 +64,41 @@
     .safety-facts { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   </style>
 </head>
-<body>
+<body data-page-label="Account">
   <main>
     <header>
-      <h1 data-game-name>HenryN Mu Online</h1>
+      <h1 data-game-name></h1>
       <a href="/">Play the game →</a>
+      <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
     </header>
+
+    <section class="panel" id="accountLoginPanel" data-no-i18n>
+      <h2 data-at="signIn">Sign in to my account</h2>
+      <div class="account-actions" role="group" aria-label="English / Tiếng Việt">
+        <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
+        <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
+      </div>
+      <p data-at="privacy">This page does not save your password in browser storage. Log out when using a shared computer.</p>
+      <form id="accountSignIn" class="panel" style="padding:0;border:0;background:none">
+        <label><span data-at="accountName">Account name</span><input id="accountUser" required maxlength="10" autocomplete="username"></label>
+        <label><span data-at="password">Password</span><input id="accountSecret" type="password" required maxlength="20" autocomplete="current-password"></label>
+        <button id="accountSignInButton" type="submit" data-at="signIn" data-at-title="signInHint">Sign in to my account</button>
+      </form>
+    </section>
+    <div id="accountDashboard" data-no-i18n>
+      <div id="accountToolbar" hidden>
+        <button type="button" data-account-language="en" title="Read in English / Đọc bằng tiếng Anh">English</button>
+        <button type="button" data-account-language="vi" title="Read in Vietnamese / Đọc bằng tiếng Việt">Tiếng Việt</button>
+        <button type="button" id="accountHelpButton" aria-expanded="false" aria-controls="accountHelp" data-at="helpTitle" data-at-title="helpHint">How to use this page</button>
+        <button type="button" id="accountRefresh" data-at="refresh" data-at-title="refreshHint">Refresh</button>
+        <button type="button" id="accountLogout" data-at="logout" data-at-title="logoutHint">Log out</button>
+        <div id="accountHelp" role="note" data-at="help" hidden></div>
+      </div>
+      <p id="accountMessage" role="status" aria-live="polite"></p>
+      <nav id="accountNav" aria-label="Account sections / Các mục tài khoản" hidden></nav>
+      <select id="accountSectionSelect" aria-label="Account sections / Các mục tài khoản"></select>
+      <div id="accountPanels"></div>
+    </div>
 
     <section class="panel notice" id="setupPanel" hidden>
       <h2>Finish the setup (host only)</h2>
@@ -113,7 +143,7 @@
         <p class="message" id="registerMessage" role="status"></p>
       </form>
 
-      <form class="panel" id="coinsForm">
+      <form class="panel" id="coinsForm" hidden>
         <h2>My coins</h2>
         <p>Spend them in the game's cash shop. The host can give more in the admin panel, and playing earns Goblin Points.</p>
         <label>Account name <input id="coinsAccount" name="account" required maxlength="10"></label>
@@ -127,7 +157,7 @@
       </form>
     </div>
 
-    <section class="panel" id="gift" aria-labelledby="giftTitle">
+    <section class="panel" id="gift" data-no-i18n aria-labelledby="giftTitle">
       <div class="gift-head">
         <h2 id="giftTitle" data-gt="title">Gift code</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-gift-lang="en">EN</button> <button type="button" data-gift-lang="vi">VI</button></div>
@@ -147,7 +177,7 @@
       <p class="message" id="giftMessage" role="status" aria-live="polite"></p>
     </section>
 
-    <section class="panel" id="resets" aria-labelledby="resetsTitle">
+    <section class="panel" id="resets" data-no-i18n aria-labelledby="resetsTitle">
       <div class="gift-head">
         <h2 id="resetsTitle" data-rt="title">Resets and stats</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-reset-lang="en">EN</button> <button type="button" data-reset-lang="vi">VI</button></div>
@@ -162,7 +192,7 @@
       <p class="message" id="resetsMessage" role="status" aria-live="polite"></p>
       <div class="reset-cards" id="resetCards"></div>
     </section>
-    <section class="panel" id="safety" aria-labelledby="safetyTitle">
+    <section class="panel" id="safety" data-no-i18n aria-labelledby="safetyTitle">
       <div class="gift-head">
         <h2 id="safetyTitle" data-st="title">Account safety</h2>
         <div class="langs" role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-safety-lang="en">EN</button> <button type="button" data-safety-lang="vi">VI</button></div>
@@ -258,13 +288,15 @@
     });
   </script>
   <script type="module">
+    import { deviceId } from '/js/deviceId.js';
+    import { giftCodeIdentityText } from '/js/giftCodeIdentity.js';
     // The gift code panel (English and Vietnamese): the account's name and password are checked by the game server
     // through this site's bridge, which lists the characters; the code is then entered for the chosen character.
     const TEXT = {
       en: {
         title: 'Gift code', account: 'Account name', password: 'Password', login: 'Show my characters',
         character: 'Character (gets the zen and items)', code: 'Gift code', use: 'Use the code',
-        intro: 'Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
+        intro: 'A code may allow one claim per network or browser device. People sharing Wi-Fi may share this limit. Enter a gift code for one of your characters: coins go to the account, zen and items to the character (they arrive in its bag when it\'s in the game). In the game you can also type /code CODE.',
         off: 'Gift codes can\'t be entered on the website on this server: use /code CODE in the game.',
         loginWrong: 'Wrong account name or password.', noCharacters: 'This account has no character yet: create one in the game first.',
         server: 'The game server didn\'t answer. Try again later.', busy: 'Too many requests from your address. Wait a minute.', setup: 'The account page isn\'t set up yet (host: see README.txt).',
@@ -279,7 +311,7 @@
       vi: {
         title: 'Gift code', account: 'Tên tài khoản', password: 'Mật khẩu', login: 'Xem nhân vật của tôi',
         character: 'Nhân vật (nhận zen và vật phẩm)', code: 'Gift code', use: 'Dùng mã',
-        intro: 'Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
+        intro: 'Gift code có thể giới hạn một lần nhận cho mỗi mạng hoặc thiết bị trình duyệt. Người dùng chung Wi-Fi có thể dùng chung hạn mức này. Nhập gift code cho một nhân vật của bạn: coin vào tài khoản, zen và vật phẩm vào nhân vật (vào túi đồ khi nhân vật ở trong game). Trong game bạn cũng có thể gõ /code MÃ.',
         off: 'Máy chủ này không cho nhập gift code trên website: hãy dùng /code MÃ trong game.',
         loginWrong: 'Sai tên tài khoản hoặc mật khẩu.', noCharacters: 'Tài khoản này chưa có nhân vật: hãy tạo nhân vật trong game trước.',
         server: 'Máy chủ game không trả lời. Hãy thử lại sau.', busy: 'Quá nhiều yêu cầu từ địa chỉ của bạn. Hãy chờ một phút.', setup: 'Trang tài khoản chưa được cài đặt (chủ server: xem README.txt).',
@@ -310,6 +342,8 @@
       return parts.join(' + ');
     }
     function resultText(answer) {
+      const identityText = giftCodeIdentityText(answer.result, lang);
+      if (identityText) return identityText;
       const d = answer.details ?? {};
       const minMax = answer.result.startsWith('Level') ? [d.minLevel, d.maxLevel] : [d.minResets, d.maxResets];
       return t(answer.result)
@@ -362,7 +396,7 @@
       event.preventDefault();
       if (!login) return;
       try {
-        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim() });
+        const answer = await post('/portal/gift-codes/redeem', { ...login, character: $('giftCharacter').value, code: $('giftCode').value.trim(), deviceId: deviceId() });
         if (!answer.ok) { last = { text: () => errorText(answer.status, answer.data), ok: false }; say(last.text(), false); return; }
         last = { text: () => resultText(answer.data), ok: answer.data.result === 'Ok' };
         say(last.text(), last.ok);
@@ -804,6 +838,7 @@
     });
     applyLanguage();
   </script>
+  <script type="module" src="/js/siteLanguage.js"></script>
   <script type="module">
     const PLAY_TEXT = {
       en: {
@@ -920,25 +955,6 @@
 
     applyPlayLanguage();
   </script>
-  <script>
-    // The game's name from the admin panel (the "Game name" plug-in), else the default above.
-    fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
-      const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
-      if (d && d.links) {
-        const labels = { zalo: 'Zalo', discord: 'Discord', facebook: 'Facebook' };
-        for (const box of document.querySelectorAll('[data-community-links]')) {
-          const found = Object.entries(d.links).filter(([kind, url]) => labels[kind] && typeof url === 'string' && url.startsWith('https://'));
-          if (!found.length) continue;
-          box.hidden = false;
-          box.replaceChildren(document.createTextNode(box.dataset.communityLinks || 'Contact: '), ...found.map(([kind, url]) => {
-            const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = labels[kind]; a.style.marginRight = '10px'; return a;
-          }));
-        }
-      }
-      if (!name) return;
-      document.title = document.title.replace('HenryN Mu Online', name);
-      for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = (e.dataset.gameName || '{game}').replaceAll('{game}', name);
-    }).catch(() => {});
-  </script>
+  <script type="module" src="/js/accountPage.js"></script>
 </body>
 </html>

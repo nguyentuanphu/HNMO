@@ -2,6 +2,7 @@
 // CMyInventory and CStorageInventory: the equipment slots and the 8 x 8 bag, the vault's 8 x 15
 // grid, the money, and moving items by clicking an item to pick it up and clicking where it goes.
 
+import { translate } from '../i18n.js';
 import { openDocument, prepareDocument } from './rml.js';
 import type { RmlDocument, RmlModel } from './rml.js';
 import { drawItem } from './itemIcons.js';
@@ -977,12 +978,13 @@ export class ItemWindows {
   sell(slot: number, item: Item): void {
     if (this.inventory.sellingSlot !== null) return;
     if (isSellingBan(item)) { this.message('These items cannot be traded.'); return; }
-    if (isHighValue(item) && !window.confirm('An expensive item. Check the item, please. Are you sure you want to sell it?')) return;
+    if (isHighValue(item) && !window.confirm(translate('An expensive item. Check the item, please. Are you sure you want to sell it?') ?? 'An expensive item. Check the item, please. Are you sure you want to sell it?')) return;
     this.inventory.sell(slot);
   }
 
   askMoney(toVault: boolean): void {
-    const text = window.prompt(toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?', '0');
+    const question = toVault ? 'How much zen to deposit?' : 'How much zen to withdraw?';
+    const text = window.prompt(translate(question) ?? question, '0');
     const amount = Math.floor(Number(text));
     if (amount > 0) this.inventory.moveMoney(toVault, amount);
   }

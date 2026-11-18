@@ -280,7 +280,7 @@ public sealed class MarketPlugIn :
             };
             await MissionCoinGranter.GrantAsync(
                 player.GameContext,
-                new CoinGrant(listing.SellerLogin, coinType, claim.NetAmount, $"Item Market sale: {listing.Item.NameEn}", $"market:{listing.Id}"),
+                new CoinGrant(listing.SellerLogin, coinType, claim.NetAmount, CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketSale), $"market:{listing.Id}"),
                 "HNMO Item Market").ConfigureAwait(false);
         }
 
@@ -446,9 +446,11 @@ public sealed class MarketPlugIn :
         }
 
         account.SetCashShopCoins(coinType, balance - price);
+        var receipt = CashShopBalanceReceipt.Record(player.PersistenceContext, account, coinType, -price, CashShopBalanceReason.MarketPurchase);
         if (!await player.SaveProgressAsync().ConfigureAwait(false))
         {
             account.SetCashShopCoins(coinType, balance);
+            await CashShopBalanceReceipt.RemoveAsync(player.PersistenceContext, receipt).ConfigureAwait(false);
             return false;
         }
 

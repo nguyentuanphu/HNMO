@@ -4581,6 +4581,105 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Bảo vệ tài khoản</value>
   </data>
+  <data name="ApiKeysHelpButtons" xml:space="preserve">
+    <value>Bật cho phép dùng lại khóa. Tắt tạm ngừng khóa cho đến khi bạn bật lại. Xóa gỡ bỏ khóa vĩnh viễn. Đổi cho phép giới hạn những việc trợ lý tự động được làm khi dùng khóa; khóa và vai trò đã chọn vẫn giữ nguyên.</value>
+  </data>
+  <data name="ApiKeysHelpCreate" xml:space="preserve">
+    <value>Bấm Tạo khóa API, đặt tên để dễ nhận biết và chỉ cấp quyền mà chương trình cần. Sao chép ngay khi khóa hiện ra: bạn chỉ được xem toàn bộ khóa một lần.</value>
+  </data>
+  <data name="ApiKeysHelpSafety" xml:space="preserve">
+    <value>Không đăng khóa công khai hoặc để lộ khóa trong ảnh chụp màn hình. Xóa khóa không còn dùng; nếu khóa bị lộ, hãy xóa và tạo khóa mới để thay thế.</value>
+  </data>
+  <data name="ApiKeysHelpTitle" xml:space="preserve">
+    <value>Hướng dẫn sử dụng trang này</value>
+  </data>
+  <data name="ApiKeysHelpWhat" xml:space="preserve">
+    <value>Khóa API giống như mật khẩu dành riêng cho một chương trình, chẳng hạn trang tài khoản trên website, bot Discord hoặc dịch vụ nạp tiền/thanh toán. Nhờ khóa này, chương trình có thể kết nối với máy chủ mà bạn không phải đưa mật khẩu quản trị cho nó.</value>
+  </data>
+  <data name="ApiKeysHelpWhen" xml:space="preserve">
+    <value>Bạn chỉ cần khóa khi chương trình đó chạy trên máy khác hoặc phần cài đặt yêu cầu nhập khóa. Nếu mọi thành phần trong thư mục HNMO đều chạy trên cùng một máy, thường bạn không cần tạo khóa.</value>
+  </data>
+  <data name="ApiKeysHintChange" xml:space="preserve">
+    <value>Giới hạn những việc trợ lý tự động được làm với khóa này mà không đổi vai trò hay giá trị khóa.</value>
+  </data>
+  <data name="ApiKeysHintClose" xml:space="preserve">
+    <value>Đóng phần hiển thị sau khi đã sao chép vì bạn không thể xem lại toàn bộ khóa.</value>
+  </data>
+  <data name="ApiKeysHintCopy" xml:space="preserve">
+    <value>Sao chép toàn bộ khóa để dán vào chương trình cần dùng.</value>
+  </data>
+  <data name="ApiKeysHintCreate" xml:space="preserve">
+    <value>Tạo khóa riêng và chọn quyền cho chương trình sẽ sử dụng khóa.</value>
+  </data>
+  <data name="ApiKeysHintDelete" xml:space="preserve">
+    <value>Xóa vĩnh viễn khóa này để chương trình không thể tiếp tục dùng khóa đó kết nối.</value>
+  </data>
+  <data name="ApiKeysHintDisable" xml:space="preserve">
+    <value>Tạm ngừng cho phép kết nối bằng khóa này mà không xóa khóa.</value>
+  </data>
+  <data name="ApiKeysHintEnable" xml:space="preserve">
+    <value>Cho phép chương trình kết nối lại bằng khóa này.</value>
+  </data>
+  <data name="ApiKeysHintHelp" xml:space="preserve">
+    <value>Mở hoặc ẩn hướng dẫn sử dụng trang này.</value>
+  </data>
+  <data name="GiftCodesOncePerNetwork" xml:space="preserve"><value>Mỗi địa chỉ mạng chỉ được nhận một lần</value></data>
+  <data name="GiftCodesOncePerDevice" xml:space="preserve"><value>Mỗi thiết bị chỉ được nhận một lần</value></data>
+  <data name="GiftCodesNetworkHint" xml:space="preserve"><value>Các tài khoản dùng chung địa chỉ mạng chỉ được nhận gift code này một lần tổng cộng.</value></data>
+  <data name="GiftCodesDeviceHint" xml:space="preserve"><value>Các tài khoản dùng chung mã thiết bị của trình duyệt chỉ được nhận một lần. Máy khách cũ không có mã này sẽ không bị giới hạn theo thiết bị.</value></data>
+  <data name="GiftCodesNetworks" xml:space="preserve"><value>Địa chỉ mạng</value></data>
+  <data name="GiftCodesDevices" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="GiftCodesIdentityCountHint" xml:space="preserve"><value>Số địa chỉ mạng hoặc thiết bị đã ghi nhận từ khi cài tính năng này; không tính các lượt nhận cũ.</value></data>
+  <data name="ShopEditorTitle" xml:space="preserve"><value>Chỉnh sửa cửa hàng NPC</value></data>
+  <data name="ShopEditorLegacy" xml:space="preserve"><value>Mở trình chỉnh sửa cửa hàng cũ</value></data>
+  <data name="ShopEditorHelpTitle" xml:space="preserve"><value>Hướng dẫn sử dụng trang này</value></data>
+  <data name="ShopEditorHelp" xml:space="preserve"><value>Chọn người bán rồi tìm vật phẩm ở danh mục bên trái. Bấm vào tên để thêm vào chỗ trống vừa đầu tiên, kéo vật phẩm vào ô, hoặc chọn nhiều vật phẩm để thêm cùng lúc. Thêm theo danh mục sẽ dùng các bộ lọc hiện tại và cho biết số vật phẩm vừa chỗ trước khi xác nhận. Bấm vật phẩm trong cửa hàng để sửa thuộc tính. Tự sắp xếp ưu tiên vật phẩm lớn; nếu không xếp hết được thì giữ nguyên bố cục. Hoàn tác và làm lại hỗ trợ 100 thao tác gần nhất. Bỏ thay đổi sẽ khôi phục cửa hàng đã lưu. Khi lưu, trang xác nhận số vật phẩm thêm, xóa, di chuyển và sửa. Giá hiển thị là giá gốc chuẩn; thuế và tiện ích mua hàng có thể thay đổi số tiền phải trả. Người chơi đang mở cửa hàng có thể cần mở lại để thấy bố cục mới.</value></data>
+  <data name="ShopEditorSearch" xml:space="preserve"><value>Tìm người bán, bản đồ hoặc tọa độ</value></data>
+  <data name="ShopEditorNpc" xml:space="preserve"><value>NPC bán hàng</value></data>
+  <data name="ShopEditorLocation" xml:space="preserve"><value>Bản đồ và vị trí xuất hiện</value></data>
+  <data name="ShopEditorNoSpawn" xml:space="preserve"><value>Chưa cấu hình vị trí xuất hiện</value></data>
+  <data name="ShopEditorCount" xml:space="preserve"><value>Vật phẩm</value></data>
+  <data name="ShopEditorPreview" xml:space="preserve"><value>Xem trước cửa hàng</value></data>
+  <data name="ShopEditorEdit" xml:space="preserve"><value>Sửa cửa hàng</value></data>
+  <data name="ShopEditorCopy" xml:space="preserve"><value>Sao chép cửa hàng sang…</value></data>
+  <data name="ShopEditorCopyHint" xml:space="preserve"><value>Chọn người bán khác; bản sao chỉ được lưu khi bạn xác nhận Lưu.</value></data>
+  <data name="ShopEditorCopyTarget" xml:space="preserve"><value>Chọn người bán đích</value></data>
+  <data name="ShopEditorCopyConfirm" xml:space="preserve"><value>Thay bản nháp của {0} bằng {1} vật phẩm từ {2}? Chưa có thay đổi nào được lưu.</value></data>
+  <data name="ShopEditorBack" xml:space="preserve"><value>Về danh sách cửa hàng</value></data>
+  <data name="ShopEditorAddSelected" xml:space="preserve"><value>Thêm vật phẩm đã chọn</value></data>
+  <data name="ShopEditorAddCategory" xml:space="preserve"><value>Thêm cả danh mục</value></data>
+  <data name="ShopEditorCategoryHint" xml:space="preserve"><value>Chọn danh mục trước; thêm mọi kết quả theo các bộ lọc hiện tại.</value></data>
+  <data name="ShopEditorBulkConfirm" xml:space="preserve"><value>Có {0} vật phẩm phù hợp: {1} vừa chỗ, {2} không vừa. Thêm các vật phẩm vừa chỗ?</value></data>
+  <data name="ShopEditorAdded" xml:space="preserve"><value>Đã thêm {0}; có {1} vật phẩm không vừa chỗ.</value></data>
+  <data name="ShopEditorDoesNotFit" xml:space="preserve"><value>Vật phẩm không vừa ở đây. Hãy dọn chỗ trống hoặc chọn vị trí khác.</value></data>
+  <data name="ShopEditorArrange" xml:space="preserve"><value>Tự sắp xếp</value></data>
+  <data name="ShopEditorArrangeHint" xml:space="preserve"><value>Xếp lại vật phẩm lớn trước, giữ nguyên thuộc tính; nếu không xếp hết thì không thay đổi gì.</value></data>
+  <data name="ShopEditorArrangeFailed" xml:space="preserve"><value>Không thể xếp lại toàn bộ vật phẩm. Bố cục được giữ nguyên.</value></data>
+  <data name="ShopEditorClear" xml:space="preserve"><value>Xóa hết vật phẩm</value></data>
+  <data name="ShopEditorClearConfirm" xml:space="preserve"><value>Xóa toàn bộ {0} vật phẩm trong bản nháp? Bạn có thể hoàn tác trước khi lưu.</value></data>
+  <data name="ShopEditorUndo" xml:space="preserve"><value>Hoàn tác</value></data>
+  <data name="ShopEditorRedo" xml:space="preserve"><value>Làm lại</value></data>
+  <data name="ShopEditorDiscard" xml:space="preserve"><value>Bỏ thay đổi</value></data>
+  <data name="ShopEditorDiscardHint" xml:space="preserve"><value>Khôi phục cửa hàng đã lưu và xóa lịch sử hoàn tác cục bộ.</value></data>
+  <data name="ShopEditorSave" xml:space="preserve"><value>Lưu cửa hàng</value></data>
+  <data name="ShopEditorSummary" xml:space="preserve"><value>Thêm {0} · xóa {1} · chuyển {2} · sửa {3}</value></data>
+  <data name="ShopEditorSaveConfirm" xml:space="preserve"><value>Lưu cửa hàng này? {0}</value></data>
+  <data name="ShopEditorSaved" xml:space="preserve"><value>Đã lưu cửa hàng. {0}</value></data>
+  <data name="ShopEditorSaveFailed" xml:space="preserve"><value>Chưa xác nhận được việc lưu. Hãy tải lại cửa hàng trước khi thử lại và kiểm tra nhật ký máy chủ.</value></data>
+  <data name="ShopEditorConflict" xml:space="preserve"><value>Cửa hàng hoặc cấu hình đã được sửa ở nơi khác. Hãy tải lại trước khi lưu.</value></data>
+  <data name="ShopEditorInvalid" xml:space="preserve"><value>Bản nháp có vật phẩm chồng nhau, nằm ngoài lưới hoặc thuộc tính không hợp lệ. Hãy sửa hoặc hoàn tác trước khi lưu.</value></data>
+  <data name="ShopEditorCapacity" xml:space="preserve"><value>Đã dùng {0} / {1} ô</value></data>
+  <data name="ShopEditorDetails" xml:space="preserve"><value>Vật phẩm đang chọn</value></data>
+  <data name="ShopEditorSelectHint" xml:space="preserve"><value>Bấm vật phẩm trong lưới để sửa cấp độ, tùy chọn và độ bền.</value></data>
+  <data name="ShopEditorPrice" xml:space="preserve"><value>Giá mua gốc: {0:N0} Zen</value></data>
+  <data name="ShopEditorPriceHint" xml:space="preserve"><value>Dùng bộ tính giá của máy chủ; chưa gồm thuế và tiện ích mua hàng phụ thuộc người chơi.</value></data>
+  <data name="ShopEditorPriceUnavailable" xml:space="preserve"><value>Chưa tính được giá cho định nghĩa vật phẩm này.</value></data>
+  <data name="ShopEditorDelete" xml:space="preserve"><value>Xóa vật phẩm đang chọn</value></data>
+  <data name="ShopEditorUnsaved" xml:space="preserve"><value>Bỏ bản nháp cửa hàng chưa lưu này?</value></data>
+  <data name="ShopEditorLoadingFailed" xml:space="preserve"><value>Không tải được dữ liệu cửa hàng. Hãy kiểm tra nhật ký máy chủ rồi tải lại.</value></data>
+  <data name="ShopEditorReload" xml:space="preserve"><value>Tải lại cửa hàng đã lưu</value></data>
+  <data name="ShopEditorEmpty" xml:space="preserve"><value>Không có người bán phù hợp.</value></data>
+  <data name="ShopEditorPending" xml:space="preserve"><value>Đang lưu cửa hàng. Hãy chờ trước khi rời trang.</value></data>
   <data name="HostSettingsPage" xml:space="preserve">
     <value>Cài đặt máy chủ</value>
   </data>
@@ -4626,4 +4725,222 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
   </data>
+  <data name="WebsiteMailTitle" xml:space="preserve">
+    <value>Gửi email</value>
+  </data>
+  <data name="WebsiteMailHelp" xml:space="preserve">
+    <value>Hãy để tắt nếu bạn chưa có dịch vụ gửi email. Nhập máy chủ SMTP, cổng gửi thư (thường là 587), địa chỉ gửi, tên đăng nhập và mật khẩu do dịch vụ cung cấp rồi lưu. Kết nối dùng STARTTLS; không hỗ trợ cổng 465 với TLS ngầm định. Người chơi lấy mã tại Tài khoản → Bảo mật, nhận mã ở địa chỉ email mới rồi xác nhận trong vòng 15 phút. Họ cần thoát game trước. Hãy sao lưu cả khóa bảo vệ dữ liệu của máy chủ để giữ được mật khẩu SMTP đã lưu.</value>
+  </data>
+  <data name="WebsiteMailEnabled" xml:space="preserve">
+    <value>Cho phép gửi email xác nhận</value>
+  </data>
+  <data name="WebsiteMailEnabledHint" xml:space="preserve">
+    <value>Cho phép người chơi xác nhận email mới qua dịch vụ gửi thư đã thiết lập.</value>
+  </data>
+  <data name="WebsiteMailHost" xml:space="preserve">
+    <value>Máy chủ SMTP</value>
+  </data>
+  <data name="WebsiteMailHostHint" xml:space="preserve">
+    <value>Nhập địa chỉ máy chủ do dịch vụ email cung cấp, không kèm cổng hoặc phần đầu URL.</value>
+  </data>
+  <data name="WebsiteMailPort" xml:space="preserve">
+    <value>Cổng gửi thư</value>
+  </data>
+  <data name="WebsiteMailPortHint" xml:space="preserve">
+    <value>Dùng cổng gửi thư STARTTLS của dịch vụ, thường là 587.</value>
+  </data>
+  <data name="WebsiteMailFrom" xml:space="preserve">
+    <value>Địa chỉ email gửi</value>
+  </data>
+  <data name="WebsiteMailFromHint" xml:space="preserve">
+    <value>Nhập địa chỉ đã được dịch vụ cho phép dùng để gửi thư.</value>
+  </data>
+  <data name="WebsiteMailUser" xml:space="preserve">
+    <value>Tên đăng nhập SMTP</value>
+  </data>
+  <data name="WebsiteMailUserHint" xml:space="preserve">
+    <value>Nhập tên đăng nhập dịch vụ gửi thư; chỉ để trống nếu máy chủ chuyển tiếp không yêu cầu xác thực.</value>
+  </data>
+  <data name="WebsiteMailPassword" xml:space="preserve">
+    <value>Mật khẩu SMTP mới</value>
+  </data>
+  <data name="WebsiteMailPasswordHint" xml:space="preserve">
+    <value>Để trống để giữ mật khẩu đã lưu; xóa tên đăng nhập sẽ xóa thông tin xác thực đã lưu.</value>
+  </data>
+  <data name="WebsiteMailPasswordSaved" xml:space="preserve">
+    <value>Đã lưu mật khẩu; trang này không hiển thị lại mật khẩu.</value>
+  </data>
+  <data name="WebsiteMailSaveHint" xml:space="preserve">
+    <value>Kiểm tra và lưu thiết lập gửi email; nút này không gửi thư.</value>
+  </data>
+  <data name="WebsiteMailOpenHint" xml:space="preserve">
+    <value>Thiết lập dịch vụ gửi thư xác nhận đổi email tài khoản.</value>
+  </data>
+  <data name="WebsiteMailSaved" xml:space="preserve">
+    <value>Đã lưu thiết lập email.</value>
+  </data>
+  <data name="WebsiteMailInvalid" xml:space="preserve">
+    <value>Hãy kiểm tra máy chủ SMTP, cổng và địa chỉ gửi.</value>
+  </data>
+  <data name="WebsiteMailUnavailable" xml:space="preserve">
+    <value>Chưa đọc hoặc lưu được thiết lập. Hãy kiểm tra tệp trạng thái và khóa bảo vệ dữ liệu của máy chủ.</value>
+  </data>
+  <data name="WebsiteMailConfirmationSubject" xml:space="preserve">
+    <value>Xác nhận địa chỉ email mới</value>
+  </data>
+  <data name="WebsiteMailConfirmationBody" xml:space="preserve">
+    <value>Mã xác nhận email của bạn:
+
+{0}
+
+Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác nhận địa chỉ email mới. Mã có hiệu lực 15 phút và chỉ dùng được một lần. Không gửi mật khẩu game cho bất kỳ ai. Nếu bạn không yêu cầu đổi email, hãy bỏ qua thư này.</value>
+  </data>
+  <data name="PageHelpTitle" xml:space="preserve">
+    <value>Cách dùng trang này</value>
+  </data>
+  <data name="PageHelpToggleHint" xml:space="preserve">
+    <value>Hiện hoặc ẩn mục đích, hướng dẫn chỉnh sửa và lưu ý của trang này.</value>
+  </data>
+  <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
+    <value>Mua thêm rương</value>
+  </data>
+  <data name="AccountCoinHistoryMarketPurchase" xml:space="preserve">
+    <value>Mua vật phẩm ở chợ</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStorePurchase" xml:space="preserve">
+    <value>Mua tại cửa hàng của {0}</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStoreSale" xml:space="preserve">
+    <value>Bán tại cửa hàng cho {0}</value>
+  </data>
+  <data name="AccountCoinHistoryReset" xml:space="preserve">
+    <value>Trả phí reset</value>
+  </data>
+  <data name="AccountCoinHistoryRelife" xml:space="preserve">
+    <value>Trả phí relife</value>
+  </data>
+  <data name="AccountCoinHistoryClearStats" xml:space="preserve">
+    <value>Trả phí tẩy điểm chỉ số</value>
+  </data>
+  <data name="AccountCoinHistoryClearMaster" xml:space="preserve">
+    <value>Trả phí tẩy điểm master</value>
+  </data>
+  <data name="AccountCoinHistoryPlayTime" xml:space="preserve">
+    <value>Thưởng thời gian chơi</value>
+  </data>
+  <data name="AccountCoinHistoryCashShop" xml:space="preserve">
+    <value>Mua ở cửa hàng: {0}</value>
+  </data>
+  <data name="AccountCoinHistoryGift" xml:space="preserve">
+    <value>Tặng {0}: {1}</value>
+  </data>
+  <data name="AccountCoinHistoryOtherCharacter" xml:space="preserve">
+    <value>nhân vật khác</value>
+  </data>
+  <data name="AccountCoinHistoryCreatedAt" xml:space="preserve">
+    <value>Thời gian (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryAppliedAt" xml:space="preserve">
+    <value>Đã ghi nhận (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
+    <value>Bán vật phẩm ở chợ</value>
+  </data>
+  <data name="VipCoinHistoryPurchase" xml:space="preserve">
+    <value>VIP {0}: {1} ngày</value>
+  </data>
+  <data name="VipCoinHistoryDaily" xml:space="preserve">
+    <value>Quà VIP hằng ngày: {0}</value>
+  </data>
+  <data name="VipCoinHistoryRemoved" xml:space="preserve"><value>Chủ máy chủ đã thu hồi VIP</value></data>
+  <data name="VipActivityAdministration" xml:space="preserve"><value>Quản trị</value></data>
+  <data name="VipManagerTitle" xml:space="preserve"><value>Quản lý VIP</value></data>
+  <data name="VipManagerHelp" xml:space="preserve"><value>Lưu các hạng và giá trước khi cấp VIP. Mua VIP được tắt mặc định. Tắt mua mới vẫn giữ thời hạn và quyền lợi đã mua. Cấp VIP không trừ coin và cộng ngày vào cùng hạng đang dùng; muốn đổi hạng, hãy thu hồi VIP hiện tại trước. Người chơi phải thoát game trước khi quản trị viên thay đổi. Nhập đúng tên tài khoản và lý do, xem lại rồi xác nhận. Nếu chưa xác nhận được kết quả, thử lại bằng chính mã thao tác đó. Chỉ thu hồi các quyền VIP đã được chứng minh thuộc plug-in này; VIP cũ hoặc từ nguồn khác cần kiểm tra riêng. Danh sách đối chiếu các gói đã biết với dữ liệu tài khoản. Sau khi khôi phục chỉ mục, tìm đúng tên tài khoản để dựng lại dòng tương ứng. Ngày giờ theo Sydney.</value></data>
+  <data name="VipManagerAccount" xml:space="preserve"><value>Tên tài khoản</value></data>
+  <data name="VipManagerAccountHint" xml:space="preserve"><value>Nhập đúng tên tài khoản game, giữ nguyên chữ hoa và chữ thường.</value></data>
+  <data name="VipManagerLevel" xml:space="preserve"><value>Hạng VIP</value></data>
+  <data name="VipManagerDays" xml:space="preserve"><value>Số ngày cộng thêm</value></data>
+  <data name="VipManagerDaysHint" xml:space="preserve"><value>Cộng từ 1 đến 3650 ngày; gói còn hạn cùng hạng sẽ được gia hạn.</value></data>
+  <data name="VipManagerReason" xml:space="preserve"><value>Lý do</value></data>
+  <data name="VipManagerReasonHint" xml:space="preserve"><value>Nêu lý do thay đổi, từ 1 đến 500 ký tự; lý do được lưu trong nhật ký quản trị.</value></data>
+  <data name="VipManagerReviewGrant" xml:space="preserve"><value>Xem lại việc cấp miễn phí</value></data>
+  <data name="VipManagerReviewGrantHint" xml:space="preserve"><value>Xem lại tài khoản, hạng và thời hạn VIP miễn phí trước khi cấp.</value></data>
+  <data name="VipManagerReviewRemove" xml:space="preserve"><value>Xem lại việc thu hồi</value></data>
+  <data name="VipManagerReviewRemoveHint" xml:space="preserve"><value>Xem lại việc thu hồi VIP hiện tại thuộc plug-in này; không hoàn hay trừ coin.</value></data>
+  <data name="VipManagerConfirm" xml:space="preserve"><value>Xác nhận thay đổi</value></data>
+  <data name="VipManagerConfirmHint" xml:space="preserve"><value>Áp dụng thay đổi đã xem lại một lần, kèm lý do đã ghi.</value></data>
+  <data name="VipManagerCancel" xml:space="preserve"><value>Hủy bước xem lại</value></data>
+  <data name="VipManagerCancelHint" xml:space="preserve"><value>Đóng bước xem lại, không thay đổi tài khoản.</value></data>
+  <data name="VipManagerRetry" xml:space="preserve"><value>Kiểm tra thao tác đang chờ</value></data>
+  <data name="VipManagerRetryHint" xml:space="preserve"><value>Xem lại chính thao tác đang chờ; giữ nguyên mã để tránh cộng thời hạn hai lần.</value></data>
+  <data name="VipManagerReload" xml:space="preserve"><value>Làm mới tài khoản</value></data>
+  <data name="VipManagerReloadHint" xml:space="preserve"><value>Kiểm tra VIP đã lưu, không bỏ các sửa đổi giá chưa lưu.</value></data>
+  <data name="VipManagerFilter" xml:space="preserve"><value>Tìm đúng tên tài khoản</value></data>
+  <data name="VipManagerFilterHint" xml:space="preserve"><value>Để trống để xem danh sách VIP đã biết, hoặc nhập đúng tên tài khoản có phân biệt hoa thường.</value></data>
+  <data name="VipManagerNext" xml:space="preserve"><value>Các tài khoản tiếp theo</value></data>
+  <data name="VipManagerPrevious" xml:space="preserve"><value>Các tài khoản trước</value></data>
+  <data name="VipManagerPagerHint" xml:space="preserve"><value>Xem trang khác, mỗi trang tối đa 50 gói đã biết.</value></data>
+  <data name="VipManagerSettings" xml:space="preserve"><value>Hạng và giá</value></data>
+  <data name="VipManagerEnabled" xml:space="preserve"><value>Cho phép mua VIP mới</value></data>
+  <data name="VipManagerEnabledHint" xml:space="preserve"><value>Cho phép người chơi mua các gói đã đặt giá; tắt không thu hồi thời hạn đã mua.</value></data>
+  <data name="VipManagerChatBadge" xml:space="preserve"><value>Hiện VIP trong chat</value></data>
+  <data name="VipManagerChatBadgeHint" xml:space="preserve"><value>Đánh dấu chat của nhân vật VIP còn hạn được xác định trên máy chủ game này.</value></data>
+  <data name="VipManagerNameEn" xml:space="preserve"><value>Tên tiếng Anh</value></data>
+  <data name="VipManagerNameVi" xml:space="preserve"><value>Tên tiếng Việt</value></data>
+  <data name="VipManagerNameHint" xml:space="preserve"><value>Dùng tên ngắn hiển thị cho người chơi, tối đa 60 ký tự.</value></data>
+  <data name="VipManagerLevelId" xml:space="preserve"><value>Số hạng cố định</value></data>
+  <data name="VipManagerLevelIdHint" xml:space="preserve"><value>Giữ nguyên số dương này khi còn tài khoản dùng hạng đó.</value></data>
+  <data name="VipManagerExperience" xml:space="preserve"><value>Kinh nghiệm thêm (%)</value></data>
+  <data name="VipManagerExperienceHint" xml:space="preserve"><value>Nhập 5 để thêm 5% kinh nghiệm khi quyền VIP còn hiệu lực.</value></data>
+  <data name="VipManagerZen" xml:space="preserve"><value>Zen thêm (%)</value></data>
+  <data name="VipManagerZenHint" xml:space="preserve"><value>Nhập 5 để thêm 5% Zen theo chỉ số tăng lượng Zen hiện có.</value></data>
+  <data name="VipManagerDaily" xml:space="preserve"><value>Coin hằng ngày</value></data>
+  <data name="VipManagerDailyHint" xml:space="preserve"><value>Số coin nhận một lần mỗi tài khoản/ngày Sydney; nhập 0 nếu không tặng coin hằng ngày.</value></data>
+  <data name="VipManagerCurrency" xml:space="preserve"><value>Loại coin</value></data>
+  <data name="VipManagerCurrencyHint" xml:space="preserve"><value>Chọn số dư coin dùng cho giá mua hoặc quà hằng ngày.</value></data>
+  <data name="VipManagerOffers" xml:space="preserve"><value>Thời hạn mua</value></data>
+  <data name="VipManagerPrice" xml:space="preserve"><value>Giá bằng coin</value></data>
+  <data name="VipManagerPriceHint" xml:space="preserve"><value>Trừ số coin này cho thời hạn đã chọn; nhập 0 để tạo gói miễn phí.</value></data>
+  <data name="VipManagerAddLevel" xml:space="preserve"><value>Thêm hạng</value></data>
+  <data name="VipManagerAddLevelHint" xml:space="preserve"><value>Thêm hạng VIP có tên hai ngôn ngữ; màn hình này hỗ trợ tối đa 12 hạng.</value></data>
+  <data name="VipManagerRemoveLevel" xml:space="preserve"><value>Bỏ hạng khỏi danh mục</value></data>
+  <data name="VipManagerRemoveLevelHint" xml:space="preserve"><value>Bỏ cấu hình bán hạng này; quyền lợi đã mua giữ nguyên giá trị và hạn đã lưu.</value></data>
+  <data name="VipManagerAddOffer" xml:space="preserve"><value>Thêm thời hạn</value></data>
+  <data name="VipManagerAddOfferHint" xml:space="preserve"><value>Thêm thời hạn có giá; tối đa 4 thời hạn cho mỗi hạng.</value></data>
+  <data name="VipManagerRemoveOffer" xml:space="preserve"><value>Bỏ thời hạn</value></data>
+  <data name="VipManagerRemoveOfferHint" xml:space="preserve"><value>Bỏ thời hạn này khỏi mua mới, không đổi các gói đang có.</value></data>
+  <data name="VipManagerSave" xml:space="preserve"><value>Lưu cài đặt VIP</value></data>
+  <data name="VipManagerSaveHint" xml:space="preserve"><value>Lưu tên hai ngôn ngữ, giá và quyền lợi qua hệ thống cấu hình plug-in hiện có.</value></data>
+  <data name="VipManagerInvalid" xml:space="preserve"><value>Kiểm tra tên, số hạng dương không trùng, thời hạn, số coin và lý do. Dùng tối đa 12 hạng, mỗi hạng 4 thời hạn và tên dài tối đa 60 ký tự.</value></data>
+  <data name="VipManagerSaved" xml:space="preserve"><value>Đã lưu cài đặt VIP.</value></data>
+  <data name="VipManagerUnavailable" xml:space="preserve"><value>Chưa thể xác nhận thay đổi. Kiểm tra tài khoản hiện tại rồi thử lại chính thao tác đang chờ.</value></data>
+  <data name="VipManagerPending" xml:space="preserve"><value>Kết quả đang chờ. Dùng Kiểm tra thao tác đang chờ; không cấp một lần khác.</value></data>
+  <data name="VipManagerAppliedGrant" xml:space="preserve"><value>Đã cấp thời hạn VIP, không trừ coin.</value></data>
+  <data name="VipManagerAppliedRemove" xml:space="preserve"><value>Đã thu hồi thời hạn VIP thuộc plug-in này.</value></data>
+  <data name="VipManagerOnline" xml:space="preserve"><value>Tài khoản đang trong game. Yêu cầu người chơi thoát rồi kiểm tra lại chính thao tác này.</value></data>
+  <data name="VipManagerConflict" xml:space="preserve"><value>Cần kiểm tra quyền hoặc gói này. Làm mới tài khoản; không ghi đè VIP cũ hay hạng khác.</value></data>
+  <data name="VipManagerNoAccounts" xml:space="preserve"><value>Trang này không có gói còn hạn đã được chứng minh. Tìm đúng tên tài khoản để kiểm tra hoặc dựng lại chỉ mục.</value></data>
+  <data name="VipManagerHasMore" xml:space="preserve"><value>Còn các gói đã biết ở trang tiếp theo.</value></data>
+  <data name="VipManagerUntil" xml:space="preserve"><value>Có hiệu lực đến (Sydney)</value></data>
+  <data name="VipManagerReviewGrantText" xml:space="preserve"><value>Cấp {0} ngày VIP hạng {1} cho {2}, không trừ coin.</value></data>
+  <data name="VipManagerReviewRemoveText" xml:space="preserve"><value>Thu hồi thời hạn VIP hiện tại đã được chứng minh của {0}.</value></data>
+  <data name="VipManagerCurrentUntil" xml:space="preserve"><value>Hạn hiện tại: {0} (Sydney).</value></data>
+  <data name="VipManagerNoCurrent" xml:space="preserve"><value>Chưa có thời hạn VIP hiện tại đã được chứng minh.</value></data>
+  <data name="VipManagerNewName" xml:space="preserve"><value>VIP mới</value></data>
+  <data name="VipManagerCoinC" xml:space="preserve"><value>W Coin (C)</value></data>
+  <data name="VipManagerCoinP" xml:space="preserve"><value>W Coin (P)</value></data>
+  <data name="VipManagerGoblin" xml:space="preserve"><value>Điểm Goblin</value></data>
+  <data name="VipManagerSavedLevels" xml:space="preserve"><value>Cấp VIP dùng quyền lợi đã lưu lần cuối, không dùng các sửa đổi chưa lưu bên dưới.</value></data>
+  <data name="VipManagerActivity" xml:space="preserve"><value>Nhật ký hoạt động</value></data>
+  <data name="VipManagerActivityHint" xml:space="preserve"><value>Mở nhật ký hoạt động và thao tác quản trị của tài khoản này.</value></data>
+  <data name="VipManagerOpenHint" xml:space="preserve"><value>Cài đặt VIP và xem lại việc cấp hoặc thu hồi của quản trị viên.</value></data>
+  <data name="VipAuditGrant" xml:space="preserve"><value>cấp</value></data>
+  <data name="VipAuditRemove" xml:space="preserve"><value>thu hồi</value></data>
+  <data name="VipAuditRequested" xml:space="preserve"><value>đã yêu cầu</value></data>
+  <data name="VipAuditApplied" xml:space="preserve"><value>đã áp dụng</value></data>
+  <data name="VipAuditPending" xml:space="preserve"><value>đang chờ xác nhận</value></data>
+  <data name="VipAuditConflict" xml:space="preserve"><value>cần kiểm tra</value></data>
+  <data name="VipAuditRefused" xml:space="preserve"><value>bị từ chối</value></data>
+  <data name="VipAuditDetails" xml:space="preserve"><value>VIP {0}: {1}. Quản trị viên: {2}. Lý do: {3}. Mã thao tác: {4}.</value></data>
+  <data name="VipManagerSaveFirst" xml:space="preserve"><value>Lưu cài đặt VIP để bật plug-in trước, rồi cấp thời hạn. Bạn vẫn có thể tắt mua mới.</value></data>
 </root>

@@ -16973,6 +16973,19 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>26</SubCode>
+      <Name>HnmoVipState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>The server finishes a correlated own-account VIP request.</SentWhen>
+      <CausedReaction>The web game updates VIP status, reviewed offers and the localized action result.</CausedReaction>
+      <Fields>
+        <Field><Index>5</Index><Type>IntegerLittleEndian</Type><Name>RequestId</Name><Description>A nonzero request correlation identifier; not an authentication token.</Description></Field>
+        <Field><Index>9</Index><Type>String</Type><Name>Json</Name><Description>ASCII-safe JSON using the shared VIP account state; Unicode is escaped and no private receipt or credential is included.</Description></Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

@@ -1,3 +1,4 @@
+import { loadWebsiteSettings } from "./websiteTheme.js";
 import { loadGameName, showCommunityLinks } from "./gameName.js";
 
 type Language = "en" | "vi";
@@ -936,7 +937,8 @@ interface Snapshot {
 }
 let language: Language = "en";
 try {
-  language = localStorage.getItem("website-language") === "vi" ? "vi" : "en";
+  const saved = localStorage.getItem("hnmo.language") ?? localStorage.getItem("website-language");
+  language = saved === "vi" ? "vi" : "en";
 } catch {
   /* Storage is optional. */
 }
@@ -1202,6 +1204,7 @@ for (const lang of ["en", "vi"] as const)
     language = lang;
     try {
       localStorage.setItem("website-language", lang);
+      localStorage.setItem("hnmo.language", lang);
     } catch {
       /* Optional storage. */
     }
@@ -1294,13 +1297,7 @@ function showGoogleAnswer(answer: PortalAnswer): void {
 }
 
 async function setUpGoogle(): Promise<void> {
-  let clientId = "";
-  try {
-    const response = await fetch("/website/settings", { cache: "no-cache" });
-    if (response.ok) clientId = ((await response.json()) as { googleClientId?: string }).googleClientId ?? "";
-  } catch {
-    /* Without settings there's no Google sign-in. */
-  }
+  const clientId = await loadWebsiteSettings();
   if (!clientId) return;
   const script = document.createElement("script");
   script.src = "https://accounts.google.com/gsi/client";

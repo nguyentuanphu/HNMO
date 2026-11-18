@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HenryN Mu Online Guide</title>
+  <title>{game}</title>
   <style>
     :root { --bg: #0b0e16; --panel: #121725; --line: rgba(255, 255, 255, .12); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --ok: #7fd18b; --soon: #8a90a4; }
     * { box-sizing: border-box; }
@@ -33,9 +33,10 @@
     @media (max-width: 560px) { th:nth-child(3), td:nth-child(3) { display: none; } }
   </style>
 </head>
-<body>
+<body data-page-label="Guide">
 <main>
-  <h1><span data-game-name>HenryN Mu Online</span> Guide</h1>
+  <h1><span data-game-name></span> Guide</h1>
+  <span role="group" aria-label="Page language" style="display:inline-flex;gap:6px"><button type="button" data-site-language="en">English</button><button type="button" data-site-language="vi">Tiếng Việt</button></span>
   <p class="lead">What to play, how to play it, and what each part of the game does. Features marked <span class="tag ok">works</span> are in the game now; <span class="tag soon">coming</span> ones are being built.</p>
   <nav>
     <a href="#start">Getting started</a><a href="#controls">Controls</a><a href="#classes">Classes</a>
@@ -49,6 +50,27 @@
     <li>Walk out of town and click a monster to fight it. Kill monsters for experience, money (zen) and items.</li>
     <li>Pick up what drops (click it), drink potions with <kbd>Q</kbd> <kbd>W</kbd> when life or mana runs low, and go back to town to store items in the vault.</li>
   </ol>
+
+  <section id="account-dashboard" data-no-i18n>
+    <h2>Account page / Trang tài khoản</h2>
+    <p lang="en">Open the account page and sign in with your game account. Use the section menu for saved characters and coin balances, coin history in Sydney time, gift codes, resets, and account safety. Rewards shows personal missions, the daily streak and login calendar. Community shows your invite link, referral progress and event alerts. Keep the selected character connected in the game to collect mission rewards or save an inviter; the same reward and eligibility rules apply. Play now creates a one-time game login ticket. The menu collapses on phones. Use Log out on shared computers. Use VIP to review a subscription or collect its daily coins.</p>
+    <p lang="vi">Mở trang tài khoản rồi đăng nhập bằng tài khoản game. Chọn mục trong menu để xem nhân vật và số dư đã lưu, lịch sử coin theo giờ Sydney, nhập gift code, reset và bảo vệ tài khoản. Mục Phần thưởng có nhiệm vụ cá nhân, chuỗi ngày hoàn thành và lịch điểm danh. Mục Cộng đồng có liên kết mời bạn, tiến trình giới thiệu và thông báo sự kiện. Hãy cho nhân vật đã chọn vào game để nhận thưởng nhiệm vụ hoặc lưu người mời; các quy tắc nhận thưởng và điều kiện vẫn áp dụng như trong game. Nút Vào game tạo vé đăng nhập dùng một lần. Trên điện thoại, menu được thu gọn. Hãy đăng xuất khi dùng máy chung. Mở mục VIP để xem gói trước khi mua hoặc nhận coin hằng ngày.</p>
+    <p lang="en">Refresh to check which characters are online. Unavailable means the game server could not be checked; it does not mean the character is offline. Last-seen times for individual characters are not recorded yet.</p>
+    <p lang="vi">Bấm Làm mới để kiểm tra nhân vật nào đang trong game. “Chưa kiểm tra được” nghĩa là chưa liên lạc được với máy chủ game, không phải nhân vật đã thoát game. Chưa có dữ liệu lần xuất hiện gần nhất của từng nhân vật.</p>
+    <p lang="en">Coins shows retained coin history, twenty entries per page. New cash-shop purchases/gifts, vault purchases, market and player-store trades, reset costs and play-time rewards are recorded with their reason. Spending is negative and credits are positive. Older unrecorded purchases have no history entry.</p>
+    <p lang="vi">Mục Coin hiển thị lịch sử còn lưu, mỗi trang 20 dòng. Các lần mua/tặng trong cửa hàng, mua thêm rương, giao dịch chợ và cửa hàng người chơi, phí reset/tẩy điểm và thưởng thời gian chơi từ bản cập nhật này đều có lý do. Chi tiêu là số âm, nhận coin là số dương. Những lần mua cũ chưa được ghi không có dòng lịch sử.</p>
+    <p lang="en">To change your password, leave the game, open Security and enter the new password twice. Use 3–20 printable English keyboard characters. After saving, sign in again with the new password. Play in your web browser.</p>
+    <p lang="vi">Để đổi mật khẩu, hãy thoát game, mở mục Bảo mật rồi nhập mật khẩu mới hai lần. Dùng 3–20 ký tự thông thường trên bàn phím tiếng Anh, không có dấu. Sau khi lưu, đăng nhập lại bằng mật khẩu mới. Bạn chơi ngay trên trình duyệt web.</p>
+    <p lang="en">To change your email, leave the game and open Security. Enter the new address, choose Send confirmation code, then paste the code received in that mailbox and choose Confirm new email. The address changes only after confirmation. The code expires after 15 minutes, works once and is locked after five wrong attempts. Wait one minute before requesting another. If email confirmation is disabled, contact the host.</p>
+    <p lang="vi">Để đổi email, hãy thoát game rồi mở mục Bảo mật. Nhập địa chỉ mới, bấm Gửi mã xác nhận, sau đó dán mã nhận tại hộp thư đó và bấm Xác nhận email mới. Địa chỉ chỉ thay đổi sau khi xác nhận. Mã có hiệu lực 15 phút, dùng một lần và bị khóa sau năm lần nhập sai. Hãy chờ một phút trước khi lấy mã khác. Nếu tính năng xác nhận email đang tắt, hãy liên hệ chủ máy chủ.</p>
+    <p><a href="/account.html" title="Open your account page / Mở trang tài khoản">Account / Tài khoản →</a></p>
+  </section>
+
+  <section id="vip" data-no-i18n>
+    <h2>VIP</h2>
+    <p lang="en">Open VIP with Alt+U in the game, or choose VIP in the phone’s More menu. On the account page, open the VIP section; leave the game before buying there. Choose an offer, review its price and benefits, then confirm. A review does not spend coins. If a purchase is pending, retry that same purchase instead of starting another. Renewing the same level adds days to the current expiry; ask the host about a different level. XP and Zen bonuses end with the timed account grants. Daily coins can be collected once per account per Sydney calendar day. All displayed dates use Sydney time. New purchases are off until the host enables them.</p>
+    <p lang="vi">Trong game, mở VIP bằng Alt+U hoặc chọn VIP trong menu Thêm trên điện thoại. Trên trang tài khoản, mở mục VIP; hãy thoát game trước khi mua tại đó. Chọn gói, xem lại giá và quyền lợi rồi xác nhận. Bước xem lại chưa trừ coin. Nếu giao dịch đang chờ, hãy thử lại chính giao dịch đó thay vì mua gói khác. Gia hạn cùng hạng VIP sẽ cộng ngày vào hạn hiện tại; hãy hỏi chủ máy chủ nếu muốn đổi hạng. Ưu đãi kinh nghiệm và Zen kết thúc cùng quyền VIP có thời hạn của tài khoản. Mỗi tài khoản nhận coin VIP một lần mỗi ngày theo lịch Sydney. Mọi ngày giờ hiển thị đều theo giờ Sydney. Chức năng mua được tắt mặc định cho đến khi chủ máy chủ bật.</p>
+  </section>
 
   <h2 id="controls">Controls</h2>
   <table>
@@ -229,7 +251,9 @@
   <p>In the admin panel, open <i>Resets and relife</i> in the game menu. Tiers by reset count (from, to; -1 = no end): the level needed and after, zen (optionally times the reset number), coins and coin type, points per reset (Total: the free points are the points of every reset done plus the relife bonus; Add: added to the free points; Keep: none), clear stats, resets a day and items (<i>group:number:level:count</i>, separated by ;). VIP (the account's <i>Is VIP</i> value; <i>Give VIP</i> adds days to an offline account): lower level, zen and coin discounts, extra resets a day, extra points. Relife: resets and level needed, costs, items, the share of resets kept, bonus points per relife, the most relifes and relifes a day. Delegated reset: on/off, an extra fee, its own daily limit, keep the build. Website: which actions the account page may do and what clearing stats costs. The page shows the month's reset ranking, the relifes, the log (who, when in Sydney time, where: game, website or delegated) and who has the delegated reset on. While this is on, the reset NPC and <code>/reset</code> follow it. The state is kept in <i>save/resets.json</i>.</p>
   <h2 id="account-safety-host">Account safety (host)</h2>
   <p>In the admin panel, open <i>Account safety</i> in the game menu. The second password is the account's vault PIN. Choose what needs it (taking things out of the vault, trading, opening the personal store, dropping or selling valuable items: excellent, ancient or from a level), how long it stays entered (0 = the whole session), the wrong tries before a lockout and its minutes, and whether players may change it on the account page. The item lock: on/off, the unlock wait in hours (0 = at once), the most locked items. The history: days of logins and trades kept, how many the account page shows, the notice about a login from another address. <i>An account</i> shows its full logins (whole addresses), trades and locked items: unlock an item at once, clear a lockout, reset the second password. The state is kept in <i>save/account-safety.json</i>; the web bridge tells the game server each web player's address (<code>Relay:SendClientAddress</code> in its appsettings.json).</p>
+  <p data-no-i18n><span lang="en">Gift codes may allow only one claim per network address or browser device. Accounts sharing Wi-Fi can share the network limit. Your browser keeps a random device id; clearing browser storage resets it. Older clients without an id still follow network limits.</span><br><span lang="vi">Gift code có thể chỉ cho nhận một lần trên mỗi địa chỉ mạng hoặc thiết bị trình duyệt. Các tài khoản dùng chung Wi-Fi có thể dùng chung hạn mức mạng. Trình duyệt lưu một mã thiết bị ngẫu nhiên; xóa dữ liệu trình duyệt sẽ đặt lại mã này. Máy khách cũ không có mã thiết bị vẫn phải tuân theo giới hạn mạng.</span></p>
   <h2 id="gift-codes-host">Gift codes (host)</h2>
+  <p data-no-i18n><span lang="en">Each code has optional network and device switches, both off by default. The counts show known addresses and devices recorded since this feature was installed, including claims made while limits are off. Older claims have no identity counts. Keep the random secret and hashed claims together when backing up the gift-code save file. Limits apply across the game and website, and across a batch's codes.</span><br><span lang="vi">Mỗi gift code có hai tùy chọn giới hạn theo mạng và thiết bị, mặc định đều tắt. Bộ đếm ghi nhận các địa chỉ mạng và thiết bị xác định được kể từ khi cài tính năng này, kể cả khi giới hạn đang tắt. Các lượt nhận cũ không có số liệu này. Khi sao lưu tệp gift code, hãy giữ cả khóa bí mật ngẫu nhiên và dữ liệu băm của các lượt nhận. Giới hạn dùng chung cho game, website và các mã trong cùng một lô.</span></p>
   <p>In the admin panel, open <i>Gift codes</i> in the game menu. <i>New code</i>: the code (letters, digits, - and _, matched without regard to case), a note, public (shown on the website's home page), the reward (coins and coin type, zen, items by group and number with level, count, durability, skill, luck, option and excellent bits), the uses in total (0 = no limit), once per account or once per character, start and end as <i>yyyy-MM-dd HH:mm</i> in Sydney time (daylight saving handled), level, reset and class limits. <i>New batch</i> makes up to 10,000 random single-use codes with a prefix (no 0/O or 1/I/L) that share one reward and its rules; download them with <i>CSV</i> (each code, whether it was used, by whom and when). Codes can be edited, switched off or deleted (their uses and the log stay). The settings: on/off, codes on the website's account page, public codes on the home page, wrong codes allowed per account and window (default 5 per 60 minutes). The redemption log shows who used which code, when (Sydney time) and where. Coins are given once by the redemption's reference (the coins history says "HNMO gift codes"); zen and items wait for the character to be in the game with room in the bag. The state is kept in <i>save/gift-codes.json</i>.</p>
   <h2 id="community-host">Community (host)</h2>
   <p>In the admin panel, open <i>Community</i> in the game menu: the Discord and Zalo coins (on/off, amount, coin type), the Zalo claims waiting for you (check that the code was posted in your Zalo group by a member, then <i>Approve</i> or <i>Reject</i>; the coins come within a minute), the community events (English and Vietnamese title and text, start and end in Sydney time, a code word and / or the winning characters, the reward: coins, zen, items), the automatic posts (each kind on/off, to Discord and / or the website, the English and Vietnamese texts) with the rare drop filter, and the recent highlights (remove one with its button). The Discord and Zalo links players see are set in Plugins, <i>Game name</i>; Discord linking needs the Discord bot (Discord setup page). The state is kept in <i>save/community.json</i>.</p>
@@ -245,25 +269,6 @@
   <h2 id="item-definitions-host">Item definitions and client sync (host)</h2>
   <p>In the admin panel, open <code>/item-definitions</code> to add or edit items without editing JSON files by hand: set the EN and VI name, inventory grid size, drop/tier level, equip requirements (level, Str, Agi, Vit, Ene, Cmd), glow color (preset or <code>#rrggbb</code> hex), and custom EN/VI tooltip notes. Changes save to the server database and feed the web game automatically via <code>/website/items</code>; use <i>Sync to Data Folder</i> or <i>Download Client Export (.zip)</i> to export matching JSON files for the desktop client from the same source.</p>
 </main>
-  <script>
-    // The game's name from the admin panel (the "Game name" plug-in), else the default above.
-    fetch('/game-name.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
-      const name = d && typeof d.name === 'string' && d.name.trim() ? d.name.trim().slice(0, 60) : null;
-      if (d && d.links) {
-        const labels = { zalo: 'Zalo', discord: 'Discord', facebook: 'Facebook' };
-        for (const box of document.querySelectorAll('[data-community-links]')) {
-          const found = Object.entries(d.links).filter(([kind, url]) => labels[kind] && typeof url === 'string' && url.startsWith('https://'));
-          if (!found.length) continue;
-          box.hidden = false;
-          box.replaceChildren(document.createTextNode(box.dataset.communityLinks || 'Contact: '), ...found.map(([kind, url]) => {
-            const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = labels[kind]; a.style.marginRight = '10px'; return a;
-          }));
-        }
-      }
-      if (!name) return;
-      document.title = document.title.replace('HenryN Mu Online', name);
-      for (const e of document.querySelectorAll('[data-game-name]')) e.textContent = (e.dataset.gameName || '{game}').replaceAll('{game}', name);
-    }).catch(() => {});
-  </script>
+  <script type="module" src="/js/siteLanguage.js"></script>
 </body>
 </html>

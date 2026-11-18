@@ -4195,6 +4195,28 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoGiftCodeRedeemExtended.
+    /// </summary>
+    [Test]
+    public void HnmoGiftCodeRedeemExtended_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 72;
+        var actualLength = HnmoGiftCodeRedeemExtendedRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'GiftCode' boundary
+        Assert.That(4 + 32, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'GiftCode' exceeds packet boundary");
+        
+        // Validate field 'DeviceId' boundary
+        Assert.That(36 + 36, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'DeviceId' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for HnmoGiftCodesRequest.
     /// </summary>
     [Test]
@@ -4683,6 +4705,22 @@ public class PacketStructureTests
         const string testString = "TestData";
         var calculatedSize = HnmoEscrowCommandRef.GetRequiredSize(testString);
         var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 5;
+        
+        Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
+            "GetRequiredSize calculation incorrect for string field");
+    }
+
+    /// <summary>
+    /// Tests the packet size calculation for HnmoVipRequest.
+    /// </summary>
+    [Test]
+    public void HnmoVipRequest_PacketSizeValidation()
+    {
+        // Variable-length packet validation
+        // Test GetRequiredSize method with sample data
+        const string testString = "TestData";
+        var calculatedSize = HnmoVipRequestRef.GetRequiredSize(testString);
+        var expectedMinSize = Encoding.UTF8.GetByteCount(testString) + 1 + 8;
         
         Assert.That(calculatedSize, Is.GreaterThanOrEqualTo(expectedMinSize), 
             "GetRequiredSize calculation incorrect for string field");

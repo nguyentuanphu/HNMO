@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="ChaosWeapon" xml:space="preserve"><value>Vũ khí hỗn loạn</value></data>
+  <data name="DevilsSquareTicket" xml:space="preserve"><value>Vé Quảng trường Quỷ</value></data>
+  <data name="FirstWings" xml:space="preserve"><value>Cánh cấp 1</value></data>
+  <data name="Plus11ItemCombination" xml:space="preserve"><value>+11 Kết hợp vật phẩm</value></data>
+  <data name="Plus10ItemCombination" xml:space="preserve"><value>Kết hợp vật phẩm +10</value></data>
+  <data name="Dinorant" xml:space="preserve"><value>Quái điểu</value></data>
+  <data name="RestoreItemRemoveJOHOption" xml:space="preserve"><value>Khôi phục mục (Xóa tùy chọn JOH)</value></data>
+  <data name="RefineStone" xml:space="preserve"><value>Tinh luyện đá</value></data>
+  <data name="CherryBlossomEventMix" xml:space="preserve"><value>Sự kiện kết hợp hoa anh đào</value></data>
+  <data name="CompleteSecromicon" xml:space="preserve"><value>Secromicon đã hoàn thành</value></data>
+  <data name="GuardianOptionLevel380" xml:space="preserve"><value>Tùy chọn người giám hộ (Cấp 380)</value></data>
+  <data name="ThirdWingsStage2" xml:space="preserve"><value>Cánh Cấp 3, Giai đoạn 2</value></data>
+  <data name="ThirdWingsStage1" xml:space="preserve"><value>Cánh Cấp 3, Giai đoạn 1</value></data>
+  <data name="SecondWings" xml:space="preserve"><value>Cánh cấp 2</value></data>
+  <data name="CapeOfLordFighter" xml:space="preserve"><value>Áo choàng của Chúa/Chiến binh</value></data>
+  <data name="FenrirUpgradeStage4" xml:space="preserve"><value>Nâng cấp Fenrir (Giai đoạn 4)</value></data>
+  <data name="FenrirStage3" xml:space="preserve"><value>Fenrir Giai đoạn 3</value></data>
+  <data name="FenrirStage2" xml:space="preserve"><value>Fenrir Giai đoạn 2</value></data>
+  <data name="FenrirStage1" xml:space="preserve"><value>Fenrir Giai đoạn 1</value></data>
+  <data name="LargeShieldPotion" xml:space="preserve"><value>Thuốc khiên lớn</value></data>
+  <data name="MediumShieldPotion" xml:space="preserve"><value>Thuốc khiên trung bình</value></data>
+  <data name="SmallShieldPotion" xml:space="preserve"><value>Thuốc khiên nhỏ</value></data>
+  <data name="LifeStone" xml:space="preserve"><value>Đá hồi sinh</value></data>
+  <data name="IllusionTempleTicket" xml:space="preserve"><value>Vé Đền Ảo Ảnh</value></data>
+  <data name="BloodCastleTicket" xml:space="preserve"><value>Vé Lâu Đài Máu</value></data>
+  <data name="Plus15ItemCombination" xml:space="preserve"><value>+15 Kết hợp vật phẩm</value></data>
+  <data name="Plus14ItemCombination" xml:space="preserve"><value>+14 Kết hợp vật phẩm</value></data>
+  <data name="Plus13ItemCombination" xml:space="preserve"><value>+13 Kết hợp vật phẩm</value></data>
+  <data name="Plus12ItemCombination" xml:space="preserve"><value>Kết hợp vật phẩm +12</value></data>
+  <data name="PotionOfSoul" xml:space="preserve"><value>Thuốc linh hồn</value></data>
+  <data name="PotionOfBless" xml:space="preserve"><value>Thuốc ban phước</value></data>
+  <data name="Fruits" xml:space="preserve"><value>trái cây</value></data>
+  <data name="RemoveSeedSphere" xml:space="preserve"><value>Loại bỏ hạt giống</value></data>
+  <data name="MountSeedSphere" xml:space="preserve"><value>Gắn kết quả cầu hạt giống</value></data>
+  <data name="SeedSphereCreation" xml:space="preserve"><value>Tạo quả cầu hạt giống</value></data>
+  <data name="SeedCreation" xml:space="preserve"><value>Tạo hạt giống</value></data>
+  <data name="DarkRaven" xml:space="preserve"><value>Quạ Tinh</value></data>
+  <data name="DarkHorse" xml:space="preserve"><value>Dark Horse</value></data>
+  <data name="GemstoneRefinery" xml:space="preserve"><value>Nhà máy luyện đá quý</value></data>
+  <data name="GoldenBoxCombination" xml:space="preserve"><value>Kết hợp hộp vàng</value></data>
+  <data name="SilverBoxCombination" xml:space="preserve"><value>Hộp Bạc Kết Hợp</value></data>
+  <data name="LuckyItemExchange" xml:space="preserve"><value>Trao đổi vật phẩm may mắn</value></data>
+</root>

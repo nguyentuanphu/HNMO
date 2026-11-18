@@ -300,8 +300,8 @@ section 12 (the cash shop) still waits for the owner's answers.
 - rage-fighter.spec.ts: the "Ignore Defense makes effect:windForce" check fails on repeated runs against the same
   test character (likely the buff is still active from the previous run, so it isn't re-applied); make the test
   remove or wait out the buff first. The Dark Side dash check passed live but once failed at 5 fps (timing).
-- Phoenix Shot: the desktop casts it and sends nothing (the server supports it as an area skill). Kept 1:1 for now;
-  ask the owner whether HNMO should send it.
+- Phoenix Shot: ✅ HNMO sends an area skill at cast-action start by the owner decision (2026-11-16),
+  unlike the desktop. Packet regression checks cover range, resources and repeat; live damage remains to verify.
 - Live specs share test accounts (account-safety and missions-live both use test5): run them with --workers=1,
   or the second login is refused ("already logged in"). Once, after such a parallel run, test5 stayed
   "already logged in" with no open connection until the server restarted; not reproduced since - watch for it.
@@ -309,17 +309,18 @@ section 12 (the cash shop) still waits for the owner's answers.
   bUnit render after disposal, map groups, packet order); they pass locally. Make them independent of timing.
 
 ## Owner decisions (2026-11-16, Sydney time) — to build
-1. Phoenix Shot: the web game sends it to the server (an area skill with real damage). Note the difference from the desktop in PARITY.md.
+1. ✅ Phoenix Shot: HNMO sends AreaSkill at cast-action start after walking into range (owner decision 2026-11-16), unlike the desktop. PARITY.md records the difference; live damage verification remains.
 2. Guild buff tooltips: English and Vietnamese for every guild buff.
 3. Guild ladder rewards: (already built, checked 2026-11-16) paid to everyone who is a member at payout time, offline members included.
 4. Zalo coins: (already built, checked 2026-11-16) credited only after an admin approves (an approval list in the admin panel).
 5. Screenshots: the player chooses in the settings (3D view only, or with the interface).
 6. K key: (already built, checked 2026-11-16) like the desktop, only while the bag is closed.
 7. Top races: (already built, checked 2026-11-16) F9 opens them.
-8. Gift codes: keep as they are, plus an admin-set limit per network address / device (one use per address or device per code).
+8. ✅ Gift codes: optional per-code network/device limits, salted identity claims and counts, shared browser device ids, and bilingual refusals. Legacy clients without a device id retain network checks. Live deployment verification remains.
 9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
-11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.
+11. **Done — VIP application (2026-11-18):** reviewed coin purchases/renewals in the web game and account page, timed benefits/daily coins/notices, and /vip host settings/grant/remove with reasons and audit. Live PostgreSQL/crash/deployment validation remains unverified; VIP servers are separate under 15.6.
+    **Đã có tính năng VIP:** mua/gia hạn trong game web và trang tài khoản, quyền lợi có hạn/quà ngày/thông báo; quản trị tại /vip với lý do và nhật ký. Chưa chứng nhận triển khai thực tế; máy chủ VIP thuộc mục 15.6.
 
 ## Owner requests (2026-11-16, Sydney time) — approved, build on Thursday 2026-11-19 from 13:00 (first)
 - Log in on the website first; the game then opens at the server choice without asking for the password again.
@@ -456,7 +457,30 @@ Plan:
   and macOS needs an Apple developer account ($99/year) to notarise, else right-click -> Open the first time.
 - Tests: the windows-start CI job installs and starts it; add macOS and Linux jobs.
 
-## Shops in the admin panel (owner asked 2026-11-16)
+## Shops in the admin panel (owner asked 2026-11-16) — partly done
+Implemented: default NPC shop list with spawn locations, count, mini grid, search
+and copy-to draft; old editor link; reusable virtualized item catalogue with
+EN/VI names, group:number search, group/class/base-level/missing filters, sorting
+and multi-selection; real 8×15 grid with click/drag/bulk placement, fit feedback,
+capacity, largest-first arrangement, existing property editor and base price.
+Local undo/redo (100 steps), discard, confirmed save summaries, conflict checks
+and administrator save logging use the existing configuration save path. EN/VI
+help and hover hints are included, with bUnit coverage and fixture browser review.
+
+Remaining: fixed price overrides/shop multiplier require NPC purchase-rule and
+model changes; import/export and a dedicated history page are not implemented.
+Largest-first arrangement is a greedy fit, not an optimal packing guarantee.
+Verify stock refresh with a player on a live server after saving. The reusable
+picker is available but other reward/catalogue pages are unchanged.
+
+Đã có: danh sách cửa hàng NPC, vị trí xuất hiện, xem trước, tìm kiếm, sao chép
+bản nháp; danh mục vật phẩm cuộn ảo và bộ lọc; ô hàng 8×15, thêm/kéo/thêm hàng
+loạt, tự sắp xếp, sửa thuộc tính, giá cơ bản, hoàn tác/làm lại, bỏ thay đổi,
+xác nhận khi lưu và nhật ký quản trị viên. Có hướng dẫn và chú thích Anh–Việt.
+Còn lại: giá riêng/hệ số giá cần thay đổi quy tắc mua hàng và mô hình dữ liệu;
+chưa có nhập/xuất hoặc trang lịch sử riêng. Cần kiểm tra cập nhật hàng hóa bằng
+người chơi trên máy chủ thật.
+### Original shop plan (remaining design details retained)
 Today: Admin -> Merchants lists the NPC shops by name; Edit shows the shop's grid; "create item" adds an empty item
 and its kind is picked in the item editor; drag to place. Works, but slow with thousands of items.
 New design (the "Shop editor"):
@@ -581,10 +605,10 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      (one server at a time). Per server today: an EXP rate multiplier, PvP on/off, a player limit, and join
      requirements (account attributes, also time-limited grants): a server can require e.g. a "VIP" attribute and
      refuses others with "subscription over" / "no subscription". Edited only in the generic server config editor.
-     To do (with ChatGPT's VIP job): buying/granting VIP gives the account the time-limited attribute that VIP
-     servers require (one source of truth); a "Servers" admin page in plain words (name, VIP only yes/no, EXP and
-     drop/zen multipliers, PvP, player limit, which events run there); the server list in the web game and the
-     desktop client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
+     VIP #39 now gives the account the same-expiry VIP attribute grant (one source of truth). Still to do:
+     a "Servers" admin page in plain words (name, VIP only yes/no, EXP and drop/zen multipliers, PvP, player
+     limit, which events run there); the web game server list marks VIP servers (lock icon, "VIP" label, EN/VI)
+     and explains the refusal with a link to the
      account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
      timetables per server.
 15.7 Worlds (separate databases; owner asked 2026-11-16). Uses: a test world, new seasons (fresh start while the
@@ -594,6 +618,76 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      managing several worlds (start/stop, rates, events, players per world); one website and one account system with
      the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
      opening date); optional one-off character transfer between worlds; later a cross-world event server.
+
+## VIP implementation checkpoint — game and account adapters (2026-11-18)
+The VIP branch now includes the required antigravity-integration foundation and account
+page dependency. Paid purchases use a shared VIP intent journal before a single account
+save commits the debit, replay receipt and three same-expiry account grants. The actual
+XP/Zen bonuses refresh in the live game and expire through the existing grant timer.
+Daily coins use one durable pending credit per account/Sydney day, then normal coin
+application. The account page and web game share offer review and stable retry controls;
+the game uses F5 25/F5 26, Alt+U and the mobile More menu. New purchases are off by default.
+Implemented: start/last-day notices, a server-resolved chat mark, and the /vip admin
+settings/grant/remove page with required reasons, confirmation, durable activity audit
+and bUnit/service tests. The existing VIP vault/reset policies use the same timed flag.
+VIP application work is complete; live PostgreSQL/crash/deployment validation remains
+unverified. Per-server rates/list controls are separate under ROADMAP 15.6.
+
+Đã nối phần mua VIP với trang tài khoản và game web: xem lại giá trước khi xác nhận,
+thử lại bằng cùng mã giao dịch, trừ coin một lần và cấp ba quyền lợi cùng hạn dùng.
+Ưu đãi kinh nghiệm/Zen áp dụng ngay trong game; quà coin hằng ngày dùng một khoản
+cộng chờ duy nhất cho mỗi tài khoản/ngày Sydney. Mở bằng Alt+U hoặc menu Thêm.
+Mua mới tắt mặc định. Đã có trang /vip để cấu hình, cấp/gỡ VIP với lý do, xác nhận,
+nhật ký và kiểm thử. Chính sách kho/reset VIP đã có dùng cùng cờ VIP có hạn.
+Chưa kiểm chứng PostgreSQL khi gặp sự cố hoặc triển khai thực tế; máy chủ VIP ở mục 15.6.
+
+## Player account dashboard — foundation (2026-11-16)
+Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,
+password-authenticated saved character/coin snapshots, retained coin history paged
+20 at a time with Sydney dates, existing gift/reset/safety forms, community links, and
+logout that clears module memory. New sections register through accountSections.ts;
+Play now ticket handling remains owned by #13. English/Vietnamese dashboard texts are
+kept together without changing the dictionaries from #4/#6.
+Personal missions/daily claims/calendar and referral progress/rewards are connected
+through the existing mission engine. Claims require the selected character in the game;
+offline reads do not mutate live state. New direct coin receipts cover vault purchases, market/player-store trades, reset/relife/
+stat/master fees and play-time credits while retaining existing save boundaries.
+Older unrecorded spending cannot be reconstructed. Remaining: per-character last-seen
+history and VIP buying/extensions
+in the VIP part. Confirmed email changes use off-by-default SMTP settings at
+Accounts → Email delivery and the player's Security form. Codes expire after 15 minutes,
+are single-use and password-bound, with one-minute resends and a five-attempt limit.
+
+Đã có phần nền trang tài khoản: đăng nhập trong bộ nhớ thẻ, menu thích ứng màn hình,
+xem nhân vật/số dư đã lưu, phân trang lịch sử nhận coin theo giờ Sydney, gift code,
+reset, bảo vệ tài khoản, liên kết cộng đồng và đăng xuất. Tính năng khác có thể đăng ký
+mục riêng. Đã kết nối nhiệm vụ, nhận quà hằng ngày, điểm danh và tiến trình mời bạn qua
+cùng bộ quy tắc trong game. Nhận thưởng cần nhân vật đã chọn đang trong game;
+xem khi ngoại tuyến không thay đổi dữ liệu đang chạy. Còn thiếu lịch sử lần xuất hiện
+gần nhất của từng nhân vật và mua/gia hạn VIP. Đã bổ sung lịch sử thay đổi coin khi mua
+rương, giao dịch chợ/cửa hàng người chơi, reset/relife/tẩy điểm và nhận thưởng thời gian
+chơi theo các điểm lưu hiện có. Không thể khôi phục lịch sử chi tiêu cũ chưa được ghi. Đổi email có xác nhận
+dùng thiết lập SMTP mặc định tắt tại Tài khoản → Gửi email và biểu mẫu Bảo mật của người chơi.
+Mã gắn với mật khẩu hiện tại, có hiệu lực 15 phút, chỉ dùng một lần; lấy mã cách nhau một phút
+và tối đa năm lần nhập sai.
+
+Password changes (2026-11-17, Sydney): the Security section accepts a matching new
+password twice, refuses online accounts, and requires signing in again after saving.
+The server authenticates again under an account reservation before writing the hash.
+HNMO is web only; the dashboard's quick links no longer offer a client download.
+
+Đổi mật khẩu (17/11/2026, giờ Sydney): mục Bảo mật yêu cầu nhập mật khẩu mới hai lần,
+từ chối khi tài khoản còn trong game và yêu cầu đăng nhập lại sau khi lưu. Máy chủ xác
+thực lại khi đã giữ chỗ tài khoản rồi mới lưu mã băm. HNMO chỉ chơi trên web; các liên
+kết nhanh của trang tài khoản không còn mục tải phần mềm chơi game.
+
+Character presence (2026-11-17, Sydney): refreshing reads each owned character's current
+online status through the existing game-server read channel. Missing/unresponsive channels
+show unavailable; no last-seen dates are invented. Saved character and coin data remain visible.
+
+Trạng thái nhân vật (17/11/2026, giờ Sydney): khi làm mới, trang kiểm tra từng nhân vật của
+tài khoản qua kênh đọc trạng thái máy chủ game có sẵn. Nếu máy chủ không trả lời, trang ghi
+chưa kiểm tra được; không tự tạo ngày giờ xuất hiện gần nhất. Vẫn xem được nhân vật và số dư đã lưu.
 
 ## Owner decision 2026-11-16 (Sydney): web only for now
 The desktop client is dropped for now (maybe later): HNMO ships and is played through the web game only. New HNMO
@@ -702,8 +796,7 @@ touch-first; read from its store listing and release notes; ideas only). The web
   definitions, 14.21 stats calculator, 14.24 3D world editor), escrow (section 16), and the admin tools moved to it.
 - Admin tools 14.18 gift box/mail, 14.16 ban manager, 14.15 character tools, 14.17/14.11 GM manager + in-game GM
   commands, 14.20 news manager: moved BACK to ChatGPT (2026-11-17) because Antigravity is out for days.
-- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (rules only, not
-  working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
+- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (website/game/admin implemented; live deployment unverified). Its redesign must also add the menu entries for every route in #51's wiring table.
 - Second Antigravity (mobile, section 17): not started.
 - Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
 

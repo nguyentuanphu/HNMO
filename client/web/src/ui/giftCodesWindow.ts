@@ -6,6 +6,8 @@
 // (HnmoGiftCodesState, C2 F5 1B) when something changes: a code entered here or with /code CODE in the chat (the server
 // answers that one in the chat itself), waiting rewards given. The buttons send HnmoGiftCodesAction (F5 1C).
 
+import { deviceId } from '../deviceId.js';
+import { giftCodeIdentityText } from '../giftCodeIdentity.js';
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { openDocument, type RmlDocument, type RmlModel } from './rml.js';
@@ -17,7 +19,7 @@ interface RewardItem { group: number; number: number; level: number; count: numb
 interface Reward { coins: number; coinType: CoinType; zen: number; items: RewardItem[] }
 interface Rules { limit: 'OncePerAccount' | 'OncePerCharacter'; start?: number; end?: number; minLevel: number; maxLevel: number; minResets: number; maxResets: number; classes: number[] }
 export type GiftCodeResult = 'Ok' | 'Invalid' | 'TooManyTries' | 'Disabled' | 'NotStarted' | 'Ended' | 'UsedUp' | 'AlreadyUsedAccount'
-  | 'AlreadyUsedCharacter' | 'BatchCodeUsed' | 'LevelTooLow' | 'LevelTooHigh' | 'ResetsTooLow' | 'ResetsTooHigh' | 'WrongClass';
+  | 'AlreadyUsedNetwork' | 'AlreadyUsedDevice' | 'NetworkAddressUnknown' | 'AlreadyUsedCharacter' | 'BatchCodeUsed' | 'LevelTooLow' | 'LevelTooHigh' | 'ResetsTooLow' | 'ResetsTooHigh' | 'WrongClass';
 export interface GiftCodesState {
   v: number; on: boolean; website: boolean;
   owed: { code: string; zen: number; items: RewardItem[] }[];
@@ -136,11 +138,20 @@ export class GiftCodesWindow {
     }).catch((error: unknown) => console.warn('Interface', error)).finally(() => { this.opening = null; });
   }
 
+  /** Route browser /code redemptions through the same device-aware request as the window. */
+  command(text: string): boolean {
+    const match = /^\/code(?:\s+(.*))?$/i.exec(text.trim());
+    if (!match) return false;
+    if (match[1]) this.redeem(match[1]);
+    else this.open();
+    return true;
+  }
+
   /** Sends a code (from the field, or the chat's /code without the server's chat command). */
   redeem(code: string): void {
     const text = code.trim();
     if (!text) return;
-    this.options.send('HnmoGiftCodesAction', { Action: ACTION.Redeem, Argument: text.slice(0, 32) });
+    this.options.send('HnmoGiftCodeRedeemExtended', { GiftCode: text.slice(0, 32), DeviceId: deviceId() });
   }
 
   /** A packet from the server: the gift code state (C2 F5 1B). Returns whether it was one. */
@@ -175,6 +186,8 @@ export class GiftCodesWindow {
 
   /** The text of a code's result. */
   resultText(event: NonNullable<GiftCodesState['event']>): string {
+    const identityText = giftCodeIdentityText(event.result, currentLanguage());
+    if (identityText) return identityText;
     const d = event.details;
     switch (event.result as GiftCodeResult | undefined) {
       case 'Ok': {

@@ -22,6 +22,7 @@ public partial class ApiKeys : IAsyncDisposable
     private IList<ApiKey> _apiKeys = new List<ApiKey>();
     private DateTime? _firstUserCreatedAt;
     private bool _isLoading = true;
+    private bool _showHelp;
     private IJSObjectReference? _clipboardModule;
 
     /// <summary>

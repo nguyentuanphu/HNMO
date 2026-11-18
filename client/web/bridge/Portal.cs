@@ -44,6 +44,16 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         // Handlers that take only the HttpContext are cast to Func<..., Task<IResult>>, so their answer is sent:
         // as a plain RequestDelegate the result would be dropped (ASP0016).
         app.MapGet("/portal/status", (Func<HttpContext, Task<IResult>>)portal.StatusAsync);
+        app.MapPost("/portal/account/overview", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "overview"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/password", (Func<HttpContext, Task<IResult>>)(context => portal.AccountAsync(context, "password"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/state", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/purchase", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/purchase", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/vip/daily", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/vip/daily", "Account VIP"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/email/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/state", "Account email"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/email/request", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/request", "Account email"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/email/confirm", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/email/confirm", "Account email"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/missions/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/state", "Account missions"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/account/missions/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/claim", "Account missions"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/register", portal.RegisterAsync).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
@@ -74,6 +84,47 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     }
 
     private string StartingCoinsText => options.StartingCoins > 0 ? $"{options.StartingCoins} {options.StartingCoinType}" : string.Empty;
+
+    private async Task<IResult> AccountAsync(HttpContext context, string action)
+    {
+        context.Response.Headers.CacheControl = "no-store";
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) => body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } value
+            && value.GetString() is { } text && text.Length <= maximum ? text : string.Empty;
+        var page = body?.GetValueOrDefault("page") is { ValueKind: JsonValueKind.Number } number && number.TryGetInt32(out var requestedPage) ? requestedPage : 0;
+        object payload = action == "password"
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20), newPassword = Field("newPassword", 20) }
+            : new { loginName = Field("loginName", 10), password = Field("password", 20), page };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/account/{action}", payload), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.BadRequest or HttpStatusCode.Conflict && text.StartsWith('{'))
+            {
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
 
     private HttpRequestMessage ApiRequest(HttpMethod method, string path, object? body = null, string? apiKey = null)
     {
@@ -218,17 +269,18 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     // What the website's pages may know (the Google client id and whether website login is required); the admin path never leaves the server.
     private async Task<IResult> WebsiteSettingsAsync(HttpContext context)
     {
-        var (clientId, requireWebsiteLogin) = await this.PublicSettingsAsync(context.RequestAborted).ConfigureAwait(false);
+        var (clientId, requireWebsiteLogin, theme) = await this.PublicSettingsAsync(context.RequestAborted).ConfigureAwait(false);
         context.Response.Headers.CacheControl = "no-cache";
         return Results.Json(new
         {
             googleClientId = clientId ?? string.Empty,
             requireWebsiteLogin,
+            theme,
             connectServerPort = options.ConnectServerPort > 0 ? options.ConnectServerPort : 44406,
         });
     }
 
-    private async Task<(string? GoogleClientId, bool RequireWebsiteLogin)> PublicSettingsAsync(CancellationToken cancellationToken)
+    private async Task<(string? GoogleClientId, bool RequireWebsiteLogin, string Theme)> PublicSettingsAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -237,18 +289,19 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             using var response = await http.GetAsync(new Uri(new Uri(options.ApiBaseUrl), "api/website/settings/public"), timeoutCts.Token).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                return (null, false);
+                return (null, false, "classic");
             }
 
             using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync(timeoutCts.Token).ConfigureAwait(false));
             var root = document.RootElement;
             var googleClientId = root.TryGetProperty("googleClientId", out var value) && value.GetString() is { Length: > 0 } id ? id : null;
             var requireWebsiteLogin = root.TryGetProperty("requireWebsiteLogin", out var req) && req.ValueKind == JsonValueKind.True;
-            return (googleClientId, requireWebsiteLogin);
+            var theme = root.TryGetProperty("theme", out var appearance) && appearance.ValueKind == JsonValueKind.String ? appearance.GetString() : null;
+            return (googleClientId, requireWebsiteLogin, theme ?? "classic");
         }
         catch (Exception error) when (error is HttpRequestException or TaskCanceledException or JsonException || (error is OperationCanceledException && !cancellationToken.IsCancellationRequested))
         {
-            return (null, false);
+            return (null, false, "classic");
         }
     }
 
@@ -479,11 +532,14 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
 
         string Field(string name, int maximum) => (body?.GetValueOrDefault(name) ?? string.Empty) is var value && value.Length <= maximum ? value : string.Empty;
         object request = action == "redeem"
-            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40) }
+            ? new { loginName = Field("loginName", 10), password = Field("password", 20), character = Field("character", 10), code = Field("code", 40), deviceId = Field("deviceId", 36) }
             : new { loginName = Field("loginName", 10), password = Field("password", 20) };
         try
         {
-            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            using var proxyRequest = this.ApiRequest(HttpMethod.Post, $"api/website/gift-codes/{action}", request);
+            // Replace, rather than copy, any browser-supplied forwarding headers.
+            proxyRequest.Headers.TryAddWithoutValidation("X-HNMO-Client-Address", context.Connection.RemoteIpAddress?.ToString());
+            using var response = await http.SendAsync(proxyRequest, context.RequestAborted).ConfigureAwait(false);
             var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
             if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
             {

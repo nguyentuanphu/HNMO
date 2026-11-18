@@ -2933,4 +2933,8 @@
   <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
     <value>Sends the account safety state (second password, required actions, locked items) to the web game which asked for it once.</value>
   </data>
+  <data name="HnmoVipRequestHandlerPlugIn_Name" xml:space="preserve"><value>VIP requests</value></data>
+  <data name="HnmoVipRequestHandlerPlugIn_Description" xml:space="preserve"><value>Handles the web game VIP window for the signed-in account.</value></data>
+  <data name="HnmoVipViewPlugIn_Name" xml:space="preserve"><value>VIP window</value></data>
+  <data name="HnmoVipViewPlugIn_Description" xml:space="preserve"><value>Shows the account VIP status and purchase results in the web game.</value></data>
 </root>

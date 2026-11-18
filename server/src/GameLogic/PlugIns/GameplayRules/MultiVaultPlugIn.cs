@@ -169,6 +169,7 @@ public sealed class MultiVaultPlugIn :
         }
 
         player.Account.SetCashShopCoins(cfg.PurchaseCoinType, balance - cfg.PurchaseExtraVaultCost);
+        CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, cfg.PurchaseCoinType, -cfg.PurchaseExtraVaultCost, CashShopBalanceReason.ExtraVault);
         var state = this.LoadAccountState(login);
         state.PurchasedExtraVaults++;
         this.SaveAccountState(login, state);

@@ -83,7 +83,8 @@ public static class AdminMcpExtensions
             .WithTools<AdminOperationReadTools>()
             .WithTools<ConfigurationReadTools>()
             .WithTools<LiveGameReadTools>()
-            .WithTools<PluginOperationReadTools>();
+            .WithTools<PluginOperationReadTools>()
+            .WithTools<VipReadTools>();
         if (!options.ReadOnly)
         {
             server.WithTools<AdminWriteTools>().WithTools<ConfigurationWriteTools>().WithTools<LiveGameWriteTools>().WithTools<PluginOperationWriteTools>();

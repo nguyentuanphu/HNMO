@@ -1075,4 +1075,8 @@ Mở rộng hành trang: {18}</value>
   <data name="ChatSpamWarning" xml:space="preserve">
     <value>Vui lòng không spam.</value>
   </data>
+  <data name="ShopCurrencyWCoinC" xml:space="preserve"><value>WCoin (C)</value></data>
+  <data name="ShopCurrencyWCoinP" xml:space="preserve"><value>WCoin (P)</value></data>
+  <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} có hiệu lực đến {1} (giờ Sydney).</value></data>
+  <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} sẽ hết hạn trong vòng một ngày, lúc {1} (giờ Sydney). Gia hạn tại cửa sổ VIP (Alt+U) hoặc trang tài khoản.</value></data>
 </root>

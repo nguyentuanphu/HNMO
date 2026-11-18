@@ -374,6 +374,7 @@
   * [C2 F5 1B - HnmoGiftCodesState (by server)](C2-F5-1B-HnmoGiftCodesState_by-server.md)
   * [C2 F5 1E - HnmoResetsState (by server)](C2-F5-1E-HnmoResetsState_by-server.md)
   * [C2 F5 21 - HnmoAccountSafetyState (by server)](C2-F5-21-HnmoAccountSafetyState_by-server.md)
+  * [C2 F5 26 - HnmoVipState (by server)](C2-F5-26-HnmoVipState_by-server.md)
   * [C2 F5 31 - HnmoTopUpMilestonesState (by server)](C2-F5-31-HnmoTopUpMilestonesState_by-server.md)
   * [C2 F5 33 - HnmoTimetableState (by server)](C2-F5-33-HnmoTimetableState_by-server.md)
   * [C2 F5 35 - HnmoLuckyNumberState (by server)](C2-F5-35-HnmoLuckyNumberState_by-server.md)

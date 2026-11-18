@@ -26,6 +26,11 @@ public class WebsiteConfiguration
     [RegularExpression("^$|^[A-Za-z0-9][A-Za-z0-9_-]{2,39}$")]
     public string AdminPath { get; set; } = DefaultAdminPath;
 
+    /// <summary>Gets or sets the public website appearance. Existing installations keep Classic.</summary>
+    [Display(Name = nameof(WebsiteThemeLabels.Caption), Description = nameof(WebsiteThemeLabels.Description), ResourceType = typeof(WebsiteThemeLabels))]
+    [EnumDataType(typeof(WebsiteTheme))]
+    public WebsiteTheme Theme { get; set; } = WebsiteTheme.Classic;
+
     /// <summary>
     /// Gets or sets the OAuth client id of a Google Cloud "Web application" client; empty hides "Sign in with Google".
     /// </summary>

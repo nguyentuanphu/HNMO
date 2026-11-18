@@ -11145,4 +11145,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoVipState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII-safe JSON using the shared VIP account state; Unicode is escaped and no private receipt or credential is included.</param>
+    /// <remarks>
+    /// Is sent by the server when: The server finishes a correlated own-account VIP request.
+    /// Causes reaction on client side: The web game updates VIP status, reviewed offers and the localized action result.
+    /// </remarks>
+    public static async ValueTask SendHnmoVipStateAsync(this IConnection? connection, uint @requestId, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoVipStateRef.GetRequiredSize(json);
+            var packet = new HnmoVipStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.RequestId = @requestId;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

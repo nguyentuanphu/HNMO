@@ -8484,5 +8484,17 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoAccountSafetyViewPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipRequestHandlerPlugIn_Name => ResourceManager.GetString("HnmoVipRequestHandlerPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipRequestHandlerPlugIn_Description => ResourceManager.GetString("HnmoVipRequestHandlerPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipViewPlugIn_Name => ResourceManager.GetString("HnmoVipViewPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipViewPlugIn_Description => ResourceManager.GetString("HnmoVipViewPlugIn_Description", resourceCulture)!;
+
     }
 }

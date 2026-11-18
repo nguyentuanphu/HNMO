@@ -24,23 +24,23 @@ bool CItemEditorPopups::RenderSimplePopup(const char* popupId, const char* messa
 void CItemEditorPopups::RenderAll()
 {
     // Save popups
-    RenderSimplePopup("Save Success", I18N::Editor::ItemsSavedSuccessfully);
-    RenderSimplePopup("Save Failed", I18N::Editor::ItemDataHasFatalProblems);
-    RenderSimplePopup("Save Write Failed", I18N::Editor::ItemDataCouldNotBeWritten);
+    RenderSimplePopup(I18N::Editor::PopupSaveSuccess, I18N::Editor::ItemsSavedSuccessfully);
+    RenderSimplePopup(I18N::Editor::PopupSaveFailed, I18N::Editor::ItemDataHasFatalProblems);
+    RenderSimplePopup(I18N::Editor::PopupSaveWriteFailed, I18N::Editor::ItemDataCouldNotBeWritten);
 
     // CSV Export popups
-    RenderSimplePopup("Export CSV Success", I18N::Editor::ItemsExportedAsCSVSuccessfully);
-    RenderSimplePopup("Export CSV Failed", I18N::Editor::FailedToExportItemAttributesAsCSV);
+    RenderSimplePopup(I18N::Editor::PopupExportCSVSuccess, I18N::Editor::ItemsExportedAsCSVSuccessfully);
+    RenderSimplePopup(I18N::Editor::PopupExportCSVFailed, I18N::Editor::FailedToExportItemAttributesAsCSV);
 
     // bmd import/export popups
-    RenderSimplePopup("Import Bmd Success", I18N::Editor::ItemsImportedFromBmd);
-    RenderSimplePopup("Import Bmd Failed", I18N::Editor::FailedToImportItemsFromBmd);
-    RenderSimplePopup("Export Bmd Success", I18N::Editor::ItemsExportedAsBmd);
-    RenderSimplePopup("Export Bmd Failed", I18N::Editor::FailedToExportItemsAsBmd);
+    RenderSimplePopup(I18N::Editor::PopupImportBmdSuccess, I18N::Editor::ItemsImportedFromBmd);
+    RenderSimplePopup(I18N::Editor::PopupImportBmdFailed, I18N::Editor::FailedToImportItemsFromBmd);
+    RenderSimplePopup(I18N::Editor::PopupExportBmdSuccess, I18N::Editor::ItemsExportedAsBmd);
+    RenderSimplePopup(I18N::Editor::PopupExportBmdFailed, I18N::Editor::FailedToExportItemsAsBmd);
 
     // S6E3 Export popups
-    RenderSimplePopup("Export S6E3 Success", I18N::Editor::ExportedAsLegacyFormatSuccessfully);
-    RenderSimplePopup("Export S6E3 Failed", I18N::Editor::FailedToExportAsLegacyFormat);
+    RenderSimplePopup(I18N::Editor::PopupExportS6E3Success, I18N::Editor::ExportedAsLegacyFormatSuccessfully);
+    RenderSimplePopup(I18N::Editor::PopupExportS6E3Failed, I18N::Editor::FailedToExportAsLegacyFormat);
 }
 
 #endif // _EDITOR

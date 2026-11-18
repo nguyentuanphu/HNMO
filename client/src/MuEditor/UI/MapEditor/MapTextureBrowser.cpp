@@ -2,6 +2,8 @@
 
 #ifdef _EDITOR
 
+#include "I18N/All.h"
+
 #include "MapTextureBrowser.h"
 
 #include "imgui.h"
@@ -180,8 +182,8 @@ void CMapTextureBrowser::Render(int defaultWorld)
 
     if (m_worlds.empty())
     {
-        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.6f, 1.0f),
-                           "No Data\\World* folders found in the working directory.");
+        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.6f, 1.0f), "%s",
+                           I18N::Editor::NoDataWorldFoldersFoundInTheWorkingDirectory);
         return;
     }
 
@@ -189,12 +191,12 @@ void CMapTextureBrowser::Render(int defaultWorld)
     if (m_selectedWorld < 0)
         LoadWorld(defaultWorld > 0 ? defaultWorld : m_worlds.front());
 
-    ImGui::Text("Browse the tile textures shipped by any map.");
+    ImGui::TextUnformatted(I18N::Editor::BrowseTheTileTexturesShippedByAnyMap);
 
     // World selector.
     ImGui::SetNextItemWidth(160.0f);
     const std::string current = "World " + std::to_string(m_selectedWorld);
-    if (ImGui::BeginCombo("World", current.c_str()))
+    if (ImGui::BeginCombo(I18N::Editor::World, current.c_str()))
     {
         for (int w : m_worlds)
         {
@@ -208,7 +210,7 @@ void CMapTextureBrowser::Render(int defaultWorld)
         ImGui::EndCombo();
     }
     ImGui::SameLine();
-    if (ImGui::Button("Rescan"))
+    if (ImGui::Button(I18N::Editor::Rescan))
     {
         ScanWorlds();
         LoadWorld(m_selectedWorld);
@@ -220,26 +222,24 @@ void CMapTextureBrowser::Render(int defaultWorld)
     const Preview* sel = hasSelection ? &m_previews[m_selectedIndex] : nullptr;
 
     ImGui::BeginDisabled(!hasSelection);
-    if (ImGui::Button("Use selected texture on this map") && sel)
+    if (ImGui::Button(I18N::Editor::UseSelectedTextureOnThisMap) && sel)
     {
         const std::wstring src = L"Data\\World" + std::to_wstring(m_selectedWorld) + L"\\" + sel->file;
         const int slot = Editor::TextureImport::UseTextureFile(defaultWorld, src);
         if (slot >= 0)
         {
             SelectMapping = slot;  // ready to paint with it on the Texture tab
-            char s[96];
-            snprintf(s, sizeof(s), "Added to slot %d - selected on the Texture tab.", slot);
-            m_status = s;
+            m_status = I18N::Format(I18N::Editor::TextureImportSelected, {std::to_string(slot)});
         }
         else
         {
-            m_status = "Failed - no free ExtTile slot, or unsupported format (OZT).";
+            m_status = I18N::Editor::TextureImportFailed;
         }
     }
     ImGui::EndDisabled();
 
     ImGui::SameLine();
-    if (ImGui::Button("Upload image..."))
+    if (ImGui::Button(I18N::Editor::UploadImage))
     {
         std::wstring picked;
         if (Editor::TextureImport::PickImageFile(picked))
@@ -248,32 +248,28 @@ void CMapTextureBrowser::Render(int defaultWorld)
             if (slot >= 0)
             {
                 SelectMapping = slot;
-                char s[96];
-                snprintf(s, sizeof(s), "Uploaded to slot %d - selected on the Texture tab.", slot);
-                m_status = s;
+                m_status = I18N::Format(I18N::Editor::TextureUploadSelected, {std::to_string(slot)});
             }
             else
             {
-                m_status = "Upload failed - use a .jpg/.jpeg or .ozj, and ensure a free ExtTile slot.";
+                m_status = I18N::Editor::TextureUploadFailed;
             }
         }
         else
         {
-            m_status = "Upload cancelled.";
+            m_status = I18N::Editor::TextureUploadCancelled;
         }
     }
-    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f),
-                       "Adds to current map (World %d) as a free ExtTile slot, then paint it on the Texture tab.",
-                       defaultWorld);
+    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), I18N::Editor::TextureImportDestinationHint, defaultWorld);
     if (!m_status.empty())
         ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "%s", m_status.c_str());
 
     ImGui::Separator();
-    ImGui::Text("%d textures in World %d", (int)m_previews.size(), m_selectedWorld);
+    ImGui::Text(I18N::Editor::DTexturesInWorldD, (int)m_previews.size(), m_selectedWorld);
 
     // Always-visible label for the texture under the cursor. A tooltip alone is
     // unreliable here because the game's 3D cursor sprite draws over it.
-    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "Hovered: %s",
+    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), I18N::Editor::HoveredS,
                        m_hoveredName.empty() ? "(hover a texture)" : m_hoveredName.c_str());
 
     ImGui::BeginChild("BrowserThumbs", ImVec2(0, 0), false);
@@ -304,7 +300,7 @@ void CMapTextureBrowser::Render(int defaultWorld)
             clicked = ImGui::ImageButton("t", (ImTextureID)(intptr_t)Bitmaps[p.slot].sdlTexture,
                                          ImVec2(THUMB_SIZE, THUMB_SIZE));
         else if (p.attempted)
-            clicked = ImGui::Button("fail", ImVec2(THUMB_SIZE, THUMB_SIZE));
+            clicked = ImGui::Button(I18N::Editor::Fail, ImVec2(THUMB_SIZE, THUMB_SIZE));
         else
             clicked = ImGui::Button("...", ImVec2(THUMB_SIZE, THUMB_SIZE));   // pending
 

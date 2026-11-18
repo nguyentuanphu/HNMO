@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="ImperialGuardianMonday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào thứ Hai, diễn ra trên bản đồ 69.</value></data>
+  <data name="ImperialGuardianTuesday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào thứ Ba, diễn ra trên bản đồ 70.</value></data>
+  <data name="ImperialGuardianWednesday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào thứ Tư, diễn ra trên bản đồ 71.</value></data>
+  <data name="ImperialGuardianThursday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào thứ Năm, diễn ra trên bản đồ 69.</value></data>
+  <data name="ImperialGuardianFriday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào thứ Sáu, diễn ra trên bản đồ 70.</value></data>
+  <data name="ImperialGuardianSaturday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào thứ Bảy, diễn ra trên bản đồ 71.</value></data>
+  <data name="ImperialGuardianSunday" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện bảo vệ đế quốc vào Chủ nhật, diễn ra trên bản đồ 72.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel4" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 4.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel3" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 3.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel2" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 2.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel1" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 1.</value></data>
+  <data name="EventDefinitionForTheDoppelgangerEventOnMap68" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện doppelganger trên bản đồ 68.</value></data>
+  <data name="EventDefinitionForTheDoppelgangerEventOnMap67" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện doppelganger trên bản đồ 67.</value></data>
+  <data name="EventDefinitionForTheDoppelgangerEventOnMap66" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện doppelganger trên bản đồ 66.</value></data>
+  <data name="EventDefinitionForTheDoppelgangerEventOnMap65" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện doppelganger trên bản đồ 65.</value></data>
+  <data name="EventDefinitionForTheKanturuRefineryTowerEvent" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện Tháp lọc dầu Kanturu.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel7" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 7.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel6" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 6.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel5" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 5.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel4" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 4.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel3" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 3.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel2" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 2.</value></data>
+  <data name="EventDefinitionForChaosCastleEventLevel1" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài hỗn loạn, cấp 1.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel8" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 8.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel7" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 7.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel6" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 6.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel5" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 5.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel4" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 4.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel3" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 3.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel2" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 2.</value></data>
+  <data name="EventDefinitionForBloodCastleEventLevel1" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện lâu đài máu, cấp 1.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel7" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 7.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel6" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 6.</value></data>
+  <data name="EventDefinitionForDevilSquareEventLevel5" xml:space="preserve"><value>Định nghĩa sự kiện cho sự kiện hình vuông ma quỷ, cấp 5.</value></data>
+  <data name="EventDefinitionForIllusionTempleEventLevel1" xml:space="preserve"><value>Định nghĩa sự kiện cho ngôi đền ảo ảnh, cấp 1.</value></data>
+  <data name="EventDefinitionForIllusionTempleEventLevel2" xml:space="preserve"><value>Định nghĩa sự kiện cho ngôi đền ảo ảnh, cấp 2.</value></data>
+  <data name="EventDefinitionForIllusionTempleEventLevel3" xml:space="preserve"><value>Định nghĩa sự kiện cho ngôi đền ảo ảnh, cấp 3.</value></data>
+  <data name="EventDefinitionForIllusionTempleEventLevel4" xml:space="preserve"><value>Định nghĩa sự kiện cho ngôi đền ảo ảnh, cấp 4.</value></data>
+  <data name="EventDefinitionForIllusionTempleEventLevel5" xml:space="preserve"><value>Định nghĩa sự kiện cho ngôi đền ảo ảnh, cấp 5.</value></data>
+  <data name="EventDefinitionForIllusionTempleEventLevel6" xml:space="preserve"><value>Định nghĩa sự kiện cho ngôi đền ảo ảnh, cấp 6.</value></data>
+</root>

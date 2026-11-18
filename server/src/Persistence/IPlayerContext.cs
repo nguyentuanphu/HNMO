@@ -183,6 +183,16 @@ public interface IPlayerContext : IContext
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets one bounded page of an account's complete retained coin history.
+    /// </summary>
+    /// <param name="accountId">The authenticated account identifier.</param>
+    /// <param name="offset">The number of older entries to skip.</param>
+    /// <param name="maximumCount">The page size, between one and 101.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The entries, newest first with a stable identifier tie-breaker.</returns>
+    ValueTask<IReadOnlyList<CashShopCoinGrant>> GetCashShopCoinHistoryAsync(Guid accountId, int offset, int maximumCount, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets the grant of cash shop coins with the specified reference.
     /// </summary>
     /// <param name="reference">The reference of the granting system.</param>
