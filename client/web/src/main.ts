@@ -28,7 +28,7 @@ import { setKtx2Renderer, clearTextureCache } from './bmd.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
-import { applyPixelRatio, frameDue, performanceFlags } from './render/quality.js';
+import { applyPixelRatio, frameDue, isBatterySaver, performanceFlags, type HudMode } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
@@ -89,6 +89,7 @@ import { MiniMap } from './ui/miniMap.js';
 import { isNewSkill, playNewSkillEffect } from './game/newSkills.js';
 import { PlayerActions } from './game/combatLook.js';
 import { installTouchControls } from './ui/touchControls.js';
+import { loadAutoLootFilter, MobileHud } from './ui/mobileHud.js';
 import { GateWatcher } from './game/gates.js';
 import { Trade } from './ui/tradeWindow.js';
 import { ChaosMachine } from './ui/mixWindow.js';
@@ -223,6 +224,7 @@ export interface GameState {
   personalShop?: PersonalShop;
   cashShop?: CashShop;
   miniMap?: MiniMap;
+  mobileHud?: MobileHud;
   connection?: Connection;
   cooldowns?: typeof skillCooldowns;
   /** The camera's turn and distance (the mouse and the touch controls change them). */
@@ -321,6 +323,8 @@ window.__game = state; // for automated tests and debugging from the console
 
 // HNMO extra: the performance report (Settings, or Ctrl+Shift+P): what the frames cost on the player's computer.
 let settingsWindow: SettingsWindow | null = null;
+let gameOptionsWindow: SettingsWindow | null = null;
+let heroClassIndex = 0;
 const perfRecorder = new PerfRecorder({
   renderer, canvas: ui.canvas,
   scene: () => {
@@ -606,28 +610,69 @@ ui.canvas.addEventListener('wheel', (event) => {
   event.preventDefault();
   view.distance = THREE.MathUtils.clamp(view.distance * (event.deltaY > 0 ? 1.1 : 0.9), CAMERA.minDistance, CAMERA.maxDistance);
 }, { passive: false });
+let lockedTarget: Character | null = null;
+let stickVector = { nx: 0, ny: 0 };
+let lastStickWalk = 0;
+let lastMobileHudUpdate = 0;
+
+function pickNearestMonster(maxCells = 9): Character | null {
+  const online = state.online;
+  if (!online) return null;
+  if (lockedTarget && !lockedTarget.dead && online.characters.has(lockedTarget.id)) {
+    const d = Math.max(Math.abs(lockedTarget.cell.x - online.hero.cell.x), Math.abs(lockedTarget.cell.y - online.hero.cell.y));
+    if (d <= maxCells) return lockedTarget;
+  }
+  const hero = online.hero.cell;
+  let best: Character | null = null, distance = maxCells;
+  for (const c of online.characters.values()) {
+    if (c.kind !== 'monster' || c.dead) continue;
+    const d = Math.max(Math.abs(c.cell.x - hero.x), Math.abs(c.cell.y - hero.y));
+    if (d < distance) { best = c; distance = d; }
+  }
+  return best;
+}
+
+function stepThumbstickWalk(): void {
+  if (!state.online || !state.hero || (stickVector.nx === 0 && stickVector.ny === 0)) return;
+  const now = performance.now();
+  if (now - lastStickWalk < 160) return;
+  lastStickWalk = now;
+  const mag = Math.hypot(stickVector.nx, stickVector.ny);
+  if (mag < 0.15) return;
+  const hx = state.hero.position.x, hy = state.hero.position.y;
+  const hz = sampleHeight(state.world!.heights, hx, hy);
+  const cos = Math.cos(view.yaw), sin = Math.sin(view.yaw);
+  // Camera looks from (+sin*H, -cos*H) toward hero, so screen-up = (-sin, +cos) and screen-right = (+cos, +sin).
+  const dirX = (-sin * (-stickVector.ny) + cos * stickVector.nx) / mag;
+  const dirY = (cos * (-stickVector.ny) + sin * stickVector.nx) / mag;
+  const stepCells = Math.max(2, Math.min(5, Math.round(mag * 5)));
+  const tx = Math.max(0, Math.min(255, state.hero.cell.x + Math.round(dirX * stepCells)));
+  const ty = Math.max(0, Math.min(255, state.hero.cell.y + Math.round(dirY * stepCells)));
+  void hz;
+  if (tx !== state.hero.cell.x || ty !== state.hero.cell.y) {
+    state.combat?.cancel();
+    state.ground?.cancel();
+    state.online.walkTo({ x: tx, y: ty });
+  }
+}
+
 // Phones and tablets (HNMO extra): long press casts, two fingers zoom and turn, buttons for the keys.
-installTouchControls({
+(installTouchControls as (a: Parameters<typeof installTouchControls>[0] & { onShow?: () => void }) => HTMLElement)({
   canvas: ui.canvas,
   zoom: (factor) => { view.distance = THREE.MathUtils.clamp(view.distance * factor, CAMERA.minDistance, CAMERA.maxDistance); },
   rotate: (dx) => { view.yaw -= dx * 0.006; },
+  onShow: () => { state.mobileHud?.setTouchDetected(true); },
   cast: (x, y) => {
     if (!state.combat || !state.online) return;
     const at = new MouseEvent('pointermove', { clientX: x, clientY: y });
     const monster = pickCharacter(at, ['monster']);
     state.combat.cast(monster, monster ? { ...monster.cell } : pickCell(at));
   },
-  // The nearest live monster within 8 cells: the current skill at it, else a plain attack.
+  // The locked target or nearest live monster within 8 cells: the current skill at it, else a plain attack.
   fight: () => {
     const online = state.online, combat = state.combat;
     if (!online || !combat) return false;
-    const hero = online.hero.cell;
-    let best: Character | null = null, distance = 9;
-    for (const c of online.characters.values()) {
-      if (c.kind !== 'monster' || c.dead) continue;
-      const d = Math.max(Math.abs(c.cell.x - hero.x), Math.abs(c.cell.y - hero.y));
-      if (d < distance) { best = c; distance = d; }
-    }
+    const best = pickNearestMonster(9);
     if (!best) { chat.add('No monster nearby.', 'system'); return false; }
     if (!combat.cast(best, { ...best.cell })) combat.attack(best);
     return true;
@@ -708,14 +753,14 @@ function cullCharacters(online: OnlineWorld): void {
 }
 
 let last = performance.now();
-let frames = 0, fpsTime = 0;
+let frames = 0, fpsTime = 0, currentFps = 0;
 
 function frame(now: number): void {
   if (!frameDue(now)) { requestAnimationFrame(frame); return; } // the settings' FPS limit
   const dt = Math.min((now - last) / 1000, MAX_FRAME_SECONDS);
   last = now;
   frames++; fpsTime += dt;
-  if (fpsTime >= 1) { ui.fps.textContent = `${Math.round(frames / fpsTime)} fps`; frames = 0; fpsTime = 0; }
+  if (fpsTime >= 1) { currentFps = Math.round(frames / fpsTime); ui.fps.textContent = `${currentFps} fps`; frames = 0; fpsTime = 0; }
   // The performance report measures the frame's parts while it records (game/perfRecorder.ts).
   const rec = perfRecorder.recording ? perfRecorder : null;
   step(dt, rec);
@@ -754,6 +799,69 @@ function step(dt: number, rec: PerfRecorder | null): void {
     state.miniMap?.update();
     state.gates?.update();
     state.hud?.updateCooldowns();
+    stepThumbstickWalk();
+    if (state.mobileHud && performance.now() - lastMobileHudUpdate >= 110) {
+      lastMobileHudUpdate = performance.now();
+      const s = state.stats;
+      const hero = state.hero;
+      const world = state.world;
+      const pid = state.connection?.playerId ?? 0;
+      const inSafe = !!(world && ((world.flags[hero.cell.y * TERRAIN_SIZE + hero.cell.x] & TerrainFlag.SAFEZONE) !== 0));
+      const nextExp = Math.max(1, s?.nextExperience ?? 1);
+      const expRatio = s ? Math.max(0, Math.min(1, s.experience / nextExp)) : 0;
+      const activeBuffs = state.buffs?.of(pid).slice(0, 6).map((b) => ({
+        label: skillInfo(b)?.name.slice(0, 8) || `B${b}`,
+        secondsLeft: state.buffs?.secondsLeft(b) ?? 0,
+      })) ?? [];
+      const partyDots = (state.party?.members ?? []).flatMap((member) => {
+        const ch = [...(state.online?.characters.values() ?? [])].find((c) => c.kind === 'player' && c.name === member.name);
+        return ch ? [{ name: member.name, cell: { ...ch.cell } }] : [];
+      });
+      const skillHotkeys = [0, 1, 2, 3, 4].map((slot) => {
+        const hk = state.skills?.slotHotkey(slot, false) ?? -1;
+        const idx = hk >= 0 ? (state.skills?.hotkeys[hk] ?? -1) : -1;
+        const skill = idx >= 0 ? (state.skills?.skillAt(idx) ?? 0) : 0;
+        return {
+          hotkey: hk >= 0 ? String(hk) : String(slot + 1),
+          selected: idx >= 0 && idx === state.skills?.current,
+          cooldown: skill > 0 ? skillCooldowns.fraction(skill) : 0,
+          usable: skill > 0,
+        };
+      });
+      const potionCounts = [0, 1, 2, 3].map((slot) => (state.inventory && state.hotkeys ? state.hotkeys.count(slot, state.inventory.items) : 0));
+      const cfg = gameOptionsWindow?.current;
+      state.mobileHud.update({
+        heroName: hero.name,
+        className: CLASSES[heroClassIndex] ?? '',
+        classIndex: heroClassIndex,
+        level: s?.level ?? 1,
+        resets: s?.resets ?? 0,
+        safeZone: inSafe,
+        fps: currentFps,
+        batterySaver: cfg ? isBatterySaver(cfg.quality) : false,
+        wakeLock: cfg?.wakeLock ?? false,
+        hideOtherPlayers: cfg?.quality.hideOtherPlayers ?? false,
+        autoPlayActive: state.autoPlay?.active ?? false,
+        hp: s?.life ?? 0,
+        maxHp: s?.maxLife ?? 1,
+        sd: s?.shield ?? 0,
+        maxSd: s?.maxShield ?? 1,
+        mp: s?.mana ?? 0,
+        maxMp: s?.maxMana ?? 1,
+        ag: s?.ability ?? 0,
+        maxAg: s?.maxAbility ?? 1,
+        expFraction: expRatio,
+        expPercentText: `${(expRatio * 100).toFixed(2)}%`,
+        mapNumber: state.mapNumber,
+        mapName: state.mapNumber !== null ? mapName(state.mapNumber) : '',
+        cell: { ...hero.cell },
+        buffs: activeBuffs,
+        partyDots,
+        targetName: lockedTarget && !lockedTarget.dead ? lockedTarget.name : null,
+        skillHotkeys,
+        potionCounts,
+      });
+    }
     const position = `${state.hero.cell.x}, ${state.hero.cell.y}`;
     if (position !== shownPosition) { ui.position.textContent = position; shownPosition = position; }
     rec?.lap('interface');
@@ -1945,6 +2053,98 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   // Kalima's gates, Crywolf's HUD and altars, the castle siege's windows (ui/fieldEventWindows.ts).
   state.fieldEvents = setUpFieldEvents({ connection, online, hero: () => ({ level: stats.level, classIndex: character.classIndex }), inventory, mapNumber: () => state.mapNumber, world: () => state.world, worldGroup: () => state.worldGroup ?? null, camera, canvas: ui.canvas, audio: sounds.audio, music: sounds.musicStates, message: (text) => chat.add(text, 'system'), safeZone: inSafeZone, closeOthers: () => { itemWindows.closeAll(); characterWindow.close(); partyWindow.close(); }, bag: itemWindows.bag, guild: () => state.social?.guild ?? null, openMix: (type) => { void state.chaosMachine?.open(type); } });
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
+  heroClassIndex = character.classIndex;
+  state.mobileHud = new MobileHud({
+    chat,
+    stickMove: (nx, ny) => { stickVector = { nx, ny }; },
+    walkToCell: (cell) => {
+      state.combat?.cancel();
+      state.ground?.cancel();
+      online.walkTo(cell);
+    },
+    fight: () => {
+      const best = pickNearestMonster(9);
+      if (!best) { chat.add('No monster nearby.', 'system'); return; }
+      if (!state.combat?.cast(best, { ...best.cell })) state.combat?.attack(best);
+    },
+    cycleTarget: () => {
+      const candidates = [...online.characters.values()]
+        .filter((c) => c.kind === 'monster' && !c.dead && Math.max(Math.abs(c.cell.x - online.hero.cell.x), Math.abs(c.cell.y - online.hero.cell.y)) <= 10)
+        .sort((a, b) => Math.hypot(a.cell.x - online.hero.cell.x, a.cell.y - online.hero.cell.y) - Math.hypot(b.cell.x - online.hero.cell.x, b.cell.y - online.hero.cell.y));
+      if (candidates.length === 0) { lockedTarget = null; return null; }
+      const currentIdx = lockedTarget ? candidates.findIndex((c) => c.id === lockedTarget!.id) : -1;
+      lockedTarget = candidates[(currentIdx + 1) % candidates.length];
+      state.overlay?.showTarget(lockedTarget);
+      return lockedTarget.name;
+    },
+    pickNearest: () => {
+      const drops = [...(state.ground?.drops.values() ?? [])]
+        .filter((d) => Math.max(Math.abs(d.cell.x - online.hero.cell.x), Math.abs(d.cell.y - online.hero.cell.y)) <= 5);
+      if (drops.length === 0) { chat.add('No item nearby to pick up.', 'system'); return false; }
+      const filter = loadAutoLootFilter();
+      const chosen = filter === 'zen'
+        ? drops.find((d) => d.zen > 0) ?? drops[0]
+        : drops[0];
+      state.ground!.pickUp(chosen);
+      return true;
+    },
+    toggleAutoPlay: () => autoPlay.toggle(),
+    openAutoSettings: () => { void settingsWindow.toggle(); },
+    openBag: () => { void itemWindows.toggle(); },
+    openCharacter: () => { void characterWindow.toggle(); },
+    openParty: () => { void partyWindow.toggle(); },
+    openWarp: () => { void moveWindow.toggle(); },
+    openFullMap: () => { void miniMap.toggle(); },
+    openRanking: () => { ranking.toggle(); },
+    openGuide: () => document.getElementById('guideButton')?.click(),
+    openTimetable: () => timetable.toggle(),
+    openCashShop: () => { void state.cashShop?.toggle(); },
+    openSettings: () => { void gameOptionsWindow?.toggle(); },
+    sendCommand: (command) => online.say(command),
+    triggerAutoBuff: () => {
+      if (autoPlay.active) autoPlay.requestStop();
+      const firstSkill = skills.skillAt(skills.current);
+      if (firstSkill > 0) state.combat?.cast(online.hero, { ...online.hero.cell }, firstSkill);
+      else chat.add('Select a buff skill or enable Auto Buff inside Auto Play (Z).', 'system');
+    },
+    toggleHidePlayers: () => {
+      const next = !(gameOptionsWindow?.current.quality.hideOtherPlayers ?? false);
+      gameOptionsWindow?.setPerformanceOption({ hideOtherPlayers: next });
+      return next;
+    },
+    toggleBatterySaver: () => {
+      const next = !(gameOptionsWindow ? isBatterySaver(gameOptionsWindow.current.quality) : false);
+      gameOptionsWindow?.setBatterySaver(next);
+      return next;
+    },
+    toggleWakeLock: () => {
+      const next = !(gameOptionsWindow?.current.wakeLock ?? false);
+      gameOptionsWindow?.setWakeLock(next);
+      return next;
+    },
+    sellJunk: () => {
+      let sold = 0;
+      if (itemWindows.shop.isOpen) {
+        for (const [slot, item] of inventory.items) {
+          if (slot >= 12 && item.group <= 11 && !isHighValue(item) && !isSellingBan(item)) {
+            inventory.sell(slot);
+            sold++;
+            if (sold >= 8) break;
+          }
+        }
+      }
+      chat.add(sold > 0 ? `Queued selling ${sold} junk item(s).` : 'Talk to an NPC merchant first, then tap Sell Junk.', 'system');
+    },
+    repairAll: () => {
+      let sent = 0;
+      for (let slot = 0; slot < 12; slot++) {
+        if (inventory.items.has(slot)) { inventory.repair(slot, true); sent++; }
+      }
+      chat.add(sent > 0 ? `Repair requested for ${sent} equipped item(s).` : 'No equipped items need repair.', 'system');
+    },
+  });
+  state.mobileHud.setMode(gameOptionsWindow?.current.hudMode ?? 'auto');
+  state.mobileHud.setInWorld(true);
   earlyPackets.forEach((bytes) => online.handle(bytes));
   hideLoadingScreen();
   connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
@@ -1987,6 +2187,89 @@ function updateWebsiteLoginButtonLanguage(): void {
   if (button) button.textContent = currentLanguage() === 'vi' ? 'Đăng nhập trên trang web' : 'Log in on the website';
 }
 
+interface SavedAccountEntry {
+  username: string;
+  host: string;
+  port: string;
+  relay: string;
+  updatedAt: number;
+}
+
+const SAVED_ACCOUNTS_KEY = 'hnmo.savedAccounts';
+
+function loadSavedAccounts(): SavedAccountEntry[] {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SAVED_ACCOUNTS_KEY) ?? '[]') as unknown;
+    return Array.isArray(parsed)
+      ? parsed.filter((x): x is SavedAccountEntry => Boolean(x && typeof x.username === 'string' && x.username.trim()))
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberSavedAccount(entry: Omit<SavedAccountEntry, 'updatedAt'>): void {
+  if (!entry.username.trim()) return;
+  const normalized = entry.username.trim();
+  const next: SavedAccountEntry[] = [
+    { ...entry, username: normalized, updatedAt: Date.now() },
+    ...loadSavedAccounts().filter((a) => a.username.toLowerCase() !== normalized.toLowerCase()),
+  ].slice(0, 6);
+  try { localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+}
+
+function removeSavedAccount(username: string): void {
+  const next = loadSavedAccounts().filter((a) => a.username.toLowerCase() !== username.toLowerCase());
+  try { localStorage.setItem(SAVED_ACCOUNTS_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+}
+
+function renderSavedAccounts(): void {
+  const container = document.getElementById('savedAccounts');
+  if (!container) return;
+  const list = loadSavedAccounts();
+  container.hidden = list.length === 0;
+  container.replaceChildren();
+  if (list.length === 0) return;
+
+  const head = document.createElement('div');
+  head.className = 'saved-accounts-head';
+  head.textContent = currentLanguage() === 'vi' ? 'Tài khoản đã lưu' : 'Saved accounts';
+
+  const row = document.createElement('div');
+  row.className = 'saved-accounts-list';
+  for (const acc of list) {
+    const chip = document.createElement('span');
+    chip.className = 'saved-account-chip';
+    const pickBtn = document.createElement('button');
+    pickBtn.type = 'button';
+    pickBtn.className = 'saved-account-pick';
+    pickBtn.textContent = acc.username;
+    const meta = document.createElement('small');
+    meta.textContent = `:${acc.port || '44406'}`;
+    pickBtn.append(meta);
+    pickBtn.addEventListener('click', () => {
+      for (const [key, val] of Object.entries({ username: acc.username, host: acc.host, port: acc.port, relay: acc.relay })) {
+        const input = ui.loginForm.elements.namedItem(key) as HTMLInputElement | null;
+        if (input && val) input.value = val;
+      }
+      const pw = ui.loginForm.elements.namedItem('password') as HTMLInputElement | null;
+      pw?.focus();
+    });
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'saved-account-del';
+    delBtn.textContent = '×';
+    delBtn.setAttribute('aria-label', `Remove ${acc.username}`);
+    delBtn.addEventListener('click', () => {
+      removeSavedAccount(acc.username);
+      renderSavedAccounts();
+    });
+    chip.append(pickBtn, delBtn);
+    row.append(chip);
+  }
+  container.append(head, row);
+}
+
 function initLogin() {
   const saved = loadSettings();
   // HNMO.Web serves the page and the relay from the same address.
@@ -1997,7 +2280,8 @@ function initLogin() {
     if (input) input.value = String(value);
   }
   updateWebsiteLoginButtonLanguage();
-  onLanguageChange(() => updateWebsiteLoginButtonLanguage());
+  renderSavedAccounts();
+  onLanguageChange(() => { updateWebsiteLoginButtonLanguage(); renderSavedAccounts(); });
 
   const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(3000) })
     .then((r) => (r.ok ? (r.json() as Promise<{ requireWebsiteLogin?: boolean; connectServerPort?: number }>) : null))
@@ -2046,6 +2330,8 @@ function initLogin() {
     const form: LoginSettings = { username: field('username'), password: field('password'), host: field('host'), port: field('port'), relay: field('relay') };
     const { password, ...remembered } = form;
     saveSettings(remembered);
+    rememberSavedAccount(remembered);
+    renderSavedAccounts();
     startGame(async () => playOnline(await resolveConnectPort(form)));
   });
 }
@@ -2053,11 +2339,12 @@ function initLogin() {
 resize();
 initLogin();
 setUpGuide();
-settingsWindow = setUpSettings(
+gameOptionsWindow = settingsWindow = setUpSettings(
   { renderer, scene, camera, effects: () => state.effects?.root },
   {
     performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); },
     textureQualityChanged: () => { clearTextureCache(); },
+    hudModeChanged: (mode: HudMode) => { state.mobileHud?.setMode(mode); },
   },
 );
 // The login theme (it starts with the first click or key: browsers hold sound back until then).

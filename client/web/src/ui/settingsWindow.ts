@@ -16,8 +16,9 @@ import { audioSystem, MAX_VOLUME_LEVEL } from '../audio/audioSystem.js';
 import { setUiScalePercent, typographyScale } from './nativeText.js';
 import { setWordFilter, wordFilterOn } from '../game/chatExtras.js';
 import {
-  applyQuality, DEFAULT_QUALITY, FPS_CAPS, isLowSpec, isPerformanceMode, LOW_SPEC, PERFORMANCE_MODE, refreshQuality,
-  RENDER_SCALES, VIEW_DISTANCES, type QualitySettings, type QualityTarget,
+  applyQuality, BATTERY_SAVER, DEFAULT_QUALITY, FPS_CAPS, HUD_MODES, isBatterySaver, isLowSpec, isPerformanceMode,
+  LOW_SPEC, PERFORMANCE_MODE, refreshQuality, RENDER_SCALES, setWakeLockEnabled, VIEW_DISTANCES,
+  type HudMode, type QualitySettings, type QualityTarget,
 } from '../render/quality.js';
 import { currentLanguage } from '../i18n.js';
 
@@ -32,6 +33,8 @@ const VIEW_DISTANCE_LABELS = ['Near', 'Medium', 'Far'];
 /** The HNMO view distance dropdown's id among the window's dropdowns (the desktop's go up to 8). */
 const VIEW_DISTANCE_DROPDOWN = 100;
 const TEXTURE_QUALITY_DROPDOWN = 102;
+const HUD_MODE_DROPDOWN = 103;
+const HUD_MODE_LABELS = ['Auto', 'Modern Touch', 'Classic'];
 export type TextureQuality = 'compressed' | 'original';
 const TEXTURE_QUALITY_VALUES: readonly TextureQuality[] = ['compressed', 'original'];
 const TEXTURE_QUALITY_LABELS = ['Compressed (faster)', 'Original'];
@@ -46,6 +49,8 @@ export interface GameSettings {
   uiSize: number;
   showFps: boolean;
   textureQuality: TextureQuality;
+  wakeLock: boolean;
+  hudMode: HudMode;
 }
 
 const DEFAULT_SETTINGS: GameSettings = {
@@ -54,6 +59,8 @@ const DEFAULT_SETTINGS: GameSettings = {
   uiSize: 100,
   showFps: true,
   textureQuality: 'compressed',
+  wakeLock: false,
+  hudMode: 'auto',
 };
 
 function pick<T>(list: readonly T[], value: unknown, fallback: T): T {
@@ -71,6 +78,8 @@ export function loadSettings(): GameSettings {
       uiSize?: unknown;
       showFps?: unknown;
       textureQuality?: unknown;
+      wakeLock?: unknown;
+      hudMode?: unknown;
     };
     const q = saved.quality ?? {};
     settings.quality = {
@@ -86,6 +95,9 @@ export function loadSettings(): GameSettings {
     settings.uiSize = pick(UI_SIZES, saved.uiSize, 100);
     if (typeof saved.showFps === 'boolean') settings.showFps = saved.showFps;
     settings.textureQuality = pick(TEXTURE_QUALITY_VALUES, saved.textureQuality, 'compressed');
+    if (typeof saved.wakeLock === 'boolean') settings.wakeLock = saved.wakeLock;
+    else settings.wakeLock = typeof window !== 'undefined' && (window.matchMedia?.('(pointer: coarse)').matches ?? false);
+    settings.hudMode = pick(HUD_MODES, saved.hudMode, 'auto');
   } catch {
     /* storage unavailable or damaged: defaults */
   }
@@ -151,6 +163,8 @@ export interface SettingsActions {
   performanceReport?: () => void;
   /** Called when the player changes texture quality (compressed vs original). */
   textureQualityChanged?: (quality: TextureQuality) => void;
+  /** Called when the player changes touch HUD layout mode (auto / modern / classic). */
+  hudModeChanged?: (mode: HudMode) => void;
 }
 
 export class SettingsWindow {
@@ -159,11 +173,12 @@ export class SettingsWindow {
   private readonly settings: GameSettings = loadSettings();
   private readonly model: OptionModel;
   private extras: {
-    lowSpec?: HTMLDivElement; perfMode?: HTMLDivElement; hidePlayers?: HTMLDivElement; hideWingsPets?: HTMLDivElement; reducedEffects?: HTMLDivElement;
+    lowSpec?: HTMLDivElement; batterySaver?: HTMLDivElement; wakeLock?: HTMLDivElement; perfMode?: HTMLDivElement; hidePlayers?: HTMLDivElement; hideWingsPets?: HTMLDivElement; reducedEffects?: HTMLDivElement;
     mute?: HTMLDivElement; viewValue?: HTMLDivElement; viewList?: HTMLDivElement; viewOptions: HTMLDivElement[];
     texValue?: HTMLDivElement; texList?: HTMLDivElement; texOptions: HTMLDivElement[];
+    hudValue?: HTMLDivElement; hudList?: HTMLDivElement; hudOptions: HTMLDivElement[];
     textValue?: HTMLDivElement; textList?: HTMLDivElement; textOptions: HTMLDivElement[]; wordFilter?: HTMLDivElement;
-  } = { viewOptions: [], texOptions: [], textOptions: [] };
+  } = { viewOptions: [], texOptions: [], hudOptions: [], textOptions: [] };
   private toastEl: HTMLDivElement | null = null;
   private toastTimer = 0;
 
@@ -311,7 +326,30 @@ export class SettingsWindow {
       this.settings.textureQuality = TEXTURE_QUALITY_VALUES[index];
       saveSettings(this.settings);
       this.actions.textureQualityChanged?.(this.settings.textureQuality);
+    } else if (id === HUD_MODE_DROPDOWN && index >= 0 && index < HUD_MODES.length) {
+      this.settings.hudMode = HUD_MODES[index];
+      saveSettings(this.settings);
+      this.actions.hudModeChanged?.(this.settings.hudMode);
     }
+  }
+
+  setHudMode(mode: HudMode): void {
+    this.settings.hudMode = mode;
+    saveSettings(this.settings);
+    this.actions.hudModeChanged?.(mode);
+    this.update();
+  }
+
+  setWakeLock(enabled: boolean): void {
+    this.settings.wakeLock = enabled;
+    setWakeLockEnabled(enabled);
+    saveSettings(this.settings);
+    this.update();
+  }
+
+  setBatterySaver(enabled: boolean): void {
+    this.setQuality(enabled ? { ...BATTERY_SAVER } : { ...DEFAULT_QUALITY });
+    this.update();
   }
 
   setPerformanceOption(change: Partial<QualitySettings>): void {
@@ -346,6 +384,8 @@ export class SettingsWindow {
   private applyPage(): void {
     setUiScalePercent(this.settings.uiSize);
     document.documentElement.style.setProperty('--hnmo-text-scale', String(TEXT_SCALES[this.settings.textSize]));
+    setWakeLockEnabled(this.settings.wakeLock);
+    this.actions.hudModeChanged?.(this.settings.hudMode);
     const fps = document.getElementById('fps');
     if (fps) fps.hidden = !this.settings.showFps;
   }
@@ -389,6 +429,10 @@ export class SettingsWindow {
         this.update();
       });
       lowSpec.row.id = 'hnmo_low_spec';
+      const batterySaver = checkboxRow('Battery saver (30 FPS)', () => {
+        this.setBatterySaver(!isBatterySaver(this.settings.quality));
+      });
+      batterySaver.row.id = 'hnmo_battery_saver';
       const perfMode = checkboxRow('Performance mode (Alt+P)', () => {
         this.setQuality(isPerformanceMode(this.settings.quality) ? { hideOtherPlayers: false, hideWingsPets: false, reducedEffects: false, viewDistance: 1 } : { ...PERFORMANCE_MODE });
         this.update();
@@ -435,8 +479,8 @@ export class SettingsWindow {
       dropdown.append(value, list);
       row.append(label, dropdown);
       const first = graphics.querySelector(':scope > .option-section');
-      if (first) first.after(lowSpec.row, perfMode.row, hidePlayers.row, hideWingsPets.row, reducedEffects.row, row);
-      else graphics.prepend(lowSpec.row, perfMode.row, hidePlayers.row, hideWingsPets.row, reducedEffects.row, row);
+      if (first) first.after(lowSpec.row, batterySaver.row, perfMode.row, hidePlayers.row, hideWingsPets.row, reducedEffects.row, row);
+      else graphics.prepend(lowSpec.row, batterySaver.row, perfMode.row, hidePlayers.row, hideWingsPets.row, reducedEffects.row, row);
       const tex = this.dropdownRow('Texture quality', TEXTURE_QUALITY_DROPDOWN, TEXTURE_QUALITY_LABELS);
       tex.row.id = 'hnmo_texture_quality';
       row.after(tex.row);
@@ -458,7 +502,7 @@ export class SettingsWindow {
       }
       this.extras = {
         ...this.extras,
-        lowSpec: lowSpec.box, perfMode: perfMode.box, hidePlayers: hidePlayers.box,
+        lowSpec: lowSpec.box, batterySaver: batterySaver.box, perfMode: perfMode.box, hidePlayers: hidePlayers.box,
         hideWingsPets: hideWingsPets.box, reducedEffects: reducedEffects.box,
         viewValue: value, viewList: list, viewOptions: options,
         texValue: tex.value, texList: tex.list, texOptions: tex.options,
@@ -470,7 +514,15 @@ export class SettingsWindow {
       const { row, value, list, options } = this.dropdownRow('Text size', TEXT_SIZE_DROPDOWN, TEXT_SIZE_LABELS);
       row.id = 'hnmo_text_size';
       uiRow.after(row);
-      this.extras = { ...this.extras, textValue: value, textList: list, textOptions: options };
+      const hud = this.dropdownRow('Touch HUD layout', HUD_MODE_DROPDOWN, HUD_MODE_LABELS);
+      hud.row.id = 'hnmo_hud_mode';
+      row.after(hud.row);
+      const wake = checkboxRow('Keep screen awake', () => {
+        this.setWakeLock(!this.settings.wakeLock);
+      });
+      wake.row.id = 'hnmo_wake_lock';
+      hud.row.after(wake.row);
+      this.extras = { ...this.extras, textValue: value, textList: list, textOptions: options, hudValue: hud.value, hudList: hud.list, hudOptions: hud.options, wakeLock: wake.box };
     }
     const interfaceTab = panels[4];
     if (interfaceTab) {
@@ -515,13 +567,19 @@ export class SettingsWindow {
   }
 
   private refreshExtras(): void {
-    const { lowSpec, mute, viewValue, viewList, viewOptions, texValue, texList, texOptions, textValue, textList, textOptions } = this.extras;
+    const { lowSpec, batterySaver, wakeLock, mute, viewValue, viewList, viewOptions, texValue, texList, texOptions, hudValue, hudList, hudOptions, textValue, textList, textOptions } = this.extras;
     this.extras.wordFilter?.classList.toggle('checked', wordFilterOn());
     if (textValue) textValue.textContent = TEXT_SIZE_LABELS[this.settings.textSize] ?? '';
     textList?.classList.toggle('hidden', this.model.open_dropdown !== TEXT_SIZE_DROPDOWN);
     textOptions.forEach((option, i) => option.classList.toggle('selected', i === this.settings.textSize));
+    const hudIndex = HUD_MODES.indexOf(this.settings.hudMode);
+    if (hudValue) hudValue.textContent = HUD_MODE_LABELS[hudIndex] ?? '';
+    hudList?.classList.toggle('hidden', this.model.open_dropdown !== HUD_MODE_DROPDOWN);
+    hudOptions.forEach((option, i) => option.classList.toggle('selected', i === hudIndex));
+    wakeLock?.classList.toggle('checked', this.settings.wakeLock);
     const q = this.settings.quality;
     lowSpec?.classList.toggle('checked', isLowSpec(q));
+    batterySaver?.classList.toggle('checked', isBatterySaver(q));
     this.extras.perfMode?.classList.toggle('checked', isPerformanceMode(q));
     this.extras.hidePlayers?.classList.toggle('checked', q.hideOtherPlayers);
     this.extras.hideWingsPets?.classList.toggle('checked', q.hideWingsPets);

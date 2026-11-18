@@ -79,6 +79,32 @@ const CSS = `
 .hnmo-err { color: #ef7a6c; }
 .hnmo-bar { height: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
 .hnmo-bar > div { height: 100%; background: linear-gradient(90deg, #a88232, #f1cf7a); transition: width 0.2s; }
+@media (max-width: 920px), (pointer: coarse) {
+  .hnmo-modal {
+    top: auto;
+    bottom: env(safe-area-inset-bottom, 0px);
+    transform: translateX(-50%);
+    width: min(680px, 100vw);
+    max-height: min(78vh, 520px);
+    border-radius: 14px 14px 0 0;
+  }
+  .hnmo-modal-head {
+    padding: 12px 16px;
+    border-radius: 13px 13px 0 0;
+  }
+  .hnmo-modal-head::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 233, 168, 0.35);
+  }
+  .hnmo-btn, .hnmo-modal-close { min-height: 36px; }
+}
 `;
 
 let stylesInjected = false;
