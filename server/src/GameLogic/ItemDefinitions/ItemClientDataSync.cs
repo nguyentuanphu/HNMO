@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -16,7 +15,7 @@ using System.Text.Json.Nodes;
 using HNMO.Interfaces;
 
 /// <summary>
-/// Exports and synchronizes item definitions from the admin panel to the web and desktop client <c>Data/Items</c> and <c>Data/Effects/GlowColors.json</c> files.
+/// Synchronizes item definitions from the admin panel to the server configuration and web client <c>Data/Items</c> and <c>Data/Effects/GlowColors.json</c> files.
 /// </summary>
 public static class ItemClientDataSync
 {
@@ -276,49 +275,6 @@ public static class ItemClientDataSync
     }
 
     /// <summary>
-    /// Builds a downloadable ZIP archive containing desktop/web <c>Data/Items</c> export files and a portable overrides patch.
-    /// </summary>
-    /// <param name="dataRoot">Optional loose <c>Data</c> root to include full patched <c>GroupNN_*.json</c> files.</param>
-    /// <param name="overrides">The customized item definitions.</param>
-    /// <returns>The ZIP archive bytes.</returns>
-    public static byte[] BuildExportZip(string? dataRoot, IReadOnlyList<ItemClientMetadata> overrides)
-    {
-        ArgumentNullException.ThrowIfNull(overrides);
-
-        using var ms = new MemoryStream();
-        using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, leaveOpen: true))
-        {
-            if (!string.IsNullOrWhiteSpace(dataRoot) && Directory.Exists(Path.Combine(dataRoot, "Items")))
-            {
-                var patched = BuildPatchedFiles(dataRoot, overrides);
-                foreach (var (rel, content) in patched)
-                {
-                    WriteZipText(zip, $"Data/{rel}", content);
-                }
-            }
-
-            var portablePayload = JsonSerializer.Serialize(
-                new
-                {
-                    formatVersion = 1,
-                    exportedAtUtc = DateTime.UtcNow,
-                    items = overrides,
-                },
-                WriteOptions);
-            WriteZipText(zip, "Data/Items/hnmo-item-overrides.json", portablePayload + Environment.NewLine);
-            WriteZipText(
-                zip,
-                "README.txt",
-                "HNMO Item Definitions Export\r\n"
-                + "============================\r\n"
-                + "- Web client: automatically receives live overrides via /website/items without manual file editing.\r\n"
-                + "- Desktop client & web packs: extract Data/ into client/src/bin/Data (or your build Data folder) and rebuild packs if needed.\r\n");
-        }
-
-        return ms.ToArray();
-    }
-
-    /// <summary>
     /// Maps a <c>#rrggbb</c> hex color into a canonical <c>GlowColors.json</c> key.
     /// </summary>
     /// <param name="hexColor">The normalized <c>#rrggbb</c> hex string.</param>
@@ -505,13 +461,5 @@ public static class ItemClientDataSync
         {
             target.Remove(key);
         }
-    }
-
-    private static void WriteZipText(ZipArchive zip, string entryName, string content)
-    {
-        var entry = zip.CreateEntry(entryName, CompressionLevel.Optimal);
-        using var stream = entry.Open();
-        using var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
-        writer.Write(content);
     }
 }

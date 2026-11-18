@@ -112,12 +112,12 @@ public sealed class ItemClientMetadata
     public string TooltipTextVi { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets an optional source item group whose 3D model is reused in the web/desktop client.
+    /// Gets or sets an optional source item group whose 3D model is reused in the web game client.
     /// </summary>
     public int? ModelSourceGroup { get; set; }
 
     /// <summary>
-    /// Gets or sets an optional source item number whose 3D model is reused in the web/desktop client.
+    /// Gets or sets an optional source item number whose 3D model is reused in the web game client.
     /// </summary>
     public int? ModelSourceNumber { get; set; }
 

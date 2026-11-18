@@ -5,7 +5,6 @@
 namespace HNMO.Web.Tests;
 
 using System.IO;
-using System.IO.Compression;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +15,7 @@ using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Pages;
 
 /// <summary>
-/// Integration checks for the Item Definitions Admin page, public website override feed, and ZIP export controller.
+/// Integration checks for the Item Definitions Admin page and public website override feed.
 /// </summary>
 [TestFixture]
 public class ItemDefinitionsPageTests
@@ -82,10 +81,5 @@ public class ItemDefinitionsPageTests
         Assert.That(first.GetProperty("name").GetProperty("vi").GetString(), Is.EqualTo("Kích Thử Nghiệm"));
         Assert.That(first.GetProperty("glowColor").GetString(), Is.EqualTo("azure"));
         Assert.That(first.GetProperty("tooltip").GetProperty("en").GetString(), Is.EqualTo("Test note EN"));
-
-        var zipBytes = ItemClientDataSync.BuildExportZip(null, ItemDefinitionStateStore.GetAll());
-        using var ms = new MemoryStream(zipBytes);
-        using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
-        Assert.That(zip.GetEntry("Data/Items/hnmo-item-overrides.json"), Is.Not.Null);
     }
 }

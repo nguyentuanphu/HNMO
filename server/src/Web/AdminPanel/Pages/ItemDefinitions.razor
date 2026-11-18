@@ -30,7 +30,7 @@
         <ul class="mb-0 mt-1">
             <li>@L("Edit any existing item or create a new one: EN/VI name, inventory size (Width x Height), drop/tier level, equip requirements (Level, Str, Agi, Vit, Ene, Cmd), glow color, and custom EN/VI tooltip text.", "Chỉnh sửa vật phẩm sẵn có hoặc tạo mới: tên EN/VI, kích thước túi (Rộng x Cao), cấp rơi, yêu cầu trang bị (Cấp, Sức mạnh, Nhanh nhẹn, Thể lực, Năng lượng, Mệnh lệnh), màu phát sáng và ghi chú tooltip EN/VI.")</li>
             <li>@L("Saving updates the server GameConfiguration in PostgreSQL and publishes a live feed to /api/website/items (proxied as /website/items) so the web game receives changes automatically without manual JSON editing.", "Khi lưu, máy chủ cập nhật GameConfiguration trong PostgreSQL và phát trực tiếp qua /api/website/items (qua /website/items) để bản web nhận ngay mà không cần sửa file thủ công.")</li>
-            <li>@L("Use Sync to Data Folder when running with loose client Data files, or Download Client Export (.zip) to export updated JSON files for the desktop client and packed web builds from the same source.", "Dùng Đồng Bộ Thư Mục Data khi chạy Data rời, hoặc Tải Gói Xuất Client (.zip) để xuất file JSON cập nhật cho client PC và gói web nén từ cùng một nguồn.")</li>
+            <li>@L("Use Sync to Data Folder when running with loose client Data files so packed or loose web builds pick up updated JSON files.", "Dùng Đồng Bộ Thư Mục Data khi chạy Data rời để bản dựng web cập nhật trực tiếp tệp JSON.")</li>
         </ul>
     </div>
 }
@@ -49,14 +49,14 @@
                 }
                 else
                 {
-                    @L("Running in packed/DB mode: web game still reads live changes via /website/items; use Export (.zip) for desktop client.", "Đang chạy chế độ gói nén/CSDL: bản web vẫn nhận thay đổi trực tiếp qua /website/items; dùng Tải Xuất (.zip) cho client PC.")
+                    @L("Running in packed/DB mode: web game reads live changes directly via /website/items.", "Đang chạy chế độ gói nén/CSDL: bản web nhận thay đổi trực tiếp qua /website/items.")
                 }
             </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
             <button type="button"
                     class="btn btn-success btn-sm"
-                    title="@L("Create a brand-new item definition in server configuration and client override feed.", "Tạo định nghĩa vật phẩm mới trong cấu hình máy chủ và dữ liệu client.")"
+                    title="@L("Create a brand-new item definition in server configuration and web client override feed.", "Tạo định nghĩa vật phẩm mới trong cấu hình máy chủ và dữ liệu web.")"
                     @onclick="this.StartNewItem">
                 + @L("New Item", "Thêm Vật Phẩm")
             </button>
@@ -67,12 +67,6 @@
                     @onclick="this.SyncDataFolder">
                 @L("Sync to Data Folder", "Đồng Bộ Thư Mục Data")
             </button>
-            <a class="btn btn-outline-secondary btn-sm"
-               href="/api/admin/item-definitions/export"
-               download="hnmo-item-definitions-export.zip"
-               title="@L("Download updated Data/Items JSON files and portable manifest as a .zip bundle for desktop and web builds.", "Tải gói .zip gồm Data/Items JSON đã cập nhật cho client PC và bản dựng web.")">
-                @L("Download Client Export (.zip)", "Tải Gói Xuất Client (.zip)")
-            </a>
         </div>
     </div>
 </div>
