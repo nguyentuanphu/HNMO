@@ -231,6 +231,36 @@ const copy = {
     showAll: "Show all",
     showLess: "Show fewer",
     scheduleTitle: "Starting in the next 24 hours.",
+    ttAll: "All",
+    ttEvents: "Events",
+    ttInvasions: "Invasions",
+    ttBosses: "Bosses",
+    ttColName: "Event / Boss",
+    ttColSydney: "Next (Sydney)",
+    ttColLocal: "Your time",
+    ttColCountdown: "Status",
+    ttColMap: "Map",
+    ttColDrops: "Drops",
+    ttColSchedule: "Daily (Sydney)",
+    ttActive: "Active now",
+    ttNone: "No scheduled entries in this category.",
+    ttOffline: "Full timetable is unavailable while this server is offline or the feature is disabled.",
+    ttGmWinners: "Recent Find the GM winners",
+    luckyNav: "Lucky number",
+    luckyTitle: "Daily lucky number.",
+    luckyOffline: "Daily lucky number is currently turned off or unavailable.",
+    luckyDate: "Date",
+    luckyWinning: "Winning #",
+    luckyWinners: "Winners",
+    luckyNone: "No draws recorded yet.",
+    marriageNav: "Marriage",
+    marriageTitle: "Married couples in the realm.",
+    marriageOffline: "Marriage is currently turned off or unavailable.",
+    marriagePair: "Couple",
+    marriageCoupleTitle: "Title",
+    marriageDate: "Married (Sydney)",
+    marriageDays: "Days",
+    marriageNone: "No married couples yet.",
     rankingsNav: "Rankings",
     rankingsTitle: "The realm's best.",
     topCharacters: "Top characters",
@@ -290,6 +320,9 @@ const copy = {
     source: "Direct from the game server",
     realmTitle: "Know your realm.",
     server: "Server",
+    worldOpenNow: "Open",
+    worldOpensAt: "Opens",
+    worldLockedNotice: "World opens at %s (Sydney time).",
     truth:
       "Rates and rules reflect the running server. No estimated statistics.",
     eventsTitle: "Events",
@@ -305,11 +338,77 @@ const copy = {
     createText: "Register through the game launcher’s account portal.",
     choose: "Choose your path",
     chooseText:
-      "Open the browser client, select your server, and create your character.",
+      "Sign in on the website and click Play now to go straight to server choice, or open the browser client directly.",
     download: "Take the realm with you",
     downloadText:
       "One download for Windows, Ubuntu and macOS. Unzip it and run Start HNMO.bat (Windows) or start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Download HNMO →",
+    marketNav: "Item Market",
+    marketTitle: "Escrow Item Market",
+    marketHint: "Safe player-to-player escrow market in-game (F6 or NPC 547 Julia) and on the website. Bought items arrive in your escrow mailbox in-game.",
+    marketOffline: "Item Market data is unavailable: the server didn't answer.",
+    marketOff: "Item Market is turned off on this server.",
+    marketNone: "No items listed right now.",
+    marketItem: "Item",
+    marketSeller: "Seller",
+    marketPrice: "Price",
+    marketExpires: "Expires (Sydney)",
+    jbNav: "Jewel Bank",
+    jbTitle: "Jewel Bank & Master Skill Clear",
+    jbHint: "Deposit Bless, Soul, Life, Creation, Chaos, and more per account (F7 in-game) and withdraw in-game or on your account page. Clear master skill points via F7, /clearmaster, or Resets.",
+    jbOffline: "Jewel Bank data is unavailable.",
+    jbOff: "Jewel Bank is turned off on this server.",
+    jbNone: "No jewels configured.",
+    jbJewel: "Jewel",
+    jbCap: "Account Limit",
+    cuNav: "Today's Cap",
+    cuTitle: "Catch-up Level & Reset Cap",
+    cuHint: "Server-wide daily progression limit so late starters can catch up. Updates in Sydney time.",
+    cuOffline: "Catch-up cap status is unavailable.",
+    cuOff: "Catch-up cap is turned off on this server.",
+    cuLevelCap: "Today's level cap: Lv.%s / %s",
+    cuResetCap: "Today's daily reset limit: %s",
+    cuUnlockedBy: "Unlocked by %s (+%s/day in Sydney time).",
+    cuWaiting: "Starts rising +%s/day once the first player reaches Lv.%s.",
+    cuNextRise: "Next Sydney day rise: %s",
+    spNav: "Season Plan",
+    spTitle: "Season Progression Timeline",
+    spHint: "Features unlock in stages (+9 cap -> Master -> Harmony -> Wing 2 -> Fenrir -> 380 Items -> Wing 3) when their date arrives or condition is met.",
+    spOffline: "Season Plan timeline is unavailable.",
+    spOff: "Season Plan progressive lock is turned off on this server.",
+    spOpen: "OPEN",
+    spLocked: "LOCKED",
+    leftoversNav: "Leftovers & Exchange",
+    leftoversTitle: "Combining leftovers & surplus exchange",
+    leftoversRecipesTitle: "Upgrade recipes (F10)",
+    leftoversOffersTitle: "Surplus material exchange",
+    leftoversEmpty: "Combining leftovers & surplus exchange is not enabled yet.",
+    leftoversCapNote: "Season box upgrade cap: +%s (in-game F10 or NPC %s)",
+    leftoversRecipeCol: "Recipe",
+    leftoversInputsCol: "Required items",
+    leftoversRateCol: "Rate / Zen",
+    leftoversOfferCol: "Offer",
+    leftoversNeedCol: "Surplus item",
+    leftoversRewardCol: "Reward",
+    mountsNav: "Mount chain",
+    mountsTitle: "Mount chain & collection",
+    mountsEmpty: "Mount chain is not enabled yet.",
+    mountsNote: "Golden Bosses drop +%s Shards (%s% chance) · %s collector accounts (in-game Shift+U)",
+    mountsTierCol: "Mount",
+    mountsReqCol: "Recipe / Material",
+    mountsBonusCol: "PvE Bonus",
+    mountsOwnersCol: "Collectors",
+    partySpotsNav: "Auto-Party spots",
+    partySpotsTitle: "Auto-Party hunting spots & /partypass",
+    partySpotsEmpty: "Party Options (/partypass & Auto-Party) is not enabled yet.",
+    partySpotsNote: "Type /partypass PASS or press P in-game to join open spot parties (%s preset spots)",
+    partySpotsLeaderCol: "Leader",
+    partySpotsSpotCol: "Hunting spot",
+    partySpotsMembersCol: "Members",
+    partySpotsModeCol: "Access",
+    partySpotsOpen: "Auto-join",
+    partySpotsLocked: "Password (/partypass)",
+    partySpotsNone: "No hunting spot parties recruiting right now.",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -331,6 +430,11 @@ const copy = {
     empty: "No entries supplied by this server.",
     updated: "Updated",
     all: "Server",
+    dropRateLabel: "Drop rate",
+    zenRateLabel: "Zen rate",
+    pvpAccessLabel: "PvP / Access",
+    vipOnlyBadge: "VIP only",
+    openAccessBadge: "All accounts",
     mapsRate: "Map experience",
     nameFallback: "Unnamed",
     noSchedule:
@@ -565,6 +669,36 @@ const copy = {
     showAll: "Xem tất cả",
     showLess: "Thu gọn",
     scheduleTitle: "Bắt đầu trong 24 giờ tới.",
+    ttAll: "Tất cả",
+    ttEvents: "Sự kiện",
+    ttInvasions: "Xâm lăng",
+    ttBosses: "Boss",
+    ttColName: "Sự kiện / Boss",
+    ttColSydney: "Giờ tới (Sydney)",
+    ttColLocal: "Giờ máy bạn",
+    ttColCountdown: "Trạng thái",
+    ttColMap: "Bản đồ",
+    ttColDrops: "Vật phẩm rơi",
+    ttColSchedule: "Hàng ngày (Sydney)",
+    ttActive: "Đang diễn ra",
+    ttNone: "Không có mục nào trong danh mục này.",
+    ttOffline: "Chưa tải được bảng lịch đầy đủ hoặc tính năng đang tắt.",
+    ttGmWinners: "Người thắng Truy tìm GM gần đây",
+    luckyNav: "Con số may mắn",
+    luckyTitle: "Quay số may mắn hàng ngày.",
+    luckyOffline: "Tính năng Con số may mắn hiện đang tắt hoặc máy chủ chưa trả lời.",
+    luckyDate: "Ngày",
+    luckyWinning: "Số trúng",
+    luckyWinners: "Người trúng",
+    luckyNone: "Chưa có kỳ quay nào.",
+    marriageNav: "Kết hôn",
+    marriageTitle: "Các cặp đôi trong lục địa.",
+    marriageOffline: "Tính năng Kết hôn hiện đang tắt hoặc máy chủ chưa trả lời.",
+    marriagePair: "Cặp đôi",
+    marriageCoupleTitle: "Danh hiệu",
+    marriageDate: "Ngày cưới (Sydney)",
+    marriageDays: "Số ngày",
+    marriageNone: "Chưa có cặp đôi nào kết hôn.",
     rankingsNav: "Xếp hạng",
     rankingsTitle: "Những người mạnh nhất.",
     topCharacters: "Nhân vật hàng đầu",
@@ -624,6 +758,9 @@ const copy = {
     source: "Dữ liệu trực tiếp từ máy chủ trò chơi",
     realmTitle: "Tìm hiểu máy chủ.",
     server: "Máy chủ",
+    worldOpenNow: "Đang mở",
+    worldOpensAt: "Mở lúc",
+    worldLockedNotice: "Thế giới mở cửa lúc %s (giờ Sydney).",
     truth:
       "Tỷ lệ và quy tắc lấy từ máy chủ đang chạy. Không dùng số liệu ước tính.",
     eventsTitle: "Sự kiện",
@@ -638,11 +775,77 @@ const copy = {
     create: "Tạo tài khoản",
     createText: "Đăng ký tại trang tài khoản của trình khởi chạy trò chơi.",
     choose: "Chọn con đường của bạn",
-    chooseText: "Mở trò chơi trên trình duyệt, chọn máy chủ và tạo nhân vật.",
+    chooseText: "Đăng nhập trên website và bấm Chơi ngay để vào thẳng phần chọn máy chủ, hoặc mở trò chơi trực tiếp trên trình duyệt.",
     download: "Mang theo thế giới của bạn",
     downloadText:
       "Một bản tải cho Windows, Ubuntu và macOS. Giải nén rồi chạy Start HNMO.bat (Windows) hoặc start-hnmo.sh (Ubuntu, macOS).",
     downloadLink: "Tải HNMO →",
+    marketNav: "Chợ vật phẩm",
+    marketTitle: "Chợ vật phẩm an toàn",
+    marketHint: "Mua bán vật phẩm qua kho giữ đồ trong game (phím F6 hoặc NPC 547 Julia) và trên website. Đồ đã mua sẽ được chuyển vào Kho chợ trong game.",
+    marketOffline: "Không xem được Chợ vật phẩm: máy chủ không trả lời.",
+    marketOff: "Chợ vật phẩm đang tắt trên máy chủ này.",
+    marketNone: "Hiện chưa có vật phẩm nào được rao bán.",
+    marketItem: "Vật phẩm",
+    marketSeller: "Người bán",
+    marketPrice: "Giá",
+    marketExpires: "Hết hạn (Sydney)",
+    jbNav: "Ngân hàng ngọc",
+    jbTitle: "Ngân hàng ngọc & Tẩy điểm Master",
+    jbHint: "Gửi Ngọc Ước Nguyện, Tâm Linh, Sinh Mệnh, Sáng Tạo, Hỗn Nguyên theo tài khoản (F7 trong game) và rút bất cứ lúc nào. Hỗ trợ tẩy hoàn điểm Master qua F7, /clearmaster hoặc trang Reset.",
+    jbOffline: "Không xem được Ngân hàng ngọc.",
+    jbOff: "Ngân hàng ngọc đang tắt trên máy chủ này.",
+    jbNone: "Chưa cấu hình loại ngọc nào.",
+    jbJewel: "Loại ngọc",
+    jbCap: "Giới hạn/Tài khoản",
+    cuNav: "Giới hạn ngày",
+    cuTitle: "Giới hạn cấp & Reset đuổi kịp",
+    cuHint: "Giới hạn tiến độ theo ngày giúp người chơi mới dễ dàng đuổi kịp. Tự động tăng theo giờ Sydney.",
+    cuOffline: "Không xem được giới hạn đuổi kịp.",
+    cuOff: "Tính năng giới hạn đuổi kịp đang tắt trên máy chủ này.",
+    cuLevelCap: "Giới hạn cấp hôm nay: Cấp %s / %s",
+    cuResetCap: "Giới hạn reset hôm nay: %s lần",
+    cuUnlockedBy: "Mở khóa bởi %s (+%s/ngày theo giờ Sydney).",
+    cuWaiting: "Bắt đầu tăng +%s/ngày khi có người đầu tiên chạm cấp %s.",
+    cuNextRise: "Lần tăng tiếp theo (Sydney): %s",
+    spNav: "Lộ trình mùa",
+    spTitle: "Lộ trình mở khóa mùa giải",
+    spHint: "Tính năng mở dần theo từng giai đoạn (+9 -> Master -> Harmony -> Cánh C2 -> Sói Tinh -> Đồ 380 -> Cánh C3) theo ngày hoặc điều kiện máy chủ.",
+    spOffline: "Không xem được Lộ trình mùa giải.",
+    spOff: "Lộ trình khóa tính năng đang tắt trên máy chủ này.",
+    spOpen: "ĐÃ MỞ",
+    spLocked: "ĐANG KHÓA",
+    leftoversNav: "Đổi đồ dư",
+    leftoversTitle: "Nâng cấp đồ dư & Đổi nguyên liệu",
+    leftoversRecipesTitle: "Công thức nâng hộp (F10)",
+    leftoversOffersTitle: "Gói đổi nguyên liệu dư",
+    leftoversEmpty: "Tính năng Đổi đồ dư & Nâng hộp hiện đang tắt.",
+    leftoversCapNote: "Giới hạn nâng hộp mùa hiện tại: +%s (mở F10 hoặc NPC %s)",
+    leftoversRecipeCol: "Công thức",
+    leftoversInputsCol: "Nguyên liệu cần",
+    leftoversRateCol: "Tỉ lệ / Zen",
+    leftoversOfferCol: "Gói đổi",
+    leftoversNeedCol: "Vật phẩm dư",
+    leftoversRewardCol: "Phần thưởng",
+    mountsNav: "Thú cưỡi",
+    mountsTitle: "Chuỗi thú cưỡi & Bộ sưu tập",
+    mountsEmpty: "Tính năng Chuỗi thú cưỡi hiện đang tắt.",
+    mountsNote: "Boss Hoàng Kim rơi +%s Mảnh (%s%) · %s tài khoản đã sưu tầm (mở Shift+U)",
+    mountsTierCol: "Thú cưỡi",
+    mountsReqCol: "Nguyên liệu nâng cấp",
+    mountsBonusCol: "Hiệu ứng PvE",
+    mountsOwnersCol: "Số chủ sở hữu",
+    partySpotsNav: "Nhóm bãi săn",
+    partySpotsTitle: "Tự động tìm nhóm & /partypass",
+    partySpotsEmpty: "Tính năng Tổ đội nhanh hiện đang tắt.",
+    partySpotsNote: "Gõ /partypass MATKHAU hoặc nhấn P trong game để tìm bãi (%s bãi gợi ý)",
+    partySpotsLeaderCol: "Trưởng nhóm",
+    partySpotsSpotCol: "Bãi săn",
+    partySpotsMembersCol: "Thành viên",
+    partySpotsModeCol: "Vào nhóm",
+    partySpotsOpen: "Tự động vào",
+    partySpotsLocked: "Mật khẩu (/partypass)",
+    partySpotsNone: "Hiện chưa có nhóm nào đang tuyển ở bãi săn.",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -665,6 +868,11 @@ const copy = {
     empty: "Máy chủ chưa cung cấp mục nào.",
     updated: "Cập nhật",
     all: "Máy chủ",
+    dropRateLabel: "Tỉ lệ rơi đồ",
+    zenRateLabel: "Tỉ lệ rơi Zen",
+    pvpAccessLabel: "PvP / Quyền vào",
+    vipOnlyBadge: "Chỉ VIP",
+    openAccessBadge: "Mọi tài khoản",
     mapsRate: "Kinh nghiệm bản đồ",
     nameFallback: "Chưa có tên",
     noSchedule:
@@ -696,10 +904,15 @@ interface GameEvent extends Named {
 }
 interface Realm {
   id: number;
+  description?: string;
+  vipOnly?: boolean;
+  pvpEnabled?: boolean;
   players: number;
   capacity: number;
   experienceRate: number;
   masterExperienceRate: number;
+  dropRate?: number;
+  zenRate?: number;
   maximumLevel: number;
   maximumMasterLevel: number;
   maximumCharactersPerAccount: number;
@@ -708,8 +921,32 @@ interface Realm {
   maps: GameMap[];
   events: GameEvent[];
 }
+interface WorldServerEntry {
+  id: number;
+  players: number;
+  capacity: number;
+  isRunning: boolean;
+}
+interface WorldGroup {
+  worldId: string;
+  nameEn: string;
+  nameVi: string;
+  isRunning: boolean;
+  isOpen: boolean;
+  openingDateUtc: string | null;
+  openingDateSydney: string;
+  experienceMultiplier: number;
+  dropMultiplier: number;
+  zenMultiplier: number;
+  eventPresetEn: string;
+  eventPresetVi: string;
+  totalPlayers: number;
+  totalCapacity: number;
+  servers: WorldServerEntry[];
+}
 interface Snapshot {
   updatedAt: string;
+  worlds?: WorldGroup[];
   servers: Realm[];
 }
 let language: Language = "en";
@@ -783,9 +1020,14 @@ function empty(id: string): void {
 }
 function renderStats(realm: Realm): void {
   const stats = clear("stats");
+  const accessLabel = realm.vipOnly ? `🔒 ${t("vipOnlyBadge")}` : t("openAccessBadge");
+  const pvpLabel = realm.pvpEnabled === false ? "Non-PvP" : "PvP";
   const fields: [string, string][] = [
     [`${realm.players} / ${realm.capacity}`, t("players")],
     [`${realm.experienceRate}×`, t("experience")],
+    [`${realm.dropRate ?? 1}×`, t("dropRateLabel")],
+    [`${realm.zenRate ?? 1}×`, t("zenRateLabel")],
+    [`${pvpLabel} · ${accessLabel}`, t("pvpAccessLabel")],
     [String(realm.maximumLevel), t("maxLevel")],
     [String(realm.maximumPartySize), t("party")],
     [`${realm.masterExperienceRate}×`, t("master")],
@@ -870,13 +1112,63 @@ function render(): void {
     element(lang).setAttribute("aria-pressed", String(language === lang));
   element("connection").textContent = t(snapshot ? "online" : "offline");
   element("notice").textContent = snapshot ? "" : t("unavailable");
+  const worldsContainer = clear("worlds-group");
   const select = element("server") as HTMLSelectElement;
   select.replaceChildren();
-  for (const realm of snapshot?.servers ?? []) {
-    const option = new Option(`${t("all")} ${realm.id}`, String(realm.id));
-    select.add(option);
+  const worlds = snapshot?.worlds ?? [];
+  if (worlds.length > 0) {
+    for (const world of worlds) {
+      const worldName = language === "vi" ? world.nameVi : world.nameEn;
+      const optgroup = document.createElement("optgroup");
+      optgroup.label = worldName;
+      for (const srv of world.servers) {
+        optgroup.append(new Option(`${worldName} · ${t("all")} ${srv.id}`, String(srv.id)));
+      }
+      select.add(optgroup);
+
+      const card = node("article", "", "world-card");
+      const header = document.createElement("header");
+      const title = document.createElement("strong");
+      title.textContent = worldName;
+      const badge = node(
+        "small",
+        world.isOpen
+          ? `${t("worldOpenNow")} · ${world.totalPlayers}`
+          : `${t("worldOpensAt")} ${world.openingDateSydney}`,
+      );
+      header.append(title, badge);
+      const ratesLine = node(
+        "small",
+        `EXP ×${world.experienceMultiplier} · Drop ×${world.dropMultiplier} · Zen ×${world.zenMultiplier} · ${language === "vi" ? world.eventPresetVi : world.eventPresetEn}`,
+      );
+      const buttons = node("div", "", "world-servers");
+      for (const srv of world.servers) {
+        const srvRealm = snapshot?.servers.find((s) => s.id === srv.id);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const vipTag = srvRealm?.vipOnly ? ` 🔒 ${t("vipOnlyBadge")}` : "";
+        btn.textContent = `${t("server")} ${srv.id} (${srv.players}/${srv.capacity})${vipTag}`;
+        btn.setAttribute("aria-current", String(String(srv.id) === selected));
+        btn.addEventListener("click", () => {
+          selected = String(srv.id);
+          render();
+        });
+        buttons.append(btn);
+      }
+      card.append(header, ratesLine, buttons);
+      worldsContainer.append(card);
+    }
+  } else {
+    for (const realm of snapshot?.servers ?? []) {
+      const option = new Option(`${t("all")} ${realm.id}`, String(realm.id));
+      select.add(option);
+    }
   }
   select.value = selected;
+  const matchedWorld = worlds.find((w) => w.servers.some((s) => String(s.id) === selected));
+  if (matchedWorld && !matchedWorld.isOpen) {
+    element("notice").textContent = t("worldLockedNotice").replace("%s", matchedWorld.openingDateSydney || matchedWorld.openingDateUtc || "");
+  }
   const realm = current();
   if (!realm) {
     for (const id of ["stats", "event-list", "classes", "maps"]) empty(id);
@@ -1073,6 +1365,20 @@ element("google-linked").addEventListener("submit", (event) => {
   const newPassword = (form.elements.namedItem("newPassword") as HTMLInputElement).value;
   if (!newPassword) return;
   void post("/portal/google", { credential: googleCredential, newPassword }).then(showGoogleAnswer);
+});
+
+document.getElementById("google-play")?.addEventListener("click", (event) => {
+  if (!googleCredential) return;
+  event.preventDefault();
+  void post("/portal/google-ticket", { credential: googleCredential }).then((answer) => {
+    const ticket = (answer as { ticket?: string }).ticket;
+    const loginName = answer.loginName;
+    if (ticket && loginName) {
+      location.href = `/index.html#ticket=${encodeURIComponent(ticket)}&account=${encodeURIComponent(loginName)}`;
+    } else if (answer.error) {
+      message("google-message", answer.error, "error");
+    }
+  });
 });
 
 // After the page has loaded: a slow or blocked Google script must not hold up the page.
@@ -1933,4 +2239,768 @@ element("refresh").addEventListener("click", () => void refreshResets());
 void refreshResets();
 setInterval(() => {
   if (!document.hidden) void refreshResets();
+}, 120000);
+
+// ---------- top-up milestones (public tiers on home page, /website/topup-milestones) ----------
+
+interface PublicMilestoneItem {
+  group: number;
+  number: number;
+  level: number;
+  quantity: number;
+  name?: string;
+}
+
+interface PublicMilestoneStep {
+  id: string;
+  thresholdVnd: number;
+  titleEn: string;
+  titleVi: string;
+  coinType: string;
+  coins: number;
+  zen: number;
+  items: PublicMilestoneItem[];
+}
+
+interface PublicTopUpMilestones {
+  enabled: boolean;
+  steps?: PublicMilestoneStep[];
+}
+
+let publicMilestones: PublicTopUpMilestones | null = null;
+
+function renderPublicMilestones(): void {
+  const section = document.getElementById("topup-milestones-section");
+  if (!section) return;
+  const data = publicMilestones;
+  if (!data?.enabled || !data.steps?.length) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  const vi = document.documentElement.lang === "vi";
+  element("topup-milestones-heading").textContent = vi ? "Thưởng mốc nạp" : "Top-up milestones";
+  element("topup-milestones-notice").textContent = vi
+    ? "Nhận thưởng một lần mỗi mốc khi tổng tiền nạp tích lũy đạt ngưỡng."
+    : "Claim each milestone reward once when cumulative confirmed top-ups pass the threshold.";
+  const list = clear("topup-milestones-list");
+  for (const step of data.steps) {
+    const card = document.createElement("article");
+    card.className = "panel";
+    const h3 = document.createElement("h3");
+    h3.textContent = `${step.thresholdVnd.toLocaleString(vi ? "vi-VN" : "en-AU")} VND — ${vi && step.titleVi ? step.titleVi : step.titleEn}`;
+    const rewards: string[] = [];
+    if (step.coins > 0) rewards.push(`${step.coins.toLocaleString(vi ? "vi-VN" : "en-AU")} ${step.coinType}`);
+    if (step.zen > 0) rewards.push(`${step.zen.toLocaleString(vi ? "vi-VN" : "en-AU")} Zen`);
+    for (const item of step.items) {
+      rewards.push(`${item.name ?? `Item ${item.group}:${item.number}`}${item.level > 0 ? ` +${item.level}` : ""} ×${item.quantity}`);
+    }
+    const p = document.createElement("p");
+    p.textContent = rewards.join(" · ");
+    card.append(h3, p);
+    list.append(card);
+  }
+}
+
+async function refreshPublicMilestones(): Promise<void> {
+  try {
+    const response = await fetch("/website/topup-milestones", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    publicMilestones = (await response.json()) as PublicTopUpMilestones;
+  } catch {
+    publicMilestones = null;
+  }
+  renderPublicMilestones();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderPublicMilestones());
+element("refresh").addEventListener("click", () => void refreshPublicMilestones());
+void refreshPublicMilestones();
+
+// ---------- full event, invasion & boss timetable (/website/timetable) ----------
+
+interface PublicTimetableEntry {
+  id: string;
+  category: "event" | "invasion" | "boss" | "custom";
+  nameEn: string;
+  nameVi: string;
+  mapsEn: string;
+  mapsVi: string;
+  dropsEn: string;
+  dropsVi: string;
+  schedule: string;
+  durationMin: number;
+  active: boolean;
+  nextStart: number | null;
+  endsAt: number | null;
+}
+
+interface PublicTimetable {
+  v: number;
+  off?: boolean;
+  now: number;
+  timeZone: string;
+  entries: PublicTimetableEntry[];
+  findGmWinners?: { name: string; map: string; coins: number; coinType: string; zen: number; at: number }[];
+}
+
+let timetableData: PublicTimetable | null = null;
+let timetableFilter: "all" | "event" | "invasion" | "boss" = "all";
+
+function formatSydneyOrLocal(atMs: number | null, timeZone?: string): string {
+  if (!atMs) return "—";
+  return new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", {
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    ...(timeZone ? { timeZone } : {}),
+  }).format(atMs);
+}
+
+function renderTimetable(): void {
+  const filters = clear("timetable-filters");
+  const filterDefs: ["all" | "event" | "invasion" | "boss", string][] = [
+    ["all", t("ttAll")],
+    ["event", t("ttEvents")],
+    ["invasion", t("ttInvasions")],
+    ["boss", t("ttBosses")],
+  ];
+  for (const [key, label] of filterDefs) {
+    const btn = node("button", label, key === timetableFilter ? "btn" : "btn muted") as HTMLButtonElement;
+    btn.type = "button";
+    btn.addEventListener("click", () => {
+      timetableFilter = key;
+      renderTimetable();
+    });
+    filters.append(btn);
+  }
+
+  const notice = element("timetable-notice");
+  const gmEl = element("timetable-gm-winners");
+  if (!timetableData || timetableData.off) {
+    notice.textContent = timetableData?.off ? t("ttOffline") : "";
+    table("timetable-table", [], [], timetableData ? "" : t("ttOffline"));
+    gmEl.textContent = "";
+    return;
+  }
+
+  notice.textContent = "";
+  const tz = timetableData.timeZone || "Australia/Sydney";
+  const rows = timetableData.entries
+    .filter((entry) => timetableFilter === "all" || entry.category === timetableFilter)
+    .map((entry) => {
+      const name = language === "vi" ? entry.nameVi : entry.nameEn;
+      const map = language === "vi" ? entry.mapsVi : entry.mapsEn;
+      const drops = language === "vi" ? entry.dropsVi : entry.dropsEn;
+      const status = entry.active
+        ? t("ttActive")
+        : entry.nextStart
+          ? (() => {
+              const sec = Math.max(0, Math.round((entry.nextStart - Date.now()) / 1000));
+              const h = Math.floor(sec / 3600);
+              const m = Math.floor((sec % 3600) / 60);
+              return h > 0 ? `${h}h ${m}m` : `${m}m`;
+            })()
+          : "—";
+      return [
+        name,
+        formatSydneyOrLocal(entry.nextStart, tz),
+        formatSydneyOrLocal(entry.nextStart),
+        status,
+        map || "—",
+        drops || "—",
+        entry.schedule || "—",
+      ];
+    });
+
+  table(
+    "timetable-table",
+    [
+      [t("ttColName"), false],
+      [t("ttColSydney"), false],
+      [t("ttColLocal"), false],
+      [t("ttColCountdown"), false],
+      [t("ttColMap"), false],
+      [t("ttColDrops"), false],
+      [t("ttColSchedule"), false],
+    ],
+    rows,
+    t("ttNone"),
+  );
+
+  const winners = timetableData.findGmWinners ?? [];
+  gmEl.textContent = winners.length
+    ? `${t("ttGmWinners")}: ` + winners.slice(0, 5).map((w) => `${w.name} (${w.map})`).join(", ")
+    : "";
+}
+
+async function refreshTimetable(): Promise<void> {
+  try {
+    const response = await fetch("/website/timetable", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicTimetable;
+    if (typeof data !== "object" || data === null || !Array.isArray(data.entries)) throw new Error("Invalid timetable");
+    timetableData = data;
+  } catch {
+    timetableData = null;
+  }
+  renderTimetable();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderTimetable());
+element("refresh").addEventListener("click", () => void refreshTimetable());
+void refreshTimetable();
+setInterval(() => {
+  if (!document.hidden) void refreshTimetable();
+}, 60000);
+
+// ---------- daily lucky number (public draws on home page, /website/lucky-number) ----------
+
+interface PublicLuckyNumber {
+  enabled: boolean;
+  roundKey: string;
+  nextDrawAt: number;
+  timeZone: string;
+  minNumber: number;
+  maxNumber: number;
+  odds: { exactPercent: number; lastDigitPercent: number };
+  prizes: {
+    exact: { coins: number; coinType: string; jewelCount: number; jewelName: string };
+    lastDigit: { enabled: boolean; coins: number; coinType: string; jewelCount: number; jewelName: string };
+  };
+  recentDraws: { dateKey: string; winningNumber: number; winners: { name: string; number: number; tier: string }[] }[];
+}
+
+let luckyData: PublicLuckyNumber | null = null;
+
+function renderLuckyNumber(): void {
+  const notice = element("lucky-notice");
+  const summary = element("lucky-summary");
+  const drawTime = element("lucky-draw-time");
+  if (!luckyData || !luckyData.enabled) {
+    notice.textContent = t("luckyOffline");
+    summary.textContent = "";
+    drawTime.textContent = "";
+    table("lucky-draws", [], [], "");
+    return;
+  }
+
+  notice.textContent = "";
+  const exactPrize = `${luckyData.prizes.exact.coins} ${luckyData.prizes.exact.coinType}` +
+    (luckyData.prizes.exact.jewelCount > 0 ? ` + ${luckyData.prizes.exact.jewelCount}x ${luckyData.prizes.exact.jewelName}` : "");
+  drawTime.textContent = `${luckyData.roundKey} · Sydney ${new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: luckyData.timeZone || "Australia/Sydney" }).format(luckyData.nextDrawAt)}`;
+  summary.textContent = `${luckyData.minNumber}–${luckyData.maxNumber} · ${luckyData.odds.exactPercent}% exact · ${exactPrize}`;
+  table(
+    "lucky-draws",
+    [[t("luckyDate"), false], [t("luckyWinning"), true], [t("luckyWinners"), false]],
+    luckyData.recentDraws.map((d) => [
+      d.dateKey,
+      `#${String(d.winningNumber).padStart(2, "0")}`,
+      d.winners.length ? d.winners.map((w) => `${w.name} (#${String(w.number).padStart(2, "0")})`).join(", ") : "—",
+    ]),
+    t("luckyNone"),
+  );
+}
+
+async function refreshLuckyNumber(): Promise<void> {
+  try {
+    const response = await fetch("/website/lucky-number", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    luckyData = (await response.json()) as PublicLuckyNumber;
+  } catch {
+    luckyData = null;
+  }
+  renderLuckyNumber();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderLuckyNumber());
+element("refresh").addEventListener("click", () => void refreshLuckyNumber());
+void refreshLuckyNumber();
+setInterval(() => {
+  if (!document.hidden) void refreshLuckyNumber();
+}, 60000);
+
+// ---------- marriage couples registry (public, /website/marriage) ----------
+
+interface PublicMarriage {
+  enabled: boolean;
+  rules: { minLevel: number; partyExpBonusPercent: number; partyDefenseBonus: number; ceremonyZenCost: number };
+  couples: { partnerA: string; partnerB: string; title: string; marriedAt: number; days: number }[];
+}
+
+let marriageData: PublicMarriage | null = null;
+
+function renderMarriage(): void {
+  const notice = element("marriage-notice");
+  const rulesEl = element("marriage-rules");
+  if (!marriageData || !marriageData.enabled) {
+    notice.textContent = t("marriageOffline");
+    rulesEl.textContent = "";
+    table("marriage-couples", [], [], "");
+    return;
+  }
+
+  notice.textContent = "";
+  rulesEl.textContent = `Lv ${marriageData.rules.minLevel}+ · +${marriageData.rules.partyExpBonusPercent}% EXP · +${marriageData.rules.partyDefenseBonus} Def`;
+  table(
+    "marriage-couples",
+    [[t("marriagePair"), false], [t("marriageCoupleTitle"), false], [t("marriageDate"), false], [t("marriageDays"), true]],
+    marriageData.couples.map((c) => [
+      `${c.partnerA} ♥ ${c.partnerB}`,
+      c.title || "—",
+      new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { dateStyle: "medium", timeZone: "Australia/Sydney" }).format(c.marriedAt),
+      c.days,
+    ]),
+    t("marriageNone"),
+  );
+}
+
+async function refreshMarriage(): Promise<void> {
+  try {
+    const response = await fetch("/website/marriage", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    marriageData = (await response.json()) as PublicMarriage;
+  } catch {
+    marriageData = null;
+  }
+  renderMarriage();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderMarriage());
+element("refresh").addEventListener("click", () => void refreshMarriage());
+void refreshMarriage();
+setInterval(() => {
+  if (!document.hidden) void refreshMarriage();
+}, 120000);
+
+interface PublicMarketListing {
+  id: string;
+  sellerName: string;
+  currency: string;
+  price: number;
+  expiresAt: number;
+  item: { NameEn: string; NameVi: string; Level: number };
+}
+interface PublicMarket {
+  v: number;
+  enabled: boolean;
+  listings?: PublicMarketListing[];
+}
+let marketData: PublicMarket | null = null;
+
+function renderMarket(): void {
+  const notice = element("market-notice");
+  const data = marketData;
+  const vi = language === "vi";
+  if (data === null) notice.textContent = t("marketOffline");
+  else if (!data.enabled) notice.textContent = t("marketOff");
+  else notice.textContent = "";
+  const listings = data && data.enabled ? data.listings ?? [] : [];
+  const fmt = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
+  const rows = listings.map((l) => {
+    const nm = (vi ? l.item.NameVi : l.item.NameEn) || l.item.NameEn;
+    return [
+      l.item.Level > 0 ? `${nm} +${l.item.Level}` : nm,
+      l.sellerName,
+      `${l.price.toLocaleString()} ${l.currency}`,
+      fmt.format(l.expiresAt),
+    ];
+  });
+  table("market-table", [
+    [t("marketItem"), false],
+    [t("marketSeller"), false],
+    [t("marketPrice"), true],
+    [t("marketExpires"), false],
+  ], rows, t("marketNone"));
+}
+
+async function refreshMarket(): Promise<void> {
+  try {
+    const response = await fetch("/website/market", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicMarket;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid market");
+    marketData = data;
+  } catch {
+    marketData = null;
+  }
+  renderMarket();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderMarket(); renderJewelBank(); });
+element("refresh").addEventListener("click", () => { void refreshMarket(); void refreshJewelBank(); });
+void refreshMarket();
+setInterval(() => {
+  if (!document.hidden) void refreshMarket();
+}, 120000);
+
+interface PublicJewelBank {
+  v: number;
+  enabled: boolean;
+  jewels?: { key: string; nameEn: string; nameVi: string; enabled: boolean; maxCapacity: number }[];
+}
+let jbData: PublicJewelBank | null = null;
+
+function renderJewelBank(): void {
+  const notice = element("jb-notice");
+  const data = jbData;
+  const vi = language === "vi";
+  if (data === null) notice.textContent = t("jbOffline");
+  else if (!data.enabled) notice.textContent = t("jbOff");
+  else notice.textContent = "";
+  const list = data && data.enabled ? (data.jewels ?? []).filter((j) => j.enabled) : [];
+  const rows = list.map((j) => [vi ? j.nameVi : j.nameEn, j.maxCapacity.toLocaleString()]);
+  table("jb-table", [[t("jbJewel"), false], [t("jbCap"), true]], rows, t("jbNone"));
+}
+
+async function refreshJewelBank(): Promise<void> {
+  try {
+    const response = await fetch("/website/jewel-bank", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicJewelBank;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid jewel bank");
+    jbData = data;
+  } catch {
+    jbData = null;
+  }
+  renderJewelBank();
+}
+
+void refreshJewelBank();
+setInterval(() => {
+  if (!document.hidden) void refreshJewelBank();
+}, 120000);
+
+interface PublicCatchup {
+  v: number;
+  enabled: boolean;
+  nextDayAt?: number;
+  levelCap?: { enabled: boolean; todayCap: number; initialCap: number; hardMax: number; perDay: number; triggered: boolean; firstPlayer: string };
+  resetCap?: { enabled: boolean; todayDailyLimit: number; perDay: number; hardMax: number; triggered: boolean; firstPlayer: string };
+}
+let catchupData: PublicCatchup | null = null;
+
+function renderCatchup(): void {
+  const notice = element("catchup-notice");
+  const cards = clear("catchup-cards");
+  const data = catchupData;
+  if (data === null) { notice.textContent = t("cuOffline"); return; }
+  if (!data.enabled) { notice.textContent = t("cuOff"); return; }
+  notice.textContent = "";
+
+  const fmt = new Intl.DateTimeFormat(language === "vi" ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
+  if (data.levelCap?.enabled) {
+    const l = data.levelCap;
+    const card = node("article", "panel");
+    card.append(node("h3", fill(t("cuLevelCap"), l.todayCap, l.hardMax)));
+    card.append(node("p", l.triggered ? fill(t("cuUnlockedBy"), l.firstPlayer, l.perDay) : fill(t("cuWaiting"), l.perDay, l.initialCap)));
+    if (data.nextDayAt) card.append(node("p", fill(t("cuNextRise"), fmt.format(data.nextDayAt))));
+    cards.append(card);
+  }
+
+  if (data.resetCap?.enabled) {
+    const r = data.resetCap;
+    const card = node("article", "panel");
+    card.append(node("h3", fill(t("cuResetCap"), r.todayDailyLimit)));
+    cards.append(card);
+  }
+}
+
+async function refreshCatchup(): Promise<void> {
+  try {
+    const response = await fetch("/website/catchup", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicCatchup;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid catchup");
+    catchupData = data;
+  } catch {
+    catchupData = null;
+  }
+  renderCatchup();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderCatchup(); renderSeasonPlan(); });
+element("refresh").addEventListener("click", () => { void refreshCatchup(); void refreshSeasonPlan(); });
+void refreshCatchup();
+setInterval(() => {
+  if (!document.hidden) void refreshCatchup();
+}, 120000);
+
+interface PublicSeasonStage {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  descriptionEn: string;
+  descriptionVi: string;
+  unlocked: boolean;
+  unlockAt: number | null;
+  requiredBossId: string;
+  requiredBossKills: number;
+  currentBossKills: number;
+  requiredPlayerLevel: number;
+  requiredPlayersCount: number;
+  currentPlayers: number;
+}
+interface PublicSeasonPlan {
+  v: number;
+  enabled: boolean;
+  stages?: PublicSeasonStage[];
+}
+let spData: PublicSeasonPlan | null = null;
+
+function renderSeasonPlan(): void {
+  const notice = element("sp-notice");
+  const wrap = clear("sp-timeline");
+  const data = spData;
+  const vi = language === "vi";
+  if (data === null) { notice.textContent = t("spOffline"); return; }
+  if (!data.enabled) { notice.textContent = t("spOff"); return; }
+  notice.textContent = "";
+
+  const fmt = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-AU", { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Australia/Sydney" });
+  for (const st of data.stages ?? []) {
+    const card = node("article", "panel");
+    const status = st.unlocked ? t("spOpen") : t("spLocked");
+    card.append(node("h3", `${(vi ? st.nameVi : st.nameEn) || st.nameEn} — [${status}]`));
+    card.append(node("p", (vi ? st.descriptionVi : st.descriptionEn) || st.descriptionEn));
+    const parts: string[] = [];
+    if (st.unlockAt) parts.push(`${vi ? "Ngày (Sydney)" : "Date (Sydney)"}: ${fmt.format(st.unlockAt)}`);
+    if (st.requiredBossId) parts.push(`Boss: ${st.requiredBossId} (${st.currentBossKills}/${Math.max(1, st.requiredBossKills)})`);
+    if (st.requiredPlayerLevel > 0 && st.requiredPlayersCount > 0) parts.push(`Lv.${st.requiredPlayerLevel}: ${st.currentPlayers}/${st.requiredPlayersCount}`);
+    if (parts.length > 0) card.append(node("p", parts.join(" • ")));
+    wrap.append(card);
+  }
+}
+
+async function refreshSeasonPlan(): Promise<void> {
+  try {
+    const response = await fetch("/website/season-plan", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicSeasonPlan;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid season plan");
+    spData = data;
+  } catch {
+    spData = null;
+  }
+  renderSeasonPlan();
+}
+
+void refreshSeasonPlan();
+setInterval(() => {
+  if (!document.hidden) void refreshSeasonPlan();
+}, 120000);
+
+interface PublicLeftoversRecipe {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  enabled: boolean;
+  successRatePercent: number;
+  zenCost: number;
+  inputs: { nameEn: string; nameVi: string; count: number }[];
+}
+
+interface PublicLeftoversOffer {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  enabled: boolean;
+  inputCount: number;
+  rewardCoins: number;
+  rewardZen: number;
+  rewardItemCount: number;
+}
+
+interface PublicLeftovers {
+  enabled: boolean;
+  exchangeNpcNumber?: number;
+  effectiveMaxBoxLevel?: number;
+  recipes?: PublicLeftoversRecipe[];
+  offers?: PublicLeftoversOffer[];
+}
+
+let leftoversData: PublicLeftovers | null = null;
+
+function renderLeftovers(): void {
+  const on = Boolean(leftoversData?.enabled);
+  const body = element("leftovers-body");
+  const empty = element("leftovers-empty");
+  const note = element("leftovers-note");
+  body.hidden = !on;
+  empty.hidden = on;
+  empty.textContent = on ? "" : t("leftoversEmpty");
+  note.textContent = on
+    ? fill(t("leftoversCapNote"), leftoversData?.effectiveMaxBoxLevel ?? 5, leftoversData?.exchangeNpcNumber ?? 0)
+    : "";
+  if (!on) return;
+  const isVi = language === "vi";
+  table(
+    "leftovers-recipes",
+    [[t("leftoversRecipeCol"), false], [t("leftoversInputsCol"), false], [t("leftoversRateCol"), true]],
+    (leftoversData?.recipes ?? []).filter((r) => r.enabled).map((r) => [
+      isVi ? r.nameVi : r.nameEn,
+      r.inputs.map((i) => `${i.count}x ${isVi ? i.nameVi : i.nameEn}`).join(", "),
+      `${r.successRatePercent}% · ${r.zenCost.toLocaleString()} Zen`,
+    ]),
+    t("empty"),
+  );
+  table(
+    "leftovers-offers",
+    [[t("leftoversOfferCol"), false], [t("leftoversNeedCol"), true], [t("leftoversRewardCol"), true]],
+    (leftoversData?.offers ?? []).filter((o) => o.enabled).map((o) => [
+      isVi ? o.nameVi : o.nameEn,
+      String(o.inputCount),
+      `${o.rewardCoins > 0 ? `${o.rewardCoins} Coins ` : ""}${o.rewardZen > 0 ? `${o.rewardZen.toLocaleString()} Zen` : ""}`.trim() || "Reward",
+    ]),
+    t("empty"),
+  );
+}
+
+async function refreshLeftovers(): Promise<void> {
+  try {
+    const response = await fetch("/website/leftovers", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicLeftovers;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid leftovers");
+    leftoversData = data;
+  } catch {
+    leftoversData = null;
+  }
+  renderLeftovers();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderLeftovers());
+element("refresh").addEventListener("click", () => void refreshLeftovers());
+void refreshLeftovers();
+setInterval(() => {
+  if (!document.hidden) void refreshLeftovers();
+}, 120000);
+
+interface PublicMountTierRow {
+  id: string;
+  nameEn: string;
+  nameVi: string;
+  shardsRequired: number;
+  previousTierId: string;
+  previousMountsRequired: number;
+  pveDefenseBonus: number;
+  bonusExpPercent: number;
+  collectorsCount: number;
+}
+
+interface PublicMounts {
+  enabled: boolean;
+  goldenDropChancePercent?: number;
+  shardsPerGoldenBoss?: number;
+  totalCollectors?: number;
+  tiers?: PublicMountTierRow[];
+}
+
+let mountsData: PublicMounts | null = null;
+
+function renderMounts(): void {
+  const on = Boolean(mountsData?.enabled);
+  const body = element("mounts-body");
+  const empty = element("mounts-empty");
+  const note = element("mounts-note");
+  body.hidden = !on;
+  empty.hidden = on;
+  empty.textContent = on ? "" : t("mountsEmpty");
+  note.textContent = on
+    ? fill(t("mountsNote"), mountsData?.shardsPerGoldenBoss ?? 2, mountsData?.goldenDropChancePercent ?? 100, mountsData?.totalCollectors ?? 0)
+    : "";
+  if (!on) return;
+  const isVi = language === "vi";
+  table(
+    "mounts-table",
+    [[t("mountsTierCol"), false], [t("mountsReqCol"), false], [t("mountsBonusCol"), false], [t("mountsOwnersCol"), true]],
+    (mountsData?.tiers ?? []).map((tier) => [
+      isVi ? tier.nameVi : tier.nameEn,
+      `${tier.shardsRequired} Shards${tier.previousTierId && tier.previousMountsRequired > 0 ? ` + ${tier.previousMountsRequired}x ${tier.previousTierId}` : ""}`,
+      `+${tier.pveDefenseBonus} Def · +${tier.bonusExpPercent}% EXP`,
+      tier.collectorsCount,
+    ]),
+    t("empty"),
+  );
+}
+
+async function refreshMounts(): Promise<void> {
+  try {
+    const response = await fetch("/website/mounts", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicMounts;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid mounts");
+    mountsData = data;
+  } catch {
+    mountsData = null;
+  }
+  renderMounts();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderMounts());
+element("refresh").addEventListener("click", () => void refreshMounts());
+void refreshMounts();
+setInterval(() => {
+  if (!document.hidden) void refreshMounts();
+}, 120000);
+
+interface PublicPartyAd {
+  leaderName: string;
+  mapName: string;
+  spotName: string;
+  hasPassword: boolean;
+  memberCount: number;
+  maxSize: number;
+}
+
+interface PublicPartySpots {
+  enabled: boolean;
+  huntingSpots?: string[];
+  ads?: PublicPartyAd[];
+}
+
+let partySpotsData: PublicPartySpots | null = null;
+
+function renderPartySpots(): void {
+  const on = Boolean(partySpotsData?.enabled);
+  const body = element("party-spots-body");
+  const empty = element("party-spots-empty");
+  const note = element("party-spots-note");
+  body.hidden = !on;
+  empty.hidden = on;
+  empty.textContent = on ? "" : t("partySpotsEmpty");
+  note.textContent = on ? fill(t("partySpotsNote"), (partySpotsData?.huntingSpots ?? []).length) : "";
+  if (!on) return;
+  table(
+    "party-spots-table",
+    [[t("partySpotsLeaderCol"), false], [t("partySpotsSpotCol"), false], [t("partySpotsMembersCol"), true], [t("partySpotsModeCol"), false]],
+    (partySpotsData?.ads ?? []).map((ad) => [
+      ad.leaderName,
+      `${ad.spotName} (${ad.mapName})`,
+      `${ad.memberCount}/${ad.maxSize}`,
+      ad.hasPassword ? t("partySpotsLocked") : t("partySpotsOpen"),
+    ]),
+    t("partySpotsNone"),
+  );
+}
+
+async function refreshPartySpots(): Promise<void> {
+  try {
+    const response = await fetch("/website/party-spots", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicPartySpots;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid party spots");
+    partySpotsData = data;
+  } catch {
+    partySpotsData = null;
+  }
+  renderPartySpots();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderPartySpots());
+element("refresh").addEventListener("click", () => void refreshPartySpots());
+void refreshPartySpots();
+setInterval(() => {
+  if (!document.hidden) void refreshPartySpots();
 }, 120000);

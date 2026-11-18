@@ -1461,6 +1461,15 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public ValueTask RunPersistenceExclusiveAsync(Func<ValueTask> operation, CancellationToken cancellationToken = default)
         => this._persistence.RunExclusiveAsync(operation, cancellationToken);
 
+    /// <summary>Refreshes timed account bonuses after a confirmed account mutation while holding the persistence lock.</summary>
+    public void RefreshAccountAttributeGrants()
+    {
+        if (this.Account is { } account && this.Attributes is { } attributes)
+        {
+            this._accountAttributeGrantPowerUps.Apply(account, attributes);
+        }
+    }
+
     /// <summary>
     /// Is called after the player killed a <see cref="Player"/>.
     /// Increment PK Level.

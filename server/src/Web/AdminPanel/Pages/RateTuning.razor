@@ -1,0 +1,148 @@
+@page "/rate-tuning"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.GameLogic.PlugIns.GameplayRules
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@L("Rate & Balance Tuning", "Cân Chỉnh Tỉ Lệ Ngọc & Sát Thương")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Rate & Balance Tuning", "Cân Chỉnh Tỉ Lệ Ngọc & Sát Thương")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Disabled by default so standard HNMO rates remain untouched until you enable both Plug-in Active and Rate Tuning Enabled.", "Mặc định tắt để giữ nguyên tỉ lệ chuẩn HNMO cho tới khi bạn bật cả Kích Hoạt Plug-in và Bật Cân Chỉnh.")</li>
+            <li>@L("Set Max Life Option Level to 4 (+16 damage/defense or +4% auto-recovery) for classic balance, or 7 (+28 / +7%) for high-cap servers.", "Đặt Cấp Option Life Tối Đa là 4 (+16 dmg/def hoặc +4% hồi phục) cho cân bằng cổ điển, hoặc 7 (+28 / +7%) cho máy chủ giới hạn cao.")</li>
+            <li>@L("Per-class PvP and PvM damage percentages (100% = default) let you balance individual classes without editing skills.", "Tỉ lệ sát thương PvP và PvM theo từng hệ nhân vật (100% = mặc định) giúp cân bằng trực tiếp từng phái.")</li>
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._isLoading || this._configuration is null)
+{
+    <p>@L("Loading...", "Đang tải...")</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-header">@L("Jewels, Chaos Mix Broadcast & Zen", "Ngọc Ép Đồ, Thông Báo +15 & Tỉ Lệ Zen")</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 d-flex flex-wrap gap-3">
+                    <div class="form-check form-switch">
+                        <input id="rtActive" class="form-check-input" type="checkbox" @bind="this._isActive" />
+                        <label class="form-check-label" for="rtActive" title="@L("Activate plug-in instance in the running server.", "Kích hoạt plug-in trong máy chủ.")">@L("Plug-in Active", "Kích Hoạt Plug-in")</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input id="rtEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
+                        <label class="form-check-label" for="rtEnabled" title="@L("Master switch applying all rate & class balance overrides on this page.", "Công tắc chính áp dụng toàn bộ tùy chỉnh trên trang này.")">@L("Rate Tuning Enabled", "Bật Cân Chỉnh")</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check mb-2">
+                        <input id="rtSoulOv" class="form-check-input" type="checkbox" @bind="this._configuration.OverrideSoulRates" />
+                        <label class="form-check-label" for="rtSoulOv" title="@L("Override default Jewel of Soul success and Luck bonus rates.", "Ghi đè tỉ lệ thành công mặc định của Ngọc Tâm Linh (Soul).")">@L("Override Jewel of Soul Rates", "Tùy Chỉnh Tỉ Lệ Soul")</label>
+                    </div>
+                    <label class="form-label" title="@L("Base Soul upgrade chance without Luck (0..100%).", "Tỉ lệ ép Soul cơ bản không Luck (0..100%).")">@L("Soul Base Rate (%)", "Tỉ Lệ Soul Cơ Bản (%)")</label>
+                    <input type="number" class="form-control form-control-sm mb-2" min="0" max="100" @bind="this._configuration.SoulSuccessRatePercent" />
+                    <label class="form-label" title="@L("Bonus chance added when the item has Luck (0..100%).", "Tỉ lệ cộng thêm khi trang bị có dòng May Mắn (Luck).")">@L("Soul Luck Bonus (%)", "Cộng Thêm Luck Soul (%)")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="100" @bind="this._configuration.SoulLuckBonusPercent" />
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check mb-2">
+                        <input id="rtLifeOv" class="form-check-input" type="checkbox" @bind="this._configuration.OverrideLifeRate" />
+                        <label class="form-check-label" for="rtLifeOv" title="@L("Override default Jewel of Life upgrade success rate.", "Ghi đè tỉ lệ thành công của Ngọc Sinh Mệnh (Life).")">@L("Override Jewel of Life Rate", "Tùy Chỉnh Tỉ Lệ Life")</label>
+                    </div>
+                    <label class="form-label" title="@L("Jewel of Life option add/upgrade chance (0..100%).", "Tỉ lệ ép thêm/tăng cấp dòng Ngọc Sinh Mệnh (0..100%).")">@L("Life Success Rate (%)", "Tỉ Lệ Thành Công Life (%)")</label>
+                    <input type="number" class="form-control form-control-sm mb-2" min="0" max="100" @bind="this._configuration.LifeSuccessRatePercent" />
+                    <label class="form-label" title="@L("Max Life +Option tier (4 = +16 dmg/def / 4% rec, 7 = +28 dmg/def / 7% rec).", "Mốc dòng Life tối đa (4 = +16 / 4% hồi, 7 = +28 / 7% hồi).")">@L("Max Life Option Level (1..7)", "Giới Hạn Cấp Option Life (1..7)")</label>
+                    <div class="input-group input-group-sm">
+                        <input type="number" class="form-control" min="1" max="7" @bind="this._configuration.MaxLifeOptionLevel" />
+                        <button type="button" class="btn btn-outline-secondary" title="@L("Standard cap (+16)", "Chuẩn (+16)")" @onclick="() => this._configuration.MaxLifeOptionLevel = 4">+16</button>
+                        <button type="button" class="btn btn-outline-secondary" title="@L("Extended cap (+28)", "Mở rộng (+28)")" @onclick="() => this._configuration.MaxLifeOptionLevel = 7">+28</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check mb-2">
+                        <input id="rtBroadcast" class="form-check-input" type="checkbox" @bind="this._configuration.BroadcastHighLevelChaosMix" />
+                        <label class="form-check-label" for="rtBroadcast" title="@L("Announce high-level Chaos Machine crafting successes globally in gold text.", "Gửi thông báo toàn máy chủ khi có người ép Chaos lên cấp cao thành công.")">@L("Broadcast High Chaos Mix Success", "Thông Báo Toàn Server Khi Ép Chaos Cấp Cao")</label>
+                    </div>
+                    <label class="form-label" title="@L("Minimum resulting item level required to broadcast (default 15).", "Cấp trang bị sau ép tối thiểu để phát thông báo (mặc định +15).")">@L("Broadcast Min Item Level", "Cấp Đồ Ép Tối Thiểu Thông Báo")</label>
+                    <input type="number" class="form-control form-control-sm mb-2" min="10" max="15" @bind="this._configuration.BroadcastMinChaosMixLevel" />
+                    <label class="form-label" title="@L("Global monster Zen drop multiplier (10..1000%, 100 = default).", "Hệ số rớt Zen từ quái toàn máy chủ (10..1000%, 100 = mặc định).")">@L("Zen Drop Multiplier (%)", "Hệ Số Rớt Zen (%)")</label>
+                    <input type="number" class="form-control form-control-sm" min="10" max="1000" @bind="this._configuration.ZenDropMultiplierPercent" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@L("Per-Class PvP & PvM Damage Multipliers", "Cân Bằng Sát Thương PvP & PvM Theo Từng Phái")</span>
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="@L("Reset every class back to 100%.", "Đặt lại sát thương toàn bộ các phái về 100%.")"
+                    @onclick="this.ResetClassRates">
+                @L("Reset Class Rates to 100%", "Đặt Lại Tất Cả 100%")
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>@L("Class Line", "Hệ Nhân Vật")</th>
+                        <th style="width: 180px;">@L("PvP Damage (%)", "Sát Thương PvP (%)")</th>
+                        <th style="width: 180px;">@L("PvM Damage (%)", "Sát Thương PvM (%)")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in this._configuration.ClassDamageRates)
+                    {
+                        <tr>
+                            <td>@(this._isVi ? entry.NameVi : entry.NameEn)</td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" min="10" max="500"
+                                       title="@L("Damage multiplier against other players (10..500%).", "Hệ số sát thương lên người chơi khác (10..500%).")"
+                                       @bind="entry.PvpDamagePercent" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" min="10" max="500"
+                                       title="@L("Damage multiplier against monsters and bosses (10..500%).", "Hệ số sát thương lên quái vật và boss (10..500%).")"
+                                       @bind="entry.PvmDamagePercent" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+        @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save Rate Tuning", "Lưu Cài Đặt Tỉ Lệ"))
+    </button>
+}

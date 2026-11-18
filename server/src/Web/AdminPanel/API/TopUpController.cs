@@ -7,13 +7,17 @@ namespace HNMO.Web.AdminPanel.API;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
+using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.ActivityLog;
+using HNMO.GameLogic.PlugIns.Escrow;
+using HNMO.Persistence;
+using HNMO.Web.AdminPanel.API;
+using HNMO.Web.AdminPanel.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HNMO.GameLogic.PlugIns;
-using HNMO.Persistence;
-using HNMO.Web.AdminPanel.Services;
 
 /// <summary>
 /// Top-ups by bank transfer (the "Bank top-up" plug-in): what the web game's top-up page shows, and the
@@ -110,6 +114,11 @@ public class TopUpController : Controller
             }
 
             var transfer = new BankTransfer("casso", Text(transaction, "id"), Text(transaction, "tid") is { Length: > 0 } tid ? tid : Text(transaction, "reference"), amount, Text(transaction, "description"));
+            if (await this.TryHandleHostEscrowAsync(transfer, this.HttpContext.RequestAborted).ConfigureAwait(false))
+            {
+                continue;
+            }
+
             await this._topUps.CreditAsync(transfer, config, this.HttpContext.RequestAborted).ConfigureAwait(false);
         }
 
@@ -142,7 +151,10 @@ public class TopUpController : Controller
         if (string.Equals(Text(body, "transferType"), "in", StringComparison.OrdinalIgnoreCase))
         {
             var transfer = new BankTransfer("sepay", Text(body, "id"), Text(body, "referenceCode"), Number(body, "transferAmount"), Text(body, "content"));
-            await this._topUps.CreditAsync(transfer, config, this.HttpContext.RequestAborted).ConfigureAwait(false);
+            if (!await this.TryHandleHostEscrowAsync(transfer, this.HttpContext.RequestAborted).ConfigureAwait(false))
+            {
+                await this._topUps.CreditAsync(transfer, config, this.HttpContext.RequestAborted).ConfigureAwait(false);
+            }
         }
 
         return this.StatusCode(StatusCodes.Status201Created, new { success = true });
@@ -197,4 +209,45 @@ public class TopUpController : Controller
 
     private Task<BankTopUpConfiguration?> ReadAsync() =>
         PlugInSettings.ReadActiveAsync<BankTopUpConfiguration>(this._contextProvider, typeof(BankTopUpPlugIn), this.HttpContext.RequestAborted);
+
+    private async Task<bool> TryHandleHostEscrowAsync(BankTransfer transfer, CancellationToken cancellationToken)
+    {
+        var memo = $"{transfer.Message} {transfer.BankReference}".Trim();
+        if (string.IsNullOrEmpty(EscrowHostVndEngine.ExtractHnmoReference(memo)))
+        {
+            return false;
+        }
+
+        var (_, _, savedCfg) = await PlugInSettings.ReadStoredAsync<EscrowConfiguration>(
+            this._contextProvider,
+            typeof(EscrowContractsPlugIn),
+            cancellationToken).ConfigureAwait(false);
+        var cfg = savedCfg ?? new EscrowConfiguration();
+        if (!EscrowHostVndEngine.IsCompliantAndEnabled(cfg))
+        {
+            return false;
+        }
+
+        var engine = new EscrowHostVndEngine(cfg, EscrowStore.Open(cfg.FileName));
+        var (err, matched) = engine.ConfirmHostPaymentReceived(memo, transfer.AmountVnd, $"{transfer.Provider}:{transfer.ProviderId}", DateTime.UtcNow);
+        if (err is "Ok" or "AlreadyProcessed")
+        {
+            if (err == "Ok" && matched is not null)
+            {
+                ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+                {
+                    Id = $"esc-hvp-{Guid.NewGuid():N}",
+                    TimestampUtc = DateTime.UtcNow,
+                    Kind = ActivityKind.Trade,
+                    Account = matched.AcceptedByLogin,
+                    PartnerAccount = matched.SellerLogin,
+                    Details = $"Host VND payment via {transfer.Provider} released {matched.ContractId} ({transfer.AmountVnd:N0} VND); seller payout queued.",
+                });
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -1,0 +1,152 @@
+@page "/event-alerts"
+
+<PageTitle>@L("Event Alerts (Web Push & Discord)", "Thông Báo Sự Kiện (Web Push & Discord)")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Event Alerts (Web Push & Discord)", "Thông Báo Sự Kiện (Web Push & Discord)")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Web Push sends real-time browser notifications to opted-in players (on mobile or desktop, no app install required) using the host-generated ECDSA P-256 VAPID keypair.", "Web Push gửi thông báo trình duyệt trực tiếp tới người chơi đã bật đăng ký bằng khóa VAPID P-256 tự sinh trên máy chủ.")</li>
+            <li>@L("Optionally enter a Discord Webhook URL to also post upcoming/opening event and boss reminders (Sydney time) to a Discord channel.", "Có thể nhập thêm Discord Webhook URL để tự động đăng nhắc nhở sự kiện/Boss (giờ Sydney) vào kênh Discord.")</li>
+            <li>@L("EventAlertsPlugIn is OFF by default until you turn it ON and save.", "EventAlertsPlugIn mặc định TẮT cho tới khi bạn bật và lưu.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@L("Loading event alerts configuration...", "Đang tải cấu hình thông báo sự kiện...")</p>
+}
+else if (this._configuration is { } cfg)
+{
+    <div class="card mb-3">
+        <div class="card-header fw-semibold">@L("Web Push (VAPID) & Discord Settings", "Cài Đặt Web Push (VAPID) & Discord")</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="eaEnabled"
+                               @bind="this._isActive"
+                               title="@L("Enable or disable EventAlertsPlugIn.", "Bật hoặc tắt hệ thống thông báo sự kiện.")" />
+                        <label class="form-check-label" for="eaEnabled">@L("Enable Event Alerts", "Bật Thông Báo Sự Kiện")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="eaAtStart"
+                               @bind="cfg.RemindAtStart"
+                               title="@L("Also send an alert when the event opens or boss spawns.", "Gửi thêm thông báo ngay khi sự kiện mở hoặc Boss xuất hiện.")" />
+                        <label class="form-check-label" for="eaAtStart">@L("Alert When Active/Spawns", "Thông Báo Khi Bắt Đầu")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label mb-1" for="eaLead">@L("Lead Time (Minutes Before Start)", "Báo Trước (Phút)")</label>
+                    <input id="eaLead" type="number" min="0" max="30" class="form-control form-control-sm" @bind="cfg.LeadTimeMinutes" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label mb-1" for="eaDiscordUrl"
+                           title="@L("Optional Discord channel Webhook URL (kept secret; masked input).", "Discord Webhook URL tùy chọn (được bảo mật và che kín).")">
+                        @L("Discord Webhook URL (Optional)", "Discord Webhook URL (Tùy chọn)")
+                    </label>
+                    <input id="eaDiscordUrl" type="password" autocomplete="off" class="form-control form-control-sm"
+                           @bind="cfg.DiscordWebhookUrl" placeholder="https://discord.com/api/webhooks/..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1" for="eaDiscordLang">@L("Discord Language", "Ngôn Ngữ Discord")</label>
+                    <select id="eaDiscordLang" class="form-select form-select-sm" @bind="cfg.DiscordLanguage">
+                        <option value="both">@L("English + Vietnamese", "Anh + Việt")</option>
+                        <option value="en">English</option>
+                        <option value="vi">Tiếng Việt</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1" for="eaVapidSubject">@L("VAPID Contact URI", "Địa Chỉ Liên Hệ VAPID")</label>
+                    <input id="eaVapidSubject" type="text" class="form-control form-control-sm" @bind="cfg.VapidSubject" placeholder="mailto:admin@hnmo.local" />
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label mb-1">@L("Host VAPID Public Key (Safe to Share)", "Khóa Công Khai VAPID Của Máy Chủ")</label>
+                    <input type="text" readonly class="form-control form-control-sm font-monospace" value="@cfg.VapidPublicKey" />
+                    <div class="form-text">@L("Private key is stored securely on the host and never exposed publicly.", "Khóa bí mật được lưu an toàn trên máy chủ và không bao giờ hiển thị.")</div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                    <button type="button" class="btn btn-outline-warning btn-sm"
+                            title="@L("Generate a fresh VAPID keypair (existing browsers must re-subscribe).", "Tạo cặp khóa VAPID mới.")"
+                            @onclick="this.RegenerateVapidKeys">
+                        @L("Regenerate VAPID Keys", "Tạo Lại Khóa VAPID")
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3 d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-primary btn-sm"
+                        disabled="@this._isSaving"
+                        title="@L("Save Event Alerts settings.", "Lưu cài đặt Thông Báo Sự Kiện.")"
+                        @onclick="this.SaveAsync">
+                    @L("Save Settings", "Lưu Cài Đặt")
+                </button>
+                <button type="button" class="btn btn-outline-success btn-sm"
+                        disabled="@this._isSendingTest"
+                        title="@L("Send a sample test notification to active Web Push subscribers and Discord webhook.", "Gửi thông báo thử tới trình duyệt đã đăng ký và kênh Discord.")"
+                        @onclick="this.SendTestAlertAsync">
+                    @L("Send Test Alert", "Gửi Thông Báo Thử")
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">@L("Recent Alert Dispatches", "Lịch Sử Gửi Thông Báo") (Sydney Time)</span>
+            <span class="badge bg-info text-dark">@L("Active Browsers:", "Trình duyệt đã bật:") @this._subscriberCount</span>
+        </div>
+        @if (this._logs.Count == 0)
+        {
+            <div class="card-body text-muted small">@L("No event alerts dispatched yet.", "Chưa có thông báo sự kiện nào được gửi.")</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>@L("Time (Sydney)", "Thời Gian (Sydney)")</th>
+                            <th>@L("Title", "Tiêu Đề")</th>
+                            <th>@L("Web Push", "Web Push")</th>
+                            <th>@L("Discord", "Discord")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in this._logs)
+                        {
+                            <tr>
+                                <td>@FormatSydney(log.SentAtUtc)</td>
+                                <td>@(this._isVi ? log.TitleVi : log.TitleEn)</td>
+                                <td>@log.PushSucceeded / @(log.PushSucceeded + log.PushFailed)</td>
+                                <td>@(log.DiscordPosted ? L("Sent", "Đã gửi") : "-")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}

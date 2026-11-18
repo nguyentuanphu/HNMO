@@ -646,6 +646,8 @@ public class WorldBossesPlugIn : IPeriodicTaskPlugIn, IAttackableGotHitPlugIn, I
             }
         }
 
+        await HNMO.GameLogic.PlugIns.SeasonPlan.SeasonPlanPlugIn.NotifyBossKilledAsync(gameContext, record.BossId).ConfigureAwait(false);
+
         if (gameContext is not null && HNMO.GameLogic.PlugIns.Guilds.GuildsPlugIn.Get(gameContext) is { } guilds)
         {
             try

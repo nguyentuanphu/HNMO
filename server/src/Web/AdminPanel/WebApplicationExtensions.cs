@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
+using HNMO.Interfaces;
 using HNMO.Network.Analyzer;
 using HNMO.Persistence;
 using HNMO.Persistence.AdminAuth;
@@ -72,6 +74,7 @@ public static class WebApplicationExtensions
         services.AddAdminPanelControllers();
 
         services.AddToasts();
+        services.AddResponseCompression(options => options.EnableForHttps = true);
 
         services.AddMemoryCache();
 
@@ -89,6 +92,9 @@ public static class WebApplicationExtensions
         services.AddAdminReadOperations();
         services.AddSingleton(new AdminLogAccess { LocalFilesAvailable = includeMapApp });
         services.AddSingleton<SetupService>();
+        services.TryAddSingleton<IHostSettingsService, HostSettingsService>();
+        services.TryAddSingleton<IServerRestartService, NoOpServerRestartService>();
+        services.TryAddSingleton<WorldEditorDataService>();
         services.AddSingleton(new LoggingConfigurationService(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json")));
         services.AddSingleton(provider => new DiscordConfigurationService(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), provider.GetRequiredService<IConfiguration>()));
         services.AddScoped<DataUpdateService>();
@@ -145,6 +151,7 @@ public static class WebApplicationExtensions
         // Through the public website: the admin path as the path base, closed while no admin user exists.
         app.UseWebsitePrefix();
 
+        app.UseResponseCompression();
         app.UseStaticFiles();
 
         app.UseRouting();
@@ -169,6 +176,7 @@ public static class WebApplicationExtensions
 
         app.MapControllers().RequireAuthorization();
         app.MapAdminPanelAuthEndpoints();
+        app.MapItemIconEndpoints();
 
         AdminPanelEnvironment.IsHostingEmbedded = true;
 
@@ -182,6 +190,7 @@ public static class WebApplicationExtensions
     /// <returns>The builder of the controllers.</returns>
     internal static IMvcBuilder AddAdminPanelControllers(this IServiceCollection services)
     {
+        services.AddWebsiteAccountMail();
         return services.AddControllers(options =>
             {
                 options.Filters.Add<HNMO.Web.AdminPanel.API.AdminOperationExceptionFilter>();

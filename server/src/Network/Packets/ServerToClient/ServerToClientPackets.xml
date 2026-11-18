@@ -12880,6 +12880,91 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>31</SubCode>
+      <Name>HnmoTopUpMilestonesState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After HnmoTopUpMilestonesCommand or when a top-up changes the account's milestone progress.</SentWhen>
+      <CausedReaction>The client renders the top-up milestones window and shows any notice.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The state as JSON in plain ASCII: enabled, totalVnd, steps, owed rewards, and optional result message.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>33</SubCode>
+      <Name>HnmoTimetableState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requested the HNMO event and boss timetable (HnmoTimetableCommand).</SentWhen>
+      <CausedReaction>The web game updates the Event and Boss Timetable window with Sydney and local times, maps, and drops.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>The timetable state as JSON, in plain ASCII (other characters are escaped): every event, invasion and boss with category, English and Vietnamese names, map names, drops, next start time in UTC, and Sydney wall-clock schedule.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>35</SubCode>
+      <Name>HnmoLuckyNumberState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After the client requests the Daily Lucky Number state, picks a number, claims owed rewards, or when the daily draw runs.</SentWhen>
+      <CausedReaction>The web game updates the Daily Lucky Number window (L) and posts draw/win chat notices.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON containing round date, next draw UTC timestamp, number range, odds, prizes, account picks, owed rewards, recent draw results, and event status.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>37</SubCode>
+      <Name>HnmoMarriageState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After any marriage command or when marital/proposal/couple bonus status changes.</SentWhen>
+      <CausedReaction>The web game updates the Marriage window (Shift+M) and displays ceremony/proposal notices.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON containing marital state, couple title, party bonus status, ceremony location, divorce rules, and public couples summary.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>39</SubCode>
+      <Name>HnmoMarketState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>After any Item Market action or when listings/payouts change.</SentWhen>
+      <CausedReaction>The web game updates the Item Market window (F6) and posts transaction notices.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON containing active listings, listable bag items, waiting deliveries/payouts, currency rules, and fee percent.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>07</SubCode>
       <Name>ExternalChatMessage</Name>
       <Direction>ServerToClient</Direction>
@@ -16717,6 +16802,189 @@
       <SentWhen>Before the active quest list.</SentWhen>
       <CausedReaction>The 1.04d client does not read any payload of this packet.</CausedReaction>
       <Fields />
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3B</SubCode>
+      <Name>HnmoJewelBankState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after entering the world or processing HnmoJewelBankCommand.</SentWhen>
+      <CausedReaction>Updates the web client's Jewel Bank window.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing enabled state, jewel rules, stored balances, bag jewels, and master skill summary.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3D</SubCode>
+      <Name>HnmoCatchupCapState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent on entering the world, when today's cap increases, or upon HnmoCatchupCapRequest.</SentWhen>
+      <CausedReaction>Updates today's Catch-up Level/Reset Cap notice in the web client.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing today's level cap, daily reset cap, first achiever, and next Sydney day reset countdown.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>3F</SubCode>
+      <Name>HnmoSeasonPlanState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after entering the world, when a new season stage unlocks, or upon HnmoSeasonPlanRequest.</SentWhen>
+      <CausedReaction>Updates the web client's Season Plan (F8) timeline.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing active stage, unlocked feature gates, and all stage conditions/dates.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>41</SubCode>
+      <Name>HnmoLeftoversState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world, talking to the exchange NPC, or after HnmoLeftoversCommand.</SentWhen>
+      <CausedReaction>Updates the web client's Combining Leftovers and Exchange NPC window (F10).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing recipes, exchange offers, bag counts, and season box cap.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>43</SubCode>
+      <Name>HnmoMountChainState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world, defeating a golden boss, or after HnmoMountChainCommand.</SentWhen>
+      <CausedReaction>Updates the web client's Mount Chain window (Shift+U).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload describing mount chain tiers, shards, duplicate bag mounts, and unlocked collection.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>45</SubCode>
+      <Name>HnmoPartyOptionsState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoPartyOptionsCommand or when opening the Party window options drawer.</SentWhen>
+      <CausedReaction>Updates the web client's Party password and Auto-party spot finder drawer.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload listing active party advertisement state and open hunting spot parties.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>47</SubCode>
+      <Name>HnmoRankingState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoRankingCommand or /rank to deliver in-game player, online, guild, and event rankings and add-stats status.</SentWhen>
+      <CausedReaction>Updates the web client's Player Rankings window.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing ranked characters, online leaders, guilds, mini-game events, player rank summary, and bulk add-stats status.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>49</SubCode>
+      <Name>HnmoCustomRanksState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world, when active titles change, or after HnmoCustomRanksCommand.</SentWhen>
+      <CausedReaction>Updates the web client's custom title badges (nameplates and chat) and /title selector.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload listing rank tiers, the hero's unlocked and equipped rank, and online players' active titles.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>4B</SubCode>
+      <Name>HnmoTeleportNpcState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when talking to a Teleport NPC or after HnmoTeleportNpcCommand.</SentWhen>
+      <CausedReaction>Opens or updates the Teleport NPC map-warp menu in the web client.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing Teleport NPC destinations, requirements, Zen fees, and warp result status.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>26</SubCode>
+      <Name>HnmoVipState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>The server finishes a correlated own-account VIP request.</SentWhen>
+      <CausedReaction>The web game updates VIP status, reviewed offers and the localized action result.</CausedReaction>
+      <Fields>
+        <Field><Index>5</Index><Type>IntegerLittleEndian</Type><Name>RequestId</Name><Description>A nonzero request correlation identifier; not an authentication token.</Description></Field>
+        <Field><Index>9</Index><Type>String</Type><Name>Json</Name><Description>ASCII-safe JSON using the shared VIP account state; Unicode is escaped and no private receipt or credential is included.</Description></Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>4D</SubCode>
+      <Name>HnmoEscrowState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when the player requests escrow contracts (F9 / /contract) or completes an escrow operation.</SentWhen>
+      <CausedReaction>Updates the Contracts window and reputation/owed summary in the web client.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing contracts, owed deliveries, safety flags, reputation, and notices.</Description>
+        </Field>
+      </Fields>
     </Packet>
   </Packets>
   <Enums>

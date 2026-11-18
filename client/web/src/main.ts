@@ -24,10 +24,11 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
+import { setKtx2Renderer, clearTextureCache } from './bmd.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
-import { applyPixelRatio, frameDue } from './render/quality.js';
+import { applyPixelRatio, frameDue, performanceFlags } from './render/quality.js';
 import { findItemReverse, HOTKEY_LETTERS, isHighValue, jewelApplies, isSellingBan, ItemHotkeys, ItemUser, itemTypesInUseOrder, rightClickBagItem } from './game/itemUse.js';
 import { loadSkillData, masterSkillToBaseSkill, skillCooldowns, SkillList, skillInfo, skillRequirementsMet, skillUsableWithEquipment } from './game/skills.js';
 import { skillTooltipLines } from './game/skillTooltip.js';
@@ -36,14 +37,30 @@ import { CharacterWindow } from './ui/characterWindow.js';
 import { setupMasterLevel } from './ui/masterLevelWindow.js';
 import { AutoPlay } from './game/autoPlay.js';
 import { AutoPlayBar } from './ui/autoPlayBar.js';
+import { TopUpMilestonesWindow } from './ui/topUpMilestonesWindow.js';
 import { AutoPlayExtras } from './game/autoPlayExtras.js';
 import { AutoPlayExtrasPanel } from './ui/autoPlayExtrasPanel.js';
 import { MissionsWindow } from './ui/missionsWindow.js';
 import { WorldBossWindow } from './ui/worldBossWindow.js';
+import { TimetableWindow } from './ui/timetableWindow.js';
+import { EventAlertsWindow } from './ui/eventAlertsWidget.js';
+import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
+import { MarriageWindow } from './ui/marriageWindow.js';
+import { MarketWindow } from './ui/marketWindow.js';
+import { EscrowWindow } from './ui/escrowWindow.js';
+import { JewelBankWindow } from './ui/jewelBankWindow.js';
+import { VipWindow } from './ui/vipWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
 import { GiftCodesWindow } from './ui/giftCodesWindow.js';
+import { CatchupBanner } from './ui/catchupBanner.js';
+import { SeasonPlanWindow } from './ui/seasonPlanWindow.js';
+import { LeftoversWindow } from './ui/leftoversWindow.js';
+import { MountChainWindow } from './ui/mountChainWindow.js';
+import { RankingWindow } from './ui/rankingWindow.js';
+import { AddStatsWindow } from './ui/addStatsWindow.js';
+import { TeleportNpcWindow } from './ui/teleportNpcWindow.js';
 import { Resets } from './game/resets.js';
 import { AccountSafety, text as safetyText } from './game/accountSafety.js';
 import { Screenshots } from './ui/screenshot.js';
@@ -58,9 +75,11 @@ import { GameSounds } from './game/gameSounds.js';
 import { Party, facingPlayer } from './game/party.js';
 import { PartyList } from './ui/partyList.js';
 import { PartyWindow } from './ui/partyWindow.js';
+import { PartyOptionsWindow } from './ui/partyOptionsWindow.js';
 import { CommandWindow } from './ui/commandWindow.js';
 import { hideLoadingScreen, showLoadingScreen } from './ui/loadingScreen.js';
-import { setupSocial, decorateLabel, type Social } from './game/social.js';
+import { setupSocial, decorateLabel, setCustomRankLookup, type Social } from './game/social.js';
+import { createCustomRanks, type CustomRanksManager } from './game/customRanks.js';
 import { confirmInGame } from './ui/confirmDialog.js';
 import { QuestWindows } from './ui/questWindows.js';
 import { setUpEvents, type EventSystem } from './ui/eventWindows.js';
@@ -89,7 +108,7 @@ import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
-import { fetchServerList, fetchGameServerAddress, login, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
+import { fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES, LoginRefusedError } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
@@ -176,10 +195,25 @@ export interface GameState {
   autoPlayExtras?: AutoPlayExtras;
   missions?: MissionsWindow;
   worldBosses?: WorldBossWindow;
+  timetable?: TimetableWindow;
+  luckyNumber?: LuckyNumberWindow;
+  marriage?: MarriageWindow;
+  market?: MarketWindow;
+  escrow?: EscrowWindow;
+  jewelBank?: JewelBankWindow;
+  vip?: VipWindow;
   guildLevels?: GuildLevelsWindow;
+  customRanks?: CustomRanksManager;
+  teleportNpc?: TeleportNpcWindow;
   community?: CommunityWindow;
   topRaces?: TopRacesWindow;
   giftCodes?: GiftCodesWindow;
+  catchupCap?: CatchupBanner;
+  seasonPlan?: SeasonPlanWindow;
+  leftovers?: LeftoversWindow;
+  mountChain?: MountChainWindow;
+  ranking?: RankingWindow;
+  addStats?: AddStatsWindow;
   resets?: Resets;
   accountSafety?: AccountSafety;
   screenshots?: Screenshots;
@@ -197,12 +231,14 @@ export interface GameState {
   view?: { yaw: number; distance: number };
   gates?: GateWatcher;
   partyWindow?: PartyWindow;
+  partyOptions?: PartyOptionsWindow;
   commandWindow?: CommandWindow;
   events?: EventSystem;
   instanceEvents?: InstanceEventSystem;
   social?: Social;
   duelAndGens?: DuelAndGens;
   fieldEvents?: FieldEvents;
+  topUpMilestones?: TopUpMilestonesWindow;
   /** The performance report window (HNMO extra). */
   perfReport?: PerfReportWindow;
   /** What tests and the console reach in the dev build and the packaged bundle alike. */
@@ -211,6 +247,8 @@ export interface GameState {
 
 export interface GameDebug {
   renderer: THREE.WebGLRenderer;
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
   createPlayerCharacter: typeof createPlayerCharacter;
   createMonsterCharacter: typeof createMonsterCharacter;
   drawItem: typeof drawItem;
@@ -258,6 +296,7 @@ const notNearby = (name: string) => chat.add(`${name} is not nearby.`, 'system')
 const chat = new Chat({
   click: () => sounds.click(),
   owner: () => state.online?.hero.name ?? '',
+  titlePrefix: (name) => state.customRanks?.chatPrefix(name) ?? null,
   nameActions: {
     party: (name) => { const p = playerNamed(name); if (p) state.party?.invite(p); else notNearby(name); },
     trade: (name) => { const p = playerNamed(name); if (p) state.trade?.requestTrade(p.id); else notNearby(name); },
@@ -266,6 +305,7 @@ const chat = new Chat({
 });
 
 const renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: true });
+setKtx2Renderer(renderer);
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // then render/quality.ts's applyPixelRatio
 const scene = new THREE.Scene();
@@ -301,7 +341,7 @@ const perfRecorder = new PerfRecorder({
 });
 const movementRecorder = new MovementRecorder();
 state.debug = {
-  renderer, createPlayerCharacter, createMonsterCharacter, drawItem, glowMaterialCount,
+  renderer, scene, camera, createPlayerCharacter, createMonsterCharacter, drawItem, glowMaterialCount,
   movementRecorder,
   setCulling: (on) => { cullingOn = on; },
   benchFrames: (count, { dt = 1 / 60, draw = true } = {}) => {
@@ -651,9 +691,15 @@ const cullSphere = new THREE.Sphere();
 const CULL_RADIUS = 450;
 let cullingOn = true;
 function cullCharacters(online: OnlineWorld): void {
+  const perf = performanceFlags();
   cullMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse).multiply(root.matrixWorld);
   cullFrustum.setFromProjectionMatrix(cullMatrix);
   for (const character of online.characters.values()) {
+    if (perf.hideOtherPlayers && character.kind === 'player') {
+      character.culled = true;
+      for (const companion of character.companions) companion.group.visible = false;
+      continue;
+    }
     const group = character.group;
     if (group.parent !== root || !cullingOn) { character.culled = false; continue; }
     cullSphere.center.copy(group.position);
@@ -736,7 +782,20 @@ function saveSettings(settings: Record<string, string>): void {
 
 function showError(error: unknown): void {
   hideLoadingScreen();
-  ui.loginError.textContent = error instanceof Error ? error.message : String(error);
+  ui.loginError.replaceChildren();
+  const message = error instanceof Error ? error.message : String(error);
+  ui.loginError.append(document.createTextNode(message));
+  if (error instanceof LoginRefusedError && error.isVipRefusal) {
+    ui.loginError.append(document.createTextNode(' '));
+    const link = document.createElement('a');
+    link.href = '/account.html#vip';
+    link.style.color = 'var(--gold)';
+    link.style.textDecoration = 'underline';
+    link.textContent = currentLanguage() === 'vi'
+      ? 'Mở trang VIP trên Tài khoản →'
+      : 'Open VIP section on Account page →';
+    ui.loginError.append(link);
+  }
   ui.loginError.hidden = false;
 }
 
@@ -803,16 +862,115 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
   });
 }
 
-async function playOnline(settings: LoginSettings): Promise<void> {
+interface WebsiteServerMeta {
+  worldLabel?: string;
+  description?: string;
+  vipOnly?: boolean;
+  pvpEnabled?: boolean;
+  experienceRate?: number;
+  dropRate?: number;
+  zenRate?: number;
+}
+
+async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
+  const meta = new Map<number, WebsiteServerMeta>();
+  try {
+    const response = await fetch('/website/data', {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(1200),
+    });
+    if (!response.ok) return meta;
+    const raw: unknown = await response.json();
+    if (typeof raw !== 'object' || raw === null) {
+      return meta;
+    }
+
+    const vi = currentLanguage() === 'vi';
+    if ('worlds' in raw && Array.isArray(raw.worlds)) {
+      for (const world of raw.worlds as unknown[]) {
+        if (typeof world !== 'object' || world === null) continue;
+        const entry = world as { nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+        const name = vi
+          ? (typeof entry.nameVi === 'string' && entry.nameVi ? entry.nameVi : typeof entry.nameEn === 'string' ? entry.nameEn : '')
+          : (typeof entry.nameEn === 'string' ? entry.nameEn : '');
+        const status = entry.isOpen === false && typeof entry.openingDateSydney === 'string' && entry.openingDateSydney
+          ? (vi ? `Mở ${entry.openingDateSydney}` : `Opens ${entry.openingDateSydney}`)
+          : '';
+        const serverList = Array.isArray(entry.servers) ? (entry.servers as unknown[]) : [];
+        for (const srv of serverList) {
+          if (typeof srv === 'object' && srv !== null && 'id' in srv && typeof (srv as { id: unknown }).id === 'number') {
+            const id = (srv as { id: number }).id;
+            const full = status ? `${name} (${status})` : name;
+            const existing = meta.get(id) ?? {};
+            if (full) existing.worldLabel = full;
+            meta.set(id, existing);
+          }
+        }
+      }
+    }
+
+    if ('servers' in raw && Array.isArray(raw.servers)) {
+      for (const srv of raw.servers as unknown[]) {
+        if (typeof srv !== 'object' || srv === null) continue;
+        const s = srv as {
+          id?: unknown;
+          description?: unknown;
+          vipOnly?: unknown;
+          pvpEnabled?: unknown;
+          experienceRate?: unknown;
+          dropRate?: unknown;
+          zenRate?: unknown;
+        };
+        if (typeof s.id !== 'number') continue;
+        const existing = meta.get(s.id) ?? {};
+        if (typeof s.description === 'string' && s.description) existing.description = s.description;
+        if (typeof s.vipOnly === 'boolean') existing.vipOnly = s.vipOnly;
+        if (typeof s.pvpEnabled === 'boolean') existing.pvpEnabled = s.pvpEnabled;
+        if (typeof s.experienceRate === 'number') existing.experienceRate = s.experienceRate;
+        if (typeof s.dropRate === 'number') existing.dropRate = s.dropRate;
+        if (typeof s.zenRate === 'number') existing.zenRate = s.zenRate;
+        meta.set(s.id, existing);
+      }
+    }
+  } catch {
+    /* Optional grouped world & VIP server metadata when offline or standalone relay. */
+  }
+  return meta;
+}
+
+export function describeServerChoice(id: number, load: number, meta?: WebsiteServerMeta, vi = currentLanguage() === 'vi'): string {
+  const baseName = meta?.description ? escapeHtml(meta.description) : (vi ? `Máy chủ ${id + 1}` : `Server ${id + 1}`);
+  const title = meta?.worldLabel ? `${escapeHtml(meta.worldLabel)} — ${baseName}` : baseName;
+  const vipBadge = meta?.vipOnly
+    ? (vi ? ' 🔒 <span style="color:var(--gold);font-weight:700">[Phòng VIP]</span>' : ' 🔒 <span style="color:var(--gold);font-weight:700">[VIP only]</span>')
+    : '';
+  const details: string[] = [`${load}% ${vi ? 'tải' : 'load'}`];
+  if (typeof meta?.experienceRate === 'number') details.push(`EXP ${meta.experienceRate}×`);
+  if (typeof meta?.dropRate === 'number' && meta.dropRate !== 1) details.push(`Drop ${meta.dropRate}×`);
+  if (typeof meta?.zenRate === 'number' && meta.zenRate !== 1) details.push(`Zen ${meta.zenRate}×`);
+  if (meta?.pvpEnabled === false) details.push('Non-PvP');
+  return `${title}${vipBadge}<small>${details.join(' · ')}</small>`;
+}
+
+async function playOnline(settings: LoginSettings, ticket?: string): Promise<void> {
+  state.connection?.close();
+  state.connection = undefined;
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
-  const servers = await fetchServerList(settings.relay, connectServer);
+  const [servers, serverMeta] = await Promise.all([
+    fetchServerList(settings.relay, connectServer),
+    fetchServerMetadata(),
+  ]);
   if (!servers.length) throw new Error('The connect server lists no game servers.');
-  const server = servers.length === 1 ? servers[0] : await chooseFrom(ui.servers, servers, (s) => `Server ${s.id + 1}<small>${s.load}% load</small>`);
+  const server = servers.length === 1
+    ? servers[0]
+    : await chooseFrom(ui.servers, servers, (s) => describeServerChoice(s.id, s.load, serverMeta.get(s.id)));
   ui.servers.hidden = true;
   const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
-  const connection = await login(settings.relay, address, settings.username, settings.password);
+  const connection = ticket
+    ? await loginWithTicket(settings.relay, address, settings.username, ticket)
+    : await login(settings.relay, address, settings.username, settings.password);
   state.connection = connection; // tests feed recorded packets through it (dispatch)
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
@@ -939,7 +1097,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   }, 6_000);
   setCompanionEffects(effects); // pets' and mounts' glows
   // The weapon trails of swinging players (CreateWeaponBlur).
-  const weaponTrails = new WeaponTrails(() => [online.hero, ...online.characters.values()]);
+  const weaponTrails = new WeaponTrails(() => (performanceFlags().reducedEffects ? [] : [online.hero, ...online.characters.values()]));
   effects.addLayer(weaponTrails);
   state.weaponTrails = weaponTrails;
   // A character as the effects see it; its aura joints live while it has eBuff_Attack, _Defense or _HelpNpc.
@@ -951,6 +1109,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   online.onAdded = (who) => { if (who.look?.setup.spawnEffects) void playSpawnEffects(effects, who, ownerFromCharacter(who)); };
   // The +15 weapons' sparkles in the hands of every player shown (not in Chaos Castle).
   keepSparkles = () => keepNextGradeSparkles(effects, function* () {
+    if (performanceFlags().reducedEffects) return;
     for (const who of [online.hero, ...online.characters.values()]) {
       if (who !== online.hero && who.kind !== 'player') continue;
       const weapons = who.attachments.filter((a) => (a.slot === 'rightHand' || a.slot === 'leftHand') && (a.item.glowLevel ?? 0) >= 15)
@@ -1063,6 +1222,8 @@ async function playOnline(settings: LoginSettings): Promise<void> {
         dash.clearDummies();
         darkSideGhosts.prepare(online.hero);
       }
+      const perf = performanceFlags();
+      if (caster !== online.hero && caster.kind === 'player' && (perf.hideOtherPlayers || perf.reducedEffects)) return;
       if (isNewSkill(skill)) { playNewSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null); return; }
       playSkillEffect(effects, skill, ownerFromCharacter(caster), target ? ownerFromCharacter(target) : null, {
         shootArrow: (angleOffsetDegrees) => { if (target) for (const kind of kinds) void projectiles.shoot(caster, target, kind, { angleOffsetDegrees }); },
@@ -1090,9 +1251,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       darkSideGhosts.prepare(online.hero);
     },
     onSkillHit: (caster, castSkill, target) => {
+      const perf = performanceFlags();
+      if (caster !== online.hero && caster.kind === 'player' && (perf.hideOtherPlayers || perf.reducedEffects)) return;
       playSkillHit(effects, masterSkillToBaseSkill(castSkill), ownerFromCharacter(caster), ownerFromCharacter(target));
     },
-    onChainLightning: (caster, _skill, targets) => playChainLightning(effects, ownerFromCharacter(caster), targets.map(ownerFromCharacter)),
+    onChainLightning: (caster, _skill, targets) => {
+      const perf = performanceFlags();
+      if (caster !== online.hero && caster.kind === 'player' && (perf.hideOtherPlayers || perf.reducedEffects)) return;
+      playChainLightning(effects, ownerFromCharacter(caster), targets.map(ownerFromCharacter));
+    },
     onHeroDied: () => chat.add('You died.', 'system'),
     onRespawn: async (map, x, y) => {
       if (map !== state.mapNumber) { await loadMap(map); online.world = state.world!; }
@@ -1171,7 +1338,12 @@ async function playOnline(settings: LoginSettings): Promise<void> {
     connection, stats, inventory, classIndex: character.classIndex, name: character.name,
     currentSkill: () => skills.skillAt(skills.current),
     onQuest: () => quests.toggleMyQuest(),
-    onToggle: (open) => { if (open) state.partyWindow?.close(); itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    onToggle: (open) => {
+      if (open) state.partyWindow?.close();
+      state.addStats?.setCharacterWindowOpen(open);
+      itemWindows.dockedRight = open ? 1 : 0;
+      itemWindows.placeAll();
+    },
   });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
@@ -1362,10 +1534,124 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.worldBosses = worldBosses;
   connection.onPacket((bytes) => { worldBosses.handle(bytes); });
   worldBosses.start();
+  const catchupCap = new CatchupBanner((name, fields) => connection.send('ClientToServer', name, fields));
+  state.catchupCap = catchupCap;
+  connection.onPacket((bytes) => { catchupCap.handle(bytes); });
+  window.addEventListener('hnmo-catchup-open', () => { catchupCap.open(); });
+  const seasonPlan = new SeasonPlanWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.seasonPlan = seasonPlan;
+  connection.onPacket((bytes) => { seasonPlan.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F8' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); seasonPlan.toggle(); }
+  });
+  window.addEventListener('hnmo-season-plan-open', () => { seasonPlan.open(); });
+  const leftovers = new LeftoversWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.leftovers = leftovers;
+  connection.onPacket((bytes) => { leftovers.handle(bytes); });
+  window.addEventListener('hnmo-leftovers-open', () => { leftovers.open(); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F10' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); leftovers.toggle(); }
+  });
+  const mountChain = new MountChainWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.mountChain = mountChain;
+  connection.onPacket((bytes) => { mountChain.handle(bytes); });
+  window.addEventListener('hnmo-mount-chain-open', () => { mountChain.open(); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if ((event.key === 'U' || event.key === 'u') && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); mountChain.toggle(); }
+  });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'n' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); worldBosses.toggle(); }
   });
+  // HNMO's event & boss timetable (H): every event, invasion and world boss with Sydney/local times, maps and drops.
+  const eventAlerts = new EventAlertsWindow();
+  const timetable = new TimetableWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    onOpenAlerts: () => eventAlerts.open(),
+  });
+  window.addEventListener('hnmo-event-alerts-open', () => eventAlerts.open());
+  state.timetable = timetable;
+  connection.onPacket((bytes) => { timetable.handle(bytes); });
+  timetable.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'h' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); timetable.toggle(); }
+  });
+  window.addEventListener('hnmo-timetable-open', () => timetable.open());
+  // HNMO's daily lucky number (L): pick a number, view draw odds/prizes and claim waiting jewels.
+  const luckyNumber = new LuckyNumberWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.luckyNumber = luckyNumber;
+  connection.onPacket((bytes) => { luckyNumber.handle(bytes); });
+  luckyNumber.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'l' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); luckyNumber.toggle(); }
+  });
+  // HNMO's marriage system (Shift+M, /marry): proposals, Devias Church ceremonies, couple title, hunting bonus.
+  const marriage = new MarriageWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.marriage = marriage;
+  connection.onPacket((bytes) => { marriage.handle(bytes); });
+  marriage.start();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'm' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); marriage.toggle(); }
+  });
+  window.addEventListener('hnmo-marriage-open', () => marriage.open());
+  // HNMO's item market (F6, or NPC 547 Market Julia): escrow listings for Zen or CashShop coins.
+  const market = new MarketWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.market = market;
+  connection.onPacket((bytes) => { market.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F6' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
+  });
+  window.addEventListener('hnmo-market-open', () => { market.open(); });
+  // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
+  const vip = new VipWindow({ send: (name, fields) => connection.send('ClientToServer', name, fields), message: (text) => chat.add(text, 'system') });
+  state.vip = vip;
+  connection.onPacket((bytes) => { vip.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'u' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); vip.toggle(); }
+  });
+  window.addEventListener('hnmo-vip-open', () => { vip.open(); });
+  // HNMO's Escrow Contracts (F9, /contract, CommandWindow Contract -> right-click player).
+  const escrow = new EscrowWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.escrow = escrow;
+  connection.onPacket((bytes) => { escrow.handlePacket(bytes); });
+  for (const bytes of earlyPackets) escrow.handlePacket(bytes);
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
+  });
+  window.addEventListener('hnmo-escrow-open', () => { escrow.open(); });
+  // HNMO's Jewel Bank & master skill clear (F7).
+  const jewelBank = new JewelBankWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.jewelBank = jewelBank;
+  connection.onPacket((bytes) => { jewelBank.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F7' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); jewelBank.toggle(); }
+  });
+  window.addEventListener('hnmo-jewel-bank-open', () => { jewelBank.open(); });
   // HNMO's guild levels: a panel next to the guild window (G) with the level, the experience, this week's ladder rank and
   // the buff (also on the buff strip); level-ups and ladder rewards are told in the chat.
   const guildLevels = new GuildLevelsWindow({
@@ -1378,6 +1664,15 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   connection.onPacket((bytes) => { guildLevels.handle(bytes); });
   for (const bytes of earlyPackets) guildLevels.handle(bytes);
   guildLevels.start();
+  const customRanks = createCustomRanks(connection);
+  state.customRanks = customRanks;
+  setCustomRankLookup((name) => customRanks.nameplateBadge(name));
+  connection.onPacket((bytes) => { customRanks.handle(bytes); });
+  for (const bytes of earlyPackets) customRanks.handle(bytes);
+  customRanks.start();
+  const teleportNpc = new TeleportNpcWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.teleportNpc = teleportNpc;
+  connection.onPacket((bytes) => { teleportNpc.handle(bytes); });
   // Screenshots (Print Screen, as the desktop) and HNMO's share panel; the community window (K, when the inventory
   // isn't open): the Discord and Zalo coins, community events and their codes.
   screenshotHero = character.name;
@@ -1439,6 +1734,22 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   for (const bytes of earlyPackets) giftCodes.handle(bytes);
   giftCodes.start();
   window.addEventListener('hnmo-gift-codes-open', () => giftCodes.open());
+  // HNMO's top-up milestones ("thưởng mốc nạp", U key): cumulative VND rewards claimed once per step.
+  const topUpMilestones = new TopUpMilestonesWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.topUpMilestones = topUpMilestones;
+  connection.onPacket((bytes) => { topUpMilestones.handlePacket(bytes); });
+  for (const bytes of earlyPackets) topUpMilestones.handlePacket(bytes);
+  topUpMilestones.requestState();
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea')) return;
+    if (event.key.toLowerCase() === 'u' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      topUpMilestones.toggle();
+    }
+  });
   // HNMO's reset options (/reset, /reset info, /relife, /autoreset): the server answers in the chat; the reset state keeps the
   // character window's reset count right and adds a notice with today's count after a reset, a relife or delegated resets.
   const resets = new Resets({
@@ -1583,12 +1894,43 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   state.party = party;
   // A party kept while the hero was away comes back with its list on entering (the server's auto rejoin).
   earlyPackets.forEach((bytes) => party.handle(bytes));
+  const partyOptions = new PartyOptionsWindow((name, fields) => connection.send('ClientToServer', name, fields));
+  state.partyOptions = partyOptions;
+  connection.onPacket((bytes) => { partyOptions.handle(bytes); });
+  window.addEventListener('hnmo-party-options-open', () => { partyOptions.open(); });
+  // HNMO's bulk Add Stats window (Shift+A) & Player Rankings panel (Shift+R / /rank).
+  const addStats = new AddStatsWindow(
+    stats,
+    character.classIndex,
+    (name, fields) => connection.send('ClientToServer', name, fields),
+    (text) => chat.add(text, 'system'),
+  );
+  state.addStats = addStats;
+  const ranking = new RankingWindow(
+    (name, fields) => connection.send('ClientToServer', name, fields),
+    () => addStats.open(),
+  );
+  state.ranking = ranking;
+  connection.onPacket((bytes) => { ranking.handle(bytes); });
+  for (const bytes of earlyPackets) ranking.handle(bytes);
+  window.addEventListener('hnmo-ranking-open', () => { ranking.open(); });
+  window.addEventListener('hnmo-add-stats-open', () => { addStats.open(); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'r' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      ranking.toggle();
+    } else if (event.key.toLowerCase() === 'a' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault();
+      addStats.toggle();
+    }
+  });
   // The party window (P): docked at the right; opening it closes the inventory and the character window.
   const partyWindow = new PartyWindow({
     connection, party, heroName: character.name, mapName,
     click: () => sounds.click(),
     onOpen: () => { itemWindows.closeAll(); characterWindow.close(); },
-    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); },
+    onToggle: (open) => { itemWindows.dockedRight = open ? 1 : 0; itemWindows.placeAll(); partyOptions.setPartyWindowOpen(open); },
   });
   state.partyWindow = partyWindow;
   window.addEventListener('keydown', (event) => {
@@ -1634,6 +1976,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
       addFriend: (player) => { if (state.social?.messenger.serverEnabled) state.social.messenger.addFriend(player.name); },
       follow: (player) => { online.followId = player.id; },
       duel: (player) => state.duelAndGens?.duel.challenge(player),
+      contract: (player) => state.escrow?.openForTarget(player.name),
     },
   });
   window.addEventListener('keydown', (event) => {
@@ -1679,7 +2022,7 @@ async function playOnline(settings: LoginSettings): Promise<void> {
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   hideLoadingScreen();
-  connection.onClose = () => setStatus('Disconnected from the server. Reload the page to log in again.');
+  connection.onClose = () => { vip.reset(); vip.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
   warmCharacterModels();
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }
@@ -1692,6 +2035,8 @@ function startGame(play: () => Promise<void>): void {
     ui.hud.hidden = false;
     window.__viewerReady = true;
   }).catch((error) => {
+    state.connection?.close();
+    state.connection = undefined;
     console.error(error);
     ui.login.hidden = false;
     ui.servers.hidden = ui.characters.hidden = true;
@@ -1700,14 +2045,74 @@ function startGame(play: () => Promise<void>): void {
   });
 }
 
+function readTicketFromHash(): { account: string; ticket: string } | null {
+  const hash = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
+  if (!hash) return null;
+  const params = new URLSearchParams(hash);
+  const ticket = params.get('ticket')?.trim() ?? '';
+  const account = params.get('account')?.trim() ?? '';
+  if (!ticket) return null;
+  // Remove the one-time ticket from the address bar right away so it doesn't linger in history.
+  history.replaceState(null, '', location.pathname + location.search);
+  return { account, ticket };
+}
+
+function updateWebsiteLoginButtonLanguage(): void {
+  const button = document.getElementById('websiteLoginButton');
+  if (button) button.textContent = currentLanguage() === 'vi' ? 'Đăng nhập trên trang web' : 'Log in on the website';
+}
+
 function initLogin() {
   const saved = loadSettings();
   // HNMO.Web serves the page and the relay from the same address.
   const defaults = { relay: `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/relay`, host: '127.0.0.1', port: 44406, username: '' };
-  for (const [key, value] of Object.entries({ ...defaults, ...saved })) {
+  const initial = { ...defaults, ...saved };
+  for (const [key, value] of Object.entries(initial)) {
     const input = ui.loginForm.elements.namedItem(key) as HTMLInputElement | null;
     if (input) input.value = String(value);
   }
+  updateWebsiteLoginButtonLanguage();
+  onLanguageChange(() => updateWebsiteLoginButtonLanguage());
+
+  const websiteSettingsPromise = fetch('/website/settings', { cache: 'no-cache', signal: AbortSignal.timeout(3000) })
+    .then((r) => (r.ok ? (r.json() as Promise<{ requireWebsiteLogin?: boolean; connectServerPort?: number }>) : null))
+    .catch(() => null);
+
+  void websiteSettingsPromise.then((d) => {
+    if (d?.requireWebsiteLogin) {
+      const fieldset = ui.loginForm.querySelector('fieldset');
+      if (fieldset) fieldset.hidden = true;
+    }
+    if (d?.connectServerPort && d.connectServerPort > 0 && !saved.port) {
+      const portInput = ui.loginForm.elements.namedItem('port') as HTMLInputElement | null;
+      if (portInput && portInput.value === '44406') portInput.value = String(d.connectServerPort);
+    }
+  });
+
+  const resolveConnectPort = async (form: LoginSettings): Promise<LoginSettings> => {
+    if (!saved.port && form.port === '44406') {
+      const d = await websiteSettingsPromise;
+      if (d?.connectServerPort && d.connectServerPort > 0) {
+        return { ...form, port: String(d.connectServerPort) };
+      }
+    }
+    return form;
+  };
+
+  const pendingTicket = readTicketFromHash();
+  if (pendingTicket) {
+    const form: LoginSettings = {
+      username: pendingTicket.account || String(initial.username ?? ''),
+      password: '',
+      host: String(initial.host),
+      port: String(initial.port),
+      relay: String(initial.relay),
+    };
+    const usernameInput = ui.loginForm.elements.namedItem('username') as HTMLInputElement | null;
+    if (usernameInput && form.username) usernameInput.value = form.username;
+    startGame(async () => playOnline(await resolveConnectPort(form), pendingTicket.ticket));
+  }
+
   ui.loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
     // The form's text inputs, by name.
@@ -1716,14 +2121,20 @@ function initLogin() {
     const form: LoginSettings = { username: field('username'), password: field('password'), host: field('host'), port: field('port'), relay: field('relay') };
     const { password, ...remembered } = form;
     saveSettings(remembered);
-    startGame(() => playOnline(form));
+    startGame(async () => playOnline(await resolveConnectPort(form)));
   });
 }
 
 resize();
 initLogin();
 setUpGuide();
-settingsWindow = setUpSettings({ renderer, scene, camera, effects: () => state.effects?.root }, { performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); } });
+settingsWindow = setUpSettings(
+  { renderer, scene, camera, effects: () => state.effects?.root },
+  {
+    performanceReport: () => { void perfWindow.open().then(() => perfWindow.record()); },
+    textureQualityChanged: () => { clearTextureCache(); },
+  },
+);
 // The login theme (it starts with the first click or key: browsers hold sound back until then).
 sounds.audio.playMusic(loginMusic(false));
 // The sound button: everything on or off, kept in the browser.
