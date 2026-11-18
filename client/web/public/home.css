@@ -14,6 +14,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 95px;
+  overflow-x: clip;
 }
 body {
   margin: 0;
@@ -22,6 +23,7 @@ body {
   font:
     14px/1.7 "Be Vietnam Pro",
     sans-serif;
+  overflow-x: clip;
 }
 a {
   color: inherit;
@@ -71,9 +73,11 @@ header {
 }
 nav {
   display: flex;
-  gap: 28px;
+  flex-wrap: wrap;
+  gap: 8px 18px;
   margin: auto;
   font-size: 12px;
+  max-width: 100%;
 }
 .languages {
   display: flex;
@@ -514,3 +518,25 @@ footer {
 .world-card .world-servers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .world-card button { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 4px 10px; font-size: 12px; cursor: pointer; }
 .world-card button[aria-current="true"] { border-color: var(--gold); color: var(--gold); }
+
+/* Safe-area notch padding and small-phone layout polish */
+@supports (padding: env(safe-area-inset-top)) {
+  header {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+  }
+  footer {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 560px) {
+  .stats { grid-template-columns: 1fr; }
+  .mission-list, .boss-list, .race-grid, .worlds-group { grid-template-columns: 1fr; }
+  nav { gap: 6px 10px; font-size: 12px; }
+  .actions { display: grid; gap: 8px; }
+  .actions a { text-align: center; }
+}

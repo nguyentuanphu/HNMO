@@ -168,7 +168,13 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   };
   window.addEventListener('resize', portrait);
   // Shown on touch screens, and from the first touch on any screen.
-  const show = () => { bar.classList.add('shown'); fight.classList.add('shown'); portrait(); };
+  const show = () => {
+    const first = !bar.classList.contains('shown');
+    bar.classList.add('shown');
+    fight.classList.add('shown');
+    portrait();
+    if (first) (actions as TouchActions & { onShow?: () => void }).onShow?.();
+  };
   if (window.matchMedia?.('(pointer: coarse)').matches) show();
 
   const fingers = new Map<number, { x: number; y: number }>();

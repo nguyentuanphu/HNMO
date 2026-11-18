@@ -110,6 +110,7 @@ export class Chat {
   private readonly inputModel: InputModel;
   private readonly logModel: LogModel;
   private readonly systemModel: SystemModel;
+  private readonly listeners = new Set<() => void>();
 
   constructor(options: ChatOptions = {}) {
     this.options = options;
@@ -145,7 +146,7 @@ export class Chat {
   }
 
   /** The windows show and the line is sent to `send` (CheckCommand and the public chat). */
-  enable(send: ChatSender): void {
+  enable(send: ChatSender, buildDocs = true): void {
     this.send = send;
     this.enabled = true;
     // The character's lines from before (a reload, the last login), marked as old so they don't fade in.
@@ -154,7 +155,7 @@ export class Chat {
     this.all = [...history.chat.map(old), ...this.all];
     this.whispers = this.all.filter((m) => m.kind === 'whisper');
     this.systemHistory = [...history.system.map(old), ...this.systemHistory];
-    void this.build();
+    if (buildDocs) void this.build();
   }
 
   /** Adds a line: a said line has the speaker's name, the game's own messages go to the system log. */
@@ -198,6 +199,30 @@ export class Chat {
     }
     this.sync(true);
     this.scheduleSave();
+    this.notify();
+  }
+
+  onChange(listener: () => void): () => void {
+    this.listeners.add(listener);
+    return () => { this.listeners.delete(listener); };
+  }
+
+  private notify(): void {
+    for (const listener of this.listeners) listener();
+  }
+
+  /** Returns messages filtered for the specified chat tab (0 All, 1 Whisper, 2 Party, 3 Guild, 4 System). */
+  getMessages(tabIndex = this.tab): { id: string; text: string; kind: ChatKind; count: number; time: number }[] {
+    const safeTab = Math.max(0, Math.min(TABS.length - 1, tabIndex));
+    const kinds = TABS[safeTab].kinds;
+    if (!kinds) return [...this.all];
+    if (safeTab === 1) return [...this.whispers];
+    const source = kinds.includes('system') ? [...this.all, ...this.systemHistory].sort((a, b) => a.time - b.time) : this.all;
+    return source.filter((m) => kinds.includes(m.kind));
+  }
+
+  getUnread(): number[] {
+    return [...this.unread];
   }
 
   /** Blocks or unblocks a player (the name menu, /block, /unblock). */
@@ -502,6 +527,7 @@ export class Chat {
     if (lines && (added || follow)) requestAnimationFrame(() => { if (follow) lines.scrollTop = lines.scrollHeight; });
     this.syncTabs();
     this.applyFade();
+    this.notify();
   }
 
   private setFrame(on: boolean): void {
@@ -654,6 +680,15 @@ export class Chat {
     if (id === '#chat_field') this.inputModel.chat_text = value; else this.inputModel.whisper_id = value;
   }
 
+  /** Sends a chat/command/whisper line directly from external HUD controls (e.g. mobile chat bar or macros). */
+  submitText(rawText: string, channel = this.inputModel.input_msg_type, whisperTo = ''): boolean {
+    const now = performance.now();
+    if (now - this.lastSent < COOLDOWN_MS) return false;
+    this.lastSent = now;
+    this.dispatchLine(rawText.slice(0, CHAT_MAX), channel, whisperTo.trim().slice(0, NAME_MAX));
+    return true;
+  }
+
   // Enter in the box: the channel's prefix, then a command, a whisper or the public chat; the box closes.
   private submit(): void {
     const now = performance.now();
@@ -661,6 +696,13 @@ export class Chat {
     this.lastSent = now;
     const text = (this.input?.$<HTMLInputElement>('#chat_field')?.value ?? '').slice(0, CHAT_MAX);
     const target = (this.input?.$<HTMLInputElement>('#whisper_field')?.value ?? '').trim().slice(0, NAME_MAX);
+    this.dispatchLine(text, this.inputModel.input_msg_type, this.inputModel.whisper_send ? target : '');
+    this.setField('#chat_field', '');
+    this.chatHistoryAt = this.whisperHistoryAt = 0;
+    this.close();
+  }
+
+  private dispatchLine(text: string, channel: number, target: string): void {
     const blockCommand = /^\/(block|unblock)\s+(\S+)/i.exec(text.trim());
     if (blockCommand) {
       this.block(blockCommand[2].slice(0, NAME_MAX), blockCommand[1].toLowerCase() === 'block');
@@ -668,8 +710,9 @@ export class Chat {
       const names = blockedNames();
       this.add(names.length ? `Blocked: ${names.join(', ')}` : 'Nobody is blocked.', 'system');
     } else if (text) {
-      const prefixed = text.startsWith('/') ? text : CHANNEL_PREFIX[this.inputModel.input_msg_type] + text;
-      if (this.inputModel.whisper_send && target && !text.startsWith('/') && this.whisper) {
+      const prefix = CHANNEL_PREFIX[channel] ?? '';
+      const prefixed = text.startsWith('/') ? text : prefix + text;
+      if (target && !text.startsWith('/') && this.whisper) {
         this.whisper(target, prefixed);
         this.remember(this.whisperHistory, target, 5);
       } else {
@@ -677,9 +720,6 @@ export class Chat {
         if (!text.startsWith('/')) this.remember(this.chatHistory, prefixed, 12);
       }
     }
-    this.setField('#chat_field', '');
-    this.chatHistoryAt = this.whisperHistoryAt = 0;
-    this.close();
   }
 
   // AddChatHistory / AddWhsprIDHistory: a repeated entry moves to the end, the oldest goes past the limit.

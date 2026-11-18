@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta name="theme-color" content="#11110e" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/images/icon-192.png" />
@@ -553,5 +553,6 @@
       ><a href="#" data-t="top"></a>
     </footer>
     <script type="module" src="/js/website.js"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw-game.js').catch(function () {}); }</script>
   </body>
 </html>
