@@ -25,7 +25,7 @@ interface I18nModule {
 test('loadItemCatalog merges /website/items overrides and renders EN/VI tooltips', async ({ page, request }) => {
   const guide = await request.get('/guide.html');
   expect(guide.ok()).toBeTruthy();
-  expect(await guide.text()).toContain('/item-definitions');
+  expect(await guide.text()).toContain('Custom items');
 
   await page.route('**/website/items', async (route) => {
     await route.fulfill({

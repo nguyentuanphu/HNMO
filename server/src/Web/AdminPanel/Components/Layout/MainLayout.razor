@@ -1,10 +1,14 @@
-﻿@using HNMO.Web.AdminPanel.Properties
+﻿@using System.Globalization
+@using Microsoft.Extensions.DependencyInjection
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
 @using HNMO.Web.Shared.Services
 @using Microsoft.Extensions.Options
 
 @inherits LayoutComponentBase
 @inject IOptions<AdminPanelAuthOptions> AuthOptions
 @inject NavigationManager NavigationManager
+@inject IServiceProvider ServiceProvider
 
 @code {
     [CascadingParameter]
@@ -14,6 +18,15 @@
     private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     private bool _isTwoFactorSetupPending;
+    private AdminNavigationPreferences? _prefs;
+
+    private AdminNavigationPreferences Preferences =>
+        this._prefs ??= this.ServiceProvider.GetService<AdminNavigationPreferences>() ?? new AdminNavigationPreferences();
+
+    private string CurrentRouteKey =>
+        AdminNavigationPreferences.NormalizeRoute(this.NavigationManager.ToBaseRelativePath(this.NavigationManager.Uri));
+
+    private AdminNavEntry? CurrentNavEntry => AdminNavCatalog.FindByRoute(this.CurrentRouteKey);
 
     private bool IsDarkTheme => string.Equals(
         this.HttpContext?.Request.Cookies[ThemeController.CookieName],
@@ -25,7 +38,13 @@
     {
         await base.OnParametersSetAsync();
         this._isTwoFactorSetupPending = await this.IsTwoFactorSetupPendingAsync();
+        this.Preferences.RecordVisit(this.CurrentRouteKey);
     }
+
+    private static string L(string en, string vi) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
+
+    private void ToggleFavouriteCurrent() => this.Preferences.ToggleFavourite(this.CurrentRouteKey);
 
     /// <summary>
     /// Determines whether the signed in user still has to set its second factor up.
@@ -76,8 +95,20 @@
         </header>
 
         <div class="breadcrumb-bar px-4 py-3">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between gap-2 w-100">
                 <BreadcrumbNavigation />
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button"
+                            id="toggle-favourite-page"
+                            class="btn btn-sm @(this.Preferences.IsFavourite(this.CurrentRouteKey) ? "btn-warning" : "btn-outline-secondary")"
+                            title="@L("Pin or unpin this page in Favourites", "Ghim hoặc bỏ ghim trang này vào Yêu thích")"
+                            @onclick="this.ToggleFavouriteCurrent">
+                        <span class="oi oi-star" aria-hidden="true"></span>
+                    </button>
+                    <a class="btn btn-sm btn-outline-info" href="admin-guide" title="@L("Open searchable Admin Guide & recipes", "Mở Cẩm nang quản trị")">
+                        <span class="oi oi-book" aria-hidden="true"></span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -96,10 +127,45 @@
             {
                 @Body
             }
+
+            @if (this.CurrentNavEntry is { RelatedRoutes.Length: > 0 } currentEntry)
+            {
+                <aside class="mt-4 pt-3 border-top d-flex flex-wrap align-items-center gap-2" id="related-pages-bar">
+                    <span class="small fw-semibold text-body-secondary">@L("Related pages:", "Trang liên quan:")</span>
+                    @foreach (var rel in currentEntry.RelatedRoutes)
+                    {
+                        if (AdminNavCatalog.FindByRoute(rel) is { } relEntry)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary"
+                               href="@(string.IsNullOrEmpty(relEntry.Route) ? "" : relEntry.Route)"
+                               title="@relEntry.LocalizedDescription">
+                                <span class="oi @relEntry.Icon me-1" aria-hidden="true"></span>@relEntry.LocalizedTitle
+                            </a>
+                        }
+                    }
+                </aside>
+            }
         </article>
     </main>
     <CreationPanel />
 </div>
+
+<script>
+(() => {
+  if (window.__hnmoAdminCtrlKBound) return;
+  window.__hnmoAdminCtrlKBound = true;
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      const input = document.getElementById('admin-global-search-input');
+      if (input) {
+        e.preventDefault();
+        input.focus();
+        input.select?.();
+      }
+    }
+  });
+})();
+</script>
 
 <div id="blazor-error-ui" data-nosnippet>
   @Resources.UnhandledErrorOccurred

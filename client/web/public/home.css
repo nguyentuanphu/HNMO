@@ -50,7 +50,34 @@ header {
   border-bottom: 1px solid var(--line);
   background: #11140ff2;
   position: relative;
-  z-index: 2;
+  z-index: 10;
+}
+.nav-more {
+  position: relative;
+  display: inline-block;
+}
+.nav-more summary {
+  cursor: pointer;
+  list-style: none;
+  color: var(--gold);
+  font-weight: 600;
+}
+.nav-more-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  min-width: 220px;
+  max-height: 70vh;
+  overflow-y: auto;
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  z-index: 30;
 }
 .brand {
   display: flex;
