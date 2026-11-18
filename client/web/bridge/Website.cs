@@ -19,6 +19,8 @@ internal static class Website
         Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
         Forward(app, "/website/market", "api/website/market", options, clients);
         Forward(app, "/website/escrow", "api/website/escrow", options, clients);
+        Forward(app, "/website/build-calculator", "api/website/build-calculator", options, clients);
+        ForwardPost(app, "/website/build-calculator", "api/website/build-calculator", options, clients);
         app.MapPost("/website/escrow/direct/webhook/{contractId}", async (string contractId, HttpContext context) =>
         {
             context.Response.Headers.CacheControl = "no-store";
