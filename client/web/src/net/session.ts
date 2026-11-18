@@ -129,6 +129,24 @@ export async function login(relayUrl: string, gameServer: ServerAddress, usernam
   return connection;
 }
 
+// Opens the game server connection and logs in with a one-time website ticket.
+export async function loginWithTicket(relayUrl: string, gameServer: ServerAddress, username: string, ticket: string): Promise<Connection> {
+  const connection = new Connection(relayUrl, { ...gameServer, encrypted: true });
+  const entered = connection.waitFor(...packetOf('ServerToClient', 'GameServerEntered'));
+  await connection.open();
+  const welcome = read<GameServerEntered>('ServerToClient', 'GameServerEntered', await entered);
+  const response = await connection.request<LoginResponse>('ClientToServer', 'HnmoTicketLogin', {
+    Username: username,
+    Ticket: ticket,
+  }, 'ServerToClient', 'LoginResponse');
+  if (response.Success !== LOGIN_OK) {
+    connection.close();
+    throw new Error(LOGIN_RESULTS[response.Success] ?? `Login refused (code ${response.Success}).`);
+  }
+  connection.playerId = welcome.PlayerId;
+  return connection;
+}
+
 // Character classes by the server's class number >> 2, with the body set the client draws.
 export const CLASSES = ['Dark Wizard', 'Dark Knight', 'Fairy Elf', 'Magic Gladiator', 'Dark Lord', 'Summoner', 'Rage Fighter'];
 

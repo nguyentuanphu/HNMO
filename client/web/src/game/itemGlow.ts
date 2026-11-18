@@ -54,8 +54,11 @@ export async function loadGlowColors(): Promise<void> {
   }
 }
 
-// String() keeps the lookup of a missing name as it was (the key "undefined").
-const color = (name?: string, fallback?: string) => new THREE.Color(...(glowColors[String(name)] ?? glowColors[String(fallback)]));
+// String() keeps the lookup of a missing name as it was (the key "undefined"), and accepts #rrggbb admin overrides.
+const color = (name?: string, fallback?: string) => {
+  if (name && /^#[0-9a-f]{6}$/i.test(name)) return new THREE.Color(name);
+  return new THREE.Color(...(glowColors[String(name)] ?? glowColors[String(fallback)]));
+};
 
 // The passes an item level draws on top of the item (+7 and up), each with its
 // texture coordinates and the color it takes: the glow color or the shine color.

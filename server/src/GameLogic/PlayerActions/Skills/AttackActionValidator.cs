@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlayerActions.Skills;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.AntiCheat;
 
 /// <summary>
 /// Validates whether a player may execute an attack skill.
@@ -69,6 +70,7 @@ internal static class AttackActionValidator
         if (player.IsAtSafezone())
         {
             player.Logger.LogWarning("Probably Hacker - player {player} is attacking from safezone", player);
+            AntiCheatPlugIn.RecordSafeZoneAttempt(player, skill);
             return false;
         }
 

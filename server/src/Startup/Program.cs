@@ -218,7 +218,25 @@ internal sealed class Program : IDisposable
     {
         var serverDir = AppContext.BaseDirectory;
         var folder = Path.GetFullPath(Path.Combine(serverDir, ".."));
-        var file = new[] { Path.Combine(folder, PlayerLicense.FileName), Path.Combine(serverDir, PlayerLicense.FileName) }.FirstOrDefault(File.Exists);
+        var hostSettings = HostSettingsStore.TryLoad(HostSettingsStore.ResolveDefaultPath(serverDir));
+        var configured = hostSettings?.LicenseFilePath;
+        var candidates = new List<string>();
+        if (!string.IsNullOrWhiteSpace(configured))
+        {
+            if (Path.IsPathRooted(configured))
+            {
+                candidates.Add(configured);
+            }
+            else
+            {
+                candidates.Add(Path.Combine(folder, configured));
+                candidates.Add(Path.Combine(serverDir, configured));
+            }
+        }
+
+        candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
+        candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
+        var file = candidates.FirstOrDefault(File.Exists);
         var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
         var license = publicKeyPem is null
             ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
@@ -486,6 +504,9 @@ internal sealed class Program : IDisposable
             .AddSingleton<IFriendNotifier, FriendNotifierToGameServer>()
             .AddSingleton<PlugInManager>()
             .AddSingleton<IServerProvider, LocalServerProvider>()
+            .AddSingleton<IServerRestartService>(s => new ServerRestartService(s.GetRequiredService<IHostApplicationLifetime>(), this._servers))
+            .AddSingleton<IHostLicenseProvider, HostLicenseProvider>()
+            .AddSingleton<IDatabasePasswordUpdater, PostgresPasswordUpdater>()
             .AddSingleton<IPacketCaptureService>(CreatePacketCaptureService)
             .AddSingleton<ICollection<PlugInConfiguration>>(this.PlugInConfigurationsFactory)
             .AddTransient<ReferenceHandler, ByDataSourceReferenceHandler>(provider =>
@@ -552,6 +573,78 @@ internal sealed class Program : IDisposable
         this._logger.Information("Host started, elapsed time: {elapsed}", stopwatch.Elapsed);
         this._logger.Information("Admin Panel bound to urls: {urls}", string.Join("; ", host.Urls));
         return host;
+    }
+
+    private sealed class ServerRestartService(IHostApplicationLifetime lifetime, IList<IManageableServer> servers) : IServerRestartService
+    {
+        public bool IsSupported => true;
+
+        public async Task RequestRestartAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var server in servers)
+            {
+                await server.ShutdownAsync().ConfigureAwait(false);
+            }
+
+            Environment.ExitCode = HostSettingsStore.RestartExitCode;
+            lifetime.StopApplication();
+        }
+    }
+
+    private sealed class HostLicenseProvider : IHostLicenseProvider
+    {
+        public LicenseStatusInfo GetStatus(string? configuredPath)
+        {
+            var serverDir = AppContext.BaseDirectory;
+            var folder = Path.GetFullPath(Path.Combine(serverDir, ".."));
+            var candidates = new List<string>();
+            if (!string.IsNullOrWhiteSpace(configuredPath))
+            {
+                if (Path.IsPathRooted(configuredPath))
+                {
+                    candidates.Add(configuredPath);
+                }
+                else
+                {
+                    candidates.Add(Path.Combine(folder, configuredPath));
+                    candidates.Add(Path.Combine(serverDir, configuredPath));
+                }
+            }
+
+            candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
+            candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
+            var resolved = candidates.FirstOrDefault(File.Exists) ?? candidates[0];
+            var exists = File.Exists(resolved);
+            var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
+            var license = publicKeyPem is null
+                ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
+                : PlayerLicense.Check(exists ? File.ReadAllBytes(resolved) : null, publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+            return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists);
+        }
+    }
+
+    private sealed class PostgresPasswordUpdater : IDatabasePasswordUpdater
+    {
+        public async Task UpdatePasswordAsync(HostSettings settings, string newPassword, CancellationToken cancellationToken = default)
+        {
+            var builder = new Npgsql.NpgsqlConnectionStringBuilder
+            {
+                Host = settings.DatabaseHost,
+                Port = settings.DatabasePort,
+                Database = settings.DatabaseName,
+                Username = settings.DatabaseUser,
+                Password = settings.DatabasePassword,
+                Timeout = 5,
+            };
+
+            await using var conn = new Npgsql.NpgsqlConnection(builder.ToString());
+            await conn.OpenAsync(cancellationToken).ConfigureAwait(false);
+            var safeUser = settings.DatabaseUser.Replace("\"", "\"\"", StringComparison.Ordinal);
+            var safePassword = newPassword.Replace("'", "''", StringComparison.Ordinal);
+            await using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"ALTER USER \"{safeUser}\" WITH PASSWORD '{safePassword}';";
+            await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -781,6 +874,30 @@ internal sealed class Program : IDisposable
             contextProvider = inMemoryProvider;
             await this.InitializeDataAsync(version, loggerFactory, contextProvider).ConfigureAwait(false);
             inMemoryProvider.ChangePublisher = changePublisher;
+
+            if (int.TryParse(Environment.GetEnvironmentVariable("HNMO_PORT_OFFSET"), out var portOffset) && portOffset != 0)
+            {
+                using var portContext = contextProvider.CreateNewConfigurationContext();
+                foreach (var cs in await portContext.GetAsync<ConnectServerDefinition>().ConfigureAwait(false))
+                {
+                    cs.ClientListenerPort += portOffset;
+                }
+
+                foreach (var gs in await portContext.GetAsync<GameServerDefinition>().ConfigureAwait(false))
+                {
+                    foreach (var ep in gs.Endpoints)
+                    {
+                        ep.NetworkPort += portOffset;
+                    }
+                }
+
+                foreach (var ep in await portContext.GetAsync<HNMO.DataModel.Configuration.ChatServerEndpoint>().ConfigureAwait(false))
+                {
+                    ep.NetworkPort += portOffset;
+                }
+
+                await portContext.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
         else
         {
@@ -795,6 +912,35 @@ internal sealed class Program : IDisposable
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)
     {
         var contextProvider = new PersistenceContextProvider(loggerFactory, changeListener);
+        contextProvider.EnableHnmoRowPersistence();
+        if (PersistenceContextProvider.ResolveConnectionString() is { } dbConn && !string.IsNullOrWhiteSpace(dbConn))
+        {
+            PostgresDbLogRetentionStore.RegisterExporter(dbConn);
+            HNMO.GameLogic.PlugIns.Chat.ChatLog.PersistentSink = entry =>
+            {
+                _ = Task.Run(() =>
+                {
+                    try
+                    {
+                        PostgresDbLogRetentionStore.AppendChatLine(
+                            dbConn,
+                            entry.TimeUtc,
+                            entry.ServerId,
+                            entry.MapName,
+                            entry.Sender,
+                            entry.AccountId,
+                            (int)entry.Kind,
+                            entry.Receiver,
+                            entry.Text);
+                    }
+                    catch
+                    {
+                        // Avoid disrupting game chat if DB is busy or offline.
+                    }
+                });
+            };
+        }
+
         if (reinit || !await contextProvider.DatabaseExistsAsync().ConfigureAwait(false))
         {
             // The database can be provisioned externally (e.g. by a Kubernetes operator,
