@@ -4,12 +4,15 @@
 
 namespace HNMO.Web.AdminPanel.Components.Layout;
 
+using System.Globalization;
 using System.Threading;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 
 using HNMO.Network.Analyzer;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization.Updates;
+using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Services;
 
 /// <summary>
@@ -32,6 +35,51 @@ public partial class NavMenu : IDisposable
     private bool _expandSystem;
 
     private bool _expandInspect;
+
+    private AdminNavigationPreferences? _prefs;
+
+    private static readonly HashSet<string> DropdownHandledRoutes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "setup",
+        "config-updates",
+        "config-captions",
+        "users",
+        "api-keys",
+        "discord",
+        "logfiles",
+        "host-settings",
+        "logging-configuration",
+        "network-analyzer",
+    };
+
+    private static string L(string en, string vi) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
+
+    private AdminNavigationPreferences Preferences
+    {
+        get
+        {
+            if (this._prefs is null)
+            {
+                this._prefs = this.ServiceProvider.GetService<AdminNavigationPreferences>() ?? new AdminNavigationPreferences();
+                this._prefs.Changed += this.OnPreferencesChanged;
+            }
+
+            return this._prefs;
+        }
+    }
+
+    private void OnPreferencesChanged()
+    {
+        if (!this._isDisposed)
+        {
+            _ = this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+    private void ToggleNavMode() => this.Preferences.SetAdvancedMode(!this.Preferences.AdvancedMode);
+
+    private static bool IsCatalogVisibleInSidebar(AdminNavEntry entry) => !DropdownHandledRoutes.Contains(entry.Route);
 
     [Inject]
     private IMigratableDatabaseContextProvider PersistenceContextProvider { get; set; } = null!;
@@ -90,6 +138,11 @@ public partial class NavMenu : IDisposable
     public void Dispose()
     {
         this._isDisposed = true;
+        if (this._prefs is not null)
+        {
+            this._prefs.Changed -= this.OnPreferencesChanged;
+        }
+
         this.SetupService.DatabaseInitialized -= this.OnDatabaseInitializedAsync;
         this.UpdateService.UpdatesInstalled -= this.OnUpdatesInstalledAsync;
         this.NavigationManager.LocationChanged -= this.OnLocationChanged;
