@@ -17,7 +17,7 @@ using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
 
 /// <summary>
-/// Admin panel page for managing item definitions (server <see cref="GameConfiguration.Items"/> + live EN/VI web/desktop client export).
+/// Admin panel page for managing item definitions (server <see cref="GameConfiguration.Items"/> + live EN/VI web game sync).
 /// </summary>
 public partial class ItemDefinitions : ComponentBase
 {

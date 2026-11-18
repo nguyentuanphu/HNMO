@@ -6,7 +6,6 @@ namespace HNMO.Tests;
 
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using HNMO.AttributeSystem;
@@ -121,9 +120,9 @@ public class ItemDefinitionsTests
         Assert.That(item.Requirements.Any(r => r.Attribute?.Id == Stats.TotalAgility.Id), Is.False);
     }
 
-    /// <summary>Verifies JSON sync and ZIP export write valid EN/VI item, model glow, and GlowColors files.</summary>
+    /// <summary>Verifies JSON sync writes valid EN/VI item, model glow, and GlowColors files.</summary>
     [Test]
-    public void SyncsDataDirectoryAndBuildsDesktopExportZip()
+    public void SyncsDataDirectoryForWebGame()
     {
         var tempData = Path.Combine(Path.GetTempPath(), $"hnmo-itemdata-{Guid.NewGuid():N}");
         Directory.CreateDirectory(Path.Combine(tempData, "Items", "Models"));
@@ -188,14 +187,6 @@ public class ItemDefinitionsTests
             Assert.That(models.Count, Is.EqualTo(2));
             Assert.That(models[0]!["glow"]!["color"]!.GetValue<string>(), Is.EqualTo("custom_ff2288"));
             Assert.That(models[1]!["file"]!.GetValue<string>(), Is.EqualTo("Data/Item/Sword01.bmd"));
-
-            var zipBytes = ItemClientDataSync.BuildExportZip(tempData, overrides);
-            using var ms = new MemoryStream(zipBytes);
-            using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
-            Assert.That(zip.GetEntry("Data/Items/Group00_Sword.json"), Is.Not.Null);
-            Assert.That(zip.GetEntry("Data/Items/Models/Group00_Sword.json"), Is.Not.Null);
-            Assert.That(zip.GetEntry("Data/Effects/GlowColors.json"), Is.Not.Null);
-            Assert.That(zip.GetEntry("Data/Items/hnmo-item-overrides.json"), Is.Not.Null);
         }
         finally
         {
