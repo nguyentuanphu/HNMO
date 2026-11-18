@@ -72,6 +72,7 @@ const sidebars = {
         "admin-panel/economy-dashboard",
         "admin-panel/chat-commands",
         "admin-panel/map-editor",
+        "admin-panel/world-editor",
         "admin-panel/live-map",
         "admin-panel/logs-and-monitoring",
         "admin-panel/authentication",

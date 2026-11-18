@@ -14,6 +14,24 @@ const ALPHA_TEST = 0.25;
 const fileCache = new Map<string, Promise<Uint8Array>>();
 const textureCache = new Map<string, Promise<THREE.Texture | null>>();
 let ktx2Loader: KTX2Loader | null = null;
+let dataBasePrefix = '';
+
+/**
+ * Sets an optional URL prefix for `/data/...` asset fetches (used when embedding the
+ * renderer outside the web client's origin/root, such as `/world-editor` in AdminPanel).
+ */
+export function setDataBaseUrl(prefix: string): void {
+  dataBasePrefix = prefix.replace(/\/+$/, '');
+  fileCache.clear();
+  textureCache.clear();
+  modelCache.clear();
+}
+
+/** Resolves a `/data/...` asset URL using the configured base prefix. */
+export function resolveDataUrl(url: string): string {
+  if (!dataBasePrefix || !url.startsWith('/data/')) return url;
+  return `${dataBasePrefix}${url}`;
+}
 
 /** Initializes the KTX2 GPU-compressed texture transcoder for the active WebGL renderer. */
 export function setKtx2Renderer(renderer: THREE.WebGLRenderer): void {
@@ -27,13 +45,14 @@ export function clearTextureCache(): void {
 }
 
 export async function fetchBytes(url: string): Promise<Uint8Array> {
-  if (!fileCache.has(url)) {
-    fileCache.set(url, fetch(url).then(async (response) => {
-      if (!response.ok) throw new Error(`${response.status} ${url}`);
+  const resolved = resolveDataUrl(url);
+  if (!fileCache.has(resolved)) {
+    fileCache.set(resolved, fetch(resolved).then(async (response) => {
+      if (!response.ok) throw new Error(`${response.status} ${resolved}`);
       return new Uint8Array(await response.arrayBuffer());
     }));
   }
-  return fileCache.get(url)!;
+  return fileCache.get(resolved)!;
 }
 
 // Parsed once per file: every player shares player.bmd (3 MB, ~25 ms to parse), so parsing it for each
@@ -93,7 +112,7 @@ async function tryLoadKtx2(url: string): Promise<THREE.Texture | null> {
   const ktx2Url = url.replace(/\.(ozj|ozt|jpe?g|tga)$/i, '.ktx2');
   if (ktx2Url === url) return null;
   try {
-    const response = await fetch(ktx2Url);
+    const response = await fetch(resolveDataUrl(ktx2Url));
     if (!response.ok) return null;
     const blobUrl = URL.createObjectURL(await response.blob());
     try {

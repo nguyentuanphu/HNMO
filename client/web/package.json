@@ -5,7 +5,7 @@
   "description": "HNMO web client.",
   "type": "module",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsc -p . && node tools/build-world-editor.mjs",
     "watch": "tsc -p . --watch --preserveWatchOutput",
     "typecheck": "tsc -p . --noEmit && tsc -p tsconfig.tests.json",
     "start": "npm run build && dotnet run --project bridge -c Release",
