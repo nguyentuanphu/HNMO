@@ -4,12 +4,12 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Nito.AsyncEx.Synchronous;
+using Npgsql;
 
 /// <summary>
 /// The database roles.
@@ -80,7 +80,7 @@ public static class ConnectionConfigurator
     {
         Provider.Initialization?.WaitWithoutException();
         var settings = Provider.GetConnectionSetting(GetContextTypeOfRole(role));
-        return Regex.Match(settings.ConnectionString!, "User Id=([^;]+?);").Groups[1].Value;
+        return new NpgsqlConnectionStringBuilder(settings.ConnectionString!).Username ?? string.Empty;
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public static class ConnectionConfigurator
     {
         Provider.Initialization?.WaitWithoutException();
         var settings = Provider.GetConnectionSetting(GetContextTypeOfRole(role));
-        return Regex.Match(settings.ConnectionString!, "Password=([^;]+?);").Groups[1].Value;
+        return new NpgsqlConnectionStringBuilder(settings.ConnectionString!).Password ?? string.Empty;
     }
 
     /// <summary>

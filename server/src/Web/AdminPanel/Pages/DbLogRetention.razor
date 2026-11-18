@@ -1,0 +1,69 @@
+@page "/db-log-retention"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Database log retention & export", "Lưu trữ & Xuất nhật ký CSDL")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Database log retention & export", "Lưu trữ & Xuất nhật ký CSDL")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Database log retention & export", "Lưu trữ & Xuất nhật ký CSDL")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<p class="text-muted">@L("Configure how many days chat logs and admin audit history stay in PostgreSQL, rolling log caps, backup retention (7 daily / 4 weekly / 3 monthly), and export-before-delete archives.", "Thiết lập số ngày giữ nhật ký chat và lịch sử thao tác quản trị trong PostgreSQL, giới hạn tệp log, lịch sử sao lưu (7 ngày / 4 tuần / 3 tháng), và tự động xuất file nén trước khi xóa.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="db-retention-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Expired database chat and audit rows are always written and verified in a compressed .json.gz file under save/archives/ before any row is deleted.", "Các dòng nhật ký chat và kiểm toán quá hạn luôn được xuất và kiểm tra trong tệp nén .json.gz ở save/archives/ trước khi xóa.")</li>
+            <li>@L("Rolling file logs (server.log, database.log) compress daily or when reaching their MB cap and obey the total days and MB limits below.", "Nhật ký server.log và database.log tự động xoay vòng theo ngày hoặc dung lượng, nén gzip và giữ theo giới hạn ngày/MB.")</li>
+        </ul>
+    </div>
+}
+
+<section class="card mb-3" id="dbr-settings">
+    <div class="card-body">
+        <div class="row g-3 mb-3">
+            <div class="col-sm-4">
+                <label class="form-label" for="dbr-db-days" title="@L("Days to keep chat/audit rows in PostgreSQL before export & delete", "Số ngày giữ nhật ký chat/kiểm toán trong PostgreSQL")">@L("DB chat & audit retention (days)", "Giữ log chat & quản trị CSDL (ngày)")</label>
+                <input class="form-control" id="dbr-db-days" type="number" min="1" max="3650" @bind="this._settings.DbLogRetentionDays" />
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label" for="dbr-log-days">@L("Rolled log retention (days)", "Giữ tệp log đã xoay vòng (ngày)")</label>
+                <input class="form-control" id="dbr-log-days" type="number" min="1" max="3650" @bind="this._settings.MaxLogDays" />
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label" for="dbr-log-mb">@L("Max total log folder (MB)", "Dung lượng thư mục log tối đa (MB)")</label>
+                <input class="form-control" id="dbr-log-mb" type="number" min="10" max="100000" @bind="this._settings.MaxLogTotalMb" />
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary" id="dbr-save" disabled="@this._isBusy" @onclick="this.SaveSettings">@Resources.Save</button>
+            <button type="button" class="btn btn-outline-warning" id="dbr-purge" disabled="@this._isBusy" @onclick="this.ExportAndPurgeNow">@L("Export & purge old DB logs now", "Xuất nén & dọn log cũ ngay")</button>
+        </div>
+    </div>
+</section>
+
+<section class="card" id="dbr-archives">
+    <div class="card-body">
+        <h2 class="h5">@L("Exported database log archives (Sydney time)", "Các bản xuất nhật ký CSDL đã lưu (Giờ Sydney)")</h2>
+        @if (this._archives.Count == 0)
+        {
+            <p class="mb-0 text-muted">@L("No exported database log archives yet.", "Chưa có tệp xuất nhật ký CSDL nào.")</p>
+        }
+        else
+        {
+            <ul class="mb-0">
+                @foreach (var item in this._archives)
+                {
+                    <li><code>@item.FileName</code> — @(Math.Max(1, item.SizeBytes / 1024)) KB (@item.CreatedSydney)</li>
+                }
+            </ul>
+        }
+        @if (!string.IsNullOrWhiteSpace(this._lastMessage))
+        {
+            <div class="alert alert-secondary mt-2 mb-0" id="dbr-msg">@this._lastMessage</div>
+        }
+    </div>
+</section>

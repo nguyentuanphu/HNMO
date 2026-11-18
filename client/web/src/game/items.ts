@@ -3,6 +3,7 @@
 // names the .bmd file and the folders of its textures.
 
 import { loadItemLooks } from './itemLooks.js';
+import { currentLanguage } from '../i18n.js';
 
 const GROUP_FILES = ['Group00_Sword', 'Group01_Axe', 'Group02_Mace', 'Group03_Spear', 'Group04_Bow', 'Group05_Staff',
   'Group06_Shield', 'Group07_Helm', 'Group08_Armor', 'Group09_Pants', 'Group10_Gloves', 'Group11_Boots', 'Group12_Wing',
@@ -114,8 +115,27 @@ export interface ItemDefinition {
   options?: string[];
   tags?: string[];
   buyPrice?: number;
+  tooltip?: LocalizedText;
   /** The many other fields of the format (docs/item-data.md). */
   [field: string]: unknown;
+}
+
+/** An item override served dynamically from the admin panel via /website/items. */
+export interface WebsiteItemOverride {
+  group: number;
+  number: number;
+  name?: LocalizedText;
+  width?: number;
+  height?: number;
+  level?: number;
+  maximumItemLevel?: number;
+  durability?: number;
+  buyPrice?: number;
+  requirements?: Partial<Record<string, number | null>>;
+  glowColor?: string;
+  tooltip?: LocalizedText | null;
+  modelSourceGroup?: number | null;
+  modelSourceNumber?: number | null;
 }
 
 /** What the catalog keeps of an item's model: where its files are and how it glows. */
@@ -202,7 +222,62 @@ export async function loadItemCatalog(): Promise<ItemCatalog> {
   });
   await looks;
   catalog = { models, names, definitions };
+  const overridesResponse = await fetch('/website/items').catch(() => null);
+  if (overridesResponse?.ok) {
+    const payload = await overridesResponse.json().catch(() => null) as { items?: WebsiteItemOverride[] } | null;
+    if (Array.isArray(payload?.items) && payload.items.length > 0) {
+      applyItemOverrides(catalog, payload.items);
+    }
+  }
   return catalog;
+}
+
+/** Applies admin-panel item definition overrides into a loaded item catalog. */
+export function applyItemOverrides(targetCatalog: ItemCatalog, overrides: WebsiteItemOverride[]): void {
+  for (const entry of overrides) {
+    const key = `${entry.group}:${entry.number}`;
+    const existing = targetCatalog.definitions.get(key);
+    const mergedRequirements: Partial<Record<string, number>> = { ...(existing?.requirements ?? {}) };
+    if (entry.requirements) {
+      for (const [reqKey, reqVal] of Object.entries(entry.requirements)) {
+        if (typeof reqVal === 'number' && reqVal > 0) mergedRequirements[reqKey] = reqVal;
+        else delete mergedRequirements[reqKey];
+      }
+    }
+    const mergedName: LocalizedText = { ...(existing?.name ?? {}), ...(entry.name ?? {}) };
+    const merged: ItemDefinition = {
+      ...(existing ?? { number: entry.number }),
+      number: entry.number,
+      name: mergedName,
+      width: entry.width ?? existing?.width ?? 1,
+      height: entry.height ?? existing?.height ?? 1,
+      level: entry.level ?? existing?.level ?? 0,
+      maximumItemLevel: entry.maximumItemLevel ?? existing?.maximumItemLevel,
+      durability: entry.durability ?? existing?.durability,
+      buyPrice: entry.buyPrice ?? existing?.buyPrice,
+      requirements: Object.keys(mergedRequirements).length > 0 ? mergedRequirements : undefined,
+      tooltip: entry.tooltip ?? existing?.tooltip,
+    };
+    targetCatalog.definitions.set(key, merged);
+    if (mergedName.en) targetCatalog.names.set(key, mergedName.en);
+
+    let model = targetCatalog.models.get(key);
+    if (!model && entry.modelSourceGroup !== undefined && entry.modelSourceGroup !== null
+      && entry.modelSourceNumber !== undefined && entry.modelSourceNumber !== null) {
+      const source = targetCatalog.models.get(`${entry.modelSourceGroup}:${entry.modelSourceNumber}`);
+      if (source) {
+        model = {
+          ...source,
+          glow: { ...source.glow },
+          look: { ...source.look },
+        };
+        targetCatalog.models.set(key, model);
+      }
+    }
+    if (model && entry.glowColor) {
+      model.glow = { ...model.glow, color: entry.glowColor };
+    }
+  }
 }
 
 export function itemModel(group: number, number: number): ItemModelSource | null {
@@ -220,7 +295,16 @@ export function* allItemDefinitions(): Generator<{ group: number; definition: It
   for (const [key, definition] of catalog.definitions) yield { group: Number(key.split(':')[0]), definition };
 }
 
+export function localizedItemName(definition: Pick<ItemDefinition, 'name'> | null | undefined, language = currentLanguage()): string {
+  const name = definition?.name;
+  if (!name) return '';
+  return (name[language] || name.en) ?? '';
+}
+
 export function itemName(group: number, number: number): string {
+  const definition = catalog?.definitions.get(`${group}:${number}`);
+  const localized = localizedItemName(definition);
+  if (localized) return localized;
   return catalog?.names.get(`${group}:${number}`) ?? `Item ${group},${number}`;
 }
 
