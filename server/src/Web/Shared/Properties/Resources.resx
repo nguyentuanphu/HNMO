@@ -717,4 +717,6 @@ Level: {2} - {3}</value>
   <data name="ItemPickerGroup13" xml:space="preserve"><value>Accessories and miscellaneous</value></data>
   <data name="ItemPickerGroup14" xml:space="preserve"><value>Jewels, potions and consumables</value></data>
   <data name="ItemPickerGroup15" xml:space="preserve"><value>Scrolls and orbs</value></data>
+  <data name="ItemPickerGiftChoose" xml:space="preserve"><value>Choose an item to add to this gift.</value></data>
+  <data name="ItemPickerGiftAdd" xml:space="preserve"><value>Add {0} to this gift.</value></data>
 </root>

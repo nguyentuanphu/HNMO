@@ -2226,4 +2226,6 @@
   </data>
   <data name="VipPlugIn_Name" xml:space="preserve"><value>VIP memberships</value></data>
   <data name="VipPlugIn_Description" xml:space="preserve"><value>Optional paid VIP time, experience and zen bonuses, and daily coins. Disabled until the host enables it.</value></data>
+  <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Gift box activity tracking</value></data>
+  <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Records observed player world entry and departure timestamps for gift box recent-player audiences.</value></data>
 </root>

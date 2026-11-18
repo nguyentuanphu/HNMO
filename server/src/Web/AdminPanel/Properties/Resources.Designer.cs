@@ -14550,5 +14550,14 @@ namespace HNMO.Web.AdminPanel.Properties {
         /// <summary>Gets the localized instruction to save the disabled VIP configuration before granting.</summary>
         public static string VipManagerSaveFirst => ResourceManager.GetString("VipManagerSaveFirst", resourceCulture)!;
 
+        /// <summary>Gets the localized public title of a collected gift.</summary>
+        public static string GiftBoxCoinHistoryCollected => ResourceManager.GetString("GiftBoxCoinHistoryCollected", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box admin page title.</summary>
+        public static string GiftBoxPageTitle => ResourceManager.GetString("GiftBoxPageTitle", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box admin page help text.</summary>
+        public static string GiftBoxPageHelp => ResourceManager.GetString("GiftBoxPageHelp", resourceCulture)!;
+
     }
 }

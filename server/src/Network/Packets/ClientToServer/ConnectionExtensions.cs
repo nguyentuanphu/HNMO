@@ -6868,4 +6868,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftBoxRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII JSON with action, offset, optional letterId and language; at most 247 bytes.</param>
+    /// <remarks>
+    /// Is sent by the client when: The signed-in player opens the mailbox window, browses a page/letter or collects a reward.
+    /// Causes reaction on server side: The server validates the session, collects safely under the player lock if requested and sends HnmoGiftBoxState.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftBoxRequestAsync(this IConnection? connection, uint @requestId, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftBoxRequestRef.GetRequiredSize(json);
+            var packet = new HnmoGiftBoxRequestRef(connection.Output.GetSpan(length)[..length]);
+            packet.RequestId = @requestId;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

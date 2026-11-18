@@ -17,6 +17,10 @@ public partial class ItemPicker
     private readonly HashSet<ItemDefinition> _selected = new();
     private List<ItemDefinition> _matches = new();
 
+    /// <summary>Gets or sets a value indicating whether shop stock and grid dragging controls are available; disable for gift selection.</summary>
+    [Parameter]
+    public bool ShopMode { get; set; } = true;
+
     /// <summary>Gets or sets all definitions to search.</summary>
     [Parameter]
     public IReadOnlyList<ItemDefinition> Definitions { get; set; } = [];
@@ -58,6 +62,11 @@ public partial class ItemPicker
     protected override void OnParametersSet()
     {
         this._selected.RemoveWhere(d => !this.Definitions.Contains(d));
+        if (!this.ShopMode)
+        {
+            this.Filter.OnlyMissing = false;
+        }
+
         this._matches = this.Filter.Apply(this.Definitions, this.Stocked);
     }
 
@@ -65,6 +74,11 @@ public partial class ItemPicker
 
     private async Task FilterChangedAsync()
     {
+        if (!this.ShopMode)
+        {
+            this.Filter.OnlyMissing = false;
+        }
+
         this._matches = this.Filter.Apply(this.Definitions, this.Stocked);
         await this.Changed.InvokeAsync().ConfigureAwait(true);
     }

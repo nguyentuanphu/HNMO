@@ -9,6 +9,7 @@ using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.GiftBox;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Interfaces;
 using HNMO.Persistence;
@@ -232,6 +233,49 @@ public class WebsiteAccountControllerTests
         foreach (var id in privateIds.Append(this._account.GetId()).Append(intent.OperationId))
         {
             Assert.That(json.GetRawText(), Does.Not.Contain(id.ToString()));
+        }
+    }
+
+    /// <summary>Collected gift history retains bilingual public titles without returning internal proof identifiers.</summary>
+    /// <param name="language">The host display language.</param>
+    /// <returns>The test task.</returns>
+    [TestCase("en")]
+    [TestCase("vi")]
+    [NonParallelizable]
+    public async Task GiftHistoryIsRedactedAndLocalizedAsync(string language)
+    {
+        using var context = this._persistence.CreateNewPlayerContext(this._configuration);
+        var letter = Guid.NewGuid();
+        var character = Guid.NewGuid();
+        var item = Guid.NewGuid();
+        var grant = context.CreateNew<CashShopCoinGrant>();
+        grant.AccountId = this._account.GetId();
+        grant.CoinType = CashShopCoinType.WCoinC;
+        grant.Amount = 10;
+        grant.CreatedAt = DateTime.UtcNow;
+        grant.AppliedAt = DateTime.UtcNow;
+        grant.GrantedBy = GiftBoxCollection.GrantedBy;
+        grant.Reference = $"mail:{this._account.GetId():N}:{letter:N}";
+        grant.Reason = JsonSerializer.Serialize(new GiftBoxReceipt("gift-box-v1", this._account.GetId(), letter, character, [item], 100, 10, grant.CoinType, "Event gift", "Quà sự kiện"));
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        var json = await this.ReadAsync(0).ConfigureAwait(false);
+        var row = json.GetProperty("history").EnumerateArray().Single(value => value.GetProperty("id").GetGuid() == grant.GetId());
+        Assert.That(row.GetProperty("reason").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(row.GetProperty("giftBox").GetProperty("titleVi").GetString(), Is.EqualTo("Quà sự kiện"));
+        foreach (var id in new[] { this._account.GetId(), letter, character, item })
+        {
+            Assert.That(json.GetRawText(), Does.Not.Contain(id.ToString()));
+        }
+
+        var previous = System.Globalization.CultureInfo.CurrentUICulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(language);
+            Assert.That(HNMO.Web.AdminPanel.Services.CashShopHistoryText.Format(grant.Reason), Is.EqualTo(language == "vi" ? "Đã nhận quà: Quà sự kiện" : "Gift collected: Event gift"));
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentUICulture = previous;
         }
     }
 

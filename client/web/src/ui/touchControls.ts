@@ -50,6 +50,7 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: '📊', title: 'Player rankings', key: '', event: 'hnmo-ranking-open' },
   { label: '➕', title: 'Add stats (bulk)', key: '', event: 'hnmo-add-stats-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
+  { label: '📬', title: 'Mailbox / Gift Box', key: '', event: 'hnmo-giftbox-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
 const POTION_KEYS = ['q', 'w', 'e', 'r'];

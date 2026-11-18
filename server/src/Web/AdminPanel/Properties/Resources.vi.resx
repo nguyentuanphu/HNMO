@@ -4943,4 +4943,7 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="VipAuditRefused" xml:space="preserve"><value>bị từ chối</value></data>
   <data name="VipAuditDetails" xml:space="preserve"><value>VIP {0}: {1}. Quản trị viên: {2}. Lý do: {3}. Mã thao tác: {4}.</value></data>
   <data name="VipManagerSaveFirst" xml:space="preserve"><value>Lưu cài đặt VIP để bật plug-in trước, rồi cấp thời hạn. Bạn vẫn có thể tắt mua mới.</value></data>
+  <data name="GiftBoxCoinHistoryCollected" xml:space="preserve"><value>Đã nhận quà: {0}</value></data>
+  <data name="GiftBoxPageTitle" xml:space="preserve"><value>Hộp thư quà tặng</value></data>
+  <data name="GiftBoxPageHelp" xml:space="preserve"><value>Gửi thư quà song ngữ (EN/VI) kèm vật phẩm, Zen hoặc Xu Cash Shop cho một tài khoản, danh sách tên đăng nhập, toàn máy chủ hoặc người chơi hoạt động gần đây. Khi túi đồ đầy sẽ không mất quà: người chơi có thể nhận lại trên trang tài khoản hoặc trong game bằng phím Alt+M.</value></data>
 </root>

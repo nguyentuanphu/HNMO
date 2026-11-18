@@ -2411,4 +2411,6 @@
   </data>
   <data name="VipPlugIn_Name" xml:space="preserve"><value>Gói VIP</value></data>
   <data name="VipPlugIn_Description" xml:space="preserve"><value>Gói VIP có thời hạn, tăng kinh nghiệm và Zen, cùng quà xu hằng ngày. Chỉ hoạt động khi chủ máy chủ bật.</value></data>
+  <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Theo dõi hoạt động hộp thư quà tặng</value></data>
+  <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Ghi nhận thời điểm người chơi vào và rời thế giới để lọc người chơi hoạt động gần đây cho hộp thư quà.</value></data>
 </root>

@@ -6,6 +6,7 @@ namespace HNMO.Web.AdminPanel.Services;
 
 using System.Globalization;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.GiftBox;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Web.AdminPanel.Properties;
 
@@ -20,6 +21,11 @@ public static class CashShopHistoryText
     public static string Format(string? reason)
     {
         var culture = CultureInfo.CurrentUICulture;
+        if (GiftBoxCollection.ReadReceiptMetadata(reason) is { } mail)
+        {
+            return string.Format(culture, Resources.GiftBoxCoinHistoryCollected, culture.TwoLetterISOLanguageName == "vi" ? mail.TitleVi : mail.TitleEn);
+        }
+
         if (VipWallet.ReadReceipt(reason) is { } vip)
         {
             var name = culture.TwoLetterISOLanguageName == "vi" ? vip.Intent.NameVi : vip.Intent.NameEn;

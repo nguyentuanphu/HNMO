@@ -58,6 +58,7 @@ const sidebars = {
         "admin-panel/event-alerts",
         "admin-panel/crash-watch",
         "admin-panel/item-definitions",
+        "admin-panel/gift-box",
         "admin-panel/import-server",
         "admin-panel/anti-cheat",
         "admin-panel/rate-tuning",

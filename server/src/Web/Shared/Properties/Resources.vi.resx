@@ -626,4 +626,6 @@ Cấp: {2} - {3}</value>
   <data name="ItemPickerGroup13" xml:space="preserve"><value>Trang sức và vật phẩm khác</value></data>
   <data name="ItemPickerGroup14" xml:space="preserve"><value>Ngọc, bình và vật phẩm tiêu hao</value></data>
   <data name="ItemPickerGroup15" xml:space="preserve"><value>Sách phép và ngọc kỹ năng</value></data>
+  <data name="ItemPickerGiftChoose" xml:space="preserve"><value>Chọn vật phẩm để thêm vào quà này.</value></data>
+  <data name="ItemPickerGiftAdd" xml:space="preserve"><value>Thêm {0} vào quà này.</value></data>
 </root>

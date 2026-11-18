@@ -6087,5 +6087,11 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized VIP plug-in text.</summary>
         public static string VipPlugIn_Description => ResourceManager.GetString("VipPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized gift box activity plug-in text.</summary>
+        public static string GiftBoxActivityPlugIn_Name => ResourceManager.GetString("GiftBoxActivityPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box activity plug-in text.</summary>
+        public static string GiftBoxActivityPlugIn_Description => ResourceManager.GetString("GiftBoxActivityPlugIn_Description", resourceCulture)!;
+
     }
 }
