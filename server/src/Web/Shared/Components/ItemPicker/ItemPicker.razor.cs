@@ -17,7 +17,7 @@ public partial class ItemPicker
     private readonly HashSet<ItemDefinition> _selected = new();
     private List<ItemDefinition> _matches = new();
 
-    /// <summary>Gets or sets whether shop stock and grid dragging controls are available; disable for gift selection.</summary>
+    /// <summary>Gets or sets a value indicating whether shop stock and grid dragging controls are available; disable for gift selection.</summary>
     [Parameter]
     public bool ShopMode { get; set; } = true;
 

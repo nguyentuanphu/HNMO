@@ -76,7 +76,8 @@ public sealed class GiftBoxAdminOperations(IPersistenceContextProvider persisten
             }
 
             var digest = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new { draft, reason, recipients }))));
-            // The full message and possibly10,000 identities would exceed the central audit limit.
+
+            // The full message and possibly 10,000 identities would exceed the central audit limit.
             // Hash the complete reviewed input; immutable mail rows keep the actual public contents.
             var arguments = new { draft.SendId, reason, digest, count = recipients.Count };
             var change = new JsonObject { ["count"] = recipients.Count, ["digest"] = digest, ["alreadyQueued"] = frozen is not null };
@@ -88,34 +89,39 @@ public sealed class GiftBoxAdminOperations(IPersistenceContextProvider persisten
             }
 
             confirmations.Consume(actor, operation, arguments, change, confirmationToken);
-            return await executor.ExecuteAsync(AdminRoles.Administrator, operation, arguments, async verified =>
-            {
-                if (verified.Id != actor.Id || verified.Frontend != actor.Frontend)
+            return await executor.ExecuteAsync(
+                AdminRoles.Administrator,
+                operation,
+                arguments,
+                async verified =>
                 {
-                    throw new AdminOperationException("The authenticated host changed; review the gift again.", AdminOperationErrorKind.Forbidden);
-                }
+                    if (verified.Id != actor.Id || verified.Frontend != actor.Frontend)
+                    {
+                        throw new AdminOperationException("The authenticated host changed; review the gift again.", AdminOperationErrorKind.Forbidden);
+                    }
 
-                var sendNow = clock.GetUtcNow().UtcDateTime;
-                if (frozen is null && draft.ExpiresAtUtc <= sendNow)
-                {
-                    throw new AdminOperationException("The gift collection deadline expired before queuing.", AdminOperationErrorKind.InvalidInput);
-                }
+                    var sendNow = clock.GetUtcNow().UtcDateTime;
+                    if (frozen is null && draft.ExpiresAtUtc <= sendNow)
+                    {
+                        throw new AdminOperationException("The gift collection deadline expired before queuing.", AdminOperationErrorKind.InvalidInput);
+                    }
 
-                this.Record(verified, draft.SendId, reason, recipients.Count, "Requested");
-                try
-                {
-                    token.ThrowIfCancellationRequested();
-                    var count = dispatch.Send(draft.SendId, verified.Id, reason, recipients, draft.TitleEn, draft.TitleVi, draft.MessageEn, draft.MessageVi, draft.Reward, sendNow, draft.ExpiresAtUtc);
-                    this.Record(verified, draft.SendId, reason, count, frozen is null ? "Queued" : "AlreadyQueued");
-                    return new JsonObject { ["status"] = frozen is null ? "Queued" : "AlreadyQueued", ["count"] = count, ["sendId"] = draft.SendId.ToString("D") };
-                }
-                catch (Exception exception)
-                {
-                    // This includes a lost commit response or failed final activity write. Do not mark
-                    // the durable host audit as failed/refused when the immutable send may exist.
-                    throw new AdminOperationException("The gift send needs confirmation. Keep its original identifier and retry the same reviewed input.", AdminOperationErrorKind.Uncertain, exception);
-                }
-            }, token).ConfigureAwait(false);
+                    this.Record(verified, draft.SendId, reason, recipients.Count, "Requested");
+                    try
+                    {
+                        token.ThrowIfCancellationRequested();
+                        var count = dispatch.Send(draft.SendId, verified.Id, reason, recipients, draft.TitleEn, draft.TitleVi, draft.MessageEn, draft.MessageVi, draft.Reward, sendNow, draft.ExpiresAtUtc);
+                        this.Record(verified, draft.SendId, reason, count, frozen is null ? "Queued" : "AlreadyQueued");
+                        return new JsonObject { ["status"] = frozen is null ? "Queued" : "AlreadyQueued", ["count"] = count, ["sendId"] = draft.SendId.ToString("D") };
+                    }
+                    catch (Exception exception)
+                    {
+                        // This includes a lost commit response or failed final activity write. Do not mark
+                        // the durable host audit as failed/refused when the immutable send may exist.
+                        throw new AdminOperationException("The gift send needs confirmation. Keep its original identifier and retry the same reviewed input.", AdminOperationErrorKind.Uncertain, exception);
+                    }
+                },
+                token).ConfigureAwait(false);
         }
     }
 
