@@ -36,6 +36,12 @@ public sealed class EscrowOwedDelivery
     /// <summary>Gets or sets Jewel Bank jewels to credit immediately.</summary>
     public List<EscrowJewelLine> Jewels { get; set; } = [];
 
+    /// <summary>Gets or sets coin currency when refunding bonds or payouts via owed delivery.</summary>
+    public EscrowCurrency CoinCurrency { get; set; } = EscrowCurrency.WCoinC;
+
+    /// <summary>Gets or sets coin amount refunded via owed delivery.</summary>
+    public long Coins { get; set; }
+
     /// <summary>Gets or sets UTC creation timestamp.</summary>
     public DateTime CreatedAtUtc { get; set; }
 

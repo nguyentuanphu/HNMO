@@ -78,4 +78,37 @@ public sealed class EscrowConfiguration
 
     /// <summary>Gets or sets jewel quantity threshold requiring explicit high-value confirmation (0 = disabled).</summary>
     public long HighValueThresholdJewels { get; set; } = 50;
+
+    /// <summary>Gets or sets a value indicating whether Direct P2P VND real-money contracts are enabled (OFF by default).</summary>
+    public bool DirectVndEnabled { get; set; }
+
+    /// <summary>Gets or sets a value indicating whether host ticked acknowledgement to check Vietnamese online-game/payment regulations before enabling Direct P2P VND.</summary>
+    public bool DirectVndComplianceAcknowledged { get; set; }
+
+    /// <summary>Gets or sets buyer payment window minutes upon accepting a Direct P2P VND contract (default 30 min).</summary>
+    public int DirectVndPaymentWindowMinutes { get; set; } = 30;
+
+    /// <summary>Gets or sets one-time extension minutes granted if buyer extends payment window.</summary>
+    public int DirectVndExtendMinutes { get; set; } = 15;
+
+    /// <summary>Gets or sets hours after buyer marks paid before auto-escalating an unconfirmed Direct P2P VND contract to Disputed.</summary>
+    public int DirectVndAutoDisputeHours { get; set; } = 2;
+
+    /// <summary>Gets or sets coin currency charged for Direct P2P VND contract service fee.</summary>
+    public EscrowCurrency DirectVndServiceFeeCurrency { get; set; } = EscrowCurrency.WCoinC;
+
+    /// <summary>Gets or sets flat coin service fee on Direct P2P VND contracts (combined with <see cref="DirectVndServiceFeePercent"/>).</summary>
+    public long DirectVndServiceFeeCoins { get; set; } = 10;
+
+    /// <summary>Gets or sets percentage fee converted into coins per 1000 VND (optional, 0 = flat fee only).</summary>
+    public double DirectVndServiceFeePercent { get; set; }
+
+    /// <summary>Gets or sets who pays the Direct P2P VND coin service fee.</summary>
+    public EscrowFeePayer DirectVndFeePayer { get; set; } = EscrowFeePayer.Seller;
+
+    /// <summary>Gets or sets maximum optional seller security bond in coins (0 = bonds disabled).</summary>
+    public int DirectVndMaxSellerBondCoins { get; set; } = 10_000;
+
+    /// <summary>Gets or sets maximum receipt image byte size (default 512 KB).</summary>
+    public int DirectVndMaxReceiptBytes { get; set; } = 524_288;
 }

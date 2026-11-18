@@ -496,6 +496,12 @@ public sealed class EscrowEngine
             contract.AdminReason = reason;
             contract.ClosedAtUtc = utcNow;
 
+            var bondRefund = contract.DirectVnd is { SellerBondCoins: > 0, BondReleased: false, BondForfeited: false } dv ? dv.SellerBondCoins : 0;
+            if (bondRefund > 0 && contract.DirectVnd is not null)
+            {
+                contract.DirectVnd.BondReleased = true;
+            }
+
             data.OwedDeliveries.Add(new EscrowOwedDelivery
             {
                 ContractId = contract.ContractId,
@@ -505,6 +511,8 @@ public sealed class EscrowEngine
                 Items = contract.Items.ToList(),
                 Zen = contract.EscrowedZen,
                 Jewels = contract.EscrowedJewels.ToList(),
+                CoinCurrency = contract.DirectVnd?.SellerBondCurrency ?? EscrowCurrency.WCoinC,
+                Coins = bondRefund,
                 CreatedAtUtc = utcNow,
             });
 
@@ -580,24 +588,7 @@ public sealed class EscrowEngine
     public EscrowReputationEntry GetReputation(string login) =>
         this._store.Read(d => d.Reputations.TryGetValue(login, out var rep) ? rep : new EscrowReputationEntry { LoginName = login });
 
-    private static void ExpireSingleLocked(EscrowStoreData data, EscrowContract contract, DateTime utcNow)
-    {
-        contract.Status = EscrowContractStatus.Expired;
-        contract.ClosedAtUtc = utcNow;
-        data.OwedDeliveries.Add(new EscrowOwedDelivery
-        {
-            ContractId = contract.ContractId,
-            RecipientLogin = contract.SellerLogin,
-            ReasonEn = $"Expired escrow {contract.ContractId} return",
-            ReasonVi = $"Hoàn trả hàng hết hạn hợp đồng {contract.ContractId}",
-            Items = contract.Items.ToList(),
-            Zen = contract.EscrowedZen,
-            Jewels = contract.EscrowedJewels.ToList(),
-            CreatedAtUtc = utcNow,
-        });
-    }
-
-    private static void UpdateReputationLocked(EscrowStoreData data, string login, int completedDelta, int cancelledDelta)
+    internal static void ApplyReputationLocked(EscrowStoreData data, string login, int completedDelta, int cancelledDelta, int disputesLostDelta = 0)
     {
         if (string.IsNullOrWhiteSpace(login))
         {
@@ -612,6 +603,76 @@ public sealed class EscrowEngine
 
         rep.Completed += completedDelta;
         rep.Cancelled += cancelledDelta;
+        rep.DisputesLost += disputesLostDelta;
         rep.Score = Math.Max(0, (rep.Completed * 10) - (rep.Cancelled * 2) - (rep.DisputesLost * 25));
     }
+
+    internal static void RecordCooldownAndDeliverToBuyerLocked(
+        EscrowConfiguration cfg,
+        EscrowStoreData data,
+        EscrowContract contract,
+        string buyerLogin,
+        DateTime utcNow)
+    {
+        DateTime? cooldownUntil = cfg.PostEscrowTradeCooldownHours > 0
+            ? utcNow.AddHours(cfg.PostEscrowTradeCooldownHours)
+            : null;
+        if (cooldownUntil is { } until)
+        {
+            foreach (var it in contract.Items)
+            {
+                data.ItemTradeCooldowns.Add(new EscrowTradeCooldownEntry
+                {
+                    LoginName = buyerLogin,
+                    Group = it.Group,
+                    Number = it.Number,
+                    Level = it.Level,
+                    LockedUntilUtc = until,
+                });
+            }
+
+            data.ItemTradeCooldowns.RemoveAll(c => c.LockedUntilUtc <= utcNow.AddDays(-1));
+        }
+
+        data.OwedDeliveries.Add(new EscrowOwedDelivery
+        {
+            ContractId = contract.ContractId,
+            RecipientLogin = buyerLogin,
+            ReasonEn = $"Escrow contract {contract.ContractId} purchase",
+            ReasonVi = $"Nhận vật phẩm hợp đồng ký gửi {contract.ContractId}",
+            Items = contract.Items.ToList(),
+            Zen = contract.EscrowedZen,
+            Jewels = contract.EscrowedJewels.ToList(),
+            CreatedAtUtc = utcNow,
+            ItemTradeCooldownUntilUtc = cooldownUntil,
+        });
+    }
+
+    private static void ExpireSingleLocked(EscrowStoreData data, EscrowContract contract, DateTime utcNow)
+    {
+        contract.Status = EscrowContractStatus.Expired;
+        contract.ClosedAtUtc = utcNow;
+        var bondRefund = contract.DirectVnd is { SellerBondCoins: > 0, BondReleased: false, BondForfeited: false } dv ? dv.SellerBondCoins : 0;
+        if (bondRefund > 0 && contract.DirectVnd is not null)
+        {
+            contract.DirectVnd.BondReleased = true;
+        }
+
+        data.OwedDeliveries.Add(new EscrowOwedDelivery
+        {
+            ContractId = contract.ContractId,
+            RecipientLogin = contract.SellerLogin,
+            ReasonEn = $"Expired escrow {contract.ContractId} return",
+            ReasonVi = $"Hoàn trả hàng hết hạn hợp đồng {contract.ContractId}",
+            Items = contract.Items.ToList(),
+            Zen = contract.EscrowedZen,
+            Jewels = contract.EscrowedJewels.ToList(),
+            CoinCurrency = contract.DirectVnd?.SellerBondCurrency ?? EscrowCurrency.WCoinC,
+            Coins = bondRefund,
+            CreatedAtUtc = utcNow,
+        });
+    }
+
+    private static void UpdateReputationLocked(EscrowStoreData data, string login, int completedDelta, int cancelledDelta) =>
+        ApplyReputationLocked(data, login, completedDelta, cancelledDelta, 0);
 }

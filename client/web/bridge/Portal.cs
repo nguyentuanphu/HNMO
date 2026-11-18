@@ -67,6 +67,7 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/market/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/escrow/account", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/escrow/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/direct/receipt", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "direct/receipt"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/jewel-bank/account", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/jewel-bank/withdraw", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "withdraw"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/jewel-bank/clear-master", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "clear-master"))).RequireRateLimiting("per-visitor");
@@ -743,9 +744,20 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
 
         string Field(string name, int maximum) =>
             body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
-        object request = action == "account"
-            ? new { loginName = Field("loginName", 10), password = Field("password", 20) }
-            : new { loginName = Field("loginName", 10), password = Field("password", 20), contractId = Field("contractId", 40) };
+        object request = action switch
+        {
+            "account" => new { loginName = Field("loginName", 10), password = Field("password", 20) },
+            "direct/receipt" => new
+            {
+                loginName = Field("loginName", 10),
+                password = Field("password", 20),
+                contractId = Field("contractId", 40),
+                receiptMime = Field("receiptMime", 40),
+                receiptBase64 = Field("receiptBase64", 800_000),
+                note = Field("note", 200),
+            },
+            _ => new { loginName = Field("loginName", 10), password = Field("password", 20), contractId = Field("contractId", 40) },
+        };
         try
         {
             using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/escrow/{action}", request), context.RequestAborted).ConfigureAwait(false);

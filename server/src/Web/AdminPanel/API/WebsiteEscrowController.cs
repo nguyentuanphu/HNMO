@@ -6,7 +6,10 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,7 +61,7 @@ public sealed class WebsiteEscrowController(
                 .Where(c => c.Status == EscrowContractStatus.Open && string.IsNullOrWhiteSpace(c.TargetBuyer))
                 .OrderByDescending(c => c.CreatedAtUtc)
                 .Take(100)
-                .Select(ToPublicContractDto)
+                .Select(c => ToPublicContractDto(EscrowDirectVndEngine.ProjectForViewer(c, string.Empty)))
                 .ToList();
             var feeTotals = data.FeeLedger
                 .GroupBy(f => f.Currency, StringComparer.OrdinalIgnoreCase)
@@ -108,7 +111,7 @@ public sealed class WebsiteEscrowController(
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .OrderByDescending(c => c.CreatedAtUtc)
                 .Take(60)
-                .Select(c => ToAccountContractDto(c, login))
+                .Select(c => ToAccountContractDto(EscrowDirectVndEngine.ProjectForViewer(c, login), login))
                 .ToList();
             var owed = data.OwedDeliveries
                 .Where(o => string.Equals(o.RecipientLogin, login, StringComparison.OrdinalIgnoreCase))
@@ -197,6 +200,133 @@ public sealed class WebsiteEscrowController(
             "application/json");
     }
 
+    /// <summary>
+    /// Pluggable automatic per-seller signed-webhook receiver for Direct P2P VND confirmation:
+    /// checks HMAC-SHA256 signature, timestamp window, replay nonce, exact VND amount, and HNMO reference.
+    /// </summary>
+    /// <param name="contractId">Target Direct P2P VND contract identifier.</param>
+    /// <returns>Verification outcome JSON.</returns>
+    [HttpPost("direct/webhook/{contractId}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> DirectWebhookAsync(string contractId)
+    {
+        var ct = this.HttpContext.RequestAborted;
+        var (cfg, engine) = await this.LoadAsync(ct).ConfigureAwait(false);
+        var direct = new EscrowDirectVndEngine(cfg, engine.Store);
+        if (!EscrowDirectVndEngine.IsCompliantAndEnabled(cfg))
+        {
+            return this.StatusCode(403, new { error = "DirectVndDisabledOrUnacknowledged" });
+        }
+
+        string rawBody;
+        using (var reader = new StreamReader(this.Request.Body, Encoding.UTF8))
+        {
+            rawBody = await reader.ReadToEndAsync(ct).ConfigureAwait(false);
+        }
+
+        var signature = this.Request.Headers["X-HNMO-Signature"].FirstOrDefault() ?? string.Empty;
+        var tsRaw = this.Request.Headers["X-HNMO-Timestamp"].FirstOrDefault() ?? string.Empty;
+        var nonce = this.Request.Headers["X-HNMO-Nonce"].FirstOrDefault() ?? string.Empty;
+        if (!long.TryParse(tsRaw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var timestampUnix))
+        {
+            return this.Unauthorized(new { error = "InvalidTimestamp" });
+        }
+
+        long amount = 0;
+        var reference = string.Empty;
+        try
+        {
+            using var doc = JsonDocument.Parse(rawBody);
+            if (doc.RootElement.TryGetProperty("amount", out var amtEl) && amtEl.TryGetInt64(out var parsedAmt))
+            {
+                amount = parsedAmt;
+            }
+
+            if (doc.RootElement.TryGetProperty("reference", out var refEl) && refEl.ValueKind == JsonValueKind.String)
+            {
+                reference = refEl.GetString() ?? string.Empty;
+            }
+        }
+        catch (JsonException)
+        {
+            return this.BadRequest(new { error = "InvalidJson" });
+        }
+
+        var (err, completed) = direct.VerifyAndCompleteWebhook(
+            contractId,
+            rawBody,
+            signature,
+            timestampUnix,
+            nonce,
+            amount,
+            reference,
+            DateTime.UtcNow);
+
+        if (err is "MissingSignature" or "InvalidSignature" or "StaleTimestamp")
+        {
+            return this.Unauthorized(new { error = err });
+        }
+
+        if (err == "ReplayDetected")
+        {
+            return this.Conflict(new { error = err });
+        }
+
+        if (err != "Ok" || completed is null)
+        {
+            return this.BadRequest(new { error = err });
+        }
+
+        ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+        {
+            Id = $"esc-wh-{Guid.NewGuid():N}",
+            TimestampUtc = DateTime.UtcNow,
+            Kind = ActivityKind.Trade,
+            Account = completed.SellerLogin,
+            PartnerAccount = completed.AcceptedByLogin,
+            Details = $"Direct VND webhook released {completed.ContractId} (amount={amount}, ref={reference})",
+        });
+
+        return this.Ok(new { v = 1, result = "Ok", contractId = completed.ContractId, status = completed.Status.ToString() });
+    }
+
+    /// <summary>Authenticated buyer receipt upload / "I've paid" endpoint for Direct P2P VND contracts.</summary>
+    /// <param name="request">Credentials, contract ID, and optional PNG/JPG/WEBP receipt image.</param>
+    /// <returns>Updated status JSON.</returns>
+    [HttpPost("direct/receipt")]
+    [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Policy = AdminPolicies.AuthenticatedOperator)]
+    public async Task<IActionResult> DirectReceiptAsync([FromBody] EscrowReceiptRequest request)
+    {
+        var ct = this.HttpContext.RequestAborted;
+        var (cfg, engine) = await this.LoadAsync(ct).ConfigureAwait(false);
+        if (!EscrowDirectVndEngine.IsCompliantAndEnabled(cfg))
+        {
+            return this.StatusCode(403, new { error = "DirectVndDisabledOrUnacknowledged" });
+        }
+
+        var configuration = await gameConfigurationSource.GetOwnerAsync(Guid.Empty, ct).ConfigureAwait(false);
+        using var context = persistence.CreateNewPlayerContext(configuration);
+        if (await AuthenticateAsync(context, request.LoginName, request.Password, ct).ConfigureAwait(false) is not { } account)
+        {
+            return this.Unauthorized(new { error = "login" });
+        }
+
+        var direct = new EscrowDirectVndEngine(cfg, engine.Store);
+        var (err, updated) = direct.MarkBuyerPaid(
+            account.LoginName,
+            request.ContractId?.Trim() ?? string.Empty,
+            request.ReceiptMime,
+            request.ReceiptBase64,
+            request.Note,
+            DateTime.UtcNow);
+        if (err != "Ok" || updated is null)
+        {
+            return this.BadRequest(new { error = err });
+        }
+
+        return this.Ok(new { v = 1, result = "Ok", contractId = updated.ContractId, status = updated.Status.ToString() });
+    }
+
     private static object ToRulesDto(EscrowConfiguration cfg) => new
     {
         feePercent = cfg.FeePercent,
@@ -207,11 +337,16 @@ public sealed class WebsiteEscrowController(
         maxOpenContracts = cfg.MaxOpenContractsPerAccount,
         cooldownHours = cfg.PostEscrowTradeCooldownHours,
         minAccountAgeDays = cfg.MinAccountAgeDays,
+        directVndEnabled = EscrowDirectVndEngine.IsCompliantAndEnabled(cfg),
+        directVndPaymentWindowMinutes = cfg.DirectVndPaymentWindowMinutes,
+        directVndServiceFeeCurrency = cfg.DirectVndServiceFeeCurrency.ToString(),
+        directVndServiceFeeCoins = cfg.DirectVndServiceFeeCoins,
     };
 
     private static object ToPublicContractDto(EscrowContract c) => new
     {
         c.ContractId,
+        c.Mode,
         c.SellerCharacter,
         status = c.Status.ToString(),
         priceCurrency = c.PriceCurrency.ToString(),
@@ -224,11 +359,14 @@ public sealed class WebsiteEscrowController(
         c.Items,
         c.CreatedAtSydney,
         c.ExpiresAtSydney,
+        bankName = c.DirectVnd?.BankName ?? string.Empty,
+        sellerBondCoins = c.DirectVnd?.SellerBondCoins ?? 0,
     };
 
     private static object ToAccountContractDto(EscrowContract c, string login) => new
     {
         c.ContractId,
+        c.Mode,
         c.SellerLogin,
         c.SellerCharacter,
         c.TargetBuyer,
@@ -249,6 +387,7 @@ public sealed class WebsiteEscrowController(
         c.Items,
         c.CreatedAtSydney,
         c.ExpiresAtSydney,
+        c.DirectVnd,
     };
 
     private static async Task<Account?> AuthenticateAsync(IPlayerContext context, string? loginName, string? password, CancellationToken cancellationToken)
@@ -287,4 +426,19 @@ public sealed class WebsiteEscrowController(
     /// <param name="Password">Account password.</param>
     /// <param name="ContractId">Target contract identifier.</param>
     public sealed record EscrowCancelRequest(string LoginName, string Password, string ContractId);
+
+    /// <summary>Buyer receipt / payment confirmation payload.</summary>
+    /// <param name="LoginName">Buyer login name.</param>
+    /// <param name="Password">Buyer password.</param>
+    /// <param name="ContractId">Target contract identifier.</param>
+    /// <param name="ReceiptMime">Optional image MIME type.</param>
+    /// <param name="ReceiptBase64">Optional base64 receipt image.</param>
+    /// <param name="Note">Optional payment reference note.</param>
+    public sealed record EscrowReceiptRequest(
+        string LoginName,
+        string Password,
+        string ContractId,
+        string? ReceiptMime,
+        string? ReceiptBase64,
+        string? Note);
 }

@@ -26,4 +26,7 @@ public sealed class EscrowStoreData
 
     /// <summary>Gets or sets collected host fee records (newest first).</summary>
     public List<EscrowFeeLedgerEntry> FeeLedger { get; set; } = [];
+
+    /// <summary>Gets or sets consumed signed webhook nonces for replay protection.</summary>
+    public List<EscrowWebhookNonceEntry> UsedWebhookNonces { get; set; } = [];
 }
