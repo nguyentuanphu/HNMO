@@ -20,6 +20,7 @@ public sealed partial class Leaderboards : ComponentBase, IDisposable
     private MiniGameType? _selectedType;
     private LeaderboardPeriod _period = LeaderboardPeriod.AllTime;
     private CancellationTokenSource? _loadCancellation;
+    private int _loadGeneration;
 
     /// <summary>
     /// The period of the finished games which are counted.
@@ -69,9 +70,10 @@ public sealed partial class Leaderboards : ComponentBase, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        this._loadCancellation?.Cancel();
-        this._loadCancellation?.Dispose();
-        this._loadCancellation = null;
+        Interlocked.Increment(ref this._loadGeneration);
+        var previous = Interlocked.Exchange(ref this._loadCancellation, null);
+        previous?.Cancel();
+        previous?.Dispose();
     }
 
     /// <inheritdoc />
@@ -111,16 +113,18 @@ public sealed partial class Leaderboards : ComponentBase, IDisposable
 
     private async Task LoadAsync()
     {
-        // A newer selection cancels the load of the previous one, so that a slow
-        // previous load can't overwrite the leaderboard of the current selection.
-        if (this._loadCancellation is { } previousCancellation)
+        // Atomically supersede any in-flight load before awaiting, so rapid selection
+        // changes cannot interleave on CancelAsync or let a slow earlier load overwrite
+        // the current leaderboard.
+        var generation = Interlocked.Increment(ref this._loadGeneration);
+        var cancellation = new CancellationTokenSource();
+        var previousCancellation = Interlocked.Exchange(ref this._loadCancellation, cancellation);
+        if (previousCancellation is not null)
         {
             await previousCancellation.CancelAsync().ConfigureAwait(true);
             previousCancellation.Dispose();
         }
 
-        var cancellation = new CancellationTokenSource();
-        this._loadCancellation = cancellation;
         var miniGameType = this._selectedType;
         var period = this._period;
 
@@ -129,7 +133,7 @@ public sealed partial class Leaderboards : ComponentBase, IDisposable
         try
         {
             var leaderboard = await this.ReadOperations.LeaderboardAsync(miniGameType, GetDays(period), cancellation.Token).ConfigureAwait(true);
-            if (cancellation.IsCancellationRequested)
+            if (cancellation.IsCancellationRequested || generation != Volatile.Read(ref this._loadGeneration))
             {
                 return;
             }
@@ -144,12 +148,15 @@ public sealed partial class Leaderboards : ComponentBase, IDisposable
         }
         catch (Exception ex)
         {
-            this.Logger.LogError(ex, "Error loading the leaderboard of {MiniGameType}.", miniGameType);
-            this.ToastService.ShowError(string.Format(Resources.UnexpectedErrorOccurred, ex.Message));
+            if (generation == Volatile.Read(ref this._loadGeneration))
+            {
+                this.Logger.LogError(ex, "Error loading the leaderboard of {MiniGameType}.", miniGameType);
+                this.ToastService.ShowError(string.Format(Resources.UnexpectedErrorOccurred, ex.Message));
+            }
         }
         finally
         {
-            if (!cancellation.IsCancellationRequested)
+            if (!cancellation.IsCancellationRequested && generation == Volatile.Read(ref this._loadGeneration))
             {
                 this.IsLoading = false;
             }

@@ -9,6 +9,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 
 /// <summary>
 /// Where a character is in the new-player guide.
@@ -169,10 +170,19 @@ public sealed class OnboardingStoreData
 /// </summary>
 public sealed class OnboardingStore
 {
+    private const string FeatureCharacters = "onboarding.char";
+    private const string FeatureAccounts = "onboarding.account";
+    private const string FeatureOwed = "onboarding.owed";
+    private const string SectionKey = "onboarding";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, OnboardingStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<OnboardingCharacterState> _charSync = new();
+    private readonly HnmoFeatureRowSync<OnboardingAccountState> _accSync = new();
+    private readonly HnmoFeatureRowSync<List<OnboardingOwedReward>> _owedSync = new();
+    private DateTime _savedActivatedAtUtc;
     private bool _changed;
 
     /// <summary>
@@ -182,7 +192,8 @@ public sealed class OnboardingStore
     /// <param name="nowUtc">The time to keep as the activation time of a new store.</param>
     public OnboardingStore(string? filePath = null, DateTime? nowUtc = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
         if (this.Data.ActivatedAtUtc == default)
         {
@@ -195,7 +206,7 @@ public sealed class OnboardingStore
     public object Lock { get; } = new();
 
     /// <summary>Gets the file, if any.</summary>
-    public string? FilePath => this._filePath;
+    public string? FilePath => this._stateStore?.FilePath;
 
     /// <summary>Gets the data.</summary>
     public OnboardingStoreData Data { get; }
@@ -219,59 +230,52 @@ public sealed class OnboardingStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
         }
 
-        try
+        this._charSync.SaveChanges(this._rowBackend, FeatureCharacters, this.Data.Characters, JsonOptions, useDirtySetOnly: true);
+        this._accSync.SaveChanges(this._rowBackend, FeatureAccounts, this.Data.Accounts, JsonOptions, useDirtySetOnly: true);
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+        if (this._savedActivatedAtUtc != this.Data.ActivatedAtUtc)
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
+            try
             {
-                Directory.CreateDirectory(directory);
+                this._stateStore.WriteSection(SectionKey, new OnboardingStoreData { ActivatedAtUtc = this.Data.ActivatedAtUtc }, JsonOptions);
+                this._savedActivatedAtUtc = this.Data.ActivatedAtUtc;
             }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // Saved with next change.
+            }
+        }
 
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
-            this._changed = false;
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // It's saved with the next change.
-        }
+        this._changed = false;
     }
 
     private OnboardingStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new OnboardingStoreData();
         }
 
-        try
-        {
-            var data = JsonSerializer.Deserialize<OnboardingStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new OnboardingStoreData();
-            data.Characters = new Dictionary<string, OnboardingCharacterState>(data.Characters, StringComparer.Ordinal);
-            data.Accounts = new Dictionary<string, OnboardingAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
-            data.Owed = new Dictionary<string, List<OnboardingOwedReward>>(data.Owed, StringComparer.Ordinal);
-            return data;
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            // A broken file is kept aside, so nothing is lost silently.
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
+        var data = this._stateStore.ReadSection<OnboardingStoreData>(SectionKey, JsonOptions) ?? new OnboardingStoreData();
+        this._savedActivatedAtUtc = data.ActivatedAtUtc;
+        data.Characters = new Dictionary<string, OnboardingCharacterState>(data.Characters, StringComparer.Ordinal);
+        data.Accounts = new Dictionary<string, OnboardingAccountState>(data.Accounts, StringComparer.OrdinalIgnoreCase);
+        data.Owed = new Dictionary<string, List<OnboardingOwedReward>>(data.Owed, StringComparer.Ordinal);
 
-            return new OnboardingStoreData();
+        var m1 = this._charSync.LoadOrMigrate(this._rowBackend, FeatureCharacters, data.Characters, JsonOptions);
+        var m2 = this._accSync.LoadOrMigrate(this._rowBackend, FeatureAccounts, data.Accounts, JsonOptions);
+        var m3 = this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions);
+        if (m1 || m2 || m3)
+        {
+            this._stateStore.WriteSection(SectionKey, new OnboardingStoreData { ActivatedAtUtc = data.ActivatedAtUtc }, JsonOptions);
         }
+
+        return data;
     }
 }

@@ -352,8 +352,9 @@ public sealed class ResetEngine
     /// <param name="subject">The character.</param>
     /// <param name="nowUtc">The time.</param>
     /// <param name="source">Where it would be done.</param>
+    /// <param name="catchupDailyCap">Optional server-wide catch-up daily reset cap.</param>
     /// <returns>The plan; <see cref="ResetPlan.Result"/> says whether it can be done.</returns>
-    public ResetPlan PlanReset(ResetSubject subject, DateTime nowUtc, ResetSource source)
+    public ResetPlan PlanReset(ResetSubject subject, DateTime nowUtc, ResetSource source, int? catchupDailyCap = null)
     {
         var configuration = this.Configuration;
         var record = this.RecordOf(subject.CharacterId, nowUtc);
@@ -393,6 +394,10 @@ public sealed class ResetEngine
         plan.ClearStats = tier.ClearStats;
         plan.PointsMode = tier.PointsMode;
         plan.DailyLimit = tier.DailyLimit > 0 ? tier.DailyLimit + (vip ? configuration.Vip.ExtraDailyResets : 0) : 0;
+        if (catchupDailyCap is { } cap && cap >= 0)
+        {
+            plan.DailyLimit = plan.DailyLimit > 0 ? Math.Min(plan.DailyLimit, cap) : cap;
+        }
 
         var zen = (long)Math.Max(0, tier.Zen) * (tier.ZenTimesResetNumber ? plan.ResetsAfter : 1);
         plan.Zen = vip ? Discount(zen, configuration.Vip.ZenDiscountPercent) : zen;

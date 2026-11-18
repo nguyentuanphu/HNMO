@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlayerActions.Chat;
 
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.PlugIns.Chat;
 
 /// <summary>
@@ -34,7 +35,13 @@ public abstract class BannableChatMessageBaseProcessor : IChatMessageProcessor
             return;
         }
 
-        await this.SubclassProcessMessageAsync(sender, content).ConfigureAwait(false);
+        var (allowed, filteredMessage) = await BannedWordsPlugIn.FilterChatAsync(sender, content.Message).ConfigureAwait(false);
+        if (!allowed)
+        {
+            return;
+        }
+
+        await this.SubclassProcessMessageAsync(sender, (filteredMessage, content.PlayerName)).ConfigureAwait(false);
     }
 
     /// <summary>

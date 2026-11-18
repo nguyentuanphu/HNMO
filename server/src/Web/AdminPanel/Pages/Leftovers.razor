@@ -1,0 +1,131 @@
+@page "/leftovers"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.CombiningLeftovers
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Combining leftovers", "Đổi đồ dư & Nâng hộp")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Combining leftovers", "Đổi đồ dư & Nâng hộp")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Combining leftovers", "Đổi đồ dư & Nâng hộp")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<p class="text-muted">@L("Configure Chaos-style bag combine recipes (e.g. 2 × Box +2 + JoL + JoC -> Box +3) capped by Season Plan stages, plus surplus event/boss material exchanges for Goblin Points, Zen, or rewards.", "Cấu hình công thức ghép vật phẩm dư trong túi đồ (vd 2 Hộp +2 + Sinh Mệnh + Sáng Tạo -> Hộp +3) theo mốc Lộ trình mùa, cùng gói đổi nguyên liệu dư lấy Coin/Zen.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="leftovers-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Feature is OFF by default. Enable to activate hotkey F10 and the Exchange NPC dialog in-game.", "Mặc định TẮT. Khi bật, người chơi có thể bấm F10 hoặc nói chuyện với NPC Đổi đồ dư.")</li>
+            <li>@L("Combine recipes are additionally capped by any lower MaxBoxLevel unlocked on the active Season Plan.", "Công thức nâng hộp tự động tuân theo giới hạn cấp Hộp đang mở của Lộ trình mùa giải.")</li>
+            <li>@L("Account Safety locked items in the player's bag are never consumed.", "Vật phẩm đang khóa bảo vệ tài khoản sẽ không bao giờ bị trừ.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Combining leftovers configuration unavailable.", "Không tải được cấu hình Đổi đồ dư.")</div>
+}
+else
+{
+    <section class="card mb-3" id="leftovers-settings">
+        <div class="card-body">
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="lo-active" @bind="this._isActive" />
+                <label class="form-check-label" for="lo-active">@L("Enable Combining Leftovers & Surplus Exchange", "Bật Đổi đồ dư & Nâng hộp")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="lo-npc" title="@L("NPC definition number that opens the panel when spoken to (0 = F10 only)", "Số hiệu NPC mở bảng khi đối thoại (0 = chỉ dùng F10)")">@L("Exchange NPC number", "Số NPC Đổi đồ")</label>
+                    <input class="form-control" id="lo-npc" type="number" min="0" max="10000" @bind="c.ExchangeNpcNumber" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="lo-maxbox" title="@L("Upper box stage cap (also respects lower active Season Plan cap)", "Giới hạn cấp Hộp cao nhất")">@L("Max box level", "Cấp Hộp tối đa")</label>
+                    <input class="form-control" id="lo-maxbox" type="number" min="1" max="15" @bind="c.MaxBoxLevel" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="lo-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="lo-file" @bind="c.FileName" />
+                </div>
+            </div>
+
+            <h2 class="h5">@L("Upgrade recipes (Combining leftovers)", "Công thức nâng hộp / ghép đồ dư")</h2>
+            @foreach (var recipe in c.Recipes)
+            {
+                <div class="border rounded p-2 mb-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-2"><label class="form-label small">ID</label><input class="form-control form-control-sm" @bind="recipe.Id" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Name (EN)", "Tên (EN)")</label><input class="form-control form-control-sm" @bind="recipe.NameEn" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Name (VI)", "Tên (VI)")</label><input class="form-control form-control-sm" @bind="recipe.NameVi" /></div>
+                        <div class="col-sm-1"><label class="form-label small">@L("Rate %", "Tỉ lệ %")</label><input class="form-control form-control-sm" type="number" min="1" max="100" @bind="recipe.SuccessRatePercent" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Zen cost", "Phí Zen")</label><input class="form-control form-control-sm" type="number" min="0" @bind="recipe.ZenCost" /></div>
+                        <div class="col-sm-1 text-end">
+                            <input type="checkbox" class="form-check-input me-1" title="@L("Active", "Bật")" @bind="recipe.Enabled" />
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Recipes.Remove(recipe)">×</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <button type="button" class="btn btn-outline-secondary btn-sm mb-3" @onclick="this.AddRecipe">@L("+ Add recipe", "+ Thêm công thức")</button>
+
+            <h2 class="h5">@L("Surplus material exchange offers", "Gói đổi nguyên liệu dư")</h2>
+            @foreach (var offer in c.ExchangeOffers)
+            {
+                <div class="border rounded p-2 mb-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-2"><label class="form-label small">ID</label><input class="form-control form-control-sm" @bind="offer.Id" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Name (EN)", "Tên (EN)")</label><input class="form-control form-control-sm" @bind="offer.NameEn" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Name (VI)", "Tên (VI)")</label><input class="form-control form-control-sm" @bind="offer.NameVi" /></div>
+                        <div class="col-sm-1"><label class="form-label small">@L("Need", "Số cần")</label><input class="form-control form-control-sm" type="number" min="1" @bind="offer.InputCount" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Coins", "Xu")</label><input class="form-control form-control-sm" type="number" min="0" @bind="offer.RewardCoins" /></div>
+                        <div class="col-sm-1 text-end">
+                            <input type="checkbox" class="form-check-input me-1" title="@L("Active", "Bật")" @bind="offer.Enabled" />
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.ExchangeOffers.Remove(offer)">×</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddOffer">@L("+ Add exchange offer", "+ Thêm gói đổi")</button>
+                <button type="button" class="btn btn-primary" id="lo-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+            </div>
+        </div>
+    </section>
+
+    @if (this._logs.Count > 0)
+    {
+        <section class="card" id="leftovers-logs">
+            <div class="card-body">
+                <h2 class="h5">@L("Recent combines & exchanges (Sydney time)", "Lịch sử ghép & đổi gần đây (Giờ Sydney)")</h2>
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>@L("Time (Sydney)", "Thời gian (Sydney)")</th>
+                            <th>@L("Account", "Tài khoản")</th>
+                            <th>@L("Action", "Hành động")</th>
+                            <th>@L("Detail", "Chi tiết")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in this._logs)
+                        {
+                            <tr>
+                                <td>@SydneyTime(log.AtUtc)</td>
+                                <td>@log.LoginName</td>
+                                <td>@log.Action</td>
+                                <td>@log.Detail</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+}
