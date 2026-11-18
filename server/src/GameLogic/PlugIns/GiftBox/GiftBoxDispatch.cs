@@ -221,10 +221,6 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
         }
     }
 
-    private HnmoFeatureRow? FindRow(string feature, string scopeId) => backend is IHnmoPlayerStateRowQueryBackend query
-        ? query.FindRow(feature, scopeId)
-        : backend.LoadAll(feature).SingleOrDefault(row => row.ScopeId == scopeId);
-
     private static bool ValidText(string? text, int maximum) => !string.IsNullOrWhiteSpace(text) && text.Length <= maximum && !text.Any(character => char.IsControl(character) && character is not '\n' and not '\r' and not '\t');
 
     private static GiftCodeReward Clone(GiftCodeReward reward) => JsonSerializer.Deserialize<GiftCodeReward>(JsonSerializer.Serialize(reward, JsonOptions), JsonOptions)!;
@@ -240,6 +236,10 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
             throw new ArgumentException("The gift box reward is invalid.", nameof(reward));
         }
     }
+
+    private HnmoFeatureRow? FindRow(string feature, string scopeId) => backend is IHnmoPlayerStateRowQueryBackend query
+        ? query.FindRow(feature, scopeId)
+        : backend.LoadAll(feature).SingleOrDefault(row => row.ScopeId == scopeId);
 
     private sealed record SendRequest(string Actor, string Reason, Guid[] AccountIds, string TitleEn, string TitleVi, string MessageEn, string MessageVi, GiftCodeReward Reward, DateTime? ExpiresAtUtc);
 
