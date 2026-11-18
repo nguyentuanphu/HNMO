@@ -4961,4 +4961,10 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="PageHelpTextCharacterTools" xml:space="preserve">
     <value>Tìm bất kỳ nhân vật nào để đưa khỏi chỗ kẹt về thành an toàn, ban tặng hoặc xóa bùa hỗ trợ trực tuyến, hoặc chỉnh cấp độ, điểm cộng, Zen và lớp nhân vật khi ngoại tuyến. Mọi thao tác đều bắt buộc nhập lý do kiểm toán và từ chối chỉnh cấp/chỉ số/Zen/lớp khi nhân vật đang trực tuyến.</value>
   </data>
+  <data name="GmManager" xml:space="preserve">
+    <value>Quản lý GM</value>
+  </data>
+  <data name="PageHelpTextGmManager" xml:space="preserve">
+    <value>Phân quyền chi tiết cho từng GM (Thông báo, Di chuyển/Triệu hồi, Thả quái/Boss, Bắt đầu sự kiện, Kiểm tra túi đồ, Cấm chat/Kick, Chỉnh nhân vật) và xem nhật ký kiểm toán mọi lệnh GM trong game.</value>
+  </data>
 </root>

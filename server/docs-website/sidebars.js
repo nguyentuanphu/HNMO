@@ -45,6 +45,7 @@ const sidebars = {
         "admin-panel/accounts",
         "admin-panel/ban-manager",
         "admin-panel/character-tools",
+        "admin-panel/gm-manager",
         "admin-panel/online-accounts",
         "admin-panel/game-configuration",
         "admin-panel/gameplay-rules",

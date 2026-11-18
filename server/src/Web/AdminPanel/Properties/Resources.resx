@@ -4930,4 +4930,10 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="PageHelpTextCharacterTools" xml:space="preserve">
     <value>Look up any character to move them out of a stuck spot to a safe town, apply or clear live buffs, or adjust offline level, stats, Zen, and class. Every change requires an audit reason, and unsafe level/stat/Zen/class edits are refused while the character is online.</value>
   </data>
+  <data name="GmManager" xml:space="preserve">
+    <value>GM manager</value>
+  </data>
+  <data name="PageHelpTextGmManager" xml:space="preserve">
+    <value>Assign per-GM command permissions (Announce, Move/Summon/GoTo, Spawn Monster/Boss, Start Event, Inspect Inventory, Mute/Kick, Direct Edits) and review in-game GM command audits.</value>
+  </data>
 </root>
