@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -2941,4 +2941,10 @@
   <data name="HnmoGiftBoxRequestHandlerPlugIn_Description" xml:space="preserve"><value>Handles the web game mailbox list and live reward collection under the player lock.</value></data>
   <data name="HnmoGiftBoxViewPlugIn_Name" xml:space="preserve"><value>Gift box mailbox window (F5 28)</value></data>
   <data name="HnmoGiftBoxViewPlugIn_Description" xml:space="preserve"><value>Shows own-account mailbox letters and collection results in the web game.</value></data>
+  <data name="HnmoBanNoticeViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: ban and mute notice (F5 29)</value>
+  </data>
+  <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
+    <value>Sends structured bilingual ban or mute reason and Sydney expiry time to the game client.</value>
+  </data>
 </root>

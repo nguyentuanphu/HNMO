@@ -334,12 +334,26 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         var request = new { loginName = Field("loginName", 10), password = Field("password", 20) };
         try
         {
-            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, "api/website/login-ticket", request), context.RequestAborted).ConfigureAwait(false);
+            using var apiRequest = this.ApiRequest(HttpMethod.Post, "api/website/login-ticket", request);
+            if (context.Connection.RemoteIpAddress?.ToString() is { Length: > 0 } clientIp)
+            {
+                apiRequest.Headers.TryAddWithoutValidation("X-HNMO-Client-Ip", clientIp);
+            }
+
+            if (Field("deviceId", 128) is { Length: > 0 } deviceId)
+            {
+                apiRequest.Headers.TryAddWithoutValidation("X-HNMO-Device-Id", deviceId);
+            }
+
+            using var response = await http.SendAsync(apiRequest, context.RequestAborted).ConfigureAwait(false);
             var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
             if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
             {
                 context.Response.Headers.CacheControl = "no-store";
-                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+                var status = (text.Contains("\"error\":\"blocked\"", StringComparison.Ordinal) && response.StatusCode == HttpStatusCode.OK)
+                    ? (int)HttpStatusCode.Forbidden
+                    : (int)response.StatusCode;
+                return Results.Content(text, "application/json", statusCode: status);
             }
 
             logger.LogWarning("Website login ticket failed: {Status}", response.StatusCode);

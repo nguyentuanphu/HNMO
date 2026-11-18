@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -4915,4 +4915,13 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="GiftBoxCoinHistoryCollected" xml:space="preserve"><value>Gift collected: {0}</value></data>
   <data name="GiftBoxPageTitle" xml:space="preserve"><value>Gift box / Mail</value></data>
   <data name="GiftBoxPageHelp" xml:space="preserve"><value>Send bilingual (EN/VI) gift letters containing items, Zen, or Cash Shop coins to one account, a pasted login list, everyone, or players recently observed online. Full bags never lose items: owed gifts remain collectible on the account page or in-game via Alt+M.</value></data>
+  <data name="NavBanManager" xml:space="preserve">
+    <value>Bans &amp; Mutes</value>
+  </data>
+  <data name="BanManagerPageTitle" xml:space="preserve">
+    <value>Bans &amp; Mutes Manager</value>
+  </data>
+  <data name="BanManagerPageHelp" xml:space="preserve">
+    <value>Issue or lift timed and permanent bans or chat mutes for accounts, characters, networks, and devices. Network and device identifiers are hashed with a persistent server salt and are never stored in plain text. Players see the reason and Sydney expiry time at login, character selection, or chat.</value>
+  </data>
 </root>

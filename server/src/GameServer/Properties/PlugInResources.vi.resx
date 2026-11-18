@@ -2840,4 +2840,10 @@
   <data name="HnmoGiftBoxRequestHandlerPlugIn_Description" xml:space="preserve"><value>Xử lý danh sách thư quà và nhận quà trực tiếp an toàn dưới khóa tài khoản trong game.</value></data>
   <data name="HnmoGiftBoxViewPlugIn_Name" xml:space="preserve"><value>Cửa sổ hộp thư quà (F5 28)</value></data>
   <data name="HnmoGiftBoxViewPlugIn_Description" xml:space="preserve"><value>Hiển thị hộp thư quà tặng và kết quả nhận quà trong trò chơi trên web.</value></data>
+  <data name="HnmoBanNoticeViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: thông báo khóa / cấm chat (F5 29)</value>
+  </data>
+  <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
+    <value>Gửi lý do khóa tài khoản, nhân vật hoặc cấm chat cùng thời hạn theo giờ Sydney tới client.</value>
+  </data>
 </root>

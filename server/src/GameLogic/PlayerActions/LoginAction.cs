@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlayerActions;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using HNMO.GameLogic.PlugIns.Moderation;
 using HNMO.GameLogic.Views.Login;
 using HNMO.Interfaces;
 using Nito.AsyncEx;
@@ -19,6 +20,19 @@ public class LoginAction
     private static readonly ConditionalWeakTable<IGameServerContext, ConcurrentDictionary<string, AsyncLock>> LoginGates = new();
 
     private static int _templateCounter;
+    private readonly BanManagerService? _banService;
+
+    /// <summary>Initializes a new instance of the <see cref="LoginAction"/> class.</summary>
+    public LoginAction()
+    {
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="LoginAction"/> class with an explicit moderation store.</summary>
+    /// <param name="banService">Isolated moderation service for testing.</param>
+    internal LoginAction(BanManagerService banService)
+    {
+        this._banService = banService;
+    }
 
     /// <summary>
     /// Logins the specified player.
@@ -32,6 +46,11 @@ public class LoginAction
 
         // Password guessing: too many wrong passwords lock the account (or address) for a while.
         var address = (player as IHasIpAddress)?.IpAddress;
+        if (await this.RefuseIfModerationBlockedAsync(player, username, address, null).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (LoginAttemptGuard.IsLocked(username, address))
         {
             player.Logger.LogWarning("Login of [{Username}] refused: too many wrong passwords recently.", username);
@@ -53,7 +72,7 @@ public class LoginAction
 
         LoginAttemptGuard.RecordSuccess(username);
 
-        if (!await this.ValidateAccountStateAsync(player, state.Value).ConfigureAwait(false))
+        if (!await this.ValidateAccountStateAsync(player, state.Value, username).ConfigureAwait(false))
         {
             return;
         }
@@ -74,6 +93,11 @@ public class LoginAction
         using var loggerScope = player.Logger.BeginScope(this.GetType());
 
         var address = (player as IHasIpAddress)?.IpAddress;
+        if (await this.RefuseIfModerationBlockedAsync(player, username, address, null).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (LoginAttemptGuard.IsLocked(username, address))
         {
             player.Logger.LogWarning("Ticket login of [{Username}] refused: too many wrong attempts recently.", username);
@@ -220,16 +244,42 @@ public class LoginAction
         }
     }
 
-    private async ValueTask<bool> ValidateAccountStateAsync(Player player, AccountState state)
+    private BanManagerService BanService => this._banService ?? BanManagerService.Default;
+
+    private async ValueTask<bool> RefuseIfModerationBlockedAsync(Player player, string username, string? address, string? deviceId)
+    {
+        var active = this.BanService.FindActiveLoginBlock(username, address, deviceId, DateTime.UtcNow);
+        if (active is null)
+        {
+            return false;
+        }
+
+        await player.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(active))).ConfigureAwait(false);
+        var code = active.ExpiresAtUtc.HasValue ? LoginResult.TemporaryBlocked : LoginResult.AccountBlocked;
+        await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(code)).ConfigureAwait(false);
+        return true;
+    }
+
+    private async ValueTask<bool> ValidateAccountStateAsync(Player player, AccountState state, string? username = null)
     {
         if (state == AccountState.Banned)
         {
+            if (username is not null && this.BanService.FindActiveLoginBlock(username, null, null, DateTime.UtcNow) is { } active)
+            {
+                await player.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(active))).ConfigureAwait(false);
+            }
+
             await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.AccountBlocked)).ConfigureAwait(false);
             return false;
         }
 
         if (state == AccountState.TemporarilyBanned)
         {
+            if (username is not null && this.BanService.FindActiveLoginBlock(username, null, null, DateTime.UtcNow) is { } active)
+            {
+                await player.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(active))).ConfigureAwait(false);
+            }
+
             await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.TemporaryBlocked)).ConfigureAwait(false);
             return false;
         }
@@ -355,7 +405,7 @@ public class LoginAction
             }
 
             if (validateAccountStateAfterLoad
-                && !await this.ValidateAccountStateAsync(player, loadedAccount.State).ConfigureAwait(false))
+                && !await this.ValidateAccountStateAsync(player, loadedAccount.State, loadedAccount.LoginName).ConfigureAwait(false))
             {
                 await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
                 context.Allowed = false;

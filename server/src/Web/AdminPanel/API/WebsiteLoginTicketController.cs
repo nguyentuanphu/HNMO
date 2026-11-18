@@ -4,14 +4,17 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
+using System.Text.Json;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlayerActions;
+using HNMO.GameLogic.PlugIns.Moderation;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Issues short-lived, single-use login tickets for players signed in on the website so "Play now"
@@ -22,13 +25,14 @@ using HNMO.Web.AdminPanel.Auth;
 [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Policy = AdminPolicies.AuthenticatedOperator)]
 public sealed class WebsiteLoginTicketController(
     IPersistenceContextProvider persistence,
-    IDataSource<GameConfiguration> gameConfigurationSource) : ControllerBase
+    IDataSource<GameConfiguration> gameConfigurationSource,
+    IHnmoPlayerStateRowBackend? banRows = null) : ControllerBase
 {
     /// <summary>
     /// Verifies the account's password and issues a one-time login ticket.
     /// </summary>
     /// <param name="request">The login name and password.</param>
-    /// <returns>The login name, ticket, and lifetime in seconds; 401 on wrong password, 403 if blocked.</returns>
+    /// <returns>The login name, ticket, and lifetime in seconds; 401 on wrong password, 403 if blocked with bilingual reason and Sydney expiry.</returns>
     [HttpPost]
     public async Task<IActionResult> IssueAsync([FromBody] LoginTicketRequest request)
     {
@@ -47,9 +51,9 @@ public sealed class WebsiteLoginTicketController(
             return this.Unauthorized(new { error = "login" });
         }
 
-        if (state is AccountState.Banned or AccountState.TemporarilyBanned)
+        if (this.BuildBlockResponse(loginName, state.Value) is { } blocked)
         {
-            return this.StatusCode(403, new { error = "blocked" });
+            return blocked;
         }
 
         var (ticket, _) = WebLoginTicketStore.Shared.Issue(loginName);
@@ -85,9 +89,9 @@ public sealed class WebsiteLoginTicketController(
             return this.NotFound(new { error = "missing" });
         }
 
-        if (account.State is AccountState.Banned or AccountState.TemporarilyBanned)
+        if (this.BuildBlockResponse(account.LoginName, account.State) is { } blocked)
         {
-            return this.StatusCode(403, new { error = "blocked" });
+            return blocked;
         }
 
         var (ticket, _) = WebLoginTicketStore.Shared.Issue(account.LoginName);
@@ -98,6 +102,36 @@ public sealed class WebsiteLoginTicketController(
             ticket,
             expiresInSeconds = (int)WebLoginTicketStore.TicketLifetime.TotalSeconds,
         });
+    }
+
+    private IActionResult? BuildBlockResponse(string loginName, AccountState state)
+    {
+        var service = banRows is not null ? new BanManagerService(banRows) : BanManagerService.Default;
+        var clientIp = this.Request.Headers["X-HNMO-Client-Ip"].FirstOrDefault();
+        var deviceId = this.Request.Headers["X-HNMO-Device-Id"].FirstOrDefault();
+        var active = service.FindActiveLoginBlock(loginName, clientIp, deviceId, DateTime.UtcNow);
+        if (active is null && state is not (AccountState.Banned or AccountState.TemporarilyBanned))
+        {
+            return null;
+        }
+
+        var effective = active ?? new BanRecord(
+            string.Empty,
+            BanTargetKind.AccountBan,
+            loginName,
+            loginName,
+            state == AccountState.TemporarilyBanned ? "Account is temporarily banned." : "Account is permanently banned.",
+            state == AccountState.TemporarilyBanned ? "Tài khoản đang bị tạm khóa." : "Tài khoản đã bị khóa vĩnh viễn.",
+            DateTime.UtcNow,
+            null,
+            "system",
+            true);
+        return new ContentResult
+        {
+            Content = BanManagerService.BuildNoticeJson(effective).Replace("{", "{\"error\":\"blocked\",", StringComparison.Ordinal),
+            ContentType = "application/json",
+            StatusCode = StatusCodes.Status403Forbidden,
+        };
     }
 
     /// <summary>Request body for <see cref="IssueAsync"/>.</summary>

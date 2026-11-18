@@ -4946,4 +4946,13 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="GiftBoxCoinHistoryCollected" xml:space="preserve"><value>Đã nhận quà: {0}</value></data>
   <data name="GiftBoxPageTitle" xml:space="preserve"><value>Hộp thư quà tặng</value></data>
   <data name="GiftBoxPageHelp" xml:space="preserve"><value>Gửi thư quà song ngữ (EN/VI) kèm vật phẩm, Zen hoặc Xu Cash Shop cho một tài khoản, danh sách tên đăng nhập, toàn máy chủ hoặc người chơi hoạt động gần đây. Khi túi đồ đầy sẽ không mất quà: người chơi có thể nhận lại trên trang tài khoản hoặc trong game bằng phím Alt+M.</value></data>
+  <data name="NavBanManager" xml:space="preserve">
+    <value>Khóa &amp; Cấm chat</value>
+  </data>
+  <data name="BanManagerPageTitle" xml:space="preserve">
+    <value>Quản lý Khóa &amp; Cấm chat</value>
+  </data>
+  <data name="BanManagerPageHelp" xml:space="preserve">
+    <value>Áp dụng hoặc gỡ lệnh khóa tài khoản, khóa nhân vật, cấm chat có thời hạn hoặc vĩnh viễn, cùng khóa mạng/thiết bị bằng mã băm có muối. Người chơi sẽ thấy rõ lý do và thời hạn theo giờ Sydney khi đăng nhập, chọn nhân vật hoặc trò chuyện.</value>
+  </data>
 </root>

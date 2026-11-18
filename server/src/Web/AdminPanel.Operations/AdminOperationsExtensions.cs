@@ -64,6 +64,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<EventRewardsOperations>();
         services.AddScoped<ServerSettingsOperations>();
         services.AddScoped<GiftBoxAdminOperations>();
+        services.AddScoped<BanAdminOperations>();
         return services;
     }
 }

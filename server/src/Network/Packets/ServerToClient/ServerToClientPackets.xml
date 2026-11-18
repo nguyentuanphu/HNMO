@@ -16999,6 +16999,23 @@
         <Field><Index>9</Index><Type>String</Type><Name>Json</Name><Description>ASCII-safe JSON using the shared mailbox projection without private host or proof secrets.</Description></Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>29</SubCode>
+      <Name>HnmoBanNotice</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when a login, character selection, or chat attempt is blocked by an active account, character, network, device ban or mute.</SentWhen>
+      <CausedReaction>The client displays the bilingual EN/VI ban or mute reason and Sydney expiration time.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>UTF-8 JSON payload containing kind, reasonEn, reasonVi, expiresAtUtc, sydneyEn, and sydneyVi.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

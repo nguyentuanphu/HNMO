@@ -7,6 +7,7 @@ import type { ServerAddress } from './connection.js';
 import { read } from './packets.js';
 import type { PacketValues } from './packets.js';
 import { PACKETS } from './packets.generated.js';
+import { currentLanguage } from '../i18n.js';
 import { parseAppearance } from '../game/items.js';
 
 // The client identity the desktop client sends (Network/Server/WSclient.cpp: Version, Serial).
@@ -141,9 +142,44 @@ export async function fetchGameServerAddress(relayUrl: string, connectServer: Se
   }
 }
 
+export interface BanNoticePayload {
+  kind?: string;
+  reasonEn?: string;
+  reasonVi?: string;
+  expiresAtUtc?: string | null;
+  permanent?: boolean;
+  sydneyEn?: string;
+  sydneyVi?: string;
+  messageEn?: string;
+  messageVi?: string;
+}
+
+export function formatBanNoticeMessage(payload: BanNoticePayload): string {
+  const isVi = currentLanguage() === 'vi';
+  const direct = isVi ? payload.messageVi : payload.messageEn;
+  if (direct && direct.trim()) return direct;
+  const reason = (isVi ? payload.reasonVi : payload.reasonEn) ?? payload.reasonEn ?? payload.reasonVi ?? '';
+  const until = (isVi ? payload.sydneyVi : payload.sydneyEn) ?? (payload.permanent ? (isVi ? 'Vĩnh viễn' : 'Permanent') : (payload.expiresAtUtc ?? ''));
+  return isVi ? `Tài khoản bị hạn chế (${until}). Lý do: ${reason}` : `Access blocked (${until}). Reason: ${reason}`;
+}
+
+function attachBanNoticeWatcher(connection: Connection): () => string | null {
+  let latest: string | null = null;
+  connection.onPacket((bytes) => {
+    if (bytes.length < 7 || bytes[0] !== 0xc2 || bytes[3] !== 0xf5 || bytes[4] !== 0x29) return;
+    try {
+      const parsed = read<{ Json: string }>('ServerToClient', 'HnmoBanNotice', bytes);
+      const data = JSON.parse(parsed.Json) as BanNoticePayload;
+      latest = formatBanNoticeMessage(data);
+    } catch { /* ignore malformed notice */ }
+  });
+  return () => latest;
+}
+
 // Opens the game server connection and logs in. Resolves with the open connection.
 export async function login(relayUrl: string, gameServer: ServerAddress, username: string, password: string): Promise<Connection> {
   const connection = new Connection(relayUrl, { ...gameServer, encrypted: true });
+  const getBanNotice = attachBanNoticeWatcher(connection);
   const entered = connection.waitFor(...packetOf('ServerToClient', 'GameServerEntered'));
   await connection.open();
   const welcome = read<GameServerEntered>('ServerToClient', 'GameServerEntered', await entered);
@@ -156,7 +192,7 @@ export async function login(relayUrl: string, gameServer: ServerAddress, usernam
   }, 'ServerToClient', 'LoginResponse');
   if (response.Success !== LOGIN_OK) {
     connection.close();
-    throw new LoginRefusedError(response.Success, loginResultMessage(response.Success));
+    throw new LoginRefusedError(response.Success, getBanNotice() ?? loginResultMessage(response.Success));
   }
   connection.playerId = welcome.PlayerId;
   return connection;
@@ -165,6 +201,7 @@ export async function login(relayUrl: string, gameServer: ServerAddress, usernam
 // Opens the game server connection and logs in with a one-time website ticket.
 export async function loginWithTicket(relayUrl: string, gameServer: ServerAddress, username: string, ticket: string): Promise<Connection> {
   const connection = new Connection(relayUrl, { ...gameServer, encrypted: true });
+  const getBanNotice = attachBanNoticeWatcher(connection);
   const entered = connection.waitFor(...packetOf('ServerToClient', 'GameServerEntered'));
   await connection.open();
   const welcome = read<GameServerEntered>('ServerToClient', 'GameServerEntered', await entered);
@@ -174,7 +211,7 @@ export async function loginWithTicket(relayUrl: string, gameServer: ServerAddres
   }, 'ServerToClient', 'LoginResponse');
   if (response.Success !== LOGIN_OK) {
     connection.close();
-    throw new LoginRefusedError(response.Success, loginResultMessage(response.Success));
+    throw new LoginRefusedError(response.Success, getBanNotice() ?? loginResultMessage(response.Success));
   }
   connection.playerId = welcome.PlayerId;
   return connection;
@@ -211,5 +248,12 @@ export async function createCharacter(connection: Connection, name: string, clas
 }
 
 export async function enterWorld(connection: Connection, characterName: string): Promise<CharacterInformation> {
-  return connection.request<CharacterInformation>('ClientToServer', 'SelectCharacter', { Name: characterName }, 'ServerToClient', 'CharacterInformationExtended');
+  const getBanNotice = attachBanNoticeWatcher(connection);
+  try {
+    return await connection.request<CharacterInformation>('ClientToServer', 'SelectCharacter', { Name: characterName }, 'ServerToClient', 'CharacterInformationExtended');
+  } catch (error) {
+    const notice = getBanNotice();
+    if (notice) throw new Error(notice);
+    throw error;
+  }
 }
