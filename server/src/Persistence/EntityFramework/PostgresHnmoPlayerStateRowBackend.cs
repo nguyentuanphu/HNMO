@@ -11,7 +11,7 @@ using NpgsqlTypes;
 /// PostgreSQL row store for per-account/per-character/per-guild plug-in state (<c>hnmo.player_feature_state</c>)
 /// and finished/expired archival (<c>hnmo.archived_feature_state</c>).
 /// </summary>
-public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowBackend
+public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowQueryBackend
 {
     private readonly string _connectionString;
     private readonly object _schemaLock = new();
@@ -96,6 +96,63 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowBacke
                 reader.GetString(1),
                 reader.GetDateTime(2).ToUniversalTime(),
                 reader.IsDBNull(3) ? null : reader.GetDateTime(3).ToUniversalTime()));
+        }
+
+        return rows;
+    }
+
+    /// <inheritdoc />
+    public HnmoFeatureRow? FindRow(string feature, string scopeId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(feature);
+        ArgumentException.ThrowIfNullOrWhiteSpace(scopeId);
+        this.EnsureSchema();
+        using var conn = new NpgsqlConnection(this._connectionString);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT scope_id, payload_json::text, updated_at_utc, expires_at_utc
+            FROM hnmo.player_feature_state
+            WHERE feature = @f AND scope_id = @s
+            """;
+        cmd.Parameters.AddWithValue("f", feature);
+        cmd.Parameters.AddWithValue("s", scopeId);
+        using var reader = cmd.ExecuteReader();
+        return reader.Read() ? ReadRow(reader, feature) : null;
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<HnmoFeatureRow> LoadScopePage(string feature, string scopePrefix, int offset, int limit)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(feature);
+        ArgumentException.ThrowIfNullOrWhiteSpace(scopePrefix);
+        if (offset < 0 || limit is < 1 or > 101)
+        {
+            throw new ArgumentOutOfRangeException(nameof(limit), "A nonnegative offset and bounded row page are required.");
+        }
+
+        this.EnsureSchema();
+        using var conn = new NpgsqlConnection(this._connectionString);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT scope_id, payload_json::text, updated_at_utc, expires_at_utc
+            FROM hnmo.player_feature_state
+            WHERE feature = @f AND scope_id LIKE @p ESCAPE E'\\'
+            ORDER BY updated_at_utc DESC, scope_id
+            LIMIT @n OFFSET @skip
+            """;
+        var pattern = scopePrefix.Replace("\\", "\\\\", StringComparison.Ordinal)
+            .Replace("%", "\\%", StringComparison.Ordinal).Replace("_", "\\_", StringComparison.Ordinal) + "%";
+        cmd.Parameters.AddWithValue("f", feature);
+        cmd.Parameters.AddWithValue("p", pattern);
+        cmd.Parameters.AddWithValue("n", limit);
+        cmd.Parameters.AddWithValue("skip", offset);
+        var rows = new List<HnmoFeatureRow>();
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            rows.Add(ReadRow(reader, feature));
         }
 
         return rows;
@@ -191,6 +248,13 @@ public sealed class PostgresHnmoPlayerStateRowBackend : IHnmoPlayerStateRowBacke
 
     /// <inheritdoc />
     public int CountArchivedRows(string? feature = null) => this.CountFromTable("hnmo.archived_feature_state", feature);
+
+    private static HnmoFeatureRow ReadRow(NpgsqlDataReader reader, string feature) => new(
+        feature,
+        reader.GetString(0),
+        reader.GetString(1),
+        reader.GetDateTime(2).ToUniversalTime(),
+        reader.IsDBNull(3) ? null : reader.GetDateTime(3).ToUniversalTime());
 
     private int CountFromTable(string table, string? feature)
     {

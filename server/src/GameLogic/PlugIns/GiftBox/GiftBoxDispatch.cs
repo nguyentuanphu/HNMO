@@ -61,7 +61,7 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
         lock (Gates.GetValue(backend, _ => new()))
         {
             var key = id.ToString("N");
-            var existing = backend.LoadAll(SendFeature).SingleOrDefault(row => row.ScopeId == key);
+            var existing = this.FindRow(SendFeature, key);
             if (existing is not null)
             {
                 var proof = JsonSerializer.Deserialize<SendProof>(existing.PayloadJson, JsonOptions)
@@ -127,7 +127,7 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
         lock (Gates.GetValue(backend, _ => new()))
         {
             var key = sendId.ToString("N");
-            var row = backend.LoadAll(SendFeature).SingleOrDefault(value => value.ScopeId == key);
+            var row = this.FindRow(SendFeature, key);
             if (row is null)
             {
                 return null;
@@ -155,6 +155,75 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
             return accounts.Order().ToArray();
         }
     }
+
+    /// <summary>Reads one owned letter without scanning unrelated mail on a query-capable backend.</summary>
+    /// <param name="accountId">The authenticated account.</param>
+    /// <param name="letterId">The immutable letter identifier.</param>
+    /// <returns>The owned letter, or null.</returns>
+    public GiftBoxLetter? ReadLetter(Guid accountId, Guid letterId)
+    {
+        if (accountId == Guid.Empty || letterId == Guid.Empty)
+        {
+            throw new ArgumentException("An account and letter identifier are required.");
+        }
+
+        lock (Gates.GetValue(backend, _ => new()))
+        {
+            var row = this.FindRow(LetterFeature, $"{accountId:N}:{letterId:N}");
+            if (row is null)
+            {
+                return null;
+            }
+
+            var letter = JsonSerializer.Deserialize<GiftBoxLetter>(row.PayloadJson, JsonOptions)
+                ?? throw new InvalidDataException("The owned gift box letter is unreadable.");
+            if (letter.AccountId != accountId || letter.Id != letterId)
+            {
+                throw new InvalidDataException("The gift box letter does not match its account scope.");
+            }
+
+            return letter;
+        }
+    }
+
+    /// <summary>Reads a bounded own-account inbox page without loading every account's messages.</summary>
+    /// <param name="accountId">The authenticated account.</param>
+    /// <param name="offset">The number of own letters to skip.</param>
+    /// <param name="limit">The bounded row count, up to101 for a next-page sentinel.</param>
+    /// <returns>The own letters, newest first.</returns>
+    public IReadOnlyList<GiftBoxLetter> ReadPage(Guid accountId, int offset, int limit)
+    {
+        if (accountId == Guid.Empty || offset < 0 || limit is < 1 or > 101)
+        {
+            throw new ArgumentException("An account and bounded inbox page are required.");
+        }
+
+        lock (Gates.GetValue(backend, _ => new()))
+        {
+            var prefix = $"{accountId:N}:";
+            var rows = backend is IHnmoPlayerStateRowQueryBackend query
+                ? query.LoadScopePage(LetterFeature, prefix, offset, limit)
+                : backend.LoadAll(LetterFeature).Where(row => row.ScopeId.StartsWith(prefix, StringComparison.Ordinal))
+                    .OrderByDescending(row => row.UpdatedAtUtc).ThenBy(row => row.ScopeId, StringComparer.Ordinal).Skip(offset).Take(limit).ToArray();
+            if (rows.Count > limit)
+            {
+                throw new InvalidDataException("The gift box backend exceeded its bounded page.");
+            }
+
+            var letters = rows.Select(row => JsonSerializer.Deserialize<GiftBoxLetter>(row.PayloadJson, JsonOptions)
+                ?? throw new InvalidDataException("A gift box inbox letter is unreadable.")).ToArray();
+            if (letters.Any(letter => letter.AccountId != accountId))
+            {
+                throw new InvalidDataException("The gift box backend returned another account's letter.");
+            }
+
+            return letters;
+        }
+    }
+
+    private HnmoFeatureRow? FindRow(string feature, string scopeId) => backend is IHnmoPlayerStateRowQueryBackend query
+        ? query.FindRow(feature, scopeId)
+        : backend.LoadAll(feature).SingleOrDefault(row => row.ScopeId == scopeId);
 
     private static bool ValidText(string? text, int maximum) => !string.IsNullOrWhiteSpace(text) && text.Length <= maximum && !text.Any(character => char.IsControl(character) && character is not '\n' and not '\r' and not '\t');
 

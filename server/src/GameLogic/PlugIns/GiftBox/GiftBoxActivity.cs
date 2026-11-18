@@ -19,7 +19,7 @@ public sealed class GiftBoxActivity
     private readonly IHnmoPlayerStateRowBackend _backend;
     private readonly Cache _cache;
 
-    /// <summary>Creates a view over the existing shared player-state backend.</summary>
+    /// <summary>Initializes a new instance of the <see cref="GiftBoxActivity"/> class.</summary>
     /// <param name="backend">The host's PostgreSQL backend, or an isolated test backend.</param>
     public GiftBoxActivity(IHnmoPlayerStateRowBackend backend)
     {

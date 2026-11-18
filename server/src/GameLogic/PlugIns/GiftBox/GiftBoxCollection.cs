@@ -105,7 +105,7 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
                 return new("Pending");
             }
 
-            var letter = dispatch.Read(account.GetId()).SingleOrDefault(value => value.Id == letterId);
+            var letter = dispatch.ReadLetter(account.GetId(), letterId);
             if (letter is null)
             {
                 return new("NotFound");
