@@ -1,0 +1,195 @@
+@page "/market"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.ItemMarket
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Item market", "Chợ vật phẩm")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Item market", "Chợ vật phẩm")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Item market", "Chợ vật phẩm")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<p class="text-muted">@L("Configure escrow marketplace fees, allowed currencies, banned items, active listings moderation, and full audit log.", "Cấu hình chợ vật phẩm giữ đồ an toàn: thuế giao dịch, loại tiền cho phép, danh sách cấm, quản lý tin đăng và nhật ký giao dịch.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="market-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Enable the plug-in when ready (OFF by default). Players press F6 or talk to NPC 547 (Market Julia).", "Bật plug-in khi sẵn sàng (mặc định TẮT). Người chơi bấm F6 hoặc nói chuyện NPC 547 (Chợ Julia).")</li>
+            <li>@L("Escrowed items leave the bag immediately so they cannot be duplicated; buyers claim bought items from Market when their bag is full.", "Vật phẩm rao bán được tách khỏi túi đồ ngay lập tức để chống nhân bản; người mua có thể nhận đồ ở Kho chợ nếu túi đầy.")</li>
+            <li>@L("Use Banned items (one group:number per line, e.g. 14:14) to block specific jewels, boxes, or quest items from trading.", "Dùng mục Vật phẩm cấm (mỗi dòng group:number, ví dụ 14:14) để chặn giao dịch ngọc, hộp hoặc đồ nhiệm vụ.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Item market plug-in configuration is not available yet.", "Chưa có cấu hình plug-in Chợ vật phẩm.")</div>
+}
+else
+{
+    <section class="card mb-3" id="market-settings">
+        <div class="card-body">
+            <h2 class="h5">@L("Market rules", "Quy tắc chợ")</h2>
+
+            <div class="form-check form-switch mb-2" title="@L("Turn the Item Market on or off across the server and website.", "Bật/tắt Chợ vật phẩm trong game và trên website.")">
+                <input class="form-check-input" type="checkbox" id="market-active" @bind="this._isActive" />
+                <label class="form-check-label" for="market-active">@L("Enable Item Market", "Bật Chợ vật phẩm")</label>
+            </div>
+            <div class="form-check form-switch mb-2" title="@L("Allow browsing and buying coin listings on the website.", "Cho phép xem và mua đồ bằng coin ngay trên website.")">
+                <input class="form-check-input" type="checkbox" id="market-website" @bind="c.AllowWebsite" />
+                <label class="form-check-label" for="market-website">@L("Allow website browsing and coin purchases", "Cho phép xem và mua bằng coin trên website")</label>
+            </div>
+            <div class="form-check form-switch mb-3" title="@L("Require players to stand inside a town safe zone to list or buy items in-game.", "Yêu cầu người chơi đứng trong vùng an toàn để đăng hoặc mua đồ trong game.")">
+                <input class="form-check-input" type="checkbox" id="market-safezone" @bind="c.SafeZoneOnly" />
+                <label class="form-check-label" for="market-safezone">@L("Safe zone required in-game", "Yêu cầu đứng trong vùng an toàn khi thao tác trong game")</label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label d-block">@L("Allowed currencies", "Loại tiền cho phép")</label>
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cur-zen" @bind="c.AllowZen" />
+                        <label class="form-check-label" for="cur-zen">Zen</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cur-wcoinc" @bind="c.AllowWCoinC" />
+                        <label class="form-check-label" for="cur-wcoinc">WCoinC</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cur-wcoinp" @bind="c.AllowWCoinP" />
+                        <label class="form-check-label" for="cur-wcoinp">WCoinP</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cur-goblin" @bind="c.AllowGoblinPoints" />
+                        <label class="form-check-label" for="cur-goblin">Goblin Points</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-sm-2" title="@L("Tax deducted from the seller's payout when an item sells (0–50%).", "Phí phần trăm trừ vào tiền người bán nhận được (0–50%).")">
+                    <label class="form-label" for="market-fee">@L("Sale fee (%)", "Phí giao dịch (%)")</label>
+                    <input class="form-control" type="number" min="0" max="50" step="0.5" id="market-fee" @bind="c.FeePercent" />
+                </div>
+                <div class="col-sm-2" title="@L("Flat Zen charged upfront when posting a listing.", "Phí Zen thu ngay khi đăng bán vật phẩm.")">
+                    <label class="form-label" for="market-zenfee">@L("Listing Zen fee", "Phí đăng (Zen)")</label>
+                    <input class="form-control" type="number" min="0" max="100000000" id="market-zenfee" @bind="c.ListingZenFee" />
+                </div>
+                <div class="col-sm-2" title="@L("Maximum active listings per account.", "Số tin đăng tối đa mỗi tài khoản.")">
+                    <label class="form-label" for="market-maxlistings">@L("Max listings/account", "Tối đa tin/tài khoản")</label>
+                    <input class="form-control" type="number" min="1" max="100" id="market-maxlistings" @bind="c.MaxListingsPerAccount" />
+                </div>
+                <div class="col-sm-2" title="@L("Hours before unsold listings expire back to seller escrow.", "Số giờ tin đăng hết hạn và trả đồ về Kho chợ.")">
+                    <label class="form-label" for="market-expiry">@L("Expiry (hours)", "Thời hạn (giờ)")</label>
+                    <input class="form-control" type="number" min="1" max="720" id="market-expiry" @bind="c.ExpiryHours" />
+                </div>
+                <div class="col-sm-2" title="@L("NPC number in town that opens Item Market (default 547 Market Julia, 0 to disable).", "Mã NPC mở Chợ (mặc định 547 Julia, 0 để tắt).")">
+                    <label class="form-label" for="market-npc">@L("NPC number", "Mã NPC chợ")</label>
+                    <input class="form-control" type="number" min="0" max="10000" id="market-npc" @bind="c.MarketNpcNumber" />
+                </div>
+                <div class="col-sm-2" title="@L("Section key inside HnmoStateStore.", "Khóa lưu trữ trong HnmoStateStore.")">
+                    <label class="form-label" for="market-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="market-file" @bind="c.FileName" />
+                </div>
+            </div>
+
+            <div class="mb-3" title="@L("One group:number per line (e.g. 14:14 for Jewel of Soul) to forbid listing.", "Mỗi dòng group:number (ví dụ 14:14) để cấm rao bán trên chợ.")">
+                <label class="form-label" for="market-banned">@L("Banned items (group:number, one per line)", "Vật phẩm cấm rao bán (group:number, mỗi dòng 1 mã)")</label>
+                <textarea class="form-control font-monospace" rows="3" id="market-banned" @bind="this._bannedText"></textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="market-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="market-listings">
+        <div class="card-body">
+            <h2 class="h5">@L("Active listings", "Tin đang rao") (@this._listings.Count)</h2>
+            @if (this._listings.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No active listings right now.", "Hiện không có vật phẩm nào đang rao.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>@L("ID", "Mã")</th>
+                                <th>@L("Seller", "Người bán")</th>
+                                <th>@L("Item", "Vật phẩm")</th>
+                                <th>@L("Price", "Giá")</th>
+                                <th>@L("Expires (Sydney)", "Hết hạn (Sydney)")</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in this._listings)
+                            {
+                                <tr>
+                                    <td><code>@item.Id</code></td>
+                                    <td>@item.SellerCharacter (@item.SellerLogin)</td>
+                                    <td>@item.Item.NameEn +@item.Item.Level</td>
+                                    <td>@item.Price.ToString("N0") @item.Currency</td>
+                                    <td>@SydneyTime(item.ExpiresAtUtc)</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.CancelListingAsync(item.Id)">@L("Cancel & return", "Hủy & trả đồ")</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="card" id="market-audit">
+        <div class="card-body">
+            <h2 class="h5">@L("Recent audit log", "Nhật ký giao dịch gần đây")</h2>
+            @if (this._audit.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No market activity recorded yet.", "Chưa có hoạt động giao dịch nào.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>@L("Time (Sydney)", "Thời gian (Sydney)")</th>
+                                <th>@L("Action", "Thao tác")</th>
+                                <th>@L("Actor", "Người thực hiện")</th>
+                                <th>@L("Counterparty", "Đối tác")</th>
+                                <th>@L("Item", "Vật phẩm")</th>
+                                <th>@L("Gross / Fee / Net", "Tổng / Phí / Thực nhận")</th>
+                                <th>@L("Source", "Nguồn")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var log in this._audit)
+                            {
+                                <tr>
+                                    <td>@SydneyTime(log.AtUtc)</td>
+                                    <td>@log.Action</td>
+                                    <td>@log.ActorLogin</td>
+                                    <td>@log.CounterpartyLogin</td>
+                                    <td>@log.ItemName</td>
+                                    <td>@log.GrossAmount.ToString("N0") / @log.FeeAmount.ToString("N0") / @log.NetAmount.ToString("N0") @log.Currency</td>
+                                    <td>@log.Source</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}

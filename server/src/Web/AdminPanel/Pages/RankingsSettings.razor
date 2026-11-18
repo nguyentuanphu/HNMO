@@ -1,0 +1,146 @@
+@page "/rankings-settings"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("In-Game Rankings & Add Stats", "Bảng Xếp Hạng & Cộng Điểm")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@this.L("In-Game Rankings & Add Stats", "Bảng Xếp Hạng & Cộng Điểm")" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <div class="d-flex align-items-center gap-2">
+        <h1 class="mb-0">@this.L("In-Game Rankings & Add Stats", "Bảng Xếp Hạng & Cộng Điểm")</h1>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.L("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<p class="text-muted">
+    @this.L(
+        "Configure the in-game Player Rankings panel (Shift+R / /rank) and bulk Add Stats window (Shift+A / Add Stats button on Character screen).",
+        "Cấu hình bảng Xếp hạng nhân vật trong game (Shift+R / /rank) và cửa sổ Cộng điểm nhanh (Shift+A / nút trong cửa sổ Nhân vật).")
+</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="region" id="rankings-settings-help">
+        <strong>@this.L("How to use this page:", "Cách sử dụng trang này:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@this.L("Players press Shift+R or type /rank to browse Top Characters (Resets/Level), Top Online, Top Guilds, and Mini-Game Events.", "Người chơi nhấn Shift+R hoặc gõ /rank để xem Top Nhân vật (Reset/Cấp), Top Online, Top Hội và BXH Sự kiện.")</li>
+            <li>@this.L("Players press Shift+A or click 'Add Stats' inside the Character window (C) to distribute large amounts of level-up points at once.", "Nhấn Shift+A hoặc nút 'Cộng điểm' trong cửa sổ Nhân vật (C) để cộng nhanh hàng trăm/nghìn điểm tiềm năng cùng lúc.")</li>
+            <li>@this.L("Cache duration keeps database queries light when many players open the leaderboard simultaneously.", "Thời gian lưu đệm giúp giảm tải truy vấn cơ sở dữ liệu khi nhiều người mở bảng xếp hạng cùng lúc.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@this.L("Ranking settings are unavailable.", "Không tải được cấu hình Bảng xếp hạng.")</div>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="form-check form-switch mb-3" title="@this.L("Master toggle for the PlayerRanking plug-in.", "Công tắc chính bật/tắt plug-in Bảng xếp hạng & Cộng điểm.")">
+                <input class="form-check-input" type="checkbox" id="rk-active" @bind="this._isActive" />
+                <label class="form-check-label fw-semibold" for="rk-active">@this.L("Plug-in active", "Kích hoạt plug-in")</label>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Allow players to open the in-game Player Rankings panel (Shift+R / /rank).", "Cho phép mở bảng Xếp hạng trong game (Shift+R / /rank).")">
+                        <input class="form-check-input" type="checkbox" id="rk-rankings" @bind="c.EnableRankings" />
+                        <label class="form-check-label" for="rk-rankings">@this.L("Enable Player Rankings panel", "Bật bảng Xếp hạng trong game")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Allow multi-stat bulk allocation via the Add Stats window (Shift+A).", "Cho phép cộng nhiều điểm tiềm năng cùng lúc qua cửa sổ Cộng điểm (Shift+A).")">
+                        <input class="form-check-input" type="checkbox" id="rk-addstats" @bind="c.EnableBulkAddStats" />
+                        <label class="form-check-label" for="rk-addstats">@this.L("Enable bulk Add Stats window", "Bật cửa sổ Cộng điểm nhanh")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Display live Online badge beside ranked characters currently logged in.", "Hiển thị trạng thái Trực tuyến cạnh nhân vật đang online.")">
+                        <input class="form-check-input" type="checkbox" id="rk-onlinestatus" @bind="c.ShowOnlineStatus" />
+                        <label class="form-check-label" for="rk-onlinestatus">@this.L("Show online badge", "Hiện huy hiệu Trực tuyến")</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Include the live Top Online Players tab in the ranking panel.", "Hiển thị tab Top Người chơi Trực tuyến.")">
+                        <input class="form-check-input" type="checkbox" id="rk-tab-online" @bind="c.ShowOnlineLeaderboard" />
+                        <label class="form-check-label" for="rk-tab-online">@this.L("Show Top Online tab", "Hiện tab Top Online")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Include the Top Guilds tab in the ranking panel.", "Hiển thị tab Top Hội (Guild).")">
+                        <input class="form-check-input" type="checkbox" id="rk-tab-guilds" @bind="c.ShowGuildRankings" />
+                        <label class="form-check-label" for="rk-tab-guilds">@this.L("Show Top Guilds tab", "Hiện tab Top Hội (Guild)")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Include Blood Castle / Devil Square / Chaos Castle rankings tab.", "Hiển thị tab Bảng xếp hạng Sự kiện (BC/DS/CC).")">
+                        <input class="form-check-input" type="checkbox" id="rk-tab-events" @bind="c.ShowEventRankings" />
+                        <label class="form-check-label" for="rk-tab-events">@this.L("Show Events tab", "Hiện tab Xếp hạng Sự kiện")</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-4">
+                    <label class="form-label" for="rk-topcount" title="@this.L("Number of rows shown per leaderboard tab (5..100).", "Số dòng tối đa hiển thị ở mỗi bảng xếp hạng (5..100).")">
+                        @this.L("Top entries per tab (5–100)", "Số top mỗi bảng (5–100)")
+                    </label>
+                    <input class="form-control" type="number" min="5" max="100" id="rk-topcount" @bind="c.TopCount" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="rk-cache" title="@this.L("Seconds before querying fresh character/guild/event rankings from database (0..300).", "Số giây lưu đệm trước khi truy vấn lại bảng xếp hạng từ cơ sở dữ liệu (0..300).")">
+                        @this.L("Cache duration (seconds, 0–300)", "Thời gian lưu đệm (giây, 0–300)")
+                    </label>
+                    <input class="form-control" type="number" min="0" max="300" id="rk-cache" @bind="c.CacheSeconds" />
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="button"
+                        class="btn btn-primary"
+                        id="rk-save"
+                        disabled="@this._isSaving"
+                        title="@this.L("Save Player Rankings & Add Stats settings", "Lưu cài đặt Bảng xếp hạng & Cộng điểm")"
+                        @onclick="this.SaveAsync">
+                    @this.L("Save changes", "Lưu thay đổi")
+                </button>
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        disabled="@this._isSaving"
+                        title="@this.L("Reload saved configuration", "Tải lại cấu hình đã lưu")"
+                        @onclick="this.LoadAsync">
+                    @this.L("Reload", "Tải lại")
+                </button>
+            </div>
+        </div>
+    </div>
+}

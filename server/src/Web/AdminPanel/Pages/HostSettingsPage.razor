@@ -1,0 +1,207 @@
+@page "/host-settings"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>@Resources.HostSettingsPage</PageTitle>
+
+<div class="d-flex align-items-center gap-2 mb-3">
+    <h1 class="mb-0">@Resources.HostSettingsPage</h1>
+    <button type="button"
+            id="host-settings-help-btn"
+            class="btn btn-sm btn-outline-secondary"
+            title="@Resources.HostSettingsHelpTitle"
+            @onclick="this.ToggleHelp">?</button>
+</div>
+
+@if (this._showHelp)
+{
+    <div id="host-settings-help" class="alert alert-info" role="region">
+        <strong>@Resources.HostSettingsHelpTitle</strong>
+        <p class="mb-1">@Resources.HostSettingsHelpBody</p>
+        <small>@Resources.HostSettingsRestartNote</small>
+    </div>
+}
+
+@if (this._errors.Count > 0)
+{
+    <div id="host-settings-errors" class="alert alert-danger" role="alert">
+        <ul class="mb-0">
+            @foreach (var err in this._errors)
+            {
+                <li>@err</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(this._statusMessage))
+{
+    <div id="host-settings-status" class="alert alert-success" role="status">@this._statusMessage</div>
+}
+
+<div class="alert alert-warning py-2">@Resources.HostSettingsRestartNote</div>
+
+@if (this._settings is not null)
+{
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsPortsSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-3">
+                <label class="form-label" title="HTTP port for the web game bridge (default 8080)">Web port</label>
+                <input id="web-port" type="number" class="form-control" @bind="this._settings.WebPort" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="Loopback HTTP port for the admin panel (default 8095)">Admin port</label>
+                <input id="admin-port" type="number" class="form-control" @bind="this._settings.AdminPort" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="TCP port for the Connect Server (default 44406)">Connect server port</label>
+                <input id="connect-port" type="number" class="form-control" @bind="this._settings.ConnectServerPort" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="PostgreSQL port on 127.0.0.1 (default 55432)">Database port</label>
+                <input id="db-port" type="number" class="form-control" @bind="this._settings.DatabasePort" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Public domain or IP players use to reach the web game">Public address</label>
+                <input id="public-address" type="text" class="form-control" @bind="this._settings.PublicAddress" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="URL opened automatically when HNMO starts">Open browser URL</label>
+                <input id="open-browser-url" type="text" class="form-control" @bind="this._settings.OpenBrowserUrl" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsBridgeSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-6">
+                <label class="form-label" title="Listening URLs for the web bridge (e.g. http://0.0.0.0:8080)">Web URLs</label>
+                <input id="web-urls" type="text" class="form-control" @bind="this._settings.WebUrls" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Comma-separated hosts the WebSocket relay may connect to">Relay allowed hosts</label>
+                <input id="relay-hosts" type="text" class="form-control" @bind="this._relayAllowedHostsText" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Path to web client static files">WebRoot</label>
+                <input type="text" class="form-control" @bind="this._settings.WebRoot" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Path to game Data folder">DataPath</label>
+                <input type="text" class="form-control" @bind="this._settings.DataPath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Path to vendor libraries">VendorPath</label>
+                <input type="text" class="form-control" @bind="this._settings.VendorPath" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="TCP connect timeout in seconds (1-120)">Relay timeout (s)</label>
+                <input type="number" class="form-control" @bind="this._settings.RelayConnectTimeoutSeconds" />
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="relay-loopback" type="checkbox" class="form-check-input" @bind="this._settings.RelayAllowLoopback" />
+                    <label class="form-check-label" for="relay-loopback" title="Allow relay connections to 127.0.0.1 / ::1">Relay allow loopback</label>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="launcher-enabled" type="checkbox" class="form-check-input" @bind="this._settings.LauncherEnabled" />
+                    <label class="form-check-label" for="launcher-enabled" title="Start PostgreSQL and game server from the web bridge">Launcher enabled</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" title="PostgreSQL bin directory">PostgresPath</label>
+                <input type="text" class="form-control" @bind="this._settings.PostgresPath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Save directory containing hnmo-settings.json and database">SavePath</label>
+                <input type="text" class="form-control" @bind="this._settings.SavePath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Game server directory">ServerPath</label>
+                <input type="text" class="form-control" @bind="this._settings.ServerPath" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="Game server executable name">ServerProgram</label>
+                <input type="text" class="form-control" @bind="this._settings.ServerProgram" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsDatabaseSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-4">
+                <label class="form-label" title="PostgreSQL hostname or IP">Database host</label>
+                <input id="db-host" type="text" class="form-control" @bind="this._settings.DatabaseHost" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="PostgreSQL database name">Database name</label>
+                <input id="db-name" type="text" class="form-control" @bind="this._settings.DatabaseName" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" title="PostgreSQL username">Database user</label>
+                <input id="db-user" type="text" class="form-control" @bind="this._settings.DatabaseUser" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Current password is never displayed">Current database password</label>
+                <input id="db-password-masked" type="text" class="form-control" value="••••••••" readonly />
+                <div class="form-text">@Resources.HostSettingsPasswordMasked</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Leave blank to keep current password">New database password</label>
+                <input id="db-password-new" type="password" class="form-control" @bind="this._newDatabasePassword" autocomplete="new-password" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header fw-bold">@Resources.HostSettingsLicenseSection</div>
+        <div class="card-body row g-3">
+            <div class="col-md-6">
+                <label class="form-label" title="Path to license.hnmo">License file path</label>
+                <input id="license-path" type="text" class="form-control" @bind="this._settings.LicenseFilePath" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="Upload a new .hnmo license file">Upload license (.hnmo)</label>
+                <Microsoft.AspNetCore.Components.Forms.InputFile class="form-control" OnChange="this.OnLicenseUploadAsync" />
+            </div>
+            @if (this._licenseStatus is not null)
+            {
+                <div class="col-12">
+                    <small class="text-muted">
+                        Max players: <strong>@this._licenseStatus.MaximumPlayers</strong> |
+                        Status: @this._licenseStatus.Message |
+                        Machine ID: <code>@this._licenseStatus.MachineId</code>
+                    </small>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-4">
+        <button type="button" id="save-host-settings-btn" class="btn btn-primary" @onclick="this.SaveAsync">
+            @Resources.HostSettingsSaveButton
+        </button>
+
+        @if (!this._confirmRestart)
+        {
+            <button type="button" id="restart-hnmo-btn" class="btn btn-danger" @onclick="() => this._confirmRestart = true">
+                @Resources.HostSettingsRestartButton
+            </button>
+        }
+        else
+        {
+            <span class="align-self-center text-danger fw-bold">@Resources.HostSettingsRestartConfirm</span>
+            <button type="button" id="confirm-restart-hnmo-btn" class="btn btn-danger" @onclick="this.RestartAsync">
+                @Resources.HostSettingsRestartButton
+            </button>
+            <button type="button" class="btn btn-secondary" @onclick="() => this._confirmRestart = false">
+                Cancel
+            </button>
+        }
+    </div>
+}
