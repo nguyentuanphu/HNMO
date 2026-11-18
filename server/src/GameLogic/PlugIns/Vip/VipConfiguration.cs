@@ -12,6 +12,9 @@ public sealed class VipConfiguration
     /// <summary>Gets or sets a value indicating whether VIP rules may authorize new activity.</summary>
     public bool Enabled { get; set; }
 
+    /// <summary>Gets or sets a value indicating whether active VIP characters receive a mark in local game chat.</summary>
+    public bool ShowChatBadge { get; set; } = true;
+
     /// <summary>Gets or sets the available bilingual levels and prices.</summary>
     public List<VipLevel> Levels { get; set; } =
     [

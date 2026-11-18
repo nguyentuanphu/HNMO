@@ -8,7 +8,8 @@ namespace HNMO.GameLogic.PlugIns.Vip;
 /// <param name="configuration">The active host configuration; disabled by default.</param>
 /// <param name="store">The shared VIP section.</param>
 /// <param name="clock">The authoritative clock.</param>
-public sealed class VipGameActions(VipConfiguration configuration, VipStateStore store, TimeProvider? clock = null)
+/// <param name="notices">Optional session notice deduplication shared with the active plug-in.</param>
+public sealed class VipGameActions(VipConfiguration configuration, VipStateStore store, TimeProvider? clock = null, VipNotices? notices = null)
 {
     private readonly TimeProvider _clock = clock ?? TimeProvider.System;
 
@@ -57,6 +58,10 @@ public sealed class VipGameActions(VipConfiguration configuration, VipStateStore
             if (!VipWallet.HasUnconfirmed(context))
             {
                 player.RefreshAccountAttributeGrants();
+                if (notices is not null)
+                {
+                    await notices.ShowOwnedAsync(player, configuration, store).ConfigureAwait(false);
+                }
             }
 
             return await VipStateWriter.WriteAsync(configuration, store, wallet, context, account, now, request.OperationId, status, rule).ConfigureAwait(false);

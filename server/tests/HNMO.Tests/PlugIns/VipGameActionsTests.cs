@@ -4,6 +4,7 @@
 
 namespace HNMO.Tests;
 
+using System.Globalization;
 using System.Text.Json;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
@@ -12,7 +13,9 @@ using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.Vip;
+using HNMO.GameLogic.Views;
 using HNMO.Persistence;
+using Moq;
 
 /// <summary>Checks the real in-world adapter, live attributes and same-wallet replay boundary.</summary>
 [TestFixture]
@@ -21,6 +24,8 @@ public class VipGameActionsTests
     private Player _player = null!;
     private VipGameActions _actions = null!;
     private VipConfiguration _configuration = null!;
+    private VipStateStore _store = null!;
+    private TestClock _clock = null!;
 
     /// <summary>Creates an entered player with identified persisted account and attribute definitions.</summary>
     /// <returns>The setup task.</returns>
@@ -41,7 +46,9 @@ public class VipGameActionsTests
         this._player.Account = account;
         await this._player.PersistenceContext.SaveChangesAsync().ConfigureAwait(false);
         this._configuration = new() { Enabled = true };
-        this._actions = new(this._configuration, VipStateStore.CreateInMemory(), new TestClock());
+        this._store = VipStateStore.CreateInMemory();
+        this._clock = new();
+        this._actions = new(this._configuration, this._store, this._clock);
     }
 
     /// <summary>Releases player timers and persistence.</summary>
@@ -143,6 +150,59 @@ public class VipGameActionsTests
         }
     }
 
+    /// <summary>Start and last-day notices are localized, use Sydney time, and do not repeat on every poll.</summary>
+    /// <param name="language">The player's language.</param>
+    /// <returns>The test task.</returns>
+    [TestCase("en")]
+    [TestCase("vi")]
+    public async Task NoticesUsePaidExpiryAndDoNotRepeatAsync(string language)
+    {
+        await this._actions.HandleAsync(this._player, await this.SelectionAsync().ConfigureAwait(false)).ConfigureAwait(false);
+        this._player.Culture = CultureInfo.GetCultureInfo(language);
+        var notices = new VipNotices(this._clock);
+        var messages = Mock.Get(this._player.ViewPlugIns.GetPlugIn<IShowMessagePlugIn>()!);
+        var received = new List<string>();
+        messages.Setup(view => view.ShowMessageAsync(It.IsAny<string>(), MessageType.BlueNormal)).Callback<string, MessageType>((text, _) => received.Add(text)).Returns(ValueTask.CompletedTask);
+        await this._player.RunPersistenceExclusiveAsync(() => notices.ShowOwnedAsync(this._player, this._configuration, this._store)).ConfigureAwait(false);
+        await this._player.RunPersistenceExclusiveAsync(() => notices.ShowOwnedAsync(this._player, this._configuration, this._store)).ConfigureAwait(false);
+        Assert.That(received, Has.Count.EqualTo(1));
+        Assert.That(received[0], Does.Contain(language == "vi" ? "có hiệu lực" : "is active"));
+        Assert.That(received[0], Does.Contain(language == "vi" ? "Đồng" : "Bronze"));
+        var expiry = this._player.Account!.AttributeGrants.First().ValidUntil!.Value;
+        var date = TimeZoneInfo.ConvertTimeFromUtc(expiry, HnmoStateStore.ResolveTimeZone(null)).ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+        Assert.That(received[0], Does.Contain(date));
+        this._clock.Advance(TimeSpan.FromDays(6).Add(TimeSpan.FromMinutes(1)));
+        await this._player.RunPersistenceExclusiveAsync(() => notices.ShowOwnedAsync(this._player, this._configuration, this._store)).ConfigureAwait(false);
+        await this._player.RunPersistenceExclusiveAsync(() => notices.ShowOwnedAsync(this._player, this._configuration, this._store)).ConfigureAwait(false);
+        Assert.That(received, Has.Count.EqualTo(2));
+        Assert.That(received[1], Does.Contain(language == "vi" ? "hết hạn trong vòng một ngày" : "ends within one day"));
+        Assert.That(received[1], Does.Contain(date));
+        this._clock.Advance(TimeSpan.FromDays(1));
+        await this._player.RunPersistenceExclusiveAsync(() => notices.ShowOwnedAsync(this._player, this._configuration, this._store)).ConfigureAwait(false);
+        Assert.That(received, Has.Count.EqualTo(2));
+    }
+
+    /// <summary>Chat marks preserve channel markers and disappear when the account grants are removed.</summary>
+    /// <param name="type">The original chat channel.</param>
+    /// <param name="text">The original message.</param>
+    /// <param name="expected">The marked message.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(ChatMessageType.Normal, "hello", "[VIP] hello")]
+    [TestCase(ChatMessageType.Whisper, "private", "[VIP] private")]
+    [TestCase(ChatMessageType.Guild, "@guild", "@[VIP] guild")]
+    [TestCase(ChatMessageType.Alliance, "@@alliance", "@@[VIP] alliance")]
+    [TestCase(ChatMessageType.Gens, "$gens", "$[VIP] gens")]
+    [TestCase(ChatMessageType.GlobalNotification, "system", "system")]
+    public async Task ChatBadgeUsesLiveEntitlementAsync(ChatMessageType type, string text, string expected)
+    {
+        Assert.That(VipChat.Mark(this._player, text, type), Is.EqualTo(text));
+        await this._actions.HandleAsync(this._player, await this.SelectionAsync().ConfigureAwait(false)).ConfigureAwait(false);
+        Assert.That(VipChat.Mark(this._player, text, type), Is.EqualTo(expected));
+        this._player.Account!.AttributeGrants.Clear();
+        this._player.RefreshAccountAttributeGrants();
+        Assert.That(VipChat.Mark(this._player, text, type), Is.EqualTo(text));
+    }
+
     private async ValueTask<VipGameRequest> SelectionAsync()
     {
         using var state = JsonDocument.Parse((await this._actions.HandleAsync(this._player, new("state")).ConfigureAwait(false))!);
@@ -151,7 +211,9 @@ public class VipGameActionsTests
     }
     private sealed class TestClock : TimeProvider
     {
-        private readonly DateTimeOffset _now = DateTimeOffset.UtcNow;
+        private DateTimeOffset _now = DateTimeOffset.UtcNow;
+
+        public void Advance(TimeSpan interval) => this._now += interval;
 
         public override DateTimeOffset GetUtcNow() => this._now;
     }

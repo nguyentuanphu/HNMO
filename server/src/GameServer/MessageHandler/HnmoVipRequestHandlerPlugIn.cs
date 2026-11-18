@@ -54,8 +54,7 @@ internal sealed class HnmoVipRequestHandlerPlugIn : ISubPacketHandlerPlugIn
             return;
         }
 
-        var configuration = VipPlugIn.Get(player.GameContext)?.Configuration ?? new VipConfiguration();
-        var actions = new VipGameActions(configuration, VipStateStore.OpenHost());
+        var actions = VipPlugIn.Get(player.GameContext)?.CreateActions() ?? new VipGameActions(new(), VipStateStore.OpenHost());
         if (await actions.HandleAsync(player, request).ConfigureAwait(false) is { } json)
         {
             await player.InvokeViewPlugInAsync<IHnmoVipViewPlugIn>(view => view.ShowVipAsync(requestId, json)).ConfigureAwait(false);

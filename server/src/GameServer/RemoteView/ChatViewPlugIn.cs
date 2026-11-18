@@ -6,6 +6,7 @@ namespace HNMO.GameServer.RemoteView;
 
 using System.Runtime.InteropServices;
 using HNMO.GameLogic.Discord;
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.GameLogic.Views;
 using HNMO.Network.Packets.ServerToClient;
 using HNMO.PlugIns;
@@ -50,6 +51,13 @@ public class ChatViewPlugIn : IChatViewPlugIn
         if (await this.TryShowAsExternalChatMessageAsync(message, sender, type).ConfigureAwait(false))
         {
             return;
+        }
+
+        // Resolve the sender on the server; never trust a mark or account identity from chat text.
+        if (VipPlugIn.Get(this._player.GameContext)?.Configuration is { Enabled: true, ShowChatBadge: true }
+            && this._player.GameContext.PlayersByCharacterName is { } players && players.TryGetValue(sender, out var source))
+        {
+            message = VipChat.Mark(source, message, type);
         }
 
         if (type == ChatMessageType.Gens && message.StartsWith(GensMessagePrefix, StringComparison.Ordinal))
