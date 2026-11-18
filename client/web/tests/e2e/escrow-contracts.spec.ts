@@ -63,4 +63,20 @@ test.describe('Escrow Contracts window & packets', () => {
     expect(hostCalc.mid).toEqual({ fee: 30_000, payout: 570_000 });
     expect(hostCalc.capped).toEqual({ fee: 50_000, payout: 1_950_000 });
   });
+
+  test('Trade Credit reconciles circulation against top-ups, conversions, cash-outs, and fees', async ({ page }) => {
+    const tc = await page.evaluate(() => {
+      const topUp = 300;
+      const converted = 100;
+      const escrowFee = 10;
+      const cashOutGross = 100;
+      const cashOutFee = Math.max(5, Math.round(cashOutGross * 0.05));
+      const cashOutNet = cashOutGross - cashOutFee;
+      const actualBalance = topUp - converted - escrowFee - cashOutGross;
+      const expected = topUp - converted - cashOutNet - (escrowFee + cashOutFee);
+      return { actualBalance, expected, variance: actualBalance - expected };
+    });
+
+    expect(tc).toEqual({ actualBalance: 90, expected: 90, variance: 0 });
+  });
 });

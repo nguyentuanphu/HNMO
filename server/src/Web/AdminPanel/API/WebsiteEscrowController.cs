@@ -327,6 +327,19 @@ public sealed class WebsiteEscrowController(
         return this.Ok(new { v = 1, result = "Ok", contractId = updated.ContractId, status = updated.Status.ToString() });
     }
 
+    /// <summary>Exports the full double-entry Trade Credit accounting ledger and reconciliation summary as CSV (Admin only).</summary>
+    /// <returns>CSV file download.</returns>
+    [HttpGet("trade-credit/export.csv")]
+    [Authorize(Policy = AdminPolicies.Administrator)]
+    public async Task<IActionResult> ExportTradeCreditCsvAsync()
+    {
+        var ct = this.HttpContext.RequestAborted;
+        var (cfg, engine) = await this.LoadAsync(ct).ConfigureAwait(false);
+        var tc = new EscrowTradeCreditEngine(cfg, engine.Store);
+        var csv = tc.ExportCsv(DateTime.UtcNow);
+        return this.File(Encoding.UTF8.GetBytes(csv), "text/csv; charset=utf-8", "hnmo-trade-credit-ledger.csv");
+    }
+
     private static object ToRulesDto(EscrowConfiguration cfg) => new
     {
         feePercent = cfg.FeePercent,

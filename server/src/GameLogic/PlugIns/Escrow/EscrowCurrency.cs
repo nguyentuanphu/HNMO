@@ -35,4 +35,7 @@ public enum EscrowCurrency
 
     /// <summary>Jewel of Life (via Jewel Bank).</summary>
     JewelLife = 8,
+
+    /// <summary>Separate convertible Trade Credit currency (ROADMAP 16.6, OFF by default).</summary>
+    TradeCredit = 9,
 }

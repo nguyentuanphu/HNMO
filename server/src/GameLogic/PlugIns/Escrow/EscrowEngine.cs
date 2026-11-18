@@ -123,8 +123,15 @@ public sealed class EscrowEngine
     /// <summary>Checks whether a currency is currently permitted by <see cref="EscrowConfiguration.AllowedCurrencies"/>.</summary>
     /// <param name="currency">Candidate currency.</param>
     /// <returns><see langword="true"/> when allowed.</returns>
-    public bool IsCurrencyAllowed(EscrowCurrency currency) =>
-        this._cfg.AllowedCurrencies is null || this._cfg.AllowedCurrencies.Count == 0 || this._cfg.AllowedCurrencies.Contains(currency);
+    public bool IsCurrencyAllowed(EscrowCurrency currency)
+    {
+        if (currency == EscrowCurrency.TradeCredit && !EscrowTradeCreditEngine.IsCompliantAndEnabled(this._cfg))
+        {
+            return false;
+        }
+
+        return this._cfg.AllowedCurrencies is null || this._cfg.AllowedCurrencies.Count == 0 || this._cfg.AllowedCurrencies.Contains(currency);
+    }
 
     /// <summary>Determines whether a contract exceeds configured high-value extra-confirmation thresholds.</summary>
     /// <param name="priceCurrency">Asking currency.</param>

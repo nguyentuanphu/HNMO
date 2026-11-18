@@ -145,6 +145,22 @@ export interface EscrowStatePayload {
   hostVndPaymentWindowMinutes?: number;
   hostVndPayoutDays?: number;
   hostVndDisputeWindowHours?: number;
+  tradeCreditEnabled?: boolean;
+  tradeCreditVndPerUnit?: number;
+  tradeCreditToCoinRate?: number;
+  tradeCreditHoldHours?: number;
+  tradeCreditFeePercent?: number;
+  tradeCreditMinFeeUnits?: number;
+  tradeCreditAccount?: {
+    spendableUnits: number;
+    generalUnits: number;
+    eligibleCashOutUnits: number;
+    lockedCashOutUnits: number;
+    bankLocked: boolean;
+    verifiedBankName: string;
+    verifiedBankAccountNumber: string;
+    verifiedBankAccountName: string;
+  };
   reputation: EscrowReputationDto;
   bagItems: EscrowBagItemDto[];
   jewelBalances: Record<string, number>;
@@ -166,7 +182,7 @@ export interface EscrowFeePreview {
 
 const CURRENCY_BY_INDEX = [
   'Zen', 'WCoinC', 'WCoinP', 'GoblinPoints',
-  'JewelBless', 'JewelSoul', 'JewelChaos', 'JewelCreation', 'JewelLife',
+  'JewelBless', 'JewelSoul', 'JewelChaos', 'JewelCreation', 'JewelLife', 'TradeCredit',
 ] as const;
 
 const STATUS_BY_INDEX = [
@@ -266,6 +282,7 @@ export class EscrowWindow {
   private disputeReasonInput = '';
   private pendingReceiptMime = '';
   private pendingReceiptBase64 = '';
+  private tcUnitsInput = '10';
 
   constructor(private readonly options: EscrowWindowOptions) {
     this.panel = createHnmoPanel('hnmo-escrow-panel', this.t('Escrow Contracts (F9)', 'Hợp đồng Ký gửi (F9)'));
@@ -1055,6 +1072,70 @@ export class EscrowWindow {
         line.textContent = `${this.t(o.reasonEn, o.reasonVi)} — ${o.items.length} item(s), ${o.zen.toLocaleString()} Zen, ${o.jewels.reduce((n, j) => n + j.quantity, 0)} jewel(s)`;
         root.append(line);
       }
+    }
+
+    if (s.tradeCreditEnabled && s.tradeCreditAccount) {
+      const tc = s.tradeCreditAccount;
+      const tcBox = document.createElement('div');
+      tcBox.style.cssText = 'border:1px solid #6b5528;border-radius:6px;padding:8px 10px;margin:8px 0;background:#161926;display:grid;gap:6px;';
+      const tcTitle = document.createElement('strong');
+      tcTitle.style.color = '#f1cf7a';
+      tcTitle.textContent = this.t(
+        `Trade Credit Wallet — Spendable: ${tc.spendableUnits} (Eligible Cash-Out after ${s.tradeCreditHoldHours ?? 72}h: ${tc.eligibleCashOutUnits}, Pending: ${tc.lockedCashOutUnits})`,
+        `Ví Tín Dụng — Khả dụng: ${tc.spendableUnits} (Được rút sau ${s.tradeCreditHoldHours ?? 72}h: ${tc.eligibleCashOutUnits}, Chờ chi: ${tc.lockedCashOutUnits})`,
+      );
+      tcBox.append(tcTitle);
+
+      if (!tc.bankLocked) {
+        const bRow = document.createElement('div');
+        bRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;align-items:end;';
+        const bAcct = this.labeledInput(this.t('Verified Bank Acct (locked once saved)', 'STK nhận rút tiền (khóa cố định)'), this.bankAccountNumber, 'text', (v) => { this.bankAccountNumber = v; }, '');
+        const bName = this.labeledInput(this.t('Account Holder', 'Tên chủ TK'), this.bankAccountName, 'text', (v) => { this.bankAccountName = v; }, '');
+        const saveBankBtn = document.createElement('button');
+        saveBankBtn.type = 'button';
+        saveBankBtn.textContent = this.t('Verify & Lock Bank', 'Lưu & Khóa Ngân hàng');
+        saveBankBtn.style.cssText = 'padding:5px 10px;border-radius:4px;border:1px solid #8a6a30;background:#2e2412;color:#f1cf7a;cursor:pointer;font:inherit;';
+        saveBankBtn.addEventListener('click', () => {
+          this.sendAction(13, {
+            bankBin: this.bankBin,
+            bankName: this.bankName,
+            bankAccountNumber: this.bankAccountNumber.trim(),
+            bankAccountName: this.bankAccountName.trim(),
+          });
+        });
+        bRow.append(bAcct, bName, saveBankBtn);
+        tcBox.append(bRow);
+      } else {
+        const bLocked = document.createElement('div');
+        bLocked.style.cssText = 'font-size:12px;color:#b7f5d0;';
+        bLocked.textContent = `${this.t('Verified Bank (Locked)', 'Ngân hàng đã khóa')}: ${tc.verifiedBankName} ${tc.verifiedBankAccountNumber} — ${tc.verifiedBankAccountName}`;
+        tcBox.append(bLocked);
+      }
+
+      const actRow = document.createElement('div');
+      actRow.style.cssText = 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;';
+      const amtIn = document.createElement('input');
+      amtIn.type = 'number';
+      amtIn.min = '1';
+      amtIn.value = this.tcUnitsInput;
+      amtIn.style.cssText = 'width:90px;padding:4px 6px;border-radius:4px;border:1px solid #444;background:#10131e;color:#fff;';
+      amtIn.addEventListener('input', () => { this.tcUnitsInput = amtIn.value; });
+
+      const convBtn = document.createElement('button');
+      convBtn.type = 'button';
+      convBtn.textContent = this.t(`Convert to WCoinC (1->${s.tradeCreditToCoinRate ?? 1})`, `Đổi sang WCoinC (1->${s.tradeCreditToCoinRate ?? 1})`);
+      convBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #4895ef;background:#172236;color:#cde4ff;cursor:pointer;font:inherit;';
+      convBtn.addEventListener('click', () => this.sendAction(14, { units: Math.max(1, Number.parseInt(this.tcUnitsInput || '0', 10) || 0), pin: this.pinInput }));
+
+      const cashBtn = document.createElement('button');
+      cashBtn.type = 'button';
+      cashBtn.textContent = this.t('Cash Out Proceeds (VND)', 'Rút tiền bán đồ (VNĐ)');
+      cashBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #358856;background:#194d2f;color:#e6fff0;cursor:pointer;font:inherit;';
+      cashBtn.addEventListener('click', () => this.sendAction(15, { units: Math.max(1, Number.parseInt(this.tcUnitsInput || '0', 10) || 0), pin: this.pinInput }));
+
+      actRow.append(amtIn, convBtn, cashBtn);
+      tcBox.append(actRow);
+      root.append(tcBox);
     }
 
     const histTitle = document.createElement('strong');
