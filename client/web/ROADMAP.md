@@ -603,3 +603,119 @@ classic game (the parity rule stays: the desktop code is the reference).
 Work moved from ChatGPT to Antigravity (ChatGPT is slower): admin tools 14.18 gift box/mail, 14.16 ban manager,
 14.15 character tools, 14.17 GM manager + in-game GM commands (14.11), 14.20 news manager. ChatGPT keeps: updating
 its PRs, account page, admin help on every page, VIP, VIP servers, admin panel redesign + guide split.
+
+## 16. Safe trades through an escrow (owner asked 2026-11-16; Antigravity)
+Players trade on trust today ("send money and hope"). HNMO stands in the middle, like a bank guarantee, for a fee.
+16.1 In-game escrow contract (zen, coins, jewels, items; the default):
+     - the seller creates a contract to a named buyer (or open offer): items + asking price (zen / coin type / jewels
+       from the jewel bank), a deadline;
+     - the seller's items move into escrow at once (out of the bag, atomically; can't be used, sold or duplicated);
+     - the buyer sees the exact items with all options (tooltips), and pays: the price moves into escrow;
+     - when both sides are in escrow the server swaps them in one transaction, minus the fee (admin-set %, minimum,
+       maximum, who pays: seller/buyer/split); both get the goods through the owed-rewards approach (full bag safe);
+     - cancel/expiry returns everything to its owner; works when the other side is offline;
+     - second password (account safety) required to create/accept; extra confirmation above a value threshold;
+     - every step in the activity log; trade history and a simple reputation (completed trades) per account.
+     Relation to the existing ones: the classic trade window is already safe when both are online and both confirm;
+     the item market (#28) is for public listings; the escrow contract is for agreed deals between two players
+     (offline, larger, mixed currencies).
+16.2 Real money between players (bank transfers in VND): OFF by default, the host's decision:
+     - recommended way: no real money between players; the buyer tops up coins through the host's official top-up,
+       then buys in an escrow contract with coins; coins can't be cashed out (keeps HNMO out of handling players'
+       money);
+     - optional "host-mediated" mode if the host wants it: the item goes into escrow; the buyer transfers VND to the
+       HOST's bank account with a unique reference (VietQR from #22); the admin confirms the money arrived; the item is
+       released; the host pays the seller minus the fee within N days; a dispute window and an admin dispute page;
+       everything logged. The host must check Vietnamese rules for online games and payment intermediaries before
+       turning it on (warning shown on the admin page).
+16.4 Real money paid directly between players (owner asked 2026-11-16; preferred over 16.2's host-mediated mode,
+     because the host never holds players' money). The game can't see bank transfers, so it guards the ITEM side and
+     records the evidence for the money side:
+     - the seller creates a "real-money contract": item(s) into escrow, a price in VND, the seller's bank details
+       (shown to the buyer only after the buyer accepts), optionally a seller bond in coins;
+     - the buyer accepts: the item is reserved for them for a payment window (e.g. 30 min); the game shows a VietQR
+       for the SELLER's account with a unique reference code (HNMO-XXXX) as the transfer note;
+     - the buyer transfers in their bank app, presses "I've paid" and may attach a receipt image;
+     - the seller presses "Money received": the item is delivered to the buyer at once;
+       optional automatic confirmation: the seller links a bank notification service (webhook on incoming transfers
+       with the reference code), then no manual click is needed;
+     - no confirmation within N hours -> dispute: both sides see the case, the admin compares the receipt, the
+       reference code and the seller's answer, and either releases the item to the buyer or returns it to the seller;
+       the side that lied loses the bond, reputation and can be banned;
+     - the seller can never keep both: the item stays locked until confirmed, cancelled before payment, or decided.
+     Limits: the game can't force a refund of money; the admin decides disputes on evidence. OFF by default; the host
+     decides if real-money trading is allowed at all (same warning as 16.2).
+16.5 Owner decisions 2026-11-16: build ALL modes, each with a fee for the host:
+     - 16.2 host-mediated (host holds the VND): fee % of the price (min/max), taken from the seller's payout;
+     - 16.4 direct between players: a service fee in coins/trade credit when the contract is created (seller,
+       buyer or split), plus the optional seller bond;
+     - 16.6 trade credit (new, below): fees on cash-out and per contract.
+16.6 Trade credit: a SEPARATE currency only for real-money trades (not the normal coins, which players can earn by
+     playing: if those could be cashed out, bots would farm money). Rules:
+     - bought only through the host's top-up at a fixed rate (e.g. 1 credit = 1,000 VND, admin-set);
+     - spent only in escrow contracts (16.1) marked "cash sale"; optionally converted one way into normal coins;
+     - cash-out allowed ONLY for credit received as the proceeds of a cash-sale contract (bought credit can't be cashed
+       out, so it can't be used to move money around), after a holding period (e.g. 72 h), minus a fee (% + minimum),
+       to the seller's bank account entered and verified once; limits per day/month; the host pays out (manual list,
+       later a bank API) and marks it paid;
+     - a double-entry ledger: every credit movement with a reason; the total credit in circulation must always equal
+       top-ups minus cash-outs minus fees (checked daily, alarm if not); reports for the host's accounting;
+     - the highest legal risk of all modes (holding players' money and paying it out works like an e-wallet): the host
+       must check the rules before turning it on; off by default.
+16.3 Safety rules: new accounts can't use escrow for N days; a holding period before items received through escrow can
+     be traded again (stops stolen-account dumping); the item's origin shown from the activity log; admin can freeze a
+     contract; fee income reported on the economy dashboard.
+
+## 17. Mobile app and phone play (owner asked 2026-11-16; a second Antigravity, branches antigravity2-*)
+Reference: a mobile game of the same genre (iOS/Android apps playing on the same servers as its Windows client,
+touch-first; read from its store listing and release notes; ideas only). The web game on phones isn't good enough yet.
+17.0 Owner decision 2026-11-16: web app ONLY: no Android/iOS store apps and no desktop client for now. The phone
+     features go into the web game (browser and "Add to Home Screen"); the store-app part of 17.1 and Apple sign-in in
+     17.7 are dropped.
+17.1 Installable app: the web game as a proper PWA (manifest exists; add a service worker caching the shell and the
+     data packs, offline "can't connect" page, install prompt, full screen, orientation lock, safe areas/notch), then
+     store apps that wrap the same web game (Android: Trusted Web Activity or Capacitor; iOS: Capacitor/WKWebView),
+     same servers and accounts on every device; app icons/splash from the game's name and images.
+17.2 Touch-first HUD: a Modern layout for phones and the Classic layout; resizable and movable HUD parts (saved per
+     device); big touch targets; a virtual joystick or tap-to-move, skill buttons with cooldown rings, target cycling,
+     auto-attack toggle, quick potion buttons; landscape and portrait; tablets.
+17.3 Chat on phones: resizable chat, swipe to scroll, long-press to select/copy, five chat macro buttons (editable),
+     block and report a player (report goes to the admin's activity/ban tools).
+17.4 Phone screens for every window: inventory, vault, shop, trade, party (a party sheet), guild, mail/gift box,
+     missions, settings; one-hand friendly, no tiny buttons, no hover-only actions (long-press shows tooltips).
+17.5 Map on phones: pinch-to-zoom and drag on the big map, party members' markers, tap a spot to walk there.
+17.6 Battery and performance: battery saver (lower fps and resolution when idle/auto-play; "wake on death" restores
+     full speed and vibrates when the character dies), a 120 fps option on 120 Hz screens, a smoother frame rate in
+     crowds (with the performance mode), keep the screen awake while auto-play runs (Wake Lock).
+17.7 Sign-in: saved multi-account sign-in on the device, sign in with Google (exists) and Apple (needs an Apple
+     developer account), the website login ticket (#13) inside the app.
+17.8 Quality-of-life seen there (check what HNMO lacks): a helper toggle key and settings key, an "active invasions"
+     tracker window (link with the timetable #23), a repair-mode key, a hold-target mode for PvP, a PK countdown icon,
+     a setting to stop hitting own guild/alliance, party-list buffing, party leader change, a jewel-upgrade
+     confirmation, a PvP log on the website, per-map music, item lock command (exists as account safety).
+
+## Status 2026-11-17 (Sydney), read from GitHub
+- Antigravity (out of usage for ~5 days): DONE its integration draft #51 (antigravity-integration, all its PRs merged
+  in order, #13 renumbered to F5 24, 0 clashes, full tests green, Windows playtest docs/playtest-2026-11-17.md) and
+  Phase 2: #52 buffer NPC, #53 banned words, #54 offline trade, #55 rankings + add stats, #56 talismans, #57 titles,
+  #58 teleport NPC, #59 fixed item options, #60 event alerts, #61 crash watch. NOT STARTED: Phase 3 (14.19 item
+  definitions, 14.21 stats calculator, 14.24 3D world editor), escrow (section 16), and the admin tools moved to it.
+- Admin tools 14.18 gift box/mail, 14.16 ban manager, 14.15 character tools, 14.17/14.11 GM manager + in-game GM
+  commands, 14.20 news manager: moved BACK to ChatGPT (2026-11-17) because Antigravity is out for days.
+- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (rules only, not
+  working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
+- Second Antigravity (mobile, section 17): not started.
+- Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
+
+## 18. Running on a Linux VPS (owner asked 2026-11-18)
+Advice given: 4 GB RAM / 2 vCPU / 60 GB NVMe is enough to launch (~50-100 online); 8 GB / 4 vCPU when busier. For
+Australian and Vietnamese players host in Singapore (AU ~90-110 ms, VN ~30-50 ms); North America is 150-300 ms.
+To build (Antigravity, 2026-11-18): a deployment kit for a fresh Debian 12 / Ubuntu VPS: one install script (user,
+packages, HNMO Linux package, systemd services with restart, PostgreSQL tuned for small RAM), a reverse proxy with
+automatic HTTPS for the game/website domain (admin panel never public: SSH tunnel or IP allow-list), firewall,
+fail2ban, automatic security updates, off-site backup copy (e.g. to S3-compatible storage), update script with
+rollback, and a step-by-step guide (EN/VI) for the owner.
+
+Antigravity's long job from 2026-11-18, in order: refresh its integration branch (#51) with main + #62; the VPS
+deployment kit (18); escrow trades (16, PR 1-4); Phase 3 (14.19 item definitions, 14.21 stats calculator, 14.24 3D
+world editor); mobile (17) only if the second Antigravity hasn't started it.
