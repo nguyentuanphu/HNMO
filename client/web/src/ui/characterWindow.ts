@@ -211,6 +211,7 @@ export class CharacterWindow {
     this.refresh(false);
     const doc = await openDocument('character_info', this.model, { parent: this.parent, scale });
     this.doc = doc;
+    doc.host.style.zIndex = '28';
     const panel = doc.$('#panel');
     this.panel = panel;
     if (panel) {

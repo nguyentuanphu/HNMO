@@ -44,7 +44,15 @@ public abstract class UpgradeItemLevelJewelConsumeHandlerPlugIn<TConfig>
     public abstract object CreateDefaultConfig();
 
     /// <inheritdoc/>
-    protected override bool ModifyItem(Item item, IContext persistenceContext)
+    protected override bool ModifyItem(Item item, IContext persistenceContext) =>
+        this.ModifyItemCore(this.CurrentPlayer, item, persistenceContext);
+
+    private static bool ItemHasLuck(Item item)
+    {
+        return item.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Luck);
+    }
+
+    private bool ModifyItemCore(Player? player, Item item, IContext persistenceContext)
     {
         if (!item.CanLevelBeUpgraded())
         {
@@ -74,10 +82,15 @@ public abstract class UpgradeItemLevelJewelConsumeHandlerPlugIn<TConfig>
             return false;
         }
 
-        int percent = this.Configuration.SuccessRatePercentage;
+        var (percent, luckBonus) = this is SoulJewelConsumeHandlerPlugIn
+            ? PlugIns.GameplayRules.RateTuningPlugIn.GetEffectiveSoulRates(
+                player,
+                this.Configuration.SuccessRatePercentage,
+                this.Configuration.SuccessRateBonusWithLuckPercentage)
+            : (this.Configuration.SuccessRatePercentage, this.Configuration.SuccessRateBonusWithLuckPercentage);
         if (ItemHasLuck(item))
         {
-            percent += this.Configuration.SuccessRateBonusWithLuckPercentage;
+            percent += luckBonus;
         }
 
         if (this._randomizer.NextRandomBool(percent))
@@ -95,10 +108,5 @@ public abstract class UpgradeItemLevelJewelConsumeHandlerPlugIn<TConfig>
 
         item.Durability = item.GetMaximumDurabilityOfOnePiece();
         return true; // true doesn't mean that it was successful, just that the consumption happened.
-    }
-
-    private static bool ItemHasLuck(Item item)
-    {
-        return item.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Luck);
     }
 }

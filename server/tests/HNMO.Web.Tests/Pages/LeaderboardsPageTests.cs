@@ -24,6 +24,7 @@ using HNMO.Web.Shared.Components.Toast;
 [NonParallelizable]
 public class LeaderboardsPageTests
 {
+    private readonly object _pendingGate = new();
     private readonly Queue<TaskCompletionSource<IReadOnlyList<MiniGameRankingSummary>>> _pendingLoads = new();
 
     private BunitContext _context = null!;
@@ -59,7 +60,11 @@ public class LeaderboardsPageTests
             .Returns(() =>
             {
                 var load = new TaskCompletionSource<IReadOnlyList<MiniGameRankingSummary>>(TaskCreationOptions.RunContinuationsAsynchronously);
-                this._pendingLoads.Enqueue(load);
+                lock (this._pendingGate)
+                {
+                    this._pendingLoads.Enqueue(load);
+                }
+
                 return new ValueTask<IReadOnlyList<MiniGameRankingSummary>>(load.Task);
             });
         var persistenceContextProvider = new Mock<IPersistenceContextProvider>();
@@ -90,13 +95,15 @@ public class LeaderboardsPageTests
     public void LateResultOfPreviousSelectionDoesNotOverwriteCurrentOne()
     {
         var cut = this._context.Render<Leaderboards>();
+        cut.WaitForState(() => this.PendingLoadCount() == 1);
         this.CompleteNextLoad("Initial");
         cut.WaitForState(() => cut.Markup.Contains("Initial", StringComparison.Ordinal));
 
         cut.Find("select").Change(nameof(Leaderboards.LeaderboardPeriod.Last30Days));
+        cut.WaitForState(() => this.PendingLoadCount() == 1);
         cut.Find("select").Change(nameof(Leaderboards.LeaderboardPeriod.Last7Days));
-        Assert.That(this._pendingLoads, Has.Count.EqualTo(2));
-        var previousLoad = this._pendingLoads.Dequeue();
+        cut.WaitForState(() => this.PendingLoadCount() == 2);
+        var previousLoad = this.DequeueLoad();
         this.CompleteNextLoad("Current");
         cut.WaitForState(() => cut.Markup.Contains("Current", StringComparison.Ordinal));
 
@@ -117,15 +124,32 @@ public class LeaderboardsPageTests
         CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("zh-CN");
 
         var cut = this._context.Render<Leaderboards>();
+        cut.WaitForState(() => this.PendingLoadCount() == 1);
         this.CompleteNextLoad("Player");
         cut.WaitForState(() => cut.Markup.Contains("Player", StringComparison.Ordinal));
 
         Assert.That(cut.Find(".nav-pills .nav-link").TextContent.Trim(), Is.EqualTo("血色城堡"));
     }
 
+    private int PendingLoadCount()
+    {
+        lock (this._pendingGate)
+        {
+            return this._pendingLoads.Count;
+        }
+    }
+
+    private TaskCompletionSource<IReadOnlyList<MiniGameRankingSummary>> DequeueLoad()
+    {
+        lock (this._pendingGate)
+        {
+            Assert.That(this._pendingLoads, Is.Not.Empty);
+            return this._pendingLoads.Dequeue();
+        }
+    }
+
     private void CompleteNextLoad(string characterName)
     {
-        Assert.That(this._pendingLoads, Is.Not.Empty);
-        this._pendingLoads.Dequeue().SetResult([new MiniGameRankingSummary(Guid.NewGuid(), characterName, null, 100, 50, 2)]);
+        this.DequeueLoad().SetResult([new MiniGameRankingSummary(Guid.NewGuid(), characterName, null, 100, 50, 2)]);
     }
 }

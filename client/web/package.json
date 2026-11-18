@@ -5,7 +5,7 @@
   "description": "HNMO web client.",
   "type": "module",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsc -p . && node tools/build-world-editor.mjs",
     "watch": "tsc -p . --watch --preserveWatchOutput",
     "typecheck": "tsc -p . --noEmit && tsc -p tsconfig.tests.json",
     "start": "npm run build && dotnet run --project bridge -c Release",
@@ -21,6 +21,8 @@
     "@types/three": "^0.160.0",
     "esbuild": "^0.24.2",
     "fast-xml-parser": "^4.5.0",
+    "ktx2-encoder": "^0.6.0",
+    "sharp": "^0.35.5",
     "typescript": "^5.6.3"
   }
 }

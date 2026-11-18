@@ -16,7 +16,8 @@
     html, body { height: 100%; margin: 0; background: #0a0d14; color: var(--text); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
     #stage { position: fixed; inset: 0; }
     #view { width: 100%; height: 100%; display: block; }
-    .hud { position: fixed; left: 12px; right: 12px; top: calc(5.5vh + 6px); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; pointer-events: none; }
+    .hud { position: fixed; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); top: max(calc(5.5vh + 6px), env(safe-area-inset-top, 0px)); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; pointer-events: none; }
+    body.hnmo-modern-hud .hud { display: none; }
     .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font-variant-numeric: tabular-nums; }
     .chip label, .chip select { pointer-events: auto; }
     select, input { background: #151a26; color: inherit; border: 1px solid #2c3446; border-radius: 4px; padding: 6px 8px; font: inherit; }
@@ -32,7 +33,15 @@
       #login:not([hidden]) ~ #loading { display: none; }
     }
     /* The game's touch buttons only in the world, not over the login and character choice. */
-    #login:not([hidden]) ~ #touchBar, #login:not([hidden]) ~ #touchFight, #login:not([hidden]) ~ #touchMore, #login:not([hidden]) ~ #touchRotate { display: none !important; }
+    #login:not([hidden]) ~ #touchBar, #login:not([hidden]) ~ #touchFight, #login:not([hidden]) ~ #touchMore, #login:not([hidden]) ~ #touchRotate, #login:not([hidden]) ~ #mobileHud, #login:not([hidden]) ~ #mobileHudSheet { display: none !important; }
+    .saved-accounts { display: grid; gap: 6px; padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(201, 162, 74, .28); background: rgba(255, 255, 255, .03); }
+    .saved-accounts-head { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: .06em; }
+    .saved-accounts-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .saved-account-chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, .05); padding: 2px 6px 2px 10px; }
+    .saved-account-pick { all: unset; cursor: pointer; font-size: 12px; color: var(--text); font-weight: 600; }
+    .saved-account-pick small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+    .saved-account-del { all: unset; cursor: pointer; width: 18px; height: 18px; border-radius: 50%; text-align: center; line-height: 18px; color: var(--muted); font-size: 13px; }
+    .saved-account-del:hover { color: var(--error); background: rgba(239, 122, 108, .15); }
     .panel { width: min(380px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 14px; }
     .panel h1 { margin: 0; font-size: 20px; letter-spacing: .04em; color: var(--gold); }
     fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
@@ -44,6 +53,8 @@
     .buttons { display: flex; gap: 8px; }
     button { font: inherit; border-radius: 6px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line); background: #1b2131; color: var(--text); }
     button.primary { background: var(--gold); color: #1a1408; border-color: var(--gold); font-weight: 600; flex: 1; }
+    a.website-login { display: block; text-align: center; text-decoration: none; font: inherit; border-radius: 6px; padding: 9px 14px; background: var(--gold); color: #1a1408; border: 1px solid var(--gold); font-weight: 600; }
+    a.website-login:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
     button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
     .choices { display: grid; gap: 6px; }
     .choice { text-align: left; display: flex; justify-content: space-between; gap: 8px; }
@@ -71,18 +82,24 @@
     #guide iframe { width: 100%; height: 100%; border: 0; display: block; }
     #guide .close { position: absolute; right: 10px; top: 10px; padding: 4px 10px; }
     #guide .onboarding { position: absolute; right: 80px; top: 10px; padding: 4px 10px; }
+    #guide .timetable { position: absolute; right: 205px; top: 10px; padding: 4px 10px; }
     .map-picker { position: fixed; right: 12px; top: 12px; display: flex; gap: 8px; align-items: center; }
     .map-picker label { color: var(--muted); font-size: 12px; }
   </style>
   <script type="importmap">
-    { "imports": { "three": "/vendor/three/build/three.module.js" } }
+    {
+      "imports": {
+        "three": "/vendor/three/build/three.module.js",
+        "three/examples/jsm/loaders/KTX2Loader.js": "/vendor/three/examples/jsm/loaders/KTX2Loader.js"
+      }
+    }
   </script>
 </head>
 <body>
   <div id="stage"><canvas id="view"></canvas></div>
   <div id="labels"></div>
   <div id="guide" hidden role="dialog" aria-label="Guide" data-game-name="{game} guide" data-game-name-attr="aria-label">
-    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
+    <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="timetable" id="guideTimetable" title="Event and boss timetable (H)">Timetable (H)</button><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
   </div>
   <div class="hud" id="hud" hidden>
     <span class="chip" id="heroName">-</span>
@@ -96,6 +113,7 @@
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">
       <h1 data-game-name>HenryN Mu Online</h1>
+      <a class="website-login" id="websiteLoginButton" href="/account.html#play">Log in on the website</a>
       <fieldset>
         <div class="row"><label for="username">Account</label><input id="username" name="username" required maxlength="10" autocomplete="username"></div>
         <div class="row"><label for="password">Password</label><input id="password" name="password" type="password" required maxlength="20" autocomplete="current-password"></div>
@@ -112,6 +130,7 @@
           <button class="primary" type="submit">Connect</button>
         </div>
       </fieldset>
+      <div class="saved-accounts" id="savedAccounts" hidden></div>
       <p id="loginError" role="alert" hidden></p>
       <div class="choices" id="servers" hidden></div>
       <div class="choices" id="characters" hidden></div>
@@ -121,5 +140,6 @@
   </div>
   <div id="loading" class="chip"><div id="status">Log in to play.</div><div id="track"><div id="bar"></div></div></div>
   <script type="module" src="/js/main.js"></script>
+  <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw-game.js').catch(function () {}); }</script>
 </body>
 </html>

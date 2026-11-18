@@ -16,6 +16,7 @@ import { loadMonsterCatalog, localName } from './monsterData.js';
 import type { MonsterCatalog } from './monsterData.js';
 import { buxConvert } from '../formats.js';
 import { hellasTooltipLines } from './kalima.js';
+import { currentLanguage } from '../i18n.js';
 
 /** A row of the tooltip. */
 export interface TooltipLine {
@@ -328,7 +329,12 @@ async function load(): Promise<TooltipData> {
 
 // ---------- text helpers ----------
 
-const english = (text: Text | undefined): string => (typeof text === 'string' ? text : text?.en ?? '');
+const english = (text: Text | undefined): string => {
+  if (typeof text === 'string') return text;
+  if (!text) return '';
+  const lang = currentLanguage();
+  return (text[lang] || text.en) ?? '';
+};
 
 // "%d" and "%%" of a desktop UI text.
 function format(text: string, ...numbers: number[]): string {
@@ -1273,6 +1279,18 @@ class TooltipWriter {
   writeDescription(afterOptions: boolean): void {
     for (const ownLine of this.definition?.description ?? []) {
       if ((ownLine.after === 'options') === afterOptions) this.descriptionRows = this.writeOwnLine(ownLine, this.descriptionRows);
+    }
+    if (afterOptions && this.definition?.tooltip) {
+      const note = english(this.definition.tooltip).trim();
+      if (note) {
+        for (const textLine of note.split(/\r?\n/)) {
+          const trimmed = textLine.trim();
+          if (trimmed && this.descriptionRows > 0) {
+            this.lines.push(line(trimmed, 'yellow', false));
+            this.descriptionRows--;
+          }
+        }
+      }
     }
   }
 }

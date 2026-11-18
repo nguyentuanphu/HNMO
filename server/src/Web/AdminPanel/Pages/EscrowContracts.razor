@@ -1,0 +1,575 @@
+@page "/escrow-contracts"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using System.Globalization
+@using HNMO.GameLogic.PlugIns.Escrow
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Escrow contracts", "Hợp đồng ký gửi")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Escrow contracts", "Hợp đồng ký gửi")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Escrow contracts", "Hợp đồng ký gửi")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" id="escrow-help-btn" title="@L("How to use Escrow contracts", "Hướng dẫn sử dụng Hợp đồng ký gửi")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<p class="text-muted">@L("Configure atomic in-game escrow contracts (items, Zen, coins, and Jewel Bank jewels), safety gates, fee rules, freeze/cancel active contracts, and review reputation & fee income.", "Cấu hình hợp đồng ký gửi nguyên tử trong game (đồ, Zen, Xu, Ngọc trong ngân hàng), quy tắc an toàn, biểu phí, đóng băng/hủy hợp đồng và theo dõi uy tín cùng doanh thu phí.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="escrow-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Players open Contracts in-game via F9, /contract, or right-clicking a player via the Command Window (D -> Contract).", "Người chơi mở Hợp đồng trong game bằng phím F9, lệnh /contract hoặc chuột phải vào người chơi qua bảng Lệnh (D -> Hợp đồng).")</li>
+            <li>@L("Seller goods enter escrow atomically; payment and delivery execute in a single lock. Offline or full-bag returns are queued under Owed Deliveries.", "Hàng của người bán được giữ ký gửi nguyên tử; thanh toán và giao hàng diễn ra trong một giao dịch duy nhất. Đồ trả lại khi ngoại tuyến/đầy túi được xếp vào Quà nhận sau.")</li>
+            <li>@L("Use Freeze to halt an open contract under investigation, or Force Cancel to immediately return escrowed goods to the seller.", "Dùng Đóng băng để tạm dừng hợp đồng đang kiểm tra, hoặc Hủy cưỡng bức để hoàn trả ngay hàng cho người bán.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is { } c)
+{
+    <section class="card mb-3" id="escrow-settings-card">
+        <div class="card-body">
+            <h2 class="h5">@L("Rules & Safety", "Quy tắc & An toàn")</h2>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" id="escrow-enabled" type="checkbox" @bind="c.Enabled" />
+                        <label class="form-check-label" for="escrow-enabled" title="@L("Enable in-game and website escrow contracts", "Bật hệ thống hợp đồng ký gửi trong game và website")">@L("Enable escrow contracts", "Bật hợp đồng ký gửi")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" id="escrow-require-pin" type="checkbox" @bind="c.RequireSecondPassword" />
+                        <label class="form-check-label" for="escrow-require-pin" title="@L("Require the account's 4-digit second password when creating or accepting contracts", "Yêu cầu mật khẩu cấp 2 (4 số) khi tạo hoặc nhận hợp đồng")">@L("Require 2nd password (PIN)", "Bắt buộc mật khẩu cấp 2")</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-fee-pct" title="@L("Percentage host fee (0 to 25%)", "Phần trăm phí hệ thống (0 đến 25%)")">@L("Fee %", "Phí %")</label>
+                    <input class="form-control form-control-sm" id="escrow-fee-pct" type="number" step="0.1" min="0" max="25" @bind="c.FeePercent" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-fee-min" title="@L("Minimum fee when Fee % > 0", "Phí tối thiểu khi Phí % > 0")">@L("Min fee", "Phí tối thiểu")</label>
+                    <input class="form-control form-control-sm" id="escrow-fee-min" type="number" min="0" @bind="c.MinFee" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-fee-max" title="@L("Maximum fee cap (0 = uncapped)", "Phí tối đa (0 = không giới hạn)")">@L("Max fee (0=no cap)", "Phí tối đa")</label>
+                    <input class="form-control form-control-sm" id="escrow-fee-max" type="number" min="0" @bind="c.MaxFee" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" for="escrow-fee-payer" title="@L("Who pays the escrow fee", "Bên chịu phí hợp đồng")">@L("Fee paid by", "Bên chịu phí")</label>
+                    <select class="form-select form-select-sm" id="escrow-fee-payer" @bind="c.FeePayer">
+                        <option value="@EscrowFeePayer.Seller">@L("Seller", "Người bán")</option>
+                        <option value="@EscrowFeePayer.Buyer">@L("Buyer", "Người mua")</option>
+                        <option value="@EscrowFeePayer.Split">@L("Split 50/50", "Chia đôi 50/50")</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-max-open" title="@L("Maximum open contracts per account", "Số hợp đồng đang mở tối đa mỗi tài khoản")">@L("Max open", "Mở tối đa")</label>
+                    <input class="form-control form-control-sm" id="escrow-max-open" type="number" min="1" max="100" @bind="c.MaxOpenContractsPerAccount" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-age-days" title="@L("Minimum account age in days before using escrow", "Tuổi tài khoản tối thiểu (ngày) mới được dùng ký gửi")">@L("Min account age (d)", "Tuổi TK tối thiểu (ngày)")</label>
+                    <input class="form-control form-control-sm" id="escrow-age-days" type="number" min="0" max="365" @bind="c.MinAccountAgeDays" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-cooldown-h" title="@L("Hours before escrow-received items can be re-traded or re-escrowed", "Số giờ khóa giao dịch sau khi nhận đồ qua hợp đồng")">@L("Trade hold (hours)", "Khóa GD lại (giờ)")</label>
+                    <input class="form-control form-control-sm" id="escrow-cooldown-h" type="number" min="0" max="720" @bind="c.PostEscrowTradeCooldownHours" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" for="escrow-hv-coins" title="@L("Coin price above which extra confirmation is required", "Ngưỡng Xu yêu cầu xác nhận thêm")">@L("High-value Coins", "Ngưỡng cảnh báo Xu")</label>
+                    <input class="form-control form-control-sm" id="escrow-hv-coins" type="number" min="0" @bind="c.HighValueThresholdCoins" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" for="escrow-hv-zen" title="@L("Zen amount requiring extra confirmation", "Ngưỡng Zen yêu cầu xác nhận thêm")">@L("High-value Zen", "Ngưỡng cảnh báo Zen")</label>
+                    <input class="form-control form-control-sm" id="escrow-hv-zen" type="number" min="0" @bind="c.HighValueThresholdZen" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="escrow-hv-jewels" title="@L("Jewel quantity requiring extra confirmation", "Ngưỡng Ngọc yêu cầu xác nhận thêm")">@L("High-value Jewels", "Ngưỡng Ngọc")</label>
+                    <input class="form-control form-control-sm" id="escrow-hv-jewels" type="number" min="0" @bind="c.HighValueThresholdJewels" />
+                </div>
+                <div class="col-md-7">
+                    <label class="form-label" for="escrow-banned" title="@L("Comma-separated group:number or exact item names blocked from escrow", "Danh sách vật phẩm cấm ký gửi (cách nhau bằng dấu phẩy, dạng nhóm:số hoặc tên)")">@L("Banned items (group:number or exact name)", "Vật phẩm cấm (nhóm:số hoặc tên)")</label>
+                    <input class="form-control form-control-sm" id="escrow-banned" type="text" @bind="this._bannedItemsText" />
+                </div>
+
+                <div class="col-12">
+                    <div class="small fw-semibold mb-1" title="@L("Currencies allowed as contract asking price", "Các loại tiền được phép dùng để định giá hợp đồng")">@L("Allowed asking currencies", "Tiền tệ cho phép")</div>
+                    <div class="d-flex flex-wrap gap-3">
+                        @foreach (var cur in Enum.GetValues<EscrowCurrency>())
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="esc-cur-@cur" checked="@this.IsCurrencyAllowed(cur)" @onchange="e => this.ToggleCurrency(cur, e.Value is true)" />
+                                <label class="form-check-label" for="esc-cur-@cur">@cur</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-12 border-top pt-3 mt-2" id="escrow-direct-vnd-config">
+                    <h3 class="h6 text-danger mb-2">@L("Direct P2P VND Contracts (Host Never Holds Cash)", "Hợp đồng VND P2P trực tiếp (Chủ server không giữ tiền)")</h3>
+                    <div class="alert alert-warning small mb-2" role="alert" id="escrow-direct-vnd-warning">
+                        <strong>@L("Legal compliance check required (Vietnam):", "Cảnh báo tuân thủ pháp luật Việt Nam:")</strong>
+                        @L(
+                            "Before enabling any real-money (VND) trading mode, the host must verify Vietnamese regulations on online game items/virtual assets and payment intermediaries / e-wallets (Circulars/Decrees on online games & non-cash payment services). Keep this OFF unless legally permitted.",
+                            "Trước khi bật chế độ giao dịch tiền thật (VNĐ), chủ server phải tự kiểm tra quy định pháp luật Việt Nam về trò chơi điện tử trên mạng và trung gian thanh toán / ví điện tử. Chỉ bật khi được phép hợp pháp.")
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" id="escrow-direct-understand" type="checkbox" @bind="c.DirectVndComplianceAcknowledged" />
+                            <label class="form-check-label fw-semibold" for="escrow-direct-understand">
+                                @L("I understand and take full legal responsibility as host", "Tôi hiểu và tự chịu trách nhiệm pháp lý với tư cách chủ server")
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="escrow-direct-enabled" type="checkbox" disabled="@(!c.DirectVndComplianceAcknowledged)" @bind="c.DirectVndEnabled" />
+                                <label class="form-check-label" for="escrow-direct-enabled" title="@L("Enable direct P2P VND contracts with VietQR & optional seller webhooks", "Bật hợp đồng VND trực tiếp giữa người chơi")">@L("Enable Direct P2P VND", "Bật VND P2P trực tiếp")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-dv-win" title="@L("Buyer transfer window minutes (extendable once)", "Thời hạn chuyển khoản (phút), gia hạn tối đa 1 lần")">@L("Pay window (m)", "Hạn CK (phút)")</label>
+                            <input class="form-control form-control-sm" id="escrow-dv-win" type="number" min="5" max="240" @bind="c.DirectVndPaymentWindowMinutes" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-dv-ext" title="@L("Minutes added on one-time extension", "Số phút thêm khi gia hạn 1 lần")">@L("Extend (m)", "Gia hạn (phút)")</label>
+                            <input class="form-control form-control-sm" id="escrow-dv-ext" type="number" min="5" max="120" @bind="c.DirectVndExtendMinutes" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-dv-disp" title="@L("Hours before unconfirmed 'I paid' auto-disputes", "Số giờ tự mở tranh chấp nếu chưa xác nhận")">@L("Auto-dispute (h)", "Tự tranh chấp (h)")</label>
+                            <input class="form-control form-control-sm" id="escrow-dv-disp" type="number" min="1" max="72" @bind="c.DirectVndAutoDisputeHours" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-dv-fee" title="@L("Flat service fee in coins charged on Direct P2P VND contracts", "Phí dịch vụ tính bằng Xu cho hợp đồng VND")">@L("Service fee (coins)", "Phí dịch vụ (Xu)")</label>
+                            <input class="form-control form-control-sm" id="escrow-dv-fee" type="number" min="0" @bind="c.DirectVndServiceFeeCoins" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-dv-feeper" title="@L("Who pays the Direct P2P coin service fee", "Bên chịu phí dịch vụ Xu")">@L("Service fee payer", "Bên trả phí DV")</label>
+                            <select class="form-select form-select-sm" id="escrow-dv-feeper" @bind="c.DirectVndFeePayer">
+                                <option value="@EscrowFeePayer.Seller">@L("Seller", "Người bán")</option>
+                                <option value="@EscrowFeePayer.Buyer">@L("Buyer", "Người mua")</option>
+                                <option value="@EscrowFeePayer.Split">@L("Split 50/50", "Chia đôi")</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-dv-bond" title="@L("Maximum optional seller coin bond (0 = disable bonds)", "Tiền cọc tối đa của người bán (Xu)")">@L("Max seller bond", "Cọc tối đa (Xu)")</label>
+                            <input class="form-control form-control-sm" id="escrow-dv-bond" type="number" min="0" @bind="c.DirectVndMaxSellerBondCoins" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 border-top pt-3 mt-2" id="escrow-host-vnd-config">
+                    <h3 class="h6 text-danger mb-2">@L("Host-Mediated VND Contracts (Host Collects & Pays Out)", "Hợp đồng VND qua Chủ Server (Chủ nhận & trả tiền)")</h3>
+                    <div class="alert alert-warning small mb-2" role="alert" id="escrow-host-vnd-warning">
+                        <strong>@L("Legal compliance check required (Vietnam):", "Cảnh báo tuân thủ pháp luật Việt Nam:")</strong>
+                        @L(
+                            "Before enabling host-mediated real-money (VND) settlement, the host must verify Vietnamese regulations on online games and licensed payment intermediaries / e-wallets. Keep this OFF unless legally permitted.",
+                            "Trước khi bật chế độ chủ server giữ tiền VNĐ trung gian, chủ server phải kiểm tra kỹ quy định pháp luật Việt Nam về trò chơi điện tử trên mạng và dịch vụ trung gian thanh toán / ví điện tử. Chỉ bật khi được phép hợp pháp.")
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" id="escrow-host-understand" type="checkbox" @bind="c.HostVndComplianceAcknowledged" />
+                            <label class="form-check-label fw-semibold" for="escrow-host-understand">
+                                @L("I understand and take full legal responsibility as host", "Tôi hiểu và tự chịu trách nhiệm pháp lý với tư cách chủ server")
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="escrow-host-enabled" type="checkbox" disabled="@(!c.HostVndComplianceAcknowledged)" @bind="c.HostVndEnabled" />
+                                <label class="form-check-label" for="escrow-host-enabled" title="@L("Enable host-mediated VND contracts with Host VietQR & Casso/SePay webhook", "Bật hợp đồng VND trung gian qua VietQR chủ server")">@L("Enable Host VND", "Bật VND qua chủ")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-bin" title="@L("Host 6-digit NAPAS BIN", "Mã BIN NAPAS ngân hàng chủ")">@L("Host BIN", "BIN chủ")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-bin" type="text" @bind="c.HostVndBankBin" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-bname">@L("Host bank", "Ngân hàng chủ")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-bname" type="text" @bind="c.HostVndBankName" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-acct">@L("Host account", "STK nhận tiền")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-acct" type="text" @bind="c.HostVndBankAccountNumber" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-hv-holder">@L("Host holder name", "Chủ tài khoản")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-holder" type="text" @bind="c.HostVndBankAccountName" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-pct">@L("Fee %", "Phí %")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-pct" type="number" step="0.1" min="0" max="25" @bind="c.HostVndFeePercent" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-min">@L("Min fee (VND)", "Phí tối thiểu")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-min" type="number" min="0" @bind="c.HostVndMinFeeVnd" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-max">@L("Max fee (0=uncap)", "Phí tối đa")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-max" type="number" min="0" @bind="c.HostVndMaxFeeVnd" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-hv-pdays">@L("Payout SLA (days)", "Hạn trả tiền (ngày)")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-pdays" type="number" min="0" max="30" @bind="c.HostVndPayoutDays" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-hv-dhrs">@L("Dispute window (h)", "Hạn khiếu nại (h)")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-dhrs" type="number" min="1" max="168" @bind="c.HostVndDisputeWindowHours" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 border-top pt-3 mt-2" id="escrow-trade-credit-config">
+                    <h3 class="h6 text-danger mb-2">@L("Convertible Trade Credit Currency (HIGHEST REGULATORY RISK)", "Tiền Tín Dụng Giao Dịch Quy Đổi (RỦI RO PHÁP LÝ CAO NHẤT)")</h3>
+                    <div class="alert alert-danger small mb-2" role="alert" id="escrow-trade-credit-warning">
+                        <strong>@L("Highest legal warning (Vietnam):", "Cảnh báo pháp lý mức cao nhất (Việt Nam):")</strong>
+                        @L(
+                            "Operating an internal stored-value currency redeemable for VND carries strict licensing risks in Vietnam (intermediary payment / e-wallet / virtual currency & online-game prize rules). Keep OFF by default unless formally licensed.",
+                            "Vận hành đơn vị tín dụng nội bộ có thể rút ra VNĐ tiềm ẩn rủi ro pháp lý cao nhất tại Việt Nam (quy định ví điện tử, trung gian thanh toán, đổi thưởng). Mặc định TẮT nếu không có giấy phép hợp pháp.")
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" id="escrow-tc-understand" type="checkbox" @bind="c.TradeCreditComplianceAcknowledged" />
+                            <label class="form-check-label fw-semibold" for="escrow-tc-understand">
+                                @L("I understand the highest legal risks and take full responsibility", "Tôi hiểu rủi ro pháp lý cao nhất và tự chịu trách nhiệm hoàn toàn")
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="escrow-tc-enabled" type="checkbox" disabled="@(!c.TradeCreditComplianceAcknowledged)" @bind="c.TradeCreditEnabled" />
+                                <label class="form-check-label" for="escrow-tc-enabled">@L("Enable Trade Credit", "Bật Tín dụng GD")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-tc-rate">@L("VND / credit", "VNĐ / tín dụng")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-rate" type="number" min="100" @bind="c.TradeCreditVndPerUnit" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-tc-coinrate">@L("WCoinC / credit", "Xu / tín dụng")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-coinrate" type="number" min="0" @bind="c.TradeCreditToCoinRate" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-tc-hold">@L("Proceeds hold (h)", "Giữ tiền bán (giờ)")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-hold" type="number" min="0" max="720" @bind="c.TradeCreditCashOutHoldHours" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-tc-fee">@L("Cash-out fee %", "Phí rút %")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-fee" type="number" step="0.1" min="0" max="25" @bind="c.TradeCreditCashOutFeePercent" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-tc-minfee">@L("Min cash-out fee", "Phí rút tối thiểu")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-minfee" type="number" min="0" @bind="c.TradeCreditCashOutMinFeeUnits" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-tc-dcap">@L("Daily cash-out cap", "Hạn rút ngày")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-dcap" type="number" min="0" @bind="c.TradeCreditCashOutDailyLimitUnits" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-tc-mcap">@L("Monthly cap", "Hạn rút tháng")</label>
+                            <input class="form-control form-control-sm" id="escrow-tc-mcap" type="number" min="0" @bind="c.TradeCreditCashOutMonthlyLimitUnits" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="button" class="btn btn-primary btn-sm" id="escrow-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="escrow-refresh" @onclick="this.LoadAsync">@L("Refresh", "Làm mới")</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <section class="card mb-3" id="escrow-contracts-card">
+                <div class="card-body">
+                    <h2 class="h5">@L("Contracts", "Danh sách hợp đồng") (@this._contracts.Count)</h2>
+                    <div class="input-group input-group-sm mb-2">
+                        <span class="input-group-text">@L("Admin note", "Ghi chú QTV")</span>
+                        <input class="form-control" id="escrow-admin-note" type="text" @bind="this._adminReason" placeholder="@L("Reason shown when freezing or cancelling", "Lý do khi đóng băng hoặc hủy")" />
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped mb-0" id="escrow-contracts-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>@L("Seller", "Người bán")</th>
+                                    <th>@L("Target / Buyer", "Người nhận / Mua")</th>
+                                    <th>@L("Price", "Giá")</th>
+                                    <th>@L("Status", "Trạng thái")</th>
+                                    <th>@L("Expires (Sydney)", "Hết hạn (Sydney)")</th>
+                                    <th>@L("Actions", "Thao tác")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var contract in this._contracts)
+                                {
+                                    <tr>
+                                        <td><code>@contract.ContractId</code></td>
+                                        <td>@contract.SellerLogin (@contract.SellerCharacter)</td>
+                                        <td>@(string.IsNullOrEmpty(contract.AcceptedByLogin) ? (string.IsNullOrEmpty(contract.TargetBuyer) ? L("Open", "Công khai") : contract.TargetBuyer) : $"{contract.AcceptedByLogin} ({contract.AcceptedByCharacter})")</td>
+                                        <td>@contract.PriceAmount.ToString("N0", CultureInfo.InvariantCulture) @contract.PriceCurrency</td>
+                                        <td>
+                                            <span class="badge @(contract.FrozenByAdmin ? "bg-warning text-dark" : contract.Status == EscrowContractStatus.Open ? "bg-success" : "bg-secondary")">
+                                                @contract.Status
+                                            </span>
+                                        </td>
+                                        <td class="small">@contract.ExpiresAtSydney</td>
+                                        <td class="d-flex gap-1">
+                                            @if (contract.Status == EscrowContractStatus.Open)
+                                            {
+                                                <button type="button" class="btn btn-sm py-0 px-1 btn-outline-warning" title="@L("Freeze contract", "Đóng băng hợp đồng")" @onclick="() => this.FreezeAsync(contract.ContractId, true)">@L("Freeze", "Đóng băng")</button>
+                                            }
+                                            else if (contract.Status == EscrowContractStatus.Frozen)
+                                            {
+                                                <button type="button" class="btn btn-sm py-0 px-1 btn-outline-info" title="@L("Unfreeze contract", "Mở khóa hợp đồng")" @onclick="() => this.FreezeAsync(contract.ContractId, false)">@L("Unfreeze", "Mở khóa")</button>
+                                            }
+                                            @if (contract.Status is EscrowContractStatus.Open or EscrowContractStatus.Frozen)
+                                            {
+                                                <button type="button" class="btn btn-sm py-0 px-1 btn-outline-danger" title="@L("Force cancel & return goods", "Hủy & hoàn hàng")" @onclick="() => this.AdminCancelAsync(contract.ContractId)">@L("Cancel", "Hủy")</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-lg-4">
+            <section class="card mb-3" id="escrow-reputation-card">
+                <div class="card-body">
+                    <h2 class="h5">@L("Account reputation", "Uy tín tài khoản")</h2>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0" id="escrow-reputation-table">
+                            <thead>
+                                <tr>
+                                    <th>@L("Account", "Tài khoản")</th>
+                                    <th class="text-end">@L("Score", "Điểm")</th>
+                                    <th class="text-end">@L("Done/Cancel", "Xong/Hủy")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var rep in this._reputations)
+                                {
+                                    <tr>
+                                        <td>@rep.LoginName</td>
+                                        <td class="text-end fw-semibold">@rep.Score</td>
+                                        <td class="text-end">@rep.Completed / @rep.Cancelled</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <section class="card mb-3" id="escrow-disputes-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("Direct VND Disputes & Evidence Review", "Tranh chấp VND trực tiếp & Bằng chứng")</h2>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="escrow-ban-loser" @bind="this._banLosingAccount" />
+                    <label class="form-check-label text-danger small" for="escrow-ban-loser" title="@L("Ban the losing party account upon dispute ruling", "Khóa tài khoản bên thua tranh chấp khi phán quyết")">@L("Also ban losing account", "Khóa luôn tài khoản bên thua")</label>
+                </div>
+            </div>
+            @{
+                var disputes = this._contracts.Where(x => x.DirectVnd is not null && x.Status is EscrowContractStatus.Disputed or EscrowContractStatus.BuyerMarkedPaid).ToList();
+            }
+            @if (disputes.Count == 0)
+            {
+                <p class="text-muted mb-0" id="escrow-no-disputes">@L("No Direct VND disputes or pending evidence reviews.", "Không có tranh chấp VND trực tiếp nào.")</p>
+            }
+            else
+            {
+                @foreach (var d in disputes)
+                {
+                    var dv = d.DirectVnd!;
+                    <div class="border rounded p-2 mb-2" id="escrow-dispute-@d.ContractId">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong>@d.ContractId [@d.Status] — @d.PriceAmount.ToString("N0", CultureInfo.InvariantCulture) VND (@L("Ref", "ND"): <code>@dv.PaymentReference</code>)</strong>
+                            <span class="small text-muted">@L("Seller", "Bán"): @d.SellerLogin | @L("Buyer", "Mua"): @d.AcceptedByLogin</span>
+                        </div>
+                        <div class="small mb-1">
+                            @L("Seller Bank (Admin dispute view)", "TK ngân hàng người bán"): <code>@dv.BankName (@dv.BankBin) - @dv.BankAccountNumber - @dv.BankAccountName</code>
+                            @if (dv.SellerBondCoins > 0)
+                            {
+                                <span class="badge bg-info text-dark ms-2">@L("Bond", "Cọc"): @dv.SellerBondCoins @dv.SellerBondCurrency</span>
+                            }
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(dv.DisputeReason) || !string.IsNullOrWhiteSpace(dv.BuyerNote))
+                        {
+                            <div class="small text-muted mb-1">@dv.DisputeReason @dv.BuyerNote</div>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(dv.ReceiptBase64))
+                        {
+                            <div class="mb-2">
+                                <img src="data:@dv.ReceiptMime;base64,@dv.ReceiptBase64" alt="Receipt" style="max-height:180px;max-width:100%;border:1px solid #666;border-radius:4px;" />
+                            </div>
+                        }
+                        @if (d.Status == EscrowContractStatus.Disputed)
+                        {
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-success" @onclick="() => this.ResolveDisputeAsync(d.ContractId, true)">@L("Release item to buyer (forfeit seller bond)", "Giao đồ cho người mua (tịch thu cọc người bán)")</button>
+                                <button type="button" class="btn btn-sm btn-warning" @onclick="() => this.ResolveDisputeAsync(d.ContractId, false)">@L("Return item & bond to seller", "Hoàn đồ & cọc về người bán")</button>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </section>
+
+    <section class="card mb-3" id="escrow-host-payouts-card">
+        <div class="card-body">
+            <h2 class="h5 mb-2">@L("Host VND Payouts to Make & Disputes", "Hàng chờ trả tiền VND & Khiếu nại")</h2>
+            <div class="input-group input-group-sm mb-2">
+                <span class="input-group-text">@L("Payout / Bank Ref", "Mã giao dịch trả")</span>
+                <input class="form-control" id="escrow-payout-ref" type="text" @bind="this._hostPayoutRef" placeholder="@L("Bank transfer reference when marking paid", "Mã bút toán ngân hàng khi trả người bán")" />
+            </div>
+            @{
+                var hostList = this._contracts.Where(x => x.HostVnd is not null && (x.Status is EscrowContractStatus.ReservedForPayment or EscrowContractStatus.Disputed || x.HostVnd.PayoutStatus != "None")).ToList();
+            }
+            @if (hostList.Count == 0)
+            {
+                <p class="text-muted mb-0" id="escrow-no-host-payouts">@L("No Host VND payouts queued or pending.", "Chưa có yêu cầu chi trả VND nào.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0" id="escrow-host-payouts-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Contract", "Hợp đồng")</th>
+                                <th>@L("Seller Bank (Payout)", "TK nhận người bán")</th>
+                                <th class="text-end">@L("Net Payout", "Thực trả")</th>
+                                <th class="text-end">@L("Host Fee", "Phí chủ")</th>
+                                <th>@L("Status / Due", "Trạng thái / Hạn")</th>
+                                <th>@L("Actions", "Thao tác")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in hostList)
+                            {
+                                var hv = h.HostVnd!;
+                                <tr>
+                                    <td><code>@h.ContractId</code><div class="small text-muted">@hv.PaymentReference</div></td>
+                                    <td class="small">@h.SellerLogin: @hv.SellerBankName (@hv.SellerBankBin)<br /><code>@hv.SellerBankAccountNumber</code> — @hv.SellerBankAccountName</td>
+                                    <td class="text-end fw-semibold">@hv.NetSellerPayoutVnd.ToString("N0", CultureInfo.InvariantCulture) VND</td>
+                                    <td class="text-end">@hv.HostFeeVnd.ToString("N0", CultureInfo.InvariantCulture) VND</td>
+                                    <td class="small"><span class="badge bg-secondary">@hv.PayoutStatus</span><div>@hv.PayoutDueAtSydney</div></td>
+                                    <td class="d-flex flex-wrap gap-1">
+                                        @if (h.Status == EscrowContractStatus.ReservedForPayment)
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-outline-primary" @onclick="() => this.ConfirmHostPaymentManualAsync(h)">@L("Confirm Buyer Paid", "Xác nhận đã thu")</button>
+                                        }
+                                        @if (hv.PayoutStatus == "Queued" && h.Status != EscrowContractStatus.Disputed)
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkHostPayoutPaidAsync(h.ContractId)">@L("Mark Payout Paid", "Đã chuyển trả")</button>
+                                        }
+                                        @if (h.Status == EscrowContractStatus.Disputed)
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, true)">@L("Release to Seller", "Trả tiền người bán")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-warning" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, false)">@L("Refund Buyer", "Hoàn tiền người mua")</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="card mb-3" id="escrow-tc-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h5 mb-0">@L("Trade Credit Reconciliation, Cash-Outs & Ledger", "Đối soát Tín Dụng, Rút Tiền & Sổ Cái")</h2>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="escrow-tc-reconcile" @onclick="this.ReconcileTradeCreditAsync">@L("Reconcile now", "Đối soát ngay")</button>
+                    <a class="btn btn-sm btn-outline-secondary" id="escrow-tc-export" href="/api/website/escrow/trade-credit/export.csv">@L("Export CSV", "Xuất CSV")</a>
+                </div>
+            </div>
+            @if (this._tcReconciliation is { } rec)
+            {
+                <div class="alert @(rec.IsBalanced ? "alert-success" : "alert-danger") small mb-2" id="@(rec.IsBalanced ? "escrow-tc-reconciliation" : "escrow-tc-reconciliation-alarm")">
+                    @if (!rec.IsBalanced)
+                    {
+                        <strong>@L("MISMATCH ALARM:", "CẢNH BÁO LỆCH SỔ:") </strong>
+                    }
+                    @L("Circulating", "Đang lưu hành"): <strong>@rec.ActualCirculatingUnits.ToString("N0", CultureInfo.InvariantCulture)</strong> |
+                    @L("Expected (TopUps - Conversions - CashOuts - Fees)", "Kỳ vọng (Nạp - Đổi Xu - Rút - Phí)"): <strong>@rec.ExpectedCirculatingUnits.ToString("N0", CultureInfo.InvariantCulture)</strong> |
+                    @L("Variance", "Chênh lệch"): <strong>@rec.VarianceUnits</strong>
+                    <span class="ms-2 text-muted">(@rec.CheckedAtSydney)</span>
+                </div>
+            }
+
+            <div class="row g-2 align-items-end mb-3">
+                <div class="col-md-3">
+                    <label class="form-label small" for="tc-topup-login">@L("Account login", "Tài khoản")</label>
+                    <input class="form-control form-control-sm" id="tc-topup-login" type="text" @bind="this._tcTopUpLogin" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small" for="tc-topup-units">@L("Credit units", "Số tín dụng")</label>
+                    <input class="form-control form-control-sm" id="tc-topup-units" type="number" min="1" @bind="this._tcTopUpUnits" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small" for="tc-topup-ref">@L("Reference", "Mã tham chiếu")</label>
+                    <input class="form-control form-control-sm" id="tc-topup-ref" type="text" @bind="this._tcTopUpRef" />
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-sm btn-outline-success" id="tc-topup-btn" @onclick="this.IssueTradeCreditTopUpAsync">@L("Issue Fixed-Rate Top-Up", "Nạp Tín dụng (cố định)")</button>
+                </div>
+            </div>
+
+            @if (this._tcCashOuts.Count == 0)
+            {
+                <p class="text-muted mb-0" id="escrow-tc-no-cashouts">@L("No Trade Credit cash-out requests yet.", "Chưa có yêu cầu rút Tín dụng nào.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0" id="escrow-tc-cashouts-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>@L("Seller Bank", "Ngân hàng người bán")</th>
+                                <th class="text-end">@L("Gross / Fee", "Yêu cầu / Phí")</th>
+                                <th class="text-end">@L("Net VND", "Thực trả VNĐ")</th>
+                                <th>@L("Status", "Trạng thái")</th>
+                                <th>@L("Action", "Thao tác")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in this._tcCashOuts)
+                            {
+                                <tr>
+                                    <td><code>@r.RequestId</code><div class="small text-muted">@r.CreatedAtSydney</div></td>
+                                    <td class="small">@r.AccountLogin: @r.BankName (@r.BankBin) <code>@r.BankAccountNumber</code> — @r.BankAccountName</td>
+                                    <td class="text-end">@r.GrossUnits / @r.FeeUnits</td>
+                                    <td class="text-end fw-semibold">@r.NetVnd.ToString("N0", CultureInfo.InvariantCulture) VND</td>
+                                    <td><span class="badge @(r.Status == "Paid" ? "bg-success" : "bg-warning text-dark")">@r.Status</span></td>
+                                    <td>
+                                        @if (r.Status == "Queued")
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkTradeCreditCashOutPaidAsync(r.RequestId)">@L("Mark Paid", "Đã chi")</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}

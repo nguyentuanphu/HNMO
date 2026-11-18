@@ -131,6 +131,7 @@ public class TradeButtonAction : BaseTradeAction
             this.CallPlugIn(traderItems, trader, tradingPartner);
             this.CallPlugIn(tradePartnerItems, tradingPartner, trader);
             PlugIns.AccountSafety.AccountSafetyPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
+            PlugIns.ActivityLog.ActivityLogPlugIn.Get(trader.GameContext)?.RecordTrade(trader, tradingPartner, traderItems, tradePartnerItems, traderMoney, partnerMoney);
             FinishedTrades.Add(1);
             return TradeResult.Success;
         }
@@ -170,6 +171,21 @@ public class TradeButtonAction : BaseTradeAction
             foreach (var item in items)
             {
                 if (await safety.RefuseLockedItemAsync(player, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
+
+                if (await PlugIns.Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(player, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
+            }
+        }
+        else if (trader is Player escrowPlayer)
+        {
+            foreach (var item in items)
+            {
+                if (await PlugIns.Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(escrowPlayer, item).ConfigureAwait(false))
                 {
                     return false;
                 }

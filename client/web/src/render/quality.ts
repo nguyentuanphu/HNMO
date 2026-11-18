@@ -15,14 +15,37 @@ export interface QualitySettings {
   viewDistance: number;
   /** Skill effects drawn. */
   effects: boolean;
+  /** Hide other players (models, attachments, labels) in crowded scenes. */
+  hideOtherPlayers: boolean;
+  /** Hide wings and follower pets / companions. */
+  hideWingsPets: boolean;
+  /** Reduce skill trails and item glow/sparkle passes. */
+  reducedEffects: boolean;
 }
 
-export const RENDER_SCALES = [1, 0.75, 0.5];
+export const RENDER_SCALES = [1, 0.75, 0.65, 0.5];
 export const FPS_CAPS = [24, 30, 60, 120, 144, 0];
 export const VIEW_DISTANCES = [0.6, 0.8, 1];
-export const DEFAULT_QUALITY: QualitySettings = { renderScale: 1, fpsCap: 0, viewDistance: 1, effects: true };
+export const HUD_MODES = ['auto', 'modern', 'classic'] as const;
+export type HudMode = typeof HUD_MODES[number];
+export const DEFAULT_QUALITY: QualitySettings = {
+  renderScale: 1, fpsCap: 0, viewDistance: 1, effects: true,
+  hideOtherPlayers: false, hideWingsPets: false, reducedEffects: false,
+};
 /** The low-spec mode in one switch. */
-export const LOW_SPEC: QualitySettings = { renderScale: 0.5, fpsCap: 30, viewDistance: 0.6, effects: false };
+export const LOW_SPEC: QualitySettings = {
+  renderScale: 0.5, fpsCap: 30, viewDistance: 0.6, effects: false,
+  hideOtherPlayers: false, hideWingsPets: false, reducedEffects: true,
+};
+/** Battery-saver mobile preset: 30 FPS cap, 65 % scale, shorter fog, and reduced effects. */
+export const BATTERY_SAVER: QualitySettings = {
+  renderScale: 0.65, fpsCap: 30, viewDistance: 0.6, effects: false,
+  hideOtherPlayers: false, hideWingsPets: true, reducedEffects: true,
+};
+/** Crowded-event performance preset: hides other players, wings/pets, and heavy effects without capping FPS. */
+export const PERFORMANCE_MODE: Partial<QualitySettings> = {
+  viewDistance: 0.6, hideOtherPlayers: true, hideWingsPets: true, reducedEffects: true,
+};
 
 export interface QualityTarget {
   renderer: THREE.WebGLRenderer;
@@ -46,6 +69,64 @@ let baseFar: number | null = null;
 export function isLowSpec(settings: QualitySettings): boolean {
   return settings.renderScale === LOW_SPEC.renderScale && settings.fpsCap === LOW_SPEC.fpsCap
     && settings.viewDistance === LOW_SPEC.viewDistance && settings.effects === LOW_SPEC.effects;
+}
+
+export function isBatterySaver(settings: QualitySettings): boolean {
+  return settings.renderScale === BATTERY_SAVER.renderScale && settings.fpsCap === BATTERY_SAVER.fpsCap
+    && settings.viewDistance === BATTERY_SAVER.viewDistance && settings.effects === BATTERY_SAVER.effects
+    && settings.hideWingsPets === BATTERY_SAVER.hideWingsPets && settings.reducedEffects === BATTERY_SAVER.reducedEffects;
+}
+
+export function isPerformanceMode(settings: QualitySettings): boolean {
+  return settings.hideOtherPlayers && settings.hideWingsPets && settings.reducedEffects;
+}
+
+type WakeLockSentinelLike = { released: boolean; release: () => Promise<void> };
+type NavigatorWithWakeLock = Navigator & { wakeLock?: { request: (type: 'screen') => Promise<WakeLockSentinelLike> } };
+
+let wakeLockEnabled = false;
+let wakeLockSentinel: WakeLockSentinelLike | null = null;
+let wakeLockListenerInstalled = false;
+
+export function isWakeLockActive(): boolean {
+  return wakeLockSentinel !== null && !wakeLockSentinel.released;
+}
+
+async function acquireWakeLock(): Promise<void> {
+  if (!wakeLockEnabled || document.visibilityState === 'hidden') return;
+  const nav = navigator as NavigatorWithWakeLock;
+  if (!nav.wakeLock) return;
+  if (wakeLockSentinel && !wakeLockSentinel.released) return;
+  try {
+    wakeLockSentinel = await nav.wakeLock.request('screen');
+  } catch {
+    wakeLockSentinel = null;
+  }
+}
+
+export function setWakeLockEnabled(enabled: boolean): void {
+  wakeLockEnabled = enabled;
+  if (!wakeLockListenerInstalled && typeof document !== 'undefined') {
+    wakeLockListenerInstalled = true;
+    document.addEventListener('visibilitychange', () => {
+      if (wakeLockEnabled && document.visibilityState === 'visible') void acquireWakeLock();
+    });
+  }
+  if (enabled) {
+    void acquireWakeLock();
+  } else if (wakeLockSentinel) {
+    void wakeLockSentinel.release().catch(() => undefined);
+    wakeLockSentinel = null;
+  }
+}
+
+/** Live crowd-performance flags checked per frame by characters, companions, and effects. */
+export function performanceFlags(): { hideOtherPlayers: boolean; hideWingsPets: boolean; reducedEffects: boolean } {
+  return {
+    hideOtherPlayers: current.hideOtherPlayers,
+    hideWingsPets: current.hideWingsPets,
+    reducedEffects: current.reducedEffects,
+  };
 }
 
 /** Applies the settings to the renderer, camera and scene (again after a map loads: refreshQuality). */
