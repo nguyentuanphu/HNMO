@@ -4728,4 +4728,139 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
   </data>
+  <data name="PageHelpTextActivityLog" xml:space="preserve">
+    <value>Tra cứu giao dịch người chơi, rớt/nhặt vật phẩm giá trị, xoay Chaos, mua bán NPC, cửa hàng cá nhân và Chợ Đồ theo dòng PostgreSQL. Lọc theo tài khoản, nhân vật, vật phẩm hoặc giờ Sydney.</value>
+  </data>
+  <data name="PageHelpTextAntiCheat" xml:space="preserve">
+    <value>Cấu hình ngưỡng chống gian lận phía máy chủ (tốc độ chạy, tốc độ đánh, gói tin bất thường, số lần cảnh báo) và xem nhật ký vi phạm. Chỉ bật khóa tự động sau khi kiểm tra log thực tế.</value>
+  </data>
+  <data name="PageHelpTextApiKeys" xml:space="preserve">
+    <value>Tạo, sao chép hoặc thu hồi API key theo quyền cho web bridge, script tự động hoặc MCP. Khóa chỉ hiển thị một lần duy nhất khi tạo; hãy lưu bảo mật và không đưa lên trình duyệt.</value>
+  </data>
+  <data name="PageHelpTextBannedWords" xml:space="preserve">
+    <value>Quản lý danh sách từ cấm tiếng Anh và tiếng Việt trong chat và tên nhân vật/hội. Chọn chế độ che từ hoặc chặn gửi kèm thông báo cho người chơi.</value>
+  </data>
+  <data name="PageHelpTextBufferNpc" xml:space="preserve">
+    <value>Cấu hình NPC hỗ trợ (Buffer): cấp độ tối đa, chi phí Zen/Xu, thời gian duy trì và danh sách bùa hỗ trợ. Lưu lại để áp dụng ngay.</value>
+  </data>
+  <data name="PageHelpTextCatchupCap" xml:space="preserve">
+    <value>Thiết lập trần cấp/reset theo top máy chủ, hệ số EXP đuổi kịp theo bậc và lượt reset thưởng mỗi ngày để người chơi mới bắt kịp mà không vượt mặt người chơi cũ.</value>
+  </data>
+  <data name="PageHelpTextCrashWatch" xml:space="preserve">
+    <value>Theo dõi trạng thái hoạt động của máy chủ game và cấu hình tự khởi động lại khi gặp sự cố. Chỉnh ngưỡng kiểm tra và webhook cảnh báo cẩn thận trên máy chủ đang chạy.</value>
+  </data>
+  <data name="PageHelpTextCustomRanks" xml:space="preserve">
+    <value>Tùy chỉnh các bậc danh hiệu (tên EN/VI, màu huy hiệu, chỉ số cộng thêm và mốc mở khóa) hiển thị trên nhân vật và bảng danh hiệu trong game.</value>
+  </data>
+  <data name="PageHelpTextDbLogRetention" xml:space="preserve">
+    <value>Kiểm tra dung lượng bảng log PostgreSQL, đặt số ngày lưu giữ cho từng loại nhật ký, dọn log cũ hoặc xuất bản sao lưu nén gzip an toàn.</value>
+  </data>
+  <data name="PageHelpTextEconomyDashboard" xml:space="preserve">
+    <value>Xem dòng tiền Zen vào/ra, thống kê xoay Chaos, lượng ngọc lưu hành, số dư Xu và cảnh báo biến động kinh tế bất thường theo thời gian thực.</value>
+  </data>
+  <data name="PageHelpTextEscrowContracts" xml:space="preserve">
+    <value>Kiểm tra và xử lý hợp đồng ký gửi giữa người chơi, tạm giữ Trade Credit, trạng thái giao dịch VND, khiếu nại và giải ngân. Chế độ tiền thật mặc định TẮT cho tới khi quản trị bật.</value>
+  </data>
+  <data name="PageHelpTextEventAlerts" xml:space="preserve">
+    <value>Cấu hình nhắc lịch trước giờ sự kiện qua Web Push trình duyệt và kênh Discord, bao gồm số phút báo trước và nhóm sự kiện.</value>
+  </data>
+  <data name="PageHelpTextFixedOptions" xml:space="preserve">
+    <value>Thiết lập các dòng chỉ số cố định hoặc giới hạn dòng cho trang bị tân thủ, đồ sự kiện hoặc gói khuyến mãi mà không ảnh hưởng bảng định nghĩa gốc.</value>
+  </data>
+  <data name="PageHelpTextGameplayRules" xml:space="preserve">
+    <value>Quản lý luật riêng từng bản đồ (PK, rơi đồ, giới hạn cấp), lịch giờ vàng tăng EXP/tỉ lệ rơi theo giờ Sydney và giới hạn chiến đấu/AFK.</value>
+  </data>
+  <data name="PageHelpTextHostSettings" xml:space="preserve">
+    <value>Chỉnh sửa cấu hình máy chủ tập trung (cổng, địa chỉ công khai, cầu nối web, chuỗi kết nối PostgreSQL, giới hạn người chơi) trong save/hnmo-settings.json. Cần khởi động lại để áp dụng đổi cổng/CSDL.</value>
+  </data>
+  <data name="PageHelpTextImportServer" xml:space="preserve">
+    <value>Nhập dữ liệu tỉ lệ, rơi đồ, shop, sự kiện, tỷ lệ xoay Chaos, bãi quái hoặc tài khoản từ thư mục / MSSQL cục bộ trên máy chủ. Luôn xem trước bản chạy thử và giữ bản sao lưu trước khi áp dụng.</value>
+  </data>
+  <data name="PageHelpTextItemDefinitions" xml:space="preserve">
+    <value>Chỉnh sửa tên vật phẩm EN/VI, kích thước ô, cấp rơi, yêu cầu trang bị, màu phát sáng và chú thích trực tiếp trong GameConfiguration, đồng bộ ngay tới web game (/website/items).</value>
+  </data>
+  <data name="PageHelpTextJewelBank" xml:space="preserve">
+    <value>Cấu hình giới hạn Ngân hàng Ngọc theo tài khoản, danh sách ngọc hỗ trợ, phí Zen gửi/rút và điều kiện tẩy bảng Master Skill (F7 / /clearmaster).</value>
+  </data>
+  <data name="PageHelpTextLeftovers" xml:space="preserve">
+    <value>Cấu hình công thức ghép hộp/nâng cấp đồ trong túi và gói đổi nguyên liệu dư thừa theo từng giai đoạn của Lộ trình Mùa giải.</value>
+  </data>
+  <data name="PageHelpTextLuckyNumber" xml:space="preserve">
+    <value>Cấu hình xổ số Con Số May Mắn hằng ngày (giờ Sydney), giá vé, dải số, tỉ lệ trúng và bảng thưởng Coin/Zen/Vật phẩm.</value>
+  </data>
+  <data name="PageHelpTextMaintenanceTools" xml:space="preserve">
+    <value>Thực hiện công cụ bảo trì an toàn: làm mới bộ nhớ đệm, kiểm tra phần thưởng chờ nhận, kiểm tra kết nối PostgreSQL hoặc sửa dữ liệu kẹt với bước xác nhận bắt buộc.</value>
+  </data>
+  <data name="PageHelpTextMarket" xml:space="preserve">
+    <value>Cấu hình Chợ Vật Phẩm trong game (F6 / NPC Julia): loại tiền tệ (Zen/Xu), phí giao dịch %, giá sàn/trần, thời hạn treo bán và quy tắc trả thưởng ký gửi.</value>
+  </data>
+  <data name="PageHelpTextMarriage" xml:space="preserve">
+    <value>Cấu hình hệ thống Kết Hôn (Shift+M): điều kiện cầu hôn, bản đồ/tọa độ lễ cưới, chi phí Zen/Xu, buff tổ đội vợ chồng và luật ly hôn.</value>
+  </data>
+  <data name="PageHelpTextMerchants" xml:space="preserve">
+    <value>Xem, thêm hoặc sửa vật phẩm bán tại các NPC cửa hàng bằng bộ chọn danh mục trực quan theo lưới ô. Kiểm tra kỹ cấp độ và dòng trước khi lưu.</value>
+  </data>
+  <data name="PageHelpTextMounts" xml:space="preserve">
+    <value>Cấu hình chuỗi nâng cấp Thú cưỡi, tỉ lệ rơi mảnh ở Golden Boss, nguyên liệu ghép, chỉ số cộng thêm và thưởng bộ sưu tập (Shift+U).</value>
+  </data>
+  <data name="PageHelpTextOffTrade" xml:space="preserve">
+    <value>Cấu hình treo cửa hàng Offline (/offtrade): bản đồ an toàn cho phép, thời lượng tối đa, ưu đãi VIP, loại tiền bán và danh sách cửa hàng đang treo.</value>
+  </data>
+  <data name="PageHelpTextPartyOptions" xml:space="preserve">
+    <value>Cấu hình tính năng vào tổ đội bằng mật khẩu (/partypass) và danh sách bãi luyện tự động tìm tổ đội trong cửa sổ Tổ Đội (P).</value>
+  </data>
+  <data name="PageHelpTextQolSettings" xml:space="preserve">
+    <value>Cấu hình các lệnh tiện ích (/post cấp/thời gian chờ/Zen, /pkclear rửa tội, /clearchat) và các tùy chọn tự động hỗ trợ người chơi.</value>
+  </data>
+  <data name="PageHelpTextRankingsSettings" xml:space="preserve">
+    <value>Cấu hình Bảng Xếp Hạng trong game (Shift+R / /rank): chu kỳ làm mới, cột hiển thị và giới hạn tính năng cộng điểm nhanh (Shift+A).</value>
+  </data>
+  <data name="PageHelpTextRateTuning" xml:space="preserve">
+    <value>Tinh chỉnh tỉ lệ đập ngọc (Tâm Linh, Ước Nguyện, Sinh Mệnh), tỷ lệ xoay Chaos theo cấp và hệ số cân bằng sát thương PvP/PvM giữa các hệ phái.</value>
+  </data>
+  <data name="PageHelpTextS6Events" xml:space="preserve">
+    <value>Quản lý lịch sự kiện Season 6 kinh điển, giới hạn vé vào, thông báo Boss và phần thưởng cho Blood Castle, Devil Square, Chaos Castle và Skeleton King.</value>
+  </data>
+  <data name="PageHelpTextSeasonPlan" xml:space="preserve">
+    <value>Thiết lập lộ trình mở tính năng theo mùa (ngày mở theo giờ Sydney cho mốc reset, Cánh, Boss, Ngọc Khảm) hiển thị trực tiếp cho người chơi tại bảng F8.</value>
+  </data>
+  <data name="PageHelpTextStateRetention" xml:space="preserve">
+    <value>Kiểm tra dung lượng các bảng trạng thái tính năng PostgreSQL, nén/lưu trữ dữ liệu hết hạn an toàn và theo dõi tình trạng lưu trữ tập trung.</value>
+  </data>
+  <data name="PageHelpTextTalismans" xml:space="preserve">
+    <value>Cấu hình Bùa/Tượng mang trong hành trang giúp tăng EXP, Zen, chỉ số và giới hạn sử dụng trái/sách cộng điểm vĩnh viễn.</value>
+  </data>
+  <data name="PageHelpTextTeleportNpc" xml:space="preserve">
+    <value>Cấu hình NPC Dịch Chuyển: danh sách bản đồ đến, yêu cầu cấp/Zen/Xu, thời gian chờ và điều kiện VIP hoặc gia tộc.</value>
+  </data>
+  <data name="PageHelpTextTimetable" xml:space="preserve">
+    <value>Xem và chỉnh sửa Bảng Lịch Sự Kiện &amp; Boss đồng nhất theo giờ Sydney, hiển thị đếm ngược chính xác trên cả web game (F8) và trang chủ.</value>
+  </data>
+  <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
+    <value>Cấu hình các mốc tích lũy nạp VND để tài khoản nhận gói thưởng một lần (Xu, Zen, Vật phẩm) trên trang tài khoản hoặc trong game.</value>
+  </data>
+  <data name="PageHelpTextVaultChaosRewards" xml:space="preserve">
+    <value>Cấu hình tỉ lệ xoay Chaos hiển thị trực tiếp cho người chơi, số rương mở rộng &amp; giá mở bằng xu (/vault) và phần thưởng từng cấp Minigame.</value>
+  </data>
+  <data name="PageHelpTextWorldEditor" xml:space="preserve">
+    <value>Xem bản đồ bằng không gian 3D Three.js, tô vùng cấm đi/an toàn/nước/ánh sáng, đặt bãi quái, cổng và vật thể 3D, tạo lại minimap và lưu đồng bộ cho máy chủ lẫn web game.</value>
+  </data>
+  <data name="PageHelpTextWorlds" xml:space="preserve">
+    <value>Tạo và quản lý các máy chủ/cụm thế giới độc lập, mẫu cấu hình khởi đầu, đếm ngược giờ mở cửa theo giờ Sydney và chuyển nhân vật an toàn.</value>
+  </data>
+  <data name="PageHelpHintLanguageEn" xml:space="preserve">
+    <value>Chuyển nhãn giao diện trang này sang tiếng Anh.</value>
+  </data>
+  <data name="PageHelpHintLanguageVi" xml:space="preserve">
+    <value>Chuyển nhãn giao diện trang này sang tiếng Việt.</value>
+  </data>
+  <data name="PageHelpHintAdd" xml:space="preserve">
+    <value>Thêm một mục hoặc vật phẩm mới vào danh sách.</value>
+  </data>
+  <data name="PageHelpHintApply" xml:space="preserve">
+    <value>Áp dụng thay đổi này ngay.</value>
+  </data>
+  <data name="PageHelpHintAction" xml:space="preserve">
+    <value>Thực hiện thao tác này.</value>
+  </data>
 </root>

@@ -11,6 +11,7 @@
     <h1 class="mb-0">@L("Combining leftovers", "Đổi đồ dư & Nâng hộp")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextLeftovers" />
 <p class="text-muted">@L("Configure Chaos-style bag combine recipes (e.g. 2 × Box +2 + JoL + JoC -> Box +3) capped by Season Plan stages, plus surplus event/boss material exchanges for Goblin Points, Zen, or rewards.", "Cấu hình công thức ghép vật phẩm dư trong túi đồ (vd 2 Hộp +2 + Sinh Mệnh + Sáng Tạo -> Hộp +3) theo mốc Lộ trình mùa, cùng gói đổi nguyên liệu dư lấy Coin/Zen.")</p>
 
 @if (this._showHelp)
@@ -68,12 +69,12 @@ else
                         <div class="col-sm-2"><label class="form-label small">@L("Zen cost", "Phí Zen")</label><input class="form-control form-control-sm" type="number" min="0" @bind="recipe.ZenCost" /></div>
                         <div class="col-sm-1 text-end">
                             <input type="checkbox" class="form-check-input me-1" title="@L("Active", "Bật")" @bind="recipe.Enabled" />
-                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Recipes.Remove(recipe)">×</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Recipes.Remove(recipe)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
                         </div>
                     </div>
                 </div>
             }
-            <button type="button" class="btn btn-outline-secondary btn-sm mb-3" @onclick="this.AddRecipe">@L("+ Add recipe", "+ Thêm công thức")</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm mb-3" @onclick="this.AddRecipe" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add recipe", "+ Thêm công thức")</button>
 
             <h2 class="h5">@L("Surplus material exchange offers", "Gói đổi nguyên liệu dư")</h2>
             @foreach (var offer in c.ExchangeOffers)
@@ -87,14 +88,14 @@ else
                         <div class="col-sm-2"><label class="form-label small">@L("Coins", "Xu")</label><input class="form-control form-control-sm" type="number" min="0" @bind="offer.RewardCoins" /></div>
                         <div class="col-sm-1 text-end">
                             <input type="checkbox" class="form-check-input me-1" title="@L("Active", "Bật")" @bind="offer.Enabled" />
-                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.ExchangeOffers.Remove(offer)">×</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.ExchangeOffers.Remove(offer)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
                         </div>
                     </div>
                 </div>
             }
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddOffer">@L("+ Add exchange offer", "+ Thêm gói đổi")</button>
-                <button type="button" class="btn btn-primary" id="lo-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddOffer" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add exchange offer", "+ Thêm gói đổi")</button>
+                <button type="button" class="btn btn-primary" id="lo-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
             </div>
         </div>
     </section>

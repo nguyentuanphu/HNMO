@@ -11,6 +11,7 @@
     <h1 class="mb-0">@L("Economy dashboard", "Bảng điều khiển Kinh tế")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="ed-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextEconomyDashboard" />
 <p class="text-muted">@L("Track daily server totals of Zen, Coins, Jewels, and valuable items, daily drop vs. sink rates, top holders, and sudden jump anomalies linked to the Player Activity Log.", "Theo dõi tổng Zen, Xu, Ngọc, đồ giá trị theo ngày, tỷ lệ rơi/tiêu thụ, người giữ nhiều nhất và cảnh báo tăng đột biến liên kết trực tiếp sang Nhật ký hoạt động.")</p>
 
 @if (this._showHelp)

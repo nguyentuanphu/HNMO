@@ -13,6 +13,7 @@
     <h1 class="mb-0">@L("Chaos rates, Multi-vault & Event rewards", "Tỉ lệ Chaos, Nhiều rương & Thưởng sự kiện")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="vcr-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextVaultChaosRewards" />
 <p class="text-muted">@L("Configure Chaos Machine success rates (shown live to players), multi-vault counts & coin unlock costs, and mini-game rewards per event level (Blood Castle, Devil Square, Chaos Castle, Illusion Temple).", "Chỉnh tỉ lệ xoay Chaos (hiện trực tiếp cho người chơi), giới hạn nhiều rương & giá mở bằng xu, và phần thưởng từng cấp của Huyết Lâu, Quảng Trường Quỷ, Hỗn Nguyên Lâu, Bạch Long Điện.")</p>
 
 @if (this._showHelp)
@@ -48,8 +49,8 @@ else
                     <input class="form-control form-control-sm" id="vcr-chaos-mult" type="number" step="0.1" min="0.1" max="10" @bind="this._chaosConfig.ServerWideMultiplier" />
                 </div>
                 <div class="col-md-8 d-flex gap-2">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" id="vcr-chaos-add" @onclick="this.AddChaosOverride">@L("+ Add recipe override", "+ Thêm công thức")</button>
-                    <button type="button" class="btn btn-sm btn-primary" id="vcr-chaos-save" disabled="@this._isSaving" @onclick="this.SaveChaosAsync">@L("Save Chaos rates", "Lưu tỉ lệ Chaos")</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="vcr-chaos-add" @onclick="this.AddChaosOverride" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add recipe override", "+ Thêm công thức")</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="vcr-chaos-save" disabled="@this._isSaving" @onclick="this.SaveChaosAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save Chaos rates", "Lưu tỉ lệ Chaos")</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -73,7 +74,7 @@ else
                                 <td><input class="form-control form-control-sm" @bind="r.RecipeName" placeholder="@this.LookupRecipeName(r.RecipeNumber)" /></td>
                                 <td><input class="form-control form-control-sm" type="number" min="0" max="100" @bind="r.SuccessRateOverridePercent" /></td>
                                 <td><input class="form-control form-control-sm" type="number" step="0.1" min="0.1" max="10" @bind="r.RateMultiplier" /></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._chaosConfig.RecipeOverrides.RemoveAt(idx)">×</button></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._chaosConfig.RecipeOverrides.RemoveAt(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
                             </tr>
                         }
                     </tbody>
@@ -118,7 +119,7 @@ else
                     </select>
                 </div>
             </div>
-            <button type="button" class="btn btn-sm btn-primary" id="vcr-vault-save" disabled="@this._isSaving" @onclick="this.SaveVaultAsync">@L("Save multi-vault settings", "Lưu cài đặt rương")</button>
+            <button type="button" class="btn btn-sm btn-primary" id="vcr-vault-save" disabled="@this._isSaving" @onclick="this.SaveVaultAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save multi-vault settings", "Lưu cài đặt rương")</button>
         </div>
     </section>
 
@@ -136,8 +137,8 @@ else
                     </select>
                 </div>
                 <div class="col-md-7 d-flex gap-2">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" id="vcr-ev-add" disabled="@(this._selectedDefinitionId == Guid.Empty)" @onclick="this.AddRewardRow">@L("+ Add reward", "+ Thêm phần thưởng")</button>
-                    <button type="button" class="btn btn-sm btn-primary" id="vcr-ev-save" disabled="@(this._isSaving || this._selectedDefinitionId == Guid.Empty)" @onclick="this.SaveEventRewardsAsync">@L("Save level rewards", "Lưu thưởng cấp này")</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="vcr-ev-add" disabled="@(this._selectedDefinitionId == Guid.Empty)" @onclick="this.AddRewardRow" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">@L("+ Add reward", "+ Thêm phần thưởng")</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="vcr-ev-save" disabled="@(this._isSaving || this._selectedDefinitionId == Guid.Empty)" @onclick="this.SaveEventRewardsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save level rewards", "Lưu thưởng cấp này")</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -185,7 +186,7 @@ else
                                         }
                                     </select>
                                 </td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._editableRewards.RemoveAt(idx)">×</button></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._editableRewards.RemoveAt(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
                             </tr>
                         }
                     </tbody>

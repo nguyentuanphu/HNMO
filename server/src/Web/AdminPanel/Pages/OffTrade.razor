@@ -16,6 +16,7 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextOffTrade" />
     <div class="btn-group btn-group-sm" role="group" aria-label="Language">
         <button type="button"
                 class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
@@ -139,7 +140,7 @@ else
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>@this.L("Active offline shops (Sydney time)", "Cửa hàng offline đang mở (giờ Sydney)") (@this._activeShops.Count)</span>
-            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.RefreshActiveShops">
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.RefreshActiveShops" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">
                 @this.L("Refresh", "Làm mới")
             </button>
         </div>
@@ -174,7 +175,7 @@ else
                                     <td>@row.StartedSydney</td>
                                     <td>@row.ExpiresSydney</td>
                                     <td class="text-end">
-                                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.StopActiveShopAsync(row)">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.StopActiveShopAsync(row)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
                                             @this.L("Stop", "Dừng")
                                         </button>
                                     </td>

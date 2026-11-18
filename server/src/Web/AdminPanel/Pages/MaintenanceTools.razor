@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Maintenance tools", "Công cụ bảo trì")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="mt-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMaintenanceTools" />
 <p class="text-muted">@L("Inspect inactive or empty accounts, duplicated item GUIDs, experience anomalies, and database backups. Always run a dry-run preview before applying changes; every apply writes an admin audit entry.", "Kiểm tra tài khoản không hoạt động/trống, vật phẩm trùng mã GUID, lỗi kinh nghiệm và sao lưu dữ liệu. Luôn chạy xem trước trước khi áp dụng; mọi thao tác đều ghi nhật ký kiểm toán.")</p>
 
 @if (this._showHelp)

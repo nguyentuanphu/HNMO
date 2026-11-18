@@ -16,6 +16,7 @@
         ?
     </button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextLuckyNumber" />
 
 @if (this._showHelp)
 {
@@ -142,10 +143,10 @@ else
             }
 
             <div class="d-flex gap-2">
-                <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+                <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
                     @L("Save settings", "Lưu cài đặt")
                 </button>
-                <button class="btn btn-outline-warning" disabled="@(!this._isActive || this._isSaving)" @onclick="this.DrawNowAsync">
+                <button class="btn btn-outline-warning" disabled="@(!this._isActive || this._isSaving)" @onclick="this.DrawNowAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">
                     @L("Draw now", "Quay số ngay")
                 </button>
             </div>

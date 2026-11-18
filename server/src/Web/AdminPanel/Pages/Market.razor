@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Item market", "Chợ vật phẩm")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMarket" />
 <p class="text-muted">@L("Configure escrow marketplace fees, allowed currencies, banned items, active listings moderation, and full audit log.", "Cấu hình chợ vật phẩm giữ đồ an toàn: thuế giao dịch, loại tiền cho phép, danh sách cấm, quản lý tin đăng và nhật ký giao dịch.")</p>
 
 @if (this._showHelp)
@@ -105,7 +106,7 @@ else
                 <textarea class="form-control font-monospace" rows="3" id="market-banned" @bind="this._bannedText"></textarea>
             </div>
 
-            <button type="button" class="btn btn-primary" id="market-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+            <button type="button" class="btn btn-primary" id="market-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
         </div>
     </section>
 
@@ -140,7 +141,7 @@ else
                                     <td>@item.Price.ToString("N0") @item.Currency</td>
                                     <td>@SydneyTime(item.ExpiresAtUtc)</td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.CancelListingAsync(item.Id)">@L("Cancel & return", "Hủy & trả đồ")</button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.CancelListingAsync(item.Id)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">@L("Cancel & return", "Hủy & trả đồ")</button>
                                     </td>
                                 </tr>
                             }

@@ -14367,5 +14367,140 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up a localized string similar to Password masked hint.</summary>
         public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tra cứu giao dịch người chơi, rớt/nhặt vật phẩm giá trị, xoay Chaos, mua bán NPC.</summary>
+        public static string PageHelpTextActivityLog => ResourceManager.GetString("PageHelpTextActivityLog", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình ngưỡng chống gian lận phía máy chủ (tốc độ chạy, tốc độ đánh, gói tin b.</summary>
+        public static string PageHelpTextAntiCheat => ResourceManager.GetString("PageHelpTextAntiCheat", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tạo, sao chép hoặc thu hồi API key theo quyền cho web bridge, script tự động hoặ.</summary>
+        public static string PageHelpTextApiKeys => ResourceManager.GetString("PageHelpTextApiKeys", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Quản lý danh sách từ cấm tiếng Anh và tiếng Việt trong chat và tên nhân vật/hội..</summary>
+        public static string PageHelpTextBannedWords => ResourceManager.GetString("PageHelpTextBannedWords", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình NPC hỗ trợ (Buffer): cấp độ tối đa, chi phí Zen/Xu, thời gian duy trì v.</summary>
+        public static string PageHelpTextBufferNpc => ResourceManager.GetString("PageHelpTextBufferNpc", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thiết lập trần cấp/reset theo top máy chủ, hệ số EXP đuổi kịp theo bậc và lượt r.</summary>
+        public static string PageHelpTextCatchupCap => ResourceManager.GetString("PageHelpTextCatchupCap", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Theo dõi trạng thái hoạt động của máy chủ game và cấu hình tự khởi động lại khi .</summary>
+        public static string PageHelpTextCrashWatch => ResourceManager.GetString("PageHelpTextCrashWatch", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tùy chỉnh các bậc danh hiệu (tên EN/VI, màu huy hiệu, chỉ số cộng thêm và mốc mở.</summary>
+        public static string PageHelpTextCustomRanks => ResourceManager.GetString("PageHelpTextCustomRanks", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Kiểm tra dung lượng bảng log PostgreSQL, đặt số ngày lưu giữ cho từng loại nhật .</summary>
+        public static string PageHelpTextDbLogRetention => ResourceManager.GetString("PageHelpTextDbLogRetention", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem dòng tiền Zen vào/ra, thống kê xoay Chaos, lượng ngọc lưu hành, số dư Xu và .</summary>
+        public static string PageHelpTextEconomyDashboard => ResourceManager.GetString("PageHelpTextEconomyDashboard", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Kiểm tra và xử lý hợp đồng ký gửi giữa người chơi, tạm giữ Trade Credit, trạng t.</summary>
+        public static string PageHelpTextEscrowContracts => ResourceManager.GetString("PageHelpTextEscrowContracts", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình nhắc lịch trước giờ sự kiện qua Web Push trình duyệt và kênh Discord, b.</summary>
+        public static string PageHelpTextEventAlerts => ResourceManager.GetString("PageHelpTextEventAlerts", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thiết lập các dòng chỉ số cố định hoặc giới hạn dòng cho trang bị tân thủ, đồ sự.</summary>
+        public static string PageHelpTextFixedOptions => ResourceManager.GetString("PageHelpTextFixedOptions", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Quản lý luật riêng từng bản đồ (PK, rơi đồ, giới hạn cấp), lịch giờ vàng tăng EX.</summary>
+        public static string PageHelpTextGameplayRules => ResourceManager.GetString("PageHelpTextGameplayRules", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chỉnh sửa cấu hình máy chủ tập trung (cổng, địa chỉ công khai, cầu nối web, chuỗ.</summary>
+        public static string PageHelpTextHostSettings => ResourceManager.GetString("PageHelpTextHostSettings", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Nhập dữ liệu tỉ lệ, rơi đồ, shop, sự kiện, tỷ lệ xoay Chaos, bãi quái hoặc tài k.</summary>
+        public static string PageHelpTextImportServer => ResourceManager.GetString("PageHelpTextImportServer", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chỉnh sửa tên vật phẩm EN/VI, kích thước ô, cấp rơi, yêu cầu trang bị, màu phát .</summary>
+        public static string PageHelpTextItemDefinitions => ResourceManager.GetString("PageHelpTextItemDefinitions", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình giới hạn Ngân hàng Ngọc theo tài khoản, danh sách ngọc hỗ trợ, phí Zen .</summary>
+        public static string PageHelpTextJewelBank => ResourceManager.GetString("PageHelpTextJewelBank", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình công thức ghép hộp/nâng cấp đồ trong túi và gói đổi nguyên liệu dư thừa.</summary>
+        public static string PageHelpTextLeftovers => ResourceManager.GetString("PageHelpTextLeftovers", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình xổ số Con Số May Mắn hằng ngày (giờ Sydney), giá vé, dải số, tỉ lệ trún.</summary>
+        public static string PageHelpTextLuckyNumber => ResourceManager.GetString("PageHelpTextLuckyNumber", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thực hiện công cụ bảo trì an toàn: làm mới bộ nhớ đệm, kiểm tra phần thưởng chờ .</summary>
+        public static string PageHelpTextMaintenanceTools => ResourceManager.GetString("PageHelpTextMaintenanceTools", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình Chợ Vật Phẩm trong game (F6 / NPC Julia): loại tiền tệ (Zen/Xu), phí gi.</summary>
+        public static string PageHelpTextMarket => ResourceManager.GetString("PageHelpTextMarket", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình hệ thống Kết Hôn (Shift+M): điều kiện cầu hôn, bản đồ/tọa độ lễ cưới, c.</summary>
+        public static string PageHelpTextMarriage => ResourceManager.GetString("PageHelpTextMarriage", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem, thêm hoặc sửa vật phẩm bán tại các NPC cửa hàng bằng bộ chọn danh mục trực .</summary>
+        public static string PageHelpTextMerchants => ResourceManager.GetString("PageHelpTextMerchants", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình chuỗi nâng cấp Thú cưỡi, tỉ lệ rơi mảnh ở Golden Boss, nguyên liệu ghép.</summary>
+        public static string PageHelpTextMounts => ResourceManager.GetString("PageHelpTextMounts", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình treo cửa hàng Offline (/offtrade): bản đồ an toàn cho phép, thời lượng .</summary>
+        public static string PageHelpTextOffTrade => ResourceManager.GetString("PageHelpTextOffTrade", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình tính năng vào tổ đội bằng mật khẩu (/partypass) và danh sách bãi luyện .</summary>
+        public static string PageHelpTextPartyOptions => ResourceManager.GetString("PageHelpTextPartyOptions", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình các lệnh tiện ích (/post cấp/thời gian chờ/Zen, /pkclear rửa tội, /clea.</summary>
+        public static string PageHelpTextQolSettings => ResourceManager.GetString("PageHelpTextQolSettings", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình Bảng Xếp Hạng trong game (Shift+R / /rank): chu kỳ làm mới, cột hiển th.</summary>
+        public static string PageHelpTextRankingsSettings => ResourceManager.GetString("PageHelpTextRankingsSettings", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tinh chỉnh tỉ lệ đập ngọc (Tâm Linh, Ước Nguyện, Sinh Mệnh), tỷ lệ xoay Chaos th.</summary>
+        public static string PageHelpTextRateTuning => ResourceManager.GetString("PageHelpTextRateTuning", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Quản lý lịch sự kiện Season 6 kinh điển, giới hạn vé vào, thông báo Boss và phần.</summary>
+        public static string PageHelpTextS6Events => ResourceManager.GetString("PageHelpTextS6Events", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thiết lập lộ trình mở tính năng theo mùa (ngày mở theo giờ Sydney cho mốc reset,.</summary>
+        public static string PageHelpTextSeasonPlan => ResourceManager.GetString("PageHelpTextSeasonPlan", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Kiểm tra dung lượng các bảng trạng thái tính năng PostgreSQL, nén/lưu trữ dữ liệ.</summary>
+        public static string PageHelpTextStateRetention => ResourceManager.GetString("PageHelpTextStateRetention", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình Bùa/Tượng mang trong hành trang giúp tăng EXP, Zen, chỉ số và giới hạn .</summary>
+        public static string PageHelpTextTalismans => ResourceManager.GetString("PageHelpTextTalismans", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình NPC Dịch Chuyển: danh sách bản đồ đến, yêu cầu cấp/Zen/Xu, thời gian ch.</summary>
+        public static string PageHelpTextTeleportNpc => ResourceManager.GetString("PageHelpTextTeleportNpc", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem và chỉnh sửa Bảng Lịch Sự Kiện &amp; Boss đồng nhất theo giờ Sydney, hiển thị đế.</summary>
+        public static string PageHelpTextTimetable => ResourceManager.GetString("PageHelpTextTimetable", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình các mốc tích lũy nạp VND để tài khoản nhận gói thưởng một lần (Xu, Zen,.</summary>
+        public static string PageHelpTextTopUpMilestones => ResourceManager.GetString("PageHelpTextTopUpMilestones", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình tỉ lệ xoay Chaos hiển thị trực tiếp cho người chơi, số rương mở rộng &amp; .</summary>
+        public static string PageHelpTextVaultChaosRewards => ResourceManager.GetString("PageHelpTextVaultChaosRewards", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem bản đồ bằng không gian 3D Three.js, tô vùng cấm đi/an toàn/nước/ánh sáng, đặ.</summary>
+        public static string PageHelpTextWorldEditor => ResourceManager.GetString("PageHelpTextWorldEditor", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tạo và quản lý các máy chủ/cụm thế giới độc lập, mẫu cấu hình khởi đầu, đếm ngượ.</summary>
+        public static string PageHelpTextWorlds => ResourceManager.GetString("PageHelpTextWorlds", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chuyển nhãn giao diện trang này sang tiếng Anh..</summary>
+        public static string PageHelpHintLanguageEn => ResourceManager.GetString("PageHelpHintLanguageEn", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chuyển nhãn giao diện trang này sang tiếng Việt..</summary>
+        public static string PageHelpHintLanguageVi => ResourceManager.GetString("PageHelpHintLanguageVi", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thêm một mục hoặc vật phẩm mới vào danh sách..</summary>
+        public static string PageHelpHintAdd => ResourceManager.GetString("PageHelpHintAdd", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Áp dụng thay đổi này ngay..</summary>
+        public static string PageHelpHintApply => ResourceManager.GetString("PageHelpHintApply", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thực hiện thao tác này..</summary>
+        public static string PageHelpHintAction => ResourceManager.GetString("PageHelpHintAction", resourceCulture)!;
     }
 }

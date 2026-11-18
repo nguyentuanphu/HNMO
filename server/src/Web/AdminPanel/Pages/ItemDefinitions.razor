@@ -17,9 +17,10 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextItemDefinitions" />
     <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
-        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)">English</button>
-        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)">Tiếng Việt</button>
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
     </div>
 </div>
 
@@ -85,7 +86,7 @@
                     ? L("Create New Item Definition", "Tạo Định Nghĩa Vật Phẩm Mới")
                     : L($"Edit Item ({this._editing.Group}:{this._editing.Number})", $"Sửa Vật Phẩm ({this._editing.Group}:{this._editing.Number})"))
             </span>
-            <button type="button" class="btn btn-sm btn-light" @onclick="this.CancelEdit">@L("Close", "Đóng")</button>
+            <button type="button" class="btn btn-sm btn-light" @onclick="this.CancelEdit" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">@L("Close", "Đóng")</button>
         </div>
         <div class="card-body">
             <div class="row g-3">
@@ -208,12 +209,12 @@
                 </div>
             </div>
             <div class="mt-3 d-flex flex-wrap gap-2">
-                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveEditingItemAsync">
+                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveEditingItemAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
                     @L("Save Item Definition", "Lưu Định Nghĩa Vật Phẩm")
                 </button>
                 @if (!this._isNewItem && this.HasOverride(this._editing.Group, this._editing.Number))
                 {
-                    <button type="button" class="btn btn-outline-danger btn-sm" disabled="@this._isSaving" @onclick="this.ResetOverride">
+                    <button type="button" class="btn btn-outline-danger btn-sm" disabled="@this._isSaving" @onclick="this.ResetOverride" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
                         @L("Clear Client Override", "Xóa Tùy Biến Client")
                     </button>
                 }
@@ -297,7 +298,7 @@
                             </td>
                             <td class="small text-truncate" style="max-width: 180px;">@(string.IsNullOrWhiteSpace(meta.TooltipTextEn) ? meta.TooltipTextVi : meta.TooltipTextEn)</td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.StartEditItem(item)">
+                                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="() => this.StartEditItem(item)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">
                                     @L("Edit", "Sửa")
                                 </button>
                             </td>
@@ -310,11 +311,11 @@
     @if (this.TotalPages > 1)
     {
         <div class="card-footer d-flex justify-content-between align-items-center py-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._pageIndex <= 0)" @onclick="() => this._pageIndex = Math.Max(0, this._pageIndex - 1)">
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._pageIndex <= 0)" @onclick="() => this._pageIndex = Math.Max(0, this._pageIndex - 1)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">
                 @L("Previous", "Trước")
             </button>
             <span class="small">@L($"Page {this._pageIndex + 1} / {this.TotalPages}", $"Trang {this._pageIndex + 1} / {this.TotalPages}")</span>
-            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._pageIndex + 1 >= this.TotalPages)" @onclick="() => this._pageIndex = Math.Min(this.TotalPages - 1, this._pageIndex + 1)">
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._pageIndex + 1 >= this.TotalPages)" @onclick="() => this._pageIndex = Math.Min(this.TotalPages - 1, this._pageIndex + 1)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">
                 @L("Next", "Sau")
             </button>
         </div>

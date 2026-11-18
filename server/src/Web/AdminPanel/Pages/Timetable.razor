@@ -16,6 +16,7 @@
         ?
     </button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextTimetable" />
 
 @if (this._showHelp)
 {
@@ -67,7 +68,7 @@ else
             </div>
 
             <div class="d-flex gap-2">
-                <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveTimetableAsync">
+                <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveTimetableAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
                     @L("Save timetable settings", "Lưu cài đặt bảng lịch")
                 </button>
             </div>
@@ -136,7 +137,7 @@ else
                                     <input class="form-control form-control-sm" type="number" min="1" max="180" style="width:90px" @bind="row.DurationMinutes" />
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary" disabled="@this._isSaving" @onclick="() => this.SaveInvasionAsync(row)">
+                                    <button class="btn btn-sm btn-outline-primary" disabled="@this._isSaving" @onclick="() => this.SaveInvasionAsync(row)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
                                         @L("Save", "Lưu")
                                     </button>
                                 </td>
@@ -152,7 +153,7 @@ else
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h2 class="h5 mb-0">@L("Custom timetable entries / overrides", "Mục lịch tùy chỉnh")</h2>
-                <button class="btn btn-sm btn-outline-secondary" @onclick="this.AddCustomEntry">
+                <button class="btn btn-sm btn-outline-secondary" @onclick="this.AddCustomEntry" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">
                     + @L("Add custom entry", "Thêm mục")
                 </button>
             </div>
@@ -217,7 +218,7 @@ else
                                     <input class="form-check-input" type="checkbox" @bind="entry.Enabled" />
                                     <label class="form-check-label small">@L("Visible", "Hiển thị")</label>
                                 </div>
-                                <button class="btn btn-sm btn-outline-danger" @onclick="() => this._configuration.CustomEntries.Remove(entry)">
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => this._configuration.CustomEntries.Remove(entry)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
                                     @L("Remove", "Xóa")
                                 </button>
                             </div>

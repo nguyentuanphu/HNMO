@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Gameplay rules & happy hours", "Luật bản đồ, Giờ vàng & Giới hạn chiến đấu")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="gr-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextGameplayRules" />
 <p class="text-muted">@L("Configure per-map PvP/PK/rate overrides, Sydney-scheduled Happy Hour bonus events (with chat notices and timetable integration), and hit damage / PvP / Castle Siege combat limits.", "Cấu hình PvP/PK/tỉ lệ EXP-Rớt đồ theo từng bản đồ, Giờ vàng theo giờ Sydney (tự thông báo chat và hiện lịch sự kiện), cùng giới hạn sát thương PvP / Công Thành.")</p>
 
 @if (this._showHelp)
@@ -66,7 +67,7 @@ else
                                 <td><input class="form-control form-control-sm" type="number" @bind="r.ExpBonusPercent" /></td>
                                 <td><input class="form-control form-control-sm" type="number" @bind="r.ItemDropBonusPercent" /></td>
                                 <td><input class="form-control form-control-sm" type="number" @bind="r.ZenDropBonusPercent" /></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._mapConfig.Rules.RemoveAt(idx)">×</button></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._mapConfig.Rules.RemoveAt(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
                             </tr>
                         }
                     </tbody>
@@ -74,7 +75,7 @@ else
             </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" id="gr-map-add" title="@L("Add a new map rule", "Thêm luật bản đồ mới")" @onclick="this.AddMapRule">@L("+ Add map rule", "+ Thêm bản đồ")</button>
-                <button type="button" class="btn btn-sm btn-primary" id="gr-map-save" disabled="@this._isSaving" @onclick="this.SaveMapRulesAsync">@L("Save map rules", "Lưu luật bản đồ")</button>
+                <button type="button" class="btn btn-sm btn-primary" id="gr-map-save" disabled="@this._isSaving" @onclick="this.SaveMapRulesAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save map rules", "Lưu luật bản đồ")</button>
             </div>
         </div>
     </section>
@@ -135,7 +136,7 @@ else
                                         <span>@SydneyTime(nextUtc)</span>
                                     }
                                 </td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._bonusConfig.Events.RemoveAt(idx)">×</button></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._bonusConfig.Events.RemoveAt(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
                             </tr>
                         }
                     </tbody>
@@ -143,7 +144,7 @@ else
             </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" id="gr-bonus-add" title="@L("Add a scheduled bonus event", "Thêm khung giờ vàng mới")" @onclick="this.AddBonusEvent">@L("+ Add bonus event", "+ Thêm giờ vàng")</button>
-                <button type="button" class="btn btn-sm btn-primary" id="gr-bonus-save" disabled="@this._isSaving" @onclick="this.SaveBonusEventsAsync">@L("Save bonus events", "Lưu giờ vàng")</button>
+                <button type="button" class="btn btn-sm btn-primary" id="gr-bonus-save" disabled="@this._isSaving" @onclick="this.SaveBonusEventsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save bonus events", "Lưu giờ vàng")</button>
             </div>
         </div>
     </section>
@@ -171,7 +172,7 @@ else
                     <input class="form-control form-control-sm" id="gr-cs-red" type="number" min="0" max="95" @bind="this._combatConfig.CastleSiegeDamageReductionPercent" />
                 </div>
             </div>
-            <button type="button" class="btn btn-sm btn-primary" id="gr-combat-save" disabled="@this._isSaving" @onclick="this.SaveCombatLimitsAsync">@L("Save combat limits", "Lưu giới hạn chiến đấu")</button>
+            <button type="button" class="btn btn-sm btn-primary" id="gr-combat-save" disabled="@this._isSaving" @onclick="this.SaveCombatLimitsAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Save combat limits", "Lưu giới hạn chiến đấu")</button>
         </div>
     </section>
 }

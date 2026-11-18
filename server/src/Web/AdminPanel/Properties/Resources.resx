@@ -4697,4 +4697,139 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
   </data>
+  <data name="PageHelpTextActivityLog" xml:space="preserve">
+    <value>Inspect player trades, item drops/pickups, Chaos Machine mixes, NPC shop transactions, personal stores, and Item Market transfers stored in PostgreSQL rows. Filter by account, character, item, action, or Sydney time range.</value>
+  </data>
+  <data name="PageHelpTextAntiCheat" xml:space="preserve">
+    <value>Configure server-authoritative anti-cheat thresholds (movement speed, attack speed, packet anomalies, escalation strikes) and inspect recorded violations. Enable enforcement carefully after checking live baseline logs.</value>
+  </data>
+  <data name="PageHelpTextApiKeys" xml:space="preserve">
+    <value>Create, copy, or revoke scoped API keys for the web bridge, automation scripts, or MCP clients. Each key is shown once at creation; store it securely and never expose it to browsers.</value>
+  </data>
+  <data name="PageHelpTextBannedWords" xml:space="preserve">
+    <value>Manage English and Vietnamese profanity or restricted words filtered in game chat and new character/guild names. Choose censoring or blocking with a reason notice.</value>
+  </data>
+  <data name="PageHelpTextBufferNpc" xml:space="preserve">
+    <value>Configure the in-town Buffer NPC maximum level, Zen/coin fee, buff durations, and extra selectable buffs. Changes apply after saving.</value>
+  </data>
+  <data name="PageHelpTextCatchupCap" xml:space="preserve">
+    <value>Configure the top-player level/reset ceiling, tiered catch-up EXP multipliers, and bonus daily reset limits so newer players can catch up smoothly without overtaking veterans.</value>
+  </data>
+  <data name="PageHelpTextCrashWatch" xml:space="preserve">
+    <value>Monitor background game-server health probes and configure optional auto-restart recovery behavior. Adjust alert webhooks or thresholds and leave test restarts off during live play unless testing recovery.</value>
+  </data>
+  <data name="PageHelpTextCustomRanks" xml:space="preserve">
+    <value>Customize progressive rank tiers (names in EN/VI, badge colors, attribute bonuses, and unlock thresholds) displayed on character nameplates and in-game panels.</value>
+  </data>
+  <data name="PageHelpTextDbLogRetention" xml:space="preserve">
+    <value>Inspect PostgreSQL table log sizes, set retention days per log category, run manual pruning, or export gzipped archive snapshots without losing audit compliance.</value>
+  </data>
+  <data name="PageHelpTextEconomyDashboard" xml:space="preserve">
+    <value>View real-time Zen flows (faucets vs sinks), Chaos mix rates, Jewel stocks, Cash Shop coin balances, and alerts indicating unusual inflation or item duplication risks.</value>
+  </data>
+  <data name="PageHelpTextEscrowContracts" xml:space="preserve">
+    <value>Inspect and manage escrow player-to-player contracts, Trade Credit holds, Direct/Host VND contract flags, disputes, and settlement payouts. Real-money modes remain OFF unless explicitly enabled and reviewed.</value>
+  </data>
+  <data name="PageHelpTextEventAlerts" xml:space="preserve">
+    <value>Configure pre-event reminder notifications delivered via browser Web Push and Discord channels, including lead-time minutes and active event categories.</value>
+  </data>
+  <data name="PageHelpTextFixedOptions" xml:space="preserve">
+    <value>Configure fixed lucky/excellent/harmony rules or capped item options for starter gear, event drops, or promotional sets without modifying base item definitions.</value>
+  </data>
+  <data name="PageHelpTextGameplayRules" xml:space="preserve">
+    <value>Manage per-map PK/drop/level rules, Sydney-time happy hour EXP/drop multipliers, and PvP/anti-AFK combat limits across maps.</value>
+  </data>
+  <data name="PageHelpTextHostSettings" xml:space="preserve">
+    <value>Edit unified host configuration (ports, public addresses, bridge URL, database connection, and player license cap) stored in save/hnmo-settings.json. Port or database edits take effect after restarting HNMO.</value>
+  </data>
+  <data name="PageHelpTextImportServer" xml:space="preserve">
+    <value>Import rates, drops, shops, event schedules, Chaos mixes, spawns, or legacy account/character data from an external folder or MSSQL database on the host machine. Always preview the dry-run diff and keep the automatic backup before applying.</value>
+  </data>
+  <data name="PageHelpTextItemDefinitions" xml:space="preserve">
+    <value>Edit EN/VI item names, sizes, drop tiers, equip requirements, glow colors, and custom tooltips directly inside GameConfiguration and publish live updates to the web client (/website/items).</value>
+  </data>
+  <data name="PageHelpTextJewelBank" xml:space="preserve">
+    <value>Configure account-wide Jewel Bank storage caps, allowed jewel types, Zen deposit/withdrawal fees, and Master Skill reset rules (F7 / /clearmaster).</value>
+  </data>
+  <data name="PageHelpTextLeftovers" xml:space="preserve">
+    <value>Configure bag combine/upgrade recipes (such as combining event boxes and jewels) and surplus material exchanges gated by Season Plan stages.</value>
+  </data>
+  <data name="PageHelpTextLuckyNumber" xml:space="preserve">
+    <value>Configure the daily Lucky Number draw schedule (Sydney time), ticket cost, valid number range, odds, and Coin/Zen/Item prize table.</value>
+  </data>
+  <data name="PageHelpTextMaintenanceTools" xml:space="preserve">
+    <value>Run safe server maintenance actions: clear cached rooms/rankings, inspect pending deliveries, check PostgreSQL connectivity, or repair stuck records with mandatory confirmation.</value>
+  </data>
+  <data name="PageHelpTextMarket" xml:space="preserve">
+    <value>Configure the in-game Item Market (F6 / NPC Market Julia): allowed currencies (Zen/Coins), listing fee percentage, minimum/maximum prices, listing expiry, and escrow payout rules.</value>
+  </data>
+  <data name="PageHelpTextMarriage" xml:space="preserve">
+    <value>Configure the in-game Marriage system (Shift+M): proposal requirements, ceremony map/coordinates, Zen/Coin fees, shared couple party EXP/attack buffs, and divorce rules.</value>
+  </data>
+  <data name="PageHelpTextMerchants" xml:space="preserve">
+    <value>Browse, edit, and add items sold by NPC merchants using the live catalog picker and visual bag grid. Review item levels and options before saving shop inventories.</value>
+  </data>
+  <data name="PageHelpTextMounts" xml:space="preserve">
+    <value>Configure the Mount Upgrade chain, Golden Boss shard drops, upgrade materials/rates, stat bonuses, and collection bonuses (Shift+U).</value>
+  </data>
+  <data name="PageHelpTextOffTrade" xml:space="preserve">
+    <value>Configure offline personal store trading (/offtrade): allowed safe maps, duration limits, VIP bonus hours, currency modes, and active offline shop inspection.</value>
+  </data>
+  <data name="PageHelpTextPartyOptions" xml:space="preserve">
+    <value>Configure password-protected party join (/partypass) and Auto-Party hunting spot listings inside the in-game Party window (P).</value>
+  </data>
+  <data name="PageHelpTextQolSettings" xml:space="preserve">
+    <value>Configure convenient player slash commands (/post level/cooldown/cost, /pkclear cost, /clearchat) and automated mining/helper convenience toggles.</value>
+  </data>
+  <data name="PageHelpTextRankingsSettings" xml:space="preserve">
+    <value>Configure the live in-game Player Rankings panel (Shift+R / /rank) cache refresh interval, visible columns, and bulk /add stat helper limits (Shift+A).</value>
+  </data>
+  <data name="PageHelpTextRateTuning" xml:space="preserve">
+    <value>Fine-tune Jewel upgrade rates (Soul, Bless, Life), Chaos Mix tiers, and class-vs-class PvP/PvM damage balance multipliers cleanly.</value>
+  </data>
+  <data name="PageHelpTextS6Events" xml:space="preserve">
+    <value>Manage classic Season 6 event schedules, entry ticket limits, boss spawn alerts, and prize pools across Blood Castle, Devil Square, Chaos Castle, and Skeleton King.</value>
+  </data>
+  <data name="PageHelpTextSeasonPlan" xml:space="preserve">
+    <value>Define progressive Season Plan milestones (Sydney unlock dates for resets, Wing tiers, Bosses, and Socket/Harmony content) visible to players in the F8 timeline.</value>
+  </data>
+  <data name="PageHelpTextStateRetention" xml:space="preserve">
+    <value>Inspect PostgreSQL plug-in feature row storage sizes, run safe archival/compaction on expired logs/claims, and verify single-store persistence health.</value>
+  </data>
+  <data name="PageHelpTextTalismans" xml:space="preserve">
+    <value>Configure bag talismans/figurines granting passive EXP, Zen, or stat bonuses when carried and capped stat-fruit consumable limits.</value>
+  </data>
+  <data name="PageHelpTextTeleportNpc" xml:space="preserve">
+    <value>Configure custom Teleport NPC warp destinations, required level/Zen/coins, cooldowns, and VIP/faction restrictions.</value>
+  </data>
+  <data name="PageHelpTextTimetable" xml:space="preserve">
+    <value>View and edit the unified Sydney-time Event &amp; Boss Timetable shown in-game (F8) and on the website homepage so players see accurate countdowns.</value>
+  </data>
+  <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
+    <value>Configure cumulative VND top-up reward tiers so accounts can claim one-time Coin, Zen, and Item bundles automatically on the account page or in game.</value>
+  </data>
+  <data name="PageHelpTextVaultChaosRewards" xml:space="preserve">
+    <value>Configure custom Chaos Machine combination rates shown live to players, Extra Vault unlocks/coin pricing (/vault), and level-specific Mini-Game rewards.</value>
+  </data>
+  <data name="PageHelpTextWorldEditor" xml:space="preserve">
+    <value>Inspect any map inside the Three.js 3D viewport, paint terrain walk/safe/water/light flags, place spawns, gates, and 3D objects, regenerate minimaps, and save changes synchronously to server &amp; web client.</value>
+  </data>
+  <data name="PageHelpTextWorlds" xml:space="preserve">
+    <value>Create and manage isolated multi-world / multi-realm game servers, templates, Sydney scheduled opening countdowns, and safe character transfers.</value>
+  </data>
+  <data name="PageHelpHintLanguageEn" xml:space="preserve">
+    <value>Switch admin labels on this page to English.</value>
+  </data>
+  <data name="PageHelpHintLanguageVi" xml:space="preserve">
+    <value>Switch admin labels on this page to Vietnamese.</value>
+  </data>
+  <data name="PageHelpHintAdd" xml:space="preserve">
+    <value>Add a new entry or item to this list.</value>
+  </data>
+  <data name="PageHelpHintApply" xml:space="preserve">
+    <value>Apply this change immediately.</value>
+  </data>
+  <data name="PageHelpHintAction" xml:space="preserve">
+    <value>Perform this action.</value>
+  </data>
 </root>

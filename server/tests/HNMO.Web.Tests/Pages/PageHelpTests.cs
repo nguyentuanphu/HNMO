@@ -62,10 +62,18 @@ public class PageHelpTests
         {
             var english = manager.GetResourceSet(CultureInfo.GetCultureInfo("en"), true, true)!;
             var vietnamese = manager.GetResourceSet(CultureInfo.GetCultureInfo("vi"), true, false)!;
-            foreach (var key in english.Cast<DictionaryEntry>().Select(entry => (string)entry.Key).Where(key => key.StartsWith("PageHelp", StringComparison.Ordinal)))
+            var enHelpKeys = english.Cast<DictionaryEntry>().Select(entry => (string)entry.Key).Where(key => key.StartsWith("PageHelp", StringComparison.Ordinal)).ToList();
+            var viHelpKeys = vietnamese.Cast<DictionaryEntry>().Select(entry => (string)entry.Key).Where(key => key.StartsWith("PageHelp", StringComparison.Ordinal)).ToList();
+
+            foreach (var key in enHelpKeys)
             {
-                Assert.That(english.GetString(key), Is.Not.Empty, key);
-                Assert.That(vietnamese.GetString(key), Is.Not.Null.And.Not.Empty, key);
+                Assert.That(english.GetString(key), Is.Not.Null.And.Not.Empty, $"Missing EN string for {key}");
+                Assert.That(vietnamese.GetString(key), Is.Not.Null.And.Not.Empty, $"Missing VI string for {key}");
+            }
+
+            foreach (var key in viHelpKeys)
+            {
+                Assert.That(english.GetString(key), Is.Not.Null.And.Not.Empty, $"Orphaned VI key {key} missing EN string");
             }
         }
     }

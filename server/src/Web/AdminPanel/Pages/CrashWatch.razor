@@ -12,9 +12,10 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextCrashWatch" />
     <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
-        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)">English</button>
-        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)">Tiếng Việt</button>
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
     </div>
 </div>
 
@@ -84,7 +85,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span class="fw-semibold">@L("Recent Crash Incidents", "Lịch Sử Sự Cố Gần Đây") (Sydney Time)</span>
-        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.Refresh">@L("Refresh", "Làm mới")</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.Refresh" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh", "Làm mới")</button>
     </div>
     @if (this._incidents.Count == 0)
     {
