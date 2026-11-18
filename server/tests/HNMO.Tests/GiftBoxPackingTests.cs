@@ -64,7 +64,9 @@ public class GiftBoxPackingTests
     public async Task InvalidItemsDoNotBecomeReducedRewardsAsync()
     {
         var (configuration, _) = Configuration();
-        foreach (var item in new GiftCodeItem[] { new() { Skill = true }, new() { Luck = true }, new() { ExcellentOptions = 1 }, new() { Level = 16 }, new() { Number = 511 } })
+        configuration.Items.Add(new HNMO.Persistence.BasicModel.ItemDefinition { Group = 0, Number = 2, Width = 0, Height = 1, MaximumItemLevel = 15 });
+        configuration.Items.Add(new HNMO.Persistence.BasicModel.ItemDefinition { Group = 0, Number = 3, Width = 1, Height = 0, MaximumItemLevel = 15 });
+        foreach (var item in new GiftCodeItem[] { new() { Number = 2 }, new() { Number = 3 }, new() { Durability = 255 }, new() { Skill = true }, new() { Luck = true }, new() { ExcellentOptions = 1 }, new() { Level = 16 }, new() { Number = 511 } })
         {
             var result = await GiftBoxPacking.PlanAsync(configuration, [], 0, new() { Items = [item] }).ConfigureAwait(false);
             Assert.That(result.Status, Is.EqualTo(GiftBoxPackingStatus.InvalidReward));

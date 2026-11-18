@@ -8,6 +8,7 @@ using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Administration;
 using HNMO.GameLogic.PlugIns.GiftCodes;
+using HNMO.Interfaces;
 using static HNMO.DataModel.InventoryConstants;
 
 /// <summary>Uses the existing inventory grid on detached items before any mail delivery mutation.</summary>
@@ -30,7 +31,7 @@ public static class GiftBoxPacking
         }
 
         var real = existingItems.Where(item => item.ItemSlot < FirstStoreItemSlotIndex).ToArray();
-        if (real.Any(item => item.Definition is null || item.ItemSlot >= GetInventorySize(extensions)))
+        if (real.Any(item => item.Definition is null || item.Definition.Width < 1 || item.Definition.Height < 1 || item.ItemSlot >= GetInventorySize(extensions)))
         {
             return (GiftBoxPackingStatus.InvalidInventory, []);
         }
@@ -66,7 +67,7 @@ public static class GiftBoxPacking
         {
             var definition = configuration.Items.FirstOrDefault(item => item.Group == entry.Group && item.Number == entry.Number);
             var specification = new ItemSpecification((byte)entry.Group, entry.Number, entry.Level, entry.Skill, entry.Luck, entry.OptionLevel, entry.ExcellentOptions);
-            if (definition is null || !GameMasterItemFactory.IsValid(definition, specification))
+            if (definition is null || definition.Width < 1 || definition.Height < 1 || !GameMasterItemFactory.IsValid(definition, specification))
             {
                 return (GiftBoxPackingStatus.InvalidReward, []);
             }
@@ -74,15 +75,13 @@ public static class GiftBoxPacking
             for (var index = 0; index < entry.Count; index++)
             {
                 var item = GameMasterItemFactory.CreateItem(definition, specification);
-                if (item.IsStackable())
+                var maximum = item.IsStackable() ? Math.Max(1, definition.Durability) : item.GetMaximumDurabilityOfOnePiece();
+                if (entry.Durability > maximum)
                 {
-                    item.Durability = Math.Clamp(entry.Durability == 0 ? definition.Durability : entry.Durability, 1, Math.Max(1, (int)definition.Durability));
+                    return (GiftBoxPackingStatus.InvalidReward, []);
                 }
-                else
-                {
-                    var maximum = item.GetMaximumDurabilityOfOnePiece();
-                    item.Durability = entry.Durability == 0 ? maximum : Math.Min(entry.Durability, maximum);
-                }
+
+                item.Durability = entry.Durability == 0 ? maximum : entry.Durability;
 
                 if (inventory.CheckInvSpace(item) is not { } slot || !await inventory.AddItemAsync(slot, item).ConfigureAwait(false))
                 {
