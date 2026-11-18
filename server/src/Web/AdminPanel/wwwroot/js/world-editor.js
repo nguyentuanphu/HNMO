@@ -20582,9 +20582,10 @@ var PATTERN = new RegExp(`(^|[^${LETTER}])(${variants.map(escape2).join("|")})(?
 var filterOn = read(FILTER_KEY, true);
 
 // src/render/quality.ts
-var RENDER_SCALES = [1, 0.75, 0.5];
+var RENDER_SCALES = [1, 0.75, 0.65, 0.5];
 var FPS_CAPS = [24, 30, 60, 120, 144, 0];
 var VIEW_DISTANCES = [0.6, 0.8, 1];
+var HUD_MODES = ["auto", "modern", "classic"];
 var DEFAULT_QUALITY = {
   renderScale: 1,
   fpsCap: 0,
@@ -20607,7 +20608,9 @@ var DEFAULT_SETTINGS = {
   textSize: 1,
   uiSize: 100,
   showFps: true,
-  textureQuality: "compressed"
+  textureQuality: "compressed",
+  wakeLock: false,
+  hudMode: "auto"
 };
 function pick(list, value, fallback) {
   return list.includes(value) ? value : fallback;
@@ -20632,6 +20635,9 @@ function loadSettings() {
     settings.uiSize = pick(UI_SIZES, saved.uiSize, 100);
     if (typeof saved.showFps === "boolean") settings.showFps = saved.showFps;
     settings.textureQuality = pick(TEXTURE_QUALITY_VALUES, saved.textureQuality, "compressed");
+    if (typeof saved.wakeLock === "boolean") settings.wakeLock = saved.wakeLock;
+    else settings.wakeLock = typeof window !== "undefined" && (window.matchMedia?.("(pointer: coarse)").matches ?? false);
+    settings.hudMode = pick(HUD_MODES, saved.hudMode, "auto");
   } catch {
   }
   return settings;

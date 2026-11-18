@@ -361,7 +361,7 @@ export class OnboardingWindow {
     const scale = typographyScale();
     Object.assign(doc.host.style, {
       position: 'fixed', left: '0px', top: '0px', width: `${window.innerWidth / scale}px`, height: `${window.innerHeight / scale}px`,
-      transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none', zIndex: '80',
+      transform: `scale(${scale})`, transformOrigin: 'left top', pointerEvents: 'none', zIndex: '24',
     });
     doc.setScale(scale);
     doc.update();

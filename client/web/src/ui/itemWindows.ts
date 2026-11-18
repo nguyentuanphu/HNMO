@@ -217,6 +217,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
 
   private async openDocument(parent: HTMLElement): Promise<void> {
     this.doc = await openDocument(this.documentName, this.model, { parent, scale: uiScale() });
+    this.doc.host.style.zIndex = '28';
     this.panel = this.doc.$('#panel')!;
     // The theme leaves pointer events to the game's own hit tests (as the desktop client does them in C++).
     this.panel.style.pointerEvents = 'auto';

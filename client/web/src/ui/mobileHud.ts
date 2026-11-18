@@ -194,9 +194,13 @@ function labels(): Labels {
 const CSS = `
 body.hnmo-modern-hud #touchBar {
   top: max(4px, env(safe-area-inset-top, 0px)) !important;
+  right: auto !important;
+  bottom: auto !important;
   left: 50% !important;
-  transform: translateX(-50%);
-  max-width: min(520px, calc(100vw - 380px));
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+  gap: 4px !important;
+  max-width: min(560px, calc(100vw - 340px));
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
@@ -204,11 +208,34 @@ body.hnmo-modern-hud #touchBar {
   border-radius: 999px;
   background: rgba(10, 13, 20, 0.72);
   border: 1px solid rgba(201, 162, 74, 0.35);
-  z-index: 26;
+  z-index: 30;
+}
+body.hnmo-modern-hud #touchBar button {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0 6px;
+  font-size: 12px;
+  border-radius: 999px;
+  flex-shrink: 0;
 }
 body.hnmo-modern-hud.hnmo-ribbon-collapsed #touchBar {
   opacity: 0.3;
-  transform: translateX(-50%) scale(0.9);
+  transform: translateX(-50%) scale(0.9) !important;
+}
+body.hnmo-modern-hud #touchMore {
+  top: max(44px, calc(env(safe-area-inset-top, 0px) + 42px));
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: min(560px, 92vw);
+  padding: 6px;
+  border-radius: 12px;
+  background: rgba(10, 13, 20, 0.9);
+  border: 1px solid rgba(201, 162, 74, 0.45);
+  z-index: 41;
 }
 body.hnmo-modern-hud #touchFight {
   right: max(12px, env(safe-area-inset-right, 0px)) !important;
@@ -350,13 +377,13 @@ body.hnmo-modern-hud #touchFight button.fight {
 /* Top-center Collapsible Quick Ribbon */
 .mh-ribbon-wrap {
   position: fixed;
-  top: max(48px, calc(env(safe-area-inset-top, 0px) + 44px));
+  top: max(44px, calc(env(safe-area-inset-top, 0px) + 42px));
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 5px;
-  max-width: calc(100vw - 360px);
+  max-width: calc(100vw - 340px);
   z-index: 29;
 }
 .mh-ribbon {

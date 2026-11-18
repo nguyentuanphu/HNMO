@@ -2328,11 +2328,17 @@ function initLogin() {
     const data = new FormData(ui.loginForm);
     const field = (name: keyof LoginSettings) => String(data.get(name) ?? '');
     const form: LoginSettings = { username: field('username'), password: field('password'), host: field('host'), port: field('port'), relay: field('relay') };
-    const { password, ...remembered } = form;
-    saveSettings(remembered);
-    rememberSavedAccount(remembered);
-    renderSavedAccounts();
-    startGame(async () => playOnline(await resolveConnectPort(form)));
+    // Resolve /website/settings before persisting settings so a stale default port (44406) isn't locked into localStorage.
+    startGame(async () => {
+      const resolved = await resolveConnectPort(form);
+      const portInput = ui.loginForm.elements.namedItem('port') as HTMLInputElement | null;
+      if (portInput && portInput.value === '44406' && resolved.port !== '44406') portInput.value = resolved.port;
+      const { password, ...remembered } = resolved;
+      saveSettings(remembered);
+      rememberSavedAccount(remembered);
+      renderSavedAccounts();
+      return playOnline(resolved);
+    });
   });
 }
 
