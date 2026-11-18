@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/accounts/{LoginName}/cash-shop"
 @attribute [Authorize(Policy = AdminPolicies.CashShop)]
 
@@ -13,6 +14,8 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb Caption="@title" />
 <h1>@title</h1>
+<PageHelp Text="@HelpResources.PageHelpTextCashShopCoins" />
+
 
 <p class="text-muted">@Resources.CashShopCoinsDescription</p>
 
@@ -72,7 +75,7 @@ else
             <InputText id="reason" class="form-control" @bind-Value="this._input.Reason" />
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary" disabled="@this._isGranting">@Resources.CashShopApply</button>
+            <button title="@HelpResources.PageHelpHintSave" type="submit" class="btn btn-primary" disabled="@this._isGranting">@Resources.CashShopApply</button>
         </div>
         <ValidationSummary />
     </EditForm>

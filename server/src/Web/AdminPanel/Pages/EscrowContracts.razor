@@ -11,6 +11,7 @@
     <h1 class="mb-0">@L("Escrow contracts", "Hợp đồng ký gửi")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="escrow-help-btn" title="@L("How to use Escrow contracts", "Hướng dẫn sử dụng Hợp đồng ký gửi")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextEscrowContracts" />
 <p class="text-muted">@L("Configure atomic in-game escrow contracts (items, Zen, coins, and Jewel Bank jewels), safety gates, fee rules, freeze/cancel active contracts, and review reputation & fee income.", "Cấu hình hợp đồng ký gửi nguyên tử trong game (đồ, Zen, Xu, Ngọc trong ngân hàng), quy tắc an toàn, biểu phí, đóng băng/hủy hợp đồng và theo dõi uy tín cùng doanh thu phí.")</p>
 
 @if (this._showHelp)
@@ -276,8 +277,8 @@ else if (this._configuration is { } c)
                 </div>
 
                 <div class="col-12 d-flex gap-2">
-                    <button type="button" class="btn btn-primary btn-sm" id="escrow-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="escrow-refresh" @onclick="this.LoadAsync">@L("Refresh", "Làm mới")</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="escrow-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="escrow-refresh" @onclick="this.LoadAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh", "Làm mới")</button>
                 </div>
             </div>
         </div>
@@ -418,8 +419,8 @@ else if (this._configuration is { } c)
                         @if (d.Status == EscrowContractStatus.Disputed)
                         {
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-sm btn-success" @onclick="() => this.ResolveDisputeAsync(d.ContractId, true)">@L("Release item to buyer (forfeit seller bond)", "Giao đồ cho người mua (tịch thu cọc người bán)")</button>
-                                <button type="button" class="btn btn-sm btn-warning" @onclick="() => this.ResolveDisputeAsync(d.ContractId, false)">@L("Return item & bond to seller", "Hoàn đồ & cọc về người bán")</button>
+                                <button type="button" class="btn btn-sm btn-success" @onclick="() => this.ResolveDisputeAsync(d.ContractId, true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Release item to buyer (forfeit seller bond)", "Giao đồ cho người mua (tịch thu cọc người bán)")</button>
+                                <button type="button" class="btn btn-sm btn-warning" @onclick="() => this.ResolveDisputeAsync(d.ContractId, false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Return item & bond to seller", "Hoàn đồ & cọc về người bán")</button>
                             </div>
                         }
                     </div>
@@ -469,16 +470,16 @@ else if (this._configuration is { } c)
                                     <td class="d-flex flex-wrap gap-1">
                                         @if (h.Status == EscrowContractStatus.ReservedForPayment)
                                         {
-                                            <button type="button" class="btn btn-sm py-0 px-1 btn-outline-primary" @onclick="() => this.ConfirmHostPaymentManualAsync(h)">@L("Confirm Buyer Paid", "Xác nhận đã thu")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-outline-primary" @onclick="() => this.ConfirmHostPaymentManualAsync(h)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Confirm Buyer Paid", "Xác nhận đã thu")</button>
                                         }
                                         @if (hv.PayoutStatus == "Queued" && h.Status != EscrowContractStatus.Disputed)
                                         {
-                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkHostPayoutPaidAsync(h.ContractId)">@L("Mark Payout Paid", "Đã chuyển trả")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkHostPayoutPaidAsync(h.ContractId)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Mark Payout Paid", "Đã chuyển trả")</button>
                                         }
                                         @if (h.Status == EscrowContractStatus.Disputed)
                                         {
-                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, true)">@L("Release to Seller", "Trả tiền người bán")</button>
-                                            <button type="button" class="btn btn-sm py-0 px-1 btn-warning" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, false)">@L("Refund Buyer", "Hoàn tiền người mua")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Release to Seller", "Trả tiền người bán")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-warning" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Refund Buyer", "Hoàn tiền người mua")</button>
                                         }
                                     </td>
                                 </tr>
@@ -495,7 +496,7 @@ else if (this._configuration is { } c)
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h2 class="h5 mb-0">@L("Trade Credit Reconciliation, Cash-Outs & Ledger", "Đối soát Tín Dụng, Rút Tiền & Sổ Cái")</h2>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-sm btn-outline-primary" id="escrow-tc-reconcile" @onclick="this.ReconcileTradeCreditAsync">@L("Reconcile now", "Đối soát ngay")</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="escrow-tc-reconcile" @onclick="this.ReconcileTradeCreditAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("Reconcile now", "Đối soát ngay")</button>
                     <a class="btn btn-sm btn-outline-secondary" id="escrow-tc-export" href="/api/website/escrow/trade-credit/export.csv">@L("Export CSV", "Xuất CSV")</a>
                 </div>
             </div>
@@ -527,7 +528,7 @@ else if (this._configuration is { } c)
                     <input class="form-control form-control-sm" id="tc-topup-ref" type="text" @bind="this._tcTopUpRef" />
                 </div>
                 <div class="col-md-4">
-                    <button type="button" class="btn btn-sm btn-outline-success" id="tc-topup-btn" @onclick="this.IssueTradeCreditTopUpAsync">@L("Issue Fixed-Rate Top-Up", "Nạp Tín dụng (cố định)")</button>
+                    <button type="button" class="btn btn-sm btn-outline-success" id="tc-topup-btn" @onclick="this.IssueTradeCreditTopUpAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("Issue Fixed-Rate Top-Up", "Nạp Tín dụng (cố định)")</button>
                 </div>
             </div>
 
@@ -561,7 +562,7 @@ else if (this._configuration is { } c)
                                     <td>
                                         @if (r.Status == "Queued")
                                         {
-                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkTradeCreditCashOutPaidAsync(r.RequestId)">@L("Mark Paid", "Đã chi")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkTradeCreditCashOutPaidAsync(r.RequestId)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@L("Mark Paid", "Đã chi")</button>
                                         }
                                     </td>
                                 </tr>

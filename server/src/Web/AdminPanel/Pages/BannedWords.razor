@@ -17,6 +17,7 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextBannedWords" />
     <div class="btn-group btn-group-sm" role="group" aria-label="Language">
         <button type="button"
                 class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
@@ -122,7 +123,7 @@ else
                         <label class="form-label mb-0" for="bw-en" title="@this.L("One English word or phrase per line, or comma-separated.", "Mỗi dòng một từ hoặc cụm từ tiếng Anh, hoặc cách nhau bằng dấu phẩy.")">
                             @this.L("English banned words", "Danh sách từ cấm (Tiếng Anh)")
                         </label>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ResetEnglishDefaults">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ResetEnglishDefaults" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintReset">
                             @this.L("Restore defaults", "Khôi phục mặc định")
                         </button>
                     </div>
@@ -133,7 +134,7 @@ else
                         <label class="form-label mb-0" for="bw-vi" title="@this.L("One Vietnamese word or phrase per line, or comma-separated.", "Mỗi dòng một từ hoặc cụm từ tiếng Việt, hoặc cách nhau bằng dấu phẩy.")">
                             @this.L("Vietnamese banned words", "Danh sách từ cấm (Tiếng Việt)")
                         </label>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ResetVietnameseDefaults">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.ResetVietnameseDefaults" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintReset">
                             @this.L("Restore defaults", "Khôi phục mặc định")
                         </button>
                     </div>
@@ -175,7 +176,7 @@ else
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-outline-primary w-100" id="bw-preview-btn" @onclick="this.RunPreview">
+                        <button type="button" class="btn btn-outline-primary w-100" id="bw-preview-btn" @onclick="this.RunPreview" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintTest">
                             @this.L("Test", "Kiểm thử")
                         </button>
                     </div>

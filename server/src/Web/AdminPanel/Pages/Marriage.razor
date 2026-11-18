@@ -15,6 +15,7 @@
         ?
     </button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMarriage" />
 
 @if (this._showHelp)
 {
@@ -96,7 +97,7 @@ else
                 </div>
             </div>
 
-            <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+            <button class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
                 @L("Save settings", "Lưu cài đặt")
             </button>
         </div>
@@ -129,7 +130,7 @@ else
                                     <td>@(string.IsNullOrWhiteSpace(c.CustomTitle) ? "—" : c.CustomTitle)</td>
                                     <td>@FormatSydney(c.MarriedAtUtc)</td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => this.DissolveCouple(c.PartnerAName)">
+                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => this.DissolveCouple(c.PartnerAName)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
                                             @L("Dissolve", "Hủy hôn")
                                         </button>
                                     </td>

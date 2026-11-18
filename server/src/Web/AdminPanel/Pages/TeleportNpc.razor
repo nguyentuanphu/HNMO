@@ -12,9 +12,10 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextTeleportNpc" />
     <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
-        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)">English</button>
-        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)">Tiếng Việt</button>
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
     </div>
 </div>
 

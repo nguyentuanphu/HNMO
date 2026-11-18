@@ -380,10 +380,10 @@ public partial class WorldEditor : IAsyncDisposable
             enterGates,
             exitGates).ConfigureAwait(true);
 
-        this._renderModeLabel = info.Mode == "full-3d-world"
+        this._renderModeLabel = info?.Mode == "full-3d-world"
             ? $"{L("Full 3D World", "Thế giới 3D đầy đủ")} ({info.ObjectCount})"
             : L("3D Terrain Grid", "Lưới địa hình 3D");
-        this._totalWorldObjects = info.ObjectCount;
+        this._totalWorldObjects = info?.ObjectCount ?? 0;
         await this.RefreshObjectsListAsync().ConfigureAwait(true);
         this.StateHasChanged();
     }
@@ -620,7 +620,12 @@ public partial class WorldEditor : IAsyncDisposable
             return;
         }
 
-        var page = await this._editorHandle.InvokeAsync<WorldObjectPage>("getObjects", 0, 60).ConfigureAwait(true);
+        var page = await this._editorHandle.InvokeAsync<WorldObjectPage?>("getObjects", 0, 60).ConfigureAwait(true);
+        if (page is null)
+        {
+            return;
+        }
+
         this._totalWorldObjects = page.Total;
         this._worldObjects = page.Items;
         this.StateHasChanged();

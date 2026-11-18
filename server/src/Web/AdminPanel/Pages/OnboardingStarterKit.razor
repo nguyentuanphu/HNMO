@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/onboarding-starter-kit"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -10,6 +11,8 @@
 <PageTitle>HNMO: @Resources.OnboardingAndStarterKit</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.OnboardingAndStarterKit" />
 <h1>@Resources.OnboardingAndStarterKit</h1>
+<PageHelp Text="@HelpResources.PageHelpTextOnboardingStarterKit" />
+
 <p class="text-muted">@Resources.OnboardingPageDescription</p>
 
 @if (this._isLoading)
@@ -147,16 +150,16 @@ else
                                 <RewardEditor Reward="@s.Reward" Row="@row.Reward" />
                             </td>
                             <td class="text-nowrap">
-                                <button type="button" class="btn btn-sm btn-outline-secondary step-up" @onclick="() => this.MoveStep(row, -1)" aria-label="@Resources.OnboardingMoveUp">↑</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary step-down" @onclick="() => this.MoveStep(row, 1)" aria-label="@Resources.OnboardingMoveDown">↓</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveStep(row)">@Resources.Remove</button>
+                                <button title="@HelpResources.PageHelpHintMoveUp" type="button" class="btn btn-sm btn-outline-secondary step-up" @onclick="() => this.MoveStep(row, -1)" aria-label="@Resources.OnboardingMoveUp">↑</button>
+                                <button title="@HelpResources.PageHelpHintMoveDown" type="button" class="btn btn-sm btn-outline-secondary step-down" @onclick="() => this.MoveStep(row, 1)" aria-label="@Resources.OnboardingMoveDown">↓</button>
+                                <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveStep(row)">@Resources.Remove</button>
                             </td>
                         </tr>
                     }
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm" id="onboarding-add" @onclick="this.AddStep">@Resources.OnboardingAddStep</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm" id="onboarding-add" @onclick="this.AddStep">@Resources.OnboardingAddStep</button>
         </div>
     </section>
 
@@ -228,13 +231,13 @@ else
                                     }
                                 </select>
                             </td>
-                            <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveKitItem(item)">@Resources.Remove</button></td>
+                            <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveKitItem(item)">@Resources.Remove</button></td>
                         </tr>
                     }
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="kit-add" @onclick="this.AddKitItem">@Resources.OnboardingKitAddItem</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm mb-3" id="kit-add" @onclick="this.AddKitItem">@Resources.OnboardingKitAddItem</button>
 
             <div class="row g-3">
                 <div class="col-md-4">
@@ -285,7 +288,7 @@ else
     </section>
 
     <div class="d-flex gap-2 mb-5">
-        <button type="button" class="btn btn-primary" id="onboarding-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.OnboardingReload</button>
+        <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="onboarding-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.OnboardingReload</button>
     </div>
 }

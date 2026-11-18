@@ -1,9 +1,12 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/config-captions"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 @using HNMO.Persistence.Initialization.Captions
 @using HNMO.Web.AdminPanel.Properties
 
 <PageTitle>HNMO: @Resources.Captions</PageTitle>
+<PageHelp Text="@HelpResources.PageHelpTextCaptions" />
+
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Captions" />
 <h3>@Resources.Captions</h3>
 
@@ -129,9 +132,9 @@ else
                 <option value="@kind">@GetKindCaption(kind)</option>
             }
         </select>
-        <button class="btn btn-outline-secondary" type="button" @onclick="this.SelectRecommended">@Resources.SelectRecommended</button>
-        <button class="btn btn-outline-secondary" type="button" @onclick="this.SelectAll" disabled="@this._isBusy">@Resources.SelectAll</button>
-        <button class="btn btn-outline-secondary" type="button" @onclick="this.SelectNone">@Resources.SelectNone</button>
+        <button title="@HelpResources.PageHelpHintSelect" class="btn btn-outline-secondary" type="button" @onclick="this.SelectRecommended">@Resources.SelectRecommended</button>
+        <button title="@HelpResources.PageHelpHintSelect" class="btn btn-outline-secondary" type="button" @onclick="this.SelectAll" disabled="@this._isBusy">@Resources.SelectAll</button>
+        <button title="@HelpResources.PageHelpHintSelect" class="btn btn-outline-secondary" type="button" @onclick="this.SelectNone">@Resources.SelectNone</button>
     </div>
 
     <table class="table table-sm table-striped">
@@ -166,14 +169,14 @@ else
 
     @if (this._isBusy && !this._isLinking)
     {
-        <button class="btn btn-primary" type="button" disabled>
+        <button title="@HelpResources.PageHelpHintSave" class="btn btn-primary" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             @Resources.ApplyingChanges
         </button>
     }
     else
     {
-        <button class="btn btn-primary" type="button" disabled="@(this._isBusy || !this._changes.Any(c => c.Selected))" @onclick="this.OnApplyClickAsync">@Resources.ApplySelectedChanges</button>
+        <button title="@HelpResources.PageHelpHintSave" class="btn btn-primary" type="button" disabled="@(this._isBusy || !this._changes.Any(c => c.Selected))" @onclick="this.OnApplyClickAsync">@Resources.ApplySelectedChanges</button>
     }
 }
 

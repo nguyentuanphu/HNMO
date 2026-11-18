@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/gift-codes"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -10,6 +11,8 @@
 <PageTitle>HNMO: @Resources.GiftCodesPage</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.GiftCodesPage" />
 <h1>@Resources.GiftCodesPage</h1>
+<PageHelp Text="@HelpResources.PageHelpTextGiftCodes" />
+
 <p class="text-muted">@Resources.GiftCodesPageDescription</p>
 
 @if (this._isLoading)
@@ -60,15 +63,15 @@ else
                 </div>
             </div>
             <p class="form-text">@Resources.GiftCodesSettingsHint</p>
-            <button type="button" class="btn btn-primary" id="gift-codes-save-settings" disabled="@this._isSaving" @onclick="this.SaveSettingsAsync">@Resources.Save</button>
+            <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="gift-codes-save-settings" disabled="@this._isSaving" @onclick="this.SaveSettingsAsync">@Resources.Save</button>
         </div>
     </section>
 
     @if (this._csv is { } csv)
     {
         <div class="alert alert-success" role="status" id="gift-codes-csv">
-            <a class="btn btn-sm btn-success" href="@csv.Href" download="@csv.FileName" id="gift-codes-csv-link">@string.Format(Resources.GiftCodesDownloadCsv, csv.FileName)</a>
-            <button type="button" class="btn btn-sm btn-link" @onclick="() => this._csv = null">@Resources.Close</button>
+            <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-sm btn-success" href="@csv.Href" download="@csv.FileName" id="gift-codes-csv-link">@string.Format(Resources.GiftCodesDownloadCsv, csv.FileName)</a>
+            <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn btn-sm btn-link" @onclick="() => this._csv = null">@Resources.Close</button>
         </div>
     }
 
@@ -188,13 +191,13 @@ else
                                 <td><input class="form-check-input item-luck" type="checkbox" @bind="item.Luck" aria-label="@Resources.GiftCodesItemLuck" /></td>
                                 <td><input class="form-control form-control-sm item-option" style="width: 4.5rem" type="number" min="0" max="7" @bind="item.OptionLevel" aria-label="@Resources.GiftCodesItemOption" /></td>
                                 <td><input class="form-control form-control-sm item-excellent" style="width: 4.5rem" type="number" min="0" max="63" @bind="item.ExcellentOptions" aria-label="@Resources.GiftCodesItemExcellent" /></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger item-remove" @onclick="() => d.Reward.Items.Remove(item)">@Resources.Remove</button></td>
+                                <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger item-remove" @onclick="() => d.Reward.Items.Remove(item)">@Resources.Remove</button></td>
                             </tr>
                         }
                         </tbody>
                     </table>
                 </div>
-                <button type="button" class="btn btn-outline-primary btn-sm" id="gift-code-add-item" @onclick="() => d.Reward.Items.Add(new GiftCodeItem { Group = 14, Number = 13, Count = 1 })">@Resources.GiftCodesAddItem</button>
+                <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm" id="gift-code-add-item" @onclick="() => d.Reward.Items.Add(new GiftCodeItem { Group = 14, Number = 13, Count = 1 })">@Resources.GiftCodesAddItem</button>
                 <p class="form-text">@Resources.GiftCodesItemsHint</p>
 
                 <h3 class="h6 mt-3">@Resources.GiftCodesRules</h3>
@@ -259,8 +262,8 @@ else
                 </div>
 
                 <div class="mt-3 d-flex gap-2">
-                    <button type="button" class="btn btn-primary" id="gift-code-save" @onclick="this.SaveCode">@(draft.IsNew && draft.IsBatch ? Resources.GiftCodesMakeBatch : Resources.Save)</button>
-                    <button type="button" class="btn btn-outline-secondary" id="gift-code-cancel" @onclick="this.CancelEdit">@Resources.Cancel</button>
+                    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="gift-code-save" @onclick="this.SaveCode">@(draft.IsNew && draft.IsBatch ? Resources.GiftCodesMakeBatch : Resources.Save)</button>
+                    <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn btn-outline-secondary" id="gift-code-cancel" @onclick="this.CancelEdit">@Resources.Cancel</button>
                 </div>
             </div>
         </section>
@@ -268,8 +271,8 @@ else
     else
     {
         <div class="mb-3 d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary" id="gift-codes-new" @onclick="() => this.NewCode(false)">@Resources.GiftCodesNewCode</button>
-            <button type="button" class="btn btn-outline-primary" id="gift-codes-new-batch" @onclick="() => this.NewCode(true)">@Resources.GiftCodesNewBatch</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary" id="gift-codes-new" @onclick="() => this.NewCode(false)">@Resources.GiftCodesNewCode</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary" id="gift-codes-new-batch" @onclick="() => this.NewCode(true)">@Resources.GiftCodesNewBatch</button>
         </div>
     }
 
@@ -313,9 +316,9 @@ else
                             <td>@this.DatesText(row)</td>
                             <td><input class="form-check-input gift-code-enabled" type="checkbox" checked="@row.Enabled" @onchange="e => this.SetEnabled(row, e.Value is true)" aria-label="@Resources.MissionsOn" /></td>
                             <td class="text-nowrap">
-                                <button type="button" class="btn btn-sm btn-outline-primary gift-code-edit" @onclick="() => this.Edit(row)">@Resources.Edit</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary gift-code-csv" @onclick="() => this.PrepareCsv(row)">CSV</button>
-                                <button type="button" class="btn btn-sm @(this._confirmDelete == row.Id ? "btn-danger" : "btn-outline-danger") gift-code-delete" @onclick="() => this.Delete(row)">@(this._confirmDelete == row.Id ? Resources.GiftCodesReallyDelete : Resources.Delete)</button>
+                                <button title="@HelpResources.PageHelpHintEdit" type="button" class="btn btn-sm btn-outline-primary gift-code-edit" @onclick="() => this.Edit(row)">@Resources.Edit</button>
+                                <button title="@HelpResources.PageHelpHintDownload" type="button" class="btn btn-sm btn-outline-secondary gift-code-csv" @onclick="() => this.PrepareCsv(row)">CSV</button>
+                                <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm @(this._confirmDelete == row.Id ? "btn-danger" : "btn-outline-danger") gift-code-delete" @onclick="() => this.Delete(row)">@(this._confirmDelete == row.Id ? Resources.GiftCodesReallyDelete : Resources.Delete)</button>
                             </td>
                         </tr>
                     }

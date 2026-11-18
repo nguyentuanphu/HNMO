@@ -9,6 +9,7 @@
 
 <Breadcrumb Caption="@this.Model.GetName()" />
 <h1>@Resources.Edit @this.ModelType.GetTypeCaption()</h1>
+<PageHelp Text="@this.HelpText" />
 @((MarkupString)(this.DownloadMarkup ?? string.Empty))
 @((MarkupString)(this.EditorsMarkup ?? string.Empty))
 
@@ -17,6 +18,10 @@
 </CascadingValue>
 
 @code {
+
+    /// <summary>Gets or sets the localized explanation for this editor.</summary>
+    [Parameter]
+    public string HelpText { get; set; } = Resources.PageHelpTextEditConfig;
 
     /// <summary>
     /// Gets or sets the edited model.

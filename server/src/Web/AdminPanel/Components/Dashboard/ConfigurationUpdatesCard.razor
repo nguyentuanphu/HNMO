@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @using HNMO.Persistence.Initialization.Updates
 @using HNMO.Web.AdminPanel.Properties
 
@@ -23,7 +24,7 @@
                     <span class="fs-3 fw-semibold">@this._availableUpdates</span>
                     <span class="text-body-secondary">@Resources.DashboardUpdatesAvailable</span>
                 </div>
-                <a class="btn btn-primary align-self-start" href="config-updates">@Resources.DashboardReviewUpdates</a>
+                <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary align-self-start" href="config-updates">@Resources.DashboardReviewUpdates</a>
                 break;
         }
     </div>

@@ -1,4 +1,5 @@
-﻿@page "/servers"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/servers"
 
 @using System.ComponentModel
 @using System.Globalization
@@ -12,6 +13,7 @@
 
 <PageTitle>HNMO: @Resources.Servers</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Servers"/>
+<div class="page-help">
 <div class="d-flex align-items-center gap-2 mb-2">
     <h1 class="mb-0">@Resources.Servers</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="servers-help-toggle" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
@@ -19,7 +21,7 @@
 
 @if (this._showHelp)
 {
-    <div class="alert alert-info page-help" role="region" id="servers-help">
+    <div class="alert alert-info" role="region" id="servers-help">
         <strong>@L("Plain Server Settings Guide:", "Hướng dẫn cấu hình máy chủ:")</strong>
         <ul class="mb-0 mt-1">
             <li>@L("Enable 'VIP only' to require an active VIP grant (Stats.IsVip from #39 VIP Manager / Account VIP) before entering that server.", "Bật 'Chỉ VIP' để yêu cầu tài khoản có VIP còn hạn khi vào máy chủ này.")</li>
@@ -28,6 +30,7 @@
         </ul>
     </div>
 }
+</div>
 
 @if (_servers == null)
 {
@@ -136,10 +139,10 @@ else
     <tr>
       <td></td>
       <td>
-        <NavLink class="btn btn-primary me-1" href="create-game-server">
+        <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary me-1" href="create-game-server">
           <span class="oi oi-plus"></span> @Resources.GameServer
         </NavLink>
-        <NavLink class="btn btn-primary" href="create-connect-server">
+        <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary" href="create-connect-server">
             <span class="oi oi-plus"></span> @Resources.ConnectServer
         </NavLink>
       </td>
@@ -150,14 +153,14 @@ else
         {
           @if (this._isRestarting)
           {
-            <button type="button" class="btn btn-warning btn-sm" disabled="disabled">
+            <button title="@HelpResources.PageHelpHintStatus" type="button" class="btn btn-warning btn-sm" disabled="disabled">
               <div class="spinner-border text-secondary" role="status">
               </div>
             </button>
           }
           else
           {
-            <button type="button" class="btn btn-warning btn-sm" @onclick="this.OnReloadAndRestartClickAsync">
+            <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-warning btn-sm" @onclick="this.OnReloadAndRestartClickAsync">
               <span class="oi oi-reload"></span>
               @Resources.ReloadConfigurationAndRestartAllGameServers
             </button>

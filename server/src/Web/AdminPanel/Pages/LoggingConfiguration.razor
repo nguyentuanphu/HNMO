@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/logging-configuration"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -7,6 +8,8 @@
 <PageTitle>HNMO: @Resources.LoggingConfiguration</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.LoggingConfiguration"/>
 <h1>@Resources.LoggingConfiguration</h1>
+<PageHelp Text="@HelpResources.PageHelpTextLoggingConfiguration" />
+
 
 @if (!AdminPanelEnvironment.IsHostingEmbedded)
 {
@@ -19,7 +22,7 @@
 @if (this._loadError is { } loadError)
 {
     <div class="alert alert-danger" role="alert">@string.Format(Resources.LoggingConfigurationLoadError, loadError)</div>
-    <button type="button" class="btn btn-secondary" @onclick="this.LoadAsync">
+    <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-secondary" @onclick="this.LoadAsync">
         <span class="oi oi-reload" aria-hidden="true"></span> @Resources.Reload
     </button>
     return;
@@ -33,10 +36,10 @@
 
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
-        <button type="button" class="nav-link @(this._showJson ? null : "active")" @onclick="() => this._showJson = false">@Resources.LogLevels</button>
+        <button title="@HelpResources.PageHelpHintNavigate" type="button" class="nav-link @(this._showJson ? null : "active")" @onclick="() => this._showJson = false">@Resources.LogLevels</button>
     </li>
     <li class="nav-item">
-        <button type="button" class="nav-link @(this._showJson ? "active" : null)" @onclick="() => this._showJson = true">@Resources.AdvancedJson</button>
+        <button title="@HelpResources.PageHelpHintNavigate" type="button" class="nav-link @(this._showJson ? "active" : null)" @onclick="() => this._showJson = true">@Resources.AdvancedJson</button>
     </li>
 </ul>
 
@@ -86,7 +89,7 @@ else
                     </select>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => settings.Overrides.Remove(levelOverride)">
+                    <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => settings.Overrides.Remove(levelOverride)">
                         <span class="oi oi-trash" aria-hidden="true"></span> @Resources.Remove
                     </button>
                 </td>
@@ -94,16 +97,16 @@ else
         }
         </tbody>
     </table>
-    <button type="button" class="btn btn-secondary mb-3" @onclick="() => settings.Overrides.Add(new LogLevelOverride())">
+    <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-secondary mb-3" @onclick="() => settings.Overrides.Add(new LogLevelOverride())">
         <span class="oi oi-plus" aria-hidden="true"></span> @Resources.AddNew
     </button>
 }
 
 <div>
-    <button type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
         <span class="oi oi-check" aria-hidden="true"></span> @Resources.Save
     </button>
-    <button type="button" class="btn btn-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">
+    <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">
         <span class="oi oi-reload" aria-hidden="true"></span> @Resources.Reload
     </button>
 </div>

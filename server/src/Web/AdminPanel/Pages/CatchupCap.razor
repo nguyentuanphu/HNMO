@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Catch-up level & reset cap", "Giới hạn cấp & reset đuổi kịp")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextCatchupCap" />
 <p class="text-muted">@L("Prevent early-season runaways: lock the initial level (or daily reset) cap until the first player reaches it, then rise N/day in Sydney time.", "Chống cày vượt cấp đầu mùa: giữ giới hạn cấp (hoặc reset ngày) ban đầu cho đến khi người đầu tiên đạt mốc, sau đó tự tăng N mỗi ngày theo giờ Sydney.")</p>
 
 @if (this._showHelp)
@@ -121,8 +122,8 @@ else
             </div>
 
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-primary" id="cu-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-                <button type="button" class="btn btn-outline-danger" @onclick="this.ResetTriggersAsync">@L("Reset trigger history", "Xóa dấu mốc mở khóa")</button>
+                <button type="button" class="btn btn-primary" id="cu-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="this.ResetTriggersAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">@L("Reset trigger history", "Xóa dấu mốc mở khóa")</button>
             </div>
         </div>
     </section>

@@ -13405,1185 +13405,2699 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Enable lets a key connect again. Disable stops it until you enable it again. Delete removes it permanently. Change limits the tasks available to an automated assistant using the key; the key and its role stay the same..
-        /// </summary>
-        public static string ApiKeysHelpButtons {
+        /// <summary>Looks up a localized string.</summary>
+        public static string Name1 {
             get {
-                return ResourceManager.GetString("ApiKeysHelpButtons", resourceCulture);
+                return ResourceManager.GetString("Name1", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Click Create API key, give it a name and choose only the access the program needs. Copy the key as soon as it appears: the full key is shown only once..
-        /// </summary>
-        public static string ApiKeysHelpCreate {
+        /// <summary>Looks up a localized string.</summary>
+        public static string Bitmap1 {
             get {
-                return ResourceManager.GetString("ApiKeysHelpCreate", resourceCulture);
+                return ResourceManager.GetString("Bitmap1", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Never post a key in public or share it in a screenshot. Delete keys you no longer use; if a key is exposed, delete it and create a replacement..
-        /// </summary>
-        public static string ApiKeysHelpSafety {
+        /// <summary>Looks up a localized string.</summary>
+        public static string Icon1 {
             get {
-                return ResourceManager.GetString("ApiKeysHelpSafety", resourceCulture);
+                return ResourceManager.GetString("Icon1", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to How to use this page.
-        /// </summary>
-        public static string ApiKeysHelpTitle {
-            get {
-                return ResourceManager.GetString("ApiKeysHelpTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to An API key is like a password for another program, such as the website's account page, a Discord bot or a top-up/payment service. It lets that program talk to this server without giving it your admin password..
-        /// </summary>
-        public static string ApiKeysHelpWhat {
-            get {
-                return ResourceManager.GetString("ApiKeysHelpWhat", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to You only need a key when such a program runs on another computer, or when its setup asks for one. If everything in the HNMO folder runs on one computer, you usually do not need to create a key..
-        /// </summary>
-        public static string ApiKeysHelpWhen {
-            get {
-                return ResourceManager.GetString("ApiKeysHelpWhen", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Change the tasks an automated assistant may use with this key, keeping its role and secret unchanged..
-        /// </summary>
-        public static string ApiKeysHintChange {
-            get {
-                return ResourceManager.GetString("ApiKeysHintChange", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Hide this key after copying it, because you cannot show the full key again..
-        /// </summary>
-        public static string ApiKeysHintClose {
-            get {
-                return ResourceManager.GetString("ApiKeysHintClose", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Copy the full key so you can paste it into the program that needs it..
-        /// </summary>
-        public static string ApiKeysHintCopy {
-            get {
-                return ResourceManager.GetString("ApiKeysHintCopy", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Create a separate key and choose the access for the program that will use it..
-        /// </summary>
-        public static string ApiKeysHintCreate {
-            get {
-                return ResourceManager.GetString("ApiKeysHintCreate", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Permanently remove this key so the program using it can no longer connect with it..
-        /// </summary>
-        public static string ApiKeysHintDelete {
-            get {
-                return ResourceManager.GetString("ApiKeysHintDelete", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Temporarily stop this key from connecting without deleting it..
-        /// </summary>
-        public static string ApiKeysHintDisable {
-            get {
-                return ResourceManager.GetString("ApiKeysHintDisable", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Allow the program to connect with this key again..
-        /// </summary>
-        public static string ApiKeysHintEnable {
-            get {
-                return ResourceManager.GetString("ApiKeysHintEnable", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Show or hide the instructions for using this page..
-        /// </summary>
-        public static string ApiKeysHintHelp {
-            get {
-                return ResourceManager.GetString("ApiKeysHintHelp", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to One use per network address.
-        /// </summary>
-        public static string GiftCodesOncePerNetwork {
-            get {
-                return ResourceManager.GetString("GiftCodesOncePerNetwork", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to One use per device.
-        /// </summary>
-        public static string GiftCodesOncePerDevice {
-            get {
-                return ResourceManager.GetString("GiftCodesOncePerDevice", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Accounts sharing an internet address can claim this code only once in total..
-        /// </summary>
-        public static string GiftCodesNetworkHint {
-            get {
-                return ResourceManager.GetString("GiftCodesNetworkHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Accounts using the same browser device id can claim once. Older clients without an id are not checked by device..
-        /// </summary>
-        public static string GiftCodesDeviceHint {
-            get {
-                return ResourceManager.GetString("GiftCodesDeviceHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Networks.
-        /// </summary>
-        public static string GiftCodesNetworks {
-            get {
-                return ResourceManager.GetString("GiftCodesNetworks", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Devices.
-        /// </summary>
-        public static string GiftCodesDevices {
-            get {
-                return ResourceManager.GetString("GiftCodesDevices", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Distinct known addresses or devices recorded since this feature was installed; older claims are not included..
-        /// </summary>
-        public static string GiftCodesIdentityCountHint {
-            get {
-                return ResourceManager.GetString("GiftCodesIdentityCountHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to NPC shop editor.
-        /// </summary>
-        public static string ShopEditorTitle {
-            get {
-                return ResourceManager.GetString("ShopEditorTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Open the old shop editor.
-        /// </summary>
-        public static string ShopEditorLegacy {
-            get {
-                return ResourceManager.GetString("ShopEditorLegacy", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to How to use this page.
-        /// </summary>
-        public static string ShopEditorHelpTitle {
-            get {
-                return ResourceManager.GetString("ShopEditorHelpTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Choose a merchant, then search the catalogue on the left. Click a name for the first fitting space, drag an item to a cell, or select several and add them together. Category additions use the active filters and show how many fit before confirmation. Click a shop item to edit its properties. Auto-arrange packs larger rectangles first; if it cannot fit everything, your layout stays unchanged. Undo and redo cover the last 100 edits. Discard returns to the saved shop. Save confirms added, removed, moved and updated counts. Prices shown are the standard base prices; taxes and purchase plug-ins can change the amount paid. Existing players may need to reopen a shop to see a saved layout..
-        /// </summary>
-        public static string ShopEditorHelp {
-            get {
-                return ResourceManager.GetString("ShopEditorHelp", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Search merchants, maps or coordinates.
-        /// </summary>
-        public static string ShopEditorSearch {
-            get {
-                return ResourceManager.GetString("ShopEditorSearch", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Merchant NPC.
-        /// </summary>
-        public static string ShopEditorNpc {
-            get {
-                return ResourceManager.GetString("ShopEditorNpc", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Map and spawn position.
-        /// </summary>
-        public static string ShopEditorLocation {
-            get {
-                return ResourceManager.GetString("ShopEditorLocation", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to No configured spawn.
-        /// </summary>
-        public static string ShopEditorNoSpawn {
-            get {
-                return ResourceManager.GetString("ShopEditorNoSpawn", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Items.
-        /// </summary>
-        public static string ShopEditorCount {
-            get {
-                return ResourceManager.GetString("ShopEditorCount", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Shop preview.
-        /// </summary>
-        public static string ShopEditorPreview {
-            get {
-                return ResourceManager.GetString("ShopEditorPreview", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Edit shop.
-        /// </summary>
-        public static string ShopEditorEdit {
-            get {
-                return ResourceManager.GetString("ShopEditorEdit", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Copy this shop to….
-        /// </summary>
-        public static string ShopEditorCopy {
-            get {
-                return ResourceManager.GetString("ShopEditorCopy", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Choose another merchant; the copied draft is not saved until you confirm Save..
-        /// </summary>
-        public static string ShopEditorCopyHint {
-            get {
-                return ResourceManager.GetString("ShopEditorCopyHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Choose a destination merchant.
-        /// </summary>
-        public static string ShopEditorCopyTarget {
-            get {
-                return ResourceManager.GetString("ShopEditorCopyTarget", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Replace the draft for {0} with {1} items from {2}? Nothing is saved yet..
-        /// </summary>
-        public static string ShopEditorCopyConfirm {
-            get {
-                return ResourceManager.GetString("ShopEditorCopyConfirm", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Back to shops.
-        /// </summary>
-        public static string ShopEditorBack {
-            get {
-                return ResourceManager.GetString("ShopEditorBack", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Add selected.
-        /// </summary>
-        public static string ShopEditorAddSelected {
-            get {
-                return ResourceManager.GetString("ShopEditorAddSelected", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Add whole category.
-        /// </summary>
-        public static string ShopEditorAddCategory {
-            get {
-                return ResourceManager.GetString("ShopEditorAddCategory", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Choose a category first; add all matching entries using the current filters..
-        /// </summary>
-        public static string ShopEditorCategoryHint {
-            get {
-                return ResourceManager.GetString("ShopEditorCategoryHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to {0} matching items: {1} fit, {2} do not. Add the items that fit?.
-        /// </summary>
-        public static string ShopEditorBulkConfirm {
-            get {
-                return ResourceManager.GetString("ShopEditorBulkConfirm", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Added {0}; {1} did not fit..
-        /// </summary>
-        public static string ShopEditorAdded {
-            get {
-                return ResourceManager.GetString("ShopEditorAdded", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to This item does not fit here. Free space or choose another position..
-        /// </summary>
-        public static string ShopEditorDoesNotFit {
-            get {
-                return ResourceManager.GetString("ShopEditorDoesNotFit", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Auto-arrange.
-        /// </summary>
-        public static string ShopEditorArrange {
-            get {
-                return ResourceManager.GetString("ShopEditorArrange", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Repack larger items first, keeping all properties; an unsuccessful packing changes nothing..
-        /// </summary>
-        public static string ShopEditorArrangeHint {
-            get {
-                return ResourceManager.GetString("ShopEditorArrangeHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to These items could not all be repacked. The layout was left unchanged..
-        /// </summary>
-        public static string ShopEditorArrangeFailed {
-            get {
-                return ResourceManager.GetString("ShopEditorArrangeFailed", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Clear shop.
-        /// </summary>
-        public static string ShopEditorClear {
-            get {
-                return ResourceManager.GetString("ShopEditorClear", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Remove all {0} items from this draft? You can undo before saving..
-        /// </summary>
-        public static string ShopEditorClearConfirm {
-            get {
-                return ResourceManager.GetString("ShopEditorClearConfirm", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Undo.
-        /// </summary>
-        public static string ShopEditorUndo {
-            get {
-                return ResourceManager.GetString("ShopEditorUndo", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Redo.
-        /// </summary>
-        public static string ShopEditorRedo {
-            get {
-                return ResourceManager.GetString("ShopEditorRedo", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Discard changes.
-        /// </summary>
-        public static string ShopEditorDiscard {
-            get {
-                return ResourceManager.GetString("ShopEditorDiscard", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Restore the saved shop and clear local undo history..
-        /// </summary>
-        public static string ShopEditorDiscardHint {
-            get {
-                return ResourceManager.GetString("ShopEditorDiscardHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Save shop.
-        /// </summary>
-        public static string ShopEditorSave {
-            get {
-                return ResourceManager.GetString("ShopEditorSave", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Added {0} · removed {1} · moved {2} · updated {3}.
-        /// </summary>
-        public static string ShopEditorSummary {
-            get {
-                return ResourceManager.GetString("ShopEditorSummary", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Save this shop? {0}.
-        /// </summary>
-        public static string ShopEditorSaveConfirm {
-            get {
-                return ResourceManager.GetString("ShopEditorSaveConfirm", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Shop saved. {0}.
-        /// </summary>
-        public static string ShopEditorSaved {
-            get {
-                return ResourceManager.GetString("ShopEditorSaved", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to The save could not be confirmed. Reload the shop before retrying; check the server log..
-        /// </summary>
-        public static string ShopEditorSaveFailed {
-            get {
-                return ResourceManager.GetString("ShopEditorSaveFailed", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to The shop or configuration changed elsewhere. Reload it before saving..
-        /// </summary>
-        public static string ShopEditorConflict {
-            get {
-                return ResourceManager.GetString("ShopEditorConflict", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to The draft contains overlaps, items outside the grid or invalid properties. Fix them or undo before saving..
-        /// </summary>
-        public static string ShopEditorInvalid {
-            get {
-                return ResourceManager.GetString("ShopEditorInvalid", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to {0} / {1} cells used.
-        /// </summary>
-        public static string ShopEditorCapacity {
-            get {
-                return ResourceManager.GetString("ShopEditorCapacity", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Selected item.
-        /// </summary>
-        public static string ShopEditorDetails {
-            get {
-                return ResourceManager.GetString("ShopEditorDetails", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Click an item in the grid to edit its level, options and durability..
-        /// </summary>
-        public static string ShopEditorSelectHint {
-            get {
-                return ResourceManager.GetString("ShopEditorSelectHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Base purchase price: {0:N0} Zen.
-        /// </summary>
-        public static string ShopEditorPrice {
-            get {
-                return ResourceManager.GetString("ShopEditorPrice", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Uses the server ItemPriceCalculator; tax and player-specific purchase plug-ins are not included..
-        /// </summary>
-        public static string ShopEditorPriceHint {
-            get {
-                return ResourceManager.GetString("ShopEditorPriceHint", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Price unavailable for this item definition..
-        /// </summary>
-        public static string ShopEditorPriceUnavailable {
-            get {
-                return ResourceManager.GetString("ShopEditorPriceUnavailable", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Remove selected item.
-        /// </summary>
-        public static string ShopEditorDelete {
-            get {
-                return ResourceManager.GetString("ShopEditorDelete", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Discard this unsaved shop draft?.
-        /// </summary>
-        public static string ShopEditorUnsaved {
-            get {
-                return ResourceManager.GetString("ShopEditorUnsaved", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Shop data could not be loaded. Check the server log and reload..
-        /// </summary>
-        public static string ShopEditorLoadingFailed {
-            get {
-                return ResourceManager.GetString("ShopEditorLoadingFailed", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Reload saved shop.
-        /// </summary>
-        public static string ShopEditorReload {
-            get {
-                return ResourceManager.GetString("ShopEditorReload", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to No matching merchants..
-        /// </summary>
-        public static string ShopEditorEmpty {
-            get {
-                return ResourceManager.GetString("ShopEditorEmpty", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Saving the shop. Wait before leaving this page..
-        /// </summary>
-        public static string ShopEditorPending {
-            get {
-                return ResourceManager.GetString("ShopEditorPending", resourceCulture);
-            }
-        }
-
-
-
-
-        /// <summary>
-        ///   Looks up a localized string similar to Devil Square.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_DevilSquare {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_DevilSquare", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Blood Castle.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_BloodCastle {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_BloodCastle", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Chaos Castle.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_ChaosCastle {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_ChaosCastle", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Illusion Temple.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_IllusionTemple {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_IllusionTemple", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Doppelganger.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_Doppelganger {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_Doppelganger", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Kanturu.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_Kanturu {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_Kanturu", resourceCulture);
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Imperial Guardian.
-        /// </summary>
+        /// <summary>Looks up a localized string.</summary>
         public static string LeaderboardMiniGame_ImperialGuardian {
             get {
                 return ResourceManager.GetString("LeaderboardMiniGame_ImperialGuardian", resourceCulture);
             }
         }
 
-        /// <summary>Looks up a localized string similar to Host settings.</summary>
-        public static string HostSettingsPage => ResourceManager.GetString("HostSettingsPage", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to How to use this page.</summary>
-        public static string HostSettingsHelpTitle => ResourceManager.GetString("HostSettingsHelpTitle", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Help body.</summary>
-        public static string HostSettingsHelpBody => ResourceManager.GetString("HostSettingsHelpBody", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Restart note.</summary>
-        public static string HostSettingsRestartNote => ResourceManager.GetString("HostSettingsRestartNote", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Ports and public address.</summary>
-        public static string HostSettingsPortsSection => ResourceManager.GetString("HostSettingsPortsSection", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Web bridge and launcher.</summary>
-        public static string HostSettingsBridgeSection => ResourceManager.GetString("HostSettingsBridgeSection", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Database connection.</summary>
-        public static string HostSettingsDatabaseSection => ResourceManager.GetString("HostSettingsDatabaseSection", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Player license.</summary>
-        public static string HostSettingsLicenseSection => ResourceManager.GetString("HostSettingsLicenseSection", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Save settings.</summary>
-        public static string HostSettingsSaveButton => ResourceManager.GetString("HostSettingsSaveButton", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Restart HNMO.</summary>
-        public static string HostSettingsRestartButton => ResourceManager.GetString("HostSettingsRestartButton", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Restart confirm.</summary>
-        public static string HostSettingsRestartConfirm => ResourceManager.GetString("HostSettingsRestartConfirm", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Host settings saved.</summary>
-        public static string HostSettingsSaved => ResourceManager.GetString("HostSettingsSaved", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to HNMO is saving and restarting...</summary>
-        public static string HostSettingsRestarting => ResourceManager.GetString("HostSettingsRestarting", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Restart unsupported.</summary>
-        public static string HostSettingsRestartUnsupported => ResourceManager.GetString("HostSettingsRestartUnsupported", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Password masked hint.</summary>
-        public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailTitle text.</summary>
-        public static string WebsiteMailTitle => ResourceManager.GetString("WebsiteMailTitle", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailHelp text.</summary>
-        public static string WebsiteMailHelp => ResourceManager.GetString("WebsiteMailHelp", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailEnabled text.</summary>
-        public static string WebsiteMailEnabled => ResourceManager.GetString("WebsiteMailEnabled", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailEnabledHint text.</summary>
-        public static string WebsiteMailEnabledHint => ResourceManager.GetString("WebsiteMailEnabledHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailHost text.</summary>
-        public static string WebsiteMailHost => ResourceManager.GetString("WebsiteMailHost", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailHostHint text.</summary>
-        public static string WebsiteMailHostHint => ResourceManager.GetString("WebsiteMailHostHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailPort text.</summary>
-        public static string WebsiteMailPort => ResourceManager.GetString("WebsiteMailPort", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailPortHint text.</summary>
-        public static string WebsiteMailPortHint => ResourceManager.GetString("WebsiteMailPortHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailFrom text.</summary>
-        public static string WebsiteMailFrom => ResourceManager.GetString("WebsiteMailFrom", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailFromHint text.</summary>
-        public static string WebsiteMailFromHint => ResourceManager.GetString("WebsiteMailFromHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailUser text.</summary>
-        public static string WebsiteMailUser => ResourceManager.GetString("WebsiteMailUser", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailUserHint text.</summary>
-        public static string WebsiteMailUserHint => ResourceManager.GetString("WebsiteMailUserHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailPassword text.</summary>
-        public static string WebsiteMailPassword => ResourceManager.GetString("WebsiteMailPassword", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailPasswordHint text.</summary>
-        public static string WebsiteMailPasswordHint => ResourceManager.GetString("WebsiteMailPasswordHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailPasswordSaved text.</summary>
-        public static string WebsiteMailPasswordSaved => ResourceManager.GetString("WebsiteMailPasswordSaved", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailSaveHint text.</summary>
-        public static string WebsiteMailSaveHint => ResourceManager.GetString("WebsiteMailSaveHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailOpenHint text.</summary>
-        public static string WebsiteMailOpenHint => ResourceManager.GetString("WebsiteMailOpenHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailSaved text.</summary>
-        public static string WebsiteMailSaved => ResourceManager.GetString("WebsiteMailSaved", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailInvalid text.</summary>
-        public static string WebsiteMailInvalid => ResourceManager.GetString("WebsiteMailInvalid", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailUnavailable text.</summary>
-        public static string WebsiteMailUnavailable => ResourceManager.GetString("WebsiteMailUnavailable", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailConfirmationSubject text.</summary>
-        public static string WebsiteMailConfirmationSubject => ResourceManager.GetString("WebsiteMailConfirmationSubject", resourceCulture)!;
-
-        /// <summary>Looks up the localized WebsiteMailConfirmationBody text.</summary>
-        public static string WebsiteMailConfirmationBody => ResourceManager.GetString("WebsiteMailConfirmationBody", resourceCulture)!;
-
-        /// <summary>Looks up the localized PageHelpTitle text.</summary>
-        public static string PageHelpTitle => ResourceManager.GetString("PageHelpTitle", resourceCulture)!;
-
-        /// <summary>Looks up the localized PageHelpToggleHint text.</summary>
-        public static string PageHelpToggleHint => ResourceManager.GetString("PageHelpToggleHint", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryExtraVault text.</summary>
-        public static string AccountCoinHistoryExtraVault => ResourceManager.GetString("AccountCoinHistoryExtraVault", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryMarketPurchase text.</summary>
-        public static string AccountCoinHistoryMarketPurchase => ResourceManager.GetString("AccountCoinHistoryMarketPurchase", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryPlayerStorePurchase text.</summary>
-        public static string AccountCoinHistoryPlayerStorePurchase => ResourceManager.GetString("AccountCoinHistoryPlayerStorePurchase", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryPlayerStoreSale text.</summary>
-        public static string AccountCoinHistoryPlayerStoreSale => ResourceManager.GetString("AccountCoinHistoryPlayerStoreSale", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryReset text.</summary>
-        public static string AccountCoinHistoryReset => ResourceManager.GetString("AccountCoinHistoryReset", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryRelife text.</summary>
-        public static string AccountCoinHistoryRelife => ResourceManager.GetString("AccountCoinHistoryRelife", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryClearStats text.</summary>
-        public static string AccountCoinHistoryClearStats => ResourceManager.GetString("AccountCoinHistoryClearStats", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryClearMaster text.</summary>
-        public static string AccountCoinHistoryClearMaster => ResourceManager.GetString("AccountCoinHistoryClearMaster", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryPlayTime text.</summary>
-        public static string AccountCoinHistoryPlayTime => ResourceManager.GetString("AccountCoinHistoryPlayTime", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryCashShop text.</summary>
-        public static string AccountCoinHistoryCashShop => ResourceManager.GetString("AccountCoinHistoryCashShop", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryGift text.</summary>
-        public static string AccountCoinHistoryGift => ResourceManager.GetString("AccountCoinHistoryGift", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryOtherCharacter text.</summary>
-        public static string AccountCoinHistoryOtherCharacter => ResourceManager.GetString("AccountCoinHistoryOtherCharacter", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryCreatedAt text.</summary>
-        public static string AccountCoinHistoryCreatedAt => ResourceManager.GetString("AccountCoinHistoryCreatedAt", resourceCulture)!;
-
-        /// <summary>Looks up the localized AccountCoinHistoryAppliedAt text.</summary>
-        public static string AccountCoinHistoryAppliedAt => ResourceManager.GetString("AccountCoinHistoryAppliedAt", resourceCulture)!;
-
-        /// <summary>Looks up the localized market-sale description.</summary>
-        public static string AccountCoinHistoryMarketSale => ResourceManager.GetString("AccountCoinHistoryMarketSale", resourceCulture)!;
-
-        /// <summary>Looks up the localized VipCoinHistoryPurchase text.</summary>
-        public static string VipCoinHistoryPurchase => ResourceManager.GetString("VipCoinHistoryPurchase", resourceCulture)!;
-
-        /// <summary>Looks up the localized VipCoinHistoryDaily text.</summary>
-        public static string VipCoinHistoryDaily => ResourceManager.GetString("VipCoinHistoryDaily", resourceCulture)!;
-        /// <summary>Gets the localized description of a host VIP removal.</summary>
-        public static string VipCoinHistoryRemoved => ResourceManager.GetString("VipCoinHistoryRemoved", resourceCulture)!;
-
-        /// <summary>Gets the localized administration activity category.</summary>
-        public static string VipActivityAdministration => ResourceManager.GetString("VipActivityAdministration", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerTitle => ResourceManager.GetString("VipManagerTitle", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerHelp => ResourceManager.GetString("VipManagerHelp", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAccount => ResourceManager.GetString("VipManagerAccount", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAccountHint => ResourceManager.GetString("VipManagerAccountHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerLevel => ResourceManager.GetString("VipManagerLevel", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerDays => ResourceManager.GetString("VipManagerDays", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerDaysHint => ResourceManager.GetString("VipManagerDaysHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReason => ResourceManager.GetString("VipManagerReason", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReasonHint => ResourceManager.GetString("VipManagerReasonHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReviewGrant => ResourceManager.GetString("VipManagerReviewGrant", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReviewGrantHint => ResourceManager.GetString("VipManagerReviewGrantHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReviewRemove => ResourceManager.GetString("VipManagerReviewRemove", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReviewRemoveHint => ResourceManager.GetString("VipManagerReviewRemoveHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerConfirm => ResourceManager.GetString("VipManagerConfirm", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerConfirmHint => ResourceManager.GetString("VipManagerConfirmHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCancel => ResourceManager.GetString("VipManagerCancel", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCancelHint => ResourceManager.GetString("VipManagerCancelHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerRetry => ResourceManager.GetString("VipManagerRetry", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerRetryHint => ResourceManager.GetString("VipManagerRetryHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReload => ResourceManager.GetString("VipManagerReload", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReloadHint => ResourceManager.GetString("VipManagerReloadHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerFilter => ResourceManager.GetString("VipManagerFilter", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerFilterHint => ResourceManager.GetString("VipManagerFilterHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNext => ResourceManager.GetString("VipManagerNext", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerPrevious => ResourceManager.GetString("VipManagerPrevious", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerPagerHint => ResourceManager.GetString("VipManagerPagerHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerSettings => ResourceManager.GetString("VipManagerSettings", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerEnabled => ResourceManager.GetString("VipManagerEnabled", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerEnabledHint => ResourceManager.GetString("VipManagerEnabledHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerChatBadge => ResourceManager.GetString("VipManagerChatBadge", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerChatBadgeHint => ResourceManager.GetString("VipManagerChatBadgeHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNameEn => ResourceManager.GetString("VipManagerNameEn", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNameVi => ResourceManager.GetString("VipManagerNameVi", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNameHint => ResourceManager.GetString("VipManagerNameHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerLevelId => ResourceManager.GetString("VipManagerLevelId", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerLevelIdHint => ResourceManager.GetString("VipManagerLevelIdHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerExperience => ResourceManager.GetString("VipManagerExperience", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerExperienceHint => ResourceManager.GetString("VipManagerExperienceHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerZen => ResourceManager.GetString("VipManagerZen", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerZenHint => ResourceManager.GetString("VipManagerZenHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerDaily => ResourceManager.GetString("VipManagerDaily", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerDailyHint => ResourceManager.GetString("VipManagerDailyHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCurrency => ResourceManager.GetString("VipManagerCurrency", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCurrencyHint => ResourceManager.GetString("VipManagerCurrencyHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerOffers => ResourceManager.GetString("VipManagerOffers", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerPrice => ResourceManager.GetString("VipManagerPrice", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerPriceHint => ResourceManager.GetString("VipManagerPriceHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAddLevel => ResourceManager.GetString("VipManagerAddLevel", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAddLevelHint => ResourceManager.GetString("VipManagerAddLevelHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerRemoveLevel => ResourceManager.GetString("VipManagerRemoveLevel", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerRemoveLevelHint => ResourceManager.GetString("VipManagerRemoveLevelHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAddOffer => ResourceManager.GetString("VipManagerAddOffer", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAddOfferHint => ResourceManager.GetString("VipManagerAddOfferHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerRemoveOffer => ResourceManager.GetString("VipManagerRemoveOffer", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerRemoveOfferHint => ResourceManager.GetString("VipManagerRemoveOfferHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerSave => ResourceManager.GetString("VipManagerSave", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerSaveHint => ResourceManager.GetString("VipManagerSaveHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerInvalid => ResourceManager.GetString("VipManagerInvalid", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerSaved => ResourceManager.GetString("VipManagerSaved", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerUnavailable => ResourceManager.GetString("VipManagerUnavailable", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerPending => ResourceManager.GetString("VipManagerPending", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAppliedGrant => ResourceManager.GetString("VipManagerAppliedGrant", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerAppliedRemove => ResourceManager.GetString("VipManagerAppliedRemove", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerOnline => ResourceManager.GetString("VipManagerOnline", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerConflict => ResourceManager.GetString("VipManagerConflict", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNoAccounts => ResourceManager.GetString("VipManagerNoAccounts", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerHasMore => ResourceManager.GetString("VipManagerHasMore", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerUntil => ResourceManager.GetString("VipManagerUntil", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReviewGrantText => ResourceManager.GetString("VipManagerReviewGrantText", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerReviewRemoveText => ResourceManager.GetString("VipManagerReviewRemoveText", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCurrentUntil => ResourceManager.GetString("VipManagerCurrentUntil", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNoCurrent => ResourceManager.GetString("VipManagerNoCurrent", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerNewName => ResourceManager.GetString("VipManagerNewName", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCoinC => ResourceManager.GetString("VipManagerCoinC", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerCoinP => ResourceManager.GetString("VipManagerCoinP", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerGoblin => ResourceManager.GetString("VipManagerGoblin", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerSavedLevels => ResourceManager.GetString("VipManagerSavedLevels", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerActivity => ResourceManager.GetString("VipManagerActivity", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerActivityHint => ResourceManager.GetString("VipManagerActivityHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipManagerOpenHint => ResourceManager.GetString("VipManagerOpenHint", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditGrant => ResourceManager.GetString("VipAuditGrant", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditRemove => ResourceManager.GetString("VipAuditRemove", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditRequested => ResourceManager.GetString("VipAuditRequested", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditApplied => ResourceManager.GetString("VipAuditApplied", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditPending => ResourceManager.GetString("VipAuditPending", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditConflict => ResourceManager.GetString("VipAuditConflict", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditRefused => ResourceManager.GetString("VipAuditRefused", resourceCulture)!;
-
-        /// <summary>Gets the localized VIP administration text.</summary>
-        public static string VipAuditDetails => ResourceManager.GetString("VipAuditDetails", resourceCulture)!;
-
-        /// <summary>Gets the localized instruction to save the disabled VIP configuration before granting.</summary>
-        public static string VipManagerSaveFirst => ResourceManager.GetString("VipManagerSaveFirst", resourceCulture)!;
-
-        /// <summary>Gets the localized public title of a collected gift.</summary>
-        public static string GiftBoxCoinHistoryCollected => ResourceManager.GetString("GiftBoxCoinHistoryCollected", resourceCulture)!;
-
-        /// <summary>Gets the localized gift box admin page title.</summary>
-        public static string GiftBoxPageTitle => ResourceManager.GetString("GiftBoxPageTitle", resourceCulture)!;
-
-        /// <summary>Gets the localized gift box admin page help text.</summary>
-        public static string GiftBoxPageHelp => ResourceManager.GetString("GiftBoxPageHelp", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Bans &amp; Mutes.</summary>
-        public static string NavBanManager => ResourceManager.GetString("NavBanManager", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Bans &amp; Mutes Manager.</summary>
-        public static string BanManagerPageTitle => ResourceManager.GetString("BanManagerPageTitle", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Ban manager help text.</summary>
-        public static string BanManagerPageHelp => ResourceManager.GetString("BanManagerPageHelp", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Character tools.</summary>
-        public static string CharacterTools => ResourceManager.GetString("CharacterTools", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Help description for Character tools.</summary>
-        public static string PageHelpTextCharacterTools => ResourceManager.GetString("PageHelpTextCharacterTools", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to GM manager.</summary>
-        public static string GmManager => ResourceManager.GetString("GmManager", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to Help description for GM manager.</summary>
-        public static string PageHelpTextGmManager => ResourceManager.GetString("PageHelpTextGmManager", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to News manager.</summary>
-        public static string NewsManager => ResourceManager.GetString("NewsManager", resourceCulture)!;
-
-        /// <summary>Looks up a localized string similar to News manager page help.</summary>
-        public static string PageHelpTextNewsManager => ResourceManager.GetString("PageHelpTextNewsManager", resourceCulture)!;
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHelpButtons {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpButtons", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHelpCreate {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpCreate", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHelpSafety {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpSafety", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHelpTitle {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHelpWhat {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpWhat", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHelpWhen {
+            get {
+                return ResourceManager.GetString("ApiKeysHelpWhen", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintChange {
+            get {
+                return ResourceManager.GetString("ApiKeysHintChange", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintClose {
+            get {
+                return ResourceManager.GetString("ApiKeysHintClose", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintCopy {
+            get {
+                return ResourceManager.GetString("ApiKeysHintCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintCreate {
+            get {
+                return ResourceManager.GetString("ApiKeysHintCreate", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintDelete {
+            get {
+                return ResourceManager.GetString("ApiKeysHintDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintDisable {
+            get {
+                return ResourceManager.GetString("ApiKeysHintDisable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintEnable {
+            get {
+                return ResourceManager.GetString("ApiKeysHintEnable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ApiKeysHintHelp {
+            get {
+                return ResourceManager.GetString("ApiKeysHintHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesOncePerNetwork {
+            get {
+                return ResourceManager.GetString("GiftCodesOncePerNetwork", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesOncePerDevice {
+            get {
+                return ResourceManager.GetString("GiftCodesOncePerDevice", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesNetworkHint {
+            get {
+                return ResourceManager.GetString("GiftCodesNetworkHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesDeviceHint {
+            get {
+                return ResourceManager.GetString("GiftCodesDeviceHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesNetworks {
+            get {
+                return ResourceManager.GetString("GiftCodesNetworks", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesDevices {
+            get {
+                return ResourceManager.GetString("GiftCodesDevices", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftCodesIdentityCountHint {
+            get {
+                return ResourceManager.GetString("GiftCodesIdentityCountHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorTitle {
+            get {
+                return ResourceManager.GetString("ShopEditorTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorLegacy {
+            get {
+                return ResourceManager.GetString("ShopEditorLegacy", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorHelpTitle {
+            get {
+                return ResourceManager.GetString("ShopEditorHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorHelp {
+            get {
+                return ResourceManager.GetString("ShopEditorHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSearch {
+            get {
+                return ResourceManager.GetString("ShopEditorSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorNpc {
+            get {
+                return ResourceManager.GetString("ShopEditorNpc", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorLocation {
+            get {
+                return ResourceManager.GetString("ShopEditorLocation", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorNoSpawn {
+            get {
+                return ResourceManager.GetString("ShopEditorNoSpawn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCount {
+            get {
+                return ResourceManager.GetString("ShopEditorCount", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorPreview {
+            get {
+                return ResourceManager.GetString("ShopEditorPreview", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorEdit {
+            get {
+                return ResourceManager.GetString("ShopEditorEdit", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCopy {
+            get {
+                return ResourceManager.GetString("ShopEditorCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCopyHint {
+            get {
+                return ResourceManager.GetString("ShopEditorCopyHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCopyTarget {
+            get {
+                return ResourceManager.GetString("ShopEditorCopyTarget", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCopyConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorCopyConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorBack {
+            get {
+                return ResourceManager.GetString("ShopEditorBack", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorAddSelected {
+            get {
+                return ResourceManager.GetString("ShopEditorAddSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorAddCategory {
+            get {
+                return ResourceManager.GetString("ShopEditorAddCategory", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCategoryHint {
+            get {
+                return ResourceManager.GetString("ShopEditorCategoryHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorBulkConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorBulkConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorAdded {
+            get {
+                return ResourceManager.GetString("ShopEditorAdded", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorDoesNotFit {
+            get {
+                return ResourceManager.GetString("ShopEditorDoesNotFit", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorArrange {
+            get {
+                return ResourceManager.GetString("ShopEditorArrange", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorArrangeHint {
+            get {
+                return ResourceManager.GetString("ShopEditorArrangeHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorArrangeFailed {
+            get {
+                return ResourceManager.GetString("ShopEditorArrangeFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorClear {
+            get {
+                return ResourceManager.GetString("ShopEditorClear", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorClearConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorClearConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorUndo {
+            get {
+                return ResourceManager.GetString("ShopEditorUndo", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorRedo {
+            get {
+                return ResourceManager.GetString("ShopEditorRedo", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorDiscard {
+            get {
+                return ResourceManager.GetString("ShopEditorDiscard", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorDiscardHint {
+            get {
+                return ResourceManager.GetString("ShopEditorDiscardHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSave {
+            get {
+                return ResourceManager.GetString("ShopEditorSave", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSummary {
+            get {
+                return ResourceManager.GetString("ShopEditorSummary", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSaveConfirm {
+            get {
+                return ResourceManager.GetString("ShopEditorSaveConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSaved {
+            get {
+                return ResourceManager.GetString("ShopEditorSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSaveFailed {
+            get {
+                return ResourceManager.GetString("ShopEditorSaveFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorConflict {
+            get {
+                return ResourceManager.GetString("ShopEditorConflict", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorInvalid {
+            get {
+                return ResourceManager.GetString("ShopEditorInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorCapacity {
+            get {
+                return ResourceManager.GetString("ShopEditorCapacity", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorDetails {
+            get {
+                return ResourceManager.GetString("ShopEditorDetails", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorSelectHint {
+            get {
+                return ResourceManager.GetString("ShopEditorSelectHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorPrice {
+            get {
+                return ResourceManager.GetString("ShopEditorPrice", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorPriceHint {
+            get {
+                return ResourceManager.GetString("ShopEditorPriceHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorPriceUnavailable {
+            get {
+                return ResourceManager.GetString("ShopEditorPriceUnavailable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorDelete {
+            get {
+                return ResourceManager.GetString("ShopEditorDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorUnsaved {
+            get {
+                return ResourceManager.GetString("ShopEditorUnsaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorLoadingFailed {
+            get {
+                return ResourceManager.GetString("ShopEditorLoadingFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorReload {
+            get {
+                return ResourceManager.GetString("ShopEditorReload", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorEmpty {
+            get {
+                return ResourceManager.GetString("ShopEditorEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ShopEditorPending {
+            get {
+                return ResourceManager.GetString("ShopEditorPending", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAccounts {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextIndex {
+            get {
+                return ResourceManager.GetString("PageHelpTextIndex", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextServers {
+            get {
+                return ResourceManager.GetString("PageHelpTextServers", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGameServer {
+            get {
+                return ResourceManager.GetString("PageHelpTextGameServer", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCreateGameServerConfig {
+            get {
+                return ResourceManager.GetString("PageHelpTextCreateGameServerConfig", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCreateConnectServerConfig {
+            get {
+                return ResourceManager.GetString("PageHelpTextCreateConnectServerConfig", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLoggedIn {
+            get {
+                return ResourceManager.GetString("PageHelpTextLoggedIn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextPlugins {
+            get {
+                return ResourceManager.GetString("PageHelpTextPlugins", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAdminUsers {
+            get {
+                return ResourceManager.GetString("PageHelpTextAdminUsers", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAccountSecurity {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccountSecurity", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAccountLinks {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccountLinks", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCashShopCoins {
+            get {
+                return ResourceManager.GetString("PageHelpTextCashShopCoins", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCashShopCatalog {
+            get {
+                return ResourceManager.GetString("PageHelpTextCashShopCatalog", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGiftCodes {
+            get {
+                return ResourceManager.GetString("PageHelpTextGiftCodes", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMissionsRewards {
+            get {
+                return ResourceManager.GetString("PageHelpTextMissionsRewards", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextOnboardingStarterKit {
+            get {
+                return ResourceManager.GetString("PageHelpTextOnboardingStarterKit", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextResetsRelife {
+            get {
+                return ResourceManager.GetString("PageHelpTextResetsRelife", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAccountSafety {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccountSafety", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCommunity {
+            get {
+                return ResourceManager.GetString("PageHelpTextCommunity", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextDiscordSetup {
+            get {
+                return ResourceManager.GetString("PageHelpTextDiscordSetup", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextTopRaces {
+            get {
+                return ResourceManager.GetString("PageHelpTextTopRaces", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextWorldBossesRankings {
+            get {
+                return ResourceManager.GetString("PageHelpTextWorldBossesRankings", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGuildsLevelsLadder {
+            get {
+                return ResourceManager.GetString("PageHelpTextGuildsLevelsLadder", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGuilds {
+            get {
+                return ResourceManager.GetString("PageHelpTextGuilds", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGuild {
+            get {
+                return ResourceManager.GetString("PageHelpTextGuild", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAlliance {
+            get {
+                return ResourceManager.GetString("PageHelpTextAlliance", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCastleSiegeManagement {
+            get {
+                return ResourceManager.GetString("PageHelpTextCastleSiegeManagement", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLeaderboards {
+            get {
+                return ResourceManager.GetString("PageHelpTextLeaderboards", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextHnmoSkills {
+            get {
+                return ResourceManager.GetString("PageHelpTextHnmoSkills", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextContentActivation {
+            get {
+                return ResourceManager.GetString("PageHelpTextContentActivation", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextChatCommands {
+            get {
+                return ResourceManager.GetString("PageHelpTextChatCommands", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextChatLog {
+            get {
+                return ResourceManager.GetString("PageHelpTextChatLog", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAuditHistory {
+            get {
+                return ResourceManager.GetString("PageHelpTextAuditHistory", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLoggingConfiguration {
+            get {
+                return ResourceManager.GetString("PageHelpTextLoggingConfiguration", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLogFiles {
+            get {
+                return ResourceManager.GetString("PageHelpTextLogFiles", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextNetworkAnalyzer {
+            get {
+                return ResourceManager.GetString("PageHelpTextNetworkAnalyzer", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditConfigGrid {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditConfigGrid", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCaptions {
+            get {
+                return ResourceManager.GetString("PageHelpTextCaptions", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextUpdates {
+            get {
+                return ResourceManager.GetString("PageHelpTextUpdates", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditItemDrops {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditItemDrops", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMapPage {
+            get {
+                return ResourceManager.GetString("PageHelpTextMapPage", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextSetup {
+            get {
+                return ResourceManager.GetString("PageHelpTextSetup", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLogin {
+            get {
+                return ResourceManager.GetString("PageHelpTextLogin", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextError {
+            get {
+                return ResourceManager.GetString("PageHelpTextError", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextNotFound {
+            get {
+                return ResourceManager.GetString("PageHelpTextNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAccessDenied {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccessDenied", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTitle {
+            get {
+                return ResourceManager.GetString("PageHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpToggleHint {
+            get {
+                return ResourceManager.GetString("PageHelpToggleHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSave {
+            get {
+                return ResourceManager.GetString("PageHelpHintSave", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCreate {
+            get {
+                return ResourceManager.GetString("PageHelpHintCreate", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintDelete {
+            get {
+                return ResourceManager.GetString("PageHelpHintDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCancel {
+            get {
+                return ResourceManager.GetString("PageHelpHintCancel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintEdit {
+            get {
+                return ResourceManager.GetString("PageHelpHintEdit", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintRefresh {
+            get {
+                return ResourceManager.GetString("PageHelpHintRefresh", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCopy {
+            get {
+                return ResourceManager.GetString("PageHelpHintCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSelect {
+            get {
+                return ResourceManager.GetString("PageHelpHintSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSearch {
+            get {
+                return ResourceManager.GetString("PageHelpHintSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintStart {
+            get {
+                return ResourceManager.GetString("PageHelpHintStart", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintStop {
+            get {
+                return ResourceManager.GetString("PageHelpHintStop", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintDownload {
+            get {
+                return ResourceManager.GetString("PageHelpHintDownload", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintUpload {
+            get {
+                return ResourceManager.GetString("PageHelpHintUpload", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintGrant {
+            get {
+                return ResourceManager.GetString("PageHelpHintGrant", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintNavigate {
+            get {
+                return ResourceManager.GetString("PageHelpHintNavigate", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSend {
+            get {
+                return ResourceManager.GetString("PageHelpHintSend", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintEnable {
+            get {
+                return ResourceManager.GetString("PageHelpHintEnable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintDisable {
+            get {
+                return ResourceManager.GetString("PageHelpHintDisable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSignIn {
+            get {
+                return ResourceManager.GetString("PageHelpHintSignIn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintVerify {
+            get {
+                return ResourceManager.GetString("PageHelpHintVerify", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintExpand {
+            get {
+                return ResourceManager.GetString("PageHelpHintExpand", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintConfirm {
+            get {
+                return ResourceManager.GetString("PageHelpHintConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintNext {
+            get {
+                return ResourceManager.GetString("PageHelpHintNext", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintPrevious {
+            get {
+                return ResourceManager.GetString("PageHelpHintPrevious", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintClear {
+            get {
+                return ResourceManager.GetString("PageHelpHintClear", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintReset {
+            get {
+                return ResourceManager.GetString("PageHelpHintReset", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintForceState {
+            get {
+                return ResourceManager.GetString("PageHelpHintForceState", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintPassword {
+            get {
+                return ResourceManager.GetString("PageHelpHintPassword", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintDiscordSetUp {
+            get {
+                return ResourceManager.GetString("PageHelpHintDiscordSetUp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCheck {
+            get {
+                return ResourceManager.GetString("PageHelpHintCheck", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintTest {
+            get {
+                return ResourceManager.GetString("PageHelpHintTest", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintDiscard {
+            get {
+                return ResourceManager.GetString("PageHelpHintDiscard", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintMoveUp {
+            get {
+                return ResourceManager.GetString("PageHelpHintMoveUp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintMoveDown {
+            get {
+                return ResourceManager.GetString("PageHelpHintMoveDown", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintScrollBottom {
+            get {
+                return ResourceManager.GetString("PageHelpHintScrollBottom", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintUpdate {
+            get {
+                return ResourceManager.GetString("PageHelpHintUpdate", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintReinstall {
+            get {
+                return ResourceManager.GetString("PageHelpHintReinstall", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintRecovery {
+            get {
+                return ResourceManager.GetString("PageHelpHintRecovery", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintAuthenticator {
+            get {
+                return ResourceManager.GetString("PageHelpHintAuthenticator", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSort {
+            get {
+                return ResourceManager.GetString("PageHelpHintSort", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintAssignMaps {
+            get {
+                return ResourceManager.GetString("PageHelpHintAssignMaps", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintFirst {
+            get {
+                return ResourceManager.GetString("PageHelpHintFirst", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintLast {
+            get {
+                return ResourceManager.GetString("PageHelpHintLast", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintZoomIn {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomIn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintZoomOut {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomOut", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintZoomStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditConfig {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditConfig", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditAccount {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditConnectionServer {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditConnectionServer", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditMap {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditMap", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEditTerrain {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditTerrain", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSignOut {
+            get {
+                return ResourceManager.GetString("PageHelpHintSignOut", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintReconnect {
+            get {
+                return ResourceManager.GetString("PageHelpHintReconnect", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsPage {
+            get {
+                return ResourceManager.GetString("HostSettingsPage", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsHelpTitle {
+            get {
+                return ResourceManager.GetString("HostSettingsHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsHelpBody {
+            get {
+                return ResourceManager.GetString("HostSettingsHelpBody", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsRestartNote {
+            get {
+                return ResourceManager.GetString("HostSettingsRestartNote", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsPortsSection {
+            get {
+                return ResourceManager.GetString("HostSettingsPortsSection", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsBridgeSection {
+            get {
+                return ResourceManager.GetString("HostSettingsBridgeSection", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsDatabaseSection {
+            get {
+                return ResourceManager.GetString("HostSettingsDatabaseSection", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsLicenseSection {
+            get {
+                return ResourceManager.GetString("HostSettingsLicenseSection", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsSaveButton {
+            get {
+                return ResourceManager.GetString("HostSettingsSaveButton", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsRestartButton {
+            get {
+                return ResourceManager.GetString("HostSettingsRestartButton", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsRestartConfirm {
+            get {
+                return ResourceManager.GetString("HostSettingsRestartConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsSaved {
+            get {
+                return ResourceManager.GetString("HostSettingsSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsRestarting {
+            get {
+                return ResourceManager.GetString("HostSettingsRestarting", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsRestartUnsupported {
+            get {
+                return ResourceManager.GetString("HostSettingsRestartUnsupported", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string HostSettingsPasswordMasked {
+            get {
+                return ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailTitle {
+            get {
+                return ResourceManager.GetString("WebsiteMailTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailHelp {
+            get {
+                return ResourceManager.GetString("WebsiteMailHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailEnabled {
+            get {
+                return ResourceManager.GetString("WebsiteMailEnabled", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailEnabledHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailEnabledHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailHost {
+            get {
+                return ResourceManager.GetString("WebsiteMailHost", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailHostHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailHostHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailPort {
+            get {
+                return ResourceManager.GetString("WebsiteMailPort", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailPortHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailPortHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailFrom {
+            get {
+                return ResourceManager.GetString("WebsiteMailFrom", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailFromHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailFromHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailUser {
+            get {
+                return ResourceManager.GetString("WebsiteMailUser", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailUserHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailUserHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailPassword {
+            get {
+                return ResourceManager.GetString("WebsiteMailPassword", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailPasswordHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailPasswordHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailPasswordSaved {
+            get {
+                return ResourceManager.GetString("WebsiteMailPasswordSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailSaveHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailSaveHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailOpenHint {
+            get {
+                return ResourceManager.GetString("WebsiteMailOpenHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailSaved {
+            get {
+                return ResourceManager.GetString("WebsiteMailSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailInvalid {
+            get {
+                return ResourceManager.GetString("WebsiteMailInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailUnavailable {
+            get {
+                return ResourceManager.GetString("WebsiteMailUnavailable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailConfirmationSubject {
+            get {
+                return ResourceManager.GetString("WebsiteMailConfirmationSubject", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string WebsiteMailConfirmationBody {
+            get {
+                return ResourceManager.GetString("WebsiteMailConfirmationBody", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryExtraVault {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryExtraVault", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryMarketPurchase {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryMarketPurchase", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryPlayerStorePurchase {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryPlayerStorePurchase", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryPlayerStoreSale {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryPlayerStoreSale", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryReset {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryReset", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryRelife {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryRelife", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryClearStats {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryClearStats", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryClearMaster {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryClearMaster", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryPlayTime {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryPlayTime", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryCashShop {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryCashShop", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryGift {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryGift", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryOtherCharacter {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryOtherCharacter", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryCreatedAt {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryCreatedAt", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryAppliedAt {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryAppliedAt", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryMarketSale {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryMarketSale", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipCoinHistoryPurchase {
+            get {
+                return ResourceManager.GetString("VipCoinHistoryPurchase", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipCoinHistoryDaily {
+            get {
+                return ResourceManager.GetString("VipCoinHistoryDaily", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipCoinHistoryRemoved {
+            get {
+                return ResourceManager.GetString("VipCoinHistoryRemoved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipActivityAdministration {
+            get {
+                return ResourceManager.GetString("VipActivityAdministration", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerTitle {
+            get {
+                return ResourceManager.GetString("VipManagerTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerHelp {
+            get {
+                return ResourceManager.GetString("VipManagerHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAccount {
+            get {
+                return ResourceManager.GetString("VipManagerAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAccountHint {
+            get {
+                return ResourceManager.GetString("VipManagerAccountHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerLevel {
+            get {
+                return ResourceManager.GetString("VipManagerLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerDays {
+            get {
+                return ResourceManager.GetString("VipManagerDays", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerDaysHint {
+            get {
+                return ResourceManager.GetString("VipManagerDaysHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReason {
+            get {
+                return ResourceManager.GetString("VipManagerReason", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReasonHint {
+            get {
+                return ResourceManager.GetString("VipManagerReasonHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReviewGrant {
+            get {
+                return ResourceManager.GetString("VipManagerReviewGrant", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReviewGrantHint {
+            get {
+                return ResourceManager.GetString("VipManagerReviewGrantHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReviewRemove {
+            get {
+                return ResourceManager.GetString("VipManagerReviewRemove", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReviewRemoveHint {
+            get {
+                return ResourceManager.GetString("VipManagerReviewRemoveHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerConfirm {
+            get {
+                return ResourceManager.GetString("VipManagerConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerConfirmHint {
+            get {
+                return ResourceManager.GetString("VipManagerConfirmHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCancel {
+            get {
+                return ResourceManager.GetString("VipManagerCancel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCancelHint {
+            get {
+                return ResourceManager.GetString("VipManagerCancelHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerRetry {
+            get {
+                return ResourceManager.GetString("VipManagerRetry", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerRetryHint {
+            get {
+                return ResourceManager.GetString("VipManagerRetryHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReload {
+            get {
+                return ResourceManager.GetString("VipManagerReload", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReloadHint {
+            get {
+                return ResourceManager.GetString("VipManagerReloadHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerFilter {
+            get {
+                return ResourceManager.GetString("VipManagerFilter", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerFilterHint {
+            get {
+                return ResourceManager.GetString("VipManagerFilterHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNext {
+            get {
+                return ResourceManager.GetString("VipManagerNext", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerPrevious {
+            get {
+                return ResourceManager.GetString("VipManagerPrevious", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerPagerHint {
+            get {
+                return ResourceManager.GetString("VipManagerPagerHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerSettings {
+            get {
+                return ResourceManager.GetString("VipManagerSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerEnabled {
+            get {
+                return ResourceManager.GetString("VipManagerEnabled", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerEnabledHint {
+            get {
+                return ResourceManager.GetString("VipManagerEnabledHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerChatBadge {
+            get {
+                return ResourceManager.GetString("VipManagerChatBadge", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerChatBadgeHint {
+            get {
+                return ResourceManager.GetString("VipManagerChatBadgeHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNameEn {
+            get {
+                return ResourceManager.GetString("VipManagerNameEn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNameVi {
+            get {
+                return ResourceManager.GetString("VipManagerNameVi", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNameHint {
+            get {
+                return ResourceManager.GetString("VipManagerNameHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerLevelId {
+            get {
+                return ResourceManager.GetString("VipManagerLevelId", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerLevelIdHint {
+            get {
+                return ResourceManager.GetString("VipManagerLevelIdHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerExperience {
+            get {
+                return ResourceManager.GetString("VipManagerExperience", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerExperienceHint {
+            get {
+                return ResourceManager.GetString("VipManagerExperienceHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerZen {
+            get {
+                return ResourceManager.GetString("VipManagerZen", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerZenHint {
+            get {
+                return ResourceManager.GetString("VipManagerZenHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerDaily {
+            get {
+                return ResourceManager.GetString("VipManagerDaily", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerDailyHint {
+            get {
+                return ResourceManager.GetString("VipManagerDailyHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCurrency {
+            get {
+                return ResourceManager.GetString("VipManagerCurrency", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCurrencyHint {
+            get {
+                return ResourceManager.GetString("VipManagerCurrencyHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerOffers {
+            get {
+                return ResourceManager.GetString("VipManagerOffers", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerPrice {
+            get {
+                return ResourceManager.GetString("VipManagerPrice", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerPriceHint {
+            get {
+                return ResourceManager.GetString("VipManagerPriceHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAddLevel {
+            get {
+                return ResourceManager.GetString("VipManagerAddLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAddLevelHint {
+            get {
+                return ResourceManager.GetString("VipManagerAddLevelHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerRemoveLevel {
+            get {
+                return ResourceManager.GetString("VipManagerRemoveLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerRemoveLevelHint {
+            get {
+                return ResourceManager.GetString("VipManagerRemoveLevelHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAddOffer {
+            get {
+                return ResourceManager.GetString("VipManagerAddOffer", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAddOfferHint {
+            get {
+                return ResourceManager.GetString("VipManagerAddOfferHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerRemoveOffer {
+            get {
+                return ResourceManager.GetString("VipManagerRemoveOffer", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerRemoveOfferHint {
+            get {
+                return ResourceManager.GetString("VipManagerRemoveOfferHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerSave {
+            get {
+                return ResourceManager.GetString("VipManagerSave", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerSaveHint {
+            get {
+                return ResourceManager.GetString("VipManagerSaveHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerInvalid {
+            get {
+                return ResourceManager.GetString("VipManagerInvalid", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerSaved {
+            get {
+                return ResourceManager.GetString("VipManagerSaved", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerUnavailable {
+            get {
+                return ResourceManager.GetString("VipManagerUnavailable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerPending {
+            get {
+                return ResourceManager.GetString("VipManagerPending", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAppliedGrant {
+            get {
+                return ResourceManager.GetString("VipManagerAppliedGrant", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerAppliedRemove {
+            get {
+                return ResourceManager.GetString("VipManagerAppliedRemove", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerOnline {
+            get {
+                return ResourceManager.GetString("VipManagerOnline", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerConflict {
+            get {
+                return ResourceManager.GetString("VipManagerConflict", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNoAccounts {
+            get {
+                return ResourceManager.GetString("VipManagerNoAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerHasMore {
+            get {
+                return ResourceManager.GetString("VipManagerHasMore", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerUntil {
+            get {
+                return ResourceManager.GetString("VipManagerUntil", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReviewGrantText {
+            get {
+                return ResourceManager.GetString("VipManagerReviewGrantText", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerReviewRemoveText {
+            get {
+                return ResourceManager.GetString("VipManagerReviewRemoveText", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCurrentUntil {
+            get {
+                return ResourceManager.GetString("VipManagerCurrentUntil", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNoCurrent {
+            get {
+                return ResourceManager.GetString("VipManagerNoCurrent", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerNewName {
+            get {
+                return ResourceManager.GetString("VipManagerNewName", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCoinC {
+            get {
+                return ResourceManager.GetString("VipManagerCoinC", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerCoinP {
+            get {
+                return ResourceManager.GetString("VipManagerCoinP", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerGoblin {
+            get {
+                return ResourceManager.GetString("VipManagerGoblin", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerSavedLevels {
+            get {
+                return ResourceManager.GetString("VipManagerSavedLevels", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerActivity {
+            get {
+                return ResourceManager.GetString("VipManagerActivity", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerActivityHint {
+            get {
+                return ResourceManager.GetString("VipManagerActivityHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerOpenHint {
+            get {
+                return ResourceManager.GetString("VipManagerOpenHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditGrant {
+            get {
+                return ResourceManager.GetString("VipAuditGrant", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditRemove {
+            get {
+                return ResourceManager.GetString("VipAuditRemove", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditRequested {
+            get {
+                return ResourceManager.GetString("VipAuditRequested", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditApplied {
+            get {
+                return ResourceManager.GetString("VipAuditApplied", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditPending {
+            get {
+                return ResourceManager.GetString("VipAuditPending", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditConflict {
+            get {
+                return ResourceManager.GetString("VipAuditConflict", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditRefused {
+            get {
+                return ResourceManager.GetString("VipAuditRefused", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipAuditDetails {
+            get {
+                return ResourceManager.GetString("VipAuditDetails", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string VipManagerSaveFirst {
+            get {
+                return ResourceManager.GetString("VipManagerSaveFirst", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftBoxCoinHistoryCollected {
+            get {
+                return ResourceManager.GetString("GiftBoxCoinHistoryCollected", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftBoxPageTitle {
+            get {
+                return ResourceManager.GetString("GiftBoxPageTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GiftBoxPageHelp {
+            get {
+                return ResourceManager.GetString("GiftBoxPageHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string NavBanManager {
+            get {
+                return ResourceManager.GetString("NavBanManager", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string BanManagerPageTitle {
+            get {
+                return ResourceManager.GetString("BanManagerPageTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string BanManagerPageHelp {
+            get {
+                return ResourceManager.GetString("BanManagerPageHelp", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string CharacterTools {
+            get {
+                return ResourceManager.GetString("CharacterTools", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCharacterTools {
+            get {
+                return ResourceManager.GetString("PageHelpTextCharacterTools", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string GmManager {
+            get {
+                return ResourceManager.GetString("GmManager", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGmManager {
+            get {
+                return ResourceManager.GetString("PageHelpTextGmManager", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string NewsManager {
+            get {
+                return ResourceManager.GetString("NewsManager", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextNewsManager {
+            get {
+                return ResourceManager.GetString("PageHelpTextNewsManager", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextActivityLog {
+            get {
+                return ResourceManager.GetString("PageHelpTextActivityLog", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextAntiCheat {
+            get {
+                return ResourceManager.GetString("PageHelpTextAntiCheat", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextApiKeys {
+            get {
+                return ResourceManager.GetString("PageHelpTextApiKeys", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextBannedWords {
+            get {
+                return ResourceManager.GetString("PageHelpTextBannedWords", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextBufferNpc {
+            get {
+                return ResourceManager.GetString("PageHelpTextBufferNpc", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCatchupCap {
+            get {
+                return ResourceManager.GetString("PageHelpTextCatchupCap", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCrashWatch {
+            get {
+                return ResourceManager.GetString("PageHelpTextCrashWatch", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextCustomRanks {
+            get {
+                return ResourceManager.GetString("PageHelpTextCustomRanks", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextDbLogRetention {
+            get {
+                return ResourceManager.GetString("PageHelpTextDbLogRetention", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEconomyDashboard {
+            get {
+                return ResourceManager.GetString("PageHelpTextEconomyDashboard", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEscrowContracts {
+            get {
+                return ResourceManager.GetString("PageHelpTextEscrowContracts", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextEventAlerts {
+            get {
+                return ResourceManager.GetString("PageHelpTextEventAlerts", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextFixedOptions {
+            get {
+                return ResourceManager.GetString("PageHelpTextFixedOptions", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextGameplayRules {
+            get {
+                return ResourceManager.GetString("PageHelpTextGameplayRules", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextHostSettings {
+            get {
+                return ResourceManager.GetString("PageHelpTextHostSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextImportServer {
+            get {
+                return ResourceManager.GetString("PageHelpTextImportServer", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextItemDefinitions {
+            get {
+                return ResourceManager.GetString("PageHelpTextItemDefinitions", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextJewelBank {
+            get {
+                return ResourceManager.GetString("PageHelpTextJewelBank", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLeftovers {
+            get {
+                return ResourceManager.GetString("PageHelpTextLeftovers", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextLuckyNumber {
+            get {
+                return ResourceManager.GetString("PageHelpTextLuckyNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMaintenanceTools {
+            get {
+                return ResourceManager.GetString("PageHelpTextMaintenanceTools", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMarket {
+            get {
+                return ResourceManager.GetString("PageHelpTextMarket", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMarriage {
+            get {
+                return ResourceManager.GetString("PageHelpTextMarriage", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMerchants {
+            get {
+                return ResourceManager.GetString("PageHelpTextMerchants", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextMounts {
+            get {
+                return ResourceManager.GetString("PageHelpTextMounts", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextOffTrade {
+            get {
+                return ResourceManager.GetString("PageHelpTextOffTrade", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextPartyOptions {
+            get {
+                return ResourceManager.GetString("PageHelpTextPartyOptions", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextQolSettings {
+            get {
+                return ResourceManager.GetString("PageHelpTextQolSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextRankingsSettings {
+            get {
+                return ResourceManager.GetString("PageHelpTextRankingsSettings", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextRateTuning {
+            get {
+                return ResourceManager.GetString("PageHelpTextRateTuning", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextS6Events {
+            get {
+                return ResourceManager.GetString("PageHelpTextS6Events", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextSeasonPlan {
+            get {
+                return ResourceManager.GetString("PageHelpTextSeasonPlan", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextStateRetention {
+            get {
+                return ResourceManager.GetString("PageHelpTextStateRetention", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextTalismans {
+            get {
+                return ResourceManager.GetString("PageHelpTextTalismans", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextTeleportNpc {
+            get {
+                return ResourceManager.GetString("PageHelpTextTeleportNpc", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextTimetable {
+            get {
+                return ResourceManager.GetString("PageHelpTextTimetable", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextTopUpMilestones {
+            get {
+                return ResourceManager.GetString("PageHelpTextTopUpMilestones", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextVaultChaosRewards {
+            get {
+                return ResourceManager.GetString("PageHelpTextVaultChaosRewards", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextWorldEditor {
+            get {
+                return ResourceManager.GetString("PageHelpTextWorldEditor", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpTextWorlds {
+            get {
+                return ResourceManager.GetString("PageHelpTextWorlds", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintLanguageEn {
+            get {
+                return ResourceManager.GetString("PageHelpHintLanguageEn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintLanguageVi {
+            get {
+                return ResourceManager.GetString("PageHelpHintLanguageVi", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintAdd {
+            get {
+                return ResourceManager.GetString("PageHelpHintAdd", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintApply {
+            get {
+                return ResourceManager.GetString("PageHelpHintApply", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintAction {
+            get {
+                return ResourceManager.GetString("PageHelpHintAction", resourceCulture);
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Player state & archival", "Lưu trữ & Dọn dữ liệu")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextStateRetention" />
 <p class="text-muted">@L("Per-account and per-character plug-in state is stored in PostgreSQL rows (hnmo.player_feature_state) and updated individually. Finished race/season rows and expired gift-code claims are archived automatically after N days.", "Dữ liệu tài khoản/nhân vật của các tính năng được lưu từng dòng riêng trong PostgreSQL (hnmo.player_feature_state). Dữ liệu mùa/đua top đã kết thúc và giftcode hết hạn sẽ tự động chuyển lưu trữ sau N ngày.")</p>
 
 @if (this._showHelp)
@@ -43,8 +44,8 @@ else if (this._configuration is { } c)
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-primary" id="sr-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-                <button type="button" class="btn btn-outline-warning" id="sr-archive" disabled="@this._isSaving" @onclick="this.ArchiveNowAsync">@L("Archive expired rows now", "Chuyển lưu trữ ngay")</button>
+                <button type="button" class="btn btn-primary" id="sr-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-warning" id="sr-archive" disabled="@this._isSaving" @onclick="this.ArchiveNowAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@L("Archive expired rows now", "Chuyển lưu trữ ngay")</button>
             </div>
         </div>
     </section>

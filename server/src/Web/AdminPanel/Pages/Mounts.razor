@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Mount chain", "Chuỗi thú cưỡi")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMounts" />
 <p class="text-muted">@L("Configure progressive mount crafting & duplicate-mount upgrades (Uniria -> Dinorant -> Fenrir -> Golden Fenrir -> Royal Steed), Golden Boss Mount Shard drops, and modest PvE aura bonuses (Shift+U).", "Cấu hình chuỗi nâng cấp thú cưỡi từ Kỳ Lân -> Quái Điểu -> Sói Tinh -> Sói Hoàng Kim -> Chiến Mã, tỷ lệ rơi mảnh từ Boss Hoàng Kim và hiệu ứng PvE nhẹ (Shift+U).")</p>
 
 @if (this._showHelp)
@@ -68,14 +69,14 @@ else
                         <div class="col-sm-1"><label class="form-label small">@L("Prev qty", "SL cũ")</label><input class="form-control form-control-sm" type="number" min="0" @bind="tier.PreviousMountsRequired" /></div>
                         <div class="col-sm-1"><label class="form-label small">@L("PvE def", "Thủ PvE")</label><input class="form-control form-control-sm" type="number" min="0" @bind="tier.PveDefenseBonus" /></div>
                         <div class="col-sm-1 text-end">
-                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Tiers.Remove(tier)">×</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Tiers.Remove(tier)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
                         </div>
                     </div>
                 </div>
             }
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddTier">@L("+ Add tier", "+ Thêm bậc")</button>
-                <button type="button" class="btn btn-primary" id="mc-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddTier" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add tier", "+ Thêm bậc")</button>
+                <button type="button" class="btn btn-primary" id="mc-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
             </div>
         </div>
     </section>

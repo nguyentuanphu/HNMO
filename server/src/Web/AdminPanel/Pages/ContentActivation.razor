@@ -1,4 +1,5 @@
-﻿@page "/content-activation"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/content-activation"
 
 @using HNMO.DataModel.Configuration
 @using HNMO.Web.AdminPanel.Operations
@@ -8,6 +9,8 @@
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ContentActivation" />
 
 <h1>@Resources.ContentActivation</h1>
+<PageHelp Text="@HelpResources.PageHelpTextContentActivation" />
+
 <p class="text-muted">@Resources.ContentActivationDescription</p>
 
 @if (this._entries is null)
@@ -42,10 +45,10 @@
         <input type="search" class="form-control" placeholder="@($"{Resources.Search}...")"
                @bind="this._filter" @bind:event="oninput" />
     </div>
-    <button type="button" class="btn btn-success" @onclick="() => this.SetActiveOfShownEntries(true)">@Resources.ActivateAllShown</button>
-    <button type="button" class="btn btn-warning" @onclick="() => this.SetActiveOfShownEntries(false)">@Resources.DeactivateAllShown</button>
-    <button type="button" class="btn btn-primary" @onclick="this.OnSaveButtonClickAsync">@Resources.SaveChanges</button>
-    <button type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClick">@Resources.DiscardChanges</button>
+    <button title="@HelpResources.PageHelpHintEnable" type="button" class="btn btn-success" @onclick="() => this.SetActiveOfShownEntries(true)">@Resources.ActivateAllShown</button>
+    <button title="@HelpResources.PageHelpHintDisable" type="button" class="btn btn-warning" @onclick="() => this.SetActiveOfShownEntries(false)">@Resources.DeactivateAllShown</button>
+    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" @onclick="this.OnSaveButtonClickAsync">@Resources.SaveChanges</button>
+    <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClick">@Resources.DiscardChanges</button>
 </div>
 
 <p>@string.Format(Resources.ActiveCountFormat, this.ActiveCount, this.TotalCount)</p>

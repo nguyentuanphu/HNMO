@@ -17,6 +17,7 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextWorlds" />
     <div class="btn-group btn-group-sm" role="group" aria-label="Language">
         <button type="button"
                 class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
@@ -209,8 +210,8 @@
                 </div>
             </div>
             <div class="mt-3 d-flex gap-2">
-                <button type="button" class="btn btn-primary" @onclick="this.SaveEditedWorldAsync">@this.T("Save Changes", "Lưu thay đổi")</button>
-                <button type="button" class="btn btn-outline-secondary" @onclick="() => this._editingWorld = null">@this.T("Cancel", "Hủy")</button>
+                <button type="button" class="btn btn-primary" @onclick="this.SaveEditedWorldAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@this.T("Save Changes", "Lưu thay đổi")</button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="() => this._editingWorld = null" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">@this.T("Cancel", "Hủy")</button>
             </div>
         </div>
     </div>

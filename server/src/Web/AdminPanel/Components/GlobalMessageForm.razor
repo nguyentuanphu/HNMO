@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @using HNMO.Web.AdminPanel.Operations
 @inject ServerWriteOperations Operations
 @using Microsoft.Extensions.DependencyInjection
@@ -30,7 +31,7 @@
         </select>
     </div>
     <div class="@(this.Compact ? "col-12" : "col-md-3")">
-        <button class="btn btn-primary w-100" @onclick="SendMessageAsync" disabled="@string.IsNullOrWhiteSpace(_message)">
+        <button title="@HelpResources.PageHelpHintSend" class="btn btn-primary w-100" @onclick="SendMessageAsync" disabled="@string.IsNullOrWhiteSpace(_message)">
             @Resources.Send
         </button>
     </div>

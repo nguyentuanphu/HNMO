@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @using HNMO.DataModel.Configuration
 @using HNMO.GameLogic.PlugIns
 @using HNMO.Web.Shared.Properties
@@ -11,7 +12,7 @@
             <option value="@Format(choice)">×@Format(choice)</option>
         }
     </select>
-    <button type="button" class="btn btn-primary text-nowrap" disabled="@(this._isSaving || this._selected == this._current)" @onclick="@this.SaveAsync">
+    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary text-nowrap" disabled="@(this._isSaving || this._selected == this._current)" @onclick="@this.SaveAsync">
         <span class="oi oi-cloud-upload"></span> @Resources.Save
     </button>
     <span class="small text-muted" data-testid="monster-amount-current">@string.Format(CultureInfo.CurrentCulture, Resources.MonsterAmountCurrent, Format(this._current))</span>

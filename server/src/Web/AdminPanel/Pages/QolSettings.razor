@@ -17,9 +17,10 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextQolSettings" />
     <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
-        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)">English</button>
-        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)">Tiếng Việt</button>
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
     </div>
 </div>
 
@@ -95,10 +96,10 @@ else
     </div>
 
     <div class="d-flex gap-2 mb-3">
-        <button type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync">
+        <button type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
             @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save QoL Settings", "Lưu Cài Đặt QoL"))
         </button>
-        <button type="button" class="btn btn-outline-secondary" @onclick="this.ReloadState">@L("Refresh Mining Logs", "Làm Mới Nhật Ký Đào")</button>
+        <button type="button" class="btn btn-outline-secondary" @onclick="this.ReloadState" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh Mining Logs", "Làm Mới Nhật Ký Đào")</button>
     </div>
 
     <div class="card">

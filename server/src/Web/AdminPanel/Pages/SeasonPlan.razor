@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Season plan", "Lộ trình mùa giải")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextSeasonPlan" />
 <p class="text-muted">@L("Configure staged seasonal unlocks (+9 cap, +10..+15, Master Levels, Harmony, Wing 2, Fenrir, 380 items, Wing 3) triggered by date, world boss kills, player levels, or manual admin control.", "Cấu hình lộ trình mở tính năng theo giai đoạn (+9, +10..+15, Master, Đá Tạo Hóa, Cánh C2, Sói Tinh, Đồ 380, Cánh C3) theo ngày, hạ Boss, cấp người chơi hoặc mở tay.")</p>
 
 @if (this._showHelp)
@@ -67,14 +68,14 @@ else
                             @if (unlocked)
                             {
                                 <span class="badge bg-success">@L($"Unlocked {SydneyTime(at)}", $"Đã mở {SydneyTime(at)}")</span>
-                                <button type="button" class="btn btn-sm btn-outline-warning" @onclick="() => this.ToggleUnlockAsync(st.Id, false)">@L("Lock", "Khóa lại")</button>
+                                <button type="button" class="btn btn-sm btn-outline-warning" @onclick="() => this.ToggleUnlockAsync(st.Id, false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Lock", "Khóa lại")</button>
                             }
                             else
                             {
                                 <span class="badge bg-secondary">@L("Locked", "Đang khóa")</span>
-                                <button type="button" class="btn btn-sm btn-outline-success" @onclick="() => this.ToggleUnlockAsync(st.Id, true)">@L("Unlock now", "Mở ngay")</button>
+                                <button type="button" class="btn btn-sm btn-outline-success" @onclick="() => this.ToggleUnlockAsync(st.Id, true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Unlock now", "Mở ngay")</button>
                             }
-                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._rows.Remove(row)">×</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._rows.Remove(row)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
                         </div>
                     </div>
                     <div class="row g-2 mb-2">
@@ -95,8 +96,8 @@ else
             }
 
             <div class="d-flex gap-2 mt-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddStage">@L("+ Add stage", "+ Thêm giai đoạn")</button>
-                <button type="button" class="btn btn-primary" id="sp-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddStage" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add stage", "+ Thêm giai đoạn")</button>
+                <button type="button" class="btn btn-primary" id="sp-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
             </div>
         </div>
     </section>

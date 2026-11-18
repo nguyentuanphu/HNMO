@@ -12,6 +12,7 @@
     <h1 class="mb-0">@L("Jewel bank & master skill clearing", "Ngân hàng ngọc & tẩy điểm master")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextJewelBank" />
 <p class="text-muted">@L("Configure account-wide jewel storage limits, withdrawal/deposit Zen fees, allowed jewels, and master skill point reset fees.", "Cấu hình giới hạn lưu trữ ngọc theo tài khoản, phí gửi/rút Zen, các loại ngọc cho phép và phí tẩy điểm kỹ năng master.")</p>
 
 @if (this._showHelp)
@@ -114,15 +115,15 @@ else
                                 <td><input class="form-control form-control-sm" type="number" style="width: 70px" @bind="j.Group" /></td>
                                 <td><input class="form-control form-control-sm" type="number" style="width: 80px" @bind="j.Number" /></td>
                                 <td><input class="form-control form-control-sm" type="number" style="width: 100px" @bind="j.MaxCapacity" /></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Jewels.Remove(j)">×</button></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => c.Jewels.Remove(j)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button></td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddJewel">@L("+ Add jewel", "+ Thêm ngọc")</button>
-                <button type="button" class="btn btn-primary" id="jb-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddJewel" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add jewel", "+ Thêm ngọc")</button>
+                <button type="button" class="btn btn-primary" id="jb-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
             </div>
         </div>
     </section>

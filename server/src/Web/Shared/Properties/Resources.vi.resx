@@ -12,7 +12,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Loading" xml:space="preserve">
+    <data name="Loading" xml:space="preserve">
     <value>Đang tải ...</value>
   </data>
   <data name="All" xml:space="preserve">
@@ -628,4 +628,26 @@ Cấp: {2} - {3}</value>
   <data name="ItemPickerGroup15" xml:space="preserve"><value>Sách phép và ngọc kỹ năng</value></data>
   <data name="ItemPickerGiftChoose" xml:space="preserve"><value>Chọn vật phẩm để thêm vào quà này.</value></data>
   <data name="ItemPickerGiftAdd" xml:space="preserve"><value>Thêm {0} vào quà này.</value></data>
+  <data name="PageHelpHintClear" xml:space="preserve"><value>Xóa giá trị, lựa chọn hoặc trạng thái được ghi trên nút này.</value></data>
+  <data name="PageHelpHintPassword" xml:space="preserve"><value>Mở hoặc xác nhận thay đổi mật khẩu cho tài khoản đã chọn.</value></data>
+  <data name="PageHelpHintSearch" xml:space="preserve"><value>Tìm các mục khớp với từ khóa hoặc bộ lọc hiện tại.</value></data>
+  <data name="PageHelpHintRefresh" xml:space="preserve"><value>Đọc lại dữ liệu mới nhất hiện có từ máy chủ.</value></data>
+  <data name="PageHelpHintZoomStatus" xml:space="preserve"><value>Giá trị này cho biết phần trăm thu phóng bản đồ hiện tại.</value></data>
+  <data name="PageHelpHintSelect" xml:space="preserve"><value>Chọn mục này cho thao tác đang thực hiện.</value></data>
+  <data name="PageHelpHintFirst" xml:space="preserve"><value>Xem trang mục đầu tiên.</value></data>
+  <data name="PageHelpHintLast" xml:space="preserve"><value>Xem trang mục cuối cùng.</value></data>
+  <data name="PageHelpHintReset" xml:space="preserve"><value>Đặt lại trạng thái đã chọn theo hướng dẫn của trang này.</value></data>
+  <data name="PageHelpHintExpand" xml:space="preserve"><value>Hiện hoặc ẩn chi tiết bổ sung của mục này.</value></data>
+  <data name="PageHelpHintConfirm" xml:space="preserve"><value>Xác nhận và thực hiện thao tác đã mô tả ở trên.</value></data>
+  <data name="PageHelpHintCancel" xml:space="preserve"><value>Hủy bước chỉnh sửa này và không áp dụng các thay đổi chưa lưu.</value></data>
+  <data name="PageHelpHintNext" xml:space="preserve"><value>Xem trang mục tiếp theo.</value></data>
+  <data name="PageHelpHintZoomIn" xml:space="preserve"><value>Phóng to bản đồ đang xem mà không thay đổi dữ liệu bản đồ.</value></data>
+  <data name="PageHelpHintNavigate" xml:space="preserve"><value>Mở trang hoặc chế độ xem đã chọn.</value></data>
+  <data name="PageHelpHintZoomOut" xml:space="preserve"><value>Thu nhỏ bản đồ đang xem mà không thay đổi dữ liệu bản đồ.</value></data>
+  <data name="PageHelpHintDelete" xml:space="preserve"><value>Xóa mục đã chọn sau khi kiểm tra đúng mục cần xóa.</value></data>
+  <data name="PageHelpHintPrevious" xml:space="preserve"><value>Xem trang mục trước.</value></data>
+  <data name="PageHelpHintCopy" xml:space="preserve"><value>Sao chép nội dung hoặc mục đã chọn để dùng lại.</value></data>
+  <data name="PageHelpHintStatus" xml:space="preserve"><value>Nút đang vô hiệu hóa này chỉ hiển thị trạng thái và không thực hiện thao tác.</value></data>
+  <data name="PageHelpHintSave" xml:space="preserve"><value>Lưu các thay đổi đang hiển thị trong trình sửa này.</value></data>
+  <data name="PageHelpHintCreate" xml:space="preserve"><value>Bắt đầu tạo một mục mới trên trang này.</value></data>
 </root>

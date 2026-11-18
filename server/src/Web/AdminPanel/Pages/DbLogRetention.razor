@@ -9,6 +9,7 @@
     <h1 class="mb-0">@L("Database log retention & export", "Lưu trữ & Xuất nhật ký CSDL")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextDbLogRetention" />
 <p class="text-muted">@L("Configure how many days chat logs and admin audit history stay in PostgreSQL, rolling log caps, backup retention (7 daily / 4 weekly / 3 monthly), and export-before-delete archives.", "Thiết lập số ngày giữ nhật ký chat và lịch sử thao tác quản trị trong PostgreSQL, giới hạn tệp log, lịch sử sao lưu (7 ngày / 4 tuần / 3 tháng), và tự động xuất file nén trước khi xóa.")</p>
 
 @if (this._showHelp)
@@ -39,8 +40,8 @@
             </div>
         </div>
         <div class="d-flex gap-2">
-            <button type="button" class="btn btn-primary" id="dbr-save" disabled="@this._isBusy" @onclick="this.SaveSettings">@Resources.Save</button>
-            <button type="button" class="btn btn-outline-warning" id="dbr-purge" disabled="@this._isBusy" @onclick="this.ExportAndPurgeNow">@L("Export & purge old DB logs now", "Xuất nén & dọn log cũ ngay")</button>
+            <button type="button" class="btn btn-primary" id="dbr-save" disabled="@this._isBusy" @onclick="this.SaveSettings" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+            <button type="button" class="btn btn-outline-warning" id="dbr-purge" disabled="@this._isBusy" @onclick="this.ExportAndPurgeNow" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDownload">@L("Export & purge old DB logs now", "Xuất nén & dọn log cũ ngay")</button>
         </div>
     </div>
 </section>

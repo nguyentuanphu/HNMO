@@ -16,6 +16,7 @@
             ?
         </button>
     </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextTalismans" />
     <div class="btn-group btn-group-sm" role="group" aria-label="Language">
         <button type="button"
                 class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
@@ -77,7 +78,7 @@ else
 
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h2 class="h6 mb-0">@this.L("Carried Bag Talismans / Figurines", "Danh sách Bùa / Tượng mang trong túi")</h2>
-                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.AddTalisman">+ @this.L("Add Talisman", "Thêm Bùa")</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.AddTalisman" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">+ @this.L("Add Talisman", "Thêm Bùa")</button>
             </div>
 
             @for (var i = 0; i < c.Talismans.Count; i++)
@@ -144,7 +145,7 @@ else
                                 <input class="form-control form-control-sm" style="width:68px" type="number" min="1" max="64" @bind="t.MaxStacks" />
                             </div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveTalisman(idx)">
+                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveTalisman(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
                             @this.L("Remove", "Xóa")
                         </button>
                     </div>
@@ -153,7 +154,7 @@ else
 
             <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
                 <h2 class="h6 mb-0">@this.L("Stat-Point Consumables", "Vật phẩm sử dụng cộng điểm")</h2>
-                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.AddConsumable">+ @this.L("Add Consumable", "Thêm Vật phẩm")</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="this.AddConsumable" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">+ @this.L("Add Consumable", "Thêm Vật phẩm")</button>
             </div>
 
             @for (var i = 0; i < c.StatConsumables.Count; i++)
@@ -198,7 +199,7 @@ else
                             <input class="form-control form-control-sm" type="number" min="1" @bind="sc.MaxCapOverride" placeholder="@c.GlobalStatPointsCap" />
                         </div>
                         <div class="col-sm-1 text-end">
-                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveConsumable(idx)">
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveConsumable(idx)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
                                 ×
                             </button>
                         </div>

@@ -11,6 +11,7 @@
     <h1 class="mb-0">@L("Player activity log", "Nhật ký hoạt động")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" id="al-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextActivityLog" />
 <p class="text-muted">@L("Inspect player trades, valuable item drops and pickups, Chaos mixes, NPC shop buys/sells, personal store sales, and Item Market transfers stored in PostgreSQL rows.", "Tra cứu giao dịch, nhặt/rớt đồ giá trị, xoay Chaos, mua bán shop NPC, cửa hàng cá nhân và Chợ Đồ theo dòng PostgreSQL.")</p>
 
 @if (this._showHelp)

@@ -10,6 +10,7 @@
 <Breadcrumb IsFirstFromRoot="true" Caption=@Resources.Merchants/>
 
 <h1>@Resources.Merchants</h1>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMerchants" />
 <a href="merchants" title="@Resources.ShopEditorTitle">@Resources.ShopEditorTitle</a>
 
 
@@ -26,7 +27,7 @@
             </PropertyColumn>
 
             <TemplateColumn Align="Align.Start">
-                <button type="button" class="btn btn-primary" @onclick="@(() => this.OnMerchantEditClickAsync(context))"><span class="oi oi-pencil" aria-hidden="true"></span> @Resources.Edit</button>
+                <button type="button" class="btn btn-primary" @onclick="@(() => this.OnMerchantEditClickAsync(context))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit"><span class="oi oi-pencil" aria-hidden="true"></span> @Resources.Edit</button>
             </TemplateColumn>
         </QuickGrid>
     </div>
@@ -35,7 +36,7 @@
 else
 {
     <div class="d-flex flex-row">
-        <button type="button" class="btn btn-secondary me-3" @onclick="this.OnBackButtonClickAsync">&lt; @Resources.Back</button>
+        <button type="button" class="btn btn-secondary me-3" @onclick="this.OnBackButtonClickAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">&lt; @Resources.Back</button>
         <h2>@this._selectedMerchant.Merchant.Designation.ToString()</h2>
     </div>
     <hr/>
@@ -43,8 +44,8 @@ else
         <EditForm Model="this._selectedMerchant.Merchant" OnValidSubmit="this.OnSaveButtonClickAsync">
             <ItemStorageField @bind-Value="this._selectedMerchant.Merchant.MerchantStore" HideLabel="true"/>
             <hr />
-            <button type="submit" class="btn btn-primary me-1">@Resources.SaveChanges</button>
-            <button type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClickAsync">@Resources.DiscardChanges</button>
+            <button type="submit" class="btn btn-primary me-1" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.SaveChanges</button>
+            <button type="button" class="btn btn-secondary" @onclick="this.OnCancelButtonClickAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">@Resources.DiscardChanges</button>
         </EditForm>
     </CascadingValue>
 }

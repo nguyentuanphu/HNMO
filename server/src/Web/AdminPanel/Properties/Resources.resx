@@ -17,106 +17,15 @@
     <resheader name="version">2.0</resheader>
     <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
     <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
         <value>[base64 mime encoded serialized .NET Framework object]</value>
     </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
@@ -4649,6 +4558,108 @@
   <data name="ShopEditorReload" xml:space="preserve"><value>Reload saved shop</value></data>
   <data name="ShopEditorEmpty" xml:space="preserve"><value>No matching merchants.</value></data>
   <data name="ShopEditorPending" xml:space="preserve"><value>Saving the shop. Wait before leaving this page.</value></data>
+  <data name="PageHelpTextAccounts" xml:space="preserve"><value>Find player accounts and open their characters, coin balances or linked sign-ins. Search for the exact account before editing it. Leave account identifiers alone and check the player's identity before changing access or money.</value></data>
+  <data name="PageHelpTextIndex" xml:space="preserve"><value>This dashboard shows the server's current activity and useful links. Open a card to investigate an alert or continue setup. Reading the dashboard does not change game rules; use the dedicated settings page for changes.</value></data>
+  <data name="PageHelpTextServers" xml:space="preserve"><value>See the connect and game servers and open their status or configuration. Check the server's name before starting, stopping or editing it. Avoid stopping a server while players are connected unless you have announced maintenance.</value></data>
+  <data name="PageHelpTextGameServer" xml:space="preserve"><value>Watch one game server's players, maps and activity. Use the available actions only for the server named here. Leave running services alone during normal play and announce maintenance before disruptive actions.</value></data>
+  <data name="PageHelpTextCreateGameServerConfig" xml:space="preserve"><value>Create settings for an additional game server. Choose a distinct server number, name and free ports, then review its rates and connection settings. Keep the working server's settings unchanged until the new server has been tested.</value></data>
+  <data name="PageHelpTextCreateConnectServerConfig" xml:space="preserve"><value>Create a connect server that tells players which game servers are available. Choose free ports and the correct public address. Do not replace a working address or port without also updating the client connection settings.</value></data>
+  <data name="PageHelpTextLoggedIn" xml:space="preserve"><value>See accounts currently playing, leveling offline or running as bots when those features are enabled. Select the matching tab and check the account before taking an action. Forcing an account offline interrupts its session; do it only when necessary.</value></data>
+  <data name="PageHelpTextPlugins" xml:space="preserve"><value>Plug-ins turn optional server features on or off and hold their settings. Open the feature's configuration and change only the values you understand. Leave unknown plug-ins and internal identifiers alone; switching features off can affect players immediately.</value></data>
+  <data name="PageHelpTextAdminUsers" xml:space="preserve"><value>Manage the people allowed into this admin panel. Give each person their own user and only the role they need. Never share administrator passwords or remove your last working administrator account.</value></data>
+  <data name="PageHelpTextAccountSecurity" xml:space="preserve"><value>Protect your own admin sign-in with an authenticator and recovery codes. Set up the authenticator, verify a current code and keep recovery codes somewhere private. Do not post the QR code, secret or recovery codes in messages or screenshots.</value></data>
+  <data name="PageHelpTextAccountLinks" xml:space="preserve"><value>See the external sign-ins linked to this player's account. Confirm the account and provider before unlinking an entry. Removing a sign-in may prevent the player using it again; do not unlink it without a verified request.</value></data>
+  <data name="PageHelpTextCashShopCoins" xml:space="preserve"><value>Review this account's saved coin balances and grant history. To adjust coins, choose the coin type, amount and a clear reason, then review the account name. Pending grants are applied by the game server; do not repeat a grant just because the displayed balance has not refreshed.</value></data>
+  <data name="PageHelpTextCashShopCatalog" xml:space="preserve"><value>Choose which items players can buy in the cash shop and their coin prices. Check the item, quantity, duration and coin type before saving. Leave internal identifiers alone and avoid changing an offer while testing an unfinished price.</value></data>
+  <data name="PageHelpTextGiftCodes" xml:space="preserve"><value>Create codes that give players the configured coins, zen or items. Set the reward, expiry and use limit, then test with a small reward first. Keep private codes private and do not reuse a live code for a different reward.</value></data>
+  <data name="PageHelpTextMissionsRewards" xml:space="preserve"><value>Set missions, daily rewards and the ways players earn coins. Review each task's target, reward and daily limits before enabling it. Keep reward amounts modest while testing and leave mission identifiers unchanged once players have progress.</value></data>
+  <data name="PageHelpTextOnboardingStarterKit" xml:space="preserve"><value>Choose the starter kit and guide steps for new players. Check class restrictions, quantities and whether rewards are once per account or character. Do not change identifiers for steps players have already started, and test the kit on a new account.</value></data>
+  <data name="PageHelpTextResetsRelife" xml:space="preserve"><value>Set the levels, costs and limits for reset, relife and stat changes. Check requirements and rewards together before enabling a rule. Leave advanced formulas unchanged unless you have tested the effect on a sample character.</value></data>
+  <data name="PageHelpTextAccountSafety" xml:space="preserve"><value>Configure the second password, item locks and login-history protection for players. Choose the delays and protections you want to require. Do not turn safeguards off to solve one player's problem; verify the account and use the specific account tools instead.</value></data>
+  <data name="PageHelpTextCommunity" xml:space="preserve"><value>Set community rewards, event codes and highlights shown to players. Check the public text, links and reward amounts before enabling an event. Keep private reward codes secret and avoid promising rewards the server cannot deliver.</value></data>
+  <data name="PageHelpTextDiscordSetup" xml:space="preserve"><value>Connect community notices to the correct Discord channel. Follow the setup steps, check permissions and send a test notice. Keep bot tokens and webhook addresses private, and do not give the bot more permissions than it needs.</value></data>
+  <data name="PageHelpTextTopRaces" xml:space="preserve"><value>Configure ranking races, their time windows and prizes. Check which progress counts, the dates and the reward list before starting a race. Avoid changing scoring rules during a race that players have already joined.</value></data>
+  <data name="PageHelpTextWorldBossesRankings" xml:space="preserve"><value>Choose world bosses, their schedules and ranking rewards. Check maps, spawn locations, times and prizes before enabling them. Leave monster identifiers alone and test a boss where it will not disrupt ordinary players.</value></data>
+  <data name="PageHelpTextGuildsLevelsLadder" xml:space="preserve"><value>Set guild-level progress and ladder rewards. Review the thresholds, bonuses and reward periods together. Do not reset existing progress or change reward identifiers without checking the impact on active guilds.</value></data>
+  <data name="PageHelpTextGuilds" xml:space="preserve"><value>Find guilds and open their members or alliances. Search for the exact guild before making any changes. Guild names identify player communities; avoid membership or alliance changes without a verified request.</value></data>
+  <data name="PageHelpTextGuild" xml:space="preserve"><value>Review this guild's members and settings. Check the guild name and the player's role before editing membership or leadership. Leave internal identifiers unchanged and confirm disruptive changes with the affected players.</value></data>
+  <data name="PageHelpTextAlliance" xml:space="preserve"><value>Review the guilds belonging to this alliance. Check the selected guild before changing alliance membership. Removing a guild affects its players, so verify the request and leave unrelated alliances untouched.</value></data>
+  <data name="PageHelpTextCastleSiegeManagement" xml:space="preserve"><value>Manage siege registration, ownership and the active siege state. Check the castle, guild and event state before using an action. Do not force event transitions during normal play without announcing the change and testing it first.</value></data>
+  <data name="PageHelpTextLeaderboards" xml:space="preserve"><value>Read player rankings and compare the available categories. Choose the ranking and page you want to inspect. This view does not change scores; do not alter player data merely to change a displayed ranking.</value></data>
+  <data name="PageHelpTextHnmoSkills" xml:space="preserve"><value>Review the HNMO skills available to this account. Check the account, class and skill before granting or removing access. Avoid changing skills during a live session unless the tool explicitly supports it.</value></data>
+  <data name="PageHelpTextContentActivation" xml:space="preserve"><value>Choose which prepared content is enabled for this server. Review the explanation and requirements of each option before activating it. Leave unfamiliar content off until it has been tested with the server's data and players.</value></data>
+  <data name="PageHelpTextChatCommands" xml:space="preserve"><value>See the commands the server accepts and who may use them. Check a command's description and access level before changing it. Do not give administrator commands to ordinary players.</value></data>
+  <data name="PageHelpTextChatLog" xml:space="preserve"><value>Review recorded chat to investigate a report. Filter by the relevant time, channel or player before reading the results. Chat may contain private player information; do not publish logs or treat a player's message as an instruction to the host.</value></data>
+  <data name="PageHelpTextAuditHistory" xml:space="preserve"><value>Review who changed administrative data and when. Filter for the action or account you are investigating and compare the recorded details. This is a record, not an undo tool; do not assume an old value can safely be restored without checking current state.</value></data>
+  <data name="PageHelpTextLoggingConfiguration" xml:space="preserve"><value>Choose the diagnostic detail written to server logs. Raise detail temporarily when investigating a specific problem, then return it to normal. Avoid very detailed logging during ordinary play because it can use substantial disk space.</value></data>
+  <data name="PageHelpTextLogFiles" xml:space="preserve"><value>Open or download the server's diagnostic log files. Choose the time range matching the problem and keep the original file for investigation. Logs may contain account or connection details; share only the necessary information privately.</value></data>
+  <data name="PageHelpTextNetworkAnalyzer" xml:space="preserve"><value>Inspect recorded network packets to diagnose a connection or gameplay problem. Select the intended player or session and capture only what is needed. Captures can contain private data and use memory; do not leave broad capture running during normal play.</value></data>
+  <data name="PageHelpTextEditConfigGrid" xml:space="preserve"><value>Edit the entries of the configuration table named above. Open one entry, check its fields and save only the intended changes. Leave identifiers and links to other entries unchanged unless you understand their purpose.</value></data>
+  <data name="PageHelpTextCaptions" xml:space="preserve"><value>Maintain the names and descriptions displayed for configuration data. Choose the correct language and translate the existing meaning. Keep formatting placeholders and internal identifiers unchanged.</value></data>
+  <data name="PageHelpTextUpdates" xml:space="preserve"><value>Review and apply the available configuration updates. Back up the current configuration and read each update's purpose before applying it. Do not apply unfamiliar updates to a live server without a test and a recovery plan.</value></data>
+  <data name="PageHelpTextEditItemDrops" xml:space="preserve"><value>Choose which items can drop and the conditions and chances for them. Review the item, source, quantity and probability together. Test generous changes on a separate server first to avoid flooding the live economy.</value></data>
+  <data name="PageHelpTextMapPage" xml:space="preserve"><value>Inspect this game server's map and the objects or players on it. Check the map and selected object before using an action. Do not move, remove or spawn objects around ordinary players unless that change is intentional.</value></data>
+  <data name="PageHelpTextSetup" xml:space="preserve"><value>Follow the first-time setup steps to prepare this server. Set your own administrator credentials and review each choice before continuing. Keep passwords and keys private, and do not rerun setup over a working installation without a backup.</value></data>
+  <data name="PageHelpTextLogin" xml:space="preserve"><value>Sign in with your admin-panel user, not a player's game account. Enter your password and the authenticator or recovery code when requested. Keep recovery codes private and ask another administrator for help if you no longer have access.</value></data>
+  <data name="PageHelpTextError" xml:space="preserve"><value>The requested page could not complete its work. Note what you were doing, return to a safe page and check the server logs. Do not turn on public development error details or repeat a money-changing action until you know whether it completed.</value></data>
+  <data name="PageHelpTextNotFound" xml:space="preserve"><value>This address does not match an available admin page. Return home or use a current navigation link. Do not change server settings to fix an old bookmark; check the page address first.</value></data>
+  <data name="PageHelpTextAccessDenied" xml:space="preserve"><value>Your current admin role cannot open this page or perform this action. Ask an administrator to review the access you need for your task. Do not share another person's credentials or increase permissions beyond that task.</value></data>
+  <data name="PageHelpTitle" xml:space="preserve"><value>How to use this page</value></data>
+  <data name="PageHelpToggleHint" xml:space="preserve"><value>Show or hide the purpose, recommended changes and cautions for this page.</value></data>
+  <data name="PageHelpHintSave" xml:space="preserve"><value>Save the changes currently shown in this editor.</value></data>
+  <data name="PageHelpHintCreate" xml:space="preserve"><value>Start creating a new entry on this page.</value></data>
+  <data name="PageHelpHintDelete" xml:space="preserve"><value>Remove the selected entry after checking that it is the correct one.</value></data>
+  <data name="PageHelpHintCancel" xml:space="preserve"><value>Cancel this editing step without applying its unsaved changes.</value></data>
+  <data name="PageHelpHintEdit" xml:space="preserve"><value>Open the selected entry to inspect or change its settings.</value></data>
+  <data name="PageHelpHintRefresh" xml:space="preserve"><value>Read the latest available data from the server again.</value></data>
+  <data name="PageHelpHintCopy" xml:space="preserve"><value>Copy the selected text or entry for reuse.</value></data>
+  <data name="PageHelpHintSelect" xml:space="preserve"><value>Choose this entry for the current action.</value></data>
+  <data name="PageHelpHintSearch" xml:space="preserve"><value>Find entries matching the current search or filter.</value></data>
+  <data name="PageHelpHintStart" xml:space="preserve"><value>Start the selected service or activity.</value></data>
+  <data name="PageHelpHintStop" xml:space="preserve"><value>Stop the selected service or activity.</value></data>
+  <data name="PageHelpHintDownload" xml:space="preserve"><value>Download the selected file to this computer.</value></data>
+  <data name="PageHelpHintUpload" xml:space="preserve"><value>Read the chosen file into this page and review it before saving.</value></data>
+  <data name="PageHelpHintGrant" xml:space="preserve"><value>Give the selected reward after reviewing the account, amount and reason.</value></data>
+  <data name="PageHelpHintNavigate" xml:space="preserve"><value>Open the selected page or view.</value></data>
+  <data name="PageHelpHintSend" xml:space="preserve"><value>Send the message or request described by this action.</value></data>
+  <data name="PageHelpHintEnable" xml:space="preserve"><value>Turn on the selected feature or entry.</value></data>
+  <data name="PageHelpHintDisable" xml:space="preserve"><value>Turn off the selected feature or entry.</value></data>
+  <data name="PageHelpHintSignIn" xml:space="preserve"><value>Sign in using the details entered in this form.</value></data>
+  <data name="PageHelpHintVerify" xml:space="preserve"><value>Check the verification code entered in this form.</value></data>
+  <data name="PageHelpHintExpand" xml:space="preserve"><value>Show or hide additional details for this entry.</value></data>
+  <data name="PageHelpHintConfirm" xml:space="preserve"><value>Confirm and carry out the action described above.</value></data>
+  <data name="PageHelpHintNext" xml:space="preserve"><value>Show the next page of entries.</value></data>
+  <data name="PageHelpHintPrevious" xml:space="preserve"><value>Show the previous page of entries.</value></data>
+  <data name="PageHelpHintClear" xml:space="preserve"><value>Clear the value, selection or state named by this control.</value></data>
+  <data name="PageHelpHintReset" xml:space="preserve"><value>Reset the selected state as described in this page's help.</value></data>
+  <data name="PageHelpHintForceState" xml:space="preserve"><value>Force the siege into the selected state after checking that players are ready.</value></data>
+  <data name="PageHelpHintPassword" xml:space="preserve"><value>Open or confirm the password change for the selected account.</value></data>
+  <data name="PageHelpHintDiscordSetUp" xml:space="preserve"><value>Create or update the configured Discord channels and roles.</value></data>
+  <data name="PageHelpHintCheck" xml:space="preserve"><value>Check the current connection and configuration without saving new values.</value></data>
+  <data name="PageHelpHintTest" xml:space="preserve"><value>Send a test notification using the saved Discord settings.</value></data>
+  <data name="PageHelpHintDiscard" xml:space="preserve"><value>Reload the saved values and discard the edits not yet saved.</value></data>
+  <data name="PageHelpHintMoveUp" xml:space="preserve"><value>Move this guide step one position earlier.</value></data>
+  <data name="PageHelpHintMoveDown" xml:space="preserve"><value>Move this guide step one position later.</value></data>
+  <data name="PageHelpHintScrollBottom" xml:space="preserve"><value>Scroll to the latest visible log entries.</value></data>
+  <data name="PageHelpHintUpdate" xml:space="preserve"><value>Apply the selected configuration updates after reviewing their details.</value></data>
+  <data name="PageHelpHintReinstall" xml:space="preserve"><value>Begin reinstalling the configuration; back up current data before confirming.</value></data>
+  <data name="PageHelpHintStatus" xml:space="preserve"><value>This disabled control shows status and does not perform an action.</value></data>
+  <data name="PageHelpHintRecovery" xml:space="preserve"><value>Create replacement recovery codes and store the new codes privately.</value></data>
+  <data name="PageHelpHintAuthenticator" xml:space="preserve"><value>Begin setting up an authenticator for your own admin sign-in.</value></data>
+  <data name="PageHelpHintSort" xml:space="preserve"><value>Sort the displayed rows by this column.</value></data>
+  <data name="PageHelpHintAssignMaps" xml:space="preserve"><value>Assign this drop group to every map after reviewing its rewards.</value></data>
+  <data name="PageHelpHintFirst" xml:space="preserve"><value>Show the first page of entries.</value></data>
+  <data name="PageHelpHintLast" xml:space="preserve"><value>Show the last page of entries.</value></data>
+  <data name="PageHelpHintZoomIn" xml:space="preserve"><value>Enlarge the map view without changing map data.</value></data>
+  <data name="PageHelpHintZoomOut" xml:space="preserve"><value>Reduce the map view without changing map data.</value></data>
+  <data name="PageHelpHintZoomStatus" xml:space="preserve"><value>This value shows the current map zoom percentage.</value></data>
+  <data name="PageHelpTextEditConfig" xml:space="preserve"><value>Edit the selected configuration entry. Change only the intended fields, review related entries and save when the values are correct. Leave internal identifiers and references alone unless you understand how they are used.</value></data>
+  <data name="PageHelpTextEditAccount" xml:space="preserve"><value>Edit this player's saved account or character data. Confirm the account and field before saving, and ensure the account is offline when the tool requires it. Avoid editing identifiers or money casually; use the dedicated coin tools for grants and adjustments.</value></data>
+  <data name="PageHelpTextEditConnectionServer" xml:space="preserve"><value>Edit the connect server's address, ports and connection settings. Check that the address is reachable by players and the ports are free. Leave working values unchanged until you have tested the replacement and updated the client connection settings.</value></data>
+  <data name="PageHelpTextEditMap" xml:space="preserve"><value>Edit monster spawn areas, objects and gates on the selected map. Choose the correct map and tool, review placements, then save. Avoid changing identifiers or gates used by other maps, and test movement and spawns before using the map with players.</value></data>
+  <data name="PageHelpTextEditTerrain" xml:space="preserve"><value>Edit walkable, blocked and safe areas of the selected map. Use the appropriate paint tool, review the affected cells and save. Keep a backup and test entrances and player movement before applying large changes to a live map.</value></data>
+  <data name="PageHelpHintSignOut" xml:space="preserve"><value>Sign out of this admin-panel session.</value></data>
+  <data name="PageHelpHintReconnect" xml:space="preserve"><value>Reconnect to the admin server and resume the page when it is available.</value></data>
   <data name="HostSettingsPage" xml:space="preserve">
     <value>Host settings</value>
   </data>
@@ -4763,12 +4774,6 @@
 {0}
 
 On your account page, open Security and paste this code to confirm your new email address. It expires after 15 minutes and can be used once. Never send your game password to anyone. If you did not request this change, ignore this message.</value>
-  </data>
-  <data name="PageHelpTitle" xml:space="preserve">
-    <value>How to use this page</value>
-  </data>
-  <data name="PageHelpToggleHint" xml:space="preserve">
-    <value>Show or hide the purpose, recommended changes and cautions for this page.</value>
   </data>
   <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
     <value>Extra vault purchase</value>
@@ -4941,5 +4946,140 @@ On your account page, open Security and paste this code to confirm your new emai
   </data>
   <data name="PageHelpTextNewsManager" xml:space="preserve">
     <value>Publish bilingual EN/VI announcements in Australia/Sydney time, pin top news, optionally attach a safe image URL, and send live in-game chat notices.</value>
+  </data>
+  <data name="PageHelpTextActivityLog" xml:space="preserve">
+    <value>Inspect player trades, item drops/pickups, Chaos Machine mixes, NPC shop transactions, personal stores, and Item Market transfers stored in PostgreSQL rows. Filter by account, character, item, action, or Sydney time range.</value>
+  </data>
+  <data name="PageHelpTextAntiCheat" xml:space="preserve">
+    <value>Configure server-authoritative anti-cheat thresholds (movement speed, attack speed, packet anomalies, escalation strikes) and inspect recorded violations. Enable enforcement carefully after checking live baseline logs.</value>
+  </data>
+  <data name="PageHelpTextApiKeys" xml:space="preserve">
+    <value>Create, copy, or revoke scoped API keys for the web bridge, automation scripts, or MCP clients. Each key is shown once at creation; store it securely and never expose it to browsers.</value>
+  </data>
+  <data name="PageHelpTextBannedWords" xml:space="preserve">
+    <value>Manage English and Vietnamese profanity or restricted words filtered in game chat and new character/guild names. Choose censoring or blocking with a reason notice.</value>
+  </data>
+  <data name="PageHelpTextBufferNpc" xml:space="preserve">
+    <value>Configure the in-town Buffer NPC maximum level, Zen/coin fee, buff durations, and extra selectable buffs. Changes apply after saving.</value>
+  </data>
+  <data name="PageHelpTextCatchupCap" xml:space="preserve">
+    <value>Configure the top-player level/reset ceiling, tiered catch-up EXP multipliers, and bonus daily reset limits so newer players can catch up smoothly without overtaking veterans.</value>
+  </data>
+  <data name="PageHelpTextCrashWatch" xml:space="preserve">
+    <value>Monitor background game-server health probes and configure optional auto-restart recovery behavior. Adjust alert webhooks or thresholds and leave test restarts off during live play unless testing recovery.</value>
+  </data>
+  <data name="PageHelpTextCustomRanks" xml:space="preserve">
+    <value>Customize progressive rank tiers (names in EN/VI, badge colors, attribute bonuses, and unlock thresholds) displayed on character nameplates and in-game panels.</value>
+  </data>
+  <data name="PageHelpTextDbLogRetention" xml:space="preserve">
+    <value>Inspect PostgreSQL table log sizes, set retention days per log category, run manual pruning, or export gzipped archive snapshots without losing audit compliance.</value>
+  </data>
+  <data name="PageHelpTextEconomyDashboard" xml:space="preserve">
+    <value>View real-time Zen flows (faucets vs sinks), Chaos mix rates, Jewel stocks, Cash Shop coin balances, and alerts indicating unusual inflation or item duplication risks.</value>
+  </data>
+  <data name="PageHelpTextEscrowContracts" xml:space="preserve">
+    <value>Inspect and manage escrow player-to-player contracts, Trade Credit holds, Direct/Host VND contract flags, disputes, and settlement payouts. Real-money modes remain OFF unless explicitly enabled and reviewed.</value>
+  </data>
+  <data name="PageHelpTextEventAlerts" xml:space="preserve">
+    <value>Configure pre-event reminder notifications delivered via browser Web Push and Discord channels, including lead-time minutes and active event categories.</value>
+  </data>
+  <data name="PageHelpTextFixedOptions" xml:space="preserve">
+    <value>Configure fixed lucky/excellent/harmony rules or capped item options for starter gear, event drops, or promotional sets without modifying base item definitions.</value>
+  </data>
+  <data name="PageHelpTextGameplayRules" xml:space="preserve">
+    <value>Manage per-map PK/drop/level rules, Sydney-time happy hour EXP/drop multipliers, and PvP/anti-AFK combat limits across maps.</value>
+  </data>
+  <data name="PageHelpTextHostSettings" xml:space="preserve">
+    <value>Edit unified host configuration (ports, public addresses, bridge URL, database connection, and player license cap) stored in save/hnmo-settings.json. Port or database edits take effect after restarting HNMO.</value>
+  </data>
+  <data name="PageHelpTextImportServer" xml:space="preserve">
+    <value>Import rates, drops, shops, event schedules, Chaos mixes, spawns, or legacy account/character data from an external folder or MSSQL database on the host machine. Always preview the dry-run diff and keep the automatic backup before applying.</value>
+  </data>
+  <data name="PageHelpTextItemDefinitions" xml:space="preserve">
+    <value>Edit EN/VI item names, sizes, drop tiers, equip requirements, glow colors, and custom tooltips directly inside GameConfiguration and publish live updates to the web client (/website/items).</value>
+  </data>
+  <data name="PageHelpTextJewelBank" xml:space="preserve">
+    <value>Configure account-wide Jewel Bank storage caps, allowed jewel types, Zen deposit/withdrawal fees, and Master Skill reset rules (F7 / /clearmaster).</value>
+  </data>
+  <data name="PageHelpTextLeftovers" xml:space="preserve">
+    <value>Configure bag combine/upgrade recipes (such as combining event boxes and jewels) and surplus material exchanges gated by Season Plan stages.</value>
+  </data>
+  <data name="PageHelpTextLuckyNumber" xml:space="preserve">
+    <value>Configure the daily Lucky Number draw schedule (Sydney time), ticket cost, valid number range, odds, and Coin/Zen/Item prize table.</value>
+  </data>
+  <data name="PageHelpTextMaintenanceTools" xml:space="preserve">
+    <value>Run safe server maintenance actions: clear cached rooms/rankings, inspect pending deliveries, check PostgreSQL connectivity, or repair stuck records with mandatory confirmation.</value>
+  </data>
+  <data name="PageHelpTextMarket" xml:space="preserve">
+    <value>Configure the in-game Item Market (F6 / NPC Market Julia): allowed currencies (Zen/Coins), listing fee percentage, minimum/maximum prices, listing expiry, and escrow payout rules.</value>
+  </data>
+  <data name="PageHelpTextMarriage" xml:space="preserve">
+    <value>Configure the in-game Marriage system (Shift+M): proposal requirements, ceremony map/coordinates, Zen/Coin fees, shared couple party EXP/attack buffs, and divorce rules.</value>
+  </data>
+  <data name="PageHelpTextMerchants" xml:space="preserve">
+    <value>Browse, edit, and add items sold by NPC merchants using the live catalog picker and visual bag grid. Review item levels and options before saving shop inventories.</value>
+  </data>
+  <data name="PageHelpTextMounts" xml:space="preserve">
+    <value>Configure the Mount Upgrade chain, Golden Boss shard drops, upgrade materials/rates, stat bonuses, and collection bonuses (Shift+U).</value>
+  </data>
+  <data name="PageHelpTextOffTrade" xml:space="preserve">
+    <value>Configure offline personal store trading (/offtrade): allowed safe maps, duration limits, VIP bonus hours, currency modes, and active offline shop inspection.</value>
+  </data>
+  <data name="PageHelpTextPartyOptions" xml:space="preserve">
+    <value>Configure password-protected party join (/partypass) and Auto-Party hunting spot listings inside the in-game Party window (P).</value>
+  </data>
+  <data name="PageHelpTextQolSettings" xml:space="preserve">
+    <value>Configure convenient player slash commands (/post level/cooldown/cost, /pkclear cost, /clearchat) and automated mining/helper convenience toggles.</value>
+  </data>
+  <data name="PageHelpTextRankingsSettings" xml:space="preserve">
+    <value>Configure the live in-game Player Rankings panel (Shift+R / /rank) cache refresh interval, visible columns, and bulk /add stat helper limits (Shift+A).</value>
+  </data>
+  <data name="PageHelpTextRateTuning" xml:space="preserve">
+    <value>Fine-tune Jewel upgrade rates (Soul, Bless, Life), Chaos Mix tiers, and class-vs-class PvP/PvM damage balance multipliers cleanly.</value>
+  </data>
+  <data name="PageHelpTextS6Events" xml:space="preserve">
+    <value>Manage classic Season 6 event schedules, entry ticket limits, boss spawn alerts, and prize pools across Blood Castle, Devil Square, Chaos Castle, and Skeleton King.</value>
+  </data>
+  <data name="PageHelpTextSeasonPlan" xml:space="preserve">
+    <value>Define progressive Season Plan milestones (Sydney unlock dates for resets, Wing tiers, Bosses, and Socket/Harmony content) visible to players in the F8 timeline.</value>
+  </data>
+  <data name="PageHelpTextStateRetention" xml:space="preserve">
+    <value>Inspect PostgreSQL plug-in feature row storage sizes, run safe archival/compaction on expired logs/claims, and verify single-store persistence health.</value>
+  </data>
+  <data name="PageHelpTextTalismans" xml:space="preserve">
+    <value>Configure bag talismans/figurines granting passive EXP, Zen, or stat bonuses when carried and capped stat-fruit consumable limits.</value>
+  </data>
+  <data name="PageHelpTextTeleportNpc" xml:space="preserve">
+    <value>Configure custom Teleport NPC warp destinations, required level/Zen/coins, cooldowns, and VIP/faction restrictions.</value>
+  </data>
+  <data name="PageHelpTextTimetable" xml:space="preserve">
+    <value>View and edit the unified Sydney-time Event &amp; Boss Timetable shown in-game (F8) and on the website homepage so players see accurate countdowns.</value>
+  </data>
+  <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
+    <value>Configure cumulative VND top-up reward tiers so accounts can claim one-time Coin, Zen, and Item bundles automatically on the account page or in game.</value>
+  </data>
+  <data name="PageHelpTextVaultChaosRewards" xml:space="preserve">
+    <value>Configure custom Chaos Machine combination rates shown live to players, Extra Vault unlocks/coin pricing (/vault), and level-specific Mini-Game rewards.</value>
+  </data>
+  <data name="PageHelpTextWorldEditor" xml:space="preserve">
+    <value>Inspect any map inside the Three.js 3D viewport, paint terrain walk/safe/water/light flags, place spawns, gates, and 3D objects, regenerate minimaps, and save changes synchronously to server &amp; web client.</value>
+  </data>
+  <data name="PageHelpTextWorlds" xml:space="preserve">
+    <value>Create and manage isolated multi-world / multi-realm game servers, templates, Sydney scheduled opening countdowns, and safe character transfers.</value>
+  </data>
+  <data name="PageHelpHintLanguageEn" xml:space="preserve">
+    <value>Switch admin labels on this page to English.</value>
+  </data>
+  <data name="PageHelpHintLanguageVi" xml:space="preserve">
+    <value>Switch admin labels on this page to Vietnamese.</value>
+  </data>
+  <data name="PageHelpHintAdd" xml:space="preserve">
+    <value>Add a new entry or item to this list.</value>
+  </data>
+  <data name="PageHelpHintApply" xml:space="preserve">
+    <value>Apply this change immediately.</value>
+  </data>
+  <data name="PageHelpHintAction" xml:space="preserve">
+    <value>Perform this action.</value>
   </data>
 </root>

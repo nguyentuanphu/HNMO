@@ -10,6 +10,7 @@
     <h1 class="mb-0">@L("Party options", "Tổ đội & Bãi săn")</h1>
     <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
 </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextPartyOptions" />
 <p class="text-muted">@L("Configure /partypass party-by-password join and the Auto-Party hunting spot finder shown alongside the P Party window.", "Cấu hình tính năng vào nhóm bằng mật khẩu (/partypass) và Tự động tìm nhóm bãi săn trong bảng P.")</p>
 
 @if (this._showHelp)
@@ -62,7 +63,7 @@ else
                     <input class="form-control" id="po-file" @bind="c.FileName" />
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" id="po-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+            <button type="button" class="btn btn-primary" id="po-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
         </div>
     </section>
 

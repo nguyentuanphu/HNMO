@@ -1,9 +1,12 @@
-﻿@page "/account/security"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/account/security"
 @using HNMO.Web.AdminPanel.Properties
 
 <PageTitle>HNMO: @Resources.AccountSecurity</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.AccountSecurity" />
 <h1>@Resources.AccountSecurity</h1>
+<PageHelp Text="@HelpResources.PageHelpTextAccountSecurity" />
+
 
 @if (this._isLoading)
 {
@@ -14,7 +17,7 @@ else if (this._user is null)
     @* Nobody is signed in and no user exists yet - there is no own account to secure. *@
     <div class="alert alert-warning" style="max-width: 40rem;" role="alert">
         <p class="mb-2">@Resources.NoAdminUserWarning</p>
-        <a class="btn btn-primary btn-sm" href="@AdminUsers.CreateUserUrl">@Resources.CreateFirstUser</a>
+        <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary btn-sm" href="@AdminUsers.CreateUserUrl">@Resources.CreateFirstUser</a>
     </div>
 }
 else
@@ -33,13 +36,13 @@ else
                 <div class="input-group mb-2" style="max-width: 20rem;">
                     <input type="text" class="form-control" inputmode="numeric" autocomplete="one-time-code"
                            placeholder="@Resources.AuthenticatorCode" @bind="@this._confirmationCode" />
-                    <button class="btn btn-primary" type="button" disabled="@this._isBusy" @onclick="@this.ConfirmSetupAsync">@Resources.Verify</button>
+                    <button title="@HelpResources.PageHelpHintVerify" class="btn btn-primary" type="button" disabled="@this._isBusy" @onclick="@this.ConfirmSetupAsync">@Resources.Verify</button>
                 </div>
                 @if (this._errorMessage is { } setupError)
                 {
                     <div class="alert alert-danger py-2" role="alert">@setupError</div>
                 }
-                <button class="btn btn-link btn-sm p-0" type="button" @onclick="@this.CancelSetup">@Resources.Cancel</button>
+                <button title="@HelpResources.PageHelpHintCancel" class="btn btn-link btn-sm p-0" type="button" @onclick="@this.CancelSetup">@Resources.Cancel</button>
             }
             else if (this._user.IsTwoFactorEnabled)
             {
@@ -47,8 +50,8 @@ else
                     <span class="oi oi-shield" aria-hidden="true"></span> @Resources.TwoFactorEnabled
                 </p>
                 <p class="small text-secondary">@Resources.RemainingRecoveryCodes: @this._remainingRecoveryCodes</p>
-                <button class="btn btn-secondary btn-sm me-2" type="button" disabled="@this._isBusy" @onclick="@this.GenerateRecoveryCodesAsync">@Resources.GenerateNewRecoveryCodes</button>
-                <button class="btn btn-outline-danger btn-sm" type="button" disabled="@this._isBusy" @onclick="@this.DisableTwoFactorAsync">@Resources.DisableTwoFactor</button>
+                <button title="@HelpResources.PageHelpHintRecovery" class="btn btn-secondary btn-sm me-2" type="button" disabled="@this._isBusy" @onclick="@this.GenerateRecoveryCodesAsync">@Resources.GenerateNewRecoveryCodes</button>
+                <button title="@HelpResources.PageHelpHintDisable" class="btn btn-outline-danger btn-sm" type="button" disabled="@this._isBusy" @onclick="@this.DisableTwoFactorAsync">@Resources.DisableTwoFactor</button>
             }
             else
             {
@@ -57,7 +60,7 @@ else
                 {
                     <div class="alert alert-warning py-2" role="alert">@Resources.TwoFactorRequiredDescription</div>
                 }
-                <button class="btn btn-primary btn-sm" type="button" disabled="@this._isBusy" @onclick="@this.BeginSetupAsync">@Resources.SetUpAuthenticator</button>
+                <button title="@HelpResources.PageHelpHintAuthenticator" class="btn btn-primary btn-sm" type="button" disabled="@this._isBusy" @onclick="@this.BeginSetupAsync">@Resources.SetUpAuthenticator</button>
             }
         </div>
     </div>

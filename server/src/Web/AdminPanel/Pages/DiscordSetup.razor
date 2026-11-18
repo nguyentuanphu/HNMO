@@ -1,4 +1,5 @@
-﻿@page "/discord"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/discord"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
 @using HNMO.Discord
@@ -12,6 +13,8 @@
 <PageTitle>HNMO: @Resources.Discord</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Discord"/>
 <h1>@Resources.Discord</h1>
+<PageHelp Text="@HelpResources.PageHelpTextDiscordSetup" />
+
 
 @if (!AdminPanelEnvironment.IsHostingEmbedded)
 {
@@ -29,7 +32,7 @@
 @if (this._loadError is { } loadError)
 {
     <div class="alert alert-danger" role="alert">@string.Format(Resources.DiscordLoadError, this.ConfigurationService.FilePath, loadError)</div>
-    <button type="button" class="btn btn-secondary" @onclick="this.LoadAsync">
+    <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-secondary" @onclick="this.LoadAsync">
         <span class="oi oi-reload" aria-hidden="true"></span> @Resources.Reload
     </button>
     return;
@@ -139,7 +142,7 @@
                        placeholder="@(settings.Bot.Token is null ? null : Resources.DiscordSecretSet)" @bind="this._newToken" @bind:event="oninput"/>
                 @if (settings.Bot.Token is not null)
                 {
-                    <button type="button" class="btn btn-outline-danger" @onclick="this.RemoveToken">@Resources.Remove</button>
+                    <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-outline-danger" @onclick="this.RemoveToken">@Resources.Remove</button>
                 }
             </div>
         }
@@ -153,7 +156,7 @@
         <p>@Resources.DiscordStep2Text</p>
         @if (this.InviteUrl is { } inviteUrl)
         {
-            <a class="btn btn-secondary" href="@inviteUrl" target="_blank" rel="noopener noreferrer">
+            <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-secondary" href="@inviteUrl" target="_blank" rel="noopener noreferrer">
                 <span class="oi oi-external-link" aria-hidden="true"></span> @Resources.DiscordInviteBot
             </a>
         }
@@ -219,7 +222,7 @@
                 }
             </ul>
         </details>
-        <button type="button" class="btn btn-secondary mb-2" disabled="@(this._isSettingUp || !this.IsBotConnected || this.HasUnsavedChanges)" @onclick="this.SetUpServerAsync">
+        <button title="@HelpResources.PageHelpHintDiscordSetUp" type="button" class="btn btn-secondary mb-2" disabled="@(this._isSettingUp || !this.IsBotConnected || this.HasUnsavedChanges)" @onclick="this.SetUpServerAsync">
             <span class="oi oi-wrench" aria-hidden="true"></span> @Resources.DiscordSetUpServer
         </button>
         @if (this.Bot?.ServerState != ServerState.Started)
@@ -249,7 +252,7 @@
             <p>@Resources.DiscordSetUpRoleHint</p>
         }
         <p>@Resources.DiscordCheckServerText</p>
-        <button type="button" class="btn btn-secondary mb-2" disabled="@(this.IsCheckingServer || !this.IsBotConnected || this.HasUnsavedChanges)" @onclick="this.CheckServerAsync">
+        <button title="@HelpResources.PageHelpHintCheck" type="button" class="btn btn-secondary mb-2" disabled="@(this.IsCheckingServer || !this.IsBotConnected || this.HasUnsavedChanges)" @onclick="this.CheckServerAsync">
             <span class="oi oi-check" aria-hidden="true"></span> @Resources.DiscordCheckServer
         </button>
         @if (!this.HasUnsavedChanges && this._serverCheck is { } check)
@@ -401,14 +404,14 @@
                                            value="@this._newWebhooks.GetValueOrDefault(category)" @onchange="e => this._newWebhooks[category] = e.Value?.ToString() ?? string.Empty"/>
                                     @if (settings.Webhooks.ContainsKey(category))
                                     {
-                                        <button type="button" class="btn btn-outline-danger" @onclick="() => this.RemoveWebhook(category)">@Resources.Remove</button>
+                                        <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-outline-danger" @onclick="() => this.RemoveWebhook(category)">@Resources.Remove</button>
                                     }
                                 </div>
                             }
                         </td>
                     }
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._runningTests.Contains(category) || this.HasUnsavedChanges || settings.DisabledNotifications.Contains(category))" @onclick="() => this.TestAsync(category)">@Resources.DiscordTest</button>
+                        <button title="@HelpResources.PageHelpHintTest" type="button" class="btn btn-sm btn-outline-secondary" disabled="@(this._runningTests.Contains(category) || this.HasUnsavedChanges || settings.DisabledNotifications.Contains(category))" @onclick="() => this.TestAsync(category)">@Resources.DiscordTest</button>
                         @if (!this.HasUnsavedChanges && this._testResults.GetValueOrDefault(category) is { } testResult)
                         {
                             <div role="status" class="small @(IsSent(testResult) ? "text-success" : "text-danger")">@TestResultText(testResult)</div>
@@ -436,7 +439,7 @@
                 <p class="form-text">@UiText("DiscordFilterHint")</p>
             </details>
         }
-        <button type="button" class="btn btn-secondary mb-3" disabled="@(this._runningTests.Count > 0 || this.HasUnsavedChanges)" @onclick="this.TestAllAsync">
+        <button title="@HelpResources.PageHelpHintTest" type="button" class="btn btn-secondary mb-3" disabled="@(this._runningTests.Count > 0 || this.HasUnsavedChanges)" @onclick="this.TestAllAsync">
             <span class="oi oi-check" aria-hidden="true"></span> @Resources.DiscordTestAll
         </button>
         <div class="row">
@@ -515,8 +518,8 @@
         {
             <div class="alert alert-warning" role="alertdialog" aria-label="@UiText("DiscordUnbindChat")">
                 <p>@UiText("DiscordConfirmUnbind")</p>
-                <button class="btn btn-danger btn-sm" @onclick="async () => { await this.RemoveChatBindingAsync(removingBinding); this._bindingToRemove = null; }">@UiText("DiscordUnbindChat")</button>
-                <button class="btn btn-secondary btn-sm" @onclick="() => this._bindingToRemove = null">@Resources.Cancel</button>
+                <button title="@HelpResources.PageHelpHintDelete" class="btn btn-danger btn-sm" @onclick="async () => { await this.RemoveChatBindingAsync(removingBinding); this._bindingToRemove = null; }">@UiText("DiscordUnbindChat")</button>
+                <button title="@HelpResources.PageHelpHintCancel" class="btn btn-secondary btn-sm" @onclick="() => this._bindingToRemove = null">@Resources.Cancel</button>
             </div>
         }
         @if (this._chatBindings is not { } chatBindings)
@@ -555,14 +558,14 @@
                             }
                         </td>
                         <td>@binding.BoundBy <span class="text-muted small">@binding.BoundAt.ToLocalTime()</span></td>
-                        <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._bindingToRemove = binding.ChannelId">@UiText("DiscordUnbindChat")</button></td>
+                        <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._bindingToRemove = binding.ChannelId">@UiText("DiscordUnbindChat")</button></td>
                     </tr>
                 }
                 </tbody>
             </table>
             </div>
         }
-        <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@(!this.IsBotConnected)" @onclick="this.LoadChatBindingsAsync">
+        <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-sm btn-outline-secondary" disabled="@(!this.IsBotConnected)" @onclick="this.LoadChatBindingsAsync">
             <span class="oi oi-reload" aria-hidden="true"></span> @Resources.Reload
         </button>
     </div>
@@ -634,14 +637,14 @@
     {
         <div class="alert alert-warning py-2" role="alertdialog" aria-label="@UiText("DiscordDiscardChanges")">
             <p>@UiText("DiscordConfirmDiscard")</p>
-            <button class="btn btn-danger btn-sm" @onclick="this.LoadAsync">@UiText("DiscordDiscardChanges")</button>
-            <button class="btn btn-secondary btn-sm" @onclick="() => this.ConfirmDiscard = false">@UiText("DiscordKeepEditing")</button>
+            <button title="@HelpResources.PageHelpHintDiscard" class="btn btn-danger btn-sm" @onclick="this.LoadAsync">@UiText("DiscordDiscardChanges")</button>
+            <button title="@HelpResources.PageHelpHintConfirm" class="btn btn-secondary btn-sm" @onclick="() => this.ConfirmDiscard = false">@UiText("DiscordKeepEditing")</button>
         </div>
     }
-    <button type="button" class="btn btn-primary" disabled="@(this._isSaving || this._isSettingUp || this.IsCheckingServer || this._runningTests.Count > 0 || !this.HasUnsavedChanges)" @onclick="this.SaveAsync">
+    <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" disabled="@(this._isSaving || this._isSettingUp || this.IsCheckingServer || this._runningTests.Count > 0 || !this.HasUnsavedChanges)" @onclick="this.SaveAsync">
         <span class="oi oi-check" aria-hidden="true"></span> @(this._isSaving ? UiText("DiscordApplying") : UiText("DiscordSaveApply"))
     </button>
-    <button type="button" class="btn btn-secondary" disabled="@this._isSaving" @onclick="this.RequestDiscardAsync">
+    <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-secondary" disabled="@this._isSaving" @onclick="this.RequestDiscardAsync">
         <span class="oi oi-reload" aria-hidden="true"></span> @(this.HasUnsavedChanges ? UiText("DiscordDiscardChanges") : Resources.Reload)
     </button>
 </div>

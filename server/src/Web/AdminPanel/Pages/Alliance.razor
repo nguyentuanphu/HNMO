@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/alliance/{GuildId:guid}"
 @using HNMO.Web.Shared.Models;
 @using Resources = HNMO.Web.AdminPanel.Properties.Resources
@@ -7,16 +8,18 @@
     <PageTitle>HNMO: @Resources.Alliance</PageTitle>
     <Breadcrumb IsFirstFromRoot="false" Caption="@Resources.Alliance" />
     <div class="alert alert-warning" role="alert">@Resources.GuildNotFound</div>
-    <NavLink href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
+    <NavLink title="@HelpResources.PageHelpHintNavigate" href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
 }
 else if (this._alliance is { } alliance)
 {
     <PageTitle>HNMO: @alliance.Master.Name</PageTitle>
     <Breadcrumb IsFirstFromRoot="false" Caption="@alliance.Master.Name" />
     <div class="d-flex flex-row align-items-center gap-3">
-        <NavLink href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
+        <NavLink title="@HelpResources.PageHelpHintNavigate" href="guilds" class="btn btn-secondary">&lt; @Resources.Back</NavLink>
         <GuildLogo Logo="@alliance.Master.Logo" Size="32" class="border rounded-1" />
         <h1 class="mb-0">@Resources.Alliance: @alliance.Master.Name</h1>
+<PageHelp Text="@HelpResources.PageHelpTextAlliance" />
+
     </div>
     <hr />
 

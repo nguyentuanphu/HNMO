@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/accounts/{LoginName}/links"
 @attribute [Authorize(Policy = AdminPolicies.Operator)]
 
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb Caption="@title" />
 <h1>@title</h1>
+<PageHelp Text="@HelpResources.PageHelpTextAccountLinks" />
+
 
 <p class="text-muted">@Resources.ExternalLinksDescription</p>
 
@@ -50,7 +53,7 @@ else
                 </td>
                 <td>@link.CharacterName</td>
                 <td>@link.LinkedAt?.ToLocalTime()</td>
-                <td><button type="button" class="btn btn-sm btn-danger" disabled="@this._isRemoving" @onclick="() => this.OnRemoveAsync(link.Provider)">@Resources.Remove</button></td>
+                <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-danger" disabled="@this._isRemoving" @onclick="() => this.OnRemoveAsync(link.Provider)">@Resources.Remove</button></td>
             </tr>
         }
         @if (links.Count == 0)

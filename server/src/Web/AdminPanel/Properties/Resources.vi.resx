@@ -12,7 +12,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create" xml:space="preserve">
+    <data name="Create" xml:space="preserve">
     <value>Tạo mới</value>
   </data>
   <data name="Reload" xml:space="preserve">
@@ -4680,6 +4680,108 @@
   <data name="ShopEditorReload" xml:space="preserve"><value>Tải lại cửa hàng đã lưu</value></data>
   <data name="ShopEditorEmpty" xml:space="preserve"><value>Không có người bán phù hợp.</value></data>
   <data name="ShopEditorPending" xml:space="preserve"><value>Đang lưu cửa hàng. Hãy chờ trước khi rời trang.</value></data>
+  <data name="PageHelpTextAccounts" xml:space="preserve"><value>Tìm tài khoản người chơi để xem nhân vật, số dư coin hoặc cách đăng nhập đã liên kết. Hãy tìm đúng tài khoản trước khi sửa. Không đổi mã định danh và cần xác minh người chơi trước khi thay đổi quyền truy cập hoặc tiền.</value></data>
+  <data name="PageHelpTextIndex" xml:space="preserve"><value>Bảng tổng quan hiển thị hoạt động máy chủ và các liên kết cần dùng. Mở thẻ tương ứng để xem cảnh báo hoặc tiếp tục thiết lập. Xem bảng này không làm thay đổi luật chơi; hãy vào đúng trang cài đặt khi cần chỉnh sửa.</value></data>
+  <data name="PageHelpTextServers" xml:space="preserve"><value>Xem máy chủ kết nối và máy chủ game, rồi mở trạng thái hoặc cấu hình của chúng. Kiểm tra tên máy chủ trước khi khởi động, dừng hoặc sửa. Tránh dừng khi còn người chơi, trừ khi đã thông báo bảo trì.</value></data>
+  <data name="PageHelpTextGameServer" xml:space="preserve"><value>Theo dõi người chơi, bản đồ và hoạt động của một máy chủ game. Chỉ thực hiện thao tác cho đúng máy chủ đang mở. Khi game đang hoạt động ổn định, không can thiệp dịch vụ; hãy thông báo bảo trì trước thao tác làm gián đoạn.</value></data>
+  <data name="PageHelpTextCreateGameServerConfig" xml:space="preserve"><value>Tạo cấu hình cho một máy chủ game bổ sung. Chọn số máy chủ, tên và cổng chưa sử dụng, rồi kiểm tra hệ số và kết nối. Giữ nguyên máy chủ đang chạy cho đến khi thử xong máy chủ mới.</value></data>
+  <data name="PageHelpTextCreateConnectServerConfig" xml:space="preserve"><value>Tạo máy chủ kết nối để người chơi thấy các máy chủ game có thể vào. Chọn cổng trống và địa chỉ công khai chính xác. Không thay địa chỉ hoặc cổng đang dùng nếu chưa cập nhật cấu hình kết nối của client.</value></data>
+  <data name="PageHelpTextLoggedIn" xml:space="preserve"><value>Xem tài khoản đang chơi, treo máy ngoại tuyến hoặc chạy bot nếu các tính năng đó được bật. Chọn đúng thẻ và kiểm tra tài khoản trước khi thao tác. Buộc ngoại tuyến sẽ ngắt phiên chơi, vì vậy chỉ dùng khi cần thiết.</value></data>
+  <data name="PageHelpTextPlugins" xml:space="preserve"><value>Plug-in bật hoặc tắt các tính năng tùy chọn và lưu cài đặt của chúng. Mở cấu hình tính năng rồi chỉ sửa giá trị bạn hiểu rõ. Giữ nguyên plug-in lạ và mã nội bộ; tắt tính năng có thể ảnh hưởng ngay đến người chơi.</value></data>
+  <data name="PageHelpTextAdminUsers" xml:space="preserve"><value>Quản lý những người được phép vào bảng quản trị. Mỗi người nên có tài khoản riêng và chỉ nhận quyền cần thiết. Không chia sẻ mật khẩu quản trị hoặc xóa tài khoản quản trị còn hoạt động cuối cùng.</value></data>
+  <data name="PageHelpTextAccountSecurity" xml:space="preserve"><value>Bảo vệ tài khoản quản trị của bạn bằng ứng dụng xác thực và mã khôi phục. Thiết lập ứng dụng, xác nhận mã hiện tại và cất mã khôi phục ở nơi riêng tư. Không đăng mã QR, khóa bí mật hoặc mã khôi phục trong tin nhắn hay ảnh chụp.</value></data>
+  <data name="PageHelpTextAccountLinks" xml:space="preserve"><value>Xem các cách đăng nhập bên ngoài đã liên kết với tài khoản người chơi. Xác nhận đúng tài khoản và nhà cung cấp trước khi hủy liên kết. Hủy liên kết có thể khiến người chơi không đăng nhập theo cách đó được nữa; chỉ thực hiện khi đã xác minh yêu cầu.</value></data>
+  <data name="PageHelpTextCashShopCoins" xml:space="preserve"><value>Kiểm tra số dư coin đã lưu và lịch sử cấp coin của tài khoản này. Khi điều chỉnh, chọn loại coin, số lượng và lý do rõ ràng, rồi kiểm tra tên tài khoản. Máy chủ game xử lý coin đang chờ; đừng cấp lại chỉ vì số dư chưa cập nhật.</value></data>
+  <data name="PageHelpTextCashShopCatalog" xml:space="preserve"><value>Chọn vật phẩm người chơi được mua trong cửa hàng và giá bằng coin. Kiểm tra vật phẩm, số lượng, thời hạn và loại coin trước khi lưu. Không đổi mã nội bộ và tránh áp dụng giá chưa kiểm tra cho ưu đãi đang bán.</value></data>
+  <data name="PageHelpTextGiftCodes" xml:space="preserve"><value>Tạo mã tặng coin, zen hoặc vật phẩm đã cấu hình cho người chơi. Đặt phần thưởng, hạn dùng và giới hạn lượt nhận, rồi thử trước với phần thưởng nhỏ. Giữ kín mã riêng và không dùng lại mã đang hoạt động cho một phần thưởng khác.</value></data>
+  <data name="PageHelpTextMissionsRewards" xml:space="preserve"><value>Thiết lập nhiệm vụ, quà hằng ngày và cách người chơi kiếm coin. Kiểm tra mục tiêu, phần thưởng và giới hạn mỗi ngày trước khi bật. Nên thử với phần thưởng nhỏ và giữ nguyên mã nhiệm vụ khi người chơi đã có tiến độ.</value></data>
+  <data name="PageHelpTextOnboardingStarterKit" xml:space="preserve"><value>Chọn bộ quà khởi đầu và các bước hướng dẫn người mới. Kiểm tra giới hạn lớp nhân vật, số lượng và quà nhận một lần theo tài khoản hay nhân vật. Không đổi mã bước đã có người chơi thực hiện; hãy thử bộ quà bằng tài khoản mới.</value></data>
+  <data name="PageHelpTextResetsRelife" xml:space="preserve"><value>Thiết lập cấp độ, chi phí và giới hạn reset, relife và đổi điểm chỉ số. Kiểm tra đồng thời điều kiện và phần thưởng trước khi bật quy tắc. Giữ nguyên công thức nâng cao nếu chưa thử tác động trên nhân vật mẫu.</value></data>
+  <data name="PageHelpTextAccountSafety" xml:space="preserve"><value>Cấu hình mật khẩu cấp 2, khóa vật phẩm và bảo vệ lịch sử đăng nhập cho người chơi. Chọn thời gian chờ và biện pháp cần áp dụng. Không tắt bảo vệ toàn bộ chỉ để xử lý một người chơi; hãy xác minh tài khoản rồi dùng công cụ riêng cho tài khoản đó.</value></data>
+  <data name="PageHelpTextCommunity" xml:space="preserve"><value>Thiết lập quà cộng đồng, mã sự kiện và nội dung nổi bật hiển thị cho người chơi. Kiểm tra nội dung công khai, liên kết và số lượng quà trước khi bật sự kiện. Giữ kín mã nhận quà riêng và không hứa phần thưởng máy chủ chưa thể trao.</value></data>
+  <data name="PageHelpTextDiscordSetup" xml:space="preserve"><value>Kết nối thông báo cộng đồng với đúng kênh Discord. Làm theo các bước thiết lập, kiểm tra quyền rồi gửi thông báo thử. Giữ kín token bot và địa chỉ webhook; không cấp quyền vượt quá nhu cầu của bot.</value></data>
+  <data name="PageHelpTextTopRaces" xml:space="preserve"><value>Cấu hình đua xếp hạng, thời gian và giải thưởng. Kiểm tra loại tiến độ được tính, ngày giờ và danh sách quà trước khi bắt đầu. Tránh đổi cách tính điểm trong cuộc đua người chơi đã tham gia.</value></data>
+  <data name="PageHelpTextWorldBossesRankings" xml:space="preserve"><value>Chọn boss thế giới, lịch xuất hiện và quà xếp hạng. Kiểm tra bản đồ, vị trí, thời gian và giải thưởng trước khi bật. Không đổi mã quái vật và hãy thử boss ở nơi không làm gián đoạn người chơi bình thường.</value></data>
+  <data name="PageHelpTextGuildsLevelsLadder" xml:space="preserve"><value>Thiết lập tiến độ cấp bang hội và quà bảng xếp hạng. Kiểm tra đồng thời mốc điểm, thưởng và chu kỳ trao quà. Không xóa tiến độ hoặc đổi mã phần thưởng khi chưa kiểm tra ảnh hưởng đến bang hội đang hoạt động.</value></data>
+  <data name="PageHelpTextGuilds" xml:space="preserve"><value>Tìm bang hội để xem thành viên hoặc liên minh. Hãy tìm đúng bang hội trước khi sửa. Tên bang hội đại diện cho cộng đồng người chơi; tránh đổi thành viên hoặc liên minh khi chưa xác minh yêu cầu.</value></data>
+  <data name="PageHelpTextGuild" xml:space="preserve"><value>Kiểm tra thành viên và cài đặt của bang hội này. Xác nhận tên bang hội và vai trò người chơi trước khi đổi thành viên hoặc trưởng bang. Giữ nguyên mã nội bộ và xác minh thao tác gây gián đoạn với người chơi liên quan.</value></data>
+  <data name="PageHelpTextAlliance" xml:space="preserve"><value>Kiểm tra các bang hội thuộc liên minh này. Xác nhận đúng bang hội trước khi thay đổi thành viên liên minh. Loại bang hội sẽ ảnh hưởng người chơi của bang đó, vì vậy hãy xác minh yêu cầu và không sửa liên minh khác.</value></data>
+  <data name="PageHelpTextCastleSiegeManagement" xml:space="preserve"><value>Quản lý đăng ký công thành, quyền sở hữu và trạng thái sự kiện. Kiểm tra thành, bang hội và giai đoạn trước khi thao tác. Không ép chuyển giai đoạn khi đang chơi bình thường nếu chưa thông báo và thử trước.</value></data>
+  <data name="PageHelpTextLeaderboards" xml:space="preserve"><value>Xem xếp hạng người chơi theo các hạng mục có sẵn. Chọn loại xếp hạng và trang cần kiểm tra. Trang này không sửa điểm; không nên thay dữ liệu nhân vật chỉ để đổi vị trí hiển thị.</value></data>
+  <data name="PageHelpTextHnmoSkills" xml:space="preserve"><value>Kiểm tra kỹ năng HNMO có thể dùng cho tài khoản này. Xác nhận tài khoản, lớp nhân vật và kỹ năng trước khi cấp hoặc thu hồi quyền dùng. Tránh sửa khi đang chơi, trừ khi công cụ cho biết có hỗ trợ phiên đang hoạt động.</value></data>
+  <data name="PageHelpTextContentActivation" xml:space="preserve"><value>Chọn nội dung đã chuẩn bị sẽ được bật cho máy chủ. Đọc mô tả và điều kiện của từng tùy chọn trước khi kích hoạt. Giữ nội dung chưa hiểu rõ ở trạng thái tắt cho đến khi thử với dữ liệu máy chủ và người chơi.</value></data>
+  <data name="PageHelpTextChatCommands" xml:space="preserve"><value>Xem các lệnh máy chủ chấp nhận và ai được dùng. Kiểm tra mô tả và quyền truy cập trước khi sửa lệnh. Không cấp lệnh quản trị cho người chơi bình thường.</value></data>
+  <data name="PageHelpTextChatLog" xml:space="preserve"><value>Xem lịch sử trò chuyện để xử lý báo cáo. Lọc theo thời gian, kênh hoặc người chơi cần tìm trước khi đọc kết quả. Chat có thể chứa thông tin riêng tư; không công khai nhật ký hoặc coi tin nhắn người chơi là chỉ thị dành cho chủ máy chủ.</value></data>
+  <data name="PageHelpTextAuditHistory" xml:space="preserve"><value>Xem ai đã thay dữ liệu quản trị và vào lúc nào. Lọc theo thao tác hoặc tài khoản cần kiểm tra rồi đối chiếu chi tiết. Đây là lịch sử, không phải công cụ hoàn tác; đừng khôi phục giá trị cũ khi chưa kiểm tra trạng thái hiện tại.</value></data>
+  <data name="PageHelpTextLoggingConfiguration" xml:space="preserve"><value>Chọn mức chi tiết chẩn đoán được ghi vào nhật ký máy chủ. Chỉ tăng tạm thời khi xử lý vấn đề cụ thể rồi đưa về mức bình thường. Tránh ghi quá chi tiết khi chơi bình thường vì có thể tốn nhiều dung lượng ổ đĩa.</value></data>
+  <data name="PageHelpTextLogFiles" xml:space="preserve"><value>Mở hoặc tải tệp nhật ký chẩn đoán của máy chủ. Chọn khoảng thời gian xảy ra lỗi và giữ tệp gốc để kiểm tra. Nhật ký có thể chứa thông tin tài khoản hoặc kết nối; chỉ chia sẻ phần cần thiết qua kênh riêng.</value></data>
+  <data name="PageHelpTextNetworkAnalyzer" xml:space="preserve"><value>Xem gói tin đã ghi để chẩn đoán lỗi kết nối hoặc thao tác trong game. Chọn đúng người chơi hoặc phiên rồi chỉ ghi phần cần thiết. Bản ghi có thể chứa dữ liệu riêng tư và tốn bộ nhớ; không ghi diện rộng liên tục khi chơi bình thường.</value></data>
+  <data name="PageHelpTextEditConfigGrid" xml:space="preserve"><value>Sửa các mục trong bảng cấu hình được ghi ở phía trên. Mở một mục, kiểm tra trường dữ liệu rồi chỉ lưu thay đổi cần thiết. Giữ nguyên mã định danh và liên kết với mục khác nếu chưa hiểu mục đích của chúng.</value></data>
+  <data name="PageHelpTextCaptions" xml:space="preserve"><value>Quản lý tên và mô tả hiển thị cho dữ liệu cấu hình. Chọn đúng ngôn ngữ và dịch đúng ý nghĩa hiện có. Giữ nguyên chỗ chèn dữ liệu định dạng và mã định danh nội bộ.</value></data>
+  <data name="PageHelpTextUpdates" xml:space="preserve"><value>Kiểm tra và áp dụng bản cập nhật cấu hình có sẵn. Sao lưu cấu hình hiện tại và đọc mục đích từng bản trước khi áp dụng. Không áp dụng bản chưa hiểu rõ lên máy chủ đang chạy nếu chưa thử và chuẩn bị cách khôi phục.</value></data>
+  <data name="PageHelpTextEditItemDrops" xml:space="preserve"><value>Chọn vật phẩm có thể rơi cùng điều kiện và xác suất. Kiểm tra đồng thời vật phẩm, nguồn rơi, số lượng và tỉ lệ. Hãy thử thay đổi lớn trên máy chủ riêng trước để tránh làm mất cân bằng kinh tế đang hoạt động.</value></data>
+  <data name="PageHelpTextMapPage" xml:space="preserve"><value>Xem bản đồ của máy chủ này cùng vật thể và người chơi trên đó. Kiểm tra bản đồ và đối tượng đã chọn trước khi thao tác. Không di chuyển, xóa hoặc tạo đối tượng quanh người chơi bình thường nếu không có chủ đích.</value></data>
+  <data name="PageHelpTextSetup" xml:space="preserve"><value>Làm theo các bước ban đầu để chuẩn bị máy chủ. Đặt thông tin quản trị của bạn và kiểm tra từng lựa chọn trước khi tiếp tục. Giữ kín mật khẩu và khóa; không chạy lại thiết lập lên bản đang hoạt động nếu chưa sao lưu.</value></data>
+  <data name="PageHelpTextLogin" xml:space="preserve"><value>Đăng nhập bằng tài khoản bảng quản trị, không phải tài khoản game của người chơi. Nhập mật khẩu và mã xác thực hoặc mã khôi phục khi được yêu cầu. Giữ kín mã khôi phục và nhờ quản trị viên khác hỗ trợ nếu bạn mất quyền truy cập.</value></data>
+  <data name="PageHelpTextError" xml:space="preserve"><value>Trang được yêu cầu chưa thực hiện xong thao tác. Ghi lại việc đang làm, quay về trang an toàn rồi kiểm tra nhật ký máy chủ. Không bật chi tiết lỗi phát triển công khai hoặc lặp lại thao tác đổi tiền khi chưa biết lần trước đã hoàn tất hay chưa.</value></data>
+  <data name="PageHelpTextNotFound" xml:space="preserve"><value>Địa chỉ này không khớp với trang quản trị hiện có. Quay về trang chủ hoặc dùng liên kết trong menu hiện tại. Không đổi cài đặt máy chủ chỉ để sửa một dấu trang cũ; hãy kiểm tra địa chỉ trang trước.</value></data>
+  <data name="PageHelpTextAccessDenied" xml:space="preserve"><value>Quyền quản trị hiện tại không cho phép mở trang hoặc thực hiện thao tác này. Nhờ quản trị viên xem xét quyền cần cho công việc của bạn. Không dùng chung thông tin đăng nhập của người khác hoặc xin quyền vượt quá công việc đó.</value></data>
+  <data name="PageHelpTitle" xml:space="preserve"><value>Cách dùng trang này</value></data>
+  <data name="PageHelpToggleHint" xml:space="preserve"><value>Hiện hoặc ẩn mục đích, hướng dẫn chỉnh sửa và lưu ý của trang này.</value></data>
+  <data name="PageHelpHintSave" xml:space="preserve"><value>Lưu các thay đổi đang hiển thị trong trình sửa này.</value></data>
+  <data name="PageHelpHintCreate" xml:space="preserve"><value>Bắt đầu tạo một mục mới trên trang này.</value></data>
+  <data name="PageHelpHintDelete" xml:space="preserve"><value>Xóa mục đã chọn sau khi kiểm tra đúng mục cần xóa.</value></data>
+  <data name="PageHelpHintCancel" xml:space="preserve"><value>Hủy bước chỉnh sửa này và không áp dụng các thay đổi chưa lưu.</value></data>
+  <data name="PageHelpHintEdit" xml:space="preserve"><value>Mở mục đã chọn để kiểm tra hoặc chỉnh cài đặt.</value></data>
+  <data name="PageHelpHintRefresh" xml:space="preserve"><value>Đọc lại dữ liệu mới nhất hiện có từ máy chủ.</value></data>
+  <data name="PageHelpHintCopy" xml:space="preserve"><value>Sao chép nội dung hoặc mục đã chọn để dùng lại.</value></data>
+  <data name="PageHelpHintSelect" xml:space="preserve"><value>Chọn mục này cho thao tác đang thực hiện.</value></data>
+  <data name="PageHelpHintSearch" xml:space="preserve"><value>Tìm các mục khớp với từ khóa hoặc bộ lọc hiện tại.</value></data>
+  <data name="PageHelpHintStart" xml:space="preserve"><value>Bắt đầu dịch vụ hoặc hoạt động đã chọn.</value></data>
+  <data name="PageHelpHintStop" xml:space="preserve"><value>Dừng dịch vụ hoặc hoạt động đã chọn.</value></data>
+  <data name="PageHelpHintDownload" xml:space="preserve"><value>Tải tệp đã chọn về máy này.</value></data>
+  <data name="PageHelpHintUpload" xml:space="preserve"><value>Đọc tệp đã chọn vào trang này rồi kiểm tra trước khi lưu.</value></data>
+  <data name="PageHelpHintGrant" xml:space="preserve"><value>Cấp phần thưởng đã chọn sau khi kiểm tra tài khoản, số lượng và lý do.</value></data>
+  <data name="PageHelpHintNavigate" xml:space="preserve"><value>Mở trang hoặc chế độ xem đã chọn.</value></data>
+  <data name="PageHelpHintSend" xml:space="preserve"><value>Gửi tin nhắn hoặc yêu cầu được mô tả ở thao tác này.</value></data>
+  <data name="PageHelpHintEnable" xml:space="preserve"><value>Bật tính năng hoặc mục đã chọn.</value></data>
+  <data name="PageHelpHintDisable" xml:space="preserve"><value>Tắt tính năng hoặc mục đã chọn.</value></data>
+  <data name="PageHelpHintSignIn" xml:space="preserve"><value>Đăng nhập bằng thông tin đã nhập trong biểu mẫu này.</value></data>
+  <data name="PageHelpHintVerify" xml:space="preserve"><value>Kiểm tra mã xác thực đã nhập trong biểu mẫu này.</value></data>
+  <data name="PageHelpHintExpand" xml:space="preserve"><value>Hiện hoặc ẩn chi tiết bổ sung của mục này.</value></data>
+  <data name="PageHelpHintConfirm" xml:space="preserve"><value>Xác nhận và thực hiện thao tác đã mô tả ở trên.</value></data>
+  <data name="PageHelpHintNext" xml:space="preserve"><value>Xem trang mục tiếp theo.</value></data>
+  <data name="PageHelpHintPrevious" xml:space="preserve"><value>Xem trang mục trước.</value></data>
+  <data name="PageHelpHintClear" xml:space="preserve"><value>Xóa giá trị, lựa chọn hoặc trạng thái được ghi trên nút này.</value></data>
+  <data name="PageHelpHintReset" xml:space="preserve"><value>Đặt lại trạng thái đã chọn theo hướng dẫn của trang này.</value></data>
+  <data name="PageHelpHintForceState" xml:space="preserve"><value>Buộc công thành chuyển sang trạng thái đã chọn sau khi kiểm tra người chơi đã sẵn sàng.</value></data>
+  <data name="PageHelpHintPassword" xml:space="preserve"><value>Mở hoặc xác nhận thay đổi mật khẩu cho tài khoản đã chọn.</value></data>
+  <data name="PageHelpHintDiscordSetUp" xml:space="preserve"><value>Tạo hoặc cập nhật kênh và vai trò Discord theo cấu hình.</value></data>
+  <data name="PageHelpHintCheck" xml:space="preserve"><value>Kiểm tra kết nối và cấu hình hiện tại mà không lưu giá trị mới.</value></data>
+  <data name="PageHelpHintTest" xml:space="preserve"><value>Gửi thông báo thử bằng cài đặt Discord đã lưu.</value></data>
+  <data name="PageHelpHintDiscard" xml:space="preserve"><value>Đọc lại giá trị đã lưu và bỏ các chỉnh sửa chưa lưu.</value></data>
+  <data name="PageHelpHintMoveUp" xml:space="preserve"><value>Đưa bước hướng dẫn này lên trước một vị trí.</value></data>
+  <data name="PageHelpHintMoveDown" xml:space="preserve"><value>Đưa bước hướng dẫn này xuống sau một vị trí.</value></data>
+  <data name="PageHelpHintScrollBottom" xml:space="preserve"><value>Cuộn đến các dòng nhật ký mới nhất đang hiển thị.</value></data>
+  <data name="PageHelpHintUpdate" xml:space="preserve"><value>Áp dụng bản cập nhật cấu hình đã chọn sau khi kiểm tra chi tiết.</value></data>
+  <data name="PageHelpHintReinstall" xml:space="preserve"><value>Bắt đầu cài lại cấu hình; hãy sao lưu dữ liệu hiện tại trước khi xác nhận.</value></data>
+  <data name="PageHelpHintStatus" xml:space="preserve"><value>Nút đang vô hiệu hóa này chỉ hiển thị trạng thái và không thực hiện thao tác.</value></data>
+  <data name="PageHelpHintRecovery" xml:space="preserve"><value>Tạo bộ mã khôi phục thay thế và cất bộ mã mới ở nơi riêng tư.</value></data>
+  <data name="PageHelpHintAuthenticator" xml:space="preserve"><value>Bắt đầu thiết lập ứng dụng xác thực cho tài khoản quản trị của bạn.</value></data>
+  <data name="PageHelpHintSort" xml:space="preserve"><value>Sắp xếp các dòng đang hiển thị theo cột này.</value></data>
+  <data name="PageHelpHintAssignMaps" xml:space="preserve"><value>Áp dụng nhóm vật phẩm rơi này cho mọi bản đồ sau khi kiểm tra phần thưởng.</value></data>
+  <data name="PageHelpHintFirst" xml:space="preserve"><value>Xem trang mục đầu tiên.</value></data>
+  <data name="PageHelpHintLast" xml:space="preserve"><value>Xem trang mục cuối cùng.</value></data>
+  <data name="PageHelpHintZoomIn" xml:space="preserve"><value>Phóng to bản đồ đang xem mà không thay đổi dữ liệu bản đồ.</value></data>
+  <data name="PageHelpHintZoomOut" xml:space="preserve"><value>Thu nhỏ bản đồ đang xem mà không thay đổi dữ liệu bản đồ.</value></data>
+  <data name="PageHelpHintZoomStatus" xml:space="preserve"><value>Giá trị này cho biết phần trăm thu phóng bản đồ hiện tại.</value></data>
+  <data name="PageHelpTextEditConfig" xml:space="preserve"><value>Sửa mục cấu hình đã chọn. Chỉ chỉnh các trường cần thiết, kiểm tra mục liên quan rồi lưu khi giá trị đã đúng. Giữ nguyên mã nội bộ và tham chiếu nếu chưa hiểu chúng được sử dụng ra sao.</value></data>
+  <data name="PageHelpTextEditAccount" xml:space="preserve"><value>Sửa dữ liệu tài khoản hoặc nhân vật đã lưu của người chơi này. Xác nhận đúng tài khoản và trường trước khi lưu; bảo đảm đã thoát game nếu công cụ yêu cầu. Không tùy tiện đổi mã định danh hoặc tiền; hãy dùng công cụ coin riêng khi cấp hoặc điều chỉnh.</value></data>
+  <data name="PageHelpTextEditConnectionServer" xml:space="preserve"><value>Sửa địa chỉ, cổng và cài đặt của máy chủ kết nối. Kiểm tra người chơi truy cập được địa chỉ và cổng chưa bị chiếm. Giữ nguyên giá trị đang hoạt động cho đến khi thử xong giá trị mới và cập nhật kết nối client.</value></data>
+  <data name="PageHelpTextEditMap" xml:space="preserve"><value>Sửa vùng xuất hiện quái, vật thể và cổng trên bản đồ đã chọn. Chọn đúng bản đồ và công cụ, kiểm tra vị trí rồi lưu. Tránh đổi mã định danh hoặc cổng đang được bản đồ khác sử dụng; hãy thử di chuyển và quái xuất hiện trước khi áp dụng cho người chơi.</value></data>
+  <data name="PageHelpTextEditTerrain" xml:space="preserve"><value>Sửa vùng đi được, vùng bị chặn và vùng an toàn của bản đồ đã chọn. Dùng đúng công cụ tô, kiểm tra các ô bị ảnh hưởng rồi lưu. Giữ bản sao lưu và thử lối vào, đường đi trước khi áp dụng thay đổi lớn lên bản đồ đang hoạt động.</value></data>
+  <data name="PageHelpHintSignOut" xml:space="preserve"><value>Đăng xuất khỏi phiên quản trị này.</value></data>
+  <data name="PageHelpHintReconnect" xml:space="preserve"><value>Kết nối lại với máy chủ quản trị và tiếp tục trang khi máy chủ sẵn sàng.</value></data>
   <data name="HostSettingsPage" xml:space="preserve">
     <value>Cài đặt máy chủ</value>
   </data>
@@ -4794,12 +4896,6 @@
 {0}
 
 Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác nhận địa chỉ email mới. Mã có hiệu lực 15 phút và chỉ dùng được một lần. Không gửi mật khẩu game cho bất kỳ ai. Nếu bạn không yêu cầu đổi email, hãy bỏ qua thư này.</value>
-  </data>
-  <data name="PageHelpTitle" xml:space="preserve">
-    <value>Cách dùng trang này</value>
-  </data>
-  <data name="PageHelpToggleHint" xml:space="preserve">
-    <value>Hiện hoặc ẩn mục đích, hướng dẫn chỉnh sửa và lưu ý của trang này.</value>
   </data>
   <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
     <value>Mua thêm rương</value>
@@ -4972,5 +5068,140 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   </data>
   <data name="PageHelpTextNewsManager" xml:space="preserve">
     <value>Đăng thông báo song ngữ Anh/Việt theo giờ Australia/Sydney, ghim bài nổi bật, đính kèm ảnh tùy chọn và gửi thông báo chat trong game.</value>
+  </data>
+  <data name="PageHelpTextActivityLog" xml:space="preserve">
+    <value>Tra cứu giao dịch người chơi, rớt/nhặt vật phẩm giá trị, xoay Chaos, mua bán NPC, cửa hàng cá nhân và Chợ Đồ theo dòng PostgreSQL. Lọc theo tài khoản, nhân vật, vật phẩm hoặc giờ Sydney.</value>
+  </data>
+  <data name="PageHelpTextAntiCheat" xml:space="preserve">
+    <value>Cấu hình ngưỡng chống gian lận phía máy chủ (tốc độ chạy, tốc độ đánh, gói tin bất thường, số lần cảnh báo) và xem nhật ký vi phạm. Chỉ bật khóa tự động sau khi kiểm tra log thực tế.</value>
+  </data>
+  <data name="PageHelpTextApiKeys" xml:space="preserve">
+    <value>Tạo, sao chép hoặc thu hồi API key theo quyền cho web bridge, script tự động hoặc MCP. Khóa chỉ hiển thị một lần duy nhất khi tạo; hãy lưu bảo mật và không đưa lên trình duyệt.</value>
+  </data>
+  <data name="PageHelpTextBannedWords" xml:space="preserve">
+    <value>Quản lý danh sách từ cấm tiếng Anh và tiếng Việt trong chat và tên nhân vật/hội. Chọn chế độ che từ hoặc chặn gửi kèm thông báo cho người chơi.</value>
+  </data>
+  <data name="PageHelpTextBufferNpc" xml:space="preserve">
+    <value>Cấu hình NPC hỗ trợ (Buffer): cấp độ tối đa, chi phí Zen/Xu, thời gian duy trì và danh sách bùa hỗ trợ. Lưu lại để áp dụng ngay.</value>
+  </data>
+  <data name="PageHelpTextCatchupCap" xml:space="preserve">
+    <value>Thiết lập trần cấp/reset theo top máy chủ, hệ số EXP đuổi kịp theo bậc và lượt reset thưởng mỗi ngày để người chơi mới bắt kịp mà không vượt mặt người chơi cũ.</value>
+  </data>
+  <data name="PageHelpTextCrashWatch" xml:space="preserve">
+    <value>Theo dõi trạng thái hoạt động của máy chủ game và cấu hình tự khởi động lại khi gặp sự cố. Chỉnh ngưỡng kiểm tra và webhook cảnh báo cẩn thận trên máy chủ đang chạy.</value>
+  </data>
+  <data name="PageHelpTextCustomRanks" xml:space="preserve">
+    <value>Tùy chỉnh các bậc danh hiệu (tên EN/VI, màu huy hiệu, chỉ số cộng thêm và mốc mở khóa) hiển thị trên nhân vật và bảng danh hiệu trong game.</value>
+  </data>
+  <data name="PageHelpTextDbLogRetention" xml:space="preserve">
+    <value>Kiểm tra dung lượng bảng log PostgreSQL, đặt số ngày lưu giữ cho từng loại nhật ký, dọn log cũ hoặc xuất bản sao lưu nén gzip an toàn.</value>
+  </data>
+  <data name="PageHelpTextEconomyDashboard" xml:space="preserve">
+    <value>Xem dòng tiền Zen vào/ra, thống kê xoay Chaos, lượng ngọc lưu hành, số dư Xu và cảnh báo biến động kinh tế bất thường theo thời gian thực.</value>
+  </data>
+  <data name="PageHelpTextEscrowContracts" xml:space="preserve">
+    <value>Kiểm tra và xử lý hợp đồng ký gửi giữa người chơi, tạm giữ Trade Credit, trạng thái giao dịch VND, khiếu nại và giải ngân. Chế độ tiền thật mặc định TẮT cho tới khi quản trị bật.</value>
+  </data>
+  <data name="PageHelpTextEventAlerts" xml:space="preserve">
+    <value>Cấu hình nhắc lịch trước giờ sự kiện qua Web Push trình duyệt và kênh Discord, bao gồm số phút báo trước và nhóm sự kiện.</value>
+  </data>
+  <data name="PageHelpTextFixedOptions" xml:space="preserve">
+    <value>Thiết lập các dòng chỉ số cố định hoặc giới hạn dòng cho trang bị tân thủ, đồ sự kiện hoặc gói khuyến mãi mà không ảnh hưởng bảng định nghĩa gốc.</value>
+  </data>
+  <data name="PageHelpTextGameplayRules" xml:space="preserve">
+    <value>Quản lý luật riêng từng bản đồ (PK, rơi đồ, giới hạn cấp), lịch giờ vàng tăng EXP/tỉ lệ rơi theo giờ Sydney và giới hạn chiến đấu/AFK.</value>
+  </data>
+  <data name="PageHelpTextHostSettings" xml:space="preserve">
+    <value>Chỉnh sửa cấu hình máy chủ tập trung (cổng, địa chỉ công khai, cầu nối web, chuỗi kết nối PostgreSQL, giới hạn người chơi) trong save/hnmo-settings.json. Cần khởi động lại để áp dụng đổi cổng/CSDL.</value>
+  </data>
+  <data name="PageHelpTextImportServer" xml:space="preserve">
+    <value>Nhập dữ liệu tỉ lệ, rơi đồ, shop, sự kiện, tỷ lệ xoay Chaos, bãi quái hoặc tài khoản từ thư mục / MSSQL cục bộ trên máy chủ. Luôn xem trước bản chạy thử và giữ bản sao lưu trước khi áp dụng.</value>
+  </data>
+  <data name="PageHelpTextItemDefinitions" xml:space="preserve">
+    <value>Chỉnh sửa tên vật phẩm EN/VI, kích thước ô, cấp rơi, yêu cầu trang bị, màu phát sáng và chú thích trực tiếp trong GameConfiguration, đồng bộ ngay tới web game (/website/items).</value>
+  </data>
+  <data name="PageHelpTextJewelBank" xml:space="preserve">
+    <value>Cấu hình giới hạn Ngân hàng Ngọc theo tài khoản, danh sách ngọc hỗ trợ, phí Zen gửi/rút và điều kiện tẩy bảng Master Skill (F7 / /clearmaster).</value>
+  </data>
+  <data name="PageHelpTextLeftovers" xml:space="preserve">
+    <value>Cấu hình công thức ghép hộp/nâng cấp đồ trong túi và gói đổi nguyên liệu dư thừa theo từng giai đoạn của Lộ trình Mùa giải.</value>
+  </data>
+  <data name="PageHelpTextLuckyNumber" xml:space="preserve">
+    <value>Cấu hình xổ số Con Số May Mắn hằng ngày (giờ Sydney), giá vé, dải số, tỉ lệ trúng và bảng thưởng Coin/Zen/Vật phẩm.</value>
+  </data>
+  <data name="PageHelpTextMaintenanceTools" xml:space="preserve">
+    <value>Thực hiện công cụ bảo trì an toàn: làm mới bộ nhớ đệm, kiểm tra phần thưởng chờ nhận, kiểm tra kết nối PostgreSQL hoặc sửa dữ liệu kẹt với bước xác nhận bắt buộc.</value>
+  </data>
+  <data name="PageHelpTextMarket" xml:space="preserve">
+    <value>Cấu hình Chợ Vật Phẩm trong game (F6 / NPC Julia): loại tiền tệ (Zen/Xu), phí giao dịch %, giá sàn/trần, thời hạn treo bán và quy tắc trả thưởng ký gửi.</value>
+  </data>
+  <data name="PageHelpTextMarriage" xml:space="preserve">
+    <value>Cấu hình hệ thống Kết Hôn (Shift+M): điều kiện cầu hôn, bản đồ/tọa độ lễ cưới, chi phí Zen/Xu, buff tổ đội vợ chồng và luật ly hôn.</value>
+  </data>
+  <data name="PageHelpTextMerchants" xml:space="preserve">
+    <value>Xem, thêm hoặc sửa vật phẩm bán tại các NPC cửa hàng bằng bộ chọn danh mục trực quan theo lưới ô. Kiểm tra kỹ cấp độ và dòng trước khi lưu.</value>
+  </data>
+  <data name="PageHelpTextMounts" xml:space="preserve">
+    <value>Cấu hình chuỗi nâng cấp Thú cưỡi, tỉ lệ rơi mảnh ở Golden Boss, nguyên liệu ghép, chỉ số cộng thêm và thưởng bộ sưu tập (Shift+U).</value>
+  </data>
+  <data name="PageHelpTextOffTrade" xml:space="preserve">
+    <value>Cấu hình treo cửa hàng Offline (/offtrade): bản đồ an toàn cho phép, thời lượng tối đa, ưu đãi VIP, loại tiền bán và danh sách cửa hàng đang treo.</value>
+  </data>
+  <data name="PageHelpTextPartyOptions" xml:space="preserve">
+    <value>Cấu hình tính năng vào tổ đội bằng mật khẩu (/partypass) và danh sách bãi luyện tự động tìm tổ đội trong cửa sổ Tổ Đội (P).</value>
+  </data>
+  <data name="PageHelpTextQolSettings" xml:space="preserve">
+    <value>Cấu hình các lệnh tiện ích (/post cấp/thời gian chờ/Zen, /pkclear rửa tội, /clearchat) và các tùy chọn tự động hỗ trợ người chơi.</value>
+  </data>
+  <data name="PageHelpTextRankingsSettings" xml:space="preserve">
+    <value>Cấu hình Bảng Xếp Hạng trong game (Shift+R / /rank): chu kỳ làm mới, cột hiển thị và giới hạn tính năng cộng điểm nhanh (Shift+A).</value>
+  </data>
+  <data name="PageHelpTextRateTuning" xml:space="preserve">
+    <value>Tinh chỉnh tỉ lệ đập ngọc (Tâm Linh, Ước Nguyện, Sinh Mệnh), tỷ lệ xoay Chaos theo cấp và hệ số cân bằng sát thương PvP/PvM giữa các hệ phái.</value>
+  </data>
+  <data name="PageHelpTextS6Events" xml:space="preserve">
+    <value>Quản lý lịch sự kiện Season 6 kinh điển, giới hạn vé vào, thông báo Boss và phần thưởng cho Blood Castle, Devil Square, Chaos Castle và Skeleton King.</value>
+  </data>
+  <data name="PageHelpTextSeasonPlan" xml:space="preserve">
+    <value>Thiết lập lộ trình mở tính năng theo mùa (ngày mở theo giờ Sydney cho mốc reset, Cánh, Boss, Ngọc Khảm) hiển thị trực tiếp cho người chơi tại bảng F8.</value>
+  </data>
+  <data name="PageHelpTextStateRetention" xml:space="preserve">
+    <value>Kiểm tra dung lượng các bảng trạng thái tính năng PostgreSQL, nén/lưu trữ dữ liệu hết hạn an toàn và theo dõi tình trạng lưu trữ tập trung.</value>
+  </data>
+  <data name="PageHelpTextTalismans" xml:space="preserve">
+    <value>Cấu hình Bùa/Tượng mang trong hành trang giúp tăng EXP, Zen, chỉ số và giới hạn sử dụng trái/sách cộng điểm vĩnh viễn.</value>
+  </data>
+  <data name="PageHelpTextTeleportNpc" xml:space="preserve">
+    <value>Cấu hình NPC Dịch Chuyển: danh sách bản đồ đến, yêu cầu cấp/Zen/Xu, thời gian chờ và điều kiện VIP hoặc gia tộc.</value>
+  </data>
+  <data name="PageHelpTextTimetable" xml:space="preserve">
+    <value>Xem và chỉnh sửa Bảng Lịch Sự Kiện &amp; Boss đồng nhất theo giờ Sydney, hiển thị đếm ngược chính xác trên cả web game (F8) và trang chủ.</value>
+  </data>
+  <data name="PageHelpTextTopUpMilestones" xml:space="preserve">
+    <value>Cấu hình các mốc tích lũy nạp VND để tài khoản nhận gói thưởng một lần (Xu, Zen, Vật phẩm) trên trang tài khoản hoặc trong game.</value>
+  </data>
+  <data name="PageHelpTextVaultChaosRewards" xml:space="preserve">
+    <value>Cấu hình tỉ lệ xoay Chaos hiển thị trực tiếp cho người chơi, số rương mở rộng &amp; giá mở bằng xu (/vault) và phần thưởng từng cấp Minigame.</value>
+  </data>
+  <data name="PageHelpTextWorldEditor" xml:space="preserve">
+    <value>Xem bản đồ bằng không gian 3D Three.js, tô vùng cấm đi/an toàn/nước/ánh sáng, đặt bãi quái, cổng và vật thể 3D, tạo lại minimap và lưu đồng bộ cho máy chủ lẫn web game.</value>
+  </data>
+  <data name="PageHelpTextWorlds" xml:space="preserve">
+    <value>Tạo và quản lý các máy chủ/cụm thế giới độc lập, mẫu cấu hình khởi đầu, đếm ngược giờ mở cửa theo giờ Sydney và chuyển nhân vật an toàn.</value>
+  </data>
+  <data name="PageHelpHintLanguageEn" xml:space="preserve">
+    <value>Chuyển nhãn giao diện trang này sang tiếng Anh.</value>
+  </data>
+  <data name="PageHelpHintLanguageVi" xml:space="preserve">
+    <value>Chuyển nhãn giao diện trang này sang tiếng Việt.</value>
+  </data>
+  <data name="PageHelpHintAdd" xml:space="preserve">
+    <value>Thêm một mục hoặc vật phẩm mới vào danh sách.</value>
+  </data>
+  <data name="PageHelpHintApply" xml:space="preserve">
+    <value>Áp dụng thay đổi này ngay.</value>
+  </data>
+  <data name="PageHelpHintAction" xml:space="preserve">
+    <value>Thực hiện thao tác này.</value>
   </data>
 </root>
