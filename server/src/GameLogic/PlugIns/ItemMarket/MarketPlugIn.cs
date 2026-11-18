@@ -189,6 +189,12 @@ public sealed class MarketPlugIn :
             return;
         }
 
+        if (await Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(player, item).ConfigureAwait(false))
+        {
+            await this.SendStateAsync(player, true).ConfigureAwait(false);
+            return;
+        }
+
         var fee = Math.Max(0, engine.Configuration.ListingZenFee);
         if (fee > 0 && player.Money < fee)
         {

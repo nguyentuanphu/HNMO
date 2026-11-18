@@ -5478,6 +5478,29 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>4C</SubCode>
+      <Name>HnmoEscrowCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to request or mutate escrow contracts or trade credit actions.</SentWhen>
+      <CausedReaction>The server validates safety, balance, and concurrency rules and replies with HnmoEscrowState (F5 4D).</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = CreateContract, 2 = AcceptContract, 3 = CancelContract, 4 = ClaimOwed.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Payload</Name>
+          <Description>JSON command payload (contract details, contractId, pin, confirmHighValue).</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

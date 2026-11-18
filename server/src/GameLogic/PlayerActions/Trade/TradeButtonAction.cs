@@ -174,6 +174,21 @@ public class TradeButtonAction : BaseTradeAction
                 {
                     return false;
                 }
+
+                if (await PlugIns.Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(player, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
+            }
+        }
+        else if (trader is Player escrowPlayer)
+        {
+            foreach (var item in items)
+            {
+                if (await PlugIns.Escrow.EscrowContractsPlugIn.RefuseCooldownItemAsync(escrowPlayer, item).ConfigureAwait(false))
+                {
+                    return false;
+                }
             }
         }
 

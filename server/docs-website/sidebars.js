@@ -63,6 +63,7 @@ const sidebars = {
         "admin-panel/rate-tuning",
         "admin-panel/s6-events",
         "admin-panel/qol-settings",
+        "admin-panel/escrow-contracts",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",

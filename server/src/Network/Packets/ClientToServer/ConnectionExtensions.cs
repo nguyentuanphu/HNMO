@@ -6778,4 +6778,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoEscrowCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = CreateContract, 2 = AcceptContract, 3 = CancelContract, 4 = ClaimOwed.</param>
+    /// <param name="payload">JSON command payload (contract details, contractId, pin, confirmHighValue).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to request or mutate escrow contracts or trade credit actions.
+    /// Causes reaction on server side: The server validates safety, balance, and concurrency rules and replies with HnmoEscrowState (F5 4D).
+    /// </remarks>
+    public static async ValueTask SendHnmoEscrowCommandAsync(this IConnection? connection, byte @action, string @payload)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoEscrowCommandRef.GetRequiredSize(payload);
+            var packet = new HnmoEscrowCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Payload = @payload;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}
