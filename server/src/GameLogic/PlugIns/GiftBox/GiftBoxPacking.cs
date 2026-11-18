@@ -75,7 +75,7 @@ public static class GiftBoxPacking
             for (var index = 0; index < entry.Count; index++)
             {
                 var item = GameMasterItemFactory.CreateItem(definition, specification);
-                var maximum = item.IsStackable() ? Math.Max(1, definition.Durability) : item.GetMaximumDurabilityOfOnePiece();
+                var maximum = item.IsStackable() ? Math.Max(1, (int)definition.Durability) : item.GetMaximumDurabilityOfOnePiece();
                 if (entry.Durability > maximum)
                 {
                     return (GiftBoxPackingStatus.InvalidReward, []);
