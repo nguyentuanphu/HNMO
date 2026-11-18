@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlayerActions.Items;
 using System.Collections.Concurrent;
 using HNMO.DataModel.Configuration.ItemCrafting;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.SeasonPlan;
 using HNMO.GameLogic.Views.NPC;
 
 /// <summary>
@@ -48,6 +49,15 @@ public class ItemCraftAction
 
         var craftingHandler = this.GetCraftingHandler(crafting);
 
+        if (RequiredSeasonGate(craftingHandler, crafting) is { } gate
+            && !SeasonPlanPlugIn.IsFeatureUnlocked(player.GameContext, gate))
+        {
+            await player.InvokeViewPlugInAsync<IShowItemCraftingResultPlugIn>(p => p.ShowResultAsync(CraftingResult.IncorrectMixItems, null)).ConfigureAwait(false);
+            var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+            await player.ShowBlueMessageAsync(isVi ? "Tính năng ép đồ này chưa mở khóa ở giai đoạn mùa giải hiện tại." : $"That Chaos mix ({gate}) is locked until its Season stage opens.").ConfigureAwait(false);
+            return;
+        }
+
         (CraftingResult, Item?) result;
         try
         {
@@ -61,6 +71,13 @@ public class ItemCraftAction
         if (player.GameContext.PlugInManager.GetPlugInPoint<IItemCraftedPlugIn>() is { } craftedPlugIns)
         {
             await craftedPlugIns.ItemCraftedAsync(player, result.Item1).ConfigureAwait(false);
+        }
+
+        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordChaosMix(player, result.Item1, result.Item2, player.OpenedNpc?.Definition?.Designation ?? string.Empty);
+
+        if (result.Item1 == CraftingResult.Success)
+        {
+            await PlugIns.GameplayRules.RateTuningPlugIn.TryBroadcastChaosMixSuccessAsync(player, result.Item2).ConfigureAwait(false);
         }
 
         var itemList = player.TemporaryStorage?.Items.ToList() ?? new List<Item>();
@@ -152,7 +169,13 @@ public class ItemCraftAction
     private IItemCraftingHandler GetCraftingHandler(ItemCrafting crafting)
     {
         // This action may be shared between players, e.g. by the message handlers, so the cache must be thread-safe.
-        return this._craftingHandlerCache.GetOrAdd(crafting, this.CreateCraftingHandler);
+        var handler = this._craftingHandlerCache.GetOrAdd(crafting, this.CreateCraftingHandler);
+        if (handler is BaseItemCraftingHandler baseHandler)
+        {
+            baseHandler.CraftingNumber = crafting.Number;
+        }
+
+        return handler;
     }
 
     private IItemCraftingHandler CreateCraftingHandler(ItemCrafting crafting)
@@ -185,5 +208,41 @@ public class ItemCraftAction
         }
 
         throw new ArgumentException("No simple crafting settings or item crafting handler name specified.", nameof(crafting));
+    }
+
+    private static SeasonFeatureGate? RequiredSeasonGate(IItemCraftingHandler handler, ItemCrafting crafting)
+    {
+        var typeName = handler.GetType().Name;
+        if (typeName.Contains("SecondWings", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Wing2;
+        }
+
+        if (typeName.Contains("ThirdWings", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Wing3;
+        }
+
+        if (typeName.Contains("Fenrir", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Fenrir;
+        }
+
+        if (typeName.Contains("GuardianOption", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Items380;
+        }
+
+        if (typeName.Contains("RefineStone", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Harmony;
+        }
+
+        if (crafting.SimpleCraftingSettings?.RequiredItems.Any(r => r.Reference != 0 && r.MinimumItemLevel >= 9 && r.MaximumItemLevel <= 14) == true)
+        {
+            return SeasonFeatureGate.ItemPlus10To15;
+        }
+
+        return null;
     }
 }

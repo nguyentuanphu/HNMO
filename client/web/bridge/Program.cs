@@ -16,16 +16,113 @@ using System.Buffers;
 using System.Net;
 using System.Net.WebSockets;
 using Microsoft.Extensions.Logging.Abstractions;
+using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.Network.SimpleModulus;
 using HNMO.Network.Xor;
 using Pipelines.Sockets.Unofficial;
 
+if (args.Length >= 3 && args[0] == "--pack-icons")
+{
+    DataPackArchive.BuildItemIconsZip(args[1], args[2]);
+    return;
+}
+
+if (args.Length >= 3 && args[0] == "--pack")
+{
+    string? allowlist = null;
+    for (var i = 3; i < args.Length - 1; i++)
+    {
+        if (args[i] == "--allowlist")
+        {
+            allowlist = args[i + 1];
+        }
+    }
+
+    DataPackArchive.BuildPacks(args[1], args[2], allowlist);
+    return;
+}
+
 var builder = WebApplication.CreateBuilder(args);
 var launcherOptions = builder.Configuration.GetSection("Launcher").Get<LauncherOptions>() ?? new LauncherOptions();
-builder.Services.AddHostedService(services => new GameLauncher(launcherOptions, builder.Environment.ContentRootPath, services.GetRequiredService<ILogger<GameLauncher>>()));
-builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
+if (launcherOptions.WebPort == 8080 && builder.Configuration["Urls"] is { } urlsCfg)
+{
+    var firstUrl = urlsCfg.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault();
+    if (firstUrl is not null && Uri.TryCreate(firstUrl.Replace("://*:", "://localhost:").Replace("://0.0.0.0:", "://localhost:"), UriKind.Absolute, out var webUri))
+    {
+        launcherOptions.WebPort = webUri.Port;
+    }
+}
 var portalOptions = builder.Configuration.GetSection("Portal").Get<PortalOptions>() ?? new PortalOptions();
+
+bool HasArg(string prefix) => args.Any(a => a.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
+
+var bridgeRoot = builder.Environment.ContentRootPath;
+var configuredSaveDir = Path.GetFullPath(Path.Combine(bridgeRoot, launcherOptions.SavePath));
+var settingsFileEnv = Environment.GetEnvironmentVariable(HostSettingsStore.EnvironmentVariableName);
+var settingsPath = !string.IsNullOrWhiteSpace(settingsFileEnv)
+    ? Path.GetFullPath(settingsFileEnv)
+    : Path.Combine(configuredSaveDir, HostSettingsStore.FileName);
+HostSettings? hostSettings = null;
+if (launcherOptions.Enabled || File.Exists(settingsPath))
+{
+    var legacyAppSettings = Path.Combine(bridgeRoot, "appsettings.json");
+    var legacyConnectionXml = Path.GetFullPath(Path.Combine(bridgeRoot, launcherOptions.ServerPath, "ConnectionSettings.xml"));
+    hostSettings = HostSettingsStore.LoadOrMigrate(settingsPath, legacyAppSettings, legacyConnectionXml);
+
+    launcherOptions.SettingsFilePath = settingsPath;
+    if (!HasArg("--Launcher:Enabled"))
+    {
+        launcherOptions.Enabled = hostSettings.LauncherEnabled;
+    }
+
+    launcherOptions.PostgresPath = hostSettings.PostgresPath;
+    if (!HasArg("--Launcher:SavePath"))
+    {
+        launcherOptions.SavePath = hostSettings.SavePath;
+    }
+
+    launcherOptions.DatabasePort = hostSettings.DatabasePort;
+    launcherOptions.DatabasePassword = hostSettings.DatabasePassword;
+    launcherOptions.ServerPath = hostSettings.ServerPath;
+    launcherOptions.ServerProgram = hostSettings.ServerProgram;
+    launcherOptions.AdminUrl = $"http://127.0.0.1:{hostSettings.AdminPort}";
+    launcherOptions.ConnectServerPort = hostSettings.ConnectServerPort;
+    launcherOptions.OpenBrowserUrl = hostSettings.OpenBrowserUrl;
+    portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
+
+    var hasCliUrls = HasArg("--urls");
+    var hasEnvUrls = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"));
+    if (!hasCliUrls && !hasEnvUrls && !string.IsNullOrWhiteSpace(hostSettings.WebUrls))
+    {
+        builder.WebHost.UseUrls(hostSettings.WebUrls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+    }
+
+    if (!HasArg("--Launcher:WebPort") && !hasCliUrls && !hasEnvUrls)
+    {
+        var firstHostUrl = hostSettings.WebUrls?.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault();
+        if (firstHostUrl is not null && Uri.TryCreate(firstHostUrl.Replace("://*:", "://localhost:").Replace("://0.0.0.0:", "://localhost:"), UriKind.Absolute, out var hostWebUri))
+        {
+            launcherOptions.WebPort = hostWebUri.Port;
+        }
+    }
+}
+
+portalOptions.ConnectServerPort = launcherOptions.ConnectServerPort;
+if (HasArg("--Launcher:AdminUrl") && !HasArg("--Portal:ApiBaseUrl"))
+{
+    portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
+}
+
+builder.Services.AddSingleton(services => new GameLauncher(
+    launcherOptions,
+    builder.Environment.ContentRootPath,
+    services.GetRequiredService<IHostApplicationLifetime>(),
+    services.GetRequiredService<ILogger<GameLauncher>>()));
+builder.Services.AddHostedService(services => services.GetRequiredService<GameLauncher>());
+builder.Services.AddSingleton(services => new ControlMaintenanceService(services.GetRequiredService<GameLauncher>(), launcherOptions, builder.Environment.ContentRootPath, services.GetRequiredService<ILogger<ControlMaintenanceService>>()));
+builder.Services.AddHostedService(services => services.GetRequiredService<ControlMaintenanceService>());
+builder.Host.ConfigureHostOptions(host => host.ShutdownTimeout = TimeSpan.FromSeconds(30));
 builder.Services.AddHttpClient();
 builder.Services.AddHttpForwarder();
 // Request rates per visitor address for the account and payment endpoints (VisitorLimits.cs covers the game connections).
@@ -43,12 +140,13 @@ builder.Services.AddRateLimiter(limiter =>
 });
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
-var webRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:WebRoot"] ?? "../public"));
-var gameFiles = new GameFiles(Path.Combine(contentRoot, app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"));
-var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
-var allowedHosts = app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
-var allowLoopback = app.Configuration.GetValue("Relay:AllowLoopback", true);
-var connectTimeout = TimeSpan.FromSeconds(app.Configuration.GetValue("Relay:ConnectTimeoutSeconds", 10));
+var webRoot = Path.GetFullPath(Path.Combine(contentRoot, (HasArg("--HNMO:WebRoot") ? app.Configuration["HNMO:WebRoot"] : hostSettings?.WebRoot) ?? app.Configuration["HNMO:WebRoot"] ?? "../public"));
+var gameFiles = new GameFiles(Path.Combine(contentRoot, (HasArg("--HNMO:DataPath") ? app.Configuration["HNMO:DataPath"] : hostSettings?.DataPath) ?? app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"), app.Logger);
+app.Lifetime.ApplicationStopping.Register(gameFiles.Dispose);
+var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, (HasArg("--HNMO:VendorPath") ? app.Configuration["HNMO:VendorPath"] : hostSettings?.VendorPath) ?? app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
+var allowedHosts = hostSettings?.RelayAllowedHosts ?? app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
+var allowLoopback = hostSettings?.RelayAllowLoopback ?? app.Configuration.GetValue("Relay:AllowLoopback", true);
+var connectTimeout = TimeSpan.FromSeconds(hostSettings?.RelayConnectTimeoutSeconds ?? app.Configuration.GetValue("Relay:ConnectTimeoutSeconds", 10));
 // Tells a game server on this computer the browser's address first (a "PROXY" line), for the login history.
 var sendClientAddress = app.Configuration.GetValue("Relay:SendClientAddress", true);
 const int MaximumPacketSize = 0xFFFF;
@@ -221,7 +319,12 @@ app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 });
 Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
-app.Logger.LogInformation("Web client: {WebRoot}. Game data: {DataRoot}.", webRoot, gameFiles.Root);
+ControlEndpoints.Map(app, app.Services.GetRequiredService<GameLauncher>(), app.Services.GetRequiredService<ControlMaintenanceService>(), launcherOptions, contentRoot, webRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Logger);
+app.Logger.LogInformation(
+    "Web client: {WebRoot}. Game data: {DataRoot} ({Mode}).",
+    webRoot,
+    gameFiles.Root,
+    gameFiles.UsingPacks ? $"{gameFiles.PackCount} packs, {gameFiles.PackedEntryCount} entries" : "loose files");
 
 app.Map("/relay", async context =>
 {

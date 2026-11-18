@@ -3,7 +3,7 @@
 # game, which opens in your browser. Press Ctrl+C to stop everything.
 set -euo pipefail
 cd "$(dirname "$0")"
-if [ ! -d Data/Monsters ]; then
+if [ ! -d Data/Monsters ] && [ ! -d Data/packs ]; then
   echo "The game data is missing. Copy the Data folder of the game into $(pwd)/Data."
   exit 1
 fi

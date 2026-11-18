@@ -21,7 +21,10 @@ START
   first start sets up the save game and takes up to a few minutes.
 
   Windows may warn "Windows protected your PC" (the files aren't signed):
-  click "More info" and "Run anyway".
+  click "More info" and "Run anyway". (Tiếng Việt: Bấm "More info" -> "Run anyway".)
+  macOS Gatekeeper may say the app is from an unidentified developer:
+  right-click HNMO.app (or HNMO), choose "Open", and click "Open" again. (Tiếng Việt: Chuột phải -> "Open" -> "Open".)
+  Control page: http://localhost:8080/control (this computer only: Start/Stop/Restart, logs, backups, updates).
   Windows 11 "Smart App Control blocked a file": Windows marks everything that came from
   the internet. Before unzipping: right-click HNMO.zip, Properties, tick "Unblock", OK,
   then Extract All again. Already unzipped: open PowerShell in the HNMO folder and run
