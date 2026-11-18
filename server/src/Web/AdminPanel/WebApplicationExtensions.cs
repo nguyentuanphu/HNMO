@@ -189,6 +189,7 @@ public static class WebApplicationExtensions
     /// <returns>The builder of the controllers.</returns>
     internal static IMvcBuilder AddAdminPanelControllers(this IServiceCollection services)
     {
+        services.AddWebsiteAccountMail();
         return services.AddControllers(options =>
             {
                 options.Filters.Add<HNMO.Web.AdminPanel.API.AdminOperationExceptionFilter>();

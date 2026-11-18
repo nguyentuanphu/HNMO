@@ -7,6 +7,7 @@ namespace HNMO.Tests;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
+using HNMO.Persistence;
 
 /// <summary>
 /// Tests for the <see cref="GoblinPointsForPlayTimePlugIn"/>.
@@ -45,6 +46,23 @@ public class GoblinPointsForPlayTimePlugInTest
         await plugIn.ExecuteTaskAsync((GameContext)player.GameContext).ConfigureAwait(false);
 
         Assert.That(player.Account!.GoblinPoints, Is.Zero);
+    }
+
+    /// <summary>Only points which fit the wallet are recorded and they are never applied a second time.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RecordsOnlyTheActualClippedCreditAsync()
+    {
+        var player = await CreatePlayerAsync().ConfigureAwait(false);
+        player.Account!.GoblinPoints = int.MaxValue - 2;
+        var plugIn = new GoblinPointsForPlayTimePlugIn { Configuration = new GoblinPointsForPlayTimeConfiguration { Interval = TimeSpan.Zero, Points = 5 } };
+        await plugIn.ExecuteTaskAsync((GameContext)player.GameContext).ConfigureAwait(false);
+        await player.SaveProgressAsync().ConfigureAwait(false);
+        var history = await player.PersistenceContext.GetCashShopCoinHistoryAsync(player.Account.GetId(), 0, 20).ConfigureAwait(false);
+        Assert.That(history.Single().Amount, Is.EqualTo(2));
+        Assert.That(CashShopBalanceReceipt.Read(history.Single().Reason)!.Action, Is.EqualTo(nameof(CashShopBalanceReason.PlayTime)));
+        await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+        Assert.That(player.Account.GoblinPoints, Is.EqualTo(int.MaxValue));
     }
 
     /// <summary>

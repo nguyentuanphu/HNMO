@@ -3234,5 +3234,11 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("ChatSpamWarning", resourceCulture);
             }
         }
+        /// <summary>Gets the localized VIP notice.</summary>
+        public static string VipActiveNotice => ResourceManager.GetString("VipActiveNotice", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP notice.</summary>
+        public static string VipExpiringNotice => ResourceManager.GetString("VipExpiringNotice", resourceCulture)!;
+
     }
 }

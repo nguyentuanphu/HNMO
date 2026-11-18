@@ -167,3 +167,23 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Item looks: item effects (`ItemEffects.json`: glowing mesh, glow strength, hidden mesh) and render styles (`RenderStyles.json`: texture layers with their meshes, glow blending, textures, light, place and level conditions) | 🟡 | `game/itemLooks.ts`: the glowing mesh by texture index (every mesh for "all", `noneBlendMeshes` matter only for reflection passes), glow layers drawn additively, other textures (lucky items' inventory textures), lights, skin and hair hidden in windows and on the ground; additive drawings stay see-through on icons, so no black squares (the catalogue check in `visual-check.spec.ts`). Not yet: the reflection (chrome) layers, scrolling textures and pulsing values (their middle is used), the flat colour layer |
 | Texture folders: first folder that has the texture | ✅ | |
 | GLB models (`Data/Models/ModelFiles.json`) | ⬜ | |
+
+### HNMO VIP subscriptions (web)
+
+The account page and game window (Alt+U; mobile More → VIP) share reviewed offers,
+stable purchase retries and Sydney-day daily coins. The server saves the debit,
+receipt and three timed account grants together; live XP/Zen bonuses use those grants.
+The existing host-configured VIP vault/reset policies also read the same timed VIP flag.
+F5 25 requests and F5 26 state belong to HNMO. New purchases are disabled by default.
+The /vip administrator page configures levels/prices and grants or removes time with a
+required reason, confirmation and activity audit. Pending recovery preserves the original
+operation. Real PostgreSQL crash recovery and live deployment remain unverified.
+Per-server rates and the VIP server list are separate work under ROADMAP 15.6.
+
+Trang tài khoản và cửa sổ VIP trong game dùng chung bước xem lại giá, thử lại giao dịch
+và quà theo ngày Sydney. Máy chủ lưu việc trừ coin, biên nhận và ba quyền lợi cùng hạn
+trong một lần lưu tài khoản. Ưu đãi kinh nghiệm/Zen áp dụng trực tiếp; các chính sách kho
+và reset VIP đã có cũng dùng cờ VIP này. Trang /vip cho quản trị viên cấu hình hạng/giá,
+cấp hoặc gỡ VIP, bắt buộc nêu lý do, xác nhận và ghi nhật ký. Mua mới tắt mặc định.
+Chưa kiểm chứng khôi phục sau sự cố PostgreSQL hoặc triển khai trên máy chủ thực tế.
+Máy chủ dành riêng cho VIP và hệ số từng máy chủ thuộc công việc riêng ở mục 15.6.

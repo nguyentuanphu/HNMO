@@ -72,6 +72,9 @@ export function mountTopUpMilestonesWidget(
       btn.type = 'button';
       btn.textContent = step.claimed ? L('Claimed', 'Đã nhận') : step.claimable ? L('Claim', 'Nhận thưởng') : L('Locked', 'Chưa đạt');
       btn.disabled = !step.claimable;
+      btn.title = step.claimable ? L('Collect this reached milestone reward once.', 'Nhận phần thưởng của mốc đã đạt một lần.')
+        : step.claimed ? L('This milestone reward has already been collected.', 'Bạn đã nhận phần thưởng của mốc này.')
+          : L('Confirm more top-ups to unlock this milestone.', 'Nạp thêm và chờ xác nhận để mở mốc này.');
       btn.addEventListener('click', () => {
         const creds = provider.getCredentials();
         if (!creds) return;

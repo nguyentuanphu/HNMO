@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Threading;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.Offline;
 using HNMO.GameLogic.PlayerActions;
@@ -403,6 +404,11 @@ public class ResetOptionsPlugIn : IPeriodicTaskPlugIn, IPlayerStateChangedPlugIn
             }
 
             return ResetResult.NotEnoughCoins;
+        }
+
+        if (player.Account is { } payingAccount)
+        {
+            ResetCoinHistory.Record(player.PersistenceContext, payingAccount, plan, plan.IsRelife ? CashShopBalanceReason.Relife : CashShopBalanceReason.Reset);
         }
 
         foreach (var item in items)

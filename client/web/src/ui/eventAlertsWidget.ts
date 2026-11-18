@@ -44,7 +44,8 @@ function arrayBufferToBase64Url(buf: ArrayBuffer | null): string {
 }
 
 /** Populates a DOM container with an interactive EN/VI Web Push event alert subscription manager. */
-export async function mountEventAlertsWidget(container: HTMLElement): Promise<void> {
+export async function mountEventAlertsWidget(container: HTMLElement, getLanguage = currentLanguage): Promise<{ refreshLanguage: () => void }> {
+  const tx = (en: string, vi: string): string => getLanguage() === 'vi' ? vi : en;
   let config: EventAlertsPublicConfig | null = null;
   let statusText = '';
   let statusError = false;
@@ -103,6 +104,7 @@ export async function mountEventAlertsWidget(container: HTMLElement): Promise<vo
       lbl.style.fontSize = '13px';
       const cb = document.createElement('input');
       cb.type = 'checkbox';
+      cb.title = tx('Choose whether to receive alerts for this event.', 'Chọn nhận thông báo cho sự kiện này.');
       cb.checked = selected.has(key);
       cb.addEventListener('change', () => {
         if (cb.checked) selected.add(key);
@@ -120,6 +122,7 @@ export async function mountEventAlertsWidget(container: HTMLElement): Promise<vo
     actions.style.gap = '8px';
     const enableBtn = document.createElement('button');
     enableBtn.type = 'button';
+    enableBtn.title = tx('Allow browser notifications for the events you selected.', 'Cho phép trình duyệt thông báo về các sự kiện đã chọn.');
     enableBtn.className = 'hnmo-btn hnmo-btn-primary';
     enableBtn.textContent = tx('Enable Browser Alerts', 'Bật Thông Báo Trình Duyệt');
     enableBtn.addEventListener('click', async () => {
@@ -143,7 +146,7 @@ export async function mountEventAlertsWidget(container: HTMLElement): Promise<vo
             endpoint: sub.endpoint,
             p256dh: arrayBufferToBase64Url(sub.getKey('p256dh')),
             auth: arrayBufferToBase64Url(sub.getKey('auth')),
-            language: currentLanguage() === 'vi' ? 'vi' : 'en',
+            language: getLanguage() === 'vi' ? 'vi' : 'en',
             events: [...selected],
           }),
         });
@@ -159,6 +162,7 @@ export async function mountEventAlertsWidget(container: HTMLElement): Promise<vo
 
     const disableBtn = document.createElement('button');
     disableBtn.type = 'button';
+    disableBtn.title = tx('Stop event notifications on this device.', 'Ngừng nhận thông báo sự kiện trên thiết bị này.');
     disableBtn.className = 'hnmo-btn';
     disableBtn.textContent = tx('Unsubscribe', 'Hủy Đăng Ký');
     disableBtn.addEventListener('click', async () => {
@@ -197,6 +201,7 @@ export async function mountEventAlertsWidget(container: HTMLElement): Promise<vo
 
   onLanguageChange(() => render());
   await refreshConfig();
+  return { refreshLanguage: render };
 }
 
 /** Modal panel wrapper for in-game Event Alerts subscription management. */
