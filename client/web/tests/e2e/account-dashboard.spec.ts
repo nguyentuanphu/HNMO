@@ -48,6 +48,7 @@ async function mockAccount(page: Page, language: 'en' | 'vi'): Promise<void> {
         { id: 'purchase', coinType: 'WCoinC', amount: -10, reason: 'structured receipt', purchase: { nameEn: 'Test package', nameVi: 'Gói thử nghiệm', giftRecipient: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'vip', coinType: 'WCoinC', amount: -100, reason: null, vipPurchase: { nameEn: 'Bronze', nameVi: 'Đồng', days: 7 }, createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'vip-daily', coinType: 'GoblinPoints', amount: 10, reason: null, vipDaily: { nameEn: 'Bronze', nameVi: 'Đồng' }, createdAt: '2026-11-15T14:30:00Z', pending: true },
+        { id: 'gift-box', coinType: 'WCoinC', amount: 10, reason: null, giftBox: { titleEn: '<Event gift>', titleVi: '<Quà sự kiện>' }, createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'vip-remove', coinType: 'WCoinC', amount: 0, reason: null, vipRemoved: true, createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'vault', coinType: 'WCoinC', amount: -5, reason: 'structured receipt', balanceChange: { action: 'ExtraVault', otherCharacter: null }, createdAt: '2026-11-15T14:30:00Z', pending: false },
         { id: 'store', coinType: 'WCoinP', amount: -3, reason: 'structured receipt', balanceChange: { action: 'PlayerStorePurchase', otherCharacter: '<OtherKnight>' }, createdAt: '2026-11-15T14:30:00Z', pending: false },
@@ -152,6 +153,8 @@ for (const width of [375, 820, 1280]) {
       await section(page, width, 1, language);
       await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Cash shop: Test package' : 'Mua ở cửa hàng: Gói thử nghiệm');
       await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'VIP removed by the host' : 'Chủ máy chủ đã thu hồi VIP');
+      await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Gift collected: <Event gift>' : 'Đã nhận quà: <Quà sự kiện>');
+      await expect(page.locator('#account-coins event')).toHaveCount(0);
       await expect(page.locator('#account-coins')).toContainText('-10');
       await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Extra vault purchase' : 'Mua thêm rương');
       await expect(page.locator('#account-coins')).toContainText(language === 'en' ? 'Player store purchase from <OtherKnight>' : 'Mua tại cửa hàng của <OtherKnight>');

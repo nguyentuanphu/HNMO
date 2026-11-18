@@ -13845,5 +13845,8 @@ namespace HNMO.Web.AdminPanel.Properties {
         /// <summary>Gets the localized instruction to save the disabled VIP configuration before granting.</summary>
         public static string VipManagerSaveFirst => ResourceManager.GetString("VipManagerSaveFirst", resourceCulture)!;
 
+        /// <summary>Gets the localized public title of a collected gift.</summary>
+        public static string GiftBoxCoinHistoryCollected => ResourceManager.GetString("GiftBoxCoinHistoryCollected", resourceCulture)!;
+
     }
 }

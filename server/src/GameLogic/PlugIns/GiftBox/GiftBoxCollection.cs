@@ -29,12 +29,34 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
     private static readonly ConcurrentDictionary<Guid, SemaphoreSlim> Gates = new();
     private static readonly ConditionalWeakTable<IPlayerContext, Dictionary<Guid, CashShopCoinGrant>> Tracked = new();
 
+    /// <summary>Checks whether this exclusively owned context retains an unconfirmed delivery.</summary>
+    /// <param name="context">The serialized account context.</param>
+    /// <returns>Whether it must reconcile or close before unrelated account mutations.</returns>
+    public static bool HasUnconfirmed(IPlayerContext context) => Tracked.TryGetValue(context, out var receipts) && receipts.Count > 0;
+
+    /// <summary>Checks whether the selected letter has staged proof which must not be displayed as confirmed.</summary>
+    /// <param name="context">The serialized account context.</param>
+    /// <param name="letterId">The selected immutable letter.</param>
+    /// <returns>Whether its proof is still awaiting a confirmed save.</returns>
+    public static bool IsUnconfirmed(IPlayerContext context, Guid letterId) => Tracked.TryGetValue(context, out var receipts) && receipts.ContainsKey(letterId);
+
     /// <summary>Reads only recognized account-bound delivery proof for history and mailbox projection.</summary>
     /// <param name="row">The stored coin receipt.</param>
     /// <returns>The proof, or null for an ordinary or malformed row.</returns>
     public static GiftBoxReceipt? ReadReceipt(CashShopCoinGrant row)
     {
-        if (row.GrantedBy != GrantedBy || row.AppliedAt is null || row.Reason is not { Length: > 0 and <= 16384 } reason)
+        var proof = ReadReceiptMetadata(row.Reason);
+        return row.GrantedBy == GrantedBy && row.AppliedAt is not null && proof is not null
+            && proof.AccountId == row.AccountId && proof.Coins == row.Amount && proof.CoinType == row.CoinType
+            && row.Reference == Reference(proof.AccountId, proof.LetterId) ? proof : null;
+    }
+
+    /// <summary>Reads bounded display metadata only; it does not prove delivery without validating the complete stored row.</summary>
+    /// <param name="reason">The stored receipt text.</param>
+    /// <returns>Recognized metadata, or null. Collection authorization must use <see cref="ReadReceipt"/> instead.</returns>
+    public static GiftBoxReceipt? ReadReceiptMetadata(string? reason)
+    {
+        if (reason is not { Length: > 0 and <= 16384 })
         {
             return null;
         }
@@ -42,14 +64,11 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
         try
         {
             var proof = JsonSerializer.Deserialize<GiftBoxReceipt>(reason);
-            return proof is { Kind: ReceiptKind, ItemIds: { Count: <= 50 } } && proof.AccountId != Guid.Empty
-                && proof.LetterId != Guid.Empty && proof.CharacterId != Guid.Empty
+            return proof is { Kind: ReceiptKind, ItemIds: { Count: <= 50 }, TitleEn.Length: > 0 and <= 100, TitleVi.Length: > 0 and <= 100 }
+                && proof.AccountId != Guid.Empty && proof.LetterId != Guid.Empty && proof.CharacterId != Guid.Empty
                 && proof.ItemIds.All(id => id != Guid.Empty) && proof.ItemIds.Distinct().Count() == proof.ItemIds.Count
                 && proof.Zen >= 0 && proof.Coins >= 0 && Enum.IsDefined(proof.CoinType)
-                && !string.IsNullOrWhiteSpace(proof.TitleEn) && !string.IsNullOrWhiteSpace(proof.TitleVi)
-                && proof.AccountId == row.AccountId
-                && proof.Coins == row.Amount && proof.CoinType == row.CoinType
-                && row.Reference == Reference(proof.AccountId, proof.LetterId) ? proof : null;
+                && !string.IsNullOrWhiteSpace(proof.TitleEn) && !string.IsNullOrWhiteSpace(proof.TitleVi) ? proof : null;
         }
         catch (JsonException)
         {

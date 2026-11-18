@@ -4844,4 +4844,5 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="VipAuditRefused" xml:space="preserve"><value>bị từ chối</value></data>
   <data name="VipAuditDetails" xml:space="preserve"><value>VIP {0}: {1}. Quản trị viên: {2}. Lý do: {3}. Mã thao tác: {4}.</value></data>
   <data name="VipManagerSaveFirst" xml:space="preserve"><value>Lưu cài đặt VIP để bật plug-in trước, rồi cấp thời hạn. Bạn vẫn có thể tắt mua mới.</value></data>
+  <data name="GiftBoxCoinHistoryCollected" xml:space="preserve"><value>Đã nhận quà: {0}</value></data>
 </root>
