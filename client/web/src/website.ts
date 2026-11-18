@@ -431,6 +431,11 @@ const copy = {
     empty: "No entries supplied by this server.",
     updated: "Updated",
     all: "Server",
+    dropRateLabel: "Drop rate",
+    zenRateLabel: "Zen rate",
+    pvpAccessLabel: "PvP / Access",
+    vipOnlyBadge: "VIP only",
+    openAccessBadge: "All accounts",
     mapsRate: "Map experience",
     nameFallback: "Unnamed",
     noSchedule:
@@ -864,6 +869,11 @@ const copy = {
     empty: "Máy chủ chưa cung cấp mục nào.",
     updated: "Cập nhật",
     all: "Máy chủ",
+    dropRateLabel: "Tỉ lệ rơi đồ",
+    zenRateLabel: "Tỉ lệ rơi Zen",
+    pvpAccessLabel: "PvP / Quyền vào",
+    vipOnlyBadge: "Chỉ VIP",
+    openAccessBadge: "Mọi tài khoản",
     mapsRate: "Kinh nghiệm bản đồ",
     nameFallback: "Chưa có tên",
     noSchedule:
@@ -895,10 +905,15 @@ interface GameEvent extends Named {
 }
 interface Realm {
   id: number;
+  description?: string;
+  vipOnly?: boolean;
+  pvpEnabled?: boolean;
   players: number;
   capacity: number;
   experienceRate: number;
   masterExperienceRate: number;
+  dropRate?: number;
+  zenRate?: number;
   maximumLevel: number;
   maximumMasterLevel: number;
   maximumCharactersPerAccount: number;
@@ -1007,9 +1022,14 @@ function empty(id: string): void {
 }
 function renderStats(realm: Realm): void {
   const stats = clear("stats");
+  const accessLabel = realm.vipOnly ? `🔒 ${t("vipOnlyBadge")}` : t("openAccessBadge");
+  const pvpLabel = realm.pvpEnabled === false ? "Non-PvP" : "PvP";
   const fields: [string, string][] = [
     [`${realm.players} / ${realm.capacity}`, t("players")],
     [`${realm.experienceRate}×`, t("experience")],
+    [`${realm.dropRate ?? 1}×`, t("dropRateLabel")],
+    [`${realm.zenRate ?? 1}×`, t("zenRateLabel")],
+    [`${pvpLabel} · ${accessLabel}`, t("pvpAccessLabel")],
     [String(realm.maximumLevel), t("maxLevel")],
     [String(realm.maximumPartySize), t("party")],
     [`${realm.masterExperienceRate}×`, t("master")],
@@ -1125,9 +1145,11 @@ function render(): void {
       );
       const buttons = node("div", "", "world-servers");
       for (const srv of world.servers) {
+        const srvRealm = snapshot?.servers.find((s) => s.id === srv.id);
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.textContent = `${t("server")} ${srv.id} (${srv.players}/${srv.capacity})`;
+        const vipTag = srvRealm?.vipOnly ? ` 🔒 ${t("vipOnlyBadge")}` : "";
+        btn.textContent = `${t("server")} ${srv.id} (${srv.players}/${srv.capacity})${vipTag}`;
         btn.setAttribute("aria-current", String(String(srv.id) === selected));
         btn.addEventListener("click", () => {
           selected = String(srv.id);

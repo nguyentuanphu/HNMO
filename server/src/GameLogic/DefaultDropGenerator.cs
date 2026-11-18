@@ -109,13 +109,16 @@ public class DefaultDropGenerator : IDropGenerator
         var (mapItemMult, mapZenMult) = PlugIns.GameplayRules.MapRulesPlugIn.GetDropModifiers(player);
         var (_, bonusItemMult, bonusZenMult) = PlugIns.GameplayRules.BonusEventsPlugIn.GetDropModifiers(player, DateTime.UtcNow);
         var rateZenMult = PlugIns.GameplayRules.RateTuningPlugIn.GetZenDropMultiplier(player);
-        var totalZenMult = mapZenMult * bonusZenMult * rateZenMult;
+        var (serverDropMult, serverZenMult) = player.GameContext is IGameServerContext serverCtx
+            ? PlugIns.Vip.GameServerRateStore.OpenDefault().GetRates(serverCtx.Id)
+            : (1.0f, 1.0f);
+        var totalZenMult = mapZenMult * bonusZenMult * rateZenMult * serverZenMult;
         if (money > 0 && Math.Abs(totalZenMult - 1.0) > 0.0001)
         {
             money = (uint)Math.Max(1, Math.Round(money * totalZenMult));
         }
 
-        var totalItemMult = mapItemMult * bonusItemMult;
+        var totalItemMult = mapItemMult * bonusItemMult * serverDropMult;
         if (totalItemMult > 1.0001)
         {
             var extraRolls = (int)Math.Floor(totalItemMult - 1.0);
