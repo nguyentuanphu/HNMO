@@ -141,7 +141,12 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
                 return new(plan.Status.ToString());
             }
 
-            var items = plan.Items.Select(item => item.MakePersistent(context)).ToArray();
+            var items = plan.Items.Select(item =>
+            {
+                var persistent = item.MakePersistent(context);
+                persistent.ItemSlot = item.ItemSlot;
+                return persistent;
+            }).ToArray();
             foreach (var item in items)
             {
                 inventory.Items.Add(item);

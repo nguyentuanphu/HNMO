@@ -83,6 +83,7 @@ public class GiftBoxCollectionTests
         Assert.That(repeated.Status, Is.EqualTo("AlreadyCollected"));
         Assert.That(repeated.Receipt!.ItemIds, Is.EquivalentTo(ids));
         Assert.That(account.WCoinC, Is.EqualTo(150));
+        Assert.That(account.Characters.Single(character => character.GetId() == this._character.GetId()).Inventory!.Items.Select(item => item.ItemSlot), Is.EqualTo(new byte[] { 12, 13 }));
         Assert.That((await restarted.GetCashShopCoinHistoryAsync(account.GetId(), 0, 20).ConfigureAwait(false)), Has.Count.EqualTo(1));
     }
 
