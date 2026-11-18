@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlugIns.GiftBox;
 
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -78,7 +79,7 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
                 throw new ArgumentException("The gift box deadline must be in the future.");
             }
 
-            var proofRow = new HnmoFeatureRow(SendFeature, key, JsonSerializer.Serialize(new SendProof(fingerprint, recipients.Length, actor, reason), JsonOptions), nowUtc);
+            var proofRow = new HnmoFeatureRow(SendFeature, key, JsonSerializer.Serialize(new SendProof(fingerprint, recipients.Length, actor, reason, recipients), JsonOptions), nowUtc);
             var rows = new List<HnmoFeatureRow>(recipients.Length + 1) { proofRow };
             foreach (var accountId in recipients)
             {
@@ -113,6 +114,48 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
         }
     }
 
+    /// <summary>Reads the original frozen audience so a retry never silently picks a newer bulk cohort.</summary>
+    /// <param name="sendId">The immutable host send identifier.</param>
+    /// <returns>The detached original accounts, or null when this send has not been recorded.</returns>
+    public IReadOnlyList<Guid>? ReadFrozenAudience(Guid sendId)
+    {
+        if (sendId == Guid.Empty)
+        {
+            throw new ArgumentException("A gift box send identifier is required.", nameof(sendId));
+        }
+
+        lock (Gates.GetValue(backend, _ => new()))
+        {
+            var key = sendId.ToString("N");
+            var row = backend.LoadAll(SendFeature).SingleOrDefault(value => value.ScopeId == key);
+            if (row is null)
+            {
+                return null;
+            }
+
+            var proof = JsonSerializer.Deserialize<SendProof>(row.PayloadJson, JsonOptions)
+                ?? throw new InvalidDataException("The original gift box audience proof is unreadable.");
+            var accounts = proof.AccountIds;
+            if (accounts is null)
+            {
+                // Compatibility with the published initial foundation, whose immutable letters still
+                // contain the original audience. Incomplete/archived rows must never invent recipients.
+                accounts = backend.LoadAll(LetterFeature).Where(letter => letter.ScopeId.EndsWith(":" + key, StringComparison.Ordinal))
+                    .Select(letter => JsonSerializer.Deserialize<GiftBoxLetter>(letter.PayloadJson, JsonOptions)
+                        ?? throw new InvalidDataException("An original gift box audience letter is unreadable."))
+                    .Where(letter => letter.Id == sendId).Select(letter => letter.AccountId).Order().ToArray();
+            }
+
+            if (proof.Recipients is < 1 or > 10000 || accounts.Length != proof.Recipients
+                || accounts.Contains(Guid.Empty) || accounts.Distinct().Count() != accounts.Length)
+            {
+                throw new InvalidDataException("The original gift box audience is incomplete; no new send may replace it.");
+            }
+
+            return accounts.Order().ToArray();
+        }
+    }
+
     private static bool ValidText(string? text, int maximum) => !string.IsNullOrWhiteSpace(text) && text.Length <= maximum && !text.Any(character => char.IsControl(character) && character is not '\n' and not '\r' and not '\t');
 
     private static GiftCodeReward Clone(GiftCodeReward reward) => JsonSerializer.Deserialize<GiftCodeReward>(JsonSerializer.Serialize(reward, JsonOptions), JsonOptions)!;
@@ -131,5 +174,5 @@ public sealed class GiftBoxDispatch(IHnmoPlayerStateRowBackend backend)
 
     private sealed record SendRequest(string Actor, string Reason, Guid[] AccountIds, string TitleEn, string TitleVi, string MessageEn, string MessageVi, GiftCodeReward Reward, DateTime? ExpiresAtUtc);
 
-    private sealed record SendProof(string Fingerprint, int Recipients, string Actor, string Reason);
+    private sealed record SendProof(string Fingerprint, int Recipients, string Actor, string Reason, Guid[]? AccountIds = null);
 }

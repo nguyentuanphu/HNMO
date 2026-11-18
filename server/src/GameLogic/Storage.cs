@@ -319,6 +319,29 @@ public class Storage : IStorage
         }
     }
 
+    /// <summary>
+    /// Determines whether the slot belongs to this storage, or not.
+    /// Extensions are not considered here.
+    /// </summary>
+    /// <param name="slot">The slot.</param>
+    /// <returns>
+    ///   <c>true</c> if the slot belongs to this storage; otherwise, <c>false</c>.
+    /// </returns>
+    public bool ContainsSlot(byte slot)
+    {
+        if (slot < this._slotOffset)
+        {
+            return false;
+        }
+
+        if (slot >= this._slotOffset + this.ItemArray.Length)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /// <summary>Includes an already stored bag item in the grid cache without adding a persistent entity again.</summary>
     /// <param name="item">The same item instance already present in this storage's backing collection.</param>
     /// <returns>Whether its bag slot is cached safely; equipment and conflicting slots are refused.</returns>
@@ -342,29 +365,6 @@ public class Storage : IStorage
         }
 
         return this.Extensions.OfType<Storage>().Any(extension => extension.TryIncludeStoredBagItem(item));
-    }
-
-    /// <summary>
-    /// Determines whether the slot belongs to this storage, or not.
-    /// Extensions are not considered here.
-    /// </summary>
-    /// <param name="slot">The slot.</param>
-    /// <returns>
-    ///   <c>true</c> if the slot belongs to this storage; otherwise, <c>false</c>.
-    /// </returns>
-    public bool ContainsSlot(byte slot)
-    {
-        if (slot < this._slotOffset)
-        {
-            return false;
-        }
-
-        if (slot >= this._slotOffset + this.ItemArray.Length)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /// <summary>

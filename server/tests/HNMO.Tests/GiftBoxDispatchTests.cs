@@ -6,6 +6,7 @@ namespace HNMO.Tests;
 
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using HNMO.GameLogic.PlugIns.GiftBox;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.Persistence;
@@ -160,6 +161,38 @@ public class GiftBoxDispatchTests
         Parallel.For(0, 12, _ => Send(new GiftBoxDispatch(backend), id, [Ann, Bob]));
         Assert.That(backend.CountRows(GiftBoxDispatch.SendFeature), Is.EqualTo(1));
         Assert.That(backend.CountRows(GiftBoxDispatch.LetterFeature), Is.EqualTo(2));
+    }
+
+    /// <summary>A retry uses the original resolved recipients even if a newer all/recent cohort would differ.</summary>
+    [Test]
+    public void BulkRetryReadsItsOriginalFrozenAudience()
+    {
+        var box = new GiftBoxDispatch(new InMemoryHnmoPlayerStateRowBackend());
+        var id = Guid.NewGuid();
+        Send(box, id, [Ann, Bob]);
+        var original = box.ReadFrozenAudience(id)!;
+        Assert.That(original, Is.EquivalentTo(new[] { Ann, Bob }));
+        Assert.That(Send(box, id, original, now: Now.AddDays(1)), Is.EqualTo(2));
+        Assert.That(box.ReadFrozenAudience(Guid.NewGuid()), Is.Null);
+        ((Guid[])original)[0] = Guid.NewGuid();
+        Assert.That(box.ReadFrozenAudience(id), Is.EquivalentTo(new[] { Ann, Bob }));
+    }
+
+    /// <summary>The initial proof format recovers its audience from complete immutable letter rows.</summary>
+    [Test]
+    public void LegacyProofRecoversAudienceWithoutRecalculatingIt()
+    {
+        var backend = new InMemoryHnmoPlayerStateRowBackend();
+        var box = new GiftBoxDispatch(backend);
+        var id = Guid.NewGuid();
+        Send(box, id, [Ann, Bob]);
+        var row = backend.LoadAll(GiftBoxDispatch.SendFeature).Single();
+        var json = JsonNode.Parse(row.PayloadJson)!.AsObject();
+        json.Remove("accountIds");
+        backend.UpsertBatch([row with { PayloadJson = json.ToJsonString() }], []);
+        Assert.That(box.ReadFrozenAudience(id), Is.EquivalentTo(new[] { Ann, Bob }));
+        backend.UpsertBatch([], [(GiftBoxDispatch.LetterFeature, $"{Bob:N}:{id:N}")]);
+        Assert.Throws<InvalidDataException>(() => box.ReadFrozenAudience(id));
     }
 
     private static GiftCodeReward Reward() => new() { Coins = 10, Zen = 100, Items = [new() { Group = 0, Number = 1, Level = 3, Luck = true, Skill = true, OptionLevel = 2, ExcellentOptions = 5, Count = 2 }] };
