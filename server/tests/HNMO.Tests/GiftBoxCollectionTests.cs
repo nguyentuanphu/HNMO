@@ -5,6 +5,7 @@
 namespace HNMO.Tests;
 
 using System.IO;
+using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
@@ -13,6 +14,7 @@ using HNMO.GameLogic.PlugIns.GiftCodes;
 using HNMO.Persistence;
 using HNMO.Persistence.InMemory;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
 /// <summary>Actual goods and balance mutation, replay proof, full-bag refusal and uncertain-save recovery.</summary>
 [TestFixture]
@@ -198,6 +200,35 @@ public class GiftBoxCollectionTests
         Assert.That(results.Count(result => result.Status == "AlreadyCollected"), Is.EqualTo(7));
         Assert.That(this._account.WCoinC, Is.EqualTo(150));
         Assert.That(this._character.Inventory!.Items, Has.Count.EqualTo(2));
+    }
+
+    /// <summary>Preparation failure detaches new roots before any later account save can commit an unproved gift.</summary>
+    [Test]
+    public async Task ItemCreationFailureLeavesNoOrphanOrReceiptAsync()
+    {
+        var letter = this.Send();
+        var query = new Mock<IPlayerContext>();
+        query.Setup(context => context.GetCashShopCoinGrantByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync((CashShopCoinGrant?)null);
+        query.Setup(context => context.CreateNew<CashShopCoinGrant>(It.IsAny<object?[]>())).Returns(() => this._context.CreateNew<CashShopCoinGrant>());
+        var made = 0;
+        query.Setup(context => context.CreateNew<Item>(It.IsAny<object?[]>())).Returns(() =>
+        {
+            if (++made == 2)
+            {
+                throw new InvalidOperationException("injected item preparation failure");
+            }
+
+            return this._context.CreateNew<Item>();
+        });
+        query.Setup(context => context.Detach(It.IsAny<object>())).Returns((object item) => this._context.Detach(item));
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await this._collection.CollectAsync(query.Object, this._account, letter, this._character.GetId(), Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false));
+        Assert.That(this._account.WCoinC, Is.EqualTo(100));
+        Assert.That(this._character.Inventory!.Money, Is.EqualTo(1000));
+        Assert.That(this._character.Inventory.Items, Is.Empty);
+        await this._context.SaveChangesAsync().ConfigureAwait(false);
+        Assert.That(await this._context.GetRepository<Item>().GetAllAsync().ConfigureAwait(false), Is.Empty);
+        Assert.That(await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false), Is.Empty);
+        Assert.That((await this.CollectAsync(letter).ConfigureAwait(false)).Status, Is.EqualTo("Applied"));
     }
 
     private Guid Send(GiftCodeReward? reward = null)

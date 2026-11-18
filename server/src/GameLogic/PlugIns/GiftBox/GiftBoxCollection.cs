@@ -141,27 +141,47 @@ public sealed class GiftBoxCollection(GiftBoxDispatch dispatch, GameConfiguratio
                 return new(plan.Status.ToString());
             }
 
-            var items = plan.Items.Select(item =>
+            var created = context.CreateNew<CashShopCoinGrant>();
+            var items = new List<Item>();
+            GiftBoxReceipt completed;
+            try
             {
-                var persistent = item.MakePersistent(context);
-                persistent.ItemSlot = item.ItemSlot;
-                return persistent;
-            }).ToArray();
-            foreach (var item in items)
+                foreach (var planned in plan.Items)
+                {
+                    // Capture each new root before copying options, so preparation failure cannot leave
+                    // an unproved item for an unrelated later save to commit.
+                    var item = context.CreateNew<Item>();
+                    items.Add(item);
+                    item.AssignValues(planned);
+                    item.ItemSlot = planned.ItemSlot;
+                }
+
+                completed = new(ReceiptKind, account.GetId(), letterId, characterId, items.Select(item => item.GetId()).ToArray(), reward.Zen, reward.Coins, reward.CoinType, letter.TitleEn, letter.TitleVi);
+                created.AccountId = account.GetId();
+                created.Reference = Reference(account.GetId(), letterId);
+                created.GrantedBy = GrantedBy;
+                created.CoinType = reward.CoinType;
+                created.Amount = reward.Coins;
+                created.Reason = JsonSerializer.Serialize(completed);
+                created.CreatedAt = nowUtc;
+                created.AppliedAt = nowUtc;
+                foreach (var item in items)
+                {
+                    inventory.Items.Add(item);
+                }
+            }
+            catch
             {
-                inventory.Items.Add(item);
+                foreach (var item in items)
+                {
+                    inventory.Items.Remove(item);
+                    context.Detach(item);
+                }
+
+                context.Detach(created);
+                throw;
             }
 
-            var completed = new GiftBoxReceipt(ReceiptKind, account.GetId(), letterId, characterId, items.Select(item => item.GetId()).ToArray(), reward.Zen, reward.Coins, reward.CoinType, letter.TitleEn, letter.TitleVi);
-            var created = context.CreateNew<CashShopCoinGrant>();
-            created.AccountId = account.GetId();
-            created.Reference = Reference(account.GetId(), letterId);
-            created.GrantedBy = GrantedBy;
-            created.CoinType = reward.CoinType;
-            created.Amount = reward.Coins;
-            created.Reason = JsonSerializer.Serialize(completed);
-            created.CreatedAt = nowUtc;
-            created.AppliedAt = nowUtc;
             inventory.Money += reward.Zen;
             account.SetCashShopCoins(reward.CoinType, coins + reward.Coins);
             tracked.Add(letterId, created);
