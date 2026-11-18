@@ -4,6 +4,7 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.GameServer;
 using HNMO.Interfaces;
 using HNMO.Persistence.Worlds;
@@ -69,10 +70,14 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers, Wor
             {
                 var context = server.Context;
                 var config = context.Configuration;
+                var (dropRate, zenRate) = GameServerRateStore.OpenDefault().GetRates(context.Id);
                 worldByServerId.TryGetValue(context.Id, out var ownerWorld);
                 return new
                 {
                     id = context.Id,
+                    description = server.Description,
+                    vipOnly = GameServerRateStore.IsVipOnly(context),
+                    pvpEnabled = context.PvpEnabled,
                     worldId = ownerWorld?.WorldId ?? "main",
                     worldNameEn = ownerWorld?.NameEn ?? "World 1",
                     worldNameVi = ownerWorld?.NameVi ?? "Thế giới 1",
@@ -83,6 +88,8 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers, Wor
                     capacity = context.ServerConfiguration.MaximumPlayers,
                     config.ExperienceRate,
                     config.MasterExperienceRate,
+                    dropRate,
+                    zenRate,
                     config.MaximumLevel,
                     config.MaximumMasterLevel,
                     config.MaximumPartySize,

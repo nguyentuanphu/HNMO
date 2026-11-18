@@ -1,6 +1,7 @@
 // The login flow of the client (Scenes/LoginScene, CharacterScene): server list from
 // the connect server, then login and character list on the chosen game server.
 
+import { currentLanguage } from '../i18n.js';
 import { Connection } from './connection.js';
 import type { ServerAddress } from './connection.js';
 import { read } from './packets.js';
@@ -62,6 +63,23 @@ export interface CharacterInformation extends PacketValues {
   MapId: number;
 }
 
+export const LOGIN_NO_CHARGE_INFO = 9;
+export const LOGIN_SUBSCRIPTION_OVER = 10;
+
+export class LoginRefusedError extends Error {
+  readonly code: number;
+
+  constructor(code: number, message: string) {
+    super(message);
+    this.name = 'LoginRefusedError';
+    this.code = code;
+  }
+
+  get isVipRefusal(): boolean {
+    return this.code === LOGIN_NO_CHARGE_INFO || this.code === LOGIN_SUBSCRIPTION_OVER;
+  }
+}
+
 const LOGIN_RESULTS: Record<number, string> = {
   0: 'Wrong password.',
   1: 'OK',
@@ -72,6 +90,21 @@ const LOGIN_RESULTS: Record<number, string> = {
   6: 'Your client version is too old for this server.',
   8: 'Too many failed logins. Try again later.',
 };
+
+export function loginResultMessage(code: number): string {
+  const vi = currentLanguage() === 'vi';
+  if (code === LOGIN_NO_CHARGE_INFO) {
+    return vi
+      ? 'Máy chủ này chỉ dành cho thành viên VIP.'
+      : 'This server is for VIP members only.';
+  }
+  if (code === LOGIN_SUBSCRIPTION_OVER) {
+    return vi
+      ? 'Thời hạn VIP vào máy chủ này đã hết.'
+      : 'Your VIP access for this server has expired.';
+  }
+  return LOGIN_RESULTS[code] ?? `Login refused (code ${code}).`;
+}
 
 function xor3Field(text: string, length: number): Uint8Array {
   const bytes = new Uint8Array(length);
@@ -123,7 +156,7 @@ export async function login(relayUrl: string, gameServer: ServerAddress, usernam
   }, 'ServerToClient', 'LoginResponse');
   if (response.Success !== LOGIN_OK) {
     connection.close();
-    throw new Error(LOGIN_RESULTS[response.Success] ?? `Login refused (code ${response.Success}).`);
+    throw new LoginRefusedError(response.Success, loginResultMessage(response.Success));
   }
   connection.playerId = welcome.PlayerId;
   return connection;
@@ -141,7 +174,7 @@ export async function loginWithTicket(relayUrl: string, gameServer: ServerAddres
   }, 'ServerToClient', 'LoginResponse');
   if (response.Success !== LOGIN_OK) {
     connection.close();
-    throw new Error(LOGIN_RESULTS[response.Success] ?? `Login refused (code ${response.Success}).`);
+    throw new LoginRefusedError(response.Success, loginResultMessage(response.Success));
   }
   connection.playerId = welcome.PlayerId;
   return connection;
