@@ -6778,4 +6778,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoVipRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII JSON with action, optional operationId, levelId, days and offerToken; at most 247 bytes.</param>
+    /// <remarks>
+    /// Is sent by the client when: The signed-in player opens the VIP window, confirms an offer or claims daily coins.
+    /// Causes reaction on server side: The server validates the session and sends HnmoVipState without accepting client prices or account identity.
+    /// </remarks>
+    public static async ValueTask SendHnmoVipRequestAsync(this IConnection? connection, uint @requestId, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoVipRequestRef.GetRequiredSize(json);
+            var packet = new HnmoVipRequestRef(connection.Output.GetSpan(length)[..length]);
+            packet.RequestId = @requestId;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

@@ -6,7 +6,7 @@ namespace HNMO.GameLogic.PlugIns.Vip;
 
 using HNMO.DataModel.Configuration;
 
-/// <summary>Opt-in VIP rules. These defaults do not register or enable a gameplay feature.</summary>
+/// <summary>Opt-in VIP rules. New purchases stay disabled until explicitly enabled by the host.</summary>
 public sealed class VipConfiguration
 {
     /// <summary>Gets or sets a value indicating whether VIP rules may authorize new activity.</summary>

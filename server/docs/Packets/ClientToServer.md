@@ -208,6 +208,7 @@
   * [C1 F5 20 - HnmoAccountSafetyRequest (by client)](C1-F5-20-HnmoAccountSafetyRequest_by-client.md)
   * [C1 F5 22 - HnmoAccountSafetyAction (by client)](C1-F5-22-HnmoAccountSafetyAction_by-client.md)
   * [C1 F5 24 - HnmoTicketLogin (by client)](C1-F5-24-HnmoTicketLogin_by-client.md)
+  * [C1 F5 25 - HnmoVipRequest (by client)](C1-F5-25-HnmoVipRequest_by-client.md)
   * [C1 F5 30 - HnmoTopUpMilestonesCommand (by client)](C1-F5-30-HnmoTopUpMilestonesCommand_by-client.md)
   * [C1 F5 32 - HnmoTimetableCommand (by client)](C1-F5-32-HnmoTimetableCommand_by-client.md)
   * [C1 F5 34 - HnmoLuckyNumberCommand (by client)](C1-F5-34-HnmoLuckyNumberCommand_by-client.md)
