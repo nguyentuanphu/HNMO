@@ -111,6 +111,7 @@ export const accountPageTexts = {
   rateError: ['Too many requests. Please try again shortly.', 'Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau ít phút.'],
   busy: ['Loading…', 'Đang tải…'],
   vipPurchaseReason: ['VIP {0}: {1} days', 'VIP {0}: {1} ngày'],
+  vipRemovalReason: ['VIP removed by the host', 'Chủ máy chủ đã thu hồi VIP'],
   vipDailyReason: ['VIP daily reward: {0}', 'Quà VIP hằng ngày: {0}'],
 } as const;
 

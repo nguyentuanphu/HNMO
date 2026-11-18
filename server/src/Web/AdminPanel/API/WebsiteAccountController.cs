@@ -93,16 +93,18 @@ public sealed class WebsiteAccountController(
             {
                 var vip = VipWallet.ReadReceipt(g.Reason);
                 var daily = VipDailyCoins.ReadReceipt(g.Reason);
+                var removed = VipWallet.ReadRemovalReceipt(g.Reason);
                 return new
                 {
                     g.Id,
                     coinType = g.CoinType.ToString(),
                     g.Amount,
-                    reason = vip is not null || daily is not null ? null : g.Reason,
+                    reason = vip is not null || daily is not null || removed is not null ? null : g.Reason,
                     purchase = CashShopPurchaseReceipt.Read(g.Reason),
                     balanceChange = CashShopBalanceReceipt.Read(g.Reason),
                     vipPurchase = vip is null ? null : new { vip.Intent.NameEn, vip.Intent.NameVi, vip.Intent.Plan.Days },
                     vipDaily = daily is null ? null : new { daily.NameEn, daily.NameVi },
+                    vipRemoved = removed is not null,
                     createdAt = DateTime.SpecifyKind(g.CreatedAt, DateTimeKind.Utc),
                     pending = g.AppliedAt is null,
                 };

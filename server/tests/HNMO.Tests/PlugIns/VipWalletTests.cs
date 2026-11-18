@@ -604,7 +604,6 @@ public class VipWalletTests
         var foreign = this._context.CreateNew<AccountAttributeGrant>();
         foreign.Attribute = this._game.Attributes.Single(value => value.Id == Stats.BonusExperienceRate.Id);
         foreign.Value = 0.1f;
-        foreign.ValidFrom = Now;
         foreign.ValidUntil = Now.AddDays(30);
         this._account.AttributeGrants.Add(foreign);
         var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);
@@ -615,7 +614,7 @@ public class VipWalletTests
         Assert.That(this._account.WCoinC, Is.EqualTo(900));
         Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, Now.AddHours(1)), Is.Zero);
         Assert.That(this._account.GetAccountAttributeValue(Stats.BonusExperienceRate, Now.AddHours(1)), Is.EqualTo(0.1f));
-        var row = (await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false)).Single(value => value.Reference.StartsWith("vipremove:", StringComparison.Ordinal));
+        var row = (await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false)).Single(value => value.Reference?.StartsWith("vipremove:", StringComparison.Ordinal) == true);
         Assert.That(row.Amount, Is.Zero);
         Assert.That(VipWallet.ReadRemovalReceipt(row.Reason)!.Intent.Attribution, Is.EqualTo(actor));
         Assert.That(this._store.Data.Memberships, Is.Empty);
@@ -647,7 +646,7 @@ public class VipWalletTests
         Assert.That(this._account.WCoinC, Is.EqualTo(900));
         Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, Now.AddHours(2)), Is.Zero);
         var rows = await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false);
-        Assert.That(rows.Count(value => value.Reference.StartsWith("vipremove:", StringComparison.Ordinal)), Is.EqualTo(1));
+        Assert.That(rows.Count(value => value.Reference?.StartsWith("vipremove:", StringComparison.Ordinal) == true), Is.EqualTo(1));
     }
 
     /// <summary>Unowned legacy VIP and missing reasons cannot be removed by this plug-in.</summary>
@@ -658,7 +657,6 @@ public class VipWalletTests
         var foreign = this._context.CreateNew<AccountAttributeGrant>();
         foreign.Attribute = this._game.Attributes.Single(value => value.Id == Stats.IsVip.Id);
         foreign.Value = 5;
-        foreign.ValidFrom = Now;
         foreign.ValidUntil = Now.AddDays(30);
         this._account.AttributeGrants.Add(foreign);
         var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);

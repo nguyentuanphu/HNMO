@@ -36,5 +36,4 @@ public sealed class VipState
 
     /// <summary>Gets or sets confirmed host removal identifiers for projection and audit replay protection.</summary>
     public HashSet<Guid> RemovedOperations { get; set; } = [];
-
 }

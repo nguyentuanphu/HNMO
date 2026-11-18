@@ -65,5 +65,4 @@ public sealed class VipAdministration(VipConfiguration configuration, VipStateSt
     /// <returns>The confirmed, pending or conflicting result.</returns>
     public ValueTask<VipWalletResult> RemoveAsync(IPlayerContext context, Account account, Guid operationId, VipAdministrativeGrant attribution, DateTime nowUtc, Func<ValueTask<bool>> save)
         => new VipWallet(configuration, store, gameConfiguration, logger).RemoveFromHostAsync(context, account, operationId, attribution, nowUtc, save);
-
 }

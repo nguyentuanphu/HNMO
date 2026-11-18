@@ -5,9 +5,11 @@
 namespace HNMO.Web.Tests.Api;
 
 using System.Globalization;
+using System.Text.Json;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Persistence.InMemory;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
@@ -49,6 +51,29 @@ public class CashShopHistoryTextTests
             var legacy = context.CreateNew<CashShopCoinGrant>();
             legacy.Reason = "Host-written compensation";
             Assert.That(CashShopHistoryText.Format(legacy.Reason), Is.EqualTo(legacy.Reason));
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = previous;
+            Resources.Culture = previousResource;
+        }
+    }
+
+    /// <summary>Removal histories use a bilingual label without exposing staff attribution or reason metadata.</summary>
+    /// <param name="language">The supported admin language.</param>
+    [TestCase("en")]
+    [TestCase("vi")]
+    public void RedactsRemovalMetadata(string language)
+    {
+        var previous = CultureInfo.CurrentUICulture;
+        var previousResource = Resources.Culture;
+        try
+        {
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
+            Resources.Culture = CultureInfo.CurrentUICulture;
+            var intent = new VipRemovalIntent(Guid.NewGuid(), Guid.NewGuid(), "ANN", new("private-host", "private investigation"), DateTime.UtcNow, [Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()]);
+            var label = CashShopHistoryText.Format(JsonSerializer.Serialize(new VipRemovalReceipt("vip-remove-v1", intent)));
+            Assert.That(label, Is.EqualTo(language == "vi" ? "Chủ máy chủ đã thu hồi VIP" : "VIP removed by the host"));
         }
         finally
         {

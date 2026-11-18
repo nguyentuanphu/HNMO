@@ -649,5 +649,4 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
 
         return new("Applied");
     }
-
 }

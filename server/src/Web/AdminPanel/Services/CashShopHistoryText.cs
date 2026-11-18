@@ -26,6 +26,11 @@ public static class CashShopHistoryText
             return string.Format(culture, Resources.VipCoinHistoryPurchase, name, vip.Intent.Plan.Days);
         }
 
+        if (VipWallet.ReadRemovalReceipt(reason) is not null)
+        {
+            return Resources.VipCoinHistoryRemoved;
+        }
+
         if (VipDailyCoins.ReadReceipt(reason) is { } daily)
         {
             var name = culture.TwoLetterISOLanguageName == "vi" ? daily.NameVi : daily.NameEn;

@@ -4753,4 +4753,5 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="VipCoinHistoryDaily" xml:space="preserve">
     <value>Quà VIP hằng ngày: {0}</value>
   </data>
+  <data name="VipCoinHistoryRemoved" xml:space="preserve"><value>Chủ máy chủ đã thu hồi VIP</value></data>
 </root>
