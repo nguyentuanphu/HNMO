@@ -30,6 +30,8 @@ public class EscrowPageTests
         Assert.That(cfg.DirectVndComplianceAcknowledged, Is.False);
         Assert.That(cfg.HostVndEnabled, Is.False);
         Assert.That(cfg.HostVndComplianceAcknowledged, Is.False);
+        Assert.That(cfg.TradeCreditEnabled, Is.False);
+        Assert.That(cfg.TradeCreditComplianceAcknowledged, Is.False);
         Assert.That(cfg.RequireSecondPassword, Is.True);
         Assert.That(cfg.BannedItems, Is.Not.Empty);
         Assert.That(cfg.AllowedCurrencies, Does.Contain(EscrowCurrency.WCoinC));
@@ -37,5 +39,7 @@ public class EscrowPageTests
 
         var webhookMethod = typeof(HNMO.Web.AdminPanel.API.WebsiteEscrowController).GetMethod("DirectWebhookAsync");
         Assert.That(webhookMethod, Is.Not.Null);
+        var csvMethod = typeof(HNMO.Web.AdminPanel.API.WebsiteEscrowController).GetMethod("ExportTradeCreditCsvAsync");
+        Assert.That(csvMethod, Is.Not.Null);
     }
 }

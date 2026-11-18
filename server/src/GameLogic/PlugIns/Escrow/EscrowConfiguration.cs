@@ -147,4 +147,31 @@ public sealed class EscrowConfiguration
 
     /// <summary>Gets or sets post-delivery dispute window hours before seller payout clears.</summary>
     public int HostVndDisputeWindowHours { get; set; } = 24;
+
+    /// <summary>Gets or sets a value indicating whether convertible Trade Credit currency is enabled (OFF by default, highest risk).</summary>
+    public bool TradeCreditEnabled { get; set; }
+
+    /// <summary>Gets or sets a value indicating whether host ticked highest-risk Vietnamese legal compliance acknowledgement for Trade Credit.</summary>
+    public bool TradeCreditComplianceAcknowledged { get; set; }
+
+    /// <summary>Gets or sets fixed VND value per 1 Trade Credit unit (e.g. 1000 VND = 1 TC).</summary>
+    public long TradeCreditVndPerUnit { get; set; } = 1000;
+
+    /// <summary>Gets or sets normal WCoinC granted per 1 Trade Credit converted one-way (0 = disallow coin conversion).</summary>
+    public int TradeCreditToCoinRate { get; set; } = 1;
+
+    /// <summary>Gets or sets hours sellers must hold earned cash-sale proceeds before cashing out (default 72h).</summary>
+    public int TradeCreditCashOutHoldHours { get; set; } = 72;
+
+    /// <summary>Gets or sets cash-out fee percentage (0..25%).</summary>
+    public double TradeCreditCashOutFeePercent { get; set; } = 5.0;
+
+    /// <summary>Gets or sets minimum cash-out fee in Trade Credit units.</summary>
+    public long TradeCreditCashOutMinFeeUnits { get; set; } = 5;
+
+    /// <summary>Gets or sets daily Trade Credit cash-out cap per account (0 = unlimited).</summary>
+    public long TradeCreditCashOutDailyLimitUnits { get; set; } = 5000;
+
+    /// <summary>Gets or sets monthly Trade Credit cash-out cap per account (0 = unlimited).</summary>
+    public long TradeCreditCashOutMonthlyLimitUnits { get; set; } = 20_000;
 }

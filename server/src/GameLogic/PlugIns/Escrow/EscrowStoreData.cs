@@ -29,4 +29,16 @@ public sealed class EscrowStoreData
 
     /// <summary>Gets or sets consumed signed webhook nonces for replay protection.</summary>
     public List<EscrowWebhookNonceEntry> UsedWebhookNonces { get; set; } = [];
+
+    /// <summary>Gets or sets Trade Credit per-account balances and proceed lots keyed by login.</summary>
+    public Dictionary<string, TradeCreditAccountState> TradeCreditAccounts { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Gets or sets Trade Credit double-entry ledger entries (newest first).</summary>
+    public List<TradeCreditLedgerEntry> TradeCreditLedger { get; set; } = [];
+
+    /// <summary>Gets or sets Trade Credit cash-out payout queue.</summary>
+    public List<TradeCreditCashOutRequest> TradeCreditCashOuts { get; set; } = [];
+
+    /// <summary>Gets or sets latest Trade Credit circulation reconciliation report.</summary>
+    public TradeCreditReconciliationReport? LastTradeCreditReconciliation { get; set; }
 }

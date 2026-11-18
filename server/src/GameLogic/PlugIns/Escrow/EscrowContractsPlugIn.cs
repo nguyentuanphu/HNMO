@@ -180,6 +180,14 @@ public sealed class EscrowContractsPlugIn :
         return new EscrowHostVndEngine(core.Configuration, core.Store);
     }
 
+    /// <summary>Gets the Trade Credit double-entry engine sharing the same atomic store.</summary>
+    /// <returns>Active <see cref="EscrowTradeCreditEngine"/>.</returns>
+    public EscrowTradeCreditEngine GetTradeCreditEngine()
+    {
+        var core = this.GetEngine();
+        return new EscrowTradeCreditEngine(core.Configuration, core.Store);
+    }
+
     /// <inheritdoc />
     public void ForceStart() => this._lastExpireUtc = DateTime.MinValue;
 
@@ -202,6 +210,11 @@ public sealed class EscrowContractsPlugIn :
         var expired = this.GetEngine().ExpireDueContracts(now);
         var directChanged = this.GetDirectEngine().ProcessTimeouts(now);
         var hostChanged = this.GetHostEngine().ProcessHostTimeouts(now);
+        if (EscrowTradeCreditEngine.IsCompliantAndEnabled(cfg))
+        {
+            this.GetTradeCreditEngine().Reconcile(now);
+        }
+
         if (expired > 0 || directChanged > 0 || hostChanged > 0)
         {
             ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
@@ -344,6 +357,15 @@ public sealed class EscrowContractsPlugIn :
                 case 12: // ReserveHostVnd
                     await this.ReserveHostVndFromPlayerAsync(player, root).ConfigureAwait(false);
                     break;
+                case 13: // RegisterTradeCreditBank
+                    await this.RegisterTradeCreditBankFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 14: // ConvertTradeCreditToCoins
+                    await this.ConvertTradeCreditFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 15: // RequestTradeCreditCashOut
+                    await this.RequestCashOutFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
                 default:
                     await this.SendStateAsync(player, requested: true).ConfigureAwait(false);
                     break;
@@ -390,6 +412,9 @@ public sealed class EscrowContractsPlugIn :
 
         var jewelBalances = JewelBankStore.Open(cfg.JewelBankFileName).Read(d =>
             d.Accounts.TryGetValue(login, out var m) ? m : new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase));
+        var tcEnabled = EscrowTradeCreditEngine.IsCompliantAndEnabled(cfg);
+        var tcAcct = this.GetTradeCreditEngine().GetAccount(login);
+        var nowUtc = DateTime.UtcNow;
 
         var snapshot = engine.Store.Read(data => new
         {
@@ -402,7 +427,10 @@ public sealed class EscrowContractsPlugIn :
             minFee = cfg.MinFee,
             maxFee = cfg.MaxFee,
             feePayer = cfg.FeePayer.ToString(),
-            allowedCurrencies = cfg.AllowedCurrencies.Select(c => c.ToString()).ToList(),
+            allowedCurrencies = cfg.AllowedCurrencies
+                .Where(c => c != EscrowCurrency.TradeCredit || tcEnabled)
+                .Select(c => c.ToString())
+                .ToList(),
             highValueCoins = cfg.HighValueThresholdCoins,
             highValueZen = cfg.HighValueThresholdZen,
             highValueJewels = cfg.HighValueThresholdJewels,
@@ -423,6 +451,23 @@ public sealed class EscrowContractsPlugIn :
             hostVndPaymentWindowMinutes = cfg.HostVndPaymentWindowMinutes,
             hostVndPayoutDays = cfg.HostVndPayoutDays,
             hostVndDisputeWindowHours = cfg.HostVndDisputeWindowHours,
+            tradeCreditEnabled = tcEnabled,
+            tradeCreditVndPerUnit = cfg.TradeCreditVndPerUnit,
+            tradeCreditToCoinRate = cfg.TradeCreditToCoinRate,
+            tradeCreditHoldHours = cfg.TradeCreditCashOutHoldHours,
+            tradeCreditFeePercent = cfg.TradeCreditCashOutFeePercent,
+            tradeCreditMinFeeUnits = cfg.TradeCreditCashOutMinFeeUnits,
+            tradeCreditAccount = new
+            {
+                spendableUnits = tcAcct.SpendableUnits,
+                generalUnits = tcAcct.GeneralUnits,
+                eligibleCashOutUnits = tcAcct.EligibleCashOutUnits(nowUtc),
+                lockedCashOutUnits = tcAcct.LockedCashOutUnits,
+                bankLocked = tcAcct.BankLocked,
+                verifiedBankName = tcAcct.VerifiedBankName,
+                verifiedBankAccountNumber = tcAcct.VerifiedBankAccountNumber,
+                verifiedBankAccountName = tcAcct.VerifiedBankAccountName,
+            },
             reputation = data.Reputations.TryGetValue(login, out var rep) ? rep : new EscrowReputationEntry { LoginName = login },
             bagItems,
             jewelBalances,
@@ -562,6 +607,15 @@ public sealed class EscrowContractsPlugIn :
         "HostVndDisabledOrUnacknowledged" => ("Host-mediated VND contracts are disabled or missing legal acknowledgement.", "Hợp đồng VND qua chủ server đang tắt hoặc chưa xác nhận pháp lý."),
         "HostBankNotConfigured" => ("Host bank account is not configured yet in /escrow-contracts.", "Tài khoản ngân hàng nhận tiền của chủ server chưa được cấu hình."),
         "DisputeWindowClosed" => ("Dispute window has expired for this contract.", "Đã hết thời gian mở tranh chấp cho hợp đồng này."),
+        "TradeCreditDisabledOrUnacknowledged" => ("Trade Credit currency is disabled or missing compliance acknowledgement.", "Tiền Tín dụng GD đang tắt hoặc chưa xác nhận pháp lý."),
+        "BankAlreadyLocked" => ("Verified payout bank is already locked; ask an admin to change it.", "Tài khoản ngân hàng rút tiền đã khóa sau lần nhập đầu; liên hệ QTV nếu cần đổi."),
+        "ConversionDisabled" => ("Trade Credit to coin conversion is disabled.", "Chức năng đổi Tín dụng sang Xu đang tắt."),
+        "InsufficientTradeCredit" => ("Insufficient Trade Credit balance.", "Không đủ số dư Tín dụng giao dịch."),
+        "VerifiedBankRequired" => ("Register your verified payout bank account first.", "Vui lòng lưu tài khoản ngân hàng rút tiền trước."),
+        "NoMaturedProceeds" => ("Only matured cash-sale proceeds (after hold period) can be cashed out.", "Chỉ tiền thu từ hợp đồng bán đã qua thời gian giữ mới được rút."),
+        "DailyCashOutLimitExceeded" => ("Daily Trade Credit cash-out limit reached.", "Đã vượt hạn mức rút tiền Tín dụng trong ngày."),
+        "MonthlyCashOutLimitExceeded" => ("Monthly Trade Credit cash-out limit reached.", "Đã vượt hạn mức rút tiền Tín dụng trong tháng."),
+        "AmountBelowMinFee" => ("Cash-out amount must exceed the minimum withdrawal fee.", "Số lượng rút phải lớn hơn phí rút tối thiểu."),
         _ => ($"Escrow action failed ({err}).", $"Thao tác ký gửi thất bại ({err})."),
     };
 
@@ -1021,6 +1075,80 @@ public sealed class EscrowContractsPlugIn :
         await this.SendStateAsync(player, true, $"Reserved {reserved.ContractId}. Pay Host VietQR {reserved.PriceAmount:N0} VND with ref {reserved.HostVnd?.PaymentReference}.", $"Đã giữ {reserved.ContractId}. Chuyển qua VietQR chủ server {reserved.PriceAmount:N0} VNĐ kèm nội dung {reserved.HostVnd?.PaymentReference}.").ConfigureAwait(false);
     }
 
+    private async ValueTask RegisterTradeCreditBankFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var cfg = this.GetEngine().Configuration;
+        var err = this.GetTradeCreditEngine().RegisterVerifiedBankOnce(
+            login,
+            ReadString(json, "bankBin"),
+            ReadString(json, "bankName"),
+            ReadString(json, "bankAccountNumber"),
+            ReadString(json, "bankAccountName"),
+            DateTime.UtcNow);
+        if (err != "Ok")
+        {
+            var (en, vi) = TranslateError(err, cfg);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        await this.SendStateAsync(player, true, "Verified payout bank saved and locked.", "Đã lưu và khóa tài khoản ngân hàng rút tiền.").ConfigureAwait(false);
+    }
+
+    private async ValueTask ConvertTradeCreditFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var cfg = this.GetEngine().Configuration;
+        if (!await this.VerifySecondPasswordAsync(player, cfg, ReadString(json, "pin")).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        var (err, coins) = this.GetTradeCreditEngine().ConvertToCoins(login, Math.Max(0, ReadLong(json, "units")), DateTime.UtcNow);
+        if (err != "Ok")
+        {
+            var (en, vi) = TranslateError(err, cfg);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        await this.ClaimOwedAsync(player, silentWhenEmpty: true).ConfigureAwait(false);
+        await this.SendStateAsync(player, true, $"Converted Trade Credit to {coins} WCoinC.", $"Đã đổi Tín dụng sang {coins} WCoinC.").ConfigureAwait(false);
+    }
+
+    private async ValueTask RequestCashOutFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login)
+        {
+            return;
+        }
+
+        var cfg = this.GetEngine().Configuration;
+        if (!await this.VerifySecondPasswordAsync(player, cfg, ReadString(json, "pin")).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        var (err, req) = this.GetTradeCreditEngine().RequestCashOut(login, Math.Max(0, ReadLong(json, "units")), DateTime.UtcNow);
+        if (err != "Ok" || req is null)
+        {
+            var (en, vi) = TranslateError(err, cfg);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        await this.SendStateAsync(player, true, $"Cash-out {req.RequestId} queued for {req.NetVnd:N0} VND.", $"Đã gửi yêu cầu rút tiền {req.RequestId}: {req.NetVnd:N0} VNĐ.").ConfigureAwait(false);
+    }
+
     private async ValueTask AcceptContractFromPlayerAsync(Player player, JsonElement? root)
     {
         if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login || player.SelectedCharacter?.Name is not { Length: > 0 } charName)
@@ -1099,6 +1227,15 @@ public sealed class EscrowContractsPlugIn :
                     bal[jk] -= (int)c.BuyerTotalDebit;
                     return (true, true);
                 }));
+        }
+        else if (targetContract.PriceCurrency == EscrowCurrency.TradeCredit)
+        {
+            (err, completed) = this.GetTradeCreditEngine().AcceptTradeCreditEscrow(
+                login,
+                charName,
+                contractId,
+                confirmHighValue,
+                now);
         }
         else
         {

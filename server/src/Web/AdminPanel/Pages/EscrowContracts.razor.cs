@@ -32,9 +32,14 @@ public partial class EscrowContracts : ComponentBase
     private EscrowConfiguration? _configuration;
     private List<EscrowContract> _contracts = [];
     private List<EscrowReputationEntry> _reputations = [];
+    private List<TradeCreditCashOutRequest> _tcCashOuts = [];
+    private TradeCreditReconciliationReport? _tcReconciliation;
     private string _bannedItemsText = string.Empty;
     private string _adminReason = string.Empty;
     private string _hostPayoutRef = string.Empty;
+    private string _tcTopUpLogin = string.Empty;
+    private long _tcTopUpUnits = 10;
+    private string _tcTopUpRef = string.Empty;
     private bool _banLosingAccount;
     private bool _isLoading = true;
     private bool _isSaving;
@@ -119,6 +124,9 @@ public partial class EscrowContracts : ComponentBase
             engine.ExpireDueContracts(DateTime.UtcNow);
             this._contracts = engine.Store.Read(d => d.Contracts.OrderByDescending(x => x.CreatedAtUtc).Take(100).ToList());
             this._reputations = engine.Store.Read(d => d.Reputations.Values.OrderByDescending(r => r.Score).ThenBy(r => r.LoginName).Take(50).ToList());
+            var tcEngine = new EscrowTradeCreditEngine(this._configuration, engine.Store);
+            this._tcReconciliation = tcEngine.Reconcile(DateTime.UtcNow);
+            this._tcCashOuts = engine.Store.Read(d => d.TradeCreditCashOuts.OrderByDescending(x => x.CreatedAtUtc).Take(100).ToList());
         }
         catch (Exception ex)
         {
@@ -156,6 +164,15 @@ public partial class EscrowContracts : ComponentBase
                 this.ToastService.ShowError(L(
                     "Please tick 'I understand' under the Vietnamese law notice before enabling Host-mediated VND.",
                     "Vui lòng đánh dấu 'Tôi hiểu' tại cảnh báo pháp lý Việt Nam trước khi bật VND qua chủ server."));
+                return;
+            }
+
+            if (cfg.TradeCreditEnabled && !cfg.TradeCreditComplianceAcknowledged)
+            {
+                cfg.TradeCreditEnabled = false;
+                this.ToastService.ShowError(L(
+                    "Please tick 'I understand' under the Trade Credit high-risk legal warning before enabling.",
+                    "Vui lòng đánh dấu 'Tôi hiểu' tại cảnh báo pháp lý mức cao của Tiền Tín dụng trước khi bật."));
                 return;
             }
 
@@ -358,5 +375,70 @@ public partial class EscrowContracts : ComponentBase
         });
         this.ToastService.ShowSuccess(L("Host VND dispute resolved.", "Đã xử lý tranh chấp VND hệ thống."));
         await this.LoadAsync().ConfigureAwait(true);
+    }
+
+    private async Task ReconcileTradeCreditAsync()
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var tc = new EscrowTradeCreditEngine(cfg, this.ResolveEngine().Store);
+        this._tcReconciliation = tc.Reconcile(DateTime.UtcNow);
+        if (this._tcReconciliation.IsBalanced)
+        {
+            this.ToastService.ShowSuccess(L("Trade Credit ledger balanced cleanly (0 variance).", "Đối soát Tín dụng khớp hoàn toàn (chênh lệch = 0)."));
+        }
+        else
+        {
+            this.ToastService.ShowError(L($"ALERT: Trade Credit mismatch detected ({this._tcReconciliation.VarianceUnits}).", $"CẢNH BÁO: Lệch sổ cái Tín dụng ({this._tcReconciliation.VarianceUnits})."));
+        }
+
+        await this.LoadAsync().ConfigureAwait(true);
+    }
+
+    private async Task IssueTradeCreditTopUpAsync()
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var tc = new EscrowTradeCreditEngine(cfg, this.ResolveEngine().Store);
+        var (err, _) = tc.TopUpCredit(this._tcTopUpLogin.Trim(), this._tcTopUpUnits, string.IsNullOrWhiteSpace(this._tcTopUpRef) ? $"ADM-{DateTime.UtcNow:yyyyMMddHHmmss}" : this._tcTopUpRef.Trim(), DateTime.UtcNow);
+        if (err == "Ok")
+        {
+            ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+            {
+                Id = $"esc-tctop-{Guid.NewGuid():N}",
+                TimestampUtc = DateTime.UtcNow,
+                Kind = ActivityKind.Trade,
+                Account = this._tcTopUpLogin.Trim(),
+                Details = $"Admin issued {this._tcTopUpUnits} Trade Credit top-up units",
+            });
+            this.ToastService.ShowSuccess(L("Issued Trade Credit top-up.", "Đã nạp Tín dụng giao dịch."));
+            await this.LoadAsync().ConfigureAwait(true);
+        }
+        else
+        {
+            this.ToastService.ShowError(L($"Top-up failed ({err}).", $"Nạp thất bại ({err})."));
+        }
+    }
+
+    private async Task MarkTradeCreditCashOutPaidAsync(string requestId)
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var tc = new EscrowTradeCreditEngine(cfg, this.ResolveEngine().Store);
+        var (err, req) = tc.MarkCashOutPaid(requestId, this._hostPayoutRef, DateTime.UtcNow);
+        if (err == "Ok" && req is not null)
+        {
+            ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+            {
+                Id = $"esc-tcout-{Guid.NewGuid():N}",
+                TimestampUtc = DateTime.UtcNow,
+                Kind = ActivityKind.Trade,
+                Account = req.AccountLogin,
+                Details = $"Marked Trade Credit cash-out paid {requestId} ({req.NetVnd:N0} VND)",
+            });
+            this.ToastService.ShowSuccess(L("Marked Trade Credit cash-out paid.", "Đã chi trả yêu cầu rút Tín dụng."));
+            await this.LoadAsync().ConfigureAwait(true);
+        }
+        else
+        {
+            this.ToastService.ShowError(L($"Cannot mark paid ({err}).", $"Không thể xác nhận ({err})."));
+        }
     }
 }
