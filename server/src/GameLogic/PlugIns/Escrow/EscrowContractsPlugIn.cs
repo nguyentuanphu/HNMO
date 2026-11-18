@@ -172,6 +172,14 @@ public sealed class EscrowContractsPlugIn :
         return new EscrowDirectVndEngine(core.Configuration, core.Store);
     }
 
+    /// <summary>Gets the Host-mediated VND rule engine sharing the same atomic store.</summary>
+    /// <returns>Active <see cref="EscrowHostVndEngine"/>.</returns>
+    public EscrowHostVndEngine GetHostEngine()
+    {
+        var core = this.GetEngine();
+        return new EscrowHostVndEngine(core.Configuration, core.Store);
+    }
+
     /// <inheritdoc />
     public void ForceStart() => this._lastExpireUtc = DateTime.MinValue;
 
@@ -193,7 +201,8 @@ public sealed class EscrowContractsPlugIn :
         this._lastExpireUtc = now;
         var expired = this.GetEngine().ExpireDueContracts(now);
         var directChanged = this.GetDirectEngine().ProcessTimeouts(now);
-        if (expired > 0 || directChanged > 0)
+        var hostChanged = this.GetHostEngine().ProcessHostTimeouts(now);
+        if (expired > 0 || directChanged > 0 || hostChanged > 0)
         {
             ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
             {
@@ -201,7 +210,7 @@ public sealed class EscrowContractsPlugIn :
                 TimestampUtc = now,
                 Kind = ActivityKind.Trade,
                 Account = "SYSTEM",
-                ItemSummary = $"Expired/updated {expired + directChanged} escrow contract(s)",
+                ItemSummary = $"Expired/updated {expired + directChanged + hostChanged} escrow contract(s)",
                 Details = "Auto-expired contracts returned goods or auto-escalated unpaid confirmations.",
             });
         }
@@ -296,6 +305,7 @@ public sealed class EscrowContractsPlugIn :
                 case 0: // RequestState
                     this.GetEngine().ExpireDueContracts(DateTime.UtcNow);
                     this.GetDirectEngine().ProcessTimeouts(DateTime.UtcNow);
+                    this.GetHostEngine().ProcessHostTimeouts(DateTime.UtcNow);
                     await this.SendStateAsync(player, requested: true, prefillTarget: targetPrefill).ConfigureAwait(false);
                     break;
                 case 1: // CreateContract
@@ -327,6 +337,12 @@ public sealed class EscrowContractsPlugIn :
                     break;
                 case 10: // OpenDispute
                     await this.OpenDisputeFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 11: // CreateHostVnd
+                    await this.CreateHostVndFromPlayerAsync(player, root).ConfigureAwait(false);
+                    break;
+                case 12: // ReserveHostVnd
+                    await this.ReserveHostVndFromPlayerAsync(player, root).ConfigureAwait(false);
                     break;
                 default:
                     await this.SendStateAsync(player, requested: true).ConfigureAwait(false);
@@ -400,6 +416,13 @@ public sealed class EscrowContractsPlugIn :
             directVndFeePayer = cfg.DirectVndFeePayer.ToString(),
             directVndMaxSellerBondCoins = cfg.DirectVndMaxSellerBondCoins,
             directVndMaxReceiptBytes = cfg.DirectVndMaxReceiptBytes,
+            hostVndEnabled = EscrowHostVndEngine.IsCompliantAndEnabled(cfg),
+            hostVndFeePercent = cfg.HostVndFeePercent,
+            hostVndMinFeeVnd = cfg.HostVndMinFeeVnd,
+            hostVndMaxFeeVnd = cfg.HostVndMaxFeeVnd,
+            hostVndPaymentWindowMinutes = cfg.HostVndPaymentWindowMinutes,
+            hostVndPayoutDays = cfg.HostVndPayoutDays,
+            hostVndDisputeWindowHours = cfg.HostVndDisputeWindowHours,
             reputation = data.Reputations.TryGetValue(login, out var rep) ? rep : new EscrowReputationEntry { LoginName = login },
             bagItems,
             jewelBalances,
@@ -414,14 +437,14 @@ public sealed class EscrowContractsPlugIn :
                     || string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .Take(100)
-                .Select(c => EscrowDirectVndEngine.ProjectForViewer(c, login))
+                .Select(c => EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login))
                 .ToList(),
             historyContracts = data.Contracts
                 .Where(c => c.Status is not EscrowContractStatus.Open and not EscrowContractStatus.Frozen and not EscrowContractStatus.ReservedForPayment and not EscrowContractStatus.BuyerMarkedPaid and not EscrowContractStatus.Disputed)
                 .Where(c => string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .Take(50)
-                .Select(c => EscrowDirectVndEngine.ProjectForViewer(c, login))
+                .Select(c => EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login))
                 .ToList(),
             owedDeliveries = data.OwedDeliveries
                 .Where(o => string.Equals(o.RecipientLogin, login, StringComparison.OrdinalIgnoreCase))
@@ -536,6 +559,9 @@ public sealed class EscrowContractsPlugIn :
         "NotSeller" => ("Only the seller can confirm receipt of funds.", "Chỉ người bán mới có quyền xác nhận đã nhận tiền."),
         "InvalidState" => ("Operation is not valid in the contract's current status.", "Thao tác không hợp lệ với trạng thái hợp đồng hiện tại."),
         "NotParticipant" => ("Only the seller or accepted buyer may dispute this contract.", "Chỉ người bán hoặc người mua mới có thể mở tranh chấp."),
+        "HostVndDisabledOrUnacknowledged" => ("Host-mediated VND contracts are disabled or missing legal acknowledgement.", "Hợp đồng VND qua chủ server đang tắt hoặc chưa xác nhận pháp lý."),
+        "HostBankNotConfigured" => ("Host bank account is not configured yet in /escrow-contracts.", "Tài khoản ngân hàng nhận tiền của chủ server chưa được cấu hình."),
+        "DisputeWindowClosed" => ("Dispute window has expired for this contract.", "Đã hết thời gian mở tranh chấp cho hợp đồng này."),
         _ => ($"Escrow action failed ({err}).", $"Thao tác ký gửi thất bại ({err})."),
     };
 
@@ -549,13 +575,18 @@ public sealed class EscrowContractsPlugIn :
         el.TryGetProperty(name, out var prop) && (prop.ValueKind == JsonValueKind.True || (prop.ValueKind == JsonValueKind.String && bool.TryParse(prop.GetString(), out var b) && b));
 
     private ValueTask CreateContractFromPlayerAsync(Player player, JsonElement? root) =>
-        this.CreateContractCoreAsync(player, root, directVnd: false);
+        this.CreateContractCoreAsync(player, root, EscrowDirectVndEngine.ModeName + ":none");
 
     private ValueTask CreateDirectVndFromPlayerAsync(Player player, JsonElement? root) =>
-        this.CreateContractCoreAsync(player, root, directVnd: true);
+        this.CreateContractCoreAsync(player, root, EscrowDirectVndEngine.ModeName);
 
-    private async ValueTask CreateContractCoreAsync(Player player, JsonElement? root, bool directVnd)
+    private ValueTask CreateHostVndFromPlayerAsync(Player player, JsonElement? root) =>
+        this.CreateContractCoreAsync(player, root, EscrowHostVndEngine.ModeName);
+
+    private async ValueTask CreateContractCoreAsync(Player player, JsonElement? root, string mode)
     {
+        var directVnd = string.Equals(mode, EscrowDirectVndEngine.ModeName, StringComparison.Ordinal);
+        var hostVnd = string.Equals(mode, EscrowHostVndEngine.ModeName, StringComparison.Ordinal);
         if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login || player.SelectedCharacter?.Name is not { Length: > 0 } charName)
         {
             return;
@@ -568,6 +599,12 @@ public sealed class EscrowContractsPlugIn :
         if (directVnd && !EscrowDirectVndEngine.IsCompliantAndEnabled(cfg))
         {
             await this.SendStateAsync(player, true, "Direct P2P VND mode is disabled.", "Hợp đồng VND trực tiếp hiện đang tắt.", true).ConfigureAwait(false);
+            return;
+        }
+
+        if (hostVnd && !EscrowHostVndEngine.IsCompliantAndEnabled(cfg))
+        {
+            await this.SendStateAsync(player, true, "Host-mediated VND mode is disabled.", "Hợp đồng VND qua chủ server hiện đang tắt.", true).ConfigureAwait(false);
             return;
         }
 
@@ -715,6 +752,22 @@ public sealed class EscrowContractsPlugIn :
                 ReadString(json, "bankAccountName"),
                 sellerBond,
                 ReadString(json, "webhookSecret"),
+                deadlineHours,
+                confirmHighValue,
+                now)
+            : hostVnd
+            ? this.GetHostEngine().CreateHostVndContract(
+                login,
+                charName,
+                targetBuyer,
+                snapshots,
+                escrowedZen,
+                jewelsList,
+                priceAmount,
+                ReadString(json, "bankBin"),
+                ReadString(json, "bankName"),
+                ReadString(json, "bankAccountNumber"),
+                ReadString(json, "bankAccountName"),
                 deadlineHours,
                 confirmHighValue,
                 now)
@@ -911,7 +964,12 @@ public sealed class EscrowContractsPlugIn :
         }
 
         var now = DateTime.UtcNow;
-        var (err, disputed) = this.GetDirectEngine().OpenDispute(login, ReadString(json, "contractId"), ReadString(json, "reason"), now);
+        var cid = ReadString(json, "contractId");
+        var reason = ReadString(json, "reason");
+        var existing = this.GetEngine().Store.Read(d => d.Contracts.FirstOrDefault(x => string.Equals(x.ContractId, cid, StringComparison.OrdinalIgnoreCase)));
+        var (err, disputed) = existing?.HostVnd is not null
+            ? this.GetHostEngine().OpenHostDispute(login, cid, reason, now)
+            : this.GetDirectEngine().OpenDispute(login, cid, reason, now);
         if (err != "Ok" || disputed is null)
         {
             var (en, vi) = TranslateError(err, this.GetEngine().Configuration);
@@ -926,10 +984,41 @@ public sealed class EscrowContractsPlugIn :
             Kind = ActivityKind.Trade,
             Account = login,
             PartnerAccount = string.Equals(login, disputed.SellerLogin, StringComparison.OrdinalIgnoreCase) ? disputed.AcceptedByLogin : disputed.SellerLogin,
-            Details = $"Opened dispute on {disputed.ContractId}: {disputed.DirectVnd?.DisputeReason}",
+            Details = $"Opened dispute on {disputed.ContractId}: {disputed.DirectVnd?.DisputeReason ?? disputed.HostVnd?.DisputeReason}",
         });
 
         await this.SendStateAsync(player, true, $"Dispute opened on {disputed.ContractId}. Admin will review.", $"Đã mở tranh chấp cho {disputed.ContractId}. QTV sẽ xem xét.").ConfigureAwait(false);
+    }
+
+    private async ValueTask ReserveHostVndFromPlayerAsync(Player player, JsonElement? root)
+    {
+        if (root is not { } json || player.Account?.LoginName is not { Length: > 0 } login || player.SelectedCharacter?.Name is not { Length: > 0 } charName)
+        {
+            return;
+        }
+
+        var cfg = this.GetEngine().Configuration;
+        var now = DateTime.UtcNow;
+        if (!EscrowEngine.MeetsAccountAgeRequirement(cfg, player.Account.RegistrationDate, now))
+        {
+            await this.SendStateAsync(player, true, $"Accounts must be at least {cfg.MinAccountAgeDays} day(s) old to use escrow.", $"Tài khoản phải đủ {cfg.MinAccountAgeDays} ngày tuổi mới được ký gửi.", true).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await this.VerifySecondPasswordAsync(player, cfg, ReadString(json, "pin")).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        var (err, reserved) = this.GetHostEngine().ReserveForHostPayment(login, charName, ReadString(json, "contractId"), now);
+        if (err != "Ok" || reserved is null)
+        {
+            var (en, vi) = TranslateError(err, cfg);
+            await this.SendStateAsync(player, true, en, vi, true).ConfigureAwait(false);
+            return;
+        }
+
+        await this.SendStateAsync(player, true, $"Reserved {reserved.ContractId}. Pay Host VietQR {reserved.PriceAmount:N0} VND with ref {reserved.HostVnd?.PaymentReference}.", $"Đã giữ {reserved.ContractId}. Chuyển qua VietQR chủ server {reserved.PriceAmount:N0} VNĐ kèm nội dung {reserved.HostVnd?.PaymentReference}.").ConfigureAwait(false);
     }
 
     private async ValueTask AcceptContractFromPlayerAsync(Player player, JsonElement? root)

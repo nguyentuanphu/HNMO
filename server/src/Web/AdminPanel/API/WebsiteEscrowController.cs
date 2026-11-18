@@ -61,7 +61,7 @@ public sealed class WebsiteEscrowController(
                 .Where(c => c.Status == EscrowContractStatus.Open && string.IsNullOrWhiteSpace(c.TargetBuyer))
                 .OrderByDescending(c => c.CreatedAtUtc)
                 .Take(100)
-                .Select(c => ToPublicContractDto(EscrowDirectVndEngine.ProjectForViewer(c, string.Empty)))
+                .Select(c => ToPublicContractDto(EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, string.Empty), string.Empty)))
                 .ToList();
             var feeTotals = data.FeeLedger
                 .GroupBy(f => f.Currency, StringComparer.OrdinalIgnoreCase)
@@ -111,7 +111,7 @@ public sealed class WebsiteEscrowController(
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .OrderByDescending(c => c.CreatedAtUtc)
                 .Take(60)
-                .Select(c => ToAccountContractDto(EscrowDirectVndEngine.ProjectForViewer(c, login), login))
+                .Select(c => ToAccountContractDto(EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login), login))
                 .ToList();
             var owed = data.OwedDeliveries
                 .Where(o => string.Equals(o.RecipientLogin, login, StringComparison.OrdinalIgnoreCase))
@@ -341,6 +341,12 @@ public sealed class WebsiteEscrowController(
         directVndPaymentWindowMinutes = cfg.DirectVndPaymentWindowMinutes,
         directVndServiceFeeCurrency = cfg.DirectVndServiceFeeCurrency.ToString(),
         directVndServiceFeeCoins = cfg.DirectVndServiceFeeCoins,
+        hostVndEnabled = EscrowHostVndEngine.IsCompliantAndEnabled(cfg),
+        hostVndFeePercent = cfg.HostVndFeePercent,
+        hostVndMinFeeVnd = cfg.HostVndMinFeeVnd,
+        hostVndMaxFeeVnd = cfg.HostVndMaxFeeVnd,
+        hostVndPayoutDays = cfg.HostVndPayoutDays,
+        hostVndDisputeWindowHours = cfg.HostVndDisputeWindowHours,
     };
 
     private static object ToPublicContractDto(EscrowContract c) => new
@@ -388,6 +394,7 @@ public sealed class WebsiteEscrowController(
         c.CreatedAtSydney,
         c.ExpiresAtSydney,
         c.DirectVnd,
+        c.HostVnd,
     };
 
     private static async Task<Account?> AuthenticateAsync(IPlayerContext context, string? loginName, string? password, CancellationToken cancellationToken)

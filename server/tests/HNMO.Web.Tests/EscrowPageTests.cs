@@ -28,6 +28,8 @@ public class EscrowPageTests
         Assert.That(cfg.Enabled, Is.False);
         Assert.That(cfg.DirectVndEnabled, Is.False);
         Assert.That(cfg.DirectVndComplianceAcknowledged, Is.False);
+        Assert.That(cfg.HostVndEnabled, Is.False);
+        Assert.That(cfg.HostVndComplianceAcknowledged, Is.False);
         Assert.That(cfg.RequireSecondPassword, Is.True);
         Assert.That(cfg.BannedItems, Is.Not.Empty);
         Assert.That(cfg.AllowedCurrencies, Does.Contain(EscrowCurrency.WCoinC));

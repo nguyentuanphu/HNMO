@@ -6,6 +6,24 @@ import { read, type PacketValues } from '../net/packets.js';
 import { buildVietQrPayload, renderVietQrSvgDataUrl } from '../vietqr.js';
 import { createHnmoPanel, type HnmoPanel } from './hnmoPanel.js';
 
+export interface EscrowHostVndDto {
+  sellerBankBin?: string;
+  sellerBankName?: string;
+  sellerBankAccountNumber?: string;
+  sellerBankAccountName?: string;
+  hostBankBin: string;
+  hostBankName: string;
+  hostBankAccountNumber: string;
+  hostBankAccountName: string;
+  paymentReference: string;
+  paymentDeadlineSydney?: string;
+  payoutDueAtSydney?: string;
+  payoutStatus: string;
+  hostFeeVnd: number;
+  netSellerPayoutVnd: number;
+  disputeReason?: string;
+}
+
 export interface EscrowDirectVndDto {
   bankBin: string;
   bankName: string;
@@ -67,6 +85,7 @@ export interface EscrowContractDto {
   frozenByAdmin: boolean;
   adminReason: string;
   directVnd?: EscrowDirectVndDto | null;
+  hostVnd?: EscrowHostVndDto | null;
 }
 
 export interface EscrowBagItemDto {
@@ -119,6 +138,13 @@ export interface EscrowStatePayload {
   directVndFeePayer?: string;
   directVndMaxSellerBondCoins?: number;
   directVndMaxReceiptBytes?: number;
+  hostVndEnabled?: boolean;
+  hostVndFeePercent?: number;
+  hostVndMinFeeVnd?: number;
+  hostVndMaxFeeVnd?: number;
+  hostVndPaymentWindowMinutes?: number;
+  hostVndPayoutDays?: number;
+  hostVndDisputeWindowHours?: number;
   reputation: EscrowReputationDto;
   bagItems: EscrowBagItemDto[];
   jewelBalances: Record<string, number>;
@@ -230,7 +256,7 @@ export class EscrowWindow {
   private pinInput = '';
   private confirmHighValue = false;
   private filterText = '';
-  private createMode: 'InGame' | 'DirectVnd' = 'InGame';
+  private createMode: 'InGame' | 'DirectVnd' | 'HostVnd' = 'InGame';
   private bankBin = '970436';
   private bankName = 'Vietcombank';
   private bankAccountNumber = '';
@@ -482,7 +508,8 @@ export class EscrowWindow {
       card.style.cssText = 'border:1px solid #3f3828;border-radius:6px;padding:8px 10px;margin-bottom:8px;background:#121622;';
       const st = statusLabel(c.status);
       const isDirect = c.mode === 'DirectVnd' && !!c.directVnd;
-      const cur = isDirect ? 'VND' : currencyLabel(c.priceCurrency);
+      const isHost = c.mode === 'HostVnd' && !!c.hostVnd;
+      const cur = isDirect || isHost ? 'VND' : currencyLabel(c.priceCurrency);
       const goodsParts: string[] = [];
       for (const it of c.items) {
         const nm = `${this.t(it.nameEn, it.nameVi)} +${it.level}${it.luck ? ' Luck' : ''}${it.skill ? ' Skill' : ''}`;
@@ -495,12 +522,15 @@ export class EscrowWindow {
       header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;';
       const title = document.createElement('strong');
       title.style.color = '#f1cf7a';
-      title.textContent = `${c.contractId}${isDirect ? ' [P2P VND]' : ''} • ${c.sellerCharacter}${c.targetBuyer ? ` -> ${c.targetBuyer}` : ''} [${st}]`;
+      const tag = isDirect ? ' [P2P VND]' : isHost ? ' [Host VND]' : '';
+      title.textContent = `${c.contractId}${tag} • ${c.sellerCharacter}${c.targetBuyer ? ` -> ${c.targetBuyer}` : ''} [${st}]`;
       const exp = document.createElement('span');
       exp.style.cssText = 'font-size:11px;color:#9ca3af;';
       exp.textContent = isDirect && c.directVnd?.paymentDeadlineSydney
         ? `${this.t('Pay by', 'Hạn CK')}: ${c.directVnd.paymentDeadlineSydney}`
-        : c.expiresAtSydney;
+        : isHost && c.hostVnd?.paymentDeadlineSydney
+          ? `${this.t('Pay Host by', 'Hạn CK chủ')}: ${c.hostVnd.paymentDeadlineSydney}`
+          : c.expiresAtSydney;
       header.append(title, exp);
 
       const goods = document.createElement('div');
@@ -549,6 +579,28 @@ export class EscrowWindow {
         }
         payBox.append(infoDiv);
         card.append(payBox);
+      } else if (isHost && c.hostVnd && st === 'ReservedForPayment') {
+        const hv = c.hostVnd;
+        const payBox = document.createElement('div');
+        payBox.style.cssText = 'display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0;padding:6px 8px;border:1px dashed #6b5528;border-radius:5px;background:#171820;font-size:12px;';
+        if (hv.hostBankBin && hv.hostBankAccountNumber) {
+          const qrPayload = buildVietQrPayload({
+            bin: hv.hostBankBin,
+            account: hv.hostBankAccountNumber,
+            accountName: hv.hostBankAccountName,
+            amount: c.priceAmount,
+            message: hv.paymentReference,
+          });
+          const img = document.createElement('img');
+          img.src = renderVietQrSvgDataUrl(qrPayload);
+          img.alt = 'Host VietQR';
+          img.style.cssText = 'width:110px;height:110px;border-radius:4px;background:#fff;padding:4px;';
+          payBox.append(img);
+        }
+        const infoDiv = document.createElement('div');
+        infoDiv.textContent = `${this.t('Host Bank', 'TK Chủ server')}: ${hv.hostBankName} ${hv.hostBankAccountNumber} (${hv.hostBankAccountName}) | ${this.t('Ref', 'ND')}: ${hv.paymentReference}`;
+        payBox.append(infoDiv);
+        card.append(payBox);
       }
 
       const footer = document.createElement('div');
@@ -557,12 +609,37 @@ export class EscrowWindow {
       price.style.cssText = 'font-size:12px;color:#b7f5d0;';
       price.textContent = isDirect
         ? `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} VND | ${this.t('Service Fee', 'Phí DV')}: ${c.buyerTotalDebit} ${currencyLabel(c.priceCurrency)}${(c.directVnd?.sellerBondCoins ?? 0) > 0 ? ` | ${this.t('Bond', 'Cọc')}: ${c.directVnd?.sellerBondCoins}` : ''}`
-        : `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} ${cur} | ${this.t('Buyer pays', 'Người mua trả')}: ${c.buyerTotalDebit.toLocaleString()} ${cur} (${this.t('fee', 'phí')} ${c.feeAmount.toLocaleString()})`;
+        : isHost
+          ? `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} VND | ${this.t('Host Fee', 'Phí hệ thống')}: ${(c.hostVnd?.hostFeeVnd ?? 0).toLocaleString()} VND`
+          : `${this.t('Price', 'Giá')}: ${c.priceAmount.toLocaleString()} ${cur} | ${this.t('Buyer pays', 'Người mua trả')}: ${c.buyerTotalDebit.toLocaleString()} ${cur} (${this.t('fee', 'phí')} ${c.feeAmount.toLocaleString()})`;
 
       const btns = document.createElement('div');
       btns.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;align-items:center;';
       const isMine = c.sellerLogin.toLowerCase() === s.accountLogin.toLowerCase();
-      if (isDirect) {
+      if (isHost) {
+        if (isMine && st === 'Open') {
+          const cancelBtn = document.createElement('button');
+          cancelBtn.type = 'button';
+          cancelBtn.textContent = this.t('Cancel Contract', 'Hủy hợp đồng');
+          cancelBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #b44;background:#441818;color:#ffd0d0;cursor:pointer;font:inherit;';
+          cancelBtn.addEventListener('click', () => this.sendAction(3, { contractId: c.contractId }));
+          btns.append(cancelBtn);
+        } else if (!isMine && st === 'Open') {
+          const resBtn = document.createElement('button');
+          resBtn.type = 'button';
+          resBtn.textContent = this.t('Buy via Host VietQR', 'Mua qua VietQR Chủ');
+          resBtn.style.cssText = 'padding:4px 10px;border-radius:4px;border:1px solid #358856;background:#194d2f;color:#e6fff0;cursor:pointer;font:inherit;font-weight:600;';
+          resBtn.addEventListener('click', () => this.sendAction(12, { contractId: c.contractId, pin: this.pinInput }));
+          btns.append(resBtn);
+        } else if (st === 'ReservedForPayment') {
+          const dispBtn = document.createElement('button');
+          dispBtn.type = 'button';
+          dispBtn.textContent = this.t('Dispute', 'Khiếu nại');
+          dispBtn.style.cssText = 'padding:4px 8px;border-radius:4px;border:1px solid #c97a2b;background:#3a2410;color:#ffe1b3;cursor:pointer;font:inherit;';
+          dispBtn.addEventListener('click', () => this.sendAction(10, { contractId: c.contractId, reason: this.disputeReasonInput || 'Host VND dispute' }));
+          btns.append(dispBtn);
+        }
+      } else if (isDirect) {
         if (isMine && st === 'Open') {
           const cancelBtn = document.createElement('button');
           cancelBtn.type = 'button';
@@ -673,10 +750,10 @@ export class EscrowWindow {
     const form = document.createElement('div');
     form.style.cssText = 'display:grid;gap:8px;';
 
-    if (s.directVndEnabled) {
+    if (s.directVndEnabled || s.hostVndEnabled) {
       const modeRow = document.createElement('div');
-      modeRow.style.cssText = 'display:flex;gap:8px;align-items:center;';
-      const mBtn = (mode: 'InGame' | 'DirectVnd', en: string, vi: string) => {
+      modeRow.style.cssText = 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;';
+      const mBtn = (mode: 'InGame' | 'DirectVnd' | 'HostVnd', en: string, vi: string) => {
         const b = document.createElement('button');
         b.type = 'button';
         b.textContent = this.t(en, vi);
@@ -684,10 +761,9 @@ export class EscrowWindow {
         b.addEventListener('click', () => { this.createMode = mode; this.render(); });
         return b;
       };
-      modeRow.append(
-        mBtn('InGame', 'In-Game Currencies', 'Tiền tệ trong game'),
-        mBtn('DirectVnd', 'Direct P2P (VND VietQR)', 'Bán VND trực tiếp (VietQR)'),
-      );
+      modeRow.append(mBtn('InGame', 'In-Game Currencies', 'Tiền tệ trong game'));
+      if (s.directVndEnabled) modeRow.append(mBtn('DirectVnd', 'Direct P2P (VND VietQR)', 'VND P2P trực tiếp'));
+      if (s.hostVndEnabled) modeRow.append(mBtn('HostVnd', 'Host-Mediated (VND)', 'VND qua chủ server'));
       form.append(modeRow);
     } else {
       this.createMode = 'InGame';
@@ -770,22 +846,25 @@ export class EscrowWindow {
     const row3 = document.createElement('div');
     row3.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end;';
 
-    if (this.createMode === 'DirectVnd') {
+    if (this.createMode === 'DirectVnd' || this.createMode === 'HostVnd') {
       const vndWrap = this.labeledInput(
         this.t('Asking Price (VND)', 'Giá bán (VNĐ)'),
         this.priceAmountInput,
         'number',
         (v) => { this.priceAmountInput = v; },
-        this.t('VND transferred directly by buyer to your bank account', 'Số tiền VNĐ người mua chuyển trực tiếp cho bạn'),
+        this.t('VND price for this contract', 'Số tiền VNĐ của hợp đồng'),
       );
-      const bondWrap = this.labeledInput(
-        this.t(`Seller Bond (${s.directVndServiceFeeCurrency ?? 'WCoinC'})`, `Cọc người bán (${s.directVndServiceFeeCurrency ?? 'WCoinC'})`),
-        this.sellerBondInput,
-        'number',
-        (v) => { this.sellerBondInput = v; },
-        this.t('Optional coin bond forfeited if buyer wins dispute', 'Tiền cọc tự chọn (mất nếu thua tranh chấp)'),
-      );
-      row3.append(vndWrap, bondWrap);
+      row3.append(vndWrap);
+      if (this.createMode === 'DirectVnd') {
+        const bondWrap = this.labeledInput(
+          this.t(`Seller Bond (${s.directVndServiceFeeCurrency ?? 'WCoinC'})`, `Cọc người bán (${s.directVndServiceFeeCurrency ?? 'WCoinC'})`),
+          this.sellerBondInput,
+          'number',
+          (v) => { this.sellerBondInput = v; },
+          this.t('Optional coin bond forfeited if buyer wins dispute', 'Tiền cọc tự chọn (mất nếu thua tranh chấp)'),
+        );
+        row3.append(bondWrap);
+      }
     } else {
       const curWrap = document.createElement('div');
       const cLbl = document.createElement('div');
@@ -835,7 +914,7 @@ export class EscrowWindow {
     }
     form.append(row3);
 
-    if (this.createMode === 'DirectVnd') {
+    if (this.createMode === 'DirectVnd' || this.createMode === 'HostVnd') {
       const bankRow = document.createElement('div');
       bankRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end;padding:6px;border:1px solid #353024;border-radius:5px;';
       const bankSelWrap = document.createElement('div');
@@ -878,7 +957,8 @@ export class EscrowWindow {
         (v) => { this.webhookSecretInput = v; },
         this.t('Optional HMAC-SHA256 secret for automatic confirmation webhook', 'Khóa bí mật HMAC để tự động nhả đồ qua webhook'),
       );
-      bankRow.append(bankSelWrap, acctWrap, nameWrap, whWrap);
+      bankRow.append(bankSelWrap, acctWrap, nameWrap);
+      if (this.createMode === 'DirectVnd') bankRow.append(whWrap);
       form.append(bankRow);
     }
 
@@ -913,8 +993,8 @@ export class EscrowWindow {
     submit.title = this.t('Move selected goods atomically into escrow', 'Chuyển đồ vào trạng thái ký gửi nguyên tử');
     submit.style.cssText = 'padding:6px 14px;border-radius:5px;border:1px solid #c9a24a;background:#8a6a30;color:#111;font-weight:700;cursor:pointer;font:inherit;';
     submit.addEventListener('click', () => {
-      if (this.createMode === 'DirectVnd') {
-        this.sendAction(5, {
+      if (this.createMode === 'DirectVnd' || this.createMode === 'HostVnd') {
+        this.sendAction(this.createMode === 'HostVnd' ? 11 : 5, {
           slots: [...this.selectedSlots],
           escrowedZen: Math.max(0, Number.parseInt(this.escrowedZenInput || '0', 10) || 0),
           escrowedJewelKey: this.escrowedJewelKey,
