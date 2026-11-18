@@ -178,13 +178,30 @@ public sealed class VipAdminOperations(IPersistenceContextProvider persistence, 
 
                         // Persist an activity attempt before the account changes. The receipt separately keeps durable actor/reason proof.
                         await this.RecordActivityAsync(account.LoginName, verified, operationId, remove, "Requested", attribution.Reason, token).ConfigureAwait(false);
-                        var administration = new VipAdministration(configuration, this.State, game, logger);
-                        var now = clock.GetUtcNow().UtcDateTime;
-                        var result = remove
-                            ? await administration.RemoveAsync(context, account, operationId, attribution, now, () => context.SaveChangesAsync(token)).ConfigureAwait(false)
-                            : await administration.GrantAsync(context, account, operationId, levelId, days, attribution, now, () => context.SaveChangesAsync(token)).ConfigureAwait(false);
-                        await this.RecordActivityAsync(account.LoginName, verified, operationId, remove, result.Status, attribution.Reason, token).ConfigureAwait(false);
-                        return new JsonObject { ["status"] = result.Status, ["rule"] = result.Rule?.ToString() };
+                        try
+                        {
+                            var administration = new VipAdministration(configuration, this.State, game, logger);
+                            var now = clock.GetUtcNow().UtcDateTime;
+                            var result = remove
+                                ? await administration.RemoveAsync(context, account, operationId, attribution, now, () => context.SaveChangesAsync(token)).ConfigureAwait(false)
+                                : await administration.GrantAsync(context, account, operationId, levelId, days, attribution, now, () => context.SaveChangesAsync(token)).ConfigureAwait(false);
+                            await this.RecordActivityAsync(account.LoginName, verified, operationId, remove, result.Status, attribution.Reason, token).ConfigureAwait(false);
+                            if (result.Status == "Pending")
+                            {
+                                throw new AdminOperationException("The VIP change needs reconciliation; retry the same operation.", AdminOperationErrorKind.Uncertain);
+                            }
+
+                            return new JsonObject { ["status"] = result.Status, ["rule"] = result.Rule?.ToString() };
+                        }
+                        catch (AdminOperationException exception) when (exception.Kind == AdminOperationErrorKind.Uncertain)
+                        {
+                            throw;
+                        }
+                        catch (Exception exception)
+                        {
+                            // A failure after entering the wallet cannot prove rollback; keep the central audit Pending.
+                            throw new AdminOperationException("The VIP change or its activity outcome could not be confirmed; retry the same operation.", AdminOperationErrorKind.Uncertain, exception);
+                        }
                     },
                     token,
                     result => result["status"]?.GetValue<string>() == "Applied").ConfigureAwait(false);

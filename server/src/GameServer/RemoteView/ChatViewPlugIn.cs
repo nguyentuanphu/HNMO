@@ -55,7 +55,7 @@ public class ChatViewPlugIn : IChatViewPlugIn
         }
 
         // Resolve the sender on the server; never trust a mark or account identity from chat text.
-        if (VipPlugIn.Get(this._player.GameContext)?.Configuration is { Enabled: true, ShowChatBadge: true }
+        if (VipPlugIn.Get(this._player.GameContext)?.Configuration is { ShowChatBadge: true }
             && this._player.GameContext is GameContext context && context.PlayersByCharacterName.TryGetValue(sender, out var source))
         {
             message = VipChat.Mark(source, message, type);

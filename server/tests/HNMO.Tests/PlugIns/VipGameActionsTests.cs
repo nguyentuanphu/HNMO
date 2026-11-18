@@ -14,8 +14,13 @@ using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.GameLogic.Views;
+using HNMO.GameServer;
+using HNMO.GameServer.RemoteView;
 using HNMO.Interfaces;
+using HNMO.Network.Packets.ServerToClient;
 using HNMO.Persistence;
+using HNMO.PlugIns;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 /// <summary>Checks the real in-world adapter, live attributes and same-wallet replay boundary.</summary>
@@ -202,6 +207,50 @@ public class VipGameActionsTests
         this._player.Account!.AttributeGrants.Clear();
         this._player.RefreshAccountAttributeGrants();
         Assert.That(VipChat.Mark(this._player, text, type), Is.EqualTo(text));
+    }
+
+    /// <summary>Stopping new sales keeps the paid chat benefit, and the explicit badge switch still hides it.</summary>
+    /// <param name="purchasesEnabled">Whether new purchases are allowed.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task ChatViewKeepsPaidBadgeWhenSalesStopAsync(bool purchasesEnabled)
+    {
+        await this._actions.HandleAsync(this._player, await this.SelectionAsync().ConfigureAwait(false)).ConfigureAwait(false);
+        var game = this._player.GameContext;
+        game.PlugInManager.RegisterPlugIn<IPlayerStateChangedPlugIn, VipPlugIn>();
+        game.PlugInManager.ActivatePlugIn<VipPlugIn>();
+        var settings = new VipConfiguration { Enabled = purchasesEnabled, ShowChatBadge = true };
+        VipPlugIn.Get(game)!.Configuration = settings;
+        var initializer = new MapInitializer(game.Configuration, NullLogger<MapInitializer>.Instance, NullDropGenerator.Instance, null);
+        var server = new GameServerContext(
+            new GameServerDefinition { GameConfiguration = game.Configuration, ServerConfiguration = new GameServerConfiguration() },
+            Mock.Of<IGuildServer>(),
+            Mock.Of<IEventPublisher>(),
+            Mock.Of<ILoginServer>(),
+            Mock.Of<IFriendServer>(),
+            game.PersistenceContextProvider,
+            initializer,
+            NullLoggerFactory.Instance,
+            game.PlugInManager,
+            NullDropGenerator.Instance,
+            new ConfigurationChangeMediator());
+        initializer.PlugInManager = game.PlugInManager;
+        initializer.PathFinderPool = server.PathFinderPool;
+        server.PlayersByCharacterName["Hero"] = this._player;
+        var first = CastleSiegeRemoteViewTestHelper.CreatePlayer(server);
+        await using var recipient = first.Player;
+        using var output = first.Output;
+        await new ChatViewPlugIn(recipient).ChatMessageAsync("private", "Hero", ChatMessageType.Whisper).ConfigureAwait(false);
+        var marked = new ChatMessageRef(output.ToArray());
+        Assert.That(marked.Sender, Is.EqualTo("Hero"));
+        Assert.That(marked.Message, Is.EqualTo("[VIP] private"));
+        settings.ShowChatBadge = false;
+        var second = CastleSiegeRemoteViewTestHelper.CreatePlayer(server);
+        await using var other = second.Player;
+        using var unmarkedOutput = second.Output;
+        await new ChatViewPlugIn(other).ChatMessageAsync("private", "Hero", ChatMessageType.Whisper).ConfigureAwait(false);
+        Assert.That(new ChatMessageRef(unmarkedOutput.ToArray()).Message, Is.EqualTo("private"));
     }
 
     private async ValueTask<VipGameRequest> SelectionAsync()

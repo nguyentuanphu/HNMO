@@ -39,6 +39,7 @@ public class VipAdminOperationsTests
     private AdminActor _actor = null!;
     private readonly List<ActivityLogEntry> _activities = [];
     private bool _rejectActivity;
+    private bool _rejectAppliedActivity;
 
     /// <summary>Creates an isolated account, real authorization/audit executor and controllable login reservation.</summary>
     /// <returns>The setup task.</returns>
@@ -75,9 +76,10 @@ public class VipAdminOperationsTests
         var clock = new TestClock();
         this._activities.Clear();
         this._rejectActivity = false;
+        this._rejectAppliedActivity = false;
         this._operations = new(this._provider, configurations.Object, this._login.Object, executor, new(clock), new() { ReadOnly = false }, NullLogger<VipAdminOperations>.Instance, clock, this._state, entry =>
         {
-            if (this._rejectActivity)
+            if (this._rejectActivity || (this._rejectAppliedActivity && JsonNode.Parse(entry.Details)?["status"]?.GetValue<string>() == "Applied"))
             {
                 throw new InvalidOperationException("injected activity write failure");
             }
@@ -214,6 +216,27 @@ public class VipAdminOperationsTests
         Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, TestClock.Now.UtcDateTime), Is.Zero);
         Assert.That(this._account.WCoinC, Is.EqualTo(1000));
         Assert.That(this._activities, Has.Count.EqualTo(4));
+    }
+
+    /// <summary>A failed activity outcome after commit leaves audit Pending; replay reconciles the original grant.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task LostActivityOutcomeKeepsAuditPendingAndDoesNotGrantAgainAsync()
+    {
+        var operation = Guid.NewGuid();
+        var preview = await this.PreviewAsync(operation).ConfigureAwait(false);
+        this._rejectAppliedActivity = true;
+        var exception = Assert.ThrowsAsync<AdminOperationException>(async () => await this.ApplyAsync(operation, preview).ConfigureAwait(false));
+        Assert.That(exception!.Kind, Is.EqualTo(AdminOperationErrorKind.Uncertain));
+        Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
+        var until = this._account.AttributeGrants.First().ValidUntil;
+        var audits = await this._audit.ReadAsync(0, 20).ConfigureAwait(false);
+        Assert.That(audits.Items.Single().Outcome, Is.EqualTo("Pending"));
+        this._rejectAppliedActivity = false;
+        await this.ApplyAsync(operation, await this.PreviewAsync(operation).ConfigureAwait(false)).ConfigureAwait(false);
+        Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
+        Assert.That(this._account.AttributeGrants.Select(grant => grant.ValidUntil), Is.All.EqualTo(until));
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000));
     }
 
     private ValueTask<JsonObject> PreviewAsync(Guid operation, bool remove = false)
