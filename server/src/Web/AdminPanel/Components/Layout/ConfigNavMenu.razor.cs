@@ -95,6 +95,7 @@ public partial class ConfigNavMenu
             new(Resources.OnboardingAndStarterKit, "onboarding-starter-kit", "oi-flag"),
             new(Resources.GuildsLevelsAndLadder, "guilds-levels-ladder", "oi-people"),
             new(Resources.CommunityPage, "community", "oi-chat"),
+            new(Resources.NewsManager, "news", "oi-document"),
             new(Resources.TopRacesPage, "top-races", "oi-badge"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Lịch sự kiện & Boss" : "Event & Boss Timetable", "timetable", "oi-calendar"),
             new(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? "Con số may mắn" : "Daily Lucky Number", "lucky-number", "oi-random"),

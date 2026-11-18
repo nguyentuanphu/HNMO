@@ -4967,4 +4967,10 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="PageHelpTextGmManager" xml:space="preserve">
     <value>Phân quyền chi tiết cho từng GM (Thông báo, Di chuyển/Triệu hồi, Thả quái/Boss, Bắt đầu sự kiện, Kiểm tra túi đồ, Cấm chat/Kick, Chỉnh nhân vật) và xem nhật ký kiểm toán mọi lệnh GM trong game.</value>
   </data>
+  <data name="NewsManager" xml:space="preserve">
+    <value>Quản lý tin tức</value>
+  </data>
+  <data name="PageHelpTextNewsManager" xml:space="preserve">
+    <value>Đăng thông báo song ngữ Anh/Việt theo giờ Australia/Sydney, ghim bài nổi bật, đính kèm ảnh tùy chọn và gửi thông báo chat trong game.</value>
+  </data>
 </root>

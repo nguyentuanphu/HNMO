@@ -4936,4 +4936,10 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="PageHelpTextGmManager" xml:space="preserve">
     <value>Assign per-GM command permissions (Announce, Move/Summon/GoTo, Spawn Monster/Boss, Start Event, Inspect Inventory, Mute/Kick, Direct Edits) and review in-game GM command audits.</value>
   </data>
+  <data name="NewsManager" xml:space="preserve">
+    <value>News manager</value>
+  </data>
+  <data name="PageHelpTextNewsManager" xml:space="preserve">
+    <value>Publish bilingual EN/VI announcements in Australia/Sydney time, pin top news, optionally attach a safe image URL, and send live in-game chat notices.</value>
+  </data>
 </root>

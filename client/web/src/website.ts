@@ -410,6 +410,14 @@ const copy = {
     partySpotsOpen: "Auto-join",
     partySpotsLocked: "Password (/partypass)",
     partySpotsNone: "No hunting spot parties recruiting right now.",
+    newsNav: "News",
+    newsTitle: "News & announcements",
+    newsHint: "Latest patch notes, maintenance schedules (Sydney time), and realm events posted by staff.",
+    newsPinned: "Pinned",
+    newsEmpty: "No announcements published yet.",
+    newsOffline: "News feed is unavailable: the server didn't answer.",
+    newsOff: "News feed is switched off on this server.",
+    newsAtSydney: "%s Sydney",
     footer: "Live game data. English & Tiếng Việt.",
     top: "Back to top ↑",
     unavailable: "Game data is unavailable. Start the game server and refresh.",
@@ -847,6 +855,14 @@ const copy = {
     partySpotsOpen: "Tự động vào",
     partySpotsLocked: "Mật khẩu (/partypass)",
     partySpotsNone: "Hiện chưa có nhóm nào đang tuyển ở bãi săn.",
+    newsNav: "Tin tức",
+    newsTitle: "Tin tức & Thông báo",
+    newsHint: "Thông báo mới nhất, lịch bảo trì (giờ Sydney) và sự kiện máy chủ từ quản trị viên.",
+    newsPinned: "Ghim",
+    newsEmpty: "Hiện chưa có bài viết nào.",
+    newsOffline: "Mục tin tức tạm thời không có: máy chủ không trả lời.",
+    newsOff: "Mục tin tức đang tắt trên máy chủ này.",
+    newsAtSydney: "%s giờ Sydney",
     footer: "Dữ liệu trò chơi trực tiếp. English & Tiếng Việt.",
     top: "Về đầu trang ↑",
     unavailable:
@@ -3000,4 +3016,109 @@ element("refresh").addEventListener("click", () => void refreshPartySpots());
 void refreshPartySpots();
 setInterval(() => {
   if (!document.hidden) void refreshPartySpots();
+}, 120000);
+
+interface PublicNewsPost {
+  id: string;
+  titleEn: string;
+  titleVi: string;
+  bodyEn: string;
+  bodyVi: string;
+  imageUrl?: string;
+  publishAtUtc: number;
+  publishSydney?: string;
+  pinned?: boolean;
+  author?: string;
+}
+
+interface PublicNewsResponse {
+  enabled: boolean;
+  allowWebsite?: boolean;
+  posts?: PublicNewsPost[];
+}
+
+let newsData: PublicNewsResponse | null = null;
+
+function safeNewsImg(url: string | undefined): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return trimmed;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return "";
+}
+
+function renderNews(): void {
+  const list = element("news-list");
+  const notice = element("news-notice");
+  list.replaceChildren();
+  if (!newsData) {
+    notice.textContent = t("newsOffline");
+    return;
+  }
+  if (!newsData.enabled || newsData.allowWebsite === false) {
+    notice.textContent = t("newsOff");
+    return;
+  }
+  const posts = newsData.posts ?? [];
+  if (!posts.length) {
+    notice.textContent = t("newsEmpty");
+    return;
+  }
+  notice.textContent = "";
+  const vi = document.documentElement.lang === "vi";
+  for (const post of posts) {
+    const card = document.createElement("article");
+    card.className = "panel";
+
+    const meta = document.createElement("p");
+    meta.className = "muted";
+    const sydneyLabel = post.publishSydney ? fill(t("newsAtSydney"), post.publishSydney) : "";
+    const pinPrefix = post.pinned ? `[${t("newsPinned")}] ` : "";
+    const authorSuffix = post.author ? ` · ${post.author}` : "";
+    meta.textContent = `${pinPrefix}${sydneyLabel}${authorSuffix}`.trim();
+
+    const heading = document.createElement("h3");
+    heading.textContent = (vi ? post.titleVi || post.titleEn : post.titleEn || post.titleVi) || "";
+
+    const body = document.createElement("p");
+    body.style.whiteSpace = "pre-line";
+    body.textContent = (vi ? post.bodyVi || post.bodyEn : post.bodyEn || post.bodyVi) || "";
+
+    card.append(meta, heading, body);
+
+    const imgUrl = safeNewsImg(post.imageUrl);
+    if (imgUrl) {
+      const img = document.createElement("img");
+      img.src = imgUrl;
+      img.alt = heading.textContent ?? "";
+      img.loading = "lazy";
+      img.style.maxWidth = "100%";
+      img.style.maxHeight = "220px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "6px";
+      card.append(img);
+    }
+
+    list.append(card);
+  }
+}
+
+async function refreshNews(): Promise<void> {
+  try {
+    const response = await fetch("/website/news", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = (await response.json()) as PublicNewsResponse;
+    if (typeof data !== "object" || data === null || typeof data.enabled !== "boolean") throw new Error("Invalid news");
+    newsData = data;
+  } catch {
+    newsData = null;
+  }
+  renderNews();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => renderNews());
+element("refresh").addEventListener("click", () => void refreshNews());
+void refreshNews();
+setInterval(() => {
+  if (!document.hidden) void refreshNews();
 }, 120000);

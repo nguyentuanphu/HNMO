@@ -14579,5 +14579,11 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up a localized string similar to Help description for GM manager.</summary>
         public static string PageHelpTextGmManager => ResourceManager.GetString("PageHelpTextGmManager", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to News manager.</summary>
+        public static string NewsManager => ResourceManager.GetString("NewsManager", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to News manager page help.</summary>
+        public static string PageHelpTextNewsManager => ResourceManager.GetString("PageHelpTextNewsManager", resourceCulture)!;
     }
 }
