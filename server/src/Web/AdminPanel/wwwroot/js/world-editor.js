@@ -21348,17 +21348,28 @@ var WorldEditorViewport = class {
   renderer = null;
   scene = new Scene();
   root = new Group();
+  ambientLight = new AmbientLight(16777215, 0.85);
+  sunLight = new DirectionalLight(16774358, 0.9);
   camera;
   controls = null;
   raycaster = new Raycaster();
   overlayGroup = new Group();
   markerGroup = new Group();
+  objectPreviewGroup = new Group();
   cursorMesh;
   world = null;
   fallbackMesh = null;
   raycastTarget = null;
+  currentMapNumber = 0;
   heights = new Float32Array(CELLS2);
+  lightData = new Float32Array(CELLS2 * 3).fill(1);
   tileFlags = new Uint8Array(CELLS2);
+  worldObjects = [];
+  selectedObjectIndex = -1;
+  objectsDirty = false;
+  lightsDirty = false;
+  lightBrushRgb = [1, 0.85, 0.55];
+  lightBrushIntensity = 0.45;
   overlayBytes = new Uint8Array(CELLS2 * 4);
   overlayTexture;
   overlayMaterial;
@@ -21393,10 +21404,9 @@ var WorldEditorViewport = class {
     this.canvas.style.touchAction = "none";
     this.host.append(this.canvas);
     this.scene.background = DEFAULT_FOG.color;
-    this.scene.add(new AmbientLight(16777215, 0.85));
-    const sun = new DirectionalLight(16774358, 0.9);
-    sun.position.set(16e3, 22e3, 14e3);
-    this.scene.add(sun);
+    this.scene.add(this.ambientLight);
+    this.sunLight.position.set(16e3, 22e3, 14e3);
+    this.scene.add(this.sunLight);
     this.root.rotation.x = -Math.PI / 2;
     this.scene.add(this.root);
     this.camera = new PerspectiveCamera(35, 16 / 9, 10, 22e3);
@@ -21434,6 +21444,7 @@ var WorldEditorViewport = class {
     this.overlayGroup.add(this.overlayMesh);
     this.root.add(this.overlayGroup);
     this.root.add(this.markerGroup);
+    this.root.add(this.objectPreviewGroup);
     const ringGeom = new BufferGeometry().setFromPoints([
       new Vector3(-TERRAIN_SCALE / 2, -TERRAIN_SCALE / 2, 24),
       new Vector3(TERRAIN_SCALE / 2, -TERRAIN_SCALE / 2, 24),
@@ -21452,6 +21463,11 @@ var WorldEditorViewport = class {
     this.spawns = spawns ?? [];
     this.enterGates = enterGates ?? [];
     this.exitGates = exitGates ?? [];
+    this.currentMapNumber = mapNumber;
+    this.worldObjects = [];
+    this.selectedObjectIndex = -1;
+    this.objectsDirty = false;
+    this.lightsDirty = false;
     this.undoStack.length = 0;
     this.redoStack.length = 0;
     if (this.world) {
@@ -21468,19 +21484,28 @@ var WorldEditorViewport = class {
     try {
       const worldData = await loadWorldData(mapNumber);
       this.heights = worldData.heights;
+      this.lightData = worldData.light;
+      this.worldObjects = worldData.objects.map((o) => ({
+        type: o.type,
+        position: [...o.position],
+        angle: [...o.angle],
+        scale: o.scale
+      }));
       this.world = await createWorld(worldData, DEFAULT_FOG);
       this.root.add(this.world.group);
       this.raycastTarget = this.world.terrain;
-      objectCount = worldData.objects.length;
+      objectCount = this.worldObjects.length;
       mode = "full-3d-world";
     } catch {
       this.heights = new Float32Array(CELLS2);
+      this.lightData = new Float32Array(CELLS2 * 3).fill(1);
       this.fallbackMesh = buildFallbackTerrainMesh(this.heights);
       this.root.add(this.fallbackMesh);
       this.raycastTarget = this.fallbackMesh;
     }
     this.rebuildOverlayTexture();
     this.rebuildMarkers();
+    this.rebuildObjectPreview();
     this.notifyHistory();
     return { mode, objectCount };
   }
@@ -21585,6 +21610,231 @@ var WorldEditorViewport = class {
   getTileFlagsBase64() {
     return bytesToBase64(this.tileFlags);
   }
+  getObjects(offset = 0, limit = 80) {
+    const start = Math.max(0, offset);
+    const slice = this.worldObjects.slice(start, start + limit).map((o, idx) => ({
+      index: start + idx,
+      type: o.type,
+      x: Math.round(o.position[0]),
+      y: Math.round(o.position[1]),
+      z: Math.round(o.position[2]),
+      angleX: Math.round(o.angle[0]),
+      angleY: Math.round(o.angle[1]),
+      angleZ: Math.round(o.angle[2]),
+      scale: Number(o.scale.toFixed(2))
+    }));
+    return { total: this.worldObjects.length, items: slice };
+  }
+  addObject(type, tileX, tileY, scale = 1) {
+    const tx = Math.max(0, Math.min(TERRAIN_SIZE - 1, Math.round(tileX)));
+    const ty = Math.max(0, Math.min(TERRAIN_SIZE - 1, Math.round(tileY)));
+    const z = this.heights[ty * TERRAIN_SIZE + tx] || 0;
+    this.worldObjects.push({
+      type: Math.max(0, Math.round(type)),
+      position: [(tx + 0.5) * TERRAIN_SCALE, (ty + 0.5) * TERRAIN_SCALE, z],
+      angle: [0, 0, 0],
+      scale: Math.max(0.1, Math.min(10, scale || 1))
+    });
+    this.objectsDirty = true;
+    this.selectedObjectIndex = this.worldObjects.length - 1;
+    this.rebuildObjectPreview();
+    return this.selectedObjectIndex;
+  }
+  selectObject(index) {
+    this.selectedObjectIndex = index >= 0 && index < this.worldObjects.length ? index : -1;
+    this.rebuildObjectPreview();
+    if (this.selectedObjectIndex >= 0) {
+      const o = this.worldObjects[this.selectedObjectIndex];
+      this.focusTile(o.position[0] / TERRAIN_SCALE, o.position[1] / TERRAIN_SCALE);
+    }
+  }
+  updateObjectTransform(index, x, y, z, angleX, angleY, angleZ, scale) {
+    const o = this.worldObjects[index];
+    if (!o) return false;
+    o.position = [x, y, z];
+    o.angle = [angleX, angleY, angleZ];
+    o.scale = Math.max(0.05, Math.min(20, scale || 1));
+    this.objectsDirty = true;
+    this.selectedObjectIndex = index;
+    this.rebuildObjectPreview();
+    return true;
+  }
+  removeObject(index) {
+    if (index < 0 || index >= this.worldObjects.length) return false;
+    this.worldObjects.splice(index, 1);
+    this.objectsDirty = true;
+    if (this.selectedObjectIndex >= this.worldObjects.length) {
+      this.selectedObjectIndex = this.worldObjects.length - 1;
+    }
+    this.rebuildObjectPreview();
+    return true;
+  }
+  getRawObjectsBase64() {
+    if (!this.objectsDirty && this.worldObjects.length === 0) return null;
+    const recBytes = 30;
+    const raw = new Uint8Array(4 + this.worldObjects.length * recBytes);
+    raw[0] = 0;
+    raw[1] = this.currentMapNumber & 255;
+    const view = new DataView(raw.buffer);
+    view.setInt16(2, this.worldObjects.length, true);
+    let p = 4;
+    for (const o of this.worldObjects) {
+      view.setInt16(p, o.type, true);
+      view.setFloat32(p + 2, o.position[0], true);
+      view.setFloat32(p + 6, o.position[1], true);
+      view.setFloat32(p + 10, o.position[2], true);
+      view.setFloat32(p + 14, o.angle[0], true);
+      view.setFloat32(p + 18, o.angle[1], true);
+      view.setFloat32(p + 22, o.angle[2], true);
+      view.setFloat32(p + 26, o.scale, true);
+      p += recBytes;
+    }
+    return bytesToBase64(raw);
+  }
+  setLightBrush(hexColor, intensity) {
+    const parsed = new Color(hexColor || "#ffd98c");
+    this.lightBrushRgb = [parsed.r, parsed.g, parsed.b];
+    this.lightBrushIntensity = Math.max(0.05, Math.min(1, intensity || 0.45));
+  }
+  setAmbientLight(hexColor, intensity) {
+    this.ambientLight.color.set(hexColor || "#ffffff");
+    this.ambientLight.intensity = Math.max(0.1, Math.min(3, intensity || 0.85));
+    if (this.world?.terrain.material.uniforms.brightness) {
+      this.world.terrain.material.uniforms.brightness.value = this.ambientLight.intensity;
+    }
+  }
+  paintLightAtTile(tileX, tileY, radiusOverride) {
+    const radius = Math.max(1, Math.min(12, Math.round(radiusOverride ?? this.brushRadius)));
+    const half = radius - 1;
+    let touched = 0;
+    const [lr, lg, lb] = this.lightBrushRgb;
+    const alpha = this.lightBrushIntensity;
+    for (let dy = -half; dy <= half; dy++) {
+      for (let dx = -half; dx <= half; dx++) {
+        const dist = Math.hypot(dx, dy);
+        if (radius > 2 && dist > half + 0.5) continue;
+        const x = tileX + dx;
+        const y = tileY + dy;
+        if (x < 0 || y < 0 || x >= TERRAIN_SIZE || y >= TERRAIN_SIZE) continue;
+        const falloff = radius <= 1 ? alpha : alpha * Math.max(0.15, 1 - dist / (half + 1));
+        const idx3 = (y * TERRAIN_SIZE + x) * 3;
+        this.lightData[idx3] = Math.min(1, this.lightData[idx3] * (1 - falloff) + lr * falloff);
+        this.lightData[idx3 + 1] = Math.min(1, this.lightData[idx3 + 1] * (1 - falloff) + lg * falloff);
+        this.lightData[idx3 + 2] = Math.min(1, this.lightData[idx3 + 2] * (1 - falloff) + lb * falloff);
+        touched++;
+      }
+    }
+    if (touched > 0) {
+      this.lightsDirty = true;
+      const lightTex = this.world?.terrain.material.uniforms.lightMap?.value;
+      const rawData = lightTex?.image?.data;
+      if (lightTex && rawData instanceof Uint8Array) {
+        const bytes = rawData;
+        for (let i = 0; i < CELLS2; i++) {
+          bytes[i * 4] = Math.round(this.lightData[i * 3] * 255);
+          bytes[i * 4 + 1] = Math.round(this.lightData[i * 3 + 1] * 255);
+          bytes[i * 4 + 2] = Math.round(this.lightData[i * 3 + 2] * 255);
+          bytes[i * 4 + 3] = 255;
+        }
+        lightTex.needsUpdate = true;
+      }
+    }
+    return touched;
+  }
+  getLightMapJpegBase64(forceExport = false) {
+    if (!forceExport && !this.lightsDirty) return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = TERRAIN_SIZE;
+    canvas.height = TERRAIN_SIZE;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    const img = ctx.createImageData(TERRAIN_SIZE, TERRAIN_SIZE);
+    for (let i = 0; i < CELLS2; i++) {
+      img.data[i * 4] = Math.round(Math.max(0, Math.min(1, this.lightData[i * 3])) * 255);
+      img.data[i * 4 + 1] = Math.round(Math.max(0, Math.min(1, this.lightData[i * 3 + 1])) * 255);
+      img.data[i * 4 + 2] = Math.round(Math.max(0, Math.min(1, this.lightData[i * 3 + 2])) * 255);
+      img.data[i * 4 + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+    const comma = dataUrl.indexOf(",");
+    return comma >= 0 ? dataUrl.slice(comma + 1) : null;
+  }
+  captureMinimapRgba(size = 256) {
+    const dim = Math.max(128, Math.min(512, Math.round(size)));
+    const rgba = new Uint8Array(dim * dim * 4);
+    if (this.renderer) {
+      const prevOverlay = this.overlayGroup.visible;
+      const prevMarkers = this.markerGroup.visible;
+      const prevPreview = this.objectPreviewGroup.visible;
+      const prevCursor = this.cursorMesh.visible;
+      this.overlayGroup.visible = false;
+      this.markerGroup.visible = false;
+      this.objectPreviewGroup.visible = false;
+      this.cursorMesh.visible = false;
+      const span = TERRAIN_SIZE * TERRAIN_SCALE;
+      const ortho = new OrthographicCamera(0, span, 0, -span, 10, 2e4);
+      ortho.position.set(0, 1e4, 0);
+      ortho.lookAt(0, 0, 0);
+      ortho.updateProjectionMatrix();
+      const target = new WebGLRenderTarget(dim, dim, { format: RGBAFormat, type: UnsignedByteType });
+      const prevTarget = this.renderer.getRenderTarget();
+      this.renderer.setRenderTarget(target);
+      this.renderer.render(this.scene, ortho);
+      const glPixels = new Uint8Array(dim * dim * 4);
+      this.renderer.readRenderTargetPixels(target, 0, 0, dim, dim, glPixels);
+      this.renderer.setRenderTarget(prevTarget);
+      target.dispose();
+      const stride = dim * 4;
+      for (let y = 0; y < dim; y++) {
+        rgba.set(glPixels.subarray((dim - 1 - y) * stride, (dim - y) * stride), y * stride);
+      }
+      this.overlayGroup.visible = prevOverlay;
+      this.markerGroup.visible = prevMarkers;
+      this.objectPreviewGroup.visible = prevPreview;
+      this.cursorMesh.visible = prevCursor;
+    } else {
+      for (let y = 0; y < dim; y++) {
+        const ty = Math.floor(y / dim * TERRAIN_SIZE);
+        for (let x = 0; x < dim; x++) {
+          const tx = Math.floor(x / dim * TERRAIN_SIZE);
+          const idx = ty * TERRAIN_SIZE + tx;
+          const o = (y * dim + x) * 4;
+          const f = this.tileFlags[idx];
+          if ((f & TerrainFlag.WATER) !== 0) {
+            rgba[o] = 48;
+            rgba[o + 1] = 110;
+            rgba[o + 2] = 190;
+          } else if ((f & TerrainFlag.SAFEZONE) !== 0) {
+            rgba[o] = 170;
+            rgba[o + 1] = 175;
+            rgba[o + 2] = 185;
+          } else if ((f & TerrainFlag.NOMOVE) !== 0) {
+            rgba[o] = 90;
+            rgba[o + 1] = 55;
+            rgba[o + 2] = 55;
+          } else {
+            rgba[o] = 72;
+            rgba[o + 1] = 128;
+            rgba[o + 2] = 74;
+          }
+          rgba[o + 3] = 255;
+        }
+      }
+    }
+    let previewDataUrl = "";
+    const canvas = document.createElement("canvas");
+    canvas.width = dim;
+    canvas.height = dim;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const img = ctx.createImageData(dim, dim);
+      img.data.set(rgba);
+      ctx.putImageData(img, 0, 0);
+      previewDataUrl = canvas.toDataURL("image/png");
+    }
+    return { width: dim, height: dim, rgbaBase64: bytesToBase64(rgba), previewDataUrl };
+  }
   getStateSummary() {
     let safezoneCount = 0;
     let blockedCount = 0;
@@ -21598,8 +21848,36 @@ var WorldEditorViewport = class {
       undoDepth: this.undoStack.length,
       redoDepth: this.redoStack.length,
       safezoneCount,
-      blockedCount
+      blockedCount,
+      objectCount: this.worldObjects.length,
+      lightsDirty: this.lightsDirty,
+      objectsDirty: this.objectsDirty
     };
+  }
+  rebuildObjectPreview() {
+    while (this.objectPreviewGroup.children.length > 0) {
+      const child = this.objectPreviewGroup.children.pop();
+      if (child instanceof Mesh) child.geometry.dispose();
+    }
+    if (this.selectedObjectIndex >= 0 && this.selectedObjectIndex < this.worldObjects.length) {
+      const o = this.worldObjects[this.selectedObjectIndex];
+      const box = new Mesh(
+        new BoxGeometry(140 * Math.max(0.5, o.scale), 140 * Math.max(0.5, o.scale), 220 * Math.max(0.5, o.scale)),
+        new MeshBasicMaterial({ color: 16771584, wireframe: true })
+      );
+      box.position.set(o.position[0], o.position[1], o.position[2] + 90);
+      box.rotation.set(o.angle[0] * (Math.PI / 180), o.angle[1] * (Math.PI / 180), o.angle[2] * (Math.PI / 180), "ZYX");
+      this.objectPreviewGroup.add(box);
+    }
+    if (this.objectsDirty) {
+      const markerMat = new MeshBasicMaterial({ color: 16766287, wireframe: true });
+      const recent = this.worldObjects.slice(-40);
+      for (const o of recent) {
+        const m = new Mesh(new BoxGeometry(70 * Math.max(0.5, o.scale), 70 * Math.max(0.5, o.scale), 120 * Math.max(0.5, o.scale)), markerMat);
+        m.position.set(o.position[0], o.position[1], o.position[2] + 60);
+        this.objectPreviewGroup.add(m);
+      }
+    }
   }
   dispose() {
     this.disposed = true;
@@ -21730,8 +22008,14 @@ var WorldEditorViewport = class {
       if (e.button !== 0 || this.tool === "inspect") return;
       const tile = this.pickTile(e.clientX, e.clientY);
       if (!tile) return;
-      if (this.tool === "spawn" || this.tool === "enterGate" || this.tool === "exitGate") {
+      if (this.tool === "spawn" || this.tool === "enterGate" || this.tool === "exitGate" || this.tool === "addObject") {
         this.dotNet?.invokeMethodAsync("OnTerrainPlaceRequestedAsync", tile.x, tile.y, this.tool).catch(() => void 0);
+        return;
+      }
+      if (this.tool === "lightPaint") {
+        this.isPainting = true;
+        this.paintLightAtTile(tile.x, tile.y);
+        this.canvas.setPointerCapture(e.pointerId);
         return;
       }
       this.isPainting = true;
@@ -21748,8 +22032,12 @@ var WorldEditorViewport = class {
         this.cursorMesh.position.set((tile.x + 0.5) * TERRAIN_SCALE, (tile.y + 0.5) * TERRAIN_SCALE, z);
         this.cursorMesh.scale.setScalar(Math.max(1, this.brushRadius));
         this.dotNet?.invokeMethodAsync("OnCursorMovedAsync", tile.x, tile.y, this.tileFlags[idx], Math.round(z)).catch(() => void 0);
-        if (this.isPainting && this.activeStroke) {
-          this.paintAtTile(tile.x, tile.y);
+        if (this.isPainting) {
+          if (this.tool === "lightPaint") {
+            this.paintLightAtTile(tile.x, tile.y);
+          } else if (this.activeStroke) {
+            this.paintAtTile(tile.x, tile.y);
+          }
         }
       } else {
         this.cursorMesh.visible = false;

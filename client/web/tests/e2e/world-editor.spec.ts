@@ -74,6 +74,29 @@ test.describe('Admin 3D World Editor (ROADMAP 14.24 Part A)', () => {
       );
       ed.setCameraMode('player', 128, 128);
       const bytes = Uint8Array.from(atob(ed.getTileFlagsBase64()), (c) => c.charCodeAt(0));
+
+      // Part B: 3D Object placement/transform/delete, light painting, and minimap capture
+      const ext = ed as unknown as {
+        addObject: (t: number, x: number, y: number, s: number) => number;
+        updateObjectTransform: (idx: number, x: number, y: number, z: number, ax: number, ay: number, az: number, s: number) => boolean;
+        removeObject: (idx: number) => boolean;
+        getRawObjectsBase64: () => string | null;
+        setLightBrush: (hex: string, inten: number) => void;
+        paintLightAtTile: (x: number, y: number, r?: number) => number;
+        getLightMapJpegBase64: (force?: boolean) => string | null;
+        captureMinimapRgba: (size?: number) => { width: number; height: number; rgbaBase64: string; previewDataUrl: string };
+      };
+      const objIdx = ext.addObject(3, 100, 110, 1.5);
+      const moved = ext.updateObjectTransform(objIdx, 10150, 11250, 50, 0, 45, 0, 2.0);
+      const rawObjB64 = ext.getRawObjectsBase64();
+      const rawObjBytes = rawObjB64 ? Uint8Array.from(atob(rawObjB64), (c) => c.charCodeAt(0)) : new Uint8Array(0);
+      const removed = ext.removeObject(objIdx);
+
+      ext.setLightBrush('#ffcc66', 0.8);
+      const litCells = ext.paintLightAtTile(128, 128, 2);
+      const lightJpg = ext.getLightMapJpegBase64();
+      const minimap = ext.captureMinimapRgba(128);
+
       return {
         afterPaint,
         undone,
@@ -81,6 +104,15 @@ test.describe('Admin 3D World Editor (ROADMAP 14.24 Part A)', () => {
         redone,
         finalTileCenter: bytes[128 * 256 + 128],
         finalTileBlocked: bytes[64 * 256 + 64],
+        objIdx,
+        moved,
+        rawObjByteLength: rawObjBytes.length,
+        removed,
+        litCells,
+        hasLightJpg: Boolean(lightJpg && lightJpg.length > 20),
+        minimapWidth: minimap.width,
+        minimapHeight: minimap.height,
+        hasMinimapData: minimap.rgbaBase64.length > 100 && minimap.previewDataUrl.startsWith('data:image/png'),
       };
     });
 
@@ -91,5 +123,14 @@ test.describe('Admin 3D World Editor (ROADMAP 14.24 Part A)', () => {
     expect(summaryAfterOps.redone).toBe(true);
     expect(summaryAfterOps.finalTileCenter).toBe(1);
     expect(summaryAfterOps.finalTileBlocked).toBe(4);
+    expect(summaryAfterOps.objIdx).toBe(0);
+    expect(summaryAfterOps.moved).toBe(true);
+    expect(summaryAfterOps.rawObjByteLength).toBe(34);
+    expect(summaryAfterOps.removed).toBe(true);
+    expect(summaryAfterOps.litCells).toBeGreaterThanOrEqual(4);
+    expect(summaryAfterOps.hasLightJpg).toBe(true);
+    expect(summaryAfterOps.minimapWidth).toBe(128);
+    expect(summaryAfterOps.minimapHeight).toBe(128);
+    expect(summaryAfterOps.hasMinimapData).toBe(true);
   });
 });

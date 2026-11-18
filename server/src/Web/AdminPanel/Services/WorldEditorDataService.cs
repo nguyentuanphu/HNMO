@@ -5,8 +5,11 @@
 namespace HNMO.Web.AdminPanel.Services;
 
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +26,12 @@ public sealed class WorldEditorDataService
     private const int OzjPrefixBytes = 24;
     private const int OztPrefixBytes = 4;
     private const int PackHeaderSize = 48;
+    private const uint PackFormatVersion = 1;
+    private const byte InitialMapKey = 0x5E;
+    private const byte MapKeyIncrement = 0x3D;
+
+    private static readonly byte[] PackMagicBytes = "HPK1"u8.ToArray();
+    private static readonly byte[] MapXorKey = [0xD1, 0x73, 0x52, 0xF6, 0xD2, 0x9A, 0xCB, 0x27, 0x3E, 0xAF, 0x59, 0x31, 0x37, 0xB3, 0xE7, 0xA2];
 
     private static readonly Dictionary<short, int> SharedWorldFolders = new()
     {
@@ -78,6 +87,59 @@ public sealed class WorldEditorDataService
     /// <returns>One-based folder index.</returns>
     public static int GetWorldFolderNumber(short mapNumber) =>
         SharedWorldFolders.TryGetValue(mapNumber, out var shared) ? shared : mapNumber + 1;
+
+    /// <summary>Encrypts raw world binary data (<c>EncTerrainN.obj</c> / <c>.map</c>) using the client map cipher.</summary>
+    /// <param name="rawData">Plaintext buffer.</param>
+    /// <returns>Encrypted buffer.</returns>
+    public static byte[] EncryptMapBuffer(ReadOnlySpan<byte> rawData)
+    {
+        var encrypted = rawData.ToArray();
+        byte mapKey = InitialMapKey;
+        for (var i = 0; i < encrypted.Length; i++)
+        {
+            encrypted[i] = (byte)((encrypted[i] + mapKey) ^ MapXorKey[i % MapXorKey.Length]);
+            mapKey = (byte)(encrypted[i] + MapKeyIncrement);
+        }
+
+        return encrypted;
+    }
+
+    /// <summary>Encodes top-down RGBA pixels into an uncompressed 32-bit bottom-up TGA image.</summary>
+    /// <param name="rgba">RGBA pixels (<c>width * height * 4</c>).</param>
+    /// <param name="width">Image width in pixels.</param>
+    /// <param name="height">Image height in pixels.</param>
+    /// <returns>Complete TGA byte payload.</returns>
+    public static byte[] EncodeUncompressedTga(ReadOnlySpan<byte> rgba, int width, int height)
+    {
+        var expected = width * height * 4;
+        if (width <= 0 || height <= 0 || rgba.Length != expected)
+        {
+            throw new ArgumentException($"Expected {expected} RGBA bytes for {width}x{height} TGA.", nameof(rgba));
+        }
+
+        var tga = new byte[18 + expected];
+        tga[2] = 2; // uncompressed true-color image
+        BinaryPrimitives.WriteUInt16LittleEndian(tga.AsSpan(12, 2), (ushort)width);
+        BinaryPrimitives.WriteUInt16LittleEndian(tga.AsSpan(14, 2), (ushort)height);
+        tga[16] = 32; // 32-bit BGRA
+        tga[17] = 8;  // 8-bit alpha, bottom-left origin
+
+        var dst = 18;
+        for (var y = height - 1; y >= 0; y--)
+        {
+            var row = y * width * 4;
+            for (var x = 0; x < width; x++)
+            {
+                var src = row + (x * 4);
+                tga[dst++] = rgba[src + 2]; // B
+                tga[dst++] = rgba[src + 1]; // G
+                tga[dst++] = rgba[src];     // R
+                tga[dst++] = rgba[src + 3]; // A
+            }
+        }
+
+        return tga;
+    }
 
     /// <summary>Determines whether client height/mapping assets exist for a map so full 3D rendering can load.</summary>
     /// <param name="mapNumber">Map number.</param>
@@ -140,33 +202,136 @@ public sealed class WorldEditorDataService
     {
         var bytes = TerrainFileConverter.ToClientFile(tileAttributes, mapNumber);
         var folder = GetWorldFolderNumber(mapNumber);
+        return this.WriteWorldFileToRoots(folder, $"EncTerrain{folder}.att", bytes);
+    }
+
+    /// <summary>Encrypts raw world object records (<c>EncTerrainN.obj</c>) and writes to web and server data folders.</summary>
+    /// <param name="mapNumber">Map number.</param>
+    /// <param name="rawObjectData">Unencrypted 4-byte header + N x 30-byte records.</param>
+    /// <returns>List of written file paths.</returns>
+    public IReadOnlyList<string> WriteClientObjects(short mapNumber, ReadOnlySpan<byte> rawObjectData)
+    {
+        if (rawObjectData.Length < 4 || ((rawObjectData.Length - 4) % 30) != 0)
+        {
+            throw new ArgumentException("Invalid world object buffer length.", nameof(rawObjectData));
+        }
+
+        var encrypted = EncryptMapBuffer(rawObjectData);
+        var folder = GetWorldFolderNumber(mapNumber);
+        return this.WriteWorldFileToRoots(folder, $"EncTerrain{folder}.obj", encrypted);
+    }
+
+    /// <summary>Writes updated <c>TerrainLight.jpg</c> lightmap files to web and server data folders.</summary>
+    /// <param name="mapNumber">Map number.</param>
+    /// <param name="jpegBytes">JPEG bytes.</param>
+    /// <returns>List of written file paths.</returns>
+    public IReadOnlyList<string> WriteClientLightMap(short mapNumber, byte[] jpegBytes)
+    {
+        if (jpegBytes is null || jpegBytes.Length < 4 || jpegBytes[0] != 0xFF || jpegBytes[1] != 0xD8)
+        {
+            throw new ArgumentException("Invalid JPEG lightmap payload.", nameof(jpegBytes));
+        }
+
+        var folder = GetWorldFolderNumber(mapNumber);
+        return this.WriteWorldFileToRoots(folder, "TerrainLight.jpg", jpegBytes);
+    }
+
+    /// <summary>Encodes and writes regenerated <c>mini_map.tga</c> (and <c>.ozt</c> for server data) across web and server roots.</summary>
+    /// <param name="mapNumber">Map number.</param>
+    /// <param name="rgbaBytes">Top-down RGBA pixel bytes.</param>
+    /// <param name="width">Image width.</param>
+    /// <param name="height">Image height.</param>
+    /// <returns>List of written file paths.</returns>
+    public IReadOnlyList<string> WriteClientMinimap(short mapNumber, ReadOnlySpan<byte> rgbaBytes, int width, int height)
+    {
+        var tga = EncodeUncompressedTga(rgbaBytes, width, height);
+        var folder = GetWorldFolderNumber(mapNumber);
         var relDir = $"World{folder}";
-        var fileName = $"EncTerrain{folder}.att";
         var written = new List<string>();
         var (serverDir, webDir) = this.ResolveDirectories();
 
-        foreach (var root in new[] { webDir, serverDir })
+        if (!string.IsNullOrWhiteSpace(webDir))
         {
-            if (string.IsNullOrWhiteSpace(root))
+            var webPath = Path.Combine(webDir, relDir, "mini_map.tga");
+            Directory.CreateDirectory(Path.GetDirectoryName(webPath)!);
+            WriteAtomic(webPath, tga);
+            written.Add(webPath);
+        }
+
+        if (!string.IsNullOrWhiteSpace(serverDir))
+        {
+            var ozt = new byte[OztPrefixBytes + tga.Length];
+            tga.CopyTo(ozt.AsSpan(OztPrefixBytes));
+            var serverPath = Path.Combine(serverDir, relDir, "mini_map.ozt");
+            Directory.CreateDirectory(Path.GetDirectoryName(serverPath)!);
+            WriteAtomic(serverPath, ozt);
+            written.Add(serverPath);
+        }
+
+        return written;
+    }
+
+    /// <summary>Rebuilds the map's <c>worldN.hpk</c> pack archive combining existing packed entries with edited loose files.</summary>
+    /// <param name="mapNumber">Map number.</param>
+    /// <returns>Tuple of pack path and packed entry count.</returns>
+    public (string PackPath, int EntryCount) RebuildWorldPack(short mapNumber)
+    {
+        var folder = GetWorldFolderNumber(mapNumber);
+        var (serverDir, webDir) = this.ResolveDirectories();
+        var packRoot = !string.IsNullOrWhiteSpace(serverDir)
+            ? serverDir
+            : !string.IsNullOrWhiteSpace(webDir)
+                ? webDir
+                : throw new InvalidOperationException("No data directory is configured.");
+
+        var packsDir = Path.Combine(packRoot, "packs");
+        if (!Directory.Exists(packsDir))
+        {
+            var siblingPacks = Path.GetFullPath(Path.Combine(packRoot, "..", "packs"));
+            if (Directory.Exists(siblingPacks))
+            {
+                packsDir = siblingPacks;
+            }
+        }
+
+        Directory.CreateDirectory(packsDir);
+        var packPath = Path.Combine(packsDir, $"world{folder}.hpk");
+
+        var entries = new Dictionary<string, (string OrigPath, byte[] Payload, byte ContentCode)>(StringComparer.Ordinal);
+        if (File.Exists(packPath))
+        {
+            ReadPackEntries(packPath, entries);
+        }
+
+        foreach (var root in new[] { serverDir, webDir })
+        {
+            if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
             {
                 continue;
             }
 
-            try
+            foreach (var sub in new[] { $"World{folder}", $"Object{folder}" })
             {
-                var targetDir = Path.Combine(root, relDir);
-                Directory.CreateDirectory(targetDir);
-                var targetFile = Path.Combine(targetDir, fileName);
-                WriteAtomic(targetFile, bytes);
-                written.Add(targetFile);
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                this._logger?.LogWarning(ex, "Could not write client terrain attributes to {Root}", root);
+                var dir = Path.Combine(root, sub);
+                if (!Directory.Exists(dir))
+                {
+                    continue;
+                }
+
+                foreach (var file in Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories))
+                {
+                    var relPath = Path.GetRelativePath(root, file).Replace('\\', '/');
+                    var raw = File.ReadAllBytes(file);
+                    var (unwrappedBytes, mime) = Unwrap(file, raw);
+                    var code = EncodeContentType(mime);
+                    entries[relPath.ToLowerInvariant()] = (relPath, unwrappedBytes, code);
+                }
             }
         }
 
-        return written;
+        var ordered = entries.OrderBy(kv => kv.Key, StringComparer.Ordinal).Select(kv => (kv.Key, kv.Value.OrigPath, kv.Value.Payload, kv.Value.ContentCode)).ToList();
+        WriteHpkArchive(packPath, ordered);
+        return (packPath, ordered.Count);
     }
 
     private static string[]? SanitizePathParts(string relativePath)
@@ -309,20 +474,138 @@ public sealed class WorldEditorDataService
                 {
                     stream.Position = offset;
                     var bytes = reader.ReadBytes(checked((int)length));
-                    var ct = contentCode switch
-                    {
-                        1 => "image/jpeg",
-                        2 => "image/png",
-                        3 => "image/tga",
-                        4 => "image/ktx2",
-                        _ => "application/octet-stream",
-                    };
-                    return (bytes, ct);
+                    return (bytes, DecodePackContentType(contentCode));
                 }
             }
         }
 
         return null;
+    }
+
+    private static string DecodePackContentType(byte contentCode) => contentCode switch
+    {
+        1 => "image/jpeg",
+        2 => "image/x-tga",
+        3 => "application/json; charset=utf-8",
+        4 => "image/png",
+        5 => "audio/ogg",
+        6 => "audio/wav",
+        7 => "audio/mpeg",
+        8 => "image/ktx2",
+        _ => "application/octet-stream",
+    };
+
+    private static byte EncodeContentType(string contentType) => contentType switch
+    {
+        "image/jpeg" => 1,
+        "image/tga" or "image/x-tga" => 2,
+        "application/json; charset=utf-8" => 3,
+        "image/png" => 4,
+        "audio/ogg" => 5,
+        "audio/wav" => 6,
+        "audio/mpeg" => 7,
+        "image/ktx2" => 8,
+        _ => 0,
+    };
+
+    private static void ReadPackEntries(
+        string packPath,
+        Dictionary<string, (string OrigPath, byte[] Payload, byte ContentCode)> entries)
+    {
+        using var stream = new FileStream(packPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        if (stream.Length < PackHeaderSize)
+        {
+            return;
+        }
+
+        using var reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen: true);
+        var magic = reader.ReadBytes(4);
+        if (magic.Length != 4 || magic[0] != PackMagicBytes[0] || magic[1] != PackMagicBytes[1] || magic[2] != PackMagicBytes[2] || magic[3] != PackMagicBytes[3])
+        {
+            return;
+        }
+
+        _ = reader.ReadUInt32(); // version
+        var count = reader.ReadUInt32();
+        stream.Position = PackHeaderSize;
+
+        var meta = new List<(string Lower, string Orig, long Offset, long Length, byte Code)>((int)count);
+        for (uint i = 0; i < count; i++)
+        {
+            var lowerLen = reader.ReadUInt16();
+            var lowerPath = Encoding.UTF8.GetString(reader.ReadBytes(lowerLen));
+            var origLen = reader.ReadUInt16();
+            var origPath = Encoding.UTF8.GetString(reader.ReadBytes(origLen));
+            var offset = reader.ReadInt64();
+            var length = reader.ReadInt64();
+            var code = reader.ReadByte();
+            meta.Add((lowerPath, origPath, offset, length, code));
+        }
+
+        foreach (var item in meta)
+        {
+            stream.Position = item.Offset;
+            var payload = reader.ReadBytes(checked((int)item.Length));
+            entries[item.Lower] = (item.Orig, payload, item.Code);
+        }
+    }
+
+    private static void WriteHpkArchive(
+        string packPath,
+        List<(string LowerPath, string OrigPath, byte[] Payload, byte ContentCode)> items)
+    {
+        var encoded = new List<(byte[] LowerBytes, byte[] OrigBytes, byte[] Payload, byte Code)>(items.Count);
+        long indexSize = 0;
+        foreach (var item in items)
+        {
+            var lowerBytes = Encoding.UTF8.GetBytes(item.LowerPath);
+            var origBytes = Encoding.UTF8.GetBytes(item.OrigPath);
+            encoded.Add((lowerBytes, origBytes, item.Payload, item.ContentCode));
+            indexSize += 2 + lowerBytes.Length + 2 + origBytes.Length + 8 + 8 + 1;
+        }
+
+        var tempPath = $"{packPath}.{Guid.NewGuid():N}.tmp";
+        var payloadStart = PackHeaderSize + indexSize;
+        using (var stream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None, bufferSize: 65536))
+        {
+            stream.Write(new byte[PackHeaderSize]);
+            var offset = payloadStart;
+            using (var writer = new BinaryWriter(stream, Encoding.UTF8, leaveOpen: true))
+            {
+                foreach (var e in encoded)
+                {
+                    writer.Write((ushort)e.LowerBytes.Length);
+                    writer.Write(e.LowerBytes);
+                    writer.Write((ushort)e.OrigBytes.Length);
+                    writer.Write(e.OrigBytes);
+                    writer.Write(offset);
+                    writer.Write((long)e.Payload.Length);
+                    writer.Write(e.Code);
+                    offset += e.Payload.Length;
+                }
+            }
+
+            foreach (var e in encoded)
+            {
+                stream.Write(e.Payload);
+            }
+
+            stream.Flush();
+            stream.Position = PackHeaderSize;
+            var hash = SHA256.HashData(stream);
+
+            Span<byte> header = stackalloc byte[PackHeaderSize];
+            PackMagicBytes.CopyTo(header[..4]);
+            BinaryPrimitives.WriteUInt32LittleEndian(header[4..8], PackFormatVersion);
+            BinaryPrimitives.WriteUInt32LittleEndian(header[8..12], (uint)encoded.Count);
+            BinaryPrimitives.WriteUInt32LittleEndian(header[12..16], 0);
+            hash.CopyTo(header[16..48]);
+
+            stream.Position = 0;
+            stream.Write(header);
+        }
+
+        File.Move(tempPath, packPath, overwrite: true);
     }
 
     private static void WriteAtomic(string destinationPath, byte[] bytes)
@@ -407,5 +690,35 @@ public sealed class WorldEditorDataService
         }
 
         return null;
+    }
+
+    private IReadOnlyList<string> WriteWorldFileToRoots(int folder, string fileName, byte[] bytes)
+    {
+        var relDir = $"World{folder}";
+        var written = new List<string>();
+        var (serverDir, webDir) = this.ResolveDirectories();
+
+        foreach (var root in new[] { webDir, serverDir })
+        {
+            if (string.IsNullOrWhiteSpace(root))
+            {
+                continue;
+            }
+
+            try
+            {
+                var targetDir = Path.Combine(root, relDir);
+                Directory.CreateDirectory(targetDir);
+                var targetFile = Path.Combine(targetDir, fileName);
+                WriteAtomic(targetFile, bytes);
+                written.Add(targetFile);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                this._logger?.LogWarning(ex, "Could not write world editor file {FileName} under {Root}", fileName, root);
+            }
+        }
+
+        return written;
     }
 }

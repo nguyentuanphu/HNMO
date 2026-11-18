@@ -67,6 +67,15 @@ public partial class WorldEditor : IAsyncDisposable
     private int _jumpX = 128;
     private int _jumpY = 128;
     private short _defaultMonsterNumber;
+    private int _newObjectType;
+    private double _newObjectScale = 1.0;
+    private string _lightBrushColor = "#ffd98c";
+    private double _lightBrushIntensity = 0.45;
+    private string _ambientColor = "#ffffff";
+    private double _ambientIntensity = 0.85;
+    private int _totalWorldObjects;
+    private List<WorldObjectRow> _worldObjects = new();
+    private string? _minimapPreviewUrl;
 
     /// <summary>Gets or sets the optionally routed map identifier.</summary>
     [Parameter]
@@ -181,6 +190,12 @@ public partial class WorldEditor : IAsyncDisposable
             this._selectedMap.ExitGates.Add(gate);
             this._allExitGates.Add(gate);
             this._activeTab = "exitGates";
+        }
+        else if (tool == "addObject" && this._editorHandle is not null)
+        {
+            await this._editorHandle.InvokeAsync<int>("addObject", this._newObjectType, x, y, this._newObjectScale).ConfigureAwait(true);
+            this._activeTab = "objects";
+            await this.RefreshObjectsListAsync().ConfigureAwait(true);
         }
 
         await this.PushEntitiesToViewportAsync().ConfigureAwait(true);
@@ -368,6 +383,8 @@ public partial class WorldEditor : IAsyncDisposable
         this._renderModeLabel = info.Mode == "full-3d-world"
             ? $"{L("Full 3D World", "Thế giới 3D đầy đủ")} ({info.ObjectCount})"
             : L("3D Terrain Grid", "Lưới địa hình 3D");
+        this._totalWorldObjects = info.ObjectCount;
+        await this.RefreshObjectsListAsync().ConfigureAwait(true);
         this.StateHasChanged();
     }
 
@@ -556,11 +573,24 @@ public partial class WorldEditor : IAsyncDisposable
             var attributes = Convert.FromBase64String(b64);
             this._selectedMap.TerrainData = TerrainFileConverter.ToServerFile(attributes);
             await this._context.SaveChangesAsync().ConfigureAwait(true);
-            var written = this.DataService.WriteClientAttributes(this._selectedMap.Number, attributes);
+            var written = new List<string>(this.DataService.WriteClientAttributes(this._selectedMap.Number, attributes));
+
+            var rawObjB64 = await this._editorHandle.InvokeAsync<string?>("getRawObjectsBase64").ConfigureAwait(true);
+            if (!string.IsNullOrEmpty(rawObjB64))
+            {
+                written.AddRange(this.DataService.WriteClientObjects(this._selectedMap.Number, Convert.FromBase64String(rawObjB64)));
+            }
+
+            var lightJpgB64 = await this._editorHandle.InvokeAsync<string?>("getLightMapJpegBase64", false).ConfigureAwait(true);
+            if (!string.IsNullOrEmpty(lightJpgB64))
+            {
+                written.AddRange(this.DataService.WriteClientLightMap(this._selectedMap.Number, Convert.FromBase64String(lightJpgB64)));
+            }
+
             var targetSummary = written.Count > 0 ? string.Join(", ", written) : L("database only (data directory not present)", "chỉ cơ sở dữ liệu (chưa có thư mục Data)");
             this._statusMessage = L(
-                $"Saved terrain, spawns, and gates for {this._selectedMap.Name} ({targetSummary}).",
-                $"Đã lưu địa hình, bãi quái và cổng cho {this._selectedMap.Name} ({targetSummary}).");
+                $"Saved terrain, objects, lights, spawns, and gates for {this._selectedMap.Name} ({targetSummary}).",
+                $"Đã lưu địa hình, vật thể 3D, ánh sáng, bãi quái và cổng cho {this._selectedMap.Name} ({targetSummary}).");
             this.ToastService.ShowSuccess(this._statusMessage);
         }
         catch (Exception ex)
@@ -577,10 +607,209 @@ public partial class WorldEditor : IAsyncDisposable
         }
     }
 
+    private async Task OpenObjectsTabAsync()
+    {
+        this._activeTab = "objects";
+        await this.RefreshObjectsListAsync().ConfigureAwait(true);
+    }
+
+    private async Task RefreshObjectsListAsync()
+    {
+        if (this._editorHandle is null)
+        {
+            return;
+        }
+
+        var page = await this._editorHandle.InvokeAsync<WorldObjectPage>("getObjects", 0, 60).ConfigureAwait(true);
+        this._totalWorldObjects = page.Total;
+        this._worldObjects = page.Items;
+        this.StateHasChanged();
+    }
+
+    private async Task SelectWorldObjectAsync(int index)
+    {
+        if (this._editorHandle is not null)
+        {
+            await this._editorHandle.InvokeVoidAsync("selectObject", index).ConfigureAwait(true);
+        }
+    }
+
+    private async Task ApplyObjectTransformAsync(WorldObjectRow obj)
+    {
+        if (this._editorHandle is not null)
+        {
+            await this._editorHandle.InvokeAsync<bool>(
+                "updateObjectTransform",
+                obj.Index,
+                obj.X,
+                obj.Y,
+                obj.Z,
+                obj.AngleX,
+                obj.AngleY,
+                obj.AngleZ,
+                obj.Scale).ConfigureAwait(true);
+        }
+    }
+
+    private async Task RemoveWorldObjectAsync(int index)
+    {
+        if (this._editorHandle is null)
+        {
+            return;
+        }
+
+        await this._editorHandle.InvokeAsync<bool>("removeObject", index).ConfigureAwait(true);
+        await this.RefreshObjectsListAsync().ConfigureAwait(true);
+    }
+
+    private async Task OnLightBrushChangedAsync(ChangeEventArgs args)
+    {
+        this._lightBrushColor = args.Value?.ToString() ?? "#ffd98c";
+        if (this._editorHandle is not null)
+        {
+            await this._editorHandle.InvokeVoidAsync("setLightBrush", this._lightBrushColor, this._lightBrushIntensity).ConfigureAwait(true);
+        }
+    }
+
+    private async Task OnLightIntensityChangedAsync(ChangeEventArgs args)
+    {
+        if (double.TryParse(args.Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
+        {
+            this._lightBrushIntensity = Math.Clamp(val, 0.05, 1.0);
+            if (this._editorHandle is not null)
+            {
+                await this._editorHandle.InvokeVoidAsync("setLightBrush", this._lightBrushColor, this._lightBrushIntensity).ConfigureAwait(true);
+            }
+        }
+    }
+
+    private async Task OnAmbientColorChangedAsync(ChangeEventArgs args)
+    {
+        this._ambientColor = args.Value?.ToString() ?? "#ffffff";
+        if (this._editorHandle is not null)
+        {
+            await this._editorHandle.InvokeVoidAsync("setAmbientLight", this._ambientColor, this._ambientIntensity).ConfigureAwait(true);
+        }
+    }
+
+    private async Task OnAmbientIntensityChangedAsync(ChangeEventArgs args)
+    {
+        if (double.TryParse(args.Value?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
+        {
+            this._ambientIntensity = Math.Clamp(val, 0.2, 2.5);
+            if (this._editorHandle is not null)
+            {
+                await this._editorHandle.InvokeVoidAsync("setAmbientLight", this._ambientColor, this._ambientIntensity).ConfigureAwait(true);
+            }
+        }
+    }
+
+    private async Task RegenerateMinimapAsync()
+    {
+        if (this._isSaving || this._selectedMap is null || this._editorHandle is null)
+        {
+            return;
+        }
+
+        this._isSaving = true;
+        this._statusError = false;
+        try
+        {
+            var capture = await this._editorHandle.InvokeAsync<MinimapCaptureResult>("captureMinimapRgba", 256).ConfigureAwait(true);
+            var rgba = Convert.FromBase64String(capture.RgbaBase64);
+            var written = this.DataService.WriteClientMinimap(this._selectedMap.Number, rgba, capture.Width, capture.Height);
+            this._minimapPreviewUrl = capture.PreviewDataUrl;
+            this._activeTab = "lights";
+            this._statusMessage = L(
+                $"Regenerated minimap ({capture.Width}x{capture.Height}): {string.Join(", ", written)}",
+                $"Đã tạo lại minimap ({capture.Width}x{capture.Height}): {string.Join(", ", written)}");
+            this.ToastService.ShowSuccess(this._statusMessage);
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Failed to regenerate minimap");
+            this._statusError = true;
+            this._statusMessage = ex.Message;
+            this.ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            this._isSaving = false;
+            this.StateHasChanged();
+        }
+    }
+
+    private Task RebuildPackAsync()
+    {
+        if (this._selectedMap is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._statusError = false;
+        try
+        {
+            var (packPath, entryCount) = this.DataService.RebuildWorldPack(this._selectedMap.Number);
+            this._statusMessage = L(
+                $"Rebuilt .hpk map pack: {packPath} ({entryCount} entries).",
+                $"Đã đóng gói lại .hpk bản đồ: {packPath} ({entryCount} tệp).");
+            this.ToastService.ShowSuccess(this._statusMessage);
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Failed to rebuild world pack");
+            this._statusError = true;
+            this._statusMessage = ex.Message;
+            this.ToastService.ShowError(ex.Message);
+        }
+
+        this.StateHasChanged();
+        return Task.CompletedTask;
+    }
+
     private sealed class ViewportLoadInfo
     {
         public string Mode { get; set; } = string.Empty;
 
         public int ObjectCount { get; set; }
+    }
+
+    private sealed class WorldObjectPage
+    {
+        public int Total { get; set; }
+
+        public List<WorldObjectRow> Items { get; set; } = new();
+    }
+
+    private sealed class WorldObjectRow
+    {
+        public int Index { get; set; }
+
+        public int Type { get; set; }
+
+        public double X { get; set; }
+
+        public double Y { get; set; }
+
+        public double Z { get; set; }
+
+        public double AngleX { get; set; }
+
+        public double AngleY { get; set; }
+
+        public double AngleZ { get; set; }
+
+        public double Scale { get; set; }
+    }
+
+    private sealed class MinimapCaptureResult
+    {
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
+        public string RgbaBase64 { get; set; } = string.Empty;
+
+        public string PreviewDataUrl { get; set; } = string.Empty;
     }
 }
