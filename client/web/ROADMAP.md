@@ -716,3 +716,13 @@ rollback, and a step-by-step guide (EN/VI) for the owner.
 Antigravity's long job from 2026-11-18, in order: refresh its integration branch (#51) with main + #62; the VPS
 deployment kit (18); escrow trades (16, PR 1-4); Phase 3 (14.19 item definitions, 14.21 stats calculator, 14.24 3D
 world editor); mobile (17) only if the second Antigravity hasn't started it.
+
+## Owner decision 2026-11-18 (Sydney): ChatGPT stopped; Antigravity takes over
+ChatGPT is stopped (slow, mistakes). Its unfinished work moves to Antigravity: gift box/mail (#64 + WIP branch
+chatgpt-gift-box-wip), ban/mute manager, admin help on every page (#33), character tools, GM manager + commands, news
+manager, VIP servers, admin redesign + guide split. Antigravity may push to the chatgpt-* branches. After its queue,
+Antigravity audits all of ChatGPT's work (#2-#6, #8, #9, #12, #16, #26, #29, #33, #39, #62, #64) and fixes what's wrong.
+VPS deployment kit: on hold (owner, 2026-11-18). IGCN: features rebuilt in HNMO's own code + a local importer for the
+owner's own data; no IGCN files, code or text in the repo.
+Packet numbers from now: Antigravity uses F5 27-2F (ChatGPT's unused numbers) and F5 50-6F; 23 gift codes, 24 login
+ticket, 25/26 VIP, 30-4F Antigravity's earlier features.
