@@ -595,23 +595,26 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      the server list grouped by world; "create a world from a template" (copy settings; fresh or copied characters;
      opening date); optional one-off character transfer between worlds; later a cross-world event server.
 
-## VIP implementation checkpoint — rules only (2026-11-16)
-chatgpt-vip starts from antigravity-one-save-file because #19 was not merged at creation.
-Added opt-in bilingual level/offer configuration, pure purchase quotes, confirmed-receipt
-bookkeeping/replay checks, extension/expiry rules, grant/remove audit records, Sydney-day
-bonus bookkeeping and the vip section of HnmoStateStore. No separate save file or new
-packet number is introduced. This is NOT a working gameplay VIP feature and this owner
-decision is not marked done.
-Remaining: authenticated wallet/debit and recovery journal, registered plug-in, timed
-account-attribute projection with the same expiry, actual XP/zen and supported benefits,
-admin page/authorization/audit operations, website section, in-game window and free hotkey,
-expiry/start notices, chat mark and the required UI/integration tests. New packets may
-use only F5 25–2F. VIP-server UI/rates are queued separately under ROADMAP 15.6.
+## VIP implementation checkpoint — game and account adapters (2026-11-18)
+The VIP branch now includes the required antigravity-integration foundation and account
+page dependency. Paid purchases use a shared VIP intent journal before a single account
+save commits the debit, replay receipt and three same-expiry account grants. The actual
+XP/Zen bonuses refresh in the live game and expire through the existing grant timer.
+Daily coins use one durable pending credit per account/Sydney day, then normal coin
+application. The account page and web game share offer review and stable retry controls;
+the game uses F5 25/F5 26, Alt+U and the mobile More menu. New purchases are off by default.
+Start/last-day notices and a server-resolved chat mark are being validated.
+Still unfinished: the plain admin VIP settings/grant/remove page, durable activity audit
+for those host actions, its bUnit tests, and final combined/live deployment checks.
+Do not mark the whole VIP decision done yet. Per-server rates/list controls are separate
+under ROADMAP 15.6. No desktop work is required.
 
-Đã có phần quy tắc VIP và mục lưu trong tệp trạng thái dùng chung; cấu hình mặc định tắt.
-Chưa có mua VIP thực tế, trừ coin, áp dụng quyền lợi hoặc giao diện. Cần hoàn thiện giao
-dịch và khôi phục, plug-in, chỉ số tài khoản cùng hạn dùng, trang quản trị, website,
-cửa sổ game, thông báo và kiểm thử tích hợp trước khi đánh dấu hoàn tất.
+Đã nối phần mua VIP với trang tài khoản và game web: xem lại giá trước khi xác nhận,
+thử lại bằng cùng mã giao dịch, trừ coin một lần và cấp ba quyền lợi cùng hạn dùng.
+Ưu đãi kinh nghiệm/Zen áp dụng ngay trong game; quà coin hằng ngày dùng một khoản
+cộng chờ duy nhất cho mỗi tài khoản/ngày Sydney. Mở bằng Alt+U hoặc menu Thêm.
+Mua mới được tắt mặc định. Chưa hoàn tất trang quản trị cấp/xóa VIP, nhật ký thao tác
+của quản trị viên và kiểm tra triển khai thực tế; chưa đánh dấu toàn bộ mục này xong.
 
 ## Player account dashboard — foundation (2026-11-16)
 Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,

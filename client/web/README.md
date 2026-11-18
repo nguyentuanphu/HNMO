@@ -259,3 +259,18 @@ cộng lại coin. Các điểm lưu và hoàn tác cũ được giữ nguyên; 
 cửa hàng được lưu theo lần lưu tiến trình thông thường. Chưa xác nhận thanh toán
 trực tiếp trên PostgreSQL hoặc khôi phục sau sự cố của các luồng thanh toán cũ.
 Lịch sử trong admin có tên giao dịch bằng tiếng Việt và thời gian Sydney.
+
+## VIP subscriptions
+
+Open VIP with **Alt+U**, the mobile **More → VIP** entry, or the account page’s VIP
+section. Review the price and bonuses before confirming. Retry a pending purchase
+with its original identifier. Renewals of the same level add time; different levels
+need host assistance. Daily coins are once per account/Sydney day. The website
+requires the account to leave the game before a purchase. Purchases default to off.
+The plain admin grant/remove page is still in development.
+
+Mở VIP bằng **Alt+U**, **Thêm → VIP** trên điện thoại hoặc mục VIP của trang tài khoản.
+Xem lại giá và quyền lợi trước khi xác nhận; thử lại chính giao dịch đang chờ.
+Gia hạn cùng hạng cộng thêm thời gian. Mỗi tài khoản nhận quà một lần/ngày Sydney.
+Hãy thoát game trước khi mua trên website. Mua mới được tắt mặc định; trang quản trị
+cấp/xóa VIP đang được hoàn thiện.

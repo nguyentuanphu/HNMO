@@ -14,6 +14,7 @@ using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.GameLogic.Views;
+using HNMO.Interfaces;
 using HNMO.Persistence;
 using Moq;
 

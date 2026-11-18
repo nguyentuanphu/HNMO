@@ -30,6 +30,7 @@ public static class VipChat
             _ => string.Empty,
         };
         var text = message.StartsWith(prefix, StringComparison.Ordinal) ? message[prefix.Length..] : message;
+
         // VIP is the same abbreviation in English and Vietnamese. Keep the sender's name untouched by packet limits.
         return prefix + "[VIP] " + text;
     }

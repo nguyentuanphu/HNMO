@@ -176,3 +176,16 @@ or a playable VIP feature.
 VIP là tính năng mở rộng được chủ HNMO yêu cầu. Hiện chỉ có nền quy tắc phía máy chủ và
 lưu trạng thái dùng chung; chưa thay đổi cách chơi hoặc gói tin của web/desktop. Chưa có
 mua VIP, giao diện hoặc áp dụng quyền lợi thực tế.
+
+### HNMO VIP subscriptions (web)
+
+The account page and game window (Alt+U; mobile More → VIP) share reviewed offers,
+stable purchase retries and Sydney-day daily coins. The server commits each debit,
+receipt and three timed account grants together; live XP/Zen bonuses use those grants.
+F5 25 requests and F5 26 state belong to HNMO. New purchases are disabled by default.
+Host grant/remove/configuration UI and final live validation remain unfinished.
+
+Trang tài khoản và cửa sổ VIP trong game dùng chung bước xem lại giá, thử lại giao dịch
+và quà theo ngày Sydney. Máy chủ lưu việc trừ coin, biên nhận và ba quyền lợi có cùng
+hạn trong một lần lưu tài khoản. Mục quản trị cấp/xóa/cấu hình và kiểm tra máy chủ
+thực tế chưa hoàn tất.
