@@ -37,7 +37,7 @@ public sealed class VipPlugIn : IPlayerStateChangedPlugIn, IPeriodicTaskPlugIn, 
     /// <inheritdoc />
     public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)
     {
-        if (this.Configuration?.Enabled == true && currentState == PlayerState.EnteredWorld)
+        if (this.Configuration is not null && currentState == PlayerState.EnteredWorld && player.Attributes?[Stats.IsVip] > 0)
         {
             await this.CheckAsync(player).ConfigureAwait(false);
         }
@@ -47,7 +47,7 @@ public sealed class VipPlugIn : IPlayerStateChangedPlugIn, IPeriodicTaskPlugIn, 
     public async ValueTask ExecuteTaskAsync(GameContext gameContext)
     {
         var now = DateTime.UtcNow;
-        if (this.Configuration?.Enabled != true || now.Ticks < Interlocked.Read(ref this._nextTickUtc))
+        if (this.Configuration is null || now.Ticks < Interlocked.Read(ref this._nextTickUtc))
         {
             return;
         }

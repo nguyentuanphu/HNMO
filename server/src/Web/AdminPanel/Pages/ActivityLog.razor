@@ -134,7 +134,7 @@ else if (this._configuration is { } c)
                                     <td>@FormatActor(entry.PartnerAccount, entry.PartnerCharacter)</td>
                                     <td>@entry.ItemSummary</td>
                                     <td class="text-end text-nowrap">@(entry.ZenDelta == 0 ? "-" : entry.ZenDelta.ToString("N0", CultureInfo.InvariantCulture))</td>
-                                    <td class="small text-muted">@entry.Details @(string.IsNullOrEmpty(entry.ItemIds) ? string.Empty : $"[{entry.ItemIds}]")</td>
+                                    <td class="small text-muted">@HNMO.Web.AdminPanel.Services.VipActivityText.Format(entry) @(string.IsNullOrEmpty(entry.ItemIds) ? string.Empty : $"[{entry.ItemIds}]")</td>
                                 </tr>
                             }
                         </tbody>

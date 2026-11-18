@@ -4755,4 +4755,93 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   </data>
   <data name="VipCoinHistoryRemoved" xml:space="preserve"><value>Chủ máy chủ đã thu hồi VIP</value></data>
   <data name="VipActivityAdministration" xml:space="preserve"><value>Quản trị</value></data>
+  <data name="VipManagerTitle" xml:space="preserve"><value>Quản lý VIP</value></data>
+  <data name="VipManagerHelp" xml:space="preserve"><value>Lưu các hạng và giá trước khi cấp VIP. Mua VIP được tắt mặc định. Tắt mua mới vẫn giữ thời hạn và quyền lợi đã mua. Cấp VIP không trừ coin và cộng ngày vào cùng hạng đang dùng; muốn đổi hạng, hãy thu hồi VIP hiện tại trước. Người chơi phải thoát game trước khi quản trị viên thay đổi. Nhập đúng tên tài khoản và lý do, xem lại rồi xác nhận. Nếu chưa xác nhận được kết quả, thử lại bằng chính mã thao tác đó. Chỉ thu hồi các quyền VIP đã được chứng minh thuộc plug-in này; VIP cũ hoặc từ nguồn khác cần kiểm tra riêng. Danh sách đối chiếu các gói đã biết với dữ liệu tài khoản. Sau khi khôi phục chỉ mục, tìm đúng tên tài khoản để dựng lại dòng tương ứng. Ngày giờ theo Sydney.</value></data>
+  <data name="VipManagerAccount" xml:space="preserve"><value>Tên tài khoản</value></data>
+  <data name="VipManagerAccountHint" xml:space="preserve"><value>Nhập đúng tên tài khoản game, giữ nguyên chữ hoa và chữ thường.</value></data>
+  <data name="VipManagerLevel" xml:space="preserve"><value>Hạng VIP</value></data>
+  <data name="VipManagerDays" xml:space="preserve"><value>Số ngày cộng thêm</value></data>
+  <data name="VipManagerDaysHint" xml:space="preserve"><value>Cộng từ 1 đến 3650 ngày; gói còn hạn cùng hạng sẽ được gia hạn.</value></data>
+  <data name="VipManagerReason" xml:space="preserve"><value>Lý do</value></data>
+  <data name="VipManagerReasonHint" xml:space="preserve"><value>Nêu lý do thay đổi, từ 1 đến 500 ký tự; lý do được lưu trong nhật ký quản trị.</value></data>
+  <data name="VipManagerReviewGrant" xml:space="preserve"><value>Xem lại việc cấp miễn phí</value></data>
+  <data name="VipManagerReviewGrantHint" xml:space="preserve"><value>Xem lại tài khoản, hạng và thời hạn VIP miễn phí trước khi cấp.</value></data>
+  <data name="VipManagerReviewRemove" xml:space="preserve"><value>Xem lại việc thu hồi</value></data>
+  <data name="VipManagerReviewRemoveHint" xml:space="preserve"><value>Xem lại việc thu hồi VIP hiện tại thuộc plug-in này; không hoàn hay trừ coin.</value></data>
+  <data name="VipManagerConfirm" xml:space="preserve"><value>Xác nhận thay đổi</value></data>
+  <data name="VipManagerConfirmHint" xml:space="preserve"><value>Áp dụng thay đổi đã xem lại một lần, kèm lý do đã ghi.</value></data>
+  <data name="VipManagerCancel" xml:space="preserve"><value>Hủy bước xem lại</value></data>
+  <data name="VipManagerCancelHint" xml:space="preserve"><value>Đóng bước xem lại, không thay đổi tài khoản.</value></data>
+  <data name="VipManagerRetry" xml:space="preserve"><value>Kiểm tra thao tác đang chờ</value></data>
+  <data name="VipManagerRetryHint" xml:space="preserve"><value>Xem lại chính thao tác đang chờ; giữ nguyên mã để tránh cộng thời hạn hai lần.</value></data>
+  <data name="VipManagerReload" xml:space="preserve"><value>Làm mới tài khoản</value></data>
+  <data name="VipManagerReloadHint" xml:space="preserve"><value>Kiểm tra VIP đã lưu, không bỏ các sửa đổi giá chưa lưu.</value></data>
+  <data name="VipManagerFilter" xml:space="preserve"><value>Tìm đúng tên tài khoản</value></data>
+  <data name="VipManagerFilterHint" xml:space="preserve"><value>Để trống để xem danh sách VIP đã biết, hoặc nhập đúng tên tài khoản có phân biệt hoa thường.</value></data>
+  <data name="VipManagerNext" xml:space="preserve"><value>Các tài khoản tiếp theo</value></data>
+  <data name="VipManagerPrevious" xml:space="preserve"><value>Các tài khoản trước</value></data>
+  <data name="VipManagerPagerHint" xml:space="preserve"><value>Xem trang khác, mỗi trang tối đa 50 gói đã biết.</value></data>
+  <data name="VipManagerSettings" xml:space="preserve"><value>Hạng và giá</value></data>
+  <data name="VipManagerEnabled" xml:space="preserve"><value>Cho phép mua VIP mới</value></data>
+  <data name="VipManagerEnabledHint" xml:space="preserve"><value>Cho phép người chơi mua các gói đã đặt giá; tắt không thu hồi thời hạn đã mua.</value></data>
+  <data name="VipManagerChatBadge" xml:space="preserve"><value>Hiện VIP trong chat</value></data>
+  <data name="VipManagerChatBadgeHint" xml:space="preserve"><value>Đánh dấu chat của nhân vật VIP còn hạn được xác định trên máy chủ game này.</value></data>
+  <data name="VipManagerNameEn" xml:space="preserve"><value>Tên tiếng Anh</value></data>
+  <data name="VipManagerNameVi" xml:space="preserve"><value>Tên tiếng Việt</value></data>
+  <data name="VipManagerNameHint" xml:space="preserve"><value>Dùng tên ngắn hiển thị cho người chơi, tối đa 60 ký tự.</value></data>
+  <data name="VipManagerLevelId" xml:space="preserve"><value>Số hạng cố định</value></data>
+  <data name="VipManagerLevelIdHint" xml:space="preserve"><value>Giữ nguyên số dương này khi còn tài khoản dùng hạng đó.</value></data>
+  <data name="VipManagerExperience" xml:space="preserve"><value>Kinh nghiệm thêm (%)</value></data>
+  <data name="VipManagerExperienceHint" xml:space="preserve"><value>Nhập 5 để thêm 5% kinh nghiệm khi quyền VIP còn hiệu lực.</value></data>
+  <data name="VipManagerZen" xml:space="preserve"><value>Zen thêm (%)</value></data>
+  <data name="VipManagerZenHint" xml:space="preserve"><value>Nhập 5 để thêm 5% Zen theo chỉ số tăng lượng Zen hiện có.</value></data>
+  <data name="VipManagerDaily" xml:space="preserve"><value>Coin hằng ngày</value></data>
+  <data name="VipManagerDailyHint" xml:space="preserve"><value>Số coin nhận một lần mỗi tài khoản/ngày Sydney; nhập 0 nếu không tặng coin hằng ngày.</value></data>
+  <data name="VipManagerCurrency" xml:space="preserve"><value>Loại coin</value></data>
+  <data name="VipManagerCurrencyHint" xml:space="preserve"><value>Chọn số dư coin dùng cho giá mua hoặc quà hằng ngày.</value></data>
+  <data name="VipManagerOffers" xml:space="preserve"><value>Thời hạn mua</value></data>
+  <data name="VipManagerPrice" xml:space="preserve"><value>Giá bằng coin</value></data>
+  <data name="VipManagerPriceHint" xml:space="preserve"><value>Trừ số coin này cho thời hạn đã chọn; nhập 0 để tạo gói miễn phí.</value></data>
+  <data name="VipManagerAddLevel" xml:space="preserve"><value>Thêm hạng</value></data>
+  <data name="VipManagerAddLevelHint" xml:space="preserve"><value>Thêm hạng VIP có tên hai ngôn ngữ; màn hình này hỗ trợ tối đa 12 hạng.</value></data>
+  <data name="VipManagerRemoveLevel" xml:space="preserve"><value>Bỏ hạng khỏi danh mục</value></data>
+  <data name="VipManagerRemoveLevelHint" xml:space="preserve"><value>Bỏ cấu hình bán hạng này; quyền lợi đã mua giữ nguyên giá trị và hạn đã lưu.</value></data>
+  <data name="VipManagerAddOffer" xml:space="preserve"><value>Thêm thời hạn</value></data>
+  <data name="VipManagerAddOfferHint" xml:space="preserve"><value>Thêm thời hạn có giá; tối đa 4 thời hạn cho mỗi hạng.</value></data>
+  <data name="VipManagerRemoveOffer" xml:space="preserve"><value>Bỏ thời hạn</value></data>
+  <data name="VipManagerRemoveOfferHint" xml:space="preserve"><value>Bỏ thời hạn này khỏi mua mới, không đổi các gói đang có.</value></data>
+  <data name="VipManagerSave" xml:space="preserve"><value>Lưu cài đặt VIP</value></data>
+  <data name="VipManagerSaveHint" xml:space="preserve"><value>Lưu tên hai ngôn ngữ, giá và quyền lợi qua hệ thống cấu hình plug-in hiện có.</value></data>
+  <data name="VipManagerInvalid" xml:space="preserve"><value>Kiểm tra tên, số hạng dương không trùng, thời hạn, số coin và lý do. Dùng tối đa 12 hạng, mỗi hạng 4 thời hạn và tên dài tối đa 60 ký tự.</value></data>
+  <data name="VipManagerSaved" xml:space="preserve"><value>Đã lưu cài đặt VIP.</value></data>
+  <data name="VipManagerUnavailable" xml:space="preserve"><value>Chưa thể xác nhận thay đổi. Kiểm tra tài khoản hiện tại rồi thử lại chính thao tác đang chờ.</value></data>
+  <data name="VipManagerPending" xml:space="preserve"><value>Kết quả đang chờ. Dùng Kiểm tra thao tác đang chờ; không cấp một lần khác.</value></data>
+  <data name="VipManagerAppliedGrant" xml:space="preserve"><value>Đã cấp thời hạn VIP, không trừ coin.</value></data>
+  <data name="VipManagerAppliedRemove" xml:space="preserve"><value>Đã thu hồi thời hạn VIP thuộc plug-in này.</value></data>
+  <data name="VipManagerOnline" xml:space="preserve"><value>Tài khoản đang trong game. Yêu cầu người chơi thoát rồi kiểm tra lại chính thao tác này.</value></data>
+  <data name="VipManagerConflict" xml:space="preserve"><value>Cần kiểm tra quyền hoặc gói này. Làm mới tài khoản; không ghi đè VIP cũ hay hạng khác.</value></data>
+  <data name="VipManagerNoAccounts" xml:space="preserve"><value>Trang này không có gói còn hạn đã được chứng minh. Tìm đúng tên tài khoản để kiểm tra hoặc dựng lại chỉ mục.</value></data>
+  <data name="VipManagerHasMore" xml:space="preserve"><value>Còn các gói đã biết ở trang tiếp theo.</value></data>
+  <data name="VipManagerUntil" xml:space="preserve"><value>Có hiệu lực đến (Sydney)</value></data>
+  <data name="VipManagerReviewGrantText" xml:space="preserve"><value>Cấp {0} ngày VIP hạng {1} cho {2}, không trừ coin.</value></data>
+  <data name="VipManagerReviewRemoveText" xml:space="preserve"><value>Thu hồi thời hạn VIP hiện tại đã được chứng minh của {0}.</value></data>
+  <data name="VipManagerCurrentUntil" xml:space="preserve"><value>Hạn hiện tại: {0} (Sydney).</value></data>
+  <data name="VipManagerNoCurrent" xml:space="preserve"><value>Chưa có thời hạn VIP hiện tại đã được chứng minh.</value></data>
+  <data name="VipManagerNewName" xml:space="preserve"><value>VIP mới</value></data>
+  <data name="VipManagerCoinC" xml:space="preserve"><value>W Coin (C)</value></data>
+  <data name="VipManagerCoinP" xml:space="preserve"><value>W Coin (P)</value></data>
+  <data name="VipManagerGoblin" xml:space="preserve"><value>Điểm Goblin</value></data>
+  <data name="VipManagerSavedLevels" xml:space="preserve"><value>Cấp VIP dùng quyền lợi đã lưu lần cuối, không dùng các sửa đổi chưa lưu bên dưới.</value></data>
+  <data name="VipManagerActivity" xml:space="preserve"><value>Nhật ký hoạt động</value></data>
+  <data name="VipManagerActivityHint" xml:space="preserve"><value>Mở nhật ký hoạt động và thao tác quản trị của tài khoản này.</value></data>
+  <data name="VipManagerOpenHint" xml:space="preserve"><value>Cài đặt VIP và xem lại việc cấp hoặc thu hồi của quản trị viên.</value></data>
+  <data name="VipAuditGrant" xml:space="preserve"><value>cấp</value></data>
+  <data name="VipAuditRemove" xml:space="preserve"><value>thu hồi</value></data>
+  <data name="VipAuditRequested" xml:space="preserve"><value>đã yêu cầu</value></data>
+  <data name="VipAuditApplied" xml:space="preserve"><value>đã áp dụng</value></data>
+  <data name="VipAuditPending" xml:space="preserve"><value>đang chờ xác nhận</value></data>
+  <data name="VipAuditConflict" xml:space="preserve"><value>cần kiểm tra</value></data>
+  <data name="VipAuditRefused" xml:space="preserve"><value>bị từ chối</value></data>
+  <data name="VipAuditDetails" xml:space="preserve"><value>VIP {0}: {1}. Quản trị viên: {2}. Lý do: {3}. Mã thao tác: {4}.</value></data>
+  <data name="VipManagerSaveFirst" xml:space="preserve"><value>Lưu cài đặt VIP để bật plug-in trước, rồi cấp thời hạn. Bạn vẫn có thể tắt mua mới.</value></data>
 </root>
