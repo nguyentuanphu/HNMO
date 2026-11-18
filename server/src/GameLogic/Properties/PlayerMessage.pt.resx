@@ -1186,4 +1186,6 @@ Extensões de inventário: {18}</value>
   <data name="ChatSpamWarning" xml:space="preserve">
     <value>Por favor, não faça spam.</value>
   </data>
+  <data name="VipActiveNotice" xml:space="preserve"><value>VIP {0} está ativo até {1} (horário de Sydney).</value></data>
+  <data name="VipExpiringNotice" xml:space="preserve"><value>VIP {0} termina dentro de um dia, em {1} (horário de Sydney). Renove na janela VIP (Alt+U) ou na página da sua conta.</value></data>
 </root>
