@@ -1,0 +1,256 @@
+@page "/gm"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.GmManager
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("GM Manager", "Quản lý GM")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.GmManager" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <h1 class="mb-0">@this.L("GM Manager & Command Permissions", "Quản lý GM & Phân quyền Lệnh")</h1>
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<div class="mb-3 page-help">
+    <button type="button"
+            class="btn btn-sm btn-outline-info"
+            title="@this.L("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+            aria-expanded="@(this._showHelp ? "true" : "false")"
+            @onclick="() => this._showHelp = !this._showHelp">
+        <span class="oi oi-question-mark" aria-hidden="true"></span> @this.L("How to use this page", "Cách dùng trang này")
+    </button>
+    @if (this._showHelp)
+    {
+        <div class="alert alert-info mt-2 mb-0" role="region">
+            @Resources.PageHelpTextGmManager
+        </div>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(this._error))
+{
+    <div class="alert alert-danger" role="alert">@this._error</div>
+}
+
+@if (!string.IsNullOrEmpty(this._status))
+{
+    <div class="alert alert-success" role="status">@this._status</div>
+}
+
+<div class="card mb-3">
+    <div class="card-header fw-semibold">@this.L("Enforcement Policy", "Chính sách kiểm tra quyền")</div>
+    <div class="card-body">
+        <div class="form-check mb-2">
+            <input id="gmStrictCheck"
+                   type="checkbox"
+                   class="form-check-input"
+                   title="@this.L("When enabled, any GameMaster character without an entry below is denied all GM commands", "Khi bật, mọi nhân vật GM không có trong danh sách bên dưới sẽ bị từ chối tất cả lệnh GM")"
+                   @bind="this._requireListed" />
+            <label class="form-check-label" for="gmStrictCheck">
+                @this.L("Deny unlisted GameMaster characters by default (strict allowlist)", "Mặc định từ chối nhân vật GM chưa được liệt kê (kiểm tra chặt)")
+            </label>
+        </div>
+        <div class="row g-2 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label" for="gmPolicyReason">@this.L("Required reason", "Lý do bắt buộc")</label>
+                <input id="gmPolicyReason"
+                       type="text"
+                       class="form-control"
+                       title="@this.L("Audit reason for changing GM enforcement mode", "Lý do kiểm toán khi đổi chính sách kiểm tra GM")"
+                       @bind="this._policyReason" />
+            </div>
+            <div class="col-auto">
+                <button type="button"
+                        class="btn btn-secondary"
+                        disabled="@this._busy"
+                        title="@this.L("Save GM enforcement mode", "Lưu chế độ kiểm tra quyền GM")"
+                        @onclick="this.SavePolicyAsync">
+                    @this.L("Save policy", "Lưu chính sách")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header fw-semibold">@this.L("Assign / Update GM Permissions", "Cấp / Cập nhật Quyền GM")</div>
+    <div class="card-body">
+        <div class="row g-2 mb-3">
+            <div class="col-sm-4">
+                <label class="form-label" for="gmCharName">@this.L("Character name", "Tên nhân vật")</label>
+                <input id="gmCharName"
+                       type="text"
+                       maxlength="10"
+                       class="form-control"
+                       title="@this.L("Exact character name (max 10 chars)", "Tên nhân vật chính xác (tối đa 10 ký tự)")"
+                       @bind="this._characterName" />
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label" for="gmReason">@this.L("Required reason", "Lý do bắt buộc")</label>
+                <input id="gmReason"
+                       type="text"
+                       class="form-control"
+                       title="@this.L("Audit reason for assigning or changing GM permissions", "Lý do kiểm toán khi cấp hoặc đổi quyền GM")"
+                       @bind="this._assignReason" />
+            </div>
+            <div class="col-sm-4 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="gmPromoteOffline"
+                           type="checkbox"
+                           class="form-check-input"
+                           title="@this.L("Also set character status to GameMaster in persistence when offline", "Đồng thời đặt trạng thái nhân vật thành GameMaster trong CSDL khi ngoại tuyến")"
+                           @bind="this._promoteOffline" />
+                    <label class="form-check-label" for="gmPromoteOffline">
+                        @this.L("Set CharacterStatus = GameMaster (if offline)", "Đặt CharacterStatus = GameMaster (nếu ngoại tuyến)")
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+            @foreach (var perm in PermissionFlags)
+            {
+                var inputId = $"gmPerm_{perm}";
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-check">
+                        <input id="@inputId"
+                               type="checkbox"
+                               class="form-check-input"
+                               checked="@this.HasPermission(perm)"
+                               title="@GmCommandPermissionCatalog.FormatLabel(perm, this._isVi)"
+                               @onchange="e => this.TogglePermission(perm, e.Value is true)" />
+                        <label class="form-check-label" for="@inputId">@GmCommandPermissionCatalog.FormatLabel(perm, this._isVi)</label>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button"
+                    class="btn btn-primary"
+                    disabled="@this._busy"
+                    title="@this.L("Save GM permission flags for this character", "Lưu bộ quyền GM cho nhân vật này")"
+                    @onclick="this.SaveAssignmentAsync">
+                @this.L("Save GM permissions", "Lưu quyền GM")
+            </button>
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    disabled="@this._busy"
+                    title="@this.L("Grant all GM permissions", "Chọn tất cả quyền GM")"
+                    @onclick="() => this._selectedPermissions = GmPermission.All">
+                @this.L("Select all", "Chọn hết")
+            </button>
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    disabled="@this._busy"
+                    title="@this.L("Clear all selected GM permissions", "Bỏ chọn tất cả quyền GM")"
+                    @onclick="() => this._selectedPermissions = GmPermission.None">
+                @this.L("Clear all", "Bỏ chọn hết")
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header fw-semibold">@this.L("Assigned GMs", "Danh sách GM đã phân quyền") (@this._assignments.Count)</div>
+    <div class="table-responsive">
+        <table class="table table-sm table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>@this.L("Character", "Nhân vật")</th>
+                    <th>@this.L("Account", "Tài khoản")</th>
+                    <th>@this.L("Permissions", "Quyền hạn")</th>
+                    <th>@this.L("Updated (Sydney)", "Cập nhật (Sydney)")</th>
+                    <th>@this.L("Reason", "Lý do")</th>
+                    <th>@this.L("Action", "Thao tác")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (this._assignments.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-muted text-center py-2">@this.L("No explicit GM assignments yet.", "Chưa có phân quyền GM nào.")</td></tr>
+                }
+                else
+                {
+                    @foreach (var gm in this._assignments)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@gm.CharacterName</td>
+                            <td>@gm.AccountLogin</td>
+                            <td class="small">@gm.Permissions</td>
+                            <td class="small">@FormatSydney(gm.UpdatedAtUtc)</td>
+                            <td class="small">@gm.Notes</td>
+                            <td class="d-flex gap-1">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary"
+                                        title="@this.L("Load this GM into the editor above", "Nạp GM này vào khung chỉnh sửa phía trên")"
+                                        @onclick="() => this.SelectForEdit(gm)">
+                                    @this.L("Edit", "Sửa")
+                                </button>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        disabled="@this._busy"
+                                        title="@this.L("Revoke GM permissions (uses the Reason field above)", "Thu hồi quyền GM (dùng ô Lý do ở trên)")"
+                                        @onclick="() => this.RevokeAsync(gm.CharacterName)">
+                                    @this.L("Revoke", "Thu hồi")
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header fw-semibold">@this.L("In-Game GM Command Audit Log", "Nhật ký Kiểm toán Lệnh GM trong Game") (@this._audits.Count)</div>
+    <div class="table-responsive">
+        <table class="table table-sm table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>@this.L("Time (Sydney)", "Thời gian (Sydney)")</th>
+                    <th>GM</th>
+                    <th>@this.L("Command", "Lệnh")</th>
+                    <th>@this.L("Permission", "Quyền cần")</th>
+                    <th>@this.L("Outcome", "Kết quả")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (this._audits.Count == 0)
+                {
+                    <tr><td colspan="5" class="text-muted text-center py-2">@this.L("No in-game GM command audits recorded yet.", "Chưa ghi nhận lệnh GM nào.")</td></tr>
+                }
+                else
+                {
+                    @foreach (var row in this._audits)
+                    {
+                        <tr>
+                            <td class="small">@FormatSydney(row.TimestampUtc)</td>
+                            <td class="fw-semibold">@row.GmCharacter (@row.Account)</td>
+                            <td class="small font-monospace">@row.CommandText</td>
+                            <td class="small">@GmCommandPermissionCatalog.FormatLabel(row.RequiredPermission, this._isVi)</td>
+                            <td>
+                                <span class="badge @(row.Allowed ? "bg-success" : "bg-danger")">@row.Outcome</span>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

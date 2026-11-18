@@ -4595,4 +4595,10 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
   </data>
+  <data name="GmManager" xml:space="preserve">
+    <value>GM manager</value>
+  </data>
+  <data name="PageHelpTextGmManager" xml:space="preserve">
+    <value>Assign per-GM command permissions (Announce, Move/Summon/GoTo, Spawn Monster/Boss, Start Event, Inspect Inventory, Mute/Kick, Direct Edits) and review in-game GM command audits.</value>
+  </data>
 </root>

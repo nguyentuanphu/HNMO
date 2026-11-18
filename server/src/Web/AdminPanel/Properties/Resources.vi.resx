@@ -4626,4 +4626,10 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
   </data>
+  <data name="GmManager" xml:space="preserve">
+    <value>Quản lý GM</value>
+  </data>
+  <data name="PageHelpTextGmManager" xml:space="preserve">
+    <value>Phân quyền chi tiết cho từng GM (Thông báo, Di chuyển/Triệu hồi, Thả quái/Boss, Bắt đầu sự kiện, Kiểm tra túi đồ, Cấm chat/Kick, Chỉnh nhân vật) và xem nhật ký kiểm toán mọi lệnh GM trong game.</value>
+  </data>
 </root>

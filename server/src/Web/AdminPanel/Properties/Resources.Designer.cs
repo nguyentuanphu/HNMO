@@ -13449,5 +13449,11 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up a localized string similar to Password masked hint.</summary>
         public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to GM manager.</summary>
+        public static string GmManager => ResourceManager.GetString("GmManager", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Help description for GM manager.</summary>
+        public static string PageHelpTextGmManager => ResourceManager.GetString("PageHelpTextGmManager", resourceCulture)!;
     }
 }
