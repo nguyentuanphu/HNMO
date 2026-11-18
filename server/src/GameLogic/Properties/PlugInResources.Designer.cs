@@ -6081,5 +6081,11 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("UnlockItemChatCommandPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string VipPlugIn_Name => ResourceManager.GetString("VipPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string VipPlugIn_Description => ResourceManager.GetString("VipPlugIn_Description", resourceCulture)!;
+
     }
 }

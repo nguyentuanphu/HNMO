@@ -123,6 +123,12 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
     internal static bool IsUnconfirmed(IPlayerContext context, Guid operationId)
         => TrackedReceipts.TryGetValue(context, out var tracked) && tracked.ContainsKey(operationId);
 
+    /// <summary>Checks all unconfirmed mutations before live attribute refresh.</summary>
+    /// <param name="context">The exclusively owned context.</param>
+    /// <returns>Whether any tracked purchase still needs its save confirmed.</returns>
+    internal static bool HasUnconfirmed(IPlayerContext context)
+        => TrackedReceipts.TryGetValue(context, out var tracked) && tracked.Count > 0;
+
     private static VipWalletReceipt? MatchActiveProof(CashShopCoinGrant row, Account account, HashSet<Guid> activeIds)
     {
         var proof = ReadReceipt(row.Reason);
