@@ -4,7 +4,6 @@
 
 namespace HNMO.GameLogic.PlugIns.GiftBox;
 
-using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.Administration;
 using HNMO.GameLogic.PlugIns.GiftCodes;

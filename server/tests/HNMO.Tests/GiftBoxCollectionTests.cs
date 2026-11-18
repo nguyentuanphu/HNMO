@@ -226,7 +226,7 @@ public class GiftBoxCollectionTests
         Assert.That(this._character.Inventory!.Money, Is.EqualTo(1000));
         Assert.That(this._character.Inventory.Items, Is.Empty);
         await this._context.SaveChangesAsync().ConfigureAwait(false);
-        Assert.That(await this._context.GetRepository<Item>().GetAllAsync().ConfigureAwait(false), Is.Empty);
+        Assert.That(await this._context.GetAsync<Item>().ConfigureAwait(false), Is.Empty);
         Assert.That(await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false), Is.Empty);
         Assert.That((await this.CollectAsync(letter).ConfigureAwait(false)).Status, Is.EqualTo("Applied"));
     }
