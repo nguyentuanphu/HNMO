@@ -6,6 +6,7 @@
 
 namespace HNMO.GameLogic.PlayerActions.ItemConsumeActions;
 
+using System.Threading;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.Persistence;
 
@@ -14,6 +15,11 @@ using HNMO.Persistence;
 /// </summary>
 public abstract class ItemModifyConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
 {
+    private static readonly AsyncLocal<Player?> CurrentConsumingPlayer = new();
+
+    /// <summary>Gets the player currently executing <see cref="ModifyItem"/> on this async flow, if any.</summary>
+    protected Player? CurrentPlayer => CurrentConsumingPlayer.Value;
+
     /// <inheritdoc/>
     public override async ValueTask<bool> ConsumeItemAsync(Player player, Item item, Item? targetItem, FruitUsage fruitUsage)
     {
@@ -41,7 +47,18 @@ public abstract class ItemModifyConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
             return false;
         }
 
-        if (!this.ModifyItem(targetItem, player.PersistenceContext))
+        CurrentConsumingPlayer.Value = player;
+        bool modified;
+        try
+        {
+            modified = this.ModifyItem(targetItem, player.PersistenceContext);
+        }
+        finally
+        {
+            CurrentConsumingPlayer.Value = null;
+        }
+
+        if (!modified)
         {
             return false;
         }
