@@ -4581,4 +4581,170 @@
   <data name="AccountSafetyPage" xml:space="preserve">
     <value>Bảo vệ tài khoản</value>
   </data>
+  <data name="HostSettingsPage" xml:space="preserve">
+    <value>Cài đặt máy chủ</value>
+  </data>
+  <data name="HostSettingsHelpTitle" xml:space="preserve">
+    <value>Cách sử dụng trang này</value>
+  </data>
+  <data name="HostSettingsHelpBody" xml:space="preserve">
+    <value>Mọi cài đặt máy chủ được lưu trong một tệp (save/hnmo-settings.json). Các thay đổi được kiểm tra hợp lệ trước khi lưu. Thay đổi về cổng, URL, đường dẫn và kết nối cơ sở dữ liệu sẽ có hiệu lực sau khi bấm Khởi động lại HNMO.</value>
+  </data>
+  <data name="HostSettingsRestartNote" xml:space="preserve">
+    <value>Thay đổi về cổng, URL, đường dẫn hoặc kết nối cơ sở dữ liệu cần khởi động lại để có hiệu lực.</value>
+  </data>
+  <data name="HostSettingsPortsSection" xml:space="preserve">
+    <value>Cổng và địa chỉ công khai</value>
+  </data>
+  <data name="HostSettingsBridgeSection" xml:space="preserve">
+    <value>Cầu nối web và trình khởi chạy</value>
+  </data>
+  <data name="HostSettingsDatabaseSection" xml:space="preserve">
+    <value>Kết nối cơ sở dữ liệu</value>
+  </data>
+  <data name="HostSettingsLicenseSection" xml:space="preserve">
+    <value>Giấy phép người chơi</value>
+  </data>
+  <data name="HostSettingsSaveButton" xml:space="preserve">
+    <value>Lưu cài đặt</value>
+  </data>
+  <data name="HostSettingsRestartButton" xml:space="preserve">
+    <value>Khởi động lại HNMO</value>
+  </data>
+  <data name="HostSettingsRestartConfirm" xml:space="preserve">
+    <value>Người chơi sẽ được ngắt kết nối an toàn và lưu dữ liệu trước khi khởi động lại. Tiếp tục?</value>
+  </data>
+  <data name="HostSettingsSaved" xml:space="preserve">
+    <value>Đã lưu cài đặt máy chủ.</value>
+  </data>
+  <data name="HostSettingsRestarting" xml:space="preserve">
+    <value>HNMO đang lưu dữ liệu và khởi động lại...</value>
+  </data>
+  <data name="HostSettingsRestartUnsupported" xml:space="preserve">
+    <value>Chỉ có thể khởi động lại khi chạy qua trình khởi chạy HNMO.</value>
+  </data>
+  <data name="HostSettingsPasswordMasked" xml:space="preserve">
+    <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
+  </data>
+  <data name="WebsiteMailTitle" xml:space="preserve">
+    <value>Gửi email</value>
+  </data>
+  <data name="WebsiteMailHelp" xml:space="preserve">
+    <value>Hãy để tắt nếu bạn chưa có dịch vụ gửi email. Nhập máy chủ SMTP, cổng gửi thư (thường là 587), địa chỉ gửi, tên đăng nhập và mật khẩu do dịch vụ cung cấp rồi lưu. Kết nối dùng STARTTLS; không hỗ trợ cổng 465 với TLS ngầm định. Người chơi lấy mã tại Tài khoản → Bảo mật, nhận mã ở địa chỉ email mới rồi xác nhận trong vòng 15 phút. Họ cần thoát game trước. Hãy sao lưu cả khóa bảo vệ dữ liệu của máy chủ để giữ được mật khẩu SMTP đã lưu.</value>
+  </data>
+  <data name="WebsiteMailEnabled" xml:space="preserve">
+    <value>Cho phép gửi email xác nhận</value>
+  </data>
+  <data name="WebsiteMailEnabledHint" xml:space="preserve">
+    <value>Cho phép người chơi xác nhận email mới qua dịch vụ gửi thư đã thiết lập.</value>
+  </data>
+  <data name="WebsiteMailHost" xml:space="preserve">
+    <value>Máy chủ SMTP</value>
+  </data>
+  <data name="WebsiteMailHostHint" xml:space="preserve">
+    <value>Nhập địa chỉ máy chủ do dịch vụ email cung cấp, không kèm cổng hoặc phần đầu URL.</value>
+  </data>
+  <data name="WebsiteMailPort" xml:space="preserve">
+    <value>Cổng gửi thư</value>
+  </data>
+  <data name="WebsiteMailPortHint" xml:space="preserve">
+    <value>Dùng cổng gửi thư STARTTLS của dịch vụ, thường là 587.</value>
+  </data>
+  <data name="WebsiteMailFrom" xml:space="preserve">
+    <value>Địa chỉ email gửi</value>
+  </data>
+  <data name="WebsiteMailFromHint" xml:space="preserve">
+    <value>Nhập địa chỉ đã được dịch vụ cho phép dùng để gửi thư.</value>
+  </data>
+  <data name="WebsiteMailUser" xml:space="preserve">
+    <value>Tên đăng nhập SMTP</value>
+  </data>
+  <data name="WebsiteMailUserHint" xml:space="preserve">
+    <value>Nhập tên đăng nhập dịch vụ gửi thư; chỉ để trống nếu máy chủ chuyển tiếp không yêu cầu xác thực.</value>
+  </data>
+  <data name="WebsiteMailPassword" xml:space="preserve">
+    <value>Mật khẩu SMTP mới</value>
+  </data>
+  <data name="WebsiteMailPasswordHint" xml:space="preserve">
+    <value>Để trống để giữ mật khẩu đã lưu; xóa tên đăng nhập sẽ xóa thông tin xác thực đã lưu.</value>
+  </data>
+  <data name="WebsiteMailPasswordSaved" xml:space="preserve">
+    <value>Đã lưu mật khẩu; trang này không hiển thị lại mật khẩu.</value>
+  </data>
+  <data name="WebsiteMailSaveHint" xml:space="preserve">
+    <value>Kiểm tra và lưu thiết lập gửi email; nút này không gửi thư.</value>
+  </data>
+  <data name="WebsiteMailOpenHint" xml:space="preserve">
+    <value>Thiết lập dịch vụ gửi thư xác nhận đổi email tài khoản.</value>
+  </data>
+  <data name="WebsiteMailSaved" xml:space="preserve">
+    <value>Đã lưu thiết lập email.</value>
+  </data>
+  <data name="WebsiteMailInvalid" xml:space="preserve">
+    <value>Hãy kiểm tra máy chủ SMTP, cổng và địa chỉ gửi.</value>
+  </data>
+  <data name="WebsiteMailUnavailable" xml:space="preserve">
+    <value>Chưa đọc hoặc lưu được thiết lập. Hãy kiểm tra tệp trạng thái và khóa bảo vệ dữ liệu của máy chủ.</value>
+  </data>
+  <data name="WebsiteMailConfirmationSubject" xml:space="preserve">
+    <value>Xác nhận địa chỉ email mới</value>
+  </data>
+  <data name="WebsiteMailConfirmationBody" xml:space="preserve">
+    <value>Mã xác nhận email của bạn:
+
+{0}
+
+Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác nhận địa chỉ email mới. Mã có hiệu lực 15 phút và chỉ dùng được một lần. Không gửi mật khẩu game cho bất kỳ ai. Nếu bạn không yêu cầu đổi email, hãy bỏ qua thư này.</value>
+  </data>
+  <data name="PageHelpTitle" xml:space="preserve">
+    <value>Cách dùng trang này</value>
+  </data>
+  <data name="PageHelpToggleHint" xml:space="preserve">
+    <value>Hiện hoặc ẩn mục đích, hướng dẫn chỉnh sửa và lưu ý của trang này.</value>
+  </data>
+  <data name="AccountCoinHistoryExtraVault" xml:space="preserve">
+    <value>Mua thêm rương</value>
+  </data>
+  <data name="AccountCoinHistoryMarketPurchase" xml:space="preserve">
+    <value>Mua vật phẩm ở chợ</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStorePurchase" xml:space="preserve">
+    <value>Mua tại cửa hàng của {0}</value>
+  </data>
+  <data name="AccountCoinHistoryPlayerStoreSale" xml:space="preserve">
+    <value>Bán tại cửa hàng cho {0}</value>
+  </data>
+  <data name="AccountCoinHistoryReset" xml:space="preserve">
+    <value>Trả phí reset</value>
+  </data>
+  <data name="AccountCoinHistoryRelife" xml:space="preserve">
+    <value>Trả phí relife</value>
+  </data>
+  <data name="AccountCoinHistoryClearStats" xml:space="preserve">
+    <value>Trả phí tẩy điểm chỉ số</value>
+  </data>
+  <data name="AccountCoinHistoryClearMaster" xml:space="preserve">
+    <value>Trả phí tẩy điểm master</value>
+  </data>
+  <data name="AccountCoinHistoryPlayTime" xml:space="preserve">
+    <value>Thưởng thời gian chơi</value>
+  </data>
+  <data name="AccountCoinHistoryCashShop" xml:space="preserve">
+    <value>Mua ở cửa hàng: {0}</value>
+  </data>
+  <data name="AccountCoinHistoryGift" xml:space="preserve">
+    <value>Tặng {0}: {1}</value>
+  </data>
+  <data name="AccountCoinHistoryOtherCharacter" xml:space="preserve">
+    <value>nhân vật khác</value>
+  </data>
+  <data name="AccountCoinHistoryCreatedAt" xml:space="preserve">
+    <value>Thời gian (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryAppliedAt" xml:space="preserve">
+    <value>Đã ghi nhận (Sydney)</value>
+  </data>
+  <data name="AccountCoinHistoryMarketSale" xml:space="preserve">
+    <value>Bán vật phẩm ở chợ</value>
+  </data>
 </root>

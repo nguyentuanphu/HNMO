@@ -172,6 +172,59 @@ public sealed class SkillList : ISkillList, IDisposable
         return true;
     }
 
+    /// <summary>
+    /// Clears all learned master skills, disposes their passive power-ups, restores any replaced base skills,
+    /// and refunds the total spent master skill points back to <see cref="Character.MasterLevelUpPoints"/>.
+    /// </summary>
+    /// <returns>The number of refunded master skill points.</returns>
+    public async ValueTask<int> ClearMasterSkillsAsync()
+    {
+        var masterEntries = this._learnedSkills.Where(s => s.Skill?.MasterDefinition is not null).ToList();
+        if (masterEntries.Count == 0)
+        {
+            return 0;
+        }
+
+        var refunded = masterEntries.Sum(s => Math.Max(0, (int)s.Level));
+        var replacedSkills = masterEntries
+            .Select(s => s.Skill?.MasterDefinition?.ReplacedSkill)
+            .OfType<Skill>()
+            .Distinct()
+            .ToList();
+
+        this._passivePowerUps?.ForEach(p => p.Dispose());
+        this._passivePowerUps = null;
+
+        foreach (var entry in masterEntries)
+        {
+            await this.RemoveLearnedSkillAsync((ushort)entry.Skill!.Number).ConfigureAwait(false);
+        }
+
+        foreach (var remaining in this._learnedSkills)
+        {
+            this.CreatePassivePowerUps(remaining);
+        }
+
+        foreach (var baseSkill in replacedSkills)
+        {
+            if (this._availableSkills.ContainsKey(baseSkill.Number.ToUnsigned())
+                && baseSkill.SkillType != SkillType.PassiveBoost)
+            {
+                await this._player.InvokeViewPlugInAsync<ISkillListViewPlugIn>(p => p.AddSkillAsync(baseSkill)).ConfigureAwait(false);
+            }
+        }
+
+        if (this._player.SelectedCharacter is { } character)
+        {
+            character.MasterLevelUpPoints = (int)Math.Min((long)character.MasterLevelUpPoints + refunded, int.MaxValue);
+        }
+
+        await this._player.InvokeViewPlugInAsync<ISkillListViewPlugIn>(p => p.UpdateSkillListAsync()).ConfigureAwait(false);
+        await this._player.InvokeViewPlugInAsync<IUpdateMasterSkillsPlugIn>(p => p.UpdateMasterSkillsAsync()).ConfigureAwait(false);
+        await this._player.InvokeViewPlugInAsync<IUpdateMasterStatsPlugIn>(p => p.SendMasterStatsAsync()).ConfigureAwait(false);
+        return refunded;
+    }
+
     /// <inheritdoc/>
     public bool ContainsSkill(ushort skillId)
     {

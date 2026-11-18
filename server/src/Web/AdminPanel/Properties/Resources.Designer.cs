@@ -13404,5 +13404,167 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("AccountSafetyPage", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string similar to Host settings.</summary>
+        public static string HostSettingsPage => ResourceManager.GetString("HostSettingsPage", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to How to use this page.</summary>
+        public static string HostSettingsHelpTitle => ResourceManager.GetString("HostSettingsHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Help body.</summary>
+        public static string HostSettingsHelpBody => ResourceManager.GetString("HostSettingsHelpBody", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart note.</summary>
+        public static string HostSettingsRestartNote => ResourceManager.GetString("HostSettingsRestartNote", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Ports and public address.</summary>
+        public static string HostSettingsPortsSection => ResourceManager.GetString("HostSettingsPortsSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Web bridge and launcher.</summary>
+        public static string HostSettingsBridgeSection => ResourceManager.GetString("HostSettingsBridgeSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Database connection.</summary>
+        public static string HostSettingsDatabaseSection => ResourceManager.GetString("HostSettingsDatabaseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Player license.</summary>
+        public static string HostSettingsLicenseSection => ResourceManager.GetString("HostSettingsLicenseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Save settings.</summary>
+        public static string HostSettingsSaveButton => ResourceManager.GetString("HostSettingsSaveButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart HNMO.</summary>
+        public static string HostSettingsRestartButton => ResourceManager.GetString("HostSettingsRestartButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart confirm.</summary>
+        public static string HostSettingsRestartConfirm => ResourceManager.GetString("HostSettingsRestartConfirm", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Host settings saved.</summary>
+        public static string HostSettingsSaved => ResourceManager.GetString("HostSettingsSaved", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to HNMO is saving and restarting...</summary>
+        public static string HostSettingsRestarting => ResourceManager.GetString("HostSettingsRestarting", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart unsupported.</summary>
+        public static string HostSettingsRestartUnsupported => ResourceManager.GetString("HostSettingsRestartUnsupported", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Password masked hint.</summary>
+        public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailTitle text.</summary>
+        public static string WebsiteMailTitle => ResourceManager.GetString("WebsiteMailTitle", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHelp text.</summary>
+        public static string WebsiteMailHelp => ResourceManager.GetString("WebsiteMailHelp", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailEnabled text.</summary>
+        public static string WebsiteMailEnabled => ResourceManager.GetString("WebsiteMailEnabled", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailEnabledHint text.</summary>
+        public static string WebsiteMailEnabledHint => ResourceManager.GetString("WebsiteMailEnabledHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHost text.</summary>
+        public static string WebsiteMailHost => ResourceManager.GetString("WebsiteMailHost", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHostHint text.</summary>
+        public static string WebsiteMailHostHint => ResourceManager.GetString("WebsiteMailHostHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPort text.</summary>
+        public static string WebsiteMailPort => ResourceManager.GetString("WebsiteMailPort", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPortHint text.</summary>
+        public static string WebsiteMailPortHint => ResourceManager.GetString("WebsiteMailPortHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailFrom text.</summary>
+        public static string WebsiteMailFrom => ResourceManager.GetString("WebsiteMailFrom", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailFromHint text.</summary>
+        public static string WebsiteMailFromHint => ResourceManager.GetString("WebsiteMailFromHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUser text.</summary>
+        public static string WebsiteMailUser => ResourceManager.GetString("WebsiteMailUser", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUserHint text.</summary>
+        public static string WebsiteMailUserHint => ResourceManager.GetString("WebsiteMailUserHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPassword text.</summary>
+        public static string WebsiteMailPassword => ResourceManager.GetString("WebsiteMailPassword", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPasswordHint text.</summary>
+        public static string WebsiteMailPasswordHint => ResourceManager.GetString("WebsiteMailPasswordHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPasswordSaved text.</summary>
+        public static string WebsiteMailPasswordSaved => ResourceManager.GetString("WebsiteMailPasswordSaved", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailSaveHint text.</summary>
+        public static string WebsiteMailSaveHint => ResourceManager.GetString("WebsiteMailSaveHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailOpenHint text.</summary>
+        public static string WebsiteMailOpenHint => ResourceManager.GetString("WebsiteMailOpenHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailSaved text.</summary>
+        public static string WebsiteMailSaved => ResourceManager.GetString("WebsiteMailSaved", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailInvalid text.</summary>
+        public static string WebsiteMailInvalid => ResourceManager.GetString("WebsiteMailInvalid", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUnavailable text.</summary>
+        public static string WebsiteMailUnavailable => ResourceManager.GetString("WebsiteMailUnavailable", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailConfirmationSubject text.</summary>
+        public static string WebsiteMailConfirmationSubject => ResourceManager.GetString("WebsiteMailConfirmationSubject", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailConfirmationBody text.</summary>
+        public static string WebsiteMailConfirmationBody => ResourceManager.GetString("WebsiteMailConfirmationBody", resourceCulture)!;
+
+        /// <summary>Looks up the localized PageHelpTitle text.</summary>
+        public static string PageHelpTitle => ResourceManager.GetString("PageHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up the localized PageHelpToggleHint text.</summary>
+        public static string PageHelpToggleHint => ResourceManager.GetString("PageHelpToggleHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryExtraVault text.</summary>
+        public static string AccountCoinHistoryExtraVault => ResourceManager.GetString("AccountCoinHistoryExtraVault", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryMarketPurchase text.</summary>
+        public static string AccountCoinHistoryMarketPurchase => ResourceManager.GetString("AccountCoinHistoryMarketPurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayerStorePurchase text.</summary>
+        public static string AccountCoinHistoryPlayerStorePurchase => ResourceManager.GetString("AccountCoinHistoryPlayerStorePurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayerStoreSale text.</summary>
+        public static string AccountCoinHistoryPlayerStoreSale => ResourceManager.GetString("AccountCoinHistoryPlayerStoreSale", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryReset text.</summary>
+        public static string AccountCoinHistoryReset => ResourceManager.GetString("AccountCoinHistoryReset", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryRelife text.</summary>
+        public static string AccountCoinHistoryRelife => ResourceManager.GetString("AccountCoinHistoryRelife", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryClearStats text.</summary>
+        public static string AccountCoinHistoryClearStats => ResourceManager.GetString("AccountCoinHistoryClearStats", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryClearMaster text.</summary>
+        public static string AccountCoinHistoryClearMaster => ResourceManager.GetString("AccountCoinHistoryClearMaster", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayTime text.</summary>
+        public static string AccountCoinHistoryPlayTime => ResourceManager.GetString("AccountCoinHistoryPlayTime", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryCashShop text.</summary>
+        public static string AccountCoinHistoryCashShop => ResourceManager.GetString("AccountCoinHistoryCashShop", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryGift text.</summary>
+        public static string AccountCoinHistoryGift => ResourceManager.GetString("AccountCoinHistoryGift", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryOtherCharacter text.</summary>
+        public static string AccountCoinHistoryOtherCharacter => ResourceManager.GetString("AccountCoinHistoryOtherCharacter", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryCreatedAt text.</summary>
+        public static string AccountCoinHistoryCreatedAt => ResourceManager.GetString("AccountCoinHistoryCreatedAt", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryAppliedAt text.</summary>
+        public static string AccountCoinHistoryAppliedAt => ResourceManager.GetString("AccountCoinHistoryAppliedAt", resourceCulture)!;
+
+        /// <summary>Looks up the localized market-sale description.</summary>
+        public static string AccountCoinHistoryMarketSale => ResourceManager.GetString("AccountCoinHistoryMarketSale", resourceCulture)!;
     }
 }

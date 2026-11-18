@@ -154,6 +154,13 @@ public class CashShopActionsTest
         Assert.That(player.Account.WCoinC, Is.EqualTo(50));
         var storage = await player.PersistenceContext.GetCashShopStorageItemsAsync(player.Account.GetId()).ConfigureAwait(false);
         Assert.That(storage.Select(item => (item.ProductSequence, item.PriceSequence, item.IsGift)), Is.EqualTo(new[] { (1, 11, false) }));
+        var history = await player.PersistenceContext.GetCashShopCoinHistoryAsync(player.Account.GetId(), 0, 21).ConfigureAwait(false);
+        Assert.That(history, Has.Count.EqualTo(1));
+        Assert.That(history[0].Amount, Is.EqualTo(-50));
+        Assert.That(history[0].CoinType, Is.EqualTo(CashShopCoinType.WCoinC));
+        Assert.That(history[0].AppliedAt, Is.Not.Null);
+        await player.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+        Assert.That(player.Account.WCoinC, Is.EqualTo(50), "The receipt must not debit the purchase twice.");
     }
 
     /// <summary>
@@ -327,6 +334,10 @@ public class CashShopActionsTest
         var recipientStorage = await player.PersistenceContext.GetCashShopStorageItemsAsync(recipientAccountId).ConfigureAwait(false);
         Assert.That(recipientStorage.Select(item => item.PriceSequence), Is.EquivalentTo(new[] { 21, 22 }));
         Assert.That(recipientStorage, Has.All.Matches<CashShopStorageItem>(item => item.IsGift && item.GiftSenderName == SenderName && item.GiftMessage == "Have fun"));
+        var receipts = await player.PersistenceContext.GetCashShopCoinHistoryAsync(player.Account.GetId(), 0, 21).ConfigureAwait(false);
+        Assert.That(receipts.Single().Amount, Is.EqualTo(-80));
+        Assert.That(CashShopPurchaseReceipt.Read(receipts.Single().Reason)?.GiftRecipient, Is.EqualTo(RecipientName));
+        Assert.That(await player.PersistenceContext.GetCashShopCoinHistoryAsync(recipientAccountId, 0, 21).ConfigureAwait(false), Is.Empty);
     }
 
     /// <summary>
@@ -558,6 +569,7 @@ public class CashShopActionsTest
 
         GetView(player).Verify(v => v.ShowBuyResultAsync(CashShopBuyResult.SaveFailed), Times.Once);
         Assert.That(player.Account.WCoinC, Is.EqualTo(100));
+        Assert.That(await player.PersistenceContext.GetCashShopCoinHistoryAsync(player.Account.GetId(), 0, 21).ConfigureAwait(false), Is.Empty);
         var storage = await player.PersistenceContext.GetCashShopStorageItemsAsync(player.Account.GetId()).ConfigureAwait(false);
         Assert.That(storage, Is.Empty);
     }

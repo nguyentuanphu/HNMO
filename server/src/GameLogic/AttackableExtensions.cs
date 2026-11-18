@@ -306,6 +306,7 @@ public static class AttackableExtensions
             }
         }
 
+        dmg = PlugIns.GameplayRules.CombatLimitsPlugIn.ApplyDamageLimits(attacker, defender, isPvp, dmg);
         return defender.GetHitInfo((uint)dmg, attributes, attacker, (uint)manaToll, skill, (uint)petDamage);
     }
 
