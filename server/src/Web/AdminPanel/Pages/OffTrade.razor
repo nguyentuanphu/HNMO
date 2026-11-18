@@ -1,0 +1,190 @@
+@page "/off-trade"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("Offline Trade (/offtrade)", "Treo Cửa Hàng Offline (/offtrade)")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@this.L("Offline Trade (/offtrade)", "Treo Cửa Hàng Offline (/offtrade)")" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <div class="d-flex align-items-center gap-2">
+        <h1 class="mb-0">@this.L("Offline Trade (/offtrade)", "Treo Cửa Hàng Offline (/offtrade)")</h1>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.L("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextOffTrade" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<p class="text-muted">
+    @this.L(
+        "Allows players to leave their personal shop open in town while offline using /offtrade or the Personal Store button, selling for Zen or coins. Disabled until turned on.",
+        "Cho phép người chơi treo Cửa Hàng Cá Nhân trong thành khi thoát game bằng /offtrade hoặc nút Treo Offline, bán bằng Zen hoặc Coin. Mặc định TẮT cho tới khi bật.")
+</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="region" id="offtrade-help">
+        <strong>@this.L("How to use this page:", "Cách sử dụng trang này:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@this.L("Enable 'Allow Offline Trade' so characters with an open personal store can run /offtrade without losing their shop.", "Bật 'Cho phép Treo Offline' để nhân vật đang mở cửa hàng cá nhân có thể gõ /offtrade giữ quầy hàng.")</li>
+            <li>@this.L("Personal stores support Zen or configured server currencies (WCoinC, WCoinP, GoblinPoints, Jewels via /shopprice) when 'Allow coins & jewels' is enabled.", "Hỗ trợ bán bằng Zen hoặc các loại tiền tệ đã bật trên máy chủ (WCoinC, WCoinP, GoblinPoints, Ngọc qua /shopprice) khi bật 'Cho phép bán bằng Coin/Ngọc'.")</li>
+            <li>@this.L("When the real account logs back in, the offline shop stops safely and credits all remaining proceeds automatically.", "Khi tài khoản đăng nhập lại, phiên treo offline tự động dừng an toàn và bảo toàn toàn bộ Zen/Coin đã bán.")</li>
+            <li>@this.L("All timestamps below are shown in Sydney time.", "Mọi mốc thời gian bên dưới hiển thị theo giờ Sydney.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@this.L("Off-Trade configuration is unavailable.", "Không tải được cấu hình Treo Offline.")</div>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="form-check form-switch mb-3" title="@this.L("Enable or disable /offtrade across game servers (OFF by default).", "Bật hoặc tắt lệnh /offtrade trên các máy chủ (mặc định TẮT).")">
+                <input class="form-check-input" type="checkbox" id="ot-active" @bind="this._isActive" />
+                <label class="form-check-label fw-semibold" for="ot-active">@this.L("Allow Offline Trade (/offtrade)", "Cho phép Treo Offline (/offtrade)")</label>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Require players to stand inside a town safe zone to start /offtrade.", "Bắt buộc người chơi đứng trong vùng an toàn của thành mới được bật /offtrade.")">
+                        <input class="form-check-input" type="checkbox" id="ot-safezone" @bind="c.SafeZoneOnly" />
+                        <label class="form-check-label" for="ot-safezone">@this.L("Safe zone only", "Chỉ trong vùng an toàn")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Allow stores with WCoinC, WCoinP, GoblinPoints, or Jewel prices (uses PlayerShopCurrencies settings).", "Cho phép treo cửa hàng bán bằng WCoinC, WCoinP, GoblinPoints hoặc Ngọc.")">
+                        <input class="form-check-input" type="checkbox" id="ot-coins" @bind="c.AllowCoinCurrencies" />
+                        <label class="form-check-label" for="ot-coins">@this.L("Allow coins & jewels", "Cho phép bán bằng Coin & Ngọc")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check" title="@this.L("Automatically close the offline shop clone once all items have been sold.", "Tự động đóng phiên treo offline sau khi bán hết toàn bộ vật phẩm.")">
+                        <input class="form-check-input" type="checkbox" id="ot-soldout" @bind="c.StopWhenSoldOut" />
+                        <label class="form-check-label" for="ot-soldout">@this.L("Stop when sold out", "Tự dừng khi bán hết")</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="ot-hours" title="@this.L("Maximum lifetime in hours (0 = unlimited until owner logs back in).", "Thời gian treo tối đa theo giờ (0 = không giới hạn đến khi chủ đăng nhập).")">
+                        @this.L("Max hours (0 = unlimited)", "Số giờ tối đa (0 = không hạn)")
+                    </label>
+                    <input class="form-control" type="number" min="0" max="720" id="ot-hours" @bind="c.MaxDurationHours" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="ot-fee" title="@this.L("Optional Zen fee charged to start /offtrade (0 = free).", "Phí Zen mỗi lần bật /offtrade (0 = miễn phí).")">
+                        @this.L("Open fee (Zen)", "Phí bật (Zen)")
+                    </label>
+                    <input class="form-control" type="number" min="0" max="2000000000" id="ot-fee" @bind="c.OpenFeeZen" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="ot-level" title="@this.L("Minimum character level required to use /offtrade.", "Cấp nhân vật tối thiểu để dùng /offtrade.")">
+                        @this.L("Minimum level", "Cấp tối thiểu")
+                    </label>
+                    <input class="form-control" type="number" min="1" max="1000" id="ot-level" @bind="c.MinimumLevel" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="ot-maps" title="@this.L("Optional comma-separated allowed map numbers (empty = all maps, e.g. 0, 2, 3).", "Mã bản đồ cho phép cách nhau dấu phẩy (để trống = tất cả, ví dụ 0, 2, 3).")">
+                        @this.L("Allowed maps (empty = all)", "Mã bản đồ cho phép (trống = tất cả)")
+                    </label>
+                    <input class="form-control" id="ot-maps" @bind="this._allowedMapsText" placeholder="0, 2, 3" />
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="button"
+                        class="btn btn-primary"
+                        id="ot-save"
+                        disabled="@this._isSaving"
+                        title="@this.L("Save Off-Trade settings and apply immediately", "Lưu cài đặt Treo Offline và áp dụng ngay")"
+                        @onclick="this.SaveAsync">
+                    @this.L("Save changes", "Lưu thay đổi")
+                </button>
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        disabled="@this._isSaving"
+                        title="@this.L("Reload saved configuration and live shop list", "Tải lại cấu hình và danh sách cửa hàng")"
+                        @onclick="this.LoadAsync">
+                    @this.L("Reload", "Tải lại")
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@this.L("Active offline shops (Sydney time)", "Cửa hàng offline đang mở (giờ Sydney)") (@this._activeShops.Count)</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="this.RefreshActiveShops" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">
+                @this.L("Refresh", "Làm mới")
+            </button>
+        </div>
+        <div class="card-body p-0">
+            @if (this._activeShops.Count == 0)
+            {
+                <p class="text-muted p-3 mb-0">@this.L("No offline shops are currently running.", "Hiện chưa có cửa hàng offline nào đang mở.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>@this.L("Character", "Nhân vật")</th>
+                                <th>@this.L("Store name", "Tên cửa hàng")</th>
+                                <th>@this.L("Location", "Vị trí")</th>
+                                <th>@this.L("Items", "Số món")</th>
+                                <th>@this.L("Started (Sydney)", "Bắt đầu (Sydney)")</th>
+                                <th>@this.L("Expires (Sydney)", "Hết hạn (Sydney)")</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in this._activeShops)
+                            {
+                                <tr>
+                                    <td>@row.CharacterName</td>
+                                    <td>@row.StoreName</td>
+                                    <td>@row.MapName (@row.Coordinates)</td>
+                                    <td>@row.ItemCount</td>
+                                    <td>@row.StartedSydney</td>
+                                    <td>@row.ExpiresSydney</td>
+                                    <td class="text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.StopActiveShopAsync(row)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
+                                            @this.L("Stop", "Dừng")
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+}

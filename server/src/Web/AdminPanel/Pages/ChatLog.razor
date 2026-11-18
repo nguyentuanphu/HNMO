@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/chat-log"
 @using HNMO.DataModel.Entities
 @using HNMO.GameLogic.PlugIns.Chat
@@ -6,6 +7,8 @@
 <PageTitle>HNMO: @Resources.ChatLog</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ChatLog" />
 <h1>@Resources.ChatLog</h1>
+<PageHelp Text="@HelpResources.PageHelpTextChatLog" />
+
 
 <p class="text-muted small">@Resources.ChatLogHint</p>
 
@@ -18,7 +21,7 @@
         <input class="form-check-input" type="checkbox" id="chatLogLive" data-testid="chat-log-live" @bind="this.LiveRefresh" />
         <label class="form-check-label" for="chatLogLive">@Resources.ChatLogLiveRefresh</label>
     </div>
-    <button type="button" class="btn btn-secondary" @onclick="this.Refresh"><span class="oi oi-reload" aria-hidden="true"></span> @Resources.ChatLogRefresh</button>
+    <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-secondary" @onclick="this.Refresh"><span class="oi oi-reload" aria-hidden="true"></span> @Resources.ChatLogRefresh</button>
     <span class="small text-muted">@string.Format(Resources.ChatLogShown, this._entries.Count, this.Log.Capacity)</span>
 </div>
 
@@ -66,7 +69,7 @@
 
                     @if (entry.AccountId != Guid.Empty)
                     {
-                        <a class="btn btn-sm btn-secondary ms-1" href="@($"edit-account/{entry.AccountId}/{typeof(Account).FullName}/{entry.AccountId}")">
+                        <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-sm btn-secondary ms-1" href="@($"edit-account/{entry.AccountId}/{typeof(Account).FullName}/{entry.AccountId}")">
                             <span class="oi oi-person" aria-hidden="true"></span> @Resources.ChatLogOpenAccount
                         </a>
                     }

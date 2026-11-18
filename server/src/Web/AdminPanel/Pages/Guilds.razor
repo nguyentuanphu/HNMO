@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/guilds"
 @using HNMO.Web.Shared.Models;
 @using Resources = HNMO.Web.AdminPanel.Properties.Resources
@@ -7,6 +8,8 @@
 <PageTitle>HNMO: @Resources.Guilds</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Guilds" />
 <h1>@Resources.Guilds</h1>
+<PageHelp Text="@HelpResources.PageHelpTextGuilds" />
+
 
 <div>
     <DataTable TItem=@GuildListItem>

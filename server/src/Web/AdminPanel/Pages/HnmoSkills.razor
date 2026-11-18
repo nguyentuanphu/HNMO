@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/accounts/{LoginName}/hnmo-skills"
 @attribute [Authorize(Policy = AdminPolicies.Operator)]
 
@@ -10,6 +11,8 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb Caption="@title" />
 <h1>@title</h1>
+<PageHelp Text="@HelpResources.PageHelpTextHnmoSkills" />
+
 
 <p class="text-muted">@Resources.HnmoSkillsDescription</p>
 
@@ -57,11 +60,11 @@ else
                     <td>
                         @if (skill.Learned)
                         {
-                            <button type="button" class="btn btn-sm btn-outline-danger" disabled="@this._isChanging" @onclick="() => this.OnChangeAsync(character.CharacterName, skill, false)">@Resources.HnmoSkillsRemove</button>
+                            <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" disabled="@this._isChanging" @onclick="() => this.OnChangeAsync(character.CharacterName, skill, false)">@Resources.HnmoSkillsRemove</button>
                         }
                         else
                         {
-                            <button type="button" class="btn btn-sm btn-primary" disabled="@this._isChanging" @onclick="() => this.OnChangeAsync(character.CharacterName, skill, true)">@Resources.HnmoSkillsGrant</button>
+                            <button title="@HelpResources.PageHelpHintGrant" type="button" class="btn btn-sm btn-primary" disabled="@this._isChanging" @onclick="() => this.OnChangeAsync(character.CharacterName, skill, true)">@Resources.HnmoSkillsGrant</button>
                         }
                     </td>
                 </tr>

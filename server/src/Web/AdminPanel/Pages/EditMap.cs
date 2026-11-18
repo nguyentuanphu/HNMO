@@ -21,4 +21,7 @@ public sealed class EditMap : MapEditorPageBase<MapEditor>
 {
     /// <inheritdoc />
     protected override string Caption => Resources.MapEditor;
+
+    /// <inheritdoc />
+    protected override string HelpText => Resources.PageHelpTextEditMap;
 }

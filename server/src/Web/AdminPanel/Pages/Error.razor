@@ -1,9 +1,12 @@
-﻿@page "/error"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/error"
 @attribute [AllowAnonymous]
 @using HNMO.Web.AdminPanel.Properties
 
 <PageTitle>@Resources.Error</PageTitle>
 <h1 class="text-danger">@Resources.Error.</h1>
+<PageHelp Text="@HelpResources.PageHelpTextError" />
+
 <h2 class="text-danger">@Resources.AnErrorOccurredWhileProcessingYourRequest.</h2>
 
 <h3>@Resources.DevelopmentMode</h3>

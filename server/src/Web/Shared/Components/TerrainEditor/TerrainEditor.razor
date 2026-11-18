@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @using HNMO.DataModel
 @using HNMO.DataModel.Configuration
 @using HNMO.Persistence
@@ -62,7 +63,7 @@
         <button type="button" class="btn btn-secondary" @onclick="() => this.ZoomByAsync(-1)" disabled="@(this._zoom <= MinimumZoom)" title="@Resources.ZoomOut">
             <span class="oi oi-zoom-out"></span>
         </button>
-        <button type="button" class="btn btn-secondary zoom-display" disabled>@(this._zoom * 100)%</button>
+        <button title="@HelpResources.PageHelpHintZoomStatus" type="button" class="btn btn-secondary zoom-display" disabled>@(this._zoom * 100)%</button>
         <button type="button" class="btn btn-secondary" @onclick="() => this.ZoomByAsync(1)" disabled="@(this._zoom >= MaximumZoom)" title="@Resources.ZoomIn">
             <span class="oi oi-zoom-in"></span>
         </button>
@@ -101,7 +102,7 @@
             <div class="btn-group w-100" role="group">
                 @foreach (var tool in Enum.GetValues<TerrainTool>())
                 {
-                    <button type="button" class="btn @(this._tool == tool ? "btn-primary" : "btn-outline-primary")" @onclick="() => this.SetToolAsync(tool)">
+                    <button title="@HelpResources.PageHelpHintSelect" type="button" class="btn @(this._tool == tool ? "btn-primary" : "btn-outline-primary")" @onclick="() => this.SetToolAsync(tool)">
                         <span class="oi @GetToolIcon(tool)"></span> @GetToolCaption(tool)
                     </button>
                 }

@@ -5,6 +5,7 @@
 namespace HNMO.GameLogic.PlayerActions.Character;
 
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views.Character;
 
 /// <summary>
@@ -54,6 +55,11 @@ public class CreateCharacterAction
         var isValidName = player.GameContext.Configuration.IsValidCharacterName(name);
         player.Logger.LogDebug("CreateCharacter: Character Name matches = {0}", isValidName);
         if (!isValidName)
+        {
+            return null;
+        }
+
+        if (!await BannedWordsPlugIn.IsCharacterNameAllowedAsync(player, name).ConfigureAwait(false))
         {
             return null;
         }

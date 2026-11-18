@@ -1,4 +1,5 @@
-﻿@typeparam TObject
+﻿@using HelpResources = HNMO.Web.Shared.Properties.Resources
+@typeparam TObject
 @using System.ComponentModel.DataAnnotations
 @using System.Diagnostics.CodeAnalysis
 @using HNMO.Persistence
@@ -11,7 +12,7 @@
         <div class="card-body card-text">
             @if (this.CurrentValue is null)
             {
-                <button type="button" class="btn btn-primary" @onclick="this.OnCreateClick">@Resources.Create</button>
+                <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-primary" @onclick="this.OnCreateClick">@Resources.Create</button>
             }
             else
             {

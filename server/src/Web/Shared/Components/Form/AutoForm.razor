@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.Shared.Properties.Resources
 @typeparam T
 
 <div class="auto-form-container">
@@ -19,7 +20,7 @@
         <AutoFields HideCollections="@this.HideCollections" SearchTerm="@this._currentSearchTerm" />
         <ValidationSummary />
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary" disabled="@this.IsProcessing">
+            <button title="@HelpResources.PageHelpHintSave" type="submit" class="btn btn-primary" disabled="@this.IsProcessing">
                 @if (this.IsProcessing)
                 {
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
@@ -28,11 +29,11 @@
             </button>
             @if (this.OnRefresh != null)
             {
-                <button type="button" class="btn btn-secondary" @onclick="this.OnRefresh.Value" >@Resources.Refresh</button>
+                <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-secondary" @onclick="this.OnRefresh.Value" >@Resources.Refresh</button>
             }
             @if (this.OnCancel != null)
             {
-                <button type="button" class="btn btn-secondary" @onclick="this.OnCancel.Value">@Resources.Cancel</button>
+                <button title="@HelpResources.PageHelpHintCancel" type="button" class="btn btn-secondary" @onclick="this.OnCancel.Value">@Resources.Cancel</button>
             }
         </div>
     </EditForm>

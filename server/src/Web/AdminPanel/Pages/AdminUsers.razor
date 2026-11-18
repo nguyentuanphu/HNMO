@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/users"
 @using HNMO.Persistence.AdminAuth
 @using HNMO.Web.AdminPanel.Properties
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@title" />
 <h1>@title</h1>
+<PageHelp Text="@HelpResources.PageHelpTextAdminUsers" />
+
 
 @if (this._isLoading)
 {
@@ -53,20 +56,20 @@ else
                     </td>
                     <td>@(user.LastLoginAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-primary me-1" @onclick="@(() => this.OnChangePasswordAsync(user))">@Resources.ChangePassword</button>
+                        <button title="@HelpResources.PageHelpHintPassword" type="button" class="btn btn-sm btn-primary me-1" @onclick="@(() => this.OnChangePasswordAsync(user))">@Resources.ChangePassword</button>
                         @if (user.IsTwoFactorEnabled)
                         {
-                            <button type="button" class="btn btn-sm btn-warning me-1" @onclick="@(() => this.OnResetTwoFactorAsync(user))">@Resources.ResetTwoFactor</button>
+                            <button title="@HelpResources.PageHelpHintReset" type="button" class="btn btn-sm btn-warning me-1" @onclick="@(() => this.OnResetTwoFactorAsync(user))">@Resources.ResetTwoFactor</button>
                         }
                         @if (this._users.Count > 1)
                         {
-                            <button type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnDeleteAsync(user))">@Resources.Delete</button>
+                            <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnDeleteAsync(user))">@Resources.Delete</button>
                         }
                     </td>
                 </tr>
             }
             </tbody>
         </table>
-        <button type="button" class="btn btn-sm btn-success" @onclick="@this.OnCreateNewAsync">@Resources.CreateUser</button>
+        <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-success" @onclick="@this.OnCreateNewAsync">@Resources.CreateUser</button>
     </div>
 }

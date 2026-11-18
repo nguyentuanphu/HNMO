@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/top-races"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @Resources.TopRacesPage</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.TopRacesPage" />
 <h1>@Resources.TopRacesPage</h1>
+<PageHelp Text="@HelpResources.PageHelpTextTopRaces" />
+
 <p class="text-muted">@Resources.TopRacesPageDescription</p>
 
 @if (this._isLoading)
@@ -112,7 +115,7 @@ else
                             <input class="form-control form-control-sm race-title-vi" @bind="r.TitleVi" aria-label="@Resources.TopRacesTitleVi" />
                         </div>
                         <div class="col-sm-1 text-end">
-                            <button type="button" class="btn btn-sm btn-outline-danger race-remove" @onclick="() => this.RemoveRace(row)">@Resources.Remove</button>
+                            <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger race-remove" @onclick="() => this.RemoveRace(row)">@Resources.Remove</button>
                         </div>
                     </div>
                     <div class="row g-2 mt-1">
@@ -225,22 +228,22 @@ else
                                     </td>
                                     <td><input class="form-control form-control-sm prize-zen" style="width: 8rem" type="number" min="0" @bind="p.Zen" aria-label="@Resources.TopRacesZen" /></td>
                                     <td><input class="form-control form-control-sm prize-items" style="min-width: 10rem" @bind="prize.Items.ItemsText" placeholder="14 13 0 1" title="@Resources.MissionsItemsHint" aria-label="@Resources.MissionsItems" /></td>
-                                    <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => row.Prizes.Remove(prize)">@Resources.Remove</button></td>
+                                    <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => row.Prizes.Remove(prize)">@Resources.Remove</button></td>
                                 </tr>
                             }
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" class="btn btn-outline-primary btn-sm prize-add" @onclick="() => AddPrize(row)">@Resources.TopRacesAddPrize</button>
+                    <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm prize-add" @onclick="() => AddPrize(row)">@Resources.TopRacesAddPrize</button>
                 </div>
             </div>
         }
-        <button type="button" class="btn btn-outline-primary btn-sm" id="top-races-add" @onclick="this.AddRace">@Resources.TopRacesAddRace</button>
+        <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm" id="top-races-add" @onclick="this.AddRace">@Resources.TopRacesAddRace</button>
     </section>
 
     <div class="d-flex gap-2 mb-4">
-        <button type="button" class="btn btn-primary" id="top-races-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
+        <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="top-races-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
     </div>
 
     @if (this._engine is { } engine)

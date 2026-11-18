@@ -1,4 +1,5 @@
-﻿@page "/plugins"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/plugins"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 @using HNMO.Web.AdminPanel.Properties
 @using HNMO.Web.Shared.Models
@@ -6,6 +7,8 @@
 <PageTitle>@Resources.Plugins</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Plugins"/>
 <h1>@Resources.Plugins</h1>
+<PageHelp Text="@HelpResources.PageHelpTextPlugins" />
+
 
 <div>
     <DataTable TItem=@PlugInConfigurationViewItem>
@@ -45,16 +48,16 @@
             <td class="text-nowrap">
                 @if (item.IsActive)
                 {
-                    <button class="btn btn-warning me-1" @onclick="async () => await this.PlugInController.DeactivateAsync(item)">@Resources.Deactivate</button>
+                    <button title="@HelpResources.PageHelpHintDisable" class="btn btn-warning me-1" @onclick="async () => await this.PlugInController.DeactivateAsync(item)">@Resources.Deactivate</button>
                 }
                 else
                 {
-                    <button class="btn btn-success me-1" @onclick="async () => await this.PlugInController.ActivateAsync(item)">@Resources.Activate</button>
+                    <button title="@HelpResources.PageHelpHintEnable" class="btn btn-success me-1" @onclick="async () => await this.PlugInController.ActivateAsync(item)">@Resources.Activate</button>
                 }
 
                 @if (item.ConfigurationType is { })
                 {
-                    <button class="btn btn-secondary" @onclick="() => this.PlugInController.ShowPlugInConfigAsync(item)"><span class="oi oi-cog" aria-hidden="true"></span></button>
+                    <button title="@HelpResources.PageHelpHintEdit" class="btn btn-secondary" @onclick="() => this.PlugInController.ShowPlugInConfigAsync(item)"><span class="oi oi-cog" aria-hidden="true"></span></button>
                 }
             </td>
         </ItemTemplate>

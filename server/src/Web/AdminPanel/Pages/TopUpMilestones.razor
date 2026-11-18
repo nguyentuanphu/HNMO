@@ -1,0 +1,204 @@
+@page "/topup-milestones"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using System.Globalization
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.TopUpMilestones
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Top-up milestones", "Thưởng mốc nạp")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Top-up milestones", "Thưởng mốc nạp")" />
+
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Top-up milestones", "Thưởng mốc nạp")</h1>
+    <button type="button"
+            class="btn btn-sm btn-outline-info"
+            id="topup-milestones-help-toggle"
+            title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")"
+            @onclick="() => this._showHelp = !this._showHelp">
+        ?
+    </button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextTopUpMilestones" />
+<p class="text-muted">@L("Reward accounts once when their confirmed cumulative VND top-up reaches each threshold.", "Thưởng một lần cho tài khoản khi tổng tiền nạp VND tích lũy đạt từng mốc.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" id="topup-milestones-help">
+        <strong>@L("How to use this page", "Cách dùng trang này"):</strong>
+        @L(
+            "Turn Active on to enable top-up milestone claims in the game and on the website. Add or edit VND steps below, then Save. Confirmed Casso/SePay bank transfers credit VND totals automatically; you can also confirm a manual transfer below using a unique transfer reference.",
+            "Bật Hoạt động để mở nhận thưởng mốc nạp trong game và trên web. Thêm hoặc sửa các mốc VND rồi Lưu. Chuyển khoản Casso/SePay tự động cộng tổng VND; bạn cũng có thể xác nhận chuyển khoản thủ công bên dưới bằng mã giao dịch riêng.")
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Top-up milestones plug-in is not registered.", "Plug-in thưởng mốc nạp chưa được đăng ký.")</div>
+}
+else
+{
+    @if (this._errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert" id="topup-milestones-errors">
+            <ul class="mb-0">
+                @foreach (var err in this._errors)
+                {
+                    <li>@err</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <section class="card mb-3" id="topup-milestones-settings">
+        <div class="card-body">
+            <h2 class="h5">@L("Settings", "Cài đặt")</h2>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="topup-milestones-active" @bind="this._isActive"
+                       title="@L("Turns top-up milestones ON or OFF.", "Bật hoặc tắt thưởng mốc nạp.")" />
+                <label class="form-check-label" for="topup-milestones-active">@L("Active", "Hoạt động")</label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="topup-milestones-website" @bind="c.AllowWebsite"
+                       title="@L("Allow players to view progress and claim coins on the website.", "Cho phép người chơi xem tiến độ và nhận mốc trên website.")" />
+                <label class="form-check-label" for="topup-milestones-website">@L("Allow website claims", "Cho phép nhận trên web")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="topup-milestones-tz">@L("Time zone (Sydney)", "Múi giờ (Sydney)")</label>
+                    <input class="form-control" id="topup-milestones-tz" @bind="c.TimeZone"
+                           title="@L("IANA or Windows timezone id (default Australia/Sydney).", "Tên múi giờ (mặc định Australia/Sydney).")"/>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="topup-milestones-file">@L("State file", "Tệp lưu trạng thái")</label>
+                    <input class="form-control" id="topup-milestones-file" @bind="c.FileName"
+                           title="@L("Mapped into save/hnmo-state.json automatically.", "Tự động lưu trong save/hnmo-state.json.")" />
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="h6 mb-0">@L("Milestone steps", "Các mốc nạp")</h3>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="topup-milestones-add-step"
+                        title="@L("Add a new milestone step.", "Thêm mốc nạp mới.")" @onclick="this.AddStep">
+                    + @L("Add step", "Thêm mốc")
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="topup-milestones-steps">
+                    <thead>
+                        <tr>
+                            <th>@L("ID", "Mã")</th>
+                            <th>@L("Threshold (VND)", "Mốc (VND)")</th>
+                            <th>@L("English title", "Tên tiếng Anh")</th>
+                            <th>@L("Vietnamese title", "Tên tiếng Việt")</th>
+                            <th>@L("Coin type", "Loại coin")</th>
+                            <th>@L("Coins", "Coin")</th>
+                            <th>@L("Zen", "Zen")</th>
+                            <th>@L("Items (group:num:lvl:qty)", "Vật phẩm (nhóm:mã:cấp:sl)")</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var draft in this._stepDrafts)
+                        {
+                            <tr>
+                                <td><input class="form-control form-control-sm" @bind="draft.Id" /></td>
+                                <td><input class="form-control form-control-sm" type="number" min="1000" step="1000" @bind="draft.ThresholdVnd" /></td>
+                                <td><input class="form-control form-control-sm" @bind="draft.TitleEn" /></td>
+                                <td><input class="form-control form-control-sm" @bind="draft.TitleVi" /></td>
+                                <td>
+                                    <select class="form-select form-select-sm" @bind="draft.CoinType">
+                                        @foreach (var ct in Enum.GetValues<CashShopCoinType>())
+                                        {
+                                            <option value="@ct">@ct</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input class="form-control form-control-sm" type="number" min="0" @bind="draft.Coins" /></td>
+                                <td><input class="form-control form-control-sm" type="number" min="0" @bind="draft.Zen" /></td>
+                                <td><input class="form-control form-control-sm" placeholder="14:13:0:2, 14:14:0:5" @bind="draft.ItemsText" /></td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" title="@L("Remove step", "Xóa mốc")"
+                                            @onclick="() => this._stepDrafts.Remove(draft)">×</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="topup-milestones-save" disabled="@this._isSaving"
+                    title="@L("Save plug-in settings and steps.", "Lưu cài đặt và các mốc.")"
+                    @onclick="this.SaveSettingsAsync">
+                @Resources.Save
+            </button>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="topup-milestones-manual">
+        <div class="card-body">
+            <h2 class="h5">@L("Confirm bank transfer / record VND", "Xác nhận chuyển khoản / cộng mốc VND")</h2>
+            <p class="text-muted small">@L("Use this to record a confirmed manual bank transfer once by its unique bank reference.", "Dùng để ghi nhận chuyển khoản thủ công đã kiểm tra (mỗi mã giao dịch chỉ tính 1 lần).")</p>
+            <div class="row g-2 align-items-end">
+                <div class="col-sm-3">
+                    <label class="form-label" for="manual-login">@L("Account login", "Tài khoản")</label>
+                    <input class="form-control" id="manual-login" @bind="this._manualLogin" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="manual-vnd">@L("Amount (VND)", "Số tiền (VND)")</label>
+                    <input class="form-control" id="manual-vnd" type="number" min="1000" step="1000" @bind="this._manualVnd" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="manual-ref">@L("Unique transfer reference", "Mã giao dịch riêng")</label>
+                    <input class="form-control" id="manual-ref" placeholder="BANK-20261116-001" @bind="this._manualReference" />
+                </div>
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-outline-success w-100" id="manual-record-btn"
+                            title="@L("Record this confirmed VND top-up for milestone progress.", "Ghi nhận số tiền VND đã xác nhận vào mốc nạp.")"
+                            @onclick="this.RecordManualTopUp">
+                        @L("Record confirmed VND", "Ghi nhận đã nạp")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="topup-milestones-accounts">
+        <div class="card-body">
+            <h2 class="h5">@L("Recent accounts (Sydney time)", "Tài khoản gần đây (giờ Sydney)")</h2>
+            @if (this._accounts.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No top-up milestone activity yet.", "Chưa có dữ liệu nạp mốc.")</p>
+            }
+            else
+            {
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>@L("Account", "Tài khoản")</th>
+                            <th>@L("Total VND", "Tổng VND")</th>
+                            <th>@L("Claimed steps", "Mốc đã nhận")</th>
+                            <th>@L("Last event (Sydney)", "Lần cuối (Sydney)")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in this._accounts)
+                        {
+                            <tr>
+                                <td>@row.Login</td>
+                                <td>@row.TotalVnd.ToString("N0", CultureInfo.InvariantCulture) đ</td>
+                                <td>@(row.Claimed.Count == 0 ? "—" : string.Join(", ", row.Claimed))</td>
+                                <td>@row.LastEventSydney</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </section>
+}

@@ -13404,5 +13404,1103 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("AccountSafetyPage", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Find player accounts and open their characters, coin balances or linked sign-ins. Search for the exact account before editing it. Leave account identifiers alone and check the player's identity before changing access or money..
+        /// </summary>
+        public static string PageHelpTextAccounts {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccounts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This dashboard shows the server's current activity and useful links. Open a card to investigate an alert or continue setup. Reading the dashboard does not change game rules; use the dedicated settings page for changes..
+        /// </summary>
+        public static string PageHelpTextIndex {
+            get {
+                return ResourceManager.GetString("PageHelpTextIndex", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to See the connect and game servers and open their status or configuration. Check the server's name before starting, stopping or editing it. Avoid stopping a server while players are connected unless you have announced maintenance..
+        /// </summary>
+        public static string PageHelpTextServers {
+            get {
+                return ResourceManager.GetString("PageHelpTextServers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Watch one game server's players, maps and activity. Use the available actions only for the server named here. Leave running services alone during normal play and announce maintenance before disruptive actions..
+        /// </summary>
+        public static string PageHelpTextGameServer {
+            get {
+                return ResourceManager.GetString("PageHelpTextGameServer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create settings for an additional game server. Choose a distinct server number, name and free ports, then review its rates and connection settings. Keep the working server's settings unchanged until the new server has been tested..
+        /// </summary>
+        public static string PageHelpTextCreateGameServerConfig {
+            get {
+                return ResourceManager.GetString("PageHelpTextCreateGameServerConfig", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create a connect server that tells players which game servers are available. Choose free ports and the correct public address. Do not replace a working address or port without also updating the client connection settings..
+        /// </summary>
+        public static string PageHelpTextCreateConnectServerConfig {
+            get {
+                return ResourceManager.GetString("PageHelpTextCreateConnectServerConfig", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to See accounts currently playing, leveling offline or running as bots when those features are enabled. Select the matching tab and check the account before taking an action. Forcing an account offline interrupts its session; do it only when necessary..
+        /// </summary>
+        public static string PageHelpTextLoggedIn {
+            get {
+                return ResourceManager.GetString("PageHelpTextLoggedIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Plug-ins turn optional server features on or off and hold their settings. Open the feature's configuration and change only the values you understand. Leave unknown plug-ins and internal identifiers alone; switching features off can affect players immediately..
+        /// </summary>
+        public static string PageHelpTextPlugins {
+            get {
+                return ResourceManager.GetString("PageHelpTextPlugins", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Manage the people allowed into this admin panel. Give each person their own user and only the role they need. Never share administrator passwords or remove your last working administrator account..
+        /// </summary>
+        public static string PageHelpTextAdminUsers {
+            get {
+                return ResourceManager.GetString("PageHelpTextAdminUsers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Protect your own admin sign-in with an authenticator and recovery codes. Set up the authenticator, verify a current code and keep recovery codes somewhere private. Do not post the QR code, secret or recovery codes in messages or screenshots..
+        /// </summary>
+        public static string PageHelpTextAccountSecurity {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccountSecurity", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to See the external sign-ins linked to this player's account. Confirm the account and provider before unlinking an entry. Removing a sign-in may prevent the player using it again; do not unlink it without a verified request..
+        /// </summary>
+        public static string PageHelpTextAccountLinks {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccountLinks", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review this account's saved coin balances and grant history. To adjust coins, choose the coin type, amount and a clear reason, then review the account name. Pending grants are applied by the game server; do not repeat a grant just because the displayed balance has not refreshed..
+        /// </summary>
+        public static string PageHelpTextCashShopCoins {
+            get {
+                return ResourceManager.GetString("PageHelpTextCashShopCoins", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose which items players can buy in the cash shop and their coin prices. Check the item, quantity, duration and coin type before saving. Leave internal identifiers alone and avoid changing an offer while testing an unfinished price..
+        /// </summary>
+        public static string PageHelpTextCashShopCatalog {
+            get {
+                return ResourceManager.GetString("PageHelpTextCashShopCatalog", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create codes that give players the configured coins, zen or items. Set the reward, expiry and use limit, then test with a small reward first. Keep private codes private and do not reuse a live code for a different reward..
+        /// </summary>
+        public static string PageHelpTextGiftCodes {
+            get {
+                return ResourceManager.GetString("PageHelpTextGiftCodes", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Set missions, daily rewards and the ways players earn coins. Review each task's target, reward and daily limits before enabling it. Keep reward amounts modest while testing and leave mission identifiers unchanged once players have progress..
+        /// </summary>
+        public static string PageHelpTextMissionsRewards {
+            get {
+                return ResourceManager.GetString("PageHelpTextMissionsRewards", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the starter kit and guide steps for new players. Check class restrictions, quantities and whether rewards are once per account or character. Do not change identifiers for steps players have already started, and test the kit on a new account..
+        /// </summary>
+        public static string PageHelpTextOnboardingStarterKit {
+            get {
+                return ResourceManager.GetString("PageHelpTextOnboardingStarterKit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Set the levels, costs and limits for reset, relife and stat changes. Check requirements and rewards together before enabling a rule. Leave advanced formulas unchanged unless you have tested the effect on a sample character..
+        /// </summary>
+        public static string PageHelpTextResetsRelife {
+            get {
+                return ResourceManager.GetString("PageHelpTextResetsRelife", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Configure the second password, item locks and login-history protection for players. Choose the delays and protections you want to require. Do not turn safeguards off to solve one player's problem; verify the account and use the specific account tools instead..
+        /// </summary>
+        public static string PageHelpTextAccountSafety {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccountSafety", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Set community rewards, event codes and highlights shown to players. Check the public text, links and reward amounts before enabling an event. Keep private reward codes secret and avoid promising rewards the server cannot deliver..
+        /// </summary>
+        public static string PageHelpTextCommunity {
+            get {
+                return ResourceManager.GetString("PageHelpTextCommunity", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Connect community notices to the correct Discord channel. Follow the setup steps, check permissions and send a test notice. Keep bot tokens and webhook addresses private, and do not give the bot more permissions than it needs..
+        /// </summary>
+        public static string PageHelpTextDiscordSetup {
+            get {
+                return ResourceManager.GetString("PageHelpTextDiscordSetup", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Configure ranking races, their time windows and prizes. Check which progress counts, the dates and the reward list before starting a race. Avoid changing scoring rules during a race that players have already joined..
+        /// </summary>
+        public static string PageHelpTextTopRaces {
+            get {
+                return ResourceManager.GetString("PageHelpTextTopRaces", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose world bosses, their schedules and ranking rewards. Check maps, spawn locations, times and prizes before enabling them. Leave monster identifiers alone and test a boss where it will not disrupt ordinary players..
+        /// </summary>
+        public static string PageHelpTextWorldBossesRankings {
+            get {
+                return ResourceManager.GetString("PageHelpTextWorldBossesRankings", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Set guild-level progress and ladder rewards. Review the thresholds, bonuses and reward periods together. Do not reset existing progress or change reward identifiers without checking the impact on active guilds..
+        /// </summary>
+        public static string PageHelpTextGuildsLevelsLadder {
+            get {
+                return ResourceManager.GetString("PageHelpTextGuildsLevelsLadder", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Find guilds and open their members or alliances. Search for the exact guild before making any changes. Guild names identify player communities; avoid membership or alliance changes without a verified request..
+        /// </summary>
+        public static string PageHelpTextGuilds {
+            get {
+                return ResourceManager.GetString("PageHelpTextGuilds", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review this guild's members and settings. Check the guild name and the player's role before editing membership or leadership. Leave internal identifiers unchanged and confirm disruptive changes with the affected players..
+        /// </summary>
+        public static string PageHelpTextGuild {
+            get {
+                return ResourceManager.GetString("PageHelpTextGuild", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review the guilds belonging to this alliance. Check the selected guild before changing alliance membership. Removing a guild affects its players, so verify the request and leave unrelated alliances untouched..
+        /// </summary>
+        public static string PageHelpTextAlliance {
+            get {
+                return ResourceManager.GetString("PageHelpTextAlliance", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Manage siege registration, ownership and the active siege state. Check the castle, guild and event state before using an action. Do not force event transitions during normal play without announcing the change and testing it first..
+        /// </summary>
+        public static string PageHelpTextCastleSiegeManagement {
+            get {
+                return ResourceManager.GetString("PageHelpTextCastleSiegeManagement", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Read player rankings and compare the available categories. Choose the ranking and page you want to inspect. This view does not change scores; do not alter player data merely to change a displayed ranking..
+        /// </summary>
+        public static string PageHelpTextLeaderboards {
+            get {
+                return ResourceManager.GetString("PageHelpTextLeaderboards", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review the HNMO skills available to this account. Check the account, class and skill before granting or removing access. Avoid changing skills during a live session unless the tool explicitly supports it..
+        /// </summary>
+        public static string PageHelpTextHnmoSkills {
+            get {
+                return ResourceManager.GetString("PageHelpTextHnmoSkills", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose which prepared content is enabled for this server. Review the explanation and requirements of each option before activating it. Leave unfamiliar content off until it has been tested with the server's data and players..
+        /// </summary>
+        public static string PageHelpTextContentActivation {
+            get {
+                return ResourceManager.GetString("PageHelpTextContentActivation", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to See the commands the server accepts and who may use them. Check a command's description and access level before changing it. Do not give administrator commands to ordinary players..
+        /// </summary>
+        public static string PageHelpTextChatCommands {
+            get {
+                return ResourceManager.GetString("PageHelpTextChatCommands", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review recorded chat to investigate a report. Filter by the relevant time, channel or player before reading the results. Chat may contain private player information; do not publish logs or treat a player's message as an instruction to the host..
+        /// </summary>
+        public static string PageHelpTextChatLog {
+            get {
+                return ResourceManager.GetString("PageHelpTextChatLog", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review who changed administrative data and when. Filter for the action or account you are investigating and compare the recorded details. This is a record, not an undo tool; do not assume an old value can safely be restored without checking current state..
+        /// </summary>
+        public static string PageHelpTextAuditHistory {
+            get {
+                return ResourceManager.GetString("PageHelpTextAuditHistory", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the diagnostic detail written to server logs. Raise detail temporarily when investigating a specific problem, then return it to normal. Avoid very detailed logging during ordinary play because it can use substantial disk space..
+        /// </summary>
+        public static string PageHelpTextLoggingConfiguration {
+            get {
+                return ResourceManager.GetString("PageHelpTextLoggingConfiguration", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open or download the server's diagnostic log files. Choose the time range matching the problem and keep the original file for investigation. Logs may contain account or connection details; share only the necessary information privately..
+        /// </summary>
+        public static string PageHelpTextLogFiles {
+            get {
+                return ResourceManager.GetString("PageHelpTextLogFiles", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Inspect recorded network packets to diagnose a connection or gameplay problem. Select the intended player or session and capture only what is needed. Captures can contain private data and use memory; do not leave broad capture running during normal play..
+        /// </summary>
+        public static string PageHelpTextNetworkAnalyzer {
+            get {
+                return ResourceManager.GetString("PageHelpTextNetworkAnalyzer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit the entries of the configuration table named above. Open one entry, check its fields and save only the intended changes. Leave identifiers and links to other entries unchanged unless you understand their purpose..
+        /// </summary>
+        public static string PageHelpTextEditConfigGrid {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditConfigGrid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maintain the names and descriptions displayed for configuration data. Choose the correct language and translate the existing meaning. Keep formatting placeholders and internal identifiers unchanged..
+        /// </summary>
+        public static string PageHelpTextCaptions {
+            get {
+                return ResourceManager.GetString("PageHelpTextCaptions", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Review and apply the available configuration updates. Back up the current configuration and read each update's purpose before applying it. Do not apply unfamiliar updates to a live server without a test and a recovery plan..
+        /// </summary>
+        public static string PageHelpTextUpdates {
+            get {
+                return ResourceManager.GetString("PageHelpTextUpdates", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose which items can drop and the conditions and chances for them. Review the item, source, quantity and probability together. Test generous changes on a separate server first to avoid flooding the live economy..
+        /// </summary>
+        public static string PageHelpTextEditItemDrops {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditItemDrops", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Inspect this game server's map and the objects or players on it. Check the map and selected object before using an action. Do not move, remove or spawn objects around ordinary players unless that change is intentional..
+        /// </summary>
+        public static string PageHelpTextMapPage {
+            get {
+                return ResourceManager.GetString("PageHelpTextMapPage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Follow the first-time setup steps to prepare this server. Set your own administrator credentials and review each choice before continuing. Keep passwords and keys private, and do not rerun setup over a working installation without a backup..
+        /// </summary>
+        public static string PageHelpTextSetup {
+            get {
+                return ResourceManager.GetString("PageHelpTextSetup", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in with your admin-panel user, not a player's game account. Enter your password and the authenticator or recovery code when requested. Keep recovery codes private and ask another administrator for help if you no longer have access..
+        /// </summary>
+        public static string PageHelpTextLogin {
+            get {
+                return ResourceManager.GetString("PageHelpTextLogin", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The requested page could not complete its work. Note what you were doing, return to a safe page and check the server logs. Do not turn on public development error details or repeat a money-changing action until you know whether it completed..
+        /// </summary>
+        public static string PageHelpTextError {
+            get {
+                return ResourceManager.GetString("PageHelpTextError", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This address does not match an available admin page. Return home or use a current navigation link. Do not change server settings to fix an old bookmark; check the page address first..
+        /// </summary>
+        public static string PageHelpTextNotFound {
+            get {
+                return ResourceManager.GetString("PageHelpTextNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Your current admin role cannot open this page or perform this action. Ask an administrator to review the access you need for your task. Do not share another person's credentials or increase permissions beyond that task..
+        /// </summary>
+        public static string PageHelpTextAccessDenied {
+            get {
+                return ResourceManager.GetString("PageHelpTextAccessDenied", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How to use this page.
+        /// </summary>
+        public static string PageHelpTitle {
+            get {
+                return ResourceManager.GetString("PageHelpTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show or hide the purpose, recommended changes and cautions for this page..
+        /// </summary>
+        public static string PageHelpToggleHint {
+            get {
+                return ResourceManager.GetString("PageHelpToggleHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Save the changes currently shown in this editor..
+        /// </summary>
+        public static string PageHelpHintSave {
+            get {
+                return ResourceManager.GetString("PageHelpHintSave", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start creating a new entry on this page..
+        /// </summary>
+        public static string PageHelpHintCreate {
+            get {
+                return ResourceManager.GetString("PageHelpHintCreate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the selected entry after checking that it is the correct one..
+        /// </summary>
+        public static string PageHelpHintDelete {
+            get {
+                return ResourceManager.GetString("PageHelpHintDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel this editing step without applying its unsaved changes..
+        /// </summary>
+        public static string PageHelpHintCancel {
+            get {
+                return ResourceManager.GetString("PageHelpHintCancel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected entry to inspect or change its settings..
+        /// </summary>
+        public static string PageHelpHintEdit {
+            get {
+                return ResourceManager.GetString("PageHelpHintEdit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Read the latest available data from the server again..
+        /// </summary>
+        public static string PageHelpHintRefresh {
+            get {
+                return ResourceManager.GetString("PageHelpHintRefresh", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Copy the selected text or entry for reuse..
+        /// </summary>
+        public static string PageHelpHintCopy {
+            get {
+                return ResourceManager.GetString("PageHelpHintCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose this entry for the current action..
+        /// </summary>
+        public static string PageHelpHintSelect {
+            get {
+                return ResourceManager.GetString("PageHelpHintSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Find entries matching the current search or filter..
+        /// </summary>
+        public static string PageHelpHintSearch {
+            get {
+                return ResourceManager.GetString("PageHelpHintSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Start the selected service or activity..
+        /// </summary>
+        public static string PageHelpHintStart {
+            get {
+                return ResourceManager.GetString("PageHelpHintStart", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Stop the selected service or activity..
+        /// </summary>
+        public static string PageHelpHintStop {
+            get {
+                return ResourceManager.GetString("PageHelpHintStop", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Download the selected file to this computer..
+        /// </summary>
+        public static string PageHelpHintDownload {
+            get {
+                return ResourceManager.GetString("PageHelpHintDownload", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Read the chosen file into this page and review it before saving..
+        /// </summary>
+        public static string PageHelpHintUpload {
+            get {
+                return ResourceManager.GetString("PageHelpHintUpload", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Give the selected reward after reviewing the account, amount and reason..
+        /// </summary>
+        public static string PageHelpHintGrant {
+            get {
+                return ResourceManager.GetString("PageHelpHintGrant", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open the selected page or view..
+        /// </summary>
+        public static string PageHelpHintNavigate {
+            get {
+                return ResourceManager.GetString("PageHelpHintNavigate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Send the message or request described by this action..
+        /// </summary>
+        public static string PageHelpHintSend {
+            get {
+                return ResourceManager.GetString("PageHelpHintSend", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Turn on the selected feature or entry..
+        /// </summary>
+        public static string PageHelpHintEnable {
+            get {
+                return ResourceManager.GetString("PageHelpHintEnable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Turn off the selected feature or entry..
+        /// </summary>
+        public static string PageHelpHintDisable {
+            get {
+                return ResourceManager.GetString("PageHelpHintDisable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in using the details entered in this form..
+        /// </summary>
+        public static string PageHelpHintSignIn {
+            get {
+                return ResourceManager.GetString("PageHelpHintSignIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Check the verification code entered in this form..
+        /// </summary>
+        public static string PageHelpHintVerify {
+            get {
+                return ResourceManager.GetString("PageHelpHintVerify", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show or hide additional details for this entry..
+        /// </summary>
+        public static string PageHelpHintExpand {
+            get {
+                return ResourceManager.GetString("PageHelpHintExpand", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm and carry out the action described above..
+        /// </summary>
+        public static string PageHelpHintConfirm {
+            get {
+                return ResourceManager.GetString("PageHelpHintConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the next page of entries..
+        /// </summary>
+        public static string PageHelpHintNext {
+            get {
+                return ResourceManager.GetString("PageHelpHintNext", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the previous page of entries..
+        /// </summary>
+        public static string PageHelpHintPrevious {
+            get {
+                return ResourceManager.GetString("PageHelpHintPrevious", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Clear the value, selection or state named by this control..
+        /// </summary>
+        public static string PageHelpHintClear {
+            get {
+                return ResourceManager.GetString("PageHelpHintClear", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reset the selected state as described in this page's help..
+        /// </summary>
+        public static string PageHelpHintReset {
+            get {
+                return ResourceManager.GetString("PageHelpHintReset", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Force the siege into the selected state after checking that players are ready..
+        /// </summary>
+        public static string PageHelpHintForceState {
+            get {
+                return ResourceManager.GetString("PageHelpHintForceState", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open or confirm the password change for the selected account..
+        /// </summary>
+        public static string PageHelpHintPassword {
+            get {
+                return ResourceManager.GetString("PageHelpHintPassword", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create or update the configured Discord channels and roles..
+        /// </summary>
+        public static string PageHelpHintDiscordSetUp {
+            get {
+                return ResourceManager.GetString("PageHelpHintDiscordSetUp", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Check the current connection and configuration without saving new values..
+        /// </summary>
+        public static string PageHelpHintCheck {
+            get {
+                return ResourceManager.GetString("PageHelpHintCheck", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Send a test notification using the saved Discord settings..
+        /// </summary>
+        public static string PageHelpHintTest {
+            get {
+                return ResourceManager.GetString("PageHelpHintTest", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reload the saved values and discard the edits not yet saved..
+        /// </summary>
+        public static string PageHelpHintDiscard {
+            get {
+                return ResourceManager.GetString("PageHelpHintDiscard", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Move this guide step one position earlier..
+        /// </summary>
+        public static string PageHelpHintMoveUp {
+            get {
+                return ResourceManager.GetString("PageHelpHintMoveUp", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Move this guide step one position later..
+        /// </summary>
+        public static string PageHelpHintMoveDown {
+            get {
+                return ResourceManager.GetString("PageHelpHintMoveDown", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll to the latest visible log entries..
+        /// </summary>
+        public static string PageHelpHintScrollBottom {
+            get {
+                return ResourceManager.GetString("PageHelpHintScrollBottom", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Apply the selected configuration updates after reviewing their details..
+        /// </summary>
+        public static string PageHelpHintUpdate {
+            get {
+                return ResourceManager.GetString("PageHelpHintUpdate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Begin reinstalling the configuration; back up current data before confirming..
+        /// </summary>
+        public static string PageHelpHintReinstall {
+            get {
+                return ResourceManager.GetString("PageHelpHintReinstall", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This disabled control shows status and does not perform an action..
+        /// </summary>
+        public static string PageHelpHintStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Create replacement recovery codes and store the new codes privately..
+        /// </summary>
+        public static string PageHelpHintRecovery {
+            get {
+                return ResourceManager.GetString("PageHelpHintRecovery", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Begin setting up an authenticator for your own admin sign-in..
+        /// </summary>
+        public static string PageHelpHintAuthenticator {
+            get {
+                return ResourceManager.GetString("PageHelpHintAuthenticator", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sort the displayed rows by this column..
+        /// </summary>
+        public static string PageHelpHintSort {
+            get {
+                return ResourceManager.GetString("PageHelpHintSort", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Assign this drop group to every map after reviewing its rewards..
+        /// </summary>
+        public static string PageHelpHintAssignMaps {
+            get {
+                return ResourceManager.GetString("PageHelpHintAssignMaps", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the first page of entries..
+        /// </summary>
+        public static string PageHelpHintFirst {
+            get {
+                return ResourceManager.GetString("PageHelpHintFirst", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show the last page of entries..
+        /// </summary>
+        public static string PageHelpHintLast {
+            get {
+                return ResourceManager.GetString("PageHelpHintLast", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enlarge the map view without changing map data..
+        /// </summary>
+        public static string PageHelpHintZoomIn {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomIn", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reduce the map view without changing map data..
+        /// </summary>
+        public static string PageHelpHintZoomOut {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomOut", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This value shows the current map zoom percentage..
+        /// </summary>
+        public static string PageHelpHintZoomStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit the selected configuration entry. Change only the intended fields, review related entries and save when the values are correct. Leave internal identifiers and references alone unless you understand how they are used..
+        /// </summary>
+        public static string PageHelpTextEditConfig {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditConfig", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit this player's saved account or character data. Confirm the account and field before saving, and ensure the account is offline when the tool requires it. Avoid editing identifiers or money casually; use the dedicated coin tools for grants and adjustments..
+        /// </summary>
+        public static string PageHelpTextEditAccount {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditAccount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit the connect server's address, ports and connection settings. Check that the address is reachable by players and the ports are free. Leave working values unchanged until you have tested the replacement and updated the client connection settings..
+        /// </summary>
+        public static string PageHelpTextEditConnectionServer {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditConnectionServer", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit monster spawn areas, objects and gates on the selected map. Choose the correct map and tool, review placements, then save. Avoid changing identifiers or gates used by other maps, and test movement and spawns before using the map with players..
+        /// </summary>
+        public static string PageHelpTextEditMap {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditMap", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Edit walkable, blocked and safe areas of the selected map. Use the appropriate paint tool, review the affected cells and save. Keep a backup and test entrances and player movement before applying large changes to a live map..
+        /// </summary>
+        public static string PageHelpTextEditTerrain {
+            get {
+                return ResourceManager.GetString("PageHelpTextEditTerrain", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out of this admin-panel session..
+        /// </summary>
+        public static string PageHelpHintSignOut {
+            get {
+                return ResourceManager.GetString("PageHelpHintSignOut", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Reconnect to the admin server and resume the page when it is available..
+        /// </summary>
+        public static string PageHelpHintReconnect {
+            get {
+                return ResourceManager.GetString("PageHelpHintReconnect", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string similar to Host settings.</summary>
+        public static string HostSettingsPage => ResourceManager.GetString("HostSettingsPage", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to How to use this page.</summary>
+        public static string HostSettingsHelpTitle => ResourceManager.GetString("HostSettingsHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Help body.</summary>
+        public static string HostSettingsHelpBody => ResourceManager.GetString("HostSettingsHelpBody", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart note.</summary>
+        public static string HostSettingsRestartNote => ResourceManager.GetString("HostSettingsRestartNote", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Ports and public address.</summary>
+        public static string HostSettingsPortsSection => ResourceManager.GetString("HostSettingsPortsSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Web bridge and launcher.</summary>
+        public static string HostSettingsBridgeSection => ResourceManager.GetString("HostSettingsBridgeSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Database connection.</summary>
+        public static string HostSettingsDatabaseSection => ResourceManager.GetString("HostSettingsDatabaseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Player license.</summary>
+        public static string HostSettingsLicenseSection => ResourceManager.GetString("HostSettingsLicenseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Save settings.</summary>
+        public static string HostSettingsSaveButton => ResourceManager.GetString("HostSettingsSaveButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart HNMO.</summary>
+        public static string HostSettingsRestartButton => ResourceManager.GetString("HostSettingsRestartButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart confirm.</summary>
+        public static string HostSettingsRestartConfirm => ResourceManager.GetString("HostSettingsRestartConfirm", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Host settings saved.</summary>
+        public static string HostSettingsSaved => ResourceManager.GetString("HostSettingsSaved", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to HNMO is saving and restarting...</summary>
+        public static string HostSettingsRestarting => ResourceManager.GetString("HostSettingsRestarting", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart unsupported.</summary>
+        public static string HostSettingsRestartUnsupported => ResourceManager.GetString("HostSettingsRestartUnsupported", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Password masked hint.</summary>
+        public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tra cứu giao dịch người chơi, rớt/nhặt vật phẩm giá trị, xoay Chaos, mua bán NPC.</summary>
+        public static string PageHelpTextActivityLog => ResourceManager.GetString("PageHelpTextActivityLog", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình ngưỡng chống gian lận phía máy chủ (tốc độ chạy, tốc độ đánh, gói tin b.</summary>
+        public static string PageHelpTextAntiCheat => ResourceManager.GetString("PageHelpTextAntiCheat", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tạo, sao chép hoặc thu hồi API key theo quyền cho web bridge, script tự động hoặ.</summary>
+        public static string PageHelpTextApiKeys => ResourceManager.GetString("PageHelpTextApiKeys", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Quản lý danh sách từ cấm tiếng Anh và tiếng Việt trong chat và tên nhân vật/hội..</summary>
+        public static string PageHelpTextBannedWords => ResourceManager.GetString("PageHelpTextBannedWords", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình NPC hỗ trợ (Buffer): cấp độ tối đa, chi phí Zen/Xu, thời gian duy trì v.</summary>
+        public static string PageHelpTextBufferNpc => ResourceManager.GetString("PageHelpTextBufferNpc", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thiết lập trần cấp/reset theo top máy chủ, hệ số EXP đuổi kịp theo bậc và lượt r.</summary>
+        public static string PageHelpTextCatchupCap => ResourceManager.GetString("PageHelpTextCatchupCap", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Theo dõi trạng thái hoạt động của máy chủ game và cấu hình tự khởi động lại khi .</summary>
+        public static string PageHelpTextCrashWatch => ResourceManager.GetString("PageHelpTextCrashWatch", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tùy chỉnh các bậc danh hiệu (tên EN/VI, màu huy hiệu, chỉ số cộng thêm và mốc mở.</summary>
+        public static string PageHelpTextCustomRanks => ResourceManager.GetString("PageHelpTextCustomRanks", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Kiểm tra dung lượng bảng log PostgreSQL, đặt số ngày lưu giữ cho từng loại nhật .</summary>
+        public static string PageHelpTextDbLogRetention => ResourceManager.GetString("PageHelpTextDbLogRetention", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem dòng tiền Zen vào/ra, thống kê xoay Chaos, lượng ngọc lưu hành, số dư Xu và .</summary>
+        public static string PageHelpTextEconomyDashboard => ResourceManager.GetString("PageHelpTextEconomyDashboard", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Kiểm tra và xử lý hợp đồng ký gửi giữa người chơi, tạm giữ Trade Credit, trạng t.</summary>
+        public static string PageHelpTextEscrowContracts => ResourceManager.GetString("PageHelpTextEscrowContracts", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình nhắc lịch trước giờ sự kiện qua Web Push trình duyệt và kênh Discord, b.</summary>
+        public static string PageHelpTextEventAlerts => ResourceManager.GetString("PageHelpTextEventAlerts", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thiết lập các dòng chỉ số cố định hoặc giới hạn dòng cho trang bị tân thủ, đồ sự.</summary>
+        public static string PageHelpTextFixedOptions => ResourceManager.GetString("PageHelpTextFixedOptions", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Quản lý luật riêng từng bản đồ (PK, rơi đồ, giới hạn cấp), lịch giờ vàng tăng EX.</summary>
+        public static string PageHelpTextGameplayRules => ResourceManager.GetString("PageHelpTextGameplayRules", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chỉnh sửa cấu hình máy chủ tập trung (cổng, địa chỉ công khai, cầu nối web, chuỗ.</summary>
+        public static string PageHelpTextHostSettings => ResourceManager.GetString("PageHelpTextHostSettings", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Nhập dữ liệu tỉ lệ, rơi đồ, shop, sự kiện, tỷ lệ xoay Chaos, bãi quái hoặc tài k.</summary>
+        public static string PageHelpTextImportServer => ResourceManager.GetString("PageHelpTextImportServer", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chỉnh sửa tên vật phẩm EN/VI, kích thước ô, cấp rơi, yêu cầu trang bị, màu phát .</summary>
+        public static string PageHelpTextItemDefinitions => ResourceManager.GetString("PageHelpTextItemDefinitions", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình giới hạn Ngân hàng Ngọc theo tài khoản, danh sách ngọc hỗ trợ, phí Zen .</summary>
+        public static string PageHelpTextJewelBank => ResourceManager.GetString("PageHelpTextJewelBank", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình công thức ghép hộp/nâng cấp đồ trong túi và gói đổi nguyên liệu dư thừa.</summary>
+        public static string PageHelpTextLeftovers => ResourceManager.GetString("PageHelpTextLeftovers", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình xổ số Con Số May Mắn hằng ngày (giờ Sydney), giá vé, dải số, tỉ lệ trún.</summary>
+        public static string PageHelpTextLuckyNumber => ResourceManager.GetString("PageHelpTextLuckyNumber", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thực hiện công cụ bảo trì an toàn: làm mới bộ nhớ đệm, kiểm tra phần thưởng chờ .</summary>
+        public static string PageHelpTextMaintenanceTools => ResourceManager.GetString("PageHelpTextMaintenanceTools", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình Chợ Vật Phẩm trong game (F6 / NPC Julia): loại tiền tệ (Zen/Xu), phí gi.</summary>
+        public static string PageHelpTextMarket => ResourceManager.GetString("PageHelpTextMarket", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình hệ thống Kết Hôn (Shift+M): điều kiện cầu hôn, bản đồ/tọa độ lễ cưới, c.</summary>
+        public static string PageHelpTextMarriage => ResourceManager.GetString("PageHelpTextMarriage", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem, thêm hoặc sửa vật phẩm bán tại các NPC cửa hàng bằng bộ chọn danh mục trực .</summary>
+        public static string PageHelpTextMerchants => ResourceManager.GetString("PageHelpTextMerchants", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình chuỗi nâng cấp Thú cưỡi, tỉ lệ rơi mảnh ở Golden Boss, nguyên liệu ghép.</summary>
+        public static string PageHelpTextMounts => ResourceManager.GetString("PageHelpTextMounts", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình treo cửa hàng Offline (/offtrade): bản đồ an toàn cho phép, thời lượng .</summary>
+        public static string PageHelpTextOffTrade => ResourceManager.GetString("PageHelpTextOffTrade", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình tính năng vào tổ đội bằng mật khẩu (/partypass) và danh sách bãi luyện .</summary>
+        public static string PageHelpTextPartyOptions => ResourceManager.GetString("PageHelpTextPartyOptions", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình các lệnh tiện ích (/post cấp/thời gian chờ/Zen, /pkclear rửa tội, /clea.</summary>
+        public static string PageHelpTextQolSettings => ResourceManager.GetString("PageHelpTextQolSettings", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình Bảng Xếp Hạng trong game (Shift+R / /rank): chu kỳ làm mới, cột hiển th.</summary>
+        public static string PageHelpTextRankingsSettings => ResourceManager.GetString("PageHelpTextRankingsSettings", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tinh chỉnh tỉ lệ đập ngọc (Tâm Linh, Ước Nguyện, Sinh Mệnh), tỷ lệ xoay Chaos th.</summary>
+        public static string PageHelpTextRateTuning => ResourceManager.GetString("PageHelpTextRateTuning", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Quản lý lịch sự kiện Season 6 kinh điển, giới hạn vé vào, thông báo Boss và phần.</summary>
+        public static string PageHelpTextS6Events => ResourceManager.GetString("PageHelpTextS6Events", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thiết lập lộ trình mở tính năng theo mùa (ngày mở theo giờ Sydney cho mốc reset,.</summary>
+        public static string PageHelpTextSeasonPlan => ResourceManager.GetString("PageHelpTextSeasonPlan", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Kiểm tra dung lượng các bảng trạng thái tính năng PostgreSQL, nén/lưu trữ dữ liệ.</summary>
+        public static string PageHelpTextStateRetention => ResourceManager.GetString("PageHelpTextStateRetention", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình Bùa/Tượng mang trong hành trang giúp tăng EXP, Zen, chỉ số và giới hạn .</summary>
+        public static string PageHelpTextTalismans => ResourceManager.GetString("PageHelpTextTalismans", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình NPC Dịch Chuyển: danh sách bản đồ đến, yêu cầu cấp/Zen/Xu, thời gian ch.</summary>
+        public static string PageHelpTextTeleportNpc => ResourceManager.GetString("PageHelpTextTeleportNpc", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem và chỉnh sửa Bảng Lịch Sự Kiện &amp; Boss đồng nhất theo giờ Sydney, hiển thị đế.</summary>
+        public static string PageHelpTextTimetable => ResourceManager.GetString("PageHelpTextTimetable", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình các mốc tích lũy nạp VND để tài khoản nhận gói thưởng một lần (Xu, Zen,.</summary>
+        public static string PageHelpTextTopUpMilestones => ResourceManager.GetString("PageHelpTextTopUpMilestones", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Cấu hình tỉ lệ xoay Chaos hiển thị trực tiếp cho người chơi, số rương mở rộng &amp; .</summary>
+        public static string PageHelpTextVaultChaosRewards => ResourceManager.GetString("PageHelpTextVaultChaosRewards", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Xem bản đồ bằng không gian 3D Three.js, tô vùng cấm đi/an toàn/nước/ánh sáng, đặ.</summary>
+        public static string PageHelpTextWorldEditor => ResourceManager.GetString("PageHelpTextWorldEditor", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Tạo và quản lý các máy chủ/cụm thế giới độc lập, mẫu cấu hình khởi đầu, đếm ngượ.</summary>
+        public static string PageHelpTextWorlds => ResourceManager.GetString("PageHelpTextWorlds", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chuyển nhãn giao diện trang này sang tiếng Anh..</summary>
+        public static string PageHelpHintLanguageEn => ResourceManager.GetString("PageHelpHintLanguageEn", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Chuyển nhãn giao diện trang này sang tiếng Việt..</summary>
+        public static string PageHelpHintLanguageVi => ResourceManager.GetString("PageHelpHintLanguageVi", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thêm một mục hoặc vật phẩm mới vào danh sách..</summary>
+        public static string PageHelpHintAdd => ResourceManager.GetString("PageHelpHintAdd", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Áp dụng thay đổi này ngay..</summary>
+        public static string PageHelpHintApply => ResourceManager.GetString("PageHelpHintApply", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Thực hiện thao tác này..</summary>
+        public static string PageHelpHintAction => ResourceManager.GetString("PageHelpHintAction", resourceCulture)!;
     }
 }

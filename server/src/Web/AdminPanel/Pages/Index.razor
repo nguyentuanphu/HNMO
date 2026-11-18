@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/"
 
 @using HNMO.DataModel
 @using HNMO.Interfaces
@@ -9,6 +10,8 @@
 <PageTitle>@Resources.HNMOAdminPanel</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Home"/>
 <h1>@Resources.Dashboard</h1>
+<PageHelp Text="@HelpResources.PageHelpTextIndex" />
+
 <p class="text-body-secondary">@Resources.WelcomeMessage</p>
 
 <div class="dashboard">
@@ -99,16 +102,16 @@
                     <GlobalMessageForm Servers="@this._servers" Compact="true" />
                 }
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-outline-secondary btn-sm" href="accounts">@Resources.Accounts</a>
-                    <a class="btn btn-outline-secondary btn-sm" href="logged-in">@Resources.OnlineAccounts</a>
-                    <a class="btn btn-outline-secondary btn-sm" href="guilds">@Resources.Guilds</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="accounts">@Resources.Accounts</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="logged-in">@Resources.OnlineAccounts</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="guilds">@Resources.Guilds</a>
                     @if (AdminPanelEnvironment.IsHostingEmbedded)
                     {
-                        <a class="btn btn-outline-secondary btn-sm" href="logfiles">@Resources.LogFiles</a>
+                        <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="logfiles">@Resources.LogFiles</a>
                     }
                     @if (AdminPanelEnvironment.IsGrafanaAvailable)
                     {
-                        <a class="btn btn-outline-secondary btn-sm" href="/grafana/dashboards" target="_blank">@Resources.Metrics</a>
+                        <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="/grafana/dashboards" target="_blank">@Resources.Metrics</a>
                     }
                 </div>
             </div>

@@ -7,8 +7,9 @@ namespace HNMO.Web.AdminPanel.Services;
 using System.Text.RegularExpressions;
 using System.Threading;
 using HNMO.DataModel.Configuration;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.TopUpMilestones;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// An incoming bank transfer as a payment service (Casso, SePay) reported it.
@@ -145,6 +146,14 @@ public class BankTopUpService
             switch (status)
             {
                 case CashShopCoinGrantStatus.Created:
+                    var milestoneStore = TopUpMilestoneStore.Open(TopUpMilestonesConfiguration.DefaultFileName);
+                    var milestoneEngine = new TopUpMilestoneEngine(new TopUpMilestonesConfiguration(), milestoneStore, enabled: true);
+                    milestoneEngine.RecordTopUp(login, transfer.AmountVnd, reference, $"{transfer.Provider} {transfer.ProviderId}", DateTime.UtcNow);
+                    lock (milestoneStore.Lock)
+                    {
+                        milestoneStore.SaveIfChanged();
+                    }
+
                     this._logger.LogInformation("Top-up {Provider} {Id}: {Amount} VND -> {Coins} {CoinType} for {Login}.", transfer.Provider, transfer.ProviderId, transfer.AmountVnd, coins, configuration.CoinType, login);
                     return BankTopUpResult.Credited;
                 case CashShopCoinGrantStatus.AlreadyGranted:

@@ -6,6 +6,7 @@ namespace HNMO.GameLogic.PlugIns.ChatCommands;
 
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views;
 using HNMO.PlugIns;
 
@@ -37,7 +38,13 @@ public class PostChatCommandPlugIn : IChatCommandPlugIn
             return;
         }
 
-        message = $"{player.SelectedCharacter?.Name}: {message}";
+        var (allowed, filteredMessage) = await BannedWordsPlugIn.FilterChatAsync(player, message).ConfigureAwait(false);
+        if (!allowed)
+        {
+            return;
+        }
+
+        message = $"{player.SelectedCharacter?.Name}: {filteredMessage}";
         await player.GameContext.SendGlobalChatMessageAsync("[POST]", message, ChatMessageType.Gens).ConfigureAwait(false);
     }
 }

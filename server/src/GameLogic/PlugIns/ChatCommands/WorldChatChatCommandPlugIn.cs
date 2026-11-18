@@ -7,6 +7,7 @@ namespace HNMO.GameLogic.PlugIns.ChatCommands;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using HNMO.GameLogic.PlayerActions.Chat;
+using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.Views;
 using HNMO.PlugIns;
 
@@ -51,14 +52,20 @@ public class WorldChatChatCommandPlugIn : IChatCommandPlugIn
             return;
         }
 
+        var (allowed, filteredMessage) = await BannedWordsPlugIn.FilterChatAsync(player, message).ConfigureAwait(false);
+        if (!allowed)
+        {
+            return;
+        }
+
         var eventArgs = new CancelEventArgs();
-        player.GameContext.PlugInManager.GetPlugInPoint<IChatMessageReceivedPlugIn>()?.ChatMessageReceived(player, message, eventArgs);
+        player.GameContext.PlugInManager.GetPlugInPoint<IChatMessageReceivedPlugIn>()?.ChatMessageReceived(player, filteredMessage, eventArgs);
         if (eventArgs.Cancel)
         {
             return;
         }
 
-        await context.EventPublisher.WorldChatMessageAsync(character.Name, message).ConfigureAwait(false);
-        await player.NotifyChatMessageSentAsync(message, ChatMessageType.World).ConfigureAwait(false);
+        await context.EventPublisher.WorldChatMessageAsync(character.Name, filteredMessage).ConfigureAwait(false);
+        await player.NotifyChatMessageSentAsync(filteredMessage, ChatMessageType.World).ConfigureAwait(false);
     }
 }

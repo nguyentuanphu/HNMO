@@ -9,6 +9,7 @@
 <PageTitle>HNMO: @title</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@title" />
 <h1>@title</h1>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextApiKeys" />
 
 <p class="text-muted">@Resources.ApiKeysDescription</p>
 
@@ -21,11 +22,11 @@
         <p>@Resources.ApiKeyShownOnceDescription</p>
         <div class="input-group">
             <input type="text" class="form-control font-monospace" readonly value="@createdKey" aria-label="@Resources.ApiKeys"/>
-            <button type="button" class="btn btn-primary" @onclick="@this.CopyCreatedKeyAsync">
+            <button type="button" class="btn btn-primary" @onclick="@this.CopyCreatedKeyAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCopy">
                 <span class="oi oi-clipboard" aria-hidden="true"></span> @Resources.CopyToClipboard
             </button>
         </div>
-        <button type="button" class="btn btn-sm btn-secondary mt-3" @onclick="@(() => this._createdKey = null)">@Resources.Close</button>
+        <button type="button" class="btn btn-sm btn-secondary mt-3" @onclick="@(() => this._createdKey = null)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">@Resources.Close</button>
     </div>
 }
 
@@ -68,18 +69,18 @@ else
                     <td>@HNMO.Web.AdminPanel.Auth.RoleCaption.Get(apiKey.Roles)</td>
                     <td>
                         <code>@apiKey.AllowedToolGroups</code>
-                        <button type="button" class="btn btn-sm btn-secondary" @onclick="@(() => this.OnEditToolGroupsAsync(apiKey))">@HNMO.Web.Shared.Properties.Resources.Change</button>
+                        <button type="button" class="btn btn-sm btn-secondary" @onclick="@(() => this.OnEditToolGroupsAsync(apiKey))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEdit">@HNMO.Web.Shared.Properties.Resources.Change</button>
                     </td>
                     <td>
                         @if (apiKey.IsDisabled)
                         {
-                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="@(() => this.OnSetDisabledAsync(apiKey, false))">@Resources.Enable</button>
+                            <button type="button" class="btn btn-sm btn-success me-1" @onclick="@(() => this.OnSetDisabledAsync(apiKey, false))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintEnable">@Resources.Enable</button>
                         }
                         else
                         {
-                            <button type="button" class="btn btn-sm btn-warning me-1" @onclick="@(() => this.OnSetDisabledAsync(apiKey, true))">@Resources.Disable</button>
+                            <button type="button" class="btn btn-sm btn-warning me-1" @onclick="@(() => this.OnSetDisabledAsync(apiKey, true))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDisable">@Resources.Disable</button>
                         }
-                        <button type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnDeleteAsync(apiKey))">@Resources.Delete</button>
+                        <button type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnDeleteAsync(apiKey))" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">@Resources.Delete</button>
                     </td>
                 </tr>
             }
@@ -91,6 +92,6 @@ else
             }
             </tbody>
         </table>
-        <button type="button" class="btn btn-sm btn-success" @onclick="@this.OnCreateNewAsync">@Resources.CreateApiKey</button>
+        <button type="button" class="btn btn-sm btn-success" @onclick="@this.OnCreateNewAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCreate">@Resources.CreateApiKey</button>
     </div>
 }

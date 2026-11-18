@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/community"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @Resources.CommunityPage</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.CommunityPage" />
 <h1>@Resources.CommunityPage</h1>
+<PageHelp Text="@HelpResources.PageHelpTextCommunity" />
+
 <p class="text-muted">@Resources.CommunityPageDescription</p>
 
 @if (this._isLoading)
@@ -110,8 +113,8 @@ else
                                 <td><code>@claim.ZaloCode</code></td>
                                 <td>@this.Local(claim.ZaloRequestedAtUtc)</td>
                                 <td class="text-nowrap">
-                                    <button type="button" class="btn btn-sm btn-success zalo-approve" @onclick="() => this.DecideZalo(claim.Login, true)">@Resources.CommunityApprove</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger zalo-reject" @onclick="() => this.DecideZalo(claim.Login, false)">@Resources.CommunityReject</button>
+                                    <button title="@HelpResources.PageHelpHintSignIn" type="button" class="btn btn-sm btn-success zalo-approve" @onclick="() => this.DecideZalo(claim.Login, true)">@Resources.CommunityApprove</button>
+                                    <button title="@HelpResources.PageHelpHintSignIn" type="button" class="btn btn-sm btn-outline-danger zalo-reject" @onclick="() => this.DecideZalo(claim.Login, false)">@Resources.CommunityReject</button>
                                 </td>
                             </tr>
                         }
@@ -212,7 +215,7 @@ else
                             <input class="form-control form-control-sm event-items" placeholder="14 13 0 1" title="@Resources.MissionsItemsHint" @bind="row.ItemsText" />
                         </div>
                         <div class="col-sm-2 d-flex align-items-end">
-                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveEvent(row)">@Resources.Remove</button>
+                            <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this.RemoveEvent(row)">@Resources.Remove</button>
                         </div>
                     </div>
                     @if (this._engine is { } eventEngine && !string.IsNullOrWhiteSpace(e.Id))
@@ -228,7 +231,7 @@ else
                     }
                 </fieldset>
             }
-            <button type="button" class="btn btn-outline-primary btn-sm" id="community-add-event" @onclick="this.AddEvent">@Resources.CommunityAddEvent</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-outline-primary btn-sm" id="community-add-event" @onclick="this.AddEvent">@Resources.CommunityAddEvent</button>
         </div>
     </section>
 
@@ -310,8 +313,8 @@ else
     </section>
 
     <div class="d-flex gap-2 mb-4">
-        <button type="button" class="btn btn-primary" id="community-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
-        <button type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
+        <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="community-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-outline-secondary" disabled="@this._isSaving" @onclick="this.LoadAsync">@Resources.GuildsReload</button>
     </div>
 
     @if (this._engine is { } engine)
@@ -331,7 +334,7 @@ else
                         {
                             <li>
                                 @this.Local(h.AtUtc) · @KindCaption(h.Kind): @(this.IsVietnamese ? h.TextVi : h.TextEn)
-                                <button type="button" class="btn btn-link btn-sm text-danger p-0 ms-1 highlight-remove" @onclick="() => this.RemoveHighlight(h)">@Resources.Remove</button>
+                                <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-link btn-sm text-danger p-0 ms-1 highlight-remove" @onclick="() => this.RemoveHighlight(h)">@Resources.Remove</button>
                             </li>
                         }
                     </ul>
