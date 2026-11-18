@@ -11147,4 +11147,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoEscrowState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON payload containing contracts, owed deliveries, safety flags, reputation, and notices.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when the player requests escrow contracts (F9 / /contract) or completes an escrow operation.
+    /// Causes reaction on client side: Updates the Contracts window and reputation/owed summary in the web client.
+    /// </remarks>
+    public static async ValueTask SendHnmoEscrowStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoEscrowStateRef.GetRequiredSize(json);
+            var packet = new HnmoEscrowStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

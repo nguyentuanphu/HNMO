@@ -47,6 +47,7 @@ import { EventAlertsWindow } from './ui/eventAlertsWidget.js';
 import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
+import { EscrowWindow } from './ui/escrowWindow.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
 import { VipWindow } from './ui/vipWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
@@ -198,6 +199,7 @@ export interface GameState {
   luckyNumber?: LuckyNumberWindow;
   marriage?: MarriageWindow;
   market?: MarketWindow;
+  escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
   guildLevels?: GuildLevelsWindow;
@@ -1561,6 +1563,19 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key.toLowerCase() === 'u' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); vip.toggle(); }
   });
   window.addEventListener('hnmo-vip-open', () => { vip.open(); });
+  // HNMO's Escrow Contracts (F9, /contract, CommandWindow Contract -> right-click player).
+  const escrow = new EscrowWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.escrow = escrow;
+  connection.onPacket((bytes) => { escrow.handlePacket(bytes); });
+  for (const bytes of earlyPackets) escrow.handlePacket(bytes);
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
+  });
+  window.addEventListener('hnmo-escrow-open', () => { escrow.open(); });
   // HNMO's Jewel Bank & master skill clear (F7).
   const jewelBank = new JewelBankWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
@@ -1897,6 +1912,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
       addFriend: (player) => { if (state.social?.messenger.serverEnabled) state.social.messenger.addFriend(player.name); },
       follow: (player) => { online.followId = player.id; },
       duel: (player) => state.duelAndGens?.duel.challenge(player),
+      contract: (player) => state.escrow?.openForTarget(player.name),
     },
   });
   window.addEventListener('keydown', (event) => {

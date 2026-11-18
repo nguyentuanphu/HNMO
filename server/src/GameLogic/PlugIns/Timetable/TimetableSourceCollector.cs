@@ -10,6 +10,7 @@ using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.MiniGames;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
+using HNMO.GameLogic.PlugIns.S6Events;
 using HNMO.GameLogic.PlugIns.WorldBosses;
 using HNMO.PlugIns;
 
@@ -87,6 +88,34 @@ public static class TimetableSourceCollector
                     items.Add(FromInvasion(plugIn.GetType(), config, gameConfig));
                 }
             }
+        }
+
+        if (timetableConfiguration.ShowMiniGames
+            && gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<S6EventsPlugIn>().FirstOrDefault() is { } s6Events
+            && s6Events.Configuration is { Enabled: true, LmsEnabled: true } s6Cfg)
+        {
+            var arenaDef = gameConfig.Maps?.FirstOrDefault(m => m.Number == s6Cfg.LmsArenaMapNumber);
+            var mapEn = arenaDef?.Name.GetTranslation(English) ?? "Duel Arena";
+            var mapVi = arenaDef?.Name.GetTranslation(Vietnamese) ?? "Đấu Trường";
+            var dailyTimes = s6Cfg.LmsDailyTimes
+                .Select(raw => TimeOnly.TryParseExact(raw?.Trim(), "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var t) ? (TimeOnly?)t : null)
+                .Where(t => t.HasValue)
+                .Select(t => t!.Value)
+                .ToList();
+            items.Add(new TimetableSourceItem
+            {
+                Id = "event-lms",
+                Category = "event",
+                NameEn = "Last Man Standing",
+                NameVi = "Chiến Trường Sinh Tử (LMS)",
+                MapsEn = mapEn,
+                MapsVi = mapVi,
+                DropsEn = $"{s6Cfg.LmsRewardCoins} {s6Cfg.LmsRewardCoinType} + {s6Cfg.LmsRewardZen:N0} Zen",
+                DropsVi = $"{s6Cfg.LmsRewardCoins} {s6Cfg.LmsRewardCoinType} + {s6Cfg.LmsRewardZen:N0} Zen",
+                DailyTimes = dailyTimes,
+                Duration = TimeSpan.FromMinutes(Math.Max(1, s6Cfg.LmsRegistrationMinutes + s6Cfg.LmsDurationMinutes)),
+                IsLiveNow = s6Events.IsLmsActive,
+            });
         }
 
         if (timetableConfiguration.ShowWorldBosses

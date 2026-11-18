@@ -16969,6 +16969,23 @@
         <Field><Index>9</Index><Type>String</Type><Name>Json</Name><Description>ASCII-safe JSON using the shared VIP account state; Unicode is escaped and no private receipt or credential is included.</Description></Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>4D</SubCode>
+      <Name>HnmoEscrowState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when the player requests escrow contracts (F9 / /contract) or completes an escrow operation.</SentWhen>
+      <CausedReaction>Updates the Contracts window and reputation/owed summary in the web client.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON payload containing contracts, owed deliveries, safety flags, reputation, and notices.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

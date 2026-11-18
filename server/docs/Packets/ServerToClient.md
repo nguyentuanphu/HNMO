@@ -389,6 +389,7 @@
   * [C2 F5 47 - HnmoRankingState (by server)](C2-F5-47-HnmoRankingState_by-server.md)
   * [C2 F5 49 - HnmoCustomRanksState (by server)](C2-F5-49-HnmoCustomRanksState_by-server.md)
   * [C2 F5 4B - HnmoTeleportNpcState (by server)](C2-F5-4B-HnmoTeleportNpcState_by-server.md)
+  * [C2 F5 4D - HnmoEscrowState (by server)](C2-F5-4D-HnmoEscrowState_by-server.md)
   * [C1 F6 00 - QuestEventLimitResult (by server)](C1-F6-00-QuestEventLimitResult_by-server.md)
   * [C1 F6 03 - QuestEventResponse (by server)](C1-F6-03-QuestEventResponse_by-server.md)
   * [C1 F6 04 - QuestStartedByItem (by server)](C1-F6-04-QuestStartedByItem_by-server.md)

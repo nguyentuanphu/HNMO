@@ -75,6 +75,11 @@ public class ItemCraftAction
 
         PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordChaosMix(player, result.Item1, result.Item2, player.OpenedNpc?.Definition?.Designation ?? string.Empty);
 
+        if (result.Item1 == CraftingResult.Success)
+        {
+            await PlugIns.GameplayRules.RateTuningPlugIn.TryBroadcastChaosMixSuccessAsync(player, result.Item2).ConfigureAwait(false);
+        }
+
         var itemList = player.TemporaryStorage?.Items.ToList() ?? new List<Item>();
         await player.InvokeViewPlugInAsync<IShowItemCraftingResultPlugIn>(p => p.ShowResultAsync(result.Item1, itemList.Count > 1 ? null : result.Item2)).ConfigureAwait(false);
         if (npcStats!.NpcWindow != NpcWindow.CombineLuckyItem)

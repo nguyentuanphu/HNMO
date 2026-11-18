@@ -37,6 +37,14 @@ public class DuelActions
             return;
         }
 
+        if (PlugIns.Qol.QolPlugIn.AreRequestsBlocked(target))
+        {
+            await player.ShowBlueMessageAsync(player.Culture.TwoLetterISOLanguageName == "vi"
+                ? $"{target.Name} đang tắt nhận lời mời (/requests off)."
+                : $"{target.Name} has disabled incoming requests (/requests off).").ConfigureAwait(false);
+            return;
+        }
+
         if (!await CheckIfDuelCanBeStartedAsync(player, target).ConfigureAwait(false))
         {
             return;

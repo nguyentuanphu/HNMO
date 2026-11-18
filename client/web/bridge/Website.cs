@@ -18,6 +18,40 @@ internal static class Website
         Forward(app, "/website/resets", "api/website/resets", options, clients);
         Forward(app, "/website/topup-milestones", "api/website/topup-milestones", options, clients);
         Forward(app, "/website/market", "api/website/market", options, clients);
+        Forward(app, "/website/escrow", "api/website/escrow", options, clients);
+        Forward(app, "/website/build-calculator", "api/website/build-calculator", options, clients);
+        ForwardPost(app, "/website/build-calculator", "api/website/build-calculator", options, clients);
+        app.MapPost("/website/escrow/direct/webhook/{contractId}", async (string contractId, HttpContext context) =>
+        {
+            context.Response.Headers.CacheControl = "no-store";
+            using var timeout = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
+            timeout.CancelAfter(TimeSpan.FromSeconds(10));
+            try
+            {
+                using var reader = new StreamReader(context.Request.Body);
+                var body = await reader.ReadToEndAsync(timeout.Token).ConfigureAwait(false);
+                var target = new Uri(new Uri(options.ApiBaseUrl), $"api/website/escrow/direct/webhook/{Uri.EscapeDataString(contractId)}");
+                using var req = new HttpRequestMessage(HttpMethod.Post, target)
+                {
+                    Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json"),
+                };
+                foreach (var hdr in new[] { "X-HNMO-Signature", "X-HNMO-Timestamp", "X-HNMO-Nonce" })
+                {
+                    if (context.Request.Headers.TryGetValue(hdr, out var vals))
+                    {
+                        req.Headers.TryAddWithoutValidation(hdr, vals.ToArray());
+                    }
+                }
+
+                using var response = await clients.CreateClient().SendAsync(req, timeout.Token).ConfigureAwait(false);
+                var reply = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+                return Results.Content(reply, "application/json", statusCode: (int)response.StatusCode);
+            }
+            catch (Exception error) when (error is HttpRequestException or OperationCanceledException)
+            {
+                return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+            }
+        });
         Forward(app, "/website/jewel-bank", "api/website/jewel-bank", options, clients);
         Forward(app, "/website/catchup", "api/website/catchup", options, clients);
         Forward(app, "/website/season-plan", "api/website/season-plan", options, clients);
@@ -27,6 +61,7 @@ internal static class Website
         Forward(app, "/website/event-alerts", "api/website/event-alerts", options, clients);
         ForwardPost(app, "/website/event-alerts/subscribe", "api/website/event-alerts/subscribe", options, clients);
         ForwardPost(app, "/website/event-alerts/unsubscribe", "api/website/event-alerts/unsubscribe", options, clients);
+        Forward(app, "/website/items", "api/website/items", options, clients);
     }
 
     private static void ForwardPost(WebApplication app, string route, string apiPath, PortalOptions options, IHttpClientFactory clients)

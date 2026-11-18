@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HNMO · Stats &amp; Build Calculator</title>
+  <style>
+    [hidden] { display: none !important; }
+    :root { --panel: rgba(10, 12, 20, .9); --line: rgba(255, 255, 255, .14); --gold: #c9a24a; --text: #e6e8ef; --muted: #9aa0b2; --ok: #7cc98a; --err: #ef7a6c; }
+    html, body { min-height: 100%; margin: 0; color: var(--text); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    body { background: radial-gradient(ellipse at top, #1a1f2e 0%, #07090f 70%) fixed; padding: 24px max(16px, env(safe-area-inset-left)) 48px; }
+    main { max-width: 1120px; margin: 0 auto; display: grid; gap: 16px; }
+    header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    h1 { margin: 0; color: var(--gold); font-size: 24px; }
+    h2 { margin: 0 0 8px; font-size: 16px; color: var(--gold); }
+    a { color: var(--gold); }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; align-content: start; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+    .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    label { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
+    input, select { background: #151a26; color: var(--text); border: 1px solid #2c3446; border-radius: 6px; padding: 7px 9px; font: inherit; }
+    button { font: inherit; border-radius: 6px; padding: 6px 12px; cursor: pointer; border: 1px solid var(--line); background: #151a26; color: var(--text); }
+    button.primary { background: var(--gold); color: #161208; border-color: var(--gold); font-weight: 700; }
+    button[aria-pressed="true"] { border-color: var(--gold); background: var(--gold); color: #161208; font-weight: 700; }
+    .help-box { background: #142238; border: 1px solid #3c6ea8; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: #cde4ff; }
+    .item-row { display: grid; grid-template-columns: 90px 1fr 64px 64px auto auto auto auto; gap: 6px; align-items: center; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: rgba(255,255,255,.02); font-size: 12px; }
+    @media (max-width: 780px) { .item-row { grid-template-columns: 1fr 1fr; } }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+    .stat-card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: rgba(255,255,255,.03); }
+    .stat-label { font-size: 11px; color: var(--muted); }
+    .stat-val { font-size: 18px; font-weight: 700; color: var(--ok); }
+    .lang { display: flex; gap: 6px; align-items: center; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1><span data-game-name>HNMO</span> · <span id="calc-title">Stats &amp; Build Calculator</span></h1>
+      <div class="lang">
+        <button type="button" id="calc-lang-en" data-lang="en">EN</button>
+        <button type="button" id="calc-lang-vi" data-lang="vi">VN</button>
+        <button type="button" id="calc-help-btn" title="How to use this calculator">?</button>
+        <a href="/home.html" id="calc-home">Home</a>
+        <a href="/index.html" id="calc-play">Play →</a>
+      </div>
+    </header>
+
+    <div class="help-box" id="calc-help" hidden></div>
+
+    <div class="grid">
+      <section class="panel" id="calc-inputs">
+        <h2 id="calc-h-char">Character &amp; Base Stats</h2>
+        <div class="fields">
+          <label><span id="lbl-class">Class</span><select id="calc-class" title="Pick your character class"></select></label>
+          <label><span id="lbl-level">Level</span><input id="calc-level" type="number" min="1" max="1000" value="400"></label>
+          <label><span id="lbl-mlevel">Master Level</span><input id="calc-mlevel" type="number" min="0" max="1000" value="0"></label>
+          <label><span id="lbl-str">Strength</span><input id="calc-str" type="number" min="0" max="65000" value="500"></label>
+          <label><span id="lbl-agi">Agility</span><input id="calc-agi" type="number" min="0" max="65000" value="300"></label>
+          <label><span id="lbl-vit">Vitality</span><input id="calc-vit" type="number" min="0" max="65000" value="150"></label>
+          <label><span id="lbl-ene">Energy</span><input id="calc-ene" type="number" min="0" max="65000" value="100"></label>
+          <label><span id="lbl-cmd">Leadership</span><input id="calc-cmd" type="number" min="0" max="65000" value="0"></label>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button type="button" class="primary" id="calc-run" title="Compute exact stats on server">Calculate</button>
+          <button type="button" id="calc-share" title="Copy URL with your build settings">Copy Share Link</button>
+          <span id="calc-status" style="font-size:12px;color:var(--muted);"></span>
+        </div>
+
+        <h2 id="calc-h-items" style="margin-top:8px;">Equipped Items</h2>
+        <div id="calc-slots" style="display:grid;gap:6px;"></div>
+      </section>
+
+      <section class="panel" id="calc-results">
+        <h2 id="calc-h-out">Computed Server Stats</h2>
+        <div class="stats-grid" id="calc-stats-grid"></div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="/js/calculator.js"></script>
+</body>
+</html>

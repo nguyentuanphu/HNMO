@@ -74,13 +74,29 @@ export interface StorePrice { kind: 'zen' | 'coin' | 'item'; amount: number; cur
 
 const COINS: Record<number, string> = { 0xfff0: 'W Coin (C)', 0xfff1: 'W Coin (P)', 0xfff2: 'Goblin Points' };
 
+export interface ShopCurrencyOption {
+  /** Protocol PriceItemType: 0 = Zen, 0xfff0..0xfff2 = Account Coins, (group << 12) | number = Item. */
+  type: number;
+  kind: 'zen' | 'coin' | 'item';
+  label: string;
+}
+
+const ZEN_OPTION: ShopCurrencyOption = { type: 0, kind: 'zen', label: 'Zen' };
+
 // DecodeExtendedPrice: pieces of an item when an amount is given, account coins for the reserved types, else zen.
 export function decodePrice(money: number, priceItemType: number, amount: number): StorePrice {
   if (amount > 0) {
-    return { kind: 'item', amount, currency: itemName(priceItemType >> 9, priceItemType & 0x1ff) };
+    return { kind: 'item', amount, currency: itemName(priceItemType >> 12, priceItemType & 0xfff) };
   }
   if (COINS[priceItemType]) return { kind: 'coin', amount: money, currency: COINS[priceItemType] };
   return { kind: 'zen', amount: money, currency: 'zen' };
+}
+
+/** Converts a protocol `PriceItemType` into a UI currency option. */
+export function currencyOptionForType(priceItemType: number): ShopCurrencyOption {
+  if (priceItemType === 0) return ZEN_OPTION;
+  if (COINS[priceItemType]) return { type: priceItemType, kind: 'coin', label: COINS[priceItemType] };
+  return { type: priceItemType, kind: 'item', label: itemName(priceItemType >> 12, priceItemType & 0xfff) };
 }
 
 /** A store's items (PlayerShopItemListExtended): from byte 55 a 9-byte price block, then the item. */
@@ -146,7 +162,12 @@ export class MyShopWindow extends ItemWindow<MyShopModel> {
   onPriceClick?: (slot: number) => void;
   /** Starts /offtrade for the open store. */
   onOffTrade?: () => void;
+  /** Fires when the player switches selling currency. */
+  onCurrencyChange?: (currency: ShopCurrencyOption) => void;
   private offTradeBtn: HTMLButtonElement | null = null;
+  private currencySelect: HTMLSelectElement | null = null;
+  private currencyOptions: ShopCurrencyOption[] = [ZEN_OPTION];
+  private selectedType = 0;
   private storeOpenState = false;
 
   constructor({ inventory, picked, onClose, onOpen, onCloseStore }: {
@@ -175,6 +196,23 @@ export class MyShopWindow extends ItemWindow<MyShopModel> {
       field.style.pointerEvents = 'auto';
       for (const type of ['keydown', 'keyup', 'keypress'] as const) field.addEventListener(type, (event) => event.stopPropagation());
     }
+    if (!this.currencySelect) {
+      const host = this.doc.root.querySelector('.shop-btn')?.parentElement ?? this.doc.root;
+      const sel = document.createElement('select');
+      sel.id = 'hnmo_shop_currency';
+      sel.setAttribute('data-testid', 'shop-currency-select');
+      sel.style.cssText = 'position:relative;padding:2px 4px;margin-left:4px;font-size:11px;background:#1e1a12;color:#ffd875;border:1px solid #9c7936;border-radius:3px;cursor:pointer;max-width:110px;pointer-events:auto;';
+      sel.addEventListener('change', (event) => {
+        event.stopPropagation();
+        this.selectedType = Number(sel.value) || 0;
+        const opt = this.currencyOptions.find((o) => o.type === this.selectedType) ?? ZEN_OPTION;
+        this.onCurrencyChange?.(opt);
+      });
+      sel.addEventListener('click', (event) => event.stopPropagation());
+      host.appendChild(sel);
+      this.currencySelect = sel;
+    }
+    this.syncCurrencyOptions(this.currencyOptions);
     if (!this.offTradeBtn) {
       const host = this.doc.root.querySelector('.shop-btn')?.parentElement ?? this.doc.root;
       const btn = document.createElement('button');
@@ -189,9 +227,36 @@ export class MyShopWindow extends ItemWindow<MyShopModel> {
     this.setStoreOpenState(this.storeOpenState);
   }
 
+  /** Updates the multi-currency selector from server-allowed currencies (Zen + Jewels/Coins). */
+  syncCurrencyOptions(options: ShopCurrencyOption[]): void {
+    this.currencyOptions = options.length > 0 ? options : [ZEN_OPTION];
+    if (!this.currencyOptions.some((o) => o.type === this.selectedType)) this.selectedType = 0;
+    const sel = this.currencySelect;
+    if (!sel) return;
+    const vi = currentLanguage() === 'vi';
+    sel.title = vi
+      ? 'Chọn đơn vị tiền tệ khi đặt giá (Zen, Coin hoặc Ngọc)'
+      : 'Select selling currency for new prices (Zen, Coins or Jewels)';
+    sel.innerHTML = '';
+    for (const opt of this.currencyOptions) {
+      const el = document.createElement('option');
+      el.value = String(opt.type);
+      el.textContent = opt.label;
+      if (opt.type === this.selectedType) el.selected = true;
+      sel.appendChild(el);
+    }
+    sel.disabled = this.storeOpenState;
+  }
+
+  /** Returns the currently selected selling currency option. */
+  getSelectedCurrency(): ShopCurrencyOption {
+    return this.currencyOptions.find((o) => o.type === this.selectedType) ?? ZEN_OPTION;
+  }
+
   /** Shows or hides the Off-trade button when the shop is open. */
   setStoreOpenState(open: boolean): void {
     this.storeOpenState = open;
+    if (this.currencySelect) this.currencySelect.disabled = open;
     const btn = this.offTradeBtn;
     if (!btn) return;
     const vi = currentLanguage() === 'vi';
@@ -208,7 +273,7 @@ export class MyShopWindow extends ItemWindow<MyShopModel> {
   }
 
   override click(event: MouseEvent): void {
-    if (event.target instanceof Element && event.target.closest('#frame_corner_close, .shop-btn, #shop_title')) return;
+    if (event.target instanceof Element && event.target.closest('#frame_corner_close, .shop-btn, #shop_title, #hnmo_shop_currency')) return;
     const source = this.picked.source;
     // An item from the bag or the equipment: its price first (the dialog), then the move.
     if (source && !(source.storage === Storage.INVENTORY && source.slot >= STORE_GRID.firstSlot)) {
@@ -564,13 +629,13 @@ export class PersonalShop {
   private place(from: { storage: number; slot: number; item: Item }, target: number): boolean {
     if (isPersonalShopBan(from.item)) { this.options.message(SHOP_TEXT.notAllowed); return true; }
     this.pricingTarget = target;
-    void this.askPrice(from.item).then((price) => {
-      if (price === null) return;
+    void this.askPrice(from.item).then((res) => {
+      if (res === null) return;
       // ApplyPersonalShopItemPrice: an open store closes first; the price goes with the item's place in the bag.
       if (this.isOpen) this.options.connection.send('ClientToServer', 'PlayerShopClose', {});
-      this.sendPrice(from.slot, price);
+      this.sendPrice(from.slot, res.amount, res.currency);
       this.options.inventory.move(from.storage, from.slot, Storage.PLAYER_SHOP, target);
-      this.prices.set(target, { kind: 'zen', amount: price, currency: 'zen' });
+      this.prices.set(target, { kind: res.currency.kind, amount: res.amount, currency: res.currency.label });
       this.options.itemWindows.refresh();
     });
     return true;
@@ -581,29 +646,46 @@ export class PersonalShop {
     const item = this.options.inventory.items.get(slot);
     if (!item) return;
     this.pricingTarget = -1;
-    const price = await this.askPrice(item);
-    if (price === null) return;
+    const res = await this.askPrice(item);
+    if (res === null) return;
     if (this.isOpen) this.options.connection.send('ClientToServer', 'PlayerShopClose', {});
     this.replaced = { slot, price: this.prices.get(slot) };
-    this.sendPrice(slot, price);
-    this.prices.set(slot, { kind: 'zen', amount: price, currency: 'zen' });
+    this.sendPrice(slot, res.amount, res.currency);
+    this.prices.set(slot, { kind: res.currency.kind, amount: res.amount, currency: res.currency.label });
     this.options.itemWindows.refresh();
   }
 
   // ShowItemPriceDialog: "Enter selling price." (up to 8 digits, 0 keeps the dialog open); a zen price under the
   // item's value asks again (ShowZenPriceConfirmation).
-  private async askPrice(item: Item): Promise<number | null> {
-    const text = await askInGame([SHOP_TEXT.enterPrice], { numeric: true, maxLength: 8, keepOpen: (value) => !(Number(value) > 0) });
+  private async askPrice(item: Item): Promise<{ amount: number; currency: ShopCurrencyOption } | null> {
+    const currency = this.myShop.getSelectedCurrency();
+    const promptLine = currency.kind === 'zen'
+      ? SHOP_TEXT.enterPrice
+      : `${SHOP_TEXT.enterPrice} (${currency.label})`;
+    const maxLen = currency.kind === 'item' ? 4 : 8;
+    const text = await askInGame([promptLine], { numeric: true, maxLength: maxLen, keepOpen: (value) => !(Number(value) > 0) });
     if (text === null) return null;
     const price = Number(text);
-    let value = 0;
-    try { value = itemValue(item, 2); } catch { value = 0; }
-    if (price < value && !(await this.options.confirm(`${format(SHOP_TEXT.sellingPriceZen, formatGold(price))}\n${SHOP_TEXT.sellAtThisPrice}`))) return null;
-    return price;
+    if (currency.kind === 'zen') {
+      let value = 0;
+      try { value = itemValue(item, 2); } catch { value = 0; }
+      if (price < value && !(await this.options.confirm(`${format(SHOP_TEXT.sellingPriceZen, formatGold(price))}\n${SHOP_TEXT.sellAtThisPrice}`))) return null;
+    }
+    return { amount: price, currency };
   }
 
-  private sendPrice(slot: number, price: number): void {
-    this.options.connection.send('ClientToServer', 'PlayerShopSetItemPrice', { ItemSlot: slot, Price: price });
+  private sendPrice(slot: number, price: number, currency: ShopCurrencyOption = ZEN_OPTION): void {
+    if (currency.kind === 'zen' || currency.type === 0) {
+      this.options.connection.send('ClientToServer', 'PlayerShopSetItemPrice', { ItemSlot: slot, Price: price });
+      return;
+    }
+
+    this.options.connection.send('ClientToServer', 'PlayerShopSetItemPriceExtended', {
+      MoneyPrice: currency.kind === 'coin' ? price : 0,
+      PriceItemType: currency.type,
+      RequiredItemAmount: currency.kind === 'item' ? price : 0,
+      ItemSlot: slot,
+    });
   }
 
   /** Asks for a player's store (PlayerShopItemListRequest). */
@@ -703,6 +785,18 @@ export class PersonalShop {
       const id = ((bytes[5] << 8) | bytes[6]) & 0x7fff;
       if (id === options.heroId()) { this.isOpen = false; this.syncButtons(); }
       this.titles.remove(id);
+    } else if (sub === 0x0a) {
+      // PlayerShopPriceTypesExtended: server advertises non-Zen allowed currencies (Coins + Jewels).
+      const packet = read<{ PriceTypes: { PriceItemType: number }[] }>('ServerToClient', 'PlayerShopPriceTypesExtended', bytes);
+      const allowed: ShopCurrencyOption[] = [ZEN_OPTION];
+      const seen = new Set<number>([0]);
+      for (const entry of packet.PriceTypes ?? []) {
+        if (entry?.PriceItemType && !seen.has(entry.PriceItemType)) {
+          seen.add(entry.PriceItemType);
+          allowed.push(currencyOptionForType(entry.PriceItemType));
+        }
+      }
+      this.myShop.syncCurrencyOptions(allowed);
     } else if (sub === 0x06) {
       this.buyResult(bytes);
     } else if (sub === 0x08) {

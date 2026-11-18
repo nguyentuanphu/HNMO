@@ -108,7 +108,8 @@ public class DefaultDropGenerator : IDropGenerator
 
         var (mapItemMult, mapZenMult) = PlugIns.GameplayRules.MapRulesPlugIn.GetDropModifiers(player);
         var (_, bonusItemMult, bonusZenMult) = PlugIns.GameplayRules.BonusEventsPlugIn.GetDropModifiers(player, DateTime.UtcNow);
-        var totalZenMult = mapZenMult * bonusZenMult;
+        var rateZenMult = PlugIns.GameplayRules.RateTuningPlugIn.GetZenDropMultiplier(player);
+        var totalZenMult = mapZenMult * bonusZenMult * rateZenMult;
         if (money > 0 && Math.Abs(totalZenMult - 1.0) > 0.0001)
         {
             money = (uint)Math.Max(1, Math.Round(money * totalZenMult));

@@ -94,6 +94,7 @@ public static class WebApplicationExtensions
         services.AddSingleton<SetupService>();
         services.TryAddSingleton<IHostSettingsService, HostSettingsService>();
         services.TryAddSingleton<IServerRestartService, NoOpServerRestartService>();
+        services.TryAddSingleton<WorldEditorDataService>();
         services.AddSingleton(new LoggingConfigurationService(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json")));
         services.AddSingleton(provider => new DiscordConfigurationService(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"), provider.GetRequiredService<IConfiguration>()));
         services.AddScoped<DataUpdateService>();

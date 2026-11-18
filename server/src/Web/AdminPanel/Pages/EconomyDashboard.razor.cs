@@ -6,14 +6,15 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns.Economy;
+using HNMO.GameLogic.PlugIns.Escrow;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Admin panel Economy Dashboard page (ROADMAP 14.25).
@@ -22,6 +23,8 @@ public partial class EconomyDashboard : ComponentBase
 {
     private EconomyConfiguration? _configuration;
     private IReadOnlyList<EconomyDailySnapshot> _snapshots = [];
+    private IReadOnlyList<EscrowFeeLedgerEntry> _escrowFeeLedger = [];
+    private IReadOnlyList<(string Currency, long TotalFee, int Count)> _escrowFeeTotals = [];
     private bool _isLoading = true;
     private bool _isSaving;
     private bool _showHelp;
@@ -67,6 +70,18 @@ public partial class EconomyDashboard : ComponentBase
                 ?? new EconomyConfiguration();
 
             this._snapshots = await this.EconomyOperations.LoadHistoryAsync(this._configuration.FileName, 30, default).ConfigureAwait(true);
+
+            var (_, _, escrowCfgSaved) = await PlugInSettings.ReadStoredAsync<EscrowConfiguration>(
+                this.PersistenceContextProvider,
+                typeof(EscrowContractsPlugIn),
+                default).ConfigureAwait(true);
+            var escrowFile = escrowCfgSaved?.FileName ?? new EscrowConfiguration().FileName;
+            this._escrowFeeLedger = EscrowStore.Open(escrowFile).Read(d => d.FeeLedger.Take(20).ToList());
+            this._escrowFeeTotals = this._escrowFeeLedger
+                .GroupBy(e => e.Currency, StringComparer.OrdinalIgnoreCase)
+                .Select(g => (Currency: g.Key, TotalFee: g.Sum(x => x.FeeAmount), Count: g.Count()))
+                .OrderByDescending(x => x.TotalFee)
+                .ToList();
         }
         catch (Exception ex)
         {

@@ -33,6 +33,14 @@ public class PartyRequestAction
             return;
         }
 
+        if (PlugIns.Qol.QolPlugIn.AreRequestsBlocked(toRequest))
+        {
+            await player.ShowBlueMessageAsync(player.Culture.TwoLetterISOLanguageName == "vi"
+                ? $"{toRequest.Name} đang tắt nhận lời mời (/requests off)."
+                : $"{toRequest.Name} has disabled incoming requests (/requests off).").ConfigureAwait(false);
+            return;
+        }
+
         if (toRequest.Party != null || toRequest.LastPartyRequester != null)
         {
             // A server-side bot is asked as well when it is a plain member of its (bot) party: a living

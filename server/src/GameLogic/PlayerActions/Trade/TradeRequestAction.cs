@@ -25,6 +25,18 @@ public class TradeRequestAction
             return false;
         }
 
+        if (partner is Player targetPlayer && PlugIns.Qol.QolPlugIn.AreRequestsBlocked(targetPlayer))
+        {
+            if (player is Player requesterPlayer)
+            {
+                await requesterPlayer.ShowBlueMessageAsync(requesterPlayer.Culture.TwoLetterISOLanguageName == "vi"
+                    ? $"{partner.Name} đang tắt nhận lời mời (/requests off)."
+                    : $"{partner.Name} has disabled incoming requests (/requests off).").ConfigureAwait(false);
+            }
+
+            return false;
+        }
+
         // HNMO's account safety: both traders need their second password (when the admin requires it).
         if (PlugIns.AccountSafety.AccountSafetyPlugIn.Get(player.GameContext) is { } safety)
         {

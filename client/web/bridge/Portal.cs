@@ -75,6 +75,9 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/market/account", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/market/buy", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "buy"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/market/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.MarketAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/account", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "account"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/cancel", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "cancel"))).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/escrow/direct/receipt", (Func<HttpContext, Task<IResult>>)(context => portal.EscrowAsync(context, "direct/receipt"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/jewel-bank/account", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "account"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/jewel-bank/withdraw", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "withdraw"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/jewel-bank/clear-master", (Func<HttpContext, Task<IResult>>)(context => portal.JewelBankAsync(context, "clear-master"))).RequireRateLimiting("per-visitor");
@@ -765,6 +768,58 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             }
 
             logger.LogWarning("Item market on the website failed: {Status}", response.StatusCode);
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+        catch (HttpRequestException)
+        {
+            return Results.Json(new { error = "server" }, statusCode: 502);
+        }
+    }
+
+    private async Task<IResult> EscrowAsync(HttpContext context, string action)
+    {
+        if (string.IsNullOrEmpty(this.ApiKey))
+        {
+            return Results.Json(new { error = "setup" }, statusCode: 503);
+        }
+
+        Dictionary<string, JsonElement>? body;
+        try
+        {
+            body = await context.Request.ReadFromJsonAsync<Dictionary<string, JsonElement>>(context.RequestAborted).ConfigureAwait(false);
+        }
+        catch (Exception error) when (error is JsonException or InvalidOperationException)
+        {
+            return Results.Json(new { error = "request" }, statusCode: 400);
+        }
+
+        string Field(string name, int maximum) =>
+            body?.GetValueOrDefault(name) is { ValueKind: JsonValueKind.String } element && element.GetString() is { } value && value.Length <= maximum ? value : string.Empty;
+        object request = action switch
+        {
+            "account" => new { loginName = Field("loginName", 10), password = Field("password", 20) },
+            "direct/receipt" => new
+            {
+                loginName = Field("loginName", 10),
+                password = Field("password", 20),
+                contractId = Field("contractId", 40),
+                receiptMime = Field("receiptMime", 40),
+                receiptBase64 = Field("receiptBase64", 800_000),
+                note = Field("note", 200),
+            },
+            _ => new { loginName = Field("loginName", 10), password = Field("password", 20), contractId = Field("contractId", 40) },
+        };
+        try
+        {
+            using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Post, $"api/website/escrow/{action}", request), context.RequestAborted).ConfigureAwait(false);
+            var text = await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false);
+            if (response.StatusCode is HttpStatusCode.OK or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.BadRequest && text.StartsWith('{'))
+            {
+                context.Response.Headers.CacheControl = "no-store";
+                return Results.Content(text, "application/json", statusCode: (int)response.StatusCode);
+            }
+
+            logger.LogWarning("Escrow website portal call {Action} failed: {Status}", action, response.StatusCode);
             return Results.Json(new { error = "server" }, statusCode: 502);
         }
         catch (HttpRequestException)
