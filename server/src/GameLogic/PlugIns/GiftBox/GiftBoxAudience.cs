@@ -47,7 +47,7 @@ public static class GiftBoxAudience
         if (activeDays is { } days)
         {
             var cutoff = nowUtc.AddDays(-days);
-            selected = selected.Where(account => account.Online || account.LastActiveUtc is { } last && last >= cutoff && last <= nowUtc);
+            selected = selected.Where(account => account.Online || (account.LastActiveUtc is { } last && last >= cutoff && last <= nowUtc));
         }
 
         var result = selected.OrderBy(account => account.AccountId).ToArray();
