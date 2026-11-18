@@ -4595,4 +4595,10 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
   </data>
+  <data name="NewsManager" xml:space="preserve">
+    <value>News manager</value>
+  </data>
+  <data name="PageHelpTextNewsManager" xml:space="preserve">
+    <value>Publish bilingual EN/VI announcements in Australia/Sydney time, pin top news, optionally attach a safe image URL, and send live in-game chat notices.</value>
+  </data>
 </root>

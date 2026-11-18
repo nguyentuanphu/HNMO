@@ -11145,4 +11145,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoNewsNotice" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">JSON payload containing the latest published EN/VI news post and fresh flag.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when entering the world with a published post or when an admin publishes a new news post.
+    /// Causes reaction on client side: Shows a bilingual news notice in the in-game chat box.
+    /// </remarks>
+    public static async ValueTask SendHnmoNewsNoticeAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoNewsNoticeRef.GetRequiredSize(json);
+            var packet = new HnmoNewsNoticeRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

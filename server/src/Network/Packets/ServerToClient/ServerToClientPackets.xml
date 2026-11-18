@@ -16973,6 +16973,23 @@
         </Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>2A</SubCode>
+      <Name>HnmoNewsNotice</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent when entering the world with a published post or when an admin publishes a new news post.</SentWhen>
+      <CausedReaction>Shows a bilingual news notice in the in-game chat box.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>JSON payload containing the latest published EN/VI news post and fresh flag.</Description>
+        </Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

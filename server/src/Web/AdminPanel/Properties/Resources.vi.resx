@@ -4626,4 +4626,10 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Mật khẩu hiện tại được ẩn để bảo mật. Chỉ nhập mật khẩu mới bên dưới nếu bạn muốn đổi.</value>
   </data>
+  <data name="NewsManager" xml:space="preserve">
+    <value>Quản lý tin tức</value>
+  </data>
+  <data name="PageHelpTextNewsManager" xml:space="preserve">
+    <value>Đăng thông báo song ngữ Anh/Việt theo giờ Australia/Sydney, ghim bài nổi bật, đính kèm ảnh tùy chọn và gửi thông báo chat trong game.</value>
+  </data>
 </root>

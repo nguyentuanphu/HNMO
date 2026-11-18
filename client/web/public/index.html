@@ -62,6 +62,15 @@
     .community-link:hover { background: var(--gold); color: #1b1408; }
     .community-zalo { border-color: #0068ff; color: #6aa8ff; }
     .community-zalo:hover { background: #0068ff; color: #fff; }
+    .login-news { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; }
+    .login-news summary { cursor: pointer; color: var(--gold); font-weight: 600; }
+    .login-news-list { display: grid; gap: 6px; margin-top: 6px; max-height: 170px; overflow-y: auto; }
+    .login-news-item { padding: 6px 8px; border: 1px solid rgba(255,255,255,.08); border-radius: 6px; background: rgba(0,0,0,.28); display: grid; gap: 3px; }
+    .login-news-meta { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 11px; }
+    .login-news-pin { padding: 1px 6px; border-radius: 999px; background: rgba(212,175,55,.22); border: 1px solid var(--gold); color: var(--gold); font-weight: 600; }
+    .login-news-title { color: var(--text); font-size: 12px; }
+    .login-news-body { margin: 0; color: var(--muted); white-space: pre-line; }
+    .login-news-img { max-width: 100%; max-height: 96px; object-fit: cover; border-radius: 4px; margin-top: 2px; }
     .language-picker { pointer-events: auto; display: inline-flex; gap: 4px; align-items: center; }
     .language-picker button { height: 30px; min-width: 38px; padding: 0 8px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font: 600 12px system-ui, sans-serif; }
     .language-picker button[aria-pressed="true"] { color: #1b1408; background: var(--gold); border-color: var(--gold); }
@@ -125,6 +134,7 @@
       <div class="choices" id="servers" hidden></div>
       <div class="choices" id="characters" hidden></div>
       <p class="hint community" id="communityLinks" data-community-links="Contact:" hidden></p>
+      <div class="login-news" id="loginNewsPanel" hidden></div>
       <p class="hint">No account yet? <a href="/account.html" style="color:var(--gold)">Create one</a> (free coins included). <a href="/topup.html" style="color:var(--gold)">Top up coins</a>. Test accounts: test300 / test300. New here? <a href="#" id="loginGuide" style="color:var(--gold)">Read the guide</a>.</p>
     </form>
   </div>
