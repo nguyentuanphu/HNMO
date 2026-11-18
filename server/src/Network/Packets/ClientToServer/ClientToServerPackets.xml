@@ -5491,6 +5491,19 @@
         <Field><Index>8</Index><Type>String</Type><Name>Json</Name><Description>ASCII JSON with action, optional operationId, levelId, days and offerToken; at most 247 bytes.</Description></Field>
       </Fields>
     </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
+      <SubCode>27</SubCode>
+      <Name>HnmoGiftBoxRequest</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>The signed-in player opens the mailbox window, browses a page/letter or collects a reward.</SentWhen>
+      <CausedReaction>The server validates the session, collects safely under the player lock if requested and sends HnmoGiftBoxState.</CausedReaction>
+      <Fields>
+        <Field><Index>4</Index><Type>IntegerLittleEndian</Type><Name>RequestId</Name><Description>A nonzero request correlation identifier; not an authentication token.</Description></Field>
+        <Field><Index>8</Index><Type>String</Type><Name>Json</Name><Description>ASCII JSON with action, offset, optional letterId and language; at most 247 bytes.</Description></Field>
+      </Fields>
+    </Packet>
   </Packets>
   <Enums>
     <Enum>

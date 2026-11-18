@@ -11147,4 +11147,34 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoGiftBoxState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="requestId">A nonzero request correlation identifier; not an authentication token.</param>
+    /// <param name="json">ASCII-safe JSON using the shared mailbox projection without private host or proof secrets.</param>
+    /// <remarks>
+    /// Is sent by the server when: The server finishes a correlated own-account gift box / mailbox request.
+    /// Causes reaction on client side: The web game updates the inbox, selected letter details and collection result.
+    /// </remarks>
+    public static async ValueTask SendHnmoGiftBoxStateAsync(this IConnection? connection, uint @requestId, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoGiftBoxStateRef.GetRequiredSize(json);
+            var packet = new HnmoGiftBoxStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.RequestId = @requestId;
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

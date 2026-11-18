@@ -6,9 +6,12 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System.IO;
 using System.Security.Cryptography;
+using System.Text.Json;
 using System.Threading;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
+using HNMO.GameLogic.PlugIns;
+using HNMO.GameLogic.PlugIns.ActivityLog;
 using HNMO.GameLogic.PlugIns.GiftBox;
 using HNMO.Interfaces;
 using HNMO.Persistence;
@@ -31,6 +34,7 @@ using Microsoft.Extensions.Logging;
 public sealed class WebsiteGiftBoxController(IPersistenceContextProvider persistence, IDataSource<GameConfiguration> configurations, ILoginServer loginServer, ILogger<WebsiteGiftBoxController> logger, IHnmoPlayerStateRowBackend? rows = null, TimeProvider? clock = null) : ControllerBase
 {
     private readonly TimeProvider _clock = clock ?? TimeProvider.System;
+    private readonly IHnmoPlayerStateRowBackend? _injectedRows = rows;
     private IHnmoPlayerStateRowBackend? _rows = rows;
 
     private IHnmoPlayerStateRowBackend Rows => this._rows ??= HnmoPlayerStateRowStoreRegistry.GetBackend(Path.Combine(AppContext.BaseDirectory, "save", HnmoStateStore.StateFileName));
@@ -102,7 +106,30 @@ public sealed class WebsiteGiftBoxController(IPersistenceContextProvider persist
 
             token.ThrowIfCancellationRequested();
             var collection = new GiftBoxCollection(box, game, logger);
-            var result = await collection.CollectAsync(owned, current, selection.LetterId!.Value, selection.CharacterId!.Value, this._clock.GetUtcNow().UtcDateTime, () => owned.SaveChangesAsync(token)).ConfigureAwait(false);
+            var now = this._clock.GetUtcNow().UtcDateTime;
+            var result = await collection.CollectAsync(owned, current, selection.LetterId!.Value, selection.CharacterId!.Value, now, () => owned.SaveChangesAsync(token)).ConfigureAwait(false);
+            if (this._injectedRows is null && result.Status == "Applied" && result.Receipt is { } receipt)
+            {
+                try
+                {
+                    var receiver = current.Characters.FirstOrDefault(c => c.GetId() == receipt.CharacterId)?.Name ?? string.Empty;
+                    var details = JsonSerializer.Serialize(new { kind = "gift-box-collect", source = "website", letterId = receipt.LetterId, coins = receipt.Coins, coinType = receipt.CoinType.ToString(), zen = receipt.Zen, items = receipt.ItemIds.Count });
+                    ActivityLogStore.Open(Path.Combine(AppContext.BaseDirectory, "save", HnmoStateStore.StateFileName)).Append(new ActivityLogEntry
+                    {
+                        TimestampUtc = now,
+                        Kind = ActivityKind.Administration,
+                        Account = current.LoginName,
+                        Character = receiver,
+                        ItemSummary = receipt.TitleEn,
+                        Details = details,
+                    });
+                }
+                catch
+                {
+                    // Non-fatal: the reward is already durably saved with its receipt.
+                }
+            }
+
             return await this.ReplyAsync(box, game, owned, current, selection, result.Status).ConfigureAwait(false);
         }
         catch (Exception exception)

@@ -6,6 +6,7 @@ import { AccountIntegrations } from './accountIntegrations.js';
 import { AccountMissions } from './accountMissions.js';
 import { AccountEmail } from './accountEmail.js';
 import { AccountVip } from './accountVip.js';
+import { AccountGiftBox } from './accountGiftBox.js';
 
 interface Credentials { loginName: string; password: string }
 interface AccountSnapshot {
@@ -31,6 +32,7 @@ const integrations = new AccountIntegrations({ getCredentials: () => credentials
 const missions = new AccountMissions({ language: () => language, request, error: showError });
 const email = new AccountEmail({ text: t, language: () => language, request, message: showMessage, error: showError });
 const vip = new AccountVip({ language: () => language, accountKey: () => snapshot?.loginName ?? '', request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: showError });
+const giftBox = new AccountGiftBox({ language: () => language, request, changed: () => { void refresh(snapshot?.page ?? 0); }, error: () => showMessage('serverError') });
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -213,6 +215,7 @@ function translate(): void {
   integrations.refreshLanguage();
   email.refreshLanguage(snapshot !== null);
   vip.refreshLanguage(snapshot !== null);
+  giftBox.refreshLanguage(snapshot !== null && active === 'rewards');
   missions.updateCharacters(snapshot?.characters.map(c => c.name) ?? []);
   document.title = `${gameName()} — ${t('account')}`;
   element<HTMLSelectElement>('accountSectionSelect').setAttribute('aria-label', t('menu'));
@@ -256,6 +259,7 @@ async function openSection(id: string): Promise<void> {
     await missions.open(id);
     if (id === 'security') { try { await email.open(); } catch (error) { showError(error); } }
     if (id === 'vip') await vip.open();
+    if (id === 'rewards') await giftBox.open();
   }
   const section = accountSections().find(s => s.id === id);
   if (credentials && snapshot && section?.open) {
@@ -278,7 +282,7 @@ async function refresh(page = 0): Promise<boolean> {
 function mount(): void {
   panel('overview', 'overview').append(integrations.play); panel('coins', 'coins');
   panel('vip', 'vip').append(vip.root);
-  panel('rewards', 'rewards', 'rewardsNote').append(missions.rewards, element('gift'));
+  panel('rewards', 'rewards', 'rewardsNote').append(giftBox.root, missions.rewards, element('gift'));
   panel('resets', 'resets').append(element('resets'));
   const security = panel('security', 'security', 'securityNote'); security.append(element('safety'));
   mountAccountPasswordForm(security, { text: t, request, message: showMessage, error: showError, changed: passwordChanged });
@@ -322,6 +326,7 @@ function mount(): void {
 
 function logOut(): void {
   vip.reset();
+  giftBox.reset();
   credentials = null; snapshot = null; generation++; element<HTMLFormElement>('accountSignIn').reset();
   // Reload clears credentials retained by the existing gift/reset/safety modules as well.
   location.reload();

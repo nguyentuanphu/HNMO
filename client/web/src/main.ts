@@ -49,6 +49,7 @@ import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
 import { VipWindow } from './ui/vipWindow.js';
+import { GiftBoxWindow } from './ui/giftBoxWindow.js';
 import { GuildLevelsWindow } from './ui/guildLevelsWindow.js';
 import { CommunityWindow } from './ui/communityWindow.js';
 import { TopRacesWindow } from './ui/topRacesWindow.js';
@@ -200,6 +201,7 @@ export interface GameState {
   market?: MarketWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
+  giftBox?: GiftBoxWindow;
   guildLevels?: GuildLevelsWindow;
   customRanks?: CustomRanksManager;
   teleportNpc?: TeleportNpcWindow;
@@ -1561,6 +1563,15 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key.toLowerCase() === 'u' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); vip.toggle(); }
   });
   window.addEventListener('hnmo-vip-open', () => { vip.open(); });
+  // Account & event mailbox (Alt+M): works even while in-world via F5 27 / F5 28 under persistence lock.
+  const giftBox = new GiftBoxWindow({ send: (name, fields) => connection.send('ClientToServer', name, fields), message: (text) => chat.add(text, 'system') });
+  state.giftBox = giftBox;
+  connection.onPacket((bytes) => { giftBox.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'm' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); giftBox.toggle(); }
+  });
+  window.addEventListener('hnmo-giftbox-open', () => { giftBox.open(); });
   // HNMO's Jewel Bank & master skill clear (F7).
   const jewelBank = new JewelBankWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),
@@ -1942,7 +1953,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   chat.add(`Welcome to ${mapName(info.MapId)}. Try /move devias or /move noria.`, 'system');
   earlyPackets.forEach((bytes) => online.handle(bytes));
   hideLoadingScreen();
-  connection.onClose = () => { vip.reset(); vip.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
+  connection.onClose = () => { vip.reset(); vip.close(); giftBox.reset(); giftBox.close(); setStatus('Disconnected from the server. Reload the page to log in again.'); };
   warmCharacterModels();
   setStatus(`${character.name} entered the world. Left-click to walk, right-drag to turn, wheel to zoom, I for the inventory, click an NPC to talk.`, 1);
 }

@@ -2937,4 +2937,8 @@
   <data name="HnmoVipRequestHandlerPlugIn_Description" xml:space="preserve"><value>Handles the web game VIP window for the signed-in account.</value></data>
   <data name="HnmoVipViewPlugIn_Name" xml:space="preserve"><value>VIP window</value></data>
   <data name="HnmoVipViewPlugIn_Description" xml:space="preserve"><value>Shows the account VIP status and purchase results in the web game.</value></data>
+  <data name="HnmoGiftBoxRequestHandlerPlugIn_Name" xml:space="preserve"><value>Gift box requests (F5 27)</value></data>
+  <data name="HnmoGiftBoxRequestHandlerPlugIn_Description" xml:space="preserve"><value>Handles the web game mailbox list and live reward collection under the player lock.</value></data>
+  <data name="HnmoGiftBoxViewPlugIn_Name" xml:space="preserve"><value>Gift box mailbox window (F5 28)</value></data>
+  <data name="HnmoGiftBoxViewPlugIn_Description" xml:space="preserve"><value>Shows own-account mailbox letters and collection results in the web game.</value></data>
 </root>

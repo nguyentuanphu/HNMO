@@ -89,7 +89,7 @@ public static class GiftBoxStateWriter
             };
         }
 
-        var json = JsonSerializer.Serialize(new
+        var payload = new
         {
             accountKey = account.LoginName,
             request.Offset,
@@ -102,7 +102,8 @@ public static class GiftBoxStateWriter
                 name = Clip(character.Name, 10),
             }).ToArray(),
             status = GiftBoxCollection.HasUnconfirmed(context) ? "Pending" : status,
-        }, Options);
+        };
+        var json = JsonSerializer.Serialize(payload, Options);
         if (System.Text.Encoding.UTF8.GetByteCount(json) > 60000)
         {
             throw new InvalidOperationException("The gift box display exceeded its packet budget.");
