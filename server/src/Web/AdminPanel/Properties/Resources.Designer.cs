@@ -13404,5 +13404,455 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("AccountSafetyPage", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string similar to Host settings.</summary>
+        public static string HostSettingsPage => ResourceManager.GetString("HostSettingsPage", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to How to use this page.</summary>
+        public static string HostSettingsHelpTitle => ResourceManager.GetString("HostSettingsHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Help body.</summary>
+        public static string HostSettingsHelpBody => ResourceManager.GetString("HostSettingsHelpBody", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart note.</summary>
+        public static string HostSettingsRestartNote => ResourceManager.GetString("HostSettingsRestartNote", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Ports and public address.</summary>
+        public static string HostSettingsPortsSection => ResourceManager.GetString("HostSettingsPortsSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Web bridge and launcher.</summary>
+        public static string HostSettingsBridgeSection => ResourceManager.GetString("HostSettingsBridgeSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Database connection.</summary>
+        public static string HostSettingsDatabaseSection => ResourceManager.GetString("HostSettingsDatabaseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Player license.</summary>
+        public static string HostSettingsLicenseSection => ResourceManager.GetString("HostSettingsLicenseSection", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Save settings.</summary>
+        public static string HostSettingsSaveButton => ResourceManager.GetString("HostSettingsSaveButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart HNMO.</summary>
+        public static string HostSettingsRestartButton => ResourceManager.GetString("HostSettingsRestartButton", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart confirm.</summary>
+        public static string HostSettingsRestartConfirm => ResourceManager.GetString("HostSettingsRestartConfirm", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Host settings saved.</summary>
+        public static string HostSettingsSaved => ResourceManager.GetString("HostSettingsSaved", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to HNMO is saving and restarting...</summary>
+        public static string HostSettingsRestarting => ResourceManager.GetString("HostSettingsRestarting", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Restart unsupported.</summary>
+        public static string HostSettingsRestartUnsupported => ResourceManager.GetString("HostSettingsRestartUnsupported", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Password masked hint.</summary>
+        public static string HostSettingsPasswordMasked => ResourceManager.GetString("HostSettingsPasswordMasked", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailTitle text.</summary>
+        public static string WebsiteMailTitle => ResourceManager.GetString("WebsiteMailTitle", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHelp text.</summary>
+        public static string WebsiteMailHelp => ResourceManager.GetString("WebsiteMailHelp", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailEnabled text.</summary>
+        public static string WebsiteMailEnabled => ResourceManager.GetString("WebsiteMailEnabled", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailEnabledHint text.</summary>
+        public static string WebsiteMailEnabledHint => ResourceManager.GetString("WebsiteMailEnabledHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHost text.</summary>
+        public static string WebsiteMailHost => ResourceManager.GetString("WebsiteMailHost", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailHostHint text.</summary>
+        public static string WebsiteMailHostHint => ResourceManager.GetString("WebsiteMailHostHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPort text.</summary>
+        public static string WebsiteMailPort => ResourceManager.GetString("WebsiteMailPort", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPortHint text.</summary>
+        public static string WebsiteMailPortHint => ResourceManager.GetString("WebsiteMailPortHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailFrom text.</summary>
+        public static string WebsiteMailFrom => ResourceManager.GetString("WebsiteMailFrom", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailFromHint text.</summary>
+        public static string WebsiteMailFromHint => ResourceManager.GetString("WebsiteMailFromHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUser text.</summary>
+        public static string WebsiteMailUser => ResourceManager.GetString("WebsiteMailUser", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUserHint text.</summary>
+        public static string WebsiteMailUserHint => ResourceManager.GetString("WebsiteMailUserHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPassword text.</summary>
+        public static string WebsiteMailPassword => ResourceManager.GetString("WebsiteMailPassword", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPasswordHint text.</summary>
+        public static string WebsiteMailPasswordHint => ResourceManager.GetString("WebsiteMailPasswordHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailPasswordSaved text.</summary>
+        public static string WebsiteMailPasswordSaved => ResourceManager.GetString("WebsiteMailPasswordSaved", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailSaveHint text.</summary>
+        public static string WebsiteMailSaveHint => ResourceManager.GetString("WebsiteMailSaveHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailOpenHint text.</summary>
+        public static string WebsiteMailOpenHint => ResourceManager.GetString("WebsiteMailOpenHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailSaved text.</summary>
+        public static string WebsiteMailSaved => ResourceManager.GetString("WebsiteMailSaved", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailInvalid text.</summary>
+        public static string WebsiteMailInvalid => ResourceManager.GetString("WebsiteMailInvalid", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailUnavailable text.</summary>
+        public static string WebsiteMailUnavailable => ResourceManager.GetString("WebsiteMailUnavailable", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailConfirmationSubject text.</summary>
+        public static string WebsiteMailConfirmationSubject => ResourceManager.GetString("WebsiteMailConfirmationSubject", resourceCulture)!;
+
+        /// <summary>Looks up the localized WebsiteMailConfirmationBody text.</summary>
+        public static string WebsiteMailConfirmationBody => ResourceManager.GetString("WebsiteMailConfirmationBody", resourceCulture)!;
+
+        /// <summary>Looks up the localized PageHelpTitle text.</summary>
+        public static string PageHelpTitle => ResourceManager.GetString("PageHelpTitle", resourceCulture)!;
+
+        /// <summary>Looks up the localized PageHelpToggleHint text.</summary>
+        public static string PageHelpToggleHint => ResourceManager.GetString("PageHelpToggleHint", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryExtraVault text.</summary>
+        public static string AccountCoinHistoryExtraVault => ResourceManager.GetString("AccountCoinHistoryExtraVault", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryMarketPurchase text.</summary>
+        public static string AccountCoinHistoryMarketPurchase => ResourceManager.GetString("AccountCoinHistoryMarketPurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayerStorePurchase text.</summary>
+        public static string AccountCoinHistoryPlayerStorePurchase => ResourceManager.GetString("AccountCoinHistoryPlayerStorePurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayerStoreSale text.</summary>
+        public static string AccountCoinHistoryPlayerStoreSale => ResourceManager.GetString("AccountCoinHistoryPlayerStoreSale", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryReset text.</summary>
+        public static string AccountCoinHistoryReset => ResourceManager.GetString("AccountCoinHistoryReset", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryRelife text.</summary>
+        public static string AccountCoinHistoryRelife => ResourceManager.GetString("AccountCoinHistoryRelife", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryClearStats text.</summary>
+        public static string AccountCoinHistoryClearStats => ResourceManager.GetString("AccountCoinHistoryClearStats", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryClearMaster text.</summary>
+        public static string AccountCoinHistoryClearMaster => ResourceManager.GetString("AccountCoinHistoryClearMaster", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryPlayTime text.</summary>
+        public static string AccountCoinHistoryPlayTime => ResourceManager.GetString("AccountCoinHistoryPlayTime", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryCashShop text.</summary>
+        public static string AccountCoinHistoryCashShop => ResourceManager.GetString("AccountCoinHistoryCashShop", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryGift text.</summary>
+        public static string AccountCoinHistoryGift => ResourceManager.GetString("AccountCoinHistoryGift", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryOtherCharacter text.</summary>
+        public static string AccountCoinHistoryOtherCharacter => ResourceManager.GetString("AccountCoinHistoryOtherCharacter", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryCreatedAt text.</summary>
+        public static string AccountCoinHistoryCreatedAt => ResourceManager.GetString("AccountCoinHistoryCreatedAt", resourceCulture)!;
+
+        /// <summary>Looks up the localized AccountCoinHistoryAppliedAt text.</summary>
+        public static string AccountCoinHistoryAppliedAt => ResourceManager.GetString("AccountCoinHistoryAppliedAt", resourceCulture)!;
+
+        /// <summary>Looks up the localized market-sale description.</summary>
+        public static string AccountCoinHistoryMarketSale => ResourceManager.GetString("AccountCoinHistoryMarketSale", resourceCulture)!;
+
+        /// <summary>Looks up the localized VipCoinHistoryPurchase text.</summary>
+        public static string VipCoinHistoryPurchase => ResourceManager.GetString("VipCoinHistoryPurchase", resourceCulture)!;
+
+        /// <summary>Looks up the localized VipCoinHistoryDaily text.</summary>
+        public static string VipCoinHistoryDaily => ResourceManager.GetString("VipCoinHistoryDaily", resourceCulture)!;
+        /// <summary>Gets the localized description of a host VIP removal.</summary>
+        public static string VipCoinHistoryRemoved => ResourceManager.GetString("VipCoinHistoryRemoved", resourceCulture)!;
+
+        /// <summary>Gets the localized administration activity category.</summary>
+        public static string VipActivityAdministration => ResourceManager.GetString("VipActivityAdministration", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerTitle => ResourceManager.GetString("VipManagerTitle", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerHelp => ResourceManager.GetString("VipManagerHelp", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAccount => ResourceManager.GetString("VipManagerAccount", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAccountHint => ResourceManager.GetString("VipManagerAccountHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerLevel => ResourceManager.GetString("VipManagerLevel", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerDays => ResourceManager.GetString("VipManagerDays", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerDaysHint => ResourceManager.GetString("VipManagerDaysHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReason => ResourceManager.GetString("VipManagerReason", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReasonHint => ResourceManager.GetString("VipManagerReasonHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReviewGrant => ResourceManager.GetString("VipManagerReviewGrant", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReviewGrantHint => ResourceManager.GetString("VipManagerReviewGrantHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReviewRemove => ResourceManager.GetString("VipManagerReviewRemove", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReviewRemoveHint => ResourceManager.GetString("VipManagerReviewRemoveHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerConfirm => ResourceManager.GetString("VipManagerConfirm", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerConfirmHint => ResourceManager.GetString("VipManagerConfirmHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCancel => ResourceManager.GetString("VipManagerCancel", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCancelHint => ResourceManager.GetString("VipManagerCancelHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerRetry => ResourceManager.GetString("VipManagerRetry", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerRetryHint => ResourceManager.GetString("VipManagerRetryHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReload => ResourceManager.GetString("VipManagerReload", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReloadHint => ResourceManager.GetString("VipManagerReloadHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerFilter => ResourceManager.GetString("VipManagerFilter", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerFilterHint => ResourceManager.GetString("VipManagerFilterHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNext => ResourceManager.GetString("VipManagerNext", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerPrevious => ResourceManager.GetString("VipManagerPrevious", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerPagerHint => ResourceManager.GetString("VipManagerPagerHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerSettings => ResourceManager.GetString("VipManagerSettings", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerEnabled => ResourceManager.GetString("VipManagerEnabled", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerEnabledHint => ResourceManager.GetString("VipManagerEnabledHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerChatBadge => ResourceManager.GetString("VipManagerChatBadge", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerChatBadgeHint => ResourceManager.GetString("VipManagerChatBadgeHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNameEn => ResourceManager.GetString("VipManagerNameEn", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNameVi => ResourceManager.GetString("VipManagerNameVi", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNameHint => ResourceManager.GetString("VipManagerNameHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerLevelId => ResourceManager.GetString("VipManagerLevelId", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerLevelIdHint => ResourceManager.GetString("VipManagerLevelIdHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerExperience => ResourceManager.GetString("VipManagerExperience", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerExperienceHint => ResourceManager.GetString("VipManagerExperienceHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerZen => ResourceManager.GetString("VipManagerZen", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerZenHint => ResourceManager.GetString("VipManagerZenHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerDaily => ResourceManager.GetString("VipManagerDaily", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerDailyHint => ResourceManager.GetString("VipManagerDailyHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCurrency => ResourceManager.GetString("VipManagerCurrency", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCurrencyHint => ResourceManager.GetString("VipManagerCurrencyHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerOffers => ResourceManager.GetString("VipManagerOffers", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerPrice => ResourceManager.GetString("VipManagerPrice", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerPriceHint => ResourceManager.GetString("VipManagerPriceHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAddLevel => ResourceManager.GetString("VipManagerAddLevel", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAddLevelHint => ResourceManager.GetString("VipManagerAddLevelHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerRemoveLevel => ResourceManager.GetString("VipManagerRemoveLevel", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerRemoveLevelHint => ResourceManager.GetString("VipManagerRemoveLevelHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAddOffer => ResourceManager.GetString("VipManagerAddOffer", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAddOfferHint => ResourceManager.GetString("VipManagerAddOfferHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerRemoveOffer => ResourceManager.GetString("VipManagerRemoveOffer", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerRemoveOfferHint => ResourceManager.GetString("VipManagerRemoveOfferHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerSave => ResourceManager.GetString("VipManagerSave", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerSaveHint => ResourceManager.GetString("VipManagerSaveHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerInvalid => ResourceManager.GetString("VipManagerInvalid", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerSaved => ResourceManager.GetString("VipManagerSaved", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerUnavailable => ResourceManager.GetString("VipManagerUnavailable", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerPending => ResourceManager.GetString("VipManagerPending", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAppliedGrant => ResourceManager.GetString("VipManagerAppliedGrant", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerAppliedRemove => ResourceManager.GetString("VipManagerAppliedRemove", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerOnline => ResourceManager.GetString("VipManagerOnline", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerConflict => ResourceManager.GetString("VipManagerConflict", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNoAccounts => ResourceManager.GetString("VipManagerNoAccounts", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerHasMore => ResourceManager.GetString("VipManagerHasMore", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerUntil => ResourceManager.GetString("VipManagerUntil", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReviewGrantText => ResourceManager.GetString("VipManagerReviewGrantText", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerReviewRemoveText => ResourceManager.GetString("VipManagerReviewRemoveText", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCurrentUntil => ResourceManager.GetString("VipManagerCurrentUntil", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNoCurrent => ResourceManager.GetString("VipManagerNoCurrent", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerNewName => ResourceManager.GetString("VipManagerNewName", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCoinC => ResourceManager.GetString("VipManagerCoinC", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerCoinP => ResourceManager.GetString("VipManagerCoinP", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerGoblin => ResourceManager.GetString("VipManagerGoblin", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerSavedLevels => ResourceManager.GetString("VipManagerSavedLevels", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerActivity => ResourceManager.GetString("VipManagerActivity", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerActivityHint => ResourceManager.GetString("VipManagerActivityHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipManagerOpenHint => ResourceManager.GetString("VipManagerOpenHint", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditGrant => ResourceManager.GetString("VipAuditGrant", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditRemove => ResourceManager.GetString("VipAuditRemove", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditRequested => ResourceManager.GetString("VipAuditRequested", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditApplied => ResourceManager.GetString("VipAuditApplied", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditPending => ResourceManager.GetString("VipAuditPending", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditConflict => ResourceManager.GetString("VipAuditConflict", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditRefused => ResourceManager.GetString("VipAuditRefused", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP administration text.</summary>
+        public static string VipAuditDetails => ResourceManager.GetString("VipAuditDetails", resourceCulture)!;
+
+        /// <summary>Gets the localized instruction to save the disabled VIP configuration before granting.</summary>
+        public static string VipManagerSaveFirst => ResourceManager.GetString("VipManagerSaveFirst", resourceCulture)!;
+
+        /// <summary>Gets the localized public title of a collected gift.</summary>
+        public static string GiftBoxCoinHistoryCollected => ResourceManager.GetString("GiftBoxCoinHistoryCollected", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box admin page title.</summary>
+        public static string GiftBoxPageTitle => ResourceManager.GetString("GiftBoxPageTitle", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box admin page help text.</summary>
+        public static string GiftBoxPageHelp => ResourceManager.GetString("GiftBoxPageHelp", resourceCulture)!;
+
     }
 }

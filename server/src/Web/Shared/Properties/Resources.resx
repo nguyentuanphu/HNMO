@@ -680,4 +680,43 @@ Level: {2} - {3}</value>
   <data name="MonsterAmountSaveMapFirst" xml:space="preserve">
     <value>Save or undo the changes of the map first.</value>
   </data>
+  <data name="ItemPickerTitle" xml:space="preserve"><value>Item catalogue</value></data>
+  <data name="ItemPickerSearch" xml:space="preserve"><value>Search names or group:number</value></data>
+  <data name="ItemPickerSearchHint" xml:space="preserve"><value>Search English or Vietnamese names, or an exact group:number.</value></data>
+  <data name="ItemPickerCategory" xml:space="preserve"><value>Category</value></data>
+  <data name="ItemPickerAll" xml:space="preserve"><value>All</value></data>
+  <data name="ItemPickerClass" xml:space="preserve"><value>Class</value></data>
+  <data name="ItemPickerMinimum" xml:space="preserve"><value>Minimum required level</value></data>
+  <data name="ItemPickerMaximum" xml:space="preserve"><value>Maximum required level</value></data>
+  <data name="ItemPickerMissing" xml:space="preserve"><value>Only items not in this shop</value></data>
+  <data name="ItemPickerSort" xml:space="preserve"><value>Sort by</value></data>
+  <data name="ItemPickerName" xml:space="preserve"><value>Name</value></data>
+  <data name="ItemPickerGroup" xml:space="preserve"><value>Group:number</value></data>
+  <data name="ItemPickerLevel" xml:space="preserve"><value>Required level</value></data>
+  <data name="ItemPickerSelect" xml:space="preserve"><value>Select {0}</value></data>
+  <data name="ItemPickerAdd" xml:space="preserve"><value>Add {0} to the first free space</value></data>
+  <data name="ItemPickerDrag" xml:space="preserve"><value>Drag this item into the shop grid</value></data>
+  <data name="ItemPickerMatches" xml:space="preserve"><value>{0} matching · {1} selected</value></data>
+  <data name="ItemPickerEmpty" xml:space="preserve"><value>No matching items. Change the filters.</value></data>
+  <data name="ItemPickerClearSelection" xml:space="preserve"><value>Clear selection</value></data>
+  <data name="ItemPickerFilterHint" xml:space="preserve"><value>Filter base item requirements; items without a class restriction are included for every class.</value></data>
+  <data name="ItemPickerInactive" xml:space="preserve"><value>Inactive definition</value></data>
+  <data name="ItemPickerGroup0" xml:space="preserve"><value>Swords</value></data>
+  <data name="ItemPickerGroup1" xml:space="preserve"><value>Axes</value></data>
+  <data name="ItemPickerGroup2" xml:space="preserve"><value>Maces</value></data>
+  <data name="ItemPickerGroup3" xml:space="preserve"><value>Spears</value></data>
+  <data name="ItemPickerGroup4" xml:space="preserve"><value>Bows and crossbows</value></data>
+  <data name="ItemPickerGroup5" xml:space="preserve"><value>Staffs</value></data>
+  <data name="ItemPickerGroup6" xml:space="preserve"><value>Shields</value></data>
+  <data name="ItemPickerGroup7" xml:space="preserve"><value>Helms</value></data>
+  <data name="ItemPickerGroup8" xml:space="preserve"><value>Armor</value></data>
+  <data name="ItemPickerGroup9" xml:space="preserve"><value>Pants</value></data>
+  <data name="ItemPickerGroup10" xml:space="preserve"><value>Gloves</value></data>
+  <data name="ItemPickerGroup11" xml:space="preserve"><value>Boots</value></data>
+  <data name="ItemPickerGroup12" xml:space="preserve"><value>Wings and related items</value></data>
+  <data name="ItemPickerGroup13" xml:space="preserve"><value>Accessories and miscellaneous</value></data>
+  <data name="ItemPickerGroup14" xml:space="preserve"><value>Jewels, potions and consumables</value></data>
+  <data name="ItemPickerGroup15" xml:space="preserve"><value>Scrolls and orbs</value></data>
+  <data name="ItemPickerGiftChoose" xml:space="preserve"><value>Choose an item to add to this gift.</value></data>
+  <data name="ItemPickerGiftAdd" xml:space="preserve"><value>Add {0} to this gift.</value></data>
 </root>

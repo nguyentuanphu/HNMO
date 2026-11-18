@@ -8484,5 +8484,29 @@ namespace HNMO.GameServer.Properties {
                 return ResourceManager.GetString("HnmoAccountSafetyViewPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipRequestHandlerPlugIn_Name => ResourceManager.GetString("HnmoVipRequestHandlerPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipRequestHandlerPlugIn_Description => ResourceManager.GetString("HnmoVipRequestHandlerPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipViewPlugIn_Name => ResourceManager.GetString("HnmoVipViewPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string HnmoVipViewPlugIn_Description => ResourceManager.GetString("HnmoVipViewPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box request handler text.</summary>
+        public static string HnmoGiftBoxRequestHandlerPlugIn_Name => ResourceManager.GetString("HnmoGiftBoxRequestHandlerPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box request handler text.</summary>
+        public static string HnmoGiftBoxRequestHandlerPlugIn_Description => ResourceManager.GetString("HnmoGiftBoxRequestHandlerPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box view text.</summary>
+        public static string HnmoGiftBoxViewPlugIn_Name => ResourceManager.GetString("HnmoGiftBoxViewPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box view text.</summary>
+        public static string HnmoGiftBoxViewPlugIn_Description => ResourceManager.GetString("HnmoGiftBoxViewPlugIn_Description", resourceCulture)!;
+
     }
 }

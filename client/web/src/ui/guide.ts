@@ -21,6 +21,11 @@ export function setUpGuide(): void {
     hide();
     window.dispatchEvent(new Event('hnmo-onboarding-open'));
   });
+  // HNMO's event & boss timetable (ui/timetableWindow.ts) opens from (i) guide too.
+  document.getElementById('guideTimetable')?.addEventListener('click', () => {
+    hide();
+    window.dispatchEvent(new Event('hnmo-timetable-open'));
+  });
   overlay.addEventListener('click', (event) => { if (event.target === overlay) hide(); });
   window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !overlay.hidden) hide(); });
   // Keys pressed while the guide is open stay in the guide.

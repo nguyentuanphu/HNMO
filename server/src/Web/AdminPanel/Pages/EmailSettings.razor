@@ -1,0 +1,46 @@
+@page "/email-settings"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>@Resources.WebsiteMailTitle</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.WebsiteMailTitle" />
+<h1>@Resources.WebsiteMailTitle</h1>
+<PageHelp Text="@Resources.WebsiteMailHelp" />
+@if (this._message is { } message)
+{
+    <p role="status">@message</p>
+}
+@if (this._settings is { } settings)
+{
+    <form @onsubmit="this.SaveAsync" @onsubmit:preventDefault>
+        <div class="form-check mb-3">
+            <input class="form-check-input" id="mail-enabled" type="checkbox" title="@Resources.WebsiteMailEnabledHint" @bind="settings.Enabled" />
+            <label class="form-check-label" for="mail-enabled">@Resources.WebsiteMailEnabled</label>
+        </div>
+        <div class="mb-3">
+            <label for="mail-host" class="form-label">@Resources.WebsiteMailHost</label>
+            <input class="form-control" id="mail-host" maxlength="253" required="@settings.Enabled" title="@Resources.WebsiteMailHostHint" @bind="settings.Host" />
+        </div>
+        <div class="mb-3">
+            <label for="mail-port" class="form-label">@Resources.WebsiteMailPort</label>
+            <input class="form-control" id="mail-port" type="number" min="1" max="65535" title="@Resources.WebsiteMailPortHint" @bind="settings.Port" />
+        </div>
+        <div class="mb-3">
+            <label for="mail-from" class="form-label">@Resources.WebsiteMailFrom</label>
+            <input class="form-control" id="mail-from" type="email" maxlength="254" required="@settings.Enabled" title="@Resources.WebsiteMailFromHint" @bind="settings.From" />
+        </div>
+        <div class="mb-3">
+            <label for="mail-user" class="form-label">@Resources.WebsiteMailUser</label>
+            <input class="form-control" id="mail-user" maxlength="254" autocomplete="off" title="@Resources.WebsiteMailUserHint" @bind="settings.UserName" />
+        </div>
+        <div class="mb-3">
+            <label for="mail-password" class="form-label">@Resources.WebsiteMailPassword</label>
+            <input class="form-control" id="mail-password" type="password" maxlength="1024" autocomplete="new-password" title="@Resources.WebsiteMailPasswordHint" @bind="this._password" />
+            @if (settings.HasPassword)
+            {
+                <p class="form-text">@Resources.WebsiteMailPasswordSaved</p>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary" title="@Resources.WebsiteMailSaveHint" disabled="@this._saving">@Resources.Save</button>
+    </form>
+}

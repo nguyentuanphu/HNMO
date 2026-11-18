@@ -2214,6 +2214,18 @@
   <data name="WebsiteConfiguration_GoogleClientId_Description" xml:space="preserve">
     <value>Client id của một OAuth client Google Cloud (loại: Web application, với địa chỉ website của bạn là JavaScript origin được phép). Để trống: không có "Đăng nhập bằng Google".</value>
   </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Caption" xml:space="preserve">
+    <value>Game web: yêu cầu đăng nhập trên website</value>
+  </data>
+  <data name="WebsiteConfiguration_RequireWebsiteLogin_Description" xml:space="preserve">
+    <value>Khi bật, game web ẩn khung nhập mật khẩu riêng và người chơi đăng nhập trên website trước (rồi bấm Chơi ngay).</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Name" xml:space="preserve">
+    <value>Xử lý vé đăng nhập web</value>
+  </data>
+  <data name="HnmoTicketLoginHandlerPlugIn_Description" xml:space="preserve">
+    <value>Xử lý vé đăng nhập dùng một lần được cấp từ website.</value>
+  </data>
   <data name="IllusionTempleStartPlugIn_Name" xml:space="preserve">
     <value>Đền Ảo Ảnh</value>
   </data>
@@ -2382,4 +2394,8 @@
   <data name="UnlockItemChatCommandPlugIn_Description" xml:space="preserve">
     <value>Yêu cầu mở khóa một vật phẩm trong túi bằng mật khẩu cấp 2: /unlockitem Ô PIN.</value>
   </data>
+  <data name="VipPlugIn_Name" xml:space="preserve"><value>Gói VIP</value></data>
+  <data name="VipPlugIn_Description" xml:space="preserve"><value>Gói VIP có thời hạn, tăng kinh nghiệm và Zen, cùng quà xu hằng ngày. Chỉ hoạt động khi chủ máy chủ bật.</value></data>
+  <data name="GiftBoxActivityPlugIn_Name" xml:space="preserve"><value>Theo dõi hoạt động hộp thư quà tặng</value></data>
+  <data name="GiftBoxActivityPlugIn_Description" xml:space="preserve"><value>Ghi nhận thời điểm người chơi vào và rời thế giới để lọc người chơi hoạt động gần đây cho hộp thư quà.</value></data>
 </root>

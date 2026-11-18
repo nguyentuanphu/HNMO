@@ -2832,4 +2832,12 @@
   <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
     <value>Gửi trạng thái bảo vệ tài khoản (mật khẩu cấp 2, thao tác cần mật khẩu, vật phẩm bị khóa) cho web game đã yêu cầu.</value>
   </data>
+  <data name="HnmoVipRequestHandlerPlugIn_Name" xml:space="preserve"><value>Yêu cầu VIP</value></data>
+  <data name="HnmoVipRequestHandlerPlugIn_Description" xml:space="preserve"><value>Xử lý cửa sổ VIP của tài khoản đang chơi trên web.</value></data>
+  <data name="HnmoVipViewPlugIn_Name" xml:space="preserve"><value>Cửa sổ VIP</value></data>
+  <data name="HnmoVipViewPlugIn_Description" xml:space="preserve"><value>Hiển thị gói VIP và kết quả mua cho tài khoản đang chơi trên web.</value></data>
+  <data name="HnmoGiftBoxRequestHandlerPlugIn_Name" xml:space="preserve"><value>Yêu cầu hộp thư quà (F5 27)</value></data>
+  <data name="HnmoGiftBoxRequestHandlerPlugIn_Description" xml:space="preserve"><value>Xử lý danh sách thư quà và nhận quà trực tiếp an toàn dưới khóa tài khoản trong game.</value></data>
+  <data name="HnmoGiftBoxViewPlugIn_Name" xml:space="preserve"><value>Cửa sổ hộp thư quà (F5 28)</value></data>
+  <data name="HnmoGiftBoxViewPlugIn_Description" xml:space="preserve"><value>Hiển thị hộp thư quà tặng và kết quả nhận quà trong trò chơi trên web.</value></data>
 </root>
