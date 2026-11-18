@@ -69,4 +69,10 @@ public sealed class GameServerAdministrationRequest
 
     /// <summary>Gets or sets the approved preview.</summary>
     public JsonObject? ExpectedPreview { get; set; }
+
+    /// <summary>Gets or sets the magic effect definition number.</summary>
+    public short EffectNumber { get; set; }
+
+    /// <summary>Gets or sets the buff duration in seconds.</summary>
+    public int DurationSeconds { get; set; } = 1800;
 }

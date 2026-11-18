@@ -14567,5 +14567,11 @@ namespace HNMO.Web.AdminPanel.Properties {
 
         /// <summary>Looks up a localized string similar to Ban manager help text.</summary>
         public static string BanManagerPageHelp => ResourceManager.GetString("BanManagerPageHelp", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Character tools.</summary>
+        public static string CharacterTools => ResourceManager.GetString("CharacterTools", resourceCulture)!;
+
+        /// <summary>Looks up a localized string similar to Help description for Character tools.</summary>
+        public static string PageHelpTextCharacterTools => ResourceManager.GetString("PageHelpTextCharacterTools", resourceCulture)!;
     }
 }

@@ -39,6 +39,14 @@ public sealed partial class GameServerClient : IGameServerAdministration
         => this.InvokeAdministrationAsync<GameServerAdminResult>(nameof(this.SetLevelAsync), new() { CharacterName = characterName, CharacterId = characterId, Level = level, Master = master }, cancellationToken);
 
     /// <inheritdoc />
+    public ValueTask<GameServerAdminResult> ApplyBuffAsync(string characterName, Guid characterId, short effectNumber, int durationSeconds, CancellationToken cancellationToken)
+        => this.InvokeAdministrationAsync<GameServerAdminResult>(nameof(this.ApplyBuffAsync), new() { CharacterName = characterName, CharacterId = characterId, EffectNumber = effectNumber, DurationSeconds = durationSeconds }, cancellationToken);
+
+    /// <inheritdoc />
+    public ValueTask<GameServerAdminResult> ClearBuffsAsync(string characterName, Guid characterId, CancellationToken cancellationToken)
+        => this.InvokeAdministrationAsync<GameServerAdminResult>(nameof(this.ClearBuffsAsync), new() { CharacterName = characterName, CharacterId = characterId }, cancellationToken);
+
+    /// <inheritdoc />
     public ValueTask<IReadOnlyList<LiveEventInfo>> GetEventsAsync(CancellationToken cancellationToken)
         => this.InvokeAdministrationAsync<IReadOnlyList<LiveEventInfo>>(nameof(this.GetEventsAsync), new(), cancellationToken);
 

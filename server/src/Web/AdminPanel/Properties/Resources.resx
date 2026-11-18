@@ -4924,4 +4924,10 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="BanManagerPageHelp" xml:space="preserve">
     <value>Issue or lift timed and permanent bans or chat mutes for accounts, characters, networks, and devices. Network and device identifiers are hashed with a persistent server salt and are never stored in plain text. Players see the reason and Sydney expiry time at login, character selection, or chat.</value>
   </data>
+  <data name="CharacterTools" xml:space="preserve">
+    <value>Character tools</value>
+  </data>
+  <data name="PageHelpTextCharacterTools" xml:space="preserve">
+    <value>Look up any character to move them out of a stuck spot to a safe town, apply or clear live buffs, or adjust offline level, stats, Zen, and class. Every change requires an audit reason, and unsafe level/stat/Zen/class edits are refused while the character is online.</value>
+  </data>
 </root>
