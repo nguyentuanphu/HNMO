@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TERRAIN_SIZE, TERRAIN_SCALE, TerrainFlag } from './formats.js';
+import type { WorldObject } from './formats.js';
 import { setDataBaseUrl } from './bmd.js';
 import { createWorld, loadWorldData } from './world.js';
 import type { World } from './world.js';
@@ -15,7 +16,21 @@ export type EditorTool =
   | 'clear'
   | 'spawn'
   | 'enterGate'
-  | 'exitGate';
+  | 'exitGate'
+  | 'addObject'
+  | 'lightPaint';
+
+export interface EditorWorldObjectDto {
+  index: number;
+  type: number;
+  x: number;
+  y: number;
+  z: number;
+  angleX: number;
+  angleY: number;
+  angleZ: number;
+  scale: number;
+}
 
 export type CameraMode = 'player' | 'orbit';
 
@@ -139,18 +154,29 @@ export class WorldEditorViewport {
   private readonly renderer: THREE.WebGLRenderer | null = null;
   private readonly scene = new THREE.Scene();
   private readonly root = new THREE.Group();
+  private readonly ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+  private readonly sunLight = new THREE.DirectionalLight(0xfff4d6, 0.9);
   private readonly camera: THREE.PerspectiveCamera;
   private readonly controls: OrbitControls | null = null;
   private readonly raycaster = new THREE.Raycaster();
   private readonly overlayGroup = new THREE.Group();
   private readonly markerGroup = new THREE.Group();
+  private readonly objectPreviewGroup = new THREE.Group();
   private readonly cursorMesh: THREE.LineLoop;
 
   private world: World | null = null;
   private fallbackMesh: THREE.Mesh | null = null;
   private raycastTarget: THREE.Object3D | null = null;
+  private currentMapNumber = 0;
   private heights = new Float32Array(CELLS);
+  private lightData = new Float32Array(CELLS * 3).fill(1);
   private tileFlags = new Uint8Array(CELLS);
+  private worldObjects: WorldObject[] = [];
+  private selectedObjectIndex = -1;
+  private objectsDirty = false;
+  private lightsDirty = false;
+  private lightBrushRgb: [number, number, number] = [1.0, 0.85, 0.55];
+  private lightBrushIntensity = 0.45;
 
   private readonly overlayBytes = new Uint8Array(CELLS * 4);
   private readonly overlayTexture: THREE.DataTexture;
@@ -192,10 +218,9 @@ export class WorldEditorViewport {
     this.host.append(this.canvas);
 
     this.scene.background = DEFAULT_FOG.color;
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-    const sun = new THREE.DirectionalLight(0xfff4d6, 0.9);
-    sun.position.set(16000, 22000, 14000);
-    this.scene.add(sun);
+    this.scene.add(this.ambientLight);
+    this.sunLight.position.set(16000, 22000, 14000);
+    this.scene.add(this.sunLight);
 
     this.root.rotation.x = -Math.PI / 2;
     this.scene.add(this.root);
@@ -240,6 +265,7 @@ export class WorldEditorViewport {
     this.overlayGroup.add(this.overlayMesh);
     this.root.add(this.overlayGroup);
     this.root.add(this.markerGroup);
+    this.root.add(this.objectPreviewGroup);
 
     const ringGeom = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(-TERRAIN_SCALE / 2, -TERRAIN_SCALE / 2, 24),
@@ -267,6 +293,11 @@ export class WorldEditorViewport {
     this.spawns = spawns ?? [];
     this.enterGates = enterGates ?? [];
     this.exitGates = exitGates ?? [];
+    this.currentMapNumber = mapNumber;
+    this.worldObjects = [];
+    this.selectedObjectIndex = -1;
+    this.objectsDirty = false;
+    this.lightsDirty = false;
     this.undoStack.length = 0;
     this.redoStack.length = 0;
 
@@ -285,13 +316,21 @@ export class WorldEditorViewport {
     try {
       const worldData = await loadWorldData(mapNumber);
       this.heights = worldData.heights;
+      this.lightData = worldData.light;
+      this.worldObjects = worldData.objects.map((o) => ({
+        type: o.type,
+        position: [...o.position],
+        angle: [...o.angle],
+        scale: o.scale,
+      }));
       this.world = await createWorld(worldData, DEFAULT_FOG);
       this.root.add(this.world.group);
       this.raycastTarget = this.world.terrain;
-      objectCount = worldData.objects.length;
+      objectCount = this.worldObjects.length;
       mode = 'full-3d-world';
     } catch {
       this.heights = new Float32Array(CELLS);
+      this.lightData = new Float32Array(CELLS * 3).fill(1);
       this.fallbackMesh = buildFallbackTerrainMesh(this.heights);
       this.root.add(this.fallbackMesh);
       this.raycastTarget = this.fallbackMesh;
@@ -299,6 +338,7 @@ export class WorldEditorViewport {
 
     this.rebuildOverlayTexture();
     this.rebuildMarkers();
+    this.rebuildObjectPreview();
     this.notifyHistory();
     return { mode, objectCount };
   }
@@ -418,7 +458,256 @@ export class WorldEditorViewport {
     return bytesToBase64(this.tileFlags);
   }
 
-  public getStateSummary(): { tool: EditorTool; brushRadius: number; undoDepth: number; redoDepth: number; safezoneCount: number; blockedCount: number } {
+  public getObjects(offset = 0, limit = 80): { total: number; items: EditorWorldObjectDto[] } {
+    const start = Math.max(0, offset);
+    const slice = this.worldObjects.slice(start, start + limit).map((o, idx) => ({
+      index: start + idx,
+      type: o.type,
+      x: Math.round(o.position[0]),
+      y: Math.round(o.position[1]),
+      z: Math.round(o.position[2]),
+      angleX: Math.round(o.angle[0]),
+      angleY: Math.round(o.angle[1]),
+      angleZ: Math.round(o.angle[2]),
+      scale: Number(o.scale.toFixed(2)),
+    }));
+    return { total: this.worldObjects.length, items: slice };
+  }
+
+  public addObject(type: number, tileX: number, tileY: number, scale = 1): number {
+    const tx = Math.max(0, Math.min(TERRAIN_SIZE - 1, Math.round(tileX)));
+    const ty = Math.max(0, Math.min(TERRAIN_SIZE - 1, Math.round(tileY)));
+    const z = this.heights[ty * TERRAIN_SIZE + tx] || 0;
+    this.worldObjects.push({
+      type: Math.max(0, Math.round(type)),
+      position: [(tx + 0.5) * TERRAIN_SCALE, (ty + 0.5) * TERRAIN_SCALE, z],
+      angle: [0, 0, 0],
+      scale: Math.max(0.1, Math.min(10, scale || 1)),
+    });
+    this.objectsDirty = true;
+    this.selectedObjectIndex = this.worldObjects.length - 1;
+    this.rebuildObjectPreview();
+    return this.selectedObjectIndex;
+  }
+
+  public selectObject(index: number): void {
+    this.selectedObjectIndex = index >= 0 && index < this.worldObjects.length ? index : -1;
+    this.rebuildObjectPreview();
+    if (this.selectedObjectIndex >= 0) {
+      const o = this.worldObjects[this.selectedObjectIndex];
+      this.focusTile(o.position[0] / TERRAIN_SCALE, o.position[1] / TERRAIN_SCALE);
+    }
+  }
+
+  public updateObjectTransform(index: number, x: number, y: number, z: number, angleX: number, angleY: number, angleZ: number, scale: number): boolean {
+    const o = this.worldObjects[index];
+    if (!o) return false;
+    o.position = [x, y, z];
+    o.angle = [angleX, angleY, angleZ];
+    o.scale = Math.max(0.05, Math.min(20, scale || 1));
+    this.objectsDirty = true;
+    this.selectedObjectIndex = index;
+    this.rebuildObjectPreview();
+    return true;
+  }
+
+  public removeObject(index: number): boolean {
+    if (index < 0 || index >= this.worldObjects.length) return false;
+    this.worldObjects.splice(index, 1);
+    this.objectsDirty = true;
+    if (this.selectedObjectIndex >= this.worldObjects.length) {
+      this.selectedObjectIndex = this.worldObjects.length - 1;
+    }
+    this.rebuildObjectPreview();
+    return true;
+  }
+
+  public getRawObjectsBase64(): string | null {
+    if (!this.objectsDirty && this.worldObjects.length === 0) return null;
+    const recBytes = 30;
+    const raw = new Uint8Array(4 + this.worldObjects.length * recBytes);
+    raw[0] = 0;
+    raw[1] = this.currentMapNumber & 0xff;
+    const view = new DataView(raw.buffer);
+    view.setInt16(2, this.worldObjects.length, true);
+    let p = 4;
+    for (const o of this.worldObjects) {
+      view.setInt16(p, o.type, true);
+      view.setFloat32(p + 2, o.position[0], true);
+      view.setFloat32(p + 6, o.position[1], true);
+      view.setFloat32(p + 10, o.position[2], true);
+      view.setFloat32(p + 14, o.angle[0], true);
+      view.setFloat32(p + 18, o.angle[1], true);
+      view.setFloat32(p + 22, o.angle[2], true);
+      view.setFloat32(p + 26, o.scale, true);
+      p += recBytes;
+    }
+    return bytesToBase64(raw);
+  }
+
+  public setLightBrush(hexColor: string, intensity: number): void {
+    const parsed = new THREE.Color(hexColor || '#ffd98c');
+    this.lightBrushRgb = [parsed.r, parsed.g, parsed.b];
+    this.lightBrushIntensity = Math.max(0.05, Math.min(1, intensity || 0.45));
+  }
+
+  public setAmbientLight(hexColor: string, intensity: number): void {
+    this.ambientLight.color.set(hexColor || '#ffffff');
+    this.ambientLight.intensity = Math.max(0.1, Math.min(3, intensity || 0.85));
+    if (this.world?.terrain.material.uniforms.brightness) {
+      this.world.terrain.material.uniforms.brightness.value = this.ambientLight.intensity;
+    }
+  }
+
+  public paintLightAtTile(tileX: number, tileY: number, radiusOverride?: number): number {
+    const radius = Math.max(1, Math.min(12, Math.round(radiusOverride ?? this.brushRadius)));
+    const half = radius - 1;
+    let touched = 0;
+    const [lr, lg, lb] = this.lightBrushRgb;
+    const alpha = this.lightBrushIntensity;
+
+    for (let dy = -half; dy <= half; dy++) {
+      for (let dx = -half; dx <= half; dx++) {
+        const dist = Math.hypot(dx, dy);
+        if (radius > 2 && dist > half + 0.5) continue;
+        const x = tileX + dx;
+        const y = tileY + dy;
+        if (x < 0 || y < 0 || x >= TERRAIN_SIZE || y >= TERRAIN_SIZE) continue;
+        const falloff = radius <= 1 ? alpha : alpha * Math.max(0.15, 1 - dist / (half + 1));
+        const idx3 = (y * TERRAIN_SIZE + x) * 3;
+        this.lightData[idx3] = Math.min(1, this.lightData[idx3] * (1 - falloff) + lr * falloff);
+        this.lightData[idx3 + 1] = Math.min(1, this.lightData[idx3 + 1] * (1 - falloff) + lg * falloff);
+        this.lightData[idx3 + 2] = Math.min(1, this.lightData[idx3 + 2] * (1 - falloff) + lb * falloff);
+        touched++;
+      }
+    }
+
+    if (touched > 0) {
+      this.lightsDirty = true;
+      const lightTex = this.world?.terrain.material.uniforms.lightMap?.value as THREE.DataTexture | undefined;
+      const rawData = lightTex?.image?.data as Uint8Array | undefined;
+      if (lightTex && rawData instanceof Uint8Array) {
+        const bytes = rawData;
+        for (let i = 0; i < CELLS; i++) {
+          bytes[i * 4] = Math.round(this.lightData[i * 3] * 255);
+          bytes[i * 4 + 1] = Math.round(this.lightData[i * 3 + 1] * 255);
+          bytes[i * 4 + 2] = Math.round(this.lightData[i * 3 + 2] * 255);
+          bytes[i * 4 + 3] = 255;
+        }
+        lightTex.needsUpdate = true;
+      }
+    }
+    return touched;
+  }
+
+  public getLightMapJpegBase64(forceExport = false): string | null {
+    if (!forceExport && !this.lightsDirty) return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = TERRAIN_SIZE;
+    canvas.height = TERRAIN_SIZE;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    const img = ctx.createImageData(TERRAIN_SIZE, TERRAIN_SIZE);
+    for (let i = 0; i < CELLS; i++) {
+      img.data[i * 4] = Math.round(Math.max(0, Math.min(1, this.lightData[i * 3])) * 255);
+      img.data[i * 4 + 1] = Math.round(Math.max(0, Math.min(1, this.lightData[i * 3 + 1])) * 255);
+      img.data[i * 4 + 2] = Math.round(Math.max(0, Math.min(1, this.lightData[i * 3 + 2])) * 255);
+      img.data[i * 4 + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+    const comma = dataUrl.indexOf(',');
+    return comma >= 0 ? dataUrl.slice(comma + 1) : null;
+  }
+
+  public captureMinimapRgba(size = 256): { width: number; height: number; rgbaBase64: string; previewDataUrl: string } {
+    const dim = Math.max(128, Math.min(512, Math.round(size)));
+    const rgba = new Uint8Array(dim * dim * 4);
+
+    if (this.renderer) {
+      const prevOverlay = this.overlayGroup.visible;
+      const prevMarkers = this.markerGroup.visible;
+      const prevPreview = this.objectPreviewGroup.visible;
+      const prevCursor = this.cursorMesh.visible;
+      this.overlayGroup.visible = false;
+      this.markerGroup.visible = false;
+      this.objectPreviewGroup.visible = false;
+      this.cursorMesh.visible = false;
+
+      const span = TERRAIN_SIZE * TERRAIN_SCALE;
+      const ortho = new THREE.OrthographicCamera(0, span, 0, -span, 10, 20000);
+      ortho.position.set(0, 10000, 0);
+      ortho.lookAt(0, 0, 0);
+      ortho.updateProjectionMatrix();
+
+      const target = new THREE.WebGLRenderTarget(dim, dim, { format: THREE.RGBAFormat, type: THREE.UnsignedByteType });
+      const prevTarget = this.renderer.getRenderTarget();
+      this.renderer.setRenderTarget(target);
+      this.renderer.render(this.scene, ortho);
+      const glPixels = new Uint8Array(dim * dim * 4);
+      this.renderer.readRenderTargetPixels(target, 0, 0, dim, dim, glPixels);
+      this.renderer.setRenderTarget(prevTarget);
+      target.dispose();
+
+      // Flip WebGL bottom-up rows into top-down RGBA
+      const stride = dim * 4;
+      for (let y = 0; y < dim; y++) {
+        rgba.set(glPixels.subarray((dim - 1 - y) * stride, (dim - y) * stride), y * stride);
+      }
+
+      this.overlayGroup.visible = prevOverlay;
+      this.markerGroup.visible = prevMarkers;
+      this.objectPreviewGroup.visible = prevPreview;
+      this.cursorMesh.visible = prevCursor;
+    } else {
+      // Deterministic top-down fallback if WebGL is absent
+      for (let y = 0; y < dim; y++) {
+        const ty = Math.floor((y / dim) * TERRAIN_SIZE);
+        for (let x = 0; x < dim; x++) {
+          const tx = Math.floor((x / dim) * TERRAIN_SIZE);
+          const idx = ty * TERRAIN_SIZE + tx;
+          const o = (y * dim + x) * 4;
+          const f = this.tileFlags[idx];
+          if ((f & TerrainFlag.WATER) !== 0) {
+            rgba[o] = 48; rgba[o + 1] = 110; rgba[o + 2] = 190;
+          } else if ((f & TerrainFlag.SAFEZONE) !== 0) {
+            rgba[o] = 170; rgba[o + 1] = 175; rgba[o + 2] = 185;
+          } else if ((f & TerrainFlag.NOMOVE) !== 0) {
+            rgba[o] = 90; rgba[o + 1] = 55; rgba[o + 2] = 55;
+          } else {
+            rgba[o] = 72; rgba[o + 1] = 128; rgba[o + 2] = 74;
+          }
+          rgba[o + 3] = 255;
+        }
+      }
+    }
+
+    let previewDataUrl = '';
+    const canvas = document.createElement('canvas');
+    canvas.width = dim;
+    canvas.height = dim;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const img = ctx.createImageData(dim, dim);
+      img.data.set(rgba);
+      ctx.putImageData(img, 0, 0);
+      previewDataUrl = canvas.toDataURL('image/png');
+    }
+
+    return { width: dim, height: dim, rgbaBase64: bytesToBase64(rgba), previewDataUrl };
+  }
+
+  public getStateSummary(): {
+    tool: EditorTool;
+    brushRadius: number;
+    undoDepth: number;
+    redoDepth: number;
+    safezoneCount: number;
+    blockedCount: number;
+    objectCount: number;
+    lightsDirty: boolean;
+    objectsDirty: boolean;
+  } {
     let safezoneCount = 0;
     let blockedCount = 0;
     for (let i = 0; i < CELLS; i++) {
@@ -432,7 +721,38 @@ export class WorldEditorViewport {
       redoDepth: this.redoStack.length,
       safezoneCount,
       blockedCount,
+      objectCount: this.worldObjects.length,
+      lightsDirty: this.lightsDirty,
+      objectsDirty: this.objectsDirty,
     };
+  }
+
+  private rebuildObjectPreview(): void {
+    while (this.objectPreviewGroup.children.length > 0) {
+      const child = this.objectPreviewGroup.children.pop()!;
+      if (child instanceof THREE.Mesh) child.geometry.dispose();
+    }
+
+    if (this.selectedObjectIndex >= 0 && this.selectedObjectIndex < this.worldObjects.length) {
+      const o = this.worldObjects[this.selectedObjectIndex];
+      const box = new THREE.Mesh(
+        new THREE.BoxGeometry(140 * Math.max(0.5, o.scale), 140 * Math.max(0.5, o.scale), 220 * Math.max(0.5, o.scale)),
+        new THREE.MeshBasicMaterial({ color: 0xffea00, wireframe: true }),
+      );
+      box.position.set(o.position[0], o.position[1], o.position[2] + 90);
+      box.rotation.set(o.angle[0] * (Math.PI / 180), o.angle[1] * (Math.PI / 180), o.angle[2] * (Math.PI / 180), 'ZYX');
+      this.objectPreviewGroup.add(box);
+    }
+
+    if (this.objectsDirty) {
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0xffd54f, wireframe: true });
+      const recent = this.worldObjects.slice(-40);
+      for (const o of recent) {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(70 * Math.max(0.5, o.scale), 70 * Math.max(0.5, o.scale), 120 * Math.max(0.5, o.scale)), markerMat);
+        m.position.set(o.position[0], o.position[1], o.position[2] + 60);
+        this.objectPreviewGroup.add(m);
+      }
+    }
   }
 
   public dispose(): void {
@@ -558,8 +878,15 @@ export class WorldEditorViewport {
       const tile = this.pickTile(e.clientX, e.clientY);
       if (!tile) return;
 
-      if (this.tool === 'spawn' || this.tool === 'enterGate' || this.tool === 'exitGate') {
+      if (this.tool === 'spawn' || this.tool === 'enterGate' || this.tool === 'exitGate' || this.tool === 'addObject') {
         this.dotNet?.invokeMethodAsync('OnTerrainPlaceRequestedAsync', tile.x, tile.y, this.tool).catch(() => undefined);
+        return;
+      }
+
+      if (this.tool === 'lightPaint') {
+        this.isPainting = true;
+        this.paintLightAtTile(tile.x, tile.y);
+        this.canvas.setPointerCapture(e.pointerId);
         return;
       }
 
@@ -578,8 +905,12 @@ export class WorldEditorViewport {
         this.cursorMesh.position.set((tile.x + 0.5) * TERRAIN_SCALE, (tile.y + 0.5) * TERRAIN_SCALE, z);
         this.cursorMesh.scale.setScalar(Math.max(1, this.brushRadius));
         this.dotNet?.invokeMethodAsync('OnCursorMovedAsync', tile.x, tile.y, this.tileFlags[idx], Math.round(z)).catch(() => undefined);
-        if (this.isPainting && this.activeStroke) {
-          this.paintAtTile(tile.x, tile.y);
+        if (this.isPainting) {
+          if (this.tool === 'lightPaint') {
+            this.paintLightAtTile(tile.x, tile.y);
+          } else if (this.activeStroke) {
+            this.paintAtTile(tile.x, tile.y);
+          }
         }
       } else {
         this.cursorMesh.visible = false;

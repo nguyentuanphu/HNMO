@@ -86,7 +86,7 @@ else
                         </label>
                     </div>
                 </div>
-                <div class="col-md-4 d-flex justify-content-md-end gap-2">
+                <div class="col-md-4 d-flex justify-content-md-end gap-1 flex-wrap">
                     <button type="button"
                             class="btn btn-sm btn-outline-secondary"
                             id="world-editor-undo-btn"
@@ -100,12 +100,24 @@ else
                             title="@L("Redo undone stroke", "Làm lại nét vẽ")"
                             @onclick="this.RedoAsync">@L("Redo", "Làm lại")</button>
                     <button type="button"
+                            class="btn btn-sm btn-outline-info"
+                            id="world-editor-minimap-btn"
+                            disabled="@this._isSaving"
+                            title="@L("Render top-down minimap and save mini_map.tga/.ozt", "Kết xuất lại bản đồ nhỏ mini_map.tga/.ozt")"
+                            @onclick="this.RegenerateMinimapAsync">@L("Minimap", "Tạo Minimap")</button>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-warning"
+                            id="world-editor-pack-btn"
+                            disabled="@this._isSaving"
+                            title="@L("Rebuild worldN.hpk pack archive for this map", "Đóng gói lại tệp worldN.hpk cho bản đồ này")"
+                            @onclick="this.RebuildPackAsync">@L("Rebuild .hpk", "Đóng gói .hpk")</button>
+                    <button type="button"
                             class="btn btn-sm btn-primary"
                             id="world-editor-save-btn"
                             disabled="@this._isSaving"
-                            title="@L("Save terrain, monster spawns, and gates to Server DB and Web EncTerrainN.att together", "Lưu đồng bộ địa hình, bãi quái và cổng vào cơ sở dữ liệu máy chủ và tệp EncTerrainN.att")"
+                            title="@L("Save terrain, objects, lights, spawns, and gates to Server DB and Web Data together", "Lưu đồng bộ địa hình, vật thể 3D, ánh sáng, bãi quái và cổng vào máy chủ và web")"
                             @onclick="this.SaveAllAsync">
-                        @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save all (Server + Web)", "Lưu tất cả (Máy chủ + Web)"))
+                        @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save all", "Lưu tất cả"))
                     </button>
                 </div>
             </div>
@@ -163,7 +175,35 @@ else
                         <button type="button" class="btn btn-sm @(this._activeTool == "spawn" ? "btn-warning" : "btn-outline-warning")" title="@L("Click terrain to place a monster spawn area", "Nhấp lên đất để đặt bãi quái mới")" @onclick='() => this.SetToolAsync("spawn")'>+ @L("Monster Spawn", "Đặt bãi quái")</button>
                         <button type="button" class="btn btn-sm @(this._activeTool == "enterGate" ? "btn-info" : "btn-outline-info")" title="@L("Click terrain to place an enter gate", "Nhấp lên đất để đặt cổng vào")" @onclick='() => this.SetToolAsync("enterGate")'>+ @L("Enter Gate", "Đặt cổng vào")</button>
                         <button type="button" class="btn btn-sm @(this._activeTool == "exitGate" ? "btn-secondary" : "btn-outline-secondary")" title="@L("Click terrain to place an exit/spawn gate", "Nhấp lên đất để đặt điểm ra")" @onclick='() => this.SetToolAsync("exitGate")'>+ @L("Exit Gate", "Đặt điểm ra")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "addObject" ? "btn-primary" : "btn-outline-primary")" title="@L("Click terrain to place a 3D world object", "Nhấp lên đất để đặt vật thể 3D")" @onclick='() => this.SetToolAsync("addObject")'>+ @L("3D Object", "Đặt vật thể 3D")</button>
+                        <button type="button" class="btn btn-sm @(this._activeTool == "lightPaint" ? "btn-warning" : "btn-outline-warning")" title="@L("Paint light map color directly onto terrain", "Tô màu ánh sáng lên bản đồ")" @onclick='() => this.SetToolAsync("lightPaint")'>@L("Light Brush", "Cọ ánh sáng")</button>
                     </div>
+                    @if (this._activeTool == "addObject")
+                    {
+                        <div class="row g-1 mb-2 small">
+                            <div class="col-6">
+                                <label class="form-label mb-0" title="@L("Model type index (EncTerrainN.obj)", "Mã kiểu vật thể 3D")">@L("Object Type", "Mã vật thể")</label>
+                                <input type="number" class="form-control form-control-sm" min="0" max="159" @bind="this._newObjectType" />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label mb-0" title="@L("Initial scale multiplier", "Tỉ lệ phóng đại")">@L("Scale", "Tỉ lệ")</label>
+                                <input type="number" step="0.1" min="0.1" max="10" class="form-control form-control-sm" @bind="this._newObjectScale" />
+                            </div>
+                        </div>
+                    }
+                    @if (this._activeTool == "lightPaint")
+                    {
+                        <div class="row g-1 mb-2 small align-items-center">
+                            <div class="col-5">
+                                <label class="form-label mb-0" title="@L("Light brush RGB tint", "Màu cọ ánh sáng")">@L("Brush Color", "Màu cọ")</label>
+                                <input type="color" class="form-control form-control-color form-control-sm w-100" value="@this._lightBrushColor" @onchange="this.OnLightBrushChangedAsync" />
+                            </div>
+                            <div class="col-7">
+                                <label class="form-label mb-0">@L("Strength", "Độ mạnh"): @this._lightBrushIntensity.ToString("0.00")</label>
+                                <input type="range" class="form-range" min="0.05" max="1" step="0.05" value="@this._lightBrushIntensity" @onchange="this.OnLightIntensityChangedAsync" />
+                            </div>
+                        </div>
+                    }
                     <div class="mb-2">
                         <label class="form-label form-label-sm d-flex justify-content-between" for="we-brush-size" title="@L("Brush radius in terrain tiles (1-12)", "Kích thước bán kính cọ (1-12 ô)")">
                             <span>@L("Brush radius", "Kích thước cọ")</span>
@@ -208,6 +248,16 @@ else
                         <li class="nav-item">
                             <button type="button" class="nav-link @(this._activeTab == "exitGates" ? "active" : string.Empty)" @onclick='() => this._activeTab = "exitGates"'>
                                 @L("Exit Gates", "Điểm ra") (@this._selectedMap.ExitGates.Count)
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "objects" ? "active" : string.Empty)" @onclick="this.OpenObjectsTabAsync">
+                                @L("3D Objects", "Vật thể 3D") (@this._totalWorldObjects)
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link @(this._activeTab == "lights" ? "active" : string.Empty)" @onclick='() => this._activeTab = "lights"'>
+                                @L("Lights", "Ánh sáng")
                             </button>
                         </li>
                     </ul>
@@ -273,7 +323,7 @@ else
                             </div>
                         }
                     }
-                    else
+                    else if (this._activeTab == "exitGates")
                     {
                         @foreach (var gate in this._selectedMap.ExitGates)
                         {
@@ -302,6 +352,55 @@ else
                                 </div>
                             </div>
                         }
+                    }
+                    else if (this._activeTab == "objects")
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2 small">
+                            <span>@L("Showing first 60 of", "Hiển thị 60 /") @this._totalWorldObjects</span>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" @onclick="this.RefreshObjectsListAsync">@L("Refresh", "Làm mới")</button>
+                        </div>
+                        @foreach (var obj in this._worldObjects)
+                        {
+                            <div class="border rounded p-2 mb-2 small">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong>#@obj.Index Type @obj.Type</strong>
+                                    <div class="d-flex gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-primary py-0 px-1" @onclick="() => this.SelectWorldObjectAsync(obj.Index)">@L("Focus", "Tới")</button>
+                                        <button type="button" class="btn btn-xs btn-outline-danger py-0 px-1" @onclick="() => this.RemoveWorldObjectAsync(obj.Index)">×</button>
+                                    </div>
+                                </div>
+                                <div class="row g-1">
+                                    <div class="col-4"><label class="form-label mb-0">X</label><input type="number" class="form-control form-control-sm" @bind="obj.X" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">Y</label><input type="number" class="form-control form-control-sm" @bind="obj.Y" /></div>
+                                    <div class="col-4"><label class="form-label mb-0">Z</label><input type="number" class="form-control form-control-sm" @bind="obj.Z" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">RX</label><input type="number" class="form-control form-control-sm" @bind="obj.AngleX" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">RY</label><input type="number" class="form-control form-control-sm" @bind="obj.AngleY" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">RZ</label><input type="number" class="form-control form-control-sm" @bind="obj.AngleZ" /></div>
+                                    <div class="col-3"><label class="form-label mb-0">Scale</label><input type="number" step="0.1" class="form-control form-control-sm" @bind="obj.Scale" /></div>
+                                </div>
+                                <button type="button" class="btn btn-xs btn-outline-success w-100 mt-1 py-0" @onclick="() => this.ApplyObjectTransformAsync(obj)">@L("Apply 3D Transform", "Áp dụng vị trí/góc 3D")</button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="small">
+                            <div class="mb-2">
+                                <label class="form-label mb-1" title="@L("Preview ambient scene color", "Màu ánh sáng môi trường")">@L("Ambient Scene Color", "Màu ánh sáng môi trường")</label>
+                                <input type="color" class="form-control form-control-color form-control-sm" value="@this._ambientColor" @onchange="this.OnAmbientColorChangedAsync" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label mb-1">@L("Ambient Intensity", "Cường độ ánh sáng"): @this._ambientIntensity.ToString("0.00")</label>
+                                <input type="range" class="form-range" min="0.2" max="2.5" step="0.05" value="@this._ambientIntensity" @onchange="this.OnAmbientIntensityChangedAsync" />
+                            </div>
+                            @if (!string.IsNullOrEmpty(this._minimapPreviewUrl))
+                            {
+                                <div class="mt-2">
+                                    <div class="mb-1"><strong>@L("Regenerated Minimap Preview:", "Xem trước Minimap mới:")</strong></div>
+                                    <img id="world-editor-minimap-preview" src="@this._minimapPreviewUrl" alt="Minimap preview" class="img-thumbnail" style="max-width: 160px;" />
+                                </div>
+                            }
+                        </div>
                     }
                 </div>
             </div>

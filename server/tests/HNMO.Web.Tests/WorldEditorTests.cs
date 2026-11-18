@@ -137,4 +137,45 @@ public class WorldEditorTests
         var traversal = await service.TryReadDataBytesAsync("../secret.txt", CancellationToken.None);
         Assert.That(traversal, Is.Null);
     }
+
+    /// <summary>Verifies <see cref="WorldEditorDataService.WriteClientObjects"/>, <see cref="WorldEditorDataService.WriteClientMinimap"/>, and <see cref="WorldEditorDataService.RebuildWorldPack"/> produce valid client binaries and HPK1 packs.</summary>
+    /// <returns>Asynchronous task.</returns>
+    [Test]
+    public async Task PartB_ObjectsMinimapAndHpkRebuildRoundTripAsync()
+    {
+        var serverDir = Path.Combine(this._tempRoot, "serverData");
+        var webDir = Path.Combine(this._tempRoot, "webData");
+        var service = new WorldEditorDataService(serverDir, webDir);
+
+        // 1. Write EncTerrain1.obj (header 4 bytes + 1 record 30 bytes = 34 bytes)
+        var rawObj = new byte[34];
+        rawObj[1] = 0; // map 0
+        rawObj[2] = 1; // 1 object
+        var objWritten = service.WriteClientObjects(0, rawObj);
+        Assert.That(objWritten, Has.Count.EqualTo(2));
+        Assert.That(File.Exists(Path.Combine(webDir, "World1", "EncTerrain1.obj")), Is.True);
+
+        // 2. Write mini_map.tga + .ozt (4x4 RGBA -> 18 + 64 = 82-byte TGA)
+        var rgba = Enumerable.Repeat((byte)0x80, 4 * 4 * 4).ToArray();
+        var mapWritten = service.WriteClientMinimap(0, rgba, 4, 4);
+        Assert.That(mapWritten, Has.Count.EqualTo(2));
+        var tgaBytes = File.ReadAllBytes(Path.Combine(webDir, "World1", "mini_map.tga"));
+        Assert.That(tgaBytes.Length, Is.EqualTo(18 + 64));
+        Assert.That(tgaBytes[2], Is.EqualTo(2)); // uncompressed TGA
+        Assert.That(tgaBytes[16], Is.EqualTo(32)); // 32-bit BGRA
+
+        // 3. Rebuild world1.hpk and read an entry back via TryReadDataBytesAsync
+        var (packPath, entryCount) = service.RebuildWorldPack(0);
+        Assert.That(File.Exists(packPath), Is.True);
+        Assert.That(entryCount, Is.GreaterThanOrEqualTo(2));
+
+        // Verify HPK1 pack can serve packed entry even if loose dir doesn't contain it
+        var packOnlyDir = Path.Combine(this._tempRoot, "packOnlyServer");
+        Directory.CreateDirectory(Path.Combine(packOnlyDir, "packs"));
+        File.Copy(packPath, Path.Combine(packOnlyDir, "packs", "world1.hpk"));
+        var packReader = new WorldEditorDataService(packOnlyDir, Path.Combine(this._tempRoot, "emptyWeb"));
+        var readFromPack = await packReader.TryReadDataBytesAsync("World1/EncTerrain1.obj", CancellationToken.None);
+        Assert.That(readFromPack, Is.Not.Null);
+        Assert.That(readFromPack!.Value.Bytes.Length, Is.EqualTo(34));
+    }
 }
