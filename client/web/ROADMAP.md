@@ -603,18 +603,19 @@ XP/Zen bonuses refresh in the live game and expire through the existing grant ti
 Daily coins use one durable pending credit per account/Sydney day, then normal coin
 application. The account page and web game share offer review and stable retry controls;
 the game uses F5 25/F5 26, Alt+U and the mobile More menu. New purchases are off by default.
-Start/last-day notices and a server-resolved chat mark are being validated.
-Still unfinished: the plain admin VIP settings/grant/remove page, durable activity audit
-for those host actions, its bUnit tests, and final combined/live deployment checks.
-Do not mark the whole VIP decision done yet. Per-server rates/list controls are separate
-under ROADMAP 15.6. No desktop work is required.
+Implemented: start/last-day notices, a server-resolved chat mark, and the /vip admin
+settings/grant/remove page with required reasons, confirmation, durable activity audit
+and bUnit/service tests. The existing VIP vault/reset policies use the same timed flag.
+VIP application work is complete; live PostgreSQL/crash/deployment validation remains
+unverified. Per-server rates/list controls are separate under ROADMAP 15.6.
 
 Đã nối phần mua VIP với trang tài khoản và game web: xem lại giá trước khi xác nhận,
 thử lại bằng cùng mã giao dịch, trừ coin một lần và cấp ba quyền lợi cùng hạn dùng.
 Ưu đãi kinh nghiệm/Zen áp dụng ngay trong game; quà coin hằng ngày dùng một khoản
 cộng chờ duy nhất cho mỗi tài khoản/ngày Sydney. Mở bằng Alt+U hoặc menu Thêm.
-Mua mới được tắt mặc định. Chưa hoàn tất trang quản trị cấp/xóa VIP, nhật ký thao tác
-của quản trị viên và kiểm tra triển khai thực tế; chưa đánh dấu toàn bộ mục này xong.
+Mua mới tắt mặc định. Đã có trang /vip để cấu hình, cấp/gỡ VIP với lý do, xác nhận,
+nhật ký và kiểm thử. Chính sách kho/reset VIP đã có dùng cùng cờ VIP có hạn.
+Chưa kiểm chứng PostgreSQL khi gặp sự cố hoặc triển khai thực tế; máy chủ VIP ở mục 15.6.
 
 ## Player account dashboard — foundation (2026-11-16)
 Implemented on chatgpt-account-page: one in-memory sign-in, responsive section navigation,
@@ -771,7 +772,6 @@ touch-first; read from its store listing and release notes; ideas only). The web
   definitions, 14.21 stats calculator, 14.24 3D world editor), escrow (section 16), and the admin tools moved to it.
 - Admin tools 14.18 gift box/mail, 14.16 ban manager, 14.15 character tools, 14.17/14.11 GM manager + in-game GM
   commands, 14.20 news manager: moved BACK to ChatGPT (2026-11-17) because Antigravity is out for days.
-- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (rules only, not
-  working yet). Its redesign must also add the menu entries for every route in #51's wiring table.
+- ChatGPT: integration draft #26; account page #29 (partial), admin help #33 (partial), VIP #39 (website/game/admin implemented; live deployment unverified). Its redesign must also add the menu entries for every route in #51's wiring table.
 - Second Antigravity (mobile, section 17): not started.
 - Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.

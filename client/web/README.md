@@ -267,10 +267,11 @@ section. Review the price and bonuses before confirming. Retry a pending purchas
 with its original identifier. Renewals of the same level add time; different levels
 need host assistance. Daily coins are once per account/Sydney day. The website
 requires the account to leave the game before a purchase. Purchases default to off.
-The plain admin grant/remove page is still in development.
+Administrators configure prices/benefits and grant or remove time at `/vip`, with a
+required reason, confirmation and activity record. See [VIP host instructions](VIP.md).
 
 Mở VIP bằng **Alt+U**, **Thêm → VIP** trên điện thoại hoặc mục VIP của trang tài khoản.
 Xem lại giá và quyền lợi trước khi xác nhận; thử lại chính giao dịch đang chờ.
 Gia hạn cùng hạng cộng thêm thời gian. Mỗi tài khoản nhận quà một lần/ngày Sydney.
-Hãy thoát game trước khi mua trên website. Mua mới được tắt mặc định; trang quản trị
-cấp/xóa VIP đang được hoàn thiện.
+Hãy thoát game trước khi mua trên website. Mua mới được tắt mặc định. Quản trị viên dùng `/vip` để cấu hình, cấp/gỡ VIP,
+bắt buộc nêu lý do, xác nhận và ghi nhật ký. Xem [hướng dẫn quản trị VIP](VIP.md).

@@ -168,24 +168,22 @@ Status: ✅ done · 🟡 partly · ⬜ not started
 | Texture folders: first folder that has the texture | ✅ | |
 | GLB models (`Data/Models/ModelFiles.json`) | ⬜ | |
 
-VIP is an owner-requested HNMO extension. The current branch adds only server-side rule
-and unified-state groundwork; no web/desktop gameplay behavior or packet has changed.
-Paid VIP, UI and applied benefits are still unimplemented, so this does not claim parity
-or a playable VIP feature.
-
-VIP là tính năng mở rộng được chủ HNMO yêu cầu. Hiện chỉ có nền quy tắc phía máy chủ và
-lưu trạng thái dùng chung; chưa thay đổi cách chơi hoặc gói tin của web/desktop. Chưa có
-mua VIP, giao diện hoặc áp dụng quyền lợi thực tế.
-
 ### HNMO VIP subscriptions (web)
 
 The account page and game window (Alt+U; mobile More → VIP) share reviewed offers,
-stable purchase retries and Sydney-day daily coins. The server commits each debit,
+stable purchase retries and Sydney-day daily coins. The server saves the debit,
 receipt and three timed account grants together; live XP/Zen bonuses use those grants.
+The existing host-configured VIP vault/reset policies also read the same timed VIP flag.
 F5 25 requests and F5 26 state belong to HNMO. New purchases are disabled by default.
-Host grant/remove/configuration UI and final live validation remain unfinished.
+The /vip administrator page configures levels/prices and grants or removes time with a
+required reason, confirmation and activity audit. Pending recovery preserves the original
+operation. Real PostgreSQL crash recovery and live deployment remain unverified.
+Per-server rates and the VIP server list are separate work under ROADMAP 15.6.
 
 Trang tài khoản và cửa sổ VIP trong game dùng chung bước xem lại giá, thử lại giao dịch
-và quà theo ngày Sydney. Máy chủ lưu việc trừ coin, biên nhận và ba quyền lợi có cùng
-hạn trong một lần lưu tài khoản. Mục quản trị cấp/xóa/cấu hình và kiểm tra máy chủ
-thực tế chưa hoàn tất.
+và quà theo ngày Sydney. Máy chủ lưu việc trừ coin, biên nhận và ba quyền lợi cùng hạn
+trong một lần lưu tài khoản. Ưu đãi kinh nghiệm/Zen áp dụng trực tiếp; các chính sách kho
+và reset VIP đã có cũng dùng cờ VIP này. Trang /vip cho quản trị viên cấu hình hạng/giá,
+cấp hoặc gỡ VIP, bắt buộc nêu lý do, xác nhận và ghi nhật ký. Mua mới tắt mặc định.
+Chưa kiểm chứng khôi phục sau sự cố PostgreSQL hoặc triển khai trên máy chủ thực tế.
+Máy chủ dành riêng cho VIP và hệ số từng máy chủ thuộc công việc riêng ở mục 15.6.
