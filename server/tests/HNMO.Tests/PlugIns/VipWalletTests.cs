@@ -548,6 +548,53 @@ public class VipWalletTests
         Assert.That(grant.AppliedAt, Is.Null);
     }
 
+    /// <summary>Host grants share timed proof without spending coins and cannot be replayed as player purchases.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task AdministrativeGrantIsFreeAndBoundToAttributionAsync()
+    {
+        this._configuration.Enabled = false;
+        var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);
+        var operation = Guid.NewGuid();
+        var actor = new VipAdministrativeGrant("host", "Compensation for the outage");
+        var first = await admin.GrantAsync(this._context, this._account, operation, 1, 14, actor, Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false);
+        var retry = await admin.GrantAsync(this._context, this._account, operation, 1, 14, actor, Now.AddMinutes(1), () => this._context.SaveChangesAsync()).ConfigureAwait(false);
+        Assert.That((first.Status, retry.Status), Is.EqualTo(("Applied", "Applied")));
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000));
+        Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
+        Assert.That(this._account.AttributeGrants.Select(grant => grant.ValidUntil), Is.All.EqualTo(Now.AddDays(14)));
+        var row = (await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false)).Single();
+        Assert.That(row.Amount, Is.Zero);
+        Assert.That(row.AppliedAt, Is.Not.Null);
+        Assert.That(VipWallet.ReadReceipt(row.Reason)!.Intent.Administration, Is.EqualTo(actor));
+        Assert.That(this._store.Data.Audit.Single().Action, Is.EqualTo("grant"));
+        Assert.That(this._store.Data.Audit.Single().Reason, Is.EqualTo(actor.Reason));
+        Assert.That((await this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 14, Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
+        Assert.That((await admin.GrantAsync(this._context, this._account, operation, 1, 14, actor with { Actor = "another host" }, Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
+    }
+
+    /// <summary>A failed host grant save retries the same grants; invalid attribution never creates an intent.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task AdministrativeGrantRetryAndRequiredReasonAsync()
+    {
+        var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);
+        var operation = Guid.NewGuid();
+        var invalid = await admin.GrantAsync(this._context, this._account, operation, 1, 7, new("host", " "), Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false);
+        Assert.That(invalid.Status, Is.EqualTo("Refused"));
+        Assert.That(this._store.Data.WalletIntents, Is.Empty);
+        var actor = new VipAdministrativeGrant("host", "Welcome reward");
+        var pending = await admin.GrantAsync(this._context, this._account, operation, 1, 7, actor, Now, () => ValueTask.FromResult(false)).ConfigureAwait(false);
+        Assert.That(pending.Status, Is.EqualTo("Pending"));
+        var publicState = await VipStateWriter.WriteAsync(this._configuration, this._store, this._wallet, this._context, this._account, Now).ConfigureAwait(false);
+        using var publicJson = JsonDocument.Parse(publicState);
+        Assert.That(publicJson.RootElement.GetProperty("pending").ValueKind, Is.EqualTo(JsonValueKind.Null));
+        Assert.That(publicState, Does.Not.Contain(actor.Reason));
+        Assert.That((await admin.GrantAsync(this._context, this._account, operation, 1, 7, actor, Now.AddMinutes(1), () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Applied"));
+        Assert.That(this._account.AttributeGrants, Has.Count.EqualTo(3));
+        Assert.That(this._account.WCoinC, Is.EqualTo(1000));
+    }
+
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
         => this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, now, () => this._context.SaveChangesAsync());
 }

@@ -16,4 +16,5 @@ namespace HNMO.GameLogic.PlugIns.Vip;
 /// <param name="PreviousGrantIds">Only grants owned by the preceding VIP purchase.</param>
 /// <param name="DailyCoins">The purchased daily bonus amount.</param>
 /// <param name="DailyCoinType">The purchased daily currency.</param>
-public sealed record VipWalletIntent(Guid AccountId, Guid OperationId, VipPurchasePlan Plan, VipMembership Membership, int ExperiencePercent, int ZenPercent, string NameEn, string NameVi, List<Guid> PreviousGrantIds, int DailyCoins = 0, CashShopCoinType DailyCoinType = CashShopCoinType.GoblinPoints);
+/// <param name="Administration">Host attribution for a zero-cost administrative grant; null for player purchases.</param>
+public sealed record VipWalletIntent(Guid AccountId, Guid OperationId, VipPurchasePlan Plan, VipMembership Membership, int ExperiencePercent, int ZenPercent, string NameEn, string NameVi, List<Guid> PreviousGrantIds, int DailyCoins = 0, CashShopCoinType DailyCoinType = CashShopCoinType.GoblinPoints, VipAdministrativeGrant? Administration = null);

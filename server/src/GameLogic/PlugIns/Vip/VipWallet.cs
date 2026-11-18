@@ -43,7 +43,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         try
         {
             var proof = JsonSerializer.Deserialize<VipWalletReceipt>(reason);
-            return proof is { Kind: ReceiptKind, Intent: { Plan: not null, Membership: not null, PreviousGrantIds: not null }, GrantIds.Count: 3 } && proof.GrantIds.Distinct().Count() == 3 && !proof.GrantIds.Contains(Guid.Empty) ? proof : null;
+            return proof is { Kind: ReceiptKind, Intent: { Plan: not null, Membership: not null, PreviousGrantIds: not null }, GrantIds.Count: 3 } && proof.GrantIds.Distinct().Count() == 3 && !proof.GrantIds.Contains(Guid.Empty) && (proof.Intent.Administration is null || (proof.Intent.Administration.IsValid && proof.Intent.Plan.Price == 0)) ? proof : null;
         }
         catch (JsonException)
         {
@@ -62,7 +62,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
     /// <param name="offerToken">The reviewed offer version; network adapters must require it. Null is for trusted internal callers only.</param>
     /// <param name="cancellationToken">Cancellation while waiting for ownership.</param>
     /// <returns>An applied, pending, conflicting or refused outcome.</returns>
-    public async ValueTask<VipWalletResult> PurchaseAsync(
+    public ValueTask<VipWalletResult> PurchaseAsync(
         IPlayerContext context,
         Account account,
         Guid operationId,
@@ -72,24 +72,20 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         Func<ValueTask<bool>> save,
         string? offerToken = null,
         CancellationToken cancellationToken = default)
-    {
-        var accountId = account.GetId();
-        if (accountId == Guid.Empty || operationId == Guid.Empty || string.IsNullOrWhiteSpace(account.LoginName) || nowUtc.Kind != DateTimeKind.Utc)
-        {
-            return new("Refused", VipRuleResult.Invalid);
-        }
+        => this.PurchaseCoreAsync(context, account, operationId, levelId, days, nowUtc, save, offerToken, cancellationToken);
 
-        var gate = AccountGates.GetOrAdd(accountId, _ => new(1, 1));
-        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
-        try
-        {
-            return await this.PurchaseOwnedAsync(context, account, operationId, levelId, days, nowUtc, save, offerToken).ConfigureAwait(false);
-        }
-        finally
-        {
-            gate.Release();
-        }
-    }
+    /// <summary>Runs a host-attributed free grant; public player adapters cannot select this mode.</summary>
+    /// <param name="context">The exclusively owned context.</param>
+    /// <param name="account">The authorized target account.</param>
+    /// <param name="operationId">The stable host operation.</param>
+    /// <param name="levelId">The configured level.</param>
+    /// <param name="days">The granted duration.</param>
+    /// <param name="nowUtc">The current UTC instant.</param>
+    /// <param name="save">Commits this same context.</param>
+    /// <param name="administration">The authenticated actor and required reason.</param>
+    /// <returns>The wallet outcome.</returns>
+    internal ValueTask<VipWalletResult> PurchaseFromHostAsync(IPlayerContext context, Account account, Guid operationId, int levelId, int days, DateTime nowUtc, Func<ValueTask<bool>> save, VipAdministrativeGrant administration)
+        => this.PurchaseCoreAsync(context, account, operationId, levelId, days, nowUtc, save, null, default, administration);
 
     /// <summary>Reads the paid, active entitlement from account grants and database proof, rebuilding only its file projection.</summary>
     /// <param name="context">The authenticated account's owned context.</param>
@@ -144,7 +140,37 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         return vip?.ValidUntil == proof.Intent.Membership.UntilUtc && vip.Value == proof.Intent.Plan.LevelId ? proof : null;
     }
 
-    private async ValueTask<VipWalletResult> PurchaseOwnedAsync(IPlayerContext context, Account account, Guid operationId, int levelId, int days, DateTime nowUtc, Func<ValueTask<bool>> save, string? offerToken)
+    private async ValueTask<VipWalletResult> PurchaseCoreAsync(
+        IPlayerContext context,
+        Account account,
+        Guid operationId,
+        int levelId,
+        int days,
+        DateTime nowUtc,
+        Func<ValueTask<bool>> save,
+        string? offerToken = null,
+        CancellationToken cancellationToken = default,
+        VipAdministrativeGrant? administration = null)
+    {
+        var accountId = account.GetId();
+        if (accountId == Guid.Empty || operationId == Guid.Empty || string.IsNullOrWhiteSpace(account.LoginName) || nowUtc.Kind != DateTimeKind.Utc || administration is { IsValid: false })
+        {
+            return new("Refused", VipRuleResult.Invalid);
+        }
+
+        var gate = AccountGates.GetOrAdd(accountId, _ => new(1, 1));
+        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await this.PurchaseOwnedAsync(context, account, operationId, levelId, days, nowUtc, save, offerToken, administration).ConfigureAwait(false);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    private async ValueTask<VipWalletResult> PurchaseOwnedAsync(IPlayerContext context, Account account, Guid operationId, int levelId, int days, DateTime nowUtc, Func<ValueTask<bool>> save, string? offerToken, VipAdministrativeGrant? administration)
     {
         var tracked = TrackedReceipts.GetOrCreateValue(context);
         var reference = $"vip:{account.GetId():N}:{operationId:N}";
@@ -154,7 +180,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         {
             var proof = ReadReceipt(receipt.Reason);
             if (proof is null || proof.Intent.AccountId != account.GetId() || proof.Intent.OperationId != operationId
-                || proof.Intent.Plan.LevelId != levelId || proof.Intent.Plan.Days != days
+                || proof.Intent.Plan.LevelId != levelId || proof.Intent.Plan.Days != days || proof.Intent.Administration != administration
                 || receipt.AccountId != account.GetId() || receipt.Reference != reference || receipt.AppliedAt is null
                 || proof.Intent.Plan.LoginName != account.LoginName.Trim().ToUpperInvariant() || proof.Intent.Plan.Price < 0
                 || receipt.CoinType != proof.Intent.Plan.CoinType || receipt.Amount != -proof.Intent.Plan.Price)
@@ -194,7 +220,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
 
             if (store.Data.WalletIntents.TryGetValue(operationId, out var previous))
             {
-                if (previous.AccountId != account.GetId() || previous.Plan.LevelId != levelId || previous.Plan.Days != days)
+                if (previous.AccountId != account.GetId() || previous.Plan.LevelId != levelId || previous.Plan.Days != days || previous.Administration != administration)
                 {
                     return new("Conflict");
                 }
@@ -241,6 +267,11 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                     return new("Refused", quote.Result);
                 }
 
+                if (administration is not null && plan.Price != 0)
+                {
+                    return new("Refused", VipRuleResult.Invalid);
+                }
+
                 var level = configuration.Levels.Single(value => value.Id == levelId);
                 if (level.NameEn.Length > 120 || level.NameVi.Length > 120)
                 {
@@ -248,7 +279,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
                 }
 
                 var from = store.Data.Memberships.TryGetValue(name, out var active) && active.UntilUtc > nowUtc ? active.FromUtc : nowUtc;
-                intent = new(account.GetId(), operationId, plan, new(name, levelId, from, plan.UntilUtc), level.ExperiencePercent, level.ZenPercent, level.NameEn, level.NameVi, owned, level.DailyCoins, level.DailyCoinType);
+                intent = new(account.GetId(), operationId, plan, new(name, levelId, from, plan.UntilUtc), level.ExperiencePercent, level.ZenPercent, level.NameEn, level.NameVi, owned, level.DailyCoins, level.DailyCoinType, administration);
                 if (offerToken is not null && !string.Equals(offerToken, VipOfferToken.FromIntent(intent), StringComparison.OrdinalIgnoreCase))
                 {
                     return new("PriceChanged");
@@ -324,7 +355,8 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             if (!store.Data.Payments.ContainsKey(intent.OperationId))
             {
                 store.Data.Payments[intent.OperationId] = intent.Plan;
-                store.Data.Audit.Add(new(nowUtc, intent.Plan.LoginName, "purchase", "wallet", intent.OperationId.ToString("N")));
+                store.Data.Audit.Add(new(nowUtc, intent.Plan.LoginName, intent.Administration is null ? "purchase" : "grant",
+                    intent.Administration?.Actor ?? "wallet", intent.Administration?.Reason ?? intent.OperationId.ToString("N")));
             }
 
             // Rebuild a missing file projection only from an actual active account grant and its paid proof.

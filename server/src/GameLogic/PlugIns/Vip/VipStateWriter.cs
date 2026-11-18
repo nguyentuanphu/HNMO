@@ -39,7 +39,7 @@ public static class VipStateWriter
         VipWalletIntent? pending;
         lock (store.SyncRoot)
         {
-            pending = store.Data.WalletIntents.Values.Where(intent => intent.AccountId == account.GetId()
+            pending = store.Data.WalletIntents.Values.Where(intent => intent.AccountId == account.GetId() && intent.Administration is null
                 && !store.Data.Payments.ContainsKey(intent.OperationId) && !store.Data.WalletRefusals.ContainsKey(intent.OperationId))
                 .OrderBy(intent => intent.Plan.QuotedAtUtc).FirstOrDefault();
             if (operationId is { } requested && store.Data.WalletIntents.TryGetValue(requested, out var intent)
