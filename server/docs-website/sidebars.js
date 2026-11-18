@@ -60,6 +60,7 @@ const sidebars = {
         "admin-panel/item-definitions",
         "admin-panel/import-server",
         "admin-panel/anti-cheat",
+        "admin-panel/rate-tuning",
         "admin-panel/item-drops",
         "admin-panel/plugins",
         "admin-panel/state-retention",
