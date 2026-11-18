@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.Offline;
 
+using System.Threading;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.MuHelper;
 using HNMO.GameLogic.Views;
@@ -55,6 +56,9 @@ public class OfflinePlayer : Player
 
     private OfflinePlayerMuHelper? _intelligence;
     private Task? _intelligenceDisposeTask;
+    private CancellationTokenSource? _offTradeMonitorCts;
+    private Task? _offTradeMonitorTask;
+    private int _offTradePendingSave;
 
     /// <summary>
     /// The player who most recently attacked this bot, with the time of that attack. Written from the
@@ -91,6 +95,21 @@ public class OfflinePlayer : Player
     /// Gets the start timestamp of the offline session.
     /// </summary>
     public DateTime StartTimestamp { get; internal set; }
+
+    /// <summary>
+    /// Gets a value indicating whether this offline session is an off-trade shop (standing in town without combat AI).
+    /// </summary>
+    public bool IsOffTrade { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether an off-trade session automatically stops once its store is empty.
+    /// </summary>
+    public bool OffTradeStopWhenSoldOut { get; private set; } = true;
+
+    /// <summary>
+    /// Gets the UTC timestamp after which an off-trade session expires, or <c>null</c> if unlimited.
+    /// </summary>
+    public DateTime? OffTradeExpiresAtUtc { get; private set; }
 
     /// <summary>
     /// Gets or sets the position the intelligence hunts around. For a plain offline player this is
@@ -187,52 +206,19 @@ public class OfflinePlayer : Player
     /// <param name="loginName">The account login name.</param>
     /// <param name="characterName">The character name to continue with.</param>
     /// <returns><c>true</c> if successfully started.</returns>
-    public async ValueTask<bool> InitializeAsync(string loginName, string characterName)
-    {
-        try
-        {
-            this.StartTimestamp = DateTime.UtcNow;
+    public ValueTask<bool> InitializeAsync(string loginName, string characterName)
+        => this.InitializeCoreAsync(loginName, characterName, isOffTrade: false, maxDurationHours: 0, stopWhenSoldOut: true);
 
-            var account = await this.PersistenceContext.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
-            if (account is null)
-            {
-                this.Logger.LogError("Failed to load account {LoginName} for offline session.", loginName);
-                return false;
-            }
-
-            var character = account.Characters?.FirstOrDefault(c => c.Name == characterName);
-            if (character is null)
-            {
-                this.Logger.LogError("Character {CharacterName} not found in account {LoginName}.", characterName, loginName);
-                return false;
-            }
-
-            this.Account = account;
-
-            await this.AdvanceToCharacterSelectionStateAsync().ConfigureAwait(false);
-
-            await this.SetupCharacterAsync(character).ConfigureAwait(false);
-
-            await this.ClientReadyAfterMapChangeAsync().ConfigureAwait(false);
-
-            this.HuntingOrigin = this.Position;
-
-            this.StartIntelligence();
-
-            this.Logger.LogDebug(
-                "Offline player started for character {CharacterName} on map {Map} at {Position}.",
-                character.Name,
-                character.CurrentMap?.Name,
-                this.Position);
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            this.Logger.LogError(ex, "Failed to initialize offline player for {LoginName}.", loginName);
-            return false;
-        }
-    }
+    /// <summary>
+    /// Initializes an offline trade (<c>/offtrade</c>) session that keeps the personal store open without MU Helper combat AI.
+    /// </summary>
+    /// <param name="loginName">The account login name.</param>
+    /// <param name="characterName">The character name to continue with.</param>
+    /// <param name="maxDurationHours">Maximum duration in hours before automatic sign-off (<c>0</c> = unlimited).</param>
+    /// <param name="stopWhenSoldOut">Whether to automatically stop when the last store item sells.</param>
+    /// <returns><c>true</c> if successfully started.</returns>
+    public ValueTask<bool> InitializeOffTradeAsync(string loginName, string characterName, int maxDurationHours, bool stopWhenSoldOut)
+        => this.InitializeCoreAsync(loginName, characterName, isOffTrade: true, maxDurationHours, stopWhenSoldOut);
 
     /// <summary>
     /// Stops the offline player and removes it from the world.
@@ -240,6 +226,14 @@ public class OfflinePlayer : Player
     public virtual async ValueTask StopAsync()
     {
         await this.DisconnectAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Marks this off-trade session as having pending proceeds (Zen or coins) that should be flushed on the next monitor tick.
+    /// </summary>
+    internal void MarkOffTradePendingSave()
+    {
+        Interlocked.Exchange(ref this._offTradePendingSave, 1);
     }
 
     /// <summary>
@@ -422,6 +416,13 @@ public class OfflinePlayer : Player
     /// <inheritdoc />
     protected override async ValueTask InternalDisconnectAsync()
     {
+        if (this._offTradeMonitorCts is { } cts)
+        {
+            this._offTradeMonitorCts = null;
+            await cts.CancelAsync().ConfigureAwait(false);
+            cts.Dispose();
+        }
+
         if (this._intelligence is { } intelligence)
         {
             this._intelligence = null;
@@ -449,6 +450,18 @@ public class OfflinePlayer : Player
             await disposeTask.ConfigureAwait(false);
         }
 
+        if (this._offTradeMonitorTask is { } monitorTask)
+        {
+            try
+            {
+                await monitorTask.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected on shutdown.
+            }
+        }
+
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 
@@ -463,6 +476,102 @@ public class OfflinePlayer : Player
     {
         this._intelligence = new OfflinePlayerMuHelper(this);
         this._intelligence.Start();
+    }
+
+    private async ValueTask<bool> InitializeCoreAsync(string loginName, string characterName, bool isOffTrade, int maxDurationHours, bool stopWhenSoldOut)
+    {
+        try
+        {
+            this.StartTimestamp = DateTime.UtcNow;
+            this.IsOffTrade = isOffTrade;
+            this.OffTradeStopWhenSoldOut = stopWhenSoldOut;
+            this.OffTradeExpiresAtUtc = isOffTrade && maxDurationHours > 0
+                ? this.StartTimestamp.AddHours(maxDurationHours)
+                : null;
+
+            var account = await this.PersistenceContext.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
+            if (account is null)
+            {
+                this.Logger.LogError("Failed to load account {LoginName} for offline session.", loginName);
+                return false;
+            }
+
+            var character = account.Characters?.FirstOrDefault(c => c.Name == characterName);
+            if (character is null)
+            {
+                this.Logger.LogError("Character {CharacterName} not found in account {LoginName}.", characterName, loginName);
+                return false;
+            }
+
+            this.Account = account;
+
+            await this.AdvanceToCharacterSelectionStateAsync().ConfigureAwait(false);
+
+            await this.SetupCharacterAsync(character).ConfigureAwait(false);
+
+            await this.ClientReadyAfterMapChangeAsync().ConfigureAwait(false);
+
+            this.HuntingOrigin = this.Position;
+
+            if (isOffTrade)
+            {
+                this.StartOffTradeMonitor();
+            }
+            else
+            {
+                this.StartIntelligence();
+            }
+
+            this.Logger.LogDebug(
+                "Offline player started (OffTrade={IsOffTrade}) for character {CharacterName} on map {Map} at {Position}.",
+                isOffTrade,
+                character.Name,
+                character.CurrentMap?.Name,
+                this.Position);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Failed to initialize offline player for {LoginName}.", loginName);
+            return false;
+        }
+    }
+
+    private void StartOffTradeMonitor()
+    {
+        var cts = new CancellationTokenSource();
+        this._offTradeMonitorCts = cts;
+        var token = cts.Token;
+        this._offTradeMonitorTask = Task.Run(async () =>
+        {
+            using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+            try
+            {
+                while (await timer.WaitForNextTickAsync(token).ConfigureAwait(false))
+                {
+                    if (Interlocked.Exchange(ref this._offTradePendingSave, 0) != 0)
+                    {
+                        await this.SaveProgressAsync(token).ConfigureAwait(false);
+                    }
+
+                    if (this.OffTradeExpiresAtUtc is { } expiresAt && DateTime.UtcNow >= expiresAt
+                        && this.AccountLoginName is { } login)
+                    {
+                        _ = Task.Run(() => this.GameContext.OfflinePlayerManager.StopAsync(login).AsTask());
+                        break;
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected when disconnected or stopped.
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Off-trade monitor error for {AccountLoginName}.", this.AccountLoginName);
+            }
+        });
     }
 
     private async ValueTask AdvanceToCharacterSelectionStateAsync()

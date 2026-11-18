@@ -152,6 +152,14 @@ finishes in about 1.5 seconds.
 If there is a problem in the future, we could go further and mix relational
 tables with JSON columns, or fully switch to a document based database.
 
+### Scale benchmark (1,000 accounts, 2,000 characters)
+
+Measured by `ScaleLoadBenchmarkTests.SimulatesThousandAccountsAndReportsLatencyDbSizeAndMemory`:
+
+- **Single-account incremental row save**: `3.545 ms` avg (`5.038 ms` p95), updating only the changed row while keeping `save/hnmo-state.json` at `177 bytes` (compared to rewriting `1,217,125 bytes` in `15.709 ms` for monolithic JSON).
+- **Simulated account login & feature load**: `0.011 ms` avg (`0.014 ms` p95) across all 1,000 accounts.
+- **Storage & memory**: `7,000` feature rows (`1,111,910 bytes` total payload); managed memory delta `14.11 MB` (`WorkingSet64` `105.11 MB` → `132.73 MB`).
+
 ## Further reading
 
 On this site:

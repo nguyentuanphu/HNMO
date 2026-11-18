@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
+using HNMO.Persistence;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
@@ -320,10 +321,14 @@ public sealed class WorldBossStoreData
 /// </summary>
 public sealed class WorldBossStore
 {
+    private const string FeatureOwed = "worldBosses.owed";
+    private const string SectionKey = "worldBosses";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
     private static readonly ConcurrentDictionary<string, WorldBossStore> Shared = new(StringComparer.Ordinal);
 
-    private readonly string? _filePath;
+    private readonly HnmoStateStore? _stateStore;
+    private readonly IHnmoPlayerStateRowBackend _rowBackend;
+    private readonly HnmoFeatureRowSync<List<WorldBossOwedReward>> _owedSync = new();
     private bool _changed;
 
     /// <summary>
@@ -332,7 +337,8 @@ public sealed class WorldBossStore
     /// <param name="filePath">The file; <c>null</c> keeps the data in memory only.</param>
     public WorldBossStore(string? filePath = null)
     {
-        this._filePath = filePath;
+        this._stateStore = HnmoStateStore.Open(filePath, SectionKey);
+        this._rowBackend = HnmoPlayerStateRowStoreRegistry.GetBackend(this._stateStore?.FilePath);
         this.Data = this.Load();
     }
 
@@ -340,7 +346,7 @@ public sealed class WorldBossStore
     public object Lock { get; } = new();
 
     /// <summary>Gets the file, if any.</summary>
-    public string? FilePath => this._filePath;
+    public string? FilePath => this._stateStore?.FilePath;
 
     /// <summary>Gets the data.</summary>
     public WorldBossStoreData Data { get; }
@@ -364,23 +370,17 @@ public sealed class WorldBossStore
     /// </summary>
     public void SaveIfChanged()
     {
-        if (!this._changed || this._filePath is null)
+        if (!this._changed || this._stateStore is null)
         {
             this._changed = false;
             return;
         }
 
+        this._owedSync.SaveChanges(this._rowBackend, FeatureOwed, this.Data.Owed, JsonOptions, useDirtySetOnly: true);
+
         try
         {
-            var directory = Path.GetDirectoryName(this._filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            var temporary = this._filePath + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(this.Data, JsonOptions));
-            File.Move(temporary, this._filePath, true);
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(this.Data), JsonOptions);
             this._changed = false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -389,37 +389,41 @@ public sealed class WorldBossStore
         }
     }
 
+    private WorldBossStoreData BuildServerOnlyData(WorldBossStoreData src) => new()
+    {
+        Bosses = src.Bosses,
+        Alive = src.Alive,
+        Kills = src.Kills,
+        Announcements = src.Announcements,
+        WeekKey = src.WeekKey,
+        Week = src.Week,
+        CastleSiegeGuildId = src.CastleSiegeGuildId,
+        CastleSiegeGuildName = src.CastleSiegeGuildName,
+        LastWeek = src.LastWeek,
+        PendingWeeks = src.PendingWeeks,
+        PaidWeeks = src.PaidWeeks,
+    };
+
     private WorldBossStoreData Load()
     {
-        if (this._filePath is null || !File.Exists(this._filePath))
+        if (this._stateStore is null)
         {
             return new WorldBossStoreData();
         }
 
-        try
+        var data = this._stateStore.ReadSection<WorldBossStoreData>(SectionKey, JsonOptions) ?? new WorldBossStoreData();
+        data.Bosses = new Dictionary<string, WorldBossState>(data.Bosses, StringComparer.Ordinal);
+        data.Owed = new Dictionary<string, List<WorldBossOwedReward>>(data.Owed, StringComparer.Ordinal);
+        foreach (var alive in data.Alive)
         {
-            var data = JsonSerializer.Deserialize<WorldBossStoreData>(File.ReadAllText(this._filePath), JsonOptions) ?? new WorldBossStoreData();
-            data.Bosses = new Dictionary<string, WorldBossState>(data.Bosses, StringComparer.Ordinal);
-            data.Owed = new Dictionary<string, List<WorldBossOwedReward>>(data.Owed, StringComparer.Ordinal);
-            foreach (var alive in data.Alive)
-            {
-                alive.Damage = new Dictionary<string, WorldBossDamageEntry>(alive.Damage, StringComparer.Ordinal);
-            }
-
-            return data;
+            alive.Damage = new Dictionary<string, WorldBossDamageEntry>(alive.Damage, StringComparer.Ordinal);
         }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+
+        if (this._owedSync.LoadOrMigrate(this._rowBackend, FeatureOwed, data.Owed, JsonOptions))
         {
-            try
-            {
-                File.Copy(this._filePath, this._filePath + ".broken", true);
-            }
-            catch (Exception copyError) when (copyError is IOException or UnauthorizedAccessException)
-            {
-                // nothing more to do
-            }
-
-            return new WorldBossStoreData();
+            this._stateStore.WriteSection(SectionKey, this.BuildServerOnlyData(data), JsonOptions);
         }
+
+        return data;
     }
 }

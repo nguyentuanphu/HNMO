@@ -19,6 +19,9 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
 {
     private readonly CastleSiegeTaxProvider _castleSiegeTaxProvider = new();
 
+    /// <summary>Gets the recipe number (<c>ItemCrafting.Number</c>) bound to this handler.</summary>
+    public byte? CraftingNumber { get; internal set; }
+
     /// <inheritdoc/>
     public async ValueTask<(CraftingResult Result, Item? Item)> DoMixAsync(Player player, byte socketSlot)
     {
@@ -97,7 +100,8 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
 
         // The price is based on the success rate of the items, so a bonus doesn't make the crafting more expensive.
         var price = this.GetPrice(successRate, items);
-        return (null, items, ApplyCraftingBonus(successRate, player.Attributes?[Stats.CraftingBonusPercentage] ?? 0), price);
+        var rate = ApplyCraftingBonus(successRate, player.Attributes?[Stats.CraftingBonusPercentage] ?? 0);
+        return (null, items, PlugIns.GameplayRules.ChaosRatesPlugIn.AdjustSuccessRate(player, this.CraftingNumber, rate), price);
     }
 
     /// <summary>

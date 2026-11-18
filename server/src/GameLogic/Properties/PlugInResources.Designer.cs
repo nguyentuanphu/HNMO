@@ -5549,6 +5549,42 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("WebsiteConfiguration_GoogleClientId_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_RequireWebsiteLogin_Caption.
+        /// </summary>
+        public static string WebsiteConfiguration_RequireWebsiteLogin_Caption {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_RequireWebsiteLogin_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_RequireWebsiteLogin_Description.
+        /// </summary>
+        public static string WebsiteConfiguration_RequireWebsiteLogin_Description {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_RequireWebsiteLogin_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HnmoTicketLoginHandlerPlugIn_Name.
+        /// </summary>
+        public static string HnmoTicketLoginHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoTicketLoginHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HnmoTicketLoginHandlerPlugIn_Description.
+        /// </summary>
+        public static string HnmoTicketLoginHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoTicketLoginHandlerPlugIn_Description", resourceCulture);
+            }
+        }
             /// <summary>
         ///   Looks up a localized string similar to IllusionTempleStartPlugIn_Name.
         /// </summary>
