@@ -582,10 +582,10 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      (one server at a time). Per server today: an EXP rate multiplier, PvP on/off, a player limit, and join
      requirements (account attributes, also time-limited grants): a server can require e.g. a "VIP" attribute and
      refuses others with "subscription over" / "no subscription". Edited only in the generic server config editor.
-     To do (with ChatGPT's VIP job): buying/granting VIP gives the account the time-limited attribute that VIP
-     servers require (one source of truth); a "Servers" admin page in plain words (name, VIP only yes/no, EXP and
-     drop/zen multipliers, PvP, player limit, which events run there); the server list in the web game and the
-     web client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
+     VIP #39 now gives the account the same-expiry VIP attribute grant (one source of truth). Still to do:
+     a "Servers" admin page in plain words (name, VIP only yes/no, EXP and drop/zen multipliers, PvP, player
+     limit, which events run there); the web game server list marks VIP servers (lock icon, "VIP" label, EN/VI)
+     and explains the refusal with a link to the
      account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
      timetables per server.
 15.7 Worlds (separate databases; owner asked 2026-11-16). Uses: a test world, new seasons (fresh start while the
