@@ -319,7 +319,8 @@ section 12 (the cash shop) still waits for the owner's answers.
 8. Gift codes: keep as they are, plus an admin-set limit per network address / device (one use per address or device per code).
 9. Resets: the character is updated in place by default; the admin switch to log out instead stays.
 10. Reset tiers: 350/380/400 with 20/10/5 per day as the default; the admin can change them.
-11. VIP: bought with coins in the game; the admin can still grant it; players see and manage their VIP on the website's account page.
+11. **Done — VIP application (2026-11-18):** reviewed coin purchases/renewals in the web game and account page, timed benefits/daily coins/notices, and /vip host settings/grant/remove with reasons and audit. Live PostgreSQL/crash/deployment validation remains unverified; VIP servers are separate under 15.6.
+    **Đã có tính năng VIP:** mua/gia hạn trong game web và trang tài khoản, quyền lợi có hạn/quà ngày/thông báo; quản trị tại /vip với lý do và nhật ký. Chưa chứng nhận triển khai thực tế; máy chủ VIP thuộc mục 15.6.
 
 ## Owner requests (2026-11-16, Sydney time) — approved, build on Thursday 2026-11-19 from 13:00 (first)
 - Log in on the website first; the game then opens at the server choice without asking for the password again.
@@ -581,10 +582,10 @@ Not adopted: scripting formulas in a scripting language (admin settings instead)
      (one server at a time). Per server today: an EXP rate multiplier, PvP on/off, a player limit, and join
      requirements (account attributes, also time-limited grants): a server can require e.g. a "VIP" attribute and
      refuses others with "subscription over" / "no subscription". Edited only in the generic server config editor.
-     To do (with ChatGPT's VIP job): buying/granting VIP gives the account the time-limited attribute that VIP
-     servers require (one source of truth); a "Servers" admin page in plain words (name, VIP only yes/no, EXP and
-     drop/zen multipliers, PvP, player limit, which events run there); the server list in the web game and the
-     desktop client marks VIP servers (lock icon, "VIP" label, EN/VI) and explains the refusal with a link to the
+     VIP #39 now gives the account the same-expiry VIP attribute grant (one source of truth). Still to do:
+     a "Servers" admin page in plain words (name, VIP only yes/no, EXP and drop/zen multipliers, PvP, player
+     limit, which events run there); the web game server list marks VIP servers (lock icon, "VIP" label, EN/VI)
+     and explains the refusal with a link to the
      account page's VIP section; per-server drop and zen rates (only EXP exists today); optional: separate event
      timetables per server.
 15.7 Worlds (separate databases; owner asked 2026-11-16). Uses: a test world, new seasons (fresh start while the
