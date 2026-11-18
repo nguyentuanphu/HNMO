@@ -2933,4 +2933,10 @@
   <data name="HnmoAccountSafetyViewPlugIn_Description" xml:space="preserve">
     <value>Sends the account safety state (second password, required actions, locked items) to the web game which asked for it once.</value>
   </data>
+  <data name="HnmoBanNoticeViewPlugIn_Name" xml:space="preserve">
+    <value>HNMO: ban and mute notice (F5 29)</value>
+  </data>
+  <data name="HnmoBanNoticeViewPlugIn_Description" xml:space="preserve">
+    <value>Sends structured bilingual ban or mute reason and Sydney expiry time to the game client.</value>
+  </data>
 </root>

@@ -11145,4 +11145,32 @@ public static class ConnectionExtensions
         }
 
         await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a <see cref="HnmoBanNotice" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">UTF-8 JSON payload containing kind, reasonEn, reasonVi, expiresAtUtc, sydneyEn, and sydneyVi.</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent when a login, character selection, or chat attempt is blocked by an active account, character, network, device ban or mute.
+    /// Causes reaction on client side: The client displays the bilingual EN/VI ban or mute reason and Sydney expiration time.
+    /// </remarks>
+    public static async ValueTask SendHnmoBanNoticeAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoBanNoticeRef.GetRequiredSize(json);
+            var packet = new HnmoBanNoticeRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }}

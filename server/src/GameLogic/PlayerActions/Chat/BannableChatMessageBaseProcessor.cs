@@ -6,27 +6,41 @@ namespace HNMO.GameLogic.PlayerActions.Chat;
 
 using HNMO.GameLogic.PlugIns.BannedWords;
 using HNMO.GameLogic.PlugIns.Chat;
+using HNMO.GameLogic.PlugIns.Moderation;
+using HNMO.GameLogic.Views;
+using HNMO.GameLogic.Views.Login;
 
 /// <summary>
 /// A chat message processor for normal chat.
 /// </summary>
 public abstract class BannableChatMessageBaseProcessor : IChatMessageProcessor
 {
+    /// <summary>Gets or sets an optional moderation service override for unit tests.</summary>
+    internal BanManagerService? BanServiceOverride { get; set; }
+
     /// <inheritdoc />
     public async ValueTask ProcessMessageAsync(Player sender, (string Message, string PlayerName) content)
     {
+        var nowUtc = DateTime.UtcNow;
+        var activeMute = (this.BanServiceOverride ?? BanManagerService.Default).FindActiveChatMute(sender.Account?.LoginName, sender.SelectedCharacter?.Name, nowUtc);
+        if (activeMute is not null)
+        {
+            var isVi = sender.Culture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
+            await sender.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(activeMute))).ConfigureAwait(false);
+            await sender.InvokeViewPlugInAsync<IShowMessagePlugIn>(p => p.ShowMessageAsync(BanManagerService.FormatPlayerNotice(activeMute, isVi), HNMO.Interfaces.MessageType.BlueNormal)).ConfigureAwait(false);
+            return;
+        }
+
         TimeSpan remainingChatBan = this.RemainingChatBanTimeSpan(sender);
         if (this.IsSenderBanned(remainingChatBan))
         {
-            if (remainingChatBan.TotalMinutes >= 1)
-            {
-                await sender.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ChatBanMinutesRemaining), (int)Math.Ceiling(remainingChatBan.TotalMinutes)).ConfigureAwait(false);
-            }
-            else
-            {
-                await sender.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ChatBanSecondsRemaining), (int)Math.Ceiling(remainingChatBan.TotalSeconds)).ConfigureAwait(false);
-            }
-
+            var untilUtc = sender.Account?.ChatBanUntil;
+            var isVi = sender.Culture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
+            var untilSydney = BanManagerService.FormatSydneyExpiry(untilUtc, isVi);
+            var msg = isVi
+                ? $"Bạn đang bị cấm chat đến {untilSydney}."
+                : $"You are muted until {untilSydney}.";
+            await sender.InvokeViewPlugInAsync<IShowMessagePlugIn>(p => p.ShowMessageAsync(msg, HNMO.Interfaces.MessageType.BlueNormal)).ConfigureAwait(false);
             return;
         }
 
@@ -59,8 +73,5 @@ public abstract class BannableChatMessageBaseProcessor : IChatMessageProcessor
         return chatBanUntil - currentDateTime;
     }
 
-    private bool IsSenderBanned(TimeSpan remainingChatBan)
-    {
-        return remainingChatBan > TimeSpan.Zero;
-    }
+    private bool IsSenderBanned(TimeSpan remainingChatBan) => remainingChatBan > TimeSpan.Zero;
 }

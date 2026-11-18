@@ -4595,4 +4595,13 @@
   <data name="HostSettingsPasswordMasked" xml:space="preserve">
     <value>Current password is hidden for security. Enter a new password below only if you want to change it.</value>
   </data>
+  <data name="NavBanManager" xml:space="preserve">
+    <value>Bans &amp; Mutes</value>
+  </data>
+  <data name="BanManagerPageTitle" xml:space="preserve">
+    <value>Bans &amp; Mutes Manager</value>
+  </data>
+  <data name="BanManagerPageHelp" xml:space="preserve">
+    <value>Issue or lift timed and permanent bans or chat mutes for accounts, characters, networks, and devices. Network and device identifiers are hashed with a persistent server salt and are never stored in plain text. Players see the reason and Sydney expiry time at login, character selection, or chat.</value>
+  </data>
 </root>
