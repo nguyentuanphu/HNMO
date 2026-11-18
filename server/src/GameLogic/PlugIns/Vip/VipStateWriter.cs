@@ -112,7 +112,7 @@ public static class VipStateWriter
                 active.Intent.DailyCoins,
                 dailyCoinType = active.Intent.DailyCoinType.ToString(),
             },
-            legacyLevel = legacy > 0 && pending is null ? (float?)legacy : null,
+            legacyLevel = legacy > 0 && pending is null && !VipWallet.HasUnconfirmed(context) ? (float?)legacy : null,
             offers,
             pending = pending is null ? null : new
             {

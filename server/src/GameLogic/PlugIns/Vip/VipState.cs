@@ -30,4 +30,11 @@ public sealed class VipState
 
     /// <summary>Gets or sets account-bound database receipt references for rebuilding the shared-state projection.</summary>
     public Dictionary<string, string> WalletReferences { get; set; } = [];
+
+    /// <summary>Gets or sets host removal intents persisted before the account mutation.</summary>
+    public Dictionary<Guid, VipRemovalIntent> RemovalIntents { get; set; } = [];
+
+    /// <summary>Gets or sets confirmed host removal identifiers for projection and audit replay protection.</summary>
+    public HashSet<Guid> RemovedOperations { get; set; } = [];
+
 }

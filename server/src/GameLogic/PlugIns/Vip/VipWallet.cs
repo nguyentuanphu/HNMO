@@ -51,6 +51,29 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         }
     }
 
+    /// <summary>Reads recognized private removal proof; public histories must redact this metadata.</summary>
+    /// <param name="reason">The saved row metadata.</param>
+    /// <returns>The proof or null.</returns>
+    public static VipRemovalReceipt? ReadRemovalReceipt(string? reason)
+    {
+        if (reason is null || reason.Length > 8192 || !reason.StartsWith('{'))
+        {
+            return null;
+        }
+
+        try
+        {
+            var proof = JsonSerializer.Deserialize<VipRemovalReceipt>(reason);
+            return proof is { Kind: "vip-remove-v1", Intent: { Attribution.IsValid: true, GrantIds.Count: 3 } }
+                && proof.Intent.AccountId != Guid.Empty && proof.Intent.OperationId != Guid.Empty
+                && proof.Intent.GrantIds.Distinct().Count() == 3 && !proof.Intent.GrantIds.Contains(Guid.Empty) ? proof : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
     /// <summary>Purchases or retries one server-priced offer without charging its identifier twice.</summary>
     /// <param name="context">The exclusively owned account context.</param>
     /// <param name="account">The authenticated account loaded in that context.</param>
@@ -73,19 +96,6 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
         string? offerToken = null,
         CancellationToken cancellationToken = default)
         => this.PurchaseCoreAsync(context, account, operationId, levelId, days, nowUtc, save, offerToken, cancellationToken);
-
-    /// <summary>Runs a host-attributed free grant; public player adapters cannot select this mode.</summary>
-    /// <param name="context">The exclusively owned context.</param>
-    /// <param name="account">The authorized target account.</param>
-    /// <param name="operationId">The stable host operation.</param>
-    /// <param name="levelId">The configured level.</param>
-    /// <param name="days">The granted duration.</param>
-    /// <param name="nowUtc">The current UTC instant.</param>
-    /// <param name="save">Commits this same context.</param>
-    /// <param name="administration">The authenticated actor and required reason.</param>
-    /// <returns>The wallet outcome.</returns>
-    internal ValueTask<VipWalletResult> PurchaseFromHostAsync(IPlayerContext context, Account account, Guid operationId, int levelId, int days, DateTime nowUtc, Func<ValueTask<bool>> save, VipAdministrativeGrant administration)
-        => this.PurchaseCoreAsync(context, account, operationId, levelId, days, nowUtc, save, null, default, administration);
 
     /// <summary>Reads the paid, active entitlement from account grants and database proof, rebuilding only its file projection.</summary>
     /// <param name="context">The authenticated account's owned context.</param>
@@ -124,6 +134,46 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
     /// <returns>Whether any tracked purchase still needs its save confirmed.</returns>
     internal static bool HasUnconfirmed(IPlayerContext context)
         => TrackedReceipts.TryGetValue(context, out var tracked) && tracked.Count > 0;
+
+    /// <summary>Runs a host-attributed free grant; public player adapters cannot select this mode.</summary>
+    /// <param name="context">The exclusively owned context.</param>
+    /// <param name="account">The authorized target account.</param>
+    /// <param name="operationId">The stable host operation.</param>
+    /// <param name="levelId">The configured level.</param>
+    /// <param name="days">The granted duration.</param>
+    /// <param name="nowUtc">The current UTC instant.</param>
+    /// <param name="save">Commits this same context.</param>
+    /// <param name="administration">The authenticated actor and required reason.</param>
+    /// <returns>The wallet outcome.</returns>
+    internal ValueTask<VipWalletResult> PurchaseFromHostAsync(IPlayerContext context, Account account, Guid operationId, int levelId, int days, DateTime nowUtc, Func<ValueTask<bool>> save, VipAdministrativeGrant administration)
+        => this.PurchaseCoreAsync(context, account, operationId, levelId, days, nowUtc, save, null, default, administration);
+
+    /// <summary>Expires only this plug-in's proved grants, atomically with an attributed database receipt.</summary>
+    /// <param name="context">The exclusively owned account context.</param>
+    /// <param name="account">The authorized target.</param>
+    /// <param name="operationId">The stable host operation.</param>
+    /// <param name="attribution">The authenticated host and required reason.</param>
+    /// <param name="nowUtc">The current UTC instant.</param>
+    /// <param name="save">Commits this same context.</param>
+    /// <returns>The confirmed, pending or conflicting result.</returns>
+    internal async ValueTask<VipWalletResult> RemoveFromHostAsync(IPlayerContext context, Account account, Guid operationId, VipAdministrativeGrant attribution, DateTime nowUtc, Func<ValueTask<bool>> save)
+    {
+        if (account.GetId() == Guid.Empty || operationId == Guid.Empty || !attribution.IsValid || nowUtc.Kind != DateTimeKind.Utc)
+        {
+            return new("Refused", VipRuleResult.Invalid);
+        }
+
+        var gate = AccountGates.GetOrAdd(account.GetId(), _ => new(1, 1));
+        await gate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            return await this.RemoveOwnedAsync(context, account, operationId, attribution, nowUtc, save).ConfigureAwait(false);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
 
     private static VipWalletReceipt? MatchActiveProof(CashShopCoinGrant row, Account account, HashSet<Guid> activeIds)
     {
@@ -239,7 +289,7 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             }
             else
             {
-                if (store.Data.Payments.ContainsKey(operationId))
+                if (store.Data.Payments.ContainsKey(operationId) || store.Data.RemovalIntents.ContainsKey(operationId))
                 {
                     return new("Conflict");
                 }
@@ -355,8 +405,12 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             if (!store.Data.Payments.ContainsKey(intent.OperationId))
             {
                 store.Data.Payments[intent.OperationId] = intent.Plan;
-                store.Data.Audit.Add(new(nowUtc, intent.Plan.LoginName, intent.Administration is null ? "purchase" : "grant",
-                    intent.Administration?.Actor ?? "wallet", intent.Administration?.Reason ?? intent.OperationId.ToString("N")));
+                store.Data.Audit.Add(new(
+                    nowUtc,
+                    intent.Plan.LoginName,
+                    intent.Administration is null ? "purchase" : "grant",
+                    intent.Administration?.Actor ?? "wallet",
+                    intent.Administration?.Reason ?? intent.OperationId.ToString("N")));
             }
 
             // Rebuild a missing file projection only from an actual active account grant and its paid proof.
@@ -473,4 +527,127 @@ public sealed class VipWallet(VipConfiguration configuration, VipStateStore stor
             return false;
         }
     }
+
+    private async ValueTask<VipWalletResult> RemoveOwnedAsync(IPlayerContext context, Account account, Guid operationId, VipAdministrativeGrant attribution, DateTime nowUtc, Func<ValueTask<bool>> save)
+    {
+        var reference = $"vipremove:{account.GetId():N}:{operationId:N}";
+        var tracked = TrackedReceipts.GetOrCreateValue(context);
+        var wasTracked = tracked.TryGetValue(operationId, out var row);
+        row ??= await context.GetCashShopCoinGrantByReferenceAsync(reference).ConfigureAwait(false);
+        if (row is not null)
+        {
+            var proof = ReadRemovalReceipt(row.Reason);
+            if (proof is null || proof.Intent.AccountId != account.GetId() || proof.Intent.OperationId != operationId
+                || proof.Intent.Attribution != attribution || proof.Intent.LoginName != account.LoginName.Trim().ToUpperInvariant()
+                || row.AccountId != account.GetId() || row.Reference != reference || row.Amount != 0 || row.AppliedAt is null)
+            {
+                return new("Conflict");
+            }
+
+            if (wasTracked && !await this.TrySaveAsync(save, operationId).ConfigureAwait(false))
+            {
+                return new("Pending");
+            }
+
+            tracked.Remove(operationId);
+            return this.ConfirmRemoval(proof.Intent, nowUtc);
+        }
+
+        if (tracked.Count > 0)
+        {
+            return new("Pending");
+        }
+
+        var active = await this.ReadActiveOwnedAsync(context, account, nowUtc).ConfigureAwait(false);
+        VipRemovalIntent intent;
+        lock (store.SyncRoot)
+        {
+            if (store.Data.WalletIntents.ContainsKey(operationId) || store.Data.Payments.ContainsKey(operationId))
+            {
+                return new("Conflict");
+            }
+
+            if (store.Data.RemovalIntents.TryGetValue(operationId, out var previous))
+            {
+                if (previous.AccountId != account.GetId() || previous.Attribution != attribution)
+                {
+                    return new("Conflict");
+                }
+
+                intent = previous;
+            }
+            else
+            {
+                if (active is null)
+                {
+                    return new("Conflict");
+                }
+
+                intent = new(account.GetId(), operationId, account.LoginName.Trim().ToUpperInvariant(), attribution, nowUtc, active.GrantIds.ToList());
+                store.Data.RemovalIntents.Add(operationId, intent);
+            }
+
+            // A retried removal is bound to the reviewed interval, never a newer purchase.
+            if (active is null || !active.GrantIds.ToHashSet().SetEquals(intent.GrantIds))
+            {
+                return new("Conflict");
+            }
+
+            store.Save();
+        }
+
+        foreach (var grant in account.AttributeGrants.Where(value => intent.GrantIds.Contains(value.GetId())))
+        {
+            grant.ValidUntil = nowUtc;
+        }
+
+        row = context.CreateNew<CashShopCoinGrant>();
+        row.AccountId = account.GetId();
+        row.CoinType = CashShopCoinType.WCoinC;
+        row.Amount = 0;
+        row.CreatedAt = nowUtc;
+        row.AppliedAt = nowUtc;
+        row.Reference = reference;
+        row.Reason = JsonSerializer.Serialize(new VipRemovalReceipt("vip-remove-v1", intent));
+        tracked.Add(operationId, row);
+        if (!await this.TrySaveAsync(save, operationId).ConfigureAwait(false))
+        {
+            return new("Pending");
+        }
+
+        tracked.Remove(operationId);
+        return this.ConfirmRemoval(intent, nowUtc);
+    }
+
+    private VipWalletResult ConfirmRemoval(VipRemovalIntent intent, DateTime nowUtc)
+    {
+        lock (store.SyncRoot)
+        {
+            if (store.Data.RemovedOperations.Add(intent.OperationId))
+            {
+                store.Data.Audit.Add(new(nowUtc, intent.LoginName, "remove", intent.Attribution.Actor, intent.Attribution.Reason));
+            }
+
+            // A late replay confirms the old receipt without erasing a newer subscription's projection.
+            if (store.Data.OwnedGrants.TryGetValue(intent.LoginName, out var current) && current.ToHashSet().SetEquals(intent.GrantIds))
+            {
+                store.Data.OwnedGrants.Remove(intent.LoginName);
+                store.Data.Memberships.Remove(intent.LoginName);
+                store.Data.WalletReferences.Remove(intent.LoginName);
+            }
+
+            try
+            {
+                store.Save();
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "VIP removal {OperationId} is committed but its shared-state projection needs retry.", intent.OperationId);
+                return new("Pending");
+            }
+        }
+
+        return new("Applied");
+    }
+
 }

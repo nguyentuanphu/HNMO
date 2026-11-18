@@ -54,4 +54,16 @@ public sealed class VipAdministration(VipConfiguration configuration, VipStateSt
         var wallet = new VipWallet(hostOffer, store, gameConfiguration, logger);
         return wallet.PurchaseFromHostAsync(context, account, operationId, levelId, days, nowUtc, save, attribution);
     }
+
+    /// <summary>Removes this plug-in's current VIP interval without touching foreign grants or charging coins.</summary>
+    /// <param name="context">The exclusively owned account context.</param>
+    /// <param name="account">The authorized target account.</param>
+    /// <param name="operationId">The stable host retry identifier.</param>
+    /// <param name="attribution">The authenticated host and required reason.</param>
+    /// <param name="nowUtc">The current UTC instant.</param>
+    /// <param name="save">Commits this same account context.</param>
+    /// <returns>The confirmed, pending or conflicting result.</returns>
+    public ValueTask<VipWalletResult> RemoveAsync(IPlayerContext context, Account account, Guid operationId, VipAdministrativeGrant attribution, DateTime nowUtc, Func<ValueTask<bool>> save)
+        => new VipWallet(configuration, store, gameConfiguration, logger).RemoveFromHostAsync(context, account, operationId, attribution, nowUtc, save);
+
 }

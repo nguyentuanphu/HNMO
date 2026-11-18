@@ -595,6 +595,79 @@ public class VipWalletTests
         Assert.That(this._account.WCoinC, Is.EqualTo(1000));
     }
 
+    /// <summary>Removal affects only owned grants and an old removal replay cannot erase a newer subscription.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task AdministrativeRemovalKeepsForeignBonusesAndNewPurchasesAsync()
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var foreign = this._context.CreateNew<AccountAttributeGrant>();
+        foreign.Attribute = this._game.Attributes.Single(value => value.Id == Stats.BonusExperienceRate.Id);
+        foreign.Value = 0.1f;
+        foreign.ValidFrom = Now;
+        foreign.ValidUntil = Now.AddDays(30);
+        this._account.AttributeGrants.Add(foreign);
+        var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);
+        var operation = Guid.NewGuid();
+        var actor = new VipAdministrativeGrant("host", "Revoke this interval");
+        var result = await admin.RemoveAsync(this._context, this._account, operation, actor, Now.AddHours(1), () => this._context.SaveChangesAsync()).ConfigureAwait(false);
+        Assert.That(result.Status, Is.EqualTo("Applied"));
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, Now.AddHours(1)), Is.Zero);
+        Assert.That(this._account.GetAccountAttributeValue(Stats.BonusExperienceRate, Now.AddHours(1)), Is.EqualTo(0.1f));
+        var row = (await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false)).Single(value => value.Reference.StartsWith("vipremove:", StringComparison.Ordinal));
+        Assert.That(row.Amount, Is.Zero);
+        Assert.That(VipWallet.ReadRemovalReceipt(row.Reason)!.Intent.Attribution, Is.EqualTo(actor));
+        Assert.That(this._store.Data.Memberships, Is.Empty);
+        var fresh = await this.BuyAsync(Guid.NewGuid(), Now.AddHours(2)).ConfigureAwait(false);
+        Assert.That(fresh.Status, Is.EqualTo("Applied"));
+        var expiry = fresh.Membership!.UntilUtc;
+        Assert.That((await admin.RemoveAsync(this._context, this._account, operation, actor, Now.AddHours(3), () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Applied"));
+        Assert.That((await this._wallet.ReadActiveAsync(this._context, this._account, Now.AddHours(3)).ConfigureAwait(false))!.Intent.Membership.UntilUtc, Is.EqualTo(expiry));
+        Assert.That(this._account.WCoinC, Is.EqualTo(800));
+        Assert.That(this._store.Data.Audit.Count(value => value.Action == "remove"), Is.EqualTo(1));
+    }
+
+    /// <summary>Failed removal saves retain one attributed marker, block other mutations, and retry without a second change.</summary>
+    /// <param name="throws">Whether persistence throws rather than returning false.</param>
+    /// <returns>The test task.</returns>
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task AdministrativeRemovalSaveFailureRecoversAsync(bool throws)
+    {
+        await this.BuyAsync(Guid.NewGuid(), Now).ConfigureAwait(false);
+        var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);
+        var operation = Guid.NewGuid();
+        var actor = new VipAdministrativeGrant("host", "Correct an earlier grant");
+        var pending = await admin.RemoveAsync(this._context, this._account, operation, actor, Now.AddHours(1), () => throws ? ValueTask.FromException<bool>(new InvalidOperationException("injected removal failure")) : ValueTask.FromResult(false)).ConfigureAwait(false);
+        Assert.That(pending.Status, Is.EqualTo("Pending"));
+        Assert.That((await this.BuyAsync(Guid.NewGuid(), Now.AddHours(1)).ConfigureAwait(false)).Status, Is.EqualTo("Pending"));
+        Assert.That((await admin.RemoveAsync(this._context, this._account, operation, actor with { Reason = "changed reason" }, Now.AddHours(1), () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
+        Assert.That((await admin.RemoveAsync(this._context, this._account, operation, actor, Now.AddHours(2), () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Applied"));
+        Assert.That(this._account.WCoinC, Is.EqualTo(900));
+        Assert.That(this._account.GetAccountAttributeValue(Stats.IsVip, Now.AddHours(2)), Is.Zero);
+        var rows = await this._context.GetCashShopCoinHistoryAsync(this._account.GetId(), 0, 20).ConfigureAwait(false);
+        Assert.That(rows.Count(value => value.Reference.StartsWith("vipremove:", StringComparison.Ordinal)), Is.EqualTo(1));
+    }
+
+    /// <summary>Unowned legacy VIP and missing reasons cannot be removed by this plug-in.</summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task AdministrativeRemovalRequiresOwnershipAndReasonAsync()
+    {
+        var foreign = this._context.CreateNew<AccountAttributeGrant>();
+        foreign.Attribute = this._game.Attributes.Single(value => value.Id == Stats.IsVip.Id);
+        foreign.Value = 5;
+        foreign.ValidFrom = Now;
+        foreign.ValidUntil = Now.AddDays(30);
+        this._account.AttributeGrants.Add(foreign);
+        var admin = new VipAdministration(this._configuration, this._store, this._game, NullLogger.Instance);
+        Assert.That((await admin.RemoveAsync(this._context, this._account, Guid.NewGuid(), new("host", " "), Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Refused"));
+        Assert.That((await admin.RemoveAsync(this._context, this._account, Guid.NewGuid(), new("host", "Review legacy entitlement"), Now, () => this._context.SaveChangesAsync()).ConfigureAwait(false)).Status, Is.EqualTo("Conflict"));
+        Assert.That(foreign.ValidUntil, Is.EqualTo(Now.AddDays(30)));
+        Assert.That(this._store.Data.RemovalIntents, Is.Empty);
+    }
+
     private ValueTask<VipWalletResult> BuyAsync(Guid operation, DateTime now)
         => this._wallet.PurchaseAsync(this._context, this._account, operation, 1, 7, now, () => this._context.SaveChangesAsync());
 }
