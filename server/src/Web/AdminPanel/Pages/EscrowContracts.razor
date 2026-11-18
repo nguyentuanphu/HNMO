@@ -163,6 +163,66 @@ else if (this._configuration is { } c)
                     </div>
                 </div>
 
+                <div class="col-12 border-top pt-3 mt-2" id="escrow-host-vnd-config">
+                    <h3 class="h6 text-danger mb-2">@L("Host-Mediated VND Contracts (Host Collects & Pays Out)", "Hợp đồng VND qua Chủ Server (Chủ nhận & trả tiền)")</h3>
+                    <div class="alert alert-warning small mb-2" role="alert" id="escrow-host-vnd-warning">
+                        <strong>@L("Legal compliance check required (Vietnam):", "Cảnh báo tuân thủ pháp luật Việt Nam:")</strong>
+                        @L(
+                            "Before enabling host-mediated real-money (VND) settlement, the host must verify Vietnamese regulations on online games and licensed payment intermediaries / e-wallets. Keep this OFF unless legally permitted.",
+                            "Trước khi bật chế độ chủ server giữ tiền VNĐ trung gian, chủ server phải kiểm tra kỹ quy định pháp luật Việt Nam về trò chơi điện tử trên mạng và dịch vụ trung gian thanh toán / ví điện tử. Chỉ bật khi được phép hợp pháp.")
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" id="escrow-host-understand" type="checkbox" @bind="c.HostVndComplianceAcknowledged" />
+                            <label class="form-check-label fw-semibold" for="escrow-host-understand">
+                                @L("I understand and take full legal responsibility as host", "Tôi hiểu và tự chịu trách nhiệm pháp lý với tư cách chủ server")
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="escrow-host-enabled" type="checkbox" disabled="@(!c.HostVndComplianceAcknowledged)" @bind="c.HostVndEnabled" />
+                                <label class="form-check-label" for="escrow-host-enabled" title="@L("Enable host-mediated VND contracts with Host VietQR & Casso/SePay webhook", "Bật hợp đồng VND trung gian qua VietQR chủ server")">@L("Enable Host VND", "Bật VND qua chủ")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-bin" title="@L("Host 6-digit NAPAS BIN", "Mã BIN NAPAS ngân hàng chủ")">@L("Host BIN", "BIN chủ")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-bin" type="text" @bind="c.HostVndBankBin" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-bname">@L("Host bank", "Ngân hàng chủ")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-bname" type="text" @bind="c.HostVndBankName" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-acct">@L("Host account", "STK nhận tiền")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-acct" type="text" @bind="c.HostVndBankAccountNumber" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-hv-holder">@L("Host holder name", "Chủ tài khoản")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-holder" type="text" @bind="c.HostVndBankAccountName" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-pct">@L("Fee %", "Phí %")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-pct" type="number" step="0.1" min="0" max="25" @bind="c.HostVndFeePercent" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-min">@L("Min fee (VND)", "Phí tối thiểu")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-min" type="number" min="0" @bind="c.HostVndMinFeeVnd" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label" for="escrow-hv-max">@L("Max fee (0=uncap)", "Phí tối đa")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-max" type="number" min="0" @bind="c.HostVndMaxFeeVnd" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-hv-pdays">@L("Payout SLA (days)", "Hạn trả tiền (ngày)")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-pdays" type="number" min="0" max="30" @bind="c.HostVndPayoutDays" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="escrow-hv-dhrs">@L("Dispute window (h)", "Hạn khiếu nại (h)")</label>
+                            <input class="form-control form-control-sm" id="escrow-hv-dhrs" type="number" min="1" max="168" @bind="c.HostVndDisputeWindowHours" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-12 d-flex gap-2">
                     <button type="button" class="btn btn-primary btn-sm" id="escrow-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
                     <button type="button" class="btn btn-outline-secondary btn-sm" id="escrow-refresh" @onclick="this.LoadAsync">@L("Refresh", "Làm mới")</button>
@@ -312,6 +372,68 @@ else if (this._configuration is { } c)
                         }
                     </div>
                 }
+            }
+        </div>
+    </section>
+
+    <section class="card mb-3" id="escrow-host-payouts-card">
+        <div class="card-body">
+            <h2 class="h5 mb-2">@L("Host VND Payouts to Make & Disputes", "Hàng chờ trả tiền VND & Khiếu nại")</h2>
+            <div class="input-group input-group-sm mb-2">
+                <span class="input-group-text">@L("Payout / Bank Ref", "Mã giao dịch trả")</span>
+                <input class="form-control" id="escrow-payout-ref" type="text" @bind="this._hostPayoutRef" placeholder="@L("Bank transfer reference when marking paid", "Mã bút toán ngân hàng khi trả người bán")" />
+            </div>
+            @{
+                var hostList = this._contracts.Where(x => x.HostVnd is not null && (x.Status is EscrowContractStatus.ReservedForPayment or EscrowContractStatus.Disputed || x.HostVnd.PayoutStatus != "None")).ToList();
+            }
+            @if (hostList.Count == 0)
+            {
+                <p class="text-muted mb-0" id="escrow-no-host-payouts">@L("No Host VND payouts queued or pending.", "Chưa có yêu cầu chi trả VND nào.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0" id="escrow-host-payouts-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Contract", "Hợp đồng")</th>
+                                <th>@L("Seller Bank (Payout)", "TK nhận người bán")</th>
+                                <th class="text-end">@L("Net Payout", "Thực trả")</th>
+                                <th class="text-end">@L("Host Fee", "Phí chủ")</th>
+                                <th>@L("Status / Due", "Trạng thái / Hạn")</th>
+                                <th>@L("Actions", "Thao tác")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in hostList)
+                            {
+                                var hv = h.HostVnd!;
+                                <tr>
+                                    <td><code>@h.ContractId</code><div class="small text-muted">@hv.PaymentReference</div></td>
+                                    <td class="small">@h.SellerLogin: @hv.SellerBankName (@hv.SellerBankBin)<br /><code>@hv.SellerBankAccountNumber</code> — @hv.SellerBankAccountName</td>
+                                    <td class="text-end fw-semibold">@hv.NetSellerPayoutVnd.ToString("N0", CultureInfo.InvariantCulture) VND</td>
+                                    <td class="text-end">@hv.HostFeeVnd.ToString("N0", CultureInfo.InvariantCulture) VND</td>
+                                    <td class="small"><span class="badge bg-secondary">@hv.PayoutStatus</span><div>@hv.PayoutDueAtSydney</div></td>
+                                    <td class="d-flex flex-wrap gap-1">
+                                        @if (h.Status == EscrowContractStatus.ReservedForPayment)
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-outline-primary" @onclick="() => this.ConfirmHostPaymentManualAsync(h)">@L("Confirm Buyer Paid", "Xác nhận đã thu")</button>
+                                        }
+                                        @if (hv.PayoutStatus == "Queued" && h.Status != EscrowContractStatus.Disputed)
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.MarkHostPayoutPaidAsync(h.ContractId)">@L("Mark Payout Paid", "Đã chuyển trả")</button>
+                                        }
+                                        @if (h.Status == EscrowContractStatus.Disputed)
+                                        {
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-success" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, true)">@L("Release to Seller", "Trả tiền người bán")</button>
+                                            <button type="button" class="btn btn-sm py-0 px-1 btn-warning" @onclick="() => this.ResolveHostDisputeAsync(h.ContractId, false)">@L("Refund Buyer", "Hoàn tiền người mua")</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             }
         </div>
     </section>

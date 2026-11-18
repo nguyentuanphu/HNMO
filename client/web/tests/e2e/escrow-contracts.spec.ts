@@ -44,4 +44,23 @@ test.describe('Escrow Contracts window & packets', () => {
     expect(payload).toContain('500000');
     expect(payload).toContain('HNMO-7K9P2M');
   });
+
+  test('Host-mediated VND calculates commission and net seller payout', async ({ page }) => {
+    const hostCalc = await page.evaluate(() => {
+      const compute = (vnd: number, pct: number, minVnd: number, maxVnd: number) => {
+        let fee = Math.round(vnd * (pct / 100));
+        if (fee < minVnd) fee = minVnd;
+        if (maxVnd > 0 && fee > maxVnd) fee = maxVnd;
+        fee = Math.min(vnd, Math.max(0, fee));
+        return { fee, payout: vnd - fee };
+      };
+      return {
+        mid: compute(600_000, 5, 5000, 0),
+        capped: compute(2_000_000, 5, 5000, 50_000),
+      };
+    });
+
+    expect(hostCalc.mid).toEqual({ fee: 30_000, payout: 570_000 });
+    expect(hostCalc.capped).toEqual({ fee: 50_000, payout: 1_950_000 });
+  });
 });

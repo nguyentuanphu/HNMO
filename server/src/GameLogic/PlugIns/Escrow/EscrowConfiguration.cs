@@ -111,4 +111,40 @@ public sealed class EscrowConfiguration
 
     /// <summary>Gets or sets maximum receipt image byte size (default 512 KB).</summary>
     public int DirectVndMaxReceiptBytes { get; set; } = 524_288;
+
+    /// <summary>Gets or sets a value indicating whether Host-mediated VND contracts are enabled (OFF by default).</summary>
+    public bool HostVndEnabled { get; set; }
+
+    /// <summary>Gets or sets a value indicating whether host ticked acknowledgement to check Vietnamese rules before enabling Host-mediated VND.</summary>
+    public bool HostVndComplianceAcknowledged { get; set; }
+
+    /// <summary>Gets or sets host bank 6-digit NAPAS BIN for receiving buyer VietQR payments.</summary>
+    public string HostVndBankBin { get; set; } = "970436";
+
+    /// <summary>Gets or sets host bank name for buyer VietQR display.</summary>
+    public string HostVndBankName { get; set; } = "Vietcombank";
+
+    /// <summary>Gets or sets host receiving bank account number.</summary>
+    public string HostVndBankAccountNumber { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets host receiving bank account holder name.</summary>
+    public string HostVndBankAccountName { get; set; } = string.Empty;
+
+    /// <summary>Gets or sets host commission fee % on Host-mediated VND sales (0..25%).</summary>
+    public double HostVndFeePercent { get; set; } = 5.0;
+
+    /// <summary>Gets or sets minimum VND host fee when fee % &gt; 0.</summary>
+    public long HostVndMinFeeVnd { get; set; } = 5000;
+
+    /// <summary>Gets or sets maximum VND host fee cap (0 = uncapped).</summary>
+    public long HostVndMaxFeeVnd { get; set; }
+
+    /// <summary>Gets or sets buyer payment window minutes when reserving a Host VND contract.</summary>
+    public int HostVndPaymentWindowMinutes { get; set; } = 30;
+
+    /// <summary>Gets or sets days allowed for admin to execute queued seller payouts.</summary>
+    public int HostVndPayoutDays { get; set; } = 3;
+
+    /// <summary>Gets or sets post-delivery dispute window hours before seller payout clears.</summary>
+    public int HostVndDisputeWindowHours { get; set; } = 24;
 }

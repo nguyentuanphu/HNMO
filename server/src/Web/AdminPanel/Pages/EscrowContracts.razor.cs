@@ -34,6 +34,7 @@ public partial class EscrowContracts : ComponentBase
     private List<EscrowReputationEntry> _reputations = [];
     private string _bannedItemsText = string.Empty;
     private string _adminReason = string.Empty;
+    private string _hostPayoutRef = string.Empty;
     private bool _banLosingAccount;
     private bool _isLoading = true;
     private bool _isSaving;
@@ -146,6 +147,15 @@ public partial class EscrowContracts : ComponentBase
                 this.ToastService.ShowError(L(
                     "Please tick 'I understand' under the Vietnamese law notice before enabling Direct P2P VND.",
                     "Vui lòng đánh dấu 'Tôi hiểu' tại cảnh báo pháp lý Việt Nam trước khi bật VND P2P trực tiếp."));
+                return;
+            }
+
+            if (cfg.HostVndEnabled && !cfg.HostVndComplianceAcknowledged)
+            {
+                cfg.HostVndEnabled = false;
+                this.ToastService.ShowError(L(
+                    "Please tick 'I understand' under the Vietnamese law notice before enabling Host-mediated VND.",
+                    "Vui lòng đánh dấu 'Tôi hiểu' tại cảnh báo pháp lý Việt Nam trước khi bật VND qua chủ server."));
                 return;
             }
 
@@ -266,6 +276,87 @@ public partial class EscrowContracts : ComponentBase
         this.ToastService.ShowSuccess(awardToBuyer
             ? L("Dispute resolved for buyer (seller bond forfeited).", "Đã xử lý giao hàng cho người mua (tịch thu cọc người bán).")
             : L("Dispute resolved for seller (goods & bond returned).", "Đã hoàn hàng & cọc cho người bán."));
+        await this.LoadAsync().ConfigureAwait(true);
+    }
+
+    private async Task ConfirmHostPaymentManualAsync(EscrowContract contract)
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var engine = this.ResolveEngine();
+        var host = new EscrowHostVndEngine(cfg, engine.Store);
+        var txId = string.IsNullOrWhiteSpace(this._hostPayoutRef) ? $"ADM-{DateTime.UtcNow:yyyyMMddHHmmss}" : this._hostPayoutRef.Trim();
+        var (err, _) = host.ConfirmHostPaymentReceived(contract.HostVnd?.PaymentReference, contract.PriceAmount, txId, DateTime.UtcNow);
+        if (err == "Ok")
+        {
+            ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+            {
+                Id = $"esc-hvman-{Guid.NewGuid():N}",
+                TimestampUtc = DateTime.UtcNow,
+                Kind = ActivityKind.Trade,
+                Account = "ADMIN",
+                PartnerAccount = contract.AcceptedByLogin,
+                Details = $"Admin confirmed host VND payment {contract.ContractId} ({contract.PriceAmount:N0} VND); item released, payout queued.",
+            });
+            this.ToastService.ShowSuccess(L("Confirmed Host VND payment; item released & payout queued.", "Đã xác nhận tiền vào TK chủ server; đã giao đồ & xếp hàng chờ trả người bán."));
+            await this.LoadAsync().ConfigureAwait(true);
+        }
+        else
+        {
+            this.ToastService.ShowError(L($"Cannot confirm ({err}).", $"Không thể xác nhận ({err})."));
+        }
+    }
+
+    private async Task MarkHostPayoutPaidAsync(string contractId)
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var engine = this.ResolveEngine();
+        var host = new EscrowHostVndEngine(cfg, engine.Store);
+        var (err, updated) = host.MarkPayoutPaid(contractId, this._hostPayoutRef, DateTime.UtcNow);
+        if (err == "Ok" && updated is not null)
+        {
+            ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+            {
+                Id = $"esc-hvpout-{Guid.NewGuid():N}",
+                TimestampUtc = DateTime.UtcNow,
+                Kind = ActivityKind.Trade,
+                Account = "ADMIN",
+                PartnerAccount = updated.SellerLogin,
+                Details = $"Marked Host VND payout paid for {contractId} ({updated.HostVnd?.NetSellerPayoutVnd:N0} VND, ref={updated.HostVnd?.PayoutReference})",
+            });
+            this.ToastService.ShowSuccess(L("Marked seller payout paid.", "Đã đánh dấu đã thanh toán cho người bán."));
+            await this.LoadAsync().ConfigureAwait(true);
+        }
+        else
+        {
+            this.ToastService.ShowError(L($"Cannot mark payout paid ({err}).", $"Không thể đánh dấu đã trả ({err})."));
+        }
+    }
+
+    private async Task ResolveHostDisputeAsync(string contractId, bool releasePayoutToSeller)
+    {
+        var cfg = this._configuration ?? new EscrowConfiguration();
+        var engine = this.ResolveEngine();
+        var host = new EscrowHostVndEngine(cfg, engine.Store);
+        var note = string.IsNullOrWhiteSpace(this._adminReason)
+            ? (releasePayoutToSeller ? "Cleared for seller payout" : "Cancelled for buyer refund")
+            : this._adminReason.Trim();
+        var (err, _, loser) = host.ResolveHostDispute(contractId, releasePayoutToSeller, note, DateTime.UtcNow);
+        if (err != "Ok")
+        {
+            this.ToastService.ShowError(L($"Cannot resolve dispute ({err}).", $"Không thể xử lý ({err})."));
+            return;
+        }
+
+        ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
+        {
+            Id = $"esc-hvres-{Guid.NewGuid():N}",
+            TimestampUtc = DateTime.UtcNow,
+            Kind = ActivityKind.Trade,
+            Account = "ADMIN",
+            PartnerAccount = loser,
+            Details = $"Resolved Host VND dispute {contractId} (releasePayoutToSeller={releasePayoutToSeller}): {note}",
+        });
+        this.ToastService.ShowSuccess(L("Host VND dispute resolved.", "Đã xử lý tranh chấp VND hệ thống."));
         await this.LoadAsync().ConfigureAwait(true);
     }
 }
