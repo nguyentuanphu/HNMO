@@ -82,3 +82,14 @@ files). Check the pack builder takes them all. Report in `docs/s9-classes-files-
 
 Main Claude works in parallel on the seasons plan steps 1-4 (server rules per season, the two-button admin panel,
 files per season, the start screen) on its own branches; do not change those areas.
+
+## Job 7 (added 23:15): models for 39 items from the Season 9 data
+
+The owner chose: take the missing item models from the Season 9 pack. These items have no 3D model in the base data
+(see `node client/web/tools/make-item-icons.mjs`, which lists them): 5:32, 7:53, 8:53, 9:53, 10:53, 11:53, 12:20,
+12:26, 12:73, 12:74, 13:95, 13:96, 13:99, 13:117-120, 13:128-134, 14:27, 14:55-57, 14:125, 14:151-159, 15:25.
+1. In the local Season 9 data, find each item's model and textures (`Item/` .bmd, .ozj/.ozt). Report names and sizes
+   only; never commit Season 9 files.
+2. Make sure `build-s9-pack` takes them, and say which items still have nothing.
+3. Draft PR into `claude/hnmo-main-handover-54co2m` with the report (and any pack builder change). Main Claude makes
+   the web game read them for every season and draws the pictures.
