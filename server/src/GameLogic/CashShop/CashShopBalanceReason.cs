@@ -36,4 +36,7 @@ public enum CashShopBalanceReason
 
     /// <summary>Goblin Points earned for play time.</summary>
     PlayTime,
+
+    /// <summary>A payment to unlock bigger stacks of a kind of items.</summary>
+    StackUnlock,
 }

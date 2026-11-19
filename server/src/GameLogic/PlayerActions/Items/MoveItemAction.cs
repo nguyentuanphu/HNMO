@@ -169,7 +169,7 @@ public class MoveItemAction
 
     private async ValueTask PartiallyStackAsync(Player player, Item sourceItem, Item targetItem)
     {
-        var partialAmount = (byte)Math.Min(targetItem.Definition!.Durability - targetItem.Durability, sourceItem.Durability);
+        var partialAmount = (byte)Math.Min(targetItem.MaximumStackSize() - targetItem.Durability, sourceItem.Durability);
         targetItem.Durability += partialAmount;
         sourceItem.Durability -= partialAmount;
         await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(sourceItem)).ConfigureAwait(false);

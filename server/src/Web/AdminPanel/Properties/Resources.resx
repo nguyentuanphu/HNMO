@@ -5176,4 +5176,7 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="SharedSettingsButtonHint" xml:space="preserve"><value>Both seasons: accounts, coins, website, news, bans, admin users and host settings.</value></data>
   <data name="SeasonBadgeTitle" xml:space="preserve"><value>This admin panel sets up {0}</value></data>
   <data name="HostSettingsHostOnly" xml:space="preserve"><value>Host settings can only be changed on the host computer: open the admin panel there (http://localhost:8095). They change ports, folders, the database password and the licence.</value></data>
+  <data name="AccountCoinHistoryStackUnlock" xml:space="preserve">
+    <value>Item stack unlock</value>
+  </data>
 </root>

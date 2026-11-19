@@ -278,6 +278,11 @@ public class ItemPriceCalculator
             // The fill ratio can reduce the price, so it's scaled with 128 bit, before it's limited.
             ItemPriceQuantityScaling.PerPiece => Limit((Int128)price * item.Durability()),
             ItemPriceQuantityScaling.ByFillRatio when item.Definition!.Durability > 0 => Limit((Int128)price * item.Durability() / item.Definition.Durability),
+
+            // A stack of an item which stacks only by HNMO's rules (jewels, boxes, …: one piece by its definition) is worth
+            // its pieces. Items which stack by their own definition keep their pricing.
+            _ when item.Durability > 1 && item.Definition is { Durability: <= 1 } definition
+                && PlugIns.ItemStacks.ItemStackRules.KindOf(definition.Group, definition.Number) is not null => Limit((Int128)price * item.Durability()),
             _ => Limit(price),
         };
     }

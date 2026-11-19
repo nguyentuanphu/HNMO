@@ -195,6 +195,8 @@ public class RemotePlayer : Player, IClientVersionProvider, IHasIpAddress
                     this.Logger.LogDebug("[C->S] {0}", buffer.ToArray().AsString());
                 }
 
+                // HNMO's stack rules answer for this player while its request is handled (unlocked stack kinds).
+                GameLogic.PlugIns.ItemStacks.ItemStackRules.CurrentPlayer = this;
                 await this.RunPersistenceExclusiveAsync(() => this.MainPacketHandler.HandlePacketAsync(this, buffer)).ConfigureAwait(false);
             }
             finally

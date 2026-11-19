@@ -15039,6 +15039,13 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>Looks up a localized string.</summary>
+        public static string AccountCoinHistoryStackUnlock {
+            get {
+                return ResourceManager.GetString("AccountCoinHistoryStackUnlock", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
         public static string AccountCoinHistoryMarketPurchase {
             get {
                 return ResourceManager.GetString("AccountCoinHistoryMarketPurchase", resourceCulture);
