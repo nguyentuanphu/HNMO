@@ -113,6 +113,12 @@
                     <label class="form-check-label" for="launcher-enabled" title="Start PostgreSQL and game server from the web bridge">Launcher enabled</label>
                 </div>
             </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                    <input id="season-nine-enabled" type="checkbox" class="form-check-input" @bind="this._settings.SeasonNineEnabled" />
+                    <label class="form-check-label" for="season-nine-enabled" title="The launcher also starts a Season 9 server (its own database, connect server port +100, admin panel on the next port; accounts and coins shared). Restart HNMO after changing it.">@Resources.SeasonNineButton</label>
+                </div>
+            </div>
             <div class="col-md-3">
                 <label class="form-label" title="PostgreSQL bin directory">PostgresPath</label>
                 <input type="text" class="form-control" @bind="this._settings.PostgresPath" />
