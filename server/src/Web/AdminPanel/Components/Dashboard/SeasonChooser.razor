@@ -2,7 +2,7 @@
 @using HNMO.Interfaces
 @using HNMO.Web.AdminPanel.Properties
 @using HNMO.Web.AdminPanel.Services
-@inject IHostSettingsService HostSettings
+@inject IServiceProvider Services
 @inject NavigationManager Navigation
 
 <section class="season-chooser" aria-label="@Resources.SeasonChooserTitle">
@@ -46,10 +46,11 @@
     protected override void OnInitialized()
     {
         var uri = new Uri(this.Navigation.Uri);
+        // Host settings may be missing (a panel without the host's settings service, e.g. in tests): the defaults then.
         HostSettings settings;
         try
         {
-            settings = this.HostSettings.Load();
+            settings = (this.Services.GetService(typeof(IHostSettingsService)) as IHostSettingsService)?.Load() ?? new HostSettings();
         }
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
         {
