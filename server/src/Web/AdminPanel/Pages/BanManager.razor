@@ -1,0 +1,227 @@
+@page "/bans"
+@attribute [Authorize(Policy = AdminPolicies.Operator)]
+
+@using HNMO.GameLogic.PlugIns.Moderation
+@using HNMO.Web.AdminPanel.Auth
+@using Resources = HNMO.Web.AdminPanel.Properties.Resources
+
+<PageTitle>HNMO: @Resources.BanManagerPageTitle</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.BanManagerPageTitle" />
+
+<div class="ban-manager-page">
+    <div class="page-help mb-2">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h1 class="mb-0">@Resources.BanManagerPageTitle</h1>
+            <button type="button"
+                    class="btn btn-sm btn-outline-info"
+                    title="@L("Show or hide help for Bans & Mutes", "Hiện hoặc ẩn hướng dẫn")"
+                    @onclick="() => this._showHelp = !this._showHelp">
+                @L("How to use this page", "Hướng dẫn")
+            </button>
+        </div>
+
+        @if (this._showHelp)
+        {
+            <div class="alert alert-info py-2 mb-3" role="note">
+                @Resources.BanManagerPageHelp
+            </div>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(this._statusMessage))
+    {
+        <div id="ban-status" class="alert @(this._statusError ? "alert-danger" : "alert-success") py-2" role="status">
+            @this._statusMessage
+        </div>
+    }
+
+    <div class="row g-3">
+        <div class="col-lg-5">
+            <div class="card mb-3">
+                <div class="card-header py-2"><strong>@L("Issue Ban or Mute", "Áp dụng Khóa / Cấm chat")</strong></div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm" for="ban-kind">@L("Moderation type", "Loại xử lý")</label>
+                        <select id="ban-kind"
+                                class="form-select form-select-sm"
+                                title="@L("Choose whether to block an account, character, chat, network IP, or device", "Chọn khóa tài khoản, nhân vật, cấm chat, IP mạng hoặc thiết bị")"
+                                @bind="this._kind">
+                            <option value="@BanTargetKind.AccountBan">@L("Account Ban (blocks login)", "Khóa tài khoản (chặn đăng nhập)")</option>
+                            <option value="@BanTargetKind.CharacterBan">@L("Character Ban (blocks world entry)", "Khóa nhân vật")</option>
+                            <option value="@BanTargetKind.AccountMute">@L("Account Chat Mute", "Cấm chat toàn tài khoản")</option>
+                            <option value="@BanTargetKind.CharacterMute">@L("Character Chat Mute", "Cấm chat nhân vật")</option>
+                            <option value="@BanTargetKind.NetworkBan">@L("Network Ban (salted IP hash)", "Khóa IP mạng (mã băm muối)")</option>
+                            <option value="@BanTargetKind.DeviceBan">@L("Device Ban (salted device hash)", "Khóa thiết bị (mã băm muối)")</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm" for="ban-target">@L("Target (login, character, IP, or device token)", "Đối tượng (tài khoản, nhân vật, IP hoặc mã thiết bị)")</label>
+                        <input id="ban-target"
+                               class="form-control form-control-sm"
+                               maxlength="256"
+                               title="@L("Exact account login or character name, or IP/device string (salted hash only is stored for network/device)", "Nhập chính xác tên tài khoản, nhân vật, IP hoặc thiết bị")"
+                               @bind="this._target" />
+                    </div>
+
+                    <div class="row g-2 mb-2 align-items-center">
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input id="ban-permanent"
+                                       class="form-check-input"
+                                       type="checkbox"
+                                       title="@L("Permanent bans have no expiration time", "Khóa vĩnh viễn không có thời hạn kết thúc")"
+                                       @bind="this._permanent" />
+                                <label class="form-check-label small" for="ban-permanent">@L("Permanent", "Vĩnh viễn")</label>
+                            </div>
+                        </div>
+                        @if (!this._permanent)
+                        {
+                            <div class="col">
+                                <label class="form-label form-label-sm mb-0" for="ban-minutes">@L("Duration (minutes)", "Thời hạn (phút)")</label>
+                                <input id="ban-minutes"
+                                       type="number"
+                                       min="1"
+                                       max="5256000"
+                                       class="form-control form-control-sm"
+                                       title="@L("Number of minutes until automatic unban/unmute (converted to Sydney time)", "Số phút tự động hết hạn theo giờ Sydney")"
+                                       @bind="this._durationMinutes" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm" for="ban-reason-en">@L("Player-facing reason (EN)", "Lý do hiển thị cho người chơi (EN)")</label>
+                        <input id="ban-reason-en"
+                               class="form-control form-control-sm"
+                               maxlength="300"
+                               title="@L("Displayed in English at login or chat", "Hiển thị bằng tiếng Anh khi người chơi đăng nhập hoặc chat")"
+                               @bind="this._reasonEn" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label form-label-sm" for="ban-reason-vi">@L("Player-facing reason (VI)", "Lý do hiển thị cho người chơi (VI)")</label>
+                        <input id="ban-reason-vi"
+                               class="form-control form-control-sm"
+                               maxlength="300"
+                               title="@L("Displayed in Vietnamese at login or chat", "Hiển thị bằng tiếng Việt khi người chơi đăng nhập hoặc chat")"
+                               @bind="this._reasonVi" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label form-label-sm" for="ban-audit-reason">@L("Internal audit reason (required)", "Lý do nội bộ / kiểm tra (bắt buộc)")</label>
+                        <input id="ban-audit-reason"
+                               class="form-control form-control-sm"
+                               maxlength="500"
+                               title="@L("Recorded in the admin audit log and player activity log", "Lưu vào nhật ký quản trị và nhật ký hoạt động")"
+                               @bind="this._auditReason" />
+                    </div>
+
+                    <button type="button"
+                            id="ban-issue-btn"
+                            class="btn btn-danger btn-sm"
+                            disabled="@this._busy"
+                            title="@L("Apply this ban or mute immediately", "Áp dụng lệnh khóa hoặc cấm chat ngay lập tức")"
+                            @onclick="this.IssueAsync">
+                        @L("Apply Ban / Mute", "Áp dụng ngay")
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                    <strong>@L("Moderation Records", "Danh sách Khóa & Cấm chat") (@this._total)</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 mb-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label form-label-sm" for="ban-search">@L("Search", "Tìm kiếm")</label>
+                            <input id="ban-search"
+                                   class="form-control form-control-sm"
+                                   placeholder="@L("Login, character, reason, actor...", "Tên đăng nhập, nhân vật, lý do...")"
+                                   title="@L("Filter records by target name, masked hash prefix, reason, or issuer", "Lọc theo tên, mã băm, lý do hoặc quản trị viên")"
+                                   @bind="this._search" />
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input id="ban-active-only"
+                                       class="form-check-input"
+                                       type="checkbox"
+                                       title="@L("Show only currently active and unexpired entries", "Chỉ hiện các lệnh đang còn hiệu lực")"
+                                       @bind="this._activeOnly" />
+                                <label class="form-check-label small" for="ban-active-only">@L("Active only", "Đang hiệu lực")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button"
+                                    id="ban-search-btn"
+                                    class="btn btn-secondary btn-sm w-100"
+                                    title="@L("Reload and filter moderation records", "Tải lại và lọc danh sách")"
+                                    @onclick="this.LoadAsync">
+                                @L("Search", "Tìm kiếm")
+                            </button>
+                        </div>
+                    </div>
+
+                    @if (this._records.Count == 0)
+                    {
+                        <p class="text-muted small mb-0">@L("No moderation records matched.", "Không có bản ghi nào phù hợp.")</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>@L("Scope", "Loại")</th>
+                                        <th>@L("Target", "Đối tượng")</th>
+                                        <th>@L("Reason", "Lý do")</th>
+                                        <th>@L("Expires (Sydney)", "Hết hạn (Sydney)")</th>
+                                        <th>@L("Action", "Thao tác")</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in this._records)
+                                    {
+                                        var active = item.IsEnforcedAt(DateTime.UtcNow);
+                                        <tr>
+                                            <td><span class="badge @(active ? "bg-danger" : "bg-secondary")">@item.Kind</span></td>
+                                            <td class="small font-monospace">@item.TargetDisplay</td>
+                                            <td class="small">@(this.IsVi ? item.ReasonVi : item.ReasonEn)</td>
+                                            <td class="small">@BanManagerService.FormatSydneyExpiry(item.ExpiresAtUtc, this.IsVi)</td>
+                                            <td>
+                                                @if (active)
+                                                {
+                                                    <div class="input-group input-group-sm">
+                                                        <input class="form-control form-control-sm"
+                                                               placeholder="@L("Unban reason", "Lý do gỡ")"
+                                                               title="@L("Required internal reason before lifting", "Lý do bắt buộc trước khi gỡ lệnh")"
+                                                               value="@this.GetUnbanReason(item.Id)"
+                                                               @onchange="e => this.SetUnbanReason(item.Id, e.Value?.ToString())" />
+                                                        <button type="button"
+                                                                class="btn btn-outline-success btn-sm unban-btn"
+                                                                disabled="@this._busy"
+                                                                title="@L("Lift this active ban or mute immediately", "Gỡ bỏ lệnh khóa hoặc cấm chat này")"
+                                                                @onclick="() => this.LiftAsync(item.Id)">
+                                                            @L("Unban", "Gỡ bỏ")
+                                                        </button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted small">@(item.Active ? L("Expired", "Hết hạn") : L("Lifted", "Đã gỡ"))</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

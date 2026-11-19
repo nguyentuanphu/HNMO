@@ -309,37 +309,37 @@ void CMapEditorUI::Render(bool* p_open)
 
     if (ImGui::BeginTabBar("MapEditorTabs"))
     {
-        if (ImGui::BeginTabItem("Texture"))
+        if (ImGui::BeginTabItem(I18N::Editor::SlotTexture))
         {
             RenderTextureTab();
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Objects"))
+        if (ImGui::BeginTabItem(I18N::Editor::ObjectTypes))
         {
             RenderObjectsTab();
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Height"))
+        if (ImGui::BeginTabItem(I18N::Editor::CallHeight))
         {
             RenderHeightTab();
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Attribute"))
+        if (ImGui::BeginTabItem(I18N::Editor::Attribute))
         {
             RenderAttributeTab();
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("T. Browse"))
+        if (ImGui::BeginTabItem(I18N::Editor::TBrowse))
         {
             g_MapTextureBrowser.Render(ResolveWorldNumber());
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Minimap"))
+        if (ImGui::BeginTabItem(I18N::Editor::Minimap))
         {
             RenderMinimapTab();
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("O. Browse"))
+        if (ImGui::BeginTabItem(I18N::Editor::OBrowse))
         {
             // Importing a model selects it for placing: jump to the Objects tab's
             // Place mode with the new type ready.
@@ -408,27 +408,27 @@ void CMapEditorUI::RenderTextureTab()
 {
     // Painting toggle. When on, take the game into EDIT_MAPPING (mouse picking +
     // paint); when off, hand the game back so you can walk without painting.
-    ImGui::Checkbox("Enable painting", &m_bPaintingEnabled);
+    ImGui::Checkbox(I18N::Editor::EnablePainting, &m_bPaintingEnabled);
     if (m_bPaintingEnabled)
     {
         m_desiredEditFlag = EDIT_MAPPING;
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "PAINTING");
+        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "%s", I18N::Editor::PAINTING);
     }
     else
     {
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "off (walk freely)");
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%s", I18N::Editor::OffWalkFreely);
     }
 
-    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f),
-                       "Left-click terrain to paint. Right-click clears layer 2.");
+    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s",
+                       I18N::Editor::LeftClickTerrainToPaintRightClickClearsLayer2);
     ImGui::Separator();
 
     // Target world / file the Save button writes to.
     int autoWorld = gMapManager.WorldActive + 1;
     bool useAuto = (m_TargetWorldOverride < 0);
-    if (ImGui::Checkbox("Auto world number", &useAuto))
+    if (ImGui::Checkbox(I18N::Editor::AutoWorldNumber, &useAuto))
         m_TargetWorldOverride = useAuto ? -1 : autoWorld;
     if (!useAuto)
     {
@@ -437,35 +437,35 @@ void CMapEditorUI::RenderTextureTab()
         ImGui::InputInt("##world", &m_TargetWorldOverride);
         if (m_TargetWorldOverride < 0) m_TargetWorldOverride = 0;
     }
-    ImGui::Text("Saves to: Data\\World%d\\EncTerrain%d.map", ResolveWorldNumber(), ResolveWorldNumber());
+    ImGui::Text(I18N::Editor::SavesToDataWorldDEncTerrainDMap, ResolveWorldNumber(), ResolveWorldNumber());
 
     ImGui::Separator();
 
     // Layer + brush controls. Both layers honor the brush size; the base layer
     // (0) replaces the tile outright, while the overlay (1) blends over the base
     // using the opacity below.
-    ImGui::RadioButton("Layer 1 (base)", &CurrentLayer, 0);
+    ImGui::RadioButton(I18N::Editor::Layer1Base, &CurrentLayer, 0);
     ImGui::SameLine();
-    ImGui::RadioButton("Layer 2 (overlay)", &CurrentLayer, 1);
+    ImGui::RadioButton(I18N::Editor::Layer2Overlay, &CurrentLayer, 1);
 
     ImGui::SetNextItemWidth(160.0f);
-    ImGui::SliderInt("Brush", &BrushSize, 0, MAX_BRUSH_HALF, "");
+    ImGui::SliderInt(I18N::Editor::Brush, &BrushSize, 0, MAX_BRUSH_HALF, "");
     ImGui::SameLine();
-    ImGui::Text("%d x %d tiles", BrushSize * 2 + 1, BrushSize * 2 + 1);
+    ImGui::Text(I18N::Editor::DXDTiles, BrushSize * 2 + 1, BrushSize * 2 + 1);
 
     // Overlay blend strength (how strongly the layer-2 tile shows over the base).
     if (CurrentLayer == 1)
     {
         ImGui::SetNextItemWidth(160.0f);
-        ImGui::SliderFloat("Overlay opacity", &m_OverlayAlpha, 0.0f, 1.0f, "%.2f");
+        ImGui::SliderFloat(I18N::Editor::OverlayOpacity, &m_OverlayAlpha, 0.0f, 1.0f, "%.2f");
     }
 
     // Dropper: click picks the tile under the cursor (from the current layer)
     // into the selection instead of painting. Holding Alt does the same.
-    ImGui::Checkbox("Dropper - pick tile under cursor (or hold Alt)", &m_bDropperMode);
+    ImGui::Checkbox(I18N::Editor::DropperPickTileUnderCursorOrHoldAlt, &m_bDropperMode);
 
     ImGui::Separator();
-    ImGui::Text("Tile palette (selected: %s)", TileSlotName(SelectMapping));
+    ImGui::Text(I18N::Editor::TilePaletteSelectedS, TileSlotName(SelectMapping));
 
     // Palette of the current world's loaded tile textures. Each cell is the
     // actual GPU texture the terrain samples, so it always matches this map.
@@ -509,20 +509,19 @@ void CMapEditorUI::RenderTextureTab()
 
     // Undo the last paint stroke (one level).
     ImGui::BeginDisabled(!m_bHasUndo);
-    if (ImGui::Button("Undo last stroke"))
+    if (ImGui::Button(I18N::Editor::UndoLastStroke))
         Undo();
     ImGui::EndDisabled();
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
-    if (ImGui::Button("Save terrain textures", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::SaveTerrainTextures, ImVec2(-1.0f, 0.0f)))
     {
         const int world = ResolveWorldNumber();
         Editor::MapSave::SaveMappingEncrypted(world, world);
     }
     ImGui::PopStyleColor(2);
-    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f),
-                       "Overwrites the live map file (no backup).");
+    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f), "%s", I18N::Editor::OverwritesTheLiveMapFileNoBackup);
 
     // Apply the brush this frame (after the UI, so hover state is known).
     PaintMapping();
@@ -650,42 +649,42 @@ void CMapEditorUI::RenderObjectsTab()
             m_selectedModelType = -1;
     }
 
-    ImGui::Checkbox("Enable object editing", &m_bObjEditEnabled);
+    ImGui::Checkbox(I18N::Editor::EnableObjectEditing, &m_bObjEditEnabled);
     if (m_bObjEditEnabled)
     {
         m_desiredEditFlag = EDIT_OBJECT;
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "EDITING");
+        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "%s", I18N::Editor::EDITING);
     }
     else
     {
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "off (walk freely)");
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%s", I18N::Editor::OffWalkFreely);
     }
 
-    ImGui::RadioButton("Place new", &m_objMode, 0);
+    ImGui::RadioButton(I18N::Editor::PlaceNew, &m_objMode, 0);
     ImGui::SameLine();
-    ImGui::RadioButton("Select & edit", &m_objMode, 1);
+    ImGui::RadioButton(I18N::Editor::SelectEdit, &m_objMode, 1);
     ImGui::Separator();
 
     if (m_objMode == 0)
     {
-        ImGui::Text("Loaded object models on this map: %d", (int)m_models.size());
+        ImGui::Text(I18N::Editor::LoadedObjectModelsOnThisMapD, (int)m_models.size());
         if (m_models.empty())
         {
-            ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.6f, 1.0f),
-                               "No world-object models are loaded on this map.");
+            ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.6f, 1.0f), "%s",
+                               I18N::Editor::NoWorldObjectModelsAreLoadedOnThisMap);
         }
         else
         {
             // Placement transform.
             ImGui::SetNextItemWidth(160.0f);
-            ImGui::SliderFloat("Yaw", &m_objYaw, 0.0f, 360.0f, "%.0f deg");
+            ImGui::SliderFloat(I18N::Editor::Yaw, &m_objYaw, 0.0f, 360.0f, I18N::Editor::AngleDegreesFormat);
             ImGui::SameLine();
             ImGui::SetNextItemWidth(120.0f);
-            ImGui::InputFloat("Scale", &m_objScale, 0.05f, 0.25f, "%.2f");
+            ImGui::InputFloat(I18N::Editor::Scale, &m_objScale, 0.05f, 0.25f, "%.2f");
             if (m_objScale < 0.05f) m_objScale = 0.05f;
-            ImGui::Checkbox("Snap to tile centre", &m_bObjSnap);
+            ImGui::Checkbox(I18N::Editor::SnapToTileCentre, &m_bObjSnap);
 
             // Model palette: a grid of live 3D thumbnails of the loaded models.
             char selName[80] = "(none)";
@@ -695,8 +694,8 @@ void CMapEditorUI::RenderObjectsTab()
                     snprintf(selName, sizeof(selName), "%d: %ls", m.type, m.file.c_str());
                     break;
                 }
-            ImGui::Text("Model palette (selected: %s)", selName);
-            ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "Left-click the ground to place.");
+            ImGui::Text(I18N::Editor::ModelPaletteSelectedS, selName);
+            ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s", I18N::Editor::LeftClickTheGroundToPlace);
 
             const float thumb = (float)g_ObjectThumbnail.Size();
             const int columns = 5;
@@ -730,7 +729,7 @@ void CMapEditorUI::RenderObjectsTab()
                 if (selected)
                     ImGui::PopStyleColor();
                 if (ImGui::IsItemHovered())
-                    ImGui::SetTooltip("%d: %ls", m.type, m.file.c_str());
+                    ImGui::SetTooltip(I18N::Editor::DLs, m.type, m.file.c_str());
                 if (clicked || MuEditor::KeyboardSelection::MovedOnto())
                     m_selectedModelType = m.type;
                 ImGui::PopID();
@@ -740,25 +739,23 @@ void CMapEditorUI::RenderObjectsTab()
     }
     else
     {
-        ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f),
-                           "Left-click an object to select. Drag to move it.");
+        ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s", I18N::Editor::LeftClickAnObjectToSelectDragToMoveIt);
         RenderSelectedObjectPanel();
     }
 
     ImGui::Separator();
     ImGui::BeginDisabled(!m_bObjHasUndo);
-    if (ImGui::Button("Undo last object edit") || Shortcut(ImGuiMod_Ctrl | ImGuiKey_Z))
+    if (ImGui::Button(I18N::Editor::UndoLastObjectEdit) || Shortcut(ImGuiMod_Ctrl | ImGuiKey_Z))
         UndoObjects();
     ImGui::EndDisabled();
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
-    if (ImGui::Button("Save objects", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::SaveObjects, ImVec2(-1.0f, 0.0f)))
         m_objStatus = Editor::ObjectPlace::Save(world) ? "Saved objects (EncTerrain.obj)."
                                                        : "Save failed.";
     ImGui::PopStyleColor(2);
-    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f),
-                       "Overwrites the live map objects file (no backup).");
+    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f), "%s", I18N::Editor::OverwritesTheLiveMapObjectsFileNoBackup);
     if (!m_objStatus.empty())
         ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "%s", m_objStatus.c_str());
 
@@ -772,17 +769,17 @@ void CMapEditorUI::RenderSelectedObjectPanel()
 {
     if (m_pSelected == nullptr)
     {
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "(nothing selected)");
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%s", I18N::Editor::NothingSelected);
         return;
     }
 
     OBJECT* o = m_pSelected;
-    ImGui::Text("Selected: type %d", o->Type);
+    ImGui::Text(I18N::Editor::SelectedTypeD, o->Type);
 
     // Position: editing may cross an object-grid block, so route through Reposition.
     float pos[3] = { o->Position[0], o->Position[1], o->Position[2] };
     ImGui::SetNextItemWidth(280.0f);
-    const bool posEdited = ImGui::InputFloat3("Pos", pos, "%.0f");
+    const bool posEdited = ImGui::InputFloat3(I18N::Editor::Pos, pos, "%.0f");
     if (ImGui::IsItemActivated()) TakeObjectUndoSnapshot();
     if (posEdited)
     {
@@ -800,16 +797,16 @@ void CMapEditorUI::RenderSelectedObjectPanel()
 
     // Angle + scale edit safely in place. Snapshot when a field is first grabbed.
     ImGui::SetNextItemWidth(280.0f);
-    ImGui::InputFloat3("Angle", o->Angle, "%.0f");
+    ImGui::InputFloat3(I18N::Editor::Angle, o->Angle, "%.0f");
     if (ImGui::IsItemActivated()) TakeObjectUndoSnapshot();
     ImGui::SetNextItemWidth(200.0f);
-    ImGui::InputFloat("Scale ", &o->Scale, 0.05f, 0.25f, "%.2f");
+    ImGui::InputFloat(I18N::Editor::SelectedObjectScaleLabel, &o->Scale, 0.05f, 0.25f, "%.2f");
     if (ImGui::IsItemActivated()) TakeObjectUndoSnapshot();
     if (o->Scale < 0.05f) o->Scale = 0.05f;
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
-    if (ImGui::Button("Delete object") || Shortcut(ImGuiKey_Delete))
+    if (ImGui::Button(I18N::Editor::DeleteObject) || Shortcut(ImGuiKey_Delete))
     {
         TakeObjectUndoSnapshot();
         Editor::ObjectPlace::Remove(m_pSelected);
@@ -827,60 +824,60 @@ void CMapEditorUI::RenderAttributeTab()
     // Must run before anything reads m_attrBaseline / m_attrEdited below.
     EnsureAttrBaseline(world);
 
-    ImGui::Checkbox("Enable attribute editing", &m_bAttrEnabled);
+    ImGui::Checkbox(I18N::Editor::EnableAttributeEditing, &m_bAttrEnabled);
     if (m_bAttrEnabled)
     {
         m_desiredEditFlag = EDIT_WALL;
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "PAINTING");
+        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "%s", I18N::Editor::PAINTING);
     }
     else
     {
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "off (walk freely)");
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%s", I18N::Editor::OffWalkFreely);
     }
 
-    ImGui::Checkbox("Show attribute overlay", &m_bAttrOverlay);
+    ImGui::Checkbox(I18N::Editor::ShowAttributeOverlay, &m_bAttrOverlay);
     if (m_bAttrOverlay)
         g_bMapEditorAttrOverlay = true;
 
-    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f),
-                       "Left-click paints the selected attribute. Right-click paints Walkable.");
+    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s",
+                       I18N::Editor::LeftClickPaintsTheSelectedAttributeRightClickPaintsWalkable);
     ImGui::Separator();
 
     // Brush attribute. These are the byte-sized TW_* bits the .att stores.
-    ImGui::Text("Brush attribute:");
-    ImGui::RadioButton("Walkable (0)", &m_attrBrushValue, 0);
+    ImGui::TextUnformatted(I18N::Editor::BrushAttribute);
+    ImGui::RadioButton(I18N::Editor::Walkable0, &m_attrBrushValue, 0);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.75f, 0.75f, 0.80f, 1.0f), "[combat area]");
-    ImGui::RadioButton("Blocked / no-go (4)", &m_attrBrushValue, TW_NOMOVE);
+    ImGui::TextColored(ImVec4(0.75f, 0.75f, 0.80f, 1.0f), "%s", I18N::Editor::CombatArea);
+    ImGui::RadioButton(I18N::Editor::BlockedNoGo4, &m_attrBrushValue, TW_NOMOVE);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.85f, 0.20f, 0.20f, 1.0f), "[red]");
-    ImGui::RadioButton("Safezone (1)", &m_attrBrushValue, TW_SAFEZONE);
+    ImGui::TextColored(ImVec4(0.85f, 0.20f, 0.20f, 1.0f), "%s", I18N::Editor::MapAttributeRedTag);
+    ImGui::RadioButton(I18N::Editor::Safezone1, &m_attrBrushValue, TW_SAFEZONE);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.20f, 0.80f, 0.35f, 1.0f), "[green - no combat]");
-    ImGui::RadioButton("No ground / void (8)", &m_attrBrushValue, TW_NOGROUND);
+    ImGui::TextColored(ImVec4(0.20f, 0.80f, 0.35f, 1.0f), "%s", I18N::Editor::GreenNoCombat);
+    ImGui::RadioButton(I18N::Editor::NoGroundVoid8, &m_attrBrushValue, TW_NOGROUND);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.45f, 0.45f, 0.50f, 1.0f), "[black]");
-    ImGui::RadioButton("Water (16)", &m_attrBrushValue, TW_WATER);
+    ImGui::TextColored(ImVec4(0.45f, 0.45f, 0.50f, 1.0f), "%s", I18N::Editor::Black);
+    ImGui::RadioButton(I18N::Editor::Water16, &m_attrBrushValue, TW_WATER);
     ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.23f, 0.43f, 0.82f, 1.0f), "[blue]");
+    ImGui::TextColored(ImVec4(0.23f, 0.43f, 0.82f, 1.0f), "%s", I18N::Editor::MapAttributeBlueTag);
 
     ImGui::SetNextItemWidth(200.0f);
-    ImGui::SliderInt("Brush", &m_attrBrush, 1, 12, "%d tiles");
+    ImGui::SliderInt(I18N::Editor::Brush, &m_attrBrush, 1, 12, I18N::Editor::BrushTilesFormat);
 
     ImGui::Separator();
     ImGui::BeginDisabled(!m_bAttrHasUndo);
-    if (ImGui::Button("Undo last attribute stroke"))
+    if (ImGui::Button(I18N::Editor::UndoLastAttributeStroke))
         UndoAttr();
     ImGui::EndDisabled();
 
     // --- Saving: the client and the server each need their own file. ---
     ImGui::Separator();
-    ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.6f, 1.0f), "1) Client file");
+    ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.6f, 1.0f), "%s", I18N::Editor::_1ClientFile);
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
-    if (ImGui::Button("Save client .att", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::SaveClientAtt, ImVec2(-1.0f, 0.0f)))
         m_attrStatus = Editor::AttrSave::SaveClientAtt(world, world)
                      ? "Saved Data\\World" + std::to_string(world) + "\\EncTerrain" +
                        std::to_string(world) + ".att"
@@ -888,12 +885,12 @@ void CMapEditorUI::RenderAttributeTab()
     ImGui::PopStyleColor(2);
 
     ImGui::Spacing();
-    ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.6f, 1.0f), "2) Server file (HNMO)");
+    ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.6f, 1.0f), "%s", I18N::Editor::_2ServerFileHNMO);
     // The server keys maps by its own number: the world ENUM (Arena = 6), but 32 for
     // Devil Square 5-7, which loads world 9. The client folder is World{enum+1}
     // (World7, World10). Show both so they're never confused.
     bool autoServer = (m_serverMapOverride < 0);
-    if (ImGui::Checkbox("Auto server map number", &autoServer))
+    if (ImGui::Checkbox(I18N::Editor::AutoServerMapNumber, &autoServer))
         m_serverMapOverride = autoServer ? -1 : gMapManager.GetServerMap();
     if (!autoServer)
     {
@@ -902,7 +899,7 @@ void CMapEditorUI::RenderAttributeTab()
         ImGui::InputInt("##servermap", &m_serverMapOverride);
         if (m_serverMapOverride < 0) m_serverMapOverride = 0;
     }
-    ImGui::Text("Server \"Number\" = %d   (client folder = World%d)", serverMap, world);
+    ImGui::Text(I18N::Editor::ServerNumberDClientFolderWorldD, serverMap, world);
 
     // The server file is a MERGE onto the server's own map, not a dump of the client's:
     // the two legitimately disagree (the client blocks object footprints, the server
@@ -922,8 +919,8 @@ void CMapEditorUI::RenderAttributeTab()
     }
     const int editedCount = m_attrEditedCountCache;
 
-    ImGui::Text("Step 1: download this map's \"Terrain Data\" from the Admin Panel, then:");
-    if (ImGui::Button("Load server base .att...", ImVec2(-1.0f, 0.0f)))
+    ImGui::TextUnformatted(I18N::Editor::Step1DownloadThisMapSTerrainDataFromTheAdminPanelThen);
+    if (ImGui::Button(I18N::Editor::LoadServerBaseAtt, ImVec2(-1.0f, 0.0f)))
     {
         std::wstring path;
         if (Editor::AttrSave::PickServerBaseAtt(path))
@@ -947,17 +944,15 @@ void CMapEditorUI::RenderAttributeTab()
 
     const bool haveBase = !m_serverBase.empty();
     if (haveBase)
-        ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "Base: %s   |   %d tile(s) edited this session",
+        ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), I18N::Editor::BaseSDTileSEditedThisSession,
                            m_serverBaseName.c_str(), editedCount);
     else
-        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.4f, 1.0f),
-                           "No server base loaded. It is needed so we only change the tiles you edited\n"
-                           "and leave the rest of the server's map exactly as it is.");
+        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.4f, 1.0f), "%s", I18N::Editor::ServerTerrainBaseNeeded);
 
     ImGui::BeginDisabled(!haveBase);
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.6f, 0.9f, 1.0f));
-    if (ImGui::Button("Step 2: Save server .att", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::Step2SaveServerAtt, ImVec2(-1.0f, 0.0f)))
     {
         std::wstring path;
         int changed = 0;
@@ -976,10 +971,9 @@ void CMapEditorUI::RenderAttributeTab()
     }
     ImGui::PopStyleColor(2);
     ImGui::EndDisabled();
-    ImGui::TextDisabled("Upload the result in the Admin Panel's \"Terrain Data\" field.\nNever upload the client .att there - it is encrypted and would corrupt the map.");
+    ImGui::TextDisabled("%s", I18N::Editor::ServerTerrainUploadInstructions);
 
-    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f),
-                       "Client + server must match, or players will desync (walk through walls / get pushed back).");
+    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f), "%s", I18N::Editor::ClientServerMapMustMatch);
     if (!m_attrStatus.empty())
         ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "%s", m_attrStatus.c_str());
 
@@ -1068,14 +1062,14 @@ void CMapEditorUI::UndoAttr()
 
 void CMapEditorUI::RenderMinimapTab()
 {
-    ImGui::TextWrapped("Capture a top-down screenshot of the whole map to make a minimap.");
+    ImGui::TextWrapped("%s", I18N::Editor::CaptureATopDownScreenshotOfTheWholeMapToMakeAMinimap);
     ImGui::Separator();
 
     auto& mgr = CameraManager::Instance();
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.8f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.6f, 0.9f, 1.0f));
-    if (ImGui::Button("Top-down view (for minimap)", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::TopDownViewForMinimap, ImVec2(-1.0f, 0.0f)))
     {
         mgr.SetCameraMode(CameraMode::FreeFly);
         ICamera* cam = mgr.GetActiveCamera();
@@ -1092,10 +1086,10 @@ void CMapEditorUI::RenderMinimapTab()
         if (cam && strcmp(cam->GetName(), "FreeFly") == 0)
             static_cast<FreeFlyCamera*>(cam)->RotateYaw(deg);
     };
-    if (ImGui::Button("Rotate 90 CW"))
+    if (ImGui::Button(I18N::Editor::Rotate90CW))
         rotateTopDown(90.0f);
     ImGui::SameLine();
-    if (ImGui::Button("Rotate 90 CCW"))
+    if (ImGui::Button(I18N::Editor::Rotate90CCW))
         rotateTopDown(-90.0f);
 
     // Generate the minimap straight from the map's terrain tiles. This is not a
@@ -1104,20 +1098,20 @@ void CMapEditorUI::RenderMinimapTab()
     // from anywhere - no need for the top-down view.
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
-    if (ImGui::Button("Generate minimap from tiles", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::GenerateMinimapFromTiles, ImVec2(-1.0f, 0.0f)))
         Editor::Minimap::GenerateFromTiles(ResolveWorldNumber(), m_minimapStatus);
     ImGui::PopStyleColor(2);
 
     // Wrap an externally-edited .tga (e.g. the generated one with a screenshot painted
     // over it) into the game's mini_map.OZT.
-    if (ImGui::Button("Convert a .tga to mini_map.OZT...", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::ConvertATgaToMiniMapOZT, ImVec2(-1.0f, 0.0f)))
         Editor::Minimap::WrapTgaToOzt(ResolveWorldNumber(), m_minimapStatus);
-    ImGui::TextDisabled("Use this after editing the .tga in an image editor.");
+    ImGui::TextDisabled("%s", I18N::Editor::UseThisAfterEditingTheTgaInAnImageEditor);
 
     if (!m_minimapStatus.empty())
         ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "%s", m_minimapStatus.c_str());
 
-    if (ImGui::Button("Back to game camera", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::BackToGameCamera, ImVec2(-1.0f, 0.0f)))
     {
         m_bMinimapMode = false;
         ICamera* cam = mgr.GetActiveCamera();
@@ -1127,7 +1121,7 @@ void CMapEditorUI::RenderMinimapTab()
     }
 
     ImGui::Separator();
-    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "Tips:");
+    ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s", I18N::Editor::Tips);
     ImGui::BulletText("\"Generate minimap from tiles\" builds mini_map.OZT (+ an");
     ImGui::BulletText("editable .tga) from the terrain - the position marker will");
     ImGui::BulletText("line up exactly. It works from anywhere; no top-down needed.");
@@ -1136,53 +1130,52 @@ void CMapEditorUI::RenderMinimapTab()
 
 void CMapEditorUI::RenderHeightTab()
 {
-    ImGui::Checkbox("Enable height editing", &m_bHeightEnabled);
+    ImGui::Checkbox(I18N::Editor::EnableHeightEditing, &m_bHeightEnabled);
     if (m_bHeightEnabled)
     {
         m_desiredEditFlag = EDIT_HEIGHT;
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "SCULPTING");
+        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.5f, 1.0f), "%s", I18N::Editor::SCULPTING);
     }
     else
     {
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "off (walk freely)");
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%s", I18N::Editor::OffWalkFreely);
     }
 
-    ImGui::Checkbox("Fixed height (flatten to a value)", &m_bHeightFixedMode);
+    ImGui::Checkbox(I18N::Editor::FixedHeightFlattenToAValue, &m_bHeightFixedMode);
     if (m_bHeightFixedMode)
-        ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f),
-                           "Left-click flattens tiles to the value below.\nRight-click samples the height under the cursor into it.");
+        ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s", I18N::Editor::FlattenBrushHelp);
     else
-        ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f),
-                           "Left-click raises the ground, right-click lowers it.");
+        ImGui::TextColored(ImVec4(0.7f, 0.9f, 1.0f, 1.0f), "%s",
+                           I18N::Editor::LeftClickRaisesTheGroundRightClickLowersIt);
     ImGui::Separator();
 
     ImGui::SetNextItemWidth(200.0f);
-    ImGui::SliderInt("Brush radius", &m_heightBrush, 1, 12, "%d tiles");
+    ImGui::SliderInt(I18N::Editor::BrushRadius, &m_heightBrush, 1, 12, I18N::Editor::BrushTilesFormat);
     if (m_bHeightFixedMode)
     {
         // Height is stored as one byte * factor on save, so the ceiling is 255*factor.
         const float factor = (gMapManager.WorldActive == WD_55LOGINSCENE) ? 3.0f : 1.5f;
         ImGui::SetNextItemWidth(200.0f);
-        ImGui::SliderFloat("Target height", &m_heightFixedValue, 0.0f, 255.0f * factor, "%.0f");
-        ImGui::TextDisabled("Tip: right-click a tile to copy its height here.");
+        ImGui::SliderFloat(I18N::Editor::TargetHeight, &m_heightFixedValue, 0.0f, 255.0f * factor, "%.0f");
+        ImGui::TextDisabled("%s", I18N::Editor::TipRightClickATileToCopyItsHeightHere);
     }
     else
     {
         ImGui::SetNextItemWidth(200.0f);
-        ImGui::SliderFloat("Strength", &m_heightStrength, 1.0f, 40.0f, "%.0f");
+        ImGui::SliderFloat(I18N::Editor::Strength, &m_heightStrength, 1.0f, 40.0f, "%.0f");
     }
 
     ImGui::Separator();
     ImGui::BeginDisabled(!m_bHeightHasUndo);
-    if (ImGui::Button("Undo last height stroke") || Shortcut(ImGuiMod_Ctrl | ImGuiKey_Z))
+    if (ImGui::Button(I18N::Editor::UndoLastHeightStroke) || Shortcut(ImGuiMod_Ctrl | ImGuiKey_Z))
         UndoHeight();
     ImGui::EndDisabled();
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
-    if (ImGui::Button("Save height", ImVec2(-1.0f, 0.0f)))
+    if (ImGui::Button(I18N::Editor::SaveHeight, ImVec2(-1.0f, 0.0f)))
     {
         const int world = ResolveWorldNumber();
         wchar_t fileName[128];
@@ -1200,8 +1193,7 @@ void CMapEditorUI::RenderHeightTab()
         }
     }
     ImGui::PopStyleColor(2);
-    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f),
-                       "Overwrites the live map height file (no backup).");
+    ImGui::TextColored(ImVec4(0.9f, 0.7f, 0.3f, 1.0f), "%s", I18N::Editor::OverwritesTheLiveMapHeightFileNoBackup);
     if (!m_heightStatus.empty())
         ImGui::TextColored(ImVec4(0.6f, 1.0f, 0.6f, 1.0f), "%s", m_heightStatus.c_str());
 

@@ -1,0 +1,180 @@
+@page "/anti-cheat"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.GameLogic.PlugIns.AntiCheat
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@L("Anti-Cheat Authority & Violation Log", "Kiểm Soát Chống Gian Lận & Nhật Ký Vi Phạm")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Anti-Cheat Authority & Violation Log", "Kiểm Soát Chống Gian Lận & Nhật Ký Vi Phạm")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextAntiCheat" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Enable this plug-in to enforce a per-IP concurrent login cap, agility-scaled attack interval checks, optional max-agility hit cap, and safe-zone attack auditing.", "Bật plug-in để giới hạn số tài khoản cùng một IP, kiểm tra nhịp độ đánh theo Nhanh Nhẹn và ghi nhật ký đánh trong vùng an toàn.")</li>
+            <li>@L("Keep Loopback Exempt enabled when all web players connect locally unless Relay:SendClientAddress forwards real player IPs.", "Giữ Miễn Trừ Loopback khi mọi người chơi web đi qua cầu nối nội bộ mà chưa bật chuyển tiếp IP thật.")</li>
+            <li>@L("All violations are saved under save/hnmo-state.json (antiCheatAudit) with Sydney timestamps.", "Mọi vi phạm được lưu trong save/hnmo-state.json (mục antiCheatAudit) theo múi giờ Sydney.")</li>
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._isLoading || this._configuration is null)
+{
+    <p>@L("Loading...", "Đang tải...")</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-header">@L("Enforcement Settings", "Cài Đặt Kiểm Soát")</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 d-flex flex-wrap gap-3">
+                    <div class="form-check form-switch">
+                        <input id="acActive" class="form-check-input" type="checkbox" @bind="this._isActive" />
+                        <label class="form-check-label" for="acActive" title="@L("Activate plug-in instance in the running server.", "Kích hoạt plug-in trong máy chủ.")">@L("Plug-in Active", "Kích Hoạt Plug-in")</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input id="acEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
+                        <label class="form-check-label" for="acEnabled" title="@L("Master toggle for per-IP cap, attack cadence checks, and violation logging.", "Công tắc chính bật giới hạn IP, kiểm tra tốc độ đánh và ghi nhật ký.")">@L("Enforcement Enabled", "Bật Xử Lý Vi Phạm")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="acLoopback" class="form-check-input" type="checkbox" @bind="this._configuration.ExemptLoopbackFromIpLimit" />
+                        <label class="form-check-label" for="acLoopback" title="@L("Skip 127.0.0.1 / ::1 from per-IP connection limits.", "Không áp dụng giới hạn IP đối với địa chỉ 127.0.0.1 / ::1.")">@L("Exempt Loopback IP", "Miễn Trừ Loopback")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="acSafe" class="form-check-input" type="checkbox" @bind="this._configuration.LogSafeZoneAttempts" />
+                        <label class="form-check-label" for="acSafe" title="@L("Record blocked attack attempts inside town safe zones.", "Ghi lại các lần cố gắng đánh khi đứng trong vùng an toàn.")">@L("Log Safe-Zone Attacks", "Ghi Đánh Vùng An Toàn")</label>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Max concurrent authenticated players per IP (0 = unlimited).", "Số kết nối tối đa trên mỗi IP (0 = không giới hạn).")">@L("Max Connections / IP", "Giới Hạn IP")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="100" @bind="this._configuration.MaxConnectionsPerIp" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Violations within window before auto-disconnect (0 = log only).", "Số lần vi phạm trong cửa sổ trước khi ngắt kết nối (0 = chỉ ghi nhận).")">@L("Strikes Before Kick", "Ngưỡng Vi Phạm Ngắt")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="1000" @bind="this._configuration.StrikesBeforeDisconnect" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Rolling strike window in minutes.", "Thời gian cửa sổ tính dồn vi phạm (phút).")">@L("Strike Window (min)", "Cửa Sổ (phút)")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="1440" @bind="this._configuration.StrikeWindowMinutes" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Maximum recent audit records kept.", "Số dòng nhật ký tối đa lưu giữ.")">@L("Max Audit Entries", "Số Dòng Nhật Ký Tối Đa")</label>
+                    <input type="number" class="form-control form-control-sm" min="50" max="5000" @bind="this._configuration.MaxAuditEntries" />
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-check mt-4">
+                        <input id="acFreq" class="form-check-input" type="checkbox" @bind="this._configuration.EnableAttackFrequencyCheck" />
+                        <label class="form-check-label" for="acFreq" title="@L("Check millisecond intervals between consecutive attacks against attack speed.", "Kiểm tra khoảng cách giữa các đòn đánh dựa trên Tốc Độ Đánh.")">@L("Attack Rate Check", "Kiểm Tra Nhịp Đánh")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Base minimum interval at 0 Attack Speed (ms).", "Khoảng trễ tối thiểu ở 0 tốc độ đánh (ms).")">@L("Base Min Interval (ms)", "Trễ Cơ Bản (ms)")</label>
+                    <input type="number" class="form-control form-control-sm" min="50" max="2000" @bind="this._configuration.BaseMinAttackIntervalMs" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Absolute floor regardless of agility/buffs (ms).", "Ngưỡng tối thiểu tuyệt đối bất kể nhanh nhẹn (ms).")">@L("Floor Interval (ms)", "Ngưỡng Tối Thiểu (ms)")</label>
+                    <input type="number" class="form-control form-control-sm" min="30" max="1000" @bind="this._configuration.MinimumAttackIntervalFloorMs" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Latency jitter factor (0.5 - 1.5, default 0.7).", "Hệ số bù độ trễ mạng (0.5 - 1.5, mặc định 0.7).")">@L("Latency Tolerance", "Dung Sai Mạng")</label>
+                    <input type="number" step="0.05" class="form-control form-control-sm" min="0.3" max="1.5" @bind="this._configuration.LatencyToleranceFactor" />
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input id="acAgi" class="form-check-input" type="checkbox" @bind="this._configuration.EnableHitHackAgilityCheck" />
+                        <label class="form-check-label" for="acAgi" title="@L("Flag players exceeding the maximum Agility threshold during combat.", "Cảnh báo nhân vật có Nhanh Nhẹn vượt trần cho phép khi tấn công.")">@L("Enable Max Agility Guard", "Giới Hạn Trần Nhanh Nhẹn")</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" title="@L("Maximum Agility allowed before flagging hit-hack.", "Trần Nhanh Nhẹn tối đa.")">@L("Max Agility Cap", "Trần Nhanh Nhẹn")</label>
+                    <input type="number" class="form-control form-control-sm" min="1000" max="65535" @bind="this._configuration.HitHackMaxAgility" />
+                </div>
+            </div>
+
+            <div class="mt-3 d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-primary btn-sm" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
+                    @L("Save Settings", "Lưu Cài Đặt")
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" disabled="@this._isSaving" @onclick="this.ReloadAudit" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">
+                    @L("Refresh Log", "Làm Mới Nhật Ký")
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm" disabled="@(this._isSaving || this._entries.Count == 0)" @onclick="this.ClearAudit" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">
+                    @L("Clear Log", "Xóa Nhật Ký")
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>@L($"Violation Audit Log ({this.FilteredEntries.Count})", $"Nhật Ký Vi Phạm ({this.FilteredEntries.Count})")</span>
+            <input type="text"
+                   class="form-control form-control-sm"
+                   style="width: 240px;"
+                   placeholder="@L("Filter account, char, IP, type...", "Lọc tài khoản, nhân vật, IP...")"
+                   @bind="this._filter"
+                   @bind:event="oninput" />
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>@L("Time (Sydney)", "Thời Gian (Sydney)")</th>
+                        <th>@L("Type", "Loại")</th>
+                        <th>@L("Account / Char", "Tài Khoản / Nhân Vật")</th>
+                        <th>@L("IP", "IP")</th>
+                        <th>@L("Details", "Chi Tiết")</th>
+                        <th>@L("Action", "Xử Lý")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (this.FilteredEntries.Count == 0)
+                    {
+                        <tr><td colspan="6" class="text-center text-muted py-3">@L("No anti-cheat events recorded.", "Chưa có sự kiện vi phạm nào.")</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in this.FilteredEntries.Take(100))
+                        {
+                            <tr>
+                                <td class="small text-nowrap">@item.OccurredAtSydney</td>
+                                <td><span class="badge bg-warning text-dark">@item.ViolationType</span></td>
+                                <td class="small">@item.Account / <strong>@item.Character</strong></td>
+                                <td class="small"><code>@item.IpAddress</code></td>
+                                <td class="small">@item.Details</td>
+                                <td><span class="badge @(item.ActionTaken == "Disconnected" ? "bg-danger" : "bg-secondary")">@item.ActionTaken</span></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

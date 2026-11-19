@@ -1,9 +1,10 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @inherits EditBase
 
 @using HNMO.DataModel.Configuration
 @using HNMO.Web.AdminPanel.Components.ConnectServer
 @using HNMO.Web.AdminPanel.Components.Layout
 
-<EditShell Model="@this.Model" ModelType="@this.Type" PersistenceContext="@this.PersistenceContext" IsOwningContext="@this.IsOwningContext" DownloadMarkup="@this.DownloadMarkup" EditorsMarkup="@this.GetEditorsMarkup()">
+<EditShell HelpText="@HelpResources.PageHelpTextEditConnectionServer" Model="@this.Model" ModelType="@this.Type" PersistenceContext="@this.PersistenceContext" IsOwningContext="@this.IsOwningContext" DownloadMarkup="@this.DownloadMarkup" EditorsMarkup="@this.GetEditorsMarkup()">
     <ConnectServerConfiguration Model="@((ConnectServerDefinition)this.Model!)" OnValidSubmit="this.SaveChangesAsync" />
 </EditShell>

@@ -32,12 +32,25 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: 'X', title: 'Cash shop', key: 'x' },
   { label: 'B', title: 'Gens', key: 'b' },
   { label: 'J', title: 'Missions', key: 'j' },
+  { label: 'H', title: 'Event & boss timetable', key: 'h' },
+  { label: 'L', title: 'Lucky number', key: 'l' },
   { label: 'N', title: 'World bosses', key: 'n' },
   { label: 'Y', title: 'New-player guide', key: 'y' },
   { label: 'K', title: 'Community', key: 'k' },
   { label: '🏆', title: 'Top races', key: '', event: 'hnmo-top-races-open' },
   { label: '🎁', title: 'Gift code', key: '', event: 'hnmo-gift-codes-open' },
+  { label: '💎', title: 'Top-up milestones', key: 'u', event: 'hnmo-topup-milestones-open' },
+  { label: '💍', title: 'Marriage', key: '', event: 'hnmo-marriage-open' },
+  { label: '🏪', title: 'Item market', key: '', event: 'hnmo-market-open' },
+  { label: '💎', title: 'Jewel bank', key: '', event: 'hnmo-jewel-bank-open' },
+  { label: 'VIP', title: 'VIP', key: '', event: 'hnmo-vip-open' },
+  { label: '📅', title: 'Season plan', key: '', event: 'hnmo-season-plan-open' },
+  { label: '♻️', title: 'Combining leftovers & exchange', key: '', event: 'hnmo-leftovers-open' },
+  { label: '🐴', title: 'Mount chain collection', key: '', event: 'hnmo-mount-chain-open' },
+  { label: '📊', title: 'Player rankings', key: '', event: 'hnmo-ranking-open' },
+  { label: '➕', title: 'Add stats (bulk)', key: '', event: 'hnmo-add-stats-open' },
   { label: '📷', title: 'Screenshot / share', key: '', event: 'hnmo-share-open' },
+  { label: '📬', title: 'Mailbox / Gift Box', key: '', event: 'hnmo-giftbox-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
 const POTION_KEYS = ['q', 'w', 'e', 'r'];
@@ -157,7 +170,13 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   };
   window.addEventListener('resize', portrait);
   // Shown on touch screens, and from the first touch on any screen.
-  const show = () => { bar.classList.add('shown'); fight.classList.add('shown'); portrait(); };
+  const show = () => {
+    const first = !bar.classList.contains('shown');
+    bar.classList.add('shown');
+    fight.classList.add('shown');
+    portrait();
+    if (first) (actions as TouchActions & { onShow?: () => void }).onShow?.();
+  };
   if (window.matchMedia?.('(pointer: coarse)').matches) show();
 
   const fingers = new Map<number, { x: number; y: number }>();

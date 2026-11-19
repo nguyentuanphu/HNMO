@@ -1,0 +1,276 @@
+@page "/character-tools"
+@attribute [Authorize(Policy = AdminPolicies.Operator)]
+
+@using HNMO.Persistence
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("Character Tools", "Công cụ nhân vật")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@Resources.CharacterTools" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <h1 class="mb-0">@this.L("Character Tools", "Công cụ nhân vật")</h1>
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<div class="mb-3 page-help">
+    <button type="button"
+            class="btn btn-sm btn-outline-info"
+            title="@this.L("Show or hide usage help for this page", "Hiện hoặc ẩn hướng dẫn sử dụng trang này")"
+            aria-expanded="@(this._showHelp ? "true" : "false")"
+            @onclick="() => this._showHelp = !this._showHelp">
+        <span class="oi oi-question-mark" aria-hidden="true"></span> @this.L("How to use this page", "Cách dùng trang này")
+    </button>
+    @if (this._showHelp)
+    {
+        <div class="alert alert-info mt-2 mb-0" role="region">
+            @Resources.PageHelpTextCharacterTools
+        </div>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(this._error))
+{
+    <div class="alert alert-danger" role="alert">@this._error</div>
+}
+
+@if (!string.IsNullOrEmpty(this._status))
+{
+    <div class="alert alert-success" role="status">@this._status</div>
+}
+
+<div class="card mb-3">
+    <div class="card-header fw-semibold">@this.L("1. Find Character", "1. Tìm nhân vật")</div>
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-sm-6 col-md-4">
+                <label class="form-label" for="charToolsLookupName">@this.L("Character name", "Tên nhân vật")</label>
+                <input id="charToolsLookupName"
+                       type="text"
+                       maxlength="10"
+                       class="form-control"
+                       placeholder="@this.L("Exact character name", "Tên nhân vật chính xác")"
+                       title="@this.L("Enter the exact character name (max 10 characters)", "Nhập tên nhân vật chính xác (tối đa 10 ký tự)")"
+                       @bind="this._characterName" />
+            </div>
+            <div class="col-auto">
+                <button type="button"
+                        class="btn btn-primary"
+                        disabled="@this._busy"
+                        title="@this.L("Load character position, stats, Zen, class, and online status", "Tải vị trí, chỉ số, Zen, lớp nhân vật và trạng thái trực tuyến")"
+                        @onclick="this.LoadCharacterAsync">
+                    @this.L("Load character", "Tải nhân vật")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (this._snapshot is { } s)
+{
+    <div class="card mb-3">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+            <span class="fw-semibold">@s.CharacterName (@s.AccountLogin)</span>
+            @if (s.IsOnline)
+            {
+                <span class="badge bg-success">@this.L($"Online (Server {s.OnlineServerId})", $"Đang trực tuyến (Máy chủ {s.OnlineServerId})")</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">@this.L("Offline", "Ngoại tuyến")</span>
+            }
+        </div>
+        <div class="card-body">
+            <div class="row g-2 small">
+                <div class="col-6 col-md-3"><strong>@this.L("Class", "Lớp"):</strong> @s.CharacterClassName</div>
+                <div class="col-6 col-md-3"><strong>@this.L("Map", "Bản đồ"):</strong> @s.MapName (#@s.MapNumber: @s.X, @s.Y)</div>
+                <div class="col-6 col-md-3"><strong>@this.L("Level / ML / Reset", "Cấp / ML / Reset"):</strong> @s.Level / @s.MasterLevel / @s.Resets</div>
+                <div class="col-6 col-md-3"><strong>Zen:</strong> @s.Zen.ToString("N0")</div>
+                <div class="col-12"><strong>STR / AGI / VIT / ENE / CMD:</strong> @s.Strength / @s.Agility / @s.Vitality / @s.Energy / @s.Leadership</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">@this.L("2. Unstuck / Move to Town", "2. Giải kẹt / Đưa về thành")</div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label class="form-label" for="charToolsTown">@this.L("Destination town", "Thành đích")</label>
+                        <select id="charToolsTown"
+                                class="form-select"
+                                title="@this.L("Choose a town spawn map or Auto Home Town", "Chọn bản đồ thành hoặc Tự động về thành mặc định")"
+                                @bind="this._selectedTownMap">
+                            <option value="">@this.L("Auto (class home town)", "Tự động (thành mặc định của lớp)")</option>
+                            @foreach (var map in this._towns)
+                            {
+                                <option value="@map.Number.ToString(System.Globalization.CultureInfo.InvariantCulture)">@map.Name (#@map.Number)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="charToolsMoveReason">@this.L("Required reason", "Lý do bắt buộc")</label>
+                        <input id="charToolsMoveReason"
+                               type="text"
+                               class="form-control"
+                               title="@this.L("Explain why this character is being moved (saved in audit log)", "Giải thích lý do dịch chuyển (được lưu vào nhật ký kiểm toán)")"
+                               @bind="this._moveReason" />
+                    </div>
+                    <button type="button"
+                            class="btn btn-warning"
+                            disabled="@this._busy"
+                            title="@this.L("Move character immediately to a safe walkable town tile", "Đưa nhân vật ngay tới ô an toàn trong thành")"
+                            @onclick="this.MoveToTownAsync">
+                        @this.L("Move to safe town", "Đưa về thành an toàn")
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">@this.L("3. Live Buffs (Online Only)", "3. Bùa hỗ trợ (Chỉ khi trực tuyến)")</div>
+                <div class="card-body">
+                    <div class="row g-2 mb-2">
+                        <div class="col-sm-8">
+                            <label class="form-label" for="charToolsBuff">@this.L("Buff effect", "Hiệu ứng bùa")</label>
+                            <select id="charToolsBuff"
+                                    class="form-select"
+                                    title="@this.L("Choose a configured buff effect to grant live", "Chọn hiệu ứng bùa hỗ trợ để ban tặng trực tiếp")"
+                                    @bind="this._selectedBuffNumber">
+                                @foreach (var buff in this._buffs)
+                                {
+                                    <option value="@buff.Number">@buff.Name (#@buff.Number)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label" for="charToolsBuffSec">@this.L("Seconds", "Số giây")</label>
+                            <input id="charToolsBuffSec"
+                                   type="number"
+                                   min="10"
+                                   max="86400"
+                                   class="form-control"
+                                   title="@this.L("Buff duration in seconds (10 to 86400)", "Thời gian hiệu lực bùa tính bằng giây (10 đến 86400)")"
+                                   @bind="this._buffDurationSeconds" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="charToolsBuffReason">@this.L("Required reason", "Lý do bắt buộc")</label>
+                        <input id="charToolsBuffReason"
+                               type="text"
+                               class="form-control"
+                               title="@this.L("Reason for applying or clearing buffs (required)", "Lý do ban tặng hoặc xóa bùa hỗ trợ (bắt buộc)")"
+                               @bind="this._buffReason" />
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button"
+                                class="btn btn-primary"
+                                disabled="@(this._busy || !s.IsOnline)"
+                                title="@this.L("Apply selected buff to the online character", "Ban tặng bùa đã chọn cho nhân vật đang trực tuyến")"
+                                @onclick="this.ApplyBuffAsync">
+                            @this.L("Apply buff", "Ban tặng bùa")
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline-danger"
+                                disabled="@(this._busy || !s.IsOnline)"
+                                title="@this.L("Clear active timed buffs on the online character", "Xóa các bùa hỗ trợ đang có hiệu lực trên nhân vật")"
+                                @onclick="this.ClearBuffsAsync">
+                            @this.L("Clear buffs", "Xóa hết bùa")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header fw-semibold">@this.L("4. Level, Stats, Zen & Class (Offline Only)", "4. Chỉnh Cấp, Chỉ số, Zen & Lớp (Chỉ ngoại tuyến)")</div>
+        <div class="card-body">
+            @if (s.IsOnline)
+            {
+                <div class="alert alert-warning mb-3" role="status">
+                    @this.L("Character is currently online. Unsafe edits (level, stats, Zen, class) are refused until the player disconnects.", "Nhân vật đang trực tuyến. Hệ thống từ chối chỉnh sửa cấp, chỉ số, Zen hoặc lớp cho tới khi người chơi thoát game.")
+                </div>
+            }
+            <div class="row g-2 mb-2">
+                <div class="col-6 col-md-2">
+                    <label class="form-label" for="editLevel">@this.L("Level", "Cấp")</label>
+                    <input id="editLevel" type="number" class="form-control" title="@this.L("Regular level", "Cấp độ thường")" @bind="this._edit.Level" />
+                </div>
+                <div class="col-6 col-md-2">
+                    <label class="form-label" for="editMasterLevel">Master</label>
+                    <input id="editMasterLevel" type="number" class="form-control" title="@this.L("Master level", "Cấp Master")" @bind="this._edit.MasterLevel" />
+                </div>
+                <div class="col-6 col-md-2">
+                    <label class="form-label" for="editResets">Resets</label>
+                    <input id="editResets" type="number" class="form-control" title="@this.L("Reset count", "Số lần Reset")" @bind="this._edit.Resets" />
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label" for="editZen">Zen</label>
+                    <input id="editZen" type="number" class="form-control" title="@this.L("Inventory Zen amount", "Lượng Zen trong hành trang")" @bind="this._edit.Zen" />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label" for="editClass">@this.L("Class", "Lớp nhân vật")</label>
+                    <select id="editClass" class="form-select" title="@this.L("Character class (requires offline)", "Lớp nhân vật (yêu cầu ngoại tuyến)")" @bind="this._selectedClassIdText">
+                        @foreach (var cc in this._classes)
+                        {
+                            <option value="@cc.GetId().ToString()">@cc.Name (#@cc.Number)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row g-2 mb-2">
+                <div class="col-4 col-md-2">
+                    <label class="form-label" for="editStr">STR</label>
+                    <input id="editStr" type="number" class="form-control" title="@this.L("Base Strength", "Sức mạnh gốc")" @bind="this._edit.Strength" />
+                </div>
+                <div class="col-4 col-md-2">
+                    <label class="form-label" for="editAgi">AGI</label>
+                    <input id="editAgi" type="number" class="form-control" title="@this.L("Base Agility", "Nhanh nhẹn gốc")" @bind="this._edit.Agility" />
+                </div>
+                <div class="col-4 col-md-2">
+                    <label class="form-label" for="editVit">VIT</label>
+                    <input id="editVit" type="number" class="form-control" title="@this.L("Base Vitality", "Thể lực gốc")" @bind="this._edit.Vitality" />
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label" for="editEne">ENE</label>
+                    <input id="editEne" type="number" class="form-control" title="@this.L("Base Energy", "Năng lượng gốc")" @bind="this._edit.Energy" />
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label" for="editCmd">CMD</label>
+                    <input id="editCmd" type="number" class="form-control" title="@this.L("Base Leadership", "Mệnh lệnh gốc")" @bind="this._edit.Leadership" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="editReason">@this.L("Required reason", "Lý do bắt buộc")</label>
+                <input id="editReason"
+                       type="text"
+                       class="form-control"
+                       placeholder="@this.L("Audit reason for this offline edit", "Lý do kiểm toán cho thay đổi ngoại tuyến này")"
+                       title="@this.L("Required reason recorded in admin audit and activity logs", "Lý do bắt buộc được ghi vào nhật ký kiểm toán và hoạt động")"
+                       @bind="this._edit.Reason" />
+            </div>
+            <button type="button"
+                    class="btn btn-success"
+                    disabled="@(this._busy || s.IsOnline)"
+                    title="@this.L("Save offline character edits with audit reason", "Lưu chỉnh sửa nhân vật ngoại tuyến kèm lý do kiểm toán")"
+                    @onclick="this.SaveOfflineEditsAsync">
+                @this.L("Save offline changes", "Lưu thay đổi ngoại tuyến")
+            </button>
+        </div>
+    </div>
+}

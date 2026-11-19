@@ -1,0 +1,232 @@
+@page "/s6-events"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.DataModel.Configuration
+@using HNMO.GameLogic.PlugIns.S6Events
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@L("Season 6 Events & Exchanges", "Sự Kiện & Đổi Thưởng Season 6")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Season 6 Events & Exchanges", "Sự Kiện & Đổi Thưởng Season 6")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextS6Events" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Disabled by default. Turn on both Plug-in Active and Enabled, then click Save.", "Mặc định tắt. Bật cả Kích Hoạt Plug-in và Bật Sự Kiện, sau đó nhấn Lưu.")</li>
+            <li>@L("Last Man Standing (/lms) opens on daily Sydney schedule or immediately via Start LMS Now, integrates into Timetable + Event Alerts, and grants coins via MissionCoinGranter + queued owed rewards.", "Chiến Trường Sinh Tử (/lms) mở theo lịch giờ Sydney hoặc chạy ngay với Bắt Đầu LMS Ngay, tự đồng bộ Bảng Giờ + Cảnh Báo Sự Kiện và trả coin qua MissionCoinGranter + hàng đợi phần thưởng.")</li>
+            <li>@L("Cherry Blossom Spirit (NPC #450 / /blossom) and Delgado Lucky Coin (NPC #478 / /luckycoin) consume stacked event tokens for weighted rewards.", "Tinh Linh Hoa Đào (NPC #450 / /blossom) và Delgado Xu May Mắn (NPC #478 / /luckycoin) trừ số lượng xếp chồng và trả quà ngẫu nhiên theo trọng số.")</li>
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._isLoading || this._configuration is null)
+{
+    <p>@L("Loading...", "Đang tải...")</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>@L("Last Man Standing (/lms)", "Chiến Trường Sinh Tử (/lms)")</span>
+            <button type="button"
+                    class="btn btn-sm btn-outline-warning"
+                    title="@L("Immediately open LMS registration on running game servers.", "Mở đăng ký LMS ngay lập tức trên máy chủ đang chạy.")"
+                    @onclick="this.TriggerLmsNowAsync">
+                @L("Start LMS Now", "Mở LMS Ngay")
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 d-flex flex-wrap gap-3">
+                    <div class="form-check form-switch">
+                        <input id="s6Active" class="form-check-input" type="checkbox" @bind="this._isActive" />
+                        <label class="form-check-label" for="s6Active" title="@L("Activate plug-in instance in the running server.", "Kích hoạt plug-in trong máy chủ.")">@L("Plug-in Active", "Kích Hoạt Plug-in")</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input id="s6Enabled" class="form-check-input" type="checkbox" @bind="this._configuration.Enabled" />
+                        <label class="form-check-label" for="s6Enabled" title="@L("Master toggle for LMS & S6 token exchanges.", "Công tắc chính bật LMS và đổi thưởng S6.")">@L("Feature Enabled", "Bật Tính Năng")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="s6LmsEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.LmsEnabled" />
+                        <label class="form-check-label" for="s6LmsEnabled" title="@L("Enable scheduled and manual Last Man Standing rounds.", "Bật vòng đấu Chiến Trường Sinh Tử.")">@L("LMS Enabled", "Bật LMS")</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label" title="@L("Comma-separated daily HH:mm times (Sydney time).", "Danh sách giờ chạy hàng ngày HH:mm cách nhau bởi dấu phẩy (giờ Sydney).")">@L("Daily Times (HH:mm)", "Khung Giờ Hàng Ngày")</label>
+                    <input type="text" class="form-control form-control-sm" @bind="this._lmsTimesText" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Registration open duration in minutes.", "Thời gian mở đăng ký /lms (phút).")">@L("Reg (min)", "Đăng Ký (phút)")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="15" @bind="this._configuration.LmsRegistrationMinutes" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Combat duration after countdown.", "Thời gian giao chiến tối đa (phút).")">@L("Combat (min)", "Đấu (phút)")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="60" @bind="this._configuration.LmsDurationMinutes" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Minimum contestants to start LMS fight.", "Số người tối thiểu để bắt đầu đấu.")">@L("Min Players", "Tối Thiểu Người")</label>
+                    <input type="number" class="form-control form-control-sm" min="2" max="50" @bind="this._configuration.LmsMinPlayers" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" title="@L("Minimum character level to enter /lms.", "Cấp nhân vật tối thiểu để tham gia /lms.")">@L("Min Level", "Cấp Tối Thiểu")</label>
+                    <input type="number" class="form-control form-control-sm" min="1" max="1000" @bind="this._configuration.LmsMinLevel" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Arena map number (64 = Duel Arena).", "Mã bản đồ đấu trường (64 = Đấu Trường).")">@L("Arena Map #", "Map Đấu #")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="255" @bind="this._configuration.LmsArenaMapNumber" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Winner coin reward.", "Thưởng coin cho nhà vô địch LMS.")">@L("Winner Coins", "Coin Vô Địch")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="100000" @bind="this._configuration.LmsRewardCoins" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Winner coin type.", "Loại tiền coin thưởng.")">@L("Coin Type", "Loại Coin")</label>
+                    <select class="form-select form-select-sm" @bind="this._configuration.LmsRewardCoinType">
+                        @foreach (var ct in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@ct">@ct</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@L("Winner Zen prize.", "Tiền Zen thưởng cho người thắng.")">@L("Winner Zen", "Zen Thưởng")</label>
+                    <input type="number" class="form-control form-control-sm" min="0" max="2000000000" @bind="this._configuration.LmsRewardZen" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">@L("Cherry Blossom Exchange (/blossom, NPC #450)", "Đổi Hoa Đào (/blossom, NPC #450)")</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input id="cbEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.CherryBlossomEnabled" />
+                        <label class="form-check-label" for="cbEnabled" title="@L("Allow exchanging stacked Golden Cherry Blossom Branches.", "Cho phép đổi Cành Hoa Đào Vàng xếp chồng.")">@L("Enable Cherry Blossom Exchange", "Bật Đổi Hoa Đào")</label>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-4">
+                            <label class="form-label">@L("NPC #", "Mã NPC")</label>
+                            <input type="number" class="form-control form-control-sm" @bind="this._configuration.CherryBlossomNpcNumber" />
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">@L("Item Group", "Nhóm Đồ")</label>
+                            <input type="number" class="form-control form-control-sm" @bind="this._configuration.CherryBlossomItemGroup" />
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">@L("Item #", "Mã Đồ")</label>
+                            <input type="number" class="form-control form-control-sm" @bind="this._configuration.CherryBlossomItemNumber" />
+                        </div>
+                    </div>
+                    <ul class="small mb-0">
+                        @foreach (var t in this._configuration.CherryBlossomTiers)
+                        {
+                            <li><strong>@t.RequiredCount</strong> — @(this._isVi ? t.LabelVi : t.LabelEn) (@t.Rewards.Count @L("outcomes", "phần thưởng"))</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">@L("Delgado Lucky Coin (/luckycoin, NPC #478)", "Delgado Xu May Mắn (/luckycoin, NPC #478)")</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input id="lcEnabled" class="form-check-input" type="checkbox" @bind="this._configuration.LuckyCoinEnabled" />
+                        <label class="form-check-label" for="lcEnabled" title="@L("Allow exchanging stacked Lucky Coins for weighted rewards.", "Cho phép đổi Xu May Mắn xếp chồng lấy quà.")">@L("Enable Lucky Coin Exchange", "Bật Đổi Xu May Mắn")</label>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-4">
+                            <label class="form-label">@L("NPC #", "Mã NPC")</label>
+                            <input type="number" class="form-control form-control-sm" @bind="this._configuration.LuckyCoinNpcNumber" />
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">@L("Item Group", "Nhóm Đồ")</label>
+                            <input type="number" class="form-control form-control-sm" @bind="this._configuration.LuckyCoinItemGroup" />
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">@L("Item #", "Mã Đồ")</label>
+                            <input type="number" class="form-control form-control-sm" @bind="this._configuration.LuckyCoinItemNumber" />
+                        </div>
+                    </div>
+                    <ul class="small mb-0">
+                        @foreach (var t in this._configuration.LuckyCoinTiers)
+                        {
+                            <li><strong>@t.RequiredCount</strong> — @(this._isVi ? t.LabelVi : t.LabelEn) (@t.Rewards.Count @L("outcomes", "phần thưởng"))</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-3">
+        <button type="button" class="btn btn-primary" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">
+            @(this._isSaving ? L("Saving...", "Đang lưu...") : L("Save S6 Events", "Lưu Cài Đặt Sự Kiện S6"))
+        </button>
+        <button type="button" class="btn btn-outline-secondary" @onclick="this.ReloadState" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintRefresh">@L("Refresh History", "Làm Mới Lịch Sử")</button>
+    </div>
+
+    <div class="card">
+        <div class="card-header">@L("Recent LMS Winners & Owed Rewards Queue", "Lịch Sử Vô Địch LMS & Hàng Đợi Quà")</div>
+        <div class="card-body">
+            <p class="small text-muted mb-2">@L("Pending Owed Rewards:", "Phần thưởng đang chờ phát:") <strong>@this._state.OwedRewards.Count</strong></p>
+            @if (this._state.LmsHistory.Count == 0)
+            {
+                <p class="text-muted mb-0">@L("No completed LMS rounds recorded yet.", "Chưa có vòng đấu LMS nào kết thúc.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>@L("Time (Sydney)", "Giờ (Sydney)")</th>
+                                <th>@L("Winner", "Nhà Vô Địch")</th>
+                                <th>@L("Kills", "Hạ Gục")</th>
+                                <th>@L("Reward", "Phần Thưởng")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var win in this._state.LmsHistory.Take(20))
+                            {
+                                <tr>
+                                    <td>@win.CompletedAtSydney</td>
+                                    <td>@win.CharacterName (@win.LoginName)</td>
+                                    <td>@win.Kills</td>
+                                    <td>@win.RewardSummary</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -11,10 +11,12 @@ using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
+using HNMO.GameLogic.CashShop;
 using HNMO.GameLogic.PlayerActions.PlayerStore;
 using HNMO.GameLogic.PlayerShopCurrencies;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.GameLogic.Views.PlayerShop;
+using HNMO.Persistence;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -182,6 +184,13 @@ public class PlayerShopCurrenciesTest
         Mock.Get(buyer.ViewPlugIns.GetPlugIn<IPlayerShopBuyRequestResultPlugIn>()!).Verify(v => v.ShowResultAsync(seller, ItemBuyResult.Success, soldItem), Times.Once);
         Assert.That(buyer.Account.WCoinC, Is.EqualTo(70));
         Assert.That(seller.Account.WCoinC, Is.EqualTo(35));
+        await seller.SaveProgressAsync().ConfigureAwait(false);
+        var history = await buyer.PersistenceContext.GetCashShopCoinHistoryAsync(buyer.Account.GetId(), 0, 20).ConfigureAwait(false);
+        Assert.That(history.Single(g => CashShopBalanceReceipt.Read(g.Reason)?.Action == nameof(CashShopBalanceReason.PlayerStorePurchase)).Amount, Is.EqualTo(-30));
+        Assert.That(history.Single(g => CashShopBalanceReceipt.Read(g.Reason)?.Action == nameof(CashShopBalanceReason.PlayerStoreSale)).Amount, Is.EqualTo(30));
+        await buyer.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+        await seller.ApplyPendingCashShopCoinGrantsAsync().ConfigureAwait(false);
+        Assert.That((buyer.Account.WCoinC, seller.Account.WCoinC), Is.EqualTo((70, 35)));
     }
 
     /// <summary>

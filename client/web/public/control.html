@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HNMO Control</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0f141b; --card: #18202c; --border: #2a3648; --text: #e6edf5; --muted: #93a4bc; --ok: #2ecc71; --down: #e74c3c; --accent: #d4a64a; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
+    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    h1 { margin: 0; font-size: 1.6rem; display: flex; align-items: center; gap: 8px; }
+    .lang-btns button, button { background: #232e3e; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; cursor: pointer; font-size: 0.92rem; }
+    button.primary { background: var(--accent); color: #111; border-color: var(--accent); font-weight: 600; }
+    button.danger { background: #5a1f25; border-color: #8b323b; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .card h2 { margin: 0 0 12px; font-size: 1.08rem; }
+    .help-box { background: #16293d; border: 1px solid #2b4c6f; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: none; }
+    .lights { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .light { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #121822; border-radius: 8px; border: 1px solid var(--border); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--down); flex-shrink: 0; }
+    .dot.on { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+    input, select { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: #0f141b; color: var(--text); }
+    pre { background: #0b0f14; border: 1px solid var(--border); border-radius: 8px; padding: 12px; max-height: 280px; overflow: auto; font-size: 0.8rem; margin: 0; white-space: pre-wrap; }
+    .msg { padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; display: none; background: #1c2d24; border: 1px solid #2e6b48; }
+    .msg.err { background: #3b1c20; border-color: #8b323b; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>
+        <span data-i18n="title">HNMO Control</span>
+        <button type="button" id="helpBtn" title="How to use this page">?</button>
+      </h1>
+      <div class="lang-btns row">
+        <button type="button" id="langEn">EN</button>
+        <button type="button" id="langVi">VI</button>
+      </div>
+    </header>
+
+    <div id="helpBox" class="help-box">
+      <strong data-i18n="helpTitle">How to use this page</strong>
+      <p data-i18n="helpBody">This local control page manages the database, game server, web game, backups, auto-start, and updates. It is only reachable from this computer.</p>
+    </div>
+
+    <div id="statusMsg" class="msg"></div>
+    <div id="crashBanner" class="msg err" style="display:none">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div>
+          <strong id="crashBannerTitle"></strong>
+          <div id="crashBannerDetail" style="font-size:0.9rem;margin-top:4px"></div>
+        </div>
+        <button type="button" id="btnAckCrash" data-i18n="btnAckCrash">Acknowledge</button>
+      </div>
+    </div>
+
+    <section id="wizardCard" class="card" style="display:none">
+      <h2 data-i18n="wizardTitle">First-start setup wizard</h2>
+      <p class="muted" style="margin:0 0 10px" data-i18n="wizardHint">After starting HNMO, open Admin panel (/users) to create your first admin user (password >= 12 characters), then create an Administrator API key on /api-keys for Website Portal registration.</p>
+      <div class="grid2">
+        <div><label data-i18n="adminPwLabel">Admin password</label><input id="wizPw" type="password" placeholder="••••••••" /></div>
+        <div><label data-i18n="gameNameLabel">Game name</label><input id="wizName" type="text" value="HNMO" /></div>
+        <div><label data-i18n="pubAddrLabel">Public address</label><input id="wizAddr" type="text" value="localhost" /></div>
+        <div><label data-i18n="langLabel">Language</label><select id="wizLang"><option value="en">English</option><option value="vi">Tiếng Việt</option></select></div>
+        <div><label>Web port</label><input id="wizWeb" type="number" value="8080" /></div>
+        <div><label>Admin port</label><input id="wizAdmin" type="number" value="8095" /></div>
+        <div><label>Connect server port</label><input id="wizConn" type="number" value="44406" /></div>
+        <div><label>Database port</label><input id="wizDb" type="number" value="55432" /></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" id="wizSubmit" class="primary" data-i18n="wizSaveStart">Save and start HNMO</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="statusTitle">Services &amp; Actions</h2>
+      <div class="lights" style="margin-bottom:14px">
+        <div class="light"><span id="dotDb" class="dot"></span><span data-i18n="svcDb">Database</span></div>
+        <div class="light"><span id="dotGame" class="dot"></span><span data-i18n="svcServer">Game server</span></div>
+        <div class="light"><span id="dotWeb" class="dot"></span><span data-i18n="svcWeb">Web game</span></div>
+        <div class="light"><span id="dotAdmin" class="dot"></span><span data-i18n="svcAdmin">Admin panel</span></div>
+      </div>
+      <div class="row">
+        <button type="button" id="btnStart" class="primary" data-i18n="btnStart">Start</button>
+        <button type="button" id="btnStop" class="danger" data-i18n="btnStop">Stop</button>
+        <button type="button" id="btnRestart" data-i18n="btnRestart">Restart</button>
+        <a id="openGame" href="/" target="_blank"><button type="button" data-i18n="btnOpenGame">Open game</button></a>
+        <a id="openAdmin" href="http://127.0.0.1:8095/" target="_blank"><button type="button" data-i18n="btnOpenAdmin">Open admin panel</button></a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="systemTitle">Startup &amp; Service (VPS)</h2>
+      <div class="row">
+        <button type="button" id="btnAutoStart" data-i18n="btnAutoStart">Start HNMO when this computer starts: OFF</button>
+        <button type="button" id="btnService" data-i18n="btnService">Install as a service</button>
+      </div>
+    </section>
+
+    <section class="card" id="diskCard">
+      <h2 data-i18n="diskTitle">Disk Usage &amp; Database Maintenance</h2>
+      <div id="diskWarning" class="msg err" style="display:none"></div>
+      <div id="diskSummary" style="color:var(--muted);font-size:0.9rem;margin-bottom:10px"></div>
+      <div class="row">
+        <button type="button" id="btnVacuum" data-i18n="btnVacuum">Run PostgreSQL VACUUM ANALYZE</button>
+        <span id="maintStatus" style="color:var(--muted);font-size:0.85rem"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="backupTitle">Backup &amp; Restore (Sydney time)</h2>
+      <div class="row" style="margin-bottom:10px">
+        <button type="button" id="btnBackup" class="primary" data-i18n="btnBackup">Backup now</button>
+        <span id="backupTotals" style="color:var(--muted);font-size:0.85rem"></span>
+      </div>
+      <table>
+        <thead><tr><th data-i18n="colFile">File</th><th data-i18n="colTime">Created (Sydney)</th><th data-i18n="colSize">Size</th><th></th></tr></thead>
+        <tbody id="backupRows"></tbody>
+      </table>
+    </section>
+
+    <section class="card" id="retentionCard">
+      <h2 data-i18n="retentionTitle">Log &amp; Backup Retention Settings</h2>
+      <div class="grid2">
+        <div><label data-i18n="lblMaxLogDays" title="Days to keep rotated .log.gz files">Log retention (days)</label><input id="cfgMaxLogDays" type="number" min="1" max="3650" value="14" /></div>
+        <div><label data-i18n="lblMaxLogMb" title="Maximum total size of save/logs folder">Max logs folder (MB)</label><input id="cfgMaxLogMb" type="number" min="10" max="100000" value="200" /></div>
+        <div><label data-i18n="lblDbDays" title="Days before DB chat/audit logs are exported & purged">DB log retention (days)</label><input id="cfgDbDays" type="number" min="1" max="3650" value="90" /></div>
+        <div><label data-i18n="lblLowDiskMb" title="Warn when free disk space drops below MB">Low disk warning (MB)</label><input id="cfgLowDiskMb" type="number" min="64" max="1000000" value="2048" /></div>
+        <div><label data-i18n="lblKeepDaily">Daily backups kept</label><input id="cfgKeepDaily" type="number" min="1" max="365" value="7" /></div>
+        <div><label data-i18n="lblKeepWeekly">Weekly backups kept</label><input id="cfgKeepWeekly" type="number" min="0" max="104" value="4" /></div>
+        <div><label data-i18n="lblKeepMonthly">Monthly backups kept</label><input id="cfgKeepMonthly" type="number" min="0" max="120" value="3" /></div>
+        <div><label data-i18n="lblVacuumHours">Vacuum interval (hours)</label><input id="cfgVacuumHours" type="number" min="1" max="720" value="24" /></div>
+        <div><label data-i18n="lblAutoRestartCrash" title="Automatically restart the game server if it crashes unexpectedly">Auto-restart on crash</label><select id="cfgAutoRestart"><option value="true">ON</option><option value="false">OFF</option></select></div>
+        <div><label data-i18n="lblMaxRestartsHour" title="Maximum auto-restarts in a 60-minute window">Max crash restarts/hour</label><input id="cfgMaxRestarts" type="number" min="1" max="60" value="5" /></div>
+        <div><label data-i18n="lblCrashDelay" title="Base backoff delay before auto-restarting">Crash restart delay (sec)</label><input id="cfgCrashDelay" type="number" min="1" max="300" value="3" /></div>
+        <div><label data-i18n="lblCrashDiscord" title="Optional secret Discord webhook URL alerted when a crash happens">Crash Discord webhook (optional)</label><input id="cfgCrashDiscord" type="password" autocomplete="off" placeholder="https://discord.com/api/webhooks/..." /></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" id="btnSaveMaint" class="primary" data-i18n="btnSaveMaint">Save retention settings</button>
+      </div>
+      <div style="margin-top:16px">
+        <h3 style="margin:0 0 8px;font-size:0.98rem" data-i18n="crashHistoryTitle">Recent Crash Watch Incidents (Sydney time)</h3>
+        <table>
+          <thead><tr><th data-i18n="colTime">Created (Sydney)</th><th data-i18n="colExit">Exit</th><th data-i18n="colSummary">Summary</th></tr></thead>
+          <tbody id="crashRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="updatesTitle">Updates</h2>
+      <div class="row" style="margin-bottom:10px">
+        <button type="button" id="btnUpdates" data-i18n="btnCheckUpdates">Check for updates</button>
+      </div>
+      <div id="updateInfo" style="color:var(--muted);font-size:0.9rem"></div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="logsTitle">Logs (View / Search / Download)</h2>
+      <div class="row" style="margin-bottom:10px">
+        <select id="logFileSelect" style="max-width:260px"><option value="all">All logs</option></select>
+        <input id="logSearch" type="text" placeholder="Search logs..." style="max-width:260px" />
+        <button type="button" id="btnLogSearch" data-i18n="btnSearchLogs">Search</button>
+        <button type="button" id="btnLogDownload" data-i18n="btnDownloadLog">Download</button>
+      </div>
+      <pre id="logOutput"></pre>
+    </section>
+  </div>
+
+  <script>
+    const i18n = {
+      en: {
+        title: 'HNMO Control',
+        helpTitle: 'How to use this page',
+        helpBody: 'This local control page manages the database, game server, web game, backups, auto-start, and updates. It is only reachable from this computer.',
+        wizardTitle: 'First-start setup wizard',
+        wizardHint: 'After starting HNMO, open Admin panel (/users) to create your first admin user (password >= 12 characters), then create an Administrator API key on /api-keys for Website Portal registration.',
+        adminPwLabel: 'Admin password',
+        gameNameLabel: 'Game name',
+        pubAddrLabel: 'Public address',
+        langLabel: 'Language',
+        wizSaveStart: 'Save and start HNMO',
+        statusTitle: 'Services & Actions',
+        svcDb: 'Database',
+        svcServer: 'Game server',
+        svcWeb: 'Web game',
+        svcAdmin: 'Admin panel',
+        btnStart: 'Start',
+        btnStop: 'Stop',
+        btnRestart: 'Restart',
+        btnOpenGame: 'Open game',
+        btnOpenAdmin: 'Open admin panel',
+        systemTitle: 'Startup & Service (VPS)',
+        backupTitle: 'Backup & Restore (Sydney time)',
+        diskTitle: 'Disk Usage & Database Maintenance',
+        btnVacuum: 'Run PostgreSQL VACUUM ANALYZE',
+        retentionTitle: 'Log & Backup Retention Settings',
+        lblMaxLogDays: 'Log retention (days)',
+        lblMaxLogMb: 'Max logs folder (MB)',
+        lblDbDays: 'DB log retention (days)',
+        lblLowDiskMb: 'Low disk warning (MB)',
+        lblKeepDaily: 'Daily backups kept',
+        lblKeepWeekly: 'Weekly backups kept',
+        lblKeepMonthly: 'Monthly backups kept',
+        lblVacuumHours: 'Vacuum interval (hours)',
+        btnSaveMaint: 'Save retention settings',
+        btnBackup: 'Backup now',
+        colFile: 'File',
+        colTime: 'Created (Sydney)',
+        colSize: 'Size',
+        updatesTitle: 'Updates',
+        btnCheckUpdates: 'Check for updates',
+        logsTitle: 'Logs (View / Search / Download)',
+        btnSearchLogs: 'Search',
+        btnDownloadLog: 'Download',
+        btnAckCrash: 'Dismiss notice',
+        lblAutoRestartCrash: 'Auto-restart on crash',
+        lblMaxRestartsHour: 'Max crash restarts/hour',
+        lblCrashDelay: 'Crash restart delay (sec)',
+        lblCrashDiscord: 'Crash Discord webhook (optional)',
+        crashHistoryTitle: 'Recent Crash Watch Incidents (Sydney time)',
+        colExit: 'Exit',
+        colSummary: 'Summary',
+      },
+      vi: {
+        btnAckCrash: 'Đã xem cảnh báo',
+        lblAutoRestartCrash: 'Tự khởi động lại khi sập',
+        lblMaxRestartsHour: 'Số lần khởi động lại/giờ',
+        lblCrashDelay: 'Độ trễ khởi động lại (giây)',
+        lblCrashDiscord: 'Discord webhook báo sập (tùy chọn)',
+        crashHistoryTitle: 'Lịch sử Sự cố Máy chủ gần đây (giờ Sydney)',
+        colExit: 'Mã',
+        colSummary: 'Chi tiết',
+        title: 'Bảng điều khiển HNMO',
+        helpTitle: 'Cách sử dụng trang này',
+        helpBody: 'Trang điều khiển cục bộ này quản lý cơ sở dữ liệu, máy chủ trò chơi, trò chơi web, sao lưu, tự khởi động và cập nhật. Chỉ truy cập được từ máy tính này.',
+        wizardTitle: 'Trình hướng dẫn cài đặt lần đầu',
+        wizardHint: 'Sau khi khởi động HNMO, mở Trang quản trị (/users) để tạo tài khoản quản trị đầu tiên (mật khẩu >= 12 ký tự), rồi tạo khóa API quyền Administrator tại /api-keys cho Website Portal.',
+        adminPwLabel: 'Mật khẩu quản trị',
+        gameNameLabel: 'Tên trò chơi',
+        pubAddrLabel: 'Địa chỉ công khai',
+        langLabel: 'Ngôn ngữ',
+        wizSaveStart: 'Lưu và khởi động HNMO',
+        statusTitle: 'Dịch vụ & Thao tác',
+        svcDb: 'Cơ sở dữ liệu',
+        svcServer: 'Máy chủ game',
+        svcWeb: 'Trò chơi web',
+        svcAdmin: 'Trang quản trị',
+        btnStart: 'Khởi động',
+        btnStop: 'Dừng',
+        btnRestart: 'Khởi động lại',
+        btnOpenGame: 'Mở trò chơi',
+        btnOpenAdmin: 'Mở trang quản trị',
+        systemTitle: 'Khởi động & Dịch vụ (VPS)',
+        backupTitle: 'Sao lưu & Khôi phục (giờ Sydney)',
+        diskTitle: 'Dung lượng ổ đĩa & Bảo trì CSDL',
+        btnVacuum: 'Chạy PostgreSQL VACUUM ANALYZE',
+        retentionTitle: 'Cài đặt Lưu trữ Nhật ký & Sao lưu',
+        lblMaxLogDays: 'Giữ nhật ký (ngày)',
+        lblMaxLogMb: 'Giới hạn thư mục log (MB)',
+        lblDbDays: 'Giữ log chat/audit CSDL (ngày)',
+        lblLowDiskMb: 'Cảnh báo đầy đĩa (MB)',
+        lblKeepDaily: 'Số bản sao lưu hằng ngày',
+        lblKeepWeekly: 'Số bản sao lưu hằng tuần',
+        lblKeepMonthly: 'Số bản sao lưu hằng tháng',
+        lblVacuumHours: 'Chu kỳ Vacuum (giờ)',
+        btnSaveMaint: 'Lưu cài đặt lưu trữ',
+        btnBackup: 'Sao lưu ngay',
+        colFile: 'Tệp',
+        colTime: 'Thời gian (Sydney)',
+        colSize: 'Dung lượng',
+        updatesTitle: 'Cập nhật',
+        btnCheckUpdates: 'Kiểm tra cập nhật',
+        logsTitle: 'Nhật ký (Xem / Tìm / Tải xuống)',
+        btnSearchLogs: 'Tìm kiếm',
+        btnDownloadLog: 'Tải xuống',
+      }
+    };
+
+    let lang = localStorage.getItem('hnmo_lang') || 'en';
+    function applyLang() {
+      const dict = i18n[lang] || i18n.en;
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+    }
+    document.getElementById('langEn').onclick = () => { lang = 'en'; localStorage.setItem('hnmo_lang', lang); applyLang(); refresh(); };
+    document.getElementById('langVi').onclick = () => { lang = 'vi'; localStorage.setItem('hnmo_lang', lang); applyLang(); refresh(); };
+    document.getElementById('helpBtn').onclick = () => {
+      const box = document.getElementById('helpBox');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    };
+
+    function showMsg(text, err = false) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = text;
+      el.className = err ? 'msg err' : 'msg';
+      el.style.display = 'block';
+    }
+
+    async function api(url, method = 'GET', body = null) {
+      const res = await fetch(url, {
+        method,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+      return data;
+    }
+
+    let currentStatus = null;
+    async function refresh() {
+      try {
+        const s = await api('/api/control/status');
+        currentStatus = s;
+        document.getElementById('dotDb').classList.toggle('on', !!s.database);
+        document.getElementById('dotGame').classList.toggle('on', !!s.gameServer);
+        document.getElementById('dotWeb').classList.toggle('on', !!s.webGame);
+        document.getElementById('dotAdmin').classList.toggle('on', !!s.adminPanel);
+        document.getElementById('openGame').href = s.gameUrl;
+        document.getElementById('openAdmin').href = s.adminUrl;
+        document.getElementById('wizardCard').style.display = s.setupNeeded ? 'block' : 'none';
+        document.getElementById('btnAutoStart').textContent = (lang === 'vi' ? 'Tự khởi động cùng máy tính: ' : 'Start HNMO when this computer starts: ') + (s.autoStartEnabled ? 'ON' : 'OFF');
+        document.getElementById('btnService').textContent = s.serviceInstalled
+          ? (lang === 'vi' ? 'Gỡ bỏ dịch vụ hệ thống' : 'Remove system service')
+          : (lang === 'vi' ? 'Cài làm dịch vụ hệ thống' : 'Install as a service');
+
+        const fmtMb = (b) => `${(Number(b || 0) / (1024 * 1024)).toFixed(1)} MB`;
+        const fmtGb = (b) => `${(Number(b || 0) / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+        if (s.disk) {
+          document.getElementById('diskSummary').textContent = lang === 'vi'
+            ? `Ổ đĩa (${s.disk.driveRoot}): Trống ${fmtGb(s.disk.freeDriveBytes)} / ${fmtGb(s.disk.totalDriveBytes)} | save/: ${fmtMb(s.disk.saveBytes)} (logs: ${fmtMb(s.disk.logsBytes)}, backups: ${fmtMb(s.disk.backupsBytes)}, db: ${fmtMb(s.disk.databaseBytes)})`
+            : `Drive (${s.disk.driveRoot}): Free ${fmtGb(s.disk.freeDriveBytes)} / ${fmtGb(s.disk.totalDriveBytes)} | save/: ${fmtMb(s.disk.saveBytes)} (logs: ${fmtMb(s.disk.logsBytes)}, backups: ${fmtMb(s.disk.backupsBytes)}, db: ${fmtMb(s.disk.databaseBytes)})`;
+          const warn = document.getElementById('diskWarning');
+          warn.style.display = s.disk.isLowDisk ? 'block' : 'none';
+          warn.textContent = lang === 'vi'
+            ? `Cảnh báo: Dung lượng ổ đĩa trống thấp (< ${s.disk.lowDiskWarningMb} MB)!`
+            : `Warning: Low free disk space (< ${s.disk.lowDiskWarningMb} MB)!`;
+        }
+
+        document.getElementById('maintStatus').textContent = [
+          s.lastAutoBackupSydney ? `${lang === 'vi' ? 'Sao lưu tự động gần nhất' : 'Last auto backup'}: ${s.lastAutoBackupSydney}` : null,
+          s.lastVacuumSydney ? `VACUUM: ${s.lastVacuumSydney}` : null,
+        ].filter(Boolean).join(' · ');
+
+        if (s.maintenanceSettings && document.activeElement?.closest('#retentionCard') === null) {
+          const ms = s.maintenanceSettings;
+          document.getElementById('cfgMaxLogDays').value = ms.maxLogDays;
+          document.getElementById('cfgMaxLogMb').value = ms.maxLogTotalMb;
+          document.getElementById('cfgDbDays').value = ms.dbLogRetentionDays;
+          document.getElementById('cfgLowDiskMb').value = ms.lowDiskWarningMb;
+          document.getElementById('cfgKeepDaily').value = ms.backupKeepDaily;
+          document.getElementById('cfgKeepWeekly').value = ms.backupKeepWeekly;
+          document.getElementById('cfgKeepMonthly').value = ms.backupKeepMonthly;
+          document.getElementById('cfgVacuumHours').value = ms.vacuumIntervalHours;
+          document.getElementById('cfgAutoRestart').value = String(ms.autoRestartOnCrash !== false);
+          document.getElementById('cfgMaxRestarts').value = ms.maxCrashRestartsPerHour || 5;
+          document.getElementById('cfgCrashDelay').value = ms.crashRestartDelaySeconds || 3;
+          const whEl = document.getElementById('cfgCrashDiscord');
+          whEl.placeholder = s.crashWatch?.hasDiscordWebhook ? '(saved — enter new URL to replace)' : 'https://discord.com/api/webhooks/...';
+        }
+
+        const cw = s.crashWatch || { unacknowledgedCount: 0, incidents: [] };
+        const crashBanner = document.getElementById('crashBanner');
+        if (cw.unacknowledgedCount > 0 && cw.incidents?.length) {
+          const latest = cw.incidents.find((i) => !i.acknowledged) || cw.incidents[0];
+          crashBanner.style.display = 'block';
+          document.getElementById('crashBannerTitle').textContent = lang === 'vi'
+            ? `Cảnh báo sự cố (${cw.unacknowledgedCount} chưa xác nhận) — ${latest.occurredAtSydney} giờ Sydney`
+            : `Crash Watch Alert (${cw.unacknowledgedCount} unacknowledged) — ${latest.occurredAtSydney} Sydney`;
+          document.getElementById('crashBannerDetail').textContent = lang === 'vi' ? latest.summaryVi : latest.summaryEn;
+        } else {
+          crashBanner.style.display = 'none';
+        }
+
+        const crashRows = document.getElementById('crashRows');
+        crashRows.innerHTML = '';
+        if (!cw.incidents || cw.incidents.length === 0) {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 3;
+          td.style.color = 'var(--muted)';
+          td.textContent = lang === 'vi' ? 'Chưa ghi nhận sự cố sập máy chủ nào.' : 'No unexpected server crashes recorded.';
+          tr.appendChild(td);
+          crashRows.appendChild(tr);
+        } else {
+          for (const inc of cw.incidents) {
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td'); td1.textContent = inc.occurredAtSydney || '';
+            const td2 = document.createElement('td'); td2.textContent = String(inc.exitCode);
+            const td3 = document.createElement('td'); td3.textContent = lang === 'vi' ? inc.summaryVi : inc.summaryEn;
+            tr.append(td1, td2, td3);
+            crashRows.appendChild(tr);
+          }
+        }
+
+        document.getElementById('backupTotals').textContent =
+          `${(s.backups || []).length} archives · ${fmtMb(s.backupTotalBytes)} (7 daily / 4 weekly / 3 monthly)`;
+
+        const tbody = document.getElementById('backupRows');
+        tbody.innerHTML = '';
+        for (const b of s.backups || []) {
+          const tr = document.createElement('tr');
+          const kb = Math.max(1, Math.round(b.sizeBytes / 1024));
+          tr.innerHTML = `<td>${b.fileName}</td><td>${b.createdSydney}</td><td>${kb} KB</td><td><button type="button" data-restore="${b.fileName}">${lang === 'vi' ? 'Khôi phục' : 'Restore'}</button></td>`;
+          tbody.appendChild(tr);
+        }
+        tbody.querySelectorAll('button[data-restore]').forEach((btn) => {
+          btn.onclick = async () => {
+            try {
+              const r = await api('/api/control/restore', 'POST', { fileName: btn.getAttribute('data-restore') });
+              showMsg(r.message || 'Restored.');
+              refresh();
+            } catch (e) { showMsg(e.message, true); }
+          };
+        });
+
+        await refreshLogs();
+      } catch (e) {
+        showMsg(e.message, true);
+      }
+    }
+
+    async function refreshLogs() {
+      const sel = document.getElementById('logFileSelect');
+      const file = sel.value || 'all';
+      const q = document.getElementById('logSearch').value || '';
+      const logs = await api(`/api/control/logs?file=${encodeURIComponent(file)}&q=${encodeURIComponent(q)}&lines=200`);
+      if (logs.files) {
+        const current = sel.value || 'all';
+        sel.innerHTML = `<option value="all">${lang === 'vi' ? 'Tất cả nhật ký' : 'All logs'}</option>` +
+          logs.files.map((f) => `<option value="${f.fileName}">${f.fileName} (${Math.max(1, Math.round(f.sizeBytes / 1024))} KB)</option>`).join('');
+        sel.value = [...sel.options].some((o) => o.value === current) ? current : 'all';
+      }
+      document.getElementById('logOutput').textContent = (logs.lines || [...(logs.server || []), ...(logs.database || [])]).join('\n');
+    }
+
+    document.getElementById('btnLogSearch').onclick = () => refreshLogs().catch((e) => showMsg(e.message, true));
+    document.getElementById('logFileSelect').onchange = () => refreshLogs().catch((e) => showMsg(e.message, true));
+    document.getElementById('btnLogDownload').onclick = () => {
+      const file = document.getElementById('logFileSelect').value;
+      const target = (!file || file === 'all') ? 'server.log' : file;
+      window.location.href = `/api/control/logs/download?file=${encodeURIComponent(target)}`;
+    };
+    document.getElementById('btnVacuum').onclick = () => api('/api/control/vacuum', 'POST').then(() => { showMsg('VACUUM ANALYZE complete.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnSaveMaint').onclick = () => api('/api/control/maintenance-settings', 'POST', {
+      maxLogDays: Number(document.getElementById('cfgMaxLogDays').value),
+      maxLogTotalMb: Number(document.getElementById('cfgMaxLogMb').value),
+      dbLogRetentionDays: Number(document.getElementById('cfgDbDays').value),
+      lowDiskWarningMb: Number(document.getElementById('cfgLowDiskMb').value),
+      backupKeepDaily: Number(document.getElementById('cfgKeepDaily').value),
+      backupKeepWeekly: Number(document.getElementById('cfgKeepWeekly').value),
+      backupKeepMonthly: Number(document.getElementById('cfgKeepMonthly').value),
+      vacuumIntervalHours: Number(document.getElementById('cfgVacuumHours').value),
+      autoRestartOnCrash: document.getElementById('cfgAutoRestart').value === 'true',
+      maxCrashRestartsPerHour: Number(document.getElementById('cfgMaxRestarts').value),
+      crashRestartDelaySeconds: Number(document.getElementById('cfgCrashDelay').value),
+      crashDiscordWebhookUrl: document.getElementById('cfgCrashDiscord').value.trim() || (currentStatus?.crashWatch?.hasDiscordWebhook ? '__KEEP__' : ''),
+    }).then(() => { document.getElementById('cfgCrashDiscord').value = ''; showMsg(lang === 'vi' ? 'Đã lưu cài đặt lưu trữ.' : 'Retention settings saved.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnAckCrash').onclick = () => api('/api/control/crash-watch/ack', 'POST').then(() => { showMsg(lang === 'vi' ? 'Đã xác nhận cảnh báo sự cố.' : 'Crash notices acknowledged.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnStart').onclick = () => api('/api/control/start', 'POST').then(() => { showMsg('Starting...'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnStop').onclick = () => api('/api/control/stop', 'POST').then(() => { showMsg('Stopped.'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnRestart').onclick = () => api('/api/control/restart', 'POST').then(() => { showMsg('Restarting...'); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnAutoStart').onclick = () => api('/api/control/autostart', 'POST', { enabled: !(currentStatus && currentStatus.autoStartEnabled) }).then(refresh).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnService').onclick = () => api('/api/control/service', 'POST', { action: (currentStatus && currentStatus.serviceInstalled) ? 'remove' : 'install' }).then(refresh).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnBackup').onclick = () => api('/api/control/backup', 'POST').then((res) => { const b = res.backup || res; showMsg(`Backup created: ${b.fileName}`); refresh(); }).catch((e) => showMsg(e.message, true));
+    document.getElementById('btnUpdates').onclick = async () => {
+      try {
+        const u = await api('/api/control/updates');
+        const info = document.getElementById('updateInfo');
+        info.innerHTML = `<strong>${u.latestTag}</strong> (${u.publishedAtSydney}) — ${u.isUpdateAvailable ? 'Update available!' : 'Up to date'} — <a href="${u.downloadUrl}" target="_blank">Download</a><pre style="margin-top:8px">${u.releaseNotes || ''}</pre>`;
+      } catch (e) { showMsg(e.message, true); }
+    };
+    document.getElementById('wizSubmit').onclick = async () => {
+      try {
+        await api('/api/control/setup', 'POST', {
+          adminPassword: document.getElementById('wizPw').value,
+          gameName: document.getElementById('wizName').value,
+          publicAddress: document.getElementById('wizAddr').value,
+          webPort: Number(document.getElementById('wizWeb').value),
+          adminPort: Number(document.getElementById('wizAdmin').value),
+          connectServerPort: Number(document.getElementById('wizConn').value),
+          databasePort: Number(document.getElementById('wizDb').value),
+          language: document.getElementById('wizLang').value,
+        });
+        showMsg('Setup saved. Starting HNMO...');
+        refresh();
+      } catch (e) { showMsg(e.message, true); }
+    };
+
+    applyLang();
+    refresh();
+    setInterval(refresh, 4000);
+  </script>
+</body>
+</html>

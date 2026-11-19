@@ -21,4 +21,7 @@ public sealed class EditTerrain : MapEditorPageBase<TerrainEditor>
 {
     /// <inheritdoc />
     protected override string Caption => Resources.TerrainEditor;
+
+    /// <inheritdoc />
+    protected override string HelpText => Resources.PageHelpTextEditTerrain;
 }

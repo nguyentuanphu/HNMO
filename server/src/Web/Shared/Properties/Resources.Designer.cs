@@ -1198,5 +1198,453 @@ namespace HNMO.Web.Shared.Properties {
                 return ResourceManager.GetString("MonsterAmountSaveMapFirst", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string Name1 {
+            get {
+                return ResourceManager.GetString("Name1", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string Bitmap1 {
+            get {
+                return ResourceManager.GetString("Bitmap1", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string Icon1 {
+            get {
+                return ResourceManager.GetString("Icon1", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerTitle {
+            get {
+                return ResourceManager.GetString("ItemPickerTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerSearch {
+            get {
+                return ResourceManager.GetString("ItemPickerSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerSearchHint {
+            get {
+                return ResourceManager.GetString("ItemPickerSearchHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerCategory {
+            get {
+                return ResourceManager.GetString("ItemPickerCategory", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerAll {
+            get {
+                return ResourceManager.GetString("ItemPickerAll", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerClass {
+            get {
+                return ResourceManager.GetString("ItemPickerClass", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerMinimum {
+            get {
+                return ResourceManager.GetString("ItemPickerMinimum", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerMaximum {
+            get {
+                return ResourceManager.GetString("ItemPickerMaximum", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerMissing {
+            get {
+                return ResourceManager.GetString("ItemPickerMissing", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerSort {
+            get {
+                return ResourceManager.GetString("ItemPickerSort", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerName {
+            get {
+                return ResourceManager.GetString("ItemPickerName", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerLevel {
+            get {
+                return ResourceManager.GetString("ItemPickerLevel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerSelect {
+            get {
+                return ResourceManager.GetString("ItemPickerSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerAdd {
+            get {
+                return ResourceManager.GetString("ItemPickerAdd", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerDrag {
+            get {
+                return ResourceManager.GetString("ItemPickerDrag", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerMatches {
+            get {
+                return ResourceManager.GetString("ItemPickerMatches", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerEmpty {
+            get {
+                return ResourceManager.GetString("ItemPickerEmpty", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerClearSelection {
+            get {
+                return ResourceManager.GetString("ItemPickerClearSelection", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerFilterHint {
+            get {
+                return ResourceManager.GetString("ItemPickerFilterHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerInactive {
+            get {
+                return ResourceManager.GetString("ItemPickerInactive", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup0 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup0", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup1 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup1", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup2 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup2", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup3 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup3", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup4 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup4", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup5 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup5", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup6 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup6", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup7 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup7", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup8 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup8", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup9 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup9", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup10 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup10", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup11 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup11", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup12 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup12", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup13 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup13", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup14 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup14", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGroup15 {
+            get {
+                return ResourceManager.GetString("ItemPickerGroup15", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGiftChoose {
+            get {
+                return ResourceManager.GetString("ItemPickerGiftChoose", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ItemPickerGiftAdd {
+            get {
+                return ResourceManager.GetString("ItemPickerGiftAdd", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintClear {
+            get {
+                return ResourceManager.GetString("PageHelpHintClear", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintPassword {
+            get {
+                return ResourceManager.GetString("PageHelpHintPassword", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSearch {
+            get {
+                return ResourceManager.GetString("PageHelpHintSearch", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintRefresh {
+            get {
+                return ResourceManager.GetString("PageHelpHintRefresh", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintZoomStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSelect {
+            get {
+                return ResourceManager.GetString("PageHelpHintSelect", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintFirst {
+            get {
+                return ResourceManager.GetString("PageHelpHintFirst", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintLast {
+            get {
+                return ResourceManager.GetString("PageHelpHintLast", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintReset {
+            get {
+                return ResourceManager.GetString("PageHelpHintReset", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintExpand {
+            get {
+                return ResourceManager.GetString("PageHelpHintExpand", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintConfirm {
+            get {
+                return ResourceManager.GetString("PageHelpHintConfirm", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCancel {
+            get {
+                return ResourceManager.GetString("PageHelpHintCancel", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintNext {
+            get {
+                return ResourceManager.GetString("PageHelpHintNext", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintZoomIn {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomIn", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintNavigate {
+            get {
+                return ResourceManager.GetString("PageHelpHintNavigate", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintZoomOut {
+            get {
+                return ResourceManager.GetString("PageHelpHintZoomOut", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintDelete {
+            get {
+                return ResourceManager.GetString("PageHelpHintDelete", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintPrevious {
+            get {
+                return ResourceManager.GetString("PageHelpHintPrevious", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCopy {
+            get {
+                return ResourceManager.GetString("PageHelpHintCopy", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintStatus {
+            get {
+                return ResourceManager.GetString("PageHelpHintStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintSave {
+            get {
+                return ResourceManager.GetString("PageHelpHintSave", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string PageHelpHintCreate {
+            get {
+                return ResourceManager.GetString("PageHelpHintCreate", resourceCulture);
+            }
+        }
     }
 }

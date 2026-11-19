@@ -4,22 +4,55 @@
 // three.js' 'ZYX' Euler order; a bone's matrix is its parent's times its own.
 
 import * as THREE from 'three';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { parseBMD, decodeTGA } from './formats.js';
+import { getTextureQuality } from './ui/settingsWindow.js';
 import type { BMDModel, BMDMesh, BMDBoneFrames } from './formats.js';
 
 const ALPHA_TEST = 0.25;
 
 const fileCache = new Map<string, Promise<Uint8Array>>();
 const textureCache = new Map<string, Promise<THREE.Texture | null>>();
+let ktx2Loader: KTX2Loader | null = null;
+let dataBasePrefix = '';
+
+/**
+ * Sets an optional URL prefix for `/data/...` asset fetches (used when embedding the
+ * renderer outside the web client's origin/root, such as `/world-editor` in AdminPanel).
+ */
+export function setDataBaseUrl(prefix: string): void {
+  dataBasePrefix = prefix.replace(/\/+$/, '');
+  fileCache.clear();
+  textureCache.clear();
+  modelCache.clear();
+}
+
+/** Resolves a `/data/...` asset URL using the configured base prefix. */
+export function resolveDataUrl(url: string): string {
+  if (!dataBasePrefix || !url.startsWith('/data/')) return url;
+  return `${dataBasePrefix}${url}`;
+}
+
+/** Initializes the KTX2 GPU-compressed texture transcoder for the active WebGL renderer. */
+export function setKtx2Renderer(renderer: THREE.WebGLRenderer): void {
+  ktx2Loader?.dispose();
+  ktx2Loader = new KTX2Loader().setTranscoderPath('/vendor/basis/').detectSupport(renderer);
+}
+
+/** Clears the decoded texture cache (for example after changing texture quality). */
+export function clearTextureCache(): void {
+  textureCache.clear();
+}
 
 export async function fetchBytes(url: string): Promise<Uint8Array> {
-  if (!fileCache.has(url)) {
-    fileCache.set(url, fetch(url).then(async (response) => {
-      if (!response.ok) throw new Error(`${response.status} ${url}`);
+  const resolved = resolveDataUrl(url);
+  if (!fileCache.has(resolved)) {
+    fileCache.set(resolved, fetch(resolved).then(async (response) => {
+      if (!response.ok) throw new Error(`${response.status} ${resolved}`);
       return new Uint8Array(await response.arrayBuffer());
     }));
   }
-  return fileCache.get(url)!;
+  return fileCache.get(resolved)!;
 }
 
 // Parsed once per file: every player shares player.bmd (3 MB, ~25 ms to parse), so parsing it for each
@@ -74,19 +107,49 @@ async function decodeTexture(url: string, isTga: boolean): Promise<THREE.Texture
   return texture;
 }
 
+async function tryLoadKtx2(url: string): Promise<THREE.Texture | null> {
+  if (!ktx2Loader) return null;
+  const ktx2Url = url.replace(/\.(ozj|ozt|jpe?g|tga)$/i, '.ktx2');
+  if (ktx2Url === url) return null;
+  try {
+    const response = await fetch(resolveDataUrl(ktx2Url));
+    if (!response.ok) return null;
+    const blobUrl = URL.createObjectURL(await response.blob());
+    try {
+      const texture = await ktx2Loader.loadAsync(blobUrl);
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.flipY = false;
+      texture.needsUpdate = true;
+      return texture;
+    } finally {
+      URL.revokeObjectURL(blobUrl);
+    }
+  } catch {
+    return null;
+  }
+}
+
 function loadTextureFrom(dir: string, name: string): Promise<THREE.Texture | null> {
   const url = `/data/${dir}/${name}`;
-  if (!textureCache.has(url)) {
+  const quality = getTextureQuality();
+  const cacheKey = `${quality}:${url}`;
+  if (!textureCache.has(cacheKey)) {
     const { isTga } = textureKind(name);
-    textureCache.set(url, decodeTexture(url, isTga).then((texture) => {
+    const load = (async (): Promise<THREE.Texture | null> => {
+      if (quality === 'compressed') {
+        const ktx2 = await tryLoadKtx2(url);
+        if (ktx2) return ktx2;
+      }
+      const texture = await decodeTexture(url, isTga);
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
       texture.magFilter = THREE.LinearFilter;
       return texture;
-    }).catch(() => null));
+    })().catch(() => null);
+    textureCache.set(cacheKey, load);
   }
-  return textureCache.get(url)!;
+  return textureCache.get(cacheKey)!;
 }
 
 // A texture comes from the first of the folders that has it (LoadTextureFromFolders).

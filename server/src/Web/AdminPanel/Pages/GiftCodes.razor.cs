@@ -256,6 +256,16 @@ public partial class GiftCodes : ComponentBase
     private string LimitText(GiftCodeDefinition code)
     {
         var parts = new List<string> { code.Limit == GiftCodeLimit.OncePerCharacter ? Resources.GiftCodesOncePerCharacter : Resources.GiftCodesOncePerAccount };
+        if (code.OncePerNetwork)
+        {
+            parts.Add(Resources.GiftCodesOncePerNetwork);
+        }
+
+        if (code.OncePerDevice)
+        {
+            parts.Add(Resources.GiftCodesOncePerDevice);
+        }
+
         if (code.MinLevel > 0 || code.MaxLevel > 0)
         {
             parts.Add($"{Resources.GiftCodesLevel} {(code.MinLevel > 0 ? code.MinLevel : 1)}-{(code.MaxLevel > 0 ? code.MaxLevel.ToString(CultureInfo.InvariantCulture) : "∞")}");

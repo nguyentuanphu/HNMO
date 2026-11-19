@@ -1,15 +1,36 @@
-﻿@page "/servers"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/servers"
 
 @using System.ComponentModel
+@using System.Globalization
 @using Microsoft.Extensions.DependencyInjection
 @using HNMO.Interfaces
+@using HNMO.Web.AdminPanel.Operations
 @using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.Shared.Components.Toast
 
 @implements IDisposable;
 
 <PageTitle>HNMO: @Resources.Servers</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Servers"/>
-<h1>@Resources.Servers</h1>
+<div class="page-help">
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@Resources.Servers</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" id="servers-help-toggle" title="@L("Show or hide help for this page", "Hiện hoặc ẩn hướng dẫn trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="servers-help">
+        <strong>@L("Plain Server Settings Guide:", "Hướng dẫn cấu hình máy chủ:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Enable 'VIP only' to require an active VIP grant (Stats.IsVip from #39 VIP Manager / Account VIP) before entering that server.", "Bật 'Chỉ VIP' để yêu cầu tài khoản có VIP còn hạn khi vào máy chủ này.")</li>
+            <li>@L("Set EXP, Drop, and Zen multipliers individually per server without editing raw database schemas.", "Điều chỉnh riêng hệ số EXP, Drop và Zen cho từng máy chủ con.")</li>
+            <li>@L("Use the server control table below to start, stop, inspect maps, or reload configurations.", "Dùng bảng điều khiển bên dưới để bật/tắt, mở bản đồ hoặc tải lại cấu hình máy chủ.")</li>
+        </ul>
+    </div>
+}
+</div>
 
 @if (_servers == null)
 {
@@ -24,6 +45,75 @@ else
         <GlobalMessageForm Servers="@_servers" />
     </div>
 </div>
+}
+
+@if (this._plainServers.Count > 0)
+{
+<section class="card mb-3" id="servers-plain-card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h2 class="h5 mb-0">@L("Server rates & VIP access", "Tỉ lệ máy chủ & Phòng VIP")</h2>
+            <small class="text-muted">@L("Shared single-source VIP access (Stats.IsVip)", "Dùng chung quyền VIP với trang Tài khoản")</small>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0" id="servers-plain-table">
+                <thead>
+                    <tr>
+                        <th>@L("ID", "Mã")</th>
+                        <th>@L("Name", "Tên máy chủ")</th>
+                        <th>@L("VIP only", "Chỉ VIP")</th>
+                        <th>@L("EXP ×", "EXP ×")</th>
+                        <th>@L("Drop ×", "Drop ×")</th>
+                        <th>@L("Zen ×", "Zen ×")</th>
+                        <th>@L("PvP", "PvP")</th>
+                        <th>@L("Max players", "Giới hạn")</th>
+                        <th>@L("Online", "Đang chơi")</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in this._plainServers)
+                    {
+                        <tr data-server-id="@entry.ServerId">
+                            <td><code>#@(entry.ServerId + 1)</code></td>
+                            <td>
+                                <input class="form-control form-control-sm" aria-label="Server name" title="@L("Display name shown in AdminPanel and server list.", "Tên hiển thị của máy chủ.")" @bind="entry.Description" />
+                            </td>
+                            <td>
+                                <div class="form-check form-switch" title="@L("Require active VIP access (Stats.IsVip) to log into this server.", "Yêu cầu tài khoản VIP đang hoạt động để vào máy chủ.")">
+                                    <input class="form-check-input server-vip-toggle" type="checkbox" @bind="entry.VipOnly" />
+                                </div>
+                            </td>
+                            <td style="width:92px">
+                                <input class="form-control form-control-sm server-exp-input" type="number" step="0.1" min="0.1" max="1000" title="@L("EXP rate multiplier for this server.", "Hệ số EXP riêng của máy chủ.")" @bind="entry.ExperienceRate" />
+                            </td>
+                            <td style="width:92px">
+                                <input class="form-control form-control-sm server-drop-input" type="number" step="0.1" min="0.1" max="50" title="@L("Item drop rate multiplier for this server.", "Hệ số rơi vật phẩm riêng của máy chủ.")" @bind="entry.DropRate" />
+                            </td>
+                            <td style="width:92px">
+                                <input class="form-control form-control-sm server-zen-input" type="number" step="0.1" min="0.1" max="50" title="@L("Zen drop amount multiplier for this server.", "Hệ số lượng Zen rơi riêng của máy chủ.")" @bind="entry.ZenRate" />
+                            </td>
+                            <td>
+                                <div class="form-check form-switch" title="@L("Allow player-versus-player combat.", "Cho phép PvP giữa người chơi.")">
+                                    <input class="form-check-input server-pvp-toggle" type="checkbox" @bind="entry.PvpEnabled" />
+                                </div>
+                            </td>
+                            <td style="width:96px">
+                                <input class="form-control form-control-sm server-max-input" type="number" min="1" max="5000" title="@L("Maximum concurrent players allowed.", "Số người chơi tối đa.")" @bind="entry.MaximumPlayers" />
+                            </td>
+                            <td><span class="badge text-bg-secondary">@entry.OnlinePlayers</span></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary server-save-btn" disabled="@this._isSavingPlain" @onclick="() => this.SavePlainAsync(entry)">
+                                    @L("Save", "Lưu")
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 }
 
 <div>
@@ -49,10 +139,10 @@ else
     <tr>
       <td></td>
       <td>
-        <NavLink class="btn btn-primary me-1" href="create-game-server">
+        <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary me-1" href="create-game-server">
           <span class="oi oi-plus"></span> @Resources.GameServer
         </NavLink>
-        <NavLink class="btn btn-primary" href="create-connect-server">
+        <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary" href="create-connect-server">
             <span class="oi oi-plus"></span> @Resources.ConnectServer
         </NavLink>
       </td>
@@ -63,14 +153,14 @@ else
         {
           @if (this._isRestarting)
           {
-            <button type="button" class="btn btn-warning btn-sm" disabled="disabled">
+            <button title="@HelpResources.PageHelpHintStatus" type="button" class="btn btn-warning btn-sm" disabled="disabled">
               <div class="spinner-border text-secondary" role="status">
               </div>
             </button>
           }
           else
           {
-            <button type="button" class="btn btn-warning btn-sm" @onclick="this.OnReloadAndRestartClickAsync">
+            <button title="@HelpResources.PageHelpHintRefresh" type="button" class="btn btn-warning btn-sm" @onclick="this.OnReloadAndRestartClickAsync">
               <span class="oi oi-reload"></span>
               @Resources.ReloadConfigurationAndRestartAllGameServers
             </button>
@@ -85,33 +175,26 @@ else
 
 @code {
     private IList<IManageableServer>? _servers;
-
+    private List<ServerSettingsModel> _plainServers = [];
     private bool _isRestarting;
+    private bool _isSavingPlain;
+    private bool _showHelp;
 
-    /// <summary>
-    /// Gets or sets the <see cref="IServerProvider"/>.
-    /// </summary>
+    /// <summary>Gets or sets the <see cref="IServerProvider"/>.</summary>
     [Inject]
     public IServerProvider ServerProvider { get; set; } = null!;
 
-    /// <summary>
-    /// Gets or sets the <see cref="IGameServerInstanceManager"/>.
-    /// </summary>
+    /// <summary>Gets or sets the <see cref="IGameServerInstanceManager"/>.</summary>
     [Inject]
     public IGameServerInstanceManager? ServerInstanceManager { get; set; }
 
-    /// <summary>
-    /// Gets or sets the service provider, used to optionally resolve the game server dictionary.
-    /// </summary>
+    /// <summary>Gets or sets the service provider.</summary>
     [Inject]
     public IServiceProvider ServiceProvider { get; set; } = null!;
 
-    /// <summary>
-    /// The game servers, resolved optionally: the dictionary is only registered in the
-    /// single-process host, so it is null on the distributed (Dapr) admin panel host. When
-    /// null, the global message card is not rendered (graceful degradation).
-    /// </summary>
     private IDictionary<int, IGameServer>? _gameServers;
+    private ServerSettingsOperations? _settingsOps;
+    private IToastService? _toastService;
 
     /// <inheritdoc />
     public void Dispose()
@@ -120,12 +203,61 @@ else
     }
 
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
         this._servers = this.ServerProvider.Servers;
         this._gameServers = this.ServiceProvider.GetService<IDictionary<int, IGameServer>>();
+        this._settingsOps = this.ServiceProvider.GetService<ServerSettingsOperations>();
+        this._toastService = this.ServiceProvider.GetService<IToastService>();
         this.ServerProvider.PropertyChanged += this.OnServersChanged;
+        await this.LoadPlainServersAsync().ConfigureAwait(true);
+    }
+
+    private static string L(string en, string vi) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
+
+    private async Task LoadPlainServersAsync()
+    {
+        if (this._settingsOps is null)
+        {
+            return;
+        }
+
+        try
+        {
+            this._plainServers = [.. await this._settingsOps.LoadAsync(default).ConfigureAwait(true)];
+        }
+        catch (Exception ex)
+        {
+            this._toastService?.ShowError(ex.Message);
+        }
+    }
+
+    private async Task SavePlainAsync(ServerSettingsModel model)
+    {
+        if (this._settingsOps is null)
+        {
+            return;
+        }
+
+        this._isSavingPlain = true;
+        try
+        {
+            await this._settingsOps.SaveAsync(model, default).ConfigureAwait(true);
+            this._toastService?.ShowSuccess(L(
+                $"Saved settings for Server #{model.ServerId + 1}.",
+                $"Đã lưu cấu hình cho Máy chủ #{model.ServerId + 1}."));
+            await this.LoadPlainServersAsync().ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            this._toastService?.ShowError(ex.Message);
+        }
+        finally
+        {
+            this._isSavingPlain = false;
+        }
     }
 
     private void OnServersChanged(object? sender, PropertyChangedEventArgs e)

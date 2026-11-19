@@ -1,0 +1,359 @@
+@page "/worlds"
+@attribute [Authorize(Policy = AdminPolicies.Viewer)]
+
+@using HNMO.Persistence.Worlds
+@using HNMO.Web.AdminPanel.Auth
+@using Microsoft.AspNetCore.Authorization
+
+<PageTitle>@this.T("Worlds", "Thế giới (Worlds)")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@this.T("Worlds & Multi-Realm Databases", "Quản lý Thế giới & Đa máy chủ")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info rounded-circle"
+                title="@this.T("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextWorlds" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="region" aria-label="How to use this page">
+        <strong>@this.T("How to use this page:", "Hướng dẫn sử dụng trang này:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@this.T("Each World represents a separate database with its own rates, event schedule, server list, and online player counter.", "Mỗi Thế giới đại diện cho một cơ sở dữ liệu riêng với tỷ lệ EXP/Rớt đồ, lịch sự kiện, danh sách sub-server và số người chơi riêng.")</li>
+            <li>@this.T("Use 'Create world from template' to clone settings into a new Fresh or CopiedCharacters world, optionally locked until a Sydney opening time.", "Dùng 'Tạo thế giới từ mẫu' để sao chép cấu hình sang thế giới mới (Trắng hoàn toàn hoặc Sao chép nhân vật), có thể khóa tới giờ mở cửa Sydney.")</li>
+            <li>@this.T("Use 'One-off character transfer' to move an eligible character once between worlds when transfers are enabled on the target world.", "Dùng 'Chuyển nhân vật 1 lần' để chuyển nhân vật hợp lệ đúng một lần sang thế giới đích khi thế giới đích bật cho phép chuyển.")</li>
+        </ul>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") mb-3" role="status">
+        @this._statusMessage
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>@this.T("Configured Worlds", "Danh sách Thế giới")</strong>
+        <button type="button"
+                class="btn btn-sm btn-outline-secondary"
+                title="@this.T("Reload worlds and player counts", "Tải lại danh sách thế giới và số người chơi")"
+                @onclick="this.LoadData">
+            @this.T("Refresh", "Làm mới")
+        </button>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-striped table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th title="@this.T("Unique world identifier", "Mã thế giới duy nhất")">@this.T("ID", "Mã")</th>
+                    <th title="@this.T("World display names", "Tên hiển thị thế giới")">@this.T("Name", "Tên")</th>
+                    <th title="@this.T("Dedicated database name", "Tên cơ sở dữ liệu riêng")">@this.T("Database", "CSDL")</th>
+                    <th title="@this.T("Assigned game server IDs", "Các sub-server thuộc thế giới")">@this.T("Servers", "Máy chủ")</th>
+                    <th title="@this.T("EXP / Master / Drop / Zen multipliers", "Hệ số EXP / Master / Rớt đồ / Zen")">@this.T("Rates", "Tỷ lệ")</th>
+                    <th title="@this.T("Event preset label", "Nhãn lịch sự kiện")">@this.T("Events", "Sự kiện")</th>
+                    <th title="@this.T("Opening time in Sydney time", "Thời gian mở cửa theo giờ Sydney")">@this.T("Opening (Sydney)", "Giờ mở (Sydney)")</th>
+                    <th title="@this.T("Current online players", "Số người đang online")">@this.T("Players", "Người chơi")</th>
+                    <th title="@this.T("Runtime state and actions", "Trạng thái và thao tác")">@this.T("Actions", "Thao tác")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var world in this._worlds)
+                {
+                    var isOpen = world.IsOpenAt(DateTimeOffset.UtcNow);
+                    <tr>
+                        <td><code>@world.WorldId</code></td>
+                        <td>
+                            <div><strong>@(this._isVi ? world.NameVi : world.NameEn)</strong></div>
+                            <small class="text-muted">@(this._isVi ? world.NameEn : world.NameVi)</small>
+                        </td>
+                        <td><code>@world.DatabaseName</code></td>
+                        <td>@(world.ServerIds.Count == 0 ? "-" : string.Join(", ", world.ServerIds))</td>
+                        <td>
+                            <small>
+                                EXP @($"{world.ExperienceMultiplier:0.##}x") ·
+                                M @($"{world.MasterExperienceMultiplier:0.##}x") ·
+                                Drop @($"{world.DropMultiplier:0.##}x") ·
+                                Zen @($"{world.ZenMultiplier:0.##}x")
+                            </small>
+                        </td>
+                        <td>@(this._isVi ? world.EventPresetVi : world.EventPresetEn)</td>
+                        <td>
+                            @if (world.OpeningDateUtc is null)
+                            {
+                                <span class="badge bg-success">@this.T("Open now", "Đang mở")</span>
+                            }
+                            else
+                            {
+                                <div><small>@world.FormatOpeningSydney()</small></div>
+                                <span class="badge @(isOpen ? "bg-success" : "bg-warning text-dark")">
+                                    @(isOpen ? this.T("Open", "Đã mở") : this.T("Scheduled", "Chờ mở"))
+                                </span>
+                            }
+                        </td>
+                        <td>@world.CachedOnlinePlayers</td>
+                        <td>
+                            <div class="d-flex flex-nowrap gap-1">
+                                @if (world.IsRunning)
+                                {
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger text-nowrap"
+                                            title="@this.T("Stop all servers in this world", "Dừng toàn bộ sub-server trong thế giới này")"
+                                            @onclick="() => this.ToggleWorldAsync(world.WorldId, false)">
+                                        @this.T("Stop", "Dừng")
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-success text-nowrap"
+                                            title="@this.T("Start all servers in this world", "Khởi động các sub-server trong thế giới này")"
+                                            @onclick="() => this.ToggleWorldAsync(world.WorldId, true)">
+                                        @this.T("Start", "Chạy")
+                                    </button>
+                                }
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary text-nowrap"
+                                        title="@this.T("Load this world into rate editor", "Chỉnh sửa tỷ lệ và giờ mở của thế giới này")"
+                                        @onclick="() => this.BeginEditWorld(world)">
+                                    @this.T("Edit", "Sửa")
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (this._editingWorld is not null)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>@this.T($"Edit World: {this._editingWorld.WorldId}", $"Chỉnh sửa Thế giới: {this._editingWorld.WorldId}")</strong>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("English display name", "Tên tiếng Anh")">@this.T("Name (EN)", "Tên (EN)")</label>
+                    <input class="form-control" @bind="this._editingWorld.NameEn" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Vietnamese display name", "Tên tiếng Việt")">@this.T("Name (VI)", "Tên (VI)")</label>
+                    <input class="form-control" @bind="this._editingWorld.NameVi" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Dedicated PostgreSQL database name", "Tên CSDL PostgreSQL riêng")">@this.T("Database Name", "Tên CSDL")</label>
+                    <input class="form-control" @bind="this._editingWorld.DatabaseName" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Opening date in Sydney time (yyyy-MM-dd HH:mm)", "Giờ mở cửa Sydney (yyyy-MM-dd HH:mm)")">@this.T("Opening (Sydney)", "Giờ mở (Sydney)")</label>
+                    <input class="form-control" @bind="this._editingOpeningSydney" placeholder="2026-12-01 19:00" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Base EXP rate multiplier", "Hệ số EXP")">@this.T("EXP Multiplier", "Hệ số EXP")</label>
+                    <input type="number" step="0.1" class="form-control" @bind="this._editingWorld.ExperienceMultiplier" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Master EXP multiplier", "Hệ số Master EXP")">@this.T("Master EXP", "Hệ số Master")</label>
+                    <input type="number" step="0.1" class="form-control" @bind="this._editingWorld.MasterExperienceMultiplier" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Item drop multiplier", "Hệ số Rớt đồ")">@this.T("Drop Multiplier", "Hệ số Rớt đồ")</label>
+                    <input type="number" step="0.1" class="form-control" @bind="this._editingWorld.DropMultiplier" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" title="@this.T("Zen drop multiplier", "Hệ số Zen")">@this.T("Zen Multiplier", "Hệ số Zen")</label>
+                    <input type="number" step="0.1" class="form-control" @bind="this._editingWorld.ZenMultiplier" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" title="@this.T("Assigned game server IDs separated by commas", "Mã sub-server cách nhau bởi dấu phẩy")">@this.T("Server IDs", "Mã Sub-Server")</label>
+                    <input class="form-control" @bind="this._editingServerIds" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" title="@this.T("Event preset note in English", "Ghi chú lịch sự kiện EN")">@this.T("Event Preset (EN)", "Lịch Sự kiện (EN)")</label>
+                    <input class="form-control" @bind="this._editingWorld.EventPresetEn" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" title="@this.T("Event preset note in Vietnamese", "Ghi chú lịch sự kiện VI")">@this.T("Event Preset (VI)", "Lịch Sự kiện (VI)")</label>
+                    <input class="form-control" @bind="this._editingWorld.EventPresetVi" />
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="editTransfer" @bind="this._editingWorld.TransferEnabled" />
+                        <label class="form-check-label" for="editTransfer" title="@this.T("Allow one-off character transfers into this world", "Cho phép nhận nhân vật chuyển 1 lần vào thế giới này")">
+                            @this.T("Allow one-off character transfers into this world", "Cho phép chuyển nhân vật 1 lần vào thế giới này")
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="button" class="btn btn-primary" @onclick="this.SaveEditedWorldAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@this.T("Save Changes", "Lưu thay đổi")</button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="() => this._editingWorld = null" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintCancel">@this.T("Cancel", "Hủy")</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <strong>@this.T("Create World from Template", "Tạo Thế giới mới từ Mẫu")</strong>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" title="@this.T("Existing world to clone settings from", "Thế giới mẫu để sao chép cấu hình")">@this.T("Source Template World", "Thế giới Mẫu")</label>
+                        <select class="form-select" @bind="this._templateRequest.SourceWorldId">
+                            @foreach (var w in this._worlds)
+                            {
+                                <option value="@w.WorldId">@w.WorldId (@(this._isVi ? w.NameVi : w.NameEn))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" title="@this.T("New world slug ID", "Mã định danh thế giới mới")">@this.T("New World ID", "Mã Thế giới mới")</label>
+                        <input class="form-control" @bind="this._templateRequest.NewWorldId" placeholder="s2-phoenix" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@this.T("Name (EN)", "Tên (EN)")</label>
+                        <input class="form-control" @bind="this._templateRequest.NameEn" placeholder="World 2 — Phoenix" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@this.T("Name (VI)", "Tên (VI)")</label>
+                        <input class="form-control" @bind="this._templateRequest.NameVi" placeholder="Thế giới 2 — Phượng Hoàng" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" title="@this.T("Separate database name", "Tên CSDL riêng")">@this.T("Database Name", "Tên CSDL")</label>
+                        <input class="form-control" @bind="this._templateRequest.DatabaseName" placeholder="hnmo_world_2" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" title="@this.T("Whether characters start fresh or are copied", "Chọn khởi đầu trắng hay sao chép nhân vật")">@this.T("Character Roster Mode", "Chế độ Nhân vật")</label>
+                        <select class="form-select" @bind="this._templateRequest.Mode">
+                            <option value="@WorldTemplateMode.Fresh">@this.T("Fresh (empty characters)", "Trắng (nhân vật mới hoàn toàn)")</option>
+                            <option value="@WorldTemplateMode.CopiedCharacters">@this.T("CopiedCharacters (clone roster)", "Sao chép nhân vật từ mẫu")</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" title="@this.T("Optional opening timestamp in Sydney time (yyyy-MM-dd HH:mm)", "Thời điểm mở cửa theo giờ Sydney (yyyy-MM-dd HH:mm)")">@this.T("Opening Date (Sydney)", "Ngày mở (Sydney)")</label>
+                        <input class="form-control" @bind="this._templateRequest.OpeningSydneyText" placeholder="2026-12-01 19:00" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" title="@this.T("Comma-separated server IDs assigned to this world", "Danh sách mã sub-server cách nhau bởi dấu phẩy")">@this.T("Server IDs", "Mã Sub-Server")</label>
+                        <input class="form-control" @bind="this._templateServerIds" placeholder="1,2" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="tplTransfer" @bind="this._templateRequest.TransferEnabled" />
+                            <label class="form-check-label" for="tplTransfer">
+                                @this.T("Enable one-off character transfers into new world", "Cho phép chuyển nhân vật 1 lần vào thế giới mới")
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="button"
+                        class="btn btn-primary mt-3"
+                        title="@this.T("Provision new world from template", "Tạo thế giới mới từ mẫu")"
+                        @onclick="this.CreateTemplateWorldAsync">
+                    @this.T("Create World from Template", "Tạo Thế giới")
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <strong>@this.T("One-Off Character Transfer", "Chuyển Nhân vật Một Lần giữa Thế giới")</strong>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">@this.T("Source World", "Thế giới nguồn")</label>
+                        <select class="form-select" @bind="this._transferSourceWorldId">
+                            @foreach (var w in this._worlds)
+                            {
+                                <option value="@w.WorldId">@w.WorldId</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@this.T("Target World", "Thế giới đích")</label>
+                        <select class="form-select" @bind="this._transferTargetWorldId">
+                            @foreach (var w in this._worlds)
+                            {
+                                <option value="@w.WorldId">@w.WorldId</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@this.T("Account Login", "Tên Tài khoản")</label>
+                        <input class="form-control" @bind="this._transferAccount" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">@this.T("Character Name", "Tên Nhân vật")</label>
+                        <input class="form-control" @bind="this._transferCharacter" />
+                    </div>
+                </div>
+                <button type="button"
+                        class="btn btn-warning mt-3"
+                        title="@this.T("Execute atomic one-off character transfer (cannot be repeated)", "Thực hiện chuyển nhân vật một lần duy nhất giữa hai CSDL thế giới")"
+                        @onclick="this.TransferCharacterOnceAsync">
+                    @this.T("Transfer Character Once", "Chuyển Nhân vật 1 Lần")
+                </button>
+
+                @if (this._transfers.Count > 0)
+                {
+                    <hr />
+                    <h6 class="mb-2">@this.T("Transfer Audit Log (Sydney)", "Lịch sử Chuyển nhân vật (Sydney)")</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>@this.T("Character", "Nhân vật")</th>
+                                    <th>@this.T("Account", "Tài khoản")</th>
+                                    <th>@this.T("Route", "Hướng")</th>
+                                    <th>@this.T("Time (Sydney)", "Thời gian (Sydney)")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var rec in this._transfers)
+                                {
+                                    <tr>
+                                        <td>@rec.CharacterName</td>
+                                        <td>@rec.AccountLogin</td>
+                                        <td><code>@rec.SourceWorldId</code> → <code>@rec.TargetWorldId</code></td>
+                                        <td><small>@FormatSydney(rec.TransferredAtUtc)</small></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -342,6 +342,31 @@ public class Storage : IStorage
         return true;
     }
 
+    /// <summary>Includes an already stored bag item in the grid cache without adding a persistent entity again.</summary>
+    /// <param name="item">The same item instance already present in this storage's backing collection.</param>
+    /// <returns>Whether its bag slot is cached safely; equipment and conflicting slots are refused.</returns>
+    /// <remarks>The caller must own the storage lock and confirm the account save before exposing the cached item.</remarks>
+    internal bool TryIncludeStoredBagItem(Item item)
+    {
+        if (item.Definition is null || item.Definition.Width < 1 || item.Definition.Height < 1)
+        {
+            return false;
+        }
+
+        if (this.ContainsSlot(item.ItemSlot))
+        {
+            var slot = item.ItemSlot - this._slotOffset;
+            if (slot < this._boxOffset || !this.ItemStorage.Items.Any(stored => ReferenceEquals(stored, item)))
+            {
+                return false;
+            }
+
+            return ReferenceEquals(this.ItemArray[slot], item) || this.AddItemInternal((byte)slot, item);
+        }
+
+        return this.Extensions.OfType<Storage>().Any(extension => extension.TryIncludeStoredBagItem(item));
+    }
+
     /// <summary>
     /// Adds the item to the internal data structures.
     /// </summary>

@@ -263,6 +263,15 @@ public class GameContext : AsyncDisposable, IGameContext
     internal bool ShouldExecutePeriodicTasks => !this.IsDisposed && !this.IsDisposing && !this.ArePeriodicTasksStopped;
 
     /// <summary>
+    /// Evaluates the configured (or default) level experience table up to <paramref name="maximumLevel"/>.
+    /// </summary>
+    /// <param name="experienceFormula">Optional formula override.</param>
+    /// <param name="maximumLevel">Maximum level.</param>
+    /// <returns>The cumulative experience table indexed by level.</returns>
+    public static long[] BuildExperienceTable(string? experienceFormula, short maximumLevel) =>
+        CreateExpTable(string.IsNullOrWhiteSpace(experienceFormula) ? DefaultExperienceFormula : experienceFormula, maximumLevel);
+
+    /// <summary>
     /// Stops the periodic tasks of this context (the per-second plug-in tasks and the recovery
     /// timer), so that no periodic plug-in runs concurrently with a subsequent teardown, such as
     /// the player disconnect loop of a shutting-down game server. The timers are also stopped on

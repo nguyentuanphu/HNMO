@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="Caption" xml:space="preserve"><value>Website theme</value></data>
+  <data name="Description" xml:space="preserve"><value>Choose an appearance for the public website. Save, then reload the website.</value></data>
+  <data name="Classic" xml:space="preserve"><value>Classic</value></data>
+  <data name="Azure" xml:space="preserve"><value>Azure</value></data>
+  <data name="Ember" xml:space="preserve"><value>Ember</value></data>
+  <data name="Jade" xml:space="preserve"><value>Jade</value></data>
+  <data name="Violet" xml:space="preserve"><value>Violet</value></data>
+  <data name="Parchment" xml:space="preserve"><value>Parchment</value></data>
+</root>

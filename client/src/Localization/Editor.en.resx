@@ -5479,4 +5479,149 @@
   <data name="Eye bones note" xml:space="preserve">
     <value>Eyes need 2, 4 or 6 bones (right, left and up to two more pairs), 0 or more each; until then Save refuses the monsters.</value>
   </data>
+  <data name="Open Editor" xml:space="preserve"><value>Open Editor</value></data>
+  <data name="Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="Map Editor" xml:space="preserve"><value>Map Editor</value></data>
+  <data name="Console" xml:space="preserve"><value>Console</value></data>
+  <data name="Reset Layout" xml:space="preserve"><value>Reset Layout</value></data>
+  <data name="Smaller editor UI" xml:space="preserve"><value>Smaller editor UI</value></data>
+  <data name="Bigger editor UI" xml:space="preserve"><value>Bigger editor UI</value></data>
+  <data name="Close Editor" xml:space="preserve"><value>Close Editor</value></data>
+  <data name="Editor Console" xml:space="preserve"><value>Editor Console</value></data>
+  <data name="Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Game Console" xml:space="preserve"><value>Game Console</value></data>
+  <data name="Copy##Game" xml:space="preserve"><value>Copy##Game</value></data>
+  <data name="Clear##Game" xml:space="preserve"><value>Clear##Game</value></data>
+  <data name="Log file: %s" xml:space="preserve"><value>Log file: %s</value></data>
+  <data name="Attribute" xml:space="preserve"><value>Attribute</value></data>
+  <data name="T. Browse" xml:space="preserve"><value>T. Browse</value></data>
+  <data name="Minimap" xml:space="preserve"><value>Minimap</value></data>
+  <data name="O. Browse" xml:space="preserve"><value>O. Browse</value></data>
+  <data name="Enable painting" xml:space="preserve"><value>Enable painting</value></data>
+  <data name="PAINTING" xml:space="preserve"><value>PAINTING</value></data>
+  <data name="off (walk freely)" xml:space="preserve"><value>off (walk freely)</value></data>
+  <data name="Left-click terrain to paint. Right-click clears layer 2." xml:space="preserve"><value>Left-click terrain to paint. Right-click clears layer 2.</value></data>
+  <data name="Auto world number" xml:space="preserve"><value>Auto world number</value></data>
+  <data name="Saves to: Data\World%d\EncTerrain%d.map" xml:space="preserve"><value>Saves to: Data\World%d\EncTerrain%d.map</value></data>
+  <data name="Layer 1 (base)" xml:space="preserve"><value>Layer 1 (base)</value></data>
+  <data name="Layer 2 (overlay)" xml:space="preserve"><value>Layer 2 (overlay)</value></data>
+  <data name="Brush" xml:space="preserve"><value>Brush</value></data>
+  <data name="%d x %d tiles" xml:space="preserve"><value>%d x %d tiles</value></data>
+  <data name="Overlay opacity" xml:space="preserve"><value>Overlay opacity</value></data>
+  <data name="Dropper - pick tile under cursor (or hold Alt)" xml:space="preserve"><value>Dropper - pick tile under cursor (or hold Alt)</value></data>
+  <data name="Tile palette (selected: %s)" xml:space="preserve"><value>Tile palette (selected: %s)</value></data>
+  <data name="Undo last stroke" xml:space="preserve"><value>Undo last stroke</value></data>
+  <data name="Save terrain textures" xml:space="preserve"><value>Save terrain textures</value></data>
+  <data name="Overwrites the live map file (no backup)." xml:space="preserve"><value>Overwrites the live map file (no backup).</value></data>
+  <data name="Enable object editing" xml:space="preserve"><value>Enable object editing</value></data>
+  <data name="EDITING" xml:space="preserve"><value>EDITING</value></data>
+  <data name="Place new" xml:space="preserve"><value>Place new</value></data>
+  <data name="Select &amp; edit" xml:space="preserve"><value>Select &amp; edit</value></data>
+  <data name="Loaded object models on this map: %d" xml:space="preserve"><value>Loaded object models on this map: %d</value></data>
+  <data name="No world-object models are loaded on this map." xml:space="preserve"><value>No world-object models are loaded on this map.</value></data>
+  <data name="Snap to tile centre" xml:space="preserve"><value>Snap to tile centre</value></data>
+  <data name="Model palette (selected: %s)" xml:space="preserve"><value>Model palette (selected: %s)</value></data>
+  <data name="Left-click the ground to place." xml:space="preserve"><value>Left-click the ground to place.</value></data>
+  <data name="%d: %ls" xml:space="preserve"><value>%d: %ls</value></data>
+  <data name="Left-click an object to select. Drag to move it." xml:space="preserve"><value>Left-click an object to select. Drag to move it.</value></data>
+  <data name="Undo last object edit" xml:space="preserve"><value>Undo last object edit</value></data>
+  <data name="Save objects" xml:space="preserve"><value>Save objects</value></data>
+  <data name="Overwrites the live map objects file (no backup)." xml:space="preserve"><value>Overwrites the live map objects file (no backup).</value></data>
+  <data name="(nothing selected)" xml:space="preserve"><value>(nothing selected)</value></data>
+  <data name="Selected: type %d" xml:space="preserve"><value>Selected: type %d</value></data>
+  <data name="SelectedObjectScaleLabel" xml:space="preserve"><value>Scale </value></data>
+  <data name="Delete object" xml:space="preserve"><value>Delete object</value></data>
+  <data name="Enable attribute editing" xml:space="preserve"><value>Enable attribute editing</value></data>
+  <data name="Show attribute overlay" xml:space="preserve"><value>Show attribute overlay</value></data>
+  <data name="Left-click paints the selected attribute. Right-click paints Walkable." xml:space="preserve"><value>Left-click paints the selected attribute. Right-click paints Walkable.</value></data>
+  <data name="Brush attribute:" xml:space="preserve"><value>Brush attribute:</value></data>
+  <data name="Walkable (0)" xml:space="preserve"><value>Walkable (0)</value></data>
+  <data name="[combat area]" xml:space="preserve"><value>[combat area]</value></data>
+  <data name="Blocked / no-go (4)" xml:space="preserve"><value>Blocked / no-go (4)</value></data>
+  <data name="MapAttributeRedTag" xml:space="preserve"><value>[red]</value></data>
+  <data name="Safezone (1)" xml:space="preserve"><value>Safezone (1)</value></data>
+  <data name="[green - no combat]" xml:space="preserve"><value>[green - no combat]</value></data>
+  <data name="No ground / void (8)" xml:space="preserve"><value>No ground / void (8)</value></data>
+  <data name="[black]" xml:space="preserve"><value>[black]</value></data>
+  <data name="Water (16)" xml:space="preserve"><value>Water (16)</value></data>
+  <data name="MapAttributeBlueTag" xml:space="preserve"><value>[blue]</value></data>
+  <data name="Undo last attribute stroke" xml:space="preserve"><value>Undo last attribute stroke</value></data>
+  <data name="1) Client file" xml:space="preserve"><value>1) Client file</value></data>
+  <data name="Save client .att" xml:space="preserve"><value>Save client .att</value></data>
+  <data name="2) Server file (HNMO)" xml:space="preserve"><value>2) Server file (HNMO)</value></data>
+  <data name="Auto server map number" xml:space="preserve"><value>Auto server map number</value></data>
+  <data name='Server "Number" = %d   (client folder = World%d)' xml:space="preserve"><value>Server "Number" = %d   (client folder = World%d)</value></data>
+  <data name="Step 1: download this map's &quot;Terrain Data&quot; from the Admin Panel, then:" xml:space="preserve"><value>Step 1: download this map's "Terrain Data" from the Admin Panel, then:</value></data>
+  <data name="Load server base .att..." xml:space="preserve"><value>Load server base .att...</value></data>
+  <data name="Base: %s   |   %d tile(s) edited this session" xml:space="preserve"><value>Base: %s   |   %d tile(s) edited this session</value></data>
+  <data name="ServerTerrainBaseNeeded" xml:space="preserve"><value>No server base loaded. It is needed so we only change the tiles you edited
+and leave the rest of the server's map exactly as it is.</value></data>
+  <data name="Step 2: Save server .att" xml:space="preserve"><value>Step 2: Save server .att</value></data>
+  <data name="ServerTerrainUploadInstructions" xml:space="preserve"><value>Upload the result in the Admin Panel's "Terrain Data" field.
+Never upload the client .att there - it is encrypted and would corrupt the map.</value></data>
+  <data name="ClientServerMapMustMatch" xml:space="preserve"><value>Client + server must match, or players will desync (walk through walls / get pushed back).</value></data>
+  <data name="Capture a top-down screenshot of the whole map to make a minimap." xml:space="preserve"><value>Capture a top-down screenshot of the whole map to make a minimap.</value></data>
+  <data name="Top-down view (for minimap)" xml:space="preserve"><value>Top-down view (for minimap)</value></data>
+  <data name="Rotate 90 CW" xml:space="preserve"><value>Rotate 90 CW</value></data>
+  <data name="Rotate 90 CCW" xml:space="preserve"><value>Rotate 90 CCW</value></data>
+  <data name="Generate minimap from tiles" xml:space="preserve"><value>Generate minimap from tiles</value></data>
+  <data name="Convert a .tga to mini_map.OZT..." xml:space="preserve"><value>Convert a .tga to mini_map.OZT...</value></data>
+  <data name="Use this after editing the .tga in an image editor." xml:space="preserve"><value>Use this after editing the .tga in an image editor.</value></data>
+  <data name="Back to game camera" xml:space="preserve"><value>Back to game camera</value></data>
+  <data name="Tips:" xml:space="preserve"><value>Tips:</value></data>
+  <data name="Enable height editing" xml:space="preserve"><value>Enable height editing</value></data>
+  <data name="SCULPTING" xml:space="preserve"><value>SCULPTING</value></data>
+  <data name="Fixed height (flatten to a value)" xml:space="preserve"><value>Fixed height (flatten to a value)</value></data>
+  <data name="FlattenBrushHelp" xml:space="preserve"><value>Left-click flattens tiles to the value below.
+Right-click samples the height under the cursor into it.</value></data>
+  <data name="Left-click raises the ground, right-click lowers it." xml:space="preserve"><value>Left-click raises the ground, right-click lowers it.</value></data>
+  <data name="Brush radius" xml:space="preserve"><value>Brush radius</value></data>
+  <data name="Target height" xml:space="preserve"><value>Target height</value></data>
+  <data name="Tip: right-click a tile to copy its height here." xml:space="preserve"><value>Tip: right-click a tile to copy its height here.</value></data>
+  <data name="Strength" xml:space="preserve"><value>Strength</value></data>
+  <data name="Undo last height stroke" xml:space="preserve"><value>Undo last height stroke</value></data>
+  <data name="Save height" xml:space="preserve"><value>Save height</value></data>
+  <data name="Overwrites the live map height file (no backup)." xml:space="preserve"><value>Overwrites the live map height file (no backup).</value></data>
+  <data name="No Data\Object* folders found." xml:space="preserve"><value>No Data\Object* folders found.</value></data>
+  <data name="Import an object model from any map onto this map (World %d)." xml:space="preserve"><value>Import an object model from any map onto this map (World %d).</value></data>
+  <data name="Source map" xml:space="preserve"><value>Source map</value></data>
+  <data name="Rescan" xml:space="preserve"><value>Rescan</value></data>
+  <data name="filter by name..." xml:space="preserve"><value>filter by name...</value></data>
+  <data name="Use selected on current map" xml:space="preserve"><value>Use selected on current map</value></data>
+  <data name="%d models in Object%d" xml:space="preserve"><value>%d models in Object%d</value></data>
+  <data name="No Data\World* folders found in the working directory." xml:space="preserve"><value>No Data\World* folders found in the working directory.</value></data>
+  <data name="Browse the tile textures shipped by any map." xml:space="preserve"><value>Browse the tile textures shipped by any map.</value></data>
+  <data name="World" xml:space="preserve"><value>World</value></data>
+  <data name="Use selected texture on this map" xml:space="preserve"><value>Use selected texture on this map</value></data>
+  <data name="Upload image..." xml:space="preserve"><value>Upload image...</value></data>
+  <data name="TextureImportDestinationHint" xml:space="preserve"><value>Adds to current map (World %d) as a free ExtTile slot, then paint it on the Texture tab.</value></data>
+  <data name="%d textures in World %d" xml:space="preserve"><value>%d textures in World %d</value></data>
+  <data name="Hovered: %s" xml:space="preserve"><value>Hovered: %s</value></data>
+  <data name="fail" xml:space="preserve"><value>fail</value></data>
+  <data name="%zu" xml:space="preserve"><value>%zu</value></data>
+  <data name="Show tooltip on hover" xml:space="preserve"><value>Show tooltip on hover</value></data>
+  <data name="Export all skills to CSV format" xml:space="preserve"><value>Export all skills to CSV format</value></data>
+  <data name="HorseLookNormal" xml:space="preserve"><value>Normal</value></data>
+  <data name="HorseLookDoppelganger" xml:space="preserve"><value>Doppelganger</value></data>
+  <data name="MapImportSelected" xml:space="preserve"><value>Imported to model slot {0} - selected for placing.</value></data>
+  <data name="MapImportFailed" xml:space="preserve"><value>Import failed (no free slot or bad file). See console.</value></data>
+  <data name="TextureImportSelected" xml:space="preserve"><value>Added to slot {0} - selected on the Texture tab.</value></data>
+  <data name="TextureUploadSelected" xml:space="preserve"><value>Uploaded to slot {0} - selected on the Texture tab.</value></data>
+  <data name="TextureImportFailed" xml:space="preserve"><value>Failed - no free ExtTile slot, or unsupported format (OZT).</value></data>
+  <data name="TextureUploadFailed" xml:space="preserve"><value>Upload failed - use a .jpg/.jpeg or .ozj, and ensure a free ExtTile slot.</value></data>
+  <data name="TextureUploadCancelled" xml:space="preserve"><value>Upload cancelled.</value></data>
+  <data name="PopupSaveSuccess" xml:space="preserve"><value>Save Success</value></data>
+  <data name="PopupSaveFailed" xml:space="preserve"><value>Save Failed</value></data>
+  <data name="PopupSaveWriteFailed" xml:space="preserve"><value>Save Write Failed</value></data>
+  <data name="PopupExportCSVSuccess" xml:space="preserve"><value>Export CSV Success</value></data>
+  <data name="PopupExportCSVFailed" xml:space="preserve"><value>Export CSV Failed</value></data>
+  <data name="PopupImportBmdSuccess" xml:space="preserve"><value>Import Bmd Success</value></data>
+  <data name="PopupImportBmdFailed" xml:space="preserve"><value>Import Bmd Failed</value></data>
+  <data name="PopupExportBmdSuccess" xml:space="preserve"><value>Export Bmd Success</value></data>
+  <data name="PopupExportBmdFailed" xml:space="preserve"><value>Export Bmd Failed</value></data>
+  <data name="PopupExportS6E3Success" xml:space="preserve"><value>Export S6E3 Success</value></data>
+  <data name="PopupExportS6E3Failed" xml:space="preserve"><value>Export S6E3 Failed</value></data>
+  <data name="AngleDegreesFormat" xml:space="preserve"><value>%.0f deg</value></data>
+  <data name="BrushTilesFormat" xml:space="preserve"><value>%d tiles</value></data>
+  <data name="NoPreview" xml:space="preserve"><value>No preview</value></data>
 </root>

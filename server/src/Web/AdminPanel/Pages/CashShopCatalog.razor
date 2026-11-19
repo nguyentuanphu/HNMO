@@ -1,4 +1,5 @@
-﻿@page "/cash-shop-catalog"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/cash-shop-catalog"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
 @using Microsoft.AspNetCore.Components.QuickGrid
@@ -11,6 +12,8 @@
 <PageTitle>HNMO: @Resources.CashShopCatalog</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.CashShopCatalog" />
 <h1>@Resources.CashShopCatalog</h1>
+<PageHelp Text="@HelpResources.PageHelpTextCashShopCatalog" />
+
 
 <div class="alert alert-info">@Resources.CashShopCatalogDescription</div>
 
@@ -21,7 +24,7 @@
 else if (this._configuration is not { } configuration)
 {
     <p>@Resources.CashShopNotConfigured</p>
-    <NavLink class="btn btn-primary" href="config-updates">@Resources.Updates</NavLink>
+    <NavLink title="@HelpResources.PageHelpHintNavigate" class="btn btn-primary" href="config-updates">@Resources.Updates</NavLink>
 }
 else if (this._selectedPackage is not { } package)
 {
@@ -84,16 +87,16 @@ else if (this._selectedPackage is not { } package)
                     }
                 </TemplateColumn>
                 <TemplateColumn>
-                    <button type="button" class="btn btn-sm btn-primary" @onclick="@(() => this.OnEditPackage(context))"><span class="oi oi-pencil" aria-hidden="true"></span> @Resources.Edit</button>
+                    <button title="@HelpResources.PageHelpHintEdit" type="button" class="btn btn-sm btn-primary" @onclick="@(() => this.OnEditPackage(context))"><span class="oi oi-pencil" aria-hidden="true"></span> @Resources.Edit</button>
                 </TemplateColumn>
             </QuickGrid>
             </div>
             <LocalizedPaginator State="@this._pagination" />
 
             <div class="mt-3">
-                <button type="button" class="btn btn-success me-1" @onclick="this.OnAddPackage">@Resources.CashShopAddPackage</button>
-                <button type="submit" class="btn btn-primary me-1">@Resources.SaveChanges</button>
-                <button type="button" class="btn btn-secondary" @onclick="this.OnDiscardAsync">@Resources.DiscardChanges</button>
+                <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-success me-1" @onclick="this.OnAddPackage">@Resources.CashShopAddPackage</button>
+                <button title="@HelpResources.PageHelpHintSave" type="submit" class="btn btn-primary me-1">@Resources.SaveChanges</button>
+                <button title="@HelpResources.PageHelpHintDiscard" type="button" class="btn btn-secondary" @onclick="this.OnDiscardAsync">@Resources.DiscardChanges</button>
             </div>
         </EditForm>
     </CascadingValue>
@@ -101,7 +104,7 @@ else if (this._selectedPackage is not { } package)
 else
 {
     <div class="d-flex flex-row">
-        <button type="button" class="btn btn-secondary me-3" @onclick="this.OnBackToList">&lt; @Resources.Back</button>
+        <button title="@HelpResources.PageHelpHintPrevious" type="button" class="btn btn-secondary me-3" @onclick="this.OnBackToList">&lt; @Resources.Back</button>
         <h2>@(string.IsNullOrEmpty(GetPackageName(package)) ? package.PackageSequence.ToString() : $"{package.PackageSequence}: {GetPackageName(package)}")</h2>
     </div>
     <hr />
@@ -186,17 +189,17 @@ else
                         <td><InputByte class="form-control form-control-sm" @bind-Value="product.ItemLevel" /></td>
                         <td><InputNumber class="form-control form-control-sm" min="1" @bind-Value="product.Quantity" /></td>
                         <td><input type="number" class="form-control form-control-sm" min="0" value="@((int)product.Duration.TotalHours)" @onchange="@(e => SetDurationHours(product, e.Value))" /></td>
-                        <td><button type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnRemoveProductAsync(package, product))">@Resources.Delete</button></td>
+                        <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-danger" @onclick="@(() => this.OnRemoveProductAsync(package, product))">@Resources.Delete</button></td>
                     </tr>
                 }
                 </tbody>
             </table>
             </div>
-            <button type="button" class="btn btn-sm btn-success mb-3" @onclick="@(() => this.OnAddProduct(package))">@Resources.CashShopAddProduct</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-success mb-3" @onclick="@(() => this.OnAddProduct(package))">@Resources.CashShopAddProduct</button>
             <hr />
-            <button type="submit" class="btn btn-primary me-1">@Resources.SaveChanges</button>
-            <button type="button" class="btn btn-secondary me-1" @onclick="this.OnDiscardAsync">@Resources.DiscardChanges</button>
-            <button type="button" class="btn btn-danger" @onclick="@(() => this.OnDeletePackageAsync(package))">@Resources.CashShopDeletePackage</button>
+            <button title="@HelpResources.PageHelpHintSave" type="submit" class="btn btn-primary me-1">@Resources.SaveChanges</button>
+            <button title="@HelpResources.PageHelpHintDiscard" type="button" class="btn btn-secondary me-1" @onclick="this.OnDiscardAsync">@Resources.DiscardChanges</button>
+            <button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-danger" @onclick="@(() => this.OnDeletePackageAsync(package))">@Resources.CashShopDeletePackage</button>
         </EditForm>
     </CascadingValue>
 }

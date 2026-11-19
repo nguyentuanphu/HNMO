@@ -5549,6 +5549,42 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("WebsiteConfiguration_GoogleClientId_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_RequireWebsiteLogin_Caption.
+        /// </summary>
+        public static string WebsiteConfiguration_RequireWebsiteLogin_Caption {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_RequireWebsiteLogin_Caption", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to WebsiteConfiguration_RequireWebsiteLogin_Description.
+        /// </summary>
+        public static string WebsiteConfiguration_RequireWebsiteLogin_Description {
+            get {
+                return ResourceManager.GetString("WebsiteConfiguration_RequireWebsiteLogin_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HnmoTicketLoginHandlerPlugIn_Name.
+        /// </summary>
+        public static string HnmoTicketLoginHandlerPlugIn_Name {
+            get {
+                return ResourceManager.GetString("HnmoTicketLoginHandlerPlugIn_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to HnmoTicketLoginHandlerPlugIn_Description.
+        /// </summary>
+        public static string HnmoTicketLoginHandlerPlugIn_Description {
+            get {
+                return ResourceManager.GetString("HnmoTicketLoginHandlerPlugIn_Description", resourceCulture);
+            }
+        }
             /// <summary>
         ///   Looks up a localized string similar to IllusionTempleStartPlugIn_Name.
         /// </summary>
@@ -6045,5 +6081,17 @@ namespace HNMO.GameLogic.Properties {
                 return ResourceManager.GetString("UnlockItemChatCommandPlugIn_Description", resourceCulture);
             }
         }
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string VipPlugIn_Name => ResourceManager.GetString("VipPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized VIP plug-in text.</summary>
+        public static string VipPlugIn_Description => ResourceManager.GetString("VipPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box activity plug-in text.</summary>
+        public static string GiftBoxActivityPlugIn_Name => ResourceManager.GetString("GiftBoxActivityPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized gift box activity plug-in text.</summary>
+        public static string GiftBoxActivityPlugIn_Description => ResourceManager.GetString("GiftBoxActivityPlugIn_Description", resourceCulture)!;
+
     }
 }

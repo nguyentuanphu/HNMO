@@ -268,6 +268,20 @@ public class WebsiteResetOptions
     /// <summary>Gets or sets the coin type of <see cref="ClearStatsCoins"/>.</summary>
     public CashShopCoinType ClearStatsCoinType { get; set; } = CashShopCoinType.GoblinPoints;
 
+    /// <summary>Gets or sets a value indicating whether master skill points can be cleared and refunded on the website.</summary>
+    public bool AllowClearMasterSkills { get; set; } = true;
+
+    /// <summary>Gets or sets the zen clearing master skill points costs on the website.</summary>
+    [Range(0, 2_000_000_000)]
+    public int ClearMasterSkillsZen { get; set; } = 5_000_000;
+
+    /// <summary>Gets or sets the coins clearing master skill points costs on the website.</summary>
+    [Range(0, 1_000_000)]
+    public int ClearMasterSkillsCoins { get; set; }
+
+    /// <summary>Gets or sets the coin type of <see cref="ClearMasterSkillsCoins"/>.</summary>
+    public CashShopCoinType ClearMasterSkillsCoinType { get; set; } = CashShopCoinType.GoblinPoints;
+
     /// <summary>Gets or sets a value indicating whether the delegated reset can be switched on and off on the website.</summary>
     public bool AllowDelegatedSwitch { get; set; } = true;
 }

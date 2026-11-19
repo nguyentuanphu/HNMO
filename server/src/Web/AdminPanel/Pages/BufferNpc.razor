@@ -1,0 +1,155 @@
+@page "/buffer-npc"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.BufferNpc
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @this.L("Buffer NPC", "NPC Hỗ trợ (Buffer)")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@this.L("Buffer NPC", "NPC Hỗ trợ (Buffer)")" />
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <div class="d-flex align-items-center gap-2">
+        <h1 class="mb-0">@this.L("Buffer NPC Settings", "Cài đặt NPC Hỗ trợ (Buffer)")</h1>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@this.L("Show or hide usage help", "Hiện hoặc ẩn hướng dẫn sử dụng")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextBufferNpc" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="Language">
+        <button type="button"
+                class="btn @(this._isVi ? "btn-outline-secondary" : "btn-primary")"
+                title="Switch interface to English"
+                @onclick="() => this.SetLanguage(false)">
+            EN
+        </button>
+        <button type="button"
+                class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")"
+                title="Chuyển giao diện sang tiếng Việt"
+                @onclick="() => this.SetLanguage(true)">
+            VI
+        </button>
+    </div>
+</div>
+
+<p class="text-muted">
+    @this.L(
+        "Grant a customizable set of buffs from the Buffer NPC (Elf Soldier by default) to help new characters up to a configured level. Disabled until turned on.",
+        "Ban tặng gói bùa hỗ trợ tùy chỉnh từ NPC Buffer (mặc định là Elf Soldier) để giúp nhân vật mới đến mốc cấp cấu hình. Mặc định TẮT cho tới khi bật.")
+</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="region" id="buffer-npc-help">
+        <strong>@this.L("How to use this page:", "Cách sử dụng trang này:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@this.L("Turn on 'Enable Buffer NPC' to replace the default single Elf Soldier buff with all checked buffs below.", "Bật 'Bật NPC Buffer' để thay bùa Elf Soldier đơn lẻ mặc định bằng toàn bộ các bùa được chọn bên dưới.")</li>
+            <li>@this.L("Set 'Max level' (inclusive) and optional 'Max resets' (-1 ignores resets) plus optional Zen cost.", "Đặt 'Cấp tối đa' (tính cả cấp này), 'Số lần Reset tối đa' (-1 bỏ qua Reset) và phí Zen tùy chọn.")</li>
+            <li>@this.L("NPC 257 is Elf Soldier (Lorencia/Noria/Devias/Elbeland). Add comma-separated NPC numbers if you also place another Buffer NPC.", "NPC 257 là Elf Soldier. Có thể thêm các mã NPC khác cách nhau bằng dấu phẩy.")</li>
+            <li>@this.L("Duration overrides how long each buff lasts (seconds); set 0 to use each effect's built-in duration.", "Thời lượng ghi đè thời gian hiệu lực của từng bùa (giây); nhập 0 để dùng thời lượng mặc định của mỗi hiệu ứng.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@this.L("Buffer NPC configuration is unavailable.", "Không tải được cấu hình NPC Buffer.")</div>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="form-check form-switch mb-3" title="@this.L("Enable or disable the Buffer NPC plug-in (OFF by default).", "Bật hoặc tắt tính năng NPC Buffer (mặc định TẮT).")">
+                <input class="form-check-input" type="checkbox" id="buf-active" @bind="this._isActive" />
+                <label class="form-check-label fw-semibold" for="buf-active">@this.L("Enable Buffer NPC", "Bật NPC Buffer")</label>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="buf-maxlevel" title="@this.L("Characters up to and including this level receive buffs.", "Nhân vật có cấp nhỏ hơn hoặc bằng mức này sẽ nhận bùa.")">
+                        @this.L("Max level (inclusive)", "Cấp tối đa (tính cả)")
+                    </label>
+                    <input class="form-control" type="number" min="1" max="1000" id="buf-maxlevel" @bind="c.MaxLevel" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="buf-maxresets" title="@this.L("Characters above this reset count are refused (-1 ignores resets).", "Giới hạn số Reset được nhận bùa (-1 = không giới hạn Reset).")">
+                        @this.L("Max resets (-1 = ignore)", "Reset tối đa (-1 = bỏ qua)")
+                    </label>
+                    <input class="form-control" type="number" min="-1" max="10000" id="buf-maxresets" @bind="c.MaxResets" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="buf-duration" title="@this.L("Buff duration in seconds (0 uses each magic effect's built-in duration).", "Thời gian duy trì bùa theo giây (0 dùng mặc định của hiệu ứng).")">
+                        @this.L("Duration (seconds)", "Thời lượng (giây)")
+                    </label>
+                    <input class="form-control" type="number" min="0" max="86400" id="buf-duration" @bind="c.DurationSeconds" />
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label" for="buf-zen" title="@this.L("Optional Zen charged per buff request (0 = free).", "Phí Zen mỗi lần nhận bùa (0 = miễn phí).")">
+                        @this.L("Zen cost (0 = free)", "Phí Zen (0 = miễn phí)")
+                    </label>
+                    <input class="form-control" type="number" min="0" max="2000000000" id="buf-zen" @bind="c.ZenCost" />
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="buf-npcs" title="@this.L("Comma-separated NPC numbers acting as Buffer NPC (257 = Elf Soldier).", "Danh sách mã NPC đóng vai trò NPC Buffer, cách nhau bởi dấu phẩy (257 = Elf Soldier).")">
+                        @this.L("Buffer NPC numbers", "Mã NPC Buffer")
+                    </label>
+                    <input class="form-control" id="buf-npcs" @bind="this._npcIdsText" placeholder="257" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="buf-extra-effects" title="@this.L("Optional extra MagicEffectDefinition IDs beyond the preset list below.", "Mã hiệu ứng phép bổ sung (ngoài danh sách gợi ý bên dưới), cách nhau dấu phẩy.")">
+                        @this.L("Extra magic effect IDs (comma-separated)", "Mã hiệu ứng bổ sung (cách nhau dấu phẩy)")
+                    </label>
+                    <input class="form-control" id="buf-extra-effects" @bind="this._extraEffectsText" placeholder="" />
+                </div>
+            </div>
+
+            <h2 class="h6 mb-2">@this.L("Buffs granted by the Buffer NPC", "Các bùa hỗ trợ sẽ ban tặng")</h2>
+            <div class="row g-2 mb-3">
+                @foreach (var preset in BufferNpcConfiguration.Presets)
+                {
+                    var id = preset.EffectNumber;
+                    var isChecked = this._selectedEffects.Contains(id);
+                    <div class="col-md-6">
+                        <div class="form-check" title="@this.L($"Magic effect #{id}", $"Hiệu ứng #{id}")">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="buf-eff-@id"
+                                   checked="@isChecked"
+                                   @onchange="@(args => this.TogglePreset(id, args.Value is true))" />
+                            <label class="form-check-label" for="buf-eff-@id">
+                                <code>#@id</code> — @this.L(preset.NameEn, preset.NameVi)
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="button"
+                        class="btn btn-primary"
+                        id="buf-save"
+                        disabled="@this._isSaving"
+                        title="@this.L("Save Buffer NPC settings and apply immediately", "Lưu cài đặt NPC Buffer và áp dụng ngay")"
+                        @onclick="this.SaveAsync">
+                    @this.L("Save changes", "Lưu thay đổi")
+                </button>
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        disabled="@this._isSaving"
+                        title="@this.L("Reload saved configuration from database", "Tải lại cấu hình đã lưu")"
+                        @onclick="this.LoadAsync">
+                    @this.L("Reload", "Tải lại")
+                </button>
+            </div>
+        </div>
+    </div>
+}

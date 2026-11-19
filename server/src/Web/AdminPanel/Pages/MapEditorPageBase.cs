@@ -1,4 +1,4 @@
-﻿// <copyright file="MapEditorPageBase.cs" company="HNMO">
+// <copyright file="MapEditorPageBase.cs" company="HNMO">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -6,14 +6,10 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Reflection;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Components;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components;
@@ -21,6 +17,11 @@ using HNMO.Web.Shared.Components.MapEditor;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The base class of the pages, which show an editor for all <see cref="GameConfiguration.Maps"/>.
@@ -45,6 +46,9 @@ public abstract class MapEditorPageBase<TEditor> : ComponentBase, IDisposable
     /// Gets the caption of the page.
     /// </summary>
     protected abstract string Caption { get; }
+
+    /// <summary>Gets the localized purpose, changes and cautions for this map editor.</summary>
+    protected abstract string HelpText { get; }
 
     /// <summary>
     /// Gets or sets the guard which checks the permission of the current user before saving.
@@ -109,13 +113,17 @@ public abstract class MapEditorPageBase<TEditor> : ComponentBase, IDisposable
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
+        builder.OpenComponent<PageHelp>(0);
+        builder.AddAttribute(1, nameof(PageHelp.Text), this.HelpText);
+        builder.CloseComponent();
+
         if (this._maps is null)
         {
             return;
         }
 
-        builder.OpenComponent<Breadcrumb>(0);
-        builder.AddAttribute(1, nameof(Breadcrumb.Caption), this.Caption);
+        builder.OpenComponent<Breadcrumb>(4);
+        builder.AddAttribute(5, nameof(Breadcrumb.Caption), this.Caption);
         builder.CloseComponent();
 
         builder.OpenComponent<CascadingValue<IContext>>(10);

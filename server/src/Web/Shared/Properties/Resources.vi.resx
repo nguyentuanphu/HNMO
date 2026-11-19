@@ -12,7 +12,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Loading" xml:space="preserve">
+    <data name="Loading" xml:space="preserve">
     <value>Đang tải ...</value>
   </data>
   <data name="All" xml:space="preserve">
@@ -589,4 +589,65 @@ Cấp: {2} - {3}</value>
   <data name="MonsterAmountSaveMapFirst" xml:space="preserve">
     <value>Hãy lưu hoặc hoàn tác các thay đổi của bản đồ trước.</value>
   </data>
+  <data name="ItemPickerTitle" xml:space="preserve"><value>Danh mục vật phẩm</value></data>
+  <data name="ItemPickerSearch" xml:space="preserve"><value>Tìm tên hoặc nhóm:số</value></data>
+  <data name="ItemPickerSearchHint" xml:space="preserve"><value>Tìm tên tiếng Anh, tiếng Việt hoặc mã nhóm:số chính xác.</value></data>
+  <data name="ItemPickerCategory" xml:space="preserve"><value>Danh mục</value></data>
+  <data name="ItemPickerAll" xml:space="preserve"><value>Tất cả</value></data>
+  <data name="ItemPickerClass" xml:space="preserve"><value>Lớp nhân vật</value></data>
+  <data name="ItemPickerMinimum" xml:space="preserve"><value>Cấp yêu cầu thấp nhất</value></data>
+  <data name="ItemPickerMaximum" xml:space="preserve"><value>Cấp yêu cầu cao nhất</value></data>
+  <data name="ItemPickerMissing" xml:space="preserve"><value>Chỉ hiện vật phẩm chưa có trong cửa hàng</value></data>
+  <data name="ItemPickerSort" xml:space="preserve"><value>Sắp xếp theo</value></data>
+  <data name="ItemPickerName" xml:space="preserve"><value>Tên</value></data>
+  <data name="ItemPickerGroup" xml:space="preserve"><value>Nhóm:số</value></data>
+  <data name="ItemPickerLevel" xml:space="preserve"><value>Cấp yêu cầu</value></data>
+  <data name="ItemPickerSelect" xml:space="preserve"><value>Chọn {0}</value></data>
+  <data name="ItemPickerAdd" xml:space="preserve"><value>Thêm {0} vào chỗ trống đầu tiên</value></data>
+  <data name="ItemPickerDrag" xml:space="preserve"><value>Kéo vật phẩm này vào lưới cửa hàng</value></data>
+  <data name="ItemPickerMatches" xml:space="preserve"><value>{0} kết quả · đã chọn {1}</value></data>
+  <data name="ItemPickerEmpty" xml:space="preserve"><value>Không có vật phẩm phù hợp. Hãy đổi bộ lọc.</value></data>
+  <data name="ItemPickerClearSelection" xml:space="preserve"><value>Bỏ chọn tất cả</value></data>
+  <data name="ItemPickerFilterHint" xml:space="preserve"><value>Lọc yêu cầu của vật phẩm cấp gốc; vật phẩm không hạn chế lớp nhân vật được tính cho mọi lớp.</value></data>
+  <data name="ItemPickerInactive" xml:space="preserve"><value>Định nghĩa đang tắt</value></data>
+  <data name="ItemPickerGroup0" xml:space="preserve"><value>Kiếm</value></data>
+  <data name="ItemPickerGroup1" xml:space="preserve"><value>Rìu</value></data>
+  <data name="ItemPickerGroup2" xml:space="preserve"><value>Chùy</value></data>
+  <data name="ItemPickerGroup3" xml:space="preserve"><value>Giáo</value></data>
+  <data name="ItemPickerGroup4" xml:space="preserve"><value>Cung và nỏ</value></data>
+  <data name="ItemPickerGroup5" xml:space="preserve"><value>Gậy phép</value></data>
+  <data name="ItemPickerGroup6" xml:space="preserve"><value>Khiên</value></data>
+  <data name="ItemPickerGroup7" xml:space="preserve"><value>Mũ</value></data>
+  <data name="ItemPickerGroup8" xml:space="preserve"><value>Áo giáp</value></data>
+  <data name="ItemPickerGroup9" xml:space="preserve"><value>Quần</value></data>
+  <data name="ItemPickerGroup10" xml:space="preserve"><value>Găng tay</value></data>
+  <data name="ItemPickerGroup11" xml:space="preserve"><value>Giày</value></data>
+  <data name="ItemPickerGroup12" xml:space="preserve"><value>Cánh và vật phẩm liên quan</value></data>
+  <data name="ItemPickerGroup13" xml:space="preserve"><value>Trang sức và vật phẩm khác</value></data>
+  <data name="ItemPickerGroup14" xml:space="preserve"><value>Ngọc, bình và vật phẩm tiêu hao</value></data>
+  <data name="ItemPickerGroup15" xml:space="preserve"><value>Sách phép và ngọc kỹ năng</value></data>
+  <data name="ItemPickerGiftChoose" xml:space="preserve"><value>Chọn vật phẩm để thêm vào quà này.</value></data>
+  <data name="ItemPickerGiftAdd" xml:space="preserve"><value>Thêm {0} vào quà này.</value></data>
+  <data name="PageHelpHintClear" xml:space="preserve"><value>Xóa giá trị, lựa chọn hoặc trạng thái được ghi trên nút này.</value></data>
+  <data name="PageHelpHintPassword" xml:space="preserve"><value>Mở hoặc xác nhận thay đổi mật khẩu cho tài khoản đã chọn.</value></data>
+  <data name="PageHelpHintSearch" xml:space="preserve"><value>Tìm các mục khớp với từ khóa hoặc bộ lọc hiện tại.</value></data>
+  <data name="PageHelpHintRefresh" xml:space="preserve"><value>Đọc lại dữ liệu mới nhất hiện có từ máy chủ.</value></data>
+  <data name="PageHelpHintZoomStatus" xml:space="preserve"><value>Giá trị này cho biết phần trăm thu phóng bản đồ hiện tại.</value></data>
+  <data name="PageHelpHintSelect" xml:space="preserve"><value>Chọn mục này cho thao tác đang thực hiện.</value></data>
+  <data name="PageHelpHintFirst" xml:space="preserve"><value>Xem trang mục đầu tiên.</value></data>
+  <data name="PageHelpHintLast" xml:space="preserve"><value>Xem trang mục cuối cùng.</value></data>
+  <data name="PageHelpHintReset" xml:space="preserve"><value>Đặt lại trạng thái đã chọn theo hướng dẫn của trang này.</value></data>
+  <data name="PageHelpHintExpand" xml:space="preserve"><value>Hiện hoặc ẩn chi tiết bổ sung của mục này.</value></data>
+  <data name="PageHelpHintConfirm" xml:space="preserve"><value>Xác nhận và thực hiện thao tác đã mô tả ở trên.</value></data>
+  <data name="PageHelpHintCancel" xml:space="preserve"><value>Hủy bước chỉnh sửa này và không áp dụng các thay đổi chưa lưu.</value></data>
+  <data name="PageHelpHintNext" xml:space="preserve"><value>Xem trang mục tiếp theo.</value></data>
+  <data name="PageHelpHintZoomIn" xml:space="preserve"><value>Phóng to bản đồ đang xem mà không thay đổi dữ liệu bản đồ.</value></data>
+  <data name="PageHelpHintNavigate" xml:space="preserve"><value>Mở trang hoặc chế độ xem đã chọn.</value></data>
+  <data name="PageHelpHintZoomOut" xml:space="preserve"><value>Thu nhỏ bản đồ đang xem mà không thay đổi dữ liệu bản đồ.</value></data>
+  <data name="PageHelpHintDelete" xml:space="preserve"><value>Xóa mục đã chọn sau khi kiểm tra đúng mục cần xóa.</value></data>
+  <data name="PageHelpHintPrevious" xml:space="preserve"><value>Xem trang mục trước.</value></data>
+  <data name="PageHelpHintCopy" xml:space="preserve"><value>Sao chép nội dung hoặc mục đã chọn để dùng lại.</value></data>
+  <data name="PageHelpHintStatus" xml:space="preserve"><value>Nút đang vô hiệu hóa này chỉ hiển thị trạng thái và không thực hiện thao tác.</value></data>
+  <data name="PageHelpHintSave" xml:space="preserve"><value>Lưu các thay đổi đang hiển thị trong trình sửa này.</value></data>
+  <data name="PageHelpHintCreate" xml:space="preserve"><value>Bắt đầu tạo một mục mới trên trang này.</value></data>
 </root>

@@ -359,6 +359,7 @@ public class CashShopActions
                 storageItems.Add(storageItem);
             }
 
+            var receipt = CashShopPurchaseReceipt.Create(player.PersistenceContext, account, package, price, giftRecipientName);
             if (await TrySaveAsync(player).ConfigureAwait(false))
             {
                 boughtPackage = package;
@@ -368,6 +369,7 @@ public class CashShopActions
             }
 
             account.SetCashShopCoins(package.CoinType, coins);
+            await player.PersistenceContext.DeleteAsync(receipt).ConfigureAwait(false);
             foreach (var storageItem in storageItems)
             {
                 await player.PersistenceContext.DeleteAsync(storageItem).ConfigureAwait(false);

@@ -39,6 +39,14 @@ public sealed partial class GameServer : IGameServerAdministration
         => this.Administration.SetLevelAsync(characterName, characterId, level, master, cancellationToken);
 
     /// <inheritdoc />
+    public ValueTask<GameServerAdminResult> ApplyBuffAsync(string characterName, Guid characterId, short effectNumber, int durationSeconds, CancellationToken cancellationToken)
+        => this.Administration.ApplyBuffAsync(characterName, characterId, effectNumber, durationSeconds, cancellationToken);
+
+    /// <inheritdoc />
+    public ValueTask<GameServerAdminResult> ClearBuffsAsync(string characterName, Guid characterId, CancellationToken cancellationToken)
+        => this.Administration.ClearBuffsAsync(characterName, characterId, cancellationToken);
+
+    /// <inheritdoc />
     public ValueTask<IReadOnlyList<LiveEventInfo>> GetEventsAsync(CancellationToken cancellationToken)
         => this.Administration.GetEventsAsync(cancellationToken);
 

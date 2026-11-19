@@ -1,0 +1,185 @@
+@page "/maintenance-tools"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.Web.AdminPanel.Operations
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Maintenance tools", "Công cụ bảo trì")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Maintenance tools", "Công cụ bảo trì")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Maintenance tools", "Công cụ bảo trì")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" id="mt-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextMaintenanceTools" />
+<p class="text-muted">@L("Inspect inactive or empty accounts, duplicated item GUIDs, experience anomalies, and database backups. Always run a dry-run preview before applying changes; every apply writes an admin audit entry.", "Kiểm tra tài khoản không hoạt động/trống, vật phẩm trùng mã GUID, lỗi kinh nghiệm và sao lưu dữ liệu. Luôn chạy xem trước trước khi áp dụng; mọi thao tác đều ghi nhật ký kiểm toán.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="maintenance-tools-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Dry-run first: Click Preview on each tool to inspect exact rows that would change before clicking Apply.", "Xem trước trước: Nhấn Xem trước để kiểm tra chính xác các dòng sẽ thay đổi trước khi Áp dụng.")</li>
+            <li>@L("Every Apply action executes through the admin audit trail and honors ReadOnly safety settings.", "Mọi thao tác Áp dụng đều đi qua hệ thống kiểm toán quản trị và tuân thủ chế độ Chỉ đọc.")</li>
+            <li>@L("Timestamps are displayed in Sydney time. For full backup/restore schedules, use the Server Control page (/control).", "Thời gian hiển thị theo giờ Sydney. Để sao lưu/khôi phục toàn phần, vào trang Điều khiển máy chủ (/control).")</li>
+        </ul>
+    </div>
+}
+
+<section class="card mb-3" id="mt-backup-card">
+    <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h2 class="h5 mb-1">@L("Database backups & restore", "Sao lưu & Khôi phục dữ liệu")</h2>
+            <p class="mb-0 text-muted small">@L("Create a fresh database backup or restore an existing snapshot in Server Control before running destructive cleanups.", "Tạo bản sao lưu cơ sở dữ liệu hoặc khôi phục tại trang Điều khiển trước khi dọn dẹp dữ liệu.")</p>
+        </div>
+        <a class="btn btn-sm btn-outline-primary" href="/control" title="@L("Open Server Control & Backups", "Mở trang Điều khiển & Sao lưu")">@L("Open backup / restore (/control)", "Mở sao lưu / khôi phục (/control)")</a>
+    </div>
+</section>
+
+<section class="card mb-3" id="mt-inactive-card">
+    <div class="card-body">
+        <h2 class="h5">@L("1. Inactive & empty accounts", "1. Tài khoản không hoạt động / trống")</h2>
+        <div class="row g-2 align-items-end mb-2">
+            <div class="col-sm-3">
+                <label class="form-label" for="mt-days" title="@L("Minimum days since account registration", "Số ngày tối thiểu kể từ khi đăng ký")">@L("Inactive at least (days)", "Không hoạt động ít nhất (ngày)")</label>
+                <input class="form-control form-control-sm" id="mt-days" type="number" min="1" max="36500" @bind="this._minInactiveDays" />
+            </div>
+            <div class="col-sm-3">
+                <div class="form-check">
+                    <input class="form-check-input" id="mt-empty-only" type="checkbox" @bind="this._emptyOnly" />
+                    <label class="form-check-label" for="mt-empty-only" title="@L("Require zero characters and zero vault items", "Chỉ chọn tài khoản không có nhân vật và rương trống")">@L("Empty accounts only", "Chỉ tài khoản trống")</label>
+                </div>
+            </div>
+            <div class="col-sm-6 d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" id="mt-inactive-preview" disabled="@this._isBusy" title="@L("Scan matching accounts without deleting anything", "Quét tài khoản phù hợp mà không xóa gì")" @onclick="this.PreviewInactiveAsync">@L("Preview dry-run", "Xem trước")</button>
+                <button type="button" class="btn btn-sm btn-danger" id="mt-inactive-apply" disabled="@(this._isBusy || this._inactiveCandidates.Count == 0)" title="@L("Delete all previewed inactive accounts (audited)", "Xóa các tài khoản đã xem trước (có ghi kiểm toán)")" @onclick="this.PurgeInactiveAsync">@L($"Apply purge ({this._inactiveCandidates.Count})", $"Xóa ({this._inactiveCandidates.Count})")</button>
+            </div>
+        </div>
+        @if (this._inactivePreviewed)
+        {
+            @if (this._inactiveCandidates.Count == 0)
+            {
+                <p class="mb-0 text-muted small" id="mt-inactive-none">@L("No inactive accounts match the current threshold.", "Không có tài khoản nào khớp điều kiện.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped mb-0" id="mt-inactive-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Login", "Tài khoản")</th>
+                                <th>@L("Registered (Sydney)", "Đăng ký (Giờ Sydney)")</th>
+                                <th>@L("Characters", "Nhân vật")</th>
+                                <th>@L("Vault items", "Đồ trong rương")</th>
+                                <th>@L("Coins", "Xu")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in this._inactiveCandidates)
+                            {
+                                <tr>
+                                    <td>@item.LoginName</td>
+                                    <td>@SydneyTime(item.RegistrationDateUtc)</td>
+                                    <td>@item.CharacterCount</td>
+                                    <td>@item.VaultItemCount</td>
+                                    <td>@item.TotalCoins</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<section class="card mb-3" id="mt-dupe-card">
+    <div class="card-body">
+        <h2 class="h5">@L("2. Duplicate item serial / GUID check", "2. Kiểm tra vật phẩm trùng mã GUID")</h2>
+        <div class="d-flex gap-2 mb-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" id="mt-dupe-preview" disabled="@this._isBusy" title="@L("Scan vaults and character inventories for identical item GUIDs", "Quét rương và túi đồ để tìm mã GUID vật phẩm bị trùng")" @onclick="this.PreviewDuplicatesAsync">@L("Preview dry-run", "Xem trước")</button>
+            <button type="button" class="btn btn-sm btn-warning" id="mt-dupe-apply" disabled="@(this._isBusy || this._duplicateItems.Count == 0)" title="@L("Keep first copy and remove extra duplicate items (audited)", "Giữ bản đầu tiên và xóa các bản sao trùng (có ghi kiểm toán)")" @onclick="this.RemoveDuplicatesAsync">@L($"Remove extra copies ({this._duplicateItems.Count})", $"Xóa bản trùng ({this._duplicateItems.Count})")</button>
+        </div>
+        @if (this._dupePreviewed)
+        {
+            @if (this._duplicateItems.Count == 0)
+            {
+                <p class="mb-0 text-muted small" id="mt-dupe-none">@L("No duplicate item GUIDs detected.", "Không phát hiện vật phẩm nào trùng GUID.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped mb-0" id="mt-dupe-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Item GUID", "Mã GUID")</th>
+                                <th>@L("Account", "Tài khoản")</th>
+                                <th>@L("Location", "Vị trí")</th>
+                                <th>@L("Item", "Vật phẩm")</th>
+                                <th>@L("Slot", "Ô")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in this._duplicateItems)
+                            {
+                                <tr>
+                                    <td class="small">@item.ItemId.ToString("N")</td>
+                                    <td>@item.AccountLogin</td>
+                                    <td>@item.LocationLabel</td>
+                                    <td>@item.ItemSummary</td>
+                                    <td>@item.Slot</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<section class="card" id="mt-exp-card">
+    <div class="card-body">
+        <h2 class="h5">@L("3. Character experience fixer", "3. Sửa lỗi kinh nghiệm nhân vật")</h2>
+        <div class="d-flex gap-2 mb-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" id="mt-exp-preview" disabled="@this._isBusy" title="@L("Find characters whose XP falls outside their level range", "Tìm nhân vật có điểm kinh nghiệm lệch khỏi khoảng của cấp hiện tại")" @onclick="this.PreviewExpAsync">@L("Preview dry-run", "Xem trước")</button>
+            <button type="button" class="btn btn-sm btn-success" id="mt-exp-apply" disabled="@(this._isBusy || this._expIssues.Count == 0)" title="@L("Clamp mismatched experience into valid level bounds (audited)", "Chỉnh lại kinh nghiệm về đúng khoảng cấp (có ghi kiểm toán)")" @onclick="this.FixExpAsync">@L($"Apply fix ({this._expIssues.Count})", $"Áp dụng sửa ({this._expIssues.Count})")</button>
+        </div>
+        @if (this._expPreviewed)
+        {
+            @if (this._expIssues.Count == 0)
+            {
+                <p class="mb-0 text-muted small" id="mt-exp-none">@L("All characters have consistent experience values.", "Tất cả nhân vật đều có điểm kinh nghiệm hợp lệ.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped mb-0" id="mt-exp-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Account", "Tài khoản")</th>
+                                <th>@L("Character", "Nhân vật")</th>
+                                <th>@L("Level", "Cấp")</th>
+                                <th>@L("Current XP", "XP hiện tại")</th>
+                                <th>@L("Fixed XP", "XP sau sửa")</th>
+                                <th>@L("Reason", "Nguyên nhân")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in this._expIssues)
+                            {
+                                <tr>
+                                    <td>@item.AccountLogin</td>
+                                    <td>@item.CharacterName</td>
+                                    <td>@item.Level</td>
+                                    <td>@item.CurrentExperience</td>
+                                    <td>@item.FixedExperience</td>
+                                    <td>@item.Reason</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+</section>

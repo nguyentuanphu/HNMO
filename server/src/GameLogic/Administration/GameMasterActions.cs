@@ -115,6 +115,64 @@ public static class GameMasterActions
         return GameServerAdminResult.Success;
     }
 
+    /// <summary>Applies a timed buff effect to a live character.</summary>
+    /// <param name="player">The live player.</param>
+    /// <param name="effectNumber">The magic effect definition number.</param>
+    /// <param name="durationSeconds">The duration in seconds.</param>
+    /// <returns>The action result.</returns>
+    public static async ValueTask<GameServerAdminResult> ApplyBuffAsync(Player player, short effectNumber, int durationSeconds)
+    {
+        if (player.SelectedCharacter is null || player.Attributes is not { } attributes)
+        {
+            return new(false, "The live character is unavailable.");
+        }
+
+        if (durationSeconds is < 10 or > 86_400)
+        {
+            return new(false, "Buff duration must be between 10 and 86,400 seconds.");
+        }
+
+        var effectDef = player.GameContext.Configuration.MagicEffects.FirstOrDefault(e => e.Number == effectNumber);
+        if (effectDef is null)
+        {
+            return new(false, "The selected buff effect definition was not found.");
+        }
+
+        var boosts = effectDef.PowerUpDefinitions
+            .Where(def => def.Boost is not null && def.TargetAttribute is not null)
+            .Select(def => new MagicEffect.ElementWithTarget(attributes.CreateElement(def), def.TargetAttribute!))
+            .ToArray();
+        if (boosts.Length == 0)
+        {
+            return new(false, "This magic effect has no configurable attribute boosts.");
+        }
+
+        var effect = new MagicEffect(TimeSpan.FromSeconds(durationSeconds), effectDef, boosts);
+        await player.MagicEffectList.AddEffectAsync(effect).ConfigureAwait(false);
+        return GameServerAdminResult.Success;
+    }
+
+    /// <summary>Clears active timed buff effects from a live character.</summary>
+    /// <param name="player">The live player.</param>
+    /// <returns>The action result.</returns>
+    public static async ValueTask<GameServerAdminResult> ClearBuffsAsync(Player player)
+    {
+        if (player.SelectedCharacter is null)
+        {
+            return new(false, "The live character is unavailable.");
+        }
+
+        var active = player.MagicEffectList.GetActiveEffectsSnapshot()
+            .Where(e => e.Duration > TimeSpan.Zero && e.Duration < System.Threading.Timeout.InfiniteTimeSpan)
+            .ToList();
+        foreach (var effect in active)
+        {
+            await effect.DisposeAsync().ConfigureAwait(false);
+        }
+
+        return GameServerAdminResult.Success;
+    }
+
     /// <summary>Performs the instantaneous same-map movement used by the GM teleport command.</summary>
     /// <param name="player">The player on the current map.</param>
     /// <param name="target">The target coordinate.</param>

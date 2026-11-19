@@ -1,0 +1,243 @@
+@page "/import-server"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using Microsoft.AspNetCore.Authorization
+@using HNMO.GameLogic.ServerImporter
+@using HNMO.Web.AdminPanel.Auth
+
+<PageTitle>@L("Import from Another Server", "Nhập Dữ Liệu Từ Máy Chủ Khác")</PageTitle>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <h3 class="mb-0">@L("Import from Another Server", "Nhập Dữ Liệu Từ Máy Chủ Khác")</h3>
+        <button type="button"
+                class="btn btn-sm btn-outline-info"
+                title="@L("Show or hide setup instructions for this page.", "Hiện hoặc ẩn hướng dẫn sử dụng trang này.")"
+                @onclick="() => this._showHelp = !this._showHelp">
+            ?
+        </button>
+    </div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextImportServer" />
+    <div class="btn-group btn-group-sm" role="group" aria-label="@L("Language", "Ngôn ngữ")">
+        <button type="button" class="btn @(!this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageEn">English</button>
+        <button type="button" class="btn @(this._isVi ? "btn-primary" : "btn-outline-secondary")" @onclick="() => this.SetLanguage(true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintLanguageVi">Tiếng Việt</button>
+    </div>
+</div>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info mb-3" role="note">
+        <strong>@L("How to use this page", "Hướng dẫn sử dụng trang này"):</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Point this local-only tool at an extracted Season 6 or Season 9 server configuration folder on the host machine and optionally a local MSSQL connection string.", "Trỏ công cụ nội bộ này tới thư mục cấu hình máy chủ Season 6 hoặc Season 9 trên máy chủ này và tùy chọn chuỗi kết nối MSSQL cục bộ.")</li>
+            <li>@L("Always run Dry-Run Preview first: the importer detects the version automatically, counts mappable entries, and lists Season 9-only or unmapped items that will be skipped.", "Luôn chạy Xem Trước Thử (Dry-Run) trước: trình nhập tự nhận diện phiên bản, đếm số mục tương thích và liệt kê các mục chỉ có ở Season 9 hoặc không khớp để bỏ qua.")</li>
+            <li>@L("Applying an import writes an atomic pre-import backup snapshot first under your local save folder. Use Undo Import at any time to restore prior rates, shops, plugin configs, and remove imported records.", "Khi áp dụng, hệ thống luôn sao lưu trạng thái trước khi nhập vào thư mục save. Có thể nhấn Hoàn Tác Nhập bất kỳ lúc nào để khôi phục dữ liệu cũ.")</li>
+            <li>@L("Security: Account passwords from legacy databases are NEVER read or stored in plaintext. Accounts are created with a BCrypt-hashed random reset token or a BCrypt hash of your temporary migration passphrase.", "Bảo mật: Mật khẩu cũ KHÔNG BAO GIỜ được đọc hoặc lưu dạng rõ. Tài khoản mới luôn dùng mã băm BCrypt (token đặt lại ngẫu nhiên hoặc mật khẩu tạm thời).")</li>
+        </ul>
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-header">@L("1. Source Paths & Import Scope (Local Only)", "1. Nguồn Dữ Liệu & Phạm Vi Nhập (Chỉ Nội Bộ)")</div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" title="@L("Absolute path on this machine containing the server Data / XML / INI config folders.", "Đường dẫn tuyệt đối trên máy chủ này chứa các thư mục cấu hình Data / XML / INI.")">
+                    @L("Local Server Config Folder", "Thư Mục Cấu Hình Máy Chủ")
+                </label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       placeholder="C:\MuServer"
+                       @bind="this._options.FolderPath" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" title="@L("Optional local MSSQL connection string (only needed if importing accounts, characters, inventories, vaults, and guilds).", "Chuỗi kết nối MSSQL cục bộ tùy chọn (chỉ cần nếu nhập tài khoản, nhân vật, túi đồ, rương và guild).")">
+                    @L("Optional Local MSSQL Connection String", "Chuỗi Kết Nối MSSQL (Tùy Chọn)")
+                </label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       placeholder="Server=localhost;Database=MuOnline;Trusted_Connection=True;"
+                       @bind="this._options.MssqlConnectionString" />
+            </div>
+
+            <div class="col-12">
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="form-check">
+                        <input id="impRates" class="form-check-input" type="checkbox" @bind="this._options.ImportRates" />
+                        <label class="form-check-label" for="impRates" title="@L("Import normal/master EXP and base drop rates.", "Nhập tỉ lệ EXP thường/master và tỉ lệ rơi cơ bản.")">@L("Rates (EXP/Drop/Zen)", "Tỉ Lệ (EXP/Drop/Zen)")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impDrops" class="form-check-input" type="checkbox" @bind="this._options.ImportDropLists" />
+                        <label class="form-check-label" for="impDrops" title="@L("Import monster/global DropManager item groups.", "Nhập danh sách rơi đồ theo quái/toàn máy chủ.")">@L("Item Drop Lists", "Danh Sách Rơi Đồ")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impShops" class="form-check-input" type="checkbox" @bind="this._options.ImportShops" />
+                        <label class="form-check-label" for="impShops" title="@L("Import NPC merchant inventories matching existing HNMO NPCs and items.", "Nhập vật phẩm cửa hàng NPC khớp NPC và vật phẩm trong HNMO.")">@L("NPC Shops", "Cửa Hàng NPC")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impEvents" class="form-check-input" type="checkbox" @bind="this._options.ImportEventSchedules" />
+                        <label class="form-check-label" for="impEvents" title="@L("Import event timetable entries and map bonus windows (Season 6 compatible events).", "Nhập lịch sự kiện và giờ vàng theo map tương thích Season 6.")">@L("Event Schedules", "Lịch Sự Kiện")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impChaos" class="form-check-input" type="checkbox" @bind="this._options.ImportChaosMixRates" />
+                        <label class="form-check-label" for="impChaos" title="@L("Import +10 to +15 Chaos Machine rates and Luck bonus.", "Nhập tỉ lệ ép đồ Chaos +10 đến +15 và cộng thêm Luck.")">@L("Chaos Mix Rates", "Tỉ Lệ Máy Ép Chaos")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impSpawns" class="form-check-input" type="checkbox" @bind="this._options.ImportMonsterSpawns" />
+                        <label class="form-check-label" for="impSpawns" title="@L("Import NPC, point, and area spawns from MonsterSetBase text files.", "Nhập bãi quái và NPC từ tệp MonsterSetBase.")">@L("Monster Spawns", "Bãi Quái & NPC")</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="impDb" class="form-check-input" type="checkbox" @bind="this._options.ImportDatabaseEntities" />
+                        <label class="form-check-label" for="impDb" title="@L("Import Accounts, Characters, Inventories, Vaults, and Guilds from the MSSQL connection string above.", "Nhập Tài khoản, Nhân vật, Túi đồ, Rương và Guild từ chuỗi MSSQL ở trên.")">@L("MSSQL Accounts / Chars / Guilds", "CSDL Tài Khoản / Nhân Vật / Guild")</label>
+                    </div>
+                </div>
+            </div>
+
+            @if (this._options.ImportDatabaseEntities)
+            {
+                <div class="col-md-5">
+                    <label class="form-label" title="@L("Legacy passwords are never stored in plain text.", "Mật khẩu cũ không bao giờ được lưu dạng văn bản thô.")">
+                        @L("Account Password Migration Mode", "Chế Độ Mật Khẩu Tài Khoản Nhập")
+                    </label>
+                    <select class="form-select form-select-sm" @bind="this._options.PasswordMode">
+                        <option value="@LegacyPasswordMigrationMode.ForceRandomReset">@L("Force random BCrypt reset token (Recommended)", "Tạo token BCrypt ngẫu nhiên buộc đặt lại (Khuyên dùng)")</option>
+                        <option value="@LegacyPasswordMigrationMode.UseTemporaryPassphrase">@L("Re-hash a temporary migration passphrase with BCrypt", "Băm mật khẩu tạm thời bằng BCrypt")</option>
+                    </select>
+                </div>
+                @if (this._options.PasswordMode == LegacyPasswordMigrationMode.UseTemporaryPassphrase)
+                {
+                    <div class="col-md-4">
+                        <label class="form-label" title="@L("Hashed immediately with BCrypt before saving.", "Được băm ngay bằng BCrypt trước khi lưu.")">@L("Temporary Passphrase", "Mật Khẩu Tạm")</label>
+                        <input type="password" class="form-control form-control-sm" maxlength="64" @bind="this._options.TemporaryPassphrase" />
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="mt-3 d-flex flex-wrap gap-2">
+            <button type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    disabled="@this._isBusy"
+                    title="@L("Inspect source files and optional database without saving any changes.", "Quét dữ liệu nguồn và CSDL (nếu có) nhưng chưa lưu thay đổi nào.")"
+                    @onclick="this.RunDryRunAsync">
+                @L("Run Dry-Run Preview", "Chạy Xem Trước (Dry-Run)")
+            </button>
+            <button type="button"
+                    class="btn btn-primary btn-sm"
+                    disabled="@(this._isBusy || this._preview is null)"
+                    title="@L("Save a full local backup first, then apply all mappable changes to HNMO.", "Lưu bản sao lưu cục bộ trước rồi áp dụng các thay đổi hợp lệ vào HNMO.")"
+                    @onclick="this.ApplyImportAsync">
+                @L("Create Backup & Apply Import", "Sao Lưu & Áp Dụng Nhập")
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(this._statusMessage))
+{
+    <div class="alert @(this._statusIsError ? "alert-danger" : "alert-success") py-2 mb-3">@this._statusMessage</div>
+}
+
+@if (this._preview is not null)
+{
+    <div class="card mb-3">
+        <div class="card-header d-flex flex-wrap align-items-center justify-content-between">
+            <span>@L("2. Dry-Run Preview Report", "2. Báo Cáo Xem Trước")</span>
+            <span class="badge @(this._preview.DetectedVersion == LegacyServerVersion.Season9 ? "bg-warning text-dark" : "bg-success")">
+                @L($"Detected Version: {this._preview.DetectedVersion}", $"Phiên Bản Nhận Diện: {this._preview.DetectedVersion}")
+            </span>
+        </div>
+        <div class="card-body">
+            @if (this._preview.VersionSignals.Count > 0)
+            {
+                <div class="small text-muted mb-2">
+                    @string.Join(" | ", this._preview.VersionSignals)
+                </div>
+            }
+            <div class="table-responsive">
+                <table class="table table-sm mb-2">
+                    <thead>
+                        <tr>
+                            <th>@L("Category", "Nhóm Dữ Liệu")</th>
+                            <th>@L("Will Import", "Sẽ Nhập")</th>
+                            <th>@L("Skipped / Unmapped", "Bỏ Qua / Không Khớp")</th>
+                            <th>@L("Details", "Chi Tiết")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cat in this._preview.Categories)
+                        {
+                            <tr>
+                                <td>@L(cat.NameEn, cat.NameVi)</td>
+                                <td><span class="badge bg-success">@cat.MappedCount</span></td>
+                                <td><span class="badge bg-secondary">@cat.SkippedCount</span></td>
+                                <td class="small">@string.Join("; ", cat.Details)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (this._preview.UnmappedWarnings.Count > 0)
+            {
+                <div class="alert alert-warning mb-0">
+                    <strong>@L($"Unmapped / Unsupported Notes ({this._preview.UnmappedWarnings.Count})", $"Mục Bỏ Qua / Không Hỗ Trợ ({this._preview.UnmappedWarnings.Count})"):</strong>
+                    <ul class="mb-0 mt-1 small">
+                        @foreach (var warning in this._preview.UnmappedWarnings.Take(50))
+                        {
+                            <li>@warning</li>
+                        }
+                        @if (this._preview.UnmappedWarnings.Count > 50)
+                        {
+                            <li>@L($"...and {this._preview.UnmappedWarnings.Count - 50} more.", $"...và {this._preview.UnmappedWarnings.Count - 50} mục khác.")</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">@L("3. Import Backups & Undo History (Sydney Time)", "3. Lịch Sử Sao Lưu & Hoàn Tác (Giờ Sydney)")</div>
+    <div class="table-responsive">
+        <table class="table table-sm table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>@L("Backup ID", "Mã Sao Lưu")</th>
+                    <th>@L("Created (Sydney)", "Thời Gian (Sydney)")</th>
+                    <th>@L("Version", "Phiên Bản")</th>
+                    <th>@L("Summary", "Tóm Tắt")</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (this._backups.Count == 0)
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-3">@L("No import backups created yet.", "Chưa có bản sao lưu nhập nào.")</td></tr>
+                }
+                else
+                {
+                    @foreach (var backup in this._backups)
+                    {
+                        <tr>
+                            <td><code>@backup.BackupId</code></td>
+                            <td>@backup.CreatedAtSydney</td>
+                            <td>@backup.SourceVersion</td>
+                            <td class="small">@backup.SummaryText</td>
+                            <td class="text-end">
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm"
+                                        disabled="@this._isBusy"
+                                        title="@L("Restore settings and delete imported entities from this batch.", "Khôi phục cài đặt trước đó và xóa dữ liệu đã nhập trong đợt này.")"
+                                        @onclick="() => this.UndoBackupAsync(backup.BackupId)">
+                                    @L("Undo Import", "Hoàn Tác Nhập")
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

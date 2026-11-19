@@ -1,0 +1,104 @@
+@page "/season-plan"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using HNMO.GameLogic.PlugIns.SeasonPlan
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Season plan", "Lộ trình mùa giải")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Season plan", "Lộ trình mùa giải")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Season plan", "Lộ trình mùa giải")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextSeasonPlan" />
+<p class="text-muted">@L("Configure staged seasonal unlocks (+9 cap, +10..+15, Master Levels, Harmony, Wing 2, Fenrir, 380 items, Wing 3) triggered by date, world boss kills, player levels, or manual admin control.", "Cấu hình lộ trình mở tính năng theo giai đoạn (+9, +10..+15, Master, Đá Tạo Hóa, Cánh C2, Sói Tinh, Đồ 380, Cánh C3) theo ngày, hạ Boss, cấp người chơi hoặc mở tay.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="season-plan-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Feature is OFF by default. Enable to lock chaos mixes, Harmony, and Master XP until their stage opens.", "Mặc định TẮT. Khi bật, các tính năng ép đồ, Đá Tạo Hóa và cấp Master sẽ tạm khóa cho tới khi giai đoạn mở.")</li>
+            <li>@L("Each stage unlocks when its UTC/Sydney scheduled date arrives, its required World Boss is defeated, or N players reach the target level.", "Mỗi giai đoạn tự mở khi đến ngày hẹn (Sydney), hạ đủ Boss thế giới, hoặc có đủ N người chơi đạt cấp.")</li>
+            <li>@L("Players see the timeline in-game via F8 and on home.html#season-plan.", "Người chơi xem lộ trình trong game qua phím F8 và trên trang chủ.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is not { } c)
+{
+    <div class="alert alert-warning" role="status">@L("Season plan configuration unavailable.", "Không tải được cấu hình lộ trình mùa giải.")</div>
+}
+else
+{
+    <section class="card mb-3" id="sp-settings">
+        <div class="card-body">
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="sp-active" @bind="this._isActive" />
+                <label class="form-check-label" for="sp-active">@L("Enable Season Plan", "Bật Lộ trình mùa giải")</label>
+            </div>
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="sp-announce" @bind="c.AnnounceInGame" />
+                <label class="form-check-label" for="sp-announce">@L("Announce stage unlocks in-game", "Thông báo trong game khi mở giai đoạn mới")</label>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-sm-3">
+                    <label class="form-label" for="sp-tz">@L("Time zone", "Múi giờ")</label>
+                    <input class="form-control" id="sp-tz" @bind="c.TimeZone" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="sp-file">@L("State key", "Khóa lưu trữ")</label>
+                    <input class="form-control" id="sp-file" @bind="c.FileName" />
+                </div>
+            </div>
+
+            <h2 class="h5">@L("Progression stages", "Các giai đoạn mùa giải")</h2>
+            @foreach (var row in this._rows)
+            {
+                var st = row.Stage;
+                var unlocked = this._unlocked.TryGetValue(st.Id, out var at);
+                <div class="border rounded p-3 mb-2 @(unlocked ? "border-success" : "border-secondary")">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>@st.NameEn</strong>
+                        <div class="d-flex align-items-center gap-2">
+                            @if (unlocked)
+                            {
+                                <span class="badge bg-success">@L($"Unlocked {SydneyTime(at)}", $"Đã mở {SydneyTime(at)}")</span>
+                                <button type="button" class="btn btn-sm btn-outline-warning" @onclick="() => this.ToggleUnlockAsync(st.Id, false)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Lock", "Khóa lại")</button>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@L("Locked", "Đang khóa")</span>
+                                <button type="button" class="btn btn-sm btn-outline-success" @onclick="() => this.ToggleUnlockAsync(st.Id, true)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAction">@L("Unlock now", "Mở ngay")</button>
+                            }
+                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => this._rows.Remove(row)" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintDelete">×</button>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-sm-2"><label class="form-label small">ID</label><input class="form-control form-control-sm" @bind="st.Id" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Name (EN)", "Tên (EN)")</label><input class="form-control form-control-sm" @bind="st.NameEn" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Name (VI)", "Tên (VI)")</label><input class="form-control form-control-sm" @bind="st.NameVi" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Unlock date (UTC yyyy-MM-dd HH:mm)", "Ngày mở (UTC)")</label><input class="form-control form-control-sm" @bind="row.DateText" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Max box level", "Cấp hộp tối đa")</label><input class="form-control form-control-sm" type="number" min="0" max="15" @bind="st.MaxBoxLevel" /></div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-sm-3"><label class="form-label small">@L("Required boss ID", "ID Boss yêu cầu")</label><input class="form-control form-control-sm" @bind="st.RequiredBossId" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Boss kills", "Số lần hạ Boss")</label><input class="form-control form-control-sm" type="number" min="0" @bind="st.RequiredBossKills" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Target level", "Mốc cấp độ")</label><input class="form-control form-control-sm" type="number" min="0" @bind="st.RequiredPlayerLevel" /></div>
+                        <div class="col-sm-2"><label class="form-label small">@L("Players at level", "Số người đạt cấp")</label><input class="form-control form-control-sm" type="number" min="0" @bind="st.RequiredPlayersCount" /></div>
+                        <div class="col-sm-3"><label class="form-label small">@L("Feature gates (comma-sep)", "Tính năng mở")</label><input class="form-control form-control-sm" @bind="row.GatesText" /></div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex gap-2 mt-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="this.AddStage" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintAdd">@L("+ Add stage", "+ Thêm giai đoạn")</button>
+                <button type="button" class="btn btn-primary" id="sp-save" disabled="@this._isSaving" @onclick="this.SaveAsync" title="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpHintSave">@Resources.Save</button>
+            </div>
+        </div>
+    </section>
+}

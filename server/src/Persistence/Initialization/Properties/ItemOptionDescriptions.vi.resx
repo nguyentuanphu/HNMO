@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="ThisOptionIsAddedByTheChaosMachineWithAJewelOfGuardianOnLevel380Items" xml:space="preserve"><value>Tùy chọn này được thêm vào bởi cỗ máy hỗn loạn với viên ngọc hộ mệnh trên vật phẩm cấp 380.</value></data>
+  <data name="BlackFenrirMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir đen: Tốc độ di chuyển</value></data>
+  <data name="BlackFenrirUnderwaterMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir đen: Tốc độ di chuyển dưới nước</value></data>
+  <data name="BlueFenrirMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir xanh: Tốc độ di chuyển</value></data>
+  <data name="BlueFenrirUnderwaterMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir xanh: Tốc độ di chuyển dưới nước</value></data>
+  <data name="GoldFenrirMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir vàng: Tốc độ di chuyển</value></data>
+  <data name="GoldFenrirUnderwaterMovementSpeed" xml:space="preserve"><value>Tùy chọn Fenrir vàng: Tốc độ di chuyển dưới nước</value></data>
+  <data name="SocketPackageDoubleDamageChance" xml:space="preserve"><value>Tùy chọn gói ổ cắm: Cơ hội sát thương gấp đôi 3%</value></data>
+  <data name="SocketPackageIgnoreDefenseChance" xml:space="preserve"><value>Tùy chọn gói socket: Bỏ qua cơ hội phòng thủ 1%</value></data>
+</root>

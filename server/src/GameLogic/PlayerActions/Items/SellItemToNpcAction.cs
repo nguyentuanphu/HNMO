@@ -93,6 +93,7 @@ public class SellItemToNpcAction
         await player.InvokeViewPlugInAsync<IItemSoldToNpcPlugIn>(p => p.ItemSoldToNpcAsync(true)).ConfigureAwait(false);
 
         player.GameContext.PlugInManager.GetPlugInPoint<IItemSoldToMerchantPlugIn>()?.ItemSold(player, item, player.OpenedNpc!);
+        PlugIns.ActivityLog.ActivityLogPlugIn.Get(player.GameContext)?.RecordNpcSell(player, item, player.OpenedNpc?.Definition?.Designation ?? string.Empty, sellingPrice);
         return true;
     }
 }

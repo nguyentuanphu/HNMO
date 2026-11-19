@@ -1,0 +1,147 @@
+@page "/activity-log"
+@attribute [Authorize(Policy = AdminPolicies.Administrator)]
+
+@using System.Globalization
+@using HNMO.GameLogic.PlugIns.ActivityLog
+@using HNMO.Web.AdminPanel.Properties
+
+<PageTitle>HNMO: @L("Player activity log", "Nhật ký hoạt động")</PageTitle>
+<Breadcrumb IsFirstFromRoot="true" Caption="@L("Player activity log", "Nhật ký hoạt động")" />
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">@L("Player activity log", "Nhật ký hoạt động")</h1>
+    <button type="button" class="btn btn-sm btn-outline-info" id="al-help-btn" title="@L("How to use this page", "Hướng dẫn sử dụng trang này")" @onclick="() => this._showHelp = !this._showHelp">?</button>
+</div>
+<PageHelp Text="@HNMO.Web.AdminPanel.Properties.Resources.PageHelpTextActivityLog" />
+<p class="text-muted">@L("Inspect player trades, valuable item drops and pickups, Chaos mixes, NPC shop buys/sells, personal store sales, and Item Market transfers stored in PostgreSQL rows.", "Tra cứu giao dịch, nhặt/rớt đồ giá trị, xoay Chaos, mua bán shop NPC, cửa hàng cá nhân và Chợ Đồ theo dòng PostgreSQL.")</p>
+
+@if (this._showHelp)
+{
+    <div class="alert alert-info" role="region" id="activity-log-help">
+        <strong>@L("How to use this page:", "Hướng dẫn:")</strong>
+        <ul class="mb-0 mt-1">
+            <li>@L("Filter by account login, character name, item name or GUID, activity type, and Sydney date/time range.", "Lọc theo tên tài khoản, nhân vật, tên hoặc mã GUID vật phẩm, loại hoạt động và khoảng thời gian giờ Sydney.")</li>
+            <li>@L("Drops and pickups log valuable items (Excellent, Ancient, Socket, Jewels, Wings, boxes, or upgraded items >= Min Level) unless you disable the valuable-only filter.", "Rớt và nhặt đồ mặc định chỉ ghi đồ giá trị (Hoàn hảo, Thần, Khảm, Ngọc, Cánh, Hộp hoặc đồ cộng cao) để tránh đầy nhật ký.")</li>
+            <li>@L("Rows older than Retention Days are archived automatically into hnmo.archived_feature_state.", "Các dòng cũ hơn số ngày lưu trữ sẽ tự động chuyển sang bảng lưu trữ hnmo.archived_feature_state.")</li>
+        </ul>
+    </div>
+}
+
+@if (this._isLoading)
+{
+    <p>@Resources.Loading</p>
+}
+else if (this._configuration is { } c)
+{
+    <section class="card mb-3" id="al-settings">
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input" id="al-enabled" type="checkbox" @bind="c.Enabled" />
+                        <label class="form-check-label" for="al-enabled" title="@L("Enable recording activity entries", "Bật ghi nhật ký hoạt động")">@L("Enabled", "Bật nhật ký")</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" id="al-valuable" type="checkbox" @bind="c.OnlyValuableDropsAndPickups" />
+                        <label class="form-check-label" for="al-valuable" title="@L("Skip common trash drops and pickups", "Bỏ qua rớt/nhặt đồ thường để tiết kiệm dung lượng")">@L("Valuable drops/pickups only", "Chỉ ghi rớt/nhặt đồ giá trị")</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-min-level" title="@L("Minimum upgrade level considered valuable (+7 default)", "Cấp cộng tối thiểu coi là đồ giá trị (mặc định +7)")">@L("Min level", "Cấp tối thiểu")</label>
+                    <input class="form-control form-control-sm" id="al-min-level" type="number" min="1" max="15" @bind="c.MinValuableDropLevel" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-retention" title="@L("Days before log entries move to archive", "Số ngày giữ trước khi chuyển lưu trữ")">@L("Retention (days)", "Lưu trữ (ngày)")</label>
+                    <input class="form-control form-control-sm" id="al-retention" type="number" min="1" max="3650" @bind="c.RetentionDays" />
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-primary" id="al-save" disabled="@this._isSaving" title="@L("Save activity log settings", "Lưu cài đặt nhật ký")" @onclick="this.SaveAsync">@Resources.Save</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-3" id="al-filters">
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label" for="al-account" title="@L("Match primary or partner account login", "Tìm tài khoản chính hoặc đối tác")">@L("Account", "Tài khoản")</label>
+                    <input class="form-control form-control-sm" id="al-account" @bind="this._accountFilter" placeholder="@L("Account login...", "Tên tài khoản...")" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-character" title="@L("Match primary or partner character name", "Tìm nhân vật chính hoặc đối tác")">@L("Character", "Nhân vật")</label>
+                    <input class="form-control form-control-sm" id="al-character" @bind="this._characterFilter" placeholder="@L("Character...", "Nhân vật...")" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-item" title="@L("Match item description, GUID, or details", "Tìm tên vật phẩm, GUID hoặc ghi chú")">@L("Item / GUID", "Vật phẩm / GUID")</label>
+                    <input class="form-control form-control-sm" id="al-item" @bind="this._itemFilter" placeholder="@L("Item or GUID...", "Vật phẩm / mã...")" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-kind" title="@L("Filter by activity category", "Lọc theo loại hoạt động")">@L("Type", "Loại")</label>
+                    <select class="form-select form-select-sm" id="al-kind" @bind="this._kindFilter">
+                        <option value="">@L("All types", "Tất cả")</option>
+                        @foreach (var kind in Enum.GetValues<ActivityKind>())
+                        {
+                            <option value="@kind.ToString()">@KindLabel(kind)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-from" title="@L("Start date/time in Sydney time (YYYY-MM-DD HH:mm)", "Từ ngày giờ Sydney (YYYY-MM-DD HH:mm)")">@L("From (Sydney)", "Từ (Giờ Sydney)")</label>
+                    <input class="form-control form-control-sm" id="al-from" @bind="this._fromSydneyText" placeholder="2026-11-16 00:00" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="al-to" title="@L("End date/time in Sydney time (YYYY-MM-DD HH:mm)", "Đến ngày giờ Sydney (YYYY-MM-DD HH:mm)")">@L("To (Sydney)", "Đến (Giờ Sydney)")</label>
+                    <input class="form-control form-control-sm" id="al-to" @bind="this._toSydneyText" placeholder="2026-11-17 23:59" />
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-2 align-items-center">
+                <button type="button" class="btn btn-sm btn-primary" id="al-search" title="@L("Run query with current filters", "Tìm kiếm theo bộ lọc")" @onclick="this.ApplyFilter">@L("Search", "Tìm kiếm")</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="al-clear" title="@L("Reset filters", "Xóa bộ lọc")" @onclick="this.ClearFilter">@L("Clear", "Xóa lọc")</button>
+                <span class="text-muted small ms-2">@L($"Showing {this._entries.Count} record(s) — Sydney time", $"Hiển thị {this._entries.Count} dòng — Giờ Sydney")</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="al-results">
+        <div class="card-body p-0">
+            @if (this._entries.Count == 0)
+            {
+                <p class="p-3 mb-0 text-muted" id="al-empty">@L("No activity log entries match the current filter.", "Không có dữ liệu nào khớp bộ lọc hiện tại.")</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped mb-0" id="al-table">
+                        <thead>
+                            <tr>
+                                <th>@L("Time (Sydney)", "Thời gian (Sydney)")</th>
+                                <th>@L("Type", "Loại")</th>
+                                <th>@L("Account / Character", "Tài khoản / Nhân vật")</th>
+                                <th>@L("Partner / NPC", "Đối tác / NPC")</th>
+                                <th>@L("Items", "Vật phẩm")</th>
+                                <th>@L("Zen", "Zen")</th>
+                                <th>@L("Details", "Chi tiết")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var entry in this._entries)
+                            {
+                                <tr>
+                                    <td class="text-nowrap">@SydneyTime(entry.TimestampUtc)</td>
+                                    <td><span class="badge bg-secondary">@KindLabel(entry.Kind)</span></td>
+                                    <td>@FormatActor(entry.Account, entry.Character)</td>
+                                    <td>@FormatActor(entry.PartnerAccount, entry.PartnerCharacter)</td>
+                                    <td>@entry.ItemSummary</td>
+                                    <td class="text-end text-nowrap">@(entry.ZenDelta == 0 ? "-" : entry.ZenDelta.ToString("N0", CultureInfo.InvariantCulture))</td>
+                                    <td class="small text-muted">@HNMO.Web.AdminPanel.Services.VipActivityText.Format(entry) @(string.IsNullOrEmpty(entry.ItemIds) ? string.Empty : $"[{entry.ItemIds}]")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </section>
+}

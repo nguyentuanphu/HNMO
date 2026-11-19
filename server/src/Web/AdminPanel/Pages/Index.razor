@@ -1,5 +1,7 @@
-﻿@page "/"
+﻿@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
+@page "/"
 
+@using System.Globalization
 @using HNMO.DataModel
 @using HNMO.Interfaces
 @using HNMO.Web.AdminPanel.Components.Dashboard
@@ -9,6 +11,8 @@
 <PageTitle>@Resources.HNMOAdminPanel</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.Home"/>
 <h1>@Resources.Dashboard</h1>
+<PageHelp Text="@HelpResources.PageHelpTextIndex" />
+
 <p class="text-body-secondary">@Resources.WelcomeMessage</p>
 
 <div class="dashboard">
@@ -99,19 +103,58 @@
                     <GlobalMessageForm Servers="@this._servers" Compact="true" />
                 }
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-outline-secondary btn-sm" href="accounts">@Resources.Accounts</a>
-                    <a class="btn btn-outline-secondary btn-sm" href="logged-in">@Resources.OnlineAccounts</a>
-                    <a class="btn btn-outline-secondary btn-sm" href="guilds">@Resources.Guilds</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="accounts">@Resources.Accounts</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="logged-in">@Resources.OnlineAccounts</a>
+                    <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="guilds">@Resources.Guilds</a>
                     @if (AdminPanelEnvironment.IsHostingEmbedded)
                     {
-                        <a class="btn btn-outline-secondary btn-sm" href="logfiles">@Resources.LogFiles</a>
+                        <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="logfiles">@Resources.LogFiles</a>
                     }
                     @if (AdminPanelEnvironment.IsGrafanaAvailable)
                     {
-                        <a class="btn btn-outline-secondary btn-sm" href="/grafana/dashboards" target="_blank">@Resources.Metrics</a>
+                        <a title="@HelpResources.PageHelpHintNavigate" class="btn btn-outline-secondary btn-sm" href="/grafana/dashboards" target="_blank">@Resources.Metrics</a>
                     }
+                    <a class="btn btn-outline-info btn-sm" href="admin-guide">
+                        <span class="oi oi-book me-1" aria-hidden="true"></span>@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? "Cẩm nang quản trị" : "Admin Guide")
+                    </a>
                 </div>
             </div>
+        </section>
+
+        @{
+            var isVi = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
+            var serverRunning = this._servers.Any(s => s.ServerState == ServerState.Started);
+            var hasAccounts = (this._accountStatistics?.AccountCount ?? 0) > 0;
+            var hasGuildsOrServers = this._servers.Count > 0;
+            var readySteps = (serverRunning ? 1 : 0) + (hasGuildsOrServers ? 1 : 0) + (hasAccounts ? 1 : 0) + 2;
+        }
+        <section class="card h-100" id="setup-checklist">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="h6 mb-0">@(isVi ? "Danh sách kiểm tra thiết lập" : "Server setup checklist")</h2>
+                <span class="badge @(readySteps == 5 ? "text-bg-success" : "text-bg-warning")">@readySteps / 5</span>
+            </div>
+            <ul class="list-group list-group-flush small">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@(serverRunning ? "✅" : "⏳") @(isVi ? "Máy chủ trò chơi đang hoạt động" : "At least one game server running")</span>
+                    <a href="servers">@(isVi ? "Mở" : "Open")</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>✅ @(isVi ? "Tên game, tỉ lệ & thế giới đã sẵn sàng" : "Game name, server rates & worlds configured")</span>
+                    <a href="worlds">@(isVi ? "Mở" : "Open")</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>✅ @(isVi ? "Sao lưu & lưu trữ dữ liệu tự động" : "State retention & GFS backups checked")</span>
+                    <a href="state-retention">@(isVi ? "Mở" : "Open")</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>✅ @(isVi ? "An toàn tài khoản & chống gian lận" : "Account safety & anti-cheat rules reviewed")</span>
+                    <a href="anti-cheat">@(isVi ? "Mở" : "Open")</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@(hasAccounts ? "✅" : "ℹ️") @(isVi ? "Sự kiện, lịch trình & cẩm nang quản trị" : "Events, timetable & admin recipes")</span>
+                    <a href="admin-guide">@(isVi ? "Xem" : "Guide")</a>
+                </li>
+            </ul>
         </section>
 
         <AuthorizeView Policy="@AdminPolicies.Administrator">

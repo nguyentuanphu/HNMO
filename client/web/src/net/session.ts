@@ -1,6 +1,7 @@
 // The login flow of the client (Scenes/LoginScene, CharacterScene): server list from
 // the connect server, then login and character list on the chosen game server.
 
+import { currentLanguage } from '../i18n.js';
 import { Connection } from './connection.js';
 import type { ServerAddress } from './connection.js';
 import { read } from './packets.js';
@@ -62,6 +63,23 @@ export interface CharacterInformation extends PacketValues {
   MapId: number;
 }
 
+export const LOGIN_NO_CHARGE_INFO = 9;
+export const LOGIN_SUBSCRIPTION_OVER = 10;
+
+export class LoginRefusedError extends Error {
+  readonly code: number;
+
+  constructor(code: number, message: string) {
+    super(message);
+    this.name = 'LoginRefusedError';
+    this.code = code;
+  }
+
+  get isVipRefusal(): boolean {
+    return this.code === LOGIN_NO_CHARGE_INFO || this.code === LOGIN_SUBSCRIPTION_OVER;
+  }
+}
+
 const LOGIN_RESULTS: Record<number, string> = {
   0: 'Wrong password.',
   1: 'OK',
@@ -72,6 +90,21 @@ const LOGIN_RESULTS: Record<number, string> = {
   6: 'Your client version is too old for this server.',
   8: 'Too many failed logins. Try again later.',
 };
+
+export function loginResultMessage(code: number): string {
+  const vi = currentLanguage() === 'vi';
+  if (code === LOGIN_NO_CHARGE_INFO) {
+    return vi
+      ? 'Máy chủ này chỉ dành cho thành viên VIP.'
+      : 'This server is for VIP members only.';
+  }
+  if (code === LOGIN_SUBSCRIPTION_OVER) {
+    return vi
+      ? 'Thời hạn VIP vào máy chủ này đã hết.'
+      : 'Your VIP access for this server has expired.';
+  }
+  return LOGIN_RESULTS[code] ?? `Login refused (code ${code}).`;
+}
 
 function xor3Field(text: string, length: number): Uint8Array {
   const bytes = new Uint8Array(length);
@@ -108,9 +141,44 @@ export async function fetchGameServerAddress(relayUrl: string, connectServer: Se
   }
 }
 
+export interface BanNoticePayload {
+  kind?: string;
+  reasonEn?: string;
+  reasonVi?: string;
+  expiresAtUtc?: string | null;
+  permanent?: boolean;
+  sydneyEn?: string;
+  sydneyVi?: string;
+  messageEn?: string;
+  messageVi?: string;
+}
+
+export function formatBanNoticeMessage(payload: BanNoticePayload): string {
+  const isVi = currentLanguage() === 'vi';
+  const direct = isVi ? payload.messageVi : payload.messageEn;
+  if (direct && direct.trim()) return direct;
+  const reason = (isVi ? payload.reasonVi : payload.reasonEn) ?? payload.reasonEn ?? payload.reasonVi ?? '';
+  const until = (isVi ? payload.sydneyVi : payload.sydneyEn) ?? (payload.permanent ? (isVi ? 'Vĩnh viễn' : 'Permanent') : (payload.expiresAtUtc ?? ''));
+  return isVi ? `Tài khoản bị hạn chế (${until}). Lý do: ${reason}` : `Access blocked (${until}). Reason: ${reason}`;
+}
+
+function attachBanNoticeWatcher(connection: Connection): () => string | null {
+  let latest: string | null = null;
+  connection.onPacket((bytes) => {
+    if (bytes.length < 7 || bytes[0] !== 0xc2 || bytes[3] !== 0xf5 || bytes[4] !== 0x29) return;
+    try {
+      const parsed = read<{ Json: string }>('ServerToClient', 'HnmoBanNotice', bytes);
+      const data = JSON.parse(parsed.Json) as BanNoticePayload;
+      latest = formatBanNoticeMessage(data);
+    } catch { /* ignore malformed notice */ }
+  });
+  return () => latest;
+}
+
 // Opens the game server connection and logs in. Resolves with the open connection.
 export async function login(relayUrl: string, gameServer: ServerAddress, username: string, password: string): Promise<Connection> {
   const connection = new Connection(relayUrl, { ...gameServer, encrypted: true });
+  const getBanNotice = attachBanNoticeWatcher(connection);
   const entered = connection.waitFor(...packetOf('ServerToClient', 'GameServerEntered'));
   await connection.open();
   const welcome = read<GameServerEntered>('ServerToClient', 'GameServerEntered', await entered);
@@ -123,7 +191,26 @@ export async function login(relayUrl: string, gameServer: ServerAddress, usernam
   }, 'ServerToClient', 'LoginResponse');
   if (response.Success !== LOGIN_OK) {
     connection.close();
-    throw new Error(LOGIN_RESULTS[response.Success] ?? `Login refused (code ${response.Success}).`);
+    throw new LoginRefusedError(response.Success, getBanNotice() ?? loginResultMessage(response.Success));
+  }
+  connection.playerId = welcome.PlayerId;
+  return connection;
+}
+
+// Opens the game server connection and logs in with a one-time website ticket.
+export async function loginWithTicket(relayUrl: string, gameServer: ServerAddress, username: string, ticket: string): Promise<Connection> {
+  const connection = new Connection(relayUrl, { ...gameServer, encrypted: true });
+  const getBanNotice = attachBanNoticeWatcher(connection);
+  const entered = connection.waitFor(...packetOf('ServerToClient', 'GameServerEntered'));
+  await connection.open();
+  const welcome = read<GameServerEntered>('ServerToClient', 'GameServerEntered', await entered);
+  const response = await connection.request<LoginResponse>('ClientToServer', 'HnmoTicketLogin', {
+    Username: username,
+    Ticket: ticket,
+  }, 'ServerToClient', 'LoginResponse');
+  if (response.Success !== LOGIN_OK) {
+    connection.close();
+    throw new LoginRefusedError(response.Success, getBanNotice() ?? loginResultMessage(response.Success));
   }
   connection.playerId = welcome.PlayerId;
   return connection;
@@ -160,5 +247,12 @@ export async function createCharacter(connection: Connection, name: string, clas
 }
 
 export async function enterWorld(connection: Connection, characterName: string): Promise<CharacterInformation> {
-  return connection.request<CharacterInformation>('ClientToServer', 'SelectCharacter', { Name: characterName }, 'ServerToClient', 'CharacterInformationExtended');
+  const getBanNotice = attachBanNoticeWatcher(connection);
+  try {
+    return await connection.request<CharacterInformation>('ClientToServer', 'SelectCharacter', { Name: characterName }, 'ServerToClient', 'CharacterInformationExtended');
+  } catch (error) {
+    const notice = getBanNotice();
+    if (notice) throw new Error(notice);
+    throw error;
+  }
 }

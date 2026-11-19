@@ -1,3 +1,4 @@
+@using HelpResources = HNMO.Web.AdminPanel.Properties.Resources
 @page "/resets-relife"
 @attribute [Authorize(Policy = AdminPolicies.Administrator)]
 
@@ -9,6 +10,8 @@
 <PageTitle>HNMO: @Resources.ResetsRelifePage</PageTitle>
 <Breadcrumb IsFirstFromRoot="true" Caption="@Resources.ResetsRelifePage" />
 <h1>@Resources.ResetsRelifePage</h1>
+<PageHelp Text="@HelpResources.PageHelpTextResetsRelife" />
+
 <p class="text-muted">@T("Reset tiers, VIP resets, relife (grand reset), the delegated reset during offline leveling and what the website's account page may do. While this is on, the reset NPC and /reset follow these rules. Days and months are Sydney time. Players: /reset, /reset info, /relife, /autoreset on|off (/uythac).", "Các mức reset, reset VIP, relife (đại reset), ủy thác reset khi treo máy offline và những gì trang tài khoản trên website được làm. Khi bật, NPC reset và /reset làm theo các quy tắc này. Ngày và tháng theo giờ Sydney. Người chơi: /reset, /reset info, /relife, /autoreset on|off (/uythac).")</p>
 
 @if (this._isLoading)
@@ -134,13 +137,13 @@ else
                                 <td><input class="form-check-input tier-clear" type="checkbox" @bind="row.Tier.ClearStats" /></td>
                                 <td><input class="form-control form-control-sm tier-daily" type="number" min="0" style="width:5em" @bind="row.Tier.DailyLimit" /></td>
                                 <td><input class="form-control form-control-sm tier-items" style="width:10em" @bind="row.ItemsText" placeholder="14:13:0:1" /></td>
-                                <td><button type="button" class="btn btn-sm btn-outline-danger tier-remove" @onclick="() => this._tiers.RemoveAt(i)">@T("Remove", "Xóa")</button></td>
+                                <td><button title="@HelpResources.PageHelpHintDelete" type="button" class="btn btn-sm btn-outline-danger tier-remove" @onclick="() => this._tiers.RemoveAt(i)">@T("Remove", "Xóa")</button></td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="resets-add-tier" @onclick="this.AddTier">@T("Add a tier", "Thêm mức")</button>
+            <button title="@HelpResources.PageHelpHintCreate" type="button" class="btn btn-sm btn-outline-secondary" id="resets-add-tier" @onclick="this.AddTier">@T("Add a tier", "Thêm mức")</button>
         </div>
     </section>
 
@@ -169,7 +172,7 @@ else
                 <div class="col-sm-3"><label class="form-label" for="resets-vip-account">@T("Account", "Tài khoản")</label><input class="form-control" id="resets-vip-account" @bind="this._vipAccount" /></div>
                 <div class="col-sm-2"><label class="form-label" for="resets-vip-value">@T("VIP value", "Giá trị VIP")</label><input class="form-control" type="number" min="1" id="resets-vip-value" @bind="this._vipValue" /></div>
                 <div class="col-sm-2"><label class="form-label" for="resets-vip-days">@T("Days", "Số ngày")</label><input class="form-control" type="number" min="1" id="resets-vip-days" @bind="this._vipDays" /></div>
-                <div class="col-sm-3"><button type="button" class="btn btn-outline-primary" id="resets-vip-give" disabled="@this._isSaving" @onclick="this.GiveVipAsync">@T("Give VIP (account offline)", "Cấp VIP (tài khoản đang offline)")</button></div>
+                <div class="col-sm-3"><button title="@HelpResources.PageHelpHintGrant" type="button" class="btn btn-outline-primary" id="resets-vip-give" disabled="@this._isSaving" @onclick="this.GiveVipAsync">@T("Give VIP (account offline)", "Cấp VIP (tài khoản đang offline)")</button></div>
             </div>
             @if (this._vipMessage is { } vipMessage)
             {
@@ -248,8 +251,9 @@ else
             <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-relife" @bind="c.Website.AllowRelife" /><label class="form-check-label" for="resets-web-relife">Relife</label></div>
             <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-add" @bind="c.Website.AllowAddStats" /><label class="form-check-label" for="resets-web-add">@T("Add stat points", "Cộng điểm")</label></div>
             <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-clear" @bind="c.Website.AllowClearStats" /><label class="form-check-label" for="resets-web-clear">@T("Clear stats (the points come back)", "Tẩy điểm (điểm được trả lại)")</label></div>
+            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="resets-web-clear-master" @bind="c.Website.AllowClearMasterSkills" /><label class="form-check-label" for="resets-web-clear-master">@T("Clear master skill points (points come back)", "Tẩy điểm master (trả lại điểm master)")</label></div>
             <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="resets-web-delegated" @bind="c.Website.AllowDelegatedSwitch" /><label class="form-check-label" for="resets-web-delegated">@T("Delegated reset switch", "Bật/tắt ủy thác reset")</label></div>
-            <div class="row g-2">
+            <div class="row g-2 mb-2">
                 <div class="col-sm-2"><label class="form-label" for="resets-web-clear-zen">@T("Clearing costs zen", "Tẩy điểm tốn zen")</label><input class="form-control" type="number" min="0" id="resets-web-clear-zen" @bind="c.Website.ClearStatsZen" /></div>
                 <div class="col-sm-2"><label class="form-label" for="resets-web-clear-coins">@T("Clearing costs coins", "Tẩy điểm tốn coin")</label><input class="form-control" type="number" min="0" id="resets-web-clear-coins" @bind="c.Website.ClearStatsCoins" /></div>
                 <div class="col-sm-2">
@@ -261,12 +265,23 @@ else
                         }
                     </select>
                 </div>
+                <div class="col-sm-2"><label class="form-label" for="resets-web-clear-mzen">@T("Clear master zen", "Tẩy master (Zen)")</label><input class="form-control" type="number" min="0" id="resets-web-clear-mzen" @bind="c.Website.ClearMasterSkillsZen" /></div>
+                <div class="col-sm-2"><label class="form-label" for="resets-web-clear-mcoins">@T("Clear master coins", "Tẩy master (Coin)")</label><input class="form-control" type="number" min="0" id="resets-web-clear-mcoins" @bind="c.Website.ClearMasterSkillsCoins" /></div>
+                <div class="col-sm-2">
+                    <label class="form-label" for="resets-web-clear-mtype">@T("Master coin type", "Loại coin master")</label>
+                    <select class="form-select" id="resets-web-clear-mtype" @bind="c.Website.ClearMasterSkillsCoinType">
+                        @foreach (var type in Enum.GetValues<CashShopCoinType>())
+                        {
+                            <option value="@type">@CashShopCoinCaption.Get(type)</option>
+                        }
+                    </select>
+                </div>
             </div>
         </div>
     </section>
 
     <div class="mb-4">
-        <button type="button" class="btn btn-primary" id="resets-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
+        <button title="@HelpResources.PageHelpHintSave" type="button" class="btn btn-primary" id="resets-save" disabled="@this._isSaving" @onclick="this.SaveAsync">@Resources.Save</button>
     </div>
 
     <section class="card mb-3" id="resets-rankings">
