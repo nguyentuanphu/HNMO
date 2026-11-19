@@ -98,3 +98,53 @@ Local Claude's PRs, reviewed:
   CreateObject.
 
 Both merge once their CI is green.
+
+## 03:00-04:15
+
+Main Claude's new work, each tested:
+- **#123, audit 1.8 (multi-vault).** Each vault is now a real item storage in the database. A switch is one save,
+  and items keep every detail. Checked in the web game on the packaged PostgreSQL:
+  - `/vault 1`, `/vault 2` and `/vault 0` keep vault 0's 16 items as the same rows;
+  - an item put into vault 1 loads after a new login, with its option row.
+- **#123, audit 1.6.** A character banned by hand stays banned after a timed ban ends.
+- **#123, audit 1.10.** A coin grant above the largest balance waits instead of being cut.
+- **Audit 1.3:** the last two stores were checked; they already share one lock per file. Closed.
+- **#124:** the admin sign-in pages no longer show the "An unhandled error has occurred" bar. Found by local Claude
+  (Job 8); checked on a published build.
+- **#111, light effect test, second cause.** On CI it still failed: the skill cases before it leave test400 at the
+  hunting spot, where monsters keep putting a debuff's tint back. It now starts in town.
+
+Local Claude's PRs, reviewed:
+- **#121 (importer):** maps sharing a number no longer stop the import preview (Devil Square 1-4 are all map 9).
+  Tests pass. With it, Job 8 imported a Season 9 server: 4,266 spawns applied, 803 skipped.
+- **#122:** two tests build the three.module.js path the Windows way too. Correct.
+- **#120 (Job 8):** Season 9 as its own program works in a Windows package. Checked:
+  - a Season 6.3 account plays Season 9;
+  - coins are shared.
+
+  Not checked: website "Play" for Season 9 and a website purchase (the throwaway folder had no website key).
+
+  Findings: the sign-in error bar (fixed in #124), and Season 9's servers show no world name. Their world names are
+  in Season 9's own admin panel, which the start screen doesn't read yet.
+- **#118 (Job 5):** the Season 9 package check on Windows. The 26 missing paths are all expected.
+- **#116 (Job 3):** the browser tests in a Season 9 world: 45 passed, 9 failed.
+  - Five failures are Season 9's own: the skill effects of the elf, lord and summoner, the monster debuff colour,
+    and the Dark Knight's new buff.
+  - Season 9's `player.bmd` has 293 actions instead of 284. Given to local Claude as Job 10.
+- **#117:** notes from Job 4 before main Claude took it. Its finding matches #110.
+
+New jobs for local Claude:
+- **Job 9:** draw Stardust from the Season 9 pack.
+- **Job 10:** the five Season 9-only failures.
+
+Overnight batch #115 now also holds #121 to #124. Server tests all pass on it (HNMO.Tests 3403, Web 1398).
+
+## 04:55
+
+Overnight batch #115 green on CI (build, server tests, browser shards 1-6) and merged into the working branch,
+with #116, #117, #118, #120 (local Claude's reports) and the Job 9/10 prompts. Main is not merged (waits for the
+owner).
+
+Local Claude takes, on the owner's request: friends list online state (social.spec), pet-zen, pets walk, the five
+Season 9-only failures (Job 10), Lorencia's light posts' fire, other maps' per-frame hidden objects. Main Claude
+keeps: Season 9 servers' world names on the start screen, the website setup in a fresh folder.
