@@ -54,6 +54,6 @@ public class ChatLogPlugIn : IChatMessageSentPlugIn
 
         var serverId = sender.GameContext is IGameServerContext serverContext ? serverContext.Id : 0;
         var mapName = sender.CurrentMap?.Definition.Name.ToString() ?? string.Empty;
-        ChatLog.Shared.Add(DateTime.UtcNow, serverId, mapName, character.Name, (sender.Account is { } account ? HNMO.Persistence.ObjectExtensions.GetId(account) : Guid.Empty), kind, receiverName, message);
+        ChatLog.Shared.Add(DateTime.UtcNow, serverId, mapName, character.Name, sender.Account is { } account ? HNMO.Persistence.ObjectExtensions.GetId(account) : Guid.Empty, kind, receiverName, message);
     }
 }

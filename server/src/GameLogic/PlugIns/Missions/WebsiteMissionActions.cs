@@ -51,6 +51,7 @@ public sealed class WebsiteMissionActions(IGameContext context)
         {
             return current;
         }
+
         if (action is not ("mission" or "streak" or "calendar" or "invite") || argument.Length > 64)
         {
             return new("invalid", current.BoardJson, current.CharacterOnline);
@@ -68,7 +69,8 @@ public sealed class WebsiteMissionActions(IGameContext context)
         }
 
         cancellationToken.ThrowIfCancellationRequested();
-        return await player.RunPersistenceExclusiveAsync(async () =>
+
+        async ValueTask<WebsiteMissionsReply> ClaimAsync()
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -86,7 +88,9 @@ public sealed class WebsiteMissionActions(IGameContext context)
                 _ => (await missions.EnterInviteAsync(player, argument).ConfigureAwait(false)).ToString(),
             };
             return this.Board(missions, subject, true, new MissionBoardEvent(action, result));
-        }, cancellationToken).ConfigureAwait(false);
+        }
+
+        return await player.RunPersistenceExclusiveAsync(ClaimAsync, cancellationToken).ConfigureAwait(false);
     }
 
     private WebsiteMissionsReply Board(MissionsPlugIn missions, WebsiteMissionSubject subject, bool online, MissionBoardEvent? boardEvent = null)

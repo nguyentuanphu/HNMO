@@ -29,6 +29,6 @@ public sealed class BackupItemSlot
     /// <summary>Gets or sets durability.</summary>
     public double Durability { get; set; }
 
-    /// <summary>Gets or sets whether item has skill.</summary>
+    /// <summary>Gets or sets a value indicating whether the item has its skill.</summary>
     public bool HasSkill { get; set; }
 }

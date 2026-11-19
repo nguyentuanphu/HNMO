@@ -111,7 +111,7 @@ public sealed class CatchupCapEngine
         if (levelTriggered && !string.IsNullOrEmpty(state.LevelTriggerDayKey))
         {
             var elapsedDays = DaysBetween(state.LevelTriggerDayKey, todayKey);
-            todayLevel = (int)Math.Min(hardMaxLevel, (long)cfg.InitialLevelCap + (long)elapsedDays * Math.Max(0, cfg.LevelsPerDay));
+            todayLevel = (int)Math.Min(hardMaxLevel, (long)cfg.InitialLevelCap + ((long)elapsedDays * Math.Max(0, cfg.LevelsPerDay)));
         }
 
         var resetTriggered = state.ResetTriggeredAtUtc is not null || cfg.TriggerResets == 0;
@@ -120,7 +120,7 @@ public sealed class CatchupCapEngine
         if (resetTriggered && !string.IsNullOrEmpty(triggerResetDay))
         {
             var elapsedResetDays = DaysBetween(triggerResetDay, todayKey);
-            var grown = (long)cfg.InitialDailyResets + (long)elapsedResetDays * Math.Max(0, cfg.DailyResetsPerDay);
+            var grown = (long)cfg.InitialDailyResets + ((long)elapsedResetDays * Math.Max(0, cfg.DailyResetsPerDay));
             todayResets = cfg.HardMaxDailyResets > 0 ? (int)Math.Min(cfg.HardMaxDailyResets, grown) : (int)Math.Min(int.MaxValue, grown);
         }
 

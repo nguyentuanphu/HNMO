@@ -22,10 +22,10 @@ public sealed class LegacyShopItemEntry
     /// <summary>Gets or sets durability.</summary>
     public byte Durability { get; set; }
 
-    /// <summary>Gets or sets whether item has skill.</summary>
+    /// <summary>Gets or sets a value indicating whether the item has its skill.</summary>
     public bool Skill { get; set; }
 
-    /// <summary>Gets or sets whether item has luck.</summary>
+    /// <summary>Gets or sets a value indicating whether the item has luck.</summary>
     public bool Luck { get; set; }
 
     /// <summary>Gets or sets item option level (0-7).</summary>

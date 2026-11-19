@@ -63,7 +63,7 @@ public sealed class TeleportNpcPlugIn :
         await this.SendStateAsync(player, requested: true, openDialog: true, actionResult: null).ConfigureAwait(false);
     }
 
-    /// <summary>Handles a menu refresh or warp request from <see cref="HnmoTeleportNpcViewPlugIn"/>.</summary>
+    /// <summary>Handles a menu refresh or warp request sent by the web game's teleport window.</summary>
     /// <param name="player">The requesting player.</param>
     /// <param name="action">Action byte (<c>0</c> = RequestMenu, <c>1</c> = WarpToDestination).</param>
     /// <param name="destinationId">Destination identifier for warp requests.</param>

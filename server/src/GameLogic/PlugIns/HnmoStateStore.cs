@@ -416,6 +416,7 @@ public sealed class HnmoStateStore
         {
             bytes = "{}"u8.ToArray();
         }
+
         if (Directory.Exists(this._filePath))
         {
             throw new IOException($"Unified state path '{this._filePath}' is a directory.");

@@ -100,7 +100,7 @@ public sealed class GiftCodeStore
             return;
         }
 
-        DateTime? ClaimExpiry(string codeId, HashSet<string> _)
+        DateTime? ClaimExpiry(string codeId, HashSet<string> claimants)
         {
             var def = this.Data.Codes.FirstOrDefault(c => string.Equals(c.Id, codeId, StringComparison.Ordinal));
             return ParseEndUtc(def?.End);
@@ -158,7 +158,7 @@ public sealed class GiftCodeStore
         data.Owed = new Dictionary<string, List<GiftCodeOwedReward>>(data.Owed, StringComparer.Ordinal);
         data.WrongTries = new Dictionary<string, List<DateTime>>(data.WrongTries, StringComparer.Ordinal);
 
-        DateTime? ClaimExpiry(string codeId, HashSet<string> _)
+        DateTime? ClaimExpiry(string codeId, HashSet<string> claimants)
         {
             var def = data.Codes.FirstOrDefault(c => string.Equals(c.Id, codeId, StringComparison.Ordinal));
             return ParseEndUtc(def?.End);

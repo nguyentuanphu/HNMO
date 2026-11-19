@@ -131,7 +131,8 @@ public static class ResetStateWriter
                     coinsDiscount = configuration.Vip.CoinsDiscountPercent,
                     extraDaily = configuration.Vip.ExtraDailyResets,
                     extraPoints = configuration.Vip.ExtraPointsPercent,
-                } : null,
+                }
+                : null,
                 relife = configuration.Relife.Enabled ? new
                 {
                     resetsNeeded = configuration.Relife.ResetsNeeded,
@@ -143,7 +144,8 @@ public static class ResetStateWriter
                     pointsPerRelife = configuration.Relife.PointsPerRelife,
                     maximum = configuration.Relife.MaximumRelifes,
                     dailyLimit = configuration.Relife.DailyLimit,
-                } : null,
+                }
+                : null,
                 delegated = configuration.Delegated.Enabled,
             },
         };

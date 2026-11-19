@@ -18,6 +18,6 @@ public sealed class LegacyAccountRow
     /// <summary>Gets or sets email address (<c>mail_addr</c>).</summary>
     public string Email { get; set; } = string.Empty;
 
-    /// <summary>Gets or sets account block flag (<c>bloc_code</c>).</summary>
+    /// <summary>Gets or sets a value indicating whether the account is blocked (<c>bloc_code</c>).</summary>
     public bool IsBanned { get; set; }
 }

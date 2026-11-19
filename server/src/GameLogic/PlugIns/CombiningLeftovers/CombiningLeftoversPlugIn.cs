@@ -322,11 +322,10 @@ public sealed class CombiningLeftoversPlugIn :
     {
         var safety = AccountSafetyPlugIn.Get(player.GameContext)?.GetEngine();
         var login = player.Account?.LoginName;
-        return CombiningLeftoversStateWriter.ReadBag(
-            player,
-            safety is not null && !string.IsNullOrEmpty(login)
-                ? item => safety.IsLocked(login, item.GetId(), DateTime.UtcNow)
-                : null);
+        Func<Item, bool>? isLocked = safety is not null && !string.IsNullOrEmpty(login)
+            ? item => safety.IsLocked(login, item.GetId(), DateTime.UtcNow)
+            : null;
+        return CombiningLeftoversStateWriter.ReadBag(player, isLocked);
     }
 
     private async ValueTask TryDeliverOwedAsync(Player player)

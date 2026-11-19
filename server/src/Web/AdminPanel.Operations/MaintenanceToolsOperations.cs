@@ -17,7 +17,7 @@ using HNMO.Web.AdminPanel.Auth;
 using PersistenceIdentifiable = HNMO.Persistence.IIdentifiable;
 
 /// <summary>
-/// Audited server maintenance operations (ROADMAP 14.8): inactive/empty account finder & cleanup,
+/// Audited server maintenance operations (ROADMAP 14.8): inactive/empty account finder and cleanup,
 /// duplicate item GUID scanner/resolver, and character experience fixer, all with dry-run previews.
 /// </summary>
 /// <param name="persistence">Persistence context provider.</param>

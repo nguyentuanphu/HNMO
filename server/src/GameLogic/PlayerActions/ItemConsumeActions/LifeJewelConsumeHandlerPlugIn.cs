@@ -15,7 +15,7 @@ using HNMO.PlugIns;
 /// </summary>
 /// <remarks>
 /// The success chance and the behaviour on a failed upgrade are configurable, see
-/// <see cref="ItemUpgradeConsumeHandlerPlugIn.ItemUpgradeConfiguration"/>.
+/// <c>ItemUpgradeConfiguration</c> of <see cref="ItemUpgradeConsumeHandlerPlugIn"/>.
 /// </remarks>
 [Guid("8AC6592D-D51C-47C9-B491-4778C615691D")]
 [PlugIn]

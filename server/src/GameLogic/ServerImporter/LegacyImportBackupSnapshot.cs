@@ -40,7 +40,7 @@ public sealed class LegacyImportBackupSnapshot
     /// <summary>Gets or sets previous <c>MasterExperienceRate</c>.</summary>
     public float PreviousMasterExperienceRate { get; set; }
 
-    /// <summary>Gets or sets previous <c>ShouldDropMoney</c> value.</summary>
+    /// <summary>Gets or sets a value indicating whether monsters dropped money (<c>ShouldDropMoney</c>) before the import.</summary>
     public bool PreviousShouldDropMoney { get; set; }
 
     /// <summary>Gets or sets a value indicating whether rate fields were modified.</summary>

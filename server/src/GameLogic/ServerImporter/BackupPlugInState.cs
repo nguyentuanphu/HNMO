@@ -17,10 +17,10 @@ public sealed class BackupPlugInState
     /// <summary>Gets or sets plugin GUID.</summary>
     public Guid TypeId { get; set; }
 
-    /// <summary>Gets or sets whether a configuration record existed prior to import.</summary>
+    /// <summary>Gets or sets a value indicating whether a configuration record existed before the import.</summary>
     public bool Existed { get; set; }
 
-    /// <summary>Gets or sets previous IsActive flag.</summary>
+    /// <summary>Gets or sets a value indicating whether the plug-in was active before the import.</summary>
     public bool PreviousIsActive { get; set; }
 
     /// <summary>Gets or sets previous JSON configuration payload.</summary>

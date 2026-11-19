@@ -129,7 +129,7 @@ public sealed class LuckyNumberEngine
             }
         }
 
-        var avgMatchCount = Math.Max(0, count / 10.0 - 1.0);
+        var avgMatchCount = Math.Max(0, (count / 10.0) - 1.0);
         var lastDigitPct = count <= 10 ? 0.0 : Math.Round(avgMatchCount * 100.0 / count, 2);
         _ = lastDigitMatches;
         return (exact, lastDigitPct);

@@ -73,7 +73,7 @@ public sealed class TopRaceStore
             return;
         }
 
-        static DateTime? RunExpiry(string _, TopRaceRun run) =>
+        static DateTime? RunExpiry(string runId, TopRaceRun run) =>
             run.EndUtc == DateTime.MinValue || run.EndUtc == DateTime.MaxValue ? null : run.EndUtc;
 
         this._runsSync.SaveChanges(this._rowBackend, FeatureRuns, this.Data.Runs, JsonOptions, RunExpiry, useDirtySetOnly: true);
@@ -103,7 +103,7 @@ public sealed class TopRaceStore
         data.Seen = new Dictionary<string, TopRaceSeen>(data.Seen, StringComparer.Ordinal);
         data.Owed = new Dictionary<string, List<TopRaceOwedReward>>(data.Owed, StringComparer.Ordinal);
 
-        static DateTime? RunExpiry(string _, TopRaceRun run) =>
+        static DateTime? RunExpiry(string runId, TopRaceRun run) =>
             run.EndUtc == DateTime.MinValue || run.EndUtc == DateTime.MaxValue ? null : run.EndUtc;
         var m1 = this._runsSync.LoadOrMigrate(this._rowBackend, FeatureRuns, data.Runs, JsonOptions, RunExpiry);
         var m2 = this._seenSync.LoadOrMigrate(this._rowBackend, FeatureSeen, data.Seen, JsonOptions);

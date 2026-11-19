@@ -17,4 +17,5 @@ using HNMO.GameLogic.PlugIns.Missions;
 /// <param name="TextEn">The English text of an announcement.</param>
 /// <param name="TextVi">The Vietnamese text of an announcement.</param>
 /// <param name="Count">The rewards given.</param>
+/// <param name="InGame">Whether it happens in the game (not on the website).</param>
 public sealed record WorldBossBoardEvent(string Type, string? Result = null, string? BossId = null, string? TextEn = null, string? TextVi = null, int Count = 0, bool InGame = false);

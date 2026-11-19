@@ -28,14 +28,15 @@ public static class TopUpMilestoneStateWriter
     public static string WritePublic(TopUpMilestoneEngine engine, Func<short, short, string?> itemNames)
     {
         var steps = engine.OrderedSteps().Select(s => SerializeStep(s, reached: false, claimed: false, claimable: false, itemNames)).ToList();
-        return JsonSerializer.Serialize(new
+        var state = new
         {
             v = 1,
             enabled = engine.Enabled,
             allowWebsite = engine.Configuration.AllowWebsite,
             timeZone = engine.TimeZone.Id,
             steps,
-        }, JsonOptions);
+        };
+        return JsonSerializer.Serialize(state, JsonOptions);
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ public static class TopUpMilestoneStateWriter
         var (totalVnd, nextThresholdVnd, steps, owed, history) = engine.SnapshotFor(loginName);
         var zone = engine.TimeZone;
 
-        return JsonSerializer.Serialize(new
+        var state = new
         {
             v = 1,
             enabled = engine.Enabled,
@@ -92,7 +93,8 @@ public static class TopUpMilestoneStateWriter
             result = actionResult,
             messageEn,
             messageVi,
-        }, JsonOptions);
+        };
+        return JsonSerializer.Serialize(state, JsonOptions);
     }
 
     private static object SerializeStep(

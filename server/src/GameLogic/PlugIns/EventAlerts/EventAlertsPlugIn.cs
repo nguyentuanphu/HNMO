@@ -43,7 +43,7 @@ public sealed class EventAlertsPlugIn :
 
     /// <summary>Dispatches a single <see cref="EventAlertCandidate"/> to Web Push subscribers and optional Discord webhook.</summary>
     /// <param name="config">Active configuration.</param>
-    /// <param name="store">Subscription & log store.</param>
+    /// <param name="store">Subscription and log store.</param>
     /// <param name="candidate">Alert content.</param>
     /// <param name="logger">Optional logger (never logs webhook URLs or private keys).</param>
     /// <param name="httpClient">Optional HttpClient override for tests.</param>

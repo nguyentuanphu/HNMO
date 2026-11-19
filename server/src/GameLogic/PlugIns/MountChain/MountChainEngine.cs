@@ -144,7 +144,7 @@ public sealed class MountChainEngine
         return MountActionResult.Ok;
     }
 
-    /// <summary>Consumes shards and unlocks <paramref name="tierId"/> in account collection, setting it active.</summary>
+    /// <summary>Consumes shards and unlocks <paramref name="tier"/> in the account's collection, setting it active.</summary>
     /// <param name="login">Account login.</param>
     /// <param name="tier">Tier definition.</param>
     /// <param name="utcNow">Timestamp.</param>

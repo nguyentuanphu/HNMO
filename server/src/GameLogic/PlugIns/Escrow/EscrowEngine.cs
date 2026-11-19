@@ -623,6 +623,12 @@ public sealed class EscrowEngine
     public EscrowReputationEntry GetReputation(string login) =>
         this._store.Read(d => d.Reputations.TryGetValue(login, out var rep) ? rep : new EscrowReputationEntry { LoginName = login });
 
+    /// <summary>Changes the trade reputation of <paramref name="login"/>; the caller holds the store's lock.</summary>
+    /// <param name="data">The escrow data being changed.</param>
+    /// <param name="login">The account.</param>
+    /// <param name="completedDelta">Completed contracts to add.</param>
+    /// <param name="cancelledDelta">Cancelled contracts to add.</param>
+    /// <param name="disputesLostDelta">Lost disputes to add.</param>
     internal static void ApplyReputationLocked(EscrowStoreData data, string login, int completedDelta, int cancelledDelta, int disputesLostDelta = 0)
     {
         if (string.IsNullOrWhiteSpace(login))
@@ -642,6 +648,15 @@ public sealed class EscrowEngine
         rep.Score = Math.Max(0, (rep.Completed * 10) - (rep.Cancelled * 2) - (rep.DisputesLost * 25));
     }
 
+    /// <summary>
+    /// Puts the contract's goods into the buyer's owed deliveries and starts their trade hold; the caller holds the
+    /// store's lock.
+    /// </summary>
+    /// <param name="cfg">The escrow configuration.</param>
+    /// <param name="data">The escrow data being changed.</param>
+    /// <param name="contract">The completed contract.</param>
+    /// <param name="buyerLogin">The buyer's account.</param>
+    /// <param name="utcNow">The current time.</param>
     internal static void RecordCooldownAndDeliverToBuyerLocked(
         EscrowConfiguration cfg,
         EscrowStoreData data,

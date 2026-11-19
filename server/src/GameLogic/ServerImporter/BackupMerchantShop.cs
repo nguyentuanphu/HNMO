@@ -17,7 +17,7 @@ public sealed class BackupMerchantShop
     /// <summary>Gets or sets merchant NPC monster number.</summary>
     public int NpcNumber { get; set; }
 
-    /// <summary>Gets or sets whether a <c>MerchantStore</c> existed before import.</summary>
+    /// <summary>Gets or sets a value indicating whether a <c>MerchantStore</c> existed before the import.</summary>
     public bool HadMerchantStore { get; set; }
 
     /// <summary>Gets or sets previous items.</summary>

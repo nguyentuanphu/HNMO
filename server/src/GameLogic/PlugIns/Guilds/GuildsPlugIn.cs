@@ -379,6 +379,9 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
     /// <summary>
     /// Gives the reward's zen and items to the character, all or nothing.
     /// </summary>
+    /// <param name="player">The player who gets the reward.</param>
+    /// <param name="reward">The reward.</param>
+    /// <returns><c>true</c>, if everything was given; <c>false</c>, if it didn't fit (nothing was given).</returns>
     internal static async ValueTask<bool> GiveGoodsAsync(Player player, MissionReward reward)
     {
         if (player.Inventory is not { } inventory)

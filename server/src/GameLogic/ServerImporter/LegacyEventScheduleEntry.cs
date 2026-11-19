@@ -16,7 +16,7 @@ public sealed class LegacyEventScheduleEntry
     /// <summary>Gets or sets event name.</summary>
     public string Name { get; set; } = string.Empty;
 
-    /// <summary>Gets or sets whether this event is Season 9-only and unavailable on HNMO's S6 dataset.</summary>
+    /// <summary>Gets or sets a value indicating whether this event exists only in Season 9 and not in HNMO's Season 6 data.</summary>
     public bool IsSeason9Only { get; set; }
 
     /// <summary>Gets or sets optional map number.</summary>

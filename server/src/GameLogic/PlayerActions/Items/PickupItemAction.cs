@@ -85,6 +85,8 @@ public class PickupItemAction
     /// drops which don't exist, so a player gets at most one refusal per <see cref="RefusalLogInterval"/>
     /// logged as information; the others are logged for debugging.
     /// </summary>
+    /// <param name="player">The player who picks up.</param>
+    /// <returns>The level of the pick-up log entry.</returns>
     internal static LogLevel GetLogLevel(Player player)
     {
         if (player is OfflinePlayer)

@@ -681,5 +681,3 @@ public class DefaultDropGenerator : IDropGenerator
                  select it).ToList();
     }
 }
-
-

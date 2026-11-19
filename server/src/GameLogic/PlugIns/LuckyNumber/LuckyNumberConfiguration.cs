@@ -9,7 +9,7 @@ using HNMO.DataModel.Configuration;
 
 /// <summary>
 /// Configuration for <see cref="LuckyNumberPlugIn"/> (OFF by default).
-/// Players pick a daily number in <see cref="MinNumber"/>..<see cref="MaxNumber"/> before <see cref="DrawTimeSydney"/>;
+/// Players pick a daily number in <see cref="MinNumber"/>..<see cref="MaxNumber"/> before the daily draw (Sydney time);
 /// exact matches (and optional last-digit matches) win coins and/or jewels.
 /// </summary>
 public sealed class LuckyNumberConfiguration

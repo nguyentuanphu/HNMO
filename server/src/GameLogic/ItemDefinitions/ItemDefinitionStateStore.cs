@@ -115,6 +115,7 @@ public static class ItemDefinitionStateStore
             return removed;
         }
     }
+
     /// <summary>
     /// Builds an editable <see cref="ItemClientMetadata"/> snapshot from a server <see cref="ItemDefinition"/> and optional existing metadata.
     /// </summary>
