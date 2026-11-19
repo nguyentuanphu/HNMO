@@ -23559,7 +23559,7 @@ function parseBMD(fileBytes) {
     const lockPositions = bytes[p + 2] !== 0;
     p += 3;
     if (lockPositions && numKeys > 0) p += numKeys * 12;
-    actions.push({ numKeys });
+    actions.push({ numKeys, lockPositions });
   }
   const bones = [];
   for (let b = 0; b < numBones; b++) {
@@ -23952,10 +23952,17 @@ function boneKey(frames, key, outPosition, outQuaternion) {
   tmpEuler.set(frames.rotations[i], frames.rotations[i + 1], frames.rotations[i + 2], "ZYX");
   outQuaternion.setFromEuler(tmpEuler);
 }
+function loopKeyCount(model, actionIndex) {
+  const action = model.actions[actionIndex] ?? model.actions[0];
+  const numKeys = Math.max(1, action?.numKeys || 1);
+  return action?.lockPositions && numKeys > 1 ? numKeys - 1 : numKeys;
+}
 function computeBoneMatrices(model, actionIndex, time, out) {
   const action = model.actions[actionIndex] ? actionIndex : 0;
   const numKeys = Math.max(1, model.actions[action]?.numKeys || 1);
-  const k0 = Math.floor(time) % numKeys;
+  const loopKeys = loopKeyCount(model, action);
+  const locked = model.actions[action]?.lockPositions === true;
+  const k0 = Math.floor(time) % loopKeys;
   const k1 = (k0 + 1) % numKeys;
   const t = time - Math.floor(time);
   const matrices = out || model.bones.map(() => new Matrix4());
@@ -23969,6 +23976,7 @@ function computeBoneMatrices(model, actionIndex, time, out) {
       boneKey(frames, k1, tmpPosB, tmpQuatB);
       tmpPos.lerp(tmpPosB, t);
       tmpQuatA.slerp(tmpQuatB, t);
+      if (index === 0 && locked) tmpPos.set(frames.positions[0], frames.positions[1], tmpPos.z);
       local.compose(tmpPos, tmpQuatA, unitScale);
     }
     if (bone.parent >= 0 && bone.parent < index) local.premultiply(matrices[bone.parent]);
@@ -24268,6 +24276,12 @@ function sampleLight(light, x, y, out) {
 }
 
 // src/world.ts
+var INDOOR_FADES = {
+  0: { types: [125, 126], indoors: (tile) => tile === 4 },
+  // Lorencia: MODEL_HOUSE_WALL01 + 4 and + 5, on the wooden floor
+  2: { types: [81, 82, 96, 98, 99], indoors: (tile) => tile === 3 || tile >= 10 }
+  // Devias
+};
 var LORENCIA_MODELS = [
   ["Tree", 0, 13],
   ["Grass", 20, 8],
@@ -24444,13 +24458,22 @@ async function createWorld(data, fog, onProgress) {
     byType.get(object.type).push(object);
   }
   const objectDir = `Object${data.worldNumber}`;
+  const fadeRule = INDOOR_FADES[data.mapNumber];
+  const indoorFade = fadeRule ? { meshes: [], indoors: fadeRule.indoors, alpha: 1 } : null;
   let done = 0;
   await Promise.all([...byType].map(async ([type, placements]) => {
     const meshes = await buildObjectType(objectDir, files.get(type), placements, data.light);
     meshes.forEach((mesh) => group.add(mesh));
+    if (indoorFade && fadeRule?.types.includes(type)) {
+      for (const mesh of meshes) {
+        const material = mesh.material;
+        mesh.userData.baseLook = { transparent: material.transparent, depthWrite: material.depthWrite, opacity: material.opacity };
+        indoorFade.meshes.push(mesh);
+      }
+    }
     onProgress?.(++done / byType.size);
   }));
-  return { group, terrain };
+  return { group, terrain, indoorFade: indoorFade && indoorFade.meshes.length ? indoorFade : null };
 }
 
 // src/worldEditor.ts
