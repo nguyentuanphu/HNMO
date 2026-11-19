@@ -94,6 +94,13 @@ public sealed class HnmoStateStore
     }
 
     /// <summary>
+    /// Gets the lock of this file's state. A wrapper that reads a section, changes it and writes it back holds it
+    /// for the whole step, so two wrappers over the same file (each game server, website request and admin page
+    /// opens its own) can't overwrite each other's change. The store's own methods take the same lock again.
+    /// </summary>
+    public object SyncRoot => this._lock;
+
+    /// <summary>
     /// Opens or returns the shared <see cref="HnmoStateStore"/> for a configured file path.
     /// </summary>
     /// <param name="filePath">The file path, or <c>null</c>/whitespace for in-memory only.</param>

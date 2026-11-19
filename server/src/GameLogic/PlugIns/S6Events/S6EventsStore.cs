@@ -22,7 +22,6 @@ public sealed class S6EventsStore
     private const int MaxHistoryEntries = 100;
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _stateStore;
 
     private S6EventsStore(HnmoStateStore stateStore)
@@ -44,7 +43,7 @@ public sealed class S6EventsStore
     /// <returns>Deep copy or default state.</returns>
     public S6EventsState Snapshot()
     {
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             return this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
         }
@@ -55,7 +54,7 @@ public sealed class S6EventsStore
     public void QueueOwedReward(S6EventsOwedReward reward)
     {
         ArgumentNullException.ThrowIfNull(reward);
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
             state.OwedRewards.Add(reward);
@@ -86,7 +85,7 @@ public sealed class S6EventsStore
             return;
         }
 
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
             state.OwedRewards.RemoveAll(r => string.Equals(r.RewardId, rewardId, StringComparison.Ordinal));
@@ -99,7 +98,7 @@ public sealed class S6EventsStore
     /// <returns><see langword="true"/> if newly claimed; <see langword="false"/> if already fired.</returns>
     public bool TryClaimScheduleSlot(string slotKey)
     {
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
             if (string.Equals(state.LastTriggeredSlotKey, slotKey, StringComparison.Ordinal))
@@ -125,7 +124,7 @@ public sealed class S6EventsStore
             entry.CompletedAtSydney = local.ToString("yyyy-MM-dd HH:mm:ss 'Sydney'", CultureInfo.InvariantCulture);
         }
 
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             var state = this._stateStore.ReadSection<S6EventsState>(SectionKey, JsonOptions) ?? new S6EventsState();
             state.LastLmsCompletedUtc = entry.CompletedAtUtc;

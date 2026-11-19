@@ -244,7 +244,7 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
     // The host pastes the API key here once; only from this computer.
     private async Task<IResult> SetupAsync(HttpContext context)
     {
-        if (context.Connection.RemoteIpAddress is not { } remote || !IPAddress.IsLoopback(remote))
+        if (!HostOnly.IsHostRequest(context))
         {
             return Results.Json(new { error = "The setup only works on the host computer (http://localhost:8080/account.html)." }, statusCode: 403);
         }

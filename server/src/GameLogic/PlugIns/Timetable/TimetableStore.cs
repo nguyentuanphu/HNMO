@@ -49,7 +49,6 @@ public sealed class TimetableStore
     private const int MaxStoredWinners = 20;
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private TimetableStore(HnmoStateStore store)
@@ -78,7 +77,7 @@ public sealed class TimetableStore
     /// <param name="utcNow">The claim time in UTC.</param>
     public void RecordFindGmWinner(string characterName, string mapName, int coins, string coinType, int zen, DateTime utcNow)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<TimetableStoreData>(SectionKey, JsonOptions) ?? new TimetableStoreData();
             data.FindGmWinners.Insert(0, new FindGmWinnerEntry
@@ -104,7 +103,7 @@ public sealed class TimetableStore
     /// <returns>The list of recent winners.</returns>
     public IReadOnlyList<FindGmWinnerEntry> ReadFindGmWinners()
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<TimetableStoreData>(SectionKey, JsonOptions) ?? new TimetableStoreData();
             return data.FindGmWinners.Select(w => new FindGmWinnerEntry

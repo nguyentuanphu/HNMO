@@ -19,7 +19,6 @@ public sealed class AntiCheatAuditStore
     private const string SectionKey = "antiCheatAudit";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private AntiCheatAuditStore(HnmoStateStore store)
@@ -41,7 +40,7 @@ public sealed class AntiCheatAuditStore
     /// <returns>List of audit entries.</returns>
     public List<AntiCheatViolationEntry> ListRecent()
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<List<AntiCheatViolationEntry>>(SectionKey, JsonOptions) ?? [];
             return data.OrderByDescending(x => x.OccurredAtUtc).ToList();
@@ -54,7 +53,7 @@ public sealed class AntiCheatAuditStore
     public void Append(AntiCheatViolationEntry entry, int maxEntries)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var list = this._store.ReadSection<List<AntiCheatViolationEntry>>(SectionKey, JsonOptions) ?? [];
             if (string.IsNullOrWhiteSpace(entry.OccurredAtSydney))
@@ -77,7 +76,7 @@ public sealed class AntiCheatAuditStore
     /// <summary>Clears all stored violation audit entries.</summary>
     public void Clear()
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             this._store.WriteSection(SectionKey, new List<AntiCheatViolationEntry>(), JsonOptions);
         }

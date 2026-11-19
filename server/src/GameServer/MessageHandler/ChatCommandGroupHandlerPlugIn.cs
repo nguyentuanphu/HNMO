@@ -6,6 +6,7 @@ namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
+using HNMO.GameLogic;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
@@ -41,4 +42,23 @@ internal class ChatCommandGroupHandlerPlugIn : GroupPacketHandlerPlugIn
 
     /// <inheritdoc/>
     public override byte Key => GroupKey;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// While a trade or a crafting dialog is open, the player's inventory and money have a backup which is put
+    /// back when the trade is cancelled or the connection ends. An HNMO feature which takes items or money in
+    /// that time (market, jewel bank, escrow, mounts, ...) would keep what it gave while the backup returns what
+    /// it took. So none of HNMO's own messages (sub codes 2 and up) are handled until the dialog is closed.
+    /// </remarks>
+    public override async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
+    {
+        const byte firstHnmoSubCode = 2;
+        var subTypeIndex = packet.Span[0] % 2 == 1 ? 3 : 4;
+        if (player.BackupInventory is not null && packet.Length > subTypeIndex && packet.Span[subTypeIndex] >= firstHnmoSubCode)
+        {
+            return;
+        }
+
+        await base.HandlePacketAsync(player, packet).ConfigureAwait(false);
+    }
 }

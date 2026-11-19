@@ -4,6 +4,7 @@
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { createHnmoPanel, type HnmoPanel } from './hnmoPanel.js';
+import { escapeHtml } from './escapeHtml.js';
 
 export interface PartySpotAdState {
   leaderName: string;
@@ -247,8 +248,8 @@ export class PartyOptionsWindow {
       card.className = 'hnmo-card';
       const left = document.createElement('div');
       const lockBadge = ad.hasPassword ? tx('Password', 'Mật khẩu') : tx('Auto-join', 'Tự vào');
-      left.innerHTML = `<div><strong>${ad.spotName}</strong> <span class="hnmo-badge">${ad.memberCount}/${ad.maxSize}</span> <span class="hnmo-badge">${lockBadge}</span></div>`
-        + `<div class="hnmo-muted">${tx('Leader', 'Trưởng nhóm')}: ${ad.leaderName} · ${ad.mapName}</div>`;
+      left.innerHTML = `<div><strong>${escapeHtml(ad.spotName)}</strong> <span class="hnmo-badge">${Number(ad.memberCount)}/${Number(ad.maxSize)}</span> <span class="hnmo-badge">${lockBadge}</span></div>`
+        + `<div class="hnmo-muted">${tx('Leader', 'Trưởng nhóm')}: ${escapeHtml(ad.leaderName)} · ${escapeHtml(ad.mapName)}</div>`;
 
       const joinBtn = document.createElement('button');
       joinBtn.type = 'button';

@@ -36,11 +36,7 @@ internal static class ControlEndpoints
         var saveDir = Path.GetFullPath(Path.Combine(contentRoot, options.SavePath));
         var setupMarker = Path.Combine(saveDir, "setup-complete.json");
 
-        static bool IsLoopback(HttpContext ctx)
-        {
-            var ip = ctx.Connection.RemoteIpAddress;
-            return ip is null || IPAddress.IsLoopback(ip);
-        }
+        static bool IsLoopback(HttpContext ctx) => HostOnly.IsHostRequest(ctx);
 
         static IResult Forbidden() => Results.StatusCode(StatusCodes.Status403Forbidden);
 
@@ -473,18 +469,30 @@ internal static class ControlEndpoints
 
             Directory.CreateDirectory(saveDir);
             var publicAddr = string.IsNullOrWhiteSpace(req.PublicAddress) ? "localhost" : req.PublicAddress.Trim();
-            var settingsJson = JsonSerializer.Serialize(new
-            {
-                WebPort = req.WebPort,
-                AdminPort = req.AdminPort,
-                ConnectServerPort = req.ConnectServerPort,
-                DatabasePort = req.DatabasePort,
-                PublicAddress = publicAddr,
-                WebUrls = $"http://0.0.0.0:{req.WebPort}",
-                OpenBrowserUrl = $"http://{publicAddr}:{req.WebPort}/",
-                LauncherEnabled = true,
-            }, new JsonSerializerOptions { WriteIndented = true });
+            // Only the wizard's own fields change: whatever else the host has set before (database password,
+            // relay hosts, paths) stays in the file.
             var settingsPath = Path.Combine(saveDir, "hnmo-settings.json");
+            System.Text.Json.Nodes.JsonObject settings;
+            try
+            {
+                settings = File.Exists(settingsPath)
+                    ? System.Text.Json.Nodes.JsonNode.Parse(await File.ReadAllTextAsync(settingsPath, ctx.RequestAborted).ConfigureAwait(false)) as System.Text.Json.Nodes.JsonObject ?? []
+                    : [];
+            }
+            catch (JsonException)
+            {
+                settings = [];
+            }
+
+            settings["WebPort"] = req.WebPort;
+            settings["AdminPort"] = req.AdminPort;
+            settings["ConnectServerPort"] = req.ConnectServerPort;
+            settings["DatabasePort"] = req.DatabasePort;
+            settings["PublicAddress"] = publicAddr;
+            settings["WebUrls"] = $"http://0.0.0.0:{req.WebPort}";
+            settings["OpenBrowserUrl"] = $"http://{publicAddr}:{req.WebPort}/";
+            settings["LauncherEnabled"] = true;
+            var settingsJson = settings.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(settingsPath, settingsJson, ctx.RequestAborted).ConfigureAwait(false);
             options.SettingsFilePath = settingsPath;
             options.WebPort = req.WebPort;

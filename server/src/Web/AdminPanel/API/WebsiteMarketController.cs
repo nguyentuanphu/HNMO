@@ -32,6 +32,8 @@ public sealed class WebsiteMarketController(
     IServerProvider serverProvider,
     ILogger<WebsiteMarketController> logger) : ControllerBase
 {
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, SemaphoreSlim> PurchaseGates = new(StringComparer.Ordinal);
+
     private readonly CashShopCoinService _coinService = new(persistence, gameConfigurationSource);
 
     /// <summary>Gets the public item market listings and rules.</summary>
@@ -102,7 +104,23 @@ public sealed class WebsiteMarketController(
             return this.BadRequest(new { error = "listing" });
         }
 
-        var claim = engine.TryClaimForBuy(account.LoginName, request.ListingId, DateTime.UtcNow);
+        // One purchase of an account at a time: two requests at once would both see the same balance and
+        // both get their item, while the second debit finds nothing left to take.
+        var gate = PurchaseGates.GetOrAdd(account.LoginName.ToUpperInvariant(), static _ => new SemaphoreSlim(1, 1));
+        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await this.BuyLockedAsync(engine, context, account, request.ListingId, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    private async Task<IActionResult> BuyLockedAsync(MarketEngine engine, IPlayerContext context, Account account, string listingId, CancellationToken cancellationToken)
+    {
+        var claim = engine.TryClaimForBuy(account.LoginName, listingId, DateTime.UtcNow);
         if (claim.Result != MarketClaimResult.Claimed || claim.Listing is null)
         {
             var err = claim.Result == MarketClaimResult.CannotBuyOwnListing ? "own" : "sold";

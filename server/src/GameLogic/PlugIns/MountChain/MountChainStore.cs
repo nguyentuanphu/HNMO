@@ -39,7 +39,6 @@ public sealed class MountChainStore
     private const string SectionKey = "mountChain";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private MountChainStore(HnmoStateStore store) => this._store = store;
@@ -60,7 +59,7 @@ public sealed class MountChainStore
     /// <returns>Projected snapshot.</returns>
     public T Read<T>(Func<MountChainStoreData, T> read)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<MountChainStoreData>(SectionKey, JsonOptions) ?? new MountChainStoreData();
             return read(data);
@@ -71,7 +70,7 @@ public sealed class MountChainStore
     /// <param name="mutate">Mutator callback.</param>
     public void Update(Action<MountChainStoreData> mutate)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<MountChainStoreData>(SectionKey, JsonOptions) ?? new MountChainStoreData();
             mutate(data);

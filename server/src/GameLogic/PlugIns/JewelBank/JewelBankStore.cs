@@ -75,7 +75,6 @@ public sealed class JewelBankStore
     private const string SectionKey = "jewelBank";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private JewelBankStore(HnmoStateStore store)
@@ -99,7 +98,7 @@ public sealed class JewelBankStore
     /// <returns>Result.</returns>
     public TResult Read<TResult>(Func<JewelBankStoreData, TResult> reader)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<JewelBankStoreData>(SectionKey, JsonOptions) ?? new JewelBankStoreData();
             return reader(data);
@@ -112,7 +111,7 @@ public sealed class JewelBankStore
     /// <returns>Result.</returns>
     public TResult Mutate<TResult>(Func<JewelBankStoreData, (bool Changed, TResult Result)> mutator)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<JewelBankStoreData>(SectionKey, JsonOptions) ?? new JewelBankStoreData();
             var (changed, result) = mutator(data);

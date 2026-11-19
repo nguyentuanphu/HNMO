@@ -52,7 +52,7 @@ public sealed class EventAlertStore
     /// <returns>The active public and private keys (Base64URL).</returns>
     public (string PublicKey, string PrivateKey) EnsureVapidKeys(string? configuredPublic = null, string? configuredPrivate = null)
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             if (!string.IsNullOrWhiteSpace(configuredPublic) && !string.IsNullOrWhiteSpace(configuredPrivate))
             {
@@ -83,7 +83,7 @@ public sealed class EventAlertStore
     /// <returns>The newly generated public and private keys.</returns>
     public (string PublicKey, string PrivateKey) RegenerateVapidKeys()
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var (pub, priv) = WebPushCrypto.GenerateVapidKeyPair();
             this._data.VapidPublicKey = pub;
@@ -91,6 +91,46 @@ public sealed class EventAlertStore
             this.SaveLocked();
             return (pub, priv);
         }
+    }
+
+    /// <summary>The most subscriptions kept; anyone can subscribe, so the list has an end.</summary>
+    public const int MaximumSubscriptions = 20000;
+
+    private const int MaximumEndpointLength = 1024;
+
+    private const int MaximumKeyLength = 256;
+
+    private const int MaximumEventsPerSubscription = 32;
+
+    /// <summary>
+    /// The browsers' push services. Notifications are only ever sent to these: a subscription is sent in by
+    /// anyone, and the server must not be made to call other addresses with it.
+    /// </summary>
+    private static readonly string[] PushServiceHosts =
+    [
+        "fcm.googleapis.com",
+        "android.googleapis.com",
+        "updates.push.services.mozilla.com",
+        "web.push.apple.com",
+    ];
+
+    private static readonly string[] PushServiceHostSuffixes =
+    [
+        ".push.services.mozilla.com",
+        ".notify.windows.com",
+        ".push.apple.com",
+    ];
+
+    /// <summary>Tells whether an address belongs to one of the browsers' push services.</summary>
+    /// <param name="endpoint">The subscription's endpoint.</param>
+    /// <returns><c>true</c>, if notifications may be sent to it.</returns>
+    public static bool IsPushService(Uri endpoint)
+    {
+        ArgumentNullException.ThrowIfNull(endpoint);
+        var host = endpoint.IdnHost;
+        return endpoint.IsDefaultPort
+            && (PushServiceHosts.Contains(host, StringComparer.OrdinalIgnoreCase)
+                || PushServiceHostSuffixes.Any(suffix => host.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <summary>Adds or updates a Web Push browser subscription.</summary>
@@ -102,13 +142,22 @@ public sealed class EventAlertStore
             || string.IsNullOrWhiteSpace(subscription.P256dh)
             || string.IsNullOrWhiteSpace(subscription.Auth)
             || !Uri.TryCreate(subscription.Endpoint, UriKind.Absolute, out var uri)
-            || !string.Equals(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            || !string.Equals(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase)
+            || !IsPushService(uri)
+            || subscription.Endpoint.Length > MaximumEndpointLength
+            || subscription.P256dh.Length > MaximumKeyLength
+            || subscription.Auth.Length > MaximumKeyLength)
         {
             return false;
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
+            if (this._data.Subscriptions.Count >= MaximumSubscriptions && !this._data.Subscriptions.ContainsKey(uri.AbsoluteUri))
+            {
+                return false;
+            }
+
             this._data.Subscriptions[uri.AbsoluteUri] = new EventAlertSubscription
             {
                 Endpoint = uri.AbsoluteUri,
@@ -119,6 +168,7 @@ public sealed class EventAlertStore
                     .Where(e => !string.IsNullOrWhiteSpace(e))
                     .Select(e => e.Trim().ToLowerInvariant())
                     .Distinct(StringComparer.Ordinal)
+                    .Take(MaximumEventsPerSubscription)
                     .ToList(),
                 UpdatedAtUtc = DateTime.UtcNow,
                 LastSentUtc = subscription.LastSentUtc,
@@ -138,7 +188,7 @@ public sealed class EventAlertStore
             return false;
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var removed = this._data.Subscriptions.Remove(endpoint.Trim());
             if (removed)
@@ -154,7 +204,7 @@ public sealed class EventAlertStore
     /// <returns>Subscription list.</returns>
     public IReadOnlyList<EventAlertSubscription> ListSubscriptions()
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._data.Subscriptions.Values
                 .Select(s => new EventAlertSubscription
@@ -176,7 +226,7 @@ public sealed class EventAlertStore
     /// <returns><c>true</c> if already logged.</returns>
     public bool HasSent(string sentKey)
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._data.Logs.Any(l => string.Equals(l.SentKey, sentKey, StringComparison.Ordinal));
         }
@@ -186,7 +236,7 @@ public sealed class EventAlertStore
     /// <param name="entry">Log entry.</param>
     public void RecordSent(EventAlertSentLog entry)
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             this._data.Logs.Insert(0, entry);
             if (this._data.Logs.Count > MaxLogs)
@@ -202,7 +252,7 @@ public sealed class EventAlertStore
     /// <returns>Log entries.</returns>
     public IReadOnlyList<EventAlertSentLog> ListLogs()
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return [.. this._data.Logs];
         }

@@ -39,7 +39,6 @@ public sealed class CatchupCapStore
     private const string SectionKey = "catchupCap";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private CatchupCapStore(HnmoStateStore store)
@@ -63,7 +62,7 @@ public sealed class CatchupCapStore
     /// <returns>Projected value.</returns>
     public TResult Read<TResult>(Func<CatchupCapStoreData, TResult> reader)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<CatchupCapStoreData>(SectionKey, JsonOptions) ?? new CatchupCapStoreData();
             return reader(data);
@@ -76,7 +75,7 @@ public sealed class CatchupCapStore
     /// <returns>Outcome.</returns>
     public TResult Mutate<TResult>(Func<CatchupCapStoreData, (bool Changed, TResult Result)> mutator)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<CatchupCapStoreData>(SectionKey, JsonOptions) ?? new CatchupCapStoreData();
             var (changed, result) = mutator(data);

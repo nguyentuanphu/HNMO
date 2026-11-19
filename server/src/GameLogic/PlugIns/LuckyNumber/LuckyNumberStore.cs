@@ -131,7 +131,6 @@ public sealed class LuckyNumberStore
     private const int MaxStoredRounds = 30;
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private LuckyNumberStore(HnmoStateStore store)
@@ -157,7 +156,7 @@ public sealed class LuckyNumberStore
     /// <returns>The projected value.</returns>
     public TResult Read<TResult>(Func<LuckyNumberStoreData, TResult> reader)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<LuckyNumberStoreData>(SectionKey, JsonOptions) ?? new LuckyNumberStoreData();
             return reader(data);
@@ -170,7 +169,7 @@ public sealed class LuckyNumberStore
     /// <returns>The result.</returns>
     public TResult Mutate<TResult>(Func<LuckyNumberStoreData, (bool Changed, TResult Result)> mutator)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<LuckyNumberStoreData>(SectionKey, JsonOptions) ?? new LuckyNumberStoreData();
             var (changed, result) = mutator(data);

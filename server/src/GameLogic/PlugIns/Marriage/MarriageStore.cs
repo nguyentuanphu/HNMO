@@ -54,7 +54,6 @@ public sealed class MarriageStore
     private const string SectionKey = "marriage";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private MarriageStore(HnmoStateStore store)
@@ -78,7 +77,7 @@ public sealed class MarriageStore
     /// <returns>Projected result.</returns>
     public TResult Read<TResult>(Func<MarriageStoreData, TResult> reader)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<MarriageStoreData>(SectionKey, JsonOptions) ?? new MarriageStoreData();
             return reader(data);
@@ -91,7 +90,7 @@ public sealed class MarriageStore
     /// <returns>Result.</returns>
     public TResult Mutate<TResult>(Func<MarriageStoreData, (bool Changed, TResult Result)> mutator)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<MarriageStoreData>(SectionKey, JsonOptions) ?? new MarriageStoreData();
             var (changed, result) = mutator(data);

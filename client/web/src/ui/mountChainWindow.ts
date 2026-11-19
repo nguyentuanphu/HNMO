@@ -4,6 +4,7 @@
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { createHnmoPanel, type HnmoPanel } from './hnmoPanel.js';
+import { escapeHtml } from './escapeHtml.js';
 
 export interface MountTierState {
   id: string;
@@ -137,9 +138,9 @@ export class MountChainWindow {
 
       const left = document.createElement('div');
       const status = isActive ? tx('ACTIVE', 'ĐANG DÙNG') : t.unlocked ? tx('UNLOCKED', 'ĐÃ MỞ') : tx('LOCKED', 'CHƯA MỞ');
-      left.innerHTML = `<div><strong>${isVi() ? t.nameVi : t.nameEn}</strong> <span class="hnmo-badge">${status}</span></div>`
+      left.innerHTML = `<div><strong>${escapeHtml(isVi() ? t.nameVi : t.nameEn)}</strong> <span class="hnmo-badge">${status}</span></div>`
         + `<div class="hnmo-muted">${tx('Cost', 'Cần')}: ${t.shardsRequired} ${tx('shards', 'mảnh')}`
-        + (t.previousTierId && t.previousMountsRequired > 0 ? ` + ${t.previousMountsRequired}x ${t.previousTierId}` : '')
+        + (t.previousTierId && t.previousMountsRequired > 0 ? ` + ${Number(t.previousMountsRequired)}x ${escapeHtml(t.previousTierId)}` : '')
         + ` · ${t.zenCost.toLocaleString()} Zen · +${t.pveDefenseBonus} Def, +${t.bonusExpPercent}% EXP`
         + ` · ${tx('In bag', 'Trong túi')}: ${t.bagDuplicates}</div>`;
 

@@ -92,6 +92,50 @@ public sealed class EscrowContractsPlugIn :
         return true;
     }
 
+    /// <summary>
+    /// Checks whether <paramref name="item"/> has something the stored snapshot of the market and of escrow can't keep
+    /// (an ancient set, sockets, harmony / guardian / wing options, pet experience). Such an item would come back to
+    /// its owner or reach its buyer without it, so it isn't taken.
+    /// </summary>
+    /// <param name="player">Holding player.</param>
+    /// <param name="item">Candidate item.</param>
+    /// <returns><see langword="true"/> when refused with an EN/VI notice.</returns>
+    public static async ValueTask<bool> RefuseItemLosingDetailAsync(Player player, Item item)
+    {
+        if (!LosesDetailWhenStored(item))
+        {
+            return false;
+        }
+
+        var isVi = string.Equals(player.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+        await player.ShowBlueMessageAsync(isVi
+            ? "Vật phẩm này có thuộc tính đặc biệt (đồ thần, socket, harmony, tùy chọn 380, cánh hoặc thú nuôi) chưa thể ký gửi: hãy giao dịch trực tiếp."
+            : "This item has special properties (ancient, sockets, harmony, level 380 option, wing options or a pet) which can't be stored yet: trade it directly.").ConfigureAwait(false);
+        return true;
+    }
+
+    /// <summary>Tells whether an item has properties outside of what the market and escrow snapshots keep.</summary>
+    /// <param name="item">The item.</param>
+    /// <returns><see langword="true"/>, if storing it would drop something.</returns>
+    public static bool LosesDetailWhenStored(Item item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        if (item.SocketCount > 0 || item.PetExperience > 0)
+        {
+            return true;
+        }
+
+        if (item.ItemSetGroups is { } sets && sets.Any(s => s.AncientSetDiscriminator != 0))
+        {
+            return true;
+        }
+
+        return item.ItemOptions.Any(o => o.ItemOption?.OptionType is { } type
+            && type != ItemOptionTypes.Option
+            && type != ItemOptionTypes.Luck
+            && !(type == ItemOptionTypes.Excellent && o.ItemOption.Number is >= 1 and <= 8));
+    }
+
     /// <summary>Builds a rich item snapshot plus Activity Log origin lookup.</summary>
     /// <param name="item">Inventory item.</param>
     /// <param name="ownerLogin">Current owner account login.</param>
@@ -727,6 +771,12 @@ public sealed class EscrowContractsPlugIn :
                 return;
             }
 
+            if (await RefuseItemLosingDetailAsync(player, item).ConfigureAwait(false))
+            {
+                await this.SendStateAsync(player, true, "This item can't be stored in escrow.", "Vật phẩm này không thể ký gửi.", true).ConfigureAwait(false);
+                return;
+            }
+
             pickedItems.Add((item, BuildItemSnapshot(item, login, cfg.ActivityLogFileName)));
         }
 
@@ -1341,13 +1391,13 @@ public sealed class EscrowContractsPlugIn :
         var jewelStore = JewelBankStore.Open(cfg.JewelBankFileName);
         var deliveredCount = 0;
 
-        foreach (var delivery in deliveries)
+        foreach (var peeked in deliveries)
         {
-            // Jewels -> Jewel Bank directly!
-            if (delivery.Jewels.Count > 0)
+            // The delivery leaves the store first, so each one is handed over once, whatever is asked again
+            // meanwhile; it goes back whole when the goods don't fit.
+            if (engine.TakeOwedDelivery(peeked.DeliveryId) is not { } delivery)
             {
-                RefundJewelsToBank(jewelStore, login, delivery.Jewels);
-                delivery.Jewels = [];
+                continue;
             }
 
             // Zen + Items -> Bag via GiftCodeRewards all-or-nothing!
@@ -1374,7 +1424,13 @@ public sealed class EscrowContractsPlugIn :
             if ((giftReward.Items.Count > 0 || giftReward.Zen > 0)
                 && !await GiftCodes.GiftCodeRewards.GiveGoodsAsync(player, giftReward).ConfigureAwait(false))
             {
+                engine.RestoreOwedDelivery(delivery);
                 continue;
+            }
+
+            if (delivery.Jewels.Count > 0)
+            {
+                RefundJewelsToBank(jewelStore, login, delivery.Jewels);
             }
 
             if (delivery.Coins > 0)
@@ -1385,7 +1441,6 @@ public sealed class EscrowContractsPlugIn :
                     GrantedBy).ConfigureAwait(false);
             }
 
-            engine.RemoveOwedDelivery(delivery.DeliveryId);
             deliveredCount++;
         }
 

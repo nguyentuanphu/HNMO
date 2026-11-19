@@ -301,6 +301,7 @@ public sealed class MountChainPlugIn :
             }
 
             await inv.RemoveItemAsync(item).ConfigureAwait(false);
+            await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
         }
     }

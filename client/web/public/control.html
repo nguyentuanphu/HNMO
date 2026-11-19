@@ -307,6 +307,9 @@
       el.style.display = 'block';
     }
 
+    // Texts from files, releases and the server never go into the page as HTML.
+    const esc = (text) => String(text ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
     async function api(url, method = 'GET', body = null) {
       const res = await fetch(url, {
         method,
@@ -412,7 +415,7 @@
         for (const b of s.backups || []) {
           const tr = document.createElement('tr');
           const kb = Math.max(1, Math.round(b.sizeBytes / 1024));
-          tr.innerHTML = `<td>${b.fileName}</td><td>${b.createdSydney}</td><td>${kb} KB</td><td><button type="button" data-restore="${b.fileName}">${lang === 'vi' ? 'Khôi phục' : 'Restore'}</button></td>`;
+          tr.innerHTML = `<td>${esc(b.fileName)}</td><td>${esc(b.createdSydney)}</td><td>${kb} KB</td><td><button type="button" data-restore="${esc(b.fileName)}">${lang === 'vi' ? 'Khôi phục' : 'Restore'}</button></td>`;
           tbody.appendChild(tr);
         }
         tbody.querySelectorAll('button[data-restore]').forEach((btn) => {
@@ -439,7 +442,7 @@
       if (logs.files) {
         const current = sel.value || 'all';
         sel.innerHTML = `<option value="all">${lang === 'vi' ? 'Tất cả nhật ký' : 'All logs'}</option>` +
-          logs.files.map((f) => `<option value="${f.fileName}">${f.fileName} (${Math.max(1, Math.round(f.sizeBytes / 1024))} KB)</option>`).join('');
+          logs.files.map((f) => `<option value="${esc(f.fileName)}">${esc(f.fileName)} (${Math.max(1, Math.round(f.sizeBytes / 1024))} KB)</option>`).join('');
         sel.value = [...sel.options].some((o) => o.value === current) ? current : 'all';
       }
       document.getElementById('logOutput').textContent = (logs.lines || [...(logs.server || []), ...(logs.database || [])]).join('\n');
@@ -478,7 +481,8 @@
       try {
         const u = await api('/api/control/updates');
         const info = document.getElementById('updateInfo');
-        info.innerHTML = `<strong>${u.latestTag}</strong> (${u.publishedAtSydney}) — ${u.isUpdateAvailable ? 'Update available!' : 'Up to date'} — <a href="${u.downloadUrl}" target="_blank">Download</a><pre style="margin-top:8px">${u.releaseNotes || ''}</pre>`;
+        const link = /^https:\/\/github\.com\//.test(String(u.downloadUrl || '')) ? esc(u.downloadUrl) : '#';
+        info.innerHTML = `<strong>${esc(u.latestTag)}</strong> (${esc(u.publishedAtSydney)}) — ${u.isUpdateAvailable ? 'Update available!' : 'Up to date'} — <a href="${link}" target="_blank" rel="noopener">Download</a><pre style="margin-top:8px">${esc(u.releaseNotes || '')}</pre>`;
       } catch (e) { showMsg(e.message, true); }
     };
     document.getElementById('wizSubmit').onclick = async () => {

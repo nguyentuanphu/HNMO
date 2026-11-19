@@ -47,6 +47,17 @@ public class ChatMessageCommandProcessor : IChatMessageProcessor
             return;
         }
 
+        if (sender.BackupInventory is not null && commandHandler.MinCharacterStatusRequirement < CharacterStatus.GameMaster)
+        {
+            // A trade or crafting dialog keeps a backup of the inventory and the money, which comes back when
+            // it's cancelled: a command which takes items or money now would give its reward for nothing.
+            var vietnamese = string.Equals(sender.Culture.TwoLetterISOLanguageName, "vi", StringComparison.OrdinalIgnoreCase);
+            await sender.ShowBlueMessageAsync(vietnamese
+                ? "Hãy đóng cửa sổ giao dịch hoặc ép đồ trước khi dùng lệnh."
+                : "Close the trade or crafting window before using a command.").ConfigureAwait(false);
+            return;
+        }
+
         if (commandHandler.MinCharacterStatusRequirement == CharacterStatus.GameMaster)
         {
             var store = this._gmStore ?? GmPermissionStore.Default;

@@ -19,7 +19,6 @@ public sealed class QolStore
     private const int MaxLogEntries = 50;
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _stateStore;
 
     private QolStore(HnmoStateStore stateStore)
@@ -41,7 +40,7 @@ public sealed class QolStore
     /// <returns>State snapshot.</returns>
     public QolState Snapshot()
     {
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             return this._stateStore.ReadSection<QolState>(SectionKey, JsonOptions) ?? new QolState();
         }
@@ -55,7 +54,7 @@ public sealed class QolStore
     {
         var sydney = HnmoStateStore.ToTimeZone(utcNow, HnmoStateStore.ResolveTimeZone(null));
         var line = $"[{sydney.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)}] {characterName}: {rewardName}";
-        lock (this._gate)
+        lock (this._stateStore.SyncRoot)
         {
             var state = this._stateStore.ReadSection<QolState>(SectionKey, JsonOptions) ?? new QolState();
             state.TotalMinesCompleted++;

@@ -53,7 +53,6 @@ public sealed class PartyOptionsStore
     private const string SectionKey = "partyOptions";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private PartyOptionsStore(HnmoStateStore store) => this._store = store;
@@ -72,7 +71,7 @@ public sealed class PartyOptionsStore
     /// <returns>Snapshot list.</returns>
     public List<PartyAdSnapshot> ReadAds()
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<PartyOptionsStoreData>(SectionKey, JsonOptions) ?? new PartyOptionsStoreData();
             return data.ActiveAds;
@@ -83,7 +82,7 @@ public sealed class PartyOptionsStore
     /// <param name="ads">Current active ads.</param>
     public void SaveAds(List<PartyAdSnapshot> ads)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             this._store.WriteSection(SectionKey, new PartyOptionsStoreData { ActiveAds = ads }, JsonOptions);
         }

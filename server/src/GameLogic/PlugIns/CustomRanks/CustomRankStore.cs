@@ -61,7 +61,7 @@ public sealed class CustomRankStore
             return null;
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var key = NormalizeKey(characterName);
             return this._data.Characters.TryGetValue(key, out var record) ? Clone(record) : null;
@@ -80,7 +80,7 @@ public sealed class CustomRankStore
 
         var display = characterName.Trim();
         var key = NormalizeKey(display);
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var record = this.GetOrCreateMutable(key, display);
             record.SelectedRankId = selectedRankId.Trim();
@@ -102,7 +102,7 @@ public sealed class CustomRankStore
         var display = characterName.Trim();
         var key = NormalizeKey(display);
         var trimmedAch = achievementKey.Trim();
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var record = this.GetOrCreateMutable(key, display);
             if (record.AchievementKeys.Any(k => string.Equals(k, trimmedAch, StringComparison.OrdinalIgnoreCase)))
@@ -129,7 +129,7 @@ public sealed class CustomRankStore
 
         var key = NormalizeKey(characterName);
         var trimmedAch = achievementKey.Trim();
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             if (!this._data.Characters.TryGetValue(key, out var record))
             {
@@ -150,7 +150,7 @@ public sealed class CustomRankStore
     /// <returns>Sorted character records.</returns>
     public IReadOnlyList<CustomRankCharacterRecord> ListAchievementHolders()
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._data.Characters.Values
                 .Where(r => r.AchievementKeys.Count > 0)

@@ -85,7 +85,7 @@ public sealed class GameServerRateStore
     public (float DropRate, float ZenRate) GetRates(byte serverId)
     {
         var key = KeyOf(serverId);
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             if (this._entries.TryGetValue(key, out var entry))
             {
@@ -111,7 +111,7 @@ public sealed class GameServerRateStore
             ZenRate = NormalizeRate(zenRate),
         };
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             this._entries[key] = saved;
             this._sync.MarkDirty(key);

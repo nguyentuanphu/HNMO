@@ -578,14 +578,42 @@ public sealed class EscrowEngine
     public List<EscrowOwedDelivery> PeekOwedDeliveries(string login) =>
         this._store.Read(d => d.OwedDeliveries.Where(o => string.Equals(o.RecipientLogin, login, StringComparison.OrdinalIgnoreCase)).ToList());
 
-    /// <summary>Removes a completed owed delivery.</summary>
+    /// <summary>
+    /// Takes an owed delivery out of the store, so it can be handed over exactly once. When the hand-over
+    /// fails (no room in the bag), <see cref="RestoreOwedDelivery"/> puts it back.
+    /// </summary>
     /// <param name="deliveryId">Delivery id.</param>
-    public void RemoveOwedDelivery(string deliveryId)
+    /// <returns>The stored delivery; <c>null</c> when it was already taken.</returns>
+    public EscrowOwedDelivery? TakeOwedDelivery(string deliveryId)
     {
+        return this._store.Mutate(d =>
+        {
+            var index = d.OwedDeliveries.FindIndex(o => string.Equals(o.DeliveryId, deliveryId, StringComparison.Ordinal));
+            if (index < 0)
+            {
+                return (false, (EscrowOwedDelivery?)null);
+            }
+
+            var taken = d.OwedDeliveries[index];
+            d.OwedDeliveries.RemoveAt(index);
+            return (true, taken);
+        });
+    }
+
+    /// <summary>Puts a delivery back which was taken with <see cref="TakeOwedDelivery"/> but couldn't be handed over.</summary>
+    /// <param name="delivery">The delivery.</param>
+    public void RestoreOwedDelivery(EscrowOwedDelivery delivery)
+    {
+        ArgumentNullException.ThrowIfNull(delivery);
         this._store.Mutate(d =>
         {
-            var removed = d.OwedDeliveries.RemoveAll(o => string.Equals(o.DeliveryId, deliveryId, StringComparison.Ordinal));
-            return (removed > 0, true);
+            if (d.OwedDeliveries.Any(o => string.Equals(o.DeliveryId, delivery.DeliveryId, StringComparison.Ordinal)))
+            {
+                return (false, true);
+            }
+
+            d.OwedDeliveries.Add(delivery);
+            return (true, true);
         });
     }
 

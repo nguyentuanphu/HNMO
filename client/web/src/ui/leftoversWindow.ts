@@ -4,6 +4,7 @@
 import { currentLanguage, onLanguageChange } from '../i18n.js';
 import { read, type PacketValues } from '../net/packets.js';
 import { createHnmoPanel, type HnmoPanel } from './hnmoPanel.js';
+import { escapeHtml } from './escapeHtml.js';
 
 export interface LeftoverIngredientState {
   group: number;
@@ -189,7 +190,7 @@ export class LeftoversWindow {
         card.className = 'hnmo-card';
         const left = document.createElement('div');
         const title = document.createElement('div');
-        title.innerHTML = `<strong>${isVi() ? r.nameVi : r.nameEn}</strong> <span class="hnmo-badge">${r.successRatePercent}%</span>`;
+        title.innerHTML = `<strong>${escapeHtml(isVi() ? r.nameVi : r.nameEn)}</strong> <span class="hnmo-badge">${Number(r.successRatePercent)}%</span>`;
         const sub = document.createElement('div');
         sub.className = 'hnmo-muted';
         const ingText = r.inputs.map((i) => `${isVi() ? i.nameVi : i.nameEn} (${i.have}/${i.count})`).join(' · ');
@@ -222,7 +223,7 @@ export class LeftoversWindow {
         card.className = 'hnmo-card';
         const left = document.createElement('div');
         const title = document.createElement('div');
-        title.innerHTML = `<strong>${isVi() ? o.nameVi : o.nameEn}</strong>`;
+        title.innerHTML = `<strong>${escapeHtml(isVi() ? o.nameVi : o.nameEn)}</strong>`;
         const sub = document.createElement('div');
         sub.className = 'hnmo-muted';
         sub.textContent = tx(`In bag: ${o.have}/${o.inputCount}`, `Trong túi: ${o.have}/${o.inputCount}`);

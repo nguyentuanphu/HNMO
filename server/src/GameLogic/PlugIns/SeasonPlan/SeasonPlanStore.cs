@@ -33,7 +33,6 @@ public sealed class SeasonPlanStore
     private const string SectionKey = "seasonPlan";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private SeasonPlanStore(HnmoStateStore store)
@@ -57,7 +56,7 @@ public sealed class SeasonPlanStore
     /// <returns>Projected result.</returns>
     public TResult Read<TResult>(Func<SeasonPlanStoreData, TResult> reader)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<SeasonPlanStoreData>(SectionKey, JsonOptions) ?? new SeasonPlanStoreData();
             return reader(data);
@@ -70,7 +69,7 @@ public sealed class SeasonPlanStore
     /// <returns>Result.</returns>
     public TResult Mutate<TResult>(Func<SeasonPlanStoreData, (bool Changed, TResult Result)> mutator)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<SeasonPlanStoreData>(SectionKey, JsonOptions) ?? new SeasonPlanStoreData();
             var (changed, result) = mutator(data);

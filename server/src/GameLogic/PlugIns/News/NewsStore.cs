@@ -134,7 +134,7 @@ public sealed class NewsStore
     /// <returns>Cloned post list.</returns>
     public IReadOnlyList<NewsPost> ListAll()
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._posts.Values
                 .OrderByDescending(p => p.IsPinned)
@@ -152,7 +152,7 @@ public sealed class NewsStore
     public IReadOnlyList<NewsPost> ListPublished(DateTime nowUtc, int maxCount = 20)
     {
         var limit = Math.Clamp(maxCount, 1, 100);
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._posts.Values
                 .Where(p => p.PublishAtUtc <= nowUtc)
@@ -175,7 +175,7 @@ public sealed class NewsStore
             return null;
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._posts.TryGetValue(id.Trim(), out var post) ? Clone(post) : null;
         }
@@ -221,7 +221,7 @@ public sealed class NewsStore
         var publishUtc = input.PublishAtUtc == default ? nowUtc : DateTime.SpecifyKind(input.PublishAtUtc, DateTimeKind.Utc);
         var id = string.IsNullOrWhiteSpace(input.Id) ? Guid.NewGuid().ToString("N") : input.Id.Trim();
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var createdAt = this._posts.TryGetValue(id, out var existing) ? existing.CreatedAtUtc : nowUtc;
             var saved = new NewsPost
@@ -257,7 +257,7 @@ public sealed class NewsStore
         }
 
         var key = id.Trim();
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             if (!this._posts.Remove(key))
             {

@@ -180,7 +180,6 @@ public sealed class MarketStore
     private const string SectionKey = "itemMarket";
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
 
-    private readonly object _gate = new();
     private readonly HnmoStateStore _store;
 
     private MarketStore(HnmoStateStore store)
@@ -204,7 +203,7 @@ public sealed class MarketStore
     /// <returns>Projected result.</returns>
     public TResult Read<TResult>(Func<MarketStoreData, TResult> reader)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<MarketStoreData>(SectionKey, JsonOptions) ?? new MarketStoreData();
             return reader(data);
@@ -217,7 +216,7 @@ public sealed class MarketStore
     /// <returns>Outcome.</returns>
     public TResult Mutate<TResult>(Func<MarketStoreData, (bool Changed, TResult Result)> mutator)
     {
-        lock (this._gate)
+        lock (this._store.SyncRoot)
         {
             var data = this._store.ReadSection<MarketStoreData>(SectionKey, JsonOptions) ?? new MarketStoreData();
             var (changed, result) = mutator(data);

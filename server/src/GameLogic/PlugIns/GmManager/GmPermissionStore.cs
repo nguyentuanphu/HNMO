@@ -49,7 +49,7 @@ public sealed class GmPermissionStore
     {
         get
         {
-            lock (this._gate)
+            lock (this._stateStore?.SyncRoot ?? this._gate)
             {
                 return this._state.RequireListedForGmCommands;
             }
@@ -57,7 +57,7 @@ public sealed class GmPermissionStore
 
         set
         {
-            lock (this._gate)
+            lock (this._stateStore?.SyncRoot ?? this._gate)
             {
                 this._state.RequireListedForGmCommands = value;
                 this.PersistSettingsLocked();
@@ -69,7 +69,7 @@ public sealed class GmPermissionStore
     /// <returns>All configured GM assignments.</returns>
     public IReadOnlyList<GmAssignment> ListAssignments()
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._state.Assignments.Values
                 .OrderBy(a => a.CharacterName, StringComparer.OrdinalIgnoreCase)
@@ -88,7 +88,7 @@ public sealed class GmPermissionStore
             return null;
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._state.Assignments.TryGetValue(key, out var item) ? item : null;
         }
@@ -105,7 +105,7 @@ public sealed class GmPermissionStore
             throw new ArgumentException("Character name is required.", nameof(assignment));
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             assignment.UpdatedAtUtc = DateTime.UtcNow;
             this._state.Assignments[key] = assignment;
@@ -130,7 +130,7 @@ public sealed class GmPermissionStore
             return false;
         }
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             var removed = this._state.Assignments.Remove(key);
             if (removed)
@@ -153,7 +153,7 @@ public sealed class GmPermissionStore
     /// <returns>Audit entries.</returns>
     public IReadOnlyList<GmCommandAuditEntry> ListAuditEntries(int limit = 100)
     {
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             return this._state.Audits
                 .OrderByDescending(a => a.TimestampUtc)
@@ -179,7 +179,7 @@ public sealed class GmPermissionStore
         bool allowed;
         string outcome;
 
-        lock (this._gate)
+        lock (this._stateStore?.SyncRoot ?? this._gate)
         {
             if (this._state.Assignments.TryGetValue(key, out var assignment))
             {

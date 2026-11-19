@@ -74,8 +74,18 @@ public class EventAlertsPageTests
             Assert.That(onJson, Does.Not.Contain("SECRET_TOKEN"));
 
             var (uaPub, _) = WebPushCrypto.GenerateVapidKeyPair();
-            var subRes = await controller.SubscribeAsync(new WebsiteEventAlertsController.SubscribeAlertRequest(
+
+            // Only the browsers' push services are taken: the server must not be made to call any address.
+            var refused = await controller.SubscribeAsync(new WebsiteEventAlertsController.SubscribeAlertRequest(
                 "https://push.example/sub-1",
+                uaPub,
+                "YWFhYWFhYWFhYWFhYWFhYQ",
+                "vi",
+                ["world_boss"])).ConfigureAwait(false);
+            Assert.That(refused, Is.InstanceOf<BadRequestObjectResult>());
+
+            var subRes = await controller.SubscribeAsync(new WebsiteEventAlertsController.SubscribeAlertRequest(
+                "https://fcm.googleapis.com/fcm/send/sub-1",
                 uaPub,
                 "YWFhYWFhYWFhYWFhYWFhYQ",
                 "vi",
@@ -84,7 +94,7 @@ public class EventAlertsPageTests
             Assert.That(JsonSerializer.Serialize(subRes!.Value), Does.Contain("\"subscriberCount\":1"));
 
             var unsubRes = await controller.UnsubscribeAsync(
-                new WebsiteEventAlertsController.UnsubscribeAlertRequest("https://push.example/sub-1"))
+                new WebsiteEventAlertsController.UnsubscribeAlertRequest("https://fcm.googleapis.com/fcm/send/sub-1"))
                 .ConfigureAwait(false) as OkObjectResult;
             Assert.That(JsonSerializer.Serialize(unsubRes!.Value), Does.Contain("\"removed\":true"));
         }
