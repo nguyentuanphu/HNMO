@@ -307,7 +307,7 @@
     <value>Cấu hình phím</value>
   </data>
   <data name="Character_MuHelperConfiguration_Caption" xml:space="preserve">
-    <value>Cấu hình MU Helper</value>
+    <value>Cấu hình trợ lý tự động đánh</value>
   </data>
   <data name="Character_StoreName_Caption" xml:space="preserve">
     <value>Tên cửa hàng</value>

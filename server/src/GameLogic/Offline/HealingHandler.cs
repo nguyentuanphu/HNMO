@@ -53,7 +53,7 @@ public sealed class HealingHandler
     /// Initializes a new instance of the <see cref="HealingHandler"/> class.
     /// </summary>
     /// <param name="player">The offline player.</param>
-    /// <param name="config">The MU helper settings.</param>
+    /// <param name="config">The auto-play helper settings.</param>
     public HealingHandler(OfflinePlayer player, IMuHelperSettings? config)
     {
         this._player = player;

@@ -523,7 +523,7 @@
     <value>Đang cầm chùy</value>
   </data>
   <data name="Name_IsMUHelperactive" xml:space="preserve">
-    <value>MU Helper đang bật</value>
+    <value>Trợ lý tự động đánh đang bật</value>
   </data>
   <data name="Name_IsOneHandedStaffEquipped" xml:space="preserve">
     <value>Đang cầm gậy một tay</value>

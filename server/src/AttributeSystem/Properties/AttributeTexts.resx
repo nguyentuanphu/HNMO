@@ -523,7 +523,7 @@
     <value>Is Mace Equipped</value>
   </data>
   <data name="Name_IsMUHelperactive" xml:space="preserve">
-    <value>Is MU Helper active</value>
+    <value>Is the auto-play helper active</value>
   </data>
   <data name="Name_IsOneHandedStaffEquipped" xml:space="preserve">
     <value>Is One Handed Staff Equipped</value>

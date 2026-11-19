@@ -166,16 +166,16 @@
     <value>Mit dem ausgerüsteten Gegenstand '{0}' können Sie das Event nicht betreten.</value>
   </data>
   <data name="MuHelperAlreadyRunning" xml:space="preserve">
-    <value>Der MU Helper läuft bereits.</value>
+    <value>Der Auto-Play-Helfer läuft bereits.</value>
   </data>
   <data name="MuHelperMinimumLevel" xml:space="preserve">
-    <value>Der MU Helper kann ab Level {0} verwendet werden.</value>
+    <value>Der Auto-Play-Helfer kann ab Level {0} verwendet werden.</value>
   </data>
   <data name="MuHelperMaximumLevel" xml:space="preserve">
-    <value>Der MU Helper kann ab Level {0} nicht mehr verwendet werden.</value>
+    <value>Der Auto-Play-Helfer kann ab Level {0} nicht mehr verwendet werden.</value>
   </data>
   <data name="MuHelperRequiresMoney" xml:space="preserve">
-    <value>Der MU Helper benötigt {0} Zen.</value>
+    <value>Der Auto-Play-Helfer benötigt {0} Zen.</value>
   </data>
   <data name="AlreadyInDuel" xml:space="preserve">
     <value>Sie befinden sich bereits in einem Duell.</value>
@@ -607,10 +607,10 @@
     <value>Hoppla, beim Senden des Briefs ist ein Fehler aufgetreten.</value>
   </data>
   <data name="MuHelperIsDisabled" xml:space="preserve">
-    <value>Der MU Helper ist deaktiviert</value>
+    <value>Der Auto-Play-Helfer ist deaktiviert</value>
   </data>
   <data name="MuHelperCantHandleStatus" xml:space="preserve">
-    <value>Der MU Helper kann diesen Status nicht verarbeiten: {0}</value>
+    <value>Der Auto-Play-Helfer kann diesen Status nicht verarbeiten: {0}</value>
   </data>
   <data name="PartyNotPossibleDuringEvent" xml:space="preserve">
     <value>Während dieses Events ist keine Party möglich.</value>
@@ -766,7 +766,7 @@
     <value>Es ist kein Charakter ausgewählt.</value>
   </data>
   <data name="OfflineLevelingMuHelperNotRunning" xml:space="preserve">
-    <value>Der MU Helper muss laufen, um Offline-Leveln zu starten.</value>
+    <value>Der Auto-Play-Helfer muss laufen, um Offline-Leveln zu starten.</value>
   </data>
   <data name="StatResetNotEnabled" xml:space="preserve">
     <value>Das Zurücksetzen der Statuswerte ist nicht aktiviert.</value>

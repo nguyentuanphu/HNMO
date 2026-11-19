@@ -142,7 +142,7 @@ public sealed class CombatHandler
     /// Initializes a new instance of the <see cref="CombatHandler"/> class.
     /// </summary>
     /// <param name="player">The offline player.</param>
-    /// <param name="config">The MU helper settings.</param>
+    /// <param name="config">The auto-play helper settings.</param>
     /// <param name="movementHandler">The movement handler.</param>
     public CombatHandler(OfflinePlayer player, IMuHelperSettings? config, MovementHandler movementHandler)
     {

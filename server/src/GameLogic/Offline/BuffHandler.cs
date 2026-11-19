@@ -34,7 +34,7 @@ public sealed class BuffHandler
     /// Initializes a new instance of the <see cref="BuffHandler"/> class.
     /// </summary>
     /// <param name="player">The offline player.</param>
-    /// <param name="config">The MU Helper configuration.</param>
+    /// <param name="config">The auto-play helper configuration.</param>
     public BuffHandler(OfflinePlayer player, IMuHelperSettings? config)
     {
         this._player = player;
