@@ -202,7 +202,16 @@ export class CountdownLine {
     if (text === this.model.countdown && (this.doc || !text)) return;
     this.model.countdown = text;
     if (this.doc) { this.doc.update(); return; }
-    if (!text || this.opening) return;
+    if (text) this.prepare();
+  }
+
+  /**
+   * Opens hud_status.rml before a countdown needs it, as the desktop has it with the HUD: loading it on the first
+   * countdown took seconds on a slow computer, so the line showed only after its first seconds had passed. With
+   * no countdown the line stays hidden (its data-if).
+   */
+  prepare(): void {
+    if (this.doc || this.opening) return;
     this.opening = openDocument('hud_status', this.model, { parent: document.body }).then((doc) => {
       this.doc = doc;
       doc.host.style.zIndex = '12';
@@ -418,6 +427,8 @@ export function setUpEvents(options: EventSetupOptions): EventSystem {
     if (slot < FIRST_BAG_SLOT || (options.inventory.openWindow !== null && MERCHANT_OR_VAULT.includes(options.inventory.openWindow))) return false;
     return events.useTicket(slot, item);
   };
+  // The countdown line's document is ready before the first countdown (CountdownLine.prepare).
+  countdown.prepare();
   // Every frame, as the desktop renders them: the time window and the countdown line.
   const frame = () => {
     timer.show(events.timer());
