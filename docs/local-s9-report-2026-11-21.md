@@ -183,8 +183,41 @@ Object3/Object113.bmd        s9=200 29932  base=404      (404 in both before the
 Object1/ston03.ktx2          s9=404        base=404      (no KTX2 in the pack: expected)
 ```
 
-**Not done: logging in and walking Lorencia and Devias.** The game server and database ports were held by the
-other HNMO folder, and stopping it was not mine to do. So there is no browser request list, no console
-errors and no screenshots this time. With that folder closed, the next step is: `Start HNMO.bat` in
-`<scratch>/HNMO-pkg-s9p`, Playwright with the GPU (`--use-angle=d3d11`), log in as `testgm` in a Season 9
-world, walk Lorencia and `/move devias`, and list the `/data/s9/` requests that fail in every form.
+### Walk in a Season 9 world
+
+Once the owner closed the other folder, `Start HNMO.bat` in `<scratch>/HNMO-pkg-s9p` started everything. The
+folder's only world (`main`) was switched to Season 9 in the admin panel (Worlds → Edit → Season 9 → Save:
+"Saved world settings."). It is a throwaway test folder, so no new world or database was made, and
+`/website/data` then gave `main s9`. A Playwright script (headless Chromium on the GPU,
+`--use-angle=d3d11`, final pack) logged in as `testgm` and:
+* clicked a loop of six ground points in Lorencia (`lorencia.png`);
+* went `/move devias` and walked the same loop (`devias.png`, 60 fps);
+* went `/move noria` too, since Task 1's list has Noria names (`noria.png`).
+
+```
+entered {"map":0,...}
+requests 1349 console 192
+statuses {"200":1187,"206":3,"404":79,"failed:net::ERR_ABORTED":80} unique 1185
+```
+
+Grouping the `/data/s9/` requests by path without extension gives 36 paths with no 200 in any form. After
+checking each:
+
+| paths | map | why | new vs Task 1? |
+|---|---|---|---|
+| `Music/main_theme.mp3`, `Music/devias.mp3`, `Music/noria.mp3` | all | 206 Partial Content (the audio element streams with a range). They are **not failures**. | – |
+| 24 `Skill/…` effect textures (`blur02`, `chrome01`, `damage1`, `flare`, `shockwave`, `volcano_stone`, …) | Lorencia | The effect loader asks `Effect` and `Skill`; every one of these got 200 from `Effect/` (same as `twlighthik01`, which got 200 from `Skill/`). **Expected misses.** | new names, same kind as `Effect/twlighthik01` |
+| `Effect/twlighthik01` | Lorencia | answered by `Skill/` (200) | in Task 1 |
+| `Object3/sword14`, `sword11`, `sword06`, `sword03`, `shield05`, `hound_sword1`, `hound_shield1` | Devias | item textures of `Object3/Object102.bmd` / `Object105.bmd`, only in `Item/`. **Real**: the console says `Texture missing: sword14.jpg in Object3` etc. (9 warnings). | in Task 1 |
+| `World4/TileGrass02` | Noria | in neither season. **Real but expected.** | in Task 1 |
+
+The 80 `net::ERR_ABORTED` are the browser dropping the rest of a 404 response or a range request; each one has
+a 404 or 206 for the same path. `Object4/itp01`, `World4/TileGrass01` and the other "not shipped" files gave
+200 (the Task 2 fix). **Nothing new fails**: every real failure is one of Task 1's names.
+
+Console: no page errors. Apart from the 9 `Texture missing` warnings above, there were only the browser's
+"Failed to load resource: 404" lines for the misses in the table, two `Permissions-Policy` header warnings
+(`join-ad-interest-group`, `run-ad-auction`) and "Service Worker registration blocked by Playwright" (on
+purpose).
+
+Screenshots: `docs/screenshots/local-s9-2026-11-21/lorencia.png`, `devias.png`, `noria.png`.
