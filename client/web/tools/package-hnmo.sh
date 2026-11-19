@@ -86,6 +86,9 @@ if [ -d "$OUT/server/wwwroot" ]; then
       --pack-icons "$ITEM_ICONS_DIR" "$OUT/server/wwwroot/_content/HNMO.Web.ItemEditor/img/items.zip"
     rm -rf "$ITEM_ICONS_DIR"
   fi
+  # The server's static asset manifest still names the deleted files; without this the admin panel
+  # gets empty scripts (integrity error, no styles, nothing saves).
+  node "$WEB/tools/prune-static-endpoints.mjs" "$OUT/server"
   SERVER_WWWROOT_AFTER_FILES="$(find "$OUT/server/wwwroot" -type f | wc -l | tr -d ' ')"
   SERVER_WWWROOT_AFTER_MB="$(du -sm "$OUT/server/wwwroot" | awk '{print $1}')"
 fi
