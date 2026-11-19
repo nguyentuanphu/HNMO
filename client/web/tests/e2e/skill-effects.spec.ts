@@ -392,6 +392,11 @@ test('effect light reaches the characters in it', async ({ page }) => {
   test.setTimeout(3 * 60_000);
   await enterWorld(page, 'test400');
   await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
+  // In town, out of the monsters' reach: the skill cases before this one leave the account at the hunting spot, where
+  // the monsters' hits keep putting debuffs (and their tint) on the hero.
+  await page.evaluate(() => (window as unknown as Win).__game.online.say('/move lorencia'));
+  await expect.poll(() => game(page, (g) => !g.online.hero.isWalking && ![...g.online.characters.values()]
+    .some((c) => c.kind === 'monster' && !c.dead && Math.hypot(c.cell.x - g.online.hero.cell.x, c.cell.y - g.online.hero.cell.y) < 10)), { timeout: 60_000 }).toBe(true);
   // A known start, as the other cases set the hero's buffs: no buff or debuff left from an earlier test of the
   // account (a debuff colours the body with its own tint, which the ground's light then doesn't reach).
   await page.evaluate(() => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, []); });
