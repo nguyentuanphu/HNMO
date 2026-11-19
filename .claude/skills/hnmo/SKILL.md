@@ -432,3 +432,8 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   tickets and keys stack free; jewels, boxes/quest items and crafting materials stack after a coin unlock; up to
   255 per slot; in the vault AND the bag. Plan: `docs/plans/vault-stacking-pages-2026-11-20.md`.
 - When the owner says "give me more options", list more choices in the next pop-up instead of deciding.
+- (07:10) Stack unlocks per kind, 500 WCoinC each; extra vault page 200 WCoinC; web only (desktop later).
+- "MU Helper" texts: rename all to "Auto play" (VI "Tự động chơi").
+- Admin path through the website: a Host setting; a fresh folder gets a random hard-to-guess path shown to the host.
+- Market/escrow (audit 1.4): do the full fix, keeping the real item in a system storage (like vault pages).
+- Season 9 new classes: local Claude checks the owner's Season 9 data for them.

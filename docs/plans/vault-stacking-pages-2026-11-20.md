@@ -15,6 +15,12 @@
   admin panel.
 - **Where:** the vault **and the bag**.
 
+Second pop-up (07:10 Sydney):
+- **Unlocks:** each kind is unlocked separately (jewels; boxes and quest items; crafting materials).
+- **Default prices:** a stack unlock costs 500, an extra vault page 200, both paid in **WCoin (C)**; changeable in
+  the admin panel.
+- **Desktop client:** **web only** for now.
+
 ## How it works today
 
 - An item stacks when it isn't wearable and its definition's durability is above 1 (`ItemExtensions.IsStackable`).
