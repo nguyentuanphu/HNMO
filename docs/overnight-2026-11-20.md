@@ -79,3 +79,22 @@ New draft PRs:
 Still waiting:
 - #96 (rerun of two flaky shards);
 - the local Claude's Jobs 1-3, 5, 6 and 8.
+
+## 00:57
+
+Main Claude's new draft PRs, each tested:
+- #105: coin grants not saved are never counted as given (audit 1.10).
+- #106: spouse warp and Teleport NPC checks (audit 1.10).
+- #107: marriage proposal spam, and a deleted character's marriage (audit 1.10).
+- #108: top-up milestone goods are delivered under the player's lock (audit 1.10).
+- #109: the relay reaches game servers only; no coin balances without a login (audit 2.8).
+- #111: the light effect test waits for the light (it failed CI on the slowest shard).
+- #113: per-account password guessing guard on the website (audit 2.8).
+
+Local Claude's PRs, reviewed:
+- #110 (Job 1, movement and NPC talk): code reviewed. Together with #104, events.spec passed 3/3, where it failed
+  every other run before. The movement tests passed 6/6 (spawn-while-loading, command-window, quests, gens).
+- #112 (Job 2, Lorencia's black slabs: objects the desktop never draws): the list matches the desktop's
+  CreateObject.
+
+Both merge once their CI is green.
