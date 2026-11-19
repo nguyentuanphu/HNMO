@@ -394,6 +394,12 @@ public sealed class MarriagePlugIn :
             return;
         }
 
+        if (HnmoWarpGuard.Refusal(player, spouse.CurrentMap.Definition) is { } refusal)
+        {
+            await this.NotifyPlayerAsync(player, "WarpRefused", refusal.En, refusal.Vi).ConfigureAwait(false);
+            return;
+        }
+
         var gate = new ExitGate
         {
             Map = spouse.CurrentMap.Definition,
