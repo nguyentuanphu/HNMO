@@ -9,7 +9,7 @@ import { enterWorld, expectNoPageErrors } from './helpers.js';
 interface WalkGame {
   mapNumber: number;
   hero: { cell: { x: number; y: number }; isWalking: boolean };
-  online: { playerId: number; goal?: { x: number; y: number } | null; continuedAt?: number; say(text: string): void; walkTo(cell: { x: number; y: number }): boolean };
+  online: { playerId: number; goal?: { x: number; y: number } | null; continuedAt?: number; resumesLeft?: number; say(text: string): void; walkTo(cell: { x: number; y: number }): boolean };
   connection: { dispatch(bytes: Uint8Array): void };
 }
 type Win = Window & { __game: WalkGame };
@@ -56,10 +56,11 @@ test('a long walk goes on after the server puts the hero back a little', async (
       note();
     }
     const to = visited[visited.length - 3];
+    const resumesLeft = g.online.resumesLeft;
     g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
-    return to;
+    return { ...to, resumesLeft };
   }, TOWN.x);
-  expect(await game(page, (g) => g.online.goal ?? null), `the goal is kept after the hero was put back to ${back.x},${back.y}`).toEqual(FIELD);
+  expect(await game(page, (g) => g.online.goal ?? null), `the goal is kept after the hero was put back to ${back.x},${back.y} (resumes left before: ${back.resumesLeft})`).toEqual(FIELD);
   await expect.poll(() => game(page, (g) => (!g.hero.isWalking && !g.online.goal ? `${g.hero.cell.x},${g.hero.cell.y}` : 'walking')), { timeout: 90_000 }).toBe(`${FIELD.x},${FIELD.y}`);
 
   // A big jump (a knock-back, a pull, more than 3 cells) still ends the walk where it puts the hero.

@@ -19,7 +19,7 @@ const MAX_STEPS_PER_WALK = 15;   // the step count is a 4-bit field
 const TALK_DISTANCE = 3;         // cells; the server refuses farther talks
 const TALK_WALK_RETRIES = 3;     // walks toward an NPC after the first one ended out of reach
 const RESUME_DISTANCE = 3;       // cells; a walk goes on after the server put the hero back at most this far
-const WALK_RESUMES = 3;          // times per walk
+const WALK_RESUMES = 3;          // corrections in a row a walk goes on after
 const RESUME_WINDOW_MS = 2000;   // a correction this soon after the next part of a walk was sent answers it
 const PING_INTERVAL_MS = 20000;
 
@@ -101,8 +101,10 @@ export class OnlineWorld {
   goal?: Cell | null;
   /** Between a map change and the client's ready packet: walks wait (see mapChanged). */
   changingMap = false;
-  /** How many more times a walk to the goal goes on after the server put the hero back a little (see moved). */
+  /** How many more times in a row a walk goes on after the server put the hero back a little (see moved). */
   resumesLeft = 0;
+  /** The last part of the walk was answered by a correction (see moved); a part walked to its end refills resumesLeft. */
+  resumedSinceLastPart = false;
   /** When the hero last sent the next part of a walk (performance.now()), see moved. */
   continuedAt = -Infinity;
   /** The player the hero follows (the command window's Follow, g_iFollowCharacter); a walk of the player's own ends it. */
@@ -237,7 +239,7 @@ export class OnlineWorld {
       const back = Math.max(Math.abs(packet.PositionX - this.hero.cell.x), Math.abs(packet.PositionY - this.hero.cell.y));
       const afterNextPart = performance.now() - this.continuedAt <= RESUME_WINDOW_MS;
       if (!afterNextPart || back > RESUME_DISTANCE || this.resumesLeft <= 0) this.goal = null;
-      else this.resumesLeft--;
+      else { this.resumesLeft--; this.resumedSinceLastPart = true; }
     }
     const character = id === this.playerId ? this.hero : this.characters.get(id);
     if (character) { character.placeAt(packet.PositionX, packet.PositionY); return; }
@@ -315,6 +317,7 @@ export class OnlineWorld {
     if (!keepFollow) this.followId = null;
     this.goal = { x: cell.x, y: cell.y };
     this.resumesLeft = WALK_RESUMES;
+    this.resumedSinceLastPart = false;
     this.continuedAt = -Infinity;
     if (this.changingMap) return true; // walks once the new map is ready (update)
     return this.walkNextPart();
@@ -358,7 +361,13 @@ export class OnlineWorld {
         this.walkTo(followed.cell, { keepFollow: true });
       }
     }
-    if (this.goal && !this.hero.isWalking && !this.changingMap && this.walkNextPart()) this.continuedAt = performance.now();
+    if (this.goal && !this.hero.isWalking && !this.changingMap) {
+      // The limit is on corrections in a row: a slow server refuses a part now and then over a long walk, and a part
+      // walked to its end (no correction since it went out) gives the walk its resumes back.
+      if (!this.resumedSinceLastPart) this.resumesLeft = WALK_RESUMES;
+      this.resumedSinceLastPart = false;
+      if (this.walkNextPart()) this.continuedAt = performance.now();
+    }
     if (this.talkTarget && !this.hero.isWalking && !this.goal && !this.closeEnoughToTalk(this.talkTarget)
       && this.talkWalksLeft > 0 && this.characters.has(this.talkTarget.id)) {
       // Still out of reach with nothing walking: the server put the hero back (its own position after a walk it
