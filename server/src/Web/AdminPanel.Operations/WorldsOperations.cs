@@ -4,6 +4,7 @@
 
 namespace HNMO.Web.AdminPanel.Operations;
 
+using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 using System.Threading;
 using HNMO.DataModel.Configuration;
@@ -21,11 +22,13 @@ using HNMO.Persistence.Worlds;
 /// <param name="serverProvider">Running server provider.</param>
 /// <param name="persistenceProvider">Default persistence context provider.</param>
 /// <param name="executor">Authorized audit executor.</param>
+/// <param name="loginServer">Reserves the account while one of its characters moves; refuses when it is online.</param>
 public sealed class WorldsOperations(
     WorldRegistryService worldRegistry,
     IServerProvider serverProvider,
     IPersistenceContextProvider persistenceProvider,
-    AdminOperationExecutor executor)
+    AdminOperationExecutor executor,
+    ILoginServer? loginServer = null)
 {
     /// <summary>Gets all configured worlds synchronized with active servers.</summary>
     /// <returns>Worlds list.</returns>
@@ -139,8 +142,27 @@ public sealed class WorldsOperations(
             new { sourceWorldId, targetWorldId, accountLogin, characterName },
             async _ =>
             {
-                var record = await worldRegistry.TransferCharacterOnceAsync(sourceWorldId, targetWorldId, accountLogin, characterName, "admin", cancellationToken).ConfigureAwait(false);
-                return AdminReadResult.From(new { record.TransferId, record.SourceWorldId, record.TargetWorldId, record.CharacterName, record.TransferredAtUtc });
+                // The account must be offline, and stays unable to log in while its character moves: a character
+                // in play would be copied with stale progress, and a save after the move could bring it back.
+                var login = accountLogin.Trim();
+                var reservation = RandomNumberGenerator.GetInt32(byte.MaxValue + 1, int.MaxValue);
+                if (loginServer is not null && !await loginServer.TryReserveAccountAsync(login, reservation).ConfigureAwait(false))
+                {
+                    throw new AdminOperationException("The account is logged in. Log it out before moving one of its characters.", AdminOperationErrorKind.Conflict);
+                }
+
+                try
+                {
+                    var record = await worldRegistry.TransferCharacterOnceAsync(sourceWorldId, targetWorldId, accountLogin, characterName, "admin", cancellationToken).ConfigureAwait(false);
+                    return AdminReadResult.From(new { record.TransferId, record.SourceWorldId, record.TargetWorldId, record.CharacterName, record.TransferredAtUtc });
+                }
+                finally
+                {
+                    if (loginServer is not null)
+                    {
+                        await loginServer.ReleaseAccountReservationAsync(login, reservation).ConfigureAwait(false);
+                    }
+                }
             },
             cancellationToken);
 

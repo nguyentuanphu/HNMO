@@ -149,4 +149,25 @@ public sealed class WorldsPageTests
         Assert.That(servers[5].ExperienceRate, Is.EqualTo(3f));
         Assert.That(servers[0].ExperienceRate, Is.EqualTo(1f));
     }
+
+    /// <summary>
+    /// A character is not moved while its account is logged in: the login server refuses the reservation, and the
+    /// world registry is never asked to move it.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task ATransferIsRefusedWhileTheAccountIsLoggedInAsync()
+    {
+        var serverProvider = new Mock<IServerProvider>();
+        serverProvider.SetupGet(p => p.Servers).Returns(Array.Empty<IManageableServer>());
+        var loginServer = new Mock<ILoginServer>();
+        loginServer.Setup(l => l.TryReserveAccountAsync("alice", It.IsAny<int>())).ReturnsAsync(false);
+        var ops = new WorldsOperations(this._registry, serverProvider.Object, new InMemoryPersistenceContextProvider(), AdminOperationTestServices.CreateExecutor(), loginServer.Object);
+
+        var refusal = Assert.ThrowsAsync<AdminOperationException>(async () => await ops.TransferCharacterOnceAsync("main", "s2", "alice", "Hero").ConfigureAwait(false));
+
+        Assert.That(refusal!.Message, Does.Contain("logged in"));
+        Assert.That(this._registry.GetTransfers(), Is.Empty);
+        loginServer.Verify(l => l.ReleaseAccountReservationAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+    }
 }
