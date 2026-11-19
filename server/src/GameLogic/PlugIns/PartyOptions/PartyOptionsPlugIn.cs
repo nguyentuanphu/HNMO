@@ -187,7 +187,9 @@ public sealed class PartyOptionsPlugIn :
 
         var engine = this.GetEngine();
         var mapName = player.CurrentMap?.Definition.Name.ValueInNeutralLanguage ?? "Lorencia";
-        var spotName = string.IsNullOrWhiteSpace(spot) ? mapName : spot.Trim();
+        // Shown to every player who opens the party list: no markup or control characters, whatever the client does with it.
+        var cleanSpot = new string((spot ?? string.Empty).Where(c => !char.IsControl(c) && c is not ('<' or '>' or '&' or '"' or '\'' or '`')).ToArray()).Trim();
+        var spotName = cleanSpot.Length == 0 ? mapName : cleanSpot;
         var cleanPass = password?.Trim() ?? string.Empty;
         var ad = new PartyAdvertisement
         {
