@@ -113,7 +113,7 @@ import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { chooseServerBySeason } from './ui/seasonColumns.js';
-import { fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
+import { type ServerListEntry, fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
 import type { Character } from './game/characters.js';
@@ -1075,25 +1075,55 @@ export function describeServerChoice(id: number, load: number, meta?: WebsiteSer
     : `${title}${vipBadge}<small>${details.join(' · ')}</small>`;
 }
 
+/** A game server of either season's connect server. */
+interface SeasonServer extends ServerListEntry {
+  connect: { host: string; port: number };
+  season: SeasonKey;
+  meta?: WebsiteServerMeta;
+}
+
+/** Season 9's connect server, when its program runs (the web server's seasons.json); null otherwise. */
+async function seasonNineConnectServer(seasonSix: { host: string; port: number }): Promise<{ host: string; port: number } | null> {
+  try {
+    const response = await fetch('/data/seasons.json', { cache: 'no-store', signal: AbortSignal.timeout(1500) });
+    if (!response.ok) return null;
+    const data: unknown = await response.json();
+    const connect = typeof data === 'object' && data !== null && 'connect' in data ? (data as { connect: unknown }).connect : null;
+    const port = typeof connect === 'object' && connect !== null && 's9' in connect ? (connect as { s9: unknown }).s9 : null;
+    return typeof port === 'number' && port > 0 && port !== seasonSix.port ? { host: seasonSix.host, port } : null;
+  } catch {
+    return null; // an older web server: Season 6.3 only
+  }
+}
+
 async function playOnline(settings: LoginSettings, ticket?: string): Promise<void> {
   state.connection?.close();
   state.connection = undefined;
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
-  const [servers, serverMeta] = await Promise.all([
+  // Season 9 runs as its own program with its own connect server (seasons.json says its port); its servers are
+  // listed next to Season 6.3's, each asking its own connect server for the address.
+  const seasonNineConnect = await seasonNineConnectServer(connectServer);
+  const [seasonSixServers, seasonNineServers, serverMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
+    seasonNineConnect ? fetchServerList(settings.relay, seasonNineConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
     fetchServerMetadata(),
   ]);
+  const servers: SeasonServer[] = [
+    ...seasonSixServers.map((s) => ({ ...s, connect: connectServer, season: serverMeta.get(s.id)?.season ?? 's6', meta: serverMeta.get(s.id) })),
+    // A Season 9 program's server ids start at 0 again: the website's world data names them only for Season 9 worlds.
+    ...seasonNineServers.map((s) => ({ ...s, connect: seasonNineConnect!, season: 's9' as const, meta: serverMeta.get(s.id)?.season === 's9' ? serverMeta.get(s.id) : undefined })),
+  ];
   if (!servers.length) throw new Error('The connect server lists no game servers.');
   // Servers of one world stand together, in the order of the worlds list.
-  servers.sort((a, b) => (serverMeta.get(a.id)?.worldOrder ?? 0) - (serverMeta.get(b.id)?.worldOrder ?? 0) || a.id - b.id);
+  servers.sort((a, b) => (a.meta?.worldOrder ?? 0) - (b.meta?.worldOrder ?? 0) || a.id - b.id);
   const server = servers.length === 1
     ? servers[0]
-    : await chooseServerBySeason(ui.servers, servers, (s) => serverMeta.get(s.id)?.season, (s) => describeServerChoice(s.id, s.load, serverMeta.get(s.id), currentLanguage() === 'vi', true), currentLanguage() === 'vi');
+    : await chooseServerBySeason(ui.servers, servers, (s) => s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi');
   ui.servers.hidden = true;
   // The game data of the picked world's season, before anything of the world is loaded.
-  setSeason(serverMeta.get(server.id)?.season ?? 's6');
-  const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
+  setSeason(server.season);
+  const address = await fetchGameServerAddress(settings.relay, server.connect, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
   const connection = ticket
     ? await loginWithTicket(settings.relay, address, settings.username, ticket)
