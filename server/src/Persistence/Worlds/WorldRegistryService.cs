@@ -396,7 +396,26 @@ public sealed class WorldRegistryService
             var sourceCharId = srcCharacter.Id;
             srcAccount.Characters.Remove(srcCharacter);
             await srcContext.DeleteAsync(srcCharacter).ConfigureAwait(false);
-            await srcContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            var deletedSource = false;
+            try
+            {
+                deletedSource = await srcContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                if (!deletedSource)
+                {
+                    // The original is still in the source world: take the copy back, so the character is never in both.
+                    dstAccount.Characters.Remove(copiedChar);
+                    await dstContext.DeleteAsync(copiedChar).ConfigureAwait(false);
+                    await dstContext.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+                }
+            }
+
+            if (!deletedSource)
+            {
+                throw new IOException("The character could not be removed from the source world; the transfer was undone.");
+            }
 
             var record = new WorldTransferRecord
             {

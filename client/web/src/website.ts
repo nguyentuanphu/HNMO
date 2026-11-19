@@ -292,7 +292,7 @@ const copy = {
     registerTitle: "Create an account",
     loginName: "Account name (3–10 letters or digits)",
     password: "Password (3–20 characters)",
-    email: "E-mail (optional)",
+    email: "Add an e-mail address later on your account page: you confirm it with a code sent to it.",
     registerButton: "Create account",
     googleTitle: "Sign in with Google",
     googleOff: "Google sign-in isn't set up on this server.",
@@ -741,7 +741,7 @@ const copy = {
     registerTitle: "Tạo tài khoản",
     loginName: "Tên tài khoản (3–10 chữ hoặc số)",
     password: "Mật khẩu (3–20 ký tự)",
-    email: "E-mail (không bắt buộc)",
+    email: "Bạn có thể thêm e-mail sau ở trang tài khoản: e-mail được xác nhận bằng mã gửi tới hộp thư.",
     registerButton: "Tạo tài khoản",
     googleTitle: "Đăng nhập bằng Google",
     googleOff: "Máy chủ này chưa bật đăng nhập bằng Google.",
@@ -1340,7 +1340,6 @@ element("register").addEventListener("submit", (event) => {
   void post("/portal/register", {
     loginName: field(form, "loginName"),
     password: (form.elements.namedItem("password") as HTMLInputElement).value,
-    eMail: field(form, "email") || null,
   }).then((answer) => {
     if (answer.error) message("register-message", answer.error, "error");
     else {

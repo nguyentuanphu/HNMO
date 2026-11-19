@@ -1,50 +1,51 @@
-# Antigravity (Windows), 1-2 hours, 2026-11-19 19:00 Sydney
+# Antigravity (Windows), about 1 hour, 2026-11-19 19:35 Sydney
 
 Paste everything below the line into Antigravity.
 
 ---
 
-You test HNMO on this Windows computer. You do not change code. Work in this order and stop when time runs out:
-an unfinished step is fine, a wrong "pass" is not.
+You test HNMO on this Windows computer. You do not change code, except the one script named in step 2.
+Stop when time runs out: an unfinished step is fine, a wrong "pass" is not. Your check3 report is merged (PR #89).
 
-**Setup (10 min)**
-1. `git fetch origin` and `git checkout -B antigravity-check2 origin/claude/hnmo-main-handover-54co2m`.
-2. Close draft PR #86 without merging.
-3. Build the package (Git Bash, same command as last time, **without** `HNMO_S9_DATA_DIR`):
-   `client/web/tools/package-hnmo.sh "<repo>/server" win-x64 "<scratch>/HNMO-pkg"`.
-   The output must contain a line `... routes kept, ... without a file removed`. Copy that line.
-4. Start it with `Start HNMO.bat`. Open `http://127.0.0.1:8095/worlds`: the page must be styled, with no red
-   error in the browser console. Screenshot.
+**1. Setup (5 min)**
+`git fetch origin` and `git checkout -B antigravity-check4 origin/claude/hnmo-main-handover-54co2m`.
 
-**Step A: admin panel saves (30 min)**
-1. `/market`: turn on "Enable Item Market", press Save, reload the page. It must still be on. Screenshot.
-2. `/worlds`: create a second world from a template, Season 9, one free server id. Save. Restart the package.
-   The world is still there. The home page `http://127.0.0.1:8080/` shows both worlds with `S6.3` and `S9`
-   badges. Screenshot.
-3. Set the new world's EXP rate to 3 and save. On `/servers`, the first world's EXP rate has not changed.
-   Screenshot.
+**2. Build the Season 9 pack (15 min)**
+Run these in Git Bash. `<S9 Data>` is the owner's extracted Season 9 `Data` folder.
+```
+node client/web/tools/build-s9-pack.mjs "<S9 Data>" "client/src/bin/Data" "<scratch>/s9-pack" --dry-run
+node client/web/tools/build-s9-pack.mjs "<S9 Data>" "client/src/bin/Data" "<scratch>/s9-pack"
+node --test client/web/tests/build-s9-pack.test.mjs
+```
+Copy the summary table and the test result into the report. If the script crashes on a real file, you may fix
+`client/web/tools/build-s9-pack.mjs` and add a test with made-up bytes to `client/web/tests/build-s9-pack.test.mjs`.
 
-**Step B: trade lock, done properly (40 min)**
-Use two browsers: `test1` and `test2` in Lorencia. The browser console has `window.__game`.
+**3. Package with the pack (20 min)**
+```
+export HNMO_S9_DATA_DIR="<scratch>/s9-pack"
+client/web/tools/package-hnmo.sh "<repo>/server" win-x64 "<scratch>/HNMO-pkg4"
+```
+Report the size of `HNMO-pkg4/Data_S9` (it was 1,217 MB with the whole Season 9 folder) and the build time.
+Start `Start HNMO.bat` and check:
+- `http://127.0.0.1:8080/data/seasons.json` gives `{"s6":true,"s9":true}`;
+- `/data/Player/player.bmd` and `/data/s9/Player/player.bmd` have different sizes;
+- `/data/s9/Local/Mix.bmd` is byte for byte the same as `/data/Local/Mix.bmd`.
 
-For each action below, do it **twice**:
-- first with no trade open: the action must work (this proves your test can see a change);
-- then with a trade open between test1 and test2: the action must change nothing.
-
-| Action | How | What to compare |
-|---|---|---|
-| Jewel Bank deposit | F7, deposit one Jewel of Bless | bank count and bag |
-| Market listing | F6, list one plain item | bag and the market's list of listings (Step A turned the market on) |
-| Chat command | type `/code TEST` | the chat says "Close the trade or crafting window before using a command." |
-
-Cancel the trade at the end: both bags must be as before the trade. Write the before/after numbers in a table.
+**4. Play in a Season 9 world (20 min)**
+On `http://127.0.0.1:8095/worlds`, create a Season 9 world with one free server id (as in check2), save, and restart.
+Log in as `testgm` on that world's server. Walk Lorencia, then `/move devias` and `/move noria`. For each map:
+- take a screenshot;
+- list every `/data/s9/...` request that failed in **every** form (for example `.ktx2`, `.jpg` and `.tga` all
+  404). A `.ktx2` 404 followed by a `.jpg` that loads is expected, not a failure;
+- list any red console error.
+Compare with your check1 list (Devias swords and shields, Noria `TileGrass02`, Lorencia `ston03`).
 
 **Rules**
-- Write `<scratch>` instead of your own folder paths (they contain the owner's user name).
-- No third-party names in anything you write or commit.
-- Do not change code. Do not push to `main`. Do not merge.
-- For every result, give the command or the clicks, plus the last output lines or a screenshot.
+- Write `<scratch>` instead of your own folder paths.
+- No third-party names in anything you write or commit. Never copy a game file into the repository.
+- Do not push to `main`. Do not merge.
+- For every result, give the command or the clicks, plus the output or a screenshot.
 
 **Finish**
-Write `docs/antigravity-report-2026-11-21.md`, with screenshots in `docs/screenshots/antigravity-2026-11-21/`.
-Commit, push `antigravity-check2`, open a **draft** PR into `claude/hnmo-main-handover-54co2m`, and stop.
+Write `docs/antigravity-report-2026-11-23.md`, with screenshots in `docs/screenshots/antigravity-2026-11-23/`.
+Commit, push `antigravity-check4`, open a **draft** PR into `claude/hnmo-main-handover-54co2m`, and stop.

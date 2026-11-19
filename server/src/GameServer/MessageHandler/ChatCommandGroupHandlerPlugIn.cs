@@ -26,6 +26,9 @@ internal class ChatCommandGroupHandlerPlugIn : GroupPacketHandlerPlugIn
     /// </summary>
     internal const byte GroupKey = 0xF5;
 
+    /// <summary>Shared by every game server of the process: a player is on one at a time.</summary>
+    private static readonly HnmoPacketRateLimiter RateLimiter = new();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatCommandGroupHandlerPlugIn" /> class.
     /// </summary>
@@ -54,7 +57,13 @@ internal class ChatCommandGroupHandlerPlugIn : GroupPacketHandlerPlugIn
     {
         const byte firstHnmoSubCode = 2;
         var subTypeIndex = packet.Span[0] % 2 == 1 ? 3 : 4;
-        if (player.BackupInventory is not null && packet.Length > subTypeIndex && packet.Span[subTypeIndex] >= firstHnmoSubCode)
+        var isHnmoPacket = packet.Length > subTypeIndex && packet.Span[subTypeIndex] >= firstHnmoSubCode;
+        if (isHnmoPacket && player.BackupInventory is not null)
+        {
+            return;
+        }
+
+        if (isHnmoPacket && !RateLimiter.TryTake(player))
         {
             return;
         }

@@ -138,6 +138,23 @@ public class MarketEngineTest
         NameVi = "Kiếm Thiên Sứ",
     };
 
+    /// <summary>
+    /// A listing taken back when its item could not leave the bag is gone, nothing is delivered for it, and
+    /// taking it back twice changes nothing.
+    /// </summary>
+    [Test]
+    public void AWithdrawnListingLeavesNoTraceAndNoDelivery()
+    {
+        var engine = this.CreateEngine();
+        var listed = engine.CreateListing("seller1", "Knight", SampleSword(), MarketCurrency.WCoinC, 500, DateTime.UtcNow, out var listing);
+        Assert.That(listed, Is.EqualTo(MarketListResult.Success));
+
+        Assert.That(engine.WithdrawListing(listing!.Id), Is.True);
+        Assert.That(engine.WithdrawListing(listing.Id), Is.False);
+        Assert.That(engine.Store.Read(d => d.Listings.Count), Is.Zero);
+        Assert.That(engine.PeekDeliveries("seller1"), Is.Empty, "the item never left the bag, so nothing is owed");
+    }
+
     private MarketEngine CreateEngine(Action<MarketConfiguration>? configure = null)
     {
         var cfg = new MarketConfiguration

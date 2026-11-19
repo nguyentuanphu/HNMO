@@ -190,16 +190,29 @@ public sealed class WebsiteMarketController(
                 cancellationToken).ConfigureAwait(false);
         }
 
+        // The buyer has paid: from here the purchase is always recorded, even when the seller's payout fails (it
+        // is then logged with its reference, so a later grant of the same sale counts once).
         if (claim.NetAmount > 0)
         {
-            await this._coinService.GrantAsync(
-                listing.SellerLogin,
-                coinType,
-                claim.NetAmount,
-                CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketSale),
-                $"market:{listing.Id}",
-                "HNMO Item Market",
-                cancellationToken).ConfigureAwait(false);
+            try
+            {
+                var (sellerStatus, _) = await this._coinService.GrantAsync(
+                    listing.SellerLogin,
+                    coinType,
+                    claim.NetAmount,
+                    CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketSale),
+                    $"market:{listing.Id}",
+                    "HNMO Item Market",
+                    CancellationToken.None).ConfigureAwait(false);
+                if (sellerStatus is not (CashShopCoinGrantStatus.Created or CashShopCoinGrantStatus.AlreadyGranted))
+                {
+                    logger.LogError("Item Market (website): the seller {Seller} was not paid {Amount} {Coin} for listing {ListingId} ({Status}); grant it with the reference market:{ListingId}.", listing.SellerLogin, claim.NetAmount, coinType, listing.Id, sellerStatus, listing.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Item Market (website): the seller {Seller} was not paid for listing {ListingId}; grant it with the reference market:{ListingId}.", listing.SellerLogin, listing.Id, listing.Id);
+            }
         }
 
         engine.FinalizePurchase(

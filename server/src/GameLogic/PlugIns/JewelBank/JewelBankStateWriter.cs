@@ -13,6 +13,11 @@ using System.Text.Json;
 /// </summary>
 public static class JewelBankStateWriter
 {
+    /// <summary>
+    /// The state sent when the Jewel Bank plug-in is turned off, so the window can say so instead of waiting for an answer.
+    /// </summary>
+    public const string DisabledState = "{\"v\":1,\"enabled\":false,\"jewels\":[],\"pending\":[],\"bagJewels\":[]}";
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         Encoder = JavaScriptEncoder.Default,

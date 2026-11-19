@@ -60,6 +60,19 @@ public sealed class WebsiteAccountEmailController(
 
     private static bool Allowed([NotNullWhen(true)] Account? account) => account is { IsBot: false } && account.State is not (AccountState.Banned or AccountState.TemporarilyBanned);
 
+    /// <summary>
+    /// Tells whether another account already has this address. Google sign-in finds an account by its address, so
+    /// an address must belong to one account only.
+    /// </summary>
+    private async ValueTask<bool> IsAddressTakenAsync(Account account, string address, CancellationToken cancellationToken)
+    {
+        var configuration = await configurations.GetOwnerAsync(Guid.Empty, cancellationToken).ConfigureAwait(false);
+        using var context = persistence.CreateNewPlayerContext(configuration);
+        var (accounts, _) = await context.SearchAccountPageAsync(address, null, 0, 100, cancellationToken).ConfigureAwait(false);
+        return (accounts ?? []).Any(other => !string.Equals(other.LoginName, account.LoginName, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(other.EMail?.Trim(), address, StringComparison.OrdinalIgnoreCase));
+    }
+
     private async ValueTask<IActionResult> HandleAsync(WebsiteEmailRequest request, string operation)
     {
         this.Response.Headers.CacheControl = "no-store";
@@ -128,6 +141,11 @@ public sealed class WebsiteAccountEmailController(
             return this.BadRequest(new { error = "email" });
         }
 
+        if (await this.IsAddressTakenAsync(account, address, cancellationToken).ConfigureAwait(false))
+        {
+            return this.BadRequest(new { error = "email-taken" });
+        }
+
         if (current is not null && now < current.NextSendAtUtc)
         {
             return this.StatusCode(StatusCodes.Status429TooManyRequests, new { error = "mail-wait" });
@@ -160,6 +178,12 @@ public sealed class WebsiteAccountEmailController(
             }
 
             return this.BadRequest(new { error = "code" });
+        }
+
+        // Another account may have confirmed the same address since the code was sent.
+        if (account.EMail != email && await this.IsAddressTakenAsync(account, email, cancellationToken).ConfigureAwait(false))
+        {
+            return this.BadRequest(new { error = "email-taken" });
         }
 
         // Persist recovery intent first. A save with a lost response can then be finalized without changing the email twice.

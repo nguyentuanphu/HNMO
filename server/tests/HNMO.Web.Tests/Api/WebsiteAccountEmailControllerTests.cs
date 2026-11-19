@@ -114,6 +114,29 @@ public class WebsiteAccountEmailControllerTests
         this._login.Verify(s => s.ReleaseAccountReservationAsync("ann", It.IsAny<int>()), Times.Exactly(3));
     }
 
+    /// <summary>
+    /// An address another account already has is refused before any mail is sent: Google sign-in finds an account
+    /// by its address, so it must belong to one account only.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    [Test]
+    public async Task RefusesAnAddressAnotherAccountHasAsync()
+    {
+        using (var players = this._persistence.CreateNewPlayerContext(this._configuration))
+        {
+            var bob = await players.GetAccountByLoginNameAsync("bob", "secret").ConfigureAwait(false);
+            bob!.EMail = "NEW@example.test";
+            await players.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        var answer = await this.SendAsync().ConfigureAwait(false);
+
+        Assert.That(answer, Is.InstanceOf<BadRequestObjectResult>());
+        Assert.That(JsonSerializer.Serialize(((BadRequestObjectResult)answer).Value), Does.Contain("email-taken"));
+        this._mail.Verify(s => s.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        Assert.That(this._account.EMail, Is.EqualTo("old@example.test"));
+    }
+
     /// <summary>Invalid credentials, another account and a banned account cannot confirm this player's code.</summary>
     /// <returns>The test task.</returns>
     [Test]

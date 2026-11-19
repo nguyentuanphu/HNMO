@@ -241,6 +241,19 @@ public sealed class MarketEngine
     }
 
     /// <summary>
+    /// Takes back a listing whose item never left the seller's bag (the listing step failed after the listing was
+    /// stored). Nothing is delivered: the item is still where it was.
+    /// </summary>
+    /// <param name="listingId">The listing created for the failed step.</param>
+    /// <returns><c>true</c> if the listing was still there and is now gone.</returns>
+    public bool WithdrawListing(string listingId) =>
+        this.Store.Mutate(data =>
+        {
+            var removed = data.Listings.RemoveAll(l => l.Id == listingId) > 0;
+            return (removed, removed);
+        });
+
+    /// <summary>
     /// Completes a claimed purchase: queues purchased item for the buyer (if <paramref name="enqueueItemDelivery"/>),
     /// queues net Zen payout (when currency is Zen), and writes the audit log.
     /// </summary>

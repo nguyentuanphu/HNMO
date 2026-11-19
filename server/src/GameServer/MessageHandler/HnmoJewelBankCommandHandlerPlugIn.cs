@@ -7,6 +7,7 @@ namespace HNMO.GameServer.MessageHandler;
 using System.Runtime.InteropServices;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlugIns.JewelBank;
+using HNMO.GameLogic.Views;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
@@ -21,6 +22,9 @@ using HNMO.PlugIns;
 [BelongsToGroup(ChatCommandGroupHandlerPlugIn.GroupKey)]
 internal class HnmoJewelBankCommandHandlerPlugIn : ISubPacketHandlerPlugIn
 {
+    /// <summary>The length of a command without a key: header (4), action, slot and amount (4).</summary>
+    internal const int MinimumLength = 10;
+
     /// <inheritdoc />
     public bool IsEncryptionExpected => false;
 
@@ -30,13 +34,17 @@ internal class HnmoJewelBankCommandHandlerPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc />
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
-        if (player.SelectedCharacter is null || packet.Length < 11)
+        // The key starts at index 10 and is empty for a state request, a deposit-all and a master clear,
+        // so a packet of 10 bytes is complete.
+        if (player.SelectedCharacter is null || packet.Length < MinimumLength)
         {
             return;
         }
 
         if (JewelBankPlugIn.Get(player.GameContext) is not { } plugIn)
         {
+            // Turned off: answer anyway, or the window waits for a state that never comes.
+            await player.InvokeViewPlugInAsync<IHnmoJewelBankViewPlugIn>(p => p.ShowJewelBankAsync(JewelBankStateWriter.DisabledState, requested: true)).ConfigureAwait(false);
             return;
         }
 

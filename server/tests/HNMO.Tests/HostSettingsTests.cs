@@ -127,4 +127,27 @@ public class HostSettingsTests
         var errors = HostSettingsValidator.Validate(new HostSettings());
         Assert.That(errors, Is.Empty);
     }
+
+    /// <summary>
+    /// Folder paths must stay inside the HNMO folder and the server program must be a bare name: the admin panel
+    /// can be reached from the website, and these paths decide where files are written and what is started.
+    /// </summary>
+    [Test]
+    public void PathsOutsideTheHnmoFolderAreRefused()
+    {
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("../save"), Is.True);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("license.hnmo"), Is.True);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("../postgres/bin"), Is.True);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("../../outside"), Is.False);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("a/../../../etc"), Is.False);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("/etc/cron.d"), Is.False);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder("C:\\Windows"), Is.False);
+        Assert.That(HostSettingsValidator.IsInsideInstallFolder(string.Empty), Is.False);
+
+        var settings = new HostSettings { PostgresPath = "/usr/bin", ServerProgram = "../evil", LicenseFilePath = "../../x.hnmo" };
+        var errors = HostSettingsValidator.Validate(settings, checkPortAvailability: false);
+        Assert.That(errors, Has.Some.Contains(nameof(HostSettings.PostgresPath)));
+        Assert.That(errors, Has.Some.Contains(nameof(HostSettings.ServerProgram)));
+        Assert.That(errors, Has.Some.Contains(nameof(HostSettings.LicenseFilePath)));
+    }
 }
