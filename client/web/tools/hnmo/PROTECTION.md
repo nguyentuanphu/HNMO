@@ -107,3 +107,13 @@ prints a clear warning.
   signed manifest means any file they change is detectable by anyone who runs the stock server.
 - The embedded public key lets anyone verify a folder is a genuine, unmodified build; only you,
   holding the private key, can produce a new signed build.
+
+## 5. Next protections (owner's choice, 2026-11-20)
+
+- **Obfuscation of HNMO's own server assemblies** in the package: an open-source .NET obfuscator run by
+  `package-hnmo.sh` on the `HNMO.*` assemblies only; third-party libraries are untouched. Reflection-used types
+  (plug-ins, EF entities, Blazor components, JSON-serialized types) keep their names.
+- **Refuse modified files:** `Integrity:OnMismatch` defaults to `refuse` in a packaged, signed build. Unsigned dev
+  builds still run.
+- **Obfuscation of the web game bundle** (`main.min.js`) beyond minifying, without source maps in the package.
+- Not chosen: requiring a license to host at all (the 10-player default stays).

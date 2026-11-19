@@ -445,3 +445,8 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - Messages for local Claude (owner, 2026-11-20): the owner relays them by hand and can miss some. Send ONE combined,
   copyable message that replaces all earlier unsent ones, and ask in a pop-up whether it was sent. Don't add a new
   message per small change: fold it into the next combined one.
+- (09:20) The owner calls HNMO's server and game proprietary and will share them free, but not to be cracked or
+  misused. Protections chosen: obfuscate HNMO's own server code in the package, refuse to start when a signed
+  package's files were changed, obfuscate the web game in the package. (Not chosen: licence required to host.)
+  Keep third-party license notices; game data isn't the owner's. Remind about multi-player licenses
+  (license.hnmo, sign-license.sh) on 2026-11-21 09:00 Sydney (a scheduled reminder exists).
