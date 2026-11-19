@@ -5215,4 +5215,5 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="SharedSettingsButton" xml:space="preserve"><value>Cài đặt chung</value></data>
   <data name="SharedSettingsButtonHint" xml:space="preserve"><value>Cả hai season: tài khoản, xu, trang web, tin tức, cấm, người quản trị và cài đặt máy chủ.</value></data>
   <data name="SeasonBadgeTitle" xml:space="preserve"><value>Trang quản trị này cài đặt {0}</value></data>
+  <data name="HostSettingsHostOnly" xml:space="preserve"><value>Chỉ đổi được cài đặt máy chủ trên chính máy chủ: mở trang quản trị ở đó (http://localhost:8095). Phần này đổi cổng, thư mục, mật khẩu cơ sở dữ liệu và giấy phép.</value></data>
 </root>
