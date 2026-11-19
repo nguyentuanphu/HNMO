@@ -1,4 +1,4 @@
-// HNMO In-Game Escrow Contracts window (F9, /contract, or CommandWindow 'Contract' -> right-click player).
+// HNMO In-Game Escrow Contracts window (Shift+F6, /contract, or the phone menu).
 // Uses F5 4C (HnmoEscrowCommand) and F5 4D (HnmoEscrowState).
 
 import { currentLanguage, onLanguageChange } from '../i18n.js';
@@ -285,10 +285,10 @@ export class EscrowWindow {
   private tcUnitsInput = '10';
 
   constructor(private readonly options: EscrowWindowOptions) {
-    this.panel = createHnmoPanel('hnmo-escrow-panel', this.t('Escrow Contracts (F9)', 'Hợp đồng Ký gửi (F9)'));
+    this.panel = createHnmoPanel('hnmo-escrow-panel', this.t('Escrow Contracts (Shift+F6)', 'Hợp đồng Ký gửi (Shift+F6)'));
     this.panel.panel.style.maxWidth = '760px';
     onLanguageChange(() => {
-      this.panel.setTitle(this.t('Escrow Contracts (F9)', 'Hợp đồng Ký gửi (F9)'));
+      this.panel.setTitle(this.t('Escrow Contracts (Shift+F6)', 'Hợp đồng Ký gửi (Shift+F6)'));
       if (this.panel.isOpen()) this.render();
     });
   }
@@ -428,8 +428,8 @@ export class EscrowWindow {
       help.id = 'escrow-in-game-help';
       help.style.cssText = 'background:#162338;border:1px solid #3c6ea8;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;color:#cde4ff;';
       help.textContent = this.t(
-        'Open with F9, /contract, or Command Window (D -> Contract -> right-click player). Goods lock safely in escrow; buyer payment and item delivery swap atomically. Cancel or expired items arrive under History & Owed.',
-        'Mở bằng F9, /contract, hoặc bảng Lệnh (D -> Contract -> chuột phải vào người chơi). Đồ được khóa an toàn; thanh toán và giao đồ hoàn tất nguyên tử. Đồ hủy/hết hạn nhận tại Lịch sử & Chờ nhận.',
+        'Open with Shift+F6, /contract, or 📜 in the phone menu. Goods lock safely in escrow; buyer payment and item delivery swap atomically. Cancel or expired items arrive under History & Owed.',
+        'Mở bằng Shift+F6, /contract, hoặc 📜 trong menu điện thoại. Đồ được khóa an toàn; thanh toán và giao đồ hoàn tất nguyên tử. Đồ hủy/hết hạn nhận tại Lịch sử & Chờ nhận.',
       );
       root.append(help);
     }

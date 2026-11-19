@@ -1731,7 +1731,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   connection.onPacket((bytes) => { market.handle(bytes); });
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F6' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
+    if (event.key === 'F6' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
   });
   window.addEventListener('hnmo-market-open', () => { market.open(); });
   // HNMO's Escrow Contracts (F9, /contract, CommandWindow Contract -> right-click player).
@@ -1744,7 +1744,8 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   for (const bytes of earlyPackets) escrow.handlePacket(bytes);
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
-    if (event.key === 'F9' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
+    // Shift+F6, next to the item market (F6): F9 is the top races window's (owner, 2026-11-16).
+    if (event.key === 'F6' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
   });
   window.addEventListener('hnmo-escrow-open', () => { escrow.open(); });
   // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
