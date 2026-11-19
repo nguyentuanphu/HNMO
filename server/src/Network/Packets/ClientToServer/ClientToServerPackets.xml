@@ -5519,6 +5519,30 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>4E</SubCode>
+      <Name>HnmoVaultPageCommand</Name>
+      <Length>6</Length>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client when its vault window opens, when the player picks a vault page, or buys one more page.</SentWhen>
+      <CausedReaction>The server answers with HnmoVaultPageState (F5 4F); a switch also sends the new page's items to the open vault window.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = SwitchPage, 2 = BuyPage.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Page</Name>
+          <Description>The page (0-based) for SwitchPage; 0 otherwise.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>25</SubCode>
       <Name>HnmoVipRequest</Name>
       <Direction>ClientToServer</Direction>

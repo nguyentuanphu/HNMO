@@ -805,6 +805,10 @@ export class ItemWindows {
   message: (text: string) => void = () => undefined;
   /** HNMO's extra tooltip lines of an item at a storage's slot (the account safety's lock). */
   extraTooltipLines: (storage: number, slot: number) => TooltipLine[] = () => [];
+  /** The vault window was shown or hidden (HNMO's vault pages follow it). */
+  onVaultShown: (shown: boolean) => void = () => undefined;
+  /** The windows were placed again (a resize, a docked panel). */
+  onPlaced: () => void = () => undefined;
 
   constructor({ inventory, parent = document.body as HTMLElement, character = () => null, groundCell = () => null }: {
     inventory: Inventory; parent?: HTMLElement; character?: () => TooltipCharacter | null;
@@ -905,11 +909,14 @@ export class ItemWindows {
     }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.placeAll(); }
     if (this.inventory.openWindow === NpcWindow.VAULT) {
+      const wasOpen = this.vault.isOpen;
       await this.bag.open(this.parent);
       await this.vault.open(this.parent);
       this.placeAll();
+      if (!wasOpen) this.onVaultShown(true);
     } else if (this.vault.isOpen) {
       this.vault.close();
+      this.onVaultShown(false);
       this.placeAll();
     }
   }
@@ -918,7 +925,7 @@ export class ItemWindows {
     if (this.docked.some((d) => d.window.isOpen && !d.close())) return;
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
-    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.onVaultShown(false); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     // Closing the inventory (or Escape) while trading cancels the trade (CSystem's HideAllGroupA, CTrade::UpdateKeyEvent).
     if (this.trade.isOpen) { this.trade.close(); this.onTradeClosed(); }
@@ -934,7 +941,7 @@ export class ItemWindows {
   async openTrade(): Promise<void> {
     this.tooltip.hide();
     if (this.picked.source) this.picked.drop();
-    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); }
+    if (this.vault.isOpen) { this.vault.close(); this.inventory.closeVault(); this.onVaultShown(false); }
     if (this.shop.isOpen) { this.shop.close(); this.repairMode = false; this.inventory.closeShop(); }
     await this.bag.open(this.parent);
     await this.trade.open(this.parent);
@@ -963,6 +970,7 @@ export class ItemWindows {
     this.vault.refresh();
     this.shop.refresh();
     this.trade.refresh();
+    this.onPlaced();
   }
 
   refresh(): void {

@@ -45,8 +45,8 @@ public sealed class VaultChatCommandPlugIn : ChatCommandPlugInBase<VaultChatComm
             var unlocked = plugIn.GetUnlockedVaultCount(player);
             var active = player.Account is { LoginName: { Length: > 0 } login } ? plugIn.GetActiveVaultIndex(login) : 0;
             var msg = isVi
-                ? $"Rương hiện tại: #{active}. Đã mở khóa: {unlocked} (dùng /vault <số> hoặc /vault buy)."
-                : $"Current vault: #{active}. Unlocked: {unlocked} (use /vault <index> or /vault buy).";
+                ? $"Trang rương hiện tại: {active + 1}. Đã mở khóa: {unlocked} trang (dùng /vault <số trang> hoặc /vault buy)."
+                : $"Current vault page: {active + 1}. Unlocked: {unlocked} pages (use /vault <page> or /vault buy).";
             await player.ShowBlueMessageAsync(msg).ConfigureAwait(false);
             return;
         }
@@ -60,11 +60,12 @@ public sealed class VaultChatCommandPlugIn : ChatCommandPlugInBase<VaultChatComm
 
         if (int.TryParse(arg, NumberStyles.Integer, CultureInfo.InvariantCulture, out var index))
         {
-            var (_, msg) = await plugIn.SwitchVaultAsync(player, index).ConfigureAwait(false);
+            // Pages are counted from 1, as the vault window's page buttons show them.
+            var (_, msg) = await plugIn.SwitchVaultAsync(player, index - 1).ConfigureAwait(false);
             await player.ShowBlueMessageAsync(msg).ConfigureAwait(false);
             return;
         }
 
-        await player.ShowBlueMessageAsync(isVi ? "Cú pháp: /vault [số | buy]" : "Usage: /vault [index | buy]").ConfigureAwait(false);
+        await player.ShowBlueMessageAsync(isVi ? "Cú pháp: /vault [số trang | buy]" : "Usage: /vault [page | buy]").ConfigureAwait(false);
     }
 }

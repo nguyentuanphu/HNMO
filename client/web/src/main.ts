@@ -49,6 +49,7 @@ import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
+import { VaultPages } from './ui/vaultPages.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
 import { VipWindow } from './ui/vipWindow.js';
 import { GiftBoxWindow } from './ui/giftBoxWindow.js';
@@ -187,6 +188,8 @@ export interface GameState {
   camera: THREE.PerspectiveCamera;
   inventory?: Inventory;
   itemWindows?: ItemWindows;
+  /** HNMO's vault pages above the vault window (ui/vaultPages.ts). */
+  vaultPages?: VaultPages;
   stats?: CharacterStats;
   hud?: Hud;
   hotkeys?: ItemHotkeys;
@@ -1789,6 +1792,16 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key === 'F6' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
   });
   window.addEventListener('hnmo-market-open', () => { market.open(); });
+  // HNMO's vault pages: page buttons above the open vault window (F5 4E / 4F).
+  const vaultPages = new VaultPages({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    anchor: () => (itemWindows.vault.isOpen && itemWindows.vault.panel ? itemWindows.vault.panel.getBoundingClientRect() : null),
+  });
+  state.vaultPages = vaultPages;
+  connection.onPacket((bytes) => { vaultPages.handle(bytes); });
+  itemWindows.onVaultShown = (shown) => { if (shown) vaultPages.show(); else vaultPages.hide(); };
+  itemWindows.onPlaced = () => vaultPages.place();
   // HNMO's Escrow Contracts (F9, /contract, CommandWindow Contract -> right-click player).
   const escrow = new EscrowWindow({
     send: (name, fields) => connection.send('ClientToServer', name, fields),

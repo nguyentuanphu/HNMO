@@ -11148,6 +11148,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoVaultPageState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: enabled, active, unlocked, max, price, coinType, balance, result message (EN/VI by the player's language).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoVaultPageCommand (F5 4E), and when the vault page changes.
+    /// Causes reaction on client side: The web client's vault window shows the page buttons, the page in use and the price of one more page.
+    /// </remarks>
+    public static async ValueTask SendHnmoVaultPageStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoVaultPageStateRef.GetRequiredSize(json);
+            var packet = new HnmoVaultPageStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoVipState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

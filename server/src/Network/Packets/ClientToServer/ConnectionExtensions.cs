@@ -6841,6 +6841,36 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoVaultPageCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = SwitchPage, 2 = BuyPage.</param>
+    /// <param name="page">The page (0-based) for SwitchPage; 0 otherwise.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client when its vault window opens, when the player picks a vault page, or buys one more page.
+    /// Causes reaction on server side: The server answers with HnmoVaultPageState (F5 4F); a switch also sends the new page's items to the open vault window.
+    /// </remarks>
+    public static async ValueTask SendHnmoVaultPageCommandAsync(this IConnection? connection, byte @action, byte @page)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoVaultPageCommandRef.Length;
+            var packet = new HnmoVaultPageCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Page = @page;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoVipRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

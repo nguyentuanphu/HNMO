@@ -9,10 +9,13 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading;
+using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.Views;
+using HNMO.GameLogic.Views.Vault;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using PersistenceIdentifiable = HNMO.Persistence.IIdentifiable;
@@ -38,6 +41,12 @@ public sealed class MultiVaultPlugIn :
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
+
+    private static readonly JsonSerializerOptions AsciiJsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Default,
     };
 
     private readonly object _gate = new();
@@ -104,26 +113,96 @@ public sealed class MultiVaultPlugIn :
             return (false, isVi ? "Không tìm thấy tài khoản." : "Account not loaded.");
         }
 
-        if (player.Vault is not null || player.OpenedNpc is not null)
+        // The vault window's page buttons switch while the vault is open; any other NPC window must be closed first.
+        var vaultOpen = player.Vault is not null && player.OpenedNpc?.Definition.NpcWindow == NpcWindow.VaultStorage;
+        if (!vaultOpen && (player.Vault is not null || player.OpenedNpc is not null))
         {
-            return (false, isVi ? "Vui lòng đóng cửa sổ rương/NPC trước khi đổi rương." : "Please close your vault/NPC window before switching vaults.");
+            return (false, isVi ? "Vui lòng đóng cửa sổ NPC trước khi đổi rương." : "Please close the NPC window before switching vaults.");
         }
 
         var unlocked = this.GetUnlockedVaultCount(player);
         if (targetIndex < 0 || targetIndex >= unlocked)
         {
-            return (false, isVi ? $"Rương #{targetIndex} chưa mở khóa (đã mở 0..{unlocked - 1})." : $"Vault #{targetIndex} is locked (unlocked: 0..{unlocked - 1}).");
+            return (false, isVi ? $"Trang rương {targetIndex + 1} chưa mở khóa (đã mở {unlocked} trang)." : $"Vault page {targetIndex + 1} is locked ({unlocked} pages unlocked).");
         }
 
+        (bool Success, string Message) result;
         await this._switchGate.WaitAsync().ConfigureAwait(false);
         try
         {
-            return await this.SwitchVaultCoreAsync(player, login, targetIndex, isVi).ConfigureAwait(false);
+            result = await this.SwitchVaultCoreAsync(player, login, targetIndex, isVi).ConfigureAwait(false);
         }
         finally
         {
             this._switchGate.Release();
         }
+
+        if (result.Success && vaultOpen && player.Account.Vault is { } vault)
+        {
+            // The open window shows the new page.
+            var size = player.Account.IsVaultExtended ? InventoryConstants.WarehouseSize * 2 : InventoryConstants.WarehouseSize;
+            player.Vault = new Storage(size, vault);
+            await player.InvokeViewPlugInAsync<IShowVaultPlugIn>(p => p.ShowVaultAsync()).ConfigureAwait(false);
+        }
+
+        return result;
+    }
+
+    /// <summary>Answers a client which has no vault pages plug-in: the feature is off.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>The task.</returns>
+    public static ValueTask SendDisabledAsync(Player player) =>
+        player.InvokeViewPlugInAsync<IHnmoVaultPageViewPlugIn>(p => p.ShowVaultPagesAsync(JsonSerializer.Serialize(new { enabled = false }, JsonOptions)));
+
+    /// <summary>
+    /// Handles the vault window's page command (<c>F5 4E</c>): 0 asks for the state, 1 switches to <paramref name="page"/>,
+    /// 2 buys one more page. Every command is answered with the state, and a switch or purchase with its message.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="page">The page (0-based) for a switch.</param>
+    /// <returns>The task.</returns>
+    public async ValueTask HandlePageCommandAsync(Player player, byte action, byte page)
+    {
+        ArgumentNullException.ThrowIfNull(player);
+        string? message = null;
+        bool? success = null;
+        if (action == 1)
+        {
+            (var ok, message) = await this.SwitchVaultAsync(player, page).ConfigureAwait(false);
+            success = ok;
+        }
+        else if (action == 2)
+        {
+            (var ok, message) = await this.BuyExtraVaultAsync(player).ConfigureAwait(false);
+            success = ok;
+        }
+
+        await player.InvokeViewPlugInAsync<IHnmoVaultPageViewPlugIn>(p => p.ShowVaultPagesAsync(this.BuildPageStateJson(player, success, message))).ConfigureAwait(false);
+    }
+
+    /// <summary>Builds the vault page state for the vault window.</summary>
+    /// <param name="player">The player.</param>
+    /// <param name="success">The result of the last switch or purchase, if any.</param>
+    /// <param name="message">Its message, in the player's language.</param>
+    /// <returns>Plain-ASCII JSON.</returns>
+    internal string BuildPageStateJson(Player player, bool? success, string? message)
+    {
+        var cfg = this.EffectiveConfig();
+        var login = player.Account?.LoginName;
+        var state = new
+        {
+            enabled = cfg.Enabled && !string.IsNullOrEmpty(login),
+            active = string.IsNullOrEmpty(login) ? 0 : this.ActivePageOf(player, login),
+            unlocked = this.GetUnlockedVaultCount(player),
+            max = Math.Max(1, cfg.MaxVaultsPerAccount),
+            price = cfg.PurchaseExtraVaultCost,
+            coinType = cfg.PurchaseCoinType.ToString(),
+            balance = player.Account?.GetCashShopCoins(cfg.PurchaseCoinType) ?? 0,
+            success,
+            message,
+        };
+        return JsonSerializer.Serialize(state, AsciiJsonOptions);
     }
 
     /// <summary>Purchases one permanent extra vault slot for <paramref name="player"/> using configured coins.</summary>
@@ -177,6 +256,18 @@ public sealed class MultiVaultPlugIn :
 
         var nextCount = this.GetUnlockedVaultCount(player);
         return (true, isVi ? $"Đã mở khóa thêm rương! Tổng số rương hiện có: {nextCount}." : $"Unlocked an extra vault! Total unlocked: {nextCount}.");
+    }
+
+    private int ActivePageOf(Player player, string login)
+    {
+        var state = this.LoadAccountState(login);
+        if (player.Account?.Vault is { } vault && IdOf(vault) is var id && id != Guid.Empty
+            && state.StorageIds.FirstOrDefault(p => p.Value == id) is { Value: var found } pair && found != Guid.Empty)
+        {
+            return pair.Key;
+        }
+
+        return Math.Max(0, state.ActiveVaultIndex);
     }
 
     private static bool IsVi(Player player) =>
@@ -257,7 +348,7 @@ public sealed class MultiVaultPlugIn :
             : Math.Max(0, state.ActiveVaultIndex);
         if (currentIndex == targetIndex)
         {
-            return (true, isVi ? $"Bạn đang ở rương #{targetIndex}." : $"You are already on vault #{targetIndex}.");
+            return (true, isVi ? $"Bạn đang ở trang rương {targetIndex + 1}." : $"You are already on vault page {targetIndex + 1}.");
         }
 
         ItemStorage target;
@@ -268,7 +359,7 @@ public sealed class MultiVaultPlugIn :
             if (await player.PersistenceContext.GetByIdAsync<ItemStorage>(targetId).ConfigureAwait(false) is not { } loaded)
             {
                 // Never replace a vault which can't be read right now by an empty one.
-                return (false, isVi ? $"Không đọc được rương #{targetIndex}. Vui lòng thử lại sau." : $"Vault #{targetIndex} couldn't be read. Please try again later.");
+                return (false, isVi ? $"Không đọc được trang rương {targetIndex + 1}. Vui lòng thử lại sau." : $"Vault page {targetIndex + 1} couldn't be read. Please try again later.");
             }
 
             target = loaded;
@@ -312,7 +403,7 @@ public sealed class MultiVaultPlugIn :
             this.RemoveStorageSnapshot(login, targetIndex);
         }
 
-        return (true, isVi ? $"Đã chuyển sang rương #{targetIndex}." : $"Switched to vault #{targetIndex}.");
+        return (true, isVi ? $"Đã chuyển sang trang rương {targetIndex + 1}." : $"Switched to vault page {targetIndex + 1}.");
     }
 
     private MultiVaultConfiguration EffectiveConfig() => this.Configuration ?? new MultiVaultConfiguration();

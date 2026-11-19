@@ -4711,6 +4711,28 @@ public class PacketStructureTests
     }
 
     /// <summary>
+    /// Tests the packet size calculation for HnmoVaultPageCommand.
+    /// </summary>
+    [Test]
+    public void HnmoVaultPageCommand_PacketSizeValidation()
+    {
+        // Fixed-length packet validation
+        const int expectedLength = 6;
+        var actualLength = HnmoVaultPageCommandRef.Length;
+        
+        Assert.That(actualLength, Is.EqualTo(expectedLength), 
+            "Packet length mismatch: declared length does not match calculated size");
+        
+        // Validate field 'Action' boundary
+        Assert.That(4 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Action' exceeds packet boundary");
+        
+        // Validate field 'Page' boundary
+        Assert.That(5 + 1, Is.LessThanOrEqualTo(expectedLength), 
+            "Field 'Page' exceeds packet boundary");
+    }
+
+    /// <summary>
     /// Tests the packet size calculation for HnmoVipRequest.
     /// </summary>
     [Test]
