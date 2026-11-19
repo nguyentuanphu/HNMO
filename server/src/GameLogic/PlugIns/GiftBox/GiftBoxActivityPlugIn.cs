@@ -27,7 +27,7 @@ public sealed class GiftBoxActivityPlugIn : IPlayerStateChangedPlugIn
     /// <summary>Initializes a new instance of the <see cref="GiftBoxActivityPlugIn"/> class with explicit test dependencies.</summary>
     /// <param name="backend">Player-state row backend.</param>
     /// <param name="clock">Authoritative clock.</param>
-    public GiftBoxActivityPlugIn(IHnmoPlayerStateRowBackend? backend, TimeProvider? clock = null)
+    internal GiftBoxActivityPlugIn(IHnmoPlayerStateRowBackend? backend, TimeProvider? clock = null)
     {
         this._backend = backend;
         this._clock = clock ?? TimeProvider.System;

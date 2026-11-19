@@ -2104,7 +2104,6 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
       addFriend: (player) => { if (state.social?.messenger.serverEnabled) state.social.messenger.addFriend(player.name); },
       follow: (player) => { online.followId = player.id; },
       duel: (player) => state.duelAndGens?.duel.challenge(player),
-      contract: (player) => state.escrow?.openForTarget(player.name),
     },
   });
   window.addEventListener('keydown', (event) => {

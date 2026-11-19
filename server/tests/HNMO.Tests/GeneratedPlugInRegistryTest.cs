@@ -5,8 +5,9 @@
 namespace HNMO.Tests;
 
 using System.Reflection;
-using Microsoft.Extensions.Logging.Abstractions;
 using HNMO.PlugIns;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 
 /// <summary>
 /// Tests for the plugin registries which are generated at compile time.
@@ -77,6 +78,38 @@ public class GeneratedPlugInRegistryTest
     /// <summary>
     /// Tests that <see cref="PlugInManager.DiscoverPlugInTypes"/> finds all NPC talk plugins, like searching all types of the assembly.
     /// </summary>
+    /// <summary>
+    /// The plug-in manager creates plug-ins with <see cref="Microsoft.Extensions.DependencyInjection.ActivatorUtilities"/>.
+    /// A plug-in with two public constructors it could use is never created (the server only logs an error), so
+    /// each plug-in must leave it one choice. Constructors for tests are internal.
+    /// </summary>
+    [Test]
+    public void EveryPlugInHasOneConstructorTheManagerCanChoose()
+    {
+        var services = new PlainServiceProvider();
+        var ambiguous = new List<string>();
+        foreach (var type in PlugInAssemblies
+            .SelectMany(assembly => assembly.DefinedTypes)
+            .Where(type => type.GetCustomAttribute<PlugInAttribute>() != null && !type.IsAbstract))
+        {
+            try
+            {
+                ActivatorUtilities.CreateInstance(services, type);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Multiple constructors", StringComparison.Ordinal))
+            {
+                ambiguous.Add(type.FullName!);
+            }
+            catch (Exception)
+            {
+                // A plug-in which needs a service, or one whose constructor does real work, is created by the server
+                // with its services; this test is only about the choice of constructor.
+            }
+        }
+
+        Assert.That(ambiguous, Is.Empty);
+    }
+
     [Test]
     public void NpcTalkPlugInsAreDiscovered()
     {
@@ -147,5 +180,11 @@ public class GeneratedPlugInRegistryTest
             .MakeGenericMethod(plugInPoint)
             .Invoke(manager, [])!;
         return plugIns.Select(plugIn => plugIn.GetType()).ToList();
+    }
+
+    /// <summary>A plain service provider, as the plug-in manager's own container: no "is this a service" check.</summary>
+    private sealed class PlainServiceProvider : IServiceProvider
+    {
+        public object? GetService(Type serviceType) => null;
     }
 }

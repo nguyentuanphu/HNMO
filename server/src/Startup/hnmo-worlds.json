@@ -1,0 +1,32 @@
+{
+  "Worlds": [
+    {
+      "WorldId": "main",
+      "NameEn": "World 1 \u2014 Origin",
+      "NameVi": "Th\u1EBF gi\u1EDBi 1 \u2014 Kh\u1EDFi Nguy\u00EAn",
+      "Season": "Season6",
+      "DatabaseName": "hnmo_world_1",
+      "DatabaseConnectionString": "",
+      "ServerIds": [
+        0,
+        1,
+        2
+      ],
+      "ExperienceMultiplier": 1,
+      "MasterExperienceMultiplier": 1,
+      "DropMultiplier": 1,
+      "ZenMultiplier": 1,
+      "EventPresetEn": "Standard schedule",
+      "EventPresetVi": "L\u1ECBch chu\u1EA9n",
+      "TemplateSourceWorldId": null,
+      "TemplateMode": 0,
+      "OpeningDateUtc": null,
+      "TransferEnabled": true,
+      "IsRunning": true,
+      "IsDefault": true,
+      "CachedOnlinePlayers": 0,
+      "CreatedAtUtc": "2026-11-19T04:20:09.98377+00:00"
+    }
+  ],
+  "Transfers": []
+}

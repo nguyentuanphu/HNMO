@@ -10,11 +10,11 @@ import type { Character } from '../game/characters.js';
 
 export const Command = {
   NONE: -1, TRADE: 0, PURCHASE: 1, PARTY: 2, WHISPER: 3, GUILD: 4, GUILDUNION: 5, RIVAL: 6, RIVALOFF: 7,
-  ADD_FRIEND: 8, FOLLOW: 9, BATTLE: 10, SPECIAL: 11, CONTRACT: 12,
+  ADD_FRIEND: 8, FOLLOW: 9, BATTLE: 10, SPECIAL: 11,
 } as const;
 
-// kCommandLabels (Game.en.resx) + HNMO Escrow Contract.
-const LABELS = ['Trade', 'Buy', 'Party', 'Whisper', 'Guild', 'Alliance', 'Hostility guild', 'Suspend hostilities', 'Add Friend', 'Follow', 'Duel', 'Special', 'Contract'];
+// kCommandLabels (Game.en.resx).
+const LABELS = ['Trade', 'Buy', 'Party', 'Whisper', 'Guild', 'Alliance', 'Hostility guild', 'Suspend hostilities', 'Add Friend', 'Follow', 'Duel', 'Special'];
 const MAX_DISTANCE_TILE = 2;
 const PANEL_WIDTH = 190; // COMMAND_WINDOW_WIDTH
 const TARGET_OFFSET = 5; // kTargetBoxOffset
@@ -40,7 +40,6 @@ export interface CommandActions {
   addFriend(player: Character): void;
   follow(player: Character): void;
   duel(player: Character): void;
-  contract?(player: Character): void;
 }
 
 export interface CommandWindowOptions {
@@ -148,7 +147,6 @@ export class CommandWindow {
       [Command.TRADE]: a.trade, [Command.PURCHASE]: a.purchase, [Command.PARTY]: a.party, [Command.WHISPER]: a.whisper,
       [Command.GUILD]: a.guild, [Command.GUILDUNION]: a.alliance, [Command.RIVAL]: a.rival, [Command.RIVALOFF]: a.rivalOff,
       [Command.ADD_FRIEND]: a.addFriend, [Command.FOLLOW]: a.follow, [Command.BATTLE]: a.duel,
-      [Command.CONTRACT]: a.contract ?? (() => {}),
     };
     run[command]?.call(a, player);
     return true;

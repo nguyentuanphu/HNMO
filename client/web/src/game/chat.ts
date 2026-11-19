@@ -99,7 +99,7 @@ export class Chat {
   private whisperHistory: string[] = [];
   private chatHistoryAt = 0;
   private whisperHistoryAt = 0;
-  private lastSent = 0;
+  private lastSent = Number.NEGATIVE_INFINITY; // no cooldown before the first line
   private input: RmlDocument | null = null;
   private log: RmlDocument | null = null;
   private systemLog: RmlDocument | null = null;
