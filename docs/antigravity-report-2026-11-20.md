@@ -108,3 +108,57 @@
   - Logged in `testgm`, spawned an Ancient item (`/item 7 5 0 0 0 0 0 1 5`), picked it up (`beforeBag: 64 -> afterBag: 65`), and pressed `F6` to open `#hnmo-market-panel`.
   - Market showed `"Item Market is currently disabled by the server administrator."`. Toggling `Enable Item Market` (`#market-active`) and clicking `Save` on `http://127.0.0.1:8095/market` did not persist (`MARKET_ACTIVE_AFTER_SAVE: false`) due to the broken `8095` Blazor circuit (`ReconnectModal.13ja33weya.razor.js` SRI block + `System is not defined`).
 
+---
+
+## STEP 3 — Season 9 Pack with Real Files
+
+### 3a. Package Build with `HNMO_S9_DATA_DIR`
+- **Command:**
+  ```bash
+  export POSTGRES_DIR="/c/Users/nguye/.gemini/antigravity/scratch/pg-portable-cache"
+  export HNMO_S9_DATA_DIR="<owner's extracted Season 9 Data folder>"
+  client/web/tools/package-hnmo.sh "/c/Users/nguye/.gemini/antigravity/scratch/HNMO-int/server" win-x64 "/c/Users/nguye/.gemini/antigravity/scratch/HNMO-pkg"
+  ```
+- **Build time:** `381` seconds (`6m 21s`)
+- **Sizes:**
+  - `HNMO-pkg` total: `2,550 MB` (`2.5G`), `20,811` files
+  - `HNMO-pkg/Data`: `50` packs (`794 MB`), zero Season 9 files inside `Data/` (`Get-ChildItem Data -Name` -> `packs` only)
+  - `HNMO-pkg/Data_S9`: **`18,965` files, `1,217.6 MB`**
+- **Last output lines:**
+  ```text
+    Data before pack: 14891 files, 1066 MB -> after pack: 50 files, 794 MB
+    server/wwwroot before: 8279 files, 69 MB -> after: 54 files, 49 MB
+    TOTAL                 20811    2550 MB
+  Done: /c/Users/nguye/.gemini/antigravity/scratch/HNMO-pkg
+  BUILD_SECONDS=381
+  2.5G	/c/Users/nguye/.gemini/antigravity/scratch/HNMO-pkg
+  ```
+
+### 3b. `/data/seasons.json`, Overlay Routing, and S6 vs. S9 Requests
+- **Endpoint byte checks (`http://127.0.0.1:8080`):**
+  - `/data/seasons.json` -> `{"s6":true,"s9":true}` (`200`)
+  - `Player/player.bmd`: `/data/Player/player.bmd` (`200`, `3,324,834` bytes) vs. `/data/s9/Player/player.bmd` (`200`, `3,472,315` bytes) — **different sizes (`differ: true`)**.
+  - `/data/Local/Mix.bmd` vs. `/data/s9/Local/Mix.bmd`: both `200`, `65,000` bytes (`sameBytes: true` SHA-256).
+  - `/data/Interface/Item_B.ozj` vs. `/data/s9/Interface/Item_B.ozj`: both `200`, `185,947` bytes (`sameBytes: true` SHA-256).
+- **Season 6 session (`test1` entering Lorencia):**
+  - `s6DataReqs: 642`, **`s9DataReqs: 0`** (no request went to `/data/s9/`).
+- **Season 9 session (`testgm` with Playwright `/website/data` route override setting `season: "s9"`, since `8095/worlds` is blocked by 2c):**
+  - `totalS9: 167+` requests under `/data/s9/` (models e.g. `/data/s9/Object8/Object23.bmd`, `/data/s9/Local/Eng/skill_eng.bmd`; maps e.g. `/data/s9/World8/EncTerrain8.map`, `EncTerrain8.att`, `EncTerrain8.obj`, `TerrainHeight.OZB`; sounds e.g. `/data/s9/Sound/aWater.wav`, `/data/s9/Music/atlans.mp3`), entering Lorencia with **zero `pageerror`s**.
+
+### 3c. Season 9 Walkthrough (`Lorencia`, `Devias`, `Noria`, `Lost Tower`, `Atlans`)
+- All 5 maps rendered cleanly with **`pageErrs: []`** (`testgm`, `season: "s9"`):
+  - **Lorencia (`map 0`)**: [step3c-lorencia.png](screenshots/antigravity-2026-11-20/step3c-lorencia.png)
+    - `404`s: `/data/s9/Object1/ston03.ktx2`, `/data/s9/Object1/light_02.ktx2`, `/data/s9/Object1/bridge_shadow01.ktx2`, `/data/s9/Effect/twlighthik01.{ktx2,jpg}`, shared `/data/s9/Skill/*` (`Swordeff_mono`, `grandmark`, `grandmark2`, `lines2`, `JointSpirit03`, `Shockwave`, `firehik02`, `flamestani`, `Chrome01`, `testmsop`, `monolines`, `Damage1*`, `Damage2*`, `volcano_*`, `blur02`, `flare`, `Kwave*`, `ground_wind`, `magic_ground1`, `shiny05`), and shared `/data/Interface/RmlUi/*.rcss` / `themes/legacy/hnmo_onboarding.rml` (also 404 in S6).
+  - **Devias (`map 2`)**: [step3c-devias.png](screenshots/antigravity-2026-11-20/step3c-devias.png)
+    - `404`s: `/data/s9/Object3/sword14.{ktx2,tga,jpg}`, `sword11.{ktx2,tga,jpg}`, `hound_sword1.{ktx2,jpg}`, `hound_shield1.{ktx2,tga}`, `sword06.{ktx2,jpg}`, `shield05.{ktx2,jpg}`, `sword03.{ktx2,jpg}`, `light_02.ktx2`.
+  - **Noria (`map 3`)**: [step3c-noria.png](screenshots/antigravity-2026-11-20/step3c-noria.png)
+    - `404`s: `/data/s9/World4/TileGrass02.jpg`, `/data/s9/Object4/filling_up02.ktx2`, `/data/s9/Object4/itp01.ktx2`.
+  - **Lost Tower (`map 4`)**: [step3c-losttower.png](screenshots/antigravity-2026-11-20/step3c-losttower.png)
+    - `failed404s: []`, `pageErrs: []`.
+  - **Atlans (`map 7`)**: [step3c-atlans.png](screenshots/antigravity-2026-11-20/step3c-atlans.png)
+    - `failed404s: []`, `pageErrs: []` (visually, a foreground archway pillar partially occludes the spawn view at `(15, 21)`).
+
+### 3d. `client/web/tools/build-s9-pack.mjs`
+- Skipped: `Test-Path client/web/tools/build-s9-pack.mjs` returned `False` (script is not on this branch yet).
+
+
