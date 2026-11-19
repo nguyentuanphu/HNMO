@@ -74,7 +74,14 @@ public static class GiftCodeRewards
             entry.Reference = coins.Reference;
             entry.GrantedBy = GiftCodeEngine.GrantedBy;
             entry.CreatedAt = DateTime.UtcNow;
-            await context.SaveChangesAsync().ConfigureAwait(false);
+
+            // A save that reports failure keeps the coins waiting (tried again), instead of dropping them as given.
+            if (!await context.SaveChangesAsync().ConfigureAwait(false))
+            {
+                logger.LogWarning("Gift codes: the coins {Reference} for {Login} weren't saved yet.", coins.Reference, coins.Login);
+                return GiftCodeCoinsResult.Failed;
+            }
+
             return GiftCodeCoinsResult.Given;
         }
         catch (Exception ex)
