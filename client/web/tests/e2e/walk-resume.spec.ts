@@ -9,7 +9,7 @@ import { enterWorld, expectNoPageErrors } from './helpers.js';
 interface WalkGame {
   mapNumber: number;
   hero: { cell: { x: number; y: number }; isWalking: boolean };
-  online: { playerId: number; goal?: { x: number; y: number } | null; continuedAt?: number; say(text: string): void; walkTo(cell: { x: number; y: number }): boolean };
+  online: { playerId: number; goal?: { x: number; y: number } | null; continuedAt?: number; resumesLeft?: number; say(text: string): void; walkTo(cell: { x: number; y: number }): boolean };
   connection: { dispatch(bytes: Uint8Array): void };
 }
 type Win = Window & { __game: WalkGame };
@@ -34,22 +34,52 @@ test('a long walk goes on after the server puts the hero back a little', async (
   }
   await walkAndWait(page, TOWN);
 
-  await page.evaluate((target) => (window as unknown as Win).__game.online.walkTo(target), FIELD);
-  // Right after the second part of the walk went out (the first part is 15 steps), the "server" puts the hero
-  // two cells back on its way (checked frame by frame, so that it answers that part, as the server's refusal does).
-  const back = await page.evaluate(async (fromX) => {
+  // Right after the second part of the walk goes out (the first part is 15 steps), the "server" puts the hero
+  // a step back on its way, as the server's refusal of that part does. The part is caught as the client sends it
+  // (walkNextPart called again for the walk) and the correction comes right after, whatever the frame rate: the test
+  // machine draws a frame or two a second, sometimes less. "Back" is a cell the hero stood on a step before.
+  const back = await page.evaluate(async (target) => {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const g = (window as unknown as Win).__game;
-    const started = performance.now();
-    while (!(g.online.goal && g.hero.cell.x > fromX && performance.now() - (g.online.continuedAt ?? -Infinity) < 300)) {
-      if (performance.now() - started > 30_000) throw new Error(`the hero didn't walk on: ${g.hero.cell.x},${g.hero.cell.y}`);
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    const to = { x: g.hero.cell.x - 2, y: g.hero.cell.y };
-    g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
-    return to;
-  }, TOWN.x);
-  expect(await game(page, (g) => g.online.goal ?? null), `the goal is kept after the hero was put back to ${back.x},${back.y}`).toEqual(FIELD);
+    const online = g.online as unknown as { walkNextPart(): boolean; walkTo(cell: { x: number; y: number }): boolean };
+    const visited: { x: number; y: number }[] = [];
+    let recording = true;
+    const record = (): void => {
+      const last = visited[visited.length - 1];
+      if (!last || last.x !== g.hero.cell.x || last.y !== g.hero.cell.y) visited.push({ x: g.hero.cell.x, y: g.hero.cell.y });
+      if (recording) requestAnimationFrame(record);
+    };
+    record();
+    const original = online.walkNextPart;
+    let parts = 0;
+    const answer = new Promise<{ x: number; y: number; resumesLeft?: number; goal: { x: number; y: number } | null }>((resolve, reject) => {
+      const timer = setTimeout(() => { online.walkNextPart = original; recording = false; reject(new Error(`the walk sent no second part: ${g.hero.cell.x},${g.hero.cell.y}`)); }, 60_000);
+      online.walkNextPart = function walkNextPart(this: unknown): boolean {
+        const sent = original.call(online);
+        if (sent && ++parts === 2) {
+          online.walkNextPart = original;
+          // After update() has noted the part as sent (continuedAt), as the server's answer comes after it.
+          setTimeout(() => {
+            recording = false;
+            clearTimeout(timer);
+            // A step back, where the server is (it walks a step or two behind): a correction to a cell the server
+            // isn't at would be answered by the server's own correction on the next part, from further away.
+            const here = g.hero.cell;
+            const near = visited.filter((c) => Math.max(Math.abs(c.x - here.x), Math.abs(c.y - here.y)) === 1);
+            const to = near[near.length - 1] ?? { x: here.x, y: here.y };
+            const resumesLeft = g.online.resumesLeft;
+            g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
+            // The client's decision, read at once (later frames bring the real server's answers to the walk).
+            resolve({ ...to, resumesLeft, goal: g.online.goal ? { x: g.online.goal.x, y: g.online.goal.y } : null });
+          }, 0);
+        }
+        return sent;
+      };
+    });
+    online.walkTo(target);
+    return answer;
+  }, FIELD);
+  expect(back.goal, `the goal is kept after the hero was put back to ${back.x},${back.y} (resumes left before: ${back.resumesLeft})`).toEqual(FIELD);
   await expect.poll(() => game(page, (g) => (!g.hero.isWalking && !g.online.goal ? `${g.hero.cell.x},${g.hero.cell.y}` : 'walking')), { timeout: 90_000 }).toBe(`${FIELD.x},${FIELD.y}`);
 
   // A big jump (a knock-back, a pull, more than 3 cells) still ends the walk where it puts the hero.
