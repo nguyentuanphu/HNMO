@@ -425,3 +425,10 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   configuration and switch it on per game server by its world's season (maps in the server's map list,
   season-only features behind a season check), not a second configuration or database.
 - A world's rates are its servers' own rates (the per-server rates of the Servers page).
+
+## Owner decisions 2026-11-20 (morning)
+- Release (merge #85 into main, HNMO.zip): wait for local Claude's additional work, then check again with the owner.
+- Vault pages: 3 free, VIP +1, buy more with coins; page buttons in the vault window. Stacks: potions, event
+  tickets and keys stack free; jewels, boxes/quest items and crafting materials stack after a coin unlock; up to
+  255 per slot; in the vault AND the bag. Plan: `docs/plans/vault-stacking-pages-2026-11-20.md`.
+- When the owner says "give me more options", list more choices in the next pop-up instead of deciding.
