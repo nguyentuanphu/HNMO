@@ -79,12 +79,14 @@ test('the vault keeper opens the vault; an item goes into the vault and comes ba
   await page.waitForTimeout(5_000);
   await page.evaluate(() => (window as unknown as Win & { __game: { online: { walkTo(cell: { x: number; y: number }): void } } }).__game.online.walkTo({ x: 144, y: 113 }));
   // The vault keeper of the map the character is on (Lorencia, Devias, Noria, … all have one).
-  await expect.poll(() => page.evaluate(() => [...(window as unknown as Win).__game.online.characters.values()].some((c) => /Safety Guardian/.test(c.name))), { timeout: 90_000 }).toBe(true);
-  await page.evaluate(() => {
+  // The keeper can come into view and leave it again while the hero still walks, so it is looked up and talked to
+  // in one step, retried until it is in view.
+  await expect.poll(() => page.evaluate(() => {
     const game = (window as unknown as Win).__game;
     const keeper = [...game.online.characters.values()].find((c) => /Safety Guardian/.test(c.name));
-    game.online.talkTo(keeper);
-  });
+    if (keeper) game.online.talkTo(keeper);
+    return keeper !== undefined;
+  }), { timeout: 90_000 }).toBe(true);
   await page.waitForFunction(() => document.querySelector('.rml-storage'), null, { timeout: 120_000 });
   await expect(page.locator('.rml-my_inventory #panel')).toBeVisible();
 

@@ -7,7 +7,7 @@ import { enterWorld, expectNoPageErrors } from './helpers.js';
 interface TradeItem { group: number; number: number; width: number; height: number }
 interface TradeGame {
   hero: { name: string };
-  online: { playerId: number; characters: Map<number, { id: number; name: string; kind: string }>; say(text: string): void };
+  online: { playerId: number; characters: Map<number, { id: number; name: string; kind: string }>; say(text: string): void; hero: { cell: { x: number; y: number } }; cellNextTo(cell: { x: number; y: number }): { x: number; y: number } | null; walkTo(cell: { x: number; y: number }): boolean };
   inventory: { items: Map<number, TradeItem>; trade: Map<number, TradeItem> };
   trade: {
     isOpen: boolean;
@@ -56,10 +56,15 @@ test('two players trade an item', async ({ browser }) => {
   a.on('dialog', (dialog) => { void dialog.accept(); });
   await Promise.all([enterWorld(a, 'test5'), enterWorld(b, 'test6')]);
 
-  // A sees B (both start in Lorencia's town).
+  // A sees B. Both start in Lorencia's town, but the town is wider than a player sees (they can stand 25 cells
+  // apart), so B walks to a walkable cell beside A first; each try starts from where both are now.
   const nameB = await game(b, (g) => g.hero.name);
   const idOfB = () => a.evaluate((name) => [...(window as unknown as Win).__game.online.characters.values()].find((c) => c.name === name)?.id ?? null, nameB);
-  await expect.poll(idOfB, { timeout: 90_000 }).not.toBeNull();
+  await expect(async () => {
+    const at = await a.evaluate(() => ({ ...(window as unknown as Win).__game.online.hero.cell }));
+    await b.evaluate((cell) => { const online = (window as unknown as Win).__game.online; const next = online.cellNextTo(cell); if (next) online.walkTo(next); }, at);
+    await expect.poll(idOfB, { timeout: 30_000 }).not.toBeNull();
+  }).toPass({ timeout: 120_000 });
 
   // A asks, B accepts: both trade windows open (with the inventory), each naming the other.
   await a.evaluate((id) => (window as unknown as Win).__game.trade.requestTrade(id), (await idOfB())!);
