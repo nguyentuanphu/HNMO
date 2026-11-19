@@ -109,3 +109,8 @@ Check them in a packaged folder:
    Season 9's shops, spawns, drops and rates. Report the preview's counts and warnings (names only; no vendor files
    in git).
 4. Draft PR with the report (`docs/local-s9-program-<date>.md`) into `claude/hnmo-main-handover-54co2m`.
+
+## Note (00:15): Job 4 is taken by main Claude
+
+Main Claude (cloud) works on Job 4 (the events countdown) now. Skip it. If you already started it, push what you
+have to a draft PR and say so in it.
