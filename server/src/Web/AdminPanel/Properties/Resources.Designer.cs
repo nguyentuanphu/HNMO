@@ -13664,6 +13664,15 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
 
+        /// <summary>
+        ///   Looks up a localized string similar to All maps.
+        /// </summary>
+        public static string ShopEditorAllMaps {
+            get {
+                return ResourceManager.GetString("ShopEditorAllMaps", resourceCulture);
+            }
+        }
+        
         /// <summary>Looks up a localized string.</summary>
         public static string ShopEditorLocation {
             get {
