@@ -25,14 +25,15 @@
 
 **Active Owner/Chat Claim**: Current Antigravity Windows session (`antigravity-s6-work`).
 
-### Wave 1 — Live Setup, Control, Portal & E2E Stability (IN PROGRESS)
+### Wave 1 — Live Setup, Control, Portal & E2E Stability (COMPLETED)
 1. [x] **Setup Wizard live port sync (`ControlEndpoints.cs`, `Portal.cs`, `Program.cs`)**: Update in-memory `LauncherOptions` and `PortalOptions` (`ConnectServerPort`, `DatabasePort`, `AdminUrl`, `OpenBrowserUrl`) immediately when `/api/control/setup` or restore writes `hnmo-settings.json`, plus 2s HTTP timeout on `ProbeHttpAsync` so `adminPanel` probe handles cold Blazor SSR startup cleanly.
-2. [~] **`/control` first-run admin/key UX & `/worlds` table layout**: Added `flex-nowrap text-nowrap` on `/worlds` Start/Stop/Edit buttons at `1280px`; still queued: unified first-run admin/key role guidance and world-qualified server picker labels when sharing server IDs.
+2. [x] **`/worlds` button layout & `/api/website` multi-world ServerId safety**: Added `flex-nowrap text-nowrap` on `/worlds` Start/Stop/Edit buttons at `1280px`, and guarded `WebsiteController.Get()` with `GroupBy(x => x.ServerId)` so duplicate server IDs across worlds never throw `ArgumentException`.
 3. [x] **`inventory.spec.ts:50` helm-swap assertion**: Polled slot `2` removal cleanly via `expect.poll` alongside `free.slot` addition so `inventory.spec.ts` does not race between packet updates.
+4. [x] **First-run `/control` setup clarity**: Added bilingual EN/VI `wizardHint` on `control.html` noting `/users` admin creation (`>= 12` char password) and `Administrator` API key role for Website Portal registration.
 
-### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion
-4. [ ] **`/import-server` S6 Extensions**: Weighted multi-pool Item Bag XML rules, Ancient Set drop rules, and multi-slot map/day bonus schedules (dry-run + backup + undo).
-5. [ ] **Remaining S6 Gameplay & Web UI Gaps** ([feature-gap-2026-11-18.md](feature-gap-2026-11-18.md)):
+### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion (NEXT)
+5. [ ] **`/import-server` S6 Extensions**: Weighted multi-pool Item Bag XML rules, Ancient Set drop rules, and multi-slot map/day bonus schedules (dry-run + backup + undo).
+6. [ ] **Remaining S6 Gameplay & Web UI Gaps** ([feature-gap-2026-11-18.md](feature-gap-2026-11-18.md)):
    - Gens strife-map PvP/move locks + chat/nameplate icons.
    - Weighted Item Bags + timed `PeriodTime` expiry + Cancel Item Sale / Item Recovery NPC + Cash Shop bundles / `MonsterGP`.
    - Scheduled invasions (Moon Rabbit / Ring Attack / Snake Egg multi-wave XML rules).
@@ -41,4 +42,19 @@
    - Combat helper AI bots (`BK_Helper` / `SM_Helper`).
 
 ### Wave 3 — Code Hygiene & Full Windows E2E Sweep (No Linux)
-6. [ ] **Pre-existing C# analyzer cleanup** (`~404` SA/CS warnings in legacy files) + **full non-smoke Windows E2E sweep** across merged PR features (`escrow-contracts`, `world-editor`, `s6-events`, `anti-cheat`, `rate-tuning`, `qol-commands`, `market`, `jewel-bank`, `top-races`) and clean `HNMO-pkg` `win-x64` re-playtest.
+7. [ ] **Pre-existing C# analyzer cleanup** (`~404` SA/CS warnings in legacy files) + **full non-smoke Windows E2E sweep** across merged PR features (`escrow-contracts`, `world-editor`, `s6-events`, `anti-cheat`, `rate-tuning`, `qol-commands`, `market`, `jewel-bank`, `top-races`) and clean `HNMO-pkg` `win-x64` re-playtest.
+
+### Wave 4 — Season 9 Support on Web App + Server (NEW — Owner Approved 2026-11-19)
+> **Scope**: Stay **WEB ONLY** (`client/web` + `server/` + Windows `HNMO-pkg`), no desktop client. Keep Season 6.3 intact by default and add version-switched Season 9 support backed by an optional extracted S9 `Data` overlay pack (never committing third-party proprietary files/archives from `D:\MuOnline\IGCN\IGCN x9` to git).
+> **F5 Packet Budget**: Free `2B–2F`, `4E–4F`, `50–6F`. Already taken: `23` (#12), `24` (#13), `25/26` (#39), `27/28` (#64), `29` (#79), `2A` (#82), `30–4D`.
+
+8. [ ] **Wave 4A — S9 Asset Verification, Overlay Pack & Web Decoders (`formats.ts`, `GameFiles.cs`, `package-hnmo.sh`)**:
+   - Inspect extracted local S9 client `Data/` outside git (from owner's local x9 archives) for BMD version headers, `World83+`/`Object83+` terrain/map formats, and S9 item/skill/pentagram/muun catalogs.
+   - Extend `client/web/src/formats.ts` (`parseBMD` / map loaders) to decode S9 asset formats safely.
+   - Add optional `Data_S9` overlay mount in `GameFiles.cs` and `package-hnmo.sh` (serving S9 assets on demand without bloating S6 realms).
+9. [ ] **Wave 4B — Elemental Combat, Pentagram & Errtel (`GameLogic`, Packets, Web UI)**:
+   - Implement `GameVersion.Season9Episode2` attribute & elemental damage/defense formulas (`Fire/Water/Earth/Wind/Darkness`), Pentagram equipment slot, Errtel socketing/leveling/combining, AdminPanel `/pentagrams` config, and TypeScript UI panel.
+10. [ ] **Wave 4C — Muun Pets, Extended Master Tree (330+) & Stat Specialization**:
+    - Implement Muun inventory/slots, timed bonus stats, Evolution Stone fusion, Extended Master Skill Tree (`330+` nodes & S9 spells), and Stat Specialization bonus tiers + TypeScript UI.
+11. [ ] **Wave 4D — S9 Maps & Events (`Acheron`, `Arca Battle`, `Tormented Square`, `Chaos Castle Survival`, `Illusion Temple Renewal`, `BattleCore`)**:
+    - Implement Acheron & Acheron Guardian, Arca Battle guild obelisk war + Conqueror buffs, Tormented Square (`map 102`), Illusion Temple Renewal, Chaos Castle Survival, and BattleCore cross-realm channel + bilingual EN/VI web HUD/AdminPanel integration + Windows Playwright & `HNMO-pkg` verification.

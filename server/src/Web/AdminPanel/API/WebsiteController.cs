@@ -55,7 +55,8 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers, Wor
         var worlds = registry.BuildGroupedSnapshot(running.Cast<IGameServer>(), nowUtc);
         var worldByServerId = worlds
             .SelectMany(w => w.Servers.Select(s => (ServerId: s.Id, World: w)))
-            .ToDictionary(x => x.ServerId, x => x.World);
+            .GroupBy(x => x.ServerId)
+            .ToDictionary(g => g.Key, g => g.First().World);
 
         if (this.HttpContext is not null)
         {
