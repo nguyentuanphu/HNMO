@@ -58,3 +58,24 @@ Still open for step 1:
 - "Play" from the website into Season 9 (login tickets live in the Season 6.3 program);
 - filling `hnmo_s9` with Season 9's own content (the Season 9 import);
 - coin grants made from Season 9's admin panel.
+
+## 00:16
+
+Merged into the branch: #94 (data per season), #95 (two-column start screen), #99 (local Claude's report on the
+39 item models).
+
+New draft PRs:
+- **#97 (step 1), part D:** the website's "Play" works for Season 9 too (tickets as hashes in the shared database).
+- **Package check (step 5, Linux):** a packaged folder with Season 9 switched on, started once:
+  - both seasons came up (connect servers 44406 and 44506, admin panels 8095 and 8096);
+  - the browser played a Season 6.3 server and a Season 9 server;
+  - Season 9's save files are in `save/s9/`.
+- **#100:** 272 Vietnamese game texts rewritten with accents and the right meaning (audit section 3).
+- **#101:** 3D models for 15 items, from local Claude's candidates; each one was drawn and checked first.
+- **#102:** audit 2.4 (setup wizard password) and 2.5 (host settings only on the host computer).
+- **#103:** audit 1.5 (a website market purchase holds the account).
+- **#104:** the events countdown shows from its first second (Job 4, taken from local Claude).
+
+Still waiting:
+- #96 (rerun of two flaky shards);
+- the local Claude's Jobs 1-3, 5, 6 and 8.
