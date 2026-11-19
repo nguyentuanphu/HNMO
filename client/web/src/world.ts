@@ -40,6 +40,19 @@ const INDOOR_FADES: Record<number, { types: number[]; indoors: (tile: number) =>
   2: { types: [81, 82, 96, 98, 99], indoors: (tile) => tile === 3 || tile >= 10 }, // Devias
 };
 
+/**
+ * The objects of a map the desktop never draws (CreateObject sets HiddenMesh -2): markers it keeps only for what they
+ * do, e.g. Lorencia's pose boxes (where a character sits) and its light posts (where fire is drawn). Drawn, they were
+ * the black slabs over Lorencia's buildings. By map number (ZzzObject.cpp, CreateObject and RenderObject).
+ */
+const HIDDEN_OBJECTS: Record<number, number[]> = {
+  0: [130, 131, 132, 133], // Lorencia: MODEL_LIGHT01 to + 2 (fire, not drawn yet), MODEL_POSE_BOX
+  1: [60],                 // Dungeon
+  2: [91, 100],            // Devias
+  3: [38],                 // Noria
+  7: [39],                 // Atlans
+};
+
 export interface IndoorFade {
   meshes: THREE.InstancedMesh[];
   indoors: (tile: number) => boolean;
@@ -198,8 +211,9 @@ export async function createWorld(data: WorldData, fog: TerrainFog, onProgress?:
 
   const files = worldModelFiles(data.worldNumber);
   const byType = new Map<number, WorldObject[]>();
+  const hidden = HIDDEN_OBJECTS[data.mapNumber] as number[] | undefined;
   for (const object of data.objects) {
-    if (!files.has(object.type)) continue;
+    if (!files.has(object.type) || hidden?.includes(object.type)) continue;
     if (!byType.has(object.type)) byType.set(object.type, []);
     byType.get(object.type)!.push(object);
   }
