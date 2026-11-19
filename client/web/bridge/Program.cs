@@ -407,6 +407,14 @@ app.Map("/relay", async context =>
         return;
     }
 
+    // Game servers only: never the database or the admin panels (audit 2.8).
+    if (RelayPorts.IsRefused(port, launcherOptions.DatabasePort, new Uri(launcherOptions.AdminUrl).Port, launcherOptions.WebPort))
+    {
+        app.Logger.LogWarning("Refused relay to port {Port}: it isn't a game server.", port);
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return;
+    }
+
     var endPoint = await ResolveAllowedAsync(host, port).ConfigureAwait(false);
     if (endPoint is null)
     {
