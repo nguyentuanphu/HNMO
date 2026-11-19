@@ -140,7 +140,15 @@ public sealed class HostSettingsService : IHostSettingsService
     /// <inheritdoc />
     public async Task<string> SaveLicenseFileAsync(string? configuredPath, byte[] content, CancellationToken cancellationToken = default)
     {
-        var resolved = this.ResolveLicensePath(configuredPath);
+        // Writing a file is only allowed inside the HNMO folder (the panel can be reached from the website).
+        var folder = Path.GetFullPath(Path.Combine(this._baseDirectory, ".."));
+        var resolved = Path.GetFullPath(this.ResolveLicensePath(configuredPath));
+        if ((!string.IsNullOrWhiteSpace(configuredPath) && !HostSettingsValidator.IsInsideInstallFolder(configuredPath))
+            || !resolved.StartsWith(folder.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException("The license file must be saved inside the HNMO folder.");
+        }
+
         var dir = Path.GetDirectoryName(resolved);
         if (!string.IsNullOrEmpty(dir))
         {

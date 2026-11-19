@@ -6,6 +6,7 @@ namespace HNMO.Interfaces;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 /// <summary>
@@ -98,7 +99,62 @@ public static class HostSettingsValidator
             errors.Add("DatabaseUser is required.");
         }
 
+        // The admin panel can be reached from the website: its paths must not point outside the HNMO folder, or an
+        // administrator could have files written, or programs started, anywhere on the host.
+        foreach (var (name, path) in new[]
+        {
+            (nameof(HostSettings.DataPath), settings.DataPath),
+            (nameof(HostSettings.VendorPath), settings.VendorPath),
+            (nameof(HostSettings.PostgresPath), settings.PostgresPath),
+            (nameof(HostSettings.SavePath), settings.SavePath),
+            (nameof(HostSettings.ServerPath), settings.ServerPath),
+            (nameof(HostSettings.LicenseFilePath), settings.LicenseFilePath),
+        })
+        {
+            if (!IsInsideInstallFolder(path))
+            {
+                errors.Add($"{name} must be a relative path inside the HNMO folder (for example \"../save\").");
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.ServerProgram) || settings.ServerProgram.IndexOfAny(['/', '\\', ':']) >= 0 || settings.ServerProgram.Contains("..", StringComparison.Ordinal))
+        {
+            errors.Add("ServerProgram must be a program name only, without a folder.");
+        }
+
         return errors;
+    }
+
+    /// <summary>
+    /// Tells whether a path, taken relative to one of the HNMO folder's parts (server, web), stays inside the HNMO
+    /// folder: it is relative and climbs at most out of that part ("../save" is fine, "../../x" or "C:\x" is not).
+    /// </summary>
+    /// <param name="path">The configured path.</param>
+    /// <returns><c>true</c> if the path stays inside the HNMO folder.</returns>
+    public static bool IsInsideInstallFolder(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || Path.IsPathRooted(path) || path.Contains(':', StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var depth = 1;
+        foreach (var segment in path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (segment == "..")
+            {
+                if (--depth < 0)
+                {
+                    return false;
+                }
+            }
+            else if (segment != ".")
+            {
+                depth++;
+            }
+        }
+
+        return true;
     }
 
     private static void ValidatePort(int port, string name, List<string> errors)
