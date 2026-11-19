@@ -1115,6 +1115,8 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     ...seasonNineServers.map((s) => ({ ...s, connect: seasonNineConnect!, season: 's9' as const, meta: serverMeta.get(s.id)?.season === 's9' ? serverMeta.get(s.id) : undefined })),
   ];
   if (!servers.length) throw new Error('The connect server lists no game servers.');
+  // The list is there: the status line says what to do next and fades, instead of covering the servers.
+  setStatus(currentLanguage() === 'vi' ? 'Chọn máy chủ.' : 'Choose a server.', 1);
   // Servers of one world stand together, in the order of the worlds list.
   servers.sort((a, b) => (a.meta?.worldOrder ?? 0) - (b.meta?.worldOrder ?? 0) || a.id - b.id);
   const server = servers.length === 1
