@@ -23,15 +23,17 @@
 
 ## Active Work Queue (`antigravity-s6-work`, branched from `chatgpt-integration` `c02e6a97`)
 
-**Active Owner/Chat Claim**: Current Antigravity Windows session (`antigravity-s6-work`).
+### Ownership Split (2026-11-19 — Quota & Environment Optimization)
+- **Cloud Claude (owns pure C#/TS coding from GitHub)**: Pull `antigravity-s6-work`, claim items below by editing this file, work on **Wave 2**, **Wave 3** (`HNMO.sln` analyzer cleanup & cross-platform `.NET` tests), and **Wave 4B–4D** (`S9` server mechanics, `F5` packets, TypeScript web UIs, AdminPanel pages). Leave `[ ]` -> `[~]`/`[x]` updates in git as you go.
+- **Local Antigravity on Windows (reserved for Windows-only / local-disk work)**: Inspect extracted local x9 client `Data/` headers (`D:\MuOnline\IGCN\IGCN x9` outside git) to publish HNMO's clean `docs/s9-asset-spec.md` unblocking **Wave 4A**, run Windows-only `package-hnmo.sh win-x64` into `HNMO-pkg`, and run Chromium Playwright playtests against `HNMO-pkg`.
 
-### Wave 1 — Live Setup, Control, Portal & E2E Stability (COMPLETED)
+### Wave 1 — Live Setup, Control, Portal & E2E Stability (COMPLETED by Antigravity)
 1. [x] **Setup Wizard live port sync (`ControlEndpoints.cs`, `Portal.cs`, `Program.cs`)**: Update in-memory `LauncherOptions` and `PortalOptions` (`ConnectServerPort`, `DatabasePort`, `AdminUrl`, `OpenBrowserUrl`) immediately when `/api/control/setup` or restore writes `hnmo-settings.json`, plus 2s HTTP timeout on `ProbeHttpAsync` so `adminPanel` probe handles cold Blazor SSR startup cleanly.
 2. [x] **`/worlds` button layout & `/api/website` multi-world ServerId safety**: Added `flex-nowrap text-nowrap` on `/worlds` Start/Stop/Edit buttons at `1280px`, and guarded `WebsiteController.Get()` with `GroupBy(x => x.ServerId)` so duplicate server IDs across worlds never throw `ArgumentException`.
 3. [x] **`inventory.spec.ts:50` helm-swap assertion**: Polled slot `2` removal cleanly via `expect.poll` alongside `free.slot` addition so `inventory.spec.ts` does not race between packet updates.
 4. [x] **First-run `/control` setup clarity**: Added bilingual EN/VI `wizardHint` on `control.html` noting `/users` admin creation (`>= 12` char password) and `Administrator` API key role for Website Portal registration.
 
-### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion (NEXT)
+### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion (ASSIGNED: Cloud Claude)
 5. [ ] **`/import-server` S6 Extensions**: Weighted multi-pool Item Bag XML rules, Ancient Set drop rules, and multi-slot map/day bonus schedules (dry-run + backup + undo).
 6. [ ] **Remaining S6 Gameplay & Web UI Gaps** ([feature-gap-2026-11-18.md](feature-gap-2026-11-18.md)):
    - Gens strife-map PvP/move locks + chat/nameplate icons.
@@ -41,10 +43,10 @@
    - Guild War & Battle Soccer web UI scoreboards + full Master Skill tree parity outside Rage Fighter.
    - Combat helper AI bots (`BK_Helper` / `SM_Helper`).
 
-### Wave 3 — Code Hygiene & Full Windows E2E Sweep (No Linux)
-7. [ ] **Pre-existing C# analyzer cleanup** (`~404` SA/CS warnings in legacy files) + **full non-smoke Windows E2E sweep** across merged PR features (`escrow-contracts`, `world-editor`, `s6-events`, `anti-cheat`, `rate-tuning`, `qol-commands`, `market`, `jewel-bank`, `top-races`) and clean `HNMO-pkg` `win-x64` re-playtest.
+### Wave 3 — Code Hygiene & Full Windows E2E Sweep (SPLIT: Cloud Claude C# cleanup; Antigravity Windows E2E)
+7. [ ] **Cloud Claude**: Clean pre-existing `~404` C# SA/CS analyzer warnings across `HNMO.sln` + run `HNMO.Web.Tests` & `.NET` tests on Linux/CI; **Local Antigravity**: run full non-smoke Windows Playwright sweep (`escrow-contracts`, `world-editor`, `s6-events`, `anti-cheat`, `rate-tuning`, `qol-commands`, `market`, `jewel-bank`, `top-races`) + clean `HNMO-pkg` `win-x64` re-playtest.
 
-### Wave 4 — Season 9 Support on Web App + Server (NEW — Owner Approved 2026-11-19)
+### Wave 4 — Season 9 Support on Web App + Server (SPLIT: Antigravity Local Inspection -> Cloud Claude Implementation)
 > **Scope**: Stay **WEB ONLY** (`client/web` + `server/` + Windows `HNMO-pkg`), no desktop client. Keep Season 6.3 intact by default and add version-switched Season 9 support backed by an optional extracted S9 `Data` overlay pack (never committing third-party proprietary files/archives from `D:\MuOnline\IGCN\IGCN x9` to git).
 > **F5 Packet Budget**: Free `2B–2F`, `4E–4F`, `50–6F`. Already taken: `23` (#12), `24` (#13), `25/26` (#39), `27/28` (#64), `29` (#79), `2A` (#82), `30–4D`.
 
