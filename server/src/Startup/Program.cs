@@ -59,6 +59,9 @@ internal sealed class Program : IDisposable
     private static bool _confirmExit;
     private static SystemConfiguration? _systemConfiguration;
 
+    /// <summary>The connect server's port of a new save (Season 6.3).</summary>
+    private const int DefaultConnectServerPort = 44406;
+
     private readonly IDictionary<int, IGameServer> _gameServers = new Dictionary<int, IGameServer>();
     private readonly IList<IManageableServer> _servers = new List<IManageableServer>();
     private readonly Serilog.ILogger _logger;
@@ -875,38 +878,110 @@ internal sealed class Program : IDisposable
             await this.InitializeDataAsync(version, loggerFactory, contextProvider).ConfigureAwait(false);
             inMemoryProvider.ChangePublisher = changePublisher;
 
-            if (int.TryParse(Environment.GetEnvironmentVariable("HNMO_PORT_OFFSET"), out var portOffset) && portOffset != 0)
+            _ = int.TryParse(Environment.GetEnvironmentVariable("HNMO_PORT_OFFSET"), out var portOffset);
+            portOffset += HnmoSeasonInstance.PortOffsetFor(HnmoSeasonInstance.Current);
+            if (portOffset != 0)
             {
-                using var portContext = contextProvider.CreateNewConfigurationContext();
-                foreach (var cs in await portContext.GetAsync<ConnectServerDefinition>().ConfigureAwait(false))
-                {
-                    cs.ClientListenerPort += portOffset;
-                }
-
-                foreach (var gs in await portContext.GetAsync<GameServerDefinition>().ConfigureAwait(false))
-                {
-                    foreach (var ep in gs.Endpoints)
-                    {
-                        ep.NetworkPort += portOffset;
-                    }
-                }
-
-                foreach (var ep in await portContext.GetAsync<HNMO.DataModel.Configuration.ChatServerEndpoint>().ConfigureAwait(false))
-                {
-                    ep.NetworkPort += portOffset;
-                }
-
-                await portContext.SaveChangesAsync().ConfigureAwait(false);
+                await ShiftPortsAsync(contextProvider, portOffset).ConfigureAwait(false);
             }
         }
         else
         {
             contextProvider = await this.PrepareRepositoryProviderAsync(args.Contains("-reinit"), version, loggerFactory, changeListener).ConfigureAwait(false);
+            await this.MoveSeasonNinePortsAsync().ConfigureAwait(false);
+            this.UseSharedAccounts();
         }
 
         await this.ReadSystemConfigurationAsync(contextProvider).ConfigureAwait(false);
 
         return contextProvider;
+    }
+
+    private static async Task ShiftPortsAsync(IPersistenceContextProvider contextProvider, int portOffset)
+    {
+        using var portContext = contextProvider.CreateNewConfigurationContext();
+        foreach (var cs in await portContext.GetAsync<ConnectServerDefinition>().ConfigureAwait(false))
+        {
+            cs.ClientListenerPort += portOffset;
+        }
+
+        foreach (var gs in await portContext.GetAsync<GameServerDefinition>().ConfigureAwait(false))
+        {
+            foreach (var ep in gs.Endpoints)
+            {
+                ep.NetworkPort += portOffset;
+            }
+        }
+
+        foreach (var ep in await portContext.GetAsync<HNMO.DataModel.Configuration.ChatServerEndpoint>().ConfigureAwait(false))
+        {
+            ep.NetworkPort += portOffset;
+        }
+
+        await portContext.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// A Season 9 program runs next to Season 6.3's, so its servers listen on other ports (connect server 44506 instead
+    /// of 44406, game and chat servers 100 higher). Done once, on its database's first start: a port an administrator
+    /// changed afterwards stays as set.
+    /// </summary>
+    /// <summary>
+    /// A Season 9 program takes logins and coins from the shared (Season 6.3) database (owner's decision, 2026-11-19).
+    /// </summary>
+    private void UseSharedAccounts()
+    {
+        if (PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        {
+            return;
+        }
+
+        var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+        builder.Database = HnmoSeasonInstance.SharedDatabaseName(builder.Database ?? string.Empty);
+
+        // The website's login tickets, in the shared database: "Play" works for a server of either season.
+        SharedLoginTicketStore.Current = new PostgresSharedLoginTicketStore(builder.ToString());
+        if (!HnmoSeasonInstance.IsSeasonNine)
+        {
+            return;
+        }
+
+        SharedAccountStore.Current = new PostgresSharedAccountStore(builder.ToString());
+        this._logger.Information("Season 9: accounts and coins are shared with Season 6.3 (database {Database}).", builder.Database);
+    }
+
+    private async Task MoveSeasonNinePortsAsync()
+    {
+        if (!HnmoSeasonInstance.IsSeasonNine || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        {
+            return;
+        }
+
+        // The configuration contexts may only read: the ports change with the database's own role, in one transaction.
+        await using var connection = new Npgsql.NpgsqlConnection(connectionString);
+        await connection.OpenAsync().ConfigureAwait(false);
+        await using var transaction = await connection.BeginTransactionAsync().ConfigureAwait(false);
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            SELECT count(*) FROM config."ConnectServerDefinition" WHERE "ClientListenerPort" = @port;
+            """;
+        command.Parameters.AddWithValue("port", DefaultConnectServerPort);
+        if (Convert.ToInt64(await command.ExecuteScalarAsync().ConfigureAwait(false), System.Globalization.CultureInfo.InvariantCulture) == 0)
+        {
+            return;
+        }
+
+        command.Parameters.Clear();
+        command.Parameters.AddWithValue("offset", HnmoSeasonInstance.SeasonNinePortOffset);
+        command.CommandText = """
+            UPDATE config."ConnectServerDefinition" SET "ClientListenerPort" = "ClientListenerPort" + @offset;
+            UPDATE config."GameServerEndpoint" SET "NetworkPort" = "NetworkPort" + @offset;
+            UPDATE config."ChatServerEndpoint" SET "NetworkPort" = "NetworkPort" + @offset;
+            """;
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+        await transaction.CommitAsync().ConfigureAwait(false);
+        this._logger.Information("Season 9: its servers listen {Offset} ports above Season 6.3's (connect server {Port}).", HnmoSeasonInstance.SeasonNinePortOffset, DefaultConnectServerPort + HnmoSeasonInstance.SeasonNinePortOffset);
     }
 
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)

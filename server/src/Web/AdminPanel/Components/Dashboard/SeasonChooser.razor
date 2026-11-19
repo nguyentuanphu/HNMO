@@ -1,0 +1,61 @@
+@* The home page's big buttons (seasons plan, step 2): Season 6.3 and Season 9 side by side, plus the shared settings. *@
+@using HNMO.Interfaces
+@using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Services
+@inject IHostSettingsService HostSettings
+@inject NavigationManager Navigation
+
+<section class="season-chooser" aria-label="@Resources.SeasonChooserTitle">
+    <h2 class="season-chooser-title">@Resources.SeasonChooserTitle</h2>
+    <div class="season-chooser-grid">
+        @foreach (var panel in this._panels)
+        {
+            var nine = panel.Season == HnmoSeasonInstance.SeasonNine;
+            var title = nine ? Resources.SeasonNineButton : Resources.SeasonSixButton;
+            var hint = nine ? Resources.SeasonNineButtonHint : Resources.SeasonSixButtonHint;
+            if (panel.Url is null)
+            {
+                <div class="season-button season-@panel.Season is-off" id="season-button-@panel.Season" aria-disabled="true">
+                    <span class="season-button-name">@title</span>
+                    <span class="season-button-hint">@Resources.SeasonNineOff</span>
+                </div>
+            }
+            else
+            {
+                <a class="season-button season-@panel.Season @(panel.IsCurrent ? "is-current" : null)" id="season-button-@panel.Season" href="@(panel.IsCurrent ? "#season-pages" : panel.Url)">
+                    <span class="season-button-name">@title</span>
+                    <span class="season-button-hint">@hint</span>
+                    @if (panel.IsCurrent)
+                    {
+                        <span class="season-button-here">@Resources.SeasonYouAreHere</span>
+                    }
+                </a>
+            }
+        }
+        <a class="season-button season-shared" id="season-button-shared" href="@SeasonPanels.SharedSettingsUrl(this._panels)">
+            <span class="season-button-name">@Resources.SharedSettingsButton</span>
+            <span class="season-button-hint">@Resources.SharedSettingsButtonHint</span>
+        </a>
+    </div>
+</section>
+
+@code {
+    private IReadOnlyList<SeasonPanel> _panels = [];
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        var uri = new Uri(this.Navigation.Uri);
+        HostSettings settings;
+        try
+        {
+            settings = this.HostSettings.Load();
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+        {
+            settings = new HostSettings();
+        }
+
+        this._panels = SeasonPanels.For(HnmoSeasonInstance.Current, settings, uri.Scheme, uri.Host);
+    }
+}

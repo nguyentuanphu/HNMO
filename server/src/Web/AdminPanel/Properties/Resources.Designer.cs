@@ -13664,6 +13664,76 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
 
+        /// <summary>Looks up a localized string similar to Which season do you want to set up?.</summary>
+        public static string SeasonChooserTitle {
+            get {
+                return ResourceManager.GetString("SeasonChooserTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to Season 6.3.</summary>
+        public static string SeasonSixButton {
+            get {
+                return ResourceManager.GetString("SeasonSixButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to Season 9.</summary>
+        public static string SeasonNineButton {
+            get {
+                return ResourceManager.GetString("SeasonNineButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to The classic worlds: maps, monsters, items, drops, shops, events and rates of Season 6.3..</summary>
+        public static string SeasonSixButtonHint {
+            get {
+                return ResourceManager.GetString("SeasonSixButtonHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to The newer worlds: maps, monsters, items, drops, shops, events and rates of Season 9..</summary>
+        public static string SeasonNineButtonHint {
+            get {
+                return ResourceManager.GetString("SeasonNineButtonHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to You are here.</summary>
+        public static string SeasonYouAreHere {
+            get {
+                return ResourceManager.GetString("SeasonYouAreHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to Off. Switch it on in Host settings (Season 9 server), then restart HNMO..</summary>
+        public static string SeasonNineOff {
+            get {
+                return ResourceManager.GetString("SeasonNineOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to Shared settings.</summary>
+        public static string SharedSettingsButton {
+            get {
+                return ResourceManager.GetString("SharedSettingsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to Both seasons: accounts, coins, website, news, bans, admin users and host settings..</summary>
+        public static string SharedSettingsButtonHint {
+            get {
+                return ResourceManager.GetString("SharedSettingsButtonHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>Looks up a localized string similar to This admin panel sets up {0}.</summary>
+        public static string SeasonBadgeTitle {
+            get {
+                return ResourceManager.GetString("SeasonBadgeTitle", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to All maps.
         /// </summary>

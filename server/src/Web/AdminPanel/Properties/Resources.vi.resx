@@ -5205,4 +5205,14 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
     <value>Thực hiện thao tác này.</value>
   </data>
   <data name="ShopEditorAllMaps" xml:space="preserve"><value>Tất cả bản đồ</value></data>
+  <data name="SeasonChooserTitle" xml:space="preserve"><value>Bạn muốn cài đặt season nào?</value></data>
+  <data name="SeasonSixButton" xml:space="preserve"><value>Season 6.3</value></data>
+  <data name="SeasonNineButton" xml:space="preserve"><value>Season 9</value></data>
+  <data name="SeasonSixButtonHint" xml:space="preserve"><value>Thế giới cổ điển: bản đồ, quái, vật phẩm, rơi đồ, cửa hàng, sự kiện và tỉ lệ của Season 6.3.</value></data>
+  <data name="SeasonNineButtonHint" xml:space="preserve"><value>Thế giới mới: bản đồ, quái, vật phẩm, rơi đồ, cửa hàng, sự kiện và tỉ lệ của Season 9.</value></data>
+  <data name="SeasonYouAreHere" xml:space="preserve"><value>Bạn đang ở đây</value></data>
+  <data name="SeasonNineOff" xml:space="preserve"><value>Đang tắt. Bật trong Cài đặt máy chủ (Máy chủ Season 9), rồi khởi động lại HNMO.</value></data>
+  <data name="SharedSettingsButton" xml:space="preserve"><value>Cài đặt chung</value></data>
+  <data name="SharedSettingsButtonHint" xml:space="preserve"><value>Cả hai season: tài khoản, xu, trang web, tin tức, cấm, người quản trị và cài đặt máy chủ.</value></data>
+  <data name="SeasonBadgeTitle" xml:space="preserve"><value>Trang quản trị này cài đặt {0}</value></data>
 </root>
