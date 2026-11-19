@@ -60,7 +60,9 @@ jobs:
         run: cd client/web && CI=1 npx playwright test --workers=1 --shard=${{ matrix.shard }}/6 --reporter=github,line
       - name: Logs and report
         if: failure() || cancelled()
-        run: tail -n 100 "$RUNNER_TEMP/server.log" "$RUNNER_TEMP/web.log"
+        # Only the server's warnings and errors: the full logs (in the artifact) push the test results off the
+        # end of the job's log.
+        run: grep -E "\[(Warning|Error|Fatal)\]|Exception" "$RUNNER_TEMP/server.log" | tail -n 40 || true
       - uses: actions/upload-artifact@v4
         if: failure() || cancelled()
         with:
@@ -68,4 +70,6 @@ jobs:
           path: |
             client/web/playwright-report
             client/web/test-results
+            ${{ runner.temp }}/server.log
+            ${{ runner.temp }}/web.log
           retention-days: 14
