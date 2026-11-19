@@ -114,3 +114,18 @@ Check them in a packaged folder:
 
 Main Claude (cloud) works on Job 4 (the events countdown) now. Skip it. If you already started it, push what you
 have to a draft PR and say so in it.
+
+## Job 9 (added 03:45, 20 Nov): draw Stardust (14:153) from the Season 9 pack
+
+Job 7's report (`docs/s9-item-models-2026-11-20.md`) found one item whose model is only in the Season 9 data:
+Stardust, 14:153, candidate `Item/SpiritDust.bmd` (version 0x0e) with `Item/Texture/SpiritDust.OZJ` and
+`SpiritDustAlpha.OZT`. Main Claude's cloud copy of the Season 9 data has no `Item/` folder, so it can't draw it.
+1. With the local Season 9 data, draw the candidate with the web game's item renderer (as
+   `client/web/tools/make-item-icons.mjs` does) and look at it: is it a star dust (a small glowing powder or pouch)?
+2. If yes: add the model entry for 14:153 to `client/src/bin/Data/Items/Models/Group14_Potion.json`
+   (file `Data/Item/SpiritDust.bmd`, texture folder `Item/Texture`). Then let the bridge serve those three files from
+   the Season 9 pack when the base data has none: `SeasonData` in `client/web/bridge` already does this for the
+   Season 9-only map folders (`IsSeasonNineOnlyMapFile`). Add a tested allowlist of exactly these three files.
+   Make the item picture (`make-item-icons.mjs`) and check the item in the game's bag (`/item 14 153` with `testgm`).
+3. If no: say so in the report; nothing changes.
+4. Draft PR into `claude/hnmo-main-handover-54co2m`, with a screenshot.
