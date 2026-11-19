@@ -8,16 +8,17 @@ using System.ComponentModel.DataAnnotations;
 using HNMO.DataModel.Configuration.Items;
 
 /// <summary>
-/// Configuration for <see cref="MultiVaultPlugIn"/> (ROADMAP 14.5). Off until enabled by host.
+/// Configuration for <see cref="MultiVaultPlugIn"/> (ROADMAP 14.5): the vault pages of an account. On by default, with
+/// two free pages, one more for VIP, and more bought with coins (owner's choice, 2026-11-20).
 /// </summary>
 public sealed class MultiVaultConfiguration
 {
     /// <summary>Gets or sets a value indicating whether extra vaults and <c>/vault</c> switching are enabled.</summary>
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     /// <summary>Gets or sets number of unlocked vaults for every standard account (minimum 1 = vault #0).</summary>
     [Range(1, 20)]
-    public int DefaultVaultCount { get; set; } = 1;
+    public int DefaultVaultCount { get; set; } = 2;
 
     /// <summary>Gets or sets hard maximum vaults any single account may hold.</summary>
     [Range(1, 30)]
@@ -29,7 +30,7 @@ public sealed class MultiVaultConfiguration
 
     /// <summary>Gets or sets coin cost to permanently unlock one extra vault with <c>/vault buy</c> (0 = purchase disabled).</summary>
     [Range(0, 1000000)]
-    public int PurchaseExtraVaultCost { get; set; } = 100;
+    public int PurchaseExtraVaultCost { get; set; } = 200;
 
     /// <summary>Gets or sets coin type charged when buying extra vaults.</summary>
     public CashShopCoinType PurchaseCoinType { get; set; } = CashShopCoinType.WCoinC;
