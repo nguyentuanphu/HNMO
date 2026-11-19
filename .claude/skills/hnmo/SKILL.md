@@ -442,3 +442,6 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   same template per class, all 4 modes (1v1 always; 5v5, battle royale, guild war scheduled), rewards = titles,
   arena points shop on home servers, website leaderboard (no coins). Plans: docs/plans/arena-2026-11-20.md,
   docs/plans/anti-dupe-market-2026-11-20.md.
+- Messages for local Claude (owner, 2026-11-20): the owner relays them by hand and can miss some. Send ONE combined,
+  copyable message that replaces all earlier unsent ones, and ask in a pop-up whether it was sent. Don't add a new
+  message per small change: fold it into the next combined one.
