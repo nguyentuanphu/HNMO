@@ -56,7 +56,7 @@ public sealed class WebsiteLoginTicketController(
             return blocked;
         }
 
-        var (ticket, _) = WebLoginTicketStore.Shared.Issue(loginName);
+        var (ticket, _) = await WebLoginTicketStore.Shared.IssueAsync(loginName, HNMO.Persistence.SharedLoginTicketStore.Current, cancellationToken).ConfigureAwait(false);
         this.Response.Headers.CacheControl = "no-store";
         return this.Ok(new
         {
@@ -94,7 +94,7 @@ public sealed class WebsiteLoginTicketController(
             return blocked;
         }
 
-        var (ticket, _) = WebLoginTicketStore.Shared.Issue(account.LoginName);
+        var (ticket, _) = await WebLoginTicketStore.Shared.IssueAsync(account.LoginName, HNMO.Persistence.SharedLoginTicketStore.Current, cancellationToken).ConfigureAwait(false);
         this.Response.Headers.CacheControl = "no-store";
         return this.Ok(new
         {

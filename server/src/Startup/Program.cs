@@ -931,13 +931,21 @@ internal sealed class Program : IDisposable
     /// </summary>
     private void UseSharedAccounts()
     {
-        if (!HnmoSeasonInstance.IsSeasonNine || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        if (PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
         {
             return;
         }
 
         var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
         builder.Database = HnmoSeasonInstance.SharedDatabaseName(builder.Database ?? string.Empty);
+
+        // The website's login tickets, in the shared database: "Play" works for a server of either season.
+        SharedLoginTicketStore.Current = new PostgresSharedLoginTicketStore(builder.ToString());
+        if (!HnmoSeasonInstance.IsSeasonNine)
+        {
+            return;
+        }
+
         SharedAccountStore.Current = new PostgresSharedAccountStore(builder.ToString());
         this._logger.Information("Season 9: accounts and coins are shared with Season 6.3 (database {Database}).", builder.Database);
     }

@@ -109,7 +109,11 @@ public class LoginAction
             return;
         }
 
-        if (!(ticketStore ?? WebLoginTicketStore.Shared).TryRedeem(username, ticket))
+        // Without a given store, the website's tickets may come from the shared store (both seasons' programs).
+        var redeemed = ticketStore is not null
+            ? ticketStore.TryRedeem(username, ticket)
+            : await RedeemWebTicketAsync(player, username, ticket).ConfigureAwait(false);
+        if (!redeemed)
         {
             player.Logger.LogInformation("Invalid, expired, or already used login ticket for [{Username}].", username);
             PlugIns.AccountSafety.AccountSafetyPlugIn.RecordFailedLogin(player, username);
@@ -127,6 +131,19 @@ public class LoginAction
         await MirrorSharedAccountAsync(player, username).ConfigureAwait(false);
         var (success, account) = await this.TryEstablishSessionAsync(player, username, validateAccountStateAfterLoad: true).ConfigureAwait(false);
         await this.CompleteLoginAsync(player, username, success, account).ConfigureAwait(false);
+    }
+
+    private static async ValueTask<bool> RedeemWebTicketAsync(Player player, string username, string ticket)
+    {
+        try
+        {
+            return await WebLoginTicketStore.Shared.TryRedeemAsync(username, ticket, HNMO.Persistence.SharedLoginTicketStore.Current).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            player.Logger.LogWarning(ex, "Couldn't check the website login ticket of [{Username}].", username);
+            return false;
+        }
     }
 
     /// <summary>
