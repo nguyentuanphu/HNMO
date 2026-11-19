@@ -93,7 +93,7 @@ async function request<T>(path: string, body: Readonly<Record<string, unknown>> 
   if (!response.ok) {
     if (path.startsWith('/portal/account/email/')) {
       const problem: unknown = await response.json().catch(() => null);
-      const messages: Readonly<Record<string, AccountTextKey>> = { online: 'emailOnline', email: 'emailInvalid', code: 'emailCodeInvalid', 'mail-off': 'emailOff', 'mail-wait': 'emailWait', 'mail-send': 'emailSendFailed' };
+      const messages: Readonly<Record<string, AccountTextKey>> = { online: 'emailOnline', email: 'emailInvalid', 'email-taken': 'emailTaken', code: 'emailCodeInvalid', 'mail-off': 'emailOff', 'mail-wait': 'emailWait', 'mail-send': 'emailSendFailed' };
       if (problem && typeof problem === 'object' && 'error' in problem && typeof problem.error === 'string' && messages[problem.error]) throw new AccountRequestError(messages[problem.error]);
     }
     if (path === '/portal/account/password' && response.status === 409) throw new AccountRequestError('passwordOnline');

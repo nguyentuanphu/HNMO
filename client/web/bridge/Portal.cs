@@ -56,7 +56,7 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/account/missions/claim", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/missions/claim", "Account missions"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-box/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/gift-box/state", "Gift box"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-box/collect", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/gift-box/collect", "Gift box"))).RequireRateLimiting("per-visitor");
-        app.MapPost("/portal/register", portal.RegisterAsync).RequireRateLimiting("per-visitor");
+        app.MapPost("/portal/register", portal.RegisterWithoutAddressAsync).RequireRateLimiting("per-visitor");
         app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
         app.MapGet("/website/settings", (Func<HttpContext, Task<IResult>>)portal.WebsiteSettingsAsync);
@@ -178,6 +178,12 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
             return true;
         }
     }
+
+    // The website's own form: an address typed there is not checked, and Google sign-in finds accounts by their
+    // address, so whoever typed someone else's address could block or take their Google sign-in. An address is
+    // only set through the account page's confirmation code, or by Google sign-in (which Google has verified).
+    private Task<IResult> RegisterWithoutAddressAsync(HttpContext context, RegisterRequest request) =>
+        this.RegisterAsync(context, request with { EMail = null });
 
     private async Task<IResult> RegisterAsync(HttpContext context, RegisterRequest request)
     {

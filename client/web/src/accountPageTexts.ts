@@ -88,6 +88,7 @@ export const accountPageTexts = {
   emailChanged: ['Your new email address is confirmed and saved.', 'Đã xác nhận và lưu địa chỉ email mới.'],
   emailOnline: ['Leave the game, then request or confirm your email code again.', 'Hãy thoát game rồi lấy mã hoặc xác nhận email lại.'],
   emailInvalid: ['Enter a valid new email address different from the current one.', 'Nhập email mới hợp lệ, khác với địa chỉ hiện tại.'],
+  emailTaken: ['Another account already uses this email address.', 'Email này đã được một tài khoản khác sử dụng.'],
   emailCodeInvalid: ['The code is incorrect, expired or already used. Request a new code if needed.', 'Mã không đúng, đã hết hạn hoặc đã dùng. Hãy lấy mã mới nếu cần.'],
   emailWait: ['Wait one minute before requesting another code.', 'Hãy chờ một phút trước khi lấy mã khác.'],
   emailSendFailed: ['The confirmation email could not be sent. Try again later or contact the host.', 'Chưa gửi được email xác nhận. Hãy thử lại sau hoặc liên hệ chủ máy chủ.'],
