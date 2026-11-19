@@ -16,11 +16,20 @@ test('drops a bag item on the ground, shows its label and picks it up again', as
   const slot = slots.find((s) => s >= BAG.firstSlot);
   test.skip(slot === undefined, 'nothing in the bag');
   const item = await page.evaluate((s) => { const i = (window as unknown as Win).__game.inventory.items.get(s)!; return { group: i.group, number: i.number }; }, slot!);
-  await clickAt(page, await gridSlotPoint(page, 'my_inventory', BAG, BAG_GRID_ORIGIN.left, BAG_GRID_ORIGIN.top, slot!));
-  // the ground a little left of the hero (the middle of the screen)
+  // The ground a little beside the hero (the middle of the screen). Where the character stands depends on earlier
+  // tests and its spawn point, so a spot can be a wall or a house, where the server refuses the drop and the item
+  // goes back to its slot: then the next direction is tried.
   const viewport = page.viewportSize()!;
-  await clickAt(page, { x: viewport.width / 2 - 160, y: viewport.height / 2 + 40 });
-  await expect.poll(() => bagSlots(page)).not.toContain(slot);
+  const spots = [[-160, 40], [160, 40], [0, 140], [-160, -60], [160, -60], [0, -120]];
+  await expect(async () => {
+    const [dx, dy] = spots.shift() ?? [-160, 40];
+    if ((await bagSlots(page)).includes(slot!)) {
+      await clickAt(page, await gridSlotPoint(page, 'my_inventory', BAG, BAG_GRID_ORIGIN.left, BAG_GRID_ORIGIN.top, slot!));
+      await clickAt(page, { x: viewport.width / 2 + dx, y: viewport.height / 2 + dy });
+    }
+
+    await expect.poll(() => bagSlots(page), { timeout: 10_000 }).not.toContain(slot);
+  }).toPass({ timeout: 90_000 });
   await expect.poll(() => page.evaluate((it) => [...(window as unknown as Win).__game.ground.drops.values()].some((d) => d.item?.group === it.group && d.item?.number === it.number), item)).toBe(true);
   await page.keyboard.down('Alt');
   await page.waitForTimeout(1500);

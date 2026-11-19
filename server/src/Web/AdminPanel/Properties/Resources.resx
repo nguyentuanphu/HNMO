@@ -5164,4 +5164,5 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="PageHelpHintAction" xml:space="preserve">
     <value>Perform this action.</value>
   </data>
+  <data name="ShopEditorAllMaps" xml:space="preserve"><value>All maps</value></data>
 </root>

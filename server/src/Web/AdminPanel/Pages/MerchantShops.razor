@@ -22,8 +22,19 @@
 @if (this._loading) { <p>@Resources.Loading</p> }
 else if (this._selected is null)
 {
-    <label class="form-label" for="merchant-search">@Resources.ShopEditorSearch</label>
-    <input id="merchant-search" class="form-control mb-3" @bind="this._search" @bind:event="oninput" @bind:after="this.ResetPageAsync" title="@Resources.ShopEditorSearch" />
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label" for="merchant-map">@Resources.ShopEditorLocation</label>
+            <select id="merchant-map" class="form-select" @bind="this._map" @bind:after="this.ResetPageAsync">
+                <option value="">@Resources.ShopEditorAllMaps</option>
+                @foreach (var map in this.MapNames) { <option value="@map">@map</option> }
+            </select>
+        </div>
+        <div class="col-md-8">
+            <label class="form-label" for="merchant-search">@Resources.ShopEditorSearch</label>
+            <input id="merchant-search" class="form-control" @bind="this._search" @bind:event="oninput" @bind:after="this.ResetPageAsync" title="@Resources.ShopEditorSearch" />
+        </div>
+    </div>
     @if (this._copySource is { } from)
     {
         <div class="card card-body mb-3 shop-copy">

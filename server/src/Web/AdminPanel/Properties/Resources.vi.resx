@@ -5204,4 +5204,5 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="PageHelpHintAction" xml:space="preserve">
     <value>Thực hiện thao tác này.</value>
   </data>
+  <data name="ShopEditorAllMaps" xml:space="preserve"><value>Tất cả bản đồ</value></data>
 </root>

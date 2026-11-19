@@ -33,6 +33,8 @@ public partial class MerchantShops : IDisposable
     private bool _loading = true;
     private bool _busy;
     private string _search = string.Empty;
+
+    private string _map = string.Empty;
     private string _notice = string.Empty;
     private string _error = string.Empty;
 
@@ -52,7 +54,9 @@ public partial class MerchantShops : IDisposable
     [Inject]
     public ILogger<MerchantShops> Logger { get; set; } = null!;
 
-    private IQueryable<MerchantShopRow> FilteredRows => this._rows.Where(r => r.Name.Contains(this._search.Trim(), StringComparison.OrdinalIgnoreCase) || r.Locations.Contains(this._search.Trim(), StringComparison.OrdinalIgnoreCase)).AsQueryable();
+    private IEnumerable<string> MapNames => this._rows.SelectMany(r => r.Maps).Distinct(StringComparer.OrdinalIgnoreCase).Order(StringComparer.OrdinalIgnoreCase);
+
+    private IQueryable<MerchantShopRow> FilteredRows => this._rows.Where(r => this._map.Length == 0 || r.Maps.Contains(this._map, StringComparer.OrdinalIgnoreCase)).Where(r => r.Name.Contains(this._search.Trim(), StringComparison.OrdinalIgnoreCase) || r.Locations.Contains(this._search.Trim(), StringComparison.OrdinalIgnoreCase)).AsQueryable();
 
     /// <inheritdoc />
     public void Dispose()
@@ -69,7 +73,8 @@ public partial class MerchantShops : IDisposable
     private static MerchantShopRow MakeRow(MonsterDefinition merchant, IEnumerable<MonsterSpawnArea> spawns)
     {
         var locations = string.Join("; ", spawns.Select(s => $"{s.GameMap?.Name} ({s.GameMap?.Number}) · {s.X1},{s.Y1}" + (s.X1 != s.X2 || s.Y1 != s.Y2 ? $"–{s.X2},{s.Y2}" : string.Empty)));
-        return new MerchantShopRow(merchant, locations.Length > 0 ? locations : Resources.ShopEditorNoSpawn);
+        var maps = spawns.Select(s => s.GameMap?.Name.ToString()).Where(n => !string.IsNullOrWhiteSpace(n)).Select(n => n!).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        return new MerchantShopRow(merchant, locations.Length > 0 ? locations : Resources.ShopEditorNoSpawn, maps);
     }
 
     private Task ResetPageAsync() => this._pagination.SetCurrentPageIndexAsync(0);
