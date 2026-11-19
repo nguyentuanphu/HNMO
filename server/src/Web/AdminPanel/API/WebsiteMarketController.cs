@@ -30,7 +30,8 @@ public sealed class WebsiteMarketController(
     IPersistenceContextProvider persistence,
     IDataSource<GameConfiguration> gameConfigurationSource,
     IServerProvider serverProvider,
-    ILogger<WebsiteMarketController> logger) : ControllerBase
+    ILogger<WebsiteMarketController> logger,
+    ILoginServer? loginServer = null) : ControllerBase
 {
     private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, SemaphoreSlim> PurchaseGates = new(StringComparer.Ordinal);
 
@@ -108,12 +109,32 @@ public sealed class WebsiteMarketController(
         // both get their item, while the second debit finds nothing left to take.
         var gate = PurchaseGates.GetOrAdd(account.LoginName.ToUpperInvariant(), static _ => new SemaphoreSlim(1, 1));
         await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+
+        // While the account plays, a purchase in the game could spend the same coins at the same moment (audit 1.5):
+        // the account is held at the login server for the purchase, as the VIP and gift box pages do. Playing, the
+        // player buys in the game (F6).
+        var reservation = System.Security.Cryptography.RandomNumberGenerator.GetInt32(byte.MaxValue + 1, int.MaxValue);
+        var reserved = false;
         try
         {
+            if (loginServer is not null)
+            {
+                reserved = await loginServer.TryReserveAccountAsync(account.LoginName, reservation).AsTask().WaitAsync(cancellationToken).ConfigureAwait(false);
+                if (!reserved)
+                {
+                    return this.Conflict(new { error = "online" });
+                }
+            }
+
             return await this.BuyLockedAsync(engine, context, account, request.ListingId, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
+            if (reserved)
+            {
+                await loginServer!.ReleaseAccountReservationAsync(account.LoginName, reservation).ConfigureAwait(false);
+            }
+
             gate.Release();
         }
     }
