@@ -62,3 +62,49 @@
       tests\e2e\touch.spec.ts:12:1 › touch: the button bar, a tap walks, two fingers zoom and turn
     12 passed (11.6m)
   ```
+
+---
+
+## STEP 2 — Audit Fixes Checked by Hand
+
+### 2a. Trade & Chaos Goblin Window Blocking (Two Browsers: `test1` & `test2`)
+- **Trade check** (`scratch/step2-trade-and-market.mjs`):
+  - Opened trade between `test1` (`test1Dk`) and `test2` (`test2Dk`) in Lorencia (`(147, 118)` / `(146, 121)`).
+  - Triggered `window.__jb?.open?.()`, `window.__market?.open?.()`, `window.__mc?.open?.()`, and sent `/code TEST123` while trade was open:
+    - Result: `jbOpen: false`, `mktOpen: false`, `mcOpen: false` (windows stayed closed), and chat displayed `"Close the trade or crafting window before using a command."`.
+  - Cancelled trade and compared full bag snapshots for both accounts: `bagAEqual: true`, `bagBEqual: true`.
+  - Screenshot: [step2a-trade-block.png](screenshots/antigravity-2026-11-20/step2a-trade-block.png)
+- **Chaos Goblin check** (`scratch/step2-abde.mjs`):
+  - Warped `test1` to Noria (`/move noria`), talked to Chaos Goblin (`238`), opened Regular Combination (`mixOpen: true`).
+  - Triggered Jewel Bank, Item Market, Mount Chain, and `/code TEST123`:
+    - Result: `jbOpenMix: false`, `mktOpenMix: false`, `mcOpenMix: false`, and chat displayed `"Close the trade or crafting window before using a command."`.
+  - Screenshot: [step2a-chaos-block.png](screenshots/antigravity-2026-11-20/step2a-chaos-block.png)
+- **Verdict:** **PASS**
+
+### 2b. Host-Only `/control` Access
+- **Checks:**
+  - Local `http://localhost:8080/control`: HTTP **`200`** (renders HNMO Control setup & actions). Screenshot: [step2b-control-local.png](screenshots/antigravity-2026-11-20/step2b-control-local.png)
+  - Non-loopback LAN IP `http://192.168.5.27:8080/control` and `http://192.168.5.27:8080/api/control/status`: HTTP **`403`**.
+- **Verdict:** **PASS**
+
+### 2c. Admin Panel `/worlds` (Season 9 World Creation, Restart, Badges, Rate Isolation)
+- **Result:** **BLOCKED / FAIL on packaged `8095` Admin Panel**
+  - `http://127.0.0.1:8095/worlds` renders unstyled HTML and fails to start its interactive Blazor Server circuit:
+    - Console errors:
+      - `PAGEERR: System is not defined`
+      - `Failed to find a valid digest in the 'integrity' attribute for resource 'http://127.0.0.1:8095/_content/HNMO.Web.AdminPanel/Components/Layout/ReconnectModal.13ja33weya.razor.js' with computed SHA-256 integrity '47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='. The resource has been blocked.`
+    - Cause observed on disk: `HNMO-pkg/server/wwwroot/_content/HNMO.Web.AdminPanel/Components/Layout/` contains `ReconnectModal.razor.js` (`2,364` bytes, un-fingerprinted), whereas the rendered HTML requests `ReconnectModal.13ja33weya.razor.js` (missing -> empty/404 SHA-256 `47DEQpj...`).
+    - Because the circuit never connects, clicking `Create World from Template` / `Edit` / `Save` on `8095` does nothing, so creating the Season 9 second world, restarting with it, verifying `S6.3`/`S9` badges, and verifying EXP `3` isolation could not complete in `HNMO-pkg`.
+  - Screenshot: [step2c-worlds-blazor-err.png](screenshots/antigravity-2026-11-20/step2c-worlds-blazor-err.png)
+
+### 2d. Cash Shop in Safe Zone (`X`)
+- **Check** (`scratch/step2-abde.mjs`): Pressed `X` in Lorencia safe zone (`test1`).
+- **Result:** Cash Shop opened with `W Coin (C)`, `W Coin (P)`, `Goblin Point` tabs and `9` packages listed (`Gold Channel Ticket`, `Magic Backpack`, `Vault Expansion Certificate`, `Premium Service`, `Gladiator Package`, etc.).
+- **Screenshot:** [step2d-cash-shop.png](screenshots/antigravity-2026-11-20/step2d-cash-shop.png)
+- **Verdict:** **PASS**
+
+### 2e. Refusing Ancient / Socket Item on Item Market (EN + VI)
+- **Result:** **BLOCKED by same `8095` Blazor issue as 2c**
+  - Logged in `testgm`, spawned an Ancient item (`/item 7 5 0 0 0 0 0 1 5`), picked it up (`beforeBag: 64 -> afterBag: 65`), and pressed `F6` to open `#hnmo-market-panel`.
+  - Market showed `"Item Market is currently disabled by the server administrator."`. Toggling `Enable Item Market` (`#market-active`) and clicking `Save` on `http://127.0.0.1:8095/market` did not persist (`MARKET_ACTIVE_AFTER_SAVE: false`) due to the broken `8095` Blazor circuit (`ReconnectModal.13ja33weya.razor.js` SRI block + `System is not defined`).
+
