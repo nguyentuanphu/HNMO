@@ -664,6 +664,51 @@
       "renderStyle": "chaosCard"
     },
     {
+      "number": 55,
+      "file": "Data/Item/giftbox_g.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.05],
+        "rotation": [0, -10, 0],
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [0, 0, 90],
+        "scale": 0.7
+      }
+    },
+    {
+      "number": 56,
+      "file": "Data/Item/giftbox_r.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.05],
+        "rotation": [0, -10, 0],
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [0, 0, 90],
+        "scale": 0.7
+      }
+    },
+    {
+      "number": 57,
+      "file": "Data/Item/giftbox_bp.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.05],
+        "rotation": [0, -10, 0],
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [0, 0, 90],
+        "scale": 0.7
+      }
+    },
+    {
       "number": 58,
       "file": "Data/Item/partCharge1/expensiveitem01.bmd",
       "textureFolders": ["Item/partCharge1"],
@@ -1583,6 +1628,11 @@
       "renderStyle": "goldenOrSilverBox"
     },
     {
+      "number": 125,
+      "file": "Data/Item/Ingameshop/package_money_item.bmd",
+      "textureFolders": ["Item/Ingameshop"]
+    },
+    {
       "number": 126,
       "model": "membershipItem",
       "inventory": {
@@ -1890,6 +1940,51 @@
         "scale": 0.3
       },
       "renderStyle": "rareItemTicket12"
+    },
+    {
+      "number": 157,
+      "file": "Data/Item/giftbox_g.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.05],
+        "rotation": [0, -10, 0],
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [0, 0, 90],
+        "scale": 0.7
+      }
+    },
+    {
+      "number": 158,
+      "file": "Data/Item/giftbox_r.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.05],
+        "rotation": [0, -10, 0],
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [0, 0, 90],
+        "scale": 0.7
+      }
+    },
+    {
+      "number": 159,
+      "file": "Data/Item/giftbox_bp.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.05],
+        "rotation": [0, -10, 0],
+        "scale": 0.002
+      },
+      "ground": {
+        "rotation": [0, 0, 90],
+        "scale": 0.7
+      }
     },
     {
       "number": 160,
