@@ -10,7 +10,8 @@
     "typecheck": "tsc -p . --noEmit && tsc -p tsconfig.tests.json",
     "start": "npm run build && dotnet run --project bridge -c Release",
     "generate-packets": "node tools/generate-packets.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:unit": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "three": "0.160.0"
