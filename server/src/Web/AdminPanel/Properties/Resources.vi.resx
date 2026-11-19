@@ -5205,4 +5205,5 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
     <value>Thực hiện thao tác này.</value>
   </data>
   <data name="ShopEditorAllMaps" xml:space="preserve"><value>Tất cả bản đồ</value></data>
+  <data name="HostSettingsHostOnly" xml:space="preserve"><value>Chỉ đổi được cài đặt máy chủ trên chính máy chủ: mở trang quản trị ở đó (http://localhost:8095). Phần này đổi cổng, thư mục, mật khẩu cơ sở dữ liệu và giấy phép.</value></data>
 </root>

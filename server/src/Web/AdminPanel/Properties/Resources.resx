@@ -5165,4 +5165,5 @@ On your account page, open Security and paste this code to confirm your new emai
     <value>Perform this action.</value>
   </data>
   <data name="ShopEditorAllMaps" xml:space="preserve"><value>All maps</value></data>
+  <data name="HostSettingsHostOnly" xml:space="preserve"><value>Host settings can only be changed on the host computer: open the admin panel there (http://localhost:8095). They change ports, folders, the database password and the licence.</value></data>
 </root>

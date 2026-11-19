@@ -13664,6 +13664,13 @@ namespace HNMO.Web.AdminPanel.Properties {
             }
         }
 
+        /// <summary>Looks up a localized string similar to Host settings can only be changed on the host computer: open the admin panel there (http://localhost:8095). They change ports, folders, the database password and the licence..</summary>
+        public static string HostSettingsHostOnly {
+            get {
+                return ResourceManager.GetString("HostSettingsHostOnly", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to All maps.
         /// </summary>

@@ -42,6 +42,11 @@
 
 <div class="alert alert-warning py-2">@Resources.HostSettingsRestartNote</div>
 
+@if (!this.IsHostComputer)
+{
+    <div class="alert alert-warning" id="host-settings-host-only" role="alert">@Resources.HostSettingsHostOnly</div>
+}
+
 @if (this._settings is not null)
 {
     <div class="card mb-3">
