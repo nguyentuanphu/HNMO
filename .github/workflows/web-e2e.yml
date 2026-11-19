@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6]
     env:
       ADMIN_URL: http://127.0.0.1:8095
       BASE_URL: http://127.0.0.1:8081
@@ -51,7 +51,7 @@ jobs:
           for i in $(seq 1 60); do curl -sf "$ADMIN_URL/" > /dev/null && break; sleep 2; done
           (echo > /dev/tcp/127.0.0.1/44406) && curl -sf -o /dev/null "$BASE_URL/" && curl -sf -o /dev/null "$ADMIN_URL/"
       - name: Play the tests
-        run: cd client/web && CI=1 npx playwright test --workers=1 --shard=${{ matrix.shard }}/4 --reporter=github,line
+        run: cd client/web && CI=1 npx playwright test --workers=1 --shard=${{ matrix.shard }}/6 --reporter=github,line
       - name: Logs and report
         if: failure() || cancelled()
         run: tail -n 100 "$RUNNER_TEMP/server.log" "$RUNNER_TEMP/web.log"
