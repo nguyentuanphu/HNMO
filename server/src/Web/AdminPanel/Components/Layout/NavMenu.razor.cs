@@ -76,8 +76,6 @@ public partial class NavMenu : IDisposable
         }
     }
 
-    private void ToggleNavMode() => this.Preferences.SetAdvancedMode(!this.Preferences.AdvancedMode);
-
     private static bool IsCatalogVisibleInSidebar(AdminNavEntry entry) => !DropdownHandledRoutes.Contains(entry.Route);
 
     [Inject]

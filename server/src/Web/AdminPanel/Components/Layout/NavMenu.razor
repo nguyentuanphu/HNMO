@@ -14,14 +14,22 @@
 
     <!-- Hiding it programmatically is not a good idea here, because we want to hide it based on the width of the device/window. -->
     <div class="nav-scrollable @NavMenuCssClass">
-        <div class="px-3 pt-2 pb-1 d-flex align-items-center justify-content-between">
-            <span class="small text-body-secondary">@L("Menu mode", "Chế độ menu")</span>
+        <div class="hn-nav-mode" role="group" aria-label="@L("Pages shown in the menu", "Trang hiện trong menu")">
             <button type="button"
-                    id="nav-mode-toggle"
-                    class="btn btn-xs btn-outline-secondary py-0 px-2"
-                    title="@L("Switch between Basic (common everyday pages) and Advanced (every route and schema editor).", "Chuyển đổi giữa Cơ bản (trang thường dùng) và Nâng cao (đầy đủ mọi trang).")"
-                    @onclick="this.ToggleNavMode">
-                @(this.Preferences.AdvancedMode ? L("Advanced", "Nâng cao") : L("Basic", "Cơ bản"))
+                    id="nav-mode-basic"
+                    class="hn-nav-mode__option@(this.Preferences.AdvancedMode ? string.Empty : " is-on")"
+                    aria-pressed="@(this.Preferences.AdvancedMode ? "false" : "true")"
+                    title="@L("Only the pages used every day.", "Chỉ các trang dùng hằng ngày.")"
+                    @onclick="() => this.Preferences.SetAdvancedMode(false)">
+                @L("Basic", "Cơ bản")
+            </button>
+            <button type="button"
+                    id="nav-mode-advanced"
+                    class="hn-nav-mode__option@(this.Preferences.AdvancedMode ? " is-on" : string.Empty)"
+                    aria-pressed="@(this.Preferences.AdvancedMode ? "true" : "false")"
+                    title="@L("Every page, including the data editors.", "Mọi trang, gồm cả các bảng dữ liệu.")"
+                    @onclick="() => this.Preferences.SetAdvancedMode(true)">
+                @L("All pages", "Tất cả trang")
             </button>
         </div>
 
@@ -100,9 +108,9 @@
                                      title="@entry.LocalizedDescription"
                                      @onclick="() => NavigationHistory.Clear()">
                                 <span class="oi @entry.Icon" aria-hidden="true"></span>
-                                <span>
-                                    @entry.LocalizedTitle
-                                    <small class="d-block text-body-secondary hn-nav-desc" style="font-size:0.72rem;line-height:1.15;opacity:0.8">@entry.LocalizedDescription</small>
+                                <span class="hn-nav-text">
+                                    <span class="hn-nav-title">@entry.LocalizedTitle</span>
+                                    <small class="hn-nav-desc">@entry.LocalizedDescription</small>
                                 </span>
                             </NavLink>
                         </li>
