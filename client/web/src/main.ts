@@ -112,6 +112,7 @@ import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
 import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
+import { chooseServerBySeason } from './ui/seasonColumns.js';
 import { fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -1053,10 +1054,11 @@ async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
   return meta;
 }
 
-export function describeServerChoice(id: number, load: number, meta?: WebsiteServerMeta, vi = currentLanguage() === 'vi'): string {
+export function describeServerChoice(id: number, load: number, meta?: WebsiteServerMeta, vi = currentLanguage() === 'vi', inSeasonColumn = false): string {
   const baseName = meta?.description ? escapeHtml(meta.description) : (vi ? `Máy chủ ${id + 1}` : `Server ${id + 1}`);
   // The season badge comes with a world's name: without the website's data there is one world, Season 6.3.
-  const badge = meta?.worldLabel
+  // In a season's column of the start screen the column says the season.
+  const badge = meta?.worldLabel && !inSeasonColumn
     ? ` <span class="season-badge season-${meta.season ?? 's6'}" title="${vi ? 'Phiên bản của thế giới này' : "This world's season"}">${seasonBadge(meta.season ?? 's6')}</span>`
     : '';
   const title = meta?.worldLabel ? `${escapeHtml(meta.worldLabel)}${badge} — ${baseName}` : baseName;
@@ -1068,7 +1070,9 @@ export function describeServerChoice(id: number, load: number, meta?: WebsiteSer
   if (typeof meta?.dropRate === 'number' && meta.dropRate !== 1) details.push(`Drop ${meta.dropRate}×`);
   if (typeof meta?.zenRate === 'number' && meta.zenRate !== 1) details.push(`Zen ${meta.zenRate}×`);
   if (meta?.pvpEnabled === false) details.push('Non-PvP');
-  return `${title}${vipBadge}<small>${details.join(' · ')}</small>`;
+  return inSeasonColumn
+    ? `<span class="server-name">${title}${vipBadge}</span><small>${details.join(' · ')}</small>`
+    : `${title}${vipBadge}<small>${details.join(' · ')}</small>`;
 }
 
 async function playOnline(settings: LoginSettings, ticket?: string): Promise<void> {
@@ -1085,7 +1089,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   servers.sort((a, b) => (serverMeta.get(a.id)?.worldOrder ?? 0) - (serverMeta.get(b.id)?.worldOrder ?? 0) || a.id - b.id);
   const server = servers.length === 1
     ? servers[0]
-    : await chooseFrom(ui.servers, servers, (s) => describeServerChoice(s.id, s.load, serverMeta.get(s.id)));
+    : await chooseServerBySeason(ui.servers, servers, (s) => serverMeta.get(s.id)?.season, (s) => describeServerChoice(s.id, s.load, serverMeta.get(s.id), currentLanguage() === 'vi', true), currentLanguage() === 'vi');
   ui.servers.hidden = true;
   // The game data of the picked world's season, before anything of the world is loaded.
   setSeason(serverMeta.get(server.id)?.season ?? 's6');
