@@ -690,6 +690,10 @@ public sealed class WorldRegistryService
             Directory.CreateDirectory(dir);
         }
 
-        File.WriteAllText(this._storagePath, JsonSerializer.Serialize(this._state, JsonOptions));
+        // Written beside the file and moved over it: a crash in between leaves the old list, never half a file
+        // (an unreadable list would also forget which characters used their one transfer).
+        var temporary = this._storagePath + ".tmp";
+        File.WriteAllText(temporary, JsonSerializer.Serialize(this._state, JsonOptions));
+        File.Move(temporary, this._storagePath, overwrite: true);
     }
 }

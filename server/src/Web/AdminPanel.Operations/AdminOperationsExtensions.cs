@@ -54,7 +54,7 @@ public static class AdminOperationsExtensions
         services.AddScoped<CastleSiegeOperations>();
         services.AddScoped<LogOperations>();
         services.AddScoped<AuditReadOperations>();
-        services.TryAddSingleton(_ => new WorldRegistryService(Path.Combine(AppContext.BaseDirectory, "hnmo-worlds.json")));
+        services.TryAddSingleton(_ => new WorldRegistryService(ResolveWorldsFile()));
         services.AddScoped<WorldsOperations>();
         services.AddScoped<CashShopCoinService>();
         services.AddScoped<CashShopCoinDelivery>();
@@ -69,5 +69,31 @@ public static class AdminOperationsExtensions
         services.AddScoped<BanAdminOperations>();
         services.AddScoped<NewsAdminOperations>();
         return services;
+    }
+
+    /// <summary>
+    /// The worlds list lives with the other saved state (the working folder, the package's <c>save</c>), not in
+    /// the program folder, which a new version of the package replaces. A list an older version wrote into the
+    /// program folder is taken along once.
+    /// </summary>
+    private static string ResolveWorldsFile()
+    {
+        const string fileName = "hnmo-worlds.json";
+        var saved = Path.GetFullPath(fileName);
+        var old = Path.Combine(AppContext.BaseDirectory, fileName);
+        try
+        {
+            if (!File.Exists(saved) && File.Exists(old) && !string.Equals(saved, old, StringComparison.OrdinalIgnoreCase))
+            {
+                File.Copy(old, saved);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // The old list stays where it is and is used from there.
+            return old;
+        }
+
+        return saved;
     }
 }

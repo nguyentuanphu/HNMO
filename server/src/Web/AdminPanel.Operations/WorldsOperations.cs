@@ -7,6 +7,7 @@ namespace HNMO.Web.AdminPanel.Operations;
 using System.Text.Json.Nodes;
 using System.Threading;
 using HNMO.DataModel.Configuration;
+using HNMO.GameLogic.PlugIns.Vip;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.AdminAuth;
@@ -143,23 +144,39 @@ public sealed class WorldsOperations(
             },
             cancellationToken);
 
+    /// <summary>
+    /// A world's rates are the rates of its own game servers (the same values the Servers &amp; Rates page edits):
+    /// each server multiplies the game's base experience rate, and has its own drop and Zen rate. The game's base
+    /// rates aren't touched, so saving one world never changes another world's rates.
+    /// </summary>
     private async ValueTask ApplyLiveRatesIfHostedAsync(WorldDefinition world, CancellationToken cancellationToken)
     {
-        var hasHostedServer = serverProvider.Servers.OfType<IGameServer>().Any(s => world.ServerIds.Contains(s.Id));
-        if (!hasHostedServer)
+        if (world.ServerIds.Count == 0)
         {
             return;
         }
 
         using var context = persistenceProvider.CreateNewContext();
-        var config = (await context.GetAsync<GameConfiguration>(cancellationToken).ConfigureAwait(false)).FirstOrDefault();
-        if (config is null)
+        var definitions = await context.GetAsync<GameServerDefinition>(cancellationToken).ConfigureAwait(false);
+        var own = definitions.Where(d => world.ServerIds.Contains(d.ServerID)).ToList();
+        if (own.Count == 0)
         {
             return;
         }
 
-        config.ExperienceRate = (float)Math.Clamp(world.ExperienceMultiplier, 0.1, 10000.0);
-        config.MasterExperienceRate = (float)Math.Clamp(world.MasterExperienceMultiplier, 0.1, 10000.0);
+        var experience = (float)Math.Clamp(world.ExperienceMultiplier, 0.1, 1000.0);
+        var drop = (float)Math.Clamp(world.DropMultiplier, 0.1, 50.0);
+        var zen = (float)Math.Clamp(world.ZenMultiplier, 0.1, 50.0);
+        foreach (var definition in own)
+        {
+            definition.ExperienceRate = experience;
+        }
+
         await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        var rates = GameServerRateStore.OpenDefault();
+        foreach (var definition in own)
+        {
+            rates.SetRates(definition.ServerID, drop, zen);
+        }
     }
 }
