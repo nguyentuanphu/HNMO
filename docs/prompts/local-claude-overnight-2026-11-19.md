@@ -64,3 +64,21 @@ packet, or the client's countdown), fix it or write down what you found in a dra
 
 Leave every job as a draft PR (finished or not) with what passed, what failed, and what is left. Do not start
 anything not listed here.
+
+## Added 22:30 Sydney: Antigravity is out; these are yours too (after jobs 1-4)
+
+### Job 5: the Season 9 package check on Windows (branch `s9-package-check`)
+From `docs/prompts/antigravity-2026-11-20.md`: build the Season 9 pack (`build-s9-pack.mjs` with
+`--base-allowlist`), package with `HNMO_S9_DATA_DIR` pointed at it, start it, check `/data/seasons.json`,
+`/data/s9/Player/player.bmd` differs from `/data/Player/player.bmd`, `/data/s9/Local/Mix.bmd` equals the base one,
+then create a Season 9 world on `/worlds`, log in on its server and walk Lorencia, Devias, Noria: screenshots and
+every `/data/s9/` request that fails in every form. Report in `docs/s9-package-2026-11-20.md`.
+
+### Job 6: what Season 9's new classes need (branch `s9-classes-files`, report only)
+Season 9's character classes the web game can't draw yet must be made to work from the Season 9 files (plan:
+`docs/plans/seasons-2026-11-19.md`, step 6). List for each new class which files it uses: body and armour sets,
+weapons, its animation set, its skill effect models and textures, sounds (names, folders, counts, sizes; never the
+files). Check the pack builder takes them all. Report in `docs/s9-classes-files-2026-11-20.md`.
+
+Main Claude works in parallel on the seasons plan steps 1-4 (server rules per season, the two-button admin panel,
+files per season, the start screen) on its own branches; do not change those areas.
