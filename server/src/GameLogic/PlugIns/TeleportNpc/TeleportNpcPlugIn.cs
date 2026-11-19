@@ -4,6 +4,7 @@
 
 namespace HNMO.GameLogic.PlugIns.TeleportNpc;
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -32,6 +33,12 @@ public sealed class TeleportNpcPlugIn :
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
+    /// <summary>How far, in cells, a player may stand from the Teleport NPC it talked to.</summary>
+    internal const int MaximumNpcDistance = 5;
+
+    /// <summary>The Teleport NPC each player talked to last.</summary>
+    private static readonly ConditionalWeakTable<Player, NonPlayerCharacter> TalkedTo = new();
+
     /// <inheritdoc />
     public TeleportNpcConfiguration? Configuration { get; set; }
 
@@ -43,6 +50,15 @@ public sealed class TeleportNpcPlugIn :
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new TeleportNpcConfiguration();
+
+    /// <summary>Whether the player still stands next to the Teleport NPC it talked to, on the same map.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns><c>true</c> if it does.</returns>
+    internal static bool IsNearTeleportNpc(Player player) =>
+        TalkedTo.TryGetValue(player, out var npc)
+        && npc.CurrentMap is { } map
+        && ReferenceEquals(map, player.CurrentMap)
+        && Math.Max(Math.Abs(npc.Position.X - player.Position.X), Math.Abs(npc.Position.Y - player.Position.Y)) <= MaximumNpcDistance;
 
     /// <inheritdoc />
     public async ValueTask PlayerTalksToNpcAsync(Player player, NonPlayerCharacter npc, NpcTalkEventArgs eventArgs)
@@ -60,6 +76,7 @@ public sealed class TeleportNpcPlugIn :
 
         eventArgs.HasBeenHandled = true;
         eventArgs.LeavesDialogOpen = false;
+        TalkedTo.AddOrUpdate(player, npc);
         await this.SendStateAsync(player, requested: true, openDialog: true, actionResult: null).ConfigureAwait(false);
     }
 
@@ -106,6 +123,21 @@ public sealed class TeleportNpcPlugIn :
         }
 
         var mapDef = player.GameContext.Configuration.Maps.FirstOrDefault(m => m.Number == decision.Destination.MapNumber);
+
+        // Only next to the Teleport NPC the player talked to, and in a state the game's warps allow (audit 1.10).
+        var stateRefusal = mapDef is null ? null : HnmoWarpGuard.Refusal(player, mapDef);
+        if (!IsNearTeleportNpc(player))
+        {
+            stateRefusal = ("Talk to the teleport NPC again, standing next to it.", "Hãy đứng cạnh NPC dịch chuyển và nói chuyện lại.");
+        }
+
+        if (stateRefusal is { } refusal)
+        {
+            await player.ShowBlueMessageAsync(isVi ? refusal.Vi : refusal.En).ConfigureAwait(false);
+            await this.SendStateAsync(player, requested: true, openDialog: false, actionResult: (false, refusal.En, refusal.Vi)).ConfigureAwait(false);
+            return;
+        }
+
         if (mapDef is null)
         {
             const string missingEn = "Target map is not configured on this server.";

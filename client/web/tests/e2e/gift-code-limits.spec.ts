@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { fileURLToPath } from 'node:url';
 
 const messages = {
   en: ['This code was already used from this network.', 'This code was already used on this device.', 'Your network address is unavailable. Reconnect and try again.'],
@@ -51,7 +52,7 @@ test('game shares the website device id and sends the extended packet with bilin
     body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/":"/vendor/three/"}}</script></head><body></body></html>',
   }));
   await page.route('**/vendor/three/build/three.module.js', route => route.fulfill({
-    path: new URL('../../node_modules/three/build/three.module.js', import.meta.url).pathname,
+    path: fileURLToPath(new URL('../../node_modules/three/build/three.module.js', import.meta.url)),
     contentType: 'text/javascript',
   }));
   await page.goto('/gift-code-check');

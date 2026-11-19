@@ -167,7 +167,8 @@ public sealed class BanManagerService(IHnmoPlayerStateRowBackend backend)
                 nowUtc,
                 expiresAtUtc,
                 actor,
-                Active: true);
+                Active: true,
+                LeavesCharacterStatus: kind == BanTargetKind.CharacterBan && expiresAtUtc.HasValue);
 
             var row = new HnmoFeatureRow(BanFeature, id, JsonSerializer.Serialize(record, JsonOptions), nowUtc);
             backend.UpsertBatch([row], []);
@@ -380,12 +381,17 @@ public sealed class BanManagerService(IHnmoPlayerStateRowBackend backend)
     public bool HasExpiredAccountBanOnly(string loginName, DateTime nowUtc) =>
         this.HasExpiredOnlyBan(BanTargetKind.AccountBan, loginName, nowUtc);
 
-    /// <summary>Checks whether <paramref name="characterName"/> only has expired timed character ban records and no active character ban at <paramref name="nowUtc"/>.</summary>
+    /// <summary>
+    /// Checks whether a character's "banned" status came from a timed character ban which has expired, so it no longer
+    /// counts. A timed ban issued now doesn't set the status at all (its record is enforced on its own), so this is only
+    /// true for an expired timed ban of the earlier kind, which did. A "banned" status set by hand, or by a permanent
+    /// ban, stays in force even after an unrelated timed ban ran out.
+    /// </summary>
     /// <param name="characterName">Character name.</param>
     /// <param name="nowUtc">Current UTC timestamp.</param>
-    /// <returns><c>true</c> if timed character ban records exist and all have expired.</returns>
+    /// <returns><c>true</c> if the character's banned status is left over from an expired timed ban.</returns>
     public bool HasExpiredCharacterBanOnly(string characterName, DateTime nowUtc) =>
-        this.HasExpiredOnlyBan(BanTargetKind.CharacterBan, characterName, nowUtc);
+        this.HasExpiredOnlyBan(BanTargetKind.CharacterBan, characterName, nowUtc, static r => !r.LeavesCharacterStatus);
 
     private static string NormalizeTargetKey(BanTargetKind kind, string target)
     {
@@ -435,7 +441,7 @@ public sealed class BanManagerService(IHnmoPlayerStateRowBackend backend)
         }
     }
 
-    private bool HasExpiredOnlyBan(BanTargetKind kind, string target, DateTime nowUtc)
+    private bool HasExpiredOnlyBan(BanTargetKind kind, string target, DateTime nowUtc, Func<BanRecord, bool>? setsStatus = null)
     {
         if (string.IsNullOrWhiteSpace(target))
         {
@@ -451,7 +457,7 @@ public sealed class BanManagerService(IHnmoPlayerStateRowBackend backend)
                 return false;
             }
 
-            return matching.Any(r => r.Active && r.ExpiresAtUtc is { } exp && exp <= nowUtc);
+            return matching.Any(r => r.Active && r.ExpiresAtUtc is { } exp && exp <= nowUtc && (setsStatus is null || setsStatus(r)));
         }
     }
 

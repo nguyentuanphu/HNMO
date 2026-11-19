@@ -526,14 +526,14 @@ public sealed class EscrowContractsPlugIn :
                     || string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .Take(100)
-                .Select(c => EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login))
+                .Select(c => EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login).WithoutOtherLogins(login))
                 .ToList(),
             historyContracts = data.Contracts
                 .Where(c => c.Status is not EscrowContractStatus.Open and not EscrowContractStatus.Frozen and not EscrowContractStatus.ReservedForPayment and not EscrowContractStatus.BuyerMarkedPaid and not EscrowContractStatus.Disputed)
                 .Where(c => string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase))
                 .Take(50)
-                .Select(c => EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login))
+                .Select(c => EscrowHostVndEngine.ProjectForViewer(EscrowDirectVndEngine.ProjectForViewer(c, login), login).WithoutOtherLogins(login))
                 .ToList(),
             owedDeliveries = data.OwedDeliveries
                 .Where(o => string.Equals(o.RecipientLogin, login, StringComparison.OrdinalIgnoreCase))

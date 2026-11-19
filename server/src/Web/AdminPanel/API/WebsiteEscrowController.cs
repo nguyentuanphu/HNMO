@@ -386,10 +386,11 @@ public sealed class WebsiteEscrowController(
     {
         c.ContractId,
         c.Mode,
-        c.SellerLogin,
+        // Only the viewer's own login name (audit 2.8); the other party is known by its character.
+        sellerLogin = string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase) ? c.SellerLogin : string.Empty,
         c.SellerCharacter,
         c.TargetBuyer,
-        buyerLogin = c.AcceptedByLogin,
+        buyerLogin = string.Equals(c.AcceptedByLogin, login, StringComparison.OrdinalIgnoreCase) ? c.AcceptedByLogin : string.Empty,
         buyerCharacter = c.AcceptedByCharacter,
         isSeller = string.Equals(c.SellerLogin, login, StringComparison.OrdinalIgnoreCase),
         status = c.Status.ToString(),

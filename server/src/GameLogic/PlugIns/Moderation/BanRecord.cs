@@ -53,7 +53,8 @@ public sealed record BanRecord(
     bool Active,
     DateTime? LiftedAtUtc = null,
     string? LiftedBy = null,
-    string? UnbanReason = null)
+    string? UnbanReason = null,
+    bool LeavesCharacterStatus = false)
 {
     /// <summary>Returns whether this record is active and unexpired at <paramref name="nowUtc"/>.</summary>
     /// <param name="nowUtc">Current authoritative UTC timestamp.</param>

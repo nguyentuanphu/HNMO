@@ -41,6 +41,12 @@ public enum MarriageActionResult
 
     /// <summary>Custom titles are disabled or invalid.</summary>
     InvalidTitle,
+
+    /// <summary>The proposer proposed a moment ago (<see cref="MarriageEngine.ProposalInterval"/>).</summary>
+    ProposalTooSoon,
+
+    /// <summary>Another character's proposal to the target is still waiting for an answer.</summary>
+    TargetHasProposal,
 }
 
 /// <summary>
@@ -49,6 +55,11 @@ public enum MarriageActionResult
 public sealed class MarriageEngine
 {
     private readonly ConcurrentDictionary<string, PendingMarriageProposal> _pendingByTarget = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>How long a proposer waits between two proposals.</summary>
+    public static readonly TimeSpan ProposalInterval = TimeSpan.FromSeconds(30);
+
+    private readonly ConcurrentDictionary<string, DateTime> _lastProposalUtc = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MarriageEngine"/> class.
@@ -126,6 +137,20 @@ public sealed class MarriageEngine
             return MarriageActionResult.LevelTooLow;
         }
 
+        // No proposal spam: one proposal per proposer every ProposalInterval, and a waiting proposal to the target
+        // isn't replaced by another character's (audit 1.10).
+        if (this._lastProposalUtc.TryGetValue(proposerName.Trim(), out var last) && utcNow - last < ProposalInterval)
+        {
+            return MarriageActionResult.ProposalTooSoon;
+        }
+
+        if (this._pendingByTarget.TryGetValue(targetName.Trim(), out var waiting)
+            && waiting.ExpiresAtUtc > utcNow
+            && !string.Equals(waiting.ProposerName, proposerName.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            return MarriageActionResult.TargetHasProposal;
+        }
+
         var eligibility = this.Store.Read(data =>
         {
             if (FindCoupleLocked(data, proposerName) is not null || FindCoupleLocked(data, targetName) is not null)
@@ -147,6 +172,7 @@ public sealed class MarriageEngine
             return eligibility;
         }
 
+        this._lastProposalUtc[proposerName.Trim()] = utcNow;
         this._pendingByTarget[targetName.Trim()] = new PendingMarriageProposal(
             proposerName.Trim(),
             proposerLogin,
@@ -311,6 +337,37 @@ public sealed class MarriageEngine
     /// <param name="utcNow">Current UTC timestamp.</param>
     /// <param name="exSpouseName">Outputs the ex-spouse's name if successful.</param>
     /// <returns>Outcome code.</returns>
+    /// <summary>
+    /// Forgets a deleted character: its marriage ends (its partner is free at once, without a cooldown), and its
+    /// cooldown and proposals go, so a new character of the same name starts single (audit 1.10).
+    /// </summary>
+    /// <param name="characterName">The deleted character's name.</param>
+    /// <returns>The partner's name, if the character was married.</returns>
+    public string? ForgetCharacter(string characterName)
+    {
+        var name = characterName.Trim();
+        foreach (var pending in this._pendingByTarget.Where(p => string.Equals(p.Key, name, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(p.Value.ProposerName, name, StringComparison.OrdinalIgnoreCase)).ToList())
+        {
+            this._pendingByTarget.TryRemove(pending.Key, out _);
+        }
+
+        this._lastProposalUtc.TryRemove(name, out _);
+        return this.Store.Mutate(data =>
+        {
+            var changed = data.RemarryCooldownUntilUtc.Remove(name);
+            var couple = FindCoupleLocked(data, name);
+            if (couple is null)
+            {
+                return (changed, (string?)null);
+            }
+
+            data.Couples.Remove(couple);
+            var partner = string.Equals(couple.PartnerAName, name, StringComparison.OrdinalIgnoreCase) ? couple.PartnerBName : couple.PartnerAName;
+            return (true, (string?)partner);
+        });
+    }
+
     public MarriageActionResult Divorce(string characterName, DateTime utcNow, out string? exSpouseName)
     {
         exSpouseName = null;

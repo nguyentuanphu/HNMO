@@ -129,5 +129,19 @@ public class MarketControllerTests
         {
             Assert.That(doc.RootElement.GetProperty("result").GetString(), Is.EqualTo("sold"));
         }
+
+        // While the buyer plays (the login server can't hold the account), the website refuses: a purchase in the
+        // game could spend the same coins at the same moment (audit 1.5). Nothing is bought, the listing stays.
+        engine.CreateListing("seller", "SellerChar", new MarketItemSnapshot { Group = 14, Number = 14, NameEn = "Jewel of Soul", NameVi = "Ngọc Tâm Linh" }, MarketCurrency.WCoinC, 50, DateTime.UtcNow, out var whilePlaying);
+        var playing = new Mock<ILoginServer>();
+        playing.Setup(l => l.TryReserveAccountAsync("buyer", It.IsAny<int>())).ReturnsAsync(false);
+        var guarded = new WebsiteMarketController(persistence, configSource.Object, serverProvider.Object, NullLogger<WebsiteMarketController>.Instance, playing.Object)
+        {
+            ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() },
+        };
+        var refused = await guarded.BuyAsync(new MarketActionRequest("buyer", "pass123", whilePlaying!.Id)).ConfigureAwait(false);
+        Assert.That(refused, Is.TypeOf<ConflictObjectResult>());
+        Assert.That(store.Read(d => d.Listings.Any(l => l.Id == whilePlaying.Id)), Is.True);
+        playing.Verify(l => l.ReleaseAccountReservationAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
     }
 }

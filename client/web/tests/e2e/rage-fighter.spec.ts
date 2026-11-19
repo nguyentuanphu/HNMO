@@ -5,6 +5,7 @@
 // test first checks that refusal, then takes the horn off on the client side only and puts it back at the end).
 import { test, expect, type Page } from '@playwright/test';
 import net from 'node:net';
+import { fileURLToPath } from 'node:url';
 import { read } from '../../src/net/packets.js';
 import type { Character } from '../../src/game/characters.js';
 import type { OnlineWorld } from '../../src/game/online.js';
@@ -293,7 +294,7 @@ test('learned Phoenix Shot walks into range and sends the exact area cast with r
     body: '<!doctype html><html><head><script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/":"/vendor/three/"}}</script></head><body></body></html>',
   }));
   await page.route('**/vendor/three/build/three.module.js', route => route.fulfill({
-    path: new URL('../../node_modules/three/build/three.module.js', import.meta.url).pathname,
+    path: fileURLToPath(new URL('../../node_modules/three/build/three.module.js', import.meta.url)),
     contentType: 'text/javascript',
   }));
   // A controlled skill data record: range 4, mana 30, AG 7 (the server remains authoritative).

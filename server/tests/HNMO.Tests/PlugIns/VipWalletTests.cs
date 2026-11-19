@@ -548,6 +548,25 @@ public class VipWalletTests
         Assert.That(grant.AppliedAt, Is.Null);
     }
 
+    /// <summary>A grant which would take the balance above the largest balance waits whole instead of being cut.</summary>
+    [Test]
+    public void GrantAboveTheLargestBalanceWaitsWhole()
+    {
+        this._account.WCoinC = int.MaxValue - 10;
+        var grant = this._context.CreateNew<CashShopCoinGrant>();
+        grant.AccountId = this._account.GetId();
+        grant.CoinType = CashShopCoinType.WCoinC;
+        grant.Amount = 20;
+        Assert.That(this._account.TryApplyCashShopCoinGrant(grant, Now), Is.False);
+        Assert.That(this._account.WCoinC, Is.EqualTo(int.MaxValue - 10));
+        Assert.That(grant.AppliedAt, Is.Null);
+
+        this._account.WCoinC = int.MaxValue - 20;
+        Assert.That(this._account.TryApplyCashShopCoinGrant(grant, Now), Is.True);
+        Assert.That(this._account.WCoinC, Is.EqualTo(int.MaxValue));
+        Assert.That(grant.AppliedAt, Is.EqualTo(Now));
+    }
+
     /// <summary>Host grants share timed proof without spending coins and cannot be replayed as player purchases.</summary>
     /// <returns>The test task.</returns>
     [Test]

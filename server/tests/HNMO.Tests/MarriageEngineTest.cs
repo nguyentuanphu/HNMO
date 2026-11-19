@@ -142,4 +142,42 @@ public sealed class MarriageEngineTest
         Assert.That(me.GetProperty("spouse").GetString(), Is.EqualTo("Groom"));
         Assert.That(me.GetProperty("bonusActiveNow").GetBoolean(), Is.True);
     }
+
+    /// <summary>
+    /// No proposal spam (audit 1.10): a proposer waits <see cref="MarriageEngine.ProposalInterval"/>, and a waiting
+    /// proposal isn't replaced by another character's.
+    /// </summary>
+    [Test]
+    public void ProposalsCannotBeSpammed()
+    {
+        var engine = new MarriageEngine(new MarriageConfiguration { MinimumLevel = 1 }, MarriageStore.Open(this._stateFile), enabled: true);
+        var now = new DateTime(2026, 11, 19, 12, 0, 0, DateTimeKind.Utc);
+
+        Assert.That(engine.Propose("Romeo", "accR", 150, "Juliet", 150, now), Is.EqualTo(MarriageActionResult.Success));
+        Assert.That(engine.Propose("Romeo", "accR", 150, "Rosaline", 150, now.AddSeconds(5)), Is.EqualTo(MarriageActionResult.ProposalTooSoon));
+        Assert.That(engine.Propose("Paris", "accP", 150, "Juliet", 150, now.AddSeconds(5)), Is.EqualTo(MarriageActionResult.TargetHasProposal));
+        Assert.That(engine.Propose("Romeo", "accR", 150, "Rosaline", 150, now + MarriageEngine.ProposalInterval), Is.EqualTo(MarriageActionResult.Success));
+
+        // Once Juliet's proposal expired (two minutes), another character may propose to her.
+        Assert.That(engine.Propose("Paris", "accP", 150, "Juliet", 150, now.AddMinutes(3)), Is.EqualTo(MarriageActionResult.Success));
+    }
+
+    /// <summary>A deleted character's marriage ends, so a new character of the same name starts single (audit 1.10).</summary>
+    [Test]
+    public void ADeletedCharacterLeavesNoMarriageBehind()
+    {
+        var engine = new MarriageEngine(new MarriageConfiguration { MinimumLevel = 1, RequireCeremonyLocation = false }, MarriageStore.Open(this._stateFile), enabled: true);
+        var now = new DateTime(2026, 11, 19, 12, 0, 0, DateTimeKind.Utc);
+        Assert.That(engine.Propose("Romeo", "accR", 150, "Juliet", 150, now), Is.EqualTo(MarriageActionResult.Success));
+        Assert.That(engine.AcceptCeremony("Juliet", "accJ", 150, 150, bothAtCeremonySpot: true, now.AddSeconds(10), out _), Is.EqualTo(MarriageActionResult.Success));
+        Assert.That(engine.GetSpouseName("Romeo"), Is.EqualTo("Juliet"));
+
+        Assert.That(engine.ForgetCharacter("Romeo"), Is.EqualTo("Juliet"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(engine.GetSpouseName("Romeo"), Is.Null, "a new Romeo is single");
+            Assert.That(engine.GetSpouseName("Juliet"), Is.Null, "Juliet is free");
+            Assert.That(engine.Propose("Paris", "accP", 150, "Juliet", 150, now.AddMinutes(1)), Is.EqualTo(MarriageActionResult.Success), "with no cooldown");
+        });
+    }
 }

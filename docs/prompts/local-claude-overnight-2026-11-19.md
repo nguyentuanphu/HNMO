@@ -114,3 +114,34 @@ Check them in a packaged folder:
 
 Main Claude (cloud) works on Job 4 (the events countdown) now. Skip it. If you already started it, push what you
 have to a draft PR and say so in it.
+
+## Job 9 (added 03:45, 20 Nov): draw Stardust (14:153) from the Season 9 pack
+
+Job 7's report (`docs/s9-item-models-2026-11-20.md`) found one item whose model is only in the Season 9 data:
+Stardust, 14:153, candidate `Item/SpiritDust.bmd` (version 0x0e) with `Item/Texture/SpiritDust.OZJ` and
+`SpiritDustAlpha.OZT`. Main Claude's cloud copy of the Season 9 data has no `Item/` folder, so it can't draw it.
+1. With the local Season 9 data, draw the candidate with the web game's item renderer (as
+   `client/web/tools/make-item-icons.mjs` does) and look at it: is it a star dust (a small glowing powder or pouch)?
+2. If yes: add the model entry for 14:153 to `client/src/bin/Data/Items/Models/Group14_Potion.json`
+   (file `Data/Item/SpiritDust.bmd`, texture folder `Item/Texture`). Then let the bridge serve those three files from
+   the Season 9 pack when the base data has none: `SeasonData` in `client/web/bridge` already does this for the
+   Season 9-only map folders (`IsSeasonNineOnlyMapFile`). Add a tested allowlist of exactly these three files.
+   Make the item picture (`make-item-icons.mjs`) and check the item in the game's bag (`/item 14 153` with `testgm`).
+3. If no: say so in the report; nothing changes.
+4. Draft PR into `claude/hnmo-main-handover-54co2m`, with a screenshot.
+
+## Job 10 (added 04:10, 20 Nov): why five browser tests fail only in a Season 9 world
+
+Job 3's report (`docs/s9-run-2026-11-20.md`, #116) found five tests that pass in Season 6.3 and fail in a Season 9
+world: the elf's, the lord's (`plasma-storm`) and the summoner's (`chain-lightning`) skill effects, "debuffs colour a
+monster", and the Dark Knight's new skill buff (180). It also found that Season 9's `Player/player.bmd` has 293
+actions instead of 284.
+1. Check the first idea: the web game's action numbers are Season 6.3's, so a Season 9 `player.bmd` with more actions
+   plays the wrong ones. Run the five tests in a Season 9 world with `Player/player.bmd` taken from the base data
+   (for example, rename it in your local Season 9 pack for the test). Do they pass then?
+2. For each test still failing, find the file it needs that Season 9 changed (`Skill/`, `Effect/`), by comparing the
+   effect's census keys with what the Season 9 file holds.
+3. Report in `docs/s9-test-failures-2026-11-20.md`: for each test, the cause and the smallest fix (for example
+   "serve `Player/player.bmd` from the base game in every season", in `client/web/bridge/SeasonData.cs`). If a fix is
+   small and you have tested it, put it in the same draft PR, with a test in `SeasonDataTests`.
+4. Draft PR into `claude/hnmo-main-handover-54co2m`.
