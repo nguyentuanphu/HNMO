@@ -889,6 +889,7 @@ internal sealed class Program : IDisposable
         {
             contextProvider = await this.PrepareRepositoryProviderAsync(args.Contains("-reinit"), version, loggerFactory, changeListener).ConfigureAwait(false);
             await this.MoveSeasonNinePortsAsync().ConfigureAwait(false);
+            this.UseSharedAccounts();
         }
 
         await this.ReadSystemConfigurationAsync(contextProvider).ConfigureAwait(false);
@@ -925,6 +926,22 @@ internal sealed class Program : IDisposable
     /// of 44406, game and chat servers 100 higher). Done once, on its database's first start: a port an administrator
     /// changed afterwards stays as set.
     /// </summary>
+    /// <summary>
+    /// A Season 9 program takes logins and coins from the shared (Season 6.3) database (owner's decision, 2026-11-19).
+    /// </summary>
+    private void UseSharedAccounts()
+    {
+        if (!HnmoSeasonInstance.IsSeasonNine || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        {
+            return;
+        }
+
+        var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+        builder.Database = HnmoSeasonInstance.SharedDatabaseName(builder.Database ?? string.Empty);
+        SharedAccountStore.Current = new PostgresSharedAccountStore(builder.ToString());
+        this._logger.Information("Season 9: accounts and coins are shared with Season 6.3 (database {Database}).", builder.Database);
+    }
+
     private async Task MoveSeasonNinePortsAsync()
     {
         if (!HnmoSeasonInstance.IsSeasonNine || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)

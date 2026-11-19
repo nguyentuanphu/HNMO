@@ -65,8 +65,30 @@ internal sealed class PlayerPersistence
         }
 
         return await this.RunExclusiveAsync(
-            () => this._player.PersistenceContext.SaveChangesAsync(cancellationToken),
+            async () =>
+            {
+                await this.SyncSharedCoinsAsync(cancellationToken).ConfigureAwait(false);
+                return await this._player.PersistenceContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            },
             cancellationToken).ConfigureAwait(false);
+    }
+
+    // A Season 9 program's coin changes go to the shared balances (Seasons.SeasonSharedAccounts); never blocks the save.
+    private async ValueTask SyncSharedCoinsAsync(CancellationToken cancellationToken)
+    {
+        if (HNMO.Persistence.SharedAccountStore.Current is not { } store)
+        {
+            return;
+        }
+
+        try
+        {
+            await Seasons.SeasonSharedAccounts.SyncCoinsAsync(store, this._player.Account, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            this._player.Logger.LogWarning(ex, "Couldn't add the coin changes of [{Account}] to the shared balances; the next save tries again.", this._player.Account?.LoginName);
+        }
     }
 
     /// <summary>

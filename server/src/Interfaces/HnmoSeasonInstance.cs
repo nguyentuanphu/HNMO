@@ -52,6 +52,12 @@ public static class HnmoSeasonInstance
         return databaseName.EndsWith("_" + SeasonNine, StringComparison.OrdinalIgnoreCase) ? databaseName : databaseName + "_" + SeasonNine;
     }
 
+    /// <summary>The shared (Season 6.3) database of a season's database: <c>hnmo_s9</c> gives <c>hnmo</c>.</summary>
+    /// <param name="databaseName">A season's database name.</param>
+    /// <returns>The shared database name.</returns>
+    public static string SharedDatabaseName(string databaseName) =>
+        databaseName.EndsWith("_" + SeasonNine, StringComparison.OrdinalIgnoreCase) ? databaseName[..^(SeasonNine.Length + 1)] : databaseName;
+
     /// <summary>How far a season's ports are from the configured (Season 6.3) ports.</summary>
     /// <param name="season">The season key.</param>
     /// <returns>0 for Season 6.3, <see cref="SeasonNinePortOffset"/> for Season 9.</returns>

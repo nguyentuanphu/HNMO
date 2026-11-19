@@ -61,6 +61,7 @@ public class LoginAction
             return;
         }
 
+        await MirrorSharedAccountAsync(player, username).ConfigureAwait(false);
         var state = await this.AuthenticateAsync(player, username, password).ConfigureAwait(false);
         if (state is null)
         {
@@ -123,8 +124,34 @@ public class LoginAction
 
         LoginAttemptGuard.RecordSuccess(username);
 
+        await MirrorSharedAccountAsync(player, username).ConfigureAwait(false);
         var (success, account) = await this.TryEstablishSessionAsync(player, username, validateAccountStateAfterLoad: true).ConfigureAwait(false);
         await this.CompleteLoginAsync(player, username, success, account).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// In a Season 9 program, copies the shared account (login, state, coins) into this season's database first, so
+    /// one sign-up plays both seasons (<see cref="Seasons.SeasonSharedAccounts"/>). Nothing happens in Season 6.3.
+    /// </summary>
+    private static async ValueTask MirrorSharedAccountAsync(Player player, string username)
+    {
+        if (HNMO.Persistence.SharedAccountStore.Current is not { } store)
+        {
+            return;
+        }
+
+        try
+        {
+            await Seasons.SeasonSharedAccounts.MirrorAsync(
+                store,
+                () => player.GameContext.PersistenceContextProvider.CreateNewPlayerContext(player.GameContext.Configuration),
+                username).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            // The shared database is out of reach: the login goes on with what this season's database has.
+            player.Logger.LogWarning(ex, "Couldn't read the shared account [{Username}].", username);
+        }
     }
 
     private static async ValueTask ReleaseLoginServerRegistrationAsync(Player player)
