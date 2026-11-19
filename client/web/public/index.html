@@ -17,6 +17,11 @@
     #stage { position: fixed; inset: 0; }
     #view { width: 100%; height: 100%; display: block; }
     .hud { position: fixed; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); top: max(calc(5.5vh + 6px), env(safe-area-inset-top, 0px)); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; pointer-events: none; }
+    /* In the game, on the line of the map's frame (the auto play bar: map, cell, helper buttons), right of it (ui/autoPlayBar.ts measures it). */
+    @media (min-width: 821px) {
+      html[style*="--helper-bar-right"] .hud { left: calc(var(--helper-bar-right) + 8px); top: calc(var(--helper-bar-middle) - 17px); right: auto; flex-wrap: nowrap; }
+      html[style*="--helper-bar-right"] .hnmo-guide-button { top: calc(var(--helper-bar-bottom) + 6px); }
+    }
     body.hnmo-modern-hud .hud { display: none; }
     .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font-variant-numeric: tabular-nums; }
     .chip label, .chip select { pointer-events: auto; }
