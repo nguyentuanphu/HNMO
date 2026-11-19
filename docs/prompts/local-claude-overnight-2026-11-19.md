@@ -93,3 +93,19 @@ The owner chose: take the missing item models from the Season 9 pack. These item
 2. Make sure `build-s9-pack` takes them, and say which items still have nothing.
 3. Draft PR into `claude/hnmo-main-handover-54co2m` with the report (and any pack builder change). Main Claude makes
    the web game read them for every season and draws the pictures.
+
+## Job 8 (added 23:40): Season 9 as its own program, on the owner's computer
+
+PR #97 (branch `seasons-databases`) runs Season 9 as a second server program with its own database (`hnmo_s9`).
+Accounts and coins are shared with Season 6.3. PR #98 (`seasons-admin`) adds the admin panel's big season buttons.
+Check them in a packaged folder:
+1. Package `seasons-admin` (it contains #97). In the admin panel (8095), Host settings: switch on "Season 9", save,
+   restart HNMO. The log must show "Season 9 is starting (connect server 44506, admin panel http://127.0.0.1:8096)".
+2. The game's start screen shows the Season 6.3 and Season 9 columns. Then:
+   - play a Season 9 server with a Season 6.3 account;
+   - "Play" from the website also works for a Season 9 server;
+   - coins bought on the website show in Season 9.
+3. In Season 9's admin panel (8096), use Import server on the local Season 9 server files, so `hnmo_s9` gets
+   Season 9's shops, spawns, drops and rates. Report the preview's counts and warnings (names only; no vendor files
+   in git).
+4. Draft PR with the report (`docs/local-s9-program-<date>.md`) into `claude/hnmo-main-handover-54co2m`.
