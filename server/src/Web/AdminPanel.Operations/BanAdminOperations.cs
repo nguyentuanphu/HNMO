@@ -148,7 +148,9 @@ public sealed class BanAdminOperations(
                         var character = owner?.Characters.FirstOrDefault(c => c.Name.Equals(canonicalTarget, StringComparison.OrdinalIgnoreCase))
                             ?? throw new AdminOperationException($"Character '{canonicalTarget}' not found.", AdminOperationErrorKind.InvalidInput);
                         canonicalTarget = character.Name;
-                        if (kind == BanTargetKind.CharacterBan && owner is not null)
+                        // Only a permanent ban sets the character's status; a timed one is enforced by its record
+                        // alone, so when it ends nothing is left behind to undo (and a status set by hand stays).
+                        if (kind == BanTargetKind.CharacterBan && !expiresAtUtc.HasValue && owner is not null)
                         {
                             await TryMutateOfflineAccountAsync(
                                 login,
