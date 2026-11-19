@@ -104,6 +104,27 @@
     .language-picker select { height: 30px; max-width: 120px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; font: 12px system-ui, sans-serif; }
     #guideButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: italic 700 16px/1 Georgia, serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
     #settingsButton { pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; font: 700 16px/1 system-ui, sans-serif; color: var(--gold); background: var(--panel); border: 1px solid var(--gold); }
+    /* The bar: two groups of one height, each one panel; the buttons inside are flat. */
+    .hud-group { display: inline-flex; align-items: center; gap: 2px; height: 34px; padding: 0 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; font-variant-numeric: tabular-nums; }
+    .hud-status { padding: 0 12px; gap: 8px; font-size: 13px; }
+    .hud-status #heroName { font-weight: 600; color: var(--text); }
+    .hud-status #fps { color: var(--muted); font-size: 12px; }
+    .hud-sep { width: 1px; height: 16px; background: var(--line); margin: 0 4px; }
+    .hud-tools { pointer-events: auto; }
+    .hud-tools #soundButton, .hud-tools #guideButton, .hud-tools #settingsButton { width: 28px; height: 28px; background: transparent; border-color: transparent; }
+    .hud-tools #soundButton:hover, .hud-tools #guideButton:hover, .hud-tools #settingsButton:hover { border-color: var(--gold); }
+    .hud-tools .language-picker button, .hud-tools .language-picker select { height: 26px; background: transparent; border-color: transparent; }
+    .hud-tools .language-picker select { padding: 0 4px; line-height: 24px; vertical-align: middle; }
+    .hud-tools .language-picker select option { background: #1b2131; color: var(--text); }
+    .hud-tools .language-picker button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); }
+    @media (max-width: 520px) { .hud-tools .language-picker select { max-width: 76px; } .hud-status #fps { display: none; } }
+    /* The new-player guide waiting as a button while its panel is closed (ui/onboardingWindow.ts). */
+    .hnmo-guide-button { position: fixed; z-index: 60; left: max(12px, env(safe-area-inset-left, 0px)); top: calc(max(calc(5.5vh + 6px), env(safe-area-inset-top, 0px)) + 42px); height: 28px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--gold); background: var(--panel); color: #ffe9a8; font: 600 12px system-ui, sans-serif; cursor: pointer; }
+    .hnmo-guide-button:hover { background: #2a2414; }
+    .hnmo-guide-button[hidden] { display: none; }
+    .hnmo-guide-button-flash { animation: hnmo-guide-flash 1.2s ease-in-out 3; }
+    @keyframes hnmo-guide-flash { 50% { box-shadow: 0 0 12px 3px var(--gold); background: #3a2f12; } }
+    body.hnmo-modern-hud .hnmo-guide-button { top: 64px; }
     #guide { position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, .6); display: grid; place-items: center; padding: 16px; }
     #guide .frame { position: relative; width: min(900px, 100%); height: min(88vh, 100%); background: #0b0e16; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
     #guide iframe { width: 100%; height: 100%; border: 0; display: block; }
@@ -129,13 +150,16 @@
     <div class="frame"><iframe title="Guide" src="about:blank"></iframe><button type="button" class="timetable" id="guideTimetable" title="Event and boss timetable (H)">Timetable (H)</button><button type="button" class="onboarding" id="guideOnboarding" title="The guided first steps for new characters (Y)">New-player guide</button><button type="button" class="close">Close</button></div>
   </div>
   <div class="hud" id="hud" hidden>
-    <span class="chip" id="heroName">-</span>
-    <span class="chip">Cell <span id="position">-</span></span>
-    <span class="chip" id="fps">- fps</span>
-    <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
-    <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
-    <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
-    <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
+    <!-- The map's frame (top left) shows the map and the hero's cell: the bar has the name and the frame rate, then the tools. -->
+    <span class="hud-group hud-status"><span id="heroName">-</span><span class="hud-sep" aria-hidden="true"></span><span id="fps">- fps</span><span id="position" hidden>-</span></span>
+    <span class="hud-group hud-tools">
+      <button type="button" id="soundButton" title="Sound on / off" aria-label="Sound on or off" aria-pressed="false">♪</button>
+      <button type="button" id="guideButton" title="Guide: what to play and what each feature does" aria-label="Open the guide" data-game-name="Open the {game} guide" data-game-name-attr="aria-label">i</button>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <span class="language-picker" data-no-i18n role="group" aria-label="Language / Ngôn ngữ"><button type="button" data-lang="en" aria-pressed="true" title="English">EN</button><button type="button" data-lang="vi" aria-pressed="false" title="Tiếng Việt">VN</button><select class="language-more" title="More languages" aria-label="More languages"><option value="">More…</option></select></span>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <button type="button" id="settingsButton" title="Settings (O)" aria-label="Open the settings">⚙</button>
+    </span>
   </div>
   <div id="login">
     <form class="panel" id="loginForm" autocomplete="on">

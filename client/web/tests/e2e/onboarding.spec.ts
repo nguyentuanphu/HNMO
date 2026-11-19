@@ -285,3 +285,59 @@ test('the website shows the starter kit and the guide steps with their rewards, 
   await expect(section.locator('#newplayers-notice')).toHaveText('The new-player guide is unavailable: the server didn\'t answer.');
   await expect(section.locator('[data-step]')).toHaveCount(0);
 });
+
+// The panel opens by itself once per character (its first time in the world, remembered in the browser); on later
+// visits the guide waits as a small button with the step, which opens it; a step done while it's closed makes the
+// button glow instead of opening the panel.
+test('the guide opens by itself once per character, then waits as a button', async ({ page }) => {
+  test.setTimeout(2 * 60_000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('/index.html');
+  const visit = () => page.evaluate(async () => {
+    const { OnboardingWindow } = await import('/js/ui/onboardingWindow.js' as string) as { OnboardingWindow: new (options: unknown) => Panel };
+    const w = window as unknown as Win;
+    w.__sent = [];
+    w.__chat = [];
+    for (const button of document.querySelectorAll('.hnmo-guide-button')) button.remove();
+    w.__panel?.close();
+    w.__panel = new OnboardingWindow({
+      send: (name: string, fields: Record<string, unknown>) => w.__sent.push({ name, fields: { ...fields } }),
+      message: (text: string) => w.__chat.push(text),
+      itemName: () => 'item',
+      characterName: () => 'GuideOnce',
+    });
+    w.__panel.start();
+  });
+  await page.evaluate(() => { try { localStorage.removeItem('hnmo.onboarding.shown.GuideOnce'); } catch { /* none */ } });
+  const panel = page.locator('.rml-hnmo_onboarding');
+  const button = page.locator('.hnmo-guide-button');
+
+  // The first visit: the panel opens by itself, no button while it's open; closed, the button shows the step.
+  await visit();
+  await feed(page, state('talk-merchant'));
+  await expect(panel).toHaveCount(1);
+  await expect(button).toBeHidden();
+  await page.evaluate(() => (window as unknown as Win).__panel.close());
+  await expect(panel).toHaveCount(0);
+  await expect(button).toBeVisible();
+  await expect(button).toHaveText('Guide 1/3');
+
+  // The next visit: no panel, the button; the button opens the panel.
+  await visit();
+  await feed(page, state('talk-merchant'));
+  await expect(button).toBeVisible();
+  await expect(button).toHaveText('Guide 1/3');
+  await expect(panel).toHaveCount(0);
+  await button.click();
+  await expect(panel).toHaveCount(1);
+  await expect(button).toBeHidden();
+
+  // A step done while closed: the panel stays closed, the button moves on and glows.
+  await page.evaluate(() => (window as unknown as Win).__panel.close());
+  await feed(page, state('kill-10', { done: ['talk-merchant'], event: { type: 'step', ids: ['talk-merchant'] } }));
+  await expect(panel).toHaveCount(0);
+  await expect(button).toHaveText('Guide 2/3');
+  await expect(button).toHaveClass(/hnmo-guide-button-flash/);
+  await expectNoPageErrors(errors);
+});
