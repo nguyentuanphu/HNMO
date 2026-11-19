@@ -915,6 +915,10 @@ public sealed class EscrowContractsPlugIn :
             await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(removedSlot)).ConfigureAwait(false);
         }
 
+        // The contract holds the items and Zen now: save the player at once, so a restart can't bring them back
+        // into the bag while the contract still has them.
+        await player.SaveProgressAsync().ConfigureAwait(false);
+
         ActivityLogPlugIn.RecordExternal(new ActivityLogEntry
         {
             Id = $"esc-new-{Guid.NewGuid():N}",

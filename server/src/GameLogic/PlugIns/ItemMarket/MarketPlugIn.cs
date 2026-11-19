@@ -209,7 +209,7 @@ public sealed class MarketPlugIn :
         }
 
         var snapshot = SnapshotFromItem(item);
-        var listResult = engine.CreateListing(login, charName, snapshot, currency, price, DateTime.UtcNow, out _);
+        var listResult = engine.CreateListing(login, charName, snapshot, currency, price, DateTime.UtcNow, out var listing);
         if (listResult != MarketListResult.Success)
         {
             var (en, vi) = listResult switch
@@ -224,16 +224,29 @@ public sealed class MarketPlugIn :
             return;
         }
 
-        // Remove real item from player bag into escrow.
-        if (fee > 0)
+        // The listing is stored; now the item leaves the bag. If that fails before the item is out, the listing is
+        // taken back, so the item is never both in the bag and on the market.
+        var itemRemoved = false;
+        try
         {
-            player.TryRemoveMoney(fee);
-        }
+            await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
+            itemRemoved = true;
+            await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
+            if (fee > 0)
+            {
+                player.TryRemoveMoney(fee);
+            }
 
-        await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
-        await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);
-        await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
-        await player.SaveProgressAsync().ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
+            await player.SaveProgressAsync().ConfigureAwait(false);
+        }
+        catch (Exception ex) when (!itemRemoved && listing is not null)
+        {
+            engine.WithdrawListing(listing.Id);
+            player.Logger.LogError(ex, "Market: listing {ListingId} taken back, the item could not leave the bag.", listing.Id);
+            await this.NotifyAsync(player, "ListFailed", "The item could not be listed; it stays in your bag.", "Không thể đăng bán; vật phẩm vẫn ở trong túi đồ.").ConfigureAwait(false);
+            return;
+        }
 
         await this.NotifyAsync(player, "Listed", $"Listed {snapshot.NameEn} for {price:N0} {currency}!", $"Đã đăng bán {snapshot.NameVi} với giá {price:N0} {currency}!").ConfigureAwait(false);
     }
@@ -284,15 +297,32 @@ public sealed class MarketPlugIn :
                 MarketCurrency.WCoinP => CashShopCoinType.WCoinP,
                 _ => CashShopCoinType.GoblinPoints,
             };
-            await MissionCoinGranter.GrantAsync(
+            var granted = await MissionCoinGranter.GrantAsync(
                 player.GameContext,
                 new CoinGrant(listing.SellerLogin, coinType, claim.NetAmount, CashShopBalanceReceipt.Describe(CashShopBalanceReason.MarketSale), $"market:{listing.Id}"),
                 "HNMO Item Market").ConfigureAwait(false);
+            if (!granted)
+            {
+                // The buyer has paid and gets the item; the seller's coins are owed. The reference makes a later
+                // grant of the same sale count once.
+                player.Logger.LogError("Market: the seller {Seller} was not paid {Amount} {Coin} for listing {ListingId}; grant it by hand with the reference market:{ListingId}.", listing.SellerLogin, claim.NetAmount, coinType, listing.Id, listing.Id);
+            }
         }
 
-        // Try immediate bag delivery; fall back to escrow Claim if bag full.
+        // Try immediate bag delivery; fall back to the market's claim list if the bag is full or the delivery fails,
+        // so the paid purchase is always recorded.
         var reward = ToOwedReward(listing.Item);
-        var deliveredDirectly = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
+        bool deliveredDirectly;
+        try
+        {
+            deliveredDirectly = await GiftCodeRewards.GiveGoodsAsync(player, reward).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            player.Logger.LogError(ex, "Market: listing {ListingId} bought, the item goes to the claim list.", listing.Id);
+            deliveredDirectly = false;
+        }
+
         engine.FinalizePurchase(
             login,
             claim,
