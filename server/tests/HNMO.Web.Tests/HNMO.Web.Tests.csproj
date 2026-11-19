@@ -21,6 +21,7 @@
     <Compile Include="..\..\src\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="..\..\src\SharedGlobalUsings.cs" Link="SharedGlobalUsings.cs" />
     <Compile Include="..\SharedTestUsings.cs" Link="SharedTestUsings.cs" />
+    <Compile Include="..\..\..\client\web\bridge\SeasonData.cs" Link="Bridge\SeasonData.cs" />
   </ItemGroup>
 
   <ItemGroup>
