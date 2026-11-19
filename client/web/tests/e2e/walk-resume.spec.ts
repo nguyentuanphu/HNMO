@@ -35,10 +35,9 @@ test('a long walk goes on after the server puts the hero back a little', async (
   await walkAndWait(page, TOWN);
 
   // Right after the second part of the walk goes out (the first part is 15 steps), the "server" puts the hero
-  // two cells back on its way, as the server's refusal of that part does. The part is caught as the client sends it
+  // a step back on its way, as the server's refusal of that part does. The part is caught as the client sends it
   // (walkNextPart called again for the walk) and the correction comes right after, whatever the frame rate: the test
-  // machine draws a frame or two a second, sometimes less. "Back" is a cell the hero stood on a step or two before
-  // (the cell two to the west may be a wall by the east gate, from which no path goes on).
+  // machine draws a frame or two a second, sometimes less. "Back" is a cell the hero stood on a step before.
   const back = await page.evaluate(async (target) => {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const g = (window as unknown as Win).__game;
@@ -53,7 +52,7 @@ test('a long walk goes on after the server puts the hero back a little', async (
     record();
     const original = online.walkNextPart;
     let parts = 0;
-    const answer = new Promise<{ x: number; y: number; resumesLeft?: number }>((resolve, reject) => {
+    const answer = new Promise<{ x: number; y: number; resumesLeft?: number; goal: { x: number; y: number } | null }>((resolve, reject) => {
       const timer = setTimeout(() => { online.walkNextPart = original; recording = false; reject(new Error(`the walk sent no second part: ${g.hero.cell.x},${g.hero.cell.y}`)); }, 60_000);
       online.walkNextPart = function walkNextPart(this: unknown): boolean {
         const sent = original.call(online);
@@ -63,12 +62,15 @@ test('a long walk goes on after the server puts the hero back a little', async (
           setTimeout(() => {
             recording = false;
             clearTimeout(timer);
+            // A step back, where the server is (it walks a step or two behind): a correction to a cell the server
+            // isn't at would be answered by the server's own correction on the next part, from further away.
             const here = g.hero.cell;
-            const near = visited.filter((c) => Math.max(Math.abs(c.x - here.x), Math.abs(c.y - here.y)) <= 2 && (c.x !== here.x || c.y !== here.y));
-            const to = near[0] ?? { x: here.x, y: here.y };
+            const near = visited.filter((c) => Math.max(Math.abs(c.x - here.x), Math.abs(c.y - here.y)) === 1);
+            const to = near[near.length - 1] ?? { x: here.x, y: here.y };
             const resumesLeft = g.online.resumesLeft;
             g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
-            resolve({ ...to, resumesLeft });
+            // The client's decision, read at once (later frames bring the real server's answers to the walk).
+            resolve({ ...to, resumesLeft, goal: g.online.goal ? { x: g.online.goal.x, y: g.online.goal.y } : null });
           }, 0);
         }
         return sent;
@@ -77,7 +79,7 @@ test('a long walk goes on after the server puts the hero back a little', async (
     online.walkTo(target);
     return answer;
   }, FIELD);
-  expect(await game(page, (g) => g.online.goal ?? null), `the goal is kept after the hero was put back to ${back.x},${back.y} (resumes left before: ${back.resumesLeft})`).toEqual(FIELD);
+  expect(back.goal, `the goal is kept after the hero was put back to ${back.x},${back.y} (resumes left before: ${back.resumesLeft})`).toEqual(FIELD);
   await expect.poll(() => game(page, (g) => (!g.hero.isWalking && !g.online.goal ? `${g.hero.cell.x},${g.hero.cell.y}` : 'walking')), { timeout: 90_000 }).toBe(`${FIELD.x},${FIELD.y}`);
 
   // A big jump (a knock-back, a pull, more than 3 cells) still ends the walk where it puts the hero.
