@@ -57,7 +57,6 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
         app.MapPost("/portal/gift-box/state", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/gift-box/state", "Gift box"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/gift-box/collect", (Func<HttpContext, Task<IResult>>)(context => portal.ForwardSignedJsonAsync(context, "api/website/account/gift-box/collect", "Gift box"))).RequireRateLimiting("per-visitor");
         app.MapPost("/portal/register", portal.RegisterWithoutAddressAsync).RequireRateLimiting("per-visitor");
-        app.MapGet("/portal/coins/{account}", portal.CoinsAsync);
         app.MapPost("/portal/setup", (Func<HttpContext, Task<IResult>>)portal.SetupAsync);
         app.MapGet("/website/settings", (Func<HttpContext, Task<IResult>>)portal.WebsiteSettingsAsync);
         app.MapPost("/portal/login-ticket", (Func<HttpContext, Task<IResult>>)portal.LoginTicketAsync).RequireRateLimiting("per-visitor");
@@ -224,27 +223,6 @@ internal sealed class Portal(PortalOptions options, string contentRoot, HttpClie
 
         logger.LogInformation("Registered account {Account} from {Address}.", request.LoginName, address);
         return Results.Json(new { created = true, coins = this.StartingCoinsText });
-    }
-
-    private async Task<IResult> CoinsAsync(HttpContext context, string account)
-    {
-        if (string.IsNullOrEmpty(this.ApiKey))
-        {
-            return Results.Json(new { error = "The portal isn't set up yet." }, statusCode: 503);
-        }
-
-        using var response = await http.SendAsync(this.ApiRequest(HttpMethod.Get, $"api/accounts/{Uri.EscapeDataString(account)}/cash-shop"), context.RequestAborted).ConfigureAwait(false);
-        if (response.StatusCode == HttpStatusCode.NotFound)
-        {
-            return Results.Json(new { error = "There's no account with that name." }, statusCode: 404);
-        }
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return Results.Json(new { error = "The game server didn't answer. Is it running?" }, statusCode: 502);
-        }
-
-        return Results.Content(await response.Content.ReadAsStringAsync(context.RequestAborted).ConfigureAwait(false), "application/json");
     }
 
     // The host pastes the API key here once; only from this computer.
