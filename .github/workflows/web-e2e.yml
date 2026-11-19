@@ -36,7 +36,13 @@ jobs:
       - name: Install the web client and the test browser
         run: |
           npm ci --prefix client/web
-          cd client/web && npx playwright install --with-deps chromium
+          # The Ubuntu mirrors are sometimes caught mid-sync ("File has unexpected size"): try again.
+          cd client/web
+          for attempt in 1 2 3; do
+            npx playwright install --with-deps chromium && break
+            [ "$attempt" = 3 ] && exit 1
+            echo "Browser install failed (attempt $attempt); retrying in 30 s"; sleep 30
+          done
       - name: Build the server and the web client
         run: |
           dotnet build server/src/Startup/HNMO.Startup.csproj -c Release -v quiet
