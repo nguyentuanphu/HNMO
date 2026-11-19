@@ -319,7 +319,7 @@ export function setUpFieldEvents(options: FieldEventsOptions): FieldEvents {
   const bars = new Map<number, HTMLDivElement>();
   const box = new THREE.Box3();
   const screenOf = (character: Character, above: number): { x: number; y: number } | null => {
-    box.setFromObject(character.group);
+    character.pickBounds(box);
     if (box.isEmpty()) return null;
     const point = new THREE.Vector3((box.min.x + box.max.x) / 2, box.max.y + above, (box.min.z + box.max.z) / 2).project(options.camera);
     if (point.z > 1) return null;

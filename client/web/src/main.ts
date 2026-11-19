@@ -5,7 +5,7 @@ import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
 import { sampleHeight, setTerrainLights } from './terrain.js';
-import { loadWorldData, createWorld, mapName } from './world.js';
+import { loadWorldData, createWorld, mapName, updateIndoorFade, type IndoorFade } from './world.js';
 import { createPlayerCharacter, createMonsterCharacter, setPlayerAnimationSpeeds, cellCenter, createItemModel } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
@@ -24,7 +24,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
-import { setKtx2Renderer, clearTextureCache } from './bmd.js';
+import { setKtx2Renderer, clearTextureCache, loopKeyCount } from './bmd.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
@@ -173,6 +173,8 @@ export type GameWorld = WorldData & { terrain: TerrainMesh };
 export interface GameState {
   world: GameWorld | null;
   worldGroup?: THREE.Group;
+  /** The roofs that fade while the hero is inside a building (world.ts, updateIndoorFade). */
+  indoorFade?: IndoorFade | null;
   hero: Character | null;
   online: OnlineWorld | null;
   /** The chat log, system log and input box (game/chat.ts). */
@@ -432,6 +434,7 @@ async function loadMapNow(mapNumber: number): Promise<void> {
   const world = await createWorld(data, FOG, (progress) => setStatus('Loading world objects…', 0.1 + progress * 0.8));
   state.world = { ...data, terrain: world.terrain };
   state.worldGroup = world.group;
+  state.indoorFade = world.indoorFade;
   state.mapNumber = mapNumber;
   root.add(world.group);
 }
@@ -541,7 +544,9 @@ function pickCharacter(event: MouseEvent, kinds: string[]): Character | null {
   let best: { character: Character; distance: number } | null = null;
   for (const character of state.online.characters.values()) {
     if (!kinds.includes(character.kind) || character.dead) continue;
-    npcBox.setFromObject(character.group);
+    // Its pick box (the desktop's OBB from BoundingBoxMin/Max). The drawn mesh's own bounds don't do: it is bent on
+    // the GPU, so they shrink to a knot at the feet that a click on the body never hits.
+    character.pickBounds(npcBox);
     // A box with NaN in it (a broken model matrix) would pass every bounds test below and take every click.
     if (npcBox.isEmpty() || ![npcBox.min.x, npcBox.min.y, npcBox.min.z, npcBox.max.x, npcBox.max.y, npcBox.max.z].every(Number.isFinite)) continue;
     // The screen rectangle around all eight corners of the box (two corners alone miss part of it when the camera turns).
@@ -796,7 +801,9 @@ function step(dt: number, rec: PerfRecorder | null): void {
     if (state.online && state.hero && state.world) {
       const hero = state.hero, world = state.world;
       const index = hero.cell.y * TERRAIN_SIZE + hero.cell.x;
-      const numKeys = hero.model.skeleton.actions[hero.action]?.numKeys ?? 0;
+      if (state.indoorFade) updateIndoorFade(state.indoorFade, world.mapping.layer1[index] ?? 0, dt);
+      // The keys the walk loops over (one less for a locked walk), so the footsteps keep time with the feet.
+      const numKeys = hero.model.skeleton.actions[hero.action] ? loopKeyCount(hero.model.skeleton, hero.action) : 0;
       sounds.frame(state.mapNumber, hero, world.mapping.layer1[index] ?? 0, (world.flags[index] & TerrainFlag.SAFEZONE) !== 0, numKeys);
     }
     state.autoPlayExtras?.update();

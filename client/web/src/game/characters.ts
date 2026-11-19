@@ -366,6 +366,16 @@ function turnAngleTowards(current: number, target: number, dt: number): number {
 }
 
 const WALK_GRACE_SECONDS = 0.25;
+// The pick boxes (MonsterModelBody.h): DefaultBoxMin/Max for monsters and NPCs, PlayerBoxMax for the player model.
+const DEFAULT_PICK_BOX_MIN = [-60, -60, 0];
+const DEFAULT_PICK_BOX_MAX = [50, 50, 150];
+const PLAYER_PICK_BOX_MAX = [40, 40, 120];
+
+/** A model's own pick box corner from Models.json ("boundingBox": { "min": [x, y, z], "max": [x, y, z] }). */
+function pickBoxCorner(box: unknown, corner: 'min' | 'max'): number[] | null {
+  const value = box && typeof box === 'object' ? (box as Record<string, unknown>)[corner] : undefined;
+  return Array.isArray(value) && value.length === 3 && value.every((n) => typeof n === 'number') ? value as number[] : null;
+}
 
 export class Character {
   id: number;
@@ -426,6 +436,19 @@ export class Character {
   fixedHeight: number | null = null;
   /** Its body beside its tile, in world units (setup "positionOffset"). */
   bodyOffset = new THREE.Vector2();
+  /**
+   * The box a click picks it by, in its model's units around its feet (the desktop's BoundingBoxMin/Max,
+   * MonsterModelBody.h; a model's own in Models.json "boundingBox"). Its drawn mesh can't be measured for this:
+   * the bones bend it on the GPU, so the mesh's own bounds are a small knot at its feet.
+   */
+  pickBoxMin = new THREE.Vector3().fromArray(DEFAULT_PICK_BOX_MIN);
+  pickBoxMax = new THREE.Vector3().fromArray(DEFAULT_PICK_BOX_MAX);
+
+  /** Its pick box in world space, placed, turned and scaled like its body (for clicks, hovers and marks over it). */
+  pickBounds(out: THREE.Box3): THREE.Box3 {
+    this.group.updateMatrixWorld();
+    return out.set(this.pickBoxMin, this.pickBoxMax).applyMatrix4(this.group.matrixWorld);
+  }
   /** Faces this way whatever the server sends (setup "facing"), in radians. */
   fixedAngle: number | null = null;
   /** The animation it stands in (setup "startAction"), else its stop action. */
@@ -755,6 +778,7 @@ export async function createPlayerCharacter({ id, name, bodySet, equipment, kind
   character.setCompanions(companions);
   if (kind === 'player') character.classIndex = Math.max(0, bodySet - 1);
   character.equipment = equipment ?? {};
+  character.pickBoxMax.fromArray(PLAYER_PICK_BOX_MAX);
   return character;
 }
 
@@ -885,6 +909,10 @@ async function buildMonsterCharacter(id: number, look: MonsterLook): Promise<Cha
   character.monsterModel = look.model;
   character.attacks = look.attacks;
   character.look = look;
+  if (look.player) character.pickBoxMax.fromArray(PLAYER_PICK_BOX_MAX);
+  const boxMin = pickBoxCorner(setup.boundingBox, 'min'), boxMax = pickBoxCorner(setup.boundingBox, 'max');
+  if (boxMin) character.pickBoxMin.fromArray(boxMin);
+  if (boxMax) character.pickBoxMax.fromArray(boxMax);
   if (setup.light === false) character.fullBright = true;
   if (setup.heightOffset !== undefined) character.heightOffset = setup.heightOffset;
   if (setup.height !== undefined) character.fixedHeight = setup.height;

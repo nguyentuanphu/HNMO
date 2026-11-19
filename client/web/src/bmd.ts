@@ -216,11 +216,24 @@ function boneKey(frames: BMDBoneFrames, key: number, outPosition: THREE.Vector3,
   outQuaternion.setFromEuler(tmpEuler);
 }
 
+/**
+ * The keys an action loops over. The desktop loops a locked action (the walks and runs) over one key less
+ * (ZzzBMD.cpp, PlayAnimation: NumAnimationKeys - 1), its last key being where the cycle comes back to.
+ */
+export function loopKeyCount(model: BMDModel, actionIndex: number): number {
+  const action = model.actions[actionIndex] ?? model.actions[0];
+  const numKeys = Math.max(1, action?.numKeys || 1);
+  return action?.lockPositions && numKeys > 1 ? numKeys - 1 : numKeys;
+}
+
 // World matrices of every bone for an action at a (fractional, looping) key.
 export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: number, out?: THREE.Matrix4[]): THREE.Matrix4[] {
   const action = model.actions[actionIndex] ? actionIndex : 0;
   const numKeys = Math.max(1, model.actions[action]?.numKeys || 1);
-  const k0 = Math.floor(time) % numKeys;
+  const loopKeys = loopKeyCount(model, action);
+  const locked = model.actions[action]?.lockPositions === true;
+  const k0 = Math.floor(time) % loopKeys;
+  // A locked action blends its key loopKeys - 1 into its last key (key 0's copy); others wrap round to key 0.
   const k1 = (k0 + 1) % numKeys;
   const t = time - Math.floor(time);
   const matrices = out || model.bones.map(() => new THREE.Matrix4());
@@ -234,6 +247,9 @@ export function computeBoneMatrices(model: BMDModel, actionIndex: number, time: 
       boneKey(frames, k1, tmpPosB, tmpQuatB);
       tmpPos.lerp(tmpPosB, t);
       tmpQuatA.slerp(tmpQuatB, t);
+      // A locked root stays on key 0's x and y; only its height moves (ZzzBMD.cpp, Animation: lockedRoot).
+      // Following the keys made the body slide away from where the character stands and snap back each loop.
+      if (index === 0 && locked) tmpPos.set(frames.positions[0], frames.positions[1], tmpPos.z);
       local.compose(tmpPos, tmpQuatA, unitScale);
     }
     if (bone.parent >= 0 && bone.parent < index) local.premultiply(matrices[bone.parent]);
