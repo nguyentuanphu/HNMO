@@ -10,8 +10,9 @@ internal sealed record ControlServiceRequest(string Action);
 
 internal sealed record ControlRestoreRequest(string FileName);
 
+// AdminPassword: sent by older control pages and ignored; the first admin user is made on the admin panel's /users page.
 internal sealed record ControlSetupRequest(
-    string AdminPassword,
+    string? AdminPassword,
     string GameName,
     string PublicAddress,
     int WebPort,
@@ -454,11 +455,6 @@ internal static class ControlEndpoints
             if (!IsLoopback(ctx))
             {
                 return Forbidden();
-            }
-
-            if (string.IsNullOrWhiteSpace(req.AdminPassword) || req.AdminPassword.Length < 4)
-            {
-                return Results.BadRequest(new { message = "Admin password must be at least 4 characters." });
             }
 
             int[] ports = [req.WebPort, req.AdminPort, req.ConnectServerPort, req.DatabasePort];

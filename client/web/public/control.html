@@ -66,7 +66,6 @@
       <h2 data-i18n="wizardTitle">First-start setup wizard</h2>
       <p class="muted" style="margin:0 0 10px" data-i18n="wizardHint">After starting HNMO, open Admin panel (/users) to create your first admin user (password >= 12 characters), then create an Administrator API key on /api-keys for Website Portal registration.</p>
       <div class="grid2">
-        <div><label data-i18n="adminPwLabel">Admin password</label><input id="wizPw" type="password" placeholder="••••••••" /></div>
         <div><label data-i18n="gameNameLabel">Game name</label><input id="wizName" type="text" value="HNMO" /></div>
         <div><label data-i18n="pubAddrLabel">Public address</label><input id="wizAddr" type="text" value="localhost" /></div>
         <div><label data-i18n="langLabel">Language</label><select id="wizLang"><option value="en">English</option><option value="vi">Tiếng Việt</option></select></div>
@@ -488,7 +487,6 @@
     document.getElementById('wizSubmit').onclick = async () => {
       try {
         await api('/api/control/setup', 'POST', {
-          adminPassword: document.getElementById('wizPw').value,
           gameName: document.getElementById('wizName').value,
           publicAddress: document.getElementById('wizAddr').value,
           webPort: Number(document.getElementById('wizWeb').value),
