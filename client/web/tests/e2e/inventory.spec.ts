@@ -63,7 +63,7 @@ test('takes the helm off into the bag and puts it back on; the character changes
   await clickAt(page, await panelPoint(page, 'my_inventory', HELM_SLOT_CENTRE.x, HELM_SLOT_CENTRE.y));
   await clickAt(page, await gridSlotPoint(page, 'my_inventory', BAG, BAG_GRID_ORIGIN.left, BAG_GRID_ORIGIN.top, free!.slot, free!));
   await expect.poll(() => bagSlots(page)).toContain(free!.slot);
-  expect(await bagSlots(page)).not.toContain(2);
+  await expect.poll(() => bagSlots(page)).not.toContain(2);
   await expect.poll(() => page.evaluate(() => (window as unknown as Win).__game.hero.group.uuid)).not.toBe(heroBefore);
 
   await clickAt(page, await gridSlotPoint(page, 'my_inventory', BAG, BAG_GRID_ORIGIN.left, BAG_GRID_ORIGIN.top, free!.slot));

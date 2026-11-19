@@ -319,7 +319,7 @@ app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 });
 Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
-ControlEndpoints.Map(app, app.Services.GetRequiredService<GameLauncher>(), app.Services.GetRequiredService<ControlMaintenanceService>(), launcherOptions, contentRoot, webRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Logger);
+ControlEndpoints.Map(app, app.Services.GetRequiredService<GameLauncher>(), app.Services.GetRequiredService<ControlMaintenanceService>(), launcherOptions, contentRoot, webRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Logger, portalOptions);
 app.Logger.LogInformation(
     "Web client: {WebRoot}. Game data: {DataRoot} ({Mode}).",
     webRoot,

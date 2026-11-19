@@ -30,7 +30,8 @@ internal static class ControlEndpoints
         string contentRoot,
         string webRoot,
         HttpClient http,
-        ILogger logger)
+        ILogger logger,
+        PortalOptions? portalOptions = null)
     {
         var saveDir = Path.GetFullPath(Path.Combine(contentRoot, options.SavePath));
         var setupMarker = Path.Combine(saveDir, "setup-complete.json");
@@ -397,6 +398,7 @@ internal static class ControlEndpoints
                 }
 
                 var sqlPath = ControlOperations.RestoreBackupZip(saveDir, req.FileName);
+                SyncLiveOptionsFromSavedSettings(saveDir, options, portalOptions);
                 var dbRestored = false;
                 if (sqlPath is not null && File.Exists(sqlPath))
                 {
@@ -482,7 +484,20 @@ internal static class ControlEndpoints
                 OpenBrowserUrl = $"http://{publicAddr}:{req.WebPort}/",
                 LauncherEnabled = true,
             }, new JsonSerializerOptions { WriteIndented = true });
-            await File.WriteAllTextAsync(Path.Combine(saveDir, "hnmo-settings.json"), settingsJson, ctx.RequestAborted).ConfigureAwait(false);
+            var settingsPath = Path.Combine(saveDir, "hnmo-settings.json");
+            await File.WriteAllTextAsync(settingsPath, settingsJson, ctx.RequestAborted).ConfigureAwait(false);
+            options.SettingsFilePath = settingsPath;
+            options.WebPort = req.WebPort;
+            options.AdminUrl = $"http://127.0.0.1:{req.AdminPort}";
+            options.ConnectServerPort = req.ConnectServerPort;
+            options.DatabasePort = req.DatabasePort;
+            options.OpenBrowserUrl = $"http://{publicAddr}:{req.WebPort}/";
+            if (portalOptions is not null)
+            {
+                portalOptions.ConnectServerPort = req.ConnectServerPort;
+                portalOptions.ApiBaseUrl = options.AdminUrl;
+            }
+
             var setupPayload = JsonSerializer.Serialize(new
             {
                 gameName = string.IsNullOrWhiteSpace(req.GameName) ? "HNMO" : req.GameName.Trim(),
@@ -514,12 +529,64 @@ internal static class ControlEndpoints
         }
     }
 
+    private static void SyncLiveOptionsFromSavedSettings(string saveDir, LauncherOptions options, PortalOptions? portalOptions)
+    {
+        var settingsPath = Path.Combine(saveDir, "hnmo-settings.json");
+        if (!File.Exists(settingsPath))
+        {
+            return;
+        }
+
+        try
+        {
+            using var doc = JsonDocument.Parse(File.ReadAllText(settingsPath));
+            var root = doc.RootElement;
+            options.SettingsFilePath = settingsPath;
+            if (root.TryGetProperty("WebPort", out var wp) && wp.TryGetInt32(out var webPort) && webPort > 0)
+            {
+                options.WebPort = webPort;
+            }
+
+            if (root.TryGetProperty("AdminPort", out var ap) && ap.TryGetInt32(out var adminPort) && adminPort > 0)
+            {
+                options.AdminUrl = $"http://127.0.0.1:{adminPort}";
+                if (portalOptions is not null)
+                {
+                    portalOptions.ApiBaseUrl = options.AdminUrl;
+                }
+            }
+
+            if (root.TryGetProperty("ConnectServerPort", out var cp) && cp.TryGetInt32(out var connectPort) && connectPort > 0)
+            {
+                options.ConnectServerPort = connectPort;
+                if (portalOptions is not null)
+                {
+                    portalOptions.ConnectServerPort = connectPort;
+                }
+            }
+
+            if (root.TryGetProperty("DatabasePort", out var dp) && dp.TryGetInt32(out var dbPort) && dbPort > 0)
+            {
+                options.DatabasePort = dbPort;
+            }
+
+            if (root.TryGetProperty("OpenBrowserUrl", out var ob) && ob.GetString() is { Length: > 0 } openUrl)
+            {
+                options.OpenBrowserUrl = openUrl;
+            }
+        }
+        catch
+        {
+            // Keep existing in-memory options if a restored file is malformed.
+        }
+    }
+
     private static async Task<bool> ProbeHttpAsync(HttpClient http, string url, CancellationToken cancellationToken)
     {
         try
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, url);
-            using var res = await http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead, cancellationToken).WaitAsync(TimeSpan.FromMilliseconds(750), cancellationToken).ConfigureAwait(false);
+            using var res = await http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead, cancellationToken).WaitAsync(TimeSpan.FromSeconds(2), cancellationToken).ConfigureAwait(false);
             return (int)res.StatusCode < 500;
         }
         catch

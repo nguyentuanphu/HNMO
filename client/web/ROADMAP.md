@@ -800,10 +800,15 @@ touch-first; read from its store listing and release notes; ideas only). The web
 - Second Antigravity (mobile, section 17): not started.
 - Merge plan for Thursday: #51 (Antigravity's integration) and #26 (ChatGPT's integration) are the two merge units.
 
-## 18. Running on a Linux VPS (owner asked 2026-11-18)
+## Status 2026-11-19 (Sydney) — See `docs/WORKBOARD.md`
+- `antigravity-integration` (`650c0431`, Draft PR `#51`) and `chatgpt-integration` (`c02e6a97`, PR `#26`, rebuilt atop `#51`) are verified and pushed on Windows.
+- Live workboard across chats lives at `docs/WORKBOARD.md`. Current active branch: `antigravity-s6-work` (Wave 1–3 Windows / Web / S6 polish & gaps).
+
+## 18. Running on a Linux VPS (owner asked 2026-11-18 — DEPRIORITISED 2026-11-19)
+> **DEPRIORITISED (owner 2026-11-19)**: Do not work on Linux VPS deployment scripts, WSL/Linux packaging, or Linux testing for now — focus exclusively on Windows (`win-x64`), Web Client, AdminPanel, and Season 6.3 gameplay features.
 Advice given: 4 GB RAM / 2 vCPU / 60 GB NVMe is enough to launch (~50-100 online); 8 GB / 4 vCPU when busier. For
 Australian and Vietnamese players host in Singapore (AU ~90-110 ms, VN ~30-50 ms); North America is 150-300 ms.
-To build (Antigravity, 2026-11-18): a deployment kit for a fresh Debian 12 / Ubuntu VPS: one install script (user,
+To build when re-prioritised: a deployment kit for a fresh Debian 12 / Ubuntu VPS: one install script (user,
 packages, HNMO Linux package, systemd services with restart, PostgreSQL tuned for small RAM), a reverse proxy with
 automatic HTTPS for the game/website domain (admin panel never public: SSH tunnel or IP allow-list), firewall,
 fail2ban, automatic security updates, off-site backup copy (e.g. to S3-compatible storage), update script with

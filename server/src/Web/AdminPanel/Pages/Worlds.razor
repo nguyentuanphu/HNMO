@@ -114,11 +114,11 @@
                         </td>
                         <td>@world.CachedOnlinePlayers</td>
                         <td>
-                            <div class="d-flex gap-1">
+                            <div class="d-flex flex-nowrap gap-1">
                                 @if (world.IsRunning)
                                 {
                                     <button type="button"
-                                            class="btn btn-sm btn-outline-danger"
+                                            class="btn btn-sm btn-outline-danger text-nowrap"
                                             title="@this.T("Stop all servers in this world", "Dừng toàn bộ sub-server trong thế giới này")"
                                             @onclick="() => this.ToggleWorldAsync(world.WorldId, false)">
                                         @this.T("Stop", "Dừng")
@@ -127,14 +127,14 @@
                                 else
                                 {
                                     <button type="button"
-                                            class="btn btn-sm btn-outline-success"
+                                            class="btn btn-sm btn-outline-success text-nowrap"
                                             title="@this.T("Start all servers in this world", "Khởi động các sub-server trong thế giới này")"
                                             @onclick="() => this.ToggleWorldAsync(world.WorldId, true)">
                                         @this.T("Start", "Chạy")
                                     </button>
                                 }
                                 <button type="button"
-                                        class="btn btn-sm btn-outline-primary"
+                                        class="btn btn-sm btn-outline-primary text-nowrap"
                                         title="@this.T("Load this world into rate editor", "Chỉnh sửa tỷ lệ và giờ mở của thế giới này")"
                                         @onclick="() => this.BeginEditWorld(world)">
                                     @this.T("Edit", "Sửa")
