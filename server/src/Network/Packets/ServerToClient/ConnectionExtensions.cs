@@ -11176,6 +11176,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoItemStackState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: enabled, coinType, balance, kinds (key, name, free, unlocked, limit, price, items), result message (EN/VI by the player's language).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoItemStackCommand (F5 50).
+    /// Causes reaction on client side: The web client knows which items stack and how many (its counts and the split), and shows the stack kinds with their unlocks.
+    /// </remarks>
+    public static async ValueTask SendHnmoItemStackStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoItemStackStateRef.GetRequiredSize(json);
+            var packet = new HnmoItemStackStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoVipState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

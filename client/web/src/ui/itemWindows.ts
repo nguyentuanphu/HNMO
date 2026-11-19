@@ -112,6 +112,14 @@ export function emptyCells(count: number): GridCell[] {
 }
 
 // The item following the mouse after it was picked up (CInventoryCtrl's picked item).
+/** Which items show their durability as a count: the potions group, and HNMO's stack kinds (ui/itemStacks.ts). */
+let stackCountRule: (item: Item) => boolean = (item) => item.group === 14;
+
+/** Sets which items show their durability as a count (HNMO's bigger stacks). */
+export function setStackCountRule(rule: (item: Item) => boolean): void {
+  stackCountRule = rule;
+}
+
 export class PickedItem {
   canvas: HTMLCanvasElement;
   source: PickedSource | null;
@@ -171,6 +179,8 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
   onDropOnItem?: (from: { storage: number; slot: number; item: Item }, slot: number, target: Item) => boolean;
   /** A left click on an item, before it's picked up: true when handled (the shop's repair mode). */
   onItemClick?: (slot: number, item: Item) => boolean;
+  /** A Shift + click on an item (HNMO: split a stack); returns whether it was taken. */
+  onShiftClick?: (slot: number, item: Item) => boolean;
   /** A right click on an item of the window (CInventoryActionController::HandleRightClick). */
   onRightClick?: (slot: number, item: Item) => void;
   /** A right click on an item, before onRightClick: true when handled (the open trade takes bag items). */
@@ -323,6 +333,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
     const equipment = this.equipmentSlotAt(point);
     const slot = equipment !== null && this.items.has(equipment) ? equipment : this.itemAtGridSlot(this.gridSlotAt(point));
     if (slot === null || !this.items.has(slot) || this.inventory.pendingMove) return;
+    if (event.shiftKey && this.onShiftClick?.(slot, this.items.get(slot)!)) return;
     if (this.onItemClick?.(slot, this.items.get(slot)!)) return;
     this.picked.pick({ storage: this.storageKind, slot }, this.items.get(slot)!);
     this.picked.follow(event);
@@ -387,7 +398,7 @@ export class ItemWindow<M extends ItemWindowModel = ItemWindowModel> {
       if (slot < this.grid.firstSlot) continue;
       const hidden = this.picked.source?.storage === this.storageKind && this.picked.source.slot === slot;
       for (const cell of Inventory.cellsOf(this.grid, slot, item) ?? []) cells[cell - this.grid.firstSlot].tint = hidden ? '' : 'tint-normal';
-      if (item.group === 14 && item.durability > 1 && !hidden) cells[slot - this.grid.firstSlot].count = String(item.durability);
+      if (stackCountRule(item) && item.durability > 1 && !hidden) cells[slot - this.grid.firstSlot].count = String(item.durability);
     }
     this.model.grid_cells = cells;
     this.updateModel();
@@ -723,7 +734,7 @@ export class TradeWindow extends ItemWindow<TradeModel> {
     const cells = emptyCells(TRADE.columns * TRADE.rows);
     for (const [slot, item] of view.partner) {
       for (const cell of Inventory.cellsOf(TRADE, slot, item) ?? []) cells[cell].tint = 'tint-normal';
-      if (item.group === 14 && item.durability > 1) cells[slot].count = String(item.durability);
+      if (stackCountRule(item) && item.durability > 1) cells[slot].count = String(item.durability);
     }
     this.model.partner_cells = cells;
     this.model.big_text_px = nativeTextPx('big');

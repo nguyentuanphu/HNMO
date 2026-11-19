@@ -22086,6 +22086,135 @@ public readonly struct HnmoVaultPageCommand
 
 
 /// <summary>
+/// Is sent by the client when: Sent by the web client to ask for the item stack kinds, to split a stack, or to unlock a stack kind with coins.
+/// Causes reaction on server side: The server answers with HnmoItemStackState (F5 51); a split also sends the bag or the open vault again.
+/// </summary>
+public readonly struct HnmoItemStackCommand
+{
+    private readonly Memory<byte> _data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoItemStackCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    public HnmoItemStackCommand(Memory<byte> data)
+        : this(data, true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HnmoItemStackCommand"/> struct.
+    /// </summary>
+    /// <param name="data">The underlying data.</param>
+    /// <param name="initialize">If set to <c>true</c>, the header data is automatically initialized and written to the underlying span.</param>
+    private HnmoItemStackCommand(Memory<byte> data, bool initialize)
+    {
+        this._data = data;
+        if (initialize)
+        {
+            var header = this.Header;
+            header.Type = HeaderType;
+            header.Code = Code;
+            header.Length = (byte)data.Length;
+            header.SubCode = SubCode;
+        }
+    }
+
+    /// <summary>
+    /// Gets the header type of this data packet.
+    /// </summary>
+    public static byte HeaderType => 0xC1;
+
+    /// <summary>
+    /// Gets the operation code of this data packet.
+    /// </summary>
+    public static byte Code => 0xF5;
+
+    /// <summary>
+    /// Gets the operation sub-code of this data packet.
+    /// The <see cref="Code" /> is used as a grouping key.
+    /// </summary>
+    public static byte SubCode => 0x50;
+
+    /// <summary>
+    /// Gets the header of this packet.
+    /// </summary>
+    public C1HeaderWithSubCode Header => new (this._data);
+
+    /// <summary>
+    /// Gets or sets 0 = RequestState, 1 = Split, 2 = Unlock.
+    /// </summary>
+    public byte Action
+    {
+        get => this._data.Span[4];
+        set => this._data.Span[4] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets for Split: 0 = the bag, 1 = the open vault.
+    /// </summary>
+    public byte Storage
+    {
+        get => this._data.Span[5];
+        set => this._data.Span[5] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets for Split: the stack's slot.
+    /// </summary>
+    public byte Slot
+    {
+        get => this._data.Span[6];
+        set => this._data.Span[6] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets for Split: how many pieces to split off.
+    /// </summary>
+    public byte Count
+    {
+        get => this._data.Span[7];
+        set => this._data.Span[7] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets for Unlock: the stack kind's key.
+    /// </summary>
+    public string Kind
+    {
+        get => this._data.Span.ExtractString(8, this._data.Length - 8, System.Text.Encoding.UTF8);
+        set => this._data.Slice(8).Span.WriteString(value, System.Text.Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Performs an implicit conversion from a Memory of bytes to a <see cref="HnmoItemStackCommand"/>.
+    /// </summary>
+    /// <param name="packet">The packet as span.</param>
+    /// <returns>The packet as struct.</returns>
+    public static implicit operator HnmoItemStackCommand(Memory<byte> packet) => new (packet, false);
+
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="HnmoItemStackCommand"/> to a Memory of bytes.
+    /// </summary>
+    /// <param name="packet">The packet as struct.</param>
+    /// <returns>The packet as byte span.</returns>
+    public static implicit operator Memory<byte>(HnmoItemStackCommand packet) => packet._data; 
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="content">The content of the variable 'Kind' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(string content) => System.Text.Encoding.UTF8.GetByteCount(content) + 1 + 8;
+
+    /// <summary>
+    /// Calculates the size of the packet for the specified field content.
+    /// </summary>
+    /// <param name="contentLength">The content length in bytes of the variable 'Kind' field from which the size will be calculated.</param>
+    public static int GetRequiredSize(int contentLength) => contentLength + 1 + 8;
+}
+
+
+/// <summary>
 /// Is sent by the client when: The signed-in player opens the VIP window, confirms an offer or claims daily coins.
 /// Causes reaction on server side: The server validates the session and sends HnmoVipState without accepting client prices or account identity.
 /// </summary>

@@ -6871,6 +6871,42 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoItemStackCommand" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = Split, 2 = Unlock.</param>
+    /// <param name="storage">For Split: 0 = the bag, 1 = the open vault.</param>
+    /// <param name="slot">For Split: the stack's slot.</param>
+    /// <param name="count">For Split: how many pieces to split off.</param>
+    /// <param name="kind">For Unlock: the stack kind's key.</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to ask for the item stack kinds, to split a stack, or to unlock a stack kind with coins.
+    /// Causes reaction on server side: The server answers with HnmoItemStackState (F5 51); a split also sends the bag or the open vault again.
+    /// </remarks>
+    public static async ValueTask SendHnmoItemStackCommandAsync(this IConnection? connection, byte @action, byte @storage, byte @slot, byte @count, string @kind)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoItemStackCommandRef.GetRequiredSize(kind);
+            var packet = new HnmoItemStackCommandRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+            packet.Storage = @storage;
+            packet.Slot = @slot;
+            packet.Count = @count;
+            packet.Kind = @kind;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoVipRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

@@ -50,6 +50,8 @@ import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
+import { ItemStacks } from './ui/itemStacks.js';
+import { setStackCountRule } from './ui/itemWindows.js';
 import { JewelBankWindow } from './ui/jewelBankWindow.js';
 import { VipWindow } from './ui/vipWindow.js';
 import { GiftBoxWindow } from './ui/giftBoxWindow.js';
@@ -190,6 +192,8 @@ export interface GameState {
   itemWindows?: ItemWindows;
   /** HNMO's vault pages above the vault window (ui/vaultPages.ts). */
   vaultPages?: VaultPages;
+  /** HNMO's bigger stacks (ui/itemStacks.ts). */
+  itemStacks?: ItemStacks;
   stats?: CharacterStats;
   hud?: Hud;
   hotkeys?: ItemHotkeys;
@@ -1792,15 +1796,29 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key === 'F6' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); market.toggle(); }
   });
   window.addEventListener('hnmo-market-open', () => { market.open(); });
+  // HNMO's bigger stacks (F5 50 / 51): counts on every stack kind, Shift + click splits, unlocks from the vault.
+  const itemStacks = new ItemStacks({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+  });
+  state.itemStacks = itemStacks;
+  connection.onPacket((bytes) => { itemStacks.handle(bytes); });
+  setStackCountRule((item) => item.group === 14 || itemStacks.isStackKind(item));
+  itemStacks.onChange = () => itemWindows.refresh();
+  const splittable = (item: Parameters<typeof itemStacks.isStackKind>[0]): boolean => item.durability > 1 && (item.group === 14 || itemStacks.isStackKind(item));
+  itemWindows.bag.onShiftClick = (slot, item) => { if (!splittable(item)) return false; void itemStacks.split(0, slot, item); return true; };
+  itemWindows.vault.onShiftClick = (slot, item) => { if (!splittable(item)) return false; void itemStacks.split(1, slot, item); return true; };
+  itemStacks.request();
   // HNMO's vault pages: page buttons above the open vault window (F5 4E / 4F).
   const vaultPages = new VaultPages({
+    extra: itemStacks.button,
     send: (name, fields) => connection.send('ClientToServer', name, fields),
     message: (text) => chat.add(text, 'system'),
     anchor: () => (itemWindows.vault.isOpen && itemWindows.vault.panel ? itemWindows.vault.panel.getBoundingClientRect() : null),
   });
   state.vaultPages = vaultPages;
   connection.onPacket((bytes) => { vaultPages.handle(bytes); });
-  itemWindows.onVaultShown = (shown) => { if (shown) vaultPages.show(); else vaultPages.hide(); };
+  itemWindows.onVaultShown = (shown) => { if (shown) vaultPages.show(); else { vaultPages.hide(); itemStacks.hidePanel(); } };
   itemWindows.onPlaced = () => vaultPages.place();
   // HNMO's Escrow Contracts (F9, /contract, CommandWindow Contract -> right-click player).
   const escrow = new EscrowWindow({

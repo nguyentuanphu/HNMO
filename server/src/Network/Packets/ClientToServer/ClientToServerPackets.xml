@@ -5543,6 +5543,47 @@
     <Packet>
       <HeaderType>C1HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>50</SubCode>
+      <Name>HnmoItemStackCommand</Name>
+      <Direction>ClientToServer</Direction>
+      <SentWhen>Sent by the web client to ask for the item stack kinds, to split a stack, or to unlock a stack kind with coins.</SentWhen>
+      <CausedReaction>The server answers with HnmoItemStackState (F5 51); a split also sends the bag or the open vault again.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>4</Index>
+          <Type>Byte</Type>
+          <Name>Action</Name>
+          <Description>0 = RequestState, 1 = Split, 2 = Unlock.</Description>
+        </Field>
+        <Field>
+          <Index>5</Index>
+          <Type>Byte</Type>
+          <Name>Storage</Name>
+          <Description>For Split: 0 = the bag, 1 = the open vault.</Description>
+        </Field>
+        <Field>
+          <Index>6</Index>
+          <Type>Byte</Type>
+          <Name>Slot</Name>
+          <Description>For Split: the stack's slot.</Description>
+        </Field>
+        <Field>
+          <Index>7</Index>
+          <Type>Byte</Type>
+          <Name>Count</Name>
+          <Description>For Split: how many pieces to split off.</Description>
+        </Field>
+        <Field>
+          <Index>8</Index>
+          <Type>String</Type>
+          <Name>Kind</Name>
+          <Description>For Unlock: the stack kind's key.</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C1HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>25</SubCode>
       <Name>HnmoVipRequest</Name>
       <Direction>ClientToServer</Direction>

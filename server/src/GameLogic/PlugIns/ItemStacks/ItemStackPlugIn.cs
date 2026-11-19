@@ -7,7 +7,11 @@ namespace HNMO.GameLogic.PlugIns.ItemStacks;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 using System.Threading;
+using HNMO.DataModel.Configuration.Items;
+using HNMO.DataModel.Entities;
 using HNMO.GameLogic.CashShop;
+using HNMO.GameLogic.Views.Inventory;
+using HNMO.GameLogic.Views.Vault;
 using HNMO.PlugIns;
 
 /// <summary>
@@ -20,6 +24,8 @@ using HNMO.PlugIns;
 [Guid("C7E43A18-5B92-4D06-8F1A-3E7D9B2C6A54")]
 public sealed class ItemStackPlugIn : IFeaturePlugIn, ISupportCustomConfiguration<ItemStackConfiguration>, ISupportDefaultCustomConfiguration
 {
+    private static readonly System.Text.Json.JsonSerializerOptions JsonOptions = new() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Default };
+
     private readonly SemaphoreSlim _purchaseGate = new(1, 1);
     private ItemStackConfiguration? _configuration;
 
@@ -47,6 +53,108 @@ public sealed class ItemStackPlugIn : IFeaturePlugIn, ISupportCustomConfiguratio
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new ItemStackConfiguration();
+
+    /// <summary>
+    /// Splits <paramref name="count"/> pieces off a stack into a free slot of the same storage (the bag, or the open vault).
+    /// The new item is made new (its own id) with the pieces taken off the stack; nothing changes when there's no room
+    /// or the save fails. Refused while trading or with a personal store open.
+    /// </summary>
+    /// <param name="player">The player.</param>
+    /// <param name="inVault">Whether the stack is in the vault (else the bag).</param>
+    /// <param name="slot">The stack's slot.</param>
+    /// <param name="count">How many pieces to split off (at least 1, fewer than the stack holds).</param>
+    /// <returns>Whether it worked, and the message in the player's language.</returns>
+    public async ValueTask<(bool Success, string Message)> SplitAsync(Player player, bool inVault, byte slot, int count)
+    {
+        ArgumentNullException.ThrowIfNull(player);
+        var vi = player.Culture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
+        var state = player.PlayerState.CurrentState;
+        if ((state != PlayerState.EnteredWorld && state != PlayerState.NpcDialogOpened)
+            || player.TradingPartner is not null
+            || player.ShopStorage?.StoreOpen is true)
+        {
+            return (false, vi ? "Không tách được lúc này (đang giao dịch hoặc mở cửa hàng)." : "You can't split now (trading or a store is open).");
+        }
+
+        IStorage? storage = inVault ? player.Vault : player.Inventory;
+        if (storage is null || (!inVault && slot <= InventoryConstants.LastEquippableItemSlotIndex))
+        {
+            return (false, vi ? "Không tìm thấy chồng đồ." : "The stack wasn't found.");
+        }
+
+        if (storage.GetItem(slot) is not { Definition: { } definition } stack || !stack.IsStackable() || count < 1 || count >= stack.Durability)
+        {
+            return (false, vi ? "Số lượng tách không hợp lệ." : "That can't be split off this stack.");
+        }
+
+        var part = player.PersistenceContext.CreateNew<Item>();
+        part.Definition = definition;
+        part.Level = stack.Level;
+        part.HasSkill = stack.HasSkill;
+        part.Durability = count;
+        if (storage.CheckInvSpace(part) is not { } freeSlot)
+        {
+            await player.PersistenceContext.DeleteAsync(part).ConfigureAwait(false);
+            return (false, vi ? "Không còn chỗ trống để tách." : "There's no free slot for the split.");
+        }
+
+        part.ItemSlot = freeSlot;
+        stack.Durability -= count;
+        if (!await storage.AddItemAsync(freeSlot, part).ConfigureAwait(false) || !await player.SaveProgressAsync().ConfigureAwait(false))
+        {
+            // Back as it was: the stack keeps its pieces and the new item is gone.
+            if (storage.GetItem(freeSlot) == part)
+            {
+                await storage.RemoveItemAsync(part).ConfigureAwait(false);
+            }
+
+            await player.PersistenceContext.DeleteAsync(part).ConfigureAwait(false);
+            stack.Durability += count;
+            return (false, vi ? "Không lưu được, chồng đồ vẫn như cũ." : "The split couldn't be saved; the stack is unchanged.");
+        }
+
+        if (inVault)
+        {
+            await player.InvokeViewPlugInAsync<IShowVaultPlugIn>(p => p.ShowVaultAsync()).ConfigureAwait(false);
+        }
+        else
+        {
+            await player.InvokeViewPlugInAsync<IUpdateInventoryListPlugIn>(p => p.UpdateInventoryListAsync()).ConfigureAwait(false);
+        }
+
+        return (true, vi ? $"Đã tách {count} món." : $"Split off {count}.");
+    }
+
+    /// <summary>Builds the state for the web game: the kinds, which are unlocked, and the result of the last action.</summary>
+    /// <param name="player">The player.</param>
+    /// <param name="success">The result of the last split or unlock, if any.</param>
+    /// <param name="message">Its message, in the player's language.</param>
+    /// <returns>Plain-ASCII JSON.</returns>
+    public string BuildStateJson(Player player, bool? success, string? message)
+    {
+        var cfg = this._configuration ?? new ItemStackConfiguration();
+        var vi = player.Culture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
+        var login = player.Account?.LoginName ?? string.Empty;
+        var state = new
+        {
+            enabled = cfg.Enabled,
+            coinType = cfg.UnlockCoinType.ToString(),
+            balance = player.Account?.GetCashShopCoins(cfg.UnlockCoinType) ?? 0,
+            kinds = cfg.Kinds.Select(k => new
+            {
+                key = k.Key,
+                name = vi ? k.NameVi : k.NameEn,
+                free = k.Free,
+                unlocked = k.Free || ItemStackRules.IsUnlocked(login, k.Key),
+                limit = Math.Clamp(k.Limit, 1, byte.MaxValue),
+                price = k.UnlockPrice,
+                items = k.Items,
+            }),
+            success,
+            message,
+        };
+        return System.Text.Json.JsonSerializer.Serialize(state, JsonOptions);
+    }
 
     /// <summary>Unlocks a kind for the player's account, for its price in coins.</summary>
     /// <param name="player">The player.</param>

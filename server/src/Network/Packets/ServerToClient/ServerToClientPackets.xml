@@ -16993,6 +16993,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>51</SubCode>
+      <Name>HnmoItemStackState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoItemStackCommand (F5 50).</SentWhen>
+      <CausedReaction>The web client knows which items stack and how many (its counts and the split), and shows the stack kinds with their unlocks.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON: enabled, coinType, balance, kinds (key, name, free, unlocked, limit, price, items), result message (EN/VI by the player's language).</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>26</SubCode>
       <Name>HnmoVipState</Name>
       <Direction>ServerToClient</Direction>

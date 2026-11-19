@@ -44,6 +44,8 @@ export class VaultPages {
     /** Where the vault window is on the screen (null while it isn't shown). */
     anchor: () => DOMRect | null;
     parent?: HTMLElement;
+    /** An extra element at the end of the bar (the item stacks button). */
+    extra?: HTMLElement;
   }) {
     this.bar = document.createElement('div');
     this.bar.className = 'hnmo-vault-pages';
@@ -144,6 +146,7 @@ export class VaultPages {
       more.addEventListener('click', () => { void this.buy(); });
       this.bar.append(more);
     }
+    if (this.options.extra) this.bar.append(this.options.extra);
     this.bar.hidden = false;
     this.place();
   }

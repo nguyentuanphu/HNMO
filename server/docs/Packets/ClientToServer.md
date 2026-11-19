@@ -227,6 +227,7 @@
   * [C1 F5 4A - HnmoTeleportNpcCommand (by client)](C1-F5-4A-HnmoTeleportNpcCommand_by-client.md)
   * [C1 F5 4C - HnmoEscrowCommand (by client)](C1-F5-4C-HnmoEscrowCommand_by-client.md)
   * [C1 F5 4E - HnmoVaultPageCommand (by client)](C1-F5-4E-HnmoVaultPageCommand_by-client.md)
+  * [C1 F5 50 - HnmoItemStackCommand (by client)](C1-F5-50-HnmoItemStackCommand_by-client.md)
   * [C1 F6 0A - QuestSelectRequest (by client)](C1-F6-0A-QuestSelectRequest_by-client.md)
   * [C1 F6 0B - QuestProceedRequest (by client)](C1-F6-0B-QuestProceedRequest_by-client.md)
   * [C1 F6 0D - QuestCompletionRequest (by client)](C1-F6-0D-QuestCompletionRequest_by-client.md)
