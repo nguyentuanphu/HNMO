@@ -19,3 +19,14 @@ reviews and merges its draft PRs into `claude/hnmo-main-handover-54co2m`. Nothin
   - Season 9 object textures are also looked for in Item/.
   - 22 new tests pass, and the rules were checked live with a test pack. The real Season 9 data is still to try (local).
 - Next for main Claude: Seasons step 4, the start screen with Season 6.3 and Season 9 side by side (web client).
+
+## 23:05
+
+- Seasons step 4: draft PR #95 (`seasons-start-screen`).
+  - After logging in, the servers stand in two columns, Season 6.3 | Season 9 (one column on a phone), in EN and VI.
+  - Tests: 3 unit and 2 browser tests pass; season and VIP server tests still pass (6/6).
+- Item pictures: draft PR #96 (`item-icons`).
+  - 223 of the 262 items with no picture now have one, drawn with the web game's renderer.
+  - The other 39 have no 3D model.
+  - Tool: `client/web/tools/make-item-icons.mjs`.
+- To merge into the branch once CI is green: #94, #95, #96 (next check-in, 00:21).
