@@ -125,6 +125,12 @@ public sealed class HostSettings
     public string DatabasePassword { get; set; } = "admin";
 
     /// <summary>
+    /// Gets or sets a value indicating whether the launcher also starts a Season 9 game server program next to Season
+    /// 6.3's (its own database, ports 100 higher, admin panel on the next port; accounts and coins shared).
+    /// </summary>
+    public bool SeasonNineEnabled { get; set; }
+
+    /// <summary>
     /// Gets or sets the player license file path (relative to the package root or server directory).
     /// </summary>
     public string LicenseFilePath { get; set; } = "license.hnmo";

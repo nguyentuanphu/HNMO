@@ -88,6 +88,7 @@ if (launcherOptions.Enabled || File.Exists(settingsPath))
     launcherOptions.ServerProgram = hostSettings.ServerProgram;
     launcherOptions.AdminUrl = $"http://127.0.0.1:{hostSettings.AdminPort}";
     launcherOptions.ConnectServerPort = hostSettings.ConnectServerPort;
+    launcherOptions.SeasonNineEnabled = hostSettings.SeasonNineEnabled;
     launcherOptions.OpenBrowserUrl = hostSettings.OpenBrowserUrl;
     portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
 
@@ -340,7 +341,15 @@ async Task<bool> TryServeWebDataAsync(HttpContext context, string path)
 app.MapGet("/data/seasons.json", (HttpContext context) =>
 {
     context.Response.Headers.CacheControl = "no-cache";
-    return Results.Json(new { s6 = true, s9 = s9Files is not null });
+    // Each season's connect server: Season 9's program (when it runs) answers 100 ports above Season 6.3's.
+    return Results.Json(new
+    {
+        s6 = true,
+        s9 = s9Files is not null,
+        connect = launcherOptions.SeasonNineEnabled
+            ? new { s6 = launcherOptions.ConnectServerPort, s9 = (int?)launcherOptions.SeasonNineConnectServerPort }
+            : new { s6 = launcherOptions.ConnectServerPort, s9 = (int?)null },
+    });
 });
 app.MapGet("/data/s9/{**path}", async (HttpContext context, string path) =>
 {
