@@ -19,6 +19,7 @@ const MAX_STEPS_PER_WALK = 15;   // the step count is a 4-bit field
 const TALK_DISTANCE = 3;         // cells; the server refuses farther talks
 const RESUME_DISTANCE = 3;       // cells; a walk goes on after the server put the hero back at most this far
 const WALK_RESUMES = 3;          // times per walk
+const RESUME_WINDOW_MS = 2000;   // a correction this soon after the next part of a walk was sent answers it
 const PING_INTERVAL_MS = 20000;
 
 const Code = { CHAT: 0x00, SERVER_MESSAGE: 0x0d, ADD_PLAYERS: 0x12, ADD_NPCS: 0x13, OUT_OF_SCOPE: 0x14, MOVED: 0x15, MAP_CHANGED: 0x1c, WALKED: 0xd4, PING_REQUEST: 0x71 };
@@ -93,6 +94,8 @@ export class OnlineWorld {
   goal?: Cell | null;
   /** How many more times a walk to the goal goes on after the server put the hero back a little (see moved). */
   resumesLeft = 0;
+  /** When the hero last sent the next part of a walk (performance.now()), see moved. */
+  continuedAt = -Infinity;
   /** The player the hero follows (the command window's Follow, g_iFollowCharacter); a walk of the player's own ends it. */
   followId: number | null = null;
   /** The NPC to talk to once the hero gets there. */
@@ -208,10 +211,12 @@ export class OnlineWorld {
     const id = packet.ObjectId & ID_MASK;
     if (id === this.playerId && this.goal) {
       // The server walks a step or two behind the hero. When the next part of a long walk starts from a cell
-      // the server hasn't reached yet, it refuses it and puts the hero back where it is: the walk goes on from
-      // there (a few times per walk). A bigger jump (a knock-back, a pull) ends it.
+      // the server hasn't reached yet, it refuses it and puts the hero back where it is: right after such a
+      // part, the walk goes on from there (a few times per walk). Any other correction (a knock-back, a pull,
+      // the server's answer to a walk sent while changing maps) ends the walk, as before.
       const back = Math.max(Math.abs(packet.PositionX - this.hero.cell.x), Math.abs(packet.PositionY - this.hero.cell.y));
-      if (back > RESUME_DISTANCE || this.resumesLeft <= 0) this.goal = null;
+      const afterNextPart = performance.now() - this.continuedAt <= RESUME_WINDOW_MS;
+      if (!afterNextPart || back > RESUME_DISTANCE || this.resumesLeft <= 0) this.goal = null;
       else this.resumesLeft--;
     }
     const character = id === this.playerId ? this.hero : this.characters.get(id);
@@ -275,6 +280,7 @@ export class OnlineWorld {
     if (!keepFollow) this.followId = null;
     this.goal = { x: cell.x, y: cell.y };
     this.resumesLeft = WALK_RESUMES;
+    this.continuedAt = -Infinity;
     return this.walkNextPart();
   }
 
@@ -316,7 +322,7 @@ export class OnlineWorld {
         this.walkTo(followed.cell, { keepFollow: true });
       }
     }
-    if (this.goal && !this.hero.isWalking) this.walkNextPart();
+    if (this.goal && !this.hero.isWalking && this.walkNextPart()) this.continuedAt = performance.now();
     if (this.talkTarget && !this.hero.isWalking && !this.goal) {
       if (this.closeEnoughToTalk(this.talkTarget)) {
         if (this.interceptTalk?.(this.talkTarget) || this.beforeTalk?.(this.talkTarget)) {

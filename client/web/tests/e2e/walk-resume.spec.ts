@@ -9,7 +9,7 @@ import { enterWorld, expectNoPageErrors } from './helpers.js';
 interface WalkGame {
   mapNumber: number;
   hero: { cell: { x: number; y: number }; isWalking: boolean };
-  online: { playerId: number; goal?: { x: number; y: number } | null; say(text: string): void; walkTo(cell: { x: number; y: number }): boolean };
+  online: { playerId: number; goal?: { x: number; y: number } | null; continuedAt?: number; say(text: string): void; walkTo(cell: { x: number; y: number }): boolean };
   connection: { dispatch(bytes: Uint8Array): void };
 }
 type Win = Window & { __game: WalkGame };
@@ -35,13 +35,13 @@ test('a long walk goes on after the server puts the hero back a little', async (
   await walkAndWait(page, TOWN);
 
   await page.evaluate((target) => (window as unknown as Win).__game.online.walkTo(target), FIELD);
-  // A few steps into the walk, the "server" puts the hero two cells back on its way (checked frame by frame, so
-  // that it happens well before the hero arrives).
+  // Right after the second part of the walk went out (the first part is 15 steps), the "server" puts the hero
+  // two cells back on its way (checked frame by frame, so that it answers that part, as the server's refusal does).
   const back = await page.evaluate(async (fromX) => {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const g = (window as unknown as Win).__game;
     const started = performance.now();
-    while (!(g.online.goal && g.hero.cell.x >= fromX + 6)) {
+    while (!(g.online.goal && g.hero.cell.x > fromX && performance.now() - (g.online.continuedAt ?? -Infinity) < 300)) {
       if (performance.now() - started > 30_000) throw new Error(`the hero didn't walk on: ${g.hero.cell.x},${g.hero.cell.y}`);
       await new Promise((resolve) => requestAnimationFrame(resolve));
     }
