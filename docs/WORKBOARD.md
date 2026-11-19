@@ -1,6 +1,6 @@
 # HNMO Shared Workboard (Australia/Sydney)
 
-> Updated: 2026-11-19 11:12 +11:00  
+> Updated: 2026-11-19 12:55 +11:00  
 > Read this file before starting new work so multiple chats/sessions stay aligned and never duplicate work.
 
 ---
@@ -8,7 +8,7 @@
 ## Owner Directives & Deprioritized Scope
 
 - **Deprioritized (DO NOT WORK ON NOW)**: Anything relating to **Linux** (`ROADMAP` §18 Linux VPS deployment kit, `linux-x64` package builds, WSL/Ubuntu/Debian scripts) — *owner 2026-11-19: "deprioritise this as i dont need for now"*. Focus exclusively on **Windows (`win-x64`), Web Client, AdminPanel, and GameServer (Season 6.3 web-first)**.
-- **Client Strategy Question Answered (2026-11-19)**: One combined S6 + S9 desktop client is technically possible via `ClientVersion` profile/packet adapters + separate S6 vs. S9 asset packs, **however** S9 still requires BMD v14+, maps, Pentagram/Errtel, Muun, Extended Master Tree, and GFx UI assets that HNMO does not ship yet, AND the repo currently remains **WEB ONLY** (`ROADMAP` §17.0). Keep S6.3 complete first before ever adding an optional S9 pack/profile.
+- **Client Strategy Question Answered (2026-11-19)**: One combined S6 + S9 desktop client is technically possible via `ClientVersion` profile/packet adapters + separate S6 vs. S9 asset packs — **now unblocked on web assets** via [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md), while keeping **WEB ONLY** (`ROADMAP` §17.0) and keeping S6.3 complete first.
 
 ---
 
@@ -25,7 +25,7 @@
 
 ### Ownership Split (2026-11-19 — Quota & Environment Optimization)
 - **Cloud Claude (owns pure C#/TS coding from GitHub)**: Pull `antigravity-s6-work`, claim items below by editing this file, work on **Wave 2**, **Wave 3** (`HNMO.sln` analyzer cleanup & cross-platform `.NET` tests), and **Wave 4B–4D** (`S9` server mechanics, `F5` packets, TypeScript web UIs, AdminPanel pages). Leave `[ ]` -> `[~]`/`[x]` updates in git as you go.
-- **Local Antigravity on Windows (reserved for Windows-only / local-disk work)**: Inspect extracted local x9 client `Data/` headers (`D:\MuOnline\IGCN\IGCN x9` outside git) to publish HNMO's clean `docs/s9-asset-spec.md` unblocking **Wave 4A**, run Windows-only `package-hnmo.sh win-x64` into `HNMO-pkg`, and run Chromium Playwright playtests against `HNMO-pkg`.
+- **Local Antigravity on Windows (reserved for Windows-only / local-disk work)**: **Wave 4A DONE** — inspected extracted local S9 client `Data/` (`D:\MuOnline\IGCN\IGCN x9` outside git), published [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md), and implemented S9 decoders + `Data_S9` overlay. Remaining Antigravity Windows-only work later: `package-hnmo.sh win-x64` into `HNMO-pkg` and Windows Playwright playtests against `HNMO-pkg`.
 
 ### Wave 1 — Live Setup, Control, Portal & E2E Stability (COMPLETED by Antigravity)
 1. [x] **Setup Wizard live port sync (`ControlEndpoints.cs`, `Portal.cs`, `Program.cs`)**: Update in-memory `LauncherOptions` and `PortalOptions` (`ConnectServerPort`, `DatabasePort`, `AdminUrl`, `OpenBrowserUrl`) immediately when `/api/control/setup` or restore writes `hnmo-settings.json`, plus 2s HTTP timeout on `ProbeHttpAsync` so `adminPanel` probe handles cold Blazor SSR startup cleanly.
@@ -50,10 +50,10 @@
 > **Scope**: Stay **WEB ONLY** (`client/web` + `server/` + Windows `HNMO-pkg`), no desktop client. Keep Season 6.3 intact by default and add version-switched Season 9 support backed by an optional extracted S9 `Data` overlay pack (never committing third-party proprietary files/archives from `D:\MuOnline\IGCN\IGCN x9` to git).
 > **F5 Packet Budget**: Free `2B–2F`, `4E–4F`, `50–6F`. Already taken: `23` (#12), `24` (#13), `25/26` (#39), `27/28` (#64), `29` (#79), `2A` (#82), `30–4D`.
 
-8. [ ] **Wave 4A — S9 Asset Verification, Overlay Pack & Web Decoders (`formats.ts`, `GameFiles.cs`, `package-hnmo.sh`)**:
-   - Inspect extracted local S9 client `Data/` outside git (from owner's local x9 archives) for BMD version headers, `World83+`/`Object83+` terrain/map formats, and S9 item/skill/pentagram/muun catalogs.
-   - Extend `client/web/src/formats.ts` (`parseBMD` / map loaders) to decode S9 asset formats safely.
-   - Add optional `Data_S9` overlay mount in `GameFiles.cs` and `package-hnmo.sh` (serving S9 assets on demand without bloating S6 realms).
+8. [x] **Wave 4A — S9 Asset Verification, Overlay Pack & Web Decoders (`modulusCipher.ts`, `formats.ts`, `GameFiles.cs`, `Program.cs`, `package-hnmo.sh`) (COMPLETED by Antigravity)**:
+   - Published full S9 asset format spec & map/asset diff in [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md).
+   - Added pure-TS `client/web/src/modulusCipher.ts` (all 8 Crypto++ ciphers: TEA, ThreeWay, CAST128, RC5, RC6, MARS, IDEA, GOST) and extended `client/web/src/formats.ts` for `BMD` `0x0e`, `"MAP\x01"`, `"ATT\x01"`, and v1 `.obj` (`32`-byte stride). Verified against synthetic unit tests (`4/4`) + all `3,578` S9 `BMD:0x0e` models and all 8 S9 worlds (`83, 92, 94, 95, 96, 99, 101, 103`).
+   - Added `.png` -> `.ozp` unwrap (`4`-byte strip) + optional `Data_S9` / `HNMO:S9DataPath` overlay in `GameFiles.cs` and `Program.cs`, plus optional `HNMO_S9_DATA_DIR` overlay hook in `package-hnmo.sh`.
 9. [ ] **Wave 4B — Elemental Combat, Pentagram & Errtel (`GameLogic`, Packets, Web UI)**:
    - Implement `GameVersion.Season9Episode2` attribute & elemental damage/defense formulas (`Fire/Water/Earth/Wind/Darkness`), Pentagram equipment slot, Errtel socketing/leveling/combining, AdminPanel `/pentagrams` config, and TypeScript UI panel.
 10. [ ] **Wave 4C — Muun Pets, Extended Master Tree (330+) & Stat Specialization**:

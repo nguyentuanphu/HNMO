@@ -13,12 +13,14 @@ internal sealed class GameFiles : IDisposable
 {
     private const int OzjPrefixBytes = 24;
     private const int OztPrefixBytes = 4;
+    private const int OzpPrefixBytes = 4;
 
     private static readonly Dictionary<string, string> FallbackExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
         [".jpg"] = ".ozj",
         [".jpeg"] = ".ozj",
         [".tga"] = ".ozt",
+        [".png"] = ".ozp",
     };
 
     private static readonly Dictionary<string, string> ContentTypes = new(StringComparer.OrdinalIgnoreCase)
@@ -36,13 +38,22 @@ internal sealed class GameFiles : IDisposable
     private readonly string _root;
     private readonly ILogger? _logger;
     private readonly DataPackArchive? _packs;
+    private readonly GameFiles? _overlay;
     private readonly ConcurrentDictionary<string, Dictionary<string, string>?> _directories = new();
 
-    public GameFiles(string root, ILogger? logger = null)
+    public GameFiles(string root, ILogger? logger = null, string? overlayRoot = null)
     {
         this._root = Path.GetFullPath(root);
         this._logger = logger;
         this._packs = DataPackArchive.TryLoad(Path.Combine(this._root, "packs"));
+        if (!string.IsNullOrWhiteSpace(overlayRoot))
+        {
+            var fullOverlay = Path.GetFullPath(overlayRoot);
+            if (!string.Equals(fullOverlay, this._root, StringComparison.OrdinalIgnoreCase) && Directory.Exists(fullOverlay))
+            {
+                this._overlay = new GameFiles(fullOverlay, logger);
+            }
+        }
     }
 
     public string Root => this._root;
@@ -53,21 +64,49 @@ internal sealed class GameFiles : IDisposable
 
     public int PackedEntryCount => this._packs?.EntryCount ?? 0;
 
-    public void Dispose() => this._packs?.Dispose();
+    public void Dispose()
+    {
+        this._overlay?.Dispose();
+        this._packs?.Dispose();
+    }
 
     public async Task ServeAsync(HttpContext context, string relativePath)
     {
+        if (await this.TryServeAsync(context, relativePath).ConfigureAwait(false))
+        {
+            return;
+        }
+
         if (this._packs is not null)
         {
-            await this.ServeFromPackAsync(context, this._packs, relativePath).ConfigureAwait(false);
-            return;
+            this._logger?.LogWarning("Data file missing from packs: {Path}", relativePath);
+        }
+
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+    }
+
+    private async Task<bool> TryServeAsync(HttpContext context, string relativePath)
+    {
+        if (this._overlay is not null && await this._overlay.TryServeAsync(context, relativePath).ConfigureAwait(false))
+        {
+            return true;
+        }
+
+        if (this._packs is not null)
+        {
+            if (NormalizeRelativePath(relativePath) is { } normalized && TryResolveInPack(this._packs, normalized, out _))
+            {
+                await this.ServeFromPackAsync(context, this._packs, relativePath).ConfigureAwait(false);
+                return true;
+            }
+
+            return false;
         }
 
         var file = this.Resolve(relativePath);
         if (file is null)
         {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-            return;
+            return false;
         }
 
         var bytes = await File.ReadAllBytesAsync(file, context.RequestAborted).ConfigureAwait(false);
@@ -75,6 +114,7 @@ internal sealed class GameFiles : IDisposable
         context.Response.ContentType = contentType;
         context.Response.Headers.CacheControl = "public, max-age=86400";
         await context.Response.Body.WriteAsync(bytes.AsMemory(offset), context.RequestAborted).ConfigureAwait(false);
+        return true;
     }
 
     private async Task ServeFromPackAsync(HttpContext context, DataPackArchive packs, string relativePath)
@@ -235,6 +275,14 @@ internal sealed class GameFiles : IDisposable
         if (extension.Equals(".ozt", StringComparison.OrdinalIgnoreCase))
         {
             return (Math.Min(OztPrefixBytes, bytes.Length), "image/x-tga");
+        }
+
+        if (extension.Equals(".ozp", StringComparison.OrdinalIgnoreCase))
+        {
+            var wrapped = bytes.Length > OzpPrefixBytes + 4
+                && bytes[OzpPrefixBytes] == 0x89 && bytes[OzpPrefixBytes + 1] == 0x50
+                && bytes[OzpPrefixBytes + 2] == 0x4E && bytes[OzpPrefixBytes + 3] == 0x47;
+            return (wrapped ? OzpPrefixBytes : 0, "image/png");
         }
 
         if (extension.Equals(".tga", StringComparison.OrdinalIgnoreCase))

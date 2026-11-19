@@ -141,7 +141,13 @@ builder.Services.AddRateLimiter(limiter =>
 var app = builder.Build();
 var contentRoot = app.Environment.ContentRootPath;
 var webRoot = Path.GetFullPath(Path.Combine(contentRoot, (HasArg("--HNMO:WebRoot") ? app.Configuration["HNMO:WebRoot"] : hostSettings?.WebRoot) ?? app.Configuration["HNMO:WebRoot"] ?? "../public"));
-var gameFiles = new GameFiles(Path.Combine(contentRoot, (HasArg("--HNMO:DataPath") ? app.Configuration["HNMO:DataPath"] : hostSettings?.DataPath) ?? app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data"), app.Logger);
+var dataPath = Path.Combine(contentRoot, (HasArg("--HNMO:DataPath") ? app.Configuration["HNMO:DataPath"] : hostSettings?.DataPath) ?? app.Configuration["HNMO:DataPath"] ?? "../../src/bin/Data");
+var configuredS9Data = app.Configuration["HNMO:S9DataPath"];
+var siblingS9Data = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(dataPath)) ?? contentRoot, "Data_S9");
+var s9DataPath = !string.IsNullOrWhiteSpace(configuredS9Data)
+    ? Path.Combine(contentRoot, configuredS9Data)
+    : siblingS9Data;
+var gameFiles = new GameFiles(dataPath, app.Logger, s9DataPath);
 app.Lifetime.ApplicationStopping.Register(gameFiles.Dispose);
 var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, (HasArg("--HNMO:VendorPath") ? app.Configuration["HNMO:VendorPath"] : hostSettings?.VendorPath) ?? app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
 var allowedHosts = hostSettings?.RelayAllowedHosts ?? app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];

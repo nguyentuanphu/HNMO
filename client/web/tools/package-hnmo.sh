@@ -191,6 +191,10 @@ JSON
 if [ "$WITH_DATA" = 1 ]; then
   echo "Copying the game data"
   cp -r "$CLIENT_REPO/src/bin/Data" "$OUT/Data"
+  if [ -n "${HNMO_S9_DATA_DIR:-}" ] && [ -d "$HNMO_S9_DATA_DIR" ]; then
+    echo "Overlaying Season 9 Data from $HNMO_S9_DATA_DIR"
+    cp -rf "$HNMO_S9_DATA_DIR/." "$OUT/Data/"
+  fi
   # Sounds and music as Opus: about 250 MB less (WAV effects shrink ~95 %). The web game asks for
   # the .opus names when Data/Audio/Opus.json is there and the browser plays Opus. Set
   # HNMO_KEEP_WAV=1 to keep the original files.
