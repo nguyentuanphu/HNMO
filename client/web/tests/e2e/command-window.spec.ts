@@ -8,7 +8,7 @@ interface Cell { x: number; y: number }
 interface Player { id: number; kind: string; name: string; cell: Cell }
 interface CommandGame {
   hero: { name: string };
-  online: { hero: { cell: Cell; isWalking: boolean }; characters: Map<number, Player>; walkTo(cell: Cell): boolean; say(text: string): void; followId: number | null };
+  online: { hero: { cell: Cell; isWalking: boolean }; characters: Map<number, Player>; walkTo(cell: Cell): boolean; cellNextTo(cell: Cell): Cell | null; say(text: string): void; followId: number | null };
   chat: { whisperTarget: string; setWhisperTarget(name: string): void };
   commandWindow: { isOpen: boolean; armed: number };
 }
@@ -29,10 +29,11 @@ test('the command window: buttons, whisper and follow on a right click', async (
     const bName = await game(b, (g) => g.hero.name);
     const bOnA = () => a.evaluate((n) => [...(window as unknown as Win).__game.online.characters.values()].find((c) => c.kind === 'player' && c.name === n)?.cell ?? null, bName);
     const aCell = () => game(a, (g) => ({ ...g.online.hero.cell }));
-    // B walks next to A.
+    // B walks next to A: to a walkable cell beside it. The cell right of A can be a wall, and then B found no
+    // path and stayed where it was.
     await expect(async () => {
       const at = await aCell();
-      await b.evaluate((cell) => (window as unknown as Win).__game.online.walkTo(cell), { x: at.x + 1, y: at.y });
+      await b.evaluate((cell) => { const online = (window as unknown as Win).__game.online; const next = online.cellNextTo(cell); if (next) online.walkTo(next); }, at);
       await expect.poll(async () => { const c = await bOnA(); const h = await aCell(); return !!c && Math.abs(c.x - h.x) <= 2 && Math.abs(c.y - h.y) <= 2; }, { timeout: 20_000 }).toBe(true);
     }).toPass(OPEN);
     await dismissOnboarding(a);
@@ -61,9 +62,14 @@ test('the command window: buttons, whisper and follow on a right click', async (
     await a.mouse.click(point.x, point.y, { button: 'right' });
     await expect.poll(() => game(a, (g) => g.online.followId)).not.toBeNull();
     const start = await aCell();
-    const target = { x: start.x + 1, y: start.y + 5 };
-    expect(await b.evaluate((cell) => (window as unknown as Win).__game.online.walkTo(cell), target), 'B must have a walkable route before A can follow it').toBe(true);
-    await expect.poll(async () => { const h = await aCell(); return Math.abs(h.y - start.y); }, OPEN).toBeGreaterThanOrEqual(3);
+    // B walks about five cells away, in the first direction that has a route (a fixed spot can be a wall).
+    const offsets = [[1, 5], [1, -5], [5, 1], [-5, 1], [0, 6], [0, -6], [6, 0], [-6, 0]];
+    const walked = await b.evaluate(({ from, offsets }) => {
+      const online = (window as unknown as Win).__game.online;
+      return offsets.some(([dx, dy]) => online.walkTo({ x: from.x + dx, y: from.y + dy }));
+    }, { from: start, offsets });
+    expect(walked, 'B must have a walkable route before A can follow it').toBe(true);
+    await expect.poll(async () => { const h = await aCell(); return Math.max(Math.abs(h.x - start.x), Math.abs(h.y - start.y)); }, OPEN).toBeGreaterThanOrEqual(3);
 
     // Escape closes the window.
     await a.keyboard.press('Escape');
