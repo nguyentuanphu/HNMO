@@ -79,7 +79,8 @@ public static class LegacyFileParsers
         var hasS6Data = FindFiles(rootFolder, "*Common.ini").Any()
             || FindFiles(rootFolder, "CommonServer.cfg").Any()
             || FindFiles(rootFolder, "*ShopList*.xml").Any()
-            || FindFiles(rootFolder, "*MonsterSetBase*.txt").Any();
+            || FindFiles(rootFolder, "*MonsterSetBase*.txt").Any()
+            || FindFiles(rootFolder, "*MonsterSpawn*.xml").Any();
         if (hasS6Data)
         {
             signals.Add("Standard Season 6 INI/XML/spawn configuration files detected.");
@@ -180,31 +181,12 @@ public static class LegacyFileParsers
 
                     foreach (var item in items)
                     {
-                        var cat = ReadIntAttr(item, "Cat", -1);
-                        var index = ReadIntAttr(item, "Index", -1);
-                        if (cat < 0 || cat > 15 || index < 0)
-                        {
-                            continue;
-                        }
-
                         var weight = Math.Max(1, ReadIntAttr(item, "DropRate", 1));
                         var effectiveChance = Math.Clamp((sectionRate / 10000.0) * (weight / totalWeight), 0.0001, 1.0);
-                        results.Add(new LegacyDropRule
+                        if (TryCreateDropRule(item, monsterNum, minLv, maxLv, mapNum, effectiveChance, forceAncient: false, out var rule))
                         {
-                            MonsterNumber = monsterNum,
-                            MonsterMinLevel = minLv,
-                            MonsterMaxLevel = maxLv,
-                            MapNumber = mapNum,
-                            ItemGroup = (byte)cat,
-                            ItemNumber = (short)index,
-                            Chance = Math.Round(effectiveChance, 6),
-                            MinItemLevel = (byte)Math.Clamp(ReadIntAttr(item, "ItemMinLevel", 0), 0, 15),
-                            IsExcellent = ReadIntAttr(item, "Exc", 0) > 0,
-                            IsAncient = ReadIntAttr(item, "SetItem", 0) > 0,
-                            SocketCount = Math.Clamp(ReadIntAttr(item, "SocketCount", 0), 0, 5),
-                            ElementalAttribute = ReadIntAttr(item, "ElementalItem", 0),
-                            CompanionEvolutionGroup = int.TryParse(item.Attribute("MuunEvolutionItemCat")?.Value, out var evoCat) ? evoCat : null,
-                        });
+                            results.Add(rule);
+                        }
                     }
                 }
             }
@@ -213,6 +195,9 @@ public static class LegacyFileParsers
                 // Ignore malformed optional XML file
             }
         }
+
+        ParseSetItemDropManagers(rootFolder, results);
+        ParseItemBags(rootFolder, results);
 
         return results;
     }
@@ -294,6 +279,11 @@ public static class LegacyFileParsers
             try
             {
                 var doc = XDocument.Load(file);
+                if (doc.Root is not null && ReadIntAttr(doc.Root, "Enable", 1) == 0)
+                {
+                    continue;
+                }
+
                 var idx = 0;
                 foreach (var ev in doc.Descendants().Where(e => e.Name.LocalName.Equals("Event", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -306,7 +296,15 @@ public static class LegacyFileParsers
 
                     var startH = ReadIntAttr(ev, "StartHour", 20);
                     var startM = ReadIntAttr(ev, "StartMinute", 0);
+                    var endH = ReadIntAttr(ev, "EndHour", -1);
                     var mapNum = ReadIntAttr(ev, "MapNumber", -1);
+                    var expBonus = TryReadFloatAttr(ev, "ExpMultiplier", out var expMult)
+                        ? Math.Max(0, (int)Math.Round((expMult - 1.0f) * 100.0f))
+                        : ReadIntAttr(ev, "ExpBonus", 20);
+                    var dropBonus = ev.Attribute("ItemDropBonus") is not null
+                        ? ReadIntAttr(ev, "ItemDropBonus", 15)
+                        : ReadIntAttr(ev, "DropBonus", 15);
+                    var windowText = endH >= 0 ? $"Window {startH:D2}:{startM:D2}-{endH:D2}:{startM:D2}" : string.Empty;
                     events.Add(new LegacyEventScheduleEntry
                     {
                         EventId = $"imported-bonus-{idx}",
@@ -314,8 +312,9 @@ public static class LegacyFileParsers
                         IsSeason9Only = false,
                         MapNumber = mapNum >= 0 ? (short)mapNum : null,
                         ScheduleTimes = $"{startH:D2}:{startM:D2}",
-                        ExpBonusPercent = ReadIntAttr(ev, "ExpBonus", 20),
-                        DropBonusPercent = ReadIntAttr(ev, "DropBonus", 15),
+                        ExpBonusPercent = expBonus,
+                        DropBonusPercent = dropBonus,
+                        RewardSummary = windowText,
                     });
                 }
             }
@@ -325,41 +324,38 @@ public static class LegacyFileParsers
             }
         }
 
-        if (FindFiles(rootFolder, "*BloodCastle*.xml").Concat(FindFiles(rootFolder, "*BloodCastle*.ini")).Any())
-        {
-            events.Add(new LegacyEventScheduleEntry
-            {
-                EventId = "imported-blood-castle",
-                Name = "Blood Castle",
-                IsSeason9Only = false,
-                ScheduleTimes = "00:30, 02:30, 04:30, 06:30, 08:30, 10:30, 12:30, 14:30, 16:30, 18:30, 20:30, 22:30",
-                RewardSummary = "Jewel of Chaos / Jewel of Bless",
-            });
-        }
+        AddStandardEventSchedule(
+            rootFolder,
+            events,
+            "*BloodCastle*.xml",
+            "*BloodCastle*.ini",
+            "imported-blood-castle",
+            "Blood Castle",
+            "00:30, 02:30, 04:30, 06:30, 08:30, 10:30, 12:30, 14:30, 16:30, 18:30, 20:30, 22:30",
+            "Jewel of Chaos / Jewel of Bless");
 
-        if (FindFiles(rootFolder, "*DevilSquare*.xml").Concat(FindFiles(rootFolder, "*DevilSquare*.ini")).Any())
-        {
-            events.Add(new LegacyEventScheduleEntry
-            {
-                EventId = "imported-devil-square",
-                Name = "Devil Square",
-                IsSeason9Only = false,
-                ScheduleTimes = "01:00, 05:00, 09:00, 13:00, 17:00, 21:00",
-                RewardSummary = "Bonus EXP & Zen ranking",
-            });
-        }
+        AddStandardEventSchedule(
+            rootFolder,
+            events,
+            "*DevilSquare*.xml",
+            "*DevilSquare*.ini",
+            "imported-devil-square",
+            "Devil Square",
+            "01:00, 05:00, 09:00, 13:00, 17:00, 21:00",
+            "Bonus EXP & Zen ranking");
 
-        if (FindFiles(rootFolder, "*ChaosCastle*.xml").Concat(FindFiles(rootFolder, "*ChaosCastle*.ini")).Any())
-        {
-            events.Add(new LegacyEventScheduleEntry
-            {
-                EventId = "imported-chaos-castle",
-                Name = "Chaos Castle",
-                IsSeason9Only = false,
-                ScheduleTimes = "01:30, 05:30, 09:30, 13:30, 17:30, 21:30",
-                RewardSummary = "Jewels / Ancient chance",
-            });
-        }
+        AddStandardEventSchedule(
+            rootFolder,
+            events,
+            "*ChaosCastle*.xml",
+            "*ChaosCastle*.ini",
+            "imported-chaos-castle",
+            "Chaos Castle",
+            "01:30, 05:30, 09:30, 13:30, 17:30, 21:30",
+            "Jewels / Ancient chance",
+            excludePattern: "Survival");
+
+        ParseInvasionSchedules(rootFolder, events);
 
         var s9Events = new (string Pattern, string Label)[]
         {
@@ -372,14 +368,15 @@ public static class LegacyFileParsers
 
         foreach (var (pattern, label) in s9Events)
         {
-            if (FindFiles(rootFolder, pattern).Any())
+            var matched = FindFiles(rootFolder, pattern).ToList();
+            if (matched.Count > 0)
             {
                 events.Add(new LegacyEventScheduleEntry
                 {
                     EventId = $"s9-{label.ToLowerInvariant().Replace(' ', '-')}",
                     Name = label,
                     IsSeason9Only = true,
-                    ScheduleTimes = "20:00",
+                    ScheduleTimes = ReadScheduleTimesFromXml(matched[0]) ?? "20:00",
                     RewardSummary = "Season 9 exclusive event",
                 });
             }
@@ -522,6 +519,8 @@ public static class LegacyFileParsers
             }
         }
 
+        ParseXmlMonsterSpawns(rootFolder, spawns);
+
         return spawns;
     }
 
@@ -581,6 +580,355 @@ public static class LegacyFileParsers
         }
 
         return list;
+    }
+
+    private static void ParseSetItemDropManagers(string rootFolder, List<LegacyDropRule> results)
+    {
+        foreach (var file in FindFiles(rootFolder, "*SetItemDropManager*.xml"))
+        {
+            try
+            {
+                var doc = XDocument.Load(file);
+                var globalRate = Math.Max(1, ReadIntAttr(doc.Root!, "DropUseRate", 10000));
+                foreach (var ruleEl in doc.Descendants().Where(e => e.Name.LocalName.Equals("Rule", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var monsterNum = ReadIntAttr(ruleEl, "MonsterIndex", -1);
+                    var minLv = ReadIntAttr(ruleEl, "MonsterMinLevel", 0);
+                    var maxLv = ReadIntAttr(ruleEl, "MonsterMaxLevel", 255);
+                    var mapNum = ReadIntAttr(ruleEl, "MapNumber", -1);
+                    foreach (var itemEl in ruleEl.Elements().Where(e => e.Name.LocalName.Equals("ItemDrop", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var dropRate = Math.Max(1, ReadIntAttr(itemEl, "DropRate", 1));
+                        var chance = Math.Clamp((double)dropRate / Math.Max(10000.0, globalRate), 0.0001, 1.0);
+                        if (TryCreateDropRule(itemEl, monsterNum, minLv, maxLv, mapNum, chance, forceAncient: true, out var rule))
+                        {
+                            results.Add(rule);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional XML file
+            }
+        }
+    }
+
+    private static void ParseItemBags(string rootFolder, List<LegacyDropRule> results)
+    {
+        foreach (var file in FindFiles(rootFolder, "*.xml").Where(IsItemBagFile))
+        {
+            try
+            {
+                var doc = XDocument.Load(file);
+                if (doc.Root is null || !doc.Root.Name.LocalName.Equals("ItemBag", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var bagConfig = doc.Root.Elements().FirstOrDefault(e => e.Name.LocalName.Equals("BagConfig", StringComparison.OrdinalIgnoreCase));
+                var bagRate = bagConfig is not null ? Math.Clamp(ReadIntAttr(bagConfig, "ItemRate", 10000), 1, 10000) : 10000;
+                foreach (var allowEl in doc.Descendants().Where(e => e.Name.LocalName.Equals("DropAllow", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var mapNum = ReadIntAttr(allowEl, "MapNumber", -1);
+                    var drops = allowEl.Elements().Where(e => e.Name.LocalName.Equals("Drop", StringComparison.OrdinalIgnoreCase)).ToList();
+                    var totalPoolRate = Math.Max(10000.0, drops.Sum(d => Math.Max(1, ReadIntAttr(d, "Rate", 10000))));
+                    foreach (var dropEl in drops)
+                    {
+                        var poolRate = Math.Max(1, ReadIntAttr(dropEl, "Rate", 10000));
+                        var items = dropEl.Elements().Where(e => e.Name.LocalName.Equals("Item", StringComparison.OrdinalIgnoreCase)).ToList();
+                        if (items.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        var effectiveChance = Math.Clamp((bagRate / 10000.0) * (poolRate / totalPoolRate) / items.Count, 0.0001, 1.0);
+                        foreach (var itemEl in items)
+                        {
+                            if (TryCreateDropRule(itemEl, -1, 0, 255, mapNum, effectiveChance, forceAncient: false, out var rule))
+                            {
+                                results.Add(rule);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional ItemBag XML file
+            }
+        }
+    }
+
+    private static bool IsItemBagFile(string filePath)
+    {
+        var dir = Path.GetDirectoryName(filePath);
+        return dir is not null && Path.GetFileName(dir).Equals("ItemBags", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool TryCreateDropRule(
+        XElement item,
+        int monsterNum,
+        int minLv,
+        int maxLv,
+        int mapNum,
+        double effectiveChance,
+        bool forceAncient,
+        out LegacyDropRule rule)
+    {
+        var cat = ReadIntAttr(item, "Cat", -1);
+        var index = ReadIntAttr(item, "Index", -1);
+        if (cat < 0 || cat > 15 || index < 0)
+        {
+            rule = null!;
+            return false;
+        }
+
+        var minLevel = item.Attribute("ItemMinLevel") is not null
+            ? ReadIntAttr(item, "ItemMinLevel", 0)
+            : ReadIntAttr(item, "MinLevel", 0);
+
+        rule = new LegacyDropRule
+        {
+            MonsterNumber = monsterNum,
+            MonsterMinLevel = minLv,
+            MonsterMaxLevel = maxLv,
+            MapNumber = mapNum,
+            ItemGroup = (byte)cat,
+            ItemNumber = (short)index,
+            Chance = Math.Round(effectiveChance, 6),
+            MinItemLevel = (byte)Math.Clamp(minLevel, 0, 15),
+            IsExcellent = ReadIntAttr(item, "Exc", 0) != 0,
+            IsAncient = forceAncient || ReadIntAttr(item, "SetItem", 0) > 0,
+            SocketCount = Math.Clamp(ReadIntAttr(item, "SocketCount", 0), 0, 5),
+            ElementalAttribute = ReadIntAttr(item, "ElementalItem", 0),
+            CompanionEvolutionGroup = int.TryParse(item.Attribute("MuunEvolutionItemCat")?.Value, out var evoCat) ? evoCat : null,
+        };
+        return true;
+    }
+
+    private static void AddStandardEventSchedule(
+        string rootFolder,
+        List<LegacyEventScheduleEntry> events,
+        string xmlPattern,
+        string iniPattern,
+        string eventId,
+        string name,
+        string fallbackTimes,
+        string rewardSummary,
+        string? excludePattern = null)
+    {
+        var xmlFiles = FindFiles(rootFolder, xmlPattern)
+            .Where(f => excludePattern is null || !Path.GetFileName(f).Contains(excludePattern, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        var iniFiles = FindFiles(rootFolder, iniPattern)
+            .Where(f => excludePattern is null || !Path.GetFileName(f).Contains(excludePattern, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (xmlFiles.Count == 0 && iniFiles.Count == 0)
+        {
+            return;
+        }
+
+        var parsedTimes = xmlFiles.Select(ReadScheduleTimesFromXml).FirstOrDefault(t => t is not null);
+        events.Add(new LegacyEventScheduleEntry
+        {
+            EventId = eventId,
+            Name = name,
+            IsSeason9Only = false,
+            ScheduleTimes = parsedTimes ?? fallbackTimes,
+            RewardSummary = rewardSummary,
+        });
+    }
+
+    private static string? ReadScheduleTimesFromXml(string filePath)
+    {
+        try
+        {
+            var doc = XDocument.Load(filePath);
+            var starts = doc.Descendants()
+                .Where(e => e.Name.LocalName.Equals("Start", StringComparison.OrdinalIgnoreCase) && e.Attribute("Hour") is not null)
+                .Select(e =>
+                {
+                    var h = ReadIntAttr(e, "Hour", -1);
+                    var m = e.Attribute("Minute") is not null ? ReadIntAttr(e, "Minute", 0) : ReadIntAttr(e, "Monute", 0);
+                    return h >= 0 && h <= 23 && m >= 0 && m <= 59 ? $"{h:D2}:{m:D2}" : null;
+                })
+                .Where(s => s is not null)
+                .Distinct(StringComparer.Ordinal)
+                .Take(24)
+                .Cast<string>()
+                .ToList();
+            return starts.Count > 0 ? string.Join(", ", starts) : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static void ParseInvasionSchedules(string rootFolder, List<LegacyEventScheduleEntry> events)
+    {
+        var foundXml = false;
+        foreach (var file in FindFiles(rootFolder, "*InvasionManager*.xml"))
+        {
+            try
+            {
+                var doc = XDocument.Load(file);
+                if (doc.Root is not null && ReadIntAttr(doc.Root, "Enable", 1) == 0)
+                {
+                    continue;
+                }
+
+                foreach (var inv in doc.Descendants().Where(e => e.Name.LocalName.Equals("Invasion", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var typeId = ReadIntAttr(inv, "Type", -1);
+                    var invName = inv.Attribute("Name")?.Value?.Trim() is { Length: > 0 } n ? n : $"Invasion {typeId}";
+                    var times = inv.Elements()
+                        .Where(e => e.Name.LocalName.Equals("Start", StringComparison.OrdinalIgnoreCase))
+                        .Select(e => $"{Math.Clamp(ReadIntAttr(e, "Hour", 0), 0, 23):D2}:{Math.Clamp(ReadIntAttr(e, "Minute", 0), 0, 59):D2}")
+                        .Distinct(StringComparer.Ordinal)
+                        .ToList();
+                    if (times.Count > 0)
+                    {
+                        foundXml = true;
+                        events.Add(new LegacyEventScheduleEntry
+                        {
+                            EventId = $"imported-invasion-{typeId}",
+                            Name = invName,
+                            IsSeason9Only = false,
+                            ScheduleTimes = string.Join(", ", times),
+                            RewardSummary = "Scheduled field invasion",
+                        });
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed InvasionManager XML
+            }
+        }
+
+        if (foundXml)
+        {
+            return;
+        }
+
+        foreach (var file in FindFiles(rootFolder, "EventsManager.dat"))
+        {
+            var inSection = false;
+            var grouped = new Dictionary<int, List<string>>();
+            foreach (var rawLine in File.ReadLines(file))
+            {
+                var line = StripLineComment(rawLine).Trim();
+                if (line.Length == 0)
+                {
+                    continue;
+                }
+
+                if (line.Equals("end", StringComparison.OrdinalIgnoreCase))
+                {
+                    inSection = false;
+                    continue;
+                }
+
+                var tokens = line.Split(WhitespaceSeparators, StringSplitOptions.RemoveEmptyEntries);
+                if (tokens.Length == 1 && TryParseInt(tokens[0], out var sec) && sec == 0)
+                {
+                    inSection = true;
+                    continue;
+                }
+
+                if (inSection && tokens.Length >= 3
+                    && TryParseInt(tokens[0], out var typeId)
+                    && TryParseInt(tokens[1], out var h)
+                    && TryParseInt(tokens[2], out var m))
+                {
+                    if (!grouped.TryGetValue(typeId, out var list))
+                    {
+                        list = [];
+                        grouped[typeId] = list;
+                    }
+
+                    var ts = $"{Math.Clamp(h, 0, 23):D2}:{Math.Clamp(m, 0, 59):D2}";
+                    if (!list.Contains(ts))
+                    {
+                        list.Add(ts);
+                    }
+                }
+            }
+
+            foreach (var (typeId, times) in grouped.OrderBy(kv => kv.Key))
+            {
+                events.Add(new LegacyEventScheduleEntry
+                {
+                    EventId = $"imported-invasion-{typeId}",
+                    Name = $"Invasion #{typeId}",
+                    IsSeason9Only = false,
+                    ScheduleTimes = string.Join(", ", times),
+                    RewardSummary = "Scheduled field invasion (EventsManager.dat)",
+                });
+            }
+        }
+    }
+
+    private static void ParseXmlMonsterSpawns(string rootFolder, List<LegacySpawnEntry> spawns)
+    {
+        foreach (var file in FindFiles(rootFolder, "*MonsterSpawn*.xml"))
+        {
+            try
+            {
+                var doc = XDocument.Load(file);
+                foreach (var mapEl in doc.Descendants().Where(e => e.Name.LocalName.Equals("Map", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var mapId = ReadIntAttr(mapEl, "Number", -1);
+                    if (mapId < 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var spotEl in mapEl.Elements().Where(e => e.Name.LocalName.Equals("Spot", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var spotType = ReadIntAttr(spotEl, "Type", 2);
+                        foreach (var spawnEl in spotEl.Elements().Where(e => e.Name.LocalName.Equals("Spawn", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            var monsterId = ReadIntAttr(spawnEl, "Index", -1);
+                            var x1 = ReadIntAttr(spawnEl, "StartX", -1);
+                            var y1 = ReadIntAttr(spawnEl, "StartY", -1);
+                            if (monsterId < 0 || x1 < 0 || y1 < 0)
+                            {
+                                continue;
+                            }
+
+                            var x2 = spawnEl.Attribute("EndX") is not null ? ReadIntAttr(spawnEl, "EndX", x1) : x1;
+                            var y2 = spawnEl.Attribute("EndY") is not null ? ReadIntAttr(spawnEl, "EndY", y1) : y1;
+                            var dir = ReadIntAttr(spawnEl, "Dir", 0);
+                            var count = Math.Max(1, ReadIntAttr(spawnEl, "Count", 1));
+                            var element = ReadIntAttr(spawnEl, "Element", 0);
+
+                            // Elemental spots (Type 3 / Element > 0) map to group 5 until Wave 4B adds elemental monster mechanics.
+                            var mappedGroup = spotType == 3 || element > 0 ? 5 : spotType;
+                            spawns.Add(new LegacySpawnEntry
+                            {
+                                SpawnGroup = mappedGroup,
+                                MonsterNumber = monsterId,
+                                MapNumber = mapId,
+                                X1 = (byte)Math.Clamp(Math.Min(x1, x2), 0, 255),
+                                Y1 = (byte)Math.Clamp(Math.Min(y1, y2), 0, 255),
+                                X2 = (byte)Math.Clamp(Math.Max(x1, x2), 0, 255),
+                                Y2 = (byte)Math.Clamp(Math.Max(y1, y2), 0, 255),
+                                Direction = dir,
+                                Quantity = count,
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed optional XML spawn file
+            }
+        }
     }
 
     private static IEnumerable<string> FindFiles(string rootFolder, string pattern) =>

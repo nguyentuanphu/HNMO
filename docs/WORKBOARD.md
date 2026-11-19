@@ -25,7 +25,7 @@
 
 ### Ownership Split (2026-11-19 — Quota & Environment Optimization)
 - **Cloud Claude (owns pure C#/TS coding from GitHub)**: Pull `antigravity-s6-work`, claim items below by editing this file, work on **Wave 2**, **Wave 3** (`HNMO.sln` analyzer cleanup & cross-platform `.NET` tests), and **Wave 4B–4D** (`S9` server mechanics, `F5` packets, TypeScript web UIs, AdminPanel pages). Leave `[ ]` -> `[~]`/`[x]` updates in git as you go.
-- **Local Antigravity on Windows (reserved for Windows-only / local-disk work)**: **Wave 4A DONE** — inspected extracted local S9 client `Data/` (`D:\MuOnline\IGCN\IGCN x9` outside git), published [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md), and implemented S9 decoders + `Data_S9` overlay. Remaining Antigravity Windows-only work later: `package-hnmo.sh win-x64` into `HNMO-pkg` and Windows Playwright playtests against `HNMO-pkg`.
+- **Local Antigravity on Windows (reserved for Windows-only / local-disk work)**: **Wave 4A + S6/S9 Schema Spec + `/import-server` Parser Upgrades DONE** — inspected extracted local S6 (`IGCN x6`) and S9 (`IGCN x9`) client/server files outside git, published [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md) and [s6-s9-server-spec-2026-11-19.md](s6-s9-server-spec-2026-11-19.md), implemented Web S9 decoders + `Data_S9` overlay, and upgraded `LegacyFileParsers.cs` for real IGCN x6 + x9 XML/INI/DAT schemas. Remaining Antigravity Windows-only work later: `package-hnmo.sh win-x64` into `HNMO-pkg` and Windows Playwright playtests against `HNMO-pkg`.
 
 ### Wave 1 — Live Setup, Control, Portal & E2E Stability (COMPLETED by Antigravity)
 1. [x] **Setup Wizard live port sync (`ControlEndpoints.cs`, `Portal.cs`, `Program.cs`)**: Update in-memory `LauncherOptions` and `PortalOptions` (`ConnectServerPort`, `DatabasePort`, `AdminUrl`, `OpenBrowserUrl`) immediately when `/api/control/setup` or restore writes `hnmo-settings.json`, plus 2s HTTP timeout on `ProbeHttpAsync` so `adminPanel` probe handles cold Blazor SSR startup cleanly.
@@ -34,7 +34,7 @@
 4. [x] **First-run `/control` setup clarity**: Added bilingual EN/VI `wizardHint` on `control.html` noting `/users` admin creation (`>= 12` char password) and `Administrator` API key role for Website Portal registration.
 
 ### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion (ASSIGNED: Cloud Claude)
-5. [ ] **`/import-server` S6 Extensions**: Weighted multi-pool Item Bag XML rules, Ancient Set drop rules, and multi-slot map/day bonus schedules (dry-run + backup + undo).
+5. [x] **`/import-server` S6 & S9 Schema Parsers (`LegacyFileParsers.cs`) + Spec ([s6-s9-server-spec-2026-11-19.md](s6-s9-server-spec-2026-11-19.md)) (COMPLETED by Antigravity)**: Added real `IGC_SetItemDropManager.xml`, weighted `ItemBags/*.xml`, `IGC_BonusEvent.xml` (`ExpMultiplier`/`ItemDropBonus`/`EndHour`), `IGC_InvasionManager.xml` / `EventsManager.dat`, event XML `<Schedule><Start>` (`Monute` typo tolerance), and x9 `IGC_MonsterSpawn.xml` parsers + synthetic unit tests. *(Cloud Claude may add UI toggles / per-day bonus scheduling in `LegacyServerImportEngine` + AdminPanel as needed for #6.)*
 6. [ ] **Remaining S6 Gameplay & Web UI Gaps** ([feature-gap-2026-11-18.md](feature-gap-2026-11-18.md)):
    - Gens strife-map PvP/move locks + chat/nameplate icons.
    - Weighted Item Bags + timed `PeriodTime` expiry + Cancel Item Sale / Item Recovery NPC + Cash Shop bundles / `MonsterGP`.
