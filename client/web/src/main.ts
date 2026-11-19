@@ -4,8 +4,9 @@ import { availableLanguages, currentLanguage, initLanguage, onLanguageChange, sa
 import { applyGameName, loadGameName } from './gameName.js';
 import * as THREE from 'three';
 import { TERRAIN_SCALE, TERRAIN_SIZE, TerrainFlag } from './formats.js';
-import { sampleHeight, setTerrainLights } from './terrain.js';
+import { sampleHeight, sampleLight, setTerrainLights } from './terrain.js';
 import { loadWorldData, createWorld, mapName, updateIndoorFade, type IndoorFade } from './world.js';
+import { objectFires, tickObjectFires, type ObjectFire } from './game/objectFires.js';
 import { createPlayerCharacter, createMonsterCharacter, setPlayerAnimationSpeeds, cellCenter, createItemModel } from './game/characters.js';
 import { GuildStatus } from './game/guild.js';
 import { findPath } from './game/pathfinding.js';
@@ -176,6 +177,8 @@ export interface GameState {
   worldGroup?: THREE.Group;
   /** The roofs that fade while the hero is inside a building (world.ts, updateIndoorFade). */
   indoorFade?: IndoorFade | null;
+  /** The flames and smoke of the map's lamps, torches and bonfires (game/objectFires.ts). */
+  objectFires?: ObjectFire[];
   hero: Character | null;
   online: OnlineWorld | null;
   /** The chat log, system log and input box (game/chat.ts). */
@@ -436,6 +439,10 @@ async function loadMapNow(mapNumber: number): Promise<void> {
   state.world = { ...data, terrain: world.terrain };
   state.worldGroup = world.group;
   state.indoorFade = world.indoorFade;
+  state.objectFires = objectFires(mapNumber, data.objects, (x, y) => {
+    const { r, g, b } = sampleLight(data.light, x, y, new THREE.Color());
+    return new THREE.Vector3(r, g, b);
+  });
   state.mapNumber = mapNumber;
   root.add(world.group);
 }
@@ -1247,6 +1254,11 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   // Skill effects (the desktop's effect system): played when anyone casts.
   const effects = new EffectSystem(root, { camera, heightAt, heroPosition: () => (state.hero ? state.hero.position : null) });
   state.effects = effects;
+  // The map's lamps, torches and bonfires burn every tick near the hero (CreateFire in the objects' animation).
+  effects.schedule(() => {
+    if (state.objectFires?.length && state.hero) tickObjectFires(effects, state.objectFires, state.hero.position.x, state.hero.position.y);
+    return true;
+  });
   // The effect models, textures and programs are made ready in the background, so the first cast of a skill doesn't stall.
   setTimeout(() => { void effects.prewarm((object) => warmObject(warmer, object)); }, 3_000);
   // The items' glow passes (levels, shines, excellent, ancient, the cloak's chrome) likewise, on a sword.
