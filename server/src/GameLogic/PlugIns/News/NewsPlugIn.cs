@@ -29,9 +29,6 @@ public sealed class NewsPlugIn :
     public static NewsPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<NewsPlugIn>().FirstOrDefault();
 
-    /// <inheritdoc />
-    public object CreateDefaultConfig() => new NewsConfiguration();
-
     /// <summary>Broadcasts a newly published news post as a chat notice to all entered-world players in <paramref name="gameContext"/>.</summary>
     /// <param name="gameContext">Target game context.</param>
     /// <param name="post">Published news post.</param>
@@ -52,6 +49,9 @@ public sealed class NewsPlugIn :
             await player.InvokeViewPlugInAsync<IHnmoNewsViewPlugIn>(v => v.ShowNewsNoticeAsync(json)).ConfigureAwait(false);
         }).ConfigureAwait(false);
     }
+
+    /// <inheritdoc />
+    public object CreateDefaultConfig() => new NewsConfiguration();
 
     /// <inheritdoc />
     public async ValueTask PlayerStateChangedAsync(Player player, State previousState, State currentState)

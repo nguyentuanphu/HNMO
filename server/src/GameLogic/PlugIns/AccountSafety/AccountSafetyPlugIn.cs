@@ -30,6 +30,7 @@ using HNMO.PlugIns;
 public class AccountSafetyPlugIn : IPlayerStateChangedPlugIn, IItemDropPlugIn, IItemMovedPlugIn, ISupportCustomConfiguration<AccountSafetyConfiguration>, ISupportDefaultCustomConfiguration
 {
     private static readonly ConcurrentDictionary<byte, IGameContext> Contexts = new();
+
     private static readonly ConditionalWeakTable<Player, Session> Sessions = new();
 
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -115,6 +116,38 @@ public class AccountSafetyPlugIn : IPlayerStateChangedPlugIn, IItemDropPlugIn, I
         var engine = plugIn.GetEngine();
         engine.RecordLogin(login, (player as IHasIpAddress)?.IpAddress, "game", false, DateTime.UtcNow);
         Save(engine);
+    }
+
+    /// <summary>
+    /// Finds a player of an account who is in a game of this process (in the game or offline leveling).
+    /// </summary>
+    /// <param name="contexts">The game contexts.</param>
+    /// <param name="login">The login name.</param>
+    /// <returns>The player, if any.</returns>
+    public static async ValueTask<Player?> FindPlayerAsync(IEnumerable<IGameContext> contexts, string login)
+    {
+        foreach (var context in contexts.Distinct())
+        {
+            var players = await context.GetPlayersAsync().ConfigureAwait(false);
+            if (players.FirstOrDefault(p => !p.IsTemplatePlayer && string.Equals(p.Account?.LoginName, login, StringComparison.OrdinalIgnoreCase)) is { } player)
+            {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Forgets that a player entered the second password (it was changed or cleared elsewhere).
+    /// </summary>
+    /// <param name="player">The player.</param>
+    public static void ForgetEntered(Player player)
+    {
+        if (Sessions.TryGetValue(player, out var session))
+        {
+            session.EnteredAtUtc = null;
+        }
     }
 
     /// <inheritdoc />
@@ -592,38 +625,6 @@ public class AccountSafetyPlugIn : IPlayerStateChangedPlugIn, IItemDropPlugIn, I
         if (player.Account?.LoginName is { Length: > 0 } login && this.GetEngine().IsLocked(login, HNMO.Persistence.ObjectExtensions.GetId(item), DateTime.UtcNow))
         {
             await this.SendStateAsync(player, false).ConfigureAwait(false);
-        }
-    }
-
-    /// <summary>
-    /// Finds a player of an account who is in a game of this process (in the game or offline leveling).
-    /// </summary>
-    /// <param name="contexts">The game contexts.</param>
-    /// <param name="login">The login name.</param>
-    /// <returns>The player, if any.</returns>
-    public static async ValueTask<Player?> FindPlayerAsync(IEnumerable<IGameContext> contexts, string login)
-    {
-        foreach (var context in contexts.Distinct())
-        {
-            var players = await context.GetPlayersAsync().ConfigureAwait(false);
-            if (players.FirstOrDefault(p => !p.IsTemplatePlayer && string.Equals(p.Account?.LoginName, login, StringComparison.OrdinalIgnoreCase)) is { } player)
-            {
-                return player;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// Forgets that a player entered the second password (it was changed or cleared elsewhere).
-    /// </summary>
-    /// <param name="player">The player.</param>
-    public static void ForgetEntered(Player player)
-    {
-        if (Sessions.TryGetValue(player, out var session))
-        {
-            session.EnteredAtUtc = null;
         }
     }
 

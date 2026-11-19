@@ -78,6 +78,34 @@ public class PickupItemAction
         }
     }
 
+    /// <summary>
+    /// Server-side bots and offline levelers retry far away drops several times per second, which
+    /// would flood the log; their refusals are only of interest when debugging them.
+    /// A connected client can also send an unlimited amount of pick up requests, e.g. with ids of
+    /// drops which don't exist, so a player gets at most one refusal per <see cref="RefusalLogInterval"/>
+    /// logged as information; the others are logged for debugging.
+    /// </summary>
+    internal static LogLevel GetLogLevel(Player player)
+    {
+        if (player is OfflinePlayer)
+        {
+            return LogLevel.Debug;
+        }
+
+        var now = Environment.TickCount64;
+        var lastLogged = LastRefusalLogs.GetValue(player, _ => new StrongBox<long>(now - (long)RefusalLogInterval.TotalMilliseconds));
+        lock (lastLogged)
+        {
+            if (now - lastLogged.Value < RefusalLogInterval.TotalMilliseconds)
+            {
+                return LogLevel.Debug;
+            }
+
+            lastLogged.Value = now;
+            return LogLevel.Information;
+        }
+    }
+
     private static async ValueTask<(bool Success, Item? StackTarget)> RejectAsync(Player player, DroppedItem droppedItem, string messageKey)
     {
         LogRefusal(player, droppedItem, messageKey);
@@ -117,34 +145,6 @@ public class PickupItemAction
             drop,
             (int)player.GetDistanceTo(drop),
             reason);
-    }
-
-    /// <summary>
-    /// Server-side bots and offline levelers retry far away drops several times per second, which
-    /// would flood the log; their refusals are only of interest when debugging them.
-    /// A connected client can also send an unlimited amount of pick up requests, e.g. with ids of
-    /// drops which don't exist, so a player gets at most one refusal per <see cref="RefusalLogInterval"/>
-    /// logged as information; the others are logged for debugging.
-    /// </summary>
-    internal static LogLevel GetLogLevel(Player player)
-    {
-        if (player is OfflinePlayer)
-        {
-            return LogLevel.Debug;
-        }
-
-        var now = Environment.TickCount64;
-        var lastLogged = LastRefusalLogs.GetValue(player, _ => new StrongBox<long>(now - (long)RefusalLogInterval.TotalMilliseconds));
-        lock (lastLogged)
-        {
-            if (now - lastLogged.Value < RefusalLogInterval.TotalMilliseconds)
-            {
-                return LogLevel.Debug;
-            }
-
-            lastLogged.Value = now;
-            return LogLevel.Information;
-        }
     }
 
     private static string GetDistanceOrDeathReason(Player player)

@@ -17,13 +17,44 @@ public sealed class EventAlertStore
     /// <summary>Section key inside <see cref="HnmoStateStore"/>.</summary>
     public const string SectionKey = "eventAlerts";
 
+    /// <summary>The most subscriptions kept; anyone can subscribe, so the list has an end.</summary>
+    public const int MaximumSubscriptions = 20000;
+
+    private const int MaximumEndpointLength = 1024;
+
+    private const int MaximumKeyLength = 256;
+
+    private const int MaximumEventsPerSubscription = 32;
+
     private const int MaxLogs = 100;
 
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
+
     private static readonly ConcurrentDictionary<string, EventAlertStore> Shared = new(StringComparer.Ordinal);
 
+    /// <summary>
+    /// The browsers' push services. Notifications are only ever sent to these: a subscription is sent in by
+    /// anyone, and the server must not be made to call other addresses with it.
+    /// </summary>
+    private static readonly string[] PushServiceHosts =
+    [
+        "fcm.googleapis.com",
+        "android.googleapis.com",
+        "updates.push.services.mozilla.com",
+        "web.push.apple.com",
+    ];
+
+    private static readonly string[] PushServiceHostSuffixes =
+    [
+        ".push.services.mozilla.com",
+        ".notify.windows.com",
+        ".push.apple.com",
+    ];
+
     private readonly object _gate = new();
+
     private readonly HnmoStateStore? _stateStore;
+
     private readonly EventAlertStoreData _data;
 
     /// <summary>Initializes a new instance of the <see cref="EventAlertStore"/> class.</summary>
@@ -44,6 +75,18 @@ public sealed class EventAlertStore
             ? string.Empty
             : (HnmoStateStore.ResolveStateFilePath(key) ?? Path.GetFullPath(key, AppContext.BaseDirectory));
         return Shared.GetOrAdd(resolved, p => new EventAlertStore(p.Length == 0 ? null : p));
+    }
+
+    /// <summary>Tells whether an address belongs to one of the browsers' push services.</summary>
+    /// <param name="endpoint">The subscription's endpoint.</param>
+    /// <returns><c>true</c>, if notifications may be sent to it.</returns>
+    public static bool IsPushService(Uri endpoint)
+    {
+        ArgumentNullException.ThrowIfNull(endpoint);
+        var host = endpoint.IdnHost;
+        return endpoint.IsDefaultPort
+            && (PushServiceHosts.Contains(host, StringComparer.OrdinalIgnoreCase)
+                || PushServiceHostSuffixes.Any(suffix => host.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <summary>Ensures a valid VAPID P-256 keypair exists, generating one when missing or empty.</summary>
@@ -91,46 +134,6 @@ public sealed class EventAlertStore
             this.SaveLocked();
             return (pub, priv);
         }
-    }
-
-    /// <summary>The most subscriptions kept; anyone can subscribe, so the list has an end.</summary>
-    public const int MaximumSubscriptions = 20000;
-
-    private const int MaximumEndpointLength = 1024;
-
-    private const int MaximumKeyLength = 256;
-
-    private const int MaximumEventsPerSubscription = 32;
-
-    /// <summary>
-    /// The browsers' push services. Notifications are only ever sent to these: a subscription is sent in by
-    /// anyone, and the server must not be made to call other addresses with it.
-    /// </summary>
-    private static readonly string[] PushServiceHosts =
-    [
-        "fcm.googleapis.com",
-        "android.googleapis.com",
-        "updates.push.services.mozilla.com",
-        "web.push.apple.com",
-    ];
-
-    private static readonly string[] PushServiceHostSuffixes =
-    [
-        ".push.services.mozilla.com",
-        ".notify.windows.com",
-        ".push.apple.com",
-    ];
-
-    /// <summary>Tells whether an address belongs to one of the browsers' push services.</summary>
-    /// <param name="endpoint">The subscription's endpoint.</param>
-    /// <returns><c>true</c>, if notifications may be sent to it.</returns>
-    public static bool IsPushService(Uri endpoint)
-    {
-        ArgumentNullException.ThrowIfNull(endpoint);
-        var host = endpoint.IdnHost;
-        return endpoint.IsDefaultPort
-            && (PushServiceHosts.Contains(host, StringComparer.OrdinalIgnoreCase)
-                || PushServiceHostSuffixes.Any(suffix => host.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <summary>Adds or updates a Web Push browser subscription.</summary>

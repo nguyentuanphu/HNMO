@@ -129,6 +129,10 @@ public class CommunityConfiguration
     [Range(0, 3600)]
     public int DropCooldownSeconds { get; set; } = 30;
 
+    /// <summary>Gets a value indicating whether any kind is posted.</summary>
+    [JsonIgnore]
+    public bool PostsAnything => Enum.GetValues<CommunityPostKind>().Any(k => this.Post(k).Enabled);
+
     /// <summary>Gets the setting of a kind.</summary>
     /// <param name="kind">The kind.</param>
     /// <returns>The setting.</returns>
@@ -142,8 +146,4 @@ public class CommunityConfiguration
         CommunityPostKind.TopRaceWinner => this.TopRaceWinner,
         _ => this.CastleSiegeWinner,
     };
-
-    /// <summary>Gets a value indicating whether any kind is posted.</summary>
-    [JsonIgnore]
-    public bool PostsAnything => Enum.GetValues<CommunityPostKind>().Any(k => this.Post(k).Enabled);
 }

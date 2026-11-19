@@ -649,6 +649,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public DateTime LastShieldRecoveryHiatusAccrual { get; set; } = DateTime.UtcNow;
 
     /// <summary>
+    /// Gets the login name with which this player is currently registered at the login server, if any.
+    /// </summary>
+    internal string? LoginServerRegistration => Volatile.Read(ref this._loginServerRegistration);
+
+    /// <summary>
     /// Gets a value indicating whether opening the player store after entering the game is supported by this instance.
     /// </summary>
     protected virtual bool IsPlayerStoreOpeningAfterEnterSupported => true;
@@ -682,11 +687,6 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
         Interlocked.Exchange(ref this._lastAliveReportTicks, DateTime.UtcNow.Ticks);
     }
-
-    /// <summary>
-    /// Gets the login name with which this player is currently registered at the login server, if any.
-    /// </summary>
-    internal string? LoginServerRegistration => Volatile.Read(ref this._loginServerRegistration);
 
     /// <summary>
     /// Remembers that the login server accepted the login of this player with the specified login name.

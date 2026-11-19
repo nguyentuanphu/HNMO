@@ -20,6 +20,7 @@ public class LoginAction
     private static readonly ConditionalWeakTable<IGameServerContext, ConcurrentDictionary<string, AsyncLock>> LoginGates = new();
 
     private static int _templateCounter;
+
     private readonly BanManagerService? _banService;
 
     /// <summary>Initializes a new instance of the <see cref="LoginAction"/> class.</summary>
@@ -33,6 +34,8 @@ public class LoginAction
     {
         this._banService = banService;
     }
+
+    private BanManagerService BanService => this._banService ?? BanManagerService.Default;
 
     /// <summary>
     /// Logins the specified player.
@@ -124,30 +127,6 @@ public class LoginAction
         await this.CompleteLoginAsync(player, username, success, account).ConfigureAwait(false);
     }
 
-    private async ValueTask CompleteLoginAsync(Player player, string username, bool success, Account? account)
-    {
-        if (success && account is { })
-        {
-            if (player.PlayerState.CurrentState.IsDisconnectedOrFinished())
-            {
-                await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
-                return;
-            }
-
-            try
-            {
-                await this.FinishLoginAsync(player, username, account).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                player.Logger.LogError(ex, "Failed to finish login for [{Username}].", username);
-                await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
-
-                await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.ConnectionError)).ConfigureAwait(false);
-            }
-        }
-    }
-
     private static async ValueTask ReleaseLoginServerRegistrationAsync(Player player)
     {
         if (player.ReleaseLoginServerRegistration() is not { } loginName
@@ -223,6 +202,94 @@ public class LoginAction
         return (false, null);
     }
 
+    private static AsyncLock GetLoginGate(IGameServerContext gameServerContext, string username)
+    {
+        var serverGates = LoginGates.GetValue(
+            gameServerContext,
+            static _ => new ConcurrentDictionary<string, AsyncLock>(StringComparer.OrdinalIgnoreCase));
+        return serverGates.GetOrAdd(username, static _ => new AsyncLock());
+    }
+
+    private static async ValueTask<bool> TryAcquireLoginServerRegistrationAsync(Player player, IGameServerContext gameServerContext, string username)
+    {
+        using var gate = await GetLoginGate(gameServerContext, username).LockAsync().ConfigureAwait(false);
+        if (player.PlayerState.CurrentState.IsDisconnectedOrFinished())
+        {
+            return false;
+        }
+
+        if (await gameServerContext.LoginServer.TryLoginAsync(username, gameServerContext.Id).ConfigureAwait(false))
+        {
+            // Remembered while the state change is in progress, which a disconnect waits for.
+            player.SetLoginServerRegistration(username);
+            return true;
+        }
+
+        // Safety net: if the login server says the account is logged in on THIS game server,
+        // verify under the per-account login gate whether any live player (or active offline player)
+        // on this server owns it. If none does, the registration is orphaned and can be safely freed.
+        var snapshot = await gameServerContext.LoginServer.GetSnapshotAsync().ConfigureAwait(false);
+        if (snapshot is not null
+            && snapshot.TryGetValue(username, out var registeredServerId)
+            && registeredServerId == gameServerContext.Id
+            && !gameServerContext.OfflinePlayerManager.IsActive(username))
+        {
+            var players = await gameServerContext.GetPlayersAsync().ConfigureAwait(false);
+            var hasLiveOwner = players.Any(p =>
+                p != player
+                && (string.Equals(p.Account?.LoginName, username, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(p.LoginServerRegistration, username, StringComparison.OrdinalIgnoreCase)));
+            if (!hasLiveOwner)
+            {
+                player.Logger.LogWarning(
+                    "Account [{Username}] was marked logged in on server {ServerId}, but no live player owns it. Releasing the stale login registration.",
+                    username,
+                    gameServerContext.Id);
+                await gameServerContext.LoginServer.LogOffAsync(username, gameServerContext.Id).ConfigureAwait(false);
+                if (await gameServerContext.LoginServer.TryLoginAsync(username, gameServerContext.Id).ConfigureAwait(false))
+                {
+                    player.SetLoginServerRegistration(username);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Notifies the game servers and external systems, that somebody tried to log into an account which is already logged in.
+    /// </summary>
+    private static async ValueTask NotifyAlreadyLoggedInAsync(IGameServerContext gameServerContext, string username)
+    {
+        await gameServerContext.EventPublisher.PlayerAlreadyLoggedInAsync(gameServerContext.Id, username).ConfigureAwait(false);
+        await gameServerContext.EventPublisher.GameEventAsync(new AccountLoginBlockedEvent(gameServerContext.Id, DateTime.UtcNow, username)).ConfigureAwait(false);
+    }
+
+    private async ValueTask CompleteLoginAsync(Player player, string username, bool success, Account? account)
+    {
+        if (success && account is { })
+        {
+            if (player.PlayerState.CurrentState.IsDisconnectedOrFinished())
+            {
+                await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
+                return;
+            }
+
+            try
+            {
+                await this.FinishLoginAsync(player, username, account).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                player.Logger.LogError(ex, "Failed to finish login for [{Username}].", username);
+                await ReleaseLoginServerRegistrationAsync(player).ConfigureAwait(false);
+
+                await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.ConnectionError)).ConfigureAwait(false);
+            }
+        }
+    }
+
     private async ValueTask<AccountState?> AuthenticateAsync(Player player, string username, string password)
     {
         try
@@ -243,8 +310,6 @@ public class LoginAction
             return null;
         }
     }
-
-    private BanManagerService BanService => this._banService ?? BanManagerService.Default;
 
     private async ValueTask<bool> RefuseIfModerationBlockedAsync(Player player, string username, string? address, string? deviceId)
     {
@@ -463,61 +528,6 @@ public class LoginAction
         }
     }
 
-    private static AsyncLock GetLoginGate(IGameServerContext gameServerContext, string username)
-    {
-        var serverGates = LoginGates.GetValue(
-            gameServerContext,
-            static _ => new ConcurrentDictionary<string, AsyncLock>(StringComparer.OrdinalIgnoreCase));
-        return serverGates.GetOrAdd(username, static _ => new AsyncLock());
-    }
-
-    private static async ValueTask<bool> TryAcquireLoginServerRegistrationAsync(Player player, IGameServerContext gameServerContext, string username)
-    {
-        using var gate = await GetLoginGate(gameServerContext, username).LockAsync().ConfigureAwait(false);
-        if (player.PlayerState.CurrentState.IsDisconnectedOrFinished())
-        {
-            return false;
-        }
-
-        if (await gameServerContext.LoginServer.TryLoginAsync(username, gameServerContext.Id).ConfigureAwait(false))
-        {
-            // Remembered while the state change is in progress, which a disconnect waits for.
-            player.SetLoginServerRegistration(username);
-            return true;
-        }
-
-        // Safety net: if the login server says the account is logged in on THIS game server,
-        // verify under the per-account login gate whether any live player (or active offline player)
-        // on this server owns it. If none does, the registration is orphaned and can be safely freed.
-        var snapshot = await gameServerContext.LoginServer.GetSnapshotAsync().ConfigureAwait(false);
-        if (snapshot is not null
-            && snapshot.TryGetValue(username, out var registeredServerId)
-            && registeredServerId == gameServerContext.Id
-            && !gameServerContext.OfflinePlayerManager.IsActive(username))
-        {
-            var players = await gameServerContext.GetPlayersAsync().ConfigureAwait(false);
-            var hasLiveOwner = players.Any(p =>
-                p != player
-                && (string.Equals(p.Account?.LoginName, username, StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(p.LoginServerRegistration, username, StringComparison.OrdinalIgnoreCase)));
-            if (!hasLiveOwner)
-            {
-                player.Logger.LogWarning(
-                    "Account [{Username}] was marked logged in on server {ServerId}, but no live player owns it. Releasing the stale login registration.",
-                    username,
-                    gameServerContext.Id);
-                await gameServerContext.LoginServer.LogOffAsync(username, gameServerContext.Id).ConfigureAwait(false);
-                if (await gameServerContext.LoginServer.TryLoginAsync(username, gameServerContext.Id).ConfigureAwait(false))
-                {
-                    player.SetLoginServerRegistration(username);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     /// <summary>
     /// Checks if the account fulfills the <see cref="IGameServerContext.JoinRequirements"/> of the game server,
     /// and shows the login result to the player if it doesn't.
@@ -571,15 +581,6 @@ public class LoginAction
             await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.ConnectionError)).ConfigureAwait(false);
             return null;
         }
-    }
-
-    /// <summary>
-    /// Notifies the game servers and external systems, that somebody tried to log into an account which is already logged in.
-    /// </summary>
-    private static async ValueTask NotifyAlreadyLoggedInAsync(IGameServerContext gameServerContext, string username)
-    {
-        await gameServerContext.EventPublisher.PlayerAlreadyLoggedInAsync(gameServerContext.Id, username).ConfigureAwait(false);
-        await gameServerContext.EventPublisher.GameEventAsync(new AccountLoginBlockedEvent(gameServerContext.Id, DateTime.UtcNow, username)).ConfigureAwait(false);
     }
 
     private async ValueTask HandleAlreadyConnectedAsync(Player player, string username)

@@ -31,6 +31,17 @@ public sealed class MissionClock
     /// <summary>Gets the reset hour.</summary>
     public int ResetHour { get; }
 
+    /// <summary>Formats a game day as its key.</summary>
+    /// <param name="day">The day.</param>
+    /// <returns>The key.</returns>
+    public static string Key(DateOnly day) => day.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+    /// <summary>Parses a key of <see cref="Key"/>.</summary>
+    /// <param name="key">The key.</param>
+    /// <returns>The day, or <c>null</c>.</returns>
+    public static DateOnly? Parse(string? key) =>
+        DateOnly.TryParseExact(key, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var day) ? day : null;
+
     /// <summary>
     /// Gets the game day of a moment.
     /// </summary>
@@ -104,17 +115,6 @@ public sealed class MissionClock
 
         return TimeZoneInfo.ConvertTimeToUtc(local, this.TimeZone);
     }
-
-    /// <summary>Formats a game day as its key.</summary>
-    /// <param name="day">The day.</param>
-    /// <returns>The key.</returns>
-    public static string Key(DateOnly day) => day.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-    /// <summary>Parses a key of <see cref="Key"/>.</summary>
-    /// <param name="key">The key.</param>
-    /// <returns>The day, or <c>null</c>.</returns>
-    public static DateOnly? Parse(string? key) =>
-        DateOnly.TryParseExact(key, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var day) ? day : null;
 
     private static TimeZoneInfo Find(string? id)
     {

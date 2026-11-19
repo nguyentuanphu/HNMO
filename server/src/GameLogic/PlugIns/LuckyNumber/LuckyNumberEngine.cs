@@ -212,6 +212,78 @@ public sealed class LuckyNumberEngine
     public LuckyNumberDrawOutcome? DrawNow(DateTime utcNow, int? overrideWinningNumber = null) =>
         this.DrawDueRoundsInternal(utcNow, forceCurrentRound: true, overrideWinningNumber).FirstOrDefault();
 
+    /// <summary>Marks a winner's coin grant as paid once saved to the database.</summary>
+    /// <param name="dateKey">The round date key.</param>
+    /// <param name="loginName">The winner login name.</param>
+    /// <param name="number">The picked number.</param>
+    public void MarkCoinsGranted(string dateKey, string loginName, int number)
+    {
+        this.Store.Mutate(data =>
+        {
+            var round = data.Rounds.FirstOrDefault(r => r.DateKey == dateKey);
+            if (round is null)
+            {
+                return (false, false);
+            }
+
+            var updated = false;
+            foreach (var w in round.Winners.Where(w => string.Equals(w.LoginName, loginName, StringComparison.OrdinalIgnoreCase) && w.Number == number))
+            {
+                if (!w.CoinsGranted)
+                {
+                    w.CoinsGranted = true;
+                    updated = true;
+                }
+            }
+
+            return (updated, updated);
+        });
+    }
+
+    /// <summary>Gets and removes an account's owed jewel rewards after claiming (or peeks when inspecting).</summary>
+    /// <param name="loginName">Account login name.</param>
+    /// <returns>Current owed rewards list.</returns>
+    public IReadOnlyList<LuckyNumberOwedReward> PeekOwed(string loginName)
+    {
+        return this.Store.Read(data =>
+            data.OwedByAccount.TryGetValue(loginName, out var list)
+                ? list.ToList()
+                : []);
+    }
+
+    /// <summary>Removes one owed jewel reward after successful bag delivery.</summary>
+    /// <param name="loginName">Account login name.</param>
+    /// <param name="owedId">The owed reward ID.</param>
+    public void RemoveOwed(string loginName, string owedId)
+    {
+        this.Store.Mutate(data =>
+        {
+            if (!data.OwedByAccount.TryGetValue(loginName, out var list))
+            {
+                return (false, false);
+            }
+
+            var removed = list.RemoveAll(r => r.Id == owedId) > 0;
+            if (list.Count == 0)
+            {
+                data.OwedByAccount.Remove(loginName);
+            }
+
+            return (removed, removed);
+        });
+    }
+
+    private static DateTime ToUtc(DateOnly day, TimeOnly time, TimeZoneInfo timeZone)
+    {
+        var local = day.ToDateTime(time, DateTimeKind.Unspecified);
+        while (timeZone.IsInvalidTime(local))
+        {
+            local = local.AddMinutes(1);
+        }
+
+        return TimeZoneInfo.ConvertTimeToUtc(local, timeZone);
+    }
+
     private IReadOnlyList<LuckyNumberDrawOutcome> DrawDueRoundsInternal(DateTime utcNow, bool forceCurrentRound, int? overrideWinningNumber)
     {
         if (!this.Enabled)
@@ -330,77 +402,5 @@ public sealed class LuckyNumberEngine
 
             return (outcomes.Count > 0, outcomes);
         });
-    }
-
-    /// <summary>Marks a winner's coin grant as paid once saved to the database.</summary>
-    /// <param name="dateKey">The round date key.</param>
-    /// <param name="loginName">The winner login name.</param>
-    /// <param name="number">The picked number.</param>
-    public void MarkCoinsGranted(string dateKey, string loginName, int number)
-    {
-        this.Store.Mutate(data =>
-        {
-            var round = data.Rounds.FirstOrDefault(r => r.DateKey == dateKey);
-            if (round is null)
-            {
-                return (false, false);
-            }
-
-            var updated = false;
-            foreach (var w in round.Winners.Where(w => string.Equals(w.LoginName, loginName, StringComparison.OrdinalIgnoreCase) && w.Number == number))
-            {
-                if (!w.CoinsGranted)
-                {
-                    w.CoinsGranted = true;
-                    updated = true;
-                }
-            }
-
-            return (updated, updated);
-        });
-    }
-
-    /// <summary>Gets and removes an account's owed jewel rewards after claiming (or peeks when inspecting).</summary>
-    /// <param name="loginName">Account login name.</param>
-    /// <returns>Current owed rewards list.</returns>
-    public IReadOnlyList<LuckyNumberOwedReward> PeekOwed(string loginName)
-    {
-        return this.Store.Read(data =>
-            data.OwedByAccount.TryGetValue(loginName, out var list)
-                ? list.ToList()
-                : []);
-    }
-
-    /// <summary>Removes one owed jewel reward after successful bag delivery.</summary>
-    /// <param name="loginName">Account login name.</param>
-    /// <param name="owedId">The owed reward ID.</param>
-    public void RemoveOwed(string loginName, string owedId)
-    {
-        this.Store.Mutate(data =>
-        {
-            if (!data.OwedByAccount.TryGetValue(loginName, out var list))
-            {
-                return (false, false);
-            }
-
-            var removed = list.RemoveAll(r => r.Id == owedId) > 0;
-            if (list.Count == 0)
-            {
-                data.OwedByAccount.Remove(loginName);
-            }
-
-            return (removed, removed);
-        });
-    }
-
-    private static DateTime ToUtc(DateOnly day, TimeOnly time, TimeZoneInfo timeZone)
-    {
-        var local = day.ToDateTime(time, DateTimeKind.Unspecified);
-        while (timeZone.IsInvalidTime(local))
-        {
-            local = local.AddMinutes(1);
-        }
-
-        return TimeZoneInfo.ConvertTimeToUtc(local, timeZone);
     }
 }

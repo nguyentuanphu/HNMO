@@ -93,6 +93,7 @@ public enum ItemLockResult
 public sealed class AccountSafetyEngine
 {
     private const int MaxLoginsKept = 500;
+
     private const int MaxTradesKept = 1000;
 
     /// <summary>
@@ -211,6 +212,16 @@ public sealed class AccountSafetyEngine
 
         return address.Length <= 3 ? "x" : address[..3] + "…";
     }
+
+    /// <summary>
+    /// Gets a value indicating whether a login came from another address than the previous successful one.
+    /// </summary>
+    /// <param name="previous">The previous successful login.</param>
+    /// <param name="address">The address of this login.</param>
+    /// <returns><c>true</c>, if the address differs.</returns>
+    public static bool IsNewAddress(SafetyLoginEntry? previous, string? address) =>
+        previous is not null && !string.IsNullOrEmpty(previous.Address) && !string.IsNullOrEmpty(address)
+        && !string.Equals(previous.Address, address, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets a value indicating whether an item counts as valuable: excellent, ancient, or of the configured level.
@@ -550,16 +561,6 @@ public sealed class AccountSafetyEngine
             return previous;
         }
     }
-
-    /// <summary>
-    /// Gets a value indicating whether a login came from another address than the previous successful one.
-    /// </summary>
-    /// <param name="previous">The previous successful login.</param>
-    /// <param name="address">The address of this login.</param>
-    /// <returns><c>true</c>, if the address differs.</returns>
-    public static bool IsNewAddress(SafetyLoginEntry? previous, string? address) =>
-        previous is not null && !string.IsNullOrEmpty(previous.Address) && !string.IsNullOrEmpty(address)
-        && !string.Equals(previous.Address, address, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets the newest logins of an account.

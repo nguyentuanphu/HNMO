@@ -44,6 +44,15 @@ public sealed class OnboardingEngine
         kind is OnboardingStepKind.TalkToNpc or OnboardingStepKind.KillMonsters or OnboardingStepKind.UseItem or OnboardingStepKind.UseSkill or OnboardingStepKind.OpenMissions;
 
     /// <summary>
+    /// Gets the items of the kit for a class.
+    /// </summary>
+    /// <param name="kit">The kit.</param>
+    /// <param name="classNumber">The class number.</param>
+    /// <returns>Copies of the items.</returns>
+    public static List<StarterKitItem> KitItemsOf(StarterKitConfiguration kit, int classNumber) =>
+        kit.Items.Where(i => i.Count > 0 && (i.ClassNumber < 0 || i.ClassNumber == classNumber)).Select(Copy).ToList();
+
+    /// <summary>
     /// Notes a character created while the plug-in runs: it's new, it may reserve the starter kit, and the kit's stat
     /// points are given at once (the character isn't saved yet).
     /// </summary>
@@ -356,15 +365,6 @@ public sealed class OnboardingEngine
             return true;
         }
     }
-
-    /// <summary>
-    /// Gets the items of the kit for a class.
-    /// </summary>
-    /// <param name="kit">The kit.</param>
-    /// <param name="classNumber">The class number.</param>
-    /// <returns>Copies of the items.</returns>
-    public static List<StarterKitItem> KitItemsOf(StarterKitConfiguration kit, int classNumber) =>
-        kit.Items.Where(i => i.Count > 0 && (i.ClassNumber < 0 || i.ClassNumber == classNumber)).Select(Copy).ToList();
 
     /// <summary>
     /// Gets the waiting rewards of a character.

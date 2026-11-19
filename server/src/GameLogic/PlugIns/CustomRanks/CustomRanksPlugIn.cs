@@ -34,7 +34,9 @@ public sealed class CustomRanksPlugIn :
     };
 
     private readonly Dictionary<string, string> _lastResolved = new(StringComparer.OrdinalIgnoreCase);
+
     private (CustomRankConfiguration Config, CustomRankEngine Engine)? _engine;
+
     private DateTime _lastTickUtc = DateTime.MinValue;
 
     /// <inheritdoc />
@@ -45,6 +47,31 @@ public sealed class CustomRanksPlugIn :
     /// <returns>The active plug-in, or <c>null</c>.</returns>
     public static CustomRanksPlugIn? Get(IGameContext gameContext) =>
         gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<CustomRanksPlugIn>().FirstOrDefault();
+
+    /// <summary>Builds the character subject snapshot used to evaluate custom rank tiers.</summary>
+    /// <param name="player">The player.</param>
+    /// <returns>The subject snapshot.</returns>
+    public static CustomRankSubject BuildSubject(Player player)
+    {
+        var ch = player.SelectedCharacter;
+        var name = ch?.Name ?? string.Empty;
+        var level = player.Level;
+        var masterLevel = (int)(player.Attributes?[Stats.MasterLevel] ?? 0f);
+        var resets = (int)(player.Attributes?[Stats.Resets] ?? 0f);
+        var fromAttr = (int)(player.Attributes?[Stats.IsVip] ?? 0f);
+        var fromAcct = player.Account is { } acc
+            ? (int)acc.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow)
+            : 0;
+        var vipLevel = Math.Max(fromAttr, fromAcct);
+
+        var missionsClaimed = 0;
+        if (ch is not null && MissionsPlugIn.Get(player.GameContext) is { } missions)
+        {
+            missionsClaimed = missions.GetEngine().GetAchievementCount(ch.Id.ToString("N"));
+        }
+
+        return new CustomRankSubject(name, level, masterLevel, resets, vipLevel, missionsClaimed);
+    }
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new CustomRankConfiguration();
@@ -127,31 +154,6 @@ public sealed class CustomRanksPlugIn :
         {
             await this.BroadcastSnapshotAsync(gameContext).ConfigureAwait(false);
         }
-    }
-
-    /// <summary>Builds the character subject snapshot used to evaluate custom rank tiers.</summary>
-    /// <param name="player">The player.</param>
-    /// <returns>The subject snapshot.</returns>
-    public static CustomRankSubject BuildSubject(Player player)
-    {
-        var ch = player.SelectedCharacter;
-        var name = ch?.Name ?? string.Empty;
-        var level = player.Level;
-        var masterLevel = (int)(player.Attributes?[Stats.MasterLevel] ?? 0f);
-        var resets = (int)(player.Attributes?[Stats.Resets] ?? 0f);
-        var fromAttr = (int)(player.Attributes?[Stats.IsVip] ?? 0f);
-        var fromAcct = player.Account is { } acc
-            ? (int)acc.GetAccountAttributeValue(Stats.IsVip, DateTime.UtcNow)
-            : 0;
-        var vipLevel = Math.Max(fromAttr, fromAcct);
-
-        var missionsClaimed = 0;
-        if (ch is not null && MissionsPlugIn.Get(player.GameContext) is { } missions)
-        {
-            missionsClaimed = missions.GetEngine().GetAchievementCount(ch.Id.ToString("N"));
-        }
-
-        return new CustomRankSubject(name, level, masterLevel, resets, vipLevel, missionsClaimed);
     }
 
     /// <summary>Selects a rank tier (or <c>auto</c>) for <paramref name="player"/> and broadcasts updated state.</summary>

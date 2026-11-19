@@ -151,28 +151,6 @@ public static class IntegrityVerifier
         return new IntegrityResult(IntegrityStatus.Ok, $"HNMO integrity: verified {entries.Count} file(s) against the signed manifest ({buildStamp}).", Array.Empty<string>());
     }
 
-    private static (string BuildStamp, IReadOnlyList<IntegrityManifestEntry> Entries) ParseManifest(byte[] manifestBytes)
-    {
-        using var document = JsonDocument.Parse(manifestBytes);
-        var root = document.RootElement;
-        var buildStamp = root.TryGetProperty("buildStamp", out var stampElement) ? stampElement.GetString() ?? string.Empty : string.Empty;
-        var entries = new List<IntegrityManifestEntry>();
-        if (root.TryGetProperty("files", out var files) && files.ValueKind == JsonValueKind.Array)
-        {
-            foreach (var file in files.EnumerateArray())
-            {
-                var path = file.TryGetProperty("path", out var p) ? p.GetString() : null;
-                var hash = file.TryGetProperty("sha256", out var h) ? h.GetString() : null;
-                if (!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(hash))
-                {
-                    entries.Add(new IntegrityManifestEntry(path, hash));
-                }
-            }
-        }
-
-        return (buildStamp, entries);
-    }
-
     /// <summary>Verifies an Ed25519 signature over a message with a public key (PEM).</summary>
     /// <param name="message">The signed bytes.</param>
     /// <param name="signature">The raw signature.</param>
@@ -198,5 +176,27 @@ public static class IntegrityVerifier
         {
             return false;
         }
+    }
+
+    private static (string BuildStamp, IReadOnlyList<IntegrityManifestEntry> Entries) ParseManifest(byte[] manifestBytes)
+    {
+        using var document = JsonDocument.Parse(manifestBytes);
+        var root = document.RootElement;
+        var buildStamp = root.TryGetProperty("buildStamp", out var stampElement) ? stampElement.GetString() ?? string.Empty : string.Empty;
+        var entries = new List<IntegrityManifestEntry>();
+        if (root.TryGetProperty("files", out var files) && files.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var file in files.EnumerateArray())
+            {
+                var path = file.TryGetProperty("path", out var p) ? p.GetString() : null;
+                var hash = file.TryGetProperty("sha256", out var h) ? h.GetString() : null;
+                if (!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(hash))
+                {
+                    entries.Add(new IntegrityManifestEntry(path, hash));
+                }
+            }
+        }
+
+        return (buildStamp, entries);
     }
 }

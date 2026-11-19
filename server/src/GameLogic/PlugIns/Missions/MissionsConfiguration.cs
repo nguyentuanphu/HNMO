@@ -138,13 +138,6 @@ public class MissionsConfiguration
     public string FileName { get; set; } = "../save/missions.json";
 
     /// <summary>
-    /// Gets the enabled missions of a period.
-    /// </summary>
-    /// <param name="period">The period.</param>
-    /// <returns>The missions.</returns>
-    public IEnumerable<MissionDefinition> Enabled(MissionPeriod period) => this.Missions.Where(m => m.Enabled && m.Period == period && !string.IsNullOrWhiteSpace(m.Id));
-
-    /// <summary>
     /// Creates the default missions.
     /// </summary>
     /// <returns>The missions.</returns>
@@ -164,4 +157,11 @@ public class MissionsConfiguration
             new() { Id = "weekly-level", Period = MissionPeriod.Weekly, Kind = MissionKind.LevelUp, Target = 30, TitleEn = "Gain 30 levels", TitleVi = "Lên 30 cấp", Reward = new() { Zen = 2_000_000, Coins = 30 } },
         ];
     }
+
+    /// <summary>
+    /// Gets the enabled missions of a period.
+    /// </summary>
+    /// <param name="period">The period.</param>
+    /// <returns>The missions.</returns>
+    public IEnumerable<MissionDefinition> Enabled(MissionPeriod period) => this.Missions.Where(m => m.Enabled && m.Period == period && !string.IsNullOrWhiteSpace(m.Id));
 }

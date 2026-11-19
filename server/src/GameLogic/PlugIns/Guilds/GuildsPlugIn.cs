@@ -41,10 +41,15 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
     public const short BuffEffectNumber = 240;
 
     private static readonly TimeSpan TickInterval = TimeSpan.FromMinutes(1);
+
     private static readonly TimeSpan BuffDuration = TimeSpan.FromMinutes(5);
+
     private static readonly TimeSpan GuildKeyLifetime = TimeSpan.FromMinutes(10);
+
     private static readonly ConcurrentDictionary<byte, IGameContext> Contexts = new();
+
     private static readonly ConcurrentDictionary<uint, (GuildKey Key, DateTime AtUtc)> GuildKeys = new();
+
     private static readonly MagicEffectDefinition BuffDefinition = new()
     {
         Number = BuffEffectNumber,
@@ -56,8 +61,11 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
     };
 
     private readonly ConcurrentDictionary<string, int> _onlineMinutes = new(StringComparer.Ordinal);
+
     private DateTime _nextTickUtc = DateTime.UtcNow + TimeSpan.FromSeconds(20);
+
     private int _running;
+
     private (GuildsConfiguration Configuration, GuildEngine Engine)? _engine;
 
     /// <inheritdoc />
@@ -368,55 +376,6 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
         return ValueTask.CompletedTask;
     }
 
-    private static byte ServerIdOf(IGameContext context) => (context as IGameServerContext)?.Id ?? 0;
-
-    private static bool IsCounted(Player player) =>
-        player is not OfflinePlayer && player.Account is { IsBot: false } && !player.IsTemplatePlayer && player.SelectedCharacter is not null;
-
-    private static bool TryGetKeys(Player player, out string characterId, out string login)
-    {
-        characterId = player.SelectedCharacter?.Id.ToString() ?? string.Empty;
-        login = player.Account?.LoginName ?? string.Empty;
-        return characterId.Length > 0 && login.Length > 0 && player.SelectedCharacter!.Id != Guid.Empty;
-    }
-
-    private static bool IsVietnamese(Player player) => player.Culture.TwoLetterISOLanguageName == "vi";
-
-    /// <summary>
-    /// Gets the persistent guild of a player (cached for a while per guild server id).
-    /// </summary>
-    private static async ValueTask<GuildKey?> GuildOfAsync(Player player)
-    {
-        if (player.GuildStatus is not { GuildId: > 0 } status || player.GameContext is not IGameServerContext serverContext)
-        {
-            return null;
-        }
-
-        if (GuildKeys.TryGetValue(status.GuildId, out var cached) && DateTime.UtcNow - cached.AtUtc < GuildKeyLifetime)
-        {
-            return cached.Key;
-        }
-
-        if (await serverContext.GuildServer.GetPersistentGuildIdAsync(status.GuildId).ConfigureAwait(false) is not { } guildId)
-        {
-            return null;
-        }
-
-        var name = await serverContext.GuildServer.GetPersistentGuildNameAsync(guildId).ConfigureAwait(false) ?? string.Empty;
-        var key = new GuildKey(guildId, name);
-        GuildKeys[status.GuildId] = (key, DateTime.UtcNow);
-        return key;
-    }
-
-    private static bool SameBuff(MagicEffect existing, MagicEffect.ElementWithTarget[] wanted)
-    {
-        var current = existing.PowerUpElements.ToList();
-        return current.Count == wanted.Length
-            && current.Zip(wanted).All(p => p.First.Target == p.Second.Target
-                && p.First.Element.AggregateType == p.Second.Element.AggregateType
-                && Math.Abs(p.First.Element.Value - p.Second.Element.Value) < 0.0001f);
-    }
-
     /// <summary>
     /// Gives the reward's zen and items to the character, all or nothing.
     /// </summary>
@@ -480,6 +439,55 @@ public class GuildsPlugIn : IPeriodicTaskPlugIn, IAttackableGotKilledPlugIn, IMi
         }
 
         return true;
+    }
+
+    private static byte ServerIdOf(IGameContext context) => (context as IGameServerContext)?.Id ?? 0;
+
+    private static bool IsCounted(Player player) =>
+        player is not OfflinePlayer && player.Account is { IsBot: false } && !player.IsTemplatePlayer && player.SelectedCharacter is not null;
+
+    private static bool TryGetKeys(Player player, out string characterId, out string login)
+    {
+        characterId = player.SelectedCharacter?.Id.ToString() ?? string.Empty;
+        login = player.Account?.LoginName ?? string.Empty;
+        return characterId.Length > 0 && login.Length > 0 && player.SelectedCharacter!.Id != Guid.Empty;
+    }
+
+    private static bool IsVietnamese(Player player) => player.Culture.TwoLetterISOLanguageName == "vi";
+
+    /// <summary>
+    /// Gets the persistent guild of a player (cached for a while per guild server id).
+    /// </summary>
+    private static async ValueTask<GuildKey?> GuildOfAsync(Player player)
+    {
+        if (player.GuildStatus is not { GuildId: > 0 } status || player.GameContext is not IGameServerContext serverContext)
+        {
+            return null;
+        }
+
+        if (GuildKeys.TryGetValue(status.GuildId, out var cached) && DateTime.UtcNow - cached.AtUtc < GuildKeyLifetime)
+        {
+            return cached.Key;
+        }
+
+        if (await serverContext.GuildServer.GetPersistentGuildIdAsync(status.GuildId).ConfigureAwait(false) is not { } guildId)
+        {
+            return null;
+        }
+
+        var name = await serverContext.GuildServer.GetPersistentGuildNameAsync(guildId).ConfigureAwait(false) ?? string.Empty;
+        var key = new GuildKey(guildId, name);
+        GuildKeys[status.GuildId] = (key, DateTime.UtcNow);
+        return key;
+    }
+
+    private static bool SameBuff(MagicEffect existing, MagicEffect.ElementWithTarget[] wanted)
+    {
+        var current = existing.PowerUpElements.ToList();
+        return current.Count == wanted.Length
+            && current.Zip(wanted).All(p => p.First.Target == p.Second.Target
+                && p.First.Element.AggregateType == p.Second.Element.AggregateType
+                && Math.Abs(p.First.Element.Value - p.Second.Element.Value) < 0.0001f);
     }
 
     private static async ValueTask<Player?> FindPlayerAsync(string characterId)

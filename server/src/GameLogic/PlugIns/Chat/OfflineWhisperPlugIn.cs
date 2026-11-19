@@ -26,6 +26,7 @@ public class OfflineWhisperPlugIn : IPlayerStateChangedPlugIn, ISupportCustomCon
     private static readonly TimeSpan DeliveryDelay = TimeSpan.FromSeconds(3);
 
     private static readonly object StoreLock = new();
+
     private static OfflineWhisperStore? _store;
 
     /// <inheritdoc />
@@ -36,12 +37,6 @@ public class OfflineWhisperPlugIn : IPlayerStateChangedPlugIn, ISupportCustomCon
     /// </summary>
     internal TimeSpan Delay { get; set; } = DeliveryDelay;
 
-    /// <inheritdoc />
-    public object CreateDefaultConfig()
-    {
-        return new OfflineWhisperConfiguration();
-    }
-
     /// <summary>
     /// Gets the active plug-in of a game context.
     /// </summary>
@@ -50,6 +45,12 @@ public class OfflineWhisperPlugIn : IPlayerStateChangedPlugIn, ISupportCustomCon
     public static OfflineWhisperPlugIn? Get(IGameContext gameContext)
     {
         return gameContext.PlugInManager.GetActivePlugInsOf<IPlayerStateChangedPlugIn>().OfType<OfflineWhisperPlugIn>().FirstOrDefault();
+    }
+
+    /// <inheritdoc />
+    public object CreateDefaultConfig()
+    {
+        return new OfflineWhisperConfiguration();
     }
 
     /// <summary>

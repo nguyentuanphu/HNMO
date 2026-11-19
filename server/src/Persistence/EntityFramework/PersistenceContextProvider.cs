@@ -18,6 +18,7 @@ using Npgsql;
 public class PersistenceContextProvider : IMigratableDatabaseContextProvider
 {
     private readonly ILoggerFactory _loggerFactory;
+
     private IConfigurationChangeListener? _changeListener;
 
     /// <summary>
@@ -43,6 +44,10 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
     /// </value>
     internal CacheAwareRepositoryProvider RepositoryProvider { get; private set; }
 
+    /// <summary>Gets the PostgreSQL connection string for maintenance operations (if configured).</summary>
+    /// <returns>Connection string or null.</returns>
+    public static string? ResolveConnectionString() => ConnectionConfigurator.GetConnectionString<EntityDataContext>();
+
     /// <inheritdoc />
     public async Task<bool> IsDatabaseUpToDateAsync(CancellationToken cancellationToken = default)
     {
@@ -56,10 +61,6 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
             return false;
         }
     }
-
-    /// <summary>Gets the PostgreSQL connection string for maintenance operations (if configured).</summary>
-    /// <returns>Connection string or null.</returns>
-    public static string? ResolveConnectionString() => ConnectionConfigurator.GetConnectionString<EntityDataContext>();
 
     /// <summary>
     /// Enables PostgreSQL-backed per-account and per-character row persistence for HNMO feature stores.

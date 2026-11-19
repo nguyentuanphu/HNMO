@@ -305,13 +305,6 @@ public sealed class JewelBankEngine
         });
     }
 
-    private int GetBalance(string loginName, string jewelKey) =>
-        this.Store.Read(data =>
-        {
-            var acct = NormalizeLogin(data, loginName);
-            return acct is not null && data.Accounts.TryGetValue(acct, out var map) && map.TryGetValue(jewelKey, out var v) ? v : 0;
-        });
-
     private static string? NormalizeLogin(JewelBankStoreData data, string loginName) =>
         data.Accounts.Keys.FirstOrDefault(k => string.Equals(k, loginName, StringComparison.OrdinalIgnoreCase));
 
@@ -335,4 +328,11 @@ public sealed class JewelBankEngine
             data.Log.RemoveRange(500, data.Log.Count - 500);
         }
     }
+
+    private int GetBalance(string loginName, string jewelKey) =>
+        this.Store.Read(data =>
+        {
+            var acct = NormalizeLogin(data, loginName);
+            return acct is not null && data.Accounts.TryGetValue(acct, out var map) && map.TryGetValue(jewelKey, out var v) ? v : 0;
+        });
 }

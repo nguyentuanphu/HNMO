@@ -90,12 +90,6 @@ public class OnboardingConfiguration
     public string FileName { get; set; } = "../save/onboarding.json";
 
     /// <summary>
-    /// Gets the steps which are part of the guide, in their order.
-    /// </summary>
-    /// <returns>The steps.</returns>
-    public IEnumerable<OnboardingStep> EnabledSteps() => this.Steps.Where(s => s.Enabled && !string.IsNullOrWhiteSpace(s.Id));
-
-    /// <summary>
     /// Creates the default steps: a merchant, the first monsters, a potion, levels, stat points, a skill, the missions
     /// window, a party and the cash shop. Steps which need another player or a class skill are optional.
     /// </summary>
@@ -202,4 +196,10 @@ public class OnboardingConfiguration
             },
         ];
     }
+
+    /// <summary>
+    /// Gets the steps which are part of the guide, in their order.
+    /// </summary>
+    /// <returns>The steps.</returns>
+    public IEnumerable<OnboardingStep> EnabledSteps() => this.Steps.Where(s => s.Enabled && !string.IsNullOrWhiteSpace(s.Id));
 }

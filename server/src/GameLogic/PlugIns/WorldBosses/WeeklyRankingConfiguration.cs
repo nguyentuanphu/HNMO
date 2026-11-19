@@ -31,11 +31,6 @@ public class WeeklyRankingConfiguration
     [Range(0, 10_000)]
     public int PointsWin { get; set; } = 3;
 
-    /// <summary>Gets the coins of a rank.</summary>
-    /// <param name="rank">The rank.</param>
-    /// <returns>The coins.</returns>
-    public int CoinsOf(int rank) => this.Ranks.LastOrDefault(r => r.Rank == rank)?.Coins ?? 0;
-
     /// <summary>
     /// Creates ranks 1, 2 and 3 with their coins and the ranks 4 to 10 with the last amount.
     /// </summary>
@@ -46,4 +41,9 @@ public class WeeklyRankingConfiguration
     /// <returns>The ranks.</returns>
     public static List<RankCoins> DefaultRanks(int first, int second, int third, int rest) =>
         Enumerable.Range(1, 10).Select(r => new RankCoins { Rank = r, Coins = r switch { 1 => first, 2 => second, 3 => third, _ => rest } }).ToList();
+
+    /// <summary>Gets the coins of a rank.</summary>
+    /// <param name="rank">The rank.</param>
+    /// <returns>The coins.</returns>
+    public int CoinsOf(int rank) => this.Ranks.LastOrDefault(r => r.Rank == rank)?.Coins ?? 0;
 }

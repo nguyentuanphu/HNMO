@@ -32,6 +32,8 @@ public sealed class GmManagerOperations(
     /// <summary>Gets or sets an optional isolated activity log file name used in tests.</summary>
     internal string? ActivityLogFileName { get; set; }
 
+    private GmPermissionStore Store => this.StoreOverride ?? GmPermissionStore.Default;
+
     /// <summary>Loads current GM assignments, strict listing setting, and recent GM command audit entries.</summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>Assignments, strict flag, and audit entries.</returns>
@@ -230,8 +232,6 @@ public sealed class GmManagerOperations(
 
         return trimmed;
     }
-
-    private GmPermissionStore Store => this.StoreOverride ?? GmPermissionStore.Default;
 
     private void RecordActivity(string account, string character, string actorName, string details)
     {

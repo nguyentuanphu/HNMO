@@ -142,6 +142,42 @@ public class ItemCraftAction
         await previewPlugIn.ShowCraftingPreviewAsync(null, 0, 0).ConfigureAwait(false);
     }
 
+    private static SeasonFeatureGate? RequiredSeasonGate(IItemCraftingHandler handler, ItemCrafting crafting)
+    {
+        var typeName = handler.GetType().Name;
+        if (typeName.Contains("SecondWings", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Wing2;
+        }
+
+        if (typeName.Contains("ThirdWings", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Wing3;
+        }
+
+        if (typeName.Contains("Fenrir", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Fenrir;
+        }
+
+        if (typeName.Contains("GuardianOption", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Items380;
+        }
+
+        if (typeName.Contains("RefineStone", StringComparison.OrdinalIgnoreCase))
+        {
+            return SeasonFeatureGate.Harmony;
+        }
+
+        if (crafting.SimpleCraftingSettings?.RequiredItems.Any(r => r.Reference != 0 && r.MinimumItemLevel >= 9 && r.MaximumItemLevel <= 14) == true)
+        {
+            return SeasonFeatureGate.ItemPlus10To15;
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// Finds the crafting of the npc with the mix type identifier which the client sent.
     /// </summary>
@@ -208,41 +244,5 @@ public class ItemCraftAction
         }
 
         throw new ArgumentException("No simple crafting settings or item crafting handler name specified.", nameof(crafting));
-    }
-
-    private static SeasonFeatureGate? RequiredSeasonGate(IItemCraftingHandler handler, ItemCrafting crafting)
-    {
-        var typeName = handler.GetType().Name;
-        if (typeName.Contains("SecondWings", StringComparison.OrdinalIgnoreCase))
-        {
-            return SeasonFeatureGate.Wing2;
-        }
-
-        if (typeName.Contains("ThirdWings", StringComparison.OrdinalIgnoreCase))
-        {
-            return SeasonFeatureGate.Wing3;
-        }
-
-        if (typeName.Contains("Fenrir", StringComparison.OrdinalIgnoreCase))
-        {
-            return SeasonFeatureGate.Fenrir;
-        }
-
-        if (typeName.Contains("GuardianOption", StringComparison.OrdinalIgnoreCase))
-        {
-            return SeasonFeatureGate.Items380;
-        }
-
-        if (typeName.Contains("RefineStone", StringComparison.OrdinalIgnoreCase))
-        {
-            return SeasonFeatureGate.Harmony;
-        }
-
-        if (crafting.SimpleCraftingSettings?.RequiredItems.Any(r => r.Reference != 0 && r.MinimumItemLevel >= 9 && r.MaximumItemLevel <= 14) == true)
-        {
-            return SeasonFeatureGate.ItemPlus10To15;
-        }
-
-        return null;
     }
 }

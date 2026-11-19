@@ -24,6 +24,7 @@ public sealed class HnmoStateStore
     public const string OldDirectoryName = "old";
 
     private static readonly JsonSerializerOptions DocumentJsonOptions = new() { WriteIndented = false };
+
     private static readonly StringComparer PathComparer = OperatingSystem.IsWindows()
         ? StringComparer.OrdinalIgnoreCase
         : StringComparer.Ordinal;
@@ -46,8 +47,11 @@ public sealed class HnmoStateStore
         };
 
     private readonly object _lock = new();
+
     private readonly Dictionary<string, JsonElement> _sections = new(StringComparer.Ordinal);
+
     private readonly string _filePath;
+
     private readonly string? _legacySectionKey;
 
     /// <summary>
@@ -68,6 +72,13 @@ public sealed class HnmoStateStore
 
     /// <summary>Gets the backup file path (<c>.bak</c>).</summary>
     public string BackupFilePath => this._filePath + ".bak";
+
+    /// <summary>
+    /// Gets the lock of this file's state. A wrapper that reads a section, changes it and writes it back holds it
+    /// for the whole step, so two wrappers over the same file (each game server, website request and admin page
+    /// opens its own) can't overwrite each other's change. The store's own methods take the same lock again.
+    /// </summary>
+    public object SyncRoot => this._lock;
 
     /// <summary>
     /// Resolves a configured legacy or state file path to the shared state file path.
@@ -92,13 +103,6 @@ public sealed class HnmoStateStore
 
         return fullPath;
     }
-
-    /// <summary>
-    /// Gets the lock of this file's state. A wrapper that reads a section, changes it and writes it back holds it
-    /// for the whole step, so two wrappers over the same file (each game server, website request and admin page
-    /// opens its own) can't overwrite each other's change. The store's own methods take the same lock again.
-    /// </summary>
-    public object SyncRoot => this._lock;
 
     /// <summary>
     /// Opens or returns the shared <see cref="HnmoStateStore"/> for a configured file path.
@@ -244,6 +248,18 @@ public sealed class HnmoStateStore
             {
                 this.SaveLocked();
             }
+        }
+    }
+
+    private static void TryCopyQuietly(string sourcePath, string destinationPath)
+    {
+        try
+        {
+            File.Copy(sourcePath, destinationPath, overwrite: true);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // Best-effort backup/broken copy.
         }
     }
 
@@ -438,18 +454,6 @@ public sealed class HnmoStateStore
                 {
                 }
             }
-        }
-    }
-
-    private static void TryCopyQuietly(string sourcePath, string destinationPath)
-    {
-        try
-        {
-            File.Copy(sourcePath, destinationPath, overwrite: true);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            // Best-effort backup/broken copy.
         }
     }
 

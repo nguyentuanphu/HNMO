@@ -20,13 +20,21 @@ using System.Text;
 public sealed class RollingLogWriter : IDisposable
 {
     private readonly object _sync = new();
+
     private readonly string _logDirectory;
+
     private readonly string _baseName;
+
     private readonly string _activeFilePath;
+
     private readonly Func<DateTimeOffset> _utcNow;
+
     private DateOnly _currentSydneyDay;
+
     private StreamWriter _writer;
+
     private long _currentBytes;
+
     private bool _disposed;
 
     /// <summary>
@@ -84,35 +92,6 @@ public sealed class RollingLogWriter : IDisposable
 
     /// <summary>Gets the active log file path.</summary>
     public string ActiveFilePath => this._activeFilePath;
-
-    /// <summary>Writes one line, rolling the active file first if the Sydney date changed or size reached <see cref="MaxFileBytes"/>.</summary>
-    /// <param name="line">Line text to append.</param>
-    public void WriteLine(string line)
-    {
-        lock (this._sync)
-        {
-            if (this._disposed)
-            {
-                return;
-            }
-
-            var now = this._utcNow();
-            var today = GetSydneyDate(now);
-            if (this._currentBytes > 0 && (today > this._currentSydneyDay || this._currentBytes >= this.MaxFileBytes))
-            {
-                var archiveDay = today > this._currentSydneyDay ? this._currentSydneyDay : today;
-                this.RollInternal(archiveDay, now);
-                this._currentSydneyDay = today;
-            }
-            else if (today > this._currentSydneyDay)
-            {
-                this._currentSydneyDay = today;
-            }
-
-            this._writer.WriteLine(line);
-            this._currentBytes += Encoding.UTF8.GetByteCount(line) + Environment.NewLine.Length;
-        }
-    }
 
     /// <summary>
     /// Safely rolls an external log file (such as PostgreSQL's <c>database.log</c>) if it exceeds
@@ -332,6 +311,35 @@ public sealed class RollingLogWriter : IDisposable
         }
 
         return queue.ToArray();
+    }
+
+    /// <summary>Writes one line, rolling the active file first if the Sydney date changed or size reached <see cref="MaxFileBytes"/>.</summary>
+    /// <param name="line">Line text to append.</param>
+    public void WriteLine(string line)
+    {
+        lock (this._sync)
+        {
+            if (this._disposed)
+            {
+                return;
+            }
+
+            var now = this._utcNow();
+            var today = GetSydneyDate(now);
+            if (this._currentBytes > 0 && (today > this._currentSydneyDay || this._currentBytes >= this.MaxFileBytes))
+            {
+                var archiveDay = today > this._currentSydneyDay ? this._currentSydneyDay : today;
+                this.RollInternal(archiveDay, now);
+                this._currentSydneyDay = today;
+            }
+            else if (today > this._currentSydneyDay)
+            {
+                this._currentSydneyDay = today;
+            }
+
+            this._writer.WriteLine(line);
+            this._currentBytes += Encoding.UTF8.GetByteCount(line) + Environment.NewLine.Length;
+        }
     }
 
     /// <inheritdoc />

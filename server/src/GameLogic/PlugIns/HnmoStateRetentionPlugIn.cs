@@ -25,11 +25,22 @@ public sealed class HnmoStateRetentionPlugIn :
     ISupportDefaultCustomConfiguration
 {
     private const string SectionKey = "stateRetention";
+
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
+
     private DateTime _lastTickUtc = DateTime.MinValue;
 
     /// <inheritdoc />
     public HnmoStateRetentionConfiguration? Configuration { get; set; }
+
+    /// <summary>Reads retention metadata from <see cref="HnmoStateStore"/>.</summary>
+    /// <param name="fileName">State file name.</param>
+    /// <returns>Metadata snapshot.</returns>
+    public static HnmoStateRetentionMetadata ReadMetadata(string? fileName)
+    {
+        var store = HnmoStateStore.Open(fileName);
+        return store?.ReadSection<HnmoStateRetentionMetadata>(SectionKey, JsonOptions) ?? new HnmoStateRetentionMetadata();
+    }
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new HnmoStateRetentionConfiguration();
@@ -74,14 +85,5 @@ public sealed class HnmoStateRetentionPlugIn :
         }
 
         return backendCount;
-    }
-
-    /// <summary>Reads retention metadata from <see cref="HnmoStateStore"/>.</summary>
-    /// <param name="fileName">State file name.</param>
-    /// <returns>Metadata snapshot.</returns>
-    public static HnmoStateRetentionMetadata ReadMetadata(string? fileName)
-    {
-        var store = HnmoStateStore.Open(fileName);
-        return store?.ReadSection<HnmoStateRetentionMetadata>(SectionKey, JsonOptions) ?? new HnmoStateRetentionMetadata();
     }
 }

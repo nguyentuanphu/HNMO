@@ -108,6 +108,92 @@ public sealed class TopRaceEngine
     }
 
     /// <summary>
+    /// Gets the classes which have a table in a race: -1 (all) unless it's per class; one class for a one-class race.
+    /// </summary>
+    /// <param name="race">The race.</param>
+    /// <returns>The classes.</returns>
+    public static IReadOnlyList<int> TableClasses(TopRaceDefinition race) =>
+        race.IsGuildRace || race.Scope == TopRaceScope.AllClasses ? [-1]
+        : race.Scope == TopRaceScope.OneClass ? [(int)race.Class]
+        : Enum.GetValues<TopRaceClass>().Select(c => (int)c).ToList();
+
+    /// <summary>Gets the table of a participant in a race.</summary>
+    /// <param name="race">The race.</param>
+    /// <param name="participantClass">The participant's class.</param>
+    /// <returns>The table's class.</returns>
+    public static int TableOf(TopRaceDefinition race, int participantClass) =>
+        race.IsGuildRace || race.Scope == TopRaceScope.AllClasses ? -1 : race.Scope == TopRaceScope.OneClass ? (int)race.Class : participantClass;
+
+    /// <summary>
+    /// Gets the prize of a rank, for a value which reaches the race's minimum.
+    /// </summary>
+    /// <param name="race">The race.</param>
+    /// <param name="rank">The rank.</param>
+    /// <param name="value">The value.</param>
+    /// <returns>The prize, if any.</returns>
+    public static TopRacePrize? PrizeOf(TopRaceDefinition race, int rank, long value)
+    {
+        if (rank < 1 || value < Math.Max(1, race.Minimum))
+        {
+            return null;
+        }
+
+        return race.Prizes.FirstOrDefault(p => rank >= p.RankFrom && rank <= Math.Max(p.RankFrom, p.RankTo) && !p.IsEmpty);
+    }
+
+    /// <summary>Gets the reference of a prize.</summary>
+    /// <param name="result">The result.</param>
+    /// <param name="table">The table's class.</param>
+    /// <param name="key">The line's key.</param>
+    /// <param name="memberId">The guild member, for a guild race.</param>
+    /// <returns>The reference.</returns>
+    public static string PrizeReference(TopRaceResult result, int table, string key, Guid? memberId = null) =>
+        string.Create(CultureInfo.InvariantCulture, $"hnmo-top-race:{result.RaceId}:{result.PeriodKey}:{table}:{key}") + (memberId is { } m ? $":{m:N}" : string.Empty);
+
+    /// <summary>
+    /// The coin grant of a prize, with a unique reference.
+    /// </summary>
+    /// <param name="result">The result.</param>
+    /// <param name="table">The table's class.</param>
+    /// <param name="line">The line.</param>
+    /// <param name="login">The account which gets it.</param>
+    /// <param name="memberId">The guild member, for a guild race.</param>
+    /// <param name="memberName">The guild member's name, for a guild race.</param>
+    /// <returns>The grant; <c>null</c> without coins.</returns>
+    public static CoinGrant? PrizeGrant(TopRaceResult result, int table, TopRaceLine line, string login, Guid? memberId = null, string? memberName = null)
+    {
+        if (line.Coins <= 0 || string.IsNullOrEmpty(login))
+        {
+            return null;
+        }
+
+        var who = memberName is null ? line.Name : $"{line.Name}, {memberName}";
+        return new CoinGrant(
+            login,
+            line.CoinType,
+            line.Coins,
+            string.Create(CultureInfo.InvariantCulture, $"Top race \"{result.TitleEn}\" ({result.PeriodKey}): rank {line.Rank} ({who})"),
+            PrizeReference(result, table, line.Key, memberId));
+    }
+
+    /// <summary>
+    /// Fills placeholders in braces, e.g. {race}.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <param name="values">The values.</param>
+    /// <returns>The filled text.</returns>
+    public static string Fill(string? text, IReadOnlyDictionary<string, string> values)
+    {
+        var result = text ?? string.Empty;
+        foreach (var (key, value) in values)
+        {
+            result = result.Replace("{" + key + "}", value, StringComparison.Ordinal);
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Gets the period of a race which contains a moment.
     /// </summary>
     /// <param name="race">The race.</param>
@@ -366,23 +452,6 @@ public sealed class TopRaceEngine
             .Select(r => (r.Race, r.Window!)).OrderBy(r => r.Item2.StartUtc).ToList();
 
     /// <summary>
-    /// Gets the classes which have a table in a race: -1 (all) unless it's per class; one class for a one-class race.
-    /// </summary>
-    /// <param name="race">The race.</param>
-    /// <returns>The classes.</returns>
-    public static IReadOnlyList<int> TableClasses(TopRaceDefinition race) =>
-        race.IsGuildRace || race.Scope == TopRaceScope.AllClasses ? [-1]
-        : race.Scope == TopRaceScope.OneClass ? [(int)race.Class]
-        : Enum.GetValues<TopRaceClass>().Select(c => (int)c).ToList();
-
-    /// <summary>Gets the table of a participant in a race.</summary>
-    /// <param name="race">The race.</param>
-    /// <param name="participantClass">The participant's class.</param>
-    /// <returns>The table's class.</returns>
-    public static int TableOf(TopRaceDefinition race, int participantClass) =>
-        race.IsGuildRace || race.Scope == TopRaceScope.AllClasses ? -1 : race.Scope == TopRaceScope.OneClass ? (int)race.Class : participantClass;
-
-    /// <summary>
     /// Gets the standings of a table: values above 0, best first; a tie goes to whoever got there first.
     /// </summary>
     /// <param name="race">The race.</param>
@@ -415,23 +484,6 @@ public sealed class TopRaceEngine
             var standing = StandingsLocked(race, run, TableOf(race, entry.Class), int.MaxValue).FirstOrDefault(s => s.Entry.Key == key);
             return (standing?.Rank ?? 0, entry.Value);
         }
-    }
-
-    /// <summary>
-    /// Gets the prize of a rank, for a value which reaches the race's minimum.
-    /// </summary>
-    /// <param name="race">The race.</param>
-    /// <param name="rank">The rank.</param>
-    /// <param name="value">The value.</param>
-    /// <returns>The prize, if any.</returns>
-    public static TopRacePrize? PrizeOf(TopRaceDefinition race, int rank, long value)
-    {
-        if (rank < 1 || value < Math.Max(1, race.Minimum))
-        {
-            return null;
-        }
-
-        return race.Prizes.FirstOrDefault(p => rank >= p.RankFrom && rank <= Math.Max(p.RankFrom, p.RankTo) && !p.IsEmpty);
     }
 
     /// <summary>Gets the finished races, newest first.</summary>
@@ -525,41 +577,6 @@ public sealed class TopRaceEngine
         }
     }
 
-    /// <summary>Gets the reference of a prize.</summary>
-    /// <param name="result">The result.</param>
-    /// <param name="table">The table's class.</param>
-    /// <param name="key">The line's key.</param>
-    /// <param name="memberId">The guild member, for a guild race.</param>
-    /// <returns>The reference.</returns>
-    public static string PrizeReference(TopRaceResult result, int table, string key, Guid? memberId = null) =>
-        string.Create(CultureInfo.InvariantCulture, $"hnmo-top-race:{result.RaceId}:{result.PeriodKey}:{table}:{key}") + (memberId is { } m ? $":{m:N}" : string.Empty);
-
-    /// <summary>
-    /// The coin grant of a prize, with a unique reference.
-    /// </summary>
-    /// <param name="result">The result.</param>
-    /// <param name="table">The table's class.</param>
-    /// <param name="line">The line.</param>
-    /// <param name="login">The account which gets it.</param>
-    /// <param name="memberId">The guild member, for a guild race.</param>
-    /// <param name="memberName">The guild member's name, for a guild race.</param>
-    /// <returns>The grant; <c>null</c> without coins.</returns>
-    public static CoinGrant? PrizeGrant(TopRaceResult result, int table, TopRaceLine line, string login, Guid? memberId = null, string? memberName = null)
-    {
-        if (line.Coins <= 0 || string.IsNullOrEmpty(login))
-        {
-            return null;
-        }
-
-        var who = memberName is null ? line.Name : $"{line.Name}, {memberName}";
-        return new CoinGrant(
-            login,
-            line.CoinType,
-            line.Coins,
-            string.Create(CultureInfo.InvariantCulture, $"Top race \"{result.TitleEn}\" ({result.PeriodKey}): rank {line.Rank} ({who})"),
-            PrizeReference(result, table, line.Key, memberId));
-    }
-
     /// <summary>
     /// Adds a prize which waits for room in the bag; one with the same reference isn't added twice.
     /// </summary>
@@ -625,23 +642,6 @@ public sealed class TopRaceEngine
         {
             this.AddOwed(characterId, reward);
         }
-    }
-
-    /// <summary>
-    /// Fills placeholders in braces, e.g. {race}.
-    /// </summary>
-    /// <param name="text">The text.</param>
-    /// <param name="values">The values.</param>
-    /// <returns>The filled text.</returns>
-    public static string Fill(string? text, IReadOnlyDictionary<string, string> values)
-    {
-        var result = text ?? string.Empty;
-        foreach (var (key, value) in values)
-        {
-            result = result.Replace("{" + key + "}", value, StringComparison.Ordinal);
-        }
-
-        return result;
     }
 
     private static bool Counts(TopRaceDefinition race, TopRaceParticipant participant, TopRaceEvent eventKind)

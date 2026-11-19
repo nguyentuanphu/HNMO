@@ -118,21 +118,6 @@ public class GuildsConfiguration
     [StringLength(260)]
     public string FileName { get; set; } = "../save/guilds.json";
 
-    /// <summary>Gets the setting of a source.</summary>
-    /// <param name="source">The source.</param>
-    /// <returns>The setting.</returns>
-    public GuildXpSourceSetting Source(GuildXpSource source) => source switch
-    {
-        GuildXpSource.MonsterKill => this.MonsterKill,
-        GuildXpSource.EventFinish => this.EventFinish,
-        GuildXpSource.EventWin => this.EventWin,
-        GuildXpSource.WorldBossKill => this.WorldBossKill,
-        GuildXpSource.WorldBossDamage => this.WorldBossDamage,
-        GuildXpSource.Mission => this.Mission,
-        GuildXpSource.OnlineTime => this.OnlineTime,
-        _ => this.CastleSiege,
-    };
-
     /// <summary>
     /// Creates the default levels (1 to 10) with small buffs.
     /// </summary>
@@ -167,4 +152,19 @@ public class GuildsConfiguration
         new() { RankFrom = 3, RankTo = 3, CoinsPerMember = 60, MasterBonusCoins = 30 },
         new() { RankFrom = 4, RankTo = 5, CoinsPerMember = 30 },
     ];
+
+    /// <summary>Gets the setting of a source.</summary>
+    /// <param name="source">The source.</param>
+    /// <returns>The setting.</returns>
+    public GuildXpSourceSetting Source(GuildXpSource source) => source switch
+    {
+        GuildXpSource.MonsterKill => this.MonsterKill,
+        GuildXpSource.EventFinish => this.EventFinish,
+        GuildXpSource.EventWin => this.EventWin,
+        GuildXpSource.WorldBossKill => this.WorldBossKill,
+        GuildXpSource.WorldBossDamage => this.WorldBossDamage,
+        GuildXpSource.Mission => this.Mission,
+        GuildXpSource.OnlineTime => this.OnlineTime,
+        _ => this.CastleSiege,
+    };
 }

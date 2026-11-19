@@ -98,22 +98,6 @@ public class WorldBossesConfiguration
     [StringLength(260)]
     public string FileName { get; set; } = "../save/world-bosses.json";
 
-    /// <summary>Gets the ranking of a category.</summary>
-    /// <param name="category">The category.</param>
-    /// <returns>The ranking configuration; <c>null</c> for the castle siege.</returns>
-    public WeeklyRankingConfiguration? Ranking(WeeklyCategory category) => category switch
-    {
-        WeeklyCategory.BossHunt => this.BossHunt,
-        WeeklyCategory.BloodCastle => this.BloodCastle,
-        WeeklyCategory.DevilSquare => this.DevilSquare,
-        WeeklyCategory.ChaosCastle => this.ChaosCastle,
-        _ => null,
-    };
-
-    /// <summary>Gets the enabled bosses with an id.</summary>
-    /// <returns>The bosses.</returns>
-    public IEnumerable<WorldBossDefinition> EnabledBosses() => this.Bosses.Where(b => b.Enabled && !string.IsNullOrWhiteSpace(b.Id));
-
     /// <summary>
     /// Creates the default bosses.
     /// </summary>
@@ -148,4 +132,20 @@ public class WorldBossesConfiguration
             },
         ];
     }
+
+    /// <summary>Gets the ranking of a category.</summary>
+    /// <param name="category">The category.</param>
+    /// <returns>The ranking configuration; <c>null</c> for the castle siege.</returns>
+    public WeeklyRankingConfiguration? Ranking(WeeklyCategory category) => category switch
+    {
+        WeeklyCategory.BossHunt => this.BossHunt,
+        WeeklyCategory.BloodCastle => this.BloodCastle,
+        WeeklyCategory.DevilSquare => this.DevilSquare,
+        WeeklyCategory.ChaosCastle => this.ChaosCastle,
+        _ => null,
+    };
+
+    /// <summary>Gets the enabled bosses with an id.</summary>
+    /// <returns>The bosses.</returns>
+    public IEnumerable<WorldBossDefinition> EnabledBosses() => this.Bosses.Where(b => b.Enabled && !string.IsNullOrWhiteSpace(b.Id));
 }

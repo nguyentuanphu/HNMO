@@ -115,6 +115,45 @@ public sealed class WorldBossEngine
     }
 
     /// <summary>
+    /// Gets the damage table of an appearance, ranked as the rewards will be.
+    /// </summary>
+    /// <param name="alive">The appearance.</param>
+    /// <param name="rankBy">What the ranking counts.</param>
+    /// <returns>The lines, best first: the entry, its rank and the damage which ranks it (the party's in party mode).</returns>
+    public static List<(WorldBossDamageEntry Entry, int Rank, long RankDamage)> Rank(WorldBossAliveState alive, WorldBossRankBy rankBy)
+    {
+        var entries = alive.Damage.Values.Where(e => e.Damage > 0).ToList();
+        var groups = entries
+            .GroupBy(e => rankBy == WorldBossRankBy.Party && !string.IsNullOrEmpty(e.Party) ? "party:" + e.Party : "player:" + e.CharacterId)
+            .Select(g => (Members: g.OrderByDescending(e => e.Damage).ThenBy(e => e.Name, StringComparer.Ordinal).ToList(), Damage: g.Sum(e => e.Damage)))
+            .OrderByDescending(g => g.Damage)
+            .ThenBy(g => g.Members[0].Name, StringComparer.Ordinal)
+            .ToList();
+        var result = new List<(WorldBossDamageEntry Entry, int Rank, long RankDamage)>();
+        for (var i = 0; i < groups.Count; i++)
+        {
+            result.AddRange(groups[i].Members.Select(m => (m, i + 1, groups[i].Damage)));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Gets the coin grants of a finished week's rankings (not the castle siege), each with a unique reference.
+    /// </summary>
+    /// <param name="result">The week.</param>
+    /// <returns>The grants.</returns>
+    public static List<CoinGrant> RankingGrants(WeeklyResult result) =>
+        result.Winners
+            .SelectMany(w => w.Value.Where(winner => winner.Coins > 0 && winner.Login.Length > 0).Select(winner => new CoinGrant(
+                winner.Login,
+                winner.CoinType,
+                winner.Coins,
+                string.Create(CultureInfo.InvariantCulture, $"Weekly ranking {w.Key}, week of {result.Week}: rank {winner.Rank} ({winner.Name})"),
+                $"hnmo-week:{result.Week}:{w.Key}:{winner.CharacterId}")))
+            .ToList();
+
+    /// <summary>
     /// Gets the boss with an id.
     /// </summary>
     /// <param name="bossId">The id.</param>
@@ -286,30 +325,6 @@ public sealed class WorldBossEngine
             this.Store.Changed();
             return true;
         }
-    }
-
-    /// <summary>
-    /// Gets the damage table of an appearance, ranked as the rewards will be.
-    /// </summary>
-    /// <param name="alive">The appearance.</param>
-    /// <param name="rankBy">What the ranking counts.</param>
-    /// <returns>The lines, best first: the entry, its rank and the damage which ranks it (the party's in party mode).</returns>
-    public static List<(WorldBossDamageEntry Entry, int Rank, long RankDamage)> Rank(WorldBossAliveState alive, WorldBossRankBy rankBy)
-    {
-        var entries = alive.Damage.Values.Where(e => e.Damage > 0).ToList();
-        var groups = entries
-            .GroupBy(e => rankBy == WorldBossRankBy.Party && !string.IsNullOrEmpty(e.Party) ? "party:" + e.Party : "player:" + e.CharacterId)
-            .Select(g => (Members: g.OrderByDescending(e => e.Damage).ThenBy(e => e.Name, StringComparer.Ordinal).ToList(), Damage: g.Sum(e => e.Damage)))
-            .OrderByDescending(g => g.Damage)
-            .ThenBy(g => g.Members[0].Name, StringComparer.Ordinal)
-            .ToList();
-        var result = new List<(WorldBossDamageEntry Entry, int Rank, long RankDamage)>();
-        for (var i = 0; i < groups.Count; i++)
-        {
-            result.AddRange(groups[i].Members.Select(m => (m, i + 1, groups[i].Damage)));
-        }
-
-        return result;
     }
 
     /// <summary>
@@ -701,21 +716,6 @@ public sealed class WorldBossEngine
             this.Store.Changed();
         }
     }
-
-    /// <summary>
-    /// Gets the coin grants of a finished week's rankings (not the castle siege), each with a unique reference.
-    /// </summary>
-    /// <param name="result">The week.</param>
-    /// <returns>The grants.</returns>
-    public static List<CoinGrant> RankingGrants(WeeklyResult result) =>
-        result.Winners
-            .SelectMany(w => w.Value.Where(winner => winner.Coins > 0 && winner.Login.Length > 0).Select(winner => new CoinGrant(
-                winner.Login,
-                winner.CoinType,
-                winner.Coins,
-                string.Create(CultureInfo.InvariantCulture, $"Weekly ranking {w.Key}, week of {result.Week}: rank {winner.Rank} ({winner.Name})"),
-                $"hnmo-week:{result.Week}:{w.Key}:{winner.CharacterId}")))
-            .ToList();
 
     private static string TierCaption(string tier, int rank) => tier switch
     {

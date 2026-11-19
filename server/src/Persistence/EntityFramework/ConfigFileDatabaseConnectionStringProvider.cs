@@ -71,6 +71,29 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         throw new ArgumentException("DB Configuration not found for type {0}", contextType.FullName);
     }
 
+    private static void ApplyHostSettings(ConnectionSetting setting, HostSettings? hostSettings)
+    {
+        if (hostSettings is null || string.IsNullOrWhiteSpace(setting.ConnectionString))
+        {
+            return;
+        }
+
+        var builder = new NpgsqlConnectionStringBuilder(setting.ConnectionString)
+        {
+            Host = hostSettings.DatabaseHost,
+            Port = hostSettings.DatabasePort,
+            Database = hostSettings.DatabaseName,
+        };
+        if (string.IsNullOrEmpty(builder.Username)
+            || string.Equals(builder.Username, "postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            builder.Username = hostSettings.DatabaseUser;
+            builder.Password = hostSettings.DatabasePassword;
+        }
+
+        setting.ConnectionString = builder.ToString();
+    }
+
     private IDictionary<Type, ConnectionSetting> LoadSettings()
     {
         var settings = new XmlReaderSettings
@@ -133,29 +156,6 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         }
 
         return result;
-    }
-
-    private static void ApplyHostSettings(ConnectionSetting setting, HostSettings? hostSettings)
-    {
-        if (hostSettings is null || string.IsNullOrWhiteSpace(setting.ConnectionString))
-        {
-            return;
-        }
-
-        var builder = new NpgsqlConnectionStringBuilder(setting.ConnectionString)
-        {
-            Host = hostSettings.DatabaseHost,
-            Port = hostSettings.DatabasePort,
-            Database = hostSettings.DatabaseName,
-        };
-        if (string.IsNullOrEmpty(builder.Username)
-            || string.Equals(builder.Username, "postgres", StringComparison.OrdinalIgnoreCase))
-        {
-            builder.Username = hostSettings.DatabaseUser;
-            builder.Password = hostSettings.DatabasePassword;
-        }
-
-        setting.ConnectionString = builder.ToString();
     }
 
     private void ApplyEnvironmentVariables(ConnectionSetting setting)

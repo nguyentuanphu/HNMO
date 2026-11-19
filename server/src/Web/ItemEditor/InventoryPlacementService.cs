@@ -13,6 +13,7 @@ using HNMO.DataModel.Entities;
 public sealed class InventoryPlacementService
 {
     private readonly StorageType _storageType;
+
     private readonly byte _numberOfExtensions;
 
     /// <summary>
@@ -24,6 +25,22 @@ public sealed class InventoryPlacementService
     {
         this._storageType = storageType;
         this._numberOfExtensions = numberOfExtensions;
+    }
+
+    /// <summary>
+    /// Calculates the item top-left coordinates from the cell currently under the pointer.
+    /// </summary>
+    /// <param name="hoveredSlot">The slot currently under the pointer.</param>
+    /// <param name="startIndex">The first slot displayed by the target section.</param>
+    /// <param name="columnOffset">The grabbed column within the dragged item.</param>
+    /// <param name="rowOffset">The grabbed row within the dragged item.</param>
+    /// <returns>The zero-based item top-left column and row within the target section.</returns>
+    public static (int Column, int Row) GetDropPosition(int hoveredSlot, int startIndex, byte columnOffset, byte rowOffset)
+    {
+        var relativeSlot = hoveredSlot - startIndex;
+        return (
+            (relativeSlot % InventoryConstants.RowSize) - columnOffset,
+            (relativeSlot / InventoryConstants.RowSize) - rowOffset);
     }
 
     /// <summary>
@@ -184,22 +201,6 @@ public sealed class InventoryPlacementService
 
         item.ItemSlot = (byte)(startIndex + (row * InventoryConstants.RowSize) + column);
         return true;
-    }
-
-    /// <summary>
-    /// Calculates the item top-left coordinates from the cell currently under the pointer.
-    /// </summary>
-    /// <param name="hoveredSlot">The slot currently under the pointer.</param>
-    /// <param name="startIndex">The first slot displayed by the target section.</param>
-    /// <param name="columnOffset">The grabbed column within the dragged item.</param>
-    /// <param name="rowOffset">The grabbed row within the dragged item.</param>
-    /// <returns>The zero-based item top-left column and row within the target section.</returns>
-    public static (int Column, int Row) GetDropPosition(int hoveredSlot, int startIndex, byte columnOffset, byte rowOffset)
-    {
-        var relativeSlot = hoveredSlot - startIndex;
-        return (
-            (relativeSlot % InventoryConstants.RowSize) - columnOffset,
-            (relativeSlot / InventoryConstants.RowSize) - rowOffset);
     }
 
     /// <summary>
