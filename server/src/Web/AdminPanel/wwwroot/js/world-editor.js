@@ -24282,6 +24282,18 @@ var INDOOR_FADES = {
   2: { types: [81, 82, 96, 98, 99], indoors: (tile) => tile === 3 || tile >= 10 }
   // Devias
 };
+var HIDDEN_OBJECTS = {
+  0: [130, 131, 132, 133],
+  // Lorencia: MODEL_LIGHT01 to + 2 (fire, not drawn yet), MODEL_POSE_BOX
+  1: [60],
+  // Dungeon
+  2: [91, 100],
+  // Devias
+  3: [38],
+  // Noria
+  7: [39]
+  // Atlans
+};
 var LORENCIA_MODELS = [
   ["Tree", 0, 13],
   ["Grass", 20, 8],
@@ -24452,8 +24464,9 @@ async function createWorld(data, fog, onProgress) {
   group.add(terrain);
   const files = worldModelFiles(data.worldNumber);
   const byType = /* @__PURE__ */ new Map();
+  const hidden = HIDDEN_OBJECTS[data.mapNumber];
   for (const object of data.objects) {
-    if (!files.has(object.type)) continue;
+    if (!files.has(object.type) || hidden?.includes(object.type)) continue;
     if (!byType.has(object.type)) byType.set(object.type, []);
     byType.get(object.type).push(object);
   }

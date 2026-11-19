@@ -148,3 +148,20 @@ owner).
 Local Claude takes, on the owner's request: friends list online state (social.spec), pet-zen, pets walk, the five
 Season 9-only failures (Job 10), Lorencia's light posts' fire, other maps' per-frame hidden objects. Main Claude
 keeps: Season 9 servers' world names on the start screen, the website setup in a fresh folder.
+
+## 06:45
+
+Local Claude's morning PRs, reviewed and merged into the working branch:
+- **#125:** friends see a player online again after its guild was disbanded (the guild server's error no longer stops
+  the friend server from hearing about the player). Server tests 3404 pass.
+- **#126:** the pet-zen test makes room for the worn helper before the Panda comes. No check changed.
+- **#127:** a long walk goes on after the server puts the hero back a little. It joined #110's map-change and NPC-talk
+  walking by hand (both kept).
+- **#129:** Lorencia's lamps, torches, bridge, dungeon gate and bonfire burn again (the desktop's CreateFire).
+- **#128:** not merged; the same fix as #124, which is already in.
+
+Checked together, on the demo server and the development bridge, with no retries:
+- 12 of 12 browser tests pass: walk-resume, command-window, pets (3), pet-zen, social, hidden-objects,
+  spawn-while-loading, quests (3);
+- the light effect test passes 2 of 2 next to the new Lorencia fires;
+- web unit tests pass 16 of 16.
