@@ -179,7 +179,7 @@ export class GensMarks {
     let best: { character: Character; distance: number } | null = null;
     for (const character of this.options.players()) {
       if (character.kind !== 'player' || character.dead) continue;
-      this.box.setFromObject(character.group);
+      character.pickBounds(this.box);
       if (this.box.isEmpty()) continue;
       const a = this.box.max.clone().project(camera), b = this.box.min.clone().project(camera);
       const x1 = rect.left + (a.x + 1) / 2 * rect.width, x2 = rect.left + (b.x + 1) / 2 * rect.width;
@@ -206,7 +206,7 @@ export class GensMarks {
     if (!character || !character.group.parent || this.options.hidden?.()) { this.tag.style.display = 'none'; return; }
     const { camera, canvas } = this.options;
     const rect = cachedRect(canvas);
-    this.box.setFromObject(character.group);
+    character.pickBounds(this.box);
     const head = new THREE.Vector3((this.box.min.x + this.box.max.x) / 2, this.box.max.y, (this.box.min.z + this.box.max.z) / 2).project(camera);
     const scale = uiScale();
     Object.assign(this.tag.style, { display: 'block', left: `${rect.left + (head.x + 1) / 2 * rect.width}px`, top: `${rect.top + (1 - head.y) / 2 * rect.height - 4}px` });

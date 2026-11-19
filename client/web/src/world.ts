@@ -27,6 +27,45 @@ export interface WorldData {
 export interface World {
   group: THREE.Group;
   terrain: TerrainMesh;
+  /** The roofs that fade out while the hero is inside a building, null on maps without them. */
+  indoorFade: IndoorFade | null;
+}
+
+/**
+ * The objects of a map that fade out while the hero stands on a building's floor tile, so the hero is seen
+ * inside (ZzzObject.cpp, RenderObject: AlphaTarget 0 when HeroTile is a floor, else 1). By map number.
+ */
+const INDOOR_FADES: Record<number, { types: number[]; indoors: (tile: number) => boolean }> = {
+  0: { types: [125, 126], indoors: (tile) => tile === 4 },                         // Lorencia: MODEL_HOUSE_WALL01 + 4 and + 5, on the wooden floor
+  2: { types: [81, 82, 96, 98, 99], indoors: (tile) => tile === 3 || tile >= 10 }, // Devias
+};
+
+export interface IndoorFade {
+  meshes: THREE.InstancedMesh[];
+  indoors: (tile: number) => boolean;
+  alpha: number;
+}
+
+/** The desktop eases an object's alpha 10% of the way to its target per frame at 25 frames a second (Alpha, ZzzAI.cpp). */
+const FADE_STEPS_PER_SECOND = 25;
+const FADE_STEP = 0.1;
+
+/** Fades the roofs out while the hero stands on the floor tile `tile` inside a building, and back in outside. */
+export function updateIndoorFade(fade: IndoorFade, tile: number, dt: number): void {
+  const target = fade.indoors(tile) ? 0 : 1;
+  if (fade.alpha === target) return;
+  fade.alpha += (target - fade.alpha) * (1 - Math.pow(1 - FADE_STEP, dt * FADE_STEPS_PER_SECOND));
+  if (Math.abs(target - fade.alpha) < 0.01) fade.alpha = target;
+  for (const mesh of fade.meshes) {
+    const material = mesh.material as THREE.MeshBasicMaterial;
+    const base = mesh.userData.baseLook as { transparent: boolean; depthWrite: boolean; opacity: number };
+    const solid = fade.alpha >= 1;
+    material.transparent = solid ? base.transparent : true;
+    material.depthWrite = solid ? base.depthWrite : false;
+    material.opacity = base.opacity * fade.alpha;
+    material.needsUpdate = true;
+    mesh.visible = fade.alpha >= 0.01;
+  }
 }
 
 const LORENCIA_MODELS: [name: string, firstType: number, count: number][] = [
@@ -165,11 +204,21 @@ export async function createWorld(data: WorldData, fog: TerrainFog, onProgress?:
     byType.get(object.type)!.push(object);
   }
   const objectDir = `Object${data.worldNumber}`;
+  const fadeRule = INDOOR_FADES[data.mapNumber] as (typeof INDOOR_FADES)[number] | undefined;
+  const indoorFade: IndoorFade | null = fadeRule ? { meshes: [], indoors: fadeRule.indoors, alpha: 1 } : null;
   let done = 0;
   await Promise.all([...byType].map(async ([type, placements]) => {
     const meshes = await buildObjectType(objectDir, files.get(type)!, placements, data.light);
     meshes.forEach((mesh) => group.add(mesh));
+    if (indoorFade && fadeRule?.types.includes(type)) {
+      for (const mesh of meshes) {
+        // Each roof mesh has its own material (createMaterial makes one per part), so fading it touches nothing else.
+        const material = mesh.material as THREE.MeshBasicMaterial;
+        mesh.userData.baseLook = { transparent: material.transparent, depthWrite: material.depthWrite, opacity: material.opacity };
+        indoorFade.meshes.push(mesh);
+      }
+    }
     onProgress?.(++done / byType.size);
   }));
-  return { group, terrain };
+  return { group, terrain, indoorFade: indoorFade && indoorFade.meshes.length ? indoorFade : null };
 }
