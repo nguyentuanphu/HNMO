@@ -265,12 +265,8 @@ public class LoginAction
         var now = DateTime.UtcNow;
         if (state == AccountState.Banned)
         {
+            // A permanent ban never ends because an older timed ban ran out: only the temporary state below does.
             var active = username is null ? null : this.BanService.FindActiveLoginBlock(username, null, null, now);
-            if (active is null && username is not null && this.BanService.HasExpiredAccountBanOnly(username, now))
-            {
-                return true;
-            }
-
             if (active is not null)
             {
                 await player.InvokeViewPlugInAsync<IHnmoBanNoticeViewPlugIn>(v => v.SendBanNoticeAsync(BanManagerService.BuildNoticeJson(active))).ConfigureAwait(false);

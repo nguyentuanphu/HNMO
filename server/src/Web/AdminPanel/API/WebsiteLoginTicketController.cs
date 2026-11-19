@@ -111,8 +111,9 @@ public sealed class WebsiteLoginTicketController(
         var deviceId = this.Request.Headers["X-HNMO-Device-Id"].FirstOrDefault();
         var now = DateTime.UtcNow;
         var active = service.FindActiveLoginBlock(loginName, clientIp, deviceId, now);
-        var persistedBlocked = state is AccountState.Banned or AccountState.TemporarilyBanned
-            && !service.HasExpiredAccountBanOnly(loginName, now);
+        // A permanent ban never ends because an older timed ban ran out: only the temporary state does.
+        var persistedBlocked = state == AccountState.Banned
+            || (state == AccountState.TemporarilyBanned && !service.HasExpiredAccountBanOnly(loginName, now));
         if (active is null && !persistedBlocked)
         {
             return null;
