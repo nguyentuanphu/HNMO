@@ -5,8 +5,8 @@
 namespace HNMO.Web.AdminPanel.Auth;
 
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Knows whether the admin panel is in its initial setup mode, and disables the API keys which

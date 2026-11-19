@@ -6,8 +6,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.Persistence;
@@ -15,6 +13,8 @@ using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Admin panel page for Chaos Machine rates (14.4), Multi-vault (14.5), and Event rewards per level (14.7).

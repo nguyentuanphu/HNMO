@@ -4,12 +4,12 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.MapEditor;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A page, which shows an <see cref="MapEditor"/> for all <see cref="GameConfiguration.Maps"/>.

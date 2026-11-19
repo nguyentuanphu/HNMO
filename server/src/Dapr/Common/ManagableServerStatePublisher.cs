@@ -9,11 +9,11 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using global::Dapr.Client;
+using HNMO.Interfaces;
+using HNMO.PlugIns;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using HNMO.Interfaces;
-using HNMO.PlugIns;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 

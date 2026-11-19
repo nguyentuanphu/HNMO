@@ -5,8 +5,6 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.ItemDefinitions;
@@ -15,6 +13,8 @@ using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Admin panel page for managing item definitions (server <see cref="GameConfiguration.Items"/> + live EN/VI web game sync).

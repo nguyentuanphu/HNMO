@@ -9,11 +9,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.TestActors;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The local control endpoint: a plain TCP listener which speaks newline-delimited JSON.

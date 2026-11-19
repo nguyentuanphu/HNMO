@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Components.ConnectServer;
 
+using HNMO.DataModel.Configuration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using HNMO.DataModel.Configuration;
 
 /// <summary>
 /// Edit component for the <see cref="ConnectServerDefinition"/>.

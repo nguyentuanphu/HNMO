@@ -7,8 +7,8 @@ namespace HNMO.Network;
 using System.IO.Pipelines;
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 using Pipelines.Sockets.Unofficial;
 
 /// <summary>

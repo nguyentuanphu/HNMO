@@ -5,9 +5,9 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.EntityFramework.Model;
 
 /// <summary>
 /// Persistence context which is used to access the <see cref="GameConfiguration"/>.

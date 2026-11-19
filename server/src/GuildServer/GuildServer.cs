@@ -6,9 +6,9 @@ namespace HNMO.GuildServer;
 
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using Guild = HNMO.DataModel.Entities.Guild;
 using GuildMember = HNMO.DataModel.Entities.GuildMember;

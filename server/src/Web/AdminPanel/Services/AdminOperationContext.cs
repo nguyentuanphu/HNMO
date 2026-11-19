@@ -6,10 +6,10 @@ namespace HNMO.Web.AdminPanel.Services;
 
 using System.Security.Claims;
 using System.Threading;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
 
 /// <summary>Resolves HTTP API callers and the current Blazor circuit user.</summary>
 /// <param name="http">The HTTP context accessor.</param>

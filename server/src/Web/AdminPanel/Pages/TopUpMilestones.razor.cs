@@ -5,8 +5,6 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.PlugIns;
@@ -16,6 +14,8 @@ using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Admin page for <see cref="TopUpMilestonesPlugIn"/>: configures VND milestone steps,

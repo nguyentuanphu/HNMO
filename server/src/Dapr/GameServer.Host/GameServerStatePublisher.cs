@@ -8,10 +8,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using global::Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx.Synchronous;
 
 /// <summary>

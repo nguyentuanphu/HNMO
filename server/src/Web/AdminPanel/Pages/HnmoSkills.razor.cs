@@ -4,13 +4,13 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page which shows, grants and removes the HNMO skills (700 to 727) of the characters of an account.

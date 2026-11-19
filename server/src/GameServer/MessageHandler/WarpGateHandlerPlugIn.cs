@@ -5,13 +5,13 @@
 namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.Pathfinding;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handler for warp gate packets.

@@ -5,8 +5,8 @@
 namespace HNMO.GameLogic.PlugIns;
 
 using System;
-using Microsoft.Extensions.Logging;
 using HNMO.Pathfinding;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Records server-executed walk steps and evaluates their pace over a sliding window.

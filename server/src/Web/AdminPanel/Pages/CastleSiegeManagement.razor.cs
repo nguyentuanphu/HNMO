@@ -5,8 +5,6 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.CastleSiege;
 using HNMO.Persistence.AdminAuth;
@@ -17,6 +15,8 @@ using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Displays and administers the local Castle Siege runtime.

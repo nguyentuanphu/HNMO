@@ -5,8 +5,8 @@
 namespace HNMO.Web.Shared.Components.Form;
 
 using System.Reflection;
-using Microsoft.AspNetCore.Components.Forms;
 using HNMO.DataModel.Composition;
+using Microsoft.AspNetCore.Components.Forms;
 
 /// <summary>
 /// A razor component which automatically generates input fields for all properties for the type of the enclosing form model,

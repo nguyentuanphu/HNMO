@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.Shared.Services;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.Web.Shared.Components.Modal;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Default implementation of <see cref="IModalService"/>.

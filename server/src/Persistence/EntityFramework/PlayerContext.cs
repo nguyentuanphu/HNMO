@@ -6,9 +6,9 @@ namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
 using System.Threading.Tasks;
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.EntityFramework.Model;
 
 /// <summary>
 /// Persistence context which is used by in-game players.

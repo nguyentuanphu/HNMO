@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.Shared.Services;
 
-using Microsoft.Extensions.DependencyInjection;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Extension methods for registering the toast service.

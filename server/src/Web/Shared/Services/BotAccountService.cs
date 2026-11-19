@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.Shared.Services;
 
-using Microsoft.Extensions.Caching.Memory;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Bots;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 
 /// <summary>
 /// Service for the bot player table on the <c>LoggedIn</c> page.

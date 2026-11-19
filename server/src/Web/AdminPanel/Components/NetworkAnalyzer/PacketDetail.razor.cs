@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Components.NetworkAnalyzer;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.Network.Analyzer;
 using HNMO.Network.PlugIns;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Shows the content of a selected data packet.

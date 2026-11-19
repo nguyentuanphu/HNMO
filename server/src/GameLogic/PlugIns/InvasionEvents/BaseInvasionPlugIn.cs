@@ -4,7 +4,6 @@
 
 namespace HNMO.GameLogic.PlugIns.InvasionEvents;
 
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.PlugIns.PeriodicTasks;
 using HNMO.GameLogic.Properties;
@@ -12,6 +11,7 @@ using HNMO.GameLogic.Views;
 using HNMO.Interfaces;
 using HNMO.Pathfinding;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Base class for invasion plugins.

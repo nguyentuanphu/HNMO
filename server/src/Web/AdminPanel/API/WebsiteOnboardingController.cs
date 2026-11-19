@@ -4,12 +4,12 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.Onboarding;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The website's "New players" section: the steps of the new-player guide with their rewards and the starter kit

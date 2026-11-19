@@ -4,11 +4,11 @@
 
 namespace HNMO.GameLogic.PlayerActions.Duel;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.GuildWar;
 using HNMO.GameLogic.PlugIns.ChatCommands;
 using HNMO.GameLogic.Views.Duel;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Actions regarding duels.

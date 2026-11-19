@@ -9,9 +9,9 @@ using System.Net;
 using global::Discord;
 using global::Discord.Net;
 using global::Discord.WebSocket;
-using Microsoft.Extensions.Logging;
 using HNMO.Discord.ChatBridge;
 using HNMO.Discord.Provisioning;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The part of the <see cref="DiscordBot"/> which the admin panel uses to show its state and to set up a Discord server.

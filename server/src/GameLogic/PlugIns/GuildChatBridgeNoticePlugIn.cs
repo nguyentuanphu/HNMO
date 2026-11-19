@@ -5,9 +5,9 @@
 namespace HNMO.GameLogic.PlugIns;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Tells players when they enter the game, if the chat of their guild or alliance is mirrored

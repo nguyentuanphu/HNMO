@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework.AdminAuth;
 
+using HNMO.Persistence.AdminAuth;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using HNMO.Persistence.AdminAuth;
 
 /// <summary>
 /// Extensions to register the persistence of the admin panel users.

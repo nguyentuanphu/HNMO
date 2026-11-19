@@ -5,6 +5,9 @@
 namespace HNMO.Web.AdminPanel.Auth;
 
 using System.IO;
+using HNMO.Persistence.AdminAuth;
+using HNMO.Web.AdminPanel.Operations;
+using HNMO.Web.AdminPanel.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +21,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.AdminAuth;
-using HNMO.Web.AdminPanel.Operations;
-using HNMO.Web.AdminPanel.Services;
 
 /// <summary>
 /// Extensions which add the authentication of the admin panel.

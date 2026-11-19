@@ -5,11 +5,11 @@
 namespace HNMO.ChatServer;
 
 using System.Buffers;
-using Microsoft.Extensions.Logging;
 using HNMO.Network;
 using HNMO.Network.Packets;
 using HNMO.Network.Packets.ChatServer;
 using HNMO.Network.Xor;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// ChatClient implementation, uses socket connections.

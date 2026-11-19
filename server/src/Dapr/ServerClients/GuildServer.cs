@@ -6,8 +6,8 @@ namespace HNMO.ServerClients;
 
 using System.Collections.Immutable;
 using Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Implementation of an <see cref="IGuildServer"/> which accesses the guild server remotely over Dapr.

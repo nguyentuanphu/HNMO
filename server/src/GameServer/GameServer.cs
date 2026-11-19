@@ -7,7 +7,6 @@ namespace HNMO.GameServer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
@@ -26,6 +25,7 @@ using HNMO.Network.Analyzer;
 using HNMO.Network.Analyzer.Archive;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 
 /// <summary>

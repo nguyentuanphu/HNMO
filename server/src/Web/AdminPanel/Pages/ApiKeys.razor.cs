@@ -4,13 +4,13 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The page which manages the API keys of the public API.

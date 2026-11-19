@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
+using HNMO.GameLogic.ItemDefinitions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using HNMO.GameLogic.ItemDefinitions;
 
 /// <summary>
 /// Public read-only website API exposing admin-managed item definition overrides (<c>api/website/items</c>)

@@ -5,12 +5,12 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page which shows the leaderboards of the mini games.

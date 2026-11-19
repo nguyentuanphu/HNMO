@@ -6,17 +6,17 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.QuickGrid;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.QuickGrid;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The page which edits the packages and products of the cash shop.

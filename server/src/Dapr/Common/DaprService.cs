@@ -4,16 +4,16 @@
 
 namespace HNMO.Dapr.Common;
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using HNMO.Dapr.Common.HealthChecks;
 using HNMO.Interfaces;
 using HNMO.Persistence.EntityFramework;
 using HNMO.Persistence.EntityFramework.Json;
 using HNMO.PlugIns;
 using HNMO.Telemetry;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 /// <summary>
 /// Helper class to create an <see cref="WebApplicationBuilder"/> which predefined common

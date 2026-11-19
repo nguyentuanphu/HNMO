@@ -8,8 +8,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A dropdown selection component for enum values of <typeparamref name="TValue" />.

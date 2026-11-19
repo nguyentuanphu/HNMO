@@ -4,11 +4,11 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.Persistence.EntityFramework.Json;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// This provider holds two other repository providers:

@@ -5,8 +5,8 @@
 namespace HNMO.Web.Shared.Components.Form;
 
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Components;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// A component which shows a collection of <typeparamref name="TValue"/> in a table.

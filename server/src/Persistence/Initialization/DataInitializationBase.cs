@@ -6,7 +6,6 @@ namespace HNMO.Persistence.Initialization;
 
 using System.ComponentModel.Design;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameLogic.MiniGames.Doppelganger;
@@ -22,6 +21,7 @@ using HNMO.Network.PlugIns;
 using HNMO.Persistence.Initialization.Items;
 using HNMO.Persistence.Initialization.Updates;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Class to manage data initialization.

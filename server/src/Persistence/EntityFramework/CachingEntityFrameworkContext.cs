@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
+using HNMO.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Interfaces;
 
 /// <summary>
 /// Implementation of <see cref="IContext"/> for the entity framework <see cref="PersistenceContextProvider"/>.

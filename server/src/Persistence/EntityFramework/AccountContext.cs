@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.EntityFrameworkCore;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// A context which is used by each account. This context does not track and save configuration data.

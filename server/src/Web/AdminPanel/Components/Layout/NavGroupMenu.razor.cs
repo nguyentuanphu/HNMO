@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Components.Layout;
 
+using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using HNMO.Web.Shared.Services;
 
 /// <summary>
 /// Renders collapsible groups of links in the sidebar. A group which contains the current page is open,

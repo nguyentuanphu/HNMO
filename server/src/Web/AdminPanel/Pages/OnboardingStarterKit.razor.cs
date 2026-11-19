@@ -5,8 +5,6 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.Missions;
 using HNMO.GameLogic.PlugIns.Onboarding;
@@ -16,6 +14,8 @@ using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page "Onboarding and starter kit": the steps of the new-player guide with their rewards, the final reward and the

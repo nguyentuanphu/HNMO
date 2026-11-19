@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.GameLogic.PlugIns.CatchupCap;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Public Catch-up Level &amp; Daily Reset Cap API (<c>GET /api/website/catchup</c>).

@@ -4,10 +4,10 @@
 
 namespace HNMO.GameLogic.TestActors;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Views;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A scripted actor: a connection-less player which enters the world as an existing account's

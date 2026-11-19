@@ -4,8 +4,8 @@
 
 namespace HNMO.ConnectServer.PacketHandler;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 using IConnectServer = HNMO.ConnectServer.IConnectServer;
 
 /// <summary>

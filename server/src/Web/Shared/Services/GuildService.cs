@@ -4,12 +4,11 @@
 
 namespace HNMO.Web.Shared.Services;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.Persistence;
 using HNMO.Web.Shared.Components;
 using HNMO.Web.Shared.Models;
-
+using Microsoft.Extensions.Logging;
 using GuildPositionComparer = HNMO.Interfaces.GuildPositionComparer;
 
 /// <summary>

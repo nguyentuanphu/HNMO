@@ -5,8 +5,8 @@
 namespace HNMO.GameServer.MessageHandler.Guild;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for alliance group packets (0xEB identifier).

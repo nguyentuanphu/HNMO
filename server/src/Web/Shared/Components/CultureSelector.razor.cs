@@ -5,10 +5,10 @@
 namespace HNMO.Web.Shared.Components;
 
 using System.Globalization;
+using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
-using HNMO.Web.Shared.Services;
 
 /// <summary>
 /// A selection component for supported UI-Cultures (languages).

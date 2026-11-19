@@ -5,10 +5,10 @@
 namespace HNMO.GameServer.MessageHandler.MiniGames;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameServer.Properties;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for the packets of the imperial guardian event (0xF7), which are forwarded to the sub handlers.

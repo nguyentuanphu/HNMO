@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.Map.Components;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.Web.Map.Map;
+using Microsoft.AspNetCore.Components;
 using Nito.AsyncEx;
 
 /// <summary>

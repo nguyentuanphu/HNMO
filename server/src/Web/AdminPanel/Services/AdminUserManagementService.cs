@@ -7,13 +7,13 @@ namespace HNMO.Web.AdminPanel.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Identity;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Form.Modal;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Identity;
 
 /// <summary>
 /// Manages the users which are allowed to log into the admin panel.

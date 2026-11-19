@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.GameLogic.PlugIns.EventAlerts;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Public website endpoints for opting in/out of browser Web Push event alerts (<c>api/website/event-alerts</c>).

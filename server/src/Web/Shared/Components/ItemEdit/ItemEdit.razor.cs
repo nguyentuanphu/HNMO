@@ -6,12 +6,11 @@ namespace HNMO.Web.Shared.Components.ItemEdit;
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.DataModel.Entities;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 /// <summary>
 /// Specialized editor for an item.

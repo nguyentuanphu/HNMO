@@ -8,6 +8,9 @@ using System.Globalization;
 using System.Net;
 using System.Text.Json.Nodes;
 using System.Threading.RateLimiting;
+using HNMO.Persistence.AdminAuth;
+using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Operations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,9 +21,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ModelContextProtocol;
 using ModelContextProtocol.Protocol;
-using HNMO.Persistence.AdminAuth;
-using HNMO.Web.AdminPanel.Auth;
-using HNMO.Web.AdminPanel.Operations;
 
 /// <summary>Registers and maps the opt-in MCP endpoint in either admin host.</summary>
 public static class AdminMcpExtensions

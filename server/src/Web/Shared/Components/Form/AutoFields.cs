@@ -8,13 +8,13 @@ using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using HNMO.DataModel.Composition;
+using HNMO.Web.Shared.ComponentBuilders;
+using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.Logging;
-using HNMO.DataModel.Composition;
-using HNMO.Web.Shared.ComponentBuilders;
-using HNMO.Web.Shared.Services;
 
 /// <summary>
 /// A razor component which automatically generates input fields for all properties for the type of the enclosing form model.

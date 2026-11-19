@@ -5,8 +5,8 @@
 namespace HNMO.CentralServer.Host;
 
 using global::Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// An implementation of a <see cref="ILoginServer"/> which persists the login state in a dapr state store.

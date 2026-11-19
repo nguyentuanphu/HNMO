@@ -5,13 +5,6 @@
 namespace HNMO.Web.AdminPanel;
 
 using System.IO;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
@@ -30,6 +23,13 @@ using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Models;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 
 /// <summary>
 /// Extensions for the <see cref="WebApplicationBuilder"/>.

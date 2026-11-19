@@ -5,9 +5,9 @@
 namespace HNMO.GameServer.MessageHandler.Gens;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for the packets of the gens system (0xF8 identifier).

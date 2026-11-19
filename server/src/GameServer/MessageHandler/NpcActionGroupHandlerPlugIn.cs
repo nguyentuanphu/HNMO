@@ -5,8 +5,8 @@
 namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for character packets (0xF3 identifier).

@@ -6,13 +6,13 @@ namespace HNMO.Startup;
 
 using System.Collections;
 using System.Threading;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using HNMO.ConnectServer;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A container which keeps all <see cref="Interfaces.IConnectServer"/>s in one <see cref="IHostedService"/>.

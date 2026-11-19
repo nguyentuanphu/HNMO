@@ -5,7 +5,6 @@
 namespace HNMO.GameServer;
 
 using System.Collections.Concurrent;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic;
@@ -13,6 +12,7 @@ using HNMO.GameLogic.Views.Guild;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 
 /// <summary>

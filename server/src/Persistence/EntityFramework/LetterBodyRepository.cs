@@ -5,9 +5,9 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.EntityFramework.Model;
 
 /// <summary>
 /// Repository which is able to load <see cref="LetterBody"/>s for a specific letter header.

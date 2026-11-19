@@ -5,8 +5,8 @@
 namespace HNMO.Dapr.Common.HealthChecks;
 
 using System.Threading;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using HNMO.Persistence.EntityFramework;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 /// <summary>
 /// Checks if the database is reachable, up to date and contains a game configuration.

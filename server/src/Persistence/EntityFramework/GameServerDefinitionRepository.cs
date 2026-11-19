@@ -5,10 +5,10 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
+using HNMO.Persistence.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.EntityFramework.Model;
 
 /// <summary>
 /// Repository for the <see cref="GameServerDefinition"/>.

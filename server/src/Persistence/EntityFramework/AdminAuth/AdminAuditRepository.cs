@@ -5,8 +5,8 @@
 namespace HNMO.Persistence.EntityFramework.AdminAuth;
 
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>Stores audit history in the isolated admin schema.</summary>
 /// <param name="users">The repository which owns admin schema migrations.</param>

@@ -5,11 +5,11 @@
 namespace HNMO.Persistence.SourceGenerator;
 
 using System.Reflection;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 using HNMO.Annotations;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Composition;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 /// <summary>
 /// Source Generator which creates classes of the our entities specifically for the entity framework core.

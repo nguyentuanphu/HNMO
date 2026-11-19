@@ -5,9 +5,9 @@
 namespace HNMO.Dapr.Common;
 
 using global::Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Implementation of a <see cref="IEventPublisher"/> which publishes the events

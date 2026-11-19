@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.Map.ViewPlugIns;
 
-using Microsoft.JSInterop;
 using HNMO.GameLogic.NPC;
 using HNMO.GameLogic.Views.World;
 using HNMO.Web.Map.Map;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Implementation of <see cref="INewNpcsInScopePlugIn"/> which uses the javascript map app.

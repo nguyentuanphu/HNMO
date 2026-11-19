@@ -5,8 +5,8 @@
 namespace HNMO.Dapr.Common;
 
 using global::Dapr;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// An api controller to control a <see cref="IManageableServer"/>.

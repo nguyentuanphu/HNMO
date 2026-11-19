@@ -4,10 +4,10 @@
 
 namespace HNMO.GameLogic.CastleSiege;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.CastleSiege.NPC;
 using HNMO.GameLogic.Views.CastleSiege;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Implements Castle Siege Crown capture and ownership changes.

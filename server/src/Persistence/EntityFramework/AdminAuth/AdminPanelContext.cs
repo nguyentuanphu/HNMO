@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework.AdminAuth;
 
+using HNMO.Persistence.AdminAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using HNMO.Persistence.AdminAuth;
 
 /// <summary>
 /// The context which holds the users of the admin panel.

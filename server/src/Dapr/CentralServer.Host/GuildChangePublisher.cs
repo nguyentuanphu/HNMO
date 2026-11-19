@@ -5,11 +5,11 @@
 namespace HNMO.CentralServer.Host;
 
 using global::Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.GuildServer;
 using HNMO.Interfaces;
 using HNMO.Persistence.EntityFramework.Model;
 using HNMO.ServerClients;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Publisher for guild changes over Dapr.

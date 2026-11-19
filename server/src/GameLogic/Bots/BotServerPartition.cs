@@ -4,8 +4,8 @@
 
 namespace HNMO.GameLogic.Bots;
 
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Splits the bot population over the game servers of the deployment, so a server does not animate the

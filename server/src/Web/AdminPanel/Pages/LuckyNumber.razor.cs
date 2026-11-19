@@ -6,8 +6,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns.LuckyNumber;
 using HNMO.Persistence;
 using HNMO.PlugIns;
@@ -15,6 +13,8 @@ using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Admin panel configuration page for <see cref="LuckyNumberPlugIn"/> (<c>/lucky-number</c>).

@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework.Json;
 
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// <see cref="JsonQueryBuilder"/> for <see cref="GameConfiguration"/>.

@@ -5,10 +5,10 @@
 namespace HNMO.Web.Shared.Components;
 
 using System.Globalization;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Blazor component which allows to select an exit gate.

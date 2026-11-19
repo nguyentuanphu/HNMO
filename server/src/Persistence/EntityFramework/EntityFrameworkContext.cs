@@ -4,9 +4,9 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
+using HNMO.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HNMO.Interfaces;
 
 /// <summary>
 /// A implementation of <see cref="EntityFrameworkContextBase"/> which doesn't cache and always asks the database for objects.

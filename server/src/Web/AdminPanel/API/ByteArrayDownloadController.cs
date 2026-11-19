@@ -5,9 +5,9 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Reflection;
+using HNMO.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using HNMO.Persistence;
 
 /// <summary>
 /// API-Controller which returns data of a byte array of an object.

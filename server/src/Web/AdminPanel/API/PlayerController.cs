@@ -6,10 +6,10 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System.Text.Json.Nodes;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>Routes audited player operations through the owning game server.</summary>
 /// <param name="operations">The shared player operations.</param>

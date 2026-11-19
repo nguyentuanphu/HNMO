@@ -5,11 +5,11 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.ComponentModel.DataAnnotations;
+using HNMO.Web.AdminPanel.Auth;
+using HNMO.Web.AdminPanel.Properties;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using HNMO.Web.AdminPanel.Auth;
-using HNMO.Web.AdminPanel.Properties;
 
 /// <summary>
 /// The login page of the admin panel.

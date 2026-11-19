@@ -5,9 +5,9 @@
 namespace HNMO.Web.AdminPanel.Services;
 
 using System.Threading;
+using HNMO.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using HNMO.Interfaces;
 
 /// <summary>
 /// Keeps the history of the number of online players of the last <see cref="Window"/>,

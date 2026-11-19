@@ -6,8 +6,6 @@ namespace HNMO.Web.Shared.Components.Form;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.Persistence;
@@ -15,6 +13,8 @@ using HNMO.Web.Shared.Components.Form.Modal;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Properties;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 /// <summary>
 /// A component that displays and allows editing a character's skill list, including the master skill tree.

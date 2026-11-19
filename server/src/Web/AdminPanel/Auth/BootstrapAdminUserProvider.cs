@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Auth;
 
+using HNMO.Persistence.AdminAuth;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using HNMO.Persistence.AdminAuth;
 
 /// <summary>
 /// Provides the configured bootstrap user, which exists without a database.

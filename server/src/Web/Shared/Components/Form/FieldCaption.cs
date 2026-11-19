@@ -5,8 +5,8 @@
 namespace HNMO.Web.Shared.Components.Form;
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components.Forms;
 using HNMO.DataModel;
+using Microsoft.AspNetCore.Components.Forms;
 
 /// <summary>Resolves field names consistently for validation messages and form labels.</summary>
 public static class FieldCaption

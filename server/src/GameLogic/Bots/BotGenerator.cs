@@ -6,13 +6,13 @@ namespace HNMO.GameLogic.Bots;
 
 using System.Linq;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.Resets;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Generates and maintains the persistent population of bot accounts and their characters.

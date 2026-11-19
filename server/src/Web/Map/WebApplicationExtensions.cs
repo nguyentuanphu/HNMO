@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.Map;
 
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using HNMO.Web.Map.Map;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 /// <summary>
 /// Extensions for the <see cref="WebApplicationBuilder"/> to add the web map app.

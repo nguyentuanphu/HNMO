@@ -4,11 +4,10 @@
 
 namespace HNMO.Web.Map.Map;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
 using HNMO.GameLogic;
 using HNMO.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Controller for all map related functions.

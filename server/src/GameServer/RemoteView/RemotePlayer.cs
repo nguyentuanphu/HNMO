@@ -5,13 +5,13 @@
 namespace HNMO.GameServer.RemoteView;
 
 using System.Buffers;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Views;
 using HNMO.GameServer.MessageHandler;
 using HNMO.Network;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A player that is playing through a remote connection.

@@ -5,10 +5,10 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.GameLogic.PlugIns;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// The website's settings (the "Website" plug-in). The secret admin path only goes to the website on

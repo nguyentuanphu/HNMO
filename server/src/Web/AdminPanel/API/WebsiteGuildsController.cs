@@ -4,12 +4,12 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic.PlugIns.Guilds;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The website's guilds (read-only, no account data): this week's guild ladder, last week's winners, every guild's level

@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework;
 
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.DataModel.Composition;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// Interface for a context which is used to edit instances of the <see cref="RootType"/>

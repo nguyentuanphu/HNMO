@@ -6,8 +6,8 @@ namespace HNMO.Web.AdminPanel.Auth;
 
 using System.Security.Cryptography;
 using System.Threading;
-using Microsoft.AspNetCore.Identity;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.AspNetCore.Identity;
 
 /// <summary>
 /// An ASP.NET Core Identity user store which is backed by the <see cref="IAdminUserRepository"/>

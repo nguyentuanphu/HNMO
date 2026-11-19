@@ -9,13 +9,13 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Reflection;
 using System.Threading;
+using HNMO.DataModel.Composition;
+using HNMO.DataModel.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using HNMO.DataModel.Composition;
-using HNMO.DataModel.Configuration;
 using Nito.AsyncEx;
 using Nito.Disposables;
 

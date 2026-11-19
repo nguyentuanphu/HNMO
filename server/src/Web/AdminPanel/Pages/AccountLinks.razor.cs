@@ -4,9 +4,6 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic.AccountLinking;
@@ -14,6 +11,9 @@ using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page which shows and removes the links of an account to users of external services, e.g. Discord.

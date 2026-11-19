@@ -4,10 +4,10 @@
 
 namespace HNMO.GameServer.MessageHandler;
 
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions;
 using HNMO.Network.Packets.ClientToServer;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handler for hit packets.

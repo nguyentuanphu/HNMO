@@ -5,9 +5,9 @@
 namespace HNMO.CentralServer.Host;
 
 using System.Threading;
+using HNMO.ServerClients;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using HNMO.ServerClients;
 
 /// <summary>
 /// A <see cref="IHostedService"/> which cleans up logged in accounts of

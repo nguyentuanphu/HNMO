@@ -8,10 +8,10 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.AttributeSystem;
 using HNMO.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// Generates the code of the <c>GameConfigurationLoader</c>, which loads the game configuration

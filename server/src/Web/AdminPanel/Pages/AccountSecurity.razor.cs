@@ -4,14 +4,14 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.JSInterop;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// The page at which a user manages the second factor of its own account.

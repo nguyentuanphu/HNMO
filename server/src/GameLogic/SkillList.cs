@@ -5,10 +5,10 @@
 namespace HNMO.GameLogic;
 
 using System.ComponentModel;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.GameLogic.Attributes;
 using HNMO.GameLogic.Views.Character;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The implementation of the skill list, which automatically adds the passive skill power ups to the player.

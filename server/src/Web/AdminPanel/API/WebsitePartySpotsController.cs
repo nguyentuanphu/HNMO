@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.API;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.GameLogic.PlugIns.PartyOptions;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Public open hunting-spot party finder endpoint (<c>GET /api/website/party-spots</c>, never exposes passwords).

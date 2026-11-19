@@ -5,9 +5,9 @@
 namespace HNMO.Web.AdminPanel.Auth;
 
 using System.Security.Claims;
+using HNMO.Persistence.AdminAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence.AdminAuth;
 
     /// <summary>
     /// Validates the credentials of an admin panel user.

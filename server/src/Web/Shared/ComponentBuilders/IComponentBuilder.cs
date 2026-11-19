@@ -5,8 +5,8 @@
 namespace HNMO.Web.Shared.ComponentBuilders;
 
 using System.Reflection;
-using Microsoft.AspNetCore.Components.Rendering;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components.Rendering;
 
 /// <summary>
 /// Interface for a component builder for a specific property.

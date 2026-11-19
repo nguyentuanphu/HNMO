@@ -5,11 +5,11 @@
 namespace HNMO.Persistence;
 
 using System.Collections;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Implementation of a <see cref="IDataSource{Account}"/>.

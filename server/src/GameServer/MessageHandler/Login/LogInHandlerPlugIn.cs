@@ -5,7 +5,6 @@
 namespace HNMO.GameServer.MessageHandler.Login;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions;
 using HNMO.GameServer.RemoteView;
@@ -15,6 +14,7 @@ using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.Network.Xor;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for login packets.

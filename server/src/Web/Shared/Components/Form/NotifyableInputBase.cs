@@ -5,9 +5,9 @@
 namespace HNMO.Web.Shared.Components.Form;
 
 using System.ComponentModel;
+using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using HNMO.Web.Shared.Services;
 
 /// <summary>
 /// An abstract base class which updates it's current value when

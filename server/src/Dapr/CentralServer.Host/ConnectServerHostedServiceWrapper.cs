@@ -5,9 +5,9 @@
 namespace HNMO.CentralServer.Host;
 
 using System.Threading;
+using HNMO.Dapr.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using HNMO.Dapr.Common;
 using ConnectServer = HNMO.ConnectServer.ConnectServer;
 
 /// <summary>

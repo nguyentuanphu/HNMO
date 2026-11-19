@@ -4,8 +4,8 @@
 
 namespace HNMO.ConnectServer.PacketHandler;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Network;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handles the request of the server list.

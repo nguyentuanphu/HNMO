@@ -5,12 +5,12 @@
 namespace HNMO.GameServer.MessageHandler.Messenger;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.GameLogic.PlayerActions.Messenger;
 using HNMO.Network.Packets;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Handler for letter delete packets.

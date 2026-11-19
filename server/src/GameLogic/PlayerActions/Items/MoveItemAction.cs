@@ -5,12 +5,12 @@
 namespace HNMO.GameLogic.PlayerActions.Items;
 
 using System.ComponentModel;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Configuration.Items;
 using HNMO.GameLogic.PlugIns;
 using HNMO.GameLogic.Views.Inventory;
 using HNMO.GameLogic.Views.Trade;
+using Microsoft.Extensions.Logging;
 using static HNMO.DataModel.InventoryConstants;
 
 /// <summary>

@@ -5,9 +5,6 @@
 namespace HNMO.Web.AdminPanel.Pages;
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
@@ -17,6 +14,9 @@ using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page which shows and grants the cash shop coins of an account.

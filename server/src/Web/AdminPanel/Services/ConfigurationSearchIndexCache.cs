@@ -6,9 +6,9 @@ namespace HNMO.Web.AdminPanel.Services;
 
 using System.Diagnostics;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Caches configuration search entries for fast header search navigation.

@@ -4,10 +4,10 @@
 
 namespace HNMO.Web.AdminPanel.Components.Layout;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Pages;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Shows the currently signed in user and allows to sign out.

@@ -7,10 +7,10 @@ namespace HNMO.ConnectServer;
 using System.Buffers;
 using System.Net;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.ConnectServer.PacketHandler;
 using HNMO.Network;
 using HNMO.Network.Packets.ConnectServer;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx.Synchronous;
 
 /// <summary>

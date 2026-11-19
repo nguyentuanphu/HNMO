@@ -5,10 +5,10 @@
 namespace HNMO.CentralServer.Host;
 
 using global::Dapr.Client;
-using Microsoft.Extensions.Logging;
 using HNMO.FriendServer;
 using HNMO.Interfaces;
 using HNMO.ServerClients;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Implementation of a <see cref="IFriendNotifier"/> which notifies the game server

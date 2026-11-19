@@ -5,9 +5,9 @@
 namespace HNMO.Web.Shared.ComponentBuilders;
 
 using System.Reflection;
+using HNMO.Web.Shared.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using HNMO.Web.Shared.Services;
 
 /// <summary>
 /// Base class for component builders which offers some generic functions to create generic components.

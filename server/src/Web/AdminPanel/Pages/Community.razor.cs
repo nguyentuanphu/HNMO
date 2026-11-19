@@ -6,8 +6,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns.Community;
 using HNMO.GameLogic.PlugIns.Missions;
 using HNMO.Persistence;
@@ -16,6 +14,8 @@ using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The page "Community": the one-time coins for linking Discord and joining the Zalo group (with the waiting Zalo claims

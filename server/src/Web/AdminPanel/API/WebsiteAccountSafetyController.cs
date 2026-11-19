@@ -8,9 +8,6 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
@@ -18,6 +15,9 @@ using HNMO.GameLogic.PlugIns.AccountSafety;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The account page's account safety, through the web bridge (which holds the API key and tells the visitor's

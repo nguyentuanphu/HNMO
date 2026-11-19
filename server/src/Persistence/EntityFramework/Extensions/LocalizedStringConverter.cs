@@ -4,8 +4,8 @@
 
 namespace HNMO.Persistence.EntityFramework.Extensions;
 
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using HNMO.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 /// <summary>
 /// A value converter for <see cref="LocalizedString" /> which stores only the underlying string value.

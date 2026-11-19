@@ -4,9 +4,9 @@
 
 namespace HNMO.Web.AdminPanel.Pages;
 
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel.Entities;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Code-behind for the <see cref="ChatCommands"/> page.

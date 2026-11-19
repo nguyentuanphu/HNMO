@@ -7,8 +7,8 @@ namespace HNMO.Web.AdminPanel.Auth;
 using System.Collections.Concurrent;
 using System.Security.Claims;
 using System.Threading;
-using Microsoft.AspNetCore.Http;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.AspNetCore.Http;
 
 /// <summary>
 /// Answers the authentication requests of a reverse proxy, so that other web applications

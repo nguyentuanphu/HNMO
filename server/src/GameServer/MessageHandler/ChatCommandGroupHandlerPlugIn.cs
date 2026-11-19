@@ -5,11 +5,11 @@
 namespace HNMO.GameServer.MessageHandler;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic;
 using HNMO.Network.Packets.ClientToServer;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for the messages about chat commands (0xF5 identifier).

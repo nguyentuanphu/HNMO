@@ -6,10 +6,10 @@ namespace HNMO.Persistence.EntityFramework;
 
 using System.Collections;
 using System.IO;
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.DataModel;
 using HNMO.DataModel.Configuration;
 using HNMO.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// Class which listens to changes within the <see cref="GameConfiguration"/>,

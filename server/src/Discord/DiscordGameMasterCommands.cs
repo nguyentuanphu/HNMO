@@ -5,12 +5,12 @@
 namespace HNMO.Discord;
 
 using System.Globalization;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.Discord.Properties;
 using HNMO.GameLogic.AccountLinking;
 using HNMO.Interfaces;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The slash commands for game masters, which change something in the game.

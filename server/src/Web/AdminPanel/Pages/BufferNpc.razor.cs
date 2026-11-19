@@ -6,14 +6,14 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System.Globalization;
 using System.Text.Json;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using HNMO.GameLogic.PlugIns.BufferNpc;
 using HNMO.Persistence;
 using HNMO.PlugIns;
 using HNMO.Web.AdminPanel.API;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.Shared.Components.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Admin configuration page for <see cref="BufferNpcPlugIn"/>.

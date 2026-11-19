@@ -6,14 +6,13 @@ namespace HNMO.Web.AdminPanel.Components.Layout;
 
 using System.Globalization;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
-
 using HNMO.Network.Analyzer;
 using HNMO.Persistence;
 using HNMO.Persistence.Initialization.Updates;
 using HNMO.Web.AdminPanel.Services;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Navigation menu of the admin panel.

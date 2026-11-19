@@ -5,16 +5,16 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
 using HNMO.Persistence.AdminAuth;
 using HNMO.Web.AdminPanel.Auth;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The public API to show and grant the cash shop coins of accounts, e.g. for a payment provider.

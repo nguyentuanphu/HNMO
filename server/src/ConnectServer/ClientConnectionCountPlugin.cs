@@ -6,8 +6,8 @@ namespace HNMO.ConnectServer;
 
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The client connection count plugin.

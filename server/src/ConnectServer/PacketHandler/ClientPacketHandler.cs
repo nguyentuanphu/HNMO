@@ -5,9 +5,8 @@
 namespace HNMO.ConnectServer.PacketHandler;
 
 using System.Net.Sockets;
-
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 using IConnectServer = HNMO.ConnectServer.IConnectServer;
 
 /// <summary>

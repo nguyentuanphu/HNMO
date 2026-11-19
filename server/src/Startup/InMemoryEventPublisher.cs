@@ -4,8 +4,8 @@
 
 namespace HNMO.Startup;
 
-using Microsoft.Extensions.Logging;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// An <see cref="IEventPublisher"/> which publishes directly to the available started servers in this application.

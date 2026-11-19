@@ -7,7 +7,6 @@ namespace HNMO.GameServer;
 using System.IO.Pipelines;
 using System.Net;
 using System.Threading;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.GameServer.RemoteView;
@@ -15,6 +14,7 @@ using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A game server listener that listens on a TCP port.

@@ -6,9 +6,9 @@ namespace HNMO.CentralServer.Host;
 
 using System.Net;
 using System.Threading;
+using HNMO.ServerClients;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using HNMO.ServerClients;
 using ConnectServer = HNMO.ConnectServer.ConnectServer;
 
 /// <summary>

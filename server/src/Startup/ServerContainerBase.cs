@@ -5,9 +5,9 @@
 namespace HNMO.Startup;
 
 using System.Threading;
+using HNMO.Persistence;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using HNMO.Persistence;
 
 /// <summary>
 /// Base class for a server container, which reacts on database recreations.

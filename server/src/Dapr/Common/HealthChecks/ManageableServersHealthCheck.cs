@@ -5,8 +5,8 @@
 namespace HNMO.Dapr.Common.HealthChecks;
 
 using System.Threading;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using HNMO.Interfaces;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 /// <summary>
 /// Reports the states of the <see cref="IManageableServer"/>s of this process.

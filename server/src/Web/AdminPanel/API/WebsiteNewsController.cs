@@ -5,10 +5,10 @@
 namespace HNMO.Web.AdminPanel.API;
 
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using HNMO.GameLogic.PlugIns.News;
 using HNMO.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Public News &amp; Announcements API (<c>GET /api/website/news</c>) used by the homepage,

@@ -5,10 +5,10 @@
 namespace HNMO.Web.Shared.ComponentBuilders;
 
 using System.Reflection;
-using Microsoft.AspNetCore.Components.Rendering;
 using HNMO.GameLogic.PlugIns.InvasionEvents;
 using HNMO.Web.Shared.Components.Form;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components.Rendering;
 
 /// <summary>
 /// A <see cref="IComponentBuilder" /> for <see cref="IList{InvasionSpawnConfiguration}"/> fields.

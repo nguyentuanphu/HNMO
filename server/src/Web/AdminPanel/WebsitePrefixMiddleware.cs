@@ -6,10 +6,10 @@ namespace HNMO.Web.AdminPanel;
 
 using System.Net;
 using System.Text.RegularExpressions;
+using HNMO.Web.AdminPanel.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using HNMO.Web.AdminPanel.Auth;
 
 /// <summary>
 /// The admin panel behind the public website: the website (on the same computer) forwards

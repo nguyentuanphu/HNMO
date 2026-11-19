@@ -5,9 +5,9 @@
 namespace HNMO.GameServer.MessageHandler.Duel;
 
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
 using HNMO.Network.PlugIns;
 using HNMO.PlugIns;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Packet handler for duel start packets (0xAA identifier).

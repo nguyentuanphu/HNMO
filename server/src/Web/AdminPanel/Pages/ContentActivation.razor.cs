@@ -7,10 +7,6 @@ namespace HNMO.Web.AdminPanel.Pages;
 using System.Globalization;
 using System.Text.Json.Nodes;
 using System.Threading;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 using HNMO.DataModel.Configuration;
 using HNMO.Web.AdminPanel.Operations;
 using HNMO.Web.AdminPanel.Properties;
@@ -18,6 +14,10 @@ using HNMO.Web.Shared;
 using HNMO.Web.Shared.Components.Modal;
 using HNMO.Web.Shared.Components.Toast;
 using HNMO.Web.Shared.Services;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Page which allows to activate and deactivate the content of the game configuration in batches,

@@ -8,12 +8,11 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
-using Microsoft.Extensions.Logging;
-
 using HNMO.DataModel;
 using HNMO.Interfaces;
 using HNMO.Persistence.EntityFramework.Json;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A repository which gets its data from the <see cref="EntityDataContext.CurrentGameConfiguration"/>, without additionally touching the database.

@@ -8,8 +8,8 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
 using HNMO.DataModel.Configuration;
-using HNMO.Persistence;
 using HNMO.GameLogic.PlugIns.Missions;
+using HNMO.Persistence;
 
 /// <summary>
 /// A character's (or a guild's) value in a running race.

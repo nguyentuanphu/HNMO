@@ -5,8 +5,8 @@
 namespace HNMO.Web.Shared.Components.Form;
 
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Components;
 using HNMO.DataModel;
+using Microsoft.AspNetCore.Components;
 
 /// <summary>
 /// Lookup field that allows to select multiple objects which will be stored in a bound <see cref="IList{TObject}"/>.

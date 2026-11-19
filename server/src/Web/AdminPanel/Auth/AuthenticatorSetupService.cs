@@ -4,8 +4,8 @@
 
 namespace HNMO.Web.AdminPanel.Auth;
 
-using Microsoft.AspNetCore.Identity;
 using HNMO.Persistence.AdminAuth;
+using Microsoft.AspNetCore.Identity;
 using QRCoder;
 
 /// <summary>

@@ -5,12 +5,12 @@
 namespace HNMO.Persistence.EntityFramework;
 
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using HNMO.AttributeSystem;
 using HNMO.Persistence.EntityFramework.Extensions;
 using HNMO.Persistence.EntityFramework.Extensions.ModelBuilder;
 using HNMO.Persistence.EntityFramework.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 /// <summary>
 /// Context for all types of the data model.

@@ -4,12 +4,12 @@
 
 namespace HNMO.Startup;
 
-using Microsoft.Extensions.DependencyInjection;
 using HNMO.DataModel.Configuration;
 using HNMO.GameLogic;
 using HNMO.Interfaces;
 using HNMO.Network;
 using HNMO.PlugIns;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// An implementation of <see cref="IConfigurationChangePublisher"/> which directly handles the changes

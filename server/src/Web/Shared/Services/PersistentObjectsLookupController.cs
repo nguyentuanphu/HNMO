@@ -5,9 +5,9 @@
 namespace HNMO.Web.Shared.Services;
 
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Configuration;
 using HNMO.Persistence;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// A <see cref="ILookupController"/> which will return persistent objects which

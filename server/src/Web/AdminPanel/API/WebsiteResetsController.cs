@@ -6,9 +6,6 @@ namespace HNMO.Web.AdminPanel.API;
 
 using System.Security.Cryptography;
 using System.Threading;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using HNMO.AttributeSystem;
 using HNMO.DataModel.Configuration;
 using HNMO.DataModel.Entities;
@@ -23,6 +20,9 @@ using HNMO.GameLogic.PlugIns.TopRaces;
 using HNMO.Interfaces;
 using HNMO.Persistence;
 using HNMO.Web.AdminPanel.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The website's resets: the public rankings (resets of the month, relifes) and rules, and, for the account page through

@@ -5,10 +5,10 @@
 namespace HNMO.Discord;
 
 using System.Globalization;
-using Microsoft.Extensions.Logging;
 using HNMO.DataModel.Entities;
 using HNMO.Discord.Properties;
 using HNMO.GameLogic.AccountLinking;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// The slash commands with which Discord users link themselves to their game account.
