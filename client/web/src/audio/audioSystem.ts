@@ -23,6 +23,8 @@
 // Browsers keep audio off until the page gets a click or key press: the system listens for
 // the first one, resumes its context and starts the music asked for meanwhile.
 
+import { seasonDataUrl } from '../dataRoot.js';
+
 export interface Vec3 {
   x: number;
   y: number;
@@ -112,7 +114,8 @@ export function distanceLevel(distance: number): number {
 export function dataUrl(file: string, dataRoot = '/data'): string {
   const parts = file.replace(/\\/g, '/').split('/').filter((part) => part.length > 0);
   if (parts.length > 0 && parts[0].toLowerCase() === 'data') parts.shift();
-  return `${dataRoot}/${parts.map((part) => encodeURIComponent(part)).join('/')}`;
+  // Sounds and music of the world's season (a Season 9 world has its own; the rest is the base game's).
+  return seasonDataUrl(`${dataRoot}/${parts.map((part) => encodeURIComponent(part)).join('/')}`);
 }
 
 /** A sound or music file's name with its extension changed to .opus (the packaged folder's form). */

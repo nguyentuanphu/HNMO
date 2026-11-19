@@ -85,7 +85,11 @@
                     <tr>
                         <td><code>@world.WorldId</code></td>
                         <td>
-                            <div><strong>@(this._isVi ? world.NameVi : world.NameEn)</strong></div>
+                            <div>
+                                <strong>@(this._isVi ? world.NameVi : world.NameEn)</strong>
+                                <span class="badge @(world.Season == WorldSeason.Season9 ? "bg-info text-dark" : "bg-secondary") world-season-badge"
+                                      title="@this.T("The season this world plays", "Phiên bản mà thế giới này chơi")">@world.Season.ToBadge()</span>
+                            </div>
                             <small class="text-muted">@(this._isVi ? world.NameEn : world.NameVi)</small>
                         </td>
                         <td><code>@world.DatabaseName</code></td>
@@ -163,6 +167,13 @@
                 <div class="col-md-3">
                     <label class="form-label" title="@this.T("Vietnamese display name", "Tên tiếng Việt")">@this.T("Name (VI)", "Tên (VI)")</label>
                     <input class="form-control" @bind="this._editingWorld.NameVi" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" for="editSeason" title="@this.T("Players pick a world on the website and in the game's server list; its season decides the game data and the season-only features. Season 6.3 is the default.", "Người chơi chọn thế giới trên website và trong danh sách máy chủ; phiên bản quyết định dữ liệu game và các tính năng riêng. Mặc định là Season 6.3.")">@this.T("Season", "Phiên bản")</label>
+                    <select class="form-select" id="editSeason" @bind="this._editingWorld.Season">
+                        <option value="@WorldSeason.Season6">Season 6.3</option>
+                        <option value="@WorldSeason.Season9">Season 9</option>
+                    </select>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label" title="@this.T("Dedicated PostgreSQL database name", "Tên CSDL PostgreSQL riêng")">@this.T("Database Name", "Tên CSDL")</label>
@@ -245,6 +256,13 @@
                     <div class="col-md-6">
                         <label class="form-label">@this.T("Name (VI)", "Tên (VI)")</label>
                         <input class="form-control" @bind="this._templateRequest.NameVi" placeholder="Thế giới 2 — Phượng Hoàng" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="tplSeason" title="@this.T("The season the new world plays. Season 6.3 is the default; a Season 9 world needs the Season 9 data pack on this computer.", "Phiên bản của thế giới mới. Mặc định là Season 6.3; thế giới Season 9 cần gói dữ liệu Season 9 trên máy này.")">@this.T("Season", "Phiên bản")</label>
+                        <select class="form-select" id="tplSeason" @bind="this._templateSeason">
+                            <option value="@WorldSeason.Season6">Season 6.3</option>
+                            <option value="@WorldSeason.Season9">Season 9</option>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" title="@this.T("Separate database name", "Tên CSDL riêng")">@this.T("Database Name", "Tên CSDL")</label>

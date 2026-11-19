@@ -1,6 +1,6 @@
 # HNMO Shared Workboard (Australia/Sydney)
 
-> Updated: 2026-11-19 12:55 +11:00  
+> Updated: 2026-11-19 14:10 +11:00  
 > Read this file before starting new work so multiple chats/sessions stay aligned and never duplicate work.
 
 ---
@@ -32,6 +32,14 @@
 2. [x] **`/worlds` button layout & `/api/website` multi-world ServerId safety**: Added `flex-nowrap text-nowrap` on `/worlds` Start/Stop/Edit buttons at `1280px`, and guarded `WebsiteController.Get()` with `GroupBy(x => x.ServerId)` so duplicate server IDs across worlds never throw `ArgumentException`.
 3. [x] **`inventory.spec.ts:50` helm-swap assertion**: Polled slot `2` removal cleanly via `expect.poll` alongside `free.slot` addition so `inventory.spec.ts` does not race between packet updates.
 4. [x] **First-run `/control` setup clarity**: Added bilingual EN/VI `wizardHint` on `control.html` noting `/users` admin creation (`>= 12` char password) and `Administrator` API key role for Website Portal registration.
+
+### Audit & season gaps (main Claude, 2026-11-19)
+- [x] **Re-audit of all helper work**: [audit-2026-11-19.md](audit-2026-11-19.md). Critical / high findings fixed (escrow claim, trade-backup rollback, shared state locks, partial item snapshots, website market race, ban expiry, script in player texts, host-only control page). Open medium / low ones are listed there.
+- [x] **Gap 1 — worlds have a season**: `WorldDefinition.Season` (S6.3 default, old registry files read as S6.3), `/worlds` page (choice on create and edit, badge), `/api/website` (`season`, `seasonBadge`); a server now belongs only to the world which names it.
+- [x] **Gap 2 — data roots per season**: `/data/...` (S6.3) and `/data/s9/...`; packaging keeps the pack in `Data_S9`. See [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md) section 3.
+- [~] **Gap 4 — players pick the season**: website season choice and badges, the game's server list (worlds together, badge), the game loads the picked world's data. Still to do: season-only admin pages shown only for that season's worlds.
+- [ ] **Gap 3 — Season 9 game data on the server**: own initialization (maps, items, monsters, skills, quests) and a game configuration per season in one admin panel. Not started.
+- [ ] **Antigravity (Windows)**: check `/data/s9/` with the real pack (`HNMO_S9_DATA_DIR`), package `win-x64`, playtest.
 
 ### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion (ASSIGNED: Cloud Claude)
 5. [ ] **`/import-server` S6 Extensions**: Weighted multi-pool Item Bag XML rules, Ancient Set drop rules, and multi-slot map/day bonus schedules (dry-run + backup + undo).

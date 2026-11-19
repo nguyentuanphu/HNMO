@@ -38,22 +38,13 @@ internal sealed class GameFiles : IDisposable
     private readonly string _root;
     private readonly ILogger? _logger;
     private readonly DataPackArchive? _packs;
-    private readonly GameFiles? _overlay;
     private readonly ConcurrentDictionary<string, Dictionary<string, string>?> _directories = new();
 
-    public GameFiles(string root, ILogger? logger = null, string? overlayRoot = null)
+    public GameFiles(string root, ILogger? logger = null)
     {
         this._root = Path.GetFullPath(root);
         this._logger = logger;
         this._packs = DataPackArchive.TryLoad(Path.Combine(this._root, "packs"));
-        if (!string.IsNullOrWhiteSpace(overlayRoot))
-        {
-            var fullOverlay = Path.GetFullPath(overlayRoot);
-            if (!string.Equals(fullOverlay, this._root, StringComparison.OrdinalIgnoreCase) && Directory.Exists(fullOverlay))
-            {
-                this._overlay = new GameFiles(fullOverlay, logger);
-            }
-        }
     }
 
     public string Root => this._root;
@@ -66,7 +57,6 @@ internal sealed class GameFiles : IDisposable
 
     public void Dispose()
     {
-        this._overlay?.Dispose();
         this._packs?.Dispose();
     }
 
@@ -85,13 +75,12 @@ internal sealed class GameFiles : IDisposable
         context.Response.StatusCode = StatusCodes.Status404NotFound;
     }
 
-    private async Task<bool> TryServeAsync(HttpContext context, string relativePath)
+    /// <summary>
+    /// Serves a file if this folder has it. A season's own data folder is asked first with this, and the
+    /// base game data answers what the season's folder doesn't have.
+    /// </summary>
+    public async Task<bool> TryServeAsync(HttpContext context, string relativePath)
     {
-        if (this._overlay is not null && await this._overlay.TryServeAsync(context, relativePath).ConfigureAwait(false))
-        {
-            return true;
-        }
-
         if (this._packs is not null)
         {
             if (NormalizeRelativePath(relativePath) is { } normalized && TryResolveInPack(this._packs, normalized, out _))

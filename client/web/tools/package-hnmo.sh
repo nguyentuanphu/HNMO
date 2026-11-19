@@ -191,9 +191,15 @@ JSON
 if [ "$WITH_DATA" = 1 ]; then
   echo "Copying the game data"
   cp -r "$CLIENT_REPO/src/bin/Data" "$OUT/Data"
+  # A Season 9 data pack (HNMO_S9_DATA_DIR, never part of the repository) gets its own folder, Data_S9,
+  # served under /data/s9/ to players of Season 9 worlds only. It must never be copied into Data: files of
+  # the same name would replace what Season 6 worlds show.
+  S9_SOUND_DIRS=()
   if [ -n "${HNMO_S9_DATA_DIR:-}" ] && [ -d "$HNMO_S9_DATA_DIR" ]; then
-    echo "Overlaying Season 9 Data from $HNMO_S9_DATA_DIR"
-    cp -rf "$HNMO_S9_DATA_DIR/." "$OUT/Data/"
+    echo "Copying the Season 9 data pack from $HNMO_S9_DATA_DIR to Data_S9"
+    mkdir -p "$OUT/Data_S9"
+    cp -rf "$HNMO_S9_DATA_DIR/." "$OUT/Data_S9/"
+    for dir in Sound Music; do [ -d "$OUT/Data_S9/$dir" ] && S9_SOUND_DIRS+=("$OUT/Data_S9/$dir"); done
   fi
   # Sounds and music as Opus: about 250 MB less (WAV effects shrink ~95 %). The web game asks for
   # the .opus names when Data/Audio/Opus.json is there and the browser plays Opus. Set
@@ -212,7 +218,7 @@ if [ "$WITH_DATA" = 1 ]; then
     }
     export -f convert_audio
     # The web game's own sounds (the HNMO skills', web/wwwroot/data/Sound) go with them.
-    find "$OUT/Data/Sound" "$OUT/Data/Music" "$OUT/web/wwwroot/data/Sound" -type f \( -iname '*.wav' -o -iname '*.mp3' -o -iname '*.ogg' \) -print0 \
+    find "$OUT/Data/Sound" "$OUT/Data/Music" "$OUT/web/wwwroot/data/Sound" ${S9_SOUND_DIRS[@]+"${S9_SOUND_DIRS[@]}"} -type f \( -iname '*.wav' -o -iname '*.mp3' -o -iname '*.ogg' \) -print0 \
       | xargs -0 -P "$(nproc)" -I{} bash -c 'convert_audio "$1"' _ {}
     mkdir -p "$OUT/Data/Audio"
     printf '{ "opus": true }\n' > "$OUT/Data/Audio/Opus.json"

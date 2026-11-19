@@ -147,8 +147,19 @@ var siblingS9Data = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(dataPath
 var s9DataPath = !string.IsNullOrWhiteSpace(configuredS9Data)
     ? Path.Combine(contentRoot, configuredS9Data)
     : siblingS9Data;
-var gameFiles = new GameFiles(dataPath, app.Logger, s9DataPath);
+// Each season has its own data root: /data/... is the base game (Season 6.3) for everyone, /data/s9/... is
+// the Season 9 pack first and the base game for whatever the pack doesn't have. The web game asks under
+// the root of the world the player picked, so a Season 9 pack never changes what a Season 6 world shows.
+var gameFiles = new GameFiles(dataPath, app.Logger);
 app.Lifetime.ApplicationStopping.Register(gameFiles.Dispose);
+var s9Root = Path.GetFullPath(s9DataPath);
+var s9Files = !string.Equals(s9Root, gameFiles.Root, StringComparison.OrdinalIgnoreCase) && Directory.Exists(s9Root)
+    ? new GameFiles(s9Root, app.Logger)
+    : null;
+if (s9Files is not null)
+{
+    app.Lifetime.ApplicationStopping.Register(s9Files.Dispose);
+}
 var vendorRoot = Path.GetFullPath(Path.Combine(contentRoot, (HasArg("--HNMO:VendorPath") ? app.Configuration["HNMO:VendorPath"] : hostSettings?.VendorPath) ?? app.Configuration["HNMO:VendorPath"] ?? "../node_modules"));
 var allowedHosts = hostSettings?.RelayAllowedHosts ?? app.Configuration.GetSection("Relay:AllowedHosts").Get<string[]>() ?? ["127.0.0.1", "localhost"];
 var allowLoopback = hostSettings?.RelayAllowLoopback ?? app.Configuration.GetValue("Relay:AllowLoopback", true);
@@ -311,17 +322,45 @@ if (Directory.Exists(Path.Combine(vendorRoot, "three")))
 // files of the same path; a matched endpoint skips the static files above, so it's looked up here.
 var webData = Path.Combine(webRoot, "data");
 var contentTypes = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
-app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
+async Task<bool> TryServeWebDataAsync(HttpContext context, string path)
 {
     var local = Path.GetFullPath(Path.Combine(webData, path));
     if (local.StartsWith(webData + Path.DirectorySeparatorChar, StringComparison.Ordinal) && File.Exists(local))
     {
         context.Response.ContentType = contentTypes.TryGetContentType(local, out var type) ? type : "application/octet-stream";
         await context.Response.SendFileAsync(local, context.RequestAborted).ConfigureAwait(false);
+        return true;
+    }
+
+    return false;
+}
+
+// Which seasons' data this folder has: the website and the server list show a Season 9 world as playable
+// only with its pack (without one it would show the base game's looks).
+app.MapGet("/data/seasons.json", (HttpContext context) =>
+{
+    context.Response.Headers.CacheControl = "no-cache";
+    return Results.Json(new { s6 = true, s9 = s9Files is not null });
+});
+app.MapGet("/data/s9/{**path}", async (HttpContext context, string path) =>
+{
+    // The season's own file first; then HNMO's own web data and the base game, as for every world.
+    if (s9Files is not null && SeasonData.IsSeasonFolder(path) && await s9Files.TryServeAsync(context, path).ConfigureAwait(false))
+    {
         return;
     }
 
-    await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
+    if (!await TryServeWebDataAsync(context, path).ConfigureAwait(false))
+    {
+        await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
+    }
+});
+app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
+{
+    if (!await TryServeWebDataAsync(context, path).ConfigureAwait(false))
+    {
+        await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
+    }
 });
 Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));

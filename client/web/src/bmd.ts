@@ -8,6 +8,7 @@ import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { parseBMD, decodeTGA } from './formats.js';
 import { getTextureQuality } from './ui/settingsWindow.js';
 import type { BMDModel, BMDMesh, BMDBoneFrames } from './formats.js';
+import { onSeasonChange, seasonDataUrl } from './dataRoot.js';
 
 const ALPHA_TEST = 0.25;
 
@@ -27,11 +28,19 @@ export function setDataBaseUrl(prefix: string): void {
   modelCache.clear();
 }
 
-/** Resolves a `/data/...` asset URL using the configured base prefix. */
+/** Resolves a `/data/...` asset URL: the season of the world being played, then the configured base prefix. */
 export function resolveDataUrl(url: string): string {
-  if (!dataBasePrefix || !url.startsWith('/data/')) return url;
-  return `${dataBasePrefix}${url}`;
+  if (!url.startsWith('/data/')) return url;
+  const seasonal = seasonDataUrl(url);
+  return dataBasePrefix ? `${dataBasePrefix}${seasonal}` : seasonal;
 }
+
+// Another season's files have the same names: nothing loaded for one is shown in the other.
+onSeasonChange(() => {
+  fileCache.clear();
+  textureCache.clear();
+  modelCache.clear();
+});
 
 /** Initializes the KTX2 GPU-compressed texture transcoder for the active WebGL renderer. */
 export function setKtx2Renderer(renderer: THREE.WebGLRenderer): void {

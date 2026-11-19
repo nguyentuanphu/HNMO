@@ -163,23 +163,23 @@ var WebGPUCoordinateSystem = 2001;
 var EventDispatcher = class {
   addEventListener(type, listener) {
     if (this._listeners === void 0) this._listeners = {};
-    const listeners = this._listeners;
-    if (listeners[type] === void 0) {
-      listeners[type] = [];
+    const listeners2 = this._listeners;
+    if (listeners2[type] === void 0) {
+      listeners2[type] = [];
     }
-    if (listeners[type].indexOf(listener) === -1) {
-      listeners[type].push(listener);
+    if (listeners2[type].indexOf(listener) === -1) {
+      listeners2[type].push(listener);
     }
   }
   hasEventListener(type, listener) {
     if (this._listeners === void 0) return false;
-    const listeners = this._listeners;
-    return listeners[type] !== void 0 && listeners[type].indexOf(listener) !== -1;
+    const listeners2 = this._listeners;
+    return listeners2[type] !== void 0 && listeners2[type].indexOf(listener) !== -1;
   }
   removeEventListener(type, listener) {
     if (this._listeners === void 0) return;
-    const listeners = this._listeners;
-    const listenerArray = listeners[type];
+    const listeners2 = this._listeners;
+    const listenerArray = listeners2[type];
     if (listenerArray !== void 0) {
       const index = listenerArray.indexOf(listener);
       if (index !== -1) {
@@ -189,8 +189,8 @@ var EventDispatcher = class {
   }
   dispatchEvent(event) {
     if (this._listeners === void 0) return;
-    const listeners = this._listeners;
-    const listenerArray = listeners[event.type];
+    const listeners2 = this._listeners;
+    const listenerArray = listeners2[event.type];
     if (listenerArray !== void 0) {
       event.target = this;
       const array = listenerArray.slice(0);
@@ -23668,6 +23668,17 @@ var BASE_CSS = `
 .rml-body .hud-board { --root-scale: calc(var(--hud-scale, 1) * var(--board-scale, 1)); }
 `;
 
+// src/dataRoot.ts
+var season = "s6";
+var listeners = [];
+function onSeasonChange(listener) {
+  listeners.push(listener);
+}
+function seasonDataUrl(url) {
+  if (season === "s6" || !url.startsWith("/data/") || url.startsWith("/data/s9/")) return url;
+  return `/data/${season}/${url.slice("/data/".length)}`;
+}
+
 // src/game/chatExtras.ts
 var BLOCKED_KEY = "hnmo.chat.blocked";
 var FILTER_KEY = "hnmo.chat.filter";
@@ -23807,9 +23818,15 @@ function setDataBaseUrl(prefix) {
   modelCache.clear();
 }
 function resolveDataUrl(url) {
-  if (!dataBasePrefix || !url.startsWith("/data/")) return url;
-  return `${dataBasePrefix}${url}`;
+  if (!url.startsWith("/data/")) return url;
+  const seasonal = seasonDataUrl(url);
+  return dataBasePrefix ? `${dataBasePrefix}${seasonal}` : seasonal;
 }
+onSeasonChange(() => {
+  fileCache.clear();
+  textureCache.clear();
+  modelCache.clear();
+});
 async function fetchBytes(url) {
   const resolved = resolveDataUrl(url);
   if (!fileCache.has(resolved)) {

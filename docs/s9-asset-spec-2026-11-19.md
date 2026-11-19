@@ -54,11 +54,25 @@ Additional extra S9 client top-level asset counts vs. S6:
 - `Effect/`: `396` files (`+76` files vs S6)
 - `Music/`: adds `Acheron.mp3`, `Urke_Clean_Area.mp3`, `Urke_Fire_Area.mp3`
 
-## 3. Data_S9 Optional Overlay Wiring
+## 3. Season data roots (changed 2026-11-19 by main Claude)
 
-- `GameFiles` (`client/web/bridge/GameFiles.cs`) accepts an optional `GameFiles? overlay` instance: overlay files (loose or inside `overlay/packs`) take precedence while missing paths cleanly fall back to base `Data/`.
-- `Program.cs` (`HNMO:S9DataPath` configuration key, or sibling `Data_S9` folder next to resolved `DataPath` if present) constructs the overlay automatically with zero impact when `Data_S9` / `HNMO:S9DataPath` does not exist.
-- `client/web/tools/package-hnmo.sh` honors optional `HNMO_S9_DATA_DIR` during data packing: files overlay `$OUT/Data` before `convert_audio`, `build-allowlist.mjs`, `convert-textures-ktx2.mjs`, and `HNMO.Web --pack` run. Because `build-allowlist.mjs` uses `formats.js:parseBMD` and `parseWorldObjects`, S9 `0x0e` models and v1 world objects automatically pull their texture dependencies when `Data_S9` is supplied.
+The first wiring made `Data_S9` a global overlay: its files won for every player, Season 6 worlds included, and
+`package-hnmo.sh` copied the pack into `Data/`. That is replaced:
+
+- `/data/...` is the base game (Season 6.3) for everyone, as before.
+- `/data/s9/...` answers from the Season 9 pack first (`Data_S9` next to `Data`, or `HNMO:S9DataPath`), then
+  from HNMO's own web data and the base game. Only the world's looks and sounds come from the pack
+  (`bridge/SeasonData.cs`): `WorldN`, `ObjectN`, `Monster`, `Item`, `Skill`, `Effect`, `Player`, `NPC`, `Sound`,
+  `Music`. `Local` (texts and tables) and `Interface` always come from the base game: the pack's files of the
+  same name are in another format.
+- `/data/seasons.json` says which seasons this folder has data for.
+- The web game asks under the root of the world the player picked (`src/dataRoot.ts`; `bmd.ts` and the audio
+  system go through it), and drops cached files when the season changes.
+- `package-hnmo.sh` with `HNMO_S9_DATA_DIR` puts the pack into the folder's own `Data_S9` (loose files, sounds
+  converted to Opus); nothing is copied into `Data`.
+
+Not checked with real Season 9 files yet (none are in the repository or on the cloud machine): that is a
+Windows task for Antigravity.
 
 ## 4. Handoff Notes for Cloud Claude (Waves 4B–4D)
 

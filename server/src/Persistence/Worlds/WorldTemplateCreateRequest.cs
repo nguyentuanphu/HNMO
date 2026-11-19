@@ -21,6 +21,9 @@ public sealed class WorldTemplateCreateRequest
     /// <summary>Gets or sets the Vietnamese display name for the new world.</summary>
     public string NameVi { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets the new world's season; <c>null</c> takes the template world's season.</summary>
+    public WorldSeason? Season { get; set; }
+
     /// <summary>Gets or sets the dedicated PostgreSQL database name for the new world.</summary>
     public string DatabaseName { get; set; } = string.Empty;
 

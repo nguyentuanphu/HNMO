@@ -18,6 +18,12 @@ public sealed class WorldPublicSummary
     /// <summary>Gets or sets the Vietnamese name.</summary>
     public string NameVi { get; set; } = string.Empty;
 
+    /// <summary>Gets or sets the season's key: "s6" or "s9".</summary>
+    public string Season { get; set; } = "s6";
+
+    /// <summary>Gets or sets the season's badge for players: "S6.3" or "S9".</summary>
+    public string SeasonBadge { get; set; } = "S6.3";
+
     /// <summary>Gets or sets a value indicating whether the world is running.</summary>
     public bool IsRunning { get; set; }
 

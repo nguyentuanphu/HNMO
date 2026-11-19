@@ -321,6 +321,9 @@ const copy = {
     source: "Direct from the game server",
     realmTitle: "Know your realm.",
     server: "Server",
+    seasonChoice: "Season",
+    seasonAll: "All",
+    seasonHint: "Each world plays one season. Pick yours here, then pick the same world in the game's server list.",
     worldOpenNow: "Open",
     worldOpensAt: "Opens",
     worldLockedNotice: "World opens at %s (Sydney time).",
@@ -767,6 +770,9 @@ const copy = {
     source: "Dữ liệu trực tiếp từ máy chủ trò chơi",
     realmTitle: "Tìm hiểu máy chủ.",
     server: "Máy chủ",
+    seasonChoice: "Phiên bản",
+    seasonAll: "Tất cả",
+    seasonHint: "Mỗi thế giới chơi một phiên bản. Chọn phiên bản ở đây, rồi chọn đúng thế giới đó trong danh sách máy chủ của game.",
     worldOpenNow: "Đang mở",
     worldOpensAt: "Mở lúc",
     worldLockedNotice: "Thế giới mở cửa lúc %s (giờ Sydney).",
@@ -946,6 +952,9 @@ interface WorldServerEntry {
 }
 interface WorldGroup {
   worldId: string;
+  /** "s6" or "s9"; a server from before worlds had a season sends none (Season 6.3). */
+  season?: string;
+  seasonBadge?: string;
   nameEn: string;
   nameVi: string;
   isRunning: boolean;
@@ -975,6 +984,7 @@ try {
 }
 let snapshot: Snapshot | null = null;
 let selected = "";
+let seasonFilter = "all";
 const REFRESH_MS = 30000;
 function t(key: CopyKey): string {
   return copy[language][key];
@@ -1133,7 +1143,31 @@ function render(): void {
   const worldsContainer = clear("worlds-group");
   const select = element("server") as HTMLSelectElement;
   select.replaceChildren();
-  const worlds = snapshot?.worlds ?? [];
+  const allWorlds = snapshot?.worlds ?? [];
+  // The season choice only shows when there is one to make: worlds of more than one season.
+  const seasons = [...new Set(allWorlds.map((world) => world.season ?? "s6"))];
+  if (seasonFilter !== "all" && !seasons.includes(seasonFilter)) seasonFilter = "all";
+  if (seasons.length > 1) {
+    const picker = node("div", "", "season-picker");
+    picker.setAttribute("role", "group");
+    picker.setAttribute("aria-label", t("seasonChoice"));
+    picker.title = t("seasonHint");
+    picker.append(node("span", `${t("seasonChoice")}:`));
+    for (const key of ["all", ...seasons]) {
+      const choice = document.createElement("button");
+      choice.type = "button";
+      choice.dataset.season = key;
+      choice.textContent = key === "all" ? t("seasonAll") : (allWorlds.find((world) => (world.season ?? "s6") === key)?.seasonBadge ?? key.toUpperCase());
+      choice.setAttribute("aria-pressed", String(seasonFilter === key));
+      choice.addEventListener("click", () => {
+        seasonFilter = key;
+        render();
+      });
+      picker.append(choice);
+    }
+    worldsContainer.append(picker);
+  }
+  const worlds = allWorlds.filter((world) => seasonFilter === "all" || (world.season ?? "s6") === seasonFilter);
   if (worlds.length > 0) {
     for (const world of worlds) {
       const worldName = language === "vi" ? world.nameVi : world.nameEn;
@@ -1148,6 +1182,9 @@ function render(): void {
       const header = document.createElement("header");
       const title = document.createElement("strong");
       title.textContent = worldName;
+      const season = node("span", world.seasonBadge ?? "S6.3", `season-badge season-${world.season === "s9" ? "s9" : "s6"}`);
+      season.title = t("seasonHint");
+      title.append(" ", season);
       const badge = node(
         "small",
         world.isOpen

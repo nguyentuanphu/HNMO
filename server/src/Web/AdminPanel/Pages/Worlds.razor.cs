@@ -23,6 +23,7 @@ public partial class Worlds
         Mode = WorldTemplateMode.Fresh,
     };
 
+    private WorldSeason _templateSeason = WorldSeason.Season6;
     private IReadOnlyList<WorldDefinition> _worlds = [];
     private IReadOnlyList<WorldTransferRecord> _transfers = [];
     private WorldDefinition? _editingWorld;
@@ -112,6 +113,7 @@ public partial class Worlds
             WorldId = world.WorldId,
             NameEn = world.NameEn,
             NameVi = world.NameVi,
+            Season = world.Season,
             DatabaseName = world.DatabaseName,
             DatabaseConnectionString = world.DatabaseConnectionString,
             ServerIds = [.. world.ServerIds],
@@ -181,6 +183,7 @@ public partial class Worlds
         try
         {
             this._templateRequest.ServerIds = ParseServerIds(this._templateServerIds);
+            this._templateRequest.Season = this._templateSeason;
             await this.Operations.CreateFromTemplateAsync(this._templateRequest).ConfigureAwait(false);
             this._statusIsError = false;
             this._statusMessage = this.T(

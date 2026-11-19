@@ -22,6 +22,12 @@ public sealed class WorldDefinition
     /// <summary>Gets or sets the Vietnamese display name.</summary>
     public string NameVi { get; set; } = "Thế giới 1";
 
+    /// <summary>
+    /// Gets or sets the season this world plays. A world saved before worlds had a season is Season 6.
+    /// </summary>
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<WorldSeason>))]
+    public WorldSeason Season { get; set; } = WorldSeason.Season6;
+
     /// <summary>Gets or sets the dedicated PostgreSQL database name for this world.</summary>
     public string DatabaseName { get; set; } = "hnmo_world_1";
 

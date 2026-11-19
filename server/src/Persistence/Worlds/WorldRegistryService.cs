@@ -249,6 +249,7 @@ public sealed class WorldRegistryService
                     WorldId = newId,
                     NameEn = string.IsNullOrWhiteSpace(request.NameEn) ? newId : request.NameEn.Trim(),
                     NameVi = string.IsNullOrWhiteSpace(request.NameVi) ? (string.IsNullOrWhiteSpace(request.NameEn) ? newId : request.NameEn.Trim()) : request.NameVi.Trim(),
+                    Season = request.Season ?? templateCopy.Season,
                     DatabaseName = string.IsNullOrWhiteSpace(request.DatabaseName) ? $"hnmo_{newId.Replace('-', '_')}" : request.DatabaseName.Trim(),
                     DatabaseConnectionString = request.DatabaseConnectionString?.Trim() ?? string.Empty,
                     ServerIds = request.ServerIds.Count > 0 ? request.ServerIds.Distinct().OrderBy(id => id).ToList() : [],
@@ -439,7 +440,11 @@ public sealed class WorldRegistryService
         }
 
         var serverLookup = serverList.ToDictionary(s => s.Id);
-        var assignedServerIds = new HashSet<int>();
+
+        // A server belongs to the world which names it. Only what no world names goes to the default world,
+        // whatever the order of the worlds: a Season 9 world's server must not also show under Season 6.
+        var assignedServerIds = new HashSet<int>(worlds.SelectMany(w => w.ServerIds).Where(serverLookup.ContainsKey));
+        var listedServerIds = new HashSet<int>();
         var result = new List<WorldPublicSummary>(worlds.Count);
 
         foreach (var world in worlds)
@@ -447,9 +452,8 @@ public sealed class WorldRegistryService
             var matched = new List<WorldServerEntry>();
             foreach (var sid in world.ServerIds)
             {
-                if (serverLookup.TryGetValue(sid, out var live))
+                if (serverLookup.TryGetValue(sid, out var live) && listedServerIds.Add(sid))
                 {
-                    assignedServerIds.Add(sid);
                     matched.Add(new WorldServerEntry
                     {
                         Id = live.Id,
@@ -482,6 +486,8 @@ public sealed class WorldRegistryService
                 WorldId = world.WorldId,
                 NameEn = world.NameEn,
                 NameVi = world.NameVi,
+                Season = world.Season.ToKey(),
+                SeasonBadge = world.Season.ToBadge(),
                 IsRunning = world.IsRunning,
                 IsOpen = world.IsOpenAt(utcNow),
                 OpeningDateUtc = world.OpeningDateUtc,
@@ -611,6 +617,7 @@ public sealed class WorldRegistryService
         WorldId = source.WorldId,
         NameEn = source.NameEn,
         NameVi = source.NameVi,
+        Season = source.Season,
         DatabaseName = source.DatabaseName,
         DatabaseConnectionString = source.DatabaseConnectionString,
         ServerIds = [.. source.ServerIds],

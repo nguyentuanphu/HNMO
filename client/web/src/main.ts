@@ -111,6 +111,7 @@ import { Combat } from './game/combat.js';
 import { CombatOverlay } from './ui/combatOverlay.js';
 import { GroundItems } from './game/groundItems.js';
 import { ARROW_RELEASE_DELAY_SECONDS, DeathEffects, ProjectileLayer, arrowKindsForMonster, arrowKindsForWeapons, loadCombatEffectsData } from './game/combatEffects.js';
+import { parseSeason, seasonBadge, setSeason, type SeasonKey } from './dataRoot.js';
 import { fetchServerList, fetchGameServerAddress, login, loginWithTicket, fetchCharacters, enterWorld, createCharacter, CLASSES } from './net/session.js';
 import type { WorldData } from './world.js';
 import type { TerrainMesh } from './terrain.js';
@@ -961,6 +962,11 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
 }
 
 interface WebsiteServerMeta {
+  /** The world's id and its place in the worlds list: servers of one world stand together. */
+  worldId?: string;
+  worldOrder?: number;
+  /** The season the world plays ('s6' unless the website says otherwise). */
+  season?: SeasonKey;
   worldLabel?: string;
   description?: string;
   vipOnly?: boolean;
@@ -987,7 +993,8 @@ async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
     if ('worlds' in raw && Array.isArray(raw.worlds)) {
       for (const world of raw.worlds as unknown[]) {
         if (typeof world !== 'object' || world === null) continue;
-        const entry = world as { nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+        const entry = world as { worldId?: unknown; season?: unknown; nameEn?: unknown; nameVi?: unknown; isOpen?: unknown; openingDateSydney?: unknown; servers?: unknown };
+        const worldOrder = (raw.worlds as unknown[]).indexOf(world);
         const name = vi
           ? (typeof entry.nameVi === 'string' && entry.nameVi ? entry.nameVi : typeof entry.nameEn === 'string' ? entry.nameEn : '')
           : (typeof entry.nameEn === 'string' ? entry.nameEn : '');
@@ -1001,6 +1008,9 @@ async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
             const full = status ? `${name} (${status})` : name;
             const existing = meta.get(id) ?? {};
             if (full) existing.worldLabel = full;
+            if (typeof entry.worldId === 'string') existing.worldId = entry.worldId;
+            existing.worldOrder = worldOrder;
+            existing.season = parseSeason(entry.season);
             meta.set(id, existing);
           }
         }
@@ -1038,7 +1048,11 @@ async function fetchServerMetadata(): Promise<Map<number, WebsiteServerMeta>> {
 
 export function describeServerChoice(id: number, load: number, meta?: WebsiteServerMeta, vi = currentLanguage() === 'vi'): string {
   const baseName = meta?.description ? escapeHtml(meta.description) : (vi ? `Máy chủ ${id + 1}` : `Server ${id + 1}`);
-  const title = meta?.worldLabel ? `${escapeHtml(meta.worldLabel)} — ${baseName}` : baseName;
+  // The season badge comes with a world's name: without the website's data there is one world, Season 6.3.
+  const badge = meta?.worldLabel
+    ? ` <span class="season-badge season-${meta.season ?? 's6'}" title="${vi ? 'Phiên bản của thế giới này' : "This world's season"}">${seasonBadge(meta.season ?? 's6')}</span>`
+    : '';
+  const title = meta?.worldLabel ? `${escapeHtml(meta.worldLabel)}${badge} — ${baseName}` : baseName;
   const vipBadge = meta?.vipOnly
     ? (vi ? ' 🔒 <span style="color:var(--gold);font-weight:700">[Phòng VIP]</span>' : ' 🔒 <span style="color:var(--gold);font-weight:700">[VIP only]</span>')
     : '';
@@ -1060,10 +1074,14 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     fetchServerMetadata(),
   ]);
   if (!servers.length) throw new Error('The connect server lists no game servers.');
+  // Servers of one world stand together, in the order of the worlds list.
+  servers.sort((a, b) => (serverMeta.get(a.id)?.worldOrder ?? 0) - (serverMeta.get(b.id)?.worldOrder ?? 0) || a.id - b.id);
   const server = servers.length === 1
     ? servers[0]
     : await chooseFrom(ui.servers, servers, (s) => describeServerChoice(s.id, s.load, serverMeta.get(s.id)));
   ui.servers.hidden = true;
+  // The game data of the picked world's season, before anything of the world is loaded.
+  setSeason(serverMeta.get(server.id)?.season ?? 's6');
   const address = await fetchGameServerAddress(settings.relay, connectServer, server.id);
   setStatus(`Logging in to ${address.host}:${address.port}…`);
   const connection = ticket

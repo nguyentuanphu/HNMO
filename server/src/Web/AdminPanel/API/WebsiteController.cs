@@ -82,6 +82,8 @@ public sealed class WebsiteController(IDictionary<int, IGameServer> servers, Wor
                     worldId = ownerWorld?.WorldId ?? "main",
                     worldNameEn = ownerWorld?.NameEn ?? "World 1",
                     worldNameVi = ownerWorld?.NameVi ?? "Thế giới 1",
+                    season = ownerWorld?.Season ?? "s6",
+                    seasonBadge = ownerWorld?.SeasonBadge ?? "S6.3",
                     isOpen = ownerWorld?.IsOpen ?? true,
                     openingDateUtc = ownerWorld?.OpeningDateUtc,
                     openingDateSydney = ownerWorld?.OpeningDateSydney ?? string.Empty,
