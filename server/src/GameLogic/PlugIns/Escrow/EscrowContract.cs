@@ -92,4 +92,26 @@ public sealed class EscrowContract
 
     /// <summary>Gets or sets Host-mediated VND settlement details when <see cref="Mode"/> is <c>HostVnd</c>.</summary>
     public EscrowHostVndDetails? HostVnd { get; set; }
+
+    /// <summary>
+    /// A copy for a viewer without the other parties' login names (audit 2.8): a login name is half of an account's
+    /// credentials, so a viewer sees only its own; the others are known by their character names.
+    /// </summary>
+    /// <param name="viewerLogin">The viewer's login name.</param>
+    /// <returns>The copy.</returns>
+    public EscrowContract WithoutOtherLogins(string viewerLogin)
+    {
+        var copy = (EscrowContract)this.MemberwiseClone();
+        if (!string.Equals(this.SellerLogin, viewerLogin, StringComparison.OrdinalIgnoreCase))
+        {
+            copy.SellerLogin = string.Empty;
+        }
+
+        if (!string.Equals(this.AcceptedByLogin, viewerLogin, StringComparison.OrdinalIgnoreCase))
+        {
+            copy.AcceptedByLogin = string.Empty;
+        }
+
+        return copy;
+    }
 }
