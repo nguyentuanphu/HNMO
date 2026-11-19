@@ -1942,6 +1942,20 @@
       "renderStyle": "rareItemTicket12"
     },
     {
+      "number": 153,
+      "file": "Data/Item/songss.bmd",
+      "textureFolders": ["Item"],
+      "inventory": {
+        "anchor": [0.5, 0.95],
+        "offset": [0, 0.02],
+        "rotation": [270, 0, 0],
+        "scale": 0.003
+      },
+      "ground": {
+        "scale": 0.8
+      }
+    },
+    {
       "number": 157,
       "file": "Data/Item/giftbox_g.bmd",
       "textureFolders": ["Item"],

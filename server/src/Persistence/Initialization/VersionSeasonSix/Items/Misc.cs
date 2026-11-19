@@ -31,6 +31,27 @@ public class Misc : InitializerBase
         this.CreateLostMap();
         this.CreateSymbolOfKundun();
         this.CreateRena();
+        this.CreateStardust();
+    }
+
+    /// <summary>
+    /// Stardust (14:153): an item of the game's item list; as the Season 9 server's item list has it: 1x1, no monster
+    /// drop, 60 zen. Its model is the client's songss.bmd (the server's item list names it).
+    /// </summary>
+    private void CreateStardust()
+    {
+        var itemDefinition = this.Context.CreateNew<ItemDefinition>();
+        itemDefinition.Name = LocalizedString.FromResource(() => ItemNames.Stardust);
+        itemDefinition.Number = 153;
+        itemDefinition.Group = 14;
+        itemDefinition.DropLevel = 0;
+        itemDefinition.DropsFromMonsters = false;
+        itemDefinition.Durability = 1;
+        itemDefinition.Width = 1;
+        itemDefinition.Height = 1;
+        itemDefinition.Value = 60;
+        itemDefinition.SetGuid(itemDefinition.Group, itemDefinition.Number);
+        this.GameConfiguration.Items.Add(itemDefinition);
     }
 
     private void CreateLostMap()

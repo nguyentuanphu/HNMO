@@ -254,6 +254,8 @@
   <data name="FixWingsAndCapesCraftingsUpdatePlugIn_Description" xml:space="preserve"><value>This update sets the right settings for the wings and capes craftings.</value></data>
   <data name="AddRenaItemUpdatePlugIn_Name" xml:space="preserve"><value>Add Rena Item</value></data>
   <data name="AddRenaItemUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the missing Rena item, which is required for the item registration feature.</value></data>
+  <data name="AddStardustItemUpdatePlugIn_Name" xml:space="preserve"><value>Add Stardust Item</value></data>
+  <data name="AddStardustItemUpdatePlugIn_Description" xml:space="preserve"><value>This update adds the Stardust item (14:153), which the game's item list has.</value></data>
   <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Name" xml:space="preserve"><value>Add Crest of Monarch Drop Group</value></data>
   <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Description" xml:space="preserve"><value>Adds the Crest of Monarch (Loch's Feather +1) drop item group to Icarus.</value></data>
   <data name="FixSummonerCurseSkillsPlugIn_Name" xml:space="preserve"><value>Fix Summoner Curse Skills</value></data>
