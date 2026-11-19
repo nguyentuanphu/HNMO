@@ -23,6 +23,7 @@ using HNMO.PlugIns;
 public sealed class MarriagePlugIn :
     IPeriodicTaskPlugIn,
     IPlayerStateChangedPlugIn,
+    ICharacterDeletedPlugIn,
     ISupportCustomConfiguration<MarriageConfiguration>,
     ISupportDefaultCustomConfiguration,
     IDisabledByDefault
@@ -356,6 +357,13 @@ public sealed class MarriagePlugIn :
         await this.NotifyPlayerAsync(player, outcome.ToString(), en, vi).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
+    public void CharacterDeleted(Player player, Character deletedCharacter)
+    {
+        // A new character with the same name must not inherit the marriage (audit 1.10).
+        this.GetEngine().ForgetCharacter(deletedCharacter.Name);
+    }
+
     /// <summary>Warps the player to their online spouse's current field map coordinates.</summary>
     /// <param name="player">The requesting player.</param>
     /// <returns>A task representing the warp.</returns>
@@ -445,6 +453,8 @@ public sealed class MarriagePlugIn :
         MarriageActionResult.NotAtCeremonyLocation => ($"Both must stand at the ceremony hall (Map #{cfg.CeremonyMapNumber} around {cfg.CeremonyX}, {cfg.CeremonyY}).", $"Cả hai phải đứng tại lễ đường (Bản đồ #{cfg.CeremonyMapNumber} gần tọa độ {cfg.CeremonyX}, {cfg.CeremonyY})."),
         MarriageActionResult.NotEnoughZen => ($"Not enough Zen (requires {cfg.CeremonyZenCost:N0} Zen).", $"Không đủ Zen (cần {cfg.CeremonyZenCost:N0} Zen)."),
         MarriageActionResult.CooldownActive => ("One partner is still on remarriage cooldown.", "Một trong hai người vẫn đang trong thời gian chờ tái hôn."),
+        MarriageActionResult.ProposalTooSoon => ("Wait a little before proposing again.", "Hãy chờ một chút trước khi cầu hôn lại."),
+        MarriageActionResult.TargetHasProposal => ("Someone else's proposal is waiting for that character's answer.", "Nhân vật đó đang có một lời cầu hôn khác chờ trả lời."),
         MarriageActionResult.NoPendingProposal => ("No matching pending marriage proposal.", "Không tìm thấy lời cầu hôn đang chờ."),
         MarriageActionResult.InvalidTitle => ("Custom couple title is empty/too long or disabled.", "Danh hiệu phu thê không hợp lệ hoặc đang tắt."),
         _ => ("Marriage feature is currently disabled.", "Tính năng Kết hôn hiện đang tắt."),
