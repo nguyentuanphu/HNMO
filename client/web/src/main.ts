@@ -1947,6 +1947,10 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   state.onboarding = onboarding;
   connection.onPacket((bytes) => { onboarding.handle(bytes); });
   onboarding.start();
+  // An NPC's window opens on the right, where the guide panel is, and the guide drew over its buttons: the guide gives
+  // way when the hero talks to an NPC, as the desktop closes its side windows for an NPC's (Y opens it again).
+  const talkBeforeGuide = online.onTalk;
+  online.onTalk = (npc) => { talkBeforeGuide?.(npc); if (onboarding.isOpen) onboarding.close(); };
   window.addEventListener('keydown', (event) => {
     if (event.target instanceof Element && event.target.closest('input, textarea')) return;
     if (event.key.toLowerCase() === 'y' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); onboarding.toggle(); }
