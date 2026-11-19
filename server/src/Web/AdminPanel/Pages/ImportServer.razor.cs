@@ -35,6 +35,9 @@ public partial class ImportServer : ComponentBase
     private IDataSource<GameConfiguration> DataSource { get; set; } = null!;
 
     [Inject]
+    private IPersistenceContextProvider PersistenceContextProvider { get; set; } = null!;
+
+    [Inject]
     private IHostSettingsService HostSettingsService { get; set; } = null!;
 
     [Inject]
@@ -89,20 +92,34 @@ public partial class ImportServer : ComponentBase
         this._isBusy = true;
         try
         {
-            var context = await this.DataSource.GetContextAsync(default).ConfigureAwait(true);
             var config = await this.DataSource.GetOwnerAsync(cancellationToken: default).ConfigureAwait(true);
-            var accounts = await context.GetAsync<Account>(default).ConfigureAwait(true);
-            var chars = await context.GetAsync<Character>(default).ConfigureAwait(true);
-            var guilds = await context.GetAsync<HNMO.DataModel.Entities.Guild>(default).ConfigureAwait(true);
+
+            // The names of the accounts, characters and guilds there are already, each read in a context of its own
+            // with the configuration's items: read in the configuration's context, the characters' items attached a
+            // second copy of an item definition it already tracks, and on a database the preview stopped with
+            // "The instance of entity type 'ItemDefinition' cannot be tracked".
+            List<string> accountNames, characterNames, guildNames;
+            using (var accountContext = this.PersistenceContextProvider.CreateNewTypedContext(typeof(Account), true, config))
+            {
+                var accounts = (await accountContext.GetAsync<Account>(default).ConfigureAwait(true)).ToList();
+                accountNames = accounts.Select(a => a.LoginName).ToList();
+                characterNames = accounts.SelectMany(a => a.Characters).Select(c => c.Name).ToList();
+            }
+
+            using (var guildContext = this.PersistenceContextProvider.CreateNewTypedContext(typeof(HNMO.DataModel.Entities.Guild), true, config))
+            {
+                var guilds = await guildContext.GetAsync<HNMO.DataModel.Entities.Guild>(default).ConfigureAwait(true);
+                guildNames = guilds.Where(g => g.Name != null).Select(g => g.Name!).ToList();
+            }
 
             var dbReader = hasDb ? new MssqlLegacyDatabaseReader() : null;
             this._preview = await LegacyServerImportEngine.BuildDryRunPreviewAsync(
                 this._options,
                 config,
                 dbReader,
-                accounts.Select(a => a.LoginName),
-                chars.Select(c => c.Name),
-                guilds.Where(g => g.Name != null).Select(g => g.Name!)).ConfigureAwait(true);
+                accountNames,
+                characterNames,
+                guildNames).ConfigureAwait(true);
 
             this._statusMessage = this.L(
                 $"Dry-run complete ({this._preview.DetectedVersion}): {this._preview.TotalMapped} mappable, {this._preview.TotalSkipped} skipped.",
