@@ -124,6 +124,11 @@ for (const folder of ['Audio', 'Buffs', 'Effects', 'Grading', 'Items', 'Maps', '
   addFolder(folder);
 }
 
+// The cash shop's script and banner (game/cashShopScript.ts asks for them by the version the server sends,
+// so no fixed path names them): without these the shop window can't open in a packed folder.
+addFolder('InGameShopScript', (_rel, lower) => lower.endsWith('.txt'));
+addFolder('InGameShopBanner', (_rel, lower) => /\.(txt|jpg|jpeg|png|tga|ozj|ozt)$/.test(lower));
+
 // 2. Scan web/src and web/public for /data/... and effect/skill/interface paths
 function scanSourceFiles(dir, exts) {
   const results = [];
