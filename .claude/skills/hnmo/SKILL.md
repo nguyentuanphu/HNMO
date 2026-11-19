@@ -450,3 +450,5 @@ The desktop code stays the reference for how the classic game behaves (parity ru
   package's files were changed, obfuscate the web game in the package. (Not chosen: licence required to host.)
   Keep third-party license notices; game data isn't the owner's. Remind about multi-player licenses
   (license.hnmo, sign-license.sh) on 2026-11-21 09:00 Sydney (a scheduled reminder exists).
+- (10:20) Release plan: ONE release with everything, the Arena (all 4 modes) included. Until then keep merging
+  verified work into the working branch; main and HNMO.zip wait for the owner's OK after all of it is done.
