@@ -23,22 +23,26 @@ test('a Panda picks up zen next to the hero', async ({ page }) => {
   await enterWorld(page, 'testgm');
   const isPanda = (g: PetGame) => { const it = g.inventory.items.get(8); return !!it && it.group === 13 && it.number === 80; };
   if (!(await game(page, isPanda))) {
+    const old = await game(page, (g) => g.inventory.items.has(8));
+    if (old) {
+      // Something else is worn there: into the bag first, before the Panda comes. The game master's bag can have
+      // room for one big item only (the demo's testgm wears a 2x2 Fenrir and has one 2x2 gap): the Panda,
+      // picked up first, took that gap and the worn item had nowhere to go.
+      const free = await page.evaluate(async () => {
+        const { BAG } = await import('/js/game/inventory.js' as string) as { BAG: unknown };
+        const inventory = (window as unknown as { __game: { inventory: { items: Map<number, unknown>; firstEmptySlot(s: unknown, g: unknown, i: unknown): number | null; move(a: number, b: number, c: number, d: number): void } } }).__game.inventory;
+        const free = inventory.firstEmptySlot(inventory.items, BAG, inventory.items.get(8));
+        if (free !== null) inventory.move(0, 8, 0, free);
+        return free;
+      });
+      expect(free, 'the bag has room for the item worn in the helper slot').not.toBeNull();
+      await expect.poll(() => game(page, (g) => g.inventory.items.has(8)), OPEN).toBe(false);
+    }
     // A Panda from the game master's command, picked up and put in the helper slot (8).
     await game(page, (g) => g.online.say('/item 13 80'));
     await expect.poll(() => game(page, (g) => [...g.ground.drops.values()].some((d) => d.item?.group === 13 && d.item.number === 80)), OPEN).toBe(true);
     await game(page, (g) => g.ground.pickUp([...g.ground.drops.values()].find((d) => d.item?.group === 13 && d.item.number === 80)));
     await expect.poll(() => game(page, (g) => [...g.inventory.items].some(([slot, it]) => slot >= 12 && it.group === 13 && it.number === 80)), OPEN).toBe(true);
-    const old = await game(page, (g) => g.inventory.items.has(8));
-    if (old) {
-      // Something else is worn there: into the bag first.
-      await page.evaluate(async () => {
-        const { BAG } = await import('/js/game/inventory.js' as string) as { BAG: unknown };
-        const inventory = (window as unknown as { __game: { inventory: { items: Map<number, unknown>; firstEmptySlot(s: unknown, g: unknown, i: unknown): number | null; move(a: number, b: number, c: number, d: number): void } } }).__game.inventory;
-        const free = inventory.firstEmptySlot(inventory.items, BAG, inventory.items.get(8));
-        if (free !== null) inventory.move(0, 8, 0, free);
-      });
-      await expect.poll(() => game(page, (g) => g.inventory.items.has(8)), OPEN).toBe(false);
-    }
     await game(page, (g) => { const slot = [...g.inventory.items].find(([s, it]) => s >= 12 && it.group === 13 && it.number === 80)![0]; g.inventory.move(0, slot, 0, 8); });
     await expect.poll(() => game(page, isPanda), OPEN).toBe(true);
   }
