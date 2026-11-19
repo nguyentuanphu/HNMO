@@ -54,7 +54,11 @@ public static class MissionCoinGranter
             entry.CreatedAt = DateTime.UtcNow;
             try
             {
-                await context.SaveChangesAsync().ConfigureAwait(false);
+                if (!await context.SaveChangesAsync().ConfigureAwait(false))
+                {
+                    gameContext.LoggerFactory.CreateLogger(typeof(MissionCoinGranter)).LogWarning("The coin grant {Reference} for {Login} wasn't saved.", grant.Reference, grant.LoginName);
+                    return false;
+                }
             }
             catch (Exception ex)
             {
