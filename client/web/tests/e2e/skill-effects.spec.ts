@@ -392,6 +392,10 @@ test('effect light reaches the characters in it', async ({ page }) => {
   test.setTimeout(3 * 60_000);
   await enterWorld(page, 'test400');
   await page.evaluate(() => (window as unknown as Win).__game.effects.ready);
+  // A known start, as the other cases set the hero's buffs: no buff or debuff left from an earlier test of the
+  // account (a debuff colours the body with its own tint, which the ground's light then doesn't reach).
+  await page.evaluate(() => { const g = (window as unknown as { __game: { buffs: { replace(id: number, b: number[]): void }; online: { playerId: number } } }).__game; g.buffs.replace(g.online.playerId, []); });
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __game: { online: { hero: { bodyTint: unknown } } } }).__game.online.hero.bodyTint === null), { timeout: 10_000 }).toBe(true);
   type Lit = { light: { r: number; g: number; b: number }; position: { x: number; y: number } };
   type LightGame = { online: { hero: Lit }; effects: { schedule(task: (tick: number) => boolean): void; groundLight(at: { x: number; y: number }, r: number, g: number, b: number, range: number): void } };
   const before = await page.evaluate(() => { const l = (window as unknown as { __game: LightGame }).__game.online.hero.light; return { r: l.r, g: l.g, b: l.b }; });
