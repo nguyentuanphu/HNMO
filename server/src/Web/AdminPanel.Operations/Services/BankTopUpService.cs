@@ -12,16 +12,6 @@ using HNMO.GameLogic.PlugIns.TopUpMilestones;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
-/// An incoming bank transfer as a payment service (Casso, SePay) reported it.
-/// </summary>
-/// <param name="Provider">The service which reported it ("casso", "sepay").</param>
-/// <param name="ProviderId">The service's own id of the transaction.</param>
-/// <param name="BankReference">The bank's reference of the transaction (the same for every service), if known.</param>
-/// <param name="AmountVnd">The amount in VND.</param>
-/// <param name="Message">The transfer message.</param>
-public sealed record BankTransfer(string Provider, string ProviderId, string? BankReference, long AmountVnd, string Message);
-
-/// <summary>
 /// The outcome of a reported transfer.
 /// </summary>
 public enum BankTopUpResult

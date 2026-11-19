@@ -355,32 +355,3 @@ public sealed class WebsiteAccountSafetyController(
         return configuration is null ? null : new AccountSafetyEngine(configuration, AccountSafetyStore.Open(configuration.FileName));
     }
 }
-
-/// <summary>
-/// An account's login for the account page's safety panel.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-/// <param name="Address">The visitor's address (told by the web bridge).</param>
-public sealed record SafetyLoginRequest(string? LoginName, string? Password, string? Address = null);
-
-/// <summary>
-/// A change of the second password.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The account's password.</param>
-/// <param name="OldPin">The current second password (needed when there is one).</param>
-/// <param name="NewPin">The new second password (4 digits); empty clears it.</param>
-/// <param name="Address">The visitor's address.</param>
-public sealed record SafetyPinRequest(string? LoginName, string? Password, string? OldPin, string? NewPin, string? Address = null);
-
-/// <summary>
-/// A lock or unlock of an item.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The account's password.</param>
-/// <param name="ItemId">The item's id.</param>
-/// <param name="Unlock">Whether to ask the unlock (else lock).</param>
-/// <param name="Pin">The second password (for an unlock).</param>
-/// <param name="Address">The visitor's address.</param>
-public sealed record SafetyItemRequest(string? LoginName, string? Password, Guid ItemId, bool Unlock, string? Pin, string? Address = null);

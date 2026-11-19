@@ -62,16 +62,6 @@ public enum InviteResult
 }
 
 /// <summary>
-/// A coin grant which the engine decided on; the plug-in gives it.
-/// </summary>
-/// <param name="LoginName">The account.</param>
-/// <param name="CoinType">The coin type.</param>
-/// <param name="Amount">The amount.</param>
-/// <param name="Reason">The reason, for the coins history.</param>
-/// <param name="Reference">The unique reference, so it counts once.</param>
-public sealed record CoinGrant(string LoginName, CashShopCoinType CoinType, int Amount, string Reason, string Reference);
-
-/// <summary>
 /// The rules of the missions, the streak and the earned coins, without the game: it works on the
 /// <see cref="MissionStore"/> with given times, so it's tested on its own. Every method takes the store's lock.
 /// </summary>

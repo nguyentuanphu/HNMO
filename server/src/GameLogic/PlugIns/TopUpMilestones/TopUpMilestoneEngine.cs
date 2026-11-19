@@ -29,43 +29,6 @@ public enum TopUpClaimResult
 }
 
 /// <summary>
-/// View of a single milestone step for a specific account.
-/// </summary>
-/// <param name="Step">The step configuration.</param>
-/// <param name="Reached">Whether the account has reached the threshold.</param>
-/// <param name="Claimed">Whether the account has already claimed the step.</param>
-/// <param name="Claimable">Whether the account can claim the step right now.</param>
-public sealed record TopUpStepProgress(
-    TopUpMilestoneStep Step,
-    bool Reached,
-    bool Claimed,
-    bool Claimable);
-
-/// <summary>
-/// Outcome of recording a top-up VND credit for an account.
-/// </summary>
-/// <param name="Recorded">False when the reference was already counted or amount was non-positive.</param>
-/// <param name="NewTotalVnd">The account's cumulative VND total.</param>
-/// <param name="NewlyUnlockedSteps">Milestone steps newly crossed by this top-up.</param>
-public sealed record TopUpCreditOutcome(
-    bool Recorded,
-    long NewTotalVnd,
-    IReadOnlyList<TopUpMilestoneStep> NewlyUnlockedSteps);
-
-/// <summary>
-/// Outcome of claiming a milestone step.
-/// </summary>
-/// <param name="Result">The outcome code.</param>
-/// <param name="Step">The targeted step, if found.</param>
-/// <param name="CoinGrant">The coin grant to apply (with unique reference), if any.</param>
-/// <param name="OwedReward">The bag goods (zen/items) to deliver or queue, if any.</param>
-public sealed record TopUpClaimOutcome(
-    TopUpClaimResult Result,
-    TopUpMilestoneStep? Step,
-    CoinGrant? CoinGrant,
-    GiftCodeOwedReward? OwedReward);
-
-/// <summary>
 /// Pure, unit-tested rules engine for top-up milestones.
 /// </summary>
 public sealed class TopUpMilestoneEngine

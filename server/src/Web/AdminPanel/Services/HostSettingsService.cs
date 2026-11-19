@@ -176,13 +176,3 @@ public sealed class HostSettingsService : IHostSettingsService
         return File.Exists(defaultInFolder) ? defaultInFolder : Path.Combine(this._baseDirectory, "license.hnmo");
     }
 }
-
-/// <summary>
-/// Fallback <see cref="IServerRestartService"/> when hosted outside <c>HNMO.Startup</c>.
-/// </summary>
-internal sealed class NoOpServerRestartService : IServerRestartService
-{
-    public bool IsSupported => false;
-
-    public Task RequestRestartAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-}

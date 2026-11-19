@@ -7,33 +7,6 @@ namespace HNMO.GameLogic.PlugIns.Onboarding;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// What the server knows of a character in the game, for the steps it checks by looking (not by an event).
-/// </summary>
-/// <param name="Level">The level.</param>
-/// <param name="Map">The map number.</param>
-/// <param name="X">The x coordinate.</param>
-/// <param name="Y">The y coordinate.</param>
-/// <param name="InParty">Whether it's in a party.</param>
-/// <param name="StatPoints">The sum of the base stats (strength, agility, vitality, energy, command).</param>
-/// <param name="LearnedSkills">The number of learned skills.</param>
-/// <param name="CashShopOpen">Whether the cash shop is open.</param>
-public sealed record OnboardingFacts(int Level, int Map, int X, int Y, bool InParty, int StatPoints, int LearnedSkills, bool CashShopOpen);
-
-/// <summary>
-/// The steps which were done by a change, and whether the guide was finished by it.
-/// </summary>
-/// <param name="Completed">The steps done.</param>
-/// <param name="Finished">Whether the last step was done (the final reward waits).</param>
-public sealed record OnboardingAdvance(IReadOnlyList<OnboardingStep> Completed, bool Finished)
-{
-    /// <summary>Gets nothing done.</summary>
-    public static OnboardingAdvance None { get; } = new([], false);
-
-    /// <summary>Gets a value indicating whether anything happened.</summary>
-    public bool Any => this.Completed.Count > 0 || this.Finished;
-}
-
-/// <summary>
 /// The rules of the new-player guide and the starter kit, without the game around them (unit-tested): which character is
 /// new, the current step and its count, the steps the server checks by looking, the rewards (kept as waiting rewards with
 /// unique references until they're handed over), skipping, and who gets the starter kit.

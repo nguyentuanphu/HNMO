@@ -42,13 +42,6 @@ public enum MarketClaimResult
     CannotBuyOwnListing,
 }
 
-/// <summary>Claimed listing details with calculated fee and net seller payout.</summary>
-/// <param name="Result">Atomic claim outcome.</param>
-/// <param name="Listing">Original listing if claimed.</param>
-/// <param name="FeeAmount">Deducted market tax.</param>
-/// <param name="NetAmount">Net payout to seller.</param>
-public sealed record MarketBuyClaim(MarketClaimResult Result, MarketListing? Listing, int FeeAmount, int NetAmount);
-
 /// <summary>
 /// Pure, concurrency-safe escrow engine for the Item Market.
 /// All transitions acquire <see cref="MarketStore"/>'s lock so concurrent buys never duplicate items or payouts.

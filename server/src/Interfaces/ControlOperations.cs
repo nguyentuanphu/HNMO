@@ -12,29 +12,6 @@ using System.Linq;
 using System.Text.Json;
 
 /// <summary>
-/// Information about a backup archive in <c>save/backups</c>.
-/// </summary>
-/// <param name="FileName">Archive file name.</param>
-/// <param name="SizeBytes">Archive size in bytes.</param>
-/// <param name="CreatedSydney">Creation timestamp formatted in Sydney time.</param>
-public sealed record BackupInfo(string FileName, long SizeBytes, string CreatedSydney);
-
-/// <summary>
-/// Result of checking GitHub for a newer release.
-/// </summary>
-/// <param name="LatestTag">Latest release tag name.</param>
-/// <param name="PublishedAtSydney">Release timestamp in Sydney time.</param>
-/// <param name="ReleaseNotes">Release notes markdown/text.</param>
-/// <param name="DownloadUrl">HTML or asset download URL.</param>
-/// <param name="IsUpdateAvailable">Whether a newer release appears available.</param>
-public sealed record UpdateCheckResult(
-    string LatestTag,
-    string PublishedAtSydney,
-    string ReleaseNotes,
-    string DownloadUrl,
-    bool IsUpdateAvailable);
-
-/// <summary>
 /// Shared helper operations for the HNMO Control page (backups, Sydney time formatting,
 /// update release parsing, and log tailing).
 /// </summary>

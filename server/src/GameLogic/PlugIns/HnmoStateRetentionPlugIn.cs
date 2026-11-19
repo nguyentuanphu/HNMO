@@ -12,33 +12,6 @@ using HNMO.Persistence;
 using HNMO.PlugIns;
 
 /// <summary>
-/// Configuration for <see cref="HnmoStateRetentionPlugIn"/> controlling archival of finished seasons/races and expired gift code claims.
-/// </summary>
-public sealed class HnmoStateRetentionConfiguration
-{
-    /// <summary>Gets or sets shared HNMO state key.</summary>
-    [StringLength(260)]
-    public string FileName { get; set; } = HnmoStateStore.StateFileName;
-
-    /// <summary>Gets or sets number of days after completion/expiry before rows are moved to the archive table.</summary>
-    [Range(1, 3650)]
-    public int ArchiveFinishedDataAfterDays { get; set; } = 30;
-}
-
-/// <summary>Summary metadata stored in <see cref="HnmoStateStore"/> under section <c>stateRetention</c>.</summary>
-public sealed class HnmoStateRetentionMetadata
-{
-    /// <summary>Gets or sets UTC timestamp of last archival sweep.</summary>
-    public DateTime? LastArchivedAtUtc { get; set; }
-
-    /// <summary>Gets or sets number of rows archived in the last sweep.</summary>
-    public int LastArchivedCount { get; set; }
-
-    /// <summary>Gets or sets total lifetime archived rows.</summary>
-    public long TotalArchivedCount { get; set; }
-}
-
-/// <summary>
 /// Scheduled daily archival plug-in that moves finished seasonal/race entries and expired gift-code claims older than
 /// <see cref="HnmoStateRetentionConfiguration.ArchiveFinishedDataAfterDays"/> from <c>hnmo.player_feature_state</c>
 /// into <c>hnmo.archived_feature_state</c>.

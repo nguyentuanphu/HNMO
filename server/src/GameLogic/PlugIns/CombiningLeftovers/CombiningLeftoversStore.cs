@@ -8,35 +8,6 @@ using System.IO;
 using System.Text.Json;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 
-/// <summary>Audit entry for leftover combines and exchanges.</summary>
-public sealed class LeftoversLogEntry
-{
-    /// <summary>Gets or sets UTC timestamp.</summary>
-    public DateTime AtUtc { get; set; }
-
-    /// <summary>Gets or sets actor login.</summary>
-    public string LoginName { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets action (<c>Combine</c>, <c>CombineFail</c>, <c>Exchange</c>).</summary>
-    public string Action { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets recipe or offer identifier.</summary>
-    public string TargetId { get; set; } = string.Empty;
-
-    /// <summary>Gets or sets display summary.</summary>
-    public string Detail { get; set; } = string.Empty;
-}
-
-/// <summary>Persistent state stored under section <c>combiningLeftovers</c> in <see cref="HnmoStateStore"/>.</summary>
-public sealed class CombiningLeftoversStoreData
-{
-    /// <summary>Gets or sets newest-first log entries.</summary>
-    public List<LeftoversLogEntry> Log { get; set; } = [];
-
-    /// <summary>Gets or sets pending item/Zen rewards owed when a character's bag was full, keyed by character ID.</summary>
-    public Dictionary<string, List<GiftCodeOwedReward>> Owed { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-}
-
 /// <summary>
 /// Thread-safe store over <see cref="HnmoStateStore"/> for Combining Leftovers audit logs and Season Plan lookup.
 /// </summary>

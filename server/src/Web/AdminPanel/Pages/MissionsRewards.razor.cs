@@ -280,12 +280,3 @@ public partial class MissionsRewards : ComponentBase
         public MissionRewardText Reward { get; }
     }
 }
-
-/// <summary>
-/// The text form of a reward's items, as the page edits it.
-/// </summary>
-public sealed class MissionRewardText
-{
-    /// <summary>Gets or sets the items as "group number level count; ...".</summary>
-    public string ItemsText { get; set; } = string.Empty;
-}

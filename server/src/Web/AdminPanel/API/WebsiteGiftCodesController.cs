@@ -180,20 +180,3 @@ public sealed class WebsiteGiftCodesController(
         }
     }
 }
-
-/// <summary>
-/// An account's login for the website's gift codes.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-public sealed record GiftCodeAccountRequest(string? LoginName, string? Password);
-
-/// <summary>
-/// A gift code entered on the website.
-/// </summary>
-/// <param name="LoginName">The login name.</param>
-/// <param name="Password">The password.</param>
-/// <param name="Character">The character which gets the zen and items.</param>
-/// <param name="Code">The code.</param>
-/// <param name="DeviceId">The optional browser UUID; legacy clients leave it unknown.</param>
-public sealed record GiftCodeRedeemRequest(string? LoginName, string? Password, string? Character, string? Code, string? DeviceId = null);

@@ -130,14 +130,3 @@ public sealed class WebsiteLuckyNumberController(
         }
     }
 }
-
-/// <summary>Request to inspect an account's lucky number picks.</summary>
-/// <param name="LoginName">Account login name.</param>
-/// <param name="Password">Account password.</param>
-public sealed record LuckyNumberAccountRequest(string? LoginName, string? Password);
-
-/// <summary>Request to pick a daily lucky number from the website.</summary>
-/// <param name="LoginName">Account login name.</param>
-/// <param name="Password">Account password.</param>
-/// <param name="Number">Chosen lucky number.</param>
-public sealed record LuckyNumberPickRequest(string? LoginName, string? Password, int Number);

@@ -9,24 +9,6 @@ using System.Text.Json.Serialization;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// Something that happened, which the web game tells in the chat.
-/// </summary>
-/// <param name="Type">"discord", "zalo", "code", "goods" or "claim".</param>
-/// <param name="Result">The result, e.g. "Ok", "AlreadyPaid", "NotLinked", "Unknown", "BagFull".</param>
-/// <param name="Coins">The coins given.</param>
-/// <param name="EventId">The community event.</param>
-public sealed record CommunityStateEvent(string Type, string? Result = null, int Coins = 0, string? EventId = null);
-
-/// <summary>
-/// What the state of a player is written from (besides the engine).
-/// </summary>
-/// <param name="Login">The login name.</param>
-/// <param name="Character">The character name.</param>
-/// <param name="DiscordLinkAvailable">Whether the game server hands out Discord link codes (the Discord integration is on).</param>
-/// <param name="DiscordLinked">Whether the account is linked to a Discord user.</param>
-public sealed record CommunityPlayerFacts(string Login, string Character, bool DiscordLinkAvailable, bool DiscordLinked);
-
-/// <summary>
 /// Writes the community state as JSON: a player's for the game client (HnmoCommunityState), and the public one for the
 /// website (no account data). Non-ASCII text is escaped, so the JSON is plain ASCII.
 /// </summary>

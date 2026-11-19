@@ -8,29 +8,6 @@ using System.IO;
 using System.Text.Json;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 
-/// <summary>Per-account mount chain progress stored inside <c>mountChain</c>.</summary>
-public sealed class MountAccountState
-{
-    /// <summary>Gets or sets Mount Shards balance earned from Golden Bosses and duplicate salvage.</summary>
-    public int Shards { get; set; }
-
-    /// <summary>Gets or sets unlocked mount tier IDs and unlock UTC timestamps.</summary>
-    public Dictionary<string, DateTime> Unlocked { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-
-    /// <summary>Gets or sets currently selected collection aura/tier ID for modest PvE bonus.</summary>
-    public string ActiveTierId { get; set; } = string.Empty;
-}
-
-/// <summary>Persistent state stored under section <c>mountChain</c> in <see cref="HnmoStateStore"/>.</summary>
-public sealed class MountChainStoreData
-{
-    /// <summary>Gets or sets per-account states keyed by login name.</summary>
-    public Dictionary<string, MountAccountState> Accounts { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-
-    /// <summary>Gets or sets owed mount items keyed by character ID when bag was full.</summary>
-    public Dictionary<string, List<GiftCodeOwedReward>> Owed { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-}
-
 /// <summary>
 /// Thread-safe persistent store over <see cref="HnmoStateStore"/> for the Mount Chain plug-in.
 /// </summary>

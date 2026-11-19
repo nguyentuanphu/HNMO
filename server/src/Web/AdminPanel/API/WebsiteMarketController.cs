@@ -369,14 +369,3 @@ public sealed class WebsiteMarketController(
         return configuration is null ? null : new MarketEngine(configuration, MarketStore.Open(configuration.FileName), enabled: true);
     }
 }
-
-/// <summary>Account market lookup request.</summary>
-/// <param name="LoginName">Account login name.</param>
-/// <param name="Password">Account password.</param>
-public sealed record MarketAccountRequest(string? LoginName, string? Password);
-
-/// <summary>Market buy/cancel request.</summary>
-/// <param name="LoginName">Account login name.</param>
-/// <param name="Password">Account password.</param>
-/// <param name="ListingId">Target listing identifier.</param>
-public sealed record MarketActionRequest(string? LoginName, string? Password, string? ListingId);

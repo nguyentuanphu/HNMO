@@ -10,54 +10,6 @@ using System.Text.Json;
 using HNMO.GameLogic.PlugIns.GiftCodes;
 
 /// <summary>
-/// A recorded top-up credit or milestone claim.
-/// </summary>
-public sealed class TopUpHistoryEntry
-{
-    /// <summary>Gets or sets when it happened (UTC).</summary>
-    public DateTime AtUtc { get; set; }
-
-    /// <summary>Gets or sets the kind (<c>topup</c> or <c>claim</c>).</summary>
-    public string Kind { get; set; } = "topup";
-
-    /// <summary>Gets or sets the VND delta (positive for top-ups, 0 for claims).</summary>
-    public long AmountVnd { get; set; }
-
-    /// <summary>Gets or sets the step id (for claims) or reference (for top-ups).</summary>
-    public string Detail { get; set; } = string.Empty;
-}
-
-/// <summary>
-/// Per-account persisted top-up milestone state.
-/// </summary>
-public sealed class TopUpAccountState
-{
-    /// <summary>Gets or sets the cumulative VND topped up by this account.</summary>
-    public long TotalVnd { get; set; }
-
-    /// <summary>Gets or sets the unique transfer references already counted toward <see cref="TotalVnd"/>.</summary>
-    public HashSet<string> CreditedReferences { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-
-    /// <summary>Gets or sets the milestone step ids already claimed by this account.</summary>
-    public HashSet<string> ClaimedStepIds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-
-    /// <summary>Gets or sets the bag rewards (items / zen) waiting for room on an account's character.</summary>
-    public List<GiftCodeOwedReward> Owed { get; set; } = [];
-
-    /// <summary>Gets or sets the recent top-up and claim entries (newest first).</summary>
-    public List<TopUpHistoryEntry> History { get; set; } = [];
-}
-
-/// <summary>
-/// Serialized data section for <see cref="TopUpMilestoneStore"/> inside <see cref="HnmoStateStore"/>.
-/// </summary>
-public sealed class TopUpMilestoneStoreData
-{
-    /// <summary>Gets or sets accounts keyed by lower-case login name.</summary>
-    public Dictionary<string, TopUpAccountState> Accounts { get; set; } = new(StringComparer.Ordinal);
-}
-
-/// <summary>
 /// Persists account top-up totals, claimed milestones, and owed bag items via <see cref="HnmoStateStore"/>.
 /// </summary>
 public sealed class TopUpMilestoneStore

@@ -23,22 +23,6 @@ public enum WorldBossActionKind
 }
 
 /// <summary>
-/// Something the plug-in has to do for a world boss.
-/// </summary>
-/// <param name="Kind">The kind.</param>
-/// <param name="Boss">The boss (<c>null</c> for the despawn of a boss which isn't configured any more).</param>
-/// <param name="AtUtc">The spawn time (Soon, Spawn) or the despawn time.</param>
-/// <param name="InstanceId">The appearance which leaves (Despawn).</param>
-public sealed record WorldBossAction(WorldBossActionKind Kind, WorldBossDefinition? Boss, DateTime AtUtc, string? InstanceId = null);
-
-/// <summary>
-/// The result of a kill: the record for the website and the admin panel, and the rewards which were earned.
-/// </summary>
-/// <param name="Record">The record.</param>
-/// <param name="Rewards">The rewards by character id.</param>
-public sealed record WorldBossKillOutcome(WorldBossKillRecord Record, IReadOnlyDictionary<string, List<WorldBossOwedReward>> Rewards);
-
-/// <summary>
 /// The rules of the world bosses, without the game: the schedule, the damage table, the rewards by rank, the
 /// boss-hunt points and the weekly rankings (Monday 00:00 in the configured time zone) which pay once per week.
 /// The state is in the <see cref="WorldBossStore"/>; every method takes its lock.

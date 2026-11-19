@@ -8,30 +8,6 @@ using System.Globalization;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// A period of a race: its key and when it starts and ends.
-/// </summary>
-/// <param name="Key">The key, e.g. "d2026-11-15", "w2026-11-09", "m2026-11" or "c202611200900".</param>
-/// <param name="StartUtc">The start.</param>
-/// <param name="EndUtc">The end.</param>
-public sealed record TopRaceWindow(string Key, DateTime StartUtc, DateTime EndUtc);
-
-/// <summary>
-/// Who did something: a character (or a guild for a guild race).
-/// </summary>
-/// <param name="Key">The character id, or <see cref="TopRaceEngine.GuildKey"/> of the guild.</param>
-/// <param name="Name">The name.</param>
-/// <param name="Login">The account's login name; empty for a guild.</param>
-/// <param name="Class">The class (<see cref="TopRaceClass"/>); -1 for a guild.</param>
-public sealed record TopRaceParticipant(string Key, string Name, string Login, int Class);
-
-/// <summary>
-/// A place in a running race.
-/// </summary>
-/// <param name="Rank">The rank, from 1.</param>
-/// <param name="Entry">The entry.</param>
-public sealed record TopRaceStanding(int Rank, TopRaceEntry Entry);
-
-/// <summary>
 /// The rules of HNMO's top races (pure, unit-tested): the periods (days, weeks from Monday, months, custom wall-clock
 /// dates, all in the configured time zone with its daylight saving), the values counted while a race runs, the tables
 /// (all classes, one class or one per class) with ties going to whoever got there first, the finished races with their

@@ -9,26 +9,6 @@ using System.Text.Json.Serialization;
 using HNMO.GameLogic.PlugIns.Missions;
 
 /// <summary>
-/// Something that happened, which the guide panel tells in the chat.
-/// </summary>
-/// <param name="Type">"step" (steps done), "final" (the guide finished), "kit" (the starter kit was given), "reward" (waiting
-/// rewards were given), "skip" (the guide was skipped), "skipStep" (an optional step was skipped), "claim" (the take button).</param>
-/// <param name="Result">The result, e.g. "Ok", "BagFull".</param>
-/// <param name="Ids">The step ids it is about.</param>
-/// <param name="Count">How many rewards were given.</param>
-/// <param name="Coins">The coins it gave.</param>
-public sealed record OnboardingBoardEvent(string Type, string? Result = null, IReadOnlyList<string>? Ids = null, int Count = 0, int Coins = 0);
-
-/// <summary>
-/// Where the current step leads: a spot on a map (an NPC, a spot to walk to, a map to enter).
-/// </summary>
-/// <param name="Map">The map number.</param>
-/// <param name="X">The x coordinate.</param>
-/// <param name="Y">The y coordinate.</param>
-/// <param name="Name">The name of the NPC or place, if known.</param>
-public sealed record OnboardingTarget(int Map, int X, int Y, string? Name);
-
-/// <summary>
 /// Writes the guide as JSON: the state of a character for the game client (HnmoOnboardingState) and the public steps and
 /// starter kit for the website. Non-ASCII text (the Vietnamese texts) is escaped, so the JSON is plain ASCII.
 /// </summary>

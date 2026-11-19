@@ -72,31 +72,6 @@ public enum GiftCodeResult
 }
 
 /// <summary>
-/// Who enters a code: the account and the character which gets the zen and items.
-/// </summary>
-/// <param name="Login">The account's login name.</param>
-/// <param name="CharacterId">The character's id.</param>
-/// <param name="CharacterName">The character's name.</param>
-/// <param name="Level">The character's level.</param>
-/// <param name="Resets">The character's resets.</param>
-/// <param name="ClassNumber">The number of the character's class.</param>
-/// <param name="NetworkAddress">The connection address, used transiently and never persisted in raw form.</param>
-/// <param name="DeviceId">The optional browser-generated device id, used transiently and never persisted in raw form.</param>
-public sealed record GiftCodeRedeemer(string Login, string CharacterId, string CharacterName, int Level, int Resets, int ClassNumber, string? NetworkAddress = null, string? DeviceId = null);
-
-/// <summary>
-/// The outcome of entering a code.
-/// </summary>
-/// <param name="Result">The result.</param>
-/// <param name="Code">The code, when one was found.</param>
-/// <param name="Entry">The log entry of a redemption.</param>
-/// <param name="Coins">The coins to give now (also kept as pending until they're given).</param>
-/// <param name="Owed">The zen and items which wait for the character.</param>
-/// <param name="TriesLeft">How many wrong codes the account may still enter in the window.</param>
-/// <param name="RetryAtUtc">When the account may try again after <see cref="GiftCodeResult.TooManyTries"/>.</param>
-public sealed record GiftCodeOutcome(GiftCodeResult Result, GiftCodeDefinition? Code = null, GiftCodeLogEntry? Entry = null, GiftCodePendingCoins? Coins = null, GiftCodeOwedReward? Owed = null, int TriesLeft = 0, DateTime? RetryAtUtc = null);
-
-/// <summary>
 /// HNMO's gift codes, without the game: finding a code (without regard to case), its rules (dates on the Sydney wall
 /// clock, uses, once per account or character, level, resets and class), the limit of wrong tries per account, the
 /// references which make a reward count once, the rewards which wait for room in the bag, the log and batches of

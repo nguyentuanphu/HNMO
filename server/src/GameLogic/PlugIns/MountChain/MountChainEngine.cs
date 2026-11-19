@@ -32,14 +32,6 @@ public enum MountActionResult
     NotUnlocked,
 }
 
-/// <summary>Bag mount descriptor for pure rule checks.</summary>
-/// <param name="Slot">Inventory slot index.</param>
-/// <param name="Group">Item group.</param>
-/// <param name="Number">Item number.</param>
-/// <param name="Level">Item level.</param>
-/// <param name="Locked">Whether account-safety locked.</param>
-public sealed record MountBagItem(byte Slot, byte Group, short Number, byte Level, bool Locked = false);
-
 /// <summary>
 /// Pure rule engine for Golden Boss shard awards, mount upgrades using duplicate bag mounts, salvaging duplicates, and active PvE tier lookup.
 /// </summary>

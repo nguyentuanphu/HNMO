@@ -26,12 +26,6 @@ public enum LuckyNumberPickResult
     DuplicateNumber,
 }
 
-/// <summary>Summary returned after running any due daily draw.</summary>
-/// <param name="DateKey">The drawn date key (<c>yyyy-MM-dd</c>).</param>
-/// <param name="DrawnNumber">The winning number.</param>
-/// <param name="Winners">The winning picks matched for that round.</param>
-public sealed record LuckyNumberDrawOutcome(string DateKey, int DrawnNumber, IReadOnlyList<LuckyNumberWinnerEntry> Winners);
-
 /// <summary>
 /// Pure, deterministic rule engine for Daily Lucky Number rounds, odds, picking, and drawing.
 /// </summary>

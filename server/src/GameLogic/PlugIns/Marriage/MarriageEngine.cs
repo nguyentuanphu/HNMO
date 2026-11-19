@@ -43,13 +43,6 @@ public enum MarriageActionResult
     InvalidTitle,
 }
 
-/// <summary>Pending in-memory marriage proposal with expiry.</summary>
-/// <param name="ProposerName">Proposing character name.</param>
-/// <param name="ProposerLogin">Proposer account login.</param>
-/// <param name="TargetName">Proposed target character name.</param>
-/// <param name="ExpiresAtUtc">Expiry timestamp.</param>
-public sealed record PendingMarriageProposal(string ProposerName, string ProposerLogin, string TargetName, DateTime ExpiresAtUtc);
-
 /// <summary>
 /// Pure rule engine governing marriage proposals, ceremonies, couple titles, and divorce rules.
 /// </summary>

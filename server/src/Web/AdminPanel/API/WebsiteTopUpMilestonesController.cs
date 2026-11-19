@@ -153,14 +153,3 @@ public sealed class WebsiteTopUpMilestonesController(
         }
     }
 }
-
-/// <summary>Request to inspect an account's top-up milestone progress.</summary>
-/// <param name="LoginName">The account login name.</param>
-/// <param name="Password">The account password.</param>
-public sealed record TopUpMilestoneAccountRequest(string? LoginName, string? Password);
-
-/// <summary>Request to claim a reached milestone step on the website.</summary>
-/// <param name="LoginName">The account login name.</param>
-/// <param name="Password">The account password.</param>
-/// <param name="StepId">The step id.</param>
-public sealed record TopUpMilestoneClaimRequest(string? LoginName, string? Password, string? StepId);

@@ -275,21 +275,3 @@ public sealed class WebsiteJewelBankController(
         return configuration is null ? null : new JewelBankEngine(configuration, JewelBankStore.Open(configuration.FileName), enabled: true);
     }
 }
-
-/// <summary>Account Jewel Bank lookup request.</summary>
-/// <param name="LoginName">Login name.</param>
-/// <param name="Password">Password.</param>
-public sealed record JewelBankAccountRequest(string? LoginName, string? Password);
-
-/// <summary>Website jewel withdrawal request.</summary>
-/// <param name="LoginName">Login name.</param>
-/// <param name="Password">Password.</param>
-/// <param name="JewelKey">Jewel key.</param>
-/// <param name="Quantity">Quantity to withdraw.</param>
-public sealed record JewelBankWithdrawRequest(string? LoginName, string? Password, string? JewelKey, int Quantity);
-
-/// <summary>Website clear-master request.</summary>
-/// <param name="LoginName">Login name.</param>
-/// <param name="Password">Password.</param>
-/// <param name="Character">Character name.</param>
-public sealed record JewelBankClearMasterRequest(string? LoginName, string? Password, string? Character);
