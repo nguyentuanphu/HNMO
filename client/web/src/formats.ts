@@ -175,7 +175,11 @@ export interface BMDMesh {
   triangles: BMDTriangle[];
 }
 
-export interface BMDAction { numKeys: number }
+/**
+ * One animation of a model. A locked action (LockPositions: the walks and runs) is drawn in place: its root bone
+ * stays on key 0's x and y, and it loops over one key less than it has (ZzzBMD.cpp).
+ */
+export interface BMDAction { numKeys: number; lockPositions: boolean }
 
 /** One action's keys of a bone: x, y, z per key. */
 export interface BMDBoneFrames {
@@ -266,7 +270,7 @@ export function parseBMD(fileBytes: Uint8Array): BMDModel {
     const lockPositions = bytes[p + 2] !== 0;
     p += 3;
     if (lockPositions && numKeys > 0) p += numKeys * 12;
-    actions.push({ numKeys });
+    actions.push({ numKeys, lockPositions });
   }
 
   const bones: BMDBone[] = [];

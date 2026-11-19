@@ -24,7 +24,7 @@ import { CharacterStats } from './game/stats.js';
 import { Hud } from './ui/hud.js';
 import { setUpGuide } from './ui/guide.js';
 import { setUpSettings, type SettingsWindow } from './ui/settingsWindow.js';
-import { setKtx2Renderer, clearTextureCache } from './bmd.js';
+import { setKtx2Renderer, clearTextureCache, loopKeyCount } from './bmd.js';
 import { FRAME_SECTIONS, PerfRecorder } from './game/perfRecorder.js';
 import { MovementRecorder } from './game/movementRecorder.js';
 import { PerfReportWindow } from './ui/perfReportWindow.js';
@@ -796,7 +796,8 @@ function step(dt: number, rec: PerfRecorder | null): void {
     if (state.online && state.hero && state.world) {
       const hero = state.hero, world = state.world;
       const index = hero.cell.y * TERRAIN_SIZE + hero.cell.x;
-      const numKeys = hero.model.skeleton.actions[hero.action]?.numKeys ?? 0;
+      // The keys the walk loops over (one less for a locked walk), so the footsteps keep time with the feet.
+      const numKeys = hero.model.skeleton.actions[hero.action] ? loopKeyCount(hero.model.skeleton, hero.action) : 0;
       sounds.frame(state.mapNumber, hero, world.mapping.layer1[index] ?? 0, (world.flags[index] & TerrainFlag.SAFEZONE) !== 0, numKeys);
     }
     state.autoPlayExtras?.update();
