@@ -312,7 +312,7 @@ function mount(): void {
     element<HTMLFormElement>('accountSignIn').reset();
     element('accountLoginPanel').hidden = true; element('accountToolbar').hidden = false;
     element('accountDashboard').classList.add('authenticated');
-    element('registerForm').hidden = true; element('coinsForm').hidden = true; element('setupPanel').hidden = true;
+    element('registerForm').hidden = true; element('setupPanel').hidden = true;
     const requested = location.hash.slice(1);
     void openSection(accountSections().some(s => s.id === requested) ? requested : 'overview');
   });

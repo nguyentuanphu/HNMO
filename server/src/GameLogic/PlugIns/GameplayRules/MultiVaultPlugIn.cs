@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Threading;
 using HNMO.DataModel.Entities;
 using HNMO.GameLogic;
 using HNMO.GameLogic.Attributes;
@@ -40,6 +41,8 @@ public sealed class MultiVaultPlugIn :
     };
 
     private readonly object _gate = new();
+
+    private readonly SemaphoreSlim _switchGate = new(1, 1);
 
     /// <inheritdoc />
     public MultiVaultConfiguration? Configuration { get; set; }
@@ -81,7 +84,7 @@ public sealed class MultiVaultPlugIn :
     }
 
     /// <summary>
-    /// Switches <paramref name="player"/>'s active vault to <paramref name="targetIndex"/> after persisting the current vault snapshot.
+    /// Switches <paramref name="player"/>'s active vault to <paramref name="targetIndex"/>; see <see cref="SwitchVaultCoreAsync"/>.
     /// </summary>
     /// <param name="player">The player (must have warehouse closed).</param>
     /// <param name="targetIndex">0-based vault index.</param>
@@ -112,24 +115,15 @@ public sealed class MultiVaultPlugIn :
             return (false, isVi ? $"Rương #{targetIndex} chưa mở khóa (đã mở 0..{unlocked - 1})." : $"Vault #{targetIndex} is locked (unlocked: 0..{unlocked - 1}).");
         }
 
-        var state = this.LoadAccountState(login);
-        if (state.ActiveVaultIndex == targetIndex)
+        await this._switchGate.WaitAsync().ConfigureAwait(false);
+        try
         {
-            return (true, isVi ? $"Bạn đang ở rương #{targetIndex}." : $"You are already on vault #{targetIndex}.");
+            return await this.SwitchVaultCoreAsync(player, login, targetIndex, isVi).ConfigureAwait(false);
         }
-
-        player.Account.Vault ??= player.PersistenceContext.CreateNew<ItemStorage>();
-        var currentSnapshot = SnapshotFromStorage(player.Account.Vault);
-        this.SaveStorageSnapshot(login, state.ActiveVaultIndex, currentSnapshot);
-
-        var nextSnapshot = this.LoadStorageSnapshot(login, targetIndex) ?? new MultiVaultStorageSnapshot();
-        await ApplySnapshotToStorageAsync(player, player.Account.Vault, nextSnapshot).ConfigureAwait(false);
-
-        state.ActiveVaultIndex = targetIndex;
-        this.SaveAccountState(login, state);
-        await player.SaveProgressAsync().ConfigureAwait(false);
-
-        return (true, isVi ? $"Đã chuyển sang rương #{targetIndex}." : $"Switched to vault #{targetIndex}.");
+        finally
+        {
+            this._switchGate.Release();
+        }
     }
 
     /// <summary>Purchases one permanent extra vault slot for <paramref name="player"/> using configured coins.</summary>
@@ -170,10 +164,16 @@ public sealed class MultiVaultPlugIn :
 
         player.Account.SetCashShopCoins(cfg.PurchaseCoinType, balance - cfg.PurchaseExtraVaultCost);
         CashShopBalanceReceipt.Record(player.PersistenceContext, player.Account, cfg.PurchaseCoinType, -cfg.PurchaseExtraVaultCost, CashShopBalanceReason.ExtraVault);
+        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+        {
+            // Nothing is bought when the payment couldn't be saved: the coins go back.
+            player.Account.SetCashShopCoins(cfg.PurchaseCoinType, player.Account.GetCashShopCoins(cfg.PurchaseCoinType) + cfg.PurchaseExtraVaultCost);
+            return (false, isVi ? "Không lưu được giao dịch, chưa trừ xu. Vui lòng thử lại." : "The purchase couldn't be saved; no coins were taken. Please try again.");
+        }
+
         var state = this.LoadAccountState(login);
         state.PurchasedExtraVaults++;
         this.SaveAccountState(login, state);
-        await player.SaveProgressAsync().ConfigureAwait(false);
 
         var nextCount = this.GetUnlockedVaultCount(player);
         return (true, isVi ? $"Đã mở khóa thêm rương! Tổng số rương hiện có: {nextCount}." : $"Unlocked an extra vault! Total unlocked: {nextCount}.");
@@ -182,55 +182,12 @@ public sealed class MultiVaultPlugIn :
     private static bool IsVi(Player player) =>
         player.Culture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase);
 
-    private static MultiVaultStorageSnapshot SnapshotFromStorage(ItemStorage storage)
+    /// <summary>
+    /// Fills a new storage from a vault saved by the earlier version of this feature, which kept a vault's items as a
+    /// list of values. Only vaults which were never opened since are read this way, once.
+    /// </summary>
+    private static void FillFromLegacySnapshot(Player player, ItemStorage vault, MultiVaultStorageSnapshot snapshot)
     {
-        var snap = new MultiVaultStorageSnapshot { Money = storage.Money };
-        foreach (var item in storage.Items)
-        {
-            if (item.Definition is null)
-            {
-                continue;
-            }
-
-            var itemSnap = new MultiVaultItemSnapshot
-            {
-                Group = item.Definition.Group,
-                Number = item.Definition.Number,
-                Level = item.Level,
-                Durability = item.Durability,
-                HasSkill = item.HasSkill,
-                SocketCount = item.SocketCount,
-                Slot = item.ItemSlot,
-            };
-
-            foreach (var link in item.ItemOptions)
-            {
-                if (link.ItemOption is PersistenceIdentifiable id && id.Id != Guid.Empty)
-                {
-                    itemSnap.Options.Add(new MultiVaultOptionSnapshot
-                    {
-                        OptionId = id.Id,
-                        Level = link.Level,
-                        Index = link.Index,
-                    });
-                }
-            }
-
-            snap.Items.Add(itemSnap);
-        }
-
-        return snap;
-    }
-
-    private static async ValueTask ApplySnapshotToStorageAsync(Player player, ItemStorage vault, MultiVaultStorageSnapshot snapshot)
-    {
-        var existing = vault.Items.ToList();
-        foreach (var old in existing)
-        {
-            vault.Items.Remove(old);
-            await player.PersistenceContext.DeleteAsync(old).ConfigureAwait(false);
-        }
-
         vault.Money = snapshot.Money;
         var config = player.GameContext.Configuration;
         var allOptions = config.ItemOptions.SelectMany(o => o.PossibleOptions).ToList();
@@ -268,6 +225,94 @@ public sealed class MultiVaultPlugIn :
 
             vault.Items.Add(entity);
         }
+    }
+
+    private static Guid IdOf(ItemStorage storage) => storage is PersistenceIdentifiable identifiable ? identifiable.Id : Guid.Empty;
+
+    /// <summary>
+    /// Switches vaults. Each vault is an item storage in the database and the account's vault is the one in use, so a
+    /// switch is one change (which storage the account's vault is) saved in one step: the items themselves are never
+    /// copied, so they keep all their detail, and a failed save leaves the vault as it was. Which vault is in use is
+    /// read from the account's storage, not from the state file, so the two can't disagree.
+    /// </summary>
+    private async ValueTask<(bool Success, string Message)> SwitchVaultCoreAsync(Player player, string login, int targetIndex, bool isVi)
+    {
+        var account = player.Account!;
+        var state = this.LoadAccountState(login);
+        var current = account.Vault;
+        if (current is null)
+        {
+            current = player.PersistenceContext.CreateNew<ItemStorage>();
+            account.Vault = current;
+        }
+
+        var currentId = IdOf(current);
+        if (currentId == Guid.Empty)
+        {
+            return (false, isVi ? "Rương hiện tại chưa được lưu. Vui lòng thử lại sau." : "Your vault isn't saved yet. Please try again later.");
+        }
+
+        var currentIndex = state.StorageIds.FirstOrDefault(p => p.Value == currentId) is { Value: var found } pair && found != Guid.Empty
+            ? pair.Key
+            : Math.Max(0, state.ActiveVaultIndex);
+        if (currentIndex == targetIndex)
+        {
+            return (true, isVi ? $"Bạn đang ở rương #{targetIndex}." : $"You are already on vault #{targetIndex}.");
+        }
+
+        ItemStorage target;
+        var fromLegacy = false;
+        var isNew = false;
+        if (state.StorageIds.TryGetValue(targetIndex, out var targetId) && targetId != Guid.Empty)
+        {
+            if (await player.PersistenceContext.GetByIdAsync<ItemStorage>(targetId).ConfigureAwait(false) is not { } loaded)
+            {
+                // Never replace a vault which can't be read right now by an empty one.
+                return (false, isVi ? $"Không đọc được rương #{targetIndex}. Vui lòng thử lại sau." : $"Vault #{targetIndex} couldn't be read. Please try again later.");
+            }
+
+            target = loaded;
+        }
+        else
+        {
+            target = player.PersistenceContext.CreateNew<ItemStorage>();
+            isNew = true;
+            if (this.LoadStorageSnapshot(login, targetIndex) is { } legacy)
+            {
+                FillFromLegacySnapshot(player, target, legacy);
+                fromLegacy = true;
+            }
+        }
+
+        // Record both storages before the save, so whichever one the account has afterwards is known.
+        var previousActive = state.ActiveVaultIndex;
+        state.StorageIds[currentIndex] = currentId;
+        state.StorageIds[targetIndex] = IdOf(target);
+        state.ActiveVaultIndex = targetIndex;
+        this.SaveAccountState(login, state);
+
+        account.Vault = target;
+        if (!await player.SaveProgressAsync().ConfigureAwait(false))
+        {
+            account.Vault = current;
+            if (isNew)
+            {
+                // The new storage was never saved: forget it, so the vault is created again next time.
+                state.StorageIds.Remove(targetIndex);
+                await player.PersistenceContext.DeleteAsync(target).ConfigureAwait(false);
+            }
+
+            state.ActiveVaultIndex = previousActive;
+            this.SaveAccountState(login, state);
+            return (false, isVi ? "Không lưu được, rương vẫn như cũ. Vui lòng thử lại." : "The switch couldn't be saved; your vault is unchanged. Please try again.");
+        }
+
+        if (fromLegacy)
+        {
+            this.RemoveStorageSnapshot(login, targetIndex);
+        }
+
+        return (true, isVi ? $"Đã chuyển sang rương #{targetIndex}." : $"Switched to vault #{targetIndex}.");
     }
 
     private MultiVaultConfiguration EffectiveConfig() => this.Configuration ?? new MultiVaultConfiguration();
@@ -322,15 +367,14 @@ public sealed class MultiVaultPlugIn :
         }
     }
 
-    private void SaveStorageSnapshot(string login, int vaultIndex, MultiVaultStorageSnapshot snapshot)
+    private void RemoveStorageSnapshot(string login, int vaultIndex)
     {
         var key = $"{login}:{vaultIndex}";
         lock (this._gate)
         {
             var backend = this.GetBackend();
             backend.EnsureSchema();
-            var row = new HnmoFeatureRow(StorageFeatureKey, key, JsonSerializer.Serialize(snapshot, JsonOptions), DateTime.UtcNow);
-            backend.UpsertBatch([row], []);
+            backend.UpsertBatch([], [(StorageFeatureKey, key)]);
         }
     }
 }

@@ -32,6 +32,7 @@ public class HostSettingsPageTests
         var fakeRestart = new FakeRestartService();
         ctx.Services.AddSingleton<IHostSettingsService>(fakeService);
         ctx.Services.AddSingleton<IServerRestartService>(fakeRestart);
+        ctx.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor>(HostRequest(forwarded: false));
 
         var cut = ctx.Render<HostSettingsPage>();
 
@@ -54,6 +55,44 @@ public class HostSettingsPageTests
         cut.Find("#restart-hnmo-btn").Click();
         cut.Find("#confirm-restart-hnmo-btn").Click();
         Assert.That(fakeRestart.Requested, Is.True);
+    }
+
+    /// <summary>
+    /// Through the website's admin path (a forwarded request), the page shows no settings and saves nothing: only
+    /// the host computer changes ports, folders, the database password and the licence (audit 2.5).
+    /// </summary>
+    [Test]
+    public void ThroughTheWebsiteNothingIsShownOrSaved()
+    {
+        using var ctx = new BunitContext();
+        var fakeService = new FakeHostSettingsService();
+        ctx.Services.AddSingleton<IHostSettingsService>(fakeService);
+        ctx.Services.AddSingleton<IServerRestartService>(new FakeRestartService());
+        ctx.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor>(HostRequest(forwarded: true));
+
+        var cut = ctx.Render<HostSettingsPage>();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.FindAll("#host-settings-host-only"), Has.Count.EqualTo(1));
+            Assert.That(cut.FindAll("#save-host-settings-btn"), Is.Empty);
+            Assert.That(cut.FindAll("#web-port"), Is.Empty);
+            Assert.That(fakeService.SavedSettings, Is.Null);
+        });
+    }
+
+    /// <summary>The host computer's own request, or the same one forwarded by the website's admin path.</summary>
+    private static Microsoft.AspNetCore.Http.HttpContextAccessor HostRequest(bool forwarded)
+    {
+        var context = new Microsoft.AspNetCore.Http.DefaultHttpContext();
+        context.Connection.RemoteIpAddress = System.Net.IPAddress.Loopback;
+        context.Request.Host = new Microsoft.AspNetCore.Http.HostString("localhost", 8095);
+        if (forwarded)
+        {
+            context.Request.Headers["X-Forwarded-For"] = "203.0.113.7";
+        }
+
+        return new Microsoft.AspNetCore.Http.HttpContextAccessor { HttpContext = context };
     }
 
     private sealed class FakeHostSettingsService : IHostSettingsService

@@ -19,6 +19,8 @@
     private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     private bool _isTwoFactorSetupPending;
+
+    private string SeasonName => HNMO.Interfaces.HnmoSeasonInstance.IsSeasonNine ? Resources.SeasonNineButton : Resources.SeasonSixButton;
     private AdminNavigationPreferences? _prefs;
 
     private AdminNavigationPreferences Preferences =>
@@ -84,6 +86,9 @@
         <header class="main-header navbar navbar-expand border-bottom">
             <div class="container-fluid px-4">
                 <div class="header-content d-flex align-items-center w-100">
+                    @* Which season this panel sets up: each season has its own admin panel (seasons plan, step 2). *@
+                    <a href="/" class="hn-season-badge hn-season-@HNMO.Interfaces.HnmoSeasonInstance.Current me-3" id="season-badge"
+                       title="@string.Format(Resources.SeasonBadgeTitle, this.SeasonName)">@this.SeasonName</a>
                     <div class="header-search flex-grow-1">
                         <ConfigurationSearch />
                     </div>

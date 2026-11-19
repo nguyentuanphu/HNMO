@@ -88,6 +88,7 @@ if (launcherOptions.Enabled || File.Exists(settingsPath))
     launcherOptions.ServerProgram = hostSettings.ServerProgram;
     launcherOptions.AdminUrl = $"http://127.0.0.1:{hostSettings.AdminPort}";
     launcherOptions.ConnectServerPort = hostSettings.ConnectServerPort;
+    launcherOptions.SeasonNineEnabled = hostSettings.SeasonNineEnabled;
     launcherOptions.OpenBrowserUrl = hostSettings.OpenBrowserUrl;
     portalOptions.ApiBaseUrl = launcherOptions.AdminUrl;
 
@@ -170,6 +171,64 @@ const int MaximumPacketSize = 0xFFFF;
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) });
 app.UseRateLimiter();
+
+// Password guessing on the website, per account (audit 2.8): a website request names its account (loginName); after
+// ten refused passwords in 15 minutes the account's requests are refused for 15 minutes, from every address.
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value ?? string.Empty;
+    if (!HttpMethods.IsPost(context.Request.Method)
+        || !(path.StartsWith("/portal/", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/website/", StringComparison.OrdinalIgnoreCase))
+        || context.Request.ContentType?.Contains("json", StringComparison.OrdinalIgnoreCase) != true
+        || context.Request.ContentLength is > 65_536)
+    {
+        await next(context).ConfigureAwait(false);
+        return;
+    }
+
+    context.Request.EnableBuffering();
+    string? login = null;
+    try
+    {
+        using var document = await System.Text.Json.JsonDocument.ParseAsync(context.Request.Body, cancellationToken: context.RequestAborted).ConfigureAwait(false);
+        if (document.RootElement.ValueKind == System.Text.Json.JsonValueKind.Object
+            && document.RootElement.TryGetProperty("loginName", out var name) && name.ValueKind == System.Text.Json.JsonValueKind.String)
+        {
+            login = name.GetString();
+        }
+    }
+    catch (System.Text.Json.JsonException)
+    {
+        // Not ours to judge: the endpoint answers it.
+    }
+
+    context.Request.Body.Position = 0;
+    if (string.IsNullOrWhiteSpace(login))
+    {
+        await next(context).ConfigureAwait(false);
+        return;
+    }
+
+    if (AccountGuessGuard.Shared.IsLocked(login))
+    {
+        context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.Response.WriteAsJsonAsync(new { error = "locked", message = "Too many wrong passwords for this account. Try again in 15 minutes.", messageVi = "Nhập sai mật khẩu quá nhiều lần. Hãy thử lại sau 15 phút." }).ConfigureAwait(false);
+        return;
+    }
+
+    await next(context).ConfigureAwait(false);
+    if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+    {
+        if (AccountGuessGuard.Shared.RecordFailure(login))
+        {
+            app.Logger.LogWarning("Website requests for an account are locked for 15 minutes after too many wrong passwords.");
+        }
+    }
+    else if (context.Response.StatusCode is >= 200 and < 300)
+    {
+        AccountGuessGuard.Shared.RecordSuccess(login);
+    }
+});
 var visitorLimits = new VisitorLimits(app.Configuration.GetSection("Limits").Get<VisitorLimitOptions>() ?? new VisitorLimitOptions());
 
 // The admin panel at the website's secret admin path (AdminGateway.cs); before everything else.
@@ -340,7 +399,15 @@ async Task<bool> TryServeWebDataAsync(HttpContext context, string path)
 app.MapGet("/data/seasons.json", (HttpContext context) =>
 {
     context.Response.Headers.CacheControl = "no-cache";
-    return Results.Json(new { s6 = true, s9 = s9Files is not null });
+    // Each season's connect server: Season 9's program (when it runs) answers 100 ports above Season 6.3's.
+    return Results.Json(new
+    {
+        s6 = true,
+        s9 = s9Files is not null,
+        connect = launcherOptions.SeasonNineEnabled
+            ? new { s6 = launcherOptions.ConnectServerPort, s9 = (int?)launcherOptions.SeasonNineConnectServerPort }
+            : new { s6 = launcherOptions.ConnectServerPort, s9 = (int?)null },
+    });
 });
 app.MapGet("/data/s9/{**path}", async (HttpContext context, string path) =>
 {
@@ -404,6 +471,14 @@ app.Map("/relay", async context =>
     if (!int.TryParse(context.Request.Query["port"], out var port) || port is <= 0 or > 65535)
     {
         context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        return;
+    }
+
+    // Game servers only: never the database or the admin panels (audit 2.8).
+    if (RelayPorts.IsRefused(port, launcherOptions.DatabasePort, new Uri(launcherOptions.AdminUrl).Port, launcherOptions.WebPort))
+    {
+        app.Logger.LogWarning("Refused relay to port {Port}: it isn't a game server.", port);
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
         return;
     }
 

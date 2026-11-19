@@ -156,15 +156,18 @@ public sealed class VaultAndChaosTests
         {
             LoginName = "vaultuser",
             WCoinC = 120,
-            Vault = new HNMO.Persistence.BasicModel.ItemStorage { Money = 5000 },
         };
+        player.Account.Vault = player.PersistenceContext.CreateNew<ItemStorage>();
+        player.Account.Vault.Money = 5000;
 
         var sword = player.PersistenceContext.CreateNew<Item>();
         sword.Definition = swordDef;
         sword.Level = 7;
         sword.Durability = 20;
         sword.ItemSlot = 0;
+        sword.PetExperience = 1234;
         player.Account.Vault!.Items.Add(sword);
+        var firstVault = player.Account.Vault;
 
         var plugIn = MultiVaultPlugIn.Get(context)!;
         Assert.That(plugIn.GetUnlockedVaultCount(player), Is.EqualTo(2));
@@ -185,6 +188,11 @@ public sealed class VaultAndChaosTests
         Assert.That(player.Account.Vault.Money, Is.EqualTo(5000));
         Assert.That(player.Account.Vault.Items.Single().Level, Is.EqualTo(7));
 
+        // The vault itself comes back, not a copy: every detail of its items is kept.
+        Assert.That(player.Account.Vault, Is.SameAs(firstVault));
+        Assert.That(player.Account.Vault.Items.Single(), Is.SameAs(sword));
+        Assert.That(player.Account.Vault.Items.Single().PetExperience, Is.EqualTo(1234));
+
         // Attempting locked vault #3 fails before buying
         var (lockedOk, _) = await plugIn.SwitchVaultAsync(player, 3).ConfigureAwait(false);
         Assert.That(lockedOk, Is.False);
@@ -197,5 +205,59 @@ public sealed class VaultAndChaosTests
 
         var (ok3, _) = await plugIn.SwitchVaultAsync(player, 3).ConfigureAwait(false);
         Assert.That(ok3, Is.True);
+    }
+
+    /// <summary>
+    /// Verifies that a vault kept by the earlier version of the feature (a list of item values in a state row) becomes a
+    /// real storage when it's first opened, and that its row is then removed, so it can't come back a second time.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask MultiVaultMovesAnOldSnapshotIntoAStorageOnceAsync()
+    {
+        var vaultCfg = new PlugInConfiguration
+        {
+            TypeId = typeof(MultiVaultPlugIn).GUID,
+            IsActive = true,
+            CustomConfiguration = JsonSerializer.Serialize(new MultiVaultConfiguration
+            {
+                Enabled = true,
+                DefaultVaultCount = 2,
+                MaxVaultsPerAccount = 5,
+                FileName = this._file,
+            }),
+        };
+
+        var context = GameContextTestHelper.CreateGameContext([vaultCfg]);
+        var swordDef = new HNMO.Persistence.BasicModel.ItemDefinition { Number = 0, Group = 0, Name = "Kris", Width = 1, Height = 2, Durability = 20 };
+        context.Configuration.Items.Add(swordDef);
+
+        var player = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
+        player.Account = new HNMO.Persistence.BasicModel.Account { LoginName = "olduser" };
+        player.Account.Vault = player.PersistenceContext.CreateNew<ItemStorage>();
+
+        var backend = HnmoPlayerStateRowStoreRegistry.GetBackend(HnmoStateStore.ResolveStateFilePath(this._file) ?? this._file);
+        backend.EnsureSchema();
+        var legacy = new MultiVaultStorageSnapshot { Money = 777 };
+        legacy.Items.Add(new MultiVaultItemSnapshot { Group = 0, Number = 0, Level = 9, Durability = 20, Slot = 3 });
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        backend.UpsertBatch([new HnmoFeatureRow(MultiVaultPlugIn.StorageFeatureKey, "olduser:1", JsonSerializer.Serialize(legacy, options), DateTime.UtcNow)], []);
+
+        var plugIn = MultiVaultPlugIn.Get(context)!;
+        var (ok1, _) = await plugIn.SwitchVaultAsync(player, 1).ConfigureAwait(false);
+        Assert.That(ok1, Is.True);
+        Assert.That(player.Account.Vault.Money, Is.EqualTo(777));
+        Assert.That(player.Account.Vault.Items.Single().Level, Is.EqualTo(9));
+        var movedVault = player.Account.Vault;
+        Assert.That(backend.LoadAll(MultiVaultPlugIn.StorageFeatureKey).Any(r => r.ScopeId == "olduser:1"), Is.False);
+
+        var (ok0, _) = await plugIn.SwitchVaultAsync(player, 0).ConfigureAwait(false);
+        Assert.That(ok0, Is.True);
+        Assert.That(player.Account.Vault.Items, Is.Empty);
+
+        var (back, _) = await plugIn.SwitchVaultAsync(player, 1).ConfigureAwait(false);
+        Assert.That(back, Is.True);
+        Assert.That(player.Account.Vault, Is.SameAs(movedVault));
+        Assert.That(player.Account.Vault.Items, Has.Count.EqualTo(1));
     }
 }

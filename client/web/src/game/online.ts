@@ -17,6 +17,7 @@ const ID_MASK = 0x7fff;          // the high bit marks "just created" (WSclient.
 const APPEARANCE_LENGTH = 27;   // the server's extended appearance (AppearanceSerializerExtended.NeededSpace)
 const MAX_STEPS_PER_WALK = 15;   // the step count is a 4-bit field
 const TALK_DISTANCE = 3;         // cells; the server refuses farther talks
+const TALK_WALK_RETRIES = 3;     // walks toward an NPC after the first one ended out of reach
 const PING_INTERVAL_MS = 20000;
 
 const Code = { CHAT: 0x00, SERVER_MESSAGE: 0x0d, ADD_PLAYERS: 0x12, ADD_NPCS: 0x13, OUT_OF_SCOPE: 0x14, MOVED: 0x15, MAP_CHANGED: 0x1c, WALKED: 0xd4, PING_REQUEST: 0x71 };
@@ -82,6 +83,12 @@ export class OnlineWorld {
   characters: Map<number, Character>;
   /** Ids whose characters are still loading. */
   pending: Set<number>;
+  /**
+   * Where a still-loading character is and walks to, as the server's latest packet says. A walk or a move of a character
+   * whose model was loading was lost, and it stood where it came into view until its next walk: on a slow machine a
+   * player who walked right after coming into view stayed there for good on the other players' screens.
+   */
+  private readonly pendingPlacements = new Map<number, Placement>();
   onChange: OnlineWorldOptions['onChange'];
   /** A player came into view with these effects (buffs), or a character left it (effects null). */
   onEffects?: (id: number, effects: number[] | null) => void;
@@ -89,10 +96,14 @@ export class OnlineWorld {
   pingTimer: ReturnType<typeof setInterval>;
   /** Where the hero is walking to, over several walk packets. */
   goal?: Cell | null;
+  /** Between a map change and the client's ready packet: walks wait (see mapChanged). */
+  changingMap = false;
   /** The player the hero follows (the command window's Follow, g_iFollowCharacter); a walk of the player's own ends it. */
   followId: number | null = null;
   /** The NPC to talk to once the hero gets there. */
   talkTarget?: Character | null;
+  /** How many more times the hero walks toward talkTarget when a walk ended out of reach. */
+  private talkWalksLeft = 0;
   /** Told when the hero talks to an NPC (TalkToNpcRequest sent), e.g. which merchant the shop is. */
   onTalk?: (npc: Character) => void;
   /** Asked before talking to an NPC: true when it handled the talk itself (an event's own NPCs). */
@@ -140,11 +151,14 @@ export class OnlineWorld {
   async spawn(id: number, create: () => Promise<Character>, placement: Placement): Promise<void> {
     if (id === this.playerId || this.characters.has(id) || this.pending.has(id)) return;
     this.pending.add(id);
+    this.pendingPlacements.set(id, { ...placement });
     try {
       const character = await create();
       if (this.pending.has(id) && this.prepare) await this.prepare(character).catch(() => undefined);
       if (!this.pending.has(id)) { character.release(); return; } // went out of view while loading
       if (character.look?.setup.live === false) { character.release(); return; } // dropped at spawn (setup "live": false)
+      // Where the server's packets since it came into view put it (its walks and moves while it was loading).
+      placement = this.pendingPlacements.get(id) ?? placement;
       character.placeAt(placement.x, placement.y, placement.rotation);
       if (placement.targetX !== placement.x || placement.targetY !== placement.y) character.walkStraightTo(placement.targetX, placement.targetY);
       this.characters.set(id, character);
@@ -156,6 +170,7 @@ export class OnlineWorld {
       console.warn(`Couldn't show object ${id}:`, (error as Error).message);
     } finally {
       this.pending.delete(id);
+      this.pendingPlacements.delete(id);
     }
   }
 
@@ -185,6 +200,7 @@ export class OnlineWorld {
     for (const { Id } of packet.Objects) {
       const id = Id & ID_MASK;
       this.pending.delete(id);
+      this.pendingPlacements.delete(id);
       this.onEffects?.(id, null);
       const character = this.characters.get(id);
       if (!character) continue;
@@ -196,15 +212,22 @@ export class OnlineWorld {
   }
 
   walked(packet: ObjectWalkedPacket): void {
-    const character = this.characters.get(packet.ObjectId & ID_MASK);
-    character?.walkStraightTo(packet.TargetX, packet.TargetY);
+    const id = packet.ObjectId & ID_MASK;
+    const character = this.characters.get(id);
+    if (character) { character.walkStraightTo(packet.TargetX, packet.TargetY); return; }
+    // Still loading: it walks there once it shows.
+    const placement = this.pendingPlacements.get(id);
+    if (placement) { placement.targetX = packet.TargetX; placement.targetY = packet.TargetY; }
   }
 
   moved(packet: ObjectMovedPacket): void {
     const id = packet.ObjectId & ID_MASK;
     if (id === this.playerId) this.goal = null;
     const character = id === this.playerId ? this.hero : this.characters.get(id);
-    character?.placeAt(packet.PositionX, packet.PositionY);
+    if (character) { character.placeAt(packet.PositionX, packet.PositionY); return; }
+    // Still loading: it shows there, standing.
+    const placement = this.pendingPlacements.get(id);
+    if (placement) Object.assign(placement, { x: packet.PositionX, y: packet.PositionY, targetX: packet.PositionX, targetY: packet.PositionY });
   }
 
   // A warp: to another map (the client loads it), or a teleport on the same map.
@@ -213,8 +236,15 @@ export class OnlineWorld {
     this.goal = null;
     this.followId = null;
     this.clearCharacters();
-    if (packet.IsMapChange) await this.onMapChanged?.(packet.MapNumber, packet.PositionX, packet.PositionY);
-    else this.hero.placeAt(packet.PositionX, packet.PositionY);
+    // Until the client is ready on the new map the server has the player on no map and drops every walk (then puts
+    // the hero back, which ended a walk asked for meanwhile): a walk asked for now waits and starts from the new cell.
+    this.changingMap = true;
+    try {
+      if (packet.IsMapChange) await this.onMapChanged?.(packet.MapNumber, packet.PositionX, packet.PositionY);
+      else this.hero.placeAt(packet.PositionX, packet.PositionY);
+    } finally {
+      this.changingMap = false;
+    }
     this.connection.send('ClientToServer', 'ClientReadyAfterMapChange');
   }
 
@@ -222,6 +252,7 @@ export class OnlineWorld {
     for (const [id, character] of this.characters) { this.root.remove(character.group); this.onEffects?.(id, null); character.release(); }
     this.characters.clear();
     this.pending.clear();
+    this.pendingPlacements.clear();
     this.onChange?.();
   }
 
@@ -233,10 +264,14 @@ export class OnlineWorld {
   // the server allows, then sends TalkToNpcRequest, as the client does when an NPC is clicked.
   talkTo(npc: Character): void {
     this.talkTarget = npc;
-    if (!this.closeEnoughToTalk(npc)) {
-      const near = this.cellNextTo(npc.cell);
-      if (near) this.walkTo(near, { keepTalk: true });
-    }
+    this.talkWalksLeft = TALK_WALK_RETRIES;
+    if (!this.closeEnoughToTalk(npc)) this.walkToTalk(npc);
+  }
+
+  /** Walks next to the NPC to talk to; false when no cell next to it can be reached. */
+  private walkToTalk(npc: Character): boolean {
+    const near = this.cellNextTo(npc.cell);
+    return near !== null && this.walkTo(near, { keepTalk: true });
   }
 
   closeEnoughToTalk(npc: Character): boolean {
@@ -263,6 +298,7 @@ export class OnlineWorld {
     if (!keepTalk) this.talkTarget = null;
     if (!keepFollow) this.followId = null;
     this.goal = { x: cell.x, y: cell.y };
+    if (this.changingMap) return true; // walks once the new map is ready (update)
     return this.walkNextPart();
   }
 
@@ -304,7 +340,15 @@ export class OnlineWorld {
         this.walkTo(followed.cell, { keepFollow: true });
       }
     }
-    if (this.goal && !this.hero.isWalking) this.walkNextPart();
+    if (this.goal && !this.hero.isWalking && !this.changingMap) this.walkNextPart();
+    if (this.talkTarget && !this.hero.isWalking && !this.goal && !this.closeEnoughToTalk(this.talkTarget)
+      && this.talkWalksLeft > 0 && this.characters.has(this.talkTarget.id)) {
+      // Still out of reach with nothing walking: the server put the hero back (its own position after a walk it
+      // didn't take) or the path ended short. Like the desktop's clicked NPC, walk to it again from here instead of
+      // dropping the talk, a few times.
+      this.talkWalksLeft--;
+      this.walkToTalk(this.talkTarget);
+    }
     if (this.talkTarget && !this.hero.isWalking && !this.goal) {
       if (this.closeEnoughToTalk(this.talkTarget)) {
         if (this.interceptTalk?.(this.talkTarget) || this.beforeTalk?.(this.talkTarget)) {

@@ -14,4 +14,11 @@ public sealed class MultiVaultAccountState
 
     /// <summary>Gets or sets number of extra vaults permanently bought with coins.</summary>
     public int PurchasedExtraVaults { get; set; }
+
+    /// <summary>
+    /// Gets or sets the database id of each vault's item storage, by vault index. The account's vault is one of them;
+    /// switching vaults only changes which one it is, so every item keeps its full detail. Vaults used before this
+    /// existed are still in <see cref="MultiVaultStorageSnapshot"/> rows and move into a storage when first opened.
+    /// </summary>
+    public Dictionary<int, Guid> StorageIds { get; set; } = [];
 }

@@ -97,12 +97,14 @@ public sealed class HnmoStateStore
         if (string.Equals(fileName, StateFileName, StringComparison.OrdinalIgnoreCase)
             || LegacyFileToSection.ContainsKey(fileName))
         {
+            // A Season 9 program keeps its state in save/s9/: two programs never write one file.
             var directory = Path.GetDirectoryName(fullPath);
-            return string.IsNullOrEmpty(directory) ? StateFileName : Path.Combine(directory, StateFileName);
+            return HNMO.Interfaces.HnmoSeasonInstance.SaveFileFor(HNMO.Interfaces.HnmoSeasonInstance.Current, string.IsNullOrEmpty(directory) ? StateFileName : Path.Combine(directory, StateFileName));
         }
 
-        return fullPath;
+        return HNMO.Interfaces.HnmoSeasonInstance.SaveFileFor(HNMO.Interfaces.HnmoSeasonInstance.Current, fullPath);
     }
+
 
     /// <summary>
     /// Opens or returns the shared <see cref="HnmoStateStore"/> for a configured file path.

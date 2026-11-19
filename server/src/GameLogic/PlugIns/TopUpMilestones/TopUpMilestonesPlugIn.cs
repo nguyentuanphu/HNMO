@@ -204,7 +204,13 @@ public class TopUpMilestonesPlugIn :
         _ => ("Milestone step not found.", "Không tìm thấy mốc nạp."),
     };
 
-    private async ValueTask<(int Given, int Left)> DeliverOwedAsync(Player player)
+    // Under the player's own persistence lock, as every change of the bag is (audit 1.10): the delivery on entering
+    // the world runs beside the packet handlers and the periodic save, which would otherwise see the bag change
+    // half-way.
+    private ValueTask<(int Given, int Left)> DeliverOwedAsync(Player player) =>
+        player.RunPersistenceExclusiveAsync(() => this.DeliverOwedLockedAsync(player));
+
+    private async ValueTask<(int Given, int Left)> DeliverOwedLockedAsync(Player player)
     {
         if (AccountLoginOf(player) is not { } login || player.SelectedCharacter is null)
         {

@@ -36,9 +36,23 @@ public partial class HostSettingsPage
     [Inject]
     private IServerRestartService RestartService { get; set; } = default!;
 
+    [Inject]
+    private Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
+
+    /// <summary>Gets a value indicating whether this page was opened on the host computer itself (audit 2.5).</summary>
+    private bool IsHostComputer { get; set; }
+
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        // Ports, paths, the database password and the licence: only from the host computer, never through the
+        // website's admin path or another proxy.
+        this.IsHostComputer = HostComputerRequest.IsFromHostComputer(this.HttpContextAccessor.HttpContext);
+        if (!this.IsHostComputer)
+        {
+            return;
+        }
+
         this._settings = this.SettingsService.Load();
         this._relayAllowedHostsText = string.Join(", ", this._settings.RelayAllowedHosts);
         this._initialPorts = [this._settings.WebPort, this._settings.AdminPort, this._settings.ConnectServerPort, this._settings.DatabasePort];
@@ -82,6 +96,11 @@ public partial class HostSettingsPage
 
     private async Task OnLicenseUploadAsync(InputFileChangeEventArgs e)
     {
+        if (!this.IsHostComputer)
+        {
+            return;
+        }
+
         if (this._settings is null)
         {
             return;
@@ -105,6 +124,11 @@ public partial class HostSettingsPage
 
     private async Task RestartAsync()
     {
+        if (!this.IsHostComputer)
+        {
+            return;
+        }
+
         this._confirmRestart = false;
         this._errors.Clear();
         if (!this.RestartService.IsSupported)

@@ -1225,6 +1225,11 @@
       "renderStyleValues": {"glowTexture": "Item/Ingameshop/kacada_R.jpg"}
     },
     {
+      "number": 99,
+      "file": "Data/Item/Ingameshop/key.bmd",
+      "textureFolders": ["Item/Ingameshop"]
+    },
+    {
       "number": 103,
       "file": "Data/Item/partcharge7/EXPscroll.bmd",
       "textureFolders": ["Item/partcharge7"],
@@ -1426,6 +1431,26 @@
       "renderStyle": "sealOfWealth"
     },
     {
+      "number": 117,
+      "file": "Data/Item/Ingameshop/FRpotionA.bmd",
+      "textureFolders": ["Item/Ingameshop"]
+    },
+    {
+      "number": 118,
+      "file": "Data/Item/Ingameshop/FRpotionB.bmd",
+      "textureFolders": ["Item/Ingameshop"]
+    },
+    {
+      "number": 119,
+      "file": "Data/Item/Ingameshop/FRpotionC.bmd",
+      "textureFolders": ["Item/Ingameshop"]
+    },
+    {
+      "number": 120,
+      "file": "Data/Item/Ingameshop/FRpotionD.bmd",
+      "textureFolders": ["Item/Ingameshop"]
+    },
+    {
       "number": 121,
       "file": "Data/Item/Ingameshop/entrancegreen.bmd",
       "textureFolders": ["Item/Ingameshop"],
@@ -1526,6 +1551,21 @@
         "scale": 0.5
       },
       "renderStyle": "openAccessTicketToVarka7"
+    },
+    {
+      "number": 128,
+      "file": "Data/Item/hawkstatue.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 129,
+      "file": "Data/Item/sheepstatue.bmd",
+      "textureFolders": ["Item"]
+    },
+    {
+      "number": 134,
+      "file": "Data/Item/horseshoe.bmd",
+      "textureFolders": ["Item"]
     },
     {
       "number": 135,

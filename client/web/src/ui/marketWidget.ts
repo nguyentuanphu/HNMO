@@ -98,6 +98,9 @@ export async function mountMarketWidget(container: HTMLElement, creds: MarketCre
           if ('state' in next) {
             const msg = next.state ? `${next.result ?? 'OK'}` : '';
             render(next, msg);
+          } else if (next.error === 'online') {
+            // The account is playing: the purchase waits for the game, where it's made with F6.
+            render(data, tx('You are in the game: buy there (F6), or log out first.', 'Bạn đang trong game: hãy mua trong game (F6), hoặc thoát game trước.'));
           }
         });
       }

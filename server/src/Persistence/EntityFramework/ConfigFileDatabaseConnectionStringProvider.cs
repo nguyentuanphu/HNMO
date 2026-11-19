@@ -94,6 +94,37 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
         setting.ConnectionString = builder.ToString();
     }
 
+    /// <summary>
+    /// A Season 9 program uses its own database (<see cref="HnmoSeasonInstance.DatabaseNameFor"/>). The admin panel's
+    /// users stay in the configured database: one set of administrators for both seasons.
+    /// </summary>
+    private static void ApplySeason(ConnectionSetting setting, Type contextType)
+    {
+        if (!HnmoSeasonInstance.IsSeasonNine || string.IsNullOrWhiteSpace(setting.ConnectionString) || contextType.Name == "AdminPanelContext")
+        {
+            return;
+        }
+
+        setting.ConnectionString = SeasonConnectionString(HnmoSeasonInstance.Current, setting.ConnectionString);
+    }
+
+    /// <summary>The connection string of a season's database, built from Season 6.3's.</summary>
+    /// <param name="season">The season key.</param>
+    /// <param name="connectionString">Season 6.3's connection string.</param>
+    /// <returns>The season's connection string.</returns>
+    internal static string SeasonConnectionString(string season, string connectionString)
+    {
+        var builder = new NpgsqlConnectionStringBuilder(connectionString);
+        var database = HnmoSeasonInstance.DatabaseNameFor(season, builder.Database ?? string.Empty);
+        if (database == builder.Database)
+        {
+            return connectionString;
+        }
+
+        builder.Database = database;
+        return builder.ToString();
+    }
+
     private IDictionary<Type, ConnectionSetting> LoadSettings()
     {
         var settings = new XmlReaderSettings
@@ -139,12 +170,14 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
                     {
                         ApplyHostSettings(setting, hostSettings);
                         this.ApplyEnvironmentVariables(setting);
+                        ApplySeason(setting, contextType);
                         result.Add(contextType, setting);
                     }
                     else if (setting.ContextTypeName.EndsWith($".{nameof(TypedContext)}") || setting.ContextTypeName.EndsWith($".{nameof(TypedContext)}^1"))
                     {
                         ApplyHostSettings(setting, hostSettings);
                         this.ApplyEnvironmentVariables(setting);
+                        ApplySeason(setting, typeof(TypedContext));
                         result.Add(typeof(TypedContext), setting);
                     }
                     else

@@ -5165,4 +5165,15 @@ On your account page, open Security and paste this code to confirm your new emai
     <value>Perform this action.</value>
   </data>
   <data name="ShopEditorAllMaps" xml:space="preserve"><value>All maps</value></data>
+  <data name="SeasonChooserTitle" xml:space="preserve"><value>Which season do you want to set up?</value></data>
+  <data name="SeasonSixButton" xml:space="preserve"><value>Season 6.3</value></data>
+  <data name="SeasonNineButton" xml:space="preserve"><value>Season 9</value></data>
+  <data name="SeasonSixButtonHint" xml:space="preserve"><value>The classic worlds: maps, monsters, items, drops, shops, events and rates of Season 6.3.</value></data>
+  <data name="SeasonNineButtonHint" xml:space="preserve"><value>The newer worlds: maps, monsters, items, drops, shops, events and rates of Season 9.</value></data>
+  <data name="SeasonYouAreHere" xml:space="preserve"><value>You are here</value></data>
+  <data name="SeasonNineOff" xml:space="preserve"><value>Off. Switch it on in Host settings (Season 9 server), then restart HNMO.</value></data>
+  <data name="SharedSettingsButton" xml:space="preserve"><value>Shared settings</value></data>
+  <data name="SharedSettingsButtonHint" xml:space="preserve"><value>Both seasons: accounts, coins, website, news, bans, admin users and host settings.</value></data>
+  <data name="SeasonBadgeTitle" xml:space="preserve"><value>This admin panel sets up {0}</value></data>
+  <data name="HostSettingsHostOnly" xml:space="preserve"><value>Host settings can only be changed on the host computer: open the admin panel there (http://localhost:8095). They change ports, folders, the database password and the licence.</value></data>
 </root>
