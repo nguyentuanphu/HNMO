@@ -36,16 +36,26 @@ test('a long walk goes on after the server puts the hero back a little', async (
 
   await page.evaluate((target) => (window as unknown as Win).__game.online.walkTo(target), FIELD);
   // Right after the second part of the walk went out (the first part is 15 steps), the "server" puts the hero
-  // two cells back on its way (checked frame by frame, so that it answers that part, as the server's refusal does).
+  // two cells back on its way (checked frame by frame, within a second of that part: the client takes a correction
+  // within 2 s as its answer; the test machine draws only a frame or two a second).
+  // "Back" is a cell the hero stood on two steps before: the cell two to the west may be a wall (by the east gate),
+  // from which no path goes on.
   const back = await page.evaluate(async (fromX) => {
     const { write } = await import('/js/net/packets.js' as string) as { write(group: string, name: string, values: Record<string, unknown>): Uint8Array };
     const g = (window as unknown as Win).__game;
     const started = performance.now();
-    while (!(g.online.goal && g.hero.cell.x > fromX && performance.now() - (g.online.continuedAt ?? -Infinity) < 300)) {
+    const visited: { x: number; y: number }[] = [];
+    const note = (): void => {
+      const last = visited[visited.length - 1];
+      if (!last || last.x !== g.hero.cell.x || last.y !== g.hero.cell.y) visited.push({ x: g.hero.cell.x, y: g.hero.cell.y });
+    };
+    note();
+    while (!(g.online.goal && g.hero.cell.x > fromX && visited.length >= 3 && performance.now() - (g.online.continuedAt ?? -Infinity) < 1000)) {
       if (performance.now() - started > 30_000) throw new Error(`the hero didn't walk on: ${g.hero.cell.x},${g.hero.cell.y}`);
       await new Promise((resolve) => requestAnimationFrame(resolve));
+      note();
     }
-    const to = { x: g.hero.cell.x - 2, y: g.hero.cell.y };
+    const to = visited[visited.length - 3];
     g.connection.dispatch(write('ServerToClient', 'ObjectMoved', { HeaderCode: 0x15, ObjectId: g.online.playerId, PositionX: to.x, PositionY: to.y }));
     return to;
   }, TOWN.x);
