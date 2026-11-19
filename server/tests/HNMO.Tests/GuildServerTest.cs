@@ -114,6 +114,27 @@ public class GuildServerTest : GuildTestBase
     }
 
     /// <summary>
+    /// The member of a guild which was deleted, in a store without cascading deletes (the demo's in-memory one
+    /// keeps the members of a disbanded guild), enters without a guild instead of failing every time.
+    /// </summary>
+    [Test]
+    public async ValueTask MemberOfADeletedGuildEntersWithoutGuildAsync()
+    {
+        using (var context = this.PersistenceContextProvider.CreateNewContext())
+        {
+            var guild = (await context.GetAsync<HNMO.DataModel.Entities.Guild>().ConfigureAwait(false)).Single(g => g.Name == GuildName);
+            await context.DeleteAsync(guild).ConfigureAwait(false);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        Assert.DoesNotThrowAsync(async () => await this.GuildServer.PlayerEnteredGameAsync(this.GuildMaster.Id, this.GuildMaster.Name, 1).ConfigureAwait(false));
+        this.GameServer1.Verify(g => g.AssignGuildToPlayerAsync(this.GuildMaster.Name, It.IsAny<GuildMemberStatus>()), Times.Never);
+
+        using var check = this.PersistenceContextProvider.CreateNewGuildContext();
+        Assert.That(await check.GetByIdAsync<HNMO.DataModel.Entities.GuildMember>(this.GuildMaster.Id).ConfigureAwait(false), Is.Null, "the membership is removed");
+    }
+
+    /// <summary>
     /// Tests that a member who enters the game with a new name (renamed while the guild stayed loaded)
     /// shows up with the new name in the guild member list.
     /// </summary>

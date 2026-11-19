@@ -296,7 +296,16 @@ public class GuildServer : IGuildServer
         var guildMember = await tempContext.GetByIdAsync<GuildMember>(characterId).ConfigureAwait(false); // we use the same id for Character.Id and GuildMemberInfo.Id
         if (guildMember is not null)
         {
-            var guildId = await this.GuildMemberEnterGameAsync(guildMember.GuildId, guildMember.Id, characterName, serverId).ConfigureAwait(false);
+            if (await this.GuildMemberEnterGameAsync(guildMember.GuildId, guildMember.Id, characterName, serverId).ConfigureAwait(false) is not { } guildId)
+            {
+                // The member of a guild which doesn't exist anymore (a store without cascading deletes keeps the
+                // members of a disbanded guild): it has no guild. Left in place, every later entry failed.
+                this._logger.LogWarning("Character {CharacterName} was a member of guild {GuildId}, which doesn't exist anymore; the membership is removed.", characterName, guildMember.GuildId);
+                await tempContext.DeleteAsync(guildMember).ConfigureAwait(false);
+                await tempContext.SaveChangesAsync().ConfigureAwait(false);
+                return;
+            }
+
             var status = new GuildMemberStatus(guildId, guildMember.Status);
             await this._changePublisher.AssignGuildToPlayerAsync(serverId, characterName, status).ConfigureAwait(false);
         }
@@ -764,13 +773,13 @@ public class GuildServer : IGuildServer
         // TODO: Inform game servers that a guild war ended.
     }
 
-    private async ValueTask<uint> GuildMemberEnterGameAsync(Guid guildId, Guid characterId, string characterName, byte serverId)
+    private async ValueTask<uint?> GuildMemberEnterGameAsync(Guid guildId, Guid characterId, string characterName, byte serverId)
     {
         using var relationshipLock = await this._relationshipChangeLock.LockAsync().ConfigureAwait(false);
         var guild = await this.GetOrCreateGuildContainerCoreAsync(guildId).ConfigureAwait(false);
         if (guild is null)
         {
-            throw new ArgumentException($"Guild not found. Id: {guildId}", nameof(guildId));
+            return null;
         }
 
         guild.SetServerId(characterId, serverId);
