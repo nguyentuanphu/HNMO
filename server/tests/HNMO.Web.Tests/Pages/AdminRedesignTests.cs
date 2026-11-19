@@ -87,6 +87,22 @@ public class AdminRedesignTests
     }
 
     /// <summary>Verifies <see cref="AdminNavigationPreferences"/> toggles favourites, recents, and view mode.</summary>
+    /// <summary>
+    /// Every page has a short line for the sidebar, in English and Vietnamese, that fits the menu's width without being cut.
+    /// </summary>
+    [Test]
+    public void EveryMenuPageHasAShortHintThatFits()
+    {
+        foreach (var entry in AdminNavCatalog.Entries)
+        {
+            Assert.That(AdminNavHints.All.TryGetValue(entry.Route, out var hint), Is.True, $"No sidebar hint for '{entry.Route}'.");
+            Assert.That(hint.En, Is.Not.Empty.And.Length.LessThanOrEqualTo(AdminNavHints.MaximumLength), $"English hint of '{entry.Route}'.");
+            Assert.That(hint.Vi, Is.Not.Empty.And.Length.LessThanOrEqualTo(AdminNavHints.MaximumLength), $"Vietnamese hint of '{entry.Route}'.");
+        }
+
+        Assert.That(AdminNavHints.All.Keys, Is.SubsetOf(AdminNavCatalog.Entries.Select(e => e.Route)), "A hint names a page the menu does not have.");
+    }
+
     [Test]
     public void PreferencesTrackFavouritesRecentsAndBasicMode()
     {

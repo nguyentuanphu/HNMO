@@ -110,7 +110,10 @@
                                 <span class="oi @entry.Icon" aria-hidden="true"></span>
                                 <span class="hn-nav-text">
                                     <span class="hn-nav-title">@entry.LocalizedTitle</span>
-                                    <small class="hn-nav-desc">@entry.LocalizedDescription</small>
+                                    @if (AdminNavHints.For(entry) is { Length: > 0 } hint)
+                                    {
+                                        <small class="hn-nav-desc">@hint</small>
+                                    }
                                 </span>
                             </NavLink>
                         </li>
