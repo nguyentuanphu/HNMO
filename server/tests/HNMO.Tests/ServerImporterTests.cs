@@ -235,6 +235,54 @@ public class ServerImporterTests
         return config;
     }
 
+    /// <summary>Verifies the Season 6 and Season 9 XML/DAT/INI configuration schemas (BonusEvent multipliers, SetItemDropManager, ItemBags, InvasionManager, IllusionTemple Monute typo, MonsterSpawn XML).</summary>
+    [Test]
+    public void ParsesSeasonSixAndNineConfigurationSchemas()
+    {
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "ItemBags"));
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Events"));
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Monsters"));
+
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "Server_SetItemDropManager.xml"),
+            "<SetItemDropManager DropUseRate=\"10000\"><Rule MonsterIndex=\"2\" MonsterMinLevel=\"1\" MonsterMaxLevel=\"150\" MapNumber=\"31\"><ItemDrop Cat=\"0\" Index=\"1\" MinLevel=\"0\" MaxLevel=\"0\" Exc=\"0\" DropRate=\"500\" /></Rule></SetItemDropManager>");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "ItemBags", "Item_Kundun_Box+1.xml"),
+            "<ItemBag><BagConfig Name=\"Box\" ItemRate=\"10000\" /><DropAllow MapNumber=\"-1\"><Drop Rate=\"2500\" Count=\"1\"><Item Cat=\"0\" Index=\"1\" ItemMinLevel=\"3\" Skill=\"1\" Luck=\"1\" Option=\"1\" Exc=\"-1\" SetItem=\"0\" /></Drop></DropAllow></ItemBag>");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "Events", "Server_BonusEvent.xml"),
+            "<BonusEvent Enable=\"1\"><Event DayOfWeek=\"-1\" StartHour=\"14\" EndHour=\"16\" ExpMultiplier=\"1.75\" MasterExpMultiplier=\"1.5\" ItemDropBonus=\"25\" /></BonusEvent>");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "Events", "Server_InvasionManager.xml"),
+            "<InvasionManager Enable=\"1\"><Invasion Type=\"0\" Name=\"Red Dragon Invasion\"><Start DayOfWeek=\"-1\" Hour=\"13\" Minute=\"0\" /><Start DayOfWeek=\"-1\" Hour=\"23\" Minute=\"30\" /></Invasion></InvasionManager>");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "Events", "Server_IllusionTemple_Renewal.xml"),
+            "<IllusionTempleRenewal Enable=\"1\"><EventSchedule><Start Hour=\"1\" Monute=\"15\" /><Start Hour=\"10\" Minute=\"30\" /></EventSchedule></IllusionTempleRenewal>");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "Monsters", "Server_MonsterSpawn.xml"),
+            "<MonsterSpawn><Map Number=\"0\" Name=\"Lorencia\"><Spot Type=\"1\"><Spawn Index=\"2\" StartX=\"100\" StartY=\"100\" EndX=\"120\" EndY=\"120\" Dir=\"3\" Count=\"4\" /></Spot><Spot Type=\"3\"><Spawn Index=\"598\" StartX=\"80\" StartY=\"80\" Dir=\"1\" Element=\"1\" /></Spot></Map></MonsterSpawn>");
+
+        var drops = LegacyFileParsers.ParseDropLists(this._tempDir);
+        Assert.That(drops.Any(d => d.IsAncient && d.MapNumber == 31), Is.True);
+        Assert.That(drops.Any(d => d.MonsterNumber == -1 && d.MinItemLevel == 3 && d.IsExcellent), Is.True);
+
+        var events = LegacyFileParsers.ParseEventSchedules(this._tempDir);
+        var bonus = events.Single(e => e.EventId == "imported-bonus-1");
+        Assert.That(bonus.ExpBonusPercent, Is.EqualTo(75));
+        Assert.That(bonus.DropBonusPercent, Is.EqualTo(25));
+        Assert.That(bonus.ScheduleTimes, Is.EqualTo("14:00"));
+        var inv = events.Single(e => e.Name == "Red Dragon Invasion");
+        Assert.That(inv.ScheduleTimes, Is.EqualTo("13:00, 23:30"));
+        var it = events.Single(e => e.EventId == "s9-illusion-temple-renewal");
+        Assert.That(it.ScheduleTimes, Is.EqualTo("01:15, 10:30"));
+
+        var spawns = LegacyFileParsers.ParseMonsterSpawns(this._tempDir);
+        Assert.That(spawns.Count, Is.EqualTo(2));
+        Assert.That(spawns[0].SpawnGroup, Is.EqualTo(1));
+        Assert.That(spawns[0].Quantity, Is.EqualTo(4));
+        Assert.That(spawns[1].SpawnGroup, Is.EqualTo(5));
+    }
+
     private sealed class StubDatabaseReader(LegacyDatabaseSnapshot snapshot) : ILegacyDatabaseReader
     {
         public Task<LegacyDatabaseSnapshot> ReadAsync(string connectionString, CancellationToken cancellationToken = default) =>

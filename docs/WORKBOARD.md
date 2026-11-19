@@ -39,6 +39,7 @@
 - [x] **Gap 2 — data roots per season**: `/data/...` (S6.3) and `/data/s9/...`; packaging keeps the pack in `Data_S9`. See [s9-asset-spec-2026-11-19.md](s9-asset-spec-2026-11-19.md) section 3.
 - [~] **Gap 4 — players pick the season**: website season choice and badges, the game's server list (worlds together, badge), the game loads the picked world's data. Still to do: season-only admin pages shown only for that season's worlds.
 - [ ] **Gap 3 — Season 9 game data on the server**: own initialization (maps, items, monsters, skills, quests) and a game configuration per season in one admin panel. Not started.
+- [x] **Antigravity's importer update taken in** (its commit `81b5f39b`, as a new commit: the vendor's name removed from the spec, the test and the message): `/import-server` reads the Season 6 and Season 9 configuration layouts; [s6-s9-server-spec-2026-11-19.md](s6-s9-server-spec-2026-11-19.md).
 - [ ] **Antigravity (Windows)**: check `/data/s9/` with the real pack (`HNMO_S9_DATA_DIR`), package `win-x64`, playtest.
 
 ### Wave 2 — Remaining Season 6 `/import-server` & Feature-Gap Completion (ASSIGNED: Cloud Claude)
