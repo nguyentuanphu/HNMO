@@ -3,7 +3,7 @@
 ## The owner's decisions (pop-up, 2026-11-20 ~06:55 Sydney)
 
 - **Vault pages:**
-  - 3 pages per account, free;
+  - **2 pages per account, free** (owner, 2026-11-20 ~08:30; earlier 3);
   - VIP +1;
   - more pages bought with coins;
   - all set in the admin panel;

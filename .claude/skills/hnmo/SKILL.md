@@ -437,3 +437,8 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - Admin path through the website: a Host setting; a fresh folder gets a random hard-to-guess path shown to the host.
 - Market/escrow (audit 1.4): do the full fix, keeping the real item in a system storage (like vault pages).
 - Season 9 new classes: local Claude checks the owner's Season 9 data for them.
+- (08:30) Vault pages: 2 free (not 3). Anti-dupe: item origin serials + hourly scan + freeze + admin alert.
+  Market: one-off access fee 1,000 WCoinC + 5% tax per sale (listing fee stays). Arena across servers/seasons:
+  same template per class, all 4 modes (1v1 always; 5v5, battle royale, guild war scheduled), rewards = titles,
+  arena points shop on home servers, website leaderboard (no coins). Plans: docs/plans/arena-2026-11-20.md,
+  docs/plans/anti-dupe-market-2026-11-20.md.
