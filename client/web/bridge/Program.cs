@@ -350,17 +350,37 @@ app.MapGet("/data/s9/{**path}", async (HttpContext context, string path) =>
         return;
     }
 
-    if (!await TryServeWebDataAsync(context, path).ConfigureAwait(false))
+    if (await TryServeWebDataAsync(context, path).ConfigureAwait(false) || await gameFiles.TryServeAsync(context, path).ConfigureAwait(false))
     {
-        await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
+        return;
     }
+
+    // A Season 9 object's texture found nowhere in its own folder: Season 9 objects that are items on display use the
+    // item's texture from Item/ (SeasonData.ItemFolderTextureFor).
+    if (SeasonData.ItemFolderTextureFor(path) is { } itemTexture
+        && ((s9Files is not null && await s9Files.TryServeAsync(context, itemTexture).ConfigureAwait(false))
+            || await gameFiles.TryServeAsync(context, itemTexture).ConfigureAwait(false)))
+    {
+        return;
+    }
+
+    await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
 });
 app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 {
-    if (!await TryServeWebDataAsync(context, path).ConfigureAwait(false))
+    if (await TryServeWebDataAsync(context, path).ConfigureAwait(false) || await gameFiles.TryServeAsync(context, path).ConfigureAwait(false))
     {
-        await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
+        return;
     }
+
+    // A map only Season 9 has, played by a Season 6.3 world: its files come from the Season 9 pack. Every file the
+    // base game has was answered above, so Season 6.3 keeps its own looks.
+    if (s9Files is not null && SeasonData.IsSeasonNineOnlyMapFile(path) && await s9Files.TryServeAsync(context, path).ConfigureAwait(false))
+    {
+        return;
+    }
+
+    await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
 });
 Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>());
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
