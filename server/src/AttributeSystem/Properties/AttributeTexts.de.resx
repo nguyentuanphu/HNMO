@@ -523,7 +523,7 @@
     <value>Keule ausgerüstet</value>
   </data>
   <data name="Name_IsMUHelperactive" xml:space="preserve">
-    <value>MU Helper aktiv</value>
+    <value>Auto-Play-Helfer aktiv</value>
   </data>
   <data name="Name_IsOneHandedStaffEquipped" xml:space="preserve">
     <value>Einhändiger Stab ausgerüstet</value>

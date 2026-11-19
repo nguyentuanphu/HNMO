@@ -2158,7 +2158,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provides configuration for the MU Helper feature..
+        ///   Looks up a localized string similar to Provides configuration for the auto-play helper feature..
         /// </summary>
         public static string MuHelperFeaturePlugIn_Description {
             get {
@@ -2167,7 +2167,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper Feature.
+        ///   Looks up a localized string similar to Auto-Play Helper Feature.
         /// </summary>
         public static string MuHelperFeaturePlugIn_Name {
             get {

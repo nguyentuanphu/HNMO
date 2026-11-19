@@ -43,10 +43,10 @@
     <value>Cho biết Land of Trials có mở không và phí vào hiện áp dụng.</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Name" xml:space="preserve">
-    <value>Tính năng MU Helper</value>
+    <value>Tính năng trợ lý tự động đánh</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Description" xml:space="preserve">
-    <value>Cung cấp cấu hình cho tính năng MU Helper.</value>
+    <value>Cung cấp cấu hình cho tính năng trợ lý tự động đánh.</value>
   </data>
   <data name="UpdatePetCommandManagerOnItemMovePlugIn_Name" xml:space="preserve">
     <value>Cập nhật lệnh thú cưng khi di chuyển vật phẩm</value>

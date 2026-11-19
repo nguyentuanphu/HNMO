@@ -23,7 +23,7 @@ public sealed class MovementHandler
     /// Initializes a new instance of the <see cref="MovementHandler"/> class.
     /// </summary>
     /// <param name="player">The offline player.</param>
-    /// <param name="config">The MU Helper configuration.</param>
+    /// <param name="config">The auto-play helper configuration.</param>
     public MovementHandler(OfflinePlayer player, IMuHelperSettings? config)
     {
         this._player = player;

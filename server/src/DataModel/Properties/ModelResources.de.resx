@@ -259,7 +259,7 @@
     <value>Tastenkonfiguration</value>
   </data>
   <data name="Character_MuHelperConfiguration_Caption" xml:space="preserve">
-    <value>MU-Helper-Konfiguration</value>
+    <value>Auto-Play-Helfer-Konfiguration</value>
   </data>
   <data name="Character_StoreName_Caption" xml:space="preserve">
     <value>Ladenname</value>

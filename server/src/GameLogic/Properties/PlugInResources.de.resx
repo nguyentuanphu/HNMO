@@ -145,10 +145,10 @@
     <value>Zeigt die Verfügbarkeit des Landes der Prüfungen und die geltende Eintrittsgebühr an.</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Name" xml:space="preserve">
-    <value>Funktion MU Helper</value>
+    <value>Funktion Auto-Play-Helfer</value>
   </data>
   <data name="MuHelperFeaturePlugIn_Description" xml:space="preserve">
-    <value>Stellt die Konfiguration für die Funktion MU Helper bereit.</value>
+    <value>Stellt die Konfiguration für die Funktion Auto-Play-Helfer bereit.</value>
   </data>
   <data name="UpdatePetCommandManagerOnItemMovePlugIn_Name" xml:space="preserve">
     <value>Haustier-Befehlsverwaltung beim Verschieben von Gegenständen aktualisieren</value>

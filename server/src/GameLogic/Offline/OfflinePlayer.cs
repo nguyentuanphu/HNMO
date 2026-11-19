@@ -210,7 +210,7 @@ public class OfflinePlayer : Player
         => this.InitializeCoreAsync(loginName, characterName, isOffTrade: false, maxDurationHours: 0, stopWhenSoldOut: true);
 
     /// <summary>
-    /// Initializes an offline trade (<c>/offtrade</c>) session that keeps the personal store open without MU Helper combat AI.
+    /// Initializes an offline trade (<c>/offtrade</c>) session that keeps the personal store open without auto-play helper combat AI.
     /// </summary>
     /// <param name="loginName">The account login name.</param>
     /// <param name="characterName">The character name to continue with.</param>

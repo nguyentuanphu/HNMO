@@ -36,7 +36,7 @@ public sealed class OfflinePlayerManager
             (sentinel, characterName) => sentinel.InitializeAsync(loginName, characterName));
 
     /// <summary>
-    /// Starts an offline shop (<c>/offtrade</c>) session without MU Helper combat AI or MU Helper Zen fee.
+    /// Starts an offline shop (<c>/offtrade</c>) session without auto-play helper combat AI or auto-play helper Zen fee.
     /// </summary>
     /// <param name="realPlayer">The real player starting <c>/offtrade</c>.</param>
     /// <param name="loginName">The pre-validated account login name.</param>
@@ -166,7 +166,7 @@ public sealed class OfflinePlayerManager
 
     /// <summary>
     /// Calculates and deducts the initial Zen cost for starting an offline player session.
-    /// The cost is based on the first MuHelper cost stage multiplied by the player's total level.
+    /// The cost is based on the first auto-play helper cost stage multiplied by the player's total level.
     /// </summary>
     /// <param name="player">The player to charge.</param>
     /// <returns><c>true</c> if the cost was successfully charged or no cost applies; otherwise <c>false</c>.</returns>
@@ -178,7 +178,7 @@ public sealed class OfflinePlayerManager
     }
 
     /// <summary>
-    /// Calculates the initial Zen cost for the given player based on the MuHelper configuration
+    /// Calculates the initial Zen cost for the given player based on the auto-play helper configuration
     /// and the player's combined normal and master level.
     /// </summary>
     /// <param name="player">The player for whom to calculate the cost.</param>

@@ -4372,7 +4372,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sends the new MU Helper status to the client..
+        ///   Looks up a localized string similar to Sends the new auto-play helper status to the client..
         /// </summary>
         public static string MuHelperConfigurationUpdatePlugIn_Description {
             get {
@@ -4381,7 +4381,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mu Helper Configuration Update.
+        ///   Looks up a localized string similar to Auto-Play Helper Configuration Update.
         /// </summary>
         public static string MuHelperConfigurationUpdatePlugIn_Name {
             get {
@@ -4390,7 +4390,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group packet handler for mu helper packets (0xBF identifier)..
+        ///   Looks up a localized string similar to Group packet handler for auto-play helper packets (0xBF identifier)..
         /// </summary>
         public static string MuHelperGroupHandler_Description {
             get {
@@ -4399,7 +4399,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MuHelperGroupHandler.
+        ///   Looks up a localized string similar to Auto-Play Helper Group Handler.
         /// </summary>
         public static string MuHelperGroupHandler_Name {
             get {
@@ -4417,7 +4417,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MuHelperSaveDataRequestHandlerPlugin.
+        ///   Looks up a localized string similar to Auto-Play Helper Save Data Request Handler.
         /// </summary>
         public static string MuHelperSaveDataRequestHandlerPlugin_Name {
             get {
@@ -4426,7 +4426,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Initializes the MU Helper settings when the player enters the world..
+        ///   Looks up a localized string similar to Initializes the auto-play helper settings when the player enters the world..
         /// </summary>
         public static string MuHelperSettingsInitializationPlugIn_Description {
             get {
@@ -4435,7 +4435,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper Settings Initialization.
+        ///   Looks up a localized string similar to Auto-Play Helper Settings Initialization.
         /// </summary>
         public static string MuHelperSettingsInitializationPlugIn_Name {
             get {
@@ -4444,7 +4444,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handler for MU Helper status change requests..
+        ///   Looks up a localized string similar to Handler for auto-play helper status change requests..
         /// </summary>
         public static string MuHelperStatusChangeRequestHandlerPlugIn_Description {
             get {
@@ -4453,7 +4453,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mu Helper Status Change Request Handler.
+        ///   Looks up a localized string similar to Auto-Play Helper Status Change Request Handler.
         /// </summary>
         public static string MuHelperStatusChangeRequestHandlerPlugIn_Name {
             get {
@@ -4462,7 +4462,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sends the MU Helper status update to the client..
+        ///   Looks up a localized string similar to Sends the auto-play helper status update to the client..
         /// </summary>
         public static string MuHelperStatusUpdatePlugIn_Description {
             get {
@@ -4471,7 +4471,7 @@ namespace HNMO.GameServer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mu Helper Status Update.
+        ///   Looks up a localized string similar to Auto-Play Helper Status Update.
         /// </summary>
         public static string MuHelperStatusUpdatePlugIn_Name {
             get {

@@ -59,7 +59,7 @@ public sealed class OfflinePlayerMuHelper : AsyncDisposable
 
         if (config is null)
         {
-            this._player.Logger.LogDebug("Offline player started for {CharacterName} without a valid MU Helper configuration.", this._player.Name);
+            this._player.Logger.LogDebug("Offline player started for {CharacterName} without a valid auto-play helper configuration.", this._player.Name);
         }
         else
         {

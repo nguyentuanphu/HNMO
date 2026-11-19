@@ -2039,7 +2039,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper is already running..
+        ///   Looks up a localized string similar to The auto-play helper is already running..
         /// </summary>
         public static string MuHelperAlreadyRunning {
             get {
@@ -2048,7 +2048,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper can&apos;t handle status: {0}.
+        ///   Looks up a localized string similar to The auto-play helper can&apos;t handle status: {0}.
         /// </summary>
         public static string MuHelperCantHandleStatus {
             get {
@@ -2057,7 +2057,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper is disabled.
+        ///   Looks up a localized string similar to The auto-play helper is disabled.
         /// </summary>
         public static string MuHelperIsDisabled {
             get {
@@ -2066,7 +2066,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper cannot be used after level {0}..
+        ///   Looks up a localized string similar to The auto-play helper cannot be used after level {0}..
         /// </summary>
         public static string MuHelperMaximumLevel {
             get {
@@ -2075,7 +2075,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper can be used after level {0}..
+        ///   Looks up a localized string similar to The auto-play helper can be used after level {0}..
         /// </summary>
         public static string MuHelperMinimumLevel {
             get {
@@ -2084,7 +2084,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MU Helper requires {0} zen..
+        ///   Looks up a localized string similar to The auto-play helper requires {0} zen..
         /// </summary>
         public static string MuHelperRequiresMoney {
             get {
@@ -3083,7 +3083,7 @@ namespace HNMO.GameLogic.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mu Helper is not running..
+        ///   Looks up a localized string similar to The auto-play helper must be running to start offline leveling..
         /// </summary>
         public static string OfflineLevelingMuHelperNotRunning {
             get {

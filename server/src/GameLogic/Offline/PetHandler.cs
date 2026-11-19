@@ -21,7 +21,7 @@ internal sealed class PetHandler
     /// Initializes a new instance of the <see cref="PetHandler"/> class.
     /// </summary>
     /// <param name="player">The offline player.</param>
-    /// <param name="config">The MU Helper configuration.</param>
+    /// <param name="config">The auto-play helper configuration.</param>
     /// <param name="petCommandManager">Optional pet command manager for testing.</param>
     public PetHandler(OfflinePlayer player, IMuHelperSettings? config, IPetCommandManager? petCommandManager = null)
     {

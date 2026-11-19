@@ -54,7 +54,7 @@ public sealed class ItemPickupHandler
     /// Initializes a new instance of the <see cref="ItemPickupHandler"/> class.
     /// </summary>
     /// <param name="player">The offline player.</param>
-    /// <param name="config">The MU Helper configuration.</param>
+    /// <param name="config">The auto-play helper configuration.</param>
     /// <param name="movementHandler">
     /// The movement handler to walk to drops which are out of pickup reach. Without it, such drops are left alone.
     /// </param>
@@ -72,7 +72,7 @@ public sealed class ItemPickupHandler
     /// The obtain range may be larger than the distance at which the server accepts a pick up
     /// (<see cref="PickupItemAction.MaximumPickupDistance"/>). Requesting such a drop from where the player
     /// stands was refused on every tick, forever; instead the player walks to the nearest wanted drop
-    /// first, like the MU Helper of the client does. A drop which stays on the ground after a request
+    /// first, like the client's auto-play helper does. A drop which stays on the ground after a request
     /// (e.g. no inventory space, not an owner yet) or which can't be reached is ignored for a while.
     /// </remarks>
     public async ValueTask PickupItemsAsync()
