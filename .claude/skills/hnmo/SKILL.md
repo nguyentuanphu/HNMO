@@ -399,3 +399,29 @@ No Android/iOS store apps and no desktop client: everything ships as the web gam
 "Add to Home Screen"). Don't plan or build native apps or desktop work unless the owner asks again.
 The desktop client is dropped for now: HNMO is played through the web game. New features get web windows only.
 The desktop code stays the reference for how the classic game behaves (parity rule unchanged).
+
+## Handover and re-audit (2026-11-19)
+- Roles: main Claude audits, fixes, merges into `main`, ships; Antigravity does the Windows-only work on
+  `antigravity-*` branches with full prompts; the first helper stopped on 2026-11-18. See
+  `docs/HANDOVER-2026-11-19.md`, `docs/WORKBOARD.md`, `docs/audit-2026-11-19.md`.
+- A fresh cloud container has no .NET and no `hnmo` user: install with `dotnet-install.sh --channel 10.0
+  --install-dir ~/.dotnet`, `useradd -m hnmo`, package to `/home/hnmo/HNMO`, `chown -R hnmo`, start with
+  `su hnmo -c ./start-hnmo.sh` (ready in under a minute). PostgreSQL 16 and ffmpeg are there.
+- A full `dotnet test` of the solution takes about 12 minutes (the initialization tests are 11 of them); run it
+  in the background and never edit-and-build the same projects meanwhile.
+- Tests that import `/js/...` modules or start `dotnet` (control.spec, party-options.spec, buffs-vi-language)
+  only work against the developer web client (`bridge` on its own port), not against the packaged folder.
+- Helpers' code: don't trust their own audits. What they got wrong most: features that take items or money
+  without thinking of the trade / crafting inventory backup, a lock per wrapper over one shared file,
+  `innerHTML` with player text, "local connection = the host", saved files in the program folder.
+- Never name a vendor or the original game in the repository, local disk paths included.
+- Only use the GitHub tools for GitHub (no direct API calls).
+
+## Seasons (2026-11-19)
+- A world has a season (`WorldDefinition.Season`, S6.3 default). The website and the game's server list show
+  it; the game loads `/data/...` for S6.3 and `/data/s9/...` for S9 (`client/web/src/dataRoot.ts`,
+  `bridge/SeasonData.cs`: only maps, models, effects and sounds come from the Season 9 pack in `Data_S9`).
+- The server runs one game configuration for all worlds. Plan for Season 9 content: add it to that one
+  configuration and switch it on per game server by its world's season (maps in the server's map list,
+  season-only features behind a season check), not a second configuration or database.
+- A world's rates are its servers' own rates (the per-server rates of the Servers page).
