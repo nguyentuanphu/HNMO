@@ -22,6 +22,7 @@
     <Compile Include="..\..\src\SharedGlobalUsings.cs" Link="SharedGlobalUsings.cs" />
     <Compile Include="..\SharedTestUsings.cs" Link="SharedTestUsings.cs" />
     <Compile Include="..\..\..\client\web\bridge\SeasonData.cs" Link="Bridge\SeasonData.cs" />
+    <Compile Include="..\..\..\client\web\bridge\AccountGuessGuard.cs" Link="Bridge\AccountGuessGuard.cs" />
   </ItemGroup>
 
   <ItemGroup>
