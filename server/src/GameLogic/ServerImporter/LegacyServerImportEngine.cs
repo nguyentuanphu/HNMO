@@ -74,7 +74,8 @@ public static class LegacyServerImportEngine
         }
 
         var itemsByKey = config.Items.ToDictionary(i => $"{i.Group}:{i.Number}", StringComparer.Ordinal);
-        var mapsByNumber = config.Maps.ToDictionary(m => (int)m.Number);
+        // Several maps can share a number (Devil Square 1-4 are all map 9): the first one with it stands for it, as for monsters.
+        var mapsByNumber = config.Maps.GroupBy(m => (int)m.Number).ToDictionary(g => g.Key, g => g.First());
         var monstersByNumber = config.Monsters.GroupBy(m => (int)m.Number).ToDictionary(g => g.Key, g => g.First());
 
         if (options.ImportRates)
@@ -365,7 +366,8 @@ public static class LegacyServerImportEngine
 
         var monstersByNum = config.Monsters.GroupBy(m => (int)m.Number).ToDictionary(g => g.Key, g => g.First());
         var itemsByKey = config.Items.ToDictionary(i => $"{i.Group}:{i.Number}", StringComparer.Ordinal);
-        var mapsByNum = config.Maps.ToDictionary(m => (int)m.Number);
+        // Several maps can share a number (Devil Square 1-4 are all map 9): a spawn of that number goes to the first one.
+        var mapsByNum = config.Maps.GroupBy(m => (int)m.Number).ToDictionary(g => g.Key, g => g.First());
 
         foreach (var shop in preview.Shops)
         {
