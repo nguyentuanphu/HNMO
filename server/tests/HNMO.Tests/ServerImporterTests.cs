@@ -187,6 +187,47 @@ public class ServerImporterTests
         Assert.That((await context.GetAsync<HNMO.DataModel.Entities.Guild>().ConfigureAwait(false)).Any(g => g.Name == "OldGuild"), Is.False);
     }
 
+    /// <summary>
+    /// HNMO's configuration has several maps with the same number (Devil Square 1-4 are all map 9, 5-7 all map 32): the
+    /// preview and the import work with it, and a spawn of such a number goes to the first map with it. The preview
+    /// threw "An item with the same key has already been added. Key: 9" on every HNMO configuration.
+    /// </summary>
+    [Test]
+    public async Task PreviewAndImportWorkWithMapsSharingANumberAsync()
+    {
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Data", "Monster", "Spawns"));
+        File.WriteAllText(Path.Combine(this._tempDir, "Data", "CommonServer.cfg"), "ItemDropPer = 60\n");
+        File.WriteAllText(
+            Path.Combine(this._tempDir, "Data", "Monster", "Spawns", "MonsterSetBase.txt"),
+            "1\n2 9 10 120 120 140 140 -1 5\nend\n");
+
+        var persistence = new InMemoryPersistenceContextProvider();
+        var context = persistence.CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var devilSquares = new System.Collections.Generic.List<GameMapDefinition>();
+        for (var i = 1; i <= 3; i++)
+        {
+            var square = context.CreateNew<GameMapDefinition>();
+            square.Number = 9;
+            square.Name = new LocalizedString($"Devil Square {i}");
+            square.IsActive = true;
+            config.Maps.Add(square);
+            devilSquares.Add(square);
+        }
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var preview = await LegacyServerImportEngine.BuildDryRunPreviewAsync(options, config, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        Assert.That(preview.TotalMapped, Is.GreaterThanOrEqualTo(1));
+
+        await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        Assert.Multiple(() =>
+        {
+            Assert.That(devilSquares[0].MonsterSpawns.Count, Is.EqualTo(1), "the spawn of map 9 goes to the first map numbered 9");
+            Assert.That(devilSquares[1].MonsterSpawns, Is.Empty);
+            Assert.That(devilSquares[2].MonsterSpawns, Is.Empty);
+        });
+    }
+
     private static GameConfiguration CreateSyntheticConfig(HNMO.Persistence.IContext context)
     {
         var config = context.CreateNew<GameConfiguration>();
