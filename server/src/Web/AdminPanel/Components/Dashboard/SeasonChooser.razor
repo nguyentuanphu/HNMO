@@ -10,14 +10,13 @@
     <div class="season-chooser-grid">
         @foreach (var panel in this._panels)
         {
-            var nine = panel.Season == HnmoSeasonInstance.SeasonNine;
-            var title = nine ? Resources.SeasonNineButton : Resources.SeasonSixButton;
-            var hint = nine ? Resources.SeasonNineButtonHint : Resources.SeasonSixButtonHint;
+            var title = panel.Season switch { HnmoSeasonInstance.SeasonNine => Resources.SeasonNineButton, HnmoSeasonInstance.Arena => Resources.ArenaButton, _ => Resources.SeasonSixButton };
+            var hint = panel.Season switch { HnmoSeasonInstance.SeasonNine => Resources.SeasonNineButtonHint, HnmoSeasonInstance.Arena => Resources.ArenaButtonHint, _ => Resources.SeasonSixButtonHint };
             if (panel.Url is null)
             {
                 <div class="season-button season-@panel.Season is-off" id="season-button-@panel.Season" aria-disabled="true">
                     <span class="season-button-name">@title</span>
-                    <span class="season-button-hint">@Resources.SeasonNineOff</span>
+                    <span class="season-button-hint">@(panel.Season == HnmoSeasonInstance.Arena ? Resources.ArenaOff : Resources.SeasonNineOff)</span>
                 </div>
             }
             else

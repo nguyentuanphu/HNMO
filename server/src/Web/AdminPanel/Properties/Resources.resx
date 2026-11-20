@@ -5185,4 +5185,16 @@ On your account page, open Security and paste this code to confirm your new emai
   <data name="AccountCoinHistoryMarketAccess" xml:space="preserve">
     <value>Item market access</value>
   </data>
+  <data name="ArenaButton" xml:space="preserve">
+    <value>Arena</value>
+  </data>
+  <data name="ArenaButtonHint" xml:space="preserve">
+    <value>Battles across servers and seasons: arena characters, ranked duels, team battles and events.</value>
+  </data>
+  <data name="ArenaOff" xml:space="preserve">
+    <value>Off: tick "Arena" in Host settings and restart HNMO.</value>
+  </data>
+  <data name="ArenaEnabledHint" xml:space="preserve">
+    <value>The launcher also starts the HNMO Arena (its own database, connect server port +200, admin panel two ports up; accounts shared). Restart HNMO after changing it.</value>
+  </data>
 </root>

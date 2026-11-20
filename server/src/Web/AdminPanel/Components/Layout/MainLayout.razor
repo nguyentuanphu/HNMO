@@ -20,7 +20,12 @@
 
     private bool _isTwoFactorSetupPending;
 
-    private string SeasonName => HNMO.Interfaces.HnmoSeasonInstance.IsSeasonNine ? Resources.SeasonNineButton : Resources.SeasonSixButton;
+    private string SeasonName => HNMO.Interfaces.HnmoSeasonInstance.Current switch
+    {
+        HNMO.Interfaces.HnmoSeasonInstance.SeasonNine => Resources.SeasonNineButton,
+        HNMO.Interfaces.HnmoSeasonInstance.Arena => Resources.ArenaButton,
+        _ => Resources.SeasonSixButton,
+    };
     private AdminNavigationPreferences? _prefs;
 
     private AdminNavigationPreferences Preferences =>

@@ -40,4 +40,19 @@ public class SeasonPanelsTests
             Assert.That(SeasonPanels.SharedSettingsUrl(panels), Is.EqualTo("https://host.tail:9000/accounts"));
         });
     }
+
+    /// <summary>The Arena's panel is two ports up, shown when the Arena is on or when it's this panel.</summary>
+    [Test]
+    public void TheArenaPanelIsTwoPortsUp()
+    {
+        Assert.That(SeasonPanels.For("s6", new HostSettings { AdminPort = 8095 }, "http", "localhost")[2].Url, Is.Null, "the Arena is off");
+        var on = SeasonPanels.For("s6", new HostSettings { AdminPort = 8095, ArenaEnabled = true }, "http", "localhost");
+        Assert.That(on[2], Is.EqualTo(new SeasonPanel("arena", "http://localhost:8097/", false)));
+        var inArena = SeasonPanels.For("arena", new HostSettings { AdminPort = 8095 }, "http", "localhost");
+        Assert.Multiple(() =>
+        {
+            Assert.That(inArena[2], Is.EqualTo(new SeasonPanel("arena", "http://localhost:8097/", true)));
+            Assert.That(SeasonPanels.SharedSettingsUrl(inArena), Is.EqualTo("http://localhost:8095/accounts"));
+        });
+    }
 }

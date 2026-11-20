@@ -123,6 +123,10 @@
                     <input id="season-nine-enabled" type="checkbox" class="form-check-input" @bind="this._settings.SeasonNineEnabled" />
                     <label class="form-check-label" for="season-nine-enabled" title="The launcher also starts a Season 9 server (its own database, connect server port +100, admin panel on the next port; accounts and coins shared). Restart HNMO after changing it.">@Resources.SeasonNineButton</label>
                 </div>
+                <div class="form-check">
+                    <input id="arena-enabled" type="checkbox" class="form-check-input" @bind="this._settings.ArenaEnabled" />
+                    <label class="form-check-label" for="arena-enabled" title="@Resources.ArenaEnabledHint">@Resources.ArenaButton</label>
+                </div>
             </div>
             <div class="col-md-3">
                 <label class="form-label" title="PostgreSQL bin directory">PostgresPath</label>

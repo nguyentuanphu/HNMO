@@ -29,10 +29,12 @@ public static class SeasonPanels
     {
         string Url(int port) => $"{scheme}://{host}:{port}/";
         var seasonNineOn = settings.SeasonNineEnabled || current == HnmoSeasonInstance.SeasonNine;
+        var arenaOn = settings.ArenaEnabled || current == HnmoSeasonInstance.Arena;
         return
         [
             new SeasonPanel(HnmoSeasonInstance.SeasonSix, Url(settings.AdminPort), current == HnmoSeasonInstance.SeasonSix),
             new SeasonPanel(HnmoSeasonInstance.SeasonNine, seasonNineOn ? Url(settings.AdminPort + 1) : null, current == HnmoSeasonInstance.SeasonNine),
+            new SeasonPanel(HnmoSeasonInstance.Arena, arenaOn ? Url(settings.AdminPort + 2) : null, current == HnmoSeasonInstance.Arena),
         ];
     }
 

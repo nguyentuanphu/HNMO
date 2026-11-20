@@ -1093,20 +1093,28 @@ export function describeServerChoice(id: number, load: number, meta?: WebsiteSer
 interface SeasonServer extends ServerListEntry {
   connect: { host: string; port: number };
   season: SeasonKey;
+  /** The start screen's column, when it isn't the season's (the Arena). */
+  column?: 'arena';
   meta?: WebsiteServerMeta;
 }
 
-/** Season 9's connect server, when its program runs (the web server's seasons.json); null otherwise. */
-async function seasonNineConnectServer(seasonSix: { host: string; port: number }): Promise<{ host: string; port: number } | null> {
+/**
+ * The connect servers of the programs next to Season 6.3's, when they run (the web server's seasons.json): Season 9's
+ * and the Arena's; null for one that doesn't run.
+ */
+async function otherConnectServers(seasonSix: { host: string; port: number }): Promise<{ s9: { host: string; port: number } | null; arena: { host: string; port: number } | null }> {
   try {
     const response = await fetch('/data/seasons.json', { cache: 'no-store', signal: AbortSignal.timeout(1500) });
-    if (!response.ok) return null;
+    if (!response.ok) return { s9: null, arena: null };
     const data: unknown = await response.json();
     const connect = typeof data === 'object' && data !== null && 'connect' in data ? (data as { connect: unknown }).connect : null;
-    const port = typeof connect === 'object' && connect !== null && 's9' in connect ? (connect as { s9: unknown }).s9 : null;
-    return typeof port === 'number' && port > 0 && port !== seasonSix.port ? { host: seasonSix.host, port } : null;
+    const portOf = (key: 's9' | 'arena') => {
+      const port = typeof connect === 'object' && connect !== null && key in connect ? (connect as Record<string, unknown>)[key] : null;
+      return typeof port === 'number' && port > 0 && port !== seasonSix.port ? { host: seasonSix.host, port } : null;
+    };
+    return { s9: portOf('s9'), arena: portOf('arena') };
   } catch {
-    return null; // an older web server: Season 6.3 only
+    return { s9: null, arena: null }; // an older web server: Season 6.3 only
   }
 }
 
@@ -1115,18 +1123,21 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   state.connection = undefined;
   const connectServer = { host: settings.host, port: Number(settings.port) };
   setStatus('Asking the connect server for game servers…');
-  // Season 9 runs as its own program with its own connect server (seasons.json says its port); its servers are
-  // listed next to Season 6.3's, each asking its own connect server for the address.
-  const seasonNineConnect = await seasonNineConnectServer(connectServer);
-  const [seasonSixServers, seasonNineServers, serverMeta] = await Promise.all([
+  // Season 9 and the Arena run as their own programs with their own connect servers (seasons.json says their ports);
+  // their servers are listed next to Season 6.3's, each asking its own connect server for the address.
+  const { s9: seasonNineConnect, arena: arenaConnect } = await otherConnectServers(connectServer);
+  const [seasonSixServers, seasonNineServers, arenaServers, serverMeta] = await Promise.all([
     fetchServerList(settings.relay, connectServer),
     seasonNineConnect ? fetchServerList(settings.relay, seasonNineConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
+    arenaConnect ? fetchServerList(settings.relay, arenaConnect).catch(() => [] as ServerListEntry[]) : Promise.resolve([] as ServerListEntry[]),
     fetchServerMetadata(),
   ]);
   const servers: SeasonServer[] = [
     ...seasonSixServers.map((s) => ({ ...s, connect: connectServer, season: serverMeta.get(s.id)?.season ?? 's6', meta: serverMeta.get(s.id) })),
     // A Season 9 program's server ids start at 0 again: the website's world data names them only for Season 9 worlds.
     ...seasonNineServers.map((s) => ({ ...s, connect: seasonNineConnect!, season: 's9' as const, meta: serverMeta.get(s.id)?.season === 's9' ? serverMeta.get(s.id) : undefined })),
+    // The Arena plays on the base game data (Season 6.3's), in a column of its own.
+    ...arenaServers.map((s) => ({ ...s, connect: arenaConnect!, season: 's6' as const, column: 'arena' as const, meta: undefined })),
   ];
   if (!servers.length) throw new Error('The connect server lists no game servers.');
   // The list is there: the status line says what to do next and fades, instead of covering the servers.
@@ -1135,7 +1146,7 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   servers.sort((a, b) => (a.meta?.worldOrder ?? 0) - (b.meta?.worldOrder ?? 0) || a.id - b.id);
   const server = servers.length === 1
     ? servers[0]
-    : await chooseServerBySeason(ui.servers, servers, (s) => s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi');
+    : await chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi');
   ui.servers.hidden = true;
   // The game data of the picked world's season, before anything of the world is loaded.
   setSeason(server.season);

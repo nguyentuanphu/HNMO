@@ -47,6 +47,15 @@ internal sealed class LauncherOptions
 
     /// <summary>Gets the Season 9 program's admin panel: the next port after Season 6.3's.</summary>
     public string SeasonNineAdminUrl => new UriBuilder(this.AdminUrl) { Port = new Uri(this.AdminUrl).Port + 1 }.Uri.ToString().TrimEnd('/');
+
+    /// <summary>Gets or sets a value indicating whether the HNMO Arena program runs too (HostSettings.ArenaEnabled).</summary>
+    public bool ArenaEnabled { get; set; }
+
+    /// <summary>Gets the Arena program's connect server port: Season 6.3's plus 200 (HnmoSeasonInstance).</summary>
+    public int ArenaConnectServerPort => this.ConnectServerPort + HnmoSeasonInstance.ArenaPortOffset;
+
+    /// <summary>Gets the Arena program's admin panel: two ports after Season 6.3's.</summary>
+    public string ArenaAdminUrl => new UriBuilder(this.AdminUrl) { Port = new Uri(this.AdminUrl).Port + 2 }.Uri.ToString().TrimEnd('/');
 }
 
 internal sealed class GameLauncher(LauncherOptions options, string contentRoot, IHostApplicationLifetime lifetime, ILogger<GameLauncher> logger) : IHostedService
@@ -57,8 +66,12 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
 
     private readonly SemaphoreSlim _lifecycleLock = new(1, 1);
     private Process? _server;
-    private Process? _seasonNineServer;
-    private RollingLogWriter? _seasonNineLogWriter;
+    // The programs next to Season 6.3's: Season 9 and the Arena.
+    private readonly SecondaryProgram[] _secondary =
+    [
+        new(HnmoSeasonInstance.SeasonNine, "Season 9", "server-s9.log", () => options.SeasonNineEnabled, () => options.SeasonNineConnectServerPort, () => options.SeasonNineAdminUrl),
+        new(HnmoSeasonInstance.Arena, "Arena", "server-arena.log", () => options.ArenaEnabled, () => options.ArenaConnectServerPort, () => options.ArenaAdminUrl),
+    ];
     private RollingLogWriter? _serverLogWriter;
     private bool _databaseStarted;
     private int _stopped;
@@ -265,7 +278,10 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             logger.LogWarning(ex, "The game server didn't stop cleanly.");
         }
 
-        this.StopSeasonNine();
+        foreach (var secondary in this._secondary)
+        {
+            this.StopSecondary(secondary);
+        }
 
         this._serverLogWriter?.Dispose();
         this._serverLogWriter = null;
@@ -354,7 +370,10 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             this.StartServer();
             logger.LogInformation("The game server is starting. The first start sets up the save game and takes a few minutes.");
             await WaitForPortAsync(options.ConnectServerPort, ServerStartTimeout, cancellationToken).ConfigureAwait(false);
-            await this.StartSeasonNineAsync(cancellationToken).ConfigureAwait(false);
+            foreach (var secondary in this._secondary)
+            {
+                await this.StartSecondaryAsync(secondary, cancellationToken).ConfigureAwait(false);
+            }
             logger.LogInformation("HNMO is ready. Play: {Play}  Control: http://localhost:{WebPort}/control  Admin panel: {Admin} (this computer only)", options.OpenBrowserUrl, options.WebPort, options.AdminUrl);
             var controlUrl = $"http://localhost:{options.WebPort}/control";
             OpenBrowser(File.Exists(Path.Combine(this.SaveFullPath, "setup-complete.json")) ? options.OpenBrowserUrl : controlUrl);
@@ -494,20 +513,23 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
         };
     }
 
-    // The Season 9 game server program (HostSettings.SeasonNineEnabled): its own database (hnmo_s9), ports 100 higher,
-    // admin panel on the next port; logins and coins come from Season 6.3's database. Started after Season 6.3's is up.
-    private async Task StartSeasonNineAsync(CancellationToken cancellationToken)
+    // A program next to Season 6.3's: Season 9 (HostSettings.SeasonNineEnabled; its own database hnmo_s9, ports 100
+    // higher, admin panel on the next port) or the Arena (HostSettings.ArenaEnabled; hnmo_arena, ports 200 higher, admin
+    // panel two ports up). Logins and coins come from Season 6.3's database. Started after Season 6.3's is up.
+    private async Task StartSecondaryAsync(SecondaryProgram secondary, CancellationToken cancellationToken)
     {
-        if (!options.SeasonNineEnabled || this._seasonNineServer is { HasExited: false })
+        if (!secondary.Enabled() || secondary.Process is { HasExited: false })
         {
             return;
         }
 
+        var port = secondary.ConnectPort();
+        var adminUrl = secondary.AdminUrl();
         try
         {
-            if (await IsPortOpenAsync(options.SeasonNineConnectServerPort, cancellationToken).ConfigureAwait(false))
+            if (await IsPortOpenAsync(port, cancellationToken).ConfigureAwait(false))
             {
-                logger.LogWarning("Season 9 isn't started: another program uses port {Port}.", options.SeasonNineConnectServerPort);
+                logger.LogWarning("{Name} isn't started: another program uses port {Port}.", secondary.Name, port);
                 return;
             }
 
@@ -520,25 +542,25 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
                 RedirectStandardError = true,
                 CreateNoWindow = true,
             };
-            start.Environment["ASPNETCORE_URLS"] = options.SeasonNineAdminUrl;
+            start.Environment["ASPNETCORE_URLS"] = adminUrl;
             start.Environment["DB_ADMIN_PW"] = options.DatabasePassword;
-            start.Environment[HnmoSeasonInstance.EnvironmentVariableName] = HnmoSeasonInstance.SeasonNine;
+            start.Environment[HnmoSeasonInstance.EnvironmentVariableName] = secondary.Season;
             if (!string.IsNullOrWhiteSpace(options.SettingsFilePath))
             {
                 start.Environment[HostSettingsStore.EnvironmentVariableName] = options.SettingsFilePath;
             }
 
             var cfg = MaintenanceSettings.Load(this.SaveFullPath);
-            this._seasonNineLogWriter?.Dispose();
+            secondary.Log?.Dispose();
             var logWriter = new RollingLogWriter(
                 this.LogDirectory,
-                "server-s9.log",
+                secondary.LogFile,
                 Math.Max(1L, cfg.MaxLogFileMb) * 1024L * 1024L,
                 cfg.MaxLogDays,
                 Math.Max(10L, cfg.MaxLogTotalMb) * 1024L * 1024L);
-            this._seasonNineLogWriter = logWriter;
-            var process = Process.Start(start) ?? throw new InvalidOperationException("The Season 9 game server didn't start.");
-            this._seasonNineServer = process;
+            secondary.Log = logWriter;
+            var process = Process.Start(start) ?? throw new InvalidOperationException($"The {secondary.Name} game server didn't start.");
+            secondary.Process = process;
             process.OutputDataReceived += (_, e) => { if (e.Data is not null) { logWriter.WriteLine(e.Data); } };
             process.ErrorDataReceived += (_, e) => { if (e.Data is not null) { logWriter.WriteLine(e.Data); } };
             process.BeginOutputReadLine();
@@ -548,36 +570,36 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             {
                 if (!this._intentionalStop && Volatile.Read(ref this._stopped) == 0)
                 {
-                    logger.LogWarning("The Season 9 game server stopped (exit code {ExitCode}). See {Log}.", process.ExitCode, Path.Combine(this.LogDirectory, "server-s9.log"));
+                    logger.LogWarning("The {Name} game server stopped (exit code {ExitCode}). See {Log}.", secondary.Name, process.ExitCode, Path.Combine(this.LogDirectory, secondary.LogFile));
                 }
             };
-            logger.LogInformation("Season 9 is starting (connect server {Port}, admin panel {Admin}). Its first start sets up its save and takes a few minutes.", options.SeasonNineConnectServerPort, options.SeasonNineAdminUrl);
+            logger.LogInformation("{Name} is starting (connect server {Port}, admin panel {Admin}). Its first start sets up its save and takes a few minutes.", secondary.Name, port, adminUrl);
         }
         catch (Exception ex) when (ex is InvalidOperationException or IOException or System.ComponentModel.Win32Exception)
         {
-            logger.LogError(ex, "Season 9 couldn't start; Season 6.3 runs on.");
+            logger.LogError(ex, "{Name} couldn't start; Season 6.3 runs on.", secondary.Name);
         }
     }
 
-    private void StopSeasonNine()
+    private void StopSecondary(SecondaryProgram secondary)
     {
         try
         {
-            if (this._seasonNineServer is { HasExited: false } process)
+            if (secondary.Process is { HasExited: false } process)
             {
-                logger.LogInformation("Stopping the Season 9 game server...");
+                logger.LogInformation("Stopping the {Name} game server...", secondary.Name);
                 process.Kill(entireProcessTree: true);
                 process.WaitForExit(5000);
             }
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
         {
-            logger.LogWarning(ex, "The Season 9 game server didn't stop cleanly.");
+            logger.LogWarning(ex, "The {Name} game server didn't stop cleanly.", secondary.Name);
         }
 
-        this._seasonNineServer = null;
-        this._seasonNineLogWriter?.Dispose();
-        this._seasonNineLogWriter = null;
+        secondary.Process = null;
+        secondary.Log?.Dispose();
+        secondary.Log = null;
     }
 
     private (string Program, string[] Arguments) ServerCommand()
@@ -782,4 +804,24 @@ internal sealed class GameLauncher(LauncherOptions options, string contentRoot, 
             // No browser to open (e.g. on a server): the address is in the log.
         }
     }
+}
+
+// A game server program next to Season 6.3's (Season 9 or the Arena) and what the launcher knows of it.
+internal sealed class SecondaryProgram(string season, string name, string logFile, Func<bool> enabled, Func<int> connectPort, Func<string> adminUrl)
+{
+    public string Season { get; } = season;
+
+    public string Name { get; } = name;
+
+    public string LogFile { get; } = logFile;
+
+    public Func<bool> Enabled { get; } = enabled;
+
+    public Func<int> ConnectPort { get; } = connectPort;
+
+    public Func<string> AdminUrl { get; } = adminUrl;
+
+    public Process? Process { get; set; }
+
+    public RollingLogWriter? Log { get; set; }
 }

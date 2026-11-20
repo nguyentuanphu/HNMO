@@ -15,7 +15,7 @@ using HNMO.Persistence.EntityFramework;
 [TestFixture]
 public class HnmoSeasonInstanceTest
 {
-    /// <summary>Only "s9" is Season 9; anything else, or nothing, is Season 6.3.</summary>
+    /// <summary>Only "s9" is Season 9 and "arena" the Arena; anything else, or nothing, is Season 6.3.</summary>
     /// <param name="value">The environment variable's value.</param>
     /// <param name="expected">The season.</param>
     [TestCase(null, "s6")]
@@ -24,6 +24,8 @@ public class HnmoSeasonInstanceTest
     [TestCase("S9", "s9")]
     [TestCase(" s9 ", "s9")]
     [TestCase("season9", "s6")]
+    [TestCase("arena", "arena")]
+    [TestCase(" ARENA ", "arena")]
     public void ReadsTheSeason(string? value, string expected)
     {
         Assert.That(HnmoSeasonInstance.Parse(value), Is.EqualTo(expected));
@@ -72,6 +74,28 @@ public class HnmoSeasonInstanceTest
             Assert.That(builder.Username, Is.EqualTo("postgres"));
             Assert.That(builder.Password, Is.EqualTo("admin"));
             Assert.That(builder.CommandTimeout, Is.EqualTo(120));
+        });
+    }
+
+    /// <summary>
+    /// The Arena has its own database, ports 200 higher and its own save folder, and shares Season 6.3's accounts.
+    /// </summary>
+    [Test]
+    public void TheArenaHasItsOwnDatabasePortsAndFiles()
+    {
+        var file = Path.Combine("x", "save", "hnmo-state.json");
+        var moved = HnmoSeasonInstance.SaveFileFor("arena", file);
+        Assert.Multiple(() =>
+        {
+            Assert.That(HnmoSeasonInstance.DatabaseNameFor("arena", "hnmo"), Is.EqualTo("hnmo_arena"));
+            Assert.That(HnmoSeasonInstance.DatabaseNameFor("arena", "hnmo_arena"), Is.EqualTo("hnmo_arena"), "never twice");
+            Assert.That(HnmoSeasonInstance.SharedDatabaseName("hnmo_arena"), Is.EqualTo("hnmo"));
+            Assert.That(HnmoSeasonInstance.SharedDatabaseName("hnmo_s9"), Is.EqualTo("hnmo"));
+            Assert.That(HnmoSeasonInstance.SharedDatabaseName("hnmo"), Is.EqualTo("hnmo"));
+            Assert.That(HnmoSeasonInstance.PortOffsetFor("arena"), Is.EqualTo(200));
+            Assert.That(moved, Is.EqualTo(Path.Combine("x", "save", "arena", "hnmo-state.json")));
+            Assert.That(HnmoSeasonInstance.SaveFileFor("arena", moved), Is.EqualTo(moved), "never twice");
+            Assert.That(new Npgsql.NpgsqlConnectionStringBuilder(ConfigFileDatabaseConnectionStringProvider.SeasonConnectionString("arena", "Server=localhost;Port=55432;User Id=postgres;Password=admin;Database=hnmo;")).Database, Is.EqualTo("hnmo_arena"));
         });
     }
 }

@@ -5225,4 +5225,16 @@ Mở mục Bảo mật trên trang tài khoản rồi dán mã này để xác n
   <data name="AccountCoinHistoryMarketAccess" xml:space="preserve">
     <value>Phí vào chợ</value>
   </data>
+  <data name="ArenaButton" xml:space="preserve">
+    <value>Đấu trường</value>
+  </data>
+  <data name="ArenaButtonHint" xml:space="preserve">
+    <value>Đấu giữa các server và season: nhân vật đấu trường, đấu xếp hạng, đấu đội và sự kiện.</value>
+  </data>
+  <data name="ArenaOff" xml:space="preserve">
+    <value>Đang tắt: chọn "Đấu trường" trong Cài đặt máy chủ rồi khởi động lại HNMO.</value>
+  </data>
+  <data name="ArenaEnabledHint" xml:space="preserve">
+    <value>Trình khởi động chạy thêm Đấu trường HNMO (database riêng, cổng connect server +200, trang quản trị cách hai cổng; dùng chung tài khoản). Khởi động lại HNMO sau khi đổi.</value>
+  </data>
 </root>

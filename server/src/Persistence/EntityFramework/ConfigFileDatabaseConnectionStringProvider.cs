@@ -100,7 +100,7 @@ public class ConfigFileDatabaseConnectionStringProvider : IDatabaseConnectionSet
     /// </summary>
     private static void ApplySeason(ConnectionSetting setting, Type contextType)
     {
-        if (!HnmoSeasonInstance.IsSeasonNine || string.IsNullOrWhiteSpace(setting.ConnectionString) || contextType.Name == "AdminPanelContext")
+        if (!HnmoSeasonInstance.IsSecondary || string.IsNullOrWhiteSpace(setting.ConnectionString) || contextType.Name == "AdminPanelContext")
         {
             return;
         }

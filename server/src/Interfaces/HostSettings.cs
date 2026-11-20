@@ -131,6 +131,12 @@ public sealed class HostSettings
     public bool SeasonNineEnabled { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the launcher also starts the HNMO Arena program: battles across servers
+    /// and seasons (its own database, ports 200 higher, admin panel two ports up; accounts shared).
+    /// </summary>
+    public bool ArenaEnabled { get; set; }
+
+    /// <summary>
     /// Gets or sets the player license file path (relative to the package root or server directory).
     /// </summary>
     public string LicenseFilePath { get; set; } = "license.hnmo";

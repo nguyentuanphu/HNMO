@@ -16206,5 +16206,33 @@ namespace HNMO.Web.AdminPanel.Properties {
                 return ResourceManager.GetString("AccountCoinHistoryMarketAccess", resourceCulture);
             }
         }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ArenaButton {
+            get {
+                return ResourceManager.GetString("ArenaButton", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ArenaButtonHint {
+            get {
+                return ResourceManager.GetString("ArenaButtonHint", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ArenaOff {
+            get {
+                return ResourceManager.GetString("ArenaOff", resourceCulture);
+            }
+        }
+
+        /// <summary>Looks up a localized string.</summary>
+        public static string ArenaEnabledHint {
+            get {
+                return ResourceManager.GetString("ArenaEnabledHint", resourceCulture);
+            }
+        }
     }
 }

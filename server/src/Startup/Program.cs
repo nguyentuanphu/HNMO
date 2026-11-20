@@ -921,13 +921,12 @@ internal sealed class Program : IDisposable
         await portContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    /// <summary>Gets the name of this program's season in the log.</summary>
+    private static string SeasonLabel => HnmoSeasonInstance.IsArena ? "Arena" : "Season 9";
+
     /// <summary>
-    /// A Season 9 program runs next to Season 6.3's, so its servers listen on other ports (connect server 44506 instead
-    /// of 44406, game and chat servers 100 higher). Done once, on its database's first start: a port an administrator
-    /// changed afterwards stays as set.
-    /// </summary>
-    /// <summary>
-    /// A Season 9 program takes logins and coins from the shared (Season 6.3) database (owner's decision, 2026-11-19).
+    /// A Season 9 or Arena program takes logins and coins from the shared (Season 6.3) database (owner's decisions,
+    /// 2026-11-19 and 2026-11-20).
     /// </summary>
     private void UseSharedAccounts()
     {
@@ -941,18 +940,23 @@ internal sealed class Program : IDisposable
 
         // The website's login tickets, in the shared database: "Play" works for a server of either season.
         SharedLoginTicketStore.Current = new PostgresSharedLoginTicketStore(builder.ToString());
-        if (!HnmoSeasonInstance.IsSeasonNine)
+        if (!HnmoSeasonInstance.IsSecondary)
         {
             return;
         }
 
         SharedAccountStore.Current = new PostgresSharedAccountStore(builder.ToString());
-        this._logger.Information("Season 9: accounts and coins are shared with Season 6.3 (database {Database}).", builder.Database);
+        this._logger.Information("{Season}: accounts and coins are shared with Season 6.3 (database {Database}).", SeasonLabel, builder.Database);
     }
 
+    /// <summary>
+    /// A Season 9 or Arena program runs next to Season 6.3's, so its servers listen on other ports (Season 9 100 higher,
+    /// the Arena 200: connect server 44506 or 44606 instead of 44406). Done once, on its database's first start: a port
+    /// an administrator changed afterwards stays as set.
+    /// </summary>
     private async Task MoveSeasonNinePortsAsync()
     {
-        if (!HnmoSeasonInstance.IsSeasonNine || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
+        if (!HnmoSeasonInstance.IsSecondary || PersistenceContextProvider.ResolveConnectionString() is not { Length: > 0 } connectionString)
         {
             return;
         }
@@ -973,7 +977,8 @@ internal sealed class Program : IDisposable
         }
 
         command.Parameters.Clear();
-        command.Parameters.AddWithValue("offset", HnmoSeasonInstance.SeasonNinePortOffset);
+        var offset = HnmoSeasonInstance.PortOffsetFor(HnmoSeasonInstance.Current);
+        command.Parameters.AddWithValue("offset", offset);
         command.CommandText = """
             UPDATE config."ConnectServerDefinition" SET "ClientListenerPort" = "ClientListenerPort" + @offset;
             UPDATE config."GameServerEndpoint" SET "NetworkPort" = "NetworkPort" + @offset;
@@ -981,7 +986,7 @@ internal sealed class Program : IDisposable
             """;
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
         await transaction.CommitAsync().ConfigureAwait(false);
-        this._logger.Information("Season 9: its servers listen {Offset} ports above Season 6.3's (connect server {Port}).", HnmoSeasonInstance.SeasonNinePortOffset, DefaultConnectServerPort + HnmoSeasonInstance.SeasonNinePortOffset);
+        this._logger.Information("{Season}: its servers listen {Offset} ports above Season 6.3's (connect server {Port}).", SeasonLabel, offset, DefaultConnectServerPort + offset);
     }
 
     private async Task<IMigratableDatabaseContextProvider> PrepareRepositoryProviderAsync(bool reinit, string version, ILoggerFactory loggerFactory, IConfigurationChangeListener changeListener)
