@@ -21,12 +21,29 @@ using HNMO.PlugIns;
 [PlugIn]
 [Display(Name = nameof(Properties.PlugInResources.ArenaPlugIn_Name), Description = nameof(Properties.PlugInResources.ArenaPlugIn_Description), ResourceType = typeof(Properties.PlugInResources))]
 [Guid("8E4C2A71-6B93-4D05-A1F8-3C7E9D2B5A64")]
-public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, ISupportCustomConfiguration<ArenaConfiguration>, ISupportDefaultCustomConfiguration
+public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPeriodicTaskPlugIn, ISupportCustomConfiguration<ArenaConfiguration>, ISupportDefaultCustomConfiguration
 {
     private const byte FirstBagSlot = 12;
 
+    private readonly object _duelsGate = new();
+    private ArenaDuels? _duels;
+    private DateTime _nextMatchUtc;
+    private DateTime _nextReturnUtc;
+
     /// <inheritdoc />
     public ArenaConfiguration? Configuration { get; set; }
+
+    /// <summary>Gets the ranked 1v1 duels of this game server.</summary>
+    public ArenaDuels Duels
+    {
+        get
+        {
+            lock (this._duelsGate)
+            {
+                return this._duels ??= new ArenaDuels((this.Configuration ?? new ArenaConfiguration()).FileName);
+            }
+        }
+    }
 
     /// <summary>Gets the active <see cref="ArenaPlugIn"/> of a game context.</summary>
     /// <param name="gameContext">The game context.</param>
@@ -35,6 +52,48 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, ISu
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => new ArenaConfiguration();
+
+    /// <inheritdoc />
+    public async ValueTask ExecuteTaskAsync(GameContext gameContext)
+    {
+        if (!ArenaRules.Active)
+        {
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        var logger = gameContext.LoggerFactory.CreateLogger<ArenaPlugIn>();
+        if (now >= this._nextMatchUtc)
+        {
+            this._nextMatchUtc = now.AddSeconds(2);
+            await this.Duels.MatchAsync(logger).ConfigureAwait(false);
+        }
+
+        if (now >= this._nextReturnUtc)
+        {
+            // After a duel the game moves both players to the duel exit: arena characters belong on the arena map.
+            this._nextReturnUtc = now.AddSeconds(5);
+            var cfg = this.Configuration ?? new ArenaConfiguration();
+            if (gameContext.Configuration.Maps.FirstOrDefault(m => m.Number == cfg.MapNumber) is { } map
+                && map.ExitGates.FirstOrDefault(g => g.IsSpawnGate) is { } gate)
+            {
+                foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
+                {
+                    if (player.PlayerState.CurrentState == PlayerState.EnteredWorld && player.DuelRoom is null && player.IsAlive
+                        && !player.IsTeleporting && player.CurrentMap is { } current && current.MapId != cfg.MapNumber)
+                    {
+                        await player.WarpToAsync(gate).ConfigureAwait(false);
+                    }
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public void ForceStart()
+    {
+        this._nextMatchUtc = DateTime.MinValue;
+    }
 
     /// <summary>An arena character enters with full health, mana, shield and ability.</summary>
     /// <param name="player">The player.</param>

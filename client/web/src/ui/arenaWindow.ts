@@ -13,6 +13,33 @@ export interface ArenaTravelState {
   account: string;
   ticket: string;
   message?: string | null;
+  /** In the Arena: the ranked 1v1 record, the queue and the leaderboards. */
+  ranked?: ArenaRanked | null;
+}
+
+/** A row of the Arena's leaderboards. */
+export interface ArenaRankRow {
+  name: string;
+  className: string;
+  rating: number;
+  wins: number;
+  losses: number;
+  weekWins: number;
+  weekLosses: number;
+}
+
+/** The player's ranked 1v1 record and the Arena's leaderboards. */
+export interface ArenaRanked {
+  rating: number;
+  wins: number;
+  losses: number;
+  weekWins: number;
+  weekLosses: number;
+  queued: boolean;
+  inDuel: boolean;
+  waiting: number;
+  top: ArenaRankRow[];
+  week: ArenaRankRow[];
 }
 
 /** The home server to come back to: its start screen column and server id. */
@@ -47,6 +74,7 @@ export class ArenaWindow {
   private readonly panel: HnmoPanel;
   private state: ArenaTravelState | null = null;
   private travelling = false;
+  private refreshTimer: number | undefined;
 
   constructor(private readonly options: {
     send: Send;
@@ -70,9 +98,16 @@ export class ArenaWindow {
     this.panel.open();
     this.render();
     this.options.send('HnmoArenaTravelRequest', { Action: 0 });
+    // While open, the queue and the leaderboards stay current.
+    window.clearInterval(this.refreshTimer);
+    this.refreshTimer = window.setInterval(() => {
+      if (!this.panel.isOpen()) { window.clearInterval(this.refreshTimer); return; }
+      if (this.state?.inArena) this.options.send('HnmoArenaTravelRequest', { Action: 0 });
+    }, 5000);
   }
 
   close(): void {
+    window.clearInterval(this.refreshTimer);
     this.panel.close();
   }
 
@@ -145,7 +180,51 @@ export class ArenaWindow {
       body.append(button, note);
     } else {
       body.append(button);
+      if (state.ranked) this.renderRanked(body, state.ranked);
     }
+  }
+
+  private renderRanked(body: HTMLElement, ranked: ArenaRanked): void {
+    const head = document.createElement('h3');
+    head.className = 'hnmo-arena-head';
+    head.textContent = tx('Ranked 1v1 (best of 3)', 'Đấu xếp hạng 1v1 (thắng 2 trong 3)');
+    const me = document.createElement('p');
+    me.id = 'arena-rating';
+    me.textContent = tx(
+      `Rating ${ranked.rating} · ${ranked.wins} wins, ${ranked.losses} losses · this week ${ranked.weekWins} / ${ranked.weekLosses}`,
+      `Điểm ${ranked.rating} · thắng ${ranked.wins}, thua ${ranked.losses} · tuần này ${ranked.weekWins} / ${ranked.weekLosses}`,
+    );
+    const queue = document.createElement('button');
+    queue.type = 'button';
+    queue.className = 'hnmo-btn';
+    queue.id = ranked.queued ? 'arena-leave-queue' : 'arena-join-queue';
+    queue.disabled = ranked.inDuel;
+    queue.textContent = ranked.inDuel
+      ? tx('In a duel…', 'Đang đấu…')
+      : ranked.queued
+        ? tx(`Leave the queue (${ranked.waiting} waiting)`, `Rời hàng chờ (${ranked.waiting} người chờ)`)
+        : tx('Find a 1v1 opponent', 'Tìm đối thủ 1v1');
+    queue.addEventListener('click', () => {
+      this.options.send('HnmoArenaTravelRequest', { Action: ranked.queued ? 3 : 2 });
+    });
+    body.append(head, me, queue);
+    const list = (title: string, rows: ArenaRankRow[], week: boolean): void => {
+      const caption = document.createElement('p');
+      caption.className = 'hnmo-muted';
+      caption.textContent = title;
+      body.append(caption);
+      if (!rows.length) return;
+      const ol = document.createElement('ol');
+      ol.className = 'hnmo-arena-top';
+      for (const row of rows.slice(0, 10)) {
+        const li = document.createElement('li');
+        li.textContent = `${row.name} (${row.className}) · ${row.rating} · ${week ? `${row.weekWins}/${row.weekLosses}` : `${row.wins}/${row.losses}`}`;
+        ol.append(li);
+      }
+      body.append(ol);
+    };
+    list(tx('This week (Sydney, from Monday)', 'Tuần này (giờ Sydney, từ thứ Hai)'), ranked.week, true);
+    list(tx('All time', 'Mọi thời điểm'), ranked.top, false);
   }
 
   private async travel(): Promise<void> {

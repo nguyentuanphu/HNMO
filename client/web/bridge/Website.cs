@@ -1,8 +1,18 @@
 // Read-only game data for the public website. No API key or account details cross this boundary.
 internal static class Website
 {
-    public static void Map(WebApplication app, PortalOptions options, IHttpClientFactory clients, string? seasonNineApiBaseUrl = null)
+    public static void Map(WebApplication app, PortalOptions options, IHttpClientFactory clients, string? seasonNineApiBaseUrl = null, string? arenaApiBaseUrl = null)
     {
+        // The HNMO Arena's leaderboards come from the Arena's own admin panel.
+        if (!string.IsNullOrWhiteSpace(arenaApiBaseUrl))
+        {
+            Forward(app, "/website/arena", "api/website/arena", options, clients, arenaApiBaseUrl);
+        }
+        else
+        {
+            app.MapGet("/website/arena", () => Results.Json(new { enabled = false }));
+        }
+
         // Each season's server program has its own market: Season 9's comes from its own admin panel.
         if (!string.IsNullOrWhiteSpace(seasonNineApiBaseUrl))
         {

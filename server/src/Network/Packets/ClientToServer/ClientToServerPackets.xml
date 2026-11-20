@@ -5564,7 +5564,7 @@
           <Index>4</Index>
           <Type>Byte</Type>
           <Name>Action</Name>
-          <Description>0 = RequestState, 1 = Travel (a one-time ticket for the other side).</Description>
+          <Description>0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue.</Description>
         </Field>
       </Fields>
     </Packet>

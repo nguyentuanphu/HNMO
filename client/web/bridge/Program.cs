@@ -453,7 +453,7 @@ app.MapGet("/data/{**path}", async (HttpContext context, string path) =>
 
     await gameFiles.ServeAsync(context, path).ConfigureAwait(false);
 });
-Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>(), launcherOptions.SeasonNineEnabled ? launcherOptions.SeasonNineAdminUrl : null);
+Website.Map(app, portalOptions, app.Services.GetRequiredService<IHttpClientFactory>(), launcherOptions.SeasonNineEnabled ? launcherOptions.SeasonNineAdminUrl : null, launcherOptions.ArenaEnabled ? launcherOptions.ArenaAdminUrl : null);
 Portal.Map(app, new Portal(portalOptions, contentRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Services.GetRequiredService<ILogger<Portal>>()));
 ControlEndpoints.Map(app, app.Services.GetRequiredService<GameLauncher>(), app.Services.GetRequiredService<ControlMaintenanceService>(), launcherOptions, contentRoot, webRoot, app.Services.GetRequiredService<IHttpClientFactory>().CreateClient(), app.Logger, portalOptions);
 app.Logger.LogInformation(

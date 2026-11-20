@@ -61,7 +61,16 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             }
         }
 
-        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message });
+        var arena = inArena ? GameLogic.PlugIns.Arena.ArenaPlugIn.Get(player.GameContext) : null;
+        if (arena is not null && request.Action is 2 or 3)
+        {
+            var (en, viText) = request.Action == 2
+                ? arena.Duels.Join(player)
+                : (arena.Duels.Leave(player) ? ("You left the 1v1 queue.", "Bạn đã rời hàng chờ 1v1.") : ("You weren't in the 1v1 queue.", "Bạn không ở trong hàng chờ 1v1."));
+            message = vi ? viText : en;
+        }
+
+        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player) });
         await player.InvokeViewPlugInAsync<IHnmoArenaTravelViewPlugIn>(p => p.ShowArenaTravelAsync(json)).ConfigureAwait(false);
     }
 }

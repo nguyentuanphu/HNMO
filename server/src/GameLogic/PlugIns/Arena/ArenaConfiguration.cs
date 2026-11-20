@@ -13,6 +13,9 @@ public sealed class ArenaConfiguration
     [Range(0, 1000)]
     public short MapNumber { get; set; } = 6;
 
+    /// <summary>Gets or sets the HNMO state file of the Arena's ranked records (in the Arena's own save folder).</summary>
+    public string FileName { get; set; } = HnmoStateStore.StateFileName;
+
     /// <summary>Gets or sets how many large healing potions every arena character carries.</summary>
     [Range(0, 255)]
     public byte HealingPotions { get; set; } = 100;

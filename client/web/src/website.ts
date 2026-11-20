@@ -354,6 +354,17 @@ const copy = {
     marketOff: "Item Market is turned off on this server.",
     marketNone: "No items listed right now.",
     marketServer: "Server",
+    arenaNav: "Arena",
+    arenaTitle: "Arena rankings",
+    arenaHint: "Ranked 1v1 duels in the HNMO Arena: everyone plays the same arena character of their class. This week counts from Monday, Sydney time.",
+    arenaWeek: "This week",
+    arenaAllTime: "All time",
+    arenaRank: "#",
+    arenaPlayer: "Player",
+    arenaClass: "Class",
+    arenaRating: "Rating",
+    arenaWinsLosses: "Wins / losses",
+    arenaNone: "No ranked duels yet.",
     marketFees: "One-off fees per account on each season's market: buying {buy}, selling {sell}; every sale pays a {tax}% tax.",
     marketItem: "Item",
     marketSeller: "Seller",
@@ -804,6 +815,17 @@ const copy = {
     marketOff: "Chợ vật phẩm đang tắt trên máy chủ này.",
     marketNone: "Hiện chưa có vật phẩm nào được rao bán.",
     marketServer: "Máy chủ",
+    arenaNav: "Đấu trường",
+    arenaTitle: "Bảng xếp hạng Đấu trường",
+    arenaHint: "Đấu xếp hạng 1v1 ở Đấu trường HNMO: mọi người dùng nhân vật đấu trường giống nhau theo class. Tuần này tính từ thứ Hai, giờ Sydney.",
+    arenaWeek: "Tuần này",
+    arenaAllTime: "Mọi thời điểm",
+    arenaRank: "#",
+    arenaPlayer: "Người chơi",
+    arenaClass: "Class",
+    arenaRating: "Điểm",
+    arenaWinsLosses: "Thắng / thua",
+    arenaNone: "Chưa có trận xếp hạng nào.",
     marketFees: "Phí một lần cho mỗi tài khoản ở chợ từng season: mua {buy}, bán {sell}; mỗi lần bán đóng thuế {tax}%.",
     marketItem: "Vật phẩm",
     marketSeller: "Người bán",
@@ -2729,6 +2751,38 @@ void (async () => {
 })();
 setInterval(() => {
   if (!document.hidden) void refreshMarket();
+}, 120000);
+
+interface ArenaRow { name: string; className: string; rating: number; wins: number; losses: number; weekWins: number; weekLosses: number }
+interface PublicArena { enabled: boolean; week?: string; allTime?: ArenaRow[]; thisWeek?: ArenaRow[] }
+let arenaData: PublicArena | null = null;
+
+function renderArena(): void {
+  // The Arena's section shows only while the Arena runs.
+  const on = arenaData?.enabled === true;
+  element("arena").hidden = !on;
+  element("arena-nav").hidden = !on;
+  if (!on || !arenaData) return;
+  const headers: [string, boolean][] = [[t("arenaRank"), true], [t("arenaPlayer"), false], [t("arenaClass"), false], [t("arenaRating"), true], [t("arenaWinsLosses"), true]];
+  table("arena-week-table", headers, (arenaData.thisWeek ?? []).map((r, i) => [i + 1, r.name, r.className, r.rating, `${r.weekWins} / ${r.weekLosses}`]), t("arenaNone"));
+  table("arena-all-table", headers, (arenaData.allTime ?? []).map((r, i) => [i + 1, r.name, r.className, r.rating, `${r.wins} / ${r.losses}`]), t("arenaNone"));
+}
+
+async function refreshArena(): Promise<void> {
+  try {
+    const response = await fetch("/website/arena", { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const data = response.ok ? (await response.json()) as PublicArena : null;
+    arenaData = data && typeof data.enabled === "boolean" ? data : null;
+  } catch {
+    arenaData = null;
+  }
+  renderArena();
+}
+
+for (const id of ["en", "vi"]) element(id).addEventListener("click", () => { renderArena(); });
+void refreshArena();
+setInterval(() => {
+  if (!document.hidden) void refreshArena();
 }, 120000);
 
 interface PublicJewelBank {

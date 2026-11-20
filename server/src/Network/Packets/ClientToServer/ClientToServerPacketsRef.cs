@@ -21641,7 +21641,7 @@ public readonly ref struct HnmoArenaTravelRequestRef
     public C1HeaderWithSubCodeRef Header => new (this._data);
 
     /// <summary>
-    /// Gets or sets 0 = RequestState, 1 = Travel (a one-time ticket for the other side).
+    /// Gets or sets 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue.
     /// </summary>
     public byte Action
     {

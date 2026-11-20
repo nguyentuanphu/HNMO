@@ -85,6 +85,21 @@ public sealed class DuelRoom : AsyncDisposable
     }
 
     /// <summary>
+    /// Gets or sets the score which wins the duel (the duel configuration's, or less for HNMO Arena's best of 3).
+    /// </summary>
+    public int MaximumScore
+    {
+        get => this._maximumScore;
+        set => this._maximumScore = Math.Max(1, value);
+    }
+
+    /// <summary>
+    /// Gets or sets what is called with the winner and the loser when the duel is won (HNMO Arena's ranked duels);
+    /// not called for a cancelled duel.
+    /// </summary>
+    public Func<Player, Player, ValueTask>? Finished { get; set; }
+
+    /// <summary>
     /// Gets the area of the duel.
     /// </summary>
     public DuelArea Area { get; }
@@ -455,6 +470,17 @@ public sealed class DuelRoom : AsyncDisposable
         var winner = this.ScoreRequester > this.ScoreOpponent ? this.Requester : this.Opponent;
         var loser = this.Requester == winner ? this.Opponent : this.Requester;
         await this.AllPlayers.ForEachAsync(player => player.InvokeViewPlugInAsync<IDuelFinishedPlugIn>(p => p.DuelFinishedAsync(winner, loser))).ConfigureAwait(false);
+        if (this.Finished is { } finished)
+        {
+            try
+            {
+                await finished(winner, loser).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                winner.Logger.LogError(ex, "The duel's result couldn't be recorded.");
+            }
+        }
     }
 
     private async ValueTask SendCurrentStateToAllPlayersAsync()
