@@ -79,4 +79,32 @@ public interface IArenaShared
     /// <param name="max">The most rows to take.</param>
     /// <returns>The rows taken.</returns>
     IReadOnlyList<(string Reference, Guid GuildId, string GuildName, int Xp, string Reason)> ClaimGuildXp(int max) => [];
+
+    /// <summary>Publishes who plays on one game server of this program (the rows of that server not in the list are removed).</summary>
+    /// <param name="season">This program ("s6", "s9" or "arena").</param>
+    /// <param name="serverId">The game server.</param>
+    /// <param name="online">The accounts' login names and their characters.</param>
+    void PublishOnline(string season, int serverId, IReadOnlyList<(string Login, string Character)> online)
+    {
+    }
+
+    /// <summary>Gets who plays in the other programs (published in the last two minutes).</summary>
+    /// <param name="season">This program.</param>
+    /// <returns>The accounts playing elsewhere.</returns>
+    IReadOnlyList<OnlinePresence> OnlineElsewhere(string season) => [];
+
+    /// <summary>Leaves a whisper for a character playing in another program.</summary>
+    /// <param name="from">The sender's character.</param>
+    /// <param name="fromSeason">The sender's program.</param>
+    /// <param name="toSeason">The receiver's program.</param>
+    /// <param name="toCharacter">The receiver's character.</param>
+    /// <param name="text">The text.</param>
+    void SendCrossWhisper(string from, string fromSeason, string toSeason, string toCharacter, string text)
+    {
+    }
+
+    /// <summary>Takes the whispers waiting for this program (each once; older than five minutes are dropped).</summary>
+    /// <param name="season">This program.</param>
+    /// <returns>The whispers.</returns>
+    IReadOnlyList<CrossWhisper> TakeCrossWhispers(string season) => [];
 }

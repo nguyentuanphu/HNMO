@@ -2435,4 +2435,6 @@
   <data name="StartGuildWarChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký bang chiến ngay, tới lúc bắt đầu: /startguildwar [số giây tới lúc bắt đầu, mặc định 120].</value></data>
   <data name="ArenaScheduleNoticesPlugIn_Name" xml:space="preserve"><value>Thông báo trận Đấu trường HNMO</value></data>
   <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>Ở máy chủ nhà: báo đấu sinh tồn và bang chiến của Đấu trường trong game trước 10 phút và lúc bắt đầu, theo lịch Đấu trường công bố.</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>Bạn bè khác season HNMO</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Bạn bè đang chơi ở chương trình HNMO khác (Season 6.3, Season 9, Đấu trường) hiện nơi họ đang chơi trong danh sách bạn, và thì thầm tới được họ. Không giao dịch giữa các season.</value></data>
 </root>

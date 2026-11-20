@@ -6147,6 +6147,12 @@ namespace HNMO.GameLogic.Properties {
         /// <summary>Gets the localized HNMO Arena text.</summary>
         public static string ArenaScheduleNoticesPlugIn_Description => ResourceManager.GetString("ArenaScheduleNoticesPlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized HNMO text.</summary>
+        public static string CrossSeasonFriendsPlugIn_Name => ResourceManager.GetString("CrossSeasonFriendsPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO text.</summary>
+        public static string CrossSeasonFriendsPlugIn_Description => ResourceManager.GetString("CrossSeasonFriendsPlugIn_Description", resourceCulture)!;
+
         /// <summary>Gets the localized HNMO Arena text.</summary>
         public static string ArenaShopPlugIn_Name => ResourceManager.GetString("ArenaShopPlugIn_Name", resourceCulture)!;
 

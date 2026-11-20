@@ -33,6 +33,20 @@ public sealed class PostgresArenaShared : IArenaShared
             "Reason" text NOT NULL DEFAULT '',
             "CreatedUtc" timestamp with time zone NOT NULL,
             "ClaimedUtc" timestamp with time zone NULL);
+        CREATE TABLE IF NOT EXISTS data."HnmoOnlinePlayer" (
+            "Login" text PRIMARY KEY,
+            "Character" text NOT NULL,
+            "Season" text NOT NULL,
+            "ServerId" integer NOT NULL,
+            "UpdatedUtc" timestamp with time zone NOT NULL);
+        CREATE TABLE IF NOT EXISTS data."HnmoCrossWhisper" (
+            "Id" bigserial PRIMARY KEY,
+            "From" text NOT NULL,
+            "FromSeason" text NOT NULL,
+            "ToSeason" text NOT NULL,
+            "ToCharacter" text NOT NULL,
+            "Text" text NOT NULL,
+            "CreatedUtc" timestamp with time zone NOT NULL);
         """;
 
     private readonly string _connectionString;
@@ -254,6 +268,95 @@ public sealed class PostgresArenaShared : IArenaShared
         while (reader.Read())
         {
             result.Add((reader.GetString(0), reader.GetGuid(1), reader.GetString(2), reader.GetInt32(3), reader.GetString(4)));
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc />
+    public void PublishOnline(string season, int serverId, IReadOnlyList<(string Login, string Character)> online)
+    {
+        using var connection = this.Open();
+        using var transaction = connection.BeginTransaction();
+        var now = DateTime.UtcNow;
+        foreach (var (login, character) in online)
+        {
+            using var upsert = new NpgsqlCommand(
+                """
+                INSERT INTO data."HnmoOnlinePlayer" ("Login", "Character", "Season", "ServerId", "UpdatedUtc") VALUES (@login, @character, @season, @server, @now)
+                ON CONFLICT ("Login") DO UPDATE SET "Character" = @character, "Season" = @season, "ServerId" = @server, "UpdatedUtc" = @now
+                """,
+                connection,
+                transaction);
+            upsert.Parameters.AddWithValue("login", login.Trim().ToLowerInvariant());
+            upsert.Parameters.AddWithValue("character", character);
+            upsert.Parameters.AddWithValue("season", season);
+            upsert.Parameters.AddWithValue("server", serverId);
+            upsert.Parameters.AddWithValue("now", now);
+            upsert.ExecuteNonQuery();
+        }
+
+        using var remove = new NpgsqlCommand("""DELETE FROM data."HnmoOnlinePlayer" WHERE "Season" = @season AND "ServerId" = @server AND "UpdatedUtc" < @now""", connection, transaction);
+        remove.Parameters.AddWithValue("season", season);
+        remove.Parameters.AddWithValue("server", serverId);
+        remove.Parameters.AddWithValue("now", now);
+        remove.ExecuteNonQuery();
+        transaction.Commit();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<OnlinePresence> OnlineElsewhere(string season)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand("""SELECT "Login", "Character", "Season", "ServerId" FROM data."HnmoOnlinePlayer" WHERE "Season" <> @season AND "UpdatedUtc" > @since""", connection);
+        command.Parameters.AddWithValue("season", season);
+        command.Parameters.AddWithValue("since", DateTime.UtcNow.AddMinutes(-2));
+        using var reader = command.ExecuteReader();
+        var result = new List<OnlinePresence>();
+        while (reader.Read())
+        {
+            result.Add(new OnlinePresence(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3)));
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc />
+    public void SendCrossWhisper(string from, string fromSeason, string toSeason, string toCharacter, string text)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand(
+            """INSERT INTO data."HnmoCrossWhisper" ("From", "FromSeason", "ToSeason", "ToCharacter", "Text", "CreatedUtc") VALUES (@from, @fromSeason, @toSeason, @to, @text, @now)""",
+            connection);
+        command.Parameters.AddWithValue("from", from);
+        command.Parameters.AddWithValue("fromSeason", fromSeason);
+        command.Parameters.AddWithValue("toSeason", toSeason);
+        command.Parameters.AddWithValue("to", toCharacter);
+        command.Parameters.AddWithValue("text", text);
+        command.Parameters.AddWithValue("now", DateTime.UtcNow);
+        command.ExecuteNonQuery();
+    }
+
+    /// <inheritdoc />
+    public IReadOnlyList<CrossWhisper> TakeCrossWhispers(string season)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand(
+            """
+            DELETE FROM data."HnmoCrossWhisper" WHERE "ToSeason" = @season
+            RETURNING "Id", "From", "FromSeason", "ToCharacter", "Text", "CreatedUtc"
+            """,
+            connection);
+        command.Parameters.AddWithValue("season", season);
+        using var reader = command.ExecuteReader();
+        var result = new List<CrossWhisper>();
+        var since = DateTime.UtcNow.AddMinutes(-5);
+        while (reader.Read())
+        {
+            if (DateTime.SpecifyKind(reader.GetDateTime(5), DateTimeKind.Utc) > since)
+            {
+                result.Add(new CrossWhisper(reader.GetInt64(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4)));
+            }
         }
 
         return result;

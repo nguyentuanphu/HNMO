@@ -2250,4 +2250,6 @@
   <data name="StartGuildWarChatCommandPlugIn_Description" xml:space="preserve"><value>A game master in the Arena opens the guild war's sign-up now, until the start: /startguildwar [seconds until the start, default 120].</value></data>
   <data name="ArenaScheduleNoticesPlugIn_Name" xml:space="preserve"><value>HNMO Arena battle notices</value></data>
   <data name="ArenaScheduleNoticesPlugIn_Description" xml:space="preserve"><value>On the home servers: announces the Arena's battle royale and guild war in the game 10 minutes before and at the start, from the schedule the Arena publishes.</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Name" xml:space="preserve"><value>HNMO friends across seasons</value></data>
+  <data name="CrossSeasonFriendsPlugIn_Description" xml:space="preserve"><value>Friends playing in another HNMO program (Season 6.3, Season 9, the Arena) show where they play in the friend list, and whispers reach them there. No trading between seasons.</value></data>
 </root>
