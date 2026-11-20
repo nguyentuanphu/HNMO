@@ -109,7 +109,7 @@ internal static class BotMiniGameHandler
             return false;
         }
 
-        if (!definition.ArePlayerKillersAllowedToEnter && bot.SelectedCharacter?.State >= HeroState.PlayerKiller1stStage)
+        if (!definition.ArePlayerKillersAllowedToEnter && bot.SelectedCharacter?.State >= HeroState.PlayerKillWarning)
         {
             reason = "player killers cannot enter";
             return false;

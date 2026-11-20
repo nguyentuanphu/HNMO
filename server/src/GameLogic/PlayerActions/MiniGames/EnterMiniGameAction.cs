@@ -206,7 +206,8 @@ public class EnterMiniGameAction
             return true;
         }
 
-        return player.SelectedCharacter?.State < HeroState.PlayerKiller1stStage;
+        // As in the Season 6/9 server suites, outlaws of every stage (the Warning stage included) can't enter.
+        return player.SelectedCharacter?.State < HeroState.PlayerKillWarning;
     }
 
     private async ValueTask ConsumeTicketItemAsync(Item? ticketItem, Player player)
