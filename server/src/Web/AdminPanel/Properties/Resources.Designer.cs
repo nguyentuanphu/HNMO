@@ -5713,6 +5713,15 @@ namespace HNMO.Web.AdminPanel.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Zen drop duration (seconds).
+        /// </summary>
+        public static string MoneyDropDurationSeconds {
+            get {
+                return ResourceManager.GetString("MoneyDropDurationSeconds", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Item Drops.
         /// </summary>
         public static string ItemDrops {

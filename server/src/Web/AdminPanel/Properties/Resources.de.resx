@@ -1401,6 +1401,9 @@
   <data name="ItemDropDurationSeconds" xml:space="preserve">
     <value>Liegedauer von Drops (Sekunden)</value>
   </data>
+  <data name="MoneyDropDurationSeconds" xml:space="preserve">
+    <value>Liegedauer von Zen (Sekunden)</value>
+  </data>
   <data name="ItemDrops" xml:space="preserve">
     <value>Gegenstands-Drops</value>
   </data>

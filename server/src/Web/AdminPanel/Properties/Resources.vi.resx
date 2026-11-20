@@ -1407,6 +1407,9 @@
   <data name="ItemDropDurationSeconds" xml:space="preserve">
     <value>Thời gian đồ nằm trên đất (giây)</value>
   </data>
+  <data name="MoneyDropDurationSeconds" xml:space="preserve">
+    <value>Thời gian zen nằm trên đất (giây)</value>
+  </data>
   <data name="ItemDrops" xml:space="preserve">
     <value>Đồ rơi</value>
   </data>

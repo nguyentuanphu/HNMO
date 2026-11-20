@@ -13,7 +13,7 @@ internal sealed partial class GameConfigurationLoader
 {
     private static readonly string[] Statements =
     [
-        "select \"Id\", \"AncientDropLevelBonus\", \"AreaSkillHitsPlayer\", \"CashShopConfigurationId\", \"CastleSiegeConfigurationId\", \"CharacterNameRegex\", \"ClampMoneyOnPickup\", \"DamagePerOneItemDurability\", \"DamagePerOnePetDurability\", \"DuelConfigurationId\", \"ExcellentDropLevelBonus\", \"ExcellentItemDropLevelDelta\", \"ExperienceFormula\", \"ExperienceRate\", \"HitsPerOneItemDurability\", \"InfoRange\", \"ItemDropDuration\", \"LetterSendPrice\", \"MasterExperienceFormula\", \"MasterExperienceRate\", \"MaximumCharactersPerAccount\", \"MaximumInventoryMoney\", \"MaximumItemOptionLevelDrop\", \"MaximumLetters\", \"MaximumLevel\", \"MaximumMasterLevel\", \"MaximumPartySize\", \"MaximumPasswordLength\", \"MaximumVaultMoney\", \"MinimumMonsterLevelForMasterExperience\", \"PreventExperienceOverflow\", \"RecoveryInterval\", \"ShouldDropMoney\" from config.\"GameConfiguration\"",
+        "select \"Id\", \"AncientDropLevelBonus\", \"AreaSkillHitsPlayer\", \"CashShopConfigurationId\", \"CastleSiegeConfigurationId\", \"CharacterNameRegex\", \"ClampMoneyOnPickup\", \"DamagePerOneItemDurability\", \"DamagePerOnePetDurability\", \"DuelConfigurationId\", \"ExcellentDropLevelBonus\", \"ExcellentItemDropLevelDelta\", \"ExperienceFormula\", \"ExperienceRate\", \"HitsPerOneItemDurability\", \"InfoRange\", \"ItemDropDuration\", \"LetterSendPrice\", \"MasterExperienceFormula\", \"MasterExperienceRate\", \"MaximumCharactersPerAccount\", \"MaximumInventoryMoney\", \"MaximumItemOptionLevelDrop\", \"MaximumLetters\", \"MaximumLevel\", \"MaximumMasterLevel\", \"MaximumPartySize\", \"MaximumPasswordLength\", \"MaximumVaultMoney\", \"MinimumMonsterLevelForMasterExperience\", \"MoneyDropDuration\", \"PreventExperienceOverflow\", \"RecoveryInterval\", \"ShouldDropMoney\" from config.\"GameConfiguration\"",
         "select \"Id\", \"Description\", \"Designation\", \"GameConfigurationId\", \"MaximumValue\" from config.\"AttributeDefinition\"",
         "select \"Id\", \"BannerSaleZone\", \"BannerYear\", \"BannerYearId\", \"ScriptSaleZone\", \"ScriptYear\", \"ScriptYearId\" from config.\"CashShopConfiguration\"",
         "select \"Id\", \"CashShopConfigurationId\", \"CoinType\", \"IsBundle\", \"IsForSale\", \"IsGiftable\", \"Name\", \"PackageSequence\", \"Price\" from config.\"CashShopPackage\"",
@@ -395,9 +395,10 @@ internal sealed partial class GameConfigurationLoader
             entity.MaximumPasswordLength = reader.GetInt32(27);
             entity.MaximumVaultMoney = reader.GetInt32(28);
             entity.MinimumMonsterLevelForMasterExperience = (global::System.Byte)reader.GetInt16(29);
-            entity.PreventExperienceOverflow = reader.GetBoolean(30);
-            entity.RecoveryInterval = reader.GetInt32(31);
-            entity.ShouldDropMoney = reader.GetBoolean(32);
+            entity.MoneyDropDuration = reader.GetFieldValue<global::System.TimeSpan>(30);
+            entity.PreventExperienceOverflow = reader.GetBoolean(31);
+            entity.RecoveryInterval = reader.GetInt32(32);
+            entity.ShouldDropMoney = reader.GetBoolean(33);
             this._GameConfiguration[entity.Id] = entity;
             this._GameConfigurationRows.Add((entity, reader.IsDBNull(3) ? null : reader.GetGuid(3), reader.IsDBNull(4) ? null : reader.GetGuid(4), reader.IsDBNull(9) ? null : reader.GetGuid(9)));
         }

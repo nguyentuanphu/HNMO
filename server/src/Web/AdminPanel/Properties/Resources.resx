@@ -1495,6 +1495,9 @@
   <data name="ItemDropDurationSeconds" xml:space="preserve">
     <value>Item drop duration (seconds)</value>
   </data>
+  <data name="MoneyDropDurationSeconds" xml:space="preserve">
+    <value>Zen drop duration (seconds)</value>
+  </data>
   <data name="ItemDrops" xml:space="preserve">
     <value>Item Drops</value>
   </data>

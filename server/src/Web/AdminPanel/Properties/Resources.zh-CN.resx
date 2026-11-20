@@ -1633,6 +1633,9 @@
   <data name="ItemDropDurationSeconds" xml:space="preserve">
     <value>掉落物品保留时间（秒）</value>
   </data>
+  <data name="MoneyDropDurationSeconds" xml:space="preserve">
+    <value>掉落金币保留时间（秒）</value>
+  </data>
   <data name="ItemDrops" xml:space="preserve">
     <value>物品掉落</value>
   </data>
