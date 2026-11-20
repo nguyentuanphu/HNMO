@@ -81,8 +81,9 @@ public sealed class GameplayRulesTests
         monster.DropItemGroups.Add(moneyGroup);
         var gen = new DefaultDropGenerator(context.Configuration, Rand.GetRandomizer());
         var (_, money) = await gen.GenerateItemDropsAsync(monster, 100, p1).ConfigureAwait(false);
-        // Base money = (100+7)=107 * 1.5 = 160 or 161 per roll * 2 rolls (because +100% item drop rolls extra pass)
-        Assert.That(money, Is.GreaterThanOrEqualTo(320));
+        // Money = (100+7)=107 * 1.5 = 160 or 161: the +50 % zen rule applies once; the extra roll of the +100 % item
+        // drop rule gives items only (it added its zen too, so an item bonus raised the zen).
+        Assert.That(money, Is.InRange(160u, 161u));
     }
 
     /// <summary>Verifies Sydney time happy hour evaluation (including midnight wraparound), chat announcements, and timetable entries.</summary>
