@@ -28,7 +28,7 @@ public sealed class LostMapDroppedPlugIn : IItemDropPlugIn
         }
 
         cancelArgs.WasHandled = true;
-        if (player.CurrentMap is null)
+        if (player.CurrentMap is not { } currentMap)
         {
             return;
         }
@@ -36,6 +36,20 @@ public sealed class LostMapDroppedPlugIn : IItemDropPlugIn
         if (item.Level is < 1 or > KalimaGate.MaximumLevel)
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InvalidLostMap)).ConfigureAwait(false);
+            return;
+        }
+
+        // The same limits as the Kalima ticket: not inside Kalima, and only up to the level of Kalima
+        // which the character level allows.
+        if (KalimaGate.IsKalimaMap(currentMap.MapId))
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NoKalimaGateInKalima)).ConfigureAwait(false);
+            return;
+        }
+
+        if (item.Level > ItemConsumeActions.KalimaTicketConsumeHandlerPlugIn.GetAllowedKalimaLevel(player))
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.LevelTooLowToEnterMap)).ConfigureAwait(false);
             return;
         }
 
