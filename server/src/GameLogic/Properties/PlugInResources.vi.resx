@@ -1185,6 +1185,9 @@
   <data name="HappyHourConfiguration_ExperienceMultiplier_Name" xml:space="preserve">
     <value>Hệ số kinh nghiệm</value>
   </data>
+  <data name="HappyHourConfiguration_ItemDropBonusPercent_Name" xml:space="preserve">
+    <value>Thêm tỉ lệ rơi đồ (%)</value>
+  </data>
   <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
     <value>Thời gian xuất hiện tối thiểu</value>
   </data>
