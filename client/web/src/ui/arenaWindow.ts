@@ -19,6 +19,8 @@ export interface ArenaTravelState {
   team?: ArenaTeam | null;
   /** In the Arena: the battle royale's schedule, sign-up and the match being fought. */
   royale?: ArenaRoyale | null;
+  /** In the Arena: the guild war's schedule, sign-up and the match being fought. */
+  guildWar?: ArenaGuildWar | null;
   /** At home: the account's Arena points and the points shop. */
   shop?: ArenaShop | null;
 }
@@ -116,6 +118,42 @@ export interface ArenaRoyale {
   /** 1 wins; 0 while fighting or not a fighter. */
   place: number;
   winner?: string | null;
+}
+
+/** A capture point of the guild war: its tile, the side holding it (0 none) and the side taking it. */
+export interface ArenaFlag {
+  x: number;
+  y: number;
+  owner: number;
+  taking: number;
+  seconds: number;
+}
+
+/** The guild war: the schedule (Sydney), the sign-up, the match (side 1 red, 2 blue) and the week's champion. */
+export interface ArenaGuildWar {
+  days: string;
+  times: string;
+  nextSydney?: string | null;
+  secondsToStart: number;
+  signupOpen: boolean;
+  signedUp: boolean;
+  myGuild?: string | null;
+  minMembers: number;
+  guilds: { name: string; count: number }[];
+  running: boolean;
+  waiting: number;
+  side: number;
+  guildA?: string | null;
+  guildB?: string | null;
+  scoreA: number;
+  scoreB: number;
+  secondsLeft: number;
+  flags?: ArenaFlag[] | null;
+  captureSeconds: number;
+  ended: boolean;
+  /** 1 side 1, -1 side 2, 0 a draw (once ended). */
+  winner: number;
+  champion?: string | null;
 }
 
 /** The home server to come back to: its start screen column and server id. */
@@ -240,7 +278,7 @@ export class ArenaWindow {
       return true;
     }
     this.travelling = false;
-    this.updateScoreboard(state.team ?? null, state.royale ?? null);
+    this.updateScoreboard(state.team ?? null, state.royale ?? null, state.guildWar ?? null);
     if (this.panel.isOpen() && json !== this.drawn) {
       this.drawn = json;
       this.render();
@@ -285,10 +323,74 @@ export class ArenaWindow {
       if (state.shop) this.renderShop(body, state.shop);
     } else {
       body.append(button);
+      if (state.guildWar) this.renderGuildWar(body, state.guildWar);
       if (state.royale) this.renderRoyale(body, state.royale);
       if (state.team) this.renderTeam(body, state.team);
       if (state.ranked) this.renderRanked(body, state.ranked);
     }
+  }
+
+  private renderGuildWar(body: HTMLElement, war: ArenaGuildWar): void {
+    const head = document.createElement('h3');
+    head.className = 'hnmo-arena-head';
+    head.textContent = tx('Guild war', 'Bang chiến');
+    const rules = document.createElement('p');
+    rules.className = 'hnmo-muted';
+    rules.textContent = tx(
+      `Valley of Loren, ${war.days} at ${war.times} (Sydney). Members of a guild sign up; a guild needs ${war.minMembers} in the Arena at the start. A kill is a point; hold a flag alone for ${war.captureSeconds} s to take it, and every held flag keeps giving points. Winners +15 Arena points, others +4.`,
+      `Thung lũng Loren, ${war.days} lúc ${war.times} (giờ Sydney). Thành viên bang đăng ký; bang cần ${war.minMembers} người có mặt trong Đấu trường lúc bắt đầu. Hạ một người được một điểm; đứng một mình ở cờ ${war.captureSeconds} giây để chiếm, cờ đang giữ liên tục cho điểm. Bang thắng +15 điểm Đấu trường, bang thua +4.`,
+    );
+    body.append(head, rules);
+    if (war.champion) {
+      const champion = document.createElement('p');
+      champion.id = 'arena-guild-champion';
+      champion.textContent = tx(`Guild war champion of the week: ${war.champion}`, `Vô địch bang chiến tuần này: ${war.champion}`);
+      body.append(champion);
+    }
+    const line = document.createElement('p');
+    line.id = 'arena-guild-status';
+    if (war.running) {
+      line.textContent = this.guildWarText(war);
+      body.append(line);
+      return;
+    }
+    const minutes = Math.floor(war.secondsToStart / 60), seconds = war.secondsToStart % 60;
+    const signed = war.guilds.map((g) => `${g.name} (${g.count})`).join(', ');
+    line.textContent = war.waiting > 0
+      ? tx(`${war.waiting} more match(es) to come.`, `Còn ${war.waiting} trận nữa.`)
+      : war.nextSydney
+        ? tx(`Next: ${war.nextSydney} Sydney (in ${minutes}:${String(seconds).padStart(2, '0')}). Signed up: ${signed || 'none yet'}.`,
+          `Lần tới: ${war.nextSydney} giờ Sydney (còn ${minutes}:${String(seconds).padStart(2, '0')}). Đã đăng ký: ${signed || 'chưa có'}.`)
+        : tx('No guild war planned.', 'Chưa có lịch bang chiến.');
+    body.append(line);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'hnmo-btn';
+    button.id = war.signedUp ? 'arena-guild-leave' : 'arena-guild-join';
+    button.disabled = !war.signupOpen && !war.signedUp;
+    button.textContent = war.signedUp
+      ? tx(`Cancel (fighting for ${war.myGuild ?? ''})`, `Huỷ (đang đăng ký cho ${war.myGuild ?? ''})`)
+      : war.signupOpen ? tx('Fight for my guild', 'Chiến đấu cho bang của tôi') : tx('The sign-up is closed', 'Đăng ký đã đóng');
+    button.addEventListener('click', () => {
+      this.options.send('HnmoArenaTravelRequest', { Action: war.signedUp ? 10 : 9, Index: 0 });
+    });
+    body.append(button);
+  }
+
+  /** "Guild A 12 : 9 Guild B · flags A - B · 11:20 · you: red", then the result. */
+  private guildWarText(war: ArenaGuildWar): string {
+    const score = `${war.guildA ?? '?'} ${war.scoreA} : ${war.scoreB} ${war.guildB ?? '?'}`;
+    if (war.ended) {
+      const result = war.winner === 0 ? tx('Draw', 'Hoà')
+        : !war.side ? tx(`${war.winner > 0 ? war.guildA : war.guildB} won`, `${war.winner > 0 ? war.guildA : war.guildB} thắng`)
+          : (war.winner > 0) === (war.side === 1) ? tx('Victory', 'Thắng') : tx('Defeat', 'Thua');
+      return `${result} · ${score}`;
+    }
+    const time = `${Math.floor(war.secondsLeft / 60)}:${String(war.secondsLeft % 60).padStart(2, '0')}`;
+    const mark = (f: ArenaFlag) => (f.owner === 1 ? tx('red', 'đỏ') : f.owner === 2 ? tx('blue', 'xanh') : '-') + (f.taking ? `>${f.taking === 1 ? tx('red', 'đỏ') : tx('blue', 'xanh')} ${f.seconds}s` : '');
+    const flags = (war.flags ?? []).map((f) => `(${f.x},${f.y}) ${mark(f)}`).join(' ');
+    const me = war.side === 1 ? tx(' · you: red', ' · bạn: đỏ') : war.side === 2 ? tx(' · you: blue', ' · bạn: xanh') : '';
+    return `${score} · ${tx('flags', 'cờ')} ${flags} · ${time}${me}`;
   }
 
   private renderRoyale(body: HTMLElement, royale: ArenaRoyale): void {
@@ -408,10 +510,11 @@ export class ArenaWindow {
    * While the player waits for or fights a team battle, the state is asked for every 2 s (also with the window closed),
    * and while they fight a small score bar stays on screen.
    */
-  private updateScoreboard(team: ArenaTeam | null, royale: ArenaRoyale | null = null): void {
+  private updateScoreboard(team: ArenaTeam | null, royale: ArenaRoyale | null = null, war: ArenaGuildWar | null = null): void {
     const inRoyale = !!royale && royale.running && royale.fighter;
-    const fighting = (!!team && team.running && team.side !== 0) || inRoyale;
-    const watching = fighting || !!team?.queued || !!royale?.signedUp;
+    const inWar = !!war && war.running && war.side !== 0;
+    const fighting = (!!team && team.running && team.side !== 0) || inRoyale || inWar;
+    const watching = fighting || !!team?.queued || !!royale?.signedUp || !!war?.signedUp || (!!war && war.waiting > 0);
     if (!watching) {
       window.clearInterval(this.battleTimer);
       this.battleTimer = undefined;
@@ -423,7 +526,7 @@ export class ArenaWindow {
     }
     if (fighting) {
       if (!this.scoreboard) this.scoreboard = this.createScoreboard();
-      const text = inRoyale && royale ? this.royaleText(royale) : team ? this.scoreText(team) : '';
+      const text = inWar && war ? this.guildWarText(war) : inRoyale && royale ? this.royaleText(royale) : team ? this.scoreText(team) : '';
       this.scoreboard.textContent = text;
       this.scoreboard.classList.toggle('arena-outside', inRoyale && text.includes(tx('OUTSIDE', 'NGOÀI')));
       this.scoreboard.style.color = this.scoreboard.classList.contains('arena-outside') ? '#ff7060' : '#f0e0b0';

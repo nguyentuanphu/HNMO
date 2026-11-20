@@ -16,5 +16,5 @@ The server answers with HnmoArenaTravelState (F5 53).
 | 1 | 1 |    Byte   |   6   | Packet header - length of the packet |
 | 2 | 1 |    Byte   | 0xF5  | Packet header - packet type identifier |
 | 3 | 1 |    Byte   | 0x52  | Packet header - sub packet type identifier |
-| 4 | 1 | Byte |  | Action; 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp. |
+| 4 | 1 | Byte |  | Action; 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp, 9 = SignUpForGuildWar, 10 = CancelGuildWarSignUp. |
 | 5 | 1 | Byte |  | Index; For BuyFromPointsShop: the item's index in the shop. |

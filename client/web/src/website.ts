@@ -365,6 +365,10 @@ const copy = {
     arenaRating: "Rating",
     arenaWinsLosses: "Wins / losses",
     arenaNone: "No ranked duels yet.",
+    arenaGuildWar: "Guild war (this week)",
+    arenaGuild: "Guild",
+    arenaGuildChampion: "Guild war champion of the week: {guild}",
+    arenaGuildNone: "No guild war this week yet.",
     marketFees: "One-off fees per account on each season's market: buying {buy}, selling {sell}; every sale pays a {tax}% tax.",
     marketItem: "Item",
     marketSeller: "Seller",
@@ -826,6 +830,10 @@ const copy = {
     arenaRating: "Điểm",
     arenaWinsLosses: "Thắng / thua",
     arenaNone: "Chưa có trận xếp hạng nào.",
+    arenaGuildWar: "Bang chiến (tuần này)",
+    arenaGuild: "Bang",
+    arenaGuildChampion: "Vô địch bang chiến tuần này: {guild}",
+    arenaGuildNone: "Tuần này chưa có trận bang chiến.",
     marketFees: "Phí một lần cho mỗi tài khoản ở chợ từng season: mua {buy}, bán {sell}; mỗi lần bán đóng thuế {tax}%.",
     marketItem: "Vật phẩm",
     marketSeller: "Người bán",
@@ -2754,7 +2762,8 @@ setInterval(() => {
 }, 120000);
 
 interface ArenaRow { name: string; className: string; rating: number; wins: number; losses: number; weekWins: number; weekLosses: number }
-interface PublicArena { enabled: boolean; week?: string; allTime?: ArenaRow[]; thisWeek?: ArenaRow[] }
+interface GuildWarRow { name: string; wins: number; losses: number }
+interface PublicArena { enabled: boolean; week?: string; allTime?: ArenaRow[]; thisWeek?: ArenaRow[]; guildChampion?: string | null; guildWeek?: GuildWarRow[] }
 let arenaData: PublicArena | null = null;
 
 function renderArena(): void {
@@ -2766,6 +2775,9 @@ function renderArena(): void {
   const headers: [string, boolean][] = [[t("arenaRank"), true], [t("arenaPlayer"), false], [t("arenaClass"), false], [t("arenaRating"), true], [t("arenaWinsLosses"), true]];
   table("arena-week-table", headers, (arenaData.thisWeek ?? []).map((r, i) => [i + 1, r.name, r.className, r.rating, `${r.weekWins} / ${r.weekLosses}`]), t("arenaNone"));
   table("arena-all-table", headers, (arenaData.allTime ?? []).map((r, i) => [i + 1, r.name, r.className, r.rating, `${r.wins} / ${r.losses}`]), t("arenaNone"));
+  const guildHeaders: [string, boolean][] = [[t("arenaRank"), true], [t("arenaGuild"), false], [t("arenaWinsLosses"), true]];
+  table("arena-guild-table", guildHeaders, (arenaData.guildWeek ?? []).map((r, i) => [i + 1, r.name, `${r.wins} / ${r.losses}`]), t("arenaGuildNone"));
+  element("arena-guild-champion").textContent = arenaData.guildChampion ? t("arenaGuildChampion").replace("{guild}", arenaData.guildChampion) : "";
 }
 
 async function refreshArena(): Promise<void> {

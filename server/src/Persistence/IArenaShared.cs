@@ -43,4 +43,12 @@ public interface IArenaShared
     /// <param name="login">The login name.</param>
     /// <returns>The rating.</returns>
     int? GetRating(string login);
+
+    /// <summary>
+    /// Gets the guild an account's characters belong to on Season 6.3 (the guild war in the Arena fights for it): the one
+    /// where the account holds the highest rank, or <c>null</c> without a guild.
+    /// </summary>
+    /// <param name="login">The login name.</param>
+    /// <returns>The guild's id and name.</returns>
+    (Guid Id, string Name)? GuildOf(string login) => null;
 }

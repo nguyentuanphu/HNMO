@@ -6904,7 +6904,7 @@ public static class ConnectionExtensions
     /// Sends a <see cref="HnmoArenaTravelRequest" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
-    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp.</param>
+    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp, 9 = SignUpForGuildWar, 10 = CancelGuildWarSignUp.</param>
     /// <param name="index">For BuyFromPointsShop: the item's index in the shop.</param>
     /// <remarks>
     /// Is sent by the client when: Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).

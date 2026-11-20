@@ -59,7 +59,21 @@ public sealed class ArenaDuels
         var now = DateTime.UtcNow;
         var (allTime, week) = store.Read(d => ArenaRanking.Leaderboards(d, now, 50));
         static object Row(ArenaPlayerRecord r) => new { name = r.CharacterName, className = r.ClassName, rating = r.Rating, wins = r.Wins, losses = r.Losses, weekWins = r.WeekWins, weekLosses = r.WeekLosses };
-        return JsonSerializer.Serialize(new { week = ArenaRanking.WeekKey(now), allTime = allTime.Select(Row), thisWeek = week.Select(Row) });
+        var weekKey = ArenaRanking.WeekKey(now);
+        var guilds = store.Read(d => d.Guilds.Values.ToList());
+        var guildWeek = guilds.Where(g => g.Week == weekKey && g.WeekWins + g.WeekLosses > 0).OrderByDescending(g => g.WeekWins).ThenBy(g => g.WeekLosses).ThenBy(g => g.Name, StringComparer.Ordinal)
+            .Select(g => new { name = g.Name, wins = g.WeekWins, losses = g.WeekLosses }).Take(20).ToList();
+        var guildAllTime = guilds.OrderByDescending(g => g.Wins).ThenBy(g => g.Losses).ThenBy(g => g.Name, StringComparer.Ordinal)
+            .Select(g => new { name = g.Name, wins = g.Wins, losses = g.Losses, draws = g.Draws }).Take(20).ToList();
+        return JsonSerializer.Serialize(new
+        {
+            week = weekKey,
+            allTime = allTime.Select(Row),
+            thisWeek = week.Select(Row),
+            guildChampion = guildWeek.FirstOrDefault(g => g.wins > 0)?.name,
+            guildWeek,
+            guildAllTime,
+        });
     }
 
     /// <summary>Gets a value indicating whether a player waits in the queue.</summary>

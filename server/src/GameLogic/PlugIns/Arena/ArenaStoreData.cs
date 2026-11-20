@@ -9,4 +9,7 @@ public sealed class ArenaStoreData
 {
     /// <summary>Gets or sets the accounts' ranked records, by login name (lower case).</summary>
     public Dictionary<string, ArenaPlayerRecord> Players { get; set; } = [];
+
+    /// <summary>Gets or sets the guild war records, by guild name.</summary>
+    public Dictionary<string, ArenaGuildRecord> Guilds { get; set; } = [];
 }

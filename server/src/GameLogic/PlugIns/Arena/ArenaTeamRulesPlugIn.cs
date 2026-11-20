@@ -24,7 +24,8 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     public void CheckAttack(Player attacker, Player defender, CancelEventArgs eventArgs)
     {
         if ((TeamsOf(attacker) is { } teams && teams.PreventsAttack(attacker, defender))
-            || (RoyaleOf(attacker) is { } royale && royale.PreventsAttack(attacker, defender)))
+            || (RoyaleOf(attacker) is { } royale && royale.PreventsAttack(attacker, defender))
+            || (GuildWarOf(attacker) is { } war && war.PreventsAttack(attacker, defender)))
         {
             eventArgs.Cancel = true;
         }
@@ -34,7 +35,8 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     public void CheckExemption(Player attacker, Player defender, PlayerKillPenaltyExemptionArgs eventArgs)
     {
         if ((TeamsOf(attacker) is { } teams && teams.AreOpponents(attacker, defender))
-            || (RoyaleOf(attacker) is { } royale && royale.AreOpponents(attacker, defender)))
+            || (RoyaleOf(attacker) is { } royale && royale.AreOpponents(attacker, defender))
+            || (GuildWarOf(attacker) is { } war && war.AreOpponents(attacker, defender)))
         {
             eventArgs.IsExempted = true;
         }
@@ -43,7 +45,7 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     /// <inheritdoc />
     public ValueTask SelectSpawnGateAsync(Player player, SpawnGateSelectionArgs args)
     {
-        if ((TeamsOf(player)?.RespawnGateOf(player) ?? RoyaleOf(player)?.RespawnGateOf(player)) is { } gate)
+        if ((TeamsOf(player)?.RespawnGateOf(player) ?? RoyaleOf(player)?.RespawnGateOf(player) ?? GuildWarOf(player)?.RespawnGateOf(player)) is { } gate)
         {
             args.Gate = gate;
         }
@@ -76,11 +78,19 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
             await teams.KilledAsync(fallen, killerPlayer).ConfigureAwait(false);
         }
 
+        if (killerPlayer is not null && GuildWarOf(fallen) is { } war)
+        {
+            await war.KilledAsync(fallen, killerPlayer).ConfigureAwait(false);
+        }
+
         if (RoyaleOf(fallen) is { } royale)
         {
             await royale.FellAsync(fallen, killerPlayer).ConfigureAwait(false);
         }
     }
+
+    private static ArenaGuildWar? GuildWarOf(Player player) =>
+        ArenaRules.Active && ArenaPlugIn.Get(player.GameContext) is { } arena && arena.GuildWar.Running ? arena.GuildWar : null;
 
     private static ArenaRoyale? RoyaleOf(Player player) =>
         ArenaRules.Active && ArenaPlugIn.Get(player.GameContext) is { } arena && arena.Royale.Running ? arena.Royale : null;

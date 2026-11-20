@@ -22259,7 +22259,7 @@ public readonly struct HnmoArenaTravelRequest
     public C1HeaderWithSubCode Header => new (this._data);
 
     /// <summary>
-    /// Gets or sets 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp.
+    /// Gets or sets 0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp, 9 = SignUpForGuildWar, 10 = CancelGuildWarSignUp.
     /// </summary>
     public byte Action
     {

@@ -164,6 +164,26 @@ public sealed class PostgresArenaShared : IArenaShared
         return this._ratings.TryGetValue(Key(login), out var rating) ? rating : null;
     }
 
+    /// <inheritdoc />
+    public (Guid Id, string Name)? GuildOf(string login)
+    {
+        using var connection = this.Open();
+        using var command = new NpgsqlCommand(
+            """
+            SELECT g."Id", g."Name" FROM guild."GuildMember" m
+            JOIN guild."Guild" g ON g."Id" = m."GuildId"
+            JOIN data."Character" c ON c."Id" = m."Id"
+            JOIN data."Account" a ON a."Id" = c."AccountId"
+            WHERE lower(a."LoginName") = lower(@login)
+            ORDER BY m."Status" DESC, g."Name"
+            LIMIT 1
+            """,
+            connection);
+        command.Parameters.AddWithValue("login", login.Trim());
+        using var reader = command.ExecuteReader();
+        return reader.Read() ? (reader.GetGuid(0), reader.GetString(1)) : null;
+    }
+
     private static string Key(string login) => login.Trim().ToLowerInvariant();
 
     private NpgsqlConnection Open()

@@ -34,6 +34,9 @@ public sealed class ArenaTeams
         this._configuration = configuration ?? new ArenaConfiguration();
     }
 
+    /// <summary>Gets or sets what says the battle map is taken by something else (the guild war); no battle starts then.</summary>
+    public Func<bool>? MapBusy { get; set; }
+
     /// <summary>Gets or sets how long the players stay on the battle map after the end, to see the result.</summary>
     public TimeSpan AfterBattle { get; set; } = TimeSpan.FromSeconds(10);
 
@@ -306,7 +309,7 @@ public sealed class ArenaTeams
                         close = battle;
                     }
                 }
-                else if (this._queue.SelectMany(e => e.Players).All(p => p.PlayerState.CurrentState == PlayerState.EnteredWorld && p.IsAlive))
+                else if (this.MapBusy?.Invoke() != true && this._queue.SelectMany(e => e.Players).All(p => p.PlayerState.CurrentState == PlayerState.EnteredWorld && p.IsAlive))
                 {
                     var groups = this._queue.Select(e => new ArenaTeamEngine.Group(e.Players.Select(p => p.Account?.LoginName ?? p.Name).ToList(), e.Order, 0)).ToList();
                     var frontWaitedLong = this._queue.Count > 0 && now - this._queue.Min(e => e.JoinedUtc) >= SmallerBattleWait;

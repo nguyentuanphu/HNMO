@@ -86,6 +86,14 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
+        if (arena is not null && request.Action is 9 or 10)
+        {
+            var (en, viText) = request.Action == 9
+                ? arena.GuildWar.Join(player)
+                : (arena.GuildWar.Leave(player) ? ("You're off the guild war list.", "Bạn đã huỷ đăng ký bang chiến.") : ("You weren't signed up.", "Bạn chưa đăng ký."));
+            message = vi ? viText : en;
+        }
+
         var shop = inArena ? null : GameLogic.PlugIns.Arena.ArenaShopPlugIn.Get(player.GameContext);
         if (shop is not null && request.Action == 4)
         {
@@ -93,7 +101,7 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
-        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), team = arena?.Teams.StateOf(player), royale = arena?.Royale.StateOf(player), shop = shop?.StateOf(player) });
+        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), team = arena?.Teams.StateOf(player), royale = arena?.Royale.StateOf(player), guildWar = arena?.GuildWar.StateOf(player), shop = shop?.StateOf(player) });
         await player.InvokeViewPlugInAsync<IHnmoArenaTravelViewPlugIn>(p => p.ShowArenaTravelAsync(json)).ConfigureAwait(false);
     }
 }

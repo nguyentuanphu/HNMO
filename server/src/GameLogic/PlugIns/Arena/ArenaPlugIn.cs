@@ -32,6 +32,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
     private ArenaDuels? _duels;
     private ArenaTeams? _teams;
     private ArenaRoyale? _royale;
+    private ArenaGuildWar? _guildWar;
     private DateTime _nextTeamTickUtc;
     private DateTime _nextMatchUtc;
     private DateTime _nextReturnUtc;
@@ -59,7 +60,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
         {
             lock (this._duelsGate)
             {
-                return this._teams ??= new ArenaTeams(this.Configuration ?? new ArenaConfiguration());
+                return this._teams ??= new ArenaTeams(this.Configuration ?? new ArenaConfiguration()) { MapBusy = () => this.GuildWar.Busy };
             }
         }
     }
@@ -72,6 +73,18 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
             lock (this._duelsGate)
             {
                 return this._royale ??= new ArenaRoyale(this.Configuration ?? new ArenaConfiguration());
+            }
+        }
+    }
+
+    /// <summary>Gets the guild war of this game server.</summary>
+    public ArenaGuildWar GuildWar
+    {
+        get
+        {
+            lock (this._duelsGate)
+            {
+                return this._guildWar ??= new ArenaGuildWar(this.Configuration ?? new ArenaConfiguration(), this.Duels.Store);
             }
         }
     }
@@ -105,6 +118,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
             this._nextTeamTickUtc = now.AddSeconds(1);
             await this.Teams.TickAsync(gameContext, this.Duels, logger).ConfigureAwait(false);
             await this.Royale.TickAsync(gameContext, this.Teams, this.Duels, logger).ConfigureAwait(false);
+            await this.GuildWar.TickAsync(gameContext, this.Teams, this.Royale, this.Duels, logger).ConfigureAwait(false);
         }
 
         if (now >= this._nextReturnUtc)
@@ -117,7 +131,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
                 foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
                 {
                     if (player.PlayerState.CurrentState == PlayerState.EnteredWorld && player.DuelRoom is null && player.IsAlive
-                        && this.Teams.SideOf(player) == 0 && !this.Royale.IsAlive(player)
+                        && this.Teams.SideOf(player) == 0 && !this.Royale.IsAlive(player) && this.GuildWar.SideOf(player) == 0
                         && !player.IsTeleporting && player.CurrentMap is { } current && current.MapId != cfg.MapNumber)
                     {
                         await player.WarpToAsync(gate).ConfigureAwait(false);

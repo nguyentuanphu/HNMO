@@ -176,6 +176,51 @@ public sealed class ArenaConfiguration
     [Range(0, 1000)]
     public int RoyalePointsOthers { get; set; } = 2;
 
+    /// <summary>Gets or sets the days of the guild war (owner's choice 2026-11-20: Saturday and Sunday).</summary>
+    public string GuildWarDays { get; set; } = "Sat, Sun";
+
+    /// <summary>Gets or sets the Sydney times of the guild war on those days (owner's choice: 21:00).</summary>
+    public string GuildWarTimes { get; set; } = "21:00";
+
+    /// <summary>Gets or sets the minutes before the start the sign-up closes (the owner's "until 20:50").</summary>
+    [Range(0, 120)]
+    public int GuildWarSignupCloseMinutes { get; set; } = 10;
+
+    /// <summary>Gets or sets how long a guild war match lasts in minutes (owner's choice: 15).</summary>
+    [Range(2, 120)]
+    public int GuildWarMinutes { get; set; } = 15;
+
+    /// <summary>Gets or sets the fewest members of a guild that must be in the Arena at the start (owner's choice: 5).</summary>
+    [Range(1, 50)]
+    public int GuildWarMinMembers { get; set; } = 5;
+
+    /// <summary>Gets or sets the most members of a guild that fight (owner's choice: 10).</summary>
+    [Range(1, 50)]
+    public int GuildWarMaxMembers { get; set; } = 10;
+
+    /// <summary>Gets or sets the capture points on the battle map, "x,y; x,y" (west, middle and east of the Valley of Loren).</summary>
+    public string GuildWarFlags { get; set; } = "79,27; 89,27; 100,33";
+
+    /// <summary>Gets or sets how near (tiles) a fighter must stand to count at a flag.</summary>
+    [Range(1, 20)]
+    public int GuildWarFlagRadius { get; set; } = 3;
+
+    /// <summary>Gets or sets the seconds a guild must hold a flag alone to capture it.</summary>
+    [Range(1, 120)]
+    public int GuildWarCaptureSeconds { get; set; } = 5;
+
+    /// <summary>Gets or sets every how many seconds a held flag gives its guild a point (a kill is a point too).</summary>
+    [Range(1, 600)]
+    public int GuildWarFlagPointSeconds { get; set; } = 10;
+
+    /// <summary>Gets or sets the arena points of every member of the winning guild (owner's choice 2026-11-20: 15).</summary>
+    [Range(0, 1000)]
+    public int GuildWarPointsWin { get; set; } = 15;
+
+    /// <summary>Gets or sets the arena points of every member of the losing guild, and of both in a draw (owner's choice: 4).</summary>
+    [Range(0, 1000)]
+    public int GuildWarPointsLoss { get; set; } = 4;
+
     /// <summary>The battle royale's match settings.</summary>
     /// <returns>The settings.</returns>
     public ArenaRoyaleEngine.Settings RoyaleSettings() =>
