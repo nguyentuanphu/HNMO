@@ -587,6 +587,18 @@ function socketBonus(item: Item, gold: number): number {
 // ---------- ItemValue ----------
 
 /**
+ * AddAdditionalOptionPrice: the price with the additional option at `optionLevel` (+4 damage, +5 defense rate or 1 %
+ * recovery a level). 60 %, 140 %, 280 % and 560 % more at the levels 1 to 4, as classic MU; above 4 (the Jewel of Life
+ * up to +28) HNMO's ItemPriceCalculator step, 0.7 * 2^(level - 1) times the price more. Level 0 adds nothing.
+ */
+export function addAdditionalOptionPrice(gold: number, optionLevel: number): number {
+  if (optionLevel < 1) return gold;
+  const tenths = [6, 14, 28, 56][optionLevel - 1];
+  if (tenths !== undefined) return gold + Math.trunc(gold * tenths / 10);
+  return gold + Math.trunc(gold * 0.7 * 2 ** (optionLevel - 1));
+}
+
+/**
  * ItemValue: the item's price. goldType 0 = what an NPC shop asks for it, 1 = what it pays for it (a third, less the
  * wear), 2 = the base of the repair cost (a third, rounded first). A Dark Lord pet (Dark Horse, Dark Raven) is priced
  * by its level, which comes from the pet's own data: without `petLevel` it is -1, as the desktop's "no pet info".
@@ -734,8 +746,7 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
       || (type >= ITEM_WING_OF_STORM && type <= ITEM_WING_OF_DIMENSION)
       || (type >= ITEM_CAPE_OF_FIGHTER && type <= ITEM_CAPE_OF_OVERRULE);
     const byStep = (value: number, step: number): void => {
-      const tenths = [6, 14, 28, 56][value / step - 1];
-      if (Number.isInteger(value / step) && tenths !== undefined) gold += Math.trunc(gold * tenths / 10);
+      if (value > 0 && value % step === 0) gold = addAdditionalOptionPrice(gold, value / step);
     };
     for (const slot of slots) {
       const option = slot.option;
@@ -743,7 +754,8 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
         gold += Math.trunc(gold * 1.5);
       } else if (option === AT_IMPROVE_DAMAGE || option === AT_IMPROVE_MAGIC || option === AT_IMPROVE_CURSE
         || option === AT_IMPROVE_DEFENSE || option === AT_LIFE_REGENERATION) {
-        // The additional option: +60%, +140%, +280%, +560% at 4, 8, 12, 16 (a wing's regeneration counts 4 a level).
+        // The additional option: +60%, +140%, +280%, +560% at 4, 8, 12, 16 and more up to +28 (a wing's regeneration
+        // counts 4 a level; the rings' 1 to 3 % add nothing).
         byStep(wingOptions && option === AT_LIFE_REGENERATION ? slot.value * 4 : slot.value, 4);
       } else if (option === AT_IMPROVE_BLOCKING) {
         byStep(slot.value, 5);

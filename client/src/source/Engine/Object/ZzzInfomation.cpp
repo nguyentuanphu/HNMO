@@ -9,6 +9,7 @@
 #include "Core/Utilities/FileHandle.h"
 
 #include <algorithm>
+#include <cmath>
 #include <codecvt>
 #include <limits>
 #include <sstream>
@@ -646,6 +647,23 @@ void SetItemAttributes(ITEM* ip)
     CalcWizardsRingOptions(ip);
 }
 
+int64_t AddAdditionalOptionPrice(int64_t gold, int optionLevel)
+{
+    switch (optionLevel)
+    {
+    case 1: return gold + (int64_t)((double)gold * 6 / 10);
+    case 2: return gold + (int64_t)((double)gold * 14 / 10);
+    case 3: return gold + (int64_t)((double)gold * 28 / 10);
+    case 4: return gold + (int64_t)((double)gold * 56 / 10);
+    }
+    if (optionLevel < 1)
+    {
+        return gold;
+    }
+    // Above +16 (the Jewel of Life up to +28): HNMO's ItemPriceCalculator, price * 0.7 * 2^(level - 1) more.
+    return gold + (int64_t)((double)gold * 0.7 * std::pow(2.0, optionLevel - 1));
+}
+
 int64_t ItemValue(const ITEM* ip, int goldType)
 {
     if (ip->Type == -1) return 0;
@@ -1154,32 +1172,27 @@ int64_t ItemValue(const ITEM* ip, int goldType)
                     {
                         iOption *= 4;
                     }
-                    switch (iOption)
+                    // +4 a level (a wing's recovery 1 % a level), up to +28 (level 7).
+                    if (iOption > 0 && iOption % 4 == 0)
                     {
-                    case 4:Gold += (int64_t)((double)Gold * 6 / 10); break;
-                    case 8:Gold += (int64_t)((double)Gold * 14 / 10); break;
-                    case 12:Gold += (int64_t)((double)Gold * 28 / 10); break;
-                    case 16:Gold += (int64_t)((double)Gold * 56 / 10); break;
+                        Gold = AddAdditionalOptionPrice(Gold, iOption / 4);
                     }
                 }
                 else
                 {
-                    switch (ip->SpecialValue[i])
+                    // +4 a level up to +28 (level 7); the rings' and pendants' recovery (1 to 3 %) adds nothing.
+                    const int value = ip->SpecialValue[i];
+                    if (value > 0 && value % 4 == 0)
                     {
-                    case 4:Gold += (int64_t)((double)Gold * 6 / 10); break;
-                    case 8:Gold += (int64_t)((double)Gold * 14 / 10); break;
-                    case 12:Gold += (int64_t)((double)Gold * 28 / 10); break;
-                    case 16:Gold += (int64_t)((double)Gold * 56 / 10); break;
+                        Gold = AddAdditionalOptionPrice(Gold, value / 4);
                     }
                 }
                 break;
             case AT_IMPROVE_BLOCKING:
-                switch (ip->SpecialValue[i])
+                // +5 defense rate a level, up to +35 (level 7).
+                if (ip->SpecialValue[i] > 0 && ip->SpecialValue[i] % 5 == 0)
                 {
-                case 5:Gold += (int64_t)((double)Gold * 6 / 10); break;
-                case 10:Gold += (int64_t)((double)Gold * 14 / 10); break;
-                case 15:Gold += (int64_t)((double)Gold * 28 / 10); break;
-                case 20:Gold += (int64_t)((double)Gold * 56 / 10); break;
+                    Gold = AddAdditionalOptionPrice(Gold, ip->SpecialValue[i] / 5);
                 }
                 break;
             case AT_LUCK:
