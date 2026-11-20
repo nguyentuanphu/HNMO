@@ -38,6 +38,12 @@ public class PostChatCommandPlugIn : IChatCommandPlugIn
             return;
         }
 
+        // A muted player can't post to the whole server either, and posts count for the spam guard.
+        if (await PlayerActions.Chat.BannableChatMessageBaseProcessor.RefuseMutedOrSpamAsync(player, message).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var (allowed, filteredMessage) = await BannedWordsPlugIn.FilterChatAsync(player, message).ConfigureAwait(false);
         if (!allowed)
         {
