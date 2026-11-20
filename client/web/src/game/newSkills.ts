@@ -75,14 +75,23 @@ const rain = (particle: ParticleType, color: Rgb, radius: number, count: number,
 const stones = (at: Anchor, count: number): Step => ({ make: { effect: 'stone1' }, at, shape: 'ring', radius: 120, count, color: EARTH });
 const fireBall = (color: Rgb): Step => ({ make: { effect: 'fireModel' }, at: 'caster', shape: 'line', count: 1, height: 100, color });
 const wave = (color: Rgb): Step => ({ make: { effect: 'magic2', subType: 2 }, at: 'caster', shape: 'point', count: 1, color });
+/** One slash across the target at tick `start`: a red cut flash, a flare, blood and sparks. */
+const slash = (start: number): Step[] => [
+  { make: { particle: 'damage2' }, at: 'target', shape: 'point', count: 1, height: 0, color: RED, start },
+  { make: { particle: 'damage1' }, at: 'target', shape: 'point', count: 1, height: 110, color: RED, scale: 1.2, start },
+  { ...burst('blood2', RED, 5), start },
+  { ...burst('spark', RED, 6), start },
+];
 
 /** The 28 skills' looks, by skill number (700 + 4 × class + letter; the server's class order). */
 export const NEW_SKILL_LOOKS: Record<number, NewSkillLook> = {
   // Dark Knight
   700: { action: A.ATTACK_SKILL_SWORD4, packet: 'area', areaAt: 'self', needsTarget: false, friendly: false, icon: { from: 42, hue: 30 }, sound: 'SOUND_SKILL_SWORD4',
     effect: [stones('caster', 10), ring('smoke', EARTH, 220, 16), ring('spark', ICE, 180, 10)] },
+  // Three quick red slashes across the target (the hit flashes of Dark Side's and Chain Drive's strikes, BITMAP_DAMAGE2
+  // and BITMAP_DAMAGE1, in red), each with blood and sparks, and a red glow on it while they land.
   701: { action: A.ATTACK_SKILL_SWORD5, packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 23, hue: -30 }, sound: 'SOUND_SKILL_SWORD2',
-    effect: [{ ...burst('blood2', RED, 12), ticks: 3, start: 2 }, { ...burst('spark', RED, 8), ticks: 3, start: 2 }] },
+    effect: [...slash(2), ...slash(6), ...slash(10), glow('flareRed', RED, 2.2, 'target', 14)] },
   702: { action: A.SKILL_VITALITY, packet: 'targeted', needsTarget: false, friendly: true, icon: { from: 27, hue: 40 }, sound: 'SOUND_SOULBARRIER',
     effect: [circle(GOLD), glow('shiny2', GOLD, 2.5, 'caster', 20), ring('spark', GOLD, 90, 12)] },
   703: { action: A.ATTACK_SKILL_SWORD2, packet: 'targeted', needsTarget: true, friendly: false, icon: { from: 20, hue: 200 }, sound: 'SOUND_RIDINGSPEAR',
