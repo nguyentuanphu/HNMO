@@ -307,6 +307,47 @@ public class MiniGameStartPlugInTests
     }
 
     /// <summary>
+    /// Tests that the countdown until the next start, which the players see at the event NPCs, reads the
+    /// timetable in the time zone of the server - the one in which the event actually starts.
+    /// </summary>
+    [Test]
+    public async Task DurationUntilNextStartUsesTheServerTimeZoneAsync()
+    {
+        var definition = this.CreateDefinition(TimeSpan.FromMinutes(2));
+        var (fakeContext, _) = this.CreateFakeContext();
+        var serverTimeZone = TimeZoneInfo.CreateCustomTimeZone("Test+10", TimeSpan.FromHours(10), "Test+10", "Test+10");
+        fakeContext.SetupGet(c => c.ServerTimeZone).Returns(serverTimeZone);
+
+        var startInServerTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone).AddMinutes(30);
+        this._configuration.Timetable = new List<TimeOnly> { TimeOnly.FromDateTime(startInServerTime) };
+
+        var duration = await this._plugIn.GetDurationUntilNextStartAsync(fakeContext.Object, definition).ConfigureAwait(false);
+
+        Assert.That(duration, Is.Not.Null);
+        Assert.That(duration!.Value, Is.EqualTo(TimeSpan.FromMinutes(30)).Within(TimeSpan.FromMinutes(1)));
+    }
+
+    /// <summary>
+    /// Tests that after the last start of a day, the countdown runs until the first start of the
+    /// next day, and not until midnight.
+    /// </summary>
+    [Test]
+    public async Task DurationUntilNextStartAfterTheLastStartOfTheDayAsync()
+    {
+        var definition = this.CreateDefinition(TimeSpan.FromMinutes(2));
+        var (fakeContext, _) = this.CreateFakeContext();
+        fakeContext.SetupGet(c => c.ServerTimeZone).Returns(TimeZoneInfo.Utc);
+
+        // The only start was 30 minutes ago, so the next one is in 23.5 hours.
+        this._configuration.Timetable = new List<TimeOnly> { TimeOnly.FromDateTime(DateTime.UtcNow.AddMinutes(-30)) };
+
+        var duration = await this._plugIn.GetDurationUntilNextStartAsync(fakeContext.Object, definition).ConfigureAwait(false);
+
+        Assert.That(duration, Is.Not.Null);
+        Assert.That(duration!.Value, Is.EqualTo(TimeSpan.FromHours(23.5)).Within(TimeSpan.FromMinutes(1)));
+    }
+
+    /// <summary>
     /// Tests that the entrance queries never create games: no announcement state may
     /// reference a game that was never started.
     /// </summary>

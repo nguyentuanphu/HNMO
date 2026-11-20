@@ -80,9 +80,13 @@ public abstract class MiniGameStartBasePlugIn<TConfiguration, TGameState> : Peri
             return ValueTask.FromResult<TimeSpan?>(null);
         }
 
-        var timeNow = new TimeOnly(DateTime.UtcNow.TimeOfDay.Ticks);
-        var nextRun = this.Configuration?.Timetable.Where(time => time > timeNow).Order().FirstOrDefault();
-        return ValueTask.FromResult(nextRun - timeNow);
+        // The timetable is in the time zone of the server, like the start itself (see
+        // PeriodicTaskConfiguration.IsItTimeToStart). Reading it as UTC told the players a
+        // wrong countdown, and after the last run of a day it counted down to midnight
+        // instead of to the first run of the next day.
+        var utcNow = DateTime.UtcNow;
+        var nextStartUtc = this.Configuration?.GetNextStartUtc(utcNow, gameContext.ServerTimeZone ?? TimeZoneInfo.Utc);
+        return ValueTask.FromResult(nextStartUtc - utcNow);
     }
 
     /// <inheritdoc />
