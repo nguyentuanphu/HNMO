@@ -6871,6 +6871,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoArenaTravelRequest" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="action">0 = RequestState, 1 = Travel (a one-time ticket for the other side).</param>
+    /// <remarks>
+    /// Is sent by the client when: Sent by the web client to ask about the HNMO Arena, or for a one-time ticket to travel to the Arena (or from the Arena back home).
+    /// Causes reaction on server side: The server answers with HnmoArenaTravelState (F5 53).
+    /// </remarks>
+    public static async ValueTask SendHnmoArenaTravelRequestAsync(this IConnection? connection, byte @action)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoArenaTravelRequestRef.Length;
+            var packet = new HnmoArenaTravelRequestRef(connection.Output.GetSpan(length)[..length]);
+            packet.Action = @action;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoItemStackCommand" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>

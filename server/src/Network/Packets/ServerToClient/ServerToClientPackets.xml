@@ -16993,6 +16993,23 @@
     <Packet>
       <HeaderType>C2HeaderWithSubCode</HeaderType>
       <Code>F5</Code>
+      <SubCode>53</SubCode>
+      <Name>HnmoArenaTravelState</Name>
+      <Direction>ServerToClient</Direction>
+      <SentWhen>Sent after HnmoArenaTravelRequest (F5 52).</SentWhen>
+      <CausedReaction>The web client shows the Arena window; with a ticket it reloads into the Arena (or back home) with that ticket.</CausedReaction>
+      <Fields>
+        <Field>
+          <Index>5</Index>
+          <Type>String</Type>
+          <Name>Json</Name>
+          <Description>Plain-ASCII JSON: inArena (this server is the Arena), account, ticket (empty without travel), message (EN/VI by the player's language).</Description>
+        </Field>
+      </Fields>
+    </Packet>
+    <Packet>
+      <HeaderType>C2HeaderWithSubCode</HeaderType>
+      <Code>F5</Code>
       <SubCode>51</SubCode>
       <Name>HnmoItemStackState</Name>
       <Direction>ServerToClient</Direction>

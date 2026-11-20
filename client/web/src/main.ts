@@ -48,6 +48,7 @@ import { EventAlertsWindow } from './ui/eventAlertsWidget.js';
 import { LuckyNumberWindow } from './ui/luckyNumberWindow.js';
 import { MarriageWindow } from './ui/marriageWindow.js';
 import { MarketWindow } from './ui/marketWindow.js';
+import { ArenaWindow, savedArenaHome, type ArenaHome } from './ui/arenaWindow.js';
 import { EscrowWindow } from './ui/escrowWindow.js';
 import { VaultPages } from './ui/vaultPages.js';
 import { ItemStacks } from './ui/itemStacks.js';
@@ -216,6 +217,8 @@ export interface GameState {
   luckyNumber?: LuckyNumberWindow;
   marriage?: MarriageWindow;
   market?: MarketWindow;
+  /** The HNMO Arena window (ui/arenaWindow.ts). */
+  arena?: ArenaWindow;
   escrow?: EscrowWindow;
   jewelBank?: JewelBankWindow;
   vip?: VipWindow;
@@ -1118,7 +1121,21 @@ async function otherConnectServers(seasonSix: { host: string; port: number }): P
   }
 }
 
-async function playOnline(settings: LoginSettings, ticket?: string): Promise<void> {
+/** The server being played (its start screen column and id): where "Leave the Arena" comes back to. */
+let playedServer: ArenaHome | null = null;
+
+/** Whether the HNMO Arena runs (the web server's seasons.json). */
+async function arenaRunning(): Promise<boolean> {
+  try {
+    const response = await fetch('/data/seasons.json', { cache: 'no-store', signal: AbortSignal.timeout(1500) });
+    const data = response.ok ? (await response.json()) as { connect?: { arena?: unknown } } : null;
+    return typeof data?.connect?.arena === 'number';
+  } catch {
+    return false;
+  }
+}
+
+async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena' | 'home'): Promise<void> {
   state.connection?.close();
   state.connection = undefined;
   const connectServer = { host: settings.host, port: Number(settings.port) };
@@ -1144,10 +1161,17 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
   setStatus(currentLanguage() === 'vi' ? 'Chọn máy chủ.' : 'Choose a server.', 1);
   // Servers of one world stand together, in the order of the worlds list.
   servers.sort((a, b) => (a.meta?.worldOrder ?? 0) - (b.meta?.worldOrder ?? 0) || a.id - b.id);
-  const server = servers.length === 1
+  // Arena travel (a ticket from the Arena window): straight to the Arena's first server, or back to the home server.
+  const columnOf = (s: SeasonServer) => s.column ?? s.season;
+  const home = go === 'home' ? savedArenaHome() : null;
+  const travelTarget = go === 'arena'
+    ? servers.find((s) => s.column === 'arena')
+    : home ? servers.find((s) => columnOf(s) === home.column && s.id === home.serverId) : undefined;
+  const server = travelTarget ?? (servers.length === 1
     ? servers[0]
-    : await chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi');
+    : await chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi'));
   ui.servers.hidden = true;
+  playedServer = { column: columnOf(server), serverId: server.id };
   // The game data of the picked world's season, before anything of the world is loaded.
   setSeason(server.season);
   const address = await fetchGameServerAddress(settings.relay, server.connect, server.id);
@@ -1845,6 +1869,25 @@ async function playOnline(settings: LoginSettings, ticket?: string): Promise<voi
     if (event.key === 'F6' && event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); escrow.toggle(); }
   });
   window.addEventListener('hnmo-escrow-open', () => { escrow.open(); });
+  // HNMO Arena (Alt+A, 🏟 in the phone menu): travel to the Arena and back with a one-time ticket (ui/arenaWindow.ts).
+  const arena = new ArenaWindow({
+    send: (name, fields) => connection.send('ClientToServer', name, fields),
+    message: (text) => chat.add(text, 'system'),
+    arenaRunning,
+    home: () => playedServer,
+    travel: (account, ticket, to) => {
+      const params = new URLSearchParams({ account, ticket, go: to });
+      location.hash = params.toString();
+      location.reload();
+    },
+  });
+  state.arena = arena;
+  connection.onPacket((bytes) => { arena.handle(bytes); });
+  window.addEventListener('keydown', (event) => {
+    if (event.target instanceof Element && event.target.closest('input, textarea, select')) return;
+    if (event.key.toLowerCase() === 'a' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) { event.preventDefault(); arena.toggle(); }
+  });
+  window.addEventListener('hnmo-arena-open', () => { arena.open(); });
   // VIP shares the website's reviewed offers and stable retry identifier, using the authenticated game session.
   const vip = new VipWindow({ send: (name, fields) => connection.send('ClientToServer', name, fields), message: (text) => chat.add(text, 'system') });
   state.vip = vip;
@@ -2366,16 +2409,18 @@ function startGame(play: () => Promise<void>): void {
   });
 }
 
-function readTicketFromHash(): { account: string; ticket: string } | null {
+function readTicketFromHash(): { account: string; ticket: string; go?: 'arena' | 'home' } | null {
   const hash = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
   if (!hash) return null;
   const params = new URLSearchParams(hash);
   const ticket = params.get('ticket')?.trim() ?? '';
   const account = params.get('account')?.trim() ?? '';
+  const goValue = params.get('go');
+  const go = goValue === 'arena' || goValue === 'home' ? goValue : undefined;
   if (!ticket) return null;
   // Remove the one-time ticket from the address bar right away so it doesn't linger in history.
   history.replaceState(null, '', location.pathname + location.search);
-  return { account, ticket };
+  return { account, ticket, go };
 }
 
 function updateWebsiteLoginButtonLanguage(): void {
@@ -2516,7 +2561,7 @@ function initLogin() {
     };
     const usernameInput = ui.loginForm.elements.namedItem('username') as HTMLInputElement | null;
     if (usernameInput && form.username) usernameInput.value = form.username;
-    startGame(async () => playOnline(await resolveConnectPort(form), pendingTicket.ticket));
+    startGame(async () => playOnline(await resolveConnectPort(form), pendingTicket.ticket, pendingTicket.go));
   }
 
   ui.loginForm.addEventListener('submit', (event) => {

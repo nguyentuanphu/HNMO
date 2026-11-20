@@ -11176,6 +11176,34 @@ public static class ConnectionExtensions
     }
 
     /// <summary>
+    /// Sends a <see cref="HnmoArenaTravelState" /> to this connection.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="json">Plain-ASCII JSON: inArena (this server is the Arena), account, ticket (empty without travel), message (EN/VI by the player's language).</param>
+    /// <remarks>
+    /// Is sent by the server when: Sent after HnmoArenaTravelRequest (F5 52).
+    /// Causes reaction on client side: The web client shows the Arena window; with a ticket it reloads into the Arena (or back home) with that ticket.
+    /// </remarks>
+    public static async ValueTask SendHnmoArenaTravelStateAsync(this IConnection? connection, string @json)
+    {
+        if (connection is null)
+        {
+            return;
+        }
+
+        int WritePacket()
+        {
+            var length = HnmoArenaTravelStateRef.GetRequiredSize(json);
+            var packet = new HnmoArenaTravelStateRef(connection.Output.GetSpan(length)[..length]);
+            packet.Json = @json;
+
+            return packet.Header.Length;
+        }
+
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Sends a <see cref="HnmoItemStackState" /> to this connection.
     /// </summary>
     /// <param name="connection">The connection.</param>
