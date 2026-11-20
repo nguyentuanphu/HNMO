@@ -78,6 +78,14 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
+        if (arena is not null && request.Action is 7 or 8)
+        {
+            var (en, viText) = request.Action == 7
+                ? arena.Royale.Join(player)
+                : (arena.Royale.Leave(player) ? ("You're off the battle royale list.", "Bạn đã huỷ đăng ký đấu sinh tồn.") : ("You weren't signed up.", "Bạn chưa đăng ký."));
+            message = vi ? viText : en;
+        }
+
         var shop = inArena ? null : GameLogic.PlugIns.Arena.ArenaShopPlugIn.Get(player.GameContext);
         if (shop is not null && request.Action == 4)
         {
@@ -85,7 +93,7 @@ internal sealed class HnmoArenaTravelRequestHandlerPlugIn : ISubPacketHandlerPlu
             message = vi ? viText : en;
         }
 
-        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), team = arena?.Teams.StateOf(player), shop = shop?.StateOf(player) });
+        var json = JsonSerializer.Serialize(new { inArena, account = login, ticket, message, ranked = arena?.Duels.StateOf(player), team = arena?.Teams.StateOf(player), royale = arena?.Royale.StateOf(player), shop = shop?.StateOf(player) });
         await player.InvokeViewPlugInAsync<IHnmoArenaTravelViewPlugIn>(p => p.ShowArenaTravelAsync(json)).ConfigureAwait(false);
     }
 }

@@ -5587,7 +5587,7 @@
           <Index>4</Index>
           <Type>Byte</Type>
           <Name>Action</Name>
-          <Description>0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue.</Description>
+          <Description>0 = RequestState, 1 = Travel (a one-time ticket for the other side), 2 = JoinRankedQueue (in the Arena), 3 = LeaveRankedQueue, 4 = BuyFromPointsShop (at home), 5 = JoinTeamQueue (in the Arena, alone or the leader with the party), 6 = LeaveTeamQueue, 7 = SignUpForBattleRoyale, 8 = CancelBattleRoyaleSignUp.</Description>
         </Field>
         <Field>
           <Index>5</Index>

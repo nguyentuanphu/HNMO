@@ -2427,4 +2427,6 @@
   <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Người chơi gửi báo lỗi từ trong game (theo giới hạn mỗi ngày); chủ server đọc, trả lời và xử lý ở trang "Báo lỗi", có thể thưởng xu cho lỗi được xác nhận và gửi báo lỗi tới nhà phát triển HNMO (thành một issue; có thể thêm link Discord để nhận thông báo).</value></data>
   <data name="ArenaTeamRulesPlugIn_Name" xml:space="preserve"><value>Luật trận đấu đội Đấu trường HNMO</value></data>
   <data name="ArenaTeamRulesPlugIn_Description" xml:space="preserve"><value>Trong chương trình Đấu trường, khi có trận đấu đội 5v5: chỉ đánh được đội kia, không bị phạt giết người, đếm mạng, người bị hạ hồi sinh ở cửa đội mình.</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh chat: /startroyale (Đấu trường HNMO)</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký đấu sinh tồn ngay: /startroyale [số giây tới lúc bắt đầu, mặc định 120].</value></data>
 </root>

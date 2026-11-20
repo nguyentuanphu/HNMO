@@ -28,6 +28,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
     private readonly object _duelsGate = new();
     private ArenaDuels? _duels;
     private ArenaTeams? _teams;
+    private ArenaRoyale? _royale;
     private DateTime _nextTeamTickUtc;
     private DateTime _nextMatchUtc;
     private DateTime _nextReturnUtc;
@@ -60,6 +61,18 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
         }
     }
 
+    /// <summary>Gets the battle royale of this game server.</summary>
+    public ArenaRoyale Royale
+    {
+        get
+        {
+            lock (this._duelsGate)
+            {
+                return this._royale ??= new ArenaRoyale(this.Configuration ?? new ArenaConfiguration());
+            }
+        }
+    }
+
     /// <summary>Gets the active <see cref="ArenaPlugIn"/> of a game context.</summary>
     /// <param name="gameContext">The game context.</param>
     /// <returns>The plug-in, or <c>null</c>.</returns>
@@ -88,6 +101,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
         {
             this._nextTeamTickUtc = now.AddSeconds(1);
             await this.Teams.TickAsync(gameContext, this.Duels, logger).ConfigureAwait(false);
+            await this.Royale.TickAsync(gameContext, this.Teams, this.Duels, logger).ConfigureAwait(false);
         }
 
         if (now >= this._nextReturnUtc)
@@ -100,7 +114,7 @@ public sealed class ArenaPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn, IPe
                 foreach (var player in await gameContext.GetPlayersAsync().ConfigureAwait(false))
                 {
                     if (player.PlayerState.CurrentState == PlayerState.EnteredWorld && player.DuelRoom is null && player.IsAlive
-                        && this.Teams.SideOf(player) == 0
+                        && this.Teams.SideOf(player) == 0 && !this.Royale.IsAlive(player)
                         && !player.IsTeleporting && player.CurrentMap is { } current && current.MapId != cfg.MapNumber)
                     {
                         await player.WarpToAsync(gate).ConfigureAwait(false);

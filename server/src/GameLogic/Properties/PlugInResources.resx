@@ -2242,4 +2242,6 @@
   <data name="BugReportsPlugIn_Description" xml:space="preserve"><value>Players send bug reports from the game (up to the daily limit); the owner reads, answers and decides them on the "Bug reports" page, may reward confirmed bugs with coins and may send a report to the HNMO developer (filed as an issue; a Discord link can also get a notice).</value></data>
   <data name="ArenaTeamRulesPlugIn_Name" xml:space="preserve"><value>HNMO Arena team battle rules</value></data>
   <data name="ArenaTeamRulesPlugIn_Description" xml:space="preserve"><value>In the Arena program, during a 5v5 team battle: only the other team can be hurt, no player-kill penalty, kills are counted, and the fallen come back at their team's gate.</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Name" xml:space="preserve"><value>Chat command: /startroyale (HNMO Arena)</value></data>
+  <data name="StartRoyaleChatCommandPlugIn_Description" xml:space="preserve"><value>A game master in the Arena opens the battle royale's sign-up now: /startroyale [seconds until the start, default 120].</value></data>
 </root>

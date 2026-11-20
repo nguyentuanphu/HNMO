@@ -23,7 +23,8 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     /// <inheritdoc />
     public void CheckAttack(Player attacker, Player defender, CancelEventArgs eventArgs)
     {
-        if (TeamsOf(attacker) is { } teams && teams.PreventsAttack(attacker, defender))
+        if ((TeamsOf(attacker) is { } teams && teams.PreventsAttack(attacker, defender))
+            || (RoyaleOf(attacker) is { } royale && royale.PreventsAttack(attacker, defender)))
         {
             eventArgs.Cancel = true;
         }
@@ -32,7 +33,8 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     /// <inheritdoc />
     public void CheckExemption(Player attacker, Player defender, PlayerKillPenaltyExemptionArgs eventArgs)
     {
-        if (TeamsOf(attacker) is { } teams && teams.AreOpponents(attacker, defender))
+        if ((TeamsOf(attacker) is { } teams && teams.AreOpponents(attacker, defender))
+            || (RoyaleOf(attacker) is { } royale && royale.AreOpponents(attacker, defender)))
         {
             eventArgs.IsExempted = true;
         }
@@ -41,7 +43,7 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     /// <inheritdoc />
     public ValueTask SelectSpawnGateAsync(Player player, SpawnGateSelectionArgs args)
     {
-        if (TeamsOf(player)?.RespawnGateOf(player) is { } gate)
+        if ((TeamsOf(player)?.RespawnGateOf(player) ?? RoyaleOf(player)?.RespawnGateOf(player)) is { } gate)
         {
             args.Gate = gate;
         }
@@ -63,13 +65,25 @@ public sealed class ArenaTeamRulesPlugIn : IPlayerAttackRestrictionPlugIn, IPlay
     /// <inheritdoc />
     public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)
     {
-        if (killed is Player fallen
-            && (killer as Player ?? (killer as IPlayerSurrogate)?.Owner) is { } killerPlayer
-            && TeamsOf(fallen) is { } teams)
+        if (killed is not Player fallen)
+        {
+            return;
+        }
+
+        var killerPlayer = killer as Player ?? (killer as IPlayerSurrogate)?.Owner;
+        if (killerPlayer is not null && TeamsOf(fallen) is { } teams)
         {
             await teams.KilledAsync(fallen, killerPlayer).ConfigureAwait(false);
         }
+
+        if (RoyaleOf(fallen) is { } royale)
+        {
+            await royale.FellAsync(fallen, killerPlayer).ConfigureAwait(false);
+        }
     }
+
+    private static ArenaRoyale? RoyaleOf(Player player) =>
+        ArenaRules.Active && ArenaPlugIn.Get(player.GameContext) is { } arena && arena.Royale.Running ? arena.Royale : null;
 
     private static ArenaTeams? TeamsOf(Player player) =>
         ArenaRules.Active && ArenaPlugIn.Get(player.GameContext) is { } arena && arena.Teams.BattleRunning ? arena.Teams : null;

@@ -113,6 +113,74 @@ public sealed class ArenaConfiguration
     [Range(0, 255)]
     public byte TeamBY2 { get; set; } = 30;
 
+    /// <summary>Gets or sets the map the battle royale is fought on (owner's choice 2026-11-20: 0, Lorencia).</summary>
+    [Range(0, 1000)]
+    public short RoyaleMapNumber { get; set; }
+
+    /// <summary>Gets or sets the Sydney times battle royale matches start at, e.g. "12:00, 20:00, 22:00" (owner's choice: set times).</summary>
+    public string RoyaleTimes { get; set; } = "12:00, 20:00, 22:00";
+
+    /// <summary>Gets or sets the minutes before a start the sign-up opens (and the first notice goes out 5 minutes before that).</summary>
+    [Range(1, 60)]
+    public int RoyaleSignupMinutes { get; set; } = 5;
+
+    /// <summary>Gets or sets the fewest players a battle royale starts with (fewer: it's called off).</summary>
+    [Range(2, 200)]
+    public int RoyaleMinPlayers { get; set; } = 3;
+
+    /// <summary>Gets or sets the most players a battle royale takes.</summary>
+    [Range(2, 200)]
+    public int RoyaleMaxPlayers { get; set; } = 50;
+
+    /// <summary>Gets or sets the longest a battle royale lasts in minutes (then the survivors are placed by kills and health).</summary>
+    [Range(2, 120)]
+    public int RoyaleMinutes { get; set; } = 12;
+
+    /// <summary>Gets or sets the minutes before the safe zone starts to shrink.</summary>
+    [Range(0, 60)]
+    public int RoyaleGraceMinutes { get; set; } = 2;
+
+    /// <summary>Gets or sets the minutes the safe zone takes to shrink to its final size.</summary>
+    [Range(1, 120)]
+    public int RoyaleShrinkMinutes { get; set; } = 8;
+
+    /// <summary>Gets or sets the zone's centre at first (x); the default is Lorencia's middle.</summary>
+    [Range(0, 255)]
+    public byte RoyaleCentreX { get; set; } = 128;
+
+    /// <summary>Gets or sets the zone's centre at first (y).</summary>
+    [Range(0, 255)]
+    public byte RoyaleCentreY { get; set; } = 128;
+
+    /// <summary>Gets or sets the zone's radius at first (tiles).</summary>
+    [Range(5, 255)]
+    public int RoyaleStartRadius { get; set; } = 120;
+
+    /// <summary>Gets or sets the zone's final radius (tiles).</summary>
+    [Range(1, 255)]
+    public int RoyaleFinalRadius { get; set; } = 6;
+
+    /// <summary>Gets or sets the share of health (%) lost each second outside the zone at the start.</summary>
+    [Range(0, 100)]
+    public double RoyaleFirstDamagePercent { get; set; } = 2;
+
+    /// <summary>Gets or sets the share of health (%) lost each second outside the zone at the end.</summary>
+    [Range(0, 100)]
+    public double RoyaleLastDamagePercent { get; set; } = 10;
+
+    /// <summary>Gets or sets the winner's arena points (owner's choice 2026-11-20: 20).</summary>
+    [Range(0, 1000)]
+    public int RoyalePointsWinner { get; set; } = 20;
+
+    /// <summary>Gets or sets everyone else's arena points (owner's choice 2026-11-20: 2).</summary>
+    [Range(0, 1000)]
+    public int RoyalePointsOthers { get; set; } = 2;
+
+    /// <summary>The battle royale's match settings.</summary>
+    /// <returns>The settings.</returns>
+    public ArenaRoyaleEngine.Settings RoyaleSettings() =>
+        new(this.RoyaleMinutes, this.RoyaleGraceMinutes, this.RoyaleShrinkMinutes, this.RoyaleStartRadius, this.RoyaleFinalRadius, this.RoyaleFirstDamagePercent, this.RoyaleLastDamagePercent, this.RoyalePointsWinner, this.RoyalePointsOthers);
+
     /// <summary>The gate arena characters stand at on the arena map, if the map exists.</summary>
     /// <param name="gameConfiguration">The game configuration.</param>
     /// <returns>The gate, or <c>null</c>.</returns>

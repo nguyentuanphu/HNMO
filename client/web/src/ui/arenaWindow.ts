@@ -17,6 +17,8 @@ export interface ArenaTravelState {
   ranked?: ArenaRanked | null;
   /** In the Arena: the 5v5 team battle queue and the battle being fought. */
   team?: ArenaTeam | null;
+  /** In the Arena: the battle royale's schedule, sign-up and the match being fought. */
+  royale?: ArenaRoyale | null;
   /** At home: the account's Arena points and the points shop. */
   shop?: ArenaShop | null;
 }
@@ -87,6 +89,35 @@ export interface ArenaTeam {
   teamB?: ArenaFighter[] | null;
 }
 
+/** The battle royale: the next start (Sydney), the sign-up, and the match (zone in tiles). */
+export interface ArenaRoyale {
+  times: string;
+  next?: string | null;
+  nextSydney?: string | null;
+  secondsToStart: number;
+  signupOpen: boolean;
+  signedUp: boolean;
+  signups: number;
+  minPlayers: number;
+  running: boolean;
+  fighter: boolean;
+  alive: boolean;
+  kills: number;
+  left: number;
+  total: number;
+  secondsLeft: number;
+  zoneX: number;
+  zoneY: number;
+  zoneRadius: number;
+  /** Where the zone closes in (known from the start). */
+  finalX: number;
+  finalY: number;
+  ended: boolean;
+  /** 1 wins; 0 while fighting or not a fighter. */
+  place: number;
+  winner?: string | null;
+}
+
 /** The home server to come back to: its start screen column and server id. */
 export interface ArenaHome {
   column: string;
@@ -142,6 +173,8 @@ export class ArenaWindow {
     arenaRunning: () => Promise<boolean>;
     /** The server being played, to come back to. */
     home: () => ArenaHome | null;
+    /** The hero's tile, to tell whether it stands in the battle royale's safe zone. */
+    heroCell?: () => { x: number; y: number } | null;
     /** Reloads into the other side with the ticket. */
     travel: (account: string, ticket: string, to: 'arena' | 'home') => void;
   }) {
@@ -201,7 +234,7 @@ export class ArenaWindow {
       return true;
     }
     this.travelling = false;
-    this.updateScoreboard(state.team ?? null);
+    this.updateScoreboard(state.team ?? null, state.royale ?? null);
     if (this.panel.isOpen() && json !== this.drawn) {
       this.drawn = json;
       this.render();
@@ -246,9 +279,64 @@ export class ArenaWindow {
       if (state.shop) this.renderShop(body, state.shop);
     } else {
       body.append(button);
+      if (state.royale) this.renderRoyale(body, state.royale);
       if (state.team) this.renderTeam(body, state.team);
       if (state.ranked) this.renderRanked(body, state.ranked);
     }
+  }
+
+  private renderRoyale(body: HTMLElement, royale: ArenaRoyale): void {
+    const head = document.createElement('h3');
+    head.className = 'hnmo-arena-head';
+    head.textContent = tx('Battle royale', 'Đấu sinh tồn');
+    const rules = document.createElement('p');
+    rules.className = 'hnmo-muted';
+    rules.textContent = tx(
+      `Lorencia, every day at ${royale.times} (Sydney). One life, everyone against everyone; the safe zone shrinks and outside it (and in town) you lose health. The last one standing wins 20 Arena points, everyone else 2.`,
+      `Lorencia, mỗi ngày lúc ${royale.times} (giờ Sydney). Một mạng, ai cũng là đối thủ; vùng an toàn thu nhỏ dần, ra ngoài vùng (và trong thị trấn) sẽ mất máu. Người cuối cùng còn đứng được 20 điểm Đấu trường, những người khác 2.`,
+    );
+    body.append(head, rules);
+    const line = document.createElement('p');
+    line.id = 'arena-royale-status';
+    if (royale.running) {
+      line.textContent = this.royaleText(royale);
+      body.append(line);
+      return;
+    }
+    const minutes = Math.floor(royale.secondsToStart / 60), seconds = royale.secondsToStart % 60;
+    const wait = `${minutes}:${String(seconds).padStart(2, '0')}`;
+    line.textContent = royale.nextSydney
+      ? tx(`Next match: ${royale.nextSydney} Sydney (in ${wait}). Signed up: ${royale.signups} (at least ${royale.minPlayers}).`,
+        `Trận tiếp theo: ${royale.nextSydney} giờ Sydney (còn ${wait}). Đã đăng ký: ${royale.signups} (tối thiểu ${royale.minPlayers}).`)
+      : tx('No match planned.', 'Chưa có lịch đấu.');
+    body.append(line);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'hnmo-btn';
+    button.id = royale.signedUp ? 'arena-royale-leave' : 'arena-royale-join';
+    button.disabled = !royale.signupOpen && !royale.signedUp;
+    button.textContent = royale.signedUp
+      ? tx('Cancel my sign-up', 'Huỷ đăng ký')
+      : royale.signupOpen ? tx('Sign up for the battle royale', 'Đăng ký đấu sinh tồn') : tx('The sign-up opens shortly before the start', 'Đăng ký mở ngay trước giờ đấu');
+    button.addEventListener('click', () => {
+      this.options.send('HnmoArenaTravelRequest', { Action: royale.signedUp ? 8 : 7, Index: 0 });
+    });
+    body.append(button);
+  }
+
+  /** "5 left · zone (60, 200) r 40 → (52, 210) · 7:12 · you are in the zone", the end's place and winner. */
+  private royaleText(royale: ArenaRoyale): string {
+    if (royale.ended) {
+      const result = royale.place === 1 ? tx('You won!', 'Bạn thắng!')
+        : royale.place ? tx(`Place ${royale.place} of ${royale.total}`, `Hạng ${royale.place}/${royale.total}`) : '';
+      return `${result} ${tx('Winner', 'Người thắng')}: ${royale.winner ?? '-'}`.trim();
+    }
+    const time = `${Math.floor(royale.secondsLeft / 60)}:${String(royale.secondsLeft % 60).padStart(2, '0')}`;
+    const cell = this.options.heroCell?.() ?? null;
+    const inside = cell ? Math.hypot(cell.x - royale.zoneX, cell.y - royale.zoneY) <= royale.zoneRadius : true;
+    const me = !royale.fighter ? '' : !royale.alive ? tx(' · you are out', ' · bạn đã bị loại')
+      : inside ? tx(' · you are in the zone', ' · bạn trong vùng an toàn') : tx(' · OUTSIDE THE ZONE', ' · NGOÀI VÙNG AN TOÀN');
+    return `${tx(`${royale.left} left`, `Còn ${royale.left}`)} · ${tx('zone', 'vùng')} (${royale.zoneX}, ${royale.zoneY}) r ${royale.zoneRadius} → (${royale.finalX}, ${royale.finalY}) · ${time}${me}`;
   }
 
   private renderTeam(body: HTMLElement, team: ArenaTeam): void {
@@ -314,21 +402,25 @@ export class ArenaWindow {
    * While the player waits for or fights a team battle, the state is asked for every 2 s (also with the window closed),
    * and while they fight a small score bar stays on screen.
    */
-  private updateScoreboard(team: ArenaTeam | null): void {
-    const fighting = !!team && team.running && team.side !== 0;
-    const watching = fighting || !!team?.queued;
+  private updateScoreboard(team: ArenaTeam | null, royale: ArenaRoyale | null = null): void {
+    const inRoyale = !!royale && royale.running && royale.fighter;
+    const fighting = (!!team && team.running && team.side !== 0) || inRoyale;
+    const watching = fighting || !!team?.queued || !!royale?.signedUp;
     if (!watching) {
       window.clearInterval(this.battleTimer);
       this.battleTimer = undefined;
     }
-    if (!fighting || !team) {
+    if (!fighting) {
       this.scoreboard?.remove();
       this.scoreboard = null;
       if (!watching) return;
     }
-    if (fighting && team) {
+    if (fighting) {
       if (!this.scoreboard) this.scoreboard = this.createScoreboard();
-      this.scoreboard.textContent = this.scoreText(team);
+      const text = inRoyale && royale ? this.royaleText(royale) : team ? this.scoreText(team) : '';
+      this.scoreboard.textContent = text;
+      this.scoreboard.classList.toggle('arena-outside', inRoyale && text.includes(tx('OUTSIDE', 'NGOÀI')));
+      this.scoreboard.style.color = this.scoreboard.classList.contains('arena-outside') ? '#ff7060' : '#f0e0b0';
     }
     if (this.battleTimer === undefined) {
       this.battleTimer = window.setInterval(() => {

@@ -6124,6 +6124,12 @@ namespace HNMO.GameLogic.Properties {
         public static string ArenaTeamRulesPlugIn_Description => ResourceManager.GetString("ArenaTeamRulesPlugIn_Description", resourceCulture)!;
 
         /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string StartRoyaleChatCommandPlugIn_Name => ResourceManager.GetString("StartRoyaleChatCommandPlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
+        public static string StartRoyaleChatCommandPlugIn_Description => ResourceManager.GetString("StartRoyaleChatCommandPlugIn_Description", resourceCulture)!;
+
+        /// <summary>Gets the localized HNMO Arena text.</summary>
         public static string ArenaShopPlugIn_Name => ResourceManager.GetString("ArenaShopPlugIn_Name", resourceCulture)!;
 
         /// <summary>Gets the localized HNMO Arena text.</summary>

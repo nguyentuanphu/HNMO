@@ -19,6 +19,9 @@ public static class ArenaRanking
 
     private static readonly TimeZoneInfo Sydney = ResolveSydney();
 
+    /// <summary>Gets Sydney's time zone (the Arena's schedules and days).</summary>
+    public static TimeZoneInfo SydneyTime => Sydney;
+
     /// <summary>The new ratings after a duel (Elo).</summary>
     /// <param name="winner">The winner's rating.</param>
     /// <param name="loser">The loser's rating.</param>

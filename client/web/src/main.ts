@@ -1948,6 +1948,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     message: (text) => chat.add(text, 'system'),
     arenaRunning,
     home: () => playedServer,
+    heroCell: () => (state.online ? { ...state.online.hero.cell } : null),
     travel: (account, ticket, to) => {
       const params = new URLSearchParams({ account, ticket, go: to });
       location.hash = params.toString();
