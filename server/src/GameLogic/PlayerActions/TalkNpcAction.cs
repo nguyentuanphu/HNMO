@@ -34,6 +34,13 @@ public class TalkNpcAction
             return;
         }
 
+        if (npcStats.MerchantStore is { Items.Count: > 0 }
+            && await PlayerActions.Items.OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        {
+            // Outlaws from PK level 2 up can't open a merchant.
+            return;
+        }
+
         if (this.AdvancePlayerState(npc))
         {
             if (!await player.PlayerState.TryAdvanceToAsync(PlayerState.NpcDialogOpened).ConfigureAwait(false))

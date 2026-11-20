@@ -47,6 +47,12 @@ public class SellItemToNpcAction
             return false;
         }
 
+        if (await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IItemSoldToNpcPlugIn>(p => p.ItemSoldToNpcAsync(false)).ConfigureAwait(false);
+            return false;
+        }
+
         if (item.Definition is { IsSellableToNpc: false })
         {
             player.Logger.LogWarning(

@@ -27,6 +27,12 @@ public class ItemRepairAction
             return;
         }
 
+        // The repair in the inventory (without NPC) stays possible for outlaws.
+        if (player.OpenedNpc is not null && await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var item = player.Inventory?.GetItem(slot);
         if (item is null)
         {
@@ -81,6 +87,10 @@ public class ItemRepairAction
         {
             // probably cheater
             player.Logger.LogWarning("Cheater Warning: Player tried to repair all items, without opened NPC. Character: [{0}], Account: [{1}]", player.SelectedCharacter?.Name, player.Account?.LoginName);
+        }
+        else if (await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        {
+            return;
         }
 
         // TODO: Check if NPC is able to repair all items. Maybe specified by npc dialog type

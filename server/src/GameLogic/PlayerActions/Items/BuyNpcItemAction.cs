@@ -44,6 +44,12 @@ public class BuyNpcItemAction
             return;
         }
 
+        if (await OutlawNpcShopRule.RefuseAsync(player).ConfigureAwait(false))
+        {
+            await player.InvokeViewPlugInAsync<IBuyNpcItemFailedPlugIn>(p => p.BuyNpcItemFailedAsync()).ConfigureAwait(false);
+            return;
+        }
+
         var storeItem = npcDefinition.MerchantStore.Items.FirstOrDefault(i => i.ItemSlot == slot);
         if (storeItem is null || storeItem.Definition is { IsActive: false })
         {

@@ -2813,6 +2813,15 @@ namespace HNMO.GameLogic.Properties {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Outlaws of PK level 2 and above can&apos;t use NPC shops..
+        /// </summary>
+        public static string PlayerKillersCantUseNpcShops {
+            get {
+                return ResourceManager.GetString("PlayerKillersCantUseNpcShops", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to You need a ticket to enter this event..
         /// </summary>
         public static string MiniGameTicketRequired {
