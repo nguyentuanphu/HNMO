@@ -146,7 +146,11 @@ internal sealed class PlayerExperience
         }
 
         var rate = isMasterExperience ? this._player.GameContext.MasterExperienceRate : this._player.GameContext.ExperienceRate;
-        var experience = (int)Math.Clamp(baseExperience * (double)Math.Max(0, rate), 0, int.MaxValue);
+        if (rate <= 0)
+        {
+            rate = 1; // not set: the plain amount
+        }
+        var experience = (int)Math.Clamp(baseExperience * (double)rate, 0, int.MaxValue);
         using var d = await this._lock.LockAsync().ConfigureAwait(false);
         if (isMasterExperience)
         {
