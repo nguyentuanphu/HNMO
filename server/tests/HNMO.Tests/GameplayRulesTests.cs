@@ -143,6 +143,50 @@ public sealed class GameplayRulesTests
         Assert.That(timetable.Single().ExpBonusPercent, Is.EqualTo(50));
     }
 
+    /// <summary>
+    /// Verifies that a bonus event and a running happy hour don't stack: only the larger EXP bonus applies.
+    /// The happy hour is already part of the experience the plug-in receives (through the EXP rate attribute).
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async ValueTask BonusEventsDoNotStackWithHappyHourAsync()
+    {
+        var utcNow = new DateTimeOffset(2026, 11, 16, 12, 30, 0, TimeSpan.Zero); // 23:30 in Sydney
+        var happyHourConfig = new PlugInConfiguration { TypeId = typeof(HNMO.GameLogic.PlugIns.PeriodicTasks.HappyHourPlugIn).GUID, IsActive = true };
+        var context = GameContextTestHelper.CreateGameContext([happyHourConfig]);
+        var player = await CreatePlayerAsync(context, "en").ConfigureAwait(false);
+        var happyHour = context.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<HNMO.GameLogic.PlugIns.PeriodicTasks.HappyHourPlugIn>().Single();
+
+        BonusEventsPlugIn CreateBonusEvents(int expBonusPercent) => new()
+        {
+            TimeProviderOverride = new FixedTimeProvider(utcNow),
+            Configuration = new BonusEventsConfiguration
+            {
+                Enabled = true,
+                Events = [new BonusEventEntry { Id = "b", MapNumber = 0, StartTimeSydney = "23:00", DurationMinutes = 60, ExpBonusPercent = expBonusPercent, Enabled = true }],
+            },
+        };
+
+        async ValueTask<double> CalculateAsync(BonusEventsPlugIn plugIn, double experience)
+        {
+            var args = new ExperienceCalculationArgs(player, false, experience);
+            await plugIn.CalculateExperienceAsync(player, args).ConfigureAwait(false);
+            return args.Experience;
+        }
+
+        // Without a happy hour, the bonus event applies fully: 1000 * 2.
+        Assert.That(await CalculateAsync(CreateBonusEvents(100), 1000).ConfigureAwait(false), Is.EqualTo(2000).Within(0.01));
+
+        // With a 1.5x happy hour the received experience is already 1500.
+        happyHour.GetMultiplierElement(context).Value = 1.5f;
+
+        // The larger bonus event (2x) wins: 1000 * 2, not 1000 * 1.5 * 2.
+        Assert.That(await CalculateAsync(CreateBonusEvents(100), 1500).ConfigureAwait(false), Is.EqualTo(2000).Within(0.01));
+
+        // The larger happy hour wins over a smaller bonus event (1.2x): 1000 * 1.5.
+        Assert.That(await CalculateAsync(CreateBonusEvents(20), 1500).ConfigureAwait(false), Is.EqualTo(1500).Within(0.01));
+    }
+
     /// <summary>Verifies damage cap per hit, PvP reduction %, and Valley of Loren Castle Siege reduction %.</summary>
     /// <returns>The task.</returns>
     [Test]

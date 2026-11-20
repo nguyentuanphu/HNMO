@@ -260,12 +260,39 @@ public sealed class BonusEventsPlugIn :
         }
 
         var (expMult, _, _) = this.GetCombinedModifiers(map.Number, (this.TimeProviderOverride ?? TimeProvider.System).GetUtcNow().UtcDateTime);
-        if (Math.Abs(expMult - 1.0) > 0.0001)
+        var factor = GetFactorBesideHappyHour(expMult, GetHappyHourMultiplier(player.GameContext));
+        if (Math.Abs(factor - 1.0) > 0.0001)
         {
-            args.Experience *= expMult;
+            args.Experience *= factor;
         }
 
         return ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// Gets the factor which this plug-in applies to the experience, so that it doesn't stack with a running
+    /// happy hour (<see cref="HappyHourPlugIn"/>): only the larger of both bonuses applies. The happy hour
+    /// multiplier is already part of the experience rate of the character, and so of the experience this
+    /// plug-in receives. A larger bonus event therefore only adds the difference, and a smaller one nothing.
+    /// The bonus events among themselves still add up (see <see cref="GetCombinedModifiers"/>).
+    /// </summary>
+    /// <param name="bonusEventMultiplier">The combined multiplier of the active bonus events.</param>
+    /// <param name="happyHourMultiplier">The multiplier of the running happy hour, or 1 when none runs.</param>
+    /// <returns>The factor to apply to the experience.</returns>
+    internal static double GetFactorBesideHappyHour(double bonusEventMultiplier, double happyHourMultiplier)
+    {
+        if (happyHourMultiplier <= 1.0)
+        {
+            return bonusEventMultiplier;
+        }
+
+        return bonusEventMultiplier > happyHourMultiplier ? bonusEventMultiplier / happyHourMultiplier : 1.0;
+    }
+
+    private static double GetHappyHourMultiplier(IGameContext gameContext)
+    {
+        var happyHour = gameContext.PlugInManager.GetActivePlugInsOf<IPeriodicTaskPlugIn>().OfType<HappyHourPlugIn>().FirstOrDefault();
+        return happyHour?.GetMultiplierElement(gameContext).Value ?? 1.0;
     }
 
     private static TimeZoneInfo ResolveSydneyZone()
