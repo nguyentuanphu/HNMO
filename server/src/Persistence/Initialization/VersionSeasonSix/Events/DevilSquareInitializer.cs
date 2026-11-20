@@ -12,6 +12,11 @@ using HNMO.DataModel.Configuration;
 internal class DevilSquareInitializer : Version095d.Events.DevilSquareInitializer
 {
     /// <summary>
+    /// The most players of every Devil Square, like the Season 6/9 server suites.
+    /// </summary>
+    internal const int MaximumPlayerCount = 15;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="DevilSquareInitializer" /> class.
     /// </summary>
     /// <param name="context">The context.</param>
@@ -44,5 +49,10 @@ internal class DevilSquareInitializer : Version095d.Events.DevilSquareInitialize
         devilSquare7.MaximumCharacterLevel = 400;
         devilSquare7.MinimumSpecialCharacterLevel = 0;
         devilSquare7.MaximumSpecialCharacterLevel = 400;
+
+        foreach (var devilSquare in this.GameConfiguration.MiniGameDefinitions.Where(d => d.Type == MiniGameType.DevilSquare))
+        {
+            devilSquare.MaximumPlayerCount = MaximumPlayerCount;
+        }
     }
 }
