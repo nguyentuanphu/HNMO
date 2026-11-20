@@ -1197,4 +1197,7 @@ Extensões de inventário: {18}</value>
   <data name="AtlansNoRiding" xml:space="preserve">
     <value>Uniria e Dinorant não podem entrar em Atlans.</value>
   </data>
+  <data name="PlayerKillersCantUseNpcShops" xml:space="preserve">
+    <value>Fora da lei de nível PK 2 ou superior não podem usar lojas de NPC.</value>
+  </data>
 </root>

@@ -16,7 +16,13 @@ async function openPage(page: Page): Promise<void> {
 /** The object meshes of a map drawn without a texture, by model file. */
 const untexturedObjects = (page: Page, map: number): Promise<{ meshes: number; untextured: Record<string, number> }> => page.evaluate(async (mapNumber) => {
   const THREE = await import('three');
-  const world = await import('/js/world.js');
+  // The built game module (public/js), loaded by the page itself: typed here by what this test uses.
+  type Object3 = { userData: { model?: unknown } };
+  type World = {
+    loadWorldData(map: number): Promise<unknown>;
+    createWorld(data: unknown, fog: { color: unknown; near: number; far: number }): Promise<{ group: { children: Object3[] } }>;
+  };
+  const world = (await import('/js/world.js' as string)) as World;
   const data = await world.loadWorldData(mapNumber);
   const built = await world.createWorld(data, { color: new THREE.Color(0), near: 2600, far: 4200 });
   const untextured: Record<string, number> = {};

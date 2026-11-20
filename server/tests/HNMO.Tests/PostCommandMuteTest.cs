@@ -45,6 +45,7 @@ public class PostCommandMuteTest
         var observer = await PlayerTestHelper.CreatePlayerAsync(context).ConfigureAwait(false);
         await context.AddPlayerAsync(observer).ConfigureAwait(false);
         sender.SelectedCharacter!.Name = "Hero";
+        sender.Money = 5_000; // a post costs 1,000 zen (#194)
 
         await new PostChatCommandPlugIn().HandleCommandAsync(sender, "/post hello all").ConfigureAwait(false);
 
