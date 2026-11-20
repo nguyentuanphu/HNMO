@@ -1515,31 +1515,27 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return;
         }
 
-        if (this._selectedCharacter!.State != HeroState.PlayerKiller2ndStage)
-        {
-            if (this._selectedCharacter.State < HeroState.Normal)
-            {
-                this._selectedCharacter.State = HeroState.PlayerKillWarning;
-            }
-            else
-            {
-                this._selectedCharacter.State++;
-            }
-
-            // Stepping up to the next outlaw state starts it with the points of that state. Math.Max, so
-            // that a kill can never lower already higher remaining points.
-            this._selectedCharacter.StateRemainingSeconds = Math.Max(
-                this._selectedCharacter.StateRemainingSeconds,
-                OutlawPoints.GetStagePoints(this._selectedCharacter.State));
-        }
-        else
-        {
-            // Further kills as a murderer can't escalate the state anymore, so they add points instead.
-            this._selectedCharacter.StateRemainingSeconds += OutlawPoints.FurtherKillPoints;
-        }
-
-        this._selectedCharacter.PlayerKillCount += 1;
+        // The kill raises the running points total, and the outlaw stage follows the total.
+        var character = this._selectedCharacter!;
+        character.StateRemainingSeconds = OutlawPoints.GetPointsAfterKill(character.State, character.StateRemainingSeconds);
+        character.State = OutlawPoints.GetState(character.StateRemainingSeconds);
+        character.PlayerKillCount += 1;
         await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(o => o.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Removes outlaw points, e.g. for a killed monster, and lets the outlaw state follow the new total.
+    /// </summary>
+    /// <param name="points">The points to remove.</param>
+    internal async ValueTask RemoveOutlawPointsAsync(int points)
+    {
+        if (this._selectedCharacter is not { State: > HeroState.Normal } character || points <= 0)
+        {
+            return;
+        }
+
+        character.StateRemainingSeconds -= points;
+        await this.UpdateOutlawStateAsync(character).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -1718,47 +1714,60 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         var elapsedWholeSeconds = Math.Floor(elapsedSeconds);
         this._heroStateSecondsRemainder = elapsedSeconds - elapsedWholeSeconds;
         currentCharacter.StateRemainingSeconds -= (int)elapsedWholeSeconds;
+
+        if (currentCharacter.State > HeroState.Normal)
+        {
+            // Outlaws: one running points total, the stage follows it down.
+            await this.UpdateOutlawStateAsync(currentCharacter).ConfigureAwait(false);
+            return;
+        }
+
         if (currentCharacter.StateRemainingSeconds > 0)
         {
             return;
         }
 
-        // The time is up, so the state falls back one step towards the normal state. Killed monsters may
-        // have pushed the remaining time below zero, so the surplus is carried over to the next step.
+        // The time of the hero state is up, so it falls back one step towards the normal state.
         var surplusSeconds = -currentCharacter.StateRemainingSeconds;
-        if (currentCharacter.State > HeroState.Normal)
-        {
-            currentCharacter.State--;
-        }
-        else
-        {
-            currentCharacter.State++;
-        }
-
-        if (currentCharacter.State == HeroState.Normal)
-        {
-            currentCharacter.StateRemainingSeconds = 0;
-            currentCharacter.PlayerKillCount = 0;
-        }
-        else
-        {
-            var stateDuration = currentCharacter.State > HeroState.Normal
-                ? OutlawPoints.GetStagePoints(currentCharacter.State)
-                : (int)HeroStateDuration.TotalSeconds;
-
-            // May still be below zero, if the surplus exceeds this step as well. Then the next tick steps down again.
-            currentCharacter.StateRemainingSeconds = stateDuration - surplusSeconds;
-        }
+        currentCharacter.State++;
+        currentCharacter.StateRemainingSeconds = currentCharacter.State == HeroState.Normal
+            ? 0
+            : (int)HeroStateDuration.TotalSeconds - surplusSeconds;
 
         await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
     }
 
     /// <summary>
-    /// Limits the remaining time of the hero state to the longest time which the current state can
-    /// legitimately have. Characters of servers which ran with the formerly broken countdown can have
-    /// a remaining time which grew by all the time they spent online.
+    /// Sets the outlaw state which the points total of the character gives, and clears the
+    /// kill count when the total is used up.
     /// </summary>
-    private void LimitHeroStateRemainingTime()
+    /// <param name="character">The outlaw character.</param>
+    private async ValueTask UpdateOutlawStateAsync(Character character)
+    {
+        var newState = OutlawPoints.GetState(character.StateRemainingSeconds);
+        if (newState == HeroState.Normal)
+        {
+            character.StateRemainingSeconds = 0;
+            character.PlayerKillCount = 0;
+        }
+
+        if (newState == character.State)
+        {
+            return;
+        }
+
+        character.State = newState;
+        await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Brings the saved hero state time into the current form: the remaining time of an outlaw saved before the
+    /// points system (each stage counted down 3 hours on its own) becomes the points total with the same time until
+    /// the character is clear, and the stage follows that total. Also limits the remaining time to the longest
+    /// time which the current state can legitimately have: characters of servers which ran with the formerly
+    /// broken countdown can have a remaining time which grew by all the time they spent online.
+    /// </summary>
+    private async ValueTask LimitHeroStateRemainingTimeAsync()
     {
         if (this._selectedCharacter is not { } character
             || character.State is HeroState.Normal or HeroState.New)
@@ -1766,12 +1775,46 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return;
         }
 
+        var savedState = character.State;
+        if (character.State > HeroState.Normal)
+        {
+            var converted = OutlawPoints.ConvertFormerRemainingTime(character.State, character.StateRemainingSeconds);
+            if (converted != character.StateRemainingSeconds)
+            {
+                this.Logger.LogInformation(
+                    "Converted the remaining outlaw time of character {CharacterName} ({HeroState}) from {RemainingSeconds} seconds of the stage to {Points} points.",
+                    character.Name,
+                    character.State,
+                    character.StateRemainingSeconds,
+                    converted);
+                character.StateRemainingSeconds = converted;
+            }
+
+            character.State = OutlawPoints.GetState(character.StateRemainingSeconds);
+            if (character.State == HeroState.Normal)
+            {
+                character.StateRemainingSeconds = 0;
+                character.PlayerKillCount = 0;
+            }
+
+            if (character.State != savedState)
+            {
+                await this.ForEachWorldObserverAsync<IUpdateCharacterHeroStatePlugIn>(p => p.UpdateCharacterHeroStateAsync(this), true).ConfigureAwait(false);
+            }
+
+            if (character.State == HeroState.Normal)
+            {
+                return;
+            }
+        }
+
         var maximumSeconds = character.State switch
         {
-            // Every kill after the one which reached the murderer stage adds further points on top.
+            // The first three kills give at most 86,400 points, every further kill at most 3,600 more.
             HeroState.PlayerKiller2ndStage => OutlawPoints.PlayerKiller2ndStagePoints
                 + (OutlawPoints.FurtherKillPoints * Math.Max(character.PlayerKillCount - 3, 0)),
-            > HeroState.Normal => OutlawPoints.GetStagePoints(character.State),
+            HeroState.PlayerKiller1stStage => OutlawPoints.PlayerKiller2ndStagePoints - 1,
+            HeroState.PlayerKillWarning => OutlawPoints.PlayerKiller1stStagePoints - 1,
             _ => (int)HeroStateDuration.TotalSeconds,
         };
 
@@ -2230,7 +2273,7 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         }
 
         await this.ClientReadyAfterMapChangeAsync().ConfigureAwait(false);
-        this.LimitHeroStateRemainingTime();
+        await this.LimitHeroStateRemainingTimeAsync().ConfigureAwait(false);
         this._lastRegenerate = DateTime.UtcNow;
         this._heroStateSecondsRemainder = 0;
 

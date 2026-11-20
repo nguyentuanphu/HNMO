@@ -367,8 +367,8 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
                 if (selectedCharacter.State > HeroState.Normal)
                 {
                     // An outlaw can clear its points faster by hunting monsters, on any map:
-                    // half of the level of the killed monster is subtracted.
-                    selectedCharacter.StateRemainingSeconds -= OutlawPoints.GetMonsterKillPoints((int)this.Attributes[Stats.Level]);
+                    // half of the level of the killed monster is subtracted, and the stage follows the total.
+                    await player.RemoveOutlawPointsAsync(OutlawPoints.GetMonsterKillPoints((int)this.Attributes[Stats.Level])).ConfigureAwait(false);
                 }
 
                 _ = this.DropItemDelayedAsync(player, experienceShares); // don't wait for completion.

@@ -16,19 +16,20 @@ using MonsterDefinition = HNMO.Persistence.BasicModel.MonsterDefinition;
 using MonsterSpawnArea = HNMO.Persistence.BasicModel.MonsterSpawnArea;
 
 /// <summary>
-/// Tests for the player killer points, as the Season 6/9 server suites count them:
-/// Warning 21,600, PK level 2 43,200, murderer 86,400, +3,600 per further kill,
-/// and a killed monster removes half of its level.
+/// Tests for the player killer points, as the Season 6/9 server suites count them: one running total
+/// (first kill 21,600, second 43,200, third 86,400, +3,600 per further kill), which goes down by one per
+/// second online and by half of the level of a killed monster; the stage follows the total
+/// (from 86,400 murderer, from 43,200 PK level 2, above 0 Warning).
 /// </summary>
 [TestFixture]
 public class OutlawPointsTest
 {
     /// <summary>
-    /// Each kill steps up the outlaw state and starts it with the points of that state;
-    /// further kills as a murderer add 3,600 points.
+    /// Each kill raises the total, and the stage follows it.
     /// </summary>
+    /// <returns>The task.</returns>
     [Test]
-    public async Task KillsStartTheStagesWithTheirPointsAsync()
+    public async Task KillsRaiseTheTotalAsync()
     {
         var gameContext = GameContextTestHelper.CreateGameContext();
         var killer = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
@@ -53,52 +54,112 @@ public class OutlawPointsTest
     }
 
     /// <summary>
-    /// When the points of a stage run out, the state falls back one stage and starts with the points of that stage.
+    /// A kill of a Warning-stage outlaw whose total went down makes it PK level 2 with 43,200 again.
     /// </summary>
+    /// <returns>The task.</returns>
     [Test]
-    public async Task FallingBackStartsTheLowerStageWithItsPointsAsync()
+    public async Task SecondKillSetsPkLevelTwoAsync()
+    {
+        var gameContext = GameContextTestHelper.CreateGameContext();
+        var killer = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
+        var character = killer.SelectedCharacter!;
+        character.State = HeroState.PlayerKillWarning;
+        character.StateRemainingSeconds = 5_000;
+        character.PlayerKillCount = 1;
+
+        await killer.AfterKilledPlayerAsync(await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false)).ConfigureAwait(false);
+
+        Assert.That(character.State, Is.EqualTo(HeroState.PlayerKiller1stStage));
+        Assert.That(character.StateRemainingSeconds, Is.EqualTo(43_200));
+    }
+
+    /// <summary>
+    /// The stage follows the total down while it counts down online, without starting the lower stage anew.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    public async Task StageFollowsTheTotalDownAsync()
     {
         var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
         var character = player.SelectedCharacter!;
         character.State = HeroState.PlayerKiller2ndStage;
         character.PlayerKillCount = 3;
-        character.StateRemainingSeconds = 0;
 
-        await InvokeRegenerateHeroStateAsync(player).ConfigureAwait(false);
+        character.StateRemainingSeconds = 86_400;
+        await InvokeAsync(player, "RegenerateHeroStateAsync").ConfigureAwait(false);
+        Assert.That(character.State, Is.EqualTo(HeroState.PlayerKiller2ndStage), "86,400 is still a murderer");
 
+        character.StateRemainingSeconds = 86_000;
+        await InvokeAsync(player, "RegenerateHeroStateAsync").ConfigureAwait(false);
         Assert.That(character.State, Is.EqualTo(HeroState.PlayerKiller1stStage));
-        Assert.That(character.StateRemainingSeconds, Is.InRange(43_200 - 2, 43_200));
+        Assert.That(character.StateRemainingSeconds, Is.InRange(85_998, 86_000), "the total carries on");
+
+        character.StateRemainingSeconds = 43_000;
+        await InvokeAsync(player, "RegenerateHeroStateAsync").ConfigureAwait(false);
+        Assert.That(character.State, Is.EqualTo(HeroState.PlayerKillWarning));
+        Assert.That(character.StateRemainingSeconds, Is.InRange(42_998, 43_000));
 
         character.StateRemainingSeconds = 0;
-        await InvokeRegenerateHeroStateAsync(player).ConfigureAwait(false);
-
-        Assert.That(character.State, Is.EqualTo(HeroState.PlayerKillWarning));
-        Assert.That(character.StateRemainingSeconds, Is.InRange(21_600 - 2, 21_600));
+        await InvokeAsync(player, "RegenerateHeroStateAsync").ConfigureAwait(false);
+        Assert.That(character.State, Is.EqualTo(HeroState.Normal));
+        Assert.That(character.PlayerKillCount, Is.Zero);
     }
 
     /// <summary>
-    /// A monster killed by an outlaw removes half of its level from the points.
+    /// A monster killed by an outlaw removes half of its level from the total, and the stage follows at once.
     /// </summary>
+    /// <returns>The task.</returns>
     [Test]
     public async Task MonsterKillRemovesHalfOfItsLevelAsync()
     {
         var gameContext = GameContextTestHelper.CreateGameContext();
         var killer = await PlayerTestHelper.CreatePlayerAsync(gameContext).ConfigureAwait(false);
         var character = killer.SelectedCharacter!;
-        character.State = HeroState.PlayerKillWarning;
-        character.StateRemainingSeconds = 10_000;
+        character.State = HeroState.PlayerKiller2ndStage;
+        character.PlayerKillCount = 3;
+        character.StateRemainingSeconds = 86_420;
         var monster = await CreateMonsterAsync(gameContext, 100).ConfigureAwait(false);
 
         await monster.ReflectDamageAsync(killer, 1_000_000).ConfigureAwait(false);
 
         Assert.That(monster.LastDeath, Is.Not.Null);
-        Assert.That(character.StateRemainingSeconds, Is.EqualTo(10_000 - 50));
+        Assert.That(character.StateRemainingSeconds, Is.EqualTo(86_420 - 50));
+        Assert.That(character.State, Is.EqualTo(HeroState.PlayerKiller1stStage));
     }
 
-    private static async ValueTask InvokeRegenerateHeroStateAsync(Player player)
+    /// <summary>
+    /// The remaining time of an outlaw saved before the points system (3 hours per stage, counted per stage)
+    /// becomes a total with the same time until the character is clear, and the stage follows that total.
+    /// </summary>
+    /// <param name="state">The saved state.</param>
+    /// <param name="remaining">The saved remaining seconds of the stage.</param>
+    /// <param name="expectedPoints">The expected total.</param>
+    /// <param name="expectedState">The expected state.</param>
+    /// <returns>The task.</returns>
+    [TestCase(HeroState.PlayerKillWarning, 5_000, 5_000, HeroState.PlayerKillWarning)]
+    [TestCase(HeroState.PlayerKiller1stStage, 5_000, 15_800, HeroState.PlayerKillWarning)]
+    [TestCase(HeroState.PlayerKiller2ndStage, 10_000, 31_600, HeroState.PlayerKillWarning)]
+    [TestCase(HeroState.PlayerKiller2ndStage, 30_000, 51_600, HeroState.PlayerKiller1stStage)]
+    [TestCase(HeroState.PlayerKiller2ndStage, 90_000, 90_000, HeroState.PlayerKiller2ndStage)]
+    public async Task FormerRemainingTimeIsConvertedAsync(HeroState state, int remaining, int expectedPoints, HeroState expectedState)
     {
-        var method = typeof(Player).GetMethod("RegenerateHeroStateAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        await ((ValueTask)method.Invoke(player, null)!).ConfigureAwait(false);
+        var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
+        var character = player.SelectedCharacter!;
+        character.State = state;
+        character.PlayerKillCount = 10;
+        character.StateRemainingSeconds = remaining;
+
+        await InvokeAsync(player, "LimitHeroStateRemainingTimeAsync").ConfigureAwait(false);
+
+        Assert.That(character.StateRemainingSeconds, Is.EqualTo(expectedPoints));
+        Assert.That(character.State, Is.EqualTo(expectedState));
+    }
+
+    private static async ValueTask InvokeAsync(Player player, string methodName)
+    {
+        var method = typeof(Player).GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.That(method, Is.Not.Null, methodName);
+        await ((ValueTask)method!.Invoke(player, null)!).ConfigureAwait(false);
     }
 
     private static async ValueTask<Monster> CreateMonsterAsync(IGameContext gameContext, int level)
