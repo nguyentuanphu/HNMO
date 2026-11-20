@@ -22,7 +22,7 @@
     <value>The common money drop item group (50 % drop chance)</value>
   </data>
   <data name="TheCommonDropItemGroupForRandomExcellentItems001PercentDropChance" xml:space="preserve">
-    <value>The common drop item group for random excellent items (0.01 % drop chance)</value>
+    <value>The common drop item group for random excellent items (0.2 % drop chance)</value>
   </data>
   <data name="ItemsFromRedDragon" xml:space="preserve">
     <value>Items from red dragon</value>
