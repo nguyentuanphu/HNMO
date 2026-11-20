@@ -17,6 +17,7 @@ public class SkillDelayTest
 {
     private const short EarthshakeNumber = 62;
     private const short EnergyBallNumber = 17;
+    private const short ChainDriveNumber = 262;
     private const int ManaCost = 10;
 
     /// <summary>
@@ -59,6 +60,20 @@ public class SkillDelayTest
     public async ValueTask SkillWithoutDelayIsNotLimitedAsync()
     {
         var (player, skillEntry) = await CreatePlayerWithSkillAsync(EnergyBallNumber).ConfigureAwait(false);
+
+        var first = await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false);
+        var second = await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false);
+
+        Assert.That(new[] { first, second }, Is.All.True);
+    }
+
+    /// <summary>
+    /// Chain Drive sends two hits for one cast; the second isn't refused.
+    /// </summary>
+    [Test]
+    public async ValueTask ChainDriveSecondHitIsNotRefusedAsync()
+    {
+        var (player, skillEntry) = await CreatePlayerWithSkillAsync(ChainDriveNumber).ConfigureAwait(false);
 
         var first = await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false);
         var second = await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false);

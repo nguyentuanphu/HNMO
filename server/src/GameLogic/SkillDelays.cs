@@ -9,7 +9,8 @@ using System.Collections.Frozen;
 /// <summary>
 /// The skills' delays (cooldowns) which the server checks, as in classic MU (CheckSkillDelay): a skill with a delay can't
 /// be used again before its delay has passed. The values are the delays of the Season 6/9 server suites; skills
-/// without an entry have no delay.
+/// without an entry have no delay. Chain Drive (and its master skills) is left out: the client sends two hits for one
+/// cast (at two keys of its action), so a 700 ms delay would refuse its second hit.
 /// </summary>
 public static class SkillDelays
 {
@@ -32,7 +33,6 @@ public static class SkillDelays
         [223] = 4_000, // Explosion
         [224] = 4_000, // Requiem
         [225] = 4_000, // Pollution
-        [262] = 700, // Chain Drive
         [264] = 700, // Dragon Roar
         [265] = 3_000, // Dragon Slasher
         [270] = 1_200, // Phoenix Shot
@@ -60,10 +60,8 @@ public static class SkillDelays
         [519] = 5_000, // Electric Spark Strengthener
         [521] = 60_000, // Iron Defense
         [524] = 60_000, // Iron Defense Strengthener
-        [558] = 700, // Chain Drive Strengthener
         [560] = 700, // Dragon Roar Strengthener
         [561] = 700, // Dragon Roar Mastery
-        [562] = 700, // Chain Drive Mastery
         [564] = 3_000, // Dragon Slasher Strengthener
         [565] = 120_000, // Blood Howling
         [566] = 3_000, // Dragon Slasher Mastery
