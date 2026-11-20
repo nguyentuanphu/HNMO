@@ -742,8 +742,11 @@ public static class AttackableExtensions
         float attackRate;
         if (defender is Player && attacker is Player)
         {
-            defenseRate = defender.Attributes[Stats.DefenseRatePvp];
-            attackRate = attacker.Attributes[Stats.AttackRatePvp];
+            return GetPvpHitChance(
+                attacker.Attributes[Stats.AttackRatePvp],
+                defender.Attributes[Stats.DefenseRatePvp],
+                attacker.Attributes[Stats.TotalLevel],
+                defender.Attributes[Stats.TotalLevel]);
         }
         else
         {
@@ -758,6 +761,44 @@ public static class AttackableExtensions
         }
 
         return hitChance;
+    }
+
+    /// <summary>
+    /// Gets the chance that a player hits another player, as in the Season 6/9 server suites:
+    /// 2 * attackRate / (attackRate + defenseRate) * attackLevel / (attackLevel + defenseLevel),
+    /// minus 5, 10 or 15 percent points when the defender is 100, 200 or 300 levels higher.
+    /// </summary>
+    /// <param name="attackRate">The attacker's PvP attack rate.</param>
+    /// <param name="defenseRate">The defender's PvP defense rate.</param>
+    /// <param name="attackLevel">The attacker's total level (with master level).</param>
+    /// <param name="defenseLevel">The defender's total level (with master level).</param>
+    /// <returns>The hit chance between 0 and 1.</returns>
+    internal static float GetPvpHitChance(float attackRate, float defenseRate, float attackLevel, float defenseLevel)
+    {
+        const float successAttackRateOption = 2.0f;
+        var rateFactor = attackRate + defenseRate > 0 ? attackRate / (attackRate + defenseRate) : 0.5f;
+        var levelFactor = attackLevel + defenseLevel > 0 ? attackLevel / (attackLevel + defenseLevel) : 0.5f;
+        var hitChance = rateFactor * successAttackRateOption * levelFactor;
+
+        var levelGap = defenseLevel - attackLevel;
+        if (levelGap >= 300)
+        {
+            hitChance -= 0.15f;
+        }
+        else if (levelGap >= 200)
+        {
+            hitChance -= 0.10f;
+        }
+        else if (levelGap >= 100)
+        {
+            hitChance -= 0.05f;
+        }
+        else
+        {
+            // No penalty.
+        }
+
+        return Math.Clamp(hitChance, 0f, 1f);
     }
 
     private static AttributeDefinition GetDefenseAttribute(this IAttackable defender, IAttacker attacker)
