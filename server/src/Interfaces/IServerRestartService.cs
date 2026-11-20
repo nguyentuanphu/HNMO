@@ -36,6 +36,16 @@ public interface IHostLicenseProvider
     /// <param name="configuredPath">The configured license file path.</param>
     /// <returns>The license status summary.</returns>
     LicenseStatusInfo GetStatus(string? configuredPath);
+
+    /// <summary>Checks a license file's content before it is saved.</summary>
+    /// <param name="content">The file's content.</param>
+    /// <returns>What it would give; <see cref="LicenseStatusInfo.IsValid"/> is false when it can't be used.</returns>
+    LicenseStatusInfo Check(byte[] content) => new(10, "The license can't be checked here.", string.Empty, string.Empty, true);
+
+    /// <summary>Applies the saved license to the running server (the players allowed at once), without a restart.</summary>
+    /// <param name="configuredPath">The configured license file path.</param>
+    /// <returns>The license now in use.</returns>
+    LicenseStatusInfo Apply(string? configuredPath) => this.GetStatus(configuredPath);
 }
 
 /// <summary>

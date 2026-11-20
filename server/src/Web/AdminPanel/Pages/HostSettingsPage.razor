@@ -174,27 +174,47 @@
         </div>
     </div>
 
-    <div class="card mb-3">
+    <div class="card mb-3" id="license-card">
         <div class="card-header fw-bold">@Resources.HostSettingsLicenseSection</div>
         <div class="card-body row g-3">
-            <div class="col-md-6">
-                <label class="form-label" title="Path to license.hnmo">License file path</label>
-                <input id="license-path" type="text" class="form-control" @bind="this._settings.LicenseFilePath" />
-            </div>
-            <div class="col-md-6">
-                <label class="form-label" title="Upload a new .hnmo license file">Upload license (.hnmo)</label>
-                <Microsoft.AspNetCore.Components.Forms.InputFile class="form-control" OnChange="this.OnLicenseUploadAsync" />
-            </div>
-            @if (this._licenseStatus is not null)
+            @if (this._licenseStatus is { } license)
             {
-                <div class="col-12">
-                    <small class="text-muted">
-                        Max players: <strong>@this._licenseStatus.MaximumPlayers</strong> |
-                        Status: @this._licenseStatus.Message |
-                        Machine ID: <code>@this._licenseStatus.MachineId</code>
-                    </small>
+                <div class="col-12" id="license-status">
+                    @if (license.IsValid)
+                    {
+                        <div class="alert alert-success mb-2" role="status">
+                            @L($"Licensed to {license.Licensee}: up to {license.MaximumPlayers} players at once", $"Giấy phép của {license.Licensee}: tối đa {license.MaximumPlayers} người chơi cùng lúc")@(license.Expires is { } until ? L($", until {until:yyyy-MM-dd}.", $", đến hết {until:yyyy-MM-dd}.") : ".")
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary mb-2" role="status">
+                            @L($"No valid license: up to {license.MaximumPlayers} players at once.", $"Chưa có giấy phép hợp lệ: tối đa {license.MaximumPlayers} người chơi cùng lúc.") <small class="text-muted">(@license.Message)</small>
+                        </div>
+                    }
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span>@L("This computer's id (send it to the HNMO developer to get a license for this computer):", "Mã máy này (gửi cho nhà phát triển HNMO để xin giấy phép cho máy này):")</span>
+                        <code id="machine-id">@license.MachineId</code>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="copy-machine-id" @onclick="this.CopyMachineIdAsync">@(this._copied ? L("Copied", "Đã copy") : L("Copy", "Copy"))</button>
+                    </div>
                 </div>
             }
+            <div class="col-md-6">
+                <label class="form-label" for="license-upload">@L("Upload a license file (.hnmo)", "Tải file giấy phép lên (.hnmo)")</label>
+                <Microsoft.AspNetCore.Components.Forms.InputFile id="license-upload" class="form-control" accept=".hnmo" OnChange="this.OnLicenseUploadAsync" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="license-text">@L("…or paste its content", "…hoặc dán nội dung file")</label>
+                <textarea id="license-text" class="form-control" rows="2" @bind="this._licenseText" placeholder='{"payload": "...", "signature": "..."}'></textarea>
+                <button type="button" class="btn btn-sm btn-primary mt-2" id="license-paste-save" @onclick="this.SaveLicenseTextAsync">@L("Check and use this license", "Kiểm tra và dùng giấy phép này")</button>
+            </div>
+            <div class="col-12">
+                <small class="text-muted">@L("A license is checked before it is saved; a good one is used at once (no restart). It is kept in the folder as license.hnmo, so the server works offline.", "Giấy phép được kiểm tra trước khi lưu; giấy phép đúng được dùng ngay (không cần khởi động lại). File được giữ trong thư mục với tên license.hnmo, nên server vẫn chạy offline.")</small>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="license-path" title="Path to license.hnmo">@L("License file path (advanced)", "Đường dẫn file giấy phép (nâng cao)")</label>
+                <input id="license-path" type="text" class="form-control" @bind="this._settings.LicenseFilePath" />
+            </div>
         </div>
     </div>
 

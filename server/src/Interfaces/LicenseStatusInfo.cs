@@ -12,9 +12,15 @@ namespace HNMO.Interfaces;
 /// <param name="MachineId">This computer's machine identifier.</param>
 /// <param name="ResolvedPath">Resolved path on disk.</param>
 /// <param name="Exists">Whether a license file exists at the resolved path.</param>
+/// <param name="IsValid">Whether the license's signature, date and computer check out.</param>
+/// <param name="Licensee">Whom the license is for.</param>
+/// <param name="Expires">The last day it is valid, if it has one.</param>
 public sealed record LicenseStatusInfo(
     int MaximumPlayers,
     string Message,
     string MachineId,
     string ResolvedPath,
-    bool Exists);
+    bool Exists,
+    bool IsValid = false,
+    string? Licensee = null,
+    DateOnly? Expires = null);

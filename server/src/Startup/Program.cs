@@ -599,6 +599,32 @@ internal sealed class Program : IDisposable
     {
         public LicenseStatusInfo GetStatus(string? configuredPath)
         {
+            var resolved = ResolvePath(configuredPath);
+            var exists = File.Exists(resolved);
+            return Describe(exists ? File.ReadAllBytes(resolved) : null, resolved, exists);
+        }
+
+        public LicenseStatusInfo Check(byte[] content) => Describe(content, string.Empty, true);
+
+        public LicenseStatusInfo Apply(string? configuredPath)
+        {
+            var status = this.GetStatus(configuredPath);
+            LicensedPlayerLimit.Maximum = status.MaximumPlayers;
+            LicensedPlayerLimit.Licensee = status.IsValid ? status.Licensee : null;
+            return status;
+        }
+
+        private static LicenseStatusInfo Describe(byte[]? content, string resolved, bool exists)
+        {
+            var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
+            var license = publicKeyPem is null
+                ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
+                : PlayerLicense.Check(content, publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
+            return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists, license.IsValid, license.Licensee, license.Expires);
+        }
+
+        private static string ResolvePath(string? configuredPath)
+        {
             var serverDir = AppContext.BaseDirectory;
             var folder = Path.GetFullPath(Path.Combine(serverDir, ".."));
             var candidates = new List<string>();
@@ -617,13 +643,7 @@ internal sealed class Program : IDisposable
 
             candidates.Add(Path.Combine(folder, PlayerLicense.FileName));
             candidates.Add(Path.Combine(serverDir, PlayerLicense.FileName));
-            var resolved = candidates.FirstOrDefault(File.Exists) ?? candidates[0];
-            var exists = File.Exists(resolved);
-            var publicKeyPem = IntegrityVerifier.LoadEmbeddedPublicKeyPem();
-            var license = publicKeyPem is null
-                ? PlayerLicense.Default("No public key is embedded: up to 10 players at once.")
-                : PlayerLicense.Check(exists ? File.ReadAllBytes(resolved) : null, publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
-            return new LicenseStatusInfo(license.MaximumPlayers, license.Message, PlayerLicense.MachineId, resolved, exists);
+            return candidates.FirstOrDefault(File.Exists) ?? candidates[0];
         }
     }
 

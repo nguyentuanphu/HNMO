@@ -49,6 +49,16 @@ public interface IHostSettingsService
     /// <returns>The license status summary.</returns>
     LicenseStatusInfo GetLicenseStatus(string? configuredPath);
 
+    /// <summary>Checks a license file's content before it is saved.</summary>
+    /// <param name="content">The file's content.</param>
+    /// <returns>What it would give.</returns>
+    LicenseStatusInfo CheckLicense(byte[] content) => new(10, "Not checked.", string.Empty, string.Empty, true);
+
+    /// <summary>Applies the saved license to the running server without a restart.</summary>
+    /// <param name="configuredPath">The configured license file path.</param>
+    /// <returns>The license now in use.</returns>
+    LicenseStatusInfo ApplyLicense(string? configuredPath) => this.GetLicenseStatus(configuredPath);
+
     /// <summary>
     /// Saves an uploaded license file to disk.
     /// </summary>
@@ -136,6 +146,14 @@ public sealed class HostSettingsService : IHostSettingsService
         var exists = File.Exists(resolved);
         return new LicenseStatusInfo(10, exists ? "License file found (restart to apply)." : "Default limit (up to 10 players).", Environment.MachineName, resolved, exists);
     }
+
+    /// <inheritdoc />
+    public LicenseStatusInfo CheckLicense(byte[] content) =>
+        this._licenseProvider?.Check(content) ?? new LicenseStatusInfo(10, "The license can't be checked here.", Environment.MachineName, string.Empty, false);
+
+    /// <inheritdoc />
+    public LicenseStatusInfo ApplyLicense(string? configuredPath) =>
+        this._licenseProvider?.Apply(configuredPath) ?? this.GetLicenseStatus(configuredPath);
 
     /// <inheritdoc />
     public async Task<string> SaveLicenseFileAsync(string? configuredPath, byte[] content, CancellationToken cancellationToken = default)

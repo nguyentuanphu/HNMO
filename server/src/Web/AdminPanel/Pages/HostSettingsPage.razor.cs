@@ -6,6 +6,7 @@ namespace HNMO.Web.AdminPanel.Pages;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using HNMO.Web.AdminPanel.Properties;
 using HNMO.Web.AdminPanel.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 
 /// <summary>
 /// Admin panel page for editing unified host settings (<c>save/hnmo-settings.json</c>).
@@ -29,12 +31,17 @@ public partial class HostSettingsPage
     private bool _showHelp;
     private bool _confirmRestart;
     private HashSet<int> _initialPorts = [];
+    private string _licenseText = string.Empty;
+    private bool _copied;
 
     [Inject]
     private IHostSettingsService SettingsService { get; set; } = default!;
 
     [Inject]
     private IServerRestartService RestartService { get; set; } = default!;
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; } = default!;
 
     [Inject]
     private Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor { get; set; } = default!;
@@ -58,6 +65,9 @@ public partial class HostSettingsPage
         this._initialPorts = [this._settings.WebPort, this._settings.AdminPort, this._settings.ConnectServerPort, this._settings.DatabasePort];
         this._licenseStatus = this.SettingsService.GetLicenseStatus(this._settings.LicenseFilePath);
     }
+
+    private static string L(string en, string vi) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("vi", StringComparison.OrdinalIgnoreCase) ? vi : en;
 
     private void ToggleHelp() => this._showHelp = !this._showHelp;
 
@@ -96,29 +106,76 @@ public partial class HostSettingsPage
 
     private async Task OnLicenseUploadAsync(InputFileChangeEventArgs e)
     {
-        if (!this.IsHostComputer)
+        if (!this.IsHostComputer || this._settings is null)
         {
             return;
         }
 
-        if (this._settings is null)
-        {
-            return;
-        }
-
-        this._errors.Clear();
-        this._statusMessage = null;
         try
         {
             using var ms = new MemoryStream();
             await e.File.OpenReadStream(maxAllowedSize: 64 * 1024).CopyToAsync(ms).ConfigureAwait(true);
-            await this.SettingsService.SaveLicenseFileAsync(this._settings.LicenseFilePath, ms.ToArray()).ConfigureAwait(true);
-            this._licenseStatus = this.SettingsService.GetLicenseStatus(this._settings.LicenseFilePath);
-            this._statusMessage = Resources.HostSettingsSaved;
+            await this.UseLicenseAsync(ms.ToArray()).ConfigureAwait(true);
         }
         catch (Exception ex)
         {
             this._errors.Add(ex.Message);
+        }
+    }
+
+    private async Task SaveLicenseTextAsync()
+    {
+        if (!this.IsHostComputer || this._settings is null || string.IsNullOrWhiteSpace(this._licenseText))
+        {
+            return;
+        }
+
+        await this.UseLicenseAsync(System.Text.Encoding.UTF8.GetBytes(this._licenseText.Trim())).ConfigureAwait(true);
+        if (this._errors.Count == 0)
+        {
+            this._licenseText = string.Empty;
+        }
+    }
+
+    /// <summary>Checks a license first; a good one is saved as license.hnmo and used at once.</summary>
+    private async Task UseLicenseAsync(byte[] content)
+    {
+        this._errors.Clear();
+        this._statusMessage = null;
+        var check = this.SettingsService.CheckLicense(content);
+        if (!check.IsValid)
+        {
+            this._errors.Add(L($"This license can't be used: {check.Message} Nothing was changed.", $"Không dùng được giấy phép này: {check.Message} Chưa thay đổi gì."));
+            return;
+        }
+
+        try
+        {
+            await this.SettingsService.SaveLicenseFileAsync(this._settings!.LicenseFilePath, content).ConfigureAwait(true);
+            this._licenseStatus = this.SettingsService.ApplyLicense(this._settings.LicenseFilePath);
+            this._statusMessage = L($"License saved and in use: up to {this._licenseStatus.MaximumPlayers} players at once.", $"Đã lưu và đang dùng giấy phép: tối đa {this._licenseStatus.MaximumPlayers} người chơi cùng lúc.");
+        }
+        catch (Exception ex)
+        {
+            this._errors.Add(ex.Message);
+        }
+    }
+
+    private async Task CopyMachineIdAsync()
+    {
+        if (this._licenseStatus is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await this.JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", this._licenseStatus.MachineId).ConfigureAwait(true);
+            this._copied = true;
+        }
+        catch (JSException)
+        {
+            // no clipboard (an insecure page): the id is on the page to copy by hand
         }
     }
 

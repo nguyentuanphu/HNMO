@@ -81,6 +81,34 @@ public class HostSettingsPageTests
         });
     }
 
+    /// <summary>
+    /// A pasted license is checked before it is saved: a bad one is refused and nothing is written; a good one is saved
+    /// and used at once, and the page shows whom it is for and how many players it allows.
+    /// </summary>
+    [Test]
+    public void ALicenseIsCheckedBeforeItIsSavedAndUsedAtOnce()
+    {
+        using var ctx = new BunitContext();
+        ctx.JSInterop.Mode = JSRuntimeMode.Loose;
+        var fakeService = new FakeHostSettingsService();
+        ctx.Services.AddSingleton<IHostSettingsService>(fakeService);
+        ctx.Services.AddSingleton<IServerRestartService>(new FakeRestartService());
+        ctx.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor>(HostRequest(forwarded: false));
+        var cut = ctx.Render<HostSettingsPage>();
+        Assert.That(cut.Find("#machine-id").TextContent, Is.EqualTo("TEST-MACHINE"));
+
+        cut.Find("#license-text").Change("not a license");
+        cut.Find("#license-paste-save").Click();
+        Assert.That(fakeService.SavedLicense, Is.Null, "a bad license is not written");
+        Assert.That(cut.Markup, Does.Contain("broken"));
+
+        cut.Find("#license-text").Change("GOOD");
+        cut.Find("#license-paste-save").Click();
+        Assert.That(fakeService.SavedLicense, Is.EqualTo("GOOD"u8.ToArray()));
+        Assert.That(fakeService.Applied, Is.True);
+        Assert.That(cut.Find("#license-status").TextContent, Does.Contain("Friends server").And.Contain("50"));
+    }
+
     /// <summary>The host computer's own request, or the same one forwarded by the website's admin path.</summary>
     private static Microsoft.AspNetCore.Http.HttpContextAccessor HostRequest(bool forwarded)
     {
@@ -114,11 +142,29 @@ public class HostSettingsPageTests
             return Task.CompletedTask;
         }
 
-        public LicenseStatusInfo GetLicenseStatus(string? configuredPath) =>
-            new(10, "Default license", "TEST-MACHINE", "license.hnmo", false);
+        public byte[]? SavedLicense { get; private set; }
 
-        public Task<string> SaveLicenseFileAsync(string? configuredPath, byte[] content, CancellationToken cancellationToken = default) =>
-            Task.FromResult("license.hnmo");
+        public bool Applied { get; private set; }
+
+        public LicenseStatusInfo GetLicenseStatus(string? configuredPath) => this.Applied
+            ? new(50, "Licensed.", "TEST-MACHINE", "license.hnmo", true, true, "Friends server")
+            : new(10, "Default license", "TEST-MACHINE", "license.hnmo", false);
+
+        public LicenseStatusInfo CheckLicense(byte[] content) => System.Text.Encoding.UTF8.GetString(content) == "GOOD"
+            ? new(50, "Licensed.", "TEST-MACHINE", string.Empty, true, true, "Friends server")
+            : new(10, "The license file is broken.", "TEST-MACHINE", string.Empty, true);
+
+        public LicenseStatusInfo ApplyLicense(string? configuredPath)
+        {
+            this.Applied = true;
+            return this.GetLicenseStatus(configuredPath);
+        }
+
+        public Task<string> SaveLicenseFileAsync(string? configuredPath, byte[] content, CancellationToken cancellationToken = default)
+        {
+            this.SavedLicense = content;
+            return Task.FromResult("license.hnmo");
+        }
     }
 
     private sealed class FakeRestartService : IServerRestartService
