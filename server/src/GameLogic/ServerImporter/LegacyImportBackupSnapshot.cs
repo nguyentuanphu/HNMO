@@ -46,6 +46,12 @@ public sealed class LegacyImportBackupSnapshot
     /// <summary>Gets or sets a value indicating whether rate fields were modified.</summary>
     public bool ModifiedRates { get; set; }
 
+    /// <summary>Gets or sets the chance of the common random item drop group before the import.</summary>
+    public double? PreviousCommonItemDropChance { get; set; }
+
+    /// <summary>Gets or sets the chance of the common excellent item drop group before the import.</summary>
+    public double? PreviousExcellentItemDropChance { get; set; }
+
     /// <summary>Gets or sets previous plugin configuration JSON blobs keyed by plugin TypeId string.</summary>
     public List<BackupPlugInState> PreviousPlugIns { get; set; } = [];
 

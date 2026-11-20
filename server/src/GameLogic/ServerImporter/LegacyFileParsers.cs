@@ -141,6 +141,12 @@ public static class LegacyFileParsers
                 rates.ItemDropPercent = Math.Clamp(dropPct, 0, 100);
             }
 
+            if (kv.TryGetValue("ExcItemDropPer", out var excStr)
+                && int.TryParse(excStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var excRate))
+            {
+                rates.ExcellentItemDropPerTenThousand = Math.Clamp(excRate, 0, 10000);
+            }
+
             if (kv.TryGetValue("ZenDropMultipler", out var zenStr) || kv.TryGetValue("ZenDropMultiplier", out zenStr))
             {
                 if (double.TryParse(zenStr, NumberStyles.Float, CultureInfo.InvariantCulture, out var zenMult))
@@ -523,6 +529,17 @@ public static class LegacyFileParsers
 
         return spawns;
     }
+
+    /// <summary>
+    /// The bytes per item slot of an inventory or vault blob. The Season 6 and Season 9 server databases this importer
+    /// reads keep 32 bytes per slot (their scripts: inventories of 7,584 bytes = 237 slots, vaults of 7,680 = 240), of
+    /// which the first 16 have the classic layout; older servers keep 16, in at most 240 slots (3,840 bytes). So a blob
+    /// of whole 32-byte slots that is longer than any 16-byte one (7,000 bytes and more) has 32-byte slots.
+    /// </summary>
+    /// <param name="blob">The raw varbinary payload.</param>
+    /// <returns>32 or 16.</returns>
+    public static int ItemSlotSizeOf(byte[]? blob)
+        => blob is { Length: >= 7000 } && blob.Length % 32 == 0 ? 32 : 16;
 
     /// <summary>Decodes classic 16-byte item slots from inventory or vault binary blobs.</summary>
     /// <param name="blob">The raw varbinary payload.</param>

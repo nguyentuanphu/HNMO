@@ -18,6 +18,7 @@ using HNMO.GameLogic.PlugIns.GameplayRules;
 using HNMO.GameLogic.ServerImporter;
 using HNMO.Interfaces;
 using HNMO.Persistence.InMemory;
+using HNMO.PlugIns;
 
 /// <summary>
 /// Unit tests for <see cref="LegacyFileParsers"/> and <see cref="LegacyServerImportEngine"/> using synthetic sample fixtures.
@@ -161,6 +162,13 @@ public class ServerImporterTests
         Assert.That(config.ExperienceRate, Is.EqualTo(500.0f));
         Assert.That(config.DropItemGroups.Count, Is.EqualTo(1));
 
+        // The +10 and +15 rates go to the +10 and +15 upgrade craftings (3 and 50), not to recipes 10-15 (wings, pets,
+        // potions); the zen multiplier 2.5 is applied as 250 %.
+        var chaos = config.PlugInConfigurations.Single(p => p.TypeId == typeof(ChaosRatesPlugIn).GUID).GetConfiguration<ChaosRatesConfiguration>(null)!;
+        Assert.That(chaos.RecipeOverrides.Select(r => (r.RecipeNumber, r.SuccessRateOverridePercent)), Is.EquivalentTo(new (byte, byte?)[] { (3, 75), (50, 45) }));
+        var tuning = config.PlugInConfigurations.Single(p => p.TypeId == typeof(RateTuningPlugIn).GUID).GetConfiguration<RateTuningConfiguration>(null)!;
+        Assert.That(tuning.ZenDropMultiplierPercent, Is.EqualTo(250));
+
         var hanzo = config.Monsters.First(m => m.Number == 251);
         Assert.That(hanzo.MerchantStore?.Items.Count, Is.EqualTo(1));
         var lorencia = config.Maps.First(m => m.Number == 0);
@@ -185,6 +193,46 @@ public class ServerImporterTests
         Assert.That(hanzo.MerchantStore, Is.Null);
         Assert.That((await context.GetAsync<Account>().ConfigureAwait(false)).Any(a => a.LoginName == "legacyuser1"), Is.False);
         Assert.That((await context.GetAsync<HNMO.DataModel.Entities.Guild>().ConfigureAwait(false)).Any(g => g.Name == "OldGuild"), Is.False);
+    }
+
+    /// <summary>
+    /// The servers' ItemDropPer (the chance a killed monster drops an item) and ExcItemDropPer (excellent items, n/10000)
+    /// set the chances of HNMO's common random item group and common excellent group; the undo puts them back. They were
+    /// read for the preview but never applied.
+    /// </summary>
+    [Test]
+    public async Task ItemAndExcellentDropRatesSetTheCommonDropGroupsAsync()
+    {
+        Directory.CreateDirectory(Path.Combine(this._tempDir, "Data"));
+        File.WriteAllText(Path.Combine(this._tempDir, "Data", "CommonServer.cfg"), "ItemDropPer = 60 ; 1[%]: MIN, 100[%]: MAX\nExcItemDropPer = 20 ; n/10000\n");
+        var persistence = new InMemoryPersistenceContextProvider();
+        var context = persistence.CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var random = context.CreateNew<DropItemGroup>();
+        random.ItemType = SpecialItemType.RandomItem;
+        random.Chance = 0.3;
+        var excellent = context.CreateNew<DropItemGroup>();
+        excellent.ItemType = SpecialItemType.Excellent;
+        excellent.Chance = 0.0001;
+        config.DropItemGroups.Add(random);
+        config.DropItemGroups.Add(excellent);
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var preview = await LegacyServerImportEngine.BuildDryRunPreviewAsync(options, config, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        var result = await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        Assert.Multiple(() =>
+        {
+            Assert.That(preview.Rates?.ExcellentItemDropPerTenThousand, Is.EqualTo(20));
+            Assert.That(random.Chance, Is.EqualTo(0.6).Within(1e-9));
+            Assert.That(excellent.Chance, Is.EqualTo(0.002).Within(1e-9));
+        });
+
+        Assert.That(await LegacyServerImportEngine.UndoBackupAsync(result.BackupId, this._backupDir, context, config).ConfigureAwait(false), Is.True);
+        Assert.Multiple(() =>
+        {
+            Assert.That(random.Chance, Is.EqualTo(0.3).Within(1e-9));
+            Assert.That(excellent.Chance, Is.EqualTo(0.0001).Within(1e-9));
+        });
     }
 
     /// <summary>
@@ -277,6 +325,41 @@ public class ServerImporterTests
     }
 
     /// <summary>Verifies the Season 6 and Season 9 XML/DAT/INI configuration schemas (BonusEvent multipliers, SetItemDropManager, ItemBags, InvasionManager, IllusionTemple Monute typo, MonsterSpawn XML).</summary>
+    /// <summary>
+    /// The servers' databases keep 32 bytes per item slot (inventories of 7,584 bytes, vaults of 7,680); read as 16-byte
+    /// slots, every item after the first came out at the wrong slot and with another item's bytes. Older 16-byte blobs
+    /// stay 16.
+    /// </summary>
+    [Test]
+    public void ReadsThirtyTwoByteItemSlots()
+    {
+        var blob = Enumerable.Repeat((byte)0xFF, 7584).ToArray();
+        void Put(int slot, byte number, byte group, byte durability)
+        {
+            var at = slot * 32;
+            Array.Clear(blob, at, 32);
+            blob[at] = number;
+            blob[at + 1] = (3 << 3) | 0x04; // +3, luck
+            blob[at + 2] = durability;
+            blob[at + 9] = (byte)(group << 4);
+        }
+
+        Put(0, 1, 0, 22);   // Short Sword in slot 0
+        Put(12, 5, 14, 3);  // a potion in the bag's first slot
+
+        Assert.That(LegacyFileParsers.ItemSlotSizeOf(blob), Is.EqualTo(32));
+        var items = LegacyFileParsers.ParseLegacyBinaryStorage(blob, LegacyFileParsers.ItemSlotSizeOf(blob));
+        Assert.That(items.Select(i => (i.Slot, i.Group, i.Number, i.Durability)), Is.EqualTo(new (byte, byte, short, byte)[] { (0, 0, 1, 22), (12, 14, 5, 3) }));
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(LegacyFileParsers.ItemSlotSizeOf(new byte[7680]), Is.EqualTo(32), "a vault of 240 slots of 32 bytes");
+            Assert.That(LegacyFileParsers.ItemSlotSizeOf(new byte[3776]), Is.EqualTo(16), "a 16-byte inventory of 236 slots");
+            Assert.That(LegacyFileParsers.ItemSlotSizeOf(new byte[1920]), Is.EqualTo(16), "a 16-byte vault of 120 slots");
+            Assert.That(LegacyFileParsers.ItemSlotSizeOf(null), Is.EqualTo(16));
+        });
+    }
+
     [Test]
     public void ParsesSeasonSixAndNineConfigurationSchemas()
     {

@@ -19,6 +19,9 @@ public sealed class LegacyParsedRates
     /// <summary>Gets or sets the raw drop percentage (0-100) from server INI if present.</summary>
     public int? ItemDropPercent { get; set; }
 
+    /// <summary>Gets or sets the excellent item drop chance in 1/10000 (ExcItemDropPer) if present.</summary>
+    public int? ExcellentItemDropPerTenThousand { get; set; }
+
     /// <summary>Gets or sets the Zen drop multiplier.</summary>
     public double? ZenMultiplier { get; set; }
 }

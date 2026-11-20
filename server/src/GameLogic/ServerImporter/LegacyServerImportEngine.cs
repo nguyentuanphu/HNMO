@@ -30,6 +30,12 @@ using HNMO.PlugIns;
 /// </summary>
 public static class LegacyServerImportEngine
 {
+    /// <summary>The craftings of the item upgrades +10 to +15 (VersionSeasonSix/ChaosMixes.cs, ItemLevelUpgradeCrafting).</summary>
+    private static readonly Dictionary<string, byte> UpgradeCraftingNumbers = new(StringComparer.Ordinal)
+    {
+        ["+10"] = 3, ["+11"] = 4, ["+12"] = 22, ["+13"] = 23, ["+14"] = 49, ["+15"] = 50,
+    };
+
     private static readonly Dictionary<byte, byte> LegacyClassMap = new()
     {
         [0] = 0, [1] = 1, [2] = 2,
@@ -98,7 +104,7 @@ public static class LegacyServerImportEngine
 
             if (rates.ItemDropPercent.HasValue || rates.ZenMultiplier.HasValue)
             {
-                details.Add($"Drop %={rates.ItemDropPercent?.ToString(CultureInfo.InvariantCulture) ?? "-"}, Zen mult={rates.ZenMultiplier?.ToString(CultureInfo.InvariantCulture) ?? "-"}");
+                details.Add($"Drop %={rates.ItemDropPercent?.ToString(CultureInfo.InvariantCulture) ?? "-"}, excellent {rates.ExcellentItemDropPerTenThousand?.ToString(CultureInfo.InvariantCulture) ?? "-"}/10000, Zen mult={rates.ZenMultiplier?.ToString(CultureInfo.InvariantCulture) ?? "-"}");
                 mapped++;
             }
 
@@ -361,6 +367,9 @@ public static class LegacyServerImportEngine
         };
 
         BackupPlugInConfig(config, typeof(ChaosRatesPlugIn).GUID, snapshot);
+        BackupPlugInConfig(config, typeof(RateTuningPlugIn).GUID, snapshot);
+        snapshot.PreviousCommonItemDropChance = CommonDropGroup(config, SpecialItemType.RandomItem)?.Chance;
+        snapshot.PreviousExcellentItemDropChance = CommonDropGroup(config, SpecialItemType.Excellent)?.Chance;
         BackupPlugInConfig(config, typeof(TimetablePlugIn).GUID, snapshot);
         BackupPlugInConfig(config, typeof(BonusEventsPlugIn).GUID, snapshot);
 
@@ -420,6 +429,31 @@ public static class LegacyServerImportEngine
             if (rates.MasterExperienceRate.HasValue)
             {
                 config.MasterExperienceRate = rates.MasterExperienceRate.Value;
+                result.AppliedCount++;
+            }
+
+            // The zen multiplier was read and shown in the preview, but not applied.
+            if (rates.ZenMultiplier is { } zen)
+            {
+                var tuning = ReadPlugInConfig<RateTuningConfiguration>(config, typeof(RateTuningPlugIn).GUID) ?? new RateTuningConfiguration();
+                tuning.Enabled = true;
+                tuning.ZenDropMultiplierPercent = (int)Math.Clamp(Math.Round(zen * 100), 10, 1000);
+                WritePlugInConfig(persistenceContext, config, typeof(RateTuningPlugIn).GUID, tuning, activate: true);
+                result.AppliedCount++;
+            }
+
+            // The servers' ItemDropPer (the chance that a killed monster drops an item, 1-100 %) and ExcItemDropPer
+            // (excellent items, n/10000) are the chances of HNMO's two common drop groups: the random items (30 % by
+            // default) and the excellent items (0.01 %). They were read for the preview, but never applied.
+            if (rates.ItemDropPercent is { } dropPercent && CommonDropGroup(config, SpecialItemType.RandomItem) is { } itemGroup)
+            {
+                itemGroup.Chance = dropPercent / 100.0;
+                result.AppliedCount++;
+            }
+
+            if (rates.ExcellentItemDropPerTenThousand is { } excellent && CommonDropGroup(config, SpecialItemType.Excellent) is { } excellentGroup)
+            {
+                excellentGroup.Chance = excellent / 10000.0;
                 result.AppliedCount++;
             }
         }
@@ -493,21 +527,32 @@ public static class LegacyServerImportEngine
         {
             var cfg = ReadPlugInConfig<ChaosRatesConfiguration>(config, typeof(ChaosRatesPlugIn).GUID) ?? new ChaosRatesConfiguration();
             cfg.Enabled = true;
-            byte nextIdx = 10;
+            var applied = 0;
             foreach (var c in preview.ChaosRates)
             {
-                var existing = cfg.RecipeOverrides.FirstOrDefault(r => r.RecipeName.Equals(c.CraftNamePattern, StringComparison.OrdinalIgnoreCase));
+                // The rate goes to the crafting it is for: the +10..+15 item upgrades are craftings 3, 4, 22, 23, 49
+                // and 50 (VersionSeasonSix/ChaosMixes.cs). They were numbered 10-15 here, which are First Wings,
+                // Dark Horse, Dark Raven and Potion of Bless, so the imported rates changed those instead.
+                if (!UpgradeCraftingNumbers.TryGetValue(c.CraftNamePattern, out var recipeNumber))
+                {
+                    result.SkippedCount++;
+                    result.SummaryLines.Add($"Chaos rate {c.Key} skipped: no HNMO crafting for '{c.CraftNamePattern}'.");
+                    continue;
+                }
+
+                var existing = cfg.RecipeOverrides.FirstOrDefault(r => r.RecipeNumber == recipeNumber);
                 if (existing is null)
                 {
-                    existing = new ChaosRecipeOverride { RecipeNumber = nextIdx++, RecipeName = c.CraftNamePattern };
+                    existing = new ChaosRecipeOverride { RecipeNumber = recipeNumber, RecipeName = $"Item upgrade {c.CraftNamePattern}" };
                     cfg.RecipeOverrides.Add(existing);
                 }
 
                 existing.SuccessRateOverridePercent = (byte)Math.Clamp(c.SuccessPercent, 0, 100);
+                applied++;
             }
 
             WritePlugInConfig(persistenceContext, config, typeof(ChaosRatesPlugIn).GUID, cfg, activate: true);
-            result.AppliedCount += preview.ChaosRates.Count;
+            result.AppliedCount += applied;
         }
 
         if (options.ImportEventSchedules && preview.EventSchedules.Count > 0)
@@ -634,6 +679,15 @@ public static class LegacyServerImportEngine
             config.ExperienceRate = snapshot.PreviousExperienceRate;
             config.MasterExperienceRate = snapshot.PreviousMasterExperienceRate;
             config.ShouldDropMoney = snapshot.PreviousShouldDropMoney;
+            if (snapshot.PreviousCommonItemDropChance is { } itemChance && CommonDropGroup(config, SpecialItemType.RandomItem) is { } itemGroup)
+            {
+                itemGroup.Chance = itemChance;
+            }
+
+            if (snapshot.PreviousExcellentItemDropChance is { } excChance && CommonDropGroup(config, SpecialItemType.Excellent) is { } excGroup)
+            {
+                excGroup.Chance = excChance;
+            }
         }
 
         foreach (var prevPlugin in snapshot.PreviousPlugIns)
@@ -880,7 +934,7 @@ public static class LegacyServerImportEngine
         IContext context,
         Dictionary<string, ItemDefinition> itemsByKey)
     {
-        foreach (var decoded in LegacyFileParsers.ParseLegacyBinaryStorage(blob))
+        foreach (var decoded in LegacyFileParsers.ParseLegacyBinaryStorage(blob, LegacyFileParsers.ItemSlotSizeOf(blob)))
         {
             if (!itemsByKey.TryGetValue($"{decoded.Group}:{decoded.Number}", out var def))
             {
@@ -905,6 +959,13 @@ public static class LegacyServerImportEngine
             attr.Value = value;
         }
     }
+
+    /// <summary>
+    /// The common drop group of a kind (GameConfigurationInitializerBase.AddItemDropItemGroups): for every monster, no
+    /// item list of its own (the random and the excellent items).
+    /// </summary>
+    private static DropItemGroup? CommonDropGroup(GameConfiguration config, SpecialItemType type)
+        => config.DropItemGroups.FirstOrDefault(g => g.ItemType == type && g.Monster is null && g.PossibleItems.Count == 0);
 
     private static void BackupPlugInConfig(GameConfiguration config, Guid typeId, LegacyImportBackupSnapshot snapshot)
     {
