@@ -208,6 +208,11 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
             },
             ["bugs"] = bugs,
         };
+
+        // The MU's name and its host (owner, 2026-11-21: the console shows every server by them).
+        var hubState = DeveloperHub.ReadState();
+        weekly["game"] = new JsonObject { ["name"] = first is null ? string.Empty : HostSetupReport.GameName(first) };
+        weekly["host"] = new JsonObject { ["name"] = hubState.HostName, ["contact"] = hubState.HostContact };
         var (ok, withdrawn, error) = await DeveloperHub.SendWeeklyAsync(weekly).ConfigureAwait(false);
         if (!ok)
         {

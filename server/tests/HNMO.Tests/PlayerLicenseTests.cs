@@ -178,12 +178,24 @@ public class PlayerLicenseTests
             Assert.That(sent["host"]!["name"]!.GetValue<string>(), Is.EqualTo("Minh"));
             Assert.That(sent["host"]!["contact"]!.GetValue<string>(), Is.EqualTo("zalo 0900"));
             Assert.That(sent["system"]!["cores"]!.GetValue<int>(), Is.EqualTo(8));
+            Assert.That(sent["test"], Is.Null, "a real host says nothing about tests");
+
+            // One of the developer's test machines says so (HNMO_TEST_HOST=1); the console keeps it apart.
+            Environment.SetEnvironmentVariable("HNMO_TEST_HOST", "1");
+            var weekly = new RecordingHandler(HttpStatusCode.OK);
+            using (var client = new HttpClient(weekly))
+            {
+                await DeveloperHub.SendWeeklyAsync(new JsonObject { ["game"] = new JsonObject { ["name"] = "Mu Rồng Vàng" } }, client).ConfigureAwait(false);
+            }
+
+            Assert.That(JsonNode.Parse(weekly.Body!)!["test"]!.GetValue<bool>(), Is.True);
         }
         finally
         {
             DeveloperHub.ResetMemoryState();
             DeveloperHub.StateFile = previousFile;
             (DeveloperHub.MachineId, DeveloperHub.LegacyMachineId) = (previousMachine, previousLegacy);
+            Environment.SetEnvironmentVariable("HNMO_TEST_HOST", null);
         }
     }
 

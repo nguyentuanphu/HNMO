@@ -72,7 +72,10 @@ internal static class HostSetupReport
         };
     }
 
-    private static string GameName(IGameServerContext context)
+    /// <summary>The MU's name players see (plug-in "Game name"), or the default.</summary>
+    /// <param name="context">A game server of this program.</param>
+    /// <returns>The name.</returns>
+    internal static string GameName(IGameServerContext context)
     {
         var configuration = context.Configuration.PlugInConfigurations.FirstOrDefault(c => c.TypeId == typeof(GameNamePlugIn).GUID);
         if (configuration is not { IsActive: true } || string.IsNullOrWhiteSpace(configuration.CustomConfiguration))

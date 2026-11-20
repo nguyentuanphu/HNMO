@@ -144,6 +144,14 @@
                     <a class="btn btn-sm btn-light ms-2" href="host-settings#license-card">@L("Licence", "Giấy phép")</a>
                 </div>
             }
+            @if (string.IsNullOrWhiteSpace(HNMO.GameLogic.DeveloperHub.ReadState().HostName))
+            {
+                @* Owner, 2026-11-21: the HNMO developer needs to know who hosts each MU. *@
+                <div class="alert alert-info d-flex flex-wrap align-items-center gap-2" role="status" id="host-name-banner">
+                    <span>@L("Tell the HNMO developer who hosts this MU: fill in your name and contact on the Setup page (the MU's name players see is in Plugins, \"Game name\").", "Hãy cho nhà phát triển HNMO biết ai là chủ MU này: điền tên và liên hệ của bạn ở trang Setup (tên MU người chơi thấy nằm ở Plugins, \"Game name\").")</span>
+                    <a class="btn btn-sm btn-light" href="setup#host-setup-report" title="@L("Opens the Setup page at the host's name and contact", "Mở trang Setup ở phần tên và liên hệ của chủ server")">@L("Fill in", "Điền ngay")</a>
+                </div>
+            }
             @if (this._isTwoFactorSetupPending)
             {
                 <div class="alert alert-warning" role="alert">

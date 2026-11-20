@@ -44,6 +44,9 @@ public static class DeveloperHub
     /// <summary>Gets or sets this folder's licence file as text (set at start and when a licence is saved), if any.</summary>
     public static string? LicenceFile { get; set; }
 
+    /// <summary>Gets a value indicating whether this is one of the HNMO developer's test machines (<c>HNMO_TEST_HOST=1</c>).</summary>
+    public static bool IsTestHost => Environment.GetEnvironmentVariable("HNMO_TEST_HOST") is "1" or "true";
+
     /// <summary>Gets or sets this computer's id (the one a licence is bound to).</summary>
     public static string MachineId { get; set; } = string.Empty;
 
@@ -307,6 +310,12 @@ public static class DeveloperHub
         }
 
         message["machine"] = MachineId;
+        if (IsTestHost)
+        {
+            // One of the HNMO developer's own test machines: the console keeps it apart from real hosts.
+            message["test"] = true;
+        }
+
         if (LegacyMachineId.Length > 0 && !string.Equals(LegacyMachineId, MachineId, StringComparison.OrdinalIgnoreCase))
         {
             // Licences issued before the real machine id are bound to this one; the hub sees both as one computer.
