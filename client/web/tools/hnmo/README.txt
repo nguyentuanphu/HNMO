@@ -6,13 +6,20 @@ database that keeps your progress. You play in a web browser. The same folder ru
 Windows, Ubuntu/Linux and macOS (runtime/ has what each system needs).
 
 START
-  Windows: double-click "Start HNMO.bat". One window opens; keep it open while you
-           play, close it to stop the game (your progress is saved).
+  Windows: double-click "Start HNMO.bat". No window stays open: HNMO's icon appears
+           next to the clock (right-click it: open the game, the admin panel, the log, or
+           Stop HNMO). Your progress is saved. To see a problem at start in a window,
+           use "Start HNMO (window).bat" instead.
   Ubuntu/Linux: once, install PostgreSQL 16: sudo apt install postgresql-16
-           Then run ./start-hnmo.sh (Ctrl+C stops it).
+           Then run ./start-hnmo.sh: HNMO runs in the background (the Terminal can be
+           closed). Stop it with ./stop-hnmo.sh or "Stop HNMO" in the admin panel.
   macOS:   once, install PostgreSQL 16: brew install postgresql@16 (or Postgres.app),
            and allow the folder: xattr -dr com.apple.quarantine HNMO
-           Then run ./start-hnmo.sh in Terminal (Ctrl+C stops it).
+           Then run ./start-hnmo.sh in Terminal: HNMO runs in the background (the
+           Terminal can be closed). Stop it with ./stop-hnmo.sh or "Stop HNMO" in the
+           admin panel.
+  The log (what the old window showed): the admin panel's "Server log" page, or
+  save/logs (launcher.log, server.log, database.log).
   (Windows needs nothing installed: its database is in the folder.)
 
   The website opens in your browser at http://localhost:8080/ when it's ready: server
