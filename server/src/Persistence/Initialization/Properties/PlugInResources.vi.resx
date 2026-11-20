@@ -288,6 +288,12 @@
   <data name="AddRenaItemUpdatePlugIn_Description" xml:space="preserve">
     <value>Bản cập nhật này thêm vật phẩm Rena còn thiếu, cần cho tính năng đăng ký vật phẩm.</value>
   </data>
+  <data name="AddStardustItemUpdatePlugIn_Name" xml:space="preserve">
+    <value>Thêm vật phẩm Stardust</value>
+  </data>
+  <data name="AddStardustItemUpdatePlugIn_Description" xml:space="preserve">
+    <value>Bản cập nhật này thêm vật phẩm Stardust (14:153) có trong danh sách vật phẩm của game.</value>
+  </data>
   <data name="AddCrestOfMonarchDropGroupUpdateSeason6_Name" xml:space="preserve">
     <value>Thêm nhóm rơi Crest of Monarch</value>
   </data>

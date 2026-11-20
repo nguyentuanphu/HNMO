@@ -527,6 +527,12 @@ namespace HNMO.Persistence.Initialization.Properties {
         /// <summary>Gets the localized AddRenaItemUpdatePlugIn_Description text.</summary>
         public static string AddRenaItemUpdatePlugIn_Description => ResourceManager.GetString("AddRenaItemUpdatePlugIn_Description", resourceCulture)!;
 
+        /// <summary>Gets the localized AddStardustItemUpdatePlugIn_Name text.</summary>
+        public static string AddStardustItemUpdatePlugIn_Name => ResourceManager.GetString("AddStardustItemUpdatePlugIn_Name", resourceCulture)!;
+
+        /// <summary>Gets the localized AddStardustItemUpdatePlugIn_Description text.</summary>
+        public static string AddStardustItemUpdatePlugIn_Description => ResourceManager.GetString("AddStardustItemUpdatePlugIn_Description", resourceCulture)!;
+
         /// <summary>Gets the localized AddCrestOfMonarchDropGroupUpdateSeason6_Name text.</summary>
         public static string AddCrestOfMonarchDropGroupUpdateSeason6_Name => ResourceManager.GetString("AddCrestOfMonarchDropGroupUpdateSeason6_Name", resourceCulture)!;
 
