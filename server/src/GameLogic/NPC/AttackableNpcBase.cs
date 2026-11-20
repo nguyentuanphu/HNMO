@@ -438,13 +438,28 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
         }
     }
 
+    /// <summary>
+    /// Determines whether killing monsters gives zen in the mini game the killer takes part in.
+    /// Like in classic MU, the monsters of Devil Square and Chaos Castle give no zen at all; the
+    /// other mini games (e.g. Blood Castle) keep their zen.
+    /// </summary>
+    /// <param name="miniGameType">The type of the mini game of the killer, or <c>null</c> outside of mini games.</param>
+    /// <returns><c>true</c>, if the kill gives zen; otherwise, <c>false</c>.</returns>
+    internal static bool GivesMoneyForKills(DataModel.Configuration.MiniGameType? miniGameType)
+        => miniGameType is not (DataModel.Configuration.MiniGameType.DevilSquare or DataModel.Configuration.MiniGameType.ChaosCastle);
+
     private async ValueTask HandleMoneyDropAsync(uint amount, Player killer, IReadOnlyList<ExperienceShare> experienceShares)
     {
+        if (!GivesMoneyForKills(killer.CurrentMiniGame?.Definition.Type))
+        {
+            return;
+        }
+
         // Each player gets the part of the money which matches the experience they gained from the kill,
         // so that money follows the same distribution as the experience it is derived from.
         var shares = MoneyDistribution.CreateShares(amount, experienceShares);
 
-        // We don't drop money in Devil Square, etc.
+        // Inside a mini game (e.g. Blood Castle) the money is not dropped, but paid directly.
         var shouldDropMoney = killer.GameContext.Configuration.ShouldDropMoney && killer.CurrentMiniGame is null;
         if (!shouldDropMoney)
         {
