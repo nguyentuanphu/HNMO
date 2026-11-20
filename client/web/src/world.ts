@@ -231,6 +231,16 @@ function objectMatrix(object: WorldObject): THREE.Matrix4 {
   );
 }
 
+/**
+ * The folders a world object's textures are looked for in: its own, then Item. The weapons and shields on display
+ * (Devias's racks, Object3: sword14, hound_shield1, shield05, ...) name item textures their folder lacks; the desktop
+ * finds them because it keeps every loaded texture by name, and the items loaded them first. Drawn without, they
+ * were grey (map check 2026-11-20).
+ */
+export function objectTextureFolders(objectDir: string): string[] {
+  return [objectDir, 'Item'];
+}
+
 // One instanced mesh per model mesh, so the 2,000+ objects of a map draw in a few hundred calls.
 async function buildObjectType(objectDir: string, fileName: string, placements: WorldObject[], light: Float32Array): Promise<THREE.InstancedMesh[]> {
   let model;
@@ -243,7 +253,7 @@ async function buildObjectType(objectDir: string, fileName: string, placements: 
   const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
   const color = new THREE.Color();
   return Promise.all(parts.map(async (part) => {
-    const material = await createMaterial(objectDir, part.textureName);
+    const material = await createMaterial(objectTextureFolders(objectDir), part.textureName);
     const mesh = new THREE.InstancedMesh(part.geometry, material, placements.length);
     placements.forEach((object, index) => {
       mesh.setMatrixAt(index, objectMatrix(object));

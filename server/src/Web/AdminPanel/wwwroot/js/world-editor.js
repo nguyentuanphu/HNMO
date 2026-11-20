@@ -24508,6 +24508,9 @@ function objectMatrix(object) {
     new Vector3(object.scale, object.scale, object.scale)
   );
 }
+function objectTextureFolders(objectDir) {
+  return [objectDir, "Item"];
+}
 async function buildObjectType(objectDir, fileName, placements, light) {
   let model;
   try {
@@ -24519,7 +24522,7 @@ async function buildObjectType(objectDir, fileName, placements, light) {
   const parts = buildGeometries(model, computeBoneMatrices(model, 0, 0));
   const color = new Color();
   return Promise.all(parts.map(async (part) => {
-    const material = await createMaterial(objectDir, part.textureName);
+    const material = await createMaterial(objectTextureFolders(objectDir), part.textureName);
     const mesh = new InstancedMesh(part.geometry, material, placements.length);
     placements.forEach((object, index) => {
       mesh.setMatrixAt(index, objectMatrix(object));
