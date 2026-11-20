@@ -73,7 +73,8 @@ jobs:
         shell: pwsh
         run: |
           # A folder with a space and brackets, like a second download ("HNMO (1)"); the start file
-          # runs the same way as a double-click (it opens its own window with cmd /k). /s with the
+          # runs the same way as a double-click (it starts HNMO in the background with its tray icon and ends, so the
+          # wait is for the game and the admin panel, not for the start file). /s with the
           # outer quotes keeps cmd from eating the quotes around the paths.
           $folder = "C:\hnmo test (1)\HNMO"
           $log = "C:\hnmo test (1)\start.log"
@@ -84,9 +85,8 @@ jobs:
             Start-Sleep -Seconds 10
             try { $game = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:8080/index.html).StatusCode -eq 200 } catch { }
             try { $admin = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:8095/ -MaximumRedirection 0 -SkipHttpErrorCheck).StatusCode -lt 500 } catch { }
-            if ($p.HasExited) { break }
-          }
-          Write-Host "game: $game, admin panel: $admin, start window still running: $(-not $p.HasExited)"
+                    }
+          Write-Host "game: $game, admin panel: $admin, start file still running: $(-not $p.HasExited) (it starts HNMO in the background and ends)"
           Get-Content $log -Tail 80 -ErrorAction SilentlyContinue
           if (-not ($game -and $admin)) {
             Get-ChildItem "$folder\save\logs" -File -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "--- $($_.Name)"; Get-Content $_.FullName -Tail 60 }

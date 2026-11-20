@@ -166,6 +166,14 @@ const HOME_KEY = 'hnmo-arena-home';
 
 type Send = (name: string, fields: PacketValues) => void;
 
+/** The values that change every second (countdowns, live scores, the shrinking zone): written in place, not redrawn. */
+const LIVE_FIELDS = new Set(['secondsToStart', 'secondsLeft', 'zoneX', 'zoneY', 'zoneRadius', 'seconds', 'scoreA', 'scoreB']);
+
+/** What decides whether the window is drawn again: the answer without its live values. */
+export function renderKey(state: unknown): string {
+  return JSON.stringify(state, (key, value: unknown) => (LIVE_FIELDS.has(key) ? undefined : value));
+}
+
 function tx(en: string, vi: string): string {
   return currentLanguage() === 'vi' ? vi : en;
 }
@@ -279,11 +287,28 @@ export class ArenaWindow {
     }
     this.travelling = false;
     this.updateScoreboard(state.team ?? null, state.royale ?? null, state.guildWar ?? null);
-    if (this.panel.isOpen() && json !== this.drawn) {
-      this.drawn = json;
+    // Countdowns and live scores change every second: they are updated in place, so the buttons under the pointer
+    // stay the same elements (rebuilding them each second made them impossible to click while a match was planned).
+    const key = renderKey(state);
+    if (this.panel.isOpen() && key !== this.drawn) {
+      this.drawn = key;
       this.render();
+    } else if (this.panel.isOpen()) {
+      this.updateLiveTexts(state);
     }
     return true;
+  }
+
+  /** Writes the countdowns and live scores into the drawn window. */
+  private updateLiveTexts(state: ArenaTravelState): void {
+    const body = this.panel.body;
+    const set = (id: string, text: string | null) => {
+      const element = body.querySelector<HTMLElement>(`#${id}`);
+      if (element && text !== null && element.textContent !== text) element.textContent = text;
+    };
+    if (state.royale) set('arena-royale-status', this.royaleStatus(state.royale));
+    if (state.guildWar) set('arena-guild-status', this.guildWarStatus(state.guildWar));
+    if (state.team?.side) set('arena-team-score', this.scoreText(state.team));
   }
 
   private render(): void {
@@ -349,20 +374,9 @@ export class ArenaWindow {
     }
     const line = document.createElement('p');
     line.id = 'arena-guild-status';
-    if (war.running) {
-      line.textContent = this.guildWarText(war);
-      body.append(line);
-      return;
-    }
-    const minutes = Math.floor(war.secondsToStart / 60), seconds = war.secondsToStart % 60;
-    const signed = war.guilds.map((g) => `${g.name} (${g.count})`).join(', ');
-    line.textContent = war.waiting > 0
-      ? tx(`${war.waiting} more match(es) to come.`, `Còn ${war.waiting} trận nữa.`)
-      : war.nextSydney
-        ? tx(`Next: ${war.nextSydney} Sydney (in ${minutes}:${String(seconds).padStart(2, '0')}). Signed up: ${signed || 'none yet'}.`,
-          `Lần tới: ${war.nextSydney} giờ Sydney (còn ${minutes}:${String(seconds).padStart(2, '0')}). Đã đăng ký: ${signed || 'chưa có'}.`)
-        : tx('No guild war planned.', 'Chưa có lịch bang chiến.');
+    line.textContent = this.guildWarStatus(war);
     body.append(line);
+    if (war.running) return;
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'hnmo-btn';
@@ -375,6 +389,19 @@ export class ArenaWindow {
       this.options.send('HnmoArenaTravelRequest', { Action: war.signedUp ? 10 : 9, Index: 0 });
     });
     body.append(button);
+  }
+
+  /** The guild war's status line: the match while it runs, else the next one and the sign-ups. */
+  private guildWarStatus(war: ArenaGuildWar): string {
+    if (war.running) return this.guildWarText(war);
+    const minutes = Math.floor(war.secondsToStart / 60), seconds = war.secondsToStart % 60;
+    const signed = war.guilds.map((g) => `${g.name} (${g.count})`).join(', ');
+    return war.waiting > 0
+      ? tx(`${war.waiting} more match(es) to come.`, `Còn ${war.waiting} trận nữa.`)
+      : war.nextSydney
+        ? tx(`Next: ${war.nextSydney} Sydney (in ${minutes}:${String(seconds).padStart(2, '0')}). Signed up: ${signed || 'none yet'}.`,
+          `Lần tới: ${war.nextSydney} giờ Sydney (còn ${minutes}:${String(seconds).padStart(2, '0')}). Đã đăng ký: ${signed || 'chưa có'}.`)
+        : tx('No guild war planned.', 'Chưa có lịch bang chiến.');
   }
 
   /** "Guild A 12 : 9 Guild B · flags A - B · 11:20 · you: red", then the result. */
@@ -408,18 +435,9 @@ export class ArenaWindow {
     body.append(head, rules);
     const line = document.createElement('p');
     line.id = 'arena-royale-status';
-    if (royale.running) {
-      line.textContent = this.royaleText(royale);
-      body.append(line);
-      return;
-    }
-    const minutes = Math.floor(royale.secondsToStart / 60), seconds = royale.secondsToStart % 60;
-    const wait = `${minutes}:${String(seconds).padStart(2, '0')}`;
-    line.textContent = royale.nextSydney
-      ? tx(`Next match: ${royale.nextSydney} Sydney (in ${wait}). Signed up: ${royale.signups} (at least ${royale.minPlayers}).`,
-        `Trận tiếp theo: ${royale.nextSydney} giờ Sydney (còn ${wait}). Đã đăng ký: ${royale.signups} (tối thiểu ${royale.minPlayers}).`)
-      : tx('No match planned.', 'Chưa có lịch đấu.');
+    line.textContent = this.royaleStatus(royale);
     body.append(line);
+    if (royale.running) return;
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'hnmo-btn';
@@ -432,6 +450,17 @@ export class ArenaWindow {
       this.options.send('HnmoArenaTravelRequest', { Action: royale.signedUp ? 8 : 7, Index: 0 });
     });
     body.append(button);
+  }
+
+  /** The battle royale's status line: the match while it runs, else the next one and the sign-ups. */
+  private royaleStatus(royale: ArenaRoyale): string {
+    if (royale.running) return this.royaleText(royale);
+    const minutes = Math.floor(royale.secondsToStart / 60), seconds = royale.secondsToStart % 60;
+    const wait = `${minutes}:${String(seconds).padStart(2, '0')}`;
+    return royale.nextSydney
+      ? tx(`Next match: ${royale.nextSydney} Sydney (in ${wait}). Signed up: ${royale.signups} (at least ${royale.minPlayers}).`,
+        `Trận tiếp theo: ${royale.nextSydney} giờ Sydney (còn ${wait}). Đã đăng ký: ${royale.signups} (tối thiểu ${royale.minPlayers}).`)
+      : tx('No match planned.', 'Chưa có lịch đấu.');
   }
 
   /** "5 left · zone (60, 200) r 40 → (52, 210) · 7:12 · you are in the zone", the end's place and winner. */
