@@ -175,8 +175,13 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
     names = !names;
     namesButton.classList.toggle('on', names);
     window.dispatchEvent(new KeyboardEvent(names ? 'keydown' : 'keyup', { key: 'Alt', bubbles: true }));
-  });
-  bar.append(namesButton, button('⋯', 'More', () => more.classList.toggle('open')), button('⛶', 'Full screen', fullScreenLandscape));
+  }, 'names');
+  // ⋯ opens the list; the modern HUD (mobileHud.ts) shows it in its menu sheet.
+  const moreButton = button('⋯', 'More', () => {
+    more.classList.toggle('open');
+    window.dispatchEvent(new CustomEvent('hnmo-touch-more', { detail: { open: more.classList.contains('open') } }));
+  }, 'more');
+  bar.append(namesButton, moreButton, button('⛶', 'Full screen', fullScreenLandscape, 'full'));
   // The fight button, the skill keys and the potion keys.
   const fight = document.createElement('div');
   fight.id = 'touchFight';
