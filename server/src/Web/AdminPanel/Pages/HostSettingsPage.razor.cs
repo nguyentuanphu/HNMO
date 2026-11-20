@@ -32,6 +32,11 @@ public partial class HostSettingsPage
     private bool _confirmRestart;
     private HashSet<int> _initialPorts = [];
     private string _licenseText = string.Empty;
+    private string _requestName = string.Empty;
+    private string _requestContact = string.Empty;
+    private int? _requestPlayers;
+    private string _requestMessage = string.Empty;
+    private bool _requestSending;
     private bool _copied;
 
     [Inject]
@@ -158,6 +163,49 @@ public partial class HostSettingsPage
         catch (Exception ex)
         {
             this._errors.Add(ex.Message);
+        }
+    }
+
+    private async Task RequestLicenseAsync()
+    {
+        if (!this.IsHostComputer || this._requestSending)
+        {
+            return;
+        }
+
+        this._errors.Clear();
+        this._statusMessage = null;
+        if (string.IsNullOrWhiteSpace(this._requestName))
+        {
+            this._errors.Add(L("Write your name or your server's name.", "Hãy ghi tên bạn hoặc tên server."));
+            return;
+        }
+
+        this._requestSending = true;
+        try
+        {
+            var message = new System.Text.Json.Nodes.JsonObject
+            {
+                ["kind"] = "licence-request",
+                ["name"] = this._requestName.Trim(),
+                ["contact"] = this._requestContact.Trim(),
+                ["players"] = this._requestPlayers ?? 0,
+                ["message"] = this._requestMessage.Trim(),
+            };
+            var (ok, en, vi) = await HNMO.GameLogic.DeveloperHub.SendAsync(message).ConfigureAwait(true);
+            if (ok)
+            {
+                this._statusMessage = L("Your request was sent to the HNMO developer.", "Đã gửi yêu cầu tới nhà phát triển HNMO.");
+                this._requestMessage = string.Empty;
+            }
+            else
+            {
+                this._errors.Add(L(en, vi));
+            }
+        }
+        finally
+        {
+            this._requestSending = false;
         }
     }
 

@@ -97,6 +97,49 @@ public sealed class BugReportsTest
         Assert.That((await BugReportForwarder.SendAsync("https://example.com/x", report, null, false, client).ConfigureAwait(false)).Ok, Is.False);
     }
 
+    /// <summary>
+    /// The developer's hub gets the report with this computer's id, the version and the licence file, never the login;
+    /// a refusal for the daily limit is told in words; without a machine id nothing is sent.
+    /// </summary>
+    /// <returns>The task.</returns>
+    [Test]
+    [NonParallelizable]
+    public async Task TheHubGetsTheReportWithTheLicenceNotTheLoginAsync()
+    {
+        var report = Report("Skills show no effect");
+        report.Id = "B9";
+        report.Character = "HeroDk";
+        var message = BugReportsPlugIn.HubMessage(report, shareCharacter: false);
+        var previous = (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile);
+        try
+        {
+            GameLogic.DeveloperHub.MachineId = string.Empty;
+            Assert.That((await GameLogic.DeveloperHub.SendAsync(message, url: "https://hub.example").ConfigureAwait(false)).Ok, Is.False);
+
+            GameLogic.DeveloperHub.MachineId = "8e5abdd396d53501";
+            GameLogic.DeveloperHub.LicenceFile = "{\"payload\":\"x\",\"signature\":\"y\"}";
+            var handler = new RecordingHandler();
+            using var client = new HttpClient(handler);
+            var (ok, _, _) = await GameLogic.DeveloperHub.SendAsync(message, client, "https://hub.example/").ConfigureAwait(false);
+            Assert.That(ok, Is.True);
+            Assert.That(handler.Url, Is.EqualTo("https://hub.example/api/report"));
+            var sent = JsonNode.Parse(handler.Body!)!;
+            Assert.That(sent["kind"]!.GetValue<string>(), Is.EqualTo("bug"));
+            Assert.That(sent["machine"]!.GetValue<string>(), Is.EqualTo("8e5abdd396d53501"));
+            Assert.That(sent["licence"]!.GetValue<string>(), Does.Contain("payload"));
+            Assert.That(handler.Body, Does.Not.Contain("alice").And.Not.Contain("HeroDk"));
+
+            handler.Status = (HttpStatusCode)429;
+            var limited = await GameLogic.DeveloperHub.SendAsync(BugReportsPlugIn.HubMessage(report, false), client, "https://hub.example").ConfigureAwait(false);
+            Assert.That(limited.Ok, Is.False);
+            Assert.That(limited.Vi, Does.Contain("hết lượt"));
+        }
+        finally
+        {
+            (GameLogic.DeveloperHub.MachineId, GameLogic.DeveloperHub.LicenceFile) = previous;
+        }
+    }
+
     /// <summary>A player sends a report from the game; the window's state lists it and the reports left.</summary>
     /// <returns>The task.</returns>
     [Test]
@@ -122,10 +165,15 @@ public sealed class BugReportsTest
     {
         public string? Body { get; private set; }
 
+        public string? Url { get; private set; }
+
+        public HttpStatusCode Status { get; set; } = HttpStatusCode.NoContent;
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            this.Url = request.RequestUri?.ToString();
             this.Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return new HttpResponseMessage(HttpStatusCode.NoContent);
+            return new HttpResponseMessage(this.Status);
         }
     }
 }

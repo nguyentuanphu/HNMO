@@ -202,18 +202,20 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
     public async Task<(bool Ok, string? Error)> ForwardAsync(string id, string? licensee)
     {
         var settings = this.Settings;
-        if (string.IsNullOrWhiteSpace(settings.DeveloperWebhookUrl))
-        {
-            return (false, "The HNMO developer's Discord link isn't set (Plugins, Bug reports).");
-        }
-
         if (this.Store.Read(data => BugReportEngine.Find(data, id)) is not { } report)
         {
             return (false, "There's no such report.");
         }
 
-        var result = await BugReportForwarder.SendAsync(settings.DeveloperWebhookUrl, report, licensee, settings.ShareCharacterNames).ConfigureAwait(false);
-        if (result.Ok)
+        // The developer's hub files it as an issue; a Discord link, if set, also gets a notice.
+        var (ok, en, _) = await DeveloperHub.SendAsync(HubMessage(report, settings.ShareCharacterNames)).ConfigureAwait(false);
+        if (BugReportForwarder.IsDiscordWebhook(settings.DeveloperWebhookUrl))
+        {
+            var discord = await BugReportForwarder.SendAsync(settings.DeveloperWebhookUrl, report, licensee, settings.ShareCharacterNames).ConfigureAwait(false);
+            ok |= discord.Ok;
+        }
+
+        if (ok)
         {
             this.Store.Mutate(data =>
             {
@@ -223,7 +225,30 @@ public sealed class BugReportsPlugIn : IFeaturePlugIn, IPlayerStateChangedPlugIn
             });
         }
 
-        return result;
+        return (ok, ok ? null : en);
+    }
+
+    /// <summary>What the developer's hub gets of a report: no login, e-mail or IP; the character only when allowed.</summary>
+    /// <param name="report">The report.</param>
+    /// <param name="shareCharacter">Whether to name the character.</param>
+    /// <returns>The message.</returns>
+    public static System.Text.Json.Nodes.JsonObject HubMessage(BugReport report, bool shareCharacter)
+    {
+        ArgumentNullException.ThrowIfNull(report);
+        return new System.Text.Json.Nodes.JsonObject
+        {
+            ["kind"] = "bug",
+            ["id"] = report.Id,
+            ["category"] = report.Category,
+            ["text"] = report.Text,
+            ["server"] = report.Server,
+            ["place"] = report.Place,
+            ["status"] = report.Status.ToString(),
+            ["info"] = report.Info,
+            ["reply"] = report.Reply ?? string.Empty,
+            ["character"] = shareCharacter ? report.Character : string.Empty,
+            ["created"] = SydneyText(report.CreatedUtc) + " Sydney",
+        };
     }
 
     /// <summary>All reports, newest first (admin panel).</summary>

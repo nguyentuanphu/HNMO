@@ -100,7 +100,7 @@ public partial class BugReports : ComponentBase
             var (_, active, saved) = await PlugInSettings.ReadStoredAsync<BugReportsConfiguration>(this.PersistenceContextProvider, typeof(BugReportsPlugIn), default).ConfigureAwait(true);
             this._configuration = saved ?? new BugReportsConfiguration();
             this._active = active;
-            this._canForward = BugReportForwarder.IsDiscordWebhook(this._configuration.DeveloperWebhookUrl);
+            this._canForward = DeveloperHub.Url.Length > 0 || BugReportForwarder.IsDiscordWebhook(this._configuration.DeveloperWebhookUrl);
             this._reports = this.PlugIn().All();
             foreach (var r in this._reports)
             {

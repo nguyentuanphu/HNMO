@@ -34,3 +34,15 @@
 
 - A private repository (e.g. `hnmo-hosts`) and a free web site linked to it; the hub's secret key in the site's
   settings and in the repository's Actions secrets. Exact clicks in `tools/developer-hub/README.md`.
+
+## Done (2026-11-20, Sydney)
+
+- Step 1: Host settings' licence card: paste or upload, checked first (a bad one is refused, nothing written), a good
+  one saved as `license.hnmo` and used at once; licensee, players, end date, this computer's id with a copy button;
+  "Ask the HNMO developer for a licence" (name, contact, players, note). EN/VI. Checked live (a forged licence refused)
+  and by a bUnit test.
+- Step 3: the hub is in the private repository `nguyentuanphu/hnmobug` (web functions, hourly Action, tests; setup in
+  its README). HNMO sends to `GameLogic/DeveloperHub.cs` (`DefaultUrl` https://hnmobug.netlify.app, or the
+  `HNMO_DEVELOPER_HUB` variable) with this computer's id, the version and the licence file; "Send to the HNMO developer"
+  on the Bug reports page and the licence request use it. A Discord link stays as an optional extra notice.
+- Not yet: step 2 and 4 (the Developer page), a live run against the deployed hub (the owner sets up the site first).

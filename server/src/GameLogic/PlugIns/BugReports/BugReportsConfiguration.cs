@@ -25,8 +25,8 @@ public sealed class BugReportsConfiguration
     public int RewardAmount { get; set; } = 100;
 
     /// <summary>
-    /// Gets or sets the HNMO developer's Discord link (webhook) which the "Send to the HNMO developer" button posts to;
-    /// empty: the button is off.
+    /// Gets or sets a Discord link (webhook) which also gets a notice when a report is sent to the HNMO developer
+    /// (optional; the report itself goes to the developer's hub).
     /// </summary>
     public string DeveloperWebhookUrl { get; set; } = string.Empty;
 

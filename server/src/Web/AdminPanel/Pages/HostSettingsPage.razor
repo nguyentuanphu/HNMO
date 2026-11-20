@@ -211,6 +211,21 @@
             <div class="col-12">
                 <small class="text-muted">@L("A license is checked before it is saved; a good one is used at once (no restart). It is kept in the folder as license.hnmo, so the server works offline.", "Giấy phép được kiểm tra trước khi lưu; giấy phép đúng được dùng ngay (không cần khởi động lại). File được giữ trong thư mục với tên license.hnmo, nên server vẫn chạy offline.")</small>
             </div>
+            <div class="col-12">
+                <details id="license-request" class="border rounded p-2">
+                    <summary class="fw-semibold">@L("Ask the HNMO developer for a licence", "Xin giấy phép từ nhà phát triển HNMO")</summary>
+                    <div class="row g-2 mt-1">
+                        <div class="col-md-4"><input id="license-request-name" class="form-control" placeholder="@L("Your name or server name", "Tên bạn hoặc tên server")" @bind="this._requestName" /></div>
+                        <div class="col-md-4"><input id="license-request-contact" class="form-control" placeholder="@L("How to reach you (Zalo, Facebook, e-mail)", "Cách liên lạc (Zalo, Facebook, email)")" @bind="this._requestContact" /></div>
+                        <div class="col-md-4"><input id="license-request-players" type="number" min="1" class="form-control" placeholder="@L("Players at once", "Số người chơi cùng lúc")" @bind="this._requestPlayers" /></div>
+                        <div class="col-12"><textarea id="license-request-message" class="form-control" rows="2" placeholder="@L("A note (optional)", "Ghi chú (không bắt buộc)")" @bind="this._requestMessage"></textarea></div>
+                        <div class="col-12 d-flex gap-2 align-items-center">
+                            <button type="button" id="license-request-send" class="btn btn-sm btn-outline-primary" disabled="@this._requestSending" @onclick="this.RequestLicenseAsync">@L("Send the request", "Gửi yêu cầu")</button>
+                            <small class="text-muted">@L("It carries this computer's id and the HNMO version; the developer answers with a licence file.", "Yêu cầu gửi kèm mã máy này và phiên bản HNMO; nhà phát triển trả lời bằng một file giấy phép.")</small>
+                        </div>
+                    </div>
+                </details>
+            </div>
             <div class="col-md-6">
                 <label class="form-label" for="license-path" title="Path to license.hnmo">@L("License file path (advanced)", "Đường dẫn file giấy phép (nâng cao)")</label>
                 <input id="license-path" type="text" class="form-control" @bind="this._settings.LicenseFilePath" />

@@ -246,6 +246,8 @@ internal sealed class Program : IDisposable
             : PlayerLicense.Check(file is null ? null : File.ReadAllBytes(file), publicKeyPem, PlayerLicense.MachineId, DateOnly.FromDateTime(DateTime.UtcNow));
         LicensedPlayerLimit.Maximum = license.MaximumPlayers;
         LicensedPlayerLimit.Licensee = license.IsValid ? license.Licensee : null;
+        DeveloperHub.MachineId = PlayerLicense.MachineId;
+        DeveloperHub.LicenceFile = file is null ? null : File.ReadAllText(file);
         this._logger.Information("HNMO license: {Message} (this computer's id: {MachineId})", license.Message, PlayerLicense.MachineId);
     }
 
@@ -611,6 +613,7 @@ internal sealed class Program : IDisposable
             var status = this.GetStatus(configuredPath);
             LicensedPlayerLimit.Maximum = status.MaximumPlayers;
             LicensedPlayerLimit.Licensee = status.IsValid ? status.Licensee : null;
+            DeveloperHub.LicenceFile = status.Exists ? File.ReadAllText(status.ResolvedPath) : null;
             return status;
         }
 
