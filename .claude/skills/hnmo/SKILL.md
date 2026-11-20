@@ -545,3 +545,6 @@ The desktop code stays the reference for how the classic game behaves (parity ru
 - A renamed NPC/monster number needs its own update that moves the old one: "add if missing" updates count as done.
 - e2e social/guild tests fail when test accounts are left in guilds by other tests (guild war); clean guild membership.
 - Owner (2026-11-21): everything sent to the developer's hub is SILENT: no notice, banner or status line for the host.
+- Owner (2026-11-21): nothing a host or player gets may point at the code repository (links, update checks, XML
+  namespaces, package metadata, strings in DLLs). Updates and downloads go through the hub's `/api/latest` (set in its
+  console). Check built DLLs with `grep -l -a <owner name>` before a release.
