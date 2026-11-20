@@ -60,7 +60,8 @@ public static class LicensedPlayerLimit
     {
         lock (Sync)
         {
-            if (!Admitted.ContainsKey(loginName) && Admitted.Count >= Maximum)
+            // Over the limit, a week of grace lets more play while the admin panel asks for a licence (owner, 2026-11-20).
+            if (!Admitted.ContainsKey(loginName) && Admitted.Count >= Maximum && !DeveloperHub.AllowOverLimit(DateTime.UtcNow))
             {
                 return false;
             }

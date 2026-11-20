@@ -27,11 +27,15 @@ public static class DeveloperHub
     /// <summary>The days between two weekly reports (the hub takes one in six days).</summary>
     public const int WeeklyDays = 7;
 
+    /// <summary>The days more players than allowed may play once the limit was first passed (owner, 2026-11-20).</summary>
+    public const int GraceDays = 7;
+
     private static readonly HttpClient DefaultClient = new() { Timeout = TimeSpan.FromSeconds(30) };
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     private static readonly Lock StateLock = new();
     private static int _peakPlayers;
     private static int _errors;
+    private static DeveloperHubState? _memoryState;
 
     /// <summary>Gets the hub's address (empty: sending is off).</summary>
     public static string Url => (Environment.GetEnvironmentVariable("HNMO_DEVELOPER_HUB") ?? DefaultUrl).Trim().TrimEnd('/');
@@ -87,10 +91,16 @@ public static class DeveloperHub
     {
         lock (StateLock)
         {
+            if (StateFile is null)
+            {
+                // No file (tests, a server without a save folder): the state lives as long as the program.
+                return _memoryState ??= new DeveloperHubState();
+            }
+
             try
             {
-                return StateFile is { } file && File.Exists(file)
-                    ? JsonSerializer.Deserialize<DeveloperHubState>(File.ReadAllText(file)) ?? new DeveloperHubState()
+                return File.Exists(StateFile)
+                    ? JsonSerializer.Deserialize<DeveloperHubState>(File.ReadAllText(StateFile)) ?? new DeveloperHubState()
                     : new DeveloperHubState();
             }
             catch (JsonException)
@@ -118,6 +128,33 @@ public static class DeveloperHub
             }
 
             return state;
+        }
+    }
+
+    /// <summary>
+    /// Whether one more player than allowed may come in now: the first time the limit is passed starts a week of grace
+    /// (remembered in the state), during which more may play; after it, not.
+    /// </summary>
+    /// <param name="nowUtc">The time.</param>
+    /// <returns><c>true</c>, during the grace week.</returns>
+    public static bool AllowOverLimit(DateTime nowUtc)
+    {
+        var started = ReadState().GraceStartedUtc;
+        if (started is null)
+        {
+            ChangeState(s => s.GraceStartedUtc ??= nowUtc);
+            return true;
+        }
+
+        return nowUtc < started.Value.AddDays(GraceDays);
+    }
+
+    /// <summary>Ends the grace (a valid licence was applied).</summary>
+    public static void ClearGrace()
+    {
+        if (ReadState().GraceStartedUtc is not null)
+        {
+            ChangeState(s => s.GraceStartedUtc = null);
         }
     }
 
@@ -226,6 +263,9 @@ public static class DeveloperHub
         });
         return (ok, withdrawn, ok ? string.Empty : en);
     }
+
+    /// <summary>For tests: forgets the state kept without a file.</summary>
+    internal static void ResetMemoryState() => _memoryState = null;
 
     private static async Task<(bool Ok, JsonNode? Answer, string En, string Vi)> PostAsync(string path, JsonObject message, HttpClient? client)
     {

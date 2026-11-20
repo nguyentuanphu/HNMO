@@ -174,6 +174,7 @@ internal sealed class DeveloperHubWeeklyService : BackgroundService
                 ["online"] = online,
                 ["accounts"] = accounts,
                 ["characters"] = characters,
+                ["graceStarted"] = DeveloperHub.ReadState().GraceStartedUtc?.ToString("O"),
             },
             ["health"] = new JsonObject { ["crashes"] = crashes, ["errors"] = DeveloperHub.TakeErrors(), ["integrity"] = DeveloperHub.Integrity },
             ["features"] = new JsonObject

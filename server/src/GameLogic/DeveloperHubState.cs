@@ -16,6 +16,12 @@ public sealed class DeveloperHubState
     /// <summary>Gets or sets the last licence request.</summary>
     public DeveloperHubRequest? Request { get; set; }
 
+    /// <summary>
+    /// Gets or sets when more players than allowed were first in the game at once (UTC): from then, more may play for a
+    /// week while the admin panel asks the host to get a licence; after it, the limit holds. A valid licence clears it.
+    /// </summary>
+    public DateTime? GraceStartedUtc { get; set; }
+
     /// <summary>Gets or sets the ids of licences the developer withdrew.</summary>
     public List<string> WithdrawnLicences { get; set; } = [];
 }

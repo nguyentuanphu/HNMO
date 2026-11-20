@@ -80,3 +80,11 @@
   `client/web/tools/hnmo/licence-pub.pem` once the owner has made it (`PlayerLicense.CheckWithEmbeddedKeys`).
 - Not checked live: against the deployed hub (the owner sets it up first; then a real request, licence and weekly
   report from the test folder).
+
+## A week of grace over the player limit (owner, 2026-11-20, 18:00 Sydney)
+
+- The limit counts accounts in the game at once (10 without a licence, or the licence's number).
+- The first time more come in, a week of grace starts (saved in `save/developer-hub.json`, so a restart doesn't
+  reset it): more may play, and every admin panel page shows a banner asking the host to pay for a licence, with the
+  date it ends. After the week the limit holds again (the banner says so). One grace per server; a new licence
+  applied ends it. The weekly report carries the day it started, and the console shows "over the limit since".

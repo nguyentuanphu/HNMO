@@ -71,23 +71,40 @@ public class PlayerLicenseTests
         Assert.That(PlayerLicense.Check(Encoding.UTF8.GetBytes("not json"), this._publicKeyPem, "abc", Today).MaximumPlayers, Is.EqualTo(10), "garbage");
     }
 
-    /// <summary>The count is per account and stops at the maximum.</summary>
+    /// <summary>
+    /// The count is per account. Passing the maximum starts a week of grace (owner, 2026-11-20): more may play then, and
+    /// the admin panel asks for a licence; after the week the maximum holds. A new licence ends the grace.
+    /// </summary>
     [Test]
-    public void TheLimitCountsAccounts()
+    [NonParallelizable]
+    public void TheLimitCountsAccountsWithAWeekOfGrace()
     {
         LicensedPlayerLimit.Maximum = 2;
+        var previousFile = DeveloperHub.StateFile;
+        DeveloperHub.StateFile = null;
+        DeveloperHub.ResetMemoryState();
         try
         {
             Assert.That(LicensedPlayerLimit.TryAdmit(null!, "a"), Is.True);
             Assert.That(LicensedPlayerLimit.TryAdmit(null!, "b"), Is.True);
-            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "c"), Is.False, "the third account");
+            Assert.That(DeveloperHub.ReadState().GraceStartedUtc, Is.Null, "within the limit");
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "c"), Is.True, "the third account starts the grace week");
+            Assert.That(DeveloperHub.ReadState().GraceStartedUtc, Is.Not.Null);
             Assert.That(LicensedPlayerLimit.TryAdmit(null!, "A"), Is.True, "the same account again");
-            Assert.That(LicensedPlayerLimit.Count, Is.EqualTo(2));
+            Assert.That(LicensedPlayerLimit.Count, Is.EqualTo(3));
+
+            DeveloperHub.ChangeState(s => s.GraceStartedUtc = DateTime.UtcNow.AddDays(-DeveloperHub.GraceDays).AddMinutes(-1));
+            Assert.That(LicensedPlayerLimit.TryAdmit(null!, "d"), Is.False, "after the week, the maximum holds");
+
+            DeveloperHub.ClearGrace();
+            Assert.That(DeveloperHub.ReadState().GraceStartedUtc, Is.Null, "a licence ends it");
         }
         finally
         {
             LicensedPlayerLimit.Maximum = LicensedPlayerLimit.DefaultMaximum;
             LicensedPlayerLimit.Reset();
+            DeveloperHub.ResetMemoryState();
+            DeveloperHub.StateFile = previousFile;
         }
     }
 

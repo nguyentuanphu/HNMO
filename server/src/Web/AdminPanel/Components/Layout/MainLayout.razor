@@ -126,6 +126,24 @@
         <ToastContainer />
 
         <article class="content px-4 py-3">
+            @if (HNMO.GameLogic.DeveloperHub.ReadState().GraceStartedUtc is { } graceStarted)
+            {
+                var graceEnds = graceStarted.AddDays(HNMO.GameLogic.DeveloperHub.GraceDays);
+                var graceOver = DateTime.UtcNow >= graceEnds;
+                var startedText = graceStarted.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                var endsText = graceEnds.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                <div class="alert @(graceOver ? "alert-danger" : "alert-warning")" role="alert" id="licence-grace-banner">
+                    @if (graceOver)
+                    {
+                        @L($"More than {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players were in the game at once ({startedText}); the week of grace ended {endsText}, so at most {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players can play at once now. Get a licence from the HNMO developer to raise it.", $"Đã có hơn {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người chơi cùng lúc ({startedText}); tuần ân hạn đã hết lúc {endsText}, nên bây giờ chỉ tối đa {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người chơi cùng lúc. Hãy xin giấy phép từ nhà phát triển HNMO để nâng giới hạn.")
+                    }
+                    else
+                    {
+                        @L($"More than {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players were in the game at once ({startedText}). They may keep playing until {endsText}; then the server goes back to {HNMO.GameLogic.LicensedPlayerLimit.Maximum} players at once unless a licence is in place. Pay for a licence from the HNMO developer to keep them.", $"Đã có hơn {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người chơi cùng lúc ({startedText}). Họ vẫn chơi được đến {endsText}; sau đó server quay về tối đa {HNMO.GameLogic.LicensedPlayerLimit.Maximum} người cùng lúc nếu chưa có giấy phép. Hãy thanh toán giấy phép với nhà phát triển HNMO để giữ họ.")
+                    }
+                    <a class="btn btn-sm btn-light ms-2" href="host-settings#license-card">@L("Licence", "Giấy phép")</a>
+                </div>
+            }
             @if (this._isTwoFactorSetupPending)
             {
                 <div class="alert alert-warning" role="alert">

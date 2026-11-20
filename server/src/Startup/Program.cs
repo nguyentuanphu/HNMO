@@ -626,6 +626,12 @@ internal sealed class Program : IDisposable
             LicensedPlayerLimit.Maximum = status.MaximumPlayers;
             LicensedPlayerLimit.Licensee = status.IsValid ? status.Licensee : null;
             DeveloperHub.LicenceFile = status.Exists ? File.ReadAllText(status.ResolvedPath) : null;
+            if (status.IsValid)
+            {
+                // A new licence ends the grace week (it was the reason for it).
+                DeveloperHub.ClearGrace();
+            }
+
             return status;
         }
 
