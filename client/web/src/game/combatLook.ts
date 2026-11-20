@@ -1583,6 +1583,8 @@ export interface MoveSpeedInput {
   mapNumber: number;
   /** How long it has walked without stopping, in seconds (c->Run, frames at 25 per second). */
   walkedSeconds: number;
+  /** A debuff slowing the walk: Freeze halves it, Blow of Destruction leaves a third. */
+  slowedBy?: 'freeze' | 'blowOfDestruction' | null;
 }
 
 /** The desktop's speed units (12 a walk) per frame at its 25 frames a second. */
@@ -1622,12 +1624,14 @@ export function playerMoveSpeed(input: MoveSpeedInput): number {
     speed = buildsUpRun(input) && run >= RUN_FRAMES ? 15 : WALK_MOVE_SPEED;
   }
   if (inChaosCastle(input.mapNumber)) speed = 15;
+  if (input.slowedBy === 'freeze') speed *= 0.5;
+  else if (input.slowedBy === 'blowOfDestruction') speed *= 0.33;
   return speed;
 }
 
 /** Whether the player plays its running walk (c->Run reached 40, or it always runs: wings and mounts set it). */
 export function isRunning(input: MoveSpeedInput): boolean {
-  return !input.safeZone && (playerMoveSpeed(input) > WALK_MOVE_SPEED || input.walkedSeconds * REFERENCE_FPS >= RUN_FRAMES && buildsUpRun(input));
+  return !input.safeZone && (playerMoveSpeed({ ...input, slowedBy: null }) > WALK_MOVE_SPEED || input.walkedSeconds * REFERENCE_FPS >= RUN_FRAMES && buildsUpRun(input));
 }
 
 /**

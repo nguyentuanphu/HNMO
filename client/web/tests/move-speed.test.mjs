@@ -37,3 +37,10 @@ test('wings, mounts and Chaos Castle', () => {
   assert.equal(playerMoveSpeed({ ...base, mount: 'fenrir', fenrirExcellent: true, walkedSeconds: 1 }), 19);
   assert.equal(playerMoveSpeed({ ...base, mapNumber: 18 }), 15, 'Chaos Castle');
 });
+
+test('Freeze halves the speed, Blow of Destruction leaves a third; the running walk stays', () => {
+  const knight = { ...base, classIndex: 1, walkedSeconds: 2 };
+  assert.equal(playerMoveSpeed({ ...knight, slowedBy: 'freeze' }), 7.5);
+  assert.equal(playerMoveSpeed({ ...base, slowedBy: 'blowOfDestruction' }), 12 * 0.33);
+  assert.equal(isRunning({ ...knight, slowedBy: 'freeze' }), true, 'still the running animation, slower');
+});

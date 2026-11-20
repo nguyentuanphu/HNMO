@@ -1414,6 +1414,8 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
     // The body's colour while a debuff lasts (poisoned, frozen, stunned...).
     const tint = debuffTint((buff) => now.includes(buff), player);
     who.bodyTint = tint ? new THREE.Color(tint[0], tint[1], tint[2]) : null;
+    // Frozen it walks at half the speed, under Blow of Destruction at a third (CharacterMoveSpeed), as the server times it.
+    who.slowedBy = now.includes(Buff.FREEZE) ? 'freeze' : now.includes(Buff.BLOW_OF_DESTRUCTION) ? 'blowOfDestruction' : null;
     // Debuffed, the items lose their level's glow; hardened or cloaked also their excellent / ancient glow; cloaked
     // the character is a chrome shell (RenderPartObjectEffect, players' parts).
     const has = (buff: number) => now.includes(buff);

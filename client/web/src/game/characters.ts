@@ -610,6 +610,9 @@ export class Character {
   /** How long it has walked without stopping (the desktop's c->Run, which SetPlayerStop and a safe zone set back). */
   private walkedSeconds = 0;
 
+  /** A debuff slowing its walk (Freeze, Blow of Destruction), set from its buffs. */
+  slowedBy: 'freeze' | 'blowOfDestruction' | null = null;
+
   /** What its moving speed depends on (a player's class, wings, mount, boots and gloves, the safe zone, the map). */
   private moveInput(world: CharacterWorld): MoveSpeedInput | null {
     if (this.classIndex === null || !this.equipment) return null;
@@ -624,6 +627,7 @@ export class Character {
       safeZone: (world.flags[this.cell.y * TERRAIN_SIZE + this.cell.x] & TerrainFlag.SAFEZONE) !== 0,
       mapNumber: world.mapNumber ?? 0,
       walkedSeconds: this.walkedSeconds,
+      slowedBy: this.slowedBy,
     };
   }
 
