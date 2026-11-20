@@ -69,6 +69,13 @@ public class WarpGateAction
             return false;
         }
 
+        // Not while dead, duelling or trading, like the other warps.
+        if (HnmoWarpGuard.Refusal(player, enterGate.TargetGate.Map) is { } refusal)
+        {
+            await player.ShowBlueMessageAsync(HnmoWarpGuard.TextFor(player, refusal)).ConfigureAwait(false);
+            return false;
+        }
+
         var requirement = player.SelectedCharacter?.GetEffectiveMoveLevelRequirement(enterGate.LevelRequirement);
         if (requirement > player.Attributes![Stats.Level])
         {

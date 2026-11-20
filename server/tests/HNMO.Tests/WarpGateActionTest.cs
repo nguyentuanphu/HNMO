@@ -105,6 +105,23 @@ public class WarpGateActionTest
         AssertNotWarped(player);
     }
 
+    /// <summary>
+    /// Tests that a player with an open trade can't enter the gate, like the other warps (audit 12).
+    /// </summary>
+    [Test]
+    public async Task TradingPlayerCantEnterAsync()
+    {
+        var (player, gate) = await CreatePlayerAndGateAsync().ConfigureAwait(false);
+        player.Position = new Point(GateX1 + 1, GateY);
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.TradeRequested).ConfigureAwait(false);
+        await player.PlayerState.TryAdvanceToAsync(PlayerState.TradeOpened).ConfigureAwait(false);
+
+        await new WarpGateAction().EnterGateAsync(player, gate).ConfigureAwait(false);
+
+        AssertNotWarped(player);
+        Assert.That(player.CurrentMap, Is.Not.Null);
+    }
+
     private static async ValueTask<(Player Player, EnterGate Gate)> CreatePlayerAndGateAsync()
     {
         var player = await PlayerTestHelper.CreatePlayerAsync().ConfigureAwait(false);
