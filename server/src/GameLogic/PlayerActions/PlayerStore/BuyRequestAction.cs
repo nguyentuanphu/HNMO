@@ -134,6 +134,16 @@ public class BuyRequestAction
                 return;
             }
 
+            // The free slot is checked again for the item read under the lock, right before the payment: the buyer's
+            // inventory may have filled up since the first check (e.g. by a buy at another store at the same time).
+            freeslot = player.Inventory?.CheckInvSpace(item);
+            if (freeslot is null)
+            {
+                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.MoneyOverflowOrNotEnoughSpace, null)).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+                return;
+            }
+
             player.Logger.LogDebug("BuyRequest, Item Price: {0} {1}", price.Amount, price.PriceItem?.ToString() ?? price.CoinType?.ToString() ?? "zen");
             using var itemContext = requestedPlayer.GameContext.PersistenceContextProvider.CreateNewTradeContext();
             var purchase = new ShopPurchase(player, requestedPlayer, price, itemContext);
@@ -151,7 +161,10 @@ public class BuyRequestAction
             await requestedPlayer.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
             item.ItemSlot = (byte)freeslot;
             item.SetStorePrice(null);
-            await player.Inventory!.AddItemAsync(item).ConfigureAwait(false);
+            if (!await player.Inventory!.AddItemAsync(item).ConfigureAwait(false))
+            {
+                player.Logger.LogCritical("Bought item {0} didn't fit into the inventory of {1} after the payment.", item, player.Name);
+            }
             requestedPlayer.PersistenceContext.Detach(item);
             foreach (var (paymentItem, _) in purchase.PaymentItems)
             {
