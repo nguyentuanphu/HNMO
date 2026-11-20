@@ -1503,8 +1503,13 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <param name="killedPlayer">The player killed.</param>
     internal async ValueTask AfterKilledPlayerAsync(Player killedPlayer)
     {
-        if (this.DuelRoom is { State: DuelState.DuelStarted } duelRoom && duelRoom.IsDuelist(this))
+        if (this.DuelRoom is { State: DuelState.DuelStarted } duelRoom
+            && duelRoom.IsDuelist(this)
+            && duelRoom.IsDuelist(killedPlayer)
+            && !ReferenceEquals(killedPlayer, this))
         {
+            // Only the kill of the opponent in the running duel is free; any other kill by a
+            // duelist (e.g. a third player) counts like everywhere else.
             return;
         }
 
