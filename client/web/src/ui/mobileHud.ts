@@ -5,6 +5,7 @@
 
 import type { Chat, ChatKind } from '../game/chat.js';
 import { currentLanguage, onLanguageChange } from '../i18n.js';
+import { isBlocked as chatIsBlocked, setBlocked as chatSetBlocked } from '../game/chatExtras.js';
 import { loadMiniMapData, type MiniMapMarker } from '../game/miniMapData.js';
 import { isWakeLockActive, type HudMode } from '../render/quality.js';
 
@@ -75,6 +76,12 @@ export interface MobileHudSnapshot {
   targetName: string | null;
   skillHotkeys: { hotkey: string; selected: boolean; cooldown: number; usable: boolean }[];
   potionCounts: number[];
+  /** The target's life as a share (0-1) from the last hit; null or -1 while unknown. */
+  targetHealth?: number | null;
+  /** Zen in the bag. */
+  zen?: number;
+  /** The round trip to the server in ms, when the game measures it. */
+  pingMs?: number | null;
 }
 
 export interface MobileHudActions {
@@ -104,6 +111,11 @@ export interface MobileHudActions {
   sellJunk: () => void;
   repairAll: () => void;
   setLootFilter?: (mode: LootFilterMode) => void;
+  /** Blocks or unblocks a player's chat (long press on their line). */
+  setBlocked?: (name: string, blocked: boolean) => void;
+  isBlocked?: (name: string) => boolean;
+  /** Back to the character list. */
+  switchCharacter?: () => void;
 }
 
 interface Labels {
@@ -143,6 +155,22 @@ interface Labels {
   close: string;
   wakeActive: string;
   pinchHint: string;
+  guild: string;
+  on: string;
+  off: string;
+  hudSize: string;
+  sizes: [string, string, string];
+  groups: { character: string; social: string; trade: string; activities: string; settings: string; help: string; switchChar: string };
+  block: string;
+  unblock: string;
+  report: string;
+  reportHint: string;
+  chatToggle: string;
+  pickUp: string;
+  skillPage: string;
+  switchConfirm: string;
+  battery: string;
+  powerSave: string;
 }
 
 function labels(): Labels {
@@ -188,7 +216,103 @@ function labels(): Labels {
     close: vi ? 'Đóng' : 'Close',
     wakeActive: vi ? 'Sáng MH' : 'Awake',
     pinchHint: vi ? 'Chạm để đi' : 'Tap map to walk',
+    guild: vi ? 'Bang' : 'Guild',
+    on: vi ? 'BẬT' : 'ON',
+    off: vi ? 'TẮT' : 'OFF',
+    hudSize: vi ? 'Cỡ giao diện' : 'HUD size',
+    sizes: vi ? ['Nhỏ', 'Vừa', 'Lớn'] : ['Small', 'Normal', 'Large'],
+    groups: vi
+      ? { character: 'Nhân vật', social: 'Xã hội', trade: 'Giao dịch', activities: 'Hoạt động', settings: 'Cài đặt', help: 'Trợ giúp', switchChar: 'Đổi nhân vật' }
+      : { character: 'Character', social: 'Social', trade: 'Trade', activities: 'Activities', settings: 'Settings', help: 'Help', switchChar: 'Switch character' },
+    block: vi ? 'Chặn' : 'Block',
+    unblock: vi ? 'Bỏ chặn' : 'Unblock',
+    report: vi ? 'Báo cáo' : 'Report',
+    reportHint: vi
+      ? 'Để báo cáo %s: chụp màn hình (📷) và gửi cho GM trong game hoặc qua trang hỗ trợ của website.'
+      : 'To report %s: take a screenshot (📷) and send it to a GM in the game or through the website\'s support page.',
+    chatToggle: vi ? 'Ẩn/hiện chat' : 'Show/hide chat',
+    pickUp: vi ? 'Nhặt đồ' : 'Pick up',
+    skillPage: vi ? 'Đổi trang kỹ năng (1-5 / 6-0)' : 'Switch skill page (1-5 / 6-0)',
+    switchConfirm: vi ? 'Về màn chọn nhân vật? Trò chơi sẽ tải lại.' : 'Go back to the character list? The game reloads.',
+    battery: vi ? 'Pin' : 'Battery',
+    powerSave: vi ? 'Tiết kiệm pin' : 'Power save',
   };
+}
+
+const HUD_SCALE_KEY = 'hnmo.mobileHudScale';
+const HUD_SCALES = [0.85, 1, 1.18] as const;
+const SKILL_PAGE_KEY = 'hnmo.mobileSkillPage';
+const MAP_OPEN_KEY = 'hnmo.mobileMiniMapOpen';
+
+function readNumber(key: string, fallback: number): number {
+  try { const v = Number(localStorage.getItem(key)); return Number.isFinite(v) && localStorage.getItem(key) !== null ? v : fallback; } catch { return fallback; }
+}
+function writeValue(key: string, value: string): void {
+  try { localStorage.setItem(key, value); } catch { /* private window: not remembered */ }
+}
+
+/** The grouped menu (left: groups, right: buttons); keys and window events as the desktop's keys open them. */
+interface MenuEntry { icon: string; en: string; vi: string; key?: string; event?: string; run?: (hud: MobileHud) => void }
+const MENU_GROUPS: { id: keyof Labels['groups']; entries: MenuEntry[] }[] = [
+  { id: 'character', entries: [
+    { icon: '🎒', en: 'Bag', vi: 'Túi đồ', key: 'i' },
+    { icon: '🧍', en: 'Character', vi: 'Nhân vật', key: 'c' },
+    { icon: '➕', en: 'Add stats', vi: 'Cộng điểm', event: 'hnmo-add-stats-open' },
+    { icon: '📜', en: 'Quests', vi: 'Nhiệm vụ', key: 't' },
+    { icon: '🎯', en: 'Missions', vi: 'Nhiệm vụ ngày', key: 'j' },
+    { icon: '🤖', en: 'Auto play', vi: 'Treo máy', key: 'z' },
+    { icon: '🧭', en: 'Warp', vi: 'Dịch chuyển', key: 'm' },
+    { icon: '🐴', en: 'Mount chain', vi: 'Bộ sưu tập thú cưỡi', event: 'hnmo-mount-chain-open' },
+  ] },
+  { id: 'social', entries: [
+    { icon: '👥', en: 'Party', vi: 'Tổ đội', key: 'p' },
+    { icon: '🤝', en: 'Friends', vi: 'Bạn bè', key: 'f' },
+    { icon: '🛡️', en: 'Guild', vi: 'Bang hội', key: 'g' },
+    { icon: '⌨️', en: 'Commands', vi: 'Lệnh', key: 'd' },
+    { icon: '🌐', en: 'Community', vi: 'Cộng đồng', key: 'k' },
+    { icon: '⚔️', en: 'Gens', vi: 'Gens', key: 'b' },
+    { icon: '💍', en: 'Marriage', vi: 'Kết hôn', event: 'hnmo-marriage-open' },
+    { icon: '📬', en: 'Mailbox', vi: 'Hộp thư', event: 'hnmo-giftbox-open' },
+  ] },
+  { id: 'trade', entries: [
+    { icon: '🛒', en: 'Cash shop', vi: 'Cửa hàng', key: 'x' },
+    { icon: '🏪', en: 'Market', vi: 'Chợ', event: 'hnmo-market-open' },
+    { icon: '📜', en: 'Escrow', vi: 'Ký quỹ', event: 'hnmo-escrow-open' },
+    { icon: '💎', en: 'Jewel bank', vi: 'Ngân hàng ngọc', event: 'hnmo-jewel-bank-open' },
+    { icon: '♻️', en: 'Leftovers', vi: 'Đồ thừa', event: 'hnmo-leftovers-open' },
+    { icon: '💳', en: 'Top-up', vi: 'Nạp', event: 'hnmo-topup-milestones-open' },
+    { icon: '🎁', en: 'Gift code', vi: 'Mã quà', event: 'hnmo-gift-codes-open' },
+    { icon: '👑', en: 'VIP', vi: 'VIP', event: 'hnmo-vip-open' },
+  ] },
+  { id: 'activities', entries: [
+    { icon: '🕒', en: 'Events', vi: 'Sự kiện', key: 'h' },
+    { icon: '🐉', en: 'World bosses', vi: 'Boss thế giới', key: 'n' },
+    { icon: '🍀', en: 'Lucky number', vi: 'Số may mắn', key: 'l' },
+    { icon: '🏆', en: 'Top races', vi: 'Đua top', event: 'hnmo-top-races-open' },
+    { icon: '📊', en: 'Rankings', vi: 'Xếp hạng', event: 'hnmo-ranking-open' },
+    { icon: '📅', en: 'Season plan', vi: 'Lộ trình mùa', event: 'hnmo-season-plan-open' },
+  ] },
+  { id: 'settings', entries: [
+    { icon: '⚙️', en: 'Settings', vi: 'Cài đặt', key: 'o' },
+    { icon: '🔍', en: 'HUD size', vi: 'Cỡ giao diện', run: (hud) => hud.cycleScale() },
+    { icon: '⌨️', en: 'Key bar', vi: 'Thanh phím', run: () => document.getElementById('touchBar')?.classList.toggle('shown') },
+  ] },
+  { id: 'help', entries: [
+    { icon: 'ℹ️', en: 'Guide', vi: 'Cẩm nang', run: (hud) => hud.openGuideFromMenu() },
+    { icon: '🧭', en: 'New-player guide', vi: 'Hướng dẫn tân thủ', key: 'y' },
+    { icon: '📷', en: 'Screenshot', vi: 'Chụp màn hình', event: 'hnmo-share-open' },
+  ] },
+  { id: 'switchChar', entries: [
+    { icon: '🔁', en: 'Character list', vi: 'Danh sách nhân vật', run: (hud) => hud.switchCharacter() },
+  ] },
+];
+const MENU_GROUP_KEY = 'hnmo.mobileMenuGroup';
+function localStorageGroup(): keyof Labels['groups'] {
+  try { return (localStorage.getItem(MENU_GROUP_KEY) ?? 'character') as keyof Labels['groups']; } catch { return 'character'; }
+}
+
+function pressKey(name: string): void {
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: name, code: /^[0-9]$/.test(name) ? `Digit${name}` : name.length === 1 ? `Key${name.toUpperCase()}` : name, bubbles: true }));
 }
 
 const CSS = `
@@ -241,7 +365,7 @@ body.hnmo-modern-hud #touchFight {
   right: max(12px, env(safe-area-inset-right, 0px)) !important;
   bottom: max(18px, env(safe-area-inset-bottom, 0px)) !important;
   width: 196px;
-  height: 174px;
+  height: 190px;
   display: block !important;
   pointer-events: none;
   z-index: 27;
@@ -701,11 +825,196 @@ body.hnmo-modern-hud #touchFight button.fight {
 .mh-macro-row { display: grid; grid-template-columns: 90px 1fr; gap: 6px; }
 .mh-macro-row input { padding: 6px 8px; border-radius: 6px; border: 1px solid #323c54; background: #141926; color: #fff; }
 
+/* The modern HUD stands in for the classic bottom bar and chat log (bars, potions, skills, chat are all here). */
+body.hnmo-modern-hud > .rml-main_frame, body.hnmo-modern-hud > .rml-chat_log { display: none !important; }
+
+/* HUD size S / M / L (remembered): the HUD's parts and the fight buttons. */
+#mobileHud > *, body.hnmo-modern-hud #touchFight { zoom: var(--mh-scale, 1); }
+
+/* Life / mana / AG / SD bars on the hero card */
+.mh-bars { display: grid; gap: 2px; width: 150px; }
+.mh-bar { position: relative; height: 11px; border-radius: 3px; background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.12); overflow: hidden; }
+.mh-bar[hidden] { display: none; }
+.mh-bar-fill { position: absolute; inset: 0 auto 0 0; width: 0%; transition: width 0.15s; }
+.mh-bar.hp .mh-bar-fill { background: linear-gradient(90deg, #8d1310, #ef5244); }
+.mh-bar.mp .mh-bar-fill { background: linear-gradient(90deg, #113a88, #4b94f7); }
+.mh-bar.ag .mh-bar-fill { background: linear-gradient(90deg, #6b5a12, #e8c547); }
+.mh-bar.sd .mh-bar-fill { background: linear-gradient(90deg, #4a4f5e, #c9d2e6); }
+.mh-bar-text { position: absolute; inset: 0; display: grid; place-items: center; font-size: 8.5px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px #000; line-height: 1; }
+.mh-hero { align-items: start; }
+.mh-buffs { top: max(110px, calc(env(safe-area-inset-top, 0px) + 104px)); }
+
+/* Top-right row: auto play on/off + its settings, Guild / Shop / Settings / Bag */
+.mh-topright {
+  position: fixed;
+  top: max(6px, env(safe-area-inset-top, 0px));
+  right: max(8px, env(safe-area-inset-right, 0px));
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.mh-auto-toggle, .mh-wrench {
+  all: unset;
+  cursor: pointer;
+  height: 30px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(11, 14, 23, 0.86);
+  border: 1px solid rgba(201, 162, 74, 0.5);
+  color: #f3e4bc;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.mh-wrench { width: 30px; padding: 0; justify-content: center; font-size: 14px; }
+.mh-auto-toggle.on { background: rgba(74, 172, 108, 0.3); border-color: #6fe39c; color: #cbffdc; }
+.mh-icon-btn {
+  all: unset;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #2a3145, #101420);
+  border: 1px solid rgba(201, 162, 74, 0.6);
+  color: #f3e4bc;
+  font-size: 8.5px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.05;
+  text-align: center;
+  overflow: hidden;
+}
+.mh-icon-btn::before { content: attr(data-icon); font-size: 15px; line-height: 1; margin-bottom: 1px; }
+.mh-minimap { top: max(52px, calc(env(safe-area-inset-top, 0px) + 50px)); }
+.mh-minimap.mh-map-closed canvas, .mh-minimap.mh-map-closed .mh-minimap-tools { display: none; }
+
+/* Target bar, top centre */
+.mh-targetbar {
+  position: fixed;
+  top: max(80px, calc(env(safe-area-inset-top, 0px) + 78px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(220px, 34vw);
+  display: grid;
+  gap: 2px;
+  padding: 3px 8px 4px;
+  border-radius: 8px;
+  background: rgba(9, 12, 20, 0.78);
+  border: 1px solid rgba(235, 120, 90, 0.55);
+  text-align: center;
+}
+.mh-targetbar[hidden] { display: none; }
+.mh-targetbar-name { font-size: 11px; font-weight: 700; color: #ffd2c4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mh-targetbar-track { height: 6px; border-radius: 3px; background: rgba(0, 0, 0, 0.6); overflow: hidden; }
+.mh-targetbar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #8d1310, #ef5244); transition: width 0.15s; }
+.mh-targetbar.unknown .mh-targetbar-fill { opacity: 0.45; }
+
+/* Joystick direction marks and the chat bubble */
+.mh-stick-mark { position: absolute; font-size: 9px; color: rgba(255, 240, 200, 0.55); pointer-events: none; line-height: 1; }
+.mh-stick-mark.up { top: 5px; left: 50%; transform: translateX(-50%); }
+.mh-stick-mark.down { bottom: 5px; left: 50%; transform: translateX(-50%); }
+.mh-stick-mark.left { left: 6px; top: 50%; transform: translateY(-50%); }
+.mh-stick-mark.right { right: 6px; top: 50%; transform: translateY(-50%); }
+.mh-chat-bubble {
+  all: unset;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  background: rgba(11, 14, 23, 0.85);
+  border: 1px solid rgba(201, 162, 74, 0.5);
+}
+.mh-chat-bubble.on { border-color: #ffd666; }
+
+/* See-through chat; the bubble hides it */
+.mh-core-row { grid-template-columns: 1fr; }
+.mh-chat { background: rgba(9, 12, 20, 0.42); border-color: rgba(255, 255, 255, 0.1); }
+.mh-chat.mh-collapsed { display: none; }
+.mh-chat-line[data-sender] { cursor: context-menu; }
+
+/* Status line + power save */
+.mh-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  color: #b8bfd2;
+  text-shadow: 0 1px 2px #000;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.mh-status-text { overflow: hidden; text-overflow: ellipsis; }
+.mh-power {
+  all: unset;
+  cursor: pointer;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 18px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  background: rgba(25, 31, 46, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.mh-power.on { background: rgba(201, 162, 74, 0.35); border-color: #d9b155; }
+.mh-round { min-width: 22px; text-align: center; }
+
+/* Grouped menu: groups left, buttons right */
+.mh-menu { display: grid; grid-template-columns: 112px 1fr; gap: 8px; border-top: 1px solid rgba(201, 162, 74, 0.3); padding-top: 8px; }
+.mh-menu-side { display: grid; gap: 4px; align-content: start; }
+.mh-menu-group {
+  all: unset;
+  cursor: pointer;
+  padding: 7px 8px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #c8cfdf;
+  background: rgba(25, 31, 46, 0.7);
+}
+.mh-menu-group.active { background: rgba(201, 162, 74, 0.3); color: #ffe8ad; }
+.mh-menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; align-content: start; }
+.mh-menu-item {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 7px 4px;
+  border-radius: 9px;
+  background: rgba(25, 31, 46, 0.92);
+  border: 1px solid rgba(201, 162, 74, 0.35);
+  color: #ffe8ad;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-align: center;
+}
+.mh-menu-icon { font-size: 19px; line-height: 1; }
+
+/* Short screens (a phone on its side): the extras sit left of the mini map, the top bar fits between the cards */
+@media (max-height: 480px) {
+  .mh-right-tools { right: max(172px, calc(env(safe-area-inset-right, 0px) + 164px)); bottom: max(196px, calc(env(safe-area-inset-bottom, 0px) + 188px)); }
+  body.hnmo-modern-hud #touchBar { max-width: max(120px, calc(100vw - 610px)); }
+  .mh-ribbon-wrap { max-width: max(120px, calc(100vw - 610px)); top: max(46px, calc(env(safe-area-inset-top, 0px) + 44px)); }
+  #mobileMiniMap canvas { height: 56px; }
+  .mh-minimap .mh-zoom { display: none; }
+}
+
 @media (max-width: 780px) {
-  .mh-center-dock { width: min(300px, calc(100vw - 260px)); min-width: 190px; }
+  .mh-center-dock { width: min(270px, calc(100vw - 300px)); min-width: 190px; }
   .mh-minimap { width: 126px; }
-  .mh-minimap canvas { width: 126px; height: 84px; }
+  .mh-minimap canvas { width: 126px; height: 70px; }
   .mh-stick { width: 92px; height: 92px; }
+  .mh-right-tools { right: max(140px, calc(env(safe-area-inset-right, 0px) + 132px)); }
 }
 `;
 
@@ -779,12 +1088,7 @@ export class MobileHud {
   private hidePlayersBtn!: HTMLButtonElement;
   private stickEl!: HTMLDivElement;
   private knobEl!: HTMLDivElement;
-  private autoPlayPill!: HTMLButtonElement;
   private targetPill!: HTMLButtonElement;
-  private hpFillEl!: HTMLDivElement;
-  private hpTextEl!: HTMLDivElement;
-  private mpFillEl!: HTMLDivElement;
-  private mpTextEl!: HTMLDivElement;
   private expFillEl!: HTMLDivElement;
   private expLabelEl!: HTMLDivElement;
   private chatTabsWrap!: HTMLDivElement;
@@ -792,6 +1096,21 @@ export class MobileHud {
   private chatInputEl!: HTMLInputElement;
   private macroBarEl!: HTMLDivElement;
   private actionLabels: { btn: HTMLButtonElement; read: (l: Labels) => string }[] = [];
+  // The bars in the hero card, the top-right row, the target bar, the status line, the combat extras.
+  private bars: Record<'hp' | 'mp' | 'ag' | 'sd', { fill: HTMLDivElement; text: HTMLSpanElement; row: HTMLDivElement }> = {} as never;
+  private autoToggleEl!: HTMLButtonElement;
+  private mapToggleEl!: HTMLButtonElement;
+  private mapCardEl!: HTMLDivElement;
+  private targetBarEl!: HTMLDivElement;
+  private targetNameEl!: HTMLSpanElement;
+  private targetFillEl!: HTMLDivElement;
+  private statusEl!: HTMLDivElement;
+  private skillPageEl!: HTMLButtonElement;
+  private chatCardEl!: HTMLDivElement;
+  private batteryLevel: number | null = null;
+  private scale = readNumber(HUD_SCALE_KEY, 1);
+  private skillPage = readNumber(SKILL_PAGE_KEY, 0) === 1 ? 1 : 0;
+  private mapOpen = readNumber(MAP_OPEN_KEY, 1) !== 0;
 
   constructor(private readonly actions: MobileHudActions) {
     const style = document.createElement('style');
@@ -809,6 +1128,15 @@ export class MobileHud {
 
     this.buildDom();
     document.body.append(this.root, this.sheet);
+    this.applyScale();
+    this.applySkillPage();
+    // The battery's level for the status line, where the browser tells it.
+    const nav = navigator as Navigator & { getBattery?: () => Promise<{ level: number; addEventListener(t: string, f: () => void): void }> };
+    nav.getBattery?.().then((battery) => {
+      const read = () => { this.batteryLevel = battery.level; };
+      read();
+      battery.addEventListener('levelchange', read);
+    }).catch(() => undefined);
 
     this.actions.chat.onChange(() => this.renderChat());
     onLanguageChange(() => {
@@ -837,6 +1165,105 @@ export class MobileHud {
   setInWorld(inWorld: boolean): void {
     this.inWorld = inWorld;
     this.syncVisibility();
+  }
+
+  /** Which five skills the skill buttons hold: 0 = keys 1-5, 1 = keys 6-0. */
+  get skillPageIndex(): number {
+    return this.skillPage;
+  }
+
+  /** The HUD's size (S / M / L), on the HUD and the fight buttons. */
+  private applyScale(): void {
+    const scale = HUD_SCALES.includes(this.scale as typeof HUD_SCALES[number]) ? this.scale : 1;
+    document.documentElement.style.setProperty('--mh-scale', String(scale));
+  }
+
+  /** The next size: S, M, L, S, … (remembered). */
+  cycleScale(): void {
+    const at = HUD_SCALES.indexOf(this.scale as typeof HUD_SCALES[number]);
+    this.scale = HUD_SCALES[(at + 1) % HUD_SCALES.length];
+    writeValue(HUD_SCALE_KEY, String(this.scale));
+    this.applyScale();
+  }
+
+  private sizeName(): string {
+    const at = Math.max(0, HUD_SCALES.indexOf(this.scale as typeof HUD_SCALES[number]));
+    return labels().sizes[at];
+  }
+
+  /** The skill page on the 1/2 button, told to the fight buttons (touchControls) with an event. */
+  private applySkillPage(): void {
+    if (this.skillPageEl) {
+      this.skillPageEl.textContent = this.skillPage === 0 ? '1/2' : '2/2';
+      this.skillPageEl.classList.toggle('on', this.skillPage === 1);
+    }
+    window.dispatchEvent(new CustomEvent('hnmo-skill-page', { detail: { page: this.skillPage } }));
+  }
+
+  private applyMapOpen(): void {
+    this.mapCardEl.classList.toggle('mh-map-closed', !this.mapOpen);
+    this.mapToggleEl.textContent = this.mapOpen ? '▲' : '▼';
+  }
+
+  openGuideFromMenu(): void {
+    this.sheet.hidden = true;
+    this.actions.openGuide();
+  }
+
+  /** Back to the character list, after asking. */
+  switchCharacter(): void {
+    if (!window.confirm(labels().switchConfirm)) return;
+    this.sheet.hidden = true;
+    if (this.actions.switchCharacter) this.actions.switchCharacter();
+    else location.reload();
+  }
+
+  /** A long press on a player's chat line: block / unblock, or how to report. */
+  private openPlayerSheet(name: string): void {
+    const l = labels();
+    this.sheet.replaceChildren();
+    this.sheet.hidden = false;
+    const head = document.createElement('div');
+    head.className = 'mh-sheet-head';
+    const title = document.createElement('strong');
+    title.textContent = name;
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button'; closeBtn.className = 'mh-sheet-btn'; closeBtn.style.minHeight = '30px'; closeBtn.textContent = l.close;
+    closeBtn.addEventListener('click', () => { this.sheet.hidden = true; });
+    head.append(title, closeBtn);
+    const grid = document.createElement('div');
+    grid.className = 'mh-sheet-grid';
+    const blocked = (this.actions.isBlocked ?? chatIsBlocked)(name);
+    const blockBtn = document.createElement('button');
+    blockBtn.type = 'button'; blockBtn.className = 'mh-sheet-btn'; blockBtn.id = 'mobileChatBlock';
+    blockBtn.textContent = `🚫 ${blocked ? l.unblock : l.block}`;
+    blockBtn.addEventListener('click', () => { (this.actions.setBlocked ?? chatSetBlocked)(name, !blocked); this.sheet.hidden = true; this.renderChat(); });
+    const reportBtn = document.createElement('button');
+    reportBtn.type = 'button'; reportBtn.className = 'mh-sheet-btn'; reportBtn.id = 'mobileChatReport';
+    reportBtn.textContent = `⚑ ${l.report}`;
+    reportBtn.addEventListener('click', () => { this.actions.chat.add(l.reportHint.replace('%s', name), 'system'); this.sheet.hidden = true; });
+    grid.append(blockBtn, reportBtn);
+    this.sheet.append(head, grid);
+  }
+
+  /** The status line: zen · FPS · ping · network · battery · level and exp. */
+  private renderStatus(snap: MobileHudSnapshot): void {
+    const l = labels();
+    const parts: string[] = [];
+    if (typeof snap.zen === 'number') parts.push(`💰 ${snap.zen.toLocaleString()}`);
+    parts.push(`${snap.fps} FPS`);
+    if (typeof snap.pingMs === 'number') parts.push(`${Math.round(snap.pingMs)} ms`);
+    const conn = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
+    parts.push(navigator.onLine === false ? '📵' : `📶 ${conn?.effectiveType ?? ''}`.trim());
+    if (this.batteryLevel !== null && Number.isFinite(this.batteryLevel)) parts.push(`🔋 ${Math.round(this.batteryLevel * 100)}%`);
+    parts.push(`${l.lv}.${snap.level} · ${snap.expPercentText}`);
+    const text = this.statusEl.querySelector<HTMLSpanElement>('.mh-status-text');
+    if (text) text.textContent = parts.join(' · ');
+    const save = this.statusEl.querySelector<HTMLButtonElement>('.mh-power');
+    if (save) {
+      save.classList.toggle('on', snap.batterySaver);
+      save.title = `${l.powerSave}: ${snap.batterySaver ? l.on : l.off}`;
+    }
   }
 
   private syncVisibility(): void {
@@ -883,7 +1310,21 @@ export class MobileHud {
     sub.append(this.lvEl);
     this.telemetryEl = document.createElement('div');
     this.telemetryEl.className = 'mh-telemetry';
-    meta.append(top, sub, this.telemetryEl);
+    // Life, mana, AG and SD as bars with their numbers (current / most).
+    const barsEl = document.createElement('div');
+    barsEl.className = 'mh-bars';
+    for (const kind of ['hp', 'mp', 'ag', 'sd'] as const) {
+      const row = document.createElement('div');
+      row.className = `mh-bar ${kind}`;
+      const fill = document.createElement('div');
+      fill.className = 'mh-bar-fill';
+      const text = document.createElement('span');
+      text.className = 'mh-bar-text';
+      row.append(fill, text);
+      barsEl.append(row);
+      this.bars[kind] = { fill, text, row };
+    }
+    meta.append(top, sub, barsEl, this.telemetryEl);
     heroCard.append(this.avatarEl, meta);
     heroCard.addEventListener('click', () => this.actions.openCharacter());
 
@@ -903,9 +1344,51 @@ export class MobileHud {
       this.btn((l) => l.guide, () => this.actions.openGuide()),
       this.btn((l) => l.reset, () => this.actions.sendCommand('/reset info')),
       this.btn((l) => l.events, () => this.actions.openTimetable()),
-      this.btn((l) => l.shop, () => this.actions.openCashShop()),
-      this.btn((l) => l.settings, () => this.actions.openSettings()),
     );
+
+    // The top-right row: auto play on/off and its settings, then Guild, Shop, Settings, Bag (labelled).
+    const topRight = document.createElement('div');
+    topRight.id = 'mobileTopRight';
+    topRight.className = 'mh-topright mh-interactive';
+    stop(topRight);
+    this.autoToggleEl = document.createElement('button');
+    this.autoToggleEl.type = 'button';
+    this.autoToggleEl.id = 'mobileAutoToggle';
+    this.autoToggleEl.className = 'mh-auto-toggle';
+    this.autoToggleEl.addEventListener('click', (e) => { e.stopPropagation(); this.actions.toggleAutoPlay(); });
+    const wrench = document.createElement('button');
+    wrench.type = 'button';
+    wrench.id = 'mobileAutoSettings';
+    wrench.className = 'mh-wrench';
+    wrench.textContent = '🔧';
+    wrench.addEventListener('click', (e) => { e.stopPropagation(); this.actions.openAutoSettings(); });
+    const labelled = (id: string, icon: string, label: (l: Labels) => string, run: () => void) => {
+      const b = this.btn((l) => label(l), run, 'mh-icon-btn');
+      b.id = id;
+      b.dataset.icon = icon;
+      return b;
+    };
+    topRight.append(
+      this.autoToggleEl, wrench,
+      labelled('mobileGuildBtn', '🛡️', (l) => l.guild, () => pressKey('g')),
+      labelled('mobileShopBtn', '🛒', (l) => l.shop, () => this.actions.openCashShop()),
+      labelled('mobileSettingsBtn', '⚙️', (l) => l.settings, () => this.actions.openSettings()),
+      labelled('mobileBagBtn', '🎒', (l) => l.bag, () => this.actions.openBag()),
+    );
+
+    // The target's name and life, top centre, while there is one.
+    this.targetBarEl = document.createElement('div');
+    this.targetBarEl.id = 'mobileTargetBar';
+    this.targetBarEl.className = 'mh-targetbar';
+    this.targetBarEl.hidden = true;
+    this.targetNameEl = document.createElement('span');
+    this.targetNameEl.className = 'mh-targetbar-name';
+    const targetTrack = document.createElement('div');
+    targetTrack.className = 'mh-targetbar-track';
+    this.targetFillEl = document.createElement('div');
+    this.targetFillEl.className = 'mh-targetbar-fill';
+    targetTrack.append(this.targetFillEl);
+    this.targetBarEl.append(this.targetNameEl, targetTrack);
     this.ribbonToggleBtn = document.createElement('button');
     this.ribbonToggleBtn.type = 'button';
     this.ribbonToggleBtn.id = 'mobileRibbonToggle';
@@ -931,12 +1414,16 @@ export class MobileHud {
     this.mapTitleEl = document.createElement('span');
     this.mapTitleEl.textContent = '-';
     const zoomOut = document.createElement('button');
-    zoomOut.type = 'button'; zoomOut.className = 'mh-mini-btn'; zoomOut.textContent = '−'; zoomOut.style.flex = '0 0 20px';
+    zoomOut.type = 'button'; zoomOut.className = 'mh-mini-btn mh-zoom'; zoomOut.textContent = '−'; zoomOut.style.flex = '0 0 20px';
     const zoomIn = document.createElement('button');
-    zoomIn.type = 'button'; zoomIn.className = 'mh-mini-btn'; zoomIn.textContent = '+'; zoomIn.style.flex = '0 0 20px';
+    zoomIn.type = 'button'; zoomIn.className = 'mh-mini-btn mh-zoom'; zoomIn.textContent = '+'; zoomIn.style.flex = '0 0 20px';
     zoomIn.addEventListener('click', () => { this.mapZoom = Math.min(2.6, +(this.mapZoom + 0.3).toFixed(2)); this.drawMiniMap(); });
     zoomOut.addEventListener('click', () => { this.mapZoom = Math.max(0.6, +(this.mapZoom - 0.3).toFixed(2)); this.drawMiniMap(); });
-    mapHead.append(this.mapTitleEl, zoomOut, zoomIn);
+    // ▼ / ▲: the mini map opens and closes under the map's name (remembered).
+    this.mapToggleEl = document.createElement('button');
+    this.mapToggleEl.type = 'button'; this.mapToggleEl.id = 'mobileMiniMapToggle'; this.mapToggleEl.className = 'mh-mini-btn'; this.mapToggleEl.style.flex = '0 0 22px';
+    this.mapToggleEl.addEventListener('click', (e) => { e.stopPropagation(); this.mapOpen = !this.mapOpen; writeValue(MAP_OPEN_KEY, this.mapOpen ? '1' : '0'); this.applyMapOpen(); });
+    mapHead.append(this.mapTitleEl, zoomOut, zoomIn, this.mapToggleEl);
 
     this.mapCanvas = document.createElement('canvas');
     this.mapCanvas.id = 'mobileMiniMapCanvas';
@@ -960,6 +1447,7 @@ export class MobileHud {
     focusChatBtn.addEventListener('click', () => this.chatInputEl.focus());
     mapTools.append(fullMapBtn, this.hidePlayersBtn, focusChatBtn);
     mapCard.append(mapHead, this.mapCanvas, mapTools);
+    this.mapCardEl = mapCard;
 
     // 4. Bottom-left virtual thumbstick & quick buttons
     const leftCluster = document.createElement('div');
@@ -971,12 +1459,32 @@ export class MobileHud {
     this.stickEl.dataset.ny = '0';
     this.knobEl = document.createElement('div');
     this.knobEl.className = 'mh-stick-knob';
+    // Four direction marks around the knob.
+    for (const [dir, mark] of [['up', '▲'], ['down', '▼'], ['left', '◀'], ['right', '▶']] as const) {
+      const arrow = document.createElement('span');
+      arrow.className = `mh-stick-mark ${dir}`;
+      arrow.textContent = mark;
+      this.stickEl.append(arrow);
+    }
     this.stickEl.append(this.knobEl);
     this.wireThumbstick();
 
     const leftQuick = document.createElement('div');
     leftQuick.className = 'mh-left-quick';
+    const chatToggle = document.createElement('button');
+    chatToggle.type = 'button';
+    chatToggle.id = 'mobileChatToggle';
+    chatToggle.className = 'mh-chat-bubble';
+    chatToggle.textContent = '💬';
+    chatToggle.addEventListener('pointerdown', (e) => e.stopPropagation());
+    chatToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const hidden = this.chatCardEl.classList.toggle('mh-collapsed');
+      chatToggle.classList.toggle('on', !hidden);
+      if (!hidden) this.chatInputEl.focus();
+    });
     leftQuick.append(
+      chatToggle,
       this.btn((l) => l.warp, () => this.actions.openWarp(), 'mh-pill-btn'),
       this.btn((l) => l.autoBuff, () => this.actions.triggerAutoBuff(), 'mh-pill-btn'),
       this.btn((l) => l.party, () => this.actions.openParty(), 'mh-pill-btn'),
@@ -986,27 +1494,27 @@ export class MobileHud {
     // 5. Bottom-center orbs, swipeable chat + macros, EXP bar
     const centerDock = document.createElement('div');
     centerDock.className = 'mh-center-dock';
-    const centerActions = document.createElement('div');
-    centerActions.className = 'mh-center-actions';
-    const pickPill = this.btn((l) => l.pick, () => { this.actions.pickNearest(); }, 'mh-pill-btn');
-    const bagPill = this.btn((l) => l.bag, () => this.actions.openBag(), 'mh-pill-btn');
-    this.autoPlayPill = this.btn((l) => l.autoPlay, () => this.actions.toggleAutoPlay(), 'mh-pill-btn');
-    this.autoPlayPill.id = 'mobileAutoPill';
-    centerActions.append(pickPill, bagPill, this.autoPlayPill);
+    // The status line: zen · FPS · ping · network · battery · level and exp, and the power-save switch.
+    this.statusEl = document.createElement('div');
+    this.statusEl.id = 'mobileStatusLine';
+    this.statusEl.className = 'mh-status';
+    const statusText = document.createElement('span');
+    statusText.className = 'mh-status-text';
+    const powerBtn = document.createElement('button');
+    powerBtn.type = 'button';
+    powerBtn.id = 'mobilePowerSave';
+    powerBtn.className = 'mh-power';
+    powerBtn.textContent = '⚡';
+    powerBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+    powerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const on = this.actions.toggleBatterySaver();
+      powerBtn.classList.toggle('on', on);
+    });
+    this.statusEl.append(powerBtn, statusText);
 
     const coreRow = document.createElement('div');
     coreRow.className = 'mh-core-row';
-    const hpOrb = document.createElement('div');
-    hpOrb.className = 'mh-orb hp';
-    this.hpFillEl = document.createElement('div'); this.hpFillEl.className = 'mh-orb-fill';
-    this.hpTextEl = document.createElement('div'); this.hpTextEl.className = 'mh-orb-text';
-    hpOrb.append(this.hpFillEl, this.hpTextEl);
-
-    const mpOrb = document.createElement('div');
-    mpOrb.className = 'mh-orb mp';
-    this.mpFillEl = document.createElement('div'); this.mpFillEl.className = 'mh-orb-fill';
-    this.mpTextEl = document.createElement('div'); this.mpTextEl.className = 'mh-orb-text';
-    mpOrb.append(this.mpFillEl, this.mpTextEl);
 
     const chatCard = document.createElement('div');
     chatCard.id = 'mobileChatBox';
@@ -1034,7 +1542,8 @@ export class MobileHud {
     this.macroBarEl.className = 'mh-macros';
 
     chatCard.append(this.chatTabsWrap, this.chatLinesEl, inputRow, this.macroBarEl);
-    coreRow.append(hpOrb, chatCard, mpOrb);
+    this.chatCardEl = chatCard;
+    coreRow.append(chatCard);
 
     const expWrap = document.createElement('div');
     expWrap.className = 'mh-exp';
@@ -1042,7 +1551,7 @@ export class MobileHud {
     this.expLabelEl = document.createElement('div'); this.expLabelEl.className = 'mh-exp-label';
     expWrap.append(this.expFillEl, this.expLabelEl);
 
-    centerDock.append(centerActions, coreRow, expWrap);
+    centerDock.append(coreRow, expWrap, this.statusEl);
 
     // 6. Bottom-right target lock & menu trigger (separate from #touchFight's 10 buttons!)
     const rightTools = document.createElement('div');
@@ -1061,9 +1570,24 @@ export class MobileHud {
     });
     const menuBtn = this.btn((l) => `⊞ ${l.menu}`, () => this.openQuickSheet(), 'mh-pill-btn');
     menuBtn.id = 'mobileMenuBtn';
-    rightTools.append(this.targetPill, menuBtn);
+    // The skill page (keys 1-5 or 6-0, remembered) and pick up, by the fight buttons.
+    this.skillPageEl = document.createElement('button');
+    this.skillPageEl.type = 'button';
+    this.skillPageEl.id = 'mobileSkillPage';
+    this.skillPageEl.className = 'mh-pill-btn mh-round';
+    stop(this.skillPageEl);
+    this.skillPageEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.skillPage = this.skillPage === 0 ? 1 : 0;
+      writeValue(SKILL_PAGE_KEY, String(this.skillPage));
+      this.applySkillPage();
+    });
+    const pickBtn = this.btn((l) => `✋ ${l.pickUp}`, () => { this.actions.pickNearest(); }, 'mh-pill-btn');
+    pickBtn.id = 'mobilePickBtn';
+    rightTools.append(this.skillPageEl, this.targetPill, pickBtn, menuBtn);
 
-    this.root.append(heroCard, this.buffsEl, ribbonWrap, mapCard, leftCluster, centerDock, rightTools);
+    this.root.append(heroCard, this.buffsEl, ribbonWrap, topRight, this.targetBarEl, mapCard, leftCluster, centerDock, rightTools);
+    this.applyMapOpen();
     this.refreshLabels();
     this.renderChat();
   }
@@ -1073,6 +1597,8 @@ export class MobileHud {
     for (const entry of this.actionLabels) entry.btn.textContent = entry.read(l);
     this.chatInputEl.placeholder = l.chatPlaceholder;
     if (!this.latest?.targetName) this.targetPill.textContent = `🎯 ${l.targetNone}`;
+    if (!this.latest) this.autoToggleEl.textContent = `${l.autoPlay}: ${l.off}`;
+    this.mapToggleEl.title = this.mapOpen ? '▲' : '▼';
 
     this.chatTabsWrap.replaceChildren();
     l.tabs.forEach((name, idx) => {
@@ -1129,9 +1655,26 @@ export class MobileHud {
       const line = document.createElement('div');
       line.className = `mh-chat-line ${msg.kind as ChatKind}`;
       line.textContent = `${msg.id ? `${msg.id}: ` : ''}${msg.text}${msg.count > 1 ? ` (x${msg.count})` : ''}`;
+      if (msg.id && msg.id !== this.latest?.heroName) this.wireLongPress(line, msg.id);
       this.chatLinesEl.append(line);
     }
     this.chatLinesEl.scrollTop = this.chatLinesEl.scrollHeight;
+  }
+
+  /** Holding a player's line for half a second opens Block / Report for that player. */
+  private wireLongPress(line: HTMLElement, name: string): void {
+    let timer = 0;
+    let at: { x: number; y: number } | null = null;
+    const cancel = () => { window.clearTimeout(timer); at = null; };
+    line.dataset.sender = name;
+    line.addEventListener('pointerdown', (e) => {
+      at = { x: e.clientX, y: e.clientY };
+      timer = window.setTimeout(() => { at = null; this.openPlayerSheet(name); }, 520);
+    });
+    line.addEventListener('pointermove', (e) => { if (at && Math.hypot(e.clientX - at.x, e.clientY - at.y) > 10) cancel(); });
+    line.addEventListener('pointerup', cancel);
+    line.addEventListener('pointercancel', cancel);
+    line.addEventListener('contextmenu', (e) => { e.preventDefault(); cancel(); this.openPlayerSheet(name); });
   }
 
   private wireChatSwipe(): void {
@@ -1411,7 +1954,61 @@ export class MobileHud {
       this.sheet.hidden = true;
     });
 
-    this.sheet.append(head, grid);
+    const sizeBtn = addAction(`🔍 ${l.hudSize}: ${this.sizeName()}`, () => {
+      this.cycleScale();
+      sizeBtn.textContent = `🔍 ${l.hudSize}: ${this.sizeName()}`;
+    }, 'mobileQolHudSize');
+
+    this.sheet.append(head, grid, this.buildGroupedMenu());
+  }
+
+  /** The grouped menu: groups on the left, a grid of icon + label buttons on the right. */
+  private buildGroupedMenu(): HTMLDivElement {
+    const l = labels();
+    const vi = currentLanguage() === 'vi';
+    const wrap = document.createElement('div');
+    wrap.id = 'mobileMenuGroups';
+    wrap.className = 'mh-menu';
+    const side = document.createElement('div');
+    side.className = 'mh-menu-side';
+    const body = document.createElement('div');
+    body.className = 'mh-menu-grid';
+    let current = MENU_GROUPS.some((g) => g.id === localStorageGroup()) ? localStorageGroup() : 'character';
+    const show = () => {
+      side.querySelectorAll<HTMLButtonElement>('button').forEach((b) => b.classList.toggle('active', b.dataset.group === current));
+      body.replaceChildren();
+      const group = MENU_GROUPS.find((g) => g.id === current) ?? MENU_GROUPS[0];
+      for (const entry of group.entries) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'mh-menu-item';
+        const icon = document.createElement('span');
+        icon.className = 'mh-menu-icon';
+        icon.textContent = entry.icon;
+        const name = document.createElement('span');
+        name.textContent = vi ? entry.vi : entry.en;
+        b.append(icon, name);
+        b.addEventListener('click', () => {
+          if (entry.run) { entry.run(this); return; }
+          this.sheet.hidden = true;
+          if (entry.event) window.dispatchEvent(new Event(entry.event));
+          else if (entry.key) pressKey(entry.key);
+        });
+        body.append(b);
+      }
+    };
+    for (const group of MENU_GROUPS) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'mh-menu-group';
+      b.dataset.group = group.id;
+      b.textContent = l.groups[group.id];
+      b.addEventListener('click', () => { current = group.id; writeValue(MENU_GROUP_KEY, group.id); show(); });
+      side.append(b);
+    }
+    show();
+    wrap.append(side, body);
+    return wrap;
   }
 
   update(snap: MobileHudSnapshot): void {
@@ -1424,7 +2021,7 @@ export class MobileHud {
     this.lvEl.textContent = `${l.lv}.${snap.level} · ${l.rs}:${snap.resets}`;
     this.zoneEl.textContent = snap.safeZone ? l.safeZone : l.combatZone;
     this.zoneEl.classList.toggle('combat', !snap.safeZone);
-    this.telemetryEl.textContent = `${snap.fps} FPS${snap.batterySaver ? ' · ⚡' : ''}${isWakeLockActive() || snap.wakeLock ? ` · ${l.wakeActive}` : ''}`;
+    this.telemetryEl.textContent = `${snap.className || '-'}${snap.batterySaver ? ' · ⚡' : ''}${isWakeLockActive() || snap.wakeLock ? ` · ${l.wakeActive}` : ''}`;
 
     this.buffsEl.replaceChildren();
     for (const b of snap.buffs.slice(0, 6)) {
@@ -1436,7 +2033,8 @@ export class MobileHud {
 
     this.mapTitleEl.textContent = `${snap.mapName} ${snap.cell.x},${snap.cell.y}`;
     this.hidePlayersBtn.classList.toggle('on', snap.hideOtherPlayers);
-    this.autoPlayPill.classList.toggle('on', snap.autoPlayActive);
+    this.autoToggleEl.classList.toggle('on', snap.autoPlayActive);
+    this.autoToggleEl.textContent = `${l.autoPlay}: ${snap.autoPlayActive ? l.on : l.off}`;
     if (snap.targetName) {
       this.targetPill.textContent = `🎯 ${snap.targetName}`;
       this.targetPill.classList.add('on');
@@ -1444,13 +2042,28 @@ export class MobileHud {
       this.targetPill.textContent = `🎯 ${l.targetNone}`;
       this.targetPill.classList.remove('on');
     }
+    // The target bar: name and life fraction, hidden with no target.
+    this.targetBarEl.hidden = !snap.targetName;
+    if (snap.targetName) {
+      const health = typeof snap.targetHealth === 'number' && snap.targetHealth >= 0 ? Math.min(1, snap.targetHealth) : null;
+      this.targetNameEl.textContent = health === null ? snap.targetName : `${snap.targetName} · ${Math.round(health * 100)}%`;
+      this.targetFillEl.style.width = `${((health ?? 1) * 100).toFixed(1)}%`;
+      this.targetBarEl.classList.toggle('unknown', health === null);
+    }
 
-    const hpPct = snap.maxHp > 0 ? Math.max(0, Math.min(100, (snap.hp / snap.maxHp) * 100)) : 0;
-    const mpPct = snap.maxMp > 0 ? Math.max(0, Math.min(100, (snap.mp / snap.maxMp) * 100)) : 0;
-    this.hpFillEl.style.height = `${hpPct.toFixed(1)}%`;
-    this.hpTextEl.textContent = `${snap.hp}\n/${snap.maxHp}`;
-    this.mpFillEl.style.height = `${mpPct.toFixed(1)}%`;
-    this.mpTextEl.textContent = `${snap.mp}\n/${snap.maxMp}`;
+    // Life, mana, AG and SD bars on the hero card (SD only where the hero has it).
+    const setBar = (kind: 'hp' | 'mp' | 'ag' | 'sd', cur: number, max: number) => {
+      const bar = this.bars[kind];
+      const pct = max > 0 ? Math.max(0, Math.min(100, (cur / max) * 100)) : 0;
+      bar.fill.style.width = `${pct.toFixed(1)}%`;
+      bar.text.textContent = `${kind.toUpperCase()} ${Math.max(0, Math.round(cur))} / ${Math.round(max)}`;
+    };
+    setBar('hp', snap.hp, snap.maxHp);
+    setBar('mp', snap.mp, snap.maxMp);
+    setBar('ag', snap.ag, snap.maxAg);
+    setBar('sd', snap.sd, snap.maxSd);
+    this.bars.sd.row.hidden = !(snap.maxSd > 1);
+    this.renderStatus(snap);
 
     const expPct = Math.max(0, Math.min(100, snap.expFraction * 100));
     this.expFillEl.style.width = `${expPct.toFixed(2)}%`;
@@ -1471,7 +2084,7 @@ export class MobileHud {
       for (let p = 0; p < 4; p++) {
         const b = btns[5 + p];
         const count = snap.potionCounts[p] ?? 0;
-        if (b) b.dataset.count = count > 0 ? String(count) : '';
+        if (b) b.dataset.count = count > 0 ? String(count) : '+';
       }
     }
 

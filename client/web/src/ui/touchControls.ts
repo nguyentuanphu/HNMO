@@ -55,6 +55,9 @@ const MORE: { label: string; title: string; key: string; event?: string }[] = [
   { label: '📬', title: 'Mailbox / Gift Box', key: '', event: 'hnmo-giftbox-open' },
 ];
 const SKILL_KEYS = ['1', '2', '3', '4', '5'];
+/** The second skill page (the modern HUD's 1/2 button): keys 6-0. */
+const SKILL_KEYS_PAGE2 = ['6', '7', '8', '9', '0'];
+const INSTALL_HINT_KEY = 'hnmo.installHintDismissed';
 const POTION_KEYS = ['q', 'w', 'e', 'r'];
 
 /** The buttons: a label and the key the desktop opens it with. */
@@ -93,7 +96,12 @@ const CSS = `
 #touchRotate.shown { display: flex; }
 #touchRotate .phone { font-size: 56px; animation: hnmoTurn 1.6s ease-in-out infinite; }
 @keyframes hnmoTurn { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
-#touchRotate button { all: unset; padding: 8px 16px; border: 1px solid rgba(255,220,150,.45); border-radius: 8px; font-size: 14px; }
+#touchRotate button { all: unset; padding: 10px 18px; border: 1px solid rgba(255,220,150,.6); border-radius: 8px; font-size: 15px; background: rgba(110,80,30,.6); }
+#touchRotate .sub { font-size: 12px; opacity: .7; font-weight: 500; }
+#touchInstall { position: fixed; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 90; display: flex; gap: 8px; align-items: center;
+  padding: 6px 8px 6px 12px; border-radius: 999px; background: rgba(12,14,22,.94); border: 1px solid rgba(255,220,150,.5); color: #f3e2bd; font: 600 12px system-ui, sans-serif; }
+#touchInstall[hidden] { display: none; }
+#touchInstall button { all: unset; cursor: pointer; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,220,150,.45); }
 `;
 
 const key = (name: string) => window.dispatchEvent(new KeyboardEvent('keydown', { key: name, code: /^[0-9]$/.test(name) ? `Digit${name}` : name.length === 1 ? `Key${name.toUpperCase()}` : name, bubbles: true }));
@@ -114,6 +122,26 @@ function fullScreenLandscape(): void {
   const done = () => { (screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> }).lock?.('landscape').catch(() => undefined); };
   if (document.fullscreenElement) { done(); return; }
   document.documentElement.requestFullscreen?.().then(done, () => undefined);
+}
+
+/** "Add to home screen": a small dismissible hint where the browser offers the install, remembered once closed. */
+function installHint(vi: boolean): void {
+  let dismissed = false;
+  try { dismissed = localStorage.getItem(INSTALL_HINT_KEY) === '1'; } catch { /* not remembered */ }
+  if (dismissed || window.matchMedia?.('(display-mode: fullscreen), (display-mode: standalone)').matches) return;
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    const prompt = event as Event & { prompt?: () => Promise<void> };
+    const hint = document.createElement('div');
+    hint.id = 'touchInstall';
+    const label = document.createElement('span');
+    label.textContent = vi ? '📲 Cài HNMO lên màn hình chính' : '📲 Put HNMO on your home screen';
+    const close = () => { hint.remove(); try { localStorage.setItem(INSTALL_HINT_KEY, '1'); } catch { /* not remembered */ } };
+    hint.append(label,
+      button(vi ? 'Cài' : 'Install', 'Install', () => { void prompt.prompt?.().catch(() => undefined); close(); }),
+      button('✕', vi ? 'Đóng' : 'Close', close));
+    document.body.append(hint);
+  }, { once: true });
 }
 
 export function installTouchControls(actions: TouchActions): HTMLElement {
@@ -152,7 +180,14 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   // The fight button, the skill keys and the potion keys.
   const fight = document.createElement('div');
   fight.id = 'touchFight';
-  for (const name of SKILL_KEYS) fight.append(button(name, `Skill ${name}`, () => key(name)));
+  // The skill buttons follow the skill page (keys 1-5, or 6-0 from the modern HUD's 1/2 button).
+  let skillKeys = SKILL_KEYS;
+  const skillButtons = SKILL_KEYS.map((name, slot) => button(name, `Skill ${name}`, () => key(skillKeys[slot])));
+  fight.append(...skillButtons);
+  window.addEventListener('hnmo-skill-page', (event) => {
+    skillKeys = (event as CustomEvent<{ page: number }>).detail?.page === 1 ? SKILL_KEYS_PAGE2 : SKILL_KEYS;
+    skillButtons.forEach((b, slot) => { b.textContent = skillKeys[slot]; b.title = `Skill ${skillKeys[slot]}`; });
+  });
   for (const name of POTION_KEYS) fight.append(button(name.toUpperCase(), `Potion ${name.toUpperCase()}`, () => key(name), 'potion'));
   fight.append(button('⚔', 'Fight the nearest monster', () => { actions.fight(); }, 'fight'));
   // A phone held upright: a hint to turn it (the game is laid out for landscape).
@@ -162,10 +197,16 @@ export function installTouchControls(actions: TouchActions): HTMLElement {
   phone.className = 'phone';
   phone.textContent = '📱';
   const text = document.createElement('div');
-  text.textContent = 'Turn your phone sideways to play.';
+  const vi = document.documentElement.lang === 'vi' || (() => { try { return localStorage.getItem('hnmo.language') === 'vi'; } catch { return false; } })();
+  text.textContent = vi ? 'Xoay ngang điện thoại để chơi.' : 'Turn your phone sideways to play.';
+  const sub = document.createElement('div');
+  sub.className = 'sub';
+  sub.textContent = vi ? 'Toàn màn hình sẽ khoá chiều ngang nếu trình duyệt cho phép.' : 'Full screen locks it sideways where the browser allows.';
   let dismissed = false;
-  rotate.append(phone, text, button('Play upright anyway', 'Play upright', () => { dismissed = true; rotate.classList.remove('shown'); }));
+  // One button: full screen (and landscape where allowed), and the hint goes.
+  rotate.append(phone, text, sub, button(vi ? 'Vào toàn màn hình' : 'Enter full screen', 'Full screen', () => { dismissed = true; rotate.classList.remove('shown'); fullScreenLandscape(); }));
   document.body.append(bar, more, fight, rotate);
+  installHint(vi);
   const portrait = () => {
     const upright = window.matchMedia?.('(pointer: coarse) and (orientation: portrait) and (max-width: 600px)').matches ?? false;
     rotate.classList.toggle('shown', upright && !dismissed && bar.classList.contains('shown'));

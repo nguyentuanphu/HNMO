@@ -848,8 +848,11 @@ function step(dt: number, rec: PerfRecorder | null): void {
         const ch = [...(state.online?.characters.values() ?? [])].find((c) => c.kind === 'player' && c.name === member.name);
         return ch ? [{ name: member.name, cell: { ...ch.cell } }] : [];
       });
+      // The modern HUD's skill page (1/2): keys 1-5 or 6-0 on the five skill buttons.
+      const page2 = state.mobileHud.skillPageIndex === 1;
       const skillHotkeys = [0, 1, 2, 3, 4].map((slot) => {
-        const hk = state.skills?.slotHotkey(slot, false) ?? -1;
+        const pageKey = page2 ? (slot + 6) % 10 : slot + 1;
+        const hk = page2 ? (state.skills && state.skills.hotkeys[pageKey] !== -1 ? pageKey : -1) : (state.skills?.slotHotkey(slot, false) ?? -1);
         const idx = hk >= 0 ? (state.skills?.hotkeys[hk] ?? -1) : -1;
         const skill = idx >= 0 ? (state.skills?.skillAt(idx) ?? 0) : 0;
         return {
@@ -889,6 +892,8 @@ function step(dt: number, rec: PerfRecorder | null): void {
         buffs: activeBuffs,
         partyDots,
         targetName: lockedTarget && !lockedTarget.dead ? lockedTarget.name : null,
+        targetHealth: lockedTarget && !lockedTarget.dead ? lockedTarget.healthStatus : null,
+        zen: state.inventory?.money,
         skillHotkeys,
         potionCounts,
       });
@@ -939,6 +944,56 @@ function chooseFrom<T>(container: HTMLElement, items: T[], describe: (item: T) =
 }
 
 const escapeHtml = (text: unknown): string => String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+// Quick play (HNMO extra): the last server and character of an account, one "Play now" button on the server list.
+const QUICK_PLAY_KEY = 'hnmo.quickPlay';
+interface QuickPlay { username: string; column: string; serverId: number; character: string }
+function loadQuickPlay(): QuickPlay | null {
+  try {
+    const raw = JSON.parse(localStorage.getItem(QUICK_PLAY_KEY) ?? 'null') as Partial<QuickPlay> | null;
+    return raw && typeof raw.username === 'string' && typeof raw.column === 'string' && typeof raw.serverId === 'number' && typeof raw.character === 'string' ? raw as QuickPlay : null;
+  } catch { return null; }
+}
+function saveQuickPlay(quick: QuickPlay): void {
+  try { localStorage.setItem(QUICK_PLAY_KEY, JSON.stringify(quick)); } catch { /* private window: not remembered */ }
+}
+/** The character quick play asked for, picked without showing the list (once). */
+let quickPlayCharacter: string | null = null;
+
+/** A "Play now" button above the server list for the last server and character; it answers the same promise. */
+function withQuickPlay<T>(container: HTMLElement, choice: Promise<T>, server: T | undefined, quick: QuickPlay | null, label: string): Promise<T> {
+  if (!server || !quick) return choice;
+  const vi = currentLanguage() === 'vi';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.id = 'quickPlay';
+  button.className = 'primary quick-play';
+  button.innerHTML = `▶ ${vi ? 'Chơi ngay' : 'Play now'}<small>${escapeHtml(quick.character)} · ${escapeHtml(label)}</small>`;
+  container.prepend(button);
+  return Promise.race([choice, new Promise<T>((resolve) => button.addEventListener('click', () => { quickPlayCharacter = quick.character; resolve(server); }, { once: true }))])
+    .finally(() => button.remove());
+}
+
+/** A random valid name: 4 to 10 letters and digits. */
+function randomCharacterName(): string {
+  const starts = ['Kal', 'Ver', 'Mor', 'Ael', 'Dra', 'Zen', 'Lor', 'Tar', 'Ny', 'Rho', 'Sel', 'Vex', 'Ori', 'Bra', 'Fen'];
+  const ends = ['dor', 'ion', 'ara', 'ix', 'en', 'is', 'ok', 'yn', 'eth', 'us', 'ia', 'ar'];
+  const pick = <T>(list: readonly T[]) => list[Math.floor(Math.random() * list.length)];
+  let name = pick(starts) + pick(ends);
+  if (Math.random() < 0.5) name += String(Math.floor(Math.random() * 90) + 10);
+  return name.slice(0, 10).padEnd(4, '7');
+}
+
+/** Four skills each class is known for, shown under the class picker. */
+const CLASS_SIGNATURE_SKILLS: readonly (readonly string[])[] = [
+  ['Meteorite', 'Evil Spirit', 'Hellfire', 'Ice Storm'],
+  ['Twisting Slash', 'Death Stab', 'Rageful Blow', 'Swell Life'],
+  ['Triple Shot', 'Heal', 'Greater Damage', 'Ice Arrow'],
+  ['Power Slash', 'Fire Slash', 'Flame Strike', 'Gigantic Storm'],
+  ['Fire Burst', 'Earthshake', 'Fire Scream', 'Critical Damage'],
+  ['Chain Lightning', 'Drain Life', 'Sleep', 'Red Storm'],
+  ['Dragon Roar', 'Chain Drive', 'Dark Side', 'Phoenix Shot'],
+];
 const NEW_CHARACTER = { create: true } as const;
 const MAX_CHARACTERS = 5;
 
@@ -947,6 +1002,9 @@ const MAX_CHARACTERS = 5;
 // as the client's CharacterScene does.
 async function chooseCharacter(connection: Connection): Promise<CharacterListEntry> {
   const characters = await fetchCharacters(connection);
+  const quick = quickPlayCharacter ? characters.find((c) => c.name === quickPlayCharacter) : undefined;
+  quickPlayCharacter = null;
+  if (quick) return quick;
   for (;;) {
     const choices: (CharacterListEntry | typeof NEW_CHARACTER)[] = characters.length < MAX_CHARACTERS ? [...characters, NEW_CHARACTER] : characters;
     const choice = await chooseFrom(ui.characters, choices, (c) => ('create' in c ? '+ Create a character<small>Dark Wizard, Dark Knight, Fairy Elf, …</small>' : `${escapeHtml(c.name)}<small>Level ${c.level} ${CLASSES[c.classIndex]}</small>`));
@@ -967,13 +1025,19 @@ function askNewCharacter(): Promise<{ name: string; classIndex: number } | null>
   const form = document.createElement('div');
   form.className = 'choices';
   form.innerHTML = `
-    <label class="row"><span>Character name</span><input id="newName" maxlength="10" required autocomplete="off"></label>
+    <label class="row"><span>Character name</span><input id="newName" maxlength="10" required autocomplete="off"><button type="button" id="randomName" title="Random name" style="min-width:40px">🎲</button></label>
     <label class="row"><span>Class</span><select id="newClass">${CLASSES.map((name, index) => `<option value="${index}">${name}</option>`).join('')}</select></label>
+    <div id="newClassSkills" class="row" style="font-size:12px;opacity:.85;flex-wrap:wrap;gap:4px"></div>
     <div class="buttons"><button type="button" class="primary" id="createIt">Create</button><button type="button" id="cancelIt">Back</button></div>`;
   ui.characters.append(form);
   // The form's fields were just written above.
   const nameInput = form.querySelector<HTMLInputElement>('#newName')!;
   const classSelect = form.querySelector<HTMLSelectElement>('#newClass')!;
+  const skillsRow = form.querySelector<HTMLDivElement>('#newClassSkills')!;
+  const showSkills = () => { skillsRow.textContent = `✦ ${(CLASS_SIGNATURE_SKILLS[Number(classSelect.value)] ?? []).join(' · ')}`; };
+  classSelect.addEventListener('change', showSkills);
+  showSkills();
+  form.querySelector('#randomName')!.addEventListener('click', () => { nameInput.value = randomCharacterName(); });
   nameInput.focus();
   return new Promise((resolve) => {
     form.querySelector('#cancelIt')!.addEventListener('click', () => resolve(null), { once: true });
@@ -1167,9 +1231,12 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   const travelTarget = go === 'arena'
     ? servers.find((s) => s.column === 'arena')
     : home ? servers.find((s) => columnOf(s) === home.column && s.id === home.serverId) : undefined;
+  const quick = loadQuickPlay();
+  const quickServer = quick && quick.username === settings.username ? servers.find((s) => columnOf(s) === quick.column && s.id === quick.serverId) : undefined;
   const server = travelTarget ?? (servers.length === 1
     ? servers[0]
-    : await chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi'));
+    : await withQuickPlay(ui.servers, chooseServerBySeason(ui.servers, servers, (s) => s.column ?? s.season, (s) => describeServerChoice(s.id, s.load, s.meta, currentLanguage() === 'vi', true), currentLanguage() === 'vi'),
+      quickServer, quick, quickServer ? (quickServer.meta?.description || quickServer.meta?.worldLabel || `${currentLanguage() === 'vi' ? 'Máy chủ' : 'Server'} ${quickServer.id + 1}`) : ''));
   ui.servers.hidden = true;
   playedServer = { column: columnOf(server), serverId: server.id };
   // The game data of the picked world's season, before anything of the world is loaded.
@@ -1182,6 +1249,7 @@ async function playOnline(settings: LoginSettings, ticket?: string, go?: 'arena'
   state.connection = connection; // tests feed recorded packets through it (dispatch)
   const character = await chooseCharacter(connection);
   ui.characters.hidden = true;
+  saveQuickPlay({ username: settings.username, column: columnOf(server), serverId: server.id, character: character.name });
   showLoadingScreen(); // until the world is ready (CLoadingScene)
   await Promise.all([loadMonsterCatalog(), loadItemCatalog(), loadGlowColors(), loadSkillData(), loadBuffData()]);
   // The server sends who is in view right after the character information, while

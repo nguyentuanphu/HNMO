@@ -217,5 +217,18 @@ test('Modern Touch HUD: thumbstick vector, minimap tap-to-walk/zoom, swipeable c
   await expect(page.locator('#mobileHeroCard')).toContainText('An Toàn');
   await expect(page.locator('#mobileChatBox')).toContainText('Thế giới');
 
+  // 8. Hero bars with numbers, no target bar without a target, the skill page and the grouped menu
+  await expect(page.locator('#mobileHeroCard')).toContainText('HP 5200 / 5293');
+  await expect(page.locator('#mobileHeroCard')).toContainText('SD 1500 / 1600');
+  await expect(page.locator('#mobileTargetBar')).toBeHidden();
+  await expect(page.locator('#mobileSkillPage')).toHaveText('1/2');
+  await page.locator('#mobileSkillPage').click();
+  await expect(page.locator('#mobileSkillPage')).toHaveText('2/2');
+  await page.locator('#mobileSkillPage').click();
+  await page.locator('#mobileMenuBtn').click();
+  await expect(page.locator('#mobileMenuGroups .mh-menu-group')).toHaveCount(7);
+  await page.locator('#mobileMenuGroups .mh-menu-group').nth(1).click();
+  await expect(page.locator('#mobileMenuGroups .mh-menu-item').first()).toBeVisible();
+
   expect(errors).toEqual([]);
 });
