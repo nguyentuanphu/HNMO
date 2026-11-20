@@ -76,6 +76,9 @@ public sealed class LegacyImportBackupSnapshot
     /// <summary>Gets or sets descriptions of <see cref="HNMO.DataModel.Configuration.DropItemGroup"/> entries created by this import.</summary>
     public List<string> CreatedDropGroupTags { get; set; } = [];
 
+    /// <summary>Gets or sets the item rewards of the mini games the import changed, before it.</summary>
+    public List<BackupEventReward> PreviousEventRewards { get; set; } = [];
+
     /// <summary>Gets or sets the stats of the monsters the import changed, before it.</summary>
     public List<BackupMonsterStats> PreviousMonsterStats { get; set; } = [];
 

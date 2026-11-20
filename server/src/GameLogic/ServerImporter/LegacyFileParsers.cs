@@ -22,6 +22,9 @@ public static class LegacyFileParsers
     /// <summary>The file name of the item bag a monster drops: "Monster_(275)_Kundun.xml" is monster 275's.</summary>
     private static readonly Regex MonsterBagName = new(@"^Monster_\((\d+)\)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
+    /// <summary>The file name of a Blood Castle or Chaos Castle reward: "Event_BloodCastle(3)_Reward.xml" is Blood Castle 3's.</summary>
+    private static readonly Regex EventRewardBagName = new(@"^Event_(BloodCastle|ChaosCastle)\((\d+)\)_Reward", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
     /// <summary>The file name of a box's content: "Item_(14,11,8)_Kundun_Box+1.xml" is item 14:11 +8's.</summary>
     private static readonly Regex BoxBagName = new(@"^Item_\((\d+),(\d+),(\d+)\)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
@@ -728,6 +731,10 @@ public static class LegacyFileParsers
                 (byte, short, byte)? boxItem = boxBag.Success
                     ? ((byte)int.Parse(boxBag.Groups[1].Value, CultureInfo.InvariantCulture), (short)int.Parse(boxBag.Groups[2].Value, CultureInfo.InvariantCulture), (byte)int.Parse(boxBag.Groups[3].Value, CultureInfo.InvariantCulture))
                     : null;
+                var eventBag = EventRewardBagName.Match(bagFileName);
+                (string, byte)? eventReward = eventBag.Success
+                    ? (eventBag.Groups[1].Value, (byte)int.Parse(eventBag.Groups[2].Value, CultureInfo.InvariantCulture))
+                    : null;
                 foreach (var allowEl in doc.Descendants().Where(e => e.Name.LocalName.Equals("DropAllow", StringComparison.OrdinalIgnoreCase)))
                 {
                     var mapNum = ReadIntAttr(allowEl, "MapNumber", -1);
@@ -752,6 +759,7 @@ public static class LegacyFileParsers
                                 rule.RewardBagName = rewardBag;
                                 rule.SourceName = bagFileName;
                                 rule.BoxItem = boxItem;
+                                rule.EventReward = eventReward;
                                 results.Add(rule);
                             }
                         }

@@ -605,6 +605,40 @@ public class ServerImporterTests
         Assert.That(box.DropItems, Is.Empty);
     }
 
+    /// <summary>A Blood Castle reward bag becomes what that level's winners get; the undo puts HNMO's reward back.</summary>
+    [Test]
+    public async Task BloodCastleRewardBagBecomesTheWinnersRewardAsync()
+    {
+        var bags = Path.Combine(this._tempDir, "IGCData", "ItemBags");
+        Directory.CreateDirectory(bags);
+        File.WriteAllText(Path.Combine(bags, "Event_BloodCastle(1)_Reward.xml"), "<ItemBag><BagConfig ItemRate=\"10000\" /><DropAllow><Drop Rate=\"10000\"><Item Cat=\"0\" Index=\"1\" /></Drop></DropAllow></ItemBag>");
+
+        var context = new InMemoryPersistenceContextProvider().CreateNewContext();
+        var config = CreateSyntheticConfig(context);
+        var chaos = context.CreateNew<ItemDefinition>();
+        chaos.Group = 12;
+        chaos.Number = 15;
+        chaos.Name = new LocalizedString("Jewel of Chaos");
+        config.Items.Add(chaos);
+        var bloodCastle = context.CreateNew<MiniGameDefinition>();
+        bloodCastle.Type = MiniGameType.BloodCastle;
+        bloodCastle.GameLevel = 1;
+        var group = context.CreateNew<DropItemGroup>();
+        group.PossibleItems.Add(chaos);
+        var reward = context.CreateNew<MiniGameReward>();
+        reward.RewardType = MiniGameRewardType.ItemDrop;
+        reward.ItemReward = group;
+        bloodCastle.Rewards.Add(reward);
+        config.MiniGameDefinitions.Add(bloodCastle);
+
+        var options = new LegacyImportOptions { FolderPath = this._tempDir };
+        var result = await LegacyServerImportEngine.ApplyImportAsync(options, context, config, this._backupDir, new StubDatabaseReader(new LegacyDatabaseSnapshot())).ConfigureAwait(false);
+        Assert.That(group.PossibleItems.Select(i => i.Name.ValueInNeutralLanguage), Is.EqualTo(new[] { "Short Sword" }));
+
+        Assert.That(await LegacyServerImportEngine.UndoBackupAsync(result.BackupId, this._backupDir, context, config).ConfigureAwait(false), Is.True);
+        Assert.That(group.PossibleItems.Select(i => i.Name.ValueInNeutralLanguage), Is.EqualTo(new[] { "Jewel of Chaos" }));
+    }
+
     /// <summary>The monsters' stats from MonsterList.xml replace HNMO's where they differ, and the undo puts them back.</summary>
     [Test]
     public async Task MonsterStatsAreImportedAndUndoneAsync()

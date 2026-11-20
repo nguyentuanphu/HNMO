@@ -30,7 +30,7 @@ suites were imported for real into a fresh Season 6 configuration (in memory,
 | Zen per map (`IGC_ZenDrop.xml`) | New zen table in the rate tuning: on the listed maps the zen of a kill is Min..Max (x monster level at MultiplyChanceRate) instead of the gained EXP (with EXP x1000, HNMO's zen was x1000 too). S9 has it on (100 x level, 50 %); S6 has it off |
 | `IGC_AppointItemDrop.xml` | Extra monster drops at DropRate / Denominator, as their own groups (their S9 items are not in HNMO, so none apply today) |
 | Box bags `Item_(g,n,l)` | Box contents (`ItemDefinition.DropItems`) where HNMO has none at that level: 1 box gets contents, 29 keep HNMO's |
-| Event, mix and NPC reward bags | Still not imported (Blood Castle / Chaos Castle rewards come from HNMO's mini games) and listed in the preview |
+| Blood Castle / Chaos Castle reward bags | `Event_BloodCastle(N)_Reward` and `Event_ChaosCastle(N)_Reward` become the winners' item reward of that level (15 levels in both suites), with undo; the other event, mix and NPC bags (Illusion Temple, Last Man Standing, Mu Rummy, Lucky Coin, Cherry Blossom, Santa) have no HNMO reward to go to and are listed in the preview |
 | Devil Square / Chaos Castle / Blood Castle | Real start times from `Data/Events/*.dat` (S6) or the event XML (S9) are written to the events' timetables |
 | Levels | `MaxNormalLevel` applied; `MaxMasterLevel` above 200 (S9: 330) is kept out, HNMO's master tree stops at 200 |
 | Party EXP | New party EXP table in the rate tuning (`NormalParty2..5ExpBonus`, `SetParty3..5ExpBonus` for different classes) used by the party EXP; empty = HNMO's rule |
@@ -47,5 +47,5 @@ suites were imported for real into a fresh Season 6 configuration (in memory,
 
 ## Still open
 
-- Event, mix and NPC reward bags (they belong to HNMO's mini game rewards).
+- Event, mix and NPC reward bags without an HNMO counterpart (Illusion Temple, Last Man Standing, Mu Rummy, Lucky Coin, Cherry Blossom, Santa).
 - Season 9-only items, maps and monsters (Arca, Acheron, elemental spawns, Muun) are skipped by design.

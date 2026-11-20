@@ -27,6 +27,9 @@ public sealed class LegacyImportPreview
     /// <summary>Gets or sets the contents of boxes (Item_(group,number,level) item bags) whose items exist in HNMO.</summary>
     public List<LegacyDropRule> BoxContents { get; set; } = [];
 
+    /// <summary>Gets or sets the items Blood Castle and Chaos Castle winners get (their reward bags), whose items exist in HNMO.</summary>
+    public List<LegacyDropRule> EventRewards { get; set; } = [];
+
     /// <summary>Gets or sets the stats of the monsters HNMO has, where they differ from HNMO's.</summary>
     public List<LegacyMonsterStats> MonsterStats { get; set; } = [];
 

@@ -152,6 +152,14 @@ public static class LegacyServerImportEngine
                     continue;
                 }
 
+                // Blood Castle and Chaos Castle rewards: what the winners get.
+                if (d.EventReward is not null && itemsByKey.ContainsKey($"{d.ItemGroup}:{d.ItemNumber}")
+                    && d.ElementalAttribute == 0 && !d.CompanionEvolutionGroup.HasValue)
+                {
+                    preview.EventRewards.Add(d);
+                    continue;
+                }
+
                 if (d.RewardBagName is { } bagName)
                 {
                     // Boxes, event and chaos-mix rewards, NPC gifts: not a monster's drop, and not mapped yet.
@@ -196,7 +204,7 @@ public static class LegacyServerImportEngine
                 NameVi = "Danh Sách Rơi Vật Phẩm",
                 MappedCount = mappedDrops,
                 SkippedCount = skippedDrops,
-                Details = [$"{preview.DropRules.Select(d => d.MonsterNumber).Where(m => m >= 0).Distinct().Count()} monsters get their own drops; {preview.BoxContents.Select(b => b.BoxItem).Distinct().Count()} boxes get contents; {rewardBags.Count} event, mix and NPC reward bags left out"],
+                Details = [$"{preview.DropRules.Select(d => d.MonsterNumber).Where(m => m >= 0).Distinct().Count()} monsters get their own drops; {preview.BoxContents.Select(b => b.BoxItem).Distinct().Count()} boxes get contents; {preview.EventRewards.Select(b => b.EventReward).Distinct().Count()} Blood/Chaos Castle rewards; {rewardBags.Count} other event, mix and NPC reward bags left out"],
             });
         }
 
@@ -781,6 +789,45 @@ public static class LegacyServerImportEngine
             }
         }
 
+        // Event_BloodCastle(N)_Reward / Event_ChaosCastle(N)_Reward: the items the winners of level N get. They take the
+        // place of the items of HNMO's item reward of that level (Blood Castle's reward, Chaos Castle's jewels).
+        if (options.ImportDropLists && preview.EventRewards.Count > 0)
+        {
+            foreach (var bag in preview.EventRewards.GroupBy(r => r.EventReward!.Value))
+            {
+                var type = bag.Key.Event.Equals("BloodCastle", StringComparison.OrdinalIgnoreCase) ? MiniGameType.BloodCastle : MiniGameType.ChaosCastle;
+                var reward = config.MiniGameDefinitions
+                    .Where(g => g.Type == type && g.GameLevel == bag.Key.Level)
+                    .SelectMany(g => g.Rewards)
+                    .FirstOrDefault(r => r.RewardType == MiniGameRewardType.ItemDrop && r.ItemReward is { ItemType: SpecialItemType.None or SpecialItemType.RandomItem, PossibleItems.Count: > 0 });
+                if (reward?.ItemReward is not { } group)
+                {
+                    result.SummaryLines.Add($"{bag.Key.Event} {bag.Key.Level} reward skipped: HNMO has no item reward for it.");
+                    continue;
+                }
+
+                snapshot.PreviousEventRewards.Add(new BackupEventReward
+                {
+                    MiniGameType = (int)type,
+                    Level = bag.Key.Level,
+                    Chance = group.Chance,
+                    ItemKeys = group.PossibleItems.Select(i => $"{i.Group}:{i.Number}").ToList(),
+                });
+                group.PossibleItems.Clear();
+                foreach (var rule in bag)
+                {
+                    var item = itemsByKey[$"{rule.ItemGroup}:{rule.ItemNumber}"];
+                    if (!group.PossibleItems.Contains(item))
+                    {
+                        group.PossibleItems.Add(item);
+                    }
+                }
+
+                group.Chance = Math.Clamp(bag.First().GroupChance ?? 1.0, 0.000001, 1.0);
+                result.AppliedCount++;
+            }
+        }
+
         if (options.ImportShops && preview.Shops.Count > 0)
         {
             foreach (var shop in preview.Shops)
@@ -1283,6 +1330,30 @@ public static class LegacyServerImportEngine
                     crafting.SimpleCraftingSettings.MaximumSuccessPercent = rate.MaximumSuccessPercent;
                 }
             }
+        }
+
+        var allItems = config.Items.ToDictionary(i => $"{i.Group}:{i.Number}", StringComparer.Ordinal);
+        foreach (var previous in snapshot.PreviousEventRewards)
+        {
+            var group = config.MiniGameDefinitions
+                .Where(g => (int)g.Type == previous.MiniGameType && g.GameLevel == previous.Level)
+                .SelectMany(g => g.Rewards)
+                .FirstOrDefault(r => r.RewardType == MiniGameRewardType.ItemDrop && r.ItemReward is { ItemType: SpecialItemType.None or SpecialItemType.RandomItem })?.ItemReward;
+            if (group is null)
+            {
+                continue;
+            }
+
+            group.PossibleItems.Clear();
+            foreach (var key in previous.ItemKeys)
+            {
+                if (allItems.TryGetValue(key, out var item))
+                {
+                    group.PossibleItems.Add(item);
+                }
+            }
+
+            group.Chance = previous.Chance;
         }
 
         foreach (var previous in snapshot.PreviousMonsterStats)

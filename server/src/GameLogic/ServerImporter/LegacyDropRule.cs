@@ -72,4 +72,10 @@ public sealed class LegacyDropRule
     /// player gets on opening (dropping) that box.
     /// </summary>
     public (byte Group, short Number, byte Level)? BoxItem { get; set; }
+
+    /// <summary>
+    /// Gets or sets the mini game whose winners get this item, when the rule comes from an "Event_BloodCastle(N)_Reward"
+    /// or "Event_ChaosCastle(N)_Reward" bag: the event ("BloodCastle" or "ChaosCastle") and its level N.
+    /// </summary>
+    public (string Event, byte Level)? EventReward { get; set; }
 }
