@@ -26,15 +26,17 @@ public class TradeMoneyAction
             return;
         }
 
-        // Check if the Player got enough Zen/Money
-        if (player.Money < moneyAmount)
+        // The zen which is already offered was taken out of the inventory, but it still belongs to the
+        // player: the new amount replaces it. So it counts to the available zen, otherwise the offer
+        // couldn't be raised (or even lowered) with the zen which is already in the trade.
+        var availableMoney = (long)player.Money + player.TradingMoney;
+        if (availableMoney < moneyAmount)
         {
             return;
         }
 
         // Add the Money to the Trade
-        player.TryAddMoney(player.TradingMoney);
-        player.TryAddMoney((int)(-1 * moneyAmount));
+        player.Money = (int)(availableMoney - moneyAmount);
         player.TradingMoney = (int)moneyAmount;
         await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
         await player.InvokeViewPlugInAsync<IRequestedTradeMoneyHasBeenSetPlugIn>(p => p.RequestedTradeMoneyHasBeenSetAsync()).ConfigureAwait(false);
