@@ -52,6 +52,9 @@ else
                 <p class="small text-secondary">@Resources.RemainingRecoveryCodes: @this._remainingRecoveryCodes</p>
                 <button title="@HelpResources.PageHelpHintRecovery" class="btn btn-secondary btn-sm me-2" type="button" disabled="@this._isBusy" @onclick="@this.GenerateRecoveryCodesAsync">@Resources.GenerateNewRecoveryCodes</button>
                 <button title="@HelpResources.PageHelpHintDisable" class="btn btn-outline-danger btn-sm" type="button" disabled="@this._isBusy" @onclick="@this.DisableTwoFactorAsync">@Resources.DisableTwoFactor</button>
+                var vi = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi";
+                <p class="small text-secondary mt-3 mb-1">@(vi ? "Trình duyệt đã nhập đúng mã được tin cậy 30 ngày (chỉ cần mật khẩu). Mất điện thoại hay máy tính? Quên hết chúng:" : "A browser where the code was right is trusted for 30 days (the password is enough). Lost a phone or computer? Forget them all:")</p>
+                <button id="forget-trusted-browsers" title="@(vi ? "Lần đăng nhập sau ở mọi trình duyệt sẽ hỏi lại mã 6 số" : "The next sign-in on every browser asks for the 6-digit code again")" class="btn btn-outline-secondary btn-sm" type="button" disabled="@this._isBusy" @onclick="@this.ForgetTrustedBrowsersAsync">@(vi ? "Quên mọi trình duyệt tin cậy" : "Forget every trusted browser")</button>
             }
             else
             {

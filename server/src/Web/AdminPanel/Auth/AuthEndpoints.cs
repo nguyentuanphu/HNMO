@@ -60,6 +60,12 @@ public static class AuthEndpoints
                             new ClaimsPrincipal(identity),
                             properties)
                         .ConfigureAwait(false);
+                    if (ticket.TrustToken is { } trust)
+                    {
+                        // The code was right: this browser is trusted for 30 days (owner, 2026-11-21).
+                        TrustedBrowserService.SetCookie(httpContext, trust);
+                    }
+
                     return Results.NoContent();
                 })
             .AllowAnonymous()

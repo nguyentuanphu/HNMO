@@ -76,6 +76,7 @@ public static class AdminPanelAuthExtensions
         services.AddSingleton<IPasswordHasher<AdminUser>, BCryptPasswordHasher>();
         services.AddSingleton<BootstrapAdminUserProvider>();
         services.AddSingleton<SignInTicketService>();
+        services.AddSingleton<TrustedBrowserService>();
         services.AddSingleton<AdminUserAvailabilityService>();
         services.AddSingleton<AdminPanelSetupMode>();
         services.AddSingleton<AdminPrincipalValidator>();

@@ -67,7 +67,9 @@ ADMIN PANEL
   until an admin user exists). Change it in the admin panel, Plugins, "Website (admin
   address, Google sign-in)". Leave it empty to allow the admin panel only on the host computer.
   From afar the 6-digit code of an authenticator app is needed: set it up first on the
-  host computer (admin panel, "2FA & Security"). The same address opens every panel:
+  host computer (admin panel, "2FA & Security"). After the code was right once, that
+  browser is trusted for 30 days (only the password then); "Forget every trusted browser"
+  on that page ends it everywhere. The same address opens every panel:
   Season 9's under ".../s9/", the Arena's under ".../arena/", one sign-in for all.
   From afar, Host settings shows only the licence (ports and folders: host computer only).
 

@@ -80,6 +80,17 @@ public class AuthenticatorSetupService
     }
 
     /// <summary>
+    /// Forgets every browser the user trusted (owner, 2026-11-21): the code is asked again everywhere. The user's other
+    /// sessions end too; the page re-issues its own.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <returns>The task.</returns>
+    public async Task ForgetTrustedBrowsersAsync(AdminUser user)
+    {
+        await this._userManager.UpdateSecurityStampAsync(user).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Disables the second factor of the specified user and removes its authenticator key.
     /// </summary>
     /// <param name="user">The user.</param>

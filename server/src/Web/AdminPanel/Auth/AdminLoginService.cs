@@ -24,6 +24,8 @@ public class AdminLoginService
     private readonly SignInTicketService _ticketService;
     private readonly ILogger<AdminLoginService> _logger;
 
+    private readonly TrustedBrowserService? _trustedBrowsers;
+
     private AdminUser? _pendingTwoFactorUser;
     private bool _pendingIsPersistent;
 
@@ -34,8 +36,10 @@ public class AdminLoginService
     /// <param name="userStore">The user store, which consumes authenticator time steps atomically.</param>
     /// <param name="ticketService">The sign in ticket service.</param>
     /// <param name="logger">The logger.</param>
-    public AdminLoginService(UserManager<AdminUser> userManager, AdminUserStore userStore, SignInTicketService ticketService, ILogger<AdminLoginService> logger)
+    /// <param name="trustedBrowsers">The trusted browsers (none: the code is always asked).</param>
+    public AdminLoginService(UserManager<AdminUser> userManager, AdminUserStore userStore, SignInTicketService ticketService, ILogger<AdminLoginService> logger, TrustedBrowserService? trustedBrowsers = null)
     {
+        this._trustedBrowsers = trustedBrowsers;
         this._userManager = userManager;
         this._userStore = userStore;
         this._ticketService = ticketService;
@@ -83,8 +87,9 @@ public class AdminLoginService
     /// <param name="password">The password.</param>
     /// <param name="isPersistent">If set to <c>true</c>, the session survives a browser restart.</param>
     /// <param name="fromAfar">Whether the login comes from afar (through the website): then the 6-digit code is required.</param>
+    /// <param name="trustedBrowser">The browser's trusted-browser cookie, if any: a trusted browser isn't asked for the code.</param>
     /// <returns>The result of the attempt.</returns>
-    public async Task<AdminLoginResult> CheckPasswordAsync(string loginName, string password, bool isPersistent, bool fromAfar = false)
+    public async Task<AdminLoginResult> CheckPasswordAsync(string loginName, string password, bool isPersistent, bool fromAfar = false, string? trustedBrowser = null)
     {
         this._pendingTwoFactorUser = null;
 
@@ -115,6 +120,13 @@ public class AdminLoginService
             return new AdminLoginResult(AdminLoginStatus.TwoFactorSetupRequired);
         }
 
+        if (user.IsTwoFactorEnabled && this._trustedBrowsers?.Trusts(trustedBrowser, user) == true)
+        {
+            // A browser where the code was right before (30 days): the password is enough (owner, 2026-11-21).
+            this._logger.LogInformation("Admin panel user '{LoginName}' signs in on a trusted browser.", user.LoginName);
+            return await this.CompleteLoginAsync(user, usedSecondFactor: true, isPersistent).ConfigureAwait(false);
+        }
+
         if (user.IsTwoFactorEnabled)
         {
             this._pendingTwoFactorUser = user;
@@ -130,8 +142,9 @@ public class AdminLoginService
     /// </summary>
     /// <param name="code">The authenticator code or recovery code.</param>
     /// <param name="isRecoveryCode">If set to <c>true</c>, the code is treated as a recovery code.</param>
+    /// <param name="trustBrowser">Whether this browser is to be trusted for 30 days after a right code.</param>
     /// <returns>The result of the attempt.</returns>
-    public async Task<AdminLoginResult> CheckTwoFactorAsync(string code, bool isRecoveryCode)
+    public async Task<AdminLoginResult> CheckTwoFactorAsync(string code, bool isRecoveryCode, bool trustBrowser = false)
     {
         if (this._pendingTwoFactorUser is not { } user)
         {
@@ -166,7 +179,7 @@ public class AdminLoginService
         }
 
         this._pendingTwoFactorUser = null;
-        return await this.CompleteLoginAsync(user, usedSecondFactor: true, this._pendingIsPersistent).ConfigureAwait(false);
+        return await this.CompleteLoginAsync(user, usedSecondFactor: true, this._pendingIsPersistent, trustBrowser).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -193,7 +206,7 @@ public class AdminLoginService
             : new AdminLoginResult(AdminLoginStatus.Failed);
     }
 
-    private async Task<AdminLoginResult> CompleteLoginAsync(AdminUser user, bool usedSecondFactor, bool isPersistent)
+    private async Task<AdminLoginResult> CompleteLoginAsync(AdminUser user, bool usedSecondFactor, bool isPersistent, bool trustBrowser = false)
     {
         await this._userManager.ResetAccessFailedCountAsync(user).ConfigureAwait(false);
         user.LastLoginAt = DateTime.UtcNow;
@@ -205,7 +218,8 @@ public class AdminLoginService
             usedSecondFactor);
 
         var claims = CreateClaims(user, usedSecondFactor);
-        var ticket = this._ticketService.Issue(claims, isPersistent);
+        var trustToken = trustBrowser && usedSecondFactor ? this._trustedBrowsers?.Issue(user) : null;
+        var ticket = this._ticketService.Issue(claims, isPersistent, trustToken);
         return new AdminLoginResult(AdminLoginStatus.Succeeded, ticket, claims);
     }
 

@@ -62,6 +62,9 @@ public partial class Login : IAsyncDisposable
     /// <summary>Gets a value indicating whether the page was opened from afar (through the website), not on the host computer.</summary>
     private bool IsFromAfar => !Services.HostComputerRequest.IsFromHostComputer(this.HttpContextAccessor.HttpContext);
 
+    /// <summary>Gets this browser's trusted-browser cookie, if it has one (owner, 2026-11-21).</summary>
+    private string? TrustedBrowserCookie => this.HttpContextAccessor.HttpContext?.Request.Cookies[TrustedBrowserService.CookieName];
+
     [Inject]
     private AdminAuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
@@ -117,7 +120,7 @@ public partial class Login : IAsyncDisposable
         try
         {
             var result = await this.LoginService
-                .CheckPasswordAsync(this._passwordInput.LoginName, this._passwordInput.Password, this._passwordInput.RememberMe, this.IsFromAfar)
+                .CheckPasswordAsync(this._passwordInput.LoginName, this._passwordInput.Password, this._passwordInput.RememberMe, this.IsFromAfar, this.TrustedBrowserCookie)
                 .ConfigureAwait(true);
             this._passwordInput.Password = string.Empty;
 
@@ -160,7 +163,7 @@ public partial class Login : IAsyncDisposable
         try
         {
             var result = await this.LoginService
-                .CheckTwoFactorAsync(this._twoFactorInput.Code, this._twoFactorInput.UseRecoveryCode)
+                .CheckTwoFactorAsync(this._twoFactorInput.Code, this._twoFactorInput.UseRecoveryCode, this._twoFactorInput.TrustBrowser)
                 .ConfigureAwait(true);
             this._twoFactorInput.Code = string.Empty;
 
@@ -255,5 +258,7 @@ public partial class Login : IAsyncDisposable
         public string Code { get; set; } = string.Empty;
 
         public bool UseRecoveryCode { get; set; }
+
+        public bool TrustBrowser { get; set; } = true;
     }
 }

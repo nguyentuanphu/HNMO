@@ -197,6 +197,28 @@ public partial class AccountSecurity : IAsyncDisposable
         }
     }
 
+    private async Task ForgetTrustedBrowsersAsync()
+    {
+        if (this._user is not { } user)
+        {
+            return;
+        }
+
+        this._isBusy = true;
+        try
+        {
+            await this.SetupService.ForgetTrustedBrowsersAsync(user).ConfigureAwait(true);
+            await this.RefreshSessionAsync(user, usedSecondFactor: true).ConfigureAwait(true);
+            this.ToastService.ShowSuccess(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi"
+                ? "Đã quên mọi trình duyệt tin cậy: lần đăng nhập sau sẽ hỏi lại mã 6 số."
+                : "Every trusted browser was forgotten: the next sign-in asks for the 6-digit code again.");
+        }
+        finally
+        {
+            this._isBusy = false;
+        }
+    }
+
     private async Task GenerateRecoveryCodesAsync()
     {
         if (this._user is not { } user)

@@ -26,3 +26,9 @@
   season chooser links stay under the path (`SeasonPanels.ForWebsite`). Tests `SeasonPanelsTests`, e2e
   `admin-remote.spec.ts` (opt-in `ADMIN_REMOTE=1`: makes an admin user, then signs in from afar with the code, sees the
   licence card and opens the Arena's panel without signing in again; remove the user afterwards on a test save).
+- **Trusted browsers** (owner, 2026-11-21, `TrustedBrowserService`): after a right 6-digit code with "Trust this
+  browser for 30 days" (ticked by default), the sign-in sets the protected cookie `hnmo_admin_trusted` (user id +
+  security stamp, 30 days, keys shared by every program); on that browser the password is enough and counts as the
+  second factor. Changing the password, resetting the authenticator or "Forget every trusted browser" (Account
+  security) renews the stamp and ends every trust. Tests `AdminAuthenticationTests.ATrustedBrowserNeedsOnlyThePasswordAsync`,
+  e2e `admin-remote.spec.ts` (signs out and in again without the code).

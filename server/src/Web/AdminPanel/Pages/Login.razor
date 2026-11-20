@@ -3,6 +3,7 @@
 @layout HNMO.Web.AdminPanel.Components.Layout.LoginLayout
 @attribute [AllowAnonymous]
 @using HNMO.Web.AdminPanel.Properties
+@using HNMO.Web.AdminPanel.Auth
 
 <PageTitle>HNMO: @Resources.Login</PageTitle>
 <PageHelp Text="@HelpResources.PageHelpTextLogin" />
@@ -45,6 +46,10 @@
                         @(this._twoFactorInput.UseRecoveryCode ? Resources.RecoveryCode : Resources.AuthenticatorCode)
                     </label>
                     <InputText id="login-code" class="form-control" autocomplete="one-time-code" inputmode="@(this._twoFactorInput.UseRecoveryCode ? "text" : "numeric")" @bind-Value="@this._twoFactorInput.Code" />
+                </div>
+                <div class="form-check mb-3">
+                    <InputCheckbox id="login-trust" class="form-check-input" @bind-Value="@this._twoFactorInput.TrustBrowser" />
+                    <label class="form-check-label" for="login-trust">@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "vi" ? $"Tin cậy trình duyệt này {TrustedBrowserService.TrustDays} ngày (không hỏi lại mã)" : $"Trust this browser for {TrustedBrowserService.TrustDays} days (don't ask for the code again)")</label>
                 </div>
                 @if (this._errorMessage is { } codeError)
                 {

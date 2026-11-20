@@ -1,7 +1,8 @@
 // The admin panel from afar (owner's choices, 2026-11-21), played by the machine: on the host computer (ADMIN_URL) an
 // admin user is made and sets up the 6-digit code; then, through the website's admin path (BASE_URL + ADMIN_PATH),
 // the password alone is not enough, the code signs in, the licence card of Host settings is there (ports are not),
-// and the Arena's panel under the same path ("arena/") opens without signing in again.
+// the Arena's panel under the same path ("arena/") opens without signing in again, and the browser is trusted:
+// signed out and in again, the code isn't asked.
 // Opt-in (ADMIN_REMOTE=1): it makes an admin user, so run it on a test save only and remove the user afterwards.
 import { test, expect, type Page } from '@playwright/test';
 import { createHmac } from 'node:crypto';
@@ -79,6 +80,14 @@ test('the admin panel from afar: the 6-digit code, the licence, one path for eve
   await expect(far.locator('.sidebar .hn-brand')).toBeVisible({ timeout: 60_000 });
   expect(far.url()).not.toContain('/login');
   await far.screenshot({ path: 'test-results/admin-remote-arena.png' });
+
+  // A trusted browser (the box was ticked with the code): signed out and in again, only the password is asked.
+  await far.goto(`${site}/`, { waitUntil: 'networkidle' });
+  await far.getByRole('button', { name: /Logout|Đăng xuất/ }).click();
+  await far.waitForURL(/\/login/, { timeout: 30_000 });
+  await signIn(far, site);
+  await expect(far.locator('.sidebar .hn-brand')).toBeVisible({ timeout: 60_000 });
+  await expect(far.locator('#login-code')).toHaveCount(0);
 
   await far.context().close();
   await host.context().close();
