@@ -1207,6 +1207,9 @@
   <data name="HappyHourConfiguration_ExperienceMultiplier_Name" xml:space="preserve">
     <value>经验倍率</value>
   </data>
+  <data name="HappyHourConfiguration_ItemDropBonusPercent_Name" xml:space="preserve">
+    <value>额外物品掉落（%）</value>
+  </data>
   <data name="WanderingMerchantsConfiguration_MinimumSpawnDuration_Name" xml:space="preserve">
     <value>最短出现时间</value>
   </data>

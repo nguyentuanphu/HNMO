@@ -25,6 +25,11 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     /// </summary>
     private readonly ConcurrentDictionary<IGameContext, SimpleElement> _happyHourExtraMultipliers = new();
 
+    /// <summary>
+    /// The item drop multipliers of the running happy hours, by game context.
+    /// </summary>
+    private static readonly ConcurrentDictionary<IGameContext, double> ActiveItemDropMultipliers = new();
+
     /// <inheritdoc />
     public object CreateDefaultConfig() => HappyHourConfiguration.Default;
 
@@ -66,6 +71,14 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     }
 
     /// <summary>
+    /// Gets the item drop multiplier of a running happy hour of the game context (1 when none runs).
+    /// </summary>
+    /// <param name="gameContext">The game context.</param>
+    /// <returns>The item drop multiplier.</returns>
+    public static double GetItemDropMultiplier(IGameContext gameContext)
+        => ActiveItemDropMultipliers.TryGetValue(gameContext, out var multiplier) ? multiplier : 1.0;
+
+    /// <summary>
     /// Gets the multiplier element of the specified game context, creating a neutral one on demand.
     /// </summary>
     /// <param name="gameContext">The game context.</param>
@@ -96,6 +109,7 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     protected override ValueTask OnStartedAsync(PeriodicTaskGameServerState state)
     {
         this.GetMultiplierElement(state.Context).Value = this.Configuration?.ExperienceMultiplier ?? 1;
+        ActiveItemDropMultipliers[state.Context] = 1 + (Math.Max(0, this.Configuration?.ItemDropBonusPercent ?? 0) / 100.0);
 
         return ValueTask.CompletedTask;
     }
@@ -104,6 +118,7 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     protected override ValueTask OnFinishedAsync(PeriodicTaskGameServerState state)
     {
         this.GetMultiplierElement(state.Context).Value = 1;
+        ActiveItemDropMultipliers.TryRemove(state.Context, out _);
 
         return ValueTask.CompletedTask;
     }

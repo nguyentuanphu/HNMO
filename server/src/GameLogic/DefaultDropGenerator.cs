@@ -108,6 +108,9 @@ public class DefaultDropGenerator : IDropGenerator
 
         var (mapItemMult, mapZenMult) = PlugIns.GameplayRules.MapRulesPlugIn.GetDropModifiers(player);
         var (_, bonusItemMult, bonusZenMult) = PlugIns.GameplayRules.BonusEventsPlugIn.GetDropModifiers(player, DateTime.UtcNow);
+
+        // A running happy hour adds item drops too; it doesn't stack with a bonus event: the larger bonus applies.
+        bonusItemMult = Math.Max(bonusItemMult, PlugIns.PeriodicTasks.HappyHourPlugIn.GetItemDropMultiplier(player.GameContext));
         var rateZenMult = PlugIns.GameplayRules.RateTuningPlugIn.GetZenDropMultiplier(player);
         var (serverDropMult, serverZenMult) = player.GameContext is IGameServerContext serverCtx
             ? PlugIns.Vip.GameServerRateStore.OpenDefault().GetRates(serverCtx.Id)
