@@ -31,7 +31,7 @@ internal class ItemPriceDefinitionsTest
 
         var jewelOfBless = gameConfiguration.Items.Single(item => item is { Group: 14, Number: 13 });
         Assert.That(jewelOfBless.PriceDefinition, Is.Not.Null);
-        Assert.That(jewelOfBless.PriceDefinition!.BasePriceFormula, Is.EqualTo("9000000"));
+        Assert.That(jewelOfBless.PriceDefinition!.BasePriceFormula, Is.EqualTo("3000000"));
         Assert.That(jewelOfBless.PriceDefinition.CraftingReferencePrice, Is.EqualTo(100_000));
         Assert.That(gameConfiguration.ItemPriceDefinitions, Does.Contain(jewelOfBless.PriceDefinition));
         Assert.That(gameConfiguration.ItemPriceDefinitions.Select(d => d.Name.ValueInNeutralLanguage), Is.Unique);

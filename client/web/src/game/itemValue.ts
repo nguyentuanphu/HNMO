@@ -536,11 +536,11 @@ function wingOption(type: number, optionType: number, option3: number, add: (opt
 
 // COMGEM::Check_Jewel's bundles (group 12) and COMGEM::CalcItemValue's price of one jewel of each.
 const BUNDLE_JEWEL_PRICES = new Map<number, number>([
-  [t(12, 30), 9000000], // Jewel of Bless
+  [t(12, 30), 3000000], // Jewel of Bless
   [t(12, 31), 6000000], // Jewel of Soul
-  [t(12, 136), 45000000], // Jewel of Life
-  [t(12, 137), 36000000], // Jewel of Creation
-  [t(12, 138), 60000000], // Jewel of Guardian
+  [t(12, 136), 16000000], // Jewel of Life
+  [t(12, 137), 15000000], // Jewel of Creation
+  [t(12, 138), 15000000], // Jewel of Guardian
   [t(12, 139), 18600], // Gemstone
   [t(12, 140), 18600], // Jewel of Harmony
   [t(12, 141), 810000], // Jewel of Chaos
@@ -620,11 +620,11 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
   } else if (BUNDLE_JEWEL_PRICES.has(type)) {
     // COMGEM::CalcItemValue (an int)
     gold = imul(BUNDLE_JEWEL_PRICES.get(type) ?? 0, level + 1, COMGEM_FIRST);
-  } else if (type === ITEM_JEWEL_OF_BLESS) gold = 9000000;
+  } else if (type === ITEM_JEWEL_OF_BLESS) gold = 3000000;
   else if (type === ITEM_JEWEL_OF_SOUL) gold = 6000000;
   else if (type === ITEM_JEWEL_OF_CHAOS) gold = 810000;
-  else if (type === ITEM_JEWEL_OF_LIFE) gold = 45000000;
-  else if (type === ITEM_JEWEL_OF_CREATION) gold = 36000000;
+  else if (type === ITEM_JEWEL_OF_LIFE) gold = 16000000;
+  else if (type === ITEM_JEWEL_OF_CREATION) gold = 15000000;
   else if (type === ITEM_POTION + 141) gold = 224000 * 3;
   else if (type === ITEM_POTION + 142) gold = 182000 * 3;
   else if (type === ITEM_POTION + 143) gold = 157000 * 3;
@@ -668,7 +668,7 @@ export function itemValue(item: Item, goldType: 0 | 1 | 2, petLevel?: number): n
   else if (type === ITEM_FIRECRACKER) gold = 200000;
   else if (type === ITEM_GM_GIFT) gold = 33 * 3;
   else if (type === ITEM_TOWN_PORTAL_SCROLL) gold = 750;
-  else if (type === ITEM_JEWEL_OF_GUARDIAN) gold = 60000000;
+  else if (type === ITEM_JEWEL_OF_GUARDIAN) gold = 15000000;
   else if (type === ITEM_SIEGE_POTION) {
     gold = level === 0 ? 900000 * item.durability : level === 1 ? 450000 * item.durability : 0;
   } else if (type === ITEM_CONTRACT_SUMMON) {
