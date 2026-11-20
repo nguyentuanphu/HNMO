@@ -16,7 +16,7 @@
         <input id="host-setup-contact" class="form-control" maxlength="120" @bind="this._contact" />
       </div>
       <div class="col-md-2 d-flex align-items-end">
-        <button id="host-setup-save" class="btn btn-primary w-100" @onclick="this.Save">@L("Save", "Lưu")</button>
+        <button id="host-setup-save" class="btn btn-primary w-100" title="@L("Saves your name and contact for the report to the HNMO developer", "Lưu tên và liên hệ của bạn cho báo cáo gửi nhà phát triển HNMO")" @onclick="this.Save">@L("Save", "Lưu")</button>
       </div>
     </div>
     <small class="text-muted" id="host-setup-status">@this.Status</small>
