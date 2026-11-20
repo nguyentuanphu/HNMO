@@ -162,6 +162,8 @@ const FIGHTER: Case[] = [
   // While Increase Attack lasts (eBuff_Att_up_Ourforces = 129) red smoke lines rise from the fists.
   { skill: 266, name: 'increase-attack-buff', expect: ['effect:lightRed', 'particle:smokeLine1'], shotAt: 1600, buffs: [129] },
   { skill: 269, name: 'charge', expect: ['effect:multiShot1', 'effect:multiShot2', 'effect:multiShot3', 'joint:jointSpark'], shotAt: 240, action: 137 },
+  // The burning wings of MODEL_PHOENIX_SHOT's dummy over the target.
+  { skill: 270, name: 'phoenix-shot', expect: ['effect:phoenixShot', 'particle:fireHik1', 'particle:explosion'], shotAt: 560 },
   { skill: 263, name: 'dark-side', expect: ['effect:eventCloud', 'effect:magic', 'effect:windForce'], shotAt: 300 },
   // Chain Drive follows the giant swing (PLAYER_SKILL_GIANTSWING), played by the hero here: the fist's trail, the first
   // blow's wave and wolf heads at key 6, the second wave and spinning waves at key 11.

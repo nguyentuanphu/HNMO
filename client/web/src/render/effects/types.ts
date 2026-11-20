@@ -131,6 +131,7 @@ export type EffectType =
   | 'feather' // MODEL_FEATHER: their feathers (Skill/darkwing_hetachi.bmd)
   | 'windForceMirror' // MODEL_WINDFOCE_MIRROR: Increase Defense's passing wind (Effect/wind_foce_mirror.bmd)
   | 'dragonKickDummy' // MODEL_DRAGON_KICK_DUMMY: Dragon Slasher's timing
+  | 'phoenixShot' // MODEL_PHOENIX_SHOT: Phoenix Shot's burning wings at the target (Effect/phoenix_shot_effect.bmd, bones only)
   | 'bladeSkill' // MODEL_BLADE_SKILL: Multi-Shot's fan (Effect/bladetonedo.bmd)
   | 'skillBlast' // MODEL_SKILL_BLAST: Cometfall's comets (Skill/Blast01.bmd)
   | 'blowOfDestruction' // MODEL_BLOW_OF_DESTRUCTION: Strike of Destruction (no model)
