@@ -2430,7 +2430,7 @@
   <data name="StartRoyaleChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh chat: /startroyale (Đấu trường HNMO)</value></data>
   <data name="StartRoyaleChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký đấu sinh tồn ngay: /startroyale [số giây tới lúc bắt đầu, mặc định 120].</value></data>
   <data name="ArenaHeraldPlugIn_Name" xml:space="preserve"><value>Sứ giả Đấu trường HNMO</value></data>
-  <data name="ArenaHeraldPlugIn_Description" xml:space="preserve"><value>Nói chuyện với Sứ giả Đấu trường (NPC 595, ở các thị trấn chính) sẽ mở cửa sổ Đấu trường trong web game.</value></data>
+  <data name="ArenaHeraldPlugIn_Description" xml:space="preserve"><value>Nói chuyện với Sứ giả Đấu trường (NPC 900, ở các thị trấn chính) sẽ mở cửa sổ Đấu trường trong web game.</value></data>
   <data name="StartGuildWarChatCommandPlugIn_Name" xml:space="preserve"><value>Lệnh chat: /startguildwar (Đấu trường HNMO)</value></data>
   <data name="StartGuildWarChatCommandPlugIn_Description" xml:space="preserve"><value>Game master trong Đấu trường mở đăng ký bang chiến ngay, tới lúc bắt đầu: /startguildwar [số giây tới lúc bắt đầu, mặc định 120].</value></data>
   <data name="ArenaScheduleNoticesPlugIn_Name" xml:space="preserve"><value>Thông báo trận Đấu trường HNMO</value></data>

@@ -15,7 +15,7 @@ using HNMO.Persistence.Initialization.Version075.Maps;
 public sealed class HnmoArenaHeraldInitializer
 {
     /// <summary>The Herald's NPC number (free in the game data; the web game's monster data knows it).</summary>
-    public const short Number = 595;
+    public const short Number = 900;
 
     private readonly IContext _context;
     private readonly GameConfiguration _gameConfiguration;

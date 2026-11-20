@@ -21,7 +21,7 @@ using HNMO.PlugIns;
 public sealed class ArenaHeraldPlugIn : IPlayerTalkToNpcPlugIn
 {
     /// <summary>The Herald's NPC number.</summary>
-    public const short HeraldNumber = 595;
+    public const short HeraldNumber = 900;
 
     /// <inheritdoc />
     public async ValueTask PlayerTalksToNpcAsync(Player player, NonPlayerCharacter npc, NpcTalkEventArgs eventArgs)

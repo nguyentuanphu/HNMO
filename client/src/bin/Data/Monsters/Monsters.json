@@ -2904,7 +2904,7 @@
       "kind": "npc",
       "model": "MODEL_TOURNAMENT",
       "numbers": [
-        {"number": 595, "maps": [0, 2, 3, 51]}
+        {"number": 900, "maps": [0, 2, 3, 51]}
       ]
     },
     {
