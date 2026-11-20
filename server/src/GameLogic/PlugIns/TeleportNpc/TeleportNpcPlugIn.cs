@@ -147,15 +147,6 @@ public sealed class TeleportNpcPlugIn :
             return;
         }
 
-        if (decision.ZenCost > 0 && !player.TryRemoveMoney(decision.ZenCost))
-        {
-            const string noZenEn = "Not enough Zen for teleport.";
-            const string noZenVi = "Không đủ Zen để dịch chuyển.";
-            await player.ShowBlueMessageAsync(isVi ? noZenVi : noZenEn).ConfigureAwait(false);
-            await this.SendStateAsync(player, requested: true, openDialog: false, actionResult: (false, noZenEn, noZenVi)).ConfigureAwait(false);
-            return;
-        }
-
         var gate = new ExitGate
         {
             Map = mapDef,
@@ -164,6 +155,24 @@ public sealed class TeleportNpcPlugIn :
             Y1 = decision.Destination.TargetY,
             Y2 = decision.Destination.TargetY,
         };
+
+        // The rules of the warp gates apply too (e.g. the Gens battle zone); checked before the zen is paid.
+        if (await WarpGateRules.RefuseAsync(player, gate).ConfigureAwait(false))
+        {
+            const string refusedEn = "You can't enter that map now.";
+            const string refusedVi = "Không thể vào bản đồ đó lúc này.";
+            await this.SendStateAsync(player, requested: true, openDialog: false, actionResult: (false, refusedEn, refusedVi)).ConfigureAwait(false);
+            return;
+        }
+
+        if (decision.ZenCost > 0 && !player.TryRemoveMoney(decision.ZenCost))
+        {
+            const string noZenEn = "Not enough Zen for teleport.";
+            const string noZenVi = "Không đủ Zen để dịch chuyển.";
+            await player.ShowBlueMessageAsync(isVi ? noZenVi : noZenEn).ConfigureAwait(false);
+            await this.SendStateAsync(player, requested: true, openDialog: false, actionResult: (false, noZenEn, noZenVi)).ConfigureAwait(false);
+            return;
+        }
 
         await player.WarpToAsync(gate).ConfigureAwait(false);
         await player.ShowBlueMessageAsync(isVi ? decision.MessageVi : decision.MessageEn).ConfigureAwait(false);
