@@ -387,9 +387,11 @@ export class ArenaWindow {
       return `${result} · ${score}`;
     }
     const time = `${Math.floor(war.secondsLeft / 60)}:${String(war.secondsLeft % 60).padStart(2, '0')}`;
-    const mark = (f: ArenaFlag) => (f.owner === 1 ? tx('red', 'đỏ') : f.owner === 2 ? tx('blue', 'xanh') : '-') + (f.taking ? `>${f.taking === 1 ? tx('red', 'đỏ') : tx('blue', 'xanh')} ${f.seconds}s` : '');
+    // Flags and sides by guild name (a guild may well be called "Red" and fight on the blue side).
+    const guild = (side: number) => (side === 1 ? war.guildA : war.guildB) ?? '?';
+    const mark = (f: ArenaFlag) => (f.owner ? guild(f.owner) : '-') + (f.taking ? `>${guild(f.taking)} ${f.seconds}s` : '');
     const flags = (war.flags ?? []).map((f) => `(${f.x},${f.y}) ${mark(f)}`).join(' ');
-    const me = war.side === 1 ? tx(' · you: red', ' · bạn: đỏ') : war.side === 2 ? tx(' · you: blue', ' · bạn: xanh') : '';
+    const me = war.side ? tx(` · you: ${guild(war.side)}`, ` · bạn: ${guild(war.side)}`) : '';
     return `${score} · ${tx('flags', 'cờ')} ${flags} · ${time}${me}`;
   }
 
